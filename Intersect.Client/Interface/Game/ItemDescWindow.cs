@@ -82,6 +82,11 @@ namespace Intersect.Client.Interface.Game
                     itemType.TextColorOverride.G = rarity.G;
                     itemType.TextColorOverride.B = rarity.B;
                     itemType.TextColorOverride.A = rarity.A;
+
+                    itemName.TextColorOverride.R = rarity.R;
+                    itemName.TextColorOverride.G = rarity.G;
+                    itemName.TextColorOverride.B = rarity.B;
+                    itemName.TextColorOverride.A = rarity.A;
                 }
 
                 var itemDesc = new RichLabel(mDescWindow, "ItemDescription");
