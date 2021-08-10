@@ -202,7 +202,6 @@ namespace Intersect.Editor.Forms.Editors
             chkStackable.Text = Strings.ItemEditor.stackable;
             lblInvStackLimit.Text = Strings.ItemEditor.InventoryStackLimit;
             lblBankStackLimit.Text = Strings.ItemEditor.BankStackLimit;
-            btnEditRequirements.Text = Strings.ItemEditor.requirements;
 
             cmbRarity.Items.Clear();
             for (var i = 0; i < Strings.ItemEditor.rarity.Count; i++)
@@ -294,8 +293,12 @@ namespace Intersect.Editor.Forms.Editors
 
             cmbConsume.Items.Add(Strings.Combat.exp);
 
+            grpRequirements.Text = Strings.ItemEditor.requirementsgroup;
+            lblCannotUse.Text = Strings.ItemEditor.cannotuse;
+            btnEditRequirements.Text = Strings.ItemEditor.requirements;
+
             //Searching/Sorting
-            btnChronological.ToolTipText = Strings.ItemEditor.sortchronologically;
+            btnAlphabetical.ToolTipText = Strings.ItemEditor.sortalphabetically;
             txtSearch.Text = Strings.ItemEditor.searchplaceholder;
             lblFolder.Text = Strings.ItemEditor.folderlabel;
 
@@ -413,6 +416,8 @@ namespace Intersect.Editor.Forms.Editors
                 cmbCooldownGroup.Text = mEditorItem.CooldownGroup;
                 chkIgnoreGlobalCooldown.Checked = mEditorItem.IgnoreGlobalCooldown;
                 chkIgnoreCdr.Checked = mEditorItem.IgnoreCooldownReduction;
+
+                txtCannotUse.Text = mEditorItem.CannotUseMessage;
 
                 if (mChanged.IndexOf(mEditorItem) == -1)
                 {
@@ -1125,6 +1130,11 @@ namespace Intersect.Editor.Forms.Editors
             picPaperdoll.BackgroundImage = picItemBmp;
         }
 
+        private void txtCannotUse_TextChanged(object sender, EventArgs e)
+        {
+            mEditorItem.CannotUseMessage = txtCannotUse.Text;
+        }
+
         #region "Item List - Folders, Searching, Sorting, Etc"
 
         public void InitEditor()
@@ -1174,9 +1184,9 @@ namespace Intersect.Editor.Forms.Editors
             cmbFolder.Items.Add("");
             cmbFolder.Items.AddRange(mKnownFolders.ToArray());
 
-            var items = ItemBase.Lookup.OrderBy(p => p.Value?.TimeCreated).Select(pair => new KeyValuePair<Guid, KeyValuePair<string, string>>(pair.Key,
+            var items = ItemBase.Lookup.OrderBy(p => p.Value?.Name).Select(pair => new KeyValuePair<Guid, KeyValuePair<string, string>>(pair.Key,
                 new KeyValuePair<string, string>(((ItemBase)pair.Value)?.Name ?? Models.DatabaseObject<ItemBase>.Deleted, ((ItemBase)pair.Value)?.Folder ?? ""))).ToArray();
-            lstGameObjects.Repopulate(items, mFolders, btnChronological.Checked, CustomSearch(), txtSearch.Text);
+            lstGameObjects.Repopulate(items, mFolders, btnAlphabetical.Checked, CustomSearch(), txtSearch.Text);
         }
 
         private void btnAddFolder_Click(object sender, EventArgs e)
@@ -1205,9 +1215,9 @@ namespace Intersect.Editor.Forms.Editors
             InitEditor();
         }
 
-        private void btnChronological_Click(object sender, EventArgs e)
+        private void btnAlphabetical_Click(object sender, EventArgs e)
         {
-            btnChronological.Checked = !btnChronological.Checked;
+            btnAlphabetical.Checked = !btnAlphabetical.Checked;
             InitEditor();
         }
 
@@ -1250,7 +1260,6 @@ namespace Intersect.Editor.Forms.Editors
 
 
         #endregion
-
     }
 
 }

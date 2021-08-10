@@ -168,6 +168,7 @@ namespace Intersect.Editor.Forms.Editors
             chkBound.Text = Strings.SpellEditor.bound;
 
             grpRequirements.Text = Strings.SpellEditor.requirements;
+            lblCannotCast.Text = Strings.SpellEditor.cannotcast;
             btnDynamicRequirements.Text = Strings.SpellEditor.requirementsbutton;
 
             grpSpellCost.Text = Strings.SpellEditor.cost;
@@ -256,7 +257,7 @@ namespace Intersect.Editor.Forms.Editors
             grpEvent.Text = Strings.SpellEditor.Event;
 
             //Searching/Sorting
-            btnChronological.ToolTipText = Strings.SpellEditor.sortchronologically;
+            btnAlphabetical.ToolTipText = Strings.SpellEditor.sortalphabetically;
             txtSearch.Text = Strings.SpellEditor.searchplaceholder;
             lblFolder.Text = Strings.SpellEditor.folderlabel;
 
@@ -296,6 +297,8 @@ namespace Intersect.Editor.Forms.Editors
 
                 nudHPCost.Value = mEditorItem.VitalCost[(int) Vitals.Health];
                 nudMpCost.Value = mEditorItem.VitalCost[(int) Vitals.Mana];
+
+                txtCannotCast.Text = mEditorItem.CannotCastMessage;
 
                 UpdateSpellTypePanels();
                 if (mChanged.IndexOf(mEditorItem) == -1)
@@ -934,6 +937,11 @@ namespace Intersect.Editor.Forms.Editors
             mEditorItem.IgnoreCooldownReduction = chkIgnoreCdr.Checked;
         }
 
+        private void txtCannotCast_TextChanged(object sender, EventArgs e)
+        {
+            mEditorItem.CannotCastMessage = txtCannotCast.Text;
+        }
+
         #region "Item List - Folders, Searching, Sorting, Etc"
 
         public void InitEditor()
@@ -983,9 +991,9 @@ namespace Intersect.Editor.Forms.Editors
             cmbCooldownGroup.Items.Add(string.Empty);
             cmbCooldownGroup.Items.AddRange(mKnownCooldownGroups.ToArray());
 
-            var items = SpellBase.Lookup.OrderBy(p => p.Value?.TimeCreated).Select(pair => new KeyValuePair<Guid, KeyValuePair<string, string>>(pair.Key,
+            var items = SpellBase.Lookup.OrderBy(p => p.Value?.Name).Select(pair => new KeyValuePair<Guid, KeyValuePair<string, string>>(pair.Key,
                 new KeyValuePair<string, string>(((SpellBase)pair.Value)?.Name ?? Models.DatabaseObject<SpellBase>.Deleted, ((SpellBase)pair.Value)?.Folder ?? ""))).ToArray();
-            lstGameObjects.Repopulate(items, mFolders, btnChronological.Checked, CustomSearch(), txtSearch.Text);
+            lstGameObjects.Repopulate(items, mFolders, btnAlphabetical.Checked, CustomSearch(), txtSearch.Text);
         }
 
         private void btnAddFolder_Click(object sender, EventArgs e)
@@ -1014,9 +1022,9 @@ namespace Intersect.Editor.Forms.Editors
             InitEditor();
         }
 
-        private void btnChronological_Click(object sender, EventArgs e)
+        private void btnAlphabetical_Click(object sender, EventArgs e)
         {
-            btnChronological.Checked = !btnChronological.Checked;
+            btnAlphabetical.Checked = !btnAlphabetical.Checked;
             InitEditor();
         }
 

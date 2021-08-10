@@ -4,12 +4,13 @@ using System.Linq;
 using System.Windows.Forms;
 
 using DarkUI.Forms;
-
+using Intersect.Editor.Content;
 using Intersect.Editor.General;
 using Intersect.Editor.Localization;
 using Intersect.Editor.Networking;
 using Intersect.Enums;
 using Intersect.GameObjects;
+using Intersect.Utilities;
 
 namespace Intersect.Editor.Forms.Editors
 {
@@ -110,6 +111,14 @@ namespace Intersect.Editor.Forms.Editors
                 cmbSellFor.SelectedIndex = 0;
             }
 
+            cmbBuySound.Items.Clear();
+            cmbBuySound.Items.Add(Strings.General.none);
+            cmbBuySound.Items.AddRange(GameContentManager.SmartSortedSoundNames);
+
+            cmbSellSound.Items.Clear();
+            cmbSellSound.Items.Add(Strings.General.none);
+            cmbSellSound.Items.AddRange(GameContentManager.SmartSortedSoundNames);
+
             InitLocalization();
             UpdateEditor();
         }
@@ -143,8 +152,11 @@ namespace Intersect.Editor.Forms.Editors
             btnAddBoughtItem.Text = Strings.ShopEditor.addboughtitem;
             btnDelBoughtItem.Text = Strings.ShopEditor.removeboughtitem;
 
+            lblBuySound.Text = Strings.ShopEditor.buysound;
+            lblSellSound.Text = Strings.ShopEditor.sellsound;
+
             //Searching/Sorting
-            btnChronological.ToolTipText = Strings.ShopEditor.sortchronologically;
+            btnAlphabetical.ToolTipText = Strings.ShopEditor.sortalphabetically;
             txtSearch.Text = Strings.ShopEditor.searchplaceholder;
             lblFolder.Text = Strings.ShopEditor.folderlabel;
 
@@ -169,6 +181,9 @@ namespace Intersect.Editor.Forms.Editors
                 {
                     rdoBuyBlacklist.Checked = true;
                 }
+
+                cmbBuySound.SelectedIndex = cmbBuySound.FindString(TextUtils.NullToNone(mEditorItem.BuySound));
+                cmbSellSound.SelectedIndex = cmbSellSound.FindString(TextUtils.NullToNone(mEditorItem.SellSound));
 
                 UpdateWhitelist();
                 UpdateLists();
@@ -340,6 +355,42 @@ namespace Intersect.Editor.Forms.Editors
             mEditorItem.DefaultCurrency = ItemBase.FromList(cmbDefaultCurrency.SelectedIndex);
         }
 
+        private void btnItemUp_Click(object sender, EventArgs e)
+        {
+            if (lstSoldItems.SelectedIndex > 0 && lstSoldItems.Items.Count > 1)
+            {
+                var index = lstSoldItems.SelectedIndex;
+                var swapWith = mEditorItem.SellingItems[index - 1];
+                mEditorItem.SellingItems[index - 1] = mEditorItem.SellingItems[index];
+                mEditorItem.SellingItems[index] = swapWith;
+                UpdateLists();
+                lstSoldItems.SelectedIndex = index - 1;
+            }
+        }
+
+        private void btnItemDown_Click(object sender, EventArgs e)
+        {
+            if (lstSoldItems.SelectedIndex > -1 && lstSoldItems.SelectedIndex + 1 != lstSoldItems.Items.Count)
+            {
+                var index = lstSoldItems.SelectedIndex;
+                var swapWith = mEditorItem.SellingItems[index + 1];
+                mEditorItem.SellingItems[index + 1] = mEditorItem.SellingItems[index];
+                mEditorItem.SellingItems[index] = swapWith;
+                UpdateLists();
+                lstSoldItems.SelectedIndex = index + 1;
+            }
+        }
+
+        private void cmbBuySound_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mEditorItem.BuySound = TextUtils.SanitizeNone(cmbBuySound?.Text);
+        }
+
+        private void cmbSellSound_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mEditorItem.SellSound = TextUtils.SanitizeNone(cmbSellSound?.Text);
+        }
+
         private void toolStripItemNew_Click(object sender, EventArgs e)
         {
             PacketSender.SendCreateObject(GameObjectType.Shop);
@@ -438,9 +489,9 @@ namespace Intersect.Editor.Forms.Editors
             cmbFolder.Items.Add("");
             cmbFolder.Items.AddRange(mKnownFolders.ToArray());
 
-            var items = ShopBase.Lookup.OrderBy(p => p.Value?.TimeCreated).Select(pair => new KeyValuePair<Guid, KeyValuePair<string, string>>(pair.Key,
+            var items = ShopBase.Lookup.OrderBy(p => p.Value?.Name).Select(pair => new KeyValuePair<Guid, KeyValuePair<string, string>>(pair.Key,
                 new KeyValuePair<string, string>(((ShopBase)pair.Value)?.Name ?? Models.DatabaseObject<ShopBase>.Deleted, ((ShopBase)pair.Value)?.Folder ?? ""))).ToArray();
-            lstGameObjects.Repopulate(items, mFolders, btnChronological.Checked, CustomSearch(), txtSearch.Text);
+            lstGameObjects.Repopulate(items, mFolders, btnAlphabetical.Checked, CustomSearch(), txtSearch.Text);
         }
 
         private void btnAddFolder_Click(object sender, EventArgs e)
@@ -469,9 +520,9 @@ namespace Intersect.Editor.Forms.Editors
             InitEditor();
         }
 
-        private void btnChronological_Click(object sender, EventArgs e)
+        private void btnAlphabetical_Click(object sender, EventArgs e)
         {
-            btnChronological.Checked = !btnChronological.Checked;
+            btnAlphabetical.Checked = !btnAlphabetical.Checked;
             InitEditor();
         }
 
@@ -513,7 +564,6 @@ namespace Intersect.Editor.Forms.Editors
         }
 
         #endregion
-
     }
 
 }
