@@ -556,10 +556,27 @@ namespace Intersect.Client.Interface.Game.EntityPanel
             if (Globals.Me.MapInstance != null)
             {
                 EntityMap.SetText(Strings.EntityBox.map.ToString(Globals.Me.MapInstance.Name));
+                updateMapLabelColor();
             }
             else
             {
                 EntityMap.SetText(Strings.EntityBox.map.ToString(""));
+            }
+        }
+
+        private void updateMapLabelColor()
+        {
+            if (Globals.Me.MapInstance.ZoneType == MapZones.Normal)
+            {
+                EntityMap.SetTextColor(Color.Red, Framework.Gwen.Control.Label.ControlState.Normal);
+            }
+            else if (Globals.Me.MapInstance.ZoneType == MapZones.Arena)
+            {
+                EntityMap.SetTextColor(Color.Yellow, Framework.Gwen.Control.Label.ControlState.Normal);
+            }
+            else
+            {
+                EntityMap.SetTextColor(Color.Gray, Framework.Gwen.Control.Label.ControlState.Normal);
             }
         }
 

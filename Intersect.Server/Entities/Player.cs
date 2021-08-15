@@ -161,6 +161,39 @@ namespace Intersect.Server.Entities
         [NotMapped, JsonIgnore]
         public int MapAutorunEvents { get; private set; }
 
+        /*//Spawn Stuff
+        public Guid AlternateSpawnMapId { get; set; }
+
+        [NotMapped]
+        [JsonIgnore]
+        public MapBase AlternateSpawnMap
+        {
+            get => MapBase.Get(AlternateSpawnMapId);
+            set => AlternateSpawnMapId = value?.Id ?? Guid.Empty;
+        }
+
+        public int AlternateSpawnX { get; set; }
+
+        public int AlternateSpawnY { get; set; }
+
+        public int AlternateSpawnDir { get; set; }
+
+        public Guid CurrentArenaSpawnMapId { get; set; }
+
+        [NotMapped]
+        [JsonIgnore]
+        public MapBase CurrentArenaSpawnMap
+        {
+            get => MapBase.Get(CurrentArenaSpawnMapId);
+            set => CurrentArenaSpawnMapId = value?.Id ?? Guid.Empty;
+        }
+
+        public int CurrentArenaSpawnX { get; set; }
+
+        public int CurrentArenaSpawnY { get; set; }
+
+        public int CurrentArenaSpawnDir { get; set; }*/
+
         /// <summary>
         /// References the in-memory copy of the guild for this player, reference this instead of the Guild property below.
         /// </summary>
@@ -766,14 +799,23 @@ namespace Intersect.Server.Entities
             CombatTimer = 0;
 
             var cls = ClassBase.Get(ClassId);
-            if (cls != null)
+           /* if (Map.ZoneType == MapZones.Arena && CurrentArenaSpawnMapId != Guid.Empty)
             {
-                Warp(cls.SpawnMapId, (byte) cls.SpawnX, (byte) cls.SpawnY, (byte) cls.SpawnDir);
-            }
-            else
+                Warp(CurrentArenaSpawnMapId, (byte)CurrentArenaSpawnX, (byte)CurrentArenaSpawnY, (byte)CurrentArenaSpawnDir);
+            } else if (AlternateSpawnMapId != Guid.Empty)
             {
-                Warp(Guid.Empty, 0, 0, 0);
-            }
+                Warp(AlternateSpawnMapId, (byte)AlternateSpawnX, (byte)AlternateSpawnY, (byte)AlternateSpawnDir);
+            } else
+            { // original logic*/
+                if (cls != null)
+                {
+                    Warp(cls.SpawnMapId, (byte)cls.SpawnX, (byte)cls.SpawnY, (byte)cls.SpawnDir);
+                }
+                else
+                {
+                    Warp(Guid.Empty, 0, 0, 0);
+                }
+            //}
 
             PacketSender.SendEntityDataToProximity(this);
 
