@@ -2517,6 +2517,7 @@ namespace Intersect.Server.Entities
         private void DropItems(Entity killer, bool sendUpdate = true)
         {
             // Drop items
+            if (Map.ZoneType == MapZones.Arena && this is Player) return; // don't drop items in Arenas
             for (var n = 0; n < Items.Count; n++)
             {
                 if (Items[n] == null)
