@@ -161,7 +161,7 @@ namespace Intersect.Server.Entities
         [NotMapped, JsonIgnore]
         public int MapAutorunEvents { get; private set; }
 
-        //Spawn Stuff
+        /*//Spawn Stuff
         public Guid AlternateSpawnMapId { get; set; }
 
         [NotMapped]
@@ -192,7 +192,7 @@ namespace Intersect.Server.Entities
 
         public int CurrentArenaSpawnY { get; set; }
 
-        public int CurrentArenaSpawnDir { get; set; }
+        public int CurrentArenaSpawnDir { get; set; }*/
 
         /// <summary>
         /// References the in-memory copy of the guild for this player, reference this instead of the Guild property below.
@@ -799,14 +799,14 @@ namespace Intersect.Server.Entities
             CombatTimer = 0;
 
             var cls = ClassBase.Get(ClassId);
-            if (Map.ZoneType == MapZones.Arena && CurrentArenaSpawnMapId != Guid.Empty)
+           /* if (Map.ZoneType == MapZones.Arena && CurrentArenaSpawnMapId != Guid.Empty)
             {
                 Warp(CurrentArenaSpawnMapId, (byte)CurrentArenaSpawnX, (byte)CurrentArenaSpawnY, (byte)CurrentArenaSpawnDir);
             } else if (AlternateSpawnMapId != Guid.Empty)
             {
                 Warp(AlternateSpawnMapId, (byte)AlternateSpawnX, (byte)AlternateSpawnY, (byte)AlternateSpawnDir);
             } else
-            { // original logic
+            { // original logic*/
                 if (cls != null)
                 {
                     Warp(cls.SpawnMapId, (byte)cls.SpawnX, (byte)cls.SpawnY, (byte)cls.SpawnDir);
@@ -815,7 +815,7 @@ namespace Intersect.Server.Entities
                 {
                     Warp(Guid.Empty, 0, 0, 0);
                 }
-            }
+            //}
 
             PacketSender.SendEntityDataToProximity(this);
 
