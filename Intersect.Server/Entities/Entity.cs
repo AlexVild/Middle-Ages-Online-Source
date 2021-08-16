@@ -1808,7 +1808,7 @@ namespace Intersect.Server.Entities
                     secondaryDamage, damageType, scalingStat, scaling, critMultiplier, this, enemy
                 );
 
-                if (secondaryDamage < 0 && damagingAttack)
+                if (secondaryDamage < 0 && damagingAttack && !(enemy is Player))
                 {
                     secondaryDamage = 0;
                 }
