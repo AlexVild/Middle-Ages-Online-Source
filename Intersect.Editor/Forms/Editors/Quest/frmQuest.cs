@@ -372,6 +372,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
         private bool OpenTaskEditor(QuestBase.QuestTask task)
         {
             var cmdWindow = new QuestTaskEditor(mEditorItem, task);
+
             var frm = new Form
             {
                 Text = Strings.TaskEditor.title

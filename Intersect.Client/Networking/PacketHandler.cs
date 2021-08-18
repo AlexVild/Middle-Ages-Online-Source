@@ -204,7 +204,7 @@ namespace Intersect.Client.Networking
                 map.CreateMapSounds();
                 if (mapId == Globals.Me.CurrentMap)
                 {
-                    Audio.PlayMusic(map.Music, 1f, 1f, true);
+                    Audio.PlayMusic(map.Music, 6f, 10f, true);
                 }
 
                 map.MapGridX = packet.GridX;
@@ -1441,13 +1441,13 @@ namespace Intersect.Client.Networking
         //PlayMusicPacket
         public void HandlePacket(IPacketSender packetSender, PlayMusicPacket packet)
         {
-            Audio.PlayMusic(packet.BGM, 1f, 1f, true);
+            Audio.PlayMusic(packet.BGM, 6f, 10f, true);
         }
 
         //StopMusicPacket
         public void HandlePacket(IPacketSender packetSender, StopMusicPacket packet)
         {
-            Audio.StopMusic(1f);
+            Audio.StopMusic(6f);
         }
 
         //PlaySoundPacket
