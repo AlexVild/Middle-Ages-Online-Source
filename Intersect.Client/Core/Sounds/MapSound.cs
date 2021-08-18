@@ -157,13 +157,13 @@ namespace Intersect.Client.Core.Sounds
                         Options.MapHeight * Options.TileHeight
                     );
 
-                    distance = (float) DistancePointToRectangle(player, mapRect) / 32f;
+                    distance = (float) DistancePointToRectangle(player, mapRect) / 16f;
                 }
                 else
                 {
                     soundx = map.GetX() + mX * Options.TileWidth + 16;
                     soundy = map.GetY() + mY * Options.TileHeight + 16;
-                    distance = (float) Math.Sqrt(Math.Pow(playerx - soundx, 2) + Math.Pow(playery - soundy, 2)) / 32f;
+                    distance = (float) Math.Sqrt(Math.Pow(playerx - soundx, 2) + Math.Pow(playery - soundy, 2)) / 16f;
                 }
             }
 

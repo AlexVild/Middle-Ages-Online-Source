@@ -145,7 +145,7 @@ namespace Intersect.Client.Entities
                     {
                         if (MapInstance.Get(Globals.Me.CurrentMap) != null)
                         {
-                            Audio.PlayMusic(MapInstance.Get(Globals.Me.CurrentMap).Music, 3, 3, true);
+                            Audio.PlayMusic(MapInstance.Get(Globals.Me.CurrentMap).Music, 1f, 1f, true);
                         }
 
                         if (newMap != null && oldMap != null)
