@@ -199,6 +199,8 @@ namespace Intersect.Editor.Forms.Editors
 
             btnSave.Text = Strings.AnimationEditor.save;
             btnCancel.Text = Strings.AnimationEditor.cancel;
+
+            lblBrightnessThreshold.Text = Strings.AnimationEditor.brightnessthreshold;
         }
 
         private void UpdateEditor()
@@ -247,6 +249,8 @@ namespace Intersect.Editor.Forms.Editors
                 DrawLowerFrame();
                 LoadUpperLight();
                 DrawUpperFrame();
+
+                nudBrightnessThreshold.Value = mEditorItem.BrightnessThreshold;
 
                 if (mChanged.IndexOf(mEditorItem) == -1)
                 {
@@ -873,6 +877,10 @@ namespace Intersect.Editor.Forms.Editors
 
         #endregion
 
+        private void nudBrightnessThreshold_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.BrightnessThreshold = (int) nudBrightnessThreshold.Value;
+        }
     }
 
 }

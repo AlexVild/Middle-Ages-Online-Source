@@ -89,7 +89,7 @@ namespace Intersect.Client.Entities
 
         public void Draw(bool upper = false, bool alternate = false)
         {
-            if (Hidden)
+            if (Hidden || Globals.Me.MapInstance.Brightness <= MyBase.BrightnessThreshold)
             {
                 return;
             }

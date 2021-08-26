@@ -654,6 +654,8 @@ namespace Intersect.Editor.Localization
 
             public static LocalizedString upperverticalframes = @"Graphic Vertical Frames:";
 
+            public static LocalizedString brightnessthreshold = @"Brightness Threshold:";
+
         }
 
         public struct Attributes

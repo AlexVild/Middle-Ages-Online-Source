@@ -37,6 +37,7 @@ namespace Intersect.Editor.Forms.Editors
             this.txtSearch = new DarkUI.Controls.DarkTextBox();
             this.lstGameObjects = new Intersect.Editor.Forms.Controls.GameObjectList();
             this.grpGeneral = new DarkUI.Controls.DarkGroupBox();
+            this.lblBrightnessThreshold = new System.Windows.Forms.Label();
             this.chkCompleteSoundPlayback = new DarkUI.Controls.DarkCheckBox();
             this.btnAddFolder = new DarkUI.Controls.DarkButton();
             this.lblFolder = new System.Windows.Forms.Label();
@@ -111,6 +112,7 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
             this.tmrRender = new System.Windows.Forms.Timer(this.components);
+            this.nudBrightnessThreshold = new System.Windows.Forms.NumericUpDown();
             this.grpAnimations.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             this.grpLower.SuspendLayout();
@@ -133,6 +135,7 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.picUpperAnimation)).BeginInit();
             this.pnlContainer.SuspendLayout();
             this.toolStrip.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudBrightnessThreshold)).BeginInit();
             this.SuspendLayout();
             // 
             // grpAnimations
@@ -194,6 +197,8 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpGeneral.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpGeneral.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpGeneral.Controls.Add(this.nudBrightnessThreshold);
+            this.grpGeneral.Controls.Add(this.lblBrightnessThreshold);
             this.grpGeneral.Controls.Add(this.chkCompleteSoundPlayback);
             this.grpGeneral.Controls.Add(this.btnAddFolder);
             this.grpGeneral.Controls.Add(this.lblFolder);
@@ -212,6 +217,15 @@ namespace Intersect.Editor.Forms.Editors
             this.grpGeneral.TabIndex = 18;
             this.grpGeneral.TabStop = false;
             this.grpGeneral.Text = "General";
+            // 
+            // lblBrightnessThreshold
+            // 
+            this.lblBrightnessThreshold.AutoSize = true;
+            this.lblBrightnessThreshold.Location = new System.Drawing.Point(808, 19);
+            this.lblBrightnessThreshold.Name = "lblBrightnessThreshold";
+            this.lblBrightnessThreshold.Size = new System.Drawing.Size(109, 13);
+            this.lblBrightnessThreshold.TabIndex = 30;
+            this.lblBrightnessThreshold.Text = "Brightness Threshold:";
             // 
             // chkCompleteSoundPlayback
             // 
@@ -1175,6 +1189,14 @@ namespace Intersect.Editor.Forms.Editors
             this.tmrRender.Interval = 16;
             this.tmrRender.Tick += new System.EventHandler(this.tmrRender_Tick);
             // 
+            // nudBrightnessThreshold
+            // 
+            this.nudBrightnessThreshold.Location = new System.Drawing.Point(923, 16);
+            this.nudBrightnessThreshold.Name = "nudBrightnessThreshold";
+            this.nudBrightnessThreshold.Size = new System.Drawing.Size(51, 20);
+            this.nudBrightnessThreshold.TabIndex = 31;
+            this.nudBrightnessThreshold.ValueChanged += new System.EventHandler(this.nudBrightnessThreshold_ValueChanged);
+            // 
             // FrmAnimation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1226,6 +1248,7 @@ namespace Intersect.Editor.Forms.Editors
             this.pnlContainer.ResumeLayout(false);
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudBrightnessThreshold)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1311,5 +1334,7 @@ namespace Intersect.Editor.Forms.Editors
         private DarkTextBox txtSearch;
         private DarkCheckBox chkCompleteSoundPlayback;
         private Controls.GameObjectList lstGameObjects;
+        private System.Windows.Forms.Label lblBrightnessThreshold;
+        private System.Windows.Forms.NumericUpDown nudBrightnessThreshold;
     }
 }
