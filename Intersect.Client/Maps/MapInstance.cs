@@ -499,7 +499,7 @@ namespace Intersect.Client.Maps
                     if (att.Type == MapAttributes.Animation)
                     {
                         var anim = AnimationBase.Get(((MapAnimationAttribute)att).AnimationId);
-                        if (anim == null)
+                        if (anim == null || !Animation.displayBasedOnBrightness(anim))
                         {
                             continue;
                         }

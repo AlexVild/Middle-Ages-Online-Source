@@ -84,6 +84,11 @@ namespace Intersect.Client.General
             return sCurrentColor;
         }
 
+        public static int GetBrightnessFromAlpha()
+        {
+            return (int)((255 - sCurrentColor.A) / 255f * 100);
+        }
+
     }
 
 }

@@ -75,7 +75,10 @@ namespace Intersect.Client.Entities
                 InfiniteLoop = loopForever;
                 AutoRotate = autoRotate;
                 mZDimension = zDimension;
-                mSound = Audio.AddMapSound(MyBase.Sound, 0, 0, Guid.Empty, loopForever, 0, 12, parent);
+                if (displayBasedOnBrightness(MyBase))
+                {
+                    mSound = Audio.AddMapSound(MyBase.Sound, 0, 0, Guid.Empty, loopForever, 0, 12, parent);
+                }
                 lock (Graphics.AnimationLock)
                 {
                     Graphics.LiveAnimations.Add(this);
@@ -89,7 +92,7 @@ namespace Intersect.Client.Entities
 
         public void Draw(bool upper = false, bool alternate = false)
         {
-            if (Hidden || Globals.Me.MapInstance.Brightness <= MyBase.BrightnessThreshold)
+            if (Hidden || !displayBasedOnBrightness(MyBase))
             {
                 return;
             }
@@ -333,7 +336,7 @@ namespace Intersect.Client.Entities
 
             if (MyBase != null)
             {
-                if (mSound != null)
+                if (mSound != null && displayBasedOnBrightness(MyBase))
                 {
                     mSound.Update();
                 }
@@ -373,7 +376,7 @@ namespace Intersect.Client.Entities
                     }
                 }
 
-                if (!mShowLower && !mShowUpper)
+                if ((!mShowLower && !mShowUpper) || !displayBasedOnBrightness(MyBase))
                 {
                     Dispose();
                 }
@@ -462,6 +465,34 @@ namespace Intersect.Client.Entities
             mRenderDir = dir;
         }
 
+        public static bool displayBasedOnBrightness(AnimationBase animBase)
+        {
+            if (animBase != null)
+            {
+                int thresh = animBase.BrightnessThreshold;
+                var map = Globals.Me.MapInstance;
+                if (map.IsIndoors)
+                {
+                    if (thresh < map.Brightness)
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    if (thresh < Time.GetBrightnessFromAlpha())
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            } else
+            {
+                return false;
+            }
+            
+        }
     }
 
 }

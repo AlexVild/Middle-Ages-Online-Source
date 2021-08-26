@@ -82,7 +82,7 @@ namespace Intersect.GameObjects
 
         public bool CompleteSound { get; set; }
 
-        public int BrightnessThreshold { get; set; }
+        public int BrightnessThreshold { get; set; } = 100;
 
         /// <inheritdoc />
         public string Folder { get; set; } = "";

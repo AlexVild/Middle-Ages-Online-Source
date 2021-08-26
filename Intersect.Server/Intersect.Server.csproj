@@ -601,8 +601,10 @@
       <DependentUpon>20210703145618_AddingShopSoundEffects.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20210810194601_OverTimeSpellAnimationMigration.cs" />
-    <Compile Include="Migrations\Game\20210810194601_OverTimeSpellAnimationMigration.Designer.cs">
-      <DependentUpon>20210810194601_OverTimeSpellAnimationMigration.cs</DependentUpon>
+    <Compile Include="Migrations\Game\20210810194601_OverTimeSpellAnimationMigration.Designer.cs" />
+    <Compile Include="Migrations\Game\20210826154714_AnimationBrightnessThreshold.cs" />
+    <Compile Include="Migrations\Game\20210826154714_AnimationBrightnessThreshold.designer.cs">
+      <DependentUpon>20210826154714_AnimationBrightnessThreshold.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
