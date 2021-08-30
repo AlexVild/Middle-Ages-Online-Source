@@ -164,13 +164,16 @@ namespace Intersect.Server.Entities
         public long ComboTimestamp { get; set; } = -1; // the timestamp that determines when a combo is no longer valid
 
         [NotMapped]
-        public long ComboWindow { get; set; } = Options.BaseComboTime;
+        public int ComboWindow { get; set; } = -1;
 
         [NotMapped]
-        public int ComboExp { get; set; }
+        public int MaxComboWindow { get; set; } = Options.BaseComboTime;
 
         [NotMapped]
-        public int CurrentCombo { get; set; }
+        public int ComboExp { get; set; } = 0;
+
+        [NotMapped]
+        public int CurrentCombo { get; set; } = 0;
 
         /*//Spawn Stuff
         public Guid AlternateSpawnMapId { get; set; }
@@ -538,9 +541,17 @@ namespace Intersect.Server.Entities
                     }
 
                     // Check to see if combos expired
-                    if (Globals.Timing.Milliseconds > ComboTimestamp)
+                    if (ComboWindow > 0)
                     {
-                        EndCombo();
+                        // Detract from the window
+                        ComboWindow = (int)(ComboTimestamp - Globals.Timing.Milliseconds);
+                        if (ComboWindow < 0)
+                        {
+                            EndCombo(); // This will also send a packet - this way, we're not flooding the client with packets when there's no active combo
+                        } else
+                        {
+                            PacketSender.SendComboPacket(Client, CurrentCombo, ComboWindow, ComboExp, MaxComboWindow);
+                        }
                     }
 
                     base.Update(timeMs);
@@ -1079,7 +1090,8 @@ namespace Intersect.Server.Entities
 
             if (CurrentCombo > 0)
             {
-                Exp += CalculateComboExperience(amount);
+                ComboExp = CalculateComboExperience(amount);
+                Exp += ComboExp;
             }
 
             if (Exp < 0)
@@ -1091,15 +1103,6 @@ namespace Intersect.Server.Entities
             {
                 PacketSender.SendExperience(this);
             }
-        }
-
-        private int CalculateComboExperience(long baseAmount)
-        {
-            // Cap bonus EXP at double the base exp from the enemy - to prevent anything absolutely bonkers
-            var calculatedBonus = MathHelper.Clamp(Options.Combat.BaseComboExpModifier * CurrentCombo, 0, 2 * baseAmount);
-            var bonusExp = (int) Math.Floor(baseAmount * (calculatedBonus));
-            PacketSender.SendChatMsg(this, "Current combo: " + CurrentCombo.ToString() + ", earning " + bonusExp.ToString() + " extra experience!", ChatMessageType.Notice, CustomColors.Alerts.AdminJoined);
-            return bonusExp;
         }
 
         public void TakeExperience(long amount)
@@ -1197,17 +1200,34 @@ namespace Intersect.Server.Entities
             }
         }
 
+        #region Combo Stuff
+        private int CalculateComboExperience(long baseAmount)
+        {
+            // Cap bonus EXP at double the base exp from the enemy - to prevent anything absolutely bonkers
+            var calculatedBonus = MathHelper.Clamp(Options.Combat.BaseComboExpModifier * CurrentCombo, 0, 2.0f);
+            var bonusExp = (int)Math.Floor(baseAmount * calculatedBonus);
+            return bonusExp;
+        }
+
         public void UpdateComboTime()
         {
-            this.ComboTimestamp = Globals.Timing.Milliseconds + Options.BaseComboTime;
-            this.CurrentCombo++;
+            ComboWindow = MaxComboWindow;
+            ComboTimestamp = Globals.Timing.Milliseconds + ComboWindow;
+            CurrentCombo++;
         }
 
         public void EndCombo()
         {
-            this.ComboTimestamp = -1;
-            this.CurrentCombo = 0;
+            if (CurrentCombo > 0) // prevents flooding the client with useless combo packets
+            {
+                ComboTimestamp = -1;
+                ComboWindow = -1;
+                ComboExp = 0;
+                CurrentCombo = 0;
+                PacketSender.SendComboPacket(Client, CurrentCombo, ComboWindow, ComboExp, MaxComboWindow); // sends the final packet of the combo
+            }
         }
+        #endregion
 
         public void UpdateQuestKillTasks(Entity en)
         {

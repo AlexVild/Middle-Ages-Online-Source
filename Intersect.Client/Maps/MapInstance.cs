@@ -1275,7 +1275,7 @@ namespace Intersect.Client.Maps
                     Options.TileHeight *
                     2 *
                     (1000 - (ActionMsgs[n].TransmittionTimer - Globals.System.GetTimeMs())) /
-                    1000
+                    1000 + ActionMsgs[n].YOffset
                 );
 
                 var x = (int) Math.Ceiling(GetX() + ActionMsgs[n].X * Options.TileWidth + ActionMsgs[n].XOffset);

@@ -2129,6 +2129,10 @@ namespace Intersect.Server.Networking
             }
         }
 
+        public static void SendComboPacket(Client client, int comboSize, int comboWindow, int bonusExp, int maxComboWindow)
+        {
+            client?.Send(new ComboPacket(comboSize, comboWindow, bonusExp, maxComboWindow));
+        }
     }
 
 }

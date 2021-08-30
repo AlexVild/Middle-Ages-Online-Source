@@ -39,6 +39,8 @@ namespace Intersect.Client.Interface.Game
 
         private Chatbox mChatBox;
 
+        private ComboText mComboText;
+
         private CraftingWindow mCraftingWindow;
 
         private DebugMenu mDebugMenu;
@@ -122,6 +124,7 @@ namespace Intersect.Client.Interface.Game
             mQuestOfferWindow = new QuestOfferWindow(GameCanvas);
             mDebugMenu = new DebugMenu(GameCanvas);
             mMapItemWindow = new MapItemWindow(GameCanvas);
+            mComboText = new ComboText(GameCanvas);
         }
 
         //Chatbox
@@ -345,6 +348,7 @@ namespace Intersect.Client.Interface.Game
             mMapItemWindow.Update();
             AnnouncementWindow?.Update();
             mPictureWindow?.Update();
+            mComboText?.Update();
 
             if (Globals.QuestOffers.Count > 0)
             {

@@ -66,7 +66,15 @@ namespace Intersect.Client.Entities
 
         public int TargetType;
 
-        public long CombatTimer { get; set; } = 0;
+        public long CombatTimer { get; set; }
+
+        public int ComboWindow { get; set; }
+
+        public int ComboExp { get; set; }
+
+        public int CurrentCombo { get; set; }
+
+        public int MaxComboWindow { get; set; }
 
         // Target data
         private long mlastTargetScanTime = 0;

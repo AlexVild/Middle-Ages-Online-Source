@@ -2070,6 +2070,15 @@ namespace Intersect.Client.Networking
             Globals.futureWarpY = packet.Y;
             Globals.futureWarpDir = packet.Dir;
         }
+
+        // Combo handling packet
+        public void HandlePacket(IPacketSender packetSender, ComboPacket packet)
+        {
+            Globals.Me.CurrentCombo = packet.ComboSize;
+            Globals.Me.ComboExp = packet.BonusExp;
+            Globals.Me.ComboWindow = packet.ComboWindow;
+            Globals.Me.MaxComboWindow = packet.MaxComboWindow;
+        }
     }
 
 }
