@@ -6,6 +6,7 @@ using Intersect.Server.Entities.Events;
 using Intersect.Server.General;
 using Intersect.Enums;
 using Intersect.Server.Maps;
+using Intersect.Utilities;
 
 namespace Intersect.Server.Classes.Maps
 {
@@ -34,7 +35,7 @@ namespace Intersect.Server.Classes.Maps
         {
             Owner = owner;
             ParentSpell = parentSpell;
-            Duration = Globals.Timing.Milliseconds + ParentSpell.Combat.TrapDuration;
+            Duration = Timing.Global.Milliseconds + ParentSpell.Combat.TrapDuration;
             MapId = mapId;
             X = x;
             Y = y;

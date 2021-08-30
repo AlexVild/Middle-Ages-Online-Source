@@ -196,7 +196,7 @@ namespace Intersect.Server.Networking
 
         public bool HandlePacket(IConnection connection, IPacket packet)
         {
-            packet.ReceiveTime = Globals.Timing.Milliseconds;
+            packet.ReceiveTime = Timing.Global.Milliseconds;
 
             var client = Client.FindBeta4Client(connection);
             if (client == null)
@@ -365,7 +365,7 @@ namespace Intersect.Server.Networking
                         //    Log.Warn(
                         //        "Dropping Packet. Time desync? Debug Info:\n\t" +
                         //        $"Ping[Connection={ping}, NetConnection={ncPing}, Error={Math.Abs(ncPing - ping)}]\n\t" +
-                        //        $"Server Time[Ticks={Globals.Timing.Ticks}, AdjustedMs={localAdjustedMs}, TicksUTC={Globals.Timing.TicksUTC}, Offset={Globals.Timing.TicksOffset}]\n\t" +
+                        //        $"Server Time[Ticks={Timing.Global.Ticks}, AdjustedMs={localAdjustedMs}, TicksUTC={Timing.Global.TicksUTC}, Offset={Timing.Global.TicksOffset}]\n\t" +
                         //        $"Client Time[Ticks={timedPacket.Adjusted}, AdjustedMs={remoteAdjustedMs}, TicksUTC={timedPacket.UTC}, Offset={timedPacket.Offset}]\n\t" +
                         //        $"Error[G={Math.Abs(localAdjustedMs - remoteAdjustedMs)}, R={Math.Abs(localUtcMs - remoteUtcMs)}, O={Math.Abs(localOffsetMs - remoteOffsetMs)}]\n\t" +
                         //        $"Delta[Adjusted={deltaAdjusted}, AWP={deltaWithPing}, AWEN={deltaWithErrorMinimum}, AWEX={deltaWithErrorMaximum}]\n\t" +
@@ -499,7 +499,7 @@ namespace Intersect.Server.Networking
         //LoginPacket
         public void HandlePacket(Client client, LoginPacket packet)
         {
-            if (client.AccountAttempts > 3 && client.TimeoutMs > Globals.Timing.Milliseconds)
+            if (client.AccountAttempts > 3 && client.TimeoutMs > Timing.Global.Milliseconds)
             {
                 PacketSender.SendError(client, Strings.Errors.errortimeout);
                 client.ResetTimeout();
@@ -1081,12 +1081,12 @@ namespace Intersect.Server.Networking
                 return;
             }
 
-            if (player.AttackTimer > Globals.Timing.Milliseconds)
+            if (player.AttackTimer > Timing.Global.Milliseconds)
             {
                 return;
             }
 
-            if (player.CastTime > Globals.Timing.Milliseconds)
+            if (player.CastTime > Timing.Global.Milliseconds)
             {
                 if (Options.Combat.EnableCombatChatMessages)
                 {
@@ -1305,9 +1305,9 @@ namespace Intersect.Server.Networking
                 }
             }
 
-            if (player.AttackTimer > Globals.Timing.Milliseconds)
+            if (player.AttackTimer > Timing.Global.Milliseconds)
             {
-                player.AttackTimer = Globals.Timing.Milliseconds + latencyAdjustmentMs + player.CalculateAttackTime();
+                player.AttackTimer = Timing.Global.Milliseconds + latencyAdjustmentMs + player.CalculateAttackTime();
             }
         }
 
@@ -1363,7 +1363,7 @@ namespace Intersect.Server.Networking
         //CreateAccountPacket
         public void HandlePacket(Client client, CreateAccountPacket packet)
         {
-            if (client.TimeoutMs > Globals.Timing.Milliseconds)
+            if (client.TimeoutMs > Timing.Global.Milliseconds)
             {
                 PacketSender.SendError(client, Strings.Errors.errortimeout);
                 client.ResetTimeout();
@@ -1914,7 +1914,7 @@ namespace Intersect.Server.Networking
             }
 
             player.CraftId = packet.CraftId;
-            player.CraftTimer = Globals.Timing.Milliseconds;
+            player.CraftTimer = Timing.Global.Milliseconds;
         }
 
         //CloseBankPacket
@@ -2028,12 +2028,12 @@ namespace Intersect.Server.Networking
                     if (player.PartyRequests.ContainsKey(player.PartyRequester))
                     {
                         player.PartyRequests[player.PartyRequester] =
-                            Globals.Timing.Milliseconds + Options.RequestTimeout;
+                            Timing.Global.Milliseconds + Options.RequestTimeout;
                     }
                     else
                     {
                         player.PartyRequests.Add(
-                            player.PartyRequester, Globals.Timing.Milliseconds + Options.RequestTimeout
+                            player.PartyRequester, Timing.Global.Milliseconds + Options.RequestTimeout
                         );
                     }
                 }
@@ -2180,12 +2180,12 @@ namespace Intersect.Server.Networking
                         if (player.Trading.Requests.ContainsKey(player.Trading.Requester))
                         {
                             player.Trading.Requests[player.Trading.Requester] =
-                                Globals.Timing.Milliseconds + Options.RequestTimeout;
+                                Timing.Global.Milliseconds + Options.RequestTimeout;
                         }
                         else
                         {
                             player.Trading.Requests.Add(
-                                player.Trading.Requester, Globals.Timing.Milliseconds + Options.RequestTimeout
+                                player.Trading.Requester, Timing.Global.Milliseconds + Options.RequestTimeout
                             );
                         }
                     }
@@ -2363,7 +2363,7 @@ namespace Intersect.Server.Networking
                     var target = Player.FindOnline(packet.Name);
                     if (target != null)
                     {
-                        if (target.CombatTimer < Globals.Timing.Milliseconds)
+                        if (target.CombatTimer < Timing.Global.Milliseconds)
                         {
                             target.FriendRequest(client.Entity);
                         }
@@ -2453,12 +2453,12 @@ namespace Intersect.Server.Networking
                         if (player.FriendRequests.ContainsKey(player.FriendRequester))
                         {
                             player.FriendRequests[player.FriendRequester] =
-                                Globals.Timing.Milliseconds + Options.RequestTimeout;
+                                Timing.Global.Milliseconds + Options.RequestTimeout;
                         }
                         else
                         {
                             player.FriendRequests.Add(
-                                client.Entity.FriendRequester, Globals.Timing.Milliseconds + Options.RequestTimeout
+                                client.Entity.FriendRequester, Timing.Global.Milliseconds + Options.RequestTimeout
                             );
                         }
                     }
@@ -2550,7 +2550,7 @@ namespace Intersect.Server.Networking
         //RequestPasswordResetPacket
         public void HandlePacket(Client client, RequestPasswordResetPacket packet)
         {
-            if (client.TimeoutMs > Globals.Timing.Milliseconds)
+            if (client.TimeoutMs > Timing.Global.Milliseconds)
             {
                 PacketSender.SendError(client, Strings.Errors.errortimeout);
                 client.ResetTimeout();
@@ -2586,7 +2586,7 @@ namespace Intersect.Server.Networking
         {
             //Find account with that name or email
 
-            if (client.TimeoutMs > Globals.Timing.Milliseconds)
+            if (client.TimeoutMs > Timing.Global.Milliseconds)
             {
                 PacketSender.SendError(client, Strings.Errors.errortimeout);
                 client.ResetTimeout();
@@ -3053,7 +3053,7 @@ namespace Intersect.Server.Networking
         //LoginPacket
         public void HandlePacket(Client client, Network.Packets.Editor.LoginPacket packet)
         {
-            if (client.AccountAttempts > 3 && client.TimeoutMs > Globals.Timing.Milliseconds)
+            if (client.AccountAttempts > 3 && client.TimeoutMs > Timing.Global.Milliseconds)
             {
                 PacketSender.SendError(client, Strings.Errors.errortimeout);
                 client.ResetTimeout();

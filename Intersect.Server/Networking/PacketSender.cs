@@ -51,10 +51,10 @@ namespace Intersect.Server.Networking
         //PingPacket
         public static void SendPing(Client client, bool request = true)
         {
-            if (client != null && client.LastPing + 250 < Globals.Timing.Milliseconds)
+            if (client != null && client.LastPing + 250 < Timing.Global.Milliseconds)
             {
                 client.Send(new PingPacket(request), TransmissionMode.Any);
-                client.LastPing = Globals.Timing.Milliseconds;
+                client.LastPing = Timing.Global.Milliseconds;
             }
         }
 
@@ -220,7 +220,7 @@ namespace Intersect.Server.Networking
             {
                 if (sentMaps.TryGetValue(mapId, out var sentMap))
                 {
-                    if (sentMap.Item1 > Globals.Timing.Milliseconds && sentMap.Item2 == map.Revision)
+                    if (sentMap.Item1 > Timing.Global.Milliseconds && sentMap.Item2 == map.Revision)
                     {
                         return;
                     }
@@ -230,7 +230,7 @@ namespace Intersect.Server.Networking
 
                 try
                 {
-                    sentMaps.Add(mapId, new Tuple<long, int>(Globals.Timing.Milliseconds + 5000, map.Revision));
+                    sentMaps.Add(mapId, new Tuple<long, int>(Timing.Global.Milliseconds + 5000, map.Revision));
                 }
                 catch (Exception exception)
                 {
@@ -869,7 +869,7 @@ namespace Intersect.Server.Networking
         {
             return new EntityVitalsPacket(
                 en.Id, en.GetEntityType(), en.MapId, en.GetVitals(), en.GetMaxVitals(), en.StatusPackets(),
-                en.CombatTimer - Globals.Timing.Milliseconds
+                en.CombatTimer - Timing.Global.Milliseconds
             );
         }
 

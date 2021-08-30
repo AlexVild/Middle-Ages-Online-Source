@@ -310,7 +310,7 @@ namespace Intersect.Server.Database.PlayerData.Players
             {
                 PacketSender.SendGuild(member);
             }
-            LastUpdateTime = Globals.Timing.Milliseconds;
+            LastUpdateTime = Timing.Global.Milliseconds;
         }
 
         /// <summary>

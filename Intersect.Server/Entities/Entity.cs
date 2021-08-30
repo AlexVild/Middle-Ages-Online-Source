@@ -235,7 +235,7 @@ namespace Intersect.Server.Entities
         public bool Passable { get; set; } = false;
 
         [NotMapped, JsonIgnore]
-        public long RegenTimer { get; set; } = Globals.Timing.Milliseconds;
+        public long RegenTimer { get; set; } = Timing.Global.Milliseconds;
 
         [NotMapped, JsonIgnore]
         public int SpellCastSlot { get; set; } = 0;
@@ -322,7 +322,7 @@ namespace Intersect.Server.Entities
                     }
 
                     var statsUpdated = false;
-                    var statTime = Globals.Timing.Milliseconds;
+                    var statTime = Timing.Global.Milliseconds;
                     for (var i = 0; i < (int)Stats.StatCount; i++)
                     {
                         statsUpdated |= Stat[i].Update(statTime);
@@ -759,17 +759,17 @@ namespace Intersect.Server.Entities
 
                         break;
                     case MoveRouteEnum.Wait100:
-                        MoveTimer = Globals.Timing.Milliseconds + 100;
+                        MoveTimer = Timing.Global.Milliseconds + 100;
                         moved = true;
 
                         break;
                     case MoveRouteEnum.Wait500:
-                        MoveTimer = Globals.Timing.Milliseconds + 500;
+                        MoveTimer = Timing.Global.Milliseconds + 500;
                         moved = true;
 
                         break;
                     case MoveRouteEnum.Wait1000:
-                        MoveTimer = Globals.Timing.Milliseconds + 1000;
+                        MoveTimer = Timing.Global.Milliseconds + 1000;
                         moved = true;
 
                         break;
@@ -792,9 +792,9 @@ namespace Intersect.Server.Entities
                     }
                 }
 
-                if (moved && MoveTimer < Globals.Timing.Milliseconds)
+                if (moved && MoveTimer < Timing.Global.Milliseconds)
                 {
-                    MoveTimer = Globals.Timing.Milliseconds + (long) GetMovementTime();
+                    MoveTimer = Timing.Global.Milliseconds + (long) GetMovementTime();
                 }
             }
 
@@ -833,7 +833,7 @@ namespace Intersect.Server.Entities
 
         public virtual void Move(int moveDir, Player forPlayer, bool doNotUpdate = false, bool correction = false)
         {
-            if (Globals.Timing.Milliseconds < MoveTimer || (!Options.Combat.MovementCancelsCast && CastTime > 0))
+            if (Timing.Global.Milliseconds < MoveTimer || (!Options.Combat.MovementCancelsCast && CastTime > 0))
             {
                 return;
             }
@@ -975,7 +975,7 @@ namespace Intersect.Server.Entities
                             }
                         }
 
-                        MoveTimer = Globals.Timing.Milliseconds + (long)GetMovementTime();
+                        MoveTimer = Timing.Global.Milliseconds + (long)GetMovementTime();
                     }
 
                     if (TryToChangeDimension() && doNotUpdate == true)
@@ -1150,7 +1150,7 @@ namespace Intersect.Server.Entities
             // Seeing as blocking doesn't... do anything, let's just get rid of this.
             /*if (AttackTimer < Globals.Timing.Milliseconds)
             {
-                if (blocking && !Blocking && AttackTimer < Globals.Timing.Milliseconds)
+                if (blocking && !Blocking && AttackTimer < Timing.Global.Milliseconds)
                 {
                     Blocking = true;
                     PacketSender.SendEntityAttack(this, -1);
@@ -1158,7 +1158,7 @@ namespace Intersect.Server.Entities
                 else if (!blocking && Blocking)
                 {
                     Blocking = false;
-                    AttackTimer = Globals.Timing.Milliseconds + CalculateAttackTime();
+                    AttackTimer = Timing.Global.Milliseconds + CalculateAttackTime();
                     PacketSender.SendEntityAttack(this, 0);
                 }
             }*/
@@ -1648,7 +1648,7 @@ namespace Intersect.Server.Entities
             }
 
             var statBuffTime = -1;
-            var expireTime = Globals.Timing.Milliseconds + spellBase.Combat.Duration;
+            var expireTime = Timing.Global.Milliseconds + spellBase.Combat.Duration;
             for (var i = 0; i < (int) Stats.StatCount; i++)
             {
                 target.Stat[i]
@@ -1821,7 +1821,7 @@ namespace Intersect.Server.Entities
             ItemBase weapon = null
         )
         {
-            if (AttackTimer > Globals.Timing.Milliseconds)
+            if (AttackTimer > Timing.Global.Milliseconds)
             {
                 return;
             }
@@ -1863,7 +1863,7 @@ namespace Intersect.Server.Entities
                 }
             }
 
-            AttackTimer = Globals.Timing.Milliseconds + CalculateAttackTime();
+            AttackTimer = Timing.Global.Milliseconds + CalculateAttackTime();
 
             //Check if the attacker is blinded.
             if (IsOneBlockAway(target))
@@ -2076,8 +2076,8 @@ namespace Intersect.Server.Entities
             }
 
             // Set combat timers!
-            enemy.CombatTimer = Globals.Timing.Milliseconds + Options.CombatTime;
-            CombatTimer = Globals.Timing.Milliseconds + Options.CombatTime;
+            enemy.CombatTimer = Timing.Global.Milliseconds + Options.CombatTime;
+            CombatTimer = Timing.Global.Milliseconds + Options.CombatTime;
 
             //Check for lifesteal
             if (GetType() == typeof(Player) && enemy.GetType() != typeof(Resource))
@@ -2143,7 +2143,7 @@ namespace Intersect.Server.Entities
             // Add a timer before able to make the next move.
             if (GetType() == typeof(Npc))
             {
-                ((Npc) this).MoveTimer = Globals.Timing.Milliseconds + (long) GetMovementTime();
+                ((Npc) this).MoveTimer = Timing.Global.Milliseconds + (long) GetMovementTime();
             }
 
             if (!wasBlocked && !attackMissed && !invulnerable)
@@ -3134,7 +3134,7 @@ namespace Intersect.Server.Entities
                 }
 
                 statusPackets[i] = new StatusPacket(
-                    status.Spell.Id, status.Type, status.Data, (int) (status.Duration - Globals.Timing.Milliseconds),
+                    status.Spell.Id, status.Type, status.Data, (int) (status.Duration - Timing.Global.Milliseconds),
                     (int) (status.Duration - status.StartTime), vitalShields
                 );
             }

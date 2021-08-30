@@ -27,7 +27,7 @@ namespace Intersect.Server.Entities
 
         public ProjectileBase ProjectileBase;
 
-        public long TransmittionTimer = Globals.Timing.Milliseconds;
+        public long TransmittionTimer = Timing.Global.Milliseconds;
 
         public long ProjectileActiveTime;
 
@@ -68,7 +68,7 @@ namespace Intersect.Server.Entities
             Dir = dir;
             ProjectileBase = projectileBase;
             Parent = parent;
-            TransmittionTimer = Globals.Timing.Milliseconds +
+            TransmittionTimer = Timing.Global.Milliseconds +
                                 (long) ((float) ProjectileBase.Speed / (float) ProjectileBase.Range);
             ProjectileActiveTime = Globals.Timing.Milliseconds + (Options.Instance.Processing.ProjectileUpdateInterval * Options.Instance.Processing.ProjectileTicksUntilDamageInSpawn);
         }

@@ -451,7 +451,7 @@ namespace Intersect.Server.Entities
                 LoginTime = null;
             }
 
-            if (CombatTimer < Globals.Timing.Milliseconds || force)
+            if (CombatTimer < Timing.Global.Milliseconds || force)
             {
                 Logout(softLogout);
             }
@@ -592,7 +592,7 @@ namespace Intersect.Server.Entities
                 {
                     if (Client == null) //Client logged out
                     {
-                        if (CombatTimer < Globals.Timing.Milliseconds)
+                        if (CombatTimer < Timing.Global.Milliseconds)
                         {
                             Logout();
 
@@ -601,14 +601,14 @@ namespace Intersect.Server.Entities
                     }
                     else
                     {
-                        if (SaveTimer < Globals.Timing.Milliseconds)
+                        if (SaveTimer < Timing.Global.Milliseconds)
                         {
                             var user = User;
                             if (user != null)
                             {
                                 DbInterface.Pool.QueueWorkItem(user.Save, false);
                             }
-                            SaveTimer = Globals.Timing.Milliseconds + Options.Instance.Processing.PlayerSaveInterval;
+                            SaveTimer = Timing.Global.Milliseconds + Options.Instance.Processing.PlayerSaveInterval;
                         }
                     }
 
@@ -657,7 +657,7 @@ namespace Intersect.Server.Entities
 
                     base.Update(timeMs);
 
-                    if (mAutorunCommonEventTimer < Globals.Timing.Milliseconds)
+                    if (mAutorunCommonEventTimer < Timing.Global.Milliseconds)
                     {
                         var autorunEvents = 0;
                         //Check for autorun common events and run them
@@ -674,7 +674,7 @@ namespace Intersect.Server.Entities
                             }
                         }
 
-                        mAutorunCommonEventTimer = Globals.Timing.Milliseconds + Options.Instance.Processing.CommonEventAutorunStartInterval;
+                        mAutorunCommonEventTimer = Timing.Global.Milliseconds + Options.Instance.Processing.CommonEventAutorunStartInterval;
                         CommonAutorunEvents = autorunEvents;
                     }
 
@@ -910,9 +910,9 @@ namespace Intersect.Server.Entities
                 pkt.AccessLevel = 0;
             }
 
-            if (CombatTimer > Globals.Timing.Milliseconds)
+            if (CombatTimer > Timing.Global.Milliseconds)
             {
-                pkt.CombatTimeRemaining = CombatTimer - Globals.Timing.Milliseconds;
+                pkt.CombatTimeRemaining = CombatTimer - Timing.Global.Milliseconds;
             }
 
             if (forPlayer != null && GetType() == typeof(Player))
@@ -1568,7 +1568,7 @@ namespace Intersect.Server.Entities
 
         public void TryAttack(Entity target)
         {
-            if (CastTime >= Globals.Timing.Milliseconds)
+            if (CastTime >= Timing.Global.Milliseconds)
             {
                 if (Options.Combat.EnableCombatChatMessages)
                 {
@@ -4424,7 +4424,7 @@ namespace Intersect.Server.Entities
                 fromPlayer.FriendRequests.Remove(this);
             }
 
-            if (!FriendRequests.ContainsKey(fromPlayer) || !(FriendRequests[fromPlayer] > Globals.Timing.Milliseconds))
+            if (!FriendRequests.ContainsKey(fromPlayer) || !(FriendRequests[fromPlayer] > Timing.Global.Milliseconds))
             {
                 if (!IsBusy())
                 {
@@ -4474,7 +4474,7 @@ namespace Intersect.Server.Entities
                 fromPlayer.Trading.Requests.Remove(this);
             }
 
-            if (Trading.Requests.ContainsKey(fromPlayer) && Trading.Requests[fromPlayer] > Globals.Timing.Milliseconds)
+            if (Trading.Requests.ContainsKey(fromPlayer) && Trading.Requests[fromPlayer] > Timing.Global.Milliseconds)
             {
                 PacketSender.SendChatMsg(fromPlayer, Strings.Trading.alreadydenied, ChatMessageType.Trading, CustomColors.Alerts.Error);
             }
@@ -4761,7 +4761,7 @@ namespace Intersect.Server.Entities
                 fromPlayer.PartyRequests.Remove(this);
             }
 
-            if (PartyRequests.ContainsKey(fromPlayer) && PartyRequests[fromPlayer] > Globals.Timing.Milliseconds)
+            if (PartyRequests.ContainsKey(fromPlayer) && PartyRequests[fromPlayer] > Timing.Global.Milliseconds)
             {
                 PacketSender.SendChatMsg(fromPlayer, Strings.Parties.alreadydenied, ChatMessageType.Party, CustomColors.Alerts.Error);
             }
@@ -5324,7 +5324,7 @@ namespace Intersect.Server.Entities
             {
                 if (CastTime == 0)
                 {
-                    CastTime = Globals.Timing.Milliseconds + spell.CastDuration;
+                    CastTime = Timing.Global.Milliseconds + spell.CastDuration;
 
                     //Remove stealth status.
                     foreach (var status in CachedStatuses)
@@ -5362,7 +5362,7 @@ namespace Intersect.Server.Entities
                     }
 
                     //Check if cast should be instance
-                    if (Globals.Timing.Milliseconds >= CastTime)
+                    if (Timing.Global.Milliseconds >= CastTime)
                     {
                         //Cast now!
                         CastTime = 0;
