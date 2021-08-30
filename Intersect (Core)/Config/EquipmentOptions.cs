@@ -20,6 +20,8 @@ namespace Intersect.Config
             "Weapon",
             "Shield",
             "Boots",
+            "Accessory",
+            "Prayer"
         };
 
         public List<string> ToolTypes = new List<string>()
@@ -31,6 +33,8 @@ namespace Intersect.Config
         };
 
         public int WeaponSlot = 2;
+
+        public int PrayerSlot = 6;
 
         [OnDeserializing]
         internal void OnDeserializingMethod(StreamingContext context)

@@ -133,6 +133,11 @@ namespace Intersect.Editor.Forms.Editors
             cmbTeachSpell.Items.Clear();
             cmbTeachSpell.Items.Add(Strings.General.none);
             cmbTeachSpell.Items.AddRange(SpellBase.Names);
+
+            cmbComboSpell.Items.Clear();
+            cmbComboSpell.Items.Add(Strings.General.none);
+            cmbComboSpell.Items.AddRange(SpellBase.Names);
+
             cmbEvent.Items.Clear();
             cmbEvent.Items.Add(Strings.General.none);
             cmbEvent.Items.AddRange(EventBase.Names);
@@ -563,13 +568,21 @@ namespace Intersect.Editor.Forms.Editors
         private void cmbEquipmentSlot_SelectedIndexChanged(object sender, EventArgs e)
         {
             mEditorItem.EquipmentSlot = cmbEquipmentSlot.SelectedIndex;
+            var x = Options.PrayerIndex;
+            var y = Options.WeaponIndex;
             if (cmbEquipmentSlot.SelectedIndex == Options.WeaponIndex)
             {
                 grpWeaponProperties.Show();
+                grpPrayerProperties.Hide();
+            } else if (cmbEquipmentSlot.SelectedIndex == Options.PrayerIndex)
+            {
+                grpWeaponProperties.Hide();
+                grpPrayerProperties.Show();
             }
             else
             {
                 grpWeaponProperties.Hide();
+                grpPrayerProperties.Hide();
 
                 mEditorItem.Projectile = null;
                 mEditorItem.Tool = -1;
@@ -1135,6 +1148,11 @@ namespace Intersect.Editor.Forms.Editors
             mEditorItem.CannotUseMessage = txtCannotUse.Text;
         }
 
+        private void cmbComboSpell_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mEditorItem.ComboSpell = SpellBase.Get(SpellBase.IdFromList(cmbComboSpell.SelectedIndex - 1));
+        }
+
         #region "Item List - Folders, Searching, Sorting, Etc"
 
         public void InitEditor()
@@ -1260,6 +1278,7 @@ namespace Intersect.Editor.Forms.Editors
 
 
         #endregion
+
     }
 
 }

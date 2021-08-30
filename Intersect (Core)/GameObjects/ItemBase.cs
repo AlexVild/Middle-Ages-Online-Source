@@ -154,6 +154,19 @@ namespace Intersect.GameObjects
             set => SpellId = value?.Id ?? Guid.Empty;
         }
 
+
+        [Column("ComboSpell")]
+        [JsonProperty]
+        public Guid ComboSpellId { get; set; }
+        
+        [NotMapped]
+        [JsonIgnore]
+        public SpellBase ComboSpell
+        {
+            get => SpellBase.Get(ComboSpellId);
+            set => ComboSpellId = value?.Id ?? Guid.Empty;
+        }
+
         public bool QuickCast { get; set; }
 
         [Column("DestroySpell")]

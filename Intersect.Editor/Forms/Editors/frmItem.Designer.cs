@@ -41,6 +41,10 @@ namespace Intersect.Editor.Forms.Editors
             this.btnCancel = new DarkUI.Controls.DarkButton();
             this.btnSave = new DarkUI.Controls.DarkButton();
             this.grpGeneral = new DarkUI.Controls.DarkGroupBox();
+            this.grpRequirements = new DarkUI.Controls.DarkGroupBox();
+            this.lblCannotUse = new System.Windows.Forms.Label();
+            this.txtCannotUse = new DarkUI.Controls.DarkTextBox();
+            this.btnEditRequirements = new DarkUI.Controls.DarkButton();
             this.chkCanGuildBank = new DarkUI.Controls.DarkCheckBox();
             this.nudBankStackLimit = new DarkUI.Controls.DarkNumericUpDown();
             this.nudInvStackLimit = new DarkUI.Controls.DarkNumericUpDown();
@@ -72,7 +76,6 @@ namespace Intersect.Editor.Forms.Editors
             this.lblRarity = new System.Windows.Forms.Label();
             this.nudCooldown = new DarkUI.Controls.DarkNumericUpDown();
             this.lblCooldown = new System.Windows.Forms.Label();
-            this.btnEditRequirements = new DarkUI.Controls.DarkButton();
             this.chkStackable = new DarkUI.Controls.DarkCheckBox();
             this.nudPrice = new DarkUI.Controls.DarkNumericUpDown();
             this.chkCanDrop = new DarkUI.Controls.DarkCheckBox();
@@ -204,11 +207,13 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemPaste = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
-            this.grpRequirements = new DarkUI.Controls.DarkGroupBox();
-            this.lblCannotUse = new System.Windows.Forms.Label();
-            this.txtCannotUse = new DarkUI.Controls.DarkTextBox();
+            this.vS2015DarkTheme1 = new WeifenLuo.WinFormsUI.Docking.VS2015DarkTheme();
+            this.grpPrayerProperties = new DarkUI.Controls.DarkGroupBox();
+            this.cmbComboSpell = new DarkUI.Controls.DarkComboBox();
+            this.lblComboSpell = new System.Windows.Forms.Label();
             this.grpItems.SuspendLayout();
             this.grpGeneral.SuspendLayout();
+            this.grpRequirements.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudBankStackLimit)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudInvStackLimit)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudDeathDropChance)).BeginInit();
@@ -259,7 +264,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpBags.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudBag)).BeginInit();
             this.toolStrip.SuspendLayout();
-            this.grpRequirements.SuspendLayout();
+            this.grpPrayerProperties.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpItems
@@ -396,6 +401,53 @@ namespace Intersect.Editor.Forms.Editors
             this.grpGeneral.TabIndex = 2;
             this.grpGeneral.TabStop = false;
             this.grpGeneral.Text = "General";
+            // 
+            // grpRequirements
+            // 
+            this.grpRequirements.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpRequirements.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpRequirements.Controls.Add(this.lblCannotUse);
+            this.grpRequirements.Controls.Add(this.txtCannotUse);
+            this.grpRequirements.Controls.Add(this.btnEditRequirements);
+            this.grpRequirements.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpRequirements.Location = new System.Drawing.Point(12, 326);
+            this.grpRequirements.Margin = new System.Windows.Forms.Padding(2);
+            this.grpRequirements.Name = "grpRequirements";
+            this.grpRequirements.Padding = new System.Windows.Forms.Padding(2);
+            this.grpRequirements.Size = new System.Drawing.Size(229, 92);
+            this.grpRequirements.TabIndex = 100;
+            this.grpRequirements.TabStop = false;
+            this.grpRequirements.Text = "Requirements";
+            // 
+            // lblCannotUse
+            // 
+            this.lblCannotUse.AutoSize = true;
+            this.lblCannotUse.Location = new System.Drawing.Point(5, 47);
+            this.lblCannotUse.Name = "lblCannotUse";
+            this.lblCannotUse.Size = new System.Drawing.Size(112, 13);
+            this.lblCannotUse.TabIndex = 54;
+            this.lblCannotUse.Text = "Cannot Use Message:";
+            // 
+            // txtCannotUse
+            // 
+            this.txtCannotUse.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.txtCannotUse.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtCannotUse.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.txtCannotUse.Location = new System.Drawing.Point(8, 63);
+            this.txtCannotUse.Name = "txtCannotUse";
+            this.txtCannotUse.Size = new System.Drawing.Size(207, 20);
+            this.txtCannotUse.TabIndex = 53;
+            this.txtCannotUse.TextChanged += new System.EventHandler(this.txtCannotUse_TextChanged);
+            // 
+            // btnEditRequirements
+            // 
+            this.btnEditRequirements.Location = new System.Drawing.Point(8, 18);
+            this.btnEditRequirements.Name = "btnEditRequirements";
+            this.btnEditRequirements.Padding = new System.Windows.Forms.Padding(5);
+            this.btnEditRequirements.Size = new System.Drawing.Size(207, 23);
+            this.btnEditRequirements.TabIndex = 0;
+            this.btnEditRequirements.Text = "Edit Usage Requirements";
+            this.btnEditRequirements.Click += new System.EventHandler(this.btnEditRequirements_Click);
             // 
             // chkCanGuildBank
             // 
@@ -811,16 +863,6 @@ namespace Intersect.Editor.Forms.Editors
             this.lblCooldown.TabIndex = 38;
             this.lblCooldown.Text = "Cooldown (ms):";
             // 
-            // btnEditRequirements
-            // 
-            this.btnEditRequirements.Location = new System.Drawing.Point(8, 18);
-            this.btnEditRequirements.Name = "btnEditRequirements";
-            this.btnEditRequirements.Padding = new System.Windows.Forms.Padding(5);
-            this.btnEditRequirements.Size = new System.Drawing.Size(207, 23);
-            this.btnEditRequirements.TabIndex = 0;
-            this.btnEditRequirements.Text = "Edit Usage Requirements";
-            this.btnEditRequirements.Click += new System.EventHandler(this.btnEditRequirements_Click);
-            // 
             // chkStackable
             // 
             this.chkStackable.AutoSize = true;
@@ -1024,6 +1066,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpEquipment.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpEquipment.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpEquipment.Controls.Add(this.grpPrayerProperties);
             this.grpEquipment.Controls.Add(this.grpRegen);
             this.grpEquipment.Controls.Add(this.grpVitalBonuses);
             this.grpEquipment.Controls.Add(this.cmbEquipmentAnimation);
@@ -2725,42 +2768,50 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
             // 
-            // grpRequirements
+            // grpPrayerProperties
             // 
-            this.grpRequirements.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.grpRequirements.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpRequirements.Controls.Add(this.lblCannotUse);
-            this.grpRequirements.Controls.Add(this.txtCannotUse);
-            this.grpRequirements.Controls.Add(this.btnEditRequirements);
-            this.grpRequirements.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpRequirements.Location = new System.Drawing.Point(12, 326);
-            this.grpRequirements.Margin = new System.Windows.Forms.Padding(2);
-            this.grpRequirements.Name = "grpRequirements";
-            this.grpRequirements.Padding = new System.Windows.Forms.Padding(2);
-            this.grpRequirements.Size = new System.Drawing.Size(229, 92);
-            this.grpRequirements.TabIndex = 100;
-            this.grpRequirements.TabStop = false;
-            this.grpRequirements.Text = "Requirements";
+            this.grpPrayerProperties.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpPrayerProperties.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpPrayerProperties.Controls.Add(this.lblComboSpell);
+            this.grpPrayerProperties.Controls.Add(this.cmbComboSpell);
+            this.grpPrayerProperties.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpPrayerProperties.Location = new System.Drawing.Point(221, 14);
+            this.grpPrayerProperties.Name = "grpPrayerProperties";
+            this.grpPrayerProperties.Size = new System.Drawing.Size(207, 80);
+            this.grpPrayerProperties.TabIndex = 43;
+            this.grpPrayerProperties.TabStop = false;
+            this.grpPrayerProperties.Text = "Prayer Properties";
+            this.grpPrayerProperties.Visible = false;
             // 
-            // lblCannotUse
+            // cmbComboSpell
             // 
-            this.lblCannotUse.AutoSize = true;
-            this.lblCannotUse.Location = new System.Drawing.Point(5, 47);
-            this.lblCannotUse.Name = "lblCannotUse";
-            this.lblCannotUse.Size = new System.Drawing.Size(112, 13);
-            this.lblCannotUse.TabIndex = 54;
-            this.lblCannotUse.Text = "Cannot Use Message:";
+            this.cmbComboSpell.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbComboSpell.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbComboSpell.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbComboSpell.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbComboSpell.DrawDropdownHoverOutline = false;
+            this.cmbComboSpell.DrawFocusRectangle = false;
+            this.cmbComboSpell.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbComboSpell.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbComboSpell.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbComboSpell.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbComboSpell.FormattingEnabled = true;
+            this.cmbComboSpell.Location = new System.Drawing.Point(10, 35);
+            this.cmbComboSpell.Name = "cmbComboSpell";
+            this.cmbComboSpell.Size = new System.Drawing.Size(185, 21);
+            this.cmbComboSpell.TabIndex = 17;
+            this.cmbComboSpell.Text = null;
+            this.cmbComboSpell.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbComboSpell.SelectedIndexChanged += new System.EventHandler(this.cmbComboSpell_SelectedIndexChanged);
             // 
-            // txtCannotUse
+            // lblComboSpell
             // 
-            this.txtCannotUse.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.txtCannotUse.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtCannotUse.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.txtCannotUse.Location = new System.Drawing.Point(8, 63);
-            this.txtCannotUse.Name = "txtCannotUse";
-            this.txtCannotUse.Size = new System.Drawing.Size(207, 20);
-            this.txtCannotUse.TabIndex = 53;
-            this.txtCannotUse.TextChanged += new System.EventHandler(this.txtCannotUse_TextChanged);
+            this.lblComboSpell.AutoSize = true;
+            this.lblComboSpell.Location = new System.Drawing.Point(12, 18);
+            this.lblComboSpell.Name = "lblComboSpell";
+            this.lblComboSpell.Size = new System.Drawing.Size(69, 13);
+            this.lblComboSpell.TabIndex = 59;
+            this.lblComboSpell.Text = "Combo Spell:";
             // 
             // FrmItem
             // 
@@ -2787,6 +2838,8 @@ namespace Intersect.Editor.Forms.Editors
             this.grpItems.PerformLayout();
             this.grpGeneral.ResumeLayout(false);
             this.grpGeneral.PerformLayout();
+            this.grpRequirements.ResumeLayout(false);
+            this.grpRequirements.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudBankStackLimit)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudInvStackLimit)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudDeathDropChance)).EndInit();
@@ -2848,8 +2901,8 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudBag)).EndInit();
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
-            this.grpRequirements.ResumeLayout(false);
-            this.grpRequirements.PerformLayout();
+            this.grpPrayerProperties.ResumeLayout(false);
+            this.grpPrayerProperties.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -3028,5 +3081,9 @@ namespace Intersect.Editor.Forms.Editors
         private DarkGroupBox grpRequirements;
         private Label lblCannotUse;
         private DarkTextBox txtCannotUse;
+        private WeifenLuo.WinFormsUI.Docking.VS2015DarkTheme vS2015DarkTheme1;
+        private DarkGroupBox grpPrayerProperties;
+        private DarkComboBox cmbComboSpell;
+        private Label lblComboSpell;
     }
 }

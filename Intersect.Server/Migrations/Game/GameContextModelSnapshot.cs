@@ -227,6 +227,9 @@ namespace Intersect.Server.Migrations.Game
 
                     b.Property<string>("CannotUseMessage");
 
+                    b.Property<Guid>("ComboSpellId")
+                        .HasColumnName("Spell");
+
                     b.Property<int>("Cooldown");
 
                     b.Property<string>("CooldownGroup");
