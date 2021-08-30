@@ -8,6 +8,10 @@
 
         public int CombatTime = 10000; //10 seconds
 
+        public int BaseComboTime = 3000; //3 seconds
+
+        public float BaseComboExpModifier = 0.25f;
+
         public int MaxAttackRate = 200; //5 attacks per second
 
         public int MaxDashSpeed = 200;

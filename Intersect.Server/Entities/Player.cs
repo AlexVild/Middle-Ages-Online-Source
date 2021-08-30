@@ -161,6 +161,17 @@ namespace Intersect.Server.Entities
         [NotMapped, JsonIgnore]
         public int MapAutorunEvents { get; private set; }
 
+        public long ComboTimestamp { get; set; } = -1; // the timestamp that determines when a combo is no longer valid
+
+        [NotMapped]
+        public long ComboWindow { get; set; } = Options.BaseComboTime;
+
+        [NotMapped]
+        public int ComboExp { get; set; }
+
+        [NotMapped]
+        public int CurrentCombo { get; set; }
+
         /*//Spawn Stuff
         public Guid AlternateSpawnMapId { get; set; }
 
@@ -358,6 +369,9 @@ namespace Intersect.Server.Entities
             //Update parties
             LeaveParty();
 
+            // End combo
+            EndCombo();
+
             //Update trade
             CancelTrade();
 
@@ -521,6 +535,12 @@ namespace Intersect.Server.Entities
                         {
                             CraftId = Guid.Empty;
                         }
+                    }
+
+                    // Check to see if combos expired
+                    if (Globals.Timing.Milliseconds > ComboTimestamp)
+                    {
+                        EndCombo();
                     }
 
                     base.Update(timeMs);
@@ -790,6 +810,8 @@ namespace Intersect.Server.Entities
         //Spawning/Dying
         private void Respawn()
         {
+            EndCombo();
+
             //Remove any damage over time effects
             DoT.Clear();
             CachedDots = new DoT[0];
@@ -1054,6 +1076,12 @@ namespace Intersect.Server.Entities
         public void GiveExperience(long amount)
         {
             Exp += (int) (amount * GetExpMultiplier() / 100);
+
+            if (CurrentCombo > 0)
+            {
+                Exp += CalculateComboExperience(amount);
+            }
+
             if (Exp < 0)
             {
                 Exp = 0;
@@ -1063,6 +1091,13 @@ namespace Intersect.Server.Entities
             {
                 PacketSender.SendExperience(this);
             }
+        }
+
+        private int CalculateComboExperience(long baseAmount)
+        {
+            var bonusExp = (int) Math.Floor(baseAmount * (Options.Combat.BaseComboExpModifier * CurrentCombo));
+            PacketSender.SendChatMsg(this, "Current combo: " + CurrentCombo.ToString() + ", earning " + bonusExp.ToString() + " extra experience!", ChatMessageType.Notice, CustomColors.Alerts.AdminJoined);
+            return bonusExp;
         }
 
         public void TakeExperience(long amount)
@@ -1118,6 +1153,7 @@ namespace Intersect.Server.Entities
                             {
                                 partyMember.GiveExperience(partyExperience);
                                 partyMember.UpdateQuestKillTasks(entity);
+                                partyMember.UpdateComboTime();
                             }
 
                             if (partyEvent != null)
@@ -1134,6 +1170,7 @@ namespace Intersect.Server.Entities
                         else
                         {
                             GiveExperience(descriptor.Experience);
+                            UpdateComboTime();
                             UpdateQuestKillTasks(entity);
                         }
 
@@ -1156,6 +1193,18 @@ namespace Intersect.Server.Entities
                         break;
                     }
             }
+        }
+
+        public void UpdateComboTime()
+        {
+            this.ComboTimestamp = Globals.Timing.Milliseconds + Options.BaseComboTime;
+            this.CurrentCombo++;
+        }
+
+        public void EndCombo()
+        {
+            this.ComboTimestamp = -1;
+            this.CurrentCombo = 0;
         }
 
         public void UpdateQuestKillTasks(Entity en)
@@ -1553,6 +1602,7 @@ namespace Intersect.Server.Entities
         //Warping
         public override void Warp(Guid newMapId, float newX, float newY, bool adminWarp = false, bool fromWarpEvent = false)
         {
+            EndCombo(); // Don't allow combos to transition between warps, I think? Maybe not.
             Warp(newMapId, newX, newY, (byte) Directions.Up, adminWarp, 0, false, fromWarpEvent);
         }
 

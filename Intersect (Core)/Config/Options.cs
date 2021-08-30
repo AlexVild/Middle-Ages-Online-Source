@@ -130,6 +130,10 @@ namespace Intersect
 
         public static int CombatTime => Instance.CombatOpts.CombatTime;
 
+        public static int BaseComboTime => Instance.CombatOpts.BaseComboTime;
+
+        public static float BaseComboExpModifier => Instance.CombatOpts.BaseComboExpModifier;
+
         public static int MinAttackRate => Instance.CombatOpts.MinAttackRate;
 
         public static int MaxAttackRate => Instance.CombatOpts.MaxAttackRate;
