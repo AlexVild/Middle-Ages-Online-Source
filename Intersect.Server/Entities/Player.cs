@@ -1095,7 +1095,9 @@ namespace Intersect.Server.Entities
 
         private int CalculateComboExperience(long baseAmount)
         {
-            var bonusExp = (int) Math.Floor(baseAmount * (Options.Combat.BaseComboExpModifier * CurrentCombo));
+            // Cap bonus EXP at double the base exp from the enemy - to prevent anything absolutely bonkers
+            var calculatedBonus = MathHelper.Clamp(Options.Combat.BaseComboExpModifier * CurrentCombo, 0, 2 * baseAmount);
+            var bonusExp = (int) Math.Floor(baseAmount * (calculatedBonus));
             PacketSender.SendChatMsg(this, "Current combo: " + CurrentCombo.ToString() + ", earning " + bonusExp.ToString() + " extra experience!", ChatMessageType.Notice, CustomColors.Alerts.AdminJoined);
             return bonusExp;
         }

@@ -19,7 +19,7 @@
         public int MinAttackRate = 500; //2 attacks per second
 
         //Combat
-        public int RegenTime = 3000; //3 seconds
+        public int RegenTime = 5000; //5 seconds
 
         public bool EnableCombatChatMessages = false; // Enables or disables combat chat messages.
 
