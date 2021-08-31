@@ -169,7 +169,7 @@ namespace Intersect.GameObjects
 
         [Column("ComboInterval")]
         [JsonProperty]
-        public int ComboInterval { get; set; }
+        public int ComboInterval { get; set; } = 1;
 
         [Column("ComboExpBoost")]
         [JsonProperty]

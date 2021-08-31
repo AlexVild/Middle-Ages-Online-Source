@@ -1231,6 +1231,7 @@ namespace Intersect.Server.Entities
             ComboWindow = MaxComboWindow;
             ComboTimestamp = Globals.Timing.Milliseconds + ComboWindow;
             CurrentCombo++;
+            StartCommonEventsWithTrigger(CommonEventTrigger.ComboUp);
         }
 
         public void EndCombo()
@@ -1242,6 +1243,7 @@ namespace Intersect.Server.Entities
                 ComboExp = 0;
                 CurrentCombo = 0;
                 PacketSender.SendComboPacket(Client, CurrentCombo, ComboWindow, ComboExp, MaxComboWindow); // sends the final packet of the combo
+                StartCommonEventsWithTrigger(CommonEventTrigger.ComboEnd);
             }
         }
         #endregion
