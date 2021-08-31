@@ -66,8 +66,11 @@
 
         OpenAdminPanel,
 
-        ToggleGui
-
+        ToggleGui,
+        
+        TurnClockwise,
+        
+        TurnCounterClockwise
     }
 
 }

@@ -165,6 +165,12 @@ namespace Intersect.Client.Core
                                     case Control.MoveRight:
                                         break;
 
+                                    case Control.TurnClockwise:
+                                        break;
+
+                                    case Control.TurnCounterClockwise:
+                                        break;
+
                                     case Control.AttackInteract:
                                         break;
 
@@ -288,6 +294,11 @@ namespace Intersect.Client.Core
             if (Controls.Controls.ControlHasKey(Control.Block, key))
             {
                 Globals.Me.StopBlocking();
+            }
+
+            if (Controls.Controls.ControlHasKey(Control.TurnClockwise, key) || Controls.Controls.ControlHasKey(Control.TurnCounterClockwise, key))
+            {
+                Globals.Me.DirKeyPressed = false;
             }
         }
 

@@ -13,6 +13,8 @@
         public float BaseComboExpModifier = 0.25f;
 
         public float MaxComboExpModifier = 2.0f;
+        
+        public long DirChangeTimer = 90;
 
         public int MaxAttackRate = 200; //5 attacks per second
 

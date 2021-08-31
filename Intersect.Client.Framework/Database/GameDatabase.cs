@@ -10,6 +10,8 @@ namespace Intersect.Client.Framework.Database
 
         public bool HideOthersOnWindowOpen;
 
+        public bool TapToTurn;
+
         public bool TargetAccountDirection;
 
         //Preferences
@@ -48,6 +50,7 @@ namespace Intersect.Client.Framework.Database
             TargetFps = LoadPreference("Fps", 0);
             FullScreen = LoadPreference("Fullscreen", false);
             HideOthersOnWindowOpen = LoadPreference("HideOthersOnWindowOpen", true);
+            TapToTurn = LoadPreference("TapToTurn", false);
             TargetAccountDirection = LoadPreference("TargetAccountDirection", false);
             StickyTarget = LoadPreference("StickyTarget", true);
         }
@@ -62,6 +65,7 @@ namespace Intersect.Client.Framework.Database
             SavePreference("HideOthersOnWindowOpen", HideOthersOnWindowOpen.ToString());
             SavePreference("TargetAccountDirection", TargetAccountDirection.ToString());
             SavePreference("StickyTarget", StickyTarget.ToString());
+            SavePreference("TapToTurn", TapToTurn.ToString());
         }
 
         public abstract bool LoadConfig();

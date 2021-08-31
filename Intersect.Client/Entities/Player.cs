@@ -66,6 +66,10 @@ namespace Intersect.Client.Entities
 
         public int TargetType;
 
+        public bool DirKeyPressed = false;
+
+        public long[] MoveDirectionTimers = new long[4];
+
         public long CombatTimer { get; set; }
 
         public int ComboWindow { get; set; }
@@ -917,6 +921,49 @@ namespace Intersect.Client.Entities
                 movex = 1;
             }
 
+            if (!IsMoving && movex == 0 && movey == 0 && !DirKeyPressed)
+            {
+                if (Controls.KeyDown(Control.TurnClockwise))
+                {
+                    DirKeyPressed = true;
+                    switch (Dir)
+                    {
+                        case (byte)Directions.Up:
+                            Dir = (byte)Directions.Right;
+                            break;
+                        case (byte)Directions.Down:
+                            Dir = (byte)Directions.Left;
+                            break;
+                        case (byte)Directions.Left:
+                            Dir = (byte)Directions.Up;
+                            break;
+                        case (byte)Directions.Right:
+                            Dir = (byte)Directions.Down;
+                            break;
+                    }
+                    PacketSender.SendDirection(Dir);
+                }
+                else if (Controls.KeyDown(Control.TurnCounterClockwise))
+                {
+                    DirKeyPressed = true;
+                    switch (Dir)
+                    {
+                        case (byte)Directions.Up:
+                            Dir = (byte)Directions.Left;
+                            break;
+                        case (byte)Directions.Down:
+                            Dir = (byte)Directions.Right;
+                            break;
+                        case (byte)Directions.Left:
+                            Dir = (byte)Directions.Down;
+                            break;
+                        case (byte)Directions.Right:
+                            Dir = (byte)Directions.Up;
+                            break;
+                    }
+                    PacketSender.SendDirection(Dir);
+                }
+            }
 
             Globals.Me.MoveDir = -1;
             if (movex != 0f || movey != 0f)
@@ -940,6 +987,44 @@ namespace Intersect.Client.Entities
                 {
                     Globals.Me.MoveDir = 3;
                 }
+
+                if (Globals.Database.TapToTurn)
+                {
+                    //Loop through our direction timers and keep track of how long we've been requesting to move in each direction
+                    //If we have only just tapped a button we will set Globals.Me.MoveDir to -1 in order to cancel the movement
+                    for (var i = 0; i < 4; i++)
+                    {
+                        if (i == Globals.Me.MoveDir)
+                        {
+                            //If we just started to change to a new direction then turn the player only (set the timer to now + Xms)
+                            if (MoveDirectionTimers[i] == -1 && !Globals.Me.IsMoving && Dir != Globals.Me.MoveDir)
+                            {
+                                //Turn Only
+                                Dir = (byte)Globals.Me.MoveDir;
+                                PacketSender.SendDirection((byte)Globals.Me.MoveDir);
+                                MoveDirectionTimers[i] = Globals.System.GetTimeMs() + Options.DirChangeTimer;
+                                Globals.Me.MoveDir = -1;
+                            }
+                            //If we're already facing the direction then just start moving (set the timer to now)
+                            else if (MoveDirectionTimers[i] == -1 && !Globals.Me.IsMoving && Dir == Globals.Me.MoveDir)
+                            {
+                                MoveDirectionTimers[i] = Globals.System.GetTimeMs();
+                            }
+                            //The timer is greater than the currect time, let's cancel the move.
+                            else if (MoveDirectionTimers[i] > Globals.System.GetTimeMs() && !Globals.Me.IsMoving)
+                            {
+                                //Don't trigger the actual move immediately, wait until button is held
+                                Globals.Me.MoveDir = -1;
+                            }
+                        }
+                        else
+                        {
+                            //Reset the timer if the direction isn't being requested
+                            MoveDirectionTimers[i] = -1;
+                        }
+                    }
+                }
+                
             }
 
             var castInput = -1;

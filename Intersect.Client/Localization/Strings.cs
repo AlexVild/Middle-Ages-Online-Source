@@ -565,7 +565,9 @@ namespace Intersect.Client.Localization
                 {"opensettings", @"Open Settings:"},
                 {"opendebugger", @"Open Debugger:"},
                 {"openadminpanel", @"Open Admin Panel:"},
-                {"togglegui", @"Toggle Interface:"}
+                {"togglegui", @"Toggle Interface:"},
+                {"turnclockwise", @"Turn Clockwise:"},
+                {"turncounterclockwise", @"Turn Counter Clockwise:"}
             };
 
             public static LocalizedString edit = @"Edit Controls";
@@ -1270,6 +1272,8 @@ namespace Intersect.Client.Localization
             public static LocalizedString unlimitedfps = @"No Limit";
 
             public static LocalizedString vsync = @"V-Sync";
+            
+            public static LocalizedString taptoturn = @"Tap-to-Turn";
 
         }
 

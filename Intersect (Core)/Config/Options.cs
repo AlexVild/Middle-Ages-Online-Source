@@ -138,6 +138,8 @@ namespace Intersect
 
         public static float BaseComboExpModifier => Instance.CombatOpts.BaseComboExpModifier;
 
+        public static long DirChangeTimer => Instance.CombatOpts.DirChangeTimer;
+
         public static int MinAttackRate => Instance.CombatOpts.MinAttackRate;
 
         public static int MaxAttackRate => Instance.CombatOpts.MaxAttackRate;
