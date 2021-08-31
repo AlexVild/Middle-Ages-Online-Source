@@ -2360,7 +2360,7 @@ Tick timer saved in server config.json.";
                 {13, @"Guild Member Left"},
                 {14, @"Guild Member Kicked"},
                 {15, @"Combo Increased"},
-                {14, @"Combo End"},
+                {16, @"Combo End"},
             };
 
             public static LocalizedString conditions = @"Conditions";
