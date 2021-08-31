@@ -1101,7 +1101,7 @@ namespace Intersect.Server.Entities
 
             if (!CheckLevelUp())
             {
-                PacketSender.SendExperience(this);
+                PacketSender.SendExperience(this, ComboExp);
             }
         }
 

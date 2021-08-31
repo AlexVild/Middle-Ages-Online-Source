@@ -16,8 +16,6 @@ namespace Intersect.Client.Interface.Game
     {
         private Canvas mCanvas { get; set; }
 
-        private string mRemaining { get; set; }
-
         private string mSize { get; set; }
 
         private int mFlashCounter { get; set; }
@@ -76,7 +74,6 @@ namespace Intersect.Client.Interface.Game
             ComboWindow = Globals.Me.ComboWindow;
             MaxComboWindow = Globals.Me.MaxComboWindow;
             mSize = Globals.Me.CurrentCombo.ToString();
-            mRemaining = mGenerateRemainingTimeText(ComboWindow);
 
             mAlpha = mGenerateTextAlpha(ComboWindow, MaxComboWindow);
 
@@ -101,22 +98,9 @@ namespace Intersect.Client.Interface.Game
             mComboLabel.SetText(message);
             mComboLabel.SetTextColor(mDrawColor, Label.ControlState.Normal);
 
-            var expMessage = "+" + Globals.Me.ComboExp.ToString() + " " + Strings.Combat.exp;
+            var expMessage = "+" + Globals.Me.ComboExp.ToString() + " Bonus " + Strings.Combat.exp;
             mExpLabel.SetText(expMessage);
             mExpLabel.SetTextColor(mExpDrawColor, Label.ControlState.Normal);
-        }
-
-        private string mGenerateRemainingTimeText(int comboWindow)
-        {
-            var secondsRemaining = (float)comboWindow / 1000f;
-            if (secondsRemaining > 10f)
-            {
-                return Strings.EntityBox.cooldown.ToString(((float)comboWindow / 1000f).ToString("N0"));
-            }
-            else
-            {
-                return Strings.EntityBox.cooldown.ToString(((float)comboWindow / 1000f).ToString("N1").Replace(".", Strings.Numbers.dec));
-            }
         }
 
         private int mGenerateTextAlpha(int comboWindow, int maxComboWindow)

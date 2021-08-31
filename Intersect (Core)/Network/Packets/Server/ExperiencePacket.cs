@@ -14,6 +14,14 @@ namespace Intersect.Network.Packets.Server
         {
             Experience = exp;
             ExperienceToNextLevel = tnl;
+            AccumulatedComboExp = 0;
+        }
+
+        public ExperiencePacket(long exp, long tnl, int accCombExp)
+        {
+            Experience = exp;
+            ExperienceToNextLevel = tnl;
+            AccumulatedComboExp = accCombExp;
         }
 
         [Key(0)]
@@ -21,6 +29,9 @@ namespace Intersect.Network.Packets.Server
 
         [Key(1)]
         public long ExperienceToNextLevel { get; set; }
+        
+        [Key(2)]
+        public int AccumulatedComboExp { get; set; }
 
     }
 

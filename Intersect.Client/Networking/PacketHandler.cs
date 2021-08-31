@@ -1311,6 +1311,10 @@ namespace Intersect.Client.Networking
             {
                 Globals.Me.Experience = packet.Experience;
                 Globals.Me.ExperienceToNextLevel = packet.ExperienceToNextLevel;
+                if (packet.AccumulatedComboExp > 0)
+                {
+                    Globals.Me.ComboExp += packet.AccumulatedComboExp;
+                }
             }
         }
 
@@ -2075,7 +2079,10 @@ namespace Intersect.Client.Networking
         public void HandlePacket(IPacketSender packetSender, ComboPacket packet)
         {
             Globals.Me.CurrentCombo = packet.ComboSize;
-            Globals.Me.ComboExp = packet.BonusExp;
+            if (packet.ComboSize == 0)
+            {
+                Globals.Me.ComboExp = 0;
+            }
             Globals.Me.ComboWindow = packet.ComboWindow;
             Globals.Me.MaxComboWindow = packet.MaxComboWindow;
         }

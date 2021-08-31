@@ -1407,9 +1407,9 @@ namespace Intersect.Server.Networking
         }
 
         //ExperiencePacket
-        public static void SendExperience(Player player)
+        public static void SendExperience(Player player, int ComboExp = 0)
         {
-            player.SendPacket(new ExperiencePacket(player.Exp, player.ExperienceToNextLevel), TransmissionMode.Any);
+            player.SendPacket(new ExperiencePacket(player.Exp, player.ExperienceToNextLevel, ComboExp), TransmissionMode.Any);
         }
 
         //PlayAnimationPacket
