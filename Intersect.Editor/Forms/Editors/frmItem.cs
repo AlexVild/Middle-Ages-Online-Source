@@ -422,6 +422,10 @@ namespace Intersect.Editor.Forms.Editors
                 chkIgnoreGlobalCooldown.Checked = mEditorItem.IgnoreGlobalCooldown;
                 chkIgnoreCdr.Checked = mEditorItem.IgnoreCooldownReduction;
 
+                cmbComboSpell.SelectedIndex = SpellBase.ListIndex(mEditorItem.ComboSpellId) + 1;
+                nudComboExpBoost.Value = mEditorItem.ComboExpBoost;
+                nudComboInterval.Value = mEditorItem.ComboInterval;
+
                 txtCannotUse.Text = mEditorItem.CannotUseMessage;
 
                 if (mChanged.IndexOf(mEditorItem) == -1)
@@ -1279,6 +1283,15 @@ namespace Intersect.Editor.Forms.Editors
 
         #endregion
 
+        private void nudComboInterval_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.ComboInterval = (int)nudComboInterval.Value;
+        }
+
+        private void nudComboExpBoost_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.ComboExpBoost = (int)nudComboExpBoost.Value;
+        }
     }
 
 }

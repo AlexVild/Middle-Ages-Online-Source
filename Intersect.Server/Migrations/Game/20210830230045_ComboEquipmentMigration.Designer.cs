@@ -3,14 +3,16 @@ using System;
 using Intersect.Server.Database.GameData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Intersect.Server.Migrations.Game
 {
     [DbContext(typeof(GameContext))]
-    partial class GameContextModelSnapshot : ModelSnapshot
+    [Migration("20210830230045_ComboEquipmentMigration")]
+    partial class ComboEquipmentMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -227,14 +229,8 @@ namespace Intersect.Server.Migrations.Game
 
                     b.Property<string>("CannotUseMessage");
 
-                    b.Property<int>("ComboExpBoost")
-                        .HasColumnName("ComboExpBoost");
-
-                    b.Property<int>("ComboInterval")
-                        .HasColumnName("ComboInterval");
-
                     b.Property<Guid>("ComboSpellId")
-                        .HasColumnName("ComboSpell");
+                        .HasColumnName("Spell");
 
                     b.Property<int>("Cooldown");
 

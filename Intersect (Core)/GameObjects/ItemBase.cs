@@ -167,6 +167,14 @@ namespace Intersect.GameObjects
             set => ComboSpellId = value?.Id ?? Guid.Empty;
         }
 
+        [Column("ComboInterval")]
+        [JsonProperty]
+        public int ComboInterval { get; set; }
+
+        [Column("ComboExpBoost")]
+        [JsonProperty]
+        public int ComboExpBoost { get; set; }
+
         public bool QuickCast { get; set; }
 
         [Column("DestroySpell")]

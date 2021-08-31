@@ -1184,6 +1184,16 @@ namespace Intersect.Server.Entities
                             StartCommonEvent(playerEvent);
                         }
 
+                        if (Equipment[Options.PrayerIndex] >= 0)
+                        {
+                            var prayer = ItemBase.Get(Items[Equipment[Options.PrayerIndex]].ItemId);
+                            var prayerSpellId = prayer.ComboSpellId;
+                            if (prayerSpellId != Guid.Empty && prayer.ComboInterval > 0 && CurrentCombo % prayer.ComboInterval == 0) // If there's a spell and we're on the right combo interval (every 2 kills, etc)
+                            {
+                                CastSpell(prayerSpellId, -1, true, npc, Dir);
+                            }
+                        }
+
                         break;
                     }
 
@@ -1203,8 +1213,15 @@ namespace Intersect.Server.Entities
         #region Combo Stuff
         private int CalculateComboExperience(long baseAmount)
         {
+            // Check to see if a prayer is equipped that modifies this
+            var equipBonus = 0.0f;
+            if (Equipment[Options.PrayerIndex] >= 0)
+            {
+                var prayer = ItemBase.Get(Items[Equipment[Options.PrayerIndex]].ItemId);
+                equipBonus = prayer.ComboExpBoost / 100f;
+            }
             // Cap bonus EXP at double the base exp from the enemy - to prevent anything absolutely bonkers
-            var calculatedBonus = MathHelper.Clamp(Options.Combat.BaseComboExpModifier * CurrentCombo, 0, 2.0f);
+            var calculatedBonus = MathHelper.Clamp((Options.Combat.BaseComboExpModifier + equipBonus) * CurrentCombo, 0, Options.Combat.MaxComboExpModifier);
             var bonusExp = (int)Math.Floor(baseAmount * calculatedBonus);
             return bonusExp;
         }
@@ -4580,7 +4597,7 @@ namespace Intersect.Server.Entities
             }
         }
 
-        public override void CastSpell(Guid spellId, int spellSlot = -1)
+        public override void CastSpell(Guid spellId, int spellSlot = -1, bool prayerSpell = false, Entity prayerTarget = null, int prayerSpellDir = -1)
         {
             var spellBase = SpellBase.Get(spellId);
             if (spellBase == null)
@@ -4598,12 +4615,12 @@ namespace Intersect.Server.Entities
                             StartCommonEvent(evt);
                         }
 
-                        base.CastSpell(spellId, spellSlot); //To get cooldown :P
+                        base.CastSpell(spellId, spellSlot, prayerSpell, prayerTarget, prayerSpellDir); //To get cooldown :P
 
                         break;
                     }
                 default:
-                    base.CastSpell(spellId, spellSlot);
+                    base.CastSpell(spellId, spellSlot, prayerSpell, prayerTarget, prayerSpellDir);
 
                     break;
             }

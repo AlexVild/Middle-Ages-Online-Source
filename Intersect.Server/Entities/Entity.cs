@@ -1956,7 +1956,7 @@ namespace Intersect.Server.Entities
             return true;
         }
 
-        public virtual void CastSpell(Guid spellId, int spellSlot = -1)
+        public virtual void CastSpell(Guid spellId, int spellSlot = -1, bool prayerSpell = false, Entity prayerTarget = null, int prayerSpellDir = -1)
         {
             var spellBase = SpellBase.Get(spellId);
             if (spellBase == null)
@@ -1971,7 +1971,10 @@ namespace Intersect.Server.Entities
 
             if (spellBase.VitalCost[(int)Vitals.Mana] > 0)
             {
-                SubVital(Vitals.Mana, spellBase.VitalCost[(int)Vitals.Mana]);
+                if (!prayerSpell) // prayer spells dont cost anything
+                {
+                    SubVital(Vitals.Mana, spellBase.VitalCost[(int)Vitals.Mana]);
+                }
             }
             else
             {
@@ -1980,7 +1983,10 @@ namespace Intersect.Server.Entities
 
             if (spellBase.VitalCost[(int)Vitals.Health] > 0)
             {
-                SubVital(Vitals.Health, spellBase.VitalCost[(int)Vitals.Health]);
+                if (!prayerSpell) // prayer spells dont cost anything
+                {
+                    SubVital(Vitals.Health, spellBase.VitalCost[(int)Vitals.Health]);
+                }
             }
             else
             {
@@ -2006,7 +2012,7 @@ namespace Intersect.Server.Entities
 
                             break;
                         case SpellTargetTypes.Single:
-                            if (CastTarget == null)
+                            if (CastTarget == null || prayerSpell)
                             {
                                 return;
                             }
@@ -2034,18 +2040,29 @@ namespace Intersect.Server.Entities
 
                             break;
                         case SpellTargetTypes.AoE:
+                            if (prayerSpell) return;
                             HandleAoESpell(spellId, spellBase.Combat.HitRadius, MapId, X, Y, null);
-
                             break;
                         case SpellTargetTypes.Projectile:
                             var projectileBase = spellBase.Combat.Projectile;
                             if (projectileBase != null)
                             {
-                                MapInstance.Get(MapId)
+                                if (prayerSpell && prayerTarget != null && prayerSpellDir >= 0)
+                                {
+                                    MapInstance.Get(MapId)
+                                        .SpawnMapProjectile(
+                                            this, projectileBase, spellBase, null, prayerTarget.MapId, (byte)prayerTarget.X, (byte)prayerTarget.Y, (byte)prayerTarget.Z,
+                                            (byte)prayerSpellDir, CastTarget
+                                        );
+                                } else
+                                {
+                                    MapInstance.Get(MapId)
                                     .SpawnMapProjectile(
-                                        this, projectileBase, spellBase, null, MapId, (byte) X, (byte) Y, (byte) Z,
-                                        (byte) Dir, CastTarget
+                                        this, projectileBase, spellBase, null, MapId, (byte)X, (byte)Y, (byte)Z,
+                                        (byte)Dir, CastTarget
                                     );
+                                }
+                                    
                             }
 
                             break;

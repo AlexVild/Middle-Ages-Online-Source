@@ -92,6 +92,9 @@ namespace Intersect.Editor.Forms.Editors
             this.lblName = new System.Windows.Forms.Label();
             this.txtName = new DarkUI.Controls.DarkTextBox();
             this.grpEquipment = new DarkUI.Controls.DarkGroupBox();
+            this.grpPrayerProperties = new DarkUI.Controls.DarkGroupBox();
+            this.lblComboSpell = new System.Windows.Forms.Label();
+            this.cmbComboSpell = new DarkUI.Controls.DarkComboBox();
             this.grpRegen = new DarkUI.Controls.DarkGroupBox();
             this.nudMpRegen = new DarkUI.Controls.DarkNumericUpDown();
             this.nudHPRegen = new DarkUI.Controls.DarkNumericUpDown();
@@ -208,9 +211,10 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
             this.vS2015DarkTheme1 = new WeifenLuo.WinFormsUI.Docking.VS2015DarkTheme();
-            this.grpPrayerProperties = new DarkUI.Controls.DarkGroupBox();
-            this.cmbComboSpell = new DarkUI.Controls.DarkComboBox();
-            this.lblComboSpell = new System.Windows.Forms.Label();
+            this.nudComboInterval = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblComboInterval = new System.Windows.Forms.Label();
+            this.nudComboExpBoost = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblComboExpBoost = new System.Windows.Forms.Label();
             this.grpItems.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             this.grpRequirements.SuspendLayout();
@@ -225,6 +229,7 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudPrice)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picItem)).BeginInit();
             this.grpEquipment.SuspendLayout();
+            this.grpPrayerProperties.SuspendLayout();
             this.grpRegen.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudMpRegen)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudHPRegen)).BeginInit();
@@ -264,7 +269,8 @@ namespace Intersect.Editor.Forms.Editors
             this.grpBags.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudBag)).BeginInit();
             this.toolStrip.SuspendLayout();
-            this.grpPrayerProperties.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudComboInterval)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudComboExpBoost)).BeginInit();
             this.SuspendLayout();
             // 
             // grpItems
@@ -1093,6 +1099,55 @@ namespace Intersect.Editor.Forms.Editors
             this.grpEquipment.TabStop = false;
             this.grpEquipment.Text = "Equipment";
             this.grpEquipment.Visible = false;
+            // 
+            // grpPrayerProperties
+            // 
+            this.grpPrayerProperties.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpPrayerProperties.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpPrayerProperties.Controls.Add(this.lblComboExpBoost);
+            this.grpPrayerProperties.Controls.Add(this.nudComboExpBoost);
+            this.grpPrayerProperties.Controls.Add(this.lblComboInterval);
+            this.grpPrayerProperties.Controls.Add(this.nudComboInterval);
+            this.grpPrayerProperties.Controls.Add(this.lblComboSpell);
+            this.grpPrayerProperties.Controls.Add(this.cmbComboSpell);
+            this.grpPrayerProperties.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpPrayerProperties.Location = new System.Drawing.Point(221, 14);
+            this.grpPrayerProperties.Name = "grpPrayerProperties";
+            this.grpPrayerProperties.Size = new System.Drawing.Size(207, 161);
+            this.grpPrayerProperties.TabIndex = 43;
+            this.grpPrayerProperties.TabStop = false;
+            this.grpPrayerProperties.Text = "Prayer Properties";
+            this.grpPrayerProperties.Visible = false;
+            // 
+            // lblComboSpell
+            // 
+            this.lblComboSpell.AutoSize = true;
+            this.lblComboSpell.Location = new System.Drawing.Point(12, 18);
+            this.lblComboSpell.Name = "lblComboSpell";
+            this.lblComboSpell.Size = new System.Drawing.Size(69, 13);
+            this.lblComboSpell.TabIndex = 59;
+            this.lblComboSpell.Text = "Combo Spell:";
+            // 
+            // cmbComboSpell
+            // 
+            this.cmbComboSpell.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbComboSpell.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbComboSpell.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbComboSpell.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbComboSpell.DrawDropdownHoverOutline = false;
+            this.cmbComboSpell.DrawFocusRectangle = false;
+            this.cmbComboSpell.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbComboSpell.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbComboSpell.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbComboSpell.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbComboSpell.FormattingEnabled = true;
+            this.cmbComboSpell.Location = new System.Drawing.Point(10, 35);
+            this.cmbComboSpell.Name = "cmbComboSpell";
+            this.cmbComboSpell.Size = new System.Drawing.Size(185, 21);
+            this.cmbComboSpell.TabIndex = 17;
+            this.cmbComboSpell.Text = null;
+            this.cmbComboSpell.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbComboSpell.SelectedIndexChanged += new System.EventHandler(this.cmbComboSpell_SelectedIndexChanged);
             // 
             // grpRegen
             // 
@@ -2768,50 +2823,68 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
             // 
-            // grpPrayerProperties
+            // nudComboInterval
             // 
-            this.grpPrayerProperties.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.grpPrayerProperties.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpPrayerProperties.Controls.Add(this.lblComboSpell);
-            this.grpPrayerProperties.Controls.Add(this.cmbComboSpell);
-            this.grpPrayerProperties.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpPrayerProperties.Location = new System.Drawing.Point(221, 14);
-            this.grpPrayerProperties.Name = "grpPrayerProperties";
-            this.grpPrayerProperties.Size = new System.Drawing.Size(207, 80);
-            this.grpPrayerProperties.TabIndex = 43;
-            this.grpPrayerProperties.TabStop = false;
-            this.grpPrayerProperties.Text = "Prayer Properties";
-            this.grpPrayerProperties.Visible = false;
+            this.nudComboInterval.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudComboInterval.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudComboInterval.Location = new System.Drawing.Point(11, 81);
+            this.nudComboInterval.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudComboInterval.Name = "nudComboInterval";
+            this.nudComboInterval.Size = new System.Drawing.Size(185, 20);
+            this.nudComboInterval.TabIndex = 59;
+            this.nudComboInterval.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudComboInterval.ValueChanged += new System.EventHandler(this.nudComboInterval_ValueChanged);
             // 
-            // cmbComboSpell
+            // lblComboInterval
             // 
-            this.cmbComboSpell.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbComboSpell.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbComboSpell.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbComboSpell.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbComboSpell.DrawDropdownHoverOutline = false;
-            this.cmbComboSpell.DrawFocusRectangle = false;
-            this.cmbComboSpell.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbComboSpell.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbComboSpell.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbComboSpell.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbComboSpell.FormattingEnabled = true;
-            this.cmbComboSpell.Location = new System.Drawing.Point(10, 35);
-            this.cmbComboSpell.Name = "cmbComboSpell";
-            this.cmbComboSpell.Size = new System.Drawing.Size(185, 21);
-            this.cmbComboSpell.TabIndex = 17;
-            this.cmbComboSpell.Text = null;
-            this.cmbComboSpell.TextPadding = new System.Windows.Forms.Padding(2);
-            this.cmbComboSpell.SelectedIndexChanged += new System.EventHandler(this.cmbComboSpell_SelectedIndexChanged);
+            this.lblComboInterval.AutoSize = true;
+            this.lblComboInterval.Location = new System.Drawing.Point(12, 63);
+            this.lblComboInterval.Name = "lblComboInterval";
+            this.lblComboInterval.Size = new System.Drawing.Size(81, 13);
+            this.lblComboInterval.TabIndex = 59;
+            this.lblComboInterval.Text = "Combo Interval:";
             // 
-            // lblComboSpell
+            // nudComboExpBoost
             // 
-            this.lblComboSpell.AutoSize = true;
-            this.lblComboSpell.Location = new System.Drawing.Point(12, 18);
-            this.lblComboSpell.Name = "lblComboSpell";
-            this.lblComboSpell.Size = new System.Drawing.Size(69, 13);
-            this.lblComboSpell.TabIndex = 59;
-            this.lblComboSpell.Text = "Combo Spell:";
+            this.nudComboExpBoost.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudComboExpBoost.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudComboExpBoost.Location = new System.Drawing.Point(10, 126);
+            this.nudComboExpBoost.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.nudComboExpBoost.Minimum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            -2147483648});
+            this.nudComboExpBoost.Name = "nudComboExpBoost";
+            this.nudComboExpBoost.Size = new System.Drawing.Size(185, 20);
+            this.nudComboExpBoost.TabIndex = 60;
+            this.nudComboExpBoost.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudComboExpBoost.ValueChanged += new System.EventHandler(this.nudComboExpBoost_ValueChanged);
+            // 
+            // lblComboExpBoost
+            // 
+            this.lblComboExpBoost.AutoSize = true;
+            this.lblComboExpBoost.Location = new System.Drawing.Point(12, 110);
+            this.lblComboExpBoost.Name = "lblComboExpBoost";
+            this.lblComboExpBoost.Size = new System.Drawing.Size(107, 13);
+            this.lblComboExpBoost.TabIndex = 59;
+            this.lblComboExpBoost.Text = "Additional Exp Boost:";
             // 
             // FrmItem
             // 
@@ -2852,6 +2925,8 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.picItem)).EndInit();
             this.grpEquipment.ResumeLayout(false);
             this.grpEquipment.PerformLayout();
+            this.grpPrayerProperties.ResumeLayout(false);
+            this.grpPrayerProperties.PerformLayout();
             this.grpRegen.ResumeLayout(false);
             this.grpRegen.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudMpRegen)).EndInit();
@@ -2901,8 +2976,8 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudBag)).EndInit();
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
-            this.grpPrayerProperties.ResumeLayout(false);
-            this.grpPrayerProperties.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudComboInterval)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudComboExpBoost)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -3085,5 +3160,9 @@ namespace Intersect.Editor.Forms.Editors
         private DarkGroupBox grpPrayerProperties;
         private DarkComboBox cmbComboSpell;
         private Label lblComboSpell;
+        private Label lblComboInterval;
+        private DarkNumericUpDown nudComboInterval;
+        private Label lblComboExpBoost;
+        private DarkNumericUpDown nudComboExpBoost;
     }
 }

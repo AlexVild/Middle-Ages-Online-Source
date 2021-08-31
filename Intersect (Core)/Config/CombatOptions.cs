@@ -12,6 +12,8 @@
 
         public float BaseComboExpModifier = 0.25f;
 
+        public float MaxComboExpModifier = 2.0f;
+
         public int MaxAttackRate = 200; //5 attacks per second
 
         public int MaxDashSpeed = 200;
