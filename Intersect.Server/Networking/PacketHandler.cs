@@ -2882,6 +2882,50 @@ namespace Intersect.Server.Networking
             player.Warp(packet.NewMapId, packet.X, packet.Y, packet.Dir);
         }
 
+        // the client is requesting 'crafting' information from the player's player variables collection
+        public void HandlePacket(Client client, ClassInfoPacket packet)
+        {
+            var player = client?.Entity;
+
+            if (player != null)
+            {
+                var craftingDict = new Dictionary<string, string>();
+                player.Variables.ForEach(variable =>
+                {
+                    if (variable.VariableName.Equals("Mining Tier"))
+                    {
+                        craftingDict.Add("mining_tier", variable.Value);
+                    } else if (variable.VariableName.Equals("Fishing Tier"))
+                    {
+                        craftingDict.Add("fishing_tier", variable.Value);
+                    } else if (variable.VariableName.Equals("Woodcut Tier"))
+                    {
+                        craftingDict.Add("woodcut_tier", variable.Value);
+                    }
+                    else if (variable.VariableName.Equals("NPC_GUILD: current_npc_guild"))
+                    {
+                        craftingDict.Add("npc_guild_name", variable.Value);
+                    }
+                    else if (variable.VariableName.Equals("Class Rank"))
+                    {
+                        craftingDict.Add("class_rank", variable.Value);
+                    }
+                });
+
+                if (craftingDict.ContainsKey("mining_tier") && craftingDict.ContainsKey("fishing_tier") && craftingDict.ContainsKey("woodcut_tier"))
+                {
+                    PacketSender.SendCraftingInfoPacket(
+                    client,
+                    craftingDict["mining_tier"],
+                    craftingDict["fishing_tier"],
+                    craftingDict["woodcut_tier"],
+                    craftingDict["npc_guild_name"],
+                    craftingDict["class_rank"]
+                    );
+                }
+            }
+        }
+
         #endregion
 
         #region "Editor Packets"

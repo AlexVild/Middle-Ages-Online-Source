@@ -2078,6 +2078,8 @@ namespace Intersect.Client.Networking
         // Combo handling packet
         public void HandlePacket(IPacketSender packetSender, ComboPacket packet)
         {
+            if (Globals.Me == null) return;
+            
             Globals.Me.CurrentCombo = packet.ComboSize;
             if (packet.ComboSize == 0)
             {
@@ -2085,6 +2087,22 @@ namespace Intersect.Client.Networking
             }
             Globals.Me.ComboWindow = packet.ComboWindow;
             Globals.Me.MaxComboWindow = packet.MaxComboWindow;
+        }
+
+        // Crafting Info packet
+        public void HandlePacket(IPacketSender packetSender, CraftingInfoPacket packet)
+        {
+            if (Globals.Me == null) return;
+
+            Globals.Me.MiningTier = packet.MiningTier;
+            Globals.Me.FishingTier = packet.FishingTier;
+            Globals.Me.WoodcutTier = packet.WoodcutTier;
+            Globals.Me.NpcGuildName = packet.NPCGuildName;
+            if (Globals.Me.NpcGuildName.Equals(""))
+            {
+                Globals.Me.NpcGuildName = "Not in NPC Guild";
+            }
+            Globals.Me.ClassRank = packet.ClassRank;
         }
     }
 

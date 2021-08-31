@@ -375,6 +375,19 @@ namespace Intersect.Client.Localization
 
             public static LocalizedString title = @"Character";
 
+            public static LocalizedString crafting = @"Crafting:";
+            
+            public static LocalizedString miningtier = @"Mining Tier: {00}";
+            
+            public static LocalizedString fishingtier = @"Fishing Tier: {00}";
+            
+            public static LocalizedString woodcuttingtier = @"Woodcutting Tier: {00}";
+
+            public static LocalizedString npcguild = @"NPC Guild:";
+
+            public static LocalizedString npcguildname = @"{00}";
+
+            public static LocalizedString classrank = @"Class Rank: {00}";
         }
 
         public struct CharacterCreation

@@ -369,6 +369,7 @@
     <Compile Include="Network\Packets\Client\BumpPacket.cs" />
     <Compile Include="Network\Packets\Client\BuyItemPacket.cs" />
     <Compile Include="Network\Packets\Client\ChatMsgPacket.cs" />
+    <Compile Include="Network\Packets\Client\ClassInfoPacket.cs" />
     <Compile Include="Network\Packets\Client\CloseBagPacket.cs" />
     <Compile Include="Network\Packets\Client\CloseBankPacket.cs" />
     <Compile Include="Network\Packets\Client\CloseCraftingPacket.cs" />
@@ -398,6 +399,7 @@
     <Compile Include="Network\Packets\Client\PictureClosedPacket.cs" />
     <Compile Include="Network\Packets\Server\ActionMsgPackets.cs" />
     <Compile Include="Network\Packets\Server\ComboPacket.cs" />
+    <Compile Include="Network\Packets\Server\CraftingInfoPacket.cs" />
     <Compile Include="Network\Packets\Server\EntityMovementPackets.cs" />
     <Compile Include="Network\Packets\Server\MapFadePacket.cs" />
     <Compile Include="Network\Packets\Server\GuildInvitePacket.cs" />

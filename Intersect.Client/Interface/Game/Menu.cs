@@ -191,6 +191,7 @@ namespace Intersect.Client.Interface.Game
             else
             {
                 HideWindows();
+                PacketSender.SendCraftingInfoPacket(); // fetch additional player info, i.e mining tier; class rank
                 mCharacterWindow.Show();
             }
         }

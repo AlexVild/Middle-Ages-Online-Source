@@ -429,6 +429,11 @@ namespace Intersect.Client.Networking
         {
             Network.SendPacket(new MapTransitionReadyPacket(newMapId, x, y, dir));
         }
+
+        public static void SendCraftingInfoPacket()
+        {
+            Network.SendPacket(new ClassInfoPacket());
+        }
     }
 
 }

@@ -65,6 +65,24 @@ namespace Intersect.Client.Interface.Game.Character
 
         public string[] PaperdollTextures;
 
+        ScrollControl mPlayerInfoScroll;
+
+        // Crafting
+        Label mCraftingLabel;
+
+        Label mMiningTierLabel;
+
+        Label mFishingTierLabel;
+
+        Label mWoodcuttingTierLabel;
+
+        // NPC Guild
+        Label mNpcGuildLabel;
+
+        Label mNpcGuildNameLabel;
+
+        Label mClassRankLabel;
+
         //Location
         public int X;
 
@@ -98,31 +116,42 @@ namespace Intersect.Client.Interface.Game.Character
             var equipmentLabel = new Label(mCharacterWindow, "EquipmentLabel");
             equipmentLabel.SetText(Strings.Character.equipment);
 
-            var statsLabel = new Label(mCharacterWindow, "StatsLabel");
+            mPlayerInfoScroll = new ScrollControl(mCharacterWindow, "PlayerInfoScrollContainer");
+
+            var statsLabel = new Label(mPlayerInfoScroll, "StatsLabel");
             statsLabel.SetText(Strings.Character.stats);
 
-            mAttackLabel = new Label(mCharacterWindow, "AttackLabel");
+            mAttackLabel = new Label(mPlayerInfoScroll, "AttackLabel");
 
-            mAddAttackBtn = new Button(mCharacterWindow, "IncreaseAttackButton");
+            mAddAttackBtn = new Button(mPlayerInfoScroll, "IncreaseAttackButton");
             mAddAttackBtn.Clicked += _addAttackBtn_Clicked;
 
-            mDefenseLabel = new Label(mCharacterWindow, "DefenseLabel");
-            mAddDefenseBtn = new Button(mCharacterWindow, "IncreaseDefenseButton");
+            mDefenseLabel = new Label(mPlayerInfoScroll, "DefenseLabel");
+            mAddDefenseBtn = new Button(mPlayerInfoScroll, "IncreaseDefenseButton");
             mAddDefenseBtn.Clicked += _addDefenseBtn_Clicked;
 
-            mSpeedLabel = new Label(mCharacterWindow, "SpeedLabel");
-            mAddSpeedBtn = new Button(mCharacterWindow, "IncreaseSpeedButton");
+            mSpeedLabel = new Label(mPlayerInfoScroll, "SpeedLabel");
+            mAddSpeedBtn = new Button(mPlayerInfoScroll, "IncreaseSpeedButton");
             mAddSpeedBtn.Clicked += _addSpeedBtn_Clicked;
 
-            mAbilityPwrLabel = new Label(mCharacterWindow, "AbilityPowerLabel");
-            mAddAbilityPwrBtn = new Button(mCharacterWindow, "IncreaseAbilityPowerButton");
+            mAbilityPwrLabel = new Label(mPlayerInfoScroll, "AbilityPowerLabel");
+            mAddAbilityPwrBtn = new Button(mPlayerInfoScroll, "IncreaseAbilityPowerButton");
             mAddAbilityPwrBtn.Clicked += _addAbilityPwrBtn_Clicked;
 
-            mMagicRstLabel = new Label(mCharacterWindow, "MagicResistLabel");
-            mAddMagicResistBtn = new Button(mCharacterWindow, "IncreaseMagicResistButton");
+            mMagicRstLabel = new Label(mPlayerInfoScroll, "MagicResistLabel");
+            mAddMagicResistBtn = new Button(mPlayerInfoScroll, "IncreaseMagicResistButton");
             mAddMagicResistBtn.Clicked += _addMagicResistBtn_Clicked;
 
-            mPointsLabel = new Label(mCharacterWindow, "PointsLabel");
+            mPointsLabel = new Label(mPlayerInfoScroll, "PointsLabel");
+
+            mCraftingLabel = new Label(mPlayerInfoScroll, "CraftingLabel");
+            mMiningTierLabel = new Label(mPlayerInfoScroll, "MiningTierLabel");
+            mFishingTierLabel = new Label(mPlayerInfoScroll, "FishingTierLabel");
+            mWoodcuttingTierLabel = new Label(mPlayerInfoScroll, "WoodcuttingTierLabel");
+
+            mNpcGuildLabel = new Label(mPlayerInfoScroll, "NPCGuildLabel");
+            mNpcGuildNameLabel = new Label(mPlayerInfoScroll, "NPCGuildName");
+            mClassRankLabel = new Label(mPlayerInfoScroll, "ClassRankLabel");
 
             for (var i = 0; i < Options.EquipmentSlots.Count; i++)
             {
@@ -315,6 +344,15 @@ namespace Intersect.Client.Interface.Game.Character
 
             mAddSpeedBtn.IsHidden =
                 Globals.Me.StatPoints == 0 || Globals.Me.Stat[(int) Stats.Speed] == Options.MaxStatValue;
+
+            mCraftingLabel.Text = Strings.Character.crafting;
+            mMiningTierLabel.SetText(Strings.Character.miningtier.ToString(Globals.Me.MiningTier));
+            mFishingTierLabel.SetText(Strings.Character.fishingtier.ToString(Globals.Me.FishingTier));
+            mWoodcuttingTierLabel.SetText(Strings.Character.woodcuttingtier.ToString(Globals.Me.WoodcutTier));
+
+            mNpcGuildLabel.Text = Strings.Character.npcguild;
+            mNpcGuildNameLabel.Text = Strings.Character.npcguildname.ToString(Globals.Me.NpcGuildName);
+            mClassRankLabel.Text = Strings.Character.classrank.ToString(Globals.Me.ClassRank);
 
             for (var i = 0; i < Options.EquipmentSlots.Count; i++)
             {

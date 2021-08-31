@@ -2133,6 +2133,11 @@ namespace Intersect.Server.Networking
         {
             client?.Send(new ComboPacket(comboSize, comboWindow, bonusExp, maxComboWindow));
         }
+
+        public static void SendCraftingInfoPacket(Client client, string miningTier, string fishingTier, string woodcutTier, string npcGuildName, string classRank)
+        {
+            client?.Send(new CraftingInfoPacket(miningTier, fishingTier, woodcutTier, npcGuildName, classRank));
+        }
     }
 
 }

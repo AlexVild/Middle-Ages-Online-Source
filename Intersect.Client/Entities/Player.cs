@@ -80,6 +80,16 @@ namespace Intersect.Client.Entities
 
         public int MaxComboWindow { get; set; }
 
+        public string MiningTier { get; set; }
+
+        public string FishingTier { get; set; }
+
+        public string WoodcutTier { get; set; }
+
+        public string NpcGuildName { get; set; }
+
+        public string ClassRank { get; set; } 
+
         // Target data
         private long mlastTargetScanTime = 0;
 
