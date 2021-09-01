@@ -2094,11 +2094,11 @@ namespace Intersect.Client.Networking
         {
             if (Globals.Me == null) return;
 
-            Globals.Me.MiningTier = packet.MiningTier;
-            Globals.Me.FishingTier = packet.FishingTier;
-            Globals.Me.WoodcutTier = packet.WoodcutTier;
-            Globals.Me.NpcGuildName = packet.NPCGuildName;
-            if (Globals.Me.NpcGuildName.Equals(""))
+            Globals.Me.MiningTier = packet?.MiningTier;
+            Globals.Me.FishingTier = packet?.FishingTier;
+            Globals.Me.WoodcutTier = packet?.WoodcutTier;
+            Globals.Me.NpcGuildName = packet?.NPCGuildName;
+            if (Globals.Me.NpcGuildName == null)
             {
                 Globals.Me.NpcGuildName = "Not in NPC Guild";
             }
@@ -2109,8 +2109,8 @@ namespace Intersect.Client.Networking
         {
             if (Globals.Me == null) return;
 
-            Globals.Me.QuestPoints = packet.QuestPoints;
-            Globals.Me.LifetimeQuestPoints = packet.LifetimeQuestPoints;
+            Globals.Me.QuestPoints = packet?.QuestPoints;
+            Globals.Me.LifetimeQuestPoints = packet?.LifetimeQuestPoints;
         }
     }
 

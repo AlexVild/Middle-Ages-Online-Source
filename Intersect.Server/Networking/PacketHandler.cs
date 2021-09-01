@@ -2890,43 +2890,42 @@ namespace Intersect.Server.Networking
             if (player != null)
             {
                 var craftingDict = new Dictionary<string, string>();
+                craftingDict.Add("mining_tier", "0");
+                craftingDict.Add("fishing_tier", "0");
+                craftingDict.Add("woodcut_tier", "0");
+                craftingDict.Add("npc_guild_name", "Not in NPC Guild");
+                craftingDict.Add("class_rank", "0");
+
                 player.Variables.ForEach(variable =>
                 {
                     if (variable.VariableName.Equals("Mining Tier"))
                     {
-                        craftingDict.Add("mining_tier", variable.Value);
+                        craftingDict["mining_tier"] = variable.Value;
                     } else if (variable.VariableName.Equals("Fishing Tier"))
                     {
-                        craftingDict.Add("fishing_tier", variable.Value);
+                        craftingDict["fishing_tier"] = variable.Value;
                     } else if (variable.VariableName.Equals("Woodcut Tier"))
                     {
-                        craftingDict.Add("woodcut_tier", variable.Value);
+                        craftingDict["woodcut_tier"] = variable.Value;
                     }
                     else if (variable.VariableName.Equals("NPC_GUILD: current_npc_guild"))
                     {
-                        craftingDict.Add("npc_guild_name", variable.Value);
+                        craftingDict["npc_guild_name"] = variable.Value;
                     }
                     else if (variable.VariableName.Equals("Class Rank"))
                     {
-                        craftingDict.Add("class_rank", variable.Value);
+                        craftingDict["class_rank"] = variable.Value;
                     }
                 });
-
-                if (craftingDict.ContainsKey("mining_tier") 
-                    && craftingDict.ContainsKey("fishing_tier") 
-                    && craftingDict.ContainsKey("woodcut_tier")
-                    && craftingDict.ContainsKey("npc_guild_name")
-                    && craftingDict.ContainsKey("class_rank"))
-                {
-                    PacketSender.SendCraftingInfoPacket(
+                
+                PacketSender.SendCraftingInfoPacket(
                     client,
                     craftingDict["mining_tier"],
                     craftingDict["fishing_tier"],
                     craftingDict["woodcut_tier"],
                     craftingDict["npc_guild_name"],
                     craftingDict["class_rank"]
-                    );
-                }
+                );
             }
         }
 
@@ -2937,27 +2936,26 @@ namespace Intersect.Server.Networking
             if (player != null)
             {
                 var questPointDictionary = new Dictionary<string, string>();
+                questPointDictionary.Add("lifetime_qp", "0");
+                questPointDictionary.Add("quest_points", "0");
+
                 player.Variables.ForEach(variable =>
                 {
                     if (variable.VariableName.Equals("QP: lifetime_quest_points"))
                     {
-                        questPointDictionary.Add("lifetime_qp", variable.Value);
+                        questPointDictionary["lifetime_qp"] = variable.Value;
                     }
                     else if (variable.VariableName.Equals("Quest Points"))
                     {
-                        questPointDictionary.Add("quest_points", variable.Value);
+                        questPointDictionary["quest_points"] = variable.Value;
                     }
                 });
-
-                if (questPointDictionary.ContainsKey("lifetime_qp") 
-                    && questPointDictionary.ContainsKey("quest_points"))
-                {
-                    PacketSender.SendQuestPointPacket(
+                
+                PacketSender.SendQuestPointPacket(
                     client,
                     questPointDictionary["quest_points"],
                     questPointDictionary["lifetime_qp"]
-                    );
-                }
+                );
             }
         }
 
