@@ -12,10 +12,16 @@
 
         public long MPWarningDisplayTime = 2000; //2 seconds
 
+        public long HPWarningFadeTime = 2000; //2 seconds
+
+        public long WarningFlashRate = 250; //250 ms
+
         public float BaseComboExpModifier = 0.25f;
 
         public float MaxComboExpModifier = 2.0f;
-        
+
+        public float HPWarningThreshold = 0.2f;
+
         public float PartyComboModifier = 0.5f;
         
         public int MinComboExpLvlDiff = 5;

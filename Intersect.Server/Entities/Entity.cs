@@ -1177,6 +1177,19 @@ namespace Intersect.Server.Entities
                 value = GetMaxVital(vital);
             }
 
+            if (this is Player player)
+            {
+                var thresholdVal = (int) (player.GetMaxVital(vital) * Options.Combat.HPWarningThreshold);
+
+                if (value < thresholdVal)
+                {
+                    PacketSender.SendGUINotification(player.Client, GUINotification.LowHP, true);
+                } else
+                {
+                    PacketSender.SendGUINotification(player.Client, GUINotification.LowHP, false);
+                }
+            }
+
             mVitals[vital] = value;
         }
 

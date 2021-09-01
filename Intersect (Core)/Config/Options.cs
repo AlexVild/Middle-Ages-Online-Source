@@ -140,9 +140,15 @@ namespace Intersect
 
         public static float PartyComboModifier => Instance.CombatOpts.PartyComboModifier;
 
+        public static int HPWarningThreshold => Instance.CombatOpts.HPWarningThreshold;
+
         public static int MinComboExpLvlDiff => Instance.CombatOpts.MinComboExpLvlDiff;
         
         public static long MPWarningDisplayTime => Instance.CombatOpts.MPWarningDisplayTime;
+        
+        public static long HPWarningFadeTime => Instance.CombatOpts.HPWarningFadeTime;
+        
+        public static long WarningFlashRate => Instance.CombatOpts.WarningFlashRate;
 
         public static long DirChangeTimer => Instance.CombatOpts.DirChangeTimer;
 

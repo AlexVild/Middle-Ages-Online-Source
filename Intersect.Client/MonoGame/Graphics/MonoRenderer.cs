@@ -735,7 +735,6 @@ namespace Intersect.Client.MonoGame.Graphics
 
             var allowedResolutions = new[]
             {
-                new Resolution(800, 600),
                 new Resolution(1024, 768),
                 new Resolution(1024, 720),
                 new Resolution(1280, 720),
