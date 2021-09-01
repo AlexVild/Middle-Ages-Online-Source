@@ -50,6 +50,8 @@ namespace Intersect.Configuration
 
         public const string GUI_CANCEL_SFX = "al_gui_cancel.wav";
 
+        public const string HEALTH_WARNING_SFX = null;
+
         #endregion
 
         #region Static Properties and Methods

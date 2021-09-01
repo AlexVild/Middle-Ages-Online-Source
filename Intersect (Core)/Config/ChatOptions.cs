@@ -18,6 +18,12 @@
         /// The time (in milliseconds) the announcement banners should display, if enabled.
         /// </summary>
         public int AnnouncementDisplayDuration = 5000;
+
+        public long MenuNotificationFlashInterval = 250;
+        
+        public string MenuCharacterIcon = "charactericon.png";
+
+        public string MenuCharacterIconFlashed = "charactericon_flash.png";
     }
 
 }

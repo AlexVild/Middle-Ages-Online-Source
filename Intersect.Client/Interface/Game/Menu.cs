@@ -79,6 +79,12 @@ namespace Intersect.Client.Interface.Game
 
         private int mButtonWidth = 34;
 
+        private long mNotificationTimer = 0;
+
+        private bool mNotificationFlash = false;
+
+        private string characterImage = Options.Chat.MenuCharacterIcon;
+
         //Canvas instance
         private Canvas mGameCanvas;
 
@@ -146,6 +152,42 @@ namespace Intersect.Client.Interface.Game
         //Methods
         public void Update(bool updateQuestLog)
         {
+            if (Globals.Me.StatPoints > 0 && !mCharacterWindow.IsVisible())
+            {
+                var time = Globals.System.GetTimeMs();
+                if (!mNotificationFlash)
+                {
+                    mNotificationFlash = true;
+                    mNotificationTimer = time + Options.Chat.MenuNotificationFlashInterval;
+
+                    if (characterImage == Options.Chat.MenuCharacterIconFlashed)
+                    {
+                        characterImage = Options.Chat.MenuCharacterIcon;
+                    }
+                    else
+                    {
+                        characterImage = Options.Chat.MenuCharacterIconFlashed;
+                    }
+                }
+                
+                if (mNotificationTimer < time)
+                {
+                    mNotificationFlash = false;
+                }
+
+                mCharacterButton.SetImage(null, characterImage, Button.ControlState.Normal);
+                mCharacterButton.SetImage(null, characterImage, Button.ControlState.Hovered);
+                mCharacterButton.Redraw();
+            } else
+            {
+                if (mCharacterButton.GetImage(Button.ControlState.Normal).GetName() != Options.Chat.MenuCharacterIcon)
+                {
+                    mCharacterButton.SetImage(null, Options.Chat.MenuCharacterIcon, Button.ControlState.Normal);
+                    mCharacterButton.SetImage(null, Options.Chat.MenuCharacterIcon, Button.ControlState.Hovered);
+                    mCharacterButton.Redraw();
+                }
+            }
+
             mInventoryWindow.Update();
             mSpellsWindow.Update();
             mCharacterWindow.Update();

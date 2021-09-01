@@ -103,7 +103,7 @@ namespace Intersect.Client.Interface.Game
 
         private void ResetHPWarningState(long time)
         {
-            DisplayWarningWithSound(ref mHPWarningLabel, null);
+            DisplayWarningWithSound(ref mHPWarningLabel, ClientConfiguration.HEALTH_WARNING_SFX);
             mHPWarningAlpha = MAX_ALPHA;
             fadeHPWarning = false;
         }

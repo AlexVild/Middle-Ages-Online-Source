@@ -140,7 +140,7 @@ namespace Intersect
 
         public static float PartyComboModifier => Instance.CombatOpts.PartyComboModifier;
 
-        public static int HPWarningThreshold => Instance.CombatOpts.HPWarningThreshold;
+        public static float HPWarningThreshold => Instance.CombatOpts.HPWarningThreshold;
 
         public static int MinComboExpLvlDiff => Instance.CombatOpts.MinComboExpLvlDiff;
         
@@ -177,6 +177,12 @@ namespace Intersect
         public static int MaxChatLength => Instance.ChatOpts.MaxChatLength;
 
         public static int MinChatInterval => Instance.ChatOpts.MinIntervalBetweenChats;
+
+        public static long MenuNotificationFlashInterval => Instance.ChatOpts.MenuNotificationFlashInterval;
+        
+        public static string MenuCharacterIcon => Instance.ChatOpts.MenuCharacterIcon;
+        
+        public static string MenuCharacterIconFlashed => Instance.ChatOpts.MenuCharacterIconFlashed;
 
         public static LootOptions Loot => Instance.LootOpts;
 
