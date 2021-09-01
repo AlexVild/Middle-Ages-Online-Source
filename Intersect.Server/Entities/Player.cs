@@ -175,6 +175,10 @@ namespace Intersect.Server.Entities
         [NotMapped]
         public int CurrentCombo { get; set; } = 0;
 
+        [NotMapped]
+        [JsonIgnore]
+        public long MPWarningSent { get; set; } = 0; // timestamp
+
         /*//Spawn Stuff
         public Guid AlternateSpawnMapId { get; set; }
 
@@ -4506,6 +4510,11 @@ namespace Intersect.Server.Entities
                     {
                         PacketSender.SendChatMsg(this, Strings.Combat.lowmana, ChatMessageType.Combat);
                     }
+                    if (MPWarningSent < Globals.Timing.Milliseconds) // attempt to limit how often we send this notification
+                    {
+                        MPWarningSent = Globals.Timing.Milliseconds + Options.Combat.MPWarningDisplayTime;
+                        PacketSender.SendGUINotification(Client, GUINotification.NotEnoughMp, true);
+                    }
 
                     return false;
                 }
@@ -4614,7 +4623,7 @@ namespace Intersect.Server.Entities
             if (spellBase == null)
             {
                 return;
-            }
+            }            
 
             switch (spellBase.SpellType)
             {

@@ -55,6 +55,8 @@ namespace Intersect.Client.Interface.Game
 
         private MapItemWindow mMapItemWindow;
 
+        private WarningWindow mWarnings;
+
         private bool mShouldCloseBag;
 
         private bool mShouldCloseBank;
@@ -125,6 +127,7 @@ namespace Intersect.Client.Interface.Game
             mDebugMenu = new DebugMenu(GameCanvas);
             mMapItemWindow = new MapItemWindow(GameCanvas);
             mComboText = new ComboText(GameCanvas);
+            mWarnings = new WarningWindow(GameCanvas);
         }
 
         //Chatbox
@@ -349,6 +352,7 @@ namespace Intersect.Client.Interface.Game
             AnnouncementWindow?.Update();
             mPictureWindow?.Update();
             mComboText?.Update();
+            mWarnings?.Update();
 
             if (Globals.QuestOffers.Count > 0)
             {

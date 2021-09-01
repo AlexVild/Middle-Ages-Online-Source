@@ -141,6 +141,8 @@ namespace Intersect
         public static float PartyComboModifier => Instance.CombatOpts.PartyComboModifier;
 
         public static int MinComboExpLvlDiff => Instance.CombatOpts.MinComboExpLvlDiff;
+        
+        public static long MPWarningDisplayTime => Instance.CombatOpts.MPWarningDisplayTime;
 
         public static long DirChangeTimer => Instance.CombatOpts.DirChangeTimer;
 

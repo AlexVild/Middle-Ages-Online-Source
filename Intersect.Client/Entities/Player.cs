@@ -70,6 +70,12 @@ namespace Intersect.Client.Entities
 
         public long[] MoveDirectionTimers = new long[4];
 
+        public bool HPWarning = false;
+
+        public bool MPWarning = false;
+
+        public bool UnspentPointsWarning = false;
+
         public long CombatTimer { get; set; }
 
         public int ComboWindow { get; set; }

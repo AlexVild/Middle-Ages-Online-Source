@@ -2112,6 +2112,20 @@ namespace Intersect.Client.Networking
             Globals.Me.QuestPoints = packet?.QuestPoints;
             Globals.Me.LifetimeQuestPoints = packet?.LifetimeQuestPoints;
         }
+
+        public void HandlePacket(IPacketSender packetSender, GUINotificationPacket packet)
+        {
+            if (Globals.Me == null) return;
+
+            switch (packet.Notification)
+            {
+                case GUINotification.NotEnoughMp:
+                    Globals.Me.MPWarning = packet.DisplayNotification;
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
 }

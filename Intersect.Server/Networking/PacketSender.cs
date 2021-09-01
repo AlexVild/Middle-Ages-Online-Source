@@ -2143,6 +2143,11 @@ namespace Intersect.Server.Networking
         {
             client?.Send(new QuestPointPacket(questPoints, lifetimeQuestPoints));
         }
+
+        public static void SendGUINotification(Client client, GUINotification notification, bool displayNotification)
+        {
+            client?.Send(new GUINotificationPacket(notification, displayNotification));
+        }
     }
 
 }

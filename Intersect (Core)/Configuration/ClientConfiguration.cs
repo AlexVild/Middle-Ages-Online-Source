@@ -48,6 +48,8 @@ namespace Intersect.Configuration
 
         public const string DEFAULT_MENU_MUSIC = "RPG-Theme_v001_Looping.ogg";
 
+        public const string GUI_CANCEL_SFX = "al_gui_cancel.wav";
+
         #endregion
 
         #region Static Properties and Methods

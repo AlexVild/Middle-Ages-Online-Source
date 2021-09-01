@@ -540,6 +540,10 @@ namespace Intersect.Client.Localization
                 @"You are about to exit while in combat! Your character will remain in-game until combat has ended! Are you sure you want to quit now?";
 
             public static LocalizedString combo = @"Combo";
+
+            public static LocalizedString notenoughmp = @"Not enough MP!";
+
+            public static LocalizedString lowhealth = @"HP LOW!";
         }
 
         public struct Controls

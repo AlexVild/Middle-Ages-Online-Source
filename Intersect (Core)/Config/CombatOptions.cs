@@ -10,6 +10,8 @@
 
         public int BaseComboTime = 3000; //3 seconds
 
+        public long MPWarningDisplayTime = 2000; //2 seconds
+
         public float BaseComboExpModifier = 0.25f;
 
         public float MaxComboExpModifier = 2.0f;

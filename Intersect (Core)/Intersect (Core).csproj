@@ -270,6 +270,7 @@
     <Compile Include="Enums\ChatboxTab.cs" />
     <Compile Include="Enums\ChatMessageType.cs" />
     <Compile Include="Enums\GuildMemberUpdateActions.cs" />
+    <Compile Include="Enums\GUINotification.cs" />
     <Compile Include="Enums\ItemHandling.cs" />
     <Compile Include="ErrorHandling\ExceptionInfo.cs" />
     <Compile Include="Extensions\ArrayExtensions.cs" />
@@ -402,6 +403,7 @@
     <Compile Include="Network\Packets\Server\ComboPacket.cs" />
     <Compile Include="Network\Packets\Server\CraftingInfoPacket.cs" />
     <Compile Include="Network\Packets\Server\EntityMovementPackets.cs" />
+    <Compile Include="Network\Packets\Server\GUINotificationPacket.cs" />
     <Compile Include="Network\Packets\Server\MapFadePacket.cs" />
     <Compile Include="Network\Packets\Server\GuildInvitePacket.cs" />
     <Compile Include="Network\Packets\Server\GuildPacket.cs" />
