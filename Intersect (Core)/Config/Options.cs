@@ -138,6 +138,10 @@ namespace Intersect
 
         public static float BaseComboExpModifier => Instance.CombatOpts.BaseComboExpModifier;
 
+        public static float PartyComboModifier => Instance.CombatOpts.PartyComboModifier;
+
+        public static int MinComboExpLvlDiff => Instance.CombatOpts.MinComboExpLvlDiff;
+
         public static long DirChangeTimer => Instance.CombatOpts.DirChangeTimer;
 
         public static int MinAttackRate => Instance.CombatOpts.MinAttackRate;

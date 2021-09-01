@@ -90,6 +90,10 @@ namespace Intersect.Client.Entities
 
         public string ClassRank { get; set; } 
 
+        public string QuestPoints { get; set; }
+
+        public string LifetimeQuestPoints { get; set; }
+
         // Target data
         private long mlastTargetScanTime = 0;
 

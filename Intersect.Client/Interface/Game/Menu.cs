@@ -279,6 +279,7 @@ namespace Intersect.Client.Interface.Game
             }
             else
             {
+                PacketSender.SendQuestPointRequestPacket(); // request quest point info here
                 HideWindows();
                 mQuestsWindow.Show();
             }

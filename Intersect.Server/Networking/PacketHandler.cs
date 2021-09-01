@@ -2912,7 +2912,11 @@ namespace Intersect.Server.Networking
                     }
                 });
 
-                if (craftingDict.ContainsKey("mining_tier") && craftingDict.ContainsKey("fishing_tier") && craftingDict.ContainsKey("woodcut_tier"))
+                if (craftingDict.ContainsKey("mining_tier") 
+                    && craftingDict.ContainsKey("fishing_tier") 
+                    && craftingDict.ContainsKey("woodcut_tier")
+                    && craftingDict.ContainsKey("npc_guild_name")
+                    && craftingDict.ContainsKey("class_rank"))
                 {
                     PacketSender.SendCraftingInfoPacket(
                     client,
@@ -2921,6 +2925,37 @@ namespace Intersect.Server.Networking
                     craftingDict["woodcut_tier"],
                     craftingDict["npc_guild_name"],
                     craftingDict["class_rank"]
+                    );
+                }
+            }
+        }
+
+        public void HandlePacket(Client client, SendQuestPointRequestPacket packet)
+        {
+            var player = client?.Entity;
+
+            if (player != null)
+            {
+                var questPointDictionary = new Dictionary<string, string>();
+                player.Variables.ForEach(variable =>
+                {
+                    if (variable.VariableName.Equals("QP: lifetime_quest_points"))
+                    {
+                        questPointDictionary.Add("lifetime_qp", variable.Value);
+                    }
+                    else if (variable.VariableName.Equals("Quest Points"))
+                    {
+                        questPointDictionary.Add("quest_points", variable.Value);
+                    }
+                });
+
+                if (questPointDictionary.ContainsKey("lifetime_qp") 
+                    && questPointDictionary.ContainsKey("quest_points"))
+                {
+                    PacketSender.SendQuestPointPacket(
+                    client,
+                    questPointDictionary["quest_points"],
+                    questPointDictionary["lifetime_qp"]
                     );
                 }
             }

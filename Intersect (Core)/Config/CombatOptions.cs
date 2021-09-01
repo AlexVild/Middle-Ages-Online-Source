@@ -14,6 +14,10 @@
 
         public float MaxComboExpModifier = 2.0f;
         
+        public float PartyComboModifier = 0.5f;
+        
+        public int MinComboExpLvlDiff = 5;
+        
         public long DirChangeTimer = 90;
 
         public int MaxAttackRate = 200; //5 attacks per second

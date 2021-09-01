@@ -2104,6 +2104,14 @@ namespace Intersect.Client.Networking
             }
             Globals.Me.ClassRank = packet.ClassRank;
         }
+
+        public void HandlePacket(IPacketSender packetSender, QuestPointPacket packet)
+        {
+            if (Globals.Me == null) return;
+
+            Globals.Me.QuestPoints = packet.QuestPoints;
+            Globals.Me.LifetimeQuestPoints = packet.LifetimeQuestPoints;
+        }
     }
 
 }

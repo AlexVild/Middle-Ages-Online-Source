@@ -1349,6 +1349,10 @@ namespace Intersect.Client.Localization
 
             public static LocalizedString title = @"Quest Log";
 
+            public static LocalizedString questpoints = @"Unspent Quest Points: {00}";
+
+            public static LocalizedString lifetimequestpoints = @"Lifetime Quest Points: {00}";
+
         }
 
         public struct QuestOffer

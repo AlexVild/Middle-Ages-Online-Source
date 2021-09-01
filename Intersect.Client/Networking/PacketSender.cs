@@ -434,6 +434,11 @@ namespace Intersect.Client.Networking
         {
             Network.SendPacket(new ClassInfoPacket());
         }
+
+        public static void SendQuestPointRequestPacket()
+        {
+            Network.SendPacket(new SendQuestPointRequestPacket());
+        }
     }
 
 }

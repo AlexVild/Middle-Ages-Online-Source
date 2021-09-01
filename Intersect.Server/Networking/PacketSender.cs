@@ -2138,6 +2138,11 @@ namespace Intersect.Server.Networking
         {
             client?.Send(new CraftingInfoPacket(miningTier, fishingTier, woodcutTier, npcGuildName, classRank));
         }
+
+        public static void SendQuestPointPacket(Client client, string questPoints, string lifetimeQuestPoints)
+        {
+            client?.Send(new QuestPointPacket(questPoints, lifetimeQuestPoints));
+        }
     }
 
 }

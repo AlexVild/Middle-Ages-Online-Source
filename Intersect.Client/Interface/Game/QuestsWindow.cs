@@ -36,6 +36,10 @@ namespace Intersect.Client.Interface.Game
 
         private Label mQuestTitle;
 
+        private Label mQuestPoints;
+
+        private Label mLifetimeQuestPoints;
+
         private Button mQuitButton;
 
         private QuestBase mSelectedQuest;
@@ -45,6 +49,9 @@ namespace Intersect.Client.Interface.Game
         {
             mQuestsWindow = new WindowControl(gameCanvas, Strings.QuestLog.title, false, "QuestsWindow");
             mQuestsWindow.DisableResizing();
+
+            mQuestPoints = new Label(mQuestsWindow, "QuestPointLabel");
+            mLifetimeQuestPoints = new Label(mQuestsWindow, "LifetimeQuestPointLabel");
 
             mQuestList = new ListBox(mQuestsWindow, "QuestList");
             mQuestList.EnableScroll(false, true);
@@ -108,6 +115,9 @@ namespace Intersect.Client.Interface.Game
             {
                 return;
             }
+
+            mQuestPoints.SetText(Strings.QuestLog.questpoints.ToString(Globals.Me.QuestPoints));
+            mLifetimeQuestPoints.SetText(Strings.QuestLog.lifetimequestpoints.ToString(Globals.Me.LifetimeQuestPoints));
 
             if (mSelectedQuest != null)
             {
@@ -204,7 +214,7 @@ namespace Intersect.Client.Interface.Game
                 {
                     add = true;
                     category = !TextUtils.IsNone(quest.InProgressCategory) ? quest.InProgressCategory : "";
-                    color = Color.Yellow;
+                    color = new Color(255, 200, 145, 62);
                     orderVal = 1;
                 }
                 else
@@ -215,7 +225,7 @@ namespace Intersect.Client.Interface.Game
                         {
                             add = true;
                             category = !TextUtils.IsNone(quest.CompletedCategory) ? quest.CompletedCategory : "";
-                            color = Color.Green;
+                            color = new Color(255, 26, 107, 5);
                             orderVal = 3;
                         }
                     }
@@ -225,7 +235,7 @@ namespace Intersect.Client.Interface.Game
                         {
                             add = true;
                             category = !TextUtils.IsNone(quest.UnstartedCategory) ? quest.UnstartedCategory : "";
-                            color = Color.Red;
+                            color = new Color(255, 222, 124, 112);
                             orderVal = 2;
                         }
                     }
@@ -237,7 +247,7 @@ namespace Intersect.Client.Interface.Game
                 {
                     add = true;
                     category = !TextUtils.IsNone(quest.UnstartedCategory) ? quest.UnstartedCategory : "";
-                    color = Color.Red;
+                    color = new Color(255, 222, 124, 112);
                     orderVal = 2;
                 }
             }
@@ -294,6 +304,8 @@ namespace Intersect.Client.Interface.Game
             if (mSelectedQuest == null)
             {
                 mQuestList.Show();
+                mQuestPoints.Show();
+                mLifetimeQuestPoints.Show();
                 mQuestTitle.Hide();
                 mQuestDescArea.Hide();
                 mQuestStatus.Hide();
@@ -313,7 +325,7 @@ namespace Intersect.Client.Interface.Game
                     {
                         //In Progress
                         mQuestStatus.SetText(Strings.QuestLog.inprogress);
-                        mQuestStatus.SetTextColor(Color.Yellow, Label.ControlState.Normal);
+                        mQuestStatus.SetTextColor(new Color(255, 200, 145, 62), Label.ControlState.Normal);
                         if (mSelectedQuest.InProgressDescription.Length > 0)
                         {
                             mQuestDescLabel.AddText(
@@ -378,7 +390,7 @@ namespace Intersect.Client.Interface.Game
                             if (mSelectedQuest.LogAfterComplete)
                             {
                                 mQuestStatus.SetText(Strings.QuestLog.completed);
-                                mQuestStatus.SetTextColor(Color.Green, Label.ControlState.Normal);
+                                mQuestStatus.SetTextColor(new Color(255, 26, 107, 5), Label.ControlState.Normal);
                                 mQuestDescLabel.AddText(
                                     mSelectedQuest.EndDescription, Color.White, Alignments.Left,
                                     mQuestDescTemplateLabel.Font
@@ -391,7 +403,7 @@ namespace Intersect.Client.Interface.Game
                             if (mSelectedQuest.LogBeforeOffer)
                             {
                                 mQuestStatus.SetText(Strings.QuestLog.notstarted);
-                                mQuestStatus.SetTextColor(Color.Red, Label.ControlState.Normal);
+                                mQuestStatus.SetTextColor(new Color(255, 222, 124, 112), Label.ControlState.Normal);
                                 mQuestDescLabel.AddText(
                                     mSelectedQuest.BeforeDescription, Color.White, Alignments.Left,
                                     mQuestDescTemplateLabel.Font
@@ -408,7 +420,7 @@ namespace Intersect.Client.Interface.Game
                     if (mSelectedQuest.LogBeforeOffer)
                     {
                         mQuestStatus.SetText(Strings.QuestLog.notstarted);
-                        mQuestStatus.SetTextColor(Color.Red, Label.ControlState.Normal);
+                        mQuestStatus.SetTextColor(new Color(255, 222, 124, 112), Label.ControlState.Normal);
                         mQuestDescLabel.AddText(
                             mSelectedQuest.BeforeDescription, Color.White, Alignments.Left, mQuestDescTemplateLabel.Font
                         );
@@ -424,6 +436,8 @@ namespace Intersect.Client.Interface.Game
                 mQuestStatus.Show();
                 mBackButton.Show();
                 mQuitButton.Show();
+                mQuestPoints.Hide();
+                mLifetimeQuestPoints.Hide();
             }
         }
 

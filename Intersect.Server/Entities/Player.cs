@@ -1084,13 +1084,13 @@ namespace Intersect.Server.Entities
             StartCommonEventsWithTrigger(CommonEventTrigger.LevelUp);
         }
 
-        public void GiveExperience(long amount)
+        public void GiveExperience(long amount, bool partyCombo = false, int opponentLevel = 0)
         {
             Exp += (int) (amount * GetExpMultiplier() / 100);
 
             if (CurrentCombo > 0)
             {
-                ComboExp = CalculateComboExperience(amount);
+                ComboExp = CalculateComboExperience(amount, partyCombo, opponentLevel);
                 Exp += ComboExp;
             }
 
@@ -1156,7 +1156,7 @@ namespace Intersect.Server.Entities
                             var partyExperience = (int)(descriptor.Experience * multiplier) / partyMembersInXpRange.Length;
                             foreach (var partyMember in partyMembersInXpRange)
                             {
-                                partyMember.GiveExperience(partyExperience);
+                                partyMember.GiveExperience(partyExperience, true, entity.Level);
                                 partyMember.UpdateQuestKillTasks(entity);
                                 partyMember.UpdateComboTime();
                             }
@@ -1174,7 +1174,7 @@ namespace Intersect.Server.Entities
                         }
                         else
                         {
-                            GiveExperience(descriptor.Experience);
+                            GiveExperience(descriptor.Experience, false, entity.Level);
                             UpdateComboTime();
                             UpdateQuestKillTasks(entity);
                         }
@@ -1211,8 +1211,13 @@ namespace Intersect.Server.Entities
         }
 
         #region Combo Stuff
-        private int CalculateComboExperience(long baseAmount)
+        private int CalculateComboExperience(long baseAmount, bool partyCombo, int entityLevel)
         {
+            if (entityLevel < Level - Options.Combat.MinComboExpLvlDiff) // don't give exp if the level gap was too large
+            {
+                return 0;
+            }
+
             // Check to see if a prayer is equipped that modifies this
             var equipBonus = 0.0f;
             if (Equipment[Options.PrayerIndex] >= 0)
@@ -1223,6 +1228,10 @@ namespace Intersect.Server.Entities
             // Cap bonus EXP at double the base exp from the enemy - to prevent anything absolutely bonkers
             var calculatedBonus = MathHelper.Clamp((Options.Combat.BaseComboExpModifier + equipBonus) * CurrentCombo, 0, Options.Combat.MaxComboExpModifier);
             var bonusExp = (int)Math.Floor(baseAmount * calculatedBonus);
+            if (partyCombo)
+            {
+                bonusExp = (int) Math.Floor(bonusExp * Options.Combat.PartyComboModifier);
+            }
             return bonusExp;
         }
 
