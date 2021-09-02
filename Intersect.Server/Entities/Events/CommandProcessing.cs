@@ -1102,6 +1102,18 @@ namespace Intersect.Server.Entities.Events
             PacketSender.SendHidePicture(player);
         }
 
+        //Flash Screen Command
+        private static void ProcessCommand(
+            FlashScreenCommand command,
+            Player player,
+            Event instance,
+            CommandInstance stackInfo,
+            Stack<CommandInstance> callStack
+        )
+        {
+            PacketSender.SendFlashScreenPacket(player.Client, command.Duration, command.FlashColor, command.Intensity);
+        }
+
         //Wait Command
         private static void ProcessCommand(
             WaitCommand command,

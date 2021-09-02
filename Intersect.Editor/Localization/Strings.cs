@@ -1644,6 +1644,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString female = @"Female";
 
+            public static LocalizedString flashscreen = @"Flash Screen [Dur: {00}ms, Color: {01}, Intensity: {02}]";
+
             public static LocalizedString forcedstart = @"Forced Start";
 
             public static LocalizedString forget = @"Remove: Spell {00}";
@@ -1957,6 +1959,7 @@ Tick timer saved in server config.json.";
                 {"openguildbank", @"Open Guild Bank"},
                 {"setguildbankslots", @"Set Guild Bank Slots Count"},
                 {"resetstatallocations", @"Reset Stat Point Allocations"},
+                {"flashscreen", @"Flash Screen"},
             };
 
         }

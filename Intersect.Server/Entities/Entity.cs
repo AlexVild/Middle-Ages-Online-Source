@@ -1756,6 +1756,25 @@ namespace Intersect.Server.Entities
                     if (isCrit)
                     {
                         PacketSender.SendActionMsg(enemy, Strings.Combat.critical, CustomColors.Combat.Critical);
+                        if (Options.CombatFlashes)
+                        {
+                            if (enemy is Player enemyPlayer)
+                            {
+                                PacketSender.SendFlashScreenPacket(enemyPlayer.Client, 
+                                    Options.CriticalHitFlashDuration, 
+                                    Color.FromName(Options.CriticalHitReceivedColor), 
+                                    Options.CriticalHitFlashIntensity,
+                                    Options.CriticalHitReceivedSound);
+                            }
+                            if (this is Player player)
+                            {
+                                PacketSender.SendFlashScreenPacket(player.Client, 
+                                    Options.CriticalHitFlashDuration, 
+                                    Color.FromName(Options.CriticalHitDealtColor), 
+                                    Options.CriticalHitFlashIntensity,
+                                    Options.CriticalHitDealtSound);
+                            }
+                        }
                     }
 
                     enemy.SubVital(Vitals.Health, (int) baseDamage);

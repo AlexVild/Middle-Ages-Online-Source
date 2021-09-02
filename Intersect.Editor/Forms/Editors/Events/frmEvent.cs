@@ -752,6 +752,10 @@ namespace Intersect.Editor.Forms.Editors.Events
                     tmpCommand = new ResetStatPointAllocationsCommand();
 
                     break;
+                case EventCommandType.FlashScreen:
+                    tmpCommand = new FlashScreenCommand();
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -1346,6 +1350,10 @@ namespace Intersect.Editor.Forms.Editors.Events
 
                     break;
                 case EventCommandType.ResetStatPointAllocations:
+
+                    break;
+                case EventCommandType.FlashScreen:
+                    cmdWindow = new EventCommand_FlashScreen((FlashScreenCommand)command, this);
 
                     break;
                 default:

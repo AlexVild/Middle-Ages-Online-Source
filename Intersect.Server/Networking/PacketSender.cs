@@ -2148,6 +2148,11 @@ namespace Intersect.Server.Networking
         {
             client?.Send(new GUINotificationPacket(notification, displayNotification));
         }
+
+        public static void SendFlashScreenPacket(Client client, float dur, Color col, float intensity, string soundFile = null)
+        {
+            client?.Send(new FlashScreenPacket(dur, col, intensity, soundFile));
+        }
     }
 
 }

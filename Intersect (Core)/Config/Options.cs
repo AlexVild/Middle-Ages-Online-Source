@@ -150,6 +150,20 @@ namespace Intersect
         
         public static long WarningFlashRate => Instance.CombatOpts.WarningFlashRate;
 
+        public static bool CombatFlashes => Instance.CombatOpts.CombatFlashes;
+
+        public static string CriticalHitDealtColor => Instance.CombatOpts.CriticalHitDealtColor;
+
+        public static string CriticalHitReceivedColor => Instance.CombatOpts.CriticalHitReceivedColor;
+
+        public static float CriticalHitFlashIntensity => Instance.CombatOpts.CriticalHitFlashIntensity;
+        
+        public static float CriticalHitFlashDuration => Instance.CombatOpts.CriticalHitFlashDuration;
+
+        public static string CriticalHitReceivedSound => Instance.CombatOpts.CriticalHitReceivedSound;
+
+        public static string CriticalHitDealtSound => Instance.CombatOpts.CriticalHitDealtSound;
+
         public static long DirChangeTimer => Instance.CombatOpts.DirChangeTimer;
 
         public static int MinAttackRate => Instance.CombatOpts.MinAttackRate;

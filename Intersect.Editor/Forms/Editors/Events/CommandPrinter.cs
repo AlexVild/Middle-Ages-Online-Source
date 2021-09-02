@@ -1276,6 +1276,11 @@ namespace Intersect.Editor.Forms.Editors.Events
             return Strings.EventCommandList.resetstatpointallocations;
         }
 
+        private static string GetCommandText(FlashScreenCommand command, MapInstance map)
+        {
+            return Strings.EventCommandList.flashscreen.ToString(command.Duration.ToString(), Color.ToString(command.FlashColor), command.Intensity.ToString());
+        }
+
         //Set Variable Modification Texts
         private static string GetVariableModText(SetVariableCommand command, VariableMod mod)
         {

@@ -2129,6 +2129,19 @@ namespace Intersect.Client.Networking
                     break;
             }
         }
-    }
 
+        // The client will flash the screen with the given params
+        public void HandlePacket(IPacketSender packetSender, FlashScreenPacket packet)
+        {
+            if (Globals.Me == null) return;
+
+            Flash.FlashScreen(packet.Duration, packet.FlashColor, packet.Intensity);
+
+            var flashSound = packet.SoundFile;
+            if (flashSound != null)
+            {
+                Audio.AddGameSound(flashSound, false);
+            }
+        }
+    }
 }

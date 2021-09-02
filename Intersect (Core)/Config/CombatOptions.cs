@@ -34,6 +34,20 @@
 
         public int MinAttackRate = 500; //2 attacks per second
 
+        public bool CombatFlashes = true; // Whether or not to flash screen on critical hits
+
+        public string CriticalHitDealtColor = "White";
+
+        public string CriticalHitReceivedColor = "Red";
+
+        public float CriticalHitFlashIntensity = 180f;
+
+        public float CriticalHitFlashDuration = 500f; // ms
+
+        public string CriticalHitReceivedSound = null;
+
+        public string CriticalHitDealtSound = null;
+
         //Combat
         public int RegenTime = 5000; //5 seconds
 

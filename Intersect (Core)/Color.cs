@@ -140,6 +140,56 @@ namespace Intersect
 
         public static Color Pink => new Color(255, 192, 203);
 
+        public static Color FromName(string name)
+        {
+            if (name == "Black")
+            {
+                return Black;
+            }
+            else if (name == "White")
+            {
+                return White;
+            }
+            else if (name == "Pink")
+            {
+                return Pink;
+            }
+            else if (name == "Blue")
+            {
+                return Blue;
+            }
+            else if (name == "Red")
+            {
+                return Red;
+            }
+            else if (name == "Green")
+            {
+                return Green;
+            }
+            else if (name == "Yellow")
+            {
+                return Yellow;
+            }
+            else if (name == "Orange")
+            {
+                return Orange;
+            }
+            else if (name == "Purple")
+            {
+                return Magenta;
+            }
+            else if (name == "Gray")
+            {
+                return Gray;
+            }
+            else if (name == "Cyan")
+            {
+                return Cyan;
+            }
+
+            return White;
+        }
+
         public static Color FromName(string name, IDictionary<int, LocalizedString> colors)
         {
             if (name == "Black" || name == colors[0])
