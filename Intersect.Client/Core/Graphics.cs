@@ -473,9 +473,17 @@ namespace Intersect.Client.Core
 
             Interface.Interface.DrawGui();
 
+            // Draw the current Fade
             DrawGameTexture(
                 Renderer.GetWhiteTexture(), new FloatRect(0, 0, 1, 1), CurrentView,
                 new Color((int) Fade.GetFade(), 0, 0, 0), null, GameBlendModes.None
+            );
+
+            // Draw the current Flash over top that
+            DrawGameTexture(
+                Renderer.GetWhiteTexture(), new FloatRect(0, 0, 1, 1), CurrentView,
+                new Color((int) Flash.GetFlash(), Flash.GetColor().R, Flash.GetColor().G, 
+                Flash.GetColor().B), null, GameBlendModes.None
             );
 
             // Draw our mousecursor at the very end, but not when taking screenshots.
