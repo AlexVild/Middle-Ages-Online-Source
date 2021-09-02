@@ -50,7 +50,7 @@ namespace Intersect.Configuration
 
         public const string GUI_CANCEL_SFX = "al_gui_cancel.wav";
 
-        public const string HEALTH_WARNING_SFX = null;
+        public const string HEALTH_WARNING_SFX = "voice_danger.wav";
 
         #endregion
 
@@ -121,6 +121,16 @@ namespace Intersect.Configuration
         /// Menu background art
         /// </summary>
         public string MenuBackground { get; set; } = DEFAULT_MENU_BACKGROUND;
+
+        /// <summary>
+        /// Sound that plays when a negative GUI event happens
+        /// </summary>
+        public string GuiCancelSfx { get; set; } = GUI_CANCEL_SFX;
+
+        /// <summary>
+        /// Sound that plays when HP warning appears
+        /// </summary>
+        public string HealthWarningSfx { get; set; } = HEALTH_WARNING_SFX;
 
         // TODO: What is this for?
         public List<string> IntroImages { get; set; } = new List<string>();

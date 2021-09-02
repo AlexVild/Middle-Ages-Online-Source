@@ -2123,11 +2123,6 @@ namespace Intersect.Client.Networking
                     Globals.Me.MPWarning = packet.DisplayNotification;
                     break;
                 case GUINotification.LowHP:
-                    if (packet.DisplayNotification)
-                    {
-                        ChatboxMsg.AddMessage(new ChatboxMsg("Low HP Packet Received! " + Globals.System.GetTimeMs().ToString(), Color.Gray, ChatMessageType.Local));
-                    }
-                    
                     Globals.Me.HPWarning = packet.DisplayNotification;
                     break;
                 default:
