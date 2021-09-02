@@ -40,7 +40,7 @@
 
         public string CriticalHitReceivedColor = "Red";
 
-        public float CriticalHitFlashIntensity = 180f;
+        public float CriticalHitFlashIntensity = 40f;
 
         public float CriticalHitFlashDuration = 500f; // ms
 

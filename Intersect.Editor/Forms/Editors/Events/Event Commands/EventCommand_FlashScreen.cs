@@ -28,11 +28,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                 cmbColor.Items.Add(Globals.GetColorName(color));
             }
 
-            cmbColor.SelectedIndex = cmbColor.Items.IndexOf(mMyCommand.FlashColor);
-            if (cmbColor.SelectedIndex == -1)
-            {
-                cmbColor.SelectedIndex = 0;
-            }
+            cmbColor.SelectedIndex = 0; // pain to actually set this, so for now, live with this inconvenience
 
             mEventEditor = editor;
         }
