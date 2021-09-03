@@ -113,6 +113,8 @@ namespace Intersect
         public static int RequestTimeout => Instance.PlayerOpts.RequestTimeout;
 
         public static int TradeRange => Instance.PlayerOpts.TradeRange;
+        
+        public static List<string> DecorSlots => Instance.PlayerOpts.DecorSlots;
 
         public static int WeaponIndex => Instance.EquipmentOpts.WeaponSlot;
 

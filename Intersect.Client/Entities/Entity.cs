@@ -182,6 +182,8 @@ namespace Intersect.Client.Entities
 
         public byte Z;
 
+        public string[] MyDecors = new string[Options.DecorSlots.Count];
+
         public Entity(Guid id, EntityPacket packet, bool isEvent = false)
         {
             Id = id;
@@ -202,6 +204,11 @@ namespace Intersect.Client.Entities
                 {
                     Equipment[i] = Guid.Empty;
                     MyEquipment[i] = -1;
+                }
+
+                for (var i = 0; i < Options.DecorSlots.Count; i++)
+                {
+                    MyDecors[i] = null;
                 }
             }
 
@@ -320,6 +327,7 @@ namespace Intersect.Client.Entities
             HeaderLabel = new Label(packet.HeaderLabel.Label, packet.HeaderLabel.Color);
             FooterLabel = new Label(packet.FooterLabel.Label, packet.FooterLabel.Color);
 
+            // TODO Alex: Load in the decors here I figure?
             var animsToClear = new List<Animation>();
             var animsToAdd = new List<AnimationBase>();
             for (var i = 0; i < packet.Animations.Length; i++)
@@ -1011,6 +1019,9 @@ namespace Intersect.Client.Entities
                 {
                     var paperdoll = Options.PaperdollOrder[Dir][z];
                     var equipSlot = Options.EquipmentSlots.IndexOf(paperdoll);
+                    var decorSlot = Options.DecorSlots.IndexOf(paperdoll);
+
+                    var notTransformed = sprite == MySprite && Equipment.Length == Options.EquipmentSlots.Count;
 
                     //Check for player
                     if (paperdoll == "Player")
@@ -1019,40 +1030,49 @@ namespace Intersect.Client.Entities
                             texture, srcRectangle, destRectangle, renderColor
                         );
                     }
-                    else if (equipSlot > -1)
+                    else if (notTransformed)
                     {
-                        //Don't render the paperdolls if they have transformed.
-                        if (sprite == MySprite && Equipment.Length == Options.EquipmentSlots.Count)
+                        if (equipSlot > -1)
                         {
-                            if (Equipment[equipSlot] != Guid.Empty && this != Globals.Me ||
-                                MyEquipment[equipSlot] < Options.MaxInvItems)
+                            //Don't render the paperdolls if they have transformed.
+                            if (sprite == MySprite && Equipment.Length == Options.EquipmentSlots.Count)
                             {
-                                var itemId = Guid.Empty;
-                                if (this == Globals.Me)
+                                if (Equipment[equipSlot] != Guid.Empty && this != Globals.Me ||
+                                    MyEquipment[equipSlot] < Options.MaxInvItems)
                                 {
-                                    var slot = MyEquipment[equipSlot];
-                                    if (slot > -1)
+                                    var itemId = Guid.Empty;
+                                    if (this == Globals.Me)
                                     {
-                                        itemId = Inventory[slot].ItemId;
-                                    }
-                                }
-                                else
-                                {
-                                    itemId = Equipment[equipSlot];
-                                }
-
-                                var item = ItemBase.Get(itemId);
-                                if (item != null)
-                                {
-                                    if (Gender == 0)
-                                    {
-                                        DrawEquipment(item.MalePaperdoll, renderColor.A);
+                                        var slot = MyEquipment[equipSlot];
+                                        if (slot > -1)
+                                        {
+                                            itemId = Inventory[slot].ItemId;
+                                        }
                                     }
                                     else
                                     {
-                                        DrawEquipment(item.FemalePaperdoll, renderColor.A);
+                                        itemId = Equipment[equipSlot];
+                                    }
+
+                                    var item = ItemBase.Get(itemId);
+                                    if (item != null)
+                                    {
+                                        if (Gender == 0)
+                                        {
+                                            DrawEquipment(item.MalePaperdoll, renderColor.A);
+                                        }
+                                        else
+                                        {
+                                            DrawEquipment(item.FemalePaperdoll, renderColor.A);
+                                        }
                                     }
                                 }
+                            }
+                        } else if (decorSlot > -1 && decorSlot < Options.Player.DecorSlots.Count)
+                        {
+                            if (MyDecors[decorSlot] != null)
+                            {
+                                DrawEquipment(MyDecors[decorSlot], renderColor.A);
                             }
                         }
                     }
@@ -2100,10 +2120,5 @@ namespace Intersect.Client.Entities
         {
             Dispose();
         }
-
-
-
-
     }
-
 }

@@ -132,8 +132,10 @@ namespace Intersect.Client.Interface.Game.EntityPanel
 
             EntityMap = new Framework.Gwen.Control.Label(EntityInfoPanel, "EntityMapLabel");
 
-            PaperdollPanels = new ImagePanel[Options.EquipmentSlots.Count];
-            PaperdollTextures = new string[Options.EquipmentSlots.Count];
+
+            var totalPaperdolls = Options.EquipmentSlots.Count + Options.DecorSlots.Count;
+            PaperdollPanels = new ImagePanel[totalPaperdolls];
+            PaperdollTextures = new string[totalPaperdolls];
             var i = 0;
             for (var z = 0; z < Options.PaperdollOrder[1].Count; z++)
             {
@@ -832,9 +834,10 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                 mCurrentSprite = MyEntity.Face;
                 EntityFace.IsHidden = false;
                 var i = 0;
-                for (var z = 0; z < Options.PaperdollOrder[1].Count; z++)
+                for (var z = 0; z < Options.PaperdollOrder[(int) Directions.Down].Count; z++)
                 {
-                    if (Options.PaperdollOrder[1][z] != "Player")
+                    var paperdollSlot = Options.PaperdollOrder[(int) Directions.Down][z];
+                    if (paperdollSlot != "Player")
                     {
                         if (PaperdollPanels == null)
                         {
@@ -864,6 +867,7 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                 }
 
                 var equipment = MyEntity.Equipment;
+                var decor = MyEntity.MyDecors;
                 if (MyEntity == Globals.Me)
                 {
                     for (var i = 0; i < MyEntity.MyEquipment.Length; i++)
@@ -878,18 +882,24 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                             equipment[i] = Guid.Empty;
                         }
                     }
+
+                    for (var i = 0; i < MyEntity.MyDecors.Length; i++)
+                    {
+                        decor[i] = MyEntity.MyDecors[i];
+                    }
                 }
 
                 var n = 0;
-                for (var z = 0; z < Options.PaperdollOrder[1].Count; z++)
+                for (var z = 0; z < Options.PaperdollOrder[(int)Directions.Down].Count; z++)
                 {
                     var paperdoll = "";
-                    if (Options.EquipmentSlots.IndexOf(Options.PaperdollOrder[1][z]) > -1 &&
+                    var paperdollSlot = Options.PaperdollOrder[(int)Directions.Down][z];
+                    if (Options.EquipmentSlots.IndexOf(paperdollSlot) > -1 &&
                         equipment.Length == Options.EquipmentSlots.Count)
                     {
-                        if (equipment[Options.EquipmentSlots.IndexOf(Options.PaperdollOrder[1][z])] != Guid.Empty)
+                        if (equipment[Options.EquipmentSlots.IndexOf(paperdollSlot)] != Guid.Empty)
                         {
-                            var itemId = equipment[Options.EquipmentSlots.IndexOf(Options.PaperdollOrder[1][z])];
+                            var itemId = equipment[Options.EquipmentSlots.IndexOf(paperdollSlot)];
                             if (ItemBase.Get(itemId) != null)
                             {
                                 var itemdata = ItemBase.Get(itemId);
@@ -903,6 +913,11 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                                 }
                             }
                         }
+                    }
+
+                    if (Options.DecorSlots.IndexOf(paperdollSlot) > -1)
+                    {
+                        paperdoll = decor[Options.DecorSlots.IndexOf(paperdollSlot)];
                     }
 
                     //Check for Player layer

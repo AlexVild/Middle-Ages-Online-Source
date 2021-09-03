@@ -92,6 +92,16 @@ namespace Intersect.Server.Entities
         [NotMapped]
         public int[] Equipment { get; set; } = new int[Options.EquipmentSlots.Count];
 
+        [Column("Decor"), JsonIgnore]
+        public string DecorJson
+        {
+            get => DatabaseUtils.SaveStringArray(Decor, Options.DecorSlots.Count);
+            set => Decor = DatabaseUtils.LoadStringArray(value, Options.DecorSlots.Count);
+        }
+
+        [NotMapped]
+        public string[] Decor { get; set; } = new string[Options.Player.DecorSlots.Count];
+
         public DateTime? LastOnline { get; set; }
 
         public DateTime? CreationDate { get; set; } = DateTime.UtcNow;

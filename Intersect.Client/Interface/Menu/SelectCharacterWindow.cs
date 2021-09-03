@@ -427,6 +427,8 @@ namespace Intersect.Client.Interface.Menu
         public string Class = "";
 
         public string[] Equipment = new string[Options.EquipmentSlots.Count + 1];
+        
+        public string[] Decor = new string[Options.DecorSlots.Count + 1];
 
         public bool Exists = false;
 
@@ -452,10 +454,12 @@ namespace Intersect.Client.Interface.Menu
             string face,
             int level,
             string charClass,
-            string[] equipment
+            string[] equipment,
+            string[] decor
         )
         {
             Equipment = equipment;
+            Decor = decor;
             Id = id;
             Name = name;
             Sprite = sprite;

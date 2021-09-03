@@ -1,4 +1,6 @@
-﻿namespace Intersect.Config
+﻿using System.Collections.Generic;
+
+namespace Intersect.Config
 {
 
     public class PlayerOptions
@@ -69,6 +71,18 @@
         /// </summary>
         public bool ExpLossFromCurrentExp = true;
 
+
+        /// <summary>
+        /// Contains the slots used during character creation - instead of relating these with equipment.
+        /// </summary>
+        public List<string> DecorSlots = new List<string>()
+        {
+            "Hair",
+            "Eyes",
+            "Shirt",
+            "Extra",
+            "Beard",
+        };
     }
 
 }

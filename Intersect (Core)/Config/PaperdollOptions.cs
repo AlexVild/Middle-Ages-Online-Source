@@ -16,41 +16,69 @@ namespace Intersect.Config
         public List<string> Down = new List<string>()
         {
             "Player",
+            "Eyes",
+            "Shirt",
+            "Extra",
+            "Boots",
             "Armor",
+            "Beard",
+            "Hair",
+            "Accessory",
             "Helmet",
-            "Weapon",
             "Shield",
-            "Boots"
+            "Weapon",
+            "Prayer"
         };
 
         public List<string> Left = new List<string>()
         {
-            "Player",
-            "Armor",
-            "Helmet",
             "Weapon",
+            "Player",
+            "Shirt",
+            "Eyes",
+            "Extra",
+            "Boots",
+            "Helmet",
+            "Accessory",
+            "Armor",
+            "Beard",
+            "Hair",
             "Shield",
-            "Boots"
+            "Prayer"
         };
 
         public List<string> Right = new List<string>()
         {
-            "Player",
-            "Armor",
-            "Helmet",
-            "Weapon",
             "Shield",
-            "Boots"
+            "Player",
+            "Shirt",
+            "Eyes",
+            "Extra",
+            "Boots",
+            "Helmet",
+            "Accessory",
+            "Armor",
+            "Beard",
+            "Hair",
+            "Weapon",
+            "Prayer"
         };
 
         public List<string> Up = new List<string>()
         {
-            "Player",
-            "Armor",
-            "Helmet",
             "Weapon",
             "Shield",
-            "Boots"
+            "Extra",
+            "Beard",
+            "Player",
+            "Shirt",
+            "Eyes",
+            "Boots",
+            "Accessory",
+            "Armor",
+            "Hair",
+            "Helmet",
+            "Prayer"
         };
 
         public PaperdollOptions()
@@ -87,10 +115,15 @@ namespace Intersect.Config
                 Left,
                 Right
             };
+
+            Validate();
         }
 
-        public void Validate(EquipmentOptions equipment)
+        public void Validate()
         {
+            var equipment = new EquipmentOptions();
+            var player = new PlayerOptions();
+
             foreach (var direction in Directions)
             {
                 var hasPlayer = false;
@@ -101,7 +134,7 @@ namespace Intersect.Config
                         hasPlayer = true;
                     }
 
-                    if (!equipment.Slots.Contains(item) && item != "Player")
+                    if (item != "Player" && !equipment.Slots.Contains(item) && !player.DecorSlots.Contains(item))
                     {
                         throw new Exception($"Config Error: Paperdoll item {item} does not exist in equipment slots!");
                     }

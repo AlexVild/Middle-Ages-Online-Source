@@ -360,7 +360,7 @@ namespace Intersect.Server.Networking
                 SendSpellCooldowns(player);
             }
 
-            //If a player, send equipment to all (for paperdolls)
+            //If a player, send equipment and decor to all (for paperdolls)
             if (en.GetType() == typeof(Player))
             {
                 SendPlayerEquipmentTo(player, (Player) en);
@@ -1142,11 +1142,12 @@ namespace Intersect.Server.Networking
         {
             if (forPlayer != null && forPlayer == en)
             {
-                return new EquipmentPacket(en.Id, en.Equipment, null);
+                return new EquipmentPacket(en.Id, en.Equipment, null, en.Decor);
             }
             else
             {
                 var equipment = new Guid[Options.EquipmentSlots.Count];
+                var decor = new string[Options.DecorSlots.Count];
 
                 for (var i = 0; i < Options.EquipmentSlots.Count; i++)
                 {
@@ -1161,7 +1162,12 @@ namespace Intersect.Server.Networking
 
                 }
 
-                return new EquipmentPacket(en.Id, null, equipment);
+                for (var i = 0; i < Options.DecorSlots.Count; i++)
+                {
+                    decor[i] = en.Decor[i];
+                }
+
+                return new EquipmentPacket(en.Id, null, equipment, decor);
             }
         }
 
@@ -1216,33 +1222,46 @@ namespace Intersect.Server.Networking
                 foreach (var character in client.Characters.OrderByDescending(p => p.LastOnline))
                 {
                     var equipmentArray = character.Equipment;
+                    var decorArray = character.Decor;
+
                     var equipment = new string[Options.EquipmentSlots.Count + 1];
+                    var decor = new string[Options.DecorSlots.Count + 1];
 
                     //Draw the equipment/paperdolls
-                    for (var z = 0; z < Options.PaperdollOrder[1].Count; z++)
+                    for (var z = 0; z < Options.PaperdollOrder[(int) Directions.Down].Count; z++)
                     {
-                        if (Options.EquipmentSlots.IndexOf(Options.PaperdollOrder[1][z]) > -1)
+                        var paperdollSlot = Options.PaperdollOrder[(int) Directions.Down][z];
+                        if (Options.EquipmentSlots.IndexOf(paperdollSlot) > -1)
                         {
-                            if (equipmentArray[Options.EquipmentSlots.IndexOf(Options.PaperdollOrder[1][z])] > -1 &&
-                                equipmentArray[Options.EquipmentSlots.IndexOf(Options.PaperdollOrder[1][z])] <
+                            if (equipmentArray[Options.EquipmentSlots.IndexOf(paperdollSlot)] > -1 &&
+                                equipmentArray[Options.EquipmentSlots.IndexOf(paperdollSlot)] <
                                 Options.MaxInvItems)
                             {
+                                var equipmentIndex = Options.EquipmentSlots.IndexOf(paperdollSlot);
                                 var itemId = character
-                                    .Items[equipmentArray[Options.EquipmentSlots.IndexOf(Options.PaperdollOrder[1][z])]]
+                                    .Items[equipmentArray[Options.EquipmentSlots.IndexOf(paperdollSlot)]]
                                     .ItemId;
 
                                 if (ItemBase.Get(itemId) != null)
                                 {
                                     var itemdata = ItemBase.Get(itemId);
-                                    if (character.Gender == 0)
+                                    if (character.Gender == Gender.Male)
                                     {
-                                        equipment[z] = itemdata.MalePaperdoll;
+                                        equipment[equipmentIndex] = itemdata.MalePaperdoll;
                                     }
                                     else
                                     {
-                                        equipment[z] = itemdata.FemalePaperdoll;
+                                        equipment[equipmentIndex] = itemdata.FemalePaperdoll;
                                     }
                                 }
+                            }
+                        } else if (Options.DecorSlots.IndexOf(paperdollSlot) > -1)
+                        {
+                            var decorIndex = Options.DecorSlots.IndexOf(paperdollSlot);
+                            var decorImg = character.Decor[Options.DecorSlots.IndexOf(paperdollSlot)];
+                            if (decorImg != null)
+                            {
+                                decor[decorIndex] = decorImg;
                             }
                         }
                         else
@@ -1257,7 +1276,7 @@ namespace Intersect.Server.Networking
                     characters.Add(
                         new CharacterPacket(
                             character.Id, character.Name, character.Sprite, character.Face, character.Level,
-                            ClassBase.GetName(character.ClassId), equipment
+                            ClassBase.GetName(character.ClassId), equipment, decor
                         )
                     );
                 }

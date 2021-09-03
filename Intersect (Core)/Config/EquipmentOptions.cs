@@ -62,8 +62,6 @@ namespace Intersect.Config
             {
                 throw new Exception("Config Error: (ShieldSlot) was out of bounds!");
             }
-
-            Paperdoll.Validate(this);
         }
 
     }
