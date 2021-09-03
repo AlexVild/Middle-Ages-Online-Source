@@ -179,6 +179,10 @@ namespace Intersect.Server.Entities
         [JsonIgnore]
         public long MPWarningSent { get; set; } = 0; // timestamp
 
+        [NotMapped]
+        [JsonIgnore]
+        public bool HPWarningSent { get; set; } = false;
+
         /*//Spawn Stuff
         public Guid AlternateSpawnMapId { get; set; }
 
@@ -6286,6 +6290,25 @@ namespace Intersect.Server.Entities
             
             return true;
 
+        }
+
+        public bool HPThresholdHit(int currentHp)
+        {
+            return currentHp < (int)(GetMaxVital(Vitals.Health) * Options.Combat.HPWarningThreshold);
+        }
+
+        public void CheckForHPWarning(int currentHp)
+        {
+            var belowThreshold = HPThresholdHit(currentHp);
+            if (HPWarningSent && !belowThreshold) // clear the warning
+            {
+                PacketSender.SendGUINotification(Client, GUINotification.LowHP, false);
+                HPWarningSent = false;
+            } else if (!HPWarningSent && belowThreshold) // send the warning
+            {
+                PacketSender.SendGUINotification(Client, GUINotification.LowHP, true);
+                HPWarningSent = true;
+            }
         }
 
         //TODO: Clean all of this stuff up

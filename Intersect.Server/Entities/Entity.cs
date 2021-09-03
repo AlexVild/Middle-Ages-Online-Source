@@ -1177,21 +1177,15 @@ namespace Intersect.Server.Entities
                 value = GetMaxVital(vital);
             }
 
-            if (this is Player player)
+            if (vital == (int)Vitals.Health && this is Player player)
             {
-                var thresholdVal = (int) (player.GetMaxVital(vital) * Options.Combat.HPWarningThreshold);
-
-                if (value < thresholdVal)
-                {
-                    PacketSender.SendGUINotification(player.Client, GUINotification.LowHP, true);
-                } else
-                {
-                    PacketSender.SendGUINotification(player.Client, GUINotification.LowHP, false);
-                }
+                player.CheckForHPWarning(value);
             }
 
             mVitals[vital] = value;
         }
+
+        
 
         public void SetVital(Vitals vital, int value)
         {
@@ -1741,9 +1735,7 @@ namespace Intersect.Server.Entities
                 }
                 else
                 {
-                    baseDamage = Formulas.CalculateDamage(
-                    baseDamage, damageType, scalingStat, scaling, critMultiplier, this, enemy
-                );
+                    baseDamage = Formulas.CalculateDamage(baseDamage, damageType, scalingStat, scaling, critMultiplier, this, enemy);
                 }
                 
                 if (baseDamage < 0 && damagingAttack)
