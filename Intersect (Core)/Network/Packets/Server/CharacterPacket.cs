@@ -29,7 +29,8 @@ namespace Intersect.Network.Packets.Server
             Level = level;
             ClassName = className;
             Equipment = equipment;
-            Decor = decor;
+            //Decor = decor;
+            Decor = new string[] { "hair_short_blonde.png", "eyes_green.png", "shirt_tunic_blue.png", "extra_glasses.png", "beard_1_blonde.png" };
         }
 
         [Key(0)]

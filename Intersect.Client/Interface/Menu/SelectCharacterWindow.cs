@@ -152,7 +152,7 @@ namespace Intersect.Client.Interface.Menu
 
         private void UpdateDisplay()
         {
-            var isFace = true;
+            var isFace = false; // ALEX: I prefer to draw paperdolls over faces
 
             //Show and hide Options based on the character count
             if (Characters.Count > 1)
@@ -167,11 +167,12 @@ namespace Intersect.Client.Interface.Menu
                 mPrevCharButton.Hide();
             }
 
+            var totalPaperdolls = Options.EquipmentSlots.Count + Options.DecorSlots.Count;
             if (mPaperdollPortraits == null)
             {
-                mPaperdollPortraits = new ImagePanel[Options.EquipmentSlots.Count + 1];
+                mPaperdollPortraits = new ImagePanel[totalPaperdolls + 1];
                 mCharacterPortrait = new ImagePanel(mCharacterContainer);
-                for (var i = 0; i <= Options.EquipmentSlots.Count; i++)
+                for (var i = 0; i <= totalPaperdolls; i++)
                 {
                     mPaperdollPortraits[i] = new ImagePanel(mCharacterContainer);
                 }
@@ -215,18 +216,18 @@ namespace Intersect.Client.Interface.Menu
                     GameContentManager.TextureType.Face, Characters[mSelectedChar].Face
                 );
 
-                if (mCharacterPortrait.Texture == null)
-                {
+                //if (mCharacterPortrait.Texture == null) ALEX commented this out to use paperdoll instead of portrait
+                //{
                     mCharacterPortrait.Texture = Globals.ContentManager.GetTexture(
                         GameContentManager.TextureType.Entity, Characters[mSelectedChar].Sprite
                     );
 
                     isFace = false;
-                }
+                //}
 
                 if (mCharacterPortrait.Texture != null)
                 {
-                    if (isFace)
+                    if (isFace) // ALEX will never be true
                     {
                         mCharacterPortrait.SetTextureRect(
                             0, 0, mCharacterPortrait.Texture.GetWidth(), mCharacterPortrait.Texture.GetHeight()
@@ -264,34 +265,57 @@ namespace Intersect.Client.Interface.Menu
                             mCharacterContainer.Height / 2 - mCharacterPortrait.Height / 2
                         );
 
-                        for (var i = 0; i <= Options.EquipmentSlots.Count; i++)
+                        var character = Characters[mSelectedChar];
+                        var equipment = character.Equipment;
+                        var decor = character.Decor;
+
+                        for (var i = 0; i < Options.PaperdollOrder[1].Count; i++)
                         {
-                            if (mPaperdollPortraits[i] != mCharacterPortrait)
+                            var paperdollSlot = Options.PaperdollOrder[1][i]; // 1 for dir down
+
+                            var drawEquipment = Options.EquipmentSlots.IndexOf(paperdollSlot) > -1;
+                            var drawDecor = Options.DecorSlots.IndexOf(paperdollSlot) > -1;
+                            var slotToDraw = -1;
+                            String textureToDraw = null;
+                            GameContentManager.TextureType textureType = GameContentManager.TextureType.Paperdoll; ;
+                            if (drawEquipment)
                             {
-                                mPaperdollPortraits[i].Texture = Globals.ContentManager.GetTexture(
-                                    GameContentManager.TextureType.Paperdoll, Characters[mSelectedChar].Equipment[i]
-                                );
+                                slotToDraw = Options.EquipmentSlots.IndexOf(paperdollSlot);
+                                textureToDraw = equipment[slotToDraw];
+                            } else if (drawDecor)
+                            {
+                                slotToDraw = Options.DecorSlots.IndexOf(paperdollSlot);
+                                textureToDraw = decor[slotToDraw];
+                                textureType = GameContentManager.TextureType.Decor;
+                            }
 
-                                if (mPaperdollPortraits[i].Texture != null)
+                            if (slotToDraw > -1 && textureToDraw != null && textureType != null)
+                            {
+                                if (mPaperdollPortraits[i] != mCharacterPortrait)
                                 {
-                                    mPaperdollPortraits[i].Show();
-                                    mPaperdollPortraits[i]
-                                        .SetTextureRect(
-                                            0, 0, mPaperdollPortraits[i].Texture.GetWidth() / Options.Instance.Sprites.NormalFrames,
-                                            mPaperdollPortraits[i].Texture.GetHeight() / Options.Instance.Sprites.Directions
-                                        );
+                                    mPaperdollPortraits[i].Texture = Globals.ContentManager.GetTexture(textureType, textureToDraw);
 
-                                    mPaperdollPortraits[i]
-                                        .SetSize(
-                                            mPaperdollPortraits[i].Texture.GetWidth() / Options.Instance.Sprites.NormalFrames,
-                                            mPaperdollPortraits[i].Texture.GetHeight() / Options.Instance.Sprites.Directions
-                                        );
+                                    if (mPaperdollPortraits[i].Texture != null)
+                                    {
+                                        mPaperdollPortraits[i].Show();
+                                        mPaperdollPortraits[i]
+                                            .SetTextureRect(
+                                                0, 0, mPaperdollPortraits[i].Texture.GetWidth() / Options.Instance.Sprites.NormalFrames,
+                                                mPaperdollPortraits[i].Texture.GetHeight() / Options.Instance.Sprites.Directions
+                                            );
 
-                                    mPaperdollPortraits[i]
-                                        .SetPosition(
-                                            mCharacterContainer.Width / 2 - mPaperdollPortraits[i].Width / 2,
-                                            mCharacterContainer.Height / 2 - mPaperdollPortraits[i].Height / 2
-                                        );
+                                        mPaperdollPortraits[i]
+                                            .SetSize(
+                                                mPaperdollPortraits[i].Texture.GetWidth() / Options.Instance.Sprites.NormalFrames,
+                                                mPaperdollPortraits[i].Texture.GetHeight() / Options.Instance.Sprites.Directions
+                                            );
+
+                                        mPaperdollPortraits[i]
+                                            .SetPosition(
+                                                mCharacterContainer.Width / 2 - mPaperdollPortraits[i].Width / 2,
+                                                mCharacterContainer.Height / 2 - mPaperdollPortraits[i].Height / 2
+                                            );
+                                    }
                                 }
                             }
                             else
