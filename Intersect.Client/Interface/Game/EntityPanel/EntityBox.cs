@@ -822,38 +822,8 @@ namespace Intersect.Client.Interface.Game.EntityPanel
 
         private void UpdateImage()
         {
-            var faceTex = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Face, MyEntity.Face);
             var entityTex = MyEntity.Texture;
-            if (faceTex != null && faceTex != EntityFace.Texture)
-            {
-                EntityFace.Texture = faceTex;
-                EntityFace.RenderColor = MyEntity.Color ?? new Color(255, 255, 255, 255);
-                EntityFace.SetTextureRect(0, 0, faceTex.GetWidth(), faceTex.GetHeight());
-                EntityFace.SizeToContents();
-                Align.Center(EntityFace);
-                mCurrentSprite = MyEntity.Face;
-                EntityFace.IsHidden = false;
-                var i = 0;
-                for (var z = 0; z < Options.PaperdollOrder[(int) Directions.Down].Count; z++)
-                {
-                    var paperdollSlot = Options.PaperdollOrder[(int) Directions.Down][z];
-                    if (paperdollSlot != "Player")
-                    {
-                        if (PaperdollPanels == null)
-                        {
-                            Log.Warn($@"{nameof(PaperdollPanels)} is null.");
-                        }
-                        else if (PaperdollPanels[i] == null)
-                        {
-                            Log.Warn($@"{nameof(PaperdollPanels)}[{i}] is null.");
-                        }
-
-                        PaperdollPanels?[i]?.Hide();
-                        i++;
-                    }
-                }
-            }
-            else if (entityTex != null && faceTex == null || faceTex != null && faceTex != EntityFace.Texture)
+            if (entityTex != null)
             {
                 if (entityTex != EntityFace.Texture)
                 {
@@ -894,6 +864,8 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                 {
                     var paperdoll = "";
                     var paperdollSlot = Options.PaperdollOrder[(int)Directions.Down][z];
+                    var textureType = GameContentManager.TextureType.Paperdoll;
+
                     if (Options.EquipmentSlots.IndexOf(paperdollSlot) > -1 &&
                         equipment.Length == Options.EquipmentSlots.Count)
                     {
@@ -918,6 +890,7 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                     if (Options.DecorSlots.IndexOf(paperdollSlot) > -1)
                     {
                         paperdoll = decor[Options.DecorSlots.IndexOf(paperdollSlot)];
+                        textureType = GameContentManager.TextureType.Decor;
                     }
 
                     //Check for Player layer
@@ -934,9 +907,7 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                     }
                     else if (paperdoll != "" && paperdoll != PaperdollTextures[n])
                     {
-                        var paperdollTex = Globals.ContentManager.GetTexture(
-                            GameContentManager.TextureType.Paperdoll, paperdoll
-                        );
+                        var paperdollTex = Globals.ContentManager.GetTexture(textureType, paperdoll);
 
                         PaperdollPanels[n].Texture = paperdollTex;
                         if (paperdollTex != null)
