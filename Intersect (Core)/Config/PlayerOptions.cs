@@ -1,4 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.Serialization;
+using System;
+using System.Linq;
+using System.Runtime.Serialization;
 
 namespace Intersect.Config
 {
@@ -83,6 +87,18 @@ namespace Intersect.Config
             "Extra",
             "Beard",
         };
+
+        [OnDeserializing]
+        internal void OnDeserializingMethod(StreamingContext context)
+        {
+            DecorSlots.Clear();
+        }
+
+        [OnDeserialized]
+        internal void OnDeserializedMethod(StreamingContext context)
+        {
+            DecorSlots = new List<string>(DecorSlots.Distinct());
+        }
     }
 
 }

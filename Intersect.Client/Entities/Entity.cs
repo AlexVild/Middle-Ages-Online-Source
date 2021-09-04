@@ -1072,7 +1072,7 @@ namespace Intersect.Client.Entities
                         {
                             if (MyDecors[decorSlot] != null)
                             {
-                                DrawEquipment(MyDecors[decorSlot], renderColor.A);
+                                DrawEquipment(MyDecors[decorSlot], renderColor.A, GameContentManager.TextureType.Decor);
                             }
                         }
                     }
@@ -1117,7 +1117,7 @@ namespace Intersect.Client.Entities
             }
         }
 
-        public virtual void DrawEquipment(string filename, int alpha)
+        public virtual void DrawEquipment(string filename, int alpha, GameContentManager.TextureType textureType = GameContentManager.TextureType.Paperdoll)
         {
             var map = MapInstance.Get(CurrentMap);
             if (map == null)
@@ -1132,14 +1132,14 @@ namespace Intersect.Client.Entities
             GameTexture paperdollTex = null;
             var filenameNoExt = Path.GetFileNameWithoutExtension(filename);
             paperdollTex = Globals.ContentManager.GetTexture(
-                GameContentManager.TextureType.Paperdoll, $"{filenameNoExt}_{SpriteAnimation.ToString()}.png"
+                textureType, $"{filenameNoExt}_{SpriteAnimation.ToString()}.png"
             );
 
             var spriteFrames = SpriteFrames;
 
             if (paperdollTex == null)
             {
-                paperdollTex = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Paperdoll, filename);
+                paperdollTex = Globals.ContentManager.GetTexture(textureType, filename);
                 spriteFrames = Options.Instance.Sprites.NormalFrames;
             }
 

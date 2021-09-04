@@ -199,6 +199,11 @@ namespace Intersect.Client.MonoGame.File_Management
             LoadTextureGroup("gui", mGuiDict);
         }
 
+        public override void LoadDecor()
+        {
+            LoadTextureGroup("decor", mDecorDict);
+        }
+
         public override void LoadMisc()
         {
             LoadTextureGroup("misc", mMiscDict);

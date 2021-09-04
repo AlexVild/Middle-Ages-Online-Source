@@ -44,6 +44,8 @@ namespace Intersect.Client.Framework.File_Management
 
             Misc,
 
+            Decor
+
         }
 
         public enum UI
@@ -81,8 +83,10 @@ namespace Intersect.Client.Framework.File_Management
 
         protected Dictionary<string, IAsset> mResourceDict = new Dictionary<string, IAsset>();
 
-        protected Dictionary<string, GameShader> mShaderDict = new Dictionary<string, GameShader>();
+        protected Dictionary<string, IAsset> mDecorDict = new Dictionary<string, IAsset>();
 
+        protected Dictionary<string, GameShader> mShaderDict = new Dictionary<string, GameShader>();
+        
         protected Dictionary<string, GameAudioSource> mSoundDict = new Dictionary<string, GameAudioSource>();
 
         protected Dictionary<KeyValuePair<UI, string>, string> mUiDict = new Dictionary<KeyValuePair<UI, string>, string>();
@@ -128,6 +132,7 @@ namespace Intersect.Client.Framework.File_Management
             LoadGui();
             LoadFonts();
             LoadShaders();
+            LoadDecor();
         }
 
         public abstract void LoadTexturePacks();
@@ -159,6 +164,8 @@ namespace Intersect.Client.Framework.File_Management
         public abstract void LoadFonts();
 
         public abstract void LoadShaders();
+
+        public abstract void LoadDecor();
 
         //Audio Loading
         public void LoadAudio()
@@ -221,6 +228,9 @@ namespace Intersect.Client.Framework.File_Management
 
                 case TextureType.Misc:
                     return mMiscDict.Keys.ToArray();
+
+                case TextureType.Decor:
+                    return mDecorDict.Keys.ToArray();
             }
 
             return null;
@@ -297,6 +307,10 @@ namespace Intersect.Client.Framework.File_Management
 
                     break;
 
+                case TextureType.Decor:
+                    textureDict = mDecorDict;
+
+                    break;
                 default:
                     return null;
             }
@@ -513,6 +527,10 @@ namespace Intersect.Client.Framework.File_Management
 
                 case ContentTypes.TileSet:
                     return mTilesetDict;
+
+                case ContentTypes.Decor:
+                    return mDecorDict;
+                    break;
 
                 case ContentTypes.Font:
                     throw new NotImplementedException();

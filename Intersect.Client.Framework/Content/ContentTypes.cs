@@ -59,6 +59,9 @@ namespace Intersect.Client.Framework.Content
         [AssetType(typeof(GameTexture))]
         TileSet,
 
+        [AssetType(typeof(GameTexture))]
+        Decor,
+
         [Obsolete] Gui = Interface
 
     }

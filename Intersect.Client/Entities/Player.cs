@@ -9,6 +9,7 @@ using Intersect.Client.Entities.Projectiles;
 using Intersect.Client.General;
 using Intersect.Client.Interface.Game;
 using Intersect.Client.Interface.Game.EntityPanel;
+using Intersect.Client.Framework.File_Management;
 using Intersect.Client.Localization;
 using Intersect.Client.Maps;
 using Intersect.Client.Networking;
@@ -1951,7 +1952,7 @@ namespace Intersect.Client.Entities
             }
         }
 
-        public override void DrawEquipment(string filename, int alpha)
+        public override void DrawEquipment(string filename, int alpha, GameContentManager.TextureType textureType = GameContentManager.TextureType.Paperdoll)
         {
             //check if player is stunned or snared, if so don't let them move.
             for (var n = 0; n < Status.Count; n++)
@@ -1962,7 +1963,7 @@ namespace Intersect.Client.Entities
                 }
             }
 
-            base.DrawEquipment(filename, alpha);
+            base.DrawEquipment(filename, alpha, textureType);
         }
 
         //Override of the original function, used for rendering the color of a player based on rank
