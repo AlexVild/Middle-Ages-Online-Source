@@ -416,6 +416,18 @@ namespace Intersect.Client.Localization
 
             public static LocalizedString title = @"Create Character";
 
+            public static LocalizedString skincolor = @"Skin Color";
+
+            public static LocalizedString hair = @"Hair";
+
+            public static LocalizedString eyes = @"Eyes";
+            
+            public static LocalizedString clothes = @"Clothes";
+
+            public static LocalizedString extra = @"Extra";
+
+            public static LocalizedString beard = @"Beard";
+
         }
 
         public struct CharacterSelection

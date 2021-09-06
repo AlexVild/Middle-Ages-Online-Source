@@ -56,9 +56,33 @@ namespace Intersect.Client.Interface.Menu
 
         private Label mGenderLabel;
 
+        private string[] mSelectedDecors = new string[Options.DecorSlots.Count];
+
         private Label mHint2Label;
 
         private Label mHintLabel;
+
+        private Label mSkinLabel;
+
+        private Label mHairLabel;
+
+        private Label mEyeLabel;
+
+        private Label mClothesLabel;
+
+        private Label mExtraLabel;
+
+        private Label mBeardLabel;
+
+        private List<string> mAvailableHairs = new List<string>();
+
+        private List<string> mAvailableEyes = new List<string>();
+
+        private List<string> mAvailableClothes = new List<string>();
+
+        private List<string> mAvailableExtras = new List<string>();
+
+        private List<string> mAvailableBeards = new List<string>();
 
         //Parent
         private MainMenu mMainMenu;
@@ -82,6 +106,8 @@ namespace Intersect.Client.Interface.Menu
             SelectCharacterWindow selectCharacterWindow
         )
         {
+            LoadDecors(ref mAvailableHairs, ref mAvailableEyes, ref mAvailableClothes, ref mAvailableExtras, ref mAvailableBeards, true);
+
             //Assign References
             mMainMenu = mainMenu;
             mSelectCharacterWindow = selectCharacterWindow;
@@ -148,6 +174,30 @@ namespace Intersect.Client.Interface.Menu
             mGenderLabel = new Label(mGenderBackground, "GenderLabel");
             mGenderLabel.SetText(Strings.CharacterCreation.gender);
 
+            //Skin Label
+            mSkinLabel = new Label(mCharCreationPanel, "SkinLabel");
+            mSkinLabel.SetText(Strings.CharacterCreation.skincolor);
+
+            //Hair Label
+            mHairLabel = new Label(mCharCreationPanel, "HairLabel");
+            mHairLabel.SetText(Strings.CharacterCreation.hair);
+
+            //Eyes Label
+            mEyeLabel = new Label(mCharCreationPanel, "EyeLabel");
+            mSkinLabel.SetText(Strings.CharacterCreation.eyes);
+
+            //Clothes Label
+            mClothesLabel = new Label(mCharCreationPanel, "ClothesLabel");
+            mClothesLabel.SetText(Strings.CharacterCreation.clothes);
+
+            //Extra Label
+            mExtraLabel = new Label(mCharCreationPanel, "ExtraLabel");
+            mExtraLabel.SetText(Strings.CharacterCreation.extra);
+            
+            //Beard Label
+            mBeardLabel = new Label(mCharCreationPanel, "BeardLabel");
+            mBeardLabel.SetText(Strings.CharacterCreation.beard);
+
             //Male Checkbox
             mMaleChk = new LabeledCheckBox(mGenderBackground, "MaleCheckbox")
             {
@@ -197,6 +247,7 @@ namespace Intersect.Client.Interface.Menu
 
             LoadClass();
             UpdateDisplay();
+            LoadDecors(ref mAvailableHairs, ref mAvailableEyes, ref mAvailableClothes, ref mAvailableExtras, ref mAvailableBeards, true);
         }
 
         public void Update()
@@ -228,9 +279,11 @@ namespace Intersect.Client.Interface.Menu
                 {
                     if (mMaleChk.IsChecked)
                     {
-                        mCharacterPortrait.Texture = Globals.ContentManager.GetTexture(
+                        /*mCharacterPortrait.Texture = Globals.ContentManager.GetTexture( DO NOT WANT face
                             GameContentManager.TextureType.Face, mMaleSprites[mDisplaySpriteIndex].Value.Face
-                        );
+                        );*/
+
+                        mCharacterPortrait.Texture = null;
 
                         if (mCharacterPortrait.Texture == null)
                         {
@@ -243,9 +296,11 @@ namespace Intersect.Client.Interface.Menu
                     }
                     else
                     {
-                        mCharacterPortrait.Texture = Globals.ContentManager.GetTexture(
+                        /*mCharacterPortrait.Texture = Globals.ContentManager.GetTexture(
                             GameContentManager.TextureType.Face, mFemaleSprites[mDisplaySpriteIndex].Value.Face
-                        );
+                        );*/
+
+                        mCharacterPortrait.Texture = null;
 
                         if (mCharacterPortrait.Texture == null)
                         {
@@ -564,6 +619,83 @@ namespace Intersect.Client.Interface.Menu
             }
         }
 
-    }
+        private void ClearDecors()
+        {
+            mAvailableHairs.Clear();
+            mAvailableEyes.Clear();
+            mAvailableClothes.Clear();
+            mAvailableExtras.Clear();
+            mAvailableBeards.Clear();
 
+            Array.Clear(mSelectedDecors, 0, mSelectedDecors.Length);
+        }
+
+        private void LoadDecors(ref List<string> hairs, ref List<string> eyes, ref List<string> clothes, ref List<string> extras, ref List<string> beards, bool isMale)
+        {
+            ClearDecors();
+
+            // Used to determine when to load a texture
+            var genderString = "m";
+            if (!isMale) genderString = "f";
+
+            Func<string, bool> isGender = genderPrefix =>
+            {
+                return genderPrefix.Equals(genderString) || genderPrefix.Equals("u");
+            };
+
+            var decorTextures = Globals.ContentManager.GetTextureNames(GameContentManager.TextureType.Decor);
+
+            foreach (var decorTexture in decorTextures)
+            {
+                var splitFileName = decorTexture.Split("_".ToCharArray());
+                if (splitFileName.Length >= 3) // prefix_gender_name
+                {
+                    var prefix = splitFileName[0].ToLower();
+                    var genderPrefix = splitFileName[1].ToLower();
+
+                    foreach (string decorSlot in Options.DecorSlots)
+                    {
+                        var lowerDecorSlot = decorSlot.ToLower();
+                        if (prefix.Equals(lowerDecorSlot))
+                        {
+                            switch (lowerDecorSlot)
+                            {
+                                case "hair":
+                                    if (isGender(genderPrefix))
+                                    {
+                                        hairs.Add(decorTexture);
+                                    }
+                                    break;
+                                case "eyes":
+                                    if (isGender(genderPrefix))
+                                    {
+                                        eyes.Add(decorTexture);
+                                    }
+                                    break;
+                                case "shirt":
+                                    if (isGender(genderPrefix))
+                                    {
+                                        clothes.Add(decorTexture);
+                                    }
+                                    break;
+                                case "extra":
+                                    if (isGender(genderPrefix))
+                                    {
+                                        extras.Add(decorTexture);
+                                    }
+                                    break;
+                                case "beard":
+                                    if (isGender(genderPrefix))
+                                    {
+                                        beards.Add(decorTexture);
+                                    }
+                                    break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    }
 }
