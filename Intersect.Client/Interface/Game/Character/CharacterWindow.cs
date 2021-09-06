@@ -104,9 +104,10 @@ namespace Intersect.Client.Interface.Game.Character
 
             mCharacterPortrait = new ImagePanel(mCharacterContainer);
 
-            PaperdollPanels = new ImagePanel[Options.EquipmentSlots.Count + 1];
-            PaperdollTextures = new string[Options.EquipmentSlots.Count + 1];
-            for (var i = 0; i <= Options.EquipmentSlots.Count; i++)
+            var paperdollSlots = Options.EquipmentSlots.Count + Options.DecorSlots.Count;
+            PaperdollPanels = new ImagePanel[paperdollSlots + 1];
+            PaperdollTextures = new string[paperdollSlots + 1];
+            for (var i = 0; i <= paperdollSlots; i++)
             {
                 PaperdollPanels[i] = new ImagePanel(mCharacterContainer);
                 PaperdollTextures[i] = "";
@@ -226,6 +227,7 @@ namespace Intersect.Client.Interface.Game.Character
                 for (var z = 0; z < Options.PaperdollOrder[1].Count; z++)
                 {
                     var paperdoll = "";
+                    var textureGroup = GameContentManager.TextureType.Paperdoll;
                     if (Options.EquipmentSlots.IndexOf(Options.PaperdollOrder[1][z]) > -1)
                     {
                         var equipment = Globals.Me.MyEquipment;
@@ -251,6 +253,11 @@ namespace Intersect.Client.Interface.Game.Character
                             }
                         }
                     }
+                    else if (Options.DecorSlots.IndexOf(Options.PaperdollOrder[1][z]) > -1)
+                    {
+                        paperdoll = Globals.Me.MyDecors[Options.DecorSlots.IndexOf(Options.PaperdollOrder[1][z])];
+                        textureGroup = GameContentManager.TextureType.Decor;
+                    }
                     else if (Options.PaperdollOrder[1][z] == "Player")
                     {
                         PaperdollPanels[z].Show();
@@ -269,9 +276,7 @@ namespace Intersect.Client.Interface.Game.Character
                     }
                     else if (paperdoll != "" && paperdoll != PaperdollTextures[z])
                     {
-                        var paperdollTex = Globals.ContentManager.GetTexture(
-                            GameContentManager.TextureType.Paperdoll, paperdoll
-                        );
+                        var paperdollTex = Globals.ContentManager.GetTexture(textureGroup, paperdoll);
 
                         PaperdollPanels[z].Texture = paperdollTex;
                         if (paperdollTex != null)
@@ -303,7 +308,7 @@ namespace Intersect.Client.Interface.Game.Character
             else if (Globals.Me.MySprite != mCurrentSprite && Globals.Me.Face != mCurrentSprite)
             {
                 mCharacterPortrait.IsHidden = true;
-                for (var i = 0; i < Options.EquipmentSlots.Count; i++)
+                for (var i = 0; i < Options.EquipmentSlots.Count + Options.DecorSlots.Count; i++)
                 {
                     PaperdollPanels[i].Hide();
                 }
