@@ -277,7 +277,7 @@ namespace Intersect.Client.Interface.Menu
                             var drawDecor = Options.DecorSlots.IndexOf(paperdollSlot) > -1;
                             var slotToDraw = -1;
                             String textureToDraw = null;
-                            GameContentManager.TextureType textureType = GameContentManager.TextureType.Paperdoll; ;
+                            GameContentManager.TextureType textureType = GameContentManager.TextureType.Paperdoll;
                             if (drawEquipment)
                             {
                                 slotToDraw = Options.EquipmentSlots.IndexOf(paperdollSlot);
@@ -294,6 +294,14 @@ namespace Intersect.Client.Interface.Menu
                                 if (mPaperdollPortraits[i] != mCharacterPortrait)
                                 {
                                     mPaperdollPortraits[i].Texture = Globals.ContentManager.GetTexture(textureType, textureToDraw);
+
+                                    // Do not draw some decor if an equipped item has the properties of hiding the relevant decor slots
+                                    if (drawDecor && (slotToDraw == Options.HairSlot && character.HelmetProps["hidehair"]
+                                        || slotToDraw == Options.BeardSlot && character.HelmetProps["hidebeard"]
+                                        || slotToDraw == Options.ExtraSlot && character.HelmetProps["hideextra"]))
+                                    {
+                                        continue;
+                                    }
 
                                     if (mPaperdollPortraits[i].Texture != null)
                                     {
@@ -320,9 +328,12 @@ namespace Intersect.Client.Interface.Menu
                             }
                             else
                             {
-                                if (mPaperdollPortraits[i].Texture != null)
+                                if (Options.PaperdollOrder[1][i] == "Player")
                                 {
                                     mPaperdollPortraits[i].Show();
+                                } else
+                                {
+                                    mPaperdollPortraits[i].Hide();
                                 }
                             }
                         }
@@ -453,7 +464,7 @@ namespace Intersect.Client.Interface.Menu
         public string[] Equipment = new string[Options.EquipmentSlots.Count + 1];
         
         public string[] Decor = new string[Options.DecorSlots.Count + 1];
-
+        
         public bool Exists = false;
 
         public string Face = "";
@@ -466,9 +477,14 @@ namespace Intersect.Client.Interface.Menu
 
         public string Sprite = "";
 
+        public Dictionary<string, bool> HelmetProps = new Dictionary<string, bool>();
+
         public Character(Guid id)
         {
             Id = id;
+            HelmetProps.Add("hidehair", false);
+            HelmetProps.Add("hidebeard", false);
+            HelmetProps.Add("hideextra", false);
         }
 
         public Character(
@@ -479,7 +495,10 @@ namespace Intersect.Client.Interface.Menu
             int level,
             string charClass,
             string[] equipment,
-            string[] decor
+            string[] decor,
+            bool hideHair = false,
+            bool hideBeard = false,
+            bool hideExtra = false
         )
         {
             Equipment = equipment;
@@ -489,6 +508,9 @@ namespace Intersect.Client.Interface.Menu
             Sprite = sprite;
             Face = face;
             Level = level;
+            HelmetProps.Add("hidehair", hideHair);
+            HelmetProps.Add("hidebeard", hideBeard);
+            HelmetProps.Add("hideextra", hideExtra);
             Class = charClass;
             Exists = true;
         }
@@ -501,6 +523,10 @@ namespace Intersect.Client.Interface.Menu
             }
 
             Equipment[0] = "Player";
+            
+            HelmetProps.Add("hidehair", false);
+            HelmetProps.Add("hidebeard", false);
+            HelmetProps.Add("hideextra", false);
         }
 
     }

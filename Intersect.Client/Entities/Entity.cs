@@ -1070,7 +1070,27 @@ namespace Intersect.Client.Entities
                             }
                         } else if (decorSlot > -1 && decorSlot < Options.Player.DecorSlots.Count)
                         {
-                            if (MyDecors[decorSlot] != null)
+                            var hideHair = false;
+                            var hideBeard = false;
+                            var hideExtra = false;
+                            var shouldDraw = true;
+
+                            if (Equipment[Options.HelmetIndex] != Guid.Empty)
+                            {
+                                var helmet = ItemBase.Get(Equipment[Options.HelmetIndex]);
+                                hideHair = helmet.HideHair;
+                                hideBeard = helmet.HideBeard;
+                                hideExtra = helmet.HideExtra;
+
+                                if (decorSlot == Options.HairSlot && hideHair
+                                    || decorSlot == Options.BeardSlot && hideBeard
+                                    || decorSlot == Options.ExtraSlot && hideExtra)
+                                {
+                                    shouldDraw = false;
+                                }
+                            }
+
+                            if (MyDecors[decorSlot] != null && shouldDraw)
                             {
                                 DrawEquipment(MyDecors[decorSlot], renderColor.A, GameContentManager.TextureType.Decor);
                             }

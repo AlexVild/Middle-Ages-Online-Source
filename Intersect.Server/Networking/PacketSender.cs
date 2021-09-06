@@ -1226,6 +1226,9 @@ namespace Intersect.Server.Networking
 
                     var equipment = new string[Options.EquipmentSlots.Count + 1];
                     var decor = new string[Options.DecorSlots.Count + 1];
+                    var hideHair = false;
+                    var hideBeard = false;
+                    var hideExtra = false;
 
                     //Draw the equipment/paperdolls
                     for (var z = 0; z < Options.PaperdollOrder[(int) Directions.Down].Count; z++)
@@ -1242,8 +1245,14 @@ namespace Intersect.Server.Networking
                                     .Items[equipmentArray[Options.EquipmentSlots.IndexOf(paperdollSlot)]]
                                     .ItemId;
 
-                                if (ItemBase.Get(itemId) != null)
+                                ItemBase item = ItemBase.Get(itemId);
+
+                                if (item != null)
                                 {
+                                    if (item.HideHair) hideHair = true;
+                                    if (item.HideBeard) hideBeard = true;
+                                    if (item.HideExtra) hideExtra = true;
+
                                     var itemdata = ItemBase.Get(itemId);
                                     if (character.Gender == Gender.Male)
                                     {
@@ -1276,7 +1285,7 @@ namespace Intersect.Server.Networking
                     characters.Add(
                         new CharacterPacket(
                             character.Id, character.Name, character.Sprite, character.Face, character.Level,
-                            ClassBase.GetName(character.ClassId), equipment, decor
+                            ClassBase.GetName(character.ClassId), equipment, decor, hideHair, hideBeard, hideExtra
                         )
                     );
                 }

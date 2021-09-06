@@ -116,6 +116,12 @@ namespace Intersect
         
         public static List<string> DecorSlots => Instance.PlayerOpts.DecorSlots;
 
+        public static int HairSlot => Instance.PlayerOpts.HairSlot;
+
+        public static int BeardSlot => Instance.PlayerOpts.BeardSlot;
+
+        public static int ExtraSlot => Instance.PlayerOpts.ExtraSlot;
+
         public static int WeaponIndex => Instance.EquipmentOpts.WeaponSlot;
 
         public static int PrayerIndex => Instance.EquipmentOpts.PrayerSlot;

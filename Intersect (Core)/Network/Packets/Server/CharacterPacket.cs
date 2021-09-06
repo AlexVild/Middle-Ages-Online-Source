@@ -19,7 +19,10 @@ namespace Intersect.Network.Packets.Server
             int level,
             string className,
             string[] equipment,
-            string[] decor
+            string[] decor,
+            bool hideHair,
+            bool hideBeard,
+            bool hideExtra
         )
         {
             Id = id;
@@ -31,6 +34,9 @@ namespace Intersect.Network.Packets.Server
             Equipment = equipment;
             //Decor = decor;
             Decor = new string[] { "hair_short_blonde.png", "eyes_green.png", "shirt_tunic_blue.png", "extra_glasses.png", "beard_1_blonde.png" };
+            HideHair = hideHair;
+            HideBeard = hideBeard;
+            HideExtra = hideExtra;
         }
 
         [Key(0)]
@@ -57,6 +63,14 @@ namespace Intersect.Network.Packets.Server
         [Key(7)]
         public string[] Decor { get; set; }
 
+        [Key(8)]
+        public bool HideHair { get; set; }
+
+        [Key(9)]
+        public bool HideBeard { get; set; }
+
+        [Key(10)]
+        public bool HideExtra { get; set; }
     }
 
 }

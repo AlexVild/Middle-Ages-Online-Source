@@ -224,6 +224,21 @@ namespace Intersect.Client.Interface.Game.Character
              else */
             if (Globals.Me.MySprite != "" && Globals.Me.MySprite != mCurrentSprite && entityTex != null)
             {
+                // Figure out if there are decors we shouldn't draw
+                var hideHair = false;
+                var hideBeard = false;
+                var hideExtra = false;
+                if (Globals.Me.MyEquipment[Options.HelmetIndex] > -1)
+                {
+                    var helmet = ItemBase.Get(Globals.Me.Inventory[Globals.Me.MyEquipment[Options.HelmetIndex]].ItemId);
+                    if (helmet != null)
+                    {
+                        hideHair = helmet.HideHair;
+                        hideBeard = helmet.HideBeard;
+                        hideExtra = helmet.HideExtra;
+                    }
+                }
+
                 for (var z = 0; z < Options.PaperdollOrder[1].Count; z++)
                 {
                     var paperdoll = "";
@@ -255,7 +270,17 @@ namespace Intersect.Client.Interface.Game.Character
                     }
                     else if (Options.DecorSlots.IndexOf(Options.PaperdollOrder[1][z]) > -1)
                     {
-                        paperdoll = Globals.Me.MyDecors[Options.DecorSlots.IndexOf(Options.PaperdollOrder[1][z])];
+                        var slotToDraw = Options.DecorSlots.IndexOf(Options.PaperdollOrder[1][z]);
+                        if (slotToDraw == Options.HairSlot && hideHair
+                            || slotToDraw == Options.BeardSlot && hideBeard
+                            || slotToDraw == Options.ExtraSlot && hideExtra)
+                        {
+                            paperdoll = "";
+                        } else
+                        {
+                            paperdoll = Globals.Me.MyDecors[slotToDraw];
+                        }
+                        
                         textureGroup = GameContentManager.TextureType.Decor;
                     }
                     else if (Options.PaperdollOrder[1][z] == "Player")

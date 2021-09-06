@@ -88,6 +88,12 @@ namespace Intersect.Config
             "Beard",
         };
 
+        public int HairSlot = 0;
+
+        public int BeardSlot = 4;
+
+        public int ExtraSlot = 3;
+
         [OnDeserializing]
         internal void OnDeserializingMethod(StreamingContext context)
         {

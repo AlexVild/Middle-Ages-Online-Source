@@ -859,6 +859,21 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                     }
                 }
 
+                // Determine decors that need hidden
+                var hideHair = false;
+                var hideBeard = false;
+                var hideExtra = false;
+                if (equipment[Options.HelmetIndex] != Guid.Empty)
+                {
+                    var helmet = ItemBase.Get(equipment[Options.HelmetIndex]);
+                    if (helmet != null)
+                    {
+                        hideHair = helmet.HideHair;
+                        hideBeard = helmet.HideBeard;
+                        hideExtra = helmet.HideExtra;
+                    }
+                }
+
                 var n = 0;
                 for (var z = 0; z < Options.PaperdollOrder[(int)Directions.Down].Count; z++)
                 {
@@ -889,7 +904,18 @@ namespace Intersect.Client.Interface.Game.EntityPanel
 
                     if (Options.DecorSlots.IndexOf(paperdollSlot) > -1)
                     {
-                        paperdoll = decor[Options.DecorSlots.IndexOf(paperdollSlot)];
+                        var slotToDraw = Options.DecorSlots.IndexOf(paperdollSlot);
+
+                        if (slotToDraw == Options.HairSlot && hideHair
+                            || slotToDraw == Options.BeardSlot && hideBeard
+                            || slotToDraw == Options.ExtraSlot && hideExtra)
+                        {
+                            paperdoll = "";
+                        }
+                        else
+                        {
+                            paperdoll = decor[slotToDraw];
+                        }
                         textureType = GameContentManager.TextureType.Decor;
                     }
 
