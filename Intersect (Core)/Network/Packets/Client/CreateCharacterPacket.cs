@@ -15,11 +15,12 @@ namespace Intersect.Network.Packets.Client
         {
         }
 
-        public CreateCharacterPacket(string name, Guid classId, int sprite)
+        public CreateCharacterPacket(string name, Guid classId, int sprite, string[] decors)
         {
             Name = name;
             ClassId = classId;
             Sprite = sprite;
+            Decors = decors;
         }
 
         [Key(0)]
@@ -31,6 +32,9 @@ namespace Intersect.Network.Packets.Client
         [Key(2)]
         public int Sprite { get; set; }
 
+        [Key(3)]
+        public string[] Decors { get; set; }
+
         public override Dictionary<string, SanitizedValue<object>> Sanitize()
         {
             base.Sanitize();
@@ -41,6 +45,10 @@ namespace Intersect.Network.Packets.Client
             if (classDescriptor != null)
             {
                 Sprite = sanitizer.Clamp(nameof(Sprite), Sprite, 0, classDescriptor.Sprites?.Count ?? 0);
+            }
+            if (Decors.Length != Options.DecorSlots.Count)
+            {
+                Decors = new string[Options.DecorSlots.Count];
             }
 
             return sanitizer.Sanitized;

@@ -1486,6 +1486,7 @@ namespace Intersect.Server.Networking
             newChar.Name = packet.Name;
             newChar.ClassId = packet.ClassId;
             newChar.Level = 1;
+            newChar.Decor = packet.Decors;
 
             if (classBase.Sprites.Count > 0)
             {

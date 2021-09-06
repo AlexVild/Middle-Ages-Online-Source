@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Intersect.Client.Core;
 using Intersect.Client.Framework.File_Management;
 using Intersect.Client.Framework.Gwen.Control;
+using Intersect.Client.Framework.Gwen;
 using Intersect.Client.Framework.Gwen.Control.EventArguments;
 using Intersect.Client.General;
 using Intersect.Client.Interface.Game.Chat;
@@ -25,6 +26,20 @@ namespace Intersect.Client.Interface.Menu
         private ImagePanel mCharacterNameBackground;
 
         private ImagePanel mCharacterPortrait;
+
+        private ImagePanel mDecorSelections;
+
+        private ImagePanel mSkinSelectionContainer;
+
+        private ImagePanel mHairSelectionContainer;
+
+        private ImagePanel mEyesSelectionContainer;
+
+        private ImagePanel mClothingSelectionContainer;
+
+        private ImagePanel mExtrasSelectionContainer;
+
+        private ImagePanel mBeardSelectionContainer;
 
         //Image
         private string mCharacterPortraitImg = "";
@@ -75,14 +90,21 @@ namespace Intersect.Client.Interface.Menu
         private Label mBeardLabel;
 
         private List<string> mAvailableHairs = new List<string>();
+        private int mHairIndex = 0;
 
         private List<string> mAvailableEyes = new List<string>();
+        private int mEyeIndex = 0;
 
         private List<string> mAvailableClothes = new List<string>();
+        private int mClothesIndex = 0;
 
         private List<string> mAvailableExtras = new List<string>();
+        private int mExtrasIndex = 0;
 
         private List<string> mAvailableBeards = new List<string>();
+        private int mBeardIndex = 0;
+
+        public ImagePanel[] PaperdollPanels;
 
         //Parent
         private MainMenu mMainMenu;
@@ -93,8 +115,22 @@ namespace Intersect.Client.Interface.Menu
         private List<KeyValuePair<int, ClassSprite>> mMaleSprites = new List<KeyValuePair<int, ClassSprite>>();
 
         private Button mNextSpriteButton;
-
         private Button mPrevSpriteButton;
+
+        private Button mNextHairButton;
+        private Button mPrevHairButton;
+
+        private Button mNextEyesButton;
+        private Button mPrevEyesButton;
+
+        private Button mNextClothesButton;
+        private Button mPrevClothesButton;
+
+        private Button mNextExtraButton;
+        private Button mPrevExtraButton;
+
+        private Button mNextBeardButton;
+        private Button mPrevBeardButton;
 
         private SelectCharacterWindow mSelectCharacterWindow;
 
@@ -158,14 +194,24 @@ namespace Intersect.Client.Interface.Menu
             //Character sprite
             mCharacterPortrait = new ImagePanel(mCharacterContainer, "CharacterPortait");
             mCharacterPortrait.SetSize(48, 48);
+            var paperdollSlots = Options.DecorSlots.Count;
+            PaperdollPanels = new ImagePanel[paperdollSlots + 1];
+            for (var i = 0; i <= paperdollSlots; i++)
+            {
+                PaperdollPanels[i] = new ImagePanel(mCharacterContainer);
+                PaperdollPanels[i].Hide();
+            }
 
-            //Next Sprite Button
-            mNextSpriteButton = new Button(mCharacterContainer, "NextSpriteButton");
-            mNextSpriteButton.Clicked += _nextSpriteButton_Clicked;
+            // Decor stuff
 
-            //Prev Sprite Button
-            mPrevSpriteButton = new Button(mCharacterContainer, "PreviousSpriteButton");
-            mPrevSpriteButton.Clicked += _prevSpriteButton_Clicked;
+            mDecorSelections = new ImagePanel(mCharCreationPanel, "DecorSelectionsContainer");
+
+            mSkinSelectionContainer = new ImagePanel(mDecorSelections, "SkinSelectionContainer");
+            mHairSelectionContainer = new ImagePanel(mDecorSelections, "HairSelectionContainer");
+            mEyesSelectionContainer = new ImagePanel(mDecorSelections, "EyesSelectionContainer");
+            mClothingSelectionContainer = new ImagePanel(mDecorSelections, "ClothingSelectionContainer");
+            mExtrasSelectionContainer = new ImagePanel(mDecorSelections, "ExtrasSelectionContainer");
+            mBeardSelectionContainer = new ImagePanel(mDecorSelections, "BeardSelectionContainer");
 
             //Class Background
             mGenderBackground = new ImagePanel(mCharCreationPanel, "GenderPanel");
@@ -174,29 +220,53 @@ namespace Intersect.Client.Interface.Menu
             mGenderLabel = new Label(mGenderBackground, "GenderLabel");
             mGenderLabel.SetText(Strings.CharacterCreation.gender);
 
-            //Skin Label
-            mSkinLabel = new Label(mCharCreationPanel, "SkinLabel");
+            //Skin
+            mPrevSpriteButton = new Button(mSkinSelectionContainer, "PreviousSpriteButton");
+            mPrevSpriteButton.Clicked += _prevSpriteButton_Clicked;
+            mSkinLabel = new Label(mSkinSelectionContainer, "SkinLabel");
             mSkinLabel.SetText(Strings.CharacterCreation.skincolor);
+            mNextSpriteButton = new Button(mSkinSelectionContainer, "NextSpriteButton");
+            mNextSpriteButton.Clicked += _nextSpriteButton_Clicked;
 
-            //Hair Label
-            mHairLabel = new Label(mCharCreationPanel, "HairLabel");
+            //Hair
+            mPrevHairButton = new Button(mHairSelectionContainer, "PreviousHairButton");
+            mPrevHairButton.Clicked += _prevHairButton_Clicked;
+            mHairLabel = new Label(mHairSelectionContainer, "HairLabel");
             mHairLabel.SetText(Strings.CharacterCreation.hair);
+            mNextHairButton = new Button(mHairSelectionContainer, "NextHairButton");
+            mNextHairButton.Clicked += _nextHairButton_Clicked;
 
             //Eyes Label
-            mEyeLabel = new Label(mCharCreationPanel, "EyeLabel");
-            mSkinLabel.SetText(Strings.CharacterCreation.eyes);
+            mPrevEyesButton = new Button(mEyesSelectionContainer, "PreviousEyesButton");
+            mPrevEyesButton.Clicked += _prevEyesButton_Clicked;
+            mEyeLabel = new Label(mEyesSelectionContainer, "EyeLabel");
+            mEyeLabel.SetText(Strings.CharacterCreation.eyes);
+            mNextEyesButton = new Button(mEyesSelectionContainer, "NextEyesButton");
+            mNextEyesButton.Clicked += _nextEyesButton_Clicked;
 
             //Clothes Label
-            mClothesLabel = new Label(mCharCreationPanel, "ClothesLabel");
+            mPrevClothesButton = new Button(mClothingSelectionContainer, "PreviousClothesButton");
+            mPrevClothesButton.Clicked += _prevClothesButton_Clicked;
+            mClothesLabel = new Label(mClothingSelectionContainer, "ClothesLabel");
             mClothesLabel.SetText(Strings.CharacterCreation.clothes);
+            mNextClothesButton = new Button(mClothingSelectionContainer, "NextClothesButton");
+            mNextClothesButton.Clicked += _nextClothesButton_Clicked;
 
             //Extra Label
-            mExtraLabel = new Label(mCharCreationPanel, "ExtraLabel");
+            mPrevExtraButton = new Button(mExtrasSelectionContainer, "PreviousExtrasButton");
+            mPrevExtraButton.Clicked += _prevExtrasButton_Clicked;
+            mExtraLabel = new Label(mExtrasSelectionContainer, "ExtraLabel");
             mExtraLabel.SetText(Strings.CharacterCreation.extra);
-            
+            mNextExtraButton = new Button(mExtrasSelectionContainer, "NextExtrasButton");
+            mNextExtraButton.Clicked += _nextExtrasButton_Clicked;
+
             //Beard Label
-            mBeardLabel = new Label(mCharCreationPanel, "BeardLabel");
+            mPrevBeardButton = new Button(mBeardSelectionContainer, "PreviousBeardButton");
+            mPrevBeardButton.Clicked += _prevBeardButton_Clicked;
+            mBeardLabel = new Label(mBeardSelectionContainer, "BeardLabel");
             mBeardLabel.SetText(Strings.CharacterCreation.beard);
+            mNextBeardButton = new Button(mBeardSelectionContainer, "NextBeardButton");
+            mNextBeardButton.Clicked += _nextBeardButton_Clicked;
 
             //Male Checkbox
             mMaleChk = new LabeledCheckBox(mGenderBackground, "MaleCheckbox")
@@ -314,7 +384,7 @@ namespace Intersect.Client.Interface.Menu
 
                     if (mCharacterPortrait.Texture != null)
                     {
-                        if (isFace)
+                        if (isFace) // never
                         {
                             mCharacterPortrait.SetTextureRect(
                                 0, 0, mCharacterPortrait.Texture.GetWidth(), mCharacterPortrait.Texture.GetHeight()
@@ -350,6 +420,44 @@ namespace Intersect.Client.Interface.Menu
                                 mCharacterContainer.Width / 2 - mCharacterPortrait.Width / 2,
                                 mCharacterContainer.Height / 2 - mCharacterPortrait.Height / 2
                             );
+                        }
+                    }
+                    for (var z = 0; z < Options.DecorSlots.Count; z++)
+                    {
+                        string paperdoll = mSelectedDecors[z];
+
+                        if (string.IsNullOrWhiteSpace(paperdoll))
+                        {
+                            PaperdollPanels[z].Texture = null;
+                            PaperdollPanels[z].Hide();
+                        }
+                        else
+                        {
+                            var paperdollTex = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Decor, paperdoll);
+
+                            PaperdollPanels[z].Texture = paperdollTex;
+                            if (paperdollTex != null)
+                            {
+                                PaperdollPanels[z]
+                                    .SetTextureRect(
+                                        0, 0, PaperdollPanels[z].Texture.GetWidth() / Options.Instance.Sprites.NormalFrames,
+                                        PaperdollPanels[z].Texture.GetHeight() / Options.Instance.Sprites.Directions
+                                    );
+
+                                PaperdollPanels[z]
+                                    .SetSize(
+                                        PaperdollPanels[z].Texture.GetWidth() / Options.Instance.Sprites.NormalFrames,
+                                        PaperdollPanels[z].Texture.GetHeight() / Options.Instance.Sprites.Directions
+                                    );
+
+                                PaperdollPanels[z]
+                                    .SetPosition(
+                                        mCharacterContainer.Width / 2 - PaperdollPanels[z].Width / 2,
+                                        mCharacterContainer.Height / 2 - PaperdollPanels[z].Height / 2
+                                    );
+                            }
+
+                            PaperdollPanels[z].Show();
                         }
                     }
                 }
@@ -416,6 +524,7 @@ namespace Intersect.Client.Interface.Menu
         {
             mNextSpriteButton.IsHidden = true;
             mPrevSpriteButton.IsHidden = true;
+            LoadDecors(ref mAvailableHairs, ref mAvailableEyes, ref mAvailableClothes, ref mAvailableExtras, ref mAvailableBeards, mMaleChk.IsChecked);
             if (mMaleChk.IsChecked)
             {
                 if (mMaleSprites.Count > 0)
@@ -520,6 +629,99 @@ namespace Intersect.Client.Interface.Menu
             UpdateDisplay();
         }
 
+        private void _nextHairButton_Clicked(Base sender, ClickedEventArgs arguments)
+        {
+            mHairIndex = safelyIterateDecorIndex(mHairIndex + 1, mAvailableHairs);
+            mSelectedDecors[Options.DecorSlots.IndexOf("Hair")] = mAvailableHairs[mHairIndex];
+
+            UpdateDisplay();
+        }
+
+        private void _prevHairButton_Clicked(Base sender, ClickedEventArgs arguments)
+        {
+            mHairIndex = safelyIterateDecorIndex(mHairIndex - 1, mAvailableHairs);
+            mSelectedDecors[Options.DecorSlots.IndexOf("Hair")] = mAvailableHairs[mHairIndex];
+
+            UpdateDisplay();
+        }
+
+        private void _nextEyesButton_Clicked(Base sender, ClickedEventArgs arguments)
+        {
+            mEyeIndex = safelyIterateDecorIndex(mEyeIndex + 1, mAvailableEyes);
+            mSelectedDecors[Options.DecorSlots.IndexOf("Eyes")] = mAvailableEyes[mEyeIndex];
+
+            UpdateDisplay();
+        }
+
+        private void _prevEyesButton_Clicked(Base sender, ClickedEventArgs arguments)
+        {
+            mEyeIndex = safelyIterateDecorIndex(mEyeIndex - 1, mAvailableEyes);
+            mSelectedDecors[Options.DecorSlots.IndexOf("Eyes")] = mAvailableEyes[mEyeIndex];
+
+            UpdateDisplay();
+        }
+
+        private void _nextClothesButton_Clicked(Base sender, ClickedEventArgs arguments)
+        {
+            mClothesIndex = safelyIterateDecorIndex(mClothesIndex + 1, mAvailableClothes);
+            mSelectedDecors[Options.DecorSlots.IndexOf("Shirt")] = mAvailableClothes[mClothesIndex];
+
+            UpdateDisplay();
+        }
+
+        private void _prevClothesButton_Clicked(Base sender, ClickedEventArgs arguments)
+        {
+            mClothesIndex = safelyIterateDecorIndex(mClothesIndex -1, mAvailableClothes);
+            mSelectedDecors[Options.DecorSlots.IndexOf("Shirt")] = mAvailableClothes[mClothesIndex];
+
+            UpdateDisplay();
+        }
+
+        private void _nextExtrasButton_Clicked(Base sender, ClickedEventArgs arguments)
+        {
+            mExtrasIndex = safelyIterateDecorIndex(mExtrasIndex + 1, mAvailableExtras);
+            mSelectedDecors[Options.DecorSlots.IndexOf("Extra")] = mAvailableExtras[mExtrasIndex];
+
+            UpdateDisplay();
+        }
+
+        private void _prevExtrasButton_Clicked(Base sender, ClickedEventArgs arguments)
+        {
+            mExtrasIndex = safelyIterateDecorIndex(mExtrasIndex - 1, mAvailableExtras);
+            mSelectedDecors[Options.DecorSlots.IndexOf("Extra")] = mAvailableExtras[mExtrasIndex];
+
+            UpdateDisplay();
+        }
+
+        private void _nextBeardButton_Clicked(Base sender, ClickedEventArgs arguments)
+        {
+            mBeardIndex = safelyIterateDecorIndex(mBeardIndex + 1, mAvailableBeards);
+            mSelectedDecors[Options.DecorSlots.IndexOf("Beard")] = mAvailableBeards[mBeardIndex];
+
+            UpdateDisplay();
+        }
+
+        private void _prevBeardButton_Clicked(Base sender, ClickedEventArgs arguments)
+        {
+            mBeardIndex = safelyIterateDecorIndex(mBeardIndex - 1, mAvailableBeards);
+            mSelectedDecors[Options.DecorSlots.IndexOf("Beard")] = mAvailableBeards[mBeardIndex];
+
+            UpdateDisplay();
+        }
+
+        int safelyIterateDecorIndex (int newIdx, List<string> collection)
+        {
+            if (newIdx >= collection.Count)
+            {
+                newIdx = 0;
+            } else if (newIdx < 0)
+            {
+                newIdx = collection.Count - 1;
+            }
+
+            return newIdx;
+        }
+
         void TryCreateCharacter(int gender)
         {
             if (Globals.WaitingOnServer || mDisplaySpriteIndex == -1)
@@ -532,13 +734,13 @@ namespace Intersect.Client.Interface.Menu
                 if (mMaleChk.IsChecked)
                 {
                     PacketSender.SendCreateCharacter(
-                        mCharnameTextbox.Text, GetClass().Id, mMaleSprites[mDisplaySpriteIndex].Key
+                        mCharnameTextbox.Text, GetClass().Id, mMaleSprites[mDisplaySpriteIndex].Key, mSelectedDecors
                     );
                 }
                 else
                 {
                     PacketSender.SendCreateCharacter(
-                        mCharnameTextbox.Text, GetClass().Id, mFemaleSprites[mDisplaySpriteIndex].Key
+                        mCharnameTextbox.Text, GetClass().Id, mFemaleSprites[mDisplaySpriteIndex].Key, mSelectedDecors
                     );
                 }
 
@@ -622,10 +824,20 @@ namespace Intersect.Client.Interface.Menu
         private void ClearDecors()
         {
             mAvailableHairs.Clear();
+            mAvailableHairs.Add("");
             mAvailableEyes.Clear();
+            mAvailableEyes.Add("");
             mAvailableClothes.Clear();
+            mAvailableClothes.Add("");
             mAvailableExtras.Clear();
+            mAvailableExtras.Add("");
             mAvailableBeards.Clear();
+            mAvailableBeards.Add("");
+            mHairIndex = 0;
+            mEyeIndex = 0;
+            mClothesIndex = 0;
+            mExtrasIndex = 0;
+            mBeardIndex = 0;
 
             Array.Clear(mSelectedDecors, 0, mSelectedDecors.Length);
         }
