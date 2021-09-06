@@ -36,6 +36,8 @@ namespace Intersect.Config
 
         public int PrayerSlot = 6;
 
+        public int HelmetSlot = 0;
+
         [OnDeserializing]
         internal void OnDeserializingMethod(StreamingContext context)
         {

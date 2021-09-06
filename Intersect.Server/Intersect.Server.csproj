@@ -622,6 +622,10 @@
     <Compile Include="Migrations\Game\20210831005144_ComboEquipmentMigrationTwo.designer.cs">
       <DependentUpon>20210831005144_ComboEquipmentMigrationTwo.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20210906022027_AddNewHelmetFields.cs" />
+    <Compile Include="Migrations\Game\20210906022027_AddNewHelmetFields.designer.cs">
+      <DependentUpon>20210906022027_AddNewHelmetFields.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

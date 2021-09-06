@@ -307,6 +307,10 @@ namespace Intersect.Editor.Forms.Editors
             txtSearch.Text = Strings.ItemEditor.searchplaceholder;
             lblFolder.Text = Strings.ItemEditor.folderlabel;
 
+            chkHelmHideHair.Text = Strings.ItemEditor.hidehair;
+            chkHelmHideBeard.Text = Strings.ItemEditor.hidebeard;
+            chkHelmHideExtra.Text = Strings.ItemEditor.hideextra;
+
             btnSave.Text = Strings.ItemEditor.save;
             btnCancel.Text = Strings.ItemEditor.cancel;
         }
@@ -427,6 +431,10 @@ namespace Intersect.Editor.Forms.Editors
                 nudComboInterval.Value = mEditorItem.ComboInterval;
 
                 txtCannotUse.Text = mEditorItem.CannotUseMessage;
+
+                chkHelmHideHair.Checked = Convert.ToBoolean(mEditorItem.HideHair);
+                chkHelmHideBeard.Checked = Convert.ToBoolean(mEditorItem.HideBeard);
+                chkHelmHideExtra.Checked = Convert.ToBoolean(mEditorItem.HideExtra);
 
                 if (mChanged.IndexOf(mEditorItem) == -1)
                 {
@@ -572,20 +580,27 @@ namespace Intersect.Editor.Forms.Editors
         private void cmbEquipmentSlot_SelectedIndexChanged(object sender, EventArgs e)
         {
             mEditorItem.EquipmentSlot = cmbEquipmentSlot.SelectedIndex;
-            var x = Options.PrayerIndex;
-            var y = Options.WeaponIndex;
             if (cmbEquipmentSlot.SelectedIndex == Options.WeaponIndex)
             {
                 grpWeaponProperties.Show();
+                grpHelmetPaperdollProps.Hide();
                 grpPrayerProperties.Hide();
             } else if (cmbEquipmentSlot.SelectedIndex == Options.PrayerIndex)
             {
                 grpWeaponProperties.Hide();
+                grpHelmetPaperdollProps.Hide();
                 grpPrayerProperties.Show();
+            }
+            else if (cmbEquipmentSlot.SelectedIndex == Options.HelmetIndex)
+            {
+                grpWeaponProperties.Hide();
+                grpHelmetPaperdollProps.Show();
+                grpPrayerProperties.Hide();
             }
             else
             {
                 grpWeaponProperties.Hide();
+                grpHelmetPaperdollProps.Hide();
                 grpPrayerProperties.Hide();
 
                 mEditorItem.Projectile = null;
@@ -1291,6 +1306,21 @@ namespace Intersect.Editor.Forms.Editors
         private void nudComboExpBoost_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.ComboExpBoost = (int)nudComboExpBoost.Value;
+        }
+
+        private void chkHelmHideHair_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.HideHair = chkHelmHideHair.Checked;
+        }
+
+        private void chkHelmHideBeard_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.HideBeard = chkHelmHideBeard.Checked;
+        }
+
+        private void chkHelmHideExtra_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.HideExtra = chkHelmHideExtra.Checked;
         }
     }
 

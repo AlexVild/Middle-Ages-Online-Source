@@ -93,6 +93,10 @@ namespace Intersect.Editor.Forms.Editors
             this.txtName = new DarkUI.Controls.DarkTextBox();
             this.grpEquipment = new DarkUI.Controls.DarkGroupBox();
             this.grpPrayerProperties = new DarkUI.Controls.DarkGroupBox();
+            this.lblComboExpBoost = new System.Windows.Forms.Label();
+            this.nudComboExpBoost = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblComboInterval = new System.Windows.Forms.Label();
+            this.nudComboInterval = new DarkUI.Controls.DarkNumericUpDown();
             this.lblComboSpell = new System.Windows.Forms.Label();
             this.cmbComboSpell = new DarkUI.Controls.DarkComboBox();
             this.grpRegen = new DarkUI.Controls.DarkGroupBox();
@@ -211,10 +215,10 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
             this.vS2015DarkTheme1 = new WeifenLuo.WinFormsUI.Docking.VS2015DarkTheme();
-            this.nudComboInterval = new DarkUI.Controls.DarkNumericUpDown();
-            this.lblComboInterval = new System.Windows.Forms.Label();
-            this.nudComboExpBoost = new DarkUI.Controls.DarkNumericUpDown();
-            this.lblComboExpBoost = new System.Windows.Forms.Label();
+            this.grpHelmetPaperdollProps = new DarkUI.Controls.DarkGroupBox();
+            this.chkHelmHideHair = new DarkUI.Controls.DarkCheckBox();
+            this.chkHelmHideBeard = new DarkUI.Controls.DarkCheckBox();
+            this.chkHelmHideExtra = new DarkUI.Controls.DarkCheckBox();
             this.grpItems.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             this.grpRequirements.SuspendLayout();
@@ -230,6 +234,8 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.picItem)).BeginInit();
             this.grpEquipment.SuspendLayout();
             this.grpPrayerProperties.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudComboExpBoost)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudComboInterval)).BeginInit();
             this.grpRegen.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudMpRegen)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudHPRegen)).BeginInit();
@@ -269,8 +275,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpBags.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudBag)).BeginInit();
             this.toolStrip.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudComboInterval)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudComboExpBoost)).BeginInit();
+            this.grpHelmetPaperdollProps.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpItems
@@ -1072,6 +1077,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpEquipment.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpEquipment.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpEquipment.Controls.Add(this.grpHelmetPaperdollProps);
             this.grpEquipment.Controls.Add(this.grpPrayerProperties);
             this.grpEquipment.Controls.Add(this.grpRegen);
             this.grpEquipment.Controls.Add(this.grpVitalBonuses);
@@ -1118,6 +1124,69 @@ namespace Intersect.Editor.Forms.Editors
             this.grpPrayerProperties.TabStop = false;
             this.grpPrayerProperties.Text = "Prayer Properties";
             this.grpPrayerProperties.Visible = false;
+            // 
+            // lblComboExpBoost
+            // 
+            this.lblComboExpBoost.AutoSize = true;
+            this.lblComboExpBoost.Location = new System.Drawing.Point(12, 110);
+            this.lblComboExpBoost.Name = "lblComboExpBoost";
+            this.lblComboExpBoost.Size = new System.Drawing.Size(107, 13);
+            this.lblComboExpBoost.TabIndex = 59;
+            this.lblComboExpBoost.Text = "Additional Exp Boost:";
+            // 
+            // nudComboExpBoost
+            // 
+            this.nudComboExpBoost.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudComboExpBoost.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudComboExpBoost.Location = new System.Drawing.Point(10, 126);
+            this.nudComboExpBoost.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.nudComboExpBoost.Minimum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            -2147483648});
+            this.nudComboExpBoost.Name = "nudComboExpBoost";
+            this.nudComboExpBoost.Size = new System.Drawing.Size(185, 20);
+            this.nudComboExpBoost.TabIndex = 60;
+            this.nudComboExpBoost.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudComboExpBoost.ValueChanged += new System.EventHandler(this.nudComboExpBoost_ValueChanged);
+            // 
+            // lblComboInterval
+            // 
+            this.lblComboInterval.AutoSize = true;
+            this.lblComboInterval.Location = new System.Drawing.Point(12, 63);
+            this.lblComboInterval.Name = "lblComboInterval";
+            this.lblComboInterval.Size = new System.Drawing.Size(81, 13);
+            this.lblComboInterval.TabIndex = 59;
+            this.lblComboInterval.Text = "Combo Interval:";
+            // 
+            // nudComboInterval
+            // 
+            this.nudComboInterval.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudComboInterval.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudComboInterval.Location = new System.Drawing.Point(11, 81);
+            this.nudComboInterval.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudComboInterval.Name = "nudComboInterval";
+            this.nudComboInterval.Size = new System.Drawing.Size(185, 20);
+            this.nudComboInterval.TabIndex = 59;
+            this.nudComboInterval.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudComboInterval.ValueChanged += new System.EventHandler(this.nudComboInterval_ValueChanged);
             // 
             // lblComboSpell
             // 
@@ -2823,68 +2892,51 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
             // 
-            // nudComboInterval
+            // grpHelmetPaperdollProps
             // 
-            this.nudComboInterval.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudComboInterval.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudComboInterval.Location = new System.Drawing.Point(11, 81);
-            this.nudComboInterval.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nudComboInterval.Name = "nudComboInterval";
-            this.nudComboInterval.Size = new System.Drawing.Size(185, 20);
-            this.nudComboInterval.TabIndex = 59;
-            this.nudComboInterval.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nudComboInterval.ValueChanged += new System.EventHandler(this.nudComboInterval_ValueChanged);
+            this.grpHelmetPaperdollProps.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpHelmetPaperdollProps.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpHelmetPaperdollProps.Controls.Add(this.chkHelmHideExtra);
+            this.grpHelmetPaperdollProps.Controls.Add(this.chkHelmHideBeard);
+            this.grpHelmetPaperdollProps.Controls.Add(this.chkHelmHideHair);
+            this.grpHelmetPaperdollProps.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpHelmetPaperdollProps.Location = new System.Drawing.Point(221, 8);
+            this.grpHelmetPaperdollProps.Name = "grpHelmetPaperdollProps";
+            this.grpHelmetPaperdollProps.Size = new System.Drawing.Size(207, 110);
+            this.grpHelmetPaperdollProps.TabIndex = 61;
+            this.grpHelmetPaperdollProps.TabStop = false;
+            this.grpHelmetPaperdollProps.Text = "Paperdoll Properties";
+            this.grpHelmetPaperdollProps.Visible = false;
             // 
-            // lblComboInterval
+            // chkHelmHideHair
             // 
-            this.lblComboInterval.AutoSize = true;
-            this.lblComboInterval.Location = new System.Drawing.Point(12, 63);
-            this.lblComboInterval.Name = "lblComboInterval";
-            this.lblComboInterval.Size = new System.Drawing.Size(81, 13);
-            this.lblComboInterval.TabIndex = 59;
-            this.lblComboInterval.Text = "Combo Interval:";
+            this.chkHelmHideHair.AutoSize = true;
+            this.chkHelmHideHair.Location = new System.Drawing.Point(41, 25);
+            this.chkHelmHideHair.Name = "chkHelmHideHair";
+            this.chkHelmHideHair.Size = new System.Drawing.Size(76, 17);
+            this.chkHelmHideHair.TabIndex = 101;
+            this.chkHelmHideHair.Text = "Hide Hair?";
+            this.chkHelmHideHair.CheckedChanged += new System.EventHandler(this.chkHelmHideHair_CheckedChanged);
             // 
-            // nudComboExpBoost
+            // chkHelmHideBeard
             // 
-            this.nudComboExpBoost.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudComboExpBoost.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudComboExpBoost.Location = new System.Drawing.Point(10, 126);
-            this.nudComboExpBoost.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.nudComboExpBoost.Minimum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            -2147483648});
-            this.nudComboExpBoost.Name = "nudComboExpBoost";
-            this.nudComboExpBoost.Size = new System.Drawing.Size(185, 20);
-            this.nudComboExpBoost.TabIndex = 60;
-            this.nudComboExpBoost.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudComboExpBoost.ValueChanged += new System.EventHandler(this.nudComboExpBoost_ValueChanged);
+            this.chkHelmHideBeard.AutoSize = true;
+            this.chkHelmHideBeard.Location = new System.Drawing.Point(41, 49);
+            this.chkHelmHideBeard.Name = "chkHelmHideBeard";
+            this.chkHelmHideBeard.Size = new System.Drawing.Size(85, 17);
+            this.chkHelmHideBeard.TabIndex = 102;
+            this.chkHelmHideBeard.Text = "Hide Beard?";
+            this.chkHelmHideBeard.CheckedChanged += new System.EventHandler(this.chkHelmHideBeard_CheckedChanged);
             // 
-            // lblComboExpBoost
+            // chkHelmHideExtra
             // 
-            this.lblComboExpBoost.AutoSize = true;
-            this.lblComboExpBoost.Location = new System.Drawing.Point(12, 110);
-            this.lblComboExpBoost.Name = "lblComboExpBoost";
-            this.lblComboExpBoost.Size = new System.Drawing.Size(107, 13);
-            this.lblComboExpBoost.TabIndex = 59;
-            this.lblComboExpBoost.Text = "Additional Exp Boost:";
+            this.chkHelmHideExtra.AutoSize = true;
+            this.chkHelmHideExtra.Location = new System.Drawing.Point(41, 73);
+            this.chkHelmHideExtra.Name = "chkHelmHideExtra";
+            this.chkHelmHideExtra.Size = new System.Drawing.Size(81, 17);
+            this.chkHelmHideExtra.TabIndex = 103;
+            this.chkHelmHideExtra.Text = "Hide Extra?";
+            this.chkHelmHideExtra.CheckedChanged += new System.EventHandler(this.chkHelmHideExtra_CheckedChanged);
             // 
             // FrmItem
             // 
@@ -2927,6 +2979,8 @@ namespace Intersect.Editor.Forms.Editors
             this.grpEquipment.PerformLayout();
             this.grpPrayerProperties.ResumeLayout(false);
             this.grpPrayerProperties.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudComboExpBoost)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudComboInterval)).EndInit();
             this.grpRegen.ResumeLayout(false);
             this.grpRegen.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudMpRegen)).EndInit();
@@ -2976,8 +3030,8 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudBag)).EndInit();
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudComboInterval)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudComboExpBoost)).EndInit();
+            this.grpHelmetPaperdollProps.ResumeLayout(false);
+            this.grpHelmetPaperdollProps.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -3164,5 +3218,9 @@ namespace Intersect.Editor.Forms.Editors
         private DarkNumericUpDown nudComboInterval;
         private Label lblComboExpBoost;
         private DarkNumericUpDown nudComboExpBoost;
+        private DarkGroupBox grpHelmetPaperdollProps;
+        private DarkCheckBox chkHelmHideExtra;
+        private DarkCheckBox chkHelmHideBeard;
+        private DarkCheckBox chkHelmHideHair;
     }
 }

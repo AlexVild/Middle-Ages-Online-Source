@@ -120,6 +120,8 @@ namespace Intersect
 
         public static int PrayerIndex => Instance.EquipmentOpts.PrayerSlot;
 
+        public static int HelmetIndex => Instance.EquipmentOpts.HelmetSlot;
+
         public static int ShieldIndex => Instance.EquipmentOpts.ShieldSlot;
 
         public static List<string> EquipmentSlots => Instance.EquipmentOpts.Slots;

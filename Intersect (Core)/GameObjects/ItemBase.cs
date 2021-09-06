@@ -257,6 +257,21 @@ namespace Intersect.GameObjects
 
         public int Tool { get; set; } = -1;
 
+        /// <summary>
+        /// Helmet: Hides hair decor doll when worn
+        /// </summary>
+        public bool HideHair { get; set; } = false;
+
+        /// <summary>
+        /// Helmet: Hides beard decor doll when worn
+        /// </summary>
+        public bool HideBeard { get; set; } = false;
+
+        /// <summary>
+        /// Helmet: Hides extra decor doll when worn
+        /// </summary>
+        public bool HideExtra { get; set; } = false;
+
         [Column("VitalsGiven")]
         [JsonIgnore]
         public string VitalsJson

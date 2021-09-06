@@ -3192,6 +3192,12 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString health = @"Health:";
 
+            public static LocalizedString hidehair = @"Hide Hair?";
+
+            public static LocalizedString hidebeard = @"Hide Beard?";
+
+            public static LocalizedString hideextra = @"Hide Extra?";
+
             public static LocalizedString items = @"Items";
 
             public static LocalizedString magicresistbonus = @"Magic Resist:";
