@@ -182,6 +182,10 @@ namespace Intersect
 
         public static int BlockingSlow => Instance.CombatOpts.BlockingSlow;
 
+        public static float AgilityMovementSpeedModifier => Instance.CombatOpts.AgilityMovementSpeedModifier;
+
+        public static int SpeedModifier => Instance.CombatOpts.SpeedModifier;
+
         public static int MaxDashSpeed => Instance.CombatOpts.MaxDashSpeed;
 
         public static int GameBorderStyle => Instance.MapOpts.GameBorderStyle;

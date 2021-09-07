@@ -771,9 +771,9 @@ namespace Intersect.GameObjects.Events.Commands
     {
         public override EventCommandType Type { get; } = EventCommandType.FlashScreen;
 
-        public float Duration { get; set; }
+        public float Duration { get; set; } = 200f;
 
-        public float Intensity { get; set; }
+        public float Intensity { get; set; } = 255f;
         
         public Color FlashColor { get; set; }
     }

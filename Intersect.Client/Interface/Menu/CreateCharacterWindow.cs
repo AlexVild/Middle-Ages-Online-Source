@@ -71,7 +71,7 @@ namespace Intersect.Client.Interface.Menu
 
         private Label mGenderLabel;
 
-        private string[] mSelectedDecors = new string[Options.DecorSlots.Count];
+        private string[] mSelectedDecors;
 
         private Label mHint2Label;
 
@@ -104,7 +104,7 @@ namespace Intersect.Client.Interface.Menu
         private List<string> mAvailableBeards = new List<string>();
         private int mBeardIndex = 0;
 
-        public ImagePanel[] PaperdollPanels;
+        public ImagePanel[] mPaperdollPanels;
 
         //Parent
         private MainMenu mMainMenu;
@@ -142,8 +142,6 @@ namespace Intersect.Client.Interface.Menu
             SelectCharacterWindow selectCharacterWindow
         )
         {
-            LoadDecors(ref mAvailableHairs, ref mAvailableEyes, ref mAvailableClothes, ref mAvailableExtras, ref mAvailableBeards, true);
-
             //Assign References
             mMainMenu = mainMenu;
             mSelectCharacterWindow = selectCharacterWindow;
@@ -194,13 +192,6 @@ namespace Intersect.Client.Interface.Menu
             //Character sprite
             mCharacterPortrait = new ImagePanel(mCharacterContainer, "CharacterPortait");
             mCharacterPortrait.SetSize(48, 48);
-            var paperdollSlots = Options.DecorSlots.Count;
-            PaperdollPanels = new ImagePanel[paperdollSlots + 1];
-            for (var i = 0; i <= paperdollSlots; i++)
-            {
-                PaperdollPanels[i] = new ImagePanel(mCharacterContainer);
-                PaperdollPanels[i].Hide();
-            }
 
             // Decor stuff
 
@@ -391,13 +382,13 @@ namespace Intersect.Client.Interface.Menu
                             );
 
                             var scale = Math.Min(
-                                mCharacterContainer.InnerWidth / (double) mCharacterPortrait.Texture.GetWidth(),
-                                mCharacterContainer.InnerHeight / (double) mCharacterPortrait.Texture.GetHeight()
+                                mCharacterContainer.InnerWidth / (double)mCharacterPortrait.Texture.GetWidth(),
+                                mCharacterContainer.InnerHeight / (double)mCharacterPortrait.Texture.GetHeight()
                             );
 
                             mCharacterPortrait.SetSize(
-                                (int) (mCharacterPortrait.Texture.GetWidth() * scale),
-                                (int) (mCharacterPortrait.Texture.GetHeight() * scale)
+                                (int)(mCharacterPortrait.Texture.GetWidth() * scale),
+                                (int)(mCharacterPortrait.Texture.GetHeight() * scale)
                             );
 
                             mCharacterPortrait.SetPosition(
@@ -422,42 +413,55 @@ namespace Intersect.Client.Interface.Menu
                             );
                         }
                     }
+                    // Draw decors
+                    if (mPaperdollPanels == null)
+                    {
+                        var paperdollSlots = Options.DecorSlots.Count;
+                        mPaperdollPanels = new ImagePanel[paperdollSlots + 1];
+                        for (var i = 0; i <= paperdollSlots; i++)
+                        {
+                            mPaperdollPanels[i] = new ImagePanel(mCharacterContainer);
+                            mPaperdollPanels[i].Hide();
+                        }
+                    }
+                    
+
                     for (var z = 0; z < Options.DecorSlots.Count; z++)
                     {
                         string paperdoll = mSelectedDecors[z];
 
                         if (string.IsNullOrWhiteSpace(paperdoll))
                         {
-                            PaperdollPanels[z].Texture = null;
-                            PaperdollPanels[z].Hide();
+                            mPaperdollPanels[z].Texture = null;
+                            mPaperdollPanels[z].Hide();
                         }
                         else
                         {
                             var paperdollTex = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Decor, paperdoll);
 
-                            PaperdollPanels[z].Texture = paperdollTex;
+                            mPaperdollPanels[z].Texture = paperdollTex;
                             if (paperdollTex != null)
                             {
-                                PaperdollPanels[z]
+                                mPaperdollPanels[z]
                                     .SetTextureRect(
-                                        0, 0, PaperdollPanels[z].Texture.GetWidth() / Options.Instance.Sprites.NormalFrames,
-                                        PaperdollPanels[z].Texture.GetHeight() / Options.Instance.Sprites.Directions
+                                        0, 0, mPaperdollPanels[z].Texture.GetWidth() / Options.Instance.Sprites.NormalFrames,
+                                        mPaperdollPanels[z].Texture.GetHeight() / Options.Instance.Sprites.Directions
                                     );
 
-                                PaperdollPanels[z]
+                                mPaperdollPanels[z]
                                     .SetSize(
-                                        PaperdollPanels[z].Texture.GetWidth() / Options.Instance.Sprites.NormalFrames,
-                                        PaperdollPanels[z].Texture.GetHeight() / Options.Instance.Sprites.Directions
+                                        mPaperdollPanels[z].Texture.GetWidth() / Options.Instance.Sprites.NormalFrames,
+                                        mPaperdollPanels[z].Texture.GetHeight() / Options.Instance.Sprites.Directions
                                     );
 
-                                PaperdollPanels[z]
+                                mPaperdollPanels[z]
                                     .SetPosition(
-                                        mCharacterContainer.Width / 2 - PaperdollPanels[z].Width / 2,
-                                        mCharacterContainer.Height / 2 - PaperdollPanels[z].Height / 2
+                                        mCharacterContainer.Width / 2 - mPaperdollPanels[z].Width / 2,
+                                        mCharacterContainer.Height / 2 - mPaperdollPanels[z].Height / 2
                                     );
                             }
 
-                            PaperdollPanels[z].Show();
+                            mPaperdollPanels[z].Show();
                         }
                     }
                 }
@@ -841,7 +845,7 @@ namespace Intersect.Client.Interface.Menu
             mExtrasIndex = 0;
             mBeardIndex = 0;
 
-            Array.Clear(mSelectedDecors, 0, mSelectedDecors.Length);
+            mSelectedDecors = new string[Options.DecorSlots.Count];
         }
 
         private void LoadDecors(ref List<string> hairs, ref List<string> eyes, ref List<string> clothes, ref List<string> extras, ref List<string> beards, bool isMale)

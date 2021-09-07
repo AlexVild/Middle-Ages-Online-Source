@@ -6,6 +6,10 @@
 
         public int BlockingSlow = 30; //Slow when moving with a shield. Default 30%
 
+        public float AgilityMovementSpeedModifier = 0.5f; // how much to divide the speed modification by
+
+        public int SpeedModifier = 90; // Just a baseline hook into speed
+
         public int CombatTime = 10000; //10 seconds
 
         public int BaseComboTime = 3000; //3 seconds

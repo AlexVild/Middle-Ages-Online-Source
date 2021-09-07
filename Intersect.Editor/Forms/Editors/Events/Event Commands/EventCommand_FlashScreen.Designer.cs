@@ -112,6 +112,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // nudIntensity
             // 
             this.nudIntensity.Location = new System.Drawing.Point(77, 93);
+            this.nudIntensity.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
             this.nudIntensity.Minimum = new decimal(new int[] {
             1,
             0,
