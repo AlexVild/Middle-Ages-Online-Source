@@ -527,6 +527,7 @@ namespace Intersect.Client.Interface.Menu
             LoadDecors(ref mAvailableHairs, ref mAvailableEyes, ref mAvailableClothes, ref mAvailableExtras, ref mAvailableBeards, mMaleChk.IsChecked);
             if (mMaleChk.IsChecked)
             {
+                mBeardSelectionContainer.Show();
                 if (mMaleSprites.Count > 0)
                 {
                     mDisplaySpriteIndex = 0;
@@ -543,6 +544,7 @@ namespace Intersect.Client.Interface.Menu
             }
             else
             {
+                mBeardSelectionContainer.Hide();
                 if (mFemaleSprites.Count > 0)
                 {
                     mDisplaySpriteIndex = 0;
