@@ -39,6 +39,8 @@ namespace Intersect.Client.Interface.Game.Bank
 
         public int Y;
 
+        private bool mOpen;
+
         //Init
         public BankWindow(Canvas gameCanvas)
         {
@@ -59,11 +61,19 @@ namespace Intersect.Client.Interface.Game.Bank
             
             mBankWindow.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
             InitItemContainer();
+            Close();
         }
 
         public void Close()
         {
-            mBankWindow.Close();
+            mBankWindow.IsHidden = true;
+            mOpen = false;
+        }
+
+        public void Open()
+        {
+            mBankWindow.IsHidden = false;
+            mOpen = true;
         }
 
         public bool IsVisible()
@@ -71,15 +81,15 @@ namespace Intersect.Client.Interface.Game.Bank
             return !mBankWindow.IsHidden;
         }
 
-        public void Hide()
-        {
-            mBankWindow.IsHidden = true;
-        }
-
         public void Update()
         {
             if (mBankWindow.IsHidden == true)
             {
+                if (mOpen)
+                {
+                    Interface.GameUi.NotifyCloseBank();
+                }
+
                 return;
             }
 
@@ -131,7 +141,7 @@ namespace Intersect.Client.Interface.Game.Bank
 
         private void InitItemContainer()
         {
-            for (var i = 0; i < Globals.BankSlots; i++)
+            for (var i = 0; i < Options.Player.MaxBank; i++)
             {
                 Items.Add(new BankItem(this, i));
                 Items[i].Container = new ImagePanel(mItemContainer, "BankItem");
