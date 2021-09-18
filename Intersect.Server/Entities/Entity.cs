@@ -796,11 +796,13 @@ namespace Intersect.Server.Entities
         //Returns the amount of time required to traverse 1 tile
         public virtual float GetMovementTime()
         {
-            var time = 1000f / (float) (1 + Math.Log(Stat[(int) Stats.Speed].Value()));
+            var time = 1000f / (float)(1 + Math.Log(Stat[(int)Stats.Speed].Value() * Options.AgilityMovementSpeedModifier));
             if (Blocking)
             {
-                time += time * Options.BlockingSlow;
+                time += time * (float)Options.BlockingSlow;
             }
+
+            time *= (float)Options.SpeedModifier;
 
             return Math.Min(1000f, time);
         }
@@ -1117,7 +1119,8 @@ namespace Intersect.Server.Entities
 
         public void TryBlock(bool blocking)
         {
-            if (AttackTimer < Globals.Timing.Milliseconds)
+            // Seeing as blocking doesn't... do anything, let's just get rid of this.
+            /*if (AttackTimer < Globals.Timing.Milliseconds)
             {
                 if (blocking && !Blocking && AttackTimer < Globals.Timing.Milliseconds)
                 {
@@ -1130,7 +1133,7 @@ namespace Intersect.Server.Entities
                     AttackTimer = Globals.Timing.Milliseconds + CalculateAttackTime();
                     PacketSender.SendEntityAttack(this, 0);
                 }
-            }
+            }*/
         }
 
         public virtual int GetWeaponDamage()

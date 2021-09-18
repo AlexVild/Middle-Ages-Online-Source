@@ -24,6 +24,8 @@
         public string MenuCharacterIcon = "charactericon.png";
 
         public string MenuCharacterIconFlashed = "charactericon_flash.png";
+
+        public string ChatSendSound = "al_typing_send.wav";
     }
 
 }

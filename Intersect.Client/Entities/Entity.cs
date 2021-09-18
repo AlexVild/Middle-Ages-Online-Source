@@ -175,6 +175,8 @@ namespace Intersect.Client.Entities
 
         public FloatRect WorldPos = new FloatRect();
 
+        public bool IsTargeted = false;
+
         //Location Info
         public byte X;
 
@@ -490,8 +492,10 @@ namespace Intersect.Client.Entities
             var time = 1000f / (float) (1 + Math.Log(Stat[(int) Stats.Speed] * Options.AgilityMovementSpeedModifier));
             if (Blocking)
             {
-                time += (time * (float) Options.SpeedModifier) * (float) Options.BlockingSlow;
+                time += time * (float) Options.BlockingSlow;
             }
+            
+            time *= (float)Options.SpeedModifier;
 
             return Math.Min(1000f, time);
         }
@@ -1374,6 +1378,11 @@ namespace Intersect.Client.Entities
 
         public virtual void DrawName(Color textColor, Color borderColor = null, Color backgroundColor = null)
         {
+            if (!(this is Event) && !(this is Player) && !IsTargeted)
+            {
+                return;
+            }
+
             if (HideName || Name.Trim().Length == 0)
             {
                 return;
@@ -1468,6 +1477,8 @@ namespace Intersect.Client.Entities
                 name, Graphics.EntityNameFont, (int) (x - (int) Math.Ceiling(textSize.X / 2f)), (int) y, 1,
                 Color.FromArgb(textColor.ToArgb()), true, null, Color.FromArgb(borderColor.ToArgb())
             );
+
+            IsTargeted = false; // allow resetting of target-only name display
         }
 
         public float GetLabelLocation(LabelType type)
@@ -1721,6 +1732,7 @@ namespace Intersect.Client.Entities
         //
         public void DrawTarget(int priority)
         {
+            IsTargeted = true;
             if (GetType() == typeof(Projectile))
             {
                 return;

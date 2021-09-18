@@ -388,6 +388,7 @@ namespace Intersect.Client.Interface.Game.Chat
                 return;
             }
 
+            Audio.AddGameSound(Options.ChatSendSound, false);
             PacketSender.SendChatMsg(
                 mChatboxInput.Text.Trim(), byte.Parse(mChannelCombobox.SelectedItem.UserData.ToString())
             );

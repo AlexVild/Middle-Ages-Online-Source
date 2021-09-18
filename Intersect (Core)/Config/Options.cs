@@ -184,7 +184,7 @@ namespace Intersect
 
         public static float AgilityMovementSpeedModifier => Instance.CombatOpts.AgilityMovementSpeedModifier;
 
-        public static int SpeedModifier => Instance.CombatOpts.SpeedModifier;
+        public static float SpeedModifier => Instance.CombatOpts.SpeedModifier;
 
         public static int MaxDashSpeed => Instance.CombatOpts.MaxDashSpeed;
 
@@ -211,6 +211,8 @@ namespace Intersect
         public static string MenuCharacterIcon => Instance.ChatOpts.MenuCharacterIcon;
         
         public static string MenuCharacterIconFlashed => Instance.ChatOpts.MenuCharacterIconFlashed;
+
+        public static string ChatSendSound => Instance.ChatOpts.ChatSendSound;
 
         public static LootOptions Loot => Instance.LootOpts;
 
