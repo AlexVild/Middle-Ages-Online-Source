@@ -1939,6 +1939,65 @@ namespace Intersect.Client.Entities
             }
         }
 
+        public byte GetDirectionTo(Entity otherEntity)
+        {
+            if (otherEntity == null) return Dir;
+
+            bool preferY;
+            int yOffset, xOffset;
+            byte newDir = Dir;
+
+            if (otherEntity.MapInstance.Id != MapInstance.Id)
+            {
+                int relX = X;
+                int relY = Y;
+                int relEntityX = otherEntity.X;
+                int relEntityY = otherEntity.Y;
+
+                if (otherEntity.MapInstance.MapGridX < MapInstance.MapGridX)
+                {
+                    relX += Options.MapWidth - 1;
+                } else if (otherEntity.MapInstance.MapGridX > MapInstance.MapGridX)
+                {
+                    relEntityX += (Options.MapWidth - 1);
+                }
+                
+                if (otherEntity.MapInstance.MapGridY < MapInstance.MapGridY)
+                {
+                    relY += Options.MapHeight - 1;
+                } else if (otherEntity.MapInstance.MapGridY > MapInstance.MapGridY)
+                {
+                    relEntityY += Options.MapHeight - 1;
+                }
+
+                yOffset = relY - relEntityY;
+                xOffset = relX - relEntityX;
+                preferY = (Math.Abs(yOffset) - Math.Abs(xOffset)) > 0;
+            } else
+            {
+                yOffset = Y - otherEntity.Y;
+                xOffset = X - otherEntity.X;
+                preferY = (Math.Abs(yOffset) - Math.Abs(xOffset)) > 0;
+            }
+
+            if (preferY)
+            {
+                if (yOffset > 0) newDir = (byte)Directions.Up;
+                else if (yOffset < 0) newDir = (byte)Directions.Down;
+                else if (xOffset > 0) newDir = (byte)Directions.Left;
+                else if (xOffset < 0) newDir = (byte)Directions.Right;
+            }
+            else
+            {
+                if (xOffset > 0) newDir = (byte)Directions.Left;
+                else if (xOffset < 0) newDir = (byte)Directions.Right;
+                else if (yOffset > 0) newDir = (byte)Directions.Up;
+                else if (yOffset < 0) newDir = (byte)Directions.Down;
+            }
+
+            return newDir;
+        }
+
         //Movement
         /// <summary>
         ///     Returns -6 if the tile is blocked by a global (non-event) entity

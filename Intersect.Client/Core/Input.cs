@@ -344,7 +344,12 @@ namespace Intersect.Client.Core
                 return;
             }
 
-            if (Globals.Me.TryTarget())
+            if (key == Keys.RButton && Globals.Me.TryTarget())
+            {
+                return;
+            }
+
+            if (key == Keys.MButton && Globals.Me.TryFaceTarget())
             {
                 return;
             }

@@ -1285,6 +1285,13 @@ namespace Intersect.Client.Entities
             if (TargetIndex != currentEntity.Id)
             {
                 SetTargetBox(currentEntity);
+                // Face the new target if the player is standing still
+                if (!IsMoving)
+                {
+                    byte newDir = GetDirectionTo(currentEntity);
+                    Dir = newDir;
+                    PacketSender.SendDirection(newDir);
+                }
                 TargetIndex = currentEntity.Id;
                 TargetType = 0;
             } 
@@ -1317,7 +1324,7 @@ namespace Intersect.Client.Entities
 
         public bool TryBlock()
         {
-            if (AttackTimer > Timing.Global.Ticks / TimeSpan.TicksPerMillisecond)
+            /*if (AttackTimer > Timing.Global.Ticks / TimeSpan.TicksPerMillisecond)
             {
                 return false;
             }
@@ -1332,19 +1339,20 @@ namespace Intersect.Client.Entities
 
                     return true;
                 }
-            }
+            }*/
 
             return false;
         }
 
         public void StopBlocking()
         {
-            if (Blocking)
-            {
-                Blocking = false;
-                PacketSender.SendBlock(false);
-                AttackTimer = Timing.Global.Ticks / TimeSpan.TicksPerMillisecond + CalculateAttackTime();
-            }
+            Blocking = false;
+            //if (Blocking)
+            //{
+                //Blocking = false;
+                //PacketSender.SendBlock(false);
+                //AttackTimer = Timing.Global.Ticks / TimeSpan.TicksPerMillisecond + CalculateAttackTime();
+            //}
         }
 
         public bool TryAttack()
@@ -1556,7 +1564,6 @@ namespace Intersect.Client.Entities
                             {
                                 var targetType = bestMatch is Event ? 1 : 0;
 
-
                                 SetTargetBox(bestMatch);
 
                                 if (bestMatch is Player)
@@ -1571,12 +1578,31 @@ namespace Intersect.Client.Entities
                                 TargetType = targetType;
                                 TargetIndex = bestMatch.Id;
 
+                                if (bestMatch.Id != Id && !IsMoving)
+                                {
+                                    byte newDir = GetDirectionTo(bestMatch);
+                                    Dir = newDir;
+                                    PacketSender.SendDirection(newDir);
+                                }
+
                                 return true;
                             }
-                            else if (!Globals.Database.StickyTarget)
+                            //else if (!Globals.Database.StickyTarget) <- Old, but also unused? Could leverage if make this configurable
+                            else if (bestMatch == null)
                             {
                                 // We've clicked off of our target and are allowed to clear it!
                                 ClearTarget();
+                                return true;
+                            }
+                            else if (bestMatch.Id == TargetIndex)
+                            {
+                                if (!IsMoving)
+                                {
+                                    byte newDir = GetDirectionTo(bestMatch);
+                                    Dir = newDir;
+                                    PacketSender.SendDirection(newDir);
+                                }
+
                                 return true;
                             }
                         }
@@ -1631,6 +1657,25 @@ namespace Intersect.Client.Entities
 
             return true;
 
+        }
+
+        public bool TryFaceTarget()
+        {
+            if (TargetIndex != null && !IsMoving)
+            {
+                foreach (var en in Globals.Entities)
+                {
+                    if (en.Key == TargetIndex)
+                    {
+                        byte newDir = GetDirectionTo(en.Value);
+                        Dir = newDir;
+                        PacketSender.SendDirection(newDir);
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         public void ClearTarget()

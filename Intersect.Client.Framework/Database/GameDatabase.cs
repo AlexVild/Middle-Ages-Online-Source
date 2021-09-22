@@ -12,6 +12,8 @@ namespace Intersect.Client.Framework.Database
 
         public bool TapToTurn;
 
+        public bool FaceOnLock;
+
         public bool TargetAccountDirection;
 
         //Preferences
@@ -51,6 +53,7 @@ namespace Intersect.Client.Framework.Database
             FullScreen = LoadPreference("Fullscreen", false);
             HideOthersOnWindowOpen = LoadPreference("HideOthersOnWindowOpen", true);
             TapToTurn = LoadPreference("TapToTurn", false);
+            FaceOnLock = LoadPreference("FaceOnLock", false);
             TargetAccountDirection = LoadPreference("TargetAccountDirection", false);
             StickyTarget = LoadPreference("StickyTarget", true);
         }
