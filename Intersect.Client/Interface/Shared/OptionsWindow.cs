@@ -27,6 +27,10 @@ namespace Intersect.Client.Interface.Shared
 
         private LabeledCheckBox mTapToTurnCheckbox;
 
+        private LabeledCheckBox mFaceTargetOnLock;
+        
+        private LabeledCheckBox mLeftClickTargetCheckbox;
+
         private Button mBackBtn;
 
         private Button mCancelKeybindingsButton;
@@ -158,6 +162,16 @@ namespace Intersect.Client.Interface.Shared
             mTapToTurnCheckbox = new LabeledCheckBox(mOptionsContainer, "TapToTurnCheckbox")
             {
                 Text = Strings.Options.taptoturn
+            };
+
+            mLeftClickTargetCheckbox = new LabeledCheckBox(mOptionsContainer, "LeftClickTarget")
+            {
+                Text = Strings.Options.leftclicktarget
+            };
+
+            mFaceTargetOnLock = new LabeledCheckBox(mOptionsContainer, "FaceTargetOnLockCheckbox")
+            {
+                Text = Strings.Options.faceonlock
             };
 
             mEditKeybindingsBtn = new Button(mOptionsContainer, "KeybindingsButton") {Text = Strings.Controls.edit};
@@ -472,6 +486,8 @@ namespace Intersect.Client.Interface.Shared
 
             mAutocloseWindowsCheckbox.IsChecked = Globals.Database.HideOthersOnWindowOpen;
             mTapToTurnCheckbox.IsChecked = Globals.Database.TapToTurn;
+            mFaceTargetOnLock.IsChecked = Globals.Database.FaceOnLock;
+            mLeftClickTargetCheckbox.IsChecked = Globals.Database.LeftClickTarget;
             mFullscreen.IsChecked = Globals.Database.FullScreen;
             mMusicSlider.Value = Globals.Database.MusicVolume;
             mSoundSlider.Value = Globals.Database.SoundVolume;
@@ -540,6 +556,8 @@ namespace Intersect.Client.Interface.Shared
 
             Globals.Database.HideOthersOnWindowOpen = mAutocloseWindowsCheckbox.IsChecked;
             Globals.Database.TapToTurn = mTapToTurnCheckbox.IsChecked;
+            Globals.Database.FaceOnLock = mFaceTargetOnLock.IsChecked;
+            Globals.Database.LeftClickTarget = mLeftClickTargetCheckbox.IsChecked;
 
             if (Globals.Database.FullScreen != mFullscreen.IsChecked)
             {

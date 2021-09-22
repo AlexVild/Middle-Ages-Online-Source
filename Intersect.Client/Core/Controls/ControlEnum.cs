@@ -70,7 +70,9 @@
         
         TurnClockwise,
         
-        TurnCounterClockwise
+        TurnCounterClockwise,
+
+        FaceTarget
     }
 
 }

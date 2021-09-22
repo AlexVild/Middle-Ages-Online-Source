@@ -51,6 +51,8 @@
         public string CriticalHitReceivedSound = null;
 
         public string CriticalHitDealtSound = null;
+        
+        public long FaceTargetPredictionTime = 650;
 
         //Combat
         public int RegenTime = 5000; //5 seconds

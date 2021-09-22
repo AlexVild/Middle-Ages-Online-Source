@@ -188,6 +188,8 @@ namespace Intersect
 
         public static int MaxDashSpeed => Instance.CombatOpts.MaxDashSpeed;
 
+        public static long FaceTargetPredictionTime => Instance.CombatOpts.FaceTargetPredictionTime;
+
         public static int GameBorderStyle => Instance.MapOpts.GameBorderStyle;
 
         public static bool ZDimensionVisible => Instance.MapOpts.ZDimensionVisible;

@@ -259,6 +259,11 @@ namespace Intersect.Client.Core
                                         Interface.Interface.GameUi?.GameMenu.ToggleGuildWindow();
 
                                         break;
+
+                                    case Control.FaceTarget:
+                                        Globals.Me?.TryFaceTarget(false, true);
+
+                                        break;
                                 }
 
                                 break;
@@ -344,15 +349,26 @@ namespace Intersect.Client.Core
                 return;
             }
 
-            if (key == Keys.RButton && Globals.Me.TryTarget())
+            if (Controls.Controls.ControlHasKey(Control.FaceTarget, key) && Globals.Me.TryFaceTarget(false, true))
             {
                 return;
             }
 
-            if (key == Keys.MButton && Globals.Me.TryFaceTarget())
+            if (Globals.Database.LeftClickTarget)
             {
-                return;
+                if (key == Keys.LButton && Globals.Me.TryTarget())
+                {
+                    return;
+                }
+            } else
+            {
+                if (key == Keys.RButton && Globals.Me.TryTarget())
+                {
+                    return;
+                }
             }
+
+            
 
             if (Controls.Controls.ControlHasKey(Control.PickUp, key))
             {

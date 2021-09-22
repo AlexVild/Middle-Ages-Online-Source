@@ -27,6 +27,8 @@ namespace Intersect.Client.Framework.Database
 
         public bool StickyTarget;
 
+        public bool LeftClickTarget;
+
         //Saving password, other stuff we don't want in the games directory
         public abstract void SavePreference(string key, object value);
 
@@ -53,7 +55,8 @@ namespace Intersect.Client.Framework.Database
             FullScreen = LoadPreference("Fullscreen", false);
             HideOthersOnWindowOpen = LoadPreference("HideOthersOnWindowOpen", true);
             TapToTurn = LoadPreference("TapToTurn", false);
-            FaceOnLock = LoadPreference("FaceOnLock", false);
+            FaceOnLock = LoadPreference("FaceOnLock", true);
+            LeftClickTarget = LoadPreference("LeftClickTarget", false);
             TargetAccountDirection = LoadPreference("TargetAccountDirection", false);
             StickyTarget = LoadPreference("StickyTarget", true);
         }
@@ -69,6 +72,8 @@ namespace Intersect.Client.Framework.Database
             SavePreference("TargetAccountDirection", TargetAccountDirection.ToString());
             SavePreference("StickyTarget", StickyTarget.ToString());
             SavePreference("TapToTurn", TapToTurn.ToString());
+            SavePreference("FaceOnLock", FaceOnLock.ToString());
+            SavePreference("LeftClickTarget", LeftClickTarget.ToString());
         }
 
         public abstract bool LoadConfig();

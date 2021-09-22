@@ -101,6 +101,9 @@ namespace Intersect.Client.Entities
 
         public string LifetimeQuestPoints { get; set; }
 
+        // Used for doing smart direction changing if requesting to face a target
+        public long DirRequestTime { get; set; }
+
         // Target data
         private long mlastTargetScanTime = 0;
 
@@ -256,7 +259,23 @@ namespace Intersect.Client.Entities
                 Interface.Interface.GameUi.HideGuildWindow();
             }
 
-            var returnval = base.Update();
+            bool wasMoving = IsMoving;
+            bool smartDirPossible = false;
+            if (DirRequestTime > Globals.System.GetTimeMs()) // If we're still in the potential zone for a smart dir change
+            {
+                smartDirPossible = true;
+            }
+
+            var returnval = base.Update(); // Will update IsMoving
+
+            if (smartDirPossible)
+            {
+                // Make sure the player would potentially WANT to turn
+                if (!IsMoving && wasMoving != IsMoving && !IsBusy() && noDirectionalInputPressed())
+                {
+                    TryFaceTarget(true);
+                }
+            }
 
             return returnval;
         }
@@ -1285,15 +1304,9 @@ namespace Intersect.Client.Entities
             if (TargetIndex != currentEntity.Id)
             {
                 SetTargetBox(currentEntity);
-                // Face the new target if the player is standing still
-                if (!IsMoving)
-                {
-                    byte newDir = GetDirectionTo(currentEntity);
-                    Dir = newDir;
-                    PacketSender.SendDirection(newDir);
-                }
                 TargetIndex = currentEntity.Id;
                 TargetType = 0;
+                TryFaceTarget();
             } 
         }
 
@@ -1578,12 +1591,7 @@ namespace Intersect.Client.Entities
                                 TargetType = targetType;
                                 TargetIndex = bestMatch.Id;
 
-                                if (bestMatch.Id != Id && !IsMoving)
-                                {
-                                    byte newDir = GetDirectionTo(bestMatch);
-                                    Dir = newDir;
-                                    PacketSender.SendDirection(newDir);
-                                }
+                                TryFaceTarget();
 
                                 return true;
                             }
@@ -1596,12 +1604,7 @@ namespace Intersect.Client.Entities
                             }
                             else if (bestMatch.Id == TargetIndex)
                             {
-                                if (!IsMoving)
-                                {
-                                    byte newDir = GetDirectionTo(bestMatch);
-                                    Dir = newDir;
-                                    PacketSender.SendDirection(newDir);
-                                }
+                                TryFaceTarget();
 
                                 return true;
                             }
@@ -1659,23 +1662,40 @@ namespace Intersect.Client.Entities
 
         }
 
-        public bool TryFaceTarget()
+        public bool TryFaceTarget(bool skipSmartDir = false, bool force = false)
         {
-            if (TargetIndex != null && !IsMoving)
+            if (TargetIndex != null && (Globals.Database.FaceOnLock || force))
             {
                 foreach (var en in Globals.Entities)
                 {
                     if (en.Key == TargetIndex)
                     {
-                        byte newDir = GetDirectionTo(en.Value);
-                        Dir = newDir;
-                        PacketSender.SendDirection(newDir);
-                        return true;
+                        if (!IsMoving)
+                        {
+                            byte newDir = GetDirectionTo(en.Value);
+                            Dir = newDir;
+                            PacketSender.SendDirection(newDir);
+                            return true;
+                        } else if (!skipSmartDir)
+                        {
+                            DirRequestTime = Globals.System.GetTimeMs() + Options.Combat.FaceTargetPredictionTime;
+                            return false;
+                        }
                     }
                 }
             }
 
             return false;
+        }
+
+        public bool noDirectionalInputPressed()
+        {
+            return !Controls.KeyDown(Control.MoveLeft)
+                && !Controls.KeyDown(Control.MoveRight)
+                && !Controls.KeyDown(Control.MoveDown)
+                && !Controls.KeyDown(Control.MoveUp)
+                && !Controls.KeyDown(Control.TurnClockwise)
+                && !Controls.KeyDown(Control.TurnCounterClockwise);
         }
 
         public void ClearTarget()

@@ -88,6 +88,7 @@ namespace Intersect.Client.Core.Controls
             CreateControlMap(Control.ToggleGui, Keys.F11, Keys.None);
             CreateControlMap(Control.TurnClockwise, Keys.E, Keys.Home);
             CreateControlMap(Control.TurnCounterClockwise, Keys.Q, Keys.End);
+            CreateControlMap(Control.FaceTarget, Keys.Shift, Keys.MButton);
         }
 
         public void Save()

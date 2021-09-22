@@ -596,7 +596,8 @@ namespace Intersect.Client.Localization
                 {"openadminpanel", @"Open Admin Panel:"},
                 {"togglegui", @"Toggle Interface:"},
                 {"turnclockwise", @"Turn Clockwise:"},
-                {"turncounterclockwise", @"Turn Counter Clockwise:"}
+                {"turncounterclockwise", @"Turn Counter Clockwise:"},
+                {"facetarget", @"Face Target:"}
             };
 
             public static LocalizedString edit = @"Edit Controls";
@@ -1303,6 +1304,10 @@ namespace Intersect.Client.Localization
             public static LocalizedString vsync = @"V-Sync";
             
             public static LocalizedString taptoturn = @"Tap-to-Turn";
+            
+            public static LocalizedString faceonlock = @"Face Target on Lock";
+            
+            public static LocalizedString leftclicktarget = @"Left Click Target";
 
         }
 
