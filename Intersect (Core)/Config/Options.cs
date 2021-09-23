@@ -215,6 +215,8 @@ namespace Intersect
         public static string MenuCharacterIconFlashed => Instance.ChatOpts.MenuCharacterIconFlashed;
 
         public static string ChatSendSound => Instance.ChatOpts.ChatSendSound;
+        
+        public static string UIDenySound => Instance.ChatOpts.UIDenySound;
 
         public static LootOptions Loot => Instance.LootOpts;
 

@@ -85,7 +85,13 @@ namespace Intersect.Server.Entities
                 {
                     if (!Parent.Base.PierceTarget)
                     {
-                        return true;
+                        if (Options.Instance.Passability.Passable[(int)en.Map.ZoneType] && !Parent.Spell.Combat.Friendly)
+                        {
+                            return false;
+                        } else
+                        {
+                            return true;
+                        }
                     }
                     else
                     {
@@ -113,7 +119,13 @@ namespace Intersect.Server.Entities
 
                         if (!Parent.Base.PierceTarget)
                         {
-                            return true;
+                            if (Options.Instance.Passability.Passable[(int)targetEntity.Map.ZoneType] && !Parent.Spell.Combat.Friendly)
+                            {
+                                return false;
+                            } else
+                            {
+                                return true;
+                            }
                         }
                     }
                 }

@@ -1335,7 +1335,7 @@ namespace Intersect.Server.Entities
                 }
             }
 
-            if (parentSpell != null)
+            if (parentSpell != null && target != null)
             {
                 TryAttack(target, parentSpell);
             }

@@ -910,17 +910,23 @@ namespace Intersect.Editor.Core
 
                                     if (attributesTex != null)
                                     {
+                                        MapAttribute attr = tmpMap.Attributes[x, y];
+                                        int alpha = 150;
+                                        if (attr is MapBlockedAttribute block && block.GroundLevel)
+                                        {
+                                            alpha = 75;
+                                        }
                                         DrawTexture(
                                             attributesTex,
                                             new RectangleF(
-                                                0, ((int) tmpMap.Attributes[x, y].Type - 1) * attributesTex.Width,
+                                                0, ((int)tmpMap.Attributes[x, y].Type - 1) * attributesTex.Width,
                                                 attributesTex.Width, attributesTex.Width
                                             ),
                                             new RectangleF(
                                                 CurrentView.Left + x * Options.TileWidth,
                                                 CurrentView.Top + y * Options.TileHeight, Options.TileWidth,
                                                 Options.TileHeight
-                                            ), System.Drawing.Color.FromArgb(150, 255, 255, 255), null
+                                            ), System.Drawing.Color.FromArgb(alpha, 255, 255, 255), null
                                         );
                                     }
                                 }

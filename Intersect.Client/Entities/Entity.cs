@@ -2143,9 +2143,12 @@ namespace Intersect.Client.Entities
                             en.Value.Z == Z &&
                             !en.Value.Passable)
                         {
+                            var entityMap = MapInstance.Get(en.Value.CurrentMap);
                             blockedBy = en.Value;
-
-                            return -4;
+                            if (!(this is Projectile))
+                            {
+                                return -4;
+                            }
                         }
                     }
 

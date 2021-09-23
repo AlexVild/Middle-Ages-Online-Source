@@ -589,9 +589,14 @@ namespace Intersect.Server.Networking
         /// <param name="message">The message to send.</param>
         /// <param name="type">The type of message we are sending.</param>
         /// <param name="target">The sender of this message, should we decide to respond from the client.</param>
-        public static void SendChatMsg(Player player, string message, ChatMessageType type, string target = "")
+        /// <param name="sound">Whether to play a GUI Cancel SFX (hardcoded)</param>
+        public static void SendChatMsg(Player player, string message, ChatMessageType type, string target = "", bool sound = false)
         {
             SendChatMsg(player, message, type, CustomColors.Chat.PlayerMsg, target);
+            if (sound)
+            {
+                SendPlaySound(player, Options.UIDenySound);
+            }
         }
 
         /// <summary>

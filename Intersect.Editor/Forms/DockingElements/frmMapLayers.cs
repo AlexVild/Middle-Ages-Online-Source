@@ -677,9 +677,12 @@ namespace Intersect.Editor.Forms.DockingElements
             switch (SelectedMapAttributeType)
             {
                 case MapAttributes.Walkable:
-                case MapAttributes.Blocked:
                 case MapAttributes.GrappleStone:
                 case MapAttributes.NpcAvoid:
+                    break;
+                case MapAttributes.Blocked:
+                    var blockAttribute = attribute as MapBlockedAttribute;
+                    blockAttribute.GroundLevel = chkGroundLevel.Checked;
                     break;
 
                 case MapAttributes.Item:
@@ -1334,6 +1337,11 @@ namespace Intersect.Editor.Forms.DockingElements
             {
                 SetLayer(Options.Instance.MapOpts.Layers.All[cmbMapLayer.SelectedIndex]);
             }
+        }
+
+        private void chkGroundLevel_CheckedChanged(object sender, EventArgs e)
+        {
+
         }
     }
 

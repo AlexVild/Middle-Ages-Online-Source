@@ -4363,7 +4363,7 @@ namespace Intersect.Server.Entities
             {
                 if (!string.IsNullOrWhiteSpace(spell.CannotCastMessage))
                 {
-                    PacketSender.SendChatMsg(this, spell.CannotCastMessage, ChatMessageType.Error);
+                    PacketSender.SendChatMsg(this, spell.CannotCastMessage, ChatMessageType.Error, "", true);
                 }
                 else
                 {
@@ -4422,7 +4422,7 @@ namespace Intersect.Server.Entities
                 if (!spell.Combat.Friendly &&
                     (spell.Combat.TargetType != SpellTargetTypes.Self &&
                     spell.Combat.TargetType != SpellTargetTypes.AoE &&
-                    (spell.Combat.TargetType == SpellTargetTypes.Projectile && spell.Combat.Projectile != null && target != this) &&
+                    spell.Combat.TargetType != SpellTargetTypes.Projectile &&
                     spell.SpellType == SpellTypes.CombatSpell
                     )
                  )

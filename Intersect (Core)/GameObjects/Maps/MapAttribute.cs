@@ -61,6 +61,8 @@ namespace Intersect.GameObjects.Maps
 
         public override MapAttributes Type { get; } = MapAttributes.Blocked;
 
+        public bool GroundLevel { get; set; }
+
     }
 
     public class MapItemAttribute : MapAttribute

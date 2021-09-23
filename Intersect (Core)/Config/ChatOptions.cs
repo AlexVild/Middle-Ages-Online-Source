@@ -26,6 +26,8 @@
         public string MenuCharacterIconFlashed = "charactericon_flash.png";
 
         public string ChatSendSound = "al_typing_send.wav";
+
+        public string UIDenySound = "al_gui_cancel.wav";
     }
 
 }

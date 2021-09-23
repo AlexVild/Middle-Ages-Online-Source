@@ -59,6 +59,9 @@ namespace Intersect.Editor.Forms.DockingElements
             this.lblMaxItemAmount = new System.Windows.Forms.Label();
             this.lblMapItem = new System.Windows.Forms.Label();
             this.grpWarp = new DarkUI.Controls.DarkGroupBox();
+            this.grpBlock = new DarkUI.Controls.DarkGroupBox();
+            this.chkGroundLevel = new System.Windows.Forms.CheckBox();
+            this.chkMapFade = new System.Windows.Forms.CheckBox();
             this.nudWarpY = new DarkUI.Controls.DarkNumericUpDown();
             this.nudWarpX = new DarkUI.Controls.DarkNumericUpDown();
             this.btnVisualMapSelector = new DarkUI.Controls.DarkButton();
@@ -141,12 +144,12 @@ namespace Intersect.Editor.Forms.DockingElements
             this.pnlEvents = new System.Windows.Forms.Panel();
             this.pnlLights = new System.Windows.Forms.Panel();
             this.lightEditor = new Intersect.Editor.Forms.Controls.LightEditorCtrl();
-            this.chkMapFade = new System.Windows.Forms.CheckBox();
             this.grpResource.SuspendLayout();
             this.grpZResource.SuspendLayout();
             this.grpItem.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudItemQuantity)).BeginInit();
             this.grpWarp.SuspendLayout();
+            this.grpBlock.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudWarpY)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudWarpX)).BeginInit();
             this.grpZDimension.SuspendLayout();
@@ -531,6 +534,7 @@ namespace Intersect.Editor.Forms.DockingElements
             // 
             this.grpWarp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpWarp.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpWarp.Controls.Add(this.grpBlock);
             this.grpWarp.Controls.Add(this.chkMapFade);
             this.grpWarp.Controls.Add(this.nudWarpY);
             this.grpWarp.Controls.Add(this.nudWarpX);
@@ -549,6 +553,41 @@ namespace Intersect.Editor.Forms.DockingElements
             this.grpWarp.TabStop = false;
             this.grpWarp.Text = "Warp";
             this.grpWarp.Visible = false;
+            // 
+            // grpBlock
+            // 
+            this.grpBlock.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpBlock.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpBlock.Controls.Add(this.chkGroundLevel);
+            this.grpBlock.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpBlock.Location = new System.Drawing.Point(4, 0);
+            this.grpBlock.Name = "grpBlock";
+            this.grpBlock.Size = new System.Drawing.Size(255, 61);
+            this.grpBlock.TabIndex = 28;
+            this.grpBlock.TabStop = false;
+            this.grpBlock.Text = "Block";
+            this.grpBlock.Visible = false;
+            // 
+            // chkGroundLevel
+            // 
+            this.chkGroundLevel.AutoSize = true;
+            this.chkGroundLevel.Location = new System.Drawing.Point(12, 25);
+            this.chkGroundLevel.Name = "chkGroundLevel";
+            this.chkGroundLevel.Size = new System.Drawing.Size(92, 17);
+            this.chkGroundLevel.TabIndex = 27;
+            this.chkGroundLevel.Text = "Ground level?";
+            this.chkGroundLevel.UseVisualStyleBackColor = true;
+            this.chkGroundLevel.CheckedChanged += new System.EventHandler(this.chkGroundLevel_CheckedChanged);
+            // 
+            // chkMapFade
+            // 
+            this.chkMapFade.AutoSize = true;
+            this.chkMapFade.Location = new System.Drawing.Point(17, 60);
+            this.chkMapFade.Name = "chkMapFade";
+            this.chkMapFade.Size = new System.Drawing.Size(101, 17);
+            this.chkMapFade.TabIndex = 27;
+            this.chkMapFade.Text = "Fade transition?";
+            this.chkMapFade.UseVisualStyleBackColor = true;
             // 
             // nudWarpY
             // 
@@ -1644,16 +1683,6 @@ namespace Intersect.Editor.Forms.DockingElements
             this.lightEditor.Visible = false;
             this.lightEditor.Load += new System.EventHandler(this.lightEditor_Load);
             // 
-            // chkMapFade
-            // 
-            this.chkMapFade.AutoSize = true;
-            this.chkMapFade.Location = new System.Drawing.Point(17, 60);
-            this.chkMapFade.Name = "chkMapFade";
-            this.chkMapFade.Size = new System.Drawing.Size(101, 17);
-            this.chkMapFade.TabIndex = 27;
-            this.chkMapFade.Text = "Fade transition?";
-            this.chkMapFade.UseVisualStyleBackColor = true;
-            // 
             // FrmMapLayers
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1688,6 +1717,8 @@ namespace Intersect.Editor.Forms.DockingElements
             ((System.ComponentModel.ISupportInitialize)(this.nudItemQuantity)).EndInit();
             this.grpWarp.ResumeLayout(false);
             this.grpWarp.PerformLayout();
+            this.grpBlock.ResumeLayout(false);
+            this.grpBlock.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudWarpY)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudWarpX)).EndInit();
             this.grpZDimension.ResumeLayout(false);
@@ -1841,5 +1872,7 @@ namespace Intersect.Editor.Forms.DockingElements
         private DarkComboBox cmbCritterDirection;
         private Label lblCritterDirection;
         private CheckBox chkMapFade;
+        private DarkGroupBox grpBlock;
+        private CheckBox chkGroundLevel;
     }
 }
