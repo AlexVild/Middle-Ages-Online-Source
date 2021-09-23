@@ -383,7 +383,16 @@ namespace Intersect.Server.Entities
                     (attribute.Type == MapAttributes.Blocked || attribute.Type == MapAttributes.Animation && ((MapAnimationAttribute)attribute).IsBlock) &&
                     !spawn.ProjectileBase.IgnoreMapBlocks)
                 {
-                    killSpawn = true;
+                    if (attribute is MapBlockedAttribute block)
+                    {
+                        if (!block.GroundLevel || (block.GroundLevel && this.Base.Grounded) )
+                        {
+                            killSpawn = true;
+                        }
+                    } else
+                    {
+                        killSpawn = true;
+                    }
                 }
             }
 

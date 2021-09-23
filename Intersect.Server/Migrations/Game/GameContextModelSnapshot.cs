@@ -498,6 +498,8 @@ namespace Intersect.Server.Migrations.Game
 
                     b.Property<bool>("GrappleHook");
 
+                    b.Property<bool>("Grounded");
+
                     b.Property<bool>("IgnoreActiveResources");
 
                     b.Property<bool>("IgnoreExhaustedResources");

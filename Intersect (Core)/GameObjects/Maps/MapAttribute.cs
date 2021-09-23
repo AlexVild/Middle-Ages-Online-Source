@@ -61,6 +61,14 @@ namespace Intersect.GameObjects.Maps
 
         public override MapAttributes Type { get; } = MapAttributes.Blocked;
 
+        public override MapAttribute Clone()
+        {
+            var att = (MapBlockedAttribute) base.Clone();
+            att.GroundLevel = GroundLevel;
+
+            return att;
+        }
+
         public bool GroundLevel { get; set; }
 
     }

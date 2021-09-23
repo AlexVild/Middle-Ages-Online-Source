@@ -59,8 +59,6 @@ namespace Intersect.Editor.Forms.DockingElements
             this.lblMaxItemAmount = new System.Windows.Forms.Label();
             this.lblMapItem = new System.Windows.Forms.Label();
             this.grpWarp = new DarkUI.Controls.DarkGroupBox();
-            this.grpBlock = new DarkUI.Controls.DarkGroupBox();
-            this.chkGroundLevel = new System.Windows.Forms.CheckBox();
             this.chkMapFade = new System.Windows.Forms.CheckBox();
             this.nudWarpY = new DarkUI.Controls.DarkNumericUpDown();
             this.nudWarpX = new DarkUI.Controls.DarkNumericUpDown();
@@ -139,17 +137,18 @@ namespace Intersect.Editor.Forms.DockingElements
             this.picLayer3 = new System.Windows.Forms.PictureBox();
             this.picLayer2 = new System.Windows.Forms.PictureBox();
             this.picLayer1 = new System.Windows.Forms.PictureBox();
-            this.pnlTilesetContainer = new Intersect.Editor.Forms.Controls.AutoDragPanel();
-            this.picTileset = new System.Windows.Forms.PictureBox();
             this.pnlEvents = new System.Windows.Forms.Panel();
             this.pnlLights = new System.Windows.Forms.Panel();
+            this.grpBlock = new DarkUI.Controls.DarkGroupBox();
+            this.chkGroundLevel = new System.Windows.Forms.CheckBox();
+            this.pnlTilesetContainer = new Intersect.Editor.Forms.Controls.AutoDragPanel();
+            this.picTileset = new System.Windows.Forms.PictureBox();
             this.lightEditor = new Intersect.Editor.Forms.Controls.LightEditorCtrl();
             this.grpResource.SuspendLayout();
             this.grpZResource.SuspendLayout();
             this.grpItem.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudItemQuantity)).BeginInit();
             this.grpWarp.SuspendLayout();
-            this.grpBlock.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudWarpY)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudWarpX)).BeginInit();
             this.grpZDimension.SuspendLayout();
@@ -174,10 +173,11 @@ namespace Intersect.Editor.Forms.DockingElements
             ((System.ComponentModel.ISupportInitialize)(this.picLayer3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picLayer2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picLayer1)).BeginInit();
-            this.pnlTilesetContainer.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picTileset)).BeginInit();
             this.pnlEvents.SuspendLayout();
             this.pnlLights.SuspendLayout();
+            this.grpBlock.SuspendLayout();
+            this.pnlTilesetContainer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picTileset)).BeginInit();
             this.SuspendLayout();
             // 
             // lblLayer
@@ -534,7 +534,6 @@ namespace Intersect.Editor.Forms.DockingElements
             // 
             this.grpWarp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpWarp.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpWarp.Controls.Add(this.grpBlock);
             this.grpWarp.Controls.Add(this.chkMapFade);
             this.grpWarp.Controls.Add(this.nudWarpY);
             this.grpWarp.Controls.Add(this.nudWarpX);
@@ -553,31 +552,6 @@ namespace Intersect.Editor.Forms.DockingElements
             this.grpWarp.TabStop = false;
             this.grpWarp.Text = "Warp";
             this.grpWarp.Visible = false;
-            // 
-            // grpBlock
-            // 
-            this.grpBlock.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.grpBlock.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpBlock.Controls.Add(this.chkGroundLevel);
-            this.grpBlock.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpBlock.Location = new System.Drawing.Point(4, 0);
-            this.grpBlock.Name = "grpBlock";
-            this.grpBlock.Size = new System.Drawing.Size(255, 61);
-            this.grpBlock.TabIndex = 28;
-            this.grpBlock.TabStop = false;
-            this.grpBlock.Text = "Block";
-            this.grpBlock.Visible = false;
-            // 
-            // chkGroundLevel
-            // 
-            this.chkGroundLevel.AutoSize = true;
-            this.chkGroundLevel.Location = new System.Drawing.Point(12, 25);
-            this.chkGroundLevel.Name = "chkGroundLevel";
-            this.chkGroundLevel.Size = new System.Drawing.Size(92, 17);
-            this.chkGroundLevel.TabIndex = 27;
-            this.chkGroundLevel.Text = "Ground level?";
-            this.chkGroundLevel.UseVisualStyleBackColor = true;
-            this.chkGroundLevel.CheckedChanged += new System.EventHandler(this.chkGroundLevel_CheckedChanged);
             // 
             // chkMapFade
             // 
@@ -1246,6 +1220,7 @@ namespace Intersect.Editor.Forms.DockingElements
             // 
             // pnlAttributes
             // 
+            this.pnlAttributes.Controls.Add(this.grpBlock);
             this.pnlAttributes.Controls.Add(this.grpWarp);
             this.pnlAttributes.Controls.Add(this.grpCritter);
             this.pnlAttributes.Controls.Add(this.rbCritter);
@@ -1630,6 +1605,48 @@ namespace Intersect.Editor.Forms.DockingElements
             this.picLayer1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.picMapLayer_MouseClick);
             this.picLayer1.MouseHover += new System.EventHandler(this.picMapLayer_MouseHover);
             // 
+            // pnlEvents
+            // 
+            this.pnlEvents.Controls.Add(this.lblEventInstructions);
+            this.pnlEvents.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlEvents.Location = new System.Drawing.Point(0, 0);
+            this.pnlEvents.Name = "pnlEvents";
+            this.pnlEvents.Size = new System.Drawing.Size(276, 442);
+            this.pnlEvents.TabIndex = 1;
+            // 
+            // pnlLights
+            // 
+            this.pnlLights.Controls.Add(this.lightEditor);
+            this.pnlLights.Controls.Add(this.lblLightInstructions);
+            this.pnlLights.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlLights.Location = new System.Drawing.Point(0, 0);
+            this.pnlLights.Name = "pnlLights";
+            this.pnlLights.Size = new System.Drawing.Size(276, 442);
+            this.pnlLights.TabIndex = 1;
+            // 
+            // grpBlock
+            // 
+            this.grpBlock.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpBlock.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpBlock.Controls.Add(this.chkGroundLevel);
+            this.grpBlock.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpBlock.Location = new System.Drawing.Point(3, 178);
+            this.grpBlock.Name = "grpBlock";
+            this.grpBlock.Size = new System.Drawing.Size(255, 61);
+            this.grpBlock.TabIndex = 39;
+            this.grpBlock.TabStop = false;
+            this.grpBlock.Text = "Block";
+            // 
+            // chkGroundLevel
+            // 
+            this.chkGroundLevel.AutoSize = true;
+            this.chkGroundLevel.Location = new System.Drawing.Point(12, 25);
+            this.chkGroundLevel.Name = "chkGroundLevel";
+            this.chkGroundLevel.Size = new System.Drawing.Size(92, 17);
+            this.chkGroundLevel.TabIndex = 27;
+            this.chkGroundLevel.Text = "Ground level?";
+            this.chkGroundLevel.UseVisualStyleBackColor = true;
+            // 
             // pnlTilesetContainer
             // 
             this.pnlTilesetContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -1653,25 +1670,6 @@ namespace Intersect.Editor.Forms.DockingElements
             this.picTileset.MouseDown += new System.Windows.Forms.MouseEventHandler(this.picTileset_MouseDown);
             this.picTileset.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picTileset_MouseMove);
             this.picTileset.MouseUp += new System.Windows.Forms.MouseEventHandler(this.picTileset_MouseUp);
-            // 
-            // pnlEvents
-            // 
-            this.pnlEvents.Controls.Add(this.lblEventInstructions);
-            this.pnlEvents.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlEvents.Location = new System.Drawing.Point(0, 0);
-            this.pnlEvents.Name = "pnlEvents";
-            this.pnlEvents.Size = new System.Drawing.Size(276, 442);
-            this.pnlEvents.TabIndex = 1;
-            // 
-            // pnlLights
-            // 
-            this.pnlLights.Controls.Add(this.lightEditor);
-            this.pnlLights.Controls.Add(this.lblLightInstructions);
-            this.pnlLights.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlLights.Location = new System.Drawing.Point(0, 0);
-            this.pnlLights.Name = "pnlLights";
-            this.pnlLights.Size = new System.Drawing.Size(276, 442);
-            this.pnlLights.TabIndex = 1;
             // 
             // lightEditor
             // 
@@ -1717,8 +1715,6 @@ namespace Intersect.Editor.Forms.DockingElements
             ((System.ComponentModel.ISupportInitialize)(this.nudItemQuantity)).EndInit();
             this.grpWarp.ResumeLayout(false);
             this.grpWarp.PerformLayout();
-            this.grpBlock.ResumeLayout(false);
-            this.grpBlock.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudWarpY)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudWarpX)).EndInit();
             this.grpZDimension.ResumeLayout(false);
@@ -1752,11 +1748,13 @@ namespace Intersect.Editor.Forms.DockingElements
             ((System.ComponentModel.ISupportInitialize)(this.picLayer3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picLayer2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picLayer1)).EndInit();
-            this.pnlTilesetContainer.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.picTileset)).EndInit();
             this.pnlEvents.ResumeLayout(false);
             this.pnlEvents.PerformLayout();
             this.pnlLights.ResumeLayout(false);
+            this.grpBlock.ResumeLayout(false);
+            this.grpBlock.PerformLayout();
+            this.pnlTilesetContainer.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.picTileset)).EndInit();
             this.ResumeLayout(false);
 
         }

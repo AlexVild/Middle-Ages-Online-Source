@@ -664,6 +664,8 @@ namespace Intersect.Editor.Localization
             public static LocalizedString animation = @"Animation:";
 
             public static LocalizedString blocked = @"Blocked";
+            
+            public static LocalizedString groundlevel= @"Ground Level?";
 
             public static LocalizedString critter = @"Critter";
 
@@ -4046,6 +4048,8 @@ Tick timer saved in server config.json.";
             public static LocalizedString cancel = @"Cancel";
 
             public static LocalizedString collisions = @"Ignore Collision:";
+
+            public static LocalizedString grounded = @"Grounded?";
 
             public static LocalizedString copy = @"Copy Projectile";
 

@@ -121,6 +121,7 @@ namespace Intersect.Editor.Forms.Editors
             lblKnockback.Text = Strings.ProjectileEditor.knockback;
             lblSpell.Text = Strings.ProjectileEditor.spell;
             chkGrapple.Text = Strings.ProjectileEditor.grapple;
+            chkGrounded.Text = Strings.ProjectileEditor.grounded;
 
             grpSpawns.Text = Strings.ProjectileEditor.spawns;
 
@@ -164,6 +165,7 @@ namespace Intersect.Editor.Forms.Editors
                 nudRange.Value = mEditorItem.Range;
                 cmbSpell.SelectedIndex = SpellBase.ListIndex(mEditorItem.SpellId) + 1;
                 nudKnockback.Value = mEditorItem.Knockback;
+                chkGrounded.Checked = mEditorItem.Grounded;
                 chkIgnoreMapBlocks.Checked = mEditorItem.IgnoreMapBlocks;
                 chkIgnoreActiveResources.Checked = mEditorItem.IgnoreActiveResources;
                 chkIgnoreInactiveResources.Checked = mEditorItem.IgnoreExhaustedResources;
@@ -760,6 +762,10 @@ namespace Intersect.Editor.Forms.Editors
 
         #endregion
 
+        private void chkGrounded_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Grounded = chkGrounded.Checked;
+        }
     }
 
 }

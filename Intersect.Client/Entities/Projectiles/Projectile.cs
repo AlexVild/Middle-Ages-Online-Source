@@ -33,6 +33,8 @@ namespace Intersect.Client.Entities.Projectiles
 
         private int mTotalSpawns;
 
+        public bool Grounded = false;
+
         public Guid ProjectileId;
 
         // Individual Spawns
@@ -83,6 +85,7 @@ namespace Intersect.Client.Entities.Projectiles
                 }
 
                 mTotalSpawns *= mMyBase.Quantity;
+                Grounded = mMyBase.Grounded;
             }
 
             Spawns = new ProjectileSpawns[mTotalSpawns];
@@ -538,7 +541,8 @@ namespace Intersect.Client.Entities.Projectiles
             Entity blockedBy = null;
             var tileBlocked = Globals.Me.IsTileBlocked(
                 Spawns[i].X, Spawns[i].Y, Z, Spawns[i].MapId, ref blockedBy,
-                Spawns[i].ProjectileBase.IgnoreActiveResources, Spawns[i].ProjectileBase.IgnoreExhaustedResources
+                Spawns[i].ProjectileBase.IgnoreActiveResources, Spawns[i].ProjectileBase.IgnoreExhaustedResources, true,
+                Grounded
             );
 
             if (tileBlocked != -1)

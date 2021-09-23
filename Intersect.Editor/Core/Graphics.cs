@@ -912,9 +912,12 @@ namespace Intersect.Editor.Core
                                     {
                                         MapAttribute attr = tmpMap.Attributes[x, y];
                                         int alpha = 150;
+                                        int red = 255;
                                         if (attr is MapBlockedAttribute block && block.GroundLevel)
                                         {
-                                            alpha = 75;
+                                            // Draw ground level blocks slightly different
+                                            alpha = 95;
+                                            red = 175;
                                         }
                                         DrawTexture(
                                             attributesTex,
@@ -926,7 +929,7 @@ namespace Intersect.Editor.Core
                                                 CurrentView.Left + x * Options.TileWidth,
                                                 CurrentView.Top + y * Options.TileHeight, Options.TileWidth,
                                                 Options.TileHeight
-                                            ), System.Drawing.Color.FromArgb(alpha, 255, 255, 255), null
+                                            ), System.Drawing.Color.FromArgb(alpha, red, 255, 255), null
                                         );
                                     }
                                 }

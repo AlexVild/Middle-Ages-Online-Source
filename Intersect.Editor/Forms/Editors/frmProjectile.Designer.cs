@@ -67,6 +67,7 @@ namespace Intersect.Editor.Forms.Editors
             this.lblSpawnRange = new System.Windows.Forms.Label();
             this.scrlSpawnRange = new DarkUI.Controls.DarkScrollBar();
             this.grpCollisions = new DarkUI.Controls.DarkGroupBox();
+            this.chkGrounded = new DarkUI.Controls.DarkCheckBox();
             this.chkPierce = new DarkUI.Controls.DarkCheckBox();
             this.chkIgnoreInactiveResources = new DarkUI.Controls.DarkCheckBox();
             this.chkIgnoreZDimensionBlocks = new DarkUI.Controls.DarkCheckBox();
@@ -584,6 +585,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpCollisions.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpCollisions.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpCollisions.Controls.Add(this.chkGrounded);
             this.grpCollisions.Controls.Add(this.chkPierce);
             this.grpCollisions.Controls.Add(this.chkIgnoreInactiveResources);
             this.grpCollisions.Controls.Add(this.chkIgnoreZDimensionBlocks);
@@ -596,6 +598,16 @@ namespace Intersect.Editor.Forms.Editors
             this.grpCollisions.TabIndex = 29;
             this.grpCollisions.TabStop = false;
             this.grpCollisions.Text = "Ignore Collision:";
+            // 
+            // chkGrounded
+            // 
+            this.chkGrounded.AutoSize = true;
+            this.chkGrounded.Location = new System.Drawing.Point(168, 39);
+            this.chkGrounded.Name = "chkGrounded";
+            this.chkGrounded.Size = new System.Drawing.Size(79, 17);
+            this.chkGrounded.TabIndex = 40;
+            this.chkGrounded.Text = "Grounded?";
+            this.chkGrounded.CheckedChanged += new System.EventHandler(this.chkGrounded_CheckedChanged);
             // 
             // chkPierce
             // 
@@ -984,5 +996,6 @@ namespace Intersect.Editor.Forms.Editors
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private DarkCheckBox chkPierce;
         private Controls.GameObjectList lstGameObjects;
-  }
+        private DarkCheckBox chkGrounded;
+    }
 }

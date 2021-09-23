@@ -2017,7 +2017,8 @@ namespace Intersect.Client.Entities
             ref Entity blockedBy,
             bool ignoreAliveResources = true,
             bool ignoreDeadResources = true,
-            bool ignoreNpcAvoids = true
+            bool ignoreNpcAvoids = true,
+            bool grounded = true
         )
         {
             var mapInstance = MapInstance.Get(mapId);
@@ -2177,7 +2178,21 @@ namespace Intersect.Client.Entities
                 {
                     if (gameMap.Attributes[tmpX, tmpY] != null)
                     {
-                        if (gameMap.Attributes[tmpX, tmpY].Type == MapAttributes.Blocked || (gameMap.Attributes[tmpX, tmpY].Type == MapAttributes.Animation && ((MapAnimationAttribute)gameMap.Attributes[tmpX, tmpY]).IsBlock))
+                        if (gameMap.Attributes[tmpX, tmpY] is MapBlockedAttribute blockAttr)
+                        {
+                            if (grounded)
+                            {
+                                return -2;
+                            } else
+                            {
+                                if (!blockAttr.GroundLevel)
+                                {
+                                    return -2;
+                                }
+                            }
+                        }
+
+                        if ((gameMap.Attributes[tmpX, tmpY].Type == MapAttributes.Animation && ((MapAnimationAttribute)gameMap.Attributes[tmpX, tmpY]).IsBlock))
                         {
                             return -2;
                         }

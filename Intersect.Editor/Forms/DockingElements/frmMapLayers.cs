@@ -440,6 +440,7 @@ namespace Intersect.Editor.Forms.DockingElements
         /// </summary>
         private void HideAttributeMenus()
         {
+            grpBlock.Visible = false;
             grpItem.Visible = false;
             grpZDimension.Visible = false;
             grpWarp.Visible = false;
@@ -465,6 +466,8 @@ namespace Intersect.Editor.Forms.DockingElements
         private void rbBlocked_CheckedChanged(object sender, EventArgs e)
         {
             HideAttributeMenus();
+            grpBlock.Visible = true;
+            chkGroundLevel.Checked = false;
         }
 
         private void rbNPCAvoid_CheckedChanged(object sender, EventArgs e)
@@ -1040,6 +1043,10 @@ namespace Intersect.Editor.Forms.DockingElements
             rbSlide.Text = Strings.Attributes.slide;
             rbCritter.Text = Strings.Attributes.critter;
 
+            //Block Groupbox
+            grpBlock.Text = Strings.Attributes.blocked;
+            chkGroundLevel.Text = Strings.Attributes.groundlevel;
+
             //Map Animation Groupbox
             grpAnimation.Text = Strings.Attributes.mapanimation;
             lblAnimation.Text = Strings.Attributes.mapanimation;
@@ -1337,11 +1344,6 @@ namespace Intersect.Editor.Forms.DockingElements
             {
                 SetLayer(Options.Instance.MapOpts.Layers.All[cmbMapLayer.SelectedIndex]);
             }
-        }
-
-        private void chkGroundLevel_CheckedChanged(object sender, EventArgs e)
-        {
-
         }
     }
 

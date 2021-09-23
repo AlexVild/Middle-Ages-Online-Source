@@ -84,6 +84,8 @@ namespace Intersect.GameObjects
 
         public bool PierceTarget { get; set; }
 
+        public bool Grounded { get; set; }
+
         public int Knockback { get; set; }
 
         public int Quantity { get; set; } = 1;
