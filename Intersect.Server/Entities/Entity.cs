@@ -2166,6 +2166,11 @@ namespace Intersect.Server.Entities
                     Globals.Timing.MillisecondsUTC + (int)(spellBase.CooldownDuration);
                 }
             }
+
+            if (GetVital(Vitals.Health) <= 0) // if the spell has killed the entity
+            {
+                Die();
+            }
         }
 
         private void HandleAoESpell(
