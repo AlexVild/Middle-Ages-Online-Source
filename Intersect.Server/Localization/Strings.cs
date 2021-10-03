@@ -399,6 +399,16 @@ namespace Intersect.Server.Localization
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]            public readonly LocalizedString cpsunlocked = @"CPS Unlocked";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]            public readonly LocalizedString guildwarsenabled = @"Guild Wars enabled";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]            public readonly LocalizedString guildwarsenabledalready = @"Guild Wars is already enabled";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]            public readonly LocalizedString guildwarsdisabled = @"Guild Wars disabled";
+            
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]            public readonly LocalizedString guildwarsdisabledalready = @"Guild Wars is already disabled";
+            
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]            public readonly LocalizedString guildwarsinvalid = @"Guild Wars GUID is either invalid or does not exist. Set this in server config.";
+
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]            public readonly LocalizedString ExperimentalFeatureEnablement = @"{00} is {01}.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]            public readonly LocalizedString gametime = @"Game time is now: {00}";

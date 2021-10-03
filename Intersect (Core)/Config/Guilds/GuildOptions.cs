@@ -34,6 +34,8 @@ namespace Intersect.Config.Guilds
         /// </summary>
         public int GuildBankSlots { get; set; } = 50;
 
+        public string GuildWarsGUID { get; set; } = "";
+
         /// <summary>
         /// Array of guild ranks that are available in this game
         /// </summary>

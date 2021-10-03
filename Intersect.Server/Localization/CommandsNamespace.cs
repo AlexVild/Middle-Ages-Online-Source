@@ -100,6 +100,15 @@ namespace Intersect.Server.Localization
                 Help = @"displays list of available commands"
             };
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocaleCommand GuildWars = new LocaleCommand
+            {
+                Name = @"guildwars",
+                Description =
+                    @"Modifies guild wars var found in server config",
+                Help = @"starts or ends guild wars, via start/end args ex. 'guildwars start'"
+            };
+
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]            public readonly LocalizedString invalid = @"Invalid /command.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]            public readonly LocaleCommand Kick = new LocaleCommand
@@ -363,6 +372,23 @@ namespace Intersect.Server.Localization
                     Description = @"the name of the player to unmute"
                 };
 
+                [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+                public readonly LocaleArgument GuildWars = new LocaleArgument
+                {
+                    Name = @"start",
+                    Description = @"enable guild wars"
+                };
+
+                [JsonProperty(NullValueHandling = NullValueHandling.Ignore)] public readonly LocalizedString GuildWarsStart = @"start";
+
+                [JsonProperty(NullValueHandling = NullValueHandling.Ignore)] public readonly LocalizedString GuildWarsEnd = @"end";
+
+                [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+                public readonly LocaleArgument GuildWarsDisabled = new LocaleArgument
+                {
+                    Name = @"end",
+                    Description = @"disable guild wars"
+                };
             }
 
         }

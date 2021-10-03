@@ -218,6 +218,8 @@ namespace Intersect
         
         public static string UIDenySound => Instance.ChatOpts.UIDenySound;
 
+        public static string GuildWarsGUID => Instance.Guild.GuildWarsGUID;
+
         public static LootOptions Loot => Instance.LootOpts;
 
         public static NpcOptions Npc => Instance.NpcOpts;
