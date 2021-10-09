@@ -280,7 +280,7 @@ namespace Intersect.Client.Entities
 
             bool wasMoving = IsMoving;
             bool smartDirPossible = false;
-            if (DirRequestTime > Globals.System.GetTimeMs()) // If we're still in the potential zone for a smart dir change
+            if (DirRequestTime > Timing.Global.Milliseconds) // If we're still in the potential zone for a smart dir change
             {
                 smartDirPossible = true;
             }
@@ -315,7 +315,7 @@ namespace Intersect.Client.Entities
             Gender = pkt.Gender;
             Class = pkt.ClassId;
             Type = pkt.AccessLevel;
-            CombatTimer = pkt.CombatTimeRemaining + Globals.System.GetTimeMs();
+            CombatTimer = pkt.CombatTimeRemaining + Timing.Global.Milliseconds;
             Guild = pkt.Guild;
             Rank = pkt.GuildRank;
             InVehicle = pkt.InVehicle;
@@ -540,7 +540,7 @@ namespace Intersect.Client.Entities
                 var itm = Inventory[slot];
                 if (itm.ItemId != Guid.Empty)
                 {
-                    if (ItemCooldowns.ContainsKey(itm.ItemId) && ItemCooldowns[itm.ItemId] > Globals.System.GetTimeMs())
+                    if (ItemCooldowns.ContainsKey(itm.ItemId) && ItemCooldowns[itm.ItemId] > Timing.Global.Milliseconds)
                     {
                         return true;
                     }
@@ -557,9 +557,9 @@ namespace Intersect.Client.Entities
                 var itm = Inventory[slot];
                 if (itm.ItemId != Guid.Empty)
                 {
-                    if (ItemCooldowns.ContainsKey(itm.ItemId) && ItemCooldowns[itm.ItemId] > Globals.System.GetTimeMs())
+                    if (ItemCooldowns.ContainsKey(itm.ItemId) && ItemCooldowns[itm.ItemId] > Timing.Global.Milliseconds)
                     {
-                        return ItemCooldowns[itm.ItemId] - Globals.System.GetTimeMs();
+                        return ItemCooldowns[itm.ItemId] - Timing.Global.Milliseconds;
                     }
                 }
             }
@@ -876,7 +876,7 @@ namespace Intersect.Client.Entities
         {
             if (Spells[index].SpellId != Guid.Empty &&
                 (!Globals.Me.SpellCooldowns.ContainsKey(Spells[index].SpellId) ||
-                 Globals.Me.SpellCooldowns[Spells[index].SpellId] < Globals.System.GetTimeMs()))
+                 Globals.Me.SpellCooldowns[Spells[index].SpellId] < Timing.Global.Milliseconds))
             {
                 var spellBase = SpellBase.Get(Spells[index].SpellId);
 
@@ -1101,16 +1101,16 @@ namespace Intersect.Client.Entities
                                 //Turn Only
                                 Dir = (byte)Globals.Me.MoveDir;
                                 PacketSender.SendDirection((byte)Globals.Me.MoveDir);
-                                MoveDirectionTimers[i] = Globals.System.GetTimeMs() + Options.DirChangeTimer;
+                                MoveDirectionTimers[i] = Timing.Global.Milliseconds + Options.DirChangeTimer;
                                 Globals.Me.MoveDir = -1;
                             }
                             //If we're already facing the direction then just start moving (set the timer to now)
                             else if (MoveDirectionTimers[i] == -1 && !Globals.Me.IsMoving && Dir == Globals.Me.MoveDir)
                             {
-                                MoveDirectionTimers[i] = Globals.System.GetTimeMs();
+                                MoveDirectionTimers[i] = Timing.Global.Milliseconds;
                             }
                             //The timer is greater than the currect time, let's cancel the move.
-                            else if (MoveDirectionTimers[i] > Globals.System.GetTimeMs() && !Globals.Me.IsMoving)
+                            else if (MoveDirectionTimers[i] > Timing.Global.Milliseconds && !Globals.Me.IsMoving)
                             {
                                 //Don't trigger the actual move immediately, wait until button is held
                                 Globals.Me.MoveDir = -1;
@@ -1734,7 +1734,7 @@ namespace Intersect.Client.Entities
         public bool TryFaceTarget(bool skipSmartDir = false, bool force = false)
         {
             // Check if we're currently casting
-            if (CastTime > Globals.System.GetTimeMs()) return false;
+            if (CastTime > Timing.Global.Milliseconds) return false;
 
             //check if player is stunned or snared, if so don't let them turn.
             for (var n = 0; n < Status.Count; n++)
@@ -1761,7 +1761,7 @@ namespace Intersect.Client.Entities
                             return true;
                         } else if (!skipSmartDir)
                         {
-                            DirRequestTime = Globals.System.GetTimeMs() + Options.Combat.FaceTargetPredictionTime;
+                            DirRequestTime = Timing.Global.Milliseconds + Options.Combat.FaceTargetPredictionTime;
                             return false;
                         }
                     }
@@ -1929,7 +1929,7 @@ namespace Intersect.Client.Entities
             }
 
             //Check if the player is dashing, if so don't let them move.
-            if (Dashing != null || DashQueue.Count > 0 || DashTimer > Globals.System.GetTimeMs())
+            if (Dashing != null || DashQueue.Count > 0 || DashTimer > Timing.Global.Milliseconds)
             {
                 return;
             }
@@ -1951,7 +1951,7 @@ namespace Intersect.Client.Entities
                 }
 
                 //Try to move if able and not casting spells.
-                if (!IsMoving && MoveTimer < Timing.Global.Ticks / TimeSpan.TicksPerMillisecond && (Options.Combat.MovementCancelsCast || CastTime < Globals.System.GetTimeMs())) 
+                if (!IsMoving && MoveTimer < Timing.Global.Ticks / TimeSpan.TicksPerMillisecond && (Options.Combat.MovementCancelsCast || CastTime < Timing.Global.Milliseconds)) 
                 {
                     if (Options.Combat.MovementCancelsCast)
                     {
@@ -2083,7 +2083,7 @@ namespace Intersect.Client.Entities
             }
             else if (!IsMoving && !DirKeyPressed)
             {
-                if (CastTime > Globals.System.GetTimeMs()) return;
+                if (CastTime > Timing.Global.Milliseconds) return;
 
                 if (Controls.KeyDown(Control.TurnClockwise))
                 {

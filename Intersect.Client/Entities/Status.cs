@@ -2,6 +2,7 @@
 
 using Intersect.Client.General;
 using Intersect.Enums;
+using Intersect.Utilities;
 
 namespace Intersect.Client.Entities
 {
@@ -30,20 +31,15 @@ namespace Intersect.Client.Entities
             Data = data;
             TimeRemaining = timeRemaining;
             TotalDuration = totalDuration;
-            TimeRecevied = Globals.System.GetTimeMs();
+            TimeRecevied = Timing.Global.Milliseconds;
         }
 
         public bool IsActive()
         {
-            return RemainingMs() > 0;
+            return RemainingMs > 0;
         }
 
-        public long RemainingMs()
-        {
-            var timeDiff = Globals.System.GetTimeMs() - TimeRecevied;
-
-            return TimeRemaining - timeDiff;
-        }
+        public long RemainingMs => TimeRemaining - (Timing.Global.Milliseconds - TimeRecevied);
 
     }
 

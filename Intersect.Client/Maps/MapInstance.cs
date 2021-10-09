@@ -187,7 +187,7 @@ namespace Intersect.Client.Maps
         {
             if (isLocal)
             {
-                mLastUpdateTime = Globals.System.GetTimeMs() + 10000;
+                mLastUpdateTime = Timing.Global.Milliseconds + 10000;
                 UpdateMapAttributes();
                 if (BackgroundSound == null && !TextUtils.IsNone(Sound))
                 {
@@ -235,7 +235,7 @@ namespace Intersect.Client.Maps
             }
             else
             {
-                if (Globals.System.GetTimeMs() > mLastUpdateTime)
+                if (Timing.Global.Milliseconds > mLastUpdateTime)
                 {
                     Dispose();
                 }
@@ -991,8 +991,8 @@ namespace Intersect.Client.Maps
                 return;
             }
 
-            float ecTime = Globals.System.GetTimeMs() - mFogUpdateTime;
-            mFogUpdateTime = Globals.System.GetTimeMs();
+            float ecTime = Timing.Global.Milliseconds - mFogUpdateTime;
+            mFogUpdateTime = Timing.Global.Milliseconds;
             if (Id == Globals.Me.CurrentMap)
             {
                 if (mCurFogIntensity != 1)
@@ -1104,7 +1104,7 @@ namespace Intersect.Client.Maps
 
             if ((WeatherXSpeed != 0 || WeatherYSpeed != 0) && Globals.Me.MapInstance == this)
             {
-                if (Globals.System.GetTimeMs() > _weatherParticleSpawnTime)
+                if (Timing.Global.Milliseconds > _weatherParticleSpawnTime)
                 {
                     _weatherParticles.Add(new WeatherParticle(_removeParticles, WeatherXSpeed, WeatherYSpeed, anim));
                     var spawnTime = 25 + (int) (475 * (float) (1f - (float) (WeatherIntensity / 100f)));
@@ -1112,7 +1112,7 @@ namespace Intersect.Client.Maps
                                        (480000f /
                                         (Graphics.Renderer.GetScreenWidth() * Graphics.Renderer.GetScreenHeight())));
 
-                    _weatherParticleSpawnTime = Globals.System.GetTimeMs() + spawnTime;
+                    _weatherParticleSpawnTime = Timing.Global.Milliseconds + spawnTime;
                 }
             }
 
@@ -1148,8 +1148,8 @@ namespace Intersect.Client.Maps
 
         public void DrawPanorama()
         {
-            float ecTime = Globals.System.GetTimeMs() - mPanoramaUpdateTime;
-            mPanoramaUpdateTime = Globals.System.GetTimeMs();
+            float ecTime = Timing.Global.Milliseconds - mPanoramaUpdateTime;
+            mPanoramaUpdateTime = Timing.Global.Milliseconds;
             if (Id == Globals.Me.CurrentMap)
             {
                 if (mPanoramaIntensity != 1)
@@ -1182,8 +1182,8 @@ namespace Intersect.Client.Maps
 
         public void DrawOverlayGraphic()
         {
-            float ecTime = Globals.System.GetTimeMs() - mOverlayUpdateTime;
-            mOverlayUpdateTime = Globals.System.GetTimeMs();
+            float ecTime = Timing.Global.Milliseconds - mOverlayUpdateTime;
+            mOverlayUpdateTime = Timing.Global.Milliseconds;
             if (Id == Globals.Me.CurrentMap)
             {
                 if (mOverlayIntensity != 1)
@@ -1274,7 +1274,7 @@ namespace Intersect.Client.Maps
                     ActionMsgs[n].Y * Options.TileHeight -
                     Options.TileHeight *
                     2 *
-                    (Options.ActionMessageTime - (ActionMsgs[n].TransmittionTimer - Globals.System.GetTimeMs())) /
+                    (Options.ActionMessageTime - (ActionMsgs[n].TransmittionTimer - Timing.Global.Milliseconds)) /
                     Options.ActionMessageTime + ActionMsgs[n].YOffset
                 );
 
@@ -1282,7 +1282,7 @@ namespace Intersect.Client.Maps
                 var textWidth = Graphics.Renderer.MeasureText(ActionMsgs[n].Msg, Graphics.ActionMsgFont, 1).X;
 
                 Color fadingColor = ActionMsgs[n].Clr;
-                double alphaRatio = Math.Abs((float) (Globals.System.GetTimeMs() - ActionMsgs[n].TransmittionTimer) / (float) Options.ActionMessageTime);
+                double alphaRatio = Math.Abs((float) (Timing.Global.Milliseconds - ActionMsgs[n].TransmittionTimer) / (float) Options.ActionMessageTime);
                 alphaRatio = MathHelper.Clamp(alphaRatio, 0.0f, 1.0f);
                 fadingColor.A = (byte) (255 * alphaRatio);
 

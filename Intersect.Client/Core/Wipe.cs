@@ -1,4 +1,5 @@
 ﻿using Intersect.Client.General;
+using Intersect.Utilities;
 
 namespace Intersect.Client.Core
 {
@@ -38,7 +39,7 @@ namespace Intersect.Client.Core
             sCurrentAction = FadeType.In;
             sFadeAmt = Graphics.CurrentView.Width / 2;
             sInvertFadeAmt = 0f;
-            sLastUpdate = Globals.System.GetTimeMs();
+            sLastUpdate = Timing.Global.Milliseconds;
         }
 
         public static void FadeOut(bool alertServerWhenFaded = false, bool fast = false)
@@ -48,7 +49,7 @@ namespace Intersect.Client.Core
             sCurrentAction = FadeType.Out;
             sFadeAmt = 0f;
             sInvertFadeAmt = Graphics.CurrentView.Width / 2;
-            sLastUpdate = Globals.System.GetTimeMs();
+            sLastUpdate = Timing.Global.Milliseconds;
             sAlertServerWhenFaded = alertServerWhenFaded;
         }
 
@@ -78,7 +79,7 @@ namespace Intersect.Client.Core
         public static void Update()
         {
             float maxWidth = Graphics.CurrentView.Width / 2;
-            var amountChange = (Globals.System.GetTimeMs() - sLastUpdate) / sFadeRate * maxWidth;
+            var amountChange = (Timing.Global.Milliseconds - sLastUpdate) / sFadeRate * maxWidth;
 
             if (sCurrentAction == FadeType.In)
             {
@@ -112,7 +113,7 @@ namespace Intersect.Client.Core
                 }
             }
             
-            sLastUpdate = Globals.System.GetTimeMs();
+            sLastUpdate = Timing.Global.Milliseconds;
         }
 
     }

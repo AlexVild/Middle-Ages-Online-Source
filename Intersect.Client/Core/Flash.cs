@@ -1,4 +1,5 @@
 ﻿using Intersect.Client.General;
+using Intersect.Utilities;
 
 namespace Intersect.Client.Core
 {
@@ -35,7 +36,7 @@ namespace Intersect.Client.Core
         {
             sDone = false;
             sDuration = duration;
-            sLastUpdate = Globals.System.GetTimeMs();
+            sLastUpdate = Timing.Global.Milliseconds;
             sBaseColor = color;
             sIntensity = intensity;
             if (sIntensity <= 0)
@@ -53,7 +54,7 @@ namespace Intersect.Client.Core
         {
             if (!sDone)
             {
-                sFadeAmt = sIntensity - (((Globals.System.GetTimeMs() - sLastUpdate) / sDuration) * 255f);
+                sFadeAmt = sIntensity - (((Timing.Global.Milliseconds - sLastUpdate) / sDuration) * 255f);
                 if (sFadeAmt <= 0f)
                 {
                     sFadeAmt = 0f;

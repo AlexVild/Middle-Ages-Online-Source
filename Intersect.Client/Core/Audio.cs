@@ -8,6 +8,7 @@ using Intersect.Client.Framework.File_Management;
 using Intersect.Client.General;
 using Intersect.Compression;
 using Intersect.Logging;
+using Intersect.Utilities;
 
 namespace Intersect.Client.Core
 {
@@ -69,7 +70,7 @@ namespace Intersect.Client.Core
         //Update
         public static void Update()
         {
-            var currentTime = Globals.System.GetTimeMs();
+            var currentTime = Timing.Global.Milliseconds;
             // Do we have a valid fade timer?
             if (sFadeTimer != 0 && sFadeTimer < currentTime)
             {
@@ -165,7 +166,7 @@ namespace Intersect.Client.Core
                     if (!string.Equals(sCurrentSong, filename, StringComparison.CurrentCultureIgnoreCase) || sFadingOut)
                     {
                         sFadeRate = sMyMusic.GetVolume() / fadeout;
-                        sFadeTimer = Globals.System.GetTimeMs() + (long) (sFadeRate);
+                        sFadeTimer = Timing.Global.Milliseconds + (long) (sFadeRate);
                         sFadingOut = true;
                         sQueuedMusic = filename;
                         sQueuedFade = fadein;
@@ -205,7 +206,7 @@ namespace Intersect.Client.Core
             sMyMusic.SetVolume(0, true);
             sMyMusic.IsLooping = loop;
             sFadeRate = (float) 100 / fadein;
-            sFadeTimer = Globals.System.GetTimeMs() + (long) (sFadeRate / 1000) + 1;
+            sFadeTimer = Timing.Global.Milliseconds + (long) (sFadeRate / 1000) + 1;
             sFadingOut = false;
         }
 
@@ -231,7 +232,7 @@ namespace Intersect.Client.Core
             {
                 //Start fadeout
                 sFadeRate = (float) sMyMusic.GetVolume() / fadeout;
-                sFadeTimer = Globals.System.GetTimeMs() + (long) (sFadeRate / 1000);
+                sFadeTimer = Timing.Global.Milliseconds + (long) (sFadeRate / 1000);
                 sFadingOut = true;
             }
         }

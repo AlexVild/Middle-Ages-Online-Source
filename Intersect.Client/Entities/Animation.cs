@@ -7,6 +7,7 @@ using Intersect.Client.Framework.GenericClasses;
 using Intersect.Client.Framework.Graphics;
 using Intersect.Client.General;
 using Intersect.GameObjects;
+using Intersect.Utilities;
 
 namespace Intersect.Client.Entities
 {
@@ -44,7 +45,7 @@ namespace Intersect.Client.Entities
 
         private MapSound mSound;
 
-        private long mStartTime = Globals.System.GetTimeMs();
+        private long mStartTime = Timing.Global.Milliseconds;
 
         private int mUpperFrame;
 
@@ -70,8 +71,8 @@ namespace Intersect.Client.Entities
             {
                 mLowerLoop = animBase.Lower.LoopCount;
                 mUpperLoop = animBase.Upper.LoopCount;
-                mLowerTimer = Globals.System.GetTimeMs() + animBase.Lower.FrameSpeed;
-                mUpperTimer = Globals.System.GetTimeMs() + animBase.Upper.FrameSpeed;
+                mLowerTimer = Timing.Global.Milliseconds + animBase.Lower.FrameSpeed;
+                mUpperTimer = Timing.Global.Milliseconds + animBase.Upper.FrameSpeed;
                 InfiniteLoop = loopForever;
                 AutoRotate = autoRotate;
                 mZDimension = zDimension;
@@ -342,7 +343,7 @@ namespace Intersect.Client.Entities
                 }
 
                 //Calculate Frames
-                var elapsedTime = Globals.System.GetTimeMs() - mStartTime;
+                var elapsedTime = Timing.Global.Milliseconds - mStartTime;
 
                 //Lower
                 if (MyBase.Lower.FrameCount > 0 && MyBase.Lower.FrameSpeed > 0)

@@ -9,6 +9,7 @@ using Intersect.Client.Localization;
 using Intersect.Client.Framework.File_Management;
 using Intersect.Client.Core;
 using Intersect.Configuration;
+using Intersect.Utilities;
 
 namespace Intersect.Client.Interface.Game
 {
@@ -59,7 +60,7 @@ namespace Intersect.Client.Interface.Game
 
         public void Update()
         {
-            var time = Globals.System.GetTimeMs();
+            var time = Timing.Global.Milliseconds;
             if (Globals.Me.MPWarning)
             {
                 Globals.Me.MPWarning = false; // the warning is always in a state of fading out. Each new packet just refreshes the fade
