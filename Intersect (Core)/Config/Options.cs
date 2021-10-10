@@ -202,6 +202,8 @@ namespace Intersect
 
         public static int TileHeight => Instance.MapOpts.TileHeight;
 
+        public static bool DebugAllowMapFades => Instance.MapOpts.DebugAllowMapFades;
+
         public static int EventWatchdogKillThreshhold => Instance.EventKillTheshhold;
 
         public static int MaxChatLength => Instance.ChatOpts.MaxChatLength;

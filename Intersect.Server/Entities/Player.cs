@@ -1685,7 +1685,7 @@ namespace Intersect.Server.Entities
             bool fromWarpEvent = false
         )
         {
-            if (fromWarpEvent)
+            if (fromWarpEvent && Options.DebugAllowMapFades)
             {
                 PacketSender.SendFadePacket(Client, false);
                 PacketSender.SendUpdateFutureWarpPacket(Client, newMapId, newX, newY, newDir);
@@ -1739,7 +1739,11 @@ namespace Intersect.Server.Entities
                     PacketSender.SendEntityPositionToAll(this);
                     PacketSender.SendEntityStats(this);
                 }
-                PacketSender.SendFadePacket(Client, true); // fade in by default - either the player was faded out or was not
+
+                if (Options.DebugAllowMapFades)
+                {
+                    PacketSender.SendFadePacket(Client, true); // fade in by default - either the player was faded out or was not
+                }
             }
         }
 

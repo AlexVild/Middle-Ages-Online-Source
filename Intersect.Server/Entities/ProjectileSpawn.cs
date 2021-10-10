@@ -119,12 +119,21 @@ namespace Intersect.Server.Entities
 
                         if (!Parent.Base.PierceTarget)
                         {
-                            if (Options.Instance.Passability.Passable[(int)targetEntity.Map.ZoneType] && !Parent.Spell.Combat.Friendly)
+                            if (Parent.Spell != null)
                             {
-                                return false;
+                                // Friendly projectiles should never pass through, as they need to take effect.
+                                if (Options.Instance.Passability.Passable[(int)targetEntity.Map.ZoneType] && !Parent.Spell.Combat.Friendly)
+                                {
+                                    return false;
+                                }
+                                else
+                                {
+                                    return true;
+                                }
                             } else
                             {
-                                return true;
+                                // If on a passable map, allow passthrough
+                                return !Options.Instance.Passability.Passable[(int)targetEntity.Map.ZoneType];
                             }
                         }
                     }

@@ -22,6 +22,8 @@ namespace Intersect.Config
 
         public bool ZDimensionVisible;
 
+        public bool DebugAllowMapFades = true;
+
         public LayerOptions Layers = new LayerOptions();
 
         [OnDeserialized]
