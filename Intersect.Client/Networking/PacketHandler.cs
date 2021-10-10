@@ -2144,5 +2144,13 @@ namespace Intersect.Client.Networking
                 Audio.AddGameSound(flashSound, false);
             }
         }
+
+        // Updates the client player to be locked to a resource
+        public void HandlePacket(IPacketSender packetSender, ResourceLockPacket packet)
+        {
+            if (Globals.Me == null) return;
+
+            Globals.Me.resourceLocked = packet.ResourceLock;
+        }
     }
 }

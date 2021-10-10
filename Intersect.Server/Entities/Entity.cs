@@ -1023,6 +1023,11 @@ namespace Intersect.Server.Entities
                     PacketSender.SendEntityDir(this);
                 }
             }
+
+            if (this is Player player && player.resourceLock != null)
+            {
+                player.setResourceLock(false);
+            }
         }
 
         // Change the dimension if the player is on a gateway
@@ -1341,6 +1346,7 @@ namespace Intersect.Server.Entities
             }
 
             var targetPlayer = target as Player;
+            var targetResource = target as Resource;
 
             if (this is Player player && targetPlayer != null)
             {

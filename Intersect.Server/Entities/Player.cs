@@ -82,6 +82,9 @@ namespace Intersect.Server.Entities
 
         public int StatPoints { get; set; }
 
+        [NotMapped]
+        public Resource resourceLock { get; set; }
+
         [Column("Equipment"), JsonIgnore]
         public string EquipmentJson
         {
@@ -570,6 +573,12 @@ namespace Intersect.Server.Entities
                         {
                             PacketSender.SendComboPacket(Client, CurrentCombo, ComboWindow, ComboExp, MaxComboWindow);
                         }
+                    }
+
+                    // Check if the resource we're locked to has died - if so, alert client
+                    if (resourceLock != null && resourceLock.IsDead())
+                    {
+                        setResourceLock(false);
                     }
 
                     base.Update(timeMs);
@@ -1397,6 +1406,7 @@ namespace Intersect.Server.Entities
 
             if (!CanAttack(target, null))
             {
+                setResourceLock(false);
                 return;
             }
 
@@ -1418,6 +1428,7 @@ namespace Intersect.Server.Entities
             {
                 if (resource.IsDead())
                 {
+                    setResourceLock(false);
                     return;
                 }
 
@@ -1436,6 +1447,8 @@ namespace Intersect.Server.Entities
                         PacketSender.SendChatMsg(this, Strings.Combat.resourcereqs, ChatMessageType.Error);
                     }
 
+                    setResourceLock(false);
+
                     return;
                 }
 
@@ -1446,10 +1459,20 @@ namespace Intersect.Server.Entities
                         PacketSender.SendChatMsg(
                             this, Strings.Combat.toolrequired.ToString(Options.ToolTypes[descriptor.Tool]), ChatMessageType.Error
                         );
+                        
+                        setResourceLock(false);
 
                         return;
                     }
                 }
+
+                if (!resource.IsDead())
+                {
+                    setResourceLock(true, resource);
+                }
+            } else
+            {
+                setResourceLock(false);
             }
 
             if (weapon != null)
@@ -5943,6 +5966,8 @@ namespace Intersect.Server.Entities
         {
             lock (EntityLock)
             {
+                setResourceLock(false);
+
                 var oldMap = MapId;
                 base.Move(moveDir, forPlayer, dontUpdate, correction);
 
@@ -6322,6 +6347,16 @@ namespace Intersect.Server.Entities
             {
                 PacketSender.SendGUINotification(Client, GUINotification.LowHP, true);
                 HPWarningSent = true;
+            }
+        }
+
+        public void setResourceLock(bool val, Resource resource = null)
+        {
+            val = (resource != null);
+            if (resourceLock != resource) // change has occured
+            {
+                resourceLock = resource;
+                PacketSender.SendResourceLockPacket(this, val);
             }
         }
 

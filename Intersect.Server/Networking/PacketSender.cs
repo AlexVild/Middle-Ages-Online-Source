@@ -2186,6 +2186,11 @@ namespace Intersect.Server.Networking
         {
             client?.Send(new FlashScreenPacket(dur, col, intensity, soundFile));
         }
+
+        public static void SendResourceLockPacket(Player player, bool resourceLock)
+        {
+            player?.SendPacket(new ResourceLockPacket(resourceLock));
+        }
     }
 
 }

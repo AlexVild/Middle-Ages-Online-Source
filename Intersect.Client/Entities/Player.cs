@@ -77,6 +77,8 @@ namespace Intersect.Client.Entities
 
         public bool UnspentPointsWarning = false;
 
+        public bool resourceLocked = false;
+
         public long CombatTimer { get; set; }
 
         public int ComboWindow { get; set; }
@@ -229,7 +231,7 @@ namespace Intersect.Client.Entities
                     ProcessDirectionalInput();
                 }
 
-                if (Controls.KeyDown(Control.AttackInteract))
+                if (Controls.KeyDown(Control.AttackInteract) || resourceLocked)
                 {
                     if (!Globals.Me.TryAttack())
                     {
