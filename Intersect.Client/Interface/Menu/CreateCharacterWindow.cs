@@ -295,6 +295,7 @@ namespace Intersect.Client.Interface.Menu
 
         public void Init()
         {
+            LoadDecors(ref mAvailableHairs, ref mAvailableEyes, ref mAvailableClothes, ref mAvailableExtras, ref mAvailableBeards, true, true);
             mClassCombobox.DeleteAll();
             var classCount = 0;
             foreach (ClassBase cls in ClassBase.Lookup.Values)
@@ -305,10 +306,8 @@ namespace Intersect.Client.Interface.Menu
                     classCount++;
                 }
             }
-
             LoadClass();
             UpdateDisplay();
-            LoadDecors(ref mAvailableHairs, ref mAvailableEyes, ref mAvailableClothes, ref mAvailableExtras, ref mAvailableBeards, true);
         }
 
         public void Update()
@@ -521,14 +520,14 @@ namespace Intersect.Client.Interface.Menu
                 }
             }
 
-            ResetSprite();
+            ResetSprite(false);
         }
 
-        private void ResetSprite()
+        private void ResetSprite(bool clearSelection)
         {
             mNextSpriteButton.IsHidden = true;
             mPrevSpriteButton.IsHidden = true;
-            LoadDecors(ref mAvailableHairs, ref mAvailableEyes, ref mAvailableClothes, ref mAvailableExtras, ref mAvailableBeards, mMaleChk.IsChecked);
+            LoadDecors(ref mAvailableHairs, ref mAvailableEyes, ref mAvailableClothes, ref mAvailableExtras, ref mAvailableBeards, mMaleChk.IsChecked, clearSelection);
             if (mMaleChk.IsChecked)
             {
                 mBeardSelectionContainer.Show();
@@ -783,7 +782,7 @@ namespace Intersect.Client.Interface.Menu
         {
             mMaleChk.IsChecked = true;
             mFemaleChk.IsChecked = false;
-            ResetSprite();
+            ResetSprite(true);
             UpdateDisplay();
         }
 
@@ -791,7 +790,7 @@ namespace Intersect.Client.Interface.Menu
         {
             mFemaleChk.IsChecked = true;
             mMaleChk.IsChecked = false;
-            ResetSprite();
+            ResetSprite(true);
             UpdateDisplay();
         }
 
@@ -827,7 +826,7 @@ namespace Intersect.Client.Interface.Menu
             }
         }
 
-        private void ClearDecors()
+        private void ClearDecors(bool clearSelection)
         {
             mAvailableHairs.Clear();
             mAvailableHairs.Add("");
@@ -839,18 +838,21 @@ namespace Intersect.Client.Interface.Menu
             mAvailableExtras.Add("");
             mAvailableBeards.Clear();
             mAvailableBeards.Add("");
-            mHairIndex = 0;
-            mEyeIndex = 0;
-            mClothesIndex = 0;
-            mExtrasIndex = 0;
-            mBeardIndex = 0;
-
-            mSelectedDecors = new string[Options.DecorSlots.Count];
+            if (clearSelection)
+            {
+                mHairIndex = 0;
+                mEyeIndex = 0;
+                mClothesIndex = 0;
+                mExtrasIndex = 0;
+                mBeardIndex = 0;
+                
+                mSelectedDecors = new string[Options.DecorSlots.Count];
+            }
         }
 
-        private void LoadDecors(ref List<string> hairs, ref List<string> eyes, ref List<string> clothes, ref List<string> extras, ref List<string> beards, bool isMale)
+        private void LoadDecors(ref List<string> hairs, ref List<string> eyes, ref List<string> clothes, ref List<string> extras, ref List<string> beards, bool isMale, bool clearSelection)
         {
-            ClearDecors();
+            ClearDecors(clearSelection);
 
             // Used to determine when to load a texture
             var genderString = "m";

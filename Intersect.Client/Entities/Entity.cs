@@ -1025,6 +1025,7 @@ namespace Intersect.Client.Entities
                     var equipSlot = Options.EquipmentSlots.IndexOf(paperdoll);
                     var decorSlot = Options.DecorSlots.IndexOf(paperdoll);
 
+                    //Don't render the paperdolls if they have transformed.
                     var notTransformed = sprite == MySprite && Equipment.Length == Options.EquipmentSlots.Count;
 
                     //Check for player
@@ -1038,37 +1039,33 @@ namespace Intersect.Client.Entities
                     {
                         if (equipSlot > -1)
                         {
-                            //Don't render the paperdolls if they have transformed.
-                            if (sprite == MySprite && Equipment.Length == Options.EquipmentSlots.Count)
+                            if (Equipment[equipSlot] != Guid.Empty && this != Globals.Me ||
+                                MyEquipment[equipSlot] < Options.MaxInvItems)
                             {
-                                if (Equipment[equipSlot] != Guid.Empty && this != Globals.Me ||
-                                    MyEquipment[equipSlot] < Options.MaxInvItems)
+                                var itemId = Guid.Empty;
+                                if (this == Globals.Me)
                                 {
-                                    var itemId = Guid.Empty;
-                                    if (this == Globals.Me)
+                                    var slot = MyEquipment[equipSlot];
+                                    if (slot > -1)
                                     {
-                                        var slot = MyEquipment[equipSlot];
-                                        if (slot > -1)
-                                        {
-                                            itemId = Inventory[slot].ItemId;
-                                        }
+                                        itemId = Inventory[slot].ItemId;
+                                    }
+                                }
+                                else
+                                {
+                                    itemId = Equipment[equipSlot];
+                                }
+
+                                var item = ItemBase.Get(itemId);
+                                if (item != null)
+                                {
+                                    if (Gender == 0)
+                                    {
+                                        DrawEquipment(item.MalePaperdoll, renderColor.A);
                                     }
                                     else
                                     {
-                                        itemId = Equipment[equipSlot];
-                                    }
-
-                                    var item = ItemBase.Get(itemId);
-                                    if (item != null)
-                                    {
-                                        if (Gender == 0)
-                                        {
-                                            DrawEquipment(item.MalePaperdoll, renderColor.A);
-                                        }
-                                        else
-                                        {
-                                            DrawEquipment(item.FemalePaperdoll, renderColor.A);
-                                        }
+                                        DrawEquipment(item.FemalePaperdoll, renderColor.A);
                                     }
                                 }
                             }

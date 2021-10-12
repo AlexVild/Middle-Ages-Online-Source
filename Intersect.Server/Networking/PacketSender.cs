@@ -2012,29 +2012,29 @@ namespace Intersect.Server.Networking
         //FriendRequestPacket
         public static void SendFriendRequest(Player player, Player partner)
         {
-            player.SendPacket(new FriendRequestPacket(partner.Id, partner.Name));
+            player?.SendPacket(new FriendRequestPacket(partner.Id, partner.Name));
         }
 
         public static void SendFadePacket(Client client, bool fadeIn)
         {
-            client.Send(new MapFadePacket(fadeIn));
+            client?.Send(new MapFadePacket(fadeIn));
         }
 
         public static void SendUpdateFutureWarpPacket(Client client, Guid mapId, float x, float y, byte dir)
         {
-            client.Send(new UpdateFutureWarpPacket(mapId, x, y, dir));
+            client?.Send(new UpdateFutureWarpPacket(mapId, x, y, dir));
         }
 
         //PasswordResetResultPacket
         public static void SendPasswordResetResult(Client client, bool result)
         {
-            client.Send(new PasswordResetResultPacket(result));
+            client?.Send(new PasswordResetResultPacket(result));
         }
 
         //TargetOverridePacket
         public static void SetPlayerTarget(Player player, Guid targetId)
         {
-            player.SendPacket(new TargetOverridePacket(targetId));
+            player?.SendPacket(new TargetOverridePacket(targetId));
         }
 
         //GuildMsgPacket
