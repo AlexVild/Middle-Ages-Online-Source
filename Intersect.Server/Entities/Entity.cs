@@ -1498,12 +1498,29 @@ namespace Intersect.Server.Entities
             else
             {
                 // Friendly Spell! Do not attack other players/npcs around us.
-                switch (target)
+               /* switch (target)
                 {
                     case Player targetPlayer
-                        when this is Player player && !IsAllyOf(targetPlayer) && this != target:
+                        when this is Player player && (!IsAllyOf(targetPlayer) || (MapInstance.Get(target.MapId)?.ZoneType == MapZones.Safe && MapInstance.Get(MapId)?.ZoneType == MapZones.Safe) ) && this != target:
                     case Npc _ when this is Npc npc && !npc.CanNpcCombat(target, spellBase.Combat.Friendly):
                         return;
+                }*/
+
+                if (target is Player targetPlayer)
+                {
+                    if (! (MapInstance.Get(target.MapId)?.ZoneType == MapZones.Safe && MapInstance.Get(MapId)?.ZoneType == MapZones.Safe) )
+                    {
+                        if (!IsAllyOf(targetPlayer) && this != target)
+                        {
+                            return;
+                        }
+                    }
+                } else if (target is Npc npc)
+                {
+                    if (!npc.CanNpcCombat(target, spellBase.Combat.Friendly))
+                    {
+                        return;
+                    }
                 }
 
                 if (target?.GetType() != GetType())

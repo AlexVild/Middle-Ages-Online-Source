@@ -298,6 +298,7 @@ namespace Intersect.Client.Entities
 
             if (playerPacket.Equipment != null)
             {
+                this.MyDecors = playerPacket.Equipment.Decor;
                 if (this == Globals.Me && playerPacket.Equipment.InventorySlots != null)
                 {
                     this.MyEquipment = playerPacket.Equipment.InventorySlots;

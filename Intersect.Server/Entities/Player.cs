@@ -4524,9 +4524,12 @@ namespace Intersect.Server.Entities
 
             if (target != null && singleTargetSpell)
             {
-                if (spell.Combat.Friendly != IsAllyOf(target))
+                if (! (MapInstance.Get(target.MapId)?.ZoneType == MapZones.Safe && MapInstance.Get(MapId)?.ZoneType == MapZones.Safe) )
                 {
-                    return false;
+                    if (spell.Combat.Friendly != IsAllyOf(target))
+                    {
+                        return false;
+                    }
                 }
             }
 
