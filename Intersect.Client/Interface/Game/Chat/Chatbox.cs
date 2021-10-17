@@ -380,15 +380,15 @@ namespace Intersect.Client.Interface.Game.Chat
                 return;
             }
             
-            if (mLastChatTime > Timing.Global.MillisecondsUtc)
+            if (mLastChatTime > Timing.Global.MillisecondsUTC)
             {
                 ChatboxMsg.AddMessage(new ChatboxMsg(Strings.Chatbox.toofast, Color.Red, ChatMessageType.Error));
-                mLastChatTime = Timing.Global.MillisecondsUtc + Options.MinChatInterval;
+                mLastChatTime = Timing.Global.MillisecondsUTC + Options.MinChatInterval;
 
                 return;
             }
 
-            mLastChatTime = Timing.Global.MillisecondsUtc + Options.MinChatInterval;
+            mLastChatTime = Timing.Global.MillisecondsUTC + Options.MinChatInterval;
 
             Audio.AddGameSound(Options.ChatSendSound, false);
             PacketSender.SendChatMsg(
