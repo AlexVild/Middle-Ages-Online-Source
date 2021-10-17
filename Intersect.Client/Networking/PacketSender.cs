@@ -439,6 +439,11 @@ namespace Intersect.Client.Networking
         {
             Network.SendPacket(new SendQuestPointRequestPacket());
         }
+
+        public static void SendBankSortPacket()
+        {
+            Network.SendPacket(new BankSortPacket());
+        }
     }
 
 }

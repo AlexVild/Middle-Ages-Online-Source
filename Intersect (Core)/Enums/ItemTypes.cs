@@ -21,3 +21,14 @@ namespace Intersect.Enums
     }
 
 }
+
+// SORT Values:
+/*
+ * Currency
+ * Equipment
+ * Bag
+ * Event
+ * Spell
+ * None
+ * Consumable
+ */

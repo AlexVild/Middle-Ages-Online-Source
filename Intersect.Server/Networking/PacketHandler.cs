@@ -2883,6 +2883,19 @@ namespace Intersect.Server.Networking
             player.Warp(packet.NewMapId, packet.X, packet.Y, packet.Dir);
         }
 
+        // BankSortPacket
+        public void HandlePacket(Client client, BankSortPacket packet)
+        {
+            var player = client?.Entity;
+
+            if (player == null || client.IsEditor)
+            {
+                return;
+            }
+
+            player.BankInterface.SortBank();
+        }
+
         // the client is requesting 'crafting' information from the player's player variables collection
         public void HandlePacket(Client client, ClassInfoPacket packet)
         {

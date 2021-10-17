@@ -309,6 +309,10 @@ namespace Intersect.Client.Localization
 
             public static LocalizedString withdrawitemprompt = @"How many/much {00} would you like to withdraw?";
 
+            public static LocalizedString sort = @"Sort";
+
+            public static LocalizedString bankvalue = @"Bank Value: {00}";
+
         }
 
         public struct BanMute
