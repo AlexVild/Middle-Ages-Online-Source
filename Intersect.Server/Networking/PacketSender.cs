@@ -6,6 +6,8 @@ using System.Linq;
 using Intersect.Enums;
 using Intersect.GameObjects;
 using Intersect.GameObjects.Crafting;
+using Intersect.GameObjects.QuestList;
+using Intersect.GameObjects.QuestBoard;
 using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Maps.MapList;
 using Intersect.Logging;
@@ -1666,6 +1668,18 @@ namespace Intersect.Server.Networking
 
                     break;
                 case GameObjectType.Time:
+                    break;
+                case GameObjectType.QuestList:
+                    foreach (var obj in QuestListBase.Lookup)
+                    {
+                        SendGameObject(client, obj.Value, false, false, packetList);
+                    }
+                    break;
+                case GameObjectType.QuestBoard:
+                    foreach (var obj in QuestBoardBase.Lookup)
+                    {
+                        SendGameObject(client, obj.Value, false, false, packetList);
+                    }
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);

@@ -18,6 +18,8 @@ using Intersect.GameObjects.Crafting;
 using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Maps;
 using Intersect.GameObjects.Maps.MapList;
+using Intersect.GameObjects.QuestList;
+using Intersect.GameObjects.QuestBoard;
 using Intersect.Logging;
 using Intersect.Logging.Output;
 using Intersect.Models;
@@ -543,6 +545,14 @@ namespace Intersect.Server.Database
                     break;
                 case GameObjectType.Time:
                     break;
+                case GameObjectType.QuestList:
+                    QuestListBase.Lookup.Clear();
+
+                    break;
+                case GameObjectType.QuestBoard:
+                    QuestBoardBase.Lookup.Clear();
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }
@@ -675,6 +685,20 @@ namespace Intersect.Server.Database
                             break;
                         case GameObjectType.Time:
                             break;
+                       case GameObjectType.QuestList:
+                            foreach (var psw in context.QuestLists)
+                            {
+                                QuestListBase.Lookup.Set(psw.Id, psw);
+                            }
+
+                            break;
+                        case GameObjectType.QuestBoard:
+                            foreach (var psw in context.QuestBoards)
+                            {
+                                QuestBoardBase.Lookup.Set(psw.Id, psw);
+                            }
+
+                            break;
                         default:
                             throw new ArgumentOutOfRangeException(nameof(gameObjectType), gameObjectType, null);
                     }
@@ -758,6 +782,14 @@ namespace Intersect.Server.Database
                     dbObj = new ServerVariableBase(predefinedid);
 
                     break;
+                /*case GameObjectType.QuestList:
+                    dbObj = new QuestListBase(predefinedid);
+
+                    break;
+                case GameObjectType.QuestBoard:
+                    dbObj = new QuestBoardBase(predefinedid);
+
+                    break;*/
                 case GameObjectType.Tileset:
                     dbObj = new TilesetBase(predefinedid);
 
@@ -887,6 +919,18 @@ namespace Intersect.Server.Database
 
                         case GameObjectType.Time:
                             break;
+                        
+                        /*case GameObjectType.QuestList:
+                            context.QuestLists.Add((QuestListBase)dbObj);
+                            QuestListBase.Lookup.Set(dbObj.Id, dbObj);
+
+                            break;
+                        
+                        case GameObjectType.QuestBoard:
+                            context.QuestBoards.Add((QuestBoardBase)dbObj);
+                            QuestBoardBase.Lookup.Set(dbObj.Id, dbObj);
+
+                            break;*/
 
                         default:
                             throw new ArgumentOutOfRangeException(nameof(gameObjectType), gameObjectType, null);
@@ -1006,6 +1050,14 @@ namespace Intersect.Server.Database
                             break;
                         case GameObjectType.Time:
                             break;
+                        /*case GameObjectType.QuestList:
+                            context.QuestLists.Remove((QuestListBase)gameObject);
+
+                            break;
+                        case GameObjectType.QuestBoard:
+                            context.QuestBoards.Remove((QuestBoardBase)gameObject);
+
+                            break;*/
                     }
 
                     if (gameObject.Type.GetLookup().Values.Contains(gameObject))
@@ -1122,6 +1174,14 @@ namespace Intersect.Server.Database
                             break;
                         case GameObjectType.Time:
                             break;
+                        /*case GameObjectType.QuestList:
+                            context.QuestLists.Update((QuestListBase)gameObject);
+
+                            break;
+                        case GameObjectType.QuestBoard:
+                            context.QuestBoards.Update((QuestBoardBase)gameObject);
+
+                            break;*/
                     }
 
                     context.ChangeTracker.DetectChanges();
@@ -1690,6 +1750,8 @@ namespace Intersect.Server.Database
                     MigrateDbSet(context.PlayerVariables, newGameContext.PlayerVariables);
                     MigrateDbSet(context.Tilesets, newGameContext.Tilesets);
                     MigrateDbSet(context.Time, newGameContext.Time);
+                    //MigrateDbSet(context.QuestLists, newGameContext.QuestLists);
+                    //MigrateDbSet(context.QuestBoards, newGameContext.QuestBoards);
                     newGameContext.ChangeTracker.DetectChanges();
                     newGameContext.SaveChanges();
                     newGameContext.Dispose();

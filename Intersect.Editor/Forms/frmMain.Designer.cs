@@ -123,6 +123,8 @@ namespace Intersect.Editor.Forms
             this.menuStrip = new DarkUI.Controls.DarkMenuStrip();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.packageUpdateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.questBoardEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.questListEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.menuStrip.SuspendLayout();
@@ -819,6 +821,8 @@ namespace Intersect.Editor.Forms
             this.shopEditorToolStripMenuItem,
             this.spellEditorToolStripMenuItem,
             this.variableEditorToolStripMenuItem,
+            this.questListEditorToolStripMenuItem,
+            this.questBoardEditorToolStripMenuItem,
             this.timeEditorToolStripMenuItem});
             this.contentEditorsToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             this.contentEditorsToolStripMenuItem.Name = "contentEditorsToolStripMenuItem";
@@ -1003,9 +1007,25 @@ namespace Intersect.Editor.Forms
             // 
             this.packageUpdateToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             this.packageUpdateToolStripMenuItem.Name = "packageUpdateToolStripMenuItem";
-            this.packageUpdateToolStripMenuItem.Size = new System.Drawing.Size(159, 22);
+            this.packageUpdateToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.packageUpdateToolStripMenuItem.Text = "Package Update";
             this.packageUpdateToolStripMenuItem.Click += new System.EventHandler(this.packageUpdateToolStripMenuItem_Click);
+            // 
+            // questBoardEditorToolStripMenuItem
+            // 
+            this.questBoardEditorToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.questBoardEditorToolStripMenuItem.Name = "questBoardEditorToolStripMenuItem";
+            this.questBoardEditorToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+            this.questBoardEditorToolStripMenuItem.Text = "Quest Board Editor";
+            this.questBoardEditorToolStripMenuItem.Click += new System.EventHandler(this.questBoardEditorToolStripMenuItem_Click);
+            // 
+            // questListEditorToolStripMenuItem
+            // 
+            this.questListEditorToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.questListEditorToolStripMenuItem.Name = "questListEditorToolStripMenuItem";
+            this.questListEditorToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+            this.questListEditorToolStripMenuItem.Text = "Quest List Editor";
+            this.questListEditorToolStripMenuItem.Click += new System.EventHandler(this.questListEditorToolStripMenuItem_Click);
             // 
             // FrmMain
             // 
@@ -1126,5 +1146,7 @@ namespace Intersect.Editor.Forms
         private ToolStripMenuItem packageUpdateToolStripMenuItem;
         private ToolStripMenuItem layersToolStripMenuItem;
         private ToolStripMenuItem hideEventsToolStripMenuItem;
+        private ToolStripMenuItem questListEditorToolStripMenuItem;
+        private ToolStripMenuItem questBoardEditorToolStripMenuItem;
     }
 }

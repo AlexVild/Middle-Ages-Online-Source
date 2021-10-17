@@ -631,6 +631,10 @@
     <Compile Include="Migrations\Game\20210923215946_ProjectileGroundedMigration.designer.cs">
       <DependentUpon>20210923215946_ProjectileGroundedMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20211017155639_QuestListMigration.cs" />
+    <Compile Include="Migrations\Game\20211017155639_QuestListMigration.designer.cs">
+      <DependentUpon>20211017155639_QuestListMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

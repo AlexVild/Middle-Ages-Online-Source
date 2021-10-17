@@ -6,6 +6,8 @@ using System.Linq;
 using Intersect.Config;
 using Intersect.GameObjects;
 using Intersect.GameObjects.Crafting;
+using Intersect.GameObjects.QuestList;
+using Intersect.GameObjects.QuestBoard;
 using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Maps.MapList;
 using Intersect.Server.Database.GameData.Migrations;
@@ -90,6 +92,12 @@ namespace Intersect.Server.Database.GameData
 
         //Time
         public DbSet<TimeBase> Time { get; set; }
+
+        //Quest Lists
+        public DbSet<QuestListBase> QuestLists { get; set; }
+
+        //Quest Boards
+        public DbSet<QuestBoardBase> QuestBoards { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

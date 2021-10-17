@@ -78,6 +78,10 @@ namespace Intersect.Editor.Forms
 
         private FrmTime mTimeEditor;
 
+        private FrmQuestList mQuestListEditor;
+
+        private FrmQuestBoard mQuestBoardEditor;
+
         //General Editting Variables
         bool mTMouseDown;
 
@@ -187,6 +191,8 @@ namespace Intersect.Editor.Forms
             spellEditorToolStripMenuItem.Text = Strings.MainForm.spelleditor;
             variableEditorToolStripMenuItem.Text = Strings.MainForm.variableeditor;
             timeEditorToolStripMenuItem.Text = Strings.MainForm.timeeditor;
+            questListEditorToolStripMenuItem.Text = Strings.MainForm.questlisteditor;
+            questBoardEditorToolStripMenuItem.Text = Strings.MainForm.questboardeditor;
 
             toolsToolStripMenuItem.Text = Strings.MainForm.tools;
 
@@ -1630,6 +1636,24 @@ namespace Intersect.Editor.Forms
                         }
 
                         break;
+                    case GameObjectType.QuestList:
+                        if (mQuestListEditor == null || mQuestListEditor.Visible == false)
+                        {
+                            mQuestListEditor = new FrmQuestList();
+                            mQuestListEditor.InitEditor();
+                            mQuestListEditor.Show();
+                        }
+
+                        break;
+                    case GameObjectType.QuestBoard:
+                        if (mQuestBoardEditor == null || mQuestBoardEditor.Visible == false)
+                        {
+                            mQuestBoardEditor = new FrmQuestBoard();
+                            mQuestBoardEditor.InitEditor();
+                            mQuestBoardEditor.Show();
+                        }
+
+                        break;
                     default:
                         return;
                 }
@@ -2023,6 +2047,15 @@ namespace Intersect.Editor.Forms
             return filesProcessed;
         }
 
+        private void questListEditorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PacketSender.SendOpenEditor(GameObjectType.QuestList);
+        }
+
+        private void questBoardEditorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PacketSender.SendOpenEditor(GameObjectType.QuestBoard);
+        }
     }
 
 }

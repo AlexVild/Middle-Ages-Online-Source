@@ -1,6 +1,8 @@
 ﻿using Intersect.Extensions;
 using Intersect.GameObjects;
 using Intersect.GameObjects.Crafting;
+using Intersect.GameObjects.QuestList;
+using Intersect.GameObjects.QuestBoard;
 using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Maps;
 
@@ -58,8 +60,14 @@ namespace Intersect.Enums
         [GameObjectInfo(typeof(TilesetBase), "tilesets")]
         Tileset,
 
-        [GameObjectInfo(typeof(TimeBase), "")] Time
+        [GameObjectInfo(typeof(TimeBase), "")] 
+        Time,
 
+        [GameObjectInfo(typeof(QuestListBase), "quest_lists")]
+        QuestList,
+
+        [GameObjectInfo(typeof(QuestBoardBase), "quest_boards")]
+        QuestBoard,
     }
 
 }

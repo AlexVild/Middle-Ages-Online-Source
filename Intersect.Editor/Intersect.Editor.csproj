@@ -130,6 +130,18 @@
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_CreateGuild.Designer.cs">
       <DependentUpon>EventCommand_CreateGuild.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Editors\frmQuestBoard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\frmQuestBoard.Designer.cs">
+      <DependentUpon>frmQuestBoard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Editors\frmQuestList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\frmQuestList.Designer.cs">
+      <DependentUpon>frmQuestList.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\frmUpdate.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -675,6 +687,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_FlashScreen.resx">
       <DependentUpon>EventCommand_FlashScreen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\frmQuestBoard.resx">
+      <DependentUpon>frmQuestBoard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\frmQuestList.resx">
+      <DependentUpon>frmQuestList.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Shaders\radialgradient_editor.xnb" />
   </ItemGroup>
