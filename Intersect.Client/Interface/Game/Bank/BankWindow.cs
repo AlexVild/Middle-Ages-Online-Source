@@ -55,7 +55,8 @@ namespace Intersect.Client.Interface.Game.Bank
 
             mValueLabel = new Label(mBankWindow, "ValueLabel");
             mValueLabel.SetText(Strings.Bank.bankvalue.ToString(Strings.FormatQuantityAbbreviated(Globals.BankValue)));
-
+            mValueLabel.SetToolTipText(Strings.Bank.bankvalue.ToString(Globals.BankValue.ToString("N0").Replace(",", Strings.Numbers.comma)));
+            
             mBankWindow.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
             InitItemContainer();
         }
@@ -83,6 +84,7 @@ namespace Intersect.Client.Interface.Game.Bank
             }
 
             mValueLabel.SetText(Strings.Bank.bankvalue.ToString(Strings.FormatQuantityAbbreviated(Globals.BankValue)));
+            mValueLabel.SetToolTipText(Strings.Bank.bankvaluefull.ToString(Globals.BankValue.ToString("N0").Replace(",", Strings.Numbers.comma)));
             X = mBankWindow.X;
             Y = mBankWindow.Y;
             for (var i = 0; i < Globals.BankSlots; i++)

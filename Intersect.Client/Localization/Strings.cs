@@ -313,6 +313,8 @@ namespace Intersect.Client.Localization
 
             public static LocalizedString bankvalue = @"Bank Value: {00}";
 
+            public static LocalizedString bankvaluefull = @"{00} Gold Coins";
+
         }
 
         public struct BanMute
