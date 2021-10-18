@@ -8,7 +8,7 @@ namespace Intersect.Server.Migrations.Game
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Quest_Boards",
+                name: "QuestBoards",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),
@@ -23,7 +23,7 @@ namespace Intersect.Server.Migrations.Game
                 });
 
             migrationBuilder.CreateTable(
-                name: "Quest_Lists",
+                name: "QuestLists",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(nullable: false),

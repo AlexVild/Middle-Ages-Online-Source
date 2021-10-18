@@ -693,7 +693,7 @@ namespace Intersect.Server.Database
 
                             break;
                         case GameObjectType.QuestBoard:
-                            foreach (var psw in context.QuestBoards)
+                           foreach (var psw in context.QuestBoards)
                             {
                                 QuestBoardBase.Lookup.Set(psw.Id, psw);
                             }
@@ -782,14 +782,14 @@ namespace Intersect.Server.Database
                     dbObj = new ServerVariableBase(predefinedid);
 
                     break;
-                /*case GameObjectType.QuestList:
+                case GameObjectType.QuestList:
                     dbObj = new QuestListBase(predefinedid);
 
                     break;
                 case GameObjectType.QuestBoard:
                     dbObj = new QuestBoardBase(predefinedid);
 
-                    break;*/
+                    break;
                 case GameObjectType.Tileset:
                     dbObj = new TilesetBase(predefinedid);
 
