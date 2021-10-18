@@ -121,6 +121,7 @@
     <Compile Include="Interface\Game\DescriptionWindows\Components\HeaderComponent.cs" />
     <Compile Include="Interface\Game\DescriptionWindows\Components\RowContainerComponent.cs" />
     <Compile Include="Interface\Game\DescriptionWindows\DescriptionWindowBase.cs" />
+    <Compile Include="Interface\Game\DescriptionWindows\SpellDescriptionWindow.cs" />
     <Compile Include="Interface\Game\DescriptionWindows\ItemDescriptionWindow.cs" />
 >>>>>>> Create a brand new Item Description Window with a lot of new functionality.
     <Compile Include="Interface\Game\GuildWindow.cs" />
@@ -204,7 +205,6 @@
     <Compile Include="Interface\Game\QuestOfferWindow.cs" />
     <Compile Include="Interface\Game\QuestsWindow.cs" />
     <Compile Include="Interface\Game\Shop\ShopWindow.cs" />
-    <Compile Include="Interface\Game\SpellDescWindow.cs" />
     <Compile Include="Interface\Game\Spells\SpellsWindow.cs" />
     <Compile Include="Interface\Game\Trades\TradingWindow.cs" />
     <Compile Include="Interface\Interface.cs" />
