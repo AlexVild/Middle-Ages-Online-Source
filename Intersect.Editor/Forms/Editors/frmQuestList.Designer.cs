@@ -1,7 +1,7 @@
 ﻿
 namespace Intersect.Editor.Forms.Editors
 {
-    partial class FrmQuestList
+    partial class frmQuestList
     {
         /// <summary>
         /// Required designer variable.
@@ -30,7 +30,7 @@ namespace Intersect.Editor.Forms.Editors
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmQuestList));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmQuestList));
             this.grpQuestList = new DarkUI.Controls.DarkGroupBox();
             this.btnClearSearch = new DarkUI.Controls.DarkButton();
             this.txtSearch = new DarkUI.Controls.DarkTextBox();
@@ -53,10 +53,24 @@ namespace Intersect.Editor.Forms.Editors
             this.btnCancel = new DarkUI.Controls.DarkButton();
             this.grpQuestListReqs = new DarkUI.Controls.DarkGroupBox();
             this.btnEditRequirements = new DarkUI.Controls.DarkButton();
+            this.toolStrip = new DarkUI.Controls.DarkToolStrip();
+            this.toolStripItemNew = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripItemDelete = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.btnAlphabetical = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripItemCopy = new System.Windows.Forms.ToolStripButton();
+            this.toolStripItemPaste = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
+            this.pnlContainer = new System.Windows.Forms.Panel();
             this.grpQuestList.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             this.grpQuests.SuspendLayout();
             this.grpQuestListReqs.SuspendLayout();
+            this.toolStrip.SuspendLayout();
+            this.pnlContainer.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpQuestList
@@ -67,9 +81,9 @@ namespace Intersect.Editor.Forms.Editors
             this.grpQuestList.Controls.Add(this.txtSearch);
             this.grpQuestList.Controls.Add(this.lstGameObjects);
             this.grpQuestList.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpQuestList.Location = new System.Drawing.Point(12, 12);
+            this.grpQuestList.Location = new System.Drawing.Point(12, 28);
             this.grpQuestList.Name = "grpQuestList";
-            this.grpQuestList.Size = new System.Drawing.Size(202, 417);
+            this.grpQuestList.Size = new System.Drawing.Size(202, 401);
             this.grpQuestList.TabIndex = 18;
             this.grpQuestList.TabStop = false;
             this.grpQuestList.Text = "Quest Lists";
@@ -82,6 +96,7 @@ namespace Intersect.Editor.Forms.Editors
             this.btnClearSearch.Size = new System.Drawing.Size(17, 17);
             this.btnClearSearch.TabIndex = 19;
             this.btnClearSearch.Text = "X";
+            this.btnClearSearch.Click += new System.EventHandler(this.btnClearSearch_Click);
             // 
             // txtSearch
             // 
@@ -93,6 +108,9 @@ namespace Intersect.Editor.Forms.Editors
             this.txtSearch.Size = new System.Drawing.Size(166, 20);
             this.txtSearch.TabIndex = 18;
             this.txtSearch.Text = "Search...";
+            this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
+            this.txtSearch.Enter += new System.EventHandler(this.txtSearch_Enter);
+            this.txtSearch.Leave += new System.EventHandler(this.txtSearch_Leave);
             // 
             // lstGameObjects
             // 
@@ -106,7 +124,7 @@ namespace Intersect.Editor.Forms.Editors
             this.lstGameObjects.Location = new System.Drawing.Point(6, 46);
             this.lstGameObjects.Name = "lstGameObjects";
             this.lstGameObjects.SelectedImageIndex = 0;
-            this.lstGameObjects.Size = new System.Drawing.Size(190, 365);
+            this.lstGameObjects.Size = new System.Drawing.Size(190, 349);
             this.lstGameObjects.TabIndex = 2;
             // 
             // grpGeneral
@@ -119,7 +137,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpGeneral.Controls.Add(this.lblName);
             this.grpGeneral.Controls.Add(this.txtName);
             this.grpGeneral.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpGeneral.Location = new System.Drawing.Point(262, 26);
+            this.grpGeneral.Location = new System.Drawing.Point(59, 8);
             this.grpGeneral.Name = "grpGeneral";
             this.grpGeneral.Size = new System.Drawing.Size(203, 76);
             this.grpGeneral.TabIndex = 35;
@@ -134,6 +152,7 @@ namespace Intersect.Editor.Forms.Editors
             this.btnAddFolder.Size = new System.Drawing.Size(18, 21);
             this.btnAddFolder.TabIndex = 23;
             this.btnAddFolder.Text = "+";
+            this.btnAddFolder.Click += new System.EventHandler(this.btnAddFolder_Click);
             // 
             // lblFolder
             // 
@@ -163,6 +182,7 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbFolder.TabIndex = 21;
             this.cmbFolder.Text = null;
             this.cmbFolder.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbFolder.SelectedIndexChanged += new System.EventHandler(this.cmbFolder_SelectedIndexChanged);
             // 
             // lblName
             // 
@@ -182,6 +202,7 @@ namespace Intersect.Editor.Forms.Editors
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(140, 20);
             this.txtName.TabIndex = 18;
+            this.txtName.TextChanged += new System.EventHandler(this.txtName_TextChanged);
             // 
             // grpQuests
             // 
@@ -195,7 +216,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpQuests.Controls.Add(this.lblAddQuest);
             this.grpQuests.Controls.Add(this.lstQuests);
             this.grpQuests.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpQuests.Location = new System.Drawing.Point(262, 119);
+            this.grpQuests.Location = new System.Drawing.Point(59, 90);
             this.grpQuests.Name = "grpQuests";
             this.grpQuests.Size = new System.Drawing.Size(203, 310);
             this.grpQuests.TabIndex = 36;
@@ -210,6 +231,7 @@ namespace Intersect.Editor.Forms.Editors
             this.btnRemoveQuest.Size = new System.Drawing.Size(189, 23);
             this.btnRemoveQuest.TabIndex = 53;
             this.btnRemoveQuest.Text = "Remove Selected";
+            this.btnRemoveQuest.Click += new System.EventHandler(this.btnRemoveQuest_Click);
             // 
             // btnQuestDown
             // 
@@ -219,6 +241,7 @@ namespace Intersect.Editor.Forms.Editors
             this.btnQuestDown.Size = new System.Drawing.Size(22, 40);
             this.btnQuestDown.TabIndex = 52;
             this.btnQuestDown.Text = "▼";
+            this.btnQuestDown.Click += new System.EventHandler(this.btnQuestDown_Click);
             // 
             // btnQuestUp
             // 
@@ -228,6 +251,7 @@ namespace Intersect.Editor.Forms.Editors
             this.btnQuestUp.Size = new System.Drawing.Size(22, 40);
             this.btnQuestUp.TabIndex = 51;
             this.btnQuestUp.Text = "▲";
+            this.btnQuestUp.Click += new System.EventHandler(this.btnQuestUp_Click);
             // 
             // btnAddQuest
             // 
@@ -237,6 +261,7 @@ namespace Intersect.Editor.Forms.Editors
             this.btnAddQuest.Size = new System.Drawing.Size(189, 23);
             this.btnAddQuest.TabIndex = 50;
             this.btnAddQuest.Text = "Add Selected";
+            this.btnAddQuest.Click += new System.EventHandler(this.btnAddQuest_Click);
             // 
             // cmbQuests
             // 
@@ -280,22 +305,24 @@ namespace Intersect.Editor.Forms.Editors
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(135, 513);
+            this.btnSave.Location = new System.Drawing.Point(135, 524);
             this.btnSave.Name = "btnSave";
             this.btnSave.Padding = new System.Windows.Forms.Padding(5);
             this.btnSave.Size = new System.Drawing.Size(169, 27);
             this.btnSave.TabIndex = 37;
             this.btnSave.Text = "Save";
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(310, 513);
+            this.btnCancel.Location = new System.Drawing.Point(310, 524);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Padding = new System.Windows.Forms.Padding(5);
             this.btnCancel.Size = new System.Drawing.Size(172, 27);
             this.btnCancel.TabIndex = 38;
             this.btnCancel.Text = "Cancel";
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // grpQuestListReqs
             // 
@@ -303,7 +330,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpQuestListReqs.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.grpQuestListReqs.Controls.Add(this.btnEditRequirements);
             this.grpQuestListReqs.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpQuestListReqs.Location = new System.Drawing.Point(211, 444);
+            this.grpQuestListReqs.Location = new System.Drawing.Point(16, 415);
             this.grpQuestListReqs.Name = "grpQuestListReqs";
             this.grpQuestListReqs.Size = new System.Drawing.Size(271, 52);
             this.grpQuestListReqs.TabIndex = 39;
@@ -318,23 +345,156 @@ namespace Intersect.Editor.Forms.Editors
             this.btnEditRequirements.Size = new System.Drawing.Size(255, 23);
             this.btnEditRequirements.TabIndex = 0;
             this.btnEditRequirements.Text = "Edit Quest List Requirements";
+            this.btnEditRequirements.Click += new System.EventHandler(this.btnEditRequirements_Click);
             // 
-            // FrmQuestList
+            // toolStrip
+            // 
+            this.toolStrip.AutoSize = false;
+            this.toolStrip.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.toolStrip.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripItemNew,
+            this.toolStripSeparator1,
+            this.toolStripItemDelete,
+            this.toolStripSeparator2,
+            this.btnAlphabetical,
+            this.toolStripSeparator4,
+            this.toolStripItemCopy,
+            this.toolStripItemPaste,
+            this.toolStripSeparator3,
+            this.toolStripItemUndo});
+            this.toolStrip.Location = new System.Drawing.Point(0, 0);
+            this.toolStrip.Name = "toolStrip";
+            this.toolStrip.Padding = new System.Windows.Forms.Padding(5, 0, 1, 0);
+            this.toolStrip.Size = new System.Drawing.Size(535, 25);
+            this.toolStrip.TabIndex = 44;
+            this.toolStrip.Text = "toolStrip1";
+            // 
+            // toolStripItemNew
+            // 
+            this.toolStripItemNew.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripItemNew.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.toolStripItemNew.Image = ((System.Drawing.Image)(resources.GetObject("toolStripItemNew.Image")));
+            this.toolStripItemNew.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripItemNew.Name = "toolStripItemNew";
+            this.toolStripItemNew.Size = new System.Drawing.Size(23, 22);
+            this.toolStripItemNew.Text = "New";
+            this.toolStripItemNew.Click += new System.EventHandler(this.toolStripItemNew_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.toolStripSeparator1.Margin = new System.Windows.Forms.Padding(0, 0, 2, 0);
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripItemDelete
+            // 
+            this.toolStripItemDelete.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripItemDelete.Enabled = false;
+            this.toolStripItemDelete.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.toolStripItemDelete.Image = ((System.Drawing.Image)(resources.GetObject("toolStripItemDelete.Image")));
+            this.toolStripItemDelete.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripItemDelete.Name = "toolStripItemDelete";
+            this.toolStripItemDelete.Size = new System.Drawing.Size(23, 22);
+            this.toolStripItemDelete.Text = "Delete";
+            this.toolStripItemDelete.Click += new System.EventHandler(this.toolStripItemDelete_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.toolStripSeparator2.Margin = new System.Windows.Forms.Padding(0, 0, 2, 0);
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            // 
+            // btnAlphabetical
+            // 
+            this.btnAlphabetical.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnAlphabetical.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.btnAlphabetical.Image = ((System.Drawing.Image)(resources.GetObject("btnAlphabetical.Image")));
+            this.btnAlphabetical.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnAlphabetical.Name = "btnAlphabetical";
+            this.btnAlphabetical.Size = new System.Drawing.Size(23, 22);
+            this.btnAlphabetical.Text = "Order Chronologically";
+            this.btnAlphabetical.Click += new System.EventHandler(this.btnAlphabetical_Click);
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.toolStripSeparator4.Margin = new System.Windows.Forms.Padding(0, 0, 2, 0);
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripItemCopy
+            // 
+            this.toolStripItemCopy.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripItemCopy.Enabled = false;
+            this.toolStripItemCopy.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.toolStripItemCopy.Image = ((System.Drawing.Image)(resources.GetObject("toolStripItemCopy.Image")));
+            this.toolStripItemCopy.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripItemCopy.Name = "toolStripItemCopy";
+            this.toolStripItemCopy.Size = new System.Drawing.Size(23, 22);
+            this.toolStripItemCopy.Text = "Copy";
+            this.toolStripItemCopy.Click += new System.EventHandler(this.toolStripItemCopy_Click);
+            // 
+            // toolStripItemPaste
+            // 
+            this.toolStripItemPaste.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripItemPaste.Enabled = false;
+            this.toolStripItemPaste.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.toolStripItemPaste.Image = ((System.Drawing.Image)(resources.GetObject("toolStripItemPaste.Image")));
+            this.toolStripItemPaste.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripItemPaste.Name = "toolStripItemPaste";
+            this.toolStripItemPaste.Size = new System.Drawing.Size(23, 22);
+            this.toolStripItemPaste.Text = "Paste";
+            this.toolStripItemPaste.Click += new System.EventHandler(this.toolStripItemPaste_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.toolStripSeparator3.Margin = new System.Windows.Forms.Padding(0, 0, 2, 0);
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripItemUndo
+            // 
+            this.toolStripItemUndo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripItemUndo.Enabled = false;
+            this.toolStripItemUndo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.toolStripItemUndo.Image = ((System.Drawing.Image)(resources.GetObject("toolStripItemUndo.Image")));
+            this.toolStripItemUndo.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripItemUndo.Name = "toolStripItemUndo";
+            this.toolStripItemUndo.Size = new System.Drawing.Size(23, 22);
+            this.toolStripItemUndo.Text = "Undo";
+            this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
+            // 
+            // pnlContainer
+            // 
+            this.pnlContainer.Controls.Add(this.grpGeneral);
+            this.pnlContainer.Controls.Add(this.grpQuests);
+            this.pnlContainer.Controls.Add(this.grpQuestListReqs);
+            this.pnlContainer.Location = new System.Drawing.Point(220, 28);
+            this.pnlContainer.Name = "pnlContainer";
+            this.pnlContainer.Size = new System.Drawing.Size(303, 479);
+            this.pnlContainer.TabIndex = 45;
+            this.pnlContainer.Visible = false;
+            // 
+            // frmQuestList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.ClientSize = new System.Drawing.Size(495, 552);
-            this.Controls.Add(this.grpQuestListReqs);
+            this.ClientSize = new System.Drawing.Size(535, 563);
+            this.Controls.Add(this.pnlContainer);
+            this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnSave);
-            this.Controls.Add(this.grpQuests);
-            this.Controls.Add(this.grpGeneral);
             this.Controls.Add(this.grpQuestList);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "FrmQuestList";
+            this.Name = "frmQuestList";
             this.Text = "Quest Lists";
+            this.Load += new System.EventHandler(this.frmQuestList_Load);
             this.grpQuestList.ResumeLayout(false);
             this.grpQuestList.PerformLayout();
             this.grpGeneral.ResumeLayout(false);
@@ -342,6 +502,9 @@ namespace Intersect.Editor.Forms.Editors
             this.grpQuests.ResumeLayout(false);
             this.grpQuests.PerformLayout();
             this.grpQuestListReqs.ResumeLayout(false);
+            this.toolStrip.ResumeLayout(false);
+            this.toolStrip.PerformLayout();
+            this.pnlContainer.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -370,5 +533,17 @@ namespace Intersect.Editor.Forms.Editors
         private DarkUI.Controls.DarkButton btnCancel;
         private DarkUI.Controls.DarkGroupBox grpQuestListReqs;
         private DarkUI.Controls.DarkButton btnEditRequirements;
+        private DarkUI.Controls.DarkToolStrip toolStrip;
+        private System.Windows.Forms.ToolStripButton toolStripItemNew;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripButton toolStripItemDelete;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        public System.Windows.Forms.ToolStripButton toolStripItemCopy;
+        public System.Windows.Forms.ToolStripButton toolStripItemPaste;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        public System.Windows.Forms.ToolStripButton toolStripItemUndo;
+        private System.Windows.Forms.ToolStripButton btnAlphabetical;
+        private System.Windows.Forms.Panel pnlContainer;
     }
 }

@@ -9,6 +9,8 @@ using Intersect.Editor.Maps;
 using Intersect.Enums;
 using Intersect.GameObjects;
 using Intersect.GameObjects.Crafting;
+using Intersect.GameObjects.QuestList;
+using Intersect.GameObjects.QuestBoard;
 using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Maps;
 using Intersect.GameObjects.Maps.MapList;
@@ -616,6 +618,32 @@ namespace Intersect.Editor.Networking
                         GameContentManager.LoadTilesets();
                     }
 
+                    break;
+                case GameObjectType.QuestList:
+                    if (deleted)
+                    {
+                        var ql = QuestListBase.Get(id);
+                        ql.Delete();
+                    }
+                    else
+                    {
+                        var ql = new QuestListBase(id);
+                        ql.Load(json);
+                        QuestListBase.Lookup.Set(id, ql);
+                    }
+                    break;
+                case GameObjectType.QuestBoard:
+                    if (deleted)
+                    {
+                        var qb = QuestBoardBase.Get(id);
+                        qb.Delete();
+                    }
+                    else
+                    {
+                        var qb = new QuestBoardBase(id);
+                        qb.Load(json);
+                        QuestBoardBase.Lookup.Set(id, qb);
+                    }
                     break;
 
                 default:

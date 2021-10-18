@@ -31,6 +31,8 @@ namespace Intersect.Editor.Forms.Editors
 
         NpcCanBeAttacked,
 
+        QuestList,
+
     }
 
     public partial class FrmDynamicRequirements : Form
@@ -96,6 +98,10 @@ namespace Intersect.Editor.Forms.Editors
                 case RequirementType.NpcCanBeAttacked:
                     lblInstructions.Text = Strings.DynamicRequirements.instructionsnpccanbeattacked;
 
+                    break;
+                case RequirementType.QuestList:
+                    lblInstructions.Text = Strings.DynamicRequirements.instructionsnpccanbeattacked;
+                    
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);

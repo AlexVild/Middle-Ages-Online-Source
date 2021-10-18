@@ -1238,6 +1238,9 @@ Tick timer saved in server config.json.";
             public static LocalizedString instructionsspell =
                 @"Below are condition lists. If conditions are met on any of the lists then the player can use cast the spell.";
 
+            public static LocalizedString questlist =
+                @"Below are condition lists. If conditions are met on any of the lists then the player can view this list of quests on a quest board.";
+
             public static LocalizedString listname = @"Desc:";
 
             public static LocalizedString removecondition = @"Remove Condition";
@@ -3508,9 +3511,9 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString view = @"View";
 
-            public static LocalizedString questlisteditor = @"Quest Lists";
+            public static LocalizedString questlisteditor = @"Quest List Editor";
 
-            public static LocalizedString questboardeditor = @"Quest Boards";
+            public static LocalizedString questboardeditor = @"Quest Board Editor";
 
         }
 
@@ -4186,6 +4189,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString quests = @"Quests";
 
+            public static LocalizedString questlists = @"Quest Lists";
+
             public static LocalizedString quit = @"Can Quit Quest?";
 
             public static LocalizedString removetask = @"Remove Task";
@@ -4227,6 +4232,12 @@ Tick timer saved in server config.json.";
             public static LocalizedString donotshowunlessreqsmet = @"Do not show in quest log unless requirements are met";
 
             public static LocalizedString order = @"Quest Log Sort Order:";
+
+            public static LocalizedString add = @"Add Selected";
+
+            public static LocalizedString remove = @"Remove Selected";
+
+            public static LocalizedString addquestlabel = @"Add quests to list:";
         }
 
         public struct ResourceEditor
@@ -5016,6 +5027,12 @@ Negative values for time to flow backwards.";
             public static LocalizedString searchplaceholder = @"Search...";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString undotitle = @"Undo Quest List Change";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString undoprompt = @"Undo last change? This cannot be reverted.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString quests = @"Quests";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -5029,6 +5046,15 @@ Negative values for time to flow backwards.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString remove = @"Remove Selected";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString sortalphabetically = @"Order Alphabetically";
+            
+            public static LocalizedString copy = @"Copy Quest List";
+
+            public static LocalizedString paste = @"Copy Quest List";
+
+            public static LocalizedString undo = @"Undo";
         }
 
         public struct QuestBoardEditor
@@ -5085,6 +5111,15 @@ Negative values for time to flow backwards.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString remove = @"Remove Selected";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString sortalphabetically = @"Order Alphabetically";
+
+            public static LocalizedString copy = @"Copy Quest List";
+
+            public static LocalizedString paste = @"Copy Quest List";
+
+            public static LocalizedString undo = @"Undo";
         }
     }
 

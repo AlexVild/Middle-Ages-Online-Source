@@ -2,6 +2,8 @@ using Intersect.Enums;
 using Intersect.ErrorHandling;
 using Intersect.GameObjects;
 using Intersect.GameObjects.Crafting;
+using Intersect.GameObjects.QuestList;
+using Intersect.GameObjects.QuestBoard;
 using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Maps;
 using Intersect.GameObjects.Maps.MapList;
@@ -3905,6 +3907,16 @@ namespace Intersect.Server.Networking
                     break;
 
                 case GameObjectType.Time:
+                    break;
+                
+                case GameObjectType.QuestList:
+                    obj = DatabaseObject<QuestListBase>.Lookup.Get(id);
+
+                    break;
+                
+                case GameObjectType.QuestBoard:
+                    obj = DatabaseObject<QuestBoardBase>.Lookup.Get(id);
+
                     break;
 
                 default:

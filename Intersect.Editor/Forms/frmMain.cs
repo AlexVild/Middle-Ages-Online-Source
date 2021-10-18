@@ -78,7 +78,7 @@ namespace Intersect.Editor.Forms
 
         private FrmTime mTimeEditor;
 
-        private FrmQuestList mQuestListEditor;
+        private frmQuestList mQuestListEditor;
 
         private FrmQuestBoard mQuestBoardEditor;
 
@@ -1639,7 +1639,7 @@ namespace Intersect.Editor.Forms
                     case GameObjectType.QuestList:
                         if (mQuestListEditor == null || mQuestListEditor.Visible == false)
                         {
-                            mQuestListEditor = new FrmQuestList();
+                            mQuestListEditor = new frmQuestList();
                             mQuestListEditor.InitEditor();
                             mQuestListEditor.Show();
                         }

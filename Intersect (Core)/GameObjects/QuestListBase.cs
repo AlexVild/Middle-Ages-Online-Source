@@ -15,7 +15,7 @@ namespace Intersect.GameObjects.QuestList
     public class QuestListBase : DatabaseObject<QuestListBase>, IFolderable
     {
         [NotMapped]
-        public List<QuestBase> Quests = new List<QuestBase>();
+        public DbList<QuestBase> Quests = new DbList<QuestBase>();
 
         [NotMapped]
         public ConditionLists Requirements { get; set; } = new ConditionLists();
@@ -37,7 +37,7 @@ namespace Intersect.GameObjects.QuestList
         public string QuestsJson
         {
             get => JsonConvert.SerializeObject(Quests);
-            set => Quests = JsonConvert.DeserializeObject<List<QuestBase>>(value);
+            set => Quests = JsonConvert.DeserializeObject<DbList<QuestBase>>(value);
         }
 
         //Requirements - Store with json
