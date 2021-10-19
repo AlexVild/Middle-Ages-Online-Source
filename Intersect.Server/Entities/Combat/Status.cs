@@ -55,8 +55,8 @@ namespace Intersect.Server.Entities.Combat
             Type = type;
             Data = data;
 
-            // Handle Player specific stuff, such as interrupting spellcasts 
-            var tenacity = 0f;
+            // Handle Player specific stuff such as retrieving their tenacity.
+            var tenacity = 0.0;
             if (en is Player player)
             {
                 // Get our player's Tenacity stat!
