@@ -11,6 +11,7 @@ using Amib.Threading;
 using Intersect.Enums;
 using Intersect.GameObjects;
 using Intersect.GameObjects.Crafting;
+using Intersect.GameObjects.QuestBoard;
 using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Events.Commands;
 using Intersect.GameObjects.Maps;
@@ -5056,6 +5057,31 @@ namespace Intersect.Server.Entities
             }
         }
 
+        public bool OpenQuestBoard(QuestBoardBase questBoard)
+        {
+            if (IsBusy())
+            {
+                return false;
+            }
+
+            if (questBoard != null)
+            {
+                QuestBoardId = questBoard.Id;
+                PacketSender.SendOpenQuestBoard(this, questBoard);
+            }
+
+            return true;
+        }
+
+        public void CloseQuestBoard()
+        {
+            if (QuestBoardId != Guid.Empty && QuestBoardId == Guid.Empty)
+            {
+                QuestBoardId = Guid.Empty;
+                PacketSender.SendCloseQuestBoard(this);
+            }
+        }
+
         public Quest FindQuest(Guid questId)
         {
             foreach (var quest in Quests)
@@ -6463,6 +6489,10 @@ namespace Intersect.Server.Entities
 
         [NotMapped][JsonIgnore] public BankInterface BankInterface;
 
+        #endregion
+
+        #region Quest Boards
+        [NotMapped, JsonIgnore] public Guid QuestBoardId = Guid.Empty;
         #endregion
 
         #region Item Cooldowns

@@ -377,6 +377,7 @@
     <Compile Include="Network\Packets\Client\CloseBagPacket.cs" />
     <Compile Include="Network\Packets\Client\CloseBankPacket.cs" />
     <Compile Include="Network\Packets\Client\CloseCraftingPacket.cs" />
+    <Compile Include="Network\Packets\Client\CloseQuestBoardPacket.cs" />
     <Compile Include="Network\Packets\Client\CloseShopPacket.cs" />
     <Compile Include="Network\Packets\Client\CraftItemPacket.cs" />
     <Compile Include="Network\Packets\Client\CreateAccountPacket.cs" />
@@ -418,6 +419,7 @@
     <Compile Include="Network\Packets\Server\AnnouncementPacket.cs" />
     <Compile Include="Network\Packets\Server\CancelCastPacket.cs" />
     <Compile Include="Network\Packets\Server\PlayAnimationPackets.cs" />
+    <Compile Include="Network\Packets\Server\QuestBoardPacket.cs" />
     <Compile Include="Network\Packets\Server\QuestPointPacket.cs" />
     <Compile Include="Network\Packets\Server\ResourceLockPacket.cs" />
     <Compile Include="Network\Packets\Server\UpdateFutureWarpPacket.cs" />

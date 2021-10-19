@@ -50,6 +50,8 @@ namespace Intersect.Client.Interface.Game
         private PictureWindow mPictureWindow;
 
         private QuestOfferWindow mQuestOfferWindow;
+        
+        private QuestBoardWindow mQuestBoardWindow;
 
         private ShopWindow mShopWindow;
 
@@ -62,6 +64,8 @@ namespace Intersect.Client.Interface.Game
         private bool mShouldCloseBank;
 
         private bool mShouldCloseCraftingTable;
+        
+        private bool mShouldCloseQuestBoard;
 
         private bool mShouldCloseShop;
 
@@ -78,6 +82,8 @@ namespace Intersect.Client.Interface.Game
         private bool mShouldOpenShop;
 
         private bool mShouldOpenTrading;
+        
+        private bool mShouldOpenQuestBoard;
 
         private bool mShouldUpdateQuestLog = true;
 
@@ -273,6 +279,19 @@ namespace Intersect.Client.Interface.Game
             mShouldUpdateQuestLog = true;
         }
 
+        //Quest Board
+        public void OpenQuestBoard()
+        {
+            if (mQuestBoardWindow != null)
+            {
+                mQuestBoardWindow.Close();
+            }
+
+            mQuestBoardWindow = new QuestBoardWindow(GameCanvas);
+            mShouldOpenQuestBoard = false;
+            Globals.InQuestBoard = true;
+        }
+
         //Trading
         public void NotifyOpenTrading(string traderName)
         {
@@ -465,6 +484,26 @@ namespace Intersect.Client.Interface.Game
 
             mShouldCloseCraftingTable = false;
 
+            //Quest Board update
+            if (mShouldOpenQuestBoard)
+            {
+                OpenQuestBoard();
+            }
+
+            if (mQuestBoardWindow != null)
+            {
+                if (!mQuestBoardWindow.IsVisible() || mShouldCloseQuestBoard)
+                {
+                    CloseQuestBoard();
+                }
+                else
+                {
+                    mQuestBoardWindow.Update();
+                }
+            }
+
+            mShouldCloseQuestBoard = false;
+
             //Trading update
             if (mShouldOpenTrading)
             {
@@ -567,6 +606,14 @@ namespace Intersect.Client.Interface.Game
             PacketSender.SendDeclineTrade();
         }
 
+        public void CloseQuestBoard()
+        {
+            mQuestBoardWindow?.Close();
+            mQuestBoardWindow = null;
+            Globals.InQuestBoard = false;
+            PacketSender.SendCloseQuestBoard();
+        }
+
         public bool CloseAllWindows()
         {
             var closedWindows = false;
@@ -597,6 +644,12 @@ namespace Intersect.Client.Interface.Game
             if (mShopWindow != null && mShopWindow.IsVisible())
             {
                 CloseShop();
+                closedWindows = true;
+            }
+
+            if (mQuestBoardWindow != null && mQuestBoardWindow.IsVisible())
+            {
+                CloseQuestBoard();
                 closedWindows = true;
             }
 

@@ -1866,6 +1866,12 @@ Tick timer saved in server config.json.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString resetstatpointallocations = @"Reset Player Stat Point Allocations";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString randomquest = @"Random Quest from List: {00}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString openquestboard = @"Open Quest Board: {00}";
         }
 
         public struct EventChangePlayerColor
@@ -1965,6 +1971,8 @@ Tick timer saved in server config.json.";
                 {"setguildbankslots", @"Set Guild Bank Slots Count"},
                 {"resetstatallocations", @"Reset Stat Point Allocations"},
                 {"flashscreen", @"Flash Screen"},
+                {"randomquest", @"Random Quest from List"},
+                {"openquestboard", @"Open Quest Board"},
             };
 
         }
@@ -1981,6 +1989,32 @@ Tick timer saved in server config.json.";
             public static LocalizedString task = @"Task:";
 
             public static LocalizedString title = @"Complete Quest Task";
+
+        }
+
+        public struct EventOpenQuestBoard
+        {
+
+            public static LocalizedString cancel = @"Cancel";
+
+            public static LocalizedString okay = @"Ok";
+
+            public static LocalizedString questboard = @"Quest Board:";
+
+            public static LocalizedString title = @"Open Quest Board";
+
+        }
+
+        public struct EventRandomQuest
+        {
+
+            public static LocalizedString cancel = @"Cancel";
+
+            public static LocalizedString okay = @"Ok";
+
+            public static LocalizedString questlist = @"Quest List:";
+
+            public static LocalizedString title = @"Random Quest from List";
 
         }
 

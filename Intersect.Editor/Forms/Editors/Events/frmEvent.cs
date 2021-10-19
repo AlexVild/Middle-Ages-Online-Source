@@ -704,6 +704,14 @@ namespace Intersect.Editor.Forms.Editors.Events
                     tmpCommand = new EndQuestCommand();
 
                     break;
+                case EventCommandType.RandomQuest:
+                    tmpCommand = new RandomQuestCommand();
+
+                    break;
+                case EventCommandType.OpenQuestBoard:
+                    tmpCommand = new OpenQuestBoardCommand();
+
+                    break;
                 case EventCommandType.ShowPicture:
                     tmpCommand = new ShowPictureCommand();
 
@@ -1325,6 +1333,14 @@ namespace Intersect.Editor.Forms.Editors.Events
                     cmdWindow = new EventCommandEndQuest((EndQuestCommand) command, this);
 
                     break;
+                case EventCommandType.RandomQuest:
+                    cmdWindow = new EventCommandRandomQuest((RandomQuestCommand)command, this);
+
+                    break;
+                case EventCommandType.OpenQuestBoard:
+                    cmdWindow = new EventCommandOpenQuestBoard((OpenQuestBoardCommand)command, this);
+
+                    break;
                 case EventCommandType.ChangePlayerColor:
                     cmdWindow = new EventCommandChangePlayerColor((ChangePlayerColorCommand)command, this);
 
@@ -1405,7 +1421,7 @@ namespace Intersect.Editor.Forms.Editors.Events
         }
 
         /// <summary>
-        ///     Resets the form when a user cancels editting or creating a new command for the event.
+        ///     Resets the form when a user cancels editing or creating a new command for the event.
         /// </summary>
         public void CancelCommandEdit(bool moveRoute = false, bool condition = false)
         {

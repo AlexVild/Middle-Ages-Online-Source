@@ -1911,6 +1911,17 @@ namespace Intersect.Server.Networking
             player.SendPacket(new QuestProgressPacket(dict, hiddenQuests.ToArray()));
         }
 
+        //QuestBoardPacket
+        public static void SendOpenQuestBoard(Player player, QuestBoardBase questBoard)
+        {
+            player.SendPacket(new QuestBoardPacket(questBoard.JsonData, false));
+        }
+
+        public static void SendCloseQuestBoard(Player player)
+        {
+            player.SendPacket(new QuestBoardPacket(null, true));
+        }
+
         //TradePacket
         public static void StartTrade(Player player, Player target)
         {

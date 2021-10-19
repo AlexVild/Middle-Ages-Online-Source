@@ -11,6 +11,7 @@ using Intersect.Client.Items;
 using Intersect.Client.Plugins.Interfaces;
 using Intersect.Enums;
 using Intersect.GameObjects;
+using Intersect.GameObjects.QuestBoard;
 using Intersect.Network.Packets.Server;
 
 namespace Intersect.Client.General
@@ -60,6 +61,10 @@ namespace Intersect.Client.General
         //Only need 1 shop, and that is the one we see at a given moment in time.
         public static ShopBase GameShop;
 
+        //Game Quest Board
+        //Only need 1 shop, and that is the one we see at a given moment in time.
+        public static QuestBoardBase QuestBoard;
+
         //Crucial game variables
 
         internal static List<IClientLifecycleHelper> ClientLifecycleHelpers { get; } =
@@ -99,6 +104,8 @@ namespace Intersect.Client.General
         public static bool InBag = false;
 
         public static bool InBank = false;
+        
+        public static bool InQuestBoard = false;
 
         //Crafting station
         public static bool InCraft = false;

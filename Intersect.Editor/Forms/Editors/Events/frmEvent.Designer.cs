@@ -133,29 +133,33 @@ namespace Intersect.Editor.Forms.Editors.Events
             System.Windows.Forms.TreeNode treeNode52 = new System.Windows.Forms.TreeNode("Start Quest");
             System.Windows.Forms.TreeNode treeNode53 = new System.Windows.Forms.TreeNode("Complete Quest Task");
             System.Windows.Forms.TreeNode treeNode54 = new System.Windows.Forms.TreeNode("End Quest");
-            System.Windows.Forms.TreeNode treeNode55 = new System.Windows.Forms.TreeNode("Quest Control", new System.Windows.Forms.TreeNode[] {
+            System.Windows.Forms.TreeNode treeNode55 = new System.Windows.Forms.TreeNode("Random Quest from List");
+            System.Windows.Forms.TreeNode treeNode56 = new System.Windows.Forms.TreeNode("Open Quest Board");
+            System.Windows.Forms.TreeNode treeNode57 = new System.Windows.Forms.TreeNode("Quest Control", new System.Windows.Forms.TreeNode[] {
             treeNode52,
             treeNode53,
-            treeNode54});
-            System.Windows.Forms.TreeNode treeNode56 = new System.Windows.Forms.TreeNode("Wait...");
-            System.Windows.Forms.TreeNode treeNode57 = new System.Windows.Forms.TreeNode("Etc", new System.Windows.Forms.TreeNode[] {
+            treeNode54,
+            treeNode55,
             treeNode56});
-            System.Windows.Forms.TreeNode treeNode58 = new System.Windows.Forms.TreeNode("Open Bank");
-            System.Windows.Forms.TreeNode treeNode59 = new System.Windows.Forms.TreeNode("Open Shop");
-            System.Windows.Forms.TreeNode treeNode60 = new System.Windows.Forms.TreeNode("Open Crafting Station");
-            System.Windows.Forms.TreeNode treeNode61 = new System.Windows.Forms.TreeNode("Shop and Bank", new System.Windows.Forms.TreeNode[] {
-            treeNode58,
-            treeNode59,
-            treeNode60});
-            System.Windows.Forms.TreeNode treeNode62 = new System.Windows.Forms.TreeNode("Create Guild");
-            System.Windows.Forms.TreeNode treeNode63 = new System.Windows.Forms.TreeNode("Disband Guild");
-            System.Windows.Forms.TreeNode treeNode64 = new System.Windows.Forms.TreeNode("Open Guild Bank");
-            System.Windows.Forms.TreeNode treeNode65 = new System.Windows.Forms.TreeNode("Set Guild Bank Slots Count");
-            System.Windows.Forms.TreeNode treeNode66 = new System.Windows.Forms.TreeNode("Guilds", new System.Windows.Forms.TreeNode[] {
-            treeNode62,
-            treeNode63,
+            System.Windows.Forms.TreeNode treeNode58 = new System.Windows.Forms.TreeNode("Wait...");
+            System.Windows.Forms.TreeNode treeNode59 = new System.Windows.Forms.TreeNode("Etc", new System.Windows.Forms.TreeNode[] {
+            treeNode58});
+            System.Windows.Forms.TreeNode treeNode60 = new System.Windows.Forms.TreeNode("Open Bank");
+            System.Windows.Forms.TreeNode treeNode61 = new System.Windows.Forms.TreeNode("Open Shop");
+            System.Windows.Forms.TreeNode treeNode62 = new System.Windows.Forms.TreeNode("Open Crafting Station");
+            System.Windows.Forms.TreeNode treeNode63 = new System.Windows.Forms.TreeNode("Shop and Bank", new System.Windows.Forms.TreeNode[] {
+            treeNode60,
+            treeNode61,
+            treeNode62});
+            System.Windows.Forms.TreeNode treeNode64 = new System.Windows.Forms.TreeNode("Create Guild");
+            System.Windows.Forms.TreeNode treeNode65 = new System.Windows.Forms.TreeNode("Disband Guild");
+            System.Windows.Forms.TreeNode treeNode66 = new System.Windows.Forms.TreeNode("Open Guild Bank");
+            System.Windows.Forms.TreeNode treeNode67 = new System.Windows.Forms.TreeNode("Set Guild Bank Slots Count");
+            System.Windows.Forms.TreeNode treeNode68 = new System.Windows.Forms.TreeNode("Guilds", new System.Windows.Forms.TreeNode[] {
             treeNode64,
-            treeNode65});
+            treeNode65,
+            treeNode66,
+            treeNode67});
             this.lblName = new System.Windows.Forms.Label();
             this.txtEventname = new DarkUI.Controls.DarkTextBox();
             this.grpEntityOptions = new DarkUI.Controls.DarkGroupBox();
@@ -1000,48 +1004,54 @@ namespace Intersect.Editor.Forms.Editors.Events
             treeNode54.Name = "endquest";
             treeNode54.Tag = "42";
             treeNode54.Text = "End Quest";
-            treeNode55.Name = "questcontrol";
-            treeNode55.Text = "Quest Control";
-            treeNode56.Name = "wait";
-            treeNode56.Tag = "34";
-            treeNode56.Text = "Wait...";
-            treeNode57.Name = "etc";
-            treeNode57.Text = "Etc";
-            treeNode58.Name = "openbank";
-            treeNode58.Tag = "35";
-            treeNode58.Text = "Open Bank";
-            treeNode59.Name = "openshop";
-            treeNode59.Tag = "36";
-            treeNode59.Text = "Open Shop";
-            treeNode60.Name = "opencraftingstation";
-            treeNode60.Tag = "37";
-            treeNode60.Text = "Open Crafting Station";
-            treeNode61.Name = "shopandbank";
-            treeNode61.Text = "Shop and Bank";
-            treeNode62.Name = "createguild";
-            treeNode62.Tag = "53";
-            treeNode62.Text = "Create Guild";
-            treeNode63.Name = "disbandguild";
-            treeNode63.Tag = "54";
-            treeNode63.Text = "Disband Guild";
-            treeNode64.Name = "openguildbank";
-            treeNode64.Tag = "55";
-            treeNode64.Text = "Open Guild Bank";
-            treeNode65.Name = "setguildbankslots";
-            treeNode65.Tag = "56";
-            treeNode65.Text = "Set Guild Bank Slots Count";
-            treeNode66.Name = "guilds";
-            treeNode66.Text = "Guilds";
+            treeNode55.Name = "randomquest";
+            treeNode55.Tag = "59";
+            treeNode55.Text = "Random Quest from List";
+            treeNode56.Name = "openquestboard";
+            treeNode56.Tag = "60";
+            treeNode56.Text = "Open Quest Board";
+            treeNode57.Name = "questcontrol";
+            treeNode57.Text = "Quest Control";
+            treeNode58.Name = "wait";
+            treeNode58.Tag = "34";
+            treeNode58.Text = "Wait...";
+            treeNode59.Name = "etc";
+            treeNode59.Text = "Etc";
+            treeNode60.Name = "openbank";
+            treeNode60.Tag = "35";
+            treeNode60.Text = "Open Bank";
+            treeNode61.Name = "openshop";
+            treeNode61.Tag = "36";
+            treeNode61.Text = "Open Shop";
+            treeNode62.Name = "opencraftingstation";
+            treeNode62.Tag = "37";
+            treeNode62.Text = "Open Crafting Station";
+            treeNode63.Name = "shopandbank";
+            treeNode63.Text = "Shop and Bank";
+            treeNode64.Name = "createguild";
+            treeNode64.Tag = "53";
+            treeNode64.Text = "Create Guild";
+            treeNode65.Name = "disbandguild";
+            treeNode65.Tag = "54";
+            treeNode65.Text = "Disband Guild";
+            treeNode66.Name = "openguildbank";
+            treeNode66.Tag = "55";
+            treeNode66.Text = "Open Guild Bank";
+            treeNode67.Name = "setguildbankslots";
+            treeNode67.Tag = "56";
+            treeNode67.Text = "Set Guild Bank Slots Count";
+            treeNode68.Name = "guilds";
+            treeNode68.Text = "Guilds";
             this.lstCommands.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
             treeNode5,
             treeNode13,
             treeNode32,
             treeNode42,
             treeNode51,
-            treeNode55,
             treeNode57,
-            treeNode61,
-            treeNode66});
+            treeNode59,
+            treeNode63,
+            treeNode68});
             this.lstCommands.Size = new System.Drawing.Size(445, 440);
             this.lstCommands.TabIndex = 2;
             this.lstCommands.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.lstCommands_NodeMouseDoubleClick);

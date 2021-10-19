@@ -106,6 +106,18 @@
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_FlashScreen.Designer.cs">
       <DependentUpon>EventCommand_FlashScreen.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_OpenQuestBoard.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_OpenQuestBoard.Designer.cs">
+      <DependentUpon>EventCommand_OpenQuestBoard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_RandomQuest.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_RandomQuest.Designer.cs">
+      <DependentUpon>EventCommand_RandomQuest.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_SetGuildBankSlots.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -682,11 +694,20 @@
     <EmbeddedResource Include="Forms\DockingElements\frmMapLayers.resx">
       <DependentUpon>frmMapLayers.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_CompleteQuestTask.resx">
+      <DependentUpon>EventCommand_CompleteQuestTask.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_ConditionalBranch.resx">
       <DependentUpon>EventCommand_ConditionalBranch.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_FlashScreen.resx">
       <DependentUpon>EventCommand_FlashScreen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_OpenQuestBoard.resx">
+      <DependentUpon>EventCommand_OpenQuestBoard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_RandomQuest.resx">
+      <DependentUpon>EventCommand_RandomQuest.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\frmQuestBoard.resx">
       <DependentUpon>frmQuestBoard.cs</DependentUpon>

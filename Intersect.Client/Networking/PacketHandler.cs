@@ -12,6 +12,7 @@ using Intersect.Client.Maps;
 using Intersect.Core;
 using Intersect.Enums;
 using Intersect.GameObjects;
+using Intersect.GameObjects.QuestBoard;
 using Intersect.GameObjects.Maps;
 using Intersect.GameObjects.Maps.MapList;
 using Intersect.Logging;
@@ -2158,6 +2159,23 @@ namespace Intersect.Client.Networking
             if (Globals.Me == null) return;
 
             Globals.Me.resourceLocked = packet.ResourceLock;
+        }
+
+        // QuestBoardPacket
+        public void HandlePacket(IPacketSender packetSender, QuestBoardPacket packet)
+        {
+            if (Globals.Me == null) return;
+
+            if (!packet.Close)
+            {
+                Globals.QuestBoard = new QuestBoardBase();
+                Globals.QuestBoard.Load(packet.QuestBoardData);
+                Interface.Interface.GameUi.NotifyOpenCraftingTable();
+            }
+            else
+            {
+                Interface.Interface.GameUi.NotifyCloseCraftingTable();
+            }
         }
     }
 }

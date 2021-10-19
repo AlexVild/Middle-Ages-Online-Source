@@ -171,6 +171,11 @@ namespace Intersect.Client.Networking
             Network.SendPacket(new OpenAdminWindowPacket());
         }
 
+        public static void SendCloseQuestBoard()
+        {
+            Network.SendPacket(new CloseQuestBoardPacket());
+        }
+
         //Admin Action Packet Should be Here
 
         public static void SendSellItem(int slot, int amount)

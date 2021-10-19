@@ -1100,4 +1100,20 @@ namespace Intersect.GameObjects.Events.Commands
         public override EventCommandType Type { get; } = EventCommandType.ResetStatPointAllocations;
 
     }
+
+    public class RandomQuestCommand : EventCommand
+    {
+
+        public override EventCommandType Type { get; } = EventCommandType.RandomQuest;
+
+        public Guid QuestListId { get; set; }
+    }
+
+    public class OpenQuestBoardCommand : EventCommand
+    {
+
+        public override EventCommandType Type { get; } = EventCommandType.OpenQuestBoard;
+
+        public Guid QuestBoardId { get; set; }
+    }
 }

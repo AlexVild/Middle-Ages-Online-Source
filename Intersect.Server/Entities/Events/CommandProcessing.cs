@@ -8,6 +8,8 @@ using Intersect.Enums;
 using Intersect.GameObjects;
 using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Events.Commands;
+using Intersect.GameObjects.QuestList;
+using Intersect.GameObjects.QuestBoard;
 using Intersect.GameObjects.Switches_and_Variables;
 using Intersect.Server.Database;
 using Intersect.Server.Database.PlayerData.Players;
@@ -2006,6 +2008,39 @@ namespace Intersect.Server.Entities.Events
             }
         }
 
+        private static void ProcessCommand(
+            RandomQuestCommand command,
+            Player player,
+            Event instance,
+            CommandInstance stackInfo,
+            Stack<CommandInstance> callStack
+        )
+        {
+            var rand = new Random();
+            var quests = QuestListBase.Get(command.QuestListId).Quests;
+
+            var randomQuestIndex = rand.Next(quests.Count());
+
+            var quest = QuestBase.Get(quests[randomQuestIndex]);
+            if (quest != null)
+            {
+                player.OfferQuest(quest);
+                stackInfo.WaitingForResponse = CommandInstance.EventResponse.Quest;
+                stackInfo.WaitingOnCommand = command;
+            }
+        }
+
+        private static void ProcessCommand(
+            OpenQuestBoardCommand command,
+            Player player,
+            Event instance,
+            CommandInstance stackInfo,
+            Stack<CommandInstance> callStack
+        )
+        {
+            player.OpenQuestBoard(QuestBoardBase.Get(command.QuestBoardId));
+            callStack.Peek().WaitingForResponse = CommandInstance.EventResponse.QuestBoard;
+        }
     }
 
 }

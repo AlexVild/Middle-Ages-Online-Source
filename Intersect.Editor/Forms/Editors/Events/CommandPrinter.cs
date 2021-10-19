@@ -8,6 +8,8 @@ using Intersect.Enums;
 using Intersect.GameObjects;
 using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Events.Commands;
+using Intersect.GameObjects.QuestBoard;
+using Intersect.GameObjects.QuestList;
 using Intersect.GameObjects.Maps.MapList;
 using Intersect.Logging;
 
@@ -1244,6 +1246,16 @@ namespace Intersect.Editor.Forms.Editors.Events
             return Strings.EventCommandList.endquest.ToString(
                 QuestBase.GetName(command.QuestId), Strings.EventCommandList.skipcompletionevent
             );
+        }
+
+        private static string GetCommandText(RandomQuestCommand command, MapInstance map)
+        {
+            return Strings.EventCommandList.randomquest.ToString(QuestListBase.GetName(command.QuestListId));
+        }
+
+        private static string GetCommandText(OpenQuestBoardCommand command, MapInstance map)
+        {
+            return Strings.EventCommandList.openquestboard.ToString(QuestBoardBase.GetName(command.QuestBoardId));
         }
 
         private static string GetCommandText(ChangePlayerColorCommand command, MapInstance map)

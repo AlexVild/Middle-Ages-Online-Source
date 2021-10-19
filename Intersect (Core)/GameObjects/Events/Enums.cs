@@ -232,6 +232,10 @@
         
         // Flash Screen
         FlashScreen,
+
+        // Quest lists/board
+        RandomQuest,
+        OpenQuestBoard,
     }
 
 }

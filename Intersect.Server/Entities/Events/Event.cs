@@ -147,6 +147,12 @@ namespace Intersect.Server.Entities.Events
                             curStack.WaitingForResponse = CommandInstance.EventResponse.None;
                         }
 
+                        if (curStack.WaitingForResponse == CommandInstance.EventResponse.QuestBoard &&
+                            Player.QuestBoardId == Guid.Empty)
+                        {
+                            curStack.WaitingForResponse = CommandInstance.EventResponse.None;
+                        }
+
                         if (curStack.WaitingForResponse == CommandInstance.EventResponse.Quest &&
                             !Player.QuestOffers.Contains(((StartQuestCommand) curStack.WaitingOnCommand).QuestId))
                         {
