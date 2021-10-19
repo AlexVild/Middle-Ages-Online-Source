@@ -1652,7 +1652,7 @@ namespace Intersect.Client.Localization
 
         }
 
-        public struct SpellDesc
+        public struct SpellDescription
         {
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static Dictionary<int, LocalizedString> SpellTypes = new Dictionary<int, LocalizedString>
@@ -1858,24 +1858,6 @@ namespace Intersect.Client.Localization
                 {10, @"Makes the target fall asleep"},
                 {11, @"Applies an On Hit effect to the target"},
                 {12, @"Taunts Target"},
-            };
-
-            public static LocalizedString effects = @"Effects:";
-
-            public static LocalizedString prereqs = @"Prerequisites:";
-
-            public static LocalizedString shield = @"Shielding: {00}";
-
-            
-
-            public static LocalizedString removesymbol = @"-";
-
-            
-
-            public static Dictionary<int, LocalizedString> vitals = new Dictionary<int, LocalizedString>
-            {
-                {0, @"HP: {00}{01}"},
-                {1, @"MP: {00}{01}"},
             };
 
         }
