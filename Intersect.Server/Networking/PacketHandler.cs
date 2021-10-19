@@ -3790,6 +3790,16 @@ namespace Intersect.Server.Networking
                 case GameObjectType.Time:
                     break;
 
+                case GameObjectType.QuestList:
+                    obj = DatabaseObject<QuestListBase>.Lookup.Get(id);
+
+                    break;
+
+                case GameObjectType.QuestBoard:
+                    obj = DatabaseObject<QuestBoardBase>.Lookup.Get(id);
+
+                    break;
+
                 default:
                     throw new ArgumentOutOfRangeException();
             }

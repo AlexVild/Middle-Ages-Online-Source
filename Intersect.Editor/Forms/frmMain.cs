@@ -80,7 +80,7 @@ namespace Intersect.Editor.Forms
 
         private frmQuestList mQuestListEditor;
 
-        private FrmQuestBoard mQuestBoardEditor;
+        private frmQuestBoard mQuestBoardEditor;
 
         //General Editting Variables
         bool mTMouseDown;
@@ -1648,7 +1648,7 @@ namespace Intersect.Editor.Forms
                     case GameObjectType.QuestBoard:
                         if (mQuestBoardEditor == null || mQuestBoardEditor.Visible == false)
                         {
-                            mQuestBoardEditor = new FrmQuestBoard();
+                            mQuestBoardEditor = new frmQuestBoard();
                             mQuestBoardEditor.InitEditor();
                             mQuestBoardEditor.Show();
                         }

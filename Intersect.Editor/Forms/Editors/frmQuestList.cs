@@ -39,6 +39,19 @@ namespace Intersect.Editor.Forms.Editors
             UpdateEditor();
         }
 
+        protected override void GameObjectUpdatedDelegate(GameObjectType type)
+        {
+            if (type == GameObjectType.QuestList)
+            {
+                InitEditor();
+                if (mEditorItem != null && !DatabaseObject<QuestListBase>.Lookup.Values.Contains(mEditorItem))
+                {
+                    mEditorItem = null;
+                    UpdateEditor();
+                }
+            }
+        }
+
         public void InitEditor()
         {
             //Collect folders
@@ -64,7 +77,7 @@ namespace Intersect.Editor.Forms.Editors
 
             var items = QuestListBase.Lookup.OrderBy(p => p.Value?.Name).Select(pair => new KeyValuePair<Guid, KeyValuePair<string, string>>(pair.Key,
                 new KeyValuePair<string, string>(((QuestListBase)pair.Value)?.Name ?? Models.DatabaseObject<QuestListBase>.Deleted, ((QuestListBase)pair.Value)?.Folder ?? ""))).ToArray();
-            lstGameObjects.Repopulate(items, mFolders, false, CustomSearch(), txtSearch.Text);
+            lstGameObjects.Repopulate(items, mFolders, btnAlphabetical.Checked, CustomSearch(), txtSearch.Text);
         }
 
         private void UpdateEditor()

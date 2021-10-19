@@ -17,7 +17,7 @@ namespace Intersect.GameObjects.QuestBoard
     public class QuestBoardBase : DatabaseObject<QuestBoardBase>, IFolderable
     {
         [NotMapped]
-        public List<QuestListBase> QuestLists = new List<QuestListBase>();
+        public DbList<QuestListBase> QuestLists = new DbList<QuestListBase>();
 
         [JsonConstructor]
         public QuestBoardBase(Guid id) : base(id)
@@ -36,7 +36,7 @@ namespace Intersect.GameObjects.QuestBoard
         public string QuestListsJson
         {
             get => JsonConvert.SerializeObject(QuestLists);
-            set => QuestLists = JsonConvert.DeserializeObject<List<QuestListBase>>(value);
+            set => QuestLists = JsonConvert.DeserializeObject<DbList<QuestListBase>>(value);
         }
 
         /// <inheritdoc />

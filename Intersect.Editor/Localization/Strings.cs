@@ -5036,7 +5036,7 @@ Negative values for time to flow backwards.";
             public static LocalizedString quests = @"Quests";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public static LocalizedString title = @"Quest Lists Editor";
+            public static LocalizedString title = @"Quest List Editor";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString addquestlabel = @"Add Quest to List:";
@@ -5120,6 +5120,12 @@ Negative values for time to flow backwards.";
             public static LocalizedString paste = @"Copy Quest List";
 
             public static LocalizedString undo = @"Undo";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString undoprompt = @"Undo last change? This cannot be reverted.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString undotitle = @"Undo Quest List Change";
         }
     }
 
