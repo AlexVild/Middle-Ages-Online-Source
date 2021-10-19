@@ -1115,14 +1115,13 @@ namespace Intersect.Server.Entities
 
         public void GiveExperience(long amount, bool partyCombo = false, int opponentLevel = 0)
         {
-            Exp += (int) (amount * GetExpMultiplier() / 100);
-
             if (CurrentCombo > 0)
             {
                 ComboExp = CalculateComboExperience(amount, partyCombo, opponentLevel);
                 Exp += ComboExp;
             }
 
+            Exp += (int) (amount * GetEquipmentBonusEffect(EffectType.EXP, 100) / 100);
             if (Exp < 0)
             {
                 Exp = 0;
@@ -2830,9 +2829,15 @@ namespace Intersect.Server.Entities
             return 0;
         }
 
-        public decimal GetCooldownReduction()
+        /// <summary>
+        /// Gets the value of a bonus effect as granted by the currently equipped gear.
+        /// </summary>
+        /// <param name="effect">The <see cref="EffectType"/> to retrieve the amount for.</param>
+        /// <param name="startValue">The starting value to which we're adding our gear amount.</param>
+        /// <returns></returns>
+        public int GetEquipmentBonusEffect(EffectType effect, int startValue = 0)
         {
-            var cooldown = 0;
+            var value = startValue;
 
             for (var i = 0; i < Options.EquipmentSlots.Count; i++)
             {
@@ -2843,116 +2848,16 @@ namespace Intersect.Server.Entities
                         var item = ItemBase.Get(Items[Equipment[i]].ItemId);
                         if (item != null)
                         {
-                            if (item.Effect.Type == EffectType.CooldownReduction)
+                            if (item.Effect.Type == effect)
                             {
-                                cooldown += item.Effect.Percentage;
+                                value += item.Effect.Percentage;
                             }
                         }
                     }
                 }
             }
 
-            return cooldown;
-        }
-
-        public decimal GetLifeSteal()
-        {
-            var lifesteal = 0;
-
-            for (var i = 0; i < Options.EquipmentSlots.Count; i++)
-            {
-                if (Equipment[i] > -1)
-                {
-                    if (Items[Equipment[i]].ItemId != Guid.Empty)
-                    {
-                        var item = ItemBase.Get(Items[Equipment[i]].ItemId);
-                        if (item != null)
-                        {
-                            if (item.Effect.Type == EffectType.Lifesteal)
-                            {
-                                lifesteal += item.Effect.Percentage;
-                            }
-                        }
-                    }
-                }
-            }
-
-            return lifesteal;
-        }
-
-        public double GetTenacity()
-        {
-            double tenacity = 0;
-
-            for (var i = 0; i < Options.EquipmentSlots.Count; i++)
-            {
-                if (Equipment[i] > -1)
-                {
-                    if (Items[Equipment[i]].ItemId != Guid.Empty)
-                    {
-                        var item = ItemBase.Get(Items[Equipment[i]].ItemId);
-                        if (item != null)
-                        {
-                            if (item.Effect.Type == EffectType.Tenacity)
-                            {
-                                tenacity += item.Effect.Percentage;
-                            }
-                        }
-                    }
-                }
-            }
-
-            return tenacity;
-        }
-
-        public double GetLuck()
-        {
-            double luck = 0;
-
-            for (var i = 0; i < Options.EquipmentSlots.Count; i++)
-            {
-                if (Equipment[i] > -1)
-                {
-                    if (Items[Equipment[i]].ItemId != Guid.Empty)
-                    {
-                        var item = ItemBase.Get(Items[Equipment[i]].ItemId);
-                        if (item != null)
-                        {
-                            if (item.Effect.Type == EffectType.Luck)
-                            {
-                                luck += item.Effect.Percentage;
-                            }
-                        }
-                    }
-                }
-            }
-
-            return luck;
-        }
-
-        public int GetExpMultiplier()
-        {
-            var exp = 100;
-
-            for (var i = 0; i < Options.EquipmentSlots.Count; i++)
-            {
-                if (Equipment[i] > -1)
-                {
-                    if (Items[Equipment[i]].ItemId != Guid.Empty)
-                    {
-                        var item = ItemBase.Get(Items[Equipment[i]].ItemId);
-                        if (item != null)
-                        {
-                            if (item.Effect.Type == EffectType.EXP)
-                            {
-                                exp += item.Effect.Percentage;
-                            }
-                        }
-                    }
-                }
-            }
-
-            return exp;
+            return value;
         }
 
         public int GetEquipmentVitalRegen(Vitals vital)
@@ -6185,7 +6090,7 @@ namespace Intersect.Server.Entities
             {
                 // No, handle singular cooldown as normal.
 
-                var cooldownReduction = 1 - (item.IgnoreCooldownReduction ? 0 : this.GetCooldownReduction() / 100);
+                var cooldownReduction = 1 - (item.IgnoreCooldownReduction ? 0 : GetEquipmentBonusEffect(EffectType.CooldownReduction) / 100f);
                 AssignItemCooldown(item.Id, Globals.Timing.MillisecondsUTC + (long)(item.Cooldown * cooldownReduction));
                 PacketSender.SendItemCooldown(this, item.Id);
             }
@@ -6211,7 +6116,7 @@ namespace Intersect.Server.Entities
             else
             {
                 // No, handle singular cooldown as normal.
-                var cooldownReduction = 1 - (spell.IgnoreCooldownReduction ? 0 : this.GetCooldownReduction() / 100);
+                var cooldownReduction = 1 - (spell.IgnoreCooldownReduction ? 0 : GetEquipmentBonusEffect(EffectType.CooldownReduction) / 100f);
                 AssignSpellCooldown(spell.Id, Globals.Timing.MillisecondsUTC + (long)(spell.CooldownDuration * cooldownReduction));
                 PacketSender.SendSpellCooldown(this, spell.Id);
             }
@@ -6230,7 +6135,7 @@ namespace Intersect.Server.Entities
             }
 
             // Calculate our global cooldown.
-            var cooldownReduction = 1 - this.GetCooldownReduction() / 100;
+            var cooldownReduction = 1 - GetEquipmentBonusEffect(EffectType.CooldownReduction) / 100f;
             var cooldown = Globals.Timing.MillisecondsUTC + (long)(Options.Combat.GlobalCooldownDuration * cooldownReduction);
 
             // Go through each item and spell to assign this cooldown.
@@ -6283,7 +6188,7 @@ namespace Intersect.Server.Entities
                 return;
             }
 
-            var cooldownReduction = 1 - (ignoreCdr ? 0 : this.GetCooldownReduction() / 100);
+            var cooldownReduction = 1 - (ignoreCdr ? 0 : GetEquipmentBonusEffect(EffectType.CooldownReduction) / 100f);
 
             // Retrieve a list of all items and/or spells depending on our settings to set the cooldown for.
             var matchingItems = Array.Empty<ItemBase>();
