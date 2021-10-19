@@ -29,7 +29,9 @@ namespace Intersect.Server.Entities.Events
 
             Picture,
 
-            QuestBoard
+            QuestBoard,
+
+            RandomQuest
 
         }
 

@@ -5048,11 +5048,15 @@ namespace Intersect.Server.Entities
             return false;
         }
 
-        public void OfferQuest(QuestBase quest)
+        public void OfferQuest(QuestBase quest, bool randomQuest = false)
         {
             if (CanStartQuest(quest))
             {
                 QuestOffers.Add(quest.Id);
+                if (randomQuest)
+                {
+
+                }
                 PacketSender.SendQuestOffer(this, quest.Id);
             }
         }
@@ -5075,7 +5079,7 @@ namespace Intersect.Server.Entities
 
         public void CloseQuestBoard()
         {
-            if (QuestBoardId != Guid.Empty && QuestBoardId == Guid.Empty)
+            if (QuestBoardId != Guid.Empty)
             {
                 QuestBoardId = Guid.Empty;
                 PacketSender.SendCloseQuestBoard(this);

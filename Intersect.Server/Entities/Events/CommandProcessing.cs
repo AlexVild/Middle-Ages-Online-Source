@@ -2025,7 +2025,7 @@ namespace Intersect.Server.Entities.Events
             if (quest != null)
             {
                 player.OfferQuest(quest);
-                stackInfo.WaitingForResponse = CommandInstance.EventResponse.Quest;
+                stackInfo.WaitingForResponse = CommandInstance.EventResponse.RandomQuest;
                 stackInfo.WaitingOnCommand = command;
             }
         }

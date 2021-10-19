@@ -30,7 +30,7 @@ namespace Intersect.Client.Interface.Game
 
         public bool IsVisible()
         {
-            return true;
+            return mQuestBoardWindow.IsVisible;
         }
 
         public void Close()

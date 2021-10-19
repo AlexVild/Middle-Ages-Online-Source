@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Intersect.Enums;
 using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Events.Commands;
+using Intersect.GameObjects.QuestList;
 using Intersect.Logging;
 using Intersect.Server.General;
 using Intersect.Server.Localization;
@@ -151,6 +152,29 @@ namespace Intersect.Server.Entities.Events
                             Player.QuestBoardId == Guid.Empty)
                         {
                             curStack.WaitingForResponse = CommandInstance.EventResponse.None;
+                        }
+
+                        if (curStack.WaitingForResponse == CommandInstance.EventResponse.RandomQuest)
+                        {
+                            var randomQuestList = ((RandomQuestCommand)curStack.WaitingOnCommand).QuestListId;
+                            var randomQuests = QuestListBase.Get(randomQuestList).Quests;
+
+                            var questStillOffered = false;
+                            // Check to see if any of the quests in the random list are currently in the player's offers
+                            foreach (var randomQuestId in randomQuests)
+                            {
+                                if (Player.QuestOffers.Contains(randomQuestId))
+                                {
+                                    questStillOffered = true; // Once we've confirmed this, we're done
+                                    break;
+                                }
+                            }
+
+                            // If we never found the quest in the players outstanding offers, then the event is done.
+                            if (!questStillOffered)
+                            {
+                                curStack.WaitingForResponse = CommandInstance.EventResponse.None;
+                            }
                         }
 
                         if (curStack.WaitingForResponse == CommandInstance.EventResponse.Quest &&

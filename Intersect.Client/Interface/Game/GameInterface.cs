@@ -280,6 +280,16 @@ namespace Intersect.Client.Interface.Game
         }
 
         //Quest Board
+        public void NotifyOpenQuestBoard()
+        {
+            mShouldOpenQuestBoard = true;
+        }
+
+        public void NotifyCloseQuestBoard()
+        {
+            mShouldCloseQuestBoard = true;
+        }
+
         public void OpenQuestBoard()
         {
             if (mQuestBoardWindow != null)

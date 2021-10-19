@@ -2170,11 +2170,11 @@ namespace Intersect.Client.Networking
             {
                 Globals.QuestBoard = new QuestBoardBase();
                 Globals.QuestBoard.Load(packet.QuestBoardData);
-                Interface.Interface.GameUi.NotifyOpenCraftingTable();
+                Interface.Interface.GameUi.NotifyOpenQuestBoard();
             }
             else
             {
-                Interface.Interface.GameUi.NotifyCloseCraftingTable();
+                Interface.Interface.GameUi.NotifyCloseQuestBoard();
             }
         }
     }

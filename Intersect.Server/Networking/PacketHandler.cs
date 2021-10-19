@@ -1899,6 +1899,18 @@ namespace Intersect.Server.Networking
             player.CloseBank();
         }
 
+        //CloseQuestBoardPacket
+        public void HandlePacket(Client client, CloseQuestBoardPacket packet)
+        {
+            var player = client?.Entity;
+            if (player == null)
+            {
+                return;
+            }
+
+            player.CloseQuestBoard();
+        }
+
         //DepositItemPacket
         public void HandlePacket(Client client, DepositItemPacket packet)
         {
