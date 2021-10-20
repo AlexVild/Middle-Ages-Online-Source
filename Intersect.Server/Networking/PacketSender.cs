@@ -1914,12 +1914,20 @@ namespace Intersect.Server.Networking
         //QuestBoardPacket
         public static void SendOpenQuestBoard(Player player, QuestBoardBase questBoard)
         {
-            player.SendPacket(new QuestBoardPacket(questBoard.JsonData, false));
+            // A dictionary of questlist GUIDs to whether or not the player can access that quest list via its requirements
+            var requirementsDict = new Dictionary<Guid, bool>();
+            
+            foreach (var questList in questBoard.QuestLists)
+            {
+                requirementsDict.Add(questList, player.CanAccessQuestList(questList));
+            }
+
+            player.SendPacket(new QuestBoardPacket(questBoard.JsonData, false, requirementsDict));
         }
 
         public static void SendCloseQuestBoard(Player player)
         {
-            player.SendPacket(new QuestBoardPacket(null, true));
+            player.SendPacket(new QuestBoardPacket(null, true, null));
         }
 
         //TradePacket

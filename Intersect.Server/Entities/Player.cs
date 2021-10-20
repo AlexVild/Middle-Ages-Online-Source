@@ -12,6 +12,7 @@ using Intersect.Enums;
 using Intersect.GameObjects;
 using Intersect.GameObjects.Crafting;
 using Intersect.GameObjects.QuestBoard;
+using Intersect.GameObjects.QuestList;
 using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Events.Commands;
 using Intersect.GameObjects.Maps;
@@ -4985,6 +4986,19 @@ namespace Intersect.Server.Entities
             {
                 return false;
             }
+
+            return true;
+        }
+
+        public bool CanAccessQuestList(Guid questListId)
+        {
+            var questList = QuestListBase.Get(questListId);
+
+            //So the quest isn't started or we can repeat it.. let's make sure that we meet requirements.
+            /*if (!Conditions.MeetsConditionLists(questList.Requirements, this, null, true, questList))
+            {
+                return false;
+            }*/
 
             return true;
         }

@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using Intersect.Enums;
 using Intersect.GameObjects;
+using Intersect.GameObjects.QuestList;
 using Intersect.GameObjects.Conditions;
 using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Switches_and_Variables;
@@ -85,8 +86,6 @@ namespace Intersect.Server.Entities.Events
 
             return true;
         }
-
-        
 
         public static bool MeetsCondition(
             Condition condition,

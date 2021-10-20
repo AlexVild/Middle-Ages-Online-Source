@@ -1,5 +1,6 @@
 ﻿using MessagePack;
 using System;
+using System.Collections.Generic;
 
 namespace Intersect.Network.Packets.Server
 {
@@ -11,10 +12,11 @@ namespace Intersect.Network.Packets.Server
         {
         }
 
-        public QuestBoardPacket(String questBoardData, bool close)
+        public QuestBoardPacket(String questBoardData, bool close, Dictionary<Guid, bool> requirementsForQuestLists)
         {
             QuestBoardData = questBoardData;
             Close = close;
+            RequirementsForQuestLists = requirementsForQuestLists;
         }
 
         [Key(0)]
@@ -22,5 +24,8 @@ namespace Intersect.Network.Packets.Server
 
         [Key(1)]
         public bool Close { get; set; }
+
+        [Key(2)]
+        public Dictionary<Guid, bool> RequirementsForQuestLists { get; set; }
     }
 }

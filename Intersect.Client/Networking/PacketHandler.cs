@@ -2170,6 +2170,7 @@ namespace Intersect.Client.Networking
             {
                 Globals.QuestBoard = new QuestBoardBase();
                 Globals.QuestBoard.Load(packet.QuestBoardData);
+                Globals.QuestBoardRequirements = packet.RequirementsForQuestLists;
                 Interface.Interface.GameUi.NotifyOpenQuestBoard();
             }
             else

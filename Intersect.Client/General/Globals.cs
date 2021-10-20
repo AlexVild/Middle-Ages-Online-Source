@@ -65,6 +65,8 @@ namespace Intersect.Client.General
         //Only need 1 shop, and that is the one we see at a given moment in time.
         public static QuestBoardBase QuestBoard;
 
+        public static Dictionary<Guid, bool> QuestBoardRequirements;
+
         //Crucial game variables
 
         internal static List<IClientLifecycleHelper> ClientLifecycleHelpers { get; } =

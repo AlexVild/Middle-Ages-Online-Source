@@ -508,7 +508,7 @@ namespace Intersect.Client.Interface.Game
                 }
                 else
                 {
-                    mQuestBoardWindow.Update();
+                    mQuestBoardWindow.Update(Globals.QuestBoard);
                 }
             }
 
@@ -621,6 +621,8 @@ namespace Intersect.Client.Interface.Game
             mQuestBoardWindow?.Close();
             mQuestBoardWindow = null;
             Globals.InQuestBoard = false;
+            Globals.QuestBoard = null;
+            Globals.QuestBoardRequirements.Clear();
             PacketSender.SendCloseQuestBoard();
         }
 
