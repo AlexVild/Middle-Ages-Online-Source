@@ -298,6 +298,7 @@ namespace Intersect.Client.Interface.Game
             }
 
             mQuestBoardWindow = new QuestBoardWindow(GameCanvas);
+            mQuestBoardWindow.Setup(Globals.QuestBoard);
             mShouldOpenQuestBoard = false;
             Globals.InQuestBoard = true;
         }
@@ -508,7 +509,7 @@ namespace Intersect.Client.Interface.Game
                 }
                 else
                 {
-                    mQuestBoardWindow.Update(Globals.QuestBoard);
+                    mQuestBoardWindow.Update();
                 }
             }
 

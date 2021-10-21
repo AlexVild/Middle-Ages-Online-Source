@@ -1396,8 +1396,6 @@ namespace Intersect.Client.Localization
         public struct QuestBoard
         {
             public static LocalizedString cancel = @"Cancel";
-
-            public static LocalizedString title = @"Quest Board";
         }
 
         public struct Regex

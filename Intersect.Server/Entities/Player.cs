@@ -4994,11 +4994,10 @@ namespace Intersect.Server.Entities
         {
             var questList = QuestListBase.Get(questListId);
 
-            //So the quest isn't started or we can repeat it.. let's make sure that we meet requirements.
-            /*if (!Conditions.MeetsConditionLists(questList.Requirements, this, null, true, questList))
+            if (!Conditions.MeetsConditionLists(questList.Requirements, this, null))
             {
                 return false;
-            }*/
+            }
 
             return true;
         }

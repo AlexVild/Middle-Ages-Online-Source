@@ -325,7 +325,5 @@ namespace Intersect.Client.Interface.Game
             ed.ResponseSent = 1;
             base.Hide();
         }
-
     }
-
 }
