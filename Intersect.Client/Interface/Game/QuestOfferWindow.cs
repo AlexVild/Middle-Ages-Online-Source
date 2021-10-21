@@ -18,6 +18,10 @@ namespace Intersect.Client.Interface.Game
 
         private Button mDeclineButton;
 
+        private Button mNextQuest;
+
+        private Button mPreviousQuest;
+
         private string mQuestOfferText = "";
 
         //Controls
@@ -31,6 +35,8 @@ namespace Intersect.Client.Interface.Game
 
         private Label mQuestTitle;
 
+        private Label mQuestOfferAmount;
+
         public QuestOfferWindow(Canvas gameCanvas)
         {
             mQuestOfferWindow = new WindowControl(gameCanvas, Strings.QuestOffer.title, false, "QuestOfferWindow");
@@ -39,12 +45,10 @@ namespace Intersect.Client.Interface.Game
 
             //Menu Header
             mQuestTitle = new Label(mQuestOfferWindow, "QuestTitle");
-
             mQuestPromptArea = new ScrollControl(mQuestOfferWindow, "QuestOfferArea");
-
             mQuestPromptTemplate = new Label(mQuestPromptArea, "QuestOfferTemplate");
-
             mQuestPromptLabel = new RichLabel(mQuestPromptArea);
+            mQuestOfferAmount = new Label(mQuestOfferWindow, "QuestOfferAmount");
 
             //Accept Button
             mAcceptButton = new Button(mQuestOfferWindow, "AcceptButton");
@@ -56,16 +60,27 @@ namespace Intersect.Client.Interface.Game
             mDeclineButton.SetText(Strings.QuestOffer.decline);
             mDeclineButton.Clicked += _declineButton_Clicked;
 
+            mNextQuest = new Button(mQuestOfferWindow, "NextQuestButton");
+            mNextQuest.UserData = 1;
+            mNextQuest.Clicked += _changeQuest_Clicked;
+            mPreviousQuest = new Button(mQuestOfferWindow, "PreviousQuestButton");
+            mPreviousQuest.UserData = -1;
+            mPreviousQuest.Clicked += _changeQuest_Clicked;
+
             mQuestOfferWindow.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
             Interface.InputBlockingElements.Add(mQuestOfferWindow);
+
+            mNextQuest.Hide();
+            mPreviousQuest.Hide();
         }
 
         private void _declineButton_Clicked(Base sender, ClickedEventArgs arguments)
         {
             if (Globals.QuestOffers.Count > 0)
             {
-                PacketSender.SendDeclineQuest(Globals.QuestOffers[0]);
-                Globals.QuestOffers.RemoveAt(0);
+                // TODO this needs revamped a bit to handle quest baords
+                PacketSender.SendDeclineQuest(Globals.QuestOffers[Globals.QuestOfferIndex], InQuestBoard());
+                RemoveQuestOffers();
             }
         }
 
@@ -73,8 +88,38 @@ namespace Intersect.Client.Interface.Game
         {
             if (Globals.QuestOffers.Count > 0)
             {
-                PacketSender.SendAcceptQuest(Globals.QuestOffers[0]);
-                Globals.QuestOffers.RemoveAt(0);
+                PacketSender.SendAcceptQuest(Globals.QuestOffers[Globals.QuestOfferIndex], InQuestBoard());
+                RemoveQuestOffers();
+            }
+        }
+
+        public void _changeQuest_Clicked(Base sender, ClickedEventArgs arguments)
+        {
+            var button = (Button)sender;
+            var dir = (int)button.UserData;
+
+            var nextIndex = Globals.QuestOfferIndex + dir;
+            if (nextIndex < 0)
+            {
+                nextIndex = Globals.QuestOffers.Count - 1; // Wrap to back of list
+            }
+            else if (nextIndex >= Globals.QuestOffers.Count)
+            {
+                nextIndex = 0; // Wrap to front
+            }
+
+            Globals.QuestOfferIndex = nextIndex;
+        }
+
+        private void RemoveQuestOffers()
+        {
+            if (Globals.QuestBoard != null)
+            {
+                Globals.QuestOffers.Clear(); // if we're in a board, we want to get rid of ALL offers.
+            }
+            else
+            {
+                Globals.QuestOffers.RemoveAt(0); // Otherwise, we only ever display the head of the offers list - so remove that one.
             }
         }
 
@@ -87,6 +132,21 @@ namespace Intersect.Client.Interface.Game
             else
             {
                 Show();
+                if (InQuestBoard())
+                {
+                    mNextQuest.Show();
+                    mPreviousQuest.Show();
+                    mQuestOfferAmount.Show();
+                    mQuestOfferAmount.SetText(Strings.QuestOffer.questamount.ToString(Globals.QuestOfferIndex + 1, Globals.QuestOffers.Count));
+                    mDeclineButton.SetText(Strings.QuestOffer.backtoboard);
+                } else
+                {
+                    mNextQuest.Hide();
+                    mPreviousQuest.Hide();
+                    mQuestOfferAmount.Hide();
+                    mDeclineButton.SetText(Strings.QuestOffer.decline);
+                }
+
                 mQuestTitle.Text = quest.Name;
                 if (mQuestOfferText != quest.StartDescription)
                 {
@@ -125,6 +185,10 @@ namespace Intersect.Client.Interface.Game
             mQuestOfferWindow.IsHidden = true;
         }
 
+        private bool InQuestBoard()
+        {
+            return (Globals.QuestBoard != null && Globals.QuestOffers.Count > 1);
+        }
     }
 
 }

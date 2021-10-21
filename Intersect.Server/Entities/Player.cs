@@ -5066,10 +5066,6 @@ namespace Intersect.Server.Entities
             if (CanStartQuest(quest))
             {
                 QuestOffers.Add(quest.Id);
-                if (randomQuest)
-                {
-
-                }
                 PacketSender.SendQuestOffer(this, quest.Id);
             }
         }
@@ -5183,16 +5179,20 @@ namespace Intersect.Server.Entities
             }
         }
 
-        public void DeclineQuest(Guid questId)
+        public void DeclineQuest(Guid questId, bool fromQuestBoard)
         {
             if (QuestOffers.Contains(questId))
             {
                 lock (mEventLock)
                 {
+                    
                     QuestOffers.Remove(questId);
-                    PacketSender.SendChatMsg(
-                        this, Strings.Quests.declined.ToString(QuestBase.GetName(questId)), ChatMessageType.Quest, CustomColors.Quests.Declined
-                    );
+                    if (!fromQuestBoard) // don't alert the player otherwise
+                    {
+                        PacketSender.SendChatMsg(
+                            this, Strings.Quests.declined.ToString(QuestBase.GetName(questId)), ChatMessageType.Quest, CustomColors.Quests.Declined
+                        );
+                    }
 
                     foreach (var evt in EventLookup)
                     {

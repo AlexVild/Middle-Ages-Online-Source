@@ -386,7 +386,7 @@ namespace Intersect.Client.Interface.Game
 
             if (Globals.QuestOffers.Count > 0)
             {
-                var quest = QuestBase.Get(Globals.QuestOffers[0]);
+                var quest = QuestBase.Get(Globals.QuestOffers[Globals.QuestOfferIndex]);
                 mQuestOfferWindow.Update(quest);
             }
             else
@@ -660,15 +660,20 @@ namespace Intersect.Client.Interface.Game
                 closedWindows = true;
             }
 
-            if (mQuestBoardWindow != null && mQuestBoardWindow.IsVisible())
-            {
-                CloseQuestBoard();
-                closedWindows = true;
-            }
-
             if (GameMenu != null && GameMenu.HasWindowsOpen())
             {
                 GameMenu.CloseAllWindows();
+                closedWindows = true;
+            }
+
+            // We do NOT want the quest offer window or the quest board window to close on 'escape' - but we ALSO don't want them to allow for more menus to open, so we return true
+            if (mQuestOfferWindow != null && mQuestOfferWindow.IsVisible())
+            {
+                closedWindows = true;
+            }
+
+            if (mQuestBoardWindow != null && mQuestBoardWindow.IsVisible())
+            {
                 closedWindows = true;
             }
 

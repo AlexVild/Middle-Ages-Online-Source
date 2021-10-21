@@ -2051,7 +2051,12 @@ namespace Intersect.Server.Networking
             }
             else
             {
-                player.DeclineQuest(packet.QuestId);
+                player.DeclineQuest(packet.QuestId, packet.FromQuestBoard);
+            }
+
+            if (packet.FromQuestBoard) // Clear all quest offers, quietly
+            {
+                player.QuestOffers.Clear();
             }
         }
 

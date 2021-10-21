@@ -158,6 +158,8 @@ namespace Intersect.Client.General
 
         public static List<Guid> QuestOffers = new List<Guid>();
 
+        public static int QuestOfferIndex = 0; // Index of current quest offer we're looking at
+
         public static Random Random = new Random();
 
         public static GameSystem System;

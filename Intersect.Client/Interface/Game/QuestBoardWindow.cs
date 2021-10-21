@@ -27,6 +27,8 @@ namespace Intersect.Client.Interface.Game
 
         public int Y => mQuestBoardWindow.Y;
 
+        private int mCurrentButtonIndex = 0;
+
         private QuestBoardBase mQuestBoard;
 
         private List<QuestListBase> mQuestLists = new List<QuestListBase>();
@@ -40,10 +42,10 @@ namespace Intersect.Client.Interface.Game
 
             mQuestBoardWindow.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
             Interface.InputBlockingElements.Add(mQuestBoardWindow);
-            ClearQuestLists();
 
+            ClearQuestLists();
             mCancelButton.Clicked += Cancel_Clicked;
-        } 
+        }
 
         public void Setup(QuestBoardBase questBoard)
         {
@@ -55,6 +57,13 @@ namespace Intersect.Client.Interface.Game
 
         public void Update()
         {
+            if (Globals.QuestOffers.Count > 0)
+            {
+                mQuestBoardWindow.IsClosable = false;
+            } else
+            {
+                mQuestBoardWindow.IsClosable = true;
+            }
             mQuestBoardWindow.DisableResizing();
         }
 
@@ -74,16 +83,18 @@ namespace Intersect.Client.Interface.Game
             var baseY = 50; // Initial positions of the first button
             var upperMargin = 16; // How much space to have between each button
 
+            mCurrentButtonIndex = 0;
             for (var i = 0; i < mQuestBoard.QuestLists.Count; i++)
             {
+                mCurrentButtonIndex = i;
                 var questListId = mQuestBoard.QuestLists[i];
                 mQuestLists.Add(QuestListBase.Get(questListId));
                 // Keep button in a list so we have some reference of which to dispose of it
-                mQuestListButtons.Add(SetupSelectionButton(mQuestBoardWindow, i, mQuestLists[i]));
+                mQuestListButtons.Add(SetupSelectionButton(mQuestLists[i]));
                 var button = mQuestListButtons[i];
                 // Load in button styling
                 button.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
-                
+
                 // If we don't meet the requirements for accessing the list
                 if (!Globals.QuestBoardRequirements[questListId])
                 {
@@ -96,10 +107,14 @@ namespace Intersect.Client.Interface.Game
             }
         }
 
-        public Button SetupSelectionButton(WindowControl parent, int index, QuestListBase questList)
+        public Button SetupSelectionButton(QuestListBase questList)
         {
             var button = new Button(mQuestBoardWindow, $"QuestBoardSelection");
             button.Text = questList.Name;
+
+            button.Clicked += Quest_Clicked;
+            button.UserData = questList;
+
             return button;
         }
 
@@ -121,6 +136,20 @@ namespace Intersect.Client.Interface.Game
         private void Cancel_Clicked(Base sender, ClickedEventArgs arguments)
         { 
             Close();
+        }
+
+        private void Quest_Clicked(Base sender, ClickedEventArgs arguments)
+        {
+            Globals.QuestOfferIndex = 0; // reset quest selection to 0
+            var button = (Button)sender;
+
+            var questList = (QuestListBase)button.UserData;
+
+            // Add all the quests in the list to the user's quest offers - the UI of the Quest Window will handle it from there.
+            foreach (var quest in questList.Quests)
+            {
+                Globals.QuestOffers.Add(QuestBase.Get(quest).Id);
+            }
         }
     }
 }

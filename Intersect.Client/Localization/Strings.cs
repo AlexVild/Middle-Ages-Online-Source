@@ -1391,6 +1391,10 @@ namespace Intersect.Client.Localization
 
             public static LocalizedString title = @"Quest Offer";
 
+            public static LocalizedString backtoboard = @"Back";
+            
+            public static LocalizedString questamount = @"{00} / {01}";
+
         }
 
         public struct QuestBoard

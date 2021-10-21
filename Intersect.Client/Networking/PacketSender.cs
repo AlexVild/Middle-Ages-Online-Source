@@ -248,14 +248,14 @@ namespace Intersect.Client.Networking
             Network.SendPacket(new PartyInviteResponsePacket((Guid) ((InputBox) sender).UserData, false));
         }
 
-        public static void SendAcceptQuest(Guid questId)
+        public static void SendAcceptQuest(Guid questId, bool fromQuestBoard)
         {
-            Network.SendPacket(new QuestResponsePacket(questId, true));
+            Network.SendPacket(new QuestResponsePacket(questId, true, fromQuestBoard));
         }
 
-        public static void SendDeclineQuest(Guid questId)
+        public static void SendDeclineQuest(Guid questId, bool fromQuestBoard)
         {
-            Network.SendPacket(new QuestResponsePacket(questId, false));
+            Network.SendPacket(new QuestResponsePacket(questId, false, fromQuestBoard));
         }
 
         public static void SendAbandonQuest(Guid questId)
