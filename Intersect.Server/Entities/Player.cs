@@ -1758,6 +1758,8 @@ namespace Intersect.Server.Entities
                     }
 
                     mSentMap = true;
+                    
+                    StartCommonEventsWithTrigger(CommonEventTrigger.MapChanged);
                 }
                 else
                 {
@@ -1987,6 +1989,7 @@ namespace Intersect.Server.Entities
             int spawnAmount = 0;
 
             // How are we going to be handling this?
+            var success = false;
             switch (handler)
             {
                 // Handle this item like normal, there's no special rules attached to this method.
@@ -1994,7 +1997,7 @@ namespace Intersect.Server.Entities
                     if (CanGiveItem(item)) // Can receive item under regular rules.
                     {
                         GiveItem(item, sendUpdate);
-                        return true;
+                        success = true;
                     }
 
                     break;
@@ -2002,7 +2005,7 @@ namespace Intersect.Server.Entities
                     if (CanGiveItem(item)) // Can receive item under regular rules.
                     {
                         GiveItem(item, sendUpdate);
-                        return true;
+                        success = true;
                     }
                     else if (item.Descriptor.Stackable && openSlots == 0) // Is stackable, but no inventory space.
                     {
@@ -2022,7 +2025,7 @@ namespace Intersect.Server.Entities
                     if (spawnAmount > 0)
                     {
                         Map.SpawnItem(overflowTileX > -1 ? overflowTileX : X, overflowTileY > -1 ? overflowTileY : Y, item, spawnAmount, Id);
-                        return spawnAmount != item.Quantity;
+                        success = spawnAmount != item.Quantity;
                     }
 
                     break;
@@ -2030,19 +2033,26 @@ namespace Intersect.Server.Entities
                     if (CanGiveItem(item)) // Can receive item under regular rules.
                     {
                         GiveItem(item, sendUpdate);
-                        return true;
+                        success = true;
                     }
                     else if (!item.Descriptor.Stackable && openSlots > 0) // Is not stackable, has space for some.
                     {
                         item.Quantity = openSlots;
                         GiveItem(item, sendUpdate);
-                        return true;
+                        success = true;
                     }
 
                     break;
                     // Did you forget to change this method when you added something? ;)
                 default:
                     throw new NotImplementedException();
+            }
+
+            if (success)
+            {
+                StartCommonEventsWithTrigger(CommonEventTrigger.InventoryChanged);
+
+                return true;
             }
 
             var bankInterface = new BankInterface(this, ((IEnumerable<Item>)Bank).ToList(), new object(), null, Options.MaxBankSlots);
@@ -2586,6 +2596,10 @@ namespace Intersect.Server.Entities
 
             // Update quest progress and we're done!
             UpdateGatherItemQuests(slot.ItemId);
+
+            // Start common events related to inventory changes.
+            StartCommonEventsWithTrigger(CommonEventTrigger.InventoryChanged);
+
             return true;
 
         }
@@ -2673,6 +2687,10 @@ namespace Intersect.Server.Entities
 
             // Update quest progress and we're done!
             UpdateGatherItemQuests(itemId);
+
+            // Start common events related to inventory changes.
+            StartCommonEventsWithTrigger(CommonEventTrigger.InventoryChanged);
+
             return true;
         }
 
@@ -6068,6 +6086,12 @@ namespace Intersect.Server.Entities
                             }
                         }
                     }
+                }
+
+                // If we've changed maps, start relevant events!
+                if (oldMap != MapId)
+                {
+                    StartCommonEventsWithTrigger(CommonEventTrigger.MapChanged);
                 }
             }
         }

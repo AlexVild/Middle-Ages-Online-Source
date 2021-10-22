@@ -38,6 +38,10 @@
 
         ComboEnd,
 
+        InventoryChanged,
+
+        MapChanged,
+
     }
 
 }
