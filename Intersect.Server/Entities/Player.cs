@@ -2280,6 +2280,8 @@ namespace Intersect.Server.Entities
             UpdateGatherItemQuests(itemDescriptor.Id);
             PacketSender.SendInventoryItemUpdate(this, slotIndex);
 
+            StartCommonEventsWithTrigger(CommonEventTrigger.InventoryChanged);
+
             return true;
         }
 
