@@ -1160,6 +1160,9 @@ namespace Intersect.Server.Localization
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString updated = @"Quest: {00} updated!";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString reqsnotmetforlist = @"You don't meet the requirements of any of the quests within the list {00}.";
+
         }
 
         public sealed class RegexNamespace : LocaleNamespace

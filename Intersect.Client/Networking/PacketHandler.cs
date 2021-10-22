@@ -1763,6 +1763,7 @@ namespace Intersect.Client.Networking
         {
             if (!Globals.QuestOffers.Contains(packet.QuestId))
             {
+                Globals.QuestOfferIndex = 0; // reset quest selection to 0
                 Globals.QuestOffers.Add(packet.QuestId);
             }
         }
@@ -2176,6 +2177,21 @@ namespace Intersect.Client.Networking
             else
             {
                 Interface.Interface.GameUi.NotifyCloseQuestBoard();
+            }
+        }
+
+        // QuestOfferListPacket
+        public void HandlePacket(IPacketSender packetSender, QuestOfferListPacket packet)
+        {
+            if (Globals.Me == null) return;
+
+            if (packet.Quests.Count > 0)
+            {
+                Globals.QuestOfferIndex = 0; // reset quest selection to 0
+            }
+            foreach (var quest in packet.Quests)
+            {
+                Globals.QuestOffers.Add(quest);
             }
         }
     }

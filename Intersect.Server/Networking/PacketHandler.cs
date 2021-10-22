@@ -2992,6 +2992,19 @@ namespace Intersect.Server.Networking
             }
         }
 
+        // RequestQuestsFromListPacket - need to give the player their list of startable quests
+        public void HandlePacket(Client client, RequestQuestsFromListPacket packet)
+        {
+            var player = client?.Entity;
+
+            if (player == null)
+            {
+                return;
+            }
+
+            player.OfferQuestList(packet.QuestList);
+        }
+
         #endregion
 
         #region "Editor Packets"

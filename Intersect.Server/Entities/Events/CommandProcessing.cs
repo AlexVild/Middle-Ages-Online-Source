@@ -2019,14 +2019,30 @@ namespace Intersect.Server.Entities.Events
             var rand = new Random();
             var quests = QuestListBase.Get(command.QuestListId).Quests;
 
-            var randomQuestIndex = rand.Next(quests.Count());
-
-            var quest = QuestBase.Get(quests[randomQuestIndex]);
-            if (quest != null)
+            // Eliminate quests the player can't do based on quest reqs
+            List<Guid> viableQuests = new List<Guid>();
+            foreach (var quest in quests)
             {
-                player.OfferQuest(quest);
-                stackInfo.WaitingForResponse = CommandInstance.EventResponse.RandomQuest;
-                stackInfo.WaitingOnCommand = command;
+                if (player.CanStartQuest(QuestBase.Get(quest)))
+                {
+                    viableQuests.Add(quest);
+                }
+            }
+
+            if (viableQuests.Count <= 0)
+            {
+                PacketSender.SendChatMsg(player, Strings.Quests.reqsnotmetforlist.ToString(), ChatMessageType.Local, Color.Red);
+            } else
+            {
+                var randomQuestIndex = rand.Next(viableQuests.Count);
+
+                var questToOffer = QuestBase.Get(viableQuests[randomQuestIndex]);
+                if (questToOffer != null)
+                {
+                    player.OfferQuest(questToOffer);
+                    stackInfo.WaitingForResponse = CommandInstance.EventResponse.RandomQuest;
+                    stackInfo.WaitingOnCommand = command;
+                }
             }
         }
 

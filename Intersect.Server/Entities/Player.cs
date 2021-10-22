@@ -5070,6 +5070,27 @@ namespace Intersect.Server.Entities
             }
         }
 
+        public void OfferQuestList(Guid questListId)
+        {
+            QuestListBase questList = QuestListBase.Get(questListId);
+            List<Guid> questsToSend = new List<Guid>();
+            foreach (var quest in questList.Quests)
+            {
+                if ( CanStartQuest( QuestBase.Get(quest) )) {
+                    QuestOffers.Add(quest);
+                    questsToSend.Add(quest);
+                }
+            }
+
+            if (questsToSend.Count > 0)
+            {
+                PacketSender.SendQuestOfferList(this, questsToSend);
+            } else
+            {
+                PacketSender.SendChatMsg(this, Strings.Quests.reqsnotmetforlist.ToString(questList.Name), ChatMessageType.Local, Color.Red);
+            }
+        }
+
         public bool OpenQuestBoard(QuestBoardBase questBoard)
         {
             if (IsBusy())

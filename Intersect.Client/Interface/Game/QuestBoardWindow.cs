@@ -31,7 +31,7 @@ namespace Intersect.Client.Interface.Game
 
         private QuestBoardBase mQuestBoard;
 
-        private List<QuestListBase> mQuestLists = new List<QuestListBase>();
+        private List<Guid> mQuestLists = new List<Guid>();
 
         public QuestBoardWindow(Canvas gameCanvas)
         {
@@ -88,7 +88,7 @@ namespace Intersect.Client.Interface.Game
             {
                 mCurrentButtonIndex = i;
                 var questListId = mQuestBoard.QuestLists[i];
-                mQuestLists.Add(QuestListBase.Get(questListId));
+                mQuestLists.Add(questListId);
                 // Keep button in a list so we have some reference of which to dispose of it
                 mQuestListButtons.Add(SetupSelectionButton(mQuestLists[i]));
                 var button = mQuestListButtons[i];
@@ -107,13 +107,13 @@ namespace Intersect.Client.Interface.Game
             }
         }
 
-        public Button SetupSelectionButton(QuestListBase questList)
+        public Button SetupSelectionButton(Guid questListId)
         {
             var button = new Button(mQuestBoardWindow, $"QuestBoardSelection");
-            button.Text = questList.Name;
+            button.Text = QuestListBase.Get(questListId).Name;
 
-            button.Clicked += Quest_Clicked;
-            button.UserData = questList;
+            button.Clicked += QuestList_Clicked;
+            button.UserData = questListId;
 
             return button;
         }
@@ -138,18 +138,13 @@ namespace Intersect.Client.Interface.Game
             Close();
         }
 
-        private void Quest_Clicked(Base sender, ClickedEventArgs arguments)
-        {
-            Globals.QuestOfferIndex = 0; // reset quest selection to 0
+        private void QuestList_Clicked(Base sender, ClickedEventArgs arguments)
+        {   
             var button = (Button)sender;
+            var questList = (Guid)button.UserData;
 
-            var questList = (QuestListBase)button.UserData;
-
-            // Add all the quests in the list to the user's quest offers - the UI of the Quest Window will handle it from there.
-            foreach (var quest in questList.Quests)
-            {
-                Globals.QuestOffers.Add(QuestBase.Get(quest).Id);
-            }
+            // Request quests from the server
+            PacketSender.RequestQuestsFromList(questList);
         }
     }
 }

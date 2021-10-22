@@ -400,6 +400,7 @@
     <Compile Include="Network\Packets\Client\HotbarUpdatePacket.cs" />
     <Compile Include="Network\Packets\Client\LoginPacket.cs" />
     <Compile Include="Network\Packets\Client\RequestGuildPacket.cs" />
+    <Compile Include="Network\Packets\Client\RequestQuestsFromListPacket.cs" />
     <Compile Include="Network\Packets\Client\SendQuestPointRequestPacket.cs" />
     <Compile Include="Network\Packets\Client\UpdateGuildMemberPacket.cs" />
     <Compile Include="Network\Packets\Client\PictureClosedPacket.cs" />
@@ -420,6 +421,7 @@
     <Compile Include="Network\Packets\Server\CancelCastPacket.cs" />
     <Compile Include="Network\Packets\Server\PlayAnimationPackets.cs" />
     <Compile Include="Network\Packets\Server\QuestBoardPacket.cs" />
+    <Compile Include="Network\Packets\Server\QuestOfferListPacket.cs" />
     <Compile Include="Network\Packets\Server\QuestPointPacket.cs" />
     <Compile Include="Network\Packets\Server\ResourceLockPacket.cs" />
     <Compile Include="Network\Packets\Server\UpdateFutureWarpPacket.cs" />

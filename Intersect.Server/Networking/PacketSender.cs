@@ -1889,6 +1889,12 @@ namespace Intersect.Server.Networking
             player.SendPacket(new QuestOfferPacket(questId));
         }
 
+        //QuestOfferListPacket
+        public static void SendQuestOfferList(Player player, List<Guid> questIds)
+        {
+            player.SendPacket(new QuestOfferListPacket(questIds));
+        }
+
         //QuestProgressPacket
         public static void SendQuestsProgress(Player player)
         {
