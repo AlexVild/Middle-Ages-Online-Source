@@ -33,6 +33,8 @@ namespace Intersect.Editor.Forms.Editors
 
         QuestList,
 
+        Craft,
+
     }
 
     public partial class FrmDynamicRequirements : Form
@@ -102,6 +104,10 @@ namespace Intersect.Editor.Forms.Editors
                 case RequirementType.QuestList:
                     lblInstructions.Text = Strings.DynamicRequirements.instructionsnpccanbeattacked;
                     
+                    break;
+                case RequirementType.Craft:
+                    lblInstructions.Text = Strings.DynamicRequirements.craft;
+
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
