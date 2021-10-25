@@ -643,7 +643,7 @@ namespace Intersect.Client.Localization
             public static LocalizedString title = @"Crafting Table";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public static LocalizedString recipe = @"{00}) {01}";
+            public static LocalizedString recipe = @"{01}";
 
         }
 

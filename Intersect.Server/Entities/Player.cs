@@ -1990,7 +1990,6 @@ namespace Intersect.Server.Entities
             int spawnAmount = 0;
 
             // How are we going to be handling this?
-            var success = false;
             switch (handler)
             {
                 // Handle this item like normal, there's no special rules attached to this method.
