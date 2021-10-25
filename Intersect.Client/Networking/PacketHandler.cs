@@ -1516,10 +1516,7 @@ namespace Intersect.Client.Networking
             {
                 Globals.ActiveCraftingTable = new CraftingTableBase();
                 Globals.ActiveCraftingTable.Load(packet.TableData);
-                if (!packet.Update)
-                {
-                    Interface.Interface.GameUi.NotifyOpenCraftingTable();
-                }
+                Interface.Interface.GameUi.NotifyOpenCraftingTable();
             }
             else
             {
