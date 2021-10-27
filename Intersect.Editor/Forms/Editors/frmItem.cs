@@ -1389,14 +1389,13 @@ namespace Intersect.Editor.Forms.Editors
 
         private void btnRemoveTag_Click(object sender, EventArgs e)
         {
-            int index = lstTags.SelectedIndex;
-            if (index > -1)
+            if (lstTags.SelectedIndex > -1)
             {
-                string selectedTagValue = mKnownItemTags[index];
-                lstTags.Items.RemoveAt(index);
-                if (!string.IsNullOrEmpty(selectedTagValue) && mEditorItem.Tags.Contains(selectedTagValue))
+                string selectedTag = (string)lstTags.SelectedItem;
+                lstTags.Items.Remove(selectedTag);
+                if (!string.IsNullOrEmpty(selectedTag) && mEditorItem.Tags.Contains(selectedTag))
                 {
-                    mEditorItem.Tags.Remove(selectedTagValue);
+                    mEditorItem.Tags.Remove(selectedTag);
                 }
             }
         }
