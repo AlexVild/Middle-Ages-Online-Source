@@ -44,6 +44,10 @@ namespace Intersect.GameObjects.Events
 
         MapZoneTypeIs,
 
+        HasItemWithTag,
+
+        ItemEquippedWithTag,
+
     }
 
     public class Condition
@@ -292,6 +296,43 @@ namespace Intersect.GameObjects.Events
         /// Defines the map Zone Type to compare to.
         /// </summary>
         public MapZones ZoneType { get; set; }
+    }
+
+    /// <summary>
+    /// Defines the condition class used when checking whether a player has some item in their inventory with a given tag
+    /// </summary>
+    public class InventoryTagCondition : Condition
+    {
+        /// <summary>
+        /// Defines the type of condition.
+        /// </summary>
+        public override ConditionTypes Type { get; } = ConditionTypes.HasItemWithTag;
+
+        /// <summary>
+        /// Defines the tag to check for.
+        /// </summary>
+        public string Tag { get; set; }
+
+        /// <summary>
+        /// Defines whether or not to include bank in the search.
+        /// </summary>
+        public bool IncludeBank { get; set; }
+    }
+
+    /// <summary>
+    /// Defines the condition class used when checking whether a player has some item equipped with a given tag
+    /// </summary>
+    public class EquipmentTagCondition : Condition
+    {
+        /// <summary>
+        /// Defines the type of condition.
+        /// </summary>
+        public override ConditionTypes Type { get; } = ConditionTypes.HasItemWithTag;
+
+        /// <summary>
+        /// Defines the tag to check for.
+        /// </summary>
+        public string Tag { get; set; }
     }
 
     public class VariableCompaison

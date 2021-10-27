@@ -289,6 +289,22 @@ namespace Intersect.Editor.Localization
             return Strings.EventConditionDesc.MapZoneTypeIs.ToString(Strings.MapProperties.zones[(int)condition.ZoneType]);
         }
 
+        public static string GetEventConditionalDesc(InventoryTagCondition condition)
+        {
+            var inBank = string.Empty;
+            if (condition.IncludeBank)
+            {
+                inBank = " (including bank)";
+            }
+
+            return Strings.EventConditionDesc.itemwithtag.ToString(condition.Tag, inBank);
+        }
+
+        public static string GetEventConditionalDesc(EquipmentTagCondition condition)
+        {
+            return Strings.EventConditionDesc.equippedwithtag.ToString(condition.Tag);
+        }
+
         public static string GetVariableComparisonString(VariableCompaison comparison)
         {
             return "";
@@ -2086,7 +2102,9 @@ Tick timer saved in server config.json.";
                 {17, @"Item Equipped is..."},
                 {18, @"Has X free Inventory slots..." },
                 {19, @"In Guild With At Least Rank..." },
-                {20, @"Map Zone Type is..." }
+                {20, @"Map Zone Type is..." },
+                {21, @"Has item with tag..." },
+                {22, @"Item equipped with tag..." },
             };
 
             public static LocalizedString endrange = @"End Range:";
@@ -2234,6 +2252,12 @@ Tick timer saved in server config.json.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString checkbank = @"Check Bank?";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString taggroup = @"Tag is:";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString taglabel = @"Tag:";
         }
 
         public struct EventConditionDesc
@@ -2318,6 +2342,12 @@ Tick timer saved in server config.json.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString MapZoneTypeIs = @"Map Zone Type is {00}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString itemwithtag = @"Player has item with tag {00} {01}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString equippedwithtag = @"Player has item equipped with tag {00}";
 
             public static Dictionary<int, LocalizedString> selfswitches = new Dictionary<int, LocalizedString>
             {

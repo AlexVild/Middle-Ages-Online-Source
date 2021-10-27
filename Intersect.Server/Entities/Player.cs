@@ -2822,6 +2822,45 @@ namespace Intersect.Server.Entities
             return count;
         }
 
+        public bool HasItemWithTag(string tag, bool inInventory = true, bool inBank = false)
+        {
+            if (inInventory == false && inBank == false)
+            {
+                throw new ArgumentException(
+                    $@"At least one of either {nameof(inInventory)} or {nameof(inBank)} must be true to count items."
+                );
+            }
+
+            if (inInventory)
+            {
+                foreach (var item in Items)
+                {
+                    if (item?.Descriptor?.Tags != null && item?.Descriptor?.Tags.Count > 0)
+                    {
+                        if (item.Descriptor.Tags.Contains(tag))
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            if (inBank)
+            {
+                foreach (var item in Bank)
+                {
+                    if (item?.Descriptor?.Tags != null && item?.Descriptor?.Tags.Count > 0)
+                    {
+                        if (item.Descriptor.Tags.Contains(tag)) {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
+
         public override int GetWeaponDamage()
         {
             if (Equipment[Options.WeaponIndex] > -1 && Equipment[Options.WeaponIndex] < Options.MaxInvItems)

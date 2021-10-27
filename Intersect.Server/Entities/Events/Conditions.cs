@@ -480,6 +480,47 @@ namespace Intersect.Server.Entities.Events
             return player.Map?.ZoneType == condition.ZoneType;
         }
 
+        public static bool MeetsCondition(
+            InventoryTagCondition condition,
+            Player player,
+            Event eventInstance,
+            QuestBase questBase
+        )
+        {
+            return player.HasItemWithTag(condition.Tag, true, condition.IncludeBank);
+        }
+
+        public static bool MeetsCondition(
+            EquipmentTagCondition condition,
+            Player player,
+            Event eventInstance,
+            QuestBase questBase
+        )
+        {
+            var equipment = player.Equipment;
+            var items = player.Items;
+
+            for (var i = 0; i < Options.EquipmentSlots.Count; i++)
+            {
+                if (equipment[i] >= 0 && equipment[i] < Options.MaxInvItems && equipment[i] < items.Count)
+                {
+                    if (items[equipment[i]].ItemId != Guid.Empty)
+                    {
+                        var item = ItemBase.Get(items[equipment[i]].ItemId);
+                        if (item != null)
+                        {
+                            if (item.Tags.Contains(condition.Tag))
+                            {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
+
         //Variable Comparison Processing
 
         public static bool CheckVariableComparison(

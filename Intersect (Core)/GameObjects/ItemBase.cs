@@ -376,6 +376,28 @@ namespace Intersect.GameObjects
             return Lookup.Where(i => ((ItemBase)i.Value).CooldownGroup.Trim() == cooldownGroup).Select(i => (ItemBase)i.Value).ToArray();
         }
 
+        /// <summary>
+        /// Gets all of the tags that have been created for all items in our collection
+        /// </summary>
+        /// <returns>Returns a list of <see cref="string"/> all tags that have been created in the item editor.</returns>
+        public static string[] GetTags()
+        {
+            List<string> tags = new List<string>();
+            ItemBase[] itemsWithTags = Lookup.Where(i => ((ItemBase)i.Value).Tags != null && ((ItemBase)i.Value).Tags.Count > 0).Select(i => (ItemBase)i.Value).ToArray();
+            foreach (var item in itemsWithTags)
+            {
+                foreach (var tag in item.Tags)
+                {
+                    if (!tags.Contains(tag))
+                    {
+                        tags.Add(tag);
+                    }
+                }
+            }
+            
+            return tags.ToArray();
+        }
+
         private void Initialize()
         {
             Name = "New Item";

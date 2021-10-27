@@ -137,6 +137,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             grpVariableAmount.Text = Strings.EventConditional.VariableLabel;
             rdoInvPlayerVariable.Text = Strings.EventConditional.playervariable;
             rdoInvGlobalVariable.Text = Strings.EventConditional.globalvariable;
+            chkBank.Text = Strings.EventConditional.checkbank;
 
             //Has Item Equipped
             grpEquippedItem.Text = Strings.EventConditional.hasitemequipped;
@@ -246,7 +247,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                 cmbMapZoneType.Items.Add(Strings.MapProperties.zones[i]);
             }
 
-            chkBank.Text = Strings.EventConditional.checkbank;
+            // Tag checks (in inv/bank/equipped)
+            grpTag.Text = Strings.EventConditional.taggroup;
+            lblTag.Text = Strings.EventConditional.taglabel;
+            chkTagBank.Text = Strings.EventConditional.checkbank;
 
             btnSave.Text = Strings.EventConditional.okay;
             btnCancel.Text = Strings.EventConditional.cancel;
@@ -375,6 +379,22 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     if (cmbMapZoneType.Items.Count > 0)
                     {
                         cmbMapZoneType.SelectedIndex = 0;
+                    }
+
+                    break;
+                case ConditionTypes.HasItemWithTag:
+                    Condition = new InventoryTagCondition();
+                    if (cmbTags.Items.Count > 0)
+                    {
+                        cmbTags.SelectedIndex = 0;
+                    }
+
+                    break;
+                case ConditionTypes.ItemEquippedWithTag:
+                    Condition = new EquipmentTagCondition();
+                    if (cmbTags.Items.Count > 0)
+                    {
+                        cmbTags.SelectedIndex = 0;
                     }
 
                     break;
@@ -518,9 +538,26 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     grpMapZoneType.Show();
 
                     break;
+                case ConditionTypes.HasItemWithTag:
+                    InitializeTags();
+                    chkTagBank.Show();
+
+                    break;
+                case ConditionTypes.ItemEquippedWithTag:
+                    InitializeTags();
+                    chkTagBank.Hide();
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+        }
+
+        private void InitializeTags()
+        {
+            grpTag.Show();
+            cmbTags.Items.Clear();
+            cmbTags.Items.AddRange(ItemBase.GetTags());
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -1177,6 +1214,16 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             }
         }
 
+        private void SetupFormValues(InventoryTagCondition condition)
+        {
+            cmbTags.SelectedItem = condition.Tag;
+            chkTagBank.Checked = condition.IncludeBank;
+        }
+
+        private void SetupFormValues(EquipmentTagCondition condition)
+        {
+            cmbTags.SelectedItem = condition.Tag;
+        }
 
         #endregion
 
@@ -1331,6 +1378,17 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             {
                 condition.ZoneType = (MapZones)cmbMapZoneType.SelectedIndex;
             }
+        }
+
+        private void SaveFormValues(InventoryTagCondition condition)
+        {
+            condition.Tag = (string)cmbTags.SelectedItem;
+            condition.IncludeBank = chkTagBank.Checked;
+        }
+
+        private void SaveFormValues(EquipmentTagCondition condition)
+        {
+            condition.Tag = (string)cmbTags.SelectedItem;
         }
 
         #endregion
