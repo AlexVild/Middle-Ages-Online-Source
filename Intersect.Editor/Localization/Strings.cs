@@ -3370,6 +3370,27 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString weaponproperties = @"Weapon Properties";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString addtag = @"Add";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString removetag = @"Remove";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString newtag = @"New Tag";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString newtagprompt = @"Enter tag name:";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString newtagtitle = @"New Tag";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString taglabel = @"Tag to Add:";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString taggroup = @"Tags";
+
         }
 
         public struct LightEditor

@@ -41,6 +41,9 @@ namespace Intersect.Editor.Forms.Editors
             this.btnCancel = new DarkUI.Controls.DarkButton();
             this.btnSave = new DarkUI.Controls.DarkButton();
             this.grpGeneral = new DarkUI.Controls.DarkGroupBox();
+            this.grpTags = new DarkUI.Controls.DarkGroupBox();
+            this.cmbTags = new DarkUI.Controls.DarkComboBox();
+            this.btnNewTag = new DarkUI.Controls.DarkButton();
             this.grpRequirements = new DarkUI.Controls.DarkGroupBox();
             this.lblCannotUse = new System.Windows.Forms.Label();
             this.txtCannotUse = new DarkUI.Controls.DarkTextBox();
@@ -92,6 +95,10 @@ namespace Intersect.Editor.Forms.Editors
             this.lblName = new System.Windows.Forms.Label();
             this.txtName = new DarkUI.Controls.DarkTextBox();
             this.grpEquipment = new DarkUI.Controls.DarkGroupBox();
+            this.grpHelmetPaperdollProps = new DarkUI.Controls.DarkGroupBox();
+            this.chkHelmHideExtra = new DarkUI.Controls.DarkCheckBox();
+            this.chkHelmHideBeard = new DarkUI.Controls.DarkCheckBox();
+            this.chkHelmHideHair = new DarkUI.Controls.DarkCheckBox();
             this.grpPrayerProperties = new DarkUI.Controls.DarkGroupBox();
             this.lblComboExpBoost = new System.Windows.Forms.Label();
             this.nudComboExpBoost = new DarkUI.Controls.DarkNumericUpDown();
@@ -186,6 +193,9 @@ namespace Intersect.Editor.Forms.Editors
             this.grpEvent = new DarkUI.Controls.DarkGroupBox();
             this.chkSingleUseEvent = new DarkUI.Controls.DarkCheckBox();
             this.cmbEvent = new DarkUI.Controls.DarkComboBox();
+            this.grpBags = new DarkUI.Controls.DarkGroupBox();
+            this.nudBag = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblBag = new System.Windows.Forms.Label();
             this.grpConsumable = new DarkUI.Controls.DarkGroupBox();
             this.lblPercentage3 = new System.Windows.Forms.Label();
             this.nudIntervalPercentage = new DarkUI.Controls.DarkNumericUpDown();
@@ -200,9 +210,6 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbTeachSpell = new DarkUI.Controls.DarkComboBox();
             this.lblSpell = new System.Windows.Forms.Label();
             this.pnlContainer = new System.Windows.Forms.Panel();
-            this.grpBags = new DarkUI.Controls.DarkGroupBox();
-            this.nudBag = new DarkUI.Controls.DarkNumericUpDown();
-            this.lblBag = new System.Windows.Forms.Label();
             this.toolStrip = new DarkUI.Controls.DarkToolStrip();
             this.toolStripItemNew = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -215,12 +222,13 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
             this.vS2015DarkTheme1 = new WeifenLuo.WinFormsUI.Docking.VS2015DarkTheme();
-            this.grpHelmetPaperdollProps = new DarkUI.Controls.DarkGroupBox();
-            this.chkHelmHideHair = new DarkUI.Controls.DarkCheckBox();
-            this.chkHelmHideBeard = new DarkUI.Controls.DarkCheckBox();
-            this.chkHelmHideExtra = new DarkUI.Controls.DarkCheckBox();
+            this.lblTagToAdd = new System.Windows.Forms.Label();
+            this.btnAddTag = new DarkUI.Controls.DarkButton();
+            this.btnRemoveTag = new DarkUI.Controls.DarkButton();
+            this.lstTags = new System.Windows.Forms.ListBox();
             this.grpItems.SuspendLayout();
             this.grpGeneral.SuspendLayout();
+            this.grpTags.SuspendLayout();
             this.grpRequirements.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudBankStackLimit)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudInvStackLimit)).BeginInit();
@@ -233,6 +241,7 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudPrice)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picItem)).BeginInit();
             this.grpEquipment.SuspendLayout();
+            this.grpHelmetPaperdollProps.SuspendLayout();
             this.grpPrayerProperties.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudComboExpBoost)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudComboInterval)).BeginInit();
@@ -267,15 +276,14 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudCritChance)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudDamage)).BeginInit();
             this.grpEvent.SuspendLayout();
+            this.grpBags.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudBag)).BeginInit();
             this.grpConsumable.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudIntervalPercentage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudInterval)).BeginInit();
             this.grpSpell.SuspendLayout();
             this.pnlContainer.SuspendLayout();
-            this.grpBags.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudBag)).BeginInit();
             this.toolStrip.SuspendLayout();
-            this.grpHelmetPaperdollProps.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpItems
@@ -358,6 +366,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpGeneral.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpGeneral.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpGeneral.Controls.Add(this.grpTags);
             this.grpGeneral.Controls.Add(this.grpRequirements);
             this.grpGeneral.Controls.Add(this.chkCanGuildBank);
             this.grpGeneral.Controls.Add(this.nudBankStackLimit);
@@ -408,10 +417,61 @@ namespace Intersect.Editor.Forms.Editors
             this.grpGeneral.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpGeneral.Location = new System.Drawing.Point(2, 1);
             this.grpGeneral.Name = "grpGeneral";
-            this.grpGeneral.Size = new System.Drawing.Size(439, 427);
+            this.grpGeneral.Size = new System.Drawing.Size(439, 584);
             this.grpGeneral.TabIndex = 2;
             this.grpGeneral.TabStop = false;
             this.grpGeneral.Text = "General";
+            // 
+            // grpTags
+            // 
+            this.grpTags.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpTags.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpTags.Controls.Add(this.lstTags);
+            this.grpTags.Controls.Add(this.btnRemoveTag);
+            this.grpTags.Controls.Add(this.btnAddTag);
+            this.grpTags.Controls.Add(this.lblTagToAdd);
+            this.grpTags.Controls.Add(this.cmbTags);
+            this.grpTags.Controls.Add(this.btnNewTag);
+            this.grpTags.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpTags.Location = new System.Drawing.Point(11, 422);
+            this.grpTags.Margin = new System.Windows.Forms.Padding(2);
+            this.grpTags.Name = "grpTags";
+            this.grpTags.Padding = new System.Windows.Forms.Padding(2);
+            this.grpTags.Size = new System.Drawing.Size(422, 157);
+            this.grpTags.TabIndex = 101;
+            this.grpTags.TabStop = false;
+            this.grpTags.Text = "Tags";
+            // 
+            // cmbTags
+            // 
+            this.cmbTags.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbTags.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbTags.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbTags.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbTags.DrawDropdownHoverOutline = false;
+            this.cmbTags.DrawFocusRectangle = false;
+            this.cmbTags.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbTags.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbTags.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbTags.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbTags.FormattingEnabled = true;
+            this.cmbTags.Location = new System.Drawing.Point(107, 118);
+            this.cmbTags.Name = "cmbTags";
+            this.cmbTags.Size = new System.Drawing.Size(147, 21);
+            this.cmbTags.TabIndex = 102;
+            this.cmbTags.Text = null;
+            this.cmbTags.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbTags.SelectedIndexChanged += new System.EventHandler(this.cmbTags_SelectedIndexChanged);
+            // 
+            // btnNewTag
+            // 
+            this.btnNewTag.Location = new System.Drawing.Point(10, 18);
+            this.btnNewTag.Name = "btnNewTag";
+            this.btnNewTag.Padding = new System.Windows.Forms.Padding(5);
+            this.btnNewTag.Size = new System.Drawing.Size(74, 28);
+            this.btnNewTag.TabIndex = 103;
+            this.btnNewTag.Text = "New Tag";
+            this.btnNewTag.Click += new System.EventHandler(this.btnNewTag_Click);
             // 
             // grpRequirements
             // 
@@ -1098,13 +1158,59 @@ namespace Intersect.Editor.Forms.Editors
             this.grpEquipment.Controls.Add(this.picMalePaperdoll);
             this.grpEquipment.Controls.Add(this.grpWeaponProperties);
             this.grpEquipment.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpEquipment.Location = new System.Drawing.Point(2, 435);
+            this.grpEquipment.Location = new System.Drawing.Point(2, 591);
             this.grpEquipment.Name = "grpEquipment";
             this.grpEquipment.Size = new System.Drawing.Size(439, 742);
             this.grpEquipment.TabIndex = 12;
             this.grpEquipment.TabStop = false;
             this.grpEquipment.Text = "Equipment";
             this.grpEquipment.Visible = false;
+            // 
+            // grpHelmetPaperdollProps
+            // 
+            this.grpHelmetPaperdollProps.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpHelmetPaperdollProps.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpHelmetPaperdollProps.Controls.Add(this.chkHelmHideExtra);
+            this.grpHelmetPaperdollProps.Controls.Add(this.chkHelmHideBeard);
+            this.grpHelmetPaperdollProps.Controls.Add(this.chkHelmHideHair);
+            this.grpHelmetPaperdollProps.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpHelmetPaperdollProps.Location = new System.Drawing.Point(221, 8);
+            this.grpHelmetPaperdollProps.Name = "grpHelmetPaperdollProps";
+            this.grpHelmetPaperdollProps.Size = new System.Drawing.Size(207, 110);
+            this.grpHelmetPaperdollProps.TabIndex = 61;
+            this.grpHelmetPaperdollProps.TabStop = false;
+            this.grpHelmetPaperdollProps.Text = "Paperdoll Properties";
+            this.grpHelmetPaperdollProps.Visible = false;
+            // 
+            // chkHelmHideExtra
+            // 
+            this.chkHelmHideExtra.AutoSize = true;
+            this.chkHelmHideExtra.Location = new System.Drawing.Point(41, 73);
+            this.chkHelmHideExtra.Name = "chkHelmHideExtra";
+            this.chkHelmHideExtra.Size = new System.Drawing.Size(81, 17);
+            this.chkHelmHideExtra.TabIndex = 103;
+            this.chkHelmHideExtra.Text = "Hide Extra?";
+            this.chkHelmHideExtra.CheckedChanged += new System.EventHandler(this.chkHelmHideExtra_CheckedChanged);
+            // 
+            // chkHelmHideBeard
+            // 
+            this.chkHelmHideBeard.AutoSize = true;
+            this.chkHelmHideBeard.Location = new System.Drawing.Point(41, 49);
+            this.chkHelmHideBeard.Name = "chkHelmHideBeard";
+            this.chkHelmHideBeard.Size = new System.Drawing.Size(85, 17);
+            this.chkHelmHideBeard.TabIndex = 102;
+            this.chkHelmHideBeard.Text = "Hide Beard?";
+            this.chkHelmHideBeard.CheckedChanged += new System.EventHandler(this.chkHelmHideBeard_CheckedChanged);
+            // 
+            // chkHelmHideHair
+            // 
+            this.chkHelmHideHair.AutoSize = true;
+            this.chkHelmHideHair.Location = new System.Drawing.Point(41, 25);
+            this.chkHelmHideHair.Name = "chkHelmHideHair";
+            this.chkHelmHideHair.Size = new System.Drawing.Size(76, 17);
+            this.chkHelmHideHair.TabIndex = 101;
+            this.chkHelmHideHair.Text = "Hide Hair?";
+            this.chkHelmHideHair.CheckedChanged += new System.EventHandler(this.chkHelmHideHair_CheckedChanged);
             // 
             // grpPrayerProperties
             // 
@@ -2473,8 +2579,10 @@ namespace Intersect.Editor.Forms.Editors
             this.grpEvent.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.grpEvent.Controls.Add(this.chkSingleUseEvent);
             this.grpEvent.Controls.Add(this.cmbEvent);
+            this.grpEvent.Controls.Add(this.grpSpell);
+            this.grpEvent.Controls.Add(this.grpBags);
             this.grpEvent.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpEvent.Location = new System.Drawing.Point(2, 435);
+            this.grpEvent.Location = new System.Drawing.Point(2, 591);
             this.grpEvent.Name = "grpEvent";
             this.grpEvent.Size = new System.Drawing.Size(200, 65);
             this.grpEvent.TabIndex = 42;
@@ -2515,6 +2623,55 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbEvent.TextPadding = new System.Windows.Forms.Padding(2);
             this.cmbEvent.SelectedIndexChanged += new System.EventHandler(this.cmbEvent_SelectedIndexChanged);
             // 
+            // grpBags
+            // 
+            this.grpBags.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpBags.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpBags.Controls.Add(this.nudBag);
+            this.grpBags.Controls.Add(this.lblBag);
+            this.grpBags.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpBags.Location = new System.Drawing.Point(6, 3);
+            this.grpBags.Name = "grpBags";
+            this.grpBags.Size = new System.Drawing.Size(222, 57);
+            this.grpBags.TabIndex = 44;
+            this.grpBags.TabStop = false;
+            this.grpBags.Text = "Bag:";
+            this.grpBags.Visible = false;
+            // 
+            // nudBag
+            // 
+            this.nudBag.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudBag.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudBag.Location = new System.Drawing.Point(69, 23);
+            this.nudBag.Maximum = new decimal(new int[] {
+            35,
+            0,
+            0,
+            0});
+            this.nudBag.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudBag.Name = "nudBag";
+            this.nudBag.Size = new System.Drawing.Size(144, 20);
+            this.nudBag.TabIndex = 38;
+            this.nudBag.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudBag.ValueChanged += new System.EventHandler(this.nudBag_ValueChanged);
+            // 
+            // lblBag
+            // 
+            this.lblBag.AutoSize = true;
+            this.lblBag.Location = new System.Drawing.Point(8, 25);
+            this.lblBag.Name = "lblBag";
+            this.lblBag.Size = new System.Drawing.Size(55, 13);
+            this.lblBag.TabIndex = 11;
+            this.lblBag.Text = "Bag Slots:";
+            // 
             // grpConsumable
             // 
             this.grpConsumable.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
@@ -2527,7 +2684,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpConsumable.Controls.Add(this.cmbConsume);
             this.grpConsumable.Controls.Add(this.lblInterval);
             this.grpConsumable.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpConsumable.Location = new System.Drawing.Point(2, 436);
+            this.grpConsumable.Location = new System.Drawing.Point(0, 599);
             this.grpConsumable.Name = "grpConsumable";
             this.grpConsumable.Size = new System.Drawing.Size(217, 125);
             this.grpConsumable.TabIndex = 12;
@@ -2647,7 +2804,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpSpell.Controls.Add(this.cmbTeachSpell);
             this.grpSpell.Controls.Add(this.lblSpell);
             this.grpSpell.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpSpell.Location = new System.Drawing.Point(2, 436);
+            this.grpSpell.Location = new System.Drawing.Point(4, 15);
             this.grpSpell.Name = "grpSpell";
             this.grpSpell.Size = new System.Drawing.Size(217, 127);
             this.grpSpell.TabIndex = 13;
@@ -2713,63 +2870,12 @@ namespace Intersect.Editor.Forms.Editors
             this.pnlContainer.Controls.Add(this.grpEvent);
             this.pnlContainer.Controls.Add(this.grpGeneral);
             this.pnlContainer.Controls.Add(this.grpEquipment);
-            this.pnlContainer.Controls.Add(this.grpSpell);
-            this.pnlContainer.Controls.Add(this.grpBags);
             this.pnlContainer.Controls.Add(this.grpConsumable);
             this.pnlContainer.Location = new System.Drawing.Point(221, 34);
             this.pnlContainer.Name = "pnlContainer";
             this.pnlContainer.Size = new System.Drawing.Size(463, 442);
             this.pnlContainer.TabIndex = 43;
             this.pnlContainer.Visible = false;
-            // 
-            // grpBags
-            // 
-            this.grpBags.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.grpBags.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpBags.Controls.Add(this.nudBag);
-            this.grpBags.Controls.Add(this.lblBag);
-            this.grpBags.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpBags.Location = new System.Drawing.Point(2, 435);
-            this.grpBags.Name = "grpBags";
-            this.grpBags.Size = new System.Drawing.Size(222, 57);
-            this.grpBags.TabIndex = 44;
-            this.grpBags.TabStop = false;
-            this.grpBags.Text = "Bag:";
-            this.grpBags.Visible = false;
-            // 
-            // nudBag
-            // 
-            this.nudBag.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudBag.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudBag.Location = new System.Drawing.Point(69, 23);
-            this.nudBag.Maximum = new decimal(new int[] {
-            35,
-            0,
-            0,
-            0});
-            this.nudBag.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nudBag.Name = "nudBag";
-            this.nudBag.Size = new System.Drawing.Size(144, 20);
-            this.nudBag.TabIndex = 38;
-            this.nudBag.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nudBag.ValueChanged += new System.EventHandler(this.nudBag_ValueChanged);
-            // 
-            // lblBag
-            // 
-            this.lblBag.AutoSize = true;
-            this.lblBag.Location = new System.Drawing.Point(8, 25);
-            this.lblBag.Name = "lblBag";
-            this.lblBag.Size = new System.Drawing.Size(55, 13);
-            this.lblBag.TabIndex = 11;
-            this.lblBag.Text = "Bag Slots:";
             // 
             // toolStrip
             // 
@@ -2892,51 +2998,46 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
             // 
-            // grpHelmetPaperdollProps
+            // lblTagToAdd
             // 
-            this.grpHelmetPaperdollProps.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.grpHelmetPaperdollProps.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpHelmetPaperdollProps.Controls.Add(this.chkHelmHideExtra);
-            this.grpHelmetPaperdollProps.Controls.Add(this.chkHelmHideBeard);
-            this.grpHelmetPaperdollProps.Controls.Add(this.chkHelmHideHair);
-            this.grpHelmetPaperdollProps.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpHelmetPaperdollProps.Location = new System.Drawing.Point(221, 8);
-            this.grpHelmetPaperdollProps.Name = "grpHelmetPaperdollProps";
-            this.grpHelmetPaperdollProps.Size = new System.Drawing.Size(207, 110);
-            this.grpHelmetPaperdollProps.TabIndex = 61;
-            this.grpHelmetPaperdollProps.TabStop = false;
-            this.grpHelmetPaperdollProps.Text = "Paperdoll Properties";
-            this.grpHelmetPaperdollProps.Visible = false;
+            this.lblTagToAdd.AutoSize = true;
+            this.lblTagToAdd.Location = new System.Drawing.Point(39, 121);
+            this.lblTagToAdd.Name = "lblTagToAdd";
+            this.lblTagToAdd.Size = new System.Drawing.Size(63, 13);
+            this.lblTagToAdd.TabIndex = 55;
+            this.lblTagToAdd.Text = "Tag to Add:";
             // 
-            // chkHelmHideHair
+            // btnAddTag
             // 
-            this.chkHelmHideHair.AutoSize = true;
-            this.chkHelmHideHair.Location = new System.Drawing.Point(41, 25);
-            this.chkHelmHideHair.Name = "chkHelmHideHair";
-            this.chkHelmHideHair.Size = new System.Drawing.Size(76, 17);
-            this.chkHelmHideHair.TabIndex = 101;
-            this.chkHelmHideHair.Text = "Hide Hair?";
-            this.chkHelmHideHair.CheckedChanged += new System.EventHandler(this.chkHelmHideHair_CheckedChanged);
+            this.btnAddTag.Location = new System.Drawing.Point(260, 113);
+            this.btnAddTag.Name = "btnAddTag";
+            this.btnAddTag.Padding = new System.Windows.Forms.Padding(5);
+            this.btnAddTag.Size = new System.Drawing.Size(74, 28);
+            this.btnAddTag.TabIndex = 104;
+            this.btnAddTag.Text = "Add";
+            this.btnAddTag.Click += new System.EventHandler(this.btnAddTag_Click);
             // 
-            // chkHelmHideBeard
+            // btnRemoveTag
             // 
-            this.chkHelmHideBeard.AutoSize = true;
-            this.chkHelmHideBeard.Location = new System.Drawing.Point(41, 49);
-            this.chkHelmHideBeard.Name = "chkHelmHideBeard";
-            this.chkHelmHideBeard.Size = new System.Drawing.Size(85, 17);
-            this.chkHelmHideBeard.TabIndex = 102;
-            this.chkHelmHideBeard.Text = "Hide Beard?";
-            this.chkHelmHideBeard.CheckedChanged += new System.EventHandler(this.chkHelmHideBeard_CheckedChanged);
+            this.btnRemoveTag.Location = new System.Drawing.Point(340, 113);
+            this.btnRemoveTag.Name = "btnRemoveTag";
+            this.btnRemoveTag.Padding = new System.Windows.Forms.Padding(5);
+            this.btnRemoveTag.Size = new System.Drawing.Size(74, 28);
+            this.btnRemoveTag.TabIndex = 105;
+            this.btnRemoveTag.Text = "Remove";
+            this.btnRemoveTag.Click += new System.EventHandler(this.btnRemoveTag_Click);
             // 
-            // chkHelmHideExtra
+            // lstTags
             // 
-            this.chkHelmHideExtra.AutoSize = true;
-            this.chkHelmHideExtra.Location = new System.Drawing.Point(41, 73);
-            this.chkHelmHideExtra.Name = "chkHelmHideExtra";
-            this.chkHelmHideExtra.Size = new System.Drawing.Size(81, 17);
-            this.chkHelmHideExtra.TabIndex = 103;
-            this.chkHelmHideExtra.Text = "Hide Extra?";
-            this.chkHelmHideExtra.CheckedChanged += new System.EventHandler(this.chkHelmHideExtra_CheckedChanged);
+            this.lstTags.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.lstTags.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lstTags.Cursor = System.Windows.Forms.Cursors.Default;
+            this.lstTags.ForeColor = System.Drawing.Color.Gainsboro;
+            this.lstTags.FormattingEnabled = true;
+            this.lstTags.Location = new System.Drawing.Point(121, 29);
+            this.lstTags.Name = "lstTags";
+            this.lstTags.Size = new System.Drawing.Size(284, 67);
+            this.lstTags.TabIndex = 106;
             // 
             // FrmItem
             // 
@@ -2963,6 +3064,8 @@ namespace Intersect.Editor.Forms.Editors
             this.grpItems.PerformLayout();
             this.grpGeneral.ResumeLayout(false);
             this.grpGeneral.PerformLayout();
+            this.grpTags.ResumeLayout(false);
+            this.grpTags.PerformLayout();
             this.grpRequirements.ResumeLayout(false);
             this.grpRequirements.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudBankStackLimit)).EndInit();
@@ -2977,6 +3080,8 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.picItem)).EndInit();
             this.grpEquipment.ResumeLayout(false);
             this.grpEquipment.PerformLayout();
+            this.grpHelmetPaperdollProps.ResumeLayout(false);
+            this.grpHelmetPaperdollProps.PerformLayout();
             this.grpPrayerProperties.ResumeLayout(false);
             this.grpPrayerProperties.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudComboExpBoost)).EndInit();
@@ -3018,6 +3123,9 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudDamage)).EndInit();
             this.grpEvent.ResumeLayout(false);
             this.grpEvent.PerformLayout();
+            this.grpBags.ResumeLayout(false);
+            this.grpBags.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudBag)).EndInit();
             this.grpConsumable.ResumeLayout(false);
             this.grpConsumable.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudIntervalPercentage)).EndInit();
@@ -3025,13 +3133,8 @@ namespace Intersect.Editor.Forms.Editors
             this.grpSpell.ResumeLayout(false);
             this.grpSpell.PerformLayout();
             this.pnlContainer.ResumeLayout(false);
-            this.grpBags.ResumeLayout(false);
-            this.grpBags.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudBag)).EndInit();
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
-            this.grpHelmetPaperdollProps.ResumeLayout(false);
-            this.grpHelmetPaperdollProps.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -3222,5 +3325,12 @@ namespace Intersect.Editor.Forms.Editors
         private DarkCheckBox chkHelmHideExtra;
         private DarkCheckBox chkHelmHideBeard;
         private DarkCheckBox chkHelmHideHair;
+        private DarkButton btnNewTag;
+        private DarkComboBox cmbTags;
+        private DarkGroupBox grpTags;
+        private DarkButton btnAddTag;
+        private Label lblTagToAdd;
+        private DarkButton btnRemoveTag;
+        private ListBox lstTags;
     }
 }

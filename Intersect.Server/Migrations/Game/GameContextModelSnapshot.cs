@@ -331,6 +331,8 @@ namespace Intersect.Server.Migrations.Game
                     b.Property<string>("StatsJson")
                         .HasColumnName("StatsGiven");
 
+                    b.Property<string>("Tag");
+
                     b.Property<long>("TimeCreated");
 
                     b.Property<int>("Tool");
@@ -457,6 +459,8 @@ namespace Intersect.Server.Migrations.Game
                     b.Property<string>("Sprite");
 
                     b.Property<bool>("Swarm");
+
+                    b.Property<double>("Tenacity");
 
                     b.Property<long>("TimeCreated");
 

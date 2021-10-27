@@ -643,6 +643,10 @@
     <Compile Include="Migrations\Game\20211026130945_NpcImmunityMigration.designer.cs">
       <DependentUpon>20211026130945_NpcImmunityMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20211027122112_ItemTagMigration.cs" />
+    <Compile Include="Migrations\Game\20211027122112_ItemTagMigration.designer.cs">
+      <DependentUpon>20211027122112_ItemTagMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

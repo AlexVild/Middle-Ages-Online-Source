@@ -7,6 +7,7 @@ using Intersect.GameObjects.Conditions;
 using Intersect.GameObjects.Events;
 using Intersect.Models;
 using Intersect.Utilities;
+using System.Collections.Generic;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -113,6 +114,20 @@ namespace Intersect.GameObjects
         /// Defines which cooldown group this item belongs to.
         /// </summary>
         public string CooldownGroup { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Defines which item tag this item belongs to.
+        /// </summary>
+        [NotMapped]
+        public List<string> Tags { get; set; } = new List<string>();
+
+        [Column("Tags")]
+        [JsonIgnore]
+        public string TagsJson
+        {
+            get => JsonConvert.SerializeObject(Tags);
+            set => Tags = JsonConvert.DeserializeObject<List<string>>(value ?? "") ?? new List<string>();
+        }
 
         /// <summary>
         /// Configures whether this should not trigger and be triggered by the global cooldown.

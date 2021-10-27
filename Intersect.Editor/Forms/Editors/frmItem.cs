@@ -32,6 +32,10 @@ namespace Intersect.Editor.Forms.Editors
 
         private List<string> mKnownCooldownGroups = new List<string>();
 
+        private List<string> mKnownItemTags = new List<string>();
+
+        private string mSelectedTag = string.Empty;
+
         public FrmItem()
         {
             ApplyHooks();
@@ -311,6 +315,12 @@ namespace Intersect.Editor.Forms.Editors
             chkHelmHideBeard.Text = Strings.ItemEditor.hidebeard;
             chkHelmHideExtra.Text = Strings.ItemEditor.hideextra;
 
+            grpTags.Text = Strings.ItemEditor.taggroup;
+            lblTagToAdd.Text = Strings.ItemEditor.taglabel;
+            btnNewTag.Text = Strings.ItemEditor.newtag;
+            btnAddTag.Text = Strings.ItemEditor.addtag;
+            btnRemoveTag.Text = Strings.ItemEditor.removetag;
+
             btnSave.Text = Strings.ItemEditor.save;
             btnCancel.Text = Strings.ItemEditor.cancel;
         }
@@ -435,6 +445,13 @@ namespace Intersect.Editor.Forms.Editors
                 chkHelmHideHair.Checked = Convert.ToBoolean(mEditorItem.HideHair);
                 chkHelmHideBeard.Checked = Convert.ToBoolean(mEditorItem.HideBeard);
                 chkHelmHideExtra.Checked = Convert.ToBoolean(mEditorItem.HideExtra);
+
+                lstTags.Items.Clear();
+                foreach (string tag in mEditorItem.Tags)
+                {
+                    lstTags.Items.Add(tag);
+                }
+                cmbTags.Text = string.Empty;
 
                 if (mChanged.IndexOf(mEditorItem) == -1)
                 {
@@ -1180,21 +1197,29 @@ namespace Intersect.Editor.Forms.Editors
             var mFolders = new List<string>();
             foreach (var itm in ItemBase.Lookup)
             {
-                if (!string.IsNullOrEmpty(((ItemBase) itm.Value).Folder) &&
-                    !mFolders.Contains(((ItemBase) itm.Value).Folder))
+                ItemBase itemBase = (ItemBase)itm.Value;
+
+                if (!string.IsNullOrEmpty(itemBase.Folder) && !mFolders.Contains(itemBase.Folder))
                 {
-                    mFolders.Add(((ItemBase) itm.Value).Folder);
-                    if (!mKnownFolders.Contains(((ItemBase) itm.Value).Folder))
+                    mFolders.Add(itemBase.Folder);
+                    if (!mKnownFolders.Contains(itemBase.Folder))
                     {
-                        mKnownFolders.Add(((ItemBase) itm.Value).Folder);
+                        mKnownFolders.Add(itemBase.Folder);
                     }
                 }
 
-                if (!string.IsNullOrWhiteSpace(((ItemBase)itm.Value).CooldownGroup) && 
-                    !mKnownCooldownGroups.Contains(((ItemBase)itm.Value).CooldownGroup))
+                if (!string.IsNullOrWhiteSpace(itemBase.CooldownGroup) && !mKnownCooldownGroups.Contains(itemBase.CooldownGroup))
                 {
-                    mKnownCooldownGroups.Add(((ItemBase)itm.Value).CooldownGroup);    
+                    mKnownCooldownGroups.Add(itemBase.CooldownGroup);    
                 }
+
+                foreach (string tag in itemBase.Tags)
+                {
+                    if (!string.IsNullOrWhiteSpace(tag) && !mKnownItemTags.Contains(tag))
+                    {
+                        mKnownItemTags.Add(tag);
+                    }
+                }   
             }
 
             // Do we add spell cooldown groups as well?
@@ -1210,16 +1235,24 @@ namespace Intersect.Editor.Forms.Editors
                 }
             }
 
+            // Init cooldown groups
             mKnownCooldownGroups.Sort();
             cmbCooldownGroup.Items.Clear();
             cmbCooldownGroup.Items.Add(string.Empty);
             cmbCooldownGroup.Items.AddRange(mKnownCooldownGroups.ToArray());
 
+            // Init folders
             mFolders.Sort();
             mKnownFolders.Sort();
             cmbFolder.Items.Clear();
             cmbFolder.Items.Add("");
             cmbFolder.Items.AddRange(mKnownFolders.ToArray());
+
+            // Init item tags
+            mKnownItemTags.Sort();
+            cmbTags.Items.Clear();
+            cmbTags.Items.Add(string.Empty);
+            cmbTags.Items.AddRange(mKnownItemTags.ToArray());
 
             var items = ItemBase.Lookup.OrderBy(p => p.Value?.Name).Select(pair => new KeyValuePair<Guid, KeyValuePair<string, string>>(pair.Key,
                 new KeyValuePair<string, string>(((ItemBase)pair.Value)?.Name ?? Models.DatabaseObject<ItemBase>.Deleted, ((ItemBase)pair.Value)?.Folder ?? ""))).ToArray();
@@ -1295,7 +1328,6 @@ namespace Intersect.Editor.Forms.Editors
             }
         }
 
-
         #endregion
 
         private void nudComboInterval_ValueChanged(object sender, EventArgs e)
@@ -1321,6 +1353,57 @@ namespace Intersect.Editor.Forms.Editors
         private void chkHelmHideExtra_CheckedChanged(object sender, EventArgs e)
         {
             mEditorItem.HideExtra = chkHelmHideExtra.Checked;
+        }
+
+        private void btnNewTag_Click(object sender, EventArgs e)
+        {
+            var tagName = "";
+            var result = DarkInputBox.ShowInformation(
+                Strings.ItemEditor.newtagprompt, Strings.ItemEditor.newtagtitle, ref tagName,
+                DarkDialogButton.OkCancel
+            );
+
+            if (result == DialogResult.OK && !string.IsNullOrEmpty(tagName))
+            {
+                if (!cmbTags.Items.Contains(tagName))
+                {
+                    lstTags.Items.Add(tagName);
+                    mEditorItem.Tags.Add(tagName);
+                    mKnownItemTags.Add(tagName);
+
+                    // Refresh the editor and load/sort new tags
+                    InitEditor();
+                    cmbTags.Text = tagName;
+                }
+            }
+        }
+
+        private void btnAddTag_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(mSelectedTag) && !mEditorItem.Tags.Contains(mSelectedTag))
+            {
+                mEditorItem.Tags.Add(mSelectedTag);
+                lstTags.Items.Add(mSelectedTag);
+            }
+        }
+
+        private void btnRemoveTag_Click(object sender, EventArgs e)
+        {
+            int index = lstTags.SelectedIndex;
+            if (index > -1)
+            {
+                string selectedTagValue = mKnownItemTags[index];
+                lstTags.Items.RemoveAt(index);
+                if (!string.IsNullOrEmpty(selectedTagValue) && mEditorItem.Tags.Contains(selectedTagValue))
+                {
+                    mEditorItem.Tags.Remove(selectedTagValue);
+                }
+            }
+        }
+
+        private void cmbTags_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mSelectedTag = cmbTags.Text;
         }
     }
 
