@@ -277,7 +277,7 @@ namespace Intersect.Client.Interface.Game.Crafting
                     Crafting = false;
                     mCraftWindow.IsClosable = true;
                     mBar.Width = 0;
-                    ChatboxMsg.AddMessage(new ChatboxMsg(Strings.Crafting.incorrectresources, Color.Red, Enums.ChatMessageType.Crafting));
+                    ChatboxMsg.AddMessage(new ChatboxMsg(Strings.Crafting.incorrectresources, CustomColors.Alerts.Declined, Enums.ChatMessageType.Crafting));
 
                     return;
                 }
@@ -424,7 +424,7 @@ namespace Intersect.Client.Interface.Game.Crafting
                 return;
             }
 
-            ChatboxMsg.AddMessage(new ChatboxMsg(Strings.Crafting.incorrectresources, Color.Red, Enums.ChatMessageType.Crafting));
+            ChatboxMsg.AddMessage(new ChatboxMsg(Strings.Crafting.incorrectresources, CustomColors.Alerts.Declined, Enums.ChatMessageType.Crafting));
         }
 
         //Craft all the items
@@ -439,7 +439,7 @@ namespace Intersect.Client.Interface.Game.Crafting
             }
             else
             {
-                ChatboxMsg.AddMessage(new ChatboxMsg(Strings.Crafting.incorrectresources, Color.Red, Enums.ChatMessageType.Crafting));
+                ChatboxMsg.AddMessage(new ChatboxMsg(Strings.Crafting.incorrectresources, CustomColors.Alerts.Declined, Enums.ChatMessageType.Crafting));
             }
         }
 

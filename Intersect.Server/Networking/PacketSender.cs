@@ -595,7 +595,7 @@ namespace Intersect.Server.Networking
         public static void SendChatMsg(Player player, string message, ChatMessageType type, string target = "", bool sound = false)
         {
             SendChatMsg(player, message, type, CustomColors.Chat.PlayerMsg, target);
-            if (sound)
+            if (sound || type == ChatMessageType.Error)
             {
                 SendPlaySound(player, Options.UIDenySound);
             }
@@ -617,6 +617,10 @@ namespace Intersect.Server.Networking
             }
 
             player.SendPacket(new ChatMsgPacket(message, type, color, target), TransmissionMode.All);
+            if (type == ChatMessageType.Error || color == CustomColors.Alerts.Error)
+            {
+                SendPlaySound(player, Options.UIDenySound);
+            }
         }
 
         //GameDataPacket
@@ -1499,7 +1503,10 @@ namespace Intersect.Server.Networking
         //PlaySoundPacket
         public static void SendPlaySound(Player player, string sound)
         {
-            player.SendPacket(new PlaySoundPacket(sound));
+            if (!string.IsNullOrEmpty(sound))
+            {
+                player.SendPacket(new PlaySoundPacket(sound));
+            }
         }
 
         //StopSoundPacket

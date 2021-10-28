@@ -37,11 +37,11 @@ namespace Intersect.Server.Admin.Actions
                     UserActivityHistory.LogActivity(target?.UserId ?? Guid.Empty, target?.Id ?? Guid.Empty, target?.Client?.GetIp(), UserActivityHistory.PeerType.Client, UserActivityHistory.UserAction.DisconnectBan, $"{target.User?.Name},{target.Name}");
 
                     target.Client?.Disconnect();
-                    PacketSender.SendChatMsg(player, Strings.Account.banned.ToString(target.Name), Enums.ChatMessageType.Admin, Color.Red);
+                    PacketSender.SendChatMsg(player, Strings.Account.banned.ToString(target.Name), Enums.ChatMessageType.Admin, CustomColors.Alerts.Declined);
                 }
                 else
                 {
-                    PacketSender.SendChatMsg(player, Strings.Account.alreadybanned.ToString(target.Name), Enums.ChatMessageType.Admin, Color.Red);
+                    PacketSender.SendChatMsg(player, Strings.Account.alreadybanned.ToString(target.Name), Enums.ChatMessageType.Admin, CustomColors.Alerts.Declined);
                 }
             }
             else
@@ -105,11 +105,11 @@ namespace Intersect.Server.Admin.Actions
                         Mute.Add(target.User, action.DurationDays, action.Reason, player.Name, "");
                     }
 
-                    PacketSender.SendChatMsg(player, Strings.Account.muted.ToString(target.Name), Enums.ChatMessageType.Admin, Color.Red);
+                    PacketSender.SendChatMsg(player, Strings.Account.muted.ToString(target.Name), Enums.ChatMessageType.Admin, CustomColors.Alerts.Declined);
                 }
                 else
                 {
-                    PacketSender.SendChatMsg(player, Strings.Account.alreadymuted.ToString(target.Name), Enums.ChatMessageType.Admin, Color.Red);
+                    PacketSender.SendChatMsg(player, Strings.Account.alreadymuted.ToString(target.Name), Enums.ChatMessageType.Admin, CustomColors.Alerts.Declined);
                 }
             }
             else

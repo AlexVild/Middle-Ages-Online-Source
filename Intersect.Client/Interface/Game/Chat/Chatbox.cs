@@ -373,7 +373,7 @@ namespace Intersect.Client.Interface.Game.Chat
         {
             if (mLastChatTime > Globals.System.GetTimeMs())
             {
-                ChatboxMsg.AddMessage(new ChatboxMsg(Strings.Chatbox.toofast, Color.Red, ChatMessageType.Error));
+                ChatboxMsg.AddMessage(new ChatboxMsg(Strings.Chatbox.toofast, CustomColors.Alerts.Declined, ChatMessageType.Error));
                 mLastChatTime = Globals.System.GetTimeMs() + Options.MinChatInterval;
 
                 return;

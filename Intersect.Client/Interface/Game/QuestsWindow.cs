@@ -214,7 +214,7 @@ namespace Intersect.Client.Interface.Game
                 {
                     add = true;
                     category = !TextUtils.IsNone(quest.InProgressCategory) ? quest.InProgressCategory : "";
-                    color = new Color(255, 200, 145, 62);
+                    color = CustomColors.Quests.Started;
                     orderVal = 1;
                 }
                 else
@@ -225,7 +225,7 @@ namespace Intersect.Client.Interface.Game
                         {
                             add = true;
                             category = !TextUtils.IsNone(quest.CompletedCategory) ? quest.CompletedCategory : "";
-                            color = new Color(255, 26, 107, 5);
+                            color = CustomColors.Quests.Completed;
                             orderVal = 3;
                         }
                     }
@@ -235,7 +235,7 @@ namespace Intersect.Client.Interface.Game
                         {
                             add = true;
                             category = !TextUtils.IsNone(quest.UnstartedCategory) ? quest.UnstartedCategory : "";
-                            color = new Color(255, 222, 124, 112);
+                            color = CustomColors.Quests.Abandoned;
                             orderVal = 2;
                         }
                     }
@@ -247,7 +247,7 @@ namespace Intersect.Client.Interface.Game
                 {
                     add = true;
                     category = !TextUtils.IsNone(quest.UnstartedCategory) ? quest.UnstartedCategory : "";
-                    color = new Color(255, 222, 124, 112);
+                    color = CustomColors.Quests.Abandoned;
                     orderVal = 2;
                 }
             }
@@ -325,7 +325,7 @@ namespace Intersect.Client.Interface.Game
                     {
                         //In Progress
                         mQuestStatus.SetText(Strings.QuestLog.inprogress);
-                        mQuestStatus.SetTextColor(new Color(255, 200, 145, 62), Label.ControlState.Normal);
+                        mQuestStatus.SetTextColor(CustomColors.Quests.Started, Label.ControlState.Normal);
                         if (mSelectedQuest.InProgressDescription.Length > 0)
                         {
                             mQuestDescLabel.AddText(
@@ -390,7 +390,7 @@ namespace Intersect.Client.Interface.Game
                             if (mSelectedQuest.LogAfterComplete)
                             {
                                 mQuestStatus.SetText(Strings.QuestLog.completed);
-                                mQuestStatus.SetTextColor(new Color(255, 26, 107, 5), Label.ControlState.Normal);
+                                mQuestStatus.SetTextColor(CustomColors.Quests.Completed, Label.ControlState.Normal);
                                 mQuestDescLabel.AddText(
                                     mSelectedQuest.EndDescription, Color.White, Alignments.Left,
                                     mQuestDescTemplateLabel.Font
@@ -403,7 +403,7 @@ namespace Intersect.Client.Interface.Game
                             if (mSelectedQuest.LogBeforeOffer)
                             {
                                 mQuestStatus.SetText(Strings.QuestLog.notstarted);
-                                mQuestStatus.SetTextColor(new Color(255, 222, 124, 112), Label.ControlState.Normal);
+                                mQuestStatus.SetTextColor(CustomColors.Quests.Abandoned, Label.ControlState.Normal);
                                 mQuestDescLabel.AddText(
                                     mSelectedQuest.BeforeDescription, Color.White, Alignments.Left,
                                     mQuestDescTemplateLabel.Font
@@ -420,7 +420,7 @@ namespace Intersect.Client.Interface.Game
                     if (mSelectedQuest.LogBeforeOffer)
                     {
                         mQuestStatus.SetText(Strings.QuestLog.notstarted);
-                        mQuestStatus.SetTextColor(new Color(255, 222, 124, 112), Label.ControlState.Normal);
+                        mQuestStatus.SetTextColor(CustomColors.Quests.Declined, Label.ControlState.Normal);
                         mQuestDescLabel.AddText(
                             mSelectedQuest.BeforeDescription, Color.White, Alignments.Left, mQuestDescTemplateLabel.Font
                         );

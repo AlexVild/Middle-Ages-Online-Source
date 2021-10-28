@@ -219,6 +219,8 @@ namespace Intersect
         public static string ChatSendSound => Instance.ChatOpts.ChatSendSound;
         
         public static string UIDenySound => Instance.ChatOpts.UIDenySound;
+        
+        public static string BankSortSound => Instance.ChatOpts.BankSortSound;
 
         public static string GuildWarsGUID => Instance.Guild.GuildWarsGUID;
 

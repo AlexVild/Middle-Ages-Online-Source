@@ -198,6 +198,20 @@ namespace Intersect
 
         }
 
+        public sealed class GeneralNamespace
+        {
+            public Color GeneralDisabled = new Color(255, 222, 124, 112);
+
+            public Color GeneralCompleted = new Color(255, 26, 107, 5);
+
+            public Color GeneralWarning = new Color(255, 200, 145, 62);
+            
+            public Color GeneralPrimary = Color.White;
+            
+            public Color GeneralMuted = Color.Gray;
+
+        }
+
         public sealed class ItemsNamespace
         {
 
@@ -305,6 +319,8 @@ namespace Intersect
 
             public readonly QuestsNamespace Quests = new QuestsNamespace();
 
+            public readonly GeneralNamespace General = new GeneralNamespace();
+
         }
 
         // ReSharper restore MemberHidesStaticFromOuterClass
@@ -324,6 +340,8 @@ namespace Intersect
         public static CombatNamespace Combat => Root.Combat;
 
         public static ItemsNamespace Items => Root.Items;
+
+        public static GeneralNamespace General => Root.General;
 
         #endregion
 

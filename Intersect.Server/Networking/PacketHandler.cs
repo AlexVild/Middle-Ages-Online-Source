@@ -2131,7 +2131,7 @@ namespace Intersect.Server.Networking
                         else
                         {
                             PacketSender.SendChatMsg(
-                                player, Strings.Trading.busy.ToString(player.Trading.Requester.Name), ChatMessageType.Trading, Color.Red
+                                player, Strings.Trading.busy.ToString(player.Trading.Requester.Name), ChatMessageType.Trading, CustomColors.Alerts.Declined
                             );
                         }
                     }

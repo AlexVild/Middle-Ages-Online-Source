@@ -665,7 +665,7 @@ namespace Intersect.Server.Entities.Events
             }
 
             PacketSender.SendEntityDataToProximity(player);
-            PacketSender.SendChatMsg(player, Strings.Player.powerchanged, ChatMessageType.Notice ,Color.Red);
+            PacketSender.SendChatMsg(player, Strings.Player.powerchanged, ChatMessageType.Notice, CustomColors.Alerts.Declined);
         }
 
         //Warp Player Command
@@ -2031,7 +2031,7 @@ namespace Intersect.Server.Entities.Events
 
             if (viableQuests.Count <= 0)
             {
-                PacketSender.SendChatMsg(player, Strings.Quests.reqsnotmetforlist.ToString(), ChatMessageType.Local, Color.Red);
+                PacketSender.SendChatMsg(player, Strings.Quests.reqsnotmetforlist.ToString(), ChatMessageType.Local, CustomColors.Alerts.Declined);
             } else
             {
                 var randomQuestIndex = rand.Next(viableQuests.Count);

@@ -28,6 +28,8 @@
         public string ChatSendSound = "al_typing_send.wav";
 
         public string UIDenySound = "al_gui_cancel.wav";
+
+        public string BankSortSound = "";
     }
 
 }

@@ -708,6 +708,10 @@ namespace Intersect.Server.Entities
                 }
             }
 
+            if (mPlayer != null)
+            {
+                PacketSender.SendPlaySound(mPlayer, Options.BankSortSound);
+            }
             SendOpenBank(); // Refresh the entire bank, so the Client knows what's up.
         }
 

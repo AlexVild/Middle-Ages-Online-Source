@@ -98,11 +98,11 @@ namespace Intersect.Client.Interface.Game
                 //Row Render color (red = offline, green = online)
                 if (f.Online == true)
                 {
-                    row.SetTextColor(Color.Green);
+                    row.SetTextColor(CustomColors.General.GeneralCompleted);
                 }
                 else
                 {
-                    row.SetTextColor(Color.Red);
+                    row.SetTextColor(CustomColors.General.GeneralDisabled);
                 }
 
                 row.RenderColor = new Color(50, 255, 255, 255);

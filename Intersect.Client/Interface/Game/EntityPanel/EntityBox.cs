@@ -1059,7 +1059,7 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                 }
                 else
                 {
-                    Chat.ChatboxMsg.AddMessage(new Chat.ChatboxMsg(Strings.Guilds.InviteAlreadyInGuild, Color.Red, ChatMessageType.Guild));
+                    Chat.ChatboxMsg.AddMessage(new Chat.ChatboxMsg(Strings.Guilds.InviteAlreadyInGuild, CustomColors.Alerts.Declined, ChatMessageType.Guild));
                 }
             }
         }
