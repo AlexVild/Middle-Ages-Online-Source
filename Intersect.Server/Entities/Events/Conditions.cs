@@ -521,6 +521,32 @@ namespace Intersect.Server.Entities.Events
             return false;
         }
 
+        public static bool MeetsCondition(
+            EquipmentInSlotCondition condition,
+            Player player,
+            Event eventInstance,
+            QuestBase questBase
+        )
+        {
+            var equipment = player.Equipment;
+            var items = player.Items;
+
+            // Make sure we don't try to access something that doesn't exist
+            if (equipment.Length >= condition.slot)
+            {
+                // Return true if there is some item in the requested equipment slot
+                if (equipment[condition.slot] == -1)
+                {
+                    return false;
+                } else
+                {
+                    return items[equipment[condition.slot]].ItemId != Guid.Empty;
+                }
+            }
+
+            return false;
+        }
+
         //Variable Comparison Processing
 
         public static bool CheckVariableComparison(

@@ -7,6 +7,7 @@ using Intersect.Enums;
 using Intersect.GameObjects;
 using Intersect.GameObjects.Events;
 using Intersect.Localization;
+using Intersect.Config;
 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -303,6 +304,12 @@ namespace Intersect.Editor.Localization
         public static string GetEventConditionalDesc(EquipmentTagCondition condition)
         {
             return Strings.EventConditionDesc.equippedwithtag.ToString(condition.Tag);
+        }
+
+        public static string GetEventConditionalDesc(EquipmentInSlotCondition condition)
+        {
+            var equipment = new EquipmentOptions();
+            return Strings.EventConditionDesc.equippedwithtag.ToString(equipment.Slots[condition.slot]);
         }
 
         public static string GetVariableComparisonString(VariableCompaison comparison)
@@ -2105,6 +2112,7 @@ Tick timer saved in server config.json.";
                 {20, @"Map Zone Type is..." },
                 {21, @"Has item with tag..." },
                 {22, @"Item equipped with tag..." },
+                {23, @"Has something equipped in slot..." },
             };
 
             public static LocalizedString endrange = @"End Range:";
@@ -2254,10 +2262,16 @@ Tick timer saved in server config.json.";
             public static LocalizedString checkbank = @"Check Bank?";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public static LocalizedString taggroup = @"Tag is:";
+            public static LocalizedString taggroup = @"Tag is...";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString taglabel = @"Tag:";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString equipinslotgroup = @"Slot is...";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString equipinslotlabel = @"Slot:";
         }
 
         public struct EventConditionDesc
@@ -2348,6 +2362,9 @@ Tick timer saved in server config.json.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString equippedwithtag = @"Player has item equipped with tag {00}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString equipinslot = @"Player has item equipped in {00} slot";
 
             public static Dictionary<int, LocalizedString> selfswitches = new Dictionary<int, LocalizedString>
             {
@@ -5246,3 +5263,4 @@ Negative values for time to flow backwards.";
     }
 
 }
+

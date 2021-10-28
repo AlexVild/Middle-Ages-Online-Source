@@ -31,6 +31,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private void InitializeComponent()
         {
             this.grpConditional = new DarkUI.Controls.DarkGroupBox();
+            this.grpTag = new DarkUI.Controls.DarkGroupBox();
+            this.chkTagBank = new DarkUI.Controls.DarkCheckBox();
+            this.lblTag = new System.Windows.Forms.Label();
+            this.cmbTags = new DarkUI.Controls.DarkComboBox();
             this.grpMapZoneType = new DarkUI.Controls.DarkGroupBox();
             this.lblMapZoneType = new System.Windows.Forms.Label();
             this.cmbMapZoneType = new DarkUI.Controls.DarkComboBox();
@@ -136,11 +140,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.rdoManual = new DarkUI.Controls.DarkRadioButton();
             this.cmbItem = new DarkUI.Controls.DarkComboBox();
             this.lblItem = new System.Windows.Forms.Label();
-            this.grpTag = new DarkUI.Controls.DarkGroupBox();
-            this.lblTag = new System.Windows.Forms.Label();
-            this.cmbTags = new DarkUI.Controls.DarkComboBox();
-            this.chkTagBank = new DarkUI.Controls.DarkCheckBox();
+            this.grpEquipmentSlot = new DarkUI.Controls.DarkGroupBox();
+            this.lblSlot = new System.Windows.Forms.Label();
+            this.cmbSlots = new DarkUI.Controls.DarkComboBox();
             this.grpConditional.SuspendLayout();
+            this.grpTag.SuspendLayout();
             this.grpMapZoneType.SuspendLayout();
             this.grpInGuild.SuspendLayout();
             this.grpQuestCompleted.SuspendLayout();
@@ -167,13 +171,14 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpManualAmount.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudItemAmount)).BeginInit();
             this.grpAmountType.SuspendLayout();
-            this.grpTag.SuspendLayout();
+            this.grpEquipmentSlot.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpConditional
             // 
             this.grpConditional.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.grpConditional.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpConditional.Controls.Add(this.grpEquipmentSlot);
             this.grpConditional.Controls.Add(this.grpTag);
             this.grpConditional.Controls.Add(this.grpMapZoneType);
             this.grpConditional.Controls.Add(this.grpInGuild);
@@ -204,6 +209,59 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpConditional.TabIndex = 17;
             this.grpConditional.TabStop = false;
             this.grpConditional.Text = "Conditional";
+            // 
+            // grpTag
+            // 
+            this.grpTag.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.grpTag.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpTag.Controls.Add(this.chkTagBank);
+            this.grpTag.Controls.Add(this.lblTag);
+            this.grpTag.Controls.Add(this.cmbTags);
+            this.grpTag.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpTag.Location = new System.Drawing.Point(3, 39);
+            this.grpTag.Name = "grpTag";
+            this.grpTag.Size = new System.Drawing.Size(262, 80);
+            this.grpTag.TabIndex = 59;
+            this.grpTag.TabStop = false;
+            this.grpTag.Text = "Tag Is:";
+            this.grpTag.Visible = false;
+            // 
+            // chkTagBank
+            // 
+            this.chkTagBank.Location = new System.Drawing.Point(143, 48);
+            this.chkTagBank.Name = "chkTagBank";
+            this.chkTagBank.Size = new System.Drawing.Size(99, 19);
+            this.chkTagBank.TabIndex = 60;
+            this.chkTagBank.Text = "Check Bank?";
+            // 
+            // lblTag
+            // 
+            this.lblTag.AutoSize = true;
+            this.lblTag.Location = new System.Drawing.Point(6, 21);
+            this.lblTag.Name = "lblTag";
+            this.lblTag.Size = new System.Drawing.Size(29, 13);
+            this.lblTag.TabIndex = 5;
+            this.lblTag.Text = "Tag:";
+            // 
+            // cmbTags
+            // 
+            this.cmbTags.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbTags.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbTags.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbTags.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbTags.DrawDropdownHoverOutline = false;
+            this.cmbTags.DrawFocusRectangle = false;
+            this.cmbTags.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbTags.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbTags.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbTags.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbTags.FormattingEnabled = true;
+            this.cmbTags.Location = new System.Drawing.Point(92, 18);
+            this.cmbTags.Name = "cmbTags";
+            this.cmbTags.Size = new System.Drawing.Size(162, 21);
+            this.cmbTags.TabIndex = 3;
+            this.cmbTags.Text = null;
+            this.cmbTags.TextPadding = new System.Windows.Forms.Padding(2);
             // 
             // grpMapZoneType
             // 
@@ -1725,58 +1783,49 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.lblItem.TabIndex = 2;
             this.lblItem.Text = "Item:";
             // 
-            // grpTag
+            // grpEquipmentSlot
             // 
-            this.grpTag.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.grpTag.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpTag.Controls.Add(this.chkTagBank);
-            this.grpTag.Controls.Add(this.lblTag);
-            this.grpTag.Controls.Add(this.cmbTags);
-            this.grpTag.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpTag.Location = new System.Drawing.Point(9, 37);
-            this.grpTag.Name = "grpTag";
-            this.grpTag.Size = new System.Drawing.Size(262, 80);
-            this.grpTag.TabIndex = 59;
-            this.grpTag.TabStop = false;
-            this.grpTag.Text = "Tag Is:";
-            this.grpTag.Visible = false;
+            this.grpEquipmentSlot.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.grpEquipmentSlot.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpEquipmentSlot.Controls.Add(this.lblSlot);
+            this.grpEquipmentSlot.Controls.Add(this.cmbSlots);
+            this.grpEquipmentSlot.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpEquipmentSlot.Location = new System.Drawing.Point(7, 45);
+            this.grpEquipmentSlot.Name = "grpEquipmentSlot";
+            this.grpEquipmentSlot.Size = new System.Drawing.Size(262, 55);
+            this.grpEquipmentSlot.TabIndex = 61;
+            this.grpEquipmentSlot.TabStop = false;
+            this.grpEquipmentSlot.Text = "Equipment Slot:";
+            this.grpEquipmentSlot.Visible = false;
             // 
-            // lblTag
+            // lblSlot
             // 
-            this.lblTag.AutoSize = true;
-            this.lblTag.Location = new System.Drawing.Point(6, 21);
-            this.lblTag.Name = "lblTag";
-            this.lblTag.Size = new System.Drawing.Size(29, 13);
-            this.lblTag.TabIndex = 5;
-            this.lblTag.Text = "Tag:";
+            this.lblSlot.AutoSize = true;
+            this.lblSlot.Location = new System.Drawing.Point(6, 21);
+            this.lblSlot.Name = "lblSlot";
+            this.lblSlot.Size = new System.Drawing.Size(28, 13);
+            this.lblSlot.TabIndex = 5;
+            this.lblSlot.Text = "Slot:";
             // 
-            // cmbTags
+            // cmbSlots
             // 
-            this.cmbTags.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbTags.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbTags.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbTags.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbTags.DrawDropdownHoverOutline = false;
-            this.cmbTags.DrawFocusRectangle = false;
-            this.cmbTags.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbTags.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbTags.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbTags.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbTags.FormattingEnabled = true;
-            this.cmbTags.Location = new System.Drawing.Point(92, 18);
-            this.cmbTags.Name = "cmbTags";
-            this.cmbTags.Size = new System.Drawing.Size(162, 21);
-            this.cmbTags.TabIndex = 3;
-            this.cmbTags.Text = null;
-            this.cmbTags.TextPadding = new System.Windows.Forms.Padding(2);
-            // 
-            // chkTagBank
-            // 
-            this.chkTagBank.Location = new System.Drawing.Point(143, 48);
-            this.chkTagBank.Name = "chkTagBank";
-            this.chkTagBank.Size = new System.Drawing.Size(99, 19);
-            this.chkTagBank.TabIndex = 60;
-            this.chkTagBank.Text = "Check Bank?";
+            this.cmbSlots.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbSlots.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbSlots.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbSlots.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbSlots.DrawDropdownHoverOutline = false;
+            this.cmbSlots.DrawFocusRectangle = false;
+            this.cmbSlots.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbSlots.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbSlots.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbSlots.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbSlots.FormattingEnabled = true;
+            this.cmbSlots.Location = new System.Drawing.Point(92, 18);
+            this.cmbSlots.Name = "cmbSlots";
+            this.cmbSlots.Size = new System.Drawing.Size(162, 21);
+            this.cmbSlots.TabIndex = 3;
+            this.cmbSlots.Text = null;
+            this.cmbSlots.TextPadding = new System.Windows.Forms.Padding(2);
             // 
             // EventCommandConditionalBranch
             // 
@@ -1789,6 +1838,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.Size = new System.Drawing.Size(285, 345);
             this.grpConditional.ResumeLayout(false);
             this.grpConditional.PerformLayout();
+            this.grpTag.ResumeLayout(false);
+            this.grpTag.PerformLayout();
             this.grpMapZoneType.ResumeLayout(false);
             this.grpMapZoneType.PerformLayout();
             this.grpInGuild.ResumeLayout(false);
@@ -1836,8 +1887,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             ((System.ComponentModel.ISupportInitialize)(this.nudItemAmount)).EndInit();
             this.grpAmountType.ResumeLayout(false);
             this.grpAmountType.PerformLayout();
-            this.grpTag.ResumeLayout(false);
-            this.grpTag.PerformLayout();
+            this.grpEquipmentSlot.ResumeLayout(false);
+            this.grpEquipmentSlot.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1954,5 +2005,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private System.Windows.Forms.Label lblTag;
         private DarkComboBox cmbTags;
         private DarkCheckBox chkTagBank;
+        private DarkGroupBox grpEquipmentSlot;
+        private System.Windows.Forms.Label lblSlot;
+        private DarkComboBox cmbSlots;
     }
 }

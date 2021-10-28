@@ -252,6 +252,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             lblTag.Text = Strings.EventConditional.taglabel;
             chkTagBank.Text = Strings.EventConditional.checkbank;
 
+            // Equip in Slot
+            grpEquipmentSlot.Text = Strings.EventConditional.equipinslotgroup;
+            lblSlot.Text = Strings.EventConditional.equipinslotlabel;
+
             btnSave.Text = Strings.EventConditional.okay;
             btnCancel.Text = Strings.EventConditional.cancel;
         }
@@ -398,6 +402,14 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     }
 
                     break;
+                case ConditionTypes.EquipmentInSlot:
+                    Condition = new EquipmentInSlotCondition();
+                    if (cmbSlots.Items.Count > 0)
+                    {
+                        cmbSlots.SelectedIndex = 0;
+                    }
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -421,6 +433,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             grpEquippedItem.Hide();
             grpInGuild.Hide();
             grpMapZoneType.Hide();
+            grpTag.Hide();
+            grpEquipmentSlot.Hide();
             switch (type)
             {
                 case ConditionTypes.VariableIs:
@@ -546,6 +560,17 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                 case ConditionTypes.ItemEquippedWithTag:
                     InitializeTags();
                     chkTagBank.Hide();
+
+                    break;
+                case ConditionTypes.EquipmentInSlot:
+                    var options = new Config.EquipmentOptions();
+                    cmbSlots.Items.Clear();
+                    foreach (string slot in options.Slots)
+                    {
+                        cmbSlots.Items.Add(slot);
+                    }
+
+                    grpEquipmentSlot.Show();
 
                     break;
                 default:
@@ -1225,6 +1250,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             cmbTags.SelectedItem = condition.Tag;
         }
 
+        private void SetupFormValues(EquipmentInSlotCondition condition)
+        {
+            cmbSlots.SelectedIndex = condition.slot;
+        }
+
         #endregion
 
         #region "SaveFormValues"
@@ -1389,6 +1419,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private void SaveFormValues(EquipmentTagCondition condition)
         {
             condition.Tag = (string)cmbTags.SelectedItem;
+        }
+
+        private void SaveFormValues(EquipmentInSlotCondition condition)
+        {
+            condition.slot = cmbSlots.SelectedIndex;
         }
 
         #endregion

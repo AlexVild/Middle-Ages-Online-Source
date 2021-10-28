@@ -48,6 +48,8 @@ namespace Intersect.GameObjects.Events
 
         ItemEquippedWithTag,
 
+        EquipmentInSlot,
+
     }
 
     public class Condition
@@ -333,6 +335,13 @@ namespace Intersect.GameObjects.Events
         /// Defines the tag to check for.
         /// </summary>
         public string Tag { get; set; }
+    }
+
+    public class EquipmentInSlotCondition : Condition
+    {
+        public override ConditionTypes Type { get; } = ConditionTypes.EquipmentInSlot;
+
+        public int slot { get; set; }
     }
 
     public class VariableCompaison
