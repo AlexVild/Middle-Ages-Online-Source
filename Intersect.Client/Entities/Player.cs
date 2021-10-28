@@ -216,6 +216,13 @@ namespace Intersect.Client.Entities
                      !Interface.Interface.HasInputFocus());
         }
 
+        public bool CanHarvest()
+        {
+            return (Globals.EventHolds.Count == 0 &&
+                     !Globals.MoveRouteActive &&
+                     Globals.GameShop == null);
+        }
+
         public override bool Update()
         {
 
@@ -236,11 +243,14 @@ namespace Intersect.Client.Entities
                 {
                     if (!Globals.Me.TryAttack())
                     {
-                        if (Globals.Me.AttackTimer < Timing.Global.Ticks / TimeSpan.TicksPerMillisecond)
-                        {
-                            Globals.Me.AttackTimer = Timing.Global.Ticks / TimeSpan.TicksPerMillisecond + Globals.Me.CalculateAttackTime();
-                        }
+                        UpdateAttackTimer();
                     }
+                }
+            } else if (CanHarvest() && resourceLocked) // Allow resource locking to persist in more situations than attacking
+            {
+                if (!Globals.Me.TryAttack())
+                {
+                    UpdateAttackTimer();
                 }
             }
 
@@ -281,6 +291,14 @@ namespace Intersect.Client.Entities
             }
 
             return returnval;
+        }
+
+        private void UpdateAttackTimer()
+        {
+            if (Globals.Me.AttackTimer < Timing.Global.Ticks / TimeSpan.TicksPerMillisecond)
+            {
+                Globals.Me.AttackTimer = Timing.Global.Ticks / TimeSpan.TicksPerMillisecond + Globals.Me.CalculateAttackTime();
+            }
         }
 
         //Loading
