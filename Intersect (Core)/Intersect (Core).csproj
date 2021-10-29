@@ -406,6 +406,7 @@
     <Compile Include="Network\Packets\Client\PictureClosedPacket.cs" />
     <Compile Include="Network\Packets\Server\ActionMsgPackets.cs" />
     <Compile Include="Network\Packets\Server\BankUpdateValuePacket.cs" />
+    <Compile Include="Network\Packets\Server\CombatEffectPacket.cs" />
     <Compile Include="Network\Packets\Server\ComboPacket.cs" />
     <Compile Include="Network\Packets\Server\CraftingInfoPacket.cs" />
     <Compile Include="Network\Packets\Server\EntityMovementPackets.cs" />
@@ -424,6 +425,7 @@
     <Compile Include="Network\Packets\Server\QuestOfferListPacket.cs" />
     <Compile Include="Network\Packets\Server\QuestPointPacket.cs" />
     <Compile Include="Network\Packets\Server\ResourceLockPacket.cs" />
+    <Compile Include="Network\Packets\Server\ShakeScreenPacket.cs" />
     <Compile Include="Network\Packets\Server\UpdateFutureWarpPacket.cs" />
     <Compile Include="Network\Packets\SlotQuantityPacket.cs" />
     <Compile Include="Network\Packets\Client\SwapBankItemsPacket.cs" />

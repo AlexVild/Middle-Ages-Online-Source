@@ -2194,5 +2194,55 @@ namespace Intersect.Client.Networking
                 Globals.QuestOffers.Add(quest);
             }
         }
+
+        // Screen Shake packet
+        public void HandlePacket(IPacketSender packetSender, ShakeScreenPacket packet)
+        {
+            if (Globals.Me == null) return;
+
+            if (Graphics.CurrentShake < packet.Intensity)
+            {
+                Graphics.CurrentShake = packet.Intensity;
+            }
+        }
+        
+        // Combat Effect packet
+        public void HandlePacket(IPacketSender packetSender, CombatEffectPacket packet)
+        {
+            if (Globals.Me == null) return;
+
+            var someTarget = packet.TargetId != null && packet.TargetId != Guid.Empty && Globals.Entities.ContainsKey(packet.TargetId);
+
+            if (Graphics.CurrentShake < packet.ShakeAmount && packet.ShakeAmount > 0.0f)
+            {
+                Graphics.CurrentShake = packet.ShakeAmount;
+            }
+            
+            if (packet.FlashColor != null)
+            {
+                Flash.FlashScreen(packet.FlashDuration, packet.FlashColor, packet.FlashIntensity);
+            }
+            // Flash entity
+            if (someTarget)
+            {
+                Entity affectedTarget = Globals.Entities[packet.TargetId];
+                affectedTarget.Flash = true;
+                affectedTarget.FlashColor = packet.EntityFlashColor;
+                affectedTarget.FlashEndTime = Globals.System.GetTimeMs() + 200; // TODO config
+                if (!string.IsNullOrEmpty(packet.Sound))
+                {
+                    Audio.AddMapSound(packet.Sound, affectedTarget.X, affectedTarget.Y, affectedTarget.CurrentMap, false, 0, 4);
+                }
+            } else // If we don't have a specific target handle this as if the hit-effects are happening to the packet-receiving player
+            {
+                if (!string.IsNullOrEmpty(packet.Sound))
+                {
+                    Audio.AddGameSound(packet.Sound, false);
+                }
+                Globals.Me.Flash = true;
+                Globals.Me.FlashColor = packet.EntityFlashColor;
+                Globals.Me.FlashEndTime = Globals.System.GetTimeMs() + 200; // TODO config
+            }
+        }
     }
 }

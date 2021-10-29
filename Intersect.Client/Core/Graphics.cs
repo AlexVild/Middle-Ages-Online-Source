@@ -11,6 +11,7 @@ using Intersect.Client.Maps;
 using Intersect.Configuration;
 using Intersect.Enums;
 using Intersect.GameObjects;
+using Intersect.Utilities;
 
 namespace Intersect.Client.Core
 {
@@ -89,6 +90,10 @@ namespace Intersect.Client.Core
         private static float sPlayerLightSize;
 
         public static GameFont UIFont;
+
+        public static float CurrentShake = 0.0f;
+
+        private static float mShakeDecrement = 0.12f;
 
         //Init Functions
         public static void InitGraphics()
@@ -754,10 +759,27 @@ namespace Intersect.Client.Core
         {
             if (Globals.Me == null)
             {
+                CurrentShake = 0.0f;
                 CurrentView = new FloatRect(0, 0, Renderer.GetScreenWidth(), Renderer.GetScreenHeight());
                 Renderer.SetView(CurrentView);
 
                 return;
+            }
+
+            CurrentShake = Utilities.MathHelper.Clamp(CurrentShake - mShakeDecrement, 0.0f, 100.0f);
+            var yShake = CurrentShake;
+            var xShake = CurrentShake;
+            if (CurrentShake > 0.0f)
+            {
+                // Randomize which directions we're shaking in
+                if (Randomization.Next(0, 2) == 1)
+                {
+                    yShake *= -1;
+                }
+                if (Randomization.Next(0, 2) == 1)
+                {
+                    xShake *= -1;
+                }
             }
 
             var map = MapInstance.Get(Globals.Me.CurrentMap);
@@ -792,8 +814,8 @@ namespace Intersect.Client.Core
                 var h = y1 - y;
                 var restrictView = new FloatRect(x, y, w, h);
                 CurrentView = new FloatRect(
-                    (int) Math.Ceiling(en.GetCenterPos().X - Renderer.GetScreenWidth() / 2f),
-                    (int) Math.Ceiling(en.GetCenterPos().Y - Renderer.GetScreenHeight() / 2f),
+                    (int) Math.Ceiling(en.GetCenterPos().X - Renderer.GetScreenWidth() / 2f) + xShake,
+                    (int) Math.Ceiling(en.GetCenterPos().Y - Renderer.GetScreenHeight() / 2f) + yShake,
                     Renderer.GetScreenWidth(), Renderer.GetScreenHeight()
                 );
 

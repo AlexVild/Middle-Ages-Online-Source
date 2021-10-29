@@ -186,6 +186,12 @@ namespace Intersect.Client.Entities
 
         public string[] MyDecors = new string[Options.DecorSlots.Count];
 
+        public bool Flash = false; // Whether or not the entity sprite is flashing
+
+        public Color FlashColor = null; // What color to flash the entity
+
+        public long FlashEndTime = 0L;
+
         public Entity(Guid id, EntityPacket packet, bool isEvent = false)
         {
             Id = id;
@@ -530,6 +536,13 @@ namespace Intersect.Client.Entities
 
             var ecTime = (float) (Globals.System.GetTimeMs() - mLastUpdate);
             elapsedtime = ecTime;
+
+            // Update flash timer
+            if (Flash && Globals.System.GetTimeMs() > FlashEndTime)
+            {
+                Flash = false;
+            }
+
             if (Dashing != null)
             {
                 WalkFrame = Options.Instance.Sprites.NormalSheetDashFrame; //Fix the frame whilst dashing
@@ -894,6 +907,10 @@ namespace Intersect.Client.Entities
             var sprite = "";
             // Copy the actual render color, because we'll be editing it later and don't want to overwrite it.
             var renderColor = new Color(Color.A, Color.R, Color.G, Color. B);
+            if (Flash && FlashColor != null) // Flash the sprite some color for some duration
+            {
+                renderColor = FlashColor;
+            }
 
             string transformedSprite = "";
 
@@ -1231,8 +1248,15 @@ namespace Intersect.Client.Entities
 
                 destRectangle.Width = srcRectangle.Width;
                 destRectangle.Height = srcRectangle.Height;
+                var renderColor = new Color(alpha, 255, 255, 255);
+                if (Flash)
+                {
+                    renderColor = FlashColor;
+                    renderColor.A = (byte) alpha;
+                }
+
                 Graphics.DrawGameTexture(
-                    paperdollTex, srcRectangle, destRectangle, new Intersect.Color(alpha, 255, 255, 255)
+                    paperdollTex, srcRectangle, destRectangle, renderColor
                 );
             }
         }

@@ -1769,6 +1769,17 @@ namespace Intersect.Server.Entities
                 isCrit = true;
             }
 
+            // Define vars that will be used for combat effects
+            Color flashColor = null;
+            Color enemyFlashColor = null;
+            Color entityFlashColor = null;
+            float flashIntensity = 0.0f;
+            float flashDuration = 0.0f;
+            float enemyFlashIntensity = 0.0f;
+            float enemyFlashDuration = 0.0f;
+            float shakeAmount = 0.0f;
+            string damageSound = "";
+
             //Calculate Damages
             if (baseDamage != 0)
             {
@@ -1796,19 +1807,26 @@ namespace Intersect.Server.Entities
                         {
                             if (enemy is Player enemyPlayer)
                             {
+                                flashColor = Color.FromName(Options.CriticalHitReceivedColor);
+                                flashDuration = Options.CriticalHitFlashDuration;
+                                flashIntensity = Options.CriticalHitFlashIntensity;
+                                damageSound = Options.CriticalHitReceivedSound;
+
+                                // Flash the screen of the receiver
+                                
+
                                 PacketSender.SendFlashScreenPacket(enemyPlayer.Client, 
                                     Options.CriticalHitFlashDuration, 
                                     Color.FromName(Options.CriticalHitReceivedColor), 
                                     Options.CriticalHitFlashIntensity,
                                     Options.CriticalHitReceivedSound);
                             }
-                            if (this is Player player)
+                            if (this is Player attacker)
                             {
-                                PacketSender.SendFlashScreenPacket(player.Client, 
-                                    Options.CriticalHitFlashDuration, 
-                                    Color.FromName(Options.CriticalHitDealtColor), 
-                                    Options.CriticalHitFlashIntensity,
-                                    Options.CriticalHitDealtSound);
+                                flashColor = Color.FromName(Options.CriticalHitReceivedColor);
+                                flashDuration = Options.CriticalHitFlashDuration;
+                                flashIntensity = Options.CriticalHitFlashIntensity;
+                                damageSound = Options.CriticalHitReceivedSound;
                             }
                         }
                     }
@@ -1975,6 +1993,55 @@ namespace Intersect.Server.Entities
             if (GetType() == typeof(Npc))
             {
                 ((Npc) this).MoveTimer = Globals.Timing.Milliseconds + (long) GetMovementTime();
+            }
+
+            // Calculate combat special effects (entity/screen flash, screen shake, extra sounds)
+            if (this is Player player)
+            {
+                // Calc distances so shakes aren't as violent when further away
+                int enemyDistance = GetDistanceTo(enemy);
+                float shakeModifier = 1.0f / (float)enemyDistance;
+                if (player.Client != null && !(enemy is Resource))
+                {
+                    shakeAmount = 4.0f * shakeModifier;
+                    PacketSender.SendCombatEffectPacket(player.Client, 
+                        enemy.Id,
+                        shakeAmount, 
+                        Color.Red, 
+                        damageSound, 
+                        flashIntensity, 
+                        flashDuration, 
+                        flashColor);
+                } else if (enemy is Resource res)
+                {
+                    shakeAmount = 2.5f * shakeModifier;
+                    if (enemy.GetVital(Vitals.Health) <= 0)
+                    {
+                        // Only shake for an exhausted resource
+                        PacketSender.SendCombatEffectPacket(player.Client,
+                            enemy.Id,
+                            shakeAmount,
+                            null, // Don't want a resource to flash
+                            "", // Don't want a resource to make a hit sound
+                            0.0f,
+                            0.0f,
+                            null);
+                    }
+                }
+            }
+
+            // Send damaged effects to enemy - this will make their screen flash if critted, play THEIR hurt sound, and also make THEIR entity sprite flash
+            if (enemy.GetVital(Vitals.Health) > 0 && enemy is Player en)
+            {
+                shakeAmount = 2.5f;
+                PacketSender.SendCombatEffectPacket(en.Client,
+                        en.Id,
+                        shakeAmount,
+                        Color.Red,
+                        damageSound,
+                        flashIntensity,
+                        flashDuration,
+                        flashColor);
             }
         }
 
