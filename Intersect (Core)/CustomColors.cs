@@ -196,6 +196,17 @@ namespace Intersect
 
             public Color TrueDamage = new Color(255, 255, 255, 255);
 
+            public Color GenericDamageGiveEntityFlashColor = new Color(255, 130, 46, 36);
+
+            public Color GenericHealingReceivedEntityFlashColor = new Color(255, 201, 226, 158);
+
+            public Color DamageTakenFlashColor = new Color(255, 222, 124, 112);
+
+            public Color HealingFlashColor = new Color(255, 201, 226, 158);
+            
+            public Color CriticalHitReceivedColor = new Color(255, 130, 46, 36);
+            
+            public Color CriticalHitDealtColor = new Color(255, 255, 255, 255);
         }
 
         public sealed class GeneralNamespace

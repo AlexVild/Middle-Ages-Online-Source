@@ -40,18 +40,28 @@
 
         public bool CombatFlashes = true; // Whether or not to flash screen on critical hits
 
-        public string CriticalHitDealtColor = "White";
+        public float CriticalHitFlashIntensity = 80f;
 
-        public string CriticalHitReceivedColor = "Red";
-
-        public float CriticalHitFlashIntensity = 40f;
-
-        public float CriticalHitFlashDuration = 500f; // ms
+        public float HitFlashDuration = 600f; // ms
 
         public string CriticalHitReceivedSound = null;
 
         public string CriticalHitDealtSound = null;
-        
+
+        public float DamageTakenFlashIntensity = 35f;
+
+        public float DamageTakenShakeAmount = 2.5f;
+
+        public float ResourceDestroyedShakeAmount = 2.5f;
+
+        public float DamageGivenShakeAmount = 4.0f;
+
+        public float MaxDamageShakeDistance = 6.0f;
+
+        public string GenericDamageGivenSound = "al_give_damage.wav";
+
+        public string GenericDamageReceivedSound = "al_take_damage.wav";
+
         public long FaceTargetPredictionTime = 650;
 
         //Combat

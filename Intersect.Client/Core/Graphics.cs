@@ -814,8 +814,8 @@ namespace Intersect.Client.Core
                 var h = y1 - y;
                 var restrictView = new FloatRect(x, y, w, h);
                 CurrentView = new FloatRect(
-                    (int) Math.Ceiling(en.GetCenterPos().X - Renderer.GetScreenWidth() / 2f) + xShake,
-                    (int) Math.Ceiling(en.GetCenterPos().Y - Renderer.GetScreenHeight() / 2f) + yShake,
+                    (int) Math.Ceiling(en.GetCenterPos().X - Renderer.GetScreenWidth() / 2f) + (int) xShake,
+                    (int) Math.Ceiling(en.GetCenterPos().Y - Renderer.GetScreenHeight() / 2f) + (int) yShake,
                     Renderer.GetScreenWidth(), Renderer.GetScreenHeight()
                 );
 

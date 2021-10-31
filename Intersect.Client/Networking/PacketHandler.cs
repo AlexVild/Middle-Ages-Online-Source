@@ -2231,7 +2231,7 @@ namespace Intersect.Client.Networking
                 affectedTarget.FlashEndTime = Globals.System.GetTimeMs() + 200; // TODO config
                 if (!string.IsNullOrEmpty(packet.Sound))
                 {
-                    Audio.AddMapSound(packet.Sound, affectedTarget.X, affectedTarget.Y, affectedTarget.CurrentMap, false, 0, 4);
+                    Audio.AddMapSound(packet.Sound, affectedTarget.X, affectedTarget.Y, affectedTarget.CurrentMap, false, 0, 10);
                 }
             } else // If we don't have a specific target handle this as if the hit-effects are happening to the packet-receiving player
             {
