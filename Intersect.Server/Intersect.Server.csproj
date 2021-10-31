@@ -450,6 +450,7 @@
     <Compile Include="Database\GameData\GameContext.cs" />
     <Compile Include="Database\GameData\IGameContext.cs" />
     <Compile Include="Database\GameData\Migrations\Beta6Migration.cs" />
+    <Compile Include="Database\GameData\Migrations\FixQuestTaskCompletionEventsMigration.cs" />
     <Compile Include="Database\GameData\Migrations\BoundItemExtensionMigration.cs" />
     <Compile Include="Database\GameData\Migrations\CerasVersionToleranceMigration.cs" />
     <Compile Include="Database\ContextInterface.cs" />
@@ -599,6 +600,10 @@
     <Compile Include="Migrations\Game\20210703145618_AddingShopSoundEffects.cs" />
     <Compile Include="Migrations\Game\20210703145618_AddingShopSoundEffects.designer.cs">
       <DependentUpon>20210703145618_AddingShopSoundEffects.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20211031200145_FixQuestTaskCompletionEvents.cs" />
+    <Compile Include="Migrations\Game\20211031200145_FixQuestTaskCompletionEvents.designer.cs">
+      <DependentUpon>20211031200145_FixQuestTaskCompletionEvents.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
