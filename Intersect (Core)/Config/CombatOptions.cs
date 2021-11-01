@@ -63,6 +63,8 @@
         public string GenericDamageReceivedSound = "al_take_damage.wav";
 
         public long FaceTargetPredictionTime = 650;
+        
+        public long ActionMessageTime = 1500;
 
         //Combat
         public int RegenTime = 5000; //5 seconds

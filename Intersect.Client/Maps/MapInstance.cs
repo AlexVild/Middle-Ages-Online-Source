@@ -1274,15 +1274,21 @@ namespace Intersect.Client.Maps
                     ActionMsgs[n].Y * Options.TileHeight -
                     Options.TileHeight *
                     2 *
-                    (1000 - (ActionMsgs[n].TransmittionTimer - Globals.System.GetTimeMs())) /
-                    1000 + ActionMsgs[n].YOffset
+                    (Options.ActionMessageTime - (ActionMsgs[n].TransmittionTimer - Globals.System.GetTimeMs())) /
+                    Options.ActionMessageTime + ActionMsgs[n].YOffset
                 );
 
                 var x = (int) Math.Ceiling(GetX() + ActionMsgs[n].X * Options.TileWidth + ActionMsgs[n].XOffset);
                 var textWidth = Graphics.Renderer.MeasureText(ActionMsgs[n].Msg, Graphics.ActionMsgFont, 1).X;
+
+                Color fadingColor = ActionMsgs[n].Clr;
+                double alphaRatio = Math.Abs((float) (Globals.System.GetTimeMs() - ActionMsgs[n].TransmittionTimer) / (float) Options.ActionMessageTime);
+                alphaRatio = MathHelper.Clamp(alphaRatio, 0.0f, 1.0f);
+                fadingColor.A = (byte) (255 * alphaRatio);
+
                 Graphics.Renderer.DrawString(
-                    ActionMsgs[n].Msg, Graphics.ActionMsgFont, (int) x - textWidth / 2f, (int) y, 1, ActionMsgs[n].Clr,
-                    true, null, new Color(40, 40, 40)
+                    ActionMsgs[n].Msg, Graphics.ActionMsgFont, (int) x - textWidth / 2f, (int) y, 1, fadingColor,
+                    true, null, new Color(fadingColor.A, 40, 40, 40)
                 );
 
                 //Try to remove

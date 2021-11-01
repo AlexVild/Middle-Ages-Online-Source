@@ -29,9 +29,9 @@ namespace Intersect.Client.Maps
             Y = y;
             Msg = message;
             Clr = color;
-            XOffset = Globals.Random.Next(-60, 60); //+- 16 pixels so action msg's don't overlap!
+            XOffset = Globals.Random.Next(-32, 32); //+- 16 pixels so action msg's don't overlap!
             YOffset = Globals.Random.Next(-20, 20);
-            TransmittionTimer = Globals.System.GetTimeMs() + 1000;
+            TransmittionTimer = Globals.System.GetTimeMs() + Options.ActionMessageTime;
         }
 
         public void TryRemove()

@@ -288,11 +288,14 @@ namespace Intersect.Server.Entities
 
         private long GetExperienceToNextLevel(int level)
         {
+            if (level > Options.MaxLevel)
+            {
+                SetLevel(Options.MaxLevel, true);
+            }
             if (level >= Options.MaxLevel)
             {
                 return -1;
             }
-
             var classBase = ClassBase.Get(ClassId);
 
             return classBase?.ExperienceToNextLevel(level) ?? ClassBase.DEFAULT_BASE_EXPERIENCE;
@@ -1115,22 +1118,33 @@ namespace Intersect.Server.Entities
 
         public void GiveExperience(long amount, bool partyCombo = false, int opponentLevel = 0)
         {
-            if (CurrentCombo > 0)
+            if (Level < Options.MaxLevel)
             {
-                ComboExp = CalculateComboExperience(amount, partyCombo, opponentLevel);
-                Exp += ComboExp;
-            }
+                if (ShouldAwardExp(opponentLevel)) // Don't give exp at all if more than X levels between
+                {
+                    if (CurrentCombo > 0)
+                    {
+                        ComboExp = CalculateComboExperience(amount, partyCombo, opponentLevel);
+                        Exp += ComboExp;
+                    }
 
-            Exp += (int) (amount * GetEquipmentBonusEffect(EffectType.EXP, 100) / 100);
-            if (Exp < 0)
-            {
-                Exp = 0;
-            }
+                    Exp += (int)(amount * GetEquipmentBonusEffect(EffectType.EXP, 100) / 100);
+                    if (Exp < 0)
+                    {
+                        Exp = 0;
+                    }
 
-            if (!CheckLevelUp())
-            {
-                PacketSender.SendExperience(this, ComboExp);
+                    if (!CheckLevelUp())
+                    {
+                        PacketSender.SendExperience(this, ComboExp);
+                    }
+                }   
             }
+        }
+
+        private bool ShouldAwardExp(int opponentLevel)
+        {
+            return opponentLevel >= (Level - Options.Combat.MinComboExpLvlDiff);
         }
 
         public void TakeExperience(long amount)
@@ -1241,7 +1255,7 @@ namespace Intersect.Server.Entities
         #region Combo Stuff
         private int CalculateComboExperience(long baseAmount, bool partyCombo, int entityLevel)
         {
-            if (entityLevel < Level - Options.Combat.MinComboExpLvlDiff) // don't give exp if the level gap was too large
+            if (!ShouldAwardExp(entityLevel)) // don't give exp if the level gap was too large
             {
                 return 0;
             }
