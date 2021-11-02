@@ -42,6 +42,10 @@ namespace Intersect.Editor.Forms.Editors
             this.btnSave = new DarkUI.Controls.DarkButton();
             this.grpGeneral = new DarkUI.Controls.DarkGroupBox();
             this.grpTags = new DarkUI.Controls.DarkGroupBox();
+            this.lstTags = new System.Windows.Forms.ListBox();
+            this.btnRemoveTag = new DarkUI.Controls.DarkButton();
+            this.btnAddTag = new DarkUI.Controls.DarkButton();
+            this.lblTagToAdd = new System.Windows.Forms.Label();
             this.cmbTags = new DarkUI.Controls.DarkComboBox();
             this.btnNewTag = new DarkUI.Controls.DarkButton();
             this.grpRequirements = new DarkUI.Controls.DarkGroupBox();
@@ -193,6 +197,11 @@ namespace Intersect.Editor.Forms.Editors
             this.grpEvent = new DarkUI.Controls.DarkGroupBox();
             this.chkSingleUseEvent = new DarkUI.Controls.DarkCheckBox();
             this.cmbEvent = new DarkUI.Controls.DarkComboBox();
+            this.grpSpell = new DarkUI.Controls.DarkGroupBox();
+            this.chkSingleUseSpell = new DarkUI.Controls.DarkCheckBox();
+            this.chkQuickCast = new DarkUI.Controls.DarkCheckBox();
+            this.cmbTeachSpell = new DarkUI.Controls.DarkComboBox();
+            this.lblSpell = new System.Windows.Forms.Label();
             this.grpBags = new DarkUI.Controls.DarkGroupBox();
             this.nudBag = new DarkUI.Controls.DarkNumericUpDown();
             this.lblBag = new System.Windows.Forms.Label();
@@ -204,11 +213,6 @@ namespace Intersect.Editor.Forms.Editors
             this.lblVital = new System.Windows.Forms.Label();
             this.cmbConsume = new DarkUI.Controls.DarkComboBox();
             this.lblInterval = new System.Windows.Forms.Label();
-            this.grpSpell = new DarkUI.Controls.DarkGroupBox();
-            this.chkSingleUseSpell = new DarkUI.Controls.DarkCheckBox();
-            this.chkQuickCast = new DarkUI.Controls.DarkCheckBox();
-            this.cmbTeachSpell = new DarkUI.Controls.DarkComboBox();
-            this.lblSpell = new System.Windows.Forms.Label();
             this.pnlContainer = new System.Windows.Forms.Panel();
             this.toolStrip = new DarkUI.Controls.DarkToolStrip();
             this.toolStripItemNew = new System.Windows.Forms.ToolStripButton();
@@ -222,10 +226,12 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
             this.vS2015DarkTheme1 = new WeifenLuo.WinFormsUI.Docking.VS2015DarkTheme();
-            this.lblTagToAdd = new System.Windows.Forms.Label();
-            this.btnAddTag = new DarkUI.Controls.DarkButton();
-            this.btnRemoveTag = new DarkUI.Controls.DarkButton();
-            this.lstTags = new System.Windows.Forms.ListBox();
+            this.chkLockStrength = new DarkUI.Controls.DarkCheckBox();
+            this.lblStatLock = new System.Windows.Forms.Label();
+            this.chkLockMagic = new DarkUI.Controls.DarkCheckBox();
+            this.chkLockArmor = new DarkUI.Controls.DarkCheckBox();
+            this.chkLockMagicResist = new DarkUI.Controls.DarkCheckBox();
+            this.chkLockSpeed = new DarkUI.Controls.DarkCheckBox();
             this.grpItems.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             this.grpTags.SuspendLayout();
@@ -276,12 +282,12 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudCritChance)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudDamage)).BeginInit();
             this.grpEvent.SuspendLayout();
+            this.grpSpell.SuspendLayout();
             this.grpBags.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudBag)).BeginInit();
             this.grpConsumable.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudIntervalPercentage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudInterval)).BeginInit();
-            this.grpSpell.SuspendLayout();
             this.pnlContainer.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.SuspendLayout();
@@ -441,6 +447,47 @@ namespace Intersect.Editor.Forms.Editors
             this.grpTags.TabIndex = 101;
             this.grpTags.TabStop = false;
             this.grpTags.Text = "Tags";
+            // 
+            // lstTags
+            // 
+            this.lstTags.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.lstTags.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lstTags.Cursor = System.Windows.Forms.Cursors.Default;
+            this.lstTags.ForeColor = System.Drawing.Color.Gainsboro;
+            this.lstTags.FormattingEnabled = true;
+            this.lstTags.Location = new System.Drawing.Point(121, 29);
+            this.lstTags.Name = "lstTags";
+            this.lstTags.Size = new System.Drawing.Size(284, 67);
+            this.lstTags.TabIndex = 106;
+            // 
+            // btnRemoveTag
+            // 
+            this.btnRemoveTag.Location = new System.Drawing.Point(340, 113);
+            this.btnRemoveTag.Name = "btnRemoveTag";
+            this.btnRemoveTag.Padding = new System.Windows.Forms.Padding(5);
+            this.btnRemoveTag.Size = new System.Drawing.Size(74, 28);
+            this.btnRemoveTag.TabIndex = 105;
+            this.btnRemoveTag.Text = "Remove";
+            this.btnRemoveTag.Click += new System.EventHandler(this.btnRemoveTag_Click);
+            // 
+            // btnAddTag
+            // 
+            this.btnAddTag.Location = new System.Drawing.Point(260, 113);
+            this.btnAddTag.Name = "btnAddTag";
+            this.btnAddTag.Padding = new System.Windows.Forms.Padding(5);
+            this.btnAddTag.Size = new System.Drawing.Size(74, 28);
+            this.btnAddTag.TabIndex = 104;
+            this.btnAddTag.Text = "Add";
+            this.btnAddTag.Click += new System.EventHandler(this.btnAddTag_Click);
+            // 
+            // lblTagToAdd
+            // 
+            this.lblTagToAdd.AutoSize = true;
+            this.lblTagToAdd.Location = new System.Drawing.Point(39, 121);
+            this.lblTagToAdd.Name = "lblTagToAdd";
+            this.lblTagToAdd.Size = new System.Drawing.Size(63, 13);
+            this.lblTagToAdd.TabIndex = 55;
+            this.lblTagToAdd.Text = "Tag to Add:";
             // 
             // cmbTags
             // 
@@ -1624,6 +1671,12 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpStatBonuses.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpStatBonuses.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpStatBonuses.Controls.Add(this.chkLockSpeed);
+            this.grpStatBonuses.Controls.Add(this.chkLockMagicResist);
+            this.grpStatBonuses.Controls.Add(this.chkLockArmor);
+            this.grpStatBonuses.Controls.Add(this.chkLockMagic);
+            this.grpStatBonuses.Controls.Add(this.lblStatLock);
+            this.grpStatBonuses.Controls.Add(this.chkLockStrength);
             this.grpStatBonuses.Controls.Add(this.lblPercentage5);
             this.grpStatBonuses.Controls.Add(this.lblPercentage4);
             this.grpStatBonuses.Controls.Add(this.lblPercentage8);
@@ -1662,7 +1715,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblPercentage5
             // 
             this.lblPercentage5.AutoSize = true;
-            this.lblPercentage5.Location = new System.Drawing.Point(179, 180);
+            this.lblPercentage5.Location = new System.Drawing.Point(161, 179);
             this.lblPercentage5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblPercentage5.Name = "lblPercentage5";
             this.lblPercentage5.Size = new System.Drawing.Size(15, 13);
@@ -1672,7 +1725,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblPercentage4
             // 
             this.lblPercentage4.AutoSize = true;
-            this.lblPercentage4.Location = new System.Drawing.Point(179, 142);
+            this.lblPercentage4.Location = new System.Drawing.Point(161, 141);
             this.lblPercentage4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblPercentage4.Name = "lblPercentage4";
             this.lblPercentage4.Size = new System.Drawing.Size(15, 13);
@@ -1682,7 +1735,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblPercentage8
             // 
             this.lblPercentage8.AutoSize = true;
-            this.lblPercentage8.Location = new System.Drawing.Point(181, 102);
+            this.lblPercentage8.Location = new System.Drawing.Point(163, 101);
             this.lblPercentage8.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblPercentage8.Name = "lblPercentage8";
             this.lblPercentage8.Size = new System.Drawing.Size(15, 13);
@@ -1692,7 +1745,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblPercentage7
             // 
             this.lblPercentage7.AutoSize = true;
-            this.lblPercentage7.Location = new System.Drawing.Point(179, 64);
+            this.lblPercentage7.Location = new System.Drawing.Point(161, 63);
             this.lblPercentage7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblPercentage7.Name = "lblPercentage7";
             this.lblPercentage7.Size = new System.Drawing.Size(15, 13);
@@ -1702,7 +1755,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblPercentage6
             // 
             this.lblPercentage6.AutoSize = true;
-            this.lblPercentage6.Location = new System.Drawing.Point(179, 30);
+            this.lblPercentage6.Location = new System.Drawing.Point(161, 29);
             this.lblPercentage6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblPercentage6.Name = "lblPercentage6";
             this.lblPercentage6.Size = new System.Drawing.Size(15, 13);
@@ -1713,7 +1766,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.nudSpdPercentage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.nudSpdPercentage.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudSpdPercentage.Location = new System.Drawing.Point(132, 178);
+            this.nudSpdPercentage.Location = new System.Drawing.Point(118, 179);
             this.nudSpdPercentage.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -1733,7 +1786,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.nudMRPercentage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.nudMRPercentage.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudMRPercentage.Location = new System.Drawing.Point(132, 140);
+            this.nudMRPercentage.Location = new System.Drawing.Point(118, 141);
             this.nudMRPercentage.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -1753,7 +1806,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.nudDefPercentage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.nudDefPercentage.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudDefPercentage.Location = new System.Drawing.Point(134, 101);
+            this.nudDefPercentage.Location = new System.Drawing.Point(120, 102);
             this.nudDefPercentage.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -1773,7 +1826,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.nudMagPercentage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.nudMagPercentage.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudMagPercentage.Location = new System.Drawing.Point(132, 63);
+            this.nudMagPercentage.Location = new System.Drawing.Point(118, 64);
             this.nudMagPercentage.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -1793,7 +1846,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.nudStrPercentage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.nudStrPercentage.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudStrPercentage.Location = new System.Drawing.Point(132, 28);
+            this.nudStrPercentage.Location = new System.Drawing.Point(118, 29);
             this.nudStrPercentage.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -1812,7 +1865,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblPlus5
             // 
             this.lblPlus5.AutoSize = true;
-            this.lblPlus5.Location = new System.Drawing.Point(114, 180);
+            this.lblPlus5.Location = new System.Drawing.Point(103, 181);
             this.lblPlus5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblPlus5.Name = "lblPlus5";
             this.lblPlus5.Size = new System.Drawing.Size(13, 13);
@@ -1822,7 +1875,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblPlus4
             // 
             this.lblPlus4.AutoSize = true;
-            this.lblPlus4.Location = new System.Drawing.Point(114, 142);
+            this.lblPlus4.Location = new System.Drawing.Point(103, 143);
             this.lblPlus4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblPlus4.Name = "lblPlus4";
             this.lblPlus4.Size = new System.Drawing.Size(13, 13);
@@ -1832,7 +1885,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblPlus8
             // 
             this.lblPlus8.AutoSize = true;
-            this.lblPlus8.Location = new System.Drawing.Point(116, 102);
+            this.lblPlus8.Location = new System.Drawing.Point(105, 103);
             this.lblPlus8.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblPlus8.Name = "lblPlus8";
             this.lblPlus8.Size = new System.Drawing.Size(13, 13);
@@ -1842,7 +1895,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblPlus7
             // 
             this.lblPlus7.AutoSize = true;
-            this.lblPlus7.Location = new System.Drawing.Point(114, 64);
+            this.lblPlus7.Location = new System.Drawing.Point(103, 65);
             this.lblPlus7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblPlus7.Name = "lblPlus7";
             this.lblPlus7.Size = new System.Drawing.Size(13, 13);
@@ -1852,7 +1905,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblPlus6
             // 
             this.lblPlus6.AutoSize = true;
-            this.lblPlus6.Location = new System.Drawing.Point(114, 30);
+            this.lblPlus6.Location = new System.Drawing.Point(103, 31);
             this.lblPlus6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblPlus6.Name = "lblPlus6";
             this.lblPlus6.Size = new System.Drawing.Size(13, 13);
@@ -1885,7 +1938,7 @@ namespace Intersect.Editor.Forms.Editors
             0,
             0});
             this.nudSpd.Name = "nudSpd";
-            this.nudSpd.Size = new System.Drawing.Size(97, 20);
+            this.nudSpd.Size = new System.Drawing.Size(89, 20);
             this.nudSpd.TabIndex = 52;
             this.nudSpd.Value = new decimal(new int[] {
             0,
@@ -1905,7 +1958,7 @@ namespace Intersect.Editor.Forms.Editors
             0,
             0});
             this.nudMR.Name = "nudMR";
-            this.nudMR.Size = new System.Drawing.Size(98, 20);
+            this.nudMR.Size = new System.Drawing.Size(90, 20);
             this.nudMR.TabIndex = 51;
             this.nudMR.Value = new decimal(new int[] {
             0,
@@ -1925,7 +1978,7 @@ namespace Intersect.Editor.Forms.Editors
             0,
             0});
             this.nudDef.Name = "nudDef";
-            this.nudDef.Size = new System.Drawing.Size(98, 20);
+            this.nudDef.Size = new System.Drawing.Size(90, 20);
             this.nudDef.TabIndex = 50;
             this.nudDef.Value = new decimal(new int[] {
             0,
@@ -1945,7 +1998,7 @@ namespace Intersect.Editor.Forms.Editors
             0,
             0});
             this.nudMag.Name = "nudMag";
-            this.nudMag.Size = new System.Drawing.Size(98, 20);
+            this.nudMag.Size = new System.Drawing.Size(90, 20);
             this.nudMag.TabIndex = 49;
             this.nudMag.Value = new decimal(new int[] {
             0,
@@ -1965,7 +2018,7 @@ namespace Intersect.Editor.Forms.Editors
             0,
             0});
             this.nudStr.Name = "nudStr";
-            this.nudStr.Size = new System.Drawing.Size(98, 20);
+            this.nudStr.Size = new System.Drawing.Size(90, 20);
             this.nudStr.TabIndex = 48;
             this.nudStr.Value = new decimal(new int[] {
             0,
@@ -2623,6 +2676,75 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbEvent.TextPadding = new System.Windows.Forms.Padding(2);
             this.cmbEvent.SelectedIndexChanged += new System.EventHandler(this.cmbEvent_SelectedIndexChanged);
             // 
+            // grpSpell
+            // 
+            this.grpSpell.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpSpell.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpSpell.Controls.Add(this.chkSingleUseSpell);
+            this.grpSpell.Controls.Add(this.chkQuickCast);
+            this.grpSpell.Controls.Add(this.cmbTeachSpell);
+            this.grpSpell.Controls.Add(this.lblSpell);
+            this.grpSpell.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpSpell.Location = new System.Drawing.Point(4, 15);
+            this.grpSpell.Name = "grpSpell";
+            this.grpSpell.Size = new System.Drawing.Size(217, 127);
+            this.grpSpell.TabIndex = 13;
+            this.grpSpell.TabStop = false;
+            this.grpSpell.Text = "Spell";
+            this.grpSpell.Visible = false;
+            // 
+            // chkSingleUseSpell
+            // 
+            this.chkSingleUseSpell.AutoSize = true;
+            this.chkSingleUseSpell.Checked = true;
+            this.chkSingleUseSpell.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkSingleUseSpell.Location = new System.Drawing.Point(15, 95);
+            this.chkSingleUseSpell.Name = "chkSingleUseSpell";
+            this.chkSingleUseSpell.Size = new System.Drawing.Size(107, 17);
+            this.chkSingleUseSpell.TabIndex = 29;
+            this.chkSingleUseSpell.Text = "Destroy On Use?";
+            this.chkSingleUseSpell.CheckedChanged += new System.EventHandler(this.chkSingleUse_CheckedChanged);
+            // 
+            // chkQuickCast
+            // 
+            this.chkQuickCast.AutoSize = true;
+            this.chkQuickCast.Location = new System.Drawing.Point(15, 72);
+            this.chkQuickCast.Name = "chkQuickCast";
+            this.chkQuickCast.Size = new System.Drawing.Size(110, 17);
+            this.chkQuickCast.TabIndex = 28;
+            this.chkQuickCast.Text = "Quick Cast Spell?";
+            this.chkQuickCast.CheckedChanged += new System.EventHandler(this.chkQuickCast_CheckedChanged);
+            // 
+            // cmbTeachSpell
+            // 
+            this.cmbTeachSpell.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbTeachSpell.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbTeachSpell.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbTeachSpell.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbTeachSpell.DrawDropdownHoverOutline = false;
+            this.cmbTeachSpell.DrawFocusRectangle = false;
+            this.cmbTeachSpell.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbTeachSpell.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbTeachSpell.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbTeachSpell.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbTeachSpell.FormattingEnabled = true;
+            this.cmbTeachSpell.Location = new System.Drawing.Point(15, 40);
+            this.cmbTeachSpell.Name = "cmbTeachSpell";
+            this.cmbTeachSpell.Size = new System.Drawing.Size(180, 21);
+            this.cmbTeachSpell.TabIndex = 12;
+            this.cmbTeachSpell.Text = null;
+            this.cmbTeachSpell.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbTeachSpell.SelectedIndexChanged += new System.EventHandler(this.cmbTeachSpell_SelectedIndexChanged);
+            // 
+            // lblSpell
+            // 
+            this.lblSpell.AutoSize = true;
+            this.lblSpell.Location = new System.Drawing.Point(12, 21);
+            this.lblSpell.Name = "lblSpell";
+            this.lblSpell.Size = new System.Drawing.Size(33, 13);
+            this.lblSpell.TabIndex = 11;
+            this.lblSpell.Text = "Spell:";
+            // 
             // grpBags
             // 
             this.grpBags.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
@@ -2795,75 +2917,6 @@ namespace Intersect.Editor.Forms.Editors
             this.lblInterval.TabIndex = 9;
             this.lblInterval.Text = "Interval:";
             // 
-            // grpSpell
-            // 
-            this.grpSpell.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.grpSpell.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpSpell.Controls.Add(this.chkSingleUseSpell);
-            this.grpSpell.Controls.Add(this.chkQuickCast);
-            this.grpSpell.Controls.Add(this.cmbTeachSpell);
-            this.grpSpell.Controls.Add(this.lblSpell);
-            this.grpSpell.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpSpell.Location = new System.Drawing.Point(4, 15);
-            this.grpSpell.Name = "grpSpell";
-            this.grpSpell.Size = new System.Drawing.Size(217, 127);
-            this.grpSpell.TabIndex = 13;
-            this.grpSpell.TabStop = false;
-            this.grpSpell.Text = "Spell";
-            this.grpSpell.Visible = false;
-            // 
-            // chkSingleUseSpell
-            // 
-            this.chkSingleUseSpell.AutoSize = true;
-            this.chkSingleUseSpell.Checked = true;
-            this.chkSingleUseSpell.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkSingleUseSpell.Location = new System.Drawing.Point(15, 95);
-            this.chkSingleUseSpell.Name = "chkSingleUseSpell";
-            this.chkSingleUseSpell.Size = new System.Drawing.Size(107, 17);
-            this.chkSingleUseSpell.TabIndex = 29;
-            this.chkSingleUseSpell.Text = "Destroy On Use?";
-            this.chkSingleUseSpell.CheckedChanged += new System.EventHandler(this.chkSingleUse_CheckedChanged);
-            // 
-            // chkQuickCast
-            // 
-            this.chkQuickCast.AutoSize = true;
-            this.chkQuickCast.Location = new System.Drawing.Point(15, 72);
-            this.chkQuickCast.Name = "chkQuickCast";
-            this.chkQuickCast.Size = new System.Drawing.Size(110, 17);
-            this.chkQuickCast.TabIndex = 28;
-            this.chkQuickCast.Text = "Quick Cast Spell?";
-            this.chkQuickCast.CheckedChanged += new System.EventHandler(this.chkQuickCast_CheckedChanged);
-            // 
-            // cmbTeachSpell
-            // 
-            this.cmbTeachSpell.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbTeachSpell.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbTeachSpell.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbTeachSpell.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbTeachSpell.DrawDropdownHoverOutline = false;
-            this.cmbTeachSpell.DrawFocusRectangle = false;
-            this.cmbTeachSpell.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbTeachSpell.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbTeachSpell.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbTeachSpell.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbTeachSpell.FormattingEnabled = true;
-            this.cmbTeachSpell.Location = new System.Drawing.Point(15, 40);
-            this.cmbTeachSpell.Name = "cmbTeachSpell";
-            this.cmbTeachSpell.Size = new System.Drawing.Size(180, 21);
-            this.cmbTeachSpell.TabIndex = 12;
-            this.cmbTeachSpell.Text = null;
-            this.cmbTeachSpell.TextPadding = new System.Windows.Forms.Padding(2);
-            this.cmbTeachSpell.SelectedIndexChanged += new System.EventHandler(this.cmbTeachSpell_SelectedIndexChanged);
-            // 
-            // lblSpell
-            // 
-            this.lblSpell.AutoSize = true;
-            this.lblSpell.Location = new System.Drawing.Point(12, 21);
-            this.lblSpell.Name = "lblSpell";
-            this.lblSpell.Size = new System.Drawing.Size(33, 13);
-            this.lblSpell.TabIndex = 11;
-            this.lblSpell.Text = "Spell:";
-            // 
             // pnlContainer
             // 
             this.pnlContainer.AutoScroll = true;
@@ -2998,46 +3051,60 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
             // 
-            // lblTagToAdd
+            // chkLockStrength
             // 
-            this.lblTagToAdd.AutoSize = true;
-            this.lblTagToAdd.Location = new System.Drawing.Point(39, 121);
-            this.lblTagToAdd.Name = "lblTagToAdd";
-            this.lblTagToAdd.Size = new System.Drawing.Size(63, 13);
-            this.lblTagToAdd.TabIndex = 55;
-            this.lblTagToAdd.Text = "Tag to Add:";
+            this.chkLockStrength.AutoSize = true;
+            this.chkLockStrength.Location = new System.Drawing.Point(180, 31);
+            this.chkLockStrength.Name = "chkLockStrength";
+            this.chkLockStrength.Size = new System.Drawing.Size(15, 14);
+            this.chkLockStrength.TabIndex = 104;
+            this.chkLockStrength.CheckedChanged += new System.EventHandler(this.chkLockStrength_CheckedChanged);
             // 
-            // btnAddTag
+            // lblStatLock
             // 
-            this.btnAddTag.Location = new System.Drawing.Point(260, 113);
-            this.btnAddTag.Name = "btnAddTag";
-            this.btnAddTag.Padding = new System.Windows.Forms.Padding(5);
-            this.btnAddTag.Size = new System.Drawing.Size(74, 28);
-            this.btnAddTag.TabIndex = 104;
-            this.btnAddTag.Text = "Add";
-            this.btnAddTag.Click += new System.EventHandler(this.btnAddTag_Click);
+            this.lblStatLock.AutoSize = true;
+            this.lblStatLock.Location = new System.Drawing.Point(161, 12);
+            this.lblStatLock.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblStatLock.Name = "lblStatLock";
+            this.lblStatLock.Size = new System.Drawing.Size(34, 13);
+            this.lblStatLock.TabIndex = 105;
+            this.lblStatLock.Text = "Lock:";
             // 
-            // btnRemoveTag
+            // chkLockMagic
             // 
-            this.btnRemoveTag.Location = new System.Drawing.Point(340, 113);
-            this.btnRemoveTag.Name = "btnRemoveTag";
-            this.btnRemoveTag.Padding = new System.Windows.Forms.Padding(5);
-            this.btnRemoveTag.Size = new System.Drawing.Size(74, 28);
-            this.btnRemoveTag.TabIndex = 105;
-            this.btnRemoveTag.Text = "Remove";
-            this.btnRemoveTag.Click += new System.EventHandler(this.btnRemoveTag_Click);
+            this.chkLockMagic.AutoSize = true;
+            this.chkLockMagic.Location = new System.Drawing.Point(180, 66);
+            this.chkLockMagic.Name = "chkLockMagic";
+            this.chkLockMagic.Size = new System.Drawing.Size(15, 14);
+            this.chkLockMagic.TabIndex = 106;
+            this.chkLockMagic.CheckedChanged += new System.EventHandler(this.chkLockMagic_CheckedChanged);
             // 
-            // lstTags
+            // chkLockArmor
             // 
-            this.lstTags.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.lstTags.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lstTags.Cursor = System.Windows.Forms.Cursors.Default;
-            this.lstTags.ForeColor = System.Drawing.Color.Gainsboro;
-            this.lstTags.FormattingEnabled = true;
-            this.lstTags.Location = new System.Drawing.Point(121, 29);
-            this.lstTags.Name = "lstTags";
-            this.lstTags.Size = new System.Drawing.Size(284, 67);
-            this.lstTags.TabIndex = 106;
+            this.chkLockArmor.AutoSize = true;
+            this.chkLockArmor.Location = new System.Drawing.Point(180, 104);
+            this.chkLockArmor.Name = "chkLockArmor";
+            this.chkLockArmor.Size = new System.Drawing.Size(15, 14);
+            this.chkLockArmor.TabIndex = 107;
+            this.chkLockArmor.CheckedChanged += new System.EventHandler(this.chkLockArmor_CheckedChanged);
+            // 
+            // chkLockMagicResist
+            // 
+            this.chkLockMagicResist.AutoSize = true;
+            this.chkLockMagicResist.Location = new System.Drawing.Point(180, 141);
+            this.chkLockMagicResist.Name = "chkLockMagicResist";
+            this.chkLockMagicResist.Size = new System.Drawing.Size(15, 14);
+            this.chkLockMagicResist.TabIndex = 108;
+            this.chkLockMagicResist.CheckedChanged += new System.EventHandler(this.chkLockMagicResist_CheckedChanged);
+            // 
+            // chkLockSpeed
+            // 
+            this.chkLockSpeed.AutoSize = true;
+            this.chkLockSpeed.Location = new System.Drawing.Point(180, 179);
+            this.chkLockSpeed.Name = "chkLockSpeed";
+            this.chkLockSpeed.Size = new System.Drawing.Size(15, 14);
+            this.chkLockSpeed.TabIndex = 109;
+            this.chkLockSpeed.CheckedChanged += new System.EventHandler(this.chkLockSpeed_CheckedChanged);
             // 
             // FrmItem
             // 
@@ -3123,6 +3190,8 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudDamage)).EndInit();
             this.grpEvent.ResumeLayout(false);
             this.grpEvent.PerformLayout();
+            this.grpSpell.ResumeLayout(false);
+            this.grpSpell.PerformLayout();
             this.grpBags.ResumeLayout(false);
             this.grpBags.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudBag)).EndInit();
@@ -3130,8 +3199,6 @@ namespace Intersect.Editor.Forms.Editors
             this.grpConsumable.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudIntervalPercentage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudInterval)).EndInit();
-            this.grpSpell.ResumeLayout(false);
-            this.grpSpell.PerformLayout();
             this.pnlContainer.ResumeLayout(false);
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
@@ -3332,5 +3399,11 @@ namespace Intersect.Editor.Forms.Editors
         private Label lblTagToAdd;
         private DarkButton btnRemoveTag;
         private ListBox lstTags;
+        private DarkCheckBox chkLockSpeed;
+        private DarkCheckBox chkLockMagicResist;
+        private DarkCheckBox chkLockArmor;
+        private DarkCheckBox chkLockMagic;
+        private Label lblStatLock;
+        private DarkCheckBox chkLockStrength;
     }
 }

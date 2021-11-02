@@ -3438,6 +3438,8 @@ Tick timer saved in server config.json.";
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString taggroup = @"Tags";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString statlocklabel = @"Lock?";
         }
 
         public struct LightEditor

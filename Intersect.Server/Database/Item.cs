@@ -47,7 +47,10 @@ namespace Intersect.Server.Database
             for (var i = 0; i < (int) Stats.StatCount; i++)
             {
                 // TODO: What the fuck?
-                StatBuffs[i] = Randomization.Next(-descriptor.StatGrowth, descriptor.StatGrowth + 1);
+                if (!descriptor.StatLocks.ContainsKey((Stats) i) || !descriptor.StatLocks[(Stats) i])
+                {
+                    StatBuffs[i] = Randomization.Next(-descriptor.StatGrowth, descriptor.StatGrowth + 1);
+                } 
             }
         }
 

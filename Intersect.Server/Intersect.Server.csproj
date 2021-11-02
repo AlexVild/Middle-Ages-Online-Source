@@ -652,6 +652,10 @@
     <Compile Include="Migrations\Game\20211031200145_FixQuestTaskCompletionEvents.designer.cs">
       <DependentUpon>20211031200145_FixQuestTaskCompletionEvents.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20211102124722_ItemStatLockMigration.cs" />
+    <Compile Include="Migrations\Game\20211102124722_ItemStatLockMigration.designer.cs">
+      <DependentUpon>20211102124722_ItemStatLockMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

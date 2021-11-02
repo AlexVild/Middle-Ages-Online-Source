@@ -323,6 +323,8 @@ namespace Intersect.Editor.Forms.Editors
 
             btnSave.Text = Strings.ItemEditor.save;
             btnCancel.Text = Strings.ItemEditor.cancel;
+
+            lblStatLock.Text = Strings.ItemEditor.statlocklabel;
         }
 
         private void UpdateEditor()
@@ -452,6 +454,12 @@ namespace Intersect.Editor.Forms.Editors
                     lstTags.Items.Add(tag);
                 }
                 cmbTags.Text = string.Empty;
+
+                chkLockStrength.Checked = GetStatLock(Stats.Attack);
+                chkLockArmor.Checked = GetStatLock(Stats.Defense);
+                chkLockMagic.Checked = GetStatLock(Stats.AbilityPower);
+                chkLockMagicResist.Checked = GetStatLock(Stats.MagicResist);
+                chkLockSpeed.Checked = GetStatLock(Stats.Speed);
 
                 if (mChanged.IndexOf(mEditorItem) == -1)
                 {
@@ -1404,6 +1412,48 @@ namespace Intersect.Editor.Forms.Editors
         {
             mSelectedTag = cmbTags.Text;
         }
-    }
 
+        private void UpdateStatLock(Stats statLock, bool val)
+        {
+            if (mEditorItem.StatLocks.ContainsKey(statLock))
+            {
+                mEditorItem.StatLocks[statLock] = val;
+            }
+            else
+            {
+                mEditorItem.StatLocks.Add(statLock, val);
+            }
+        }
+
+        private bool GetStatLock(Stats statLock)
+        {
+            mEditorItem.StatLocks.TryGetValue(statLock, out var val);
+            return val;
+        }
+
+        private void chkLockStrength_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateStatLock(Stats.Attack, chkLockStrength.Checked);
+        }
+
+        private void chkLockMagic_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateStatLock(Stats.AbilityPower, chkLockMagic.Checked);
+        }
+
+        private void chkLockArmor_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateStatLock(Stats.Defense, chkLockArmor.Checked);
+        }
+
+        private void chkLockMagicResist_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateStatLock(Stats.MagicResist, chkLockMagicResist.Checked);
+        }
+
+        private void chkLockSpeed_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateStatLock(Stats.Speed, chkLockSpeed.Checked);
+        }
+    }
 }

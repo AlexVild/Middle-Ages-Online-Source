@@ -129,6 +129,17 @@ namespace Intersect.GameObjects
             set => Tags = JsonConvert.DeserializeObject<List<string>>(value ?? "") ?? new List<string>();
         }
 
+        [NotMapped]
+        public Dictionary<Stats, bool> StatLocks { get; set; } = new Dictionary<Stats, bool>();
+
+        [Column("StatLocks")]
+        [JsonIgnore]
+        public string StatLockJson
+        {
+            get => JsonConvert.SerializeObject(StatLocks);
+            set => StatLocks = JsonConvert.DeserializeObject<Dictionary<Stats, bool>>(value ?? "") ?? new Dictionary<Stats, bool>();
+        }
+
         /// <summary>
         /// Configures whether this should not trigger and be triggered by the global cooldown.
         /// </summary>
