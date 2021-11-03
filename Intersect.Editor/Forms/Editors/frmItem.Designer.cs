@@ -41,6 +41,11 @@ namespace Intersect.Editor.Forms.Editors
             this.btnCancel = new DarkUI.Controls.DarkButton();
             this.btnSave = new DarkUI.Controls.DarkButton();
             this.grpGeneral = new DarkUI.Controls.DarkGroupBox();
+            this.grpDestroy = new DarkUI.Controls.DarkGroupBox();
+            this.chkEnableDestroy = new DarkUI.Controls.DarkCheckBox();
+            this.lblDestroyMessage = new System.Windows.Forms.Label();
+            this.txtCannotDestroy = new DarkUI.Controls.DarkTextBox();
+            this.btnDestroyRequirements = new DarkUI.Controls.DarkButton();
             this.grpTags = new DarkUI.Controls.DarkGroupBox();
             this.lstTags = new System.Windows.Forms.ListBox();
             this.btnRemoveTag = new DarkUI.Controls.DarkButton();
@@ -234,6 +239,7 @@ namespace Intersect.Editor.Forms.Editors
             this.vS2015DarkTheme1 = new WeifenLuo.WinFormsUI.Docking.VS2015DarkTheme();
             this.grpItems.SuspendLayout();
             this.grpGeneral.SuspendLayout();
+            this.grpDestroy.SuspendLayout();
             this.grpTags.SuspendLayout();
             this.grpRequirements.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudBankStackLimit)).BeginInit();
@@ -372,6 +378,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpGeneral.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpGeneral.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpGeneral.Controls.Add(this.grpDestroy);
             this.grpGeneral.Controls.Add(this.grpTags);
             this.grpGeneral.Controls.Add(this.grpRequirements);
             this.grpGeneral.Controls.Add(this.chkCanGuildBank);
@@ -423,10 +430,68 @@ namespace Intersect.Editor.Forms.Editors
             this.grpGeneral.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpGeneral.Location = new System.Drawing.Point(2, 1);
             this.grpGeneral.Name = "grpGeneral";
-            this.grpGeneral.Size = new System.Drawing.Size(439, 584);
+            this.grpGeneral.Size = new System.Drawing.Size(439, 691);
             this.grpGeneral.TabIndex = 2;
             this.grpGeneral.TabStop = false;
             this.grpGeneral.Text = "General";
+            // 
+            // grpDestroy
+            // 
+            this.grpDestroy.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpDestroy.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpDestroy.Controls.Add(this.chkEnableDestroy);
+            this.grpDestroy.Controls.Add(this.lblDestroyMessage);
+            this.grpDestroy.Controls.Add(this.txtCannotDestroy);
+            this.grpDestroy.Controls.Add(this.btnDestroyRequirements);
+            this.grpDestroy.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpDestroy.Location = new System.Drawing.Point(11, 326);
+            this.grpDestroy.Margin = new System.Windows.Forms.Padding(2);
+            this.grpDestroy.Name = "grpDestroy";
+            this.grpDestroy.Padding = new System.Windows.Forms.Padding(2);
+            this.grpDestroy.Size = new System.Drawing.Size(232, 95);
+            this.grpDestroy.TabIndex = 101;
+            this.grpDestroy.TabStop = false;
+            this.grpDestroy.Text = "Item Destruction";
+            // 
+            // chkEnableDestroy
+            // 
+            this.chkEnableDestroy.AutoSize = true;
+            this.chkEnableDestroy.Location = new System.Drawing.Point(8, 20);
+            this.chkEnableDestroy.Name = "chkEnableDestroy";
+            this.chkEnableDestroy.Size = new System.Drawing.Size(59, 17);
+            this.chkEnableDestroy.TabIndex = 102;
+            this.chkEnableDestroy.Text = "Enable";
+            this.chkEnableDestroy.CheckedChanged += new System.EventHandler(this.chkEnableDestroy_CheckedChanged);
+            // 
+            // lblDestroyMessage
+            // 
+            this.lblDestroyMessage.AutoSize = true;
+            this.lblDestroyMessage.Location = new System.Drawing.Point(5, 47);
+            this.lblDestroyMessage.Name = "lblDestroyMessage";
+            this.lblDestroyMessage.Size = new System.Drawing.Size(129, 13);
+            this.lblDestroyMessage.TabIndex = 54;
+            this.lblDestroyMessage.Text = "Cannot Destroy Message:";
+            // 
+            // txtCannotDestroy
+            // 
+            this.txtCannotDestroy.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.txtCannotDestroy.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtCannotDestroy.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.txtCannotDestroy.Location = new System.Drawing.Point(8, 63);
+            this.txtCannotDestroy.Name = "txtCannotDestroy";
+            this.txtCannotDestroy.Size = new System.Drawing.Size(219, 20);
+            this.txtCannotDestroy.TabIndex = 53;
+            this.txtCannotDestroy.TextChanged += new System.EventHandler(this.txtCannotDestroy_TextChanged);
+            // 
+            // btnDestroyRequirements
+            // 
+            this.btnDestroyRequirements.Location = new System.Drawing.Point(73, 18);
+            this.btnDestroyRequirements.Name = "btnDestroyRequirements";
+            this.btnDestroyRequirements.Padding = new System.Windows.Forms.Padding(5);
+            this.btnDestroyRequirements.Size = new System.Drawing.Size(154, 23);
+            this.btnDestroyRequirements.TabIndex = 0;
+            this.btnDestroyRequirements.Text = "Edit Destroy Requirements";
+            this.btnDestroyRequirements.Click += new System.EventHandler(this.btnDestroyRequirements_Click);
             // 
             // grpTags
             // 
@@ -439,7 +504,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpTags.Controls.Add(this.cmbTags);
             this.grpTags.Controls.Add(this.btnNewTag);
             this.grpTags.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpTags.Location = new System.Drawing.Point(11, 422);
+            this.grpTags.Location = new System.Drawing.Point(6, 519);
             this.grpTags.Margin = new System.Windows.Forms.Padding(2);
             this.grpTags.Name = "grpTags";
             this.grpTags.Padding = new System.Windows.Forms.Padding(2);
@@ -528,7 +593,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpRequirements.Controls.Add(this.txtCannotUse);
             this.grpRequirements.Controls.Add(this.btnEditRequirements);
             this.grpRequirements.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpRequirements.Location = new System.Drawing.Point(12, 326);
+            this.grpRequirements.Location = new System.Drawing.Point(14, 425);
             this.grpRequirements.Margin = new System.Windows.Forms.Padding(2);
             this.grpRequirements.Name = "grpRequirements";
             this.grpRequirements.Padding = new System.Windows.Forms.Padding(2);
@@ -553,7 +618,7 @@ namespace Intersect.Editor.Forms.Editors
             this.txtCannotUse.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             this.txtCannotUse.Location = new System.Drawing.Point(8, 63);
             this.txtCannotUse.Name = "txtCannotUse";
-            this.txtCannotUse.Size = new System.Drawing.Size(207, 20);
+            this.txtCannotUse.Size = new System.Drawing.Size(216, 20);
             this.txtCannotUse.TabIndex = 53;
             this.txtCannotUse.TextChanged += new System.EventHandler(this.txtCannotUse_TextChanged);
             // 
@@ -562,7 +627,7 @@ namespace Intersect.Editor.Forms.Editors
             this.btnEditRequirements.Location = new System.Drawing.Point(8, 18);
             this.btnEditRequirements.Name = "btnEditRequirements";
             this.btnEditRequirements.Padding = new System.Windows.Forms.Padding(5);
-            this.btnEditRequirements.Size = new System.Drawing.Size(207, 23);
+            this.btnEditRequirements.Size = new System.Drawing.Size(216, 23);
             this.btnEditRequirements.TabIndex = 0;
             this.btnEditRequirements.Text = "Edit Usage Requirements";
             this.btnEditRequirements.Click += new System.EventHandler(this.btnEditRequirements_Click);
@@ -1205,7 +1270,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpEquipment.Controls.Add(this.picMalePaperdoll);
             this.grpEquipment.Controls.Add(this.grpWeaponProperties);
             this.grpEquipment.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpEquipment.Location = new System.Drawing.Point(2, 591);
+            this.grpEquipment.Location = new System.Drawing.Point(2, 698);
             this.grpEquipment.Name = "grpEquipment";
             this.grpEquipment.Size = new System.Drawing.Size(439, 742);
             this.grpEquipment.TabIndex = 12;
@@ -2688,7 +2753,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpEvent.Controls.Add(this.chkSingleUseEvent);
             this.grpEvent.Controls.Add(this.cmbEvent);
             this.grpEvent.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpEvent.Location = new System.Drawing.Point(2, 591);
+            this.grpEvent.Location = new System.Drawing.Point(2, 698);
             this.grpEvent.Name = "grpEvent";
             this.grpEvent.Size = new System.Drawing.Size(200, 65);
             this.grpEvent.TabIndex = 42;
@@ -2738,7 +2803,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpSpell.Controls.Add(this.cmbTeachSpell);
             this.grpSpell.Controls.Add(this.lblSpell);
             this.grpSpell.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpSpell.Location = new System.Drawing.Point(2, 591);
+            this.grpSpell.Location = new System.Drawing.Point(2, 698);
             this.grpSpell.Name = "grpSpell";
             this.grpSpell.Size = new System.Drawing.Size(217, 127);
             this.grpSpell.TabIndex = 13;
@@ -2805,7 +2870,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpBags.Controls.Add(this.nudBag);
             this.grpBags.Controls.Add(this.lblBag);
             this.grpBags.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpBags.Location = new System.Drawing.Point(2, 591);
+            this.grpBags.Location = new System.Drawing.Point(2, 698);
             this.grpBags.Name = "grpBags";
             this.grpBags.Size = new System.Drawing.Size(222, 57);
             this.grpBags.TabIndex = 44;
@@ -2859,7 +2924,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpConsumable.Controls.Add(this.cmbConsume);
             this.grpConsumable.Controls.Add(this.lblInterval);
             this.grpConsumable.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpConsumable.Location = new System.Drawing.Point(2, 591);
+            this.grpConsumable.Location = new System.Drawing.Point(2, 698);
             this.grpConsumable.Name = "grpConsumable";
             this.grpConsumable.Size = new System.Drawing.Size(217, 125);
             this.grpConsumable.TabIndex = 12;
@@ -2973,12 +3038,12 @@ namespace Intersect.Editor.Forms.Editors
             // pnlContainer
             // 
             this.pnlContainer.AutoScroll = true;
-            this.pnlContainer.Controls.Add(this.grpBags);
-            this.pnlContainer.Controls.Add(this.grpSpell);
-            this.pnlContainer.Controls.Add(this.grpConsumable);
-            this.pnlContainer.Controls.Add(this.grpEvent);
             this.pnlContainer.Controls.Add(this.grpGeneral);
+            this.pnlContainer.Controls.Add(this.grpConsumable);
             this.pnlContainer.Controls.Add(this.grpEquipment);
+            this.pnlContainer.Controls.Add(this.grpBags);
+            this.pnlContainer.Controls.Add(this.grpEvent);
+            this.pnlContainer.Controls.Add(this.grpSpell);
             this.pnlContainer.Location = new System.Drawing.Point(221, 34);
             this.pnlContainer.Name = "pnlContainer";
             this.pnlContainer.Size = new System.Drawing.Size(463, 442);
@@ -3131,6 +3196,8 @@ namespace Intersect.Editor.Forms.Editors
             this.grpItems.PerformLayout();
             this.grpGeneral.ResumeLayout(false);
             this.grpGeneral.PerformLayout();
+            this.grpDestroy.ResumeLayout(false);
+            this.grpDestroy.PerformLayout();
             this.grpTags.ResumeLayout(false);
             this.grpTags.PerformLayout();
             this.grpRequirements.ResumeLayout(false);
@@ -3405,5 +3472,10 @@ namespace Intersect.Editor.Forms.Editors
         private DarkCheckBox chkLockMagic;
         private Label lblStatLock;
         private DarkCheckBox chkLockStrength;
+        private DarkGroupBox grpDestroy;
+        private Label lblDestroyMessage;
+        private DarkTextBox txtCannotDestroy;
+        private DarkButton btnDestroyRequirements;
+        private DarkCheckBox chkEnableDestroy;
     }
 }

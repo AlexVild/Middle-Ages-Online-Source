@@ -1243,6 +1243,9 @@ Tick timer saved in server config.json.";
             public static LocalizedString instructionsitem =
                 @"Below are condition lists. If conditions are met on any of the lists then the player can use the item.";
 
+            public static LocalizedString instructionsdestroyitem =
+                @"Below are condition lists. If conditions are met on any of the lists then the player can destroy the item, instead of dropping it.";
+
             public static LocalizedString instructionsnpcfriend =
                 @"Below are condition lists. If conditions are met on any of the lists then the npc will be friendly/protect the player and cannot be hurt by the player.";
 
@@ -3443,6 +3446,18 @@ Tick timer saved in server config.json.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString statlocklabel = @"Lock?";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString destroygroup = @"Item Destruction";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString enabledestroy = @"Enable";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString destroyrequirementbutton = @"Edit Destroy Requirements";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString cannotdestroylabel = @"Cannot Destroy Message:";
         }
 
         public struct LightEditor

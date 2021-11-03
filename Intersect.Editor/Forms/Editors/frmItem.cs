@@ -321,6 +321,11 @@ namespace Intersect.Editor.Forms.Editors
             btnAddTag.Text = Strings.ItemEditor.addtag;
             btnRemoveTag.Text = Strings.ItemEditor.removetag;
 
+            grpDestroy.Text = Strings.ItemEditor.destroygroup;
+            chkEnableDestroy.Text = Strings.ItemEditor.enabledestroy;
+            btnDestroyRequirements.Text = Strings.ItemEditor.destroyrequirementbutton;
+            lblDestroyMessage.Text = Strings.ItemEditor.cannotdestroylabel;
+
             btnSave.Text = Strings.ItemEditor.save;
             btnCancel.Text = Strings.ItemEditor.cancel;
 
@@ -460,6 +465,10 @@ namespace Intersect.Editor.Forms.Editors
                 chkLockMagic.Checked = GetStatLock(Stats.AbilityPower);
                 chkLockMagicResist.Checked = GetStatLock(Stats.MagicResist);
                 chkLockSpeed.Checked = GetStatLock(Stats.Speed);
+
+                chkEnableDestroy.Checked = mEditorItem.CanDestroy;
+                txtCannotDestroy.Text = mEditorItem.CannotDestroyMessage;
+
 
                 if (mChanged.IndexOf(mEditorItem) == -1)
                 {
@@ -1454,6 +1463,29 @@ namespace Intersect.Editor.Forms.Editors
         private void chkLockSpeed_CheckedChanged(object sender, EventArgs e)
         {
             UpdateStatLock(Stats.Speed, chkLockSpeed.Checked);
+        }
+
+        private void btnDestroyRequirements_Click(object sender, EventArgs e)
+        {
+            var frm = new FrmDynamicRequirements(mEditorItem.DestroyRequirements, RequirementType.ItemDestroy);
+            frm.ShowDialog();
+        }
+
+        private void chkEnableDestroy_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.CanDestroy = chkEnableDestroy.Checked;
+            UpdateDestroyGroup(mEditorItem.CanDestroy);
+        }
+
+        private void UpdateDestroyGroup(bool canDestroy)
+        {
+            btnDestroyRequirements.Enabled = canDestroy;
+            txtCannotDestroy.Enabled = canDestroy;
+        }
+
+        private void txtCannotDestroy_TextChanged(object sender, EventArgs e)
+        {
+            mEditorItem.CannotDestroyMessage = txtCannotDestroy.Text;
         }
     }
 }

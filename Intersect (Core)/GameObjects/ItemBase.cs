@@ -21,7 +21,11 @@ namespace Intersect.GameObjects
 
         [NotMapped] public ConditionLists UsageRequirements = new ConditionLists();
 
+        [NotMapped] public ConditionLists DestroyRequirements = new ConditionLists();
+
         public string CannotUseMessage { get; set; } = "";
+
+        public string CannotDestroyMessage { get; set; } = "";
 
         public ItemBase()
         {
@@ -103,6 +107,11 @@ namespace Intersect.GameObjects
         /// Defines whether or not this item can be placed in a bag by a player.
         /// </summary>
         public bool CanBag { get; set; } = true;
+
+        /// <summary>
+        /// Defines whether or not this item CAN be destroyed, if its requirements are met. Destroy takes precedence over drop.
+        /// </summary>
+        public bool CanDestroy { get; set; } = false;
 
         public int CritChance { get; set; }
 
@@ -359,6 +368,14 @@ namespace Intersect.GameObjects
         {
             get => UsageRequirements.Data();
             set => UsageRequirements.Load(value);
+        }
+
+        [Column("DestroyRequirements")]
+        [JsonIgnore]
+        public string JsonDestroyRequirements
+        {
+            get => DestroyRequirements.Data();
+            set => DestroyRequirements.Load(value);
         }
 
         [JsonIgnore, NotMapped]
