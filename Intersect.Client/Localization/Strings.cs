@@ -959,9 +959,9 @@ namespace Intersect.Client.Localization
 
             public static LocalizedString destroyitem = @"Destroy Item";
 
-            public static LocalizedString destroyitemprompt = @"How many/much {00} do you want to PERMANENTLY destroy?";
+            public static LocalizedString destroyitemprompt = @"How many/much {00} do you want to DESTROY? (Note: Item destruction is permanent)";
 
-            public static LocalizedString destroyprompt = @"Do you wish to PERMANENTLY destroy the item: {00}?";
+            public static LocalizedString destroyprompt = @"Do you wish to DESTROY the item: {00}? (Note: Item destruction is permanent)";
 
             public static LocalizedString equippedicon = "E";
 

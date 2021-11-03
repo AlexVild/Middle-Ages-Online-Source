@@ -348,7 +348,8 @@ namespace Intersect.Client.Entities
             Inventory[Label] = tmpInstance.Clone();
         }
 
-        public void TryDropItem(int index, bool fromPacket = false, bool canDestroy = false)
+        // Alex: The two default values here can be set to FALSE if we want to drop through to "DROP" functionality - but this means we won't ever see the "cannot destroy message"
+        public void TryDropItem(int index, bool fromPacket = true, bool canDestroy = true)
         {
             if (ItemBase.Get(Inventory[index].ItemId) != null)
             {
