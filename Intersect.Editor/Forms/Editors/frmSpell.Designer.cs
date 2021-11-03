@@ -110,6 +110,7 @@ namespace Intersect.Editor.Forms.Editors
             this.lblMag = new System.Windows.Forms.Label();
             this.lblStr = new System.Windows.Forms.Label();
             this.grpHotDot = new DarkUI.Controls.DarkGroupBox();
+            this.lblOTanimationDisclaimer = new System.Windows.Forms.Label();
             this.lblHOTDOTenableAnimation = new System.Windows.Forms.Label();
             this.cmbOverTimeAnimation = new DarkUI.Controls.DarkComboBox();
             this.nudTick = new DarkUI.Controls.DarkNumericUpDown();
@@ -175,7 +176,6 @@ namespace Intersect.Editor.Forms.Editors
             this.btnClearSearch = new DarkUI.Controls.DarkButton();
             this.txtSearch = new DarkUI.Controls.DarkTextBox();
             this.lstGameObjects = new Intersect.Editor.Forms.Controls.GameObjectList();
-            this.lblOTanimationDisclaimer = new System.Windows.Forms.Label();
             this.pnlContainer.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picSpell)).BeginInit();
@@ -1436,6 +1436,15 @@ namespace Intersect.Editor.Forms.Editors
             this.grpHotDot.TabStop = false;
             this.grpHotDot.Text = "Heal/Damage Over Time";
             // 
+            // lblOTanimationDisclaimer
+            // 
+            this.lblOTanimationDisclaimer.AutoSize = true;
+            this.lblOTanimationDisclaimer.Location = new System.Drawing.Point(0, 110);
+            this.lblOTanimationDisclaimer.Name = "lblOTanimationDisclaimer";
+            this.lblOTanimationDisclaimer.Size = new System.Drawing.Size(195, 13);
+            this.lblOTanimationDisclaimer.TabIndex = 57;
+            this.lblOTanimationDisclaimer.Text = "(Set to \"None\" to keep same animation)";
+            // 
             // lblHOTDOTenableAnimation
             // 
             this.lblHOTDOTenableAnimation.AutoSize = true;
@@ -1916,7 +1925,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpDash.Controls.Add(this.lblRange);
             this.grpDash.Controls.Add(this.scrlRange);
             this.grpDash.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpDash.Location = new System.Drawing.Point(3, 456);
+            this.grpDash.Location = new System.Drawing.Point(215, 105);
             this.grpDash.Name = "grpDash";
             this.grpDash.Size = new System.Drawing.Size(200, 181);
             this.grpDash.TabIndex = 38;
@@ -2341,15 +2350,6 @@ namespace Intersect.Editor.Forms.Editors
             this.lstGameObjects.SelectedImageIndex = 0;
             this.lstGameObjects.Size = new System.Drawing.Size(191, 422);
             this.lstGameObjects.TabIndex = 32;
-            // 
-            // lblOTanimationDisclaimer
-            // 
-            this.lblOTanimationDisclaimer.AutoSize = true;
-            this.lblOTanimationDisclaimer.Location = new System.Drawing.Point(0, 110);
-            this.lblOTanimationDisclaimer.Name = "lblOTanimationDisclaimer";
-            this.lblOTanimationDisclaimer.Size = new System.Drawing.Size(195, 13);
-            this.lblOTanimationDisclaimer.TabIndex = 57;
-            this.lblOTanimationDisclaimer.Text = "(Set to \"None\" to keep same animation)";
             // 
             // FrmSpell
             // 

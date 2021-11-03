@@ -131,6 +131,12 @@ namespace Intersect.Editor.Forms.Editors
             this.lblEquipmentAnimation = new System.Windows.Forms.Label();
             this.nudEffectPercent = new DarkUI.Controls.DarkNumericUpDown();
             this.grpStatBonuses = new DarkUI.Controls.DarkGroupBox();
+            this.chkLockSpeed = new DarkUI.Controls.DarkCheckBox();
+            this.chkLockMagicResist = new DarkUI.Controls.DarkCheckBox();
+            this.chkLockArmor = new DarkUI.Controls.DarkCheckBox();
+            this.chkLockMagic = new DarkUI.Controls.DarkCheckBox();
+            this.lblStatLock = new System.Windows.Forms.Label();
+            this.chkLockStrength = new DarkUI.Controls.DarkCheckBox();
             this.lblPercentage5 = new System.Windows.Forms.Label();
             this.lblPercentage4 = new System.Windows.Forms.Label();
             this.lblPercentage8 = new System.Windows.Forms.Label();
@@ -226,12 +232,6 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
             this.vS2015DarkTheme1 = new WeifenLuo.WinFormsUI.Docking.VS2015DarkTheme();
-            this.chkLockStrength = new DarkUI.Controls.DarkCheckBox();
-            this.lblStatLock = new System.Windows.Forms.Label();
-            this.chkLockMagic = new DarkUI.Controls.DarkCheckBox();
-            this.chkLockArmor = new DarkUI.Controls.DarkCheckBox();
-            this.chkLockMagicResist = new DarkUI.Controls.DarkCheckBox();
-            this.chkLockSpeed = new DarkUI.Controls.DarkCheckBox();
             this.grpItems.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             this.grpTags.SuspendLayout();
@@ -1712,6 +1712,61 @@ namespace Intersect.Editor.Forms.Editors
             this.grpStatBonuses.TabStop = false;
             this.grpStatBonuses.Text = "Stat Bonuses";
             // 
+            // chkLockSpeed
+            // 
+            this.chkLockSpeed.AutoSize = true;
+            this.chkLockSpeed.Location = new System.Drawing.Point(180, 179);
+            this.chkLockSpeed.Name = "chkLockSpeed";
+            this.chkLockSpeed.Size = new System.Drawing.Size(15, 14);
+            this.chkLockSpeed.TabIndex = 109;
+            this.chkLockSpeed.CheckedChanged += new System.EventHandler(this.chkLockSpeed_CheckedChanged);
+            // 
+            // chkLockMagicResist
+            // 
+            this.chkLockMagicResist.AutoSize = true;
+            this.chkLockMagicResist.Location = new System.Drawing.Point(180, 141);
+            this.chkLockMagicResist.Name = "chkLockMagicResist";
+            this.chkLockMagicResist.Size = new System.Drawing.Size(15, 14);
+            this.chkLockMagicResist.TabIndex = 108;
+            this.chkLockMagicResist.CheckedChanged += new System.EventHandler(this.chkLockMagicResist_CheckedChanged);
+            // 
+            // chkLockArmor
+            // 
+            this.chkLockArmor.AutoSize = true;
+            this.chkLockArmor.Location = new System.Drawing.Point(180, 104);
+            this.chkLockArmor.Name = "chkLockArmor";
+            this.chkLockArmor.Size = new System.Drawing.Size(15, 14);
+            this.chkLockArmor.TabIndex = 107;
+            this.chkLockArmor.CheckedChanged += new System.EventHandler(this.chkLockArmor_CheckedChanged);
+            // 
+            // chkLockMagic
+            // 
+            this.chkLockMagic.AutoSize = true;
+            this.chkLockMagic.Location = new System.Drawing.Point(180, 66);
+            this.chkLockMagic.Name = "chkLockMagic";
+            this.chkLockMagic.Size = new System.Drawing.Size(15, 14);
+            this.chkLockMagic.TabIndex = 106;
+            this.chkLockMagic.CheckedChanged += new System.EventHandler(this.chkLockMagic_CheckedChanged);
+            // 
+            // lblStatLock
+            // 
+            this.lblStatLock.AutoSize = true;
+            this.lblStatLock.Location = new System.Drawing.Point(161, 12);
+            this.lblStatLock.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblStatLock.Name = "lblStatLock";
+            this.lblStatLock.Size = new System.Drawing.Size(34, 13);
+            this.lblStatLock.TabIndex = 105;
+            this.lblStatLock.Text = "Lock:";
+            // 
+            // chkLockStrength
+            // 
+            this.chkLockStrength.AutoSize = true;
+            this.chkLockStrength.Location = new System.Drawing.Point(180, 31);
+            this.chkLockStrength.Name = "chkLockStrength";
+            this.chkLockStrength.Size = new System.Drawing.Size(15, 14);
+            this.chkLockStrength.TabIndex = 104;
+            this.chkLockStrength.CheckedChanged += new System.EventHandler(this.chkLockStrength_CheckedChanged);
+            // 
             // lblPercentage5
             // 
             this.lblPercentage5.AutoSize = true;
@@ -2632,8 +2687,6 @@ namespace Intersect.Editor.Forms.Editors
             this.grpEvent.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.grpEvent.Controls.Add(this.chkSingleUseEvent);
             this.grpEvent.Controls.Add(this.cmbEvent);
-            this.grpEvent.Controls.Add(this.grpSpell);
-            this.grpEvent.Controls.Add(this.grpBags);
             this.grpEvent.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpEvent.Location = new System.Drawing.Point(2, 591);
             this.grpEvent.Name = "grpEvent";
@@ -2685,7 +2738,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpSpell.Controls.Add(this.cmbTeachSpell);
             this.grpSpell.Controls.Add(this.lblSpell);
             this.grpSpell.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpSpell.Location = new System.Drawing.Point(4, 15);
+            this.grpSpell.Location = new System.Drawing.Point(2, 591);
             this.grpSpell.Name = "grpSpell";
             this.grpSpell.Size = new System.Drawing.Size(217, 127);
             this.grpSpell.TabIndex = 13;
@@ -2752,7 +2805,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpBags.Controls.Add(this.nudBag);
             this.grpBags.Controls.Add(this.lblBag);
             this.grpBags.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpBags.Location = new System.Drawing.Point(6, 3);
+            this.grpBags.Location = new System.Drawing.Point(2, 591);
             this.grpBags.Name = "grpBags";
             this.grpBags.Size = new System.Drawing.Size(222, 57);
             this.grpBags.TabIndex = 44;
@@ -2806,7 +2859,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpConsumable.Controls.Add(this.cmbConsume);
             this.grpConsumable.Controls.Add(this.lblInterval);
             this.grpConsumable.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpConsumable.Location = new System.Drawing.Point(0, 599);
+            this.grpConsumable.Location = new System.Drawing.Point(2, 591);
             this.grpConsumable.Name = "grpConsumable";
             this.grpConsumable.Size = new System.Drawing.Size(217, 125);
             this.grpConsumable.TabIndex = 12;
@@ -2920,10 +2973,12 @@ namespace Intersect.Editor.Forms.Editors
             // pnlContainer
             // 
             this.pnlContainer.AutoScroll = true;
+            this.pnlContainer.Controls.Add(this.grpBags);
+            this.pnlContainer.Controls.Add(this.grpSpell);
+            this.pnlContainer.Controls.Add(this.grpConsumable);
             this.pnlContainer.Controls.Add(this.grpEvent);
             this.pnlContainer.Controls.Add(this.grpGeneral);
             this.pnlContainer.Controls.Add(this.grpEquipment);
-            this.pnlContainer.Controls.Add(this.grpConsumable);
             this.pnlContainer.Location = new System.Drawing.Point(221, 34);
             this.pnlContainer.Name = "pnlContainer";
             this.pnlContainer.Size = new System.Drawing.Size(463, 442);
@@ -3050,61 +3105,6 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo.Size = new System.Drawing.Size(23, 22);
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
-            // 
-            // chkLockStrength
-            // 
-            this.chkLockStrength.AutoSize = true;
-            this.chkLockStrength.Location = new System.Drawing.Point(180, 31);
-            this.chkLockStrength.Name = "chkLockStrength";
-            this.chkLockStrength.Size = new System.Drawing.Size(15, 14);
-            this.chkLockStrength.TabIndex = 104;
-            this.chkLockStrength.CheckedChanged += new System.EventHandler(this.chkLockStrength_CheckedChanged);
-            // 
-            // lblStatLock
-            // 
-            this.lblStatLock.AutoSize = true;
-            this.lblStatLock.Location = new System.Drawing.Point(161, 12);
-            this.lblStatLock.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblStatLock.Name = "lblStatLock";
-            this.lblStatLock.Size = new System.Drawing.Size(34, 13);
-            this.lblStatLock.TabIndex = 105;
-            this.lblStatLock.Text = "Lock:";
-            // 
-            // chkLockMagic
-            // 
-            this.chkLockMagic.AutoSize = true;
-            this.chkLockMagic.Location = new System.Drawing.Point(180, 66);
-            this.chkLockMagic.Name = "chkLockMagic";
-            this.chkLockMagic.Size = new System.Drawing.Size(15, 14);
-            this.chkLockMagic.TabIndex = 106;
-            this.chkLockMagic.CheckedChanged += new System.EventHandler(this.chkLockMagic_CheckedChanged);
-            // 
-            // chkLockArmor
-            // 
-            this.chkLockArmor.AutoSize = true;
-            this.chkLockArmor.Location = new System.Drawing.Point(180, 104);
-            this.chkLockArmor.Name = "chkLockArmor";
-            this.chkLockArmor.Size = new System.Drawing.Size(15, 14);
-            this.chkLockArmor.TabIndex = 107;
-            this.chkLockArmor.CheckedChanged += new System.EventHandler(this.chkLockArmor_CheckedChanged);
-            // 
-            // chkLockMagicResist
-            // 
-            this.chkLockMagicResist.AutoSize = true;
-            this.chkLockMagicResist.Location = new System.Drawing.Point(180, 141);
-            this.chkLockMagicResist.Name = "chkLockMagicResist";
-            this.chkLockMagicResist.Size = new System.Drawing.Size(15, 14);
-            this.chkLockMagicResist.TabIndex = 108;
-            this.chkLockMagicResist.CheckedChanged += new System.EventHandler(this.chkLockMagicResist_CheckedChanged);
-            // 
-            // chkLockSpeed
-            // 
-            this.chkLockSpeed.AutoSize = true;
-            this.chkLockSpeed.Location = new System.Drawing.Point(180, 179);
-            this.chkLockSpeed.Name = "chkLockSpeed";
-            this.chkLockSpeed.Size = new System.Drawing.Size(15, 14);
-            this.chkLockSpeed.TabIndex = 109;
-            this.chkLockSpeed.CheckedChanged += new System.EventHandler(this.chkLockSpeed_CheckedChanged);
             // 
             // FrmItem
             // 
