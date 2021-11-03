@@ -126,6 +126,11 @@ namespace Intersect.Client.Networking
             Network.SendPacket(new DropItemPacket(slot, amount));
         }
 
+        public static void SendDestroyItem(int slot, bool checkCanDrop, int amount = 1)
+        {
+            Network.SendPacket(new DestroyItemPacket(slot, amount, checkCanDrop));
+        }
+
         public static void SendUseItem(int slot, Guid targetId)
         {
             Network.SendPacket(new UseItemPacket(slot, targetId));

@@ -2546,6 +2546,16 @@ namespace Intersect.Server.Entities
                 }
             }
         }
+        
+        public bool CanDestroyItem(int slot)
+        {
+            return Conditions.MeetsConditionLists(Items[slot].Descriptor.DestroyRequirements, this, null);
+        }
+
+        public void TryDestroyItem(int slot, int quantity)
+        {
+            TryTakeItem(Items[slot], quantity);
+        }
 
         /// <summary>
         /// Try to take an item away from the player by slot.
@@ -2596,6 +2606,18 @@ namespace Intersect.Server.Entities
 
             // Figure out what we're dealing with here.
             var itemDescriptor = slot.Descriptor;
+            if (itemDescriptor.CanDestroy && !(Conditions.MeetsConditionLists(itemDescriptor.DestroyRequirements, this, null)))
+            {
+                if (!string.IsNullOrEmpty(itemDescriptor.CannotDestroyMessage))
+                {
+                    PacketSender.SendChatMsg(this, itemDescriptor.CannotDestroyMessage, ChatMessageType.Error, CustomColors.General.GeneralDisabled);
+                } else
+                {
+                    PacketSender.SendChatMsg(this, Strings.Items.destroydefault, ChatMessageType.Error, CustomColors.General.GeneralDisabled);
+                }
+
+                return false;
+            }
 
             // is this stackable? if so try to take as many as we can each time.
             if (itemDescriptor.Stackable)

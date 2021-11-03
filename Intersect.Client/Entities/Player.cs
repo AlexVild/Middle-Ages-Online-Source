@@ -348,25 +348,50 @@ namespace Intersect.Client.Entities
             Inventory[Label] = tmpInstance.Clone();
         }
 
-        public void TryDropItem(int index)
+        public void TryDropItem(int index, bool fromPacket = false, bool canDestroy = false)
         {
             if (ItemBase.Get(Inventory[index].ItemId) != null)
             {
-                if (Inventory[index].Quantity > 1)
+                var destroyable = Inventory[index].Base.CanDestroy;
+                if (destroyable && !fromPacket)
                 {
-                    var iBox = new InputBox(
-                        Strings.Inventory.dropitem,
-                        Strings.Inventory.dropitemprompt.ToString(ItemBase.Get(Inventory[index].ItemId).Name), true,
-                        InputBox.InputType.NumericInput, DropItemInputBoxOkay, null, index, Inventory[index].Quantity
-                    );
+                    PacketSender.SendDestroyItem(index, true);
+                }
+                else if (Inventory[index].Quantity > 1)
+                {
+                    if (destroyable && canDestroy)
+                    {
+                        var iBox = new InputBox(
+                            Strings.Inventory.destroyitem,
+                            Strings.Inventory.destroyitemprompt.ToString(ItemBase.Get(Inventory[index].ItemId).Name), true,
+                            InputBox.InputType.NumericInput, DestroyItemInputBoxOkay, null, index, Inventory[index].Quantity
+                        );
+                    } else
+                    {
+                        var iBox = new InputBox(
+                            Strings.Inventory.dropitem,
+                            Strings.Inventory.dropitemprompt.ToString(ItemBase.Get(Inventory[index].ItemId).Name), true,
+                            InputBox.InputType.NumericInput, DropItemInputBoxOkay, null, index, Inventory[index].Quantity
+                        );
+                    }
                 }
                 else
                 {
-                    var iBox = new InputBox(
-                        Strings.Inventory.dropitem,
-                        Strings.Inventory.dropprompt.ToString(ItemBase.Get(Inventory[index].ItemId).Name), true,
-                        InputBox.InputType.YesNo, DropInputBoxOkay, null, index
-                    );
+                    if (destroyable && canDestroy)
+                    {
+                        var iBox = new InputBox(
+                            Strings.Inventory.destroyitem,
+                            Strings.Inventory.destroyprompt.ToString(ItemBase.Get(Inventory[index].ItemId).Name), true,
+                            InputBox.InputType.YesNo, DestroyInputBoxOkay, null, index
+                        );
+                    } else
+                    {
+                        var iBox = new InputBox(
+                            Strings.Inventory.dropitem,
+                            Strings.Inventory.dropprompt.ToString(ItemBase.Get(Inventory[index].ItemId).Name), true,
+                            InputBox.InputType.YesNo, DropInputBoxOkay, null, index
+                        );
+                    }
                 }
             }
         }
@@ -380,9 +405,23 @@ namespace Intersect.Client.Entities
             }
         }
 
+        private void DestroyItemInputBoxOkay(object sender, EventArgs e)
+        {
+            var value = (int)((InputBox)sender).Value;
+            if (value > 0)
+            {
+                PacketSender.SendDestroyItem((int)((InputBox)sender).UserData, false, value);
+            }
+        }
+
         private void DropInputBoxOkay(object sender, EventArgs e)
         {
             PacketSender.SendDropItem((int) ((InputBox) sender).UserData, 1);
+        }
+
+        private void DestroyInputBoxOkay(object sender, EventArgs e)
+        {
+            PacketSender.SendDestroyItem((int)((InputBox)sender).UserData, false, 1);
         }
 
         public int FindItem(Guid itemId, int itemVal = 1)

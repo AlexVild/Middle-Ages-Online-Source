@@ -2244,5 +2244,11 @@ namespace Intersect.Client.Networking
                 Globals.Me.FlashEndTime = Globals.System.GetTimeMs() + 200; // TODO config
             }
         }
+
+        //DestroyConditionPacket
+        public void HandlePacket(IPacketSender packetSender, DestroyConditionPacket packet)
+        {
+            Globals.Me.TryDropItem(packet.Index, true, packet.CanDestroy);
+        }
     }
 }

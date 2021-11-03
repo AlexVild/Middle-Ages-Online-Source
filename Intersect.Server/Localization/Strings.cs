@@ -830,6 +830,8 @@ namespace Intersect.Server.Localization
             public readonly LocalizedString InventoryNoSpace =
                 @"There is no space left in your inventory for that item!";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString destroydefault = @"You cannot currently destroy this item.";
         }
 
         public sealed class MappingNamespace : LocaleNamespace

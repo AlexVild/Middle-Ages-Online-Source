@@ -1521,6 +1521,12 @@ namespace Intersect.Server.Networking
             player.SendPacket(new ShowPicturePacket(picture, size, clickable, hideTime, eventId));
         }
 
+        //Whether to drop or destroy an item
+        public static void SendDestroyConditionPacket(Player player, bool canDestroy, int slot)
+        {
+            player.SendPacket(new DestroyConditionPacket(canDestroy, slot));
+        }
+
         //HidePicturePacket
         public static void SendHidePicture(Player player)
         {

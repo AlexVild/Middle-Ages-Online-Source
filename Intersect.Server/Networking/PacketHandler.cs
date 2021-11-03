@@ -1669,6 +1669,26 @@ namespace Intersect.Server.Networking
             player?.DropItemFrom(packet.Slot, packet.Quantity);
         }
 
+        //DestroyItemPacket
+        public void HandlePacket(Client client, DestroyItemPacket packet)
+        {
+            var player = client?.Entity;
+            if (packet == null)
+            {
+                return;
+            }
+
+            // When a player tries to destroy an item, we first reach out to the server to check if we can destroy the item
+            if (packet.CheckCanDrop)
+            {
+                // We let the client know if we CAN - if we can, we present a destroy interface, else, a drop interface.
+                PacketSender.SendDestroyConditionPacket(player, player.CanDestroyItem(packet.Slot), packet.Slot);
+            } else
+            {
+                player?.TryDestroyItem(packet.Slot, packet.Quantity);
+            }
+        }
+
         //UseItemPacket
         public void HandlePacket(Client client, UseItemPacket packet)
         {
