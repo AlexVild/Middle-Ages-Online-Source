@@ -341,6 +341,18 @@ namespace Intersect.Server.Entities.Events
                     MoveTimer = Globals.Timing.Milliseconds + (long)GetMovementTime();
                 }
             }
+            if (ShouldDisplayQuestAnimation())
+            {
+                if (!Animations.Contains(MyPage.QuestAnimationId))
+                {
+                    Animations.Add(MyPage.QuestAnimationId);
+                    SendToPlayer();
+                }
+            } else if (Animations.Contains(MyPage.QuestAnimationId) && MyPage.AnimationId != MyPage.QuestAnimationId)
+            {
+                Animations.Remove(MyPage.QuestAnimationId);
+                SendToPlayer();
+            }
         }
 
         /// <inheritdoc />
@@ -818,6 +830,16 @@ namespace Intersect.Server.Entities.Events
             return false;
         }
 
+        public bool ShouldDisplayQuestAnimation()
+        {
+            var questAvailable = false;
+            if (MyPage.GivesQuestId != Guid.Empty && MyPage.QuestAnimationId != Guid.Empty)
+            {
+                var quest = MyPage.GivesQuestId;
+                questAvailable = (Player.QuestCompleted(quest) && QuestBase.Get(quest).Repeatable) || !(Player.QuestInProgress(quest));
+            }
+            return questAvailable;
+        }
     }
 
 }

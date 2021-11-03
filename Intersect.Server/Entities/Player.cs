@@ -5077,6 +5077,20 @@ namespace Intersect.Server.Entities
             return false;
         }
 
+        public bool QuestInProgress(Guid questId)
+        {
+            var questProgress = FindQuest(questId);
+            if (questProgress != null)
+            {
+                var quest = QuestBase.Get(questId);
+                if (quest != null)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public void OfferQuest(QuestBase quest, bool randomQuest = false)
         {
             if (CanStartQuest(quest))

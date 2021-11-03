@@ -2583,6 +2583,9 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString walkinganim = @"Walking Anim";
 
+            public static LocalizedString questanimationgroup = @"Quest Giver Animation";
+
+            public static LocalizedString questanimationlabel = @"Animation:";
         }
 
         public struct EventEndQuest

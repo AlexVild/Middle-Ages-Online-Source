@@ -30,6 +30,10 @@ namespace Intersect.GameObjects.Events
 
         public ConditionLists ConditionLists { get; set; } = new ConditionLists();
 
+        public Guid GivesQuestId { get; set; }
+
+        public Guid QuestAnimationId { get; set; }
+
         public string Description { get; set; } = "";
 
         public bool DirectionFix { get; set; }

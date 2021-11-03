@@ -926,6 +926,9 @@ namespace Intersect.Editor.Forms.Editors.Events
             btnSave.Text = Strings.EventEditor.save;
             btnCancel.Text = Strings.EventEditor.cancel;
 
+            grpQuestAnimation.Text = Strings.EventEditor.questanimationgroup;
+            lblQuestAnimation.Text = Strings.EventEditor.questanimationlabel;
+
             for (var i = 0; i < lstCommands.Nodes.Count; i++)
             {
                 lstCommands.Nodes[i].Text = Strings.EventCommands.commands[lstCommands.Nodes[i].Name];
@@ -972,6 +975,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             if (MyEvent.CommonEvent || questEvent)
             {
                 grpEntityOptions.Hide();
+                grpQuestAnimation.Hide();
                 cmbTrigger.Items.Clear();
                 for (var i = 0; i < Strings.EventEditor.commontriggers.Count; i++)
                 {
@@ -989,6 +993,14 @@ namespace Intersect.Editor.Forms.Editors.Events
                 cmbTriggerVal.Items.Clear();
                 cmbTriggerVal.Items.Add(Strings.General.none);
                 cmbTriggerVal.Items.AddRange(ProjectileBase.Names);
+
+                cmbQuest.Items.Clear();
+                cmbQuest.Items.Add(Strings.General.none);
+                cmbQuest.Items.AddRange(QuestBase.Names);
+
+                cmbQuestAnimation.Items.Clear();
+                cmbQuestAnimation.Items.Add(Strings.General.none);
+                cmbQuestAnimation.Items.AddRange(AnimationBase.Names);
             }
 
             chkIsGlobal.Checked = Convert.ToBoolean(MyEvent.Global);
@@ -1066,6 +1078,10 @@ namespace Intersect.Editor.Forms.Editors.Events
             chkWalkingAnimation.Checked = Convert.ToBoolean(CurrentPage.WalkingAnimation);
             chkInteractionFreeze.Checked = Convert.ToBoolean(CurrentPage.InteractionFreeze);
             txtDesc.Text = CurrentPage.Description;
+
+            cmbQuestAnimation.SelectedIndex = AnimationBase.ListIndex(CurrentPage.QuestAnimationId) + 1;
+            cmbQuest.SelectedIndex = QuestBase.ListIndex(CurrentPage.GivesQuestId) + 1;
+
             ListPageCommands();
             UpdateEventPreview();
             EnableButtons();
@@ -1896,6 +1912,22 @@ namespace Intersect.Editor.Forms.Editors.Events
         }
 
         #endregion
+
+        private void cmbQuest_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!MyEvent.CommonEvent)
+            {
+                CurrentPage.GivesQuestId = QuestBase.IdFromList(cmbQuest.SelectedIndex - 1);
+            }
+        }
+
+        private void cmbQuestAnimation_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!MyEvent.CommonEvent)
+            {
+                CurrentPage.QuestAnimationId = AnimationBase.IdFromList(cmbQuestAnimation.SelectedIndex - 1);
+            }
+        }
     }
 
     public class CommandListProperties
