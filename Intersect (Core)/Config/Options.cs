@@ -201,6 +201,8 @@ namespace Intersect
         public static long FaceTargetPredictionTime => Instance.CombatOpts.FaceTargetPredictionTime;
         
         public static long ActionMessageTime => Instance.CombatOpts.ActionMessageTime;
+        
+        public static string PlayerDeathAnimationId => Instance.CombatOpts.PlayerDeathAnimationId;
 
         public static int GameBorderStyle => Instance.MapOpts.GameBorderStyle;
 

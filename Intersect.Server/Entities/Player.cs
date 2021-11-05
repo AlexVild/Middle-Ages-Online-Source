@@ -894,6 +894,7 @@ namespace Intersect.Server.Entities
             CastTarget = null;
 
             //Flag death to the client
+            PlayDeathAnimation();
             PacketSender.SendPlayerDeath(this);
 
             //Event trigger
