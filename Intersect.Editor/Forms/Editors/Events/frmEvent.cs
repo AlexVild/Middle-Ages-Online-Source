@@ -60,6 +60,8 @@ namespace Intersect.Editor.Forms.Editors.Events
 
         public bool NewEvent;
 
+        public bool QuestEvent;
+
         public int mOldSelectedCommand;
 
         private void txtEventname_TextChanged(object sender, EventArgs e)
@@ -972,7 +974,8 @@ namespace Intersect.Editor.Forms.Editors.Events
             cmbAnimation.Items.Clear();
             cmbAnimation.Items.Add(Strings.General.none);
             cmbAnimation.Items.AddRange(AnimationBase.Names);
-            if (MyEvent.CommonEvent || questEvent)
+            QuestEvent = questEvent;
+            if (MyEvent.CommonEvent || QuestEvent)
             {
                 grpEntityOptions.Hide();
                 grpQuestAnimation.Hide();
@@ -1079,9 +1082,12 @@ namespace Intersect.Editor.Forms.Editors.Events
             chkInteractionFreeze.Checked = Convert.ToBoolean(CurrentPage.InteractionFreeze);
             txtDesc.Text = CurrentPage.Description;
 
-            cmbQuestAnimation.SelectedIndex = AnimationBase.ListIndex(CurrentPage.QuestAnimationId) + 1;
-            cmbQuest.SelectedIndex = QuestBase.ListIndex(CurrentPage.GivesQuestId) + 1;
-
+            if (!MyEvent.CommonEvent && !QuestEvent)
+            {
+                cmbQuestAnimation.SelectedIndex = AnimationBase.ListIndex(CurrentPage.QuestAnimationId) + 1;
+                cmbQuest.SelectedIndex = QuestBase.ListIndex(CurrentPage.GivesQuestId) + 1;
+            }
+            
             ListPageCommands();
             UpdateEventPreview();
             EnableButtons();

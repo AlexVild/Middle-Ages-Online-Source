@@ -246,6 +246,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.grpPageOptions.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             this.pnlTabsContainer.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblName
@@ -275,13 +276,12 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.grpEntityOptions.Controls.Add(this.grpQuestAnimation);
             this.grpEntityOptions.Controls.Add(this.grpExtra);
             this.grpEntityOptions.Controls.Add(this.grpInspector);
-            this.grpEntityOptions.Controls.Add(this.grpTriggers);
             this.grpEntityOptions.Controls.Add(this.grpPreview);
             this.grpEntityOptions.Controls.Add(this.grpMovement);
             this.grpEntityOptions.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpEntityOptions.Location = new System.Drawing.Point(21, 150);
             this.grpEntityOptions.Name = "grpEntityOptions";
-            this.grpEntityOptions.Size = new System.Drawing.Size(326, 472);
+            this.grpEntityOptions.Size = new System.Drawing.Size(326, 423);
             this.grpEntityOptions.TabIndex = 12;
             this.grpEntityOptions.TabStop = false;
             this.grpEntityOptions.Text = "Entity Options";
@@ -519,7 +519,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.grpTriggers.Controls.Add(this.cmbTriggerVal);
             this.grpTriggers.Controls.Add(this.cmbTrigger);
             this.grpTriggers.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpTriggers.Location = new System.Drawing.Point(6, 422);
+            this.grpTriggers.Location = new System.Drawing.Point(12, 488);
             this.grpTriggers.Name = "grpTriggers";
             this.grpTriggers.Size = new System.Drawing.Size(317, 44);
             this.grpTriggers.TabIndex = 21;
@@ -1391,6 +1391,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             // panel1
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.grpTriggers);
             this.panel1.Location = new System.Drawing.Point(12, 83);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(811, 543);
@@ -1450,6 +1451,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.grpGeneral.PerformLayout();
             this.pnlTabsContainer.ResumeLayout(false);
             this.pnlTabsContainer.PerformLayout();
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
