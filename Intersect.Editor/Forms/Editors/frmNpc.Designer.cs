@@ -77,6 +77,9 @@ namespace Intersect.Editor.Forms.Editors
             this.lblHP = new System.Windows.Forms.Label();
             this.lblExp = new System.Windows.Forms.Label();
             this.pnlContainer = new System.Windows.Forms.Panel();
+            this.grpAnimation = new DarkUI.Controls.DarkGroupBox();
+            this.cmbDeathAnimation = new DarkUI.Controls.DarkComboBox();
+            this.lblDeathAnimation = new System.Windows.Forms.Label();
             this.grpImmunities = new DarkUI.Controls.DarkGroupBox();
             this.nudTenacity = new DarkUI.Controls.DarkNumericUpDown();
             this.lblTenacity = new System.Windows.Forms.Label();
@@ -195,6 +198,7 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudMag)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudStr)).BeginInit();
             this.pnlContainer.SuspendLayout();
+            this.grpAnimation.SuspendLayout();
             this.grpImmunities.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudTenacity)).BeginInit();
             this.grpCombat.SuspendLayout();
@@ -882,6 +886,7 @@ namespace Intersect.Editor.Forms.Editors
             // pnlContainer
             // 
             this.pnlContainer.AutoScroll = true;
+            this.pnlContainer.Controls.Add(this.grpAnimation);
             this.pnlContainer.Controls.Add(this.grpImmunities);
             this.pnlContainer.Controls.Add(this.grpCombat);
             this.pnlContainer.Controls.Add(this.grpCommonEvents);
@@ -896,6 +901,52 @@ namespace Intersect.Editor.Forms.Editors
             this.pnlContainer.Name = "pnlContainer";
             this.pnlContainer.Size = new System.Drawing.Size(464, 529);
             this.pnlContainer.TabIndex = 17;
+            // 
+            // grpAnimation
+            // 
+            this.grpAnimation.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpAnimation.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpAnimation.Controls.Add(this.cmbDeathAnimation);
+            this.grpAnimation.Controls.Add(this.lblDeathAnimation);
+            this.grpAnimation.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpAnimation.Location = new System.Drawing.Point(216, 1128);
+            this.grpAnimation.Margin = new System.Windows.Forms.Padding(2);
+            this.grpAnimation.Name = "grpAnimation";
+            this.grpAnimation.Padding = new System.Windows.Forms.Padding(2);
+            this.grpAnimation.Size = new System.Drawing.Size(229, 68);
+            this.grpAnimation.TabIndex = 33;
+            this.grpAnimation.TabStop = false;
+            this.grpAnimation.Text = "Animations";
+            // 
+            // cmbDeathAnimation
+            // 
+            this.cmbDeathAnimation.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbDeathAnimation.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbDeathAnimation.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbDeathAnimation.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbDeathAnimation.DrawDropdownHoverOutline = false;
+            this.cmbDeathAnimation.DrawFocusRectangle = false;
+            this.cmbDeathAnimation.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbDeathAnimation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbDeathAnimation.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbDeathAnimation.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbDeathAnimation.FormattingEnabled = true;
+            this.cmbDeathAnimation.Location = new System.Drawing.Point(12, 36);
+            this.cmbDeathAnimation.Name = "cmbDeathAnimation";
+            this.cmbDeathAnimation.Size = new System.Drawing.Size(182, 21);
+            this.cmbDeathAnimation.TabIndex = 19;
+            this.cmbDeathAnimation.Text = null;
+            this.cmbDeathAnimation.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbDeathAnimation.SelectedIndexChanged += new System.EventHandler(this.cmbDeathAnimation_SelectedIndexChanged);
+            // 
+            // lblDeathAnimation
+            // 
+            this.lblDeathAnimation.AutoSize = true;
+            this.lblDeathAnimation.Location = new System.Drawing.Point(9, 20);
+            this.lblDeathAnimation.Name = "lblDeathAnimation";
+            this.lblDeathAnimation.Size = new System.Drawing.Size(88, 13);
+            this.lblDeathAnimation.TabIndex = 18;
+            this.lblDeathAnimation.Text = "Death Animation:";
             // 
             // grpImmunities
             // 
@@ -2273,6 +2324,8 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudMag)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudStr)).EndInit();
             this.pnlContainer.ResumeLayout(false);
+            this.grpAnimation.ResumeLayout(false);
+            this.grpAnimation.PerformLayout();
             this.grpImmunities.ResumeLayout(false);
             this.grpImmunities.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudTenacity)).EndInit();
@@ -2454,5 +2507,8 @@ namespace Intersect.Editor.Forms.Editors
         private DarkCheckBox chkStun;
         private DarkCheckBox chkSilence;
         private DarkCheckBox chkKnockback;
+        private DarkGroupBox grpAnimation;
+        private DarkComboBox cmbDeathAnimation;
+        private System.Windows.Forms.Label lblDeathAnimation;
     }
 }

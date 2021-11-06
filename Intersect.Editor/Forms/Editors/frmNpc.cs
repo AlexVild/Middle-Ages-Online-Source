@@ -118,6 +118,11 @@ namespace Intersect.Editor.Forms.Editors
             nudDef.Maximum = Options.MaxStatValue;
             nudMR.Maximum = Options.MaxStatValue;
             nudSpd.Maximum = Options.MaxStatValue;
+
+            cmbDeathAnimation.Items.Clear();
+            cmbDeathAnimation.Items.Add(Strings.General.none);
+            cmbDeathAnimation.Items.AddRange(AnimationBase.Names);
+
             InitLocalization();
             UpdateEditor();
         }
@@ -238,6 +243,7 @@ namespace Intersect.Editor.Forms.Editors
             txtSearch.Text = Strings.NpcEditor.searchplaceholder;
             lblFolder.Text = Strings.NpcEditor.folderlabel;
 
+            //Immunities
             grpImmunities.Text = Strings.NpcEditor.immunities;
             chkKnockback.Text = Strings.NpcEditor.knockback;
             chkSilence.Text = Strings.NpcEditor.silence;
@@ -248,6 +254,10 @@ namespace Intersect.Editor.Forms.Editors
             chkTaunt.Text = Strings.NpcEditor.taunt;
             chkSleep.Text = Strings.NpcEditor.sleep;
             lblTenacity.Text = Strings.NpcEditor.tenacity;
+
+            //Additional animations
+            grpAnimation.Text = Strings.NpcEditor.additionalanimationgroup;
+            lblDeathAnimation.Text = Strings.NpcEditor.deathanimation;
 
             btnSave.Text = Strings.NpcEditor.save;
             btnCancel.Text = Strings.NpcEditor.cancel;
@@ -368,6 +378,8 @@ namespace Intersect.Editor.Forms.Editors
                 nudTenacity.Value = (decimal) mEditorItem.Tenacity;
 
                 UpdateImmunities();
+
+                cmbDeathAnimation.SelectedIndex = AnimationBase.ListIndex(mEditorItem.DeathAnimationId) + 1;
             }
             else
             {
@@ -1095,6 +1107,12 @@ namespace Intersect.Editor.Forms.Editors
         private void nudTenacity_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.Tenacity = (double)nudTenacity.Value;
+        }
+
+        private void cmbDeathAnimation_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mEditorItem.DeathAnimation =
+                AnimationBase.Get(AnimationBase.IdFromList(cmbDeathAnimation.SelectedIndex - 1));
         }
     }
 

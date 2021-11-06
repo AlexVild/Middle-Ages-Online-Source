@@ -146,6 +146,10 @@ namespace Intersect.Server.Entities
 
             Range = (byte) myBase.SightRange;
             mPathFinder = new Pathfinder(this);
+            if (myBase.DeathAnimation != null)
+            {
+                DeathAnimation = myBase.DeathAnimation.Id;
+            }
         }
 
         public NpcBase Base { get; private set; }

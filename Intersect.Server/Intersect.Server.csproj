@@ -660,6 +660,10 @@
     <Compile Include="Migrations\Game\20211103142838_DestroyItemMigration.designer.cs">
       <DependentUpon>20211103142838_DestroyItemMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20211106140056_DeathAnimationMigration.cs" />
+    <Compile Include="Migrations\Game\20211106140056_DeathAnimationMigration.designer.cs">
+      <DependentUpon>20211106140056_DeathAnimationMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

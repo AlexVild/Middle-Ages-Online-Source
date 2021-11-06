@@ -4118,6 +4118,10 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString tenacity = @"Tenacity (%):";
 
+            public static LocalizedString additionalanimationgroup = @"Animations:";
+
+            public static LocalizedString deathanimation = @"Death Animation:";
+
         }
 
         public struct NpcSpawns

@@ -126,6 +126,17 @@ namespace Intersect.GameObjects
             set => AttackAnimationId = value?.Id ?? Guid.Empty;
         }
 
+        [Column("DeathAnimation")]
+        public Guid DeathAnimationId { get; set; }
+
+        [NotMapped]
+        [JsonIgnore]
+        public AnimationBase DeathAnimation
+        {
+            get => AnimationBase.Get(DeathAnimationId);
+            set => DeathAnimationId = value?.Id ?? Guid.Empty;
+        }
+
         //Behavior
         public bool Aggressive { get; set; }
 
