@@ -1904,6 +1904,9 @@ Tick timer saved in server config.json.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString openquestboard = @"Open Quest Board: {00}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString setvehicle = @"Set Vehicle: {00}";
         }
 
         public struct EventChangePlayerColor
@@ -2005,6 +2008,7 @@ Tick timer saved in server config.json.";
                 {"flashscreen", @"Flash Screen"},
                 {"randomquest", @"Random Quest from List"},
                 {"openquestboard", @"Open Quest Board"},
+                {"setvehicle", @"Set Vehicle"},
             };
 
         }
@@ -5283,6 +5287,27 @@ Negative values for time to flow backwards.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString undotitle = @"Undo Quest List Change";
+        }
+
+        public struct EventSetVehicle
+        {
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString title = @"Set Vehicle";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString checkbox = @"Get In Vehicle?";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString spritelabel = @"Vehicle Sprite:";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString speedlabel = @"Vehicle Speed:";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString confirm = @"Okay";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString cancel = @"Cancel";
         }
     }
 

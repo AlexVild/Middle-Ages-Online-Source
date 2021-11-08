@@ -2253,6 +2253,11 @@ namespace Intersect.Server.Networking
         {
             client?.Send(new CombatEffectPacket(targetId, shakeAmount, entityFlashColor, sound, flashIntensity, flashDuration, flashColor));
         }
+
+        public static void SendVehiclePacket(Client client, bool inVehicle, string vehicleSprite, long vehicleSpeed)
+        {
+            client?.Send(new VehiclePacket(inVehicle, vehicleSprite, vehicleSpeed));
+        }
     }
 
 }

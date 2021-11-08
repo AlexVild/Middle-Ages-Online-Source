@@ -254,6 +254,12 @@ namespace Intersect.Server.Entities
         /// </summary>
         [NotMapped] public bool GuildBank;
 
+        public bool InVehicle;
+
+        public string VehicleSprite;
+
+        public long VehicleSpeed;
+
         public static Player FindOnline(Guid id)
         {
             return OnlinePlayers.ContainsKey(id) ? OnlinePlayers[id] : null;
@@ -1517,6 +1523,11 @@ namespace Intersect.Server.Entities
 
         public override bool CanAttack(Entity entity, SpellBase spell)
         {
+            if (InVehicle)
+            {
+                return false;
+            }
+
             // If self-cast, AoE, Projectile or Dash.. always accept.
             if (spell?.Combat.TargetType == SpellTargetTypes.Self ||
                 spell?.Combat.TargetType == SpellTargetTypes.AoE ||

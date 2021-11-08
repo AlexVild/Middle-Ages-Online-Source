@@ -401,6 +401,7 @@
     <Compile Include="Network\Packets\Client\LoginPacket.cs" />
     <Compile Include="Network\Packets\Client\RequestGuildPacket.cs" />
     <Compile Include="Network\Packets\Client\RequestQuestsFromListPacket.cs" />
+    <Compile Include="Network\Packets\Client\RequestVehiclePacket.cs" />
     <Compile Include="Network\Packets\Client\SendQuestPointRequestPacket.cs" />
     <Compile Include="Network\Packets\Client\UpdateGuildMemberPacket.cs" />
     <Compile Include="Network\Packets\Client\PictureClosedPacket.cs" />
@@ -429,6 +430,7 @@
     <Compile Include="Network\Packets\Server\ResourceLockPacket.cs" />
     <Compile Include="Network\Packets\Server\ShakeScreenPacket.cs" />
     <Compile Include="Network\Packets\Server\UpdateFutureWarpPacket.cs" />
+    <Compile Include="Network\Packets\Server\VehiclePacket.cs" />
     <Compile Include="Network\Packets\SlotQuantityPacket.cs" />
     <Compile Include="Network\Packets\Client\SwapBankItemsPacket.cs" />
     <Compile Include="Network\Packets\Client\MovePacket.cs" />

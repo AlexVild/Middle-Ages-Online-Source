@@ -128,6 +128,8 @@ namespace Intersect.Client.Entities
 
         protected string mTransformedSprite = "";
 
+        protected bool mInVehicle = false;
+
         private long mWalkTimer;
 
         public int[] MyEquipment = new int[Options.EquipmentSlots.Count];

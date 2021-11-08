@@ -236,5 +236,8 @@
         // Quest lists/board
         RandomQuest,
         OpenQuestBoard,
+
+        // Vehicles
+        SetVehicle,
     }
 }

@@ -1523,6 +1523,11 @@ namespace Intersect.Editor.Forms.Editors.Events
             return Strings.EventCommandList.invalid;
         }
 
+        private static string GetCommandText(SetVehicleCommand command, MapInstance map)
+        {
+            return Strings.EventCommandList.randomquest.ToString(QuestListBase.GetName(command.QuestListId));
+        }
+
     }
 
 }

@@ -1116,4 +1116,15 @@ namespace Intersect.GameObjects.Events.Commands
 
         public Guid QuestBoardId { get; set; }
     }
+
+    public class SetVehicleCommand : EventCommand
+    {
+        public override EventCommandType Type { get; } = EventCommandType.SetVehicle;
+
+        public bool InVehicle { get; set; }
+
+        public string VehicleSprite { get; set; }
+
+        public long VehicleSpeed { get; set; }
+    }
 }
