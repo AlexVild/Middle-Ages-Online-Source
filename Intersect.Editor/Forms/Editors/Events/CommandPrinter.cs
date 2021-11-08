@@ -1525,7 +1525,13 @@ namespace Intersect.Editor.Forms.Editors.Events
 
         private static string GetCommandText(SetVehicleCommand command, MapInstance map)
         {
-            return Strings.EventCommandList.randomquest.ToString(QuestListBase.GetName(command.QuestListId));
+            if (command.InVehicle)
+            {
+                return Strings.EventCommandList.setvehicle.ToString(command.VehicleSprite);
+            } else
+            {
+                return Strings.EventCommandList.setvehicle.ToString(Strings.General.none);
+            }
         }
 
     }

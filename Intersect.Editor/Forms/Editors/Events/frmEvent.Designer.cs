@@ -75,7 +75,8 @@ namespace Intersect.Editor.Forms.Editors.Events
             System.Windows.Forms.TreeNode treeNode29 = new System.Windows.Forms.TreeNode("Change Player Label");
             System.Windows.Forms.TreeNode treeNode30 = new System.Windows.Forms.TreeNode("Change Player Name");
             System.Windows.Forms.TreeNode treeNode31 = new System.Windows.Forms.TreeNode("Reset Stat Point Allocations");
-            System.Windows.Forms.TreeNode treeNode32 = new System.Windows.Forms.TreeNode("Player Control", new System.Windows.Forms.TreeNode[] {
+            System.Windows.Forms.TreeNode treeNode32 = new System.Windows.Forms.TreeNode("Set Vehicle");
+            System.Windows.Forms.TreeNode treeNode33 = new System.Windows.Forms.TreeNode("Player Control", new System.Windows.Forms.TreeNode[] {
             treeNode14,
             treeNode15,
             treeNode16,
@@ -93,18 +94,18 @@ namespace Intersect.Editor.Forms.Editors.Events
             treeNode28,
             treeNode29,
             treeNode30,
-            treeNode31});
-            System.Windows.Forms.TreeNode treeNode33 = new System.Windows.Forms.TreeNode("Warp Player");
-            System.Windows.Forms.TreeNode treeNode34 = new System.Windows.Forms.TreeNode("Set Move Route");
-            System.Windows.Forms.TreeNode treeNode35 = new System.Windows.Forms.TreeNode("Wait for Route Completion");
-            System.Windows.Forms.TreeNode treeNode36 = new System.Windows.Forms.TreeNode("Hold Player");
-            System.Windows.Forms.TreeNode treeNode37 = new System.Windows.Forms.TreeNode("Release Player");
-            System.Windows.Forms.TreeNode treeNode38 = new System.Windows.Forms.TreeNode("Spawn NPC");
-            System.Windows.Forms.TreeNode treeNode39 = new System.Windows.Forms.TreeNode("Despawn NPC");
-            System.Windows.Forms.TreeNode treeNode40 = new System.Windows.Forms.TreeNode("Hide Player");
-            System.Windows.Forms.TreeNode treeNode41 = new System.Windows.Forms.TreeNode("Show Player");
-            System.Windows.Forms.TreeNode treeNode42 = new System.Windows.Forms.TreeNode("Movement", new System.Windows.Forms.TreeNode[] {
-            treeNode33,
+            treeNode31,
+            treeNode32});
+            System.Windows.Forms.TreeNode treeNode34 = new System.Windows.Forms.TreeNode("Warp Player");
+            System.Windows.Forms.TreeNode treeNode35 = new System.Windows.Forms.TreeNode("Set Move Route");
+            System.Windows.Forms.TreeNode treeNode36 = new System.Windows.Forms.TreeNode("Wait for Route Completion");
+            System.Windows.Forms.TreeNode treeNode37 = new System.Windows.Forms.TreeNode("Hold Player");
+            System.Windows.Forms.TreeNode treeNode38 = new System.Windows.Forms.TreeNode("Release Player");
+            System.Windows.Forms.TreeNode treeNode39 = new System.Windows.Forms.TreeNode("Spawn NPC");
+            System.Windows.Forms.TreeNode treeNode40 = new System.Windows.Forms.TreeNode("Despawn NPC");
+            System.Windows.Forms.TreeNode treeNode41 = new System.Windows.Forms.TreeNode("Hide Player");
+            System.Windows.Forms.TreeNode treeNode42 = new System.Windows.Forms.TreeNode("Show Player");
+            System.Windows.Forms.TreeNode treeNode43 = new System.Windows.Forms.TreeNode("Movement", new System.Windows.Forms.TreeNode[] {
             treeNode34,
             treeNode35,
             treeNode36,
@@ -112,54 +113,55 @@ namespace Intersect.Editor.Forms.Editors.Events
             treeNode38,
             treeNode39,
             treeNode40,
-            treeNode41});
-            System.Windows.Forms.TreeNode treeNode43 = new System.Windows.Forms.TreeNode("Play Animation");
-            System.Windows.Forms.TreeNode treeNode44 = new System.Windows.Forms.TreeNode("Play BGM");
-            System.Windows.Forms.TreeNode treeNode45 = new System.Windows.Forms.TreeNode("Fadeout BGM");
-            System.Windows.Forms.TreeNode treeNode46 = new System.Windows.Forms.TreeNode("Play Sound");
-            System.Windows.Forms.TreeNode treeNode47 = new System.Windows.Forms.TreeNode("Stop Sounds");
-            System.Windows.Forms.TreeNode treeNode48 = new System.Windows.Forms.TreeNode("Show Picture");
-            System.Windows.Forms.TreeNode treeNode49 = new System.Windows.Forms.TreeNode("Hide Picture");
-            System.Windows.Forms.TreeNode treeNode50 = new System.Windows.Forms.TreeNode("Flash Screen");
-            System.Windows.Forms.TreeNode treeNode51 = new System.Windows.Forms.TreeNode("Special Effects", new System.Windows.Forms.TreeNode[] {
-            treeNode43,
+            treeNode41,
+            treeNode42});
+            System.Windows.Forms.TreeNode treeNode44 = new System.Windows.Forms.TreeNode("Play Animation");
+            System.Windows.Forms.TreeNode treeNode45 = new System.Windows.Forms.TreeNode("Play BGM");
+            System.Windows.Forms.TreeNode treeNode46 = new System.Windows.Forms.TreeNode("Fadeout BGM");
+            System.Windows.Forms.TreeNode treeNode47 = new System.Windows.Forms.TreeNode("Play Sound");
+            System.Windows.Forms.TreeNode treeNode48 = new System.Windows.Forms.TreeNode("Stop Sounds");
+            System.Windows.Forms.TreeNode treeNode49 = new System.Windows.Forms.TreeNode("Show Picture");
+            System.Windows.Forms.TreeNode treeNode50 = new System.Windows.Forms.TreeNode("Hide Picture");
+            System.Windows.Forms.TreeNode treeNode51 = new System.Windows.Forms.TreeNode("Flash Screen");
+            System.Windows.Forms.TreeNode treeNode52 = new System.Windows.Forms.TreeNode("Special Effects", new System.Windows.Forms.TreeNode[] {
             treeNode44,
             treeNode45,
             treeNode46,
             treeNode47,
             treeNode48,
             treeNode49,
-            treeNode50});
-            System.Windows.Forms.TreeNode treeNode52 = new System.Windows.Forms.TreeNode("Start Quest");
-            System.Windows.Forms.TreeNode treeNode53 = new System.Windows.Forms.TreeNode("Complete Quest Task");
-            System.Windows.Forms.TreeNode treeNode54 = new System.Windows.Forms.TreeNode("End Quest");
-            System.Windows.Forms.TreeNode treeNode55 = new System.Windows.Forms.TreeNode("Random Quest from List");
-            System.Windows.Forms.TreeNode treeNode56 = new System.Windows.Forms.TreeNode("Open Quest Board");
-            System.Windows.Forms.TreeNode treeNode57 = new System.Windows.Forms.TreeNode("Quest Control", new System.Windows.Forms.TreeNode[] {
-            treeNode52,
+            treeNode50,
+            treeNode51});
+            System.Windows.Forms.TreeNode treeNode53 = new System.Windows.Forms.TreeNode("Start Quest");
+            System.Windows.Forms.TreeNode treeNode54 = new System.Windows.Forms.TreeNode("Complete Quest Task");
+            System.Windows.Forms.TreeNode treeNode55 = new System.Windows.Forms.TreeNode("End Quest");
+            System.Windows.Forms.TreeNode treeNode56 = new System.Windows.Forms.TreeNode("Random Quest from List");
+            System.Windows.Forms.TreeNode treeNode57 = new System.Windows.Forms.TreeNode("Open Quest Board");
+            System.Windows.Forms.TreeNode treeNode58 = new System.Windows.Forms.TreeNode("Quest Control", new System.Windows.Forms.TreeNode[] {
             treeNode53,
             treeNode54,
             treeNode55,
-            treeNode56});
-            System.Windows.Forms.TreeNode treeNode58 = new System.Windows.Forms.TreeNode("Wait...");
-            System.Windows.Forms.TreeNode treeNode59 = new System.Windows.Forms.TreeNode("Etc", new System.Windows.Forms.TreeNode[] {
-            treeNode58});
-            System.Windows.Forms.TreeNode treeNode60 = new System.Windows.Forms.TreeNode("Open Bank");
-            System.Windows.Forms.TreeNode treeNode61 = new System.Windows.Forms.TreeNode("Open Shop");
-            System.Windows.Forms.TreeNode treeNode62 = new System.Windows.Forms.TreeNode("Open Crafting Station");
-            System.Windows.Forms.TreeNode treeNode63 = new System.Windows.Forms.TreeNode("Shop and Bank", new System.Windows.Forms.TreeNode[] {
-            treeNode60,
+            treeNode56,
+            treeNode57});
+            System.Windows.Forms.TreeNode treeNode59 = new System.Windows.Forms.TreeNode("Wait...");
+            System.Windows.Forms.TreeNode treeNode60 = new System.Windows.Forms.TreeNode("Etc", new System.Windows.Forms.TreeNode[] {
+            treeNode59});
+            System.Windows.Forms.TreeNode treeNode61 = new System.Windows.Forms.TreeNode("Open Bank");
+            System.Windows.Forms.TreeNode treeNode62 = new System.Windows.Forms.TreeNode("Open Shop");
+            System.Windows.Forms.TreeNode treeNode63 = new System.Windows.Forms.TreeNode("Open Crafting Station");
+            System.Windows.Forms.TreeNode treeNode64 = new System.Windows.Forms.TreeNode("Shop and Bank", new System.Windows.Forms.TreeNode[] {
             treeNode61,
-            treeNode62});
-            System.Windows.Forms.TreeNode treeNode64 = new System.Windows.Forms.TreeNode("Create Guild");
-            System.Windows.Forms.TreeNode treeNode65 = new System.Windows.Forms.TreeNode("Disband Guild");
-            System.Windows.Forms.TreeNode treeNode66 = new System.Windows.Forms.TreeNode("Open Guild Bank");
-            System.Windows.Forms.TreeNode treeNode67 = new System.Windows.Forms.TreeNode("Set Guild Bank Slots Count");
-            System.Windows.Forms.TreeNode treeNode68 = new System.Windows.Forms.TreeNode("Guilds", new System.Windows.Forms.TreeNode[] {
-            treeNode64,
+            treeNode62,
+            treeNode63});
+            System.Windows.Forms.TreeNode treeNode65 = new System.Windows.Forms.TreeNode("Create Guild");
+            System.Windows.Forms.TreeNode treeNode66 = new System.Windows.Forms.TreeNode("Disband Guild");
+            System.Windows.Forms.TreeNode treeNode67 = new System.Windows.Forms.TreeNode("Open Guild Bank");
+            System.Windows.Forms.TreeNode treeNode68 = new System.Windows.Forms.TreeNode("Set Guild Bank Slots Count");
+            System.Windows.Forms.TreeNode treeNode69 = new System.Windows.Forms.TreeNode("Guilds", new System.Windows.Forms.TreeNode[] {
             treeNode65,
             treeNode66,
-            treeNode67});
+            treeNode67,
+            treeNode68});
             this.lblName = new System.Windows.Forms.Label();
             this.txtEventname = new DarkUI.Controls.DarkTextBox();
             this.grpEntityOptions = new DarkUI.Controls.DarkGroupBox();
@@ -180,14 +182,6 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.chkDisableInspector = new DarkUI.Controls.DarkCheckBox();
             this.cmbPreviewFace = new DarkUI.Controls.DarkComboBox();
             this.lblFace = new System.Windows.Forms.Label();
-            this.grpTriggers = new DarkUI.Controls.DarkGroupBox();
-            this.cmbVariable = new DarkUI.Controls.DarkComboBox();
-            this.lblVariableTrigger = new System.Windows.Forms.Label();
-            this.txtCommand = new DarkUI.Controls.DarkTextBox();
-            this.lblCommand = new System.Windows.Forms.Label();
-            this.lblTriggerVal = new System.Windows.Forms.Label();
-            this.cmbTriggerVal = new DarkUI.Controls.DarkComboBox();
-            this.cmbTrigger = new DarkUI.Controls.DarkComboBox();
             this.grpPreview = new DarkUI.Controls.DarkGroupBox();
             this.lblAnimation = new System.Windows.Forms.Label();
             this.cmbAnimation = new DarkUI.Controls.DarkComboBox();
@@ -202,6 +196,14 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.btnSetRoute = new DarkUI.Controls.DarkButton();
             this.lblType = new System.Windows.Forms.Label();
             this.cmbMoveType = new DarkUI.Controls.DarkComboBox();
+            this.grpTriggers = new DarkUI.Controls.DarkGroupBox();
+            this.cmbVariable = new DarkUI.Controls.DarkComboBox();
+            this.lblVariableTrigger = new System.Windows.Forms.Label();
+            this.txtCommand = new DarkUI.Controls.DarkTextBox();
+            this.lblCommand = new System.Windows.Forms.Label();
+            this.lblTriggerVal = new System.Windows.Forms.Label();
+            this.cmbTriggerVal = new DarkUI.Controls.DarkComboBox();
+            this.cmbTrigger = new DarkUI.Controls.DarkComboBox();
             this.grpEventConditions = new DarkUI.Controls.DarkGroupBox();
             this.btnEditConditions = new DarkUI.Controls.DarkButton();
             this.grpNewCommands = new DarkUI.Controls.DarkGroupBox();
@@ -236,9 +238,9 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.grpQuestAnimation.SuspendLayout();
             this.grpExtra.SuspendLayout();
             this.grpInspector.SuspendLayout();
-            this.grpTriggers.SuspendLayout();
             this.grpPreview.SuspendLayout();
             this.grpMovement.SuspendLayout();
+            this.grpTriggers.SuspendLayout();
             this.grpEventConditions.SuspendLayout();
             this.grpNewCommands.SuspendLayout();
             this.grpEventCommands.SuspendLayout();
@@ -507,139 +509,6 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.lblFace.TabIndex = 9;
             this.lblFace.Text = "Face:";
             // 
-            // grpTriggers
-            // 
-            this.grpTriggers.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.grpTriggers.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpTriggers.Controls.Add(this.cmbVariable);
-            this.grpTriggers.Controls.Add(this.lblVariableTrigger);
-            this.grpTriggers.Controls.Add(this.txtCommand);
-            this.grpTriggers.Controls.Add(this.lblCommand);
-            this.grpTriggers.Controls.Add(this.lblTriggerVal);
-            this.grpTriggers.Controls.Add(this.cmbTriggerVal);
-            this.grpTriggers.Controls.Add(this.cmbTrigger);
-            this.grpTriggers.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpTriggers.Location = new System.Drawing.Point(12, 488);
-            this.grpTriggers.Name = "grpTriggers";
-            this.grpTriggers.Size = new System.Drawing.Size(317, 44);
-            this.grpTriggers.TabIndex = 21;
-            this.grpTriggers.TabStop = false;
-            this.grpTriggers.Text = "Trigger";
-            // 
-            // cmbVariable
-            // 
-            this.cmbVariable.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbVariable.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbVariable.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbVariable.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbVariable.DrawDropdownHoverOutline = false;
-            this.cmbVariable.DrawFocusRectangle = false;
-            this.cmbVariable.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbVariable.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbVariable.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbVariable.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbVariable.FormattingEnabled = true;
-            this.cmbVariable.Items.AddRange(new object[] {
-            "None"});
-            this.cmbVariable.Location = new System.Drawing.Point(181, 13);
-            this.cmbVariable.Name = "cmbVariable";
-            this.cmbVariable.Size = new System.Drawing.Size(130, 21);
-            this.cmbVariable.TabIndex = 14;
-            this.cmbVariable.Text = "None";
-            this.cmbVariable.TextPadding = new System.Windows.Forms.Padding(2);
-            this.cmbVariable.SelectedIndexChanged += new System.EventHandler(this.cmbVariable_SelectedIndexChanged);
-            // 
-            // lblVariableTrigger
-            // 
-            this.lblVariableTrigger.AutoSize = true;
-            this.lblVariableTrigger.Location = new System.Drawing.Point(113, 17);
-            this.lblVariableTrigger.Name = "lblVariableTrigger";
-            this.lblVariableTrigger.Size = new System.Drawing.Size(48, 13);
-            this.lblVariableTrigger.TabIndex = 13;
-            this.lblVariableTrigger.Text = "Variable:";
-            this.lblVariableTrigger.Visible = false;
-            // 
-            // txtCommand
-            // 
-            this.txtCommand.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.txtCommand.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtCommand.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.txtCommand.Location = new System.Drawing.Point(181, 13);
-            this.txtCommand.Name = "txtCommand";
-            this.txtCommand.Size = new System.Drawing.Size(130, 20);
-            this.txtCommand.TabIndex = 12;
-            this.txtCommand.Visible = false;
-            this.txtCommand.TextChanged += new System.EventHandler(this.txtCommand_TextChanged);
-            // 
-            // lblCommand
-            // 
-            this.lblCommand.AutoSize = true;
-            this.lblCommand.Location = new System.Drawing.Point(113, 17);
-            this.lblCommand.Name = "lblCommand";
-            this.lblCommand.Size = new System.Drawing.Size(70, 13);
-            this.lblCommand.TabIndex = 11;
-            this.lblCommand.Text = "/Command: /";
-            this.lblCommand.Visible = false;
-            // 
-            // lblTriggerVal
-            // 
-            this.lblTriggerVal.AutoSize = true;
-            this.lblTriggerVal.Location = new System.Drawing.Point(113, 17);
-            this.lblTriggerVal.Name = "lblTriggerVal";
-            this.lblTriggerVal.Size = new System.Drawing.Size(53, 13);
-            this.lblTriggerVal.TabIndex = 10;
-            this.lblTriggerVal.Text = "Projectile:";
-            this.lblTriggerVal.Visible = false;
-            // 
-            // cmbTriggerVal
-            // 
-            this.cmbTriggerVal.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbTriggerVal.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbTriggerVal.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbTriggerVal.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbTriggerVal.DrawDropdownHoverOutline = false;
-            this.cmbTriggerVal.DrawFocusRectangle = false;
-            this.cmbTriggerVal.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbTriggerVal.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbTriggerVal.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbTriggerVal.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbTriggerVal.FormattingEnabled = true;
-            this.cmbTriggerVal.Items.AddRange(new object[] {
-            "None"});
-            this.cmbTriggerVal.Location = new System.Drawing.Point(181, 13);
-            this.cmbTriggerVal.Name = "cmbTriggerVal";
-            this.cmbTriggerVal.Size = new System.Drawing.Size(130, 21);
-            this.cmbTriggerVal.TabIndex = 9;
-            this.cmbTriggerVal.Text = "None";
-            this.cmbTriggerVal.TextPadding = new System.Windows.Forms.Padding(2);
-            this.cmbTriggerVal.Visible = false;
-            // 
-            // cmbTrigger
-            // 
-            this.cmbTrigger.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbTrigger.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbTrigger.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbTrigger.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbTrigger.DrawDropdownHoverOutline = false;
-            this.cmbTrigger.DrawFocusRectangle = false;
-            this.cmbTrigger.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbTrigger.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbTrigger.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbTrigger.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbTrigger.FormattingEnabled = true;
-            this.cmbTrigger.Items.AddRange(new object[] {
-            "Action Button",
-            "Player Touch",
-            "Autorun",
-            "Projectile Hit"});
-            this.cmbTrigger.Location = new System.Drawing.Point(6, 13);
-            this.cmbTrigger.Name = "cmbTrigger";
-            this.cmbTrigger.Size = new System.Drawing.Size(101, 21);
-            this.cmbTrigger.TabIndex = 2;
-            this.cmbTrigger.Text = "Action Button";
-            this.cmbTrigger.TextPadding = new System.Windows.Forms.Padding(2);
-            this.cmbTrigger.SelectedIndexChanged += new System.EventHandler(this.cmbTrigger_SelectedIndexChanged);
-            // 
             // grpPreview
             // 
             this.grpPreview.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
@@ -867,6 +736,139 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.cmbMoveType.TextPadding = new System.Windows.Forms.Padding(2);
             this.cmbMoveType.SelectedIndexChanged += new System.EventHandler(this.cmbMoveType_SelectedIndexChanged);
             // 
+            // grpTriggers
+            // 
+            this.grpTriggers.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpTriggers.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpTriggers.Controls.Add(this.cmbVariable);
+            this.grpTriggers.Controls.Add(this.lblVariableTrigger);
+            this.grpTriggers.Controls.Add(this.txtCommand);
+            this.grpTriggers.Controls.Add(this.lblCommand);
+            this.grpTriggers.Controls.Add(this.lblTriggerVal);
+            this.grpTriggers.Controls.Add(this.cmbTriggerVal);
+            this.grpTriggers.Controls.Add(this.cmbTrigger);
+            this.grpTriggers.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpTriggers.Location = new System.Drawing.Point(12, 488);
+            this.grpTriggers.Name = "grpTriggers";
+            this.grpTriggers.Size = new System.Drawing.Size(317, 44);
+            this.grpTriggers.TabIndex = 21;
+            this.grpTriggers.TabStop = false;
+            this.grpTriggers.Text = "Trigger";
+            // 
+            // cmbVariable
+            // 
+            this.cmbVariable.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbVariable.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbVariable.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbVariable.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbVariable.DrawDropdownHoverOutline = false;
+            this.cmbVariable.DrawFocusRectangle = false;
+            this.cmbVariable.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbVariable.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbVariable.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbVariable.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbVariable.FormattingEnabled = true;
+            this.cmbVariable.Items.AddRange(new object[] {
+            "None"});
+            this.cmbVariable.Location = new System.Drawing.Point(181, 13);
+            this.cmbVariable.Name = "cmbVariable";
+            this.cmbVariable.Size = new System.Drawing.Size(130, 21);
+            this.cmbVariable.TabIndex = 14;
+            this.cmbVariable.Text = "None";
+            this.cmbVariable.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbVariable.SelectedIndexChanged += new System.EventHandler(this.cmbVariable_SelectedIndexChanged);
+            // 
+            // lblVariableTrigger
+            // 
+            this.lblVariableTrigger.AutoSize = true;
+            this.lblVariableTrigger.Location = new System.Drawing.Point(113, 17);
+            this.lblVariableTrigger.Name = "lblVariableTrigger";
+            this.lblVariableTrigger.Size = new System.Drawing.Size(48, 13);
+            this.lblVariableTrigger.TabIndex = 13;
+            this.lblVariableTrigger.Text = "Variable:";
+            this.lblVariableTrigger.Visible = false;
+            // 
+            // txtCommand
+            // 
+            this.txtCommand.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.txtCommand.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtCommand.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.txtCommand.Location = new System.Drawing.Point(181, 13);
+            this.txtCommand.Name = "txtCommand";
+            this.txtCommand.Size = new System.Drawing.Size(130, 20);
+            this.txtCommand.TabIndex = 12;
+            this.txtCommand.Visible = false;
+            this.txtCommand.TextChanged += new System.EventHandler(this.txtCommand_TextChanged);
+            // 
+            // lblCommand
+            // 
+            this.lblCommand.AutoSize = true;
+            this.lblCommand.Location = new System.Drawing.Point(113, 17);
+            this.lblCommand.Name = "lblCommand";
+            this.lblCommand.Size = new System.Drawing.Size(70, 13);
+            this.lblCommand.TabIndex = 11;
+            this.lblCommand.Text = "/Command: /";
+            this.lblCommand.Visible = false;
+            // 
+            // lblTriggerVal
+            // 
+            this.lblTriggerVal.AutoSize = true;
+            this.lblTriggerVal.Location = new System.Drawing.Point(113, 17);
+            this.lblTriggerVal.Name = "lblTriggerVal";
+            this.lblTriggerVal.Size = new System.Drawing.Size(53, 13);
+            this.lblTriggerVal.TabIndex = 10;
+            this.lblTriggerVal.Text = "Projectile:";
+            this.lblTriggerVal.Visible = false;
+            // 
+            // cmbTriggerVal
+            // 
+            this.cmbTriggerVal.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbTriggerVal.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbTriggerVal.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbTriggerVal.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbTriggerVal.DrawDropdownHoverOutline = false;
+            this.cmbTriggerVal.DrawFocusRectangle = false;
+            this.cmbTriggerVal.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbTriggerVal.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbTriggerVal.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbTriggerVal.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbTriggerVal.FormattingEnabled = true;
+            this.cmbTriggerVal.Items.AddRange(new object[] {
+            "None"});
+            this.cmbTriggerVal.Location = new System.Drawing.Point(181, 13);
+            this.cmbTriggerVal.Name = "cmbTriggerVal";
+            this.cmbTriggerVal.Size = new System.Drawing.Size(130, 21);
+            this.cmbTriggerVal.TabIndex = 9;
+            this.cmbTriggerVal.Text = "None";
+            this.cmbTriggerVal.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbTriggerVal.Visible = false;
+            // 
+            // cmbTrigger
+            // 
+            this.cmbTrigger.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbTrigger.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbTrigger.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbTrigger.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbTrigger.DrawDropdownHoverOutline = false;
+            this.cmbTrigger.DrawFocusRectangle = false;
+            this.cmbTrigger.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbTrigger.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbTrigger.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbTrigger.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbTrigger.FormattingEnabled = true;
+            this.cmbTrigger.Items.AddRange(new object[] {
+            "Action Button",
+            "Player Touch",
+            "Autorun",
+            "Projectile Hit"});
+            this.cmbTrigger.Location = new System.Drawing.Point(6, 13);
+            this.cmbTrigger.Name = "cmbTrigger";
+            this.cmbTrigger.Size = new System.Drawing.Size(101, 21);
+            this.cmbTrigger.TabIndex = 2;
+            this.cmbTrigger.Text = "Action Button";
+            this.cmbTrigger.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbTrigger.SelectedIndexChanged += new System.EventHandler(this.cmbTrigger_SelectedIndexChanged);
+            // 
             // grpEventConditions
             // 
             this.grpEventConditions.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
@@ -1014,120 +1016,123 @@ namespace Intersect.Editor.Forms.Editors.Events
             treeNode31.Name = "resetstatallocations";
             treeNode31.Tag = "57";
             treeNode31.Text = "Reset Stat Point Allocations";
-            treeNode32.Name = "playercontrol";
-            treeNode32.Text = "Player Control";
-            treeNode33.Name = "warpplayer";
-            treeNode33.Tag = "23";
-            treeNode33.Text = "Warp Player";
-            treeNode34.Name = "setmoveroute";
-            treeNode34.Tag = "24";
-            treeNode34.Text = "Set Move Route";
-            treeNode35.Name = "waitmoveroute";
-            treeNode35.Tag = "25";
-            treeNode35.Text = "Wait for Route Completion";
-            treeNode36.Name = "holdplayer";
-            treeNode36.Tag = "26";
-            treeNode36.Text = "Hold Player";
-            treeNode37.Name = "releaseplayer";
-            treeNode37.Tag = "27";
-            treeNode37.Text = "Release Player";
-            treeNode38.Name = "spawnnpc";
-            treeNode38.Tag = "28";
-            treeNode38.Text = "Spawn NPC";
-            treeNode39.Name = "despawnnpcs";
-            treeNode39.Tag = "39";
-            treeNode39.Text = "Despawn NPC";
-            treeNode40.Name = "hideplayer";
-            treeNode40.Tag = "45";
-            treeNode40.Text = "Hide Player";
-            treeNode41.Name = "showplayer";
-            treeNode41.Tag = "46";
-            treeNode41.Text = "Show Player";
-            treeNode42.Name = "movement";
-            treeNode42.Text = "Movement";
-            treeNode43.Name = "playanimation";
-            treeNode43.Tag = "29";
-            treeNode43.Text = "Play Animation";
-            treeNode44.Name = "playbgm";
-            treeNode44.Tag = "30";
-            treeNode44.Text = "Play BGM";
-            treeNode45.Name = "fadeoutbgm";
-            treeNode45.Tag = "31";
-            treeNode45.Text = "Fadeout BGM";
-            treeNode46.Name = "playsound";
-            treeNode46.Tag = "32";
-            treeNode46.Text = "Play Sound";
-            treeNode47.Name = "stopsounds";
-            treeNode47.Tag = "33";
-            treeNode47.Text = "Stop Sounds";
-            treeNode48.Name = "showpicture";
-            treeNode48.Tag = "43";
-            treeNode48.Text = "Show Picture";
-            treeNode49.Name = "hidepicture";
-            treeNode49.Tag = "44";
-            treeNode49.Text = "Hide Picture";
-            treeNode50.Name = "flashscreen";
-            treeNode50.Tag = "58";
-            treeNode50.Text = "Flash Screen";
-            treeNode51.Name = "specialeffects";
-            treeNode51.Text = "Special Effects";
-            treeNode52.Name = "startquest";
-            treeNode52.Tag = "40";
-            treeNode52.Text = "Start Quest";
-            treeNode53.Name = "completequesttask";
-            treeNode53.Tag = "41";
-            treeNode53.Text = "Complete Quest Task";
-            treeNode54.Name = "endquest";
-            treeNode54.Tag = "42";
-            treeNode54.Text = "End Quest";
-            treeNode55.Name = "randomquest";
-            treeNode55.Tag = "59";
-            treeNode55.Text = "Random Quest from List";
-            treeNode56.Name = "openquestboard";
-            treeNode56.Tag = "60";
-            treeNode56.Text = "Open Quest Board";
-            treeNode57.Name = "questcontrol";
-            treeNode57.Text = "Quest Control";
-            treeNode58.Name = "wait";
-            treeNode58.Tag = "34";
-            treeNode58.Text = "Wait...";
-            treeNode59.Name = "etc";
-            treeNode59.Text = "Etc";
-            treeNode60.Name = "openbank";
-            treeNode60.Tag = "35";
-            treeNode60.Text = "Open Bank";
-            treeNode61.Name = "openshop";
-            treeNode61.Tag = "36";
-            treeNode61.Text = "Open Shop";
-            treeNode62.Name = "opencraftingstation";
-            treeNode62.Tag = "37";
-            treeNode62.Text = "Open Crafting Station";
-            treeNode63.Name = "shopandbank";
-            treeNode63.Text = "Shop and Bank";
-            treeNode64.Name = "createguild";
-            treeNode64.Tag = "53";
-            treeNode64.Text = "Create Guild";
-            treeNode65.Name = "disbandguild";
-            treeNode65.Tag = "54";
-            treeNode65.Text = "Disband Guild";
-            treeNode66.Name = "openguildbank";
-            treeNode66.Tag = "55";
-            treeNode66.Text = "Open Guild Bank";
-            treeNode67.Name = "setguildbankslots";
-            treeNode67.Tag = "56";
-            treeNode67.Text = "Set Guild Bank Slots Count";
-            treeNode68.Name = "guilds";
-            treeNode68.Text = "Guilds";
+            treeNode32.Name = "setvehicle";
+            treeNode32.Tag = "61";
+            treeNode32.Text = "Set Vehicle";
+            treeNode33.Name = "playercontrol";
+            treeNode33.Text = "Player Control";
+            treeNode34.Name = "warpplayer";
+            treeNode34.Tag = "23";
+            treeNode34.Text = "Warp Player";
+            treeNode35.Name = "setmoveroute";
+            treeNode35.Tag = "24";
+            treeNode35.Text = "Set Move Route";
+            treeNode36.Name = "waitmoveroute";
+            treeNode36.Tag = "25";
+            treeNode36.Text = "Wait for Route Completion";
+            treeNode37.Name = "holdplayer";
+            treeNode37.Tag = "26";
+            treeNode37.Text = "Hold Player";
+            treeNode38.Name = "releaseplayer";
+            treeNode38.Tag = "27";
+            treeNode38.Text = "Release Player";
+            treeNode39.Name = "spawnnpc";
+            treeNode39.Tag = "28";
+            treeNode39.Text = "Spawn NPC";
+            treeNode40.Name = "despawnnpcs";
+            treeNode40.Tag = "39";
+            treeNode40.Text = "Despawn NPC";
+            treeNode41.Name = "hideplayer";
+            treeNode41.Tag = "45";
+            treeNode41.Text = "Hide Player";
+            treeNode42.Name = "showplayer";
+            treeNode42.Tag = "46";
+            treeNode42.Text = "Show Player";
+            treeNode43.Name = "movement";
+            treeNode43.Text = "Movement";
+            treeNode44.Name = "playanimation";
+            treeNode44.Tag = "29";
+            treeNode44.Text = "Play Animation";
+            treeNode45.Name = "playbgm";
+            treeNode45.Tag = "30";
+            treeNode45.Text = "Play BGM";
+            treeNode46.Name = "fadeoutbgm";
+            treeNode46.Tag = "31";
+            treeNode46.Text = "Fadeout BGM";
+            treeNode47.Name = "playsound";
+            treeNode47.Tag = "32";
+            treeNode47.Text = "Play Sound";
+            treeNode48.Name = "stopsounds";
+            treeNode48.Tag = "33";
+            treeNode48.Text = "Stop Sounds";
+            treeNode49.Name = "showpicture";
+            treeNode49.Tag = "43";
+            treeNode49.Text = "Show Picture";
+            treeNode50.Name = "hidepicture";
+            treeNode50.Tag = "44";
+            treeNode50.Text = "Hide Picture";
+            treeNode51.Name = "flashscreen";
+            treeNode51.Tag = "58";
+            treeNode51.Text = "Flash Screen";
+            treeNode52.Name = "specialeffects";
+            treeNode52.Text = "Special Effects";
+            treeNode53.Name = "startquest";
+            treeNode53.Tag = "40";
+            treeNode53.Text = "Start Quest";
+            treeNode54.Name = "completequesttask";
+            treeNode54.Tag = "41";
+            treeNode54.Text = "Complete Quest Task";
+            treeNode55.Name = "endquest";
+            treeNode55.Tag = "42";
+            treeNode55.Text = "End Quest";
+            treeNode56.Name = "randomquest";
+            treeNode56.Tag = "59";
+            treeNode56.Text = "Random Quest from List";
+            treeNode57.Name = "openquestboard";
+            treeNode57.Tag = "60";
+            treeNode57.Text = "Open Quest Board";
+            treeNode58.Name = "questcontrol";
+            treeNode58.Text = "Quest Control";
+            treeNode59.Name = "wait";
+            treeNode59.Tag = "34";
+            treeNode59.Text = "Wait...";
+            treeNode60.Name = "etc";
+            treeNode60.Text = "Etc";
+            treeNode61.Name = "openbank";
+            treeNode61.Tag = "35";
+            treeNode61.Text = "Open Bank";
+            treeNode62.Name = "openshop";
+            treeNode62.Tag = "36";
+            treeNode62.Text = "Open Shop";
+            treeNode63.Name = "opencraftingstation";
+            treeNode63.Tag = "37";
+            treeNode63.Text = "Open Crafting Station";
+            treeNode64.Name = "shopandbank";
+            treeNode64.Text = "Shop and Bank";
+            treeNode65.Name = "createguild";
+            treeNode65.Tag = "53";
+            treeNode65.Text = "Create Guild";
+            treeNode66.Name = "disbandguild";
+            treeNode66.Tag = "54";
+            treeNode66.Text = "Disband Guild";
+            treeNode67.Name = "openguildbank";
+            treeNode67.Tag = "55";
+            treeNode67.Text = "Open Guild Bank";
+            treeNode68.Name = "setguildbankslots";
+            treeNode68.Tag = "56";
+            treeNode68.Text = "Set Guild Bank Slots Count";
+            treeNode69.Name = "guilds";
+            treeNode69.Text = "Guilds";
             this.lstCommands.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
             treeNode5,
             treeNode13,
-            treeNode32,
-            treeNode42,
-            treeNode51,
-            treeNode57,
-            treeNode59,
-            treeNode63,
-            treeNode68});
+            treeNode33,
+            treeNode43,
+            treeNode52,
+            treeNode58,
+            treeNode60,
+            treeNode64,
+            treeNode69});
             this.lstCommands.Size = new System.Drawing.Size(445, 440);
             this.lstCommands.TabIndex = 2;
             this.lstCommands.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.lstCommands_NodeMouseDoubleClick);
@@ -1435,12 +1440,12 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.grpExtra.PerformLayout();
             this.grpInspector.ResumeLayout(false);
             this.grpInspector.PerformLayout();
-            this.grpTriggers.ResumeLayout(false);
-            this.grpTriggers.PerformLayout();
             this.grpPreview.ResumeLayout(false);
             this.grpPreview.PerformLayout();
             this.grpMovement.ResumeLayout(false);
             this.grpMovement.PerformLayout();
+            this.grpTriggers.ResumeLayout(false);
+            this.grpTriggers.PerformLayout();
             this.grpEventConditions.ResumeLayout(false);
             this.grpNewCommands.ResumeLayout(false);
             this.grpNewCommands.PerformLayout();

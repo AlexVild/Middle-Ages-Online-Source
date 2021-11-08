@@ -2057,6 +2057,29 @@ namespace Intersect.Server.Entities.Events
             player.OpenQuestBoard(QuestBoardBase.Get(command.QuestBoardId));
             callStack.Peek().WaitingForResponse = CommandInstance.EventResponse.QuestBoard;
         }
+
+        //Set Vehicle Command
+        private static void ProcessCommand(
+            SetVehicleCommand command,
+            Player player,
+            Event instance,
+            CommandInstance stackInfo,
+            Stack<CommandInstance> callStack
+        )
+        {
+            player.InVehicle = command.InVehicle;
+            if (player.InVehicle)
+            {
+                player.VehicleSpeed = command.VehicleSpeed;
+                player.VehicleSprite = command.VehicleSprite;
+            } else 
+            {
+                player.VehicleSpeed = 0L;
+                player.VehicleSprite = string.Empty;
+            }
+
+            PacketSender.SendVehiclePacket(player, player.InVehicle, player.VehicleSprite, player.VehicleSpeed);
+        }
     }
 
 }

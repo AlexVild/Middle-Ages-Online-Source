@@ -766,6 +766,10 @@ namespace Intersect.Editor.Forms.Editors.Events
                     tmpCommand = new FlashScreenCommand();
 
                     break;
+                case EventCommandType.SetVehicle:
+                    tmpCommand = new SetVehicleCommand();
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -1392,6 +1396,10 @@ namespace Intersect.Editor.Forms.Editors.Events
                     break;
                 case EventCommandType.FlashScreen:
                     cmdWindow = new EventCommand_FlashScreen((FlashScreenCommand)command, this);
+
+                    break;
+                case EventCommandType.SetVehicle:
+                    cmdWindow = new EventCommand_SetVehicle((SetVehicleCommand)command, this);
 
                     break;
                 default:

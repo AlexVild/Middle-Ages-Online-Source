@@ -254,11 +254,11 @@ namespace Intersect.Server.Entities
         /// </summary>
         [NotMapped] public bool GuildBank;
 
-        public bool InVehicle;
+        public bool InVehicle { get; set; } = false;
 
-        public string VehicleSprite;
+        public string VehicleSprite { get; set; } = string.Empty;
 
-        public long VehicleSpeed;
+        public long VehicleSpeed { get; set; } = 0L;
 
         public static Player FindOnline(Guid id)
         {
@@ -847,6 +847,10 @@ namespace Intersect.Server.Entities
 
             pkt.Guild = Guild?.Name;
             pkt.GuildRank = GuildRank;
+            if (InVehicle && !string.IsNullOrEmpty(VehicleSprite))
+            {
+                pkt.Sprite = VehicleSprite;
+            }
 
             return pkt;
         }
@@ -900,6 +904,7 @@ namespace Intersect.Server.Entities
             CastTarget = null;
 
             //Flag death to the client
+            DestroyVehicle();
             PlayDeathAnimation();
             PacketSender.SendPlayerDeath(this);
 
@@ -944,6 +949,14 @@ namespace Intersect.Server.Entities
             Reset();
             Respawn();
             PacketSender.SendInventory(this);
+        }
+
+        private void DestroyVehicle()
+        {
+            InVehicle = false;
+            VehicleSprite = string.Empty;
+            VehicleSpeed = 0L;
+            PacketSender.SendVehiclePacket(this, InVehicle, VehicleSprite, VehicleSpeed);
         }
 
         public override void ProcessRegen()

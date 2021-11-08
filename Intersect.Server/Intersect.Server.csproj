@@ -554,6 +554,10 @@
     <Compile Include="Migrations\20210903131751_AddDecorToPlayerMigration.designer.cs">
       <DependentUpon>20210903131751_AddDecorToPlayerMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\20211108145352_AddVehicleColumn.cs" />
+    <Compile Include="Migrations\20211108145352_AddVehicleColumn.designer.cs">
+      <DependentUpon>20211108145352_AddVehicleColumn.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.cs" />
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.Designer.cs">
       <DependentUpon>20201222164741_NpcResetRadius.cs</DependentUpon>

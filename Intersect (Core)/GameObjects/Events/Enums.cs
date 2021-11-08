@@ -235,7 +235,7 @@
 
         // Quest lists/board
         RandomQuest,
-        OpenQuestBoard,
+        OpenQuestBoard = 60,
 
         // Vehicles
         SetVehicle,
