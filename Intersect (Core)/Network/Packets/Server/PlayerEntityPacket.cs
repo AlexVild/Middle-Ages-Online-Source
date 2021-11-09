@@ -40,6 +40,15 @@ namespace Intersect.Network.Packets.Server
 
         [Key(30)]
         public int GuildRank { get; set; }
+
+        [Key(31)]
+        public bool InVehicle { get; set; }
+
+        [Key(32)]
+        public string VehicleSprite { get; set; }
+
+        [Key(33)]
+        public long VehicleSpeed { get; set; }
     }
 
 }

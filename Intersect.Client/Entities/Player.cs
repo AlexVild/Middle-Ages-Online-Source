@@ -145,6 +145,12 @@ namespace Intersect.Client.Entities
         /// </summary>
         public GuildMember[] GuildMembers = new GuildMember[0];
 
+        public bool InVehicle = false;
+
+        public string VehicleSprite = string.Empty;
+        
+        public long VehicleSpeed = 0L;
+
         public Player(Guid id, PlayerEntityPacket packet) : base(id, packet)
         {
             for (var i = 0; i < Options.MaxHotbar; i++)
@@ -225,12 +231,10 @@ namespace Intersect.Client.Entities
 
         public override bool Update()
         {
-
             if (Globals.Me == this)
             {
                 HandleInput();
             }
-
 
             if (!IsBusy())
             {
@@ -312,6 +316,9 @@ namespace Intersect.Client.Entities
             CombatTimer = pkt.CombatTimeRemaining + Globals.System.GetTimeMs();
             Guild = pkt.Guild;
             Rank = pkt.GuildRank;
+            InVehicle = pkt.InVehicle;
+            VehicleSprite = pkt.VehicleSprite;
+            VehicleSpeed = pkt.VehicleSpeed;
 
             var playerPacket = (PlayerEntityPacket) packet;
 
@@ -1477,7 +1484,13 @@ namespace Intersect.Client.Entities
                             en.Value.CanBeAttacked())
                         {
                             //ATTACKKKKK!!!
-                            PacketSender.SendAttack(en.Key);
+                            if (!InVehicle)
+                            {
+                                PacketSender.SendAttack(en.Key);
+                            } else if (en.Value is Resource)
+                            {
+                                PacketSender.SendAttack(en.Key);
+                            }
                             AttackTimer = Timing.Global.Ticks / TimeSpan.TicksPerMillisecond + CalculateAttackTime();
 
                             return true;
@@ -1510,7 +1523,10 @@ namespace Intersect.Client.Entities
             }
 
             //Projectile/empty swing for animations
-            PacketSender.SendAttack(Guid.Empty);
+            if (!InVehicle)
+            {
+                PacketSender.SendAttack(Guid.Empty);
+            }
             AttackTimer = Timing.Global.Ticks / TimeSpan.TicksPerMillisecond + CalculateAttackTime();
 
             return true;

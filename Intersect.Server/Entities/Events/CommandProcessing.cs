@@ -2078,7 +2078,7 @@ namespace Intersect.Server.Entities.Events
                 player.VehicleSprite = string.Empty;
             }
 
-            PacketSender.SendVehiclePacket(player, player.InVehicle, player.VehicleSprite, player.VehicleSpeed);
+            PacketSender.SendEntityDataToProximity(player);
         }
     }
 

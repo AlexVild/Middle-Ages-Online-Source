@@ -847,10 +847,9 @@ namespace Intersect.Server.Entities
 
             pkt.Guild = Guild?.Name;
             pkt.GuildRank = GuildRank;
-            if (InVehicle && !string.IsNullOrEmpty(VehicleSprite))
-            {
-                pkt.Sprite = VehicleSprite;
-            }
+            pkt.VehicleSprite = VehicleSprite;
+            pkt.VehicleSpeed = VehicleSpeed;
+            pkt.InVehicle = InVehicle;
 
             return pkt;
         }
@@ -956,7 +955,7 @@ namespace Intersect.Server.Entities
             InVehicle = false;
             VehicleSprite = string.Empty;
             VehicleSpeed = 0L;
-            PacketSender.SendVehiclePacket(this, InVehicle, VehicleSprite, VehicleSpeed);
+            PacketSender.SendEntityDataToProximity(this);
         }
 
         public override void ProcessRegen()
@@ -1536,7 +1535,8 @@ namespace Intersect.Server.Entities
 
         public override bool CanAttack(Entity entity, SpellBase spell)
         {
-            if (InVehicle)
+            // Do not allow spells while in a vehicle
+            if (InVehicle && spell != null)
             {
                 return false;
             }

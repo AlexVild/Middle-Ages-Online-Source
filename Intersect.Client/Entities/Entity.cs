@@ -128,8 +128,6 @@ namespace Intersect.Client.Entities
 
         protected string mTransformedSprite = "";
 
-        protected bool mInVehicle = false;
-
         private long mWalkTimer;
 
         public int[] MyEquipment = new int[Options.EquipmentSlots.Count];
@@ -497,7 +495,13 @@ namespace Intersect.Client.Entities
         //Returns the amount of time required to traverse 1 tile
         public virtual float GetMovementTime()
         {
-            var time = 1000f / (float) (1 + Math.Log(Stat[(int) Stats.Speed] * Options.AgilityMovementSpeedModifier));
+            var speed = Stat[(int)Stats.Speed];
+            if (this is Player player && player.InVehicle)
+            {
+                speed = (int) player.VehicleSpeed;
+            }
+
+            var time = 1000f / (float) (1 + Math.Log(speed * Options.AgilityMovementSpeedModifier));
             if (Blocking)
             {
                 time += time * (float) Options.BlockingSlow;
@@ -679,15 +683,16 @@ namespace Intersect.Client.Entities
 
                         if (anim != null)
                         {
+                            var inVehicle = this is Player player && player.InVehicle;
                             if (EquipmentAnimations[z] != null &&
-                                (EquipmentAnimations[z].MyBase != anim || EquipmentAnimations[z].Disposed()))
+                                (EquipmentAnimations[z].MyBase != anim || EquipmentAnimations[z].Disposed() || inVehicle))
                             {
                                 EquipmentAnimations[z].Dispose();
                                 Animations.Remove(EquipmentAnimations[z]);
                                 EquipmentAnimations[z] = null;
                             }
 
-                            if (EquipmentAnimations[z] == null)
+                            if (EquipmentAnimations[z] == null && !inVehicle)
                             {
                                 EquipmentAnimations[z] = new Animation(anim, true, true, -1, this);
                                 Animations.Add(EquipmentAnimations[z]);
@@ -939,6 +944,12 @@ namespace Intersect.Client.Entities
                 }
             }
 
+            if (this is Player p && p.InVehicle)
+            {
+                sprite = p.VehicleSprite;
+                transformedSprite = sprite;
+            }
+
             if (transformedSprite != TransformedSprite)
             {
                 TransformedSprite = transformedSprite;
@@ -951,8 +962,8 @@ namespace Intersect.Client.Entities
                 MySprite = sprite;
             }
 
-
-            var texture = AnimatedTextures[SpriteAnimation] ?? Texture;
+            AnimatedTextures.TryGetValue(SpriteAnimation, out var texture);
+            texture = texture ?? Texture;
 
             if (texture != null)
             {
@@ -1006,8 +1017,8 @@ namespace Intersect.Client.Entities
                 {
                     if (SpriteAnimation == SpriteAnimations.Normal)
                     {
-                        var attackTime = CalculateAttackTime();
-                        if (AttackTimer - CalculateAttackTime() / 2 > Timing.Global.Ticks / TimeSpan.TicksPerMillisecond || Blocking)
+                        bool inAction = AttackTimer - CalculateAttackTime() / 2 > Timing.Global.Ticks / TimeSpan.TicksPerMillisecond || Blocking;
+                        if (inAction && !(this is Player play && play.InVehicle))
                         {
                             srcRectangle = new FloatRect(
                                 Options.Instance.Sprites.NormalSheetAttackFrame * (int)texture.GetWidth() / SpriteFrames, d * (int)texture.GetHeight() / Options.Instance.Sprites.Directions,
@@ -1046,6 +1057,11 @@ namespace Intersect.Client.Entities
 
                     //Don't render the paperdolls if they have transformed.
                     var notTransformed = sprite == MySprite && Equipment.Length == Options.EquipmentSlots.Count;
+
+                    if (this is Player pl && pl.InVehicle)
+                    {
+                        notTransformed = false;
+                    }
 
                     //Check for player
                     if (paperdoll == "Player")

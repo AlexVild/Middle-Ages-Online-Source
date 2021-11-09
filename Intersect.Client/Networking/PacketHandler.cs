@@ -2245,20 +2245,6 @@ namespace Intersect.Client.Networking
             }
         }
 
-        // Vehicle packet
-        public void HandlePacket(IPacketSender packetSender, VehiclePacket packet)
-        {
-            if (Globals.Me == null) return;
-
-            if (packet.InVehicle)
-            {
-                Globals.Me.TransformedSprite = packet.VehicleSprite;
-            } else
-            {
-                Globals.Me.TransformedSprite = string.Empty;
-            }
-        }
-
         //DestroyConditionPacket
         public void HandlePacket(IPacketSender packetSender, DestroyConditionPacket packet)
         {

@@ -330,7 +330,12 @@ namespace Intersect.Client.Interface.Game.Hotbar
                 }
             }
 
-            if (updateDisplay) //Item on cd and fade is incorrect
+            if (Globals.Me.InVehicle != mIsFaded)
+            {
+                updateDisplay = true;
+            }
+
+            if (updateDisplay) //Item on cd and/or fade is incorrect
             {
                 if (mCurrentItem != null)
                 {
@@ -423,6 +428,11 @@ namespace Intersect.Client.Interface.Game.Hotbar
                     EquipPanel.IsHidden = true;
                     EquipLabel.IsHidden = true;
                     mCooldownLabel.IsHidden = true;
+                }
+
+                if (Globals.Me.InVehicle)
+                {
+                    mIsFaded = true;
                 }
 
                 if (mIsFaded)

@@ -1158,7 +1158,6 @@ namespace Intersect.Server.Networking
 
             player.ClientAttackTimer = clientTime + (long) player.CalculateAttackTime();
 
-            //Fire projectile instead if weapon has it
             if (Options.WeaponIndex > -1)
             {
                 if (player.Equipment[Options.WeaponIndex] >= 0 &&
