@@ -8,11 +8,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Intersect Client")]
-[assembly: AssemblyDescription("Game Client - Part of the Intersect 2D Game Creation Suite")]
-[assembly: AssemblyProduct("Intersect Game Engine")]
-[assembly: AssemblyCompany("Ascension Game Development")]
-[assembly: AssemblyCopyright("Copyright © Ascension Game Dev 2020")]
+[assembly: AssemblyTitle("Middle Ages Online")]
+[assembly: AssemblyDescription("MAO Game Client")]
+[assembly: AssemblyProduct("Middle Ages Online")]
+[assembly: AssemblyCompany("Sloane Games")]
+[assembly: AssemblyCopyright("Copyright © Sloane Games 2021")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCulture("")]
 [assembly: AssemblyTrademark("")]
