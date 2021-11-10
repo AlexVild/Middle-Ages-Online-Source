@@ -63,6 +63,8 @@ namespace Intersect.Client.Framework.Database
             LeftClickTarget = LoadPreference("LeftClickTarget", false);
             TargetAccountDirection = LoadPreference("TargetAccountDirection", false);
             StickyTarget = LoadPreference("StickyTarget", true);
+            CombatShake = LoadPreference("CombatShake", true);
+            CombatFlash = LoadPreference("CombatFlash", true);
         }
 
         public virtual void SavePreferences()
@@ -78,6 +80,8 @@ namespace Intersect.Client.Framework.Database
             SavePreference("TapToTurn", TapToTurn.ToString());
             SavePreference("FaceOnLock", FaceOnLock.ToString());
             SavePreference("LeftClickTarget", LeftClickTarget.ToString());
+            SavePreference("CombatShake", FaceOnLock.ToString());
+            SavePreference("CombatFlash", LeftClickTarget.ToString());
         }
 
         public abstract bool LoadConfig();
