@@ -309,7 +309,12 @@ namespace Intersect.Editor.Localization
         public static string GetEventConditionalDesc(EquipmentInSlotCondition condition)
         {
             var equipment = new EquipmentOptions();
-            return Strings.EventConditionDesc.equippedwithtag.ToString(equipment.Slots[condition.slot]);
+            return Strings.EventConditionDesc.equipinslot.ToString(equipment.Slots[condition.slot]);
+        }
+
+        public static string GetEventConditionalDesc(InVehicleCondition condition)
+        {
+            return Strings.EventConditionDesc.invehicle;
         }
 
         public static string GetVariableComparisonString(VariableCompaison comparison)
@@ -2120,6 +2125,7 @@ Tick timer saved in server config.json.";
                 {21, @"Has item with tag..." },
                 {22, @"Item equipped with tag..." },
                 {23, @"Has something equipped in slot..." },
+                {24, @"Is in vehicle"},
             };
 
             public static LocalizedString endrange = @"End Range:";
@@ -2372,6 +2378,9 @@ Tick timer saved in server config.json.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString equipinslot = @"Player has item equipped in {00} slot";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString invehicle = @"Player is in vehicle";
 
             public static Dictionary<int, LocalizedString> selfswitches = new Dictionary<int, LocalizedString>
             {

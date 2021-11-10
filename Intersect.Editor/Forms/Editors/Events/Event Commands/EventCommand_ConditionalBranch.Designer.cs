@@ -31,6 +31,9 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private void InitializeComponent()
         {
             this.grpConditional = new DarkUI.Controls.DarkGroupBox();
+            this.grpEquipmentSlot = new DarkUI.Controls.DarkGroupBox();
+            this.lblSlot = new System.Windows.Forms.Label();
+            this.cmbSlots = new DarkUI.Controls.DarkComboBox();
             this.grpTag = new DarkUI.Controls.DarkGroupBox();
             this.chkTagBank = new DarkUI.Controls.DarkCheckBox();
             this.lblTag = new System.Windows.Forms.Label();
@@ -140,10 +143,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.rdoManual = new DarkUI.Controls.DarkRadioButton();
             this.cmbItem = new DarkUI.Controls.DarkComboBox();
             this.lblItem = new System.Windows.Forms.Label();
-            this.grpEquipmentSlot = new DarkUI.Controls.DarkGroupBox();
-            this.lblSlot = new System.Windows.Forms.Label();
-            this.cmbSlots = new DarkUI.Controls.DarkComboBox();
             this.grpConditional.SuspendLayout();
+            this.grpEquipmentSlot.SuspendLayout();
             this.grpTag.SuspendLayout();
             this.grpMapZoneType.SuspendLayout();
             this.grpInGuild.SuspendLayout();
@@ -171,7 +172,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpManualAmount.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudItemAmount)).BeginInit();
             this.grpAmountType.SuspendLayout();
-            this.grpEquipmentSlot.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpConditional
@@ -209,6 +209,50 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpConditional.TabIndex = 17;
             this.grpConditional.TabStop = false;
             this.grpConditional.Text = "Conditional";
+            // 
+            // grpEquipmentSlot
+            // 
+            this.grpEquipmentSlot.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.grpEquipmentSlot.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpEquipmentSlot.Controls.Add(this.lblSlot);
+            this.grpEquipmentSlot.Controls.Add(this.cmbSlots);
+            this.grpEquipmentSlot.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpEquipmentSlot.Location = new System.Drawing.Point(7, 45);
+            this.grpEquipmentSlot.Name = "grpEquipmentSlot";
+            this.grpEquipmentSlot.Size = new System.Drawing.Size(262, 55);
+            this.grpEquipmentSlot.TabIndex = 61;
+            this.grpEquipmentSlot.TabStop = false;
+            this.grpEquipmentSlot.Text = "Equipment Slot:";
+            this.grpEquipmentSlot.Visible = false;
+            // 
+            // lblSlot
+            // 
+            this.lblSlot.AutoSize = true;
+            this.lblSlot.Location = new System.Drawing.Point(6, 21);
+            this.lblSlot.Name = "lblSlot";
+            this.lblSlot.Size = new System.Drawing.Size(28, 13);
+            this.lblSlot.TabIndex = 5;
+            this.lblSlot.Text = "Slot:";
+            // 
+            // cmbSlots
+            // 
+            this.cmbSlots.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbSlots.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbSlots.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbSlots.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbSlots.DrawDropdownHoverOutline = false;
+            this.cmbSlots.DrawFocusRectangle = false;
+            this.cmbSlots.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbSlots.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbSlots.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbSlots.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbSlots.FormattingEnabled = true;
+            this.cmbSlots.Location = new System.Drawing.Point(92, 18);
+            this.cmbSlots.Name = "cmbSlots";
+            this.cmbSlots.Size = new System.Drawing.Size(162, 21);
+            this.cmbSlots.TabIndex = 3;
+            this.cmbSlots.Text = null;
+            this.cmbSlots.TextPadding = new System.Windows.Forms.Padding(2);
             // 
             // grpTag
             // 
@@ -1783,50 +1827,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.lblItem.TabIndex = 2;
             this.lblItem.Text = "Item:";
             // 
-            // grpEquipmentSlot
-            // 
-            this.grpEquipmentSlot.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.grpEquipmentSlot.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpEquipmentSlot.Controls.Add(this.lblSlot);
-            this.grpEquipmentSlot.Controls.Add(this.cmbSlots);
-            this.grpEquipmentSlot.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpEquipmentSlot.Location = new System.Drawing.Point(7, 45);
-            this.grpEquipmentSlot.Name = "grpEquipmentSlot";
-            this.grpEquipmentSlot.Size = new System.Drawing.Size(262, 55);
-            this.grpEquipmentSlot.TabIndex = 61;
-            this.grpEquipmentSlot.TabStop = false;
-            this.grpEquipmentSlot.Text = "Equipment Slot:";
-            this.grpEquipmentSlot.Visible = false;
-            // 
-            // lblSlot
-            // 
-            this.lblSlot.AutoSize = true;
-            this.lblSlot.Location = new System.Drawing.Point(6, 21);
-            this.lblSlot.Name = "lblSlot";
-            this.lblSlot.Size = new System.Drawing.Size(28, 13);
-            this.lblSlot.TabIndex = 5;
-            this.lblSlot.Text = "Slot:";
-            // 
-            // cmbSlots
-            // 
-            this.cmbSlots.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbSlots.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbSlots.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbSlots.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbSlots.DrawDropdownHoverOutline = false;
-            this.cmbSlots.DrawFocusRectangle = false;
-            this.cmbSlots.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbSlots.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbSlots.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbSlots.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbSlots.FormattingEnabled = true;
-            this.cmbSlots.Location = new System.Drawing.Point(92, 18);
-            this.cmbSlots.Name = "cmbSlots";
-            this.cmbSlots.Size = new System.Drawing.Size(162, 21);
-            this.cmbSlots.TabIndex = 3;
-            this.cmbSlots.Text = null;
-            this.cmbSlots.TextPadding = new System.Windows.Forms.Padding(2);
-            // 
             // EventCommandConditionalBranch
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1838,6 +1838,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.Size = new System.Drawing.Size(285, 345);
             this.grpConditional.ResumeLayout(false);
             this.grpConditional.PerformLayout();
+            this.grpEquipmentSlot.ResumeLayout(false);
+            this.grpEquipmentSlot.PerformLayout();
             this.grpTag.ResumeLayout(false);
             this.grpTag.PerformLayout();
             this.grpMapZoneType.ResumeLayout(false);
@@ -1887,8 +1889,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             ((System.ComponentModel.ISupportInitialize)(this.nudItemAmount)).EndInit();
             this.grpAmountType.ResumeLayout(false);
             this.grpAmountType.PerformLayout();
-            this.grpEquipmentSlot.ResumeLayout(false);
-            this.grpEquipmentSlot.PerformLayout();
             this.ResumeLayout(false);
 
         }

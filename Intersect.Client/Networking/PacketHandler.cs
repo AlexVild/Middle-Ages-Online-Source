@@ -2213,12 +2213,12 @@ namespace Intersect.Client.Networking
 
             var someTarget = packet.TargetId != null && packet.TargetId != Guid.Empty && Globals.Entities.ContainsKey(packet.TargetId);
 
-            if (Graphics.CurrentShake < packet.ShakeAmount && packet.ShakeAmount > 0.0f)
+            if (Graphics.CurrentShake < packet.ShakeAmount && packet.ShakeAmount > 0.0f && Globals.Database.CombatShake)
             {
                 Graphics.CurrentShake = packet.ShakeAmount;
             }
             
-            if (packet.FlashColor != null)
+            if (packet.FlashColor != null && Globals.Database.CombatFlash)
             {
                 Flash.FlashScreen(packet.FlashDuration, packet.FlashColor, packet.FlashIntensity);
             }

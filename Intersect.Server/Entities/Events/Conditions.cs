@@ -547,6 +547,16 @@ namespace Intersect.Server.Entities.Events
             return false;
         }
 
+        public static bool MeetsCondition(
+            InVehicleCondition condition,
+            Player player,
+            Event eventInstance,
+            QuestBase questBase
+        )
+        {
+            return player.InVehicle;
+        }
+
         //Variable Comparison Processing
 
         public static bool CheckVariableComparison(

@@ -14,6 +14,10 @@ namespace Intersect.Client.Framework.Database
 
         public bool FaceOnLock;
 
+        public bool CombatFlash;
+
+        public bool CombatShake;
+
         public bool TargetAccountDirection;
 
         //Preferences

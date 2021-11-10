@@ -30,6 +30,10 @@ namespace Intersect.Client.Interface.Shared
         private LabeledCheckBox mFaceTargetOnLock;
         
         private LabeledCheckBox mLeftClickTargetCheckbox;
+        
+        private LabeledCheckBox mCombatFlashCheckbox;
+        
+        private LabeledCheckBox mCombatShakeCheckbox;
 
         private Button mBackBtn;
 
@@ -172,6 +176,16 @@ namespace Intersect.Client.Interface.Shared
             mFaceTargetOnLock = new LabeledCheckBox(mOptionsContainer, "FaceTargetOnLockCheckbox")
             {
                 Text = Strings.Options.faceonlock
+            };
+
+            mCombatFlashCheckbox = new LabeledCheckBox(mOptionsContainer, "CombatFlashCheckbox")
+            {
+                Text = Strings.Options.combatflash
+            };
+
+            mCombatShakeCheckbox = new LabeledCheckBox(mOptionsContainer, "CombatShakeCheckbox")
+            {
+                Text = Strings.Options.combatshake
             };
 
             mEditKeybindingsBtn = new Button(mOptionsContainer, "KeybindingsButton") {Text = Strings.Controls.edit};
@@ -488,6 +502,8 @@ namespace Intersect.Client.Interface.Shared
             mTapToTurnCheckbox.IsChecked = Globals.Database.TapToTurn;
             mFaceTargetOnLock.IsChecked = Globals.Database.FaceOnLock;
             mLeftClickTargetCheckbox.IsChecked = Globals.Database.LeftClickTarget;
+            mCombatFlashCheckbox.IsChecked = Globals.Database.CombatFlash;
+            mCombatShakeCheckbox.IsChecked = Globals.Database.CombatShake;
             mFullscreen.IsChecked = Globals.Database.FullScreen;
             mMusicSlider.Value = Globals.Database.MusicVolume;
             mSoundSlider.Value = Globals.Database.SoundVolume;
@@ -558,6 +574,8 @@ namespace Intersect.Client.Interface.Shared
             Globals.Database.TapToTurn = mTapToTurnCheckbox.IsChecked;
             Globals.Database.FaceOnLock = mFaceTargetOnLock.IsChecked;
             Globals.Database.LeftClickTarget = mLeftClickTargetCheckbox.IsChecked;
+            Globals.Database.CombatShake = mCombatShakeCheckbox.IsChecked;
+            Globals.Database.CombatFlash = mCombatFlashCheckbox.IsChecked;
 
             if (Globals.Database.FullScreen != mFullscreen.IsChecked)
             {

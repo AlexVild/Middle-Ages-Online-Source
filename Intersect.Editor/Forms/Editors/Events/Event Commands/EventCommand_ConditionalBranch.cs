@@ -410,6 +410,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     }
 
                     break;
+                case ConditionTypes.InVehicle:
+                    Condition = new InVehicleCondition();
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -571,6 +575,9 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     }
 
                     grpEquipmentSlot.Show();
+
+                    break;
+                case ConditionTypes.InVehicle:
 
                     break;
                 default:
@@ -1255,6 +1262,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             cmbSlots.SelectedIndex = condition.slot;
         }
 
+        private void SetupFormValues(InVehicleCondition condition)
+        {
+            // There are no additional parameters for this guy
+        }
+
         #endregion
 
         #region "SaveFormValues"
@@ -1424,6 +1436,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private void SaveFormValues(EquipmentInSlotCondition condition)
         {
             condition.slot = cmbSlots.SelectedIndex;
+        }
+
+        private void SaveFormValues(InVehicleCondition condition)
+        {
+            // Intentionally blank
         }
 
         #endregion

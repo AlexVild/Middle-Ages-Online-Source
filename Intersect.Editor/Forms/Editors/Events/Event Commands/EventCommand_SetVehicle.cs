@@ -51,11 +51,16 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
 
             if (mMyCommand.VehicleSprite != null && cmbSprites.Items.IndexOf(mMyCommand.VehicleSprite) > 0)
             {
-                cmbSprites.SelectedIndex = cmbSprites.Items.IndexOf(mMyCommand.VehicleSprite) - 1;
+                cmbSprites.SelectedIndex = cmbSprites.Items.IndexOf(mMyCommand.VehicleSprite);
             }
             else
             {
                 cmbSprites.SelectedIndex = 0;
+            }
+
+            if (mMyCommand.VehicleSpeed != null)
+            {
+                nudSpeed.Value = mMyCommand.VehicleSpeed;
             }
 
             UpdatePreview();

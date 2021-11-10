@@ -1323,6 +1323,10 @@ namespace Intersect.Client.Localization
             public static LocalizedString faceonlock = @"Face Target on Lock";
             
             public static LocalizedString leftclicktarget = @"Left Click Target";
+            
+            public static LocalizedString combatflash = @"Combat Screen Flashes";
+            
+            public static LocalizedString combatshake = @"Combat Shake";
 
         }
 

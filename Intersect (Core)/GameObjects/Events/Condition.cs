@@ -50,6 +50,8 @@ namespace Intersect.GameObjects.Events
 
         EquipmentInSlot,
 
+        InVehicle,
+
     }
 
     public class Condition
@@ -342,6 +344,11 @@ namespace Intersect.GameObjects.Events
         public override ConditionTypes Type { get; } = ConditionTypes.EquipmentInSlot;
 
         public int slot { get; set; }
+    }
+
+    public class InVehicleCondition : Condition
+    {
+        public override ConditionTypes Type { get; } = ConditionTypes.InVehicle;
     }
 
     public class VariableCompaison
