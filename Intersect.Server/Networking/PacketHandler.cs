@@ -2067,6 +2067,10 @@ namespace Intersect.Server.Networking
             if (packet.AcceptingQuest)
             {
                 player.AcceptQuest(packet.QuestId);
+                if (packet.FromQuestBoard)
+                {
+                    player.CloseQuestBoard();
+                }
             }
             else
             {

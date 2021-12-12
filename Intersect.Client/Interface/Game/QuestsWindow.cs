@@ -36,8 +36,6 @@ namespace Intersect.Client.Interface.Game
 
         private Label mQuestTitle;
 
-        private Label mQuestPoints;
-
         private Label mLifetimeQuestPoints;
 
         private Button mQuitButton;
@@ -50,7 +48,6 @@ namespace Intersect.Client.Interface.Game
             mQuestsWindow = new WindowControl(gameCanvas, Strings.QuestLog.title, false, "QuestsWindow");
             mQuestsWindow.DisableResizing();
 
-            mQuestPoints = new Label(mQuestsWindow, "QuestPointLabel");
             mLifetimeQuestPoints = new Label(mQuestsWindow, "LifetimeQuestPointLabel");
 
             mQuestList = new ListBox(mQuestsWindow, "QuestList");
@@ -116,7 +113,6 @@ namespace Intersect.Client.Interface.Game
                 return;
             }
 
-            mQuestPoints.SetText(Strings.QuestLog.questpoints.ToString(Globals.Me.QuestPoints));
             mLifetimeQuestPoints.SetText(Strings.QuestLog.lifetimequestpoints.ToString(Globals.Me.LifetimeQuestPoints));
 
             if (mSelectedQuest != null)
@@ -304,7 +300,6 @@ namespace Intersect.Client.Interface.Game
             if (mSelectedQuest == null)
             {
                 mQuestList.Show();
-                mQuestPoints.Show();
                 mLifetimeQuestPoints.Show();
                 mQuestTitle.Hide();
                 mQuestDescArea.Hide();
@@ -436,7 +431,6 @@ namespace Intersect.Client.Interface.Game
                 mQuestStatus.Show();
                 mBackButton.Show();
                 mQuitButton.Show();
-                mQuestPoints.Hide();
                 mLifetimeQuestPoints.Hide();
             }
         }

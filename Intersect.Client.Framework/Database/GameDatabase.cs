@@ -80,8 +80,8 @@ namespace Intersect.Client.Framework.Database
             SavePreference("TapToTurn", TapToTurn.ToString());
             SavePreference("FaceOnLock", FaceOnLock.ToString());
             SavePreference("LeftClickTarget", LeftClickTarget.ToString());
-            SavePreference("CombatShake", FaceOnLock.ToString());
-            SavePreference("CombatFlash", LeftClickTarget.ToString());
+            SavePreference("CombatShake", CombatShake.ToString());
+            SavePreference("CombatFlash", CombatFlash.ToString());
         }
 
         public abstract bool LoadConfig();
