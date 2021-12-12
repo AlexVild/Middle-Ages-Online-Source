@@ -1573,14 +1573,20 @@ namespace Intersect.Server.Entities
             var damageHealth = spellBase.Combat.VitalDiff[(int)Vitals.Health];
             var damageMana = spellBase.Combat.VitalDiff[(int)Vitals.Mana];
 
+            var spellResisted = false;
             if ((spellBase.Combat.Effect != StatusTypes.OnHit || onHitTrigger) &&
                 spellBase.Combat.Effect != StatusTypes.Shield)
             {
-                Attack(
+                spellResisted = Attack(
                     target, damageHealth, damageMana, (DamageType) spellBase.Combat.DamageType,
                     (Stats) spellBase.Combat.ScalingStat, spellBase.Combat.Scaling, spellBase.Combat.CritChance,
-                    spellBase.Combat.CritMultiplier, deadAnimations, aliveAnimations, false
+                    spellBase.Combat.CritMultiplier, deadAnimations, aliveAnimations, spellBase.Combat.Friendly
                 );
+            }
+
+            if (spellResisted)
+            {
+                return; // Do NOT apply additional effects/DoT if the spell was resisted
             }
 
             if (spellBase.Combat.Effect > 0) //Handle status effects
@@ -1743,7 +1749,7 @@ namespace Intersect.Server.Entities
             );
         }
 
-        public void Attack(
+        public bool Attack(
             Entity enemy,
             int baseDamage,
             int secondaryDamage,
@@ -1754,14 +1760,15 @@ namespace Intersect.Server.Entities
             double critMultiplier,
             List<KeyValuePair<Guid, sbyte>> deadAnimations = null,
             List<KeyValuePair<Guid, sbyte>> aliveAnimations = null,
-            bool isAutoAttack = false
+            bool isAutoAttack = false,
+            bool ignoreEvasion = false
         )
         {
             var originalBaseDamage = baseDamage;
             var damagingAttack = baseDamage > 0;
             if (enemy == null)
             {
-                return;
+                return true;
             }
 
             var invulnerable = enemy.CachedStatuses.Any(status => status.Type == StatusTypes.Invulnerable);
@@ -1787,7 +1794,7 @@ namespace Intersect.Server.Entities
                 }
                 else
                 {
-                    baseDamage = Formulas.CalculateDamage(baseDamage, damageType, scalingStat, scaling, critMultiplier, this, enemy);
+                    baseDamage = Formulas.CalculateDamage(baseDamage, damageType, scalingStat, scaling, critMultiplier, this, enemy, ignoreEvasion);
                 }
                 
                 if (baseDamage < 0 && damagingAttack)
@@ -1856,13 +1863,28 @@ namespace Intersect.Server.Entities
                     PacketSender.SendActionMsg(
                         enemy, Strings.Combat.addsymbol + (int) Math.Abs(baseDamage), CustomColors.Combat.Heal
                     );
+                } else if (baseDamage == 0)
+                {
+                    enemy.SendMissedAttackMessage(damageType);
+
+                    // Add the attacker to the Npcs threat table only
+                    if (enemy is Npc enemyNpc)
+                    {
+                        var dmgMap = enemyNpc.DamageMap;
+                        dmgMap.TryGetValue(this, out var damage);
+                        dmgMap[this] = damage + baseDamage;
+
+                        enemyNpc.TryFindNewTarget(Timing.Global.Milliseconds, default, false, this);
+                    }
+
+                    enemy.NotifySwarm(this);
                 }
             }
 
             if (secondaryDamage != 0)
             {
                 secondaryDamage = Formulas.CalculateDamage(
-                    secondaryDamage, damageType, scalingStat, scaling, critMultiplier, this, enemy
+                    secondaryDamage, damageType, scalingStat, scaling, critMultiplier, this, enemy, ignoreEvasion
                 );
 
                 if (secondaryDamage < 0 && damagingAttack && !(enemy is Player))
@@ -1969,6 +1991,32 @@ namespace Intersect.Server.Entities
             if (baseDamage != 0)
             {
                 SendCombatEffects(enemy, isCrit, baseDamage);
+            } else
+            {
+                if (!invulnerable && enemy is Npc) // handle misses
+                {
+                    SendMissedAttackMessage(damageType);
+                }
+            }
+
+            var wasMiss = (originalBaseDamage != 0) && baseDamage == 0;
+            return wasMiss;
+        }
+
+        private void SendMissedAttackMessage(DamageType damageType)
+        {
+            if (this is Player player)
+            {
+                PacketSender.SendPlaySound(player, Options.MissSound);
+
+                if (damageType == DamageType.Physical)
+                {
+                    PacketSender.SendActionMsg(player, Strings.Combat.miss, CustomColors.Combat.Missed);
+                }
+                else
+                {
+                    PacketSender.SendActionMsg(player, Strings.Combat.resist, CustomColors.Combat.Missed);
+                }
             }
         }
 
@@ -2647,7 +2695,10 @@ namespace Intersect.Server.Entities
                 return;
             }
 
-            PlayDeathAnimation();
+            if (dropItems)
+            {
+                PlayDeathAnimation();
+            }
 
             // Run events and other things.
             killer?.KilledEntity(this);

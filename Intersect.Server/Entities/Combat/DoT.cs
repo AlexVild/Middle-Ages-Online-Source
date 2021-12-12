@@ -114,7 +114,7 @@ namespace Intersect.Server.Entities.Combat
                 Target, damageHealth, damageMana,
                 (DamageType) SpellBase.Combat.DamageType, (Stats) SpellBase.Combat.ScalingStat,
                 SpellBase.Combat.Scaling, SpellBase.Combat.CritChance, SpellBase.Combat.CritMultiplier, deadAnimations,
-                aliveAnimations, false
+                aliveAnimations, false, true
             );
 
             mInterval = Globals.Timing.Milliseconds + SpellBase.Combat.HotDotInterval;

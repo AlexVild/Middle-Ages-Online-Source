@@ -113,11 +113,11 @@ namespace Intersect.Editor.Forms.Editors
                 cmbScalingStat.Items.Add(Globals.GetStatName(x));
             }
 
-            nudStr.Maximum = Options.MaxStatValue;
-            nudMag.Maximum = Options.MaxStatValue;
-            nudDef.Maximum = Options.MaxStatValue;
-            nudMR.Maximum = Options.MaxStatValue;
-            nudSpd.Maximum = Options.MaxStatValue;
+            nudStr.Maximum = Options.MaxNpcStat;
+            nudMag.Maximum = Options.MaxNpcStat;
+            nudDef.Maximum = Options.MaxNpcStat;
+            nudMR.Maximum = Options.MaxNpcStat;
+            nudSpd.Maximum = Options.MaxNpcStat;
 
             cmbDeathAnimation.Items.Clear();
             cmbDeathAnimation.Items.Add(Strings.General.none);

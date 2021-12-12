@@ -97,6 +97,8 @@ namespace Intersect
         public static int MaxLoggedinUsers => Instance._maxUsers;
 
         public static int MaxStatValue => Instance.PlayerOpts.MaxStat;
+        
+        public static int MaxNpcStat => Instance.CombatOpts.MaxNpcStat;
 
         public static int MaxLevel => Instance.PlayerOpts.MaxLevel;
 
@@ -203,6 +205,8 @@ namespace Intersect
         public static long ActionMessageTime => Instance.CombatOpts.ActionMessageTime;
         
         public static string PlayerDeathAnimationId => Instance.CombatOpts.PlayerDeathAnimationId;
+        
+        public static string MissSound => Instance.CombatOpts.MissSound;
 
         public static int GameBorderStyle => Instance.MapOpts.GameBorderStyle;
 

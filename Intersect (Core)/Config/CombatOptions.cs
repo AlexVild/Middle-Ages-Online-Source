@@ -14,6 +14,10 @@
 
         public int BaseComboTime = 3000; //3 seconds
 
+        public int MaxNpcStat = 500;
+
+        public string MissSound = "";
+
         public long MPWarningDisplayTime = 2000; //2 seconds
 
         public long HPWarningFadeTime = 2000; //2 seconds
