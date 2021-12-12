@@ -60,9 +60,19 @@ namespace Intersect.Client.Interface.Game
             if (Globals.QuestOffers.Count > 0)
             {
                 mQuestBoardWindow.IsClosable = false;
+                for (var i = 0; i < mQuestListButtons.Count; i++)
+                {
+                    mQuestListButtons[i].Disable();
+                }
+                mCancelButton.Disable();
             } else
             {
                 mQuestBoardWindow.IsClosable = true;
+                for (var i = 0; i < mQuestListButtons.Count; i++)
+                {
+                    mQuestListButtons[i].Enable();
+                }
+                mCancelButton.Enable();
             }
             mQuestBoardWindow.DisableResizing();
         }

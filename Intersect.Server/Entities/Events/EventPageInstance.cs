@@ -836,7 +836,9 @@ namespace Intersect.Server.Entities.Events
             if (MyPage.GivesQuestId != Guid.Empty && MyPage.QuestAnimationId != Guid.Empty)
             {
                 var quest = MyPage.GivesQuestId;
-                questAvailable = (Player.QuestCompleted(quest) && QuestBase.Get(quest).Repeatable) || !(Player.QuestInProgress(quest));
+                var repeatableQuestReady = (Player.QuestCompleted(quest) && QuestBase.Get(quest).Repeatable) && !Player.QuestInProgress(quest);
+                var neverStartedQuest = !Player.QuestCompleted(quest) && !Player.QuestInProgress(quest);
+                questAvailable = repeatableQuestReady || neverStartedQuest;
             }
             return questAvailable;
         }

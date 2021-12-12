@@ -134,10 +134,18 @@ namespace Intersect.Client.Interface.Game
                 Show();
                 if (InQuestBoard())
                 {
-                    mNextQuest.Show();
-                    mPreviousQuest.Show();
-                    mQuestOfferAmount.Show();
-                    mQuestOfferAmount.SetText(Strings.QuestOffer.questamount.ToString(Globals.QuestOfferIndex + 1, Globals.QuestOffers.Count));
+                    if (Globals.QuestOffers.Count > 1)
+                    {
+                        mNextQuest.Show();
+                        mPreviousQuest.Show();
+                        mQuestOfferAmount.Show();
+                        mQuestOfferAmount.SetText(Strings.QuestOffer.questamount.ToString(Globals.QuestOfferIndex + 1, Globals.QuestOffers.Count));
+                    } else
+                    {
+                        mNextQuest.Hide();
+                        mPreviousQuest.Hide();
+                        mQuestOfferAmount.Hide();
+                    }
                     mDeclineButton.SetText(Strings.QuestOffer.backtoboard);
                 } else
                 {
@@ -187,7 +195,7 @@ namespace Intersect.Client.Interface.Game
 
         private bool InQuestBoard()
         {
-            return (Globals.QuestBoard != null && Globals.QuestOffers.Count > 1);
+            return (Globals.QuestBoard != null);
         }
     }
 

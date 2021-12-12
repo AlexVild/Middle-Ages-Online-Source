@@ -5132,7 +5132,7 @@ namespace Intersect.Server.Entities
                 var quest = QuestBase.Get(questId);
                 if (quest != null)
                 {
-                    return true;
+                    return questProgress.TaskProgress >= 0;
                 }
             }
             return false;
