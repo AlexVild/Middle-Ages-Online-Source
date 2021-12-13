@@ -127,6 +127,8 @@ namespace Intersect
         public static int BeardSlot => Instance.PlayerOpts.BeardSlot;
 
         public static int ExtraSlot => Instance.PlayerOpts.ExtraSlot;
+        
+        public static float AmmoRetrieveChance => Instance.PlayerOpts.AmmoRetrieveChance;
 
         public static int WeaponIndex => Instance.EquipmentOpts.WeaponSlot;
 

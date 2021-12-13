@@ -6,6 +6,10 @@ using Intersect.Server.Entities.Combat;
 using Intersect.Server.Entities.Events;
 using Intersect.Server.General;
 using Intersect.Server.Networking;
+using Intersect.Server.Maps;
+using Intersect.Server.Database;
+using Intersect.Enums;
+using Intersect.Utilities;
 
 namespace Intersect.Server.Entities
 {
@@ -59,6 +63,23 @@ namespace Intersect.Server.Entities
         public bool IsAtLocation(Guid mapId, int x, int y, int z)
         {
             return MapId == mapId && X == x && Y == y && Z == z;
+        }
+
+        public void AmmoDrop()
+        {
+            var map = MapInstance.Get(MapId);
+            if (map != null && Parent.Base.AmmoItemId != Guid.Empty && Parent.Owner is Player owner)
+            {
+                if (owner != null)
+                {
+                    var ownerLuck = 1 + owner.GetEquipmentBonusEffect(EffectType.Luck) / 100f;
+                    var randomChance = Randomization.Next(1, 100001);
+                    if (randomChance < (Options.AmmoRetrieveChance * 1000) * ownerLuck)
+                    {
+                        MapInstance.Get(MapId).SpawnItem((int)X, (int)Y, new Item(Parent.Base.AmmoItemId, 1), 1, Parent.Owner.Id);
+                    }
+                }
+            }
         }
 
         public bool HitEntity(Entity en)
