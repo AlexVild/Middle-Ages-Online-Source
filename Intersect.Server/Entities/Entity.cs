@@ -1353,7 +1353,7 @@ namespace Intersect.Server.Entities
 
             if (parentSpell != null && target != null)
             {
-                TryAttack(target, parentSpell);
+                TryAttack(target, parentSpell, (sbyte) projectileDir, true);
             }
 
             var targetPlayer = target as Player;
@@ -1383,11 +1383,20 @@ namespace Intersect.Server.Entities
                 }
             }
 
-            if (parentSpell == null)
+            if (parentSpell == null && parentItem != null)
             {
+                var deadAnimations = new List<KeyValuePair<Guid, sbyte>>();
+                var aliveAnimations = new List<KeyValuePair<Guid, sbyte>>();
+                
+                if (parentItem.AttackAnimationId != Guid.Empty)
+                {
+                    deadAnimations.Add(new KeyValuePair<Guid, sbyte>(parentItem.AttackAnimationId, (sbyte)projectileDir));
+                    aliveAnimations.Add(new KeyValuePair<Guid, sbyte>(parentItem.AttackAnimationId, (sbyte)projectileDir));
+                }
+
                 Attack(
                     target, parentItem.Damage, 0, (DamageType) parentItem.DamageType, (Stats) parentItem.ScalingStat,
-                    parentItem.Scaling, parentItem.CritChance, parentItem.CritMultiplier, null, null, true
+                    parentItem.Scaling, parentItem.CritChance, parentItem.CritMultiplier, deadAnimations, aliveAnimations, true, false, true
                 );
             }
 
@@ -1429,6 +1438,8 @@ namespace Intersect.Server.Entities
         public virtual void TryAttack(
             Entity target,
             SpellBase spellBase,
+            sbyte attackAnimDir = (sbyte)Directions.Up,
+            bool fromProjectile = false,
             bool onHitTrigger = false,
             bool trapTrigger = false
         )
@@ -1543,8 +1554,8 @@ namespace Intersect.Server.Entities
             if (spellBase.HitAnimationId != Guid.Empty &&
                 (spellBase.Combat.Effect != StatusTypes.OnHit || onHitTrigger))
             {
-                deadAnimations.Add(new KeyValuePair<Guid, sbyte>(spellBase.HitAnimationId, (sbyte) Directions.Up));
-                aliveAnimations.Add(new KeyValuePair<Guid, sbyte>(spellBase.HitAnimationId, (sbyte) Directions.Up));
+                deadAnimations.Add(new KeyValuePair<Guid, sbyte>(spellBase.HitAnimationId, attackAnimDir));
+                aliveAnimations.Add(new KeyValuePair<Guid, sbyte>(spellBase.HitAnimationId, attackAnimDir));
             }
 
             var statBuffTime = -1;
@@ -1596,7 +1607,7 @@ namespace Intersect.Server.Entities
                 spellResisted = Attack(
                     target, damageHealth, damageMana, damageType,
                     scalingStat, scaling, critChance,
-                    critMultiplier, deadAnimations, aliveAnimations, spellBase.Combat.Friendly
+                    critMultiplier, deadAnimations, aliveAnimations, false, spellBase.Combat.Friendly, fromProjectile
                 );
             }
 
@@ -1670,11 +1681,11 @@ namespace Intersect.Server.Entities
             }
         }
 
-        private void Animate(Entity target, List<KeyValuePair<Guid, sbyte>> animations)
+        private void Animate(Entity target, List<KeyValuePair<Guid, sbyte>> animations, bool fromProjectile = false)
         {
             foreach (var anim in animations)
             {
-                PacketSender.SendAnimationToProximity(anim.Key, 1, target.Id, target.MapId, 0, 0, anim.Value);
+                PacketSender.SendAnimationToProximity(anim.Key, 1, target.Id, target.MapId, 0, 0, anim.Value, fromProjectile);
             }
         }
 
@@ -1777,7 +1788,8 @@ namespace Intersect.Server.Entities
             List<KeyValuePair<Guid, sbyte>> deadAnimations = null,
             List<KeyValuePair<Guid, sbyte>> aliveAnimations = null,
             bool isAutoAttack = false,
-            bool ignoreEvasion = false
+            bool ignoreEvasion = false,
+            bool fromProjectile = false
         )
         {
             var originalBaseDamage = baseDamage;
@@ -1991,7 +2003,7 @@ namespace Intersect.Server.Entities
                 //Hit him, make him mad and send the vital update.
                 if (aliveAnimations?.Count > 0)
                 {
-                    Animate(enemy, aliveAnimations);
+                    Animate(enemy, aliveAnimations, fromProjectile);
                 }
 
                 //Check for any onhit damage bonus effects!
@@ -2044,7 +2056,7 @@ namespace Intersect.Server.Entities
                 {
                     if (status.Type == StatusTypes.OnHit)
                     {
-                        TryAttack(enemy, status.Spell, true);
+                        TryAttack(enemy, status.Spell, (sbyte) Directions.Up, true);
                         status.RemoveStatus();
                     }
                 }

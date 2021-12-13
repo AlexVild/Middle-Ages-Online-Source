@@ -1163,13 +1163,13 @@ namespace Intersect.Server.Networking
                 if (player.Equipment[Options.WeaponIndex] >= 0 &&
                     ItemBase.Get(player.Items[player.Equipment[Options.WeaponIndex]].ItemId) != null)
                 {
+
                     var weaponItem = ItemBase.Get(player.Items[player.Equipment[Options.WeaponIndex]].ItemId);
 
                     //Check for animation
-                    var attackAnim = ItemBase.Get(player.Items[player.Equipment[Options.WeaponIndex]].ItemId)
-                        .AttackAnimation;
+                    var attackAnim = weaponItem.AttackAnimation;
 
-                    if (attackAnim != null && attackingTile.TryFix())
+                    if (attackAnim != null && attackingTile.TryFix() && weaponItem.ProjectileId == Guid.Empty)
                     {
                         PacketSender.SendAnimationToProximity(
                             attackAnim.Id, -1, player.Id, attackingTile.GetMapId(), attackingTile.GetX(),

@@ -1380,7 +1380,7 @@ namespace Intersect.Client.Networking
                         if (animBase != null)
                         {
                             var animInstance = new Animation(
-                                animBase, false, packet.Direction != -1, -1, Globals.Entities[entityId]
+                                animBase, false, packet.Direction != -1 && !packet.ProjectileHitAnim, -1, Globals.Entities[entityId]
                             );
 
                             if (packet.Direction > -1)
