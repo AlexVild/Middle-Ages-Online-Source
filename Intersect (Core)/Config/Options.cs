@@ -115,7 +115,11 @@ namespace Intersect
         public static int RequestTimeout => Instance.PlayerOpts.RequestTimeout;
 
         public static int TradeRange => Instance.PlayerOpts.TradeRange;
+
+        public static int AttackHealthDivider => Instance.PlayerOpts.AttackHealthDivider;
         
+        public static int AbilityPowerManaDivider => Instance.PlayerOpts.AbilityPowerManaDivider;
+
         public static List<string> DecorSlots => Instance.PlayerOpts.DecorSlots;
 
         public static int HairSlot => Instance.PlayerOpts.HairSlot;

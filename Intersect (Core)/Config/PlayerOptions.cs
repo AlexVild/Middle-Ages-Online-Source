@@ -75,6 +75,15 @@ namespace Intersect.Config
         /// </summary>
         public bool ExpLossFromCurrentExp = true;
 
+        /// <summary>
+        /// The amount to divide strength by when determining its HP bonus 
+        /// </summary>
+        public int AttackHealthDivider = 5;
+
+        /// <summary>
+        /// The amount to divide AP by when determining its HP bonus 
+        /// </summary>
+        public int AbilityPowerManaDivider = 5;
 
         /// <summary>
         /// Contains the slots used during character creation - instead of relating these with equipment.

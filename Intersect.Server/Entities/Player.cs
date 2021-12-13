@@ -1008,6 +1008,7 @@ namespace Intersect.Server.Entities
                 }
             }
 
+            classVital += CalculateVitalStatBonus(vital);
             var baseVital = classVital;
 
             // TODO: Alternate implementation for the loop
@@ -1043,6 +1044,36 @@ namespace Intersect.Server.Entities
             }
 
             return classVital;
+        }
+
+        public int CalculateVitalStatBonus(int vital)
+        {
+            int bonus = 0;
+            if (vital == (int)Vitals.Health)
+            {
+                bonus = GetStatValue(Stats.Attack) / Options.AttackHealthDivider;
+            }
+            if (vital == (int)Vitals.Mana)
+            {
+                bonus = GetStatValue(Stats.AbilityPower) / Options.AbilityPowerManaDivider;
+            }
+            return bonus;
+        }
+
+        public int GetStatValue(Stats stat)
+        {
+            var playerClass = ClassBase.Get(ClassId);
+            var statIncrease = BaseStats[(int)stat];
+            if (playerClass.IncreasePercentage) //% increase per level
+            {
+                statIncrease = (int)(statIncrease * Math.Pow(1 + (double)playerClass.StatIncrease[(int)stat] / 100, Level - 1));
+            }
+            else //Static value increase per level
+            {
+                statIncrease += playerClass.StatIncrease[(int)stat] * (Level - 1);
+            }
+
+            return StatPointAllocations[(int)stat] + statIncrease;
         }
 
         public override int GetMaxVital(Vitals vital)
