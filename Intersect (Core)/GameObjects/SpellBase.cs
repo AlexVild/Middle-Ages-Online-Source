@@ -94,6 +94,9 @@ namespace Intersect.GameObjects
         //Spell Bound
         public bool Bound { get; set; }
 
+        //Spell uses weapon
+        public bool WeaponSpell { get; set; }
+
         //Requirements
         [Column("CastRequirements")]
         [JsonIgnore]

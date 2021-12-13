@@ -198,6 +198,10 @@ namespace Intersect.Server.Entities
         [JsonIgnore]
         public bool HPWarningSent { get; set; } = false;
 
+        [NotMapped]
+        [JsonIgnore]
+        public ItemBase CastingWeapon { get; set; }
+
         /*//Spawn Stuff
         public Guid AlternateSpawnMapId { get; set; }
 
@@ -1452,6 +1456,19 @@ namespace Intersect.Server.Entities
             base.TryAttack(target, projectile, parentSpell, parentItem, projectileDir);
         }
 
+        private ItemBase GetEquippedWeapon()
+        {
+            if (Options.WeaponIndex > -1 &&
+                Options.WeaponIndex < Equipment.Length &&
+                Equipment[Options.WeaponIndex] >= 0)
+            {
+                return ItemBase.Get(Items[Equipment[Options.WeaponIndex]].ItemId);
+            } else
+            {
+                return null;
+            }
+        }
+
         public void TryAttack(Entity target)
         {
             if (CastTime >= Globals.Timing.Milliseconds)
@@ -1480,13 +1497,7 @@ namespace Intersect.Server.Entities
                 return;
             }
 
-            ItemBase weapon = null;
-            if (Options.WeaponIndex > -1 &&
-                Options.WeaponIndex < Equipment.Length &&
-                Equipment[Options.WeaponIndex] >= 0)
-            {
-                weapon = ItemBase.Get(Items[Equipment[Options.WeaponIndex]].ItemId);
-            }
+            ItemBase weapon = GetEquippedWeapon();
 
             //If Entity is resource, check for the correct tool and make sure its not a spell cast.
             if (target is Resource resource)
@@ -4763,7 +4774,9 @@ namespace Intersect.Server.Entities
             if (spellBase == null)
             {
                 return;
-            }            
+            }
+
+            CastingWeapon = GetEquippedWeapon();
 
             switch (spellBase.SpellType)
             {

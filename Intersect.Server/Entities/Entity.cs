@@ -1577,10 +1577,26 @@ namespace Intersect.Server.Entities
             if ((spellBase.Combat.Effect != StatusTypes.OnHit || onHitTrigger) &&
                 spellBase.Combat.Effect != StatusTypes.Shield)
             {
+                var scaling = spellBase.Combat.Scaling;
+                Stats scalingStat = (Stats) spellBase.Combat.ScalingStat;
+                DamageType damageType = (DamageType)spellBase.Combat.DamageType;
+                var critChance = spellBase.Combat.CritChance;
+                var critMultiplier = spellBase.Combat.CritMultiplier;
+
+                if (this is Player player && spellBase.WeaponSpell && player.CastingWeapon != null ) // add on weapon stats if needed
+                {
+                    damageHealth += player.CastingWeapon.Damage;
+                    scaling += player.CastingWeapon.Scaling;
+                    scalingStat = (Stats) player.CastingWeapon.ScalingStat;
+                    damageType = (DamageType) player.CastingWeapon.DamageType;
+                    critChance += player.CastingWeapon.CritChance;
+                    critMultiplier += player.CastingWeapon.CritMultiplier;
+                }
+
                 spellResisted = Attack(
-                    target, damageHealth, damageMana, (DamageType) spellBase.Combat.DamageType,
-                    (Stats) spellBase.Combat.ScalingStat, spellBase.Combat.Scaling, spellBase.Combat.CritChance,
-                    spellBase.Combat.CritMultiplier, deadAnimations, aliveAnimations, spellBase.Combat.Friendly
+                    target, damageHealth, damageMana, damageType,
+                    scalingStat, scaling, critChance,
+                    critMultiplier, deadAnimations, aliveAnimations, spellBase.Combat.Friendly
                 );
             }
 
