@@ -1585,15 +1585,15 @@ namespace Intersect.Server.Entities
             var damageMana = spellBase.Combat.VitalDiff[(int)Vitals.Mana];
 
             var spellResisted = false;
+            var scaling = spellBase.Combat.Scaling;
+            Stats scalingStat = (Stats)spellBase.Combat.ScalingStat;
+            DamageType damageType = (DamageType)spellBase.Combat.DamageType;
+            var critChance = spellBase.Combat.CritChance;
+            var critMultiplier = spellBase.Combat.CritMultiplier;
+
             if ((spellBase.Combat.Effect != StatusTypes.OnHit || onHitTrigger) &&
                 spellBase.Combat.Effect != StatusTypes.Shield)
             {
-                var scaling = spellBase.Combat.Scaling;
-                Stats scalingStat = (Stats) spellBase.Combat.ScalingStat;
-                DamageType damageType = (DamageType)spellBase.Combat.DamageType;
-                var critChance = spellBase.Combat.CritChance;
-                var critMultiplier = spellBase.Combat.CritMultiplier;
-
                 if (this is Player player && spellBase.WeaponSpell && player.CastingWeapon != null ) // add on weapon stats if needed
                 {
                     damageHealth += player.CastingWeapon.Damage;
