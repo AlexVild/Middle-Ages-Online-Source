@@ -126,6 +126,7 @@ namespace Intersect.Editor.Forms.Editors
             this.nudBuffDuration = new DarkUI.Controls.DarkNumericUpDown();
             this.lblBuffDuration = new System.Windows.Forms.Label();
             this.grpDamage = new DarkUI.Controls.DarkGroupBox();
+            this.chkInheritStats = new DarkUI.Controls.DarkCheckBox();
             this.nudCritMultiplier = new DarkUI.Controls.DarkNumericUpDown();
             this.lblCritMultiplier = new System.Windows.Forms.Label();
             this.nudCritChance = new DarkUI.Controls.DarkNumericUpDown();
@@ -975,7 +976,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpCombat.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpCombat.Location = new System.Drawing.Point(3, 513);
             this.grpCombat.Name = "grpCombat";
-            this.grpCombat.Size = new System.Drawing.Size(440, 500);
+            this.grpCombat.Size = new System.Drawing.Size(440, 516);
             this.grpCombat.TabIndex = 39;
             this.grpCombat.TabStop = false;
             this.grpCombat.Text = "Combat Spell";
@@ -1429,7 +1430,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpHotDot.Controls.Add(this.chkHOTDOT);
             this.grpHotDot.Controls.Add(this.lblTick);
             this.grpHotDot.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpHotDot.Location = new System.Drawing.Point(6, 350);
+            this.grpHotDot.Location = new System.Drawing.Point(6, 365);
             this.grpHotDot.Name = "grpHotDot";
             this.grpHotDot.Size = new System.Drawing.Size(194, 135);
             this.grpHotDot.TabIndex = 53;
@@ -1664,6 +1665,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpDamage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpDamage.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpDamage.Controls.Add(this.chkInheritStats);
             this.grpDamage.Controls.Add(this.nudCritMultiplier);
             this.grpDamage.Controls.Add(this.lblCritMultiplier);
             this.grpDamage.Controls.Add(this.nudCritChance);
@@ -1682,10 +1684,20 @@ namespace Intersect.Editor.Forms.Editors
             this.grpDamage.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpDamage.Location = new System.Drawing.Point(6, 19);
             this.grpDamage.Name = "grpDamage";
-            this.grpDamage.Size = new System.Drawing.Size(188, 325);
+            this.grpDamage.Size = new System.Drawing.Size(188, 340);
             this.grpDamage.TabIndex = 49;
             this.grpDamage.TabStop = false;
             this.grpDamage.Text = "Damage";
+            // 
+            // chkInheritStats
+            // 
+            this.chkInheritStats.AutoSize = true;
+            this.chkInheritStats.Location = new System.Drawing.Point(9, 311);
+            this.chkInheritStats.Name = "chkInheritStats";
+            this.chkInheritStats.Size = new System.Drawing.Size(126, 17);
+            this.chkInheritStats.TabIndex = 64;
+            this.chkInheritStats.Text = "Inherit Weapon Stats";
+            this.chkInheritStats.CheckedChanged += new System.EventHandler(this.chkInheritStats_CheckedChanged);
             // 
             // nudCritMultiplier
             // 
@@ -2582,5 +2594,6 @@ namespace Intersect.Editor.Forms.Editors
         private System.Windows.Forms.Label lblHOTDOTenableAnimation;
         private DarkComboBox cmbOverTimeAnimation;
         private System.Windows.Forms.Label lblOTanimationDisclaimer;
+        private DarkCheckBox chkInheritStats;
     }
 }

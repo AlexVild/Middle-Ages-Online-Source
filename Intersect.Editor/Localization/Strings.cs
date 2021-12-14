@@ -4698,6 +4698,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString delete = @"Delete Spell";
 
+            public static LocalizedString inherit = @"Inherit Weapon Stats";
+
             public static LocalizedString deleteprompt =
                 @"Are you sure you want to delete this spell? This action cannot be reverted!";
 

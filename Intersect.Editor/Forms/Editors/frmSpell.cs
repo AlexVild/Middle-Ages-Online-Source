@@ -204,6 +204,7 @@ namespace Intersect.Editor.Forms.Editors
             lblHPDamage.Text = Strings.SpellEditor.hpdamage;
             lblManaDamage.Text = Strings.SpellEditor.mpdamage;
             chkFriendly.Text = Strings.SpellEditor.friendly;
+            chkInheritStats.Text = Strings.SpellEditor.inherit;
             cmbDamageType.Items.Clear();
             for (var i = 0; i < Strings.Combat.damagetypes.Count; i++)
             {
@@ -354,6 +355,7 @@ namespace Intersect.Editor.Forms.Editors
                 nudSpdPercentage.Value = mEditorItem.Combat.PercentageStatDiff[(int) Stats.Speed];
 
                 chkFriendly.Checked = Convert.ToBoolean(mEditorItem.Combat.Friendly);
+                chkInheritStats.Checked = Convert.ToBoolean(mEditorItem.WeaponSpell);
                 cmbDamageType.SelectedIndex = mEditorItem.Combat.DamageType;
                 cmbScalingStat.SelectedIndex = mEditorItem.Combat.ScalingStat;
                 nudScaling.Value = mEditorItem.Combat.Scaling;
@@ -1077,6 +1079,11 @@ namespace Intersect.Editor.Forms.Editors
         {
             Guid animationId = AnimationBase.IdFromList(cmbOverTimeAnimation.SelectedIndex - 1);
             mEditorItem.OverTimeAnimation = AnimationBase.Get(animationId);
+        }
+
+        private void chkInheritStats_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.WeaponSpell = chkInheritStats.Checked;
         }
     }
 
