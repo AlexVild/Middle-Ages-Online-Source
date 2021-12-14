@@ -64,7 +64,7 @@ namespace Intersect.Server.Classes.Maps
                         return;
                     }
 
-                    Owner.TryAttack(entity, ParentSpell, (sbyte) Directions.Up, false, true);
+                    Owner.TryAttackSpell(entity, ParentSpell, out var miss, out var block, (sbyte) Directions.Up, false, true);
                     Triggered = true;
                 }
             }

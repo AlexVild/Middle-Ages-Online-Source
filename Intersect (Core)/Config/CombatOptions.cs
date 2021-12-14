@@ -17,6 +17,8 @@
         public int MaxNpcStat = 500;
 
         public string MissSound = "";
+        
+        public string BlockSound = "";
 
         public long MPWarningDisplayTime = 2000; //2 seconds
 

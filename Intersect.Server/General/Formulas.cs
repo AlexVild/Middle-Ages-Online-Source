@@ -157,14 +157,6 @@ namespace Intersect.Server.General
 
             try
             {
-                if (!ignoreEvasion)
-                {
-                    if (mFormulas.AttackEvaded(baseDamage, damageType, attacker, victim, critMultiplier, scaling, scalingStat))
-                    {
-                        return 0;
-                    }
-                }
-
                 mFormulas.ReadParams(ref expression, baseDamage, attacker, victim, critMultiplier, scaling, scalingStat);
 
                 var result = Convert.ToDouble(expression.Evaluate());
@@ -181,7 +173,7 @@ namespace Intersect.Server.General
             }
         }
 
-        private bool AttackEvaded(int baseDamage, DamageType damageType, Entity attacker, Entity victim, double critMultiplier, int scaling, Stats scalingStat)
+        public static bool AttackEvaded(int baseDamage, DamageType damageType, Entity attacker, Entity victim, double critMultiplier, int scaling, Stats scalingStat)
         {
             var victimsEvasionExpr = damageType == DamageType.Physical ? new Expression(mFormulas.Evasion) : new Expression(mFormulas.Resistance);
             mFormulas.ReadParams(ref victimsEvasionExpr, baseDamage, attacker, victim, critMultiplier, scaling, scalingStat);

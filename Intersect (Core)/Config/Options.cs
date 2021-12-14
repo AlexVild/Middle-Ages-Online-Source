@@ -214,6 +214,8 @@ namespace Intersect
         
         public static string MissSound => Instance.CombatOpts.MissSound;
 
+        public static string BlockSound => Instance.CombatOpts.MissSound;
+
         public static int GameBorderStyle => Instance.MapOpts.GameBorderStyle;
 
         public static bool ZDimensionVisible => Instance.MapOpts.ZDimensionVisible;

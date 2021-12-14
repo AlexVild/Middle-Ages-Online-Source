@@ -1351,9 +1351,11 @@ namespace Intersect.Server.Entities
                 }
             }
 
+            bool parentSpellMissed = false;
             if (parentSpell != null && target != null)
             {
-                TryAttack(target, parentSpell, (sbyte) projectileDir, true);
+                TryAttackSpell(target, parentSpell, out bool spellMissed, out bool spellBlocked, (sbyte) projectileDir, true);
+                parentSpellMissed = spellMissed;
             }
 
             var targetPlayer = target as Player;
@@ -1383,6 +1385,7 @@ namespace Intersect.Server.Entities
                 }
             }
 
+            Dictionary<AttackFailures, bool> attackFailures = new Dictionary<AttackFailures, bool>();
             if (parentSpell == null && parentItem != null)
             {
                 var deadAnimations = new List<KeyValuePair<Guid, sbyte>>();
@@ -1394,10 +1397,15 @@ namespace Intersect.Server.Entities
                     aliveAnimations.Add(new KeyValuePair<Guid, sbyte>(parentItem.AttackAnimationId, (sbyte)projectileDir));
                 }
 
-                Attack(
+                attackFailures = Attack(
                     target, parentItem.Damage, 0, (DamageType) parentItem.DamageType, (Stats) parentItem.ScalingStat,
                     parentItem.Scaling, parentItem.CritChance, parentItem.CritMultiplier, deadAnimations, aliveAnimations, true, false, true
                 );
+            }
+
+            if ((attackFailures.TryGetValue(AttackFailures.MISSED, out var val) && val) || parentSpellMissed)
+            {
+                return; // do not further process the projectile, it missed.
             }
 
             //If projectile, check if a splash spell is applied
@@ -1411,7 +1419,7 @@ namespace Intersect.Server.Entities
                 var s = projectile.Spell;
                 if (s != null)
                 {
-                    HandleAoESpell(projectile.SpellId, s.Combat.HitRadius, target.MapId, target.X, target.Y, null);
+                    HandleAoESpell(projectile.SpellId, s.Combat.HitRadius, target.MapId, target.X, target.Y, null, true);
                 }
 
                 //Check that the npc has not been destroyed by the splash spell
@@ -1435,15 +1443,26 @@ namespace Intersect.Server.Entities
         }
 
         //Attacking with spell
-        public virtual void TryAttack(
+        /* Alex - Okay, so this WAS a `TryAttack` override. I had to add two out vars to it to handle spell missing and blocking
+         * This was ONLY DONE to support the fact that a Projectile with a parent spell would call this method with the parent's spell base,
+         * but then we needed to know the RESULT of the try attack, and I didn't want to rework try attack everywhere to support failures the
+         * same way the Attack() method does, so... now we have _this_. HOWEVER, if we ever DO need to know attack missed/blocked anywhere else,
+         * we can now!
+        */
+        public virtual void TryAttackSpell(
             Entity target,
             SpellBase spellBase,
+            out bool spellMissed,
+            out bool spellBlocked,
             sbyte attackAnimDir = (sbyte)Directions.Up,
             bool fromProjectile = false,
             bool onHitTrigger = false,
             bool trapTrigger = false
         )
         {
+            spellMissed = false;
+            spellBlocked = false;
+
             if (target is Resource)
             {
                 return;
@@ -1584,7 +1603,7 @@ namespace Intersect.Server.Entities
             var damageHealth = spellBase.Combat.VitalDiff[(int)Vitals.Health];
             var damageMana = spellBase.Combat.VitalDiff[(int)Vitals.Mana];
 
-            var spellResisted = false;
+            Dictionary<AttackFailures, bool> attackFailures = new Dictionary<AttackFailures, bool>();
             var scaling = spellBase.Combat.Scaling;
             Stats scalingStat = (Stats)spellBase.Combat.ScalingStat;
             DamageType damageType = (DamageType)spellBase.Combat.DamageType;
@@ -1604,16 +1623,22 @@ namespace Intersect.Server.Entities
                     critMultiplier += player.CastingWeapon.CritMultiplier;
                 }
 
-                spellResisted = Attack(
+                attackFailures = Attack(
                     target, damageHealth, damageMana, damageType,
                     scalingStat, scaling, critChance,
                     critMultiplier, deadAnimations, aliveAnimations, false, spellBase.Combat.Friendly, fromProjectile
                 );
             }
 
-            if (spellResisted)
+            if (attackFailures.TryGetValue(AttackFailures.MISSED, out bool miss) && miss)
             {
-                return; // Do NOT apply additional effects/DoT if the spell was resisted
+                spellMissed = miss;
+                return;
+            }
+            if (attackFailures.TryGetValue(AttackFailures.BLOCKED, out bool blocked) && blocked)
+            {
+                spellBlocked = blocked;
+                // We don't return on a blocked - the spell can still do its status effects
             }
 
             if (spellBase.Combat.Effect > 0) //Handle status effects
@@ -1776,7 +1801,13 @@ namespace Intersect.Server.Entities
             );
         }
 
-        public bool Attack(
+        public enum AttackFailures
+        {
+            BLOCKED,
+            MISSED
+        }
+
+        public Dictionary<AttackFailures, bool> Attack(
             Entity enemy,
             int baseDamage,
             int secondaryDamage,
@@ -1796,7 +1827,7 @@ namespace Intersect.Server.Entities
             var damagingAttack = baseDamage > 0;
             if (enemy == null)
             {
-                return true;
+                return new Dictionary<AttackFailures, bool>();
             }
 
             var invulnerable = enemy.CachedStatuses.Any(status => status.Type == StatusTypes.Invulnerable);
@@ -1813,16 +1844,26 @@ namespace Intersect.Server.Entities
             }
 
             //Calculate Damages
-            if (baseDamage != 0)
+            var attackMissed = false;
+            if (!ignoreEvasion)
             {
+                attackMissed = Formulas.AttackEvaded(baseDamage, damageType, this, enemy, critMultiplier, scaling, scalingStat);
+            }
+            if (!attackMissed)
+            {
+                baseDamage = Formulas.CalculateDamage(baseDamage, damageType, scalingStat, scaling, critMultiplier, this, enemy, ignoreEvasion);
+            }
+            else
+            {
+                baseDamage = 0;
+            }
+            var wasBlocked = (originalBaseDamage != 0 && baseDamage == 0) && !attackMissed;
 
+            if (originalBaseDamage != 0)
+            {
                 if (enemy is Resource)
                 {
                     baseDamage = originalBaseDamage;
-                }
-                else
-                {
-                    baseDamage = Formulas.CalculateDamage(baseDamage, damageType, scalingStat, scaling, critMultiplier, this, enemy, ignoreEvasion);
                 }
                 
                 if (baseDamage < 0 && damagingAttack)
@@ -1891,10 +1932,8 @@ namespace Intersect.Server.Entities
                     PacketSender.SendActionMsg(
                         enemy, Strings.Combat.addsymbol + (int) Math.Abs(baseDamage), CustomColors.Combat.Heal
                     );
-                } else if (baseDamage == 0)
+                } else if (attackMissed || wasBlocked)
                 {
-                    enemy.SendMissedAttackMessage(damageType);
-
                     // Add the attacker to the Npcs threat table only
                     if (enemy is Npc enemyNpc)
                     {
@@ -1909,7 +1948,7 @@ namespace Intersect.Server.Entities
                 }
             }
 
-            if (secondaryDamage != 0)
+            if (secondaryDamage != 0 && !attackMissed)
             {
                 secondaryDamage = Formulas.CalculateDamage(
                     secondaryDamage, damageType, scalingStat, scaling, critMultiplier, this, enemy, ignoreEvasion
@@ -2016,36 +2055,58 @@ namespace Intersect.Server.Entities
                 ((Npc) this).MoveTimer = Globals.Timing.Milliseconds + (long) GetMovementTime();
             }
 
-            if (baseDamage != 0)
+            if (!wasBlocked && !attackMissed && !invulnerable)
             {
                 SendCombatEffects(enemy, isCrit, baseDamage);
-            } else
-            {
-                if (!invulnerable && enemy is Npc) // handle misses
-                {
-                    SendMissedAttackMessage(damageType);
-                }
             }
 
-            var wasMiss = (originalBaseDamage != 0) && baseDamage == 0;
-            return wasMiss;
+            if (wasBlocked)
+            {
+                SendBlockedAttackMessage(this, enemy);
+            }
+            else if (attackMissed)
+            {
+                SendMissedAttackMessage(this, enemy, damageType);
+            }
+
+            var failures = new Dictionary<AttackFailures, bool>();
+            failures.Add(AttackFailures.BLOCKED, wasBlocked);
+            failures.Add(AttackFailures.MISSED, attackMissed);
+            return failures;
         }
 
-        private void SendMissedAttackMessage(DamageType damageType)
+        private void SendMissedAttackMessage(Entity attacker, Entity defender, DamageType damageType)
         {
-            if (this is Player player)
+            if (defender is Player)
             {
-                PacketSender.SendPlaySound(player, Options.MissSound);
-
-                if (damageType == DamageType.Physical)
-                {
-                    PacketSender.SendActionMsg(player, Strings.Combat.miss, CustomColors.Combat.Missed);
-                }
-                else
-                {
-                    PacketSender.SendActionMsg(player, Strings.Combat.resist, CustomColors.Combat.Missed);
-                }
+                PacketSender.SendPlaySound((Player)defender, Options.BlockSound);
             }
+            if (attacker is Player)
+            {
+                PacketSender.SendPlaySound((Player)attacker, Options.BlockSound);
+            }
+            switch(damageType)
+            {
+                case DamageType.Magic:
+                    PacketSender.SendActionMsg(defender, Strings.Combat.resist, CustomColors.Combat.Missed);
+                    break;
+                default:
+                    PacketSender.SendActionMsg(defender, Strings.Combat.miss, CustomColors.Combat.Missed);
+                    break;
+            }
+        }
+
+        private void SendBlockedAttackMessage(Entity attacker, Entity defender)
+        {
+            if (defender is Player)
+            {
+                PacketSender.SendPlaySound((Player) defender, Options.BlockSound);
+            }
+            if (attacker is Player)
+            {
+                PacketSender.SendPlaySound((Player) attacker, Options.BlockSound);
+            }
+            PacketSender.SendActionMsg(defender, Strings.Combat.blocked, CustomColors.Combat.Blocked);
         }
 
         void CheckForOnhitAttack(Entity enemy, bool isAutoAttack)
@@ -2056,7 +2117,7 @@ namespace Intersect.Server.Entities
                 {
                     if (status.Type == StatusTypes.OnHit)
                     {
-                        TryAttack(enemy, status.Spell, (sbyte) Directions.Up, true);
+                        TryAttackSpell(enemy, status.Spell, out bool miss, out bool blocked, (sbyte) Directions.Up, true);
                         status.RemoveStatus();
                     }
                 }
@@ -2254,7 +2315,7 @@ namespace Intersect.Server.Entities
                                 ); //Target Type 1 will be global entity
                             }
 
-                            TryAttack(this, spellBase);
+                            TryAttackSpell(this, spellBase, out bool miss, out bool blocked);
 
                             break;
                         case SpellTargetTypes.Single:
@@ -2281,7 +2342,7 @@ namespace Intersect.Server.Entities
                             }
                             else
                             {
-                                TryAttack(CastTarget, spellBase);
+                                TryAttackSpell(CastTarget, spellBase, out bool spellMissed, out bool spellBlocked);
                             }
 
                             break;
@@ -2398,7 +2459,8 @@ namespace Intersect.Server.Entities
             Guid startMapId,
             int startX,
             int startY,
-            Entity spellTarget
+            Entity spellTarget,
+            bool ignoreEvasion = false
         )
         {
             var spellBase = SpellBase.Get(spellId);
@@ -2430,7 +2492,7 @@ namespace Intersect.Server.Entities
                                             }
                                         }
 
-                                        TryAttack(entity, spellBase); //Handle damage
+                                        TryAttackSpell(entity, spellBase, out bool miss, out bool blocked, (sbyte) Directions.Up, ignoreEvasion); //Handle damage
                                     }
                                 }
                             }
