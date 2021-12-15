@@ -64,6 +64,8 @@
 
         public float MaxDamageShakeDistance = 6.0f;
 
+        public float ShakeDeltaDurationDivider = 150f;
+
         public string GenericDamageGivenSound = "al_give_damage.wav";
 
         public string GenericDamageReceivedSound = "al_take_damage.wav";

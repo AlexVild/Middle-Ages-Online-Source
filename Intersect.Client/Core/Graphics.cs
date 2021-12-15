@@ -69,8 +69,6 @@ namespace Intersect.Client.Core
 
         private static GameRenderTexture sDarknessTexture;
 
-        private static long sFadeTimer;
-
         private static List<LightBase> sLightQueue = new List<LightBase>();
 
         //Player Spotlight Values
@@ -94,6 +92,8 @@ namespace Intersect.Client.Core
         public static float CurrentShake = 0.0f;
 
         private static float mShakeDecrement = 0.12f;
+
+        private static long sLastUpdate;
 
         //Init Functions
         public static void InitGraphics()
@@ -762,11 +762,12 @@ namespace Intersect.Client.Core
                 CurrentShake = 0.0f;
                 CurrentView = new FloatRect(0, 0, Renderer.GetScreenWidth(), Renderer.GetScreenHeight());
                 Renderer.SetView(CurrentView);
-
                 return;
             }
 
-            CurrentShake = Utilities.MathHelper.Clamp(CurrentShake - mShakeDecrement, 0.0f, 100.0f);
+            var shakeReduction = (Globals.System.GetTimeMs() - sLastUpdate) / Options.ShakeDeltaDurationDivider;
+            
+            CurrentShake = Utilities.MathHelper.Clamp(CurrentShake - shakeReduction, 0.0f, 100.0f);
             var yShake = CurrentShake;
             var xShake = CurrentShake;
             if (CurrentShake > 0.0f)
@@ -853,6 +854,7 @@ namespace Intersect.Client.Core
             }
 
             Renderer.SetView(CurrentView);
+            sLastUpdate = Globals.System.GetTimeMs();
         }
 
         //Lighting

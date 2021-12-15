@@ -31,12 +31,6 @@ namespace Intersect.Server.General
         public string TrueDamage =
             "Random(((BaseDamage + (ScalingStat * ScaleFactor))) * CritMultiplier * .975, ((BaseDamage + (ScalingStat * ScaleFactor))) * CritMultiplier * 1.025)";
 
-        public string MagicDamageNoEvasion =
-            "Random(((BaseDamage + (ScalingStat * ScaleFactor))) * CritMultiplier * .975, ((BaseDamage + (ScalingStat * ScaleFactor))) * CritMultiplier * 1.025) * (100 / (100 + V_Defense))";
-
-        public string PhysicalDamageNoEvasion =
-            "Random(((BaseDamage + (ScalingStat * ScaleFactor))) * CritMultiplier * .975, ((BaseDamage + (ScalingStat * ScaleFactor))) * CritMultiplier * 1.025) * (100 / (100 + V_Defense))";
-
         public string Evasion =
             "V_Speed + V_Defense + 20";
 
@@ -76,8 +70,7 @@ namespace Intersect.Server.General
             int scaling,
             double critMultiplier,
             Entity attacker,
-            Entity victim,
-            bool ignoreEvasion
+            Entity victim
         )
         {
             if (mFormulas == null)
@@ -113,23 +106,11 @@ namespace Intersect.Server.General
             switch (damageType)
             {
                 case DamageType.Physical:
-                    if (ignoreEvasion)
-                    {
-                        expressionString = mFormulas.PhysicalDamageNoEvasion;
-                    } else
-                    {
-                        expressionString = mFormulas.PhysicalDamage;
-                    }
+                    expressionString = mFormulas.PhysicalDamage;
 
                     break;
                 case DamageType.Magic:
-                    if (ignoreEvasion)
-                    {
-                        expressionString = mFormulas.MagicDamageNoEvasion;
-                    } else
-                    {
-                        expressionString = mFormulas.MagicDamage;
-                    }
+                    expressionString = mFormulas.MagicDamage;
 
                     break;
                 case DamageType.True:

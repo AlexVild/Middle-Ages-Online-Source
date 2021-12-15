@@ -184,6 +184,8 @@ namespace Intersect
         
         public static float MaxDamageShakeDistance => Instance.CombatOpts.MaxDamageShakeDistance;
         
+        public static float ShakeDeltaDurationDivider => Instance.CombatOpts.ShakeDeltaDurationDivider;
+        
         public static string GenericDamageGivenSound => Instance.CombatOpts.GenericDamageGivenSound;
         
         public static string GenericDamageReceivedSound => Instance.CombatOpts.GenericDamageReceivedSound;

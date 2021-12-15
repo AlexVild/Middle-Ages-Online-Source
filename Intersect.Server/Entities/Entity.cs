@@ -1851,7 +1851,7 @@ namespace Intersect.Server.Entities
             }
             if (!attackMissed)
             {
-                baseDamage = Formulas.CalculateDamage(baseDamage, damageType, scalingStat, scaling, critMultiplier, this, enemy, ignoreEvasion);
+                baseDamage = Formulas.CalculateDamage(baseDamage, damageType, scalingStat, scaling, critMultiplier, this, enemy);
             }
             else
             {
@@ -1951,7 +1951,7 @@ namespace Intersect.Server.Entities
             if (secondaryDamage != 0 && !attackMissed)
             {
                 secondaryDamage = Formulas.CalculateDamage(
-                    secondaryDamage, damageType, scalingStat, scaling, critMultiplier, this, enemy, ignoreEvasion
+                    secondaryDamage, damageType, scalingStat, scaling, critMultiplier, this, enemy
                 );
 
                 if (secondaryDamage < 0 && damagingAttack && !(enemy is Player))
