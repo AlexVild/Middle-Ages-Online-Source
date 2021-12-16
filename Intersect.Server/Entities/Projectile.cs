@@ -316,7 +316,10 @@ namespace Intersect.Server.Entities
                             if (killSpawn || spawn.Dead)
                             {
                                 spawnDeaths.Add(new KeyValuePair<Guid, int>(Id, i));
-                                spawn.AmmoDrop();
+                                lock(EntityLock)
+                                {
+                                    spawn.AmmoDrop();
+                                }
                                 Spawns[i] = null;
                                 mSpawnCount--;
                             }
