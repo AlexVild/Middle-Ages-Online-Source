@@ -281,11 +281,7 @@ namespace Intersect.Server.Maps
         private void AddItem(MapItem item)
         {
             AllMapItems.TryAdd(item.UniqueId, item);
-
-            if (TileItems[item.TileIndex] == null)
-            {
-                TileItems[item.TileIndex] = new ConcurrentDictionary<Guid, MapItem>();
-            }
+            TileItems[item.TileIndex] = new ConcurrentDictionary<Guid, MapItem>();
             TileItems[item.TileIndex]?.TryAdd(item.UniqueId, item);
         }
 
@@ -350,6 +346,11 @@ namespace Intersect.Server.Maps
                     VisibleToAll = Options.Loot.ShowUnownedItems || owner == Guid.Empty
                 };
 
+                if (mapItem.TileIndex > Options.MapHeight * Options.MapWidth || mapItem.TileIndex < 0)
+                {
+                    return;
+                }
+
                 // Remove existing items if we need to.
                 foreach (var reItem in toRemove)
                 {
@@ -383,6 +384,11 @@ namespace Intersect.Server.Maps
                     if (itemDescriptor.ItemType == ItemTypes.Equipment)
                     {
                         mapItem.SetupStatBuffs(item);
+                    }
+
+                    if (mapItem.TileIndex > Options.MapHeight * Options.MapWidth || mapItem.TileIndex < 0)
+                    {
+                        return;
                     }
 
                     AddItem(mapItem);
