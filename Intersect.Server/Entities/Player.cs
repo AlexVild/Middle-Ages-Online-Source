@@ -3209,13 +3209,20 @@ namespace Intersect.Server.Entities
                             }
                             else
                             {
+                                var itemInInventory = FindInventoryItemSlot(
+                                    shop.SellingItems[slot].CostItemId,
+                                    shop.SellingItems[slot].CostItemQuantity * buyItemAmt
+                                );
+                                if (itemInInventory == null)
+                                {
+                                    PacketSender.SendChatMsg(
+                                        this, Strings.Shops.inventoryfull, ChatMessageType.Inventory, CustomColors.Alerts.Error, Name
+                                    );
+                                    return;
+                                }
+
                                 if (shop.SellingItems[slot].CostItemQuantity * buyItemAmt ==
-                                    Items[
-                                            FindInventoryItemSlot(
-                                                shop.SellingItems[slot].CostItemId,
-                                                shop.SellingItems[slot].CostItemQuantity * buyItemAmt
-                                            ).Slot]
-                                        .Quantity)
+                                    Items[itemInInventory.Slot].Quantity)
                                 {
                                     TryTakeItem(
                                         FindInventoryItemSlot(
