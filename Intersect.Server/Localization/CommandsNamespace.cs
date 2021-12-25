@@ -109,6 +109,15 @@ namespace Intersect.Server.Localization
                 Help = @"starts or ends guild wars, via start/end args ex. 'guildwars start'"
             };
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocaleCommand SetVar = new LocaleCommand
+            {
+                Name = @"setvar",
+                Description =
+                    @"Sets a server variable via GUID to a valid value",
+                Help = @"ex: setvar 12-34-56 true"
+            };
+
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]            public readonly LocalizedString invalid = @"Invalid /command.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]            public readonly LocaleCommand Kick = new LocaleCommand
@@ -388,6 +397,20 @@ namespace Intersect.Server.Localization
                 {
                     Name = @"end",
                     Description = @"disable guild wars"
+                };
+                
+                [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+                public readonly LocaleArgument VarGUID = new LocaleArgument
+                {
+                    Name = @"GUID",
+                    Description = @"The GUID of the server var to set"
+                };
+
+                [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+                public readonly LocaleArgument VarValue = new LocaleArgument
+                {
+                    Name = @"Value",
+                    Description = @"The value to set the server var to"
                 };
             }
 

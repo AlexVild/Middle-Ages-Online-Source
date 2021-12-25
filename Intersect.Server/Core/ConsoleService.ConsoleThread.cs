@@ -52,6 +52,7 @@ namespace Intersect.Server.Core
                 Parser.Register<UnbanCommand>();
                 Parser.Register<UnmuteCommand>();
                 Parser.Register<GuildWarsCommand>();
+                Parser.Register<SetVarCommand>();
             }
 
             public CommandParser Parser { get; }
