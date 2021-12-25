@@ -100,6 +100,8 @@ namespace Intersect.Editor.Forms.Editors
             {
                 cmbAddSoldItem.SelectedIndex = 0;
             }
+            lblBuyItemPriceNum.Text = Strings.General.none;
+            lblSellItemPriceNum.Text = Strings.General.none;
 
             if (cmbBuyFor.Items.Count > 0)
             {
@@ -187,6 +189,7 @@ namespace Intersect.Editor.Forms.Editors
 
                 UpdateWhitelist();
                 UpdateLists();
+                UpdateItemPriceInfo();
                 if (mChanged.IndexOf(mEditorItem) == -1)
                 {
                     mChanged.Add(mEditorItem);
@@ -564,6 +567,37 @@ namespace Intersect.Editor.Forms.Editors
         }
 
         #endregion
+
+        private void UpdateItemPriceInfo()
+        {
+            if (cmbAddSoldItem.SelectedIndex > -1)
+            {
+                Guid selectedSellItemId = ItemBase.IdFromList(cmbAddSoldItem.SelectedIndex);
+                lblBuyItemPriceNum.Text = GetStringPriceOfItemFromId(selectedSellItemId);
+            }
+            if (cmbAddBoughtItem.SelectedIndex > -1)
+            {
+                Guid selectedSellItemId = ItemBase.IdFromList(cmbAddBoughtItem.SelectedIndex);
+                lblSellItemPriceNum.Text = GetStringPriceOfItemFromId(selectedSellItemId);
+            }
+        }
+
+        private void cmbAddSoldItem_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Guid selectedSellItemId = ItemBase.IdFromList(cmbAddSoldItem.SelectedIndex);
+            lblBuyItemPriceNum.Text = GetStringPriceOfItemFromId(selectedSellItemId);
+        }
+
+        private void cmbAddBoughtItem_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Guid selectedSellItemId = ItemBase.IdFromList(cmbAddBoughtItem.SelectedIndex);
+            lblSellItemPriceNum.Text = GetStringPriceOfItemFromId(selectedSellItemId);
+        }
+
+        private String GetStringPriceOfItemFromId(Guid itemId)
+        {
+            return ItemBase.Get(itemId).Price.ToString();
+        }
     }
 
 }

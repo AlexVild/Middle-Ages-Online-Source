@@ -2058,7 +2058,7 @@ namespace Intersect.Server.Entities
             // Is this a valid item?
             if (item.Descriptor == null)
             {
-                success = true;
+                return false;
             }
 
             if (item.Quantity <= 0)
@@ -2137,7 +2137,7 @@ namespace Intersect.Server.Entities
                     UpdateCraftingTable(CraftingTableId);
                 }
 
-                return true;
+                return success;
             }
 
             var bankInterface = new BankInterface(this, ((IEnumerable<Item>)Bank).ToList(), new object(), null, Options.MaxBankSlots);

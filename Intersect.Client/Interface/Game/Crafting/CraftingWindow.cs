@@ -51,6 +51,8 @@ namespace Intersect.Client.Interface.Game.Crafting
 
         private bool mInitialized = false;
 
+        public bool Refresh = false;
+
         private ScrollControl mItemContainer;
 
         private List<RecipeItem> mItems = new List<RecipeItem>();
@@ -446,7 +448,14 @@ namespace Intersect.Client.Interface.Game.Crafting
         //Update the crafting bar
         public void Update()
         {
-            if (!mInitialized)
+            var resetSelection = false;
+            if (Refresh)
+            {
+                // Clear things that were already populated
+                mRecipes.Clear();
+            }
+
+            if (!mInitialized || Refresh)
             {
                 var displayIndex = 0;
                 for (var i = 0; i < Globals.ActiveCraftingTable?.Crafts?.Count; ++i)
@@ -459,6 +468,11 @@ namespace Intersect.Client.Interface.Game.Crafting
 
                     if (Globals.ActiveCraftingTable.HiddenCrafts.Contains(activeCraft.Id))
                     {
+                        if (activeCraft.Id == mCraftId && mAutoCraftAmount == 0)
+                        {
+                            // The craft the user had seelcted is no longer available - clear it from their selection
+                            resetSelection = true;
+                        }
                         continue;
                     }
 
@@ -477,12 +491,12 @@ namespace Intersect.Client.Interface.Game.Crafting
                 }
 
                 //Load the craft data
-                if (Globals.ActiveCraftingTable?.Crafts?.Count > 0)
+                if (( Globals.ActiveCraftingTable?.Crafts?.Count > 0 && !Refresh ) || resetSelection)
                 {
                     LoadCraftItems(Globals.ActiveCraftingTable.Crafts[0]);
                 }
-
                 mInitialized = true;
+                Refresh = false;
             }
 
             if (!Crafting)
@@ -530,7 +544,5 @@ namespace Intersect.Client.Interface.Game.Crafting
 
             mBar.Width = Convert.ToInt32(width);
         }
-
     }
-
 }

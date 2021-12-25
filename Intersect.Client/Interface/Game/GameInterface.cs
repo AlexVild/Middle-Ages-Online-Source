@@ -78,6 +78,8 @@ namespace Intersect.Client.Interface.Game
         private bool mShouldOpenBank;
 
         private bool mShouldOpenCraftingTable;
+        
+        private bool mShouldUpdateCraftingTable;
 
         private bool mShouldOpenShop;
 
@@ -254,6 +256,11 @@ namespace Intersect.Client.Interface.Game
         public void NotifyOpenCraftingTable()
         {
             mShouldOpenCraftingTable = true;
+        }
+
+        public void UpdateCraftingTable()
+        {
+            mShouldUpdateCraftingTable = true;
         }
 
         public void NotifyCloseCraftingTable()
@@ -490,6 +497,11 @@ namespace Intersect.Client.Interface.Game
                 else
                 {
                     mCraftingWindow.Update();
+                    if (mShouldUpdateCraftingTable)
+                    {
+                        mShouldUpdateCraftingTable = false;
+                        mCraftingWindow.Refresh = true;
+                    }
                 }
             }
 

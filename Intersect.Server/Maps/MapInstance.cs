@@ -281,7 +281,12 @@ namespace Intersect.Server.Maps
         private void AddItem(MapItem item)
         {
             AllMapItems.TryAdd(item.UniqueId, item);
-            TileItems[item.TileIndex] = new ConcurrentDictionary<Guid, MapItem>();
+
+            if (TileItems[item.TileIndex] == null)
+            {
+                TileItems[item.TileIndex] = new ConcurrentDictionary<Guid, MapItem>();
+            }
+
             TileItems[item.TileIndex]?.TryAdd(item.UniqueId, item);
         }
 
