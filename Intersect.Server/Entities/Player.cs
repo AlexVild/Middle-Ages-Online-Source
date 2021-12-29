@@ -1170,7 +1170,7 @@ namespace Intersect.Server.Entities
             StartCommonEventsWithTrigger(CommonEventTrigger.LevelUp);
         }
 
-        public void GiveExperience(long amount, bool partyCombo = false, int opponentLevel = 0)
+        public void GiveExperience(long amount, bool partyCombo = false, int opponentLevel = -1)
         {
             if (Level < Options.MaxLevel)
             {
@@ -1198,6 +1198,10 @@ namespace Intersect.Server.Entities
 
         private bool ShouldAwardExp(int opponentLevel)
         {
+            if (opponentLevel < 0) // not awarded via enemy
+            {
+                return true;
+            }
             return opponentLevel >= (Level - Options.Combat.MinComboExpLvlDiff);
         }
 
