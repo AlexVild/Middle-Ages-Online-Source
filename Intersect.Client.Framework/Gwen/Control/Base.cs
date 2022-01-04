@@ -11,6 +11,7 @@ using Intersect.Client.Framework.Gwen.Control.EventArguments;
 using Intersect.Client.Framework.Gwen.ControlInternal;
 using Intersect.Client.Framework.Gwen.DragDrop;
 using Intersect.Client.Framework.Gwen.Input;
+
 #if DEBUG || DIAGNOSTIC
 #endif
 using Newtonsoft.Json;
@@ -129,6 +130,8 @@ namespace Intersect.Client.Framework.Gwen.Control
         private string mToolTipFontInfo;
 
         private object mUserData;
+
+        private Audio.GameAudioInstance mSoundInstance;
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="Base" /> class.
@@ -2172,11 +2175,11 @@ namespace Intersect.Client.Framework.Gwen.Control
             var sound = GameContentManager.Current.GetSound(filename);
             if (sound != null)
             {
-                var soundInstance = sound.CreateInstance();
-                if (soundInstance != null)
+                mSoundInstance = sound.CreateInstance();
+                if (mSoundInstance != null)
                 {
-                    soundInstance.SetVolume(100, false);
-                    soundInstance.Play();
+                    mSoundInstance.SetVolume(100, false);
+                    mSoundInstance.Play();
                 }
             }
         }
@@ -2736,6 +2739,10 @@ namespace Intersect.Client.Framework.Gwen.Control
             UpdateColors();
             mCacheTextureDirty = true;
             mParent?.Redraw();
+            if (mSoundInstance?.State == Audio.GameAudioInstance.AudioInstanceState.Stopped)
+            {
+                mSoundInstance.Dispose();
+            }
         }
 
         /// <summary>
