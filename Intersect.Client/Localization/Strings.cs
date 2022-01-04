@@ -394,6 +394,26 @@ namespace Intersect.Client.Localization
             public static LocalizedString npcguildname = @"{00}";
 
             public static LocalizedString classrank = @"Class Rank: {00}";
+
+            public static LocalizedString attacktip = @"Attack-scaling damage, max HP, physical accuracy";
+
+            public static LocalizedString defensetip = @"Physical defense, physical evasion";
+
+            public static LocalizedString agilitytip = @"Movement speed, agility-scaling damage, physical evasion, attunement, resistance & accuracy";
+
+            public static LocalizedString resisttip = @"Magical defense, magical resistance";
+            
+            public static LocalizedString abilitypowertip = @"Ability power-scaling damage, attunement, maximum MP";
+
+            public static LocalizedString addattacktip = @"Add Attack";
+
+            public static LocalizedString addphysicaldefensetip = @"Add Physical Defense";
+
+            public static LocalizedString addmagicdefense = @"Add Magical Defense";
+
+            public static LocalizedString addagilitytip = @"Add Agility";
+
+            public static LocalizedString addabilitypowertip = @"Add Ability Power";
         }
 
         public struct CharacterCreation

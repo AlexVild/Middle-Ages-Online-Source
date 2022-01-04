@@ -40,8 +40,6 @@ namespace Intersect.Client.Interface.Game.Character
 
         private Label mCharacterLevelAndClass;
 
-        private Label mCharacterName;
-
         private ImagePanel mCharacterPortrait;
 
         private string mCharacterPortraitImg = "";
@@ -64,8 +62,6 @@ namespace Intersect.Client.Interface.Game.Character
         public ImagePanel[] PaperdollPanels;
 
         public string[] PaperdollTextures;
-
-        ScrollControl mPlayerInfoScroll;
 
         // Crafting
         Label mCraftingLabel;
@@ -91,11 +87,8 @@ namespace Intersect.Client.Interface.Game.Character
         //Init
         public CharacterWindow(Canvas gameCanvas)
         {
-            mCharacterWindow = new WindowControl(gameCanvas, Strings.Character.title, false, "CharacterWindow");
+            mCharacterWindow = new WindowControl(gameCanvas, Globals.Me.Name, false, "CharacterWindow");
             mCharacterWindow.DisableResizing();
-
-            mCharacterName = new Label(mCharacterWindow, "CharacterNameLabel");
-            mCharacterName.SetTextColor(Color.White, Label.ControlState.Normal);
 
             mCharacterLevelAndClass = new Label(mCharacterWindow, "ChatacterInfoLabel");
             mCharacterLevelAndClass.SetText("");
@@ -117,42 +110,49 @@ namespace Intersect.Client.Interface.Game.Character
             var equipmentLabel = new Label(mCharacterWindow, "EquipmentLabel");
             equipmentLabel.SetText(Strings.Character.equipment);
 
-            mPlayerInfoScroll = new ScrollControl(mCharacterWindow, "PlayerInfoScrollContainer");
-
-            var statsLabel = new Label(mPlayerInfoScroll, "StatsLabel");
+            var statsLabel = new Label(mCharacterWindow, "StatsLabel");
             statsLabel.SetText(Strings.Character.stats);
 
-            mAttackLabel = new Label(mPlayerInfoScroll, "AttackLabel");
-
-            mAddAttackBtn = new Button(mPlayerInfoScroll, "IncreaseAttackButton");
+            mAttackLabel = new Label(mCharacterWindow, "AttackLabel");
+            mAttackLabel.SetToolTipText(Strings.Character.attacktip);
+            mAddAttackBtn = new Button(mCharacterWindow, "IncreaseAttackButton");
             mAddAttackBtn.Clicked += _addAttackBtn_Clicked;
+            mAddAttackBtn.SetToolTipText(Strings.Character.addattacktip);
 
-            mDefenseLabel = new Label(mPlayerInfoScroll, "DefenseLabel");
-            mAddDefenseBtn = new Button(mPlayerInfoScroll, "IncreaseDefenseButton");
+            mDefenseLabel = new Label(mCharacterWindow, "DefenseLabel");
+            mDefenseLabel.SetToolTipText(Strings.Character.defensetip);
+            mAddDefenseBtn = new Button(mCharacterWindow, "IncreaseDefenseButton");
             mAddDefenseBtn.Clicked += _addDefenseBtn_Clicked;
+            mAddDefenseBtn.SetToolTipText(Strings.Character.addphysicaldefensetip);
 
-            mSpeedLabel = new Label(mPlayerInfoScroll, "SpeedLabel");
-            mAddSpeedBtn = new Button(mPlayerInfoScroll, "IncreaseSpeedButton");
+            mSpeedLabel = new Label(mCharacterWindow, "SpeedLabel");
+            mSpeedLabel.SetToolTipText(Strings.Character.agilitytip);
+            mAddSpeedBtn = new Button(mCharacterWindow, "IncreaseSpeedButton");
             mAddSpeedBtn.Clicked += _addSpeedBtn_Clicked;
+            mAddSpeedBtn.SetToolTipText(Strings.Character.addagilitytip);
 
-            mAbilityPwrLabel = new Label(mPlayerInfoScroll, "AbilityPowerLabel");
-            mAddAbilityPwrBtn = new Button(mPlayerInfoScroll, "IncreaseAbilityPowerButton");
+            mAbilityPwrLabel = new Label(mCharacterWindow, "AbilityPowerLabel");
+            mAbilityPwrLabel.SetToolTipText(Strings.Character.abilitypowertip);
+            mAddAbilityPwrBtn = new Button(mCharacterWindow, "IncreaseAbilityPowerButton");
             mAddAbilityPwrBtn.Clicked += _addAbilityPwrBtn_Clicked;
+            mAddAbilityPwrBtn.SetToolTipText(Strings.Character.addabilitypowertip);
 
-            mMagicRstLabel = new Label(mPlayerInfoScroll, "MagicResistLabel");
-            mAddMagicResistBtn = new Button(mPlayerInfoScroll, "IncreaseMagicResistButton");
+            mMagicRstLabel = new Label(mCharacterWindow, "MagicResistLabel");
+            mMagicRstLabel.SetToolTipText(Strings.Character.resisttip);
+            mAddMagicResistBtn = new Button(mCharacterWindow, "IncreaseMagicResistButton");
             mAddMagicResistBtn.Clicked += _addMagicResistBtn_Clicked;
+            mAddMagicResistBtn.SetToolTipText(Strings.Character.addmagicdefense);
 
-            mPointsLabel = new Label(mPlayerInfoScroll, "PointsLabel");
+            mPointsLabel = new Label(mCharacterWindow, "PointsLabel");
 
-            mCraftingLabel = new Label(mPlayerInfoScroll, "CraftingLabel");
-            mMiningTierLabel = new Label(mPlayerInfoScroll, "MiningTierLabel");
-            mFishingTierLabel = new Label(mPlayerInfoScroll, "FishingTierLabel");
-            mWoodcuttingTierLabel = new Label(mPlayerInfoScroll, "WoodcuttingTierLabel");
+            mCraftingLabel = new Label(mCharacterWindow, "CraftingLabel");
+            mMiningTierLabel = new Label(mCharacterWindow, "MiningTierLabel");
+            mFishingTierLabel = new Label(mCharacterWindow, "FishingTierLabel");
+            mWoodcuttingTierLabel = new Label(mCharacterWindow, "WoodcuttingTierLabel");
 
-            mNpcGuildLabel = new Label(mPlayerInfoScroll, "NPCGuildLabel");
-            mNpcGuildNameLabel = new Label(mPlayerInfoScroll, "NPCGuildName");
-            mClassRankLabel = new Label(mPlayerInfoScroll, "ClassRankLabel");
+            mNpcGuildLabel = new Label(mCharacterWindow, "NPCGuildLabel");
+            mNpcGuildNameLabel = new Label(mCharacterWindow, "NPCGuildName");
+            mClassRankLabel = new Label(mCharacterWindow, "ClassRankLabel");
 
             for (var i = 0; i < Options.EquipmentSlots.Count; i++)
             {
@@ -198,7 +198,6 @@ namespace Intersect.Client.Interface.Game.Character
                 return;
             }
 
-            mCharacterName.Text = Globals.Me.Name;
             mCharacterLevelAndClass.Text = Strings.Character.levelandclass.ToString(
                 Globals.Me.Level, ClassBase.GetName(Globals.Me.Class)
             );
@@ -360,6 +359,7 @@ namespace Intersect.Client.Interface.Game.Character
             );
 
             mPointsLabel.SetText(Strings.Character.points.ToString(Globals.Me.StatPoints));
+            mPointsLabel.IsHidden = Globals.Me.StatPoints == 0;
             mAddAbilityPwrBtn.IsHidden = Globals.Me.StatPoints == 0 ||
                                          Globals.Me.Stat[(int) Stats.AbilityPower] == Options.MaxStatValue;
 
@@ -381,8 +381,16 @@ namespace Intersect.Client.Interface.Game.Character
             mWoodcuttingTierLabel.SetText(Strings.Character.woodcuttingtier.ToString(Globals.Me.WoodcutTier));
 
             mNpcGuildLabel.Text = Strings.Character.npcguild;
-            mNpcGuildNameLabel.Text = Strings.Character.npcguildname.ToString(Globals.Me.NpcGuildName);
+            mNpcGuildNameLabel.Text = Strings.Character.npcguildname.ToString(Globals.Me.NpcGuildName, Globals.Me.ClassRank);
             mClassRankLabel.Text = Strings.Character.classrank.ToString(Globals.Me.ClassRank);
+
+            if (Globals.Me.NpcGuildName == null || Globals.Me.NpcGuildName.Equals("Not in NPC Guild"))
+            {
+                mNpcGuildNameLabel.Hide();
+            } else
+            {
+                mNpcGuildNameLabel.Show();
+            }
 
             for (var i = 0; i < Options.EquipmentSlots.Count; i++)
             {
