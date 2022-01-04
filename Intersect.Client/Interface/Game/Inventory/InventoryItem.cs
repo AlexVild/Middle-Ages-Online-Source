@@ -250,8 +250,22 @@ namespace Intersect.Client.Interface.Game.Inventory
                 mCurrentItemId = Globals.Me.Inventory[mMySlot].ItemId;
                 mCurrentAmt = Globals.Me.Inventory[mMySlot].Quantity;
                 mIsEquipped = equipped;
+                // Alex: Commented out to ALWAYS hide equip panel/label, in favor of displaying a texture for equipped items
+                /*
                 EquipPanel.IsHidden = !mIsEquipped;
                 EquipLabel.IsHidden = !mIsEquipped;
+                */
+                // This was the alternative
+                EquipPanel.IsHidden = true;
+                EquipLabel.IsHidden = true;
+                if (mIsEquipped)
+                {
+                    Container.RenderColor = Color.White;
+                } else
+                {
+                    Container.RenderColor = Color.Transparent;
+                }
+
                 mCooldownLabel.IsHidden = true;
                 if (item != null)
                 {
