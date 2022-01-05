@@ -2077,13 +2077,13 @@ namespace Intersect.Server.Entities
 
         private void SendMissedAttackMessage(Entity attacker, Entity defender, DamageType damageType)
         {
-            if (defender is Player)
+            if (defender is Player def)
             {
-                PacketSender.SendPlaySound((Player)defender, Options.MissSound);
+                PacketSender.SendPlaySound(def, Options.MissSound);
             }
-            if (attacker is Player)
+            if (attacker is Player att)
             {
-                PacketSender.SendPlaySound((Player)defender, Options.MissSound);
+                PacketSender.SendPlaySound(att, Options.MissSound);
             }
             switch(damageType)
             {
@@ -2098,13 +2098,13 @@ namespace Intersect.Server.Entities
 
         private void SendBlockedAttackMessage(Entity attacker, Entity defender)
         {
-            if (defender is Player)
+            if (defender is Player def)
             {
-                PacketSender.SendPlaySound((Player) defender, Options.BlockSound);
+                PacketSender.SendPlaySound(def, Options.BlockSound);
             }
-            if (attacker is Player)
+            if (attacker is Player att)
             {
-                PacketSender.SendPlaySound((Player) attacker, Options.BlockSound);
+                PacketSender.SendPlaySound(att, Options.BlockSound);
             }
             PacketSender.SendActionMsg(defender, Strings.Combat.blocked, CustomColors.Combat.Blocked);
         }
