@@ -2079,11 +2079,11 @@ namespace Intersect.Server.Entities
         {
             if (defender is Player)
             {
-                PacketSender.SendPlaySound((Player)defender, Options.BlockSound);
+                PacketSender.SendPlaySound((Player)defender, Options.MissSound);
             }
             if (attacker is Player)
             {
-                PacketSender.SendPlaySound((Player)attacker, Options.BlockSound);
+                PacketSender.SendPlaySound((Player)defender, Options.MissSound);
             }
             switch(damageType)
             {
