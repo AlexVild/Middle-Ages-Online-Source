@@ -2179,15 +2179,10 @@ namespace Intersect.Client.Framework.Gwen.Control
             if (sound != null)
             {
                 var soundInstance = sound.CreateInstance();
-                // If this sound file hasn't been played by this UI element before
-                if (!mSounds.ContainsKey(filename))
+                if (soundInstance != null)
                 {
-                    // Add it to the list of playing sounds
-                    mSounds.Add(filename, soundInstance);
+                    Canvas.PlayAndAddSound(soundInstance);
                 }
-                // And play the sound
-                mSounds[filename].SetVolume(100, false);
-                mSounds[filename].Play();
             }
         }
 
