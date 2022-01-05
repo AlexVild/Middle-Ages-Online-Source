@@ -186,6 +186,22 @@ namespace Intersect.Client.Framework.Gwen.Control
             sound.Play();
         }
 
+        private void RemoveAndDisposeDeadSounds()
+        {
+            mUISounds.RemoveAll(item =>
+            {
+                if (item.State == GameAudioInstance.AudioInstanceState.Stopped || item.State == GameAudioInstance.AudioInstanceState.Disposed)
+                {
+                    item.Dispose();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            });
+        }
+
         /// <summary>
         ///     Processes input and layout. Also purges delayed delete queue.
         /// </summary>
@@ -196,17 +212,7 @@ namespace Intersect.Client.Framework.Gwen.Control
                 return;
             }
 
-            mUISounds.RemoveAll(item =>
-            {
-                if (item.State == GameAudioInstance.AudioInstanceState.Stopped || item.State == GameAudioInstance.AudioInstanceState.Disposed)
-                {
-                    item.Dispose();
-                    return true;
-                } else
-                {
-                    return false;
-                }
-            });
+            RemoveAndDisposeDeadSounds();
 
             Animation.GlobalThink();
 

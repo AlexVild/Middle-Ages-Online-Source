@@ -132,8 +132,6 @@ namespace Intersect.Client.Framework.Gwen.Control
 
         private object mUserData;
 
-        private Dictionary<string, GameAudioInstance> mSounds;
-
         /// <summary>
         ///     Initializes a new instance of the <see cref="Base" /> class.
         /// </summary>
@@ -171,8 +169,6 @@ namespace Intersect.Client.Framework.Gwen.Control
             BoundsOutlineColor = Color.Red;
             MarginOutlineColor = Color.Green;
             PaddingOutlineColor = Color.Blue;
-
-            mSounds = new Dictionary<string, GameAudioInstance>();
         }
 
         /// <summary>
@@ -2741,20 +2737,6 @@ namespace Intersect.Client.Framework.Gwen.Control
             UpdateColors();
             mCacheTextureDirty = true;
             mParent?.Redraw();
-
-            var keysToRemove = new List<string>();
-            foreach (var sound in mSounds.Keys)
-            {
-                if (mSounds[sound]?.State == GameAudioInstance.AudioInstanceState.Stopped)
-                {
-                    mSounds[sound].Dispose();
-                    keysToRemove.Add(sound);
-                }
-            }
-            foreach (var filename in keysToRemove)
-            {
-                mSounds.Remove(filename);
-            }
         }
 
         /// <summary>
