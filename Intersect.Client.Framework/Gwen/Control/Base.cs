@@ -2163,7 +2163,7 @@ namespace Intersect.Client.Framework.Gwen.Control
             Redraw();
         }
 
-        protected void PlaySound(string filename)
+        protected void PlaySound(string filename, bool isHoverSound = false)
         {
             if (filename == null || this.IsDisabled)
             {
@@ -2177,7 +2177,7 @@ namespace Intersect.Client.Framework.Gwen.Control
                 var soundInstance = sound.CreateInstance();
                 if (soundInstance != null)
                 {
-                    Canvas.PlayAndAddSound(soundInstance);
+                    Canvas.PlayAndAddSound(soundInstance, isHoverSound);
                 }
             }
         }

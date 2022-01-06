@@ -6,6 +6,7 @@ using Intersect.Client.Framework.Gwen.Anim;
 using Intersect.Client.Framework.Gwen.DragDrop;
 using Intersect.Client.Framework.Gwen.Input;
 using Intersect.Client.Framework.Audio;
+using Intersect.Configuration;
 
 namespace Intersect.Client.Framework.Gwen.Control
 {
@@ -31,6 +32,8 @@ namespace Intersect.Client.Framework.Gwen.Control
 
         private List<GameAudioInstance> mUISounds;
 
+        public long LastHoverSound;
+
         /// <summary>
         ///     Initializes a new instance of the <see cref="Canvas" /> class.
         /// </summary>
@@ -45,6 +48,7 @@ namespace Intersect.Client.Framework.Gwen.Control
             ShouldDrawBackground = false;
 
             mDisposeQueue = new List<IDisposable>();
+            LastHoverSound = 0;
         }
 
         /// <summary>
@@ -177,8 +181,19 @@ namespace Intersect.Client.Framework.Gwen.Control
             InvalidateChildren(true);
         }
 
-        public void PlayAndAddSound(GameAudioInstance sound)
+        public void PlayAndAddSound(GameAudioInstance sound, bool isHoverSound)
         {
+            if (isHoverSound)
+            {
+                var now = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+                if (now < LastHoverSound + ClientConfiguration.UI_HOVER_SOUND_TIMER)
+                {
+                    return;
+                } else
+                {
+                    LastHoverSound = now;
+                }
+            }
             // Track the sound - we will check to see when it's done and dispose of it in DoThink()
             mUISounds.Add(sound);
             // And play the sound
