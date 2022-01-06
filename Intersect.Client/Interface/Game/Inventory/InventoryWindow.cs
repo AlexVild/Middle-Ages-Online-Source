@@ -86,6 +86,7 @@ namespace Intersect.Client.Interface.Game.Inventory
                 }
                 else
                 {
+                    Items[i].Container.RenderColor = Color.Transparent; // Hide the "Equipped" background
                     Items[i].Pnl.IsHidden = true;
                     mValues[i].IsHidden = true;
                 }

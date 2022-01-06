@@ -81,6 +81,7 @@ namespace Intersect.Client.Interface.Game.Inventory
             EquipLabel.IsHidden = true;
             EquipLabel.Text = Strings.Inventory.equippedicon;
             EquipLabel.TextColor = new Color(0, 255, 255, 255);
+            Container.RenderColor = Color.Transparent; // Alex: "Unequipped" display
             mCooldownLabel = new Label(Pnl, "InventoryItemCooldownLabel");
             mCooldownLabel.IsHidden = true;
             mCooldownLabel.TextColor = new Color(0, 255, 255, 255);
@@ -239,6 +240,7 @@ namespace Intersect.Client.Interface.Game.Inventory
             }
 
             var item = ItemBase.Get(Globals.Me.Inventory[mMySlot].ItemId);
+
             if (Globals.Me.Inventory[mMySlot].ItemId != mCurrentItemId ||
                 Globals.Me.Inventory[mMySlot].Quantity != mCurrentAmt ||
                 equipped != mIsEquipped ||
@@ -255,16 +257,9 @@ namespace Intersect.Client.Interface.Game.Inventory
                 EquipPanel.IsHidden = !mIsEquipped;
                 EquipLabel.IsHidden = !mIsEquipped;
                 */
-                // This was the alternative
-                EquipPanel.IsHidden = true;
-                EquipLabel.IsHidden = true;
-                if (mIsEquipped)
-                {
-                    Container.RenderColor = Color.White;
-                } else
-                {
-                    Container.RenderColor = Color.Transparent;
-                }
+                
+                // Alex: This is my addition - also note that InventoryWindow has some new logic as well in its update loop
+                Container.RenderColor = mIsEquipped ? Color.White : Color.Transparent;
 
                 mCooldownLabel.IsHidden = true;
                 if (item != null)
@@ -481,7 +476,5 @@ namespace Intersect.Client.Interface.Game.Inventory
                 }
             }
         }
-
     }
-
 }
