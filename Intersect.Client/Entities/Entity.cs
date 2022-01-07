@@ -197,7 +197,6 @@ namespace Intersect.Client.Entities
         public Entity(Guid id, EntityPacket packet, bool isEvent = false)
         {
             Id = id;
-            InstanceLayer = packet.InstanceLayer;
             CurrentMap = Guid.Empty;
             if (id != Guid.Empty && !isEvent)
             {
@@ -339,7 +338,6 @@ namespace Intersect.Client.Entities
             FooterLabel = new Label(packet.FooterLabel.Label, packet.FooterLabel.Color);
             InstanceLayer = packet.InstanceLayer;
 
-            // TODO Alex: Load in the decors here I figure?
             var animsToClear = new List<Animation>();
             var animsToAdd = new List<AnimationBase>();
             for (var i = 0; i < packet.Animations.Length; i++)
