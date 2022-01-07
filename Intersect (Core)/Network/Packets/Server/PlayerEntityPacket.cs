@@ -14,40 +14,40 @@ namespace Intersect.Network.Packets.Server
         }
 
 
-        [Key(25)]
+        [Key(24)]
         public int AccessLevel { get; set; }
 
 
-        [Key(26)]
+        [Key(25)]
         public Gender Gender { get; set; }
 
 
-        [Key(27)]
+        [Key(26)]
         public Guid ClassId { get; set; }
 
 
-        [Key(28)]
+        [Key(27)]
         public EquipmentPacket Equipment { get; set; }
 
     
-        [Key(29)]
+        [Key(28)]
         public long CombatTimeRemaining { get; set; }
 
 
-        [Key(30)]
+        [Key(29)]
         public string Guild { get; set; }
 
 
-        [Key(31)]
+        [Key(30)]
         public int GuildRank { get; set; }
 
-        [Key(32)]
+        [Key(31)]
         public bool InVehicle { get; set; }
 
-        [Key(33)]
+        [Key(32)]
         public string VehicleSprite { get; set; }
 
-        [Key(34)]
+        [Key(33)]
         public long VehicleSpeed { get; set; }
     }
 
