@@ -1812,6 +1812,7 @@ namespace Intersect.Server.Entities
                 Y = (int)newY;
                 Z = zOverride;
                 Dir = newDir;
+                InstanceLayer = Guid.NewGuid(); // TODO Alex: Literally always warp to a unique instance for testing
                 var newSurroundingMaps = map.GetSurroundingMapIds(true);
                 foreach (var evt in EventLookup)
                 {
