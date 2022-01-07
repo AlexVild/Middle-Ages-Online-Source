@@ -351,6 +351,7 @@ namespace Intersect.Server.Core
                             MetricsRoot.Instance.Game.MapUpdateQueuedTime.Record(timeBeforeUpdate - map.UpdateQueueStart);
 
                             map.Update(Globals.Timing.Milliseconds);
+                            map.UpdateProcessingInstances(Globals.Timing.Milliseconds);
 
                             var timeAfterUpdate = Globals.Timing.Milliseconds;
                             MetricsRoot.Instance.Game.MapUpdateProcessingTime.Record(timeAfterUpdate - timeBeforeUpdate);
@@ -364,6 +365,7 @@ namespace Intersect.Server.Core
                         else
                         {
                             map.Update(Globals.Timing.Milliseconds);
+                            map.UpdateProcessingInstances(Globals.Timing.Milliseconds);
                         }
                     }
                 }

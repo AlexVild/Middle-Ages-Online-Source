@@ -671,7 +671,7 @@ namespace Intersect.Server.Entities
                             }
                             else
                             {
-                                MapInstance.Get(MapId).PlayerEnteredMap(this);
+                                MapInstance.Get(MapId).GetRelevantProcessingLayer(InstanceLayer).PlayerEnteredMap(this);
                             }
                         }
                     }
@@ -1813,6 +1813,7 @@ namespace Intersect.Server.Entities
                 Z = zOverride;
                 Dir = newDir;
                 InstanceLayer = Guid.NewGuid(); // TODO Alex: Literally always warp to a unique instance for testing
+                map.CreateProcessingInstance(InstanceLayer);
                 var newSurroundingMaps = map.GetSurroundingMapIds(true);
                 foreach (var evt in EventLookup)
                 {
@@ -1832,7 +1833,7 @@ namespace Intersect.Server.Entities
 
                     PacketSender.SendEntityLeave(this);
                     MapId = newMapId;
-                    map.PlayerEnteredMap(this);
+                    map.GetRelevantProcessingLayer(InstanceLayer).PlayerEnteredMap(this);
                     PacketSender.SendEntityDataToProximity(this);
                     PacketSender.SendEntityPositionToAll(this);
 
