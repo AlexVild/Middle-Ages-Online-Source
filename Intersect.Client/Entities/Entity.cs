@@ -192,9 +192,12 @@ namespace Intersect.Client.Entities
 
         public long FlashEndTime = 0L;
 
+        public Guid InstanceLayer;
+
         public Entity(Guid id, EntityPacket packet, bool isEvent = false)
         {
             Id = id;
+            InstanceLayer = packet.InstanceLayer;
             CurrentMap = Guid.Empty;
             if (id != Guid.Empty && !isEvent)
             {
@@ -334,6 +337,7 @@ namespace Intersect.Client.Entities
             NameColor = packet.NameColor;
             HeaderLabel = new Label(packet.HeaderLabel.Label, packet.HeaderLabel.Color);
             FooterLabel = new Label(packet.FooterLabel.Label, packet.FooterLabel.Color);
+            InstanceLayer = packet.InstanceLayer;
 
             // TODO Alex: Load in the decors here I figure?
             var animsToClear = new List<Animation>();

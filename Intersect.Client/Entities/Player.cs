@@ -161,7 +161,6 @@ namespace Intersect.Client.Entities
             mRenderPriority = 2;
         }
 
-
         public List<PartyMember> Party
         {
             get
