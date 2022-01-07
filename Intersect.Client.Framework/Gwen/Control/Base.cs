@@ -866,7 +866,7 @@ namespace Intersect.Client.Framework.Gwen.Control
                 var alignments = ((string) obj["Alignments"]).Split(',');
                 foreach (var alignment in alignments)
                 {
-                    switch (alignment.ToLower())
+                    switch (alignment.ToLower().Trim())
                     {
                         case "top":
                             AddAlignment(Alignments.Top);

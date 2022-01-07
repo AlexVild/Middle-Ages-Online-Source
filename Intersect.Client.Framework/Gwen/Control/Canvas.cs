@@ -186,7 +186,7 @@ namespace Intersect.Client.Framework.Gwen.Control
             if (isHoverSound)
             {
                 var now = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-                if (now < LastHoverSound + ClientConfiguration.UI_HOVER_SOUND_TIMER)
+                if (now < LastHoverSound + ClientConfiguration.Instance.UIHoverSoundTimer)
                 {
                     return;
                 } else
