@@ -1282,6 +1282,16 @@ namespace Intersect.Server.Networking
 
             foreach (var map in player.Map.GetSurroundingMaps(true))
             {
+                // TODO Alex Consolidate
+                foreach (var entity in map.GetRelevantProcessingLayer(player.InstanceLayer).GetEntities())
+                {
+                    if (entity.Id == target)
+                    {
+                        player.TryAttack(entity);
+
+                        break;
+                    }
+                }
                 foreach (var entity in map.GetEntities())
                 {
                     if (entity.Id == target)
@@ -1700,8 +1710,18 @@ namespace Intersect.Server.Networking
             Entity target = null;
             if (packet.TargetId != Guid.Empty)
             {
+                // TODO Alex: Consolidate, and also maybe refactor all this to a method
                 foreach (var map in player.Map.GetSurroundingMaps(true))
                 {
+                    foreach (var en in map.GetRelevantProcessingLayer(player.InstanceLayer).GetEntities())
+                    {
+                        if (en.Id == packet.TargetId)
+                        {
+                            target = en;
+
+                            break;
+                        }
+                    }
                     foreach (var en in map.GetEntities())
                     {
                         if (en.Id == packet.TargetId)
@@ -1754,8 +1774,20 @@ namespace Intersect.Server.Networking
 
             if (packet.TargetId != Guid.Empty)
             {
+                // TODO Alex: Consolidate
                 foreach (var map in player.Map.GetSurroundingMaps(true))
                 {
+                    foreach (var en in map.GetRelevantProcessingLayer(player.InstanceLayer).GetEntities())
+                    {
+                        if (en.Id == packet.TargetId)
+                        {
+                            player.UseSpell(packet.Slot, en);
+                            casted = true;
+
+                            break;
+                        }
+                    }
+
                     foreach (var en in map.GetEntities())
                     {
                         if (en.Id == packet.TargetId)
