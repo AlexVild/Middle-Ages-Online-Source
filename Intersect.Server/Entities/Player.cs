@@ -921,7 +921,7 @@ namespace Intersect.Server.Entities
             var mapList = Map.GetSurroundingMaps(true).ToArray();
             foreach(var map in mapList)
             {
-                foreach(var entity in map.GetCachedEntities())
+                foreach(var entity in map.GetRelevantProcessingLayer(InstanceLayer).GetCachedEntities())
                 {
                     if (entity is Npc npc)
                     {
@@ -1634,7 +1634,7 @@ namespace Intersect.Server.Entities
 
         public override void NotifySwarm(Entity attacker)
         {
-            MapInstance.Get(MapId)
+            MapInstance.Get(MapId).GetRelevantProcessingLayer(InstanceLayer)
                 ?.GetEntities(true)
                 .ForEach(
                     entity =>
@@ -1812,7 +1812,7 @@ namespace Intersect.Server.Entities
                 Y = (int)newY;
                 Z = zOverride;
                 Dir = newDir;
-                InstanceLayer = Guid.Empty; // TODO Alex: Literally always warp to a unique instance for testing
+                InstanceLayer = Guid.NewGuid(); // TODO Alex: Literally always warp to a unique instance for testing
                 map.CreateProcessingInstance(InstanceLayer);
                 // Todo Alex Remove this
                 PacketSender.SendChatMsg(this, "Joined Map Instance with ID" + InstanceLayer.ToString(), ChatMessageType.Local);
@@ -2604,7 +2604,7 @@ namespace Intersect.Server.Entities
                 if (itemBase.Animation != null)
                 {
                     PacketSender.SendAnimationToProximity(
-                        itemBase.Animation.Id, 1, base.Id, MapId, 0, 0, (sbyte)Dir
+                        itemBase.Animation.Id, 1, base.Id, MapId, 0, 0, (sbyte)Dir, InstanceLayer
                     ); //Target Type 1 will be global entity
                 }
 
@@ -4748,7 +4748,7 @@ namespace Intersect.Server.Entities
                     if (spell.CastAnimationId != Guid.Empty)
                     {
                         PacketSender.SendAnimationToProximity(
-                            spell.CastAnimationId, 1, base.Id, MapId, 0, 0, (sbyte) Dir
+                            spell.CastAnimationId, 1, base.Id, MapId, 0, 0, (sbyte) Dir, InstanceLayer
                         ); //Target Type 1 will be global entity
                     }
 

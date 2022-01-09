@@ -133,7 +133,9 @@ namespace Intersect.Server.Core
                                                     AddToQueue(map);
                                                 }
                                                 
+                                                // TODO Alex: Only one call
                                                 globalEntities += map.GetCachedEntities().Length;
+                                                globalEntities += map.GetCachedEntitiesOnAllLayers().Length;
 
                                                 processedMaps.Add(map.Id);
                                             }
@@ -146,9 +148,6 @@ namespace Intersect.Server.Core
                             //Refresh list of active maps & their processing layers
                             foreach (var map in ActiveMaps.ToArray())
                             {
-                                // Remove any processing layers ("instances") that no players are on
-                                MapInstance.Get(map).RemoveDeadProcessingLayers();
-                                // If no players are on a map at all,
                                 if (!processedMaps.Contains(map))
                                 {
                                     // Remove the map entirely from the update queue

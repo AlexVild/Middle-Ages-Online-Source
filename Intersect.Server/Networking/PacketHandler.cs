@@ -1173,7 +1173,7 @@ namespace Intersect.Server.Networking
                     {
                         PacketSender.SendAnimationToProximity(
                             attackAnim.Id, -1, player.Id, attackingTile.GetMapId(), attackingTile.GetX(),
-                            attackingTile.GetY(), (sbyte) player.Dir
+                            attackingTile.GetY(), (sbyte) player.Dir, player.InstanceLayer
                         );
                     }
 
@@ -1274,7 +1274,7 @@ namespace Intersect.Server.Networking
                     {
                         PacketSender.SendAnimationToProximity(
                             classBase.AttackAnimationId, -1, player.Id, attackingTile.GetMapId(), attackingTile.GetX(),
-                            attackingTile.GetY(), (sbyte) player.Dir
+                            attackingTile.GetY(), (sbyte) player.Dir, player.InstanceLayer
                         );
                     }
                 }
@@ -1284,15 +1284,6 @@ namespace Intersect.Server.Networking
             {
                 // TODO Alex Consolidate
                 foreach (var entity in map.GetRelevantProcessingLayer(player.InstanceLayer).GetEntities())
-                {
-                    if (entity.Id == target)
-                    {
-                        player.TryAttack(entity);
-
-                        break;
-                    }
-                }
-                foreach (var entity in map.GetEntities())
                 {
                     if (entity.Id == target)
                     {
@@ -1722,15 +1713,6 @@ namespace Intersect.Server.Networking
                             break;
                         }
                     }
-                    foreach (var en in map.GetEntities())
-                    {
-                        if (en.Id == packet.TargetId)
-                        {
-                            target = en;
-
-                            break;
-                        }
-                    }
                 }
             }
 
@@ -1774,21 +1756,10 @@ namespace Intersect.Server.Networking
 
             if (packet.TargetId != Guid.Empty)
             {
-                // TODO Alex: Consolidate
+                // TODO Alex: Simplify with a method?
                 foreach (var map in player.Map.GetSurroundingMaps(true))
                 {
                     foreach (var en in map.GetRelevantProcessingLayer(player.InstanceLayer).GetEntities())
-                    {
-                        if (en.Id == packet.TargetId)
-                        {
-                            player.UseSpell(packet.Slot, en);
-                            casted = true;
-
-                            break;
-                        }
-                    }
-
-                    foreach (var en in map.GetEntities())
                     {
                         if (en.Id == packet.TargetId)
                         {

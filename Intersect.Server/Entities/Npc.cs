@@ -173,7 +173,7 @@ namespace Intersect.Server.Entities
                 AggroCenterY = 0;
                 AggroCenterZ = 0;
 
-                MapInstance.Get(MapId).RemoveEntity(this);
+                MapInstance.Get(MapId)?.GetRelevantProcessingLayer(InstanceLayer)?.RemoveEntity(this);
                 PacketSender.SendEntityDie(this);
                 PacketSender.SendEntityLeave(this);
             }
@@ -395,7 +395,7 @@ namespace Intersect.Server.Entities
                 {
                     PacketSender.SendAnimationToProximity(
                         Base.AttackAnimationId, -1, Guid.Empty, target.MapId, (byte) target.X, (byte) target.Y,
-                        (sbyte) Dir
+                        (sbyte) Dir, target.InstanceLayer
                     );
                 }
 
@@ -745,7 +745,7 @@ namespace Intersect.Server.Entities
 
             if (spellBase.CastAnimationId != Guid.Empty)
             {
-                PacketSender.SendAnimationToProximity(spellBase.CastAnimationId, 1, Id, MapId, 0, 0, (sbyte) Dir);
+                PacketSender.SendAnimationToProximity(spellBase.CastAnimationId, 1, Id, MapId, 0, 0, (sbyte) Dir, InstanceLayer);
 
                 //Target Type 1 will be global entity
             }
@@ -1170,12 +1170,12 @@ namespace Intersect.Server.Entities
                     {
                         if (curMapLink == Guid.Empty)
                         {
-                            MapInstance.Get(curMapLink).RemoveEntity(this);
+                            MapInstance.Get(curMapLink)?.GetRelevantProcessingLayer(InstanceLayer)?.RemoveEntity(this);
                         }
 
                         if (MapId != Guid.Empty)
                         {
-                            MapInstance.Get(MapId).AddEntity(this);
+                            MapInstance.Get(MapId)?.GetRelevantProcessingLayer(InstanceLayer)?.AddEntity(this);
                         }
                     }
                 }
@@ -1242,7 +1242,7 @@ namespace Intersect.Server.Entities
 
         public override void NotifySwarm(Entity attacker)
         {
-            var mapEntities = MapInstance.Get(MapId).GetEntities(true);
+            var mapEntities = MapInstance.Get(MapId).GetRelevantProcessingLayer(InstanceLayer).GetEntities(true);
             foreach (var en in mapEntities)
             {
                 if (en.GetType() == typeof(Npc))
@@ -1396,7 +1396,7 @@ namespace Intersect.Server.Entities
             // Scan for nearby targets
             foreach (var map in maps)
             {
-                foreach (var entity in map.GetCachedEntities())
+                foreach (var entity in map.GetRelevantProcessingLayer(InstanceLayer)?.GetCachedEntities())
                 {
                     if (entity != null && !entity.IsDead() && entity != this && entity.Id != avoidId)
                     {
@@ -1528,7 +1528,7 @@ namespace Intersect.Server.Entities
             bool fromWarpEvent = false
         )
         {
-            var map = MapInstance.Get(newMapId);
+            var map = MapInstance.Get(newMapId)?.GetRelevantProcessingLayer(InstanceLayer);
             if (map == null)
             {
                 return;
@@ -1540,7 +1540,7 @@ namespace Intersect.Server.Entities
             Dir = newDir;
             if (newMapId != MapId)
             {
-                var oldMap = MapInstance.Get(MapId);
+                var oldMap = MapInstance.Get(MapId)?.GetRelevantProcessingLayer(InstanceLayer);
                 if (oldMap != null)
                 {
                     oldMap.RemoveEntity(this);
