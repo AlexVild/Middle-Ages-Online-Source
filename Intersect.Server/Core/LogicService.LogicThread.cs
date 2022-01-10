@@ -175,7 +175,8 @@ namespace Intersect.Server.Core
                         //Check our map update queues. If maps are ready to be updated based on our update intervals set in the server config then tell our thread pool to queue the map update as a work item.
                         lock (LogicLock)
                         {
-                            if (Options.Instance.Processing.MapUpdateInterval != Options.Instance.Processing.ProjectileUpdateInterval)
+                            // TODO Alex Support this
+                            /*if (Options.Instance.Processing.MapUpdateInterval != Options.Instance.Processing.ProjectileUpdateInterval)
                             {
                                 while (MapProjectileUpdateQueue.TryPeek(out MapInstance result) && result.LastProjectileUpdateTime + Options.Instance.Processing.ProjectileUpdateInterval <= startTime)
                                 {
@@ -184,7 +185,7 @@ namespace Intersect.Server.Core
                                         LogicPool.QueueWorkItem(UpdateMap, sameResult, true);
                                     }
                                 }
-                            }
+                            }*/
 
                             while (MapUpdateQueue.TryPeek(out MapInstance result) && result.LastUpdateTime + Options.Instance.Processing.MapUpdateInterval <= startTime)
                             {
@@ -320,6 +321,7 @@ namespace Intersect.Server.Core
             /// <param name="map">The map in which we want to add to our update queues.</param>
             private void AddToQueue(MapInstance map)
             {
+                // TODO Alex: Support this
                 if (Options.Instance.Processing.MapUpdateInterval != Options.Instance.Processing.ProjectileUpdateInterval)
                 {
                     MapProjectileUpdateQueue.Enqueue(map);
@@ -340,6 +342,7 @@ namespace Intersect.Server.Core
                 {
                     if (onlyProjectiles)
                     {
+                        
                         map.UpdateProjectiles(Globals.Timing.Milliseconds);
                         if (ActiveMaps.Contains(map.Id))
                         {

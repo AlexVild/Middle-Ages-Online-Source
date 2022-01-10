@@ -898,7 +898,7 @@ namespace Intersect.Server.Entities
                     {
                         var oldMap = MapInstance.Get(MapId);
                         // Todo Alex this should be done regardless of entity status
-                        if (this is Player || this is Npc || this is Resource)
+                        if (this is Player || this is Npc || this is Resource || this is Projectile)
                         {
                             if (oldMap.TryGetRelevantProcessingLayer(InstanceLayer, out var oldMapProcessingLayer)) {
                                 oldMapProcessingLayer.RemoveEntity(this);
@@ -971,21 +971,24 @@ namespace Intersect.Server.Entities
                             var localMaps = currentMap.GetSurroundingMaps(true);
                             foreach (var map in localMaps)
                             {
-                                var projectiles = map.MapProjectilesCached;
-                                foreach (var projectile in projectiles)
+                                if (map.TryGetRelevantProcessingLayer(InstanceLayer, out var mpl))
                                 {
-                                    var spawns = projectile?.Spawns?.ToArray() ?? Array.Empty<ProjectileSpawn>();
-                                    foreach (var spawn in spawns)
+                                    var projectiles = mpl.MapProjectilesCached;
+                                    foreach (var projectile in projectiles)
                                     {
-                                        // TODO: Filter in Spawns variable, there should be no nulls. See #78 for evidence it is null.
-                                        if (spawn == null)
+                                        var spawns = projectile?.Spawns?.ToArray() ?? Array.Empty<ProjectileSpawn>();
+                                        foreach (var spawn in spawns)
                                         {
-                                            continue;
-                                        }
+                                            // TODO: Filter in Spawns variable, there should be no nulls. See #78 for evidence it is null.
+                                            if (spawn == null)
+                                            {
+                                                continue;
+                                            }
 
-                                        if (spawn.IsAtLocation(MapId, X, Y, Z) && spawn.HitEntity(this))
-                                        {
-                                            spawn.Dead = true;
+                                            if (spawn.IsAtLocation(MapId, X, Y, Z) && spawn.HitEntity(this))
+                                            {
+                                                spawn.Dead = true;
+                                            }
                                         }
                                     }
                                 }
@@ -1001,9 +1004,9 @@ namespace Intersect.Server.Entities
                     }
 
                     //Check for traps
-                    if (currentMap != null)
+                    if (currentMap != null && currentMap.TryGetRelevantProcessingLayer(InstanceLayer, out var mapProcessingLayer))
                     {
-                        foreach (var trap in currentMap.MapTrapsCached)
+                        foreach (var trap in mapProcessingLayer.MapTrapsCached)
                         {
                             trap.CheckEntityHasDetonatedTrap(this);
                         }
@@ -2383,22 +2386,26 @@ namespace Intersect.Server.Entities
                             var projectileBase = spellBase.Combat.Projectile;
                             if (projectileBase != null)
                             {
-                                if (prayerSpell && prayerTarget != null && prayerSpellDir >= 0)
+                                var mapInstance = MapInstance.Get(MapId);
+                                if (mapInstance != null && mapInstance.TryGetRelevantProcessingLayer(InstanceLayer, out var mapProcessingLayer))
                                 {
-                                    MapInstance.Get(MapId)
+                                    if (prayerSpell && prayerTarget != null && prayerSpellDir >= 0)
+                                    {
+                                        mapProcessingLayer
+                                            .SpawnMapProjectile(
+                                                this, projectileBase, spellBase, null, prayerTarget.MapId, (byte)prayerTarget.X, (byte)prayerTarget.Y, (byte)prayerTarget.Z,
+                                                (byte)prayerSpellDir, CastTarget
+                                            );
+                                    }
+                                    else
+                                    {
+                                        mapProcessingLayer
                                         .SpawnMapProjectile(
-                                            this, projectileBase, spellBase, null, prayerTarget.MapId, (byte)prayerTarget.X, (byte)prayerTarget.Y, (byte)prayerTarget.Z,
-                                            (byte)prayerSpellDir, CastTarget
+                                            this, projectileBase, spellBase, null, MapId, (byte)X, (byte)Y, (byte)Z,
+                                            (byte)Dir, CastTarget
                                         );
-                                } else
-                                {
-                                    MapInstance.Get(MapId)
-                                    .SpawnMapProjectile(
-                                        this, projectileBase, spellBase, null, MapId, (byte)X, (byte)Y, (byte)Z,
-                                        (byte)Dir, CastTarget
-                                    );
-                                }
-                                    
+                                    }
+                                }   
                             }
 
                             break;
@@ -2418,7 +2425,11 @@ namespace Intersect.Server.Entities
 
                             break;
                         case SpellTargetTypes.Trap:
-                            MapInstance.Get(MapId).SpawnTrap(this, spellBase, (byte) X, (byte) Y, (byte) Z);
+                            var map = MapInstance.Get(MapId);
+                            if (map != null && map.TryGetRelevantProcessingLayer(InstanceLayer, out var mpl))
+                            {
+                                mpl.SpawnTrap(this, spellBase, (byte)X, (byte)Y, (byte)Z);
+                            }
 
                             break;
                         default:
