@@ -1826,6 +1826,7 @@ namespace Intersect.Server.Entities
                 }
 
                 var onNewInstance = false;
+                var oldMap = MapInstance.Get(MapId);
 
                 // If we've changed instance layers
                 if (InstanceLayer != LastInstanceLayer)
@@ -1837,6 +1838,7 @@ namespace Intersect.Server.Entities
                     Log.Info($"Previous layer was {LastInstanceLayer}");
                     // Todo Alex Remove this
                     PacketSender.SendChatMsg(this, "Joined Map Instance with ID" + InstanceLayer.ToString(), ChatMessageType.Local);
+                    PacketSender.SendMapLayerChangedPacketTo(this, oldMap, LastInstanceLayer);
                 }
 
                 var newSurroundingMaps = map.GetSurroundingMapIds(true);
@@ -1850,7 +1852,6 @@ namespace Intersect.Server.Entities
 
                 if (newMapId != MapId || mSentMap == false) // Player walked to a new map?
                 {
-                    var oldMap = MapInstance.Get(MapId);
                     if (oldMap != null)
                     {
                         oldMap.GetRelevantProcessingLayer(InstanceLayer).RemoveEntity(this);

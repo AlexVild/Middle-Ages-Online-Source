@@ -1216,7 +1216,10 @@ namespace Intersect.Server.Maps
         {
             foreach (var instance in mMapProcessingLayers.Keys.ToList())
             {
-                mMapProcessingLayers[instance]?.Update(timeMs);
+                if (mMapProcessingLayers.TryGetValue(instance, out var mpl))
+                {
+                    mpl.Update(timeMs);
+                }
             }
         }
 
