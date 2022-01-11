@@ -2210,8 +2210,11 @@ namespace Intersect.Server.Entities
                     // Do we have any items to spawn to the map?
                     if (spawnAmount > 0)
                     {
-                        Map.SpawnItem(overflowTileX > -1 ? overflowTileX : X, overflowTileY > -1 ? overflowTileY : Y, item, spawnAmount, Id);
-                        success = spawnAmount != item.Quantity;
+                        if (Map.TryGetRelevantProcessingLayer(InstanceLayer, out var mapProcessingLayer)) 
+                        {
+                            mapProcessingLayer.SpawnItem(overflowTileX > -1 ? overflowTileX : X, overflowTileY > -1 ? overflowTileY : Y, item, spawnAmount, Id);
+                            success = spawnAmount != item.Quantity;
+                        }
                     }
 
                     break;
@@ -2452,13 +2455,18 @@ namespace Intersect.Server.Entities
             }
 
             var map = Map;
+            MapProcessingLayer mapProcessingLayer;
             if (map == null)
             {
                 Log.Error($"Could not find map {MapId} for player '{Name}'.");
                 return false;
+            } else if (!map.TryGetRelevantProcessingLayer(InstanceLayer, out mapProcessingLayer))
+            {
+                Log.Error($"Could not find map layer {InstanceLayer} for player '{Name}' on map {Map.Name}.");
+                return false;
             }
 
-            map.SpawnItem(X, Y, itemInSlot, itemDescriptor.IsStackable ? amount : 1, Id);
+            mapProcessingLayer.SpawnItem(X, Y, itemInSlot, itemDescriptor.IsStackable ? amount : 1, Id);
 
             itemInSlot.Quantity = Math.Max(0, itemInSlot.Quantity - amount);
 
@@ -4242,8 +4250,12 @@ namespace Intersect.Server.Entities
 
                 if (!TryGiveItem(offer))
                 {
-                    MapInstance.Get(MapId)?.SpawnItem(X, Y, offer, offer.Quantity, Id);
-                    PacketSender.SendChatMsg(this, Strings.Trading.itemsdropped, ChatMessageType.Inventory, CustomColors.Alerts.Error);
+                    var map = MapInstance.Get(MapId);
+                    if (map != null && map.TryGetRelevantProcessingLayer(InstanceLayer, out var mapProcessingLayer))
+                    {
+                        mapProcessingLayer.SpawnItem(X, Y, offer, offer.Quantity, Id);
+                        PacketSender.SendChatMsg(this, Strings.Trading.itemsdropped, ChatMessageType.Inventory, CustomColors.Alerts.Error);
+                    }
                 }
 
                 offer.ItemId = Guid.Empty;

@@ -58,7 +58,7 @@ namespace Intersect.Server.General
         {
             foreach (MapInstance map in MapInstance.Lookup.Values)
             {
-                map?.DespawnItemsOf(item);
+                map?.DespawnItemsOfAcrossLayers(item);
             }
         }
 

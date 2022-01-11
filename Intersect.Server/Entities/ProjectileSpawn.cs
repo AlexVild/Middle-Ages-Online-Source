@@ -37,6 +37,8 @@ namespace Intersect.Server.Entities
 
         public bool Dead;
 
+        public Guid InstanceLayer;
+
         private List<Guid> mEntitiesCollided = new List<Guid>();
 
         public ProjectileSpawn(
@@ -51,6 +53,7 @@ namespace Intersect.Server.Entities
         )
         {
             MapId = mapId;
+            InstanceLayer = instanceLayer;
             X = x;
             Y = y;
             Z = z;
@@ -77,7 +80,10 @@ namespace Intersect.Server.Entities
                     var randomChance = Randomization.Next(1, 100001);
                     if (randomChance < (Options.AmmoRetrieveChance * 1000) * ownerLuck)
                     {
-                        MapInstance.Get(MapId).SpawnItem((int)X, (int)Y, new Item(Parent.Base.AmmoItemId, 1), 1, Parent.Owner.Id);
+                        if (MapInstance.Get(MapId).TryGetRelevantProcessingLayer(InstanceLayer, out var mapProcessingLayer))
+                        {
+                            mapProcessingLayer.SpawnItem((int)X, (int)Y, new Item(Parent.Base.AmmoItemId, 1), 1, Parent.Owner.Id);
+                        }
                     }
                 }
             }
