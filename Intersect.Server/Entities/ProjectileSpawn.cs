@@ -45,6 +45,7 @@ namespace Intersect.Server.Entities
             byte y,
             byte z,
             Guid mapId,
+            Guid instanceLayer,
             ProjectileBase projectileBase,
             Projectile parent
         )
