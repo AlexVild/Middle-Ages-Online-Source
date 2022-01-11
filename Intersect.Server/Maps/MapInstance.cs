@@ -439,7 +439,7 @@ namespace Intersect.Server.Maps
                     }
                 }
             }
-            PacketSender.SendRemoveProjectileSpawns(Id, guids.ToArray(), null);
+            PacketSender.SendRemoveProjectileSpawnsFromAllLayers(Id, guids.ToArray(), null);
         }
 
         public void DespawnItemsOf(ItemBase itemBase)
@@ -619,16 +619,6 @@ namespace Intersect.Server.Maps
 
                         en.Value.StatusesUpdated = false;
                     }
-                }
-
-                if (vitalUpdates.Count > 0)
-                {
-                    PacketSender.SendMapEntityVitalUpdate(this, vitalUpdates.ToArray());
-                }
-
-                if (statusUpdates.Count > 0)
-                {
-                    PacketSender.SendMapEntityStatusUpdate(this, statusUpdates.ToArray());
                 }
 
                 //Process all global events
@@ -971,7 +961,7 @@ namespace Intersect.Server.Maps
             }
         }
 
-        public bool TryGetRelevantProcessingLayer(Guid instanceLayer, out MapProcessingLayer mpl, bool createIfNew = true)
+        public bool TryGetRelevantProcessingLayer(Guid instanceLayer, out MapProcessingLayer mpl, bool createIfNew = false)
         {
             mpl = null;
             if (mMapProcessingLayers.TryGetValue(instanceLayer, out var processingLayer))
