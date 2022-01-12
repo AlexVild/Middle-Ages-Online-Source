@@ -818,11 +818,11 @@ namespace Intersect.Server.Networking
                     chatColor = CustomColors.Chat.ModLocalChat;
                 }
 
-                PacketSender.SendProximityMsg(
-                    Strings.Chat.local.ToString(player.Name, msg), ChatMessageType.Local, player.MapId, chatColor,
+                PacketSender.SendProximityMsgToLayer(
+                    Strings.Chat.local.ToString(player.Name, msg), ChatMessageType.Local, player.MapId, player.InstanceLayer, chatColor,
                     player.Name
                 );
-                PacketSender.SendChatBubble(player.Id, (int) EntityTypes.GlobalEntity, msg, player.MapId);
+                PacketSender.SendChatBubble(player.Id, player.InstanceLayer, (int) EntityTypes.GlobalEntity, msg, player.MapId);
                 ChatHistory.LogMessage(player, msg.Trim(), ChatMessageType.Local, Guid.Empty);
             }
             else if (cmd == Strings.Chat.allcmd || cmd == Strings.Chat.globalcmd)
@@ -1286,7 +1286,6 @@ namespace Intersect.Server.Networking
 
             foreach (var map in player.Map.GetSurroundingMaps(true))
             {
-                // TODO Alex Consolidate
                 if (map.TryGetRelevantProcessingLayer(player.InstanceLayer, out var mapProcessingLayer))
                 {
                     foreach (var entity in mapProcessingLayer.GetEntities())
@@ -1713,7 +1712,6 @@ namespace Intersect.Server.Networking
             Entity target = null;
             if (packet.TargetId != Guid.Empty)
             {
-                // TODO Alex: Consolidate, and also maybe refactor all this to a method
                 foreach (var map in player.Map.GetSurroundingMaps(true))
                 {
                     if (map.TryGetRelevantProcessingLayer(player.InstanceLayer, out var mapProcessingLayer))
@@ -1771,7 +1769,6 @@ namespace Intersect.Server.Networking
 
             if (packet.TargetId != Guid.Empty)
             {
-                // TODO Alex: Simplify with a method?
                 foreach (var map in player.Map.GetSurroundingMaps(true))
                 {
                     if (map != null && map.TryGetRelevantProcessingLayer(player.InstanceLayer, out var mapProcessingLayer))
@@ -3194,7 +3191,7 @@ namespace Intersect.Server.Networking
             var players = new List<Player>();
             foreach (var surrMap in map.GetSurroundingMaps(true))
             {
-                players.AddRange(surrMap.GetPlayersOnMap().ToArray());
+                players.AddRange(surrMap.GetPlayersOnAllLayers().ToArray());
             }
 
             foreach (var plyr in players)
@@ -3495,7 +3492,7 @@ namespace Intersect.Server.Networking
                         {
                             ServerContext.Instance.LogicService.LogicPool.WaitForIdle();
                             mapId = packet.TargetId;
-                            var players = MapInstance.Get(mapId).GetPlayersOnMap();
+                            var players = MapInstance.Get(mapId).GetPlayersOnAllLayers();
                             MapList.List.DeleteMap(mapId);
                             DbInterface.DeleteGameObject(MapInstance.Get(mapId));
                             DbInterface.GenerateMapGrids();

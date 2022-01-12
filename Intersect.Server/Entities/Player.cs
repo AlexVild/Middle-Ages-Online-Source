@@ -699,11 +699,10 @@ namespace Intersect.Server.Entities
                             continue;
                         }
 
-                        // TODO Alex - Events
+                        MapProcessingLayer mapProcessingLayer;
                         // If the map does not yet have a processing layer for this player's instance, create one.
                         lock (EntityLock)
                         {
-                            MapProcessingLayer mapProcessingLayer;
                             if (!surrMap.TryGetRelevantProcessingLayer(InstanceLayer, out mapProcessingLayer))
                             {
                                 surrMap.TryCreateProcessingInstance(InstanceLayer, out mapProcessingLayer);
@@ -714,7 +713,7 @@ namespace Intersect.Server.Entities
                         lock (mEventLock)
                         {
                             var autorunEvents = 0;
-                            foreach (var mapEvent in surrMap.EventsCache)
+                            foreach (var mapEvent in mapProcessingLayer.EventsCache)
                             {
                                 if (mapEvent != null)
                                 {
@@ -1898,6 +1897,10 @@ namespace Intersect.Server.Entities
                         // Remove targets of this entity
                         oldMapsProcessingLayer.ClearEntityTargetsOf(this);
                     }
+                    // Clear events - we'll get them again from the map layer's event cache
+                    EventTileLookup.Clear();
+                    EventLookup.Clear();
+                    EventBaseIdLookup.Clear();
                     Log.Debug($"Player {Name} has joined layer {InstanceLayer} of map: {map.Name}");
                     Log.Info($"Previous layer was {LastInstanceLayer}");
                     // Todo Alex Remove this
@@ -6156,7 +6159,7 @@ namespace Intersect.Server.Entities
                             SpawnY = -1
                         };
                         newEvent.PageInstance = new EventPageInstance(
-                            baseEvent, baseEvent.Pages[i], mapId, newEvent, this
+                            baseEvent, baseEvent.Pages[i], mapId, InstanceLayer, newEvent, this
                         );
 
                         newEvent.PageIndex = i;
