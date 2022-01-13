@@ -37,7 +37,7 @@ namespace Intersect.Server.Entities
 
         public bool Dead;
 
-        public Guid InstanceLayer;
+        public Guid MapInstanceId;
 
         private List<Guid> mEntitiesCollided = new List<Guid>();
 
@@ -47,13 +47,13 @@ namespace Intersect.Server.Entities
             byte y,
             byte z,
             Guid mapId,
-            Guid instanceLayer,
+            Guid mapInstanceId,
             ProjectileBase projectileBase,
             Projectile parent
         )
         {
             MapId = mapId;
-            InstanceLayer = instanceLayer;
+            MapInstanceId = mapInstanceId;
             X = x;
             Y = y;
             Z = z;
@@ -71,7 +71,7 @@ namespace Intersect.Server.Entities
 
         public void AmmoDrop()
         {
-            var map = MapInstance.Get(MapId);
+            var map = MapController.Get(MapId);
             if (map != null && Parent.Base.AmmoItemId != Guid.Empty && Parent.Owner is Player owner)
             {
                 if (owner != null)
@@ -80,9 +80,9 @@ namespace Intersect.Server.Entities
                     var randomChance = Randomization.Next(1, 100001);
                     if (randomChance < (Options.AmmoRetrieveChance * 1000) * ownerLuck)
                     {
-                        if (MapInstance.Get(MapId).TryGetProcesingLayerWithId(InstanceLayer, out var mapProcessingLayer))
+                        if (MapController.TryGetInstanceFromMap(MapId, MapInstanceId, out var mapInstance))
                         {
-                            mapProcessingLayer.SpawnItem((int)X, (int)Y, new Item(Parent.Base.AmmoItemId, 1), 1, Parent.Owner.Id);
+                            mapInstance.SpawnItem((int)X, (int)Y, new Item(Parent.Base.AmmoItemId, 1), 1, Parent.Owner.Id);
                         }
                     }
                 }
