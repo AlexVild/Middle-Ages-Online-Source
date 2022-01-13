@@ -400,7 +400,7 @@ namespace Intersect.Server.Entities
                 }
             }
 
-            if (!killSpawn && map != null && map.TryGetRelevantProcessingLayer(InstanceLayer, out var mapProcessingLayer))
+            if (!killSpawn && map != null && map.TryGetProcesingLayerWithId(InstanceLayer, out var mapProcessingLayer))
             {
                 var entities = mapProcessingLayer.GetEntities();
                 for (var z = 0; z < entities.Count; z++)
@@ -517,7 +517,7 @@ namespace Intersect.Server.Entities
 
             var map = MapInstance.Get(MapId);
 
-            if (map != null && map.TryGetRelevantProcessingLayer(InstanceLayer, out var mapProcessingLayer))
+            if (map != null && map.TryGetProcesingLayerWithId(InstanceLayer, out var mapProcessingLayer))
             {
                 mapProcessingLayer.RemoveProjectile(this);
             }

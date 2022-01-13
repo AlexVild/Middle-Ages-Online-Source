@@ -80,7 +80,7 @@ namespace Intersect.Server.Entities
                     var randomChance = Randomization.Next(1, 100001);
                     if (randomChance < (Options.AmmoRetrieveChance * 1000) * ownerLuck)
                     {
-                        if (MapInstance.Get(MapId).TryGetRelevantProcessingLayer(InstanceLayer, out var mapProcessingLayer))
+                        if (MapInstance.Get(MapId).TryGetProcesingLayerWithId(InstanceLayer, out var mapProcessingLayer))
                         {
                             mapProcessingLayer.SpawnItem((int)X, (int)Y, new Item(Parent.Base.AmmoItemId, 1), 1, Parent.Owner.Id);
                         }

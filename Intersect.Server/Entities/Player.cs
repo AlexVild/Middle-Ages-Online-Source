@@ -405,7 +405,7 @@ namespace Intersect.Server.Entities
         private void Logout()
         {
             var map = MapInstance.Get(MapId);
-            if (map.TryGetRelevantProcessingLayer(InstanceLayer, out var mapProcessingLayer))
+            if (map.TryGetProcesingLayerWithId(InstanceLayer, out var mapProcessingLayer))
             {
                 mapProcessingLayer.RemoveEntity(this);
             }
@@ -666,7 +666,7 @@ namespace Intersect.Server.Entities
                         var lastMap = MapInstance.Get(LastMapEntered);
                         if (lastMap != null)
                         {
-                            if (lastMap.TryGetRelevantProcessingLayer(InstanceLayer, out var mapProcessingLayer))
+                            if (lastMap.TryGetProcesingLayerWithId(InstanceLayer, out var mapProcessingLayer))
                             {
                                 mapProcessingLayer.RemoveEntity(this);
                             }
@@ -682,7 +682,7 @@ namespace Intersect.Server.Entities
                             {
                                 if (MapInstance.Get(MapId) != null)
                                 {
-                                    if (MapInstance.Get(MapId).TryGetRelevantProcessingLayer(InstanceLayer, out var mapProcessingLayer))
+                                    if (MapInstance.Get(MapId).TryGetProcesingLayerWithId(InstanceLayer, out var mapProcessingLayer))
                                     {
                                         mapProcessingLayer.PlayerEnteredMap(this);
                                     }
@@ -703,9 +703,9 @@ namespace Intersect.Server.Entities
                         // If the map does not yet have a processing layer for this player's instance, create one.
                         lock (EntityLock)
                         {
-                            if (!surrMap.TryGetRelevantProcessingLayer(InstanceLayer, out mapProcessingLayer))
+                            if (!surrMap.TryGetProcesingLayerWithId(InstanceLayer, out mapProcessingLayer))
                             {
-                                surrMap.TryCreateProcessingInstance(InstanceLayer, out mapProcessingLayer);
+                                surrMap.TryCreateProcessingLayer(InstanceLayer, out mapProcessingLayer);
                             }
                         }
 
@@ -946,7 +946,7 @@ namespace Intersect.Server.Entities
             var mapList = Map.GetSurroundingMaps(true).ToArray();
             foreach(var map in mapList)
             {
-                if (map.TryGetRelevantProcessingLayer(InstanceLayer, out var mapProcessingLayer))
+                if (map.TryGetProcesingLayerWithId(InstanceLayer, out var mapProcessingLayer))
                 {
                     foreach (var entity in mapProcessingLayer.GetCachedEntities())
                     {
@@ -1665,7 +1665,7 @@ namespace Intersect.Server.Entities
             var mapInstance = MapInstance.Get(MapId);
             if (mapInstance == null) return;
 
-            if (mapInstance.TryGetRelevantProcessingLayer(InstanceLayer, out var mapProcessingLayer))
+            if (mapInstance.TryGetProcesingLayerWithId(InstanceLayer, out var mapProcessingLayer))
             {
                 mapProcessingLayer.GetEntities(true).ForEach(
                     entity =>
@@ -1863,17 +1863,17 @@ namespace Intersect.Server.Entities
                 var newSurroundingMaps = map.GetSurroundingMapIds(true);
                 var onNewInstance = InstanceLayer != LastInstanceLayer;
                 var oldMap = MapInstance.Get(MapId);
-                oldMap.TryGetRelevantProcessingLayer(LastInstanceLayer, out var oldMapsProcessingLayer);
+                oldMap.TryGetProcesingLayerWithId(LastInstanceLayer, out var oldMapsProcessingLayer);
 
                 MapProcessingLayer newMapsProcessingLayer;
                 // Ensure there exists a map processing layer. A player is the sole entity that can create new layers
                 lock (EntityLock)
                 {
-                    if (!map.TryGetRelevantProcessingLayer(InstanceLayer, out newMapsProcessingLayer))
+                    if (!map.TryGetProcesingLayerWithId(InstanceLayer, out newMapsProcessingLayer))
                     {
                         foreach (var allMaps in newSurroundingMaps)
                         {
-                            MapInstance.Get(allMaps).TryCreateProcessingInstance(InstanceLayer, out newMapsProcessingLayer);
+                            MapInstance.Get(allMaps).TryCreateProcessingLayer(InstanceLayer, out newMapsProcessingLayer);
                         }
                     }
                 }
@@ -1908,7 +1908,7 @@ namespace Intersect.Server.Entities
                     // We changed maps AND instance layers - remove from the old map's old layer
                     PacketSender.SendEntityLeaveLayerOnMap(this, oldMap.Id, LastInstanceLayer);
                     // Remove any trace of our player from the old layer's processing
-                    map.RemoveEntityFromAllRelevantMapsInLayer(this, LastInstanceLayer);
+                    map.RemoveEntityFromAllSurroundingMapsInLayer(this, LastInstanceLayer);
                 }
 
                 foreach (var evt in EventLookup)
@@ -2213,7 +2213,7 @@ namespace Intersect.Server.Entities
                     // Do we have any items to spawn to the map?
                     if (spawnAmount > 0)
                     {
-                        if (Map.TryGetRelevantProcessingLayer(InstanceLayer, out var mapProcessingLayer)) 
+                        if (Map.TryGetProcesingLayerWithId(InstanceLayer, out var mapProcessingLayer)) 
                         {
                             mapProcessingLayer.SpawnItem(overflowTileX > -1 ? overflowTileX : X, overflowTileY > -1 ? overflowTileY : Y, item, spawnAmount, Id);
                             success = spawnAmount != item.Quantity;
@@ -2463,7 +2463,7 @@ namespace Intersect.Server.Entities
             {
                 Log.Error($"Could not find map {MapId} for player '{Name}'.");
                 return false;
-            } else if (!map.TryGetRelevantProcessingLayer(InstanceLayer, out mapProcessingLayer))
+            } else if (!map.TryGetProcesingLayerWithId(InstanceLayer, out mapProcessingLayer))
             {
                 Log.Error($"Could not find map layer {InstanceLayer} for player '{Name}' on map {Map.Name}.");
                 return false;
@@ -4254,7 +4254,7 @@ namespace Intersect.Server.Entities
                 if (!TryGiveItem(offer))
                 {
                     var map = MapInstance.Get(MapId);
-                    if (map != null && map.TryGetRelevantProcessingLayer(InstanceLayer, out var mapProcessingLayer))
+                    if (map != null && map.TryGetProcesingLayerWithId(InstanceLayer, out var mapProcessingLayer))
                     {
                         mapProcessingLayer.SpawnItem(X, Y, offer, offer.Quantity, Id);
                         PacketSender.SendChatMsg(this, Strings.Trading.itemsdropped, ChatMessageType.Inventory, CustomColors.Alerts.Error);

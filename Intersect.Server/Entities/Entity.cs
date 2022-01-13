@@ -502,7 +502,7 @@ namespace Intersect.Server.Entities
             {
                 var targetMap = mapInstance;
                 var mapEntities = new List<Entity>();
-                if (mapInstance.TryGetRelevantProcessingLayer(InstanceLayer, out var mapProcessingLayer))
+                if (mapInstance.TryGetProcesingLayerWithId(InstanceLayer, out var mapProcessingLayer))
                 {
                     mapEntities.AddRange(mapProcessingLayer.GetCachedEntities());
                 }
@@ -890,11 +890,11 @@ namespace Intersect.Server.Entities
                     if (MapId != tile.GetMapId())
                     {
                         var oldMap = MapInstance.Get(MapId);
-                        if (oldMap.TryGetRelevantProcessingLayer(InstanceLayer, out var oldMapProcessingLayer)) {
+                        if (oldMap.TryGetProcesingLayerWithId(InstanceLayer, out var oldMapProcessingLayer)) {
                             oldMapProcessingLayer.RemoveEntity(this);
                         }
 
-                        if (currentMap.TryGetRelevantProcessingLayer(InstanceLayer, out var currentMapProcessingLayer))
+                        if (currentMap.TryGetProcesingLayerWithId(InstanceLayer, out var currentMapProcessingLayer))
                         {
                             currentMapProcessingLayer.AddEntity(this);
                         }
@@ -956,7 +956,7 @@ namespace Intersect.Server.Entities
                             var localMaps = currentMap.GetSurroundingMaps(true);
                             foreach (var map in localMaps)
                             {
-                                if (map.TryGetRelevantProcessingLayer(InstanceLayer, out var mpl))
+                                if (map.TryGetProcesingLayerWithId(InstanceLayer, out var mpl))
                                 {
                                     var projectiles = mpl.MapProjectilesCached;
                                     foreach (var projectile in projectiles)
@@ -989,7 +989,7 @@ namespace Intersect.Server.Entities
                     }
 
                     //Check for traps
-                    if (currentMap != null && currentMap.TryGetRelevantProcessingLayer(InstanceLayer, out var mapProcessingLayer))
+                    if (currentMap != null && currentMap.TryGetProcesingLayerWithId(InstanceLayer, out var mapProcessingLayer))
                     {
                         foreach (var trap in mapProcessingLayer.MapTrapsCached)
                         {
@@ -2372,7 +2372,7 @@ namespace Intersect.Server.Entities
                             if (projectileBase != null)
                             {
                                 var mapInstance = MapInstance.Get(MapId);
-                                if (mapInstance != null && mapInstance.TryGetRelevantProcessingLayer(InstanceLayer, out var mapProcessingLayer))
+                                if (mapInstance != null && mapInstance.TryGetProcesingLayerWithId(InstanceLayer, out var mapProcessingLayer))
                                 {
                                     if (prayerSpell && prayerTarget != null && prayerSpellDir >= 0)
                                     {
@@ -2411,7 +2411,7 @@ namespace Intersect.Server.Entities
                             break;
                         case SpellTargetTypes.Trap:
                             var map = MapInstance.Get(MapId);
-                            if (map != null && map.TryGetRelevantProcessingLayer(InstanceLayer, out var mpl))
+                            if (map != null && map.TryGetProcesingLayerWithId(InstanceLayer, out var mpl))
                             {
                                 mpl.SpawnTrap(this, spellBase, (byte)X, (byte)Y, (byte)Z);
                             }
@@ -2497,7 +2497,7 @@ namespace Intersect.Server.Entities
                     var surroundingMaps = startMap.GetSurroundingMaps(true);
                     foreach (var map in surroundingMaps)
                     {
-                        if (map.TryGetRelevantProcessingLayer(InstanceLayer, out var mapProcessingLayer))
+                        if (map.TryGetProcesingLayerWithId(InstanceLayer, out var mapProcessingLayer))
                         {
                             foreach (var entity in mapProcessingLayer.GetCachedEntities())
                             {
@@ -2538,7 +2538,7 @@ namespace Intersect.Server.Entities
             {
                 return new int[] { x, y };
             }
-            if (mapInstance.TryGetRelevantProcessingLayer(InstanceLayer, out var map))
+            if (mapInstance.TryGetProcesingLayerWithId(InstanceLayer, out var map))
             {
                 List<int[]> validPosition = new List<int[]>();
 
@@ -2882,7 +2882,7 @@ namespace Intersect.Server.Entities
             {
                 foreach (var map in currentMap.GetSurroundingMaps(true))
                 {
-                    if (map.TryGetRelevantProcessingLayer(InstanceLayer, out var mapProcessingLayer))
+                    if (map.TryGetProcesingLayerWithId(InstanceLayer, out var mapProcessingLayer))
                     {
                         mapProcessingLayer.ClearEntityTargetsOf(this);
                     }
@@ -2966,7 +2966,7 @@ namespace Intersect.Server.Entities
 
                 // Spawn the actual item!
                 var map = MapInstance.Get(MapId);
-                if (map != null && map.TryGetRelevantProcessingLayer(InstanceLayer, out var mapProcessingLayer))
+                if (map != null && map.TryGetProcesingLayerWithId(InstanceLayer, out var mapProcessingLayer))
                 {
                     mapProcessingLayer.SpawnItem(X, Y, item, item.Quantity, lootOwner, sendUpdate);
                 }

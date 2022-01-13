@@ -1227,7 +1227,7 @@ namespace Intersect.Server.Networking
                             }
 #endif
                         var map = MapInstance.Get(player.MapId);
-                        if (map != null && map.TryGetRelevantProcessingLayer(player.InstanceLayer, out var mapProcessingLayer))
+                        if (map != null && map.TryGetProcesingLayerWithId(player.InstanceLayer, out var mapProcessingLayer))
                         {
                             mapProcessingLayer
                             .SpawnMapProjectile(
@@ -1286,7 +1286,7 @@ namespace Intersect.Server.Networking
 
             foreach (var map in player.Map.GetSurroundingMaps(true))
             {
-                if (map.TryGetRelevantProcessingLayer(player.InstanceLayer, out var mapProcessingLayer))
+                if (map.TryGetProcesingLayerWithId(player.InstanceLayer, out var mapProcessingLayer))
                 {
                     foreach (var entity in mapProcessingLayer.GetEntities())
                     {
@@ -1559,7 +1559,7 @@ namespace Intersect.Server.Networking
                 return;
             }
 
-            if(!map.TryGetRelevantProcessingLayer(player.InstanceLayer, out var mapProcessingLayer))
+            if(!map.TryGetProcesingLayerWithId(player.InstanceLayer, out var mapProcessingLayer))
             {
                 return;
             }
@@ -1714,7 +1714,7 @@ namespace Intersect.Server.Networking
             {
                 foreach (var map in player.Map.GetSurroundingMaps(true))
                 {
-                    if (map.TryGetRelevantProcessingLayer(player.InstanceLayer, out var mapProcessingLayer))
+                    if (map.TryGetProcesingLayerWithId(player.InstanceLayer, out var mapProcessingLayer))
                     {
                         foreach (var en in mapProcessingLayer.GetEntities())
                         {
@@ -1771,7 +1771,7 @@ namespace Intersect.Server.Networking
             {
                 foreach (var map in player.Map.GetSurroundingMaps(true))
                 {
-                    if (map != null && map.TryGetRelevantProcessingLayer(player.InstanceLayer, out var mapProcessingLayer))
+                    if (map != null && map.TryGetProcesingLayerWithId(player.InstanceLayer, out var mapProcessingLayer))
                     {
                         foreach (var en in mapProcessingLayer.GetEntities())
                         {
