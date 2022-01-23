@@ -924,9 +924,17 @@ namespace Intersect.Editor.Forms.Editors.Events
                 }
             }
 
-            return Strings.EventCommandList.warp.ToString(
-                mapName, command.X, command.Y, Strings.Directions.dir[(int) command.Direction - 1], command.FadeOnWarp.ToString()
-            );
+            if (command.ChangeInstance)
+            {
+                return Strings.EventCommandList.instancedwarp.ToString(
+                    mapName, command.X, command.Y, Strings.Directions.dir[(int)command.Direction - 1], command.FadeOnWarp.ToString(), Enum.GetName(typeof(MapInstanceType), command.InstanceType)
+                );
+            } else
+            {
+                return Strings.EventCommandList.warp.ToString(
+                    mapName, command.X, command.Y, Strings.Directions.dir[(int)command.Direction - 1], command.FadeOnWarp.ToString()
+                );
+            }
         }
 
         private static string GetCommandText(SetMoveRouteCommand command, MapInstance map)

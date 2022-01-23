@@ -594,6 +594,16 @@ namespace Intersect.GameObjects.Events.Commands
         public WarpDirection Direction { get; set; } = WarpDirection.Retain;
 
         public bool FadeOnWarp { get; set; } = false;
+
+        /// <summary>
+        /// Whether or not the warp event will change a player's map instance settings
+        /// </summary>
+        public bool ChangeInstance { get; set; } = false;
+
+        /// <summary>
+        /// The <see cref="MapInstanceType"/> we are going to be warping to
+        /// </summary>
+        public MapInstanceType InstanceType { get; set; } = MapInstanceType.Overworld;
     }
 
     public class SetMoveRouteCommand : EventCommand

@@ -718,6 +718,9 @@
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_SetVehicle.resx">
       <DependentUpon>EventCommand_SetVehicle.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_Warp.resx">
+      <DependentUpon>EventCommand_Warp.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\frmQuestBoard.resx">
       <DependentUpon>frmQuestBoard.cs</DependentUpon>
     </EmbeddedResource>

@@ -271,6 +271,7 @@
     <Compile Include="Enums\ChatMessageType.cs" />
     <Compile Include="Enums\GuildMemberUpdateActions.cs" />
     <Compile Include="Enums\GUINotification.cs" />
+    <Compile Include="Enums\MapInstanceType.cs" />
     <Compile Include="Enums\ItemHandling.cs" />
     <Compile Include="ErrorHandling\ExceptionInfo.cs" />
     <Compile Include="Extensions\ArrayExtensions.cs" />

@@ -114,6 +114,7 @@ namespace Intersect.Editor.Forms.DockingElements
 
             rbZDimension.Visible = Options.ZDimensionVisible;
             grpZResource.Visible = Options.ZDimensionVisible;
+            grpInstanceSettings.Visible = chkChangeInstance.Checked;
         }
 
         //Tiles Tab
@@ -707,6 +708,8 @@ namespace Intersect.Editor.Forms.DockingElements
                     warpAttribute.Y = (byte)nudWarpY.Value;
                     warpAttribute.Direction = (WarpDirection)cmbDirection.SelectedIndex;
                     warpAttribute.FadeOnWarp = chkMapFade.Checked;
+                    warpAttribute.ChangeInstance = chkChangeInstance.Checked;
+                    warpAttribute.InstanceType = (MapInstanceType)cmbInstanceType.SelectedIndex;
                     break;
 
                 case MapAttributes.Sound:
@@ -1093,6 +1096,9 @@ namespace Intersect.Editor.Forms.DockingElements
             {
                 cmbDirection.Items.Add(Strings.Directions.dir[i]);
             }
+            lblInstance.Text = Strings.Warping.instanceType;
+            chkChangeInstance.Text = Strings.Warping.changeInstance;
+            grpInstanceSettings.Text = Strings.Warping.mapInstancingGroup;
 
             btnVisualMapSelector.Text = Strings.Warping.visual;
 
@@ -1344,6 +1350,11 @@ namespace Intersect.Editor.Forms.DockingElements
             {
                 SetLayer(Options.Instance.MapOpts.Layers.All[cmbMapLayer.SelectedIndex]);
             }
+        }
+
+        private void chkChangeInstance_CheckedChanged(object sender, EventArgs e)
+        {
+            grpInstanceSettings.Visible = chkChangeInstance.Checked;
         }
     }
 

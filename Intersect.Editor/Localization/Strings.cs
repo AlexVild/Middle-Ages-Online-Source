@@ -1866,6 +1866,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString warp = @"Warp Player [Map: {00} X: {01} Y: {02} Dir: {03} Fade: {04}]";
 
+            public static LocalizedString instancedwarp = @"Warp Player to {05} instance [Map: {00} X: {01} Y: {02} Dir: {03} Fade: {04}]";
+
             public static LocalizedString whenoption = @"When [{00}]";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -5136,6 +5138,12 @@ Negative values for time to flow backwards.";
             public static LocalizedString y = @"Y: {00}";
             
             public static LocalizedString mapFade = @"Fade transition?";
+
+            public static LocalizedString changeInstance = @"Change instance?";
+
+            public static LocalizedString mapInstancingGroup = @"Instance Settings";
+
+            public static LocalizedString instanceType = @"Instance Type:";
 
         }
 

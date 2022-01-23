@@ -1850,7 +1850,7 @@ namespace Intersect.Server.Entities
                 var onNewInstance = MapInstanceId != PreviousMapInstanceId;
 
                 MapInstance newMapInstance;
-                // Ensure there exists a map processing layer. A player is the sole entity that can create new map instances
+                // Ensure there exists a map instance with the Player's InstanceId. A player is the sole entity that can create new map instances
                 lock (EntityLock)
                 {
                     if (!newMap.TryGetInstance(MapInstanceId, out newMapInstance))
@@ -1866,7 +1866,7 @@ namespace Intersect.Server.Entities
 
                 if (newMapInstance == null)
                 {
-                    Log.Error($"Player {Name} requested a new map processing layer and failed to get it.");
+                    Log.Error($"Player {Name} requested a new map Instance with ID {MapInstanceId} and failed to get it.");
                     WarpToSpawn();
 
                     return;
@@ -1941,17 +1941,17 @@ namespace Intersect.Server.Entities
                 PacketSender.SendMapLayerChangedPacketTo(this, oldMap, PreviousMapInstanceId);
                 oldMapInstance.ClearEntityTargetsOf(this); // Remove targets of this entity
             }
-            // Clear events - we'll get them again from the map layer's event cache
+            // Clear events - we'll get them again from the map instance's event cache
             EventTileLookup.Clear();
             EventLookup.Clear();
             EventBaseIdLookup.Clear();
-            Log.Debug($"Player {Name} has joined layer {MapInstanceId} of map: {newMap.Name}");
-            Log.Info($"Previous layer was {PreviousMapInstanceId}");
+            Log.Debug($"Player {Name} has joined instance {MapInstanceId} of map: {newMap.Name}");
+            Log.Info($"Previous instance was {PreviousMapInstanceId}");
             // Todo Alex Remove this
             PacketSender.SendChatMsg(this, "Joined Map Instance with ID" + MapInstanceId.ToString(), ChatMessageType.Local);
-            // We changed maps AND instance layers - remove from the old map's old layer
+            // We changed maps AND instance layers - remove from the old instance
             PacketSender.SendEntityLeaveInstanceOfMap(this, oldMap.Id, PreviousMapInstanceId);
-            // Remove any trace of our player from the old layer's processing
+            // Remove any trace of our player from the old instance's processing
             newMap.RemoveEntityFromAllSurroundingMapsInInstance(this, PreviousMapInstanceId);
         }
 

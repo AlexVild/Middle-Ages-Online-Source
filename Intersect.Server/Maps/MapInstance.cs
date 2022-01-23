@@ -61,7 +61,7 @@ namespace Intersect.Server.Maps
         /// <summary>
         /// Used to determine when to process the instance (update properties & send packets to players.
         /// <remarks>
-        /// This is flipped whenever we have NO players on this or surrounding processing layers.
+        /// This is flipped whenever we have NO players on this or surrounding instances.
         /// </remarks>
         /// </summary>
         private bool mIsProcessing;
@@ -129,7 +129,7 @@ namespace Intersect.Server.Maps
         private BytePoint[] mNpcMapBlocks = Array.Empty<BytePoint>();
 
         // Events
-        /* Processing Layers have Global Events - these are global to the PROCESSING instance, NOT to the MapController.
+        /* Processing Layers have Global Events - these are global to the INSTANCE, NOT to the MapController.
          * As of the initial "Add Instancing" refactor, this is what the stock "Is Global?" event tick box in the editor
          * will enable - an "Instance-Global" event */
         public ConcurrentDictionary<EventBase, Event> GlobalEventInstances = new ConcurrentDictionary<EventBase, Event>();
@@ -139,10 +139,10 @@ namespace Intersect.Server.Maps
         private MapActionMessages mActionMessages = new MapActionMessages();
         private MapAnimations mMapAnimations = new MapAnimations();
 
-        public MapInstance(MapController map, Guid instanceLayer)
+        public MapInstance(MapController map, Guid mapInstanceId)
         {
             mMapController = map;
-            MapInstanceId = instanceLayer;
+            MapInstanceId = mapInstanceId;
             Id = Guid.NewGuid();
 
             Initialize();
@@ -171,7 +171,7 @@ namespace Intersect.Server.Maps
             return (!mIsProcessing && LastRequestedUpdateTime > mLastUpdateTime + Options.TimeUntilMapCleanup);
         }
 
-        public void RemoveLayerFromController()
+        public void RemoveInstanceFromController()
         {
             lock (GetLock())
             {
@@ -264,7 +264,7 @@ namespace Intersect.Server.Maps
                     mLastUpdateTime = timeMs;
                 }
 
-                // If there are no players on this or surrounding processing layers, stop processing updates.
+                // If there are no players on this or surrounding instances, stop processing updates.
                 mIsProcessing = GetPlayers(true).Any();
                 LastRequestedUpdateTime = timeMs;
             }
