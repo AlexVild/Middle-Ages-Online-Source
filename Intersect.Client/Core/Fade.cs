@@ -77,7 +77,7 @@ namespace Intersect.Client.Core
                     sCurrentAction = FadeType.None;
                     if (sAlertServerWhenFaded)
                     {
-                        Networking.PacketSender.SendMapTransitionReady(Globals.futureWarpMapId, Globals.futureWarpX, Globals.futureWarpY, Globals.futureWarpDir);
+                        Networking.PacketSender.SendMapTransitionReady(Globals.futureWarpMapId, Globals.futureWarpX, Globals.futureWarpY, Globals.futureWarpDir, Globals.futureWarpInstanceType);
                     }
                     sAlertServerWhenFaded = false;
                     sFadeAmt = 255f;

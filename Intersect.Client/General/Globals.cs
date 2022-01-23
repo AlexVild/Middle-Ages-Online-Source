@@ -181,6 +181,8 @@ namespace Intersect.Client.General
 
         public static byte futureWarpDir;
 
+        public static MapInstanceType futureWarpInstanceType = MapInstanceType.NoChange;
+
         public static Entity GetEntity(Guid id, EntityTypes type)
         {
             if (Entities.ContainsKey(id))

@@ -2922,7 +2922,7 @@ namespace Intersect.Server.Networking
                 return;
             }
 
-            player.Warp(packet.NewMapId, packet.X, packet.Y, packet.Dir);
+            player.Warp(packet.NewMapId, packet.X, packet.Y, packet.Dir, false, 0, false, false, packet.InstanceType);
         }
 
         // BankSortPacket

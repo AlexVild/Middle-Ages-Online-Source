@@ -1540,7 +1540,9 @@ namespace Intersect.Server.Entities
             bool adminWarp = false,
             byte zOverride = 0,
             bool mapSave = false,
-            bool fromWarpEvent = false
+            bool fromWarpEvent = false,
+            MapInstanceType mapInstanceType = MapInstanceType.NoChange,
+            bool fromLogin = false
         )
         {
             if (!MapController.TryGetInstanceFromMap(newMapId, MapInstanceId, out var map))

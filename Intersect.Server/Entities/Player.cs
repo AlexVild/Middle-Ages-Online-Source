@@ -261,9 +261,11 @@ namespace Intersect.Server.Entities
         /// </summary>
         [NotMapped] public bool GuildBank;
 
-        public MapInstanceType MapInstanceType;
+        public MapInstanceType InstanceType { get; set; } = MapInstanceType.Overworld;
 
-        public Guid PersonalMapInstanceId;
+        [NotMapped, JsonIgnore] public MapInstanceType PreviousMapInstanceType { get; set; } = MapInstanceType.Overworld;
+
+        public Guid PersonalMapInstanceId { get; set; } = Guid.Empty;
 
         public bool InVehicle { get; set; } = false;
 
@@ -899,23 +901,14 @@ namespace Intersect.Server.Entities
             CombatTimer = 0;
 
             var cls = ClassBase.Get(ClassId);
-           /* if (Map.ZoneType == MapZones.Arena && CurrentArenaSpawnMapId != Guid.Empty)
+            if (cls != null)
             {
-                Warp(CurrentArenaSpawnMapId, (byte)CurrentArenaSpawnX, (byte)CurrentArenaSpawnY, (byte)CurrentArenaSpawnDir);
-            } else if (AlternateSpawnMapId != Guid.Empty)
+                WarpToSpawn();
+            }
+            else
             {
-                Warp(AlternateSpawnMapId, (byte)AlternateSpawnX, (byte)AlternateSpawnY, (byte)AlternateSpawnDir);
-            } else
-            { // original logic*/
-                if (cls != null)
-                {
-                    Warp(cls.SpawnMapId, (byte)cls.SpawnX, (byte)cls.SpawnY, (byte)cls.SpawnDir);
-                }
-                else
-                {
-                    Warp(Guid.Empty, 0, 0, 0);
-                }
-            //}
+                Warp(Guid.Empty, 0, 0, 0);
+            }
 
             PacketSender.SendEntityDataToProximity(this);
 
@@ -1801,11 +1794,29 @@ namespace Intersect.Server.Entities
             }
         }
 
+        /// <summary>
+        /// Warps the player on login, taking care of instance management depending on the instance type the player
+        /// is attempting to login to.
+        /// </summary>
+        public void LoginWarp()
+        {
+            if (MapId == null || MapId == Guid.Empty)
+            {
+                WarpToSpawn();
+            } else
+            {
+                // Will warp to spawn if we fail to create an instance for the relevant map
+                Warp(
+                    MapId, (byte)X, (byte)Y, (byte)Dir, false, (byte)Z, false, false, InstanceType, true
+                );
+            }
+        }
+
         //Warping
-        public override void Warp(Guid newMapId, float newX, float newY, bool adminWarp = false, bool fromWarpEvent = false)
+        public override void Warp(Guid newMapId, float newX, float newY, bool adminWarp = false)
         {
             EndCombo(); // Don't allow combos to transition between warps, I think? Maybe not.
-            Warp(newMapId, newX, newY, (byte) Directions.Up, adminWarp, 0, false, fromWarpEvent);
+            Warp(newMapId, newX, newY, (byte) Directions.Up, adminWarp, 0, false);
         }
 
         public override void Warp(
@@ -1816,13 +1827,15 @@ namespace Intersect.Server.Entities
             bool adminWarp = false,
             byte zOverride = 0,
             bool mapSave = false,
-            bool fromWarpEvent = false
+            bool fromWarpEvent = false,
+            MapInstanceType mapInstanceType = MapInstanceType.NoChange,
+            bool fromLogin = false
         )
         {
             if (fromWarpEvent && Options.DebugAllowMapFades)
             {
                 PacketSender.SendFadePacket(Client, false);
-                PacketSender.SendUpdateFutureWarpPacket(Client, newMapId, newX, newY, newDir);
+                PacketSender.SendUpdateFutureWarpPacket(Client, newMapId, newX, newY, newDir, mapInstanceType);
             } else
             {
                 var newMap = MapController.Get(newMapId);
@@ -1838,22 +1851,13 @@ namespace Intersect.Server.Entities
                 Z = zOverride;
                 Dir = newDir;
 
-                // TODO Alex: Control when we change layers
-                PreviousMapInstanceId = MapInstanceId;
-                if (adminWarp)
-                {
-                    if (MapInstanceId == Guid.Empty)
-                    {
-                        MapInstanceId = Guid.NewGuid();
-                    } else
-                    {
-                        MapInstanceId = Guid.Empty;
-                    }
-                }
-
                 var newSurroundingMaps = newMap.GetSurroundingMapIds(false);
-                var onNewInstance = MapInstanceId != PreviousMapInstanceId;
 
+                #region Map instance traversal
+                // Save values before change for reference/emergency recall
+                PreviousMapInstanceId = MapInstanceId;
+                PreviousMapInstanceType = InstanceType;
+                bool onNewInstance = MapInstanceChanged(mapInstanceType, fromLogin);
                 MapInstance newMapInstance;
                 // Ensure there exists a map instance with the Player's InstanceId. A player is the sole entity that can create new map instances
                 lock (EntityLock)
@@ -1880,8 +1884,9 @@ namespace Intersect.Server.Entities
                 // If we've changed instance layers
                 if (onNewInstance)
                 {
-                    MapInstanceChanged(newMap);
+                    SendToNewMapInstance(newMap);
                 }
+                #endregion
 
                 foreach (var evt in EventLookup)
                 {
@@ -1936,7 +1941,7 @@ namespace Intersect.Server.Entities
             }
         }
 
-        private void MapInstanceChanged(MapController newMap)
+        private void SendToNewMapInstance(MapController newMap)
         {
             // Refresh the client's entity list
             var oldMap = MapController.Get(MapId);
@@ -1952,12 +1957,51 @@ namespace Intersect.Server.Entities
             EventBaseIdLookup.Clear();
             Log.Debug($"Player {Name} has joined instance {MapInstanceId} of map: {newMap.Name}");
             Log.Info($"Previous instance was {PreviousMapInstanceId}");
-            // Todo Alex Remove this
-            PacketSender.SendChatMsg(this, "Joined Map Instance with ID" + MapInstanceId.ToString(), ChatMessageType.Local);
             // We changed maps AND instance layers - remove from the old instance
             PacketSender.SendEntityLeaveInstanceOfMap(this, oldMap.Id, PreviousMapInstanceId);
             // Remove any trace of our player from the old instance's processing
             newMap.RemoveEntityFromAllSurroundingMapsInInstance(this, PreviousMapInstanceId);
+        }
+
+        public bool MapInstanceChanged(MapInstanceType mapInstanceType, bool fromLogin)
+        {
+            if (mapInstanceType != MapInstanceType.NoChange) // If we're requesting an instance type change
+            {
+                // Update our saved instance type - this helps us determine what to do on login, warps, etc
+                InstanceType = mapInstanceType;
+                // Requests a new instance id, using the type of instance to determine creation logic
+                MapInstanceId = CreateNewInstanceIdFromType(mapInstanceType, fromLogin);
+            }
+            return MapInstanceId != PreviousMapInstanceId;
+        }
+
+        public Guid CreateNewInstanceIdFromType(MapInstanceType mapInstanceType, bool fromLogin)
+        {
+            Guid newMapLayerId = MapInstanceId;
+            switch (mapInstanceType)
+            {
+                case MapInstanceType.Overworld:
+                    ResetSavedInstanceIds();
+                    newMapLayerId = Guid.Empty;
+                    break;
+                case MapInstanceType.Personal:
+                    if (!fromLogin) // If we're logging into a personal instance, we want to login to the SAME instance.
+                    {
+                        PersonalMapInstanceId = Guid.NewGuid();
+                    }
+                    newMapLayerId = PersonalMapInstanceId;
+                    break;
+                default:
+                    Log.Error($"Player {Name} requested an instance type that is not supported. Their map instance settings will not change.");
+                    break;
+            }
+
+            return newMapLayerId;
+        }
+
+        public void ResetSavedInstanceIds()
+        {
+            PersonalMapInstanceId = Guid.Empty;
         }
 
         public void WarpToSpawn(bool sendWarp = false)
@@ -1986,7 +2030,7 @@ namespace Intersect.Server.Entities
                 }
             }
 
-            Warp(mapId, x, y, dir);
+            Warp(mapId, x, y, dir, false, 0, false, false, MapInstanceType.Overworld);
         }
 
         /// <summary>
@@ -6285,11 +6329,24 @@ namespace Intersect.Server.Entities
                     var warpAtt = (MapWarpAttribute)attribute;
                     if (warpAtt.Direction == WarpDirection.Retain)
                     {
-                        Warp(warpAtt.MapId, warpAtt.X, warpAtt.Y, (byte)Dir, false, 0, false, warpAtt.FadeOnWarp);
+                        if (warpAtt.ChangeInstance)
+                        {
+                            Warp(warpAtt.MapId, warpAtt.X, warpAtt.Y, (byte)Dir, false, 0, false, warpAtt.FadeOnWarp, warpAtt.InstanceType);
+                        } else
+                        {
+                            Warp(warpAtt.MapId, warpAtt.X, warpAtt.Y, (byte)Dir, false, 0, false, warpAtt.FadeOnWarp);
+                        }
                     }
                     else
                     {
-                        Warp(warpAtt.MapId, warpAtt.X, warpAtt.Y, (byte)(warpAtt.Direction - 1), false, 0, false, warpAtt.FadeOnWarp);
+                        if (warpAtt.ChangeInstance)
+                        {
+                            Warp(warpAtt.MapId, warpAtt.X, warpAtt.Y, (byte)(warpAtt.Direction - 1), false, 0, false, warpAtt.FadeOnWarp, warpAtt.InstanceType);
+                        }
+                        else
+                        {
+                            Warp(warpAtt.MapId, warpAtt.X, warpAtt.Y, (byte)(warpAtt.Direction - 1), false, 0, false, warpAtt.FadeOnWarp);
+                        }
                     }
                 }
 

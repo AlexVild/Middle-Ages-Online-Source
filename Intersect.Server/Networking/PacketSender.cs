@@ -103,16 +103,7 @@ namespace Intersect.Server.Networking
                     SendChatMsg(player, Strings.Player.modjoined, ChatMessageType.Notice, CustomColors.Alerts.ModJoined);
                 }
 
-                if (player.MapId == Guid.Empty)
-                {
-                    player.WarpToSpawn();
-                }
-                else
-                {
-                    player.Warp(
-                        player.MapId, (byte) player.X, (byte) player.Y, (byte) player.Dir, false, (byte) player.Z
-                    );
-                }
+                player.LoginWarp();
 
                 SendEntityDataTo(client.Entity, player);
 
@@ -2116,9 +2107,9 @@ namespace Intersect.Server.Networking
             client?.Send(new MapFadePacket(fadeIn));
         }
 
-        public static void SendUpdateFutureWarpPacket(Client client, Guid mapId, float x, float y, byte dir)
+        public static void SendUpdateFutureWarpPacket(Client client, Guid mapId, float x, float y, byte dir, MapInstanceType mapInstanceType)
         {
-            client?.Send(new UpdateFutureWarpPacket(mapId, x, y, dir));
+            client?.Send(new UpdateFutureWarpPacket(mapId, x, y, dir, mapInstanceType));
         }
 
         //PasswordResetResultPacket

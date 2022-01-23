@@ -115,6 +115,13 @@ namespace Intersect.Editor.Forms.DockingElements
             rbZDimension.Visible = Options.ZDimensionVisible;
             grpZResource.Visible = Options.ZDimensionVisible;
             grpInstanceSettings.Visible = chkChangeInstance.Checked;
+
+            cmbInstanceType.Items.Clear();
+            // We do not want to iterate over the "NoChange" enum - so we subtract 1 from the iterating maximum
+            for (var i = 0; i < Enum.GetNames(typeof(MapInstanceType)).Length - 1; i++)
+            {
+                cmbInstanceType.Items.Add(Enum.GetName(typeof(MapInstanceType), i));
+            }
         }
 
         //Tiles Tab

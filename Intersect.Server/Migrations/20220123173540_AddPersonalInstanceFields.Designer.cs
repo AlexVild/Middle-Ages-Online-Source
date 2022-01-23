@@ -3,14 +3,16 @@ using System;
 using Intersect.Server.Database.PlayerData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Intersect.Server.Migrations
 {
     [DbContext(typeof(PlayerContext))]
-    partial class PlayerContextModelSnapshot : ModelSnapshot
+    [Migration("20220123173540_AddPersonalInstanceFields")]
+    partial class AddPersonalInstanceFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -410,8 +412,6 @@ namespace Intersect.Server.Migrations
 
                     b.Property<bool>("InVehicle");
 
-                    b.Property<int>("InstanceType");
-
                     b.Property<string>("ItemCooldownsJson")
                         .HasColumnName("ItemCooldowns");
 
@@ -428,8 +428,6 @@ namespace Intersect.Server.Migrations
 
                     b.Property<string>("NameColorJson")
                         .HasColumnName("NameColor");
-
-                    b.Property<Guid>("PersonalMapInstanceId");
 
                     b.Property<ulong>("PlayTimeSeconds");
 
