@@ -39,6 +39,7 @@ namespace Intersect.Server.Entities
 
     public partial class Player : Entity
     {
+        [NotMapped, JsonIgnore]
         public Guid PreviousMapInstanceId = Guid.Empty;
 
         //Online Players List
@@ -259,6 +260,10 @@ namespace Intersect.Server.Entities
         /// Used to determine whether the player is operating in the guild bank vs player bank
         /// </summary>
         [NotMapped] public bool GuildBank;
+
+        public MapInstanceType MapInstanceType;
+
+        public Guid PersonalMapInstanceId;
 
         public bool InVehicle { get; set; } = false;
 
