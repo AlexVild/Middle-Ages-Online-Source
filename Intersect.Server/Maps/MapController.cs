@@ -165,7 +165,7 @@ namespace Intersect.Server.Maps
 
         public void Initialize()
         {
-            lock (mMapLock)
+            lock (GetMapLock())
             {
                 DespawnAllInstances();
                 RespawnAllInstances();
@@ -174,7 +174,7 @@ namespace Intersect.Server.Maps
 
         public void Load(string json, int keepRevision = -1)
         {
-            lock (mMapLock)
+            lock (GetMapLock())
             {
                 DespawnAllInstances();
                 base.Load(json);
@@ -333,32 +333,28 @@ namespace Intersect.Server.Maps
                     newLayer = mInstances[instanceId];
                     return true;
                 }
-
                 return false;
             }
         }
 
         public bool TryGetInstance(Guid mapInstanceId, out MapInstance instance, bool createIfNew = false)
         {
-            lock (GetMapLock())
+            instance = null;
+            if (mInstances.TryGetValue(mapInstanceId, out instance))
             {
-                instance = null;
-                if (mInstances.TryGetValue(mapInstanceId, out instance))
+                return true;
+            }
+            else
+            {
+                if (createIfNew)
                 {
-                    return true;
-                }
-                else
-                {
-                    if (createIfNew)
+                    if (TryCreateInstance(mapInstanceId, out instance))
                     {
-                        if (TryCreateInstance(mapInstanceId, out instance))
-                        {
-                            return true;
-                        }
+                        return true;
                     }
                 }
-                return false;
             }
+            return false;
         }
 
         public void RemoveEntityFromAllSurroundingMapsInInstance(Entity entity, Guid mapInstanceId)

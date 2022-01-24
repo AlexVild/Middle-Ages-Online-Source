@@ -1778,24 +1778,6 @@ namespace Intersect.Server.Entities
             }
         }
 
-        /// <summary>
-        /// Warps the player on login, taking care of instance management depending on the instance type the player
-        /// is attempting to login to.
-        /// </summary>
-        public void LoginWarp()
-        {
-            if (MapId == null || MapId == Guid.Empty)
-            {
-                WarpToSpawn();
-            } else
-            {
-                // Will warp to spawn if we fail to create an instance for the relevant map
-                Warp(
-                    MapId, (byte)X, (byte)Y, (byte)Dir, false, (byte)Z, false, false, InstanceType, true
-                );
-            }
-        }
-
         //Warping
         public override void Warp(Guid newMapId, float newX, float newY, bool adminWarp = false)
         {
@@ -1816,12 +1798,24 @@ namespace Intersect.Server.Entities
             bool fromLogin = false
         )
         {
+            // First, deny the warp entirely if we CAN'T, for some reason, warp to the requested instance type.
+            if (!CanChangeToInstanceType(mapInstanceType, fromLogin))
+            {
+                return;
+            }
+            // If we are leaving the overworld to go to a new instance, save the overworld location
+            if (!fromLogin && PreviousMapInstanceType == MapInstanceType.Overworld && mapInstanceType != MapInstanceType.Overworld)
+            {
+                UpdateLastOverworldLocation(MapId, X, Y);
+            }
+
             if (fromWarpEvent && Options.DebugAllowMapFades)
             {
                 PacketSender.SendFadePacket(Client, false);
                 PacketSender.SendUpdateFutureWarpPacket(Client, newMapId, newX, newY, newDir, mapInstanceType);
             } else
             {
+                // Make sure we're heading to a map that exists - otherwise, to spawn you go
                 var newMap = MapController.Get(newMapId);
                 if (newMap == null)
                 {
@@ -1838,12 +1832,11 @@ namespace Intersect.Server.Entities
                 var newSurroundingMaps = newMap.GetSurroundingMapIds(false);
 
                 #region Map instance traversal
-                // Save values before change for reference/emergency recall
-                PreviousMapInstanceId = MapInstanceId;
-                PreviousMapInstanceType = InstanceType;
-                bool onNewInstance = MapInstanceChanged(mapInstanceType, fromLogin);
-                MapInstance newMapInstance;
+                // Set up player properties if we have changed instance types
+                bool onNewInstance = ProcessMapInstanceChange(mapInstanceType, fromLogin);
+
                 // Ensure there exists a map instance with the Player's InstanceId. A player is the sole entity that can create new map instances
+                MapInstance newMapInstance;
                 lock (EntityLock)
                 {
                     if (!newMap.TryGetInstance(MapInstanceId, out newMapInstance))
@@ -1857,6 +1850,7 @@ namespace Intersect.Server.Entities
                     }
                 }
 
+                // An instance of the map MUST exist. Otherwise, head to spawn.
                 if (newMapInstance == null)
                 {
                     Log.Error($"Player {Name} requested a new map Instance with ID {MapInstanceId} and failed to get it.");
@@ -1865,7 +1859,7 @@ namespace Intersect.Server.Entities
                     return;
                 }
 
-                // If we've changed instance layers
+                // If we've changed instances, send data to instance entities/entities to player
                 if (onNewInstance)
                 {
                     SendToNewMapInstance(newMap);
@@ -1925,6 +1919,105 @@ namespace Intersect.Server.Entities
             }
         }
 
+        /// <summary>
+        /// Warps the player on login, taking care of instance management depending on the instance type the player
+        /// is attempting to login to.
+        /// </summary>
+        public void LoginWarp()
+        {
+            if (MapId == null || MapId == Guid.Empty)
+            {
+                WarpToSpawn();
+            }
+            else
+            {
+                // Will warp to spawn if we fail to create an instance for the relevant map
+                Warp(
+                    MapId, (byte)X, (byte)Y, (byte)Dir, false, (byte)Z, false, false, InstanceType, true
+                );
+            }
+        }
+
+        /// <summary>
+        /// Warps the player to the last location they were at on the "Overworld" (empty Guid) map instance. Useful for kicking out of
+        /// instances in a variety of situations.
+        /// </summary>
+        /// <param name="fromLogin">Whether or not we're coming to this method via the player login/join game flow</param>
+        public void WarpToLastOverworldLocation(bool fromLogin)
+        {
+            Warp(
+                LastOverworldMapId, (byte)LastOverworldX, (byte)LastOverworldY, (byte)Dir, false, 0, false, false, MapInstanceType.Overworld, fromLogin
+            );
+        }
+
+        public void WarpToSpawn(bool sendWarp = false)
+        {
+            var mapId = Guid.Empty;
+            byte x = 0, y = 0, dir = 0;
+            var cls = ClassBase.Get(ClassId);
+            if (cls != null)
+            {
+                if (MapController.Lookup.Keys.Contains(cls.SpawnMapId))
+                {
+                    mapId = cls.SpawnMapId;
+                }
+
+                x = (byte)cls.SpawnX;
+                y = (byte)cls.SpawnY;
+                dir = (byte)cls.SpawnDir;
+            }
+
+            if (mapId == Guid.Empty)
+            {
+                using (var mapenum = MapController.Lookup.GetEnumerator())
+                {
+                    mapenum.MoveNext();
+                    mapId = mapenum.Current.Value.Id;
+                }
+            }
+
+            Warp(mapId, x, y, dir, false, 0, false, false, MapInstanceType.Overworld);
+        }
+
+        // Instancing
+
+        /// <summary>
+        /// Checks to see if we CAN go to the requested instance type
+        /// </summary>
+        /// <param name="instanceType">The instance type we're requesting a warp to</param>
+        /// <param name="fromLogin">Whether or not this is from the login flow</param>
+        /// <returns></returns>
+        public bool CanChangeToInstanceType(MapInstanceType instanceType, bool fromLogin)
+        {
+            bool isValid = true;
+
+            switch (instanceType)
+            {
+                case MapInstanceType.Guild:
+                    if (Guild == null)
+                    {
+                        isValid = false;
+
+                        if (fromLogin)
+                        {
+                            PacketSender.SendChatMsg(this, Strings.Guilds.NoLongerAllowedInInstance, ChatMessageType.Guild, CustomColors.Alerts.Error);
+                            WarpToLastOverworldLocation(fromLogin);
+                        }
+                        else
+                        {
+                            PacketSender.SendChatMsg(this, Strings.Guilds.NotAllowedInInstance, ChatMessageType.Guild, CustomColors.Alerts.Error);
+                        }
+                    }
+                    break;
+            }
+
+            return isValid;
+        }
+
+        /// <summary>
+        /// In charge of sending the necessary packet information on an instance change
+        /// </summary>
+        /// <param name="newMap">The <see cref="MapController"/> we are warping to</param>
         private void SendToNewMapInstance(MapController newMap)
         {
             // Refresh the client's entity list
@@ -1947,8 +2040,18 @@ namespace Intersect.Server.Entities
             newMap.RemoveEntityFromAllSurroundingMapsInInstance(this, PreviousMapInstanceId);
         }
 
-        public bool MapInstanceChanged(MapInstanceType mapInstanceType, bool fromLogin)
+        /// <summary>
+        /// Checks to see if the <see cref="MapInstanceType"/> we're warping to is different than what type we are currently
+        /// on, and, if so, takes care of updating our instance settings.
+        /// </summary>
+        /// <param name="mapInstanceType">The <see cref="MapInstanceType"/> the player is currently on</param>
+        /// <param name="fromLogin">Whether or not we're coming to this method via a login warp.</param>
+        /// <returns></returns>
+        public bool ProcessMapInstanceChange(MapInstanceType mapInstanceType, bool fromLogin)
         {
+            // Save values before change for reference/emergency recall
+            PreviousMapInstanceId = MapInstanceId;
+            PreviousMapInstanceType = InstanceType;
             if (mapInstanceType != MapInstanceType.NoChange) // If we're requesting an instance type change
             {
                 // Update our saved instance type - this helps us determine what to do on login, warps, etc
@@ -1959,6 +2062,16 @@ namespace Intersect.Server.Entities
             return MapInstanceId != PreviousMapInstanceId;
         }
 
+        /// <summary>
+        /// Creates an instance id based on the type of instance we are heading to, and whether or not we should generate a fresh id or use a saved id.
+        /// </summary>
+        /// <remarks>
+        /// Note that if we are coming to this method, we have already checked to see whether or not we CAN go to the requested instance.
+        /// </remarks>
+        /// <param name="mapInstanceType">The <see cref="MapInstanceType"/> we are switching to</param>
+        /// <param name="fromLogin">Whether or not we are coming to this method via player login. We may prefer to use saved values instead of generate new
+        /// values if this is the case.</param>
+        /// <returns></returns>
         public Guid CreateNewInstanceIdFromType(MapInstanceType mapInstanceType, bool fromLogin)
         {
             Guid newMapLayerId = MapInstanceId;
@@ -1975,6 +2088,16 @@ namespace Intersect.Server.Entities
                     }
                     newMapLayerId = PersonalMapInstanceId;
                     break;
+                case MapInstanceType.Guild:
+                    if (Guild != null)
+                    {
+                        newMapLayerId = Guild.GuildInstanceId;
+                    } else
+                    {
+                        Log.Error($"Player {Name} requested a guild warp with no guild, and proceeded to warp to map anyway");
+                        newMapLayerId = Guid.Empty;
+                    }
+                    break;
                 default:
                     Log.Error($"Player {Name} requested an instance type that is not supported. Their map instance settings will not change.");
                     break;
@@ -1983,38 +2106,25 @@ namespace Intersect.Server.Entities
             return newMapLayerId;
         }
 
+        /// <summary>
+        /// /// Updates the player's last overworld location. Useful for warping out of instances if need be.
+        /// </summary>
+        /// <param name="overworldMapId">Which map we were on before the instance change</param>
+        /// <param name="overworldX">X before instance change</param>
+        /// <param name="overworldY">Y before instance change</param>
+        public void UpdateLastOverworldLocation(Guid overworldMapId, int overworldX, int overworldY)
+        {
+            LastOverworldMapId = overworldMapId;
+            LastOverworldX = overworldX;
+            LastOverworldY = overworldY;
+        }
+
+        /// <summary>
+        /// Resets instance ids we've saved on the player. Generally called when going back to the overworld.
+        /// </summary>
         public void ResetSavedInstanceIds()
         {
             PersonalMapInstanceId = Guid.Empty;
-        }
-
-        public void WarpToSpawn(bool sendWarp = false)
-        {
-            var mapId = Guid.Empty;
-            byte x = 0, y = 0, dir = 0;
-            var cls = ClassBase.Get(ClassId);
-            if (cls != null)
-            {
-                if (MapController.Lookup.Keys.Contains(cls.SpawnMapId))
-                {
-                    mapId = cls.SpawnMapId;
-                }
-
-                x = (byte) cls.SpawnX;
-                y = (byte) cls.SpawnY;
-                dir = (byte) cls.SpawnDir;
-            }
-
-            if (mapId == Guid.Empty)
-            {
-                using (var mapenum = MapController.Lookup.GetEnumerator())
-                {
-                    mapenum.MoveNext();
-                    mapId = mapenum.Current.Value.Id;
-                }
-            }
-
-            Warp(mapId, x, y, dir, false, 0, false, false, MapInstanceType.Overworld);
         }
 
         /// <summary>

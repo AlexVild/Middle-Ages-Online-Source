@@ -760,6 +760,12 @@ namespace Intersect.Server.Localization
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString RankLimitResponse = @"This guild has already hit it's member limit for the rank of {00}. Promote or demote other members in order to make room for {01}.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString NotAllowedInInstance = @"You must be in a guild to warp to a guild instance.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString NoLongerAllowedInInstance = @"You are no longer in the guild who's instance you were logged into. You have been warped back to the overworld.";
         }
 
         public sealed class IntroNamespace : LocaleNamespace

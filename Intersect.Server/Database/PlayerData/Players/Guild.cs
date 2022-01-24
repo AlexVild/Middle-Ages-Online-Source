@@ -294,6 +294,10 @@ namespace Intersect.Server.Database.PlayerData.Players
                     }
                 }
 
+                if (player.Online && player.InstanceType == MapInstanceType.Guild)
+                {
+                    player.WarpToLastOverworldLocation(false);
+                }
             }
         }
 
@@ -474,6 +478,11 @@ namespace Intersect.Server.Database.PlayerData.Players
 
                         // Send our entity data to nearby players.
                         PacketSender.SendEntityDataToProximity(plyr);
+
+                        if (plyr.InstanceType == MapInstanceType.Guild)
+                        {
+                            plyr.WarpToLastOverworldLocation(false);
+                        }
                     }
                 }
 
