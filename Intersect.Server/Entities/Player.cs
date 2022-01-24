@@ -205,39 +205,6 @@ namespace Intersect.Server.Entities
         [JsonIgnore]
         public ItemBase CastingWeapon { get; set; }
 
-        /*//Spawn Stuff
-        public Guid AlternateSpawnMapId { get; set; }
-
-        [NotMapped]
-        [JsonIgnore]
-        public MapBase AlternateSpawnMap
-        {
-            get => MapBase.Get(AlternateSpawnMapId);
-            set => AlternateSpawnMapId = value?.Id ?? Guid.Empty;
-        }
-
-        public int AlternateSpawnX { get; set; }
-
-        public int AlternateSpawnY { get; set; }
-
-        public int AlternateSpawnDir { get; set; }
-
-        public Guid CurrentArenaSpawnMapId { get; set; }
-
-        [NotMapped]
-        [JsonIgnore]
-        public MapBase CurrentArenaSpawnMap
-        {
-            get => MapBase.Get(CurrentArenaSpawnMapId);
-            set => CurrentArenaSpawnMapId = value?.Id ?? Guid.Empty;
-        }
-
-        public int CurrentArenaSpawnX { get; set; }
-
-        public int CurrentArenaSpawnY { get; set; }
-
-        public int CurrentArenaSpawnDir { get; set; }*/
-
         /// <summary>
         /// References the in-memory copy of the guild for this player, reference this instead of the Guild property below.
         /// </summary>
@@ -261,11 +228,28 @@ namespace Intersect.Server.Entities
         /// </summary>
         [NotMapped] public bool GuildBank;
 
+
+        // Instancing
         public MapInstanceType InstanceType { get; set; } = MapInstanceType.Overworld;
 
         [NotMapped, JsonIgnore] public MapInstanceType PreviousMapInstanceType { get; set; } = MapInstanceType.Overworld;
 
         public Guid PersonalMapInstanceId { get; set; } = Guid.Empty;
+
+        /* This bundle of columns exists so that we have a "non-instanced" location to reference in case we need
+         * to kick someone out of an instance for any reason */
+        [Column("LastOverworldMapId")]
+        [JsonProperty]
+        public Guid LastOverworldMapId { get; set; }
+        [NotMapped]
+        [JsonIgnore]
+        public MapBase LastOverworldMap
+        {
+            get => MapBase.Get(LastOverworldMapId);
+            set => LastOverworldMapId = value?.Id ?? Guid.Empty;
+        }
+        public int LastOverworldX { get; set; }
+        public int LastOverworldY { get; set; }
 
         public bool InVehicle { get; set; } = false;
 
