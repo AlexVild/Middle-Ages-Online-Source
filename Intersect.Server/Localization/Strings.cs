@@ -1053,6 +1053,9 @@ namespace Intersect.Server.Localization
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString nomorelivesremaining = @"Your party has no more lives remaining! You will respawn out of the instance on your next death.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString instancefailed = @"Your party has failed the instance...";
         }
 
         public sealed class PasswordResetNotificationNamespace : LocaleNamespace

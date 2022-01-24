@@ -2015,8 +2015,12 @@ namespace Intersect.Server.Entities
                                 {
                                     if (member.Id != Id)
                                     {
+                                        // Keep party member instance lives in sync
                                         member.InstanceLives--;
-                                        member.SendLivesRemainingMessage();
+                                        if (member.InstanceType == MapInstanceType.Shared)
+                                        {
+                                            member.SendLivesRemainingMessage();
+                                        }
                                     }
                                 }
                             }
@@ -2040,6 +2044,7 @@ namespace Intersect.Server.Entities
                                         lock (EntityLock)
                                         {
                                             member.WarpToLastOverworldLocation(false);
+                                            PacketSender.SendChatMsg(member, Strings.Parties.instancefailed, ChatMessageType.Party, CustomColors.Chat.PartyChat);
                                         }
                                     }
                                 }
@@ -4695,6 +4700,7 @@ namespace Intersect.Server.Entities
                         Party[i], Strings.Parties.joined.ToString(target.Name), ChatMessageType.Party, CustomColors.Alerts.Accepted
                     );
                 }
+                target.InstanceLives = InstanceLives;
             }
             else
             {
