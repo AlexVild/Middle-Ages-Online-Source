@@ -256,6 +256,21 @@ namespace Intersect.Server.Entities
         public int LastOverworldX { get; set; }
         public int LastOverworldY { get; set; }
 
+        // For respawning in shared instances (configurable option)
+        [Column("SharedInstanceRespawnId")]
+        [JsonProperty]
+        public Guid SharedInstanceRespawnId { get; set; }
+        [NotMapped]
+        [JsonIgnore]
+        public MapBase SharedInstanceRespawn
+        {
+            get => MapBase.Get(SharedInstanceRespawnId);
+            set => SharedInstanceRespawnId = value?.Id ?? Guid.Empty;
+        }
+        public int SharedInstanceRespawnX { get; set; }
+        public int SharedInstanceRespawnY { get; set; }
+        public int SharedInstanceRespawnDir { get; set; }
+
         public bool InVehicle { get; set; } = false;
 
         public string VehicleSprite { get; set; } = string.Empty;
@@ -1813,6 +1828,10 @@ namespace Intersect.Server.Entities
             {
                 UpdateLastOverworldLocation(MapId, X, Y);
             }
+            if (!fromLogin && mapInstanceType == MapInstanceType.Shared && Options.SharedInstanceRespawnInInstance && MapController.Get(newMapId) != null)
+            {
+                UpdateSharedInstanceRespawnLocation(newMapId, (int)newX, (int)newY, (int)newDir);
+            }
 
             if (fromWarpEvent && Options.DebugAllowMapFades)
             {
@@ -1955,33 +1974,46 @@ namespace Intersect.Server.Entities
             );
         }
 
-        public void WarpToSpawn(bool sendWarp = false)
+        public void WarpToSpawn(bool forceClassRespawn = false)
         {
             var mapId = Guid.Empty;
             byte x = 0, y = 0, dir = 0;
-            var cls = ClassBase.Get(ClassId);
-            if (cls != null)
+
+            if (Options.SharedInstanceRespawnInInstance && InstanceType == MapInstanceType.Shared && !forceClassRespawn)
             {
-                if (MapController.Lookup.Keys.Contains(cls.SpawnMapId))
+                if (SharedInstanceRespawn != null)
                 {
-                    mapId = cls.SpawnMapId;
+                    Warp(SharedInstanceRespawnId, SharedInstanceRespawnX, SharedInstanceRespawnY, (Byte) SharedInstanceRespawnDir);
+                } else
+                {
+                    WarpToSpawn(true);
+                }
+            } else
+            {
+                var cls = ClassBase.Get(ClassId);
+                if (cls != null)
+                {
+                    if (MapController.Lookup.Keys.Contains(cls.SpawnMapId))
+                    {
+                        mapId = cls.SpawnMapId;
+                    }
+
+                    x = (byte)cls.SpawnX;
+                    y = (byte)cls.SpawnY;
+                    dir = (byte)cls.SpawnDir;
                 }
 
-                x = (byte)cls.SpawnX;
-                y = (byte)cls.SpawnY;
-                dir = (byte)cls.SpawnDir;
-            }
-
-            if (mapId == Guid.Empty)
-            {
-                using (var mapenum = MapController.Lookup.GetEnumerator())
+                if (mapId == Guid.Empty)
                 {
-                    mapenum.MoveNext();
-                    mapId = mapenum.Current.Value.Id;
+                    using (var mapenum = MapController.Lookup.GetEnumerator())
+                    {
+                        mapenum.MoveNext();
+                        mapId = mapenum.Current.Value.Id;
+                    }
                 }
-            }
 
-            Warp(mapId, x, y, dir, false, 0, false, false, MapInstanceType.Overworld);
+                Warp(mapId, x, y, dir, false, 0, false, false, MapInstanceType.Overworld);
+            }
         }
 
         // Instancing
@@ -2015,7 +2047,7 @@ namespace Intersect.Server.Entities
                     }
                     break;
                 case MapInstanceType.Shared:
-                    if (Party != null && Party.Count > 0)
+                    if (Party != null && Party.Count > 0 && !Options.RejoinableSharedInstances) // Always valid warp if solo/instances are rejoinable
                     {
                         if (Party[0].Id == Id) // if we are the party leader
                         {
@@ -2139,19 +2171,36 @@ namespace Intersect.Server.Entities
                         bool isSolo = Party == null || Party.Count < 2;
                         bool isPartyLeader = Party != null && Party.Count > 0 && Party[0].Id == Id;
 
-                        if (isSolo || isPartyLeader) // If in party by self, or not in party
+                        if (isSolo)
+                        {
+                            SharedMapInstanceId = Guid.NewGuid();
+                            newMapLayerId = SharedMapInstanceId;
+                        } else if (!Options.RejoinableSharedInstances && isPartyLeader)
                         {
                             // Generate a new instance
                             SharedMapInstanceId = Guid.NewGuid();
                             // If we are the leader, propogate your shared instance ID to all current members of the party.
-                            if (isPartyLeader)
+                            if (isPartyLeader && !Options.RejoinableSharedInstances)
                             {
                                 foreach (Player member in Party)
                                 {
                                     member.SharedMapInstanceId = SharedMapInstanceId;
                                 }
                             }
+                        } else if (Party != null && Party.Count > 0 && Options.RejoinableSharedInstances)
+                        {
+                            // Scan party members for an active shared instance - if one is found, use it
+                            var memberInInstance = Party.Find((Player member) => member.SharedMapInstanceId != Guid.Empty);
+                            if (memberInInstance != null)
+                            {
+                                SharedMapInstanceId = memberInInstance.SharedMapInstanceId;
+                            } else
+                            {
+                                // Otherwise, if no one is on an instance, and you're the party leader, create a new instance
+                                SharedMapInstanceId = Guid.NewGuid();
+                            }
                         }
+                        // Use whatever your shared instance id is for the warp
                         newMapLayerId = SharedMapInstanceId;
                     }
                     
@@ -2175,6 +2224,21 @@ namespace Intersect.Server.Entities
             LastOverworldMapId = overworldMapId;
             LastOverworldX = overworldX;
             LastOverworldY = overworldY;
+        }
+
+        /// <summary>
+        /// Updates the shared instance respawn location - for respawning on death in a shared instance (when this is enabled)
+        /// </summary>
+        /// <param name="respawnMapId"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="dir"></param>
+        public void UpdateSharedInstanceRespawnLocation(Guid respawnMapId, int x, int y, int dir)
+        {
+            SharedInstanceRespawnId = respawnMapId;
+            SharedInstanceRespawnX = x;
+            SharedInstanceRespawnY = y;
+            SharedInstanceRespawnDir = dir;
         }
 
         /// <summary>

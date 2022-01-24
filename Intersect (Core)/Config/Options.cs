@@ -77,6 +77,8 @@ namespace Intersect
         public GuildOptions Guild = new GuildOptions();
 
         public LoggingOptions Logging = new LoggingOptions();
+        
+        public InstancingOptions Instancing = new InstancingOptions();
 
         public static Options Instance { get; private set; }
 
@@ -253,6 +255,10 @@ namespace Intersect
         public static string BankSortSound => Instance.ChatOpts.BankSortSound;
 
         public static string GuildWarsGUID => Instance.Guild.GuildWarsGUID;
+
+        public static bool SharedInstanceRespawnInInstance => Instance.Instancing.SharedInstanceRespawnInInstance;
+        
+        public static bool RejoinableSharedInstances => Instance.Instancing.RejoinableSharedInstances;
 
         public static LootOptions Loot => Instance.LootOpts;
 

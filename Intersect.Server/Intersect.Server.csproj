@@ -572,6 +572,10 @@
     <Compile Include="Migrations\20220124175811_AddSharedInstanceIdToPlayerMigration.designer.cs">
       <DependentUpon>20220124175811_AddSharedInstanceIdToPlayerMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\20220124215539_AddSharedInstanceRespawnPointMigration.cs" />
+    <Compile Include="Migrations\20220124215539_AddSharedInstanceRespawnPointMigration.designer.cs">
+      <DependentUpon>20220124215539_AddSharedInstanceRespawnPointMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.cs" />
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.Designer.cs">
       <DependentUpon>20201222164741_NpcResetRadius.cs</DependentUpon>

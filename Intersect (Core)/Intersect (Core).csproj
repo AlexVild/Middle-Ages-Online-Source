@@ -217,6 +217,7 @@
     <Compile Include="Config\Guilds\GuildOptions.cs" />
     <Compile Include="Config\Guilds\GuildPermissions.cs" />
     <Compile Include="Config\Guilds\GuildRank.cs" />
+    <Compile Include="Config\InstancingOptions.cs" />
     <Compile Include="Config\LayerOptions.cs" />
     <Compile Include="Config\LoggingOptions.cs" />
     <Compile Include="Config\LootOptions.cs" />
