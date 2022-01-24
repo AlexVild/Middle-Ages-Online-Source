@@ -228,7 +228,6 @@ namespace Intersect.Server.Entities
         /// </summary>
         [NotMapped] public bool GuildBank;
 
-
         // Instancing
         public MapInstanceType InstanceType { get; set; } = MapInstanceType.Overworld;
 
@@ -270,6 +269,9 @@ namespace Intersect.Server.Entities
         public int SharedInstanceRespawnX { get; set; }
         public int SharedInstanceRespawnY { get; set; }
         public int SharedInstanceRespawnDir { get; set; }
+
+        [NotMapped, JsonIgnore]
+        public int InstanceLives { get; set; }
 
         public bool InVehicle { get; set; } = false;
 
@@ -421,7 +423,7 @@ namespace Intersect.Server.Entities
             }
 
             //Update parties
-            LeaveParty();
+            LeaveParty(true);
 
             // End combo
             EndCombo();
@@ -1823,22 +1825,22 @@ namespace Intersect.Server.Entities
             {
                 return;
             }
-            // If we are leaving the overworld to go to a new instance, save the overworld location
-            if (!fromLogin && PreviousMapInstanceType == MapInstanceType.Overworld && mapInstanceType != MapInstanceType.Overworld)
-            {
-                UpdateLastOverworldLocation(MapId, X, Y);
-            }
-            if (!fromLogin && mapInstanceType == MapInstanceType.Shared && Options.SharedInstanceRespawnInInstance && MapController.Get(newMapId) != null)
-            {
-                UpdateSharedInstanceRespawnLocation(newMapId, (int)newX, (int)newY, (int)newDir);
-            }
-
             if (fromWarpEvent && Options.DebugAllowMapFades)
             {
                 PacketSender.SendFadePacket(Client, false);
                 PacketSender.SendUpdateFutureWarpPacket(Client, newMapId, newX, newY, newDir, mapInstanceType);
             } else
             {
+                // If we are leaving the overworld to go to a new instance, save the overworld location
+                if (!fromLogin && InstanceType == MapInstanceType.Overworld && mapInstanceType != MapInstanceType.Overworld)
+                {
+                    UpdateLastOverworldLocation(MapId, X, Y);
+                }
+                if (!fromLogin && mapInstanceType == MapInstanceType.Shared && Options.SharedInstanceRespawnInInstance && MapController.Get(newMapId) != null)
+                {
+                    UpdateSharedInstanceRespawnLocation(newMapId, (int)newX, (int)newY, (int)newDir);
+                }
+
                 // Make sure we're heading to a map that exists - otherwise, to spawn you go
                 var newMap = MapController.Get(newMapId);
                 if (newMap == null)
@@ -1974,6 +1976,17 @@ namespace Intersect.Server.Entities
             );
         }
 
+        public void SendLivesRemainingMessage()
+        {
+            if (InstanceLives > 0)
+            {
+                PacketSender.SendChatMsg(this, Strings.Parties.instancelivesremaining.ToString(InstanceLives), ChatMessageType.Party, CustomColors.Chat.PartyChat);
+            } else
+            {
+                PacketSender.SendChatMsg(this, Strings.Parties.nomorelivesremaining.ToString(InstanceLives), ChatMessageType.Party, CustomColors.Chat.PartyChat);
+            }
+        }
+
         public void WarpToSpawn(bool forceClassRespawn = false)
         {
             var mapId = Guid.Empty;
@@ -1983,10 +1996,60 @@ namespace Intersect.Server.Entities
             {
                 if (SharedInstanceRespawn != null)
                 {
-                    Warp(SharedInstanceRespawnId, SharedInstanceRespawnX, SharedInstanceRespawnY, (Byte) SharedInstanceRespawnDir);
+                    if (Options.MaxSharedInstanceLives <= 0) // User has not configured shared instances to have lives
+                    {
+                        // Warp to the start of the shared instance - no concern for life total
+                        Warp(SharedInstanceRespawnId, SharedInstanceRespawnX, SharedInstanceRespawnY, (Byte)SharedInstanceRespawnDir);
+                    } else
+                    {
+                        // Check if the player/party have enough lives to spawn in-instance
+                        if (InstanceLives > 0)
+                        {
+                            // If they do, subtract from this player's life total...
+                            InstanceLives--;
+                            SendLivesRemainingMessage();
+                            // And the totals from any party members
+                            if (Party != null && Party.Count > 1)
+                            {
+                                foreach (Player member in Party)
+                                {
+                                    if (member.Id != Id)
+                                    {
+                                        member.InstanceLives--;
+                                        member.SendLivesRemainingMessage();
+                                    }
+                                }
+                            }
+
+                            // And warp to the instance start
+                            Warp(SharedInstanceRespawnId, SharedInstanceRespawnX, SharedInstanceRespawnY, (Byte)SharedInstanceRespawnDir);
+                        } else
+                        {
+                            // The player has ran out of lives - too bad, back to instance entrance you go.
+                            if (!Options.BootAllFromInstanceWhenOutOfLives)
+                            {
+                                WarpToLastOverworldLocation(false);
+                            } else 
+                            {
+                                // Oh shit, hard mode enabled - boot ALL party members out of instance. No more lives.
+                                foreach (Player member in Party)
+                                {
+                                    // Only warp players in the instance
+                                    if (member.InstanceType == MapInstanceType.Shared)
+                                    {
+                                        lock (EntityLock)
+                                        {
+                                            member.WarpToLastOverworldLocation(false);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 } else
                 {
-                    WarpToSpawn(true);
+                    // invalid map - try overworld (which will throw to class spawn if itself is invalid)
+                    WarpToLastOverworldLocation(false);
                 }
             } else
             {
@@ -2173,6 +2236,10 @@ namespace Intersect.Server.Entities
 
                         if (isSolo)
                         {
+                            if (Options.MaxSharedInstanceLives > 0)
+                            {
+                                InstanceLives = Options.MaxSharedInstanceLives;
+                            }
                             SharedMapInstanceId = Guid.NewGuid();
                             newMapLayerId = SharedMapInstanceId;
                         } else if (!Options.RejoinableSharedInstances && isPartyLeader)
@@ -2185,6 +2252,10 @@ namespace Intersect.Server.Entities
                                 foreach (Player member in Party)
                                 {
                                     member.SharedMapInstanceId = SharedMapInstanceId;
+                                    if (Options.MaxSharedInstanceLives > 0)
+                                    {
+                                        member.InstanceLives = Options.MaxSharedInstanceLives;
+                                    }
                                 }
                             }
                         } else if (Party != null && Party.Count > 0 && Options.RejoinableSharedInstances)
@@ -2196,8 +2267,18 @@ namespace Intersect.Server.Entities
                                 SharedMapInstanceId = memberInInstance.SharedMapInstanceId;
                             } else
                             {
-                                // Otherwise, if no one is on an instance, and you're the party leader, create a new instance
+                                // Otherwise, if no one is on an instance, create a new instance
                                 SharedMapInstanceId = Guid.NewGuid();
+
+                                // And give your party members their instance lives - though this can be exploited when instances are rejoinable, so you'd really
+                                // have to be a freak to have both options on
+                                if (Options.MaxSharedInstanceLives > 0)
+                                {
+                                    foreach (Player member in Party)
+                                    {
+                                        member.InstanceLives = Options.MaxSharedInstanceLives;
+                                    }
+                                }
                             }
                         }
                         // Use whatever your shared instance id is for the warp
@@ -4635,7 +4716,7 @@ namespace Intersect.Server.Entities
                         PacketSender.SendChatMsg(oldMember, Strings.Parties.kicked, ChatMessageType.Party, CustomColors.Alerts.Error);
                         Party.Remove(oldMember);
 
-                        // Warp the old member out of the shared instance and into their own
+                        // Warp the old member out of the shared instance
                         oldMember.WarpToLastOverworldLocation(false);
 
                         if (Party.Count > 1) //Need atleast 2 party members to function
@@ -4664,7 +4745,7 @@ namespace Intersect.Server.Entities
             }
         }
 
-        public void LeaveParty()
+        public void LeaveParty(bool fromLogout = false)
         {
             if (Party.Count > 0 && Party.Contains(this))
             {
@@ -4693,8 +4774,11 @@ namespace Intersect.Server.Entities
 
                 PacketSender.SendChatMsg(this, Strings.Parties.left, ChatMessageType.Party, CustomColors.Alerts.Error);
 
-                // Warp the old member out of the shared instance and into their own
-                oldMember.WarpToLastOverworldLocation(false);
+                // Warp the old member out of the shared instance
+                if (!fromLogout)
+                {
+                    oldMember.WarpToLastOverworldLocation(false);
+                }
             }
 
             Party = new List<Player>();

@@ -11,6 +11,10 @@ namespace Intersect.Config
 
         public bool RejoinableSharedInstances = false;
 
+        public int MaxSharedInstanceLives = 3;
+
+        public bool BootAllFromInstanceWhenOutOfLives = true;
+
         [OnDeserialized]
         internal void OnDeserializedMethod(StreamingContext context)
         {

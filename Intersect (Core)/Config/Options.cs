@@ -259,6 +259,10 @@ namespace Intersect
         public static bool SharedInstanceRespawnInInstance => Instance.Instancing.SharedInstanceRespawnInInstance;
         
         public static bool RejoinableSharedInstances => Instance.Instancing.RejoinableSharedInstances;
+        
+        public static int MaxSharedInstanceLives => Instance.Instancing.MaxSharedInstanceLives;
+        
+        public static bool BootAllFromInstanceWhenOutOfLives => Instance.Instancing.BootAllFromInstanceWhenOutOfLives;
 
         public static LootOptions Loot => Instance.LootOpts;
 
