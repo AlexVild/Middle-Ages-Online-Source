@@ -1039,6 +1039,12 @@ namespace Intersect.Server.Localization
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString outofrange = @"Target is out of range or offline.";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString instanceinuse = @"Can not create new instance - party members are still in the old one.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString cannotcreateinstance = @"Only the party leader can create a shared instance.";
+
         }
 
         public sealed class PasswordResetNotificationNamespace : LocaleNamespace

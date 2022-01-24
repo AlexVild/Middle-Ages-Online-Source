@@ -236,6 +236,11 @@ namespace Intersect.Server.Entities
 
         public Guid PersonalMapInstanceId { get; set; } = Guid.Empty;
 
+        /// <summary>
+        /// This instance Id is shared amongst members of a party. Party members will use the shared ID of the party leader.
+        /// </summary>
+        public Guid SharedMapInstanceId { get; set; } = Guid.Empty;
+
         /* This bundle of columns exists so that we have a "non-instanced" location to reference in case we need
          * to kick someone out of an instance for any reason */
         [Column("LastOverworldMapId")]
@@ -2009,6 +2014,28 @@ namespace Intersect.Server.Entities
                         }
                     }
                     break;
+                case MapInstanceType.Shared:
+                    if (Party != null && Party.Count > 0)
+                    {
+                        if (Party[0].Id == Id) // if we are the party leader
+                        {
+                            // And other players are using our shared instance, deny creation of a new instance until they are finished.
+                            if (Party.FindAll((Player member) => member.Id != Id && member.InstanceType == MapInstanceType.Shared).Count > 0)
+                            {
+                                isValid = false;
+                                PacketSender.SendChatMsg(this, Strings.Parties.instanceinuse, ChatMessageType.Party, CustomColors.Alerts.Error);
+                            }
+                        } else
+                        {
+                            // Otherwise, if the party leader hasn't yet created a shared instance, deny creation of a new one.
+                            if (Party[0].InstanceType != MapInstanceType.Shared)
+                            {
+                                isValid = false;
+                                PacketSender.SendChatMsg(this, Strings.Parties.cannotcreateinstance, ChatMessageType.Party, CustomColors.Alerts.Error);
+                            }
+                        }
+                    }
+                    break;
             }
 
             return isValid;
@@ -2097,6 +2124,19 @@ namespace Intersect.Server.Entities
                         Log.Error($"Player {Name} requested a guild warp with no guild, and proceeded to warp to map anyway");
                         newMapLayerId = Guid.Empty;
                     }
+                    break;
+                case MapInstanceType.Shared:
+                    if (Party == null || Party.Count < 2) // If in party by self, or not in party
+                    {
+                        // Generate a new instance - it will be used by anyone who joins your party to dictate their shared instance id
+                        SharedMapInstanceId = Guid.NewGuid();
+                    } else
+                    {
+                        // Get the party leader's shared instance ID
+                        SharedMapInstanceId = Party[0].SharedMapInstanceId;
+                    }
+
+                    newMapLayerId = SharedMapInstanceId;
                     break;
                 default:
                     Log.Error($"Player {Name} requested an instance type that is not supported. Their map instance settings will not change.");
@@ -4491,6 +4531,13 @@ namespace Intersect.Server.Entities
                         Party[i], Strings.Parties.joined.ToString(target.Name), ChatMessageType.Party, CustomColors.Alerts.Accepted
                     );
                 }
+
+                target.SharedMapInstanceId = Party[0].SharedMapInstanceId;
+                // Warp the target to the party's instance, if they were already in another shared instance
+                if (target.InstanceType == MapInstanceType.Shared)
+                {
+                    target.Warp(target.MapId, target.X, target.Y, (Byte) target.Dir, false, 0, false, false, MapInstanceType.Shared);
+                }
             }
             else
             {
@@ -4511,6 +4558,10 @@ namespace Intersect.Server.Entities
                         PacketSender.SendParty(oldMember);
                         PacketSender.SendChatMsg(oldMember, Strings.Parties.kicked, ChatMessageType.Party, CustomColors.Alerts.Error);
                         Party.Remove(oldMember);
+
+                        // Warp the old member out of the shared instance and into their own
+                        oldMember.SharedMapInstanceId = Guid.NewGuid();
+                        oldMember.Warp(oldMember.MapId, oldMember.X, oldMember.Y, (Byte)oldMember.Dir, false, 0, false, false, MapInstanceType.Shared);
 
                         if (Party.Count > 1) //Need atleast 2 party members to function
                         {
@@ -4566,6 +4617,10 @@ namespace Intersect.Server.Entities
                 }
 
                 PacketSender.SendChatMsg(this, Strings.Parties.left, ChatMessageType.Party, CustomColors.Alerts.Error);
+
+                // Warp the old member out of the shared instance and into their own
+                oldMember.SharedMapInstanceId = Guid.NewGuid();
+                oldMember.Warp(oldMember.MapId, oldMember.X, oldMember.Y, (Byte)oldMember.Dir, false, 0, false, false, MapInstanceType.Shared);
             }
 
             Party = new List<Player>();
