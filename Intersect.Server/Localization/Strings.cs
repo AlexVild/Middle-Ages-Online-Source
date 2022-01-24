@@ -1045,6 +1045,8 @@ namespace Intersect.Server.Localization
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString cannotcreateinstance = @"Only the party leader can create a shared instance.";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString instanceinprogress = @"The party has not yet completed their instance.";
         }
 
         public sealed class PasswordResetNotificationNamespace : LocaleNamespace

@@ -680,6 +680,7 @@ namespace Intersect.Server.Entities.Events
             Stack<CommandInstance> callStack
         )
         {
+            // TODO Alex: This and the map warp attribute are the same thing using different code. Consolidate.
             if (command.ChangeInstance)
             {
                 player.Warp(
