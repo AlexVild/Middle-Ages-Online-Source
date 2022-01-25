@@ -159,6 +159,9 @@ namespace Intersect.Server.Core
                                 }
                             }
 
+                            // Update our global list of unique instances that are being processed
+                            ProcessingInfo.UpdateActiveInstanceList(ActiveMapInstances.Values.ToList());
+
                             if (Options.Instance.Metrics.Enable)
                             {
                                 MetricsRoot.Instance.Game.ActiveEntities.Record(globalEntities);
@@ -322,7 +325,6 @@ namespace Intersect.Server.Core
             /// <param name="mapInstance">The map instance in which to process in our queues.</param>
             private void AddToQueue(MapInstance mapInstance)
             {
-                // TODO Alex: Support this
                 if (Options.Instance.Processing.MapUpdateInterval != Options.Instance.Processing.ProjectileUpdateInterval)
                 {
                     MapInstanceProjectileUpdateQueue.Enqueue(mapInstance);
@@ -330,6 +332,20 @@ namespace Intersect.Server.Core
                 MapInstanceUpdateQueue.Enqueue(mapInstance);
                 ActiveMapInstances.Add(mapInstance.Id, mapInstance);
                 mapInstance.LastRequestedUpdateTime = Globals.Timing.Milliseconds - Options.Instance.Processing.MapUpdateInterval;
+                /* TODO alex remove this
+                // Check if we need to generate instance variables for this instance
+                if (!InstanceVariableStore.ContainsKey(mapInstance.MapInstanceId))
+                {
+                    // If we do, go out and fetch the default values of all our instance variables
+                    var instVarValues = new Dictionary<Guid, VariableValue>();
+                    foreach(var instVarId in InstanceVariableBase.Ids)
+                    {
+                        instVarValues.Add(instVarId, InstanceVariableBase.Get(instVarId).DefaultValue);
+                    }
+                    // And link them to this instance
+                    InstanceVariableStore.Add(mapInstance.MapInstanceId, instVarValues);
+                }
+                */
             }
 
             /// <summary>

@@ -37,6 +37,10 @@ namespace Intersect.Models
             .Select(pair => pair.Value?.Name ?? Deleted)
             .ToArray();
 
+        public static Guid[] Ids => Lookup.OrderBy(p => p.Value?.Id)
+            .Select(pair => pair.Value?.Id ?? Guid.Empty)
+            .ToArray();
+
         public static DatabaseObjectLookup Lookup => LookupUtils.GetLookup(typeof(TObject));
 
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
