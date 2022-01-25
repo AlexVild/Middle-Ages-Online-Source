@@ -1657,6 +1657,13 @@ namespace Intersect.Server.Entities.Events
                         sb.Replace(val.Key, player.GetVariableValue(val.Value.Id).ToString((val.Value).Type));
                 }
 
+                // TODO Alex: Handle this to show the correct value based on your instance
+                /*foreach (var val in DbInterface.InstanceVariableEventTextLookup)
+                {
+                    if (input.Contains(val.Key))
+                        sb.Replace(val.Key, player.GetVariableValue(val.Value.Id).ToString((val.Value).Type));
+                }*/
+
                 if (instance != null)
                 {
                     var parms = instance.GetParams(player);

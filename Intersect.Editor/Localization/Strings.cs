@@ -4879,6 +4879,10 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString globalvariables = @"Global Variables";
 
+            public static LocalizedString instancevariable = @"Instance Variable";
+
+            public static LocalizedString instancevariables = @"Instance Variables";
+
             public static LocalizedString list = @"Variable List";
 
             public static LocalizedString name = @"Name:";
@@ -4900,6 +4904,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString textidpv = @"Text Id: \pv ";
 
+            public static LocalizedString textidiv = @"Text Id: \iv ";
+
             public static LocalizedString title = @"Variable Editor";
 
             public static LocalizedString True = @"True";
@@ -4916,6 +4922,8 @@ Tick timer saved in server config.json.";
             public static LocalizedString undo = @"Undo Changes";
 
             public static LocalizedString value = @"Value:";
+
+            public static LocalizedString defaultvalue = @"Default Value:";
 
         }
 

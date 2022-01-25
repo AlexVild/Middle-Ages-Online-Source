@@ -3966,6 +3966,11 @@ namespace Intersect.Server.Networking
 
                     break;
 
+                case GameObjectType.InstanceVariable:
+                    obj = InstanceVariableBase.Get(id);
+
+                    break;
+
                 case GameObjectType.Tileset:
                     break;
 
@@ -4048,6 +4053,12 @@ namespace Intersect.Server.Networking
                     {
                         Player.StartCommonEventsWithTriggerForAll(CommonEventTrigger.ServerVariableChange, "", obj.Id.ToString());
                         DbInterface.CacheServerVariableEventTextLookups();
+                    }
+                    else if (type == GameObjectType.InstanceVariable)
+                    {
+                        // TODO Alex - Common Event for instance variables
+                        // Player.StartCommonEventsWithTriggerForAll(CommonEventTrigger.ServerVariableChange, "", obj.Id.ToString());
+                        DbInterface.CacheInstanceVariableEventTextLookups();
                     }
 
                     // Only replace the modified object

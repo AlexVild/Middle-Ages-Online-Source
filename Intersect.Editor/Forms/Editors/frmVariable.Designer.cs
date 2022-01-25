@@ -65,6 +65,7 @@ namespace Intersect.Editor.Forms.Editors
             this.btnAlphabetical = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
+            this.rdoInstanceVariables = new DarkUI.Controls.DarkRadioButton();
             this.grpTypes.SuspendLayout();
             this.grpList.SuspendLayout();
             this.grpEditor.SuspendLayout();
@@ -78,6 +79,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpTypes.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpTypes.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpTypes.Controls.Add(this.rdoInstanceVariables);
             this.grpTypes.Controls.Add(this.rdoGlobalVariables);
             this.grpTypes.Controls.Add(this.rdoPlayerVariables);
             this.grpTypes.ForeColor = System.Drawing.Color.Gainsboro;
@@ -505,6 +507,16 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
             // 
+            // rdoInstanceVariables
+            // 
+            this.rdoInstanceVariables.AutoSize = true;
+            this.rdoInstanceVariables.Location = new System.Drawing.Point(240, 20);
+            this.rdoInstanceVariables.Name = "rdoInstanceVariables";
+            this.rdoInstanceVariables.Size = new System.Drawing.Size(112, 17);
+            this.rdoInstanceVariables.TabIndex = 4;
+            this.rdoInstanceVariables.Text = "Instance Variables";
+            this.rdoInstanceVariables.CheckedChanged += new System.EventHandler(this.rdoInstanceVariables_CheckedChanged);
+            // 
             // FrmSwitchVariable
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -573,5 +585,6 @@ namespace Intersect.Editor.Forms.Editors
         private DarkComboBox cmbFolder;
         private DarkTextBox txtStringValue;
         private Controls.GameObjectList lstGameObjects;
+        private DarkRadioButton rdoInstanceVariables;
     }
 }

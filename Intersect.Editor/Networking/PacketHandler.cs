@@ -609,6 +609,21 @@ namespace Intersect.Editor.Networking
 
                     break;
 
+                case GameObjectType.InstanceVariable:
+                    if (deleted)
+                    {
+                        var svar = InstanceVariableBase.Get(id);
+                        svar.Delete();
+                    }
+                    else
+                    {
+                        var svar = new InstanceVariableBase(id);
+                        svar.Load(json);
+                        InstanceVariableBase.Lookup.Set(id, svar);
+                    }
+
+                    break;
+
                 case GameObjectType.Tileset:
                     var obj = new TilesetBase(id);
                     obj.Load(json);

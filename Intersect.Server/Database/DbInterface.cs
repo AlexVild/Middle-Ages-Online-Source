@@ -68,6 +68,8 @@ namespace Intersect.Server.Database
 
         private static Logger playerDbLogger { get; set; }
 
+        public static Dictionary<string, InstanceVariableBase> InstanceVariableEventTextLookup = new Dictionary<string, InstanceVariableBase>();
+
         public static Dictionary<string, ServerVariableBase> ServerVariableEventTextLookup = new Dictionary<string, ServerVariableBase>();
 
         public static Dictionary<string, PlayerVariableBase> PlayerVariableEventTextLookup = new Dictionary<string, PlayerVariableBase>();
@@ -306,6 +308,7 @@ namespace Intersect.Server.Database
                     OnMapsLoaded();
                     CacheServerVariableEventTextLookups();
                     CachePlayerVariableEventTextLookups();
+                    CacheInstanceVariableEventTextLookups();
                 }
             }
 
@@ -1307,6 +1310,21 @@ namespace Intersect.Server.Database
                 }
             }
             ServerVariableEventTextLookup = lookup;
+        }
+
+        public static void CacheInstanceVariableEventTextLookups()
+        {
+            var lookup = new Dictionary<string, InstanceVariableBase>();
+            var addedIds = new HashSet<string>();
+            foreach (InstanceVariableBase variable in InstanceVariableBase.Lookup.Values)
+            {
+                if (!string.IsNullOrWhiteSpace(variable.TextId) && !addedIds.Contains(variable.TextId))
+                {
+                    lookup.Add(Strings.Events.instancevar + "{" + variable.TextId + "}", variable);
+                    addedIds.Add(variable.TextId);
+                }
+            }
+            InstanceVariableEventTextLookup = lookup;
         }
 
         //Extra Map Helper Functions
