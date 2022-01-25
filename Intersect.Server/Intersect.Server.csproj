@@ -443,6 +443,7 @@
     <Compile Include="Core\IServerContext.cs" />
     <Compile Include="Core\LogicService.cs" />
     <Compile Include="Core\LogicService.LogicThread.cs" />
+    <Compile Include="Core\ProcessingInfo.cs" />
     <Compile Include="Core\Services\IConsoleService.cs" />
     <Compile Include="Core\Services\ILogicService.cs" />
     <Compile Include="Database\ContextProvider.cs" />
@@ -689,6 +690,10 @@
     <Compile Include="Migrations\Game\20211213162720_WeaponSpellMigration.cs" />
     <Compile Include="Migrations\Game\20211213162720_WeaponSpellMigration.designer.cs">
       <DependentUpon>20211213162720_WeaponSpellMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20220125173554_InstanceVariableMigration.cs" />
+    <Compile Include="Migrations\Game\20220125173554_InstanceVariableMigration.designer.cs">
+      <DependentUpon>20220125173554_InstanceVariableMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">

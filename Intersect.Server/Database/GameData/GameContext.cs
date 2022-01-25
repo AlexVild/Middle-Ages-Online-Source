@@ -87,6 +87,8 @@ namespace Intersect.Server.Database.GameData
 
         public DbSet<ServerVariableBase> ServerVariables { get; set; }
 
+        public DbSet<InstanceVariableBase> InstanceVariables { get; set; }
+
         //Tilesets
         public DbSet<TilesetBase> Tilesets { get; set; }
 

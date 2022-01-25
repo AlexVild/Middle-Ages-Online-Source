@@ -332,20 +332,6 @@ namespace Intersect.Server.Core
                 MapInstanceUpdateQueue.Enqueue(mapInstance);
                 ActiveMapInstances.Add(mapInstance.Id, mapInstance);
                 mapInstance.LastRequestedUpdateTime = Globals.Timing.Milliseconds - Options.Instance.Processing.MapUpdateInterval;
-                /* TODO alex remove this
-                // Check if we need to generate instance variables for this instance
-                if (!InstanceVariableStore.ContainsKey(mapInstance.MapInstanceId))
-                {
-                    // If we do, go out and fetch the default values of all our instance variables
-                    var instVarValues = new Dictionary<Guid, VariableValue>();
-                    foreach(var instVarId in InstanceVariableBase.Ids)
-                    {
-                        instVarValues.Add(instVarId, InstanceVariableBase.Get(instVarId).DefaultValue);
-                    }
-                    // And link them to this instance
-                    InstanceVariableStore.Add(mapInstance.MapInstanceId, instVarValues);
-                }
-                */
             }
 
             /// <summary>

@@ -286,6 +286,7 @@
     <Compile Include="GameObjects\Events\VariableMod.cs" />
     <Compile Include="GameObjects\QuestBoardBase.cs" />
     <Compile Include="GameObjects\QuestListBase.cs" />
+    <Compile Include="GameObjects\Switches and Variables\InstanceVariableBase.cs" />
     <Compile Include="GameObjects\Switches and Variables\VariableValue.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IO\ConsoleContext.cs" />

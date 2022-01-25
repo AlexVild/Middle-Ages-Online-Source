@@ -539,6 +539,10 @@ namespace Intersect.Server.Database
                     ServerVariableBase.Lookup.Clear();
 
                     break;
+                case GameObjectType.InstanceVariable:
+                    InstanceVariableBase.Lookup.Clear();
+
+                    break;
                 case GameObjectType.Tileset:
                     TilesetBase.Lookup.Clear();
 
@@ -676,6 +680,13 @@ namespace Intersect.Server.Database
                             }
 
                             break;
+                        case GameObjectType.InstanceVariable:
+                            foreach (var psw in context.InstanceVariables)
+                            {
+                                InstanceVariableBase.Lookup.Set(psw.Id, psw);
+                            }
+
+                            break;
                         case GameObjectType.Tileset:
                             foreach (var psw in context.Tilesets)
                             {
@@ -780,6 +791,10 @@ namespace Intersect.Server.Database
                     break;
                 case GameObjectType.ServerVariable:
                     dbObj = new ServerVariableBase(predefinedid);
+
+                    break;
+                case GameObjectType.InstanceVariable:
+                    dbObj = new InstanceVariableBase(predefinedid);
 
                     break;
                 case GameObjectType.QuestList:
@@ -908,6 +923,12 @@ namespace Intersect.Server.Database
                         case GameObjectType.ServerVariable:
                             context.ServerVariables.Add((ServerVariableBase)dbObj);
                             ServerVariableBase.Lookup.Set(dbObj.Id, dbObj);
+
+                            break;
+                        
+                        case GameObjectType.InstanceVariable:
+                            context.InstanceVariables.Add((InstanceVariableBase)dbObj);
+                            InstanceVariableBase.Lookup.Set(dbObj.Id, dbObj);
 
                             break;
 
@@ -1044,6 +1065,10 @@ namespace Intersect.Server.Database
                             context.ServerVariables.Remove((ServerVariableBase)gameObject);
 
                             break;
+                        case GameObjectType.InstanceVariable:
+                            context.InstanceVariables.Remove((InstanceVariableBase)gameObject);
+
+                            break;
                         case GameObjectType.Tileset:
                             context.Tilesets.Remove((TilesetBase)gameObject);
 
@@ -1166,6 +1191,10 @@ namespace Intersect.Server.Database
                             break;
                         case GameObjectType.ServerVariable:
                             context.ServerVariables.Update((ServerVariableBase)gameObject);
+
+                            break;
+                        case GameObjectType.InstanceVariable:
+                            context.InstanceVariables.Update((InstanceVariableBase)gameObject);
 
                             break;
                         case GameObjectType.Tileset:
@@ -1750,6 +1779,7 @@ namespace Intersect.Server.Database
                     MigrateDbSet(context.PlayerVariables, newGameContext.PlayerVariables);
                     MigrateDbSet(context.Tilesets, newGameContext.Tilesets);
                     MigrateDbSet(context.Time, newGameContext.Time);
+                    MigrateDbSet(context.InstanceVariables, newGameContext.InstanceVariables);
                     MigrateDbSet(context.QuestLists, newGameContext.QuestLists);
                     MigrateDbSet(context.QuestBoards, newGameContext.QuestBoards);
                     newGameContext.ChangeTracker.DetectChanges();
