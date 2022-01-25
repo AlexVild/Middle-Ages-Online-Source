@@ -1821,7 +1821,7 @@ namespace Intersect.Server.Entities
         )
         {
             // First, deny the warp entirely if we CAN'T, for some reason, warp to the requested instance type.
-            if (!CanChangeToInstanceType(mapInstanceType, fromLogin))
+            if (!CanChangeToInstanceType(mapInstanceType, fromLogin, newMapId))
             {
                 return;
             }
@@ -2091,8 +2091,9 @@ namespace Intersect.Server.Entities
         /// </summary>
         /// <param name="instanceType">The instance type we're requesting a warp to</param>
         /// <param name="fromLogin">Whether or not this is from the login flow</param>
+        /// <param name="newMapId">The map ID we will be warping to</param>
         /// <returns></returns>
-        public bool CanChangeToInstanceType(MapInstanceType instanceType, bool fromLogin)
+        public bool CanChangeToInstanceType(MapInstanceType instanceType, bool fromLogin, Guid newMapId)
         {
             bool isValid = true;
 
@@ -2136,6 +2137,10 @@ namespace Intersect.Server.Entities
                             {
                                 isValid = false;
                                 PacketSender.SendChatMsg(this, Strings.Parties.instanceinprogress, ChatMessageType.Party, CustomColors.Alerts.Error);
+                            } else if (newMapId != Party[0].SharedInstanceRespawn.Id)
+                            {
+                                isValid = false;
+                                PacketSender.SendChatMsg(this, Strings.Parties.wronginstance, ChatMessageType.Party, CustomColors.Alerts.Error);
                             }
                         }
                     }
@@ -2239,7 +2244,7 @@ namespace Intersect.Server.Entities
                         bool isSolo = Party == null || Party.Count < 2;
                         bool isPartyLeader = Party != null && Party.Count > 0 && Party[0].Id == Id;
 
-                        if (isSolo)
+                        if (isSolo) // Solo instance initialization
                         {
                             if (Options.MaxSharedInstanceLives > 0)
                             {
@@ -2247,7 +2252,7 @@ namespace Intersect.Server.Entities
                             }
                             SharedMapInstanceId = Guid.NewGuid();
                             newMapLayerId = SharedMapInstanceId;
-                        } else if (!Options.RejoinableSharedInstances && isPartyLeader)
+                        } else if (!Options.RejoinableSharedInstances && isPartyLeader) // Non-rejoinable instance initialization
                         {
                             // Generate a new instance
                             SharedMapInstanceId = Guid.NewGuid();
@@ -2263,7 +2268,7 @@ namespace Intersect.Server.Entities
                                     }
                                 }
                             }
-                        } else if (Party != null && Party.Count > 0 && Options.RejoinableSharedInstances)
+                        } else if (Party != null && Party.Count > 0 && Options.RejoinableSharedInstances) // Joinable instance initialization
                         {
                             // Scan party members for an active shared instance - if one is found, use it
                             var memberInInstance = Party.Find((Player member) => member.SharedMapInstanceId != Guid.Empty);

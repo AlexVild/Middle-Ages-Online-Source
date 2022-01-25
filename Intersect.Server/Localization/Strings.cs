@@ -1049,6 +1049,9 @@ namespace Intersect.Server.Localization
             public readonly LocalizedString instanceinprogress = @"The party has not yet completed their instance.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString wronginstance = @"Your party is currently doing a different instance.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString instancelivesremaining = @"Your party has {00} lives remaining on this instance!";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
