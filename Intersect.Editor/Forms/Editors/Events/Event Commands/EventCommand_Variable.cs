@@ -347,7 +347,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             else if (optBooleanCloneInstanceVar.Checked)
             {
                 mod.DupVariableType = VariableTypes.InstanceVariable;
-                mod.DuplicateVariableId = InstanceVariableBase.IdFromList(cmbBooleanCloneGlobalVar.SelectedIndex);
+                mod.DuplicateVariableId = InstanceVariableBase.IdFromList(cmbBooleanInstanceGlobalVar.SelectedIndex);
             }
 
             return mod;
@@ -534,49 +534,49 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     case VariableMods.DupInstanceVar:
                         optNumericSet.Checked = true;
                         optNumericCloneInstanceVar.Checked = true;
-                        cmbNumericCloneGlobalVar.SelectedIndex = InstanceVariableBase.ListIndex(mod.DuplicateVariableId);
+                        cmbNumericCloneInstanceVar.SelectedIndex = InstanceVariableBase.ListIndex(mod.DuplicateVariableId);
 
                         break;
                     
                     case VariableMods.AddInstanceVar:
                         optNumericAdd.Checked = true;
                         optNumericCloneInstanceVar.Checked = true;
-                        cmbNumericCloneGlobalVar.SelectedIndex = InstanceVariableBase.ListIndex(mod.DuplicateVariableId);
+                        cmbNumericCloneInstanceVar.SelectedIndex = InstanceVariableBase.ListIndex(mod.DuplicateVariableId);
 
                         break;
 
                     case VariableMods.SubtractInstanceVar:
                         optNumericSubtract.Checked = true;
                         optNumericCloneInstanceVar.Checked = true;
-                        cmbNumericCloneGlobalVar.SelectedIndex = InstanceVariableBase.ListIndex(mod.DuplicateVariableId);
+                        cmbNumericCloneInstanceVar.SelectedIndex = InstanceVariableBase.ListIndex(mod.DuplicateVariableId);
 
                         break;
 
                     case VariableMods.MultiplyInstanceVar:
                         optNumericMultiply.Checked = true;
                         optNumericCloneInstanceVar.Checked = true;
-                        cmbNumericCloneGlobalVar.SelectedIndex = InstanceVariableBase.ListIndex(mod.DuplicateVariableId);
+                        cmbNumericCloneInstanceVar.SelectedIndex = InstanceVariableBase.ListIndex(mod.DuplicateVariableId);
 
                         break;
 
                     case VariableMods.DivideInstanceVar:
                         optNumericDivide.Checked = true;
                         optNumericCloneInstanceVar.Checked = true;
-                        cmbNumericCloneGlobalVar.SelectedIndex = InstanceVariableBase.ListIndex(mod.DuplicateVariableId);
+                        cmbNumericCloneInstanceVar.SelectedIndex = InstanceVariableBase.ListIndex(mod.DuplicateVariableId);
 
                         break;
 
                     case VariableMods.LeftShiftInstanceVar:
                         optNumericLeftShift.Checked = true;
                         optNumericCloneInstanceVar.Checked = true;
-                        cmbNumericCloneGlobalVar.SelectedIndex = InstanceVariableBase.ListIndex(mod.DuplicateVariableId);
+                        cmbNumericCloneInstanceVar.SelectedIndex = InstanceVariableBase.ListIndex(mod.DuplicateVariableId);
 
                         break;
 
                     case VariableMods.RightShiftInstanceVar:
                         optNumericRightShift.Checked = true;
                         optNumericCloneInstanceVar.Checked = true;
-                        cmbNumericCloneGlobalVar.SelectedIndex = InstanceVariableBase.ListIndex(mod.DuplicateVariableId);
+                        cmbNumericCloneInstanceVar.SelectedIndex = InstanceVariableBase.ListIndex(mod.DuplicateVariableId);
 
                         break;
                 }
@@ -801,7 +801,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     mod.ModType = VariableMods.RightShiftInstanceVar;
                 }
 
-                mod.DuplicateVariableId = InstanceVariableBase.IdFromList(cmbNumericCloneGlobalVar.SelectedIndex);
+                mod.DuplicateVariableId = InstanceVariableBase.IdFromList(cmbNumericCloneInstanceVar.SelectedIndex);
             }
 
             return mod;

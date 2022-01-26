@@ -1814,7 +1814,12 @@ namespace Intersect.Server.Entities.Events
         )
         {
             VariableValue value = null;
-            MapInstance playersInstance = null;
+            // Get the players instance so we have it for reaching instance variables.
+            if (!MapController.TryGetInstanceFromMap(player.MapId, player.MapInstanceId, out var playersInstance))
+            {
+                return; // A player not having an instance reaalllly is a problem, so just kick out of here if they don't.
+            }
+
             if (command.VariableType == VariableTypes.PlayerVariable)
             {
                 value = player.GetVariableValue(command.VariableId);
@@ -1823,7 +1828,7 @@ namespace Intersect.Server.Entities.Events
             {
                 value = ServerVariableBase.Get(command.VariableId)?.Value;
             }
-            else if (command.VariableType == VariableTypes.InstanceVariable && MapController.TryGetInstanceFromMap(player.MapId, player.MapInstanceId, out playersInstance))
+            else if (command.VariableType == VariableTypes.InstanceVariable)
             {
                 value = playersInstance.GetInstanceVariable(command.VariableId);
             }
