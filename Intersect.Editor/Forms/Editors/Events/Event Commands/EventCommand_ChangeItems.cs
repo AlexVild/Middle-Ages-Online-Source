@@ -34,6 +34,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
 
             rdoVariable.Checked = mMyCommand.UseVariable;
             rdoGlobalVariable.Checked = mMyCommand.VariableType == VariableTypes.ServerVariable;
+            rdoInstanceVariable.Checked = mMyCommand.VariableType == VariableTypes.InstanceVariable;
 
             SetupAmountInput();
         }
@@ -67,6 +68,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
 
             rdoPlayerVariable.Text = Strings.EventChangeItems.PlayerVariable;
             rdoGlobalVariable.Text = Strings.EventChangeItems.ServerVariable;
+            rdoInstanceVariable.Text = Strings.EventChangeItems.InstanceVariable;
 
             btnSave.Text = Strings.EventChangeItems.okay;
             btnCancel.Text = Strings.EventChangeItems.cancel;
@@ -76,10 +78,22 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         {
             mMyCommand.Add = !Convert.ToBoolean(cmbAction.SelectedIndex);
             mMyCommand.ItemId = ItemBase.IdFromList(cmbItem.SelectedIndex);
-            mMyCommand.VariableType = rdoPlayerVariable.Checked ? VariableTypes.PlayerVariable : VariableTypes.ServerVariable;
+            if (rdoPlayerVariable.Checked)
+            {
+                mMyCommand.VariableType = VariableTypes.PlayerVariable;
+                mMyCommand.VariableId = PlayerVariableBase.IdFromList(cmbVariable.SelectedIndex, VariableDataTypes.Integer);
+            }
+            else if (rdoGlobalVariable.Checked)
+            {
+                mMyCommand.VariableType = VariableTypes.ServerVariable;
+                mMyCommand.VariableId = ServerVariableBase.IdFromList(cmbVariable.SelectedIndex, VariableDataTypes.Integer);
+            }
+            else if (rdoInstanceVariable.Checked)
+            {
+                mMyCommand.VariableType = VariableTypes.InstanceVariable;
+                mMyCommand.VariableId = InstanceVariableBase.IdFromList(cmbVariable.SelectedIndex, VariableDataTypes.Integer);
+            }
             mMyCommand.UseVariable = !rdoManual.Checked;
-            mMyCommand.VariableId = rdoPlayerVariable.Checked ? PlayerVariableBase.IdFromList(cmbVariable.SelectedIndex, VariableDataTypes.Integer) : ServerVariableBase.IdFromList(cmbVariable.SelectedIndex, VariableDataTypes.Integer);
-
             mMyCommand.Quantity = (int) nudGiveTakeAmount.Value;
             mMyCommand.ItemHandling = (ItemHandling) cmbMethod.SelectedIndex;
             mEventEditor.FinishCommandEdit();
@@ -112,6 +126,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         }
 
         private void rdoVariable_CheckedChanged(object sender, EventArgs e)
+        {
+            SetupAmountInput();
+        }
+
+        private void rdoInstanceVariable_CheckedChanged(object sender, EventArgs e)
         {
             SetupAmountInput();
         }
@@ -156,7 +175,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     VariableBlank();
                 }
             }
-            else
+            else if (rdoGlobalVariable.Checked)
             {
                 cmbVariable.Items.AddRange(ServerVariableBase.GetNamesByType(VariableDataTypes.Integer));
                 // Do not update if the wrong type of variable is saved
@@ -177,9 +196,31 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     VariableBlank();
                 }
             }
+            else if (rdoInstanceVariable.Checked)
+            {
+                cmbVariable.Items.AddRange(InstanceVariableBase.GetNamesByType(VariableDataTypes.Integer));
+                // Do not update if the wrong type of variable is saved
+                if (mMyCommand.VariableType == VariableTypes.InstanceVariable)
+                {
+                    var index = InstanceVariableBase.ListIndex(mMyCommand.VariableId, VariableDataTypes.Integer);
+                    if (index > -1)
+                    {
+                        cmbVariable.SelectedIndex = index;
+                    }
+                    else
+                    {
+                        VariableBlank();
+                    }
+                }
+                else
+                {
+                    VariableBlank();
+                }
+            }
 
             nudGiveTakeAmount.Value = Math.Max(1, mMyCommand.Quantity);
         }
+
     }
 
 }

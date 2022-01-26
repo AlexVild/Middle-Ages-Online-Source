@@ -700,6 +700,9 @@
     <EmbeddedResource Include="Forms\DockingElements\frmMapLayers.resx">
       <DependentUpon>frmMapLayers.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_ChangeItems.resx">
+      <DependentUpon>EventCommand_ChangeItems.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_CompleteQuestTask.resx">
       <DependentUpon>EventCommand_CompleteQuestTask.cs</DependentUpon>
     </EmbeddedResource>
@@ -708,6 +711,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_FlashScreen.resx">
       <DependentUpon>EventCommand_FlashScreen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_GiveExperience.resx">
+      <DependentUpon>EventCommand_GiveExperience.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_OpenQuestBoard.resx">
       <DependentUpon>EventCommand_OpenQuestBoard.cs</DependentUpon>

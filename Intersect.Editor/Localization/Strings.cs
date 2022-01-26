@@ -1427,6 +1427,9 @@ Tick timer saved in server config.json.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString ServerVariable = @"Global Variable";
+            
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString InstanceVariable = @"Instance Variable";
 
             public static LocalizedString cancel = @"Cancel";
 
