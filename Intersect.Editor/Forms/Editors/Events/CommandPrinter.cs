@@ -1498,6 +1498,48 @@ namespace Intersect.Editor.Forms.Editors.Events
                     );
 
                     break;
+                case Enums.VariableMods.DupInstanceVar:
+                    varvalue = Strings.EventCommandList.dupinstancevariable.ToString(
+                        InstanceVariableBase.GetName(mod.DuplicateVariableId)
+                    );
+
+                    break;
+                case Enums.VariableMods.AddInstanceVar:
+                    varvalue = Strings.EventCommandList.addinstancevariable.ToString(
+                        InstanceVariableBase.GetName(mod.DuplicateVariableId)
+                    );
+
+                    break;
+                case Enums.VariableMods.SubtractInstanceVar:
+                    varvalue = Strings.EventCommandList.subtractinstancevariable.ToString(
+                        InstanceVariableBase.GetName(mod.DuplicateVariableId)
+                    );
+
+                    break;
+                case Enums.VariableMods.MultiplyInstanceVar:
+                    varvalue = Strings.EventCommandList.multiplyinstancevariable.ToString(
+                        InstanceVariableBase.GetName(mod.DuplicateVariableId)
+                    );
+
+                    break;
+                case Enums.VariableMods.DivideInstanceVar:
+                    varvalue = Strings.EventCommandList.divideinstancevariable.ToString(
+                        InstanceVariableBase.GetName(mod.DuplicateVariableId)
+                    );
+
+                    break;
+                case Enums.VariableMods.LeftShiftInstanceVar:
+                    varvalue = Strings.EventCommandList.leftshiftinstancevariable.ToString(
+                        InstanceVariableBase.GetName(mod.DuplicateVariableId)
+                    );
+
+                    break;
+                case Enums.VariableMods.RightShiftInstanceVar:
+                    varvalue = Strings.EventCommandList.rightshiftinstancevariable.ToString(
+                        InstanceVariableBase.GetName(mod.DuplicateVariableId)
+                    );
+
+                    break;
             }
 
             if (command.VariableType == VariableTypes.PlayerVariable)

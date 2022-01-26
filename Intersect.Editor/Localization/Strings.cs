@@ -34,6 +34,12 @@ namespace Intersect.Editor.Localization
                     ServerVariableBase.GetName(condition.VariableId), pVar
                 );
             }
+            else if (condition.VariableType == VariableTypes.InstanceVariable)
+            {
+                return Strings.EventConditionDesc.instancevariable.ToString(
+                    InstanceVariableBase.GetName(condition.VariableId), pVar
+                );
+            }
 
             return "";
         }
@@ -345,6 +351,12 @@ namespace Intersect.Editor.Localization
                         ServerVariableBase.GetName(comparison.CompareVariableId)
                     );
                 }
+                else if (comparison.CompareVariableType == VariableTypes.InstanceVariable)
+                {
+                    value = Strings.EventConditionDesc.instancevariablevalue.ToString(
+                        InstanceVariableBase.GetName(comparison.CompareVariableId)
+                    );
+                }
             }
 
             if (comparison.ComparingEqual)
@@ -380,6 +392,12 @@ namespace Intersect.Editor.Localization
                 {
                     value = Strings.EventConditionDesc.globalvariablevalue.ToString(
                         ServerVariableBase.GetName(comparison.CompareVariableId)
+                    );
+                }
+                else if (comparison.CompareVariableType == VariableTypes.InstanceVariable)
+                {
+                    value = Strings.EventConditionDesc.instancevariablevalue.ToString(
+                        InstanceVariableBase.GetName(comparison.CompareVariableId)
                     );
                 }
             }
@@ -1648,25 +1666,37 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString addplayervariable = @"Add Player Variable: {00}'s Value";
 
+            public static LocalizedString addinstancevariable = @"Add Instance Variable: {00}'s Value";
+
             public static LocalizedString subtractglobalvariable = @"Subtract Global Variable: {00}'s Value";
 
             public static LocalizedString subtractplayervariable = @"Subtract Player Variable: {00}'s Value";
 
+            public static LocalizedString subtractinstancevariable = @"Subtract Instance Variable: {00}'s Value";
+
             public static LocalizedString multiplyglobalvariable = @"Multiply Global Variable: {00}'s Value";
 
             public static LocalizedString multiplyplayervariable = @"Multiply Player Variable: {00}'s Value";
+            
+            public static LocalizedString multiplyinstancevariable = @"Multiply Instance Variable: {00}'s Value";
 
             public static LocalizedString divideglobalvariable = @"Divide Global Variable: {00}'s Value";
 
             public static LocalizedString divideplayervariable = @"Divide Player Variable: {00}'s Value";
+            
+            public static LocalizedString divideinstancevariable = @"Divide Instance Variable: {00}'s Value";
 
             public static LocalizedString leftshiftglobalvariable = @"Left Bit Shift Global Variable: {00}'s Value";
 
             public static LocalizedString leftshiftplayervariable = @"Left Bit Shift Player Variable: {00}'s Value";
+            
+            public static LocalizedString leftshiftinstancevariable = @"Left Bit Shift Instance Variable: {00}'s Value";
 
             public static LocalizedString rightshiftglobalvariable = @"Right Bit Shift Global Variable: {00}'s Value";
 
             public static LocalizedString rightshiftplayervariable = @"Right Bit Shift Player Variable: {00}'s Value";
+            
+            public static LocalizedString rightshiftinstancevariable = @"Right Bit Shift Instance Variable: {00}'s Value";
 
             public static LocalizedString enditemchange = @"End Item Change";
 
@@ -2317,6 +2347,10 @@ Tick timer saved in server config.json.";
             public static LocalizedString globalvariable = @"Global Variable: {00} {01}";
 
             public static LocalizedString globalvariablevalue = @"Global Variable: {00}'s Value";
+
+            public static LocalizedString instancevariable = @"Instance Variable: {00} {01}";
+
+            public static LocalizedString instancevariablevalue = @"Instance Variable: {00}'s Value";
 
             public static LocalizedString greater = @"is greater than {00}";
 
