@@ -95,12 +95,20 @@ namespace Intersect.Server.Entities.Events
                     type = (int)variable.Type;
                 }
             }
-            else
+            else if (command.VariableType == VariableTypes.ServerVariable)
             {
                 var variable = ServerVariableBase.Get(command.VariableId);
                 if (variable != null)
                 {
                     type = (int)variable.Type;
+                }
+            }
+            else if (command.VariableType == VariableTypes.InstanceVariable && MapController.TryGetInstanceFromMap(player.MapId, player.MapInstanceId, out var mapInstance))
+            {
+                var variable = mapInstance.GetInstanceVariable(command.VariableId);
+                if (variable != null)
+                {
+                    type = (int)InstanceVariableBase.Get(command.VariableId).Type;
                 }
             }
 
@@ -382,6 +390,12 @@ namespace Intersect.Server.Entities.Events
                     case VariableTypes.ServerVariable:
                         quantity = (int)ServerVariableBase.Get(command.VariableId)?.Value.Integer;
                         break;
+                    case VariableTypes.InstanceVariable:
+                        if (MapController.TryGetInstanceFromMap(player.MapId, player.MapInstanceId, out var mapInstance))
+                        {
+                            quantity = mapInstance.GetInstanceVariable(command.VariableId).Integer;
+                        }
+                        break;
                 }
             }
 
@@ -468,6 +482,12 @@ namespace Intersect.Server.Entities.Events
                         break;
                     case VariableTypes.ServerVariable:
                         quantity = (int)ServerVariableBase.Get(command.VariableId)?.Value.Integer;
+                        break;
+                    case VariableTypes.InstanceVariable:
+                        if (MapController.TryGetInstanceFromMap(player.MapId, player.MapInstanceId, out var mapInstance))
+                        {
+                            quantity = (int)mapInstance.GetInstanceVariable(command.VariableId).Integer;
+                        }
                         break;
                 }
 
@@ -680,7 +700,6 @@ namespace Intersect.Server.Entities.Events
             Stack<CommandInstance> callStack
         )
         {
-            // TODO Alex: This and the map warp attribute are the same thing using different code. Consolidate.
             if (command.ChangeInstance)
             {
                 player.Warp(
@@ -1494,6 +1513,12 @@ namespace Intersect.Server.Entities.Events
                 case VariableTypes.ServerVariable:
                     quantity = (int)ServerVariableBase.Get(command.VariableId)?.Value.Integer;
                     break;
+                case VariableTypes.InstanceVariable:
+                    if (MapController.TryGetInstanceFromMap(player.MapId, player.MapInstanceId, out var mapInstance))
+                    {
+                        quantity = (int)mapInstance.GetInstanceVariable(command.VariableId).Integer;
+                    }
+                    break;
             }
             var guild = player.Guild;
             if (quantity > 0 && guild != null && guild.BankSlotsCount != quantity)
@@ -1657,12 +1682,15 @@ namespace Intersect.Server.Entities.Events
                         sb.Replace(val.Key, player.GetVariableValue(val.Value.Id).ToString((val.Value).Type));
                 }
 
-                // TODO Alex: Handle this to show the correct value based on your instance
-                /*foreach (var val in DbInterface.InstanceVariableEventTextLookup)
+                foreach (var val in DbInterface.InstanceVariableEventTextLookup)
                 {
-                    if (input.Contains(val.Key))
-                        sb.Replace(val.Key, player.GetVariableValue(val.Value.Id).ToString((val.Value).Type));
-                }*/
+                    if (MapController.TryGetInstanceFromMap(player.MapId, player.MapInstanceId, out var mapInstance))
+                    {
+                        var instanceVarVal = mapInstance.GetInstanceVariable(val.Value.Id);
+                        if (instanceVarVal != null && input.Contains(val.Key))
+                                sb.Replace(val.Key, instanceVarVal.ToString((val.Value).Type));
+                    }
+                }
 
                 if (instance != null)
                 {
@@ -1704,6 +1732,10 @@ namespace Intersect.Server.Entities.Events
             {
                 value = ServerVariableBase.Get(command.VariableId)?.Value;
             }
+            else if (command.VariableType == VariableTypes.InstanceVariable && MapController.TryGetInstanceFromMap(player.MapId, player.MapInstanceId, out var mapInstance)) 
+            {
+                value = mapInstance.GetInstanceVariable(command.VariableId);
+            }
 
             if (value == null)
             {
@@ -1726,6 +1758,14 @@ namespace Intersect.Server.Entities.Events
                         value.Boolean = ServerVariableBase.Get(mod.DuplicateVariableId).Value.Boolean;
                     }
                 }
+                else if (mod.DupVariableType == VariableTypes.InstanceVariable && MapController.TryGetInstanceFromMap(player.MapId, player.MapInstanceId, out var mapInstance))
+                {
+                    var variable = mapInstance.GetInstanceVariable(command.VariableId);
+                    if (variable != null)
+                    {
+                        value.Boolean = variable.Boolean;
+                    }
+                }
             }
             else
             {
@@ -1736,11 +1776,6 @@ namespace Intersect.Server.Entities.Events
 
             if (command.VariableType == VariableTypes.PlayerVariable)
             {
-                if (changed)
-                {
-
-                }
-
                 // Set the party member switches too if Sync Party enabled!
                 if (command.SyncParty)
                 {
@@ -1758,13 +1793,16 @@ namespace Intersect.Server.Entities.Events
                     }
                 }
             }
-            else
+            else if (command.VariableType == VariableTypes.ServerVariable && changed)
             {
-                if (changed)
-                {
-                    Player.StartCommonEventsWithTriggerForAll(Enums.CommonEventTrigger.ServerVariableChange, "", command.VariableId.ToString());
-                    DbInterface.UpdatedServerVariables.AddOrUpdate(command.VariableId, ServerVariableBase.Get(command.VariableId), (key, oldValue) => ServerVariableBase.Get(command.VariableId));
-                }
+                Player.StartCommonEventsWithTriggerForAll(Enums.CommonEventTrigger.ServerVariableChange, "", command.VariableId.ToString());
+                DbInterface.UpdatedServerVariables.AddOrUpdate(command.VariableId, ServerVariableBase.Get(command.VariableId), (key, oldValue) => ServerVariableBase.Get(command.VariableId));
+            }
+            else if (command.VariableType == VariableTypes.InstanceVariable && changed && MapController.TryGetInstanceFromMap(player.MapId, player.MapInstanceId, out var mapInstance))
+            {
+                // TODO Alex: instance var common events
+                //Player.StartCommonEventsWithTriggerForAll(Enums.CommonEventTrigger.ServerVariableChange, "", command.VariableId.ToString());
+                mapInstance.SetInstanceVariable(command.VariableId, value);
             }
         }
 
@@ -1776,6 +1814,7 @@ namespace Intersect.Server.Entities.Events
         )
         {
             VariableValue value = null;
+            MapInstance playersInstance = null;
             if (command.VariableType == VariableTypes.PlayerVariable)
             {
                 value = player.GetVariableValue(command.VariableId);
@@ -1783,6 +1822,10 @@ namespace Intersect.Server.Entities.Events
             else if (command.VariableType == VariableTypes.ServerVariable)
             {
                 value = ServerVariableBase.Get(command.VariableId)?.Value;
+            }
+            else if (command.VariableType == VariableTypes.InstanceVariable && MapController.TryGetInstanceFromMap(player.MapId, player.MapInstanceId, out playersInstance))
+            {
+                value = playersInstance.GetInstanceVariable(command.VariableId);
             }
 
             if (value == null)
@@ -1927,6 +1970,61 @@ namespace Intersect.Server.Entities.Events
                     }
 
                     break;
+                case VariableMods.DupInstanceVar:
+                    if (playersInstance != null) 
+                    {
+                        value.Integer = playersInstance.GetInstanceVariable(mod.DuplicateVariableId).Integer;
+                    }
+
+                    break;
+                case VariableMods.AddInstanceVar:
+                    if (playersInstance != null)
+                    {
+                        value.Integer += playersInstance.GetInstanceVariable(mod.DuplicateVariableId).Integer;
+                    }
+
+                    break;
+                case VariableMods.SubtractInstanceVar:
+                    if (playersInstance != null)
+                    {
+                        value.Integer -= playersInstance.GetInstanceVariable(mod.DuplicateVariableId).Integer;
+                    }
+
+                    break;
+                case VariableMods.MultiplyInstanceVar:
+                    if (playersInstance != null)
+                    {
+                        value.Integer *= playersInstance.GetInstanceVariable(mod.DuplicateVariableId).Integer;
+                    }
+
+                    break;
+                case VariableMods.DivideInstanceVar:
+                    if (playersInstance != null)
+                    {
+                        var div = playersInstance.GetInstanceVariable(mod.DuplicateVariableId);
+                        if (div != 0)
+                        {
+                            value.Integer /= playersInstance.GetInstanceVariable(mod.DuplicateVariableId).Integer;
+                        }
+                    }
+
+                    break;
+                case VariableMods.LeftShiftInstanceVar:
+                    if (playersInstance != null)
+                    {
+                        var div = playersInstance.GetInstanceVariable(mod.DuplicateVariableId);
+                        value.Integer = value.Integer << (int)playersInstance.GetInstanceVariable(mod.DuplicateVariableId).Integer;
+                    }
+
+                    break;
+                case VariableMods.RightShiftInstanceVar:
+                    if (playersInstance != null)
+                    {
+                        var div = playersInstance.GetInstanceVariable(mod.DuplicateVariableId);
+                        value.Integer = value.Integer >> (int)playersInstance.GetInstanceVariable(mod.DuplicateVariableId).Integer;
+                    }
+
+                    break;
             }
 
             var changed = value.Integer != originalValue;
@@ -1950,13 +2048,16 @@ namespace Intersect.Server.Entities.Events
                     }
                 }
             }
-            else
+            else if (command.VariableType == VariableTypes.ServerVariable && changed)
             {
-                if (changed)
-                {
-                    Player.StartCommonEventsWithTriggerForAll(Enums.CommonEventTrigger.ServerVariableChange, "", command.VariableId.ToString());
-                    DbInterface.UpdatedServerVariables.AddOrUpdate(command.VariableId, ServerVariableBase.Get(command.VariableId), (key, oldValue) => ServerVariableBase.Get(command.VariableId));
-                }
+                Player.StartCommonEventsWithTriggerForAll(Enums.CommonEventTrigger.ServerVariableChange, "", command.VariableId.ToString());
+                DbInterface.UpdatedServerVariables.AddOrUpdate(command.VariableId, ServerVariableBase.Get(command.VariableId), (key, oldValue) => ServerVariableBase.Get(command.VariableId));
+            }
+            else if (command.VariableType == VariableTypes.InstanceVariable && changed && MapController.TryGetInstanceFromMap(player.MapId, player.MapInstanceId, out var mapInstance))
+            {
+                // TODO Alex: instance var common events
+                //Player.StartCommonEventsWithTriggerForAll(Enums.CommonEventTrigger.ServerVariableChange, "", command.VariableId.ToString());
+                mapInstance.SetInstanceVariable(command.VariableId, value);
             }
         }
 
@@ -1975,6 +2076,10 @@ namespace Intersect.Server.Entities.Events
             else if (command.VariableType == VariableTypes.ServerVariable)
             {
                 value = ServerVariableBase.Get(command.VariableId)?.Value;
+            }
+            else if (command.VariableType == VariableTypes.InstanceVariable && MapController.TryGetInstanceFromMap(player.MapId, player.MapInstanceId, out var mapInstance))
+            {
+                value = mapInstance.GetInstanceVariable(command.VariableId);
             }
 
             if (value == null)
@@ -2019,13 +2124,16 @@ namespace Intersect.Server.Entities.Events
                     }
                 }
             }
-            else
+            else if (command.VariableType == VariableTypes.ServerVariable && changed)
             {
-                if (changed)
-                {
-                    Player.StartCommonEventsWithTriggerForAll(Enums.CommonEventTrigger.ServerVariableChange, "", command.VariableId.ToString());
-                    DbInterface.UpdatedServerVariables.AddOrUpdate(command.VariableId, ServerVariableBase.Get(command.VariableId), (key, oldValue) => ServerVariableBase.Get(command.VariableId));
-                }
+                Player.StartCommonEventsWithTriggerForAll(Enums.CommonEventTrigger.ServerVariableChange, "", command.VariableId.ToString());
+                DbInterface.UpdatedServerVariables.AddOrUpdate(command.VariableId, ServerVariableBase.Get(command.VariableId), (key, oldValue) => ServerVariableBase.Get(command.VariableId));
+            }
+            else if (command.VariableType == VariableTypes.InstanceVariable && changed && MapController.TryGetInstanceFromMap(player.MapId, player.MapInstanceId, out var mapInstance))
+            {
+                // TODO Alex: instance var common events
+                //Player.StartCommonEventsWithTriggerForAll(Enums.CommonEventTrigger.ServerVariableChange, "", command.VariableId.ToString());
+                mapInstance.SetInstanceVariable(command.VariableId, value);
             }
         }
 

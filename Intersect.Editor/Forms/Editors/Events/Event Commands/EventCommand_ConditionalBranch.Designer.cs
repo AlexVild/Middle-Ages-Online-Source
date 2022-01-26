@@ -143,6 +143,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.rdoManual = new DarkUI.Controls.DarkRadioButton();
             this.cmbItem = new DarkUI.Controls.DarkComboBox();
             this.lblItem = new System.Windows.Forms.Label();
+            this.rdoInstanceVariable = new DarkUI.Controls.DarkRadioButton();
             this.grpConditional.SuspendLayout();
             this.grpEquipmentSlot.SuspendLayout();
             this.grpTag.SuspendLayout();
@@ -178,6 +179,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             this.grpConditional.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.grpConditional.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpConditional.Controls.Add(this.grpVariable);
             this.grpConditional.Controls.Add(this.grpEquipmentSlot);
             this.grpConditional.Controls.Add(this.grpTag);
             this.grpConditional.Controls.Add(this.grpMapZoneType);
@@ -189,7 +191,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpConditional.Controls.Add(this.grpQuestCompleted);
             this.grpConditional.Controls.Add(this.lblType);
             this.grpConditional.Controls.Add(this.btnCancel);
-            this.grpConditional.Controls.Add(this.grpVariable);
             this.grpConditional.Controls.Add(this.grpQuestInProgress);
             this.grpConditional.Controls.Add(this.grpStartQuest);
             this.grpConditional.Controls.Add(this.grpTime);
@@ -205,7 +206,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpConditional.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpConditional.Location = new System.Drawing.Point(3, 3);
             this.grpConditional.Name = "grpConditional";
-            this.grpConditional.Size = new System.Drawing.Size(278, 337);
+            this.grpConditional.Size = new System.Drawing.Size(278, 415);
             this.grpConditional.TabIndex = 17;
             this.grpConditional.TabStop = false;
             this.grpConditional.Text = "Conditional";
@@ -397,7 +398,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             // chkHasElse
             // 
-            this.chkHasElse.Location = new System.Drawing.Point(112, 279);
+            this.chkHasElse.Location = new System.Drawing.Point(109, 363);
             this.chkHasElse.Name = "chkHasElse";
             this.chkHasElse.Size = new System.Drawing.Size(72, 17);
             this.chkHasElse.TabIndex = 56;
@@ -405,7 +406,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             // chkNegated
             // 
-            this.chkNegated.Location = new System.Drawing.Point(199, 279);
+            this.chkNegated.Location = new System.Drawing.Point(192, 363);
             this.chkNegated.Name = "chkNegated";
             this.chkNegated.Size = new System.Drawing.Size(72, 17);
             this.chkNegated.TabIndex = 34;
@@ -413,7 +414,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(12, 307);
+            this.btnSave.Location = new System.Drawing.Point(12, 386);
             this.btnSave.Name = "btnSave";
             this.btnSave.Padding = new System.Windows.Forms.Padding(5);
             this.btnSave.Size = new System.Drawing.Size(75, 23);
@@ -515,7 +516,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(113, 307);
+            this.btnCancel.Location = new System.Drawing.Point(109, 386);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Padding = new System.Windows.Forms.Padding(5);
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
@@ -527,14 +528,14 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             this.grpVariable.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.grpVariable.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpVariable.Controls.Add(this.grpBooleanVariable);
             this.grpVariable.Controls.Add(this.grpSelectVariable);
             this.grpVariable.Controls.Add(this.grpStringVariable);
-            this.grpVariable.Controls.Add(this.grpBooleanVariable);
             this.grpVariable.Controls.Add(this.grpNumericVariable);
             this.grpVariable.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpVariable.Location = new System.Drawing.Point(9, 40);
             this.grpVariable.Name = "grpVariable";
-            this.grpVariable.Size = new System.Drawing.Size(262, 233);
+            this.grpVariable.Size = new System.Drawing.Size(262, 269);
             this.grpVariable.TabIndex = 24;
             this.grpVariable.TabStop = false;
             this.grpVariable.Text = "Variable is...";
@@ -543,13 +544,14 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             this.grpSelectVariable.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.grpSelectVariable.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpSelectVariable.Controls.Add(this.rdoInstanceVariable);
             this.grpSelectVariable.Controls.Add(this.rdoPlayerVariable);
             this.grpSelectVariable.Controls.Add(this.cmbVariable);
             this.grpSelectVariable.Controls.Add(this.rdoGlobalVariable);
             this.grpSelectVariable.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpSelectVariable.Location = new System.Drawing.Point(7, 16);
             this.grpSelectVariable.Name = "grpSelectVariable";
-            this.grpSelectVariable.Size = new System.Drawing.Size(247, 75);
+            this.grpSelectVariable.Size = new System.Drawing.Size(247, 101);
             this.grpSelectVariable.TabIndex = 50;
             this.grpSelectVariable.TabStop = false;
             this.grpSelectVariable.Text = "Select Variable";
@@ -579,7 +581,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbVariable.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbVariable.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbVariable.FormattingEnabled = true;
-            this.cmbVariable.Location = new System.Drawing.Point(6, 42);
+            this.cmbVariable.Location = new System.Drawing.Point(8, 70);
             this.cmbVariable.Name = "cmbVariable";
             this.cmbVariable.Size = new System.Drawing.Size(235, 21);
             this.cmbVariable.TabIndex = 22;
@@ -590,7 +592,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // rdoGlobalVariable
             // 
             this.rdoGlobalVariable.AutoSize = true;
-            this.rdoGlobalVariable.Location = new System.Drawing.Point(145, 19);
+            this.rdoGlobalVariable.Location = new System.Drawing.Point(6, 44);
             this.rdoGlobalVariable.Name = "rdoGlobalVariable";
             this.rdoGlobalVariable.Size = new System.Drawing.Size(96, 17);
             this.rdoGlobalVariable.TabIndex = 35;
@@ -607,7 +609,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpStringVariable.Controls.Add(this.cmbStringComparitor);
             this.grpStringVariable.Controls.Add(this.lblStringComparator);
             this.grpStringVariable.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpStringVariable.Location = new System.Drawing.Point(6, 96);
+            this.grpStringVariable.Location = new System.Drawing.Point(7, 128);
             this.grpStringVariable.Name = "grpStringVariable";
             this.grpStringVariable.Size = new System.Drawing.Size(247, 134);
             this.grpStringVariable.TabIndex = 53;
@@ -691,7 +693,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpBooleanVariable.Controls.Add(this.optBooleanPlayerVariable);
             this.grpBooleanVariable.Controls.Add(this.optBooleanGlobalVariable);
             this.grpBooleanVariable.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpBooleanVariable.Location = new System.Drawing.Point(8, 95);
+            this.grpBooleanVariable.Location = new System.Drawing.Point(3, 123);
             this.grpBooleanVariable.Name = "grpBooleanVariable";
             this.grpBooleanVariable.Size = new System.Drawing.Size(247, 134);
             this.grpBooleanVariable.TabIndex = 52;
@@ -819,7 +821,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpNumericVariable.Controls.Add(this.rdoVarComparePlayerVar);
             this.grpNumericVariable.Controls.Add(this.rdoVarCompareGlobalVar);
             this.grpNumericVariable.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpNumericVariable.Location = new System.Drawing.Point(8, 95);
+            this.grpNumericVariable.Location = new System.Drawing.Point(6, 123);
             this.grpNumericVariable.Name = "grpNumericVariable";
             this.grpNumericVariable.Size = new System.Drawing.Size(247, 134);
             this.grpNumericVariable.TabIndex = 51;
@@ -1827,6 +1829,16 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.lblItem.TabIndex = 2;
             this.lblItem.Text = "Item:";
             // 
+            // rdoInstanceVariable
+            // 
+            this.rdoInstanceVariable.AutoSize = true;
+            this.rdoInstanceVariable.Location = new System.Drawing.Point(133, 19);
+            this.rdoInstanceVariable.Name = "rdoInstanceVariable";
+            this.rdoInstanceVariable.Size = new System.Drawing.Size(107, 17);
+            this.rdoInstanceVariable.TabIndex = 36;
+            this.rdoInstanceVariable.Text = "Instance Variable";
+            this.rdoInstanceVariable.CheckedChanged += new System.EventHandler(this.rdoInstanceVariable_CheckedChanged);
+            // 
             // EventCommandConditionalBranch
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1835,7 +1847,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.Controls.Add(this.grpConditional);
             this.Name = "EventCommandConditionalBranch";
-            this.Size = new System.Drawing.Size(285, 345);
+            this.Size = new System.Drawing.Size(285, 421);
             this.grpConditional.ResumeLayout(false);
             this.grpConditional.PerformLayout();
             this.grpEquipmentSlot.ResumeLayout(false);
@@ -2008,5 +2020,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private DarkGroupBox grpEquipmentSlot;
         private System.Windows.Forms.Label lblSlot;
         private DarkComboBox cmbSlots;
+        private DarkRadioButton rdoInstanceVariable;
     }
 }

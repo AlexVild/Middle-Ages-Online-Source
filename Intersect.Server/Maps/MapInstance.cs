@@ -1414,6 +1414,18 @@ namespace Intersect.Server.Maps
                 return null;
             }
         }
+
+        public void SetInstanceVariable(Guid variableId, VariableValue value)
+        {
+            if (ProcessingInfo.InstanceVariables.TryGetValue(MapInstanceId, out var instanceVariables) && instanceVariables.ContainsKey(variableId))
+            {
+                instanceVariables[variableId] = value;
+            }
+            else
+            {
+                Log.Error($"Failed to set value for instance variable {variableId} in instance {MapInstanceId}");
+            }
+        }
         #endregion
     }
 }

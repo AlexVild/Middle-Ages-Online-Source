@@ -1642,6 +1642,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString dupplayervariable = @"Player Variable: {00}'s Value";
 
+            public static LocalizedString dupinstancevariable = @"Instance Variable: {00}'s Value";
+
             public static LocalizedString addglobalvariable = @"Add Global Variable: {00}'s Value";
 
             public static LocalizedString addplayervariable = @"Add Player Variable: {00}'s Value";
@@ -1699,6 +1701,8 @@ Tick timer saved in server config.json.";
             public static LocalizedString globalswitch = @"Set Global Switch {00} to {01}";
 
             public static LocalizedString globalvariable = @"Set Global Variable {00} ({01})";
+
+            public static LocalizedString instancevariable = @"Set Instance Variable {00} ({01})";
 
             public static LocalizedString gotolabel = @"Go to Label {00}";
 
@@ -2647,6 +2651,8 @@ Tick timer saved in server config.json.";
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString ServerVariable = @"Global Variable";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString InstanceVariable = @"Instance Variable";
         }
 
         public struct EventGotoLabel
@@ -2938,6 +2944,8 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString player = @"Player Variable";
 
+            public static LocalizedString instance = @"Instance Variable";
+
             public static LocalizedString title = @"Set Variable";
 
             public static LocalizedString syncparty = @"Party Sync?";
@@ -2953,6 +2961,8 @@ Tick timer saved in server config.json.";
             public static LocalizedString booleanccloneglobalvariablevalue = @"Global Variable Value: ";
 
             public static LocalizedString booleancloneplayervariablevalue = @"Player Variable Value: ";
+            
+            public static LocalizedString booleancloneinstancevariablevalue = @"Instance Variable Value: ";
 
             public static LocalizedString numericlabel = @"Integer Variable:";
 
@@ -2965,6 +2975,8 @@ Tick timer saved in server config.json.";
             public static LocalizedString numericcloneglobalvariablevalue = @"Global Variable Value: ";
 
             public static LocalizedString numericcloneplayervariablevalue = @"Player Variable Value: ";
+
+            public static LocalizedString numericcloneinstancevariablevalue = @"Instance Variable Value: ";
 
             public static LocalizedString numericmultiply = @"Multiply";
 

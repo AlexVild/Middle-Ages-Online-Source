@@ -811,6 +811,9 @@ namespace Intersect.Editor.Forms.Editors.Events
                     case VariableTypes.ServerVariable:
                         exp = string.Format(@"({0}: {1})", Strings.EventGiveExperience.ServerVariable, ServerVariableBase.GetName(command.VariableId));
                         break;
+                    case VariableTypes.InstanceVariable:
+                        exp = string.Format(@"({0}: {1})", Strings.EventGiveExperience.InstanceVariable, InstanceVariableBase.GetName(command.VariableId));
+                        break;
                 }
 
                 return Strings.EventCommandList.giveexp.ToString(exp);
@@ -1325,6 +1328,13 @@ namespace Intersect.Editor.Forms.Editors.Events
                         ServerVariableBase.GetName(mod.DuplicateVariableId)
                     );
                 }
+
+                else if (mod.DupVariableType == VariableTypes.InstanceVariable)
+                {
+                    varvalue = Strings.EventCommandList.dupinstancevariable.ToString(
+                        InstanceVariableBase.GetName(mod.DuplicateVariableId)
+                    );
+                }
             }
             else
             {
@@ -1352,12 +1362,20 @@ namespace Intersect.Editor.Forms.Editors.Events
                 );
             }
 
+            if (command.VariableType == VariableTypes.InstanceVariable)
+            {
+                return Strings.EventCommandList.instancevariable.ToString(
+                    InstanceVariableBase.GetName(command.VariableId), varvalue
+                );
+            }
+
             return Strings.EventCommandList.invalid;
         }
 
         private static string GetVariableModText(SetVariableCommand command, IntegerVariableMod mod)
         {
             var varvalue = "";
+            // TODO Alex: instance variable mods
             switch (mod.ModType)
             {
                 case Enums.VariableMods.Set:
@@ -1496,6 +1514,13 @@ namespace Intersect.Editor.Forms.Editors.Events
                 );
             }
 
+            if (command.VariableType == VariableTypes.InstanceVariable)
+            {
+                return Strings.EventCommandList.instancevariable.ToString(
+                    InstanceVariableBase.GetName(command.VariableId), varvalue
+                );
+            }
+
             return Strings.EventCommandList.invalid;
         }
 
@@ -1525,6 +1550,13 @@ namespace Intersect.Editor.Forms.Editors.Events
             {
                 return Strings.EventCommandList.globalvariable.ToString(
                     ServerVariableBase.GetName(command.VariableId), varvalue
+                );
+            }
+            
+            if (command.VariableType == VariableTypes.InstanceVariable)
+            {
+                return Strings.EventCommandList.instancevariable.ToString(
+                    InstanceVariableBase.GetName(command.VariableId), varvalue
                 );
             }
 

@@ -45,7 +45,9 @@ namespace Intersect.Server.Core
                     var instVarValues = new Dictionary<Guid, VariableValue>();
                     foreach (InstanceVariableBase instVar in InstanceVariableBase.Lookup.Values)
                     {
-                        instVarValues.Add(instVar.Id, instVar.DefaultValue);
+                        VariableValue copyValue = new VariableValue();
+                        copyValue.SetValue(instVar.DefaultValue.Value);
+                        instVarValues.Add(instVar.Id, copyValue);
                     }
                     // And link them to this instance
                     InstanceVariables.Add(instanceId, instVarValues);

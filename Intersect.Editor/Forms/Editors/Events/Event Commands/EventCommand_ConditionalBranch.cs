@@ -737,6 +737,14 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                         varType = (byte) serverVar.Type;
                     }
                 }
+                else if (rdoInstanceVariable.Checked)
+                {
+                    var serverVar = InstanceVariableBase.FromList(cmbVariable.SelectedIndex);
+                    if (serverVar != null)
+                    {
+                        varType = (byte) serverVar.Type;
+                    }
+                }
             }
 
             //Load the correct editor
@@ -866,10 +874,15 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                 cmbVariable.Items.AddRange(PlayerVariableBase.Names);
                 cmbVariable.SelectedIndex = PlayerVariableBase.ListIndex(variableId);
             }
-            else
+            else if (rdoGlobalVariable.Checked)
             {
                 cmbVariable.Items.AddRange(ServerVariableBase.Names);
                 cmbVariable.SelectedIndex = ServerVariableBase.ListIndex(variableId);
+            }
+            else if (rdoInstanceVariable.Checked)
+            {
+                cmbVariable.Items.AddRange(InstanceVariableBase.Names);
+                cmbVariable.SelectedIndex = InstanceVariableBase.ListIndex(variableId);
             }
 
             mLoading = false;
@@ -967,6 +980,15 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             }
         }
 
+        private void rdoInstanceVariable_CheckedChanged(object sender, EventArgs e)
+        {
+            InitVariableElements(Guid.Empty);
+            if (!mLoading && cmbVariable.Items.Count > 0)
+            {
+                cmbVariable.SelectedIndex = 0;
+            }
+        }
+
         private void cmbVariable_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (mLoading)
@@ -981,6 +1003,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             else if (rdoGlobalVariable.Checked)
             {
                 InitVariableElements(ServerVariableBase.IdFromList(cmbVariable.SelectedIndex));
+            }
+            else if (rdoInstanceVariable.Checked)
+            {
+                InitVariableElements(InstanceVariableBase.IdFromList(cmbVariable.SelectedIndex));
             }
 
             UpdateVariableElements();
@@ -1114,9 +1140,13 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             {
                 rdoPlayerVariable.Checked = true;
             }
-            else
+            else if (condition.VariableType == VariableTypes.ServerVariable)
             {
                 rdoGlobalVariable.Checked = true;
+            }
+            else if (condition.VariableType == VariableTypes.InstanceVariable)
+            {
+                rdoInstanceVariable.Checked = true;
             }
 
             InitVariableElements(condition.VariableId);
@@ -1278,10 +1308,15 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                 condition.VariableType = VariableTypes.ServerVariable;
                 condition.VariableId = ServerVariableBase.IdFromList(cmbVariable.SelectedIndex);
             }
-            else
+            else if (rdoPlayerVariable.Checked)
             {
                 condition.VariableType = VariableTypes.PlayerVariable;
                 condition.VariableId = PlayerVariableBase.IdFromList(cmbVariable.SelectedIndex);
+            }
+            else if (rdoInstanceVariable.Checked)
+            {
+                condition.VariableType = VariableTypes.InstanceVariable;
+                condition.VariableId = InstanceVariableBase.IdFromList(cmbVariable.SelectedIndex);
             }
 
             if (grpBooleanVariable.Visible)
