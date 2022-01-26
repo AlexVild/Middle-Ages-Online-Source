@@ -57,6 +57,9 @@ namespace Intersect.Editor.Localization
                     case VariableTypes.ServerVariable:
                         amount = string.Format(@"({0}: {1})", Strings.EventConditional.globalvariable, ServerVariableBase.GetName(condition.VariableId));
                         break;
+                    case VariableTypes.InstanceVariable:
+                        amount = string.Format(@"({0}: {1})", Strings.EventConditional.instancevariable, InstanceVariableBase.GetName(condition.VariableId));
+                        break;
                 }
 
                 return Strings.EventConditionDesc.hasitem.ToString(amount, ItemBase.GetName(condition.ItemId));
@@ -280,6 +283,9 @@ namespace Intersect.Editor.Localization
                         break;
                     case VariableTypes.ServerVariable:
                         amount = string.Format(@"({0}: {1})", Strings.EventConditional.globalvariable, ServerVariableBase.GetName(condition.VariableId));
+                        break;
+                    case VariableTypes.InstanceVariable:
+                        amount = string.Format(@"({0}: {1})", Strings.EventConditional.instancevariable, InstanceVariableBase.GetName(condition.VariableId));
                         break;
                 }
 
@@ -2321,6 +2327,12 @@ Tick timer saved in server config.json.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString equipinslotlabel = @"Slot:";
+            
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString instancevariable = @"Instance Variable";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString instancevariablevalue = @"Instance Variable Value: ";
         }
 
         public struct EventConditionDesc
