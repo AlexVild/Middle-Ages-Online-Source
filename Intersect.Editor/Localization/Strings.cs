@@ -329,6 +329,12 @@ namespace Intersect.Editor.Localization
             return Strings.EventConditionDesc.invehicle;
         }
 
+        public static string GetEventConditionalDesc(InPartyWithCondition condition)
+        {
+            return Strings.EventConditionDesc.inpartywith.ToString(condition.Members);
+        }
+
+
         public static string GetVariableComparisonString(VariableCompaison comparison)
         {
             return "";
@@ -2171,6 +2177,7 @@ Tick timer saved in server config.json.";
                 {22, @"Item equipped with tag..." },
                 {23, @"Has something equipped in slot..." },
                 {24, @"Is in vehicle"},
+                {25, @"Is in party with..."},
             };
 
             public static LocalizedString endrange = @"End Range:";
@@ -2436,6 +2443,9 @@ Tick timer saved in server config.json.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString invehicle = @"Player is in vehicle";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString inpartywith = @"Player is in party with at least {00} members";
 
             public static Dictionary<int, LocalizedString> selfswitches = new Dictionary<int, LocalizedString>
             {

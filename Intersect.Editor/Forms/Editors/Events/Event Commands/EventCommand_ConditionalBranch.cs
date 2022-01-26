@@ -65,6 +65,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             chkHasElse.Checked = refCommand.ElseEnabled;
             SetupFormValues((dynamic) refCommand);
             mLoading = false;
+            nudPartySize.Maximum = Options.Party.MaximumMembers;
         }
 
         private void InitLocalization()
@@ -418,6 +419,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     Condition = new InVehicleCondition();
 
                     break;
+                case ConditionTypes.InPartyWith:
+                    Condition = new InPartyWithCondition();
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -443,6 +448,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             grpMapZoneType.Hide();
             grpTag.Hide();
             grpEquipmentSlot.Hide();
+            grpInPartyWith.Hide();
             switch (type)
             {
                 case ConditionTypes.VariableIs:
@@ -586,6 +592,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
 
                     break;
                 case ConditionTypes.InVehicle:
+
+                    break;
+                case ConditionTypes.InPartyWith:
+                    grpInPartyWith.Show();
 
                     break;
                 default:
@@ -1354,6 +1364,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // There are no additional parameters for this guy
         }
 
+        private void SetupFormValues(InPartyWithCondition condition)
+        {
+            nudPartySize.Value = condition.Members;
+        }
+
         #endregion
 
         #region "SaveFormValues"
@@ -1560,6 +1575,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private void SaveFormValues(InVehicleCondition condition)
         {
             // Intentionally blank
+        }
+
+        private void SaveFormValues(InPartyWithCondition condition)
+        {
+            condition.Members = (int) nudPartySize.Value;
         }
 
         #endregion

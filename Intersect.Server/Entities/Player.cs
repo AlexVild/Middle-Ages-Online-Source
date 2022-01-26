@@ -4728,7 +4728,10 @@ namespace Intersect.Server.Entities
                         Party.Remove(oldMember);
 
                         // Warp the old member out of the shared instance
-                        oldMember.WarpToLastOverworldLocation(false);
+                        if (oldMember.InstanceType == MapInstanceType.Shared)
+                        {
+                            oldMember.WarpToLastOverworldLocation(false);
+                        }
 
                         if (Party.Count > 1) //Need atleast 2 party members to function
                         {
@@ -4786,7 +4789,7 @@ namespace Intersect.Server.Entities
                 PacketSender.SendChatMsg(this, Strings.Parties.left, ChatMessageType.Party, CustomColors.Alerts.Error);
 
                 // Warp the old member out of the shared instance
-                if (!fromLogout)
+                if (!fromLogout && oldMember.InstanceType == MapInstanceType.Shared)
                 {
                     oldMember.WarpToLastOverworldLocation(false);
                 }

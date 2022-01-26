@@ -573,6 +573,20 @@ namespace Intersect.Server.Entities.Events
         {
             return player.InVehicle;
         }
+        
+        public static bool MeetsCondition(
+            InPartyWithCondition condition,
+            Player player,
+            Event eventInstance,
+            QuestBase questBase
+        )
+        {
+            if (player.Party == null)
+            {
+                return false;
+            } 
+            return player.Party.Count >= condition.Members && player.Party.Count > 1;
+        }
 
         //Variable Comparison Processing
 

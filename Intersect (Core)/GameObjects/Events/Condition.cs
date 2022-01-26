@@ -52,6 +52,8 @@ namespace Intersect.GameObjects.Events
 
         InVehicle,
 
+        InPartyWith,
+
     }
 
     public class Condition
@@ -349,6 +351,13 @@ namespace Intersect.GameObjects.Events
     public class InVehicleCondition : Condition
     {
         public override ConditionTypes Type { get; } = ConditionTypes.InVehicle;
+    }
+
+    public class InPartyWithCondition : Condition
+    {
+        public override ConditionTypes Type { get; } = ConditionTypes.InPartyWith;
+
+        public int Members { get; set; }
     }
 
     public class VariableCompaison
