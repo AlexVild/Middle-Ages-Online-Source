@@ -2163,9 +2163,9 @@ namespace Intersect.Client.Framework.Gwen.Control
             Redraw();
         }
 
-        protected void PlaySound(string filename, bool isHoverSound = false)
+        protected void PlaySound(string filename, Enums.UISoundType soundType = Enums.UISoundType.Other)
         {
-            if (filename == null || this.IsDisabled)
+            if (filename == null || IsDisabled)
             {
                 return;
             }
@@ -2177,7 +2177,7 @@ namespace Intersect.Client.Framework.Gwen.Control
                 var soundInstance = sound.CreateInstance();
                 if (soundInstance != null)
                 {
-                    Canvas.PlayAndAddSound(soundInstance, isHoverSound);
+                    Canvas.PlayAndAddSound(soundInstance, soundType);
                 }
             }
         }

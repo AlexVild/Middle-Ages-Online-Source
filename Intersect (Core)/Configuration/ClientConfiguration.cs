@@ -53,6 +53,8 @@ namespace Intersect.Configuration
         public const string HEALTH_WARNING_SFX = "voice_danger.wav";
         
         public const int UI_HOVER_SOUND_TIMER = 80;
+        
+        public const int UI_TEXT_SOUND_TIMER = 40;
 
         #endregion
 
@@ -145,6 +147,8 @@ namespace Intersect.Configuration
         public string MouseCursor { get; set; } = "";
 
         public int UIHoverSoundTimer { get; set; } = UI_HOVER_SOUND_TIMER;
+        
+        public int UITextSoundTimer { get; set; } = UI_TEXT_SOUND_TIMER;
 
         #endregion
 

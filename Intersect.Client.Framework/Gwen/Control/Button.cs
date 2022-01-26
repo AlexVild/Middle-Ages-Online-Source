@@ -264,7 +264,7 @@ namespace Intersect.Client.Framework.Gwen.Control
 
         public void PlayHoverSound()
         {
-            base.PlaySound(mHoverSound, true);
+            base.PlaySound(mHoverSound, Enums.UISoundType.Hover);
         }
 
         public void ClearSounds()
@@ -543,7 +543,7 @@ namespace Intersect.Client.Framework.Gwen.Control
             //Play Mouse Entered Sound
             if (ShouldDrawHover)
             {
-                base.PlaySound(mHoverSound, true);
+                base.PlaySound(mHoverSound, Enums.UISoundType.Hover);
             }
         }
 

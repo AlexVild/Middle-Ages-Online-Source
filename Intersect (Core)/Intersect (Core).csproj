@@ -274,6 +274,7 @@
     <Compile Include="Enums\GUINotification.cs" />
     <Compile Include="Enums\MapInstanceType.cs" />
     <Compile Include="Enums\ItemHandling.cs" />
+    <Compile Include="Enums\UISoundType.cs" />
     <Compile Include="ErrorHandling\ExceptionInfo.cs" />
     <Compile Include="Extensions\ArrayExtensions.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />

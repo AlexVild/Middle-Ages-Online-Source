@@ -34,6 +34,8 @@ namespace Intersect.Client.Framework.Gwen.Control
 
         public long LastHoverSound;
 
+        public long LastTextSound;
+
         /// <summary>
         ///     Initializes a new instance of the <see cref="Canvas" /> class.
         /// </summary>
@@ -181,17 +183,28 @@ namespace Intersect.Client.Framework.Gwen.Control
             InvalidateChildren(true);
         }
 
-        public void PlayAndAddSound(GameAudioInstance sound, bool isHoverSound)
+        public void PlayAndAddSound(GameAudioInstance sound, Enums.UISoundType soundType)
         {
-            if (isHoverSound)
+            var now = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+            if (soundType == Enums.UISoundType.Hover)
             {
-                var now = DateTimeOffset.Now.ToUnixTimeMilliseconds();
                 if (now < LastHoverSound + ClientConfiguration.Instance.UIHoverSoundTimer)
                 {
                     return;
                 } else
                 {
                     LastHoverSound = now;
+                }
+            }
+            else if (soundType == Enums.UISoundType.Text)
+            {
+                if (now < LastTextSound + ClientConfiguration.Instance.UITextSoundTimer)
+                {
+                    return;
+                }
+                else
+                {
+                    LastTextSound = now;
                 }
             }
             // Track the sound - we will check to see when it's done and dispose of it in DoThink()
