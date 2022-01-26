@@ -76,6 +76,8 @@
 
         public string PlayerDeathAnimationId = "a306ad8b-c58c-4d27-b94b-86dd7173dfd8";
 
+        public bool HideResourceHealthBars = true;
+
         //Combat
         public int RegenTime = 5000; //5 seconds
 

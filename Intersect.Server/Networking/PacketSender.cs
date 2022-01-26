@@ -1828,7 +1828,7 @@ namespace Intersect.Server.Networking
         //ActionMsgPacket
         public static void SendActionMsg(Entity en, string message, Color color)
         {
-            if (en == null)
+            if (en == null || en is Resource && Options.HideResourceHealthBars)
             {
                 return;
             }

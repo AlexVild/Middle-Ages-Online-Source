@@ -1610,6 +1610,11 @@ namespace Intersect.Client.Entities
                 return;
             }
 
+            if (this is Resource && Options.HideResourceHealthBars)
+            {
+                return;
+            }
+
             if (Vital[(int) Vitals.Health] <= 0)
             {
                 return;
