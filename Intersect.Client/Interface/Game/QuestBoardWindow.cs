@@ -70,7 +70,10 @@ namespace Intersect.Client.Interface.Game
                 mQuestBoardWindow.IsClosable = true;
                 for (var i = 0; i < mQuestListButtons.Count; i++)
                 {
-                    mQuestListButtons[i].Enable();
+                    if (Globals.QuestBoardRequirements[mQuestBoard.QuestLists[i]])
+                    {
+                        mQuestListButtons[i].Enable();
+                    }
                 }
                 mCancelButton.Enable();
             }
