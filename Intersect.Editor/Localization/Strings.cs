@@ -2532,6 +2532,7 @@ Tick timer saved in server config.json.";
                 {16, @"Combo End"},
                 {17, @"Inventory Changed"},
                 {18, @"Map Changed"},
+                {19, @"Instance Variable Changed"},
             };
 
             public static LocalizedString conditions = @"Conditions";

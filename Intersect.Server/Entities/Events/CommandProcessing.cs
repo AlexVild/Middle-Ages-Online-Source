@@ -1800,9 +1800,8 @@ namespace Intersect.Server.Entities.Events
             }
             else if (command.VariableType == VariableTypes.InstanceVariable && changed && MapController.TryGetInstanceFromMap(player.MapId, player.MapInstanceId, out var mapInstance))
             {
-                // TODO Alex: instance var common events
-                //Player.StartCommonEventsWithTriggerForAll(Enums.CommonEventTrigger.ServerVariableChange, "", command.VariableId.ToString());
                 mapInstance.SetInstanceVariable(command.VariableId, value);
+                Player.StartCommonEventsWithTriggerForAllOnInstance(Enums.CommonEventTrigger.InstanceVariableChange, player.MapInstanceId, "", command.VariableId.ToString());
             }
         }
 
@@ -2060,9 +2059,8 @@ namespace Intersect.Server.Entities.Events
             }
             else if (command.VariableType == VariableTypes.InstanceVariable && changed && MapController.TryGetInstanceFromMap(player.MapId, player.MapInstanceId, out var mapInstance))
             {
-                // TODO Alex: instance var common events
-                //Player.StartCommonEventsWithTriggerForAll(Enums.CommonEventTrigger.ServerVariableChange, "", command.VariableId.ToString());
                 mapInstance.SetInstanceVariable(command.VariableId, value);
+                Player.StartCommonEventsWithTriggerForAllOnInstance(Enums.CommonEventTrigger.InstanceVariableChange, player.MapInstanceId, "", command.VariableId.ToString());
             }
         }
 
@@ -2136,9 +2134,8 @@ namespace Intersect.Server.Entities.Events
             }
             else if (command.VariableType == VariableTypes.InstanceVariable && changed && MapController.TryGetInstanceFromMap(player.MapId, player.MapInstanceId, out var mapInstance))
             {
-                // TODO Alex: instance var common events
-                //Player.StartCommonEventsWithTriggerForAll(Enums.CommonEventTrigger.ServerVariableChange, "", command.VariableId.ToString());
                 mapInstance.SetInstanceVariable(command.VariableId, value);
+                Player.StartCommonEventsWithTriggerForAllOnInstance(Enums.CommonEventTrigger.InstanceVariableChange, player.MapInstanceId, "", command.VariableId.ToString());
             }
         }
 

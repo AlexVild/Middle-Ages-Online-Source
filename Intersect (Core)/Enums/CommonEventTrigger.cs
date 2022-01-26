@@ -42,6 +42,8 @@
 
         MapChanged,
 
+        InstanceVariableChange,
+
     }
 
 }

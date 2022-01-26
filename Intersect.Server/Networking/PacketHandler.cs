@@ -4056,8 +4056,7 @@ namespace Intersect.Server.Networking
                     }
                     else if (type == GameObjectType.InstanceVariable)
                     {
-                        // TODO Alex - Common Event for instance variables
-                        // Player.StartCommonEventsWithTriggerForAll(CommonEventTrigger.ServerVariableChange, "", obj.Id.ToString());
+                        // Don't trigger a instance change common event, because the editor can not change instance variable values - only their defaults
                         DbInterface.CacheInstanceVariableEventTextLookups();
                     }
 

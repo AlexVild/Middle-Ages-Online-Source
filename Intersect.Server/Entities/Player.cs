@@ -5493,6 +5493,22 @@ namespace Intersect.Server.Entities
             }
         }
 
+        public static void StartCommonEventsWithTriggerForAllOnInstance(CommonEventTrigger trigger, Guid instanceId, string command = "", string param = "")
+        {
+            var relevantPlayers = Player.OnlineList.ToList().Where(player => player.MapInstanceId == instanceId);
+
+            foreach (var value in EventBase.Lookup.Values)
+            {
+                if (value is EventBase eventDescriptor && eventDescriptor.Pages.Any(p => p.CommonTrigger == trigger))
+                {
+                    foreach (var player in relevantPlayers)
+                    {
+                        player.StartCommonEvent(eventDescriptor, trigger, command, param);
+                    }
+                }
+            }
+        }
+
         //Stats
         public void UpgradeStat(int statIndex)
         {

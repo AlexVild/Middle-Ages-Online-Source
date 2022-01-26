@@ -1375,7 +1375,6 @@ namespace Intersect.Editor.Forms.Editors.Events
         private static string GetVariableModText(SetVariableCommand command, IntegerVariableMod mod)
         {
             var varvalue = "";
-            // TODO Alex: instance variable mods
             switch (mod.ModType)
             {
                 case Enums.VariableMods.Set:
