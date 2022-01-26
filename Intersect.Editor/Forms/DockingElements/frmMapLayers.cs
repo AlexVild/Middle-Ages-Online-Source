@@ -840,6 +840,7 @@ namespace Intersect.Editor.Forms.DockingElements
                 n.X = -1;
                 n.Y = -1;
                 n.Direction = NpcSpawnDirection.Random;
+                n.RequiredPlayersToSpawn = (int)nudInstanceSpawnLimit.Value;
 
                 Globals.CurrentMap.Spawns.Add(n);
                 lstMapNpcs.Items.Add(NpcBase.GetName(n.NpcId));
@@ -1165,6 +1166,7 @@ namespace Intersect.Editor.Forms.DockingElements
             grpNpcList.Text = Strings.NpcSpawns.addremove;
             btnAddMapNpc.Text = Strings.NpcSpawns.add;
             btnRemoveMapNpc.Text = Strings.NpcSpawns.remove;
+            lblInstanceLimit.Text = Strings.NpcSpawns.minimumininstance;
 
             lblEventInstructions.Text = Strings.MapLayers.eventinstructions;
             lblLightInstructions.Text = Strings.MapLayers.lightinstructions;

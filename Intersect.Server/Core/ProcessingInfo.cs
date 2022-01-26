@@ -12,12 +12,17 @@ namespace Intersect.Server.Core
         /// <summary>
         /// A list of all active unique instance IDs
         /// </summary>
-        public static List<Guid> ActiveMapInstanceIds = new List<Guid>();
+        private static List<Guid> ActiveMapInstanceIds = new List<Guid>();
 
         /// <summary>
         /// A dictionary from InstanceId => [InstanceVariableId => InstanceVariableValue]
         /// </summary>
         public static Dictionary<Guid, Dictionary<Guid, VariableValue>> InstanceVariables = new Dictionary<Guid, Dictionary<Guid, VariableValue>>();
+
+        /// <summary>
+        /// Keeps an active count of how many players are currently on any given instance
+        /// </summary>
+        public static Dictionary<Guid, int> PlayersInInstance = new Dictionary<Guid, int>();
 
         /// <summary>
         /// Maintains a list of unique instance Ids that players may be on
@@ -26,8 +31,18 @@ namespace Intersect.Server.Core
         {
             // Update our list of unique active instance IDs
             ActiveMapInstanceIds.Clear();
+            PlayersInInstance.Clear();
             ActiveMapInstanceIds = activeMaps
-                .Select(mapInstance => mapInstance.MapInstanceId)
+                .Select(mapInstance => {
+                    if (!PlayersInInstance.ContainsKey(mapInstance.MapInstanceId)) // Alex - LOL, might as well do this here
+                    {
+                        PlayersInInstance.Add(mapInstance.MapInstanceId, mapInstance.GetPlayers().Count);
+                    } else
+                    {
+                        PlayersInInstance[mapInstance.MapInstanceId] += mapInstance.GetPlayers().Count;
+                    }
+                    return mapInstance.MapInstanceId;
+                })
                 .Distinct()
                 .ToList();
 

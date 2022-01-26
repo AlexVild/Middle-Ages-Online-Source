@@ -16,6 +16,8 @@ namespace Intersect.GameObjects.Maps
 
         public int Y;
 
+        public int RequiredPlayersToSpawn;
+
         public NpcSpawn()
         {
         }
@@ -26,6 +28,7 @@ namespace Intersect.GameObjects.Maps
             X = copy.X;
             Y = copy.Y;
             Direction = copy.Direction;
+            RequiredPlayersToSpawn = copy.RequiredPlayersToSpawn;
         }
 
     }

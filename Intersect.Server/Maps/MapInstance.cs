@@ -405,7 +405,10 @@ namespace Intersect.Server.Maps
         {
             for (var i = 0; i < mMapController.Spawns.Count; i++)
             {
-                SpawnMapNpc(i);
+                if (NpcHasEnoughPlayersToSpawn(i))
+                {
+                    SpawnMapNpc(i);
+                }
             }
         }
 
@@ -1242,22 +1245,35 @@ namespace Intersect.Server.Maps
                     var npcSpawnInstance = NpcSpawnInstances[spawns[i]];
                     if (npcSpawnInstance != null && npcSpawnInstance.Entity.Dead)
                     {
-                        if (npcSpawnInstance.RespawnTime == -1)
+                        if (npcSpawnInstance.RespawnTime == -1 || !NpcHasEnoughPlayersToSpawn(i))
                         {
                             npcSpawnInstance.RespawnTime = Globals.Timing.Milliseconds +
                                                            ((Npc)npcSpawnInstance.Entity).Base.SpawnDuration -
                                                            (Globals.Timing.Milliseconds - mLastUpdateTime);
                         }
-                        else if (npcSpawnInstance.RespawnTime < Globals.Timing.Milliseconds)
+                        else if (npcSpawnInstance.RespawnTime < Globals.Timing.Milliseconds && NpcHasEnoughPlayersToSpawn(i))
                         {
                             SpawnMapNpc(i);
                             npcSpawnInstance.RespawnTime = -1;
                         }
                     }
+                } else if (NpcHasEnoughPlayersToSpawn(i))
+                {
+                    SpawnMapNpc(i);
                 }
             }
         }
 
+        private bool NpcHasEnoughPlayersToSpawn(int spawnIndex)
+        {
+            int playersOnInstanceId;
+            if (!ProcessingInfo.PlayersInInstance.TryGetValue(MapInstanceId, out playersOnInstanceId))
+            {
+                playersOnInstanceId = GetPlayers().Count; // Guaranteed to at LEAST have this map's count
+            }
+            return mMapController.Spawns[spawnIndex].RequiredPlayersToSpawn <= 1 || playersOnInstanceId >= mMapController.Spawns[spawnIndex].RequiredPlayersToSpawn;
+        }
+        
         private void ProcessResourceRespawns()
         {
             foreach (var spawn in ResourceSpawns)
