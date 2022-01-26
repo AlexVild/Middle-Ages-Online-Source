@@ -2073,11 +2073,11 @@ namespace Intersect.Server.Entities
                 SendCombatEffects(enemy, isCrit, baseDamage);
             }
 
-            if (wasBlocked)
+            if (wasBlocked && !(enemy is Resource)) // Alex - dumb fix
             {
                 SendBlockedAttackMessage(this, enemy);
             }
-            else if (attackMissed)
+            else if (attackMissed && !(enemy is Resource))
             {
                 SendMissedAttackMessage(this, enemy, damageType);
             }

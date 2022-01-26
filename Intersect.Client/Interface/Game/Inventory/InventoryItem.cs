@@ -260,6 +260,8 @@ namespace Intersect.Client.Interface.Game.Inventory
                 
                 // Alex: This is my addition - also note that InventoryWindow has some new logic as well in its update loop
                 Container.RenderColor = mIsEquipped ? Color.White : Color.Transparent;
+                EquipPanel.IsHidden = true; // Alex: Don't want, at the moment
+                EquipLabel.IsHidden = true;
 
                 mCooldownLabel.IsHidden = true;
                 if (item != null)
