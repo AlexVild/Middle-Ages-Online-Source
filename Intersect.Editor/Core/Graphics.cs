@@ -977,6 +977,7 @@ namespace Intersect.Editor.Core
                 }
                 else if (Globals.CurrentLayer == LayerOptions.Npcs) //NPCS
                 {
+                    tmpMap = Globals.CurrentMap;
                     for (var i = 0; i < tmpMap.Spawns.Count; i++)
                     {
                         if (tmpMap.Spawns[i].X >= 0 && tmpMap.Spawns[i].Y >= 0)
@@ -987,13 +988,19 @@ namespace Intersect.Editor.Core
 
                             if (spawnTex != null)
                             {
+                                System.Drawing.Color renderColor = System.Drawing.Color.White;
+                                if (i == Globals.SelectedMapNpc)
+                                {
+                                    renderColor = System.Drawing.Color.Blue;
+                                }
+
                                 DrawTexture(
                                     spawnTex, new RectangleF(0, 0, spawnTex.Width, spawnTex.Height),
                                     new RectangleF(
                                         CurrentView.Left + tmpMap.Spawns[i].X * Options.TileWidth,
                                         CurrentView.Top + tmpMap.Spawns[i].Y * Options.TileHeight, Options.TileWidth,
                                         Options.TileHeight
-                                    ), System.Drawing.Color.White, null
+                                    ), renderColor, null
                                 );
                             }
                         }

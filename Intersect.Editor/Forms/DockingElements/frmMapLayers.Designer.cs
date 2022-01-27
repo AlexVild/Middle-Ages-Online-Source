@@ -99,6 +99,8 @@ namespace Intersect.Editor.Forms.DockingElements
             this.lblLightInstructions = new System.Windows.Forms.Label();
             this.lblEventInstructions = new System.Windows.Forms.Label();
             this.grpNpcList = new DarkUI.Controls.DarkGroupBox();
+            this.lblInstanceLimit = new System.Windows.Forms.Label();
+            this.nudInstanceSpawnLimit = new DarkUI.Controls.DarkNumericUpDown();
             this.btnRemoveMapNpc = new DarkUI.Controls.DarkButton();
             this.btnAddMapNpc = new DarkUI.Controls.DarkButton();
             this.cmbNpc = new DarkUI.Controls.DarkComboBox();
@@ -114,6 +116,7 @@ namespace Intersect.Editor.Forms.DockingElements
             this.btnEventsHeader = new DarkUI.Controls.DarkButton();
             this.btnNpcsHeader = new DarkUI.Controls.DarkButton();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.pnlNpcs = new System.Windows.Forms.Panel();
             this.pnlAttributes = new System.Windows.Forms.Panel();
             this.grpBlock = new DarkUI.Controls.DarkGroupBox();
             this.chkGroundLevel = new System.Windows.Forms.CheckBox();
@@ -135,7 +138,6 @@ namespace Intersect.Editor.Forms.DockingElements
             this.cmbCritterAnimation = new DarkUI.Controls.DarkComboBox();
             this.lblCritterAnimation = new System.Windows.Forms.Label();
             this.rbCritter = new DarkUI.Controls.DarkRadioButton();
-            this.pnlNpcs = new System.Windows.Forms.Panel();
             this.pnlTiles = new System.Windows.Forms.Panel();
             this.cmbMapLayer = new DarkUI.Controls.DarkComboBox();
             this.picLayer5 = new System.Windows.Forms.PictureBox();
@@ -148,8 +150,6 @@ namespace Intersect.Editor.Forms.DockingElements
             this.pnlEvents = new System.Windows.Forms.Panel();
             this.pnlLights = new System.Windows.Forms.Panel();
             this.lightEditor = new Intersect.Editor.Forms.Controls.LightEditorCtrl();
-            this.nudInstanceSpawnLimit = new DarkUI.Controls.DarkNumericUpDown();
-            this.lblInstanceLimit = new System.Windows.Forms.Label();
             this.grpResource.SuspendLayout();
             this.grpZResource.SuspendLayout();
             this.grpItem.SuspendLayout();
@@ -167,14 +167,15 @@ namespace Intersect.Editor.Forms.DockingElements
             this.grpSlide.SuspendLayout();
             this.grpAnimation.SuspendLayout();
             this.grpNpcList.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudInstanceSpawnLimit)).BeginInit();
             this.grpSpawnLoc.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.pnlNpcs.SuspendLayout();
             this.pnlAttributes.SuspendLayout();
             this.grpBlock.SuspendLayout();
             this.grpCritter.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudCritterMoveFrequency)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudCritterMoveSpeed)).BeginInit();
-            this.pnlNpcs.SuspendLayout();
             this.pnlTiles.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picLayer5)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picLayer4)).BeginInit();
@@ -185,7 +186,6 @@ namespace Intersect.Editor.Forms.DockingElements
             ((System.ComponentModel.ISupportInitialize)(this.picTileset)).BeginInit();
             this.pnlEvents.SuspendLayout();
             this.pnlLights.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudInstanceSpawnLimit)).BeginInit();
             this.SuspendLayout();
             // 
             // lblLayer
@@ -1096,6 +1096,35 @@ namespace Intersect.Editor.Forms.DockingElements
             this.grpNpcList.TabStop = false;
             this.grpNpcList.Text = "Add/Remove Map NPCs";
             // 
+            // lblInstanceLimit
+            // 
+            this.lblInstanceLimit.AutoSize = true;
+            this.lblInstanceLimit.Location = new System.Drawing.Point(17, 94);
+            this.lblInstanceLimit.Name = "lblInstanceLimit";
+            this.lblInstanceLimit.Size = new System.Drawing.Size(152, 13);
+            this.lblInstanceLimit.TabIndex = 18;
+            this.lblInstanceLimit.Text = "If Minimum Players in Instance:";
+            // 
+            // nudInstanceSpawnLimit
+            // 
+            this.nudInstanceSpawnLimit.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudInstanceSpawnLimit.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudInstanceSpawnLimit.Location = new System.Drawing.Point(173, 92);
+            this.nudInstanceSpawnLimit.Maximum = new decimal(new int[] {
+            500,
+            0,
+            0,
+            0});
+            this.nudInstanceSpawnLimit.Name = "nudInstanceSpawnLimit";
+            this.nudInstanceSpawnLimit.Size = new System.Drawing.Size(63, 20);
+            this.nudInstanceSpawnLimit.TabIndex = 17;
+            this.nudInstanceSpawnLimit.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudInstanceSpawnLimit.ValueChanged += new System.EventHandler(this.nudInstanceSpawnLimit_ValueChanged);
+            // 
             // btnRemoveMapNpc
             // 
             this.btnRemoveMapNpc.Location = new System.Drawing.Point(147, 47);
@@ -1289,6 +1318,17 @@ namespace Intersect.Editor.Forms.DockingElements
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(278, 568);
             this.panel1.TabIndex = 23;
+            // 
+            // pnlNpcs
+            // 
+            this.pnlNpcs.Controls.Add(this.grpNpcList);
+            this.pnlNpcs.Controls.Add(this.lstMapNpcs);
+            this.pnlNpcs.Controls.Add(this.grpSpawnLoc);
+            this.pnlNpcs.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlNpcs.Location = new System.Drawing.Point(0, 0);
+            this.pnlNpcs.Name = "pnlNpcs";
+            this.pnlNpcs.Size = new System.Drawing.Size(276, 566);
+            this.pnlNpcs.TabIndex = 1;
             // 
             // pnlAttributes
             // 
@@ -1598,17 +1638,6 @@ namespace Intersect.Editor.Forms.DockingElements
             this.rbCritter.Text = "Critter";
             this.rbCritter.CheckedChanged += new System.EventHandler(this.rbCritter_CheckedChanged);
             // 
-            // pnlNpcs
-            // 
-            this.pnlNpcs.Controls.Add(this.grpNpcList);
-            this.pnlNpcs.Controls.Add(this.lstMapNpcs);
-            this.pnlNpcs.Controls.Add(this.grpSpawnLoc);
-            this.pnlNpcs.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlNpcs.Location = new System.Drawing.Point(0, 0);
-            this.pnlNpcs.Name = "pnlNpcs";
-            this.pnlNpcs.Size = new System.Drawing.Size(276, 566);
-            this.pnlNpcs.TabIndex = 1;
-            // 
             // pnlTiles
             // 
             this.pnlTiles.Controls.Add(this.cmbMapLayer);
@@ -1753,34 +1782,6 @@ namespace Intersect.Editor.Forms.DockingElements
             this.lightEditor.Visible = false;
             this.lightEditor.Load += new System.EventHandler(this.lightEditor_Load);
             // 
-            // nudInstanceSpawnLimit
-            // 
-            this.nudInstanceSpawnLimit.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudInstanceSpawnLimit.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudInstanceSpawnLimit.Location = new System.Drawing.Point(173, 92);
-            this.nudInstanceSpawnLimit.Maximum = new decimal(new int[] {
-            500,
-            0,
-            0,
-            0});
-            this.nudInstanceSpawnLimit.Name = "nudInstanceSpawnLimit";
-            this.nudInstanceSpawnLimit.Size = new System.Drawing.Size(63, 20);
-            this.nudInstanceSpawnLimit.TabIndex = 17;
-            this.nudInstanceSpawnLimit.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            // 
-            // lblInstanceLimit
-            // 
-            this.lblInstanceLimit.AutoSize = true;
-            this.lblInstanceLimit.Location = new System.Drawing.Point(17, 94);
-            this.lblInstanceLimit.Name = "lblInstanceLimit";
-            this.lblInstanceLimit.Size = new System.Drawing.Size(152, 13);
-            this.lblInstanceLimit.TabIndex = 18;
-            this.lblInstanceLimit.Text = "If Minimum Players in Instance:";
-            // 
             // FrmMapLayers
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1834,9 +1835,11 @@ namespace Intersect.Editor.Forms.DockingElements
             this.grpAnimation.PerformLayout();
             this.grpNpcList.ResumeLayout(false);
             this.grpNpcList.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudInstanceSpawnLimit)).EndInit();
             this.grpSpawnLoc.ResumeLayout(false);
             this.grpSpawnLoc.PerformLayout();
             this.panel1.ResumeLayout(false);
+            this.pnlNpcs.ResumeLayout(false);
             this.pnlAttributes.ResumeLayout(false);
             this.pnlAttributes.PerformLayout();
             this.grpBlock.ResumeLayout(false);
@@ -1845,7 +1848,6 @@ namespace Intersect.Editor.Forms.DockingElements
             this.grpCritter.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudCritterMoveFrequency)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudCritterMoveSpeed)).EndInit();
-            this.pnlNpcs.ResumeLayout(false);
             this.pnlTiles.ResumeLayout(false);
             this.pnlTiles.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picLayer5)).EndInit();
@@ -1858,7 +1860,6 @@ namespace Intersect.Editor.Forms.DockingElements
             this.pnlEvents.ResumeLayout(false);
             this.pnlEvents.PerformLayout();
             this.pnlLights.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.nudInstanceSpawnLimit)).EndInit();
             this.ResumeLayout(false);
 
         }
