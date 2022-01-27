@@ -128,6 +128,15 @@ namespace Intersect.Editor.Forms.Editors
                     UpdateEditor();
                 }
             }
+            else if (type == GameObjectType.InstanceVariable)
+            {
+                InitEditor();
+                if (mEditorItem != null && !InstanceVariableBase.Lookup.Values.Contains(mEditorItem))
+                {
+                    mEditorItem = null;
+                    UpdateEditor();
+                }
+            }
         }
 
         private void toolStripItemNew_Click(object sender, EventArgs e)
@@ -281,7 +290,7 @@ namespace Intersect.Editor.Forms.Editors
                 else if (rdoInstanceVariables.Checked)
                 {
                     var obj = InstanceVariableBase.Get((Guid) lstGameObjects.SelectedNode.Tag);
-                    lstGameObjects.SelectedNode.Text = obj.Name + " = " + obj.DefaultValue.ToString(obj.Type);
+                    lstGameObjects.SelectedNode.Text = obj.Name;
                     grpValue.Show();
                 }
             }
@@ -310,7 +319,7 @@ namespace Intersect.Editor.Forms.Editors
                 {
                     var obj = InstanceVariableBase.Get((Guid)lstGameObjects.SelectedNode.Tag);
                     obj.Name = txtObjectName.Text;
-                    lstGameObjects.UpdateText(obj.Name + " = " + obj.DefaultValue.ToString());
+                    lstGameObjects.UpdateText(obj.Name);
                     grpValue.Show();
                 }
             }
