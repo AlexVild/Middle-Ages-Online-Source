@@ -1832,10 +1832,11 @@ namespace Intersect.Server.Entities
             } else
             {
                 // If we are leaving the overworld to go to a new instance, save the overworld location
-                if (!fromLogin && InstanceType == MapInstanceType.Overworld && mapInstanceType != MapInstanceType.Overworld)
+                if (!fromLogin && InstanceType == MapInstanceType.Overworld && mapInstanceType != MapInstanceType.Overworld && mapInstanceType != MapInstanceType.NoChange)
                 {
                     UpdateLastOverworldLocation(MapId, X, Y);
                 }
+                // If we are moving TO a new shared instance, update the shared respawn point (if enabled)
                 if (!fromLogin && mapInstanceType == MapInstanceType.Shared && Options.SharedInstanceRespawnInInstance && MapController.Get(newMapId) != null)
                 {
                     UpdateSharedInstanceRespawnLocation(newMapId, (int)newX, (int)newY, (int)newDir);
@@ -1916,7 +1917,7 @@ namespace Intersect.Server.Entities
                     PacketSender.SendEntityPositionToAll(this);
 
                     //If map grid changed then send the new map grid
-                    if (!adminWarp && (oldMap == null || !oldMap.SurroundingMapIds.Contains(newMapId)))
+                    if (!adminWarp && (oldMap == null || !oldMap.SurroundingMapIds.Contains(newMapId)) || fromLogin)
                     {
                         PacketSender.SendMapGrid(this.Client, newMap.MapGrid, true);
                     }
@@ -1957,10 +1958,16 @@ namespace Intersect.Server.Entities
             }
             else
             {
-                // Will warp to spawn if we fail to create an instance for the relevant map
-                Warp(
-                    MapId, (byte)X, (byte)Y, (byte)Dir, false, (byte)Z, false, false, InstanceType, true
-                );
+                if (!CanChangeToInstanceType(InstanceType, true, MapId))
+                {
+                    WarpToLastOverworldLocation(true);
+                } else
+                {
+                    // Will warp to spawn if we fail to create an instance for the relevant map
+                    Warp(
+                        MapId, (byte)X, (byte)Y, (byte)Dir, false, (byte)Z, false, false, InstanceType, true
+                    );
+                }
             }
         }
 
@@ -1972,7 +1979,7 @@ namespace Intersect.Server.Entities
         public void WarpToLastOverworldLocation(bool fromLogin)
         {
             Warp(
-                LastOverworldMapId, (byte)LastOverworldX, (byte)LastOverworldY, (byte)Dir, false, 0, false, false, MapInstanceType.Overworld, fromLogin
+                LastOverworldMapId, (byte)LastOverworldX, (byte)LastOverworldY, (byte)Dir, false, (byte)Z, false, false, MapInstanceType.Overworld, fromLogin
             );
         }
 
@@ -2107,7 +2114,6 @@ namespace Intersect.Server.Entities
                         if (fromLogin)
                         {
                             PacketSender.SendChatMsg(this, Strings.Guilds.NoLongerAllowedInInstance, ChatMessageType.Guild, CustomColors.Alerts.Error);
-                            WarpToLastOverworldLocation(fromLogin);
                         }
                         else
                         {
@@ -2116,6 +2122,10 @@ namespace Intersect.Server.Entities
                     }
                     break;
                 case MapInstanceType.Shared:
+                    if (fromLogin)
+                    {
+                        isValid = false;
+                    }
                     if (Party != null && Party.Count > 0 && !Options.RejoinableSharedInstances) // Always valid warp if solo/instances are rejoinable
                     {
                         if (Party[0].Id == Id) // if we are the party leader
@@ -2235,65 +2245,58 @@ namespace Intersect.Server.Entities
                     }
                     break;
                 case MapInstanceType.Shared:
-                    if (fromLogin)
-                    {
-                        // A player can not log back in to their shared instance.
-                        WarpToLastOverworldLocation(fromLogin);
-                    } else
-                    {
-                        bool isSolo = Party == null || Party.Count < 2;
-                        bool isPartyLeader = Party != null && Party.Count > 0 && Party[0].Id == Id;
+                    bool isSolo = Party == null || Party.Count < 2;
+                    bool isPartyLeader = Party != null && Party.Count > 0 && Party[0].Id == Id;
 
-                        if (isSolo) // Solo instance initialization
+                    if (isSolo) // Solo instance initialization
+                    {
+                        if (Options.MaxSharedInstanceLives > 0)
                         {
-                            if (Options.MaxSharedInstanceLives > 0)
-                            {
-                                InstanceLives = Options.MaxSharedInstanceLives;
-                            }
-                            SharedMapInstanceId = Guid.NewGuid();
-                            newMapLayerId = SharedMapInstanceId;
-                        } else if (!Options.RejoinableSharedInstances && isPartyLeader) // Non-rejoinable instance initialization
+                            InstanceLives = Options.MaxSharedInstanceLives;
+                        }
+                        SharedMapInstanceId = Guid.NewGuid();
+                        newMapLayerId = SharedMapInstanceId;
+                    } else if (!Options.RejoinableSharedInstances && isPartyLeader) // Non-rejoinable instance initialization
+                    {
+                        // Generate a new instance
+                        SharedMapInstanceId = Guid.NewGuid();
+                        // If we are the leader, propogate your shared instance ID to all current members of the party.
+                        if (isPartyLeader && !Options.RejoinableSharedInstances)
                         {
-                            // Generate a new instance
-                            SharedMapInstanceId = Guid.NewGuid();
-                            // If we are the leader, propogate your shared instance ID to all current members of the party.
-                            if (isPartyLeader && !Options.RejoinableSharedInstances)
+                            foreach (Player member in Party)
                             {
-                                foreach (Player member in Party)
-                                {
-                                    member.SharedMapInstanceId = SharedMapInstanceId;
-                                    if (Options.MaxSharedInstanceLives > 0)
-                                    {
-                                        member.InstanceLives = Options.MaxSharedInstanceLives;
-                                    }
-                                }
-                            }
-                        } else if (Party != null && Party.Count > 0 && Options.RejoinableSharedInstances) // Joinable instance initialization
-                        {
-                            // Scan party members for an active shared instance - if one is found, use it
-                            var memberInInstance = Party.Find((Player member) => member.SharedMapInstanceId != Guid.Empty);
-                            if (memberInInstance != null)
-                            {
-                                SharedMapInstanceId = memberInInstance.SharedMapInstanceId;
-                            } else
-                            {
-                                // Otherwise, if no one is on an instance, create a new instance
-                                SharedMapInstanceId = Guid.NewGuid();
-
-                                // And give your party members their instance lives - though this can be exploited when instances are rejoinable, so you'd really
-                                // have to be a freak to have both options on
+                                member.SharedMapInstanceId = SharedMapInstanceId;
                                 if (Options.MaxSharedInstanceLives > 0)
                                 {
-                                    foreach (Player member in Party)
-                                    {
-                                        member.InstanceLives = Options.MaxSharedInstanceLives;
-                                    }
+                                    member.InstanceLives = Options.MaxSharedInstanceLives;
                                 }
                             }
                         }
-                        // Use whatever your shared instance id is for the warp
-                        newMapLayerId = SharedMapInstanceId;
+                    } else if (Party != null && Party.Count > 0 && Options.RejoinableSharedInstances) // Joinable instance initialization
+                    {
+                        // Scan party members for an active shared instance - if one is found, use it
+                        var memberInInstance = Party.Find((Player member) => member.SharedMapInstanceId != Guid.Empty);
+                        if (memberInInstance != null)
+                        {
+                            SharedMapInstanceId = memberInInstance.SharedMapInstanceId;
+                        } else
+                        {
+                            // Otherwise, if no one is on an instance, create a new instance
+                            SharedMapInstanceId = Guid.NewGuid();
+
+                            // And give your party members their instance lives - though this can be exploited when instances are rejoinable, so you'd really
+                            // have to be a freak to have both options on
+                            if (Options.MaxSharedInstanceLives > 0)
+                            {
+                                foreach (Player member in Party)
+                                {
+                                    member.InstanceLives = Options.MaxSharedInstanceLives;
+                                }
+                            }
+                        }
                     }
+                    // Use whatever your shared instance id is for the warp
+                    newMapLayerId = SharedMapInstanceId;
                     
                     break;
                 default:

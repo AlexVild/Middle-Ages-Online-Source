@@ -1006,9 +1006,6 @@ namespace Intersect.Editor.Core
                         }
                     }
                 }
-                else
-                {
-                }
             }
 
             if (Globals.CurrentTool == (int) EditingTool.Selection && Globals.Dragging)

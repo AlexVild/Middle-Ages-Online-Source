@@ -3852,6 +3852,10 @@ namespace Intersect.Server.Networking
                     obj = DatabaseObject<QuestBoardBase>.Lookup.Get(id);
 
                     break;
+                case GameObjectType.InstanceVariable:
+                    obj = InstanceVariableBase.Get(id);
+
+                    break;
 
                 default:
                     throw new ArgumentOutOfRangeException();
