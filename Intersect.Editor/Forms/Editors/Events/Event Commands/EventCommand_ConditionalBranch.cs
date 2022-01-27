@@ -864,7 +864,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     else if (com.CompareVariableType == VariableTypes.InstanceVariable)
                     {
                         rdoVarCompareInstanceVar.Checked = true;
-                        cmbCompareInstanceVar.SelectedIndex = ServerVariableBase.ListIndex(com.CompareVariableId);
+                        cmbCompareInstanceVar.SelectedIndex = InstanceVariableBase.ListIndex(com.CompareVariableId);
                     }
                 }
                 else

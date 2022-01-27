@@ -458,12 +458,14 @@ namespace Intersect.Editor.Forms.Editors
                         case VariableDataTypes.Boolean:
                             cmbBooleanValue.Show();
                             cmbBooleanValue.SelectedIndex = Convert.ToInt32(obj.DefaultValue.Boolean);
+                            obj.DefaultValue.Boolean = Convert.ToBoolean(cmbBooleanValue.SelectedIndex);
 
                             break;
 
                         case VariableDataTypes.Integer:
                             nudVariableValue.Show();
                             nudVariableValue.Value = obj.DefaultValue.Integer;
+                            obj.DefaultValue.Integer = (int) nudVariableValue.Value;
 
                             break;
 
@@ -473,6 +475,7 @@ namespace Intersect.Editor.Forms.Editors
                         case VariableDataTypes.String:
                             txtStringValue.Show();
                             txtStringValue.Text = obj.DefaultValue.String;
+                            obj.DefaultValue.String = txtStringValue.Text;
 
                             break;
 
