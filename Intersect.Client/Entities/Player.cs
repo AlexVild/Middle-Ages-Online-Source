@@ -1400,6 +1400,7 @@ namespace Intersect.Client.Entities
                 TargetBox?.SetEntity(en, EntityTypes.GlobalEntity);
             }
 
+            Audio.AddGameSound(Configuration.ClientConfiguration.Instance.TargetSound, false);
             TargetBox?.Show();
         }
 

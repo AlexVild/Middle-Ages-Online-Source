@@ -62,6 +62,7 @@ namespace Intersect.Server.Core
                     {
                         VariableValue copyValue = new VariableValue();
                         copyValue.SetValue(instVar.DefaultValue.Value);
+                        copyValue.Type = instVar.Type;
                         instVarValues.Add(instVar.Id, copyValue);
                     }
                     // And link them to this instance

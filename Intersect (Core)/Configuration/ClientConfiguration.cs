@@ -56,6 +56,8 @@ namespace Intersect.Configuration
         
         public const int UI_TEXT_SOUND_TIMER = 40;
 
+        public const string TARGET_SOUND = "al_target.wav";
+
         #endregion
 
         #region Static Properties and Methods
@@ -149,6 +151,8 @@ namespace Intersect.Configuration
         public int UIHoverSoundTimer { get; set; } = UI_HOVER_SOUND_TIMER;
         
         public int UITextSoundTimer { get; set; } = UI_TEXT_SOUND_TIMER;
+        
+        public string TargetSound { get; set; } = TARGET_SOUND;
 
         #endregion
 

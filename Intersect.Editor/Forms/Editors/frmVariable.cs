@@ -370,7 +370,6 @@ namespace Intersect.Editor.Forms.Editors
                     if (obj != null)
                     {
                         obj.DefaultValue.Integer = (long)nudVariableValue.Value;
-                        UpdateSelection();
                     }
                 }
             }
@@ -496,7 +495,6 @@ namespace Intersect.Editor.Forms.Editors
                     if (obj != null)
                     {
                         obj.Value.Boolean = Convert.ToBoolean(cmbBooleanValue.SelectedIndex);
-                        UpdateSelection();
                     }
                 }
                 else if (rdoInstanceVariables.Checked)
@@ -505,7 +503,6 @@ namespace Intersect.Editor.Forms.Editors
                     if (obj != null)
                     {
                         obj.DefaultValue.Boolean = Convert.ToBoolean(cmbBooleanValue.SelectedIndex);
-                        UpdateSelection();
                     }
                 }
 
@@ -532,7 +529,6 @@ namespace Intersect.Editor.Forms.Editors
                     if (obj != null)
                     {
                         obj.DefaultValue.String = txtStringValue.Text;
-                        UpdateSelection();
                     }
                 }
             }
@@ -650,7 +646,7 @@ namespace Intersect.Editor.Forms.Editors
             else if (rdoInstanceVariables.Checked)
             {
                 items = InstanceVariableBase.Lookup.OrderBy(p => p.Value?.Name).Select(pair => new KeyValuePair<Guid, KeyValuePair<string, string>>(pair.Key,
-                    new KeyValuePair<string, string>(((InstanceVariableBase)pair.Value)?.Name ?? Models.DatabaseObject<InstanceVariableBase>.Deleted + " = " + ((InstanceVariableBase)pair.Value)?.DefaultValue.ToString(((InstanceVariableBase)pair.Value).Type) ?? "", ((InstanceVariableBase)pair.Value)?.Folder ?? ""))).ToArray();
+                    new KeyValuePair<string, string>(((InstanceVariableBase)pair.Value)?.Name ?? Models.DatabaseObject<InstanceVariableBase>.Deleted, ((InstanceVariableBase)pair.Value)?.Folder ?? ""))).ToArray();
             }
 
             lstGameObjects.Repopulate(items, mFolders, btnAlphabetical.Checked, CustomSearch(), txtSearch.Text);
