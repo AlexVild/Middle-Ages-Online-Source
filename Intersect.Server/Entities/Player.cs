@@ -6518,12 +6518,9 @@ namespace Intersect.Server.Entities
                             continue;
                         }
 
-                        if (trigger == CommonEventTrigger.PlayerVariableChange && param != baseEvent.Pages[i].TriggerId.ToString())
-                        {
-                            continue;
-                        }
-
-                        if (trigger == CommonEventTrigger.ServerVariableChange && param != baseEvent.Pages[i].TriggerId.ToString())
+                        // If a var change event was triggered, but not for the var set for this Common Event, back out of processing
+                        var varChangeEvent = (trigger == CommonEventTrigger.PlayerVariableChange || trigger == CommonEventTrigger.InstanceVariableChange || trigger == CommonEventTrigger.ServerVariableChange);
+                        if (varChangeEvent && param != baseEvent.Pages[i].TriggerId.ToString())
                         {
                             continue;
                         }

@@ -1840,6 +1840,13 @@ namespace Intersect.Editor.Forms.Editors.Events
                     cmbVariable.Items.AddRange(ServerVariableBase.Names);
                     cmbVariable.SelectedIndex = ServerVariableBase.ListIndex(CurrentPage.TriggerId) + 1;
                 }
+                else if (cmbTrigger.SelectedIndex == (int)CommonEventTrigger.InstanceVariableChange)
+                {
+                    cmbVariable.Show();
+                    cmbVariable.Items.Add(Strings.General.none);
+                    cmbVariable.Items.AddRange(InstanceVariableBase.Names);
+                    cmbVariable.SelectedIndex = InstanceVariableBase.ListIndex(CurrentPage.TriggerId) + 1;
+                }
             }
         }
 
@@ -1854,6 +1861,10 @@ namespace Intersect.Editor.Forms.Editors.Events
                 else if (cmbTrigger.SelectedIndex == (int)CommonEventTrigger.ServerVariableChange)
                 {
                     CurrentPage.TriggerId = ServerVariableBase.IdFromList(cmbVariable.SelectedIndex - 1);
+                }
+                else if (cmbTrigger.SelectedIndex == (int)CommonEventTrigger.InstanceVariableChange)
+                {
+                    CurrentPage.TriggerId = InstanceVariableBase.IdFromList(cmbVariable.SelectedIndex - 1);
                 }
             }
         }
