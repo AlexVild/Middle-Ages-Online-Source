@@ -1662,7 +1662,7 @@ namespace Intersect.Client.Entities
                 return;
             }
 
-            var width = Options.TileWidth + 8;
+            var width = Options.TileWidth - 8;
 
             var hpfillRatio = (float) Vital[(int) Vitals.Health] / maxVital;
             hpfillRatio = Math.Min(1, Math.Max(0, hpfillRatio));
@@ -1732,7 +1732,7 @@ namespace Intersect.Client.Entities
             var castSpell = SpellBase.Get(SpellCast);
             if (castSpell != null)
             {
-                var width = Options.TileWidth + 8;
+                var width = Options.TileWidth - 8;
                 var fillratio = (castSpell.CastDuration - (CastTime - Globals.System.GetTimeMs())) /
                                 (float) castSpell.CastDuration;
 
