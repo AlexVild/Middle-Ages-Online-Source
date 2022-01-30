@@ -2037,7 +2037,7 @@ namespace Intersect.Server.Entities
                         } else
                         {
                             // The player has ran out of lives - too bad, back to instance entrance you go.
-                            if (!Options.BootAllFromInstanceWhenOutOfLives)
+                            if (!Options.BootAllFromInstanceWhenOutOfLives || Party == null || Party.Count < 2)
                             {
                                 WarpToLastOverworldLocation(false);
                             } else 
