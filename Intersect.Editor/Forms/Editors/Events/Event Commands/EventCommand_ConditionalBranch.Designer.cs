@@ -31,7 +31,18 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private void InitializeComponent()
         {
             this.grpConditional = new DarkUI.Controls.DarkGroupBox();
+            this.grpInPartyWith = new DarkUI.Controls.DarkGroupBox();
+            this.nudPartySize = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblPartySize = new System.Windows.Forms.Label();
             this.grpInventoryConditions = new DarkUI.Controls.DarkGroupBox();
+            this.grpLevelStat = new DarkUI.Controls.DarkGroupBox();
+            this.chkStatIgnoreBuffs = new DarkUI.Controls.DarkCheckBox();
+            this.nudLevelStatValue = new DarkUI.Controls.DarkNumericUpDown();
+            this.cmbLevelStat = new DarkUI.Controls.DarkComboBox();
+            this.lblLevelOrStat = new System.Windows.Forms.Label();
+            this.lblLvlStatValue = new System.Windows.Forms.Label();
+            this.cmbLevelComparator = new DarkUI.Controls.DarkComboBox();
+            this.lblLevelComparator = new System.Windows.Forms.Label();
             this.chkBank = new DarkUI.Controls.DarkCheckBox();
             this.grpVariableAmount = new DarkUI.Controls.DarkGroupBox();
             this.rdoInvInstanceVariable = new DarkUI.Controls.DarkRadioButton();
@@ -133,14 +144,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpClass = new DarkUI.Controls.DarkGroupBox();
             this.cmbClass = new DarkUI.Controls.DarkComboBox();
             this.lblClass = new System.Windows.Forms.Label();
-            this.grpLevelStat = new DarkUI.Controls.DarkGroupBox();
-            this.chkStatIgnoreBuffs = new DarkUI.Controls.DarkCheckBox();
-            this.nudLevelStatValue = new DarkUI.Controls.DarkNumericUpDown();
-            this.cmbLevelStat = new DarkUI.Controls.DarkComboBox();
-            this.lblLevelOrStat = new System.Windows.Forms.Label();
-            this.lblLvlStatValue = new System.Windows.Forms.Label();
-            this.cmbLevelComparator = new DarkUI.Controls.DarkComboBox();
-            this.lblLevelComparator = new System.Windows.Forms.Label();
             this.grpMapIs = new DarkUI.Controls.DarkGroupBox();
             this.btnSelectMap = new DarkUI.Controls.DarkButton();
             this.grpGender = new DarkUI.Controls.DarkGroupBox();
@@ -149,11 +152,12 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpEquippedItem = new DarkUI.Controls.DarkGroupBox();
             this.cmbEquippedItem = new DarkUI.Controls.DarkComboBox();
             this.lblEquippedItem = new System.Windows.Forms.Label();
-            this.grpInPartyWith = new DarkUI.Controls.DarkGroupBox();
-            this.nudPartySize = new DarkUI.Controls.DarkNumericUpDown();
-            this.lblPartySize = new System.Windows.Forms.Label();
             this.grpConditional.SuspendLayout();
+            this.grpInPartyWith.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPartySize)).BeginInit();
             this.grpInventoryConditions.SuspendLayout();
+            this.grpLevelStat.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudLevelStatValue)).BeginInit();
             this.grpVariableAmount.SuspendLayout();
             this.grpManualAmount.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudItemAmount)).BeginInit();
@@ -176,19 +180,16 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpSelfSwitch.SuspendLayout();
             this.grpSpell.SuspendLayout();
             this.grpClass.SuspendLayout();
-            this.grpLevelStat.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudLevelStatValue)).BeginInit();
             this.grpMapIs.SuspendLayout();
             this.grpGender.SuspendLayout();
             this.grpEquippedItem.SuspendLayout();
-            this.grpInPartyWith.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudPartySize)).BeginInit();
             this.SuspendLayout();
             // 
             // grpConditional
             // 
             this.grpConditional.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.grpConditional.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpConditional.Controls.Add(this.grpLevelStat);
             this.grpConditional.Controls.Add(this.grpInPartyWith);
             this.grpConditional.Controls.Add(this.grpInventoryConditions);
             this.grpConditional.Controls.Add(this.grpVariable);
@@ -221,11 +222,57 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpConditional.TabStop = false;
             this.grpConditional.Text = "Conditional";
             // 
+            // grpInPartyWith
+            // 
+            this.grpInPartyWith.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.grpInPartyWith.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpInPartyWith.Controls.Add(this.nudPartySize);
+            this.grpInPartyWith.Controls.Add(this.lblPartySize);
+            this.grpInPartyWith.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpInPartyWith.Location = new System.Drawing.Point(8, 37);
+            this.grpInPartyWith.Name = "grpInPartyWith";
+            this.grpInPartyWith.Size = new System.Drawing.Size(262, 59);
+            this.grpInPartyWith.TabIndex = 33;
+            this.grpInPartyWith.TabStop = false;
+            this.grpInPartyWith.Text = "In Party With...";
+            // 
+            // nudPartySize
+            // 
+            this.nudPartySize.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudPartySize.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudPartySize.Location = new System.Drawing.Point(80, 25);
+            this.nudPartySize.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.nudPartySize.Minimum = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            this.nudPartySize.Name = "nudPartySize";
+            this.nudPartySize.Size = new System.Drawing.Size(178, 20);
+            this.nudPartySize.TabIndex = 8;
+            this.nudPartySize.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            // 
+            // lblPartySize
+            // 
+            this.lblPartySize.AutoSize = true;
+            this.lblPartySize.Location = new System.Drawing.Point(10, 27);
+            this.lblPartySize.Name = "lblPartySize";
+            this.lblPartySize.Size = new System.Drawing.Size(57, 13);
+            this.lblPartySize.TabIndex = 4;
+            this.lblPartySize.Text = "Party Size:";
+            // 
             // grpInventoryConditions
             // 
             this.grpInventoryConditions.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.grpInventoryConditions.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpInventoryConditions.Controls.Add(this.grpLevelStat);
             this.grpInventoryConditions.Controls.Add(this.chkBank);
             this.grpInventoryConditions.Controls.Add(this.grpVariableAmount);
             this.grpInventoryConditions.Controls.Add(this.grpManualAmount);
@@ -239,6 +286,126 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpInventoryConditions.TabIndex = 25;
             this.grpInventoryConditions.TabStop = false;
             this.grpInventoryConditions.Text = "Has Item";
+            // 
+            // grpLevelStat
+            // 
+            this.grpLevelStat.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.grpLevelStat.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpLevelStat.Controls.Add(this.chkStatIgnoreBuffs);
+            this.grpLevelStat.Controls.Add(this.nudLevelStatValue);
+            this.grpLevelStat.Controls.Add(this.cmbLevelStat);
+            this.grpLevelStat.Controls.Add(this.lblLevelOrStat);
+            this.grpLevelStat.Controls.Add(this.lblLvlStatValue);
+            this.grpLevelStat.Controls.Add(this.cmbLevelComparator);
+            this.grpLevelStat.Controls.Add(this.lblLevelComparator);
+            this.grpLevelStat.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpLevelStat.Location = new System.Drawing.Point(11, 43);
+            this.grpLevelStat.Name = "grpLevelStat";
+            this.grpLevelStat.Size = new System.Drawing.Size(262, 140);
+            this.grpLevelStat.TabIndex = 28;
+            this.grpLevelStat.TabStop = false;
+            this.grpLevelStat.Text = "Level or Stat is...";
+            // 
+            // chkStatIgnoreBuffs
+            // 
+            this.chkStatIgnoreBuffs.Location = new System.Drawing.Point(13, 115);
+            this.chkStatIgnoreBuffs.Name = "chkStatIgnoreBuffs";
+            this.chkStatIgnoreBuffs.Size = new System.Drawing.Size(211, 17);
+            this.chkStatIgnoreBuffs.TabIndex = 32;
+            this.chkStatIgnoreBuffs.Text = "Ignore equipment & spell buffs.";
+            // 
+            // nudLevelStatValue
+            // 
+            this.nudLevelStatValue.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudLevelStatValue.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudLevelStatValue.Location = new System.Drawing.Point(79, 87);
+            this.nudLevelStatValue.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.nudLevelStatValue.Name = "nudLevelStatValue";
+            this.nudLevelStatValue.Size = new System.Drawing.Size(178, 20);
+            this.nudLevelStatValue.TabIndex = 8;
+            this.nudLevelStatValue.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            // 
+            // cmbLevelStat
+            // 
+            this.cmbLevelStat.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbLevelStat.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbLevelStat.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbLevelStat.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbLevelStat.DrawDropdownHoverOutline = false;
+            this.cmbLevelStat.DrawFocusRectangle = false;
+            this.cmbLevelStat.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbLevelStat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbLevelStat.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbLevelStat.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbLevelStat.FormattingEnabled = true;
+            this.cmbLevelStat.Items.AddRange(new object[] {
+            "Level",
+            "Attack",
+            "Defense",
+            "Speed",
+            "Ability Power",
+            "Magic Resist"});
+            this.cmbLevelStat.Location = new System.Drawing.Point(79, 23);
+            this.cmbLevelStat.Name = "cmbLevelStat";
+            this.cmbLevelStat.Size = new System.Drawing.Size(177, 21);
+            this.cmbLevelStat.TabIndex = 7;
+            this.cmbLevelStat.Text = "Level";
+            this.cmbLevelStat.TextPadding = new System.Windows.Forms.Padding(2);
+            // 
+            // lblLevelOrStat
+            // 
+            this.lblLevelOrStat.AutoSize = true;
+            this.lblLevelOrStat.Location = new System.Drawing.Point(7, 25);
+            this.lblLevelOrStat.Name = "lblLevelOrStat";
+            this.lblLevelOrStat.Size = new System.Drawing.Size(70, 13);
+            this.lblLevelOrStat.TabIndex = 6;
+            this.lblLevelOrStat.Text = "Level or Stat:";
+            // 
+            // lblLvlStatValue
+            // 
+            this.lblLvlStatValue.AutoSize = true;
+            this.lblLvlStatValue.Location = new System.Drawing.Point(10, 89);
+            this.lblLvlStatValue.Name = "lblLvlStatValue";
+            this.lblLvlStatValue.Size = new System.Drawing.Size(37, 13);
+            this.lblLvlStatValue.TabIndex = 4;
+            this.lblLvlStatValue.Text = "Value:";
+            // 
+            // cmbLevelComparator
+            // 
+            this.cmbLevelComparator.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbLevelComparator.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbLevelComparator.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbLevelComparator.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbLevelComparator.DrawDropdownHoverOutline = false;
+            this.cmbLevelComparator.DrawFocusRectangle = false;
+            this.cmbLevelComparator.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbLevelComparator.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbLevelComparator.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbLevelComparator.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbLevelComparator.FormattingEnabled = true;
+            this.cmbLevelComparator.Location = new System.Drawing.Point(79, 53);
+            this.cmbLevelComparator.Name = "cmbLevelComparator";
+            this.cmbLevelComparator.Size = new System.Drawing.Size(177, 21);
+            this.cmbLevelComparator.TabIndex = 3;
+            this.cmbLevelComparator.Text = null;
+            this.cmbLevelComparator.TextPadding = new System.Windows.Forms.Padding(2);
+            // 
+            // lblLevelComparator
+            // 
+            this.lblLevelComparator.AutoSize = true;
+            this.lblLevelComparator.Location = new System.Drawing.Point(7, 55);
+            this.lblLevelComparator.Name = "lblLevelComparator";
+            this.lblLevelComparator.Size = new System.Drawing.Size(64, 13);
+            this.lblLevelComparator.TabIndex = 2;
+            this.lblLevelComparator.Text = "Comparator:";
             // 
             // chkBank
             // 
@@ -1694,126 +1861,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.lblClass.TabIndex = 2;
             this.lblClass.Text = "Class:";
             // 
-            // grpLevelStat
-            // 
-            this.grpLevelStat.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.grpLevelStat.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpLevelStat.Controls.Add(this.chkStatIgnoreBuffs);
-            this.grpLevelStat.Controls.Add(this.nudLevelStatValue);
-            this.grpLevelStat.Controls.Add(this.cmbLevelStat);
-            this.grpLevelStat.Controls.Add(this.lblLevelOrStat);
-            this.grpLevelStat.Controls.Add(this.lblLvlStatValue);
-            this.grpLevelStat.Controls.Add(this.cmbLevelComparator);
-            this.grpLevelStat.Controls.Add(this.lblLevelComparator);
-            this.grpLevelStat.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpLevelStat.Location = new System.Drawing.Point(0, 0);
-            this.grpLevelStat.Name = "grpLevelStat";
-            this.grpLevelStat.Size = new System.Drawing.Size(262, 140);
-            this.grpLevelStat.TabIndex = 28;
-            this.grpLevelStat.TabStop = false;
-            this.grpLevelStat.Text = "Level or Stat is...";
-            // 
-            // chkStatIgnoreBuffs
-            // 
-            this.chkStatIgnoreBuffs.Location = new System.Drawing.Point(13, 115);
-            this.chkStatIgnoreBuffs.Name = "chkStatIgnoreBuffs";
-            this.chkStatIgnoreBuffs.Size = new System.Drawing.Size(211, 17);
-            this.chkStatIgnoreBuffs.TabIndex = 32;
-            this.chkStatIgnoreBuffs.Text = "Ignore equipment & spell buffs.";
-            // 
-            // nudLevelStatValue
-            // 
-            this.nudLevelStatValue.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudLevelStatValue.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudLevelStatValue.Location = new System.Drawing.Point(79, 87);
-            this.nudLevelStatValue.Maximum = new decimal(new int[] {
-            100000,
-            0,
-            0,
-            0});
-            this.nudLevelStatValue.Name = "nudLevelStatValue";
-            this.nudLevelStatValue.Size = new System.Drawing.Size(178, 20);
-            this.nudLevelStatValue.TabIndex = 8;
-            this.nudLevelStatValue.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            // 
-            // cmbLevelStat
-            // 
-            this.cmbLevelStat.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbLevelStat.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbLevelStat.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbLevelStat.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbLevelStat.DrawDropdownHoverOutline = false;
-            this.cmbLevelStat.DrawFocusRectangle = false;
-            this.cmbLevelStat.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbLevelStat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbLevelStat.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbLevelStat.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbLevelStat.FormattingEnabled = true;
-            this.cmbLevelStat.Items.AddRange(new object[] {
-            "Level",
-            "Attack",
-            "Defense",
-            "Speed",
-            "Ability Power",
-            "Magic Resist"});
-            this.cmbLevelStat.Location = new System.Drawing.Point(79, 23);
-            this.cmbLevelStat.Name = "cmbLevelStat";
-            this.cmbLevelStat.Size = new System.Drawing.Size(177, 21);
-            this.cmbLevelStat.TabIndex = 7;
-            this.cmbLevelStat.Text = "Level";
-            this.cmbLevelStat.TextPadding = new System.Windows.Forms.Padding(2);
-            // 
-            // lblLevelOrStat
-            // 
-            this.lblLevelOrStat.AutoSize = true;
-            this.lblLevelOrStat.Location = new System.Drawing.Point(7, 25);
-            this.lblLevelOrStat.Name = "lblLevelOrStat";
-            this.lblLevelOrStat.Size = new System.Drawing.Size(70, 13);
-            this.lblLevelOrStat.TabIndex = 6;
-            this.lblLevelOrStat.Text = "Level or Stat:";
-            // 
-            // lblLvlStatValue
-            // 
-            this.lblLvlStatValue.AutoSize = true;
-            this.lblLvlStatValue.Location = new System.Drawing.Point(10, 89);
-            this.lblLvlStatValue.Name = "lblLvlStatValue";
-            this.lblLvlStatValue.Size = new System.Drawing.Size(37, 13);
-            this.lblLvlStatValue.TabIndex = 4;
-            this.lblLvlStatValue.Text = "Value:";
-            // 
-            // cmbLevelComparator
-            // 
-            this.cmbLevelComparator.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbLevelComparator.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbLevelComparator.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbLevelComparator.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbLevelComparator.DrawDropdownHoverOutline = false;
-            this.cmbLevelComparator.DrawFocusRectangle = false;
-            this.cmbLevelComparator.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbLevelComparator.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbLevelComparator.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbLevelComparator.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbLevelComparator.FormattingEnabled = true;
-            this.cmbLevelComparator.Location = new System.Drawing.Point(79, 53);
-            this.cmbLevelComparator.Name = "cmbLevelComparator";
-            this.cmbLevelComparator.Size = new System.Drawing.Size(177, 21);
-            this.cmbLevelComparator.TabIndex = 3;
-            this.cmbLevelComparator.Text = null;
-            this.cmbLevelComparator.TextPadding = new System.Windows.Forms.Padding(2);
-            // 
-            // lblLevelComparator
-            // 
-            this.lblLevelComparator.AutoSize = true;
-            this.lblLevelComparator.Location = new System.Drawing.Point(7, 55);
-            this.lblLevelComparator.Name = "lblLevelComparator";
-            this.lblLevelComparator.Size = new System.Drawing.Size(64, 13);
-            this.lblLevelComparator.TabIndex = 2;
-            this.lblLevelComparator.Text = "Comparator:";
-            // 
             // grpMapIs
             // 
             this.grpMapIs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
@@ -1923,53 +1970,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.lblEquippedItem.TabIndex = 2;
             this.lblEquippedItem.Text = "Item:";
             // 
-            // grpInPartyWith
-            // 
-            this.grpInPartyWith.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.grpInPartyWith.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpInPartyWith.Controls.Add(this.nudPartySize);
-            this.grpInPartyWith.Controls.Add(this.lblPartySize);
-            this.grpInPartyWith.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpInPartyWith.Location = new System.Drawing.Point(8, 37);
-            this.grpInPartyWith.Name = "grpInPartyWith";
-            this.grpInPartyWith.Size = new System.Drawing.Size(262, 59);
-            this.grpInPartyWith.TabIndex = 33;
-            this.grpInPartyWith.TabStop = false;
-            this.grpInPartyWith.Text = "In Party With...";
-            // 
-            // nudPartySize
-            // 
-            this.nudPartySize.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudPartySize.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudPartySize.Location = new System.Drawing.Point(80, 25);
-            this.nudPartySize.Maximum = new decimal(new int[] {
-            100000,
-            0,
-            0,
-            0});
-            this.nudPartySize.Minimum = new decimal(new int[] {
-            2,
-            0,
-            0,
-            0});
-            this.nudPartySize.Name = "nudPartySize";
-            this.nudPartySize.Size = new System.Drawing.Size(178, 20);
-            this.nudPartySize.TabIndex = 8;
-            this.nudPartySize.Value = new decimal(new int[] {
-            2,
-            0,
-            0,
-            0});
-            // 
-            // lblPartySize
-            // 
-            this.lblPartySize.AutoSize = true;
-            this.lblPartySize.Location = new System.Drawing.Point(10, 27);
-            this.lblPartySize.Name = "lblPartySize";
-            this.lblPartySize.Size = new System.Drawing.Size(57, 13);
-            this.lblPartySize.TabIndex = 4;
-            this.lblPartySize.Text = "Party Size:";
-            // 
             // EventCommandConditionalBranch
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1981,8 +1981,14 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.Size = new System.Drawing.Size(285, 471);
             this.grpConditional.ResumeLayout(false);
             this.grpConditional.PerformLayout();
+            this.grpInPartyWith.ResumeLayout(false);
+            this.grpInPartyWith.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPartySize)).EndInit();
             this.grpInventoryConditions.ResumeLayout(false);
             this.grpInventoryConditions.PerformLayout();
+            this.grpLevelStat.ResumeLayout(false);
+            this.grpLevelStat.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudLevelStatValue)).EndInit();
             this.grpVariableAmount.ResumeLayout(false);
             this.grpVariableAmount.PerformLayout();
             this.grpManualAmount.ResumeLayout(false);
@@ -2024,17 +2030,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpSpell.PerformLayout();
             this.grpClass.ResumeLayout(false);
             this.grpClass.PerformLayout();
-            this.grpLevelStat.ResumeLayout(false);
-            this.grpLevelStat.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudLevelStatValue)).EndInit();
             this.grpMapIs.ResumeLayout(false);
             this.grpGender.ResumeLayout(false);
             this.grpGender.PerformLayout();
             this.grpEquippedItem.ResumeLayout(false);
             this.grpEquippedItem.PerformLayout();
-            this.grpInPartyWith.ResumeLayout(false);
-            this.grpInPartyWith.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudPartySize)).EndInit();
             this.ResumeLayout(false);
 
         }
