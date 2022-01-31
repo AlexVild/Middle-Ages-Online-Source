@@ -1856,7 +1856,7 @@ namespace Intersect.Server.Entities
                 Z = zOverride;
                 Dir = newDir;
 
-                var newSurroundingMaps = newMap.GetSurroundingMapIds(false);
+                var newSurroundingMaps = newMap.GetSurroundingMapIds(true);
 
                 #region Map instance traversal
                 // Set up player properties if we have changed instance types
@@ -1890,17 +1890,24 @@ namespace Intersect.Server.Entities
                 if (onNewInstance)
                 {
                     SendToNewMapInstance(newMap);
-                }
-                #endregion
-
-                foreach (var evt in EventLookup)
-                {
-                    // Remove events that aren't relevant (on a surrounding map) anymore
-                    if (evt.Value.MapId != Guid.Empty && (!newSurroundingMaps.Contains(evt.Value.MapId) || mapSave))
+                    // Clear all events - get fresh ones from the new instance to re-fresh event locations
+                    foreach (var evt in EventLookup)
                     {
                         RemoveEvent(evt.Value.Id, false);
                     }
+                } else
+                {
+                    // Clear events that are no longer on a surrounding map.
+                    foreach (var evt in EventLookup)
+                    {
+                        // Remove events that aren't relevant (on a surrounding map) anymore
+                        if (evt.Value.MapId != Guid.Empty && (!newSurroundingMaps.Contains(evt.Value.MapId) || mapSave))
+                        {
+                            RemoveEvent(evt.Value.Id, false);
+                        }
+                    }
                 }
+                #endregion
 
                 if (newMapId != MapId || mSentMap == false) // Player warped to a new map?
                 {
