@@ -222,6 +222,8 @@ namespace Intersect
         
         public static bool HideResourceHealthBars => Instance.CombatOpts.HideResourceHealthBars;
 
+        public static float DefaultBackstabMultiplier => Instance.CombatOpts.DefaultBackstabMultiplier;
+
         public static int GameBorderStyle => Instance.MapOpts.GameBorderStyle;
 
         public static bool ZDimensionVisible => Instance.MapOpts.ZDimensionVisible;

@@ -104,6 +104,10 @@ namespace Intersect.Editor.Forms.Editors
             this.lblName = new System.Windows.Forms.Label();
             this.txtName = new DarkUI.Controls.DarkTextBox();
             this.grpEquipment = new DarkUI.Controls.DarkGroupBox();
+            this.grpAdditionalWeaponProps = new DarkUI.Controls.DarkGroupBox();
+            this.lblBackstabMultiplier = new System.Windows.Forms.Label();
+            this.chkBackstab = new DarkUI.Controls.DarkCheckBox();
+            this.nudBackstabMultiplier = new DarkUI.Controls.DarkNumericUpDown();
             this.grpHelmetPaperdollProps = new DarkUI.Controls.DarkGroupBox();
             this.chkHelmHideExtra = new DarkUI.Controls.DarkCheckBox();
             this.chkHelmHideBeard = new DarkUI.Controls.DarkCheckBox();
@@ -253,6 +257,8 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudPrice)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picItem)).BeginInit();
             this.grpEquipment.SuspendLayout();
+            this.grpAdditionalWeaponProps.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudBackstabMultiplier)).BeginInit();
             this.grpHelmetPaperdollProps.SuspendLayout();
             this.grpPrayerProperties.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudComboExpBoost)).BeginInit();
@@ -1249,6 +1255,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpEquipment.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpEquipment.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpEquipment.Controls.Add(this.grpAdditionalWeaponProps);
             this.grpEquipment.Controls.Add(this.grpHelmetPaperdollProps);
             this.grpEquipment.Controls.Add(this.grpPrayerProperties);
             this.grpEquipment.Controls.Add(this.grpRegen);
@@ -1270,13 +1277,80 @@ namespace Intersect.Editor.Forms.Editors
             this.grpEquipment.Controls.Add(this.picMalePaperdoll);
             this.grpEquipment.Controls.Add(this.grpWeaponProperties);
             this.grpEquipment.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpEquipment.Location = new System.Drawing.Point(2, 698);
+            this.grpEquipment.Location = new System.Drawing.Point(2, 83);
             this.grpEquipment.Name = "grpEquipment";
-            this.grpEquipment.Size = new System.Drawing.Size(439, 742);
+            this.grpEquipment.Size = new System.Drawing.Size(439, 847);
             this.grpEquipment.TabIndex = 12;
             this.grpEquipment.TabStop = false;
             this.grpEquipment.Text = "Equipment";
             this.grpEquipment.Visible = false;
+            // 
+            // grpAdditionalWeaponProps
+            // 
+            this.grpAdditionalWeaponProps.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpAdditionalWeaponProps.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpAdditionalWeaponProps.Controls.Add(this.lblBackstabMultiplier);
+            this.grpAdditionalWeaponProps.Controls.Add(this.chkBackstab);
+            this.grpAdditionalWeaponProps.Controls.Add(this.nudBackstabMultiplier);
+            this.grpAdditionalWeaponProps.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpAdditionalWeaponProps.Location = new System.Drawing.Point(9, 742);
+            this.grpAdditionalWeaponProps.Margin = new System.Windows.Forms.Padding(2);
+            this.grpAdditionalWeaponProps.Name = "grpAdditionalWeaponProps";
+            this.grpAdditionalWeaponProps.Padding = new System.Windows.Forms.Padding(2);
+            this.grpAdditionalWeaponProps.Size = new System.Drawing.Size(277, 90);
+            this.grpAdditionalWeaponProps.TabIndex = 60;
+            this.grpAdditionalWeaponProps.TabStop = false;
+            this.grpAdditionalWeaponProps.Text = "Additional Weapon Properties";
+            // 
+            // lblBackstabMultiplier
+            // 
+            this.lblBackstabMultiplier.AutoSize = true;
+            this.lblBackstabMultiplier.Location = new System.Drawing.Point(4, 56);
+            this.lblBackstabMultiplier.Name = "lblBackstabMultiplier";
+            this.lblBackstabMultiplier.Size = new System.Drawing.Size(99, 13);
+            this.lblBackstabMultiplier.TabIndex = 62;
+            this.lblBackstabMultiplier.Text = "Backstab Multiplier:";
+            // 
+            // chkBackstab
+            // 
+            this.chkBackstab.AutoSize = true;
+            this.chkBackstab.Location = new System.Drawing.Point(10, 26);
+            this.chkBackstab.Name = "chkBackstab";
+            this.chkBackstab.Size = new System.Drawing.Size(99, 17);
+            this.chkBackstab.TabIndex = 104;
+            this.chkBackstab.Text = "Can Backstab?";
+            this.chkBackstab.CheckedChanged += new System.EventHandler(this.chkBackstab_CheckedChanged);
+            // 
+            // nudBackstabMultiplier
+            // 
+            this.nudBackstabMultiplier.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudBackstabMultiplier.DecimalPlaces = 2;
+            this.nudBackstabMultiplier.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudBackstabMultiplier.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            this.nudBackstabMultiplier.Location = new System.Drawing.Point(104, 54);
+            this.nudBackstabMultiplier.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.nudBackstabMultiplier.Minimum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            65536});
+            this.nudBackstabMultiplier.Name = "nudBackstabMultiplier";
+            this.nudBackstabMultiplier.Size = new System.Drawing.Size(76, 20);
+            this.nudBackstabMultiplier.TabIndex = 105;
+            this.nudBackstabMultiplier.Value = new decimal(new int[] {
+            10,
+            0,
+            0,
+            65536});
+            this.nudBackstabMultiplier.ValueChanged += new System.EventHandler(this.nudBackstabMultiplier_ValueChanged);
             // 
             // grpHelmetPaperdollProps
             // 
@@ -2241,9 +2315,9 @@ namespace Intersect.Editor.Forms.Editors
             // picFemalePaperdoll
             // 
             this.picFemalePaperdoll.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.picFemalePaperdoll.Location = new System.Drawing.Point(221, 577);
+            this.picFemalePaperdoll.Location = new System.Drawing.Point(221, 578);
             this.picFemalePaperdoll.Name = "picFemalePaperdoll";
-            this.picFemalePaperdoll.Size = new System.Drawing.Size(200, 156);
+            this.picFemalePaperdoll.Size = new System.Drawing.Size(200, 155);
             this.picFemalePaperdoll.TabIndex = 34;
             this.picFemalePaperdoll.TabStop = false;
             // 
@@ -3038,9 +3112,9 @@ namespace Intersect.Editor.Forms.Editors
             // pnlContainer
             // 
             this.pnlContainer.AutoScroll = true;
+            this.pnlContainer.Controls.Add(this.grpEquipment);
             this.pnlContainer.Controls.Add(this.grpGeneral);
             this.pnlContainer.Controls.Add(this.grpConsumable);
-            this.pnlContainer.Controls.Add(this.grpEquipment);
             this.pnlContainer.Controls.Add(this.grpBags);
             this.pnlContainer.Controls.Add(this.grpEvent);
             this.pnlContainer.Controls.Add(this.grpSpell);
@@ -3214,6 +3288,9 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.picItem)).EndInit();
             this.grpEquipment.ResumeLayout(false);
             this.grpEquipment.PerformLayout();
+            this.grpAdditionalWeaponProps.ResumeLayout(false);
+            this.grpAdditionalWeaponProps.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudBackstabMultiplier)).EndInit();
             this.grpHelmetPaperdollProps.ResumeLayout(false);
             this.grpHelmetPaperdollProps.PerformLayout();
             this.grpPrayerProperties.ResumeLayout(false);
@@ -3477,5 +3554,9 @@ namespace Intersect.Editor.Forms.Editors
         private DarkTextBox txtCannotDestroy;
         private DarkButton btnDestroyRequirements;
         private DarkCheckBox chkEnableDestroy;
+        private DarkGroupBox grpAdditionalWeaponProps;
+        private DarkCheckBox chkBackstab;
+        private Label lblBackstabMultiplier;
+        private DarkNumericUpDown nudBackstabMultiplier;
     }
 }

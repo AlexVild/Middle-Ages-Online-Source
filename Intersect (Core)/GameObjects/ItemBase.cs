@@ -386,6 +386,10 @@ namespace Intersect.GameObjects
         /// <inheritdoc />
         public string Folder { get; set; } = "";
 
+        public bool CanBackstab { get; set; } = false;
+        
+        public float BackstabMultiplier { get; set; } = 1.0f;
+
         /// <summary>
         /// Gets an array of all items sharing the provided cooldown group.
         /// </summary>

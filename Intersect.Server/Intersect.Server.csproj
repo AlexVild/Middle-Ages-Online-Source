@@ -695,6 +695,10 @@
     <Compile Include="Migrations\Game\20220125173554_InstanceVariableMigration.designer.cs">
       <DependentUpon>20220125173554_InstanceVariableMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20220204163952_BackstabMigration.cs" />
+    <Compile Include="Migrations\Game\20220204163952_BackstabMigration.designer.cs">
+      <DependentUpon>20220204163952_BackstabMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

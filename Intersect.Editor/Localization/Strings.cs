@@ -3545,6 +3545,15 @@ Tick timer saved in server config.json.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString cannotdestroylabel = @"Cannot Destroy Message:";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString AdditionalWeaponProps = @"Additional Weapon Properties";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString CanBackstab = @"Can Backstab?";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString BackstabMultiplier = @"Backstab Multiplier:";
         }
 
         public struct LightEditor

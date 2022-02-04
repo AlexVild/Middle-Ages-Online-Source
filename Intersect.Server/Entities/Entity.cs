@@ -1410,8 +1410,9 @@ namespace Intersect.Server.Entities
                     aliveAnimations.Add(new KeyValuePair<Guid, sbyte>(parentItem.AttackAnimationId, (sbyte)projectileDir));
                 }
 
+                int damage = calculateBackstabDamage(parentItem.Damage, parentItem, target);
                 attackFailures = Attack(
-                    target, parentItem.Damage, 0, (DamageType) parentItem.DamageType, (Stats) parentItem.ScalingStat,
+                    target, damage, 0, (DamageType) parentItem.DamageType, (Stats) parentItem.ScalingStat,
                     parentItem.Scaling, parentItem.CritChance, parentItem.CritMultiplier, deadAnimations, aliveAnimations, true, false, true
                 );
             }
@@ -1453,6 +1454,19 @@ namespace Intersect.Server.Entities
             {
                 var dash = new Dash(target, projectile.Knockback, projectileDir, false, false, false, false);
             }
+        }
+
+        public int calculateBackstabDamage(int baseDamage, ItemBase item, Entity target)
+        {
+            if (item == null || target == null) return baseDamage;
+
+            if (item.CanBackstab && target.Dir == Dir)
+            {
+                PacketSender.SendActionMsg(target, Strings.Combat.backstab, CustomColors.Combat.Backstab);
+                baseDamage = (int)Math.Floor(baseDamage * item.BackstabMultiplier);
+            }
+
+            return baseDamage;
         }
 
         //Attacking with spell
@@ -1628,7 +1642,7 @@ namespace Intersect.Server.Entities
             {
                 if (this is Player player && spellBase.WeaponSpell && player.CastingWeapon != null ) // add on weapon stats if needed
                 {
-                    damageHealth += player.CastingWeapon.Damage;
+                    damageHealth += calculateBackstabDamage(player.CastingWeapon.Damage, player.CastingWeapon, target);
                     scaling += player.CastingWeapon.Scaling;
                     scalingStat = (Stats) player.CastingWeapon.ScalingStat;
                     damageType = (DamageType) player.CastingWeapon.DamageType;
@@ -1808,6 +1822,10 @@ namespace Intersect.Server.Entities
                 }
             }
 
+            if (weapon != null)
+            {
+                baseDamage = calculateBackstabDamage(weapon.Damage, weapon, target);
+            }
             Attack(
                 target, baseDamage, 0, damageType, scalingStat, scaling, critChance, critMultiplier, deadAnimations,
                 aliveAnimations, true
@@ -2073,14 +2091,18 @@ namespace Intersect.Server.Entities
                 SendCombatEffects(enemy, isCrit, baseDamage);
             }
 
-            if (wasBlocked && !(enemy is Resource)) // Alex - dumb fix
+            if (damageType != DamageType.True && !(enemy is Resource)) // Alex - dumb fix
             {
-                SendBlockedAttackMessage(this, enemy);
+                if (wasBlocked) 
+                {
+                    SendBlockedAttackMessage(this, enemy);
+                }
+                else if (attackMissed)
+                {
+                    SendMissedAttackMessage(this, enemy, damageType);
+                }
             }
-            else if (attackMissed && !(enemy is Resource))
-            {
-                SendMissedAttackMessage(this, enemy, damageType);
-            }
+            
 
             var failures = new Dictionary<AttackFailures, bool>();
             failures.Add(AttackFailures.BLOCKED, wasBlocked);

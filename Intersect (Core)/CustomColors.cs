@@ -170,6 +170,8 @@ namespace Intersect
 
             public Color Critical = new Color(255, 255, 255, 0);
 
+            public Color Backstab = new Color(255, 180, 180, 0);
+
             public Color Dash = new Color(255, 0, 0, 255);
 
             public Color Heal = new Color(255, 0, 255, 0);

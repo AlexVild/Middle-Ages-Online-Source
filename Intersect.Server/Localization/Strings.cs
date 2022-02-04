@@ -248,6 +248,9 @@ namespace Intersect.Server.Localization
             public readonly LocalizedString critical = @"CRITICAL HIT!";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString backstab = @"BACKSTAB!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocaleDictionary<int, LocalizedString> damagetypes =
                 new LocaleDictionary<int, LocalizedString>(
                     new Dictionary<int, LocalizedString>
