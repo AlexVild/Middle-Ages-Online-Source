@@ -500,6 +500,7 @@
     <Compile Include="Database\PlayerData\User.cs" />
     <Compile Include="Database\PlayerData\PlayerContext.cs" />
     <Compile Include="Entities\Events\Event.cs" />
+    <Compile Include="Entities\PlayerData\PlayerClassStats.cs" />
     <Compile Include="Entities\Projectile.cs" />
     <Compile Include="Entities\ProjectileSpawn.cs" />
     <Compile Include="Entities\Resource.cs" />

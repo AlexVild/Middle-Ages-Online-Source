@@ -33,6 +33,7 @@ using Intersect.Server.Networking;
 using Intersect.Utilities;
 
 using Newtonsoft.Json;
+using Intersect.Server.Entities.PlayerData;
 
 namespace Intersect.Server.Entities
 {
@@ -278,6 +279,26 @@ namespace Intersect.Server.Entities
         public string VehicleSprite { get; set; } = string.Empty;
 
         public long VehicleSpeed { get; set; } = 0L;
+
+        // Class Rank Vars
+        // Contains a mapping of a Class' GUID -> the class info for this player
+        [NotMapped, JsonIgnore]
+        public Dictionary<Guid, PlayerClassStats> ClassInfo = new Dictionary<Guid, PlayerClassStats>();
+
+        [JsonIgnore]
+        [Column("ClassInfo")]
+        public string ClassInfoJson
+        {
+            get => JsonConvert.SerializeObject(ClassInfo);
+            set
+            {
+                ClassInfo = JsonConvert.DeserializeObject<Dictionary<Guid, PlayerClassStats>>(value ?? "");
+                if (ClassInfo == null)
+                {
+                    ClassInfo = new Dictionary<Guid, PlayerClassStats>();
+                }
+            }
+        }
 
         public static Player FindOnline(Guid id)
         {

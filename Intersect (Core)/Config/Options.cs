@@ -131,6 +131,18 @@ namespace Intersect
         public static int ExtraSlot => Instance.PlayerOpts.ExtraSlot;
         
         public static float AmmoRetrieveChance => Instance.PlayerOpts.AmmoRetrieveChance;
+        
+        public static string ClassRankVarGuid => Instance.PlayerOpts.ClassRankVarGuid;
+
+        public static string TasksCompletedVarGuid => Instance.PlayerOpts.TasksCompletedVarGuid;
+
+        public static string SpecialAssignmentAvailableGuid => Instance.PlayerOpts.SpecialAssignmentAvailableGuid;
+
+        public static string OnSpecialAssignmentVarGuid => Instance.PlayerOpts.OnSpecialAssignmentVarGuid;
+
+        public static string OnTaskVarGuid => Instance.PlayerOpts.OnTaskVarGuid;
+
+        public static string InGuildVarGuid => Instance.PlayerOpts.InGuildVarGuid;
 
         public static int WeaponIndex => Instance.EquipmentOpts.WeaponSlot;
 

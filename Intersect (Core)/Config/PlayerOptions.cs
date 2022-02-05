@@ -105,6 +105,20 @@ namespace Intersect.Config
 
         public int ExtraSlot = 3;
 
+        public string ClassRankVarGuid = "df280bcf-f0f4-448a-9430-45d1022b9aa8";
+
+        public string TasksCompletedVarGuid = "cd6f7e2b-7f2e-477b-9425-70c66d2d5dd6";
+        
+        public string TasksRemainingVarGuid = "5b18da07-f676-44f5-9050-3a66f1ed0a23";
+
+        public string SpecialAssignmentAvailableGuid = "21267b3b-1c6b-434a-ac87-dd77724fe70a";
+        
+        public string OnSpecialAssignmentVarGuid = "a1c38f8f-919f-4dda-94cf-88551abbbc81";
+        
+        public string OnTaskVarGuid = "8cd211a9-b27e-460d-b82a-cf620dfe63a3";
+
+        public string InGuildVarGuid = "ed1040cb-7018-4862-b0b5-1f9f081bb562";
+
         [OnDeserializing]
         internal void OnDeserializingMethod(StreamingContext context)
         {
