@@ -704,6 +704,10 @@
     <Compile Include="Migrations\Game\20220204163952_BackstabMigration.designer.cs">
       <DependentUpon>20220204163952_BackstabMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20220206010259_QuestTypeMigration.cs" />
+    <Compile Include="Migrations\Game\20220206010259_QuestTypeMigration.designer.cs">
+      <DependentUpon>20220206010259_QuestTypeMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>
