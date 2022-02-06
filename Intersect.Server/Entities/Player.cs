@@ -5611,11 +5611,14 @@ namespace Intersect.Server.Entities
                 ClassInfo[classId] = new PlayerClassStats();
                 ClassInfo[classId].InGuild = true;
             }
+            PacketSender.SendChatMsg(this,
+                Strings.Quests.npcguildjoin.ToString(ClassBase.Get(classId).Name),
+                ChatMessageType.Quest,
+                CustomColors.Quests.Completed);
         }
         
         public void LeaveNpcGuildOfClass(Guid classId)
         {
-
             if (ClassInfo.ContainsKey(classId))
             {
                 // Do not allow a player to leave an NPC Guild if they're doing something for them
@@ -5630,6 +5633,11 @@ namespace Intersect.Server.Entities
                     ClassInfo[classId].OnTask = false;
                     ClassInfo[classId].TaskCompleted = false;
                     ClassInfo[classId].InGuild = false;
+
+                    PacketSender.SendChatMsg(this,
+                        Strings.Quests.npcguildleave.ToString(ClassBase.Get(classId).Name),
+                        ChatMessageType.Quest,
+                        CustomColors.Quests.Abandoned);
                 }
             }
             else // Might as well backfill in the event this key never existed
@@ -5701,7 +5709,7 @@ namespace Intersect.Server.Entities
                         CustomColors.Quests.Declined);
                     return false;
                 }
-                if (relevantInfo.LastTaskStartTime + Options.TaskCooldown > Globals.Timing.Milliseconds)
+                if (relevantInfo.LastTaskStartTime + Options.TaskCooldown > Globals.Timing.MillisecondsUTC)
                 {
                     PacketSender.SendChatMsg(this,
                         Strings.Quests.taskcooldown,
@@ -6117,7 +6125,7 @@ namespace Intersect.Server.Entities
                     if (quest.RelatedClassId != Guid.Empty && ClassInfo.TryGetValue(quest.RelatedClassId, out var taskClassInfo))
                     {
                         taskClassInfo.OnTask = true;
-                        taskClassInfo.LastTaskStartTime = Globals.Timing.Milliseconds;
+                        taskClassInfo.LastTaskStartTime = Globals.Timing.MillisecondsUTC;
                     }
                     break;
                 case QuestType.SpecialAssignment:
@@ -6127,7 +6135,7 @@ namespace Intersect.Server.Entities
                         assignmentClassInfo.OnSpecialAssignment = true;
                         if (Options.SpecialAssignmentCountsTowardCooldown)
                         {
-                            assignmentClassInfo.LastTaskStartTime = Globals.Timing.Milliseconds;
+                            assignmentClassInfo.LastTaskStartTime = Globals.Timing.MillisecondsUTC;
                         }
                     }
                     break;
@@ -6164,7 +6172,6 @@ namespace Intersect.Server.Entities
                     {
                         taskClassInfo.TaskCompleted = true; // The task can be turned in
                         taskClassInfo.OnTask = false;
-                        taskClassInfo.LastTaskStartTime = Globals.Timing.Milliseconds; // A new task can be picked up in X time
                         if (!questProgress.Completed) // first time completing
                         {
                             // They have completed a new task - update their total
@@ -6229,6 +6236,7 @@ namespace Intersect.Server.Entities
                         // TODO Alex: Fire common event of type "Class Rank Increased" with class parameter
                         assignmentClassInfo.OnSpecialAssignment = false;
                         assignmentClassInfo.OnTask = false;
+                        assignmentClassInfo.AssignmentAvailable = false;
                         if (Options.SpecialAssignmentCountsTowardCooldown)
                         {
                             assignmentClassInfo.LastTaskStartTime = Globals.Timing.Milliseconds;
@@ -6259,12 +6267,19 @@ namespace Intersect.Server.Entities
                                 ChatMessageType.Quest,
                                 CustomColors.Quests.TaskUpdated);
                         }
+                        else if (assignmentClassInfo.TasksRemaining == 0)
+                        {
+                            PacketSender.SendChatMsg(this,
+                                Strings.Quests.newspecialassignment.ToString(ClassBase.Get(quest.RelatedClassId).Name),
+                                ChatMessageType.Quest,
+                                CustomColors.Quests.Completed);
+                        }
                     }
                     break;
             }
         }
 
-        private int TasksRemainingForClassRank(int classRank)
+        public int TasksRemainingForClassRank(int classRank)
         {
             if (classRank == Options.MaxClassRank)
             {

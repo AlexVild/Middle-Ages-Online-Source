@@ -770,6 +770,10 @@ namespace Intersect.Editor.Forms.Editors.Events
                     tmpCommand = new SetVehicleCommand();
 
                     break;
+                case EventCommandType.NPCGuildManagement:
+                    tmpCommand = new NPCGuildManagementCommand();
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -1400,6 +1404,10 @@ namespace Intersect.Editor.Forms.Editors.Events
                     break;
                 case EventCommandType.SetVehicle:
                     cmdWindow = new EventCommand_SetVehicle((SetVehicleCommand)command, this);
+
+                    break;
+                case EventCommandType.NPCGuildManagement:
+                    cmdWindow = new EventCommand_NPCGuildManagement((NPCGuildManagementCommand)command, this);
 
                     break;
                 default:

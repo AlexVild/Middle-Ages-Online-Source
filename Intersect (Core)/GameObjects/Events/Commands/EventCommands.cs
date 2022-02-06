@@ -1137,4 +1137,17 @@ namespace Intersect.GameObjects.Events.Commands
 
         public long VehicleSpeed { get; set; }
     }
+
+    public class NPCGuildManagementCommand : EventCommand
+    {
+        public override EventCommandType Type { get; } = EventCommandType.NPCGuildManagement;
+
+        public Guid ClassId { get; set; }
+
+        public NPCGuildManagementSelection Selection { get; set; }
+
+        public bool SelectionValue { get; set; }
+        
+        public int NewRank { get; set; }
+    }
 }

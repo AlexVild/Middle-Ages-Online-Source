@@ -2212,6 +2212,71 @@ namespace Intersect.Server.Entities.Events
             PacketSender.SendEntityDataToProximity(player);
         }
 
+        //Set Vehicle Command
+        private static void ProcessCommand(
+            NPCGuildManagementCommand command,
+            Player player,
+            Event instance,
+            CommandInstance stackInfo,
+            Stack<CommandInstance> callStack
+        )
+        {
+            if (player == null || !player.ClassInfo.TryGetValue(command.ClassId, out var classInfo))
+            {
+                return;
+            }
+
+            switch(command.Selection)
+            {
+                case NPCGuildManagementSelection.ChangeComplete:
+                    classInfo.TaskCompleted = command.SelectionValue;
+                    break;
+                case NPCGuildManagementSelection.ChangeGuildStatus:
+                    if (command.SelectionValue)
+                    {
+                        player.JoinNpcGuildOfClass(command.ClassId);
+                    }
+                    else
+                    {
+                        player.LeaveNpcGuildOfClass(command.ClassId);
+                    }
+                    break;
+                case NPCGuildManagementSelection.ChangeRank:
+                    var oldRank = classInfo.Rank;
+                    classInfo.Rank = command.NewRank;
+                    if (oldRank < classInfo.Rank)
+                    {
+                        PacketSender.SendChatMsg(player,
+                            Strings.Quests.classrankincreased.ToString(ClassBase.Get(command.ClassId).Name, classInfo.Rank.ToString()),
+                            ChatMessageType.Quest,
+                            CustomColors.Quests.Completed);
+                    }
+                    else if (oldRank > classInfo.Rank)
+                    {
+                        PacketSender.SendChatMsg(player,
+                            Strings.Quests.classrankdecreased.ToString(ClassBase.Get(command.ClassId).Name, classInfo.Rank.ToString()),
+                            ChatMessageType.Quest,
+                            CustomColors.Quests.Abandoned);
+                    }
+                    
+                    classInfo.TasksRemaining = player.TasksRemainingForClassRank(classInfo.Rank);
+                    break;
+                case NPCGuildManagementSelection.ChangeSpecialAssignment:
+                    classInfo.AssignmentAvailable = command.SelectionValue;
+                    if (command.SelectionValue)
+                    {
+                        PacketSender.SendChatMsg(player,
+                            Strings.Quests.newspecialassignment.ToString(ClassBase.Get(command.ClassId).Name),
+                            ChatMessageType.Quest,
+                            CustomColors.Quests.Completed);
+                    }
+                    break;
+                case NPCGuildManagementSelection.ClearCooldown:
+                    classInfo.LastTaskStartTime = 0L;
+                    break;
+            }
+        }
+
     }
 
 }

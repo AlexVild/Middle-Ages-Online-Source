@@ -658,7 +658,7 @@ namespace Intersect.Server.Entities.Events
             if (player != null && player.ClassInfo.ContainsKey(condition.ClassId))
             {
                 var classInfo = player.ClassInfo[condition.ClassId];
-                return classInfo.LastTaskStartTime + Options.TaskCooldown > Globals.Timing.Milliseconds;
+                return (classInfo.LastTaskStartTime + Options.TaskCooldown > Globals.Timing.MillisecondsUTC);
             }
             return false;
         }

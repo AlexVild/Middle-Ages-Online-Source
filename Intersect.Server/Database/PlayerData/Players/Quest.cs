@@ -35,8 +35,6 @@ namespace Intersect.Server.Database.PlayerData.Players
         public int TaskProgress { get; set; }
 
         public bool Completed { get; set; }
-        
-        public bool FirstTimeCompletion { get; set; }
 
         [JsonIgnore]
         public Guid PlayerId { get; private set; }

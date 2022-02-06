@@ -1230,7 +1230,10 @@ namespace Intersect.Server.Localization
             
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString classrankincreased = @"Your {00} Class Rank has increased to {01}!";
-            
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString classrankdecreased = @"Your {00} Class Rank has decreased to {01}!";
+
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString notinguild = @"You cannot start this task, as you are not a member of the {00} guild.";
 
@@ -1239,6 +1242,12 @@ namespace Intersect.Server.Localization
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString taskcooldown = @"Not enough time has passed since you last did a task.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString npcguildjoin = @"You have joined the {00}'s Guild!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString npcguildleave = @"You have left the {00}'s Guild!";
         }
 
         public sealed class RegexNamespace : LocaleNamespace

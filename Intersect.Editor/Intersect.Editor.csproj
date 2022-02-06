@@ -106,6 +106,12 @@
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_FlashScreen.Designer.cs">
       <DependentUpon>EventCommand_FlashScreen.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_NPCGuildManagement.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_NPCGuildManagement.Designer.cs">
+      <DependentUpon>EventCommand_NPCGuildManagement.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_OpenQuestBoard.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -714,6 +720,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_GiveExperience.resx">
       <DependentUpon>EventCommand_GiveExperience.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_NPCGuildManagement.resx">
+      <DependentUpon>EventCommand_NPCGuildManagement.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_OpenQuestBoard.resx">
       <DependentUpon>EventCommand_OpenQuestBoard.cs</DependentUpon>

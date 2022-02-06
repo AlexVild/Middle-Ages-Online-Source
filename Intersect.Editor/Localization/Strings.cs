@@ -1987,6 +1987,24 @@ Tick timer saved in server config.json.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString setvehicle = @"Set Vehicle: {00}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString npcmanage = @"{00} Guild Management: [{01}]";
+            
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString npcmanagecomplete = @"Task Complete: {00}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString npcmanageguildstatus = @"In Guild: {00}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString npcmanagechangerank = @"Set Class Rank: {00}";
+            
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString npcmanagespecialassignment = @"Set Special Assignment Available: {00}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString npcmanageclearcooldown = @"Clear Task Cooldown";
         }
 
         public struct EventChangePlayerColor
@@ -2089,6 +2107,7 @@ Tick timer saved in server config.json.";
                 {"randomquest", @"Random Quest from List"},
                 {"openquestboard", @"Open Quest Board"},
                 {"setvehicle", @"Set Vehicle"},
+                {"npcguildmanagement", @"NPC Guild Management"},
             };
 
         }
@@ -5472,6 +5491,30 @@ Negative values for time to flow backwards.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString speedlabel = @"Vehicle Speed:";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString confirm = @"Okay";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString cancel = @"Cancel";
+        }
+
+        public struct EventNPCGuildManagement
+        {
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString title = @"NPC Guild Management";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString type = @"Type:";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString cls = @"Class:";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString value = @"Value:";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString rank = @"New Class Rank:";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString confirm = @"Okay";

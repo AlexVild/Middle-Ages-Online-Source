@@ -1615,6 +1615,40 @@ namespace Intersect.Editor.Forms.Editors.Events
             }
         }
 
+        private static string GetCommandText(NPCGuildManagementCommand command, MapInstance map)
+        {
+            switch(command.Selection)
+            {
+                case NPCGuildManagementSelection.ChangeComplete:
+                    return Strings.EventCommandList.npcmanage.ToString(
+                        ClassBase.GetName(command.ClassId),
+                        Strings.EventCommandList.npcmanagecomplete.ToString(command.SelectionValue.ToString())
+                        );
+                case NPCGuildManagementSelection.ChangeGuildStatus:
+                    return Strings.EventCommandList.npcmanage.ToString(
+                        ClassBase.GetName(command.ClassId),
+                        Strings.EventCommandList.npcmanageguildstatus.ToString(command.SelectionValue.ToString())
+                        );
+                case NPCGuildManagementSelection.ChangeRank:
+                    return Strings.EventCommandList.npcmanage.ToString(
+                        ClassBase.GetName(command.ClassId),
+                        Strings.EventCommandList.npcmanagechangerank.ToString(command.NewRank.ToString())
+                        );
+                case NPCGuildManagementSelection.ChangeSpecialAssignment:
+                    return Strings.EventCommandList.npcmanage.ToString(
+                        ClassBase.GetName(command.ClassId),
+                        Strings.EventCommandList.npcmanagespecialassignment.ToString(command.SelectionValue.ToString())
+                        );
+                case NPCGuildManagementSelection.ClearCooldown:
+                    return Strings.EventCommandList.npcmanage.ToString(
+                        ClassBase.GetName(command.ClassId),
+                        Strings.EventCommandList.npcmanageclearcooldown.ToString(command.SelectionValue.ToString())
+                        );
+                default:
+                    return Strings.EventCommandList.npcmanage.ToString(Strings.General.none);
+            }
+        }
+
     }
 
 }

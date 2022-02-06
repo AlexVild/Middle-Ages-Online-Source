@@ -109,10 +109,6 @@ namespace Intersect.Editor.Forms.Editors.Quest
 
             cmbQuestType.Items.AddRange(Enum.GetNames(typeof(QuestType)));
             cmbClass.Items.AddRange(ClassBase.Names);
-            if (cmbClass.Items.Count > 0)
-            {
-                cmbClass.SelectedIndex = 0;
-            }
 
             nudClassRank.Maximum = Options.MaxClassRank;
 

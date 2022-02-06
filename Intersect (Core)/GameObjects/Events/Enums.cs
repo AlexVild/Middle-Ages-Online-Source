@@ -239,5 +239,17 @@
 
         // Vehicles
         SetVehicle,
+
+        // NPC Guilds,
+        NPCGuildManagement
+    }
+
+    public enum NPCGuildManagementSelection
+    {
+        ChangeComplete,
+        ClearCooldown,
+        ChangeRank,
+        ChangeGuildStatus,
+        ChangeSpecialAssignment,
     }
 }
