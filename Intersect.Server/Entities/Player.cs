@@ -404,7 +404,7 @@ namespace Intersect.Server.Entities
             //Send guild list update to all members when coming online
             Guild?.UpdateMemberList();
 
-            // Initialize Class Rank info for any new classes that have been added.
+            // Initialize Class Rank info for any new classes that have been added/underlying updates to CR stuff in Options
             InitClassRanks();
         }
 
@@ -5600,6 +5600,44 @@ namespace Intersect.Server.Entities
             Hotbar[swapIndex].PreferredStatBuffs = stats;
         }
 
+        // NPC Guilds
+        public void JoinNpcGuildOfClass(Guid classId)
+        {
+            if (ClassInfo.ContainsKey(classId))
+            {
+                ClassInfo[classId].InGuild = true;
+            } else
+            {
+                ClassInfo[classId] = new PlayerClassStats();
+                ClassInfo[classId].InGuild = true;
+            }
+        }
+        
+        public void LeaveNpcGuildOfClass(Guid classId)
+        {
+
+            if (ClassInfo.ContainsKey(classId))
+            {
+                // Do not allow a player to leave an NPC Guild if they're doing something for them
+                if (ClassInfo[classId].OnTask || ClassInfo[classId].OnSpecialAssignment || ClassInfo[classId].TaskCompleted)
+                {
+                    PacketSender.SendChatMsg(this, Strings.Quests.taskinprogressleave, ChatMessageType.Error, CustomColors.General.GeneralWarning);
+                }
+                else
+                {
+                    // Reset their quest states, but keep other stuff around
+                    ClassInfo[classId].OnSpecialAssignment = false;
+                    ClassInfo[classId].OnTask = false;
+                    ClassInfo[classId].TaskCompleted = false;
+                    ClassInfo[classId].InGuild = false;
+                }
+            }
+            else // Might as well backfill in the event this key never existed
+            {
+                ClassInfo[classId] = new PlayerClassStats();
+            }
+        }
+
         //Quests
         public bool CanStartQuest(QuestBase quest)
         {
@@ -5627,6 +5665,42 @@ namespace Intersect.Server.Entities
             if (quest.Tasks.Count == 0)
             {
                 return false;
+            }
+
+            // Handle special quests
+            if (quest.QuestType == QuestType.Task || quest.QuestType == QuestType.SpecialAssignment)
+            {
+                if (!ClassInfo.ContainsKey(quest.RelatedClassId))
+                {
+                    return false;
+                }
+
+                PlayerClassStats relevantInfo = ClassInfo[quest.RelatedClassId];
+
+                if (!relevantInfo.InGuild)
+                {
+                    PacketSender.SendChatMsg(this,
+                        Strings.Quests.notinguild.ToString(ClassBase.Get(quest.RelatedClassId).Name),
+                        ChatMessageType.Quest,
+                        CustomColors.Quests.Declined);
+                    return false;
+                }
+                if (relevantInfo.OnTask || relevantInfo.OnSpecialAssignment)
+                {
+                    PacketSender.SendChatMsg(this,
+                        Strings.Quests.taskinprogress,
+                        ChatMessageType.Quest,
+                        CustomColors.Quests.Declined);
+                    return false;
+                }
+                if (relevantInfo.Rank < quest.QuestClassRank)
+                {
+                    PacketSender.SendChatMsg(this,
+                        Strings.Quests.ranktoolow.ToString(quest.QuestClassRank.ToString()),
+                        ChatMessageType.Quest,
+                        CustomColors.Quests.Declined);
+                    return false;
+                }
             }
 
             return true;
@@ -5811,6 +5885,8 @@ namespace Intersect.Server.Entities
                     UpdateGatherItemQuests(quest.Tasks[0].TargetId);
                 }
 
+                HandleSpecialQuestStart(quest);
+
                 StartCommonEvent(EventBase.Get(quest.StartEventId));
                 PacketSender.SendChatMsg(
                     this, Strings.Quests.started.ToString(quest.Name), ChatMessageType.Quest, CustomColors.Quests.Started
@@ -5909,6 +5985,9 @@ namespace Intersect.Server.Entities
                         var questProgress = FindQuest(quest.Id);
                         questProgress.TaskId = Guid.Empty;
                         questProgress.TaskProgress = -1;
+                        
+                        HandleSpecialQuestAbandon(quest);
+
                         PacketSender.SendChatMsg(
                             this, Strings.Quests.abandoned.ToString(QuestBase.GetName(questId)), ChatMessageType.Quest, CustomColors.Alerts.Declined
                         );
@@ -5989,6 +6068,12 @@ namespace Intersect.Server.Entities
                 var questProgress = FindQuest(questId);
                 if (questProgress != null)
                 {
+                    // Handle quests that aren't "normal" and should do some management on completion
+                    if (quest.QuestType != QuestType.Normal)
+                    {
+                        HandleSpecialQuestCompletion(quest, questProgress);
+                    }
+
                     //Complete Quest
                     questProgress.Completed = true;
                     questProgress.TaskId = Guid.Empty;
@@ -5998,9 +6083,178 @@ namespace Intersect.Server.Entities
                         StartCommonEvent(EventBase.Get(quest.EndEventId));
                         PacketSender.SendChatMsg(this, Strings.Quests.completed.ToString(quest.Name), ChatMessageType.Quest, CustomColors.Alerts.Accepted);
                     }
+                    
                     PacketSender.SendQuestsProgress(this);
                 }
             }
+        }
+
+        /// <summary>
+        /// Sets <see cref="PlayerClassStats"/> state for a given quest at start time
+        /// </summary>
+        /// <param name="quest">The quest thats being started</param>
+        private void HandleSpecialQuestStart(QuestBase quest)
+        {
+            switch(quest.QuestType)
+            {
+                case QuestType.Task:
+                    if (quest.RelatedClassId != Guid.Empty && ClassInfo.TryGetValue(quest.RelatedClassId, out var taskClassInfo))
+                    {
+                        taskClassInfo.OnTask = true;
+                        taskClassInfo.LastTaskStartTime = Globals.Timing.Milliseconds;
+                    }
+                    break;
+                case QuestType.SpecialAssignment:
+                    if (quest.RelatedClassId != Guid.Empty && ClassInfo.TryGetValue(quest.RelatedClassId, out var assignmentClassInfo))
+                    {
+                        assignmentClassInfo.OnTask = true;
+                        assignmentClassInfo.OnSpecialAssignment = true;
+                        if (Options.SpecialAssignmentCountsTowardCooldown)
+                        {
+                            assignmentClassInfo.LastTaskStartTime = Globals.Timing.Milliseconds;
+                        }
+                    }
+                    break;
+            }
+        }
+
+        private void HandleSpecialQuestAbandon(QuestBase quest)
+        {
+            switch (quest.QuestType)
+            {
+                case QuestType.Task:
+                case QuestType.SpecialAssignment:
+                    if (quest.RelatedClassId != Guid.Empty && ClassInfo.TryGetValue(quest.RelatedClassId, out var taskClassInfo))
+                    {
+                        taskClassInfo.OnTask = false;
+                        taskClassInfo.OnSpecialAssignment = false;
+                    }
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// It is imperative that this method be called BEFORE setting a <see cref="Quest"/> to Completed, so we
+        /// can check for novel quest completion
+        /// </summary>
+        /// <param name="quest">The DB quest info</param>
+        /// <param name="questProgress">The players personal quest progress</param>
+        private void HandleSpecialQuestCompletion(QuestBase quest, Quest questProgress)
+        {
+            switch (quest.QuestType)
+            {
+                case QuestType.Task:
+                    if (quest.RelatedClassId != Guid.Empty && ClassInfo.TryGetValue(quest.RelatedClassId, out var taskClassInfo))
+                    {
+                        taskClassInfo.TaskCompleted = true; // The task can be turned in
+                        taskClassInfo.OnTask = false;
+                        taskClassInfo.LastTaskStartTime = Globals.Timing.Milliseconds; // A new task can be picked up in X time
+                        if (!questProgress.Completed) // first time completing
+                        {
+                            // They have completed a new task - update their total
+                            taskClassInfo.TotalTasksComplete++;
+                            PacketSender.SendChatMsg(this,
+                                           Strings.Quests.totaltaskscompleted.ToString(taskClassInfo.TotalTasksComplete.ToString(), ClassBase.Get(quest.RelatedClassId).Name),
+                                           ChatMessageType.Quest,
+                                           CustomColors.Quests.TaskUpdated);
+                            
+                            // If this was a NEW task within their current rank, update SA progress
+                            if (taskClassInfo.Rank == quest.QuestClassRank)
+                            {
+                                int tasksRequired = Options.RequiredTasksPerClassRank
+                                    .ToArray()
+                                    .ElementAtOrDefault(taskClassInfo.Rank);
+                                if (tasksRequired == 0)
+                                {
+                                    Log.Error($"Could not find CR Task requirement for player {Name} at CR {taskClassInfo.Rank}");
+                                } else
+                                {
+                                    taskClassInfo.TasksRemaining = MathHelper.Clamp(taskClassInfo.TasksRemaining - 1, 0, tasksRequired);
+                                    if (taskClassInfo.TasksRemaining == 0)
+                                    {
+                                        taskClassInfo.AssignmentAvailable = true;
+                                        PacketSender.SendChatMsg(this, 
+                                            Strings.Quests.newspecialassignment.ToString(ClassBase.Get(quest.RelatedClassId).Name),
+                                            ChatMessageType.Quest, 
+                                            CustomColors.Quests.Completed);
+                                    } else
+                                    {
+                                        PacketSender.SendChatMsg(this, 
+                                            Strings.Quests.tasksremaining.ToString(taskClassInfo.TasksRemaining.ToString(), ClassBase.Get(quest.RelatedClassId).Name),
+                                            ChatMessageType.Quest, 
+                                            CustomColors.Quests.TaskUpdated);
+                                    }
+                                }
+                            } 
+                            else // Otherwise, check if they have an SA and alert them
+                            {
+                                if (taskClassInfo.Rank < Options.MaxClassRank)
+                                {
+                                    // Inform the player that this task will not count toward their next SA
+                                    PacketSender.SendChatMsg(this,
+                                            Strings.Quests.tasktoolow,
+                                            ChatMessageType.Quest,
+                                            CustomColors.Quests.TaskUpdated);
+                                }
+                                if (taskClassInfo.AssignmentAvailable)
+                                {
+                                    PacketSender.SendChatMsg(this,
+                                            Strings.Quests.newspecialassignment.ToString(ClassBase.Get(quest.RelatedClassId).Name),
+                                            ChatMessageType.Quest,
+                                            CustomColors.Quests.Completed);
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case QuestType.SpecialAssignment:
+                    if (quest.RelatedClassId != Guid.Empty && ClassInfo.TryGetValue(quest.RelatedClassId, out var assignmentClassInfo))
+                    {
+                        // TODO Alex: Fire common event of type "Class Rank Increased" with class parameter
+                        assignmentClassInfo.OnSpecialAssignment = false;
+                        assignmentClassInfo.OnTask = false;
+                        if (Options.SpecialAssignmentCountsTowardCooldown)
+                        {
+                            assignmentClassInfo.LastTaskStartTime = Globals.Timing.Milliseconds;
+                        }
+                        if (Options.PayoutSpecialAssignments)
+                        {
+                            assignmentClassInfo.TaskCompleted = true;
+                        }
+                        assignmentClassInfo.Rank = MathHelper.Clamp(assignmentClassInfo.Rank + 1, 0, Options.MaxClassRank);
+
+                        // Assign the new amount of tasks remaining
+                        assignmentClassInfo.TasksRemaining = TasksRemainingForClassRank(assignmentClassInfo.Rank);
+
+                        PacketSender.SendChatMsg(this,
+                            Strings.Quests.classrankincreased.ToString(ClassBase.Get(quest.RelatedClassId).Name, assignmentClassInfo.Rank.ToString()),
+                            ChatMessageType.Quest,
+                            CustomColors.Quests.Completed);
+
+                        if (assignmentClassInfo.TasksRemaining > 0)
+                        {
+                            PacketSender.SendChatMsg(this,
+                                Strings.Quests.tasksremaining.ToString(assignmentClassInfo.TasksRemaining.ToString(), ClassBase.Get(quest.RelatedClassId).Name),
+                                ChatMessageType.Quest,
+                                CustomColors.Quests.TaskUpdated);
+                        }
+                    }
+                    break;
+            }
+        }
+
+        private int TasksRemainingForClassRank(int classRank)
+        {
+            if (classRank == Options.MaxClassRank)
+            {
+                /*
+                 * Return a marker that we can use on login (since CR stuff can only be changed via server restart) to determine
+                 * whether we need to refresh this value or not.
+                 */
+                return -1; 
+            }
+
+            return Options.RequiredTasksPerClassRank.ToArray().ElementAtOrDefault(classRank);
         }
 
         private void UpdateGatherItemQuests(Guid itemId)
@@ -7184,6 +7438,23 @@ namespace Intersect.Server.Entities
                     {
                         
                         ClassInfo[cls.Id] = new PlayerClassStats();
+                    }
+                }
+                else
+                {
+                    if (ClassInfo[cls.Id].TasksRemaining == -1)
+                    {
+                        // Check to see if our max class rank has changed on the player since they last played, and if so, update their tasks remaining
+                        ClassInfo[cls.Id].TasksRemaining = TasksRemainingForClassRank(ClassInfo[cls.Id].Rank);
+                    }
+                    if (ClassInfo[cls.Id].AssignmentAvailable || ClassInfo[cls.Id].TasksRemaining == 0)
+                    {
+                        // Let the good people know they have a special assignment available to them
+                        ClassInfo[cls.Id].AssignmentAvailable = true;
+                        PacketSender.SendChatMsg(this,
+                            Strings.Quests.newspecialassignment.ToString(cls.Name),
+                            ChatMessageType.Quest,
+                            CustomColors.Quests.Completed);
                     }
                 }
             }

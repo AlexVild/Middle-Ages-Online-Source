@@ -79,6 +79,8 @@ namespace Intersect
         public LoggingOptions Logging = new LoggingOptions();
         
         public InstancingOptions Instancing = new InstancingOptions();
+        
+        public NPCGuildOptions NpcGuild = new NPCGuildOptions();
 
         public static Options Instance { get; private set; }
 
@@ -281,6 +283,16 @@ namespace Intersect
         public static int MaxSharedInstanceLives => Instance.Instancing.MaxSharedInstanceLives;
         
         public static bool BootAllFromInstanceWhenOutOfLives => Instance.Instancing.BootAllFromInstanceWhenOutOfLives;
+        
+        public static int MaxClassRank => Instance.NpcGuild.MaxClassRank;
+        
+        public static List<int> RequiredTasksPerClassRank => Instance.NpcGuild.RequiredTasksPerClassRank;
+        
+        public static bool SpecialAssignmentCountsTowardCooldown => Instance.NpcGuild.SpecialAssignmentCountsTowardCooldown;
+        
+        public static bool PayoutSpecialAssignments => Instance.NpcGuild.PayoutSpecialAssignments;
+        
+        public static long TaskCooldown => Instance.NpcGuild.TaskCooldownMs;
 
         public static LootOptions Loot => Instance.LootOpts;
 

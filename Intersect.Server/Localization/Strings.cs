@@ -1210,6 +1210,32 @@ namespace Intersect.Server.Localization
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString reqsnotmetforlist = @"You don't meet the requirements of any of the quests within the list {00}.";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString taskinprogressleave = @"You are currently doing a task for this guild. You can not leave until that task is completed.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString taskinprogress = @"You are already doing a task for this guild.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString newspecialassignment = @"You have a new Special Assignment waiting for you with the {00}s!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString tasksremaining = @"Complete {00} more {01} tasks to unlock a Special Assignment.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString tasktoolow = @"This task was not within your current Class Rank, and will not count toward a new Special Assignment.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString totaltaskscompleted = @"You have completed a total of {00} tasks for the {01}s guild.";
+            
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString classrankincreased = @"Your {00} Class Rank has increased to {01}!";
+            
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString notinguild = @"You cannot start this task, as you are not a member of the {00} guild.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString ranktoolow = @"You must have a Class Rank of {00} or higher to do this task.";
         }
 
         public sealed class RegexNamespace : LocaleNamespace

@@ -44,6 +44,8 @@
 
         InstanceVariableChange,
 
+        ClassRankIncreased,
+
     }
 
 }

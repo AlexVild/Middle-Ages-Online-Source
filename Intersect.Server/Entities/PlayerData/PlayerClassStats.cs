@@ -24,6 +24,8 @@ namespace Intersect.Server.Entities.PlayerData
         
         public bool TaskCompleted;
 
+        public long LastTaskStartTime;
+
         public PlayerClassStats()
         {
             Rank = 0;
@@ -34,6 +36,7 @@ namespace Intersect.Server.Entities.PlayerData
             OnTask = false;
             InGuild = false;
             TaskCompleted = false;
+            LastTaskStartTime = 0L;
         }
     }
 }
