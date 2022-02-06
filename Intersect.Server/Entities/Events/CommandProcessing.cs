@@ -2211,6 +2211,7 @@ namespace Intersect.Server.Entities.Events
 
             PacketSender.SendEntityDataToProximity(player);
         }
+
     }
 
 }

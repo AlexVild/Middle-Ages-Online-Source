@@ -5701,6 +5701,14 @@ namespace Intersect.Server.Entities
                         CustomColors.Quests.Declined);
                     return false;
                 }
+                if (relevantInfo.LastTaskStartTime + Options.TaskCooldown > Globals.Timing.Milliseconds)
+                {
+                    PacketSender.SendChatMsg(this,
+                        Strings.Quests.taskcooldown,
+                        ChatMessageType.Quest,
+                        CustomColors.Quests.Declined);
+                    return false;
+                }
             }
 
             return true;

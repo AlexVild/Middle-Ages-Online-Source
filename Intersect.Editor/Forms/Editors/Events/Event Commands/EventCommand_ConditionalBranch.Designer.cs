@@ -31,10 +31,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private void InitializeComponent()
         {
             this.grpConditional = new DarkUI.Controls.DarkGroupBox();
-            this.grpInPartyWith = new DarkUI.Controls.DarkGroupBox();
-            this.nudPartySize = new DarkUI.Controls.DarkNumericUpDown();
-            this.lblPartySize = new System.Windows.Forms.Label();
-            this.grpInventoryConditions = new DarkUI.Controls.DarkGroupBox();
             this.grpLevelStat = new DarkUI.Controls.DarkGroupBox();
             this.chkStatIgnoreBuffs = new DarkUI.Controls.DarkCheckBox();
             this.nudLevelStatValue = new DarkUI.Controls.DarkNumericUpDown();
@@ -43,6 +39,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.lblLvlStatValue = new System.Windows.Forms.Label();
             this.cmbLevelComparator = new DarkUI.Controls.DarkComboBox();
             this.lblLevelComparator = new System.Windows.Forms.Label();
+            this.grpInPartyWith = new DarkUI.Controls.DarkGroupBox();
+            this.nudPartySize = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblPartySize = new System.Windows.Forms.Label();
+            this.grpInventoryConditions = new DarkUI.Controls.DarkGroupBox();
             this.chkBank = new DarkUI.Controls.DarkCheckBox();
             this.grpVariableAmount = new DarkUI.Controls.DarkGroupBox();
             this.rdoInvInstanceVariable = new DarkUI.Controls.DarkRadioButton();
@@ -152,12 +152,14 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpEquippedItem = new DarkUI.Controls.DarkGroupBox();
             this.cmbEquippedItem = new DarkUI.Controls.DarkComboBox();
             this.lblEquippedItem = new System.Windows.Forms.Label();
+            this.nudClassRank = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblClassRank = new System.Windows.Forms.Label();
             this.grpConditional.SuspendLayout();
+            this.grpLevelStat.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudLevelStatValue)).BeginInit();
             this.grpInPartyWith.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudPartySize)).BeginInit();
             this.grpInventoryConditions.SuspendLayout();
-            this.grpLevelStat.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudLevelStatValue)).BeginInit();
             this.grpVariableAmount.SuspendLayout();
             this.grpManualAmount.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudItemAmount)).BeginInit();
@@ -183,12 +185,14 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpMapIs.SuspendLayout();
             this.grpGender.SuspendLayout();
             this.grpEquippedItem.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudClassRank)).BeginInit();
             this.SuspendLayout();
             // 
             // grpConditional
             // 
             this.grpConditional.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.grpConditional.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpConditional.Controls.Add(this.grpClass);
             this.grpConditional.Controls.Add(this.grpLevelStat);
             this.grpConditional.Controls.Add(this.grpInPartyWith);
             this.grpConditional.Controls.Add(this.grpInventoryConditions);
@@ -210,7 +214,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpConditional.Controls.Add(this.grpPowerIs);
             this.grpConditional.Controls.Add(this.grpSelfSwitch);
             this.grpConditional.Controls.Add(this.grpSpell);
-            this.grpConditional.Controls.Add(this.grpClass);
             this.grpConditional.Controls.Add(this.grpMapIs);
             this.grpConditional.Controls.Add(this.grpGender);
             this.grpConditional.Controls.Add(this.grpEquippedItem);
@@ -221,71 +224,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpConditional.TabIndex = 17;
             this.grpConditional.TabStop = false;
             this.grpConditional.Text = "Conditional";
-            // 
-            // grpInPartyWith
-            // 
-            this.grpInPartyWith.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.grpInPartyWith.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpInPartyWith.Controls.Add(this.nudPartySize);
-            this.grpInPartyWith.Controls.Add(this.lblPartySize);
-            this.grpInPartyWith.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpInPartyWith.Location = new System.Drawing.Point(8, 37);
-            this.grpInPartyWith.Name = "grpInPartyWith";
-            this.grpInPartyWith.Size = new System.Drawing.Size(262, 59);
-            this.grpInPartyWith.TabIndex = 33;
-            this.grpInPartyWith.TabStop = false;
-            this.grpInPartyWith.Text = "In Party With...";
-            // 
-            // nudPartySize
-            // 
-            this.nudPartySize.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudPartySize.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudPartySize.Location = new System.Drawing.Point(80, 25);
-            this.nudPartySize.Maximum = new decimal(new int[] {
-            100000,
-            0,
-            0,
-            0});
-            this.nudPartySize.Minimum = new decimal(new int[] {
-            2,
-            0,
-            0,
-            0});
-            this.nudPartySize.Name = "nudPartySize";
-            this.nudPartySize.Size = new System.Drawing.Size(178, 20);
-            this.nudPartySize.TabIndex = 8;
-            this.nudPartySize.Value = new decimal(new int[] {
-            2,
-            0,
-            0,
-            0});
-            // 
-            // lblPartySize
-            // 
-            this.lblPartySize.AutoSize = true;
-            this.lblPartySize.Location = new System.Drawing.Point(10, 27);
-            this.lblPartySize.Name = "lblPartySize";
-            this.lblPartySize.Size = new System.Drawing.Size(57, 13);
-            this.lblPartySize.TabIndex = 4;
-            this.lblPartySize.Text = "Party Size:";
-            // 
-            // grpInventoryConditions
-            // 
-            this.grpInventoryConditions.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.grpInventoryConditions.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpInventoryConditions.Controls.Add(this.chkBank);
-            this.grpInventoryConditions.Controls.Add(this.grpVariableAmount);
-            this.grpInventoryConditions.Controls.Add(this.grpManualAmount);
-            this.grpInventoryConditions.Controls.Add(this.grpAmountType);
-            this.grpInventoryConditions.Controls.Add(this.cmbItem);
-            this.grpInventoryConditions.Controls.Add(this.lblItem);
-            this.grpInventoryConditions.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpInventoryConditions.Location = new System.Drawing.Point(9, 40);
-            this.grpInventoryConditions.Name = "grpInventoryConditions";
-            this.grpInventoryConditions.Size = new System.Drawing.Size(262, 268);
-            this.grpInventoryConditions.TabIndex = 25;
-            this.grpInventoryConditions.TabStop = false;
-            this.grpInventoryConditions.Text = "Has Item";
             // 
             // grpLevelStat
             // 
@@ -406,6 +344,71 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.lblLevelComparator.Size = new System.Drawing.Size(64, 13);
             this.lblLevelComparator.TabIndex = 2;
             this.lblLevelComparator.Text = "Comparator:";
+            // 
+            // grpInPartyWith
+            // 
+            this.grpInPartyWith.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.grpInPartyWith.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpInPartyWith.Controls.Add(this.nudPartySize);
+            this.grpInPartyWith.Controls.Add(this.lblPartySize);
+            this.grpInPartyWith.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpInPartyWith.Location = new System.Drawing.Point(8, 37);
+            this.grpInPartyWith.Name = "grpInPartyWith";
+            this.grpInPartyWith.Size = new System.Drawing.Size(262, 59);
+            this.grpInPartyWith.TabIndex = 33;
+            this.grpInPartyWith.TabStop = false;
+            this.grpInPartyWith.Text = "In Party With...";
+            // 
+            // nudPartySize
+            // 
+            this.nudPartySize.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudPartySize.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudPartySize.Location = new System.Drawing.Point(80, 25);
+            this.nudPartySize.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.nudPartySize.Minimum = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            this.nudPartySize.Name = "nudPartySize";
+            this.nudPartySize.Size = new System.Drawing.Size(178, 20);
+            this.nudPartySize.TabIndex = 8;
+            this.nudPartySize.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            // 
+            // lblPartySize
+            // 
+            this.lblPartySize.AutoSize = true;
+            this.lblPartySize.Location = new System.Drawing.Point(10, 27);
+            this.lblPartySize.Name = "lblPartySize";
+            this.lblPartySize.Size = new System.Drawing.Size(57, 13);
+            this.lblPartySize.TabIndex = 4;
+            this.lblPartySize.Text = "Party Size:";
+            // 
+            // grpInventoryConditions
+            // 
+            this.grpInventoryConditions.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.grpInventoryConditions.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpInventoryConditions.Controls.Add(this.chkBank);
+            this.grpInventoryConditions.Controls.Add(this.grpVariableAmount);
+            this.grpInventoryConditions.Controls.Add(this.grpManualAmount);
+            this.grpInventoryConditions.Controls.Add(this.grpAmountType);
+            this.grpInventoryConditions.Controls.Add(this.cmbItem);
+            this.grpInventoryConditions.Controls.Add(this.lblItem);
+            this.grpInventoryConditions.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpInventoryConditions.Location = new System.Drawing.Point(9, 40);
+            this.grpInventoryConditions.Name = "grpInventoryConditions";
+            this.grpInventoryConditions.Size = new System.Drawing.Size(262, 268);
+            this.grpInventoryConditions.TabIndex = 25;
+            this.grpInventoryConditions.TabStop = false;
+            this.grpInventoryConditions.Text = "Has Item";
             // 
             // chkBank
             // 
@@ -1822,12 +1825,14 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             this.grpClass.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.grpClass.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpClass.Controls.Add(this.lblClassRank);
+            this.grpClass.Controls.Add(this.nudClassRank);
             this.grpClass.Controls.Add(this.cmbClass);
             this.grpClass.Controls.Add(this.lblClass);
             this.grpClass.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpClass.Location = new System.Drawing.Point(9, 40);
             this.grpClass.Name = "grpClass";
-            this.grpClass.Size = new System.Drawing.Size(262, 52);
+            this.grpClass.Size = new System.Drawing.Size(262, 89);
             this.grpClass.TabIndex = 27;
             this.grpClass.TabStop = false;
             this.grpClass.Text = "Class is";
@@ -1970,6 +1975,34 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.lblEquippedItem.TabIndex = 2;
             this.lblEquippedItem.Text = "Item:";
             // 
+            // nudClassRank
+            // 
+            this.nudClassRank.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudClassRank.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudClassRank.Location = new System.Drawing.Point(178, 51);
+            this.nudClassRank.Maximum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.nudClassRank.Name = "nudClassRank";
+            this.nudClassRank.Size = new System.Drawing.Size(75, 20);
+            this.nudClassRank.TabIndex = 33;
+            this.nudClassRank.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            // 
+            // lblClassRank
+            // 
+            this.lblClassRank.AutoSize = true;
+            this.lblClassRank.Location = new System.Drawing.Point(132, 54);
+            this.lblClassRank.Name = "lblClassRank";
+            this.lblClassRank.Size = new System.Drawing.Size(36, 13);
+            this.lblClassRank.TabIndex = 34;
+            this.lblClassRank.Text = "Rank:";
+            // 
             // EventCommandConditionalBranch
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1981,14 +2014,14 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.Size = new System.Drawing.Size(285, 471);
             this.grpConditional.ResumeLayout(false);
             this.grpConditional.PerformLayout();
+            this.grpLevelStat.ResumeLayout(false);
+            this.grpLevelStat.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudLevelStatValue)).EndInit();
             this.grpInPartyWith.ResumeLayout(false);
             this.grpInPartyWith.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudPartySize)).EndInit();
             this.grpInventoryConditions.ResumeLayout(false);
             this.grpInventoryConditions.PerformLayout();
-            this.grpLevelStat.ResumeLayout(false);
-            this.grpLevelStat.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudLevelStatValue)).EndInit();
             this.grpVariableAmount.ResumeLayout(false);
             this.grpVariableAmount.PerformLayout();
             this.grpManualAmount.ResumeLayout(false);
@@ -2035,6 +2068,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpGender.PerformLayout();
             this.grpEquippedItem.ResumeLayout(false);
             this.grpEquippedItem.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudClassRank)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -2163,5 +2197,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private DarkGroupBox grpInPartyWith;
         private DarkNumericUpDown nudPartySize;
         private System.Windows.Forms.Label lblPartySize;
+        private System.Windows.Forms.Label lblClassRank;
+        private DarkNumericUpDown nudClassRank;
     }
 }

@@ -109,6 +109,12 @@ namespace Intersect.Editor.Forms.Editors.Quest
 
             cmbQuestType.Items.AddRange(Enum.GetNames(typeof(QuestType)));
             cmbClass.Items.AddRange(ClassBase.Names);
+            if (cmbClass.Items.Count > 0)
+            {
+                cmbClass.SelectedIndex = 0;
+            }
+
+            nudClassRank.Maximum = Options.MaxClassRank;
 
             lblSortOrder.Text = Strings.QuestEditor.order;
 
@@ -290,6 +296,10 @@ namespace Intersect.Editor.Forms.Editors.Quest
                 cmbQuestType.SelectedIndex = (int) mEditorItem.QuestType;
                 cmbClass.SelectedIndex = ClassBase.ListIndex(mEditorItem.RelatedClassId);
                 nudClassRank.Value = mEditorItem.QuestClassRank;
+                if (nudClassRank.Value > Options.MaxClassRank)
+                {
+                    nudClassRank.Value = Options.MaxClassRank;
+                }
                 HandleAdditionalOptionsDisplay(mEditorItem.QuestType);
             }
             else

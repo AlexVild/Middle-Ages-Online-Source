@@ -588,6 +588,81 @@ namespace Intersect.Server.Entities.Events
             return player.Party.Count >= condition.Members && player.Party.Count > 1;
         }
 
+        public static bool MeetsCondition(
+            InNpcGuildWithRankCondition condition,
+            Player player,
+            Event eventInstance,
+            QuestBase questBase
+        )
+        {
+            if (player != null && player.ClassInfo.ContainsKey(condition.ClassId))
+            {
+                var classInfo = player.ClassInfo[condition.ClassId];
+                return classInfo.InGuild && classInfo.Rank >= condition.ClassRank;
+            }
+            return false;
+        }
+
+        public static bool MeetsCondition(
+            HasSpecialAssignmentForClassCondition condition,
+            Player player,
+            Event eventInstance,
+            QuestBase questBase
+        )
+        {
+            if (player != null && player.ClassInfo.ContainsKey(condition.ClassId))
+            {
+                var classInfo = player.ClassInfo[condition.ClassId];
+                return classInfo.AssignmentAvailable;
+            }
+            return false;
+        }
+
+        public static bool MeetsCondition(
+            IsOnGuildTaskForClassCondition condition,
+            Player player,
+            Event eventInstance,
+            QuestBase questBase
+        )
+        {
+            if (player != null && player.ClassInfo.ContainsKey(condition.ClassId))
+            {
+                var classInfo = player.ClassInfo[condition.ClassId];
+                return classInfo.OnTask;
+            }
+            return false;
+        }
+
+        public static bool MeetsCondition(
+            HasTaskCompletedForClassCondition condition,
+            Player player,
+            Event eventInstance,
+            QuestBase questBase
+        )
+        {
+            if (player != null && player.ClassInfo.ContainsKey(condition.ClassId))
+            {
+                var classInfo = player.ClassInfo[condition.ClassId];
+                return classInfo.TaskCompleted;
+            }
+            return false;
+        }
+
+        public static bool MeetsCondition(
+            TaskIsOnCooldownForClassCondition condition,
+            Player player,
+            Event eventInstance,
+            QuestBase questBase
+        )
+        {
+            if (player != null && player.ClassInfo.ContainsKey(condition.ClassId))
+            {
+                var classInfo = player.ClassInfo[condition.ClassId];
+                return classInfo.LastTaskStartTime + Options.TaskCooldown > Globals.Timing.Milliseconds;
+            }
+            return false;
+        }
+
         //Variable Comparison Processing
 
         public static bool CheckVariableComparison(

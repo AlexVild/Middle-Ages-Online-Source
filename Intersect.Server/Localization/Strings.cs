@@ -1236,6 +1236,9 @@ namespace Intersect.Server.Localization
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString ranktoolow = @"You must have a Class Rank of {00} or higher to do this task.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString taskcooldown = @"Not enough time has passed since you last did a task.";
         }
 
         public sealed class RegexNamespace : LocaleNamespace

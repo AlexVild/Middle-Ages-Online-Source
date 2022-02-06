@@ -334,6 +334,30 @@ namespace Intersect.Editor.Localization
             return Strings.EventConditionDesc.inpartywith.ToString(condition.Members);
         }
 
+        public static string GetEventConditionalDesc(InNpcGuildWithRankCondition condition)
+        {
+            return Strings.EventConditionDesc.innpcguildwithrank.ToString(ClassBase.Get(condition.ClassId).Name, condition.ClassRank.ToString());
+        }
+
+        public static string GetEventConditionalDesc(HasSpecialAssignmentForClassCondition condition)
+        {
+            return Strings.EventConditionDesc.specialassignment.ToString(ClassBase.Get(condition.ClassId).Name);
+        }
+
+        public static string GetEventConditionalDesc(IsOnGuildTaskForClassCondition condition)
+        {
+            return Strings.EventConditionDesc.isonguildtask.ToString(ClassBase.Get(condition.ClassId).Name);
+        }
+        
+        public static string GetEventConditionalDesc(HasTaskCompletedForClassCondition condition)
+        {
+            return Strings.EventConditionDesc.taskcompleted.ToString(ClassBase.Get(condition.ClassId).Name);
+        }
+
+        public static string GetEventConditionalDesc(TaskIsOnCooldownForClassCondition condition)
+        {
+            return Strings.EventConditionDesc.taskoncooldown.ToString(ClassBase.Get(condition.ClassId).Name);
+        }
 
         public static string GetVariableComparisonString(VariableCompaison comparison)
         {
@@ -2178,6 +2202,11 @@ Tick timer saved in server config.json.";
                 {23, @"Has something equipped in slot..." },
                 {24, @"Is in vehicle"},
                 {25, @"Is in party with..."},
+                {26, @"In NPC Guild for class With rank..."},
+                {27, @"Has special assignment for class..."},
+                {28, @"Has task in progress for class..."},
+                {29, @"Has task completed for class..."},
+                {30, @"Has task on cooldown for class..."},
             };
 
             public static LocalizedString endrange = @"End Range:";
@@ -2446,6 +2475,21 @@ Tick timer saved in server config.json.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString inpartywith = @"Player is in party with at least {00} members";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString innpcguildwithrank = @"In NPC Guild {00} with rank {01} or higher";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString specialassignment = @"Has special assignment available for {00}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString isonguildtask = @"Is currently on task for {00}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString taskcompleted = @"Has task completed for {00}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString taskoncooldown = @"Task cooldown in effect for {00}";
 
             public static Dictionary<int, LocalizedString> selfswitches = new Dictionary<int, LocalizedString>
             {

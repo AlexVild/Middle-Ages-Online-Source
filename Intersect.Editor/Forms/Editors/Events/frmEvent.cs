@@ -1857,7 +1857,13 @@ namespace Intersect.Editor.Forms.Editors.Events
                     cmbClass.Show();
                     lblClass.Show();
                     cmbClass.Items.AddRange(ClassBase.Names);
-                    cmbClass.SelectedIndex = ClassBase.ListIndex(CurrentPage.TriggerId);
+                    if (ClassBase.ListIndex(CurrentPage.TriggerId) > -1)
+                    {
+                        cmbClass.SelectedIndex = ClassBase.ListIndex(CurrentPage.TriggerId);
+                    } else if (cmbClass.Items.Count > 0)
+                    {
+                        cmbClass.SelectedIndex = 0;
+                    }
                 }
             }
         }

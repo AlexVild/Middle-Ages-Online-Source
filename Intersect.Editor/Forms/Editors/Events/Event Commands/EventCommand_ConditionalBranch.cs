@@ -423,6 +423,46 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     Condition = new InPartyWithCondition();
 
                     break;
+                case ConditionTypes.InNpcGuildWithRank:
+                    Condition = new InNpcGuildWithRankCondition();
+                    if (cmbClass.Items.Count > 0)
+                    {
+                        cmbClass.SelectedIndex = 0;
+                    }
+
+                    break;
+                case ConditionTypes.HasSpecialAssignmentForClass:
+                    Condition = new HasSpecialAssignmentForClassCondition();
+                    if (cmbClass.Items.Count > 0)
+                    {
+                        cmbClass.SelectedIndex = 0;
+                    }
+
+                    break;
+                case ConditionTypes.IsOnGuildTaskForClass:
+                    Condition = new IsOnGuildTaskForClassCondition();
+                    if (cmbClass.Items.Count > 0)
+                    {
+                        cmbClass.SelectedIndex = 0;
+                    }
+
+                    break;
+                case ConditionTypes.HasTaskCompletedForClass:
+                    Condition = new HasTaskCompletedForClassCondition();
+                    if (cmbClass.Items.Count > 0)
+                    {
+                        cmbClass.SelectedIndex = 0;
+                    }
+
+                    break;
+                case ConditionTypes.TaskIsOnCooldownForClass:
+                    Condition = new TaskIsOnCooldownForClassCondition();
+                    if (cmbClass.Items.Count > 0)
+                    {
+                        cmbClass.SelectedIndex = 0;
+                    }
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -449,6 +489,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             grpTag.Hide();
             grpEquipmentSlot.Hide();
             grpInPartyWith.Hide();
+            lblClassRank.Hide();
+            nudClassRank.Hide();
             switch (type)
             {
                 case ConditionTypes.VariableIs:
@@ -596,6 +638,31 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     break;
                 case ConditionTypes.InPartyWith:
                     grpInPartyWith.Show();
+
+                    break;
+                case ConditionTypes.InNpcGuildWithRank:
+                    grpClass.Show();
+                    cmbClass.Items.Clear();
+                    cmbClass.Items.AddRange(ClassBase.Names);
+                    if (cmbClass.Items.Count > 0)
+                    {
+                        cmbClass.SelectedIndex = 0;
+                    }
+
+                    nudClassRank.Show();
+                    nudClassRank.Maximum = Options.MaxClassRank;
+                    break;
+                case ConditionTypes.HasSpecialAssignmentForClass:
+                case ConditionTypes.IsOnGuildTaskForClass:
+                case ConditionTypes.HasTaskCompletedForClass:
+                case ConditionTypes.TaskIsOnCooldownForClass:
+                    grpClass.Show();
+                    cmbClass.Items.Clear();
+                    cmbClass.Items.AddRange(ClassBase.Names);
+                    if (cmbClass.Items.Count > 0)
+                    {
+                        cmbClass.SelectedIndex = 0;
+                    }
 
                     break;
                 default:
@@ -1369,6 +1436,39 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             nudPartySize.Value = condition.Members;
         }
 
+        private void SetupFormValues(InNpcGuildWithRankCondition condition)
+        {
+            cmbClass.SelectedIndex = ClassBase.ListIndex(condition.ClassId);
+            if (condition.ClassRank > Options.MaxClassRank)
+            {
+                nudClassRank.Value = Options.MaxClassRank;
+            }
+            else
+            {
+                nudClassRank.Value = condition.ClassRank;
+            }
+        }
+
+        private void SetupFormValues(HasSpecialAssignmentForClassCondition condition)
+        {
+            cmbClass.SelectedIndex = ClassBase.ListIndex(condition.ClassId);
+        }
+
+        private void SetupFormValues(IsOnGuildTaskForClassCondition condition)
+        {
+            cmbClass.SelectedIndex = ClassBase.ListIndex(condition.ClassId);
+        }
+
+        private void SetupFormValues(HasTaskCompletedForClassCondition condition)
+        {
+            cmbClass.SelectedIndex = ClassBase.ListIndex(condition.ClassId);
+        }
+
+        private void SetupFormValues(TaskIsOnCooldownForClassCondition condition)
+        {
+            cmbClass.SelectedIndex = ClassBase.ListIndex(condition.ClassId);
+        }
+
         #endregion
 
         #region "SaveFormValues"
@@ -1580,6 +1680,32 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private void SaveFormValues(InPartyWithCondition condition)
         {
             condition.Members = (int) nudPartySize.Value;
+        }
+
+        private void SaveFormValues(InNpcGuildWithRankCondition condition)
+        {
+            condition.ClassId = ClassBase.IdFromList(cmbClass.SelectedIndex);
+            condition.ClassRank = (int)nudClassRank.Value;
+        }
+
+        private void SaveFormValues(HasSpecialAssignmentForClassCondition condition)
+        {
+            condition.ClassId = ClassBase.IdFromList(cmbClass.SelectedIndex);
+        }
+
+        private void SaveFormValues(IsOnGuildTaskForClassCondition condition)
+        {
+            condition.ClassId = ClassBase.IdFromList(cmbClass.SelectedIndex);
+        }
+
+        private void SaveFormValues(HasTaskCompletedForClassCondition condition)
+        {
+            condition.ClassId = ClassBase.IdFromList(cmbClass.SelectedIndex);
+        }
+
+        private void SaveFormValues(TaskIsOnCooldownForClassCondition condition)
+        {
+            condition.ClassId = ClassBase.IdFromList(cmbClass.SelectedIndex);
         }
 
         #endregion

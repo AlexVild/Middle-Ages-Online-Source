@@ -54,6 +54,16 @@ namespace Intersect.GameObjects.Events
 
         InPartyWith,
 
+        InNpcGuildWithRank,
+
+        HasSpecialAssignmentForClass,
+
+        IsOnGuildTaskForClass,
+
+        HasTaskCompletedForClass,
+
+        TaskIsOnCooldownForClass,
+
     }
 
     public class Condition
@@ -358,6 +368,43 @@ namespace Intersect.GameObjects.Events
         public override ConditionTypes Type { get; } = ConditionTypes.InPartyWith;
 
         public int Members { get; set; }
+    }
+
+    public class InNpcGuildWithRankCondition : Condition
+    {
+        public override ConditionTypes Type { get; } = ConditionTypes.InNpcGuildWithRank;
+
+        public Guid ClassId { get; set; }
+
+        public int ClassRank { get; set; }
+    }
+
+    public class HasSpecialAssignmentForClassCondition : Condition
+    {
+        public override ConditionTypes Type { get; } = ConditionTypes.HasSpecialAssignmentForClass;
+
+        public Guid ClassId { get; set; }
+    }
+
+    public class IsOnGuildTaskForClassCondition : Condition
+    {
+        public override ConditionTypes Type { get; } = ConditionTypes.IsOnGuildTaskForClass;
+
+        public Guid ClassId { get; set; }
+    }
+
+    public class HasTaskCompletedForClassCondition : Condition
+    {
+        public override ConditionTypes Type { get; } = ConditionTypes.HasTaskCompletedForClass;
+
+        public Guid ClassId { get; set; }
+    }
+
+    public class TaskIsOnCooldownForClassCondition : Condition
+    {
+        public override ConditionTypes Type { get; } = ConditionTypes.TaskIsOnCooldownForClass;
+
+        public Guid ClassId { get; set; }
     }
 
     public class VariableCompaison
