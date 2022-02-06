@@ -109,11 +109,11 @@ namespace Intersect.Server.Entities
             {
 
                 // Have we collided with this entity before? If so, cancel out.
-                if (mEntitiesCollided.Contains(en.Id))
+                if (mEntitiesCollided.Contains(targetEntity.Id))
                 {
                     if (!Parent.Base.PierceTarget)
                     {
-                        if (Options.Instance.Passability.Passable[(int)en.Map.ZoneType] && !Parent.Spell.Combat.Friendly)
+                        if (Options.Instance.Passability.Passable[(int)targetEntity.Map.ZoneType] && Parent.Spell != null && !Parent.Spell.Combat.Friendly)
                         {
                             return false;
                         } else
@@ -126,7 +126,7 @@ namespace Intersect.Server.Entities
                         return false;
                     }
                 }
-                mEntitiesCollided.Add(en.Id);
+                mEntitiesCollided.Add(targetEntity.Id);
 
                 if (targetEntity.GetType() == typeof(Player)) //Player
                 {
