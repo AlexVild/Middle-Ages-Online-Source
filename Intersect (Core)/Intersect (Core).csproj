@@ -222,6 +222,7 @@
     <Compile Include="Config\LoggingOptions.cs" />
     <Compile Include="Config\LootOptions.cs" />
     <Compile Include="Config\MetricsOptions.cs" />
+    <Compile Include="Config\NPCGuildOptions.cs" />
     <Compile Include="Config\NpcOptions.cs" />
     <Compile Include="Config\PacketOptions.cs" />
     <Compile Include="Config\PacketSecurityOptions.cs" />

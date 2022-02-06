@@ -1812,12 +1812,14 @@ namespace Intersect.Editor.Forms.Editors.Events
             txtCommand.Hide();
             lblCommand.Hide();
             lblVariableTrigger.Hide();
+            lblClass.Hide();
             cmbVariable.Hide();
+            cmbClass.Hide();
 
             if (MyEvent.CommonEvent)
             {
                 cmbVariable.Items.Clear();
-
+                cmbClass.Items.Clear();
 
                 if (cmbTrigger.SelectedIndex == (int)CommonEventTrigger.SlashCommand)
                 {
@@ -1829,6 +1831,7 @@ namespace Intersect.Editor.Forms.Editors.Events
                 else if (cmbTrigger.SelectedIndex == (int)CommonEventTrigger.PlayerVariableChange)
                 {
                     cmbVariable.Show();
+                    lblVariableTrigger.Show();
                     cmbVariable.Items.Add(Strings.General.none);
                     cmbVariable.Items.AddRange(PlayerVariableBase.Names);
                     cmbVariable.SelectedIndex = PlayerVariableBase.ListIndex(CurrentPage.TriggerId) + 1;
@@ -1836,6 +1839,7 @@ namespace Intersect.Editor.Forms.Editors.Events
                 else if (cmbTrigger.SelectedIndex == (int)CommonEventTrigger.ServerVariableChange)
                 {
                     cmbVariable.Show();
+                    lblVariableTrigger.Show();
                     cmbVariable.Items.Add(Strings.General.none);
                     cmbVariable.Items.AddRange(ServerVariableBase.Names);
                     cmbVariable.SelectedIndex = ServerVariableBase.ListIndex(CurrentPage.TriggerId) + 1;
@@ -1843,9 +1847,17 @@ namespace Intersect.Editor.Forms.Editors.Events
                 else if (cmbTrigger.SelectedIndex == (int)CommonEventTrigger.InstanceVariableChange)
                 {
                     cmbVariable.Show();
+                    lblVariableTrigger.Show();
                     cmbVariable.Items.Add(Strings.General.none);
                     cmbVariable.Items.AddRange(InstanceVariableBase.Names);
                     cmbVariable.SelectedIndex = InstanceVariableBase.ListIndex(CurrentPage.TriggerId) + 1;
+                }
+                else if (cmbTrigger.SelectedIndex == (int)CommonEventTrigger.ClassRankIncreased)
+                {
+                    cmbClass.Show();
+                    lblClass.Show();
+                    cmbClass.Items.AddRange(ClassBase.Names);
+                    cmbClass.SelectedIndex = ClassBase.ListIndex(CurrentPage.TriggerId);
                 }
             }
         }
@@ -1951,6 +1963,17 @@ namespace Intersect.Editor.Forms.Editors.Events
             if (!MyEvent.CommonEvent)
             {
                 CurrentPage.QuestAnimationId = AnimationBase.IdFromList(cmbQuestAnimation.SelectedIndex - 1);
+            }
+        }
+
+        private void cmbClass_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (MyEvent.CommonEvent)
+            {
+                if (cmbTrigger.SelectedIndex == (int)CommonEventTrigger.ClassRankIncreased)
+                {
+                    CurrentPage.TriggerId = ClassBase.IdFromList(cmbClass.SelectedIndex);
+                }
             }
         }
     }

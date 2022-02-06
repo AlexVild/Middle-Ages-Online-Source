@@ -6017,9 +6017,7 @@ namespace Intersect.Server.Entities
                                 if (i == quest.Tasks.Count - 1)
                                 {
                                     //Complete Quest
-                                    questProgress.Completed = true;
-                                    questProgress.TaskId = Guid.Empty;
-                                    questProgress.TaskProgress = -1;
+                                    MarkQuestComplete(quest, questProgress);
                                     if (quest.Tasks[i].CompletionEvent != null)
                                     {
                                         StartCommonEvent(quest.Tasks[i].CompletionEvent);
@@ -6068,16 +6066,7 @@ namespace Intersect.Server.Entities
                 var questProgress = FindQuest(questId);
                 if (questProgress != null)
                 {
-                    // Handle quests that aren't "normal" and should do some management on completion
-                    if (quest.QuestType != QuestType.Normal)
-                    {
-                        HandleSpecialQuestCompletion(quest, questProgress);
-                    }
-
-                    //Complete Quest
-                    questProgress.Completed = true;
-                    questProgress.TaskId = Guid.Empty;
-                    questProgress.TaskProgress = -1;
+                    MarkQuestComplete(quest, questProgress);
                     if (!skipCompletionEvent)
                     {
                         StartCommonEvent(EventBase.Get(quest.EndEventId));
@@ -6087,6 +6076,25 @@ namespace Intersect.Server.Entities
                     PacketSender.SendQuestsProgress(this);
                 }
             }
+        }
+
+        /// <summary>
+        /// Performs common handling of quest/class info state on a quest being completed
+        /// </summary>
+        /// <param name="quest">Quest info from DB</param>
+        /// <param name="questProgress">Players tracking of the quest, to mark as completed</param>
+        private void MarkQuestComplete(QuestBase quest, Quest questProgress)
+        {
+            // Handle quests that aren't "normal" and should do some management on completion
+            if (quest.QuestType != QuestType.Normal)
+            {
+                HandleSpecialQuestCompletion(quest, questProgress);
+            }
+
+            //Complete Quest
+            questProgress.Completed = true;
+            questProgress.TaskId = Guid.Empty;
+            questProgress.TaskProgress = -1;
         }
 
         /// <summary>
@@ -6221,7 +6229,12 @@ namespace Intersect.Server.Entities
                         {
                             assignmentClassInfo.TaskCompleted = true;
                         }
+                        var oldRank = assignmentClassInfo.Rank;
                         assignmentClassInfo.Rank = MathHelper.Clamp(assignmentClassInfo.Rank + 1, 0, Options.MaxClassRank);
+                        if (oldRank != assignmentClassInfo.Rank)
+                        {
+                            StartCommonEventsWithTrigger(Enums.CommonEventTrigger.ClassRankIncreased, "", quest.RelatedClassId.ToString());
+                        }
 
                         // Assign the new amount of tasks remaining
                         assignmentClassInfo.TasksRemaining = TasksRemainingForClassRank(assignmentClassInfo.Rank);
@@ -6807,6 +6820,12 @@ namespace Intersect.Server.Entities
                         // If a var change event was triggered, but not for the var set for this Common Event, back out of processing
                         var varChangeEvent = (trigger == CommonEventTrigger.PlayerVariableChange || trigger == CommonEventTrigger.InstanceVariableChange || trigger == CommonEventTrigger.ServerVariableChange);
                         if (varChangeEvent && param != baseEvent.Pages[i].TriggerId.ToString())
+                        {
+                            continue;
+                        }
+
+                        // If this is a class rank increase event, but not for the correct class type, back out of processing
+                        if (trigger == CommonEventTrigger.ClassRankIncreased && param != baseEvent.Pages[i].TriggerId.ToString())
                         {
                             continue;
                         }

@@ -748,6 +748,7 @@ namespace Intersect.Editor.Forms.Editors.Quest
             switch(type)
             {
                 case QuestType.Task:
+                case QuestType.SpecialAssignment:
                     grpTaskOptions.Show();
                     break;
             }

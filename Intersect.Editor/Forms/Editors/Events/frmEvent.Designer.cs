@@ -197,6 +197,8 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.lblType = new System.Windows.Forms.Label();
             this.cmbMoveType = new DarkUI.Controls.DarkComboBox();
             this.grpTriggers = new DarkUI.Controls.DarkGroupBox();
+            this.lblClass = new System.Windows.Forms.Label();
+            this.cmbClass = new DarkUI.Controls.DarkComboBox();
             this.cmbVariable = new DarkUI.Controls.DarkComboBox();
             this.lblVariableTrigger = new System.Windows.Forms.Label();
             this.txtCommand = new DarkUI.Controls.DarkTextBox();
@@ -740,6 +742,8 @@ namespace Intersect.Editor.Forms.Editors.Events
             // 
             this.grpTriggers.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpTriggers.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpTriggers.Controls.Add(this.lblClass);
+            this.grpTriggers.Controls.Add(this.cmbClass);
             this.grpTriggers.Controls.Add(this.cmbVariable);
             this.grpTriggers.Controls.Add(this.lblVariableTrigger);
             this.grpTriggers.Controls.Add(this.txtCommand);
@@ -754,6 +758,37 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.grpTriggers.TabIndex = 21;
             this.grpTriggers.TabStop = false;
             this.grpTriggers.Text = "Trigger";
+            // 
+            // lblClass
+            // 
+            this.lblClass.AutoSize = true;
+            this.lblClass.Location = new System.Drawing.Point(140, 17);
+            this.lblClass.Name = "lblClass";
+            this.lblClass.Size = new System.Drawing.Size(35, 13);
+            this.lblClass.TabIndex = 16;
+            this.lblClass.Text = "Class:";
+            this.lblClass.Visible = false;
+            // 
+            // cmbClass
+            // 
+            this.cmbClass.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbClass.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbClass.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbClass.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbClass.DrawDropdownHoverOutline = false;
+            this.cmbClass.DrawFocusRectangle = false;
+            this.cmbClass.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbClass.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbClass.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbClass.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbClass.FormattingEnabled = true;
+            this.cmbClass.Location = new System.Drawing.Point(183, 13);
+            this.cmbClass.Name = "cmbClass";
+            this.cmbClass.Size = new System.Drawing.Size(130, 21);
+            this.cmbClass.TabIndex = 15;
+            this.cmbClass.Text = "None";
+            this.cmbClass.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbClass.SelectedIndexChanged += new System.EventHandler(this.cmbClass_SelectedIndexChanged);
             // 
             // cmbVariable
             // 
@@ -1213,13 +1248,13 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.btnDelete});
             this.commandMenu.Name = "commandMenu";
             this.commandMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.commandMenu.Size = new System.Drawing.Size(108, 136);
+            this.commandMenu.Size = new System.Drawing.Size(114, 136);
             // 
             // btnInsert
             // 
             this.btnInsert.ForeColor = System.Drawing.Color.Gainsboro;
             this.btnInsert.Name = "btnInsert";
-            this.btnInsert.Size = new System.Drawing.Size(107, 22);
+            this.btnInsert.Size = new System.Drawing.Size(113, 22);
             this.btnInsert.Text = "Insert";
             this.btnInsert.Click += new System.EventHandler(this.btnInsert_Click);
             // 
@@ -1227,7 +1262,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             // 
             this.btnEdit.ForeColor = System.Drawing.Color.Gainsboro;
             this.btnEdit.Name = "btnEdit";
-            this.btnEdit.Size = new System.Drawing.Size(107, 22);
+            this.btnEdit.Size = new System.Drawing.Size(113, 22);
             this.btnEdit.Text = "Edit";
             this.btnEdit.Click += new System.EventHandler(this.btnEdit_Click);
             // 
@@ -1235,7 +1270,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             // 
             this.btnCut.ForeColor = System.Drawing.Color.Gainsboro;
             this.btnCut.Name = "btnCut";
-            this.btnCut.Size = new System.Drawing.Size(107, 22);
+            this.btnCut.Size = new System.Drawing.Size(113, 22);
             this.btnCut.Text = "Cut";
             this.btnCut.Click += new System.EventHandler(this.btnCut_Click);
             // 
@@ -1243,7 +1278,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             // 
             this.btnCopy.ForeColor = System.Drawing.Color.Gainsboro;
             this.btnCopy.Name = "btnCopy";
-            this.btnCopy.Size = new System.Drawing.Size(107, 22);
+            this.btnCopy.Size = new System.Drawing.Size(113, 22);
             this.btnCopy.Text = "Copy";
             this.btnCopy.Click += new System.EventHandler(this.btnCopy_Click);
             // 
@@ -1251,7 +1286,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             // 
             this.btnPaste.ForeColor = System.Drawing.Color.Gainsboro;
             this.btnPaste.Name = "btnPaste";
-            this.btnPaste.Size = new System.Drawing.Size(107, 22);
+            this.btnPaste.Size = new System.Drawing.Size(113, 22);
             this.btnPaste.Text = "Paste";
             this.btnPaste.Click += new System.EventHandler(this.btnPaste_Click);
             // 
@@ -1259,7 +1294,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             // 
             this.btnDelete.ForeColor = System.Drawing.Color.Gainsboro;
             this.btnDelete.Name = "btnDelete";
-            this.btnDelete.Size = new System.Drawing.Size(107, 22);
+            this.btnDelete.Size = new System.Drawing.Size(113, 22);
             this.btnDelete.Text = "Delete";
             this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 
@@ -1535,5 +1570,7 @@ namespace Intersect.Editor.Forms.Editors.Events
         private DarkComboBox cmbQuestAnimation;
         private Label lblQuestAnimation;
         private DarkComboBox cmbQuest;
+        private Label lblClass;
+        private DarkComboBox cmbClass;
     }
 }
