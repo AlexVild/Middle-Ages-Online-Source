@@ -85,7 +85,7 @@ namespace Intersect.Server.Entities
         public bool HitEntity(Entity en)
         {
             var targetEntity = en;
-            if (targetEntity is EventPageInstance) return false;
+            if (targetEntity is EventPageInstance || en == null) return false;
 
             var scalingStat = Enums.Stats.StatCount;
 
@@ -106,7 +106,7 @@ namespace Intersect.Server.Entities
                 {
                     if (!Parent.Base.PierceTarget)
                     {
-                        if (Options.Instance.Passability.Passable[(int)en.Map.ZoneType] && !Parent.Spell.Combat.Friendly)
+                        if ((en != null && Options.Instance.Passability.Passable[(int)en.Map.ZoneType]) && (Parent.Spell != null && !Parent.Spell.Combat.Friendly))
                         {
                             return false;
                         } else
