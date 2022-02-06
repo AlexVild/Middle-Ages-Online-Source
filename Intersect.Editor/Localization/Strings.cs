@@ -4493,6 +4493,21 @@ Tick timer saved in server config.json.";
             public static LocalizedString remove = @"Remove Selected";
 
             public static LocalizedString addquestlabel = @"Add quests to list:";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString additionalquestoptions = @"Additional Quest Options";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString questtype = @"Quest Type:";
+            
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString taskoptions = @"Task Options";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString taskclass = @"Task Class";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString taskclassrank = @"Task Class Rank";
         }
 
         public struct ResourceEditor
