@@ -118,6 +118,8 @@ namespace Intersect.Config
         public string OnTaskVarGuid = "8cd211a9-b27e-460d-b82a-cf620dfe63a3";
 
         public string InGuildVarGuid = "ed1040cb-7018-4862-b0b5-1f9f081bb562";
+        
+        public string TaskCompletedVarGuid = "546e9490-f152-4318-9cc6-2c26555fea78";
 
         [OnDeserializing]
         internal void OnDeserializingMethod(StreamingContext context)

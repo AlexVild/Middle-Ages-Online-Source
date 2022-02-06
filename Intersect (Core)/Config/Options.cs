@@ -143,6 +143,8 @@ namespace Intersect
         public static string OnTaskVarGuid => Instance.PlayerOpts.OnTaskVarGuid;
 
         public static string InGuildVarGuid => Instance.PlayerOpts.InGuildVarGuid;
+        
+        public static string TaskCompletedVarGuid => Instance.PlayerOpts.TaskCompletedVarGuid;
 
         public static int WeaponIndex => Instance.EquipmentOpts.WeaponSlot;
 

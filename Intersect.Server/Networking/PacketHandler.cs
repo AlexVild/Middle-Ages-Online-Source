@@ -3723,6 +3723,12 @@ namespace Intersect.Server.Networking
             if (changed)
             {
                 DbInterface.SaveGameObject(obj);
+
+                // Update a player's Class Rank info to include this new class
+                if (type == GameObjectType.Class)
+                {
+                    Globals.OnlineList.ForEach(player => player.InitClassRanks());
+                }
             }
 
             PacketSender.CacheGameDataPacket();
@@ -3875,6 +3881,11 @@ namespace Intersect.Server.Networking
                 else if (type == GameObjectType.Npc)
                 {
                     Globals.KillNpcsOf((NpcBase) obj);
+                }
+                else if (type == GameObjectType.Class)
+                {
+                    // Update a player's Class Rank info to remove this class
+                    Globals.OnlineList.ForEach(player => player.ClassInfo.Remove(obj.Id));
                 }
 
                 DbInterface.DeleteGameObject(obj);

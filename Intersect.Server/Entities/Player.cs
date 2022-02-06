@@ -34,6 +34,7 @@ using Intersect.Utilities;
 
 using Newtonsoft.Json;
 using Intersect.Server.Entities.PlayerData;
+using Intersect.Server.Database.PlayerData;
 
 namespace Intersect.Server.Entities
 {
@@ -402,6 +403,9 @@ namespace Intersect.Server.Entities
 
             //Send guild list update to all members when coming online
             Guild?.UpdateMemberList();
+
+            // Initialize Class Rank info for any new classes that have been added.
+            InitClassRanks();
         }
 
         public void SendPacket(IPacket packet, TransmissionMode mode = TransmissionMode.All)
@@ -7163,6 +7167,45 @@ namespace Intersect.Server.Entities
 
         [JsonIgnore, NotMapped] public Dictionary<Player, long> PartyRequests = new Dictionary<Player, long>();
 
+        #region Class Rank
+        public void InitClassRanks()
+        {
+            foreach (var cls in ClassBase.Lookup.Values)
+            {
+                // If the player doesn't have any info on this class
+                if (!ClassInfo.ContainsKey(cls.Id))
+                {
+                    // Migration - check to see if the player's NPC Guild was previous tracked via player var, and if so, fill in their info
+                    if (cls.Id == ClassId && !String.IsNullOrEmpty(GetVariableValue(Guid.Parse(Options.InGuildVarGuid))))
+                    {
+                        ClassInfo[cls.Id] = GetClassInfoFromPlayerVariables();
+                    }
+                    else // Otherwise, simplyt instantiate a new CR instance
+                    {
+                        
+                        ClassInfo[cls.Id] = new PlayerClassStats();
+                    }
+                }
+            }
+        }
+
+        public PlayerClassStats GetClassInfoFromPlayerVariables()
+        {
+            var classStats = new PlayerClassStats();
+            classStats.InGuild = !String.IsNullOrEmpty(GetVariableValue(Guid.Parse(Options.InGuildVarGuid)));
+            classStats.Rank = (int)GetVariableValue(Guid.Parse(Options.ClassRankVarGuid));
+            classStats.TotalTasksComplete = (int)GetVariableValue(Guid.Parse(Options.TasksCompletedVarGuid));
+            classStats.OnTask = (bool)GetVariableValue(Guid.Parse(Options.OnTaskVarGuid));
+            classStats.OnSpecialAssignment = (bool)GetVariableValue(Guid.Parse(Options.OnSpecialAssignmentVarGuid));
+            classStats.AssignmentAvailable = (bool)GetVariableValue(Guid.Parse(Options.SpecialAssignmentAvailableGuid));
+            classStats.TaskCompleted = (bool)GetVariableValue(Guid.Parse(Options.TaskCompletedVarGuid));
+
+            Log.Info($"Player {Name} has had their class stats migrated from player variables. {ClassBase.Get(ClassId).Name} Rank {classStats.Rank}");
+            return classStats;
+        }
+
+        #endregion
+
         #endregion
 
         #region Friends
@@ -7213,7 +7256,6 @@ namespace Intersect.Server.Entities
         [JsonIgnore] public ConcurrentDictionary<Guid, long> ItemCooldowns = new ConcurrentDictionary<Guid, long>();
 
         #endregion
-
     }
 
 }

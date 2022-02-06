@@ -21,6 +21,8 @@ namespace Intersect.Server.Entities.PlayerData
         public bool OnTask;
 
         public bool InGuild;
+        
+        public bool TaskCompleted;
 
         public PlayerClassStats()
         {
@@ -31,6 +33,7 @@ namespace Intersect.Server.Entities.PlayerData
             OnSpecialAssignment = false;
             OnTask = false;
             InGuild = false;
+            TaskCompleted = false;
         }
     }
 }
