@@ -15,6 +15,7 @@ using Intersect.Editor.Maps;
 using Intersect.Editor.Networking;
 using Intersect.Enums;
 using Intersect.GameObjects;
+using Intersect.GameObjects.Crafting;
 using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Events.Commands;
 using Intersect.GameObjects.Maps;
@@ -1823,6 +1824,10 @@ namespace Intersect.Editor.Forms.Editors.Events
             lblClass.Hide();
             cmbVariable.Hide();
             cmbClass.Hide();
+            nudRecordNumber.Hide();
+            lblRecordNumber.Hide();
+            lblRecordItem.Hide();
+            cmbRecordItem.Hide();
 
             if (MyEvent.CommonEvent)
             {
@@ -1871,6 +1876,61 @@ namespace Intersect.Editor.Forms.Editors.Events
                     } else if (cmbClass.Items.Count > 0)
                     {
                         cmbClass.SelectedIndex = 0;
+                    }
+                }
+                else if (cmbTrigger.SelectedIndex == (int)CommonEventTrigger.NpcsDefeated ||
+                    cmbTrigger.SelectedIndex == (int)CommonEventTrigger.ResourcesGathered ||
+                    cmbTrigger.SelectedIndex == (int)CommonEventTrigger.CraftsCreated)
+                {
+                    cmbRecordItem.Items.Clear();
+                    cmbRecordItem.Show();
+                    lblRecordItem.Show();
+                    nudRecordNumber.Show();
+                    lblRecordNumber.Show();
+                    if (cmbTrigger.SelectedIndex == (int) CommonEventTrigger.NpcsDefeated)
+                    {
+                        cmbRecordItem.Items.AddRange(NpcBase.Names);
+                        if (NpcBase.ListIndex(CurrentPage.TriggerId) > -1)
+                        {
+                            cmbRecordItem.SelectedIndex = NpcBase.ListIndex(CurrentPage.TriggerId);
+                        }
+                        else if (cmbClass.Items.Count > 0)
+                        {
+                            cmbRecordItem.SelectedIndex = 0;
+                        }
+                    } 
+                    else if (cmbTrigger.SelectedIndex == (int)CommonEventTrigger.ResourcesGathered)
+                    {
+                        cmbRecordItem.Items.AddRange(ResourceBase.Names);
+                        if (ResourceBase.ListIndex(CurrentPage.TriggerId) > -1)
+                        {
+                            cmbRecordItem.SelectedIndex = ResourceBase.ListIndex(CurrentPage.TriggerId);
+                        }
+                        else if (cmbClass.Items.Count > 0)
+                        {
+                            cmbRecordItem.SelectedIndex = 0;
+                        }
+                    }
+                    else if (cmbTrigger.SelectedIndex == (int)CommonEventTrigger.CraftsCreated)
+                    {
+                        cmbRecordItem.Items.AddRange(CraftBase.Names);
+                        if (CraftBase.ListIndex(CurrentPage.TriggerId) > -1)
+                        {
+                            cmbRecordItem.SelectedIndex = CraftBase.ListIndex(CurrentPage.TriggerId);
+                        }
+                        else if (cmbClass.Items.Count > 0)
+                        {
+                            cmbRecordItem.SelectedIndex = 0;
+                        }
+                    }
+
+                    if (CurrentPage.TriggerVal > -1)
+                    {
+                        nudRecordNumber.Value = CurrentPage.TriggerVal;
+                    }
+                    else
+                    {
+                        nudRecordNumber.Value = 0;
                     }
                 }
             }
@@ -1982,11 +2042,32 @@ namespace Intersect.Editor.Forms.Editors.Events
 
         private void cmbClass_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (MyEvent.CommonEvent && cmbTrigger.SelectedIndex == (int)CommonEventTrigger.ClassRankIncreased)
+            {
+                CurrentPage.TriggerId = ClassBase.IdFromList(cmbClass.SelectedIndex);
+            }
+        }
+
+        private void nudRecordNumber_ValueChanged(object sender, EventArgs e)
+        {
+            CurrentPage.TriggerVal = (int) nudRecordNumber.Value;
+        }
+
+        private void cmbRecordItem_SelectedIndexChanged(object sender, EventArgs e)
+        {
             if (MyEvent.CommonEvent)
             {
-                if (cmbTrigger.SelectedIndex == (int)CommonEventTrigger.ClassRankIncreased)
+                if (cmbTrigger.SelectedIndex == (int)CommonEventTrigger.NpcsDefeated)
                 {
-                    CurrentPage.TriggerId = ClassBase.IdFromList(cmbClass.SelectedIndex);
+                    CurrentPage.TriggerId = NpcBase.IdFromList(cmbRecordItem.SelectedIndex);
+                }
+                else if (cmbTrigger.SelectedIndex == (int)CommonEventTrigger.ResourcesGathered)
+                {
+                    CurrentPage.TriggerId = ResourceBase.IdFromList(cmbRecordItem.SelectedIndex);
+                }
+                else if (cmbTrigger.SelectedIndex == (int)CommonEventTrigger.CraftsCreated)
+                {
+                    CurrentPage.TriggerId = CraftBase.IdFromList(cmbRecordItem.SelectedIndex);
                 }
             }
         }

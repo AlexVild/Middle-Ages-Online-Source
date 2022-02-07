@@ -5518,13 +5518,13 @@ namespace Intersect.Server.Entities
             }
         }
 
-        public void StartCommonEventsWithTrigger(CommonEventTrigger trigger, string command = "", string param = "")
+        public void StartCommonEventsWithTrigger(CommonEventTrigger trigger, string command = "", string param = "", int val = -1)
         {
             foreach (var value in EventBase.Lookup.Values)
             {
                 if (value is EventBase eventDescriptor && eventDescriptor.Pages.Any(p => p.CommonTrigger == trigger))
                 {
-                    StartCommonEvent(eventDescriptor, trigger, command, param);
+                    StartCommonEvent(eventDescriptor, trigger, command, param, val);
                 }
             }
         }
@@ -6814,7 +6814,8 @@ namespace Intersect.Server.Entities
             EventBase baseEvent,
             CommonEventTrigger trigger = CommonEventTrigger.None,
             string command = "",
-            string param = ""
+            string param = "",
+            int val = -1
         )
         {
             if (baseEvent == null)
@@ -6865,6 +6866,16 @@ namespace Intersect.Server.Entities
                         {
                             continue;
                         }
+
+                        // If this is a record update, but does not count toward the relevant record item/count
+                        if (trigger == CommonEventTrigger.NpcsDefeated || trigger == CommonEventTrigger.ResourcesGathered || trigger == CommonEventTrigger.CraftsCreated)
+                        {
+                            if (param != baseEvent.Pages[i].TriggerId.ToString() || val != baseEvent.Pages[i].TriggerVal)
+                            {
+                                continue;
+                            }
+                        }
+
 
                         newEvent = new Event(evtId, null, this, baseEvent)
                         {
@@ -7588,18 +7599,40 @@ namespace Intersect.Server.Entities
         {
             lock (EntityLock)
             {
+                int recordAmt = 0;
                 PlayerRecord matchingRecord = PlayerRecords.Find(record => record.Type == type && record.RecordId == recordId);
                 if (matchingRecord != null)
                 {
                     matchingRecord.Amount++;
-                    return matchingRecord.Amount;
+                    recordAmt = matchingRecord.Amount;
                 }
                 else
                 {
                     PlayerRecord newRecord = new PlayerRecord(Id, type, recordId, 1);
                     PlayerRecords.Add(newRecord);
-                    return newRecord.Amount;
+                    recordAmt = newRecord.Amount;
                 }
+
+                // Search for relevant common events and fire them
+                CommonEventTrigger evtTrigger = CommonEventTrigger.NpcsDefeated;
+                switch (type)
+                {
+                    case RecordType.NpcKilled:
+                        evtTrigger = CommonEventTrigger.NpcsDefeated;
+                        break;
+                    case RecordType.ItemCrafted:
+                        evtTrigger = CommonEventTrigger.CraftsCreated;
+                        break;
+                    case RecordType.ResourceGathered:
+                        evtTrigger = CommonEventTrigger.ResourcesGathered;
+                        break;
+                    default:
+                        evtTrigger = CommonEventTrigger.NpcsDefeated;
+                        break;
+                }
+                StartCommonEventsWithTrigger(evtTrigger, "", recordId.ToString(), recordAmt);
+
+                return recordAmt;
             }
         }
 

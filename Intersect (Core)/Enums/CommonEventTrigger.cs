@@ -46,6 +46,12 @@
 
         ClassRankIncreased,
 
+        NpcsDefeated,
+
+        ResourcesGathered,
+
+        CraftsCreated,
+
     }
 
 }

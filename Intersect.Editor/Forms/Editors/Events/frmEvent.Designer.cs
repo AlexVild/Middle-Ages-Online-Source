@@ -199,6 +199,10 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.lblType = new System.Windows.Forms.Label();
             this.cmbMoveType = new DarkUI.Controls.DarkComboBox();
             this.grpTriggers = new DarkUI.Controls.DarkGroupBox();
+            this.lblRecordItem = new System.Windows.Forms.Label();
+            this.cmbRecordItem = new DarkUI.Controls.DarkComboBox();
+            this.lblRecordNumber = new System.Windows.Forms.Label();
+            this.nudRecordNumber = new DarkUI.Controls.DarkNumericUpDown();
             this.lblClass = new System.Windows.Forms.Label();
             this.cmbClass = new DarkUI.Controls.DarkComboBox();
             this.cmbVariable = new DarkUI.Controls.DarkComboBox();
@@ -245,6 +249,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.grpPreview.SuspendLayout();
             this.grpMovement.SuspendLayout();
             this.grpTriggers.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudRecordNumber)).BeginInit();
             this.grpEventConditions.SuspendLayout();
             this.grpNewCommands.SuspendLayout();
             this.grpEventCommands.SuspendLayout();
@@ -744,6 +749,10 @@ namespace Intersect.Editor.Forms.Editors.Events
             // 
             this.grpTriggers.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpTriggers.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpTriggers.Controls.Add(this.lblRecordItem);
+            this.grpTriggers.Controls.Add(this.cmbRecordItem);
+            this.grpTriggers.Controls.Add(this.lblRecordNumber);
+            this.grpTriggers.Controls.Add(this.nudRecordNumber);
             this.grpTriggers.Controls.Add(this.lblClass);
             this.grpTriggers.Controls.Add(this.cmbClass);
             this.grpTriggers.Controls.Add(this.cmbVariable);
@@ -756,10 +765,66 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.grpTriggers.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpTriggers.Location = new System.Drawing.Point(12, 488);
             this.grpTriggers.Name = "grpTriggers";
-            this.grpTriggers.Size = new System.Drawing.Size(317, 44);
+            this.grpTriggers.Size = new System.Drawing.Size(317, 81);
             this.grpTriggers.TabIndex = 21;
             this.grpTriggers.TabStop = false;
             this.grpTriggers.Text = "Trigger";
+            // 
+            // lblRecordItem
+            // 
+            this.lblRecordItem.AutoSize = true;
+            this.lblRecordItem.Location = new System.Drawing.Point(109, 20);
+            this.lblRecordItem.Name = "lblRecordItem";
+            this.lblRecordItem.Size = new System.Drawing.Size(68, 13);
+            this.lblRecordItem.TabIndex = 98;
+            this.lblRecordItem.Text = "Record Item:";
+            this.lblRecordItem.Visible = false;
+            // 
+            // cmbRecordItem
+            // 
+            this.cmbRecordItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbRecordItem.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbRecordItem.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbRecordItem.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbRecordItem.DrawDropdownHoverOutline = false;
+            this.cmbRecordItem.DrawFocusRectangle = false;
+            this.cmbRecordItem.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbRecordItem.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbRecordItem.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbRecordItem.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbRecordItem.FormattingEnabled = true;
+            this.cmbRecordItem.Location = new System.Drawing.Point(181, 14);
+            this.cmbRecordItem.Name = "cmbRecordItem";
+            this.cmbRecordItem.Size = new System.Drawing.Size(130, 21);
+            this.cmbRecordItem.TabIndex = 97;
+            this.cmbRecordItem.Text = null;
+            this.cmbRecordItem.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbRecordItem.SelectedIndexChanged += new System.EventHandler(this.cmbRecordItem_SelectedIndexChanged);
+            // 
+            // lblRecordNumber
+            // 
+            this.lblRecordNumber.AutoSize = true;
+            this.lblRecordNumber.Location = new System.Drawing.Point(120, 42);
+            this.lblRecordNumber.Name = "lblRecordNumber";
+            this.lblRecordNumber.Size = new System.Drawing.Size(46, 13);
+            this.lblRecordNumber.TabIndex = 96;
+            this.lblRecordNumber.Text = "Amount:";
+            this.lblRecordNumber.Visible = false;
+            // 
+            // nudRecordNumber
+            // 
+            this.nudRecordNumber.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudRecordNumber.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudRecordNumber.Location = new System.Drawing.Point(186, 40);
+            this.nudRecordNumber.Name = "nudRecordNumber";
+            this.nudRecordNumber.Size = new System.Drawing.Size(126, 20);
+            this.nudRecordNumber.TabIndex = 95;
+            this.nudRecordNumber.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudRecordNumber.ValueChanged += new System.EventHandler(this.nudRecordNumber_ValueChanged);
             // 
             // lblClass
             // 
@@ -1222,7 +1287,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(629, 632);
+            this.btnSave.Location = new System.Drawing.Point(631, 663);
             this.btnSave.Name = "btnSave";
             this.btnSave.Padding = new System.Windows.Forms.Padding(5);
             this.btnSave.Size = new System.Drawing.Size(93, 30);
@@ -1232,7 +1297,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(728, 632);
+            this.btnCancel.Location = new System.Drawing.Point(730, 663);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Padding = new System.Windows.Forms.Padding(5);
             this.btnCancel.Size = new System.Drawing.Size(93, 30);
@@ -1439,7 +1504,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.panel1.Controls.Add(this.grpTriggers);
             this.panel1.Location = new System.Drawing.Point(12, 83);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(811, 543);
+            this.panel1.Size = new System.Drawing.Size(811, 574);
             this.panel1.TabIndex = 23;
             // 
             // FrmEvent
@@ -1448,7 +1513,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.ClientSize = new System.Drawing.Size(835, 665);
+            this.ClientSize = new System.Drawing.Size(835, 705);
             this.Controls.Add(this.grpNewCommands);
             this.Controls.Add(this.btnTabsRight);
             this.Controls.Add(this.btnTabsLeft);
@@ -1486,6 +1551,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.grpMovement.PerformLayout();
             this.grpTriggers.ResumeLayout(false);
             this.grpTriggers.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudRecordNumber)).EndInit();
             this.grpEventConditions.ResumeLayout(false);
             this.grpNewCommands.ResumeLayout(false);
             this.grpNewCommands.PerformLayout();
@@ -1577,5 +1643,9 @@ namespace Intersect.Editor.Forms.Editors.Events
         private DarkComboBox cmbQuest;
         private Label lblClass;
         private DarkComboBox cmbClass;
+        private Label lblRecordNumber;
+        private DarkNumericUpDown nudRecordNumber;
+        private Label lblRecordItem;
+        private DarkComboBox cmbRecordItem;
     }
 }

@@ -10,7 +10,7 @@ namespace Intersect.Config
     {
         public bool SendNpcRecordUpdates = true;
 
-        public int NpcRecordUpdateInterval = 100;
+        public int NpcRecordUpdateInterval = 20;
 
         public bool SendResourceRecordUpdates = true;
 

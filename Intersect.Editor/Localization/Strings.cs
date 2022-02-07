@@ -2616,6 +2616,9 @@ Tick timer saved in server config.json.";
                 {18, @"Map Changed"},
                 {19, @"Instance Variable Changed"},
                 {20, @"Class Rank Changed for Class"},
+                {21, @"Slain X NPCs of type"},
+                {22, @"Gathered X Resources of Type"},
+                {23, @"Crafted X of Item"},
             };
 
             public static LocalizedString conditions = @"Conditions";
