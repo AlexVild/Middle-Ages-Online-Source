@@ -67,6 +67,8 @@ namespace Intersect.Server.Database.PlayerData
         public DbSet<Guild> Guilds { get; set; }
 
         public DbSet<GuildBankSlot> Guild_Bank { get; set; }
+        
+        public DbSet<PlayerRecord> Player_Record { get; set; }
 
         internal async ValueTask Commit(
             bool commit = false,
@@ -126,6 +128,8 @@ namespace Intersect.Server.Database.PlayerData
 
             modelBuilder.Entity<Guild>().HasMany(b => b.Bank).WithOne(p => p.Guild);
             modelBuilder.Entity<GuildBankSlot>().HasOne(b => b.Bag);
+
+            modelBuilder.Entity<Player>().HasMany(b => b.PlayerRecords).WithOne(p => p.Player);
         }
 
         public void Seed()

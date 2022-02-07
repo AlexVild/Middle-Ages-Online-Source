@@ -15,6 +15,7 @@ using Intersect.Server.Entities.Combat;
 using Intersect.Server.Entities.Events;
 using Intersect.Server.Entities.Pathfinding;
 using Intersect.Server.General;
+using Intersect.Server.Localization;
 using Intersect.Server.Maps;
 using Intersect.Server.Networking;
 using Intersect.Utilities;
@@ -180,6 +181,15 @@ namespace Intersect.Server.Entities
                 }
                 PacketSender.SendEntityDie(this);
                 PacketSender.SendEntityLeave(this);
+
+                if (killer is Player playerKiller)
+                {
+                    int recordKilled = playerKiller.IncrementRecord(RecordType.NpcKilled, Base.Id);
+                    if (Options.SendNpcRecordUpdates && recordKilled % Options.NpcRecordUpdateInterval == 0)
+                    {
+                        playerKiller.SendRecordUpdate(Strings.Records.enemykilled.ToString(recordKilled, Name));
+                    }
+                }
             }
         }
 

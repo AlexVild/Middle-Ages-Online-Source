@@ -7,6 +7,7 @@ using Intersect.Network.Packets.Server;
 using Intersect.Server.Database;
 using Intersect.Server.Database.PlayerData.Players;
 using Intersect.Server.General;
+using Intersect.Server.Localization;
 using Intersect.Server.Maps;
 using Intersect.Server.Networking;
 using Intersect.Utilities;
@@ -75,6 +76,15 @@ namespace Intersect.Server.Entities
  
             PacketSender.SendEntityDataToProximity(this);
             PacketSender.SendEntityPositionToAll(this);
+
+            if (killer is Player playerKiller)
+            {
+                int recordKilled = playerKiller.IncrementRecord(RecordType.ResourceGathered, Base.Id);
+                if (Options.SendResourceRecordUpdates && recordKilled % Options.ResourceRecordUpdateInterval == 0)
+                {
+                    playerKiller.SendRecordUpdate(Strings.Records.resourcegathered.ToString(recordKilled, Name));
+                }
+            }
         }
 
         public void Spawn()

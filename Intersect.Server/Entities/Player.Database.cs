@@ -445,6 +445,25 @@ namespace Intersect.Server.Entities
 
         #endregion
 
+        #region Player Records
+        public void LoadRecords()
+        {
+            try
+            {
+                using (var context = DbInterface.CreatePlayerContext())
+                {
+                    PlayerRecords = context.Player_Record.Where(f => f.Player.Id == Id).ToList();
+                    Log.Info($"Successfully loaded player records for {Name}. Count of records is {PlayerRecords.Count}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, $"Failed to load player records for {Name}.");
+                //ServerContext.DispatchUnhandledException(new Exception("Failed to save user, shutting down to prevent rollbacks!"), true);
+            }
+        }
+        #endregion
+
         #endregion
 
     }

@@ -229,6 +229,7 @@
     <Compile Include="Config\PartyOptions.cs" />
     <Compile Include="Config\ProcessingOptions.cs" />
     <Compile Include="Config\QuestOptions.cs" />
+    <Compile Include="Config\RecordOptions.cs" />
     <Compile Include="Config\SecurityOptions.cs" />
     <Compile Include="Core\ApplicationContext`2.cs" />
     <Compile Include="Core\ApplicationService`2.cs" />

@@ -1351,6 +1351,21 @@ namespace Intersect.Server.Localization
 
         }
 
+        public sealed class RecordsNamespace : LocaleNamespace
+        {
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString enemykilled =
+                @"You have slain a total of {00} {01}!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString itemcrafted =
+                @"You have crafted a total of {00} {01}!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString resourcegathered =
+                @"You have harvested a resource of this type {00} times!";
+        }
+
         #region Serialization
 
         public static bool Load()
@@ -1484,6 +1499,8 @@ namespace Intersect.Server.Localization
             public readonly UpnpNamespace Upnp = new UpnpNamespace();
 
             public readonly GuildsNamespace Guilds = new GuildsNamespace();
+            
+            public readonly RecordsNamespace Records = new RecordsNamespace();
 
         }
 
@@ -1559,6 +1576,8 @@ namespace Intersect.Server.Localization
         public static TradingNamespace Trading => Root.Trading;
 
         public static UpnpNamespace Upnp => Root.Upnp;
+        
+        public static RecordsNamespace Records => Root.Records;
 
         #endregion
 

@@ -281,6 +281,9 @@ namespace Intersect.Server.Entities
 
         public long VehicleSpeed { get; set; } = 0L;
 
+        [JsonIgnore]
+        public virtual List<PlayerRecord> PlayerRecords { get; set; } = new List<PlayerRecord>();
+
         // Class Rank Vars
         // Contains a mapping of a Class' GUID -> the class info for this player
         [NotMapped, JsonIgnore]
@@ -372,6 +375,7 @@ namespace Intersect.Server.Entities
 
             LoadFriends();
             LoadGuild();
+            LoadRecords();
 
             //Upon Sign In Remove Any Items/Spells that have been deleted
             foreach (var itm in Items)
@@ -3889,10 +3893,19 @@ namespace Intersect.Server.Entities
 
                 if (TryGiveItem(CraftBase.Get(id).ItemId, quantity))
                 {
+                    String itemName = ItemBase.GetName(CraftBase.Get(id).ItemId);
                     PacketSender.SendChatMsg(
-                        this, Strings.Crafting.crafted.ToString(ItemBase.GetName(CraftBase.Get(id).ItemId)), ChatMessageType.Crafting,
+                        this, Strings.Crafting.crafted.ToString(itemName), ChatMessageType.Crafting,
                         CustomColors.Alerts.Success
                     );
+                    
+                    // Update our record of how many of this item we've crafted
+                    int recordCrafted = IncrementRecord(RecordType.ItemCrafted, id);
+                    if (Options.SendCraftingRecordUpdates && recordCrafted % Options.CraftingRecordUpdateInterval == 0)
+                    {
+                        SendRecordUpdate(Strings.Records.itemcrafted.ToString(recordCrafted, itemName));
+                    }
+                    
                     if (CraftBase.Get(id).Event != null)
                         StartCommonEvent(CraftBase.Get(id).Event);
                 }
@@ -7568,6 +7581,32 @@ namespace Intersect.Server.Entities
 
         [JsonIgnore] public ConcurrentDictionary<Guid, long> ItemCooldowns = new ConcurrentDictionary<Guid, long>();
 
+        #endregion
+
+        #region Player Records
+        public int IncrementRecord(RecordType type, Guid recordId)
+        {
+            lock (EntityLock)
+            {
+                PlayerRecord matchingRecord = PlayerRecords.Find(record => record.Type == type && record.RecordId == recordId);
+                if (matchingRecord != null)
+                {
+                    matchingRecord.Amount++;
+                    return matchingRecord.Amount;
+                }
+                else
+                {
+                    PlayerRecord newRecord = new PlayerRecord(Id, type, recordId, 1);
+                    PlayerRecords.Add(newRecord);
+                    return newRecord.Amount;
+                }
+            }
+        }
+
+        public void SendRecordUpdate(string message)
+        {
+            PacketSender.SendChatMsg(this, message, ChatMessageType.Experience);
+        }
         #endregion
     }
 

@@ -482,6 +482,7 @@
     <Compile Include="Database\PlayerData\Players\IPlayerOwned.cs" />
     <Compile Include="Database\PlayerData\Players\ISlot.cs" />
     <Compile Include="Database\PlayerData\Players\Quest.cs" />
+    <Compile Include="Database\PlayerData\Players\PlayerRecord.cs" />
     <Compile Include="Database\PlayerData\Players\SlotHelper.cs" />
     <Compile Include="Database\PlayerData\Players\SpellSlot.cs" />
     <Compile Include="Entities\BankInterface.cs" />
@@ -581,6 +582,10 @@
     <Compile Include="Migrations\20220205181832_ClassRankMigration.cs" />
     <Compile Include="Migrations\20220205181832_ClassRankMigration.designer.cs">
       <DependentUpon>20220205181832_ClassRankMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20220207213352_PlayerRecordsMigration.cs" />
+    <Compile Include="Migrations\20220207213352_PlayerRecordsMigration.designer.cs">
+      <DependentUpon>20220207213352_PlayerRecordsMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.cs" />
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.Designer.cs">

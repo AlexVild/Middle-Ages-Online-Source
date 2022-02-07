@@ -59,6 +59,8 @@ namespace Intersect
         [JsonProperty("Security")] public SecurityOptions SecurityOpts = new SecurityOptions();
 
         [JsonProperty("Loot")] public LootOptions LootOpts = new LootOptions();
+        
+        [JsonProperty("Records")] public RecordOptions RecordOpts = new RecordOptions();
 
         public ProcessingOptions Processing = new ProcessingOptions();
 
@@ -293,6 +295,18 @@ namespace Intersect
         public static bool PayoutSpecialAssignments => Instance.NpcGuild.PayoutSpecialAssignments;
         
         public static long TaskCooldown => Instance.NpcGuild.TaskCooldownMs;
+        
+        public static bool SendNpcRecordUpdates => Instance.RecordOpts.SendNpcRecordUpdates;
+        
+        public static int NpcRecordUpdateInterval => Instance.RecordOpts.NpcRecordUpdateInterval;
+
+        public static bool SendResourceRecordUpdates => Instance.RecordOpts.SendResourceRecordUpdates;
+
+        public static int ResourceRecordUpdateInterval => Instance.RecordOpts.ResourceRecordUpdateInterval;
+
+        public static bool SendCraftingRecordUpdates => Instance.RecordOpts.SendCraftingRecordUpdates;
+
+        public static int CraftingRecordUpdateInterval => Instance.RecordOpts.CraftingRecordUpdateInterval;
 
         public static LootOptions Loot => Instance.LootOpts;
 
