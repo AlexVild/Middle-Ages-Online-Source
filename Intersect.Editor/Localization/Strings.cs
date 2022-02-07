@@ -359,6 +359,11 @@ namespace Intersect.Editor.Localization
             return Strings.EventConditionDesc.taskoncooldown.ToString(ClassBase.Get(condition.ClassId).Name);
         }
 
+        public static string GetEventConditionalDesc(HighestClassRankIs condition)
+        {
+            return Strings.EventConditionDesc.highestclassrank.ToString(condition.ClassRank);
+        }
+
         public static string GetVariableComparisonString(VariableCompaison comparison)
         {
             return "";
@@ -2226,6 +2231,7 @@ Tick timer saved in server config.json.";
                 {28, @"Has task in progress for class..."},
                 {29, @"Has task completed for class..."},
                 {30, @"Has task on cooldown for class..."},
+                {31, @"Has highest class rank of at least X..."},
             };
 
             public static LocalizedString endrange = @"End Range:";
@@ -2509,6 +2515,9 @@ Tick timer saved in server config.json.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString taskoncooldown = @"Task cooldown in effect for {00}";
+            
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString highestclassrank = @"Highest class rank is at least {00}";
 
             public static Dictionary<int, LocalizedString> selfswitches = new Dictionary<int, LocalizedString>
             {

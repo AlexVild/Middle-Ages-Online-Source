@@ -663,6 +663,22 @@ namespace Intersect.Server.Entities.Events
             return false;
         }
 
+        public static bool MeetsCondition(
+            HighestClassRankIs condition,
+            Player player,
+            Event eventInstance,
+            QuestBase questBase
+        )
+        {
+            if (player != null && player.ClassInfo.Count > 0)
+            {
+                return player.ClassInfo.Values.ToList()
+                    .OrderByDescending(info => info.Rank)
+                    .First().Rank >= condition.ClassRank;
+            }
+            return false;
+        }
+
         //Variable Comparison Processing
 
         public static bool CheckVariableComparison(

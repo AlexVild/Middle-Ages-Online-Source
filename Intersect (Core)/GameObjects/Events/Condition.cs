@@ -64,6 +64,8 @@ namespace Intersect.GameObjects.Events
 
         TaskIsOnCooldownForClass,
 
+        HighestClassRankIs,
+
     }
 
     public class Condition
@@ -405,6 +407,13 @@ namespace Intersect.GameObjects.Events
         public override ConditionTypes Type { get; } = ConditionTypes.TaskIsOnCooldownForClass;
 
         public Guid ClassId { get; set; }
+    }
+
+    public class HighestClassRankIs : Condition
+    {
+        public override ConditionTypes Type { get; } = ConditionTypes.HighestClassRankIs;
+
+        public int ClassRank { get; set; }
     }
 
     public class VariableCompaison

@@ -463,6 +463,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     }
 
                     break;
+                case ConditionTypes.HighestClassRankIs:
+                    Condition = new HighestClassRankIs();
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -651,6 +655,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
 
                     nudClassRank.Show();
                     nudClassRank.Maximum = Options.MaxClassRank;
+                    break;
+                case ConditionTypes.HighestClassRankIs:
+                    grpClass.Show();
+                    cmbClass.Hide();
+                    nudClassRank.Show();
                     break;
                 case ConditionTypes.HasSpecialAssignmentForClass:
                 case ConditionTypes.IsOnGuildTaskForClass:
@@ -1468,6 +1477,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         {
             cmbClass.SelectedIndex = ClassBase.ListIndex(condition.ClassId);
         }
+        
+        private void SetupFormValues(HighestClassRankIs condition)
+        {
+            nudClassRank.Value = condition.ClassRank;
+        }
 
         #endregion
 
@@ -1706,6 +1720,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private void SaveFormValues(TaskIsOnCooldownForClassCondition condition)
         {
             condition.ClassId = ClassBase.IdFromList(cmbClass.SelectedIndex);
+        }
+
+        private void SaveFormValues(HighestClassRankIs condition)
+        {
+            condition.ClassRank = (int) nudClassRank.Value;
         }
 
         #endregion
