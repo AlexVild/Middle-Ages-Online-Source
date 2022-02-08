@@ -1715,6 +1715,8 @@ namespace Intersect.Server.Entities
             }
 
             //Handle DoT/HoT spells]
+            // Alex: This was the old way.
+            /*
             if (spellBase.Combat.HoTDoT)
             {
                 var doTFound = false;
@@ -1730,6 +1732,16 @@ namespace Intersect.Server.Entities
                 {
                     new DoT(this, spellBase.Id, target);
                 }
+            }
+            */
+            
+            if (spellBase.Combat.HoTDoT)
+            {
+                target.CachedDots.ToList()
+                    .FindAll((DoT dot) => dot.SpellBase.Id == spellBase.Id && dot.Target == target)
+                    .ForEach((DoT dot) => dot.Expire());
+
+                new DoT(this, spellBase.Id, target);
             }
         }
 
