@@ -1763,7 +1763,7 @@ namespace Intersect.Server.Entities
             if (spellBase.Combat.HoTDoT)
             {
                 target.CachedDots.ToList()
-                    .FindAll((DoT dot) => dot.SpellBase.Id == spellBase.Id && dot.Target == target)
+                    .FindAll((DoT dot) => dot.SpellBase.Id == spellBase.Id && dot.Attacker == this)
                     .ForEach((DoT dot) => dot.Expire());
 
                 new DoT(this, spellBase.Id, target);
