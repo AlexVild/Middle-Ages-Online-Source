@@ -1658,11 +1658,41 @@ namespace Intersect.Server.Entities.Events
                     { Strings.Events.timeperiod, time.Hour >= 12 ? Strings.Events.periodevening : Strings.Events.periodmorning },
                     { Strings.Events.onlinecountcommand, Player.OnlineCount.ToString() },
                     { Strings.Events.onlinelistcommand, input.Contains(Strings.Events.onlinelistcommand) ? string.Join(", ", Player.OnlineList.Select(p => p.Name).ToList()) : "" },
+                    { Strings.Events.eventnamecapscommand, instance?.PageInstance?.Name.ToUpper() ?? "" },
                     { Strings.Events.eventnamecommand, instance?.PageInstance?.Name ?? "" },
                     { Strings.Events.commandparameter, instance?.PageInstance?.Param ?? "" },
-                    { Strings.Events.eventparams, (instance != null && input.Contains(Strings.Events.eventparams)) ? instance.FormatParameters(player) : "" },
-
+                    { Strings.Events.eventparams, (instance != null && input.Contains(Strings.Events.eventparams)) ? instance.FormatParameters(player) : "" }
                 };
+                
+                if (player.Party?.Count > 1)
+                {
+                    if (player.Party.Count == 2)
+                    {
+                        replacements[Strings.Events.playerpartymemberscommand] = String.Join(" and ", player.Party.Select(member => member.Name).ToArray());
+                    }
+                    else
+                    {
+                        StringBuilder partyBuilder = new StringBuilder(player.Party[0].Name);
+                        for (int i = 1; i < player.Party.Count; i++)
+                        {
+                            if (i < player.Party.Count - 1)
+                            {
+                                partyBuilder.Append(", " + player.Party[i].Name);
+                            }
+                            else
+                            {
+                                partyBuilder.Append(", and " + player.Party[i].Name);
+                            }
+                        }
+
+                        replacements[Strings.Events.playerpartymemberscommand] = partyBuilder.ToString();
+                    }
+                }
+                else
+                {
+                    replacements[Strings.Events.playerpartymemberscommand] = player.Name;
+                }
+
 
                 foreach (var val in replacements)
                 {

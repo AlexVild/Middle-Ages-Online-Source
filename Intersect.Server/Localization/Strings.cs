@@ -562,6 +562,9 @@ namespace Intersect.Server.Localization
             public readonly LocalizedString eventnamecommand = @"\en";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString eventnamecapscommand = @"\encaps";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString eventparam = @"\evtparam";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -611,6 +614,9 @@ namespace Intersect.Server.Localization
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString timesecond = @"\second";
+            
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString playerpartymemberscommand = @"\party";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString watchdogkill =
