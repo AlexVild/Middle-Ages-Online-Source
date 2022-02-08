@@ -5020,7 +5020,18 @@ namespace Intersect.Server.Entities
 
         public virtual bool IsAllyOf(Player otherPlayer)
         {
-            return this.InParty(otherPlayer) || this == otherPlayer;
+            if (Guild != null && otherPlayer != null)
+            {   
+                return this.InParty(otherPlayer) || this.Guild.IsMember(otherPlayer.Id) || this == otherPlayer;
+            }
+            else if (otherPlayer != null)
+            {
+                return this.InParty(otherPlayer) || this == otherPlayer;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public bool CanSpellCast(SpellBase spell, Entity target, bool checkVitalReqs)
