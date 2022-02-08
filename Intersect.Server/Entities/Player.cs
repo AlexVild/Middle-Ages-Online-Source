@@ -284,6 +284,12 @@ namespace Intersect.Server.Entities
         [JsonIgnore]
         public virtual List<PlayerRecord> PlayerRecords { get; set; } = new List<PlayerRecord>();
 
+        /// <summary>
+        /// Used to determine if the player is performing an attack out of stealth
+        /// </summary>
+        [NotMapped, JsonIgnore]
+        public bool StealthAttack = false;
+
         // Class Rank Vars
         // Contains a mapping of a Class' GUID -> the class info for this player
         [NotMapped, JsonIgnore]
@@ -5242,6 +5248,8 @@ namespace Intersect.Server.Entities
                 return;
             }
 
+            // Reset stealth attack status
+            StealthAttack = false;
             if (!SpellCooldowns.ContainsKey(Spells[spellSlot].SpellId) ||
                 SpellCooldowns[Spells[spellSlot].SpellId] < Globals.Timing.MillisecondsUTC)
             {
@@ -5254,6 +5262,10 @@ namespace Intersect.Server.Entities
                     {
                         if (status.Type == StatusTypes.Stealth)
                         {
+                            if (spell.WeaponSpell)
+                            {
+                                StealthAttack = true;
+                            }
                             status.RemoveStatus();
                         }
                     }
@@ -5339,6 +5351,18 @@ namespace Intersect.Server.Entities
                     base.CastSpell(spellId, spellSlot, prayerSpell, prayerTarget, prayerSpellDir);
 
                     break;
+            }
+        }
+        
+        public int CalculateStealthDamage(int baseDamage, ItemBase item)
+        {
+            if (StealthAttack && item.ProjectileId == Guid.Empty)
+            {
+                return (int)Math.Floor(baseDamage * Options.Combat.SneakAttackMultiplier);
+            }
+            else
+            {
+                return baseDamage;
             }
         }
 

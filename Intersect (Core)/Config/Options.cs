@@ -241,6 +241,8 @@ namespace Intersect
         public static bool HideResourceHealthBars => Instance.CombatOpts.HideResourceHealthBars;
 
         public static float DefaultBackstabMultiplier => Instance.CombatOpts.DefaultBackstabMultiplier;
+        
+        public static float SneakAttackMultiplier => Instance.CombatOpts.SneakAttackMultiplier;
 
         public static int GameBorderStyle => Instance.MapOpts.GameBorderStyle;
 

@@ -1410,7 +1410,7 @@ namespace Intersect.Server.Entities
                     aliveAnimations.Add(new KeyValuePair<Guid, sbyte>(parentItem.AttackAnimationId, (sbyte)projectileDir));
                 }
 
-                int damage = calculateBackstabDamage(parentItem.Damage, parentItem, target);
+                int damage = CalculateSpecialDamage(parentItem.Damage, parentItem, target);
                 attackFailures = Attack(
                     target, damage, 0, (DamageType) parentItem.DamageType, (Stats) parentItem.ScalingStat,
                     parentItem.Scaling, parentItem.CritChance, parentItem.CritMultiplier, deadAnimations, aliveAnimations, true, false, true
@@ -1456,14 +1456,39 @@ namespace Intersect.Server.Entities
             }
         }
 
-        public int calculateBackstabDamage(int baseDamage, ItemBase item, Entity target)
+        private enum DamageBonus
         {
+            None = 0,
+            Backstab,
+            Stealth
+        };
+        public int CalculateSpecialDamage(int baseDamage, ItemBase item, Entity target)
+        {
+            if (target is Resource) return baseDamage;
             if (item == null || target == null) return baseDamage;
 
-            if (item.CanBackstab && target.Dir == Dir)
+            var damageBonus = DamageBonus.None;
+            if (target.Dir == Dir) // Player is hitting something from behind
             {
-                PacketSender.SendActionMsg(target, Strings.Combat.backstab, CustomColors.Combat.Backstab);
-                baseDamage = (int)Math.Floor(baseDamage * item.BackstabMultiplier);
+                if (item.CanBackstab)
+                {
+                    baseDamage = (int)Math.Floor(baseDamage * item.BackstabMultiplier);
+                    damageBonus = DamageBonus.Backstab;
+                }
+                if (this is Player player && player.StealthAttack && item.ProjectileId == Guid.Empty) // Melee weapons only for stealth attacks
+                {
+                    baseDamage += player.CalculateStealthDamage(baseDamage, item);
+                    damageBonus = DamageBonus.Stealth;
+                }
+
+                if (damageBonus == DamageBonus.Backstab)
+                {
+                    PacketSender.SendActionMsg(target, Strings.Combat.backstab, CustomColors.Combat.Backstab);
+                }
+                else if (damageBonus == DamageBonus.Stealth)
+                {
+                    PacketSender.SendActionMsg(target, Strings.Combat.stealthattack, CustomColors.Combat.Backstab);
+                }
             }
 
             return baseDamage;
@@ -1642,7 +1667,7 @@ namespace Intersect.Server.Entities
             {
                 if (this is Player player && spellBase.WeaponSpell && player.CastingWeapon != null ) // add on weapon stats if needed
                 {
-                    damageHealth += calculateBackstabDamage(player.CastingWeapon.Damage, player.CastingWeapon, target);
+                    damageHealth += CalculateSpecialDamage(player.CastingWeapon.Damage, player.CastingWeapon, target);
                     scaling += player.CastingWeapon.Scaling;
                     scalingStat = (Stats) player.CastingWeapon.ScalingStat;
                     damageType = (DamageType) player.CastingWeapon.DamageType;
@@ -1836,7 +1861,7 @@ namespace Intersect.Server.Entities
 
             if (weapon != null)
             {
-                baseDamage = calculateBackstabDamage(weapon.Damage, weapon, target);
+                baseDamage = CalculateSpecialDamage(weapon.Damage, weapon, target);
             }
             Attack(
                 target, baseDamage, 0, damageType, scalingStat, scaling, critChance, critMultiplier, deadAnimations,

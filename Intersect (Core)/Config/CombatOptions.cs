@@ -79,6 +79,8 @@
         public bool HideResourceHealthBars = true;
         
         public float DefaultBackstabMultiplier = 1.25f;
+        
+        public float SneakAttackMultiplier = 1.5f;
 
         //Combat
         public int RegenTime = 5000; //5 seconds

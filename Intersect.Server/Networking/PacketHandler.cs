@@ -1093,6 +1093,8 @@ namespace Intersect.Server.Networking
             var utcDeltaMs = (Timing.Global.TicksUTC - packet.UTC) / TimeSpan.TicksPerMillisecond;
             var latencyAdjustmentMs = -(client.Ping + Math.Max(0, utcDeltaMs));
 
+            // Reset stealth attack status
+            player.StealthAttack = false;
             //check if player is blinded or stunned or in stealth mode
             foreach (var status in player.CachedStatuses)
             {
@@ -1126,6 +1128,7 @@ namespace Intersect.Server.Networking
                 //Remove stealth status.
                 if (status.Type == StatusTypes.Stealth)
                 {
+                    player.StealthAttack = true;
                     status.RemoveStatus();
                 }
             }
