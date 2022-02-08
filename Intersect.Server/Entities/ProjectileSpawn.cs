@@ -29,9 +29,15 @@ namespace Intersect.Server.Entities
 
         public long TransmittionTimer = Globals.Timing.Milliseconds;
 
+        public long ProjectileActiveTime;
+
         public float X;
+        
+        private float InitX;
 
         public float Y;
+        
+        private float InitY;
 
         public byte Z;
 
@@ -55,13 +61,16 @@ namespace Intersect.Server.Entities
             MapId = mapId;
             MapInstanceId = mapInstanceId;
             X = x;
+            InitX = X;
             Y = y;
+            InitY = Y;
             Z = z;
             Dir = dir;
             ProjectileBase = projectileBase;
             Parent = parent;
             TransmittionTimer = Globals.Timing.Milliseconds +
                                 (long) ((float) ProjectileBase.Speed / (float) ProjectileBase.Range);
+            ProjectileActiveTime = Globals.Timing.Milliseconds + (Options.Instance.Processing.ProjectileUpdateInterval * Options.Instance.Processing.ProjectileTicksUntilDamageInSpawn);
         }
 
         public bool IsAtLocation(Guid mapId, int x, int y, int z)
@@ -93,6 +102,12 @@ namespace Intersect.Server.Entities
         {
             var targetEntity = en;
             if (targetEntity is EventPageInstance) return false;
+
+            bool projectileCantDamageYet = Globals.Timing.Milliseconds < ProjectileActiveTime && InitX == X && InitY == Y;
+            if (projectileCantDamageYet)
+            {
+                return false;
+            }
 
             var scalingStat = Enums.Stats.StatCount;
 
