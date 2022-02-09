@@ -15,12 +15,31 @@ namespace Intersect.Server.Admin.Actions
     public static class ActionProcessing
     {
 
+        private static bool TargetAccessIsHigher(Client client, Player player)
+        {
+            if (player.Power.EnumeratePermissions().Count > client.Entity.Power.EnumeratePermissions().Count)
+            {
+                PacketSender.SendChatMsg(client.Entity, Strings.Account.badaccess, Enums.ChatMessageType.Admin, CustomColors.Alerts.Declined);
+                return true;
+            }
+
+            return false;
+        }
+
         //BanAction
         public static void ProcessAction(Client client, Player player, BanAction action)
         {
             var target = Player.Find(action.Name);
+
+            if (target.Power.EnumeratePermissions().Count < client.Entity.Power.EnumeratePermissions().Count)
+            {
+                PacketSender.SendChatMsg(player, Strings.Account.badaccess, Enums.ChatMessageType.Admin, CustomColors.Alerts.Declined);
+            }
+
             if (target != null)
             {
+                if (TargetAccessIsHigher(client, target)) return;
+
                 if (string.IsNullOrEmpty(Ban.CheckBan(target.User, "")))
                 {
                     if (action.BanIp == true)
@@ -56,6 +75,7 @@ namespace Intersect.Server.Admin.Actions
             var target = Player.FindOnline(action.Name);
             if (target != null)
             {
+                if (TargetAccessIsHigher(client, target)) return;
                 UserActivityHistory.LogActivity(target?.UserId ?? Guid.Empty, target?.Id ?? Guid.Empty, target?.Client?.GetIp(), UserActivityHistory.PeerType.Client, UserActivityHistory.UserAction.DisconnectKick, $"{target.User?.Name},{target.Name}");
 
                 PacketSender.SendGlobalMsg(Strings.Player.kicked.ToString(target.Name, player.Name));
@@ -73,6 +93,7 @@ namespace Intersect.Server.Admin.Actions
             var target = Player.FindOnline(action.Name);
             if (target != null)
             {
+                if (TargetAccessIsHigher(client, target)) return;
                 lock (target.EntityLock)
                 {
                     target.Die(); //Kill em'
@@ -92,6 +113,8 @@ namespace Intersect.Server.Admin.Actions
             var target = Player.Find(action.Name);
             if (target != null)
             {
+                if (TargetAccessIsHigher(client, target)) return;
+
                 if (string.IsNullOrEmpty(Mute.FindMuteReason(target.UserId, "")))
                 {
                     if (action.BanIp == true)
@@ -175,6 +198,7 @@ namespace Intersect.Server.Admin.Actions
             var target = Player.FindOnline(action.Name);
             if (target != null)
             {
+                if (TargetAccessIsHigher(client, target)) return;
                 target.Face = action.Face;
                 PacketSender.SendEntityDataToProximity(target);
             }
@@ -190,6 +214,7 @@ namespace Intersect.Server.Admin.Actions
             var target = Player.FindOnline(action.Name);
             if (target != null)
             {
+                if (TargetAccessIsHigher(client, target)) return;
                 target.Sprite = action.Sprite;
                 PacketSender.SendEntityDataToProximity(target);
             }
@@ -244,6 +269,7 @@ namespace Intersect.Server.Admin.Actions
             var target = Player.FindOnline(action.Name);
             if (target != null)
             {
+                if (TargetAccessIsHigher(client, target)) return;
                 player.Warp(target.MapId, (byte) target.X, (byte) target.Y);
                 PacketSender.SendChatMsg(player, Strings.Player.warpedto.ToString(target.Name), Enums.ChatMessageType.Admin);
                 PacketSender.SendChatMsg(target, Strings.Player.warpedtoyou.ToString(player.Name), Enums.ChatMessageType.Notice);
@@ -272,6 +298,7 @@ namespace Intersect.Server.Admin.Actions
             var target = Player.FindOnline(action.Name);
             if (target != null)
             {
+                if (TargetAccessIsHigher(client, target)) return;
                 target.Warp(player.MapId, (byte) player.X, (byte) player.Y);
                 PacketSender.SendChatMsg(player, Strings.Player.haswarpedto.ToString(target.Name), Enums.ChatMessageType.Admin, player.Name);
                 PacketSender.SendChatMsg(target, Strings.Player.beenwarpedto.ToString(player.Name), Enums.ChatMessageType.Notice, player.Name);
