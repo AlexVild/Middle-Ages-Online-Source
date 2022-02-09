@@ -361,19 +361,19 @@ namespace Intersect.Client.Interface.Game.Character
             mPointsLabel.SetText(Strings.Character.points.ToString(Globals.Me.StatPoints));
             mPointsLabel.IsHidden = Globals.Me.StatPoints == 0;
             mAddAbilityPwrBtn.IsHidden = Globals.Me.StatPoints == 0 ||
-                                         Globals.Me.Stat[(int) Stats.AbilityPower] == Options.MaxStatValue;
+                                         Globals.Me.TrueStats[(int) Stats.AbilityPower] == Options.MaxStatValue;
 
             mAddAttackBtn.IsHidden =
-                Globals.Me.StatPoints == 0 || Globals.Me.Stat[(int) Stats.Attack] == Options.MaxStatValue;
+                Globals.Me.StatPoints == 0 || Globals.Me.TrueStats[(int) Stats.Attack] == Options.MaxStatValue;
 
             mAddDefenseBtn.IsHidden = Globals.Me.StatPoints == 0 ||
-                                      Globals.Me.Stat[(int) Stats.Defense] == Options.MaxStatValue;
+                                      Globals.Me.TrueStats[(int) Stats.Defense] == Options.MaxStatValue;
 
             mAddMagicResistBtn.IsHidden = Globals.Me.StatPoints == 0 ||
-                                          Globals.Me.Stat[(int) Stats.MagicResist] == Options.MaxStatValue;
+                                          Globals.Me.TrueStats[(int) Stats.MagicResist] == Options.MaxStatValue;
 
             mAddSpeedBtn.IsHidden =
-                Globals.Me.StatPoints == 0 || Globals.Me.Stat[(int) Stats.Speed] == Options.MaxStatValue;
+                Globals.Me.StatPoints == 0 || Globals.Me.TrueStats[(int) Stats.Speed] == Options.MaxStatValue;
 
             mCraftingLabel.Text = Strings.Character.crafting;
             mMiningTierLabel.SetText(Strings.Character.miningtier.ToString(Globals.Me.MiningTier));

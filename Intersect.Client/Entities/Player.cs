@@ -318,6 +318,7 @@ namespace Intersect.Client.Entities
             InVehicle = pkt.InVehicle;
             VehicleSprite = pkt.VehicleSprite;
             VehicleSpeed = pkt.VehicleSpeed;
+            TrueStats = pkt.TrueStats;
 
             var playerPacket = (PlayerEntityPacket) packet;
 
