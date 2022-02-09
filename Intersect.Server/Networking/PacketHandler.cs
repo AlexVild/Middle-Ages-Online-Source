@@ -2952,8 +2952,6 @@ namespace Intersect.Server.Networking
                 craftingDict.Add("mining_tier", "0");
                 craftingDict.Add("fishing_tier", "0");
                 craftingDict.Add("woodcut_tier", "0");
-                craftingDict.Add("npc_guild_name", "Not in NPC Guild");
-                craftingDict.Add("class_rank", "0");
 
                 player.Variables.ForEach(variable =>
                 {
@@ -2971,19 +2969,20 @@ namespace Intersect.Server.Networking
                     {
                         craftingDict["npc_guild_name"] = variable.Value;
                     }
-                    else if (variable.VariableName.Equals("Class Rank"))
-                    {
-                        craftingDict["class_rank"] = variable.Value;
-                    }
                 });
-                
+
+                var classRanks = new Dictionary<string, int>();
+                player.ClassInfo.Keys.ToList().ForEach(classId =>
+                {
+                    classRanks[ClassBase.GetName(classId)] = player.ClassInfo[classId].Rank;
+                });
+
                 PacketSender.SendCraftingInfoPacket(
                     client,
                     craftingDict["mining_tier"],
                     craftingDict["fishing_tier"],
                     craftingDict["woodcut_tier"],
-                    craftingDict["npc_guild_name"],
-                    craftingDict["class_rank"]
+                    classRanks
                 );
             }
         }

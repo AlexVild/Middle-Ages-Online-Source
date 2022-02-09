@@ -7547,14 +7547,14 @@ namespace Intersect.Server.Entities
             foreach (var cls in ClassBase.Lookup.Values)
             {
                 // If the player doesn't have any info on this class
-                if (!ClassInfo.ContainsKey(cls.Id))
+                if (true)
                 {
                     // Migration - check to see if the player's NPC Guild was previous tracked via player var, and if so, fill in their info
                     if (cls.Id == ClassId && !String.IsNullOrEmpty(GetVariableValue(Guid.Parse(Options.InGuildVarGuid))))
                     {
                         ClassInfo[cls.Id] = GetClassInfoFromPlayerVariables();
                     }
-                    else // Otherwise, simplyt instantiate a new CR instance
+                    else // Otherwise, simply instantiate a new CR instance
                     {
                         
                         ClassInfo[cls.Id] = new PlayerClassStats();

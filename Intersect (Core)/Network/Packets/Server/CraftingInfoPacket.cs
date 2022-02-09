@@ -1,4 +1,5 @@
 ﻿using MessagePack;
+using System.Collections.Generic;
 
 namespace Intersect.Network.Packets.Server
 {
@@ -12,17 +13,14 @@ namespace Intersect.Network.Packets.Server
         [Key(2)]
         public string WoodcutTier { get; set; }
         [Key(3)]
-        public string NPCGuildName { get; set; }
-        [Key(4)]
-        public string ClassRank { get; set; }
+        public Dictionary<string, int> ClassRanks { get; set; }
 
-        public CraftingInfoPacket(string miningTier, string fishingTier, string woodcutTier, string npcGuildName, string classRank)
+        public CraftingInfoPacket(string miningTier, string fishingTier, string woodcutTier, Dictionary<string, int> classRanks)
         {
             MiningTier = miningTier;
             FishingTier = fishingTier;
             WoodcutTier = woodcutTier;
-            NPCGuildName = npcGuildName;
-            ClassRank = classRank;
+            ClassRanks = classRanks;
         }
     }
 }

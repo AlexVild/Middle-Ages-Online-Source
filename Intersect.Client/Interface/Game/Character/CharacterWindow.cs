@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Text;
 using Intersect.Client.Core;
 using Intersect.Client.Framework.File_Management;
 using Intersect.Client.Framework.Gwen;
@@ -44,6 +44,8 @@ namespace Intersect.Client.Interface.Game.Character
 
         private string mCharacterPortraitImg = "";
 
+        private CheckBox mCalcStatCheckbox;
+
         //Controls
         private WindowControl mCharacterWindow;
 
@@ -74,10 +76,6 @@ namespace Intersect.Client.Interface.Game.Character
 
         // NPC Guild
         Label mNpcGuildLabel;
-
-        Label mNpcGuildNameLabel;
-
-        Label mClassRankLabel;
 
         //Location
         public int X;
@@ -150,9 +148,11 @@ namespace Intersect.Client.Interface.Game.Character
             mFishingTierLabel = new Label(mCharacterWindow, "FishingTierLabel");
             mWoodcuttingTierLabel = new Label(mCharacterWindow, "WoodcuttingTierLabel");
 
+            mCalcStatCheckbox = new CheckBox(mCharacterWindow, "CalcStatsCheckBox");
+            mCalcStatCheckbox.SetToolTipText(Strings.Character.calculatestats);
+
             mNpcGuildLabel = new Label(mCharacterWindow, "NPCGuildLabel");
-            mNpcGuildNameLabel = new Label(mCharacterWindow, "NPCGuildName");
-            mClassRankLabel = new Label(mCharacterWindow, "ClassRankLabel");
+            mNpcGuildLabel.SetToolTipText(Strings.Character.classranktip);
 
             for (var i = 0; i < Options.EquipmentSlots.Count; i++)
             {
@@ -339,23 +339,23 @@ namespace Intersect.Client.Interface.Game.Character
             }
 
             mAttackLabel.SetText(
-                Strings.Character.stat0.ToString(Strings.Combat.stat0, Globals.Me.Stat[(int) Stats.Attack])
+                Strings.Character.stat0.ToString(Strings.Combat.stat0, GetStatDisplayString(Stats.Attack, mCalcStatCheckbox.IsChecked))
             );
 
             mDefenseLabel.SetText(
-                Strings.Character.stat2.ToString(Strings.Combat.stat2, Globals.Me.Stat[(int) Stats.Defense])
+                Strings.Character.stat2.ToString(Strings.Combat.stat2, GetStatDisplayString(Stats.Defense, mCalcStatCheckbox.IsChecked))
             );
 
             mSpeedLabel.SetText(
-                Strings.Character.stat4.ToString(Strings.Combat.stat4, Globals.Me.Stat[(int) Stats.Speed])
+                Strings.Character.stat4.ToString(Strings.Combat.stat4, GetStatDisplayString(Stats.Speed, mCalcStatCheckbox.IsChecked))
             );
 
             mAbilityPwrLabel.SetText(
-                Strings.Character.stat1.ToString(Strings.Combat.stat1, Globals.Me.Stat[(int) Stats.AbilityPower])
+                Strings.Character.stat1.ToString(Strings.Combat.stat1, GetStatDisplayString(Stats.AbilityPower, mCalcStatCheckbox.IsChecked))
             );
 
             mMagicRstLabel.SetText(
-                Strings.Character.stat3.ToString(Strings.Combat.stat3, Globals.Me.Stat[(int) Stats.MagicResist])
+                Strings.Character.stat3.ToString(Strings.Combat.stat3, GetStatDisplayString(Stats.MagicResist, mCalcStatCheckbox.IsChecked))
             );
 
             mPointsLabel.SetText(Strings.Character.points.ToString(Globals.Me.StatPoints));
@@ -380,17 +380,7 @@ namespace Intersect.Client.Interface.Game.Character
             mFishingTierLabel.SetText(Strings.Character.fishingtier.ToString(Globals.Me.FishingTier));
             mWoodcuttingTierLabel.SetText(Strings.Character.woodcuttingtier.ToString(Globals.Me.WoodcutTier));
 
-            mNpcGuildLabel.Text = Strings.Character.npcguild;
-            mNpcGuildNameLabel.Text = Strings.Character.npcguildname.ToString(Globals.Me.NpcGuildName, Globals.Me.ClassRank);
-            mClassRankLabel.Text = Strings.Character.classrank.ToString(Globals.Me.ClassRank);
-
-            if (Globals.Me.NpcGuildName == null || Globals.Me.NpcGuildName.Equals("Not in NPC Guild"))
-            {
-                mNpcGuildNameLabel.Hide();
-            } else
-            {
-                mNpcGuildNameLabel.Show();
-            }
+            InitializeClassRankLabel(ref mNpcGuildLabel);
 
             for (var i = 0; i < Options.EquipmentSlots.Count; i++)
             {
@@ -431,6 +421,58 @@ namespace Intersect.Client.Interface.Game.Character
             mCharacterWindow.IsHidden = true;
         }
 
-    }
+        private static void InitializeClassRankLabel(ref Label label)
+        {
+            StringBuilder classRankString = new StringBuilder();
+            if (Globals.Me.ClassRanks != null)
+            {
+                foreach (var cls in ClassBase.GetNameList())
+                {
+                    if (Globals.Me.ClassRanks.TryGetValue(cls, out var classRank))
+                    {
+                        if (classRank > 0)
+                        {
+                            if (classRankString.Length == 0)
+                            {
+                                classRankString.Append(Strings.Character.classrank.ToString(ClassBase.GetName(Globals.Me.Class), classRank));
+                            }
+                            else
+                            {
+                                classRankString.Append(", " + Strings.Character.classrank.ToString(ClassBase.GetName(Globals.Me.Class), classRank));
+                            }
+                        }
+                    }
+                }
+            }
 
+            label.Text = classRankString.ToString();
+        }
+        
+        /// <summary>
+        /// Generates a string that displays the difference between the player's true stat and their equipment/spell modified stat
+        /// </summary>
+        /// <param name="stat">The stat to generate a string for</param>
+        /// <param name="calculate">Whether or not to calculate the value
+        /// <returns>The display string</returns>
+        private static string GetStatDisplayString(Stats stat, bool calculate)
+        {
+            if (calculate)
+            {
+                return Globals.Me.Stat[(int)stat].ToString();
+            }
+            else
+            {
+                var statDiff = Globals.Me.Stat[(int)stat] - Globals.Me.TrueStats[(int)stat];
+                if (Math.Sign(statDiff) >= 0)
+                {
+                    return Globals.Me.TrueStats[(int)stat].ToString() + " (+" + statDiff + ")";
+                }
+                else
+                {
+                    return Globals.Me.TrueStats[(int)stat].ToString() + " (" + statDiff + ")";
+                }
+            }
+            
+        }
+    }
 }

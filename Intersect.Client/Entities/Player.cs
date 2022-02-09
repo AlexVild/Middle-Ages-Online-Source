@@ -95,9 +95,7 @@ namespace Intersect.Client.Entities
 
         public string WoodcutTier { get; set; }
 
-        public string NpcGuildName { get; set; }
-
-        public string ClassRank { get; set; } 
+        public Dictionary<string, int> ClassRanks { get; set; } 
 
         public string QuestPoints { get; set; }
 

@@ -2304,9 +2304,9 @@ namespace Intersect.Server.Networking
             client?.Send(new ComboPacket(comboSize, comboWindow, bonusExp, maxComboWindow));
         }
 
-        public static void SendCraftingInfoPacket(Client client, string miningTier, string fishingTier, string woodcutTier, string npcGuildName, string classRank)
+        public static void SendCraftingInfoPacket(Client client, string miningTier, string fishingTier, string woodcutTier, Dictionary<string, int> classRanks)
         {
-            client?.Send(new CraftingInfoPacket(miningTier, fishingTier, woodcutTier, npcGuildName, classRank));
+            client?.Send(new CraftingInfoPacket(miningTier, fishingTier, woodcutTier, classRanks));
         }
 
         public static void SendQuestPointPacket(Client client, string questPoints, string lifetimeQuestPoints)

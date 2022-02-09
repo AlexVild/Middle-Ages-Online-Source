@@ -389,11 +389,7 @@ namespace Intersect.Client.Localization
             
             public static LocalizedString woodcuttingtier = @"Woodcutting Tier: {00}";
 
-            public static LocalizedString npcguild = @"NPC Guild:";
-
-            public static LocalizedString npcguildname = @"{00}";
-
-            public static LocalizedString classrank = @"Class Rank: {00}";
+            public static LocalizedString classrank = @"{00} Class Rank: {01}";
 
             public static LocalizedString attacktip = @"Attack-scaling damage, max HP, physical accuracy";
 
@@ -414,6 +410,10 @@ namespace Intersect.Client.Localization
             public static LocalizedString addagilitytip = @"Add Agility";
 
             public static LocalizedString addabilitypowertip = @"Add Ability Power";
+            
+            public static LocalizedString classranktip = @"Your Class Rank(s). This can be increased at a Class Guild Hall.";
+            
+            public static LocalizedString calculatestats = @"Calculate Stats?";
         }
 
         public struct CharacterCreation

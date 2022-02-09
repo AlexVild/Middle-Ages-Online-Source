@@ -2162,12 +2162,7 @@ namespace Intersect.Client.Networking
             Globals.Me.MiningTier = packet?.MiningTier;
             Globals.Me.FishingTier = packet?.FishingTier;
             Globals.Me.WoodcutTier = packet?.WoodcutTier;
-            Globals.Me.NpcGuildName = packet?.NPCGuildName;
-            if (Globals.Me.NpcGuildName == null)
-            {
-                Globals.Me.NpcGuildName = "Not in NPC Guild";
-            }
-            Globals.Me.ClassRank = packet.ClassRank;
+            Globals.Me.ClassRanks = packet.ClassRanks;
         }
 
         public void HandlePacket(IPacketSender packetSender, QuestPointPacket packet)
