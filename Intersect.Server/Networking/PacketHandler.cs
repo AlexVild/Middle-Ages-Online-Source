@@ -2974,7 +2974,10 @@ namespace Intersect.Server.Networking
                 var classRanks = new Dictionary<string, int>();
                 player.ClassInfo.Keys.ToList().ForEach(classId =>
                 {
-                    classRanks[ClassBase.GetName(classId)] = player.ClassInfo[classId].Rank;
+                    if (player.ClassInfo[classId].InGuild)
+                    {
+                        classRanks[ClassBase.GetName(classId)] = player.ClassInfo[classId].Rank;
+                    }
                 });
 
                 PacketSender.SendCraftingInfoPacket(

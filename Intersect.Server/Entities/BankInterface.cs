@@ -51,7 +51,8 @@ namespace Intersect.Server.Entities
                             mBank[slot].StatBuffs
                         )
                     );
-                    mBankValue += ItemBase.Get(mBank[slot].ItemId).Price;
+                    var item = ItemBase.Get(mBank[slot].ItemId);
+                    mBankValue += item.Price * mBank[slot].Quantity;
                 }
                 else
                 {
@@ -85,7 +86,12 @@ namespace Intersect.Server.Entities
                 mPlayer?.SendPacket(new BankUpdatePacket(slot, Guid.Empty, 0, null, null));
             }
 
-            UpdateBankValue();
+            var oldValue = mBankValue;
+            mBankValue = CalculateBankValue();
+            if (oldValue != mBankValue)
+            {
+                mPlayer?.SendPacket(new BankUpdateValuePacket(mBankValue));
+            }
         }
 
         public void SendCloseBank()
@@ -810,18 +816,18 @@ namespace Intersect.Server.Entities
             mPlayer.BankInterface = null;
         }
 
-        public void UpdateBankValue()
+        public int CalculateBankValue()
         {
-            mBankValue = 0;
+            var bankVal = 0;
             for (var slot = 0; slot < mMaxSlots - 1; slot++)
             {
                 if (mBank[slot] != null && mBank[slot].ItemId != Guid.Empty)
                 {
-                    mBankValue += ItemBase.Get(mBank[slot].ItemId).Price;
+                    bankVal += ItemBase.Get(mBank[slot].ItemId).Price * mBank[slot].Quantity;
                 }
             }
 
-            mPlayer?.SendPacket(new BankUpdateValuePacket(mBankValue));
+            return bankVal;
         }
     }
 }
