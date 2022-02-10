@@ -122,6 +122,8 @@ namespace Intersect.GameObjects
         /// <inheritdoc />
         public string Folder { get; set; } = "";
 
+        public long Experience { get; set; }
+
         public class ResourceDrop
         {
 

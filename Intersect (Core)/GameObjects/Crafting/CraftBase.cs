@@ -51,6 +51,8 @@ namespace Intersect.GameObjects.Crafting
         /// <inheritdoc />
         public string Folder { get; set; } = "";
 
+        public long Experience { get; set; }
+
         [Column("Event")]
         [JsonProperty]
         public Guid EventId { get; set; }

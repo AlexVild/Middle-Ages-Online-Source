@@ -1649,6 +1649,11 @@ namespace Intersect.Editor.Forms.Editors.Events
             }
         }
 
+        private static string GetCommandText(AddInspirationCommand command, MapInstance map)
+        {
+            return Strings.EventCommandList.addinspiration.ToString(command.Seconds);
+        }
+
     }
 
 }

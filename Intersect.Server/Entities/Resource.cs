@@ -84,6 +84,8 @@ namespace Intersect.Server.Entities
                 {
                     playerKiller.SendRecordUpdate(Strings.Records.resourcegathered.ToString(recordKilled, Name));
                 }
+
+                playerKiller.GiveInspiredExperience(Base.Experience);
             }
         }
 

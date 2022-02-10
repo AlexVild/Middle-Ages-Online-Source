@@ -2010,6 +2010,9 @@ Tick timer saved in server config.json.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString npcmanageclearcooldown = @"Clear Task Cooldown";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString addinspiration = @"Add {00} seconds of inspiration";
         }
 
         public struct EventChangePlayerColor
@@ -2113,6 +2116,7 @@ Tick timer saved in server config.json.";
                 {"openquestboard", @"Open Quest Board"},
                 {"setvehicle", @"Set Vehicle"},
                 {"npcguildmanagement", @"NPC Guild Management"},
+                {"addinspiration", @"Add Inspiration"},
             };
 
         }
@@ -4687,6 +4691,8 @@ Tick timer saved in server config.json.";
             public static LocalizedString walkableafter = @"Walkable after resource removal?";
 
             public static LocalizedString walkablebefore = @"Walkable before resource removal?";
+            
+            public static LocalizedString inspirationexp = @"Inspiration Exp:";
 
         }
 

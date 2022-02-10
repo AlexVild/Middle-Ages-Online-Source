@@ -77,7 +77,8 @@ namespace Intersect.Editor.Forms.Editors.Events
             System.Windows.Forms.TreeNode treeNode31 = new System.Windows.Forms.TreeNode("Reset Stat Point Allocations");
             System.Windows.Forms.TreeNode treeNode32 = new System.Windows.Forms.TreeNode("Set Vehicle");
             System.Windows.Forms.TreeNode treeNode33 = new System.Windows.Forms.TreeNode("NPC Guild Management");
-            System.Windows.Forms.TreeNode treeNode34 = new System.Windows.Forms.TreeNode("Player Control", new System.Windows.Forms.TreeNode[] {
+            System.Windows.Forms.TreeNode treeNode34 = new System.Windows.Forms.TreeNode("Add Inspiration");
+            System.Windows.Forms.TreeNode treeNode35 = new System.Windows.Forms.TreeNode("Player Control", new System.Windows.Forms.TreeNode[] {
             treeNode14,
             treeNode15,
             treeNode16,
@@ -97,18 +98,18 @@ namespace Intersect.Editor.Forms.Editors.Events
             treeNode30,
             treeNode31,
             treeNode32,
-            treeNode33});
-            System.Windows.Forms.TreeNode treeNode35 = new System.Windows.Forms.TreeNode("Warp Player");
-            System.Windows.Forms.TreeNode treeNode36 = new System.Windows.Forms.TreeNode("Set Move Route");
-            System.Windows.Forms.TreeNode treeNode37 = new System.Windows.Forms.TreeNode("Wait for Route Completion");
-            System.Windows.Forms.TreeNode treeNode38 = new System.Windows.Forms.TreeNode("Hold Player");
-            System.Windows.Forms.TreeNode treeNode39 = new System.Windows.Forms.TreeNode("Release Player");
-            System.Windows.Forms.TreeNode treeNode40 = new System.Windows.Forms.TreeNode("Spawn NPC");
-            System.Windows.Forms.TreeNode treeNode41 = new System.Windows.Forms.TreeNode("Despawn NPC");
-            System.Windows.Forms.TreeNode treeNode42 = new System.Windows.Forms.TreeNode("Hide Player");
-            System.Windows.Forms.TreeNode treeNode43 = new System.Windows.Forms.TreeNode("Show Player");
-            System.Windows.Forms.TreeNode treeNode44 = new System.Windows.Forms.TreeNode("Movement", new System.Windows.Forms.TreeNode[] {
-            treeNode35,
+            treeNode33,
+            treeNode34});
+            System.Windows.Forms.TreeNode treeNode36 = new System.Windows.Forms.TreeNode("Warp Player");
+            System.Windows.Forms.TreeNode treeNode37 = new System.Windows.Forms.TreeNode("Set Move Route");
+            System.Windows.Forms.TreeNode treeNode38 = new System.Windows.Forms.TreeNode("Wait for Route Completion");
+            System.Windows.Forms.TreeNode treeNode39 = new System.Windows.Forms.TreeNode("Hold Player");
+            System.Windows.Forms.TreeNode treeNode40 = new System.Windows.Forms.TreeNode("Release Player");
+            System.Windows.Forms.TreeNode treeNode41 = new System.Windows.Forms.TreeNode("Spawn NPC");
+            System.Windows.Forms.TreeNode treeNode42 = new System.Windows.Forms.TreeNode("Despawn NPC");
+            System.Windows.Forms.TreeNode treeNode43 = new System.Windows.Forms.TreeNode("Hide Player");
+            System.Windows.Forms.TreeNode treeNode44 = new System.Windows.Forms.TreeNode("Show Player");
+            System.Windows.Forms.TreeNode treeNode45 = new System.Windows.Forms.TreeNode("Movement", new System.Windows.Forms.TreeNode[] {
             treeNode36,
             treeNode37,
             treeNode38,
@@ -116,54 +117,55 @@ namespace Intersect.Editor.Forms.Editors.Events
             treeNode40,
             treeNode41,
             treeNode42,
-            treeNode43});
-            System.Windows.Forms.TreeNode treeNode45 = new System.Windows.Forms.TreeNode("Play Animation");
-            System.Windows.Forms.TreeNode treeNode46 = new System.Windows.Forms.TreeNode("Play BGM");
-            System.Windows.Forms.TreeNode treeNode47 = new System.Windows.Forms.TreeNode("Fadeout BGM");
-            System.Windows.Forms.TreeNode treeNode48 = new System.Windows.Forms.TreeNode("Play Sound");
-            System.Windows.Forms.TreeNode treeNode49 = new System.Windows.Forms.TreeNode("Stop Sounds");
-            System.Windows.Forms.TreeNode treeNode50 = new System.Windows.Forms.TreeNode("Show Picture");
-            System.Windows.Forms.TreeNode treeNode51 = new System.Windows.Forms.TreeNode("Hide Picture");
-            System.Windows.Forms.TreeNode treeNode52 = new System.Windows.Forms.TreeNode("Flash Screen");
-            System.Windows.Forms.TreeNode treeNode53 = new System.Windows.Forms.TreeNode("Special Effects", new System.Windows.Forms.TreeNode[] {
-            treeNode45,
+            treeNode43,
+            treeNode44});
+            System.Windows.Forms.TreeNode treeNode46 = new System.Windows.Forms.TreeNode("Play Animation");
+            System.Windows.Forms.TreeNode treeNode47 = new System.Windows.Forms.TreeNode("Play BGM");
+            System.Windows.Forms.TreeNode treeNode48 = new System.Windows.Forms.TreeNode("Fadeout BGM");
+            System.Windows.Forms.TreeNode treeNode49 = new System.Windows.Forms.TreeNode("Play Sound");
+            System.Windows.Forms.TreeNode treeNode50 = new System.Windows.Forms.TreeNode("Stop Sounds");
+            System.Windows.Forms.TreeNode treeNode51 = new System.Windows.Forms.TreeNode("Show Picture");
+            System.Windows.Forms.TreeNode treeNode52 = new System.Windows.Forms.TreeNode("Hide Picture");
+            System.Windows.Forms.TreeNode treeNode53 = new System.Windows.Forms.TreeNode("Flash Screen");
+            System.Windows.Forms.TreeNode treeNode54 = new System.Windows.Forms.TreeNode("Special Effects", new System.Windows.Forms.TreeNode[] {
             treeNode46,
             treeNode47,
             treeNode48,
             treeNode49,
             treeNode50,
             treeNode51,
-            treeNode52});
-            System.Windows.Forms.TreeNode treeNode54 = new System.Windows.Forms.TreeNode("Start Quest");
-            System.Windows.Forms.TreeNode treeNode55 = new System.Windows.Forms.TreeNode("Complete Quest Task");
-            System.Windows.Forms.TreeNode treeNode56 = new System.Windows.Forms.TreeNode("End Quest");
-            System.Windows.Forms.TreeNode treeNode57 = new System.Windows.Forms.TreeNode("Random Quest from List");
-            System.Windows.Forms.TreeNode treeNode58 = new System.Windows.Forms.TreeNode("Open Quest Board");
-            System.Windows.Forms.TreeNode treeNode59 = new System.Windows.Forms.TreeNode("Quest Control", new System.Windows.Forms.TreeNode[] {
-            treeNode54,
+            treeNode52,
+            treeNode53});
+            System.Windows.Forms.TreeNode treeNode55 = new System.Windows.Forms.TreeNode("Start Quest");
+            System.Windows.Forms.TreeNode treeNode56 = new System.Windows.Forms.TreeNode("Complete Quest Task");
+            System.Windows.Forms.TreeNode treeNode57 = new System.Windows.Forms.TreeNode("End Quest");
+            System.Windows.Forms.TreeNode treeNode58 = new System.Windows.Forms.TreeNode("Random Quest from List");
+            System.Windows.Forms.TreeNode treeNode59 = new System.Windows.Forms.TreeNode("Open Quest Board");
+            System.Windows.Forms.TreeNode treeNode60 = new System.Windows.Forms.TreeNode("Quest Control", new System.Windows.Forms.TreeNode[] {
             treeNode55,
             treeNode56,
             treeNode57,
-            treeNode58});
-            System.Windows.Forms.TreeNode treeNode60 = new System.Windows.Forms.TreeNode("Wait...");
-            System.Windows.Forms.TreeNode treeNode61 = new System.Windows.Forms.TreeNode("Etc", new System.Windows.Forms.TreeNode[] {
-            treeNode60});
-            System.Windows.Forms.TreeNode treeNode62 = new System.Windows.Forms.TreeNode("Open Bank");
-            System.Windows.Forms.TreeNode treeNode63 = new System.Windows.Forms.TreeNode("Open Shop");
-            System.Windows.Forms.TreeNode treeNode64 = new System.Windows.Forms.TreeNode("Open Crafting Station");
-            System.Windows.Forms.TreeNode treeNode65 = new System.Windows.Forms.TreeNode("Shop and Bank", new System.Windows.Forms.TreeNode[] {
-            treeNode62,
+            treeNode58,
+            treeNode59});
+            System.Windows.Forms.TreeNode treeNode61 = new System.Windows.Forms.TreeNode("Wait...");
+            System.Windows.Forms.TreeNode treeNode62 = new System.Windows.Forms.TreeNode("Etc", new System.Windows.Forms.TreeNode[] {
+            treeNode61});
+            System.Windows.Forms.TreeNode treeNode63 = new System.Windows.Forms.TreeNode("Open Bank");
+            System.Windows.Forms.TreeNode treeNode64 = new System.Windows.Forms.TreeNode("Open Shop");
+            System.Windows.Forms.TreeNode treeNode65 = new System.Windows.Forms.TreeNode("Open Crafting Station");
+            System.Windows.Forms.TreeNode treeNode66 = new System.Windows.Forms.TreeNode("Shop and Bank", new System.Windows.Forms.TreeNode[] {
             treeNode63,
-            treeNode64});
-            System.Windows.Forms.TreeNode treeNode66 = new System.Windows.Forms.TreeNode("Create Guild");
-            System.Windows.Forms.TreeNode treeNode67 = new System.Windows.Forms.TreeNode("Disband Guild");
-            System.Windows.Forms.TreeNode treeNode68 = new System.Windows.Forms.TreeNode("Open Guild Bank");
-            System.Windows.Forms.TreeNode treeNode69 = new System.Windows.Forms.TreeNode("Set Guild Bank Slots Count");
-            System.Windows.Forms.TreeNode treeNode70 = new System.Windows.Forms.TreeNode("Guilds", new System.Windows.Forms.TreeNode[] {
-            treeNode66,
+            treeNode64,
+            treeNode65});
+            System.Windows.Forms.TreeNode treeNode67 = new System.Windows.Forms.TreeNode("Create Guild");
+            System.Windows.Forms.TreeNode treeNode68 = new System.Windows.Forms.TreeNode("Disband Guild");
+            System.Windows.Forms.TreeNode treeNode69 = new System.Windows.Forms.TreeNode("Open Guild Bank");
+            System.Windows.Forms.TreeNode treeNode70 = new System.Windows.Forms.TreeNode("Set Guild Bank Slots Count");
+            System.Windows.Forms.TreeNode treeNode71 = new System.Windows.Forms.TreeNode("Guilds", new System.Windows.Forms.TreeNode[] {
             treeNode67,
             treeNode68,
-            treeNode69});
+            treeNode69,
+            treeNode70});
             this.lblName = new System.Windows.Forms.Label();
             this.txtEventname = new DarkUI.Controls.DarkTextBox();
             this.grpEntityOptions = new DarkUI.Controls.DarkGroupBox();
@@ -1124,120 +1126,123 @@ namespace Intersect.Editor.Forms.Editors.Events
             treeNode33.Name = "npcguildmanagement";
             treeNode33.Tag = "62";
             treeNode33.Text = "NPC Guild Management";
-            treeNode34.Name = "playercontrol";
-            treeNode34.Text = "Player Control";
-            treeNode35.Name = "warpplayer";
-            treeNode35.Tag = "23";
-            treeNode35.Text = "Warp Player";
-            treeNode36.Name = "setmoveroute";
-            treeNode36.Tag = "24";
-            treeNode36.Text = "Set Move Route";
-            treeNode37.Name = "waitmoveroute";
-            treeNode37.Tag = "25";
-            treeNode37.Text = "Wait for Route Completion";
-            treeNode38.Name = "holdplayer";
-            treeNode38.Tag = "26";
-            treeNode38.Text = "Hold Player";
-            treeNode39.Name = "releaseplayer";
-            treeNode39.Tag = "27";
-            treeNode39.Text = "Release Player";
-            treeNode40.Name = "spawnnpc";
-            treeNode40.Tag = "28";
-            treeNode40.Text = "Spawn NPC";
-            treeNode41.Name = "despawnnpcs";
-            treeNode41.Tag = "39";
-            treeNode41.Text = "Despawn NPC";
-            treeNode42.Name = "hideplayer";
-            treeNode42.Tag = "45";
-            treeNode42.Text = "Hide Player";
-            treeNode43.Name = "showplayer";
-            treeNode43.Tag = "46";
-            treeNode43.Text = "Show Player";
-            treeNode44.Name = "movement";
-            treeNode44.Text = "Movement";
-            treeNode45.Name = "playanimation";
-            treeNode45.Tag = "29";
-            treeNode45.Text = "Play Animation";
-            treeNode46.Name = "playbgm";
-            treeNode46.Tag = "30";
-            treeNode46.Text = "Play BGM";
-            treeNode47.Name = "fadeoutbgm";
-            treeNode47.Tag = "31";
-            treeNode47.Text = "Fadeout BGM";
-            treeNode48.Name = "playsound";
-            treeNode48.Tag = "32";
-            treeNode48.Text = "Play Sound";
-            treeNode49.Name = "stopsounds";
-            treeNode49.Tag = "33";
-            treeNode49.Text = "Stop Sounds";
-            treeNode50.Name = "showpicture";
-            treeNode50.Tag = "43";
-            treeNode50.Text = "Show Picture";
-            treeNode51.Name = "hidepicture";
-            treeNode51.Tag = "44";
-            treeNode51.Text = "Hide Picture";
-            treeNode52.Name = "flashscreen";
-            treeNode52.Tag = "58";
-            treeNode52.Text = "Flash Screen";
-            treeNode53.Name = "specialeffects";
-            treeNode53.Text = "Special Effects";
-            treeNode54.Name = "startquest";
-            treeNode54.Tag = "40";
-            treeNode54.Text = "Start Quest";
-            treeNode55.Name = "completequesttask";
-            treeNode55.Tag = "41";
-            treeNode55.Text = "Complete Quest Task";
-            treeNode56.Name = "endquest";
-            treeNode56.Tag = "42";
-            treeNode56.Text = "End Quest";
-            treeNode57.Name = "randomquest";
-            treeNode57.Tag = "59";
-            treeNode57.Text = "Random Quest from List";
-            treeNode58.Name = "openquestboard";
-            treeNode58.Tag = "60";
-            treeNode58.Text = "Open Quest Board";
-            treeNode59.Name = "questcontrol";
-            treeNode59.Text = "Quest Control";
-            treeNode60.Name = "wait";
-            treeNode60.Tag = "34";
-            treeNode60.Text = "Wait...";
-            treeNode61.Name = "etc";
-            treeNode61.Text = "Etc";
-            treeNode62.Name = "openbank";
-            treeNode62.Tag = "35";
-            treeNode62.Text = "Open Bank";
-            treeNode63.Name = "openshop";
-            treeNode63.Tag = "36";
-            treeNode63.Text = "Open Shop";
-            treeNode64.Name = "opencraftingstation";
-            treeNode64.Tag = "37";
-            treeNode64.Text = "Open Crafting Station";
-            treeNode65.Name = "shopandbank";
-            treeNode65.Text = "Shop and Bank";
-            treeNode66.Name = "createguild";
-            treeNode66.Tag = "53";
-            treeNode66.Text = "Create Guild";
-            treeNode67.Name = "disbandguild";
-            treeNode67.Tag = "54";
-            treeNode67.Text = "Disband Guild";
-            treeNode68.Name = "openguildbank";
-            treeNode68.Tag = "55";
-            treeNode68.Text = "Open Guild Bank";
-            treeNode69.Name = "setguildbankslots";
-            treeNode69.Tag = "56";
-            treeNode69.Text = "Set Guild Bank Slots Count";
-            treeNode70.Name = "guilds";
-            treeNode70.Text = "Guilds";
+            treeNode34.Name = "addinspiration";
+            treeNode34.Tag = "63";
+            treeNode34.Text = "Add Inspiration";
+            treeNode35.Name = "playercontrol";
+            treeNode35.Text = "Player Control";
+            treeNode36.Name = "warpplayer";
+            treeNode36.Tag = "23";
+            treeNode36.Text = "Warp Player";
+            treeNode37.Name = "setmoveroute";
+            treeNode37.Tag = "24";
+            treeNode37.Text = "Set Move Route";
+            treeNode38.Name = "waitmoveroute";
+            treeNode38.Tag = "25";
+            treeNode38.Text = "Wait for Route Completion";
+            treeNode39.Name = "holdplayer";
+            treeNode39.Tag = "26";
+            treeNode39.Text = "Hold Player";
+            treeNode40.Name = "releaseplayer";
+            treeNode40.Tag = "27";
+            treeNode40.Text = "Release Player";
+            treeNode41.Name = "spawnnpc";
+            treeNode41.Tag = "28";
+            treeNode41.Text = "Spawn NPC";
+            treeNode42.Name = "despawnnpcs";
+            treeNode42.Tag = "39";
+            treeNode42.Text = "Despawn NPC";
+            treeNode43.Name = "hideplayer";
+            treeNode43.Tag = "45";
+            treeNode43.Text = "Hide Player";
+            treeNode44.Name = "showplayer";
+            treeNode44.Tag = "46";
+            treeNode44.Text = "Show Player";
+            treeNode45.Name = "movement";
+            treeNode45.Text = "Movement";
+            treeNode46.Name = "playanimation";
+            treeNode46.Tag = "29";
+            treeNode46.Text = "Play Animation";
+            treeNode47.Name = "playbgm";
+            treeNode47.Tag = "30";
+            treeNode47.Text = "Play BGM";
+            treeNode48.Name = "fadeoutbgm";
+            treeNode48.Tag = "31";
+            treeNode48.Text = "Fadeout BGM";
+            treeNode49.Name = "playsound";
+            treeNode49.Tag = "32";
+            treeNode49.Text = "Play Sound";
+            treeNode50.Name = "stopsounds";
+            treeNode50.Tag = "33";
+            treeNode50.Text = "Stop Sounds";
+            treeNode51.Name = "showpicture";
+            treeNode51.Tag = "43";
+            treeNode51.Text = "Show Picture";
+            treeNode52.Name = "hidepicture";
+            treeNode52.Tag = "44";
+            treeNode52.Text = "Hide Picture";
+            treeNode53.Name = "flashscreen";
+            treeNode53.Tag = "58";
+            treeNode53.Text = "Flash Screen";
+            treeNode54.Name = "specialeffects";
+            treeNode54.Text = "Special Effects";
+            treeNode55.Name = "startquest";
+            treeNode55.Tag = "40";
+            treeNode55.Text = "Start Quest";
+            treeNode56.Name = "completequesttask";
+            treeNode56.Tag = "41";
+            treeNode56.Text = "Complete Quest Task";
+            treeNode57.Name = "endquest";
+            treeNode57.Tag = "42";
+            treeNode57.Text = "End Quest";
+            treeNode58.Name = "randomquest";
+            treeNode58.Tag = "59";
+            treeNode58.Text = "Random Quest from List";
+            treeNode59.Name = "openquestboard";
+            treeNode59.Tag = "60";
+            treeNode59.Text = "Open Quest Board";
+            treeNode60.Name = "questcontrol";
+            treeNode60.Text = "Quest Control";
+            treeNode61.Name = "wait";
+            treeNode61.Tag = "34";
+            treeNode61.Text = "Wait...";
+            treeNode62.Name = "etc";
+            treeNode62.Text = "Etc";
+            treeNode63.Name = "openbank";
+            treeNode63.Tag = "35";
+            treeNode63.Text = "Open Bank";
+            treeNode64.Name = "openshop";
+            treeNode64.Tag = "36";
+            treeNode64.Text = "Open Shop";
+            treeNode65.Name = "opencraftingstation";
+            treeNode65.Tag = "37";
+            treeNode65.Text = "Open Crafting Station";
+            treeNode66.Name = "shopandbank";
+            treeNode66.Text = "Shop and Bank";
+            treeNode67.Name = "createguild";
+            treeNode67.Tag = "53";
+            treeNode67.Text = "Create Guild";
+            treeNode68.Name = "disbandguild";
+            treeNode68.Tag = "54";
+            treeNode68.Text = "Disband Guild";
+            treeNode69.Name = "openguildbank";
+            treeNode69.Tag = "55";
+            treeNode69.Text = "Open Guild Bank";
+            treeNode70.Name = "setguildbankslots";
+            treeNode70.Tag = "56";
+            treeNode70.Text = "Set Guild Bank Slots Count";
+            treeNode71.Name = "guilds";
+            treeNode71.Text = "Guilds";
             this.lstCommands.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
             treeNode5,
             treeNode13,
-            treeNode34,
-            treeNode44,
-            treeNode53,
-            treeNode59,
-            treeNode61,
-            treeNode65,
-            treeNode70});
+            treeNode35,
+            treeNode45,
+            treeNode54,
+            treeNode60,
+            treeNode62,
+            treeNode66,
+            treeNode71});
             this.lstCommands.Size = new System.Drawing.Size(445, 440);
             this.lstCommands.TabIndex = 2;
             this.lstCommands.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.lstCommands_NodeMouseDoubleClick);
@@ -1318,13 +1323,13 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.btnDelete});
             this.commandMenu.Name = "commandMenu";
             this.commandMenu.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.commandMenu.Size = new System.Drawing.Size(114, 136);
+            this.commandMenu.Size = new System.Drawing.Size(108, 136);
             // 
             // btnInsert
             // 
             this.btnInsert.ForeColor = System.Drawing.Color.Gainsboro;
             this.btnInsert.Name = "btnInsert";
-            this.btnInsert.Size = new System.Drawing.Size(113, 22);
+            this.btnInsert.Size = new System.Drawing.Size(107, 22);
             this.btnInsert.Text = "Insert";
             this.btnInsert.Click += new System.EventHandler(this.btnInsert_Click);
             // 
@@ -1332,7 +1337,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             // 
             this.btnEdit.ForeColor = System.Drawing.Color.Gainsboro;
             this.btnEdit.Name = "btnEdit";
-            this.btnEdit.Size = new System.Drawing.Size(113, 22);
+            this.btnEdit.Size = new System.Drawing.Size(107, 22);
             this.btnEdit.Text = "Edit";
             this.btnEdit.Click += new System.EventHandler(this.btnEdit_Click);
             // 
@@ -1340,7 +1345,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             // 
             this.btnCut.ForeColor = System.Drawing.Color.Gainsboro;
             this.btnCut.Name = "btnCut";
-            this.btnCut.Size = new System.Drawing.Size(113, 22);
+            this.btnCut.Size = new System.Drawing.Size(107, 22);
             this.btnCut.Text = "Cut";
             this.btnCut.Click += new System.EventHandler(this.btnCut_Click);
             // 
@@ -1348,7 +1353,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             // 
             this.btnCopy.ForeColor = System.Drawing.Color.Gainsboro;
             this.btnCopy.Name = "btnCopy";
-            this.btnCopy.Size = new System.Drawing.Size(113, 22);
+            this.btnCopy.Size = new System.Drawing.Size(107, 22);
             this.btnCopy.Text = "Copy";
             this.btnCopy.Click += new System.EventHandler(this.btnCopy_Click);
             // 
@@ -1356,7 +1361,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             // 
             this.btnPaste.ForeColor = System.Drawing.Color.Gainsboro;
             this.btnPaste.Name = "btnPaste";
-            this.btnPaste.Size = new System.Drawing.Size(113, 22);
+            this.btnPaste.Size = new System.Drawing.Size(107, 22);
             this.btnPaste.Text = "Paste";
             this.btnPaste.Click += new System.EventHandler(this.btnPaste_Click);
             // 
@@ -1364,7 +1369,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             // 
             this.btnDelete.ForeColor = System.Drawing.Color.Gainsboro;
             this.btnDelete.Name = "btnDelete";
-            this.btnDelete.Size = new System.Drawing.Size(113, 22);
+            this.btnDelete.Size = new System.Drawing.Size(107, 22);
             this.btnDelete.Text = "Delete";
             this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
             // 

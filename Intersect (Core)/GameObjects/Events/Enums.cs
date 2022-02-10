@@ -241,7 +241,10 @@
         SetVehicle,
 
         // NPC Guilds,
-        NPCGuildManagement
+        NPCGuildManagement,
+        
+        // Inspiration
+        AddInspiration
     }
 
     public enum NPCGuildManagementSelection

@@ -2307,6 +2307,29 @@ namespace Intersect.Server.Entities.Events
             }
         }
 
+        private static void ProcessCommand(
+            AddInspirationCommand command,
+            Player player,
+            Event instance,
+            CommandInstance stackInfo,
+            Stack<CommandInstance> callStack
+        )
+        {
+            if (player == null) return;
+
+            var now = Globals.Timing.MillisecondsUTC;
+            if (player.InspirationTime < now)
+            {
+                // Add Millis
+                player.InspirationTime = now + (command.Seconds * 1000);
+            }
+            else
+            {
+                player.InspirationTime += (command.Seconds * 1000);
+            }
+
+            player.SendInspirationUpdateText(command.Seconds);
+        }
     }
 
 }

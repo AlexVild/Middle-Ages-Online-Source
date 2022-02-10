@@ -1150,4 +1150,11 @@ namespace Intersect.GameObjects.Events.Commands
         
         public int NewRank { get; set; }
     }
+
+    public class AddInspirationCommand : EventCommand
+    {
+        public override EventCommandType Type { get; } = EventCommandType.AddInspiration;
+
+        public long Seconds { get; set; }
+    }
 }

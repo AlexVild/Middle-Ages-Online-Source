@@ -125,6 +125,8 @@ namespace Intersect.Editor.Forms.Editors
                 }
 
                 cmbEvent.SelectedIndex = EventBase.ListIndex(mEditorItem.EventId) + 1;
+
+                nudExp.Value = mEditorItem.Experience;
             }
             else
             {
@@ -567,6 +569,11 @@ namespace Intersect.Editor.Forms.Editors
         }
 
         #endregion
+
+        private void nudExp_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Experience = (long)nudExp.Value;
+        }
     }
 
 }

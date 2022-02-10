@@ -775,6 +775,10 @@ namespace Intersect.Editor.Forms.Editors.Events
                     tmpCommand = new NPCGuildManagementCommand();
 
                     break;
+                case EventCommandType.AddInspiration:
+                    tmpCommand = new AddInspirationCommand();
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -1409,6 +1413,10 @@ namespace Intersect.Editor.Forms.Editors.Events
                     break;
                 case EventCommandType.NPCGuildManagement:
                     cmdWindow = new EventCommand_NPCGuildManagement((NPCGuildManagementCommand)command, this);
+
+                    break;
+                case EventCommandType.AddInspiration:
+                    cmdWindow = new EventCommand_AddInspiration((AddInspirationCommand)command, this);
 
                     break;
                 default:

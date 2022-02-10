@@ -281,6 +281,8 @@ namespace Intersect.Server.Entities
 
         public long VehicleSpeed { get; set; } = 0L;
 
+        public long InspirationTime { get; set; } = 0L;
+
         [JsonIgnore]
         public virtual List<PlayerRecord> PlayerRecords { get; set; } = new List<PlayerRecord>();
 
@@ -416,6 +418,11 @@ namespace Intersect.Server.Entities
 
             // Initialize Class Rank info for any new classes that have been added/underlying updates to CR stuff in Options
             InitClassRanks();
+
+            if (InspirationTime > Globals.Timing.MillisecondsUTC)
+            {
+                SendInspirationUpdateText(-1);
+            }
         }
 
         public void SendPacket(IPacket packet, TransmissionMode mode = TransmissionMode.All)
@@ -3918,7 +3925,8 @@ namespace Intersect.Server.Entities
 
                 if (TryGiveItem(CraftBase.Get(id).ItemId, quantity))
                 {
-                    String itemName = ItemBase.GetName(CraftBase.Get(id).ItemId);
+                    var craftedItem = CraftBase.Get(id);
+                    String itemName = ItemBase.GetName(craftedItem.ItemId);
                     PacketSender.SendChatMsg(
                         this, Strings.Crafting.crafted.ToString(itemName), ChatMessageType.Crafting,
                         CustomColors.Alerts.Success
@@ -3930,9 +3938,10 @@ namespace Intersect.Server.Entities
                     {
                         SendRecordUpdate(Strings.Records.itemcrafted.ToString(recordCrafted, itemName));
                     }
-                    
+                    GiveInspiredExperience(craftedItem.Experience);
+
                     if (CraftBase.Get(id).Event != null)
-                        StartCommonEvent(CraftBase.Get(id).Event);
+                        StartCommonEvent(craftedItem.Event);
                 }
                 else
                 {
@@ -7693,6 +7702,35 @@ namespace Intersect.Server.Entities
         public void SendRecordUpdate(string message)
         {
             PacketSender.SendChatMsg(this, message, ChatMessageType.Experience);
+        }
+        #endregion
+
+        #region inspiration
+        public void GiveInspiredExperience(long amount)
+        {
+            if (InspirationTime > Globals.Timing.MillisecondsUTC && amount > 0)
+            {
+                GiveExperience(amount);
+                PacketSender.SendActionMsg(this, Strings.Combat.inspiredexp.ToString(amount), CustomColors.Combat.LevelUp);
+            }
+        }
+
+        public void SendInspirationUpdateText(long seconds)
+        {
+            var endTimeStamp = (InspirationTime - Globals.Timing.MillisecondsUTC) / 1000 / 60;
+            if (seconds >= 60)
+            {
+                var minutes = seconds / 60;
+                PacketSender.SendChatMsg(this, Strings.Combat.inspirationgainedminutes.ToString(minutes, endTimeStamp), ChatMessageType.Combat, CustomColors.Combat.LevelUp);
+            }
+            else if (seconds > 0)
+            {
+                PacketSender.SendChatMsg(this, Strings.Combat.inspirationgained.ToString(seconds, endTimeStamp), ChatMessageType.Combat, CustomColors.Combat.LevelUp);
+            }
+            else
+            {
+                PacketSender.SendChatMsg(this, Strings.Combat.stillinspired.ToString(endTimeStamp), ChatMessageType.Combat, CustomColors.Combat.LevelUp);
+            }
         }
         #endregion
     }

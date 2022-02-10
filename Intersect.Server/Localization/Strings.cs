@@ -254,6 +254,21 @@ namespace Intersect.Server.Localization
             public readonly LocalizedString stealthattack = @"SNEAK ATTACK!";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString inspiredexp = @"+ {00} EXP!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString inspirationgained = @"You have gained {00} seconds of inspiration! You have {01} minutes remaining.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString stillinspired = @"You are inspired, and will run out of inspiration in {00} minutes.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString inspirationgainedminutes = @"You have gained {00} minutes of inspiration! You have {01} minutes remaining.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString inspirationover = @"You are no longer inspired.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocaleDictionary<int, LocalizedString> damagetypes =
                 new LocaleDictionary<int, LocalizedString>(
                     new Dictionary<int, LocalizedString>
