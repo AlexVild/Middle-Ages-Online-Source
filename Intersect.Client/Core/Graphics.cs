@@ -419,6 +419,20 @@ namespace Intersect.Client.Core
             {
                 animInstance.EndDraw();
             }
+
+            DrawScanlines();
+        }
+
+        public static void DrawScanlines()
+        {
+            if (Globals.Database.EnableScanlines)
+            {
+                var imageTex = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Image, "scanlines.png");
+                if (imageTex != null)
+                {
+                    DrawFullScreenTexture(imageTex, 1f);
+                }
+            }
         }
 
         //Game Rendering

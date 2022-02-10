@@ -17,6 +17,8 @@ namespace Intersect.Client.Framework.Database
         public bool CombatFlash;
 
         public bool CombatShake;
+        
+        public bool EnableScanlines;
 
         public bool TargetAccountDirection;
 
@@ -65,6 +67,7 @@ namespace Intersect.Client.Framework.Database
             StickyTarget = LoadPreference("StickyTarget", true);
             CombatShake = LoadPreference("CombatShake", true);
             CombatFlash = LoadPreference("CombatFlash", true);
+            EnableScanlines = LoadPreference("EnableScanlines", true);
         }
 
         public virtual void SavePreferences()
@@ -82,6 +85,7 @@ namespace Intersect.Client.Framework.Database
             SavePreference("LeftClickTarget", LeftClickTarget.ToString());
             SavePreference("CombatShake", CombatShake.ToString());
             SavePreference("CombatFlash", CombatFlash.ToString());
+            SavePreference("EnableScanlines", EnableScanlines.ToString());
         }
 
         public abstract bool LoadConfig();

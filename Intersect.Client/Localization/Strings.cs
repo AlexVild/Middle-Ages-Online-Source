@@ -1339,7 +1339,9 @@ namespace Intersect.Client.Localization
             public static LocalizedString vsync = @"V-Sync";
             
             public static LocalizedString taptoturn = @"Tap-to-Turn";
-            
+
+            public static LocalizedString enablescanlines = @"Enable Scanlines";
+
             public static LocalizedString faceonlock = @"Face Target on Lock";
             
             public static LocalizedString leftclicktarget = @"Left Click Target";
