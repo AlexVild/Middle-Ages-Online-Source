@@ -127,6 +127,14 @@ namespace Intersect.Editor.Forms.Editors
                 cmbEvent.SelectedIndex = EventBase.ListIndex(mEditorItem.EventId) + 1;
 
                 nudExp.Value = mEditorItem.Experience;
+
+                int craftCost = 0;
+                mEditorItem.Ingredients.ForEach(ing =>
+                {
+                    craftCost += ItemBase.Get(ing.ItemId).Price;
+                });
+
+                lblCost.Text = $"Item Cost: {ItemBase.Get(mEditorItem.ItemId).Price}; Craft Cost: {craftCost}";
             }
             else
             {

@@ -241,6 +241,8 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
             this.vS2015DarkTheme1 = new WeifenLuo.WinFormsUI.Docking.VS2015DarkTheme();
+            this.lstDrops = new System.Windows.Forms.ListBox();
+            this.lblDrops = new System.Windows.Forms.Label();
             this.grpItems.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             this.grpDestroy.SuspendLayout();
@@ -384,6 +386,8 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpGeneral.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpGeneral.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpGeneral.Controls.Add(this.lblDrops);
+            this.grpGeneral.Controls.Add(this.lstDrops);
             this.grpGeneral.Controls.Add(this.grpDestroy);
             this.grpGeneral.Controls.Add(this.grpTags);
             this.grpGeneral.Controls.Add(this.grpRequirements);
@@ -3245,6 +3249,27 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
             // 
+            // lstDrops
+            // 
+            this.lstDrops.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.lstDrops.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lstDrops.Cursor = System.Windows.Forms.Cursors.Default;
+            this.lstDrops.ForeColor = System.Drawing.Color.Gainsboro;
+            this.lstDrops.FormattingEnabled = true;
+            this.lstDrops.Location = new System.Drawing.Point(262, 441);
+            this.lstDrops.Name = "lstDrops";
+            this.lstDrops.Size = new System.Drawing.Size(171, 80);
+            this.lstDrops.TabIndex = 107;
+            // 
+            // lblDrops
+            // 
+            this.lblDrops.AutoSize = true;
+            this.lblDrops.Location = new System.Drawing.Point(259, 425);
+            this.lblDrops.Name = "lblDrops";
+            this.lblDrops.Size = new System.Drawing.Size(104, 13);
+            this.lblDrops.TabIndex = 108;
+            this.lblDrops.Text = "NPCs that Drop This";
+            // 
             // FrmItem
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3558,5 +3583,7 @@ namespace Intersect.Editor.Forms.Editors
         private DarkCheckBox chkBackstab;
         private Label lblBackstabMultiplier;
         private DarkNumericUpDown nudBackstabMultiplier;
+        private ListBox lstDrops;
+        private Label lblDrops;
     }
 }

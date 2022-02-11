@@ -41,6 +41,8 @@ namespace Intersect.Editor.Forms.Editors
             this.pnlContainer = new System.Windows.Forms.Panel();
             this.btnDynamicRequirements = new DarkUI.Controls.DarkButton();
             this.grpGeneral = new DarkUI.Controls.DarkGroupBox();
+            this.nudExp = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblExp = new System.Windows.Forms.Label();
             this.btnAddFolder = new DarkUI.Controls.DarkButton();
             this.lblFolder = new System.Windows.Forms.Label();
             this.cmbFolder = new DarkUI.Controls.DarkComboBox();
@@ -74,17 +76,16 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemPaste = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
-            this.lblExp = new System.Windows.Forms.Label();
-            this.nudExp = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblCost = new System.Windows.Forms.Label();
             this.grpCrafts.SuspendLayout();
             this.pnlContainer.SuspendLayout();
             this.grpGeneral.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudExp)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudCraftQuantity)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudSpeed)).BeginInit();
             this.grpIngredients.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudQuantity)).BeginInit();
             this.toolStrip.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudExp)).BeginInit();
             this.SuspendLayout();
             // 
             // btnCancel
@@ -176,7 +177,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             // btnDynamicRequirements
             // 
-            this.btnDynamicRequirements.Location = new System.Drawing.Point(17, 240);
+            this.btnDynamicRequirements.Location = new System.Drawing.Point(13, 213);
             this.btnDynamicRequirements.Name = "btnDynamicRequirements";
             this.btnDynamicRequirements.Padding = new System.Windows.Forms.Padding(5);
             this.btnDynamicRequirements.Size = new System.Drawing.Size(250, 23);
@@ -203,10 +204,39 @@ namespace Intersect.Editor.Forms.Editors
             this.grpGeneral.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpGeneral.Location = new System.Drawing.Point(5, 3);
             this.grpGeneral.Name = "grpGeneral";
-            this.grpGeneral.Size = new System.Drawing.Size(273, 231);
+            this.grpGeneral.Size = new System.Drawing.Size(273, 204);
             this.grpGeneral.TabIndex = 31;
             this.grpGeneral.TabStop = false;
             this.grpGeneral.Text = "General";
+            // 
+            // nudExp
+            // 
+            this.nudExp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudExp.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudExp.Location = new System.Drawing.Point(112, 147);
+            this.nudExp.Maximum = new decimal(new int[] {
+            2147483647,
+            0,
+            0,
+            0});
+            this.nudExp.Name = "nudExp";
+            this.nudExp.Size = new System.Drawing.Size(151, 20);
+            this.nudExp.TabIndex = 48;
+            this.nudExp.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudExp.ValueChanged += new System.EventHandler(this.nudExp_ValueChanged);
+            // 
+            // lblExp
+            // 
+            this.lblExp.AutoSize = true;
+            this.lblExp.Location = new System.Drawing.Point(6, 149);
+            this.lblExp.Name = "lblExp";
+            this.lblExp.Size = new System.Drawing.Size(79, 13);
+            this.lblExp.TabIndex = 47;
+            this.lblExp.Text = "Inspiration Exp:";
             // 
             // btnAddFolder
             // 
@@ -370,6 +400,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpIngredients.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpIngredients.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpIngredients.Controls.Add(this.lblCost);
             this.grpIngredients.Controls.Add(this.cmbEvent);
             this.grpIngredients.Controls.Add(this.lblCommonEvent);
             this.grpIngredients.Controls.Add(this.nudQuantity);
@@ -381,9 +412,9 @@ namespace Intersect.Editor.Forms.Editors
             this.grpIngredients.Controls.Add(this.lstIngredients);
             this.grpIngredients.Controls.Add(this.lblQuantity);
             this.grpIngredients.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpIngredients.Location = new System.Drawing.Point(0, 269);
+            this.grpIngredients.Location = new System.Drawing.Point(0, 242);
             this.grpIngredients.Name = "grpIngredients";
-            this.grpIngredients.Size = new System.Drawing.Size(273, 234);
+            this.grpIngredients.Size = new System.Drawing.Size(273, 261);
             this.grpIngredients.TabIndex = 30;
             this.grpIngredients.TabStop = false;
             this.grpIngredients.Text = "Ingredients";
@@ -648,34 +679,14 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
             // 
-            // lblExp
+            // lblCost
             // 
-            this.lblExp.AutoSize = true;
-            this.lblExp.Location = new System.Drawing.Point(6, 149);
-            this.lblExp.Name = "lblExp";
-            this.lblExp.Size = new System.Drawing.Size(79, 13);
-            this.lblExp.TabIndex = 47;
-            this.lblExp.Text = "Inspiration Exp:";
-            // 
-            // nudExp
-            // 
-            this.nudExp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudExp.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudExp.Location = new System.Drawing.Point(112, 147);
-            this.nudExp.Maximum = new decimal(new int[] {
-            2147483647,
-            0,
-            0,
-            0});
-            this.nudExp.Name = "nudExp";
-            this.nudExp.Size = new System.Drawing.Size(151, 20);
-            this.nudExp.TabIndex = 48;
-            this.nudExp.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudExp.ValueChanged += new System.EventHandler(this.nudExp_ValueChanged);
+            this.lblCost.AutoSize = true;
+            this.lblCost.Location = new System.Drawing.Point(8, 227);
+            this.lblCost.Name = "lblCost";
+            this.lblCost.Size = new System.Drawing.Size(140, 13);
+            this.lblCost.TabIndex = 49;
+            this.lblCost.Text = "Item Cost: 100; Craft Cost: X";
             // 
             // FrmCrafts
             // 
@@ -704,6 +715,7 @@ namespace Intersect.Editor.Forms.Editors
             this.pnlContainer.ResumeLayout(false);
             this.grpGeneral.ResumeLayout(false);
             this.grpGeneral.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudExp)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudCraftQuantity)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudSpeed)).EndInit();
             this.grpIngredients.ResumeLayout(false);
@@ -711,7 +723,6 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudQuantity)).EndInit();
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudExp)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -762,5 +773,6 @@ namespace Intersect.Editor.Forms.Editors
         private DarkButton btnDynamicRequirements;
         private DarkNumericUpDown nudExp;
         private System.Windows.Forms.Label lblExp;
+        private System.Windows.Forms.Label lblCost;
     }
 }

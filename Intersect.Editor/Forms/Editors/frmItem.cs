@@ -36,6 +36,8 @@ namespace Intersect.Editor.Forms.Editors
 
         private string mSelectedTag = string.Empty;
 
+        private List<NpcBase> mNpcs = new List<NpcBase>();
+
         public FrmItem()
         {
             ApplyHooks();
@@ -55,6 +57,12 @@ namespace Intersect.Editor.Forms.Editors
             cmbProjectile.Items.Clear();
             cmbProjectile.Items.Add(Strings.General.none);
             cmbProjectile.Items.AddRange(ProjectileBase.Names);
+
+            var npcs = NpcBase.GetNameList();
+            for (var i = 0; i < NpcBase.GetNameList().Length; i++)
+            {
+                mNpcs.Add(NpcBase.Get(NpcBase.IdFromList(i)));
+            }
 
             lstGameObjects.Init(UpdateToolStripItems, AssignEditorItem, toolStripItemNew_Click, toolStripItemCopy_Click, toolStripItemUndo_Click, toolStripItemPaste_Click, toolStripItemDelete_Click);
         }
@@ -475,6 +483,16 @@ namespace Intersect.Editor.Forms.Editors
                     lstTags.Items.Add(tag);
                 }
                 cmbTags.Text = string.Empty;
+
+                lstDrops.Items.Clear();
+                foreach (var npc in mNpcs)
+                {
+                    npc.Drops.FindAll(drop => drop.ItemId == mEditorItem.Id).ForEach(drop =>
+                    {
+                        string itemString = npc.Name + ": " + drop.Chance.ToString() + "% chance";
+                        lstDrops.Items.Add(itemString);
+                    });
+                }
 
                 chkLockStrength.Checked = GetStatLock(Stats.Attack);
                 chkLockArmor.Checked = GetStatLock(Stats.Defense);
