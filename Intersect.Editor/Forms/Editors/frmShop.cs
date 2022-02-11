@@ -187,9 +187,18 @@ namespace Intersect.Editor.Forms.Editors
                 cmbBuySound.SelectedIndex = cmbBuySound.FindString(TextUtils.NullToNone(mEditorItem.BuySound));
                 cmbSellSound.SelectedIndex = cmbSellSound.FindString(TextUtils.NullToNone(mEditorItem.SellSound));
 
+                if (mEditorItem.TagWhitelist)
+                {
+                    rdoTagWhitelist.Checked = true;
+                }
+                else
+                {
+                    tdoTagBlacklist.Checked = true;
+                }
                 UpdateWhitelist();
                 UpdateLists();
                 UpdateItemPriceInfo();
+                nudBuyMultiplier.Value = (decimal) mEditorItem.BuyMultiplier;
                 if (mChanged.IndexOf(mEditorItem) == -1)
                 {
                     mChanged.Add(mEditorItem);
@@ -274,6 +283,26 @@ namespace Intersect.Editor.Forms.Editors
                 {
                     lstBoughtItems.Items.Add(
                         Strings.ShopEditor.dontbuy.ToString(ItemBase.GetName(mEditorItem.BuyingItems[i].ItemId))
+                    );
+                }
+            }
+
+            lstBoughtTags.Items.Clear();
+            if (mEditorItem.TagWhitelist && mEditorItem.BuyingTags != null)
+            {
+                for (var i = 0; i < mEditorItem.BuyingTags.Count; i++)
+                {
+                    lstBoughtTags.Items.Add(
+                        Strings.ShopEditor.tagbuydesc.ToString(mEditorItem.BuyingTags[i])
+                    );
+                }
+            }
+            else if (mEditorItem.BuyingTags != null)
+            {
+                for (var i = 0; i < mEditorItem.BuyingTags.Count; i++)
+                {
+                    lstBoughtTags.Items.Add(
+                        Strings.ShopEditor.tagdontbuydesc.ToString(mEditorItem.BuyingTags[i])
                     );
                 }
             }
@@ -495,6 +524,8 @@ namespace Intersect.Editor.Forms.Editors
             var items = ShopBase.Lookup.OrderBy(p => p.Value?.Name).Select(pair => new KeyValuePair<Guid, KeyValuePair<string, string>>(pair.Key,
                 new KeyValuePair<string, string>(((ShopBase)pair.Value)?.Name ?? Models.DatabaseObject<ShopBase>.Deleted, ((ShopBase)pair.Value)?.Folder ?? ""))).ToArray();
             lstGameObjects.Repopulate(items, mFolders, btnAlphabetical.Checked, CustomSearch(), txtSearch.Text);
+
+            InitializeTags();
         }
 
         private void btnAddFolder_Click(object sender, EventArgs e)
@@ -597,6 +628,66 @@ namespace Intersect.Editor.Forms.Editors
         private String GetStringPriceOfItemFromId(Guid itemId)
         {
             return ItemBase.Get(itemId).Price.ToString();
+        }
+
+        private void InitializeTags()
+        {
+            cmbTags.Items.Clear();
+            cmbTags.Items.AddRange(ItemBase.GetTags());
+        }
+
+        private void btnRemoveTag_Click(object sender, EventArgs e)
+        {
+            if (lstBoughtTags.SelectedIndex > -1)
+            {
+                mEditorItem.BuyingTags.RemoveAt(lstBoughtTags.SelectedIndex);
+                UpdateLists();
+            }
+        }
+
+        private void btnAddTag_Click(object sender, EventArgs e)
+        {
+            if (cmbTags.SelectedItem != null)
+            {
+                if (mEditorItem.BuyingTags == null)
+                {
+                    mEditorItem.BuyingTags = new List<string>()
+                    {
+                        (string)cmbTags.SelectedItem
+                    };
+                    UpdateLists();
+                }
+                else if (!mEditorItem.BuyingTags.Contains(cmbTags.SelectedItem))
+                {
+                    mEditorItem.BuyingTags.Add((string)cmbTags.SelectedItem);
+                    UpdateLists();
+                }
+            }
+        }
+
+        private void darkNumericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.BuyMultiplier = (float) nudBuyMultiplier.Value;
+        }
+
+        private void rdoTagWhitelist_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.TagWhitelist = true;
+
+            UpdateLists();
+        }
+
+        private void tdoTagBlacklist_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.TagWhitelist = false;
+            
+            UpdateLists();
+        }
+
+        private void btnNuke_Click(object sender, EventArgs e)
+        {
+            mEditorItem.BuyingItems.Clear();
+            UpdateLists();
         }
     }
 

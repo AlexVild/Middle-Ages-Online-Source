@@ -721,6 +721,10 @@
     <Compile Include="Migrations\Game\20220210173512_InspirationMigration.designer.cs">
       <DependentUpon>20220210173512_InspirationMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20220210203035_ShopImprovementMigration.cs" />
+    <Compile Include="Migrations\Game\20220210203035_ShopImprovementMigration.designer.cs">
+      <DependentUpon>20220210203035_ShopImprovementMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

@@ -3626,39 +3626,45 @@ namespace Intersect.Server.Entities
                         }
                     }
 
-                    for (var i = 0; i < shop.BuyingItems.Count; i++)
+                    bool itemHasValidTag = itemDescriptor.Tags.FindAll(tag =>
                     {
-                        if (shop.BuyingItems[i].ItemId == sellItemNum)
+                        // Item is sellable based on whitelist settings
+                        return shop.BuyingTags?.Contains(tag) == shop.TagWhitelist;
+                    }).Count > 0;
+
+                    bool itemValidInList = false;
+                    if (shop.BuyingWhitelist)
+                    {
+                        itemValidInList = shop.BuyingItems.FindAll(buyItem =>
                         {
-                            if (!shop.BuyingWhitelist)
-                            {
-                                PacketSender.SendChatMsg(this, Strings.Shops.doesnotaccept, ChatMessageType.Inventory, CustomColors.Alerts.Error);
-
-                                return;
-                            }
-                            else
-                            {
-                                rewardItemId = shop.BuyingItems[i].CostItemId;
-                                rewardItemVal = shop.BuyingItems[i].CostItemQuantity;
-
-                                break;
-                            }
-                        }
+                            return (itemDescriptor.Id == buyItem.ItemId) == shop.BuyingWhitelist;
+                        }).Count > 0;
+                    }
+                    else 
+                    {
+                        itemValidInList = shop.BuyingItems.FindAll(buyItem => buyItem.ItemId == itemDescriptor.Id).Count == 0;
                     }
 
-                    if (rewardItemId == Guid.Empty)
+                    // If the "specific" list has this item on its blacklist, OR the item is invalid in both lists, deny the sale
+                    if (!itemValidInList && !shop.BuyingWhitelist || (!itemHasValidTag && !itemValidInList))
                     {
-                        if (shop.BuyingWhitelist)
-                        {
-                            PacketSender.SendChatMsg(this, Strings.Shops.doesnotaccept, ChatMessageType.Inventory, CustomColors.Alerts.Error);
+                        PacketSender.SendChatMsg(this, Strings.Shops.doesnotaccept, ChatMessageType.Inventory, CustomColors.Alerts.Error);
 
-                            return;
-                        }
-                        else
-                        {
-                            rewardItemId = shop.DefaultCurrencyId;
-                            rewardItemVal = itemDescriptor.Price;
-                        }
+                        return;
+                    }
+
+                    // Always prefer specified sales to non-specified ones (blacklist, tag-whitelist) sales
+                    if (itemValidInList && shop.BuyingWhitelist) 
+                    {
+                        var itemBuyProps = shop.BuyingItems.Find(item => item.ItemId == itemDescriptor.Id);
+                        rewardItemId = itemBuyProps.CostItemId;
+                        rewardItemVal = itemBuyProps.CostItemQuantity;
+                    }
+                    else
+                    {
+                        // Give the default currency, with the bonus multiplier
+                        rewardItemVal = (int)Math.Floor(itemDescriptor.Price * shop.BuyMultiplier);
+                        rewardItemId = shop.DefaultCurrency.Id;
                     }
 
                     amount = Math.Min(itemInSlot.Quantity, amount);

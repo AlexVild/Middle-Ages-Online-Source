@@ -4718,6 +4718,12 @@ Tick timer saved in server config.json.";
             public static LocalizedString buydesc = @"Buy Item {00} For ({01}) Item {02}";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString tagbuydesc = @"Buy Items with tag {00}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString tagdontbuydesc = @"Do not buy Items with tag {00}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString buyfor = @"Buy For:";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
