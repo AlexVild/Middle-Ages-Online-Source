@@ -116,6 +116,15 @@ namespace Intersect.Server.Database
                 );
         }
 
+        internal static LoggingContext CreateLoggingContext(bool readOnly = true)
+        {
+            return new LoggingContext(
+                Logging.LoggingContext.DefaultConnectionStringBuilder,
+                DatabaseOptions.DatabaseType.SQLite,
+                readOnly: readOnly
+            );
+        }
+
         public static void InitializeDbLoggers()
         {
             if (Options.GameDb.LogLevel > LogLevel.None)
@@ -295,6 +304,13 @@ namespace Intersect.Server.Database
                         using (var loggingContext = LoggingContext)
                         {
                             loggingContext.Database?.Migrate();
+
+#if DEBUG
+                            if (ServerContext.Instance.RestApi.Configuration.SeedMode)
+                            {
+                                loggingContext.Seed();
+                            }
+#endif
                         }
                     }
                     catch (Exception exception)
@@ -1430,7 +1446,7 @@ namespace Intersect.Server.Database
                                     y < mapGrids[myGrid].YMax &&
                                     mapGrids[myGrid].MyGrid[x, y] != Guid.Empty)
                                 {
-                                    
+
                                     surroundingMapIds.Add(mapGrids[myGrid].MyGrid[x, y]);
                                     surroundingMaps.Add(MapController.Get(mapGrids[myGrid].MyGrid[x, y]));
                                 }
