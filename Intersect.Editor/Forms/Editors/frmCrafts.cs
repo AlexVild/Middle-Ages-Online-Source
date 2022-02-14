@@ -128,13 +128,24 @@ namespace Intersect.Editor.Forms.Editors
 
                 nudExp.Value = mEditorItem.Experience;
 
-                int craftCost = 0;
-                mEditorItem.Ingredients.ForEach(ing =>
+                if (mEditorItem.ItemId != Guid.Empty && mEditorItem.Ingredients != null && mEditorItem.Ingredients.Count > 0)
                 {
-                    craftCost += ItemBase.Get(ing.ItemId).Price;
-                });
+                    int craftCost = 0;
+                    mEditorItem.Ingredients.ForEach(ing =>
+                    {
+                        if (ing != null && ing.ItemId != Guid.Empty)
+                        {
+                            craftCost += ItemBase.Get(ing.ItemId).Price * ing.Quantity;
+                        }
+                    });
 
-                lblCost.Text = $"Item Cost: {ItemBase.Get(mEditorItem.ItemId).Price}; Craft Cost: {craftCost}";
+                    lblCost.Text = $"Item Cost: {ItemBase.Get(mEditorItem.ItemId).Price * mEditorItem.Quantity }; Craft Cost: {craftCost}";
+                    lblCost.Show();
+                }
+                else
+                {
+                    lblCost.Hide();
+                }
             }
             else
             {

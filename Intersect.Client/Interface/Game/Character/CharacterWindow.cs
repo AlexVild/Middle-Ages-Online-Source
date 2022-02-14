@@ -430,16 +430,13 @@ namespace Intersect.Client.Interface.Game.Character
                 {
                     if (Globals.Me.ClassRanks.TryGetValue(cls, out var classRank))
                     {
-                        if (classRank > 0)
+                        if (classRankString.Length == 0)
                         {
-                            if (classRankString.Length == 0)
-                            {
-                                classRankString.Append(Strings.Character.classrank.ToString(ClassBase.GetName(Globals.Me.Class), classRank));
-                            }
-                            else
-                            {
-                                classRankString.Append(", " + Strings.Character.classrank.ToString(ClassBase.GetName(Globals.Me.Class), classRank));
-                            }
+                            classRankString.Append(Strings.Character.classrank.ToString(ClassBase.GetName(Globals.Me.Class), classRank));
+                        }
+                        else
+                        {
+                            classRankString.Append(", " + Strings.Character.classrank.ToString(ClassBase.GetName(Globals.Me.Class), classRank));
                         }
                     }
                 }

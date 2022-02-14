@@ -587,46 +587,17 @@ namespace Intersect.Client.Entities
 
             return cooldown;
         }
-
+        
         public void TrySellItem(int index)
         {
             var item = ItemBase.Get(Inventory[index].ItemId);
             if (item != null)
             {
-                bool foundItem = false;
-
-                // Check to see if this item contains a tag in the tag white/blacklist
-                bool inTags = item.Tags.FindAll(tag =>
-                {
-                    // Item is sellable based on whitelist settings
-                    return Globals.GameShop.BuyingTags?.Contains(tag) == Globals.GameShop.TagWhitelist;
-                }).Count > 0;
-
-                bool itemValidInList = false;
-                if (Globals.GameShop.BuyingWhitelist)
-                {
-                    itemValidInList = Globals.GameShop.BuyingItems.FindAll(buyItem =>
-                    {
-                        return (item.Id == buyItem.ItemId) == Globals.GameShop.BuyingWhitelist;
-                    }).Count > 0;
-                }
-                else
-                {
-                    itemValidInList = Globals.GameShop.BuyingItems.FindAll(buyItem => buyItem.ItemId == item.Id).Count == 0;
-                }
-
-                // The item was not valid
-                if (!itemValidInList && !Globals.GameShop.BuyingWhitelist || (!inTags && !itemValidInList))
-                {
-                    var iBox = new InputBox(
-                        Strings.Shop.sellitem, Strings.Shop.cannotsell, true, InputBox.InputType.OkayOnly, null, null,
-                        -1
-                    );
-                }
                 // Either the specific list is set to whitelist, and the item is valid on one or both lists
                 // OR, the specific item is on the black list, but is valid on that list
-                else
+                if (Globals.GameShop.BuysItem(item))
                 {
+                    
                     if (Inventory[index].Quantity > 1)
                     {
                         var iBox = new InputBox(
@@ -643,6 +614,14 @@ namespace Intersect.Client.Entities
                             InputBox.InputType.YesNo, SellInputBoxOkay, null, index
                         );
                     }
+                }
+                // The item was not valid
+                else
+                {
+                    var iBox = new InputBox(
+                        Strings.Shop.sellitem, Strings.Shop.cannotsell, true, InputBox.InputType.OkayOnly, null, null,
+                        -1
+                    );
                 }
             }
         }

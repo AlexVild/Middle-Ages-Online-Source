@@ -3626,27 +3626,7 @@ namespace Intersect.Server.Entities
                         }
                     }
 
-                    bool itemHasValidTag = itemDescriptor.Tags.FindAll(tag =>
-                    {
-                        // Item is sellable based on whitelist settings
-                        return shop.BuyingTags?.Contains(tag) == shop.TagWhitelist;
-                    }).Count > 0;
-
-                    bool itemValidInList = false;
-                    if (shop.BuyingWhitelist)
-                    {
-                        itemValidInList = shop.BuyingItems.FindAll(buyItem =>
-                        {
-                            return (itemDescriptor.Id == buyItem.ItemId) == shop.BuyingWhitelist;
-                        }).Count > 0;
-                    }
-                    else 
-                    {
-                        itemValidInList = shop.BuyingItems.FindAll(buyItem => buyItem.ItemId == itemDescriptor.Id).Count == 0;
-                    }
-
-                    // If the "specific" list has this item on its blacklist, OR the item is invalid in both lists, deny the sale
-                    if (!itemValidInList && !shop.BuyingWhitelist || (!itemHasValidTag && !itemValidInList))
+                    if (!shop.BuysItem(itemDescriptor))
                     {
                         PacketSender.SendChatMsg(this, Strings.Shops.doesnotaccept, ChatMessageType.Inventory, CustomColors.Alerts.Error);
 
@@ -3654,7 +3634,7 @@ namespace Intersect.Server.Entities
                     }
 
                     // Always prefer specified sales to non-specified ones (blacklist, tag-whitelist) sales
-                    if (itemValidInList && shop.BuyingWhitelist) 
+                    if (shop.BuyingWhitelist && shop.BuyingItems.Find(item => item.ItemId == itemDescriptor.Id) != null)
                     {
                         var itemBuyProps = shop.BuyingItems.Find(item => item.ItemId == itemDescriptor.Id);
                         rewardItemId = itemBuyProps.CostItemId;
@@ -7562,7 +7542,7 @@ namespace Intersect.Server.Entities
             foreach (var cls in ClassBase.Lookup.Values)
             {
                 // If the player doesn't have any info on this class
-                if (true)
+                if (!ClassInfo.ContainsKey(cls.Id))
                 {
                     // Migration - check to see if the player's NPC Guild was previous tracked via player var, and if so, fill in their info
                     if (cls.Id == ClassId && !String.IsNullOrEmpty(GetVariableValue(Guid.Parse(Options.InGuildVarGuid))))

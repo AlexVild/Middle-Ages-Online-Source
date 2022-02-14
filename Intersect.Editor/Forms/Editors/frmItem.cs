@@ -489,7 +489,7 @@ namespace Intersect.Editor.Forms.Editors
                 {
                     npc.Drops.FindAll(drop => drop.ItemId == mEditorItem.Id).ForEach(drop =>
                     {
-                        string itemString = npc.Name + ": " + drop.Chance.ToString() + "% chance";
+                        string itemString = $"{npc.Name} LV {npc.Level}: {drop.Chance} % chance";
                         lstDrops.Items.Add(itemString);
                     });
                 }
