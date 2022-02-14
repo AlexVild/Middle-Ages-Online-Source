@@ -5,6 +5,7 @@ using Intersect.Enums;
 using Intersect.GameObjects;
 using Intersect.Client.General;
 using Intersect.Client.Localization;
+using Intersect.Client.Framework.File_Management;
 
 namespace Intersect.Client.Interface.Game.DescriptionWindows
 {
@@ -101,7 +102,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             var header = AddHeader();
 
             // Set up the icon, if we can load it.
-            var tex = Globals.ContentManager.GetTexture(Framework.Content.TextureType.Item, mItem.Icon);
+            var tex = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Item, mItem.Icon);
             if (tex != null)
             {
                 header.SetIcon(tex, mItem.Color);

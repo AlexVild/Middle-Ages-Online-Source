@@ -65,7 +65,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             var header = AddHeader();
 
             // Set up the icon, if we can load it.
-            var tex = Globals.ContentManager.GetTexture(Framework.Content.TextureType.Spell, mSpell.Icon);
+            var tex = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Spell, mSpell.Icon);
             if (tex != null)
             {
                 header.SetIcon(tex, Color.White);

@@ -1,4 +1,4 @@
-﻿using Intersect.Client.Utilities;
+﻿/*using Intersect.Client.Utilities;
 
 using NUnit.Framework;
 
@@ -19,3 +19,4 @@ namespace Intersect.Tests.Client
     }
 
 }
+*/

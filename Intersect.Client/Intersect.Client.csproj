@@ -112,9 +112,7 @@
     <Compile Include="General\Time.cs" />
     <Compile Include="General\Globals.cs" />
     <Compile Include="Interface\Game\AnnouncementWindow.cs" />
-<<<<<<< HEAD
     <Compile Include="Interface\Game\ComboText.cs" />
-=======
     <Compile Include="Interface\Game\DescriptionWindows\Components\ComponentBase.cs" />
     <Compile Include="Interface\Game\DescriptionWindows\Components\DescriptionComponent.cs" />
     <Compile Include="Interface\Game\DescriptionWindows\Components\DividerComponent.cs" />
@@ -123,7 +121,6 @@
     <Compile Include="Interface\Game\DescriptionWindows\DescriptionWindowBase.cs" />
     <Compile Include="Interface\Game\DescriptionWindows\SpellDescriptionWindow.cs" />
     <Compile Include="Interface\Game\DescriptionWindows\ItemDescriptionWindow.cs" />
->>>>>>> Create a brand new Item Description Window with a lot of new functionality.
     <Compile Include="Interface\Game\GuildWindow.cs" />
     <Compile Include="Interface\Game\MapItem\MapItemIcon.cs" />
     <Compile Include="Interface\Game\MapItem\MapItemWindow.cs" />

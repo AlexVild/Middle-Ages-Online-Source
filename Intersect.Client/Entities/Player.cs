@@ -24,7 +24,6 @@ using Intersect.Utilities;
 using Intersect.Client.Items;
 using Intersect.Client.Interface.Game.Chat;
 using Intersect.Config.Guilds;
-using Intersect.Client.Framework.Entities;
 using Intersect.Client.Interface.Game.DescriptionWindows;
 
 namespace Intersect.Client.Entities
@@ -49,7 +48,7 @@ namespace Intersect.Client.Entities
 
         public Dictionary<Guid, long> ItemCooldowns = new Dictionary<Guid, long>();
 
-        private ItemDescWindow mItemTargetBox;
+        private ItemDescriptionWindow mItemTargetBox;
 
         private Entity mLastBumpedEvent = null;
 

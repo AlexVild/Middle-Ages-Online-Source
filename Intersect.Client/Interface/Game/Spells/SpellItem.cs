@@ -113,7 +113,7 @@ namespace Intersect.Client.Interface.Game.Spells
                 mDescWindow = null;
             }
 
-            mDescWindow = new SpellDescriptionWindow(Globals.Me.Spells[mYindex].Id, mSpellWindow.X, mSpellWindow.Y);
+            mDescWindow = new SpellDescriptionWindow(Globals.Me.Spells[mYindex].SpellId, mSpellWindow.X, mSpellWindow.Y);
         }
 
         public FloatRect RenderBounds()
