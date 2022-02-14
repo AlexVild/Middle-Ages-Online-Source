@@ -18,6 +18,8 @@ namespace Intersect.GameObjects.Maps
 
         public int RequiredPlayersToSpawn;
 
+        public bool PreventRespawn;
+
         public NpcSpawn()
         {
         }
@@ -29,6 +31,7 @@ namespace Intersect.GameObjects.Maps
             Y = copy.Y;
             Direction = copy.Direction;
             RequiredPlayersToSpawn = copy.RequiredPlayersToSpawn;
+            PreventRespawn = copy.PreventRespawn;
         }
 
     }

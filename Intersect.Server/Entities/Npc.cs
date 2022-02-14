@@ -9,6 +9,7 @@ using Intersect.Enums;
 using Intersect.GameObjects;
 using Intersect.Logging;
 using Intersect.Network.Packets.Server;
+using Intersect.Server.Core;
 using Intersect.Server.Database;
 using Intersect.Server.Database.PlayerData.Players;
 using Intersect.Server.Entities.Combat;
@@ -104,6 +105,8 @@ namespace Intersect.Server.Entities
         /// </summary>
         public int AggroCenterZ;
 
+        public string PermadeathKey = string.Empty; // A key that we can use to reference if this entity is permadead in an instance
+
         public Npc(NpcBase myBase, bool despawnable = false) : base()
         {
             Name = myBase.Name;
@@ -181,6 +184,19 @@ namespace Intersect.Server.Entities
                 }
                 PacketSender.SendEntityDie(this);
                 PacketSender.SendEntityLeave(this);
+
+                // Do not process permadeaths on the overworld
+                if (MapInstanceId != Guid.Empty)
+                {
+                    if (!String.IsNullOrEmpty(PermadeathKey) && ProcessingInfo.PermadeadNpcs.TryGetValue(MapInstanceId, out var permadeadNpcs))
+                    {
+                        permadeadNpcs.Add(PermadeathKey);
+                    }
+                    else if (!String.IsNullOrEmpty(PermadeathKey))
+                    {
+                        ProcessingInfo.PermadeadNpcs.Add(MapInstanceId, new HashSet<string>() { PermadeathKey });
+                    }
+                }
 
                 if (killer is Player playerKiller)
                 {

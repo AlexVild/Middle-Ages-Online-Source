@@ -437,6 +437,16 @@ namespace Intersect.Server.Maps
                     NpcSpawnInstances.TryAdd(spawns[i], npcSpawnInstance);
                 }
 
+                // Check to see if this NPC is on the permadeath list for this instance and, if so, do not spawn it
+                // Unique identifier tying the spawning NPC to its map spawner
+                string npcKey = $"{mMapController.Id}_{i}";
+                if (spawns[i].PreventRespawn &&
+                    ProcessingInfo.PermadeadNpcs.TryGetValue(MapInstanceId, out var permadeadNpcs) &&
+                    permadeadNpcs.Contains(npcKey))
+                {
+                    return;
+                }
+
                 if (spawns[i].Direction != NpcSpawnDirection.Random)
                 {
                     dir = (byte)(spawns[i].Direction - 1);
@@ -446,10 +456,12 @@ namespace Intersect.Server.Maps
                     dir = (byte)Randomization.Next(0, 4);
                 }
 
+                // Declared spawn
                 if (spawns[i].X >= 0 && spawns[i].Y >= 0)
                 {
                     npcSpawnInstance.Entity = SpawnNpc((byte)spawns[i].X, (byte)spawns[i].Y, dir, spawns[i].NpcId);
                 }
+                // Random spawn
                 else
                 {
                     for (var n = 0; n < 100; n++)
@@ -466,6 +478,13 @@ namespace Intersect.Server.Maps
                     }
 
                     npcSpawnInstance.Entity = SpawnNpc(x, y, dir, spawns[i].NpcId);
+                }
+
+                // If this NPC is not meant to respawn, set up the NPC to talk back to ProcessingInfo
+                if (spawns[i].PreventRespawn && npcSpawnInstance.Entity is Npc npc)
+                {
+                    // A key - the spawn map, and the spawn index on the map
+                    npc.PermadeathKey = npcKey;
                 }
             }
         }
@@ -1243,14 +1262,20 @@ namespace Intersect.Server.Maps
                 if (NpcSpawnInstances.ContainsKey(spawns[i]))
                 {
                     var npcSpawnInstance = NpcSpawnInstances[spawns[i]];
-                    if (npcSpawnInstance != null && npcSpawnInstance.Entity.Dead)
+                    // Entity can be null if the entity was never spawned (permadeath enabled on instance initialize)
+                    if (npcSpawnInstance != null && npcSpawnInstance.Entity != null && npcSpawnInstance.Entity.Dead)
                     {
+                        // Do not respawn NPCs that aren't supposed to respawn - unless on overworld
+                        if (spawns[i].PreventRespawn && MapInstanceId != Guid.Empty) continue;
+
+                        // If the entity is dead, but needs respawning, set its respawn time (or, wait for more players to show up before starting the timer)
                         if (npcSpawnInstance.RespawnTime == -1 || !NpcHasEnoughPlayersToSpawn(i))
                         {
                             npcSpawnInstance.RespawnTime = Globals.Timing.Milliseconds +
                                                            ((Npc)npcSpawnInstance.Entity).Base.SpawnDuration -
                                                            (Globals.Timing.Milliseconds - mLastUpdateTime);
                         }
+                        // If we're passed the respawn time, and there's enough players on the instance to warrant a spawn
                         else if (npcSpawnInstance.RespawnTime < Globals.Timing.Milliseconds && NpcHasEnoughPlayersToSpawn(i))
                         {
                             SpawnMapNpc(i);

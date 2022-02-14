@@ -24,6 +24,8 @@ namespace Intersect.Server.Core
         /// </summary>
         public static Dictionary<Guid, int> PlayersInInstance = new Dictionary<Guid, int>();
 
+        public static Dictionary<Guid, HashSet<string>> PermadeadNpcs = new Dictionary<Guid, HashSet<string>>();
+
         /// <summary>
         /// Maintains a list of unique instance Ids that players may be on
         /// </summary>
@@ -45,6 +47,15 @@ namespace Intersect.Server.Core
                 })
                 .Distinct()
                 .ToList();
+
+            foreach(var key in PermadeadNpcs.Keys.ToList())
+            {
+                if (!ActiveMapInstanceIds.Contains(key))
+                {
+                    Logging.Log.Info($"Cleaning up permadead NPCs for instance {key}");
+                    PermadeadNpcs.Remove(key);
+                }
+            }
 
             // Clean up instance variables where the instance has been marked dead
             InstanceVariables.Keys.ToList()

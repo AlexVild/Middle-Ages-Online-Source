@@ -150,6 +150,7 @@ namespace Intersect.Editor.Forms.DockingElements
             this.pnlEvents = new System.Windows.Forms.Panel();
             this.pnlLights = new System.Windows.Forms.Panel();
             this.lightEditor = new Intersect.Editor.Forms.Controls.LightEditorCtrl();
+            this.chkDoNotRespawn = new DarkUI.Controls.DarkCheckBox();
             this.grpResource.SuspendLayout();
             this.grpZResource.SuspendLayout();
             this.grpItem.SuspendLayout();
@@ -1083,6 +1084,7 @@ namespace Intersect.Editor.Forms.DockingElements
             // 
             this.grpNpcList.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpNpcList.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpNpcList.Controls.Add(this.chkDoNotRespawn);
             this.grpNpcList.Controls.Add(this.lblInstanceLimit);
             this.grpNpcList.Controls.Add(this.nudInstanceSpawnLimit);
             this.grpNpcList.Controls.Add(this.btnRemoveMapNpc);
@@ -1091,7 +1093,7 @@ namespace Intersect.Editor.Forms.DockingElements
             this.grpNpcList.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpNpcList.Location = new System.Drawing.Point(7, 277);
             this.grpNpcList.Name = "grpNpcList";
-            this.grpNpcList.Size = new System.Drawing.Size(259, 128);
+            this.grpNpcList.Size = new System.Drawing.Size(259, 156);
             this.grpNpcList.TabIndex = 12;
             this.grpNpcList.TabStop = false;
             this.grpNpcList.Text = "Add/Remove Map NPCs";
@@ -1782,6 +1784,16 @@ namespace Intersect.Editor.Forms.DockingElements
             this.lightEditor.Visible = false;
             this.lightEditor.Load += new System.EventHandler(this.lightEditor_Load);
             // 
+            // chkDoNotRespawn
+            // 
+            this.chkDoNotRespawn.AutoSize = true;
+            this.chkDoNotRespawn.Location = new System.Drawing.Point(5, 118);
+            this.chkDoNotRespawn.Name = "chkDoNotRespawn";
+            this.chkDoNotRespawn.Size = new System.Drawing.Size(114, 17);
+            this.chkDoNotRespawn.TabIndex = 54;
+            this.chkDoNotRespawn.Text = "Do Not Respawn?";
+            this.chkDoNotRespawn.CheckedChanged += new System.EventHandler(this.chkDoNotRespawn_CheckedChanged);
+            // 
             // FrmMapLayers
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1983,5 +1995,6 @@ namespace Intersect.Editor.Forms.DockingElements
         private DarkComboBox cmbInstanceType;
         private Label lblInstanceLimit;
         private DarkNumericUpDown nudInstanceSpawnLimit;
+        private DarkCheckBox chkDoNotRespawn;
     }
 }

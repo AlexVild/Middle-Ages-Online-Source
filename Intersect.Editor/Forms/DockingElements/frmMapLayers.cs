@@ -841,6 +841,7 @@ namespace Intersect.Editor.Forms.DockingElements
                 n.Y = -1;
                 n.Direction = NpcSpawnDirection.Random;
                 n.RequiredPlayersToSpawn = (int)nudInstanceSpawnLimit.Value;
+                n.PreventRespawn = chkDoNotRespawn.Checked;
 
                 Globals.CurrentMap.Spawns.Add(n);
                 lstMapNpcs.Items.Add(NpcBase.GetName(n.NpcId));
@@ -870,6 +871,7 @@ namespace Intersect.Editor.Forms.DockingElements
                     cmbNpc.SelectedIndex = NpcBase.ListIndex(spawn.NpcId);
                     cmbDir.SelectedIndex = (int)spawn.Direction;
                     nudInstanceSpawnLimit.Value = spawn.RequiredPlayersToSpawn;
+                    chkDoNotRespawn.Checked = spawn.PreventRespawn;
                     if (Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].X >= 0)
                     {
                         rbDeclared.Checked = true;
@@ -892,6 +894,7 @@ namespace Intersect.Editor.Forms.DockingElements
                 cmbNpc.SelectedIndex = NpcBase.ListIndex(spawn.NpcId);
                 cmbDir.SelectedIndex = (int)spawn.Direction;
                 nudInstanceSpawnLimit.Value = spawn.RequiredPlayersToSpawn;
+                chkDoNotRespawn.Checked = spawn.PreventRespawn;
                 if (Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].X >= 0)
                 {
                     rbDeclared.Checked = true;
@@ -1391,6 +1394,14 @@ namespace Intersect.Editor.Forms.DockingElements
             if (lstMapNpcs.SelectedIndex >= 0)
             {
                 Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].RequiredPlayersToSpawn = (int) nudInstanceSpawnLimit.Value;
+            }
+        }
+
+        private void chkDoNotRespawn_CheckedChanged(object sender, EventArgs e)
+        {
+            if (lstMapNpcs.SelectedIndex >= 0)
+            {
+                Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].PreventRespawn = chkDoNotRespawn.Checked;
             }
         }
     }
