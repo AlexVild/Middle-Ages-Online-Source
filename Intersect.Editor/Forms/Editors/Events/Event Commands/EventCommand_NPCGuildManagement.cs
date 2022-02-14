@@ -68,14 +68,14 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             {
                 cmbSelection.Items.Add(selection);
             }
-            if (cmbSelection.Items.Count > 0)
+            if (cmbSelection.Items.Count > 0 && mMyCommand.Selection == 0)
             {
                 cmbSelection.SelectedIndex = 0;
             }
 
             cmbClass.Items.Clear();
             cmbClass.Items.AddRange(ClassBase.Names);
-            if (cmbClass.Items.Count > 0)
+            if (cmbClass.Items.Count > 0 && mMyCommand.ClassId == Guid.Empty)
             {
                 cmbClass.SelectedIndex = 0;
             }
