@@ -59,6 +59,8 @@ namespace Intersect
         [JsonProperty("Security")] public SecurityOptions SecurityOpts = new SecurityOptions();
 
         [JsonProperty("Loot")] public LootOptions LootOpts = new LootOptions();
+        
+        [JsonProperty("Records")] public RecordOptions RecordOpts = new RecordOptions();
 
         public ProcessingOptions Processing = new ProcessingOptions();
 
@@ -77,6 +79,10 @@ namespace Intersect
         public GuildOptions Guild = new GuildOptions();
 
         public LoggingOptions Logging = new LoggingOptions();
+        
+        public InstancingOptions Instancing = new InstancingOptions();
+        
+        public NPCGuildOptions NpcGuild = new NPCGuildOptions();
 
         public static Options Instance { get; private set; }
 
@@ -129,6 +135,20 @@ namespace Intersect
         public static int ExtraSlot => Instance.PlayerOpts.ExtraSlot;
         
         public static float AmmoRetrieveChance => Instance.PlayerOpts.AmmoRetrieveChance;
+        
+        public static string ClassRankVarGuid => Instance.PlayerOpts.ClassRankVarGuid;
+
+        public static string TasksCompletedVarGuid => Instance.PlayerOpts.TasksCompletedVarGuid;
+
+        public static string SpecialAssignmentAvailableGuid => Instance.PlayerOpts.SpecialAssignmentAvailableGuid;
+
+        public static string OnSpecialAssignmentVarGuid => Instance.PlayerOpts.OnSpecialAssignmentVarGuid;
+
+        public static string OnTaskVarGuid => Instance.PlayerOpts.OnTaskVarGuid;
+
+        public static string InGuildVarGuid => Instance.PlayerOpts.InGuildVarGuid;
+        
+        public static string TaskCompletedVarGuid => Instance.PlayerOpts.TaskCompletedVarGuid;
 
         public static int WeaponIndex => Instance.EquipmentOpts.WeaponSlot;
 
@@ -216,7 +236,13 @@ namespace Intersect
         
         public static string MissSound => Instance.CombatOpts.MissSound;
 
-        public static string BlockSound => Instance.CombatOpts.MissSound;
+        public static string BlockSound => Instance.CombatOpts.BlockSound;
+        
+        public static bool HideResourceHealthBars => Instance.CombatOpts.HideResourceHealthBars;
+
+        public static float DefaultBackstabMultiplier => Instance.CombatOpts.DefaultBackstabMultiplier;
+        
+        public static float SneakAttackMultiplier => Instance.CombatOpts.SneakAttackMultiplier;
 
         public static int GameBorderStyle => Instance.MapOpts.GameBorderStyle;
 
@@ -229,6 +255,8 @@ namespace Intersect
         public static int TileWidth => Instance.MapOpts.TileWidth;
 
         public static int TileHeight => Instance.MapOpts.TileHeight;
+        
+        public static int TimeUntilMapCleanup => Instance.MapOpts.TimeUntilMapCleanup;
 
         public static bool DebugAllowMapFades => Instance.MapOpts.DebugAllowMapFades;
 
@@ -251,6 +279,36 @@ namespace Intersect
         public static string BankSortSound => Instance.ChatOpts.BankSortSound;
 
         public static string GuildWarsGUID => Instance.Guild.GuildWarsGUID;
+
+        public static bool SharedInstanceRespawnInInstance => Instance.Instancing.SharedInstanceRespawnInInstance;
+        
+        public static bool RejoinableSharedInstances => Instance.Instancing.RejoinableSharedInstances;
+        
+        public static int MaxSharedInstanceLives => Instance.Instancing.MaxSharedInstanceLives;
+        
+        public static bool BootAllFromInstanceWhenOutOfLives => Instance.Instancing.BootAllFromInstanceWhenOutOfLives;
+        
+        public static int MaxClassRank => Instance.NpcGuild.MaxClassRank;
+        
+        public static List<int> RequiredTasksPerClassRank => Instance.NpcGuild.RequiredTasksPerClassRank;
+        
+        public static bool SpecialAssignmentCountsTowardCooldown => Instance.NpcGuild.SpecialAssignmentCountsTowardCooldown;
+        
+        public static bool PayoutSpecialAssignments => Instance.NpcGuild.PayoutSpecialAssignments;
+        
+        public static long TaskCooldown => Instance.NpcGuild.TaskCooldownMs;
+        
+        public static bool SendNpcRecordUpdates => Instance.RecordOpts.SendNpcRecordUpdates;
+        
+        public static int NpcRecordUpdateInterval => Instance.RecordOpts.NpcRecordUpdateInterval;
+
+        public static bool SendResourceRecordUpdates => Instance.RecordOpts.SendResourceRecordUpdates;
+
+        public static int ResourceRecordUpdateInterval => Instance.RecordOpts.ResourceRecordUpdateInterval;
+
+        public static bool SendCraftingRecordUpdates => Instance.RecordOpts.SendCraftingRecordUpdates;
+
+        public static int CraftingRecordUpdateInterval => Instance.RecordOpts.CraftingRecordUpdateInterval;
 
         public static LootOptions Loot => Instance.LootOpts;
 

@@ -57,6 +57,9 @@ namespace Intersect.Enums
         [GameObjectInfo(typeof(ServerVariableBase), "server_variables")]
         ServerVariable,
 
+        [GameObjectInfo(typeof(InstanceVariableBase), "instance_variables")]
+        InstanceVariable,
+
         [GameObjectInfo(typeof(TilesetBase), "tilesets")]
         Tileset,
 

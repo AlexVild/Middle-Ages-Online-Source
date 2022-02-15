@@ -129,6 +129,8 @@ namespace Intersect.Server.Migrations.Game
                     b.Property<Guid>("EventId")
                         .HasColumnName("Event");
 
+                    b.Property<long>("Experience");
+
                     b.Property<string>("Folder");
 
                     b.Property<string>("IngredientsJson")
@@ -200,6 +202,29 @@ namespace Intersect.Server.Migrations.Game
                     b.ToTable("Events");
                 });
 
+            modelBuilder.Entity("Intersect.GameObjects.InstanceVariableBase", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Folder");
+
+                    b.Property<string>("Json")
+                        .HasColumnName("DefaultValue");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("TextId");
+
+                    b.Property<long>("TimeCreated");
+
+                    b.Property<byte>("Type");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("InstanceVariables");
+                });
+
             modelBuilder.Entity("Intersect.GameObjects.ItemBase", b =>
                 {
                     b.Property<Guid>("Id")
@@ -214,6 +239,10 @@ namespace Intersect.Server.Migrations.Game
                     b.Property<int>("AttackSpeedModifier");
 
                     b.Property<int>("AttackSpeedValue");
+
+                    b.Property<float>("BackstabMultiplier");
+
+                    b.Property<bool>("CanBackstab");
 
                     b.Property<bool>("CanBag");
 
@@ -590,7 +619,13 @@ namespace Intersect.Server.Migrations.Game
 
                     b.Property<int>("OrderValue");
 
+                    b.Property<int>("QuestClassRank");
+
+                    b.Property<int>("QuestType");
+
                     b.Property<bool>("Quitable");
+
+                    b.Property<Guid>("RelatedClassId");
 
                     b.Property<bool>("Repeatable");
 
@@ -665,6 +700,8 @@ namespace Intersect.Server.Migrations.Game
                     b.Property<Guid>("EventId")
                         .HasColumnName("Event");
 
+                    b.Property<long>("Experience");
+
                     b.Property<string>("Folder");
 
                     b.Property<string>("JsonDrops")
@@ -724,6 +761,8 @@ namespace Intersect.Server.Migrations.Game
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<float>("BuyMultiplier");
+
                     b.Property<string>("BuySound");
 
                     b.Property<bool>("BuyingWhitelist");
@@ -736,12 +775,17 @@ namespace Intersect.Server.Migrations.Game
                     b.Property<string>("JsonBuyingItems")
                         .HasColumnName("BuyingItems");
 
+                    b.Property<string>("JsonBuyingTags")
+                        .HasColumnName("BuyingTags");
+
                     b.Property<string>("JsonSellingItems")
                         .HasColumnName("SellingItems");
 
                     b.Property<string>("Name");
 
                     b.Property<string>("SellSound");
+
+                    b.Property<bool>("TagWhitelist");
 
                     b.Property<long>("TimeCreated");
 
@@ -839,7 +883,7 @@ namespace Intersect.Server.Migrations.Game
                     b.ToTable("Time");
                 });
 
-            modelBuilder.Entity("Intersect.Server.Maps.MapInstance", b =>
+            modelBuilder.Entity("Intersect.Server.Maps.MapController", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();

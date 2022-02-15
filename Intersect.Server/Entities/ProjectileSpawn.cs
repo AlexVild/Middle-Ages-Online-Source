@@ -29,13 +29,21 @@ namespace Intersect.Server.Entities
 
         public long TransmittionTimer = Globals.Timing.Milliseconds;
 
+        public long ProjectileActiveTime;
+
         public float X;
+        
+        private float InitX;
 
         public float Y;
+        
+        private float InitY;
 
         public byte Z;
 
         public bool Dead;
+
+        public Guid MapInstanceId;
 
         private List<Guid> mEntitiesCollided = new List<Guid>();
 
@@ -45,19 +53,24 @@ namespace Intersect.Server.Entities
             byte y,
             byte z,
             Guid mapId,
+            Guid mapInstanceId,
             ProjectileBase projectileBase,
             Projectile parent
         )
         {
             MapId = mapId;
+            MapInstanceId = mapInstanceId;
             X = x;
+            InitX = X;
             Y = y;
+            InitY = Y;
             Z = z;
             Dir = dir;
             ProjectileBase = projectileBase;
             Parent = parent;
             TransmittionTimer = Globals.Timing.Milliseconds +
                                 (long) ((float) ProjectileBase.Speed / (float) ProjectileBase.Range);
+            ProjectileActiveTime = Globals.Timing.Milliseconds + (Options.Instance.Processing.ProjectileUpdateInterval * Options.Instance.Processing.ProjectileTicksUntilDamageInSpawn);
         }
 
         public bool IsAtLocation(Guid mapId, int x, int y, int z)
@@ -67,7 +80,7 @@ namespace Intersect.Server.Entities
 
         public void AmmoDrop()
         {
-            var map = MapInstance.Get(MapId);
+            var map = MapController.Get(MapId);
             if (map != null && Parent.Base.AmmoItemId != Guid.Empty && Parent.Owner is Player owner)
             {
                 if (owner != null)
@@ -76,7 +89,10 @@ namespace Intersect.Server.Entities
                     var randomChance = Randomization.Next(1, 100001);
                     if (randomChance < (Options.AmmoRetrieveChance * 1000) * ownerLuck)
                     {
-                        MapInstance.Get(MapId).SpawnItem((int)X, (int)Y, new Item(Parent.Base.AmmoItemId, 1), 1, Parent.Owner.Id);
+                        if (MapController.TryGetInstanceFromMap(MapId, MapInstanceId, out var mapInstance))
+                        {
+                            mapInstance.SpawnItem((int)X, (int)Y, new Item(Parent.Base.AmmoItemId, 1), 1, Parent.Owner.Id);
+                        }
                     }
                 }
             }
@@ -86,6 +102,12 @@ namespace Intersect.Server.Entities
         {
             var targetEntity = en;
             if (targetEntity is EventPageInstance || en == null) return false;
+
+            bool projectileCantDamageYet = Globals.Timing.Milliseconds < ProjectileActiveTime && InitX == X && InitY == Y;
+            if (projectileCantDamageYet)
+            {
+                return false;
+            }
 
             var scalingStat = Enums.Stats.StatCount;
 
@@ -102,7 +124,7 @@ namespace Intersect.Server.Entities
             {
 
                 // Have we collided with this entity before? If so, cancel out.
-                if (mEntitiesCollided.Contains(en.Id))
+                if (mEntitiesCollided.Contains(targetEntity.Id))
                 {
                     if (!Parent.Base.PierceTarget)
                     {
@@ -119,7 +141,7 @@ namespace Intersect.Server.Entities
                         return false;
                     }
                 }
-                mEntitiesCollided.Add(en.Id);
+                mEntitiesCollided.Add(targetEntity.Id);
 
                 if (targetEntity.GetType() == typeof(Player)) //Player
                 {

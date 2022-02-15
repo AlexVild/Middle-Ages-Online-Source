@@ -6,6 +6,7 @@ using Intersect.Client.General;
 using Intersect.Client.Interface.Game;
 using Intersect.Client.Maps;
 using Intersect.Network.Packets.Client;
+using Intersect.Enums;
 
 namespace Intersect.Client.Networking
 {
@@ -435,9 +436,9 @@ namespace Intersect.Client.Networking
             }
         }
 
-        public static void SendMapTransitionReady(Guid newMapId, float x, float y, byte dir)
+        public static void SendMapTransitionReady(Guid newMapId, float x, float y, byte dir, MapInstanceType instanceType)
         {
-            Network.SendPacket(new MapTransitionReadyPacket(newMapId, x, y, dir));
+            Network.SendPacket(new MapTransitionReadyPacket(newMapId, x, y, dir, instanceType));
         }
 
         public static void SendCraftingInfoPacket()

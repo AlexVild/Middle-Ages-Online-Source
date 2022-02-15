@@ -36,6 +36,8 @@ namespace Intersect.Editor.Forms.Editors
 
         private string mSelectedTag = string.Empty;
 
+        private List<NpcBase> mNpcs = new List<NpcBase>();
+
         public FrmItem()
         {
             ApplyHooks();
@@ -55,6 +57,12 @@ namespace Intersect.Editor.Forms.Editors
             cmbProjectile.Items.Clear();
             cmbProjectile.Items.Add(Strings.General.none);
             cmbProjectile.Items.AddRange(ProjectileBase.Names);
+
+            var npcs = NpcBase.GetNameList();
+            for (var i = 0; i < NpcBase.GetNameList().Length; i++)
+            {
+                mNpcs.Add(NpcBase.Get(NpcBase.IdFromList(i)));
+            }
 
             lstGameObjects.Init(UpdateToolStripItems, AssignEditorItem, toolStripItemNew_Click, toolStripItemCopy_Click, toolStripItemUndo_Click, toolStripItemPaste_Click, toolStripItemDelete_Click);
         }
@@ -330,6 +338,10 @@ namespace Intersect.Editor.Forms.Editors
             btnCancel.Text = Strings.ItemEditor.cancel;
 
             lblStatLock.Text = Strings.ItemEditor.statlocklabel;
+
+            grpAdditionalWeaponProps.Text = Strings.ItemEditor.AdditionalWeaponProps;
+            chkBackstab.Text = Strings.ItemEditor.CanBackstab;
+            lblBackstabMultiplier.Text = Strings.ItemEditor.BackstabMultiplier;
         }
 
         private void UpdateEditor()
@@ -397,6 +409,18 @@ namespace Intersect.Editor.Forms.Editors
 
                 nudEffectPercent.Value = mEditorItem.Effect.Percentage;
                 chk2Hand.Checked = mEditorItem.TwoHanded;
+                
+                chkBackstab.Checked = Convert.ToBoolean(mEditorItem.CanBackstab);
+                if (chkBackstab.Checked)
+                {
+                    nudBackstabMultiplier.Enabled = true;
+                    nudBackstabMultiplier.Value = (decimal)mEditorItem.BackstabMultiplier;
+                } else
+                {
+                    nudBackstabMultiplier.Enabled = false;
+                    nudBackstabMultiplier.Value = (decimal)Options.DefaultBackstabMultiplier;
+                }
+
                 cmbMalePaperdoll.SelectedIndex =
                     cmbMalePaperdoll.FindString(TextUtils.NullToNone(mEditorItem.MalePaperdoll));
 
@@ -459,6 +483,16 @@ namespace Intersect.Editor.Forms.Editors
                     lstTags.Items.Add(tag);
                 }
                 cmbTags.Text = string.Empty;
+
+                lstDrops.Items.Clear();
+                foreach (var npc in mNpcs)
+                {
+                    npc.Drops.FindAll(drop => drop.ItemId == mEditorItem.Id).ForEach(drop =>
+                    {
+                        string itemString = $"{npc.Name} LV {npc.Level}: {drop.Chance} % chance";
+                        lstDrops.Items.Add(itemString);
+                    });
+                }
 
                 chkLockStrength.Checked = GetStatLock(Stats.Attack);
                 chkLockArmor.Checked = GetStatLock(Stats.Defense);
@@ -619,23 +653,27 @@ namespace Intersect.Editor.Forms.Editors
                 grpWeaponProperties.Show();
                 grpHelmetPaperdollProps.Hide();
                 grpPrayerProperties.Hide();
+                grpAdditionalWeaponProps.Show();
             } else if (cmbEquipmentSlot.SelectedIndex == Options.PrayerIndex)
             {
                 grpWeaponProperties.Hide();
                 grpHelmetPaperdollProps.Hide();
                 grpPrayerProperties.Show();
+                grpAdditionalWeaponProps.Hide();
             }
             else if (cmbEquipmentSlot.SelectedIndex == Options.HelmetIndex)
             {
                 grpWeaponProperties.Hide();
                 grpHelmetPaperdollProps.Show();
                 grpPrayerProperties.Hide();
+                grpAdditionalWeaponProps.Hide();
             }
             else
             {
                 grpWeaponProperties.Hide();
                 grpHelmetPaperdollProps.Hide();
                 grpPrayerProperties.Hide();
+                grpAdditionalWeaponProps.Hide();
 
                 mEditorItem.Projectile = null;
                 mEditorItem.Tool = -1;
@@ -1486,6 +1524,17 @@ namespace Intersect.Editor.Forms.Editors
         private void txtCannotDestroy_TextChanged(object sender, EventArgs e)
         {
             mEditorItem.CannotDestroyMessage = txtCannotDestroy.Text;
+        }
+
+        private void chkBackstab_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.CanBackstab = chkBackstab.Checked;
+            nudBackstabMultiplier.Enabled = mEditorItem.CanBackstab;
+        }
+
+        private void nudBackstabMultiplier_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.BackstabMultiplier = (float) nudBackstabMultiplier.Value;
         }
     }
 }

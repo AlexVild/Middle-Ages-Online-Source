@@ -29,7 +29,7 @@ namespace Intersect.Network.Packets.Server
         [Key(27)]
         public EquipmentPacket Equipment { get; set; }
 
-
+    
         [Key(28)]
         public long CombatTimeRemaining { get; set; }
 
@@ -42,12 +42,15 @@ namespace Intersect.Network.Packets.Server
         public int GuildRank { get; set; }
 
         [Key(31)]
-        public bool InVehicle { get; set; }
+        public int[] TrueStats { get; set; }
 
         [Key(32)]
-        public string VehicleSprite { get; set; }
+        public bool InVehicle { get; set; }
 
         [Key(33)]
+        public string VehicleSprite { get; set; }
+
+        [Key(34)]
         public long VehicleSpeed { get; set; }
     }
 

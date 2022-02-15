@@ -81,7 +81,7 @@ namespace Intersect.Server.Entities
             {
                 using (var context = DbInterface.CreatePlayerContext())
                 {
-                    return Load(QueryPlayerById(context, playerId));
+                    return Validate(QueryPlayerById(context, playerId));
                 }
             }
             catch (Exception ex)
@@ -108,7 +108,7 @@ namespace Intersect.Server.Entities
             {
                 using (var context = DbInterface.CreatePlayerContext())
                 {
-                    return Load(QueryPlayerByName(context, playerName));
+                    return Validate(QueryPlayerByName(context, playerName));
                 }
             }
             catch (Exception ex)
@@ -153,17 +153,17 @@ namespace Intersect.Server.Entities
         {
             var player = Find(playerId);
 
-            return Load(player);
+            return Validate(player);
         }
 
         public static Player Load(string playerName)
         {
             var player = Find(playerName);
 
-            return Load(player);
+            return Validate(player);
         }
 
-        public static Player Load(Player player)
+        public static Player Validate(Player player)
         {
             if (player == null)
             {
@@ -443,6 +443,25 @@ namespace Intersect.Server.Entities
             EF.CompileQuery(
                 (PlayerContext context, string name) => context.Players.Where(p => p.Name == name).Any());
 
+        #endregion
+
+        #region Player Records
+        public void LoadRecords()
+        {
+            try
+            {
+                using (var context = DbInterface.CreatePlayerContext())
+                {
+                    PlayerRecords = context.Player_Record.Where(f => f.Player.Id == Id).ToList();
+                    Log.Info($"Successfully loaded player records for {Name}. Count of records is {PlayerRecords.Count}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, $"Failed to load player records for {Name}.");
+                //ServerContext.DispatchUnhandledException(new Exception("Failed to save user, shutting down to prevent rollbacks!"), true);
+            }
+        }
         #endregion
 
         #endregion

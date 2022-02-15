@@ -125,6 +125,27 @@ namespace Intersect.Editor.Forms.Editors
                 }
 
                 cmbEvent.SelectedIndex = EventBase.ListIndex(mEditorItem.EventId) + 1;
+
+                nudExp.Value = mEditorItem.Experience;
+
+                if (mEditorItem.ItemId != Guid.Empty && mEditorItem.Ingredients != null && mEditorItem.Ingredients.Count > 0)
+                {
+                    int craftCost = 0;
+                    mEditorItem.Ingredients.ForEach(ing =>
+                    {
+                        if (ing != null && ing.ItemId != Guid.Empty)
+                        {
+                            craftCost += ItemBase.Get(ing.ItemId).Price * ing.Quantity;
+                        }
+                    });
+
+                    lblCost.Text = $"Item Cost: {ItemBase.Get(mEditorItem.ItemId).Price * mEditorItem.Quantity }; Craft Cost: {craftCost}";
+                    lblCost.Show();
+                }
+                else
+                {
+                    lblCost.Hide();
+                }
             }
             else
             {
@@ -567,6 +588,11 @@ namespace Intersect.Editor.Forms.Editors
         }
 
         #endregion
+
+        private void nudExp_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Experience = (long)nudExp.Value;
+        }
     }
 
 }

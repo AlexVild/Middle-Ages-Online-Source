@@ -373,6 +373,33 @@ namespace Intersect.Client.Networking
             }
         }
 
+        // MapLayerChanged Packet (for traveling between map "instances")
+        public void HandlePacket(IPacketSender packetSender, MapLayerChangedPacket packet)
+        {
+            var disposingEntities = new List<Guid>();
+            foreach (var pkt in packet.EntitiesToDispose)
+            {
+                HandlePacket(pkt);
+                disposingEntities.Add(pkt.EntityId);
+            }
+
+            foreach (var entity in disposingEntities)
+            {
+                Globals.EntitiesToDispose.Add(entity);
+            }
+
+            foreach (var mapId in packet.MapIdsToRefresh)
+            {
+                var map = MapInstance.Get(mapId);
+                if (map != null)
+                {
+                    Globals.EntitiesToDispose.AddRange(map.LocalEntities.Values
+                        .ToList()
+                        .Select(en => en.Id));
+                }
+            }
+        }
+
         //EntityPositionPacket
         public void HandlePacket(IPacketSender packetSender, EntityPositionPacket packet)
         {
@@ -900,6 +927,27 @@ namespace Intersect.Client.Networking
             }
 
             en.Stat = packet.Stats;
+        }
+
+        //PlayerStatsPacket
+        public void HandlePacket(IPacketSender packetSender, PlayerStatsPacket packet)
+        {
+            var id = packet.Id;
+            Entity player = null;
+
+            if (!Globals.Entities.ContainsKey(id))
+            {
+                return;
+            }
+
+            player = Globals.Entities[id];
+            if (player == null)
+            {
+                return;
+            }
+
+            player.Stat = packet.Stats;
+            player.TrueStats = packet.TrueStats;
         }
 
         //EntityDirectionPacket
@@ -2089,6 +2137,7 @@ namespace Intersect.Client.Networking
             Globals.futureWarpX = packet.X;
             Globals.futureWarpY = packet.Y;
             Globals.futureWarpDir = packet.Dir;
+            Globals.futureWarpInstanceType = packet.InstanceType;
         }
 
         // Combo handling packet
@@ -2113,12 +2162,7 @@ namespace Intersect.Client.Networking
             Globals.Me.MiningTier = packet?.MiningTier;
             Globals.Me.FishingTier = packet?.FishingTier;
             Globals.Me.WoodcutTier = packet?.WoodcutTier;
-            Globals.Me.NpcGuildName = packet?.NPCGuildName;
-            if (Globals.Me.NpcGuildName == null)
-            {
-                Globals.Me.NpcGuildName = "Not in NPC Guild";
-            }
-            Globals.Me.ClassRank = packet.ClassRank;
+            Globals.Me.ClassRanks = packet.ClassRanks;
         }
 
         public void HandlePacket(IPacketSender packetSender, QuestPointPacket packet)

@@ -239,5 +239,20 @@
 
         // Vehicles
         SetVehicle,
+
+        // NPC Guilds,
+        NPCGuildManagement,
+        
+        // Inspiration
+        AddInspiration
+    }
+
+    public enum NPCGuildManagementSelection
+    {
+        ChangeComplete,
+        ClearCooldown,
+        ChangeRank,
+        ChangeGuildStatus,
+        ChangeSpecialAssignment,
     }
 }

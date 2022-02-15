@@ -8,6 +8,7 @@ using Intersect.Client.Framework.Gwen.Control.EventArguments;
 using Intersect.Client.Framework.Gwen.Input;
 using Intersect.Client.Framework.Input;
 using Intersect.Client.General;
+using Intersect.Client.Interface.Game.DescriptionWindows;
 using Intersect.Client.Localization;
 using Intersect.Client.Networking;
 using Intersect.GameObjects;
@@ -37,7 +38,7 @@ namespace Intersect.Client.Interface.Game.Inventory
 
         private Guid mCurrentItemId;
 
-        private ItemDescWindow mDescWindow;
+        private ItemDescriptionWindow mDescWindow;
 
         private Draggable mDragIcon;
 
@@ -81,6 +82,7 @@ namespace Intersect.Client.Interface.Game.Inventory
             EquipLabel.IsHidden = true;
             EquipLabel.Text = Strings.Inventory.equippedicon;
             EquipLabel.TextColor = new Color(0, 255, 255, 255);
+            Container.RenderColor = Color.Transparent; // Alex: "Unequipped" display
             mCooldownLabel = new Label(Pnl, "InventoryItemCooldownLabel");
             mCooldownLabel.IsHidden = true;
             mCooldownLabel.TextColor = new Color(0, 255, 255, 255);
@@ -153,7 +155,7 @@ namespace Intersect.Client.Interface.Game.Inventory
             {
                 if (Globals.Me.Inventory[mMySlot]?.Base != null)
                 {
-                    mDescWindow = new ItemDescWindow(
+                    mDescWindow = new ItemDescriptionWindow(
                         Globals.Me.Inventory[mMySlot].Base, Globals.Me.Inventory[mMySlot].Quantity, mInventoryWindow.X,
                         mInventoryWindow.Y, Globals.Me.Inventory[mMySlot].StatBuffs
                     );
@@ -162,52 +164,43 @@ namespace Intersect.Client.Interface.Game.Inventory
             else
             {
                 var invItem = Globals.Me.Inventory[mMySlot];
-                ShopItem shopItem = null;
-                for (var i = 0; i < Globals.GameShop.BuyingItems.Count; i++)
+
+                if (Globals.GameShop.BuysItem(invItem.Base))
                 {
-                    var tmpShop = Globals.GameShop.BuyingItems[i];
+                    ShopItem buysFor = Globals.GameShop.BuyingItems.Find(buyItem => invItem.ItemId == buyItem.ItemId);
 
-                    if (invItem.ItemId == tmpShop.ItemId)
+                    // If the item has a specific currency set that it is selling for
+                    if (buysFor != null)
                     {
-                        shopItem = tmpShop;
-
-                        break;
+                        var hoveredItem = ItemBase.Get(buysFor.CostItemId);
+                        if (hoveredItem != null && Globals.Me.Inventory[mMySlot]?.Base != null)
+                        {
+                            mDescWindow = new ItemDescriptionWindow(
+                                Globals.Me.Inventory[mMySlot].Base, Globals.Me.Inventory[mMySlot].Quantity,
+                                mInventoryWindow.X, mInventoryWindow.Y, Globals.Me.Inventory[mMySlot].StatBuffs, "",
+                                Strings.Shop.sellsfor.ToString(buysFor.CostItemQuantity, hoveredItem.Name)
+                            );
+                        }
+                    }
+                    else // Else, the default currency
+                    {
+                        var costItem = Globals.GameShop.DefaultCurrency;
+                        if (invItem.Base != null && costItem != null && Globals.Me.Inventory[mMySlot]?.Base != null)
+                        {
+                            mDescWindow = new ItemDescriptionWindow(
+                                Globals.Me.Inventory[mMySlot].Base, Globals.Me.Inventory[mMySlot].Quantity,
+                                mInventoryWindow.X, mInventoryWindow.Y, Globals.Me.Inventory[mMySlot].StatBuffs, "",
+                                Strings.Shop.sellsfor.ToString((int) Math.Floor(invItem.Base.Price * Globals.GameShop.BuyMultiplier), costItem.Name)
+                            );
+                        }
                     }
                 }
-
-                if (Globals.GameShop.BuyingWhitelist && shopItem != null)
+                else if(invItem?.Base != null)
                 {
-                    var hoveredItem = ItemBase.Get(shopItem.CostItemId);
-                    if (hoveredItem != null && Globals.Me.Inventory[mMySlot]?.Base != null)
-                    {
-                        mDescWindow = new ItemDescWindow(
-                            Globals.Me.Inventory[mMySlot].Base, Globals.Me.Inventory[mMySlot].Quantity,
-                            mInventoryWindow.X, mInventoryWindow.Y, Globals.Me.Inventory[mMySlot].StatBuffs, "",
-                            Strings.Shop.sellsfor.ToString(shopItem.CostItemQuantity, hoveredItem.Name)
-                        );
-                    }
-                }
-                else if (shopItem == null)
-                {
-                    var costItem = Globals.GameShop.DefaultCurrency;
-                    if (invItem.Base != null && costItem != null && Globals.Me.Inventory[mMySlot]?.Base != null)
-                    {
-                        mDescWindow = new ItemDescWindow(
-                            Globals.Me.Inventory[mMySlot].Base, Globals.Me.Inventory[mMySlot].Quantity,
-                            mInventoryWindow.X, mInventoryWindow.Y, Globals.Me.Inventory[mMySlot].StatBuffs, "",
-                            Strings.Shop.sellsfor.ToString(invItem.Base.Price.ToString(), costItem.Name)
-                        );
-                    }
-                }
-                else
-                {
-                    if (invItem?.Base != null)
-                    {
-                        mDescWindow = new ItemDescWindow(
-                            invItem.Base, invItem.Quantity, mInventoryWindow.X, mInventoryWindow.Y, invItem.StatBuffs,
-                            "", Strings.Shop.wontbuy
-                        );
-                    }
+                    mDescWindow = new ItemDescriptionWindow(
+                        invItem.Base, invItem.Quantity, mInventoryWindow.X, mInventoryWindow.Y, invItem.StatBuffs,
+                        "", Strings.Shop.wontbuy
+                    );
                 }
             }
         }
@@ -239,6 +232,7 @@ namespace Intersect.Client.Interface.Game.Inventory
             }
 
             var item = ItemBase.Get(Globals.Me.Inventory[mMySlot].ItemId);
+
             if (Globals.Me.Inventory[mMySlot].ItemId != mCurrentItemId ||
                 Globals.Me.Inventory[mMySlot].Quantity != mCurrentAmt ||
                 equipped != mIsEquipped ||
@@ -250,8 +244,17 @@ namespace Intersect.Client.Interface.Game.Inventory
                 mCurrentItemId = Globals.Me.Inventory[mMySlot].ItemId;
                 mCurrentAmt = Globals.Me.Inventory[mMySlot].Quantity;
                 mIsEquipped = equipped;
+                // Alex: Commented out to ALWAYS hide equip panel/label, in favor of displaying a texture for equipped items
+                /*
                 EquipPanel.IsHidden = !mIsEquipped;
                 EquipLabel.IsHidden = !mIsEquipped;
+                */
+                
+                // Alex: This is my addition - also note that InventoryWindow has some new logic as well in its update loop
+                Container.RenderColor = mIsEquipped ? Color.White : Color.Transparent;
+                EquipPanel.IsHidden = true; // Alex: Don't want, at the moment
+                EquipLabel.IsHidden = true;
+
                 mCooldownLabel.IsHidden = true;
                 if (item != null)
                 {
@@ -467,7 +470,5 @@ namespace Intersect.Client.Interface.Game.Inventory
                 }
             }
         }
-
     }
-
 }

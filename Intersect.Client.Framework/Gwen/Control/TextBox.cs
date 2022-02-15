@@ -238,7 +238,7 @@ namespace Intersect.Client.Framework.Gwen.Control
 
             RefreshCursorBounds();
 
-            base.PlaySound(mAddTextSound);
+            base.PlaySound(mAddTextSound, Enums.UISoundType.Text);
         }
 
         /// <summary>
@@ -607,7 +607,7 @@ namespace Intersect.Client.Framework.Gwen.Control
 
             if (length > 0 && playSound)
             {
-                base.PlaySound(mRemoveTextSound);
+                base.PlaySound(mRemoveTextSound, Enums.UISoundType.Text);
             }
         }
 

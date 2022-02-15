@@ -811,6 +811,9 @@ namespace Intersect.Editor.Forms.Editors.Events
                     case VariableTypes.ServerVariable:
                         exp = string.Format(@"({0}: {1})", Strings.EventGiveExperience.ServerVariable, ServerVariableBase.GetName(command.VariableId));
                         break;
+                    case VariableTypes.InstanceVariable:
+                        exp = string.Format(@"({0}: {1})", Strings.EventGiveExperience.InstanceVariable, InstanceVariableBase.GetName(command.VariableId));
+                        break;
                 }
 
                 return Strings.EventCommandList.giveexp.ToString(exp);
@@ -924,9 +927,17 @@ namespace Intersect.Editor.Forms.Editors.Events
                 }
             }
 
-            return Strings.EventCommandList.warp.ToString(
-                mapName, command.X, command.Y, Strings.Directions.dir[(int) command.Direction - 1], command.FadeOnWarp.ToString()
-            );
+            if (command.ChangeInstance)
+            {
+                return Strings.EventCommandList.instancedwarp.ToString(
+                    mapName, command.X, command.Y, Strings.Directions.dir[(int)command.Direction - 1], command.FadeOnWarp.ToString(), Enum.GetName(typeof(MapInstanceType), command.InstanceType)
+                );
+            } else
+            {
+                return Strings.EventCommandList.warp.ToString(
+                    mapName, command.X, command.Y, Strings.Directions.dir[(int)command.Direction - 1], command.FadeOnWarp.ToString()
+                );
+            }
         }
 
         private static string GetCommandText(SetMoveRouteCommand command, MapInstance map)
@@ -1317,6 +1328,13 @@ namespace Intersect.Editor.Forms.Editors.Events
                         ServerVariableBase.GetName(mod.DuplicateVariableId)
                     );
                 }
+
+                else if (mod.DupVariableType == VariableTypes.InstanceVariable)
+                {
+                    varvalue = Strings.EventCommandList.dupinstancevariable.ToString(
+                        InstanceVariableBase.GetName(mod.DuplicateVariableId)
+                    );
+                }
             }
             else
             {
@@ -1341,6 +1359,13 @@ namespace Intersect.Editor.Forms.Editors.Events
             {
                 return Strings.EventCommandList.globalvariable.ToString(
                     ServerVariableBase.GetName(command.VariableId), varvalue
+                );
+            }
+
+            if (command.VariableType == VariableTypes.InstanceVariable)
+            {
+                return Strings.EventCommandList.instancevariable.ToString(
+                    InstanceVariableBase.GetName(command.VariableId), varvalue
                 );
             }
 
@@ -1472,6 +1497,48 @@ namespace Intersect.Editor.Forms.Editors.Events
                     );
 
                     break;
+                case Enums.VariableMods.DupInstanceVar:
+                    varvalue = Strings.EventCommandList.dupinstancevariable.ToString(
+                        InstanceVariableBase.GetName(mod.DuplicateVariableId)
+                    );
+
+                    break;
+                case Enums.VariableMods.AddInstanceVar:
+                    varvalue = Strings.EventCommandList.addinstancevariable.ToString(
+                        InstanceVariableBase.GetName(mod.DuplicateVariableId)
+                    );
+
+                    break;
+                case Enums.VariableMods.SubtractInstanceVar:
+                    varvalue = Strings.EventCommandList.subtractinstancevariable.ToString(
+                        InstanceVariableBase.GetName(mod.DuplicateVariableId)
+                    );
+
+                    break;
+                case Enums.VariableMods.MultiplyInstanceVar:
+                    varvalue = Strings.EventCommandList.multiplyinstancevariable.ToString(
+                        InstanceVariableBase.GetName(mod.DuplicateVariableId)
+                    );
+
+                    break;
+                case Enums.VariableMods.DivideInstanceVar:
+                    varvalue = Strings.EventCommandList.divideinstancevariable.ToString(
+                        InstanceVariableBase.GetName(mod.DuplicateVariableId)
+                    );
+
+                    break;
+                case Enums.VariableMods.LeftShiftInstanceVar:
+                    varvalue = Strings.EventCommandList.leftshiftinstancevariable.ToString(
+                        InstanceVariableBase.GetName(mod.DuplicateVariableId)
+                    );
+
+                    break;
+                case Enums.VariableMods.RightShiftInstanceVar:
+                    varvalue = Strings.EventCommandList.rightshiftinstancevariable.ToString(
+                        InstanceVariableBase.GetName(mod.DuplicateVariableId)
+                    );
+
+                    break;
             }
 
             if (command.VariableType == VariableTypes.PlayerVariable)
@@ -1485,6 +1552,13 @@ namespace Intersect.Editor.Forms.Editors.Events
             {
                 return Strings.EventCommandList.globalvariable.ToString(
                     ServerVariableBase.GetName(command.VariableId), varvalue
+                );
+            }
+
+            if (command.VariableType == VariableTypes.InstanceVariable)
+            {
+                return Strings.EventCommandList.instancevariable.ToString(
+                    InstanceVariableBase.GetName(command.VariableId), varvalue
                 );
             }
 
@@ -1519,6 +1593,13 @@ namespace Intersect.Editor.Forms.Editors.Events
                     ServerVariableBase.GetName(command.VariableId), varvalue
                 );
             }
+            
+            if (command.VariableType == VariableTypes.InstanceVariable)
+            {
+                return Strings.EventCommandList.instancevariable.ToString(
+                    InstanceVariableBase.GetName(command.VariableId), varvalue
+                );
+            }
 
             return Strings.EventCommandList.invalid;
         }
@@ -1532,6 +1613,45 @@ namespace Intersect.Editor.Forms.Editors.Events
             {
                 return Strings.EventCommandList.setvehicle.ToString(Strings.General.none);
             }
+        }
+
+        private static string GetCommandText(NPCGuildManagementCommand command, MapInstance map)
+        {
+            switch(command.Selection)
+            {
+                case NPCGuildManagementSelection.ChangeComplete:
+                    return Strings.EventCommandList.npcmanage.ToString(
+                        ClassBase.GetName(command.ClassId),
+                        Strings.EventCommandList.npcmanagecomplete.ToString(command.SelectionValue.ToString())
+                        );
+                case NPCGuildManagementSelection.ChangeGuildStatus:
+                    return Strings.EventCommandList.npcmanage.ToString(
+                        ClassBase.GetName(command.ClassId),
+                        Strings.EventCommandList.npcmanageguildstatus.ToString(command.SelectionValue.ToString())
+                        );
+                case NPCGuildManagementSelection.ChangeRank:
+                    return Strings.EventCommandList.npcmanage.ToString(
+                        ClassBase.GetName(command.ClassId),
+                        Strings.EventCommandList.npcmanagechangerank.ToString(command.NewRank.ToString())
+                        );
+                case NPCGuildManagementSelection.ChangeSpecialAssignment:
+                    return Strings.EventCommandList.npcmanage.ToString(
+                        ClassBase.GetName(command.ClassId),
+                        Strings.EventCommandList.npcmanagespecialassignment.ToString(command.SelectionValue.ToString())
+                        );
+                case NPCGuildManagementSelection.ClearCooldown:
+                    return Strings.EventCommandList.npcmanage.ToString(
+                        ClassBase.GetName(command.ClassId),
+                        Strings.EventCommandList.npcmanageclearcooldown.ToString(command.SelectionValue.ToString())
+                        );
+                default:
+                    return Strings.EventCommandList.npcmanage.ToString(Strings.General.none);
+            }
+        }
+
+        private static string GetCommandText(AddInspirationCommand command, MapInstance map)
+        {
+            return Strings.EventCommandList.addinspiration.ToString(command.Seconds);
         }
 
     }

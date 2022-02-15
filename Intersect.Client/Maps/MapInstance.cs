@@ -37,7 +37,7 @@ namespace Intersect.Client.Maps
 
         public static MapLoadedDelegate OnMapLoaded;
 
-        private static MapInstances sLookup;
+        private static MapControllers sLookup;
 
         public List<WeatherParticle> _removeParticles = new List<WeatherParticle>();
 
@@ -123,7 +123,7 @@ namespace Intersect.Client.Maps
         //Map Sounds
         public MapSound BackgroundSound { get; set; }
 
-        public new static MapInstances Lookup => sLookup ?? (sLookup = new MapInstances(MapBase.Lookup));
+        public new static MapControllers Lookup => sLookup ?? (sLookup = new MapControllers(MapBase.Lookup));
 
         //Load
         public void Load(string json)

@@ -39,5 +39,7 @@ namespace Intersect.Server.Database.PlayerData
         DbSet<Guild> Guilds { get; set; }
 
         DbSet<GuildBankSlot> Guild_Bank { get; set; }
+
+        DbSet<PlayerRecord> Player_Record { get; set; }
     }
 }

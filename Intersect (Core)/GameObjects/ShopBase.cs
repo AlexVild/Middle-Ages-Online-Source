@@ -29,6 +29,8 @@ namespace Intersect.GameObjects
         }
 
         public bool BuyingWhitelist { get; set; } = true;
+        
+        public bool TagWhitelist { get; set; } = true;
 
         //Spawn Info
         [Column("DefaultCurrency")]
@@ -66,6 +68,49 @@ namespace Intersect.GameObjects
         /// <inheritdoc />
         public string Folder { get; set; } = "";
 
+        public float BuyMultiplier { get; set; } = 1.0f;
+
+        [NotMapped] public List<string> BuyingTags = new List<string>();
+
+        [Column("BuyingTags")]
+        [JsonIgnore]
+        public string JsonBuyingTags
+        {
+            get => JsonConvert.SerializeObject(BuyingTags);
+            set => BuyingTags = JsonConvert.DeserializeObject<List<string>>(value);
+        }
+
+        public bool BuysItem(ItemBase item)
+        {
+            if (item == null) return false;
+
+            // Check to see if this item contains a tag in the tag white/blacklist
+            bool validTag = false;
+            if (TagWhitelist)
+            {
+                validTag = item.Tags.FindAll(tag => BuyingTags?.Contains(tag) == true).Count > 0;
+            }
+            else
+            {
+                validTag = item.Tags.FindAll(tag => BuyingTags?.Contains(tag) == true).Count == 0;
+            }
+
+            bool validBuyItem = false;
+            if (BuyingWhitelist)
+            {
+                validBuyItem = BuyingItems.FindAll(buyItem =>
+                {
+                    return (item.Id == buyItem.ItemId) == BuyingWhitelist;
+                }).Count > 0;
+            }
+            else
+            {
+                validBuyItem = BuyingItems.FindAll(buyItem => buyItem.ItemId == item.Id).Count == 0;
+            }
+
+            // If item is in whitelist, do not care about tag list
+            return (validBuyItem && BuyingWhitelist) || validTag && validBuyItem;
+        }
     }
 
     public class ShopItem

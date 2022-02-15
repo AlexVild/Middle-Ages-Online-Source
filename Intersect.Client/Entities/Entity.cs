@@ -151,6 +151,8 @@ namespace Intersect.Client.Entities
 
         public int[] Stat = new int[(int) Stats.StatCount];
 
+        public int[] TrueStats = new int[(int)Stats.StatCount];
+
         public int Target = -1;
 
         public GameTexture Texture;
@@ -335,7 +337,6 @@ namespace Intersect.Client.Entities
             HeaderLabel = new Label(packet.HeaderLabel.Label, packet.HeaderLabel.Color);
             FooterLabel = new Label(packet.FooterLabel.Label, packet.FooterLabel.Color);
 
-            // TODO Alex: Load in the decors here I figure?
             var animsToClear = new List<Animation>();
             var animsToAdd = new List<AnimationBase>();
             for (var i = 0; i < packet.Animations.Length; i++)
@@ -1611,6 +1612,11 @@ namespace Intersect.Client.Entities
                 return;
             }
 
+            if (this is Resource && Options.HideResourceHealthBars)
+            {
+                return;
+            }
+
             if (Vital[(int) Vitals.Health] <= 0)
             {
                 return;
@@ -1658,7 +1664,7 @@ namespace Intersect.Client.Entities
                 return;
             }
 
-            var width = Options.TileWidth;
+            var width = Options.TileWidth - 8;
 
             var hpfillRatio = (float) Vital[(int) Vitals.Health] / maxVital;
             hpfillRatio = Math.Min(1, Math.Max(0, hpfillRatio));
@@ -1690,7 +1696,7 @@ namespace Intersect.Client.Entities
             {
                 Graphics.DrawGameTexture(
                     hpBackground, new FloatRect(0, 0, hpBackground.GetWidth(), hpBackground.GetHeight()),
-                    new FloatRect((int) (x - width / 2), (int) (y - 1), width, 6), Color.White
+                    new FloatRect((int) (x - width / 2), (int) (y - 1), width, 9), Color.White
                 );
             }
 
@@ -1699,7 +1705,7 @@ namespace Intersect.Client.Entities
                 Graphics.DrawGameTexture(
                     hpForeground, 
                     new FloatRect(0, 0, hpForeground.GetWidth(), hpForeground.GetHeight()),
-                    new FloatRect((int) (x - width / 2), (int) (y - 1), hpfillWidth, 6), Color.White
+                    new FloatRect((int) (x - width / 2), (int) (y - 1), hpfillWidth, 9), Color.White
                 );
             }
 
@@ -1708,7 +1714,7 @@ namespace Intersect.Client.Entities
                 Graphics.DrawGameTexture(
                     shieldForeground,
                     new FloatRect(0, 0, shieldfillWidth, shieldForeground.GetHeight()),
-                    new FloatRect((int) (x - width / 2) + hpfillWidth, (int) (y - 1), shieldfillWidth, 6), Color.White
+                    new FloatRect((int) (x - width / 2) + hpfillWidth, (int) (y - 1), shieldfillWidth, 9), Color.White
                 );
             }
         }
@@ -1728,7 +1734,7 @@ namespace Intersect.Client.Entities
             var castSpell = SpellBase.Get(SpellCast);
             if (castSpell != null)
             {
-                var width = Options.TileWidth;
+                var width = Options.TileWidth - 8;
                 var fillratio = (castSpell.CastDuration - (CastTime - Globals.System.GetTimeMs())) /
                                 (float) castSpell.CastDuration;
 
@@ -1754,7 +1760,7 @@ namespace Intersect.Client.Entities
                 {
                     Graphics.DrawGameTexture(
                         castBackground, new FloatRect(0, 0, castBackground.GetWidth(), castBackground.GetHeight()),
-                        new FloatRect((int) (x - width / 2), (int) (y - 1), width, 6), Color.White
+                        new FloatRect((int) (x - width / 2), (int) (y - 1), width, 9), Color.White
                     );
                 }
 
@@ -1763,7 +1769,7 @@ namespace Intersect.Client.Entities
                     Graphics.DrawGameTexture(
                         castForeground,
                         new FloatRect(0, 0, castForeground.GetWidth() * fillratio, castForeground.GetHeight()),
-                        new FloatRect((int) (x - width / 2), (int) (y - 1), castFillWidth, 6), Color.White
+                        new FloatRect((int) (x - width / 2), (int) (y - 1), castFillWidth, 9), Color.White
                     );
                 }
             }

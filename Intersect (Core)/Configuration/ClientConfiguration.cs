@@ -51,6 +51,12 @@ namespace Intersect.Configuration
         public const string GUI_CANCEL_SFX = "al_gui_cancel.wav";
 
         public const string HEALTH_WARNING_SFX = "voice_danger.wav";
+        
+        public const int UI_HOVER_SOUND_TIMER = 80;
+        
+        public const int UI_TEXT_SOUND_TIMER = 40;
+
+        public const string TARGET_SOUND = "al_target.wav";
 
         #endregion
 
@@ -141,6 +147,12 @@ namespace Intersect.Configuration
         /// Sets a custom mouse cursor.
         /// </summary>
         public string MouseCursor { get; set; } = "";
+
+        public int UIHoverSoundTimer { get; set; } = UI_HOVER_SOUND_TIMER;
+        
+        public int UITextSoundTimer { get; set; } = UI_TEXT_SOUND_TIMER;
+        
+        public string TargetSound { get; set; } = TARGET_SOUND;
 
         #endregion
 

@@ -30,7 +30,7 @@ namespace Intersect.Server.Classes.Maps
 
         public byte Z;
 
-        public MapTrapInstance(Entity owner, SpellBase parentSpell, Guid mapId, byte x, byte y, byte z)
+        public MapTrapInstance(Entity owner, SpellBase parentSpell, Guid mapId, Guid mapLayerId, byte x, byte y, byte z)
         {
             Owner = owner;
             ParentSpell = parentSpell;
@@ -72,14 +72,17 @@ namespace Intersect.Server.Classes.Maps
 
         public void Update()
         {
-            if (Triggered)
+            if (MapController.TryGetInstanceFromMap(MapId, Owner.MapInstanceId, out var mapInstance))
             {
-                MapInstance.Get(MapId).RemoveTrap(this);
-            }
+                if (Triggered)
+                {
+                    mapInstance.RemoveTrap(this);
+                }
 
-            if (Globals.Timing.Milliseconds > Duration)
-            {
-                MapInstance.Get(MapId).RemoveTrap(this);
+                if (Globals.Timing.Milliseconds > Duration)
+                {
+                    mapInstance.RemoveTrap(this);
+                }
             }
         }
 

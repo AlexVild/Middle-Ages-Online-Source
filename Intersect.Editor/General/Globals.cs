@@ -51,6 +51,8 @@ namespace Intersect.Editor.General
         //Editor Variables
         public static MapInstance CurrentMap = null;
 
+        public static int SelectedMapNpc = -1;
+
         public static TilesetBase CurrentTileset = null;
 
         public static int CurrentTool = (int) EditingTool.Pen;

@@ -443,6 +443,7 @@
     <Compile Include="Core\IServerContext.cs" />
     <Compile Include="Core\LogicService.cs" />
     <Compile Include="Core\LogicService.LogicThread.cs" />
+    <Compile Include="Core\ProcessingInfo.cs" />
     <Compile Include="Core\Services\IConsoleService.cs" />
     <Compile Include="Core\Services\ILogicService.cs" />
     <Compile Include="Database\ContextProvider.cs" />
@@ -465,6 +466,7 @@
     <Compile Include="Database\Logging\ILoggingContext.cs" />
     <Compile Include="Database\Logging\LoggingContext.cs" />
     <Compile Include="Database\Logging\RequestLog.cs" />
+    <Compile Include="Database\Logging\Seed\SeedTrades.cs" />
     <Compile Include="Database\MigrationBuilderExtensions.cs" />
     <Compile Include="Database\PlayerData\Api\RefreshToken.cs" />
     <Compile Include="Database\PlayerData\Ban.cs" />
@@ -481,6 +483,7 @@
     <Compile Include="Database\PlayerData\Players\IPlayerOwned.cs" />
     <Compile Include="Database\PlayerData\Players\ISlot.cs" />
     <Compile Include="Database\PlayerData\Players\Quest.cs" />
+    <Compile Include="Database\PlayerData\Players\PlayerRecord.cs" />
     <Compile Include="Database\PlayerData\Players\SlotHelper.cs" />
     <Compile Include="Database\PlayerData\Players\SpellSlot.cs" />
     <Compile Include="Entities\BankInterface.cs" />
@@ -499,6 +502,7 @@
     <Compile Include="Database\PlayerData\User.cs" />
     <Compile Include="Database\PlayerData\PlayerContext.cs" />
     <Compile Include="Entities\Events\Event.cs" />
+    <Compile Include="Entities\PlayerData\PlayerClassStats.cs" />
     <Compile Include="Entities\Projectile.cs" />
     <Compile Include="Entities\ProjectileSpawn.cs" />
     <Compile Include="Entities\Resource.cs" />
@@ -516,10 +520,11 @@
     <Compile Include="Maps\MapActionMessages.cs" />
     <Compile Include="Maps\MapAnimations.cs" />
     <Compile Include="Maps\MapEntityMovements.cs" />
-    <Compile Include="Maps\MapInstance.cs" />
+    <Compile Include="Maps\MapController.cs" />
     <Compile Include="Maps\MapItemInstance.cs" />
     <Compile Include="Maps\MapItemSpawn.cs" />
     <Compile Include="Maps\MapNpcSpawn.cs" />
+    <Compile Include="Maps\MapInstance.cs" />
     <Compile Include="Maps\MapResourceSpawn.cs" />
     <Compile Include="Maps\MapTileLoc.cs" />
     <Compile Include="Maps\MapTrapInstance.cs" />
@@ -558,6 +563,34 @@
     <Compile Include="Migrations\20211108145352_AddVehicleColumn.cs" />
     <Compile Include="Migrations\20211108145352_AddVehicleColumn.designer.cs">
       <DependentUpon>20211108145352_AddVehicleColumn.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20220123173906_AddPersonalInstanceFields.cs" />
+    <Compile Include="Migrations\20220123173906_AddPersonalInstanceFields.designer.cs">
+      <DependentUpon>20220123173906_AddPersonalInstanceFields.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20220124143627_GuildInstanceIdMigration.cs" />
+    <Compile Include="Migrations\20220124143627_GuildInstanceIdMigration.designer.cs">
+      <DependentUpon>20220124143627_GuildInstanceIdMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20220124175811_AddSharedInstanceIdToPlayerMigration.cs" />
+    <Compile Include="Migrations\20220124175811_AddSharedInstanceIdToPlayerMigration.designer.cs">
+      <DependentUpon>20220124175811_AddSharedInstanceIdToPlayerMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20220124215539_AddSharedInstanceRespawnPointMigration.cs" />
+    <Compile Include="Migrations\20220124215539_AddSharedInstanceRespawnPointMigration.designer.cs">
+      <DependentUpon>20220124215539_AddSharedInstanceRespawnPointMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20220205181832_ClassRankMigration.cs" />
+    <Compile Include="Migrations\20220205181832_ClassRankMigration.designer.cs">
+      <DependentUpon>20220205181832_ClassRankMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20220207213352_PlayerRecordsMigration.cs" />
+    <Compile Include="Migrations\20220207213352_PlayerRecordsMigration.designer.cs">
+      <DependentUpon>20220207213352_PlayerRecordsMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20220210173234_InspirationMigration.cs" />
+    <Compile Include="Migrations\20220210173234_InspirationMigration.designer.cs">
+      <DependentUpon>20220210173234_InspirationMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.cs" />
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.Designer.cs">
@@ -672,6 +705,26 @@
     <Compile Include="Migrations\Game\20211213162720_WeaponSpellMigration.cs" />
     <Compile Include="Migrations\Game\20211213162720_WeaponSpellMigration.designer.cs">
       <DependentUpon>20211213162720_WeaponSpellMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20220125173554_InstanceVariableMigration.cs" />
+    <Compile Include="Migrations\Game\20220125173554_InstanceVariableMigration.designer.cs">
+      <DependentUpon>20220125173554_InstanceVariableMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20220204163952_BackstabMigration.cs" />
+    <Compile Include="Migrations\Game\20220204163952_BackstabMigration.designer.cs">
+      <DependentUpon>20220204163952_BackstabMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20220206010259_QuestTypeMigration.cs" />
+    <Compile Include="Migrations\Game\20220206010259_QuestTypeMigration.designer.cs">
+      <DependentUpon>20220206010259_QuestTypeMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20220210173512_InspirationMigration.cs" />
+    <Compile Include="Migrations\Game\20220210173512_InspirationMigration.designer.cs">
+      <DependentUpon>20220210173512_InspirationMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20220210203035_ShopImprovementMigration.cs" />
+    <Compile Include="Migrations\Game\20220210203035_ShopImprovementMigration.designer.cs">
+      <DependentUpon>20220210203035_ShopImprovementMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">

@@ -24,6 +24,7 @@ using Intersect.Utilities;
 using Intersect.Client.Items;
 using Intersect.Client.Interface.Game.Chat;
 using Intersect.Config.Guilds;
+using Intersect.Client.Interface.Game.DescriptionWindows;
 
 namespace Intersect.Client.Entities
 {
@@ -47,7 +48,7 @@ namespace Intersect.Client.Entities
 
         public Dictionary<Guid, long> ItemCooldowns = new Dictionary<Guid, long>();
 
-        private ItemDescWindow mItemTargetBox;
+        private ItemDescriptionWindow mItemTargetBox;
 
         private Entity mLastBumpedEvent = null;
 
@@ -95,9 +96,7 @@ namespace Intersect.Client.Entities
 
         public string WoodcutTier { get; set; }
 
-        public string NpcGuildName { get; set; }
-
-        public string ClassRank { get; set; } 
+        public Dictionary<string, int> ClassRanks { get; set; } 
 
         public string QuestPoints { get; set; }
 
@@ -160,7 +159,6 @@ namespace Intersect.Client.Entities
 
             mRenderPriority = 2;
         }
-
 
         public List<PartyMember> Party
         {
@@ -319,6 +317,7 @@ namespace Intersect.Client.Entities
             InVehicle = pkt.InVehicle;
             VehicleSprite = pkt.VehicleSprite;
             VehicleSpeed = pkt.VehicleSpeed;
+            TrueStats = pkt.TrueStats;
 
             var playerPacket = (PlayerEntityPacket) packet;
 
@@ -589,25 +588,17 @@ namespace Intersect.Client.Entities
 
             return cooldown;
         }
-
+        
         public void TrySellItem(int index)
         {
-            if (ItemBase.Get(Inventory[index].ItemId) != null)
+            var item = ItemBase.Get(Inventory[index].ItemId);
+            if (item != null)
             {
-                var foundItem = -1;
-                for (var i = 0; i < Globals.GameShop.BuyingItems.Count; i++)
+                // Either the specific list is set to whitelist, and the item is valid on one or both lists
+                // OR, the specific item is on the black list, but is valid on that list
+                if (Globals.GameShop.BuysItem(item))
                 {
-                    if (Globals.GameShop.BuyingItems[i].ItemId == Inventory[index].ItemId)
-                    {
-                        foundItem = i;
-
-                        break;
-                    }
-                }
-
-                if (foundItem > -1 && Globals.GameShop.BuyingWhitelist ||
-                    foundItem == -1 && !Globals.GameShop.BuyingWhitelist)
-                {
+                    
                     if (Inventory[index].Quantity > 1)
                     {
                         var iBox = new InputBox(
@@ -625,6 +616,7 @@ namespace Intersect.Client.Entities
                         );
                     }
                 }
+                // The item was not valid
                 else
                 {
                     var iBox = new InputBox(
@@ -1401,6 +1393,7 @@ namespace Intersect.Client.Entities
                 TargetBox?.SetEntity(en, EntityTypes.GlobalEntity);
             }
 
+            Audio.AddGameSound(Configuration.ClientConfiguration.Instance.TargetSound, false);
             TargetBox?.Show();
         }
 
@@ -1782,11 +1775,6 @@ namespace Intersect.Client.Entities
 
             TargetIndex = Guid.Empty;
             TargetType = -1;
-            if (mItemTargetBox != null)
-            {
-                mItemTargetBox.Dispose();
-                mItemTargetBox = null;
-            }
         }
 
         /// <summary>
@@ -1887,6 +1875,19 @@ namespace Intersect.Client.Entities
             }
 
             return attackTime;
+        }
+
+        /// <summary>
+        /// Calculate the attack time for the player as if they have a specified speed stat.
+        /// </summary>
+        /// <param name="speed"></param>
+        /// <returns></returns>
+        public virtual int CalculateAttackTime(int speed)
+        {
+            return (int)(Options.MaxAttackRate +
+                          (float)((Options.MinAttackRate - Options.MaxAttackRate) *
+                                   (((float)Options.MaxStatValue - speed) /
+                                    (float)Options.MaxStatValue)));
         }
 
         //Movement Processing

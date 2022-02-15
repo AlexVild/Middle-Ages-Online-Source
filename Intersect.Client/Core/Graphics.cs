@@ -154,7 +154,7 @@ namespace Intersect.Client.Core
 
             if (imageTex != null)
             {
-                DrawFullScreenTexture(imageTex);
+                DrawFullScreenTextureCutoff(imageTex);
             }
         }
 
@@ -418,6 +418,20 @@ namespace Intersect.Client.Core
             foreach (var animInstance in animations)
             {
                 animInstance.EndDraw();
+            }
+
+            DrawScanlines();
+        }
+
+        public static void DrawScanlines()
+        {
+            if (Globals.Database.EnableScanlines)
+            {
+                var imageTex = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Image, "scanlines.png");
+                if (imageTex != null)
+                {
+                    DrawFullScreenTexture(imageTex, 1f);
+                }
             }
         }
 
@@ -692,6 +706,20 @@ namespace Intersect.Client.Core
                 tex, GetSourceRect(tex),
                 new FloatRect(bgx + Renderer.GetView().X, bgy + Renderer.GetView().Y, bgw, bgh),
                 new Color((int) (alpha * 255f), 255, 255, 255)
+            );
+        }
+
+        public static void DrawFullScreenTextureCutoff(GameTexture tex, float alpha = 1f)
+        {
+            var bgx = Renderer.GetScreenWidth() / 2 - tex.GetWidth() / 2;
+            var bgy = Renderer.GetScreenHeight() / 2 - tex.GetHeight() / 2;
+            var bgw = tex.GetWidth();
+            var bgh = tex.GetHeight();
+
+            DrawGameTexture(
+                tex, GetSourceRect(tex),
+                new FloatRect(bgx + Renderer.GetView().X, bgy + Renderer.GetView().Y, bgw, bgh),
+                new Color((int)(alpha * 255f), 255, 255, 255)
             );
         }
 

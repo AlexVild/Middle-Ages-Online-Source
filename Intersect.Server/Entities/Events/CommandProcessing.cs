@@ -95,12 +95,20 @@ namespace Intersect.Server.Entities.Events
                     type = (int)variable.Type;
                 }
             }
-            else
+            else if (command.VariableType == VariableTypes.ServerVariable)
             {
                 var variable = ServerVariableBase.Get(command.VariableId);
                 if (variable != null)
                 {
                     type = (int)variable.Type;
+                }
+            }
+            else if (command.VariableType == VariableTypes.InstanceVariable && MapController.TryGetInstanceFromMap(player.MapId, player.MapInstanceId, out var mapInstance))
+            {
+                var variable = mapInstance.GetInstanceVariable(command.VariableId);
+                if (variable != null)
+                {
+                    type = (int)InstanceVariableBase.Get(command.VariableId).Type;
                 }
             }
 
@@ -135,12 +143,25 @@ namespace Intersect.Server.Entities.Events
 
                     break;
                 case ChatboxChannel.Local:
-                    PacketSender.SendProximityMsg(txt, command.MessageType, player.MapId, color);
+                    PacketSender.SendProximityMsg(txt, ChatMessageType.Local, player.MapId, color);
 
                     break;
                 case ChatboxChannel.Global:
-                    PacketSender.SendGlobalMsg(txt, color, string.Empty, command.MessageType);
+                    PacketSender.SendGlobalMsg(txt, color, string.Empty, ChatMessageType.Global);
 
+                    break;
+                case ChatboxChannel.Party:
+                    if (player.Party?.Count > 0)
+                    {
+                        PacketSender.SendPartyMsg(player, txt, color, player.Name);
+                    }
+                    
+                    break;
+                case ChatboxChannel.Guild:
+                    if (player.Guild != null)
+                    {
+                        PacketSender.SendGuildMsg(player, txt, color, player.Name);
+                    }
                     break;
             }
         }
@@ -161,25 +182,28 @@ namespace Intersect.Server.Entities.Events
         private static void ProcessCommand(
             SetSelfSwitchCommand command,
             Player player,
-            Event instance,
+            Event eventInstance,
             CommandInstance stackInfo,
             Stack<CommandInstance> callStack
         )
         {
-            if (instance.Global)
+            if (eventInstance.Global)
             {
-                var evts = MapInstance.Get(instance.MapId).GlobalEventInstances.Values.ToList();
-                for (var i = 0; i < evts.Count; i++)
+                if (MapController.TryGetInstanceFromMap(eventInstance.MapId, player.MapInstanceId, out var instance))
                 {
-                    if (evts[i] != null && evts[i].BaseEvent == instance.BaseEvent)
+                    var evts = instance.GlobalEventInstances.Values.ToList();
+                    for (var i = 0; i < evts.Count; i++)
                     {
-                        evts[i].SelfSwitch[command.SwitchId] = command.Value;
+                        if (evts[i] != null && evts[i].BaseEvent == eventInstance.BaseEvent)
+                        {
+                            evts[i].SelfSwitch[command.SwitchId] = command.Value;
+                        }
                     }
                 }
             }
             else
             {
-                instance.SelfSwitch[command.SwitchId] = command.Value;
+                eventInstance.SelfSwitch[command.SwitchId] = command.Value;
             }
         }
 
@@ -379,6 +403,12 @@ namespace Intersect.Server.Entities.Events
                     case VariableTypes.ServerVariable:
                         quantity = (int)ServerVariableBase.Get(command.VariableId)?.Value.Integer;
                         break;
+                    case VariableTypes.InstanceVariable:
+                        if (MapController.TryGetInstanceFromMap(player.MapId, player.MapInstanceId, out var mapInstance))
+                        {
+                            quantity = mapInstance.GetInstanceVariable(command.VariableId).Integer;
+                        }
+                        break;
                 }
             }
 
@@ -465,6 +495,12 @@ namespace Intersect.Server.Entities.Events
                         break;
                     case VariableTypes.ServerVariable:
                         quantity = (int)ServerVariableBase.Get(command.VariableId)?.Value.Integer;
+                        break;
+                    case VariableTypes.InstanceVariable:
+                        if (MapController.TryGetInstanceFromMap(player.MapId, player.MapInstanceId, out var mapInstance))
+                        {
+                            quantity = (int)mapInstance.GetInstanceVariable(command.VariableId).Integer;
+                        }
                         break;
                 }
 
@@ -677,11 +713,21 @@ namespace Intersect.Server.Entities.Events
             Stack<CommandInstance> callStack
         )
         {
-            player.Warp(
-                command.MapId, command.X, command.Y,
-                command.Direction == WarpDirection.Retain ? (byte) player.Dir : (byte) (command.Direction - 1),
-                false, 0, false, command.FadeOnWarp
-            );
+            if (command.ChangeInstance)
+            {
+                player.Warp(
+                    command.MapId, command.X, command.Y,
+                    command.Direction == WarpDirection.Retain ? (byte)player.Dir : (byte)(command.Direction - 1),
+                    false, 0, false, command.FadeOnWarp, command.InstanceType
+                );
+            } else
+            {
+                player.Warp(
+                    command.MapId, command.X, command.Y,
+                    command.Direction == WarpDirection.Retain ? (byte)player.Dir : (byte)(command.Direction - 1),
+                    false, 0, false, command.FadeOnWarp
+                );
+            }
         }
 
         //Set Move Route Command
@@ -753,7 +799,7 @@ namespace Intersect.Server.Entities.Events
         private static void ProcessCommand(
             SpawnNpcCommand command,
             Player player,
-            Event instance,
+            Event eventInstance,
             CommandInstance stackInfo,
             Stack<CommandInstance> callStack
         )
@@ -776,7 +822,7 @@ namespace Intersect.Server.Entities.Events
                 {
                     foreach (var evt in player.EventLookup)
                     {
-                        if (evt.Value.MapId != instance.MapId)
+                        if (evt.Value.MapId != eventInstance.MapId)
                         {
                             continue;
                         }
@@ -832,10 +878,10 @@ namespace Intersect.Server.Entities.Events
             }
 
             var tile = new TileHelper(mapId, tileX, tileY);
-            if (tile.TryFix())
+            if (tile.TryFix() && MapController.TryGetInstanceFromMap(mapId, player.MapInstanceId, out var instance))
             {
-                var npc = MapInstance.Get(mapId).SpawnNpc((byte) tileX, (byte) tileY, direction, npcId, true);
-                player.SpawnedNpcs.Add((Npc) npc);
+                var npc = instance.SpawnNpc((byte)tileX, (byte)tileY, direction, npcId, true);
+                player.SpawnedNpcs.Add((Npc)npc);
             }
         }
 
@@ -916,7 +962,7 @@ namespace Intersect.Server.Entities.Events
                         //Attach to entity instead of playing on tile
                         PacketSender.SendAnimationToProximity(
                             animId, targetEntity.GetEntityType() == EntityTypes.Event ? 2 : 1, targetEntity.Id,
-                            targetEntity.MapId, 0, 0, 0
+                            targetEntity.MapId, 0, 0, 0, targetEntity.MapInstanceId
                         );
 
                         return;
@@ -965,7 +1011,7 @@ namespace Intersect.Server.Entities.Events
             if (tile.TryFix())
             {
                 PacketSender.SendAnimationToProximity(
-                    animId, -1, Guid.Empty, tile.GetMapId(), tile.GetX(), tile.GetY(), (sbyte) direction
+                    animId, -1, Guid.Empty, tile.GetMapId(), tile.GetX(), tile.GetY(), (sbyte) direction, player.MapInstanceId
                 );
             }
         }
@@ -1480,6 +1526,12 @@ namespace Intersect.Server.Entities.Events
                 case VariableTypes.ServerVariable:
                     quantity = (int)ServerVariableBase.Get(command.VariableId)?.Value.Integer;
                     break;
+                case VariableTypes.InstanceVariable:
+                    if (MapController.TryGetInstanceFromMap(player.MapId, player.MapInstanceId, out var mapInstance))
+                    {
+                        quantity = (int)mapInstance.GetInstanceVariable(command.VariableId).Integer;
+                    }
+                    break;
             }
             var guild = player.Guild;
             if (quantity > 0 && guild != null && guild.BankSlotsCount != quantity)
@@ -1619,11 +1671,41 @@ namespace Intersect.Server.Entities.Events
                     { Strings.Events.timeperiod, time.Hour >= 12 ? Strings.Events.periodevening : Strings.Events.periodmorning },
                     { Strings.Events.onlinecountcommand, Player.OnlineCount.ToString() },
                     { Strings.Events.onlinelistcommand, input.Contains(Strings.Events.onlinelistcommand) ? string.Join(", ", Player.OnlineList.Select(p => p.Name).ToList()) : "" },
+                    { Strings.Events.eventnamecapscommand, instance?.PageInstance?.Name.ToUpper() ?? "" },
                     { Strings.Events.eventnamecommand, instance?.PageInstance?.Name ?? "" },
                     { Strings.Events.commandparameter, instance?.PageInstance?.Param ?? "" },
-                    { Strings.Events.eventparams, (instance != null && input.Contains(Strings.Events.eventparams)) ? instance.FormatParameters(player) : "" },
-
+                    { Strings.Events.eventparams, (instance != null && input.Contains(Strings.Events.eventparams)) ? instance.FormatParameters(player) : "" }
                 };
+                
+                if (player.Party?.Count > 1)
+                {
+                    if (player.Party.Count == 2)
+                    {
+                        replacements[Strings.Events.playerpartymemberscommand] = String.Join(" and ", player.Party.Select(member => member.Name).ToArray());
+                    }
+                    else
+                    {
+                        StringBuilder partyBuilder = new StringBuilder(player.Party[0].Name);
+                        for (int i = 1; i < player.Party.Count; i++)
+                        {
+                            if (i < player.Party.Count - 1)
+                            {
+                                partyBuilder.Append(", " + player.Party[i].Name);
+                            }
+                            else
+                            {
+                                partyBuilder.Append(", and " + player.Party[i].Name);
+                            }
+                        }
+
+                        replacements[Strings.Events.playerpartymemberscommand] = partyBuilder.ToString();
+                    }
+                }
+                else
+                {
+                    replacements[Strings.Events.playerpartymemberscommand] = player.Name;
+                }
+
 
                 foreach (var val in replacements)
                 {
@@ -1641,6 +1723,16 @@ namespace Intersect.Server.Entities.Events
                 {
                     if (input.Contains(val.Key))
                         sb.Replace(val.Key, player.GetVariableValue(val.Value.Id).ToString((val.Value).Type));
+                }
+
+                foreach (var val in DbInterface.InstanceVariableEventTextLookup)
+                {
+                    if (MapController.TryGetInstanceFromMap(player.MapId, player.MapInstanceId, out var mapInstance))
+                    {
+                        var instanceVarVal = mapInstance.GetInstanceVariable(val.Value.Id);
+                        if (instanceVarVal != null && input.Contains(val.Key))
+                                sb.Replace(val.Key, instanceVarVal.ToString((val.Value).Type));
+                    }
                 }
 
                 if (instance != null)
@@ -1683,6 +1775,10 @@ namespace Intersect.Server.Entities.Events
             {
                 value = ServerVariableBase.Get(command.VariableId)?.Value;
             }
+            else if (command.VariableType == VariableTypes.InstanceVariable && MapController.TryGetInstanceFromMap(player.MapId, player.MapInstanceId, out var mapInstance)) 
+            {
+                value = mapInstance.GetInstanceVariable(command.VariableId);
+            }
 
             if (value == null)
             {
@@ -1705,6 +1801,14 @@ namespace Intersect.Server.Entities.Events
                         value.Boolean = ServerVariableBase.Get(mod.DuplicateVariableId).Value.Boolean;
                     }
                 }
+                else if (mod.DupVariableType == VariableTypes.InstanceVariable && MapController.TryGetInstanceFromMap(player.MapId, player.MapInstanceId, out var mapInstance))
+                {
+                    var variable = mapInstance.GetInstanceVariable(command.VariableId);
+                    if (variable != null)
+                    {
+                        value.Boolean = variable.Boolean;
+                    }
+                }
             }
             else
             {
@@ -1715,11 +1819,6 @@ namespace Intersect.Server.Entities.Events
 
             if (command.VariableType == VariableTypes.PlayerVariable)
             {
-                if (changed)
-                {
-
-                }
-
                 // Set the party member switches too if Sync Party enabled!
                 if (command.SyncParty)
                 {
@@ -1737,13 +1836,15 @@ namespace Intersect.Server.Entities.Events
                     }
                 }
             }
-            else
+            else if (command.VariableType == VariableTypes.ServerVariable && changed)
             {
-                if (changed)
-                {
-                    Player.StartCommonEventsWithTriggerForAll(Enums.CommonEventTrigger.ServerVariableChange, "", command.VariableId.ToString());
-                    DbInterface.UpdatedServerVariables.AddOrUpdate(command.VariableId, ServerVariableBase.Get(command.VariableId), (key, oldValue) => ServerVariableBase.Get(command.VariableId));
-                }
+                Player.StartCommonEventsWithTriggerForAll(Enums.CommonEventTrigger.ServerVariableChange, "", command.VariableId.ToString());
+                DbInterface.UpdatedServerVariables.AddOrUpdate(command.VariableId, ServerVariableBase.Get(command.VariableId), (key, oldValue) => ServerVariableBase.Get(command.VariableId));
+            }
+            else if (command.VariableType == VariableTypes.InstanceVariable && changed && MapController.TryGetInstanceFromMap(player.MapId, player.MapInstanceId, out var mapInstance))
+            {
+                mapInstance.SetInstanceVariable(command.VariableId, value);
+                Player.StartCommonEventsWithTriggerForAllOnInstance(Enums.CommonEventTrigger.InstanceVariableChange, player.MapInstanceId, "", command.VariableId.ToString());
             }
         }
 
@@ -1755,6 +1856,12 @@ namespace Intersect.Server.Entities.Events
         )
         {
             VariableValue value = null;
+            // Get the players instance so we have it for reaching instance variables.
+            if (!MapController.TryGetInstanceFromMap(player.MapId, player.MapInstanceId, out var playersInstance))
+            {
+                return; // A player not having an instance reaalllly is a problem, so just kick out of here if they don't.
+            }
+
             if (command.VariableType == VariableTypes.PlayerVariable)
             {
                 value = player.GetVariableValue(command.VariableId);
@@ -1762,6 +1869,10 @@ namespace Intersect.Server.Entities.Events
             else if (command.VariableType == VariableTypes.ServerVariable)
             {
                 value = ServerVariableBase.Get(command.VariableId)?.Value;
+            }
+            else if (command.VariableType == VariableTypes.InstanceVariable)
+            {
+                value = playersInstance.GetInstanceVariable(command.VariableId);
             }
 
             if (value == null)
@@ -1906,6 +2017,61 @@ namespace Intersect.Server.Entities.Events
                     }
 
                     break;
+                case VariableMods.DupInstanceVar:
+                    if (playersInstance != null) 
+                    {
+                        value.Integer = playersInstance.GetInstanceVariable(mod.DuplicateVariableId).Integer;
+                    }
+
+                    break;
+                case VariableMods.AddInstanceVar:
+                    if (playersInstance != null)
+                    {
+                        value.Integer += playersInstance.GetInstanceVariable(mod.DuplicateVariableId).Integer;
+                    }
+
+                    break;
+                case VariableMods.SubtractInstanceVar:
+                    if (playersInstance != null)
+                    {
+                        value.Integer -= playersInstance.GetInstanceVariable(mod.DuplicateVariableId).Integer;
+                    }
+
+                    break;
+                case VariableMods.MultiplyInstanceVar:
+                    if (playersInstance != null)
+                    {
+                        value.Integer *= playersInstance.GetInstanceVariable(mod.DuplicateVariableId).Integer;
+                    }
+
+                    break;
+                case VariableMods.DivideInstanceVar:
+                    if (playersInstance != null)
+                    {
+                        var div = playersInstance.GetInstanceVariable(mod.DuplicateVariableId);
+                        if (div != 0)
+                        {
+                            value.Integer /= playersInstance.GetInstanceVariable(mod.DuplicateVariableId).Integer;
+                        }
+                    }
+
+                    break;
+                case VariableMods.LeftShiftInstanceVar:
+                    if (playersInstance != null)
+                    {
+                        var div = playersInstance.GetInstanceVariable(mod.DuplicateVariableId);
+                        value.Integer = value.Integer << (int)playersInstance.GetInstanceVariable(mod.DuplicateVariableId).Integer;
+                    }
+
+                    break;
+                case VariableMods.RightShiftInstanceVar:
+                    if (playersInstance != null)
+                    {
+                        var div = playersInstance.GetInstanceVariable(mod.DuplicateVariableId);
+                        value.Integer = value.Integer >> (int)playersInstance.GetInstanceVariable(mod.DuplicateVariableId).Integer;
+                    }
+
+                    break;
             }
 
             var changed = value.Integer != originalValue;
@@ -1929,13 +2095,15 @@ namespace Intersect.Server.Entities.Events
                     }
                 }
             }
-            else
+            else if (command.VariableType == VariableTypes.ServerVariable && changed)
             {
-                if (changed)
-                {
-                    Player.StartCommonEventsWithTriggerForAll(Enums.CommonEventTrigger.ServerVariableChange, "", command.VariableId.ToString());
-                    DbInterface.UpdatedServerVariables.AddOrUpdate(command.VariableId, ServerVariableBase.Get(command.VariableId), (key, oldValue) => ServerVariableBase.Get(command.VariableId));
-                }
+                Player.StartCommonEventsWithTriggerForAll(Enums.CommonEventTrigger.ServerVariableChange, "", command.VariableId.ToString());
+                DbInterface.UpdatedServerVariables.AddOrUpdate(command.VariableId, ServerVariableBase.Get(command.VariableId), (key, oldValue) => ServerVariableBase.Get(command.VariableId));
+            }
+            else if (command.VariableType == VariableTypes.InstanceVariable && changed && MapController.TryGetInstanceFromMap(player.MapId, player.MapInstanceId, out var mapInstance))
+            {
+                mapInstance.SetInstanceVariable(command.VariableId, value);
+                Player.StartCommonEventsWithTriggerForAllOnInstance(Enums.CommonEventTrigger.InstanceVariableChange, player.MapInstanceId, "", command.VariableId.ToString());
             }
         }
 
@@ -1954,6 +2122,10 @@ namespace Intersect.Server.Entities.Events
             else if (command.VariableType == VariableTypes.ServerVariable)
             {
                 value = ServerVariableBase.Get(command.VariableId)?.Value;
+            }
+            else if (command.VariableType == VariableTypes.InstanceVariable && MapController.TryGetInstanceFromMap(player.MapId, player.MapInstanceId, out var mapInstance))
+            {
+                value = mapInstance.GetInstanceVariable(command.VariableId);
             }
 
             if (value == null)
@@ -1998,13 +2170,15 @@ namespace Intersect.Server.Entities.Events
                     }
                 }
             }
-            else
+            else if (command.VariableType == VariableTypes.ServerVariable && changed)
             {
-                if (changed)
-                {
-                    Player.StartCommonEventsWithTriggerForAll(Enums.CommonEventTrigger.ServerVariableChange, "", command.VariableId.ToString());
-                    DbInterface.UpdatedServerVariables.AddOrUpdate(command.VariableId, ServerVariableBase.Get(command.VariableId), (key, oldValue) => ServerVariableBase.Get(command.VariableId));
-                }
+                Player.StartCommonEventsWithTriggerForAll(Enums.CommonEventTrigger.ServerVariableChange, "", command.VariableId.ToString());
+                DbInterface.UpdatedServerVariables.AddOrUpdate(command.VariableId, ServerVariableBase.Get(command.VariableId), (key, oldValue) => ServerVariableBase.Get(command.VariableId));
+            }
+            else if (command.VariableType == VariableTypes.InstanceVariable && changed && MapController.TryGetInstanceFromMap(player.MapId, player.MapInstanceId, out var mapInstance))
+            {
+                mapInstance.SetInstanceVariable(command.VariableId, value);
+                Player.StartCommonEventsWithTriggerForAllOnInstance(Enums.CommonEventTrigger.InstanceVariableChange, player.MapInstanceId, "", command.VariableId.ToString());
             }
         }
 
@@ -2079,6 +2253,95 @@ namespace Intersect.Server.Entities.Events
             }
 
             PacketSender.SendEntityDataToProximity(player);
+        }
+
+        //Set Vehicle Command
+        private static void ProcessCommand(
+            NPCGuildManagementCommand command,
+            Player player,
+            Event instance,
+            CommandInstance stackInfo,
+            Stack<CommandInstance> callStack
+        )
+        {
+            if (player == null || !player.ClassInfo.TryGetValue(command.ClassId, out var classInfo))
+            {
+                return;
+            }
+
+            switch(command.Selection)
+            {
+                case NPCGuildManagementSelection.ChangeComplete:
+                    classInfo.TaskCompleted = command.SelectionValue;
+                    break;
+                case NPCGuildManagementSelection.ChangeGuildStatus:
+                    if (command.SelectionValue)
+                    {
+                        player.JoinNpcGuildOfClass(command.ClassId);
+                    }
+                    else
+                    {
+                        player.LeaveNpcGuildOfClass(command.ClassId);
+                    }
+                    break;
+                case NPCGuildManagementSelection.ChangeRank:
+                    var oldRank = classInfo.Rank;
+                    classInfo.Rank = command.NewRank;
+                    if (oldRank < classInfo.Rank)
+                    {
+                        PacketSender.SendChatMsg(player,
+                            Strings.Quests.classrankincreased.ToString(ClassBase.Get(command.ClassId).Name, classInfo.Rank.ToString()),
+                            ChatMessageType.Quest,
+                            CustomColors.Quests.Completed);
+                    }
+                    else if (oldRank > classInfo.Rank)
+                    {
+                        PacketSender.SendChatMsg(player,
+                            Strings.Quests.classrankdecreased.ToString(ClassBase.Get(command.ClassId).Name, classInfo.Rank.ToString()),
+                            ChatMessageType.Quest,
+                            CustomColors.Quests.Abandoned);
+                    }
+                    
+                    classInfo.TasksRemaining = player.TasksRemainingForClassRank(classInfo.Rank);
+                    break;
+                case NPCGuildManagementSelection.ChangeSpecialAssignment:
+                    classInfo.AssignmentAvailable = command.SelectionValue;
+                    if (command.SelectionValue)
+                    {
+                        PacketSender.SendChatMsg(player,
+                            Strings.Quests.newspecialassignment.ToString(ClassBase.Get(command.ClassId).Name),
+                            ChatMessageType.Quest,
+                            CustomColors.Quests.Completed);
+                    }
+                    break;
+                case NPCGuildManagementSelection.ClearCooldown:
+                    classInfo.LastTaskStartTime = 0L;
+                    break;
+            }
+        }
+
+        private static void ProcessCommand(
+            AddInspirationCommand command,
+            Player player,
+            Event instance,
+            CommandInstance stackInfo,
+            Stack<CommandInstance> callStack
+        )
+        {
+            if (player == null) return;
+
+            var now = Globals.Timing.MillisecondsUTC;
+            if (player.InspirationTime < now)
+            {
+                // Add Millis
+                player.InspirationTime = now + (command.Seconds * 1000);
+            }
+            else
+            {
+                player.InspirationTime += (command.Seconds * 1000);
+            }
+
+            player.SendInspirationUpdateText(command.Seconds);
         }
     }
 

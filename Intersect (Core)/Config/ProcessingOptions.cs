@@ -102,6 +102,8 @@ namespace Intersect.Config
         /// How often should the server try to execute autorun common events for a player? This can get expensive if you have a lot of autorun common events with lots of complex conditions.
         /// </summary>
         public int CommonEventAutorunStartInterval { get; set; } = 500;
+        
+        public int ProjectileTicksUntilDamageInSpawn { get; set; } = 4;
 
         [OnDeserialized]
         internal void OnDeserializedMethod(StreamingContext context)

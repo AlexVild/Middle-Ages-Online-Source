@@ -230,6 +230,8 @@ namespace Intersect.Editor.Forms.Editors
             btnAlphabetical.ToolTipText = Strings.ResourceEditor.sortalphabetically;
             txtSearch.Text = Strings.ResourceEditor.searchplaceholder;
             lblFolder.Text = Strings.ResourceEditor.folderlabel;
+            
+            lblExp.Text = Strings.ResourceEditor.inspirationexp;
 
             btnSave.Text = Strings.ResourceEditor.save;
             btnCancel.Text = Strings.ResourceEditor.cancel;
@@ -256,6 +258,7 @@ namespace Intersect.Editor.Forms.Editors
                 chkInitialBelowEntities.Checked = mEditorItem.Initial.RenderBelowEntities;
                 chkExhaustedBelowEntities.Checked = mEditorItem.Exhausted.RenderBelowEntities;
                 txtCannotHarvest.Text = mEditorItem.CannotHarvestMessage;
+                nudExp.Value = mEditorItem.Experience;
 
                 //Regen
                 nudHpRegen.Value = mEditorItem.VitalRegen;
@@ -979,6 +982,11 @@ namespace Intersect.Editor.Forms.Editors
         }
 
         #endregion
+
+        private void nudExp_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Experience = (long) nudExp.Value;
+        }
     }
 
 }

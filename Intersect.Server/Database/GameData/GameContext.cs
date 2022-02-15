@@ -60,7 +60,7 @@ namespace Intersect.Server.Database.GameData
         public DbSet<ItemBase> Items { get; set; }
 
         //Maps
-        public DbSet<MapInstance> Maps { get; set; }
+        public DbSet<MapController> Maps { get; set; }
 
         public DbSet<MapList> MapFolders { get; set; }
 
@@ -86,6 +86,8 @@ namespace Intersect.Server.Database.GameData
         public DbSet<PlayerVariableBase> PlayerVariables { get; set; }
 
         public DbSet<ServerVariableBase> ServerVariables { get; set; }
+
+        public DbSet<InstanceVariableBase> InstanceVariables { get; set; }
 
         //Tilesets
         public DbSet<TilesetBase> Tilesets { get; set; }

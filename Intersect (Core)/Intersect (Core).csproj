@@ -217,16 +217,19 @@
     <Compile Include="Config\Guilds\GuildOptions.cs" />
     <Compile Include="Config\Guilds\GuildPermissions.cs" />
     <Compile Include="Config\Guilds\GuildRank.cs" />
+    <Compile Include="Config\InstancingOptions.cs" />
     <Compile Include="Config\LayerOptions.cs" />
     <Compile Include="Config\LoggingOptions.cs" />
     <Compile Include="Config\LootOptions.cs" />
     <Compile Include="Config\MetricsOptions.cs" />
+    <Compile Include="Config\NPCGuildOptions.cs" />
     <Compile Include="Config\NpcOptions.cs" />
     <Compile Include="Config\PacketOptions.cs" />
     <Compile Include="Config\PacketSecurityOptions.cs" />
     <Compile Include="Config\PartyOptions.cs" />
     <Compile Include="Config\ProcessingOptions.cs" />
     <Compile Include="Config\QuestOptions.cs" />
+    <Compile Include="Config\RecordOptions.cs" />
     <Compile Include="Config\SecurityOptions.cs" />
     <Compile Include="Core\ApplicationContext`2.cs" />
     <Compile Include="Core\ApplicationService`2.cs" />
@@ -271,7 +274,9 @@
     <Compile Include="Enums\ChatMessageType.cs" />
     <Compile Include="Enums\GuildMemberUpdateActions.cs" />
     <Compile Include="Enums\GUINotification.cs" />
+    <Compile Include="Enums\MapInstanceType.cs" />
     <Compile Include="Enums\ItemHandling.cs" />
+    <Compile Include="Enums\UISoundType.cs" />
     <Compile Include="ErrorHandling\ExceptionInfo.cs" />
     <Compile Include="Extensions\ArrayExtensions.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
@@ -284,6 +289,7 @@
     <Compile Include="GameObjects\Events\VariableMod.cs" />
     <Compile Include="GameObjects\QuestBoardBase.cs" />
     <Compile Include="GameObjects\QuestListBase.cs" />
+    <Compile Include="GameObjects\Switches and Variables\InstanceVariableBase.cs" />
     <Compile Include="GameObjects\Switches and Variables\VariableValue.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IO\ConsoleContext.cs" />
@@ -422,7 +428,9 @@
     <Compile Include="Network\Packets\Client\LogoutPacket.cs" />
     <Compile Include="Network\Packets\Server\AnnouncementPacket.cs" />
     <Compile Include="Network\Packets\Server\CancelCastPacket.cs" />
+    <Compile Include="Network\Packets\Server\MapLayerChangedPacket.cs" />
     <Compile Include="Network\Packets\Server\PlayAnimationPackets.cs" />
+    <Compile Include="Network\Packets\Server\PlayerStatsPacket.cs" />
     <Compile Include="Network\Packets\Server\QuestBoardPacket.cs" />
     <Compile Include="Network\Packets\Server\QuestOfferListPacket.cs" />
     <Compile Include="Network\Packets\Server\QuestPointPacket.cs" />

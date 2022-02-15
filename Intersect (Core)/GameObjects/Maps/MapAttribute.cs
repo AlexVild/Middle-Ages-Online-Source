@@ -135,6 +135,10 @@ namespace Intersect.GameObjects.Maps
 
         public bool FadeOnWarp { get; set; } = false;
 
+        public bool ChangeInstance { get; set; } = false;
+
+        public MapInstanceType InstanceType { get; set; } = MapInstanceType.Overworld;
+
         public override MapAttribute Clone()
         {
             var att = (MapWarpAttribute) base.Clone();
@@ -143,6 +147,8 @@ namespace Intersect.GameObjects.Maps
             att.Y = Y;
             att.Direction = Direction;
             att.FadeOnWarp = FadeOnWarp;
+            att.ChangeInstance = ChangeInstance;
+            att.InstanceType = InstanceType;
             return att;
         }
 

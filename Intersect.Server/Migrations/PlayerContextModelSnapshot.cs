@@ -189,6 +189,8 @@ namespace Intersect.Server.Migrations
 
                     b.Property<DateTime>("FoundingDate");
 
+                    b.Property<Guid>("GuildInstanceId");
+
                     b.Property<string>("Name");
 
                     b.HasKey("Id");
@@ -271,6 +273,26 @@ namespace Intersect.Server.Migrations
                     b.HasIndex("PlayerId");
 
                     b.ToTable("Player_Items");
+                });
+
+            modelBuilder.Entity("Intersect.Server.Database.PlayerData.Players.PlayerRecord", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("Amount");
+
+                    b.Property<Guid>("PlayerId");
+
+                    b.Property<Guid>("RecordId");
+
+                    b.Property<int>("Type");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PlayerId");
+
+                    b.ToTable("Player_Record");
                 });
 
             modelBuilder.Entity("Intersect.Server.Database.PlayerData.Players.Quest", b =>
@@ -378,6 +400,9 @@ namespace Intersect.Server.Migrations
 
                     b.Property<Guid>("ClassId");
 
+                    b.Property<string>("ClassInfoJson")
+                        .HasColumnName("ClassInfo");
+
                     b.Property<long>("ComboTimestamp");
 
                     b.Property<DateTime?>("CreationDate");
@@ -408,6 +433,12 @@ namespace Intersect.Server.Migrations
                     b.Property<string>("HeaderLabelJson")
                         .HasColumnName("HeaderLabel");
 
+                    b.Property<bool>("InVehicle");
+
+                    b.Property<long>("InspirationTime");
+
+                    b.Property<int>("InstanceType");
+
                     b.Property<string>("ItemCooldownsJson")
                         .HasColumnName("ItemCooldowns");
 
@@ -415,6 +446,13 @@ namespace Intersect.Server.Migrations
                         .HasColumnName("Color");
 
                     b.Property<DateTime?>("LastOnline");
+
+                    b.Property<Guid>("LastOverworldMapId")
+                        .HasColumnName("LastOverworldMapId");
+
+                    b.Property<int>("LastOverworldX");
+
+                    b.Property<int>("LastOverworldY");
 
                     b.Property<int>("Level");
 
@@ -425,7 +463,20 @@ namespace Intersect.Server.Migrations
                     b.Property<string>("NameColorJson")
                         .HasColumnName("NameColor");
 
+                    b.Property<Guid>("PersonalMapInstanceId");
+
                     b.Property<ulong>("PlayTimeSeconds");
+
+                    b.Property<int>("SharedInstanceRespawnDir");
+
+                    b.Property<Guid>("SharedInstanceRespawnId")
+                        .HasColumnName("SharedInstanceRespawnId");
+
+                    b.Property<int>("SharedInstanceRespawnX");
+
+                    b.Property<int>("SharedInstanceRespawnY");
+
+                    b.Property<Guid>("SharedMapInstanceId");
 
                     b.Property<string>("SpellCooldownsJson")
                         .HasColumnName("SpellCooldowns");
@@ -441,6 +492,10 @@ namespace Intersect.Server.Migrations
                         .HasColumnName("BaseStats");
 
                     b.Property<Guid>("UserId");
+
+                    b.Property<long>("VehicleSpeed");
+
+                    b.Property<string>("VehicleSprite");
 
                     b.Property<string>("VitalsJson")
                         .HasColumnName("Vitals");
@@ -549,6 +604,14 @@ namespace Intersect.Server.Migrations
 
                     b.HasOne("Intersect.Server.Entities.Player", "Player")
                         .WithMany("Items")
+                        .HasForeignKey("PlayerId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Intersect.Server.Database.PlayerData.Players.PlayerRecord", b =>
+                {
+                    b.HasOne("Intersect.Server.Entities.Player", "Player")
+                        .WithMany("PlayerRecords")
                         .HasForeignKey("PlayerId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

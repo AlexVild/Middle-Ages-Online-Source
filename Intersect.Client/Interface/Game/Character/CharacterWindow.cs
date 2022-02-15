@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Text;
 using Intersect.Client.Core;
 using Intersect.Client.Framework.File_Management;
 using Intersect.Client.Framework.Gwen;
@@ -40,11 +40,11 @@ namespace Intersect.Client.Interface.Game.Character
 
         private Label mCharacterLevelAndClass;
 
-        private Label mCharacterName;
-
         private ImagePanel mCharacterPortrait;
 
         private string mCharacterPortraitImg = "";
+
+        private CheckBox mCalcStatCheckbox;
 
         //Controls
         private WindowControl mCharacterWindow;
@@ -65,8 +65,6 @@ namespace Intersect.Client.Interface.Game.Character
 
         public string[] PaperdollTextures;
 
-        ScrollControl mPlayerInfoScroll;
-
         // Crafting
         Label mCraftingLabel;
 
@@ -79,10 +77,6 @@ namespace Intersect.Client.Interface.Game.Character
         // NPC Guild
         Label mNpcGuildLabel;
 
-        Label mNpcGuildNameLabel;
-
-        Label mClassRankLabel;
-
         //Location
         public int X;
 
@@ -91,11 +85,8 @@ namespace Intersect.Client.Interface.Game.Character
         //Init
         public CharacterWindow(Canvas gameCanvas)
         {
-            mCharacterWindow = new WindowControl(gameCanvas, Strings.Character.title, false, "CharacterWindow");
+            mCharacterWindow = new WindowControl(gameCanvas, Globals.Me.Name, false, "CharacterWindow");
             mCharacterWindow.DisableResizing();
-
-            mCharacterName = new Label(mCharacterWindow, "CharacterNameLabel");
-            mCharacterName.SetTextColor(Color.White, Label.ControlState.Normal);
 
             mCharacterLevelAndClass = new Label(mCharacterWindow, "ChatacterInfoLabel");
             mCharacterLevelAndClass.SetText("");
@@ -117,42 +108,51 @@ namespace Intersect.Client.Interface.Game.Character
             var equipmentLabel = new Label(mCharacterWindow, "EquipmentLabel");
             equipmentLabel.SetText(Strings.Character.equipment);
 
-            mPlayerInfoScroll = new ScrollControl(mCharacterWindow, "PlayerInfoScrollContainer");
-
-            var statsLabel = new Label(mPlayerInfoScroll, "StatsLabel");
+            var statsLabel = new Label(mCharacterWindow, "StatsLabel");
             statsLabel.SetText(Strings.Character.stats);
 
-            mAttackLabel = new Label(mPlayerInfoScroll, "AttackLabel");
-
-            mAddAttackBtn = new Button(mPlayerInfoScroll, "IncreaseAttackButton");
+            mAttackLabel = new Label(mCharacterWindow, "AttackLabel");
+            mAttackLabel.SetToolTipText(Strings.Character.attacktip);
+            mAddAttackBtn = new Button(mCharacterWindow, "IncreaseAttackButton");
             mAddAttackBtn.Clicked += _addAttackBtn_Clicked;
+            mAddAttackBtn.SetToolTipText(Strings.Character.addattacktip);
 
-            mDefenseLabel = new Label(mPlayerInfoScroll, "DefenseLabel");
-            mAddDefenseBtn = new Button(mPlayerInfoScroll, "IncreaseDefenseButton");
+            mDefenseLabel = new Label(mCharacterWindow, "DefenseLabel");
+            mDefenseLabel.SetToolTipText(Strings.Character.defensetip);
+            mAddDefenseBtn = new Button(mCharacterWindow, "IncreaseDefenseButton");
             mAddDefenseBtn.Clicked += _addDefenseBtn_Clicked;
+            mAddDefenseBtn.SetToolTipText(Strings.Character.addphysicaldefensetip);
 
-            mSpeedLabel = new Label(mPlayerInfoScroll, "SpeedLabel");
-            mAddSpeedBtn = new Button(mPlayerInfoScroll, "IncreaseSpeedButton");
+            mSpeedLabel = new Label(mCharacterWindow, "SpeedLabel");
+            mSpeedLabel.SetToolTipText(Strings.Character.agilitytip);
+            mAddSpeedBtn = new Button(mCharacterWindow, "IncreaseSpeedButton");
             mAddSpeedBtn.Clicked += _addSpeedBtn_Clicked;
+            mAddSpeedBtn.SetToolTipText(Strings.Character.addagilitytip);
 
-            mAbilityPwrLabel = new Label(mPlayerInfoScroll, "AbilityPowerLabel");
-            mAddAbilityPwrBtn = new Button(mPlayerInfoScroll, "IncreaseAbilityPowerButton");
+            mAbilityPwrLabel = new Label(mCharacterWindow, "AbilityPowerLabel");
+            mAbilityPwrLabel.SetToolTipText(Strings.Character.abilitypowertip);
+            mAddAbilityPwrBtn = new Button(mCharacterWindow, "IncreaseAbilityPowerButton");
             mAddAbilityPwrBtn.Clicked += _addAbilityPwrBtn_Clicked;
+            mAddAbilityPwrBtn.SetToolTipText(Strings.Character.addabilitypowertip);
 
-            mMagicRstLabel = new Label(mPlayerInfoScroll, "MagicResistLabel");
-            mAddMagicResistBtn = new Button(mPlayerInfoScroll, "IncreaseMagicResistButton");
+            mMagicRstLabel = new Label(mCharacterWindow, "MagicResistLabel");
+            mMagicRstLabel.SetToolTipText(Strings.Character.resisttip);
+            mAddMagicResistBtn = new Button(mCharacterWindow, "IncreaseMagicResistButton");
             mAddMagicResistBtn.Clicked += _addMagicResistBtn_Clicked;
+            mAddMagicResistBtn.SetToolTipText(Strings.Character.addmagicdefense);
 
-            mPointsLabel = new Label(mPlayerInfoScroll, "PointsLabel");
+            mPointsLabel = new Label(mCharacterWindow, "PointsLabel");
 
-            mCraftingLabel = new Label(mPlayerInfoScroll, "CraftingLabel");
-            mMiningTierLabel = new Label(mPlayerInfoScroll, "MiningTierLabel");
-            mFishingTierLabel = new Label(mPlayerInfoScroll, "FishingTierLabel");
-            mWoodcuttingTierLabel = new Label(mPlayerInfoScroll, "WoodcuttingTierLabel");
+            mCraftingLabel = new Label(mCharacterWindow, "CraftingLabel");
+            mMiningTierLabel = new Label(mCharacterWindow, "MiningTierLabel");
+            mFishingTierLabel = new Label(mCharacterWindow, "FishingTierLabel");
+            mWoodcuttingTierLabel = new Label(mCharacterWindow, "WoodcuttingTierLabel");
 
-            mNpcGuildLabel = new Label(mPlayerInfoScroll, "NPCGuildLabel");
-            mNpcGuildNameLabel = new Label(mPlayerInfoScroll, "NPCGuildName");
-            mClassRankLabel = new Label(mPlayerInfoScroll, "ClassRankLabel");
+            mCalcStatCheckbox = new CheckBox(mCharacterWindow, "CalcStatsCheckBox");
+            mCalcStatCheckbox.SetToolTipText(Strings.Character.calculatestats);
+
+            mNpcGuildLabel = new Label(mCharacterWindow, "NPCGuildLabel");
+            mNpcGuildLabel.SetToolTipText(Strings.Character.classranktip);
 
             for (var i = 0; i < Options.EquipmentSlots.Count; i++)
             {
@@ -198,7 +198,6 @@ namespace Intersect.Client.Interface.Game.Character
                 return;
             }
 
-            mCharacterName.Text = Globals.Me.Name;
             mCharacterLevelAndClass.Text = Strings.Character.levelandclass.ToString(
                 Globals.Me.Level, ClassBase.GetName(Globals.Me.Class)
             );
@@ -340,49 +339,48 @@ namespace Intersect.Client.Interface.Game.Character
             }
 
             mAttackLabel.SetText(
-                Strings.Character.stat0.ToString(Strings.Combat.stat0, Globals.Me.Stat[(int) Stats.Attack])
+                Strings.Character.stat0.ToString(Strings.Combat.stat0, GetStatDisplayString(Stats.Attack, mCalcStatCheckbox.IsChecked))
             );
 
             mDefenseLabel.SetText(
-                Strings.Character.stat2.ToString(Strings.Combat.stat2, Globals.Me.Stat[(int) Stats.Defense])
+                Strings.Character.stat2.ToString(Strings.Combat.stat2, GetStatDisplayString(Stats.Defense, mCalcStatCheckbox.IsChecked))
             );
 
             mSpeedLabel.SetText(
-                Strings.Character.stat4.ToString(Strings.Combat.stat4, Globals.Me.Stat[(int) Stats.Speed])
+                Strings.Character.stat4.ToString(Strings.Combat.stat4, GetStatDisplayString(Stats.Speed, mCalcStatCheckbox.IsChecked))
             );
 
             mAbilityPwrLabel.SetText(
-                Strings.Character.stat1.ToString(Strings.Combat.stat1, Globals.Me.Stat[(int) Stats.AbilityPower])
+                Strings.Character.stat1.ToString(Strings.Combat.stat1, GetStatDisplayString(Stats.AbilityPower, mCalcStatCheckbox.IsChecked))
             );
 
             mMagicRstLabel.SetText(
-                Strings.Character.stat3.ToString(Strings.Combat.stat3, Globals.Me.Stat[(int) Stats.MagicResist])
+                Strings.Character.stat3.ToString(Strings.Combat.stat3, GetStatDisplayString(Stats.MagicResist, mCalcStatCheckbox.IsChecked))
             );
 
             mPointsLabel.SetText(Strings.Character.points.ToString(Globals.Me.StatPoints));
+            mPointsLabel.IsHidden = Globals.Me.StatPoints == 0;
             mAddAbilityPwrBtn.IsHidden = Globals.Me.StatPoints == 0 ||
-                                         Globals.Me.Stat[(int) Stats.AbilityPower] == Options.MaxStatValue;
+                                         Globals.Me.TrueStats[(int) Stats.AbilityPower] == Options.MaxStatValue;
 
             mAddAttackBtn.IsHidden =
-                Globals.Me.StatPoints == 0 || Globals.Me.Stat[(int) Stats.Attack] == Options.MaxStatValue;
+                Globals.Me.StatPoints == 0 || Globals.Me.TrueStats[(int) Stats.Attack] == Options.MaxStatValue;
 
             mAddDefenseBtn.IsHidden = Globals.Me.StatPoints == 0 ||
-                                      Globals.Me.Stat[(int) Stats.Defense] == Options.MaxStatValue;
+                                      Globals.Me.TrueStats[(int) Stats.Defense] == Options.MaxStatValue;
 
             mAddMagicResistBtn.IsHidden = Globals.Me.StatPoints == 0 ||
-                                          Globals.Me.Stat[(int) Stats.MagicResist] == Options.MaxStatValue;
+                                          Globals.Me.TrueStats[(int) Stats.MagicResist] == Options.MaxStatValue;
 
             mAddSpeedBtn.IsHidden =
-                Globals.Me.StatPoints == 0 || Globals.Me.Stat[(int) Stats.Speed] == Options.MaxStatValue;
+                Globals.Me.StatPoints == 0 || Globals.Me.TrueStats[(int) Stats.Speed] == Options.MaxStatValue;
 
             mCraftingLabel.Text = Strings.Character.crafting;
             mMiningTierLabel.SetText(Strings.Character.miningtier.ToString(Globals.Me.MiningTier));
             mFishingTierLabel.SetText(Strings.Character.fishingtier.ToString(Globals.Me.FishingTier));
             mWoodcuttingTierLabel.SetText(Strings.Character.woodcuttingtier.ToString(Globals.Me.WoodcutTier));
 
-            mNpcGuildLabel.Text = Strings.Character.npcguild;
-            mNpcGuildNameLabel.Text = Strings.Character.npcguildname.ToString(Globals.Me.NpcGuildName);
-            mClassRankLabel.Text = Strings.Character.classrank.ToString(Globals.Me.ClassRank);
+            InitializeClassRankLabel(ref mNpcGuildLabel);
 
             for (var i = 0; i < Options.EquipmentSlots.Count; i++)
             {
@@ -423,6 +421,55 @@ namespace Intersect.Client.Interface.Game.Character
             mCharacterWindow.IsHidden = true;
         }
 
-    }
+        private static void InitializeClassRankLabel(ref Label label)
+        {
+            StringBuilder classRankString = new StringBuilder();
+            if (Globals.Me.ClassRanks != null)
+            {
+                foreach (var cls in ClassBase.GetNameList())
+                {
+                    if (Globals.Me.ClassRanks.TryGetValue(cls, out var classRank))
+                    {
+                        if (classRankString.Length == 0)
+                        {
+                            classRankString.Append(Strings.Character.classrank.ToString(ClassBase.GetName(Globals.Me.Class), classRank));
+                        }
+                        else
+                        {
+                            classRankString.Append(", " + Strings.Character.classrank.ToString(ClassBase.GetName(Globals.Me.Class), classRank));
+                        }
+                    }
+                }
+            }
 
+            label.Text = classRankString.ToString();
+        }
+        
+        /// <summary>
+        /// Generates a string that displays the difference between the player's true stat and their equipment/spell modified stat
+        /// </summary>
+        /// <param name="stat">The stat to generate a string for</param>
+        /// <param name="calculate">Whether or not to calculate the value
+        /// <returns>The display string</returns>
+        private static string GetStatDisplayString(Stats stat, bool calculate)
+        {
+            if (calculate)
+            {
+                return Globals.Me.Stat[(int)stat].ToString();
+            }
+            else
+            {
+                var statDiff = Globals.Me.Stat[(int)stat] - Globals.Me.TrueStats[(int)stat];
+                if (Math.Sign(statDiff) >= 0)
+                {
+                    return Globals.Me.TrueStats[(int)stat].ToString() + " (+" + statDiff + ")";
+                }
+                else
+                {
+                    return Globals.Me.TrueStats[(int)stat].ToString() + " (" + statDiff + ")";
+                }
+            }
+            
+        }
+    }
 }

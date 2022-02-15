@@ -89,7 +89,7 @@ namespace Intersect.Client.Framework.Gwen.Control.Layout
 
         private void TableRow_HoverEnter(Base sender, EventArgs arguments)
         {
-            PlaySound(mHoverSound);
+            PlaySound(mHoverSound, Enums.UISoundType.Hover);
         }
 
         private void TableRow_RightClicked(Base sender, ClickedEventArgs arguments)

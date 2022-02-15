@@ -118,6 +118,10 @@ namespace Intersect.Server.Entities.Events
             {
                 value = ServerVariableBase.Get(condition.VariableId)?.Value;
             }
+            else if (condition.VariableType == VariableTypes.InstanceVariable && MapController.TryGetInstanceFromMap(player.MapId, player.MapInstanceId, out var mapInstance))
+            {
+                value = mapInstance.GetInstanceVariable(condition.VariableId);
+            }
 
             if (value == null)
             {
@@ -145,6 +149,12 @@ namespace Intersect.Server.Entities.Events
                         break;
                     case VariableTypes.ServerVariable:
                         quantity = (int)ServerVariableBase.Get(condition.VariableId)?.Value.Integer;
+                        break;
+                    case VariableTypes.InstanceVariable:
+                        if (MapController.TryGetInstanceFromMap(player.MapId, player.MapInstanceId, out var mapInstance))
+                        {
+                            quantity = (int)mapInstance.GetInstanceVariable(condition.VariableId).Integer;
+                        }
                         break;
                 }
             }
@@ -199,8 +209,7 @@ namespace Intersect.Server.Entities.Events
                 lvlStat = player.Stat[(int)condition.Stat].Value();
                 if (condition.IgnoreBuffs)
                 {
-                    lvlStat = player.Stat[(int)condition.Stat].BaseStat +
-                              player.StatPointAllocations[(int)condition.Stat];
+                    lvlStat = player.GetNonBuffedStat(condition.Stat);
                 }
             }
 
@@ -262,9 +271,9 @@ namespace Intersect.Server.Entities.Events
         {
             if (eventInstance != null)
             {
-                if (eventInstance.Global)
+                if (eventInstance.Global && MapController.TryGetInstanceFromMap(eventInstance.MapId, player.MapInstanceId, out var instance))
                 {
-                    if (MapInstance.Get(eventInstance.MapId).GlobalEventInstances.TryGetValue(eventInstance.BaseEvent, out Event evt))
+                    if (instance.GlobalEventInstances.TryGetValue(eventInstance.BaseEvent, out Event evt))
                     {
                         if (evt != null)
                         {
@@ -368,15 +377,16 @@ namespace Intersect.Server.Entities.Events
             QuestBase questBase
         )
         {
-            var map = MapInstance.Get(eventInstance?.MapId ?? Guid.Empty);
+            var map = MapController.Get(eventInstance?.MapId ?? Guid.Empty);
             if (map == null)
             {
-                map = MapInstance.Get(player.MapId);
+                // If we couldn't get an entity's map, use the player's map
+                map = MapController.Get(player.MapId);
             }
 
-            if (map != null)
+            if (map != null && map.TryGetInstance(player.MapInstanceId, out var mapInstance))
             {
-                var entities = map.GetEntities();
+                var entities = mapInstance.GetEntities();
                 foreach (var en in entities)
                 {
                     if (en.GetType() == typeof(Npc))
@@ -451,6 +461,12 @@ namespace Intersect.Server.Entities.Events
                         break;
                     case VariableTypes.ServerVariable:
                         quantity = (int)ServerVariableBase.Get(condition.VariableId)?.Value.Integer;
+                        break;
+                    case VariableTypes.InstanceVariable:
+                        if (MapController.TryGetInstanceFromMap(player.MapId, player.MapInstanceId, out var mapInstance))
+                        {
+                            quantity = (int)mapInstance.GetInstanceVariable(condition.VariableId).Integer;
+                        }
                         break;
                 }
             }
@@ -556,6 +572,111 @@ namespace Intersect.Server.Entities.Events
         {
             return player.InVehicle;
         }
+        
+        public static bool MeetsCondition(
+            InPartyWithCondition condition,
+            Player player,
+            Event eventInstance,
+            QuestBase questBase
+        )
+        {
+            if (player.Party == null)
+            {
+                return false;
+            } 
+            return player.Party.Count >= condition.Members && player.Party.Count > 1;
+        }
+
+        public static bool MeetsCondition(
+            InNpcGuildWithRankCondition condition,
+            Player player,
+            Event eventInstance,
+            QuestBase questBase
+        )
+        {
+            if (player != null && player.ClassInfo.ContainsKey(condition.ClassId))
+            {
+                var classInfo = player.ClassInfo[condition.ClassId];
+                return classInfo.InGuild && classInfo.Rank >= condition.ClassRank;
+            }
+            return false;
+        }
+
+        public static bool MeetsCondition(
+            HasSpecialAssignmentForClassCondition condition,
+            Player player,
+            Event eventInstance,
+            QuestBase questBase
+        )
+        {
+            if (player != null && player.ClassInfo.ContainsKey(condition.ClassId))
+            {
+                var classInfo = player.ClassInfo[condition.ClassId];
+                return classInfo.AssignmentAvailable;
+            }
+            return false;
+        }
+
+        public static bool MeetsCondition(
+            IsOnGuildTaskForClassCondition condition,
+            Player player,
+            Event eventInstance,
+            QuestBase questBase
+        )
+        {
+            if (player != null && player.ClassInfo.ContainsKey(condition.ClassId))
+            {
+                var classInfo = player.ClassInfo[condition.ClassId];
+                return classInfo.OnTask;
+            }
+            return false;
+        }
+
+        public static bool MeetsCondition(
+            HasTaskCompletedForClassCondition condition,
+            Player player,
+            Event eventInstance,
+            QuestBase questBase
+        )
+        {
+            if (player != null && player.ClassInfo.ContainsKey(condition.ClassId))
+            {
+                var classInfo = player.ClassInfo[condition.ClassId];
+                return classInfo.TaskCompleted;
+            }
+            return false;
+        }
+
+        public static bool MeetsCondition(
+            TaskIsOnCooldownForClassCondition condition,
+            Player player,
+            Event eventInstance,
+            QuestBase questBase
+        )
+        {
+            if (player != null && player.ClassInfo.ContainsKey(condition.ClassId))
+            {
+                var classInfo = player.ClassInfo[condition.ClassId];
+                return (classInfo.LastTaskStartTime + Options.TaskCooldown > Globals.Timing.MillisecondsUTC);
+            }
+            return false;
+        }
+
+        public static bool MeetsCondition(
+            HighestClassRankIs condition,
+            Player player,
+            Event eventInstance,
+            QuestBase questBase
+        )
+        {
+            if (player != null && player.ClassInfo.Count > 0)
+            {
+                return player.ClassInfo.Values.ToList()
+                    .OrderByDescending(info => info.Rank)
+                    .First().Rank >= condition.ClassRank;
+            }
+            return false;
+        }
 
         //Variable Comparison Processing
 
@@ -586,6 +707,10 @@ namespace Intersect.Server.Entities.Events
                 else if (comparison.CompareVariableType == VariableTypes.ServerVariable)
                 {
                     compValue = ServerVariableBase.Get(comparison.CompareVariableId)?.Value;
+                }
+                else if (comparison.CompareVariableType == VariableTypes.InstanceVariable && MapController.TryGetInstanceFromMap(player.MapId, player.MapInstanceId, out var mapInstance))
+                {
+                    compValue = mapInstance.GetInstanceVariable(comparison.CompareVariableId);
                 }
             }
             else
@@ -638,6 +763,10 @@ namespace Intersect.Server.Entities.Events
                 else if (comparison.CompareVariableType == VariableTypes.ServerVariable)
                 {
                     compValue = ServerVariableBase.Get(comparison.CompareVariableId)?.Value;
+                }
+                else if (comparison.CompareVariableType == VariableTypes.InstanceVariable && MapController.TryGetInstanceFromMap(player.MapId, player.MapInstanceId, out var mapInstance))
+                {
+                    compValue = mapInstance.GetInstanceVariable(comparison.CompareVariableId);
                 }
             }
             else

@@ -114,6 +114,14 @@ namespace Intersect.Editor.Forms.DockingElements
 
             rbZDimension.Visible = Options.ZDimensionVisible;
             grpZResource.Visible = Options.ZDimensionVisible;
+            grpInstanceSettings.Visible = chkChangeInstance.Checked;
+
+            cmbInstanceType.Items.Clear();
+            // We do not want to iterate over the "NoChange" enum - so we subtract 1 from the iterating maximum
+            for (var i = 0; i < Enum.GetNames(typeof(MapInstanceType)).Length - 1; i++)
+            {
+                cmbInstanceType.Items.Add(Enum.GetName(typeof(MapInstanceType), i));
+            }
         }
 
         //Tiles Tab
@@ -707,6 +715,8 @@ namespace Intersect.Editor.Forms.DockingElements
                     warpAttribute.Y = (byte)nudWarpY.Value;
                     warpAttribute.Direction = (WarpDirection)cmbDirection.SelectedIndex;
                     warpAttribute.FadeOnWarp = chkMapFade.Checked;
+                    warpAttribute.ChangeInstance = chkChangeInstance.Checked;
+                    warpAttribute.InstanceType = (MapInstanceType)cmbInstanceType.SelectedIndex;
                     break;
 
                 case MapAttributes.Sound:
@@ -830,10 +840,13 @@ namespace Intersect.Editor.Forms.DockingElements
                 n.X = -1;
                 n.Y = -1;
                 n.Direction = NpcSpawnDirection.Random;
+                n.RequiredPlayersToSpawn = (int)nudInstanceSpawnLimit.Value;
+                n.PreventRespawn = chkDoNotRespawn.Checked;
 
                 Globals.CurrentMap.Spawns.Add(n);
                 lstMapNpcs.Items.Add(NpcBase.GetName(n.NpcId));
                 lstMapNpcs.SelectedIndex = lstMapNpcs.Items.Count - 1;
+                Globals.SelectedMapNpc = lstMapNpcs.SelectedIndex;
             }
         }
 
@@ -854,16 +867,34 @@ namespace Intersect.Editor.Forms.DockingElements
                 if (lstMapNpcs.Items.Count > 0)
                 {
                     lstMapNpcs.SelectedIndex = 0;
+                    NpcSpawn spawn = Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex];
+                    cmbNpc.SelectedIndex = NpcBase.ListIndex(spawn.NpcId);
+                    cmbDir.SelectedIndex = (int)spawn.Direction;
+                    nudInstanceSpawnLimit.Value = spawn.RequiredPlayersToSpawn;
+                    chkDoNotRespawn.Checked = spawn.PreventRespawn;
+                    if (Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].X >= 0)
+                    {
+                        rbDeclared.Checked = true;
+                    }
+                    else
+                    {
+                        rbRandom.Checked = true;
+                    }
                 }
+                Globals.SelectedMapNpc = lstMapNpcs.SelectedIndex;
             }
         }
 
         private void lstMapNpcs_Click(object sender, EventArgs e)
         {
+            Globals.SelectedMapNpc = lstMapNpcs.SelectedIndex;
             if (lstMapNpcs.Items.Count > 0 && lstMapNpcs.SelectedIndex > -1)
             {
-                cmbNpc.SelectedIndex = NpcBase.ListIndex(Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].NpcId);
-                cmbDir.SelectedIndex = (int) Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].Direction;
+                NpcSpawn spawn = Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex];
+                cmbNpc.SelectedIndex = NpcBase.ListIndex(spawn.NpcId);
+                cmbDir.SelectedIndex = (int)spawn.Direction;
+                nudInstanceSpawnLimit.Value = spawn.RequiredPlayersToSpawn;
+                chkDoNotRespawn.Checked = spawn.PreventRespawn;
                 if (Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].X >= 0)
                 {
                     rbDeclared.Checked = true;
@@ -1093,6 +1124,9 @@ namespace Intersect.Editor.Forms.DockingElements
             {
                 cmbDirection.Items.Add(Strings.Directions.dir[i]);
             }
+            lblInstance.Text = Strings.Warping.instanceType;
+            chkChangeInstance.Text = Strings.Warping.changeInstance;
+            grpInstanceSettings.Text = Strings.Warping.mapInstancingGroup;
 
             btnVisualMapSelector.Text = Strings.Warping.visual;
 
@@ -1152,6 +1186,7 @@ namespace Intersect.Editor.Forms.DockingElements
             grpNpcList.Text = Strings.NpcSpawns.addremove;
             btnAddMapNpc.Text = Strings.NpcSpawns.add;
             btnRemoveMapNpc.Text = Strings.NpcSpawns.remove;
+            lblInstanceLimit.Text = Strings.NpcSpawns.minimumininstance;
 
             lblEventInstructions.Text = Strings.MapLayers.eventinstructions;
             lblLightInstructions.Text = Strings.MapLayers.lightinstructions;
@@ -1199,6 +1234,7 @@ namespace Intersect.Editor.Forms.DockingElements
         private void lstMapNpcs_MouseDown(object sender, MouseEventArgs e)
         {
             lstMapNpcs.SelectedIndex = lstMapNpcs.IndexFromPoint(e.Location);
+            Globals.SelectedMapNpc = lstMapNpcs.SelectedIndex;
         }
 
         private void ChangeTab()
@@ -1213,6 +1249,7 @@ namespace Intersect.Editor.Forms.DockingElements
             pnlLights.Hide();
             pnlEvents.Hide();
             pnlNpcs.Hide();
+            Globals.SelectedMapNpc = -1;
 
             //Force Game Object Lists to Refresh
             rbAnimation_CheckedChanged(null, null);
@@ -1291,6 +1328,7 @@ namespace Intersect.Editor.Forms.DockingElements
             btnNpcsHeader.BackColor = System.Drawing.Color.FromArgb(90, 90, 90);
             CurrentTab = LayerTabs.Npcs;
             pnlNpcs.Show();
+            Globals.SelectedMapNpc = lstMapNpcs.SelectedIndex;
         }
 
         private void picMapLayer_MouseClick(object sender, MouseEventArgs e)
@@ -1343,6 +1381,27 @@ namespace Intersect.Editor.Forms.DockingElements
             if (cmbMapLayer.SelectedIndex > -1)
             {
                 SetLayer(Options.Instance.MapOpts.Layers.All[cmbMapLayer.SelectedIndex]);
+            }
+        }
+
+        private void chkChangeInstance_CheckedChanged(object sender, EventArgs e)
+        {
+            grpInstanceSettings.Visible = chkChangeInstance.Checked;
+        }
+
+        private void nudInstanceSpawnLimit_ValueChanged(object sender, EventArgs e)
+        {
+            if (lstMapNpcs.SelectedIndex >= 0)
+            {
+                Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].RequiredPlayersToSpawn = (int) nudInstanceSpawnLimit.Value;
+            }
+        }
+
+        private void chkDoNotRespawn_CheckedChanged(object sender, EventArgs e)
+        {
+            if (lstMapNpcs.SelectedIndex >= 0)
+            {
+                Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].PreventRespawn = chkDoNotRespawn.Checked;
             }
         }
     }

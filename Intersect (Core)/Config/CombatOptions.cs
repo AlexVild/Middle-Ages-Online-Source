@@ -76,6 +76,12 @@
 
         public string PlayerDeathAnimationId = "a306ad8b-c58c-4d27-b94b-86dd7173dfd8";
 
+        public bool HideResourceHealthBars = true;
+        
+        public float DefaultBackstabMultiplier = 1.25f;
+        
+        public float SneakAttackMultiplier = 1.5f;
+
         //Combat
         public int RegenTime = 5000; //5 seconds
 

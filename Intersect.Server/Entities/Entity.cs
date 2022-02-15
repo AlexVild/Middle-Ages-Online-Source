@@ -33,18 +33,20 @@ namespace Intersect.Server.Entities
         //Instance Values
         private Guid _id;
 
+        public Guid MapInstanceId = Guid.Empty;
+
         [JsonProperty("MaxVitals"), NotMapped] private int[] _maxVital = new int[(int) Vitals.VitalCount];
 
         [NotMapped, JsonIgnore] public Stat[] Stat = new Stat[(int) Stats.StatCount];
 
         [NotMapped, JsonIgnore] public Entity Target { get; set; } = null;
 
-        public Entity() : this(Guid.NewGuid())
+        public Entity() : this(Guid.NewGuid(), Guid.Empty)
         {
         }
 
         //Initialization
-        public Entity(Guid instanceId)
+        public Entity(Guid instanceId, Guid mapInstanceId)
         {
             if (!(this is EventPageInstance) && !(this is Projectile))
             {
@@ -53,6 +55,8 @@ namespace Intersect.Server.Entities
                     Stat[i] = new Stat((Stats)i, this);
                 }
             }
+            MapInstanceId = mapInstanceId;
+
             Id = instanceId;
         }
 
@@ -62,11 +66,11 @@ namespace Intersect.Server.Entities
         public Guid MapId { get; set; }
 
         [NotMapped]
-        public string MapName => MapInstance.GetName(MapId);
+        public string MapName => MapController.GetName(MapId);
 
         [JsonIgnore]
         [NotMapped]
-        public MapInstance Map => MapInstance.Get(MapId);
+        public MapController Map => MapController.Get(MapId);
 
         public int X { get; set; }
 
@@ -419,16 +423,16 @@ namespace Intersect.Server.Entities
                     break;
             }
 
-            MapInstance mapInstance = null;
+            MapController mapController = null;
             int tileX = 0;
             int tileY = 0;
 
             if (tile.Translate(xOffset, yOffset))
             {
-                mapInstance = MapInstance.Get(tile.GetMapId());
+                mapController = MapController.Get(tile.GetMapId());
                 tileX = tile.GetX();
                 tileY = tile.GetY();
-                var tileAttribute = mapInstance.Attributes[tileX, tileY];
+                var tileAttribute = mapController.Attributes[tileX, tileY];
                 if (tileAttribute != null)
                 {
                     if (tileAttribute.Type == MapAttributes.Blocked || (tileAttribute.Type == MapAttributes.Animation && ((MapAnimationAttribute)tileAttribute).IsBlock))
@@ -496,8 +500,12 @@ namespace Intersect.Server.Entities
 
             if (!Passable)
             {
-                var targetMap = mapInstance;
-                var mapEntities = mapInstance.GetCachedEntities();
+                var targetMap = mapController;
+                var mapEntities = new List<Entity>();
+                if (mapController.TryGetInstance(MapInstanceId, out var mapInstance))
+                {
+                    mapEntities.AddRange(mapInstance.GetCachedEntities());
+                }
                 foreach (var en in mapEntities)
                 {
                     if (en != null && en.X == tileX && en.Y == tileY && en.Z == Z && !en.Passable)
@@ -535,7 +543,7 @@ namespace Intersect.Server.Entities
                 }
 
                 //If this is an npc or other event.. if any global page exists that isn't passable then don't walk here!
-                if (!(this is Player))
+                if (!(this is Player) && mapInstance != null)
                 {
                     foreach (var evt in mapInstance.GlobalEventInstances)
                     {
@@ -553,7 +561,7 @@ namespace Intersect.Server.Entities
             return IsTileWalkable(tile.GetMap(), tile.GetX(), tile.GetY(), Z);
         }
 
-        protected virtual int IsTileWalkable(MapInstance map, int x, int y, int z)
+        protected virtual int IsTileWalkable(MapController map, int x, int y, int z)
         {
             //Out of bounds if no map
             if (map == null)
@@ -878,12 +886,18 @@ namespace Intersect.Server.Entities
                     X = tile.GetX();
                     Y = tile.GetY();
 
-                    var currentMap = MapInstance.Get(tile.GetMapId());
+                    var currentMap = MapController.Get(tile.GetMapId());
                     if (MapId != tile.GetMapId())
                     {
-                        var oldMap = MapInstance.Get(MapId);
-                        oldMap?.RemoveEntity(this);
-                        currentMap?.AddEntity(this);
+                        var oldMap = MapController.Get(MapId);
+                        if (oldMap.TryGetInstance(MapInstanceId, out var oldInstance)) {
+                            oldInstance.RemoveEntity(this);
+                        }
+
+                        if (currentMap.TryGetInstance(MapInstanceId, out var newInstance))
+                        {
+                            newInstance.AddEntity(this);
+                        }
 
                         //Send Left Map Packet To the Maps that we are no longer with
                         var oldMaps = oldMap?.GetSurroundingMaps(true);
@@ -939,10 +953,9 @@ namespace Intersect.Server.Entities
                         //Check if moving into a projectile.. if so this npc needs to be hit
                         if (currentMap != null)
                         {
-                            var localMaps = currentMap.GetSurroundingMaps(true);
-                            foreach (var map in localMaps)
+                            foreach (var instance in MapController.GetSurroundingMapInstances(currentMap.Id, MapInstanceId, true))
                             {
-                                var projectiles = map.MapProjectilesCached;
+                                var projectiles = instance.MapProjectilesCached;
                                 foreach (var projectile in projectiles)
                                 {
                                     var spawns = projectile?.Spawns?.ToArray() ?? Array.Empty<ProjectileSpawn>();
@@ -972,9 +985,9 @@ namespace Intersect.Server.Entities
                     }
 
                     //Check for traps
-                    if (currentMap != null)
+                    if (MapController.TryGetInstanceFromMap(currentMap.Id, MapInstanceId, out var mapInstance))
                     {
-                        foreach (var trap in currentMap.MapTrapsCached)
+                        foreach (var trap in mapInstance.MapTrapsCached)
                         {
                             trap.CheckEntityHasDetonatedTrap(this);
                         }
@@ -1048,7 +1061,7 @@ namespace Intersect.Server.Entities
             {
                 if (Y < Options.MapHeight && Y >= 0)
                 {
-                    var attribute = MapInstance.Get(MapId).Attributes[X, Y];
+                    var attribute = MapController.Get(MapId).Attributes[X, Y];
                     if (attribute != null && attribute.Type == MapAttributes.ZDimension)
                     {
                         if (((MapZDimensionAttribute) attribute).GatewayTo > 0)
@@ -1069,7 +1082,7 @@ namespace Intersect.Server.Entities
         {
             int xDiff = 0, yDiff = 0;
 
-            var map = MapInstance.Get(MapId);
+            var map = MapController.Get(MapId);
             var gridId = map.MapGrid;
             var grid = DbInterface.GetGrid(gridId);
 
@@ -1369,12 +1382,12 @@ namespace Intersect.Server.Entities
                     targetPlayer.StartCommonEventsWithTrigger(CommonEventTrigger.PlayerInteract, "", this.Name);
                 }
 
-                if (MapInstance.Get(MapId).ZoneType == MapZones.Safe)
+                if (MapController.Get(MapId).ZoneType == MapZones.Safe)
                 {
                     return;
                 }
 
-                if (MapInstance.Get(target.MapId).ZoneType == MapZones.Safe)
+                if (MapController.Get(target.MapId).ZoneType == MapZones.Safe)
                 {
                     return;
                 }
@@ -1397,8 +1410,9 @@ namespace Intersect.Server.Entities
                     aliveAnimations.Add(new KeyValuePair<Guid, sbyte>(parentItem.AttackAnimationId, (sbyte)projectileDir));
                 }
 
+                int damage = CalculateSpecialDamage(parentItem.Damage, parentItem, target);
                 attackFailures = Attack(
-                    target, parentItem.Damage, 0, (DamageType) parentItem.DamageType, (Stats) parentItem.ScalingStat,
+                    target, damage, 0, (DamageType) parentItem.DamageType, (Stats) parentItem.ScalingStat,
                     parentItem.Scaling, parentItem.CritChance, parentItem.CritMultiplier, deadAnimations, aliveAnimations, true, false, true
                 );
             }
@@ -1440,6 +1454,44 @@ namespace Intersect.Server.Entities
             {
                 var dash = new Dash(target, projectile.Knockback, projectileDir, false, false, false, false);
             }
+        }
+
+        private enum DamageBonus
+        {
+            None = 0,
+            Backstab,
+            Stealth
+        };
+        public int CalculateSpecialDamage(int baseDamage, ItemBase item, Entity target)
+        {
+            if (target is Resource) return baseDamage;
+            if (item == null || target == null) return baseDamage;
+
+            var damageBonus = DamageBonus.None;
+            if (target.Dir == Dir) // Player is hitting something from behind
+            {
+                if (item.CanBackstab)
+                {
+                    baseDamage = (int)Math.Floor(baseDamage * item.BackstabMultiplier);
+                    damageBonus = DamageBonus.Backstab;
+                }
+                if (this is Player player && player.StealthAttack && item.ProjectileId == Guid.Empty) // Melee weapons only for stealth attacks
+                {
+                    baseDamage += player.CalculateStealthDamage(baseDamage, item);
+                    damageBonus = DamageBonus.Stealth;
+                }
+
+                if (damageBonus == DamageBonus.Backstab)
+                {
+                    PacketSender.SendActionMsg(target, Strings.Combat.backstab, CustomColors.Combat.Backstab);
+                }
+                else if (damageBonus == DamageBonus.Stealth)
+                {
+                    PacketSender.SendActionMsg(target, Strings.Combat.stealthattack, CustomColors.Combat.Backstab);
+                }
+            }
+
+            return baseDamage;
         }
 
         //Attacking with spell
@@ -1520,12 +1572,12 @@ namespace Intersect.Server.Entities
                     }
 
                     // Check if either the attacker or the defender is in a "safe zone" (Only apply if combat is PVP)
-                    if (MapInstance.Get(MapId).ZoneType == MapZones.Safe)
+                    if (MapController.Get(MapId).ZoneType == MapZones.Safe)
                     {
                         return;
                     }
 
-                    if (MapInstance.Get(target.MapId).ZoneType == MapZones.Safe)
+                    if (MapController.Get(target.MapId).ZoneType == MapZones.Safe)
                     {
                         return;
                     }
@@ -1539,17 +1591,17 @@ namespace Intersect.Server.Entities
             else
             {
                 // Friendly Spell! Do not attack other players/npcs around us.
-               /* switch (target)
-                {
-                    case Player targetPlayer
-                        when this is Player player && (!IsAllyOf(targetPlayer) || (MapInstance.Get(target.MapId)?.ZoneType == MapZones.Safe && MapInstance.Get(MapId)?.ZoneType == MapZones.Safe) ) && this != target:
-                    case Npc _ when this is Npc npc && !npc.CanNpcCombat(target, spellBase.Combat.Friendly):
-                        return;
-                }*/
+                /* switch (target)
+                 {
+                     case Player targetPlayer
+                         when this is Player player && (!IsAllyOf(targetPlayer) || (MapController.Get(target.MapId)?.ZoneType == MapZones.Safe && MapController.Get(MapId)?.ZoneType == MapZones.Safe) ) && this != target:
+                     case Npc _ when this is Npc npc && !npc.CanNpcCombat(target, spellBase.Combat.Friendly):
+                         return;
+                 }*/
 
                 if (target is Player targetPlayer)
                 {
-                    if (! (MapInstance.Get(target.MapId)?.ZoneType == MapZones.Safe && MapInstance.Get(MapId)?.ZoneType == MapZones.Safe) )
+                    if (! (MapController.Get(target.MapId)?.ZoneType == MapZones.Safe && MapController.Get(MapId)?.ZoneType == MapZones.Safe) )
                     {
                         if (!IsAllyOf(targetPlayer) && this != target)
                         {
@@ -1615,7 +1667,7 @@ namespace Intersect.Server.Entities
             {
                 if (this is Player player && spellBase.WeaponSpell && player.CastingWeapon != null ) // add on weapon stats if needed
                 {
-                    damageHealth += player.CastingWeapon.Damage;
+                    damageHealth += CalculateSpecialDamage(player.CastingWeapon.Damage, player.CastingWeapon, target);
                     scaling += player.CastingWeapon.Scaling;
                     scalingStat = (Stats) player.CastingWeapon.ScalingStat;
                     damageType = (DamageType) player.CastingWeapon.DamageType;
@@ -1688,6 +1740,8 @@ namespace Intersect.Server.Entities
             }
 
             //Handle DoT/HoT spells]
+            // Alex: This was the old way.
+            /*
             if (spellBase.Combat.HoTDoT)
             {
                 var doTFound = false;
@@ -1704,13 +1758,23 @@ namespace Intersect.Server.Entities
                     new DoT(this, spellBase.Id, target);
                 }
             }
+            */
+            
+            if (spellBase.Combat.HoTDoT)
+            {
+                target.CachedDots.ToList()
+                    .FindAll((DoT dot) => dot.SpellBase.Id == spellBase.Id && dot.Attacker == this)
+                    .ForEach((DoT dot) => dot.Expire());
+
+                new DoT(this, spellBase.Id, target);
+            }
         }
 
         private void Animate(Entity target, List<KeyValuePair<Guid, sbyte>> animations, bool fromProjectile = false)
         {
             foreach (var anim in animations)
             {
-                PacketSender.SendAnimationToProximity(anim.Key, 1, target.Id, target.MapId, 0, 0, anim.Value, fromProjectile);
+                PacketSender.SendAnimationToProximity(anim.Key, 1, target.Id, target.MapId, 0, 0, anim.Value, MapInstanceId, fromProjectile);
             }
         }
 
@@ -1751,12 +1815,12 @@ namespace Intersect.Server.Entities
                 //Player interaction common events
                 targetPlayer.StartCommonEventsWithTrigger(CommonEventTrigger.PlayerInteract, "", this.Name);
 
-                if (MapInstance.Get(MapId)?.ZoneType == MapZones.Safe)
+                if (MapController.Get(MapId)?.ZoneType == MapZones.Safe)
                 {
                     return;
                 }
 
-                if (MapInstance.Get(target.MapId)?.ZoneType == MapZones.Safe)
+                if (MapController.Get(target.MapId)?.ZoneType == MapZones.Safe)
                 {
                     return;
                 }
@@ -1795,6 +1859,10 @@ namespace Intersect.Server.Entities
                 }
             }
 
+            if (weapon != null)
+            {
+                baseDamage = CalculateSpecialDamage(weapon.Damage, weapon, target);
+            }
             Attack(
                 target, baseDamage, 0, damageType, scalingStat, scaling, critChance, critMultiplier, deadAnimations,
                 aliveAnimations, true
@@ -2032,7 +2100,7 @@ namespace Intersect.Server.Entities
                     foreach (var anim in deadAnimations)
                     {
                         PacketSender.SendAnimationToProximity(
-                            anim.Key, -1, Id, enemy.MapId, (byte) enemy.X, (byte) enemy.Y, anim.Value
+                            anim.Key, -1, Id, enemy.MapId, (byte) enemy.X, (byte) enemy.Y, anim.Value, MapInstanceId
                         );
                     }
                 }
@@ -2060,14 +2128,18 @@ namespace Intersect.Server.Entities
                 SendCombatEffects(enemy, isCrit, baseDamage);
             }
 
-            if (wasBlocked)
+            if (damageType != DamageType.True && !(enemy is Resource)) // Alex - dumb fix
             {
-                SendBlockedAttackMessage(this, enemy);
+                if (wasBlocked) 
+                {
+                    SendBlockedAttackMessage(this, enemy);
+                }
+                else if (attackMissed)
+                {
+                    SendMissedAttackMessage(this, enemy, damageType);
+                }
             }
-            else if (attackMissed)
-            {
-                SendMissedAttackMessage(this, enemy, damageType);
-            }
+            
 
             var failures = new Dictionary<AttackFailures, bool>();
             failures.Add(AttackFailures.BLOCKED, wasBlocked);
@@ -2077,13 +2149,13 @@ namespace Intersect.Server.Entities
 
         private void SendMissedAttackMessage(Entity attacker, Entity defender, DamageType damageType)
         {
-            if (defender is Player)
+            if (defender is Player def)
             {
-                PacketSender.SendPlaySound((Player)defender, Options.BlockSound);
+                PacketSender.SendPlaySound(def, Options.MissSound);
             }
-            if (attacker is Player)
+            if (attacker is Player att)
             {
-                PacketSender.SendPlaySound((Player)attacker, Options.BlockSound);
+                PacketSender.SendPlaySound(att, Options.MissSound);
             }
             switch(damageType)
             {
@@ -2098,13 +2170,13 @@ namespace Intersect.Server.Entities
 
         private void SendBlockedAttackMessage(Entity attacker, Entity defender)
         {
-            if (defender is Player)
+            if (defender is Player def)
             {
-                PacketSender.SendPlaySound((Player) defender, Options.BlockSound);
+                PacketSender.SendPlaySound(def, Options.BlockSound);
             }
-            if (attacker is Player)
+            if (attacker is Player att)
             {
-                PacketSender.SendPlaySound((Player) attacker, Options.BlockSound);
+                PacketSender.SendPlaySound(att, Options.BlockSound);
             }
             PacketSender.SendActionMsg(defender, Strings.Combat.blocked, CustomColors.Combat.Blocked);
         }
@@ -2311,7 +2383,7 @@ namespace Intersect.Server.Entities
                             if (spellBase.HitAnimationId != Guid.Empty && spellBase.Combat.Effect != StatusTypes.OnHit)
                             {
                                 PacketSender.SendAnimationToProximity(
-                                    spellBase.HitAnimationId, 1, Id, MapId, 0, 0, (sbyte) Dir
+                                    spellBase.HitAnimationId, 1, Id, MapId, 0, 0, (sbyte) Dir, MapInstanceId
                                 ); //Target Type 1 will be global entity
                             }
 
@@ -2354,22 +2426,23 @@ namespace Intersect.Server.Entities
                             var projectileBase = spellBase.Combat.Projectile;
                             if (projectileBase != null)
                             {
-                                if (prayerSpell && prayerTarget != null && prayerSpellDir >= 0)
+                                if (MapController.TryGetInstanceFromMap(MapId, MapInstanceId, out var mapInstance))
                                 {
-                                    MapInstance.Get(MapId)
-                                        .SpawnMapProjectile(
-                                            this, projectileBase, spellBase, null, prayerTarget.MapId, (byte)prayerTarget.X, (byte)prayerTarget.Y, (byte)prayerTarget.Z,
-                                            (byte)prayerSpellDir, CastTarget
+                                    if (prayerSpell && prayerTarget != null && prayerSpellDir >= 0)
+                                    {
+                                        mapInstance.SpawnMapProjectile(
+                                                this, projectileBase, spellBase, null, prayerTarget.MapId, (byte)prayerTarget.X, (byte)prayerTarget.Y, (byte)prayerTarget.Z,
+                                                (byte)prayerSpellDir, CastTarget
+                                            );
+                                    }
+                                    else
+                                    {
+                                        mapInstance.SpawnMapProjectile(
+                                            this, projectileBase, spellBase, null, MapId, (byte)X, (byte)Y, (byte)Z,
+                                            (byte)Dir, CastTarget
                                         );
-                                } else
-                                {
-                                    MapInstance.Get(MapId)
-                                    .SpawnMapProjectile(
-                                        this, projectileBase, spellBase, null, MapId, (byte)X, (byte)Y, (byte)Z,
-                                        (byte)Dir, CastTarget
-                                    );
-                                }
-                                    
+                                    }
+                                }   
                             }
 
                             break;
@@ -2389,7 +2462,10 @@ namespace Intersect.Server.Entities
 
                             break;
                         case SpellTargetTypes.Trap:
-                            MapInstance.Get(MapId).SpawnTrap(this, spellBase, (byte) X, (byte) Y, (byte) Z);
+                            if (MapController.TryGetInstanceFromMap(MapId, MapInstanceId, out var instance)) 
+                            {
+                                instance.SpawnTrap(this, spellBase, (byte)X, (byte)Y, (byte)Z);
+                            }
 
                             break;
                         default:
@@ -2466,34 +2542,30 @@ namespace Intersect.Server.Entities
             var spellBase = SpellBase.Get(spellId);
             if (spellBase != null)
             {
-                var startMap = MapInstance.Get(startMapId);
-                if (startMap != null)
+                var startMap = MapController.Get(startMapId);
+                foreach (var instance in MapController.GetSurroundingMapInstances(startMapId, MapInstanceId, true))
                 {
-                    var surroundingMaps = startMap.GetSurroundingMaps(true);
-                    foreach (var map in surroundingMaps)
+                    foreach (var entity in instance.GetCachedEntities())
                     {
-                        foreach (var entity in map.GetCachedEntities())
+                        if (entity != null && (entity is Player || entity is Npc))
                         {
-                            if (entity != null && (entity is Player || entity is Npc))
+                            if (spellTarget == null || spellTarget == entity)
                             {
-                                if (spellTarget == null || spellTarget == entity)
+                                if (entity.GetDistanceTo(startMap, startX, startY) <= range)
                                 {
-                                    if (entity.GetDistanceTo(startMap,startX,startY) <= range)
+                                    //Check to handle a warp to spell
+                                    if (spellBase.SpellType == SpellTypes.WarpTo)
                                     {
-                                        //Check to handle a warp to spell
-                                        if (spellBase.SpellType == SpellTypes.WarpTo)
+                                        if (spellTarget != null)
                                         {
-                                            if (spellTarget != null)
-                                            {
-                                                //Spelltarget used to be Target. I don't know if this is correct or not.
-                                                int[] position = GetPositionNearTarget(spellTarget.MapId, spellTarget.X, spellTarget.Y);
-                                                Warp(spellTarget.MapId, (byte)position[0], (byte)position[1], (byte)Dir);
-                                                ChangeDir(DirToEnemy(spellTarget));
-                                            }
+                                            //Spelltarget used to be Target. I don't know if this is correct or not.
+                                            int[] position = GetPositionNearTarget(spellTarget.MapId, spellTarget.X, spellTarget.Y);
+                                            Warp(spellTarget.MapId, (byte)position[0], (byte)position[1], (byte)Dir);
+                                            ChangeDir(DirToEnemy(spellTarget));
                                         }
-
-                                        TryAttackSpell(entity, spellBase, out bool miss, out bool blocked, (sbyte) Directions.Up, ignoreEvasion); //Handle damage
                                     }
+
+                                    TryAttackSpell(entity, spellBase, out bool miss, out bool blocked, (sbyte)Directions.Up, ignoreEvasion); //Handle damage
                                 }
                             }
                         }
@@ -2504,68 +2576,68 @@ namespace Intersect.Server.Entities
 
         private int[] GetPositionNearTarget(Guid mapId, int x, int y)
         {
-            var map = MapInstance.Get(mapId);
-            if (map == null)
+            if (MapController.TryGetInstanceFromMap(mapId, MapInstanceId, out var instance))
+            {
+                List<int[]> validPosition = new List<int[]>();
+
+                // Start by north, west, est and south
+                for (int col = -1; col < 2; col++)
+                {
+                    for (int row = -1; row < 2; row++)
+                    {
+                        if (Math.Abs(col % 2) != Math.Abs(row % 2))
+                        {
+                            int newX = x + row;
+                            int newY = y + col;
+
+                            if (newX >= 0 && newX <= Options.MapWidth &&
+                                newY >= 0 && newY <= Options.MapHeight &&
+                                !instance.TileBlocked(newX, newY))
+                            {
+                                validPosition.Add(new int[] { newX, newY });
+                            }
+                        }
+                    }
+                }
+
+                if (validPosition.Count > 0)
+                {
+                    return validPosition[Randomization.Next(0, validPosition.Count)];
+                }
+
+                // If nothing found, diagonal direction
+                for (int col = -1; col < 2; col++)
+                {
+                    for (int row = -1; row < 2; row++)
+                    {
+                        if (Math.Abs(col % 2) == Math.Abs(row % 2))
+                        {
+                            int newX = x + row;
+                            int newY = y + col;
+
+                            // Tile must not be the target position
+                            if (newX >= 0 && newX <= Options.MapWidth &&
+                                newY >= 0 && newY <= Options.MapHeight &&
+                                !(x + row == x && y + col == y) &&
+                                !instance.TileBlocked(newX, newY))
+                            {
+                                validPosition.Add(new int[] { newX, newY });
+                            }
+                        }
+                    }
+                }
+
+                if (validPosition.Count > 0)
+                {
+                    return validPosition[Randomization.Next(0, validPosition.Count)];
+                }
+
+                // If nothing found, return target position
+                return new int[] { x, y };
+            } else
             {
                 return new int[] { x, y };
             }
-
-            List<int[]> validPosition = new List<int[]>();
-
-            // Start by north, west, est and south
-            for (int col = -1; col < 2; col++)
-            {
-                for (int row = -1; row < 2; row++)
-                {
-                    if (Math.Abs(col % 2) != Math.Abs(row % 2))
-                    {
-                        int newX = x + row;
-                        int newY = y + col;
-
-                        if (newX >= 0 && newX <= Options.MapWidth &&
-                            newY >= 0 && newY <= Options.MapHeight &&
-                            !map.TileBlocked(newX, newY))
-                        {
-                            validPosition.Add(new int[] { newX, newY });
-                        }
-                    }
-                }
-            }
-
-            if (validPosition.Count > 0)
-            {
-                return validPosition[Randomization.Next(0, validPosition.Count)];
-            }
-
-            // If nothing found, diagonal direction
-            for (int col = -1; col < 2; col++)
-            {
-                for (int row = -1; row < 2; row++)
-                {
-                    if (Math.Abs(col % 2) == Math.Abs(row % 2))
-                    {
-                        int newX = x + row;
-                        int newY = y + col;
-
-                        // Tile must not be the target position
-                        if (newX >= 0 && newX <= Options.MapWidth &&
-                            newY >= 0 && newY <= Options.MapHeight &&
-                            !(x + row == x && y + col == y) &&
-                            !map.TileBlocked(newX, newY))
-                        {
-                            validPosition.Add(new int[] { newX, newY });
-                        }
-                    }
-                }
-            }
-
-            if (validPosition.Count > 0)
-            {
-                return validPosition[Randomization.Next(0, validPosition.Count)];
-            }
-
-            // If nothing found, return target position
-            return new int[] { x, y };
         }
 
         //Check if the target is either up, down, left or right of the target on the correct Z dimension.
@@ -2648,12 +2720,12 @@ namespace Intersect.Server.Entities
             return 9999;
         }
 
-        public int GetDistanceTo(MapInstance targetMap, int targetX, int targetY)
+        public int GetDistanceTo(MapController targetMap, int targetX, int targetY)
         {
             return GetDistanceBetween(Map, targetMap, X, targetX, Y, targetY);
         }
 
-        public int GetDistanceBetween(MapInstance mapA, MapInstance mapB, int xTileA, int xTileB, int yTileA, int yTileB)
+        public int GetDistanceBetween(MapController mapA, MapController mapB, int xTileA, int xTileB, int yTileA, int yTileB)
         {
             if (mapA != null && mapB != null && mapA.MapGrid == mapB.MapGrid
             ) //Make sure both maps exist and that they are in the same dimension
@@ -2696,12 +2768,12 @@ namespace Intersect.Server.Entities
         protected byte DirToEnemy(Entity target)
         {
             //Calculate World Tile of Me
-            var x1 = X + MapInstance.Get(MapId).MapGridX * Options.MapWidth;
-            var y1 = Y + MapInstance.Get(MapId).MapGridY * Options.MapHeight;
+            var x1 = X + MapController.Get(MapId).MapGridX * Options.MapWidth;
+            var y1 = Y + MapController.Get(MapId).MapGridY * Options.MapHeight;
 
             //Calculate world tile of target
-            var x2 = target.X + MapInstance.Get(target.MapId).MapGridX * Options.MapWidth;
-            var y2 = target.Y + MapInstance.Get(target.MapId).MapGridY * Options.MapHeight;
+            var x2 = target.X + MapController.Get(target.MapId).MapGridX * Options.MapWidth;
+            var y2 = target.Y + MapController.Get(target.MapId).MapGridY * Options.MapHeight;
 
 
             if (Math.Abs(x1 - x2) > Math.Abs(y1 - y2))
@@ -2729,12 +2801,12 @@ namespace Intersect.Server.Entities
         protected bool IsOneBlockAway(Guid mapId, int x, int y, int z = 0)
         {
             //Calculate World Tile of Me
-            var x1 = X + MapInstance.Get(MapId).MapGridX * Options.MapWidth;
-            var y1 = Y + MapInstance.Get(MapId).MapGridY * Options.MapHeight;
+            var x1 = X + MapController.Get(MapId).MapGridX * Options.MapWidth;
+            var y1 = Y + MapController.Get(MapId).MapGridY * Options.MapHeight;
 
             //Calculate world tile of target
-            var x2 = x + MapInstance.Get(mapId).MapGridX * Options.MapWidth;
-            var y2 = y + MapInstance.Get(mapId).MapGridY * Options.MapHeight;
+            var x2 = x + MapController.Get(mapId).MapGridX * Options.MapWidth;
+            var y2 = y + MapController.Get(mapId).MapGridY * Options.MapHeight;
             if (z == Z)
             {
                 if (y1 == y2)
@@ -2769,11 +2841,11 @@ namespace Intersect.Server.Entities
         {
             if (DeathAnimation != Guid.Empty)
             {
-                PacketSender.SendAnimationToProximity(DeathAnimation, -1, Id, MapId, (byte) X, (byte) Y, (sbyte)Directions.Up);
+                PacketSender.SendAnimationToProximity(DeathAnimation, -1, Id, MapId, (byte) X, (byte) Y, (sbyte)Directions.Up, MapInstanceId);
             }
             if (this is Player)
             {
-                PacketSender.SendAnimationToProximity(new Guid(Options.PlayerDeathAnimationId), -1, Id, MapId, (byte) X, (byte) Y, (sbyte)Directions.Up);
+                PacketSender.SendAnimationToProximity(new Guid(Options.PlayerDeathAnimationId), -1, Id, MapId, (byte) X, (byte) Y, (sbyte)Directions.Up, MapInstanceId);
             }
         }
 
@@ -2843,13 +2915,9 @@ namespace Intersect.Server.Entities
                 }
             }
             
-            var currentMap = MapInstance.Get(MapId);
-            if (currentMap != null)
+            foreach (var instance in MapController.GetSurroundingMapInstances(MapId, MapInstanceId, true))
             {
-                foreach (var map in currentMap.GetSurroundingMaps(true))
-                {
-                    map.ClearEntityTargetsOf(this);
-                }
+                instance.ClearEntityTargetsOf(this);
             }
 
             DoT?.Clear();
@@ -2864,7 +2932,7 @@ namespace Intersect.Server.Entities
         private void DropItems(Entity killer, bool sendUpdate = true)
         {
             // Drop items
-            if (Map.ZoneType == MapZones.Arena && this is Player) return; // don't drop items in Arenas
+            if (Map.ZoneType != MapZones.Normal && this is Player) return; // Only drop items in PVP
             for (var n = 0; n < Items.Count; n++)
             {
                 if (Items[n] == null)
@@ -2928,8 +2996,10 @@ namespace Intersect.Server.Entities
                 }
 
                 // Spawn the actual item!
-                var map = MapInstance.Get(MapId);
-                map?.SpawnItem(X, Y, item, item.Quantity, lootOwner, sendUpdate);
+                if (MapController.TryGetInstanceFromMap(MapId, MapInstanceId, out var instance))
+                {
+                    instance.SpawnItem(X, Y, item, item.Quantity, lootOwner, sendUpdate);
+                }
 
                 // Remove the item from inventory if a player.
                 var player = this as Player;
@@ -2955,7 +3025,7 @@ namespace Intersect.Server.Entities
         }
 
         //Empty virtual functions for players
-        public virtual void Warp(Guid newMapId, float newX, float newY, bool adminWarp = false, bool fromWarpEvent = false)
+        public virtual void Warp(Guid newMapId, float newX, float newY, bool adminWarp = false)
         {
             Warp(newMapId, newX, newY, (byte) Dir, adminWarp);
         }
@@ -2968,7 +3038,9 @@ namespace Intersect.Server.Entities
             bool adminWarp = false,
             byte zOverride = 0,
             bool mapSave = false,
-            bool fromWarpEvent = false
+            bool fromWarpEvent = false,
+            MapInstanceType mapInstanceType = MapInstanceType.NoChange,
+            bool fromLogin = false
         )
         {
         }

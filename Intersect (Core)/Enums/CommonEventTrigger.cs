@@ -42,6 +42,16 @@
 
         MapChanged,
 
+        InstanceVariableChange,
+
+        ClassRankIncreased,
+
+        NpcsDefeated,
+
+        ResourcesGathered,
+
+        CraftsCreated,
+
     }
 
 }

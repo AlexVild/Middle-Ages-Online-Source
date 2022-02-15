@@ -311,7 +311,7 @@ namespace Intersect.Client.Framework.Gwen.ControlInternal
             //Play Mouse Entered Sound
             if (ShouldDrawHover)
             {
-                base.PlaySound(mHoverSound);
+                base.PlaySound(mHoverSound, Enums.UISoundType.Hover);
             }
         }
 

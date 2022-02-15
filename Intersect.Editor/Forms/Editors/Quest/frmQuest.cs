@@ -35,6 +35,8 @@ namespace Intersect.Editor.Forms.Editors.Quest
             InitializeComponent();
             InitLocalization();
 
+
+
             lstGameObjects.Init(UpdateToolStripItems, AssignEditorItem, toolStripItemNew_Click, toolStripItemCopy_Click, toolStripItemUndo_Click, toolStripItemPaste_Click, toolStripItemDelete_Click);
         }
         private void AssignEditorItem(Guid id)
@@ -105,7 +107,18 @@ namespace Intersect.Editor.Forms.Editors.Quest
                 cmbCompletedCategory.Items.Add(questCategory);
             }
 
+            cmbQuestType.Items.AddRange(Enum.GetNames(typeof(QuestType)));
+            cmbClass.Items.AddRange(ClassBase.Names);
+
+            nudClassRank.Maximum = Options.MaxClassRank;
+
             lblSortOrder.Text = Strings.QuestEditor.order;
+
+            grpAdditionalOptions.Text = Strings.QuestEditor.additionalquestoptions;
+            lblQuestType.Text = Strings.QuestEditor.questtype;
+            grpTaskOptions.Text = Strings.QuestEditor.taskoptions;
+            lblQuestClass.Text = Strings.QuestEditor.taskclass;
+            lblClassRank.Text = Strings.QuestEditor.taskclassrank;
 
             btnSave.Text = Strings.QuestEditor.save;
             btnCancel.Text = Strings.QuestEditor.cancel;
@@ -275,6 +288,15 @@ namespace Intersect.Editor.Forms.Editors.Quest
 
                     mEditorItem.MakeBackup();
                 }
+
+                cmbQuestType.SelectedIndex = (int) mEditorItem.QuestType;
+                cmbClass.SelectedIndex = ClassBase.ListIndex(mEditorItem.RelatedClassId);
+                nudClassRank.Value = mEditorItem.QuestClassRank;
+                if (nudClassRank.Value > Options.MaxClassRank)
+                {
+                    nudClassRank.Value = Options.MaxClassRank;
+                }
+                HandleAdditionalOptionsDisplay(mEditorItem.QuestType);
             }
             else
             {
@@ -718,6 +740,34 @@ namespace Intersect.Editor.Forms.Editors.Quest
         private void nudOrderValue_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.OrderValue = (int)nudOrderValue.Value; 
+        }
+
+        private void cmbQuestType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mEditorItem.QuestType = (QuestType) cmbQuestType.SelectedIndex;
+            HandleAdditionalOptionsDisplay(mEditorItem.QuestType);
+        }
+
+        private void HandleAdditionalOptionsDisplay(QuestType type)
+        {
+            grpTaskOptions.Hide();
+            switch(type)
+            {
+                case QuestType.Task:
+                case QuestType.SpecialAssignment:
+                    grpTaskOptions.Show();
+                    break;
+            }
+        }
+
+        private void cmbClass_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mEditorItem.RelatedClassId = ClassBase.IdFromList(cmbClass.SelectedIndex);
+        }
+
+        private void nudClassRank_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.QuestClassRank = (int) nudClassRank.Value;
         }
     }
 

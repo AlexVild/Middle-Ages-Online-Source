@@ -44,7 +44,6 @@ namespace Intersect.Editor.Forms.Editors
             this.nudMinHp = new DarkUI.Controls.DarkNumericUpDown();
             this.nudSpawnDuration = new DarkUI.Controls.DarkNumericUpDown();
             this.cmbAnimation = new DarkUI.Controls.DarkComboBox();
-            this.btnRequirements = new DarkUI.Controls.DarkButton();
             this.lblAnimation = new System.Windows.Forms.Label();
             this.lblMaxHp = new System.Windows.Forms.Label();
             this.lblSpawnDuration = new System.Windows.Forms.Label();
@@ -55,6 +54,7 @@ namespace Intersect.Editor.Forms.Editors
             this.lblHP = new System.Windows.Forms.Label();
             this.lblName = new System.Windows.Forms.Label();
             this.txtName = new DarkUI.Controls.DarkTextBox();
+            this.btnRequirements = new DarkUI.Controls.DarkButton();
             this.grpGraphics = new DarkUI.Controls.DarkGroupBox();
             this.chkExhaustedBelowEntities = new DarkUI.Controls.DarkCheckBox();
             this.chkInitialBelowEntities = new DarkUI.Controls.DarkCheckBox();
@@ -70,6 +70,9 @@ namespace Intersect.Editor.Forms.Editors
             this.lblPic = new System.Windows.Forms.Label();
             this.tmrRender = new System.Windows.Forms.Timer(this.components);
             this.pnlContainer = new System.Windows.Forms.Panel();
+            this.grpRequirements = new DarkUI.Controls.DarkGroupBox();
+            this.lblCannotHarvest = new System.Windows.Forms.Label();
+            this.txtCannotHarvest = new DarkUI.Controls.DarkTextBox();
             this.grpCommonEvent = new DarkUI.Controls.DarkGroupBox();
             this.cmbEvent = new DarkUI.Controls.DarkComboBox();
             this.lblEvent = new System.Windows.Forms.Label();
@@ -100,9 +103,8 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemPaste = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
-            this.grpRequirements = new DarkUI.Controls.DarkGroupBox();
-            this.lblCannotHarvest = new System.Windows.Forms.Label();
-            this.txtCannotHarvest = new DarkUI.Controls.DarkTextBox();
+            this.nudExp = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblExp = new System.Windows.Forms.Label();
             this.grpResources.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudMaxHp)).BeginInit();
@@ -114,6 +116,7 @@ namespace Intersect.Editor.Forms.Editors
             this.initalGraphicContainer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picInitialResource)).BeginInit();
             this.pnlContainer.SuspendLayout();
+            this.grpRequirements.SuspendLayout();
             this.grpCommonEvent.SuspendLayout();
             this.grpRegen.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudHpRegen)).BeginInit();
@@ -121,7 +124,7 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudDropAmount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudDropChance)).BeginInit();
             this.toolStrip.SuspendLayout();
-            this.grpRequirements.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudExp)).BeginInit();
             this.SuspendLayout();
             // 
             // grpResources
@@ -183,6 +186,8 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpGeneral.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpGeneral.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpGeneral.Controls.Add(this.lblExp);
+            this.grpGeneral.Controls.Add(this.nudExp);
             this.grpGeneral.Controls.Add(this.btnAddFolder);
             this.grpGeneral.Controls.Add(this.lblFolder);
             this.grpGeneral.Controls.Add(this.cmbFolder);
@@ -329,16 +334,6 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbAnimation.TextPadding = new System.Windows.Forms.Padding(2);
             this.cmbAnimation.SelectedIndexChanged += new System.EventHandler(this.cmbAnimation_SelectedIndexChanged);
             // 
-            // btnRequirements
-            // 
-            this.btnRequirements.Location = new System.Drawing.Point(8, 18);
-            this.btnRequirements.Name = "btnRequirements";
-            this.btnRequirements.Padding = new System.Windows.Forms.Padding(5);
-            this.btnRequirements.Size = new System.Drawing.Size(225, 23);
-            this.btnRequirements.TabIndex = 38;
-            this.btnRequirements.Text = "Harvesting Requirements";
-            this.btnRequirements.Click += new System.EventHandler(this.btnRequirements_Click);
-            // 
             // lblAnimation
             // 
             this.lblAnimation.AutoSize = true;
@@ -368,7 +363,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             // chkWalkableAfter
             // 
-            this.chkWalkableAfter.Location = new System.Drawing.Point(6, 229);
+            this.chkWalkableAfter.Location = new System.Drawing.Point(8, 256);
             this.chkWalkableAfter.Name = "chkWalkableAfter";
             this.chkWalkableAfter.Size = new System.Drawing.Size(211, 17);
             this.chkWalkableAfter.TabIndex = 31;
@@ -377,7 +372,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             // chkWalkableBefore
             // 
-            this.chkWalkableBefore.Location = new System.Drawing.Point(6, 206);
+            this.chkWalkableBefore.Location = new System.Drawing.Point(8, 236);
             this.chkWalkableBefore.Name = "chkWalkableBefore";
             this.chkWalkableBefore.Size = new System.Drawing.Size(211, 17);
             this.chkWalkableBefore.TabIndex = 30;
@@ -442,6 +437,16 @@ namespace Intersect.Editor.Forms.Editors
             this.txtName.Size = new System.Drawing.Size(135, 20);
             this.txtName.TabIndex = 2;
             this.txtName.TextChanged += new System.EventHandler(this.txtName_TextChanged);
+            // 
+            // btnRequirements
+            // 
+            this.btnRequirements.Location = new System.Drawing.Point(8, 18);
+            this.btnRequirements.Name = "btnRequirements";
+            this.btnRequirements.Padding = new System.Windows.Forms.Padding(5);
+            this.btnRequirements.Size = new System.Drawing.Size(225, 23);
+            this.btnRequirements.TabIndex = 38;
+            this.btnRequirements.Text = "Harvesting Requirements";
+            this.btnRequirements.Click += new System.EventHandler(this.btnRequirements_Click);
             // 
             // grpGraphics
             // 
@@ -625,6 +630,43 @@ namespace Intersect.Editor.Forms.Editors
             this.pnlContainer.Size = new System.Drawing.Size(731, 458);
             this.pnlContainer.TabIndex = 18;
             this.pnlContainer.Visible = false;
+            // 
+            // grpRequirements
+            // 
+            this.grpRequirements.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpRequirements.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpRequirements.Controls.Add(this.lblCannotHarvest);
+            this.grpRequirements.Controls.Add(this.btnRequirements);
+            this.grpRequirements.Controls.Add(this.txtCannotHarvest);
+            this.grpRequirements.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpRequirements.Location = new System.Drawing.Point(462, 189);
+            this.grpRequirements.Margin = new System.Windows.Forms.Padding(2);
+            this.grpRequirements.Name = "grpRequirements";
+            this.grpRequirements.Padding = new System.Windows.Forms.Padding(2);
+            this.grpRequirements.Size = new System.Drawing.Size(244, 92);
+            this.grpRequirements.TabIndex = 33;
+            this.grpRequirements.TabStop = false;
+            this.grpRequirements.Text = "Requirements";
+            // 
+            // lblCannotHarvest
+            // 
+            this.lblCannotHarvest.AutoSize = true;
+            this.lblCannotHarvest.Location = new System.Drawing.Point(5, 47);
+            this.lblCannotHarvest.Name = "lblCannotHarvest";
+            this.lblCannotHarvest.Size = new System.Drawing.Size(130, 13);
+            this.lblCannotHarvest.TabIndex = 54;
+            this.lblCannotHarvest.Text = "Cannot Harvest Message:";
+            // 
+            // txtCannotHarvest
+            // 
+            this.txtCannotHarvest.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.txtCannotHarvest.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtCannotHarvest.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.txtCannotHarvest.Location = new System.Drawing.Point(8, 63);
+            this.txtCannotHarvest.Name = "txtCannotHarvest";
+            this.txtCannotHarvest.Size = new System.Drawing.Size(225, 20);
+            this.txtCannotHarvest.TabIndex = 53;
+            this.txtCannotHarvest.TextChanged += new System.EventHandler(this.txtCannotHarvest_TextChanged);
             // 
             // grpCommonEvent
             // 
@@ -1006,42 +1048,30 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
             // 
-            // grpRequirements
+            // nudExp
             // 
-            this.grpRequirements.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.grpRequirements.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpRequirements.Controls.Add(this.lblCannotHarvest);
-            this.grpRequirements.Controls.Add(this.btnRequirements);
-            this.grpRequirements.Controls.Add(this.txtCannotHarvest);
-            this.grpRequirements.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpRequirements.Location = new System.Drawing.Point(462, 189);
-            this.grpRequirements.Margin = new System.Windows.Forms.Padding(2);
-            this.grpRequirements.Name = "grpRequirements";
-            this.grpRequirements.Padding = new System.Windows.Forms.Padding(2);
-            this.grpRequirements.Size = new System.Drawing.Size(244, 92);
-            this.grpRequirements.TabIndex = 33;
-            this.grpRequirements.TabStop = false;
-            this.grpRequirements.Text = "Requirements";
+            this.nudExp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudExp.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudExp.Location = new System.Drawing.Point(123, 206);
+            this.nudExp.Name = "nudExp";
+            this.nudExp.Size = new System.Drawing.Size(87, 20);
+            this.nudExp.TabIndex = 31;
+            this.nudExp.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudExp.ValueChanged += new System.EventHandler(this.nudExp_ValueChanged);
             // 
-            // lblCannotHarvest
+            // lblExp
             // 
-            this.lblCannotHarvest.AutoSize = true;
-            this.lblCannotHarvest.Location = new System.Drawing.Point(5, 47);
-            this.lblCannotHarvest.Name = "lblCannotHarvest";
-            this.lblCannotHarvest.Size = new System.Drawing.Size(130, 13);
-            this.lblCannotHarvest.TabIndex = 54;
-            this.lblCannotHarvest.Text = "Cannot Harvest Message:";
-            // 
-            // txtCannotHarvest
-            // 
-            this.txtCannotHarvest.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.txtCannotHarvest.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtCannotHarvest.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.txtCannotHarvest.Location = new System.Drawing.Point(8, 63);
-            this.txtCannotHarvest.Name = "txtCannotHarvest";
-            this.txtCannotHarvest.Size = new System.Drawing.Size(225, 20);
-            this.txtCannotHarvest.TabIndex = 53;
-            this.txtCannotHarvest.TextChanged += new System.EventHandler(this.txtCannotHarvest_TextChanged);
+            this.lblExp.AutoSize = true;
+            this.lblExp.Location = new System.Drawing.Point(5, 208);
+            this.lblExp.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblExp.Name = "lblExp";
+            this.lblExp.Size = new System.Drawing.Size(79, 13);
+            this.lblExp.TabIndex = 31;
+            this.lblExp.Text = "Inspiration Exp:";
             // 
             // FrmResource
             // 
@@ -1078,6 +1108,8 @@ namespace Intersect.Editor.Forms.Editors
             this.initalGraphicContainer.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.picInitialResource)).EndInit();
             this.pnlContainer.ResumeLayout(false);
+            this.grpRequirements.ResumeLayout(false);
+            this.grpRequirements.PerformLayout();
             this.grpCommonEvent.ResumeLayout(false);
             this.grpCommonEvent.PerformLayout();
             this.grpRegen.ResumeLayout(false);
@@ -1089,8 +1121,7 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudDropChance)).EndInit();
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
-            this.grpRequirements.ResumeLayout(false);
-            this.grpRequirements.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudExp)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1168,5 +1199,7 @@ namespace Intersect.Editor.Forms.Editors
         private DarkGroupBox grpRequirements;
         private System.Windows.Forms.Label lblCannotHarvest;
         private DarkTextBox txtCannotHarvest;
+        private System.Windows.Forms.Label lblExp;
+        private DarkNumericUpDown nudExp;
     }
 }

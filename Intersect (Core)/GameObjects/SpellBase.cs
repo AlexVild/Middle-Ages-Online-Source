@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using Intersect.Enums;
@@ -104,6 +105,12 @@ namespace Intersect.GameObjects
         {
             get => CastingRequirements.Data();
             set => CastingRequirements.Load(value);
+        }
+
+        [NotMapped]
+        public List<string> RestrictionStrings
+        {
+            get => CastingRequirements.ConditionListsToRequirementsString();
         }
 
         [NotMapped]

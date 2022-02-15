@@ -11,6 +11,8 @@ using Intersect.Client.Framework.Gwen.Control.EventArguments;
 using Intersect.Client.Framework.Gwen.ControlInternal;
 using Intersect.Client.Framework.Gwen.DragDrop;
 using Intersect.Client.Framework.Gwen.Input;
+using Intersect.Client.Framework.Audio;
+
 #if DEBUG || DIAGNOSTIC
 #endif
 using Newtonsoft.Json;
@@ -864,7 +866,7 @@ namespace Intersect.Client.Framework.Gwen.Control
                 var alignments = ((string) obj["Alignments"]).Split(',');
                 foreach (var alignment in alignments)
                 {
-                    switch (alignment.ToLower())
+                    switch (alignment.ToLower().Trim())
                     {
                         case "top":
                             AddAlignment(Alignments.Top);
@@ -2161,9 +2163,9 @@ namespace Intersect.Client.Framework.Gwen.Control
             Redraw();
         }
 
-        protected void PlaySound(string filename)
+        protected void PlaySound(string filename, Enums.UISoundType soundType = Enums.UISoundType.Other)
         {
-            if (filename == null || this.IsDisabled)
+            if (filename == null || IsDisabled)
             {
                 return;
             }
@@ -2175,8 +2177,7 @@ namespace Intersect.Client.Framework.Gwen.Control
                 var soundInstance = sound.CreateInstance();
                 if (soundInstance != null)
                 {
-                    soundInstance.SetVolume(100, false);
-                    soundInstance.Play();
+                    Canvas.PlayAndAddSound(soundInstance, soundType);
                 }
             }
         }

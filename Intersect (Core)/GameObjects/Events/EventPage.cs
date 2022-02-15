@@ -62,7 +62,7 @@ namespace Intersect.GameObjects.Events
 
         public Guid TriggerId { get; set; }
 
-        public Guid TriggerVal { get; set; }
+        public int TriggerVal { get; set; }
 
         public bool WalkingAnimation { get; set; } = true;
 

@@ -248,6 +248,27 @@ namespace Intersect.Server.Localization
             public readonly LocalizedString critical = @"CRITICAL HIT!";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString backstab = @"BACKSTAB!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString stealthattack = @"SNEAK ATTACK!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString inspiredexp = @"+ {00} EXP!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString inspirationgained = @"You have gained {00} seconds of inspiration! You have {01} minutes remaining.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString stillinspired = @"You are inspired, and will run out of inspiration in {00} minutes.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString inspirationgainedminutes = @"You have gained {00} minutes of inspiration! You have {01} minutes remaining.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString inspirationover = @"You are no longer inspired.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocaleDictionary<int, LocalizedString> damagetypes =
                 new LocaleDictionary<int, LocalizedString>(
                     new Dictionary<int, LocalizedString>
@@ -556,6 +577,9 @@ namespace Intersect.Server.Localization
             public readonly LocalizedString eventnamecommand = @"\en";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString eventnamecapscommand = @"\encaps";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString eventparam = @"\evtparam";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -605,6 +629,9 @@ namespace Intersect.Server.Localization
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString timesecond = @"\second";
+            
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString playerpartymemberscommand = @"\party";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString watchdogkill =
@@ -613,6 +640,9 @@ namespace Intersect.Server.Localization
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString watchdogkillcommon =
                 @"Common event killed due to commands processed in a single frame surpassing the Event Watchdog Threshhold.  (Event {00})";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString instancevar = @"\iv";
 
         }
 
@@ -760,6 +790,12 @@ namespace Intersect.Server.Localization
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString RankLimitResponse = @"This guild has already hit it's member limit for the rank of {00}. Promote or demote other members in order to make room for {01}.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString NotAllowedInInstance = @"You must be in a guild to warp to a guild instance.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString NoLongerAllowedInInstance = @"You are no longer in the guild who's instance you were logged into. You have been warped back to the overworld.";
         }
 
         public sealed class IntroNamespace : LocaleNamespace
@@ -1033,6 +1069,26 @@ namespace Intersect.Server.Localization
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString outofrange = @"Target is out of range or offline.";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString instanceinuse = @"Can not create new instance - party members are still in the old one.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString cannotcreateinstance = @"Only the party leader can create a shared instance.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString instanceinprogress = @"The party has not yet completed their instance.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString wronginstance = @"Your party is currently doing a different instance.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString instancelivesremaining = @"Your party has {00} lives remaining on this instance!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString nomorelivesremaining = @"Your party has no more lives remaining! You will respawn out of the instance on your next death.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString instancefailed = @"Your party has failed the instance...";
         }
 
         public sealed class PasswordResetNotificationNamespace : LocaleNamespace
@@ -1178,6 +1234,44 @@ namespace Intersect.Server.Localization
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString reqsnotmetforlist = @"You don't meet the requirements of any of the quests within the list {00}.";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString taskinprogressleave = @"You are currently doing a task for this guild. You can not leave until that task is completed.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString taskinprogress = @"You are already doing a task for this guild.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString newspecialassignment = @"You have a new Special Assignment waiting for you with the {00}s!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString tasksremaining = @"Complete {00} more {01} tasks to unlock a Special Assignment.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString tasktoolow = @"This task was not within your current Class Rank, and will not count toward a new Special Assignment.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString totaltaskscompleted = @"You have completed a total of {00} tasks for the {01}s guild.";
+            
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString classrankincreased = @"Your {00} Class Rank has increased to {01}!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString classrankdecreased = @"Your {00} Class Rank has decreased to {01}!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString notinguild = @"You cannot start this task, as you are not a member of the {00} guild.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString ranktoolow = @"You must have a Class Rank of {00} or higher to do this task.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString taskcooldown = @"Not enough time has passed since you last did a task.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString npcguildjoin = @"You have joined the {00}'s Guild!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString npcguildleave = @"You have left the {00}'s Guild!";
         }
 
         public sealed class RegexNamespace : LocaleNamespace
@@ -1279,6 +1373,28 @@ namespace Intersect.Server.Localization
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]            public readonly LocalizedString initialized = @"UPnP Service Initialization Succeeded";
 
+        }
+
+        public sealed class RecordsNamespace : LocaleNamespace
+        {
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString enemykilled =
+                @"You have slain a total of {00} {01}!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString itemcrafted =
+                @"You have crafted a total of {00} {01}!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString resourcegathered =
+                @"You have harvested a resource of this type {00} times!";
+        }
+
+        public sealed class RequirementsNamespace : LocaleNamespace
+        {
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString classis =
+                @"Class Is: {00}";
         }
 
         #region Serialization
@@ -1414,6 +1530,10 @@ namespace Intersect.Server.Localization
             public readonly UpnpNamespace Upnp = new UpnpNamespace();
 
             public readonly GuildsNamespace Guilds = new GuildsNamespace();
+            
+            public readonly RecordsNamespace Records = new RecordsNamespace();
+            
+            public readonly RequirementsNamespace Requirements = new RequirementsNamespace();
 
         }
 
@@ -1489,6 +1609,8 @@ namespace Intersect.Server.Localization
         public static TradingNamespace Trading => Root.Trading;
 
         public static UpnpNamespace Upnp => Root.Upnp;
+        
+        public static RecordsNamespace Records => Root.Records;
 
         #endregion
 

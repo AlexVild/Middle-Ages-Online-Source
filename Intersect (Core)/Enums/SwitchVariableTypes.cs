@@ -19,7 +19,9 @@ namespace Intersect.Enums
 
         PlayerVariable = 0,
 
-        ServerVariable
+        ServerVariable,
+
+        InstanceVariable
 
     }
 
@@ -74,7 +76,22 @@ namespace Intersect.Enums
 
         RightShiftPlayerVar,
 
-        RightShiftGlobalVar
+        RightShiftGlobalVar,
+
+        DupInstanceVar,
+
+        AddInstanceVar,
+
+        SubtractInstanceVar,
+        
+        MultiplyInstanceVar,
+
+        DivideInstanceVar,
+
+        LeftShiftInstanceVar,
+
+        RightShiftInstanceVar,
+
     }
 
     public enum VariableComparators

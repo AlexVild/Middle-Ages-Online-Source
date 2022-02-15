@@ -31,6 +31,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private void InitializeComponent()
         {
             this.grpWarp = new DarkUI.Controls.DarkGroupBox();
+            this.chkChangeInstance = new System.Windows.Forms.CheckBox();
+            this.grpInstanceSettings = new DarkUI.Controls.DarkGroupBox();
+            this.cmbInstanceType = new DarkUI.Controls.DarkComboBox();
+            this.lblInstanceType = new System.Windows.Forms.Label();
             this.chkMapFade = new System.Windows.Forms.CheckBox();
             this.btnVisual = new DarkUI.Controls.DarkButton();
             this.btnCancel = new DarkUI.Controls.DarkButton();
@@ -44,12 +48,15 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.lblMap = new System.Windows.Forms.Label();
             this.lblX = new System.Windows.Forms.Label();
             this.grpWarp.SuspendLayout();
+            this.grpInstanceSettings.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpWarp
             // 
             this.grpWarp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.grpWarp.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpWarp.Controls.Add(this.chkChangeInstance);
+            this.grpWarp.Controls.Add(this.grpInstanceSettings);
             this.grpWarp.Controls.Add(this.chkMapFade);
             this.grpWarp.Controls.Add(this.btnVisual);
             this.grpWarp.Controls.Add(this.btnCancel);
@@ -65,10 +72,66 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpWarp.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpWarp.Location = new System.Drawing.Point(3, 3);
             this.grpWarp.Name = "grpWarp";
-            this.grpWarp.Size = new System.Drawing.Size(182, 223);
+            this.grpWarp.Size = new System.Drawing.Size(374, 223);
             this.grpWarp.TabIndex = 17;
             this.grpWarp.TabStop = false;
             this.grpWarp.Text = "saw";
+            // 
+            // chkChangeInstance
+            // 
+            this.chkChangeInstance.AutoSize = true;
+            this.chkChangeInstance.Location = new System.Drawing.Point(183, 18);
+            this.chkChangeInstance.Name = "chkChangeInstance";
+            this.chkChangeInstance.Size = new System.Drawing.Size(112, 17);
+            this.chkChangeInstance.TabIndex = 63;
+            this.chkChangeInstance.Text = "Change instance?";
+            this.chkChangeInstance.UseVisualStyleBackColor = true;
+            this.chkChangeInstance.CheckedChanged += new System.EventHandler(this.chkCreateInstance_CheckedChanged);
+            // 
+            // grpInstanceSettings
+            // 
+            this.grpInstanceSettings.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.grpInstanceSettings.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpInstanceSettings.Controls.Add(this.cmbInstanceType);
+            this.grpInstanceSettings.Controls.Add(this.lblInstanceType);
+            this.grpInstanceSettings.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpInstanceSettings.Location = new System.Drawing.Point(183, 46);
+            this.grpInstanceSettings.Name = "grpInstanceSettings";
+            this.grpInstanceSettings.Size = new System.Drawing.Size(183, 102);
+            this.grpInstanceSettings.TabIndex = 62;
+            this.grpInstanceSettings.TabStop = false;
+            this.grpInstanceSettings.Text = "Instance Settings";
+            this.grpInstanceSettings.Visible = false;
+            // 
+            // cmbInstanceType
+            // 
+            this.cmbInstanceType.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbInstanceType.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbInstanceType.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbInstanceType.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbInstanceType.DrawDropdownHoverOutline = false;
+            this.cmbInstanceType.DrawFocusRectangle = false;
+            this.cmbInstanceType.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbInstanceType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbInstanceType.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbInstanceType.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbInstanceType.FormattingEnabled = true;
+            this.cmbInstanceType.Location = new System.Drawing.Point(9, 47);
+            this.cmbInstanceType.Name = "cmbInstanceType";
+            this.cmbInstanceType.Size = new System.Drawing.Size(169, 21);
+            this.cmbInstanceType.TabIndex = 64;
+            this.cmbInstanceType.Text = null;
+            this.cmbInstanceType.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbInstanceType.SelectedIndexChanged += new System.EventHandler(this.darkComboBox1_SelectedIndexChanged);
+            // 
+            // lblInstanceType
+            // 
+            this.lblInstanceType.AutoSize = true;
+            this.lblInstanceType.Location = new System.Drawing.Point(6, 31);
+            this.lblInstanceType.Name = "lblInstanceType";
+            this.lblInstanceType.Size = new System.Drawing.Size(78, 13);
+            this.lblInstanceType.TabIndex = 64;
+            this.lblInstanceType.Text = "Instance Type:";
             // 
             // chkMapFade
             // 
@@ -93,7 +156,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(92, 194);
+            this.btnCancel.Location = new System.Drawing.Point(286, 194);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Padding = new System.Windows.Forms.Padding(5);
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
@@ -103,7 +166,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(12, 194);
+            this.btnSave.Location = new System.Drawing.Point(205, 194);
             this.btnSave.Name = "btnSave";
             this.btnSave.Padding = new System.Windows.Forms.Padding(5);
             this.btnSave.Size = new System.Drawing.Size(75, 23);
@@ -219,9 +282,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.Controls.Add(this.grpWarp);
             this.Name = "EventCommandWarp";
-            this.Size = new System.Drawing.Size(188, 229);
+            this.Size = new System.Drawing.Size(383, 229);
             this.grpWarp.ResumeLayout(false);
             this.grpWarp.PerformLayout();
+            this.grpInstanceSettings.ResumeLayout(false);
+            this.grpInstanceSettings.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -241,5 +306,9 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private DarkScrollBar scrlX;
         private DarkButton btnVisual;
         private System.Windows.Forms.CheckBox chkMapFade;
+        private System.Windows.Forms.CheckBox chkChangeInstance;
+        private DarkGroupBox grpInstanceSettings;
+        private DarkComboBox cmbInstanceType;
+        private System.Windows.Forms.Label lblInstanceType;
     }
 }

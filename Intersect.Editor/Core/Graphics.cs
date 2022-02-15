@@ -913,11 +913,18 @@ namespace Intersect.Editor.Core
                                         MapAttribute attr = tmpMap.Attributes[x, y];
                                         int alpha = 150;
                                         int red = 255;
+                                        int blue = 255;
+                                        int green = 255;
                                         if (attr is MapBlockedAttribute block && block.GroundLevel)
                                         {
                                             // Draw ground level blocks slightly different
                                             alpha = 95;
                                             red = 175;
+                                        }
+                                        if (attr is MapWarpAttribute warp && warp.ChangeInstance)
+                                        {
+                                            // Draw warps to new instances differently than warps on same instance
+                                            blue = 0;
                                         }
                                         DrawTexture(
                                             attributesTex,
@@ -929,8 +936,8 @@ namespace Intersect.Editor.Core
                                                 CurrentView.Left + x * Options.TileWidth,
                                                 CurrentView.Top + y * Options.TileHeight, Options.TileWidth,
                                                 Options.TileHeight
-                                            ), System.Drawing.Color.FromArgb(alpha, red, 255, 255), null
-                                        );
+                                            ), System.Drawing.Color.FromArgb(alpha, red, green, blue), null
+                                        ); ;
                                     }
                                 }
                             }
@@ -970,6 +977,7 @@ namespace Intersect.Editor.Core
                 }
                 else if (Globals.CurrentLayer == LayerOptions.Npcs) //NPCS
                 {
+                    tmpMap = Globals.CurrentMap;
                     for (var i = 0; i < tmpMap.Spawns.Count; i++)
                     {
                         if (tmpMap.Spawns[i].X >= 0 && tmpMap.Spawns[i].Y >= 0)
@@ -980,20 +988,23 @@ namespace Intersect.Editor.Core
 
                             if (spawnTex != null)
                             {
+                                System.Drawing.Color renderColor = System.Drawing.Color.White;
+                                if (i == Globals.SelectedMapNpc)
+                                {
+                                    renderColor = System.Drawing.Color.Blue;
+                                }
+
                                 DrawTexture(
                                     spawnTex, new RectangleF(0, 0, spawnTex.Width, spawnTex.Height),
                                     new RectangleF(
                                         CurrentView.Left + tmpMap.Spawns[i].X * Options.TileWidth,
                                         CurrentView.Top + tmpMap.Spawns[i].Y * Options.TileHeight, Options.TileWidth,
                                         Options.TileHeight
-                                    ), System.Drawing.Color.White, null
+                                    ), renderColor, null
                                 );
                             }
                         }
                     }
-                }
-                else
-                {
                 }
             }
 

@@ -42,6 +42,26 @@ namespace Intersect.GameObjects
 
     }
 
+    public enum QuestType
+    {
+        /// <summary>
+        /// A quest that does not modify a player's job or task state on completion
+        /// </summary>
+        Normal = 0,
+        /// <summary>
+        /// A quest responsible for progressing a player's task state
+        /// </summary>
+        Task,
+        /// <summary>
+        /// A quest responsible for increasing a player's class rank
+        /// </summary>
+        SpecialAssignment,
+        /// <summary>
+        /// A quest responsible for modifying a player's job state
+        /// </summary>
+        Job
+    }
+
     public class QuestBase : DatabaseObject<QuestBase>, IFolderable
     {
 
@@ -180,6 +200,20 @@ namespace Intersect.GameObjects
         /// </summary>
         public int OrderValue { get; set; }
 
+        /// <summary>
+        /// The <see cref="QuestType"/> of quest
+        /// </summary>
+        public QuestType QuestType { get; set; }
+
+        /// <summary>
+        /// The class Id that relates to the quest - used to change task/CR of that class for a player if the quest type is <see cref="QuestType.Task"/> or <see cref="QuestType.SpecialAssignment"/>
+        /// </summary>
+        public Guid RelatedClassId { get; set; }
+
+        /// <summary>
+        /// The class rank of the task/SA, if this quest is one
+        /// </summary>
+        public int QuestClassRank { get; set; }
 
         public int GetTaskIndex(Guid taskId)
         {

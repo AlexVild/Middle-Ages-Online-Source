@@ -7,6 +7,7 @@ using Intersect.Network.Packets.Server;
 using Intersect.Server.Database;
 using Intersect.Server.Database.PlayerData.Players;
 using Intersect.Server.General;
+using Intersect.Server.Localization;
 using Intersect.Server.Maps;
 using Intersect.Server.Networking;
 using Intersect.Utilities;
@@ -68,13 +69,24 @@ namespace Intersect.Server.Entities
                 if (Base.AnimationId != Guid.Empty)
                 {
                     PacketSender.SendAnimationToProximity(
-                        Base.AnimationId, -1, Guid.Empty, MapId, (byte)X, (byte)Y, (int)Directions.Up
+                        Base.AnimationId, -1, Guid.Empty, MapId, (byte)X, (byte)Y, (int)Directions.Up, MapInstanceId
                     );
                 }
             }
  
             PacketSender.SendEntityDataToProximity(this);
             PacketSender.SendEntityPositionToAll(this);
+
+            if (killer is Player playerKiller)
+            {
+                int recordKilled = playerKiller.IncrementRecord(RecordType.ResourceGathered, Base.Id);
+                if (Options.SendResourceRecordUpdates && recordKilled % Options.ResourceRecordUpdateInterval == 0)
+                {
+                    playerKiller.SendRecordUpdate(Strings.Records.resourcegathered.ToString(recordKilled, Name));
+                }
+
+                playerKiller.GiveInspiredExperience(Base.Experience);
+            }
         }
 
         public void Spawn()
@@ -120,10 +132,10 @@ namespace Intersect.Server.Entities
                     if (tileHelper.TryFix())
                     {
                         //Tile is valid.. let's see if its open
-                        var map = MapInstance.Get(tileHelper.GetMapId());
-                        if (map != null)
+                        var mapId = tileHelper.GetMapId();
+                        if (MapController.TryGetInstanceFromMap(mapId, MapInstanceId, out var mapInstance))
                         {
-                            if (!map.TileBlocked(tileHelper.GetX(), tileHelper.GetY()))
+                            if (!mapInstance.TileBlocked(tileHelper.GetX(), tileHelper.GetY()))
                             {
                                 tiles.Add(tileHelper);
                             }
@@ -166,8 +178,11 @@ namespace Intersect.Server.Entities
                 {
                     if (ItemBase.Get(item.ItemId) != null)
                     {
-                        MapInstance.Get(selectedTile.GetMapId())
-                            .SpawnItem(selectedTile.GetX(), selectedTile.GetY(), item, item.Quantity, killer.Id);
+                        var mapId = selectedTile.GetMapId();
+                        if (MapController.TryGetInstanceFromMap(mapId, MapInstanceId, out var mapInstance))
+                        {
+                            mapInstance.SpawnItem(selectedTile.GetX(), selectedTile.GetY(), item, item.Quantity, killer.Id);
+                        }
                     }
                 }
             }

@@ -68,6 +68,8 @@ namespace Intersect.Server.Database
 
         private static Logger playerDbLogger { get; set; }
 
+        public static Dictionary<string, InstanceVariableBase> InstanceVariableEventTextLookup = new Dictionary<string, InstanceVariableBase>();
+
         public static Dictionary<string, ServerVariableBase> ServerVariableEventTextLookup = new Dictionary<string, ServerVariableBase>();
 
         public static Dictionary<string, PlayerVariableBase> PlayerVariableEventTextLookup = new Dictionary<string, PlayerVariableBase>();
@@ -112,6 +114,15 @@ namespace Intersect.Server.Database
                         Options.PlayerDb ?? throw new InvalidOperationException(), PlayersDbFilename
                     ), Options.PlayerDb.Type, readOnly, playerDbLogger, Options.PlayerDb.LogLevel
                 );
+        }
+
+        internal static LoggingContext CreateLoggingContext(bool readOnly = true)
+        {
+            return new LoggingContext(
+                Logging.LoggingContext.DefaultConnectionStringBuilder,
+                DatabaseOptions.DatabaseType.SQLite,
+                readOnly: readOnly
+            );
         }
 
         public static void InitializeDbLoggers()
@@ -293,6 +304,13 @@ namespace Intersect.Server.Database
                         using (var loggingContext = LoggingContext)
                         {
                             loggingContext.Database?.Migrate();
+
+#if DEBUG
+                            if (ServerContext.Instance.RestApi.Configuration.SeedMode)
+                            {
+                                loggingContext.Seed();
+                            }
+#endif
                         }
                     }
                     catch (Exception exception)
@@ -306,6 +324,7 @@ namespace Intersect.Server.Database
                     OnMapsLoaded();
                     CacheServerVariableEventTextLookups();
                     CachePlayerVariableEventTextLookups();
+                    CacheInstanceVariableEventTextLookups();
                 }
             }
 
@@ -539,6 +558,10 @@ namespace Intersect.Server.Database
                     ServerVariableBase.Lookup.Clear();
 
                     break;
+                case GameObjectType.InstanceVariable:
+                    InstanceVariableBase.Lookup.Clear();
+
+                    break;
                 case GameObjectType.Tileset:
                     TilesetBase.Lookup.Clear();
 
@@ -647,7 +670,7 @@ namespace Intersect.Server.Database
                         case GameObjectType.Map:
                             foreach (var map in context.Maps)
                             {
-                                MapInstance.Lookup.Set(map.Id, map);
+                                MapController.Lookup.Set(map.Id, map);
                                 if (Options.Instance.MapOpts.Layers.DestroyOrphanedLayers)
                                 {
                                     map.DestroyOrphanedLayers();
@@ -673,6 +696,13 @@ namespace Intersect.Server.Database
                             foreach (var psw in context.ServerVariables)
                             {
                                 ServerVariableBase.Lookup.Set(psw.Id, psw);
+                            }
+
+                            break;
+                        case GameObjectType.InstanceVariable:
+                            foreach (var psw in context.InstanceVariables)
+                            {
+                                InstanceVariableBase.Lookup.Set(psw.Id, psw);
                             }
 
                             break;
@@ -767,7 +797,7 @@ namespace Intersect.Server.Database
 
                     break;
                 case GameObjectType.Map:
-                    dbObj = new MapInstance(predefinedid);
+                    dbObj = new MapController(predefinedid);
 
                     break;
                 case GameObjectType.Event:
@@ -780,6 +810,10 @@ namespace Intersect.Server.Database
                     break;
                 case GameObjectType.ServerVariable:
                     dbObj = new ServerVariableBase(predefinedid);
+
+                    break;
+                case GameObjectType.InstanceVariable:
+                    dbObj = new InstanceVariableBase(predefinedid);
 
                     break;
                 case GameObjectType.QuestList:
@@ -888,8 +922,8 @@ namespace Intersect.Server.Database
                             break;
 
                         case GameObjectType.Map:
-                            context.Maps.Add((MapInstance)dbObj);
-                            MapInstance.Lookup.Set(dbObj.Id, dbObj);
+                            context.Maps.Add((MapController)dbObj);
+                            MapController.Lookup.Set(dbObj.Id, dbObj);
 
                             break;
 
@@ -908,6 +942,12 @@ namespace Intersect.Server.Database
                         case GameObjectType.ServerVariable:
                             context.ServerVariables.Add((ServerVariableBase)dbObj);
                             ServerVariableBase.Lookup.Set(dbObj.Id, dbObj);
+
+                            break;
+                        
+                        case GameObjectType.InstanceVariable:
+                            context.InstanceVariables.Add((InstanceVariableBase)dbObj);
+                            InstanceVariableBase.Lookup.Set(dbObj.Id, dbObj);
 
                             break;
 
@@ -1028,8 +1068,8 @@ namespace Intersect.Server.Database
 
                             break;
                         case GameObjectType.Map:
-                            context.Maps.Remove((MapInstance)gameObject);
-                            MapInstance.Lookup.Delete(gameObject);
+                            context.Maps.Remove((MapController)gameObject);
+                            MapController.Lookup.Delete(gameObject);
 
                             break;
                         case GameObjectType.Event:
@@ -1042,6 +1082,10 @@ namespace Intersect.Server.Database
                             break;
                         case GameObjectType.ServerVariable:
                             context.ServerVariables.Remove((ServerVariableBase)gameObject);
+
+                            break;
+                        case GameObjectType.InstanceVariable:
+                            context.InstanceVariables.Remove((InstanceVariableBase)gameObject);
 
                             break;
                         case GameObjectType.Tileset:
@@ -1153,7 +1197,7 @@ namespace Intersect.Server.Database
 
                             break;
                         case GameObjectType.Map:
-                            context.Maps.Update((MapInstance)gameObject);
+                            context.Maps.Update((MapController)gameObject);
 
                             break;
                         case GameObjectType.Event:
@@ -1166,6 +1210,10 @@ namespace Intersect.Server.Database
                             break;
                         case GameObjectType.ServerVariable:
                             context.ServerVariables.Update((ServerVariableBase)gameObject);
+
+                            break;
+                        case GameObjectType.InstanceVariable:
+                            context.InstanceVariables.Update((InstanceVariableBase)gameObject);
 
                             break;
                         case GameObjectType.Tileset:
@@ -1208,9 +1256,9 @@ namespace Intersect.Server.Database
             LoadMapFolders();
             CheckAllMapConnections();
 
-            foreach (var map in MapInstance.Lookup)
+            foreach (var map in MapController.Lookup)
             {
-                ((MapInstance) map.Value).Initialize();
+                ((MapController) map.Value).Initialize();
             }
         }
 
@@ -1280,17 +1328,32 @@ namespace Intersect.Server.Database
             ServerVariableEventTextLookup = lookup;
         }
 
+        public static void CacheInstanceVariableEventTextLookups()
+        {
+            var lookup = new Dictionary<string, InstanceVariableBase>();
+            var addedIds = new HashSet<string>();
+            foreach (InstanceVariableBase variable in InstanceVariableBase.Lookup.Values)
+            {
+                if (!string.IsNullOrWhiteSpace(variable.TextId) && !addedIds.Contains(variable.TextId))
+                {
+                    lookup.Add(Strings.Events.instancevar + "{" + variable.TextId + "}", variable);
+                    addedIds.Add(variable.TextId);
+                }
+            }
+            InstanceVariableEventTextLookup = lookup;
+        }
+
         //Extra Map Helper Functions
         public static void CheckAllMapConnections()
         {
             var changed = false;
-            foreach (MapInstance map in MapInstance.Lookup.Values)
+            foreach (MapController map in MapController.Lookup.Values)
             {
-                CheckMapConnections(map, MapInstance.Lookup);
+                CheckMapConnections(map, MapController.Lookup);
             }
         }
 
-        public static bool CheckMapConnections(MapInstance map, DatabaseObjectLookup maps)
+        public static bool CheckMapConnections(MapController map, DatabaseObjectLookup maps)
         {
             var updated = false;
             if (!maps.Keys.Contains(map.Up) && map.Up != Guid.Empty)
@@ -1332,7 +1395,7 @@ namespace Intersect.Server.Database
             lock (mapGrids)
             {
                 mapGrids.Clear();
-                foreach (var map in MapInstance.Lookup.Values)
+                foreach (var map in MapController.Lookup.Values)
                 {
                     if (mapGrids.Count == 0)
                     {
@@ -1361,13 +1424,13 @@ namespace Intersect.Server.Database
                     }
                 }
 
-                foreach (MapInstance map in MapInstance.Lookup.Values)
+                foreach (MapController map in MapController.Lookup.Values)
                 {
                     lock (map.GetMapLock())
                     {
                         var myGrid = map.MapGrid;
                         var surroundingMapIds = new List<Guid>();
-                        var surroundingMaps = new List<MapInstance>();
+                        var surroundingMaps = new List<MapController>();
                         for (var x = map.MapGridX - 1; x <= map.MapGridX + 1; x++)
                         {
                             for (var y = map.MapGridY - 1; y <= map.MapGridY + 1; y++)
@@ -1383,9 +1446,9 @@ namespace Intersect.Server.Database
                                     y < mapGrids[myGrid].YMax &&
                                     mapGrids[myGrid].MyGrid[x, y] != Guid.Empty)
                                 {
-                                    
+
                                     surroundingMapIds.Add(mapGrids[myGrid].MyGrid[x, y]);
-                                    surroundingMaps.Add(MapInstance.Get(mapGrids[myGrid].MyGrid[x, y]));
+                                    surroundingMaps.Add(MapController.Get(mapGrids[myGrid].MyGrid[x, y]));
                                 }
                             }
                         }
@@ -1750,6 +1813,7 @@ namespace Intersect.Server.Database
                     MigrateDbSet(context.PlayerVariables, newGameContext.PlayerVariables);
                     MigrateDbSet(context.Tilesets, newGameContext.Tilesets);
                     MigrateDbSet(context.Time, newGameContext.Time);
+                    MigrateDbSet(context.InstanceVariables, newGameContext.InstanceVariables);
                     MigrateDbSet(context.QuestLists, newGameContext.QuestLists);
                     MigrateDbSet(context.QuestBoards, newGameContext.QuestBoards);
                     newGameContext.ChangeTracker.DetectChanges();
@@ -1777,6 +1841,7 @@ namespace Intersect.Server.Database
                     MigrateDbSet(context.Bag_Items, newPlayerContext.Bag_Items);
                     MigrateDbSet(context.Mutes, newPlayerContext.Mutes);
                     MigrateDbSet(context.Bans, newPlayerContext.Bans);
+                    MigrateDbSet(context.Player_Record, newPlayerContext.Player_Record);
                     newPlayerContext.ChangeTracker.DetectChanges();
                     newPlayerContext.SaveChanges();
                     newPlayerContext.Dispose();

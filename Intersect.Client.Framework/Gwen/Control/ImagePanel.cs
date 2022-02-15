@@ -68,7 +68,7 @@ namespace Intersect.Client.Framework.Gwen.Control
 
         private void ImagePanel_HoverEnter(Base sender, System.EventArgs arguments)
         {
-            PlaySound(mHoverSound);
+            PlaySound(mHoverSound, Enums.UISoundType.Hover);
         }
 
         private void ImagePanel_RightClicked(Base sender, EventArguments.ClickedEventArgs arguments)
