@@ -72,6 +72,15 @@ namespace Intersect.GameObjects
             set => EquipmentAnimationId = value?.Id ?? Guid.Empty;
         }
 
+        [NotMapped]
+        public List<string> RestrictionStrings
+        {
+            get => UsageRequirements.ConditionListsToRequirementsString();
+        }
+
+        [NotMapped]
+        public Dictionary<string, string> StatRestrictions = new Dictionary<string, string>();
+
         /// <summary>
         /// Defines whether or not this item can be dropped by a player.
         /// </summary>

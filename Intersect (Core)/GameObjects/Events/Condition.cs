@@ -1,5 +1,6 @@
 ﻿using System;
-
+using System.Collections.Generic;
+using System.Text;
 using Intersect.Enums;
 
 namespace Intersect.GameObjects.Events
@@ -156,6 +157,68 @@ namespace Intersect.GameObjects.Events
 
         public bool IgnoreBuffs { get; set; }
 
+        public string GetPrettyString()
+        {
+            StringBuilder retString = new StringBuilder();
+            if (ComparingLevel)
+            {
+                retString.Append("Level");
+            }
+            else
+            {
+                switch (Stat)
+                {
+                    case (Stats.Attack):
+                        retString.Append("ATK");
+                        break;
+                    case (Stats.AbilityPower):
+                        retString.Append("AP");
+                        break;
+                    case (Stats.MagicResist):
+                        retString.Append("M. DEF");
+                        break;
+                    case (Stats.Defense):
+                        retString.Append("P. DEF");
+                        break;
+                    case (Stats.Speed):
+                        retString.Append("AGI");
+                        break;
+                }
+            }
+
+            switch (Comparator)
+            {
+                case VariableComparators.Equal:
+                    retString.Append($" = {Value}");
+                    break;
+                case VariableComparators.Less:
+                    retString.Append($" < {Value}");
+                    break;
+                case VariableComparators.Greater:
+                    retString.Append($" > {Value}");
+                    break;
+                case VariableComparators.GreaterOrEqual:
+                    retString.Append($" >= {Value}");
+                    break;
+                case VariableComparators.LesserOrEqual:
+                    retString.Append($" <= {Value}");
+                    break;
+                case VariableComparators.NotEqual:
+                    retString.Append($" is not {Value}");
+                    break;
+            }
+
+            if (IgnoreBuffs && !ComparingLevel)
+            {
+                retString.Append(" (raw)");
+            }
+            else if (!ComparingLevel)
+            {
+                retString.Append(" (w/ mod)");
+            }
+
+            return retString.ToString();
+        }
     }
 
     public class SelfSwitchCondition : Condition
@@ -345,12 +408,30 @@ namespace Intersect.GameObjects.Events
         /// <summary>
         /// Defines the type of condition.
         /// </summary>
-        public override ConditionTypes Type { get; } = ConditionTypes.HasItemWithTag;
+        public override ConditionTypes Type { get; } = ConditionTypes.ItemEquippedWithTag;
 
         /// <summary>
         /// Defines the tag to check for.
         /// </summary>
         public string Tag { get; set; }
+
+        public string GetPrettyString()
+        {
+            var tmpTag = Tag.ToLower();
+
+            var words = new List<string>();
+            foreach(var tagSplit in tmpTag.Split('_'))
+            {
+                var letters = tagSplit.ToCharArray();
+                if (letters.Length > 0)
+                {
+                    letters[0] = char.ToUpper(tmpTag[0]);
+                }
+                words.Add(new string(letters));
+            }
+
+            return $"{string.Join(" ", words)} Equipped";
+        }
     }
 
     public class EquipmentInSlotCondition : Condition
@@ -379,6 +460,11 @@ namespace Intersect.GameObjects.Events
         public Guid ClassId { get; set; }
 
         public int ClassRank { get; set; }
+
+        public string GetPrettyString()
+        {
+            return $"{ClassBase.GetName(ClassId)} CR {ClassRank}";
+        }
     }
 
     public class HasSpecialAssignmentForClassCondition : Condition

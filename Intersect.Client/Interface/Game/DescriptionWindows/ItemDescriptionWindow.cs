@@ -69,6 +69,12 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 SetupDescription();
             }
 
+            // if we have usage restrictions, display those
+            if (mItem.RestrictionStrings.Count > 0)
+            {
+                SetupRestrictionInfo();
+            }
+
             // Set up information depending on the item type.
             switch (mItem.ItemType)
             {
@@ -410,6 +416,45 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             if (!string.IsNullOrWhiteSpace(mValueLabel))
             {
                 data.Add(new Tuple<string, string>(mValueLabel, string.Empty));
+            }
+
+            // Do we have any data to display? If so, generate the element and add the data to it.
+            if (data.Count > 0)
+            {
+                // Add a divider.
+                AddDivider();
+
+                // Add a row component.
+                var rows = AddRowContainer();
+
+                foreach (var item in data)
+                {
+                    rows.AddKeyValueRow(item.Item1, item.Item2);
+                }
+
+                // Resize and position the container.
+                rows.SizeToChildren(true, true);
+            }
+        }
+
+        protected void SetupRestrictionInfo()
+        {
+            // Our list of data to add, should we need to.
+            var data = new List<Tuple<string, string>>();
+
+            // Display each condition list as returned to us by the server
+            data.Add(new Tuple<string, string>(Strings.ItemDescription.Restriction, String.Empty));
+            for (var i = 0; i < mItem.RestrictionStrings.Count; i++)
+            {
+                var restriction = mItem.RestrictionStrings[i];
+                if (i == 0)
+                {
+                    data.Add(new Tuple<string, string>(restriction, String.Empty));
+                }
+                else
+                {
+                    data.Add(new Tuple<string, string>(Strings.ItemDescription.RestrictionOr.ToString(restriction), String.Empty));
+                }
             }
 
             // Do we have any data to display? If so, generate the element and add the data to it.

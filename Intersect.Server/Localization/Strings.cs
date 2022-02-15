@@ -1390,6 +1390,13 @@ namespace Intersect.Server.Localization
                 @"You have harvested a resource of this type {00} times!";
         }
 
+        public sealed class RequirementsNamespace : LocaleNamespace
+        {
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString classis =
+                @"Class Is: {00}";
+        }
+
         #region Serialization
 
         public static bool Load()
@@ -1525,6 +1532,8 @@ namespace Intersect.Server.Localization
             public readonly GuildsNamespace Guilds = new GuildsNamespace();
             
             public readonly RecordsNamespace Records = new RecordsNamespace();
+            
+            public readonly RequirementsNamespace Requirements = new RequirementsNamespace();
 
         }
 

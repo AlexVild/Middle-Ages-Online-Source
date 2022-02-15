@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using System.Text;
+using Intersect.GameObjects.Events;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -49,6 +50,93 @@ namespace Intersect.GameObjects.Conditions
                     DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate
                 }
             );
+        }
+
+        public List<string> ConditionListsToRequirementsString()
+        {
+            List<string> requirementLists = new List<string>();
+
+            foreach (var conditionList in Lists)
+            {
+                var requirements = new List<string>();
+
+                var classes = new List<string>();
+                var classRanks = new List<string>();
+                var stats = new List<string>();
+                var equip = new List<string>();
+                foreach (var condition in conditionList.Conditions)
+                {
+                    if (condition.Type == ConditionTypes.ClassIs && condition is ClassIsCondition classIs)
+                    {
+                        if (condition.Negated)
+                        {
+                            classes.Add($"NOT {ClassBase.GetName(classIs.ClassId)}");
+                        }
+                        else
+                        {
+                            classes.Add(ClassBase.GetName(classIs.ClassId));
+                        }
+                    }
+                    else if (condition.Type == ConditionTypes.InNpcGuildWithRank && condition is InNpcGuildWithRankCondition npcGuildCond)
+                    {
+                        if (condition.Negated)
+                        {
+                            classRanks.Add($"NOT {npcGuildCond.GetPrettyString()}");
+                        }
+                        else
+                        {
+                            classRanks.Add(npcGuildCond.GetPrettyString());
+                        }
+                    }
+                    else if (condition.Type == ConditionTypes.LevelOrStat && condition is LevelOrStatCondition statCond)
+                    {
+                        if (condition.Negated)
+                        {
+                            classRanks.Add($"NOT {statCond.GetPrettyString()}");
+                        }
+                        else
+                        {
+                            stats.Add(statCond.GetPrettyString());
+                        }
+                    }
+                    else if (condition.Type == ConditionTypes.ItemEquippedWithTag && condition is EquipmentTagCondition equipTag)
+                    {
+                        if (condition.Negated)
+                        {
+                            equip.Add($"NOT {equipTag.GetPrettyString()}");
+                        }
+                        else
+                        {
+                            equip.Add(equipTag.GetPrettyString());
+                        }
+                    }
+                }
+
+                if (classes.Count > 0)
+                {
+                    requirements.Add(string.Join(" and ", classes));
+                }
+
+                if (classRanks.Count > 0)
+                {
+                    requirements.Add(string.Join(", ", classRanks));
+                }
+                
+                if (stats.Count > 0)
+                {
+                    requirements.Add(string.Join(", ", stats));
+                }
+
+                if (equip.Count > 0)
+                {
+                    requirements.Add(string.Join(", ", equip));
+                }
+                
+
+                requirementLists.Add(string.Join("; ", requirements));
+            }
+
+            return requirementLists.Where(str => !string.IsNullOrWhiteSpace(str)).ToList();
         }
 
     }
