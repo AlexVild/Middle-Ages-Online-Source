@@ -279,6 +279,11 @@ namespace Intersect.GameObjects.Events
 
         public Guid QuestId { get; set; }
 
+        public string GetPrettyString()
+        {
+            return $"Completion of quest: \"{QuestBase.GetName(QuestId)}\"";
+        }
+
     }
 
     public class NoNpcsOnMapCondition : Condition
@@ -500,6 +505,11 @@ namespace Intersect.GameObjects.Events
         public override ConditionTypes Type { get; } = ConditionTypes.HighestClassRankIs;
 
         public int ClassRank { get; set; }
+
+        public string GetPrettyString()
+        {
+            return $"Highest CR {ClassRank}+";
+        }
     }
 
     public class VariableCompaison

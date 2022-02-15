@@ -64,6 +64,8 @@ namespace Intersect.GameObjects.Conditions
                 var classRanks = new List<string>();
                 var stats = new List<string>();
                 var equip = new List<string>();
+                var highestCrs = new List<string>();
+                var questsComplete = new List<string>();
                 foreach (var condition in conditionList.Conditions)
                 {
                     if (condition.Type == ConditionTypes.ClassIs && condition is ClassIsCondition classIs)
@@ -110,6 +112,28 @@ namespace Intersect.GameObjects.Conditions
                             equip.Add(equipTag.GetPrettyString());
                         }
                     }
+                    else if (condition.Type == ConditionTypes.HighestClassRankIs && condition is HighestClassRankIs highCrCond)
+                    {
+                        if (condition.Negated)
+                        {
+                            highestCrs.Add($"NOT {highCrCond.GetPrettyString()}");
+                        }
+                        else
+                        {
+                            highestCrs.Add(highCrCond.GetPrettyString());
+                        }
+                    }
+                    else if (condition.Type == ConditionTypes.QuestCompleted && condition is QuestCompletedCondition questCompleteCond)
+                    {
+                        if (condition.Negated)
+                        {
+                            questsComplete.Add($"NOT {questCompleteCond.GetPrettyString()}");
+                        }
+                        else
+                        {
+                            questsComplete.Add(questCompleteCond.GetPrettyString());
+                        }
+                    }
                 }
 
                 if (classes.Count > 0)
@@ -130,6 +154,16 @@ namespace Intersect.GameObjects.Conditions
                 if (equip.Count > 0)
                 {
                     requirements.Add(string.Join(", ", equip));
+                }
+
+                if (highestCrs.Count > 0)
+                {
+                    requirements.Add(string.Join(", ", highestCrs));
+                }
+                
+                if (questsComplete.Count > 0)
+                {
+                    requirements.Add(string.Join(", ", questsComplete));
                 }
                 
 
