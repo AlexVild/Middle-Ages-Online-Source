@@ -1031,9 +1031,9 @@ namespace Intersect.Client.Localization
             {
                 {0, @"Attack"},
                 {1, @"Ability Power"},
-                {2, @"Defense"},
-                {3, @"Magic Resist"},
-                {4, @"Speed"}
+                {2, @"Physical Defense"},
+                {3, @"Magic Defense"},
+                {4, @"Agility"}
             };
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -1041,9 +1041,9 @@ namespace Intersect.Client.Localization
             {
                 {0, @"Attack:"},
                 {1, @"Ability Power:"},
-                {2, @"Defense:"},
-                {3, @"Magic Resist:"},
-                {4, @"Speed:"}
+                {2, @"Physical Defense:"},
+                {3, @"Magic Defense:"},
+                {4, @"Agility:"}
             };
             
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -1057,6 +1057,13 @@ namespace Intersect.Client.Localization
             {
                 {0, @"HP:"},
                 {1, @"MP:"}
+            };
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static Dictionary<int, LocalizedString> VitalRegens = new Dictionary<int, LocalizedString>
+            {
+                {0, @"OoC HP Regen:"},
+                {1, @"OoC MP Regen:"}
             };
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -1787,9 +1794,9 @@ namespace Intersect.Client.Localization
             {
                 {0, @"Attack"},
                 {1, @"Ability Power"},
-                {2, @"Defense"},
-                {3, @"Magic Resist"},
-                {4, @"Speed"}
+                {2, @"Physical Defense"},
+                {3, @"Magic Defense"},
+                {4, @"Agility"}
             };
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -1842,9 +1849,9 @@ namespace Intersect.Client.Localization
             {
                 {0, @"Attack:"},
                 {1, @"Ability Power:"},
-                {2, @"Defense:"},
-                {3, @"Magic Resist:"},
-                {4, @"Speed:"}
+                {2, @"Physical Defense:"},
+                {3, @"Magic Defense:"},
+                {4, @"Agility:"}
             };
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]

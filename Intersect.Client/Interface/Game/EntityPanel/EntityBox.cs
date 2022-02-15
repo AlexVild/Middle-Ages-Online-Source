@@ -763,7 +763,7 @@ namespace Intersect.Client.Interface.Game.EntityPanel
         private void UpdateXpBar(float elapsedTime, bool instant = false)
         {
             float targetExpWidth = 1;
-            if (((Player) MyEntity).GetNextLevelExperience() > 0)
+            if (((Player) MyEntity).GetNextLevelExperience() >= 0 && MyEntity.Level != Options.MaxLevel)
             {
                 targetExpWidth = (float) ((Player) MyEntity).Experience /
                                  (float) ((Player) MyEntity).GetNextLevelExperience();
@@ -772,7 +772,7 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                     ((Player) MyEntity)?.Experience, ((Player) MyEntity)?.GetNextLevelExperience()
                 );
             }
-            else
+            else if (MyEntity.Level == Options.MaxLevel)
             {
                 targetExpWidth = 1f;
                 ExpLbl.Text = Strings.EntityBox.maxlevel;

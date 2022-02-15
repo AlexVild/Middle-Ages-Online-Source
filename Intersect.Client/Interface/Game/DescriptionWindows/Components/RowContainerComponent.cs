@@ -62,6 +62,11 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows.Components
         /// <returns>Returns a new instance of <see cref="KeyValueRowComponent"/> with the provided settings.</returns>
         public KeyValueRowComponent AddKeyValueRow(string key, string value)
         {
+            return AddKeyValueRow(key, value, CustomColors.ItemDesc.Muted, CustomColors.ItemDesc.Muted);
+        }
+
+        public KeyValueRowComponent AddKeyValueRow(string key, string value, Color keyColor, Color valueColor)
+        {
             var row = new KeyValueRowComponent(mContainer, key, value);
 
             // Since we're pulling some trickery here, catch any errors doing this ourselves and log them.
@@ -75,6 +80,8 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows.Components
             }
 
             row.SizeToChildren(true, false);
+            row.SetKeyTextColor(keyColor);
+            row.SetValueTextColor(valueColor);
             PositionComponent(row);
             return row;
         }

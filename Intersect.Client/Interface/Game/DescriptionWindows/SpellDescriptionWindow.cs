@@ -291,7 +291,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
 
             if (mSpell.WeaponSpell)
             {
-                rows.AddKeyValueRow(Strings.SpellDescription.WeaponSkill, string.Empty);
+                rows.AddKeyValueRow(Strings.SpellDescription.WeaponSkill, string.Empty, CustomColors.ItemDesc.Special, Color.White);
             }
 
             // Resize and position the container.
@@ -387,7 +387,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
 
                 foreach (var item in data)
                 {
-                    rows.AddKeyValueRow(item.Item1, item.Item2);
+                    rows.AddKeyValueRow(item.Item1, item.Item2, CustomColors.ItemDesc.Notice, Color.White);
                 }
 
                 // Resize and position the container.

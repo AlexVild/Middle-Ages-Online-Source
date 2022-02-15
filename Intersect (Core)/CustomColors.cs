@@ -225,6 +225,21 @@ namespace Intersect
 
         }
 
+        public sealed class ItemDescNamespace
+        {
+            public Color Primary = Color.White;
+            
+            public Color Muted = new Color(255, 160, 160, 160);
+
+            public Color Better = new Color(255, 129, 186, 40);
+
+            public Color Worse = new Color(255, 222, 124, 112);
+            
+            public Color Notice = new Color(255, 217, 218, 157);
+            
+            public Color Special = new Color(255, 206, 109, 241);
+        }
+
         public sealed class ItemsNamespace
         {
 
@@ -333,6 +348,8 @@ namespace Intersect
             public readonly QuestsNamespace Quests = new QuestsNamespace();
 
             public readonly GeneralNamespace General = new GeneralNamespace();
+            
+            public readonly ItemDescNamespace ItemDesc = new ItemDescNamespace();
 
         }
 
@@ -355,6 +372,8 @@ namespace Intersect
         public static ItemsNamespace Items => Root.Items;
 
         public static GeneralNamespace General => Root.General;
+        
+        public static ItemDescNamespace ItemDesc => Root.ItemDesc;
 
         #endregion
 

@@ -197,6 +197,325 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             description.AddText(Strings.ItemDescription.Description.ToString(mItem.Description), Color.White);
         }
 
+        private int GetStatDifference(int statIndex)
+        {
+            var slot = mItem.EquipmentSlot;
+            var flatStat = mItem.StatsGiven[statIndex];
+            if (mStatBuffs != null) 
+            {
+                flatStat += mStatBuffs[statIndex];
+            }
+            
+            if (Globals.Me.MyEquipment[slot] != -1)
+            {
+                var equippedItem = Globals.Me.Inventory[Globals.Me.MyEquipment[slot]];
+
+                if (equippedItem != null)
+                {
+                    var equippedStat = equippedItem.Base.StatsGiven[statIndex];
+                    if (equippedItem.StatBuffs != null)
+                    {
+                        equippedStat += equippedItem.StatBuffs[statIndex];
+                    }
+
+                    return flatStat - equippedStat;
+                }
+                else
+                {
+                    return flatStat;
+                }
+            }
+            else
+            {
+                return flatStat;
+            }
+        }
+
+        private int GetStatPercentageDifference(int statIndex)
+        {
+            var slot = mItem.EquipmentSlot;
+            if (Globals.Me.MyEquipment[slot] != -1)
+            {
+                var equippedItem = Globals.Me.Inventory[Globals.Me.MyEquipment[slot]].Base;
+
+                if (equippedItem != null)
+                {
+                    return mItem.PercentageStatsGiven[statIndex] - equippedItem.PercentageStatsGiven[statIndex];
+                }
+                else
+                {
+                    return mItem.PercentageStatsGiven[statIndex];
+                }
+            }
+            else
+            {
+                return mItem.PercentageStatsGiven[statIndex];
+            }
+        }
+
+        private (int stat, int percent) GetStatPercentageAndFlatDifference(int statIndex)
+        {
+            var slot = mItem.EquipmentSlot;
+            var flatStat = mItem.StatsGiven[statIndex];
+            if (mStatBuffs != null)
+            {
+                flatStat += mStatBuffs[statIndex];
+            }
+
+            if (Globals.Me.MyEquipment[slot] != -1)
+            {
+                var equippedItem = Globals.Me.Inventory[Globals.Me.MyEquipment[slot]];
+
+                if (equippedItem != null)
+                {
+                    var equippedStat = equippedItem.Base.StatsGiven[statIndex];
+                    if (equippedItem.StatBuffs != null)
+                    {
+                        equippedStat += equippedItem.StatBuffs[statIndex];
+                    }
+                    var statDiff = flatStat - equippedStat;
+                    var percentDiff = mItem.PercentageStatsGiven[statIndex] - equippedItem.Base.PercentageStatsGiven[statIndex];
+                    return (statDiff, percentDiff);
+                }
+                else
+                {
+                    return (flatStat, mItem.PercentageStatsGiven[statIndex]);
+                }
+            }
+            else
+            {
+                return (flatStat, mItem.PercentageStatsGiven[statIndex]);
+            }
+        }
+
+        private int GetBaseDamageDifference()
+        {
+            var slot = mItem.EquipmentSlot;
+            if (Globals.Me.MyEquipment[slot] != -1)
+            {
+                var equippedItem = Globals.Me.Inventory[Globals.Me.MyEquipment[slot]].Base;
+
+                if (equippedItem != null)
+                {
+                    return mItem.Damage - equippedItem.Damage;
+                }
+                else
+                {
+                    return mItem.Damage;
+                }
+            }
+            else
+            {
+                return mItem.Damage;
+            }
+        }
+
+        private int GetScalingDifference()
+        {
+            var slot = mItem.EquipmentSlot;
+            if (Globals.Me.MyEquipment[slot] != -1)
+            {
+                var equippedItem = Globals.Me.Inventory[Globals.Me.MyEquipment[slot]].Base;
+
+                if (equippedItem != null && mItem.ScalingStat == equippedItem.ScalingStat)
+                {
+                    return mItem.Scaling - equippedItem.Scaling;
+                }
+                else
+                {
+                    return mItem.Scaling;
+                }
+            }
+            else
+            {
+                return mItem.Scaling;
+            }
+        }
+
+        private int GetCritChanceDifference()
+        {
+            var slot = mItem.EquipmentSlot;
+            if (Globals.Me.MyEquipment[slot] != -1)
+            {
+                var equippedItem = Globals.Me.Inventory[Globals.Me.MyEquipment[slot]].Base;
+
+                if (equippedItem != null)
+                {
+                    return mItem.CritChance - equippedItem.CritChance;
+                }
+                else
+                {
+                    return mItem.CritChance;
+                }
+            }
+            else
+            {
+                return mItem.CritChance;
+            }
+        }
+
+        private double GetCritMultiplierDifference()
+        {
+            var slot = mItem.EquipmentSlot;
+            if (Globals.Me.MyEquipment[slot] != -1)
+            {
+                var equippedItem = Globals.Me.Inventory[Globals.Me.MyEquipment[slot]].Base;
+
+                if (equippedItem != null)
+                {
+                    return mItem.CritMultiplier - equippedItem.CritMultiplier;
+                }
+                else
+                {
+                    return mItem.CritMultiplier;
+                }
+            }
+            else
+            {
+                return mItem.CritMultiplier;
+            }
+        }
+
+        private int GetAttackSpeedDifference()
+        {
+            var slot = mItem.EquipmentSlot;
+            var retVal = 0f;
+            var classAttack = ClassBase.Get(Globals.Me.Class).AttackSpeedValue;
+            if (Globals.Me.MyEquipment[slot] != -1)
+            {
+                var equippedItem = Globals.Me.Inventory[Globals.Me.MyEquipment[slot]].Base;
+
+                if (equippedItem != null)
+                {
+                    // Reversed - a lower value is better
+                    retVal = equippedItem.AttackSpeedValue - mItem.AttackSpeedValue;
+                }
+                else
+                {
+                    retVal = classAttack - mItem.AttackSpeedValue;
+                }
+            }
+            else
+            {
+                retVal = classAttack - mItem.AttackSpeedValue;
+            }
+
+            return (int)retVal;
+        }
+
+        private int GetVitalDifference(int vitalIndex)
+        {
+            var slot = mItem.EquipmentSlot;
+            if (Globals.Me.MyEquipment[slot] != -1)
+            {
+                var equippedItem = Globals.Me.Inventory[Globals.Me.MyEquipment[slot]].Base;
+
+                if (equippedItem != null)
+                {
+                    return mItem.VitalsGiven[vitalIndex] - equippedItem.VitalsGiven[vitalIndex];
+                }
+                else
+                {
+                    return mItem.VitalsGiven[vitalIndex];
+                }
+            }
+            else
+            {
+                return mItem.VitalsGiven[vitalIndex];
+            }
+        }
+
+        private int GetVitalRegenDifference(int vitalIndex)
+        {
+            var slot = mItem.EquipmentSlot;
+            if (Globals.Me.MyEquipment[slot] != -1)
+            {
+                var equippedItem = Globals.Me.Inventory[Globals.Me.MyEquipment[slot]].Base;
+
+                if (equippedItem != null)
+                {
+                    return mItem.VitalsRegen[vitalIndex] - equippedItem.VitalsRegen[vitalIndex];
+                }
+                else
+                {
+                    return mItem.VitalsRegen[vitalIndex];
+                }
+            }
+            else
+            {
+                return mItem.VitalsRegen[vitalIndex];
+            }
+        }
+
+        private int GetPercentageVitalDifference(int vitalIndex)
+        {
+            var slot = mItem.EquipmentSlot;
+            if (Globals.Me.MyEquipment[slot] != -1)
+            {
+                var equippedItem = Globals.Me.Inventory[Globals.Me.MyEquipment[slot]].Base;
+
+                if (equippedItem != null)
+                {
+                    return mItem.PercentageVitalsGiven[vitalIndex] - equippedItem.PercentageVitalsGiven[vitalIndex];
+                }
+                else
+                {
+                    return mItem.PercentageVitalsGiven[vitalIndex];
+                }
+            }
+            else
+            {
+                return mItem.PercentageVitalsGiven[vitalIndex];
+            }
+        }
+
+        private (int stat, int percent) GetVitalPercentageAndFlatDifference(int statIndex)
+        {
+            var slot = mItem.EquipmentSlot;
+
+            if (Globals.Me.MyEquipment[slot] != -1)
+            {
+                var equippedItem = Globals.Me.Inventory[Globals.Me.MyEquipment[slot]].Base;
+
+                if (equippedItem != null)
+                {
+                    var statDiff = mItem.VitalsGiven[statIndex] - equippedItem.VitalsGiven[statIndex];
+                    var percentDiff = mItem.PercentageVitalsGiven[statIndex] - equippedItem.PercentageVitalsGiven[statIndex];
+                    return (statDiff, percentDiff);
+                }
+                else
+                {
+                    return (mItem.VitalsGiven[statIndex], mItem.PercentageVitalsGiven[statIndex]);
+                }
+            }
+            else
+            {
+                return (mItem.VitalsGiven[statIndex], mItem.PercentageVitalsGiven[statIndex]);
+            }
+        }
+
+        private int GetBonusEffectDifference()
+        {
+            var slot = mItem.EquipmentSlot;
+            if (Globals.Me.MyEquipment[slot] != -1)
+            {
+                var equippedItem = Globals.Me.Inventory[Globals.Me.MyEquipment[slot]].Base;
+
+                if (equippedItem != null && equippedItem.Effect.Type == mItem.Effect.Type)
+                {
+                    return mItem.Effect.Percentage - equippedItem.Effect.Percentage;
+                }
+                else
+                {
+                    return mItem.Effect.Percentage;
+                }
+            }
+            else
+            {
+                return mItem.Effect.Percentage;
+            }
+        }
+
         protected void SetupEquipmentInfo()
         {
             // Add a divider.
@@ -209,7 +528,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             if (mItem.EquipmentSlot == Options.WeaponIndex)
             {
                 // Base Damage:
-                rows.AddKeyValueRow(Strings.ItemDescription.BaseDamage, mItem.Damage.ToString());
+                DisplayKeyValueRowWithDifference(GetBaseDamageDifference(), Strings.ItemDescription.BaseDamage, mItem.Damage.ToString(), rows);
 
                 // Damage Type:
                 Strings.ItemDescription.DamageTypes.TryGetValue(mItem.DamageType, out var damageType);
@@ -219,14 +538,14 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 {
                     Strings.ItemDescription.Stats.TryGetValue(mItem.ScalingStat, out var stat);
                     rows.AddKeyValueRow(Strings.ItemDescription.ScalingStat, stat);
-                    rows.AddKeyValueRow(Strings.ItemDescription.ScalingPercentage, Strings.ItemDescription.Percentage.ToString(mItem.Scaling));
+                    DisplayKeyValueRowWithDifference(GetScalingDifference(), Strings.ItemDescription.ScalingPercentage, Strings.ItemDescription.Percentage.ToString(mItem.Scaling), rows, "%");
                 }
 
                 // Crit Chance
                 if (mItem.CritChance > 0)
                 {
-                    rows.AddKeyValueRow(Strings.ItemDescription.CritChance, Strings.ItemDescription.Percentage.ToString(mItem.CritChance));
-                    rows.AddKeyValueRow(Strings.ItemDescription.CritMultiplier, Strings.ItemDescription.Multiplier.ToString(mItem.CritMultiplier));
+                    DisplayKeyValueRowWithDifference(GetCritChanceDifference(), Strings.ItemDescription.CritChance, Strings.ItemDescription.Percentage.ToString(mItem.CritChance), rows, "%");
+                    DisplayKeyValueRowWithDifference(GetCritMultiplierDifference(), Strings.ItemDescription.CritMultiplier, Strings.ItemDescription.Multiplier.ToString(mItem.CritMultiplier), rows);
                 }
 
                 // Attack Speed
@@ -264,12 +583,12 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 else if (mItem.AttackSpeedModifier == 1)
                 {
                     // Static, so this weapon's attack speed.
-                    rows.AddKeyValueRow(Strings.ItemDescription.AttackSpeed, Strings.ItemDescription.Seconds.ToString(mItem.AttackSpeedValue / 1000f));
+                    DisplayKeyValueRowWithDifference(GetAttackSpeedDifference(), Strings.ItemDescription.AttackSpeed, Strings.ItemDescription.Seconds.ToString(mItem.AttackSpeedValue / 1000f), rows, "ms");
                 }
                 else if (mItem.AttackSpeedModifier == 2)
                 {
                     // Percentage based.
-                    rows.AddKeyValueRow(Strings.ItemDescription.AttackSpeed, Strings.ItemDescription.Percentage.ToString(mItem.AttackSpeedValue));
+                    DisplayKeyValueRowWithDifference(GetAttackSpeedDifference(), Strings.ItemDescription.AttackSpeed, Strings.ItemDescription.Percentage.ToString(mItem.AttackSpeedValue), rows, "%");
                 }
             }
 
@@ -278,15 +597,22 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             {
                 if (mItem.VitalsGiven[i] != 0 && mItem.PercentageVitalsGiven[i] != 0)
                 {
-                    rows.AddKeyValueRow(Strings.ItemDescription.Vitals[i], Strings.ItemDescription.RegularAndPercentage.ToString(mItem.VitalsGiven[i], mItem.PercentageVitalsGiven[i]));
+                    var (vitalDiff, percentDiff) = GetVitalPercentageAndFlatDifference(i);
+                    DisplayKeyValueRowWithDifferenceAndPercent(vitalDiff, percentDiff, Strings.ItemDescription.Vitals[i], Strings.ItemDescription.RegularAndPercentage.ToString(mItem.VitalsGiven[i], mItem.PercentageVitalsGiven[i]), rows);
                 }
                 else if (mItem.VitalsGiven[i] != 0)
                 {
-                    rows.AddKeyValueRow(Strings.ItemDescription.Vitals[i], mItem.VitalsGiven[i].ToString());
+                    DisplayKeyValueRowWithDifference(GetVitalDifference(i), Strings.ItemDescription.Vitals[i], mItem.VitalsGiven[i].ToString(), rows);
                 }
                 else if (mItem.PercentageVitalsGiven[i] != 0)
                 {
-                    rows.AddKeyValueRow(Strings.ItemDescription.Vitals[i], Strings.ItemDescription.Percentage.ToString(mItem.PercentageVitalsGiven[i]));
+                    DisplayKeyValueRowWithDifference(GetPercentageVitalDifference(i), Strings.ItemDescription.Vitals[i], Strings.ItemDescription.Percentage.ToString(mItem.PercentageVitalsGiven[i]), rows, "%");
+                }
+
+                // Regen
+                if (mItem.VitalsRegen[i] != 0)
+                {
+                    DisplayKeyValueRowWithDifference(GetVitalRegenDifference(i), Strings.ItemDescription.VitalRegens[i], mItem.VitalsRegen[i].ToString(), rows, "/s");
                 }
             }
 
@@ -298,15 +624,16 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                     var flatStat = mItem.StatsGiven[i] + mStatBuffs[i];
                     if (flatStat != 0 && mItem.PercentageStatsGiven[i] != 0)
                     {
-                        rows.AddKeyValueRow(Strings.ItemDescription.StatCounts[i], Strings.ItemDescription.RegularAndPercentage.ToString(flatStat, mItem.PercentageStatsGiven[i]));
+                        var (flatStatDiff, percentStatDiff) = GetStatPercentageAndFlatDifference(i);
+                        DisplayKeyValueRowWithDifferenceAndPercent(flatStatDiff, percentStatDiff, Strings.ItemDescription.StatCounts[i], Strings.ItemDescription.RegularAndPercentage.ToString(flatStat, mItem.PercentageStatsGiven[i]), rows);
                     }
                     else if (flatStat != 0)
                     {
-                        rows.AddKeyValueRow(Strings.ItemDescription.StatCounts[i], flatStat.ToString());
+                        DisplayKeyValueRowWithDifference(GetStatDifference(i), Strings.ItemDescription.StatCounts[i], flatStat.ToString(), rows);
                     }
                     else if (mItem.PercentageStatsGiven[i] != 0)
                     {
-                        rows.AddKeyValueRow(Strings.ItemDescription.StatCounts[i], Strings.ItemDescription.Percentage.ToString(mItem.PercentageStatsGiven[i]));
+                        DisplayKeyValueRowWithDifference(GetStatPercentageDifference(i), Strings.ItemDescription.StatCounts[i], Strings.ItemDescription.Percentage.ToString(mItem.PercentageStatsGiven[i]), rows, "%");
                     }
                 }
             }
@@ -314,11 +641,90 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             // Bonus Effect
             if (mItem.Effect.Type != EffectType.None && mItem.Effect.Percentage != 0)
             {
-                rows.AddKeyValueRow(Strings.ItemDescription.BonusEffects[(int) mItem.Effect.Type], Strings.ItemDescription.Percentage.ToString(mItem.Effect.Percentage));
+                DisplayKeyValueRowWithDifference(GetBonusEffectDifference(), Strings.ItemDescription.BonusEffects[(int)mItem.Effect.Type], Strings.ItemDescription.Percentage.ToString(mItem.Effect.Percentage), rows);
             }
 
             // Resize the container.
             rows.SizeToChildren(true, true);
+        }
+
+        private void DisplayKeyValueRowWithDifference(int statDiff, string keyString, string valueString, Components.RowContainerComponent rows, string unit = "")
+        {
+            if (statDiff != 0)
+            {
+                if (Math.Sign(statDiff) > 0)
+                {
+                    rows.AddKeyValueRow(keyString, $"{valueString} (+{statDiff.ToString()}{unit})", CustomColors.ItemDesc.Muted, CustomColors.ItemDesc.Better);
+                }
+                else
+                {
+                    rows.AddKeyValueRow(keyString, $"{valueString} ({statDiff.ToString()}{unit})", CustomColors.ItemDesc.Muted, CustomColors.ItemDesc.Worse);
+                }
+            }
+            else
+            {
+                rows.AddKeyValueRow(keyString, $"{valueString}");
+            }
+        }
+
+        private void DisplayKeyValueRowWithDifferenceAndPercent(int statDiff, int percentDiff, string keyString, string valueString, Components.RowContainerComponent rows)
+        {
+            string statString;
+            string percentString;
+
+            if (Math.Sign(percentDiff) > 0)
+            {
+                percentString = $"+{percentDiff}%";
+            }
+            else if (Math.Sign(percentDiff) == 0)
+            {
+                percentString = $"";
+            }
+            else
+            {
+                percentString = $"-{percentDiff}%";
+            }
+
+            if (Math.Sign(statDiff) > 0)
+            {
+                statString = $"+{statDiff}%";
+            }
+            else if (Math.Sign(statDiff) == 0)
+            {
+                statString = $"";
+            }
+            else
+            {
+                statString = $"-{statDiff}%";
+            }
+
+            if (statDiff != 0)
+            {
+                rows.AddKeyValueRow(keyString, $"{valueString} ({statString}, {percentString})");
+            }
+            else
+            {
+                rows.AddKeyValueRow(keyString, $"{valueString}");
+            }
+        }
+
+        private void DisplayKeyValueRowWithDifference(double statDiff, string keyString, string valueString, Components.RowContainerComponent rows, string unit = "")
+        {
+            if (statDiff != 0)
+            {
+                if (Math.Sign(statDiff) > 0)
+                {
+                    rows.AddKeyValueRow(keyString, $"{valueString} (+{statDiff.ToString()}{unit})");
+                }
+                else
+                {
+                    rows.AddKeyValueRow(keyString, $"{valueString} ({statDiff.ToString()}{unit})");
+                }
+            }
+            else
+            {
+                rows.AddKeyValueRow(keyString, $"{valueString}");
+            }
         }
 
         protected void SetupConsumableInfo()
@@ -468,7 +874,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
 
                 foreach (var item in data)
                 {
-                    rows.AddKeyValueRow(item.Item1, item.Item2);
+                    rows.AddKeyValueRow(item.Item1, item.Item2, CustomColors.ItemDesc.Notice, Color.White);
                 }
 
                 // Resize and position the container.
