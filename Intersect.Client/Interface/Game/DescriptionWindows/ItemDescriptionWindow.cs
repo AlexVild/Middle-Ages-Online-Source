@@ -48,6 +48,10 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             {
                 mSpellDescWindow = new SpellDescriptionWindow(mItem.SpellId, x, mContainer.Bottom);
             }
+            if (mItem.ItemType == ItemTypes.Equipment && mItem.EquipmentSlot == Options.PrayerIndex)
+            {
+                mSpellDescWindow = new SpellDescriptionWindow(mItem.ComboSpellId, x, mContainer.Bottom);
+            }
         }
 
         protected void SetupDescriptionWindow()
