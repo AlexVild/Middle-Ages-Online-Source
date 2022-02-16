@@ -214,7 +214,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             {
                 var equippedItem = Globals.Me.Inventory[Globals.Me.MyEquipment[slot]];
 
-                if (equippedItem != null)
+                if (equippedItem != null && equippedItem.Base != null)
                 {
                     var equippedStat = equippedItem.Base.StatsGiven[statIndex];
                     if (equippedItem.StatBuffs != null)
