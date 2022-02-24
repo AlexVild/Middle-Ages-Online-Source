@@ -2454,10 +2454,10 @@ namespace Intersect.Server.Networking
                             );
                         }
                     }
-
-                    player.FriendRequester = null;
                 }
             }
+
+            player.FriendRequester = null;
         }
 
         //SelectCharacterPacket

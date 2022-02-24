@@ -3993,7 +3993,13 @@ namespace Intersect.Server.Entities
         //Business
         public bool IsBusy()
         {
-            return InShop != null || InBank || CraftingTableId != Guid.Empty || Trading.Counterparty != null;
+            return InShop != null ||
+                InBank ||
+                CraftingTableId != Guid.Empty ||
+                Trading.Counterparty != null ||
+                Trading.Requester != null ||
+                PartyRequester != null ||
+                FriendRequester != null;
         }
 
         //Bank
@@ -4378,7 +4384,7 @@ namespace Intersect.Server.Entities
 
             if (!FriendRequests.ContainsKey(fromPlayer) || !(FriendRequests[fromPlayer] > Globals.Timing.Milliseconds))
             {
-                if (Trading.Requester == null && PartyRequester == null && FriendRequester == null)
+                if (!IsBusy())
                 {
                     FriendRequester = fromPlayer;
                     PacketSender.SendFriendRequest(this, fromPlayer);
@@ -4432,7 +4438,7 @@ namespace Intersect.Server.Entities
             }
             else
             {
-                if (Trading.Requester == null && PartyRequester == null && FriendRequester == null)
+                if (!IsBusy())
                 {
                     Trading.Requester = fromPlayer;
                     PacketSender.SendTradeRequest(this, fromPlayer);
@@ -4719,7 +4725,7 @@ namespace Intersect.Server.Entities
             }
             else
             {
-                if (Trading.Requester == null && PartyRequester == null && FriendRequester == null)
+                if (!IsBusy())
                 {
                     PartyRequester = fromPlayer;
                     PacketSender.SendPartyInvite(this, fromPlayer);
