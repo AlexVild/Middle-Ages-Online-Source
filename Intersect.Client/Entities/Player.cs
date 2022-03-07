@@ -843,9 +843,12 @@ namespace Intersect.Client.Entities
         //Spell Processing
         public void SwapSpells(int spell1, int spell2)
         {
-            var tmpInstance = Spells[spell2].Clone();
-            Spells[spell2] = Spells[spell1].Clone();
-            Spells[spell1] = tmpInstance.Clone();
+            if (CastTime == 0)
+            {
+                var tmpInstance = Spells[spell2].Clone();
+                Spells[spell2] = Spells[spell1].Clone();
+                Spells[spell1] = tmpInstance.Clone();
+            }
         }
 
         public void TryForgetSpell(int index)

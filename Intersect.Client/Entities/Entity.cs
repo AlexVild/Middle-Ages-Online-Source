@@ -20,6 +20,7 @@ using Intersect.GameObjects.Maps;
 using Intersect.Logging;
 using Intersect.Network.Packets.Server;
 using Intersect.Utilities;
+using static Intersect.Client.Framework.File_Management.GameContentManager;
 
 namespace Intersect.Client.Entities
 {
@@ -1790,7 +1791,7 @@ namespace Intersect.Client.Entities
                 return;
             }
 
-            var targetTex = Globals.ContentManager.GetTexture(Framework.Content.TextureType.Misc, "target.png");
+            var targetTex = Globals.ContentManager.GetTexture(TextureType.Misc, "target.png");
             if (targetTex != null)
             {
                 var srcRectangle = new FloatRect(

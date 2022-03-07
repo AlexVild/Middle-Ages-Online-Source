@@ -4967,11 +4967,18 @@ namespace Intersect.Server.Entities
 
         public void SwapSpells(int spell1, int spell2)
         {
-            var tmpInstance = Spells[spell2].Clone();
-            Spells[spell2].Set(Spells[spell1]);
-            Spells[spell1].Set(tmpInstance);
-            PacketSender.SendPlayerSpellUpdate(this, spell1);
-            PacketSender.SendPlayerSpellUpdate(this, spell2);
+            if (CastTime != 0)
+            {
+                PacketSender.SendChatMsg(this, "You can't swap spells while casting.", ChatMessageType.Error, CustomColors.Alerts.Error);
+            }
+            else
+            {
+                var tmpInstance = Spells[spell2].Clone();
+                Spells[spell2].Set(Spells[spell1]);
+                Spells[spell1].Set(tmpInstance);
+                PacketSender.SendPlayerSpellUpdate(this, spell1);
+                PacketSender.SendPlayerSpellUpdate(this, spell2);
+            }
         }
 
         public void ForgetSpell(int spellSlot)
