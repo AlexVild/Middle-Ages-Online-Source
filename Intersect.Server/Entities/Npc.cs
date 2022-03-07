@@ -1568,7 +1568,8 @@ namespace Intersect.Server.Entities
             bool mapSave = false,
             bool fromWarpEvent = false,
             MapInstanceType mapInstanceType = MapInstanceType.NoChange,
-            bool fromLogin = false
+            bool fromLogin = false,
+            bool forceInstanceChange = false
         )
         {
             if (!MapController.TryGetInstanceFromMap(newMapId, MapInstanceId, out var map))

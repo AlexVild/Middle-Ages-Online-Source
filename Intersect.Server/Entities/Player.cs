@@ -1861,6 +1861,22 @@ namespace Intersect.Server.Entities
             Warp(newMapId, newX, newY, (byte) Directions.Up, adminWarp, 0, false);
         }
 
+        public void ForceInstanceChangeWarp(Guid newMapId, float newX, float newY, Guid newMapInstanceId, MapInstanceType instanceType, bool adminWarp = false)
+        {
+            PreviousMapInstanceId = MapInstanceId;
+            PreviousMapInstanceType = InstanceType;
+
+            MapInstanceId = newMapInstanceId;
+            InstanceType = instanceType;
+            EndCombo();
+            // If we've warped the player out of their overworld, keep a reference to their overworld just in case.
+            if (PreviousMapInstanceType == MapInstanceType.Overworld)
+            {
+                UpdateLastOverworldLocation(MapId, X, Y);
+            }
+            Warp(newMapId, newX, newY, (byte)Directions.Up, adminWarp, 0, false, false, MapInstanceType.NoChange, false, true);
+        }
+
         public override void Warp(
             Guid newMapId,
             float newX,
@@ -1871,11 +1887,12 @@ namespace Intersect.Server.Entities
             bool mapSave = false,
             bool fromWarpEvent = false,
             MapInstanceType mapInstanceType = MapInstanceType.NoChange,
-            bool fromLogin = false
+            bool fromLogin = false,
+            bool forceInstanceChange = false
         )
         {
-            // First, deny the warp entirely if we CAN'T, for some reason, warp to the requested instance type.
-            if (!CanChangeToInstanceType(mapInstanceType, fromLogin, newMapId))
+            // First, deny the warp entirely if we CAN'T, for some reason, warp to the requested instance type. ONly do this if we're not forcing a change
+            if (!forceInstanceChange && !CanChangeToInstanceType(mapInstanceType, fromLogin, newMapId))
             {
                 return;
             }
@@ -1883,6 +1900,7 @@ namespace Intersect.Server.Entities
             {
                 PacketSender.SendFadePacket(Client, false);
                 PacketSender.SendUpdateFutureWarpPacket(Client, newMapId, newX, newY, newDir, mapInstanceType);
+                return;
             } else
             {
                 // If we are leaving the overworld to go to a new instance, save the overworld location
@@ -1914,7 +1932,7 @@ namespace Intersect.Server.Entities
 
                 #region Map instance traversal
                 // Set up player properties if we have changed instance types
-                bool onNewInstance = ProcessMapInstanceChange(mapInstanceType, fromLogin);
+                bool onNewInstance = forceInstanceChange || ProcessMapInstanceChange(mapInstanceType, fromLogin);
 
                 // Ensure there exists a map instance with the Player's InstanceId. A player is the sole entity that can create new map instances
                 MapInstance newMapInstance;
@@ -1941,7 +1959,7 @@ namespace Intersect.Server.Entities
                 }
 
                 // If we've changed instances, send data to instance entities/entities to player
-                if (onNewInstance)
+                if (onNewInstance || forceInstanceChange)
                 {
                     SendToNewMapInstance(newMap);
                     // Clear all events - get fresh ones from the new instance to re-fresh event locations
