@@ -1891,6 +1891,7 @@ namespace Intersect.Server.Entities
             bool forceInstanceChange = false
         )
         {
+            #region shortcircuit exits
             // First, deny the warp entirely if we CAN'T, for some reason, warp to the requested instance type. ONly do this if we're not forcing a change
             if (!forceInstanceChange && !CanChangeToInstanceType(mapInstanceType, fromLogin, newMapId))
             {
@@ -1901,127 +1902,127 @@ namespace Intersect.Server.Entities
                 PacketSender.SendFadePacket(Client, false);
                 PacketSender.SendUpdateFutureWarpPacket(Client, newMapId, newX, newY, newDir, mapInstanceType);
                 return;
-            } else
+            }
+            #endregion
+
+            // If we are leaving the overworld to go to a new instance, save the overworld location
+            if (!fromLogin && InstanceType == MapInstanceType.Overworld && mapInstanceType != MapInstanceType.Overworld && mapInstanceType != MapInstanceType.NoChange)
             {
-                // If we are leaving the overworld to go to a new instance, save the overworld location
-                if (!fromLogin && InstanceType == MapInstanceType.Overworld && mapInstanceType != MapInstanceType.Overworld && mapInstanceType != MapInstanceType.NoChange)
+                UpdateLastOverworldLocation(MapId, X, Y);
+            }
+            // If we are moving TO a new shared instance, update the shared respawn point (if enabled)
+            if (!fromLogin && mapInstanceType == MapInstanceType.Shared && Options.SharedInstanceRespawnInInstance && MapController.Get(newMapId) != null)
+            {
+                UpdateSharedInstanceRespawnLocation(newMapId, (int)newX, (int)newY, (int)newDir);
+            }
+
+            // Make sure we're heading to a map that exists - otherwise, to spawn you go
+            var newMap = MapController.Get(newMapId);
+            if (newMap == null)
+            {
+                WarpToSpawn();
+
+                return;
+            }
+
+            X = (int)newX;
+            Y = (int)newY;
+            Z = zOverride;
+            Dir = newDir;
+
+            var newSurroundingMaps = newMap.GetSurroundingMapIds(true);
+
+            #region Map instance traversal
+            // Set up player properties if we have changed instance types
+            bool onNewInstance = forceInstanceChange || ProcessMapInstanceChange(mapInstanceType, fromLogin);
+
+            // Ensure there exists a map instance with the Player's InstanceId. A player is the sole entity that can create new map instances
+            MapInstance newMapInstance;
+            lock (EntityLock)
+            {
+                if (!newMap.TryGetInstance(MapInstanceId, out newMapInstance))
                 {
-                    UpdateLastOverworldLocation(MapId, X, Y);
-                }
-                // If we are moving TO a new shared instance, update the shared respawn point (if enabled)
-                if (!fromLogin && mapInstanceType == MapInstanceType.Shared && Options.SharedInstanceRespawnInInstance && MapController.Get(newMapId) != null)
-                {
-                    UpdateSharedInstanceRespawnLocation(newMapId, (int)newX, (int)newY, (int)newDir);
-                }
-
-                // Make sure we're heading to a map that exists - otherwise, to spawn you go
-                var newMap = MapController.Get(newMapId);
-                if (newMap == null)
-                {
-                    WarpToSpawn();
-
-                    return;
-                }
-
-                X = (int)newX;
-                Y = (int)newY;
-                Z = zOverride;
-                Dir = newDir;
-
-                var newSurroundingMaps = newMap.GetSurroundingMapIds(true);
-
-                #region Map instance traversal
-                // Set up player properties if we have changed instance types
-                bool onNewInstance = forceInstanceChange || ProcessMapInstanceChange(mapInstanceType, fromLogin);
-
-                // Ensure there exists a map instance with the Player's InstanceId. A player is the sole entity that can create new map instances
-                MapInstance newMapInstance;
-                lock (EntityLock)
-                {
-                    if (!newMap.TryGetInstance(MapInstanceId, out newMapInstance))
+                    // Create a new instance for the map we're on
+                    newMap.TryCreateInstance(MapInstanceId, out newMapInstance);
+                    foreach (var surrMap in newSurroundingMaps)
                     {
-                        // Create a new instance for the map we're on
-                        newMap.TryCreateInstance(MapInstanceId, out newMapInstance);
-                        foreach (var surrMap in newSurroundingMaps)
-                        {
-                            MapController.Get(surrMap).TryCreateInstance(MapInstanceId, out var surrMapInstance);
-                        }
+                        MapController.Get(surrMap).TryCreateInstance(MapInstanceId, out var surrMapInstance);
                     }
                 }
+            }
 
-                // An instance of the map MUST exist. Otherwise, head to spawn.
-                if (newMapInstance == null)
+            // An instance of the map MUST exist. Otherwise, head to spawn.
+            if (newMapInstance == null)
+            {
+                Log.Error($"Player {Name} requested a new map Instance with ID {MapInstanceId} and failed to get it.");
+                WarpToSpawn();
+
+                return;
+            }
+
+            // If we've changed instances, send data to instance entities/entities to player
+            if (onNewInstance || forceInstanceChange)
+            {
+                SendToNewMapInstance(newMap);
+                // Clear all events - get fresh ones from the new instance to re-fresh event locations
+                foreach (var evt in EventLookup)
                 {
-                    Log.Error($"Player {Name} requested a new map Instance with ID {MapInstanceId} and failed to get it.");
-                    WarpToSpawn();
-
-                    return;
+                    RemoveEvent(evt.Value.Id, false);
                 }
-
-                // If we've changed instances, send data to instance entities/entities to player
-                if (onNewInstance || forceInstanceChange)
+            } else
+            {
+                // Clear events that are no longer on a surrounding map.
+                foreach (var evt in EventLookup)
                 {
-                    SendToNewMapInstance(newMap);
-                    // Clear all events - get fresh ones from the new instance to re-fresh event locations
-                    foreach (var evt in EventLookup)
+                    // Remove events that aren't relevant (on a surrounding map) anymore
+                    if (evt.Value.MapId != Guid.Empty && (!newSurroundingMaps.Contains(evt.Value.MapId) || mapSave))
                     {
                         RemoveEvent(evt.Value.Id, false);
                     }
+                }
+            }
+            #endregion
+
+            if (newMapId != MapId || mSentMap == false) // Player warped to a new map?
+            {
+                // Remove the entity from the old map instance
+                var oldMap = MapController.Get(MapId);
+                if (oldMap != null && oldMap.TryGetInstance(PreviousMapInstanceId, out var oldMapInstance))
+                {
+                    oldMapInstance.RemoveEntity(this);
+                }
+
+                PacketSender.SendEntityLeave(this); // We simply changed maps - leave the old one
+                MapId = newMapId;
+                newMapInstance.PlayerEnteredMap(this);
+                PacketSender.SendEntityPositionToAll(this);
+
+                //If map grid changed then send the new map grid
+                if (!adminWarp && (oldMap == null || !oldMap.SurroundingMapIds.Contains(newMapId)) || fromLogin)
+                {
+                    PacketSender.SendMapGrid(this.Client, newMap.MapGrid, true);
+                }
+
+                mSentMap = true;
+                    
+                StartCommonEventsWithTrigger(CommonEventTrigger.MapChanged);
+            }
+            else // Player moved on same map?
+            {
+                if (onNewInstance)
+                {
+                    // But instance changed? Add player to the new instance (will also send stats thru SendEntityDataToProximity)
+                    newMapInstance.PlayerEnteredMap(this);
                 } else
                 {
-                    // Clear events that are no longer on a surrounding map.
-                    foreach (var evt in EventLookup)
-                    {
-                        // Remove events that aren't relevant (on a surrounding map) anymore
-                        if (evt.Value.MapId != Guid.Empty && (!newSurroundingMaps.Contains(evt.Value.MapId) || mapSave))
-                        {
-                            RemoveEvent(evt.Value.Id, false);
-                        }
-                    }
+                    PacketSender.SendEntityStats(this);
                 }
-                #endregion
+                PacketSender.SendEntityPositionToAll(this);
+            }
 
-                if (newMapId != MapId || mSentMap == false) // Player warped to a new map?
-                {
-                    // Remove the entity from the old map instance
-                    var oldMap = MapController.Get(MapId);
-                    if (oldMap != null && oldMap.TryGetInstance(PreviousMapInstanceId, out var oldMapInstance))
-                    {
-                        oldMapInstance.RemoveEntity(this);
-                    }
-
-                    PacketSender.SendEntityLeave(this); // We simply changed maps - leave the old one
-                    MapId = newMapId;
-                    newMapInstance.PlayerEnteredMap(this);
-                    PacketSender.SendEntityPositionToAll(this);
-
-                    //If map grid changed then send the new map grid
-                    if (!adminWarp && (oldMap == null || !oldMap.SurroundingMapIds.Contains(newMapId)) || fromLogin)
-                    {
-                        PacketSender.SendMapGrid(this.Client, newMap.MapGrid, true);
-                    }
-
-                    mSentMap = true;
-                    
-                    StartCommonEventsWithTrigger(CommonEventTrigger.MapChanged);
-                }
-                else // Player moved on same map?
-                {
-                    if (onNewInstance)
-                    {
-                        // But instance changed? Add player to the new instance (will also send stats thru SendEntityDataToProximity)
-                        newMapInstance.PlayerEnteredMap(this);
-                    } else
-                    {
-                        PacketSender.SendEntityStats(this);
-                    }
-                    PacketSender.SendEntityPositionToAll(this);
-                }
-
-                if (Options.DebugAllowMapFades)
-                {
-                    PacketSender.SendFadePacket(Client, true); // fade in by default - either the player was faded out or was not
-                }
+            if (Options.DebugAllowMapFades)
+            {
+                PacketSender.SendFadePacket(Client, true); // fade in by default - either the player was faded out or was not
             }
         }
 
