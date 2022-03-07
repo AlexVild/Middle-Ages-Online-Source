@@ -529,6 +529,11 @@ namespace Intersect.Client.Networking
                         new Color(packet.Color.A, packet.Color.R, packet.Color.G, packet.Color.B)
                     )
                 );
+
+                if (!string.IsNullOrEmpty(packet.MapSound))
+                {
+                    Audio.AddMapSound(packet.MapSound, packet.X, packet.Y, map.Id, false, 0, 10);
+                }
             }
         }
 

@@ -11,13 +11,14 @@ namespace Intersect.Network.Packets.Server
         {
         }
 
-        public ActionMsgPacket(Guid mapId, int x, int y, string message, Color color)
+        public ActionMsgPacket(Guid mapId, int x, int y, string message, Color color, string mapSound)
         {
             MapId = mapId;
             X = x;
             Y = y;
             Message = message;
             Color = color;
+            MapSound = mapSound;
         }
 
         [Key(0)]
@@ -35,6 +36,8 @@ namespace Intersect.Network.Packets.Server
         [Key(4)]
         public Color Color { get; set; }
 
+        [Key(5)]
+        public string MapSound { get; set; }
     }
 
 }

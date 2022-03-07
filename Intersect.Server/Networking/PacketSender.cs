@@ -1838,7 +1838,7 @@ namespace Intersect.Server.Networking
         }
 
         //ActionMsgPacket
-        public static void SendActionMsg(Entity en, string message, Color color)
+        public static void SendActionMsg(Entity en, string message, Color color, string mapSound = "")
         {
             if (en == null || en is Resource && Options.HideResourceHealthBars)
             {
@@ -1849,11 +1849,11 @@ namespace Intersect.Server.Networking
             {
                 if (Options.Instance.Packets.BatchActionMessagePackets)
                 {
-                    mapInstance.AddBatchedActionMessage(new ActionMsgPacket(en.MapId, en.X, en.Y, message, color));
+                    mapInstance.AddBatchedActionMessage(new ActionMsgPacket(en.MapId, en.X, en.Y, message, color, mapSound));
                 }
                 else
                 {
-                    SendDataToProximityOnMapInstance(en.MapId, en.MapInstanceId, new ActionMsgPacket(en.MapId, en.X, en.Y, message, color));
+                    SendDataToProximityOnMapInstance(en.MapId, en.MapInstanceId, new ActionMsgPacket(en.MapId, en.X, en.Y, message, color, mapSound));
                 }
             }
         }

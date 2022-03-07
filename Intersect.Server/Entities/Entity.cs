@@ -2132,11 +2132,11 @@ namespace Intersect.Server.Entities
             {
                 if (wasBlocked) 
                 {
-                    SendBlockedAttackMessage(this, enemy);
+                    SendBlockedAttackMessage(enemy);
                 }
                 else if (attackMissed)
                 {
-                    SendMissedAttackMessage(this, enemy, damageType);
+                    SendMissedAttackMessage(enemy, damageType);
                 }
             }
             
@@ -2147,38 +2147,26 @@ namespace Intersect.Server.Entities
             return failures;
         }
 
-        private void SendMissedAttackMessage(Entity attacker, Entity defender, DamageType damageType)
+        private void SendMissedAttackMessage(Entity en, DamageType damageType)
         {
-            if (defender is Player def)
-            {
-                PacketSender.SendPlaySound(def, Options.MissSound);
-            }
-            if (attacker is Player att)
-            {
-                PacketSender.SendPlaySound(att, Options.MissSound);
-            }
-            switch(damageType)
+            if (en == null) return;
+
+            switch (damageType)
             {
                 case DamageType.Magic:
-                    PacketSender.SendActionMsg(defender, Strings.Combat.resist, CustomColors.Combat.Missed);
+                    PacketSender.SendActionMsg(en, Strings.Combat.resist, CustomColors.Combat.Missed, Options.MissSound);
                     break;
                 default:
-                    PacketSender.SendActionMsg(defender, Strings.Combat.miss, CustomColors.Combat.Missed);
+                    PacketSender.SendActionMsg(en, Strings.Combat.miss, CustomColors.Combat.Missed, Options.MissSound);
                     break;
             }
         }
 
-        private void SendBlockedAttackMessage(Entity attacker, Entity defender)
+        private void SendBlockedAttackMessage(Entity en)
         {
-            if (defender is Player def)
-            {
-                PacketSender.SendPlaySound(def, Options.BlockSound);
-            }
-            if (attacker is Player att)
-            {
-                PacketSender.SendPlaySound(att, Options.BlockSound);
-            }
-            PacketSender.SendActionMsg(defender, Strings.Combat.blocked, CustomColors.Combat.Blocked);
+            if (en == null) return;
+
+            PacketSender.SendActionMsg(en, Strings.Combat.blocked, CustomColors.Combat.Blocked, Options.BlockSound);
         }
 
         void CheckForOnhitAttack(Entity enemy, bool isAutoAttack)
@@ -2345,6 +2333,11 @@ namespace Intersect.Server.Entities
 
             if (!CanCastSpell(spellBase, CastTarget))
             {
+                if (this is Player)
+                {
+                    PacketSender.SendChatMsg((Player)this, "You could not cast the spell - the target may have moved out of range.", ChatMessageType.Spells, CustomColors.General.GeneralWarning);
+                    SendMissedAttackMessage(CastTarget, (DamageType) spellBase.Combat.DamageType);
+                }
                 return;
             }
 
@@ -2542,6 +2535,9 @@ namespace Intersect.Server.Entities
             var spellBase = SpellBase.Get(spellId);
             if (spellBase != null)
             {
+                int entitiesHit = 0;
+                bool miss;
+                bool blocked;
                 var startMap = MapController.Get(startMapId);
                 foreach (var instance in MapController.GetSurroundingMapInstances(startMapId, MapInstanceId, true))
                 {
@@ -2565,11 +2561,20 @@ namespace Intersect.Server.Entities
                                         }
                                     }
 
-                                    TryAttackSpell(entity, spellBase, out bool miss, out bool blocked, (sbyte)Directions.Up, ignoreEvasion); //Handle damage
+                                    TryAttackSpell(entity, spellBase, out miss, out blocked, (sbyte)Directions.Up, ignoreEvasion); //Handle damage
+                                    if (!miss && !blocked) entitiesHit++;
                                 }
                             }
                         }
                     }
+                }
+                if (entitiesHit > 0)
+                {
+                    if (this is Player)
+                    {
+                        PacketSender.SendChatMsg((Player)this, "There weren't any targets in your spell's AoE range.", ChatMessageType.Spells, CustomColors.General.GeneralWarning);
+                    }
+                    SendMissedAttackMessage(this, (DamageType)spellBase.Combat.DamageType);
                 }
             }
         }
