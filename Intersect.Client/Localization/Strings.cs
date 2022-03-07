@@ -1105,11 +1105,15 @@ namespace Intersect.Client.Localization
             public static Dictionary<int, LocalizedString> Rarity = new Dictionary<int, LocalizedString>
             {
                 {0, @"None"},
-                {1, @"Common"},
-                {2, @"Uncommon"},
-                {3, @"Rare"},
-                {4, @"Epic"},
-                {5, @"Legendary"},
+                {1, @"Tier 1"},
+                {2, @"Tier 2"},
+                {3, @"Tier 3"},
+                {4, @"Tier 4"},
+                {5, @"Tier 5"},
+                {6, @"Tier 6"},
+                {7, @"Tier 7"},
+                {8, @"Tier 8"},
+                {9, @"Tier 9"},
             };
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
