@@ -330,6 +330,7 @@ namespace Intersect.Server.Maps
                 {
                     Log.Debug($"Creating new Map Instance {instanceId} for map {Name}");
                     mInstances[instanceId] = new MapInstance(this, instanceId);
+                    mInstances[instanceId].Initialize();
                     newLayer = mInstances[instanceId];
                     return true;
                 }
