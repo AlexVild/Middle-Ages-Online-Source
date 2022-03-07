@@ -1110,6 +1110,12 @@ namespace Intersect.Server.Localization
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]            public readonly LocalizedString beenwarpedto = @"You have been warped to {00}.";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)] public readonly LocalizedString instanceupdate = @"Your instance ID has changed from {00} to {01}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)] public readonly LocalizedString overworldreturnadmin = @"You have returned {00} to the overworld.";
+            
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)] public readonly LocalizedString overworldreturned = @"You have been returned to the overworld.";
+
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]            public readonly LocalizedString changeownpower = @"You cannot alter your own power!";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]            public readonly LocalizedString deadmin = @"{00} has had their administrative powers revoked!";

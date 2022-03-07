@@ -278,6 +278,8 @@ namespace Intersect.Client.Localization
             public static LocalizedString warp2me = @"Warp To Me";
 
             public static LocalizedString warpme2 = @"Warp Me To";
+            
+            public static LocalizedString overworldreturn = @"Leave Instance";
 
         }
 

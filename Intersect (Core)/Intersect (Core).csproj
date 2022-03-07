@@ -199,6 +199,7 @@
     <Compile Include="Admin\Actions\WarpMeToAction.cs" />
     <Compile Include="Admin\Actions\WarpToLocationAction.cs" />
     <Compile Include="Admin\Actions\WarpToMapAction.cs" />
+    <Compile Include="Admin\Actions\ReturnToOverworldAction.cs" />
     <Compile Include="Admin\Actions\WarpToMeAction.cs" />
     <Compile Include="AlphanumComparatorFast.cs" />
     <Compile Include="Collections\NamedInstanceStore.cs" />

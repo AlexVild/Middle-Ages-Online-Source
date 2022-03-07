@@ -309,6 +309,25 @@ namespace Intersect.Server.Admin.Actions
             }
         }
 
+        //ReturnToOverworld
+        public static void ProcessAction(Client client, Player player, ReturnToOverworldAction action)
+        {
+            var target = Player.FindOnline(action.PlayerName);
+            if (target != null)
+            {
+                target.WarpToLastOverworldLocation(false);
+                PacketSender.SendChatMsg(target, Strings.Player.overworldreturned.ToString(target.Name), Enums.ChatMessageType.Notice, player.Name);
+                
+                if (player == null || target.Name == player.Name) return;
+
+                PacketSender.SendChatMsg(player, Strings.Player.overworldreturnadmin.ToString(target.Name), Enums.ChatMessageType.Admin, player.Name);
+            }
+            else
+            {
+                PacketSender.SendChatMsg(player, Strings.Player.offline, Enums.ChatMessageType.Admin);
+            }
+        }
+
     }
 
 }

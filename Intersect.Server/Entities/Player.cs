@@ -1874,6 +1874,10 @@ namespace Intersect.Server.Entities
             {
                 UpdateLastOverworldLocation(MapId, X, Y);
             }
+            if (PreviousMapInstanceId != MapInstanceId)
+            {
+                PacketSender.SendChatMsg(this, Strings.Player.instanceupdate.ToString(PreviousMapInstanceId.ToString(), MapInstanceId.ToString()), ChatMessageType.Admin, CustomColors.Alerts.Info);
+            }
             Warp(newMapId, newX, newY, (byte)Directions.Up, adminWarp, 0, false, false, MapInstanceType.NoChange, false, true);
         }
 
