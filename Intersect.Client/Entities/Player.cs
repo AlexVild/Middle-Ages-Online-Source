@@ -1025,50 +1025,6 @@ namespace Intersect.Client.Entities
                 movex = 1;
             }
 
-            if (!IsMoving && movex == 0 && movey == 0 && !DirKeyPressed)
-            {
-                if (Controls.KeyDown(Control.TurnClockwise))
-                {
-                    DirKeyPressed = true;
-                    switch (Dir)
-                    {
-                        case (byte)Directions.Up:
-                            Dir = (byte)Directions.Right;
-                            break;
-                        case (byte)Directions.Down:
-                            Dir = (byte)Directions.Left;
-                            break;
-                        case (byte)Directions.Left:
-                            Dir = (byte)Directions.Up;
-                            break;
-                        case (byte)Directions.Right:
-                            Dir = (byte)Directions.Down;
-                            break;
-                    }
-                    PacketSender.SendDirection(Dir);
-                }
-                else if (Controls.KeyDown(Control.TurnCounterClockwise))
-                {
-                    DirKeyPressed = true;
-                    switch (Dir)
-                    {
-                        case (byte)Directions.Up:
-                            Dir = (byte)Directions.Left;
-                            break;
-                        case (byte)Directions.Down:
-                            Dir = (byte)Directions.Right;
-                            break;
-                        case (byte)Directions.Left:
-                            Dir = (byte)Directions.Down;
-                            break;
-                        case (byte)Directions.Right:
-                            Dir = (byte)Directions.Up;
-                            break;
-                    }
-                    PacketSender.SendDirection(Dir);
-                }
-            }
-
             Globals.Me.MoveDir = -1;
             if (movex != 0f || movey != 0f)
             {
@@ -2064,6 +2020,49 @@ namespace Intersect.Client.Entities
                             mLastBumpedEvent = blockedBy;
                         }
                     }
+                }
+            }
+            else if (!IsMoving && !DirKeyPressed)
+            {
+                if (Controls.KeyDown(Control.TurnClockwise))
+                {
+                    DirKeyPressed = true;
+                    switch (Dir)
+                    {
+                        case (byte)Directions.Up:
+                            Dir = (byte)Directions.Right;
+                            break;
+                        case (byte)Directions.Down:
+                            Dir = (byte)Directions.Left;
+                            break;
+                        case (byte)Directions.Left:
+                            Dir = (byte)Directions.Up;
+                            break;
+                        case (byte)Directions.Right:
+                            Dir = (byte)Directions.Down;
+                            break;
+                    }
+                    PacketSender.SendDirection(Dir);
+                }
+                else if (Controls.KeyDown(Control.TurnCounterClockwise))
+                {
+                    DirKeyPressed = true;
+                    switch (Dir)
+                    {
+                        case (byte)Directions.Up:
+                            Dir = (byte)Directions.Left;
+                            break;
+                        case (byte)Directions.Down:
+                            Dir = (byte)Directions.Right;
+                            break;
+                        case (byte)Directions.Left:
+                            Dir = (byte)Directions.Down;
+                            break;
+                        case (byte)Directions.Right:
+                            Dir = (byte)Directions.Up;
+                            break;
+                    }
+                    PacketSender.SendDirection(Dir);
                 }
             }
         }
