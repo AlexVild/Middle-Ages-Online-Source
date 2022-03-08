@@ -2336,8 +2336,8 @@ namespace Intersect.Server.Entities
                 if (this is Player)
                 {
                     PacketSender.SendChatMsg((Player)this, "You could not cast the spell - the target may have moved out of range.", ChatMessageType.Spells, CustomColors.General.GeneralWarning);
-                    SendMissedAttackMessage(CastTarget, (DamageType) spellBase.Combat.DamageType);
                 }
+                SendMissedAttackMessage(this, DamageType.True);
                 return;
             }
 
@@ -2562,19 +2562,19 @@ namespace Intersect.Server.Entities
                                     }
 
                                     TryAttackSpell(entity, spellBase, out miss, out blocked, (sbyte)Directions.Up, ignoreEvasion); //Handle damage
-                                    if (!miss && !blocked) entitiesHit++;
+                                    entitiesHit++;
                                 }
                             }
                         }
                     }
                 }
-                if (entitiesHit > 0)
+                if (!spellBase.Combat.Friendly && entitiesHit <= 1) // Will count yourself - which is FINE in the case of a friendly spell, otherwise ignore it
                 {
                     if (this is Player)
                     {
                         PacketSender.SendChatMsg((Player)this, "There weren't any targets in your spell's AoE range.", ChatMessageType.Spells, CustomColors.General.GeneralWarning);
                     }
-                    SendMissedAttackMessage(this, (DamageType)spellBase.Combat.DamageType);
+                    SendMissedAttackMessage(this, DamageType.True);
                 }
             }
         }

@@ -1694,6 +1694,17 @@ namespace Intersect.Client.Entities
 
         public bool TryFaceTarget(bool skipSmartDir = false, bool force = false)
         {
+            //check if player is stunned or snared, if so don't let them turn.
+            for (var n = 0; n < Status.Count; n++)
+            {
+                if (Status[n].Type == StatusTypes.Stun ||
+                    Status[n].Type == StatusTypes.Snare ||
+                    Status[n].Type == StatusTypes.Sleep)
+                {
+                    return false;
+                }
+            }
+
             if (TargetIndex != null && (Globals.Database.FaceOnLock || force))
             {
                 foreach (var en in Globals.Entities)
