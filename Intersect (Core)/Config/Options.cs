@@ -255,8 +255,6 @@ namespace Intersect
         public static int TileWidth => Instance.MapOpts.TileWidth;
 
         public static int TileHeight => Instance.MapOpts.TileHeight;
-        
-        public static int TimeUntilMapCleanup => Instance.MapOpts.TimeUntilMapCleanup;
 
         public static bool DebugAllowMapFades => Instance.MapOpts.DebugAllowMapFades;
 
