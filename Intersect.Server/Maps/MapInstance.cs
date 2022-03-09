@@ -530,6 +530,8 @@ namespace Intersect.Server.Maps
             {
                 foreach (var npcSpawn in NpcSpawnInstances)
                 {
+                    if (npcSpawn.Value.Entity == null) continue;
+                    
                     lock (npcSpawn.Value.Entity.EntityLock)
                     {
                         npcSpawn.Value.Entity.Die(false);
