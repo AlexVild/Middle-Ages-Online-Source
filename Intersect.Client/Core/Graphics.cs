@@ -493,9 +493,15 @@ namespace Intersect.Client.Core
             Interface.Interface.DrawGui();
 
             // Draw the current Fade
+            // Left shutter
             DrawGameTexture(
-                Renderer.GetWhiteTexture(), new FloatRect(0, 0, 1, 1), CurrentView,
-                new Color((int) Fade.GetFade(), 0, 0, 0), null, GameBlendModes.None
+                Renderer.GetWhiteTexture(), new FloatRect(0, 0, 1, 1), new FloatRect(CurrentView.X, CurrentView.Y, (int)Fade.GetFade(), CurrentView.Height),
+                new Color(255, 0, 0, 0), null, GameBlendModes.None
+            );
+            // Right shutter
+            DrawGameTexture(
+                Renderer.GetWhiteTexture(), new FloatRect(0, 0, 1, 1), new FloatRect(CurrentView.X + (CurrentView.Width / 2 + (int)Fade.GetFade(true)), CurrentView.Y, CurrentView.Width / 2, CurrentView.Height),
+                new Color(255, 0, 0, 0), null, GameBlendModes.None
             );
 
             // Draw the current Flash over top that
@@ -789,6 +795,11 @@ namespace Intersect.Client.Core
             {
                 CurrentShake = 0.0f;
                 CurrentView = new FloatRect(0, 0, Renderer.GetScreenWidth(), Renderer.GetScreenHeight());
+                if (!Globals.InitialFade)
+                {
+                    Fade.FadeIn();
+                    Globals.InitialFade = true;
+                }
                 Renderer.SetView(CurrentView);
                 return;
             }

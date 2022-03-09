@@ -38,7 +38,6 @@ namespace Intersect.Client.Core
 
             //Init Network
             Networking.Network.InitNetwork(context);
-            Fade.FadeIn();
 
             //Make Json.Net Familiar with Our Object Types
             var id = Guid.NewGuid();
