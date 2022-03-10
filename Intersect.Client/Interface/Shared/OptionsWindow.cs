@@ -34,6 +34,8 @@ namespace Intersect.Client.Interface.Shared
         private LabeledCheckBox mCombatFlashCheckbox;
         
         private LabeledCheckBox mCombatShakeCheckbox;
+        
+        private LabeledCheckBox mFadeCheckbox;
 
         private Button mBackBtn;
 
@@ -193,6 +195,11 @@ namespace Intersect.Client.Interface.Shared
             mEnableScanlines = new LabeledCheckBox(mOptionsContainer, "DisableScanlinesCheckbox")
             {
                 Text = Strings.Options.enablescanlines
+            };
+
+            mFadeCheckbox = new LabeledCheckBox(mOptionsContainer, "FadeCheckbox")
+            {
+                Text = Strings.Options.fade
             };
 
             mEditKeybindingsBtn = new Button(mOptionsContainer, "KeybindingsButton") {Text = Strings.Controls.edit};
@@ -512,6 +519,7 @@ namespace Intersect.Client.Interface.Shared
             mCombatFlashCheckbox.IsChecked = Globals.Database.CombatFlash;
             mCombatShakeCheckbox.IsChecked = Globals.Database.CombatShake;
             mEnableScanlines.IsChecked = Globals.Database.EnableScanlines;
+            mFadeCheckbox.IsChecked = Globals.Database.FadeTransitions;
             mFullscreen.IsChecked = Globals.Database.FullScreen;
             mMusicSlider.Value = Globals.Database.MusicVolume;
             mSoundSlider.Value = Globals.Database.SoundVolume;
@@ -585,6 +593,7 @@ namespace Intersect.Client.Interface.Shared
             Globals.Database.CombatShake = mCombatShakeCheckbox.IsChecked;
             Globals.Database.CombatFlash = mCombatFlashCheckbox.IsChecked;
             Globals.Database.EnableScanlines = mEnableScanlines.IsChecked;
+            Globals.Database.FadeTransitions = mFadeCheckbox.IsChecked;
 
             if (Globals.Database.FullScreen != mFullscreen.IsChecked)
             {

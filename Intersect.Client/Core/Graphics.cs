@@ -492,11 +492,27 @@ namespace Intersect.Client.Core
 
             Interface.Interface.DrawGui();
 
-            // Draw the current Fade
-            DrawGameTexture(
-                Renderer.GetWhiteTexture(), new FloatRect(0, 0, 1, 1), CurrentView,
-                new Color((int) Fade.GetFade(), 0, 0, 0), null, GameBlendModes.None
-            );
+            if (Globals.Database.FadeTransitions)
+            {
+                // Draw the current Fade
+                DrawGameTexture(
+                    Renderer.GetWhiteTexture(), new FloatRect(0, 0, 1, 1), CurrentView,
+                    new Color((int)Fade.GetFade(), 0, 0, 0), null, GameBlendModes.None
+                );
+            }
+            else // Wipe transition
+            {
+                // Left shutter
+                DrawGameTexture(
+                    Renderer.GetWhiteTexture(), new FloatRect(0, 0, 1, 1), new FloatRect(CurrentView.X, CurrentView.Y, (int)Wipe.GetFade(), CurrentView.Height),
+                    new Color(255, 0, 0, 0), null, GameBlendModes.None
+                );
+                // Right shutter
+                DrawGameTexture(
+                    Renderer.GetWhiteTexture(), new FloatRect(0, 0, 1, 1), new FloatRect(CurrentView.X + (CurrentView.Width / 2 + (int)Wipe.GetFade(true)), CurrentView.Y, CurrentView.Width / 2, CurrentView.Height),
+                    new Color(255, 0, 0, 0), null, GameBlendModes.None
+                );
+            }
 
             // Draw the current Flash over top that
             DrawGameTexture(
@@ -789,6 +805,19 @@ namespace Intersect.Client.Core
             {
                 CurrentShake = 0.0f;
                 CurrentView = new FloatRect(0, 0, Renderer.GetScreenWidth(), Renderer.GetScreenHeight());
+                if (!Globals.InitialFade)
+                {
+                    if (Globals.Database.FadeTransitions)
+                    {
+                        Fade.FadeIn();
+                    }
+                    else
+                    {
+                        Wipe.FadeIn();
+                    }
+                    
+                    Globals.InitialFade = true;
+                }
                 Renderer.SetView(CurrentView);
                 return;
             }

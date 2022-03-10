@@ -46,7 +46,15 @@ namespace Intersect.Client.Core
                         break;
                     }
 
-                    Fade.FadeIn();
+                    if (Globals.Database.FadeTransitions)
+                    {
+                        Fade.FadeIn();
+                    }
+                    else
+                    {
+                        Wipe.FadeIn();
+                    }
+
                     Globals.GameState = GameStates.Menu;
 
                     return;

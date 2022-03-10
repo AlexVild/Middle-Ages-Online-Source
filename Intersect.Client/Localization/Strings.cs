@@ -1465,6 +1465,8 @@ namespace Intersect.Client.Localization
             public static LocalizedString combatflash = @"Combat Screen Flashes";
             
             public static LocalizedString combatshake = @"Combat Shake";
+            
+            public static LocalizedString fade = @"Fade Instead of Wipe";
 
         }
 

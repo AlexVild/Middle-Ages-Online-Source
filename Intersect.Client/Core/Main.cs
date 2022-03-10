@@ -38,7 +38,6 @@ namespace Intersect.Client.Core
 
             //Init Network
             Networking.Network.InitNetwork(context);
-            Fade.FadeIn();
 
             //Make Json.Net Familiar with Our Object Types
             var id = Guid.NewGuid();
@@ -71,6 +70,7 @@ namespace Intersect.Client.Core
                 Networking.Network.Update();
                 Globals.System.Update();
                 Fade.Update();
+                Wipe.Update();
                 Flash.Update();
                 Interface.Interface.ToggleInput(Globals.GameState != GameStates.Intro);
 
@@ -124,7 +124,7 @@ namespace Intersect.Client.Core
                 {
                     if (Globals.IntroStartTime == -1)
                     {
-                        if (Fade.DoneFading())
+                        if ((Globals.Database.FadeTransitions && Fade.DoneFading()) || (!Globals.Database.FadeTransitions && Wipe.DoneFading()))
                         {
                             if (Globals.IntroComing)
                             {
@@ -133,7 +133,14 @@ namespace Intersect.Client.Core
                             else
                             {
                                 Globals.IntroIndex++;
-                                Fade.FadeIn();
+                                if (Globals.Database.FadeTransitions)
+                                {
+                                    Fade.FadeIn();
+                                }
+                                else
+                                {
+                                    Wipe.FadeIn();
+                                }
                                 Globals.IntroComing = true;
                             }
                         }
@@ -143,7 +150,14 @@ namespace Intersect.Client.Core
                         if (Globals.System.GetTimeMs() > Globals.IntroStartTime + Globals.IntroDelay)
                         {
                             //If we have shown an image long enough, fade to black -- keep track that the image is going
-                            Fade.FadeOut();
+                            if (Globals.Database.FadeTransitions)
+                            {
+                                Fade.FadeOut();
+                            }
+                            else
+                            {
+                                Wipe.FadeOut();
+                            }
                             Globals.IntroStartTime = -1;
                             Globals.IntroComing = false;
                         }
@@ -189,7 +203,14 @@ namespace Intersect.Client.Core
 
             Audio.PlayMusic(MapInstance.Get(Globals.Me.CurrentMap).Music, 6f, 10f, true);
             Globals.GameState = GameStates.InGame;
-            Fade.FadeIn();
+            if (Globals.Database.FadeTransitions)
+            {
+                Fade.FadeIn();
+            }
+            else
+            {
+                Wipe.FadeIn();
+            }
         }
 
         private static void ProcessGame()
@@ -360,7 +381,15 @@ namespace Intersect.Client.Core
         public static void Logout(bool characterSelect)
         {
             Audio.PlayMusic(ClientConfiguration.Instance.MenuMusic, 6f, 10f, true);
-            Fade.FadeOut();
+            if (Globals.Database.FadeTransitions)
+            {
+                Fade.FadeOut();
+            }
+            else
+            {
+                Wipe.FadeOut();
+            }
+            
             PacketSender.SendLogout(characterSelect);
             Globals.LoggedIn = false;
             Globals.WaitingOnServer = false;
@@ -395,7 +424,14 @@ namespace Intersect.Client.Core
             Globals.PendingEvents.Clear();
 
             Interface.Interface.InitGwen();
-            Fade.FadeIn();
+            if (Globals.Database.FadeTransitions)
+            {
+                Fade.FadeIn();
+            }
+            else
+            {
+                Wipe.FadeIn();
+            }
         }
 
     }

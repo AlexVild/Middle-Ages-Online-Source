@@ -1130,7 +1130,14 @@ namespace Intersect.Client.Networking
         //ErrorMessagePacket
         public void HandlePacket(IPacketSender packetSender, ErrorMessagePacket packet)
         {
-            Fade.FadeIn();
+            if (Globals.Database.FadeTransitions)
+            {
+                Fade.FadeIn();
+            }
+            else
+            {
+                Wipe.FadeIn();
+            }
             Globals.WaitingOnServer = false;
             Interface.Interface.MsgboxErrors.Add(new KeyValuePair<string, string>(packet.Header, packet.Error));
             Interface.Interface.MenuUi.Reset();
@@ -2081,7 +2088,14 @@ namespace Intersect.Client.Networking
         public void HandlePacket(IPacketSender packetSender, EnteringGamePacket packet)
         {
             //Fade out, we're finally loading the game world!
-            Fade.FadeOut();
+            if (Globals.Database.FadeTransitions)
+            {
+                Fade.FadeOut();
+            }
+            else
+            {
+                Wipe.FadeOut();
+            }
         }
 
         //CancelCastPacket
@@ -2123,14 +2137,33 @@ namespace Intersect.Client.Networking
         {
             if (packet.FadeIn)
             {
-                if (Fade.GetFade() > 0)
+                if (Globals.Database.FadeTransitions)
                 {
-                    Fade.FadeIn(true);
+                    if (Fade.GetFade() > 0)
+                    {
+                        Fade.FadeIn(true);
+                    }
                 }
+                else
+                {
+                    if (Wipe.GetFade() > 0)
+                    {
+                        Wipe.FadeIn(true);
+                    }
+                }
+
                 Globals.InMapTransition = false;
             } else
             {
-                Fade.FadeOut(true, true);
+                if (Globals.Database.FadeTransitions)
+                {
+                    Fade.FadeOut(true, true);
+                }
+                else
+                {
+                    Wipe.FadeOut(true, true);
+                }
+                
                 Globals.InMapTransition = true;
             }
         }
