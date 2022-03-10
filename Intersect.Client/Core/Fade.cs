@@ -5,7 +5,7 @@ namespace Intersect.Client.Core
 
     public static class Fade
     {
-        private const float STANDARD_FADE_RATE = 1800f;
+        private const float STANDARD_FADE_RATE = 800f;
         private const float FAST_FADE_RATE = 800f;
 
         public enum FadeType
