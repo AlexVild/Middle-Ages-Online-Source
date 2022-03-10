@@ -145,8 +145,6 @@ namespace Intersect.Client.General
         //Local player information
         public static Player Me;
 
-        public static bool InitialFade = false;
-
         public static bool MoveRouteActive = false;
 
         public static bool NeedsMaps = true;
