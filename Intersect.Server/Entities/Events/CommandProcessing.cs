@@ -1306,7 +1306,14 @@ namespace Intersect.Server.Entities.Events
             Stack<CommandInstance> callStack
         )
         {
-            player.CompleteQuest(command.QuestId, command.SkipCompletionEvent);
+            if (command.ResetQuest)
+            {
+                player.ResetQuest(command.QuestId);
+            }
+            else
+            {
+                player.CompleteQuest(command.QuestId, command.SkipCompletionEvent);
+            }
         }
 
         // Change Player Color Command

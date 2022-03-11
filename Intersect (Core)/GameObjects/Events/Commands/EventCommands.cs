@@ -909,6 +909,8 @@ namespace Intersect.GameObjects.Events.Commands
         public Guid QuestId { get; set; }
 
         public bool SkipCompletionEvent { get; set; }
+        
+        public bool ResetQuest { get; set; }
 
     }
 

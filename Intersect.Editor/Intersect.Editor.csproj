@@ -724,6 +724,9 @@
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_ConditionalBranch.resx">
       <DependentUpon>EventCommand_ConditionalBranch.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_EndQuest.resx">
+      <DependentUpon>EventCommand_EndQuest.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_FlashScreen.resx">
       <DependentUpon>EventCommand_FlashScreen.cs</DependentUpon>
     </EmbeddedResource>

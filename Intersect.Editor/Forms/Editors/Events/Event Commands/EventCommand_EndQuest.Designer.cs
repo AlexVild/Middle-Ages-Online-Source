@@ -36,6 +36,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.lblQuest = new System.Windows.Forms.Label();
             this.btnCancel = new DarkUI.Controls.DarkButton();
             this.btnSave = new DarkUI.Controls.DarkButton();
+            this.chkReset = new DarkUI.Controls.DarkCheckBox();
             this.grpEndQuest.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -43,6 +44,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             this.grpEndQuest.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.grpEndQuest.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpEndQuest.Controls.Add(this.chkReset);
             this.grpEndQuest.Controls.Add(this.chkSkipCompletionEvent);
             this.grpEndQuest.Controls.Add(this.cmbQuests);
             this.grpEndQuest.Controls.Add(this.lblQuest);
@@ -56,7 +58,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpEndQuest.TabStop = false;
             this.grpEndQuest.Text = "End Quest";
             // 
-            // chkRunCompletionTask
+            // chkSkipCompletionEvent
             // 
             this.chkSkipCompletionEvent.AutoSize = true;
             this.chkSkipCompletionEvent.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
@@ -71,14 +73,20 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbQuests.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.cmbQuests.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.cmbQuests.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbQuests.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbQuests.DrawDropdownHoverOutline = false;
+            this.cmbQuests.DrawFocusRectangle = false;
             this.cmbQuests.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.cmbQuests.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbQuests.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbQuests.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbQuests.FormattingEnabled = true;
             this.cmbQuests.Location = new System.Drawing.Point(47, 19);
             this.cmbQuests.Name = "cmbQuests";
             this.cmbQuests.Size = new System.Drawing.Size(117, 21);
             this.cmbQuests.TabIndex = 22;
+            this.cmbQuests.Text = null;
+            this.cmbQuests.TextPadding = new System.Windows.Forms.Padding(2);
             // 
             // lblQuest
             // 
@@ -109,7 +117,17 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.btnSave.Text = "Ok";
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
-            // EventCommand_EndQuest
+            // chkReset
+            // 
+            this.chkReset.AutoSize = true;
+            this.chkReset.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.chkReset.Location = new System.Drawing.Point(7, 69);
+            this.chkReset.Name = "chkReset";
+            this.chkReset.Size = new System.Drawing.Size(129, 17);
+            this.chkReset.TabIndex = 24;
+            this.chkReset.Text = "Reset to Not Started?";
+            // 
+            // EventCommandEndQuest
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -132,5 +150,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private System.Windows.Forms.Label lblQuest;
         private DarkComboBox cmbQuests;
         private DarkCheckBox chkSkipCompletionEvent;
+        private DarkCheckBox chkReset;
     }
 }

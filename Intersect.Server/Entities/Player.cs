@@ -6211,6 +6211,35 @@ namespace Intersect.Server.Entities
             questProgress.TaskProgress = -1;
         }
 
+        public void ResetQuest(Guid questId)
+        {
+            var quest = QuestBase.Get(questId);
+            if (quest != null)
+            {
+                var questProgress = FindQuest(questId);
+                if (questProgress != null)
+                {
+                    MarkQuestReset(quest, questProgress);
+
+                    PacketSender.SendQuestsProgress(this);
+                }
+            }
+        }
+
+        private void MarkQuestReset(QuestBase quest, Quest questProgress)
+        {
+            // Handle quests that aren't "normal" and should do some management on completion
+            if (quest.QuestType != QuestType.Normal)
+            {
+                HandleSpecialQuestReset(quest, questProgress);
+            }
+
+            //Complete Quest
+            questProgress.Completed = false;
+            questProgress.TaskId = Guid.Empty;
+            questProgress.TaskProgress = -1;
+        }
+
         /// <summary>
         /// Sets <see cref="PlayerClassStats"/> state for a given quest at start time
         /// </summary>
@@ -6372,6 +6401,29 @@ namespace Intersect.Server.Entities
                                 ChatMessageType.Quest,
                                 CustomColors.Quests.Completed);
                         }
+                    }
+                    break;
+            }
+        }
+
+        private void HandleSpecialQuestReset(QuestBase quest, Quest questProgress)
+        {
+            switch (quest.QuestType)
+            {
+                case QuestType.Task:
+                    if (quest.RelatedClassId != Guid.Empty && ClassInfo.TryGetValue(quest.RelatedClassId, out var taskClassInfo))
+                    {
+                        taskClassInfo.TaskCompleted = false; // The task can be turned in
+                        taskClassInfo.OnTask = false;
+                    }
+                    break;
+                case QuestType.SpecialAssignment:
+                    if (quest.RelatedClassId != Guid.Empty && ClassInfo.TryGetValue(quest.RelatedClassId, out var assignmentClassInfo))
+                    {
+                        // TODO Alex: Fire common event of type "Class Rank Increased" with class parameter
+                        assignmentClassInfo.OnSpecialAssignment = false;
+                        assignmentClassInfo.OnTask = false;
+                        assignmentClassInfo.TaskCompleted = false;
                     }
                     break;
             }

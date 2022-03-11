@@ -1247,6 +1247,13 @@ namespace Intersect.Editor.Forms.Editors.Events
 
         private static string GetCommandText(EndQuestCommand command, MapInstance map)
         {
+            if (command.ResetQuest)
+            {
+                return Strings.EventCommandList.endquest.ToString(
+                    QuestBase.GetName(command.QuestId), Strings.EventCommandList.resetquest
+                );
+            }
+
             if (!command.SkipCompletionEvent)
             {
                 return Strings.EventCommandList.endquest.ToString(

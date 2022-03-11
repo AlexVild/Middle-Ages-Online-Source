@@ -1857,6 +1857,9 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString runcompletionevent = @"Running Completion Event";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString resetquest = @"Reset to Uncomplete";
+
             public static LocalizedString selfswitch = @"Set Self Switch {00} to {01}";
 
             public static LocalizedString showplayer = @"Show Player";
@@ -2777,6 +2780,9 @@ Tick timer saved in server config.json.";
             public static LocalizedString okay = @"Ok";
 
             public static LocalizedString skipcompletion = @"Do not run completion event?";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ResetQuest = @"Mark as uncomplete?";
 
             public static LocalizedString title = @"End Quest";
 
