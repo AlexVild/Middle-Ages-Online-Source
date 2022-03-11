@@ -89,6 +89,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             optNumericCloneInstanceVar.Text = Strings.EventSetVariable.numericcloneinstancevariablevalue;
             lblNumericRandomLow.Text = Strings.EventSetVariable.numericrandomlow;
             lblNumericRandomHigh.Text = Strings.EventSetVariable.numericrandomhigh;
+            optPlayerLevel.Text = Strings.EventSetVariable.OptPlayerLevel;
+            optPlayerX.Text = Strings.EventSetVariable.OptPlayerX;
+            optPlayerY.Text = Strings.EventSetVariable.OptPlayerY;
+            optEventX.Text = Strings.EventSetVariable.OptEventX;
+            optEventY.Text = Strings.EventSetVariable.OptEventY;
 
             //Booleanic
             grpBooleanVariable.Text = Strings.EventSetVariable.booleanlabel;
@@ -432,7 +437,26 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                         optNumericSystemTime.Checked = true;
 
                         break;
+                    case VariableMods.PlayerLevel:
+                        optPlayerLevel.Checked = true;
 
+                        break;
+                    case VariableMods.PlayerX:
+                        optPlayerX.Checked = true;
+
+                        break;
+                    case VariableMods.PlayerY:
+                        optPlayerY.Checked = true;
+
+                        break;
+                    case VariableMods.EventX:
+                        optEventX.Checked = true;
+
+                        break;
+                    case VariableMods.EventY:
+                        optEventY.Checked = true;
+
+                        break;
                     case VariableMods.DupPlayerVar:
                         optNumericSet.Checked = true;
                         optNumericClonePlayerVar.Checked = true;
@@ -704,6 +728,26 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             {
                 mod.ModType = VariableMods.SystemTime;
             }
+            else if (optPlayerLevel.Checked)
+            {
+                mod.ModType = VariableMods.PlayerLevel;
+            }
+            else if (optPlayerX.Checked)
+            {
+                mod.ModType = VariableMods.PlayerX;
+            }
+            else if (optPlayerY.Checked)
+            {
+                mod.ModType = VariableMods.PlayerY;
+            }
+            else if (optEventX.Checked)
+            {
+                mod.ModType = VariableMods.EventX;
+            }
+            else if (optEventY.Checked)
+            {
+                mod.ModType = VariableMods.EventY;
+            }
             else if (optNumericClonePlayerVar.Checked)
             {
                 if (optNumericSet.Checked)
@@ -881,6 +925,31 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         }
 
         #endregion
+
+        private void optPlayerX_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateNumericFormElements();
+        }
+
+        private void optPlayerY_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateNumericFormElements();
+        }
+
+        private void optEventX_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateNumericFormElements();
+        }
+
+        private void optPlayerLevel_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateNumericFormElements();
+        }
+
+        private void optEventY_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateNumericFormElements();
+        }
     }
 
 }

@@ -1413,6 +1413,26 @@ namespace Intersect.Editor.Forms.Editors.Events
                     varvalue = Strings.EventCommandList.systemtimevariable;
 
                     break;
+                case Enums.VariableMods.PlayerLevel:
+                    varvalue = Strings.EventCommandList.varplayerlevel;
+
+                    break;
+                case Enums.VariableMods.PlayerX:
+                    varvalue = Strings.EventCommandList.varplayerx;
+
+                    break;
+                case Enums.VariableMods.PlayerY:
+                    varvalue = Strings.EventCommandList.varplayery;
+
+                    break;
+                case Enums.VariableMods.EventX:
+                    varvalue = Strings.EventCommandList.vareventx;
+
+                    break;
+                case Enums.VariableMods.EventY:
+                    varvalue = Strings.EventCommandList.vareventy;
+
+                    break;
                 case Enums.VariableMods.DupPlayerVar:
                     varvalue = Strings.EventCommandList.dupplayervariable.ToString(
                         PlayerVariableBase.GetName(mod.DuplicateVariableId)

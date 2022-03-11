@@ -1927,6 +1927,48 @@ namespace Intersect.Server.Entities.Events
                     value.Integer = ms;
 
                     break;
+                case Enums.VariableMods.PlayerLevel:
+                    value.Integer = player.Level;
+
+                    break;
+                case Enums.VariableMods.PlayerX:
+                    value.Integer = player.X;
+
+                    break;
+                case Enums.VariableMods.PlayerY:
+                    value.Integer = player.Y;
+
+                    break;
+                case Enums.VariableMods.EventX:
+                case Enums.VariableMods.EventY:
+                    if (instance.Global && MapController.TryGetInstanceFromMap(instance.MapId, instance.MapInstanceId, out var mapInstance))
+                    {
+                        var globalEvent = mapInstance.GetGlobalEventInstance(instance.BaseEvent);
+                        if (globalEvent.GlobalPageInstance != null)
+                        {
+                            if (mod.ModType == Enums.VariableMods.EventX)
+                            {
+                                value.Integer = globalEvent.GlobalPageInstance[globalEvent.PageIndex].X;
+                            }
+                            else
+                            {
+                                value.Integer = globalEvent.GlobalPageInstance[globalEvent.PageIndex].Y;
+                            }
+                        }
+                    }
+                    else if (instance.PageInstance != null)
+                    {
+                        if (mod.ModType == Enums.VariableMods.EventX)
+                        {
+                            value.Integer = instance.PageInstance.X;
+                        }
+                        else
+                        {
+                            value.Integer = instance.PageInstance.Y;
+                        }
+                    }
+
+                    break;
                 case Enums.VariableMods.DupPlayerVar:
                     value.Integer = player.GetVariableValue(mod.DuplicateVariableId).Integer;
 

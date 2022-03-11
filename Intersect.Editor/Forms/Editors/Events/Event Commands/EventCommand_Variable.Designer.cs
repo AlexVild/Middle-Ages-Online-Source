@@ -39,6 +39,15 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.rdoGlobalVariable = new DarkUI.Controls.DarkRadioButton();
             this.btnCancel = new DarkUI.Controls.DarkButton();
             this.btnSave = new DarkUI.Controls.DarkButton();
+            this.grpBooleanVariable = new DarkUI.Controls.DarkGroupBox();
+            this.cmbBooleanInstanceGlobalVar = new DarkUI.Controls.DarkComboBox();
+            this.optBooleanCloneInstanceVar = new DarkUI.Controls.DarkRadioButton();
+            this.cmbBooleanCloneGlobalVar = new DarkUI.Controls.DarkComboBox();
+            this.cmbBooleanClonePlayerVar = new DarkUI.Controls.DarkComboBox();
+            this.optBooleanCloneGlobalVar = new DarkUI.Controls.DarkRadioButton();
+            this.optBooleanClonePlayerVar = new DarkUI.Controls.DarkRadioButton();
+            this.optBooleanTrue = new DarkUI.Controls.DarkRadioButton();
+            this.optBooleanFalse = new DarkUI.Controls.DarkRadioButton();
             this.grpNumericVariable = new DarkUI.Controls.DarkGroupBox();
             this.optNumericRightShift = new DarkUI.Controls.DarkRadioButton();
             this.optNumericLeftShift = new DarkUI.Controls.DarkRadioButton();
@@ -75,17 +84,14 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpStringSet = new DarkUI.Controls.DarkGroupBox();
             this.lblStringValue = new System.Windows.Forms.Label();
             this.txtStringValue = new DarkUI.Controls.DarkTextBox();
-            this.grpBooleanVariable = new DarkUI.Controls.DarkGroupBox();
-            this.cmbBooleanCloneGlobalVar = new DarkUI.Controls.DarkComboBox();
-            this.cmbBooleanClonePlayerVar = new DarkUI.Controls.DarkComboBox();
-            this.optBooleanCloneGlobalVar = new DarkUI.Controls.DarkRadioButton();
-            this.optBooleanClonePlayerVar = new DarkUI.Controls.DarkRadioButton();
-            this.optBooleanTrue = new DarkUI.Controls.DarkRadioButton();
-            this.optBooleanFalse = new DarkUI.Controls.DarkRadioButton();
-            this.optBooleanCloneInstanceVar = new DarkUI.Controls.DarkRadioButton();
-            this.cmbBooleanInstanceGlobalVar = new DarkUI.Controls.DarkComboBox();
+            this.optPlayerLevel = new DarkUI.Controls.DarkRadioButton();
+            this.optPlayerX = new DarkUI.Controls.DarkRadioButton();
+            this.optPlayerY = new DarkUI.Controls.DarkRadioButton();
+            this.optEventX = new DarkUI.Controls.DarkRadioButton();
+            this.optEventY = new DarkUI.Controls.DarkRadioButton();
             this.grpSetVariable.SuspendLayout();
             this.grpSelectVariable.SuspendLayout();
+            this.grpBooleanVariable.SuspendLayout();
             this.grpNumericVariable.SuspendLayout();
             this.grpNumericValues.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudNumericValue)).BeginInit();
@@ -95,7 +101,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpStringVariable.SuspendLayout();
             this.grpStringReplace.SuspendLayout();
             this.grpStringSet.SuspendLayout();
-            this.grpBooleanVariable.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpSetVariable
@@ -105,13 +110,13 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpSetVariable.Controls.Add(this.grpSelectVariable);
             this.grpSetVariable.Controls.Add(this.btnCancel);
             this.grpSetVariable.Controls.Add(this.btnSave);
-            this.grpSetVariable.Controls.Add(this.grpBooleanVariable);
             this.grpSetVariable.Controls.Add(this.grpNumericVariable);
+            this.grpSetVariable.Controls.Add(this.grpBooleanVariable);
             this.grpSetVariable.Controls.Add(this.grpStringVariable);
             this.grpSetVariable.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpSetVariable.Location = new System.Drawing.Point(3, 3);
             this.grpSetVariable.Name = "grpSetVariable";
-            this.grpSetVariable.Size = new System.Drawing.Size(437, 365);
+            this.grpSetVariable.Size = new System.Drawing.Size(437, 406);
             this.grpSetVariable.TabIndex = 17;
             this.grpSetVariable.TabStop = false;
             this.grpSetVariable.Text = "Set Variable";
@@ -198,7 +203,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(356, 336);
+            this.btnCancel.Location = new System.Drawing.Point(356, 370);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Padding = new System.Windows.Forms.Padding(5);
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
@@ -208,7 +213,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(6, 336);
+            this.btnSave.Location = new System.Drawing.Point(6, 370);
             this.btnSave.Name = "btnSave";
             this.btnSave.Padding = new System.Windows.Forms.Padding(5);
             this.btnSave.Size = new System.Drawing.Size(75, 23);
@@ -216,14 +221,144 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.btnSave.Text = "Ok";
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
+            // grpBooleanVariable
+            // 
+            this.grpBooleanVariable.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.grpBooleanVariable.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpBooleanVariable.Controls.Add(this.cmbBooleanInstanceGlobalVar);
+            this.grpBooleanVariable.Controls.Add(this.optBooleanCloneInstanceVar);
+            this.grpBooleanVariable.Controls.Add(this.cmbBooleanCloneGlobalVar);
+            this.grpBooleanVariable.Controls.Add(this.cmbBooleanClonePlayerVar);
+            this.grpBooleanVariable.Controls.Add(this.optBooleanCloneGlobalVar);
+            this.grpBooleanVariable.Controls.Add(this.optBooleanClonePlayerVar);
+            this.grpBooleanVariable.Controls.Add(this.optBooleanTrue);
+            this.grpBooleanVariable.Controls.Add(this.optBooleanFalse);
+            this.grpBooleanVariable.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpBooleanVariable.Location = new System.Drawing.Point(6, 100);
+            this.grpBooleanVariable.Name = "grpBooleanVariable";
+            this.grpBooleanVariable.Size = new System.Drawing.Size(413, 172);
+            this.grpBooleanVariable.TabIndex = 40;
+            this.grpBooleanVariable.TabStop = false;
+            this.grpBooleanVariable.Text = "Boolean Variable:";
+            // 
+            // cmbBooleanInstanceGlobalVar
+            // 
+            this.cmbBooleanInstanceGlobalVar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbBooleanInstanceGlobalVar.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbBooleanInstanceGlobalVar.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbBooleanInstanceGlobalVar.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbBooleanInstanceGlobalVar.DrawDropdownHoverOutline = false;
+            this.cmbBooleanInstanceGlobalVar.DrawFocusRectangle = false;
+            this.cmbBooleanInstanceGlobalVar.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbBooleanInstanceGlobalVar.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbBooleanInstanceGlobalVar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbBooleanInstanceGlobalVar.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbBooleanInstanceGlobalVar.FormattingEnabled = true;
+            this.cmbBooleanInstanceGlobalVar.Location = new System.Drawing.Point(155, 137);
+            this.cmbBooleanInstanceGlobalVar.Name = "cmbBooleanInstanceGlobalVar";
+            this.cmbBooleanInstanceGlobalVar.Size = new System.Drawing.Size(241, 21);
+            this.cmbBooleanInstanceGlobalVar.TabIndex = 51;
+            this.cmbBooleanInstanceGlobalVar.Text = null;
+            this.cmbBooleanInstanceGlobalVar.TextPadding = new System.Windows.Forms.Padding(2);
+            // 
+            // optBooleanCloneInstanceVar
+            // 
+            this.optBooleanCloneInstanceVar.AutoSize = true;
+            this.optBooleanCloneInstanceVar.Location = new System.Drawing.Point(9, 138);
+            this.optBooleanCloneInstanceVar.Name = "optBooleanCloneInstanceVar";
+            this.optBooleanCloneInstanceVar.Size = new System.Drawing.Size(140, 17);
+            this.optBooleanCloneInstanceVar.TabIndex = 50;
+            this.optBooleanCloneInstanceVar.Text = "Instance Variable Value:";
+            // 
+            // cmbBooleanCloneGlobalVar
+            // 
+            this.cmbBooleanCloneGlobalVar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbBooleanCloneGlobalVar.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbBooleanCloneGlobalVar.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbBooleanCloneGlobalVar.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbBooleanCloneGlobalVar.DrawDropdownHoverOutline = false;
+            this.cmbBooleanCloneGlobalVar.DrawFocusRectangle = false;
+            this.cmbBooleanCloneGlobalVar.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbBooleanCloneGlobalVar.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbBooleanCloneGlobalVar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbBooleanCloneGlobalVar.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbBooleanCloneGlobalVar.FormattingEnabled = true;
+            this.cmbBooleanCloneGlobalVar.Location = new System.Drawing.Point(155, 103);
+            this.cmbBooleanCloneGlobalVar.Name = "cmbBooleanCloneGlobalVar";
+            this.cmbBooleanCloneGlobalVar.Size = new System.Drawing.Size(241, 21);
+            this.cmbBooleanCloneGlobalVar.TabIndex = 49;
+            this.cmbBooleanCloneGlobalVar.Text = null;
+            this.cmbBooleanCloneGlobalVar.TextPadding = new System.Windows.Forms.Padding(2);
+            // 
+            // cmbBooleanClonePlayerVar
+            // 
+            this.cmbBooleanClonePlayerVar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbBooleanClonePlayerVar.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbBooleanClonePlayerVar.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbBooleanClonePlayerVar.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbBooleanClonePlayerVar.DrawDropdownHoverOutline = false;
+            this.cmbBooleanClonePlayerVar.DrawFocusRectangle = false;
+            this.cmbBooleanClonePlayerVar.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbBooleanClonePlayerVar.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbBooleanClonePlayerVar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbBooleanClonePlayerVar.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbBooleanClonePlayerVar.FormattingEnabled = true;
+            this.cmbBooleanClonePlayerVar.Location = new System.Drawing.Point(155, 70);
+            this.cmbBooleanClonePlayerVar.Name = "cmbBooleanClonePlayerVar";
+            this.cmbBooleanClonePlayerVar.Size = new System.Drawing.Size(241, 21);
+            this.cmbBooleanClonePlayerVar.TabIndex = 48;
+            this.cmbBooleanClonePlayerVar.Text = null;
+            this.cmbBooleanClonePlayerVar.TextPadding = new System.Windows.Forms.Padding(2);
+            // 
+            // optBooleanCloneGlobalVar
+            // 
+            this.optBooleanCloneGlobalVar.AutoSize = true;
+            this.optBooleanCloneGlobalVar.Location = new System.Drawing.Point(9, 103);
+            this.optBooleanCloneGlobalVar.Name = "optBooleanCloneGlobalVar";
+            this.optBooleanCloneGlobalVar.Size = new System.Drawing.Size(129, 17);
+            this.optBooleanCloneGlobalVar.TabIndex = 47;
+            this.optBooleanCloneGlobalVar.Text = "Global Variable Value:";
+            // 
+            // optBooleanClonePlayerVar
+            // 
+            this.optBooleanClonePlayerVar.AutoSize = true;
+            this.optBooleanClonePlayerVar.Location = new System.Drawing.Point(9, 71);
+            this.optBooleanClonePlayerVar.Name = "optBooleanClonePlayerVar";
+            this.optBooleanClonePlayerVar.Size = new System.Drawing.Size(128, 17);
+            this.optBooleanClonePlayerVar.TabIndex = 46;
+            this.optBooleanClonePlayerVar.Text = "Player Variable Value:";
+            // 
+            // optBooleanTrue
+            // 
+            this.optBooleanTrue.AutoSize = true;
+            this.optBooleanTrue.Location = new System.Drawing.Point(9, 19);
+            this.optBooleanTrue.Name = "optBooleanTrue";
+            this.optBooleanTrue.Size = new System.Drawing.Size(47, 17);
+            this.optBooleanTrue.TabIndex = 26;
+            this.optBooleanTrue.Text = "True";
+            // 
+            // optBooleanFalse
+            // 
+            this.optBooleanFalse.AutoSize = true;
+            this.optBooleanFalse.Location = new System.Drawing.Point(9, 44);
+            this.optBooleanFalse.Name = "optBooleanFalse";
+            this.optBooleanFalse.Size = new System.Drawing.Size(50, 17);
+            this.optBooleanFalse.TabIndex = 25;
+            this.optBooleanFalse.Text = "False";
+            // 
             // grpNumericVariable
             // 
             this.grpNumericVariable.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.grpNumericVariable.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpNumericVariable.Controls.Add(this.optEventX);
+            this.grpNumericVariable.Controls.Add(this.optEventY);
             this.grpNumericVariable.Controls.Add(this.optNumericRightShift);
             this.grpNumericVariable.Controls.Add(this.optNumericLeftShift);
+            this.grpNumericVariable.Controls.Add(this.optPlayerY);
             this.grpNumericVariable.Controls.Add(this.optNumericDivide);
+            this.grpNumericVariable.Controls.Add(this.optPlayerX);
             this.grpNumericVariable.Controls.Add(this.optNumericMultiply);
+            this.grpNumericVariable.Controls.Add(this.optPlayerLevel);
             this.grpNumericVariable.Controls.Add(this.optNumericSet);
             this.grpNumericVariable.Controls.Add(this.optNumericAdd);
             this.grpNumericVariable.Controls.Add(this.optNumericRandom);
@@ -234,7 +369,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpNumericVariable.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpNumericVariable.Location = new System.Drawing.Point(6, 100);
             this.grpNumericVariable.Name = "grpNumericVariable";
-            this.grpNumericVariable.Size = new System.Drawing.Size(419, 219);
+            this.grpNumericVariable.Size = new System.Drawing.Size(419, 264);
             this.grpNumericVariable.TabIndex = 36;
             this.grpNumericVariable.TabStop = false;
             this.grpNumericVariable.Text = "Numeric Variable:";
@@ -341,7 +476,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpNumericValues.Controls.Add(this.optNumericClonePlayerVar);
             this.grpNumericValues.Controls.Add(this.optNumericStaticVal);
             this.grpNumericValues.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpNumericValues.Location = new System.Drawing.Point(6, 71);
+            this.grpNumericValues.Location = new System.Drawing.Point(6, 113);
             this.grpNumericValues.Name = "grpNumericValues";
             this.grpNumericValues.Size = new System.Drawing.Size(407, 142);
             this.grpNumericValues.TabIndex = 37;
@@ -481,7 +616,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpNumericRandom.Controls.Add(this.lblNumericRandomHigh);
             this.grpNumericRandom.Controls.Add(this.lblNumericRandomLow);
             this.grpNumericRandom.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpNumericRandom.Location = new System.Drawing.Point(6, 74);
+            this.grpNumericRandom.Location = new System.Drawing.Point(6, 113);
             this.grpNumericRandom.Name = "grpNumericRandom";
             this.grpNumericRandom.Size = new System.Drawing.Size(284, 97);
             this.grpNumericRandom.TabIndex = 39;
@@ -692,130 +827,55 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.txtStringValue.Size = new System.Drawing.Size(207, 20);
             this.txtStringValue.TabIndex = 62;
             // 
-            // grpBooleanVariable
+            // optPlayerLevel
             // 
-            this.grpBooleanVariable.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.grpBooleanVariable.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpBooleanVariable.Controls.Add(this.cmbBooleanInstanceGlobalVar);
-            this.grpBooleanVariable.Controls.Add(this.optBooleanCloneInstanceVar);
-            this.grpBooleanVariable.Controls.Add(this.cmbBooleanCloneGlobalVar);
-            this.grpBooleanVariable.Controls.Add(this.cmbBooleanClonePlayerVar);
-            this.grpBooleanVariable.Controls.Add(this.optBooleanCloneGlobalVar);
-            this.grpBooleanVariable.Controls.Add(this.optBooleanClonePlayerVar);
-            this.grpBooleanVariable.Controls.Add(this.optBooleanTrue);
-            this.grpBooleanVariable.Controls.Add(this.optBooleanFalse);
-            this.grpBooleanVariable.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpBooleanVariable.Location = new System.Drawing.Point(6, 100);
-            this.grpBooleanVariable.Name = "grpBooleanVariable";
-            this.grpBooleanVariable.Size = new System.Drawing.Size(413, 172);
-            this.grpBooleanVariable.TabIndex = 40;
-            this.grpBooleanVariable.TabStop = false;
-            this.grpBooleanVariable.Text = "Boolean Variable:";
+            this.optPlayerLevel.AutoSize = true;
+            this.optPlayerLevel.Location = new System.Drawing.Point(9, 90);
+            this.optPlayerLevel.Name = "optPlayerLevel";
+            this.optPlayerLevel.Size = new System.Drawing.Size(83, 17);
+            this.optPlayerLevel.TabIndex = 50;
+            this.optPlayerLevel.Text = "Player Level";
+            this.optPlayerLevel.CheckedChanged += new System.EventHandler(this.optPlayerLevel_CheckedChanged);
             // 
-            // cmbBooleanCloneGlobalVar
+            // optPlayerX
             // 
-            this.cmbBooleanCloneGlobalVar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbBooleanCloneGlobalVar.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbBooleanCloneGlobalVar.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbBooleanCloneGlobalVar.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbBooleanCloneGlobalVar.DrawDropdownHoverOutline = false;
-            this.cmbBooleanCloneGlobalVar.DrawFocusRectangle = false;
-            this.cmbBooleanCloneGlobalVar.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbBooleanCloneGlobalVar.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbBooleanCloneGlobalVar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbBooleanCloneGlobalVar.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbBooleanCloneGlobalVar.FormattingEnabled = true;
-            this.cmbBooleanCloneGlobalVar.Location = new System.Drawing.Point(155, 103);
-            this.cmbBooleanCloneGlobalVar.Name = "cmbBooleanCloneGlobalVar";
-            this.cmbBooleanCloneGlobalVar.Size = new System.Drawing.Size(241, 21);
-            this.cmbBooleanCloneGlobalVar.TabIndex = 49;
-            this.cmbBooleanCloneGlobalVar.Text = null;
-            this.cmbBooleanCloneGlobalVar.TextPadding = new System.Windows.Forms.Padding(2);
+            this.optPlayerX.AutoSize = true;
+            this.optPlayerX.Location = new System.Drawing.Point(9, 67);
+            this.optPlayerX.Name = "optPlayerX";
+            this.optPlayerX.Size = new System.Drawing.Size(64, 17);
+            this.optPlayerX.TabIndex = 51;
+            this.optPlayerX.Text = "Player X";
+            this.optPlayerX.CheckedChanged += new System.EventHandler(this.optPlayerX_CheckedChanged);
             // 
-            // cmbBooleanClonePlayerVar
+            // optPlayerY
             // 
-            this.cmbBooleanClonePlayerVar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbBooleanClonePlayerVar.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbBooleanClonePlayerVar.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbBooleanClonePlayerVar.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbBooleanClonePlayerVar.DrawDropdownHoverOutline = false;
-            this.cmbBooleanClonePlayerVar.DrawFocusRectangle = false;
-            this.cmbBooleanClonePlayerVar.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbBooleanClonePlayerVar.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbBooleanClonePlayerVar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbBooleanClonePlayerVar.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbBooleanClonePlayerVar.FormattingEnabled = true;
-            this.cmbBooleanClonePlayerVar.Location = new System.Drawing.Point(155, 70);
-            this.cmbBooleanClonePlayerVar.Name = "cmbBooleanClonePlayerVar";
-            this.cmbBooleanClonePlayerVar.Size = new System.Drawing.Size(241, 21);
-            this.cmbBooleanClonePlayerVar.TabIndex = 48;
-            this.cmbBooleanClonePlayerVar.Text = null;
-            this.cmbBooleanClonePlayerVar.TextPadding = new System.Windows.Forms.Padding(2);
+            this.optPlayerY.AutoSize = true;
+            this.optPlayerY.Location = new System.Drawing.Point(88, 67);
+            this.optPlayerY.Name = "optPlayerY";
+            this.optPlayerY.Size = new System.Drawing.Size(64, 17);
+            this.optPlayerY.TabIndex = 52;
+            this.optPlayerY.Text = "Player Y";
+            this.optPlayerY.CheckedChanged += new System.EventHandler(this.optPlayerY_CheckedChanged);
             // 
-            // optBooleanCloneGlobalVar
+            // optEventX
             // 
-            this.optBooleanCloneGlobalVar.AutoSize = true;
-            this.optBooleanCloneGlobalVar.Location = new System.Drawing.Point(9, 103);
-            this.optBooleanCloneGlobalVar.Name = "optBooleanCloneGlobalVar";
-            this.optBooleanCloneGlobalVar.Size = new System.Drawing.Size(129, 17);
-            this.optBooleanCloneGlobalVar.TabIndex = 47;
-            this.optBooleanCloneGlobalVar.Text = "Global Variable Value:";
+            this.optEventX.AutoSize = true;
+            this.optEventX.Location = new System.Drawing.Point(169, 67);
+            this.optEventX.Name = "optEventX";
+            this.optEventX.Size = new System.Drawing.Size(63, 17);
+            this.optEventX.TabIndex = 53;
+            this.optEventX.Text = "Event X";
+            this.optEventX.CheckedChanged += new System.EventHandler(this.optEventX_CheckedChanged);
             // 
-            // optBooleanClonePlayerVar
+            // optEventY
             // 
-            this.optBooleanClonePlayerVar.AutoSize = true;
-            this.optBooleanClonePlayerVar.Location = new System.Drawing.Point(9, 71);
-            this.optBooleanClonePlayerVar.Name = "optBooleanClonePlayerVar";
-            this.optBooleanClonePlayerVar.Size = new System.Drawing.Size(128, 17);
-            this.optBooleanClonePlayerVar.TabIndex = 46;
-            this.optBooleanClonePlayerVar.Text = "Player Variable Value:";
-            // 
-            // optBooleanTrue
-            // 
-            this.optBooleanTrue.AutoSize = true;
-            this.optBooleanTrue.Location = new System.Drawing.Point(9, 19);
-            this.optBooleanTrue.Name = "optBooleanTrue";
-            this.optBooleanTrue.Size = new System.Drawing.Size(47, 17);
-            this.optBooleanTrue.TabIndex = 26;
-            this.optBooleanTrue.Text = "True";
-            // 
-            // optBooleanFalse
-            // 
-            this.optBooleanFalse.AutoSize = true;
-            this.optBooleanFalse.Location = new System.Drawing.Point(9, 44);
-            this.optBooleanFalse.Name = "optBooleanFalse";
-            this.optBooleanFalse.Size = new System.Drawing.Size(50, 17);
-            this.optBooleanFalse.TabIndex = 25;
-            this.optBooleanFalse.Text = "False";
-            // 
-            // optBooleanCloneInstanceVar
-            // 
-            this.optBooleanCloneInstanceVar.AutoSize = true;
-            this.optBooleanCloneInstanceVar.Location = new System.Drawing.Point(9, 138);
-            this.optBooleanCloneInstanceVar.Name = "optBooleanCloneInstanceVar";
-            this.optBooleanCloneInstanceVar.Size = new System.Drawing.Size(140, 17);
-            this.optBooleanCloneInstanceVar.TabIndex = 50;
-            this.optBooleanCloneInstanceVar.Text = "Instance Variable Value:";
-            // 
-            // cmbBooleanInstanceGlobalVar
-            // 
-            this.cmbBooleanInstanceGlobalVar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbBooleanInstanceGlobalVar.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbBooleanInstanceGlobalVar.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbBooleanInstanceGlobalVar.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbBooleanInstanceGlobalVar.DrawDropdownHoverOutline = false;
-            this.cmbBooleanInstanceGlobalVar.DrawFocusRectangle = false;
-            this.cmbBooleanInstanceGlobalVar.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbBooleanInstanceGlobalVar.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbBooleanInstanceGlobalVar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbBooleanInstanceGlobalVar.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbBooleanInstanceGlobalVar.FormattingEnabled = true;
-            this.cmbBooleanInstanceGlobalVar.Location = new System.Drawing.Point(155, 137);
-            this.cmbBooleanInstanceGlobalVar.Name = "cmbBooleanInstanceGlobalVar";
-            this.cmbBooleanInstanceGlobalVar.Size = new System.Drawing.Size(241, 21);
-            this.cmbBooleanInstanceGlobalVar.TabIndex = 51;
-            this.cmbBooleanInstanceGlobalVar.Text = null;
-            this.cmbBooleanInstanceGlobalVar.TextPadding = new System.Windows.Forms.Padding(2);
+            this.optEventY.AutoSize = true;
+            this.optEventY.Location = new System.Drawing.Point(238, 67);
+            this.optEventY.Name = "optEventY";
+            this.optEventY.Size = new System.Drawing.Size(63, 17);
+            this.optEventY.TabIndex = 54;
+            this.optEventY.Text = "Event Y";
+            this.optEventY.CheckedChanged += new System.EventHandler(this.optEventY_CheckedChanged);
             // 
             // EventCommandVariable
             // 
@@ -825,10 +885,12 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.Controls.Add(this.grpSetVariable);
             this.Name = "EventCommandVariable";
-            this.Size = new System.Drawing.Size(447, 375);
+            this.Size = new System.Drawing.Size(447, 415);
             this.grpSetVariable.ResumeLayout(false);
             this.grpSelectVariable.ResumeLayout(false);
             this.grpSelectVariable.PerformLayout();
+            this.grpBooleanVariable.ResumeLayout(false);
+            this.grpBooleanVariable.PerformLayout();
             this.grpNumericVariable.ResumeLayout(false);
             this.grpNumericVariable.PerformLayout();
             this.grpNumericValues.ResumeLayout(false);
@@ -844,8 +906,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpStringReplace.PerformLayout();
             this.grpStringSet.ResumeLayout(false);
             this.grpStringSet.PerformLayout();
-            this.grpBooleanVariable.ResumeLayout(false);
-            this.grpBooleanVariable.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -906,5 +966,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         internal DarkRadioButton optNumericCloneInstanceVar;
         internal DarkComboBox cmbBooleanInstanceGlobalVar;
         internal DarkRadioButton optBooleanCloneInstanceVar;
+        internal DarkRadioButton optEventY;
+        internal DarkRadioButton optEventX;
+        internal DarkRadioButton optPlayerY;
+        internal DarkRadioButton optPlayerX;
+        internal DarkRadioButton optPlayerLevel;
     }
 }

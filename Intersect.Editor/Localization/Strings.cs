@@ -2015,6 +2015,21 @@ Tick timer saved in server config.json.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString addinspiration = @"Add {00} seconds of inspiration";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString varplayerlevel = @"Player Level";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString varplayerx = @"Player's X Position";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString varplayery = @"Player's Y Position";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString vareventx = @"Event's X Position";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString vareventy = @"Event's Y Position";
         }
 
         public struct EventChangePlayerColor
@@ -3152,6 +3167,20 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString stringtip = @"Text variables work with strings. Click here for a list!";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString OptPlayerLevel = @"Player Level";
+            
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString OptPlayerX = @"Player X";
+            
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString OptPlayerY = @"Player Y";
+            
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString OptEventX = @"Event X";
+            
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString OptEventY = @"Event Y";
         }
 
         public struct EventShowOptions
