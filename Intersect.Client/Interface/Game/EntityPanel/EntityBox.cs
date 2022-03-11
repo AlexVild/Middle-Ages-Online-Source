@@ -838,6 +838,13 @@ namespace Intersect.Client.Interface.Game.EntityPanel
 
                 var equipment = MyEntity.Equipment;
                 var decor = MyEntity.MyDecors;
+
+                bool inVehicle = false;
+                if (MyEntity is Player player)
+                {
+                    inVehicle = player.InVehicle;
+                }
+
                 if (MyEntity == Globals.Me)
                 {
                     for (var i = 0; i < MyEntity.MyEquipment.Length; i++)
@@ -882,7 +889,7 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                     var textureType = GameContentManager.TextureType.Paperdoll;
 
                     if (Options.EquipmentSlots.IndexOf(paperdollSlot) > -1 &&
-                        equipment.Length == Options.EquipmentSlots.Count)
+                        equipment.Length == Options.EquipmentSlots.Count && !inVehicle)
                     {
                         if (equipment[Options.EquipmentSlots.IndexOf(paperdollSlot)] != Guid.Empty)
                         {
@@ -902,7 +909,7 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                         }
                     }
 
-                    if (Options.DecorSlots.IndexOf(paperdollSlot) > -1)
+                    if (Options.DecorSlots.IndexOf(paperdollSlot) > -1 && !inVehicle)
                     {
                         var slotToDraw = Options.DecorSlots.IndexOf(paperdollSlot);
 
