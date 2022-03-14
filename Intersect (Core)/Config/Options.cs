@@ -106,7 +106,7 @@ namespace Intersect
         
         public static int MaxNpcStat => Instance.CombatOpts.MaxNpcStat;
         
-        public static long PostCastMovementDelay => Instance.CombatOpts.PostCastMovementDelay;
+        public static long PostCastMovementDelay => Instance.CombatOpts.ProjectileSpellMovementDelay;
 
         public static int MaxLevel => Instance.PlayerOpts.MaxLevel;
 

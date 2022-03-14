@@ -669,13 +669,6 @@ namespace Intersect.Server.Networking
                 return;
             }
 
-            // check if player is out of post-cast stun
-            if (player.LastSpellCast > Globals.Timing.Milliseconds)
-            {
-                PacketSender.SendEntityPositionTo(client, client.Entity);
-                return;
-            }
-
             //check if player is stunned or snared, if so don't let them move.
             foreach (var status in player.CachedStatuses)
             {

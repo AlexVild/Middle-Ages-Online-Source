@@ -979,7 +979,6 @@ namespace Intersect.Server.Entities
         public override void Die(bool dropItems = true, Entity killer = null)
         {
             CastTime = 0;
-            LastSpellCast = 0;
             CastTarget = null;
 
             //Flag death to the client

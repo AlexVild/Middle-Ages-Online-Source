@@ -2115,6 +2115,10 @@ namespace Intersect.Client.Networking
             {
                 Globals.Entities[packet.EntityId].CastTime = 0;
                 Globals.Entities[packet.EntityId].SpellCast = Guid.Empty;
+                if (Globals.Entities[packet.EntityId] is Player player)
+                {
+                    player.LastCastTime = 0L;
+                }
             }
         }
 

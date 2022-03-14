@@ -262,9 +262,6 @@ namespace Intersect.Server.Entities
         [NotMapped, JsonIgnore]
         public Guid DeathAnimation = Guid.Empty;
 
-        [NotMapped, JsonIgnore] 
-        public long LastSpellCast = 0L;
-
         [NotMapped, JsonIgnore]
         public bool VitalsUpdated
         {
@@ -845,8 +842,6 @@ namespace Intersect.Server.Entities
             {
                 if (this is Player && CastTime > 0 && Options.Combat.MovementCancelsCast)
                 {
-                    CastTime = 0;
-                    LastSpellCast = 0;
                     CastTarget = null;
                 }
 
@@ -2548,8 +2543,6 @@ namespace Intersect.Server.Entities
             {
                 Die();
             }
-
-            LastSpellCast = Globals.Timing.Milliseconds + Options.PostCastMovementDelay;
         }
 
         private void HandleAoESpell(
