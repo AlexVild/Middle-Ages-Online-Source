@@ -1349,9 +1349,13 @@ namespace Intersect.Server.Entities
             byte projectileDir
         )
         {
-            if (target is Resource && parentSpell != null)
+            bool projectileTool = false;
+            if (target is Resource && projectile.Tool != ((Resource)target).Base.Tool)
             {
                 return;
+            } else if (target is Resource)
+            {
+                projectileTool = true; // this is a projectile being used as a tool on a resource
             }
 
             //Check for taunt status and trying to attack a target that has not taunted you.
@@ -1369,9 +1373,14 @@ namespace Intersect.Server.Entities
             }
 
             bool parentSpellMissed = false;
-            if (parentSpell != null && target != null)
+            if (target is Resource && projectile.SpellId != Guid.Empty)
             {
-                TryAttackSpell(target, parentSpell, out bool spellMissed, out bool spellBlocked, (sbyte) projectileDir, true);
+                TryAttackSpell(target, projectile.Spell, out bool spellMissed, out bool spellBlocked, (sbyte)projectileDir, true);
+                parentSpellMissed = spellMissed;
+            }
+            else if (parentSpell != null && target != null)
+            {
+                TryAttackSpell(target, parentSpell, out bool spellMissed, out bool spellBlocked, (sbyte)projectileDir, true);
                 parentSpellMissed = spellMissed;
             }
 
@@ -1405,6 +1414,12 @@ namespace Intersect.Server.Entities
             Dictionary<AttackFailures, bool> attackFailures = new Dictionary<AttackFailures, bool>();
             if (parentSpell == null && parentItem != null)
             {
+                DamageType damageType = (DamageType)parentItem.DamageType;
+                if (projectileTool)
+                {
+                    damageType = DamageType.True;
+                }
+
                 var deadAnimations = new List<KeyValuePair<Guid, sbyte>>();
                 var aliveAnimations = new List<KeyValuePair<Guid, sbyte>>();
                 
@@ -1416,7 +1431,7 @@ namespace Intersect.Server.Entities
 
                 int damage = CalculateSpecialDamage(parentItem.Damage, parentItem, target);
                 attackFailures = Attack(
-                    target, damage, 0, (DamageType) parentItem.DamageType, (Stats) parentItem.ScalingStat,
+                    target, damage, 0, damageType, (Stats) parentItem.ScalingStat,
                     parentItem.Scaling, parentItem.CritChance, parentItem.CritMultiplier, deadAnimations, aliveAnimations, true, false, true
                 );
             }
@@ -1437,7 +1452,7 @@ namespace Intersect.Server.Entities
                 var s = projectile.Spell;
                 if (s != null)
                 {
-                    HandleAoESpell(projectile.SpellId, s.Combat.HitRadius, target.MapId, target.X, target.Y, null, true);
+                    HandleAoESpell(projectile.SpellId, s.Combat.HitRadius, target.MapId, target.X, target.Y, null, true, projectileTool);
                 }
 
                 //Check that the npc has not been destroyed by the splash spell
@@ -1519,9 +1534,13 @@ namespace Intersect.Server.Entities
             spellMissed = false;
             spellBlocked = false;
 
-            if (target is Resource)
+            bool projectileTool = false;
+            if (target is Resource && !fromProjectile) // will only be from a projectile with a target resource if the projectile is the appropriate tool
             {
                 return;
+            } else if (target is Resource)
+            {
+                projectileTool = true;
             }
 
             if (spellBase == null)
@@ -1677,6 +1696,11 @@ namespace Intersect.Server.Entities
                     damageType = (DamageType) player.CastingWeapon.DamageType;
                     critChance += player.CastingWeapon.CritChance;
                     critMultiplier += player.CastingWeapon.CritMultiplier;
+                }
+
+                if (projectileTool)
+                {
+                    damageType = DamageType.True;
                 }
 
                 attackFailures = Attack(
@@ -2535,7 +2559,8 @@ namespace Intersect.Server.Entities
             int startX,
             int startY,
             Entity spellTarget,
-            bool ignoreEvasion = false
+            bool ignoreEvasion = false,
+            bool isProjectileTool = false
         )
         {
             var spellBase = SpellBase.Get(spellId);
@@ -2574,7 +2599,7 @@ namespace Intersect.Server.Entities
                         }
                     }
                 }
-                if (!spellBase.Combat.Friendly && entitiesHit <= 1) // Will count yourself - which is FINE in the case of a friendly spell, otherwise ignore it
+                if (!spellBase.Combat.Friendly && entitiesHit <= 1 && !isProjectileTool) // Will count yourself - which is FINE in the case of a friendly spell, otherwise ignore it
                 {
                     if (this is Player)
                     {

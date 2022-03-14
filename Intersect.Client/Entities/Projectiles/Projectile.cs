@@ -554,7 +554,10 @@ namespace Intersect.Client.Entities.Projectiles
                 {
                     if (blockedBy.GetType() == typeof(Resource))
                     {
-                        killSpawn = true;
+                        if (!Spawns[i].ProjectileBase.PierceTarget && !Spawns[i].ProjectileBase.IgnoreActiveResources)
+                        {
+                            killSpawn = true;
+                        }
                     }
                 }
                 else

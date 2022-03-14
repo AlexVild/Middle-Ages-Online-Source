@@ -1496,7 +1496,7 @@ namespace Intersect.Server.Entities
                 }
 
                 // We don't here deal in them fancy projectile tools o'er in dis town!
-                if (parentSpell != null)
+                if (parentSpell != null && projectile.Tool != resource.Base.Tool)
                 {
                     return;
                 }
@@ -1521,20 +1521,24 @@ namespace Intersect.Server.Entities
 
                 if (descriptor.Tool > -1 && descriptor.Tool < Options.ToolTypes.Count)
                 {
-                    if (projectile != null && projectile.Tool != parentItem.Tool)
+                    if (projectile != null)
                     {
-                        PacketSender.SendChatMsg(
-                            this, Strings.Combat.toolrequired.ToString(Options.ToolTypes[descriptor.Tool]), ChatMessageType.Error
-                        );
-
-                        return;
-                    }
-                    else if (parentItem == null || descriptor.Tool != parentItem.Tool)
-                    {
+                        if (projectile.Tool != descriptor.Tool)
                         {
                             PacketSender.SendChatMsg(
                                 this, Strings.Combat.toolrequired.ToString(Options.ToolTypes[descriptor.Tool]), ChatMessageType.Error
                             );
+
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        if (parentItem == null || descriptor.Tool != parentItem.Tool) 
+                        {
+                            PacketSender.SendChatMsg(
+                               this, Strings.Combat.toolrequired.ToString(Options.ToolTypes[descriptor.Tool]), ChatMessageType.Error
+                           );
 
                             return;
                         }

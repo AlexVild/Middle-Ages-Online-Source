@@ -183,26 +183,56 @@ namespace Intersect.Server.Entities
                 }
                 else if (targetEntity.GetType() == typeof(Resource))
                 {
-                    if (((Resource) targetEntity).IsDead() && !ProjectileBase.IgnoreExhaustedResources ||
-                        !((Resource) targetEntity).IsDead() && !ProjectileBase.IgnoreActiveResources)
+                    if (ProjectileBase.Tool != -1) // if the projectile can be handled as a tool, do some things differently
                     {
-                        if (Parent.Owner.GetType() == typeof(Player) && !((Resource) targetEntity).IsDead())
+                        // If the projectile is the right tool for the job, make an attack
+                        var validTool = false;
+                        if (!((Resource)targetEntity).IsDead() && (ProjectileBase.Tool == ((Resource)targetEntity).Base.Tool)) 
                         {
                             Parent.Owner.TryAttack(targetEntity, Parent.Base, Parent.Spell, Parent.Item, Dir);
-                            if (Dir <= 3 && Parent.Base.GrappleHook && !Parent.HasGrappled
-                            ) //Don't handle directional projectile grapplehooks
+                            validTool = true;
+                        }
+                        // then, determine if the projectile spawn should die
+
+                        if (Parent.Base.PierceTarget)
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            if (validTool)
                             {
-                                Parent.HasGrappled = true;
-                                Parent.Owner.Dir = Dir;
-                                new Dash(
-                                    Parent.Owner, Distance, (byte) Parent.Owner.Dir, Parent.Base.IgnoreMapBlocks,
-                                    Parent.Base.IgnoreActiveResources, Parent.Base.IgnoreExhaustedResources,
-                                    Parent.Base.IgnoreZDimension
-                                );
+                                return true;
+                            } 
+                            else
+                            {
+                                return ((Resource)targetEntity).IsDead() && !ProjectileBase.IgnoreExhaustedResources ||
+                                    !((Resource)targetEntity).IsDead() && !ProjectileBase.IgnoreActiveResources;
                             }
                         }
+                    }
+                    else
+                    {
+                        if (((Resource)targetEntity).IsDead() && !ProjectileBase.IgnoreExhaustedResources ||
+                        !((Resource)targetEntity).IsDead() && !ProjectileBase.IgnoreActiveResources)
+                        {
+                            if (Parent.Owner.GetType() == typeof(Player) && !((Resource)targetEntity).IsDead())
+                            {
+                                Parent.Owner.TryAttack(targetEntity, Parent.Base, Parent.Spell, Parent.Item, Dir);
+                                if (Dir <= 3 && Parent.Base.GrappleHook && !Parent.HasGrappled) //Don't handle directional projectile grapplehooks
+                                {
+                                    Parent.HasGrappled = true;
+                                    Parent.Owner.Dir = Dir;
+                                    new Dash(
+                                        Parent.Owner, Distance, (byte)Parent.Owner.Dir, Parent.Base.IgnoreMapBlocks,
+                                        Parent.Base.IgnoreActiveResources, Parent.Base.IgnoreExhaustedResources,
+                                        Parent.Base.IgnoreZDimension
+                                    );
+                                }
+                            }
 
-                        return true;
+                            return true;
+                        }
                     }
                 }
                 else //Any other Parent.Target

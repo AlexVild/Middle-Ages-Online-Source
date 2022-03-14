@@ -581,6 +581,8 @@ namespace Intersect.Server.Migrations.Game
 
                     b.Property<long>("TimeCreated");
 
+                    b.Property<int>("Tool");
+
                     b.HasKey("Id");
 
                     b.ToTable("Projectiles");
