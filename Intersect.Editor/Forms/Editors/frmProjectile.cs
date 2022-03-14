@@ -97,6 +97,10 @@ namespace Intersect.Editor.Forms.Editors
             cmbSpell.Items.Add(Strings.General.none);
             cmbSpell.Items.AddRange(SpellBase.Names);
 
+            cmbToolType.Items.Clear();
+            cmbToolType.Items.Add(Strings.General.none);
+            cmbToolType.Items.AddRange(Options.ToolTypes.ToArray());
+
             InitLocalization();
             UpdateEditor();
         }
@@ -182,6 +186,8 @@ namespace Intersect.Editor.Forms.Editors
 
                 UpdateAnimationData(0);
                 lstAnimations.SelectedIndex = 0;
+
+                cmbToolType.SelectedIndex = mEditorItem.Tool + 1;
 
                 Render();
                 if (mChanged.IndexOf(mEditorItem) == -1)
@@ -765,6 +771,11 @@ namespace Intersect.Editor.Forms.Editors
         private void chkGrounded_CheckedChanged(object sender, EventArgs e)
         {
             mEditorItem.Grounded = chkGrounded.Checked;
+        }
+
+        private void cmbToolType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Tool = cmbToolType.SelectedIndex - 1;
         }
     }
 

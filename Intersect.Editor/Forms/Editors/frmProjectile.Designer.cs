@@ -39,6 +39,8 @@ namespace Intersect.Editor.Forms.Editors
             this.grpSpawns = new DarkUI.Controls.DarkGroupBox();
             this.picSpawns = new System.Windows.Forms.PictureBox();
             this.grpProperties = new DarkUI.Controls.DarkGroupBox();
+            this.cmbToolType = new DarkUI.Controls.DarkComboBox();
+            this.lblToolType = new System.Windows.Forms.Label();
             this.btnAddFolder = new DarkUI.Controls.DarkButton();
             this.lblFolder = new System.Windows.Forms.Label();
             this.cmbFolder = new DarkUI.Controls.DarkComboBox();
@@ -170,7 +172,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpSpawns.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.grpSpawns.Controls.Add(this.picSpawns);
             this.grpSpawns.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpSpawns.Location = new System.Drawing.Point(1, 259);
+            this.grpSpawns.Location = new System.Drawing.Point(3, 305);
             this.grpSpawns.Name = "grpSpawns";
             this.grpSpawns.Size = new System.Drawing.Size(186, 192);
             this.grpSpawns.TabIndex = 17;
@@ -191,6 +193,8 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpProperties.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpProperties.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpProperties.Controls.Add(this.cmbToolType);
+            this.grpProperties.Controls.Add(this.lblToolType);
             this.grpProperties.Controls.Add(this.btnAddFolder);
             this.grpProperties.Controls.Add(this.lblFolder);
             this.grpProperties.Controls.Add(this.cmbFolder);
@@ -212,10 +216,40 @@ namespace Intersect.Editor.Forms.Editors
             this.grpProperties.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpProperties.Location = new System.Drawing.Point(1, 1);
             this.grpProperties.Name = "grpProperties";
-            this.grpProperties.Size = new System.Drawing.Size(186, 252);
+            this.grpProperties.Size = new System.Drawing.Size(186, 298);
             this.grpProperties.TabIndex = 18;
             this.grpProperties.TabStop = false;
             this.grpProperties.Text = "Properties";
+            // 
+            // cmbToolType
+            // 
+            this.cmbToolType.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbToolType.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbToolType.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbToolType.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbToolType.DrawDropdownHoverOutline = false;
+            this.cmbToolType.DrawFocusRectangle = false;
+            this.cmbToolType.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbToolType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbToolType.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbToolType.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbToolType.FormattingEnabled = true;
+            this.cmbToolType.Location = new System.Drawing.Point(9, 216);
+            this.cmbToolType.Name = "cmbToolType";
+            this.cmbToolType.Size = new System.Drawing.Size(167, 21);
+            this.cmbToolType.TabIndex = 54;
+            this.cmbToolType.Text = null;
+            this.cmbToolType.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbToolType.SelectedIndexChanged += new System.EventHandler(this.cmbToolType_SelectedIndexChanged);
+            // 
+            // lblToolType
+            // 
+            this.lblToolType.AutoSize = true;
+            this.lblToolType.Location = new System.Drawing.Point(7, 200);
+            this.lblToolType.Name = "lblToolType";
+            this.lblToolType.Size = new System.Drawing.Size(58, 13);
+            this.lblToolType.TabIndex = 53;
+            this.lblToolType.Text = "Tool Type:";
             // 
             // btnAddFolder
             // 
@@ -270,7 +304,7 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbSpell.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbSpell.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbSpell.FormattingEnabled = true;
-            this.cmbSpell.Location = new System.Drawing.Point(9, 225);
+            this.cmbSpell.Location = new System.Drawing.Point(10, 270);
             this.cmbSpell.Name = "cmbSpell";
             this.cmbSpell.Size = new System.Drawing.Size(167, 21);
             this.cmbSpell.TabIndex = 46;
@@ -404,7 +438,7 @@ namespace Intersect.Editor.Forms.Editors
             // chkGrapple
             // 
             this.chkGrapple.AutoSize = true;
-            this.chkGrapple.Location = new System.Drawing.Point(90, 202);
+            this.chkGrapple.Location = new System.Drawing.Point(95, 250);
             this.chkGrapple.Name = "chkGrapple";
             this.chkGrapple.Size = new System.Drawing.Size(90, 17);
             this.chkGrapple.TabIndex = 36;
@@ -414,7 +448,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblSpell
             // 
             this.lblSpell.AutoSize = true;
-            this.lblSpell.Location = new System.Drawing.Point(6, 206);
+            this.lblSpell.Location = new System.Drawing.Point(7, 254);
             this.lblSpell.Name = "lblSpell";
             this.lblSpell.Size = new System.Drawing.Size(74, 13);
             this.lblSpell.TabIndex = 24;
@@ -669,7 +703,7 @@ namespace Intersect.Editor.Forms.Editors
             this.pnlContainer.Controls.Add(this.grpSpawns);
             this.pnlContainer.Location = new System.Drawing.Point(221, 36);
             this.pnlContainer.Name = "pnlContainer";
-            this.pnlContainer.Size = new System.Drawing.Size(473, 454);
+            this.pnlContainer.Size = new System.Drawing.Size(473, 500);
             this.pnlContainer.TabIndex = 30;
             this.pnlContainer.Visible = false;
             // 
@@ -682,7 +716,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpAmmo.Controls.Add(this.lblAmmoItem);
             this.grpAmmo.Controls.Add(this.lblAmmoAmount);
             this.grpAmmo.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpAmmo.Location = new System.Drawing.Point(193, 372);
+            this.grpAmmo.Location = new System.Drawing.Point(192, 372);
             this.grpAmmo.Name = "grpAmmo";
             this.grpAmmo.Size = new System.Drawing.Size(272, 79);
             this.grpAmmo.TabIndex = 30;
@@ -751,7 +785,7 @@ namespace Intersect.Editor.Forms.Editors
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(497, 496);
+            this.btnCancel.Location = new System.Drawing.Point(496, 542);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Padding = new System.Windows.Forms.Padding(5);
             this.btnCancel.Size = new System.Drawing.Size(190, 27);
@@ -761,7 +795,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(301, 496);
+            this.btnSave.Location = new System.Drawing.Point(301, 542);
             this.btnSave.Name = "btnSave";
             this.btnSave.Padding = new System.Windows.Forms.Padding(5);
             this.btnSave.Size = new System.Drawing.Size(190, 27);
@@ -896,7 +930,7 @@ namespace Intersect.Editor.Forms.Editors
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.ClientSize = new System.Drawing.Size(698, 527);
+            this.ClientSize = new System.Drawing.Size(698, 581);
             this.ControlBox = false;
             this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.btnCancel);
@@ -997,5 +1031,7 @@ namespace Intersect.Editor.Forms.Editors
         private DarkCheckBox chkPierce;
         private Controls.GameObjectList lstGameObjects;
         private DarkCheckBox chkGrounded;
+        private System.Windows.Forms.Label lblToolType;
+        private DarkComboBox cmbToolType;
     }
 }
