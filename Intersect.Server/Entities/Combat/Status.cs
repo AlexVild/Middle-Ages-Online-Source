@@ -81,6 +81,10 @@ namespace Intersect.Server.Entities.Combat
             if (InterruptStatusses.Contains(type))
             {
                 en.CastTime = 0;
+                if (en is Player ply)
+                {
+                    ply.LastSpellCast = 0;
+                }
                 en.CastTarget = null;
                 en.SpellCastSlot = -1;
                 PacketSender.SendEntityCancelCast(en);

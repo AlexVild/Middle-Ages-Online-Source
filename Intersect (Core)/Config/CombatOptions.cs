@@ -87,6 +87,8 @@
 
         public bool EnableCombatChatMessages = false; // Enables or disables combat chat messages.
 
+        public long PostCastMovementDelay = 250;
+
         //Spells
 
         /// <summary>

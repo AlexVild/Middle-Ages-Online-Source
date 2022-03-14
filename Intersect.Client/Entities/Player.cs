@@ -150,6 +150,8 @@ namespace Intersect.Client.Entities
         
         public long VehicleSpeed = 0L;
 
+        public long LastCastTime = 0L;
+
         public Player(Guid id, PlayerEntityPacket packet) : base(id, packet)
         {
             for (var i = 0; i < Options.MaxHotbar; i++)
@@ -879,6 +881,11 @@ namespace Intersect.Client.Entities
                 if (spellBase.CastDuration > 0 && (Options.Instance.CombatOpts.MovementCancelsCast && Globals.Me.IsMoving))
                 {
                     return;
+                }
+
+                if (!Options.Combat.MovementCancelsCast)
+                {
+                    LastCastTime = Timing.Global.Milliseconds + SpellBase.Get(Spells[index].SpellId).CastDuration + Options.Combat.PostCastMovementDelay;
                 }
 
                 PacketSender.SendUseSpell(index, TargetIndex);
@@ -1694,6 +1701,9 @@ namespace Intersect.Client.Entities
 
         public bool TryFaceTarget(bool skipSmartDir = false, bool force = false)
         {
+            // Check if we're currently casting
+            if (CastTime > Globals.System.GetTimeMs()) return false;
+
             //check if player is stunned or snared, if so don't let them turn.
             for (var n = 0; n < Status.Count; n++)
             {
@@ -1903,12 +1913,18 @@ namespace Intersect.Client.Entities
 
             if (MoveDir > -1 && Globals.EventDialogs.Count == 0)
             {
+                if (LastCastTime >= Timing.Global.Milliseconds)
+                {
+                    return;
+                }
+
                 //Try to move if able and not casting spells.
                 if (!IsMoving && MoveTimer < Timing.Global.Ticks / TimeSpan.TicksPerMillisecond && (Options.Combat.MovementCancelsCast || CastTime < Globals.System.GetTimeMs())) 
                 {
                     if (Options.Combat.MovementCancelsCast)
                     {
                         CastTime = 0;
+                        LastCastTime = 0L;
                     }
 
                     switch (MoveDir)
@@ -2035,6 +2051,8 @@ namespace Intersect.Client.Entities
             }
             else if (!IsMoving && !DirKeyPressed)
             {
+                if (CastTime > Globals.System.GetTimeMs()) return;
+
                 if (Controls.KeyDown(Control.TurnClockwise))
                 {
                     DirKeyPressed = true;

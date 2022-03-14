@@ -621,9 +621,10 @@ namespace Intersect.Client.Networking
                 return;
             }
 
-            if (en is Player && Options.Combat.MovementCancelsCast)
+            if (en is Player pl && Options.Combat.MovementCancelsCast)
             {
                 en.CastTime = 0;
+                pl.LastCastTime = 0;
             }
 
             if (en.Dashing != null || en.DashQueue.Count > 0)
@@ -786,6 +787,10 @@ namespace Intersect.Client.Networking
                     if (instance.Type == StatusTypes.Stun || instance.Type == StatusTypes.Silence)
                     {
                         entity.CastTime = 0;
+                        if (entity is Player player)
+                        {
+                            player.LastCastTime = 0;
+                        }
                     }
                     else if (instance.Type == StatusTypes.Shield)
                     {
@@ -871,6 +876,11 @@ namespace Intersect.Client.Networking
                 if (instance.Type == StatusTypes.Stun || instance.Type == StatusTypes.Silence)
                 {
                     en.CastTime = 0;
+                    // Clear the players movement stun if counterspelled
+                    if (en is Player player)
+                    {
+                        player.LastCastTime = 0;
+                    }
                 }
                 else if (instance.Type == StatusTypes.Shield)
                 {

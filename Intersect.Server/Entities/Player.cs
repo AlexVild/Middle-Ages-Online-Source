@@ -979,6 +979,7 @@ namespace Intersect.Server.Entities
         public override void Die(bool dropItems = true, Entity killer = null)
         {
             CastTime = 0;
+            LastSpellCast = 0;
             CastTarget = null;
 
             //Flag death to the client
@@ -1495,7 +1496,7 @@ namespace Intersect.Server.Entities
                 }
 
                 // We don't here deal in them fancy projectile tools o'er in dis town!
-                if (parentSpell != null || projectile != null)
+                if (parentSpell != null)
                 {
                     return;
                 }
@@ -1520,13 +1521,23 @@ namespace Intersect.Server.Entities
 
                 if (descriptor.Tool > -1 && descriptor.Tool < Options.ToolTypes.Count)
                 {
-                    if (parentItem == null || descriptor.Tool != parentItem.Tool)
+                    if (projectile != null && projectile.Tool != parentItem.Tool)
                     {
                         PacketSender.SendChatMsg(
                             this, Strings.Combat.toolrequired.ToString(Options.ToolTypes[descriptor.Tool]), ChatMessageType.Error
                         );
 
                         return;
+                    }
+                    else if (parentItem == null || descriptor.Tool != parentItem.Tool)
+                    {
+                        {
+                            PacketSender.SendChatMsg(
+                                this, Strings.Combat.toolrequired.ToString(Options.ToolTypes[descriptor.Tool]), ChatMessageType.Error
+                            );
+
+                            return;
+                        }
                     }
                 }
             }
