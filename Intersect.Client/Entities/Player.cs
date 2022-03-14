@@ -102,6 +102,8 @@ namespace Intersect.Client.Entities
 
         public string LifetimeQuestPoints { get; set; }
 
+        private long mLastSpellCastMessageSent = 0L;
+
         // Used for doing smart direction changing if requesting to face a target
         public long DirRequestTime { get; set; }
 
@@ -885,7 +887,32 @@ namespace Intersect.Client.Entities
 
                 if (!Options.Combat.MovementCancelsCast)
                 {
-                    LastCastTime = Timing.Global.Milliseconds + SpellBase.Get(Spells[index].SpellId).CastDuration + Options.Combat.PostCastMovementDelay;
+                    if (spellBase.Combat.TargetType == SpellTargetTypes.Single)
+                    {
+                        if (TargetIndex != Guid.Empty)
+                        {
+                            if (!spellBase.Combat.Friendly && TargetIndex != Globals.Me.Id)
+                            {
+                                LastCastTime = Timing.Global.Milliseconds + SpellBase.Get(Spells[index].SpellId).CastDuration + Options.Combat.PostCastMovementDelay;
+                            }
+                            else if (spellBase.Combat.Friendly)
+                            {
+                                LastCastTime = Timing.Global.Milliseconds + SpellBase.Get(Spells[index].SpellId).CastDuration + Options.Combat.PostCastMovementDelay;
+                            }
+                        } else
+                        {
+                            if (Timing.Global.Milliseconds > mLastSpellCastMessageSent)
+                            {
+                                Audio.AddGameSound(Options.UIDenySound, false);
+                                ChatboxMsg.AddMessage(new ChatboxMsg(Strings.Spells.targetneeded, CustomColors.Alerts.Error, ChatMessageType.Spells));
+                                mLastSpellCastMessageSent = Timing.Global.Milliseconds + 5000;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        LastCastTime = Timing.Global.Milliseconds + SpellBase.Get(Spells[index].SpellId).CastDuration + Options.Combat.PostCastMovementDelay;
+                    }
                 }
 
                 PacketSender.SendUseSpell(index, TargetIndex);

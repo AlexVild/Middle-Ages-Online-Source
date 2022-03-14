@@ -1902,7 +1902,8 @@ namespace Intersect.Client.Localization
             public static LocalizedString forgetspellprompt = @"Are you sure you want to forget {00}?";
 
             public static LocalizedString title = @"Spells";
-
+            
+            public static LocalizedString targetneeded = @"You must have a target selected to cast this spell.";
         }
 
         public struct Trading
