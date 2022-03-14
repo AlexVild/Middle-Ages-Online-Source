@@ -885,9 +885,9 @@ namespace Intersect.Client.Entities
                     return;
                 }
 
-                if (spellBase.Combat.TargetType == SpellTargetTypes.Single)
+                if (spellBase.Combat.TargetType == SpellTargetTypes.Single && Timing.Global.Milliseconds > mLastSpellCastMessageSent)
                 {
-                    if (TargetIndex != Guid.Empty && Timing.Global.Milliseconds > mLastSpellCastMessageSent)
+                    if (TargetIndex == Guid.Empty)
                     {
                         Audio.AddGameSound(Options.UIDenySound, false);
                         ChatboxMsg.AddMessage(new ChatboxMsg(Strings.Spells.targetneeded, CustomColors.Alerts.Error, ChatMessageType.Spells));
