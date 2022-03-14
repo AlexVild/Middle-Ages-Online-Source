@@ -638,6 +638,12 @@ namespace Intersect.Client.Interface.Shared
                 mCustomResolutionMenuItem?.Hide();
                 Graphics.Renderer.OverrideResolution = Resolution.Empty;
                 Graphics.Renderer.Init();
+                if (!Globals.Database.FadeTransitions)
+                {
+                    // Make sure we don't have a bigass black bar on the screen after resolution change
+                    Wipe.FadeIn();
+                }
+                
             }
 
             if (Globals.GameState == GameStates.InGame)
