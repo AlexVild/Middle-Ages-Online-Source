@@ -6126,7 +6126,7 @@ namespace Intersect.Server.Entities
             }
         }
 
-        public void CompleteQuestTask(Guid questId, Guid taskId)
+        public void CompleteQuestTask(Guid questId, Guid taskId, bool skipCompletion = false, bool noNotify = false)
         {
             var quest = QuestBase.Get(questId);
             if (quest != null)
@@ -6141,16 +6141,20 @@ namespace Intersect.Server.Entities
                         {
                             if (quest.Tasks[i].Id == taskId)
                             {
-                                PacketSender.SendChatMsg(this, Strings.Quests.taskcompleted, ChatMessageType.Quest);
+                                if (!noNotify)
+                                {
+                                    PacketSender.SendChatMsg(this, Strings.Quests.taskcompleted, ChatMessageType.Quest);
+                                }
+
+                                if (!skipCompletion && quest.Tasks[i].CompletionEvent != null)
+                                {
+                                    StartCommonEvent(quest.Tasks[i].CompletionEvent);
+                                }
+
                                 if (i == quest.Tasks.Count - 1)
                                 {
                                     //Complete Quest
                                     MarkQuestComplete(quest, questProgress);
-                                    if (quest.Tasks[i].CompletionEvent != null)
-                                    {
-                                        StartCommonEvent(quest.Tasks[i].CompletionEvent);
-                                    }
-
                                     StartCommonEvent(EventBase.Get(quest.EndEventId));
                                     PacketSender.SendChatMsg(
                                         this, Strings.Quests.completed.ToString(quest.Name), ChatMessageType.Quest, CustomColors.Alerts.Accepted
@@ -6161,21 +6165,20 @@ namespace Intersect.Server.Entities
                                     //Advance Task
                                     questProgress.TaskId = quest.Tasks[i + 1].Id;
                                     questProgress.TaskProgress = 0;
-                                    if (quest.Tasks[i].CompletionEvent != null)
-                                    {
-                                        StartCommonEvent(quest.Tasks[i].CompletionEvent);
-                                    }
 
                                     if (quest.Tasks[i + 1].Objective == QuestObjective.GatherItems)
                                     {
                                         UpdateGatherItemQuests(quest.Tasks[i + 1].TargetId);
                                     }
 
-                                    PacketSender.SendChatMsg(
-                                        this, Strings.Quests.updated.ToString(quest.Name),
-                                        ChatMessageType.Quest,
-                                        CustomColors.Quests.TaskUpdated
-                                    );
+                                    if (!noNotify)
+                                    {
+                                        PacketSender.SendChatMsg(
+                                            this, Strings.Quests.updated.ToString(quest.Name),
+                                            ChatMessageType.Quest,
+                                            CustomColors.Quests.TaskUpdated
+                                        );
+                                    }
                                 }
                             }
                         }

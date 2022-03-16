@@ -2154,6 +2154,12 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString title = @"Complete Quest Task";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString skipcompletion = @"Do not run completion event?";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString nonotify = @"Do not send chat notification?";
+
         }
 
         public struct EventOpenQuestBoard
