@@ -6,6 +6,7 @@ using Intersect.GameObjects;
 using Intersect.Client.General;
 using Intersect.Client.Localization;
 using Intersect.Client.Framework.File_Management;
+using Intersect.Client.Items;
 
 namespace Intersect.Client.Interface.Game.DescriptionWindows
 {
@@ -587,12 +588,12 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 else if (mItem.AttackSpeedModifier == 1)
                 {
                     // Static, so this weapon's attack speed.
-                    DisplayKeyValueRowWithDifference(GetAttackSpeedDifference(), Strings.ItemDescription.AttackSpeed, Strings.ItemDescription.Seconds.ToString(mItem.AttackSpeedValue / 1000f), rows, "ms");
+                    DisplayKeyValueRowWithDifference(GetAttackSpeedDifference(), Strings.ItemDescription.AttackSpeed, Strings.ItemDescription.Seconds.ToString(mItem.AttackSpeedValue / 1000f), rows, "ms", "-");
                 }
                 else if (mItem.AttackSpeedModifier == 2)
                 {
                     // Percentage based.
-                    DisplayKeyValueRowWithDifference(GetAttackSpeedDifference(), Strings.ItemDescription.AttackSpeed, Strings.ItemDescription.Percentage.ToString(mItem.AttackSpeedValue), rows, "%");
+                    DisplayKeyValueRowWithDifference(GetAttackSpeedDifference(), Strings.ItemDescription.AttackSpeed, Strings.ItemDescription.Percentage.ToString(mItem.AttackSpeedValue), rows, "%", "-");
                 }
             }
 
@@ -623,6 +624,13 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             // Stats
             if (mStatBuffs != null)
             {
+                var slot = mItem.EquipmentSlot;
+                Item equippedItem = null;
+                if (Globals.Me.MyEquipment[slot] != -1) 
+                {
+                    equippedItem = Globals.Me.Inventory[Globals.Me.MyEquipment[slot]];
+                }
+                
                 for (var i = 0; i < (int)Stats.StatCount; i++)
                 {
                     var flatStat = mItem.StatsGiven[i] + mStatBuffs[i];
@@ -639,6 +647,25 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                     {
                         DisplayKeyValueRowWithDifference(GetStatPercentageDifference(i), Strings.ItemDescription.StatCounts[i], Strings.ItemDescription.Percentage.ToString(mItem.PercentageStatsGiven[i]), rows, "%");
                     }
+                    // Display stats that this item straight-up doesn't have, to show what you'll be missing out on.
+                    else if (equippedItem != null)
+                    {
+                        var equippedFlatStat = equippedItem.Base.StatsGiven[i] + equippedItem.StatBuffs[i];
+                        var equippedPerecentage = equippedItem.Base.PercentageStatsGiven[i];
+                        if (equippedFlatStat != 0 && equippedPerecentage != 0)
+                        {
+                            var (flatStatDiff, percentStatDiff) = GetStatPercentageAndFlatDifference(i);
+                            DisplayKeyValueRowWithDifferenceAndPercent(flatStatDiff, percentStatDiff, Strings.ItemDescription.StatCounts[i], Strings.ItemDescription.RegularAndPercentage.ToString(flatStat, mItem.PercentageStatsGiven[i]), rows);
+                        }
+                        else if (flatStat != 0)
+                        {
+                            DisplayKeyValueRowWithDifference(GetStatDifference(i), Strings.ItemDescription.StatCounts[i], flatStat.ToString(), rows);
+                        }
+                        else if (mItem.PercentageStatsGiven[i] != 0)
+                        {
+                            DisplayKeyValueRowWithDifference(GetStatPercentageDifference(i), Strings.ItemDescription.StatCounts[i], Strings.ItemDescription.Percentage.ToString(mItem.PercentageStatsGiven[i]), rows, "%");
+                        }
+                    }
                 }
             }
 
@@ -652,13 +679,13 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             rows.SizeToChildren(true, true);
         }
 
-        private void DisplayKeyValueRowWithDifference(int statDiff, string keyString, string valueString, Components.RowContainerComponent rows, string unit = "")
+        private void DisplayKeyValueRowWithDifference(int statDiff, string keyString, string valueString, Components.RowContainerComponent rows, string unit = "", string sign = "+")
         {
             if (statDiff != 0)
             {
                 if (Math.Sign(statDiff) > 0)
                 {
-                    rows.AddKeyValueRow(keyString, $"{valueString} (+{statDiff.ToString()}{unit})", CustomColors.ItemDesc.Muted, CustomColors.ItemDesc.Better);
+                    rows.AddKeyValueRow(keyString, $"{valueString} ({sign}{statDiff.ToString()}{unit})", CustomColors.ItemDesc.Muted, CustomColors.ItemDesc.Better);
                 }
                 else
                 {
