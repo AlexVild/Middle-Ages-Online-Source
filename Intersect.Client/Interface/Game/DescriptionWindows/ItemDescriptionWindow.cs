@@ -648,7 +648,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                         DisplayKeyValueRowWithDifference(GetStatPercentageDifference(i), Strings.ItemDescription.StatCounts[i], Strings.ItemDescription.Percentage.ToString(mItem.PercentageStatsGiven[i]), rows, "%");
                     }
                     // Display stats that this item straight-up doesn't have, to show what you'll be missing out on.
-                    else if (equippedItem != null)
+                    else if (equippedItem != null && equippedItem.Base != null)
                     {
                         var equippedFlatStat = equippedItem.Base.StatsGiven[i] + equippedItem.StatBuffs[i];
                         var equippedPerecentage = equippedItem.Base.PercentageStatsGiven[i];
@@ -745,11 +745,11 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             {
                 if (Math.Sign(statDiff) > 0)
                 {
-                    rows.AddKeyValueRow(keyString, $"{valueString} (+{statDiff.ToString()}{unit})");
+                    rows.AddKeyValueRow(keyString, $"{valueString} (+{statDiff.ToString()}{unit})", CustomColors.ItemDesc.Muted, CustomColors.ItemDesc.Better);
                 }
                 else
                 {
-                    rows.AddKeyValueRow(keyString, $"{valueString} ({statDiff.ToString()}{unit})");
+                    rows.AddKeyValueRow(keyString, $"{valueString} ({statDiff.ToString()}{unit})", CustomColors.ItemDesc.Muted, CustomColors.ItemDesc.Worse);
                 }
             }
             else
