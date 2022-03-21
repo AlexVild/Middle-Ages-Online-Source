@@ -978,6 +978,7 @@ namespace Intersect.Server.Entities
 
         public override void Die(bool dropItems = true, Entity killer = null)
         {
+            var currentMapZoneType = MapController.Get(Map.Id).ZoneType;
             CastTime = 0;
             CastTarget = null;
 
@@ -1003,23 +1004,27 @@ namespace Intersect.Server.Entities
                     }
                 }
             }
-            
+
             lock (EntityLock)
             {
                 base.Die(dropItems, killer);
             }
 
-            if (Options.Instance.PlayerOpts.ExpLossOnDeathPercent > 0)
+            // EXP Loss - don't lose in shared instance, or in an Arena zone
+            if ((InstanceType != MapInstanceType.Shared || Options.Instance.Instancing.LoseExpOnInstanceDeath) && currentMapZoneType != MapZones.Arena)
             {
-                if (Options.Instance.PlayerOpts.ExpLossFromCurrentExp)
+                if (Options.Instance.PlayerOpts.ExpLossOnDeathPercent > 0)
                 {
-                    var ExpLoss = (this.Exp * (Options.Instance.PlayerOpts.ExpLossOnDeathPercent / 100.0));
-                    TakeExperience((long)ExpLoss);
-                }
-                else
-                {
-                    var ExpLoss = (GetExperienceToNextLevel(this.Level) * (Options.Instance.PlayerOpts.ExpLossOnDeathPercent / 100.0));
-                    TakeExperience((long)ExpLoss);
+                    if (Options.Instance.PlayerOpts.ExpLossFromCurrentExp)
+                    {
+                        var ExpLoss = (this.Exp * (Options.Instance.PlayerOpts.ExpLossOnDeathPercent / 100.0));
+                        TakeExperience((long)ExpLoss);
+                    }
+                    else
+                    {
+                        var ExpLoss = (GetExperienceToNextLevel(this.Level) * (Options.Instance.PlayerOpts.ExpLossOnDeathPercent / 100.0));
+                        TakeExperience((long)ExpLoss);
+                    }
                 }
             }
             PacketSender.SendEntityDie(this);

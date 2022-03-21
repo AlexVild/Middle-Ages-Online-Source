@@ -3047,6 +3047,14 @@ namespace Intersect.Server.Entities
         {
             for (var i = 0; i < (int) Vitals.VitalCount; i++)
             {
+                if (this is Player player)
+                {
+                    if (player.InstanceType == MapInstanceType.Shared && !Options.Instance.Instancing.RegenManaOnInstanceDeath && i == (int)Vitals.Mana)
+                    {
+                        continue;
+                    }
+                }
+                
                 RestoreVital((Vitals) i);
             }
 

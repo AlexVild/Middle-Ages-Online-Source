@@ -15,6 +15,10 @@ namespace Intersect.Config
 
         public bool BootAllFromInstanceWhenOutOfLives = true;
 
+        public bool LoseExpOnInstanceDeath = false;
+        
+        public bool RegenManaOnInstanceDeath = false;
+
         [OnDeserialized]
         internal void OnDeserializedMethod(StreamingContext context)
         {
