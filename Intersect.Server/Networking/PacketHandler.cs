@@ -4034,8 +4034,6 @@ namespace Intersect.Server.Networking
 
                     obj.Load(packet.Data);
 
-                    DbInterface.SaveGameObject(obj);
-
                     if (type == GameObjectType.Quest)
                     {
                         var qst = (QuestBase)obj;
@@ -4081,6 +4079,9 @@ namespace Intersect.Server.Networking
                         // Don't trigger a instance change common event, because the editor can not change instance variable values - only their defaults
                         DbInterface.CacheInstanceVariableEventTextLookups();
                     }
+
+                    // Save the object. Resolves #915 - we needed to make sure we did this AFTER modifying the object if it was a quest
+                    DbInterface.SaveGameObject(obj);
 
                     // Only replace the modified object
                     PacketSender.CacheGameDataPacket();
