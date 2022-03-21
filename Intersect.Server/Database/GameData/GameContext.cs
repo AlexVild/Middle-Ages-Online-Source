@@ -122,7 +122,7 @@ namespace Intersect.Server.Database.GameData
                 BoundItemExtensionMigration.Run(this);
             }
 
-            if (migrations.IndexOf("20211031200145_FixQuestTaskCompletionEvents") > -1)
+            if (migrations.IndexOf("20211031200145_FixQuestTaskCompletionEvents") > -1 || migrations.IndexOf("20220321165144_FixQuestsAgainMigration") > -1)
             {
                 FixQuestTaskCompletionEventsMigration.Run(this);
             }
