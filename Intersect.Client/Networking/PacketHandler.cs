@@ -2261,6 +2261,7 @@ namespace Intersect.Client.Networking
             if (Globals.Me == null) return;
 
             Globals.Me.resourceLocked = packet.ResourceLock;
+            Globals.Me.currentHarvestBonus = packet.HarvestBonus;
         }
 
         // QuestBoardPacket

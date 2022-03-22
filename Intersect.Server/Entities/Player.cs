@@ -1769,7 +1769,16 @@ namespace Intersect.Server.Entities
             {
                 if (weapon.AttackSpeedModifier == 1) // Static
                 {
-                    attackTime = weapon.AttackSpeedValue;
+                    if (resourceLock != null)
+                    {
+                        var speedMod = (int) Math.Floor(weapon.AttackSpeedValue * resourceLock.CalculateHarvestBonus(this));
+
+                        attackTime = weapon.AttackSpeedValue - speedMod;
+                    }
+                    else
+                    {
+                        attackTime = weapon.AttackSpeedValue;
+                    }
                 }
                 else if (weapon.AttackSpeedModifier == 2) //Percentage
                 {
@@ -2962,6 +2971,10 @@ namespace Intersect.Server.Entities
 
         public void UseItem(int slot, Entity target = null)
         {
+            if (resourceLock != null)
+            {
+                setResourceLock(false);
+            }
             var equipped = false;
             var Item = Items[slot];
             var itemBase = ItemBase.Get(Item.ItemId);
@@ -5394,6 +5407,10 @@ namespace Intersect.Server.Entities
 
         public override void CastSpell(Guid spellId, int spellSlot = -1, bool prayerSpell = false, Entity prayerTarget = null, int prayerSpellDir = -1)
         {
+            if (resourceLock != null)
+            {
+                setResourceLock(false);
+            }
             var spellBase = SpellBase.Get(spellId);
             if (spellBase == null)
             {
@@ -7574,7 +7591,14 @@ namespace Intersect.Server.Entities
             if (resourceLock != resource) // change has occured
             {
                 resourceLock = resource;
-                PacketSender.SendResourceLockPacket(this, val);
+
+                double harvestBonus = 0.0f;
+                if (resource != null)
+                {
+                    harvestBonus = resource.CalculateHarvestBonus(this);
+                }
+
+                PacketSender.SendResourceLockPacket(this, val, harvestBonus);
             }
         }
 

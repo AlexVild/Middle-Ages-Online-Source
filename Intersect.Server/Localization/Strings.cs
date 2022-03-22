@@ -1394,6 +1394,18 @@ namespace Intersect.Server.Localization
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString resourcegathered =
                 @"You have harvested a resource of this type {00} times!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString resourcegatheredbonus =
+                @"You have harvested a resource of this type {00} times! Harvest it {01} more times to receive a harvest speed bonus!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString resourcegatheredbonusunlock =
+                @"You've unlocked a resource harvesting bonus for this resource! You will now harvest it faster. Your next bonus will be unlocked at {00} harvests.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString resourcegatheredbonusunlockcomplete =
+                @"Congratulations, you have maxed out your harvesting bonus for this resource!";
         }
 
         public sealed class RequirementsNamespace : LocaleNamespace

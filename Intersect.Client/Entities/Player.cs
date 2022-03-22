@@ -79,6 +79,8 @@ namespace Intersect.Client.Entities
         public bool UnspentPointsWarning = false;
 
         public bool resourceLocked = false;
+        
+        public double currentHarvestBonus = 0.0f;
 
         public long CombatTimer { get; set; }
 
@@ -1878,7 +1880,16 @@ namespace Intersect.Client.Entities
             {
                 if (weapon.AttackSpeedModifier == 1) // Static
                 {
-                    attackTime = weapon.AttackSpeedValue;
+                    // Calculating resource harvest bonus
+                    if (resourceLocked)
+                    {
+                        var harvestBonus = (int)Math.Floor(weapon.AttackSpeedValue * currentHarvestBonus);
+                        attackTime = weapon.AttackSpeedValue - harvestBonus;
+                    }
+                    else
+                    {
+                        attackTime = weapon.AttackSpeedValue;
+                    }
                 }
                 else if (weapon.AttackSpeedModifier == 2) //Percentage
                 {

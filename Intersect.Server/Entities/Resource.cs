@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.UI;
 using Intersect.Enums;
 using Intersect.GameObjects;
@@ -80,9 +81,41 @@ namespace Intersect.Server.Entities
             if (killer is Player playerKiller)
             {
                 int recordKilled = playerKiller.IncrementRecord(RecordType.ResourceGathered, Base.Id);
-                if (Options.SendResourceRecordUpdates && recordKilled % Options.ResourceRecordUpdateInterval == 0)
+                Console.WriteLine($"{recordKilled.ToString()}");
+                List<int> intervals = Options.Instance.CombatOpts.HarvestBonusIntervals;
+
+                if (Options.SendResourceRecordUpdates)
                 {
-                    playerKiller.SendRecordUpdate(Strings.Records.resourcegathered.ToString(recordKilled, Name));
+                    if (recordKilled <= intervals.Last())
+                    {
+                        // If we just unlocked a new harvesting bonus
+                        if (intervals.Find(x => x == recordKilled) != default)
+                        {
+                            if (recordKilled != intervals.Last())
+                            {
+                                // The player still has some unlocks to go.
+                                var nextIntervalIdx = intervals.FindIndex(x => x == recordKilled) + 1;
+                                var nextInterval = intervals[nextIntervalIdx];
+                                PacketSender.SendEventDialog(playerKiller, Strings.Records.resourcegatheredbonusunlock.ToString(nextInterval.ToString()), "", Guid.NewGuid());
+                            }
+                            else
+                            {
+                                // The player has completed these resource bonuses
+                                PacketSender.SendEventDialog(playerKiller, Strings.Records.resourcegatheredbonusunlockcomplete, "", Guid.NewGuid());
+                            }
+                        }
+                        else if (recordKilled % Options.ResourceRecordUpdateInterval == 0)
+                        {
+                            // Otherwise, figure out when their next bonus will be awarded and let them know about it.
+                            int nextInterval = intervals.Find(interval => interval > recordKilled);
+                            int progressUntilNextBonus = nextInterval - recordKilled; 
+                            playerKiller.SendRecordUpdate(Strings.Records.resourcegatheredbonus.ToString(recordKilled, progressUntilNextBonus));
+                        }
+                    }
+                    else if (recordKilled % Options.ResourceRecordUpdateInterval == 0)
+                    {
+                        playerKiller.SendRecordUpdate(Strings.Records.resourcegathered.ToString(recordKilled));
+                    }
                 }
 
                 playerKiller.GiveInspiredExperience(Base.Experience);
@@ -219,6 +252,51 @@ namespace Intersect.Server.Entities
         public override bool IsPassable()
         {
             return IsDead() & Base.WalkableAfter || !IsDead() && Base.WalkableBefore;
+        }
+
+        public double CalculateHarvestBonus(Player attacker)
+        {
+            var playerRecord = attacker.PlayerRecords.Find(record => record.Type == RecordType.ResourceGathered && record.RecordId == Base.Id);
+
+            if (playerRecord == null) return 0.0f;
+
+            int amtHarvested = playerRecord.Amount;
+
+            var intervals = Options.Instance.CombatOpts.HarvestBonusIntervals;
+            if (intervals.Count != 5)
+            {
+                Logging.Log.Error($"You fucked up the server config for harvest bonus intervals. Count is {intervals.Count}, must be 5");
+                return 0.0f;
+            }
+            var bonuses = Options.Instance.CombatOpts.HarvestBonuses;
+            if (bonuses.Count != intervals.Count)
+            {
+                Logging.Log.Error($"You fucked up the server config for harvest bonuses. Count is {bonuses.Count}, must be {intervals.Count}");
+                return 0.0f;
+            }
+
+            if (amtHarvested >= intervals[0] && amtHarvested < intervals[1])
+            {
+                return bonuses[0];
+            }
+            else if (amtHarvested >= intervals[1] && amtHarvested < intervals[2])
+            {
+                return bonuses[1];
+            }
+            else if (amtHarvested >= intervals[2] && amtHarvested < intervals[3])
+            {
+                return bonuses[2];
+            }
+            else if (amtHarvested >= intervals[3] && amtHarvested < intervals[4])
+            {
+                return bonuses[3];
+            }
+            else if (amtHarvested >= intervals[4])
+            {
+                return bonuses[4];
+            }
+
+            return 0.0f;
         }
 
         public override EntityPacket EntityPacket(EntityPacket packet = null, Player forPlayer = null)

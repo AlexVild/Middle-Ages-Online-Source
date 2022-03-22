@@ -1,4 +1,8 @@
-﻿namespace Intersect.Config
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.Serialization;
+
+namespace Intersect.Config
 {
 
     public class CombatOptions
@@ -89,6 +93,16 @@
 
         public long ProjectileSpellMovementDelay = 250;
 
+        public List<int> HarvestBonusIntervals = new List<int>()
+        {
+            30, 90, 250, 500, 1000
+        };
+
+        public List<double> HarvestBonuses = new List<double>()
+        {
+            0.05f, 0.1f, 0.25f, 0.33f, 0.5f
+        };
+
         //Spells
 
         /// <summary>
@@ -130,6 +144,20 @@
         /// Configures the maximum distance a target is allowed to be from the player when auto targetting.
         /// </summary>
         public int MaxPlayerAutoTargetRadius = 15;
+
+        [OnDeserializing]
+        internal void OnDeserializingMethod(StreamingContext context)
+        {
+            HarvestBonuses.Clear();
+            HarvestBonusIntervals.Clear();
+        }
+
+        [OnDeserialized]
+        internal void OnDeserializedMethod(StreamingContext context)
+        {
+            HarvestBonuses = new List<double>(HarvestBonuses.Distinct());
+            HarvestBonusIntervals = new List<int>(HarvestBonusIntervals.Distinct());
+        }
     }
 
 }

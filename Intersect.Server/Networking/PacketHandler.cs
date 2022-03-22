@@ -1028,7 +1028,7 @@ namespace Intersect.Server.Networking
                 return;
             }
 
-            //check if player is blinded or stunned
+            /*//check if player is blinded or stunned
             var statuses = client.Entity.Statuses.Values.ToArray();
             foreach (var status in statuses)
             {
@@ -1045,7 +1045,7 @@ namespace Intersect.Server.Networking
 
                     return;
                 }
-            }
+            }*/
 
             client.Entity.TryBlock(packet.Blocking);
         }
