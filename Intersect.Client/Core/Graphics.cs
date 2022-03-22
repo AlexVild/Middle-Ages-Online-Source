@@ -819,6 +819,8 @@ namespace Intersect.Client.Core
                     Globals.InitialFade = true;
                 }
                 Renderer.SetView(CurrentView);
+
+                sLastUpdate = Timing.Global.Milliseconds;
                 return;
             }
 
