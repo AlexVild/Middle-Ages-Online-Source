@@ -2379,7 +2379,7 @@ namespace Intersect.Server.Entities.Events
         {
             if (player == null) return;
 
-            var now = Globals.Timing.MillisecondsUTC;
+            var now = Timing.Global.MillisecondsUtc;
             if (player.InspirationTime < now)
             {
                 // Add Millis

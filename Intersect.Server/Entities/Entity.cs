@@ -1148,7 +1148,7 @@ namespace Intersect.Server.Entities
         public void TryBlock(bool blocking)
         {
             // Seeing as blocking doesn't... do anything, let's just get rid of this.
-            /*if (AttackTimer < Globals.Timing.Milliseconds)
+            /*if (AttackTimer < Timing.Global.Milliseconds)
             {
                 if (blocking && !Blocking && AttackTimer < Timing.Global.Milliseconds)
                 {
@@ -2535,7 +2535,7 @@ namespace Intersect.Server.Entities
                 else
                 {
                     SpellCooldowns[Spells[spellSlot].SpellId] =
-                    Globals.Timing.MillisecondsUTC + (int)(spellBase.CooldownDuration);
+                    Timing.Global.MillisecondsUtc + (int)(spellBase.CooldownDuration);
                 }
             }
 

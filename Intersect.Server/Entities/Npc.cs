@@ -703,7 +703,7 @@ namespace Intersect.Server.Entities
                 return;
             }
 
-            if (SpellCooldowns.ContainsKey(spell.SpellId) && SpellCooldowns[spell.SpellId] >= Globals.Timing.MillisecondsUTC)
+            if (SpellCooldowns.ContainsKey(spell.SpellId) && SpellCooldowns[spell.SpellId] >= Timing.Global.MillisecondsUtc)
             {
                 return;
             }

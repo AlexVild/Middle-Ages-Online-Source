@@ -11,6 +11,7 @@ using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Switches_and_Variables;
 using Intersect.Server.General;
 using Intersect.Server.Maps;
+using Intersect.Utilities;
 
 namespace Intersect.Server.Entities.Events
 {
@@ -657,7 +658,7 @@ namespace Intersect.Server.Entities.Events
             if (player != null && player.ClassInfo.ContainsKey(condition.ClassId))
             {
                 var classInfo = player.ClassInfo[condition.ClassId];
-                return (classInfo.LastTaskStartTime + Options.TaskCooldown > Globals.Timing.MillisecondsUTC);
+                return (classInfo.LastTaskStartTime + Options.TaskCooldown > Timing.Global.MillisecondsUtc);
             }
             return false;
         }

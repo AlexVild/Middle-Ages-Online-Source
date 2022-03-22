@@ -778,9 +778,9 @@ namespace Intersect.Server.Maps
                 {
                     var mapItem = new MapItem(item.ItemId, amount, x, y, item.BagId, item.Bag)
                     {
-                        DespawnTime = Globals.Timing.Milliseconds + Options.Loot.ItemDespawnTime,
+                        DespawnTime = Timing.Global.Milliseconds + Options.Loot.ItemDespawnTime,
                         Owner = owner,
-                        OwnershipTime = Globals.Timing.Milliseconds + Options.Loot.ItemOwnershipTime,
+                        OwnershipTime = Timing.Global.Milliseconds + Options.Loot.ItemOwnershipTime,
                         VisibleToAll = Options.Loot.ShowUnownedItems || owner == Guid.Empty
                     };
 
@@ -847,7 +847,7 @@ namespace Intersect.Server.Maps
                         {
                             AttributeSpawnX = item.X,
                             AttributeSpawnY = item.Y,
-                            RespawnTime = Globals.Timing.Milliseconds + Options.Map.ItemAttributeRespawnTime
+                            RespawnTime = Timing.Global.Milliseconds + Options.Map.ItemAttributeRespawnTime
                         };
                         ItemRespawns.TryAdd(spawn.Id, spawn);
                     }
@@ -1271,12 +1271,12 @@ namespace Intersect.Server.Maps
                         // If the entity is dead, but needs respawning, set its respawn time (or, wait for more players to show up before starting the timer)
                         if (npcSpawnInstance.RespawnTime == -1 || !NpcHasEnoughPlayersToSpawn(i))
                         {
-                            npcSpawnInstance.RespawnTime = Globals.Timing.Milliseconds +
+                            npcSpawnInstance.RespawnTime = Timing.Global.Milliseconds +
                                                            ((Npc)npcSpawnInstance.Entity).Base.SpawnDuration -
-                                                           (Globals.Timing.Milliseconds - mLastUpdateTime);
+                                                           (Timing.Global.Milliseconds - mLastUpdateTime);
                         }
                         // If we're passed the respawn time, and there's enough players on the instance to warrant a spawn
-                        else if (npcSpawnInstance.RespawnTime < Globals.Timing.Milliseconds && NpcHasEnoughPlayersToSpawn(i))
+                        else if (npcSpawnInstance.RespawnTime < Timing.Global.Milliseconds && NpcHasEnoughPlayersToSpawn(i))
                         {
                             SpawnMapNpc(i);
                             npcSpawnInstance.RespawnTime = -1;
@@ -1310,10 +1310,10 @@ namespace Intersect.Server.Maps
                     {
                         if (resourceSpawnInstance.RespawnTime == -1)
                         {
-                            resourceSpawnInstance.RespawnTime = Globals.Timing.Milliseconds +
+                            resourceSpawnInstance.RespawnTime = Timing.Global.Milliseconds +
                                                                 resourceSpawnInstance.Entity.Base.SpawnDuration;
                         }
-                        else if (resourceSpawnInstance.RespawnTime < Globals.Timing.Milliseconds)
+                        else if (resourceSpawnInstance.RespawnTime < Timing.Global.Milliseconds)
                         {
                             // Check to see if this resource can be respawned, if there's an Npc or Player on it we shouldn't let it respawn yet..
                             // Unless of course the resource is walkable regardless.

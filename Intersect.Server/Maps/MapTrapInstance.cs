@@ -80,7 +80,7 @@ namespace Intersect.Server.Classes.Maps
                     mapInstance.RemoveTrap(this);
                 }
 
-                if (Globals.Timing.Milliseconds > Duration)
+                if (Timing.Global.Milliseconds > Duration)
                 {
                     mapInstance.RemoveTrap(this);
                 }

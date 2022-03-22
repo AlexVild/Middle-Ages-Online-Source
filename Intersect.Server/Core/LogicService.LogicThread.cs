@@ -198,7 +198,7 @@ namespace Intersect.Server.Core
                                 {
                                     if (Options.Instance.Metrics.Enable)
                                     {
-                                        var delay = Globals.Timing.Milliseconds - (result.LastRequestedUpdateTime + Options.Instance.Processing.MapUpdateInterval);
+                                        var delay = Timing.Global.Milliseconds - (result.LastRequestedUpdateTime + Options.Instance.Processing.MapUpdateInterval);
                                         MetricsRoot.Instance.Game.MapQueueUpdateOffset.Record(delay);
                                         result.UpdateQueueStart = Timing.Global.Milliseconds;
                                     }
@@ -332,7 +332,7 @@ namespace Intersect.Server.Core
                 }
                 MapInstanceUpdateQueue.Enqueue(mapInstance);
                 ActiveMapInstances.Add(mapInstance.Id, mapInstance);
-                mapInstance.LastRequestedUpdateTime = Globals.Timing.Milliseconds - Options.Instance.Processing.MapUpdateInterval;
+                mapInstance.LastRequestedUpdateTime = Timing.Global.Milliseconds - Options.Instance.Processing.MapUpdateInterval;
             }
 
             /// <summary>
@@ -346,7 +346,7 @@ namespace Intersect.Server.Core
                 {
                     if (onlyProjectiles)
                     {   
-                        mapInstance.UpdateProjectiles(Globals.Timing.Milliseconds);
+                        mapInstance.UpdateProjectiles(Timing.Global.Milliseconds);
                         if (ActiveMapInstances.Keys.Contains(mapInstance.Id))
                         {
                             MapInstanceProjectileUpdateQueue.Enqueue(mapInstance);
@@ -356,11 +356,11 @@ namespace Intersect.Server.Core
                     {
                         if (Options.Instance.Metrics.Enable)
                         {
-                            var timeBeforeUpdate = Globals.Timing.Milliseconds;
+                            var timeBeforeUpdate = Timing.Global.Milliseconds;
                             var desiredMapUpdateTime = mapInstance.LastRequestedUpdateTime + Options.Instance.Processing.MapUpdateInterval;
                             MetricsRoot.Instance.Game.MapUpdateQueuedTime.Record(timeBeforeUpdate - mapInstance.UpdateQueueStart);
 
-                            mapInstance.Update(Globals.Timing.Milliseconds);
+                            mapInstance.Update(Timing.Global.Milliseconds);
 
                             var timeAfterUpdate = Timing.Global.Milliseconds;
                             MetricsRoot.Instance.Game.MapUpdateProcessingTime.Record(timeAfterUpdate - timeBeforeUpdate);
@@ -373,7 +373,7 @@ namespace Intersect.Server.Core
                         }
                         else
                         {
-                            mapInstance.Update(Globals.Timing.Milliseconds);
+                            mapInstance.Update(Timing.Global.Milliseconds);
                         }
                     }
                 }

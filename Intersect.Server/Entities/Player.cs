@@ -419,7 +419,7 @@ namespace Intersect.Server.Entities
             // Initialize Class Rank info for any new classes that have been added/underlying updates to CR stuff in Options
             InitClassRanks();
 
-            if (InspirationTime > Globals.Timing.MillisecondsUTC)
+            if (InspirationTime > Timing.Global.MillisecondsUtc)
             {
                 SendInspirationUpdateText(-1);
             }
@@ -526,7 +526,7 @@ namespace Intersect.Server.Entities
             var keys = SpellCooldowns.Keys.ToArray();
             foreach (var key in keys)
             {
-                if (SpellCooldowns.TryGetValue(key, out var time) && time < Globals.Timing.MillisecondsUTC)
+                if (SpellCooldowns.TryGetValue(key, out var time) && time < Timing.Global.MillisecondsUtc)
                 {
                     SpellCooldowns.TryRemove(key, out _);
                 }
@@ -535,7 +535,7 @@ namespace Intersect.Server.Entities
             keys = ItemCooldowns.Keys.ToArray();
             foreach (var key in keys)
             {
-                if (ItemCooldowns.TryGetValue(key, out var time) && time < Globals.Timing.MillisecondsUTC)
+                if (ItemCooldowns.TryGetValue(key, out var time) && time < Timing.Global.MillisecondsUtc)
                 {
                     ItemCooldowns.TryRemove(key, out _);
                 }
@@ -639,7 +639,7 @@ namespace Intersect.Server.Entities
                     if (ComboWindow > 0)
                     {
                         // Detract from the window
-                        ComboWindow = (int)(ComboTimestamp - Globals.Timing.Milliseconds);
+                        ComboWindow = (int)(ComboTimestamp - Timing.Global.Milliseconds);
                         if (ComboWindow < 0)
                         {
                             EndCombo(); // This will also send a packet - this way, we're not flooding the client with packets when there's no active combo
@@ -1417,7 +1417,7 @@ namespace Intersect.Server.Entities
         public void UpdateComboTime()
         {
             ComboWindow = MaxComboWindow;
-            ComboTimestamp = Globals.Timing.Milliseconds + ComboWindow;
+            ComboTimestamp = Timing.Global.Milliseconds + ComboWindow;
             CurrentCombo++;
             StartCommonEventsWithTrigger(CommonEventTrigger.ComboUp);
         }
@@ -3019,7 +3019,7 @@ namespace Intersect.Server.Entities
                     return;
                 }
 
-                if (ItemCooldowns.ContainsKey(itemBase.Id) && ItemCooldowns[itemBase.Id] > Globals.Timing.MillisecondsUTC)
+                if (ItemCooldowns.ContainsKey(itemBase.Id) && ItemCooldowns[itemBase.Id] > Timing.Global.MillisecondsUtc)
                 {
                     //Cooldown warning!
                     PacketSender.SendChatMsg(this, Strings.Items.cooldown, ChatMessageType.Error);
@@ -5279,9 +5279,9 @@ namespace Intersect.Server.Entities
                     {
                         PacketSender.SendChatMsg(this, Strings.Combat.lowmana, ChatMessageType.Combat);
                     }
-                    if (MPWarningSent < Globals.Timing.Milliseconds) // attempt to limit how often we send this notification
+                    if (MPWarningSent < Timing.Global.Milliseconds) // attempt to limit how often we send this notification
                     {
-                        MPWarningSent = Globals.Timing.Milliseconds + Options.Combat.MPWarningDisplayTime;
+                        MPWarningSent = Timing.Global.Milliseconds + Options.Combat.MPWarningDisplayTime;
                         PacketSender.SendGUINotification(Client, GUINotification.NotEnoughMp, true);
                     }
 
@@ -5320,7 +5320,7 @@ namespace Intersect.Server.Entities
             // Reset stealth attack status
             StealthAttack = false;
             if (!SpellCooldowns.ContainsKey(Spells[spellSlot].SpellId) ||
-                SpellCooldowns[Spells[spellSlot].SpellId] < Globals.Timing.MillisecondsUTC)
+                SpellCooldowns[Spells[spellSlot].SpellId] < Timing.Global.MillisecondsUtc)
             {
                 if (CastTime == 0)
                 {
@@ -5826,7 +5826,7 @@ namespace Intersect.Server.Entities
                         CustomColors.Quests.Declined);
                     return false;
                 }
-                if (relevantInfo.LastTaskStartTime + Options.TaskCooldown > Globals.Timing.MillisecondsUTC)
+                if (relevantInfo.LastTaskStartTime + Options.TaskCooldown > Timing.Global.MillisecondsUtc)
                 {
                     PacketSender.SendChatMsg(this,
                         Strings.Quests.taskcooldown,
@@ -6274,7 +6274,7 @@ namespace Intersect.Server.Entities
                     if (quest.RelatedClassId != Guid.Empty && ClassInfo.TryGetValue(quest.RelatedClassId, out var taskClassInfo))
                     {
                         taskClassInfo.OnTask = true;
-                        taskClassInfo.LastTaskStartTime = Globals.Timing.MillisecondsUTC;
+                        taskClassInfo.LastTaskStartTime = Timing.Global.MillisecondsUtc;
                     }
                     break;
                 case QuestType.SpecialAssignment:
@@ -6284,7 +6284,7 @@ namespace Intersect.Server.Entities
                         assignmentClassInfo.OnSpecialAssignment = true;
                         if (Options.SpecialAssignmentCountsTowardCooldown)
                         {
-                            assignmentClassInfo.LastTaskStartTime = Globals.Timing.MillisecondsUTC;
+                            assignmentClassInfo.LastTaskStartTime = Timing.Global.MillisecondsUtc;
                         }
                     }
                     break;
@@ -6388,7 +6388,7 @@ namespace Intersect.Server.Entities
                         assignmentClassInfo.AssignmentAvailable = false;
                         if (Options.SpecialAssignmentCountsTowardCooldown)
                         {
-                            assignmentClassInfo.LastTaskStartTime = Globals.Timing.Milliseconds;
+                            assignmentClassInfo.LastTaskStartTime = Timing.Global.Milliseconds;
                         }
                         if (Options.PayoutSpecialAssignments)
                         {
@@ -7313,7 +7313,7 @@ namespace Intersect.Server.Entities
                 // No, handle singular cooldown as normal.
 
                 var cooldownReduction = 1 - (item.IgnoreCooldownReduction ? 0 : GetEquipmentBonusEffect(EffectType.CooldownReduction) / 100f);
-                AssignItemCooldown(item.Id, Globals.Timing.MillisecondsUTC + (long)(item.Cooldown * cooldownReduction));
+                AssignItemCooldown(item.Id, Timing.Global.MillisecondsUtc + (long)(item.Cooldown * cooldownReduction));
                 PacketSender.SendItemCooldown(this, item.Id);
             }
         }
@@ -7339,7 +7339,7 @@ namespace Intersect.Server.Entities
             {
                 // No, handle singular cooldown as normal.
                 var cooldownReduction = 1 - (spell.IgnoreCooldownReduction ? 0 : GetEquipmentBonusEffect(EffectType.CooldownReduction) / 100f);
-                AssignSpellCooldown(spell.Id, Globals.Timing.MillisecondsUTC + (long)(spell.CooldownDuration * cooldownReduction));
+                AssignSpellCooldown(spell.Id, Timing.Global.MillisecondsUtc + (long)(spell.CooldownDuration * cooldownReduction));
                 PacketSender.SendSpellCooldown(this, spell.Id);
             }
         }
@@ -7358,7 +7358,7 @@ namespace Intersect.Server.Entities
 
             // Calculate our global cooldown.
             var cooldownReduction = 1 - GetEquipmentBonusEffect(EffectType.CooldownReduction) / 100f;
-            var cooldown = Globals.Timing.MillisecondsUTC + (long)(Options.Combat.GlobalCooldownDuration * cooldownReduction);
+            var cooldown = Timing.Global.MillisecondsUtc + (long)(Options.Combat.GlobalCooldownDuration * cooldownReduction);
 
             // Go through each item and spell to assign this cooldown.
             // Do not allow this to overwrite things that are still on a cooldown above our new cooldown though, don't want us to lower cooldowns!
@@ -7438,7 +7438,7 @@ namespace Intersect.Server.Entities
             }
 
             // Set the cooldown for all items matching this cooldown group.
-            var baseTime = Globals.Timing.MillisecondsUTC;
+            var baseTime = Timing.Global.MillisecondsUtc;
             if (type == GameObjectType.Item || Options.Combat.LinkSpellAndItemCooldowns)
             {
                 foreach (var item in matchingItems)
@@ -7447,7 +7447,7 @@ namespace Intersect.Server.Entities
                     var tempCooldown = Options.Combat.MatchGroupCooldowns ? matchedCooldowntime : item.Cooldown;
 
                     // Asign it! Assuming our cooldown isn't already going..
-                    if (!ItemCooldowns.ContainsKey(item.Id) || ItemCooldowns[item.Id] < Globals.Timing.MillisecondsUTC)
+                    if (!ItemCooldowns.ContainsKey(item.Id) || ItemCooldowns[item.Id] < Timing.Global.MillisecondsUtc)
                     {
                         AssignItemCooldown(item.Id, baseTime + (long)(tempCooldown * cooldownReduction));
                         itemsUpdated = true;
@@ -7464,7 +7464,7 @@ namespace Intersect.Server.Entities
                     var tempCooldown = Options.Combat.MatchGroupCooldowns ? matchedCooldowntime : spell.CooldownDuration;
 
                     // Asign it! Assuming our cooldown isn't already going...
-                    if (!SpellCooldowns.ContainsKey(spell.Id) || SpellCooldowns[spell.Id] < Globals.Timing.MillisecondsUTC)
+                    if (!SpellCooldowns.ContainsKey(spell.Id) || SpellCooldowns[spell.Id] < Timing.Global.MillisecondsUtc)
                     {
                         AssignSpellCooldown(spell.Id, baseTime + (long)(tempCooldown * cooldownReduction));
                         spellsUpdated = true;
@@ -7804,7 +7804,7 @@ namespace Intersect.Server.Entities
         #region inspiration
         public void GiveInspiredExperience(long amount)
         {
-            if (InspirationTime > Globals.Timing.MillisecondsUTC && amount > 0)
+            if (InspirationTime > Timing.Global.MillisecondsUtc && amount > 0)
             {
                 GiveExperience(amount);
                 PacketSender.SendActionMsg(this, Strings.Combat.inspiredexp.ToString(amount), CustomColors.Combat.LevelUp);
@@ -7813,7 +7813,7 @@ namespace Intersect.Server.Entities
 
         public void SendInspirationUpdateText(long seconds)
         {
-            var endTimeStamp = (InspirationTime - Globals.Timing.MillisecondsUTC) / 1000 / 60;
+            var endTimeStamp = (InspirationTime - Timing.Global.MillisecondsUtc) / 1000 / 60;
             if (seconds >= 60)
             {
                 var minutes = seconds / 60;

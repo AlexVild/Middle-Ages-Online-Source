@@ -329,10 +329,10 @@ namespace Intersect.Server.Networking
                                  configurableBaseDesyncForgiveness +
                                  errorRangeMaximum * configurablePingDesyncForgivenessFactor;
 
-                if (timeDesync && Globals.Timing.MillisecondsUTC > client.LastPacketDesyncForgiven)
+                if (timeDesync && Timing.Global.MillisecondsUtc > client.LastPacketDesyncForgiven)
                 {
                     client.LastPacketDesyncForgiven =
-                        Globals.Timing.MillisecondsUTC + configurablePacketDesyncForgivenessInternal;
+                        Timing.Global.MillisecondsUtc + configurablePacketDesyncForgivenessInternal;
 
                     PacketSender.SendPing(client, false);
                     timeDesync = false;
@@ -749,10 +749,10 @@ namespace Intersect.Server.Networking
                 return;
             }
 
-            if (player.LastChatTime > Globals.Timing.MillisecondsUTC)
+            if (player.LastChatTime > Timing.Global.MillisecondsUtc)
             {
                 PacketSender.SendChatMsg(player, Strings.Chat.toofast, ChatMessageType.Notice);
-                player.LastChatTime = Globals.Timing.MillisecondsUTC + Options.MinChatInterval;
+                player.LastChatTime = Timing.Global.MillisecondsUtc + Options.MinChatInterval;
 
                 return;
             }
@@ -1244,7 +1244,7 @@ namespace Intersect.Server.Networking
                                 (byte)player.Dir, null
                             );
 
-                            player.AttackTimer = Globals.Timing.Milliseconds +
+                            player.AttackTimer = Timing.Global.Milliseconds +
                                                  latencyAdjustmentMs +
                                                  player.CalculateAttackTime();
                         }
@@ -1605,7 +1605,7 @@ namespace Intersect.Server.Networking
 
                         var canTake = false;
                         // Can we actually take this item?
-                        if (mapItem.Owner == Guid.Empty || Globals.Timing.Milliseconds > mapItem.OwnershipTime)
+                        if (mapItem.Owner == Guid.Empty || Timing.Global.Milliseconds > mapItem.OwnershipTime)
                         {
                             // The ownership time has run out, or there's no owner!
                             canTake = true;
