@@ -1840,7 +1840,7 @@ namespace Intersect.Server.Networking
         //ActionMsgPacket
         public static void SendActionMsg(Entity en, string message, Color color, string mapSound = "")
         {
-            if (en == null || en is Resource && Options.HideResourceHealthBars)
+            if (en == null)
             {
                 return;
             }
