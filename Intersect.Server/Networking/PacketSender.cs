@@ -2324,9 +2324,9 @@ namespace Intersect.Server.Networking
             client?.Send(new FlashScreenPacket(dur, col, intensity, soundFile));
         }
 
-        public static void SendResourceLockPacket(Player player, bool resourceLock, Double harvestBonus)
+        public static void SendResourceLockPacket(Player player, bool resourceLock, double harvestBonus, int harvestsRemaining)
         {
-            player?.SendPacket(new ResourceLockPacket(resourceLock, harvestBonus));
+            player?.SendPacket(new ResourceLockPacket(resourceLock, harvestBonus, harvestsRemaining));
         }
 
         public static void SendShakeScreenPacket(Client client, float intensity)

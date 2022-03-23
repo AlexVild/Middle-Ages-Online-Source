@@ -7593,12 +7593,14 @@ namespace Intersect.Server.Entities
                 resourceLock = resource;
 
                 double harvestBonus = 0.0f;
+                int progressUntilNextBonus = 0;
                 if (resource != null)
                 {
                     harvestBonus = resource.CalculateHarvestBonus(this);
+                    progressUntilNextBonus = resource.GetHarvestsUntilNextBonus(this);
                 }
 
-                PacketSender.SendResourceLockPacket(this, val, harvestBonus);
+                PacketSender.SendResourceLockPacket(this, val, harvestBonus, progressUntilNextBonus);
             }
         }
 

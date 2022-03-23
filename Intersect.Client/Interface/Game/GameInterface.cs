@@ -47,6 +47,8 @@ namespace Intersect.Client.Interface.Game
 
         private EventWindow mEventWindow;
 
+        private HarvestBonusWindow mHarvestBonusWindow;
+
         private PictureWindow mPictureWindow;
 
         private QuestOfferWindow mQuestOfferWindow;
@@ -135,6 +137,7 @@ namespace Intersect.Client.Interface.Game
             mDebugMenu = new DebugMenu(GameCanvas);
             mMapItemWindow = new MapItemWindow(GameCanvas);
             mComboText = new ComboText(GameCanvas);
+            mHarvestBonusWindow = new HarvestBonusWindow(GameCanvas);
             mWarnings = new WarningWindow(GameCanvas);
         }
 
@@ -389,6 +392,7 @@ namespace Intersect.Client.Interface.Game
             AnnouncementWindow?.Update();
             mPictureWindow?.Update();
             mComboText?.Update();
+            mHarvestBonusWindow?.Update();
             mWarnings?.Update();
 
             if (Globals.QuestOffers.Count > 0)

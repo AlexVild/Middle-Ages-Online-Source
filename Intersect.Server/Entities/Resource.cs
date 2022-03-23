@@ -81,8 +81,8 @@ namespace Intersect.Server.Entities
             if (killer is Player playerKiller)
             {
                 int recordKilled = playerKiller.IncrementRecord(RecordType.ResourceGathered, Base.Id);
-                Console.WriteLine($"{recordKilled.ToString()}");
                 List<int> intervals = Options.Instance.CombatOpts.HarvestBonusIntervals;
+                int progressUntilNextBonus = GetHarvestsUntilNextBonus(recordKilled);
 
                 if (Options.SendResourceRecordUpdates)
                 {
@@ -107,8 +107,6 @@ namespace Intersect.Server.Entities
                         else if (recordKilled % Options.ResourceRecordUpdateInterval == 0)
                         {
                             // Otherwise, figure out when their next bonus will be awarded and let them know about it.
-                            int nextInterval = intervals.Find(interval => interval > recordKilled);
-                            int progressUntilNextBonus = nextInterval - recordKilled; 
                             playerKiller.SendRecordUpdate(Strings.Records.resourcegatheredbonus.ToString(recordKilled, progressUntilNextBonus));
                         }
                     }
@@ -120,6 +118,37 @@ namespace Intersect.Server.Entities
 
                 playerKiller.GiveInspiredExperience(Base.Experience);
             }
+        }
+
+        public int GetHarvestsUntilNextBonus(Player player)
+        {
+            if (player == null) return 0;
+
+            int currentHarvests = 0;
+            var currentRecord = player.PlayerRecords.Find(record => record.Type == RecordType.ResourceGathered && record.RecordId == Base.Id);
+            if (currentRecord != default)
+            {
+                currentHarvests = currentRecord.Amount;
+            }
+
+            var intervals = Options.Instance.CombatOpts.HarvestBonusIntervals;
+            if (currentHarvests >= intervals.Last())
+            {
+                return 0;
+            }
+
+            return intervals.Find(x => currentHarvests < x) - currentHarvests;
+        }
+
+        public int GetHarvestsUntilNextBonus(int currentHarvests)
+        {
+            var intervals = Options.Instance.CombatOpts.HarvestBonusIntervals;
+            if (currentHarvests >= intervals.Last())
+            {
+                return 0;
+            }
+
+            return intervals.Find(x => currentHarvests < x) - currentHarvests;
         }
 
         public void Spawn()
@@ -263,11 +292,6 @@ namespace Intersect.Server.Entities
             int amtHarvested = playerRecord.Amount;
 
             var intervals = Options.Instance.CombatOpts.HarvestBonusIntervals;
-            if (intervals.Count != 5)
-            {
-                Logging.Log.Error($"You fucked up the server config for harvest bonus intervals. Count is {intervals.Count}, must be 5");
-                return 0.0f;
-            }
             var bonuses = Options.Instance.CombatOpts.HarvestBonuses;
             if (bonuses.Count != intervals.Count)
             {
@@ -275,25 +299,17 @@ namespace Intersect.Server.Entities
                 return 0.0f;
             }
 
-            if (amtHarvested >= intervals[0] && amtHarvested < intervals[1])
+            if (amtHarvested >= intervals.Last())
             {
-                return bonuses[0];
+                return bonuses.Last();
             }
-            else if (amtHarvested >= intervals[1] && amtHarvested < intervals[2])
+
+            for(int i = 0; i < intervals.Count - 1; i++)
             {
-                return bonuses[1];
-            }
-            else if (amtHarvested >= intervals[2] && amtHarvested < intervals[3])
-            {
-                return bonuses[2];
-            }
-            else if (amtHarvested >= intervals[3] && amtHarvested < intervals[4])
-            {
-                return bonuses[3];
-            }
-            else if (amtHarvested >= intervals[4])
-            {
-                return bonuses[4];
+                if (amtHarvested >= intervals[i] && amtHarvested < intervals[i])
+                {
+                    return bonuses[i];
+                }
             }
 
             return 0.0f;

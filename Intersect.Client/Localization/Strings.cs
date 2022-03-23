@@ -2028,6 +2028,15 @@ namespace Intersect.Client.Localization
 
         }
 
+        public struct HarvestBonus
+        {
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Bonus = @"Current Harvest Speed Bonus: {00}%";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Remaining = @"Required harvests until next bonus: {00}";
+        }
+
         public struct GameWindow
         {
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]

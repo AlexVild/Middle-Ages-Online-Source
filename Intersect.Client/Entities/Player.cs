@@ -78,9 +78,11 @@ namespace Intersect.Client.Entities
 
         public bool UnspentPointsWarning = false;
 
-        public bool resourceLocked = false;
+        public bool ResourceLocked = false;
         
-        public double currentHarvestBonus = 0.0f;
+        public double CurrentHarvestBonus = 0.0f;
+        
+        public int HarvestsRemaining = 0;
 
         public long CombatTimer { get; set; }
 
@@ -247,14 +249,14 @@ namespace Intersect.Client.Entities
                     ProcessDirectionalInput();
                 }
 
-                if (Controls.KeyDown(Control.AttackInteract) || resourceLocked)
+                if (Controls.KeyDown(Control.AttackInteract) || ResourceLocked)
                 {
                     if (!Globals.Me.TryAttack())
                     {
                         UpdateAttackTimer();
                     }
                 }
-            } else if (CanHarvest() && resourceLocked) // Allow resource locking to persist in more situations than attacking
+            } else if (CanHarvest() && ResourceLocked) // Allow resource locking to persist in more situations than attacking
             {
                 if (!Globals.Me.TryAttack())
                 {
@@ -1881,9 +1883,9 @@ namespace Intersect.Client.Entities
                 if (weapon.AttackSpeedModifier == 1) // Static
                 {
                     // Calculating resource harvest bonus
-                    if (resourceLocked)
+                    if (ResourceLocked)
                     {
-                        var harvestBonus = (int)Math.Floor(weapon.AttackSpeedValue * currentHarvestBonus);
+                        var harvestBonus = (int)Math.Floor(weapon.AttackSpeedValue * CurrentHarvestBonus);
                         attackTime = weapon.AttackSpeedValue - harvestBonus;
                     }
                     else
