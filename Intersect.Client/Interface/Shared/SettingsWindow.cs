@@ -780,6 +780,7 @@ namespace Intersect.Client.Interface.Shared
                 mCustomResolutionMenuItem?.Hide();
                 Graphics.Renderer.OverrideResolution = Resolution.Empty;
                 Graphics.Renderer.Init();
+                Fade.FadeIn();
             }
 
             // Hide our current window.
