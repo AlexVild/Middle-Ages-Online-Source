@@ -7587,6 +7587,8 @@ namespace Intersect.Server.Entities
 
         public void setResourceLock(bool val, Resource resource = null)
         {
+            if (resource != null && resource.Base != null && resource.Base.DoNotRecord) return;
+
             val = (resource != null);
             if (resourceLock != resource) // change has occured
             {

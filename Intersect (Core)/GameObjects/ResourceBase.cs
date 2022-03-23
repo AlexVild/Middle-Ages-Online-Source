@@ -124,6 +124,8 @@ namespace Intersect.GameObjects
 
         public long Experience { get; set; }
 
+        public bool DoNotRecord { get; set; } = false;
+
         public class ResourceDrop
         {
 

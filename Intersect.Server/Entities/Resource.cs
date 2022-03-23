@@ -80,6 +80,13 @@ namespace Intersect.Server.Entities
 
             if (killer is Player playerKiller)
             {
+                playerKiller.GiveInspiredExperience(Base.Experience);
+                if (Base.DoNotRecord)
+                {
+                    return;
+                }
+
+                // Increment records/determine resource bonuses
                 int recordKilled = playerKiller.IncrementRecord(RecordType.ResourceGathered, Base.Id);
                 List<int> intervals = Options.Instance.CombatOpts.HarvestBonusIntervals;
                 int progressUntilNextBonus = GetHarvestsUntilNextBonus(recordKilled);
@@ -115,8 +122,6 @@ namespace Intersect.Server.Entities
                         playerKiller.SendRecordUpdate(Strings.Records.resourcegathered.ToString(recordKilled));
                     }
                 }
-
-                playerKiller.GiveInspiredExperience(Base.Experience);
             }
         }
 

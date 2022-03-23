@@ -734,6 +734,10 @@
     <Compile Include="Migrations\Game\20220321165144_FixQuestsAgainMigration.designer.cs">
       <DependentUpon>20220321165144_FixQuestsAgainMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20220323213555_ResourceRecordOptOutMigration.cs" />
+    <Compile Include="Migrations\Game\20220323213555_ResourceRecordOptOutMigration.designer.cs">
+      <DependentUpon>20220323213555_ResourceRecordOptOutMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>
