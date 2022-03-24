@@ -51,15 +51,12 @@ namespace Intersect.Server.Classes.Maps
             {
                 if (entity.MapId == MapId && entity.X == X && entity.Y == Y && entity.Z == Z)
                 {
-                    if (entity.GetType() == typeof(Player) && Owner.GetType() == typeof(Player))
+                    if (entity is Player player && Owner is Player)
                     {
                         //Don't detonate on yourself and party members on non-friendly spells!
-                        if (Owner == entity || ((Player) Owner).InParty((Player) entity))
+                        if (!ParentSpell.Combat.Friendly && (player.IsAllyOf(Owner) || MapController.Get(MapId).ZoneType == MapZones.Safe))
                         {
-                            if (!ParentSpell.Combat.Friendly)
-                            {
-                                return;
-                            }
+                            return;
                         }
                     }
 
