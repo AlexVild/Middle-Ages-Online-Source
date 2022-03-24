@@ -5083,6 +5083,9 @@ Tick timer saved in server config.json.";
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString TrapAnimation = @"Trap Animation";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString SpawnerAnimation = @"Spawner Animation";
+
         }
 
         public struct VariableEditor

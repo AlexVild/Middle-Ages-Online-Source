@@ -762,6 +762,8 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpTargetInfo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpTargetInfo.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpTargetInfo.Controls.Add(this.cmbProjectile);
+            this.grpTargetInfo.Controls.Add(this.lblProjectile);
             this.grpTargetInfo.Controls.Add(this.lblTrapAnimation);
             this.grpTargetInfo.Controls.Add(this.cmbTrapAnimation);
             this.grpTargetInfo.Controls.Add(this.nudDuration);
@@ -772,8 +774,6 @@ namespace Intersect.Editor.Forms.Editors
             this.grpTargetInfo.Controls.Add(this.lblCastRange);
             this.grpTargetInfo.Controls.Add(this.lblTargetType);
             this.grpTargetInfo.Controls.Add(this.nudCastRange);
-            this.grpTargetInfo.Controls.Add(this.lblProjectile);
-            this.grpTargetInfo.Controls.Add(this.cmbProjectile);
             this.grpTargetInfo.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpTargetInfo.Location = new System.Drawing.Point(215, 105);
             this.grpTargetInfo.Name = "grpTargetInfo";
@@ -935,7 +935,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblProjectile
             // 
             this.lblProjectile.AutoSize = true;
-            this.lblProjectile.Location = new System.Drawing.Point(6, 59);
+            this.lblProjectile.Location = new System.Drawing.Point(8, 102);
             this.lblProjectile.Name = "lblProjectile";
             this.lblProjectile.Size = new System.Drawing.Size(53, 13);
             this.lblProjectile.TabIndex = 18;
@@ -954,7 +954,7 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbProjectile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbProjectile.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbProjectile.FormattingEnabled = true;
-            this.cmbProjectile.Location = new System.Drawing.Point(9, 75);
+            this.cmbProjectile.Location = new System.Drawing.Point(10, 118);
             this.cmbProjectile.Name = "cmbProjectile";
             this.cmbProjectile.Size = new System.Drawing.Size(206, 21);
             this.cmbProjectile.TabIndex = 19;

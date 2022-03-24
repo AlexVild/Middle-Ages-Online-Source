@@ -462,6 +462,9 @@ namespace Intersect.Editor.Forms.Editors
                 lblProjectile.Show();
                 cmbProjectile.Show();
                 cmbProjectile.SelectedIndex = ProjectileBase.ListIndex(mEditorItem.Combat.ProjectileId);
+                lblTrapAnimation.Show();
+                cmbTrapAnimation.Show();
+                lblTrapAnimation.Text = Strings.SpellEditor.SpawnerAnimation;
             }
 
             if (cmbTargetType.SelectedIndex == (int) SpellTargetTypes.OnHit)
@@ -479,6 +482,7 @@ namespace Intersect.Editor.Forms.Editors
                 lblTrapAnimation.Show();
                 cmbTrapAnimation.Show();
                 cmbTrapAnimation.SelectedIndex = AnimationBase.ListIndex(mEditorItem.TrapAnimationId) + 1;
+                lblTrapAnimation.Text = Strings.SpellEditor.TrapAnimation;
             }
         }
 

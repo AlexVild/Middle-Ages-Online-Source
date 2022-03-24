@@ -2458,6 +2458,11 @@ namespace Intersect.Server.Entities
                                             (byte)Dir, CastTarget
                                         );
                                     }
+
+                                    if (spellBase.TrapAnimationId != Guid.Empty)
+                                    {
+                                        PacketSender.SendAnimationToProximity(spellBase.TrapAnimationId, -1, Guid.Empty, MapId, (byte)X, (byte)Y, (sbyte)Dir, MapInstanceId);
+                                    }
                                 }   
                             }
 
