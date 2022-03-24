@@ -5080,6 +5080,9 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString overTimeDisclaimer2 = @" to keep same animation)";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString TrapAnimation = @"Trap Animation";
+
         }
 
         public struct VariableEditor

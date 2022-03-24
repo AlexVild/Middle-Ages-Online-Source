@@ -70,6 +70,8 @@ namespace Intersect.Editor.Forms.Editors
             this.txtCannotCast = new DarkUI.Controls.DarkTextBox();
             this.btnDynamicRequirements = new DarkUI.Controls.DarkButton();
             this.grpTargetInfo = new DarkUI.Controls.DarkGroupBox();
+            this.lblTrapAnimation = new System.Windows.Forms.Label();
+            this.cmbTrapAnimation = new DarkUI.Controls.DarkComboBox();
             this.nudDuration = new DarkUI.Controls.DarkNumericUpDown();
             this.lblDuration = new System.Windows.Forms.Label();
             this.nudHitRadius = new DarkUI.Controls.DarkNumericUpDown();
@@ -760,6 +762,8 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpTargetInfo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpTargetInfo.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpTargetInfo.Controls.Add(this.lblTrapAnimation);
+            this.grpTargetInfo.Controls.Add(this.cmbTrapAnimation);
             this.grpTargetInfo.Controls.Add(this.nudDuration);
             this.grpTargetInfo.Controls.Add(this.lblDuration);
             this.grpTargetInfo.Controls.Add(this.nudHitRadius);
@@ -778,6 +782,36 @@ namespace Intersect.Editor.Forms.Editors
             this.grpTargetInfo.TabStop = false;
             this.grpTargetInfo.Text = "Targetting Info";
             this.grpTargetInfo.Visible = false;
+            // 
+            // lblTrapAnimation
+            // 
+            this.lblTrapAnimation.AutoSize = true;
+            this.lblTrapAnimation.Location = new System.Drawing.Point(7, 60);
+            this.lblTrapAnimation.Name = "lblTrapAnimation";
+            this.lblTrapAnimation.Size = new System.Drawing.Size(81, 13);
+            this.lblTrapAnimation.TabIndex = 60;
+            this.lblTrapAnimation.Text = "Trap Animation:";
+            // 
+            // cmbTrapAnimation
+            // 
+            this.cmbTrapAnimation.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbTrapAnimation.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbTrapAnimation.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbTrapAnimation.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbTrapAnimation.DrawDropdownHoverOutline = false;
+            this.cmbTrapAnimation.DrawFocusRectangle = false;
+            this.cmbTrapAnimation.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbTrapAnimation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbTrapAnimation.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbTrapAnimation.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbTrapAnimation.FormattingEnabled = true;
+            this.cmbTrapAnimation.Location = new System.Drawing.Point(9, 76);
+            this.cmbTrapAnimation.Name = "cmbTrapAnimation";
+            this.cmbTrapAnimation.Size = new System.Drawing.Size(206, 21);
+            this.cmbTrapAnimation.TabIndex = 60;
+            this.cmbTrapAnimation.Text = null;
+            this.cmbTrapAnimation.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbTrapAnimation.SelectedIndexChanged += new System.EventHandler(this.cmbTrapAnimation_SelectedIndexChanged);
             // 
             // nudDuration
             // 
@@ -2595,5 +2629,7 @@ namespace Intersect.Editor.Forms.Editors
         private DarkComboBox cmbOverTimeAnimation;
         private System.Windows.Forms.Label lblOTanimationDisclaimer;
         private DarkCheckBox chkInheritStats;
+        private System.Windows.Forms.Label lblTrapAnimation;
+        private DarkComboBox cmbTrapAnimation;
     }
 }

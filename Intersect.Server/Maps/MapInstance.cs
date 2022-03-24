@@ -334,6 +334,8 @@ namespace Intersect.Server.Maps
         /// <param name="player">The player who's entered</param>
         public void PlayerEnteredMap(Player player)
         {
+            if (player == null) return;
+
             //Send Entity Info to Everyone and Everyone to the Entity
             player.Client?.SentMaps?.Clear();
             PacketSender.SendMapItems(player, mMapController.Id);
@@ -343,11 +345,13 @@ namespace Intersect.Server.Maps
 
             // Send the entities/items of this current MapInstance to the player
             SendMapEntitiesTo(player);
+            SendTrapsTo(player);
 
             // send the entities/items of the SURROUNDING maps on this instance to the player
             foreach (var surroundingMapInstance in MapController.GetSurroundingMapInstances(mMapController.Id, MapInstanceId, false))
             {
                 surroundingMapInstance.SendMapEntitiesTo(player);
+                surroundingMapInstance.SendTrapsTo(player);
                 PacketSender.SendMapItems(player, surroundingMapInstance.GetController().Id);
             }
             PacketSender.SendEntityDataToProximity(player, player);
@@ -990,8 +994,20 @@ namespace Intersect.Server.Maps
         public void SpawnTrap(Entity owner, SpellBase parentSpell, byte x, byte y, byte z)
         {
             var trap = new MapTrapInstance(owner, parentSpell, mMapController.Id, MapInstanceId, x, y, z);
+            foreach(var player in GetPlayers(true))
+            {
+                PacketSender.SendMapTrapPacket(player, trap.MapId, trap.Id, trap.ParentSpell.TrapAnimationId, trap.Owner.Id, trap.X, trap.Y);
+            }
             MapTraps.TryAdd(trap.Id, trap);
             MapTrapsCached = MapTraps.Values.ToArray();
+        }
+
+        public void SendTrapsTo(Player player)
+        {
+            foreach (var trap in MapTraps.Values)
+            {
+                PacketSender.SendMapTrapPacket(player, trap.MapId, trap.Id, trap.ParentSpell.TrapAnimationId, trap.Owner.Id, trap.X, trap.Y);
+            }
         }
 
         public void DespawnTraps()
@@ -1002,7 +1018,13 @@ namespace Intersect.Server.Maps
 
         public void RemoveTrap(MapTrapInstance trap)
         {
-            MapTraps.TryRemove(trap.Id, out MapTrapInstance removed);
+            if (MapTraps.TryRemove(trap.Id, out MapTrapInstance removed))
+            {
+                foreach(var player in GetPlayers(true))
+                {
+                    PacketSender.SendMapTrapPacket(player, removed.MapId, removed.Id, removed.ParentSpell.CastAnimationId, removed.Owner.Id, removed.X, removed.Y, true);
+                }
+            }
             MapTrapsCached = MapTraps.Values.ToArray();
         }
 
