@@ -66,6 +66,10 @@ namespace Intersect.Client.Interface.Game
                 {
                     mToGoLabel.Show();
                 }
+                else
+                {
+                    mToGoLabel.Hide();
+                }
             }
 
             // else, update members

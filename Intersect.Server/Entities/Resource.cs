@@ -309,9 +309,9 @@ namespace Intersect.Server.Entities
                 return bonuses.Last();
             }
 
-            for(int i = 0; i < intervals.Count - 1; i++)
+            for(int i = 0; i < intervals.Count - 2; i++)
             {
-                if (amtHarvested >= intervals[i] && amtHarvested < intervals[i])
+                if (amtHarvested >= intervals[i] && amtHarvested < intervals[i + 1])
                 {
                     return bonuses[i];
                 }
