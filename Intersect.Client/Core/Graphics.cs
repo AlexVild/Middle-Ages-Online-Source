@@ -1211,6 +1211,8 @@ namespace Intersect.Client.Core
                     }
                 }
 
+                // Cap instensity between 0 and 255 so as not to overflow (as it is an alpha value)
+                sPlayerLightIntensity = (float) MathHelper.Clamp(sPlayerLightIntensity, 0f, 255f);
                 sLightUpdate = Timing.Global.Milliseconds;
             }
         }
