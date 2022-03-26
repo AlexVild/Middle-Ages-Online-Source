@@ -80,6 +80,7 @@ namespace Intersect.Server.Entities.Combat
             // Interrupt their spellcast if we are running a Silence, Sleep or Stun!
             if (InterruptStatusses.Contains(type))
             {
+                en.CastTime = 0;
                 en.CastTarget = null;
                 en.SpellCastSlot = -1;
                 PacketSender.SendEntityCancelCast(en);
