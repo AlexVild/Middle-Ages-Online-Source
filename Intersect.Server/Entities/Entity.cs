@@ -2513,7 +2513,7 @@ namespace Intersect.Server.Entities
                 case SpellTypes.WarpTo:
                     if (CastTarget != null)
                     {
-                        HandleAoESpell(spellId, spellBase.Combat.CastRange, MapId, X, Y, CastTarget);
+                        HandleAoESpell(spellId, spellBase.Combat.CastRange, MapId, X, Y, CastTarget, false, false, true);
                     }
                     break;
                 case SpellTypes.Dash:
@@ -2591,7 +2591,7 @@ namespace Intersect.Server.Entities
                                         if (spellTarget != null)
                                         {
                                             //Spelltarget used to be Target. I don't know if this is correct or not.
-                                            int[] position = GetPositionNearTarget(spellTarget.MapId, spellTarget.X, spellTarget.Y);
+                                            int[] position = GetPositionNearTarget(spellTarget.MapId, spellTarget.X, spellTarget.Y, spellTarget.Dir);
                                             Warp(spellTarget.MapId, (byte)position[0], (byte)position[1], (byte)Dir);
                                             ChangeDir(DirToEnemy(spellTarget));
                                         }
@@ -2615,7 +2615,7 @@ namespace Intersect.Server.Entities
             }
         }
 
-        private int[] GetPositionNearTarget(Guid mapId, int x, int y)
+        private int[] GetPositionNearTarget(Guid mapId, int x, int y, int dir)
         {
             if (MapController.TryGetInstanceFromMap(mapId, MapInstanceId, out var instance))
             {
@@ -2643,7 +2643,44 @@ namespace Intersect.Server.Entities
 
                 if (validPosition.Count > 0)
                 {
-                    return validPosition[Randomization.Next(0, validPosition.Count)];
+                    // Prefer the _back_ of the target, if possible
+                    var idealIdx = -1;
+                    switch (dir)
+                    {
+                        case (int)Directions.Down:
+                            idealIdx = validPosition.FindIndex((pos) =>
+                            {
+                                return pos[0] == x && pos[1] == y - 1;
+                            });
+                            break;
+                        case (int)Directions.Up:
+                            idealIdx = validPosition.FindIndex((pos) =>
+                            {
+                                return pos[0] == x && pos[1] == y + 1;
+                            });
+                            break;
+                        case (int)Directions.Left:
+                            idealIdx = validPosition.FindIndex((pos) =>
+                            {
+                                return pos[0] == x + 1 && pos[1] == y;
+                            });
+                            break;
+                        case (int)Directions.Right:
+                            idealIdx = validPosition.FindIndex((pos) =>
+                            {
+                                return pos[0] == x - 1 && pos[1] == y;
+                            });
+                            break;
+                    }
+
+                    if (idealIdx != -1)
+                    {
+                        return validPosition[idealIdx];
+                    }
+                    else
+                    {
+                        return validPosition[Randomization.Next(0, validPosition.Count)];
+                    }
                 }
 
                 // If nothing found, diagonal direction
@@ -2674,7 +2711,7 @@ namespace Intersect.Server.Entities
                 }
 
                 // If nothing found, return target position
-                return new int[] { x, y };
+                return new int[] { x, y }; 
             } else
             {
                 return new int[] { x, y };
