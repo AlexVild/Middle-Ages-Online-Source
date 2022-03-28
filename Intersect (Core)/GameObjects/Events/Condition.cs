@@ -430,7 +430,7 @@ namespace Intersect.GameObjects.Events
                 var letters = tagSplit.ToCharArray();
                 if (letters.Length > 0)
                 {
-                    letters[0] = char.ToUpper(tmpTag[0]);
+                    letters[0] = char.ToUpper(letters[0]);
                 }
                 words.Add(new string(letters));
             }

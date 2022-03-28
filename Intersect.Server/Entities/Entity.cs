@@ -1447,7 +1447,7 @@ namespace Intersect.Server.Entities
                 var s = projectile.Spell;
                 if (s != null)
                 {
-                    HandleAoESpell(projectile.SpellId, s.Combat.HitRadius, target.MapId, target.X, target.Y, null, true, projectileTool);
+                    HandleAoESpell(projectile.SpellId, s.Combat.HitRadius, target.MapId, target.X, target.Y, null, true, projectileTool, true);
                 }
 
                 //Check that the npc has not been destroyed by the splash spell
@@ -2425,7 +2425,7 @@ namespace Intersect.Server.Entities
                             {
                                 HandleAoESpell(
                                     spellId, spellBase.Combat.HitRadius, CastTarget.MapId, CastTarget.X, CastTarget.Y,
-                                    null
+                                    null, false, false, true
                                 );
                             }
                             else
@@ -2558,7 +2558,8 @@ namespace Intersect.Server.Entities
             int startY,
             Entity spellTarget,
             bool ignoreEvasion = false,
-            bool isProjectileTool = false
+            bool isProjectileTool = false,
+            bool ignoreMissMessage = false
         )
         {
             var spellBase = SpellBase.Get(spellId);
@@ -2597,7 +2598,7 @@ namespace Intersect.Server.Entities
                         }
                     }
                 }
-                if (!spellBase.Combat.Friendly && entitiesHit <= 1 && !isProjectileTool) // Will count yourself - which is FINE in the case of a friendly spell, otherwise ignore it
+                if (!spellBase.Combat.Friendly && entitiesHit <= 1 && !isProjectileTool && !ignoreMissMessage // Will count yourself - which is FINE in the case of a friendly spell, otherwise ignore it
                 {
                     if (this is Player)
                     {
