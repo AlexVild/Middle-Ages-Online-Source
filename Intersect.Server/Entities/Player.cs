@@ -652,7 +652,7 @@ namespace Intersect.Server.Entities
                     // Check if the resource we're locked to has died - if so, alert client
                     if (resourceLock != null && resourceLock.IsDead())
                     {
-                        setResourceLock(false);
+                        SetResourceLock(false);
                     }
 
                     base.Update(timeMs);
@@ -1585,7 +1585,7 @@ namespace Intersect.Server.Entities
 
             if (!CanAttack(target, null))
             {
-                setResourceLock(false);
+                SetResourceLock(false);
                 return;
             }
 
@@ -1601,7 +1601,7 @@ namespace Intersect.Server.Entities
             {
                 if (resource.IsDead())
                 {
-                    setResourceLock(false);
+                    SetResourceLock(false);
                     return;
                 }
 
@@ -1620,7 +1620,7 @@ namespace Intersect.Server.Entities
                         PacketSender.SendChatMsg(this, Strings.Combat.resourcereqs, ChatMessageType.Error);
                     }
 
-                    setResourceLock(false);
+                    SetResourceLock(false);
 
                     return;
                 }
@@ -1633,7 +1633,7 @@ namespace Intersect.Server.Entities
                             this, Strings.Combat.toolrequired.ToString(Options.ToolTypes[descriptor.Tool]), ChatMessageType.Error
                         );
                         
-                        setResourceLock(false);
+                        SetResourceLock(false);
 
                         return;
                     }
@@ -1641,11 +1641,11 @@ namespace Intersect.Server.Entities
 
                 if (!resource.IsDead())
                 {
-                    setResourceLock(true, resource);
+                    SetResourceLock(true, resource);
                 }
             } else
             {
-                setResourceLock(false);
+                SetResourceLock(false);
             }
 
             if (weapon != null)
@@ -2974,7 +2974,7 @@ namespace Intersect.Server.Entities
         {
             if (resourceLock != null)
             {
-                setResourceLock(false);
+                SetResourceLock(false);
             }
             var equipped = false;
             var Item = Items[slot];
@@ -5410,7 +5410,7 @@ namespace Intersect.Server.Entities
         {
             if (resourceLock != null)
             {
-                setResourceLock(false);
+                SetResourceLock(false);
             }
             var spellBase = SpellBase.Get(spellId);
             if (spellBase == null)
@@ -7183,7 +7183,7 @@ namespace Intersect.Server.Entities
         {
             lock (EntityLock)
             {
-                setResourceLock(false);
+                SetResourceLock(false);
 
                 var oldMap = MapId;
                 base.Move(moveDir, forPlayer, dontUpdate, correction);
@@ -7586,7 +7586,7 @@ namespace Intersect.Server.Entities
             }
         }
 
-        public void setResourceLock(bool val, Resource resource = null)
+        public void SetResourceLock(bool val, Resource resource = null)
         {
             if (resource != null && resource.Base != null && resource.Base.DoNotRecord) return;
 
@@ -7605,6 +7605,42 @@ namespace Intersect.Server.Entities
 
                 PacketSender.SendResourceLockPacket(this, val, harvestBonus, progressUntilNextBonus);
             }
+        }
+
+        /// <summary>
+        /// Caclulate crit chance based on the player's current affinity
+        /// </summary>
+        /// <param name="amount"></param>
+        /// <param name="effect"></param>
+        /// <returns></returns>
+        public int CalculateEffectBonus(int amount, EffectType effect)
+        {
+            int effectAmt = GetEquipmentBonusEffect(effect, 0);
+
+            if (effectAmt <= 0) return amount;
+
+            float effectMod = effectAmt / 100f;
+            amount = (int) Math.Round(amount * (1 + effectMod));
+
+            return amount;
+        }
+
+        /// <summary>
+        /// Caclulate crit chance based on the player's current affinity
+        /// </summary>
+        /// <param name="amount"></param>
+        /// <param name="effect"></param>
+        /// <returns></returns>
+        public double CalculateEffectBonus(double amount, EffectType effect)
+        {
+            int effectAmt = GetEquipmentBonusEffect(effect, 0);
+
+            if (effectAmt <= 0) return amount;
+
+            float effectMod = effectAmt / 100f;
+            amount *= (1 + effectMod);
+
+            return amount;
         }
 
         //TODO: Clean all of this stuff up

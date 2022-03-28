@@ -1049,7 +1049,7 @@ namespace Intersect.Server.Entities
 
             if (this is Player player && player.resourceLock != null)
             {
-                player.setResourceLock(false);
+                player.SetResourceLock(false);
             }
         }
 
@@ -1925,6 +1925,12 @@ namespace Intersect.Server.Entities
 
             bool isCrit = false;
             //Is this a critical hit?
+            if (this is Player player)
+            {
+                critChance = player.CalculateEffectBonus(critChance, EffectType.Affinity);
+                critMultiplier = player.CalculateEffectBonus(critMultiplier, EffectType.CritBonus);
+            }
+
             if (Randomization.Next(1, 101) > critChance)
             {
                 critMultiplier = 1;
@@ -2598,7 +2604,7 @@ namespace Intersect.Server.Entities
                         }
                     }
                 }
-                if (!spellBase.Combat.Friendly && entitiesHit <= 1 && !isProjectileTool && !ignoreMissMessage // Will count yourself - which is FINE in the case of a friendly spell, otherwise ignore it
+                if (!spellBase.Combat.Friendly && entitiesHit <= 1 && !isProjectileTool && !ignoreMissMessage) // Will count yourself - which is FINE in the case of a friendly spell, otherwise ignore it
                 {
                     if (this is Player)
                     {

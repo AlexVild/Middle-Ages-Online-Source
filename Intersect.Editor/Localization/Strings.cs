@@ -3416,6 +3416,8 @@ Tick timer saved in server config.json.";
                 {3, @"Tenacity"},
                 {4, @"Luck"},
                 {5, @"EXP"},
+                {6, @"Affinity"},
+                {7, @"Critical Bonus"},
             };
 
             public static LocalizedString bonuses = @"Stat Bonuses";

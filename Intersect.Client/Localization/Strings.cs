@@ -1082,6 +1082,8 @@ namespace Intersect.Client.Localization
                 {3, @"Tenacity:"},
                 {4, @"Luck:"},
                 {5, @"Bonus Experience:"},
+                {6, @"Affinity:"},
+                {7, @"Critical Bonus:"},
             };
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]

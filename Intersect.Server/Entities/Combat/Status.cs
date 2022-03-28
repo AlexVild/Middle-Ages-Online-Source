@@ -62,7 +62,7 @@ namespace Intersect.Server.Entities.Combat
                 // Get our player's Tenacity stat!
                 if (!TenacityExcluded.Contains(type))
                 {
-                    tenacity = player.GetEquipmentBonusEffect(EffectType.Tenacity); ;
+                    tenacity = player.GetEquipmentBonusEffect(EffectType.Tenacity);
                 } 
             }
 

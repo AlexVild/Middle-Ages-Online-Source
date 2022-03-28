@@ -14,7 +14,11 @@
 
         Luck = 4,
 
-        EXP = 5
+        EXP = 5,
+
+        Affinity = 6,
+
+        CritBonus = 7,
 
     }
 
