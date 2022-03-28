@@ -38,6 +38,7 @@ namespace Intersect.Server.Entities.Combat
             StatusTypes.OnHit,
             StatusTypes.Shield,
             StatusTypes.Transform,
+            StatusTypes.Swift,
         };
 
         public static List<StatusTypes> InterruptStatusses = new List<StatusTypes>()

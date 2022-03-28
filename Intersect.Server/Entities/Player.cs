@@ -1787,9 +1787,14 @@ namespace Intersect.Server.Entities
                 }
             }
 
+            if (StatusActive(StatusTypes.Swift))
+            {
+                attackTime = (int)Math.Floor(attackTime * Options.Instance.CombatOpts.SwiftAttackSpeedMod);
+            }
+
             return
                 attackTime -
-                60; //subtracting 60 to account for a moderate ping to the server so some attacks dont get cancelled.
+                100; //subtracting 100 to account for a moderate ping to the server so some attacks dont get cancelled.
         }
 
         /// <summary>
@@ -7641,6 +7646,18 @@ namespace Intersect.Server.Entities
             amount *= (1 + effectMod);
 
             return amount;
+        }
+
+        public bool StatusActive(StatusTypes status)
+        {
+            foreach (var cachedStatus in CachedStatuses)
+            {
+                if (cachedStatus.Type == status)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         //TODO: Clean all of this stuff up

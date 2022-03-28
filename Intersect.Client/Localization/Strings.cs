@@ -1876,6 +1876,7 @@ namespace Intersect.Client.Localization
                 {10, @"Sleep"},
                 {11, @"On-Hit"},
                 {12, @"Taunt"},
+                {13, @"Swift"},
             };
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -1923,6 +1924,7 @@ namespace Intersect.Client.Localization
                 {10, @"Makes the target fall asleep"},
                 {11, @"Applies an On Hit effect to the target"},
                 {12, @"Taunts Target"},
+                {13, @"Swiftens Target"},
             };
 
         }

@@ -1709,6 +1709,42 @@ namespace Intersect.Client.Entities
 
         }
 
+        public bool StatusActive(StatusTypes status, Action action = default)
+        {
+            bool statusFound = false;
+            for (var n = 0; n < Status.Count; n++)
+            {
+                if (Status[n].Type == status)
+                {
+                    statusFound = true;
+                    if (action != default)
+                    {
+                        action();
+                    }
+                }
+            }
+
+            return statusFound;
+        }
+
+        public bool DoIfInStatus(List<StatusTypes> statuses, Action action = default)
+        {
+            bool statusFound = false;
+            for (var n = 0; n < Status.Count; n++)
+            {
+                if (statuses.Contains(Status[n].Type))
+                {
+                    statusFound = true;
+                    if (action != default)
+                    {
+                        action();
+                    }
+                }
+            }
+
+            return statusFound;
+        }
+
         public bool TryFaceTarget(bool skipSmartDir = false, bool force = false)
         {
             // Check if we're currently casting
@@ -1871,6 +1907,11 @@ namespace Intersect.Client.Entities
                 {
                     attackTime = (int) (attackTime * (100f / weapon.AttackSpeedValue));
                 }
+            }
+
+            if (StatusActive(StatusTypes.Swift))
+            {
+                attackTime = (int) Math.Floor(attackTime * Options.Instance.CombatOpts.SwiftAttackSpeedMod);
             }
 
             return attackTime;

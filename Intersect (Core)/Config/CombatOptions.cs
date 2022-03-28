@@ -85,6 +85,8 @@ namespace Intersect.Config
         public float DefaultBackstabMultiplier = 1.25f;
         
         public float SneakAttackMultiplier = 1.5f;
+        
+        public float SwiftAttackSpeedMod = 0.75f;
 
         //Combat
         public int RegenTime = 5000; //5 seconds
