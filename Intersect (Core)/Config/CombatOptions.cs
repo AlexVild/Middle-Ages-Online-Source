@@ -87,6 +87,14 @@ namespace Intersect.Config
         public float SneakAttackMultiplier = 1.5f;
         
         public float SwiftAttackSpeedMod = 0.75f;
+        
+        public int AccurateCritChanceMultiplier = 3;
+
+        public float HasteModifier = 1.2f;
+        
+        public float SlowedModifier = 1.6f;
+        
+        public int ConfusionMissPercent = 50;
 
         //Combat
         public int RegenTime = 5000; //5 seconds

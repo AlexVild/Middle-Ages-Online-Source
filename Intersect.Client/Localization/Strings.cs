@@ -1877,6 +1877,10 @@ namespace Intersect.Client.Localization
                 {11, @"On-Hit"},
                 {12, @"Taunt"},
                 {13, @"Swift"},
+                {14, @"Accurate"},
+                {15, @"Haste"},
+                {16, @"Slowed"},
+                {17, @"Confused"},
             };
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -1925,6 +1929,10 @@ namespace Intersect.Client.Localization
                 {11, @"Applies an On Hit effect to the target"},
                 {12, @"Taunts Target"},
                 {13, @"Swiftens Target"},
+                {14, @"Increases Target Crit Chance"},
+                {15, @"Increases target movement speed"},
+                {16, @"Decreases target movement speed"},
+                {17, @"Confuses target"},
             };
 
         }

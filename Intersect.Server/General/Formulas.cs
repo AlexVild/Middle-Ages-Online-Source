@@ -146,6 +146,11 @@ namespace Intersect.Server.General
                     result = -result;
                 }
 
+                if (attacker.StatusActive(StatusTypes.Confused) && Randomization.Next(1, 101) <= Options.Instance.CombatOpts.ConfusionMissPercent)
+                {
+                    result = 0.0;
+                }
+
                 return (int) Math.Round(result);
             }
             catch (Exception ex)

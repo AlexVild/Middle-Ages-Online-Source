@@ -511,9 +511,18 @@ namespace Intersect.Client.Entities
             
             time *= (float)Options.SpeedModifier;
 
+            if (StatusIsActive(StatusTypes.Slowed))
+            {
+                time *= Options.Instance.CombatOpts.SlowedModifier;
+            }
+            else if (StatusIsActive(StatusTypes.Haste))
+            {
+                time /= Options.Instance.CombatOpts.HasteModifier;
+            }
+
             return Math.Min(1000f, time);
         }
-
+        
         //Movement Processing
         public virtual bool Update()
         {
@@ -1840,6 +1849,24 @@ namespace Intersect.Client.Entities
             }
 
             return false;
+        }
+
+        public bool StatusIsActive(StatusTypes status, Action action = default)
+        {
+            bool statusFound = false;
+            for (var n = 0; n < Status.Count; n++)
+            {
+                if (Status[n].Type == status)
+                {
+                    statusFound = true;
+                    if (action != default)
+                    {
+                        action();
+                    }
+                }
+            }
+
+            return statusFound;
         }
 
         public Status GetStatus(Guid guid)

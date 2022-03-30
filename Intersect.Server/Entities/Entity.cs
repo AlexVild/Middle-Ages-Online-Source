@@ -823,6 +823,15 @@ namespace Intersect.Server.Entities
 
             time *= (float)Options.SpeedModifier;
 
+            if (StatusActive(StatusTypes.Slowed))
+            {
+                time *= Options.Instance.CombatOpts.SlowedModifier;
+            }
+            else if (StatusActive(StatusTypes.Haste))
+            {
+                time /= Options.Instance.CombatOpts.HasteModifier;
+            }
+
             return Math.Min(1000f, time);
         }
 
@@ -847,6 +856,7 @@ namespace Intersect.Server.Entities
 
                 var xOffset = 0;
                 var yOffset = 0;
+
                 switch (moveDir)
                 {
                     case 0: //Up
@@ -1929,6 +1939,11 @@ namespace Intersect.Server.Entities
             {
                 critChance = player.CalculateEffectBonus(critChance, EffectType.Affinity);
                 critMultiplier = player.CalculateEffectBonus(critMultiplier, EffectType.CritBonus);
+            }
+
+            if (StatusActive(StatusTypes.Accurate))
+            {
+                critChance *= Options.Instance.CombatOpts.AccurateCritChanceMultiplier;
             }
 
             if (Randomization.Next(1, 101) > critChance)
@@ -3130,6 +3145,18 @@ namespace Intersect.Server.Entities
             bool forceInstanceChange = false
         )
         {
+        }
+
+        public bool StatusActive(StatusTypes status)
+        {
+            foreach (var cachedStatus in CachedStatuses)
+            {
+                if (cachedStatus.Type == status)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         public virtual EntityPacket EntityPacket(EntityPacket packet = null, Player forPlayer = null)

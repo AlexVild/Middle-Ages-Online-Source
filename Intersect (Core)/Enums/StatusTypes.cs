@@ -32,6 +32,14 @@ namespace Intersect.Enums
 
         Swift = 13,
 
+        Accurate = 14,
+
+        Haste = 15,
+
+        Slowed = 16,
+        
+        Confused = 17,
+
     }
 
 }

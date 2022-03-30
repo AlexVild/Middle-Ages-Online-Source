@@ -365,6 +365,10 @@ namespace Intersect.Server.Localization
                     {11, @"ON HIT!"},
                     {12, @"TAUNT!"},
                     {13, @"SWIFT!"},
+                    {14, @"ACCCURATE!"},
+                    {15, @"HASTE!"},
+                    {16, @"SLOWED!"},
+                    {17, @"CONFUSED!"},
                 }
             );
 

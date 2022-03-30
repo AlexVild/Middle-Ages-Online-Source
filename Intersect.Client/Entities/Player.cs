@@ -1024,22 +1024,50 @@ namespace Intersect.Client.Entities
 
             if (Controls.KeyDown(Control.MoveUp))
             {
-                movey = 1;
+                if (StatusIsActive(StatusTypes.Confused))
+                {
+                    movey = -1;
+                }
+                else 
+                {
+                    movey = 1;
+                }
             }
 
             if (Controls.KeyDown(Control.MoveDown))
             {
-                movey = -1;
+                if (StatusIsActive(StatusTypes.Confused))
+                {
+                    movey = 1;
+                }
+                else
+                {
+                    movey = -1;
+                }
             }
 
             if (Controls.KeyDown(Control.MoveLeft))
             {
-                movex = -1;
+                if (StatusIsActive(StatusTypes.Confused))
+                {
+                    movex = 1;
+                }
+                else
+                {
+                    movex = -1;
+                }
             }
 
             if (Controls.KeyDown(Control.MoveRight))
             {
-                movex = 1;
+                if (StatusIsActive(StatusTypes.Confused))
+                {
+                    movex = -1;
+                }
+                else
+                {
+                    movex = 1;
+                }
             }
 
             Globals.Me.MoveDir = -1;
@@ -1709,24 +1737,6 @@ namespace Intersect.Client.Entities
 
         }
 
-        public bool StatusActive(StatusTypes status, Action action = default)
-        {
-            bool statusFound = false;
-            for (var n = 0; n < Status.Count; n++)
-            {
-                if (Status[n].Type == status)
-                {
-                    statusFound = true;
-                    if (action != default)
-                    {
-                        action();
-                    }
-                }
-            }
-
-            return statusFound;
-        }
-
         public bool DoIfInStatus(List<StatusTypes> statuses, Action action = default)
         {
             bool statusFound = false;
@@ -1909,7 +1919,7 @@ namespace Intersect.Client.Entities
                 }
             }
 
-            if (StatusActive(StatusTypes.Swift))
+            if (StatusIsActive(StatusTypes.Swift))
             {
                 attackTime = (int) Math.Floor(attackTime * Options.Instance.CombatOpts.SwiftAttackSpeedMod);
             }

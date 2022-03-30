@@ -7648,18 +7648,6 @@ namespace Intersect.Server.Entities
             return amount;
         }
 
-        public bool StatusActive(StatusTypes status)
-        {
-            foreach (var cachedStatus in CachedStatuses)
-            {
-                if (cachedStatus.Type == status)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
         //TODO: Clean all of this stuff up
 
         #region Temporary Values

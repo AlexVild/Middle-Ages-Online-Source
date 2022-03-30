@@ -4958,6 +4958,10 @@ Tick timer saved in server config.json.";
                 {11, @"OnHit"},
                 {12, @"Taunt"},
                 {13, @"Swift"},
+                {14, @"Accurate"},
+                {15, @"Haste"},
+                {16, @"Slowed"},
+                {17, @"Confused"},
             };
 
             public static LocalizedString effectgroup = @"Effect";
