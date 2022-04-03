@@ -7198,27 +7198,19 @@ namespace Intersect.Server.Entities
                 if (attribute != null && attribute.Type == MapAttributes.Warp)
                 {
                     var warpAtt = (MapWarpAttribute)attribute;
-                    if (warpAtt.Direction == WarpDirection.Retain)
+                    var dir = (byte)Dir;
+                    if (warpAtt.Direction != WarpDirection.Retain)
                     {
-                        if (warpAtt.ChangeInstance)
-                        {
-                            Warp(warpAtt.MapId, warpAtt.X, warpAtt.Y, (byte)Dir, false, 0, false, warpAtt.FadeOnWarp, warpAtt.InstanceType);
-                        } else
-                        {
-                            Warp(warpAtt.MapId, warpAtt.X, warpAtt.Y, (byte)Dir, false, 0, false, warpAtt.FadeOnWarp);
-                        }
+                        dir = (byte)(warpAtt.Direction - 1);
                     }
-                    else
+
+                    var instanceType = MapInstanceType.NoChange;
+                    if (warpAtt.ChangeInstance)
                     {
-                        if (warpAtt.ChangeInstance)
-                        {
-                            Warp(warpAtt.MapId, warpAtt.X, warpAtt.Y, (byte)(warpAtt.Direction - 1), false, 0, false, warpAtt.FadeOnWarp, warpAtt.InstanceType);
-                        }
-                        else
-                        {
-                            Warp(warpAtt.MapId, warpAtt.X, warpAtt.Y, (byte)(warpAtt.Direction - 1), false, 0, false, warpAtt.FadeOnWarp);
-                        }
+                        instanceType = warpAtt.InstanceType;
                     }
+
+                    Warp(warpAtt.MapId, warpAtt.X, warpAtt.Y, dir, false, 0, false, warpAtt.FadeOnWarp, instanceType);
                 }
 
                 foreach (var evt in EventLookup)

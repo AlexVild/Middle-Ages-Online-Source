@@ -308,7 +308,7 @@ namespace Intersect.Server.Entities
                 if (lockObtained)
                 {
                     //Cast timers
-                    if (CastTime != 0 && CastTime < timeMs && SpellCastSlot < Spells.Count && SpellCastSlot > -1)
+                    if (CastTime != 0 && CastTime < timeMs && SpellCastSlot < Spells.Count && SpellCastSlot >= 0)
                     {
                         CastTime = 0;
                         CastSpell(Spells[SpellCastSlot].SpellId, SpellCastSlot);
