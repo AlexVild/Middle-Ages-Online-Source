@@ -214,6 +214,7 @@
     <Compile Include="Configuration\IConfigurable.cs" />
     <Compile Include="Configuration\IConfiguration.cs" />
     <Compile Include="Configuration\ConfigurationHelper.cs" />
+    <Compile Include="Config\BankOptions.cs" />
     <Compile Include="Config\ChatOptions.cs" />
     <Compile Include="Config\Guilds\GuildOptions.cs" />
     <Compile Include="Config\Guilds\GuildPermissions.cs" />

@@ -6,6 +6,7 @@ using System;
 
 using Intersect.Config;
 using Intersect.Server.Database.PlayerData.Api;
+using Intersect.Server.Database.PlayerData.Migrations;
 using Intersect.Server.Database.PlayerData.Players;
 using Intersect.Server.Database.PlayerData.SeedData;
 using Intersect.Server.Entities;
@@ -13,6 +14,7 @@ using Intersect.Server.Entities;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Intersect.GameObjects.Timers;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace Intersect.Server.Database.PlayerData
 {
@@ -146,6 +148,10 @@ namespace Intersect.Server.Database.PlayerData
 
         public override void MigrationsProcessed(string[] migrations)
         {
+            if (migrations.IndexOf("20220331140427_GuildBankMaxSlotsMigration") > -1)
+            {
+                GuildBankMaxSlotMigration.Run(this);
+            }
         }
 
         public void StopTrackingExcept(object obj)
