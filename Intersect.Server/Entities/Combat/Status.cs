@@ -48,6 +48,7 @@ namespace Intersect.Server.Entities.Combat
             StatusTypes.Silence,
             StatusTypes.Sleep,
             StatusTypes.Stun,
+            StatusTypes.Confused,
         };
 
         public Status(Entity en, Entity attacker, SpellBase spell, StatusTypes type, int duration, string data)

@@ -497,23 +497,8 @@ namespace Intersect.Server.Entities
                 case StatusTypes.Sleep:
                 case StatusTypes.Stun:
                     return true;
-
-                case StatusTypes.Silence:
-                case StatusTypes.None:
-                case StatusTypes.Snare:
-                case StatusTypes.Blind:
-                case StatusTypes.Stealth:
-                case StatusTypes.Transform:
-                case StatusTypes.Cleanse:
-                case StatusTypes.Invulnerable:
-                case StatusTypes.Shield:
-                case StatusTypes.OnHit:
-                case StatusTypes.Taunt:
-                case null:
-                    return false;
-
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    return false;
             }
         }
 
@@ -525,22 +510,8 @@ namespace Intersect.Server.Entities
                 case StatusTypes.Sleep:
                 case StatusTypes.Stun:
                     return true;
-
-                case StatusTypes.None:
-                case StatusTypes.Snare:
-                case StatusTypes.Blind:
-                case StatusTypes.Stealth:
-                case StatusTypes.Transform:
-                case StatusTypes.Cleanse:
-                case StatusTypes.Invulnerable:
-                case StatusTypes.Shield:
-                case StatusTypes.OnHit:
-                case StatusTypes.Taunt:
-                case null:
-                    return false;
-
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    return false;
             }
         }
 
