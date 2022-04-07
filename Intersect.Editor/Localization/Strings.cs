@@ -2649,6 +2649,7 @@ Tick timer saved in server config.json.";
                 {21, @"Slain X NPCs of type"},
                 {22, @"Gathered X Resources of Type"},
                 {23, @"Crafted X of Item"},
+                {24, @"Combo Reached"},
             };
 
             public static LocalizedString conditions = @"Conditions";

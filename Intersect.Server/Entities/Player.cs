@@ -1420,6 +1420,7 @@ namespace Intersect.Server.Entities
             ComboTimestamp = Timing.Global.Milliseconds + ComboWindow;
             CurrentCombo++;
             StartCommonEventsWithTrigger(CommonEventTrigger.ComboUp);
+            StartCommonEventsWithTrigger(CommonEventTrigger.ComboReached, "", "", CurrentCombo);
         }
 
         public void EndCombo()
@@ -7053,6 +7054,15 @@ namespace Intersect.Server.Entities
                         if (trigger == CommonEventTrigger.NpcsDefeated || trigger == CommonEventTrigger.ResourcesGathered || trigger == CommonEventTrigger.CraftsCreated)
                         {
                             if (param != baseEvent.Pages[i].TriggerId.ToString() || val != baseEvent.Pages[i].TriggerVal)
+                            {
+                                continue;
+                            }
+                        }
+
+                        // If this is a combo update, but not for the right number, back out
+                        if (trigger == CommonEventTrigger.ComboReached)
+                        {
+                            if (val != baseEvent.Pages[i].TriggerVal)
                             {
                                 continue;
                             }

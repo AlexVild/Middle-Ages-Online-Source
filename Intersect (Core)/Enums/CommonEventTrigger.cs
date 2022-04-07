@@ -52,6 +52,8 @@
 
         CraftsCreated,
 
+        ComboReached,
+
     }
 
 }

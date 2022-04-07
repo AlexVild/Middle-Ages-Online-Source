@@ -1886,6 +1886,11 @@ namespace Intersect.Editor.Forms.Editors.Events
                         cmbClass.SelectedIndex = 0;
                     }
                 }
+                else if (cmbTrigger.SelectedIndex == (int)CommonEventTrigger.ComboReached)
+                {
+                    nudRecordNumber.Show();
+                    lblRecordNumber.Show();
+                }
                 else if (cmbTrigger.SelectedIndex == (int)CommonEventTrigger.NpcsDefeated ||
                     cmbTrigger.SelectedIndex == (int)CommonEventTrigger.ResourcesGathered ||
                     cmbTrigger.SelectedIndex == (int)CommonEventTrigger.CraftsCreated)
