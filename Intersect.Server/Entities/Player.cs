@@ -1530,10 +1530,6 @@ namespace Intersect.Server.Entities
                     {
                         if (projectile.Tool != descriptor.Tool)
                         {
-                            PacketSender.SendChatMsg(
-                                this, Strings.Combat.toolrequired.ToString(Options.ToolTypes[descriptor.Tool]), ChatMessageType.Error
-                            );
-
                             return;
                         }
                     }
@@ -6360,7 +6356,7 @@ namespace Intersect.Server.Entities
                                 int tasksRequired = Options.RequiredTasksPerClassRank
                                     .ToArray()
                                     .ElementAtOrDefault(taskClassInfo.Rank);
-                                if (tasksRequired == 0)
+                                if (tasksRequired <= 0)
                                 {
                                     Log.Error($"Could not find CR Task requirement for player {Name} at CR {taskClassInfo.Rank}");
                                 } else
