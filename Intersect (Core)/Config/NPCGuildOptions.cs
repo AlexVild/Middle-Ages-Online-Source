@@ -12,7 +12,7 @@ namespace Intersect.Config
         /// <summary>
         /// A players max class rank in some class
         /// </summary>
-        public int MaxClassRank { get; } = 4;
+        public int MaxClassRank { get; } = 3;
 
         /// <summary>
         /// There should always be MaxClassRank - 1 of these At max rank, you will no longer need to check for SAs

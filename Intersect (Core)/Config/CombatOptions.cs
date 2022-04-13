@@ -96,6 +96,7 @@ namespace Intersect.Config
         
         public int ConfusionMissPercent = 50;
 
+        public bool TurnWhileCasting = true;
         //Combat
         public int RegenTime = 5000; //5 seconds
 

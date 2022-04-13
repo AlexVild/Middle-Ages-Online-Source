@@ -156,7 +156,7 @@ namespace Intersect.Client.Entities
         
         public long VehicleSpeed = 0L;
 
-        public long LastCastTime = 0L;
+        public long LastProjectileCastTime = 0L;
 
         public Player(Guid id, PlayerEntityPacket packet) : base(id, packet)
         {
@@ -870,31 +870,6 @@ namespace Intersect.Client.Entities
                         Audio.AddGameSound(Options.UIDenySound, false);
                         ChatboxMsg.AddMessage(new ChatboxMsg(Strings.Spells.targetneeded, CustomColors.Alerts.Error, ChatMessageType.Spells));
                         mLastSpellCastMessageSent = Timing.Global.Milliseconds + 5000;
-                    }
-                }
-
-                // THIS BATCH OF GARBAGE is to prevent players from being able to walk off their tile immediately after casting a projectile spell, which causes weird damage stacking issues
-                // THIS IS GARBAGE!!!
-                if (!Options.Combat.MovementCancelsCast && spellBase.Combat.TargetType == SpellTargetTypes.Projectile)
-                {
-                    var hasVitals = spellBase.VitalCost[(int)Vitals.Health] < Vital[(int)Vitals.Health] && spellBase.VitalCost[(int)Vitals.Mana] < Vital[(int)Vitals.Mana];
-                   
-                    // Doesn't need ammo
-                    if (hasVitals && spellBase.Combat.ProjectileId != Guid.Empty && spellBase.Combat.Projectile.AmmoItemId == Guid.Empty)
-                    {
-                        LastCastTime = Timing.Global.Milliseconds + SpellBase.Get(Spells[index].SpellId).CastDuration + Options.Combat.ProjectileSpellMovementDelay;
-                    }
-                    // Needs ammo
-                    else if (hasVitals && spellBase.Combat.ProjectileId != Guid.Empty)
-                    {
-                        var ammo = FindItem(spellBase.Combat.Projectile.AmmoItemId);
-                        if (ammo != -1)
-                        {
-                            if (Inventory[ammo].Quantity >= spellBase.Combat.Projectile.AmmoRequired)
-                            {
-                                LastCastTime = Timing.Global.Milliseconds + SpellBase.Get(Spells[index].SpellId).CastDuration + Options.Combat.ProjectileSpellMovementDelay;
-                            }
-                        }
                     }
                 }
 
@@ -1977,24 +1952,25 @@ namespace Intersect.Client.Entities
                 return;
             }
 
+
+            // If the player has recently casted a projectile
+            if (LastProjectileCastTime >= Timing.Global.Milliseconds)
+            {
+                return;
+            }
+
             var tmpX = (sbyte) X;
             var tmpY = (sbyte) Y;
             Entity blockedBy = null;
 
             if (MoveDir > -1 && Globals.EventDialogs.Count == 0)
             {
-                if (LastCastTime >= Timing.Global.Milliseconds)
-                {
-                    return;
-                }
-
                 //Try to move if able and not casting spells.
                 if (!IsMoving && MoveTimer < Timing.Global.Ticks / TimeSpan.TicksPerMillisecond && (Options.Combat.MovementCancelsCast || CastTime < Timing.Global.Milliseconds)) 
                 {
                     if (Options.Combat.MovementCancelsCast)
                     {
                         CastTime = 0;
-                        LastCastTime = 0L;
                     }
 
                     switch (MoveDir)
@@ -2121,7 +2097,10 @@ namespace Intersect.Client.Entities
             }
             else if (!IsMoving && !DirKeyPressed)
             {
-                if (CastTime > Timing.Global.Milliseconds) return;
+                if (CastTime > Timing.Global.Milliseconds && !Options.Instance.CombatOpts.TurnWhileCasting)
+                {
+                    return;
+                }
 
                 if (Controls.KeyDown(Control.TurnClockwise))
                 {

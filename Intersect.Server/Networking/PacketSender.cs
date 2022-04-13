@@ -2363,6 +2363,11 @@ namespace Intersect.Server.Networking
         {
             player?.SendPacket(new MapTrapPacket(mapId, trapId, animationId, ownerId, x, y, remove));
         }
+        
+        public static void SendProjectileCastDelayPacket(Player player, long delayTime)
+        {
+            player?.SendPacket(new ProjectileCastDelayPacket(delayTime));
+        }
     }
 
 }

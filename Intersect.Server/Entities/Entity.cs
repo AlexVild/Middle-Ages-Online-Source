@@ -2463,6 +2463,11 @@ namespace Intersect.Server.Entities
                             var projectileBase = spellBase.Combat.Projectile;
                             if (projectileBase != null)
                             {
+                                if (this is Player player)
+                                {
+                                    PacketSender.SendProjectileCastDelayPacket(player, Options.Instance.CombatOpts.ProjectileSpellMovementDelay);
+                                }
+
                                 if (MapController.TryGetInstanceFromMap(MapId, MapInstanceId, out var mapInstance))
                                 {
                                     if (prayerSpell && prayerTarget != null && prayerSpellDir >= 0)
@@ -2484,7 +2489,7 @@ namespace Intersect.Server.Entities
                                     {
                                         PacketSender.SendAnimationToProximity(spellBase.TrapAnimationId, -1, Guid.Empty, MapId, (byte)X, (byte)Y, (sbyte)Dir, MapInstanceId);
                                     }
-                                }   
+                                }
                             }
 
                             break;
