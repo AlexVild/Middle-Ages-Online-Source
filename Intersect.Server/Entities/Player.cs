@@ -2222,7 +2222,7 @@ namespace Intersect.Server.Entities
             switch (instanceType)
             {
                 case MapInstanceType.Guild:
-                    if (Guild == null || Guild.GuildInstanceId != newMapId)
+                    if (Guild == null)
                     {
                         isValid = false;
 
