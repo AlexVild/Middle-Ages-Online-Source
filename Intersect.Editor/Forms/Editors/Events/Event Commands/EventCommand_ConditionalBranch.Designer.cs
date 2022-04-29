@@ -31,6 +31,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private void InitializeComponent()
         {
             this.grpConditional = new DarkUI.Controls.DarkGroupBox();
+            this.grpClass = new DarkUI.Controls.DarkGroupBox();
+            this.lblClassRank = new System.Windows.Forms.Label();
+            this.nudClassRank = new DarkUI.Controls.DarkNumericUpDown();
+            this.cmbClass = new DarkUI.Controls.DarkComboBox();
+            this.lblClass = new System.Windows.Forms.Label();
             this.grpLevelStat = new DarkUI.Controls.DarkGroupBox();
             this.chkStatIgnoreBuffs = new DarkUI.Controls.DarkCheckBox();
             this.nudLevelStatValue = new DarkUI.Controls.DarkNumericUpDown();
@@ -141,9 +146,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpSpell = new DarkUI.Controls.DarkGroupBox();
             this.cmbSpell = new DarkUI.Controls.DarkComboBox();
             this.lblSpell = new System.Windows.Forms.Label();
-            this.grpClass = new DarkUI.Controls.DarkGroupBox();
-            this.cmbClass = new DarkUI.Controls.DarkComboBox();
-            this.lblClass = new System.Windows.Forms.Label();
             this.grpMapIs = new DarkUI.Controls.DarkGroupBox();
             this.btnSelectMap = new DarkUI.Controls.DarkButton();
             this.grpGender = new DarkUI.Controls.DarkGroupBox();
@@ -152,9 +154,13 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpEquippedItem = new DarkUI.Controls.DarkGroupBox();
             this.cmbEquippedItem = new DarkUI.Controls.DarkComboBox();
             this.lblEquippedItem = new System.Windows.Forms.Label();
-            this.nudClassRank = new DarkUI.Controls.DarkNumericUpDown();
-            this.lblClassRank = new System.Windows.Forms.Label();
+            this.grpNpc = new DarkUI.Controls.DarkGroupBox();
+            this.cmbNpcs = new DarkUI.Controls.DarkComboBox();
+            this.lblNpc = new System.Windows.Forms.Label();
+            this.chkNpc = new DarkUI.Controls.DarkCheckBox();
             this.grpConditional.SuspendLayout();
+            this.grpClass.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudClassRank)).BeginInit();
             this.grpLevelStat.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudLevelStatValue)).BeginInit();
             this.grpInPartyWith.SuspendLayout();
@@ -181,17 +187,17 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpPowerIs.SuspendLayout();
             this.grpSelfSwitch.SuspendLayout();
             this.grpSpell.SuspendLayout();
-            this.grpClass.SuspendLayout();
             this.grpMapIs.SuspendLayout();
             this.grpGender.SuspendLayout();
             this.grpEquippedItem.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudClassRank)).BeginInit();
+            this.grpNpc.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpConditional
             // 
             this.grpConditional.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.grpConditional.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpConditional.Controls.Add(this.grpNpc);
             this.grpConditional.Controls.Add(this.grpClass);
             this.grpConditional.Controls.Add(this.grpLevelStat);
             this.grpConditional.Controls.Add(this.grpInPartyWith);
@@ -224,6 +230,79 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpConditional.TabIndex = 17;
             this.grpConditional.TabStop = false;
             this.grpConditional.Text = "Conditional";
+            // 
+            // grpClass
+            // 
+            this.grpClass.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.grpClass.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpClass.Controls.Add(this.lblClassRank);
+            this.grpClass.Controls.Add(this.nudClassRank);
+            this.grpClass.Controls.Add(this.cmbClass);
+            this.grpClass.Controls.Add(this.lblClass);
+            this.grpClass.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpClass.Location = new System.Drawing.Point(9, 40);
+            this.grpClass.Name = "grpClass";
+            this.grpClass.Size = new System.Drawing.Size(262, 89);
+            this.grpClass.TabIndex = 27;
+            this.grpClass.TabStop = false;
+            this.grpClass.Text = "Class is";
+            // 
+            // lblClassRank
+            // 
+            this.lblClassRank.AutoSize = true;
+            this.lblClassRank.Location = new System.Drawing.Point(132, 54);
+            this.lblClassRank.Name = "lblClassRank";
+            this.lblClassRank.Size = new System.Drawing.Size(36, 13);
+            this.lblClassRank.TabIndex = 34;
+            this.lblClassRank.Text = "Rank:";
+            // 
+            // nudClassRank
+            // 
+            this.nudClassRank.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudClassRank.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudClassRank.Location = new System.Drawing.Point(178, 51);
+            this.nudClassRank.Maximum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.nudClassRank.Name = "nudClassRank";
+            this.nudClassRank.Size = new System.Drawing.Size(75, 20);
+            this.nudClassRank.TabIndex = 33;
+            this.nudClassRank.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            // 
+            // cmbClass
+            // 
+            this.cmbClass.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbClass.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbClass.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbClass.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbClass.DrawDropdownHoverOutline = false;
+            this.cmbClass.DrawFocusRectangle = false;
+            this.cmbClass.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbClass.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbClass.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbClass.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbClass.FormattingEnabled = true;
+            this.cmbClass.Location = new System.Drawing.Point(79, 18);
+            this.cmbClass.Name = "cmbClass";
+            this.cmbClass.Size = new System.Drawing.Size(175, 21);
+            this.cmbClass.TabIndex = 3;
+            this.cmbClass.Text = null;
+            this.cmbClass.TextPadding = new System.Windows.Forms.Padding(2);
+            // 
+            // lblClass
+            // 
+            this.lblClass.AutoSize = true;
+            this.lblClass.Location = new System.Drawing.Point(7, 20);
+            this.lblClass.Name = "lblClass";
+            this.lblClass.Size = new System.Drawing.Size(35, 13);
+            this.lblClass.TabIndex = 2;
+            this.lblClass.Text = "Class:";
             // 
             // grpLevelStat
             // 
@@ -1821,51 +1900,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.lblSpell.TabIndex = 2;
             this.lblSpell.Text = "Spell:";
             // 
-            // grpClass
-            // 
-            this.grpClass.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.grpClass.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpClass.Controls.Add(this.lblClassRank);
-            this.grpClass.Controls.Add(this.nudClassRank);
-            this.grpClass.Controls.Add(this.cmbClass);
-            this.grpClass.Controls.Add(this.lblClass);
-            this.grpClass.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpClass.Location = new System.Drawing.Point(9, 40);
-            this.grpClass.Name = "grpClass";
-            this.grpClass.Size = new System.Drawing.Size(262, 89);
-            this.grpClass.TabIndex = 27;
-            this.grpClass.TabStop = false;
-            this.grpClass.Text = "Class is";
-            // 
-            // cmbClass
-            // 
-            this.cmbClass.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbClass.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbClass.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbClass.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbClass.DrawDropdownHoverOutline = false;
-            this.cmbClass.DrawFocusRectangle = false;
-            this.cmbClass.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbClass.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbClass.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbClass.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbClass.FormattingEnabled = true;
-            this.cmbClass.Location = new System.Drawing.Point(79, 18);
-            this.cmbClass.Name = "cmbClass";
-            this.cmbClass.Size = new System.Drawing.Size(175, 21);
-            this.cmbClass.TabIndex = 3;
-            this.cmbClass.Text = null;
-            this.cmbClass.TextPadding = new System.Windows.Forms.Padding(2);
-            // 
-            // lblClass
-            // 
-            this.lblClass.AutoSize = true;
-            this.lblClass.Location = new System.Drawing.Point(7, 20);
-            this.lblClass.Name = "lblClass";
-            this.lblClass.Size = new System.Drawing.Size(35, 13);
-            this.lblClass.TabIndex = 2;
-            this.lblClass.Text = "Class:";
-            // 
             // grpMapIs
             // 
             this.grpMapIs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
@@ -1975,33 +2009,58 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.lblEquippedItem.TabIndex = 2;
             this.lblEquippedItem.Text = "Item:";
             // 
-            // nudClassRank
+            // grpNpc
             // 
-            this.nudClassRank.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudClassRank.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudClassRank.Location = new System.Drawing.Point(178, 51);
-            this.nudClassRank.Maximum = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.nudClassRank.Name = "nudClassRank";
-            this.nudClassRank.Size = new System.Drawing.Size(75, 20);
-            this.nudClassRank.TabIndex = 33;
-            this.nudClassRank.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
+            this.grpNpc.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.grpNpc.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpNpc.Controls.Add(this.chkNpc);
+            this.grpNpc.Controls.Add(this.cmbNpcs);
+            this.grpNpc.Controls.Add(this.lblNpc);
+            this.grpNpc.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpNpc.Location = new System.Drawing.Point(9, 40);
+            this.grpNpc.Name = "grpNpc";
+            this.grpNpc.Size = new System.Drawing.Size(262, 83);
+            this.grpNpc.TabIndex = 35;
+            this.grpNpc.TabStop = false;
+            this.grpNpc.Text = "NPCs";
             // 
-            // lblClassRank
+            // cmbNpcs
             // 
-            this.lblClassRank.AutoSize = true;
-            this.lblClassRank.Location = new System.Drawing.Point(132, 54);
-            this.lblClassRank.Name = "lblClassRank";
-            this.lblClassRank.Size = new System.Drawing.Size(36, 13);
-            this.lblClassRank.TabIndex = 34;
-            this.lblClassRank.Text = "Rank:";
+            this.cmbNpcs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbNpcs.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbNpcs.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbNpcs.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbNpcs.DrawDropdownHoverOutline = false;
+            this.cmbNpcs.DrawFocusRectangle = false;
+            this.cmbNpcs.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbNpcs.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbNpcs.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbNpcs.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbNpcs.FormattingEnabled = true;
+            this.cmbNpcs.Location = new System.Drawing.Point(51, 43);
+            this.cmbNpcs.Name = "cmbNpcs";
+            this.cmbNpcs.Size = new System.Drawing.Size(196, 21);
+            this.cmbNpcs.TabIndex = 3;
+            this.cmbNpcs.Text = null;
+            this.cmbNpcs.TextPadding = new System.Windows.Forms.Padding(2);
+            // 
+            // lblNpc
+            // 
+            this.lblNpc.AutoSize = true;
+            this.lblNpc.Location = new System.Drawing.Point(10, 48);
+            this.lblNpc.Name = "lblNpc";
+            this.lblNpc.Size = new System.Drawing.Size(32, 13);
+            this.lblNpc.TabIndex = 2;
+            this.lblNpc.Text = "NPC:";
+            // 
+            // chkNpc
+            // 
+            this.chkNpc.Location = new System.Drawing.Point(10, 20);
+            this.chkNpc.Name = "chkNpc";
+            this.chkNpc.Size = new System.Drawing.Size(98, 17);
+            this.chkNpc.TabIndex = 60;
+            this.chkNpc.Text = "Specific Npc?";
+            this.chkNpc.CheckedChanged += new System.EventHandler(this.chkNpc_CheckedChanged);
             // 
             // EventCommandConditionalBranch
             // 
@@ -2014,6 +2073,9 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.Size = new System.Drawing.Size(285, 471);
             this.grpConditional.ResumeLayout(false);
             this.grpConditional.PerformLayout();
+            this.grpClass.ResumeLayout(false);
+            this.grpClass.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudClassRank)).EndInit();
             this.grpLevelStat.ResumeLayout(false);
             this.grpLevelStat.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudLevelStatValue)).EndInit();
@@ -2061,14 +2123,13 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpSelfSwitch.PerformLayout();
             this.grpSpell.ResumeLayout(false);
             this.grpSpell.PerformLayout();
-            this.grpClass.ResumeLayout(false);
-            this.grpClass.PerformLayout();
             this.grpMapIs.ResumeLayout(false);
             this.grpGender.ResumeLayout(false);
             this.grpGender.PerformLayout();
             this.grpEquippedItem.ResumeLayout(false);
             this.grpEquippedItem.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudClassRank)).EndInit();
+            this.grpNpc.ResumeLayout(false);
+            this.grpNpc.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -2199,5 +2260,9 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private System.Windows.Forms.Label lblPartySize;
         private System.Windows.Forms.Label lblClassRank;
         private DarkNumericUpDown nudClassRank;
+        private DarkGroupBox grpNpc;
+        private DarkComboBox cmbNpcs;
+        private System.Windows.Forms.Label lblNpc;
+        private DarkCheckBox chkNpc;
     }
 }
