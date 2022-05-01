@@ -2096,6 +2096,15 @@ namespace Intersect.Server.Entities
             Warp(
                 LastOverworldMapId, (byte)LastOverworldX, (byte)LastOverworldY, (byte)Dir, false, (byte)Z, false, false, MapInstanceType.Overworld, fromLogin
             );
+            // If the player was forcibly warped, which they would have been here, we need to kick them out of any vehicle they were in in the instance
+            LeaveVehicle();
+        }
+
+        public void LeaveVehicle()
+        {
+            InVehicle = false;
+            VehicleSpeed = 0L;
+            VehicleSprite = string.Empty;
         }
 
         public void SendLivesRemainingMessage()
