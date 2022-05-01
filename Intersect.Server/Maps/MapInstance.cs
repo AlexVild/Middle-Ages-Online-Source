@@ -692,6 +692,13 @@ namespace Intersect.Server.Maps
             TileItems[item.TileIndex]?.TryAdd(item.UniqueId, item);
         }
 
+        public enum ItemSpawnType
+        {
+            Normal,
+            Dropped,
+            PlayerDeath
+        }
+
         /// <summary>
         /// Spawn an item to this map instance.
         /// </summary>
@@ -709,7 +716,7 @@ namespace Intersect.Server.Maps
         /// <param name="item">The <see cref="Item"/> to spawn on the map.</param>
         /// <param name="amount">The amount of times to spawn this item to the map. Set to the <see cref="Item"/> quantity, overwrites quantity if stackable!</param>
         /// <param name="owner">The player Id that will be the temporary owner of this item.</param>
-        public void SpawnItem(int x, int y, Item item, int amount, Guid owner, bool sendUpdate = true)
+        public void SpawnItem(int x, int y, Item item, int amount, Guid owner, bool sendUpdate = true, ItemSpawnType spawnType = ItemSpawnType.Normal)
         {
             if (item == null)
             {
@@ -725,6 +732,8 @@ namespace Intersect.Server.Maps
 
                 return;
             }
+
+            var despawnTime = DetermineItemDespawnTime(spawnType);
 
             // if we can stack this item or the user configured to drop items consolidated, simply spawn a single stack of it.
             // Does not count for Equipment and bags, these are ALWAYS their own separate item spawn. We don't want to lose data on that!
@@ -747,7 +756,7 @@ namespace Intersect.Server.Maps
 
                 var mapItem = new MapItem(item.ItemId, amount + existingCount, x, y, item.BagId, item.Bag)
                 {
-                    DespawnTime = Timing.Global.Milliseconds + Options.Loot.ItemDespawnTime,
+                    DespawnTime = despawnTime,
                     Owner = owner,
                     OwnershipTime = Timing.Global.Milliseconds + Options.Loot.ItemOwnershipTime,
                     VisibleToAll = Options.Loot.ShowUnownedItems || owner == Guid.Empty
@@ -782,7 +791,7 @@ namespace Intersect.Server.Maps
                 {
                     var mapItem = new MapItem(item.ItemId, amount, x, y, item.BagId, item.Bag)
                     {
-                        DespawnTime = Timing.Global.Milliseconds + Options.Loot.ItemDespawnTime,
+                        DespawnTime = despawnTime,
                         Owner = owner,
                         OwnershipTime = Timing.Global.Milliseconds + Options.Loot.ItemOwnershipTime,
                         VisibleToAll = Options.Loot.ShowUnownedItems || owner == Guid.Empty
@@ -803,6 +812,30 @@ namespace Intersect.Server.Maps
                 }
                 PacketSender.SendMapItemsToProximity(mMapController.Id, this);
             }
+        }
+
+        /// <summary>
+        /// Returns a timestamp associated with when an item should be despawned, based upon the method it was spawned
+        /// </summary>
+        /// <param name="spawnType">A <see cref="ItemSpawnType"/> that determines in what way this item is being created</param>
+        /// <returns></returns>
+        public long DetermineItemDespawnTime(ItemSpawnType spawnType)
+        {
+            long despawnTime = Timing.Global.Milliseconds;
+            switch (spawnType)
+            {
+                case ItemSpawnType.Dropped:
+                    despawnTime += Options.Instance.LootOpts.PlayerDroppedItemDespawnTime;
+                    break;
+                case ItemSpawnType.PlayerDeath:
+                    despawnTime += Options.Instance.LootOpts.PlayerDeathItemDespawnTime;
+                    break;
+                default:
+                    despawnTime += Options.Instance.LootOpts.ItemDespawnTime;
+                    break;
+            }
+
+            return despawnTime;
         }
 
         /// <summary>

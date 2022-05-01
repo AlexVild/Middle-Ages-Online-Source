@@ -3096,7 +3096,14 @@ namespace Intersect.Server.Entities
                 // Spawn the actual item!
                 if (MapController.TryGetInstanceFromMap(MapId, MapInstanceId, out var instance))
                 {
-                    instance.SpawnItem(X, Y, item, item.Quantity, lootOwner, sendUpdate);
+                    if (this is Player)
+                    {
+                        instance.SpawnItem(X, Y, item, item.Quantity, lootOwner, sendUpdate, MapInstance.ItemSpawnType.PlayerDeath);
+                    }
+                    else
+                    {
+                        instance.SpawnItem(X, Y, item, item.Quantity, lootOwner, sendUpdate);
+                    }
                 }
 
                 // Remove the item from inventory if a player.
