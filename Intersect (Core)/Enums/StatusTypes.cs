@@ -40,6 +40,8 @@ namespace Intersect.Enums
         
         Confused = 17,
 
+        Steady = 18,
+
     }
 
 }

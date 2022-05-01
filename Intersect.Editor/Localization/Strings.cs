@@ -4976,6 +4976,7 @@ Tick timer saved in server config.json.";
                 {15, @"Haste"},
                 {16, @"Slowed"},
                 {17, @"Confused"},
+                {18, @"Steady"},
             };
 
             public static LocalizedString effectgroup = @"Effect";

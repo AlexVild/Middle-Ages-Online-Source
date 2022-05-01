@@ -1881,6 +1881,7 @@ namespace Intersect.Client.Localization
                 {15, @"Haste"},
                 {16, @"Slowed"},
                 {17, @"Confused"},
+                {18, @"Steady"},
             };
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]

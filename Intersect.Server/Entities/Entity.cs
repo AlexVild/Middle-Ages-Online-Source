@@ -1474,9 +1474,9 @@ namespace Intersect.Server.Entities
             }
 
             //If there is a knockback, knock them backwards and make sure its linear (diagonal player movement not coded).
-            if (projectile.Knockback > 0 && projectileDir < 4 && !target.IsImmuneTo(Immunities.Knockback))
+            if (projectile.Knockback > 0 && projectileDir < 4 && !target.IsImmuneTo(Immunities.Knockback) && !StatusActive(StatusTypes.Steady))
             {
-                var dash = new Dash(target, projectile.Knockback, projectileDir, false, false, false, false);
+                _ = new Dash(target, projectile.Knockback, projectileDir, false, false, false, false);
             }
         }
 

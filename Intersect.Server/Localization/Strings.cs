@@ -369,6 +369,7 @@ namespace Intersect.Server.Localization
                     {15, @"HASTE!"},
                     {16, @"SLOWED!"},
                     {17, @"CONFUSED!"},
+                    {18, @"STEADY!"},
                 }
             );
 
