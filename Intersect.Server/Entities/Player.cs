@@ -2698,7 +2698,7 @@ namespace Intersect.Server.Entities
                     // Do we have any items to spawn to the map?
                     if (spawnAmount > 0 && MapController.TryGetInstanceFromMap(Map.Id, MapInstanceId, out var instance))
                     {
-                        instance.SpawnItem(overflowTileX > -1 ? overflowTileX : X, overflowTileY > -1 ? overflowTileY : Y, item, spawnAmount, Id, ItemSpawnType.Dropped);
+                        instance.SpawnItem(overflowTileX > -1 ? overflowTileX : X, overflowTileY > -1 ? overflowTileY : Y, item, spawnAmount, Id, true, ItemSpawnType.Dropped);
                         success = spawnAmount != item.Quantity;
                     }
 
@@ -2941,7 +2941,7 @@ namespace Intersect.Server.Entities
 
             if (MapController.TryGetInstanceFromMap(MapId, MapInstanceId, out var mapInstance))
             {
-                mapInstance.SpawnItem(X, Y, itemInSlot, itemDescriptor.IsStackable ? amount : 1, Id, ItemSpawnType.Dropped);
+                mapInstance.SpawnItem(X, Y, itemInSlot, itemDescriptor.IsStackable ? amount : 1, Id, true, ItemSpawnType.Dropped);
 
                 itemInSlot.Quantity = Math.Max(0, itemInSlot.Quantity - amount);
 
@@ -4743,7 +4743,7 @@ namespace Intersect.Server.Entities
 
                 if (!TryGiveItem(offer) && MapController.TryGetInstanceFromMap(MapId, MapInstanceId, out var instance))
                 {
-                    instance.SpawnItem(X, Y, offer, offer.Quantity, Id, ItemSpawnType.Dropped);
+                    instance.SpawnItem(X, Y, offer, offer.Quantity, Id, true, ItemSpawnType.Dropped);
                     PacketSender.SendChatMsg(this, Strings.Trading.itemsdropped, ChatMessageType.Inventory, CustomColors.Alerts.Error);
                 }
 
