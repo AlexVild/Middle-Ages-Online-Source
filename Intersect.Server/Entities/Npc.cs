@@ -181,6 +181,10 @@ namespace Intersect.Server.Entities
                 if (MapController.TryGetInstanceFromMap(MapId, MapInstanceId, out var instance))
                 {
                     instance.RemoveEntity(this);
+                    if (Base.DeathTransformId != Guid.Empty)
+                    {
+                        instance.SpawnNpc((byte)X, (byte)Y, (byte)Dir, Base.DeathTransformId);
+                    }
                 }
                 PacketSender.SendEntityDie(this);
                 PacketSender.SendEntityLeave(this);

@@ -123,6 +123,10 @@ namespace Intersect.Editor.Forms.Editors
             cmbDeathAnimation.Items.Add(Strings.General.none);
             cmbDeathAnimation.Items.AddRange(AnimationBase.Names);
 
+            cmbTransformIntoNpc.Items.Clear();
+            cmbTransformIntoNpc.Items.Add(Strings.General.none);
+            cmbTransformIntoNpc.Items.AddRange(NpcBase.Names);
+
             InitLocalization();
             UpdateEditor();
         }
@@ -380,6 +384,7 @@ namespace Intersect.Editor.Forms.Editors
                 UpdateImmunities();
 
                 cmbDeathAnimation.SelectedIndex = AnimationBase.ListIndex(mEditorItem.DeathAnimationId) + 1;
+                cmbTransformIntoNpc.SelectedIndex = NpcBase.ListIndex(mEditorItem.DeathTransformId) + 1;
             }
             else
             {
@@ -1113,6 +1118,12 @@ namespace Intersect.Editor.Forms.Editors
         {
             mEditorItem.DeathAnimation =
                 AnimationBase.Get(AnimationBase.IdFromList(cmbDeathAnimation.SelectedIndex - 1));
+        }
+
+        private void cmbTransformIntoNpc_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mEditorItem.DeathTransform =
+                NpcBase.Get(NpcBase.IdFromList(cmbTransformIntoNpc.SelectedIndex - 1));
         }
     }
 

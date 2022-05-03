@@ -137,6 +137,17 @@ namespace Intersect.GameObjects
             set => DeathAnimationId = value?.Id ?? Guid.Empty;
         }
 
+        [Column("DeathTransformId")]
+        public Guid DeathTransformId { get; set; }
+
+        [NotMapped]
+        [JsonIgnore]
+        public NpcBase DeathTransform
+        {
+            get => Get(DeathTransformId);
+            set => DeathTransformId = value?.Id ?? Guid.Empty;
+        }
+
         //Behavior
         public bool Aggressive { get; set; }
 
