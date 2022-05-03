@@ -1000,7 +1000,7 @@ namespace Intersect.Server.Entities
                                                     var dirTarget = GetDirectionTo(Target);
                                                     if (mLastTargetDir < 0 || mLastTargetDir != dirTarget)
                                                     {
-                                                        smLastTargetDir = dirTarget;
+                                                        mLastTargetDir = dirTarget;
                                                         Dir = dirTarget;
                                                         PacketSender.SendEntityDir(this);
                                                     }
