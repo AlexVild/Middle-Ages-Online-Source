@@ -746,6 +746,10 @@
     <Compile Include="Migrations\Game\20220502235311_NpcDeathTransformMigration.designer.cs">
       <DependentUpon>20220502235311_NpcDeathTransformMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20220503002505_NpcStandStillMigration.cs" />
+    <Compile Include="Migrations\Game\20220503002505_NpcStandStillMigration.designer.cs">
+      <DependentUpon>20220503002505_NpcStandStillMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

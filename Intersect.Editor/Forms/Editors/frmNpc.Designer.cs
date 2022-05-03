@@ -77,6 +77,9 @@ namespace Intersect.Editor.Forms.Editors
             this.lblHP = new System.Windows.Forms.Label();
             this.lblExp = new System.Windows.Forms.Label();
             this.pnlContainer = new System.Windows.Forms.Panel();
+            this.grpDeathTransform = new DarkUI.Controls.DarkGroupBox();
+            this.cmbTransformIntoNpc = new DarkUI.Controls.DarkComboBox();
+            this.lblDeathTransform = new System.Windows.Forms.Label();
             this.grpAnimation = new DarkUI.Controls.DarkGroupBox();
             this.cmbDeathAnimation = new DarkUI.Controls.DarkComboBox();
             this.lblDeathAnimation = new System.Windows.Forms.Label();
@@ -178,9 +181,7 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
             this.searchableDarkTreeView1 = new Intersect.Editor.Forms.Controls.SearchableDarkTreeView();
-            this.grpDeathTransform = new DarkUI.Controls.DarkGroupBox();
-            this.cmbTransformIntoNpc = new DarkUI.Controls.DarkComboBox();
-            this.lblDeathTransform = new System.Windows.Forms.Label();
+            this.chkStandStill = new DarkUI.Controls.DarkCheckBox();
             this.grpNpcs.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudRgbaA)).BeginInit();
@@ -201,6 +202,7 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudMag)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudStr)).BeginInit();
             this.pnlContainer.SuspendLayout();
+            this.grpDeathTransform.SuspendLayout();
             this.grpAnimation.SuspendLayout();
             this.grpImmunities.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudTenacity)).BeginInit();
@@ -225,7 +227,6 @@ namespace Intersect.Editor.Forms.Editors
             this.grpNpcVsNpc.SuspendLayout();
             this.grpSpells.SuspendLayout();
             this.toolStrip.SuspendLayout();
-            this.grpDeathTransform.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpNpcs
@@ -907,6 +908,52 @@ namespace Intersect.Editor.Forms.Editors
             this.pnlContainer.Size = new System.Drawing.Size(464, 529);
             this.pnlContainer.TabIndex = 17;
             // 
+            // grpDeathTransform
+            // 
+            this.grpDeathTransform.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpDeathTransform.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpDeathTransform.Controls.Add(this.cmbTransformIntoNpc);
+            this.grpDeathTransform.Controls.Add(this.lblDeathTransform);
+            this.grpDeathTransform.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpDeathTransform.Location = new System.Drawing.Point(216, 1200);
+            this.grpDeathTransform.Margin = new System.Windows.Forms.Padding(2);
+            this.grpDeathTransform.Name = "grpDeathTransform";
+            this.grpDeathTransform.Padding = new System.Windows.Forms.Padding(2);
+            this.grpDeathTransform.Size = new System.Drawing.Size(229, 68);
+            this.grpDeathTransform.TabIndex = 34;
+            this.grpDeathTransform.TabStop = false;
+            this.grpDeathTransform.Text = "Death Transform";
+            // 
+            // cmbTransformIntoNpc
+            // 
+            this.cmbTransformIntoNpc.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbTransformIntoNpc.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbTransformIntoNpc.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbTransformIntoNpc.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbTransformIntoNpc.DrawDropdownHoverOutline = false;
+            this.cmbTransformIntoNpc.DrawFocusRectangle = false;
+            this.cmbTransformIntoNpc.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbTransformIntoNpc.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbTransformIntoNpc.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbTransformIntoNpc.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbTransformIntoNpc.FormattingEnabled = true;
+            this.cmbTransformIntoNpc.Location = new System.Drawing.Point(12, 36);
+            this.cmbTransformIntoNpc.Name = "cmbTransformIntoNpc";
+            this.cmbTransformIntoNpc.Size = new System.Drawing.Size(182, 21);
+            this.cmbTransformIntoNpc.TabIndex = 19;
+            this.cmbTransformIntoNpc.Text = null;
+            this.cmbTransformIntoNpc.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbTransformIntoNpc.SelectedIndexChanged += new System.EventHandler(this.cmbTransformIntoNpc_SelectedIndexChanged);
+            // 
+            // lblDeathTransform
+            // 
+            this.lblDeathTransform.AutoSize = true;
+            this.lblDeathTransform.Location = new System.Drawing.Point(9, 20);
+            this.lblDeathTransform.Name = "lblDeathTransform";
+            this.lblDeathTransform.Size = new System.Drawing.Size(78, 13);
+            this.lblDeathTransform.TabIndex = 18;
+            this.lblDeathTransform.Text = "Transform Into:";
+            // 
             // grpAnimation
             // 
             this.grpAnimation.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
@@ -1487,6 +1534,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpBehavior.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpBehavior.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpBehavior.Controls.Add(this.chkStandStill);
             this.grpBehavior.Controls.Add(this.nudResetRadius);
             this.grpBehavior.Controls.Add(this.lblResetRadius);
             this.grpBehavior.Controls.Add(this.lblFocusDamageDealer);
@@ -2283,51 +2331,15 @@ namespace Intersect.Editor.Forms.Editors
             this.searchableDarkTreeView1.TabIndex = 46;
             this.searchableDarkTreeView1.Visible = false;
             // 
-            // grpDeathTransform
+            // chkStandStill
             // 
-            this.grpDeathTransform.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.grpDeathTransform.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpDeathTransform.Controls.Add(this.cmbTransformIntoNpc);
-            this.grpDeathTransform.Controls.Add(this.lblDeathTransform);
-            this.grpDeathTransform.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpDeathTransform.Location = new System.Drawing.Point(216, 1200);
-            this.grpDeathTransform.Margin = new System.Windows.Forms.Padding(2);
-            this.grpDeathTransform.Name = "grpDeathTransform";
-            this.grpDeathTransform.Padding = new System.Windows.Forms.Padding(2);
-            this.grpDeathTransform.Size = new System.Drawing.Size(229, 68);
-            this.grpDeathTransform.TabIndex = 34;
-            this.grpDeathTransform.TabStop = false;
-            this.grpDeathTransform.Text = "Death Transform";
-            // 
-            // cmbTransformIntoNpc
-            // 
-            this.cmbTransformIntoNpc.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbTransformIntoNpc.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbTransformIntoNpc.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbTransformIntoNpc.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbTransformIntoNpc.DrawDropdownHoverOutline = false;
-            this.cmbTransformIntoNpc.DrawFocusRectangle = false;
-            this.cmbTransformIntoNpc.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbTransformIntoNpc.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbTransformIntoNpc.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbTransformIntoNpc.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbTransformIntoNpc.FormattingEnabled = true;
-            this.cmbTransformIntoNpc.Location = new System.Drawing.Point(12, 36);
-            this.cmbTransformIntoNpc.Name = "cmbTransformIntoNpc";
-            this.cmbTransformIntoNpc.Size = new System.Drawing.Size(182, 21);
-            this.cmbTransformIntoNpc.TabIndex = 19;
-            this.cmbTransformIntoNpc.Text = null;
-            this.cmbTransformIntoNpc.TextPadding = new System.Windows.Forms.Padding(2);
-            this.cmbTransformIntoNpc.SelectedIndexChanged += new System.EventHandler(this.cmbTransformIntoNpc_SelectedIndexChanged);
-            // 
-            // lblDeathTransform
-            // 
-            this.lblDeathTransform.AutoSize = true;
-            this.lblDeathTransform.Location = new System.Drawing.Point(9, 20);
-            this.lblDeathTransform.Name = "lblDeathTransform";
-            this.lblDeathTransform.Size = new System.Drawing.Size(78, 13);
-            this.lblDeathTransform.TabIndex = 18;
-            this.lblDeathTransform.Text = "Transform Into:";
+            this.chkStandStill.AutoSize = true;
+            this.chkStandStill.Location = new System.Drawing.Point(153, 16);
+            this.chkStandStill.Name = "chkStandStill";
+            this.chkStandStill.Size = new System.Drawing.Size(73, 17);
+            this.chkStandStill.TabIndex = 77;
+            this.chkStandStill.Text = "Stand Still";
+            this.chkStandStill.CheckedChanged += new System.EventHandler(this.chkStandStill_CheckedChanged);
             // 
             // FrmNpc
             // 
@@ -2375,6 +2387,8 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudMag)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudStr)).EndInit();
             this.pnlContainer.ResumeLayout(false);
+            this.grpDeathTransform.ResumeLayout(false);
+            this.grpDeathTransform.PerformLayout();
             this.grpAnimation.ResumeLayout(false);
             this.grpAnimation.PerformLayout();
             this.grpImmunities.ResumeLayout(false);
@@ -2410,8 +2424,6 @@ namespace Intersect.Editor.Forms.Editors
             this.grpSpells.PerformLayout();
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
-            this.grpDeathTransform.ResumeLayout(false);
-            this.grpDeathTransform.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -2566,5 +2578,6 @@ namespace Intersect.Editor.Forms.Editors
         private DarkGroupBox grpDeathTransform;
         private DarkComboBox cmbTransformIntoNpc;
         private System.Windows.Forms.Label lblDeathTransform;
+        private DarkCheckBox chkStandStill;
     }
 }

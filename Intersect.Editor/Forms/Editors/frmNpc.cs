@@ -301,6 +301,7 @@ namespace Intersect.Editor.Forms.Editors
                 nudFlee.Value = mEditorItem.FleeHealthPercentage;
                 chkFocusDamageDealer.Checked = mEditorItem.FocusHighestDamageDealer;
                 nudResetRadius.Value = mEditorItem.ResetRadius;
+                chkStandStill.Checked = mEditorItem.StandStill;
 
                 //Common Events
                 cmbOnDeathEventKiller.SelectedIndex = EventBase.ListIndex(mEditorItem.OnDeathEventId) + 1;
@@ -1124,6 +1125,11 @@ namespace Intersect.Editor.Forms.Editors
         {
             mEditorItem.DeathTransform =
                 NpcBase.Get(NpcBase.IdFromList(cmbTransformIntoNpc.SelectedIndex - 1));
+        }
+
+        private void chkStandStill_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.StandStill = chkStandStill.Checked;
         }
     }
 
