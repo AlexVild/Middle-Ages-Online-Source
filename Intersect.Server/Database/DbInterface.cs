@@ -576,6 +576,14 @@ namespace Intersect.Server.Database
                     QuestBoardBase.Lookup.Clear();
 
                     break;
+                case GameObjectType.PlayerTimer:
+                    PlayerTimerBase.Lookup.Clear();
+
+                    break;
+                case GameObjectType.InstanceTimer:
+                    InstanceTimerBase.Lookup.Clear();
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }
@@ -729,6 +737,20 @@ namespace Intersect.Server.Database
                             }
 
                             break;
+                        case GameObjectType.PlayerTimer:
+                           foreach (var psw in context.PlayerTimers)
+                            {
+                                PlayerTimerBase.Lookup.Set(psw.Id, psw);
+                            }
+
+                            break;
+                        case GameObjectType.InstanceTimer:
+                            foreach (var psw in context.InstanceTimers)
+                            {
+                                InstanceTimerBase.Lookup.Set(psw.Id, psw);
+                            }
+
+                            break;
                         default:
                             throw new ArgumentOutOfRangeException(nameof(gameObjectType), gameObjectType, null);
                     }
@@ -822,6 +844,14 @@ namespace Intersect.Server.Database
                     break;
                 case GameObjectType.QuestBoard:
                     dbObj = new QuestBoardBase(predefinedid);
+
+                    break;
+                case GameObjectType.PlayerTimer:
+                    dbObj = new PlayerTimerBase(predefinedid);
+
+                    break;
+                case GameObjectType.InstanceTimer:
+                    dbObj = new InstanceTimerBase(predefinedid);
 
                     break;
                 case GameObjectType.Tileset:
@@ -971,6 +1001,16 @@ namespace Intersect.Server.Database
                             QuestBoardBase.Lookup.Set(dbObj.Id, dbObj);
 
                             break;
+                        case GameObjectType.PlayerTimer:
+                            context.PlayerTimers.Add((PlayerTimerBase)dbObj);
+                            PlayerTimerBase.Lookup.Set(dbObj.Id, dbObj);
+
+                            break;
+                        case GameObjectType.InstanceTimer:
+                            context.InstanceTimers.Add((InstanceTimerBase)dbObj);
+                            InstanceTimerBase.Lookup.Set(dbObj.Id, dbObj);
+
+                            break;
 
                         default:
                             throw new ArgumentOutOfRangeException(nameof(gameObjectType), gameObjectType, null);
@@ -1102,6 +1142,14 @@ namespace Intersect.Server.Database
                             context.QuestBoards.Remove((QuestBoardBase)gameObject);
 
                             break;
+                        case GameObjectType.PlayerTimer:
+                            context.PlayerTimers.Remove((PlayerTimerBase)gameObject);
+
+                            break;
+                        case GameObjectType.InstanceTimer:
+                            context.InstanceTimers.Remove((InstanceTimerBase)gameObject);
+
+                            break;
                     }
 
                     if (gameObject.Type.GetLookup().Values.Contains(gameObject))
@@ -1228,6 +1276,14 @@ namespace Intersect.Server.Database
                             break;
                         case GameObjectType.QuestBoard:
                             context.QuestBoards.Update((QuestBoardBase)gameObject);
+
+                            break;
+                        case GameObjectType.PlayerTimer:
+                            context.PlayerTimers.Update((PlayerTimerBase)gameObject);
+
+                            break;
+                        case GameObjectType.InstanceTimer:
+                            context.InstanceTimers.Update((InstanceTimerBase)gameObject);
 
                             break;
                     }
@@ -1816,6 +1872,8 @@ namespace Intersect.Server.Database
                     MigrateDbSet(context.InstanceVariables, newGameContext.InstanceVariables);
                     MigrateDbSet(context.QuestLists, newGameContext.QuestLists);
                     MigrateDbSet(context.QuestBoards, newGameContext.QuestBoards);
+                    MigrateDbSet(context.PlayerTimers, newGameContext.PlayerTimers);
+                    MigrateDbSet(context.InstanceTimers, newGameContext.InstanceTimers);
                     newGameContext.ChangeTracker.DetectChanges();
                     newGameContext.SaveChanges();
                     newGameContext.Dispose();

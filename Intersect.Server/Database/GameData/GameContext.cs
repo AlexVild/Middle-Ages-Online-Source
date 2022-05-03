@@ -101,6 +101,11 @@ namespace Intersect.Server.Database.GameData
         //Quest Boards
         public DbSet<QuestBoardBase> QuestBoards { get; set; }
 
+        // Timers
+        public DbSet<PlayerTimerBase> PlayerTimers { get; set; }
+        
+        public DbSet<InstanceTimerBase> InstanceTimers { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
         }

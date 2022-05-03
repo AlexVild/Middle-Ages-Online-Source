@@ -3875,7 +3875,14 @@ namespace Intersect.Server.Networking
                     obj = InstanceVariableBase.Get(id);
 
                     break;
+                case GameObjectType.PlayerTimer:
+                    obj = PlayerTimerBase.Get(id);
 
+                    break;
+                case GameObjectType.InstanceTimer:
+                    obj = InstanceTimerBase.Get(id);
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -4012,6 +4019,14 @@ namespace Intersect.Server.Networking
                 
                 case GameObjectType.QuestBoard:
                     obj = DatabaseObject<QuestBoardBase>.Lookup.Get(id);
+
+                    break;
+                case GameObjectType.PlayerTimer:
+                    obj = DatabaseObject<PlayerTimerBase>.Lookup.Get(id);
+
+                    break;
+                case GameObjectType.InstanceTimer:
+                    obj = DatabaseObject<InstanceTimerBase>.Lookup.Get(id);
 
                     break;
 

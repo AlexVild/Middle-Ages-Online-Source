@@ -492,6 +492,7 @@
     <Compile Include="Entities\Combat\DoT.cs" />
     <Compile Include="Entities\Events\ConditionHandlerRegistry.cs" />
     <Compile Include="Entities\Events\Conditions.cs" />
+    <Compile Include="Entities\Events\Timer.cs" />
     <Compile Include="Entities\Events\VariableCheckHandlerRegistry.cs" />
     <Compile Include="Entities\Label.cs" />
     <Compile Include="Entities\Player.Database.cs" />
@@ -753,6 +754,10 @@
     <Compile Include="Migrations\Game\20220503010431_NpcSpellOverrideMigration.cs" />
     <Compile Include="Migrations\Game\20220503010431_NpcSpellOverrideMigration.designer.cs">
       <DependentUpon>20220503010431_NpcSpellOverrideMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20220503161727_TimerMigration.cs" />
+    <Compile Include="Migrations\Game\20220503161727_TimerMigration.designer.cs">
+      <DependentUpon>20220503161727_TimerMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">

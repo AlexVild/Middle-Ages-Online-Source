@@ -5,6 +5,7 @@ using Intersect.GameObjects.QuestList;
 using Intersect.GameObjects.QuestBoard;
 using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Maps;
+using Intersect.GameObjects.Timers;
 
 namespace Intersect.Enums
 {
@@ -71,6 +72,12 @@ namespace Intersect.Enums
 
         [GameObjectInfo(typeof(QuestBoardBase), "quest_boards")]
         QuestBoard,
+
+        [GameObjectInfo(typeof(PlayerTimerBase), "player_timers")]
+        PlayerTimer,
+
+        [GameObjectInfo(typeof(InstanceTimerBase), "instance_timers")]
+        InstanceTimer,
     }
 
 }

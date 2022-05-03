@@ -684,6 +684,32 @@ namespace Intersect.Editor.Networking
                         QuestBoardBase.Lookup.Set(id, qb);
                     }
                     break;
+                case GameObjectType.PlayerTimer:
+                    if (deleted)
+                    {
+                        var qb = PlayerTimerBase.Get(id);
+                        qb.Delete();
+                    }
+                    else
+                    {
+                        var qb = new PlayerTimerBase(id);
+                        qb.Load(json);
+                        PlayerTimerBase.Lookup.Set(id, qb);
+                    }
+                    break;
+                case GameObjectType.InstanceTimer:
+                    if (deleted)
+                    {
+                        var qb = InstanceTimerBase.Get(id);
+                        qb.Delete();
+                    }
+                    else
+                    {
+                        var qb = new InstanceTimerBase(id);
+                        qb.Load(json);
+                        InstanceTimerBase.Lookup.Set(id, qb);
+                    }
+                    break;
 
                 default:
                     throw new ArgumentOutOfRangeException();

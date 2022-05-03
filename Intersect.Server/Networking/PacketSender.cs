@@ -1766,6 +1766,18 @@ namespace Intersect.Server.Networking
                         SendGameObject(client, obj.Value, false, false, packetList);
                     }
                     break;
+                case GameObjectType.PlayerTimer:
+                    foreach (var obj in PlayerTimerBase.Lookup)
+                    {
+                        SendGameObject(client, obj.Value, false, false, packetList);
+                    }
+                    break;
+                case GameObjectType.InstanceTimer:
+                    foreach (var obj in InstanceTimerBase.Lookup)
+                    {
+                        SendGameObject(client, obj.Value, false, false, packetList);
+                    }
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }
