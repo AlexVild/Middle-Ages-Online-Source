@@ -127,6 +127,10 @@ namespace Intersect.Editor.Forms.Editors
             cmbTransformIntoNpc.Items.Add(Strings.General.none);
             cmbTransformIntoNpc.Items.AddRange(NpcBase.Names);
 
+            cmbSpellAttackOverride.Items.Clear();
+            cmbSpellAttackOverride.Items.Add(Strings.General.none);
+            cmbSpellAttackOverride.Items.AddRange(SpellBase.Names);
+
             InitLocalization();
             UpdateEditor();
         }
@@ -386,6 +390,7 @@ namespace Intersect.Editor.Forms.Editors
 
                 cmbDeathAnimation.SelectedIndex = AnimationBase.ListIndex(mEditorItem.DeathAnimationId) + 1;
                 cmbTransformIntoNpc.SelectedIndex = NpcBase.ListIndex(mEditorItem.DeathTransformId) + 1;
+                cmbSpellAttackOverride.SelectedIndex = SpellBase.ListIndex(mEditorItem.SpellAttackOverrideId) + 1;
             }
             else
             {
@@ -1130,6 +1135,11 @@ namespace Intersect.Editor.Forms.Editors
         private void chkStandStill_CheckedChanged(object sender, EventArgs e)
         {
             mEditorItem.StandStill = chkStandStill.Checked;
+        }
+
+        private void cmbSpellAttackOverride_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mEditorItem.SpellAttackOverrideId = SpellBase.IdFromList(cmbSpellAttackOverride.SelectedIndex - 1);
         }
     }
 

@@ -148,6 +148,8 @@ namespace Intersect.GameObjects
             set => DeathTransformId = value?.Id ?? Guid.Empty;
         }
 
+        public Guid SpellAttackOverrideId { get; set; }
+
         //Behavior
         public bool Aggressive { get; set; }
 
