@@ -27,6 +27,7 @@ using Intersect.Server.Maps;
 using Intersect.Utilities;
 using Newtonsoft.Json;
 using Intersect.Server.Classes.Maps;
+using Intersect.GameObjects.Timers;
 
 namespace Intersect.Server.Networking
 {
@@ -1766,14 +1767,8 @@ namespace Intersect.Server.Networking
                         SendGameObject(client, obj.Value, false, false, packetList);
                     }
                     break;
-                case GameObjectType.PlayerTimer:
-                    foreach (var obj in PlayerTimerBase.Lookup)
-                    {
-                        SendGameObject(client, obj.Value, false, false, packetList);
-                    }
-                    break;
-                case GameObjectType.InstanceTimer:
-                    foreach (var obj in InstanceTimerBase.Lookup)
+                case GameObjectType.Timer:
+                    foreach (var obj in TimerDescriptor.Lookup)
                     {
                         SendGameObject(client, obj.Value, false, false, packetList);
                     }

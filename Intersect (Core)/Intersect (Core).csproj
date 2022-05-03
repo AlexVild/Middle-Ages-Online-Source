@@ -289,13 +289,11 @@
     <Compile Include="Factories\IFactory.cs" />
     <Compile Include="GameObjects\Events\VariableMod.cs" />
     <Compile Include="Enums\Timers.cs" />
-    <Compile Include="GameObjects\Timers\InstanceTimerBase.cs" />
     <Compile Include="GameObjects\QuestBoardBase.cs" />
     <Compile Include="GameObjects\QuestListBase.cs" />
     <Compile Include="GameObjects\Switches and Variables\InstanceVariableBase.cs" />
     <Compile Include="GameObjects\Switches and Variables\VariableValue.cs" />
-    <Compile Include="GameObjects\Timers\PlayerTimerBase.cs" />
-    <Compile Include="GameObjects\Timers\Timer.cs" />
+    <Compile Include="GameObjects\Timers\TimerDescriptor.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IO\ConsoleContext.cs" />
     <Compile Include="IO\ConsoleWriter.cs" />

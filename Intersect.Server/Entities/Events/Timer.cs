@@ -11,14 +11,15 @@ namespace Intersect.Server.Entities.Events
     /// Used to determine if a timer is:
     /// - <see cref="TimerState.Active"/>: Currently counting down/up
     /// - <see cref="TimerState.Paused"/>: Not progressing further
-    /// - <see cref="TimerState.Stopped"/>: Finished and needs its events ran
+    /// - <see cref="TimerState.Quit"/>: Was quit by some event, and will execute its "quit" event
+    /// - <see cref="TimerState.Finished"/>: Was quit by vi
     /// </summary>
     public enum TimerState
     {
         Active,
         Paused,
-        Stopped,
-        Failed
+        Quit,
+        Finished
     }
 
     class Timer

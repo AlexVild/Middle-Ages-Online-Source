@@ -39,6 +39,7 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
 using MySql.Data.MySqlClient;
+using Intersect.GameObjects.Timers;
 
 namespace Intersect.Server.Database
 {
@@ -576,12 +577,8 @@ namespace Intersect.Server.Database
                     QuestBoardBase.Lookup.Clear();
 
                     break;
-                case GameObjectType.PlayerTimer:
-                    PlayerTimerBase.Lookup.Clear();
-
-                    break;
-                case GameObjectType.InstanceTimer:
-                    InstanceTimerBase.Lookup.Clear();
+                case GameObjectType.Timer:
+                    TimerDescriptor.Lookup.Clear();
 
                     break;
                 default:
@@ -737,17 +734,10 @@ namespace Intersect.Server.Database
                             }
 
                             break;
-                        case GameObjectType.PlayerTimer:
-                           foreach (var psw in context.PlayerTimers)
+                        case GameObjectType.Timer:
+                           foreach (var psw in context.Timers)
                             {
-                                PlayerTimerBase.Lookup.Set(psw.Id, psw);
-                            }
-
-                            break;
-                        case GameObjectType.InstanceTimer:
-                            foreach (var psw in context.InstanceTimers)
-                            {
-                                InstanceTimerBase.Lookup.Set(psw.Id, psw);
+                                TimerDescriptor.Lookup.Set(psw.Id, psw);
                             }
 
                             break;
@@ -846,12 +836,8 @@ namespace Intersect.Server.Database
                     dbObj = new QuestBoardBase(predefinedid);
 
                     break;
-                case GameObjectType.PlayerTimer:
-                    dbObj = new PlayerTimerBase(predefinedid);
-
-                    break;
-                case GameObjectType.InstanceTimer:
-                    dbObj = new InstanceTimerBase(predefinedid);
+                case GameObjectType.Timer:
+                    dbObj = new TimerDescriptor(predefinedid);
 
                     break;
                 case GameObjectType.Tileset:
@@ -1001,14 +987,9 @@ namespace Intersect.Server.Database
                             QuestBoardBase.Lookup.Set(dbObj.Id, dbObj);
 
                             break;
-                        case GameObjectType.PlayerTimer:
-                            context.PlayerTimers.Add((PlayerTimerBase)dbObj);
-                            PlayerTimerBase.Lookup.Set(dbObj.Id, dbObj);
-
-                            break;
-                        case GameObjectType.InstanceTimer:
-                            context.InstanceTimers.Add((InstanceTimerBase)dbObj);
-                            InstanceTimerBase.Lookup.Set(dbObj.Id, dbObj);
+                        case GameObjectType.Timer:
+                            context.Timers.Add((TimerDescriptor)dbObj);
+                            TimerDescriptor.Lookup.Set(dbObj.Id, dbObj);
 
                             break;
 
@@ -1142,12 +1123,8 @@ namespace Intersect.Server.Database
                             context.QuestBoards.Remove((QuestBoardBase)gameObject);
 
                             break;
-                        case GameObjectType.PlayerTimer:
-                            context.PlayerTimers.Remove((PlayerTimerBase)gameObject);
-
-                            break;
-                        case GameObjectType.InstanceTimer:
-                            context.InstanceTimers.Remove((InstanceTimerBase)gameObject);
+                        case GameObjectType.Timer:
+                            context.Timers.Remove((TimerDescriptor)gameObject);
 
                             break;
                     }
@@ -1278,12 +1255,8 @@ namespace Intersect.Server.Database
                             context.QuestBoards.Update((QuestBoardBase)gameObject);
 
                             break;
-                        case GameObjectType.PlayerTimer:
-                            context.PlayerTimers.Update((PlayerTimerBase)gameObject);
-
-                            break;
-                        case GameObjectType.InstanceTimer:
-                            context.InstanceTimers.Update((InstanceTimerBase)gameObject);
+                        case GameObjectType.Timer:
+                            context.Timers.Update((TimerDescriptor)gameObject);
 
                             break;
                     }
@@ -1872,8 +1845,7 @@ namespace Intersect.Server.Database
                     MigrateDbSet(context.InstanceVariables, newGameContext.InstanceVariables);
                     MigrateDbSet(context.QuestLists, newGameContext.QuestLists);
                     MigrateDbSet(context.QuestBoards, newGameContext.QuestBoards);
-                    MigrateDbSet(context.PlayerTimers, newGameContext.PlayerTimers);
-                    MigrateDbSet(context.InstanceTimers, newGameContext.InstanceTimers);
+                    MigrateDbSet(context.Timers, newGameContext.Timers);
                     newGameContext.ChangeTracker.DetectChanges();
                     newGameContext.SaveChanges();
                     newGameContext.Dispose();

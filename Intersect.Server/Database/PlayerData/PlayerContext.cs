@@ -69,6 +69,8 @@ namespace Intersect.Server.Database.PlayerData
         public DbSet<GuildBankSlot> Guild_Bank { get; set; }
         
         public DbSet<PlayerRecord> Player_Record { get; set; }
+        
+        public DbSet<TimerInstance> Timers { get; set; }
 
         internal async ValueTask Commit(
             bool commit = false,

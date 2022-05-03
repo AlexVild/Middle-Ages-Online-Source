@@ -73,11 +73,8 @@ namespace Intersect.Enums
         [GameObjectInfo(typeof(QuestBoardBase), "quest_boards")]
         QuestBoard,
 
-        [GameObjectInfo(typeof(PlayerTimerBase), "player_timers")]
-        PlayerTimer,
-
-        [GameObjectInfo(typeof(InstanceTimerBase), "instance_timers")]
-        InstanceTimer,
+        [GameObjectInfo(typeof(TimerDescriptor), "timers")]
+        Timer,
     }
 
 }

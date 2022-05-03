@@ -1,18 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Intersect.GameObjects.Timers
+﻿namespace Intersect.GameObjects.Timers
 {
 
     /// <summary>
-    /// Used to determine if a timer is ascending or descending
+    /// Used to determine what kind of timer we are creating
     /// </summary>
-    public enum TimerTimingType
+    public enum TimerType
     {
-        Ascending,
-        Descending
+        Scheduler,
+        Stopwatch,
+        Countdown
+    }
+
+    public enum TimerOwnerType : byte
+    {
+        Global,
+        Player,
+        Instance,
+        Party,
+        Guild
+    }
+
+    public enum TimerCompletionBehavior : byte
+    {
+        ExpirationThenCompletion,
+        OnlyCompletion,
     }
 }

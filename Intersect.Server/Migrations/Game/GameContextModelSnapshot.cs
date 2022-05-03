@@ -202,31 +202,6 @@ namespace Intersect.Server.Migrations.Game
                     b.ToTable("Events");
                 });
 
-            modelBuilder.Entity("Intersect.GameObjects.InstanceTimerBase", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<Guid>("FailureEventId")
-                        .HasColumnName("FailureEvent");
-
-                    b.Property<string>("Folder");
-
-                    b.Property<Guid>("InstanceVariableStoreId")
-                        .HasColumnName("InstanceVariableStore");
-
-                    b.Property<string>("Name");
-
-                    b.Property<Guid>("StopEventId")
-                        .HasColumnName("StopEvent");
-
-                    b.Property<long>("TimeCreated");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("InstanceTimers");
-                });
-
             modelBuilder.Entity("Intersect.GameObjects.InstanceVariableBase", b =>
                 {
                     b.Property<Guid>("Id")
@@ -542,31 +517,6 @@ namespace Intersect.Server.Migrations.Game
                     b.HasKey("Id");
 
                     b.ToTable("Npcs");
-                });
-
-            modelBuilder.Entity("Intersect.GameObjects.PlayerTimerBase", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<Guid>("FailureEventId")
-                        .HasColumnName("FailureEvent");
-
-                    b.Property<string>("Folder");
-
-                    b.Property<string>("Name");
-
-                    b.Property<Guid>("PlayerVariableStoreId")
-                        .HasColumnName("InstanceVariableStore");
-
-                    b.Property<Guid>("StopEventId")
-                        .HasColumnName("StopEvent");
-
-                    b.Property<long>("TimeCreated");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("PlayerTimers");
                 });
 
             modelBuilder.Entity("Intersect.GameObjects.PlayerVariableBase", b =>
@@ -945,6 +895,44 @@ namespace Intersect.Server.Migrations.Game
                     b.HasKey("Id");
 
                     b.ToTable("Time");
+                });
+
+            modelBuilder.Entity("Intersect.GameObjects.Timers.TimerDescriptor", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<Guid>("CancellationEventId");
+
+                    b.Property<byte>("CompletionBehavior");
+
+                    b.Property<Guid>("CompletionEventId");
+
+                    b.Property<bool>("ContinueOnTimeout");
+
+                    b.Property<string>("DisplayName");
+
+                    b.Property<Guid>("ExpirationEventId");
+
+                    b.Property<string>("Folder");
+
+                    b.Property<bool>("Hidden");
+
+                    b.Property<string>("Name");
+
+                    b.Property<byte>("OwnerType");
+
+                    b.Property<int>("Repetitions");
+
+                    b.Property<long>("TimeCreated");
+
+                    b.Property<long>("TimeLimit");
+
+                    b.Property<int>("Type");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Timers");
                 });
 
             modelBuilder.Entity("Intersect.Server.Maps.MapController", b =>

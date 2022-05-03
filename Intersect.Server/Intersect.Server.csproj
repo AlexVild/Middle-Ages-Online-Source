@@ -486,6 +486,7 @@
     <Compile Include="Database\PlayerData\Players\PlayerRecord.cs" />
     <Compile Include="Database\PlayerData\Players\SlotHelper.cs" />
     <Compile Include="Database\PlayerData\Players\SpellSlot.cs" />
+    <Compile Include="Database\PlayerData\TimerInstance.cs" />
     <Compile Include="Entities\BankInterface.cs" />
     <Compile Include="Entities\Combat\Buff.cs" />
     <Compile Include="Entities\Combat\Dash.cs" />
@@ -592,6 +593,10 @@
     <Compile Include="Migrations\20220210173234_InspirationMigration.cs" />
     <Compile Include="Migrations\20220210173234_InspirationMigration.designer.cs">
       <DependentUpon>20220210173234_InspirationMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20220503205129_TimerMigration.cs" />
+    <Compile Include="Migrations\20220503205129_TimerMigration.designer.cs">
+      <DependentUpon>20220503205129_TimerMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.cs" />
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.Designer.cs">
@@ -755,9 +760,9 @@
     <Compile Include="Migrations\Game\20220503010431_NpcSpellOverrideMigration.designer.cs">
       <DependentUpon>20220503010431_NpcSpellOverrideMigration.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\Game\20220503161727_TimerMigration.cs" />
-    <Compile Include="Migrations\Game\20220503161727_TimerMigration.designer.cs">
-      <DependentUpon>20220503161727_TimerMigration.cs</DependentUpon>
+    <Compile Include="Migrations\Game\20220503204227_TimerMigration.cs" />
+    <Compile Include="Migrations\Game\20220503204227_TimerMigration.designer.cs">
+      <DependentUpon>20220503204227_TimerMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">

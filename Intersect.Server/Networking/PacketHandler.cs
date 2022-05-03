@@ -34,6 +34,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using Intersect.GameObjects.Timers;
 
 namespace Intersect.Server.Networking
 {
@@ -3875,12 +3876,8 @@ namespace Intersect.Server.Networking
                     obj = InstanceVariableBase.Get(id);
 
                     break;
-                case GameObjectType.PlayerTimer:
-                    obj = PlayerTimerBase.Get(id);
-
-                    break;
-                case GameObjectType.InstanceTimer:
-                    obj = InstanceTimerBase.Get(id);
+                case GameObjectType.Timer:
+                    obj = TimerDescriptor.Get(id);
 
                     break;
                 default:
@@ -4021,12 +4018,8 @@ namespace Intersect.Server.Networking
                     obj = DatabaseObject<QuestBoardBase>.Lookup.Get(id);
 
                     break;
-                case GameObjectType.PlayerTimer:
-                    obj = DatabaseObject<PlayerTimerBase>.Lookup.Get(id);
-
-                    break;
-                case GameObjectType.InstanceTimer:
-                    obj = DatabaseObject<InstanceTimerBase>.Lookup.Get(id);
+                case GameObjectType.Timer:
+                    obj = DatabaseObject<TimerDescriptor>.Lookup.Get(id);
 
                     break;
 
