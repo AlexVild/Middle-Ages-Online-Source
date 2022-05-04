@@ -11,6 +11,7 @@ using Intersect.Config;
 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Intersect.GameObjects.Timers;
 
 namespace Intersect.Editor.Localization
 {
@@ -5190,37 +5191,71 @@ Tick timer saved in server config.json.";
             public static LocalizedString Cancel = @"Cancel";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public static LocalizedString General = @"General";
+            public static Dictionary<TimerCompletionBehavior, LocalizedString> CompletionTypes = new Dictionary<TimerCompletionBehavior, LocalizedString>
+            {
+                {TimerCompletionBehavior.ExpirationThenCompletion, @"Event Driven"},
+                {TimerCompletionBehavior.OnlyCompletion, @"Gather Item(s)"},
+            };
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public static LocalizedString Name = @"Name:";
+            public static LocalizedString Copy = @"Copy";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public static LocalizedString Folder = @"Folder:";
+            public static LocalizedString Delete = @"Delete";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public static LocalizedString Type = @"Type";
+            public static LocalizedString DeleteCaption = @"Delete Timer";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public static LocalizedString Ascending = @"Ascending";
-
-            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public static LocalizedString Descending = @"Descending";
+            public static LocalizedString DeletePrompt =
+                @"Are you sure you want to delete this timer? This action cannot be reverted!";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString Display = @"Display";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public static LocalizedString Visible = @"Visible to Player?";
-            
-            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString DisplayName = @"Display Name:";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString EditorName = @"Timers";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Folder = @"Folder:";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString FolderPrompt = @"Enter a name for the folder you'd like to add:";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString FolderTitle = @"Add Folder";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString General = @"General";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString InstanceType = @"Instance";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Interval = @"Interval (Seconds)";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Name = @"Name:";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString New = @"New";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Paste = @"Paste";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString PlayerType = @"Player";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public static LocalizedString InstanceType = @"Instance";
+            public static Dictionary<int, LocalizedString> RepetitionOptions = new Dictionary<int, LocalizedString>
+            {
+                {0, @"No"},
+                {1, @"Yes"},
+                {2, @"Indefinitely"},
+            };
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString Save = @"Save";
@@ -5229,10 +5264,25 @@ Tick timer saved in server config.json.";
             public static LocalizedString SearchPlaceHolder = @"Search...";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString SortAlphabetically = @"Order Alphabetically";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString TimeLimit = @"Time Limit (Seconds)";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString Timers = @"Timers";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString TimerOptions = @"Timer Options";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString TimerType = @"Timer Type";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Undo = @"Undo";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Visible = @"Visible to Player?";
         }
 
         public struct TaskEditor

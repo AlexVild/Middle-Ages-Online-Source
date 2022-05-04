@@ -81,6 +81,8 @@ namespace Intersect.Editor.Forms
         private frmQuestList mQuestListEditor;
 
         private frmQuestBoard mQuestBoardEditor;
+        
+        private frmTimers mTimerEditor;
 
         //General Editting Variables
         bool mTMouseDown;
@@ -1660,6 +1662,15 @@ namespace Intersect.Editor.Forms
                         }
 
                         break;
+                    case GameObjectType.Timer:
+                        if (mTimerEditor == null || mTimerEditor.Visible == false)
+                        {
+                            mTimerEditor = new frmTimers();
+                            mTimerEditor.InitEditor();
+                            mTimerEditor.Show();
+                        }
+
+                        break;
                     default:
                         return;
                 }
@@ -2061,6 +2072,11 @@ namespace Intersect.Editor.Forms
         private void questBoardEditorToolStripMenuItem_Click(object sender, EventArgs e)
         {
             PacketSender.SendOpenEditor(GameObjectType.QuestBoard);
+        }
+
+        private void timerEditorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PacketSender.SendOpenEditor(GameObjectType.Timer);
         }
     }
 
