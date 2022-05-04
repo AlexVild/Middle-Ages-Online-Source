@@ -51,7 +51,7 @@ namespace Intersect.Editor.Forms.Editors
             this.lblCompletionBehavior = new System.Windows.Forms.Label();
             this.cmbCompletionBehavior = new DarkUI.Controls.DarkComboBox();
             this.chkContinueTimeout = new DarkUI.Controls.DarkCheckBox();
-            this.Events = new DarkUI.Controls.DarkGroupBox();
+            this.grpEvents = new DarkUI.Controls.DarkGroupBox();
             this.cmbCompletionEvent = new DarkUI.Controls.DarkComboBox();
             this.lblOnCompletion = new System.Windows.Forms.Label();
             this.cmbExpirationEvent = new DarkUI.Controls.DarkComboBox();
@@ -87,7 +87,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpTimers.SuspendLayout();
             this.pnlTimerSettings.SuspendLayout();
             this.grpTimerOptions.SuspendLayout();
-            this.Events.SuspendLayout();
+            this.grpEvents.SuspendLayout();
             this.grpSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudRepetitions)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudTimeLimit)).BeginInit();
@@ -227,7 +227,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpTimers.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpTimers.Location = new System.Drawing.Point(18, 79);
             this.grpTimers.Name = "grpTimers";
-            this.grpTimers.Size = new System.Drawing.Size(202, 395);
+            this.grpTimers.Size = new System.Drawing.Size(202, 504);
             this.grpTimers.TabIndex = 46;
             this.grpTimers.TabStop = false;
             this.grpTimers.Text = "Timers";
@@ -268,13 +268,13 @@ namespace Intersect.Editor.Forms.Editors
             this.lstGameObjects.Location = new System.Drawing.Point(6, 46);
             this.lstGameObjects.Name = "lstGameObjects";
             this.lstGameObjects.SelectedImageIndex = 0;
-            this.lstGameObjects.Size = new System.Drawing.Size(190, 343);
+            this.lstGameObjects.Size = new System.Drawing.Size(190, 452);
             this.lstGameObjects.TabIndex = 2;
             // 
             // pnlTimerSettings
             // 
             this.pnlTimerSettings.Controls.Add(this.grpTimerOptions);
-            this.pnlTimerSettings.Controls.Add(this.Events);
+            this.pnlTimerSettings.Controls.Add(this.grpEvents);
             this.pnlTimerSettings.Controls.Add(this.grpSettings);
             this.pnlTimerSettings.Controls.Add(this.grpDisplay);
             this.pnlTimerSettings.Controls.Add(this.grpGeneral);
@@ -339,23 +339,23 @@ namespace Intersect.Editor.Forms.Editors
             this.chkContinueTimeout.Text = "Continue On Time-Out?";
             this.chkContinueTimeout.CheckedChanged += new System.EventHandler(this.chkContinueTimeout_CheckedChanged);
             // 
-            // Events
+            // grpEvents
             // 
-            this.Events.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.Events.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.Events.Controls.Add(this.cmbCompletionEvent);
-            this.Events.Controls.Add(this.lblOnCompletion);
-            this.Events.Controls.Add(this.cmbExpirationEvent);
-            this.Events.Controls.Add(this.lblExpiredEvent);
-            this.Events.Controls.Add(this.cmbCancelledEvent);
-            this.Events.Controls.Add(this.lblCancelled);
-            this.Events.ForeColor = System.Drawing.Color.Gainsboro;
-            this.Events.Location = new System.Drawing.Point(10, 323);
-            this.Events.Name = "Events";
-            this.Events.Size = new System.Drawing.Size(274, 143);
-            this.Events.TabIndex = 101;
-            this.Events.TabStop = false;
-            this.Events.Text = "Events";
+            this.grpEvents.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpEvents.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpEvents.Controls.Add(this.cmbCompletionEvent);
+            this.grpEvents.Controls.Add(this.lblOnCompletion);
+            this.grpEvents.Controls.Add(this.cmbExpirationEvent);
+            this.grpEvents.Controls.Add(this.lblExpiredEvent);
+            this.grpEvents.Controls.Add(this.cmbCancelledEvent);
+            this.grpEvents.Controls.Add(this.lblCancelled);
+            this.grpEvents.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpEvents.Location = new System.Drawing.Point(10, 323);
+            this.grpEvents.Name = "grpEvents";
+            this.grpEvents.Size = new System.Drawing.Size(274, 143);
+            this.grpEvents.TabIndex = 101;
+            this.grpEvents.TabStop = false;
+            this.grpEvents.Text = "Events";
             // 
             // cmbCompletionEvent
             // 
@@ -782,6 +782,7 @@ namespace Intersect.Editor.Forms.Editors
             this.Controls.Add(this.toolStrip);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "frmTimers";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Timers";
             this.Load += new System.EventHandler(this.frmTimers_Load);
             this.toolStrip.ResumeLayout(false);
@@ -791,8 +792,8 @@ namespace Intersect.Editor.Forms.Editors
             this.pnlTimerSettings.ResumeLayout(false);
             this.grpTimerOptions.ResumeLayout(false);
             this.grpTimerOptions.PerformLayout();
-            this.Events.ResumeLayout(false);
-            this.Events.PerformLayout();
+            this.grpEvents.ResumeLayout(false);
+            this.grpEvents.PerformLayout();
             this.grpSettings.ResumeLayout(false);
             this.grpSettings.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudRepetitions)).EndInit();
@@ -845,7 +846,7 @@ namespace Intersect.Editor.Forms.Editors
         private DarkUI.Controls.DarkRadioButton rdoScheduler;
         private System.Windows.Forms.Label lblTimeLimit;
         private DarkUI.Controls.DarkNumericUpDown nudTimeLimit;
-        private DarkUI.Controls.DarkGroupBox Events;
+        private DarkUI.Controls.DarkGroupBox grpEvents;
         private System.Windows.Forms.Label lblCancelled;
         private DarkUI.Controls.DarkComboBox cmbExpirationEvent;
         private System.Windows.Forms.Label lblExpiredEvent;

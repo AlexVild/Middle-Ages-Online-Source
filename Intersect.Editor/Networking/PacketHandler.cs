@@ -688,14 +688,14 @@ namespace Intersect.Editor.Networking
                 case GameObjectType.Timer:
                     if (deleted)
                     {
-                        var qb = TimerDescriptor.Get(id);
-                        qb.Delete();
+                        var timer = TimerDescriptor.Get(id);
+                        timer.Delete();
                     }
                     else
                     {
-                        var qb = new TimerDescriptor(id);
-                        qb.Load(json);
-                        TimerDescriptor.Lookup.Set(id, qb);
+                        var timer = new TimerDescriptor(id);
+                        timer.Load(json);
+                        TimerDescriptor.Lookup.Set(id, timer);
                     }
                     break;
                 default:

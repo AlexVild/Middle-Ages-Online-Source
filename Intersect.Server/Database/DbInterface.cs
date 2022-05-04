@@ -863,6 +863,13 @@ namespace Intersect.Server.Database
             return dbObj == null ? null : AddGameObject(gameObjectType, dbObj);
         }
 
+        public static IDatabaseObject AddNewTimerGameObject(TimerOwnerType ownerType)
+        {
+            var dbObj = new TimerDescriptor(Guid.NewGuid(), ownerType);
+
+            return dbObj == null ? null : AddGameObject(GameObjectType.Timer, dbObj);
+        }
+
         public static IDatabaseObject AddGameObject(GameObjectType gameObjectType, IDatabaseObject dbObj)
         {
             try

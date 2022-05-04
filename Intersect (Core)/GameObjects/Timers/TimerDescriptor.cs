@@ -19,6 +19,12 @@ namespace Intersect.GameObjects.Timers
             Name = "New Timer";
         }
 
+        public TimerDescriptor(Guid id, TimerOwnerType ownerType) : base(id)
+        {
+            Name = "New Timer";
+            OwnerType = ownerType;
+        }
+
         /// <summary>
         /// The type required by this timer's owner
         /// </summary>

@@ -464,6 +464,7 @@ namespace Intersect.Editor.Forms.Editors
             this.Controls.Add(this.grpQuestBoards);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "frmQuestBoard";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Quest Boards";
             this.Load += new System.EventHandler(this.frmQuestBoard_Load);
             this.grpQuestBoards.ResumeLayout(false);

@@ -415,6 +415,7 @@
     <Compile Include="Network\Packets\Client\PictureClosedPacket.cs" />
     <Compile Include="Network\Packets\DestroyConditionPacket.cs" />
     <Compile Include="Network\Packets\DestroyItemPacket.cs" />
+    <Compile Include="Network\Packets\Editor\CreateTimerPacket.cs" />
     <Compile Include="Network\Packets\Server\ActionMsgPackets.cs" />
     <Compile Include="Network\Packets\Server\BankUpdateValuePacket.cs" />
     <Compile Include="Network\Packets\Server\CombatEffectPacket.cs" />

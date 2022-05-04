@@ -3750,6 +3750,18 @@ namespace Intersect.Server.Networking
             PacketSender.SendGameObjectToAll(obj);
         }
 
+        //CreateTimerPacket
+        public void HandlePacket(Client client, Network.Packets.Editor.CreateTimerPacket packet)
+        {
+            if (!client.IsEditor)
+            {
+                return;
+            }
+
+            var obj = DbInterface.AddNewTimerGameObject(packet.OwnerType);
+            PacketSender.SendGameObjectToAll(obj);
+        }
+
         //RequestOpenEditorPacket
         public void HandlePacket(Client client, Network.Packets.Editor.RequestOpenEditorPacket packet)
         {

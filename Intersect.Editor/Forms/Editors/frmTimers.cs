@@ -43,18 +43,30 @@ namespace Intersect.Editor.Forms.Editors
             cmbCompletionBehavior.Items.AddRange(Strings.TimerEditor.CompletionTypes.Values.ToArray());
             cmbRepetitionType.Items.AddRange(Strings.TimerEditor.RepetitionOptions.Values.ToArray());
 
+            PopulateEditor();
             RefreshEditorListItems();
+        }
+
+        protected override void GameObjectUpdatedDelegate(GameObjectType type)
+        {
+            if (type == GameObjectType.Timer)
+            {
+                RefreshEditorListItems();
+                mEditorItem = null;
+                PopulateEditor();
+            }
         }
 
         public void RefreshEditorListItems()
         {
             // Get timers of the selected type
             var timers = TimerDescriptor.Lookup
-                .OrderBy(p => p.Value?.Name)
-                .Where(timer => ((TimerDescriptor)timer.Value)?.OwnerType == GetTimerTypeFromRadioSelection());
+                .OrderBy(p => p.Value?.Name).ToList()
+                .Where(timer => ((TimerDescriptor)timer.Value)?.OwnerType == GetOwnerTypeFromRadioSelection());
 
             //Collect folders
             var mFolders = new List<string>();
+            mKnownFolders.Clear();
             foreach (var itm in timers)
             {
                 var folder = ((TimerDescriptor)itm.Value).Folder;
@@ -71,7 +83,7 @@ namespace Intersect.Editor.Forms.Editors
             mFolders.Sort();
             mKnownFolders.Sort();
             cmbFolder.Items.Clear();
-            cmbFolder.Items.Add("");
+            cmbFolder.Items.Add(string.Empty);
             cmbFolder.Items.AddRange(mKnownFolders.ToArray());
 
             // Get & Sort timers for the list component
@@ -83,14 +95,14 @@ namespace Intersect.Editor.Forms.Editors
             lstGameObjects.Repopulate(listItems, mFolders, btnAlphabetical.Checked, CustomSearch(), txtSearch.Text);
         }
 
-        private void UpdateEditor()
+        private void PopulateEditor()
         {
             if (mEditorItem != null)
             {
                 pnlTimerSettings.Show();
                 txtName.Text = mEditorItem.Name;
                 cmbFolder.Text = mEditorItem.Folder;
-                RefreshEditorListItems();
+                PopulateEditorItemValues();
                 UpdateControlAvailability();
 
                 if (mChanged.IndexOf(mEditorItem) == -1)
@@ -117,6 +129,27 @@ namespace Intersect.Editor.Forms.Editors
             toolStripItemCopy.ToolTipText = Strings.TimerEditor.Copy;
             toolStripItemPaste.ToolTipText = Strings.TimerEditor.Paste;
             toolStripItemUndo.ToolTipText = Strings.TimerEditor.Undo;
+
+            grpGeneral.Text = Strings.TimerEditor.General;
+            lblName.Text = Strings.TimerEditor.Name;
+            lblFolder.Text = Strings.TimerEditor.Folder;
+
+            grpSettings.Text = Strings.TimerEditor.Settings;
+            rdoScheduler.Text = Strings.TimerEditor.TypeScheduler;
+            rdoStopwatch.Text = Strings.TimerEditor.TypeStopwatch;
+            rdoCountdown.Text = Strings.TimerEditor.TypeCountdown;
+            lblRepeat.Text = Strings.TimerEditor.Repeat;
+            lblRepetitions.Text = Strings.TimerEditor.Repetitions;
+
+            grpDisplay.Text = Strings.TimerEditor.DisplaySettings;
+            chkHidden.Text = Strings.TimerEditor.Hidden;
+            AddToolTip(chkHidden, Strings.TimerEditor.HiddenToolTip);
+            lblDisplayName.Text = Strings.TimerEditor.DisplayName;
+
+            grpEvents.Text = Strings.TimerEditor.Events;
+            lblCancelled.Text = Strings.TimerEditor.OnCancelled;
+            lblExpiredEvent.Text = Strings.TimerEditor.OnExpired;
+            lblOnCompletion.Text = Strings.TimerEditor.OnCompletion;
 
             grpTimerOptions.Text = Strings.TimerEditor.TimerOptions;
 
@@ -149,12 +182,12 @@ namespace Intersect.Editor.Forms.Editors
         private void AssignEditorItem(Guid id)
         {
             mEditorItem = TimerDescriptor.Get(id);
-            UpdateEditor();
+            PopulateEditor();
         }
 
         private void toolStripItemNew_Click(object sender, EventArgs e)
         {
-            PacketSender.SendCreateObject(GameObjectType.Timer);
+            PacketSender.SendCreateTimer(GetOwnerTypeFromRadioSelection());
         }
 
         private void toolStripItemDelete_Click(object sender, EventArgs e)
@@ -162,7 +195,7 @@ namespace Intersect.Editor.Forms.Editors
             if (mEditorItem != null)
             {
                 if (DarkMessageBox.ShowWarning(
-                        Strings.TimerEditor.DeleteCaption, Strings.TimerEditor.DeletePrompt,
+                        Strings.TimerEditor.DeletePrompt, Strings.TimerEditor.DeleteCaption,
                         DarkDialogButton.YesNo, Properties.Resources.Icon
                     ) ==
                     DialogResult.Yes)
@@ -192,7 +225,8 @@ namespace Intersect.Editor.Forms.Editors
             if (mChanged.Contains(mEditorItem) && mEditorItem != null)
             {
                 mEditorItem.RestoreBackup();
-                UpdateEditor();
+                PopulateEditor();
+                RefreshEditorListItems();
             }
         }
 
@@ -202,6 +236,7 @@ namespace Intersect.Editor.Forms.Editors
             {
                 mEditorItem.Load(mCopiedItem, true);
 
+                PopulateEditor();
                 // Go to the correct timer category after pasting
                 SelectOwnerRadioFromEditorItem(mEditorItem);
                 RefreshEditorListItems();
@@ -229,7 +264,7 @@ namespace Intersect.Editor.Forms.Editors
             }
         }
 
-        public TimerOwnerType GetTimerTypeFromRadioSelection()
+        public TimerOwnerType GetOwnerTypeFromRadioSelection()
         {
             if (rdoPlayerTimers.Checked)
             {
@@ -241,6 +276,89 @@ namespace Intersect.Editor.Forms.Editors
             }
 
             return TimerOwnerType.Player;
+        }
+
+        private void AddToolTip(Control control, string caption)
+        {
+            ToolTip toolTip = new ToolTip();
+
+            toolTip.AutoPopDelay = 5000;
+            toolTip.InitialDelay = 1000;
+            toolTip.ReshowDelay = 500;
+            // Force the ToolTip text to be displayed whether or not the form is active.
+            toolTip.ShowAlways = true;
+
+            toolTip.SetToolTip(control, caption);
+        }
+        #endregion
+
+        #region Form population
+        private void PopulateEditorItemValues()
+        {
+            SelectOwnerRadioButton(mEditorItem.OwnerType);
+
+            txtName.Text = mEditorItem.Name;
+            cmbFolder.Text = mEditorItem.Folder;
+
+            SelectTimeSettingRadioButton(mEditorItem.Type);
+            nudTimeLimit.Value = mEditorItem.TimeLimit;
+            cmbRepetitionType.SelectedIndex = (int)SelectRepetitionType(mEditorItem.Repetitions);
+            if (mEditorItem.Repetitions >= 0)
+            {
+                nudRepetitions.Value = mEditorItem.Repetitions;
+            }
+
+            chkHidden.Checked = mEditorItem.Hidden;
+            txtDisplayName.Text = mEditorItem.DisplayName;
+
+            cmbCancelledEvent.SelectedIndex = EventBase.ListIndex(mEditorItem.CancellationEventId) + 1;
+            cmbExpirationEvent.SelectedIndex = EventBase.ListIndex(mEditorItem.ExpirationEventId) + 1;
+            cmbCompletionEvent.SelectedIndex = EventBase.ListIndex(mEditorItem.CompletionEventId) + 1;
+
+            chkContinueTimeout.Checked = mEditorItem.ContinueOnTimeout;
+            cmbCompletionBehavior.SelectedIndex = (int)mEditorItem.CompletionBehavior;
+        }
+
+        private static TimerRepetitionTypes SelectRepetitionType(int repetitions)
+        {
+            switch (repetitions)
+            {
+                case -1:
+                    return TimerRepetitionTypes.NoRepeat;
+                case int.MinValue:
+                    return TimerRepetitionTypes.Indefinite;
+                default:
+                    return TimerRepetitionTypes.Repeat;
+            }
+        }
+
+        public void SelectOwnerRadioButton(TimerOwnerType ownerType)
+        {
+            switch (ownerType)
+            {
+                case TimerOwnerType.Player:
+                    rdoPlayerTimers.Select();
+                    break;
+                case TimerOwnerType.Instance:
+                    rdoInstanceTimers.Select();
+                    break;
+            }
+        }
+
+        public void SelectTimeSettingRadioButton(TimerType timerType)
+        {
+            switch(timerType)
+            {
+                case TimerType.Scheduler:
+                    rdoScheduler.Select();
+                    break;
+                case TimerType.Stopwatch:
+                    rdoStopwatch.Select();
+                    break;
+                case TimerType.Countdown:
+                    rdoCountdown.Select();
+                    break;
+            }
         }
         #endregion
 
@@ -264,16 +382,23 @@ namespace Intersect.Editor.Forms.Editors
         {
             txtDisplayName.Enabled = !mEditorItem.Hidden;
         }
+
+        public void ChangeTimerOwnerType()
+        {
+            mEditorItem = null;
+            PopulateEditor();
+            RefreshEditorListItems();
+        }
         #endregion
 
         private void rdoPlayerTimers_CheckedChanged(object sender, EventArgs e)
         {
-            RefreshEditorListItems();
+            ChangeTimerOwnerType();
         }
 
         private void rdoInstanceTimers_CheckedChanged(object sender, EventArgs e)
         {
-            RefreshEditorListItems();
+            ChangeTimerOwnerType();
         }
 
         private void txtSearch_TextChanged(object sender, EventArgs e)
@@ -390,6 +515,7 @@ namespace Intersect.Editor.Forms.Editors
         private void txtName_TextChanged(object sender, EventArgs e)
         {
             mEditorItem.Name = txtName.Text;
+            lstGameObjects.UpdateText(txtName.Text);
         }
 
         private void chkHidden_CheckedChanged(object sender, EventArgs e)
@@ -405,17 +531,17 @@ namespace Intersect.Editor.Forms.Editors
 
         private void cmbCancelledEvent_SelectedIndexChanged(object sender, EventArgs e)
         {
-            mEditorItem.CancellationEventId = EventBase.IdFromList(cmbCancelledEvent.SelectedIndex + 1);
+            mEditorItem.CancellationEventId = EventBase.IdFromList(cmbCancelledEvent.SelectedIndex - 1);
         }
 
         private void cmbExpirationEvent_SelectedIndexChanged(object sender, EventArgs e)
         {
-            mEditorItem.ExpirationEventId = EventBase.IdFromList(cmbExpirationEvent.SelectedIndex + 1);
+            mEditorItem.ExpirationEventId = EventBase.IdFromList(cmbExpirationEvent.SelectedIndex - 1);
         }
 
         private void cmbCompletionEvent_SelectedIndexChanged(object sender, EventArgs e)
         {
-            mEditorItem.CompletionEventId = EventBase.IdFromList(cmbCompletionEvent.SelectedIndex + 1);
+            mEditorItem.CompletionEventId = EventBase.IdFromList(cmbCompletionEvent.SelectedIndex - 1);
         }
 
         private void chkContinueTimeout_CheckedChanged(object sender, EventArgs e)
