@@ -12,6 +12,7 @@ using Intersect.GameObjects.QuestBoard;
 using Intersect.GameObjects.QuestList;
 using Intersect.GameObjects.Maps.MapList;
 using Intersect.Logging;
+using Intersect.GameObjects.Timers;
 
 namespace Intersect.Editor.Forms.Editors.Events
 {
@@ -1679,6 +1680,25 @@ namespace Intersect.Editor.Forms.Editors.Events
         private static string GetCommandText(AddInspirationCommand command, MapInstance map)
         {
             return Strings.EventCommandList.addinspiration.ToString(command.Seconds);
+        }
+
+        private static string GetCommandText(StartTimerCommand command, MapInstance map)
+        {
+            var descriptor = TimerDescriptor.Get(command.DescriptorId);
+            return Strings.EventCommandList.TimerStart.ToString(descriptor.Name);
+        }
+
+        private static string GetCommandText(ModifyTimerCommand command, MapInstance map)
+        {
+            var descriptor = TimerDescriptor.Get(command.DescriptorId);
+            // TODO Alex this
+            return Strings.EventCommandList.TimerModify.ToString();
+        }
+
+        private static string GetCommandText(StopTimerCommand command, MapInstance map)
+        {
+            var descriptor = TimerDescriptor.Get(command.DescriptorId);
+            return Strings.EventCommandList.TimerStop.ToString(descriptor.Name, Strings.EventCommandList.TimerStopCommands[command.StopType].ToString());
         }
 
     }

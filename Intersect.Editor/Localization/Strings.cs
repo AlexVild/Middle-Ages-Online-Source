@@ -1940,6 +1940,24 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString teach = @"Teach: Spell {00}";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString TimerModify = @"Modify Timer: {00} {01} {02}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString TimerStart = @"Start Timer: {00}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString TimerStop = @"Stop Timer: {00}, Execute {01} Event";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static Dictionary<TimerStopType, LocalizedString> TimerStopCommands = new Dictionary<TimerStopType, LocalizedString>
+            {
+                {TimerStopType.None, @"None"},
+                {TimerStopType.Cancel, @"Cancel"},
+                {TimerStopType.Expire, @"Expire"},
+                {TimerStopType.Complete, @"Complete"}
+            };
+
             public static LocalizedString True = @"True";
 
             public static LocalizedString unknown = @"Unknown Command";
@@ -2140,6 +2158,10 @@ Tick timer saved in server config.json.";
                 {"setvehicle", @"Set Vehicle"},
                 {"npcguildmanagement", @"NPC Guild Management"},
                 {"addinspiration", @"Add Inspiration"},
+                {"timers", @"Timers"},
+                {"starttimer", @"Start Timer"},
+                {"modifytimer", @"Modify Timer"},
+                {"stoptimer", @"Stop Timer"},
             };
 
         }
@@ -2888,6 +2910,35 @@ Tick timer saved in server config.json.";
 
         }
 
+        public struct EventModifyTimer
+        {
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ButtonOkay = @"Ok";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ButtonCancel = @"Cancel";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString OwnerType = @"Type";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString TimerGroup = @"Timer";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString TimerSelect = @"Timer";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Title = @"Modify Timer";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static Dictionary<VariableTypes, LocalizedString> VarTypes = new Dictionary<VariableTypes, LocalizedString>
+            {
+                {VariableTypes.PlayerVariable, @"Player"},
+                {VariableTypes.ServerVariable, @"Global"},
+                {VariableTypes.InstanceVariable, @"Instance"},
+            };
+        }
+
         public struct EventMoveRoute
         {
 
@@ -3250,6 +3301,63 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString title = @"Show Text";
 
+        }
+
+        public struct EventStartTimer
+        {
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ButtonOkay = @"Ok";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ButtonCancel = @"Cancel";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString OwnerType = @"Type";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString TimerGroup = @"Timer";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString TimerSelect = @"Timer";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Title = @"Start Timer";
+        }
+
+        public struct EventStopTimer
+        {
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ButtonOkay = @"Ok";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ButtonCancel = @"Cancel";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString EventGroup = @"Event";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString OwnerType = @"Type";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString StopType = @"Stop Type";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString TimerGroup = @"Timer";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString TimerSelect = @"Timer";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static Dictionary<TimerStopType, LocalizedString> TimerStopCommands = new Dictionary<TimerStopType, LocalizedString>
+            {
+                {TimerStopType.None, @"None"},
+                {TimerStopType.Cancel, @"Cancel"},
+                {TimerStopType.Expire, @"Expire"},
+                {TimerStopType.Complete, @"Complete"}
+            };
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Title = @"Stop Timer";
         }
 
         public struct EventInput

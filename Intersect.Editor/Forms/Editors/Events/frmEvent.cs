@@ -1419,6 +1419,18 @@ namespace Intersect.Editor.Forms.Editors.Events
                     cmdWindow = new EventCommand_AddInspiration((AddInspirationCommand)command, this);
 
                     break;
+                case EventCommandType.StartTimer:
+                    cmdWindow = new EventCommand_StartTimer((StartTimerCommand)command, this);
+
+                    break;
+                case EventCommandType.ModifyTimer:
+                    cmdWindow = new EventCommand_AddInspiration((AddInspirationCommand)command, this);
+
+                    break;
+                case EventCommandType.StopTimer:
+                    cmdWindow = new EventCommand_AddInspiration((AddInspirationCommand)command, this);
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }

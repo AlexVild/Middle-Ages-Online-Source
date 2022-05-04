@@ -166,6 +166,13 @@ namespace Intersect.Editor.Forms.Editors.Events
             treeNode68,
             treeNode69,
             treeNode70});
+            System.Windows.Forms.TreeNode treeNode72 = new System.Windows.Forms.TreeNode("Start Timer");
+            System.Windows.Forms.TreeNode treeNode73 = new System.Windows.Forms.TreeNode("Modify Timer");
+            System.Windows.Forms.TreeNode treeNode74 = new System.Windows.Forms.TreeNode("Stop Timer");
+            System.Windows.Forms.TreeNode treeNode75 = new System.Windows.Forms.TreeNode("Timers", new System.Windows.Forms.TreeNode[] {
+            treeNode72,
+            treeNode73,
+            treeNode74});
             this.lblName = new System.Windows.Forms.Label();
             this.txtEventname = new DarkUI.Controls.DarkTextBox();
             this.grpEntityOptions = new DarkUI.Controls.DarkGroupBox();
@@ -1233,6 +1240,17 @@ namespace Intersect.Editor.Forms.Editors.Events
             treeNode70.Text = "Set Guild Bank Slots Count";
             treeNode71.Name = "guilds";
             treeNode71.Text = "Guilds";
+            treeNode72.Name = "starttimer";
+            treeNode72.Tag = "64";
+            treeNode72.Text = "Start Timer";
+            treeNode73.Name = "modifytimer";
+            treeNode73.Tag = "65";
+            treeNode73.Text = "Modify Timer";
+            treeNode74.Name = "stoptimer";
+            treeNode74.Tag = "66";
+            treeNode74.Text = "Stop Timer";
+            treeNode75.Name = "timers";
+            treeNode75.Text = "Timers";
             this.lstCommands.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
             treeNode5,
             treeNode13,
@@ -1242,7 +1260,8 @@ namespace Intersect.Editor.Forms.Editors.Events
             treeNode60,
             treeNode62,
             treeNode66,
-            treeNode71});
+            treeNode71,
+            treeNode75});
             this.lstCommands.Size = new System.Drawing.Size(445, 440);
             this.lstCommands.TabIndex = 2;
             this.lstCommands.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.lstCommands_NodeMouseDoubleClick);

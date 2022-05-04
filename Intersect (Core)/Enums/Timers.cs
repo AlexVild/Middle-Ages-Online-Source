@@ -25,4 +25,19 @@
         ExpirationThenCompletion,
         OnlyCompletion,
     }
+
+    public enum TimerStopType
+    {
+        None,
+        Cancel,
+        Expire,
+        Complete,
+    }
+
+    public enum TimerOperator
+    {
+        Set,
+        Add,
+        Subtract
+    }
 }
