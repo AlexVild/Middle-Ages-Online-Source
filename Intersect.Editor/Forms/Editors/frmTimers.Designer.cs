@@ -63,11 +63,8 @@ namespace Intersect.Editor.Forms.Editors
             this.lblRepeat = new System.Windows.Forms.Label();
             this.cmbRepetitionType = new DarkUI.Controls.DarkComboBox();
             this.nudRepetitions = new DarkUI.Controls.DarkNumericUpDown();
-            this.rdoCountdown = new DarkUI.Controls.DarkRadioButton();
             this.nudTimeLimit = new DarkUI.Controls.DarkNumericUpDown();
             this.lblTimeLimit = new System.Windows.Forms.Label();
-            this.rdoStopwatch = new DarkUI.Controls.DarkRadioButton();
-            this.rdoScheduler = new DarkUI.Controls.DarkRadioButton();
             this.grpDisplay = new DarkUI.Controls.DarkGroupBox();
             this.chkHidden = new DarkUI.Controls.DarkCheckBox();
             this.lblDisplayName = new System.Windows.Forms.Label();
@@ -79,10 +76,11 @@ namespace Intersect.Editor.Forms.Editors
             this.lblName = new System.Windows.Forms.Label();
             this.txtName = new DarkUI.Controls.DarkTextBox();
             this.grpTypes = new DarkUI.Controls.DarkGroupBox();
-            this.rdoInstanceTimers = new DarkUI.Controls.DarkRadioButton();
-            this.rdoPlayerTimers = new DarkUI.Controls.DarkRadioButton();
             this.btnSave = new DarkUI.Controls.DarkButton();
             this.btnCancel = new DarkUI.Controls.DarkButton();
+            this.lblTimerType = new System.Windows.Forms.Label();
+            this.cmbTimerType = new DarkUI.Controls.DarkComboBox();
+            this.cmbOwnerType = new DarkUI.Controls.DarkComboBox();
             this.toolStrip.SuspendLayout();
             this.grpTimers.SuspendLayout();
             this.pnlTimerSettings.SuspendLayout();
@@ -451,15 +449,14 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpSettings.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpSettings.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpSettings.Controls.Add(this.cmbTimerType);
+            this.grpSettings.Controls.Add(this.lblTimerType);
             this.grpSettings.Controls.Add(this.lblRepetitions);
             this.grpSettings.Controls.Add(this.lblRepeat);
             this.grpSettings.Controls.Add(this.cmbRepetitionType);
             this.grpSettings.Controls.Add(this.nudRepetitions);
-            this.grpSettings.Controls.Add(this.rdoCountdown);
             this.grpSettings.Controls.Add(this.nudTimeLimit);
             this.grpSettings.Controls.Add(this.lblTimeLimit);
-            this.grpSettings.Controls.Add(this.rdoStopwatch);
-            this.grpSettings.Controls.Add(this.rdoScheduler);
             this.grpSettings.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpSettings.Location = new System.Drawing.Point(10, 89);
             this.grpSettings.Name = "grpSettings";
@@ -499,9 +496,9 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbRepetitionType.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbRepetitionType.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbRepetitionType.FormattingEnabled = true;
-            this.cmbRepetitionType.Location = new System.Drawing.Point(135, 76);
+            this.cmbRepetitionType.Location = new System.Drawing.Point(123, 76);
             this.cmbRepetitionType.Name = "cmbRepetitionType";
-            this.cmbRepetitionType.Size = new System.Drawing.Size(128, 21);
+            this.cmbRepetitionType.Size = new System.Drawing.Size(140, 21);
             this.cmbRepetitionType.TabIndex = 24;
             this.cmbRepetitionType.Text = null;
             this.cmbRepetitionType.TextPadding = new System.Windows.Forms.Padding(2);
@@ -511,14 +508,14 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.nudRepetitions.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.nudRepetitions.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudRepetitions.Location = new System.Drawing.Point(135, 105);
+            this.nudRepetitions.Location = new System.Drawing.Point(123, 105);
             this.nudRepetitions.Maximum = new decimal(new int[] {
             1000000,
             0,
             0,
             0});
             this.nudRepetitions.Name = "nudRepetitions";
-            this.nudRepetitions.Size = new System.Drawing.Size(128, 20);
+            this.nudRepetitions.Size = new System.Drawing.Size(140, 20);
             this.nudRepetitions.TabIndex = 104;
             this.nudRepetitions.Value = new decimal(new int[] {
             0,
@@ -527,28 +524,18 @@ namespace Intersect.Editor.Forms.Editors
             0});
             this.nudRepetitions.ValueChanged += new System.EventHandler(this.nudRepetitions_ValueChanged);
             // 
-            // rdoCountdown
-            // 
-            this.rdoCountdown.AutoSize = true;
-            this.rdoCountdown.Location = new System.Drawing.Point(180, 19);
-            this.rdoCountdown.Name = "rdoCountdown";
-            this.rdoCountdown.Size = new System.Drawing.Size(79, 17);
-            this.rdoCountdown.TabIndex = 103;
-            this.rdoCountdown.Text = "Countdown";
-            this.rdoCountdown.CheckedChanged += new System.EventHandler(this.rdoCountdown_CheckedChanged);
-            // 
             // nudTimeLimit
             // 
             this.nudTimeLimit.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.nudTimeLimit.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudTimeLimit.Location = new System.Drawing.Point(135, 50);
+            this.nudTimeLimit.Location = new System.Drawing.Point(123, 50);
             this.nudTimeLimit.Maximum = new decimal(new int[] {
             1000000,
             0,
             0,
             0});
             this.nudTimeLimit.Name = "nudTimeLimit";
-            this.nudTimeLimit.Size = new System.Drawing.Size(128, 20);
+            this.nudTimeLimit.Size = new System.Drawing.Size(140, 20);
             this.nudTimeLimit.TabIndex = 102;
             this.nudTimeLimit.Value = new decimal(new int[] {
             0,
@@ -562,31 +549,9 @@ namespace Intersect.Editor.Forms.Editors
             this.lblTimeLimit.AutoSize = true;
             this.lblTimeLimit.Location = new System.Drawing.Point(6, 52);
             this.lblTimeLimit.Name = "lblTimeLimit";
-            this.lblTimeLimit.Size = new System.Drawing.Size(91, 13);
+            this.lblTimeLimit.Size = new System.Drawing.Size(103, 13);
             this.lblTimeLimit.TabIndex = 101;
-            this.lblTimeLimit.Text = "Interval (seconds)";
-            // 
-            // rdoStopwatch
-            // 
-            this.rdoStopwatch.AutoSize = true;
-            this.rdoStopwatch.Location = new System.Drawing.Point(92, 19);
-            this.rdoStopwatch.Name = "rdoStopwatch";
-            this.rdoStopwatch.Size = new System.Drawing.Size(76, 17);
-            this.rdoStopwatch.TabIndex = 6;
-            this.rdoStopwatch.Text = "Stopwatch";
-            this.rdoStopwatch.CheckedChanged += new System.EventHandler(this.rdoStopwatch_CheckedChanged);
-            // 
-            // rdoScheduler
-            // 
-            this.rdoScheduler.AutoSize = true;
-            this.rdoScheduler.Checked = true;
-            this.rdoScheduler.Location = new System.Drawing.Point(8, 19);
-            this.rdoScheduler.Name = "rdoScheduler";
-            this.rdoScheduler.Size = new System.Drawing.Size(73, 17);
-            this.rdoScheduler.TabIndex = 5;
-            this.rdoScheduler.TabStop = true;
-            this.rdoScheduler.Text = "Scheduler";
-            this.rdoScheduler.CheckedChanged += new System.EventHandler(this.rdoScheduler_CheckedChanged);
+            this.lblTimeLimit.Text = "Time Limit (seconds)";
             // 
             // grpDisplay
             // 
@@ -715,8 +680,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpTypes.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpTypes.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpTypes.Controls.Add(this.rdoInstanceTimers);
-            this.grpTypes.Controls.Add(this.rdoPlayerTimers);
+            this.grpTypes.Controls.Add(this.cmbOwnerType);
             this.grpTypes.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpTypes.Location = new System.Drawing.Point(18, 28);
             this.grpTypes.Name = "grpTypes";
@@ -724,28 +688,6 @@ namespace Intersect.Editor.Forms.Editors
             this.grpTypes.TabIndex = 20;
             this.grpTypes.TabStop = false;
             this.grpTypes.Text = "Timer Type";
-            // 
-            // rdoInstanceTimers
-            // 
-            this.rdoInstanceTimers.AutoSize = true;
-            this.rdoInstanceTimers.Location = new System.Drawing.Point(106, 18);
-            this.rdoInstanceTimers.Name = "rdoInstanceTimers";
-            this.rdoInstanceTimers.Size = new System.Drawing.Size(66, 17);
-            this.rdoInstanceTimers.TabIndex = 4;
-            this.rdoInstanceTimers.Text = "Instance";
-            this.rdoInstanceTimers.CheckedChanged += new System.EventHandler(this.rdoInstanceTimers_CheckedChanged);
-            // 
-            // rdoPlayerTimers
-            // 
-            this.rdoPlayerTimers.AutoSize = true;
-            this.rdoPlayerTimers.Checked = true;
-            this.rdoPlayerTimers.Location = new System.Drawing.Point(20, 19);
-            this.rdoPlayerTimers.Name = "rdoPlayerTimers";
-            this.rdoPlayerTimers.Size = new System.Drawing.Size(54, 17);
-            this.rdoPlayerTimers.TabIndex = 1;
-            this.rdoPlayerTimers.TabStop = true;
-            this.rdoPlayerTimers.Text = "Player";
-            this.rdoPlayerTimers.CheckedChanged += new System.EventHandler(this.rdoPlayerTimers_CheckedChanged);
             // 
             // btnSave
             // 
@@ -767,6 +709,57 @@ namespace Intersect.Editor.Forms.Editors
             this.btnCancel.TabIndex = 55;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            // 
+            // lblTimerType
+            // 
+            this.lblTimerType.AutoSize = true;
+            this.lblTimerType.Location = new System.Drawing.Point(5, 26);
+            this.lblTimerType.Name = "lblTimerType";
+            this.lblTimerType.Size = new System.Drawing.Size(31, 13);
+            this.lblTimerType.TabIndex = 107;
+            this.lblTimerType.Text = "Type";
+            // 
+            // cmbTimerType
+            // 
+            this.cmbTimerType.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbTimerType.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbTimerType.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbTimerType.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbTimerType.DrawDropdownHoverOutline = false;
+            this.cmbTimerType.DrawFocusRectangle = false;
+            this.cmbTimerType.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbTimerType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbTimerType.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbTimerType.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbTimerType.FormattingEnabled = true;
+            this.cmbTimerType.Location = new System.Drawing.Point(123, 23);
+            this.cmbTimerType.Name = "cmbTimerType";
+            this.cmbTimerType.Size = new System.Drawing.Size(140, 21);
+            this.cmbTimerType.TabIndex = 108;
+            this.cmbTimerType.Text = null;
+            this.cmbTimerType.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbTimerType.SelectedIndexChanged += new System.EventHandler(this.cmbTimerType_SelectedIndexChanged);
+            // 
+            // cmbOwnerType
+            // 
+            this.cmbOwnerType.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbOwnerType.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbOwnerType.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbOwnerType.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbOwnerType.DrawDropdownHoverOutline = false;
+            this.cmbOwnerType.DrawFocusRectangle = false;
+            this.cmbOwnerType.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbOwnerType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbOwnerType.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbOwnerType.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbOwnerType.FormattingEnabled = true;
+            this.cmbOwnerType.Location = new System.Drawing.Point(6, 18);
+            this.cmbOwnerType.Name = "cmbOwnerType";
+            this.cmbOwnerType.Size = new System.Drawing.Size(190, 21);
+            this.cmbOwnerType.TabIndex = 109;
+            this.cmbOwnerType.Text = null;
+            this.cmbOwnerType.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbOwnerType.SelectedIndexChanged += new System.EventHandler(this.cmbOwnerType_SelectedIndexChanged);
             // 
             // frmTimers
             // 
@@ -803,7 +796,6 @@ namespace Intersect.Editor.Forms.Editors
             this.grpGeneral.ResumeLayout(false);
             this.grpGeneral.PerformLayout();
             this.grpTypes.ResumeLayout(false);
-            this.grpTypes.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -833,8 +825,6 @@ namespace Intersect.Editor.Forms.Editors
         private System.Windows.Forms.Label lblName;
         private DarkUI.Controls.DarkTextBox txtName;
         private DarkUI.Controls.DarkGroupBox grpTypes;
-        private DarkUI.Controls.DarkRadioButton rdoInstanceTimers;
-        private DarkUI.Controls.DarkRadioButton rdoPlayerTimers;
         private DarkUI.Controls.DarkButton btnSave;
         private DarkUI.Controls.DarkButton btnCancel;
         private DarkUI.Controls.DarkGroupBox grpDisplay;
@@ -842,8 +832,6 @@ namespace Intersect.Editor.Forms.Editors
         private DarkUI.Controls.DarkTextBox txtDisplayName;
         private DarkUI.Controls.DarkCheckBox chkHidden;
         private DarkUI.Controls.DarkGroupBox grpSettings;
-        private DarkUI.Controls.DarkRadioButton rdoStopwatch;
-        private DarkUI.Controls.DarkRadioButton rdoScheduler;
         private System.Windows.Forms.Label lblTimeLimit;
         private DarkUI.Controls.DarkNumericUpDown nudTimeLimit;
         private DarkUI.Controls.DarkGroupBox grpEvents;
@@ -853,7 +841,6 @@ namespace Intersect.Editor.Forms.Editors
         private DarkUI.Controls.DarkComboBox cmbCancelledEvent;
         private DarkUI.Controls.DarkGroupBox grpTimerOptions;
         private DarkUI.Controls.DarkCheckBox chkContinueTimeout;
-        private DarkUI.Controls.DarkRadioButton rdoCountdown;
         private System.Windows.Forms.Label lblRepetitions;
         private System.Windows.Forms.Label lblRepeat;
         private DarkUI.Controls.DarkComboBox cmbRepetitionType;
@@ -862,5 +849,8 @@ namespace Intersect.Editor.Forms.Editors
         private System.Windows.Forms.Label lblOnCompletion;
         private System.Windows.Forms.Label lblCompletionBehavior;
         private DarkUI.Controls.DarkComboBox cmbCompletionBehavior;
+        private DarkUI.Controls.DarkComboBox cmbTimerType;
+        private System.Windows.Forms.Label lblTimerType;
+        private DarkUI.Controls.DarkComboBox cmbOwnerType;
     }
 }

@@ -5271,6 +5271,16 @@ Tick timer saved in server config.json.";
             public static LocalizedString OnCompletion = @"On Completion";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static Dictionary<TimerOwnerType, LocalizedString> OwnerTypes = new Dictionary<TimerOwnerType, LocalizedString>
+            {
+                {TimerOwnerType.Global, @"Global"},
+                {TimerOwnerType.Player, @"Player"},
+                {TimerOwnerType.Instance, @"Instance"},
+                {TimerOwnerType.Party, @"Party"},
+                {TimerOwnerType.Guild, @"Guild"},
+            };
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString Paste = @"Paste";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -5310,6 +5320,14 @@ Tick timer saved in server config.json.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString TimerOptions = @"Timer Options";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static Dictionary<TimerType, LocalizedString> TimerTypes = new Dictionary<TimerType, LocalizedString>
+            {
+                {TimerType.Scheduler, @"Scheduler"},
+                {TimerType.Stopwatch, @"Stopwatch"},
+                {TimerType.Countdown, @"Countdown"},
+            };
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString TypeCountdown = @"Countdown";
