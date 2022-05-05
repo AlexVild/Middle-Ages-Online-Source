@@ -26,6 +26,13 @@ namespace Intersect.Editor.Maps
 
         private MapSaveState mLoadedState;
 
+        public override string JsonData => JsonConvert.SerializeObject(this, new JsonSerializerSettings() {
+            Formatting = Formatting.Indented,
+            TypeNameHandling = TypeNameHandling.Auto,
+            DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate,
+            ObjectCreationHandling = ObjectCreationHandling.Replace
+        });
+
         public MapInstance(Guid id) : base(id)
         {
             lock (MapLock)
@@ -64,7 +71,17 @@ namespace Intersect.Editor.Maps
                 var down = Down;
                 var left = Left;
                 var right = Right;
-                base.Load(mapJson);
+                JsonConvert.PopulateObject(
+                    mapJson, this, new JsonSerializerSettings
+                    {
+                        Formatting = Formatting.None,
+                        TypeNameHandling = TypeNameHandling.Auto,
+                        DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate,
+                        ObjectCreationHandling = ObjectCreationHandling.Replace,
+                        Converters = new JsonConverter[] { new VariableComparisonConverter() }
+                    }
+                );
+
                 if (import)
                 {
                     Up = up;

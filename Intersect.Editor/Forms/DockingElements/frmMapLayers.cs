@@ -10,6 +10,7 @@ using Intersect.Editor.General;
 using Intersect.Editor.Localization;
 using Intersect.Enums;
 using Intersect.GameObjects;
+using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Maps;
 using Intersect.GameObjects.Maps.MapList;
 using Intersect.Localization;
@@ -52,6 +53,8 @@ namespace Intersect.Editor.Forms.DockingElements
         private List<PictureBox> mMapLayers = new List<PictureBox>();
 
         private bool mTMouseDown;
+
+        private bool mLoading = false;
 
         public FrmMapLayers()
         {
@@ -122,6 +125,8 @@ namespace Intersect.Editor.Forms.DockingElements
             {
                 cmbInstanceType.Items.Add(Enum.GetName(typeof(MapInstanceType), i));
             }
+
+            InitializeConditionVariables();
         }
 
         //Tiles Tab
@@ -792,6 +797,8 @@ namespace Intersect.Editor.Forms.DockingElements
             // Update the list incase npcs have been modified since form load.
             cmbNpc.Items.Clear();
             cmbNpc.Items.AddRange(NpcBase.Names);
+            InitializeConditionVariables();
+            grpVariable.Hide();
 
             // Add the map NPCs
             lstMapNpcs.Items.Clear();
@@ -813,15 +820,310 @@ namespace Intersect.Editor.Forms.DockingElements
                 lstMapNpcs.SelectedIndex = 0;
                 if (lstMapNpcs.SelectedIndex < Globals.CurrentMap.Spawns.Count)
                 {
-                    cmbDir.SelectedIndex = (int) Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].Direction;
-                    cmbNpc.SelectedIndex = NpcBase.ListIndex(Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].NpcId);
-                    if (Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].X >= 0)
+                    var selectedSpawn = Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex];
+                    cmbDir.SelectedIndex = (int) selectedSpawn.Direction;
+                    cmbNpc.SelectedIndex = NpcBase.ListIndex(selectedSpawn.NpcId);
+                    if (selectedSpawn.X >= 0)
                     {
                         rbDeclared.Checked = true;
+                    }
+                    RefreshSpawnConditions();
+                }
+            }
+        }
+
+        #region NPC Spawn Variable Editor
+
+        private void InitializeConditionVariables()
+        {
+            cmbCompareGlobalVar.Items.Clear();
+            cmbCompareGlobalVar.Items.AddRange(ServerVariableBase.Names);
+            cmbCompareInstanceVar.Items.Clear();
+            cmbCompareInstanceVar.Items.AddRange(InstanceVariableBase.Names);
+
+            cmbBooleanGlobalVariable.Items.Clear();
+            cmbBooleanGlobalVariable.Items.AddRange(ServerVariableBase.Names);
+            cmbBooleanInstanceVariable.Items.Clear();
+            cmbBooleanInstanceVariable.Items.AddRange(InstanceVariableBase.Names);
+        }
+
+        private void SetupSpawnConditionFormValues()
+        {
+            if (lstMapNpcs.Items.Count <= 0 || lstMapNpcs.SelectedIndex < 0)
+            {
+                return;
+            }
+
+            var selectedSpawn = Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex];
+            if (selectedSpawn.SpawnVariableType == VariableTypes.ServerVariable)
+            {
+                rdoGlobalVariable.Checked = true;
+            }
+            else if (selectedSpawn.SpawnVariableType == VariableTypes.InstanceVariable)
+            {
+                rdoInstanceVariable.Checked = true;
+            }
+
+            InitVariableElements(selectedSpawn.SpawnVariableId);
+
+            UpdateVariableElements();
+        }
+
+        private void UpdateVariableElements()
+        {
+            var selectedSpawn = Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex];
+            //Hide editor windows until we have a variable selected to work with
+            grpNumericVariable.Hide();
+            grpBooleanVariable.Hide();
+            grpStringVariable.Hide();
+
+            var varType = 0;
+            if (cmbVariable.SelectedIndex > -1)
+            {
+                //Determine Variable Type
+                if (rdoGlobalVariable.Checked)
+                {
+                    var serverVar = ServerVariableBase.FromList(cmbVariable.SelectedIndex);
+                    if (serverVar != null)
+                    {
+                        varType = (byte)serverVar.Type;
+                    }
+                }
+                else if (rdoInstanceVariable.Checked)
+                {
+                    var serverVar = InstanceVariableBase.FromList(cmbVariable.SelectedIndex);
+                    if (serverVar != null)
+                    {
+                        varType = (byte)serverVar.Type;
+                    }
+                }
+            }
+
+            //Load the correct editor
+            if (varType > 0)
+            {
+                var comparison = selectedSpawn.SpawnVariableComparison;
+                switch ((VariableDataTypes)varType)
+                {
+                    case VariableDataTypes.Boolean:
+                        grpBooleanVariable.Show();
+                        TryLoadVariableBooleanComparison(comparison);
+
+                        break;
+
+                    case VariableDataTypes.Integer:
+                        grpNumericVariable.Show();
+                        TryLoadVariableIntegerComparison(comparison);
+                        UpdateNumericVariableElements();
+
+                        break;
+
+                    case VariableDataTypes.Number:
+                        break;
+
+                    case VariableDataTypes.String:
+                        grpStringVariable.Show();
+                        TryLoadVariableStringComparison(comparison);
+
+                        break;
+
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+        }
+
+        private void UpdateNumericVariableElements()
+        {
+            nudVariableValue.Enabled = rdoVarCompareStaticValue.Checked;
+            cmbCompareGlobalVar.Enabled = rdoVarCompareGlobalVar.Checked;
+            cmbCompareInstanceVar.Enabled = rdoVarCompareInstanceVar.Checked;
+        }
+
+        private void InitVariableElements(Guid variableId)
+        {
+            mLoading = true;
+            cmbVariable.Items.Clear();
+            if (rdoGlobalVariable.Checked)
+            {
+                cmbVariable.Items.AddRange(ServerVariableBase.Names);
+                cmbVariable.SelectedIndex = ServerVariableBase.ListIndex(variableId);
+            }
+            else if (rdoInstanceVariable.Checked)
+            {
+                cmbVariable.Items.AddRange(InstanceVariableBase.Names);
+                cmbVariable.SelectedIndex = InstanceVariableBase.ListIndex(variableId);
+            }
+
+            mLoading = false;
+        }
+
+        private void TryLoadVariableBooleanComparison(VariableCompaison comp)
+        {
+            if (comp.GetType() == typeof(BooleanVariableComparison))
+            {
+                var com = (BooleanVariableComparison)comp;
+
+                cmbBooleanComparator.SelectedIndex = Convert.ToInt32(!com.ComparingEqual);
+
+                if (cmbBooleanComparator.SelectedIndex < 0)
+                {
+                    cmbBooleanComparator.SelectedIndex = 0;
+                }
+
+                optBooleanTrue.Checked = com.Value;
+                optBooleanFalse.Checked = !com.Value;
+
+                if (com.CompareVariableId != Guid.Empty)
+                {
+                    if (com.CompareVariableType == VariableTypes.ServerVariable)
+                    {
+                        optBooleanGlobalVariable.Checked = true;
+                        cmbBooleanGlobalVariable.SelectedIndex = ServerVariableBase.ListIndex(com.CompareVariableId);
+                    }
+                    else if (com.CompareVariableType == VariableTypes.InstanceVariable)
+                    {
+                        optBooleanInstanceVariable.Checked = true;
+                        cmbBooleanInstanceVariable.SelectedIndex = InstanceVariableBase.ListIndex(com.CompareVariableId);
                     }
                 }
             }
         }
+
+        private void TryLoadVariableIntegerComparison(VariableCompaison comp)
+        {
+            if (comp.GetType() == typeof(IntegerVariableComparison))
+            {
+                var com = (IntegerVariableComparison)comp;
+
+                cmbNumericComparitor.SelectedIndex = (int)com.Comparator;
+
+                if (cmbNumericComparitor.SelectedIndex < 0)
+                {
+                    cmbNumericComparitor.SelectedIndex = 0;
+                }
+
+                if (com.CompareVariableId != Guid.Empty)
+                {
+                    if (com.CompareVariableType == VariableTypes.ServerVariable)
+                    {
+                        rdoVarCompareGlobalVar.Checked = true;
+                        cmbCompareGlobalVar.SelectedIndex = ServerVariableBase.ListIndex(com.CompareVariableId);
+                    }
+                    else if (com.CompareVariableType == VariableTypes.InstanceVariable)
+                    {
+                        rdoVarCompareInstanceVar.Checked = true;
+                        cmbCompareInstanceVar.SelectedIndex = InstanceVariableBase.ListIndex(com.CompareVariableId);
+                    }
+                }
+                else
+                {
+                    rdoVarCompareStaticValue.Checked = true;
+                    nudVariableValue.Value = com.Value;
+                }
+
+                UpdateNumericVariableElements();
+            }
+        }
+
+        private void TryLoadVariableStringComparison(VariableCompaison comp)
+        {
+            if (comp.GetType() == typeof(StringVariableComparison))
+            {
+                var com = (StringVariableComparison)comp;
+
+                cmbStringComparitor.SelectedIndex = Convert.ToInt32(com.Comparator);
+
+                if (cmbStringComparitor.SelectedIndex < 0)
+                {
+                    cmbStringComparitor.SelectedIndex = 0;
+                }
+
+                txtStringValue.Text = com.Value;
+            }
+        }
+
+        private BooleanVariableComparison GetBooleanVariableComparison()
+        {
+            var comp = new BooleanVariableComparison();
+
+            if (cmbBooleanComparator.SelectedIndex < 0)
+            {
+                cmbBooleanComparator.SelectedIndex = 0;
+            }
+
+            comp.ComparingEqual = !Convert.ToBoolean(cmbBooleanComparator.SelectedIndex);
+
+            comp.Value = optBooleanTrue.Checked;
+
+            if (optBooleanGlobalVariable.Checked)
+            {
+                comp.CompareVariableType = VariableTypes.ServerVariable;
+                comp.CompareVariableId = ServerVariableBase.IdFromList(cmbBooleanGlobalVariable.SelectedIndex);
+            }
+            else if (optBooleanInstanceVariable.Checked)
+            {
+                comp.CompareVariableType = VariableTypes.InstanceVariable;
+                comp.CompareVariableId = InstanceVariableBase.IdFromList(cmbBooleanInstanceVariable.SelectedIndex);
+            }
+
+            return comp;
+        }
+
+        private IntegerVariableComparison GetNumericVariableComparison()
+        {
+            var comp = new IntegerVariableComparison();
+
+            if (cmbNumericComparitor.SelectedIndex < 0)
+            {
+                cmbNumericComparitor.SelectedIndex = 0;
+            }
+
+            comp.Comparator = (VariableComparators)cmbNumericComparitor.SelectedIndex;
+
+            comp.CompareVariableId = Guid.Empty;
+
+            if (rdoVarCompareStaticValue.Checked)
+            {
+                comp.Value = (long)nudVariableValue.Value;
+            }
+            else if (rdoVarCompareGlobalVar.Checked)
+            {
+                comp.CompareVariableType = VariableTypes.ServerVariable;
+                comp.CompareVariableId = ServerVariableBase.IdFromList(cmbCompareGlobalVar.SelectedIndex);
+            }
+            else if (rdoVarCompareInstanceVar.Checked)
+            {
+                comp.CompareVariableType = VariableTypes.InstanceVariable;
+                comp.CompareVariableId = InstanceVariableBase.IdFromList(cmbCompareInstanceVar.SelectedIndex);
+            }
+
+            return comp;
+        }
+
+        private StringVariableComparison GetStringVariableComparison()
+        {
+            var comp = new StringVariableComparison();
+
+            if (cmbStringComparitor.SelectedIndex < 0)
+            {
+                cmbStringComparitor.SelectedIndex = 0;
+            }
+
+            comp.Comparator = (StringVariableComparators)cmbStringComparitor.SelectedIndex;
+
+            comp.Value = txtStringValue.Text;
+
+            return comp;
+        }
+
+        private void DisplaySpawnConditions()
+        {
+            grpVariable.Show();
+            SetupSpawnConditionFormValues();
+        }
+
+        #endregion
 
         private void frmMapLayers_DockStateChanged(object sender, EventArgs e)
         {
@@ -848,6 +1150,8 @@ namespace Intersect.Editor.Forms.DockingElements
                 lstMapNpcs.SelectedIndex = lstMapNpcs.Items.Count - 1;
                 Globals.SelectedMapNpc = lstMapNpcs.SelectedIndex;
             }
+
+            RefreshSpawnConditions();
         }
 
         private void btnRemoveMapNpc_Click(object sender, EventArgs e)
@@ -883,6 +1187,8 @@ namespace Intersect.Editor.Forms.DockingElements
                 }
                 Globals.SelectedMapNpc = lstMapNpcs.SelectedIndex;
             }
+
+            RefreshSpawnConditions();
         }
 
         private void lstMapNpcs_Click(object sender, EventArgs e)
@@ -1187,6 +1493,8 @@ namespace Intersect.Editor.Forms.DockingElements
             btnAddMapNpc.Text = Strings.NpcSpawns.add;
             btnRemoveMapNpc.Text = Strings.NpcSpawns.remove;
             lblInstanceLimit.Text = Strings.NpcSpawns.minimumininstance;
+            grpSpawnSettings.Text = Strings.NpcSpawns.SpawnSettings;
+            chkConditionalSpawning.Text = Strings.NpcSpawns.ConditionalSpawning;
 
             lblEventInstructions.Text = Strings.MapLayers.eventinstructions;
             lblLightInstructions.Text = Strings.MapLayers.lightinstructions;
@@ -1235,6 +1543,23 @@ namespace Intersect.Editor.Forms.DockingElements
         {
             lstMapNpcs.SelectedIndex = lstMapNpcs.IndexFromPoint(e.Location);
             Globals.SelectedMapNpc = lstMapNpcs.SelectedIndex;
+            RefreshSpawnConditions();
+        }
+
+        public void RefreshSpawnConditions()
+        {
+            if (lstMapNpcs.Items.Count > 0 && lstMapNpcs.SelectedIndex >= 0)
+            {
+                chkConditionalSpawning.Checked = Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].ConditionalSpawning;
+                if (Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].ConditionalSpawning)
+                {
+                    DisplaySpawnConditions();
+                }
+                else
+                {
+                    grpVariable.Hide();
+                }
+            }
         }
 
         private void ChangeTab()
@@ -1403,6 +1728,111 @@ namespace Intersect.Editor.Forms.DockingElements
             {
                 Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].PreventRespawn = chkDoNotRespawn.Checked;
             }
+        }
+
+        private void chkConditionalSpawning_CheckedChanged(object sender, EventArgs e)
+        {
+            if (lstMapNpcs.SelectedIndex >= 0)
+            {
+                Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].ConditionalSpawning = chkConditionalSpawning.Checked;
+                if (chkConditionalSpawning.Checked)
+                {
+                    DisplaySpawnConditions();
+                }
+                else
+                {
+                    grpVariable.Hide();
+                }
+            }
+        }
+
+        private void InitializeAndSelectDefaultVariableElement()
+        {
+            InitVariableElements(Guid.Empty);
+            if (!mLoading && cmbVariable.Items.Count > 0)
+            {
+                cmbVariable.SelectedIndex = 0;
+            }
+        }
+
+        private void rdoGlobalVariable_CheckedChanged(object sender, EventArgs e)
+        {
+            InitializeAndSelectDefaultVariableElement();
+        }
+
+        private void rdoInstanceVariable_CheckedChanged(object sender, EventArgs e)
+        {
+            InitializeAndSelectDefaultVariableElement();
+        }
+
+        private void rdoVarCompareGlobalVar_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateNumericVariableElements();
+        }
+
+        private void rdoVarCompareInstanceVar_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateNumericVariableElements();
+        }
+
+        private void SaveSpawnCondition()
+        {
+            if (lstMapNpcs.Items.Count <= 0 || lstMapNpcs.SelectedIndex < 0)
+            {
+                btnApplySpawnConditions.Enabled = false;
+                return;
+            }
+           
+            btnApplySpawnConditions.Enabled = true;
+
+            var selectedSpawn = Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex];
+            if (rdoGlobalVariable.Checked)
+            {
+                selectedSpawn.SpawnVariableType = VariableTypes.ServerVariable;
+                selectedSpawn.SpawnVariableId = ServerVariableBase.IdFromList(cmbVariable.SelectedIndex);
+            }
+            else if (rdoInstanceVariable.Checked)
+            {
+                selectedSpawn.SpawnVariableType = VariableTypes.InstanceVariable;
+                selectedSpawn.SpawnVariableId = InstanceVariableBase.IdFromList(cmbVariable.SelectedIndex);
+            }
+
+            if (grpBooleanVariable.Visible)
+            {
+                selectedSpawn.SpawnVariableComparison = GetBooleanVariableComparison();
+            }
+            else if (grpNumericVariable.Visible)
+            {
+                selectedSpawn.SpawnVariableComparison = GetNumericVariableComparison();
+            }
+            else if (grpStringVariable.Visible)
+            {
+                selectedSpawn.SpawnVariableComparison = GetStringVariableComparison();
+            }
+        }
+
+        private void btnApplySpawnConditions_Click(object sender, EventArgs e)
+        {
+            SaveSpawnCondition();
+        }
+
+        private void cmbVariable_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (mLoading)
+            {
+                return;
+            }
+
+            if (rdoGlobalVariable.Checked)
+            {
+                InitVariableElements(ServerVariableBase.IdFromList(cmbVariable.SelectedIndex));
+            }
+            else if (rdoInstanceVariable.Checked)
+            {
+                InitVariableElements(InstanceVariableBase.IdFromList(cmbVariable.SelectedIndex));
+            }
+
+            UpdateVariableElements();
         }
     }
 

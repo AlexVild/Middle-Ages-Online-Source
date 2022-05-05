@@ -4366,6 +4366,9 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString addremove = @"Add/Remove Map NPCs";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ConditionalSpawning = @"Conditional Spawning?";
+
             public static LocalizedString declaredlocation = @"Declared";
 
             public static LocalizedString direction = @"Direction:";
@@ -4379,6 +4382,9 @@ Tick timer saved in server config.json.";
             public static LocalizedString spawndeclared = @"Spawn Location: Declared";
 
             public static LocalizedString spawnrandom = @"Spawn Location: Random";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString SpawnSettings = @"Spawn Settings";
 
             public static LocalizedString minimumininstance = @"If Minimum Players in Instance: ";
 

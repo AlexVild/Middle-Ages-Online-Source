@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 using Intersect.Enums;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 
 namespace Intersect.GameObjects.Events
 {
@@ -516,9 +519,86 @@ namespace Intersect.GameObjects.Events
         }
     }
 
+    public class VariableConverterSpecifiedConcreteClassConverter : DefaultContractResolver
+    {
+        protected override JsonConverter ResolveContractConverter(Type objectType)
+        {
+            if (typeof(VariableCompaison).IsAssignableFrom(objectType) && !objectType.IsAbstract)
+                return null; // pretend TableSortRuleConvert is not specified (thus avoiding a stack overflow)
+            return base.ResolveContractConverter(objectType);
+        }
+    }
+
+
+    public class VariableComparisonConverter : JsonConverter
+    {
+        static JsonSerializerSettings SpecifiedSubclassConversion = new JsonSerializerSettings() { ContractResolver = new VariableConverterSpecifiedConcreteClassConverter() };
+
+        public override bool CanConvert(Type objectType)
+        {
+            return objectType == typeof(VariableCompaison);
+        }
+
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            if (reader == null) return new JObject();
+
+            JObject readJson = JObject.Load(reader);
+
+            // The best way to tell which type to transform to is to take the type of the Value property...
+            var type = readJson["Value"]?.Type;
+            if (type == null)
+            {
+                var typeString = readJson["$type"]?.Value<string>();
+                if (typeString == null)
+                {
+                    return JsonConvert.DeserializeObject<VariableCompaison>(readJson.ToString(), SpecifiedSubclassConversion);
+                }
+
+                if (typeString.ToLower().Contains("boolean"))
+                {
+                    type = JTokenType.Boolean;
+                }
+                if (typeString.ToLower().Contains("integer"))
+                {
+                    type = JTokenType.Integer;
+                }
+                if (typeString.ToLower().Contains("string"))
+                {
+                    type = JTokenType.String;
+                }
+            }
+
+            // ... and use that to determine the proper type.
+            switch (type)
+            {
+                case JTokenType.String:
+                    return JsonConvert.DeserializeObject<StringVariableComparison>(readJson.ToString(), SpecifiedSubclassConversion);
+                case JTokenType.Integer:
+                    return JsonConvert.DeserializeObject<IntegerVariableComparison>(readJson.ToString(), SpecifiedSubclassConversion);
+                case JTokenType.Boolean:
+                    return JsonConvert.DeserializeObject<BooleanVariableComparison>(readJson.ToString(), SpecifiedSubclassConversion);
+                default:
+                    return JsonConvert.DeserializeObject<VariableCompaison>(readJson.ToString(), SpecifiedSubclassConversion);
+            }
+        }
+
+        #region Writing - not necessary
+        public override bool CanWrite
+        {
+            get { return false; }
+        }
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+        {
+            throw new NotImplementedException(); // won't be called because CanWrite returns false
+        }
+        #endregion
+    }
+
+    //[JsonConverter(typeof(VariableComparisonConverter))]
     public class VariableCompaison
     {
-
     }
 
     public class BooleanVariableComparison : VariableCompaison
@@ -531,7 +611,6 @@ namespace Intersect.GameObjects.Events
         public bool ComparingEqual { get; set; }
 
         public bool Value { get; set; }
-
     }
 
     public class IntegerVariableComparison : VariableCompaison

@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Intersect.Enums;
+using Intersect.GameObjects.Events;
 
 namespace Intersect.GameObjects.Maps
 {
@@ -20,6 +21,14 @@ namespace Intersect.GameObjects.Maps
 
         public bool PreventRespawn;
 
+        public bool ConditionalSpawning;
+
+        public VariableTypes SpawnVariableType { get; set; } = VariableTypes.ServerVariable;
+            
+        public Guid SpawnVariableId { get; set; }
+
+        public VariableCompaison SpawnVariableComparison { get; set; } = new VariableCompaison();
+
         public NpcSpawn()
         {
         }
@@ -32,6 +41,10 @@ namespace Intersect.GameObjects.Maps
             Direction = copy.Direction;
             RequiredPlayersToSpawn = copy.RequiredPlayersToSpawn;
             PreventRespawn = copy.PreventRespawn;
+            ConditionalSpawning = copy.ConditionalSpawning;
+            SpawnVariableType = copy.SpawnVariableType;
+            SpawnVariableId = copy.SpawnVariableId;
+            SpawnVariableComparison = copy.SpawnVariableComparison;
         }
 
     }

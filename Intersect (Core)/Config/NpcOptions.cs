@@ -6,6 +6,7 @@
     /// </summary>
     public class NpcOptions
     {
+        public const long DefaultNpcSpawnConditionCheckInterval = 3000;
 
         /// <summary>
         /// Configures whether or not Npcs are allowed to reset after moving out of a specified radius when starting to fight another entity.
@@ -43,6 +44,12 @@
         /// Configures whether or not the level of an Npc is shown next to their name.
         /// </summary>
         public bool ShowLevelByName = false;
+
+        /// <summary>
+        /// Configures how long to wait in between NPC Spawn condition checks. Set to < 0 to not bother - cost in performance vs accuracy of information
+        /// (consider if you want something to happen if a variable is _exact_, but that variable can change easily. Might miss the spawn condition if this gap is too long)
+        /// </summary>
+        public long SpawnConditionCheckInterval { get; set; } = DefaultNpcSpawnConditionCheckInterval;
 
     }
 

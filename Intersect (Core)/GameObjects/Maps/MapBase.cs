@@ -245,12 +245,24 @@ namespace Intersect.GameObjects.Maps
         [JsonIgnore]
         public string NpcSpawnsJson
         {
-            get => JsonConvert.SerializeObject(Spawns);
+            get => JsonConvert.SerializeObject(Spawns, typeof(List<NpcSpawn>), new JsonSerializerSettings()
+            {
+                Formatting = Formatting.None,
+                TypeNameHandling = TypeNameHandling.Auto,
+                DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate,
+                ObjectCreationHandling = ObjectCreationHandling.Replace
+            });
             set
             {
                 Spawns.Clear();
 
-                var spawns = JsonConvert.DeserializeObject<List<NpcSpawn>>(value);
+                var spawns = JsonConvert.DeserializeObject<List<NpcSpawn>>(value, new JsonSerializerSettings()
+                {
+                    Formatting = Formatting.None,
+                    TypeNameHandling = TypeNameHandling.Auto,
+                    DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate,
+                    ObjectCreationHandling = ObjectCreationHandling.Replace
+                });
                 if (spawns != null)
                 {
                     Spawns.AddRange(spawns);

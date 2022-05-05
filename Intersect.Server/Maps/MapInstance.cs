@@ -109,6 +109,11 @@ namespace Intersect.Server.Maps
 
         // NPCs
         public ConcurrentDictionary<NpcSpawn, MapNpcSpawn> NpcSpawnInstances = new ConcurrentDictionary<NpcSpawn, MapNpcSpawn>();
+        
+        /// <summary>
+        /// Used to determine when its okay to check NPC spawn conditions again
+        /// </summary>
+        private long SpawnConditionCheckInterval = 0;
 
         // Items
         public ConcurrentDictionary<Guid, MapItemSpawn> ItemRespawns = new ConcurrentDictionary<Guid, MapItemSpawn>();
@@ -407,10 +412,7 @@ namespace Intersect.Server.Maps
         {
             for (var i = 0; i < mMapController.Spawns.Count; i++)
             {
-                if (NpcHasEnoughPlayersToSpawn(i))
-                {
-                    SpawnMapNpc(i);
-                }
+                SpawnMapNpc(i);
             }
         }
 
@@ -421,10 +423,16 @@ namespace Intersect.Server.Maps
         /// <param name="i">Index of the NPC in the Map Instance's Spawns list</param>
         private void SpawnMapNpc(int i)
         {
+            if (!NpcCanSpawn(i))
+            {
+                return;
+            }
+
             byte x = 0;
             byte y = 0;
             byte dir = 0;
             var spawns = mMapController.Spawns;
+            var spawn = spawns[i];
             var npcBase = NpcBase.Get(spawns[i].NpcId);
             if (npcBase != null)
             {
@@ -1324,36 +1332,93 @@ namespace Intersect.Server.Maps
                         if (spawns[i].PreventRespawn && MapInstanceId != Guid.Empty) continue;
 
                         // If the entity is dead, but needs respawning, set its respawn time (or, wait for more players to show up before starting the timer)
-                        if (npcSpawnInstance.RespawnTime == -1 || !NpcHasEnoughPlayersToSpawn(i))
+                        if (npcSpawnInstance.RespawnTime == -1 || !NpcCanSpawn(i))
                         {
                             npcSpawnInstance.RespawnTime = Timing.Global.Milliseconds +
                                                            ((Npc)npcSpawnInstance.Entity).Base.SpawnDuration -
                                                            (Timing.Global.Milliseconds - mLastUpdateTime);
                         }
                         // If we're passed the respawn time, and there's enough players on the instance to warrant a spawn
-                        else if (npcSpawnInstance.RespawnTime < Timing.Global.Milliseconds && NpcHasEnoughPlayersToSpawn(i))
+                        else if (npcSpawnInstance.RespawnTime < Timing.Global.Milliseconds)
                         {
                             SpawnMapNpc(i);
                             npcSpawnInstance.RespawnTime = -1;
                         }
                     }
-                } else if (NpcHasEnoughPlayersToSpawn(i))
+                } else if (NpcCanSpawn(i))
                 {
                     SpawnMapNpc(i);
                 }
             }
         }
 
+        private bool NpcCanSpawn(int spawnIndex)
+        {
+            return NpcHasEnoughPlayersToSpawn(spawnIndex) && NpcSpawnConditionsMet(spawnIndex);
+        }
+
         private bool NpcHasEnoughPlayersToSpawn(int spawnIndex)
         {
+            var spawn = mMapController.Spawns[spawnIndex];
+
+            if (spawn.RequiredPlayersToSpawn < 2)
+            {
+                return true;
+            }
+
             int playersOnInstanceId;
             if (!ProcessingInfo.PlayersInInstance.TryGetValue(MapInstanceId, out playersOnInstanceId))
             {
                 playersOnInstanceId = GetPlayers().Count; // Guaranteed to at LEAST have this map's count
             }
-            return mMapController.Spawns[spawnIndex].RequiredPlayersToSpawn <= 1 || playersOnInstanceId >= mMapController.Spawns[spawnIndex].RequiredPlayersToSpawn;
+            return playersOnInstanceId >= spawn.RequiredPlayersToSpawn;
         }
-        
+
+        private bool NpcSpawnConditionsMet(int spawnIndex)
+        {
+            var spawn = mMapController.Spawns[spawnIndex];
+            if (!spawn.ConditionalSpawning)
+            {
+                return true;
+            }
+
+            // Don't check spawn conditions EVERY tick - only every X seconds or so.
+            long spawnIntervalUpdate = Options.Instance.NpcOpts.SpawnConditionCheckInterval;
+            if (spawnIntervalUpdate > 0 && Timing.Global.Milliseconds < SpawnConditionCheckInterval)
+            {
+                return false;
+            }
+            else
+            {
+                SpawnConditionCheckInterval = Timing.Global.Milliseconds + spawnIntervalUpdate;
+            }
+
+            VariableValue varValue;
+            switch (spawn.SpawnVariableType)
+            {
+                case VariableTypes.ServerVariable:
+                    varValue = ServerVariableBase.Get(spawn.SpawnVariableId).Value;
+                    break;
+                case VariableTypes.InstanceVariable:
+                    varValue = GetInstanceVariable(spawn.SpawnVariableId);
+                    break;
+                default:
+                    throw new NotImplementedException("Invalid variable type given for NPC Spawn condition");
+            }
+
+            switch (spawn.SpawnVariableComparison)
+            {
+                case BooleanVariableComparison booleanVar:
+                    return Conditions.CheckVariableComparison(varValue, booleanVar, this);
+                case IntegerVariableComparison intVar:
+                    return Conditions.CheckVariableComparison(varValue, intVar, this);
+                case StringVariableComparison stringVar:
+                    return Conditions.CheckVariableComparison(varValue, stringVar);
+                default:
+                    return true;
+            }
+        }
+
         private void ProcessResourceRespawns()
         {
             foreach (var spawn in ResourceSpawns)
