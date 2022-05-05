@@ -26,7 +26,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             cmbStopType.SelectedIndex = (int) refCommand.StopType;
         }
 
-        // TODO Alex - This
         private void InitLocalization()
         {
             grpStopTimer.Text = Strings.EventStopTimer.Title;

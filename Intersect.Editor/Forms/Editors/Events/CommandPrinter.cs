@@ -1691,8 +1691,32 @@ namespace Intersect.Editor.Forms.Editors.Events
         private static string GetCommandText(ModifyTimerCommand command, MapInstance map)
         {
             var descriptor = TimerDescriptor.Get(command.DescriptorId);
-            // TODO Alex this
-            return Strings.EventCommandList.TimerModify.ToString();
+            var op = Enum.GetName(typeof(TimerOperator), command.Operator);
+
+            if (command.IsStatic)
+            {
+                var amount = command.Amount.ToString();
+                return Strings.EventCommandList.TimerModify.ToString(descriptor.Name, op, amount);
+            }
+            else 
+            {
+                String varType = Enum.GetName(typeof(VariableTypes), command.VariableType);
+                String varName = string.Empty;
+                switch(command.VariableType)
+                {
+                    case VariableTypes.PlayerVariable:
+                        varName = PlayerVariableBase.GetName(command.VariableDescriptorId);
+                        break;
+                    case VariableTypes.ServerVariable:
+                        varName = ServerVariableBase.GetName(command.VariableDescriptorId);
+                        break;
+                    case VariableTypes.InstanceVariable:
+                        varName = InstanceVariableBase.GetName(command.VariableDescriptorId);
+                        break;
+                }
+
+                return Strings.EventCommandList.TimerModifyVar.ToString(descriptor.Name, op, varType, varName);
+            }
         }
 
         private static string GetCommandText(StopTimerCommand command, MapInstance map)

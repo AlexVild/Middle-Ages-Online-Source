@@ -38,8 +38,15 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     break;
             }
 
-            rdoStatic.Checked = mMyCommand.IsStatic;
-            rdoVariable.Checked = !mMyCommand.IsStatic;
+            nudSeconds.Value = mMyCommand.Amount;
+            if (mMyCommand.IsStatic)
+            {
+                rdoStatic.Select();
+            }
+            else
+            {
+                rdoVariable.Select();
+            }
 
             RefreshVariableSelection();
             if (!mMyCommand.IsStatic)
@@ -51,15 +58,26 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             UpdateElementAvailability();
         }
 
-        // TODO Alex - This
         private void InitLocalization()
         {
             grpModifyTimer.Text = Strings.EventModifyTimer.Title;
 
             grpTimer.Text = Strings.EventModifyTimer.TimerGroup;
-
             lblType.Text = Strings.EventModifyTimer.OwnerType;
             lblTimer.Text = Strings.EventModifyTimer.TimerSelect;
+
+            grpMod.Text = Strings.EventModifyTimer.ModifyGroup;
+            grpOperators.Text = Strings.EventModifyTimer.Operator;
+            rdoSet.Text = Strings.EventModifyTimer.OperatorSet;
+            rdoAdd.Text = Strings.EventModifyTimer.OperatorAdd;
+            rdoSubtract.Text = Strings.EventModifyTimer.OperatorSub;
+
+            rdoStatic.Text = Strings.EventModifyTimer.Static;
+            rdoVariable.Text = Strings.EventModifyTimer.Variable;
+
+            grpVariables.Text = Strings.EventModifyTimer.VariableSelection;
+            lblVarType.Text = Strings.EventModifyTimer.VariableType;
+            lblVarVal.Text = Strings.EventModifyTimer.VariableValue;
 
             cmbVariableType.Items.Clear();
             cmbVariableType.Items.AddRange(Strings.EventModifyTimer.VarTypes.Values.ToArray());
@@ -125,6 +143,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                 case VariableTypes.InstanceVariable:
                     cmbVariable.Items.AddRange(InstanceVariableBase.Names);
                     break;
+            }
+            if (cmbVariable.Items.Count > 0)
+            {
+                cmbVariable.SelectedIndex = 0;
             }
         }
 

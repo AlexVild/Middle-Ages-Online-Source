@@ -23,14 +23,18 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             TimerDescriptor descriptor = TimerDescriptor.Get(command.DescriptorId);
             if (descriptor == default) // no selection prior
             {
-                InitializeTimerOwnerSelector(ref timerOwnerBox);
+                InitializeTimerOwnerSelector(ref timerOwnerBox, TimerOwnerType.Global);
                 RefreshTimerSelector(ref timerBox, TimerOwnerType.Global);
             }
             else
             {
-                timerOwnerBox.SelectedIndex = (int)descriptor.OwnerType;
+                InitializeTimerOwnerSelector(ref timerOwnerBox, descriptor.OwnerType);
                 RefreshTimerSelector(ref timerBox, descriptor.OwnerType);
-                timerBox.SelectedIndex = TimerDescriptor.ListIndex(descriptor.Id);
+                var index = TimerDescriptor.ListIndex(descriptor.Id);
+                if (index < timerBox.Items.Count)
+                {
+                    timerBox.SelectedIndex = index;
+                }
             }
         }
 
@@ -52,9 +56,13 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                 .ToArray();
 
             timerBox.Items.AddRange(validTimers);
+            if (timerBox.Items.Count > 0)
+            {
+                timerBox.SelectedIndex = 0;
+            }
         }
 
-        private static void InitializeTimerOwnerSelector(ref DarkUI.Controls.DarkComboBox timerOwnerBox)
+        private static void InitializeTimerOwnerSelector(ref DarkUI.Controls.DarkComboBox timerOwnerBox, TimerOwnerType ownerType)
         {
             _ = timerOwnerBox ?? throw new ArgumentNullException(nameof(timerOwnerBox));
 
@@ -65,7 +73,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             {
                 return;
             }
-            timerOwnerBox.SelectedIndex = 0;
+            timerOwnerBox.SelectedIndex = (int)ownerType;
         }
     }
 }

@@ -111,6 +111,12 @@
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_FlashScreen.Designer.cs">
       <DependentUpon>EventCommand_FlashScreen.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_ModifyTimer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_ModifyTimer.Designer.cs">
+      <DependentUpon>EventCommand_ModifyTimer.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_NPCGuildManagement.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -159,6 +165,19 @@
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_SetVehicle.Designer.cs">
       <DependentUpon>EventCommand_SetVehicle.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_StartTimer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_StartTimer.Designer.cs">
+      <DependentUpon>EventCommand_StartTimer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_StopTimer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_StopTimer.Designer.cs">
+      <DependentUpon>EventCommand_StopTimer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\TimerCommandHelpers.cs" />
     <Compile Include="Forms\Editors\frmQuestBoard.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -738,6 +757,9 @@
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_GiveExperience.resx">
       <DependentUpon>EventCommand_GiveExperience.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_ModifyTimer.resx">
+      <DependentUpon>EventCommand_ModifyTimer.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_NPCGuildManagement.resx">
       <DependentUpon>EventCommand_NPCGuildManagement.cs</DependentUpon>
     </EmbeddedResource>
@@ -749,6 +771,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_SetVehicle.resx">
       <DependentUpon>EventCommand_SetVehicle.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_StartTimer.resx">
+      <DependentUpon>EventCommand_StartTimer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_StopTimer.resx">
+      <DependentUpon>EventCommand_StopTimer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_Variable.resx">
       <DependentUpon>EventCommand_Variable.cs</DependentUpon>

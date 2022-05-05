@@ -22,7 +22,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             TimerCommandHelpers.InitializeSelectionFields(refCommand, ref cmbTimerType, ref cmbTimer);
         }
 
-        // TODO Alex - This
         private void InitLocalization()
         {
             grpStartTimer.Text = Strings.EventStartTimer.Title;
