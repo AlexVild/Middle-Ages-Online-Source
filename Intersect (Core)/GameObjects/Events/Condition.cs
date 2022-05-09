@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 using Intersect.Enums;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 
 namespace Intersect.GameObjects.Events
 {
@@ -518,7 +521,6 @@ namespace Intersect.GameObjects.Events
 
     public class VariableCompaison
     {
-
     }
 
     public class BooleanVariableComparison : VariableCompaison
@@ -531,7 +533,6 @@ namespace Intersect.GameObjects.Events
         public bool ComparingEqual { get; set; }
 
         public bool Value { get; set; }
-
     }
 
     public class IntegerVariableComparison : VariableCompaison

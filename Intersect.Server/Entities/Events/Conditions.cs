@@ -752,6 +752,61 @@ namespace Intersect.Server.Entities.Events
             }
         }
 
+        // For checking the value of a bool condition without referencing a player
+        public static bool CheckVariableComparison(
+            VariableValue currentValue,
+            BooleanVariableComparison comparison,
+            MapInstance mapInstance
+        )
+        {
+            if (mapInstance == null)
+            {
+                return false;
+            }
+
+            VariableValue compValue = null;
+            if (comparison.CompareVariableId != Guid.Empty)
+            {
+                if (comparison.CompareVariableType == VariableTypes.ServerVariable)
+                {
+                    compValue = ServerVariableBase.Get(comparison.CompareVariableId)?.Value;
+                }
+                else if (comparison.CompareVariableType == VariableTypes.InstanceVariable)
+                {
+                    compValue = mapInstance.GetInstanceVariable(comparison.CompareVariableId);
+                }
+            }
+            else
+            {
+                compValue = new VariableValue();
+                compValue.Boolean = comparison.Value;
+            }
+
+            if (compValue == null)
+            {
+                compValue = new VariableValue();
+            }
+
+            if (currentValue.Type == 0)
+            {
+                currentValue.Boolean = false;
+            }
+
+            if (compValue.Type != currentValue.Type)
+            {
+                return false;
+            }
+
+            if (comparison.ComparingEqual)
+            {
+                return currentValue.Boolean == compValue.Boolean;
+            }
+            else
+            {
+                return currentValue.Boolean != compValue.Boolean;
+            }
+        }
+
         public static bool CheckVariableComparison(
             VariableValue currentValue,
             IntegerVariableComparison comparison,
@@ -850,6 +905,103 @@ namespace Intersect.Server.Entities.Events
             return false;
         }
 
+        // For checking the value of an int condition without referencing a player
+        public static bool CheckVariableComparison(
+            VariableValue currentValue,
+            IntegerVariableComparison comparison,
+            MapInstance mapInstance
+        )
+        {
+            if (mapInstance == null)
+            {
+                return false;
+            }
+
+            VariableValue compValue = null;
+            if (comparison.CompareVariableId != Guid.Empty)
+            {
+                if (comparison.CompareVariableType == VariableTypes.ServerVariable)
+                {
+                    compValue = ServerVariableBase.Get(comparison.CompareVariableId)?.Value;
+                }
+                else if (comparison.CompareVariableType == VariableTypes.InstanceVariable)
+                {
+                    compValue = mapInstance.GetInstanceVariable(comparison.CompareVariableId);
+                }
+            }
+            else
+            {
+                compValue = new VariableValue();
+                compValue.Integer = comparison.Value;
+            }
+
+            if (compValue == null)
+            {
+                compValue = new VariableValue();
+            }
+
+            if (currentValue.Type == 0)
+            {
+                currentValue.Integer = 0;
+            }
+
+            if (compValue.Type != currentValue.Type)
+            {
+                return false;
+            }
+
+            var varVal = currentValue.Integer;
+            long compareAgainst = compValue.Integer;
+
+            switch (comparison.Comparator) //Comparator
+            {
+                case VariableComparators.Equal:
+                    if (varVal == compareAgainst)
+                    {
+                        return true;
+                    }
+
+                    break;
+                case VariableComparators.GreaterOrEqual:
+                    if (varVal >= compareAgainst)
+                    {
+                        return true;
+                    }
+
+                    break;
+                case VariableComparators.LesserOrEqual:
+                    if (varVal <= compareAgainst)
+                    {
+                        return true;
+                    }
+
+                    break;
+                case VariableComparators.Greater:
+                    if (varVal > compareAgainst)
+                    {
+                        return true;
+                    }
+
+                    break;
+                case VariableComparators.Less:
+                    if (varVal < compareAgainst)
+                    {
+                        return true;
+                    }
+
+                    break;
+                case VariableComparators.NotEqual:
+                    if (varVal != compareAgainst)
+                    {
+                        return true;
+                    }
+
+                    break;
+            }
+
+            return false;
+        }
+
         public static bool CheckVariableComparison(
             VariableValue currentValue,
             StringVariableComparison comparison,
@@ -866,6 +1018,22 @@ namespace Intersect.Server.Entities.Events
                     return varVal == compareAgainst;
                 case StringVariableComparators.Contains:
                     return varVal.Contains(compareAgainst);
+            }
+
+            return false;
+        }
+
+        public static bool CheckVariableComparison(
+            VariableValue currentValue,
+            StringVariableComparison comparison
+        )
+        {
+            switch (comparison.Comparator)
+            {
+                case StringVariableComparators.Equal:
+                    return currentValue.String == comparison.Value;
+                case StringVariableComparators.Contains:
+                    return currentValue.String.Contains(comparison.Value);
             }
 
             return false;

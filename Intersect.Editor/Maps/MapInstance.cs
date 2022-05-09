@@ -65,6 +65,7 @@ namespace Intersect.Editor.Maps
                 var left = Left;
                 var right = Right;
                 base.Load(mapJson);
+
                 if (import)
                 {
                     Up = up;
