@@ -446,7 +446,7 @@
     <Compile Include="Core\ProcessingInfo.cs" />
     <Compile Include="Core\Services\IConsoleService.cs" />
     <Compile Include="Core\Services\ILogicService.cs" />
-    <Compile Include="Core\TimerInstance.cs" />
+    <Compile Include="Core\TimersInstance.cs" />
     <Compile Include="Database\ContextProvider.cs" />
     <Compile Include="Database\ContextProvider.Locking.cs" />
     <Compile Include="Database\DbLogger.cs" />

@@ -1879,6 +1879,7 @@ namespace Intersect.Server.Database
                     MigrateDbSet(context.Mutes, newPlayerContext.Mutes);
                     MigrateDbSet(context.Bans, newPlayerContext.Bans);
                     MigrateDbSet(context.Player_Record, newPlayerContext.Player_Record);
+                    MigrateDbSet(context.Timers, newPlayerContext.Timers);
                     newPlayerContext.ChangeTracker.DetectChanges();
                     newPlayerContext.SaveChanges();
                     newPlayerContext.Dispose();

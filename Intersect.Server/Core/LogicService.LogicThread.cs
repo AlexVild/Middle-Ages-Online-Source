@@ -19,6 +19,7 @@ using Intersect.Server.Networking;
 using Intersect.Server.Networking.Lidgren;
 using Intersect.Server.Database.PlayerData.Players;
 using Intersect.Utilities;
+using Intersect.Server.Database.PlayerData;
 
 namespace Intersect.Server.Core
 {
@@ -87,6 +88,10 @@ namespace Intersect.Server.Core
                     var processedMapInstances = new HashSet<Guid>();
                     var sourceMapInstance = new HashSet<Guid>();
                     var players = 0;
+
+                    // Initialize timers instance and load in values
+                    TimersInstance.Timers = new SortedSet<TimerInstance>(new TimerComparer());
+                    LoadTimers();
 
                     while (ServerContext.Instance.IsRunning)
                     {
@@ -302,6 +307,8 @@ namespace Intersect.Server.Core
                             saveServerVariablesTimer = Timing.Global.Milliseconds + Options.Instance.Processing.DatabaseSaveServerVariablesInterval;
                         }
 
+                        TimersInstance.ProcessTimers(Timing.Global.MillisecondsUtc);
+
                         if (Options.Instance.Processing.CpsLock)
                         {
                             Thread.Sleep(1);
@@ -387,6 +394,16 @@ namespace Intersect.Server.Core
                 }
             }
 
+            private void LoadTimers()
+            {
+                using (var context = DbInterface.CreatePlayerContext())
+                {
+                    foreach (var timer in context.Timers.ToList())
+                    {
+                        TimersInstance.Timers.Add(timer);
+                    }
+                }
+            }
         }
     }
 }

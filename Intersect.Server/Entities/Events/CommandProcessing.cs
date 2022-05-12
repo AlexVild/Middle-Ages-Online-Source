@@ -19,6 +19,9 @@ using Intersect.Server.Localization;
 using Intersect.Server.Maps;
 using Intersect.Server.Networking;
 using Intersect.Utilities;
+using Intersect.GameObjects.Timers;
+using Intersect.Server.Database.PlayerData;
+using Intersect.Server.Core;
 
 namespace Intersect.Server.Entities.Events
 {
@@ -2391,6 +2394,34 @@ namespace Intersect.Server.Entities.Events
             }
 
             player.SendInspirationUpdateText(command.Seconds);
+        }
+
+        private static void ProcessCommand(
+            StartTimerCommand command,
+            Player player,
+            Event instance,
+            CommandInstance stackInfo,
+            Stack<CommandInstance> callStack
+        )
+        {
+            if (player == null) return;
+
+            var now = Timing.Global.MillisecondsUtc;
+
+            TimerDescriptor descriptor = TimerDescriptor.Get(command.DescriptorId);
+
+            switch(descriptor.OwnerType)
+            {
+                case TimerOwnerType.Player:
+                    if (TimersInstance.Timers.ToList().Find(t => t.DescriptorId == command.DescriptorId && t.OwnerId == player.Id) != default)
+                    {
+                        return; // Timer already started for this player
+                    }
+                    TimersInstance.Timers.Add(new TimerInstance(command.DescriptorId, player.Id, now));
+                    break;
+                default:
+                    throw new NotImplementedException("This timer owner type can not be processed yet!");
+            }
         }
     }
 
