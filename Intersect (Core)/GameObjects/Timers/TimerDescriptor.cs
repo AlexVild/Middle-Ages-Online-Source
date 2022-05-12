@@ -3,6 +3,7 @@ using Intersect.Models;
 using Newtonsoft.Json;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace Intersect.GameObjects.Timers
 {
@@ -94,5 +95,35 @@ namespace Intersect.GameObjects.Timers
 
         /// <inheritdoc />
         public string Folder { get; set; } = "";
+
+        #region Access Helpers
+        public static Guid IdFromList(int listIndex, TimerOwnerType ownerType)
+        {
+            if (listIndex < 0 || listIndex > Lookup.KeyList.Count)
+            {
+                return Guid.Empty;
+            }
+
+            var ids = Lookup.KeyList
+                .OrderBy(pairs => Lookup[pairs]?.Name)
+                .Where(pairs => ((TimerDescriptor)Lookup[pairs])?.OwnerType == ownerType)
+                .ToArray();
+
+            if (listIndex >= ids.Length)
+            {
+                return Guid.Empty;
+            }
+
+            return ids[listIndex];
+        }
+
+        public static int ListIndex(Guid id, TimerOwnerType ownerType)
+        {
+            return Lookup.KeyList
+                .OrderBy(pairs => Lookup[pairs]?.Name)
+                .Where(pairs => ((TimerDescriptor)Lookup[pairs])?.OwnerType == ownerType)
+                .ToList().IndexOf(id);
+        }
+        #endregion
     }
 }

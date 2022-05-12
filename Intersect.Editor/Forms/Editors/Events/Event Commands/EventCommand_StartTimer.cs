@@ -12,6 +12,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
 
         private StartTimerCommand mMyCommand;
 
+        private bool mInitializing = true;
+
         public EventCommand_StartTimer(StartTimerCommand refCommand, FrmEvent editor)
         {
             InitializeComponent();
@@ -20,6 +22,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             mEventEditor = editor;
 
             TimerCommandHelpers.InitializeSelectionFields(refCommand, ref cmbTimerType, ref cmbTimer);
+            mInitializing = false;
         }
 
         private void InitLocalization()
@@ -35,12 +38,23 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
 
         private void cmbTimerType_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (mInitializing)
+            {
+                return;
+            }
+
             TimerCommandHelpers.RefreshTimerSelector(ref cmbTimer, (TimerOwnerType)cmbTimerType.SelectedIndex);
+            mMyCommand.DescriptorId = TimerDescriptor.IdFromList(cmbTimer.SelectedIndex, (TimerOwnerType)cmbTimerType.SelectedIndex);
         }
 
         private void cmbTimer_SelectedIndexChanged(object sender, EventArgs e)
         {
-            mMyCommand.DescriptorId = TimerDescriptor.IdFromList(cmbTimerType.SelectedIndex);
+            if (mInitializing)
+            {
+                return;
+            }
+
+            mMyCommand.DescriptorId = TimerDescriptor.IdFromList(cmbTimer.SelectedIndex, (TimerOwnerType)cmbTimerType.SelectedIndex);
         }
 
         private void btnSave_Click(object sender, EventArgs e)

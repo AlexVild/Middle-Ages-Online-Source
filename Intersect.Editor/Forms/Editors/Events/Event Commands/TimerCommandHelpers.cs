@@ -25,16 +25,15 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             {
                 InitializeTimerOwnerSelector(ref timerOwnerBox, TimerOwnerType.Global);
                 RefreshTimerSelector(ref timerBox, TimerOwnerType.Global);
+                return;
             }
-            else
+            // Otherwise load previous selection
+            InitializeTimerOwnerSelector(ref timerOwnerBox, descriptor.OwnerType);
+            RefreshTimerSelector(ref timerBox, descriptor.OwnerType);
+            var index = TimerDescriptor.ListIndex(descriptor.Id, descriptor.OwnerType);
+            if (index < timerBox.Items.Count)
             {
-                InitializeTimerOwnerSelector(ref timerOwnerBox, descriptor.OwnerType);
-                RefreshTimerSelector(ref timerBox, descriptor.OwnerType);
-                var index = TimerDescriptor.ListIndex(descriptor.Id);
-                if (index < timerBox.Items.Count)
-                {
-                    timerBox.SelectedIndex = index;
-                }
+                timerBox.SelectedIndex = index;
             }
         }
 

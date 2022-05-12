@@ -1685,7 +1685,7 @@ namespace Intersect.Editor.Forms.Editors.Events
         private static string GetCommandText(StartTimerCommand command, MapInstance map)
         {
             var descriptor = TimerDescriptor.Get(command.DescriptorId);
-            return Strings.EventCommandList.TimerStart.ToString(descriptor.Name);
+            return Strings.EventCommandList.TimerStart.ToString(descriptor?.Name);
         }
 
         private static string GetCommandText(ModifyTimerCommand command, MapInstance map)
@@ -1696,12 +1696,12 @@ namespace Intersect.Editor.Forms.Editors.Events
             if (command.IsStatic)
             {
                 var amount = command.Amount.ToString();
-                return Strings.EventCommandList.TimerModify.ToString(descriptor.Name, op, amount);
+                return Strings.EventCommandList.TimerModify.ToString(descriptor?.Name, op, amount);
             }
             else 
             {
-                String varType = Enum.GetName(typeof(VariableTypes), command.VariableType);
-                String varName = string.Empty;
+                string varType = Enum.GetName(typeof(VariableTypes), command.VariableType);
+                string varName = string.Empty;
                 switch(command.VariableType)
                 {
                     case VariableTypes.PlayerVariable:
@@ -1715,14 +1715,14 @@ namespace Intersect.Editor.Forms.Editors.Events
                         break;
                 }
 
-                return Strings.EventCommandList.TimerModifyVar.ToString(descriptor.Name, op, varType, varName);
+                return Strings.EventCommandList.TimerModifyVar.ToString(descriptor?.Name, op, varType, varName);
             }
         }
 
         private static string GetCommandText(StopTimerCommand command, MapInstance map)
         {
             var descriptor = TimerDescriptor.Get(command.DescriptorId);
-            return Strings.EventCommandList.TimerStop.ToString(descriptor.Name, Strings.EventCommandList.TimerStopCommands[command.StopType].ToString());
+            return Strings.EventCommandList.TimerStop.ToString(descriptor?.Name, Strings.EventCommandList.TimerStopCommands[command.StopType].ToString());
         }
 
     }

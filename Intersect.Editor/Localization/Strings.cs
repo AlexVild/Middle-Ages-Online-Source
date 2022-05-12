@@ -1941,10 +1941,10 @@ Tick timer saved in server config.json.";
             public static LocalizedString teach = @"Teach: Spell {00}";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public static LocalizedString TimerModify = @"Modify Timer: {00}, {01} {02}";
+            public static LocalizedString TimerModify = @"Modify Timer: {00}, {01} {02} seconds";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public static LocalizedString TimerModifyVar = @"Modify Timer: {00}, {01} {02} ({03})";
+            public static LocalizedString TimerModifyVar = @"Modify Timer: {00}, {01} {02} ({03}) seconds";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString TimerStart = @"Start Timer: {00}";

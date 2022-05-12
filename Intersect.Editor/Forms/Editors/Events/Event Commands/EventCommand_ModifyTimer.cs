@@ -15,6 +15,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
 
         private ModifyTimerCommand mMyCommand;
 
+        private bool mInitializing = true;
+
         public EventCommand_ModifyTimer(ModifyTimerCommand refCommand, FrmEvent editor)
         {
             InitializeComponent();
@@ -56,6 +58,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             }
 
             UpdateElementAvailability();
+
+            mInitializing = false;
         }
 
         private void InitLocalization()
@@ -121,12 +125,23 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
 
         private void cmbTimerType_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (mInitializing)
+            {
+                return;
+            }
+
             TimerCommandHelpers.RefreshTimerSelector(ref cmbTimer, (TimerOwnerType)cmbTimerType.SelectedIndex);
+            mMyCommand.DescriptorId = TimerDescriptor.IdFromList(cmbTimer.SelectedIndex, (TimerOwnerType)cmbTimerType.SelectedIndex);
         }
 
         private void cmbTimer_SelectedIndexChanged(object sender, EventArgs e)
         {
-            mMyCommand.DescriptorId = TimerDescriptor.IdFromList(cmbTimerType.SelectedIndex);
+            if (mInitializing)
+            {
+                return;
+            }
+
+            mMyCommand.DescriptorId = TimerDescriptor.IdFromList(cmbTimer.SelectedIndex, (TimerOwnerType)cmbTimerType.SelectedIndex);
         }
 
         private void RefreshVariableSelection()
@@ -135,13 +150,13 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             switch (mMyCommand.VariableType)
             {
                 case VariableTypes.PlayerVariable:
-                    cmbVariable.Items.AddRange(PlayerVariableBase.Names);
+                    cmbVariable.Items.AddRange(PlayerVariableBase.GetNamesByType(VariableDataTypes.Integer));
                     break;
                 case VariableTypes.ServerVariable:
-                    cmbVariable.Items.AddRange(ServerVariableBase.Names);
+                    cmbVariable.Items.AddRange(ServerVariableBase.GetNamesByType(VariableDataTypes.Integer));
                     break;
                 case VariableTypes.InstanceVariable:
-                    cmbVariable.Items.AddRange(InstanceVariableBase.Names);
+                    cmbVariable.Items.AddRange(InstanceVariableBase.GetNamesByType(VariableDataTypes.Integer));
                     break;
             }
             if (cmbVariable.Items.Count > 0)
@@ -155,13 +170,13 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             switch (mMyCommand.VariableType)
             {
                 case VariableTypes.PlayerVariable:
-                    mMyCommand.VariableDescriptorId = PlayerVariableBase.IdFromList(cmbVariable.SelectedIndex);
+                    mMyCommand.VariableDescriptorId = PlayerVariableBase.IdFromList(cmbVariable.SelectedIndex, VariableDataTypes.Integer);
                     break;
                 case VariableTypes.ServerVariable:
-                    mMyCommand.VariableDescriptorId = ServerVariableBase.IdFromList(cmbVariable.SelectedIndex);
+                    mMyCommand.VariableDescriptorId = ServerVariableBase.IdFromList(cmbVariable.SelectedIndex, VariableDataTypes.Integer);
                     break;
                 case VariableTypes.InstanceVariable:
-                    mMyCommand.VariableDescriptorId = InstanceVariableBase.IdFromList(cmbVariable.SelectedIndex);
+                    mMyCommand.VariableDescriptorId = InstanceVariableBase.IdFromList(cmbVariable.SelectedIndex, VariableDataTypes.Integer);
                     break;
             }
         }
