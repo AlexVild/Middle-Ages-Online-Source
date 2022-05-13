@@ -54,6 +54,8 @@ namespace Intersect.Server.Database.PlayerData
         /// </summary>
         public int CompletionCount { get; set; }
 
+        public bool IsExpired => Timing.Global.MillisecondsUtc > TimeRemaining;
+
         /// <summary>
         /// Helper for determining if this timer has expired
         /// </summary>

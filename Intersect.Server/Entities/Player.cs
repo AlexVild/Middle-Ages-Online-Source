@@ -7968,17 +7968,20 @@ namespace Intersect.Server.Entities
         /// </summary>
         private void RemoveActiveTimers()
         {
-            foreach(var timer in TimerProcessor.ActiveTimers.Where(t => t.OwnerId == Id && t.Descriptor.OwnerType == TimerOwnerType.Player).ToArray())
+            var now = Timing.Global.MillisecondsUtc;
+            using (var context = DbInterface.CreatePlayerContext(readOnly: false))
             {
-                var descriptor = timer.Descriptor;
-                TimerProcessor.ActiveTimers.Remove(timer); // Remove from processing queue, not from DB
-                using (var context = DbInterface.CreatePlayerContext(readOnly: false))
+                foreach (var timer in TimerProcessor.ActiveTimers.Where(t => t.OwnerId == Id && t.Descriptor.OwnerType == TimerOwnerType.Player).ToArray())
                 {
+                    var descriptor = timer.Descriptor;
+                    TimerProcessor.ActiveTimers.Remove(timer); // Remove from processing queue, not from DB
+                
                     switch (descriptor.LogoutBehavior)
                     {
                         case TimerLogoutBehavior.Pause:
                             // Store how much time the timer has until its next expiry, so we can re-populate it on login
-                            timer.TimeRemaining -= Timing.Global.MillisecondsUtc;
+                            timer.TimeRemaining -= now;
+                            
                             break;
                         case TimerLogoutBehavior.Continue:
                             // Intentinoally blank - leave as is, and it'll be processed when the player returns
@@ -7989,10 +7992,10 @@ namespace Intersect.Server.Entities
                         default:
                             throw new NotImplementedException("Player timer has invalid logout behavior");
                     }
-
-                    context.ChangeTracker.DetectChanges();
-                    context.SaveChanges();
+                    context.Timers.Update(timer);
                 }
+                context.ChangeTracker.DetectChanges();
+                context.SaveChanges();
             }
         }
         #endregion
