@@ -1530,7 +1530,7 @@ namespace Intersect.Server.Maps
         /// <summary>
         /// Executes when the instance is cleaned up - gets rid of any timers that still exist for this instance.
         /// </summary>
-        public void DestroyDanglingTimers()
+        private void DestroyDanglingTimers()
         {
             foreach(var timer in TimersInstance.Timers.Where(t => t.Descriptor.OwnerType == GameObjects.Timers.TimerOwnerType.Instance && t.OwnerId == Id).ToList())
             {

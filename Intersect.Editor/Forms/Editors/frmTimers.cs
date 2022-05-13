@@ -302,9 +302,9 @@ namespace Intersect.Editor.Forms.Editors
         {
             switch (repetitions)
             {
-                case -1:
+                case TimerConstants.DoNotRepeat:
                     return TimerRepetitionTypes.NoRepeat;
-                case int.MinValue:
+                case TimerConstants.TimerIndefiniteRepeat:
                     return TimerRepetitionTypes.Indefinite;
                 default:
                     return TimerRepetitionTypes.Repeat;
@@ -435,13 +435,13 @@ namespace Intersect.Editor.Forms.Editors
             switch(cmbRepetitionType.SelectedIndex)
             {
                 case (int) TimerRepetitionTypes.NoRepeat:
-                    mEditorItem.Repetitions = -1;
+                    mEditorItem.Repetitions = TimerConstants.DoNotRepeat;
                     break;
                 case (int)TimerRepetitionTypes.Repeat:
                     mEditorItem.Repetitions = (int)nudRepetitions.Value;
                     break;
                 case (int)TimerRepetitionTypes.Indefinite:
-                    mEditorItem.Repetitions = int.MinValue;
+                    mEditorItem.Repetitions = TimerConstants.TimerIndefiniteRepeat;
                     break;
             }
 

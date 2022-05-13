@@ -1,6 +1,5 @@
 ﻿using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Timers;
-using Intersect.Server.Core;
 using Intersect.Server.Entities;
 using Intersect.Server.General;
 using System;
@@ -53,10 +52,19 @@ namespace Intersect.Server.Database.PlayerData
         // Default if owner is server (global timer)
         public Guid OwnerId { get; set; }
 
+        /// <summary>
+        /// A UTC Timestamp of when the timer will next expire/when the timer started if it is of type <see cref="TimerType.Stopwatch"/>
+        /// </summary>
         public long TimeRemaining { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public int CompletionCount { get; set; }
 
+        /// <summary>
+        /// Increments a timers <see cref="CompletionCount"/> and fires events for the necessary players based on this timers <see cref="OwnerId"/>
+        /// </summary>
         public void ExpireTimer()
         {
             CompletionCount++;
@@ -67,6 +75,10 @@ namespace Intersect.Server.Database.PlayerData
             }
         }
 
+        /// <summary>
+        /// Gets a list of players that should be affected by this timers completion event
+        /// </summary>
+        /// <returns>A list of <see cref="Player"/>s to be affected by timer expiration, based on the <see cref="TimerDescriptor.OwnerType"/></returns>
         public List<Player> GetAffectedPlayers()
         {
             var affectedPlayers = new List<Player>();
@@ -100,9 +112,16 @@ namespace Intersect.Server.Database.PlayerData
             return affectedPlayers;
         }
 
+        /// <summary>
+        /// Fires the appropriate timer event based on the timer's state
+        /// </summary>
+        /// <param name="player">The player that will experience the event.</param>
         private void FireExpireEvent(Player player)
         {
-            _ = player ?? throw new ArgumentNullException(nameof(player));
+            if (player == default)
+            {
+                return;
+            }
 
             int reps = Descriptor.Repetitions;
 
