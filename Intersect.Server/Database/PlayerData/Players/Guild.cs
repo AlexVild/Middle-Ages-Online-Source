@@ -504,7 +504,7 @@ namespace Intersect.Server.Database.PlayerData.Players
             }
 
             // Remove dangling timers
-            foreach (var timer in TimerProcessor.Timers.Where(timer => timer.Descriptor.OwnerType == GameObjects.Timers.TimerOwnerType.Guild && timer.OwnerId == guild.Id).ToArray())
+            foreach (var timer in TimerProcessor.ActiveTimers.Where(timer => timer.Descriptor.OwnerType == GameObjects.Timers.TimerOwnerType.Guild && timer.OwnerId == guild.Id).ToArray())
             {
                 TimerProcessor.RemoveTimer(timer);
             }

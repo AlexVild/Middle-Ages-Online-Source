@@ -4927,7 +4927,7 @@ namespace Intersect.Server.Entities
                     }
 
                     // Check if any outstanding party timers exist for this party and, if so, update their owner ID to the new party owner
-                    var partysTimers = TimerProcessor.Timers
+                    var partysTimers = TimerProcessor.ActiveTimers
                         .Where(timer => timer.Descriptor.OwnerType == GameObjects.Timers.TimerOwnerType.Party && timer.OwnerId == Id);
 
                     foreach (var timer in partysTimers)
@@ -4943,7 +4943,7 @@ namespace Intersect.Server.Entities
                     PacketSender.SendChatMsg(remainder, Strings.Parties.disbanded, ChatMessageType.Party, CustomColors.Alerts.Error);
 
                     // Nuke timers that existed for this disbanded party
-                    foreach (var timer in TimerProcessor.Timers.Where(timer => timer.Descriptor.OwnerType == GameObjects.Timers.TimerOwnerType.Party && timer.OwnerId == Id).ToArray())
+                    foreach (var timer in TimerProcessor.ActiveTimers.Where(timer => timer.Descriptor.OwnerType == GameObjects.Timers.TimerOwnerType.Party && timer.OwnerId == Id).ToArray())
                     {
                         TimerProcessor.RemoveTimer(timer);
                     }
@@ -7939,7 +7939,7 @@ namespace Intersect.Server.Entities
                 foreach(var timer in timers.ToArray().Where(t => t.OwnerId == Id && t.Descriptor.OwnerType == TimerOwnerType.Player))
                 {
                     // Check if the timer is already being processed - ignore it
-                    if (TimerProcessor.Timers.Contains(timer))
+                    if (TimerProcessor.ActiveTimers.Contains(timer))
                     {
                         continue;
                     }
@@ -7953,7 +7953,7 @@ namespace Intersect.Server.Entities
                     }
 
                     // Add the timer back to the processing list
-                    TimerProcessor.Timers.Add(timer);
+                    TimerProcessor.ActiveTimers.Add(timer);
                 }
 
                 context.ChangeTracker.DetectChanges();
@@ -7962,16 +7962,16 @@ namespace Intersect.Server.Entities
         }
 
         /// <summary>
-        /// Removes all timers from the <see cref="TimerProcessor.Timers"/> processing list that
+        /// Removes all timers from the <see cref="TimerProcessor.ActiveTimers"/> processing list that
         /// have this player as their owner ID. Also updates those timers in the DB so that, when they
         /// are refreshed, they are refreshed properly.
         /// </summary>
         private void RemoveActiveTimers()
         {
-            foreach(var timer in TimerProcessor.Timers.Where(t => t.OwnerId == Id && t.Descriptor.OwnerType == TimerOwnerType.Player).ToArray())
+            foreach(var timer in TimerProcessor.ActiveTimers.Where(t => t.OwnerId == Id && t.Descriptor.OwnerType == TimerOwnerType.Player).ToArray())
             {
                 var descriptor = timer.Descriptor;
-                TimerProcessor.Timers.Remove(timer); // Remove from processing queue, not from DB
+                TimerProcessor.ActiveTimers.Remove(timer); // Remove from processing queue, not from DB
                 using (var context = DbInterface.CreatePlayerContext(readOnly: false))
                 {
                     switch (descriptor.LogoutBehavior)

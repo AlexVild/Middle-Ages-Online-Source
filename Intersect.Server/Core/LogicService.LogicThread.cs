@@ -91,7 +91,7 @@ namespace Intersect.Server.Core
                     var players = 0;
 
                     // Initialize timers instance and load in values
-                    TimerProcessor.Timers = new TimerList();
+                    TimerProcessor.ActiveTimers = new TimerList();
                     LoadTimers();
 
                     while (ServerContext.Instance.IsRunning)
@@ -396,7 +396,7 @@ namespace Intersect.Server.Core
             }
 
             /// <summary>
-            /// Loads timers into the <see cref="TimerProcessor.Timers"/> list, containing actively running timers.
+            /// Loads timers into the <see cref="TimerProcessor.ActiveTimers"/> list, containing actively running timers.
             /// Also prunes timers whose owners have been purged in some way.
             /// </summary>
             private void LoadTimers()
@@ -445,14 +445,14 @@ namespace Intersect.Server.Core
                         }
 
                         // Add the timer to processing if it passes all of the above checks
-                        TimerProcessor.Timers.Add(timer);
+                        TimerProcessor.ActiveTimers.Add(timer);
                     }
 
                     context.ChangeTracker.DetectChanges();
                     context.SaveChanges();
                 }
 
-                var processingTimerCount = TimerProcessor.Timers.Count;
+                var processingTimerCount = TimerProcessor.ActiveTimers.Count;
                 if (processingTimerCount > 0)
                 {
                     Logging.Log.Debug($"{processingTimerCount.ToString()} timers now active");

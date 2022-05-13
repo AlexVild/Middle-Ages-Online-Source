@@ -2534,7 +2534,7 @@ namespace Intersect.Server.Entities.Events
                     }
 
                     // Re-sort with new timer values
-                    TimerProcessor.Timers.Sort();
+                    TimerProcessor.ActiveTimers.Sort();
                 }
             }
         }
