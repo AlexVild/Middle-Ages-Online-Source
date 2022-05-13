@@ -50,11 +50,6 @@ namespace Intersect.Server.Database.PlayerData
         public long TimeRemaining { get; set; }
 
         /// <summary>
-        /// A timestamp used to hold a UTC timestamp of when this timer was paused - for handling Player timers set to pause on logout
-        /// </summary>
-        public long PausedTimestamp { get; set; }
-
-        /// <summary>
         /// How many times this timer has completed an interval
         /// </summary>
         public int CompletionCount { get; set; }

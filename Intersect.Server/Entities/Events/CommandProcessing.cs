@@ -2453,21 +2453,21 @@ namespace Intersect.Server.Entities.Events
                             break;
                         case TimerStopType.Cancel:
                             stopAction((pl) => pl.StartCommonEvent(descriptor.CancellationEvent));
-
+                            TimersInstance.RemoveTimer(activeTimer);
                             break;
+
                         case TimerStopType.Complete:
                             stopAction((pl) => pl.StartCommonEvent(descriptor.CompletionEvent));
-
+                            TimersInstance.RemoveTimer(activeTimer);
                             break;
+
                         case TimerStopType.Expire:
                             activeTimer.ExpireTimer(now);
-
                             break;
+
                         default:
                             throw new NotImplementedException("Invalid timer stop type received for StopTimerCommand");
                     }
-
-                    TimersInstance.RemoveTimer(activeTimer);
                 }
             }
         }

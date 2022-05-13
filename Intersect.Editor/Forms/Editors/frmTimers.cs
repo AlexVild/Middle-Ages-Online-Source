@@ -344,6 +344,7 @@ namespace Intersect.Editor.Forms.Editors
 
             chkRunIndefinite.Enabled = mEditorItem.Type != TimerType.Scheduler;
             nudTimeLimit.Enabled = !chkRunIndefinite.Checked;
+            cmbRepetitionType.Enabled = !chkRunIndefinite.Checked;
             nudRepetitions.Enabled = cmbRepetitionType.SelectedIndex == (int)TimerRepetitionTypes.Repeat && !chkRunIndefinite.Checked;
         }
 
