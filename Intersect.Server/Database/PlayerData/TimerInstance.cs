@@ -4,6 +4,7 @@ using Intersect.Server.Core;
 using Intersect.Server.Entities;
 using Intersect.Server.General;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
@@ -60,45 +61,43 @@ namespace Intersect.Server.Database.PlayerData
         {
             CompletionCount++;
 
+            foreach (var player in GetAffectedPlayers())
+            {
+                FireExpireEvent(player);
+            }
+        }
+
+        public List<Player> GetAffectedPlayers()
+        {
+            var affectedPlayers = new List<Player>();
             var onlinePlayers = Globals.OnlineList;
             switch (Descriptor.OwnerType)
             {
                 case TimerOwnerType.Global:
-                    foreach (var onlinePlayer in onlinePlayers)
-                    {
-                        FireExpireEvent(onlinePlayer);
-                    }
+                    affectedPlayers.AddRange(onlinePlayers);
                     break;
-                case TimerOwnerType.Player:
-                    var player = onlinePlayers.Find(ply => ply.Id == OwnerId);
-                    if (player == default)
-                    {
-                        return;
-                    }
 
-                    FireExpireEvent(player);
+                case TimerOwnerType.Player:
+                    affectedPlayers.Add(onlinePlayers.Find(ply => ply.Id == OwnerId));
                     break;
+
                 case TimerOwnerType.Instance:
-                    foreach (var instanceMember in onlinePlayers.FindAll(ply => ply.MapInstanceId == OwnerId))
-                    {
-                        FireExpireEvent(instanceMember);
-                    }
+                    affectedPlayers.AddRange(onlinePlayers.FindAll(ply => ply.MapInstanceId == OwnerId));
                     break;
+
                 case TimerOwnerType.Party:
-                    foreach (var partyMember in onlinePlayers.FindAll(ply => ply.Party != null && ply.Party.Count >= 1 && ply.Party[0].Id == OwnerId))
-                    {
-                        FireExpireEvent(partyMember);
-                    }
+                    affectedPlayers.AddRange(onlinePlayers.FindAll(ply => ply.Party != null && ply.Party.Count >= 1 && ply.Party[0].Id == OwnerId));
                     break;
+
                 case TimerOwnerType.Guild:
-                    foreach (var guildMember in onlinePlayers.FindAll(ply => ply.Guild != null && ply.Guild.Id == OwnerId))
-                    {
-                        FireExpireEvent(guildMember);
-                    }
+                    affectedPlayers.AddRange(onlinePlayers.FindAll(ply => ply.Guild != null && ply.Guild.Id == OwnerId));
                     break;
+
                 default:
-                    throw new NotImplementedException($"{Enum.GetName(typeof(TimerOwnerType), Descriptor.OwnerType)} expiry not implemented!");
+                    throw new NotImplementedException($"{Enum.GetName(typeof(TimerOwnerType), Descriptor.OwnerType)} not implemented!");
             }
+
+            return affectedPlayers;
         }
 
         private void FireExpireEvent(Player player)

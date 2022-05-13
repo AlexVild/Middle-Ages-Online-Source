@@ -2418,6 +2418,44 @@ namespace Intersect.Server.Entities.Events
                 }
             }
         }
+
+        private static void ProcessCommand(
+            StopTimerCommand command,
+            Player player,
+            Event instance,
+            CommandInstance stackInfo,
+            Stack<CommandInstance> callStack
+        )
+        {
+            if (player == null) return;
+
+            var now = Timing.Global.MillisecondsUtc;
+
+            TimerDescriptor descriptor = TimerDescriptor.Get(command.DescriptorId);
+
+            lock (player.EntityLock)
+            {
+                if (TimersInstance.TryGetOwnerId(descriptor.OwnerType, command.DescriptorId, player, out var ownerId) && TimersInstance.TryGetActiveTimer(command.DescriptorId, ownerId, out var activeTimer))
+                {
+                    switch(command.StopType)
+                    {
+                        case TimerStopType.Cancel:
+                            
+                            break;
+                        case TimerStopType.Complete:
+
+                            break;
+                        case TimerStopType.Expire:
+
+                            break;
+                        default:
+                            throw new NotImplementedException("Invalid timer stop type received for StopTimerCommand");
+                    }
+
+                    TimersInstance.RemoveTimer(activeTimer);
+                }
+            }
+        }
     }
 
 }
