@@ -27,9 +27,8 @@ namespace Intersect.Server.Core
 
         public static void ProcessTimers(long now)
         {
-            foreach (var timer in Timers.Where((t => TimerDescriptor.Get(t.DescriptorId).Type != TimerType.Stopwatch)).ToArray())
+            foreach (var timer in Timers.Where((t => t.Descriptor.Type != TimerType.Stopwatch)).ToArray())
             {
-                var descriptor = TimerDescriptor.Get(timer.DescriptorId);
                 // Short-circuit out if the newest timer is not yet expired
                 if (timer.TimeRemaining > now)
                 {
@@ -39,7 +38,7 @@ namespace Intersect.Server.Core
                 timer.ExpireTimer();
 
                 // If the timer has completed its required amount of repetitions, remove the timer from processing
-                if (timer.CompletionCount >= descriptor.Repetitions + 1)
+                if (timer.CompletionCount >= timer.Descriptor.Repetitions + 1)
                 {
                     RemoveTimer(timer);
                 }

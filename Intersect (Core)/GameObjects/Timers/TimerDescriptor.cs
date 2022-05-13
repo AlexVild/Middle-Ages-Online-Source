@@ -73,8 +73,13 @@ namespace Intersect.GameObjects.Timers
         [ForeignKey(nameof(CancellationEvent))]
         public Guid CancellationEventId { get; set; }
 
+        [JsonIgnore]
         [NotMapped]
-        public EventBase CancellationEvent { get; set; }
+        public EventBase CancellationEvent
+        {
+            get => EventBase.Get(CancellationEventId);
+            set => CancellationEventId = value?.Id ?? Guid.Empty;
+        }
 
         /// <summary>
         /// A <see cref="EventBase"/> to run each time a timer hits its expiry time
@@ -82,8 +87,13 @@ namespace Intersect.GameObjects.Timers
         [ForeignKey(nameof(ExpirationEvent))]
         public Guid ExpirationEventId { get; set; }
 
+        [JsonIgnore]
         [NotMapped]
-        public EventBase ExpirationEvent { get; set; }
+        public EventBase ExpirationEvent
+        {
+            get => EventBase.Get(ExpirationEventId);
+            set => ExpirationEventId = value?.Id ?? Guid.Empty;
+        }
 
         /// <summary>
         /// A <see cref="EventBase"/> to run each time a timer hits the end of its lifecycle
@@ -91,8 +101,13 @@ namespace Intersect.GameObjects.Timers
         [ForeignKey(nameof(CompletionEvent))]
         public Guid CompletionEventId { get; set; }
 
+        [JsonIgnore]
         [NotMapped]
-        public EventBase CompletionEvent { get; set; }
+        public EventBase CompletionEvent
+        {
+            get => EventBase.Get(CompletionEventId);
+            set => CompletionEventId = value?.Id ?? Guid.Empty;
+        }
 
         /// <inheritdoc />
         public string Folder { get; set; } = "";

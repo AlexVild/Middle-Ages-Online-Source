@@ -4,6 +4,7 @@ using Intersect.Server.Entities;
 using Intersect.Server.General;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Intersect.Server.Database.PlayerData
 {
@@ -22,7 +23,6 @@ namespace Intersect.Server.Database.PlayerData
             Id = Guid.NewGuid();
 
             DescriptorId = descriptorId;
-            Descriptor = TimerDescriptor.Get(DescriptorId);
             OwnerId = ownerId;
 
             if (Descriptor.Type == TimerType.Stopwatch)
@@ -40,9 +40,14 @@ namespace Intersect.Server.Database.PlayerData
         [ForeignKey(nameof(Descriptor))]
         public Guid DescriptorId { get; set; }
 
+        [JsonIgnore]
         [NotMapped]
-        public TimerDescriptor Descriptor { get; set; }
-        
+        public TimerDescriptor Descriptor
+        {
+            get => TimerDescriptor.Get(DescriptorId);
+            set => DescriptorId = value?.Id ?? Guid.Empty;
+        }
+
         // Default if owner is server (global timer)
         public Guid OwnerId { get; set; }
 
@@ -85,9 +90,9 @@ namespace Intersect.Server.Database.PlayerData
             // Otherwise, the timer is "complete". Fire the necessary events
             if (Descriptor.CompletionBehavior == TimerCompletionBehavior.ExpirationThenCompletion)
             {
-                player.StartCommonEvent(EventBase.Get(Descriptor.ExpirationEventId));
+                player.StartCommonEvent(Descriptor.ExpirationEvent);
             }
-            player.StartCommonEvent(EventBase.Get(Descriptor.CompletionEventId));
+            player.StartCommonEvent(Descriptor.CompletionEvent);
         }
     }
 }
