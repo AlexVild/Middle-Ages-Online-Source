@@ -418,7 +418,6 @@ namespace Intersect.Editor.Forms.Editors
             }
         }
 
-
         enum TimerRepetitionTypes
         {
             NoRepeat,

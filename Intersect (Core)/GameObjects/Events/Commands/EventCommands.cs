@@ -1179,10 +1179,10 @@ namespace Intersect.GameObjects.Events.Commands
         public override EventCommandType Type { get; } = EventCommandType.ModifyTimer;
 
         public TimerOperator Operator { get; set; }
-        
-        public int Amount { get; set; }
-        
-        public bool IsStatic { get; set; }
+
+        public int Amount { get; set; } = 1;
+
+        public bool IsStatic { get; set; } = true;
 
         public VariableTypes VariableType { get; set; }
         

@@ -2448,6 +2448,9 @@ namespace Intersect.Server.Entities.Events
 
                     switch (command.StopType)
                     {
+                        case TimerStopType.None:
+                            // intentionally blank; just removes timer
+                            break;
                         case TimerStopType.Cancel:
                             stopAction((pl) => pl.StartCommonEvent(descriptor.CancellationEvent));
 
