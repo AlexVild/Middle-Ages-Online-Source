@@ -4922,9 +4922,13 @@ namespace Intersect.Server.Entities
                     }
 
                     // Check if any outstanding party timers exist for this party and, if so, update their owner ID to the new party owner
-                    TimersInstance.Timers
-                        .Where(timer => timer.Descriptor.OwnerType == GameObjects.Timers.TimerOwnerType.Party && timer.OwnerId == Id)
-                        .Select(timer => timer.OwnerId = Party[0].Id);
+                    var partysTimers = TimersInstance.Timers
+                        .Where(timer => timer.Descriptor.OwnerType == GameObjects.Timers.TimerOwnerType.Party && timer.OwnerId == Id);
+
+                    foreach (var timer in partysTimers)
+                    {
+                        timer.OwnerId = Party[0].Id;
+                    }
                 }
                 else if (Party.Count > 0) //Check if anyone is left on their own
                 {

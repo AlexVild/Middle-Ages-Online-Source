@@ -2437,15 +2437,27 @@ namespace Intersect.Server.Entities.Events
             {
                 if (TimersInstance.TryGetOwnerId(descriptor.OwnerType, command.DescriptorId, player, out var ownerId) && TimersInstance.TryGetActiveTimer(command.DescriptorId, ownerId, out var activeTimer))
                 {
-                    switch(command.StopType)
+                    var players = activeTimer.GetAffectedPlayers();
+                    Action<Action<Player>> stopAction = action =>
+                    {
+                        foreach (var pl in players)
+                        {
+                            action(pl);
+                        }
+                    };
+
+                    switch (command.StopType)
                     {
                         case TimerStopType.Cancel:
-                            
+                            stopAction((pl) => pl.StartCommonEvent(descriptor.CancellationEvent));
+
                             break;
                         case TimerStopType.Complete:
+                            stopAction((pl) => pl.StartCommonEvent(descriptor.CompletionEvent));
 
                             break;
                         case TimerStopType.Expire:
+                            stopAction((pl) => pl.StartCommonEvent(descriptor.ExpirationEvent));
 
                             break;
                         default:
@@ -2453,6 +2465,70 @@ namespace Intersect.Server.Entities.Events
                     }
 
                     TimersInstance.RemoveTimer(activeTimer);
+                }
+            }
+        }
+
+        private static void ProcessCommand(
+            ModifyTimerCommand command,
+            Player player,
+            Event instance,
+            CommandInstance stackInfo,
+            Stack<CommandInstance> callStack
+        )
+        {
+            if (player == null) return;
+
+            TimerDescriptor descriptor = TimerDescriptor.Get(command.DescriptorId);
+
+            lock (player.EntityLock)
+            {
+                if (TimersInstance.TryGetOwnerId(descriptor.OwnerType, command.DescriptorId, player, out var ownerId) && TimersInstance.TryGetActiveTimer(command.DescriptorId, ownerId, out var activeTimer))
+                {
+                    long amount = 0;
+                    if (command.IsStatic)
+                    {
+                        amount = command.Amount;
+                    }
+                    else
+                    {
+                        switch(command.VariableType)
+                        {
+                            case VariableTypes.PlayerVariable:
+                                amount = player.GetVariableValue(command.VariableDescriptorId).Integer;
+                                break;
+                            case VariableTypes.ServerVariable:
+                                amount = (int)ServerVariableBase.Get(command.VariableDescriptorId)?.Value.Integer;
+
+                                break;
+                            case VariableTypes.InstanceVariable:
+                                if (MapController.TryGetInstanceFromMap(player.MapId, player.MapInstanceId, out var mapInstance))
+                                {
+                                    amount = mapInstance.GetInstanceVariable(command.VariableDescriptorId)?.Value;
+                                }
+
+                                break;
+                        }
+                    }
+
+                    // Convert to seconds
+                    amount *= 1000;
+
+                    switch(command.Operator)
+                    {
+                        case TimerOperator.Set:
+                            activeTimer.TimeRemaining = Timing.Global.MillisecondsUtc + amount;
+                            break;
+                        case TimerOperator.Add:
+                            activeTimer.TimeRemaining += amount;
+                            break;
+                        case TimerOperator.Subtract:
+                            activeTimer.TimeRemaining -= amount;
+
+                            break;
+                        default:
+                            throw new NotImplementedException("Invalid operator given to modify timer value");
+                    }
                 }
             }
         }
