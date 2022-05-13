@@ -21,6 +21,7 @@ using Intersect.Utilities;
 using Intersect.Server.Localization;
 using Intersect.Server.Database.Logging.Entities;
 using static Intersect.Server.Database.Logging.Entities.GuildHistory;
+using Intersect.Server.Core;
 
 namespace Intersect.Server.Database.PlayerData.Players
 {
@@ -500,6 +501,12 @@ namespace Intersect.Server.Database.PlayerData.Players
                 context.SaveChanges();
 
                 LogActivity(guild.Id, initiator, null, GuildActivityType.Disbanded);
+            }
+
+            // Remove dangling timers
+            foreach (var timer in TimersInstance.Timers.Where(timer => timer.Descriptor.OwnerType == GameObjects.Timers.TimerOwnerType.Guild && timer.OwnerId == guild.Id).ToArray())
+            {
+                TimersInstance.RemoveTimer(timer);
             }
         }
 

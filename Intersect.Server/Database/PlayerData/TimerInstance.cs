@@ -1,5 +1,6 @@
 ﻿using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Timers;
+using Intersect.Server.Core;
 using Intersect.Server.Entities;
 using Intersect.Server.General;
 using System;
@@ -58,16 +59,42 @@ namespace Intersect.Server.Database.PlayerData
         public void ExpireTimer()
         {
             CompletionCount++;
+
+            var onlinePlayers = Globals.OnlineList;
             switch (Descriptor.OwnerType)
             {
+                case TimerOwnerType.Global:
+                    foreach (var onlinePlayer in onlinePlayers)
+                    {
+                        FireExpireEvent(onlinePlayer);
+                    }
+                    break;
                 case TimerOwnerType.Player:
-                    var player = Globals.OnlineList.Find(ply => ply.Id == OwnerId);
+                    var player = onlinePlayers.Find(ply => ply.Id == OwnerId);
                     if (player == default)
                     {
                         return;
                     }
 
                     FireExpireEvent(player);
+                    break;
+                case TimerOwnerType.Instance:
+                    foreach (var instanceMember in onlinePlayers.FindAll(ply => ply.MapInstanceId == OwnerId))
+                    {
+                        FireExpireEvent(instanceMember);
+                    }
+                    break;
+                case TimerOwnerType.Party:
+                    foreach (var partyMember in onlinePlayers.FindAll(ply => ply.Party != null && ply.Party.Count >= 1 && ply.Party[0].Id == OwnerId))
+                    {
+                        FireExpireEvent(partyMember);
+                    }
+                    break;
+                case TimerOwnerType.Guild:
+                    foreach (var guildMember in onlinePlayers.FindAll(ply => ply.Guild != null && ply.Guild.Id == OwnerId))
+                    {
+                        FireExpireEvent(guildMember);
+                    }
                     break;
                 default:
                     throw new NotImplementedException($"{Enum.GetName(typeof(TimerOwnerType), Descriptor.OwnerType)} expiry not implemented!");

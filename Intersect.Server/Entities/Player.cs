@@ -36,6 +36,7 @@ using Newtonsoft.Json;
 using Intersect.Server.Entities.PlayerData;
 using Intersect.Server.Database.PlayerData;
 using static Intersect.Server.Maps.MapInstance;
+using Intersect.Server.Core;
 
 namespace Intersect.Server.Entities
 {
@@ -4919,6 +4920,11 @@ namespace Intersect.Server.Entities
                             Party[i], Strings.Parties.memberleft.ToString(oldMember.Name), ChatMessageType.Party, CustomColors.Alerts.Error
                         );
                     }
+
+                    // Check if any outstanding party timers exist for this party and, if so, update their owner ID to the new party owner
+                    TimersInstance.Timers
+                        .Where(timer => timer.Descriptor.OwnerType == GameObjects.Timers.TimerOwnerType.Party && timer.OwnerId == Id)
+                        .Select(timer => timer.OwnerId = Party[0].Id);
                 }
                 else if (Party.Count > 0) //Check if anyone is left on their own
                 {
@@ -4926,6 +4932,12 @@ namespace Intersect.Server.Entities
                     remainder.Party.Clear();
                     PacketSender.SendParty(remainder);
                     PacketSender.SendChatMsg(remainder, Strings.Parties.disbanded, ChatMessageType.Party, CustomColors.Alerts.Error);
+
+                    // Nuke timers that existed for this disbanded party
+                    foreach (var timer in TimersInstance.Timers.Where(timer => timer.Descriptor.OwnerType == GameObjects.Timers.TimerOwnerType.Party && timer.OwnerId == Id).ToArray())
+                    {
+                        TimersInstance.RemoveTimer(timer);
+                    }
                 }
 
                 PacketSender.SendChatMsg(this, Strings.Parties.left, ChatMessageType.Party, CustomColors.Alerts.Error);

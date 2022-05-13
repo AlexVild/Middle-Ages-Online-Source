@@ -27,6 +27,7 @@ namespace Intersect.Server.Core
 
         public static void ProcessTimers(long now)
         {
+            // Stop watch timers don't expire - don't process them.
             foreach (var timer in Timers.Where((t => t.Descriptor.Type != TimerType.Stopwatch)).ToArray())
             {
                 // Short-circuit out if the newest timer is not yet expired
@@ -38,9 +39,13 @@ namespace Intersect.Server.Core
                 timer.ExpireTimer();
 
                 // If the timer has completed its required amount of repetitions, remove the timer from processing
-                if (timer.CompletionCount >= timer.Descriptor.Repetitions + 1)
+                if (timer.Descriptor.Repetitions != int.MinValue && timer.CompletionCount >= timer.Descriptor.Repetitions + 1)
                 {
                     RemoveTimer(timer);
+                }
+                else
+                {
+                    timer.TimeRemaining = now + (timer.Descriptor.TimeLimit * 1000); // Extend timer for next repetition
                 }
             }
         }
