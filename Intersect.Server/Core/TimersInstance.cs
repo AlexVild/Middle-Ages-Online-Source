@@ -1,6 +1,7 @@
 ﻿using Intersect.GameObjects.Timers;
 using Intersect.Server.Database;
 using Intersect.Server.Database.PlayerData;
+using Intersect.Server.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -73,6 +74,59 @@ namespace Intersect.Server.Core
                 context.ChangeTracker.DetectChanges();
                 context.SaveChanges();
             }
+        }
+
+        public static bool TimerIsActive(Guid descriptorId, Guid ownerId)
+        {
+            return Timers.ToList().Find(t => t.DescriptorId == descriptorId && t.OwnerId == ownerId) != default;
+        }
+
+        public static bool TryGetOwnerId(TimerOwnerType ownerType, Guid descriptorId, Player player, out Guid ownerId)
+        {
+            ownerId = default;
+
+            switch (ownerType)
+            {
+                case TimerOwnerType.Global:
+                    ownerId = default;
+                    
+                    break;
+                case TimerOwnerType.Player:
+                    ownerId = player.Id;
+
+                    break;
+                case TimerOwnerType.Instance:
+                    ownerId = player.MapInstanceId;
+
+                    break;
+                case TimerOwnerType.Party:
+                    if (player.Party == null || player.Party.Count < 1)
+                    {
+                        return false; // This timer requires the player to be in a party
+                    }
+                    ownerId = player.Party[0].Id; // party leader
+
+                    break;
+                case TimerOwnerType.Guild:
+                    if (player.Guild == null)
+                    {
+                        return false; // This timer requires the player to be in a guild
+                    }
+
+                    ownerId = player.Guild.Id;
+                    break;
+                default:
+                    throw new NotImplementedException("This timer owner type can not be processed!");
+            }
+
+            return true;
+        }
+
+        public static bool TryGetActiveTimer(Guid descriptorId, Guid ownerId, out TimerInstance activeTimer)
+        {
+            activeTimer = Timers.ToList().Find(t => t.DescriptorId == descriptorId && t.OwnerId == ownerId);
+
+            return activeTimer != default;
         }
     }
 }

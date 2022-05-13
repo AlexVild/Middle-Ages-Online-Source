@@ -2409,57 +2409,12 @@ namespace Intersect.Server.Entities.Events
             var now = Timing.Global.MillisecondsUtc;
 
             TimerDescriptor descriptor = TimerDescriptor.Get(command.DescriptorId);
-            lock (player.EntityLock) // Lock so no funny business can occur while spinning up a new timer
+
+            lock (player.EntityLock)
             {
-                switch (descriptor.OwnerType)
+                if (TimersInstance.TryGetOwnerId(descriptor.OwnerType, command.DescriptorId, player, out var ownerId) && !TimersInstance.TryGetActiveTimer(command.DescriptorId, ownerId, out _))
                 {
-                    case TimerOwnerType.Global:
-                        if (TimersInstance.Timers.ToList().Find(t => t.DescriptorId == command.DescriptorId && t.OwnerId == default) != default)
-                        {
-                            return; // Timer already started globally
-                        }
-                        TimersInstance.AddTimer(command.DescriptorId, default, now);
-                        break;
-                    case TimerOwnerType.Player:
-                        if (TimersInstance.Timers.ToList().Find(t => t.DescriptorId == command.DescriptorId && t.OwnerId == player.Id) != default)
-                        {
-                            return; // Timer already started for this player
-                        }
-                        TimersInstance.AddTimer(command.DescriptorId, player.Id, now);
-                        break;
-                    case TimerOwnerType.Instance:
-                        if (TimersInstance.Timers.ToList().Find(t => t.DescriptorId == command.DescriptorId && t.OwnerId == player.MapInstanceId) != default)
-                        {
-                            return; // Timer already started for the instance
-                        }
-                        TimersInstance.AddTimer(command.DescriptorId, player.MapInstanceId, now);
-                        break;
-                    case TimerOwnerType.Party:
-                        if (player.Party == null || player.Party.Count < 1)
-                        {
-                            return; // This timer requires the player to be in a party
-                        }
-
-                        if (TimersInstance.Timers.ToList().Find(t => t.DescriptorId == command.DescriptorId && t.OwnerId == player.Party[0].Id) != default)
-                        {
-                            return; // Timer already started for the party
-                        }
-                        TimersInstance.AddTimer(command.DescriptorId, player.Party[0].Id, now);
-                        break;
-                    case TimerOwnerType.Guild:
-                        if (player.Guild == null)
-                        {
-                            return; // This timer requires the player to be in a guild
-                        }
-
-                        if (TimersInstance.Timers.ToList().Find(t => t.DescriptorId == command.DescriptorId && t.OwnerId == player.Guild.Id) != default)
-                        {
-                            return; // Timer already started for the guild
-                        }
-                        TimersInstance.AddTimer(command.DescriptorId, player.Guild.Id, now);
-                        break;
-                    default:
-                        throw new NotImplementedException("This timer owner type can not be processed yet!");
+                    TimersInstance.AddTimer(command.DescriptorId, ownerId, now);
                 }
             }
         }
