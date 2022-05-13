@@ -7,17 +7,17 @@
     public enum TimerType
     {
         /// <summary>
-        /// A timer that executes an event every X seconds, counting up, and continues to run after completion
+        /// A timer that executes an event every X seconds, counting up, and has a hard-stop
         /// </summary>
         Scheduler,
 
         /// <summary>
-        /// A timer that executes an event every X seconds, counting up, but can only be completed via event or timer cleanup
+        /// A timer that executes an event every X seconds, counting up, and can be configured to have a hard stop or not
         /// </summary>
         Stopwatch,
 
         /// <summary>
-        /// A timer that executes an event every X seconds, counting down, and completes when it has finished its repetitions
+        /// A timer that executes an event every X seconds, counting down, and can be configured to have a hard stop or not
         /// </summary>
         Countdown
     }
@@ -116,6 +116,32 @@
         Subtract
     }
 
+    /// <summary>
+    /// The behavior that a timer with type "Player" follows at player logout
+    /// </summary>
+    public enum TimerLogoutBehavior
+    {
+        /// <summary>
+        /// Pause the timer - don't bother with it until the user logs back in, at which case we continue where we left off.
+        /// </summary>
+        Pause,
+
+        /// <summary>
+        /// The timer continues counting while the user is away. If the user returns to an expired timer, the timer will run its expired events.
+        /// </summary>
+        Continue,
+        
+        /// <summary>
+        /// The timer will run its cancellation events when the player returns, regardless of time remaining.
+        /// </summary>
+        CancelOnLogin,
+
+        /// <summary>
+        /// The timer will execute events at logout. Not yet implemented.
+        /// </summary>
+        //CancelOnLogout,
+    }
+
     public static class TimerConstants
     {
         /// <summary>
@@ -127,5 +153,7 @@
         /// Used to be consistent about timer repetition values
         /// </summary>
         public const int TimerIndefiniteRepeat = int.MinValue;
+
+        public const long TimerIndefiniteTimeLimit = long.MaxValue;
     }
 }

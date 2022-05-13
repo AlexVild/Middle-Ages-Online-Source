@@ -27,6 +27,10 @@ namespace Intersect.Editor.Forms.Editors
 
         private bool mPopulating = false;
 
+        private const int mMinimumIntervalScheduler = 5;
+        
+        private const int mMinimumIntervalOther = 1;
+
         public frmTimers()
         {
             ApplyHooks();
@@ -47,6 +51,7 @@ namespace Intersect.Editor.Forms.Editors
             }
             cmbTimerType.Items.AddRange(Strings.TimerEditor.TimerTypes.Values.ToArray());
             cmbRepetitionType.Items.AddRange(Strings.TimerEditor.RepetitionOptions.Values.ToArray());
+            cmbLogoutBehavior.Items.AddRange(Strings.TimerEditor.LogoutBehaviors.Values.ToArray());
             cmbCompletionBehavior.Items.AddRange(Strings.TimerEditor.CompletionTypes.Values.ToArray());
 
             PopulateEditor();
@@ -144,6 +149,7 @@ namespace Intersect.Editor.Forms.Editors
             lblFolder.Text = Strings.TimerEditor.Folder;
 
             grpSettings.Text = Strings.TimerEditor.Settings;
+            chkRunIndefinite.Text = Strings.TimerEditor.RunIndefinitely;
             lblRepeat.Text = Strings.TimerEditor.Repeat;
             lblRepetitions.Text = Strings.TimerEditor.Repetitions;
 
@@ -158,6 +164,10 @@ namespace Intersect.Editor.Forms.Editors
             lblOnCompletion.Text = Strings.TimerEditor.OnCompletion;
 
             grpTimerOptions.Text = Strings.TimerEditor.TimerOptions;
+            chkContinue.Text = Strings.TimerEditor.ContinueAfterExpire;
+            lblLogoutBehavior.Text = Strings.TimerEditor.LogoutBehavior;
+            AddToolTip(lblLogoutBehavior, Strings.TimerEditor.LogoutBehaviorTooltip);
+            lblCompletionBehavior.Text = Strings.TimerEditor.CompletionBehavior;
 
             btnCancel.Text = Strings.TimerEditor.Cancel;
             btnSave.Text = Strings.TimerEditor.Save;
@@ -279,8 +289,10 @@ namespace Intersect.Editor.Forms.Editors
             txtName.Text = mEditorItem.Name;
             cmbFolder.Text = mEditorItem.Folder;
 
+            chkRunIndefinite.Checked = mEditorItem.TimeLimit == TimerConstants.TimerIndefiniteTimeLimit;
             cmbTimerType.SelectedIndex = (int)mEditorItem.Type;
             nudTimeLimit.Value = mEditorItem.TimeLimit;
+            
             cmbRepetitionType.SelectedIndex = (int)SelectRepetitionType(mEditorItem.Repetitions);
             if (mEditorItem.Repetitions >= 0)
             {
@@ -294,7 +306,11 @@ namespace Intersect.Editor.Forms.Editors
             cmbExpirationEvent.SelectedIndex = EventBase.ListIndex(mEditorItem.ExpirationEventId) + 1;
             cmbCompletionEvent.SelectedIndex = EventBase.ListIndex(mEditorItem.CompletionEventId) + 1;
 
-            chkContinueTimeout.Checked = mEditorItem.ContinueOnTimeout;
+            chkContinue.Checked = mEditorItem.ContinueAfterExpiration;
+            if (mEditorItem.LogoutBehavior >= 0 && (int)mEditorItem.LogoutBehavior < cmbLogoutBehavior.Items.Count)
+            {
+                cmbLogoutBehavior.SelectedIndex = (int) mEditorItem.LogoutBehavior;
+            }
             cmbCompletionBehavior.SelectedIndex = (int)mEditorItem.CompletionBehavior;
         }
 
@@ -317,6 +333,7 @@ namespace Intersect.Editor.Forms.Editors
         {
             UpdateSettingControls();
             UpdateDisplayNameControls();
+            UpdateOptionControls();
         }
 
         private void UpdateSettingControls()
@@ -325,12 +342,20 @@ namespace Intersect.Editor.Forms.Editors
                 Strings.TimerEditor.Interval :
                 Strings.TimerEditor.TimeLimit;
 
-            nudRepetitions.Enabled = cmbRepetitionType.SelectedIndex == (int)TimerRepetitionTypes.Repeat;
+            chkRunIndefinite.Enabled = mEditorItem.Type != TimerType.Scheduler;
+            nudTimeLimit.Enabled = !chkRunIndefinite.Checked;
+            nudRepetitions.Enabled = cmbRepetitionType.SelectedIndex == (int)TimerRepetitionTypes.Repeat && !chkRunIndefinite.Checked;
         }
 
         private void UpdateDisplayNameControls()
         {
             txtDisplayName.Enabled = !mEditorItem.Hidden;
+        }
+
+        private void UpdateOptionControls()
+        {
+            chkContinue.Enabled = mEditorItem.Type != TimerType.Scheduler;
+            cmbLogoutBehavior.Enabled = mEditorItem.OwnerType == TimerOwnerType.Player;
         }
 
         public void ChangeTimerOwnerType()
@@ -498,11 +523,6 @@ namespace Intersect.Editor.Forms.Editors
             mEditorItem.CompletionEventId = EventBase.IdFromList(cmbCompletionEvent.SelectedIndex - 1);
         }
 
-        private void chkContinueTimeout_CheckedChanged(object sender, EventArgs e)
-        {
-            mEditorItem.ContinueOnTimeout = chkContinueTimeout.Checked;
-        }
-
         private void cmbCompletionBehavior_SelectedIndexChanged(object sender, EventArgs e)
         {
             mEditorItem.CompletionBehavior = (TimerCompletionBehavior)cmbCompletionBehavior.SelectedIndex;
@@ -515,6 +535,11 @@ namespace Intersect.Editor.Forms.Editors
 
         private void nudTimeLimit_ValueChanged(object sender, EventArgs e)
         {
+            if (mPopulating)
+            {
+                return;
+            }
+
             mEditorItem.TimeLimit = (int)nudTimeLimit.Value;
         }
 
@@ -548,12 +573,42 @@ namespace Intersect.Editor.Forms.Editors
         private void cmbTimerType_SelectedIndexChanged(object sender, EventArgs e)
         {
             mEditorItem.Type = (TimerType) cmbTimerType.SelectedIndex;
+
+            nudTimeLimit.Minimum = mEditorItem.Type == TimerType.Scheduler ?
+                mMinimumIntervalScheduler :
+                mMinimumIntervalOther;
+
+            if (mEditorItem.Type == TimerType.Scheduler)
+            {
+                chkRunIndefinite.Checked = false;
+                chkContinue.Checked = false;
+            }
             UpdateSettingControls();
+            UpdateOptionControls();
         }
 
         private void cmbOwnerType_SelectedIndexChanged(object sender, EventArgs e)
         {
             ChangeTimerOwnerType();
+        }
+
+        private void cmbLogoutBehavior_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mEditorItem.LogoutBehavior = (TimerLogoutBehavior) cmbLogoutBehavior.SelectedIndex;
+        }
+
+        private void chkRunIndefinite_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.TimeLimit = chkRunIndefinite.Checked ?
+                TimerConstants.TimerIndefiniteTimeLimit :
+                (long) nudTimeLimit.Value;
+
+            UpdateSettingControls();
+        }
+
+        private void chkContinue_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.ContinueAfterExpiration = chkContinue.Checked;
         }
     }
 }

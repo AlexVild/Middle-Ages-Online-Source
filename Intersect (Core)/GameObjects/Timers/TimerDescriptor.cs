@@ -53,9 +53,14 @@ namespace Intersect.GameObjects.Timers
         public int Repetitions { get; set; }
 
         /// <summary>
-        /// Whether this timer continues after a user gets timed-out
+        /// Whether or not this timer continues after expiration - relying on a player to run its "Complete" or "Cancel" event via the "Stop Timer" command
         /// </summary>
-        public bool ContinueOnTimeout { get; set; }
+        public bool ContinueAfterExpiration { get; set; }
+
+        /// <summary>
+        /// What kind of <see cref="TimerLogoutBehavior"/> to perform. Player timers only
+        /// </summary>
+        public TimerLogoutBehavior LogoutBehavior { get; set; }
 
         /// <summary>
         /// Whether or not to fire an epiry event at completion time
@@ -65,7 +70,7 @@ namespace Intersect.GameObjects.Timers
         /// <summary>
         /// How long a timer should run before execution
         /// </summary>
-        public long TimeLimit { get; set; } = 0L;
+        public long TimeLimit { get; set; } = 1L;
 
         /// <summary>
         /// A <see cref="EventBase"/> to run if a timer is stopped via some event

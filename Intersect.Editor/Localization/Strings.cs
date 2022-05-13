@@ -5332,6 +5332,9 @@ Tick timer saved in server config.json.";
             public static LocalizedString Cancel = @"Cancel";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString CompletionBehavior = @"Completion Behavior";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static Dictionary<TimerCompletionBehavior, LocalizedString> CompletionTypes = new Dictionary<TimerCompletionBehavior, LocalizedString>
             {
                 {TimerCompletionBehavior.ExpirationThenCompletion, @"Expire, then Complete"},
@@ -5339,7 +5342,7 @@ Tick timer saved in server config.json.";
             };
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public static LocalizedString ContinueOnTimeOut = @"Continue On Time-Out?";
+            public static LocalizedString ContinueAfterExpire = @"Continue After Expiration?";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString ContinueOnTimeOutTooltip = @"If checked, the timer will persist";
@@ -5397,6 +5400,21 @@ Tick timer saved in server config.json.";
             public static LocalizedString Interval = @"Interval (Seconds)";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString LogoutBehavior = @"Logout Behavior";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static Dictionary<TimerLogoutBehavior, LocalizedString> LogoutBehaviors = new Dictionary<TimerLogoutBehavior, LocalizedString>
+            {
+                {TimerLogoutBehavior.Pause, @"Pause"},
+                {TimerLogoutBehavior.Continue, @"Continue"},
+                {TimerLogoutBehavior.CancelOnLogin, @"Cancel on Login"},
+                // {TimerOwnerType.Instance, @"Instance"}, // Not implemented, future support planned
+            };
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString LogoutBehaviorTooltip = @"Determines what to do on player logout - for player timers only";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString Name = @"Name";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -5432,6 +5450,9 @@ Tick timer saved in server config.json.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString Repetitions = @"Repetitions";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString RunIndefinitely = @"Run Indefinitely?";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static Dictionary<int, LocalizedString> RepetitionOptions = new Dictionary<int, LocalizedString>
