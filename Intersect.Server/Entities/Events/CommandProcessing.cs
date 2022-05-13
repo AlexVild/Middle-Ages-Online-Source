@@ -2417,7 +2417,7 @@ namespace Intersect.Server.Entities.Events
                     {
                         return; // Timer already started for this player
                     }
-                    TimersInstance.Timers.Add(new TimerInstance(command.DescriptorId, player.Id, now));
+                    TimersInstance.AddTimer(command.DescriptorId, player.Id, now);
                     break;
                 default:
                     throw new NotImplementedException("This timer owner type can not be processed yet!");

@@ -17,7 +17,7 @@ namespace Intersect.Server.Database.PlayerData
 
         public TimerInstance() { } // EF
 
-        public TimerInstance(Guid descriptorId, Guid ownerId, long now, int completionCount = 0)
+        public TimerInstance(Guid descriptorId, Guid ownerId, long now, int completionCount)
         {
             Id = Guid.NewGuid();
 
@@ -78,7 +78,6 @@ namespace Intersect.Server.Database.PlayerData
             // If this timer is set to repeat and we're not done repeating yet, run expire event
             if (reps >= 0 && CompletionCount != reps + 1)
             {
-                
                 player.StartCommonEvent(EventBase.Get(Descriptor.ExpirationEventId));
                 return;
             }
