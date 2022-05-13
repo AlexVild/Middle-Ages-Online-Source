@@ -37,6 +37,7 @@ using Intersect.Server.Entities.PlayerData;
 using Intersect.Server.Database.PlayerData;
 using static Intersect.Server.Maps.MapInstance;
 using Intersect.Server.Core;
+using Intersect.GameObjects.Timers;
 
 namespace Intersect.Server.Entities
 {
@@ -386,6 +387,7 @@ namespace Intersect.Server.Entities
             LoadFriends();
             LoadGuild();
             LoadRecords();
+            LoadTimers();
 
             //Upon Sign In Remove Any Items/Spells that have been deleted
             foreach (var itm in Items)
@@ -468,6 +470,9 @@ namespace Intersect.Server.Entities
 
             //Update parties
             LeaveParty(true);
+
+            // Update timers
+            RemoveActiveTimers();
 
             // End combo
             EndCombo();
@@ -4922,7 +4927,7 @@ namespace Intersect.Server.Entities
                     }
 
                     // Check if any outstanding party timers exist for this party and, if so, update their owner ID to the new party owner
-                    var partysTimers = TimersInstance.Timers
+                    var partysTimers = TimerProcessor.Timers
                         .Where(timer => timer.Descriptor.OwnerType == GameObjects.Timers.TimerOwnerType.Party && timer.OwnerId == Id);
 
                     foreach (var timer in partysTimers)
@@ -4938,9 +4943,9 @@ namespace Intersect.Server.Entities
                     PacketSender.SendChatMsg(remainder, Strings.Parties.disbanded, ChatMessageType.Party, CustomColors.Alerts.Error);
 
                     // Nuke timers that existed for this disbanded party
-                    foreach (var timer in TimersInstance.Timers.Where(timer => timer.Descriptor.OwnerType == GameObjects.Timers.TimerOwnerType.Party && timer.OwnerId == Id).ToArray())
+                    foreach (var timer in TimerProcessor.Timers.Where(timer => timer.Descriptor.OwnerType == GameObjects.Timers.TimerOwnerType.Party && timer.OwnerId == Id).ToArray())
                     {
-                        TimersInstance.RemoveTimer(timer);
+                        TimerProcessor.RemoveTimer(timer);
                     }
                 }
 
@@ -7920,6 +7925,74 @@ namespace Intersect.Server.Entities
             else
             {
                 PacketSender.SendChatMsg(this, Strings.Combat.stillinspired.ToString(endTimeStamp), ChatMessageType.Combat, CustomColors.Combat.LevelUp);
+            }
+        }
+        #endregion
+
+        #region Timers
+        private void LoadTimers()
+        {
+            using (var context = DbInterface.CreatePlayerContext(readOnly: false))
+            {
+                var timers = context.Timers;
+
+                foreach(var timer in timers.ToArray().Where(t => t.OwnerId == Id && t.Descriptor.OwnerType == TimerOwnerType.Player))
+                {
+                    // Check if the timer is already being processed - ignore it
+                    if (TimerProcessor.Timers.Contains(timer))
+                    {
+                        continue;
+                    }
+
+                    var descriptor = timer.Descriptor;
+                    var now = Timing.Global.MillisecondsUtc;
+
+                    if (descriptor.LogoutBehavior == TimerLogoutBehavior.Pause)
+                    {
+                        timer.TimeRemaining += now;
+                    }
+
+                    // Add the timer back to the processing list
+                    TimerProcessor.Timers.Add(timer);
+                }
+
+                context.ChangeTracker.DetectChanges();
+                context.SaveChanges();
+            }
+        }
+
+        /// <summary>
+        /// Removes all timers from the <see cref="TimerProcessor.Timers"/> processing list that
+        /// have this player as their owner ID. Also updates those timers in the DB so that, when they
+        /// are refreshed, they are refreshed properly.
+        /// </summary>
+        private void RemoveActiveTimers()
+        {
+            foreach(var timer in TimerProcessor.Timers.Where(t => t.OwnerId == Id && t.Descriptor.OwnerType == TimerOwnerType.Player).ToArray())
+            {
+                var descriptor = timer.Descriptor;
+                TimerProcessor.Timers.Remove(timer); // Remove from processing queue, not from DB
+                using (var context = DbInterface.CreatePlayerContext(readOnly: false))
+                {
+                    switch (descriptor.LogoutBehavior)
+                    {
+                        case TimerLogoutBehavior.Pause:
+                            // Store how much time the timer has until its next expiry, so we can re-populate it on login
+                            timer.TimeRemaining -= Timing.Global.MillisecondsUtc;
+                            break;
+                        case TimerLogoutBehavior.Continue:
+                            // Intentinoally blank - leave as is, and it'll be processed when the player returns
+                            break;
+                        case TimerLogoutBehavior.CancelOnLogin:
+                            timer.TimeRemaining = TimerConstants.TimerAborted; // Flags timer as aborted, so we know how to handle it when next processed
+                            break;
+                        default:
+                            throw new NotImplementedException("Player timer has invalid logout behavior");
+                    }
+
+                    context.ChangeTracker.DetectChanges();
+                    context.SaveChanges();
+                }
             }
         }
         #endregion

@@ -95,6 +95,17 @@ namespace Intersect.Server.Database.PlayerData
         }
 
         /// <summary>
+        /// Runs the cancellation event for all relevant players
+        /// </summary>
+        public void CancelTimer()
+        {
+            foreach (var player in GetAffectedPlayers())
+            {
+                player.StartCommonEvent(Descriptor.CancellationEvent);
+            }
+        }
+
+        /// <summary>
         /// Gets a list of players that should be affected by this timers completion event
         /// </summary>
         /// <returns>A list of <see cref="Player"/>s to be affected by timer expiration, based on the <see cref="TimerDescriptor.OwnerType"/></returns>

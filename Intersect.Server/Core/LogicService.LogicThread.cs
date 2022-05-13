@@ -20,6 +20,7 @@ using Intersect.Server.Networking.Lidgren;
 using Intersect.Server.Database.PlayerData.Players;
 using Intersect.Utilities;
 using Intersect.Server.Database.PlayerData;
+using Intersect.GameObjects.Timers;
 
 namespace Intersect.Server.Core
 {
@@ -90,7 +91,7 @@ namespace Intersect.Server.Core
                     var players = 0;
 
                     // Initialize timers instance and load in values
-                    TimersInstance.Timers = new List<TimerInstance>();
+                    TimerProcessor.Timers = new TimerList();
                     LoadTimers();
 
                     while (ServerContext.Instance.IsRunning)
@@ -307,7 +308,7 @@ namespace Intersect.Server.Core
                             saveServerVariablesTimer = Timing.Global.Milliseconds + Options.Instance.Processing.DatabaseSaveServerVariablesInterval;
                         }
 
-                        TimersInstance.ProcessTimers(Timing.Global.MillisecondsUtc);
+                        TimerProcessor.ProcessTimers(Timing.Global.MillisecondsUtc);
 
                         if (Options.Instance.Processing.CpsLock)
                         {
@@ -394,15 +395,73 @@ namespace Intersect.Server.Core
                 }
             }
 
+            /// <summary>
+            /// Loads timers into the <see cref="TimerProcessor.Timers"/> list, containing actively running timers.
+            /// Also prunes timers whose owners have been purged in some way.
+            /// </summary>
             private void LoadTimers()
             {
-                using (var context = DbInterface.CreatePlayerContext())
+                Logging.Log.Debug("Loading timers into TimerProcessor...");
+                using (var context = DbInterface.CreatePlayerContext(readOnly: false))
                 {
                     foreach (var timer in context.Timers.ToList())
                     {
-                        TimersInstance.Timers.Add(timer);
+                        var descriptor = timer.Descriptor;
+
+                        switch(descriptor.OwnerType)
+                        {
+                            case TimerOwnerType.Player:
+                                // If the player isn't currently online, don't load this timer into the processor
+                                if (!Globals.OnlineList.ToArray().Select(p => p.Id).Contains(timer.OwnerId))
+                                {
+                                    continue;
+                                }
+                                // If the player doesn't exist anymore, remove the timer
+                                if (!context.Players.ToArray().Select(p => p.Id).Contains(timer.OwnerId))
+                                {
+                                    context.Timers.Remove(timer);
+                                }
+                                break;
+                            case TimerOwnerType.Instance:
+                                // If an instance timer that doesn't belong to the overworld, a guild, or a player, remove it
+                                if (timer.OwnerId != default || 
+                                    !context.Guilds.ToArray().Select(p => p.GuildInstanceId).Contains(timer.OwnerId) ||
+                                    !context.Players.ToArray().Select(p => p.MapInstanceId).Contains(timer.OwnerId))
+                                {
+                                    context.Timers.Remove(timer);
+                                }
+                                break;
+                            case TimerOwnerType.Guild:
+                                // If the guild in which this timer belonged to no longer exists, remove it
+                                if (!context.Guilds.ToArray().Select(p => p.Id).Contains(timer.OwnerId))
+                                {
+                                    context.Timers.Remove(timer);
+                                }
+                                break;
+                            case TimerOwnerType.Party:
+                                // A party timer simply could not have survived a server shutdown - remove it
+                                context.Timers.Remove(timer);
+                                break;
+                        }
+
+                        // Add the timer to processing if it passes all of the above checks
+                        TimerProcessor.Timers.Add(timer);
                     }
+
+                    context.ChangeTracker.DetectChanges();
+                    context.SaveChanges();
                 }
+
+                var processingTimerCount = TimerProcessor.Timers.Count;
+                if (processingTimerCount > 0)
+                {
+                    Logging.Log.Debug($"{processingTimerCount.ToString()} timers now active");
+                }
+                else
+                {
+                    Logging.Log.Debug("No timers to load");
+                }
+
             }
         }
     }

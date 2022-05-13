@@ -160,8 +160,8 @@
         public const long TimerIndefiniteTimeLimit = long.MaxValue;
 
         /// <summary>
-        /// An identifier for a timer that is currently "paused"
+        /// An identifier for a timer that has been aborted
         /// </summary>
-        public const int TimerPausedStamp = 0;
+        public const int TimerAborted = 0;
     }
 }

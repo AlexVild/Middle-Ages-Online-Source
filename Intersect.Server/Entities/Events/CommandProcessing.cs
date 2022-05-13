@@ -2412,9 +2412,9 @@ namespace Intersect.Server.Entities.Events
 
             lock (player.EntityLock)
             {
-                if (TimersInstance.TryGetOwnerId(descriptor.OwnerType, command.DescriptorId, player, out var ownerId) && !TimersInstance.TryGetActiveTimer(command.DescriptorId, ownerId, out _))
+                if (TimerProcessor.TryGetOwnerId(descriptor.OwnerType, command.DescriptorId, player, out var ownerId) && !TimerProcessor.TryGetActiveTimer(command.DescriptorId, ownerId, out _))
                 {
-                    TimersInstance.AddTimer(command.DescriptorId, ownerId, now);
+                    TimerProcessor.AddTimer(command.DescriptorId, ownerId, now);
                 }
             }
         }
@@ -2435,7 +2435,7 @@ namespace Intersect.Server.Entities.Events
 
             lock (player.EntityLock)
             {
-                if (TimersInstance.TryGetOwnerId(descriptor.OwnerType, command.DescriptorId, player, out var ownerId) && TimersInstance.TryGetActiveTimer(command.DescriptorId, ownerId, out var activeTimer))
+                if (TimerProcessor.TryGetOwnerId(descriptor.OwnerType, command.DescriptorId, player, out var ownerId) && TimerProcessor.TryGetActiveTimer(command.DescriptorId, ownerId, out var activeTimer))
                 {
                     var players = activeTimer.GetAffectedPlayers();
                     Action<Action<Player>> stopAction = action =>
@@ -2453,12 +2453,12 @@ namespace Intersect.Server.Entities.Events
                             break;
                         case TimerStopType.Cancel:
                             stopAction((pl) => pl.StartCommonEvent(descriptor.CancellationEvent));
-                            TimersInstance.RemoveTimer(activeTimer);
+                            TimerProcessor.RemoveTimer(activeTimer);
                             break;
 
                         case TimerStopType.Complete:
                             stopAction((pl) => pl.StartCommonEvent(descriptor.CompletionEvent));
-                            TimersInstance.RemoveTimer(activeTimer);
+                            TimerProcessor.RemoveTimer(activeTimer);
                             break;
 
                         case TimerStopType.Expire:
@@ -2486,7 +2486,7 @@ namespace Intersect.Server.Entities.Events
 
             lock (player.EntityLock)
             {
-                if (TimersInstance.TryGetOwnerId(descriptor.OwnerType, command.DescriptorId, player, out var ownerId) && TimersInstance.TryGetActiveTimer(command.DescriptorId, ownerId, out var activeTimer))
+                if (TimerProcessor.TryGetOwnerId(descriptor.OwnerType, command.DescriptorId, player, out var ownerId) && TimerProcessor.TryGetActiveTimer(command.DescriptorId, ownerId, out var activeTimer))
                 {
                     long amount = 0;
                     if (command.IsStatic)
@@ -2534,7 +2534,7 @@ namespace Intersect.Server.Entities.Events
                     }
 
                     // Re-sort with new timer values
-                    TimersInstance.Timers.Sort(new TimerComparer());
+                    TimerProcessor.Timers.Sort();
                 }
             }
         }
