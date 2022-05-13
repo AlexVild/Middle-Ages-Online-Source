@@ -2,6 +2,7 @@
 using Intersect.GameObjects.Timers;
 using Intersect.Server.Entities;
 using Intersect.Server.General;
+using Intersect.Utilities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -25,16 +26,7 @@ namespace Intersect.Server.Database.PlayerData
 
             DescriptorId = descriptorId;
             OwnerId = ownerId;
-
-            if (Descriptor.Type == TimerType.Stopwatch)
-            {
-                TimeRemaining = now;
-            }
-            else
-            {
-                TimeRemaining = now + (Descriptor.TimeLimit * 1000); // TimeLimit is in seconds, multiply accordingly
-            }
-            
+            TimeRemaining = now + (Descriptor.TimeLimit * 1000); // TimeLimit is in seconds, multiply accordingly
             CompletionCount = completionCount;
         }
 
@@ -58,20 +50,52 @@ namespace Intersect.Server.Database.PlayerData
         public long TimeRemaining { get; set; }
 
         /// <summary>
-        /// 
+        /// A timestamp used to hold a UTC timestamp of when this timer was paused - for handling Player timers set to pause on logout
+        /// </summary>
+        public long PausedTimestamp { get; set; }
+
+        /// <summary>
+        /// How many times this timer has completed an interval
         /// </summary>
         public int CompletionCount { get; set; }
 
         /// <summary>
+        /// Helper for determining if this timer has expired
+        /// </summary>
+        [NotMapped]
+        [JsonIgnore]
+        public bool IsCompleted => Descriptor.Repetitions != TimerConstants.TimerIndefiniteRepeat && CompletionCount >= Descriptor.Repetitions + 1;
+
+        /// <summary>
+        /// Helper to calculate the timer's start time
+        /// </summary>
+        [NotMapped]
+        [JsonIgnore] 
+        public long StartTime => TimeRemaining - (Descriptor.TimeLimit * (CompletionCount + 1));
+
+        /// <summary>
+        /// Helper to calculate how long this timer has been running
+        /// </summary>
+        [NotMapped]
+        [JsonIgnore]
+        public long ElapsedTime => Timing.Global.MillisecondsUtc - StartTime;
+
+        /// <summary>
         /// Increments a timers <see cref="CompletionCount"/> and fires events for the necessary players based on this timers <see cref="OwnerId"/>
         /// </summary>
-        public void ExpireTimer()
+        public void ExpireTimer(long now)
         {
             CompletionCount++;
 
             foreach (var player in GetAffectedPlayers())
             {
                 FireExpireEvent(player);
+            }
+
+            var descriptor = Descriptor;
+            if (!IsCompleted)
+            {
+                TimeRemaining = now + (descriptor.TimeLimit * 1000); // Extend timer for next repetition
             }
         }
 

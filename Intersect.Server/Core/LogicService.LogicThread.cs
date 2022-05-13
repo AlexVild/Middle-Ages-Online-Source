@@ -90,7 +90,7 @@ namespace Intersect.Server.Core
                     var players = 0;
 
                     // Initialize timers instance and load in values
-                    TimersInstance.Timers = new SortedSet<TimerInstance>(new TimerComparer());
+                    TimersInstance.Timers = new List<TimerInstance>();
                     LoadTimers();
 
                     while (ServerContext.Instance.IsRunning)

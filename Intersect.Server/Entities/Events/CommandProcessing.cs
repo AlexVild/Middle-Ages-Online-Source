@@ -2460,7 +2460,7 @@ namespace Intersect.Server.Entities.Events
 
                             break;
                         case TimerStopType.Expire:
-                            stopAction((pl) => pl.StartCommonEvent(descriptor.ExpirationEvent));
+                            activeTimer.ExpireTimer(now);
 
                             break;
                         default:
@@ -2532,6 +2532,9 @@ namespace Intersect.Server.Entities.Events
                         default:
                             throw new NotImplementedException("Invalid operator given to modify timer value");
                     }
+
+                    // Re-sort with new timer values
+                    TimersInstance.Timers.Sort(new TimerComparer());
                 }
             }
         }

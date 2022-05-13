@@ -154,6 +154,14 @@
         /// </summary>
         public const int TimerIndefiniteRepeat = int.MinValue;
 
+        /// <summary>
+        /// The amount of time to set a timer to that qualifies as an "indefinite" timer; a timer that does not expire
+        /// </summary>
         public const long TimerIndefiniteTimeLimit = long.MaxValue;
+
+        /// <summary>
+        /// An identifier for a timer that is currently "paused"
+        /// </summary>
+        public const int TimerPausedStamp = 0;
     }
 }

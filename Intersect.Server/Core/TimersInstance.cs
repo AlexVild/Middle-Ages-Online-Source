@@ -45,7 +45,7 @@ namespace Intersect.Server.Core
         /// <summary>
         /// A list of all active timers of all types
         /// </summary>
-        public static SortedSet<TimerInstance> Timers;
+        public static List<TimerInstance> Timers;
 
         /// <summary>
         /// Processes the current list of timers, in a set sorted by expiry time.
@@ -53,8 +53,8 @@ namespace Intersect.Server.Core
         /// <param name="now">The UTC timestamp of processing time</param>
         public static void ProcessTimers(long now)
         {
-            // Stop watch timers don't expire - don't process them.
-            foreach (var timer in Timers.Where((t => t.Descriptor.Type != TimerType.Stopwatch)).ToArray())
+            // Process all timers that aren't indefinite
+            foreach (var timer in Timers.Where(t => t.Descriptor.TimeLimit < TimerConstants.TimerIndefiniteTimeLimit).ToArray())
             {
                 // Short-circuit out if the newest timer is not yet expired
                 if (timer.TimeRemaining > now)
@@ -62,16 +62,21 @@ namespace Intersect.Server.Core
                     return;
                 }
 
-                timer.ExpireTimer();
+                var descriptor = timer.Descriptor;
 
-                // If the timer has completed its required amount of repetitions and is NOT set to indefinite repetition, remove the timer from processing
-                if (timer.Descriptor.Repetitions != TimerConstants.TimerIndefiniteRepeat && timer.CompletionCount >= timer.Descriptor.Repetitions + 1)
+                // If the timer is set to continue after expiration, and has already expired, simply allow the timer to continue.
+                if (timer.IsCompleted && descriptor.ContinueAfterExpiration)
+                {
+                    return;
+                }
+
+                // Otherwise, process the timer, as it has reached an expiry time
+                timer?.ExpireTimer(now);
+
+                // If the timer has completed its required amount of repetitions, remove the timer from processing
+                if (timer.IsCompleted)
                 {
                     RemoveTimer(timer);
-                }
-                else
-                {
-                    timer.TimeRemaining = now + (timer.Descriptor.TimeLimit * 1000); // Extend timer for next repetition
                 }
             }
         }
@@ -94,6 +99,7 @@ namespace Intersect.Server.Core
                 context.ChangeTracker.DetectChanges();
                 context.SaveChanges();
             }
+            Timers.Sort(new TimerComparer());
         }
 
         /// <summary>
@@ -110,6 +116,7 @@ namespace Intersect.Server.Core
                 context.ChangeTracker.DetectChanges();
                 context.SaveChanges();
             }
+            Timers.Sort(new TimerComparer());
         }
 
         /// <summary>
