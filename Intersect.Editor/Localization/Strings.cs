@@ -2952,7 +2952,7 @@ Tick timer saved in server config.json.";
             public static LocalizedString Title = @"Modify Timer";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public static LocalizedString Variable = @"Variable";
+            public static LocalizedString Variable = @"Variable (seconds)";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString VariableSelection = @"Variable Selection";

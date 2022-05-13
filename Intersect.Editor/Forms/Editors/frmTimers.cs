@@ -25,6 +25,8 @@ namespace Intersect.Editor.Forms.Editors
 
         private TimerDescriptor mEditorItem;
 
+        private bool mPopulating = false;
+
         public frmTimers()
         {
             ApplyHooks();
@@ -103,6 +105,7 @@ namespace Intersect.Editor.Forms.Editors
         {
             if (mEditorItem != null)
             {
+                mPopulating = true;
                 pnlTimerSettings.Show();
                 txtName.Text = mEditorItem.Name;
                 cmbFolder.Text = mEditorItem.Folder;
@@ -114,6 +117,8 @@ namespace Intersect.Editor.Forms.Editors
                     mChanged.Add(mEditorItem);
                     mEditorItem.MakeBackup();
                 }
+
+                mPopulating = false;
             }
             else
             {
@@ -423,6 +428,11 @@ namespace Intersect.Editor.Forms.Editors
 
         private void cmbRepetitionType_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (mPopulating)
+            {
+                return;
+            }
+
             switch(cmbRepetitionType.SelectedIndex)
             {
                 case (int) TimerRepetitionTypes.NoRepeat:
