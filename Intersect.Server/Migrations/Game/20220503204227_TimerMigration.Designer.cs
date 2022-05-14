@@ -910,8 +910,6 @@ namespace Intersect.Server.Migrations.Game
 
                     b.Property<Guid>("CompletionEventId");
 
-                    b.Property<bool>("ContinueOnTimeout");
-
                     b.Property<string>("DisplayName");
 
                     b.Property<Guid>("ExpirationEventId");

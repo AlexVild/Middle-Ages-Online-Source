@@ -157,11 +157,15 @@
         /// <summary>
         /// The amount of time to set a timer to that qualifies as an "indefinite" timer; a timer that does not expire
         /// </summary>
-        public const long TimerIndefiniteTimeLimit = long.MaxValue;
+        public const int TimerIndefiniteTimeLimit = int.MaxValue;
 
         /// <summary>
         /// An identifier for a timer that has been aborted
         /// </summary>
         public const int TimerAborted = 0;
+
+        public const long HourMillis = 3600000;
+
+        public const long DayMillis = 86400000;
     }
 }

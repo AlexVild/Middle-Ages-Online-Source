@@ -16,7 +16,6 @@ namespace Intersect.Server.Migrations.Game
                     Name = table.Column<string>(nullable: true),
                     Hidden = table.Column<bool>(nullable: false),
                     Repetitions = table.Column<int>(nullable: false),
-                    ContinueOnTimeout = table.Column<bool>(nullable: false),
                     DisplayName = table.Column<string>(nullable: true),
                     OwnerType = table.Column<byte>(nullable: false),
                     Type = table.Column<int>(nullable: false),

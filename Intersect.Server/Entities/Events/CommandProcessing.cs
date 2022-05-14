@@ -1744,7 +1744,7 @@ namespace Intersect.Server.Entities.Events
                                 sb.Replace(val.Key, instanceVarVal.ToString((val.Value).Type));
                     }
                 }
-
+                    
                 if (instance != null)
                 {
                     var parms = instance.GetParams(player);
@@ -1754,7 +1754,49 @@ namespace Intersect.Server.Entities.Events
                     }
                 }
 
-                return sb.ToString();
+                // Time Lapses require variables to already be evaluated in the string, so we make a second string builder.
+                var finalSb = new StringBuilder(sb.ToString());
+                var elapsedRegexString = $@"\{Strings.Events.elapsed}\{{\d+\}}";
+                Regex elapsedRegex = new Regex(elapsedRegexString);
+
+                foreach (var match in elapsedRegex.Matches(finalSb.ToString()))
+                {
+                    var digits = Regex.Match(match.ToString(), @"\d+").Value;
+
+                    if (double.TryParse(digits.ToString(), out var ms))
+                    {
+                        string elapsedString = string.Empty;
+                        TimeSpan t = TimeSpan.FromMilliseconds(ms);
+                        switch ((int)ms)
+                        {
+                            case int n when n < TimerConstants.HourMillis:
+                                elapsedString = string.Format(Strings.Events.elapsedMinutes,
+                                    t.Minutes,
+                                    t.Seconds,
+                                    t.Milliseconds);
+                                break;
+                            case int n when n >= TimerConstants.HourMillis && n < TimerConstants.DayMillis:
+                                elapsedString = string.Format(Strings.Events.elapsedHours,
+                                    t.Hours,
+                                    t.Minutes,
+                                    t.Seconds,
+                                    t.Milliseconds);
+                                break;
+                            case int n when n >= TimerConstants.DayMillis:
+                                elapsedString = string.Format(Strings.Events.elapsedDays,
+                                    t.Days,
+                                    t.Hours,
+                                    t.Minutes,
+                                    t.Seconds,
+                                    t.Milliseconds);
+                                break;
+                        }
+
+                        finalSb.Replace(match.ToString(), elapsedString);
+                    }
+                }
+
+                return finalSb.ToString();
             }
 
             return input;
@@ -2517,20 +2559,27 @@ namespace Intersect.Server.Entities.Events
                     // Convert to seconds
                     amount *= 1000;
 
-                    switch(command.Operator)
+                    using (var context = DbInterface.CreatePlayerContext(readOnly: false))
                     {
-                        case TimerOperator.Set:
-                            activeTimer.TimeRemaining = Timing.Global.MillisecondsUtc + amount;
-                            break;
-                        case TimerOperator.Add:
-                            activeTimer.TimeRemaining += amount;
-                            break;
-                        case TimerOperator.Subtract:
-                            activeTimer.TimeRemaining -= amount;
+                        switch (command.Operator)
+                        {
+                            case TimerOperator.Set:
+                                activeTimer.TimeRemaining = Timing.Global.MillisecondsUtc + amount;
+                                break;
+                            case TimerOperator.Add:
+                                activeTimer.TimeRemaining += amount;
+                                break;
+                            case TimerOperator.Subtract:
+                                activeTimer.TimeRemaining -= amount;
+                                break;
+                            default:
+                                throw new NotImplementedException("Invalid operator given to modify timer value");
+                        }
 
-                            break;
-                        default:
-                            throw new NotImplementedException("Invalid operator given to modify timer value");
+                        context.Timers.Update(activeTimer);
+
+                        context.ChangeTracker.DetectChanges();
+                        context.SaveChanges();
                     }
 
                     // Re-sort with new timer values
