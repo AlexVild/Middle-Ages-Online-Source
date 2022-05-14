@@ -82,6 +82,11 @@ namespace Intersect.GameObjects.Timers
         public long TimeLimit { get; set; } = 1L;
 
         /// <summary>
+        /// Whether or not this timer starts with server startup
+        /// </summary>
+        public bool StartWithServer { get; set; }
+
+        /// <summary>
         /// A <see cref="EventBase"/> to run if a timer is stopped via some event
         /// </summary>
         [ForeignKey(nameof(CancellationEvent))]

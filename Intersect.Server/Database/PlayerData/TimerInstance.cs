@@ -84,17 +84,25 @@ namespace Intersect.Server.Database.PlayerData
         /// </summary>
         public void ExpireTimer(long now)
         {
-            CompletionCount++;
-
-            foreach (var player in GetAffectedPlayers())
+            using (var context = DbInterface.CreatePlayerContext(readOnly: false))
             {
-                FireExpireEvent(player);
-            }
+                CompletionCount++;
 
-            var descriptor = Descriptor;
-            if (!IsCompleted)
-            {
-                TimeRemaining = now + (descriptor.TimeLimit * 1000); // Extend timer for next repetition
+                foreach (var player in GetAffectedPlayers())
+                {
+                    FireExpireEvent(player);
+                }
+
+                var descriptor = Descriptor;
+                if (!IsCompleted)
+                {
+                    TimeRemaining = now + (descriptor.TimeLimit * 1000); // Extend timer for next repetition
+                }
+
+                context.Timers.Update(this);
+
+                context.ChangeTracker.DetectChanges();
+                context.SaveChanges();
             }
         }
 

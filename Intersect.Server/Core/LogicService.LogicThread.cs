@@ -404,12 +404,29 @@ namespace Intersect.Server.Core
                 Logging.Log.Debug("Loading timers into TimerProcessor...");
                 using (var context = DbInterface.CreatePlayerContext(readOnly: false))
                 {
+                    // Find any timers meant to start on startup. As we iterate through timer instances, we will check to see if these timers are already loaded and, if not, load them after
+                    List<Guid> startupTimerIds = new List<Guid>();
+                    foreach (TimerDescriptor descriptor in TimerDescriptor.Lookup.Values.Where(t => ((TimerDescriptor)t).OwnerType == TimerOwnerType.Global && ((TimerDescriptor)t).StartWithServer))
+                    {
+                        startupTimerIds.Add(descriptor.Id);
+                    }
+
                     foreach (var timer in context.Timers.ToList())
                     {
                         var descriptor = timer.Descriptor;
 
                         switch(descriptor.OwnerType)
                         {
+                            case TimerOwnerType.Global:
+                                // We want to make sure we don't duplicate timers marked to start with the server
+                                if (startupTimerIds.Contains(descriptor.Id))
+                                {
+                                    // So we'll remove it from the list of descriptor IDs that we want to start
+                                    startupTimerIds.Remove(descriptor.Id);
+                                }
+
+                                break;
+
                             case TimerOwnerType.Player:
                                 // If the player isn't currently online, don't load this timer into the processor
                                 if (!Globals.OnlineList.ToArray().Select(p => p.Id).Contains(timer.OwnerId))
@@ -446,6 +463,13 @@ namespace Intersect.Server.Core
 
                         // Add the timer to processing if it passes all of the above checks
                         TimerProcessor.ActiveTimers.Add(timer);
+                    }
+
+                    // We've reduced server startup timers down at this point to only the timers that SHOULD start, but have never started. Start them here:
+                    var now = Timing.Global.MillisecondsUtc;
+                    foreach(var id in startupTimerIds)
+                    {
+                        TimerProcessor.AddTimer(id, default, now);
                     }
 
                     context.ChangeTracker.DetectChanges();

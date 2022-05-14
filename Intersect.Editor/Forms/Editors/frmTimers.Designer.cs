@@ -48,6 +48,8 @@ namespace Intersect.Editor.Forms.Editors
             this.lstGameObjects = new Intersect.Editor.Forms.Controls.GameObjectList();
             this.pnlTimerSettings = new System.Windows.Forms.Panel();
             this.grpTimerOptions = new DarkUI.Controls.DarkGroupBox();
+            this.cmbVariable = new DarkUI.Controls.DarkComboBox();
+            this.lblVariable = new System.Windows.Forms.Label();
             this.cmbLogoutBehavior = new DarkUI.Controls.DarkComboBox();
             this.lblLogoutBehavior = new System.Windows.Forms.Label();
             this.chkContinue = new DarkUI.Controls.DarkCheckBox();
@@ -84,8 +86,7 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbOwnerType = new DarkUI.Controls.DarkComboBox();
             this.btnSave = new DarkUI.Controls.DarkButton();
             this.btnCancel = new DarkUI.Controls.DarkButton();
-            this.lblVariable = new System.Windows.Forms.Label();
-            this.cmbVariable = new DarkUI.Controls.DarkComboBox();
+            this.chkStartWithServer = new DarkUI.Controls.DarkCheckBox();
             this.toolStrip.SuspendLayout();
             this.grpTimers.SuspendLayout();
             this.pnlTimerSettings.SuspendLayout();
@@ -291,6 +292,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpTimerOptions.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpTimerOptions.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpTimerOptions.Controls.Add(this.chkStartWithServer);
             this.grpTimerOptions.Controls.Add(this.cmbVariable);
             this.grpTimerOptions.Controls.Add(this.lblVariable);
             this.grpTimerOptions.Controls.Add(this.cmbLogoutBehavior);
@@ -301,10 +303,40 @@ namespace Intersect.Editor.Forms.Editors
             this.grpTimerOptions.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpTimerOptions.Location = new System.Drawing.Point(299, 159);
             this.grpTimerOptions.Name = "grpTimerOptions";
-            this.grpTimerOptions.Size = new System.Drawing.Size(274, 163);
+            this.grpTimerOptions.Size = new System.Drawing.Size(274, 201);
             this.grpTimerOptions.TabIndex = 106;
             this.grpTimerOptions.TabStop = false;
             this.grpTimerOptions.Text = "Timer Options";
+            // 
+            // cmbVariable
+            // 
+            this.cmbVariable.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbVariable.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbVariable.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbVariable.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbVariable.DrawDropdownHoverOutline = false;
+            this.cmbVariable.DrawFocusRectangle = false;
+            this.cmbVariable.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbVariable.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbVariable.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbVariable.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbVariable.FormattingEnabled = true;
+            this.cmbVariable.Location = new System.Drawing.Point(9, 127);
+            this.cmbVariable.Name = "cmbVariable";
+            this.cmbVariable.Size = new System.Drawing.Size(254, 21);
+            this.cmbVariable.TabIndex = 113;
+            this.cmbVariable.Text = null;
+            this.cmbVariable.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbVariable.SelectedIndexChanged += new System.EventHandler(this.cmbVariable_SelectedIndexChanged);
+            // 
+            // lblVariable
+            // 
+            this.lblVariable.AutoSize = true;
+            this.lblVariable.Location = new System.Drawing.Point(6, 108);
+            this.lblVariable.Name = "lblVariable";
+            this.lblVariable.Size = new System.Drawing.Size(174, 13);
+            this.lblVariable.TabIndex = 112;
+            this.lblVariable.Text = "Store Elapsed Time (ms) In Variable";
             // 
             // cmbLogoutBehavior
             // 
@@ -816,35 +848,15 @@ namespace Intersect.Editor.Forms.Editors
             this.btnCancel.Text = "Cancel";
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
-            // lblVariable
+            // chkStartWithServer
             // 
-            this.lblVariable.AutoSize = true;
-            this.lblVariable.Location = new System.Drawing.Point(6, 108);
-            this.lblVariable.Name = "lblVariable";
-            this.lblVariable.Size = new System.Drawing.Size(174, 13);
-            this.lblVariable.TabIndex = 112;
-            this.lblVariable.Text = "Store Elapsed Time (ms) In Variable";
-            // 
-            // cmbVariable
-            // 
-            this.cmbVariable.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbVariable.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbVariable.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbVariable.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbVariable.DrawDropdownHoverOutline = false;
-            this.cmbVariable.DrawFocusRectangle = false;
-            this.cmbVariable.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbVariable.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbVariable.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbVariable.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbVariable.FormattingEnabled = true;
-            this.cmbVariable.Location = new System.Drawing.Point(9, 127);
-            this.cmbVariable.Name = "cmbVariable";
-            this.cmbVariable.Size = new System.Drawing.Size(254, 21);
-            this.cmbVariable.TabIndex = 113;
-            this.cmbVariable.Text = null;
-            this.cmbVariable.TextPadding = new System.Windows.Forms.Padding(2);
-            this.cmbVariable.SelectedIndexChanged += new System.EventHandler(this.cmbVariable_SelectedIndexChanged);
+            this.chkStartWithServer.AutoSize = true;
+            this.chkStartWithServer.Location = new System.Drawing.Point(6, 166);
+            this.chkStartWithServer.Name = "chkStartWithServer";
+            this.chkStartWithServer.Size = new System.Drawing.Size(108, 17);
+            this.chkStartWithServer.TabIndex = 114;
+            this.chkStartWithServer.Text = "Start with server?";
+            this.chkStartWithServer.CheckedChanged += new System.EventHandler(this.chkStartWithServer_CheckedChanged);
             // 
             // frmTimers
             // 
@@ -942,5 +954,6 @@ namespace Intersect.Editor.Forms.Editors
         private System.Windows.Forms.Label lblLogoutBehavior;
         private DarkUI.Controls.DarkComboBox cmbVariable;
         private System.Windows.Forms.Label lblVariable;
+        private DarkUI.Controls.DarkCheckBox chkStartWithServer;
     }
 }

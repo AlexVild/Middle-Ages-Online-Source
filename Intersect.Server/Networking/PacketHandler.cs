@@ -3891,6 +3891,12 @@ namespace Intersect.Server.Networking
                 case GameObjectType.Timer:
                     obj = TimerDescriptor.Get(id);
 
+                    // Remove the timer from processing
+                    foreach (var timer in TimerProcessor.ActiveTimers.Where(t => t.DescriptorId == id).ToArray())
+                    {
+                        TimerProcessor.RemoveTimer(timer);
+                    }
+
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

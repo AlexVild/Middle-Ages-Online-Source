@@ -5475,6 +5475,9 @@ Tick timer saved in server config.json.";
             public static LocalizedString SortAlphabetically = @"Order Alphabetically";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString StartWithServer = @"Start with server?";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString TimeLimit = @"Time Limit (Seconds)";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -5503,6 +5506,9 @@ Tick timer saved in server config.json.";
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString Undo = @"Undo";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString VariableLabel = @"Store Elapsed Time (ms) In Variable";
+            
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString Visible = @"Visible to Player?";
         }

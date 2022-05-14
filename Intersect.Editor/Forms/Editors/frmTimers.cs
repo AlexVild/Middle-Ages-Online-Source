@@ -169,6 +169,8 @@ namespace Intersect.Editor.Forms.Editors
             lblLogoutBehavior.Text = Strings.TimerEditor.LogoutBehavior;
             AddToolTip(lblLogoutBehavior, Strings.TimerEditor.LogoutBehaviorTooltip);
             lblCompletionBehavior.Text = Strings.TimerEditor.CompletionBehavior;
+            lblVariable.Text = Strings.TimerEditor.VariableLabel;
+            chkStartWithServer.Text = Strings.TimerEditor.StartWithServer;
 
             btnCancel.Text = Strings.TimerEditor.Cancel;
             btnSave.Text = Strings.TimerEditor.Save;
@@ -315,6 +317,8 @@ namespace Intersect.Editor.Forms.Editors
             cmbCompletionBehavior.SelectedIndex = (int)mEditorItem.CompletionBehavior;
 
             PopulateVariableOptions(false);
+
+            chkStartWithServer.Checked = mEditorItem.StartWithServer;
         }
 
         private static TimerRepetitionTypes SelectRepetitionType(int repetitions)
@@ -392,6 +396,7 @@ namespace Intersect.Editor.Forms.Editors
         {
             chkContinue.Enabled = mEditorItem.Type != TimerType.Scheduler;
             cmbLogoutBehavior.Enabled = mEditorItem.OwnerType == TimerOwnerType.Player;
+            chkStartWithServer.Enabled = mEditorItem.OwnerType == TimerOwnerType.Global;
         }
 
         public void ChangeTimerOwnerType()
@@ -671,6 +676,11 @@ namespace Intersect.Editor.Forms.Editors
             }
 
             mEditorItem.ElapsedTimeVariableId = selection;
+        }
+
+        private void chkStartWithServer_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.StartWithServer = chkStartWithServer.Checked;
         }
     }
 }
