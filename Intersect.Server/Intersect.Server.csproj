@@ -769,6 +769,10 @@
     <Compile Include="Migrations\Game\20220513173328_TimerMigrationNewFields.designer.cs">
       <DependentUpon>20220513173328_TimerMigrationNewFields.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20220513234035_TimerElapsedTimeMigration.cs" />
+    <Compile Include="Migrations\Game\20220513234035_TimerElapsedTimeMigration.designer.cs">
+      <DependentUpon>20220513234035_TimerElapsedTimeMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

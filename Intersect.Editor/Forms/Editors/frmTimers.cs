@@ -3,6 +3,7 @@ using Intersect.Editor.General;
 using Intersect.Editor.Localization;
 using Intersect.Editor.Networking;
 using Intersect.Enums;
+using Intersect.GameObjects;
 using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Timers;
 using Intersect.Models;
@@ -312,6 +313,8 @@ namespace Intersect.Editor.Forms.Editors
                 cmbLogoutBehavior.SelectedIndex = (int) mEditorItem.LogoutBehavior;
             }
             cmbCompletionBehavior.SelectedIndex = (int)mEditorItem.CompletionBehavior;
+
+            PopulateVariableOptions(false);
         }
 
         private static TimerRepetitionTypes SelectRepetitionType(int repetitions)
@@ -324,6 +327,38 @@ namespace Intersect.Editor.Forms.Editors
                     return TimerRepetitionTypes.Indefinite;
                 default:
                     return TimerRepetitionTypes.Repeat;
+            }
+        }
+
+        private void PopulateVariableOptions(bool newSelection)
+        {
+            cmbVariable.Items.Clear();
+            cmbVariable.Items.Add(Strings.General.none);
+            int listIdx = 0;
+            switch(mEditorItem.OwnerType)
+            {
+                case TimerOwnerType.Global:
+                    cmbVariable.Items.AddRange(ServerVariableBase.GetNamesByType(VariableDataTypes.Integer));
+                    listIdx = ServerVariableBase.ListIndex(mEditorItem.ElapsedTimeVariableId, VariableDataTypes.Integer) + 1;
+                    break;
+                case TimerOwnerType.Player:
+                case TimerOwnerType.Party:
+                    cmbVariable.Items.AddRange(PlayerVariableBase.GetNamesByType(VariableDataTypes.Integer));
+                    listIdx = PlayerVariableBase.ListIndex(mEditorItem.ElapsedTimeVariableId, VariableDataTypes.Integer) + 1;
+                    break;
+                case TimerOwnerType.Instance:
+                    cmbVariable.Items.AddRange(InstanceVariableBase.GetNamesByType(VariableDataTypes.Integer));
+                    listIdx = InstanceVariableBase.ListIndex(mEditorItem.ElapsedTimeVariableId, VariableDataTypes.Integer) + 1;
+                    break;
+            }
+
+            if (!newSelection && listIdx < cmbVariable.Items.Count)
+            {
+                cmbVariable.SelectedIndex = listIdx;
+            }
+            else
+            {
+                cmbVariable.SelectedIndex = 0;
             }
         }
         #endregion
@@ -586,6 +621,7 @@ namespace Intersect.Editor.Forms.Editors
             }
             UpdateSettingControls();
             UpdateOptionControls();
+            PopulateVariableOptions(true);
         }
 
         private void cmbOwnerType_SelectedIndexChanged(object sender, EventArgs e)
@@ -610,6 +646,31 @@ namespace Intersect.Editor.Forms.Editors
         private void chkContinue_CheckedChanged(object sender, EventArgs e)
         {
             mEditorItem.ContinueAfterExpiration = chkContinue.Checked;
+        }
+
+        private void cmbVariable_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (mPopulating)
+            {
+                return;
+            }
+
+            Guid selection = default;
+            switch(mEditorItem.OwnerType)
+            {
+                case TimerOwnerType.Global:
+                    selection = ServerVariableBase.IdFromList(cmbVariable.SelectedIndex - 1, VariableDataTypes.Integer);
+                    break;
+                case TimerOwnerType.Player:
+                case TimerOwnerType.Party:
+                    selection = PlayerVariableBase.IdFromList(cmbVariable.SelectedIndex - 1, VariableDataTypes.Integer);
+                    break;
+                case TimerOwnerType.Instance:
+                    selection = InstanceVariableBase.IdFromList(cmbVariable.SelectedIndex - 1, VariableDataTypes.Integer);
+                    break;
+            }
+
+            mEditorItem.ElapsedTimeVariableId = selection;
         }
     }
 }

@@ -67,6 +67,16 @@ namespace Intersect.GameObjects.Timers
         public TimerCompletionBehavior CompletionBehavior { get; set; }
 
         /// <summary>
+        /// Stores the timers elapsed time at timer destruction in some variable with this ID.
+        /// The variable type is determined by <see cref="OwnerType"/>:
+        /// - <see cref="TimerOwnerType.Global"/> - <see cref="ServerVariableBase"/>
+        /// - <see cref="TimerOwnerType.Player"/> - <see cref="PlayerVariableBase"/>
+        /// - <see cref="TimerOwnerType.Party"/> - <see cref="PlayerVariableBase"/>
+        /// - <see cref="TimerOwnerType.Instance"/> - <see cref="InstanceVariableBase"/>
+        /// </summary>
+        public Guid ElapsedTimeVariableId { get; set; }
+
+        /// <summary>
         /// How long a timer should run before execution
         /// </summary>
         public long TimeLimit { get; set; } = 1L;

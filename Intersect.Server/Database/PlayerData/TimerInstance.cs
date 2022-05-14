@@ -1,7 +1,9 @@
-﻿using Intersect.GameObjects.Events;
+﻿using Intersect.GameObjects;
+using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Timers;
 using Intersect.Server.Entities;
 using Intersect.Server.General;
+using Intersect.Server.Maps;
 using Intersect.Utilities;
 using System;
 using System.Collections.Generic;
@@ -68,7 +70,7 @@ namespace Intersect.Server.Database.PlayerData
         /// </summary>
         [NotMapped]
         [JsonIgnore] 
-        public long StartTime => TimeRemaining - (Descriptor.TimeLimit * (CompletionCount + 1));
+        public long StartTime => TimeRemaining - (Descriptor.TimeLimit * 1000 * (CompletionCount));
 
         /// <summary>
         /// Helper to calculate how long this timer has been running
@@ -170,6 +172,38 @@ namespace Intersect.Server.Database.PlayerData
                 player.StartCommonEvent(Descriptor.ExpirationEvent);
             }
             player.StartCommonEvent(Descriptor.CompletionEvent);
+        }
+
+        /// <summary>
+        /// Stores the timer's total elapsed time in a variable
+        /// </summary>
+        public void StoreElapsedTime()
+        {
+            // Log the elapsed time in a variable, if necessary
+            var descriptor = Descriptor;
+            if (descriptor.ElapsedTimeVariableId != default)
+            {
+                switch (descriptor.OwnerType)
+                {
+                    case TimerOwnerType.Global:
+                        var globalVar = ServerVariableBase.Get(descriptor.ElapsedTimeVariableId);
+                        if (globalVar != default)
+                        {
+                            globalVar.Value.Integer = ElapsedTime;
+                        }
+                        break;
+                    case TimerOwnerType.Player:
+                    case TimerOwnerType.Party:
+                        foreach (var player in GetAffectedPlayers())
+                        {
+                            player.SetVariableValue(descriptor.ElapsedTimeVariableId, ElapsedTime);
+                        }
+                        break;
+                    case TimerOwnerType.Instance:
+                        MapInstance.SetInstanceVariable(descriptor.ElapsedTimeVariableId, ElapsedTime, OwnerId);
+                        break;
+                }
+            }
         }
     }
 }
