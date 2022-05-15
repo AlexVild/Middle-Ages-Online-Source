@@ -47,7 +47,7 @@ namespace Intersect.Server.Database.PlayerData
         public Guid OwnerId { get; set; }
 
         /// <summary>
-        /// A UTC Timestamp of when the timer will next expire/when the timer started if it is of type <see cref="TimerType.Stopwatch"/>
+        /// A UTC Timestamp of when the timer will next expire
         /// </summary>
         public long TimeRemaining { get; set; }
 
@@ -70,7 +70,7 @@ namespace Intersect.Server.Database.PlayerData
         /// </summary>
         [NotMapped]
         [JsonIgnore] 
-        public long StartTime => TimeRemaining - (Descriptor.TimeLimit * 1000 * (CompletionCount));
+        public long StartTime => TimeRemaining - (Descriptor.TimeLimit * 1000 * (CompletionCount > 1 ? CompletionCount : 1));
 
         /// <summary>
         /// Helper to calculate how long this timer has been running

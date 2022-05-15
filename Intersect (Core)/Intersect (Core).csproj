@@ -442,6 +442,8 @@
     <Compile Include="Network\Packets\Server\QuestPointPacket.cs" />
     <Compile Include="Network\Packets\Server\ResourceLockPacket.cs" />
     <Compile Include="Network\Packets\Server\ShakeScreenPacket.cs" />
+    <Compile Include="Network\Packets\Server\TimerPacket.cs" />
+    <Compile Include="Network\Packets\Server\TimerStopPacket.cs" />
     <Compile Include="Network\Packets\Server\UpdateFutureWarpPacket.cs" />
     <Compile Include="Network\Packets\SlotQuantityPacket.cs" />
     <Compile Include="Network\Packets\Client\SwapBankItemsPacket.cs" />

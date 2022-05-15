@@ -24,6 +24,7 @@ using Intersect.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Intersect.GameObjects.Timers;
 
 namespace Intersect.Client.Networking
 {
@@ -2384,6 +2385,32 @@ namespace Intersect.Client.Networking
         public void HandlePacket(IPacketSender packetSender, ProjectileCastDelayPacket packet)
         {
             Globals.Me.LastProjectileCastTime = Timing.Global.Milliseconds + packet.DelayTime;
+        }
+
+        //TimerPacket
+        public void HandlePacket(IPacketSender packetSender, TimerPacket packet)
+        {
+            if (Globals.Me.ActiveTimers.Find(t => t.DescriptorId == packet.DescriptorId) != default)
+            {
+                // Timer already being shown
+                return;
+            }
+
+            var descriptor = TimerDescriptor.Get(packet.DescriptorId);
+            var displayType = descriptor.Type == TimerType.Countdown ? TimerDisplayType.Descending : TimerDisplayType.Ascending;
+
+            var timer = new Timer(packet.DescriptorId, packet.Timestamp, packet.StartTime, displayType, descriptor.DisplayName);
+            Globals.Me.ActiveTimers.Add(timer);
+        }
+
+        //TimerStopPacket
+        public void HandlePacket(IPacketSender packetSender, TimerStopPacket packet)
+        {
+            foreach (var timer in Globals.Me.ActiveTimers.FindAll(t => t.DescriptorId == packet.DescriptorId))
+            {
+                timer.ElapsedTime = packet.ElapsedTime;
+                timer.EndTimer();
+            }
         }
     }
 }

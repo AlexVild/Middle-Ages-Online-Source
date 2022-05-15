@@ -61,6 +61,8 @@ namespace Intersect.Client.Interface.Game
 
         private WarningWindow mWarnings;
 
+        private TimerWindow mTimerWindow;
+
         private bool mShouldCloseBag;
 
         private bool mShouldCloseBank;
@@ -139,6 +141,7 @@ namespace Intersect.Client.Interface.Game
             mComboText = new ComboText(GameCanvas);
             mHarvestBonusWindow = new HarvestBonusWindow(GameCanvas);
             mWarnings = new WarningWindow(GameCanvas);
+            mTimerWindow = new TimerWindow(GameCanvas);
         }
 
         //Chatbox
@@ -394,6 +397,7 @@ namespace Intersect.Client.Interface.Game
             mComboText?.Update();
             mHarvestBonusWindow?.Update();
             mWarnings?.Update();
+            mTimerWindow.Update();
 
             if (Globals.QuestOffers.Count > 0)
             {

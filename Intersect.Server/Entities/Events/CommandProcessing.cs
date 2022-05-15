@@ -1756,7 +1756,7 @@ namespace Intersect.Server.Entities.Events
 
                 // Time Lapses require variables to already be evaluated in the string, so we make a second string builder.
                 var finalSb = new StringBuilder(sb.ToString());
-                var elapsedRegexString = $@"\{Strings.Events.elapsed}\{{\d+\}}";
+                var elapsedRegexString = $@"\{Strings.Events.Elapsed}\{{\d+\}}";
                 Regex elapsedRegex = new Regex(elapsedRegexString);
 
                 foreach (var match in elapsedRegex.Matches(finalSb.ToString()))
@@ -1770,20 +1770,20 @@ namespace Intersect.Server.Entities.Events
                         switch ((int)ms)
                         {
                             case int n when n < TimerConstants.HourMillis:
-                                elapsedString = string.Format(Strings.Events.elapsedMinutes,
+                                elapsedString = string.Format(Strings.Events.ElapsedMinutes,
                                     t.Minutes,
                                     t.Seconds,
                                     t.Milliseconds);
                                 break;
                             case int n when n >= TimerConstants.HourMillis && n < TimerConstants.DayMillis:
-                                elapsedString = string.Format(Strings.Events.elapsedHours,
+                                elapsedString = string.Format(Strings.Events.ElapsedHours,
                                     t.Hours,
                                     t.Minutes,
                                     t.Seconds,
                                     t.Milliseconds);
                                 break;
                             case int n when n >= TimerConstants.DayMillis:
-                                elapsedString = string.Format(Strings.Events.elapsedDays,
+                                elapsedString = string.Format(Strings.Events.ElapsedDays,
                                     t.Days,
                                     t.Hours,
                                     t.Minutes,
@@ -2457,7 +2457,12 @@ namespace Intersect.Server.Entities.Events
                 if (TimerProcessor.TryGetOwnerId(descriptor.OwnerType, command.DescriptorId, player, out var ownerId) && !TimerProcessor.TryGetActiveTimer(command.DescriptorId, ownerId, out _))
                 {
                     TimerProcessor.AddTimer(command.DescriptorId, ownerId, now);
+                    if (!descriptor.Hidden && TimerProcessor.TryGetActiveTimer(command.DescriptorId, ownerId, out var timer))
+                    {
+                        PacketSender.SendTimerPacket(player, timer);
+                    }
                 }
+                
             }
         }
 

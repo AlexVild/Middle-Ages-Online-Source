@@ -28,6 +28,7 @@ using Intersect.Utilities;
 using Newtonsoft.Json;
 using Intersect.Server.Classes.Maps;
 using Intersect.GameObjects.Timers;
+using Intersect.Server.Database.PlayerData;
 
 namespace Intersect.Server.Networking
 {
@@ -2374,6 +2375,16 @@ namespace Intersect.Server.Networking
         public static void SendProjectileCastDelayPacket(Player player, long delayTime)
         {
             player?.SendPacket(new ProjectileCastDelayPacket(delayTime));
+        }
+
+        public static void SendTimerPacket(Player player, TimerInstance timer)
+        {
+            player?.SendPacket(new TimerPacket(timer.DescriptorId, timer.TimeRemaining, timer.StartTime));
+        }
+
+        public static void SendTimerStopPacket(Player player, TimerInstance timer)
+        {
+            player?.SendPacket(new TimerStopPacket(timer.DescriptorId, timer.ElapsedTime));
         }
     }
 

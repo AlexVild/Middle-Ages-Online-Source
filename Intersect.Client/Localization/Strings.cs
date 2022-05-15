@@ -2056,6 +2056,18 @@ namespace Intersect.Client.Localization
             public static LocalizedString EntityNameAndLevel = @"{00} [Lv. {01}]";
         }
 
+        public struct TimerWindow
+        {
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ElapsedMinutes = @"{0:D1}:{1:D2}.{2:D1}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ElapsedHours = @"{0:D1}:{1:D2}:{2:D2}.{3:D1}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ElapsedDays = @"{0:D1} Day(s) and {1:D2}:{2:D2}:{3:D2}.{4:D1}";
+        }
+
     }
 
 }

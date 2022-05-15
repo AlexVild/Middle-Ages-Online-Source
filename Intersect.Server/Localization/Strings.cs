@@ -580,16 +580,16 @@ namespace Intersect.Server.Localization
             public readonly LocalizedString commandparameter = @"\param";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public readonly LocalizedString elapsed = @"\elapsed";
+            public readonly LocalizedString Elapsed = @"\elapsed";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public readonly LocalizedString elapsedMinutes = @"{0:D1}:{1:D2}:{2:D3}";
+            public readonly LocalizedString ElapsedMinutes = @"{0:D1}:{1:D2}.{2:D3}";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public readonly LocalizedString elapsedHours = @"{0:D1}:{1:D2}:{2:D2}:{3:D3}";
+            public readonly LocalizedString ElapsedHours = @"{0:D1}:{1:D2}:{2:D2}.{3:D3}";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public readonly LocalizedString elapsedDays = @"{0:D1} Day(s) and {1:D2}:{2:D2}:{3:D2}:{4:D3}";
+            public readonly LocalizedString ElapsedDays = @"{0:D1} Day(s) and {1:D2}:{2:D2}:{3:D2}.{4:D3}";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString eventnamecommand = @"\en";

@@ -5,6 +5,7 @@ using Intersect.Server.Database.PlayerData;
 using Intersect.Server.Entities;
 using Intersect.Server.General;
 using Intersect.Server.Maps;
+using Intersect.Server.Networking;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -145,6 +146,15 @@ namespace Intersect.Server.Core
         public static void RemoveTimer(TimerInstance timer)
         {
             timer?.StoreElapsedTime();
+
+            if (!timer.Descriptor.Hidden)
+            {
+                foreach (var player in timer.GetAffectedPlayers())
+                {
+                    PacketSender.SendTimerStopPacket(player, timer);
+                }
+            }
+
             using (var context = DbInterface.CreatePlayerContext(readOnly: false))
             {
                 ActiveTimers.Remove(timer);
