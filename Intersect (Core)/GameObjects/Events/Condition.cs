@@ -67,6 +67,8 @@ namespace Intersect.GameObjects.Events
 
         HighestClassRankIs,
 
+        TimerIsActive,
+
     }
 
     public class Condition
@@ -514,6 +516,26 @@ namespace Intersect.GameObjects.Events
         {
             return $"Highest CR {ClassRank}+";
         }
+    }
+
+    public enum TimerActiveConditions
+    {
+        IsActive,
+        Elapsed,
+        Repetitions,
+    }
+
+    public class TimerIsActive : Condition
+    {
+        public override ConditionTypes Type { get; } = ConditionTypes.TimerIsActive;
+
+        public Guid descriptorId { get; set; }
+
+        public TimerActiveConditions ConditionType { get; set; }
+
+        public int ElapsedSeconds { get; set; }
+
+        public int Repetitions { get; set; }
     }
 
     public class VariableCompaison

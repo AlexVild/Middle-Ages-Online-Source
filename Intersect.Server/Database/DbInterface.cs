@@ -39,6 +39,7 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
 using MySql.Data.MySqlClient;
+using Intersect.GameObjects.Timers;
 
 namespace Intersect.Server.Database
 {
@@ -576,6 +577,10 @@ namespace Intersect.Server.Database
                     QuestBoardBase.Lookup.Clear();
 
                     break;
+                case GameObjectType.Timer:
+                    TimerDescriptor.Lookup.Clear();
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }
@@ -729,6 +734,13 @@ namespace Intersect.Server.Database
                             }
 
                             break;
+                        case GameObjectType.Timer:
+                           foreach (var psw in context.Timers)
+                            {
+                                TimerDescriptor.Lookup.Set(psw.Id, psw);
+                            }
+
+                            break;
                         default:
                             throw new ArgumentOutOfRangeException(nameof(gameObjectType), gameObjectType, null);
                     }
@@ -824,6 +836,10 @@ namespace Intersect.Server.Database
                     dbObj = new QuestBoardBase(predefinedid);
 
                     break;
+                case GameObjectType.Timer:
+                    dbObj = new TimerDescriptor(predefinedid);
+
+                    break;
                 case GameObjectType.Tileset:
                     dbObj = new TilesetBase(predefinedid);
 
@@ -845,6 +861,13 @@ namespace Intersect.Server.Database
             }
 
             return dbObj == null ? null : AddGameObject(gameObjectType, dbObj);
+        }
+
+        public static IDatabaseObject AddNewTimerGameObject(TimerOwnerType ownerType)
+        {
+            var dbObj = new TimerDescriptor(Guid.NewGuid(), ownerType);
+
+            return dbObj == null ? null : AddGameObject(GameObjectType.Timer, dbObj);
         }
 
         public static IDatabaseObject AddGameObject(GameObjectType gameObjectType, IDatabaseObject dbObj)
@@ -969,6 +992,11 @@ namespace Intersect.Server.Database
                         case GameObjectType.QuestBoard:
                             context.QuestBoards.Add((QuestBoardBase)dbObj);
                             QuestBoardBase.Lookup.Set(dbObj.Id, dbObj);
+
+                            break;
+                        case GameObjectType.Timer:
+                            context.Timers.Add((TimerDescriptor)dbObj);
+                            TimerDescriptor.Lookup.Set(dbObj.Id, dbObj);
 
                             break;
 
@@ -1102,6 +1130,10 @@ namespace Intersect.Server.Database
                             context.QuestBoards.Remove((QuestBoardBase)gameObject);
 
                             break;
+                        case GameObjectType.Timer:
+                            context.Timers.Remove((TimerDescriptor)gameObject);
+
+                            break;
                     }
 
                     if (gameObject.Type.GetLookup().Values.Contains(gameObject))
@@ -1228,6 +1260,10 @@ namespace Intersect.Server.Database
                             break;
                         case GameObjectType.QuestBoard:
                             context.QuestBoards.Update((QuestBoardBase)gameObject);
+
+                            break;
+                        case GameObjectType.Timer:
+                            context.Timers.Update((TimerDescriptor)gameObject);
 
                             break;
                     }
@@ -1816,6 +1852,7 @@ namespace Intersect.Server.Database
                     MigrateDbSet(context.InstanceVariables, newGameContext.InstanceVariables);
                     MigrateDbSet(context.QuestLists, newGameContext.QuestLists);
                     MigrateDbSet(context.QuestBoards, newGameContext.QuestBoards);
+                    MigrateDbSet(context.Timers, newGameContext.Timers);
                     newGameContext.ChangeTracker.DetectChanges();
                     newGameContext.SaveChanges();
                     newGameContext.Dispose();
@@ -1842,6 +1879,7 @@ namespace Intersect.Server.Database
                     MigrateDbSet(context.Mutes, newPlayerContext.Mutes);
                     MigrateDbSet(context.Bans, newPlayerContext.Bans);
                     MigrateDbSet(context.Player_Record, newPlayerContext.Player_Record);
+                    MigrateDbSet(context.Timers, newPlayerContext.Timers);
                     newPlayerContext.ChangeTracker.DetectChanges();
                     newPlayerContext.SaveChanges();
                     newPlayerContext.Dispose();

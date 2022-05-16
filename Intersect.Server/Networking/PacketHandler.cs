@@ -34,6 +34,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using Intersect.GameObjects.Timers;
 
 namespace Intersect.Server.Networking
 {
@@ -3749,6 +3750,18 @@ namespace Intersect.Server.Networking
             PacketSender.SendGameObjectToAll(obj);
         }
 
+        //CreateTimerPacket
+        public void HandlePacket(Client client, Network.Packets.Editor.CreateTimerPacket packet)
+        {
+            if (!client.IsEditor)
+            {
+                return;
+            }
+
+            var obj = DbInterface.AddNewTimerGameObject(packet.OwnerType);
+            PacketSender.SendGameObjectToAll(obj);
+        }
+
         //RequestOpenEditorPacket
         public void HandlePacket(Client client, Network.Packets.Editor.RequestOpenEditorPacket packet)
         {
@@ -3875,7 +3888,16 @@ namespace Intersect.Server.Networking
                     obj = InstanceVariableBase.Get(id);
 
                     break;
+                case GameObjectType.Timer:
+                    obj = TimerDescriptor.Get(id);
 
+                    // Remove the timer from processing
+                    foreach (var timer in TimerProcessor.ActiveTimers.Where(t => t.DescriptorId == id).ToArray())
+                    {
+                        TimerProcessor.RemoveTimer(timer);
+                    }
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -4012,6 +4034,10 @@ namespace Intersect.Server.Networking
                 
                 case GameObjectType.QuestBoard:
                     obj = DatabaseObject<QuestBoardBase>.Lookup.Get(id);
+
+                    break;
+                case GameObjectType.Timer:
+                    obj = DatabaseObject<TimerDescriptor>.Lookup.Get(id);
 
                     break;
 

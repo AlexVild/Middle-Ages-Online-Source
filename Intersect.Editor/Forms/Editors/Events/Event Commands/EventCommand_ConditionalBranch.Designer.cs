@@ -31,6 +31,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private void InitializeComponent()
         {
             this.grpConditional = new DarkUI.Controls.DarkGroupBox();
+            this.grpNpc = new DarkUI.Controls.DarkGroupBox();
+            this.chkNpc = new DarkUI.Controls.DarkCheckBox();
+            this.cmbNpcs = new DarkUI.Controls.DarkComboBox();
+            this.lblNpc = new System.Windows.Forms.Label();
             this.grpClass = new DarkUI.Controls.DarkGroupBox();
             this.lblClassRank = new System.Windows.Forms.Label();
             this.nudClassRank = new DarkUI.Controls.DarkNumericUpDown();
@@ -154,11 +158,18 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpEquippedItem = new DarkUI.Controls.DarkGroupBox();
             this.cmbEquippedItem = new DarkUI.Controls.DarkComboBox();
             this.lblEquippedItem = new System.Windows.Forms.Label();
-            this.grpNpc = new DarkUI.Controls.DarkGroupBox();
-            this.cmbNpcs = new DarkUI.Controls.DarkComboBox();
-            this.lblNpc = new System.Windows.Forms.Label();
-            this.chkNpc = new DarkUI.Controls.DarkCheckBox();
+            this.grpTimers = new DarkUI.Controls.DarkGroupBox();
+            this.cmbTimerType = new DarkUI.Controls.DarkComboBox();
+            this.cmbTimer = new DarkUI.Controls.DarkComboBox();
+            this.lblTimer = new System.Windows.Forms.Label();
+            this.lblTimerType = new System.Windows.Forms.Label();
+            this.rdoIsActive = new DarkUI.Controls.DarkRadioButton();
+            this.rdoSecondsElapsed = new DarkUI.Controls.DarkRadioButton();
+            this.rdoRepsMade = new DarkUI.Controls.DarkRadioButton();
+            this.nudSecondsElapsed = new DarkUI.Controls.DarkNumericUpDown();
+            this.nudRepetitionsMade = new DarkUI.Controls.DarkNumericUpDown();
             this.grpConditional.SuspendLayout();
+            this.grpNpc.SuspendLayout();
             this.grpClass.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudClassRank)).BeginInit();
             this.grpLevelStat.SuspendLayout();
@@ -190,13 +201,16 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpMapIs.SuspendLayout();
             this.grpGender.SuspendLayout();
             this.grpEquippedItem.SuspendLayout();
-            this.grpNpc.SuspendLayout();
+            this.grpTimers.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSecondsElapsed)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudRepetitionsMade)).BeginInit();
             this.SuspendLayout();
             // 
             // grpConditional
             // 
             this.grpConditional.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.grpConditional.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpConditional.Controls.Add(this.grpTimers);
             this.grpConditional.Controls.Add(this.grpNpc);
             this.grpConditional.Controls.Add(this.grpClass);
             this.grpConditional.Controls.Add(this.grpLevelStat);
@@ -230,6 +244,59 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpConditional.TabIndex = 17;
             this.grpConditional.TabStop = false;
             this.grpConditional.Text = "Conditional";
+            // 
+            // grpNpc
+            // 
+            this.grpNpc.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.grpNpc.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpNpc.Controls.Add(this.chkNpc);
+            this.grpNpc.Controls.Add(this.cmbNpcs);
+            this.grpNpc.Controls.Add(this.lblNpc);
+            this.grpNpc.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpNpc.Location = new System.Drawing.Point(9, 40);
+            this.grpNpc.Name = "grpNpc";
+            this.grpNpc.Size = new System.Drawing.Size(262, 83);
+            this.grpNpc.TabIndex = 35;
+            this.grpNpc.TabStop = false;
+            this.grpNpc.Text = "NPCs";
+            // 
+            // chkNpc
+            // 
+            this.chkNpc.Location = new System.Drawing.Point(10, 20);
+            this.chkNpc.Name = "chkNpc";
+            this.chkNpc.Size = new System.Drawing.Size(98, 17);
+            this.chkNpc.TabIndex = 60;
+            this.chkNpc.Text = "Specific Npc?";
+            this.chkNpc.CheckedChanged += new System.EventHandler(this.chkNpc_CheckedChanged);
+            // 
+            // cmbNpcs
+            // 
+            this.cmbNpcs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbNpcs.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbNpcs.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbNpcs.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbNpcs.DrawDropdownHoverOutline = false;
+            this.cmbNpcs.DrawFocusRectangle = false;
+            this.cmbNpcs.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbNpcs.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbNpcs.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbNpcs.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbNpcs.FormattingEnabled = true;
+            this.cmbNpcs.Location = new System.Drawing.Point(51, 43);
+            this.cmbNpcs.Name = "cmbNpcs";
+            this.cmbNpcs.Size = new System.Drawing.Size(196, 21);
+            this.cmbNpcs.TabIndex = 3;
+            this.cmbNpcs.Text = null;
+            this.cmbNpcs.TextPadding = new System.Windows.Forms.Padding(2);
+            // 
+            // lblNpc
+            // 
+            this.lblNpc.AutoSize = true;
+            this.lblNpc.Location = new System.Drawing.Point(10, 48);
+            this.lblNpc.Name = "lblNpc";
+            this.lblNpc.Size = new System.Drawing.Size(32, 13);
+            this.lblNpc.TabIndex = 2;
+            this.lblNpc.Text = "NPC:";
             // 
             // grpClass
             // 
@@ -2009,58 +2076,155 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.lblEquippedItem.TabIndex = 2;
             this.lblEquippedItem.Text = "Item:";
             // 
-            // grpNpc
+            // grpTimers
             // 
-            this.grpNpc.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.grpNpc.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpNpc.Controls.Add(this.chkNpc);
-            this.grpNpc.Controls.Add(this.cmbNpcs);
-            this.grpNpc.Controls.Add(this.lblNpc);
-            this.grpNpc.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpNpc.Location = new System.Drawing.Point(9, 40);
-            this.grpNpc.Name = "grpNpc";
-            this.grpNpc.Size = new System.Drawing.Size(262, 83);
-            this.grpNpc.TabIndex = 35;
-            this.grpNpc.TabStop = false;
-            this.grpNpc.Text = "NPCs";
+            this.grpTimers.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.grpTimers.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpTimers.Controls.Add(this.nudRepetitionsMade);
+            this.grpTimers.Controls.Add(this.nudSecondsElapsed);
+            this.grpTimers.Controls.Add(this.rdoRepsMade);
+            this.grpTimers.Controls.Add(this.rdoSecondsElapsed);
+            this.grpTimers.Controls.Add(this.rdoIsActive);
+            this.grpTimers.Controls.Add(this.cmbTimerType);
+            this.grpTimers.Controls.Add(this.cmbTimer);
+            this.grpTimers.Controls.Add(this.lblTimer);
+            this.grpTimers.Controls.Add(this.lblTimerType);
+            this.grpTimers.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpTimers.Location = new System.Drawing.Point(9, 40);
+            this.grpTimers.Name = "grpTimers";
+            this.grpTimers.Size = new System.Drawing.Size(262, 234);
+            this.grpTimers.TabIndex = 61;
+            this.grpTimers.TabStop = false;
+            this.grpTimers.Text = "Timers";
             // 
-            // cmbNpcs
+            // cmbTimerType
             // 
-            this.cmbNpcs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbNpcs.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbNpcs.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbNpcs.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbNpcs.DrawDropdownHoverOutline = false;
-            this.cmbNpcs.DrawFocusRectangle = false;
-            this.cmbNpcs.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbNpcs.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbNpcs.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbNpcs.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbNpcs.FormattingEnabled = true;
-            this.cmbNpcs.Location = new System.Drawing.Point(51, 43);
-            this.cmbNpcs.Name = "cmbNpcs";
-            this.cmbNpcs.Size = new System.Drawing.Size(196, 21);
-            this.cmbNpcs.TabIndex = 3;
-            this.cmbNpcs.Text = null;
-            this.cmbNpcs.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbTimerType.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbTimerType.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbTimerType.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbTimerType.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbTimerType.DrawDropdownHoverOutline = false;
+            this.cmbTimerType.DrawFocusRectangle = false;
+            this.cmbTimerType.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbTimerType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbTimerType.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbTimerType.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbTimerType.FormattingEnabled = true;
+            this.cmbTimerType.Location = new System.Drawing.Point(65, 18);
+            this.cmbTimerType.Name = "cmbTimerType";
+            this.cmbTimerType.Size = new System.Drawing.Size(177, 21);
+            this.cmbTimerType.TabIndex = 31;
+            this.cmbTimerType.Text = null;
+            this.cmbTimerType.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbTimerType.SelectedIndexChanged += new System.EventHandler(this.cmbTimerType_SelectedIndexChanged);
             // 
-            // lblNpc
+            // cmbTimer
             // 
-            this.lblNpc.AutoSize = true;
-            this.lblNpc.Location = new System.Drawing.Point(10, 48);
-            this.lblNpc.Name = "lblNpc";
-            this.lblNpc.Size = new System.Drawing.Size(32, 13);
-            this.lblNpc.TabIndex = 2;
-            this.lblNpc.Text = "NPC:";
+            this.cmbTimer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbTimer.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbTimer.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbTimer.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbTimer.DrawDropdownHoverOutline = false;
+            this.cmbTimer.DrawFocusRectangle = false;
+            this.cmbTimer.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbTimer.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbTimer.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbTimer.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbTimer.FormattingEnabled = true;
+            this.cmbTimer.Location = new System.Drawing.Point(65, 51);
+            this.cmbTimer.Name = "cmbTimer";
+            this.cmbTimer.Size = new System.Drawing.Size(177, 21);
+            this.cmbTimer.TabIndex = 30;
+            this.cmbTimer.Text = null;
+            this.cmbTimer.TextPadding = new System.Windows.Forms.Padding(2);
             // 
-            // chkNpc
+            // lblTimer
             // 
-            this.chkNpc.Location = new System.Drawing.Point(10, 20);
-            this.chkNpc.Name = "chkNpc";
-            this.chkNpc.Size = new System.Drawing.Size(98, 17);
-            this.chkNpc.TabIndex = 60;
-            this.chkNpc.Text = "Specific Npc?";
-            this.chkNpc.CheckedChanged += new System.EventHandler(this.chkNpc_CheckedChanged);
+            this.lblTimer.AutoSize = true;
+            this.lblTimer.Location = new System.Drawing.Point(6, 54);
+            this.lblTimer.Name = "lblTimer";
+            this.lblTimer.Size = new System.Drawing.Size(33, 13);
+            this.lblTimer.TabIndex = 29;
+            this.lblTimer.Text = "Timer";
+            // 
+            // lblTimerType
+            // 
+            this.lblTimerType.AutoSize = true;
+            this.lblTimerType.Location = new System.Drawing.Point(6, 21);
+            this.lblTimerType.Name = "lblTimerType";
+            this.lblTimerType.Size = new System.Drawing.Size(31, 13);
+            this.lblTimerType.TabIndex = 28;
+            this.lblTimerType.Text = "Type";
+            // 
+            // rdoIsActive
+            // 
+            this.rdoIsActive.AutoSize = true;
+            this.rdoIsActive.Checked = true;
+            this.rdoIsActive.Location = new System.Drawing.Point(8, 90);
+            this.rdoIsActive.Name = "rdoIsActive";
+            this.rdoIsActive.Size = new System.Drawing.Size(66, 17);
+            this.rdoIsActive.TabIndex = 51;
+            this.rdoIsActive.TabStop = true;
+            this.rdoIsActive.Text = "Is Active";
+            this.rdoIsActive.CheckedChanged += new System.EventHandler(this.rdoIsActive_CheckedChanged);
+            // 
+            // rdoSecondsElapsed
+            // 
+            this.rdoSecondsElapsed.AutoSize = true;
+            this.rdoSecondsElapsed.Location = new System.Drawing.Point(8, 116);
+            this.rdoSecondsElapsed.Name = "rdoSecondsElapsed";
+            this.rdoSecondsElapsed.Size = new System.Drawing.Size(108, 17);
+            this.rdoSecondsElapsed.TabIndex = 52;
+            this.rdoSecondsElapsed.Text = "Seconds Elapsed";
+            this.rdoSecondsElapsed.CheckedChanged += new System.EventHandler(this.rdoSecondsElapsed_CheckedChanged);
+            // 
+            // rdoRepsMade
+            // 
+            this.rdoRepsMade.AutoSize = true;
+            this.rdoRepsMade.Location = new System.Drawing.Point(7, 171);
+            this.rdoRepsMade.Name = "rdoRepsMade";
+            this.rdoRepsMade.Size = new System.Drawing.Size(108, 17);
+            this.rdoRepsMade.TabIndex = 53;
+            this.rdoRepsMade.Text = "Repetitions Made";
+            this.rdoRepsMade.CheckedChanged += new System.EventHandler(this.rdoRepsMade_CheckedChanged);
+            // 
+            // nudSecondsElapsed
+            // 
+            this.nudSecondsElapsed.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudSecondsElapsed.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudSecondsElapsed.Location = new System.Drawing.Point(8, 142);
+            this.nudSecondsElapsed.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.nudSecondsElapsed.Name = "nudSecondsElapsed";
+            this.nudSecondsElapsed.Size = new System.Drawing.Size(234, 20);
+            this.nudSecondsElapsed.TabIndex = 54;
+            this.nudSecondsElapsed.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            // 
+            // nudRepetitionsMade
+            // 
+            this.nudRepetitionsMade.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudRepetitionsMade.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudRepetitionsMade.Location = new System.Drawing.Point(8, 199);
+            this.nudRepetitionsMade.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.nudRepetitionsMade.Name = "nudRepetitionsMade";
+            this.nudRepetitionsMade.Size = new System.Drawing.Size(234, 20);
+            this.nudRepetitionsMade.TabIndex = 55;
+            this.nudRepetitionsMade.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
             // 
             // EventCommandConditionalBranch
             // 
@@ -2073,6 +2237,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.Size = new System.Drawing.Size(285, 471);
             this.grpConditional.ResumeLayout(false);
             this.grpConditional.PerformLayout();
+            this.grpNpc.ResumeLayout(false);
+            this.grpNpc.PerformLayout();
             this.grpClass.ResumeLayout(false);
             this.grpClass.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudClassRank)).EndInit();
@@ -2128,8 +2294,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpGender.PerformLayout();
             this.grpEquippedItem.ResumeLayout(false);
             this.grpEquippedItem.PerformLayout();
-            this.grpNpc.ResumeLayout(false);
-            this.grpNpc.PerformLayout();
+            this.grpTimers.ResumeLayout(false);
+            this.grpTimers.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSecondsElapsed)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudRepetitionsMade)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -2264,5 +2432,15 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private DarkComboBox cmbNpcs;
         private System.Windows.Forms.Label lblNpc;
         private DarkCheckBox chkNpc;
+        private DarkGroupBox grpTimers;
+        private DarkComboBox cmbTimerType;
+        private DarkComboBox cmbTimer;
+        private System.Windows.Forms.Label lblTimer;
+        private System.Windows.Forms.Label lblTimerType;
+        private DarkNumericUpDown nudRepetitionsMade;
+        private DarkNumericUpDown nudSecondsElapsed;
+        internal DarkRadioButton rdoRepsMade;
+        internal DarkRadioButton rdoSecondsElapsed;
+        internal DarkRadioButton rdoIsActive;
     }
 }

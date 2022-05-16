@@ -362,6 +362,24 @@ namespace Intersect.Server.Migrations
                     b.ToTable("Player_Variables");
                 });
 
+            modelBuilder.Entity("Intersect.Server.Database.PlayerData.TimerInstance", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("CompletionCount");
+
+                    b.Property<Guid>("DescriptorId");
+
+                    b.Property<Guid>("OwnerId");
+
+                    b.Property<long>("TimeRemaining");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Timers");
+                });
+
             modelBuilder.Entity("Intersect.Server.Database.PlayerData.User", b =>
                 {
                     b.Property<Guid>("Id")

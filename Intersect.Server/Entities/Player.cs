@@ -36,6 +36,8 @@ using Newtonsoft.Json;
 using Intersect.Server.Entities.PlayerData;
 using Intersect.Server.Database.PlayerData;
 using static Intersect.Server.Maps.MapInstance;
+using Intersect.Server.Core;
+using Intersect.GameObjects.Timers;
 
 namespace Intersect.Server.Entities
 {
@@ -385,6 +387,7 @@ namespace Intersect.Server.Entities
             LoadFriends();
             LoadGuild();
             LoadRecords();
+            LoadTimers();
 
             //Upon Sign In Remove Any Items/Spells that have been deleted
             foreach (var itm in Items)
@@ -467,6 +470,9 @@ namespace Intersect.Server.Entities
 
             //Update parties
             LeaveParty(true);
+
+            // Update timers
+            LogoutPlayerTimers();
 
             // End combo
             EndCombo();
@@ -2309,6 +2315,62 @@ namespace Intersect.Server.Entities
             PacketSender.SendEntityLeaveInstanceOfMap(this, oldMap.Id, PreviousMapInstanceId);
             // Remove any trace of our player from the old instance's processing
             newMap.RemoveEntityFromAllSurroundingMapsInInstance(this, PreviousMapInstanceId);
+
+            // Get any instance timers that are running and send them to the player
+            StopInstanceTimers(PreviousMapInstanceId);
+            SendInstanceTimers();
+        }
+
+        /// <summary>
+        /// Gets all instance timers that are on this player's instance and sends timer packets if necessary
+        /// </summary>
+        private void SendInstanceTimers()
+        {
+            foreach (var timer in TimerProcessor.ActiveTimers.ToArray().Where(t => t.Descriptor.OwnerType == TimerOwnerType.Instance && t.OwnerId == MapInstanceId))
+            {
+                timer.SendTimerPacketTo(this);
+            }
+        }
+
+        /// <summary>
+        /// Stop instance timers from a given instance ID
+        /// </summary>
+        /// <param name="previousInstanceId">Given instance ID</param>
+        private void StopInstanceTimers(Guid previousInstanceId)
+        {
+            foreach (var timer in TimerProcessor.ActiveTimers.ToArray().Where(t => t.Descriptor.OwnerType == TimerOwnerType.Instance && t.OwnerId == previousInstanceId))
+            {
+                timer.SendTimerStopPacketTo(this);
+            }
+        }
+
+        /// <summary>
+        /// Gets all party timers that belong to this player's party and sends timer packets if necessary
+        /// </summary>
+        private void SendPartyTimers()
+        {
+            if (Party == null || Party.Count <= 0)
+            {
+                return;
+            }
+
+            foreach (var timer in TimerProcessor.ActiveTimers.ToArray().Where(t => t.Descriptor.OwnerType == TimerOwnerType.Party && t.OwnerId == Party[0].Id))
+            {
+                timer.SendTimerPacketTo(this);
+            }
+        }
+
+        private void StopPartyTimers()
+        {
+            if (Party == null || Party.Count <= 0)
+            {
+                return;
+            }
+
+            foreach (var timer in TimerProcessor.ActiveTimers.ToArray().Where(t => t.Descriptor.OwnerType == TimerOwnerType.Party && t.OwnerId == Party[0].Id))
+            {
+                timer.SendTimerStopPacketTo(this);
+            }
         }
 
         /// <summary>
@@ -4813,6 +4875,7 @@ namespace Intersect.Server.Entities
             if (Party.Count == 0)
             {
                 Party.Add(this);
+                SendPartyTimers();
             }
             else
             {
@@ -4848,6 +4911,7 @@ namespace Intersect.Server.Entities
                     );
                 }
                 target.InstanceLives = InstanceLives;
+                target.SendPartyTimers();
             }
             else
             {
@@ -4864,6 +4928,7 @@ namespace Intersect.Server.Entities
                     var oldMember = Party.Where(p => p.Id == target).FirstOrDefault();
                     if (oldMember != null)
                     {
+                        oldMember.StopPartyTimers();
                         oldMember.Party = new List<Player>();
                         PacketSender.SendParty(oldMember);
                         PacketSender.SendChatMsg(oldMember, Strings.Parties.kicked, ChatMessageType.Party, CustomColors.Alerts.Error);
@@ -4906,7 +4971,25 @@ namespace Intersect.Server.Entities
             if (Party.Count > 0 && Party.Contains(this))
             {
                 var oldMember = this;
+                
+                // Remove any client timers from this player
+                oldMember.StopPartyTimers();
+                
+                // Remove them from the party
                 Party.Remove(this);
+
+                // Check if any outstanding party timers exist for this party and, if so, update their owner ID to the new party owner
+                if (Party.Count > 0)
+                {
+                    var partyTimers = TimerProcessor.ActiveTimers
+                        .Where(timer => timer.Descriptor.OwnerType == TimerOwnerType.Party && timer.OwnerId == Party[0].Id)
+                        .ToArray();
+
+                    foreach (var timer in partyTimers)
+                    {
+                        timer.OwnerId = Party[0].Id;
+                    }
+                }
 
                 if (Party.Count > 1) //Need atleast 2 party members to function
                 {
@@ -4923,6 +5006,14 @@ namespace Intersect.Server.Entities
                 else if (Party.Count > 0) //Check if anyone is left on their own
                 {
                     var remainder = Party[0];
+
+                    remainder.StopPartyTimers();
+                    // Nuke timers that existed for this disbanded party
+                    foreach (var timer in TimerProcessor.ActiveTimers.Where(timer => timer.Descriptor.OwnerType == GameObjects.Timers.TimerOwnerType.Party && timer.OwnerId == Party[0].Id).ToArray())
+                    {
+                        TimerProcessor.RemoveTimer(timer);
+                    }
+
                     remainder.Party.Clear();
                     PacketSender.SendParty(remainder);
                     PacketSender.SendChatMsg(remainder, Strings.Parties.disbanded, ChatMessageType.Party, CustomColors.Alerts.Error);
@@ -7904,6 +7995,86 @@ namespace Intersect.Server.Entities
             else
             {
                 PacketSender.SendChatMsg(this, Strings.Combat.stillinspired.ToString(endTimeStamp), ChatMessageType.Combat, CustomColors.Combat.LevelUp);
+            }
+        }
+        #endregion
+
+        #region Timers
+        private void LoadTimers()
+        {
+            // First, tell the TimerProcessor to begin processing this player's timers
+            using (var context = DbInterface.CreatePlayerContext(readOnly: false))
+            {
+                var timers = context.Timers;
+
+                foreach(var timer in timers.ToArray().Where(t => t.OwnerId == Id && t.Descriptor.OwnerType == TimerOwnerType.Player))
+                {
+                    // Check if the timer is already being processed - ignore it
+                    if (TimerProcessor.ActiveTimers.Contains(timer))
+                    {
+                        continue;
+                    }
+
+                    var descriptor = timer.Descriptor;
+                    var now = Timing.Global.MillisecondsUtc;
+
+                    if (descriptor.LogoutBehavior == TimerLogoutBehavior.Pause)
+                    {
+                        timer.TimeRemaining += now;
+                    }
+
+                    // Add the timer back to the processing list
+                    TimerProcessor.ActiveTimers.Add(timer);
+                }
+
+                context.ChangeTracker.DetectChanges();
+                context.SaveChanges();
+            }
+
+            HashSet<TimerInstance> relevantTimers = new HashSet<TimerInstance>();
+
+            // Get any instance timers that affect this player and send them to their client, if the timer is visible
+            foreach (var timer in TimerProcessor.ActiveTimers.ToArray().Where(t => !t.Descriptor.Hidden && t.AffectsPlayer(this)))
+            {
+                timer.SendTimerPacketTo(this);
+            }
+        }
+
+        /// <summary>
+        /// Removes all timers from the <see cref="TimerProcessor.ActiveTimers"/> processing list that
+        /// have this player as their owner ID. Also updates those timers in the DB so that, when they
+        /// are refreshed, they are refreshed properly.
+        /// </summary>
+        private void LogoutPlayerTimers()
+        {
+            var now = Timing.Global.MillisecondsUtc;
+            using (var context = DbInterface.CreatePlayerContext(readOnly: false))
+            {
+                foreach (var timer in TimerProcessor.ActiveTimers.Where(t => t.OwnerId == Id && t.Descriptor.OwnerType == TimerOwnerType.Player).ToArray())
+                {
+                    var descriptor = timer.Descriptor;
+                    TimerProcessor.ActiveTimers.Remove(timer); // Remove from processing queue, not from DB
+                
+                    switch (descriptor.LogoutBehavior)
+                    {
+                        case TimerLogoutBehavior.Pause:
+                            // Store how much time the timer has until its next expiry, so we can re-populate it on login
+                            timer.TimeRemaining -= now;
+                            
+                            break;
+                        case TimerLogoutBehavior.Continue:
+                            // Intentinoally blank - leave as is, and it'll be processed when the player returns
+                            break;
+                        case TimerLogoutBehavior.CancelOnLogin:
+                            timer.TimeRemaining = TimerConstants.TimerAborted; // Flags timer as aborted, so we know how to handle it when next processed
+                            break;
+                        default:
+                            throw new NotImplementedException("Player timer has invalid logout behavior");
+                    }
+                    context.Timers.Update(timer);
+                }
+                context.ChangeTracker.DetectChanges();
+                context.SaveChanges();
             }
         }
         #endregion

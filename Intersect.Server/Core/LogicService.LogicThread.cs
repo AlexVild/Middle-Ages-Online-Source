@@ -19,6 +19,8 @@ using Intersect.Server.Networking;
 using Intersect.Server.Networking.Lidgren;
 using Intersect.Server.Database.PlayerData.Players;
 using Intersect.Utilities;
+using Intersect.Server.Database.PlayerData;
+using Intersect.GameObjects.Timers;
 
 namespace Intersect.Server.Core
 {
@@ -87,6 +89,10 @@ namespace Intersect.Server.Core
                     var processedMapInstances = new HashSet<Guid>();
                     var sourceMapInstance = new HashSet<Guid>();
                     var players = 0;
+
+                    // Initialize timers instance and load in values
+                    TimerProcessor.ActiveTimers = new TimerList();
+                    LoadTimers();
 
                     while (ServerContext.Instance.IsRunning)
                     {
@@ -302,6 +308,8 @@ namespace Intersect.Server.Core
                             saveServerVariablesTimer = Timing.Global.Milliseconds + Options.Instance.Processing.DatabaseSaveServerVariablesInterval;
                         }
 
+                        TimerProcessor.ProcessTimers(Timing.Global.MillisecondsUtc);
+
                         if (Options.Instance.Processing.CpsLock)
                         {
                             Thread.Sleep(1);
@@ -387,6 +395,102 @@ namespace Intersect.Server.Core
                 }
             }
 
+            /// <summary>
+            /// Loads timers into the <see cref="TimerProcessor.ActiveTimers"/> list, containing actively running timers.
+            /// Also prunes timers whose owners have been purged in some way.
+            /// </summary>
+            private void LoadTimers()
+            {
+                Logging.Log.Debug("Loading timers into TimerProcessor...");
+                using (var context = DbInterface.CreatePlayerContext(readOnly: false))
+                {
+                    // Find any timers meant to start on startup. As we iterate through timer instances, we will check to see if these timers are already loaded and, if not, load them after
+                    List<Guid> startupTimerIds = new List<Guid>();
+                    foreach (TimerDescriptor descriptor in TimerDescriptor.Lookup.Values.Where(t => ((TimerDescriptor)t).OwnerType == TimerOwnerType.Global && ((TimerDescriptor)t).StartWithServer))
+                    {
+                        startupTimerIds.Add(descriptor.Id);
+                    }
+
+                    foreach (var timer in context.Timers.ToList())
+                    {
+                        var descriptor = timer.Descriptor;
+
+                        switch(descriptor.OwnerType)
+                        {
+                            case TimerOwnerType.Global:
+                                // We want to make sure we don't duplicate timers marked to start with the server
+                                if (startupTimerIds.Contains(descriptor.Id))
+                                {
+                                    // So we'll remove it from the list of descriptor IDs that we want to start
+                                    startupTimerIds.Remove(descriptor.Id);
+                                    continue;
+                                }
+
+                                break;
+
+                            case TimerOwnerType.Player:
+                                // If the player isn't currently online, don't load this timer into the processor
+                                if (!Globals.OnlineList.ToArray().Select(p => p.Id).Contains(timer.OwnerId))
+                                {
+                                    continue;
+                                }
+                                // If the player doesn't exist anymore, remove the timer
+                                if (!context.Players.ToArray().Select(p => p.Id).Contains(timer.OwnerId))
+                                {
+                                    context.Timers.Remove(timer);
+                                    continue;
+                                }
+                                break;
+                            case TimerOwnerType.Instance:
+                                // If an instance timer that doesn't belong to the overworld, a guild, or a player, remove it
+                                if (timer.OwnerId != default || 
+                                    !context.Guilds.ToArray().Select(p => p.GuildInstanceId).Contains(timer.OwnerId) ||
+                                    !context.Players.ToArray().Select(p => p.MapInstanceId).Contains(timer.OwnerId))
+                                {
+                                    context.Timers.Remove(timer);
+                                    continue;
+                                }
+                                break;
+                            case TimerOwnerType.Guild:
+                                // If the guild in which this timer belonged to no longer exists, remove it
+                                if (!context.Guilds.ToArray().Select(p => p.Id).Contains(timer.OwnerId))
+                                {
+                                    context.Timers.Remove(timer);
+                                    continue;
+                                }
+                                break;
+                            case TimerOwnerType.Party:
+                                // A party timer simply could not have survived a server shutdown - remove it
+                                context.Timers.Remove(timer);
+                                continue;
+                        }
+
+                        // Add the timer to processing if it passes all of the above checks
+                        TimerProcessor.ActiveTimers.Add(timer);
+                    }
+
+                    // We've reduced server startup timers down at this point to only the timers that SHOULD start, but have never started. Start them here:
+                    var now = Timing.Global.MillisecondsUtc;
+                    foreach(var id in startupTimerIds)
+                    {
+                        TimerProcessor.AddTimer(id, default, now);
+                    }
+
+                    context.ChangeTracker.DetectChanges();
+                    context.SaveChanges();
+                }
+
+                var processingTimerCount = TimerProcessor.ActiveTimers.Count;
+                if (processingTimerCount > 0)
+                {
+                    Logging.Log.Debug($"{processingTimerCount.ToString()} timers now active");
+                }
+                else
+                {
+                    Logging.Log.Debug("No timers to load");
+                }
+
+            }
         }
     }
 }

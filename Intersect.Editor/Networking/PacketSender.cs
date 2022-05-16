@@ -4,6 +4,7 @@ using Intersect.Editor.General;
 using Intersect.Editor.Maps;
 using Intersect.Enums;
 using Intersect.GameObjects.Maps.MapList;
+using Intersect.GameObjects.Timers;
 using Intersect.Models;
 using Intersect.Network.Packets.Editor;
 
@@ -147,6 +148,11 @@ namespace Intersect.Editor.Networking
         public static void SendCreateObject(GameObjectType type)
         {
             Network.SendPacket(new CreateGameObjectPacket(type));
+        }
+
+        public static void SendCreateTimer(TimerOwnerType ownerType)
+        {
+            Network.SendPacket(new CreateTimerPacket(ownerType));
         }
 
         public static void SendOpenEditor(GameObjectType type)

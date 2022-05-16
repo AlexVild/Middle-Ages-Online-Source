@@ -17,6 +17,7 @@ using Intersect.GameObjects.Maps.MapList;
 using Intersect.Logging;
 using Intersect.Network;
 using Intersect.Network.Packets.Server;
+using Intersect.GameObjects.Timers;
 
 namespace Intersect.Editor.Networking
 {
@@ -684,7 +685,19 @@ namespace Intersect.Editor.Networking
                         QuestBoardBase.Lookup.Set(id, qb);
                     }
                     break;
-
+                case GameObjectType.Timer:
+                    if (deleted)
+                    {
+                        var timer = TimerDescriptor.Get(id);
+                        timer.Delete();
+                    }
+                    else
+                    {
+                        var timer = new TimerDescriptor(id);
+                        timer.Load(json);
+                        TimerDescriptor.Lookup.Set(id, timer);
+                    }
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }

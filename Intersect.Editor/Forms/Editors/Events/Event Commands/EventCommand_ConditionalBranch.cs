@@ -7,6 +7,7 @@ using Intersect.Enums;
 using Intersect.GameObjects;
 using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Events.Commands;
+using Intersect.GameObjects.Timers;
 
 namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
 {
@@ -266,6 +267,14 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             lblNpc.Text = Strings.EventConditional.NpcLabel;
             chkNpc.Text = Strings.EventConditional.SpecificNpcCheck;
 
+            // Timer Active
+            grpTimers.Text = Strings.EventConditional.Timers;
+            lblTimerType.Text = Strings.EventConditional.TimerType;
+            lblTimer.Text = Strings.EventConditional.TimerName;
+            rdoIsActive.Text = Strings.EventConditional.TimerIsActive;
+            rdoSecondsElapsed.Text = Strings.EventConditional.TimerSecondsElapsed;
+            rdoRepsMade.Text = Strings.EventConditional.TimerRepetitions;
+
             btnSave.Text = Strings.EventConditional.okay;
             btnCancel.Text = Strings.EventConditional.cancel;
         }
@@ -476,6 +485,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     Condition = new HighestClassRankIs();
 
                     break;
+                case ConditionTypes.TimerIsActive:
+                    Condition = new TimerIsActive();
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -505,6 +518,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             grpNpc.Hide();
             lblClassRank.Hide();
             nudClassRank.Hide();
+            grpTimers.Hide();
             switch (type)
             {
                 case ConditionTypes.VariableIs:
@@ -690,6 +704,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                         cmbClass.SelectedIndex = 0;
                     }
 
+                    break;
+                case ConditionTypes.TimerIsActive:
+                    grpTimers.Show();
+                    TimerCommandHelpers.InitializeSelectionFields(Guid.Empty, ref cmbTimerType, ref cmbTimer);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -1510,6 +1528,29 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         {
             nudClassRank.Value = condition.ClassRank;
         }
+        
+        private void SetupFormValues(TimerIsActive condition)
+        {
+            TimerCommandHelpers.InitializeSelectionFields(condition, ref cmbTimerType, ref cmbTimer);
+
+            switch(condition.ConditionType)
+            {
+                case TimerActiveConditions.IsActive:
+                    rdoIsActive.Checked = true;
+                    break;
+                case TimerActiveConditions.Elapsed:
+                    rdoSecondsElapsed.Checked = true;
+                    nudSecondsElapsed.Value = condition.ElapsedSeconds;
+                    break;
+                case TimerActiveConditions.Repetitions:
+                    rdoRepsMade.Checked = true;
+                    nudRepetitionsMade.Value = condition.Repetitions;
+                    break;
+                default:
+                    rdoIsActive.Checked = true;
+                    break;
+            }
+        }
 
         #endregion
 
@@ -1762,6 +1803,16 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         {
             condition.ClassRank = (int) nudClassRank.Value;
         }
+
+        private void SaveFormValues(TimerIsActive condition)
+        {
+            condition.descriptorId = TimerDescriptor.IdFromList(cmbTimer.SelectedIndex, (TimerOwnerType)cmbTimerType.SelectedIndex);
+            condition.ConditionType = rdoIsActive.Checked ? TimerActiveConditions.IsActive :
+                rdoSecondsElapsed.Checked ? TimerActiveConditions.Elapsed :
+                TimerActiveConditions.Repetitions;
+            condition.Repetitions = (int) nudRepetitionsMade.Value;
+            condition.ElapsedSeconds = (int) nudSecondsElapsed.Value;
+        }
         #endregion
 
         private void chkNpc_CheckedChanged(object sender, EventArgs e)
@@ -1780,6 +1831,32 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                 lblNpc.Hide();
                 cmbNpcs.Hide();
             }
+        }
+
+        private void cmbTimerType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            TimerCommandHelpers.RefreshTimerSelector(ref cmbTimer, (TimerOwnerType)cmbTimerType.SelectedIndex);
+        }
+
+        private void TimerActiveConditionChange()
+        {
+            nudRepetitionsMade.Enabled = rdoRepsMade.Checked;
+            nudSecondsElapsed.Enabled = rdoSecondsElapsed.Checked;
+        }
+
+        private void rdoIsActive_CheckedChanged(object sender, EventArgs e)
+        {
+            TimerActiveConditionChange();
+        }
+
+        private void rdoSecondsElapsed_CheckedChanged(object sender, EventArgs e)
+        {
+            TimerActiveConditionChange();
+        }
+
+        private void rdoRepsMade_CheckedChanged(object sender, EventArgs e)
+        {
+            TimerActiveConditionChange();
         }
     }
 

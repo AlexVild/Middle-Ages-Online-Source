@@ -24,6 +24,7 @@ using Intersect.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Intersect.GameObjects.Timers;
 
 namespace Intersect.Client.Networking
 {
@@ -2384,6 +2385,40 @@ namespace Intersect.Client.Networking
         public void HandlePacket(IPacketSender packetSender, ProjectileCastDelayPacket packet)
         {
             Globals.Me.LastProjectileCastTime = Timing.Global.Milliseconds + packet.DelayTime;
+        }
+
+        //TimerPacket
+        public void HandlePacket(IPacketSender packetSender, TimerPacket packet)
+        {
+            var activeTimer = Timers.ActiveTimers.Find(t => t.DescriptorId == packet.DescriptorId);
+            if (activeTimer != default)
+            {
+                // Timer already being shown - update it
+                activeTimer.Timestamp = packet.Timestamp;
+                activeTimer.StartTime = packet.StartTime;
+                return;
+            }
+
+            var displayType = packet.Type == TimerType.Countdown ? TimerDisplayType.Descending : TimerDisplayType.Ascending;
+
+            var timer = new Timer(packet.DescriptorId, packet.Timestamp, packet.StartTime, displayType, packet.DisplayName, packet.ContinueAfterExpiration);
+            Timers.ActiveTimers.Add(timer);
+
+            // Display the most recently added timer to the user
+            if (Interface.Interface.GameUi != null)
+            {
+                Interface.Interface.GameUi.GoToTimer(timer.DescriptorId);
+            }
+        }
+
+        //TimerStopPacket
+        public void HandlePacket(IPacketSender packetSender, TimerStopPacket packet)
+        {
+            foreach (var timer in Timers.ActiveTimers.FindAll(t => t.DescriptorId == packet.DescriptorId))
+            {
+                timer.ElapsedTime = packet.ElapsedTime;
+                timer.EndTimer();
+            }
         }
     }
 }

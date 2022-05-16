@@ -27,6 +27,8 @@ using Intersect.Server.Maps;
 using Intersect.Utilities;
 using Newtonsoft.Json;
 using Intersect.Server.Classes.Maps;
+using Intersect.GameObjects.Timers;
+using Intersect.Server.Database.PlayerData;
 
 namespace Intersect.Server.Networking
 {
@@ -1766,6 +1768,12 @@ namespace Intersect.Server.Networking
                         SendGameObject(client, obj.Value, false, false, packetList);
                     }
                     break;
+                case GameObjectType.Timer:
+                    foreach (var obj in TimerDescriptor.Lookup)
+                    {
+                        SendGameObject(client, obj.Value, false, false, packetList);
+                    }
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }
@@ -2367,6 +2375,17 @@ namespace Intersect.Server.Networking
         public static void SendProjectileCastDelayPacket(Player player, long delayTime)
         {
             player?.SendPacket(new ProjectileCastDelayPacket(delayTime));
+        }
+
+        public static void SendTimerPacket(Player player, TimerInstance timer)
+        {
+            var descriptor = timer.Descriptor;
+            player?.SendPacket(new TimerPacket(timer.DescriptorId, timer.TimeRemaining, timer.StartTime, descriptor.Type, descriptor.DisplayName, descriptor.ContinueAfterExpiration));
+        }
+
+        public static void SendTimerStopPacket(Player player, TimerInstance timer)
+        {
+            player?.SendPacket(new TimerStopPacket(timer.DescriptorId, timer.ElapsedTime));
         }
     }
 

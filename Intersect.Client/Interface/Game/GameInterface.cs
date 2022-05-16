@@ -61,6 +61,8 @@ namespace Intersect.Client.Interface.Game
 
         private WarningWindow mWarnings;
 
+        private TimerWindow mTimerWindow;
+
         private bool mShouldCloseBag;
 
         private bool mShouldCloseBank;
@@ -132,6 +134,7 @@ namespace Intersect.Client.Interface.Game
                 mPictureWindow = new PictureWindow(GameCanvas);
             }
 
+            mTimerWindow = new TimerWindow(GameCanvas);
             mEventWindow = new EventWindow(GameCanvas);
             mQuestOfferWindow = new QuestOfferWindow(GameCanvas);
             mDebugMenu = new DebugMenu(GameCanvas);
@@ -337,6 +340,11 @@ namespace Intersect.Client.Interface.Game
             Globals.InTrade = true;
         }
 
+        public void GoToTimer(Guid timerId)
+        {
+            mTimerWindow.ShowTimer(timerId);
+        }
+
         public void ShowHideDebug()
         {
             if (mDebugMenu.IsVisible())
@@ -394,6 +402,7 @@ namespace Intersect.Client.Interface.Game
             mComboText?.Update();
             mHarvestBonusWindow?.Update();
             mWarnings?.Update();
+            mTimerWindow?.Update();
 
             if (Globals.QuestOffers.Count > 0)
             {

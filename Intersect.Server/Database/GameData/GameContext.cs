@@ -16,6 +16,7 @@ using Intersect.Server.Maps;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
+using Intersect.GameObjects.Timers;
 
 namespace Intersect.Server.Database.GameData
 {
@@ -100,6 +101,9 @@ namespace Intersect.Server.Database.GameData
 
         //Quest Boards
         public DbSet<QuestBoardBase> QuestBoards { get; set; }
+
+        // Timers
+        public DbSet<TimerDescriptor> Timers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

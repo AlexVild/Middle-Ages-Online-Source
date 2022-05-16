@@ -3,11 +3,7 @@ using Intersect.Client.Framework.File_Management;
 using Intersect.Client.Framework.Gwen.Control;
 using Intersect.Client.General;
 using Intersect.Client.Localization;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Intersect.Client.Interface.Game
 {
@@ -16,14 +12,6 @@ namespace Intersect.Client.Interface.Game
         private Canvas mCanvas { get; set; }
 
         private string mSize { get; set; }
-
-        private int mFlashCounter { get; set; }
-
-        private Color mDrawColor { get; set; }
-
-        private Color mExpDrawColor { get; set; }
-
-        private bool mIsFlashing { get; set; }
 
         private int ComboWindow { get; set; }
 

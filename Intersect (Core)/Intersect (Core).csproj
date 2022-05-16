@@ -288,10 +288,12 @@
     <Compile Include="Factories\FactoryRegistry.cs" />
     <Compile Include="Factories\IFactory.cs" />
     <Compile Include="GameObjects\Events\VariableMod.cs" />
+    <Compile Include="Enums\Timers.cs" />
     <Compile Include="GameObjects\QuestBoardBase.cs" />
     <Compile Include="GameObjects\QuestListBase.cs" />
     <Compile Include="GameObjects\Switches and Variables\InstanceVariableBase.cs" />
     <Compile Include="GameObjects\Switches and Variables\VariableValue.cs" />
+    <Compile Include="GameObjects\Timers\TimerDescriptor.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IO\ConsoleContext.cs" />
     <Compile Include="IO\ConsoleWriter.cs" />
@@ -413,6 +415,7 @@
     <Compile Include="Network\Packets\Client\PictureClosedPacket.cs" />
     <Compile Include="Network\Packets\DestroyConditionPacket.cs" />
     <Compile Include="Network\Packets\DestroyItemPacket.cs" />
+    <Compile Include="Network\Packets\Editor\CreateTimerPacket.cs" />
     <Compile Include="Network\Packets\Server\ActionMsgPackets.cs" />
     <Compile Include="Network\Packets\Server\BankUpdateValuePacket.cs" />
     <Compile Include="Network\Packets\Server\CombatEffectPacket.cs" />
@@ -439,6 +442,8 @@
     <Compile Include="Network\Packets\Server\QuestPointPacket.cs" />
     <Compile Include="Network\Packets\Server\ResourceLockPacket.cs" />
     <Compile Include="Network\Packets\Server\ShakeScreenPacket.cs" />
+    <Compile Include="Network\Packets\Server\TimerPacket.cs" />
+    <Compile Include="Network\Packets\Server\TimerStopPacket.cs" />
     <Compile Include="Network\Packets\Server\UpdateFutureWarpPacket.cs" />
     <Compile Include="Network\Packets\SlotQuantityPacket.cs" />
     <Compile Include="Network\Packets\Client\SwapBankItemsPacket.cs" />

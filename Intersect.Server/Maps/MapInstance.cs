@@ -195,6 +195,8 @@ namespace Intersect.Server.Maps
 
         public virtual void Dispose()
         {
+            DestroyDanglingTimers();
+
             if (!IsDisposed)
             {
                 IsDisposed = true;
@@ -1511,15 +1513,28 @@ namespace Intersect.Server.Maps
             }
         }
 
-        public void SetInstanceVariable(Guid variableId, VariableValue value)
+        public static void SetInstanceVariable(Guid variableId, VariableValue value, Guid mapInstanceId)
         {
-            if (ProcessingInfo.InstanceVariables.TryGetValue(MapInstanceId, out var instanceVariables) && instanceVariables.ContainsKey(variableId))
+            if (ProcessingInfo.InstanceVariables.TryGetValue(mapInstanceId, out var instanceVariables) && instanceVariables.ContainsKey(variableId))
             {
                 instanceVariables[variableId] = value;
             }
             else
             {
-                Log.Error($"Failed to set value for instance variable {variableId} in instance {MapInstanceId}");
+                Log.Error($"Failed to set value for instance variable {variableId} in instance {mapInstanceId}");
+            }
+        }
+        #endregion
+
+        #region Timers
+        /// <summary>
+        /// Executes when the instance is cleaned up - gets rid of any timers that still exist for this instance.
+        /// </summary>
+        private void DestroyDanglingTimers()
+        {
+            foreach(var timer in TimerProcessor.ActiveTimers.Where(t => t.Descriptor.OwnerType == GameObjects.Timers.TimerOwnerType.Instance && t.OwnerId == Id).ToList())
+            {
+                TimerProcessor.RemoveTimer(timer);
             }
         }
         #endregion

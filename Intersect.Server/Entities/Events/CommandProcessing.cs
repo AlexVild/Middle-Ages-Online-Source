@@ -19,6 +19,9 @@ using Intersect.Server.Localization;
 using Intersect.Server.Maps;
 using Intersect.Server.Networking;
 using Intersect.Utilities;
+using Intersect.GameObjects.Timers;
+using Intersect.Server.Database.PlayerData;
+using Intersect.Server.Core;
 
 namespace Intersect.Server.Entities.Events
 {
@@ -1741,7 +1744,7 @@ namespace Intersect.Server.Entities.Events
                                 sb.Replace(val.Key, instanceVarVal.ToString((val.Value).Type));
                     }
                 }
-
+                    
                 if (instance != null)
                 {
                     var parms = instance.GetParams(player);
@@ -1751,7 +1754,49 @@ namespace Intersect.Server.Entities.Events
                     }
                 }
 
-                return sb.ToString();
+                // Time Lapses require variables to already be evaluated in the string, so we make a second string builder.
+                var finalSb = new StringBuilder(sb.ToString());
+                var elapsedRegexString = $@"\{Strings.Events.Elapsed}\{{\d+\}}";
+                Regex elapsedRegex = new Regex(elapsedRegexString);
+
+                foreach (var match in elapsedRegex.Matches(finalSb.ToString()))
+                {
+                    var digits = Regex.Match(match.ToString(), @"\d+").Value;
+
+                    if (double.TryParse(digits.ToString(), out var ms))
+                    {
+                        string elapsedString = string.Empty;
+                        TimeSpan t = TimeSpan.FromMilliseconds(ms);
+                        switch ((int)ms)
+                        {
+                            case int n when n < TimerConstants.HourMillis:
+                                elapsedString = string.Format(Strings.Events.ElapsedMinutes,
+                                    t.Minutes,
+                                    t.Seconds,
+                                    t.Milliseconds);
+                                break;
+                            case int n when n >= TimerConstants.HourMillis && n < TimerConstants.DayMillis:
+                                elapsedString = string.Format(Strings.Events.ElapsedHours,
+                                    t.Hours,
+                                    t.Minutes,
+                                    t.Seconds,
+                                    t.Milliseconds);
+                                break;
+                            case int n when n >= TimerConstants.DayMillis:
+                                elapsedString = string.Format(Strings.Events.ElapsedDays,
+                                    t.Days,
+                                    t.Hours,
+                                    t.Minutes,
+                                    t.Seconds,
+                                    t.Milliseconds);
+                                break;
+                        }
+
+                        finalSb.Replace(match.ToString(), elapsedString);
+                    }
+                }
+
+                return finalSb.ToString();
             }
 
             return input;
@@ -1850,7 +1895,7 @@ namespace Intersect.Server.Entities.Events
             }
             else if (command.VariableType == VariableTypes.InstanceVariable && changed && MapController.TryGetInstanceFromMap(player.MapId, player.MapInstanceId, out var mapInstance))
             {
-                mapInstance.SetInstanceVariable(command.VariableId, value);
+                MapInstance.SetInstanceVariable(command.VariableId, value, mapInstance.MapInstanceId);
                 Player.StartCommonEventsWithTriggerForAllOnInstance(Enums.CommonEventTrigger.InstanceVariableChange, player.MapInstanceId, "", command.VariableId.ToString());
             }
         }
@@ -2151,7 +2196,7 @@ namespace Intersect.Server.Entities.Events
             }
             else if (command.VariableType == VariableTypes.InstanceVariable && changed && MapController.TryGetInstanceFromMap(player.MapId, player.MapInstanceId, out var mapInstance))
             {
-                mapInstance.SetInstanceVariable(command.VariableId, value);
+                MapInstance.SetInstanceVariable(command.VariableId, value, mapInstance.Id);
                 Player.StartCommonEventsWithTriggerForAllOnInstance(Enums.CommonEventTrigger.InstanceVariableChange, player.MapInstanceId, "", command.VariableId.ToString());
             }
         }
@@ -2226,7 +2271,7 @@ namespace Intersect.Server.Entities.Events
             }
             else if (command.VariableType == VariableTypes.InstanceVariable && changed && MapController.TryGetInstanceFromMap(player.MapId, player.MapInstanceId, out var mapInstance))
             {
-                mapInstance.SetInstanceVariable(command.VariableId, value);
+                MapInstance.SetInstanceVariable(command.VariableId, value, mapInstance.Id);
                 Player.StartCommonEventsWithTriggerForAllOnInstance(Enums.CommonEventTrigger.InstanceVariableChange, player.MapInstanceId, "", command.VariableId.ToString());
             }
         }
@@ -2391,6 +2436,160 @@ namespace Intersect.Server.Entities.Events
             }
 
             player.SendInspirationUpdateText(command.Seconds);
+        }
+
+        private static void ProcessCommand(
+            StartTimerCommand command,
+            Player player,
+            Event instance,
+            CommandInstance stackInfo,
+            Stack<CommandInstance> callStack
+        )
+        {
+            if (player == null) return;
+
+            var now = Timing.Global.MillisecondsUtc;
+
+            TimerDescriptor descriptor = TimerDescriptor.Get(command.DescriptorId);
+
+            lock (player.EntityLock)
+            {
+                if (TimerProcessor.TryGetOwnerId(descriptor.OwnerType, command.DescriptorId, player, out var ownerId) && !TimerProcessor.TryGetActiveTimer(command.DescriptorId, ownerId, out _))
+                {
+                    TimerProcessor.AddTimer(command.DescriptorId, ownerId, now);
+                }
+                
+            }
+        }
+
+        private static void ProcessCommand(
+            StopTimerCommand command,
+            Player player,
+            Event instance,
+            CommandInstance stackInfo,
+            Stack<CommandInstance> callStack
+        )
+        {
+            if (player == null) return;
+
+            var now = Timing.Global.MillisecondsUtc;
+
+            TimerDescriptor descriptor = TimerDescriptor.Get(command.DescriptorId);
+
+            lock (player.EntityLock)
+            {
+                if (TimerProcessor.TryGetOwnerId(descriptor.OwnerType, command.DescriptorId, player, out var ownerId) && TimerProcessor.TryGetActiveTimer(command.DescriptorId, ownerId, out var activeTimer))
+                {
+                    var players = activeTimer.GetAffectedPlayers();
+                    Action<Action<Player>> stopAction = action =>
+                    {
+                        foreach (var pl in players)
+                        {
+                            action(pl);
+                        }
+                    };
+
+                    switch (command.StopType)
+                    {
+                        case TimerStopType.None:
+                            TimerProcessor.RemoveTimer(activeTimer);
+                            break;
+                        case TimerStopType.Cancel:
+                            stopAction((pl) => pl.StartCommonEvent(descriptor.CancellationEvent));
+                            TimerProcessor.RemoveTimer(activeTimer);
+                            break;
+
+                        case TimerStopType.Complete:
+                            stopAction((pl) => pl.StartCommonEvent(descriptor.CompletionEvent));
+                            TimerProcessor.RemoveTimer(activeTimer);
+                            break;
+
+                        case TimerStopType.Expire:
+                            activeTimer.ExpireTimer(now);
+                            break;
+
+                        default:
+                            throw new NotImplementedException("Invalid timer stop type received for StopTimerCommand");
+                    }
+                }
+            }
+        }
+
+        private static void ProcessCommand(
+            ModifyTimerCommand command,
+            Player player,
+            Event instance,
+            CommandInstance stackInfo,
+            Stack<CommandInstance> callStack
+        )
+        {
+            if (player == null) return;
+
+            TimerDescriptor descriptor = TimerDescriptor.Get(command.DescriptorId);
+
+            lock (player.EntityLock)
+            {
+                if (TimerProcessor.TryGetOwnerId(descriptor.OwnerType, command.DescriptorId, player, out var ownerId) && TimerProcessor.TryGetActiveTimer(command.DescriptorId, ownerId, out var activeTimer))
+                {
+                    long amount = 0;
+                    if (command.IsStatic)
+                    {
+                        amount = command.Amount;
+                    }
+                    else
+                    {
+                        switch(command.VariableType)
+                        {
+                            case VariableTypes.PlayerVariable:
+                                amount = player.GetVariableValue(command.VariableDescriptorId).Integer;
+                                break;
+                            case VariableTypes.ServerVariable:
+                                amount = (int)ServerVariableBase.Get(command.VariableDescriptorId)?.Value.Integer;
+
+                                break;
+                            case VariableTypes.InstanceVariable:
+                                if (MapController.TryGetInstanceFromMap(player.MapId, player.MapInstanceId, out var mapInstance))
+                                {
+                                    amount = mapInstance.GetInstanceVariable(command.VariableDescriptorId)?.Value;
+                                }
+
+                                break;
+                        }
+                    }
+
+                    // Convert to seconds
+                    amount *= 1000;
+
+                    using (var context = DbInterface.CreatePlayerContext(readOnly: false))
+                    {
+                        switch (command.Operator)
+                        {
+                            case TimerOperator.Set:
+                                activeTimer.TimeRemaining = Timing.Global.MillisecondsUtc + amount;
+                                break;
+                            case TimerOperator.Add:
+                                activeTimer.TimeRemaining += amount;
+                                break;
+                            case TimerOperator.Subtract:
+                                activeTimer.TimeRemaining -= amount;
+                                break;
+                            default:
+                                throw new NotImplementedException("Invalid operator given to modify timer value");
+                        }
+
+                        context.Timers.Update(activeTimer);
+
+                        context.ChangeTracker.DetectChanges();
+                        context.SaveChanges();
+                    }
+
+                    // Re-sort with new timer values
+                    TimerProcessor.ActiveTimers.Sort();
+
+                    // Update client values
+                    activeTimer.SendTimerPackets();
+                }
+            }
         }
     }
 
