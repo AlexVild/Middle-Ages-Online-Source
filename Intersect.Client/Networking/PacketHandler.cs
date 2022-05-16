@@ -2403,6 +2403,12 @@ namespace Intersect.Client.Networking
 
             var timer = new Timer(packet.DescriptorId, packet.Timestamp, packet.StartTime, displayType, packet.DisplayName, packet.ContinueAfterExpiration);
             Timers.ActiveTimers.Add(timer);
+
+            // Display the most recently added timer to the user
+            if (Interface.Interface.GameUi != null)
+            {
+                Interface.Interface.GameUi.GoToTimer(timer.DescriptorId);
+            }
         }
 
         //TimerStopPacket

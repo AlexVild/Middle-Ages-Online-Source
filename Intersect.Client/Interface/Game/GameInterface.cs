@@ -134,6 +134,7 @@ namespace Intersect.Client.Interface.Game
                 mPictureWindow = new PictureWindow(GameCanvas);
             }
 
+            mTimerWindow = new TimerWindow(GameCanvas);
             mEventWindow = new EventWindow(GameCanvas);
             mQuestOfferWindow = new QuestOfferWindow(GameCanvas);
             mDebugMenu = new DebugMenu(GameCanvas);
@@ -141,7 +142,6 @@ namespace Intersect.Client.Interface.Game
             mComboText = new ComboText(GameCanvas);
             mHarvestBonusWindow = new HarvestBonusWindow(GameCanvas);
             mWarnings = new WarningWindow(GameCanvas);
-            mTimerWindow = new TimerWindow(GameCanvas);
         }
 
         //Chatbox
@@ -340,6 +340,11 @@ namespace Intersect.Client.Interface.Game
             Globals.InTrade = true;
         }
 
+        public void GoToTimer(Guid timerId)
+        {
+            mTimerWindow.ShowTimer(timerId);
+        }
+
         public void ShowHideDebug()
         {
             if (mDebugMenu.IsVisible())
@@ -397,7 +402,7 @@ namespace Intersect.Client.Interface.Game
             mComboText?.Update();
             mHarvestBonusWindow?.Update();
             mWarnings?.Update();
-            mTimerWindow.Update();
+            mTimerWindow?.Update();
 
             if (Globals.QuestOffers.Count > 0)
             {

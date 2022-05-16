@@ -641,6 +641,11 @@ namespace Intersect.Editor.Forms.Editors
 
         private void chkRunIndefinite_CheckedChanged(object sender, EventArgs e)
         {
+            if (mPopulating)
+            {
+                return;
+            }
+
             mEditorItem.TimeLimit = chkRunIndefinite.Checked ?
                 (long) TimerConstants.TimerIndefiniteTimeLimit :
                 (long) nudTimeLimit.Value;

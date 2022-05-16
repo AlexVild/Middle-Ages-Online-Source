@@ -76,13 +76,18 @@ namespace Intersect.Client.Entities
             {
                 case TimerDisplayType.Ascending:
                     ElapsedTime = Timing.Global.MillisecondsUtc - StartTime;
+                    if (!ContinueAfterExpiration)
+                    {
+                        // If the timer is not set to continue after expiration, never display a time longer than the configured time for the timer
+                        ElapsedTime = MathHelper.Clamp(ElapsedTime, 0, Timestamp - StartTime);
+                    }
                     break;
                 case TimerDisplayType.Descending:
                     ElapsedTime = Timestamp - Timing.Global.MillisecondsUtc;
                     if (!ContinueAfterExpiration)
                     {
                         // If the timer is not set to continue after expiration, never display a negative time
-                        MathHelper.Clamp(ElapsedTime, 0, long.MaxValue);
+                        ElapsedTime = MathHelper.Clamp(ElapsedTime, 0, long.MaxValue);
                     }
                     break;
             }

@@ -8,7 +8,7 @@ using System;
 
 namespace Intersect.Client.Interface.Game
 {
-    class TimerWindow
+    public class TimerWindow
     {
         //Controls
         private Canvas mGameCanvas;
@@ -35,10 +35,7 @@ namespace Intersect.Client.Interface.Game
             mBackground = new WindowControl(gameCanvas, string.Empty, false, "TimerWindow");
             mBackground.DisableResizing();
 
-            mBackground.Title = "Norsche Cave";
-
             mTimer = new Label(mBackground, "Timer");
-            mTimer.Text = "12:34:56.789";
 
             mNextButton = new Button(mBackground, "NextButton");
             mPrevButton = new Button(mBackground, "PrevButton");
