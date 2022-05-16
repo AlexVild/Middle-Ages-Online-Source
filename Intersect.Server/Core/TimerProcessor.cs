@@ -128,15 +128,18 @@ namespace Intersect.Server.Core
         /// <param name="completionCount">How many times this timer has been completed. By default, 0.</param>
         public static void AddTimer(Guid descriptorId, Guid ownerId, long now, int completionCount = 0)
         {
+            var timer = new TimerInstance(descriptorId, ownerId, now, completionCount);
+
             using (var context = DbInterface.CreatePlayerContext(readOnly: false))
             {
-                var timer = new TimerInstance(descriptorId, ownerId, now, completionCount);
                 ActiveTimers.Add(timer);
 
                 context.Timers.Add(timer);
                 context.ChangeTracker.DetectChanges();
                 context.SaveChanges();
             }
+
+            timer?.SendTimerPackets();
         }
 
         /// <summary>
@@ -146,14 +149,7 @@ namespace Intersect.Server.Core
         public static void RemoveTimer(TimerInstance timer)
         {
             timer?.StoreElapsedTime();
-
-            if (!timer.Descriptor.Hidden)
-            {
-                foreach (var player in timer.GetAffectedPlayers())
-                {
-                    PacketSender.SendTimerStopPacket(player, timer);
-                }
-            }
+            timer?.SendTimerStopPackets();
 
             using (var context = DbInterface.CreatePlayerContext(readOnly: false))
             {

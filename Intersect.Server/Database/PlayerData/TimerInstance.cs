@@ -4,6 +4,7 @@ using Intersect.GameObjects.Timers;
 using Intersect.Server.Entities;
 using Intersect.Server.General;
 using Intersect.Server.Maps;
+using Intersect.Server.Networking;
 using Intersect.Utilities;
 using System;
 using System.Collections.Generic;
@@ -104,6 +105,12 @@ namespace Intersect.Server.Database.PlayerData
                 context.ChangeTracker.DetectChanges();
                 context.SaveChanges();
             }
+            
+            // If the timer doesn't need to be stopped yet, send timer packets signifying the expiry so that timer displays can be appropriately updated
+            if (!IsCompleted)
+            {
+                SendTimerPackets();
+            }
         }
 
         /// <summary>
@@ -123,35 +130,56 @@ namespace Intersect.Server.Database.PlayerData
         /// <returns>A list of <see cref="Player"/>s to be affected by timer expiration, based on the <see cref="TimerDescriptor.OwnerType"/></returns>
         public List<Player> GetAffectedPlayers()
         {
-            var affectedPlayers = new List<Player>();
             var onlinePlayers = Globals.OnlineList;
             switch (Descriptor.OwnerType)
             {
                 case TimerOwnerType.Global:
-                    affectedPlayers.AddRange(onlinePlayers);
-                    break;
+                    return onlinePlayers;
 
                 case TimerOwnerType.Player:
-                    affectedPlayers.Add(onlinePlayers.Find(ply => ply.Id == OwnerId));
-                    break;
+                    return new List<Player> { onlinePlayers.Find(ply => ply.Id == OwnerId) };
 
                 case TimerOwnerType.Instance:
-                    affectedPlayers.AddRange(onlinePlayers.FindAll(ply => ply.MapInstanceId == OwnerId));
-                    break;
+                    return onlinePlayers.FindAll(ply => ply.MapInstanceId == OwnerId);
 
                 case TimerOwnerType.Party:
-                    affectedPlayers.AddRange(onlinePlayers.FindAll(ply => ply.Party != null && ply.Party.Count >= 1 && ply.Party[0].Id == OwnerId));
-                    break;
+                    return onlinePlayers.FindAll(ply => ply.Party != null && ply.Party.Count >= 1 && ply.Party[0].Id == OwnerId);
 
                 case TimerOwnerType.Guild:
-                    affectedPlayers.AddRange(onlinePlayers.FindAll(ply => ply.Guild != null && ply.Guild.Id == OwnerId));
-                    break;
+                    return onlinePlayers.FindAll(ply => ply.Guild != null && ply.Guild.Id == OwnerId);
 
                 default:
                     throw new NotImplementedException($"{Enum.GetName(typeof(TimerOwnerType), Descriptor.OwnerType)} not implemented!");
             }
+        }
 
-            return affectedPlayers;
+        /// <summary>
+        /// Returns whether or not this timer affects the given <see cref="Player"/>
+        /// </summary>
+        /// <param name="player">The player instance to check</param>
+        /// <returns>True if the given player is affected by this timer</returns>
+        public bool AffectsPlayer(Player player)
+        {
+            switch (Descriptor.OwnerType)
+            {
+                case TimerOwnerType.Global:
+                    return true;
+
+                case TimerOwnerType.Player:
+                    return OwnerId == player.Id;
+
+                case TimerOwnerType.Instance:
+                    return player.MapInstanceId == OwnerId;
+
+                case TimerOwnerType.Party:
+                    return player.Party != null && player.Party.Count >= 1 && player.Party[0].Id == OwnerId;
+
+                case TimerOwnerType.Guild:
+                    return player.Guild != null && player.Guild.Id == OwnerId;
+
+                default:
+                    throw new NotImplementedException($"{Enum.GetName(typeof(TimerOwnerType), Descriptor.OwnerType)} not implemented!");
+            }
         }
 
         /// <summary>
@@ -211,6 +239,44 @@ namespace Intersect.Server.Database.PlayerData
                         MapInstance.SetInstanceVariable(descriptor.ElapsedTimeVariableId, ElapsedTime, OwnerId);
                         break;
                 }
+            }
+        }
+
+        public void SendTimerPackets()
+        {
+            if (!Descriptor.Hidden)
+            {
+                foreach (var player in GetAffectedPlayers())
+                {
+                    PacketSender.SendTimerPacket(player, this);
+                }
+            }
+        }
+
+        public void SendTimerPacketTo(Player player)
+        {
+            if (!Descriptor.Hidden)
+            {
+                PacketSender.SendTimerPacket(player, this);
+            }
+        }
+
+        public void SendTimerStopPackets()
+        {
+            if (!Descriptor.Hidden)
+            {
+                foreach (var player in GetAffectedPlayers())
+                {
+                    PacketSender.SendTimerStopPacket(player, this);
+                }
+            }
+        }
+
+        public void SendTimerStopPacketTo(Player player)
+        {
+            if (!Descriptor.Hidden)
+            {
+                PacketSender.SendTimerStopPacket(player, this);
             }
         }
     }

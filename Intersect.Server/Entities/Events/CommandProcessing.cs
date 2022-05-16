@@ -2457,10 +2457,6 @@ namespace Intersect.Server.Entities.Events
                 if (TimerProcessor.TryGetOwnerId(descriptor.OwnerType, command.DescriptorId, player, out var ownerId) && !TimerProcessor.TryGetActiveTimer(command.DescriptorId, ownerId, out _))
                 {
                     TimerProcessor.AddTimer(command.DescriptorId, ownerId, now);
-                    if (!descriptor.Hidden && TimerProcessor.TryGetActiveTimer(command.DescriptorId, ownerId, out var timer))
-                    {
-                        PacketSender.SendTimerPacket(player, timer);
-                    }
                 }
                 
             }
@@ -2496,7 +2492,7 @@ namespace Intersect.Server.Entities.Events
                     switch (command.StopType)
                     {
                         case TimerStopType.None:
-                            // intentionally blank; just removes timer
+                            TimerProcessor.RemoveTimer(activeTimer);
                             break;
                         case TimerStopType.Cancel:
                             stopAction((pl) => pl.StartCommonEvent(descriptor.CancellationEvent));
@@ -2589,6 +2585,9 @@ namespace Intersect.Server.Entities.Events
 
                     // Re-sort with new timer values
                     TimerProcessor.ActiveTimers.Sort();
+
+                    // Update client values
+                    activeTimer.SendTimerPackets();
                 }
             }
         }

@@ -2065,7 +2065,7 @@ namespace Intersect.Client.Localization
             public static LocalizedString ElapsedHours = @"{0:D1}:{1:D2}:{2:D2}.{3:D1}";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public static LocalizedString ElapsedDays = @"{0:D1} Day(s) and {1:D2}:{2:D2}:{3:D2}.{4:D1}";
+            public static LocalizedString ElapsedDays = @"{0:D1}D {1:D2}:{2:D2}";
         }
 
     }

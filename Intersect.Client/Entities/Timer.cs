@@ -28,6 +28,8 @@ namespace Intersect.Client.Entities
 
         public string DisplayName;
 
+        public bool ContinueAfterExpiration;
+
         public string Time;
 
         public long ElapsedTime = 0L;
@@ -38,13 +40,14 @@ namespace Intersect.Client.Entities
 
         private TimerDisplayType DisplayType;
 
-        public Timer(Guid descriptorId, long timestamp, long startTime, TimerDisplayType displayType, string displayName)
+        public Timer(Guid descriptorId, long timestamp, long startTime, TimerDisplayType displayType, string displayName, bool continueAfterExpiration)
         {
             DescriptorId = descriptorId;
             Timestamp = timestamp;
             StartTime = startTime;
             DisplayType = displayType;
             DisplayName = displayName;
+            ContinueAfterExpiration = continueAfterExpiration;
         }
 
         public void Update()
@@ -64,7 +67,7 @@ namespace Intersect.Client.Entities
 
         private void StateFinishing()
         {
-            Globals.Me.ActiveTimers.Remove(this);
+            Timers.ActiveTimers.Remove(this);
         }
 
         private void StateActive()
@@ -76,7 +79,7 @@ namespace Intersect.Client.Entities
                     break;
                 case TimerDisplayType.Descending:
                     ElapsedTime = Timestamp - Timing.Global.MillisecondsUtc;
-                    if (!TimerDescriptor.Get(DescriptorId).ContinueAfterExpiration)
+                    if (!ContinueAfterExpiration)
                     {
                         // If the timer is not set to continue after expiration, never display a negative time
                         MathHelper.Clamp(ElapsedTime, 0, long.MaxValue);
@@ -114,9 +117,7 @@ namespace Intersect.Client.Entities
                     return string.Format(Strings.TimerWindow.ElapsedDays,
                         t.Days,
                         t.Hours,
-                        t.Minutes,
-                        t.Seconds,
-                        t.Milliseconds / 100);
+                        t.Minutes);
                 default:
                     return string.Empty;
             }

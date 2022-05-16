@@ -472,7 +472,7 @@ namespace Intersect.Server.Entities
             LeaveParty(true);
 
             // Update timers
-            RemoveActiveTimers();
+            LogoutPlayerTimers();
 
             // End combo
             EndCombo();
@@ -2315,6 +2315,62 @@ namespace Intersect.Server.Entities
             PacketSender.SendEntityLeaveInstanceOfMap(this, oldMap.Id, PreviousMapInstanceId);
             // Remove any trace of our player from the old instance's processing
             newMap.RemoveEntityFromAllSurroundingMapsInInstance(this, PreviousMapInstanceId);
+
+            // Get any instance timers that are running and send them to the player
+            StopInstanceTimers(PreviousMapInstanceId);
+            SendInstanceTimers();
+        }
+
+        /// <summary>
+        /// Gets all instance timers that are on this player's instance and sends timer packets if necessary
+        /// </summary>
+        private void SendInstanceTimers()
+        {
+            foreach (var timer in TimerProcessor.ActiveTimers.ToArray().Where(t => t.Descriptor.OwnerType == TimerOwnerType.Instance && t.OwnerId == MapInstanceId))
+            {
+                timer.SendTimerPacketTo(this);
+            }
+        }
+
+        /// <summary>
+        /// Stop instance timers from a given instance ID
+        /// </summary>
+        /// <param name="previousInstanceId">Given instance ID</param>
+        private void StopInstanceTimers(Guid previousInstanceId)
+        {
+            foreach (var timer in TimerProcessor.ActiveTimers.ToArray().Where(t => t.Descriptor.OwnerType == TimerOwnerType.Instance && t.OwnerId == previousInstanceId))
+            {
+                timer.SendTimerStopPacketTo(this);
+            }
+        }
+
+        /// <summary>
+        /// Gets all party timers that belong to this player's party and sends timer packets if necessary
+        /// </summary>
+        private void SendPartyTimers()
+        {
+            if (Party == null || Party.Count <= 0)
+            {
+                return;
+            }
+
+            foreach (var timer in TimerProcessor.ActiveTimers.ToArray().Where(t => t.Descriptor.OwnerType == TimerOwnerType.Party && t.OwnerId == Party[0].Id))
+            {
+                timer.SendTimerPacketTo(this);
+            }
+        }
+
+        private void StopPartyTimers()
+        {
+            if (Party == null || Party.Count <= 0)
+            {
+                return;
+            }
+
+            foreach (var timer in TimerProcessor.ActiveTimers.ToArray().Where(t => t.Descriptor.OwnerType == TimerOwnerType.Party && t.OwnerId == Party[0].Id))
+            {
+                timer.SendTimerStopPacketTo(this);
+            }
         }
 
         /// <summary>
@@ -4819,6 +4875,7 @@ namespace Intersect.Server.Entities
             if (Party.Count == 0)
             {
                 Party.Add(this);
+                SendPartyTimers();
             }
             else
             {
@@ -4854,6 +4911,7 @@ namespace Intersect.Server.Entities
                     );
                 }
                 target.InstanceLives = InstanceLives;
+                target.SendPartyTimers();
             }
             else
             {
@@ -4870,6 +4928,7 @@ namespace Intersect.Server.Entities
                     var oldMember = Party.Where(p => p.Id == target).FirstOrDefault();
                     if (oldMember != null)
                     {
+                        oldMember.StopPartyTimers();
                         oldMember.Party = new List<Player>();
                         PacketSender.SendParty(oldMember);
                         PacketSender.SendChatMsg(oldMember, Strings.Parties.kicked, ChatMessageType.Party, CustomColors.Alerts.Error);
@@ -4912,7 +4971,25 @@ namespace Intersect.Server.Entities
             if (Party.Count > 0 && Party.Contains(this))
             {
                 var oldMember = this;
+                
+                // Remove any client timers from this player
+                oldMember.StopPartyTimers();
+                
+                // Remove them from the party
                 Party.Remove(this);
+
+                // Check if any outstanding party timers exist for this party and, if so, update their owner ID to the new party owner
+                if (Party.Count > 0)
+                {
+                    var partyTimers = TimerProcessor.ActiveTimers
+                        .Where(timer => timer.Descriptor.OwnerType == TimerOwnerType.Party && timer.OwnerId == Party[0].Id)
+                        .ToArray();
+
+                    foreach (var timer in partyTimers)
+                    {
+                        timer.OwnerId = Party[0].Id;
+                    }
+                }
 
                 if (Party.Count > 1) //Need atleast 2 party members to function
                 {
@@ -4925,28 +5002,21 @@ namespace Intersect.Server.Entities
                             Party[i], Strings.Parties.memberleft.ToString(oldMember.Name), ChatMessageType.Party, CustomColors.Alerts.Error
                         );
                     }
-
-                    // Check if any outstanding party timers exist for this party and, if so, update their owner ID to the new party owner
-                    var partysTimers = TimerProcessor.ActiveTimers
-                        .Where(timer => timer.Descriptor.OwnerType == GameObjects.Timers.TimerOwnerType.Party && timer.OwnerId == Id);
-
-                    foreach (var timer in partysTimers)
-                    {
-                        timer.OwnerId = Party[0].Id;
-                    }
                 }
                 else if (Party.Count > 0) //Check if anyone is left on their own
                 {
                     var remainder = Party[0];
-                    remainder.Party.Clear();
-                    PacketSender.SendParty(remainder);
-                    PacketSender.SendChatMsg(remainder, Strings.Parties.disbanded, ChatMessageType.Party, CustomColors.Alerts.Error);
 
+                    remainder.StopPartyTimers();
                     // Nuke timers that existed for this disbanded party
-                    foreach (var timer in TimerProcessor.ActiveTimers.Where(timer => timer.Descriptor.OwnerType == GameObjects.Timers.TimerOwnerType.Party && timer.OwnerId == Id).ToArray())
+                    foreach (var timer in TimerProcessor.ActiveTimers.Where(timer => timer.Descriptor.OwnerType == GameObjects.Timers.TimerOwnerType.Party && timer.OwnerId == Party[0].Id).ToArray())
                     {
                         TimerProcessor.RemoveTimer(timer);
                     }
+
+                    remainder.Party.Clear();
+                    PacketSender.SendParty(remainder);
+                    PacketSender.SendChatMsg(remainder, Strings.Parties.disbanded, ChatMessageType.Party, CustomColors.Alerts.Error);
                 }
 
                 PacketSender.SendChatMsg(this, Strings.Parties.left, ChatMessageType.Party, CustomColors.Alerts.Error);
@@ -7932,6 +8002,7 @@ namespace Intersect.Server.Entities
         #region Timers
         private void LoadTimers()
         {
+            // First, tell the TimerProcessor to begin processing this player's timers
             using (var context = DbInterface.CreatePlayerContext(readOnly: false))
             {
                 var timers = context.Timers;
@@ -7959,6 +8030,14 @@ namespace Intersect.Server.Entities
                 context.ChangeTracker.DetectChanges();
                 context.SaveChanges();
             }
+
+            HashSet<TimerInstance> relevantTimers = new HashSet<TimerInstance>();
+
+            // Get any instance timers that affect this player and send them to their client, if the timer is visible
+            foreach (var timer in TimerProcessor.ActiveTimers.ToArray().Where(t => !t.Descriptor.Hidden && t.AffectsPlayer(this)))
+            {
+                timer.SendTimerPacketTo(this);
+            }
         }
 
         /// <summary>
@@ -7966,7 +8045,7 @@ namespace Intersect.Server.Entities
         /// have this player as their owner ID. Also updates those timers in the DB so that, when they
         /// are refreshed, they are refreshed properly.
         /// </summary>
-        private void RemoveActiveTimers()
+        private void LogoutPlayerTimers()
         {
             var now = Timing.Global.MillisecondsUtc;
             using (var context = DbInterface.CreatePlayerContext(readOnly: false))

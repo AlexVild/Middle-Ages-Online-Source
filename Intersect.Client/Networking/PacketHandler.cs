@@ -2390,23 +2390,25 @@ namespace Intersect.Client.Networking
         //TimerPacket
         public void HandlePacket(IPacketSender packetSender, TimerPacket packet)
         {
-            if (Globals.Me.ActiveTimers.Find(t => t.DescriptorId == packet.DescriptorId) != default)
+            var activeTimer = Timers.ActiveTimers.Find(t => t.DescriptorId == packet.DescriptorId);
+            if (activeTimer != default)
             {
-                // Timer already being shown
+                // Timer already being shown - update it
+                activeTimer.Timestamp = packet.Timestamp;
+                activeTimer.StartTime = packet.StartTime;
                 return;
             }
 
-            var descriptor = TimerDescriptor.Get(packet.DescriptorId);
-            var displayType = descriptor.Type == TimerType.Countdown ? TimerDisplayType.Descending : TimerDisplayType.Ascending;
+            var displayType = packet.Type == TimerType.Countdown ? TimerDisplayType.Descending : TimerDisplayType.Ascending;
 
-            var timer = new Timer(packet.DescriptorId, packet.Timestamp, packet.StartTime, displayType, descriptor.DisplayName);
-            Globals.Me.ActiveTimers.Add(timer);
+            var timer = new Timer(packet.DescriptorId, packet.Timestamp, packet.StartTime, displayType, packet.DisplayName, packet.ContinueAfterExpiration);
+            Timers.ActiveTimers.Add(timer);
         }
 
         //TimerStopPacket
         public void HandlePacket(IPacketSender packetSender, TimerStopPacket packet)
         {
-            foreach (var timer in Globals.Me.ActiveTimers.FindAll(t => t.DescriptorId == packet.DescriptorId))
+            foreach (var timer in Timers.ActiveTimers.FindAll(t => t.DescriptorId == packet.DescriptorId))
             {
                 timer.ElapsedTime = packet.ElapsedTime;
                 timer.EndTimer();

@@ -423,6 +423,7 @@ namespace Intersect.Server.Core
                                 {
                                     // So we'll remove it from the list of descriptor IDs that we want to start
                                     startupTimerIds.Remove(descriptor.Id);
+                                    continue;
                                 }
 
                                 break;
@@ -437,6 +438,7 @@ namespace Intersect.Server.Core
                                 if (!context.Players.ToArray().Select(p => p.Id).Contains(timer.OwnerId))
                                 {
                                     context.Timers.Remove(timer);
+                                    continue;
                                 }
                                 break;
                             case TimerOwnerType.Instance:
@@ -446,6 +448,7 @@ namespace Intersect.Server.Core
                                     !context.Players.ToArray().Select(p => p.MapInstanceId).Contains(timer.OwnerId))
                                 {
                                     context.Timers.Remove(timer);
+                                    continue;
                                 }
                                 break;
                             case TimerOwnerType.Guild:
@@ -453,12 +456,13 @@ namespace Intersect.Server.Core
                                 if (!context.Guilds.ToArray().Select(p => p.Id).Contains(timer.OwnerId))
                                 {
                                     context.Timers.Remove(timer);
+                                    continue;
                                 }
                                 break;
                             case TimerOwnerType.Party:
                                 // A party timer simply could not have survived a server shutdown - remove it
                                 context.Timers.Remove(timer);
-                                break;
+                                continue;
                         }
 
                         // Add the timer to processing if it passes all of the above checks

@@ -113,6 +113,7 @@
     <Compile Include="Entities\Timer.cs" />
     <Compile Include="General\Time.cs" />
     <Compile Include="General\Globals.cs" />
+    <Compile Include="General\Timers.cs" />
     <Compile Include="Interface\Game\AnnouncementWindow.cs" />
     <Compile Include="Interface\Game\ComboText.cs" />
     <Compile Include="Interface\Game\DescriptionWindows\Components\ComponentBase.cs" />

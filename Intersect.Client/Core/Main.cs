@@ -422,6 +422,8 @@ namespace Intersect.Client.Core
             Globals.EventHolds.Clear();
             Globals.PendingEvents.Clear();
 
+            Timers.ActiveTimers.Clear();
+
             Interface.Interface.InitGwen();
             if (Globals.Database.FadeTransitions)
             {
