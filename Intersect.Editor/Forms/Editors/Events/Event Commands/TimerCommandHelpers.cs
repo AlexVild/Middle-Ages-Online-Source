@@ -1,4 +1,5 @@
 ﻿using Intersect.Editor.Localization;
+using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Events.Commands;
 using Intersect.GameObjects.Timers;
 using System;
@@ -20,7 +21,33 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             _ = timerOwnerBox ?? throw new ArgumentNullException(nameof(timerOwnerBox));
             _ = timerBox ?? throw new ArgumentNullException(nameof(timerBox));
 
-            TimerDescriptor descriptor = TimerDescriptor.Get(command.DescriptorId);
+            InitializeSelectionFields(command.DescriptorId, ref timerOwnerBox, ref timerBox);
+        }
+
+        /// <summary>
+        /// Populates timer type and timer fields according to the values required by the <see cref="TimerCommand"/> coming in.
+        /// </summary>
+        /// <param name="condition">The condition that is being edited/created</param>
+        /// <param name="timerOwnerBox">The combo box that contains timer owner filters</param>
+        /// <param name="timerBox">The combo box that contains timer descriptor names</param>
+        public static void InitializeSelectionFields(TimerIsActive condition, ref DarkUI.Controls.DarkComboBox timerOwnerBox, ref DarkUI.Controls.DarkComboBox timerBox)
+        {
+            _ = condition ?? throw new ArgumentNullException(nameof(condition));
+            _ = timerOwnerBox ?? throw new ArgumentNullException(nameof(timerOwnerBox));
+            _ = timerBox ?? throw new ArgumentNullException(nameof(timerBox));
+
+            InitializeSelectionFields(condition.descriptorId, ref timerOwnerBox, ref timerBox);
+        }
+
+        /// <summary>
+        /// Populates timer type and timer fields according to the values required by the <see cref="TimerCommand"/> coming in.
+        /// </summary>
+        /// <param name="descriptorId">The descriptor ID of the editing timer descriptor</param>
+        /// <param name="timerOwnerBox">The combo box that contains timer owner filters</param>
+        /// <param name="timerBox">The combo box that contains timer descriptor names</param>
+        public static void InitializeSelectionFields(Guid descriptorId, ref DarkUI.Controls.DarkComboBox timerOwnerBox, ref DarkUI.Controls.DarkComboBox timerBox)
+        {
+            TimerDescriptor descriptor = TimerDescriptor.Get(descriptorId);
             if (descriptor == default) // no selection prior
             {
                 InitializeTimerOwnerSelector(ref timerOwnerBox, TimerOwnerType.Global);

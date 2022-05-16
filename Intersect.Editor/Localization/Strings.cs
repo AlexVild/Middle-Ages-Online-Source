@@ -367,6 +367,22 @@ namespace Intersect.Editor.Localization
             return Strings.EventConditionDesc.highestclassrank.ToString(condition.ClassRank);
         }
 
+        public static string GetEventConditionalDesc(TimerIsActive condition)
+        {
+            var timerName = TimerDescriptor.Get(condition.descriptorId).DisplayName;
+            switch (condition.ConditionType)
+            {
+                case TimerActiveConditions.IsActive:
+                    return Strings.EventConditionDesc.TimerActive.ToString(timerName);
+                case TimerActiveConditions.Elapsed:
+                    return Strings.EventConditionDesc.TimerElapsed.ToString(timerName, condition.ElapsedSeconds.ToString());
+                case TimerActiveConditions.Repetitions:
+                    return Strings.EventConditionDesc.TimerReps.ToString(timerName, condition.Repetitions.ToString());
+                default:
+                    throw new NotImplementedException("Invalid TimerActiveCondition for TimerIsActive condition when trying to print command");
+            }
+        }
+
         public static string GetVariableComparisonString(VariableCompaison comparison)
         {
             return "";
@@ -2290,6 +2306,7 @@ Tick timer saved in server config.json.";
                 {29, @"Has task completed for class..."},
                 {30, @"Has task on cooldown for class..."},
                 {31, @"Has highest class rank of at least X..."},
+                {32, @"Timer X Is Active..."},
             };
 
             public static LocalizedString endrange = @"End Range:";
@@ -2407,6 +2424,24 @@ Tick timer saved in server config.json.";
             public static LocalizedString task = @"Task:";
 
             public static LocalizedString time = @"Time is between:";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Timers = @"Timers";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString TimerType = @"Type";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString TimerName = @"Timer";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString TimerIsActive = @"Is Active";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString TimerSecondsElapsed = @"Seconds Elapsed";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString TimerRepetitions = @"Repetitions Made";
 
             public static LocalizedString title = @"Conditional";
 
@@ -2603,6 +2638,15 @@ Tick timer saved in server config.json.";
             public static LocalizedString time = @"Time is between {00} and {01}";
 
             public static LocalizedString timeinvalid = @"invalid";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString TimerActive = @"Timer {00} is active";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString TimerElapsed = @"Timer {00} is active with at least {01} seconds elapsed";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString TimerReps = @"Timer {00} is active with at least {01} repetitions completed";
 
             public static LocalizedString True = @"True";
 
