@@ -777,6 +777,10 @@
     <Compile Include="Migrations\Game\20220514162010_TimerServerStartMigration.designer.cs">
       <DependentUpon>20220514162010_TimerServerStartMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20220520152021_TimerOnDeathMigration.cs" />
+    <Compile Include="Migrations\Game\20220520152021_TimerOnDeathMigration.designer.cs">
+      <DependentUpon>20220520152021_TimerOnDeathMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

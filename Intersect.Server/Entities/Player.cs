@@ -992,6 +992,7 @@ namespace Intersect.Server.Entities
             //Flag death to the client
             DestroyVehicle();
             PlayDeathAnimation();
+            EndDeathTimers();
             PacketSender.SendPlayerDeath(this);
 
             //Event trigger
@@ -1038,6 +1039,19 @@ namespace Intersect.Server.Entities
             Reset();
             Respawn();
             PacketSender.SendInventory(this);
+        }
+
+        /// <summary>
+        /// Ends all player timers associated with this player that are meant to end on death
+        /// </summary>
+        private void EndDeathTimers()
+        {
+            foreach (var timer in TimerProcessor.ActiveTimers.ToArray().Where(t => !t.Descriptor.ContinueOnDeath
+                && t.Descriptor.OwnerType == GameObjects.Timers.TimerOwnerType.Player
+                && t.OwnerId == Id))
+            {
+                TimerProcessor.RemoveTimer(timer, false);
+            }
         }
 
         private void DestroyVehicle()

@@ -146,9 +146,13 @@ namespace Intersect.Server.Core
         /// Removes a timer from our processing list and from the database.
         /// </summary>
         /// <param name="timer">The <see cref="TimerInstance"/> to remove</param>
-        public static void RemoveTimer(TimerInstance timer)
+        /// /// <param name="storeElapsed">When false, do not store the elapsed time in a variable; default true</param>
+        public static void RemoveTimer(TimerInstance timer, bool storeElapsed = true)
         {
-            timer?.StoreElapsedTime();
+            if (storeElapsed)
+            {
+                timer?.StoreElapsedTime();
+            }
             timer?.SendTimerStopPackets();
 
             using (var context = DbInterface.CreatePlayerContext(readOnly: false))

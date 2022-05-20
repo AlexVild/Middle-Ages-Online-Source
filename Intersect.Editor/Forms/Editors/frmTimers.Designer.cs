@@ -48,6 +48,7 @@ namespace Intersect.Editor.Forms.Editors
             this.lstGameObjects = new Intersect.Editor.Forms.Controls.GameObjectList();
             this.pnlTimerSettings = new System.Windows.Forms.Panel();
             this.grpTimerOptions = new DarkUI.Controls.DarkGroupBox();
+            this.chkStartWithServer = new DarkUI.Controls.DarkCheckBox();
             this.cmbVariable = new DarkUI.Controls.DarkComboBox();
             this.lblVariable = new System.Windows.Forms.Label();
             this.cmbLogoutBehavior = new DarkUI.Controls.DarkComboBox();
@@ -86,7 +87,7 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbOwnerType = new DarkUI.Controls.DarkComboBox();
             this.btnSave = new DarkUI.Controls.DarkButton();
             this.btnCancel = new DarkUI.Controls.DarkButton();
-            this.chkStartWithServer = new DarkUI.Controls.DarkCheckBox();
+            this.chkContinueOnDeath = new DarkUI.Controls.DarkCheckBox();
             this.toolStrip.SuspendLayout();
             this.grpTimers.SuspendLayout();
             this.pnlTimerSettings.SuspendLayout();
@@ -292,6 +293,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpTimerOptions.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpTimerOptions.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpTimerOptions.Controls.Add(this.chkContinueOnDeath);
             this.grpTimerOptions.Controls.Add(this.chkStartWithServer);
             this.grpTimerOptions.Controls.Add(this.cmbVariable);
             this.grpTimerOptions.Controls.Add(this.lblVariable);
@@ -308,6 +310,16 @@ namespace Intersect.Editor.Forms.Editors
             this.grpTimerOptions.TabStop = false;
             this.grpTimerOptions.Text = "Timer Options";
             // 
+            // chkStartWithServer
+            // 
+            this.chkStartWithServer.AutoSize = true;
+            this.chkStartWithServer.Location = new System.Drawing.Point(6, 42);
+            this.chkStartWithServer.Name = "chkStartWithServer";
+            this.chkStartWithServer.Size = new System.Drawing.Size(108, 17);
+            this.chkStartWithServer.TabIndex = 114;
+            this.chkStartWithServer.Text = "Start with server?";
+            this.chkStartWithServer.CheckedChanged += new System.EventHandler(this.chkStartWithServer_CheckedChanged);
+            // 
             // cmbVariable
             // 
             this.cmbVariable.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
@@ -321,9 +333,9 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbVariable.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbVariable.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbVariable.FormattingEnabled = true;
-            this.cmbVariable.Location = new System.Drawing.Point(9, 127);
+            this.cmbVariable.Location = new System.Drawing.Point(6, 174);
             this.cmbVariable.Name = "cmbVariable";
-            this.cmbVariable.Size = new System.Drawing.Size(254, 21);
+            this.cmbVariable.Size = new System.Drawing.Size(256, 21);
             this.cmbVariable.TabIndex = 113;
             this.cmbVariable.Text = null;
             this.cmbVariable.TextPadding = new System.Windows.Forms.Padding(2);
@@ -332,7 +344,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblVariable
             // 
             this.lblVariable.AutoSize = true;
-            this.lblVariable.Location = new System.Drawing.Point(6, 108);
+            this.lblVariable.Location = new System.Drawing.Point(3, 155);
             this.lblVariable.Name = "lblVariable";
             this.lblVariable.Size = new System.Drawing.Size(174, 13);
             this.lblVariable.TabIndex = 112;
@@ -351,7 +363,7 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbLogoutBehavior.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbLogoutBehavior.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbLogoutBehavior.FormattingEnabled = true;
-            this.cmbLogoutBehavior.Location = new System.Drawing.Point(115, 44);
+            this.cmbLogoutBehavior.Location = new System.Drawing.Point(114, 93);
             this.cmbLogoutBehavior.Name = "cmbLogoutBehavior";
             this.cmbLogoutBehavior.Size = new System.Drawing.Size(148, 21);
             this.cmbLogoutBehavior.TabIndex = 111;
@@ -362,7 +374,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblLogoutBehavior
             // 
             this.lblLogoutBehavior.AutoSize = true;
-            this.lblLogoutBehavior.Location = new System.Drawing.Point(4, 47);
+            this.lblLogoutBehavior.Location = new System.Drawing.Point(3, 96);
             this.lblLogoutBehavior.Name = "lblLogoutBehavior";
             this.lblLogoutBehavior.Size = new System.Drawing.Size(85, 13);
             this.lblLogoutBehavior.TabIndex = 110;
@@ -381,7 +393,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblCompletionBehavior
             // 
             this.lblCompletionBehavior.AutoSize = true;
-            this.lblCompletionBehavior.Location = new System.Drawing.Point(4, 76);
+            this.lblCompletionBehavior.Location = new System.Drawing.Point(3, 129);
             this.lblCompletionBehavior.Name = "lblCompletionBehavior";
             this.lblCompletionBehavior.Size = new System.Drawing.Size(104, 13);
             this.lblCompletionBehavior.TabIndex = 108;
@@ -400,7 +412,7 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbCompletionBehavior.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbCompletionBehavior.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbCompletionBehavior.FormattingEnabled = true;
-            this.cmbCompletionBehavior.Location = new System.Drawing.Point(115, 73);
+            this.cmbCompletionBehavior.Location = new System.Drawing.Point(114, 126);
             this.cmbCompletionBehavior.Name = "cmbCompletionBehavior";
             this.cmbCompletionBehavior.Size = new System.Drawing.Size(148, 21);
             this.cmbCompletionBehavior.TabIndex = 108;
@@ -848,15 +860,15 @@ namespace Intersect.Editor.Forms.Editors
             this.btnCancel.Text = "Cancel";
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
-            // chkStartWithServer
+            // chkContinueOnDeath
             // 
-            this.chkStartWithServer.AutoSize = true;
-            this.chkStartWithServer.Location = new System.Drawing.Point(6, 166);
-            this.chkStartWithServer.Name = "chkStartWithServer";
-            this.chkStartWithServer.Size = new System.Drawing.Size(108, 17);
-            this.chkStartWithServer.TabIndex = 114;
-            this.chkStartWithServer.Text = "Start with server?";
-            this.chkStartWithServer.CheckedChanged += new System.EventHandler(this.chkStartWithServer_CheckedChanged);
+            this.chkContinueOnDeath.AutoSize = true;
+            this.chkContinueOnDeath.Location = new System.Drawing.Point(6, 65);
+            this.chkContinueOnDeath.Name = "chkContinueOnDeath";
+            this.chkContinueOnDeath.Size = new System.Drawing.Size(119, 17);
+            this.chkContinueOnDeath.TabIndex = 115;
+            this.chkContinueOnDeath.Text = "Continue on death?";
+            this.chkContinueOnDeath.CheckedChanged += new System.EventHandler(this.chkContinueOnDeath_CheckedChanged);
             // 
             // frmTimers
             // 
@@ -955,5 +967,6 @@ namespace Intersect.Editor.Forms.Editors
         private DarkUI.Controls.DarkComboBox cmbVariable;
         private System.Windows.Forms.Label lblVariable;
         private DarkUI.Controls.DarkCheckBox chkStartWithServer;
+        private DarkUI.Controls.DarkCheckBox chkContinueOnDeath;
     }
 }

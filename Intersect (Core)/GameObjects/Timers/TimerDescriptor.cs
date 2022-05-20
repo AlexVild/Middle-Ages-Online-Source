@@ -57,6 +57,11 @@ namespace Intersect.GameObjects.Timers
         public bool ContinueAfterExpiration { get; set; }
 
         /// <summary>
+        /// Whether or not this timer continues after player death (only for player timers)
+        /// </summary>
+        public bool ContinueOnDeath { get; set; }
+
+        /// <summary>
         /// What kind of <see cref="TimerLogoutBehavior"/> to perform. Player timers only
         /// </summary>
         public TimerLogoutBehavior LogoutBehavior { get; set; }
