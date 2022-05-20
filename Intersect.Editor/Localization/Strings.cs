@@ -5783,6 +5783,8 @@ Negative values for time to flow backwards.";
 
             public static LocalizedString instanceType = @"Instance Type:";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString WarpSound = @"Sound:";
         }
 
         public struct WarpSelection

@@ -99,6 +99,7 @@ namespace Intersect.Editor.Forms.DockingElements
             this.lblLightInstructions = new System.Windows.Forms.Label();
             this.lblEventInstructions = new System.Windows.Forms.Label();
             this.grpNpcList = new DarkUI.Controls.DarkGroupBox();
+            this.chkDoNotRespawn = new DarkUI.Controls.DarkCheckBox();
             this.lblInstanceLimit = new System.Windows.Forms.Label();
             this.nudInstanceSpawnLimit = new DarkUI.Controls.DarkNumericUpDown();
             this.btnRemoveMapNpc = new DarkUI.Controls.DarkButton();
@@ -145,12 +146,13 @@ namespace Intersect.Editor.Forms.DockingElements
             this.picLayer3 = new System.Windows.Forms.PictureBox();
             this.picLayer2 = new System.Windows.Forms.PictureBox();
             this.picLayer1 = new System.Windows.Forms.PictureBox();
-            this.pnlTilesetContainer = new Intersect.Editor.Forms.Controls.AutoDragPanel();
-            this.picTileset = new System.Windows.Forms.PictureBox();
             this.pnlEvents = new System.Windows.Forms.Panel();
             this.pnlLights = new System.Windows.Forms.Panel();
+            this.lblWarpSound = new System.Windows.Forms.Label();
+            this.cmbWarpSound = new DarkUI.Controls.DarkComboBox();
+            this.pnlTilesetContainer = new Intersect.Editor.Forms.Controls.AutoDragPanel();
+            this.picTileset = new System.Windows.Forms.PictureBox();
             this.lightEditor = new Intersect.Editor.Forms.Controls.LightEditorCtrl();
-            this.chkDoNotRespawn = new DarkUI.Controls.DarkCheckBox();
             this.grpResource.SuspendLayout();
             this.grpZResource.SuspendLayout();
             this.grpItem.SuspendLayout();
@@ -183,10 +185,10 @@ namespace Intersect.Editor.Forms.DockingElements
             ((System.ComponentModel.ISupportInitialize)(this.picLayer3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picLayer2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picLayer1)).BeginInit();
-            this.pnlTilesetContainer.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picTileset)).BeginInit();
             this.pnlEvents.SuspendLayout();
             this.pnlLights.SuspendLayout();
+            this.pnlTilesetContainer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picTileset)).BeginInit();
             this.SuspendLayout();
             // 
             // lblLayer
@@ -543,6 +545,8 @@ namespace Intersect.Editor.Forms.DockingElements
             // 
             this.grpWarp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpWarp.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpWarp.Controls.Add(this.cmbWarpSound);
+            this.grpWarp.Controls.Add(this.lblWarpSound);
             this.grpWarp.Controls.Add(this.grpInstanceSettings);
             this.grpWarp.Controls.Add(this.chkChangeInstance);
             this.grpWarp.Controls.Add(this.chkMapFade);
@@ -558,7 +562,7 @@ namespace Intersect.Editor.Forms.DockingElements
             this.grpWarp.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpWarp.Location = new System.Drawing.Point(6, 179);
             this.grpWarp.Name = "grpWarp";
-            this.grpWarp.Size = new System.Drawing.Size(255, 350);
+            this.grpWarp.Size = new System.Drawing.Size(255, 384);
             this.grpWarp.TabIndex = 26;
             this.grpWarp.TabStop = false;
             this.grpWarp.Text = "Warp";
@@ -571,7 +575,7 @@ namespace Intersect.Editor.Forms.DockingElements
             this.grpInstanceSettings.Controls.Add(this.lblInstance);
             this.grpInstanceSettings.Controls.Add(this.cmbInstanceType);
             this.grpInstanceSettings.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpInstanceSettings.Location = new System.Drawing.Point(7, 260);
+            this.grpInstanceSettings.Location = new System.Drawing.Point(7, 292);
             this.grpInstanceSettings.Name = "grpInstanceSettings";
             this.grpInstanceSettings.Size = new System.Drawing.Size(242, 84);
             this.grpInstanceSettings.TabIndex = 31;
@@ -616,7 +620,7 @@ namespace Intersect.Editor.Forms.DockingElements
             // chkChangeInstance
             // 
             this.chkChangeInstance.AutoSize = true;
-            this.chkChangeInstance.Location = new System.Drawing.Point(6, 237);
+            this.chkChangeInstance.Location = new System.Drawing.Point(6, 269);
             this.chkChangeInstance.Name = "chkChangeInstance";
             this.chkChangeInstance.Size = new System.Drawing.Size(112, 17);
             this.chkChangeInstance.TabIndex = 28;
@@ -638,9 +642,9 @@ namespace Intersect.Editor.Forms.DockingElements
             // 
             this.nudWarpY.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.nudWarpY.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudWarpY.Location = new System.Drawing.Point(49, 124);
+            this.nudWarpY.Location = new System.Drawing.Point(61, 124);
             this.nudWarpY.Name = "nudWarpY";
-            this.nudWarpY.Size = new System.Drawing.Size(190, 20);
+            this.nudWarpY.Size = new System.Drawing.Size(178, 20);
             this.nudWarpY.TabIndex = 26;
             this.nudWarpY.Value = new decimal(new int[] {
             0,
@@ -652,9 +656,9 @@ namespace Intersect.Editor.Forms.DockingElements
             // 
             this.nudWarpX.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.nudWarpX.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudWarpX.Location = new System.Drawing.Point(49, 86);
+            this.nudWarpX.Location = new System.Drawing.Point(61, 86);
             this.nudWarpX.Name = "nudWarpX";
-            this.nudWarpX.Size = new System.Drawing.Size(190, 20);
+            this.nudWarpX.Size = new System.Drawing.Size(178, 20);
             this.nudWarpX.TabIndex = 25;
             this.nudWarpX.Value = new decimal(new int[] {
             0,
@@ -664,7 +668,7 @@ namespace Intersect.Editor.Forms.DockingElements
             // 
             // btnVisualMapSelector
             // 
-            this.btnVisualMapSelector.Location = new System.Drawing.Point(16, 203);
+            this.btnVisualMapSelector.Location = new System.Drawing.Point(16, 231);
             this.btnVisualMapSelector.Name = "btnVisualMapSelector";
             this.btnVisualMapSelector.Padding = new System.Windows.Forms.Padding(5);
             this.btnVisualMapSelector.Size = new System.Drawing.Size(222, 23);
@@ -711,9 +715,9 @@ namespace Intersect.Editor.Forms.DockingElements
             "Down",
             "Left",
             "Right"});
-            this.cmbDirection.Location = new System.Drawing.Point(49, 164);
+            this.cmbDirection.Location = new System.Drawing.Point(61, 164);
             this.cmbDirection.Name = "cmbDirection";
-            this.cmbDirection.Size = new System.Drawing.Size(189, 21);
+            this.cmbDirection.Size = new System.Drawing.Size(177, 21);
             this.cmbDirection.TabIndex = 23;
             this.cmbDirection.Text = "Retain Direction";
             this.cmbDirection.TextPadding = new System.Windows.Forms.Padding(2);
@@ -1098,6 +1102,16 @@ namespace Intersect.Editor.Forms.DockingElements
             this.grpNpcList.TabStop = false;
             this.grpNpcList.Text = "Add/Remove Map NPCs";
             // 
+            // chkDoNotRespawn
+            // 
+            this.chkDoNotRespawn.AutoSize = true;
+            this.chkDoNotRespawn.Location = new System.Drawing.Point(5, 118);
+            this.chkDoNotRespawn.Name = "chkDoNotRespawn";
+            this.chkDoNotRespawn.Size = new System.Drawing.Size(114, 17);
+            this.chkDoNotRespawn.TabIndex = 54;
+            this.chkDoNotRespawn.Text = "Do Not Respawn?";
+            this.chkDoNotRespawn.CheckedChanged += new System.EventHandler(this.chkDoNotRespawn_CheckedChanged);
+            // 
             // lblInstanceLimit
             // 
             this.lblInstanceLimit.AutoSize = true;
@@ -1311,8 +1325,8 @@ namespace Intersect.Editor.Forms.DockingElements
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel1.Controls.Add(this.pnlNpcs);
             this.panel1.Controls.Add(this.pnlAttributes);
+            this.panel1.Controls.Add(this.pnlNpcs);
             this.panel1.Controls.Add(this.pnlTiles);
             this.panel1.Controls.Add(this.pnlEvents);
             this.panel1.Controls.Add(this.pnlLights);
@@ -1731,6 +1745,54 @@ namespace Intersect.Editor.Forms.DockingElements
             this.picLayer1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.picMapLayer_MouseClick);
             this.picLayer1.MouseHover += new System.EventHandler(this.picMapLayer_MouseHover);
             // 
+            // pnlEvents
+            // 
+            this.pnlEvents.Controls.Add(this.lblEventInstructions);
+            this.pnlEvents.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlEvents.Location = new System.Drawing.Point(0, 0);
+            this.pnlEvents.Name = "pnlEvents";
+            this.pnlEvents.Size = new System.Drawing.Size(276, 566);
+            this.pnlEvents.TabIndex = 1;
+            // 
+            // pnlLights
+            // 
+            this.pnlLights.Controls.Add(this.lightEditor);
+            this.pnlLights.Controls.Add(this.lblLightInstructions);
+            this.pnlLights.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlLights.Location = new System.Drawing.Point(0, 0);
+            this.pnlLights.Name = "pnlLights";
+            this.pnlLights.Size = new System.Drawing.Size(276, 566);
+            this.pnlLights.TabIndex = 1;
+            // 
+            // lblWarpSound
+            // 
+            this.lblWarpSound.AutoSize = true;
+            this.lblWarpSound.Location = new System.Drawing.Point(14, 200);
+            this.lblWarpSound.Name = "lblWarpSound";
+            this.lblWarpSound.Size = new System.Drawing.Size(41, 13);
+            this.lblWarpSound.TabIndex = 32;
+            this.lblWarpSound.Text = "Sound:";
+            // 
+            // cmbWarpSound
+            // 
+            this.cmbWarpSound.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbWarpSound.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbWarpSound.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbWarpSound.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbWarpSound.DrawDropdownHoverOutline = false;
+            this.cmbWarpSound.DrawFocusRectangle = false;
+            this.cmbWarpSound.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbWarpSound.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbWarpSound.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbWarpSound.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbWarpSound.FormattingEnabled = true;
+            this.cmbWarpSound.Location = new System.Drawing.Point(61, 197);
+            this.cmbWarpSound.Name = "cmbWarpSound";
+            this.cmbWarpSound.Size = new System.Drawing.Size(179, 21);
+            this.cmbWarpSound.TabIndex = 33;
+            this.cmbWarpSound.Text = "Retain Direction";
+            this.cmbWarpSound.TextPadding = new System.Windows.Forms.Padding(2);
+            // 
             // pnlTilesetContainer
             // 
             this.pnlTilesetContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -1755,25 +1817,6 @@ namespace Intersect.Editor.Forms.DockingElements
             this.picTileset.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picTileset_MouseMove);
             this.picTileset.MouseUp += new System.Windows.Forms.MouseEventHandler(this.picTileset_MouseUp);
             // 
-            // pnlEvents
-            // 
-            this.pnlEvents.Controls.Add(this.lblEventInstructions);
-            this.pnlEvents.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlEvents.Location = new System.Drawing.Point(0, 0);
-            this.pnlEvents.Name = "pnlEvents";
-            this.pnlEvents.Size = new System.Drawing.Size(276, 566);
-            this.pnlEvents.TabIndex = 1;
-            // 
-            // pnlLights
-            // 
-            this.pnlLights.Controls.Add(this.lightEditor);
-            this.pnlLights.Controls.Add(this.lblLightInstructions);
-            this.pnlLights.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlLights.Location = new System.Drawing.Point(0, 0);
-            this.pnlLights.Name = "pnlLights";
-            this.pnlLights.Size = new System.Drawing.Size(276, 566);
-            this.pnlLights.TabIndex = 1;
-            // 
             // lightEditor
             // 
             this.lightEditor.ForeColor = System.Drawing.Color.Gainsboro;
@@ -1783,16 +1826,6 @@ namespace Intersect.Editor.Forms.DockingElements
             this.lightEditor.TabIndex = 2;
             this.lightEditor.Visible = false;
             this.lightEditor.Load += new System.EventHandler(this.lightEditor_Load);
-            // 
-            // chkDoNotRespawn
-            // 
-            this.chkDoNotRespawn.AutoSize = true;
-            this.chkDoNotRespawn.Location = new System.Drawing.Point(5, 118);
-            this.chkDoNotRespawn.Name = "chkDoNotRespawn";
-            this.chkDoNotRespawn.Size = new System.Drawing.Size(114, 17);
-            this.chkDoNotRespawn.TabIndex = 54;
-            this.chkDoNotRespawn.Text = "Do Not Respawn?";
-            this.chkDoNotRespawn.CheckedChanged += new System.EventHandler(this.chkDoNotRespawn_CheckedChanged);
             // 
             // FrmMapLayers
             // 
@@ -1867,11 +1900,11 @@ namespace Intersect.Editor.Forms.DockingElements
             ((System.ComponentModel.ISupportInitialize)(this.picLayer3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picLayer2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picLayer1)).EndInit();
-            this.pnlTilesetContainer.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.picTileset)).EndInit();
             this.pnlEvents.ResumeLayout(false);
             this.pnlEvents.PerformLayout();
             this.pnlLights.ResumeLayout(false);
+            this.pnlTilesetContainer.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.picTileset)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1996,5 +2029,7 @@ namespace Intersect.Editor.Forms.DockingElements
         private Label lblInstanceLimit;
         private DarkNumericUpDown nudInstanceSpawnLimit;
         private DarkCheckBox chkDoNotRespawn;
+        private DarkComboBox cmbWarpSound;
+        private Label lblWarpSound;
     }
 }
