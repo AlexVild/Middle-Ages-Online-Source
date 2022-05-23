@@ -465,7 +465,8 @@ namespace Intersect.Editor.Forms.Editors
         private void cmbFolder_SelectedIndexChanged(object sender, EventArgs e)
         {
             mEditorItem.Folder = cmbFolder.Text;
-            InitEditor();
+            PopulateEditor();
+            RefreshEditorListItems();
         }
 
         private void btnAddFolder_Click(object sender, EventArgs e)

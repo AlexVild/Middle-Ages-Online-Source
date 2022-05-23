@@ -369,7 +369,7 @@ namespace Intersect.Editor.Localization
 
         public static string GetEventConditionalDesc(TimerIsActive condition)
         {
-            var timerName = TimerDescriptor.Get(condition.descriptorId).DisplayName;
+            var timerName = TimerDescriptor.Get(condition.descriptorId).Name;
             switch (condition.ConditionType)
             {
                 case TimerActiveConditions.IsActive:

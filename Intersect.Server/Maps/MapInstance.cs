@@ -1532,9 +1532,9 @@ namespace Intersect.Server.Maps
         /// </summary>
         private void DestroyDanglingTimers()
         {
-            foreach(var timer in TimerProcessor.ActiveTimers.Where(t => t.Descriptor.OwnerType == GameObjects.Timers.TimerOwnerType.Instance && t.OwnerId == Id).ToList())
+            foreach(var timer in TimerProcessor.ActiveTimers.Where(t => t.Descriptor.OwnerType == GameObjects.Timers.TimerOwnerType.Instance && t.OwnerId == Id).ToArray())
             {
-                TimerProcessor.RemoveTimer(timer);
+                TimerProcessor.RemoveTimer(timer, false);
             }
         }
         #endregion
