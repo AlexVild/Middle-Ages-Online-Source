@@ -2333,6 +2333,34 @@ namespace Intersect.Server.Entities
             // Get any instance timers that are running and send them to the player
             StopInstanceTimers(PreviousMapInstanceId);
             SendInstanceTimers();
+
+            // Remove items that are meant to only exist in an instance
+            RemoveInstanceItems();
+        }
+
+        private void RemoveInstanceItems()
+        {
+            for (var n = 0; n < Items.Count; n++)
+            {
+                if (Items[n] == null)
+                {
+                    continue;
+                }
+
+                // Don't mess with the actual object.
+                var item = Items[n].Clone();
+
+                var itemBase = ItemBase.Get(item.ItemId);
+                if (itemBase == null)
+                {
+                    continue;
+                }
+
+                if (itemBase.DestroyOnInstanceChange)
+                {
+                    TryTakeItem(Items[n], item.Quantity);
+                }
+            }
         }
 
         /// <summary>

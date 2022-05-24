@@ -41,6 +41,8 @@ namespace Intersect.Editor.Forms.Editors
             this.btnCancel = new DarkUI.Controls.DarkButton();
             this.btnSave = new DarkUI.Controls.DarkButton();
             this.grpGeneral = new DarkUI.Controls.DarkGroupBox();
+            this.lblDrops = new System.Windows.Forms.Label();
+            this.lstDrops = new System.Windows.Forms.ListBox();
             this.grpDestroy = new DarkUI.Controls.DarkGroupBox();
             this.chkEnableDestroy = new DarkUI.Controls.DarkCheckBox();
             this.lblDestroyMessage = new System.Windows.Forms.Label();
@@ -241,8 +243,7 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
             this.vS2015DarkTheme1 = new WeifenLuo.WinFormsUI.Docking.VS2015DarkTheme();
-            this.lstDrops = new System.Windows.Forms.ListBox();
-            this.lblDrops = new System.Windows.Forms.Label();
+            this.chkInstanceDestroy = new DarkUI.Controls.DarkCheckBox();
             this.grpItems.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             this.grpDestroy.SuspendLayout();
@@ -445,10 +446,32 @@ namespace Intersect.Editor.Forms.Editors
             this.grpGeneral.TabStop = false;
             this.grpGeneral.Text = "General";
             // 
+            // lblDrops
+            // 
+            this.lblDrops.AutoSize = true;
+            this.lblDrops.Location = new System.Drawing.Point(259, 425);
+            this.lblDrops.Name = "lblDrops";
+            this.lblDrops.Size = new System.Drawing.Size(104, 13);
+            this.lblDrops.TabIndex = 108;
+            this.lblDrops.Text = "NPCs that Drop This";
+            // 
+            // lstDrops
+            // 
+            this.lstDrops.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.lstDrops.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lstDrops.Cursor = System.Windows.Forms.Cursors.Default;
+            this.lstDrops.ForeColor = System.Drawing.Color.Gainsboro;
+            this.lstDrops.FormattingEnabled = true;
+            this.lstDrops.Location = new System.Drawing.Point(262, 441);
+            this.lstDrops.Name = "lstDrops";
+            this.lstDrops.Size = new System.Drawing.Size(171, 106);
+            this.lstDrops.TabIndex = 107;
+            // 
             // grpDestroy
             // 
             this.grpDestroy.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpDestroy.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpDestroy.Controls.Add(this.chkInstanceDestroy);
             this.grpDestroy.Controls.Add(this.chkEnableDestroy);
             this.grpDestroy.Controls.Add(this.lblDestroyMessage);
             this.grpDestroy.Controls.Add(this.txtCannotDestroy);
@@ -458,7 +481,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpDestroy.Margin = new System.Windows.Forms.Padding(2);
             this.grpDestroy.Name = "grpDestroy";
             this.grpDestroy.Padding = new System.Windows.Forms.Padding(2);
-            this.grpDestroy.Size = new System.Drawing.Size(232, 95);
+            this.grpDestroy.Size = new System.Drawing.Size(232, 123);
             this.grpDestroy.TabIndex = 101;
             this.grpDestroy.TabStop = false;
             this.grpDestroy.Text = "Item Destruction";
@@ -514,11 +537,11 @@ namespace Intersect.Editor.Forms.Editors
             this.grpTags.Controls.Add(this.cmbTags);
             this.grpTags.Controls.Add(this.btnNewTag);
             this.grpTags.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpTags.Location = new System.Drawing.Point(6, 519);
+            this.grpTags.Location = new System.Drawing.Point(6, 552);
             this.grpTags.Margin = new System.Windows.Forms.Padding(2);
             this.grpTags.Name = "grpTags";
             this.grpTags.Padding = new System.Windows.Forms.Padding(2);
-            this.grpTags.Size = new System.Drawing.Size(422, 157);
+            this.grpTags.Size = new System.Drawing.Size(422, 124);
             this.grpTags.TabIndex = 101;
             this.grpTags.TabStop = false;
             this.grpTags.Text = "Tags";
@@ -530,27 +553,27 @@ namespace Intersect.Editor.Forms.Editors
             this.lstTags.Cursor = System.Windows.Forms.Cursors.Default;
             this.lstTags.ForeColor = System.Drawing.Color.Gainsboro;
             this.lstTags.FormattingEnabled = true;
-            this.lstTags.Location = new System.Drawing.Point(121, 29);
+            this.lstTags.Location = new System.Drawing.Point(127, 14);
             this.lstTags.Name = "lstTags";
             this.lstTags.Size = new System.Drawing.Size(284, 67);
             this.lstTags.TabIndex = 106;
             // 
             // btnRemoveTag
             // 
-            this.btnRemoveTag.Location = new System.Drawing.Point(340, 113);
+            this.btnRemoveTag.Location = new System.Drawing.Point(336, 90);
             this.btnRemoveTag.Name = "btnRemoveTag";
             this.btnRemoveTag.Padding = new System.Windows.Forms.Padding(5);
-            this.btnRemoveTag.Size = new System.Drawing.Size(74, 28);
+            this.btnRemoveTag.Size = new System.Drawing.Size(74, 23);
             this.btnRemoveTag.TabIndex = 105;
             this.btnRemoveTag.Text = "Remove";
             this.btnRemoveTag.Click += new System.EventHandler(this.btnRemoveTag_Click);
             // 
             // btnAddTag
             // 
-            this.btnAddTag.Location = new System.Drawing.Point(260, 113);
+            this.btnAddTag.Location = new System.Drawing.Point(253, 90);
             this.btnAddTag.Name = "btnAddTag";
             this.btnAddTag.Padding = new System.Windows.Forms.Padding(5);
-            this.btnAddTag.Size = new System.Drawing.Size(74, 28);
+            this.btnAddTag.Size = new System.Drawing.Size(74, 23);
             this.btnAddTag.TabIndex = 104;
             this.btnAddTag.Text = "Add";
             this.btnAddTag.Click += new System.EventHandler(this.btnAddTag_Click);
@@ -558,7 +581,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblTagToAdd
             // 
             this.lblTagToAdd.AutoSize = true;
-            this.lblTagToAdd.Location = new System.Drawing.Point(39, 121);
+            this.lblTagToAdd.Location = new System.Drawing.Point(32, 95);
             this.lblTagToAdd.Name = "lblTagToAdd";
             this.lblTagToAdd.Size = new System.Drawing.Size(63, 13);
             this.lblTagToAdd.TabIndex = 55;
@@ -577,7 +600,7 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbTags.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbTags.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbTags.FormattingEnabled = true;
-            this.cmbTags.Location = new System.Drawing.Point(107, 118);
+            this.cmbTags.Location = new System.Drawing.Point(97, 92);
             this.cmbTags.Name = "cmbTags";
             this.cmbTags.Size = new System.Drawing.Size(147, 21);
             this.cmbTags.TabIndex = 102;
@@ -587,7 +610,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             // btnNewTag
             // 
-            this.btnNewTag.Location = new System.Drawing.Point(10, 18);
+            this.btnNewTag.Location = new System.Drawing.Point(21, 25);
             this.btnNewTag.Name = "btnNewTag";
             this.btnNewTag.Padding = new System.Windows.Forms.Padding(5);
             this.btnNewTag.Size = new System.Drawing.Size(74, 28);
@@ -603,7 +626,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpRequirements.Controls.Add(this.txtCannotUse);
             this.grpRequirements.Controls.Add(this.btnEditRequirements);
             this.grpRequirements.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpRequirements.Location = new System.Drawing.Point(14, 425);
+            this.grpRequirements.Location = new System.Drawing.Point(11, 455);
             this.grpRequirements.Margin = new System.Windows.Forms.Padding(2);
             this.grpRequirements.Name = "grpRequirements";
             this.grpRequirements.Padding = new System.Windows.Forms.Padding(2);
@@ -3249,26 +3272,15 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
             // 
-            // lstDrops
+            // chkInstanceDestroy
             // 
-            this.lstDrops.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.lstDrops.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lstDrops.Cursor = System.Windows.Forms.Cursors.Default;
-            this.lstDrops.ForeColor = System.Drawing.Color.Gainsboro;
-            this.lstDrops.FormattingEnabled = true;
-            this.lstDrops.Location = new System.Drawing.Point(262, 441);
-            this.lstDrops.Name = "lstDrops";
-            this.lstDrops.Size = new System.Drawing.Size(171, 80);
-            this.lstDrops.TabIndex = 107;
-            // 
-            // lblDrops
-            // 
-            this.lblDrops.AutoSize = true;
-            this.lblDrops.Location = new System.Drawing.Point(259, 425);
-            this.lblDrops.Name = "lblDrops";
-            this.lblDrops.Size = new System.Drawing.Size(104, 13);
-            this.lblDrops.TabIndex = 108;
-            this.lblDrops.Text = "NPCs that Drop This";
+            this.chkInstanceDestroy.AutoSize = true;
+            this.chkInstanceDestroy.Location = new System.Drawing.Point(8, 95);
+            this.chkInstanceDestroy.Name = "chkInstanceDestroy";
+            this.chkInstanceDestroy.Size = new System.Drawing.Size(169, 17);
+            this.chkInstanceDestroy.TabIndex = 103;
+            this.chkInstanceDestroy.Text = "Destroy On Instance Change?";
+            this.chkInstanceDestroy.CheckedChanged += new System.EventHandler(this.chkInstanceDestroy_CheckedChanged);
             // 
             // FrmItem
             // 
@@ -3585,5 +3597,6 @@ namespace Intersect.Editor.Forms.Editors
         private DarkNumericUpDown nudBackstabMultiplier;
         private ListBox lstDrops;
         private Label lblDrops;
+        private DarkCheckBox chkInstanceDestroy;
     }
 }

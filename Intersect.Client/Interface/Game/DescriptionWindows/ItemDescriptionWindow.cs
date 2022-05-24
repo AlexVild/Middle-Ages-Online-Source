@@ -68,6 +68,13 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             // Set up our item limit information.
             SetupItemLimits();
 
+            // Display item drop chance if configured.
+            if (mItem.DestroyOnInstanceChange)
+            {
+                var instanceItemDesc = AddDescription();
+                instanceItemDesc.AddText(Strings.ItemDescription.DestroyOnInstance, CustomColors.ItemDesc.Special);
+            }
+
             // if we have a description, set that up.
             if (!string.IsNullOrWhiteSpace(mItem.Description))
             {
@@ -408,6 +415,28 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             return (int)retVal;
         }
 
+        private decimal GetBackstabDifference()
+        {
+            var slot = mItem.EquipmentSlot;
+            if (Globals.Me.MyEquipment[slot] != -1)
+            {
+                var equippedItem = Globals.Me.Inventory[Globals.Me.MyEquipment[slot]].Base;
+
+                if (equippedItem != null && equippedItem.CanBackstab)
+                {
+                    return (decimal)(mItem.BackstabMultiplier - equippedItem.BackstabMultiplier);
+                }
+                else
+                {
+                    return (decimal)mItem.BackstabMultiplier;
+                }
+            }
+            else
+            {
+                return (decimal)mItem.BackstabMultiplier;
+            }
+        }
+
         private int GetVitalDifference(int vitalIndex)
         {
             var slot = mItem.EquipmentSlot;
@@ -550,7 +579,12 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 if (mItem.CritChance > 0)
                 {
                     DisplayKeyValueRowWithDifference(GetCritChanceDifference(), Strings.ItemDescription.CritChance, Strings.ItemDescription.Percentage.ToString(mItem.CritChance), rows, "%");
-                    DisplayKeyValueRowWithDifference(GetCritMultiplierDifference(), Strings.ItemDescription.CritMultiplier, Strings.ItemDescription.Multiplier.ToString(mItem.CritMultiplier), rows);
+                    DisplayKeyValueRowWithDifference(Decimal.Round((decimal)GetCritMultiplierDifference(), 2), Strings.ItemDescription.CritMultiplier, Strings.ItemDescription.Multiplier.ToString(mItem.CritMultiplier), rows, "x");
+                }
+
+                if (mItem.CanBackstab)
+                {
+                    DisplayKeyValueRowWithDifference(Decimal.Round(GetBackstabDifference(), 2), Strings.ItemDescription.BackstabMultiplier, Strings.ItemDescription.Multiplier.ToString(mItem.BackstabMultiplier), rows, "x");
                 }
 
                 // Attack Speed
@@ -739,7 +773,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             }
         }
 
-        private void DisplayKeyValueRowWithDifference(double statDiff, string keyString, string valueString, Components.RowContainerComponent rows, string unit = "")
+        private void DisplayKeyValueRowWithDifference(decimal statDiff, string keyString, string valueString, Components.RowContainerComponent rows, string unit = "")
         {
             if (statDiff != 0)
             {

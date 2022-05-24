@@ -316,6 +316,8 @@ namespace Intersect.GameObjects
         /// </summary>
         public bool HideExtra { get; set; } = false;
 
+        public bool DestroyOnInstanceChange { get; set; } = false;
+
         [Column("VitalsGiven")]
         [JsonIgnore]
         public string VitalsJson

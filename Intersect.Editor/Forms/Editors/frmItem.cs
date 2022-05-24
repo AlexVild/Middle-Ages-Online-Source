@@ -333,6 +333,7 @@ namespace Intersect.Editor.Forms.Editors
             chkEnableDestroy.Text = Strings.ItemEditor.enabledestroy;
             btnDestroyRequirements.Text = Strings.ItemEditor.destroyrequirementbutton;
             lblDestroyMessage.Text = Strings.ItemEditor.cannotdestroylabel;
+            chkInstanceDestroy.Text = Strings.ItemEditor.DestroyOnInstanceChange;
 
             btnSave.Text = Strings.ItemEditor.save;
             btnCancel.Text = Strings.ItemEditor.cancel;
@@ -502,7 +503,7 @@ namespace Intersect.Editor.Forms.Editors
 
                 chkEnableDestroy.Checked = mEditorItem.CanDestroy;
                 txtCannotDestroy.Text = mEditorItem.CannotDestroyMessage;
-
+                chkInstanceDestroy.Checked = mEditorItem.DestroyOnInstanceChange;
 
                 if (mChanged.IndexOf(mEditorItem) == -1)
                 {
@@ -1535,6 +1536,11 @@ namespace Intersect.Editor.Forms.Editors
         private void nudBackstabMultiplier_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.BackstabMultiplier = (float) nudBackstabMultiplier.Value;
+        }
+
+        private void chkInstanceDestroy_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.DestroyOnInstanceChange = chkInstanceDestroy.Checked;
         }
     }
 }

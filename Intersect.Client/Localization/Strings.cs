@@ -990,6 +990,9 @@ namespace Intersect.Client.Localization
         public struct ItemDescription
         {
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString BackstabMultiplier = @"Backstab Multiplier:";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString BaseDamageType = @"Damage Type:";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -1163,6 +1166,9 @@ namespace Intersect.Client.Localization
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString RestrictionOr = @"OR {00}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString DestroyOnInstance = @"Instance Item";
         }
 
         public struct Keys

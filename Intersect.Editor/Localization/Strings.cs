@@ -3686,6 +3686,9 @@ Tick timer saved in server config.json.";
             public static LocalizedString deletetitle = @"Delete Item";
 
             public static LocalizedString description = @"Desc:";
+            
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString DestroyOnInstanceChange = @"Destroy on Instance Change?";
 
             public static LocalizedString equipment = @"Equipment";
 
