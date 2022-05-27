@@ -2451,6 +2451,10 @@ namespace Intersect.Server.Entities.Events
             var now = Timing.Global.MillisecondsUtc;
 
             TimerDescriptor descriptor = TimerDescriptor.Get(command.DescriptorId);
+            if (descriptor == null)
+            {
+                return;
+            }
 
             lock (player.EntityLock)
             {
@@ -2475,6 +2479,10 @@ namespace Intersect.Server.Entities.Events
             var now = Timing.Global.MillisecondsUtc;
 
             TimerDescriptor descriptor = TimerDescriptor.Get(command.DescriptorId);
+            if (descriptor == null)
+            {
+                return;
+            }
 
             lock (player.EntityLock)
             {
@@ -2526,6 +2534,10 @@ namespace Intersect.Server.Entities.Events
             if (player == null) return;
 
             TimerDescriptor descriptor = TimerDescriptor.Get(command.DescriptorId);
+            if (descriptor == null)
+            {
+                return;
+            }
 
             lock (player.EntityLock)
             {

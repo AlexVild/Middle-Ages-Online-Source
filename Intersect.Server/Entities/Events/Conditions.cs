@@ -701,6 +701,11 @@ namespace Intersect.Server.Entities.Events
             }
 
             var descriptor = TimerDescriptor.Get(condition.descriptorId);
+            if (descriptor == null)
+            {
+                return false;
+            }
+
             if (TimerProcessor.TryGetOwnerId(descriptor.OwnerType, condition.descriptorId, player, out var ownerId) && TimerProcessor.TryGetActiveTimer(condition.descriptorId, ownerId, out var timer))
             {
                 switch (condition.ConditionType)

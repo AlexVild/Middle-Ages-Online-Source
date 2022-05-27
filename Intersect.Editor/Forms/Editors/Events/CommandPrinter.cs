@@ -1685,18 +1685,28 @@ namespace Intersect.Editor.Forms.Editors.Events
         private static string GetCommandText(StartTimerCommand command, MapInstance map)
         {
             var descriptor = TimerDescriptor.Get(command.DescriptorId);
-            return Strings.EventCommandList.TimerStart.ToString(descriptor?.Name);
+            if (descriptor == null)
+            {
+                return Strings.EventCommandList.TimerStart.ToString(Strings.General.none);
+            }
+
+            return Strings.EventCommandList.TimerStart.ToString(descriptor.Name);
         }
 
         private static string GetCommandText(ModifyTimerCommand command, MapInstance map)
         {
             var descriptor = TimerDescriptor.Get(command.DescriptorId);
             var op = Enum.GetName(typeof(TimerOperator), command.Operator);
+            var amount = command.Amount.ToString();
+
+            if (descriptor == null)
+            {
+                return Strings.EventCommandList.TimerModify.ToString(Strings.General.none, op, amount);
+            }
 
             if (command.IsStatic)
             {
-                var amount = command.Amount.ToString();
-                return Strings.EventCommandList.TimerModify.ToString(descriptor?.Name, op, amount);
+                return Strings.EventCommandList.TimerModify.ToString(descriptor.Name, op, amount);
             }
             else 
             {
@@ -1715,14 +1725,19 @@ namespace Intersect.Editor.Forms.Editors.Events
                         break;
                 }
 
-                return Strings.EventCommandList.TimerModifyVar.ToString(descriptor?.Name, op, varType, varName);
+                return Strings.EventCommandList.TimerModifyVar.ToString(descriptor.Name, op, varType, varName);
             }
         }
 
         private static string GetCommandText(StopTimerCommand command, MapInstance map)
         {
             var descriptor = TimerDescriptor.Get(command.DescriptorId);
-            return Strings.EventCommandList.TimerStop.ToString(descriptor?.Name, Strings.EventCommandList.TimerStopCommands[command.StopType].ToString());
+            if (descriptor == null)
+            {
+                return Strings.EventCommandList.TimerStop.ToString(Strings.General.none, Strings.EventCommandList.TimerStopCommands[command.StopType].ToString());
+            }
+
+            return Strings.EventCommandList.TimerStop.ToString(descriptor.Name, Strings.EventCommandList.TimerStopCommands[command.StopType].ToString());
         }
 
     }
