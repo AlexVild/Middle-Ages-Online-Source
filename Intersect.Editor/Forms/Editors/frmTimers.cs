@@ -173,6 +173,8 @@ namespace Intersect.Editor.Forms.Editors
             chkStartWithServer.Text = Strings.TimerEditor.StartWithServer;
             chkContinueOnDeath.Text = Strings.TimerEditor.ContinueOnDeath;
             AddToolTip(chkContinueOnDeath, Strings.TimerEditor.ContinueOnDeathTooltip);
+            chkContinueOnInstanceChange.Text = Strings.TimerEditor.ContineuOnInstance;
+            AddToolTip(chkContinueOnDeath, Strings.TimerEditor.ContineuOnInstanceTooltip);
 
             btnCancel.Text = Strings.TimerEditor.Cancel;
             btnSave.Text = Strings.TimerEditor.Save;
@@ -322,6 +324,7 @@ namespace Intersect.Editor.Forms.Editors
 
             chkStartWithServer.Checked = mEditorItem.StartWithServer;
             chkContinueOnDeath.Checked = mEditorItem.ContinueOnDeath;
+            chkContinueOnInstanceChange.Checked = mEditorItem.ContinueOnInstanceChange;
         }
 
         private static TimerRepetitionTypes SelectRepetitionType(int repetitions)
@@ -401,6 +404,7 @@ namespace Intersect.Editor.Forms.Editors
             cmbLogoutBehavior.Enabled = mEditorItem.OwnerType == TimerOwnerType.Player;
             chkStartWithServer.Enabled = mEditorItem.OwnerType == TimerOwnerType.Global;
             chkContinueOnDeath.Enabled = mEditorItem.OwnerType == TimerOwnerType.Player;
+            chkContinueOnInstanceChange.Enabled = mEditorItem.OwnerType == TimerOwnerType.Player;
         }
 
         public void ChangeTimerOwnerType()
@@ -696,6 +700,11 @@ namespace Intersect.Editor.Forms.Editors
         private void chkContinueOnDeath_CheckedChanged(object sender, EventArgs e)
         {
             mEditorItem.ContinueOnDeath = chkContinueOnDeath.Checked;
+        }
+
+        private void chkContinueOnInstanceChange_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.ContinueOnInstanceChange = chkContinueOnInstanceChange.Checked;
         }
     }
 }

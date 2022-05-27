@@ -48,6 +48,7 @@ namespace Intersect.Editor.Forms.Editors
             this.lstGameObjects = new Intersect.Editor.Forms.Controls.GameObjectList();
             this.pnlTimerSettings = new System.Windows.Forms.Panel();
             this.grpTimerOptions = new DarkUI.Controls.DarkGroupBox();
+            this.chkContinueOnDeath = new DarkUI.Controls.DarkCheckBox();
             this.chkStartWithServer = new DarkUI.Controls.DarkCheckBox();
             this.cmbVariable = new DarkUI.Controls.DarkComboBox();
             this.lblVariable = new System.Windows.Forms.Label();
@@ -87,7 +88,7 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbOwnerType = new DarkUI.Controls.DarkComboBox();
             this.btnSave = new DarkUI.Controls.DarkButton();
             this.btnCancel = new DarkUI.Controls.DarkButton();
-            this.chkContinueOnDeath = new DarkUI.Controls.DarkCheckBox();
+            this.chkContinueOnInstanceChange = new DarkUI.Controls.DarkCheckBox();
             this.toolStrip.SuspendLayout();
             this.grpTimers.SuspendLayout();
             this.pnlTimerSettings.SuspendLayout();
@@ -232,7 +233,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpTimers.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpTimers.Location = new System.Drawing.Point(18, 79);
             this.grpTimers.Name = "grpTimers";
-            this.grpTimers.Size = new System.Drawing.Size(202, 313);
+            this.grpTimers.Size = new System.Drawing.Size(202, 338);
             this.grpTimers.TabIndex = 46;
             this.grpTimers.TabStop = false;
             this.grpTimers.Text = "Timers";
@@ -273,7 +274,7 @@ namespace Intersect.Editor.Forms.Editors
             this.lstGameObjects.Location = new System.Drawing.Point(6, 46);
             this.lstGameObjects.Name = "lstGameObjects";
             this.lstGameObjects.SelectedImageIndex = 0;
-            this.lstGameObjects.Size = new System.Drawing.Size(190, 258);
+            this.lstGameObjects.Size = new System.Drawing.Size(190, 286);
             this.lstGameObjects.TabIndex = 2;
             // 
             // pnlTimerSettings
@@ -285,7 +286,7 @@ namespace Intersect.Editor.Forms.Editors
             this.pnlTimerSettings.Controls.Add(this.grpGeneral);
             this.pnlTimerSettings.Location = new System.Drawing.Point(229, 23);
             this.pnlTimerSettings.Name = "pnlTimerSettings";
-            this.pnlTimerSettings.Size = new System.Drawing.Size(586, 369);
+            this.pnlTimerSettings.Size = new System.Drawing.Size(586, 394);
             this.pnlTimerSettings.TabIndex = 47;
             this.pnlTimerSettings.Visible = false;
             // 
@@ -293,6 +294,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpTimerOptions.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpTimerOptions.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpTimerOptions.Controls.Add(this.chkContinueOnInstanceChange);
             this.grpTimerOptions.Controls.Add(this.chkContinueOnDeath);
             this.grpTimerOptions.Controls.Add(this.chkStartWithServer);
             this.grpTimerOptions.Controls.Add(this.cmbVariable);
@@ -305,10 +307,20 @@ namespace Intersect.Editor.Forms.Editors
             this.grpTimerOptions.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpTimerOptions.Location = new System.Drawing.Point(299, 159);
             this.grpTimerOptions.Name = "grpTimerOptions";
-            this.grpTimerOptions.Size = new System.Drawing.Size(274, 201);
+            this.grpTimerOptions.Size = new System.Drawing.Size(274, 223);
             this.grpTimerOptions.TabIndex = 106;
             this.grpTimerOptions.TabStop = false;
             this.grpTimerOptions.Text = "Timer Options";
+            // 
+            // chkContinueOnDeath
+            // 
+            this.chkContinueOnDeath.AutoSize = true;
+            this.chkContinueOnDeath.Location = new System.Drawing.Point(6, 65);
+            this.chkContinueOnDeath.Name = "chkContinueOnDeath";
+            this.chkContinueOnDeath.Size = new System.Drawing.Size(119, 17);
+            this.chkContinueOnDeath.TabIndex = 115;
+            this.chkContinueOnDeath.Text = "Continue on death?";
+            this.chkContinueOnDeath.CheckedChanged += new System.EventHandler(this.chkContinueOnDeath_CheckedChanged);
             // 
             // chkStartWithServer
             // 
@@ -333,7 +345,7 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbVariable.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbVariable.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbVariable.FormattingEnabled = true;
-            this.cmbVariable.Location = new System.Drawing.Point(6, 174);
+            this.cmbVariable.Location = new System.Drawing.Point(9, 198);
             this.cmbVariable.Name = "cmbVariable";
             this.cmbVariable.Size = new System.Drawing.Size(256, 21);
             this.cmbVariable.TabIndex = 113;
@@ -344,7 +356,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblVariable
             // 
             this.lblVariable.AutoSize = true;
-            this.lblVariable.Location = new System.Drawing.Point(3, 155);
+            this.lblVariable.Location = new System.Drawing.Point(6, 179);
             this.lblVariable.Name = "lblVariable";
             this.lblVariable.Size = new System.Drawing.Size(174, 13);
             this.lblVariable.TabIndex = 112;
@@ -363,7 +375,7 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbLogoutBehavior.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbLogoutBehavior.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbLogoutBehavior.FormattingEnabled = true;
-            this.cmbLogoutBehavior.Location = new System.Drawing.Point(114, 93);
+            this.cmbLogoutBehavior.Location = new System.Drawing.Point(117, 117);
             this.cmbLogoutBehavior.Name = "cmbLogoutBehavior";
             this.cmbLogoutBehavior.Size = new System.Drawing.Size(148, 21);
             this.cmbLogoutBehavior.TabIndex = 111;
@@ -374,7 +386,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblLogoutBehavior
             // 
             this.lblLogoutBehavior.AutoSize = true;
-            this.lblLogoutBehavior.Location = new System.Drawing.Point(3, 96);
+            this.lblLogoutBehavior.Location = new System.Drawing.Point(6, 120);
             this.lblLogoutBehavior.Name = "lblLogoutBehavior";
             this.lblLogoutBehavior.Size = new System.Drawing.Size(85, 13);
             this.lblLogoutBehavior.TabIndex = 110;
@@ -393,7 +405,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblCompletionBehavior
             // 
             this.lblCompletionBehavior.AutoSize = true;
-            this.lblCompletionBehavior.Location = new System.Drawing.Point(3, 129);
+            this.lblCompletionBehavior.Location = new System.Drawing.Point(6, 153);
             this.lblCompletionBehavior.Name = "lblCompletionBehavior";
             this.lblCompletionBehavior.Size = new System.Drawing.Size(104, 13);
             this.lblCompletionBehavior.TabIndex = 108;
@@ -412,7 +424,7 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbCompletionBehavior.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbCompletionBehavior.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbCompletionBehavior.FormattingEnabled = true;
-            this.cmbCompletionBehavior.Location = new System.Drawing.Point(114, 126);
+            this.cmbCompletionBehavior.Location = new System.Drawing.Point(117, 150);
             this.cmbCompletionBehavior.Name = "cmbCompletionBehavior";
             this.cmbCompletionBehavior.Size = new System.Drawing.Size(148, 21);
             this.cmbCompletionBehavior.TabIndex = 108;
@@ -841,7 +853,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(519, 410);
+            this.btnSave.Location = new System.Drawing.Point(521, 433);
             this.btnSave.Name = "btnSave";
             this.btnSave.Padding = new System.Windows.Forms.Padding(5);
             this.btnSave.Size = new System.Drawing.Size(132, 27);
@@ -852,7 +864,7 @@ namespace Intersect.Editor.Forms.Editors
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(670, 410);
+            this.btnCancel.Location = new System.Drawing.Point(670, 433);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Padding = new System.Windows.Forms.Padding(5);
             this.btnCancel.Size = new System.Drawing.Size(132, 27);
@@ -860,22 +872,22 @@ namespace Intersect.Editor.Forms.Editors
             this.btnCancel.Text = "Cancel";
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
-            // chkContinueOnDeath
+            // chkContinueOnInstanceChange
             // 
-            this.chkContinueOnDeath.AutoSize = true;
-            this.chkContinueOnDeath.Location = new System.Drawing.Point(6, 65);
-            this.chkContinueOnDeath.Name = "chkContinueOnDeath";
-            this.chkContinueOnDeath.Size = new System.Drawing.Size(119, 17);
-            this.chkContinueOnDeath.TabIndex = 115;
-            this.chkContinueOnDeath.Text = "Continue on death?";
-            this.chkContinueOnDeath.CheckedChanged += new System.EventHandler(this.chkContinueOnDeath_CheckedChanged);
+            this.chkContinueOnInstanceChange.AutoSize = true;
+            this.chkContinueOnInstanceChange.Location = new System.Drawing.Point(6, 88);
+            this.chkContinueOnInstanceChange.Name = "chkContinueOnInstanceChange";
+            this.chkContinueOnInstanceChange.Size = new System.Drawing.Size(171, 17);
+            this.chkContinueOnInstanceChange.TabIndex = 116;
+            this.chkContinueOnInstanceChange.Text = "Continue on instance change?";
+            this.chkContinueOnInstanceChange.CheckedChanged += new System.EventHandler(this.chkContinueOnInstanceChange_CheckedChanged);
             // 
             // frmTimers
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.ClientSize = new System.Drawing.Size(834, 459);
+            this.ClientSize = new System.Drawing.Size(834, 472);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.grpTypes);
@@ -968,5 +980,6 @@ namespace Intersect.Editor.Forms.Editors
         private System.Windows.Forms.Label lblVariable;
         private DarkUI.Controls.DarkCheckBox chkStartWithServer;
         private DarkUI.Controls.DarkCheckBox chkContinueOnDeath;
+        private DarkUI.Controls.DarkCheckBox chkContinueOnInstanceChange;
     }
 }

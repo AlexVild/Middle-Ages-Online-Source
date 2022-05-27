@@ -1047,7 +1047,20 @@ namespace Intersect.Server.Entities
         private void EndDeathTimers()
         {
             foreach (var timer in TimerProcessor.ActiveTimers.ToArray().Where(t => !t.Descriptor.ContinueOnDeath
-                && t.Descriptor.OwnerType == GameObjects.Timers.TimerOwnerType.Player
+                && t.Descriptor.OwnerType == TimerOwnerType.Player
+                && t.OwnerId == Id))
+            {
+                TimerProcessor.RemoveTimer(timer, false);
+            }
+        }
+
+        /// <summary>
+        /// Ends all player timers associated with this player that are meant to not persist beyond an instance change
+        /// </summary>
+        private void EndInstanceChangeTimers()
+        {
+            foreach (var timer in TimerProcessor.ActiveTimers.ToArray().Where(t => !t.Descriptor.ContinueOnInstanceChange
+                && t.Descriptor.OwnerType == TimerOwnerType.Player
                 && t.OwnerId == Id))
             {
                 TimerProcessor.RemoveTimer(timer, false);
@@ -2336,6 +2349,8 @@ namespace Intersect.Server.Entities
 
             // Remove items that are meant to only exist in an instance
             RemoveInstanceItems();
+            // Remove timers that aren't meant to proceed beyond an instance change
+            EndInstanceChangeTimers();
         }
 
         private void RemoveInstanceItems()

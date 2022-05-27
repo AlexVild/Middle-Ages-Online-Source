@@ -62,6 +62,11 @@ namespace Intersect.GameObjects.Timers
         public bool ContinueOnDeath { get; set; }
 
         /// <summary>
+        /// Whether or not this timer continues if the player experiences an instance change
+        /// </summary>
+        public bool ContinueOnInstanceChange { get; set; } = true;
+
+        /// <summary>
         /// What kind of <see cref="TimerLogoutBehavior"/> to perform. Player timers only
         /// </summary>
         public TimerLogoutBehavior LogoutBehavior { get; set; }

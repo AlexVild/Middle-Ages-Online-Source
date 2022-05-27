@@ -5398,6 +5398,12 @@ Tick timer saved in server config.json.";
             public static LocalizedString ContinueOnDeathTooltip = @"If checked, will not remove the timer on player death";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ContineuOnInstance = @"Continue on instance change?";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ContineuOnInstanceTooltip = @"If checked, will not remove the timer when the player changes between instances";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString ContinueOnTimeOutTooltip = @"If checked, the timer will persist";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
