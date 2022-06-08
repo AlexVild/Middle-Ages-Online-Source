@@ -2171,6 +2171,10 @@ namespace Intersect.Server.Entities
             {
                 SendCombatEffects(enemy, isCrit, baseDamage);
             }
+            else if (invulnerable)
+            {
+                PacketSender.SendActionMsg(enemy, Strings.Combat.invulnerable, CustomColors.Combat.Invulnerable, Options.BlockSound);
+            }
 
             if (damageType != DamageType.True && !(enemy is Resource)) // Alex - dumb fix
             {
@@ -2183,7 +2187,6 @@ namespace Intersect.Server.Entities
                     SendMissedAttackMessage(enemy, damageType);
                 }
             }
-            
 
             var failures = new Dictionary<AttackFailures, bool>();
             failures.Add(AttackFailures.BLOCKED, wasBlocked);
