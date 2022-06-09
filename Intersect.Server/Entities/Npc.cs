@@ -779,7 +779,7 @@ namespace Intersect.Server.Entities
             if (Base.FleeHealthPercentage > 0)
             {
                 var fleeHpCutoff = GetMaxVital(Vitals.Health) * ((float)Base.FleeHealthPercentage / 100f);
-                if (GetVital(Vitals.Health) < fleeHpCutoff)
+                if (GetVital(Vitals.Health) < fleeHpCutoff || (Base.FleeHealthPercentage >= 100 && Target != default))
                 {
                     return true;
                 }
