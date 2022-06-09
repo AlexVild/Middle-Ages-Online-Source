@@ -109,6 +109,7 @@ namespace Intersect.Server.Maps
 
         // NPCs
         public ConcurrentDictionary<NpcSpawn, MapNpcSpawn> NpcSpawnInstances = new ConcurrentDictionary<NpcSpawn, MapNpcSpawn>();
+        public int NpcSpawnGroup { get; private set; } = 0;
 
         // Items
         public ConcurrentDictionary<Guid, MapItemSpawn> ItemRespawns = new ConcurrentDictionary<Guid, MapItemSpawn>();
@@ -407,7 +408,8 @@ namespace Intersect.Server.Maps
         /// </summary>
         private void SpawnMapNpcs()
         {
-            for (var i = 0; i < mMapController.Spawns.Count; i++)
+            var spawns = mMapController.SpawnsInGroup(NpcSpawnGroup);
+            for (var i = 0; i < spawns.Count; i++)
             {
                 if (NpcHasEnoughPlayersToSpawn(i))
                 {
@@ -426,7 +428,7 @@ namespace Intersect.Server.Maps
             byte x = 0;
             byte y = 0;
             byte dir = 0;
-            var spawns = mMapController.Spawns;
+            var spawns = mMapController.SpawnsInGroup(NpcSpawnGroup);
             var npcBase = NpcBase.Get(spawns[i].NpcId);
             if (npcBase != null)
             {
@@ -1313,7 +1315,7 @@ namespace Intersect.Server.Maps
 
         private void ProcessNpcRespawns()
         {
-            var spawns = mMapController.Spawns;
+            var spawns = mMapController.SpawnsInGroup(NpcSpawnGroup);
             for (var i = 0; i < spawns.Count; i++)
             {
                 if (NpcSpawnInstances.ContainsKey(spawns[i]))
@@ -1353,7 +1355,29 @@ namespace Intersect.Server.Maps
             {
                 playersOnInstanceId = GetPlayers().Count; // Guaranteed to at LEAST have this map's count
             }
-            return mMapController.Spawns[spawnIndex].RequiredPlayersToSpawn <= 1 || playersOnInstanceId >= mMapController.Spawns[spawnIndex].RequiredPlayersToSpawn;
+            var spawns = mMapController.SpawnsInGroup(NpcSpawnGroup);
+
+            return spawns[spawnIndex].RequiredPlayersToSpawn <= 1 || playersOnInstanceId >= spawns[spawnIndex].RequiredPlayersToSpawn;
+        }
+
+        /// <summary>
+        /// Changes the spawn group of the map instance
+        /// </summary>
+        /// <param name="group">The group to change to</param>
+        /// <param name="reset">Whether or not to despawn current NPCs on change</param>
+        public void ChangeSpawnGroup(int group, bool reset)
+        {
+            // Can optionally get rid of all NPCs not belonging to this new group
+            if (reset)
+            {
+                DespawnNpcs();
+            }
+            if (group >= 0)
+            {
+                NpcSpawnGroup = group;
+            }
+            // Spawn the NPCs that belong to the new group
+            SpawnMapNpcs();
         }
         
         private void ProcessResourceRespawns()

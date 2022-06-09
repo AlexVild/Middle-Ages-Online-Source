@@ -105,6 +105,12 @@
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_AddInspiration.Designer.cs">
       <DependentUpon>EventCommand_AddInspiration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_ChangeMapSpawnGroup.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_ChangeMapSpawnGroup.Designer.cs">
+      <DependentUpon>EventCommand_ChangeMapSpawnGroup.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_FlashScreen.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -741,6 +747,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_ChangeItems.resx">
       <DependentUpon>EventCommand_ChangeItems.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_ChangeMapSpawnGroup.resx">
+      <DependentUpon>EventCommand_ChangeMapSpawnGroup.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_CompleteQuestTask.resx">
       <DependentUpon>EventCommand_CompleteQuestTask.cs</DependentUpon>

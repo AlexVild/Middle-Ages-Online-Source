@@ -100,7 +100,9 @@ namespace Intersect.Enums
 
         EventX,
 
-        EventY
+        EventY,
+
+        SpawnGroup,
     }
 
     public enum VariableComparators

@@ -250,6 +250,8 @@
         StartTimer,
         ModifyTimer,
         StopTimer,
+
+        ChangeSpawnGroup,
     }
 
     public enum NPCGuildManagementSelection

@@ -53,6 +53,8 @@ namespace Intersect.Editor.Forms.DockingElements
 
         private bool mTMouseDown;
 
+        private bool mChanging;
+
         public FrmMapLayers()
         {
             InitializeComponent();
@@ -794,16 +796,13 @@ namespace Intersect.Editor.Forms.DockingElements
 
         public void RefreshNpcList()
         {
+            // Reset the spawn group value to 0 to show the first group of NPC spawns
+            nudSpawnGroup.Value = 0;
             // Update the list incase npcs have been modified since form load.
             cmbNpc.Items.Clear();
             cmbNpc.Items.AddRange(NpcBase.Names);
-
             // Add the map NPCs
-            lstMapNpcs.Items.Clear();
-            for (var i = 0; i < Globals.CurrentMap.Spawns.Count; i++)
-            {
-                lstMapNpcs.Items.Add(NpcBase.GetName(Globals.CurrentMap.Spawns[i].NpcId));
-            }
+            ClearAndAddNpcs();
 
             // Don't select if there are no NPCs, to avoid crashes.
             if (cmbNpc.Items.Count > 0)
@@ -847,9 +846,11 @@ namespace Intersect.Editor.Forms.DockingElements
                 n.Direction = NpcSpawnDirection.Random;
                 n.RequiredPlayersToSpawn = (int)nudInstanceSpawnLimit.Value;
                 n.PreventRespawn = chkDoNotRespawn.Checked;
+                n.SpawnGroup = (int)nudNpcSpawnGroup.Value;
+                n.CumulativeSpawning = chkSpawnGroupGreater.Checked;
 
                 Globals.CurrentMap.Spawns.Add(n);
-                lstMapNpcs.Items.Add(NpcBase.GetName(n.NpcId));
+                lstMapNpcs.Items.Add(GenerateNpcSpawnString(n));
                 lstMapNpcs.SelectedIndex = lstMapNpcs.Items.Count - 1;
                 Globals.SelectedMapNpc = lstMapNpcs.SelectedIndex;
             }
@@ -863,11 +864,7 @@ namespace Intersect.Editor.Forms.DockingElements
                 lstMapNpcs.Items.RemoveAt(lstMapNpcs.SelectedIndex);
 
                 // Refresh List
-                lstMapNpcs.Items.Clear();
-                for (var i = 0; i < Globals.CurrentMap.Spawns.Count; i++)
-                {
-                    lstMapNpcs.Items.Add(NpcBase.GetName(Globals.CurrentMap.Spawns[i].NpcId));
-                }
+                ClearAndAddNpcs();
 
                 if (lstMapNpcs.Items.Count > 0)
                 {
@@ -890,8 +887,20 @@ namespace Intersect.Editor.Forms.DockingElements
             }
         }
 
+        private void ClearAndAddNpcs()
+        {
+            lstMapNpcs.Items.Clear();
+            for (var i = 0; i < Globals.CurrentMap.Spawns.Count; i++)
+            {
+                var spawn = Globals.CurrentMap.Spawns[i];
+                lstMapNpcs.Items.Add(GenerateNpcSpawnString(spawn));
+            }
+            Globals.SelectedMapNpc = 0;
+        }
+
         private void lstMapNpcs_Click(object sender, EventArgs e)
         {
+            mChanging = true;
             Globals.SelectedMapNpc = lstMapNpcs.SelectedIndex;
             if (lstMapNpcs.Items.Count > 0 && lstMapNpcs.SelectedIndex > -1)
             {
@@ -900,7 +909,9 @@ namespace Intersect.Editor.Forms.DockingElements
                 cmbDir.SelectedIndex = (int)spawn.Direction;
                 nudInstanceSpawnLimit.Value = spawn.RequiredPlayersToSpawn;
                 chkDoNotRespawn.Checked = spawn.PreventRespawn;
-                if (Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].X >= 0)
+                nudNpcSpawnGroup.Value = spawn.SpawnGroup;
+                chkSpawnGroupGreater.Checked = spawn.CumulativeSpawning;
+                if (spawn.X >= 0)
                 {
                     rbDeclared.Checked = true;
                 }
@@ -909,6 +920,7 @@ namespace Intersect.Editor.Forms.DockingElements
                     rbRandom.Checked = true;
                 }
             }
+            mChanging = false;
         }
 
         private void rbRandom_Click(object sender, EventArgs e)
@@ -932,6 +944,11 @@ namespace Intersect.Editor.Forms.DockingElements
 
         private void cmbNpc_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (mChanging)
+            {
+                return;
+            }
+
             var n = 0;
 
             if (lstMapNpcs.SelectedIndex >= 0)
@@ -939,14 +956,10 @@ namespace Intersect.Editor.Forms.DockingElements
                 Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].NpcId = NpcBase.IdFromList(cmbNpc.SelectedIndex);
 
                 // Refresh List
-                n = lstMapNpcs.SelectedIndex;
-                lstMapNpcs.Items.Clear();
-                for (var i = 0; i < Globals.CurrentMap.Spawns.Count; i++)
-                {
-                    lstMapNpcs.Items.Add(NpcBase.GetName(Globals.CurrentMap.Spawns[i].NpcId));
-                }
+                ClearAndAddNpcs();
 
                 lstMapNpcs.SelectedIndex = n;
+                Globals.SelectedMapNpc = n;
             }
         }
 
@@ -1178,6 +1191,8 @@ namespace Intersect.Editor.Forms.DockingElements
             cmbCritterLayer.SelectedIndex = 1;
 
             //NPCS Tab
+            grpSpawnGroup.Text = Strings.NpcSpawns.SpawnGroupLabel;
+            lblSpawnGroup.Text = Strings.NpcSpawns.MapSpawnGroup;
             grpSpawnLoc.Text = rbDeclared.Checked ? Strings.NpcSpawns.spawndeclared : Strings.NpcSpawns.spawnrandom;
             rbDeclared.Text = Strings.NpcSpawns.declaredlocation;
             rbRandom.Text = Strings.NpcSpawns.randomlocation;
@@ -1189,10 +1204,12 @@ namespace Intersect.Editor.Forms.DockingElements
                 cmbDir.Items.Add(Strings.Directions.dir[i]);
             }
 
+            grpSpawnOptions.Text = Strings.NpcSpawns.SpawnOptions;
             grpNpcList.Text = Strings.NpcSpawns.addremove;
             btnAddMapNpc.Text = Strings.NpcSpawns.add;
             btnRemoveMapNpc.Text = Strings.NpcSpawns.remove;
-            lblInstanceLimit.Text = Strings.NpcSpawns.minimumininstance;
+            lblInstanceLimit.Text = Strings.NpcSpawns.MinimumInInstance;
+            lblNpcSpawnGroup.Text = Strings.NpcSpawns.NpcSpawnGroup;
 
             lblEventInstructions.Text = Strings.MapLayers.eventinstructions;
             lblLightInstructions.Text = Strings.MapLayers.lightinstructions;
@@ -1404,9 +1421,15 @@ namespace Intersect.Editor.Forms.DockingElements
 
         private void nudInstanceSpawnLimit_ValueChanged(object sender, EventArgs e)
         {
+            if (mChanging)
+            {
+                return;
+            }
             if (lstMapNpcs.SelectedIndex >= 0)
             {
-                Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].RequiredPlayersToSpawn = (int) nudInstanceSpawnLimit.Value;
+                var spawn = Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex];
+                spawn.RequiredPlayersToSpawn = (int) nudInstanceSpawnLimit.Value;
+                lstMapNpcs.Items[lstMapNpcs.SelectedIndex] = GenerateNpcSpawnString(spawn);
             }
         }
 
@@ -1415,6 +1438,58 @@ namespace Intersect.Editor.Forms.DockingElements
             if (lstMapNpcs.SelectedIndex >= 0)
             {
                 Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].PreventRespawn = chkDoNotRespawn.Checked;
+            }
+        }
+
+        private void nudSpawnGroup_ValueChanged(object sender, EventArgs e)
+        {
+            Globals.SelectedSpawnGroup = (int)nudSpawnGroup.Value;
+        }
+
+        private void nudNpcSpawnGroup_ValueChanged(object sender, EventArgs e)
+        {
+            if (mChanging)
+            {
+                return;
+            }
+            if (lstMapNpcs.SelectedIndex >= 0)
+            {
+                var spawn = Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex];
+                spawn.SpawnGroup = (int)nudNpcSpawnGroup.Value;
+                // Refresh list values
+                lstMapNpcs.Items[lstMapNpcs.SelectedIndex] = GenerateNpcSpawnString(spawn);
+            }
+        }
+
+        private string GenerateNpcSpawnString(NpcSpawn spawn)
+        {
+            if (spawn.CumulativeSpawning)
+            {
+                if (spawn.RequiredPlayersToSpawn > 1)
+                {
+                    return Strings.MapLayers.NpcSpawnPlayerLimitCumulative.ToString(NpcBase.GetName(spawn.NpcId), spawn.SpawnGroup, spawn.RequiredPlayersToSpawn);
+                }
+
+                return Strings.MapLayers.NpcSpawnCumulative.ToString(NpcBase.GetName(spawn.NpcId), spawn.SpawnGroup);
+            }
+            if (spawn.RequiredPlayersToSpawn > 1)
+            {
+                return Strings.MapLayers.NpcSpawnPlayerLimit.ToString(NpcBase.GetName(spawn.NpcId), spawn.SpawnGroup, spawn.RequiredPlayersToSpawn);
+            }
+            
+            return Strings.MapLayers.NpcSpawn.ToString(NpcBase.GetName(spawn.NpcId), spawn.SpawnGroup);
+        }
+
+        private void chkSpawnGroupGreater_CheckedChanged(object sender, EventArgs e)
+        {
+            if (mChanging)
+            {
+                return;
+            }
+
+            if (lstMapNpcs.SelectedIndex >= 0)
+            {
+                Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].CumulativeSpawning = chkSpawnGroupGreater.Checked;
             }
         }
     }

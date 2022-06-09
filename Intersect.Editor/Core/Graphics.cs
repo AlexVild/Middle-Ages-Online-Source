@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Linq;
 using System.Windows.Forms;
 using Intersect.Config;
 using Intersect.Editor.Content;
@@ -978,9 +979,13 @@ namespace Intersect.Editor.Core
                 else if (Globals.CurrentLayer == LayerOptions.Npcs) //NPCS
                 {
                     tmpMap = Globals.CurrentMap;
-                    for (var i = 0; i < tmpMap.Spawns.Count; i++)
+                    var spawns = tmpMap.Spawns;
+                    for (var i = 0; i < spawns.Count; i++)
                     {
-                        if (tmpMap.Spawns[i].X >= 0 && tmpMap.Spawns[i].Y >= 0)
+                        var validGroup = spawns[i].SpawnGroup == Globals.SelectedSpawnGroup || (spawns[i].CumulativeSpawning && spawns[i].SpawnGroup <= Globals.SelectedSpawnGroup);
+                        var declaredSpawn = spawns[i].X >= 0 && spawns[i].Y >= 0;
+
+                        if (validGroup && declaredSpawn)
                         {
                             var spawnTex = GameContentManager.GetTexture(
                                 GameContentManager.TextureType.Misc, "spawnicon.png"
@@ -997,8 +1002,8 @@ namespace Intersect.Editor.Core
                                 DrawTexture(
                                     spawnTex, new RectangleF(0, 0, spawnTex.Width, spawnTex.Height),
                                     new RectangleF(
-                                        CurrentView.Left + tmpMap.Spawns[i].X * Options.TileWidth,
-                                        CurrentView.Top + tmpMap.Spawns[i].Y * Options.TileHeight, Options.TileWidth,
+                                        CurrentView.Left + spawns[i].X * Options.TileWidth,
+                                        CurrentView.Top + spawns[i].Y * Options.TileHeight, Options.TileWidth,
                                         Options.TileHeight
                                     ), renderColor, null
                                 );

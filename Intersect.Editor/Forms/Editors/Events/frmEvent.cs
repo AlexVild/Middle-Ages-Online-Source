@@ -791,6 +791,10 @@ namespace Intersect.Editor.Forms.Editors.Events
                     tmpCommand = new StopTimerCommand();
 
                     break;
+                case EventCommandType.ChangeSpawnGroup:
+                    tmpCommand = new ChangeSpawnGroupCommand();
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -1441,6 +1445,10 @@ namespace Intersect.Editor.Forms.Editors.Events
                     break;
                 case EventCommandType.StopTimer:
                     cmdWindow = new EventCommand_StopTimer((StopTimerCommand)command, this);
+
+                    break;
+                case EventCommandType.ChangeSpawnGroup:
+                    cmdWindow = new EventCommand_ChangeMapSpawnGroup((ChangeSpawnGroupCommand)command, this);
 
                     break;
                 default:

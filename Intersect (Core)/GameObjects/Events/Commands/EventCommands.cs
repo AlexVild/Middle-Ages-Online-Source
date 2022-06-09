@@ -1195,4 +1195,17 @@ namespace Intersect.GameObjects.Events.Commands
 
         public TimerStopType StopType { get; set; }
     }
+
+    public class ChangeSpawnGroupCommand : EventCommand
+    {
+        public override EventCommandType Type { get; } = EventCommandType.ChangeSpawnGroup;
+
+        public Guid MapId { get; set; }
+
+        public bool SurroundingMaps { get; set; }
+
+        public int SpawnGroup { get; set; }
+
+        public bool ResetNpcs { get; set; }
+    }
 }

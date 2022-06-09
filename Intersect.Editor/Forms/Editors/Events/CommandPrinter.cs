@@ -1441,6 +1441,10 @@ namespace Intersect.Editor.Forms.Editors.Events
                     varvalue = Strings.EventCommandList.vareventy;
 
                     break;
+                case Enums.VariableMods.SpawnGroup:
+                    varvalue = Strings.EventCommandList.VarSpawnGroup;
+
+                    break;
                 case Enums.VariableMods.DupPlayerVar:
                     varvalue = Strings.EventCommandList.dupplayervariable.ToString(
                         PlayerVariableBase.GetName(mod.DuplicateVariableId)
@@ -1738,6 +1742,25 @@ namespace Intersect.Editor.Forms.Editors.Events
             }
 
             return Strings.EventCommandList.TimerStop.ToString(descriptor.Name, Strings.EventCommandList.TimerStopCommands[command.StopType].ToString());
+        }
+
+        private static string GetCommandText(ChangeSpawnGroupCommand command, MapInstance map)
+        {
+            var mapName = Strings.EventCommandList.mapnotfound;
+            for (var i = 0; i < MapList.OrderedMaps.Count; i++)
+            {
+                if (MapList.OrderedMaps[i].MapId == command.MapId)
+                {
+                    mapName = MapList.OrderedMaps[i].Name;
+                }
+            }
+
+            if (command.ResetNpcs)
+            {
+                return Strings.EventCommandList.ChangeSpawnGroupReset.ToString(command.SpawnGroup.ToString(), mapName, command.SurroundingMaps.ToString());
+            }
+
+            return Strings.EventCommandList.ChangeSpawnGroup.ToString(command.SpawnGroup.ToString(), mapName, command.SurroundingMaps.ToString());
         }
 
     }

@@ -1701,6 +1701,12 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString unequipitem = @"Unequip Player Item [{00}]";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ChangeSpawnGroup = @"Change Spawn Group to {00} on {01} (neighbors: {02})";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ChangeSpawnGroupReset = @"Change Spawn Group to {00} on {01} (reset NPCs) (neighbors: {02})";
+
             public static LocalizedString changespells = @"Change Player Spells [{00}]";
 
             public static LocalizedString chatboxtext = @"Show Chatbox Text [Channel: {00}, Color: {01}] - {02}";
@@ -2079,6 +2085,9 @@ Tick timer saved in server config.json.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString vareventy = @"Event's Y Position";
+            
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString VarSpawnGroup = @"Current Map's Spawn Group";
         }
 
         public struct EventChangePlayerColor
@@ -2187,6 +2196,7 @@ Tick timer saved in server config.json.";
                 {"starttimer", @"Start Timer"},
                 {"modifytimer", @"Modify Timer"},
                 {"stoptimer", @"Stop Timer"},
+                {"changemapspawngroup", @"Change Map Spawn Group"},
             };
 
         }
@@ -4160,6 +4170,18 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString npcs = @"Npcs";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString NpcSpawn = @"{00} - (Group {01})";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString NpcSpawnCumulative = @"{00} - (Group {01}+)";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString NpcSpawnPlayerLimit = @"{00} - (Group {01}) [{02}]+";
+            
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString NpcSpawnPlayerLimitCumulative = @"{00} - (Group {01}+) [{02}]+";
+
             public static LocalizedString tiles = @"Tiles";
 
             public static LocalizedString title = @"Map Layers";
@@ -4565,6 +4587,15 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString direction = @"Direction:";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString MapSpawnGroup = @"Selected Spawn Group";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString MinimumInInstance = @"If Minimum Players in Instance";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString NpcSpawnGroup = @"Spawn Group";
+
             public static LocalizedString randomdirection = @"Random";
 
             public static LocalizedString randomlocation = @"Random";
@@ -4573,9 +4604,13 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString spawndeclared = @"Spawn Location: Declared";
 
-            public static LocalizedString spawnrandom = @"Spawn Location: Random";
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString SpawnGroupLabel = @"Spawn Group";
 
-            public static LocalizedString minimumininstance = @"If Minimum Players in Instance: ";
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString SpawnOptions = @"Spawn Options";
+
+            public static LocalizedString spawnrandom = @"Spawn Location: Random";
 
         }
 

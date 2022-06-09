@@ -53,6 +53,8 @@ namespace Intersect.Editor.General
 
         public static int SelectedMapNpc = -1;
 
+        public static int SelectedSpawnGroup = 0;
+
         public static TilesetBase CurrentTileset = null;
 
         public static int CurrentTool = (int) EditingTool.Pen;

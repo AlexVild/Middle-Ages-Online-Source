@@ -20,6 +20,10 @@ namespace Intersect.GameObjects.Maps
 
         public bool PreventRespawn;
 
+        public int SpawnGroup = 0;
+
+        public bool CumulativeSpawning = false;
+
         public NpcSpawn()
         {
         }
@@ -32,6 +36,7 @@ namespace Intersect.GameObjects.Maps
             Direction = copy.Direction;
             RequiredPlayersToSpawn = copy.RequiredPlayersToSpawn;
             PreventRespawn = copy.PreventRespawn;
+            SpawnGroup = copy.SpawnGroup;
         }
 
     }

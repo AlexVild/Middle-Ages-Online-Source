@@ -2021,6 +2021,13 @@ namespace Intersect.Server.Entities.Events
                     }
 
                     break;
+                case Enums.VariableMods.SpawnGroup:
+                    if (MapController.TryGetInstanceFromMap(player.MapId, player.MapInstanceId, out var playerMap))
+                    {
+                        value.Integer = playerMap.NpcSpawnGroup;
+                    }
+                    
+                    break;
                 case Enums.VariableMods.DupPlayerVar:
                     value.Integer = player.GetVariableValue(mod.DuplicateVariableId).Integer;
 
@@ -2600,6 +2607,30 @@ namespace Intersect.Server.Entities.Events
 
                     // Update client values
                     activeTimer.SendTimerPackets();
+                }
+            }
+        }
+
+        private static void ProcessCommand(
+            ChangeSpawnGroupCommand command,
+            Player player,
+            Event instance,
+            CommandInstance stackInfo,
+            Stack<CommandInstance> callStack
+        )
+        {
+            if (player == null) return;
+
+            // We can not currently set the spawn group of a map that has not yet been created in the player's current instance
+            if (MapController.TryGetInstanceFromMap(command.MapId, player.MapInstanceId, out var mapInstance))
+            {
+                mapInstance.ChangeSpawnGroup(command.SpawnGroup, command.ResetNpcs);
+                if (command.SurroundingMaps)
+                {
+                    foreach (var neighboringInstance in MapController.GetSurroundingMapInstances(player.MapId, player.MapInstanceId, false))
+                    {
+                        neighboringInstance.ChangeSpawnGroup(command.SpawnGroup, command.ResetNpcs);
+                    }
                 }
             }
         }

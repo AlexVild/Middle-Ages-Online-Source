@@ -457,6 +457,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                         optEventY.Checked = true;
 
                         break;
+                    case VariableMods.SpawnGroup:
+                        rdoSpawnGroup.Checked = true;
+
+                        break;
                     case VariableMods.DupPlayerVar:
                         optNumericSet.Checked = true;
                         optNumericClonePlayerVar.Checked = true;
@@ -748,6 +752,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             {
                 mod.ModType = VariableMods.EventY;
             }
+            else if (rdoSpawnGroup.Checked)
+            {
+                mod.ModType = VariableMods.SpawnGroup;
+            }
             else if (optNumericClonePlayerVar.Checked)
             {
                 if (optNumericSet.Checked)
@@ -947,6 +955,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         }
 
         private void optEventY_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateNumericFormElements();
+        }
+
+        private void rdoSpawnGroup_CheckedChanged(object sender, EventArgs e)
         {
             UpdateNumericFormElements();
         }
