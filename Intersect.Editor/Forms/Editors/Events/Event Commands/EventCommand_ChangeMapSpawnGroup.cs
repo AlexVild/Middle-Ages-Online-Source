@@ -46,17 +46,35 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
 
             btnSave.Enabled = cmbMap.Items.Count >= 1;
 
+            switch(mMyCommand.Operator)
+            {
+                case ChangeSpawnOperator.SET:
+                    optNumericSet.Checked = true;
+                    break;
+                case ChangeSpawnOperator.ADD:
+                    optNumericAdd.Checked = true;
+                    break;
+                case ChangeSpawnOperator.SUBTRACT:
+                    optNumericSubtract.Checked = true;
+                    break;
+            }
+
             chkSurrounding.Checked = mMyCommand.SurroundingMaps;
             nudSpawnGroup.Value = mMyCommand.SpawnGroup;
             chkResetNpcs.Checked = mMyCommand.ResetNpcs;
+            chkPlayerMap.Checked = mMyCommand.UsePlayerMap;
         }
 
         private void SaveValues()
         {
-            mMyCommand.MapId = MapList.OrderedMaps[cmbMap.SelectedIndex].MapId;
+            if (cmbMap.SelectedIndex >= 0)
+            {
+                mMyCommand.MapId = MapList.OrderedMaps[cmbMap.SelectedIndex].MapId;
+            }
             mMyCommand.SpawnGroup = (int)nudSpawnGroup.Value;
             mMyCommand.ResetNpcs = chkResetNpcs.Checked;
             mMyCommand.SurroundingMaps = chkSurrounding.Checked;
+            mMyCommand.UsePlayerMap = chkPlayerMap.Checked;
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -69,4 +87,25 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         {
             mEventEditor.CancelCommandEdit();
         }
-    }}
+
+        private void optNumericSet_CheckedChanged(object sender, EventArgs e)
+        {
+            mMyCommand.Operator = ChangeSpawnOperator.SET;
+        }
+
+        private void optNumericAdd_CheckedChanged(object sender, EventArgs e)
+        {
+            mMyCommand.Operator = ChangeSpawnOperator.ADD;
+        }
+
+        private void optNumericSubtract_CheckedChanged(object sender, EventArgs e)
+        {
+            mMyCommand.Operator = ChangeSpawnOperator.SUBTRACT;
+        }
+
+        private void chkPlayerMap_CheckedChanged(object sender, EventArgs e)
+        {
+            cmbMap.Enabled = !chkPlayerMap.Checked;
+        }
+    }
+}

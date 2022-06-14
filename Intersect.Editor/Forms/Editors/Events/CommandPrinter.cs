@@ -1755,12 +1755,14 @@ namespace Intersect.Editor.Forms.Editors.Events
                 }
             }
 
+            var op = Enum.GetName(typeof(ChangeSpawnOperator), command.Operator);
+
             if (command.ResetNpcs)
             {
-                return Strings.EventCommandList.ChangeSpawnGroupReset.ToString(command.SpawnGroup.ToString(), mapName, command.SurroundingMaps.ToString());
+                return Strings.EventCommandList.ChangeSpawnGroupReset.ToString(command.SpawnGroup.ToString(), mapName, command.SurroundingMaps.ToString(), op);
             }
 
-            return Strings.EventCommandList.ChangeSpawnGroup.ToString(command.SpawnGroup.ToString(), mapName, command.SurroundingMaps.ToString());
+            return Strings.EventCommandList.ChangeSpawnGroup.ToString(command.SpawnGroup.ToString(), mapName, command.SurroundingMaps.ToString(), op);
         }
 
     }

@@ -1204,6 +1204,7 @@ namespace Intersect.Editor.Forms.DockingElements
                     {
                         spawn.X = Globals.CurTileX;
                         spawn.Y = Globals.CurTileY;
+                            Globals.MapLayersWindow.SetSpawnGroupValue(spawn.SpawnGroup);
                         mMapChanged = true;
                     }
 

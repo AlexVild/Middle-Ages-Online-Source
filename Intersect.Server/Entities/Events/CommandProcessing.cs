@@ -2621,15 +2621,32 @@ namespace Intersect.Server.Entities.Events
         {
             if (player == null) return;
 
-            // We can not currently set the spawn group of a map that has not yet been created in the player's current instance
-            if (MapController.TryGetInstanceFromMap(command.MapId, player.MapInstanceId, out var mapInstance))
+            var mapId = player.MapId;
+            if (!command.UsePlayerMap)
             {
-                mapInstance.ChangeSpawnGroup(command.SpawnGroup, command.ResetNpcs);
+                mapId = command.MapId;
+            }
+
+            // We can not currently set the spawn group of a map that has not yet been created in the player's current instance
+            if (MapController.TryGetInstanceFromMap(mapId, player.MapInstanceId, out var mapInstance))
+            {
+                var spawnGroup = command.SpawnGroup;
+                switch (command.Operator)
+                {
+                    case ChangeSpawnOperator.ADD:
+                        spawnGroup += mapInstance.NpcSpawnGroup;
+                        break;
+                    case ChangeSpawnOperator.SUBTRACT:
+                        spawnGroup = mapInstance.NpcSpawnGroup - spawnGroup;
+                        break;
+                }
+
+                mapInstance.ChangeSpawnGroup(spawnGroup, command.ResetNpcs);
                 if (command.SurroundingMaps)
                 {
                     foreach (var neighboringInstance in MapController.GetSurroundingMapInstances(player.MapId, player.MapInstanceId, false))
                     {
-                        neighboringInstance.ChangeSpawnGroup(command.SpawnGroup, command.ResetNpcs);
+                        neighboringInstance.ChangeSpawnGroup(spawnGroup, command.ResetNpcs);
                     }
                 }
             }

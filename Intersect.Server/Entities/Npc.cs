@@ -192,8 +192,8 @@ namespace Intersect.Server.Entities
                 PacketSender.SendEntityDie(this);
                 PacketSender.SendEntityLeave(this);
 
-                // Do not process permadeaths on the overworld
-                if (MapInstanceId != Guid.Empty)
+                // Do not process permadeaths on the overworld or if the entity was not killed by some other entity
+                if (MapInstanceId != Guid.Empty && killer != null)
                 {
                     if (!String.IsNullOrEmpty(PermadeathKey) && ProcessingInfo.PermadeadNpcs.TryGetValue(MapInstanceId, out var permadeadNpcs))
                     {

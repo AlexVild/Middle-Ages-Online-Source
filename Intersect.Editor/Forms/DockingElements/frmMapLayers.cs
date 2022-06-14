@@ -817,9 +817,14 @@ namespace Intersect.Editor.Forms.DockingElements
                 lstMapNpcs.SelectedIndex = 0;
                 if (lstMapNpcs.SelectedIndex < Globals.CurrentMap.Spawns.Count)
                 {
-                    cmbDir.SelectedIndex = (int) Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].Direction;
-                    cmbNpc.SelectedIndex = NpcBase.ListIndex(Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].NpcId);
-                    if (Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].X >= 0)
+                    var spawn = Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex];
+                    cmbDir.SelectedIndex = (int)spawn.Direction;
+                    cmbNpc.SelectedIndex = NpcBase.ListIndex(spawn.NpcId);
+                    nudSpawnGroup.Value = spawn.SpawnGroup;
+                    chkDoNotRespawn.Checked = spawn.PreventRespawn;
+                    chkSpawnGroupGreater.Checked = spawn.CumulativeSpawning;
+                    nudInstanceSpawnLimit.Value = spawn.RequiredPlayersToSpawn;
+                    if (spawn.X >= 0)
                     {
                         rbDeclared.Checked = true;
                     }
@@ -835,6 +840,7 @@ namespace Intersect.Editor.Forms.DockingElements
         //Map NPC List
         private void btnAddMapNpc_Click(object sender, EventArgs e)
         {
+            mChanging = true;
             var n = new NpcSpawn();
 
             //Don't add nothing
@@ -854,6 +860,7 @@ namespace Intersect.Editor.Forms.DockingElements
                 lstMapNpcs.SelectedIndex = lstMapNpcs.Items.Count - 1;
                 Globals.SelectedMapNpc = lstMapNpcs.SelectedIndex;
             }
+            mChanging = false;
         }
 
         private void btnRemoveMapNpc_Click(object sender, EventArgs e)
@@ -1489,8 +1496,16 @@ namespace Intersect.Editor.Forms.DockingElements
 
             if (lstMapNpcs.SelectedIndex >= 0)
             {
-                Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].CumulativeSpawning = chkSpawnGroupGreater.Checked;
+                var spawn = Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex];
+                spawn.CumulativeSpawning = chkSpawnGroupGreater.Checked;
+                lstMapNpcs.Items[lstMapNpcs.SelectedIndex] = GenerateNpcSpawnString(spawn);
             }
+        }
+
+        public void SetSpawnGroupValue(int spawnGroup)
+        {
+            // Fires value changed event
+            nudSpawnGroup.Value = spawnGroup;
         }
     }
 

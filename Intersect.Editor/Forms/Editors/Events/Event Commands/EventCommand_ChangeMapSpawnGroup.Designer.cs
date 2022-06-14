@@ -30,15 +30,21 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private void InitializeComponent()
         {
             this.grpChangeSpawnGroup = new DarkUI.Controls.DarkGroupBox();
+            this.chkPlayerMap = new System.Windows.Forms.CheckBox();
+            this.lblBalue = new System.Windows.Forms.Label();
+            this.grpOperators = new DarkUI.Controls.DarkGroupBox();
+            this.optNumericSet = new DarkUI.Controls.DarkRadioButton();
+            this.optNumericSubtract = new DarkUI.Controls.DarkRadioButton();
+            this.optNumericAdd = new DarkUI.Controls.DarkRadioButton();
+            this.chkSurrounding = new System.Windows.Forms.CheckBox();
             this.chkResetNpcs = new System.Windows.Forms.CheckBox();
             this.nudSpawnGroup = new DarkUI.Controls.DarkNumericUpDown();
-            this.lblSpawnGroup = new System.Windows.Forms.Label();
             this.lblMap = new System.Windows.Forms.Label();
             this.cmbMap = new DarkUI.Controls.DarkComboBox();
             this.btnCancel = new DarkUI.Controls.DarkButton();
             this.btnSave = new DarkUI.Controls.DarkButton();
-            this.chkSurrounding = new System.Windows.Forms.CheckBox();
             this.grpChangeSpawnGroup.SuspendLayout();
+            this.grpOperators.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudSpawnGroup)).BeginInit();
             this.SuspendLayout();
             // 
@@ -46,10 +52,12 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             this.grpChangeSpawnGroup.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.grpChangeSpawnGroup.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpChangeSpawnGroup.Controls.Add(this.chkPlayerMap);
+            this.grpChangeSpawnGroup.Controls.Add(this.lblBalue);
+            this.grpChangeSpawnGroup.Controls.Add(this.grpOperators);
             this.grpChangeSpawnGroup.Controls.Add(this.chkSurrounding);
             this.grpChangeSpawnGroup.Controls.Add(this.chkResetNpcs);
             this.grpChangeSpawnGroup.Controls.Add(this.nudSpawnGroup);
-            this.grpChangeSpawnGroup.Controls.Add(this.lblSpawnGroup);
             this.grpChangeSpawnGroup.Controls.Add(this.lblMap);
             this.grpChangeSpawnGroup.Controls.Add(this.cmbMap);
             this.grpChangeSpawnGroup.Controls.Add(this.btnCancel);
@@ -57,15 +65,92 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpChangeSpawnGroup.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpChangeSpawnGroup.Location = new System.Drawing.Point(3, 3);
             this.grpChangeSpawnGroup.Name = "grpChangeSpawnGroup";
-            this.grpChangeSpawnGroup.Size = new System.Drawing.Size(319, 161);
+            this.grpChangeSpawnGroup.Size = new System.Drawing.Size(319, 202);
             this.grpChangeSpawnGroup.TabIndex = 21;
             this.grpChangeSpawnGroup.TabStop = false;
             this.grpChangeSpawnGroup.Text = "Change Spawn Group";
             // 
+            // chkPlayerMap
+            // 
+            this.chkPlayerMap.AutoSize = true;
+            this.chkPlayerMap.Location = new System.Drawing.Point(131, 51);
+            this.chkPlayerMap.Name = "chkPlayerMap";
+            this.chkPlayerMap.Size = new System.Drawing.Size(105, 17);
+            this.chkPlayerMap.TabIndex = 71;
+            this.chkPlayerMap.Text = "Use player map?";
+            this.chkPlayerMap.UseVisualStyleBackColor = true;
+            this.chkPlayerMap.CheckedChanged += new System.EventHandler(this.chkPlayerMap_CheckedChanged);
+            // 
+            // lblBalue
+            // 
+            this.lblBalue.AutoSize = true;
+            this.lblBalue.Location = new System.Drawing.Point(212, 82);
+            this.lblBalue.Name = "lblBalue";
+            this.lblBalue.Size = new System.Drawing.Size(34, 13);
+            this.lblBalue.TabIndex = 70;
+            this.lblBalue.Text = "Value";
+            // 
+            // grpOperators
+            // 
+            this.grpOperators.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.grpOperators.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpOperators.Controls.Add(this.optNumericSet);
+            this.grpOperators.Controls.Add(this.optNumericSubtract);
+            this.grpOperators.Controls.Add(this.optNumericAdd);
+            this.grpOperators.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpOperators.Location = new System.Drawing.Point(9, 74);
+            this.grpOperators.Name = "grpOperators";
+            this.grpOperators.Size = new System.Drawing.Size(197, 55);
+            this.grpOperators.TabIndex = 69;
+            this.grpOperators.TabStop = false;
+            this.grpOperators.Text = "Operators";
+            // 
+            // optNumericSet
+            // 
+            this.optNumericSet.AutoSize = true;
+            this.optNumericSet.Checked = true;
+            this.optNumericSet.Location = new System.Drawing.Point(12, 27);
+            this.optNumericSet.Name = "optNumericSet";
+            this.optNumericSet.Size = new System.Drawing.Size(41, 17);
+            this.optNumericSet.TabIndex = 66;
+            this.optNumericSet.TabStop = true;
+            this.optNumericSet.Text = "Set";
+            this.optNumericSet.CheckedChanged += new System.EventHandler(this.optNumericSet_CheckedChanged);
+            // 
+            // optNumericSubtract
+            // 
+            this.optNumericSubtract.AutoSize = true;
+            this.optNumericSubtract.Location = new System.Drawing.Point(109, 27);
+            this.optNumericSubtract.Name = "optNumericSubtract";
+            this.optNumericSubtract.Size = new System.Drawing.Size(65, 17);
+            this.optNumericSubtract.TabIndex = 68;
+            this.optNumericSubtract.Text = "Subtract";
+            this.optNumericSubtract.CheckedChanged += new System.EventHandler(this.optNumericSubtract_CheckedChanged);
+            // 
+            // optNumericAdd
+            // 
+            this.optNumericAdd.AutoSize = true;
+            this.optNumericAdd.Location = new System.Drawing.Point(59, 27);
+            this.optNumericAdd.Name = "optNumericAdd";
+            this.optNumericAdd.Size = new System.Drawing.Size(44, 17);
+            this.optNumericAdd.TabIndex = 67;
+            this.optNumericAdd.Text = "Add";
+            this.optNumericAdd.CheckedChanged += new System.EventHandler(this.optNumericAdd_CheckedChanged);
+            // 
+            // chkSurrounding
+            // 
+            this.chkSurrounding.AutoSize = true;
+            this.chkSurrounding.Location = new System.Drawing.Point(9, 51);
+            this.chkSurrounding.Name = "chkSurrounding";
+            this.chkSurrounding.Size = new System.Drawing.Size(118, 17);
+            this.chkSurrounding.TabIndex = 65;
+            this.chkSurrounding.Text = "Surrounding Maps?";
+            this.chkSurrounding.UseVisualStyleBackColor = true;
+            // 
             // chkResetNpcs
             // 
             this.chkResetNpcs.AutoSize = true;
-            this.chkResetNpcs.Location = new System.Drawing.Point(8, 109);
+            this.chkResetNpcs.Location = new System.Drawing.Point(9, 144);
             this.chkResetNpcs.Name = "chkResetNpcs";
             this.chkResetNpcs.Size = new System.Drawing.Size(115, 17);
             this.chkResetNpcs.TabIndex = 64;
@@ -76,29 +161,20 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             this.nudSpawnGroup.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.nudSpawnGroup.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudSpawnGroup.Location = new System.Drawing.Point(180, 79);
+            this.nudSpawnGroup.Location = new System.Drawing.Point(212, 98);
             this.nudSpawnGroup.Maximum = new decimal(new int[] {
             100000,
             0,
             0,
             0});
             this.nudSpawnGroup.Name = "nudSpawnGroup";
-            this.nudSpawnGroup.Size = new System.Drawing.Size(133, 20);
+            this.nudSpawnGroup.Size = new System.Drawing.Size(101, 20);
             this.nudSpawnGroup.TabIndex = 23;
             this.nudSpawnGroup.Value = new decimal(new int[] {
             0,
             0,
             0,
             0});
-            // 
-            // lblSpawnGroup
-            // 
-            this.lblSpawnGroup.AutoSize = true;
-            this.lblSpawnGroup.Location = new System.Drawing.Point(6, 81);
-            this.lblSpawnGroup.Name = "lblSpawnGroup";
-            this.lblSpawnGroup.Size = new System.Drawing.Size(72, 13);
-            this.lblSpawnGroup.TabIndex = 24;
-            this.lblSpawnGroup.Text = "Spawn Group";
             // 
             // lblMap
             // 
@@ -131,7 +207,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(223, 132);
+            this.btnCancel.Location = new System.Drawing.Point(238, 169);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Padding = new System.Windows.Forms.Padding(5);
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
@@ -141,23 +217,13 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(142, 132);
+            this.btnSave.Location = new System.Drawing.Point(131, 169);
             this.btnSave.Name = "btnSave";
             this.btnSave.Padding = new System.Windows.Forms.Padding(5);
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 19;
             this.btnSave.Text = "Ok";
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
-            // 
-            // chkSurrounding
-            // 
-            this.chkSurrounding.AutoSize = true;
-            this.chkSurrounding.Location = new System.Drawing.Point(9, 51);
-            this.chkSurrounding.Name = "chkSurrounding";
-            this.chkSurrounding.Size = new System.Drawing.Size(118, 17);
-            this.chkSurrounding.TabIndex = 65;
-            this.chkSurrounding.Text = "Surrounding Maps?";
-            this.chkSurrounding.UseVisualStyleBackColor = true;
             // 
             // EventCommand_ChangeMapSpawnGroup
             // 
@@ -166,9 +232,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.Controls.Add(this.grpChangeSpawnGroup);
             this.Name = "EventCommand_ChangeMapSpawnGroup";
-            this.Size = new System.Drawing.Size(331, 167);
+            this.Size = new System.Drawing.Size(331, 211);
             this.grpChangeSpawnGroup.ResumeLayout(false);
             this.grpChangeSpawnGroup.PerformLayout();
+            this.grpOperators.ResumeLayout(false);
+            this.grpOperators.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudSpawnGroup)).EndInit();
             this.ResumeLayout(false);
 
@@ -178,12 +246,17 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
 
         private DarkUI.Controls.DarkGroupBox grpChangeSpawnGroup;
         private DarkUI.Controls.DarkNumericUpDown nudSpawnGroup;
-        private System.Windows.Forms.Label lblSpawnGroup;
         private System.Windows.Forms.Label lblMap;
         private DarkUI.Controls.DarkComboBox cmbMap;
         private DarkUI.Controls.DarkButton btnCancel;
         private DarkUI.Controls.DarkButton btnSave;
         private System.Windows.Forms.CheckBox chkResetNpcs;
         private System.Windows.Forms.CheckBox chkSurrounding;
+        internal DarkUI.Controls.DarkRadioButton optNumericSet;
+        internal DarkUI.Controls.DarkRadioButton optNumericAdd;
+        private DarkUI.Controls.DarkGroupBox grpOperators;
+        internal DarkUI.Controls.DarkRadioButton optNumericSubtract;
+        private System.Windows.Forms.Label lblBalue;
+        private System.Windows.Forms.CheckBox chkPlayerMap;
     }
 }
