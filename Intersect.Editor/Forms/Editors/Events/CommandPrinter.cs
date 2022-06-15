@@ -1749,7 +1749,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             var mapName = Strings.EventCommandList.mapnotfound;
             if (command.UsePlayerMap)
             {
-                mapName = "Player's Map";
+                mapName = "Player Map";
             }
             else
             {
@@ -1766,10 +1766,10 @@ namespace Intersect.Editor.Forms.Editors.Events
 
             if (command.ResetNpcs)
             {
-                return Strings.EventCommandList.ChangeSpawnGroupReset.ToString(command.SpawnGroup.ToString(), mapName, command.SurroundingMaps.ToString(), op);
+                return Strings.EventCommandList.ChangeSpawnGroupReset.ToString(command.SpawnGroup.ToString(), mapName, command.SurroundingMaps.ToString(), op, command.PersistCleanup.ToString());
             }
 
-            return Strings.EventCommandList.ChangeSpawnGroup.ToString(command.SpawnGroup.ToString(), mapName, command.SurroundingMaps.ToString(), op);
+            return Strings.EventCommandList.ChangeSpawnGroup.ToString(command.SpawnGroup.ToString(), mapName, command.SurroundingMaps.ToString(), op, command.PersistCleanup.ToString());
         }
 
     }

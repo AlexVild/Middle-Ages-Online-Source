@@ -183,7 +183,9 @@ namespace Intersect.Server.Entities
                 }
                 else if (targetEntity.GetType() == typeof(Resource))
                 {
-                    if (ProjectileBase.Tool != -1) // if the projectile can be handled as a tool, do some things differently
+                    var resourceTarget = targetEntity as Resource;
+
+                    if (ProjectileBase.Tool != -1 || resourceTarget.Base.Tool == -1) // if the projectile can be handled as a tool or the resource does not demand a tool, do some things differently
                     {
                         // If the projectile is the right tool for the job, make an attack
                         var validTool = false;

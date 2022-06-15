@@ -1702,10 +1702,10 @@ Tick timer saved in server config.json.";
             public static LocalizedString unequipitem = @"Unequip Player Item [{00}]";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public static LocalizedString ChangeSpawnGroup = @"Spawn Group Change: {03} on {01} (neighbors: {02}, persist: {04})";
+            public static LocalizedString ChangeSpawnGroup = @"Spawn Group Change: {03} {00} on {01} (neighbors: {02}, persist: {04})";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public static LocalizedString ChangeSpawnGroupReset = @"Spawn Group Change: {03} on {01} (reset NPCs) (neighbors: {02}, persist: {04})";
+            public static LocalizedString ChangeSpawnGroupReset = @"Spawn Group Change: {03} {00} on {01} (reset NPCs) (neighbors: {02}, persist: {04})";
 
             public static LocalizedString changespells = @"Change Player Spells [{00}]";
 
