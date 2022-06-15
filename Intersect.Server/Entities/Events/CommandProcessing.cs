@@ -2641,12 +2641,12 @@ namespace Intersect.Server.Entities.Events
                         break;
                 }
 
-                mapInstance.ChangeSpawnGroup(spawnGroup, command.ResetNpcs);
+                mapInstance.ChangeSpawnGroup(spawnGroup, command.ResetNpcs, command.PersistCleanup);
                 if (command.SurroundingMaps)
                 {
                     foreach (var neighboringInstance in MapController.GetSurroundingMapInstances(player.MapId, player.MapInstanceId, false))
                     {
-                        neighboringInstance.ChangeSpawnGroup(spawnGroup, command.ResetNpcs);
+                        neighboringInstance.ChangeSpawnGroup(spawnGroup, command.ResetNpcs, command.PersistCleanup);
                     }
                 }
             }

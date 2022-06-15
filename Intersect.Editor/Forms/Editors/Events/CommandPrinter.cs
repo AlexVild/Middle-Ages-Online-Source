@@ -1747,11 +1747,18 @@ namespace Intersect.Editor.Forms.Editors.Events
         private static string GetCommandText(ChangeSpawnGroupCommand command, MapInstance map)
         {
             var mapName = Strings.EventCommandList.mapnotfound;
-            for (var i = 0; i < MapList.OrderedMaps.Count; i++)
+            if (command.UsePlayerMap)
             {
-                if (MapList.OrderedMaps[i].MapId == command.MapId)
+                mapName = "Player's Map";
+            }
+            else
+            {
+                for (var i = 0; i < MapList.OrderedMaps.Count; i++)
                 {
-                    mapName = MapList.OrderedMaps[i].Name;
+                    if (MapList.OrderedMaps[i].MapId == command.MapId)
+                    {
+                        mapName = MapList.OrderedMaps[i].Name;
+                    }
                 }
             }
 

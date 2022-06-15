@@ -1217,6 +1217,8 @@ namespace Intersect.GameObjects.Events.Commands
 
         public bool ResetNpcs { get; set; }
 
+        public bool PersistCleanup { get; set; }
+
         public ChangeSpawnOperator Operator { get; set; } = ChangeSpawnOperator.SET;
     }
 }

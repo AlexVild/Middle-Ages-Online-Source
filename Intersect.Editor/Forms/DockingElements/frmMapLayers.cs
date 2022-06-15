@@ -960,12 +960,21 @@ namespace Intersect.Editor.Forms.DockingElements
 
             if (lstMapNpcs.SelectedIndex >= 0)
             {
-                Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].NpcId = NpcBase.IdFromList(cmbNpc.SelectedIndex);
+                n = lstMapNpcs.SelectedIndex;
+                Globals.CurrentMap.Spawns[n].NpcId = NpcBase.IdFromList(cmbNpc.SelectedIndex);
 
                 // Refresh List
                 ClearAndAddNpcs();
 
-                lstMapNpcs.SelectedIndex = n;
+                if (lstMapNpcs.Items.Count <= n)
+                {
+                    lstMapNpcs.SelectedIndex = n;
+                }
+                else
+                {
+                    lstMapNpcs.SelectedIndex = 0;
+                }
+                
                 Globals.SelectedMapNpc = n;
             }
         }

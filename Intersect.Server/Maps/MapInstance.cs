@@ -161,6 +161,15 @@ namespace Intersect.Server.Maps
             {
                 mIsProcessing = true;
 
+                // Set default spawn group if one was saved in the permanents list
+                if (ProcessingInfo.PermaSpawnGroups.TryGetValue(MapInstanceId, out var instancePermaSpawns))
+                {
+                    if (instancePermaSpawns.TryGetValue(mMapController.Id, out var defaultSpawnGroup))
+                    {
+                        NpcSpawnGroup = defaultSpawnGroup;
+                    }
+                }
+
                 CacheMapBlocks();
                 DespawnEverything();
                 RespawnEverything();
@@ -1365,7 +1374,8 @@ namespace Intersect.Server.Maps
         /// </summary>
         /// <param name="group">The group to change to</param>
         /// <param name="reset">Whether or not to despawn current NPCs on change</param>
-        public void ChangeSpawnGroup(int group, bool reset)
+        /// <param name="instancePermanent">Whether or not this change should persist map cleanup so long as there are players on the instance</param>
+        public void ChangeSpawnGroup(int group, bool reset, bool instancePermanent)
         {
             // Can optionally get rid of all NPCs not belonging to this new group
             if (reset)
@@ -1375,6 +1385,19 @@ namespace Intersect.Server.Maps
             if (group >= 0)
             {
                 NpcSpawnGroup = group;
+            }
+            if (instancePermanent)
+            {
+                if (ProcessingInfo.PermaSpawnGroups.TryGetValue(MapInstanceId, out var instance) && !instance.ContainsKey(mMapController.Id))
+                {
+                    instance.Add(mMapController.Id, NpcSpawnGroup);
+                }
+                else
+                {
+                    var savedSpawnGroup = new Dictionary<Guid, int>();
+                    savedSpawnGroup.Add(mMapController.Id, NpcSpawnGroup);
+                    ProcessingInfo.PermaSpawnGroups.Add(MapInstanceId, savedSpawnGroup);
+                }
             }
             // Spawn the NPCs that belong to the new group
             SpawnMapNpcs();

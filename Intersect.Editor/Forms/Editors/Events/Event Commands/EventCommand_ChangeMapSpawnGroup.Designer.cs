@@ -43,6 +43,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbMap = new DarkUI.Controls.DarkComboBox();
             this.btnCancel = new DarkUI.Controls.DarkButton();
             this.btnSave = new DarkUI.Controls.DarkButton();
+            this.chkPersist = new System.Windows.Forms.CheckBox();
             this.grpChangeSpawnGroup.SuspendLayout();
             this.grpOperators.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudSpawnGroup)).BeginInit();
@@ -52,6 +53,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             this.grpChangeSpawnGroup.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.grpChangeSpawnGroup.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpChangeSpawnGroup.Controls.Add(this.chkPersist);
             this.grpChangeSpawnGroup.Controls.Add(this.chkPlayerMap);
             this.grpChangeSpawnGroup.Controls.Add(this.lblBalue);
             this.grpChangeSpawnGroup.Controls.Add(this.grpOperators);
@@ -225,6 +227,16 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.btnSave.Text = "Ok";
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
+            // chkPersist
+            // 
+            this.chkPersist.AutoSize = true;
+            this.chkPersist.Location = new System.Drawing.Point(131, 144);
+            this.chkPersist.Name = "chkPersist";
+            this.chkPersist.Size = new System.Drawing.Size(127, 17);
+            this.chkPersist.TabIndex = 72;
+            this.chkPersist.Text = "Persist map cleanup?";
+            this.chkPersist.UseVisualStyleBackColor = true;
+            // 
             // EventCommand_ChangeMapSpawnGroup
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -258,5 +270,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         internal DarkUI.Controls.DarkRadioButton optNumericSubtract;
         private System.Windows.Forms.Label lblBalue;
         private System.Windows.Forms.CheckBox chkPlayerMap;
+        private System.Windows.Forms.CheckBox chkPersist;
     }
 }

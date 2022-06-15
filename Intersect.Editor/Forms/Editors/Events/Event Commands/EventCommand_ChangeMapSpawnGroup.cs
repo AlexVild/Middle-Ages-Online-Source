@@ -63,6 +63,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             nudSpawnGroup.Value = mMyCommand.SpawnGroup;
             chkResetNpcs.Checked = mMyCommand.ResetNpcs;
             chkPlayerMap.Checked = mMyCommand.UsePlayerMap;
+            chkPersist.Checked = mMyCommand.PersistCleanup;
         }
 
         private void SaveValues()
@@ -75,6 +76,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             mMyCommand.ResetNpcs = chkResetNpcs.Checked;
             mMyCommand.SurroundingMaps = chkSurrounding.Checked;
             mMyCommand.UsePlayerMap = chkPlayerMap.Checked;
+            mMyCommand.PersistCleanup = chkPersist.Checked;
         }
 
         private void btnSave_Click(object sender, EventArgs e)
