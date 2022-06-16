@@ -4322,7 +4322,7 @@ namespace Intersect.Server.Entities
             foreach (var inventorySlotsWithItem in inventorySlots)
             {
                 // If we've fulfilled our stacking desires, we're done
-                if (amountRemainder < 0 || FindOpenInventorySlots().Count <= 0)
+                if (amountRemainder <= 0 || FindOpenInventorySlots().Count <= 0)
                 {
                     return amountRemainder <= 0;
                 }
@@ -4354,9 +4354,12 @@ namespace Intersect.Server.Entities
                     bagSlots[bagSlotIdx].Quantity -= amountToGive;
                 }
 
-                // Aaaand tell the client.
-                PacketSender.SendInventoryItemUpdate(this, currSlot);
-                PacketSender.SendBagUpdate(this, bagSlotIdx, bagSlots[bagSlotIdx]);
+                // Aaaand tell the client, provided any amount got given
+                if (amountToGive > 0)
+                {
+                    PacketSender.SendInventoryItemUpdate(this, currSlot);
+                    PacketSender.SendBagUpdate(this, bagSlotIdx, bagSlots[bagSlotIdx]);
+                }
             } // repeat until we've either filled the bag or fulfilled our stack requirements
 
             return amountRemainder <= 0;
@@ -4376,7 +4379,7 @@ namespace Intersect.Server.Entities
             int amountRemainder = amountToGive;
             foreach (var bagSlotWithItem in bagSlots)
             {
-                if (amountRemainder < 0 || bag.FindOpenBagSlots().Count <= 0)
+                if (amountRemainder <= 0 || bag.FindOpenBagSlots().Count <= 0)
                 {
                     return amountRemainder <= 0;
                 }
@@ -4404,8 +4407,11 @@ namespace Intersect.Server.Entities
                     Items[inventorySlotIdx].Quantity -= amountToGive;
                 }
 
-                PacketSender.SendInventoryItemUpdate(this, inventorySlotIdx);
-                PacketSender.SendBagUpdate(this, currSlot, bagSlotWithItem);
+                if (amountToGive > 0)
+                {
+                    PacketSender.SendInventoryItemUpdate(this, inventorySlotIdx);
+                    PacketSender.SendBagUpdate(this, currSlot, bagSlotWithItem);
+                }
             }
 
             return amountRemainder <= 0;
