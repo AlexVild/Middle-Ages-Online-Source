@@ -420,7 +420,8 @@ namespace Intersect.Server.Maps
             var spawns = mMapController.SpawnsInGroup(NpcSpawnGroup);
             for (var i = 0; i < spawns.Count; i++)
             {
-                if (NpcHasEnoughPlayersToSpawn(i))
+                NpcSpawn spawn = spawns[i];
+                if (NpcHasEnoughPlayersToSpawn(i) && !NpcSpawnInstances.TryGetValue(spawn, out _))
                 {
                     SpawnMapNpc(i);
                 }
@@ -1377,30 +1378,33 @@ namespace Intersect.Server.Maps
         /// <param name="instancePermanent">Whether or not this change should persist map cleanup so long as there are players on the instance</param>
         public void ChangeSpawnGroup(int group, bool reset, bool instancePermanent)
         {
-            // Can optionally get rid of all NPCs not belonging to this new group
-            if (reset)
+            lock (GetLock())
             {
-                DespawnNpcs();
-            }
-            if (group >= 0)
-            {
-                NpcSpawnGroup = group;
-            }
-            if (instancePermanent)
-            {
-                if (ProcessingInfo.PermaSpawnGroups.TryGetValue(MapInstanceId, out var instance) && !instance.ContainsKey(mMapController.Id))
+                // Can optionally get rid of all NPCs not belonging to this new group
+                if (reset)
                 {
-                    instance.Add(mMapController.Id, NpcSpawnGroup);
+                    DespawnNpcs();
                 }
-                else
+                if (group >= 0)
                 {
-                    var savedSpawnGroup = new Dictionary<Guid, int>();
-                    savedSpawnGroup.Add(mMapController.Id, NpcSpawnGroup);
-                    ProcessingInfo.PermaSpawnGroups.Add(MapInstanceId, savedSpawnGroup);
+                    NpcSpawnGroup = group;
                 }
+                if (instancePermanent)
+                {
+                    if (ProcessingInfo.PermaSpawnGroups.TryGetValue(MapInstanceId, out var instanceSpawnGroups) && !instanceSpawnGroups.ContainsKey(mMapController.Id))
+                    {
+                        instanceSpawnGroups[mMapController.Id] = NpcSpawnGroup;
+                    }
+                    else
+                    {
+                        var savedSpawnGroup = new Dictionary<Guid, int>();
+                        savedSpawnGroup[mMapController.Id] = NpcSpawnGroup;
+                        ProcessingInfo.PermaSpawnGroups[MapInstanceId] = savedSpawnGroup;
+                    }
+                }
+                // Spawn the NPCs that belong to the new group
+                SpawnMapNpcs();
             }
-            // Spawn the NPCs that belong to the new group
-            SpawnMapNpcs();
         }
         
         private void ProcessResourceRespawns()
