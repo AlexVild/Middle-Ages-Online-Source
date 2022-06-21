@@ -323,6 +323,11 @@ namespace Intersect.Server.Entities.Events
             {
                 return;
             }
+            
+            if (Trigger == EventTrigger.EventCollide && MapController.TryGetInstanceFromMap(Map.Id, MapInstanceId, out var instance))
+            {
+                HandleEventCollision(instance);
+            }
 
             if (MovementType == EventMovementType.MoveRoute && MoveRoute != null)
             {
@@ -364,14 +369,47 @@ namespace Intersect.Server.Entities.Events
         {
             base.Move(moveDir, forPlayer, doNotUpdate, correction);
 
-            if (Trigger == EventTrigger.PlayerCollide && Passable && MapController.TryGetInstanceFromMap(Map.Id, MapInstanceId, out var instance))
+            if (!MapController.TryGetInstanceFromMap(Map.Id, MapInstanceId, out var instance))
             {
-                var players = instance.GetPlayers();
+                return;
+            }
+
+            var players = instance.GetPlayers();
+            if (Trigger == EventTrigger.PlayerCollide && Passable)
+            {   
                 foreach (var player in players)
                 {
                     if (player.X == X && player.Y == Y && player.Z == Z)
                     {
                         player.HandleEventCollision(this.MyEventIndex, mPageNum);
+                    }
+                }
+            }
+            if (Trigger == EventTrigger.EventCollide && GlobalClone != null)
+            {
+                HandleEventCollision(instance);
+            }
+        }
+
+        /// <summary>
+        /// Checks for two global events colliding if this current event has the "Event Collision" trigger, and fires to relevant players
+        /// </summary>
+        /// <param name="instance">The <see cref="MapInstance"/>belonging to this event</param>
+        private void HandleEventCollision(MapInstance instance)
+        {
+            var players = instance.GetPlayers(true);
+            var collidingEvents = instance.GetGlobalEventInstances()
+                    .FindAll(evt => evt.Id != MyEventIndex.Id && evt.GlobalPageInstance[evt.PageIndex].X == X && evt.GlobalPageInstance[evt.PageIndex].Y == Y)
+                    .ToArray();
+
+            foreach (var globalEvent in collidingEvents)
+            {
+                foreach (var player in players)
+                {
+                    player.HandleEventCollision(MyEventIndex, mPageNum);
+                    if (MyPage.OnePlayer)
+                    {
+                        return;
                     }
                 }
             }

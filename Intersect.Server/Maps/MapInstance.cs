@@ -1106,6 +1106,11 @@ namespace Intersect.Server.Maps
             GlobalEventInstances.Clear();
         }
 
+        public List<Event> GetGlobalEventInstances()
+        {
+            return GlobalEventInstances.Values.ToList();
+        }
+
         public Event GetGlobalEventInstance(EventBase baseEvent)
         {
             if (GlobalEventInstances.ContainsKey(baseEvent))

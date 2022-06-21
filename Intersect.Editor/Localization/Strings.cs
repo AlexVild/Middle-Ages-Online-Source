@@ -2867,6 +2867,7 @@ Tick timer saved in server config.json.";
                 {1, @"Player Collide"},
                 {2, @"Autorun"},
                 {3, "Player Bump"},
+                {4, "Global Event Collide"},
             };
 
             public static LocalizedString walkinganim = @"Walking Anim";

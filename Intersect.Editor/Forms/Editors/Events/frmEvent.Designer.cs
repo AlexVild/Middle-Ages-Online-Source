@@ -253,6 +253,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.btnTabsRight = new DarkUI.Controls.DarkButton();
             this.btnTabsLeft = new DarkUI.Controls.DarkButton();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.chkKillAfterOne = new DarkUI.Controls.DarkCheckBox();
             this.grpEntityOptions.SuspendLayout();
             this.grpQuestAnimation.SuspendLayout();
             this.grpExtra.SuspendLayout();
@@ -381,6 +382,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             // 
             this.grpExtra.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpExtra.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpExtra.Controls.Add(this.chkKillAfterOne);
             this.grpExtra.Controls.Add(this.chkInteractionFreeze);
             this.grpExtra.Controls.Add(this.chkWalkingAnimation);
             this.grpExtra.Controls.Add(this.chkDirectionFix);
@@ -1536,6 +1538,16 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.panel1.Size = new System.Drawing.Size(811, 574);
             this.panel1.TabIndex = 23;
             // 
+            // chkKillAfterOne
+            // 
+            this.chkKillAfterOne.AutoSize = true;
+            this.chkKillAfterOne.Location = new System.Drawing.Point(125, 41);
+            this.chkKillAfterOne.Name = "chkKillAfterOne";
+            this.chkKillAfterOne.Size = new System.Drawing.Size(78, 17);
+            this.chkKillAfterOne.TabIndex = 7;
+            this.chkKillAfterOne.Text = "One Player";
+            this.chkKillAfterOne.CheckedChanged += new System.EventHandler(this.chkKillAfterOne_CheckedChanged);
+            // 
             // FrmEvent
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1676,5 +1688,6 @@ namespace Intersect.Editor.Forms.Editors.Events
         private DarkNumericUpDown nudRecordNumber;
         private Label lblRecordItem;
         private DarkComboBox cmbRecordItem;
+        private DarkCheckBox chkKillAfterOne;
     }
 }

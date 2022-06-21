@@ -1107,6 +1107,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             chkHideName.Checked = Convert.ToBoolean(CurrentPage.HideName);
             chkDisableInspector.Checked = Convert.ToBoolean(CurrentPage.DisablePreview);
             chkDirectionFix.Checked = Convert.ToBoolean(CurrentPage.DirectionFix);
+            chkKillAfterOne.Checked = Convert.ToBoolean(CurrentPage.OnePlayer);
             chkWalkingAnimation.Checked = Convert.ToBoolean(CurrentPage.WalkingAnimation);
             chkInteractionFreeze.Checked = Convert.ToBoolean(CurrentPage.InteractionFreeze);
             txtDesc.Text = CurrentPage.Description;
@@ -2115,6 +2116,11 @@ namespace Intersect.Editor.Forms.Editors.Events
                     CurrentPage.TriggerId = CraftBase.IdFromList(cmbRecordItem.SelectedIndex);
                 }
             }
+        }
+
+        private void chkKillAfterOne_CheckedChanged(object sender, EventArgs e)
+        {
+            CurrentPage.OnePlayer = chkKillAfterOne.Checked;
         }
     }
 
