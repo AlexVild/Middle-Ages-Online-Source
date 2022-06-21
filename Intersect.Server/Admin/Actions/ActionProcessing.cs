@@ -270,7 +270,8 @@ namespace Intersect.Server.Admin.Actions
             if (target != null)
             {
                 if (TargetAccessIsHigher(client, target)) return;
-                player.ForceInstanceChangeWarp(target.MapId, (byte) target.X, (byte) target.Y, target.MapInstanceId, target.InstanceType);
+                var forceInstanceChange = target.InstanceType != player.InstanceType;
+                player.AdminWarp(target.MapId, (byte) target.X, (byte) target.Y, target.MapInstanceId, target.InstanceType, forceInstanceChange);
                 PacketSender.SendChatMsg(player, Strings.Player.warpedto.ToString(target.Name), Enums.ChatMessageType.Admin);
                 PacketSender.SendChatMsg(target, Strings.Player.warpedtoyou.ToString(player.Name), Enums.ChatMessageType.Notice);
             }
@@ -299,7 +300,8 @@ namespace Intersect.Server.Admin.Actions
             if (target != null)
             {
                 if (TargetAccessIsHigher(client, target)) return;
-                target.ForceInstanceChangeWarp(player.MapId, (byte) player.X, (byte) player.Y, player.MapInstanceId, player.InstanceType);
+                var forceInstanceChange = target.InstanceType != player.InstanceType;
+                target.AdminWarp(player.MapId, (byte) player.X, (byte) player.Y, player.MapInstanceId, player.InstanceType, forceInstanceChange);
                 PacketSender.SendChatMsg(player, Strings.Player.haswarpedto.ToString(target.Name), Enums.ChatMessageType.Admin, player.Name);
                 PacketSender.SendChatMsg(target, Strings.Player.beenwarpedto.ToString(player.Name), Enums.ChatMessageType.Notice, player.Name);
             }

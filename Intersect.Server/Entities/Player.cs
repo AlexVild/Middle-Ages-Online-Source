@@ -1931,7 +1931,7 @@ namespace Intersect.Server.Entities
             Warp(newMapId, newX, newY, (byte) Directions.Up, adminWarp, 0, false);
         }
 
-        public void ForceInstanceChangeWarp(Guid newMapId, float newX, float newY, Guid newMapInstanceId, MapInstanceType instanceType, bool adminWarp = false)
+        public void AdminWarp(Guid newMapId, float newX, float newY, Guid newMapInstanceId, MapInstanceType instanceType, bool force)
         {
             PreviousMapInstanceId = MapInstanceId;
             PreviousMapInstanceType = InstanceType;
@@ -1948,7 +1948,7 @@ namespace Intersect.Server.Entities
             {
                 PacketSender.SendChatMsg(this, Strings.Player.instanceupdate.ToString(PreviousMapInstanceId.ToString(), MapInstanceId.ToString()), ChatMessageType.Admin, CustomColors.Alerts.Info);
             }
-            Warp(newMapId, newX, newY, (byte)Directions.Up, adminWarp, 0, false, false, MapInstanceType.NoChange, false, true);
+            Warp(newMapId, newX, newY, (byte)Directions.Up, forceInstanceChange: force);
         }
 
         public override void Warp(
@@ -7506,7 +7506,7 @@ namespace Intersect.Server.Entities
 
             if (eventInstance != null)
             {
-                if (eventInstance.PageInstance.Trigger != EventTrigger.PlayerCollide)
+                if (eventInstance.PageInstance.Trigger != EventTrigger.PlayerCollide && eventInstance.PageInstance.Trigger != EventTrigger.EventCollide)
                 {
                     return;
                 }
