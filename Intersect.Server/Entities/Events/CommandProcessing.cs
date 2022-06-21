@@ -2203,7 +2203,7 @@ namespace Intersect.Server.Entities.Events
             }
             else if (command.VariableType == VariableTypes.InstanceVariable && changed && MapController.TryGetInstanceFromMap(player.MapId, player.MapInstanceId, out var mapInstance))
             {
-                MapInstance.SetInstanceVariable(command.VariableId, value, mapInstance.Id);
+                MapInstance.SetInstanceVariable(command.VariableId, value, mapInstance.MapInstanceId);
                 Player.StartCommonEventsWithTriggerForAllOnInstance(Enums.CommonEventTrigger.InstanceVariableChange, player.MapInstanceId, "", command.VariableId.ToString());
             }
         }
@@ -2278,7 +2278,7 @@ namespace Intersect.Server.Entities.Events
             }
             else if (command.VariableType == VariableTypes.InstanceVariable && changed && MapController.TryGetInstanceFromMap(player.MapId, player.MapInstanceId, out var mapInstance))
             {
-                MapInstance.SetInstanceVariable(command.VariableId, value, mapInstance.Id);
+                MapInstance.SetInstanceVariable(command.VariableId, value, mapInstance.MapInstanceId);
                 Player.StartCommonEventsWithTriggerForAllOnInstance(Enums.CommonEventTrigger.InstanceVariableChange, player.MapInstanceId, "", command.VariableId.ToString());
             }
         }

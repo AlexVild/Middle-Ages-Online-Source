@@ -92,5 +92,21 @@ namespace Intersect.Server.Core
                 }
             });
         }
+
+        public static void AddInstanceVariable(Guid instanceVarId)
+        {
+            foreach(var instance in ActiveMapInstanceIds)
+            {
+                if (InstanceVariables.ContainsKey(instance) && !InstanceVariables[instance].ContainsKey(instanceVarId))
+                {
+                    VariableValue copyValue = new VariableValue();
+                    var instVar = (InstanceVariableBase)InstanceVariableBase.Lookup[instanceVarId];
+                    copyValue.SetValue(instVar.DefaultValue.Value);
+                    copyValue.Type = instVar.Type;
+                    InstanceVariables[instance][instanceVarId] = copyValue;
+                }
+            }
+            
+        }
     }
 }
