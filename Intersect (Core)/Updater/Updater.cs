@@ -674,7 +674,7 @@ namespace Intersect.Updater
                 order++;
                 len = len / 1024;
             }
-            return String.Format("{0:0.##} {1} Left", len, sizes[order]);
+            return String.Format("{0:0.##} {1}", len, sizes[order]);
         }
 
         public bool CheckUpdaterContentLoaded()
