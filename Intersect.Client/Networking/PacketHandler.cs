@@ -1687,7 +1687,7 @@ namespace Intersect.Client.Networking
                     var lookup = type.GetLookup();
                     if (deleted)
                     {
-                        lookup.Get(id).Delete();
+                        lookup.Get(id)?.Delete();
                     }
                     else
                     {
