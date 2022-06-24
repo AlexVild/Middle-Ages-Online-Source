@@ -132,7 +132,7 @@ namespace Intersect.Server.Database
                 {
                     if (itm.ItemId != Guid.Empty && ItemBase.Get(itm.ItemId) == null)
                     {
-                        itm.Set(new Item());
+                        itm.Set(Item.None);
                     }
                 }
             }
