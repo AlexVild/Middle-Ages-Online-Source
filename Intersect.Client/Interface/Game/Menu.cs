@@ -301,6 +301,11 @@ namespace Intersect.Client.Interface.Game
             return mInventoryWindow;
         }
 
+        public bool InventoryWindowIsVisible()
+        {
+            return mInventoryWindow.IsVisible();
+        }
+
         public void TogglePartyWindow()
         {
             if (mPartyWindow.IsVisible())

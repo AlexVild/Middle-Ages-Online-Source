@@ -887,6 +887,17 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             if (!string.IsNullOrWhiteSpace(mValueLabel))
             {
                 data.Add(new Tuple<string, string>(mValueLabel, string.Empty));
+                if (!mValueLabel.Equals(Strings.Shop.wontbuy.ToString()))
+                {
+                    if (mItem.Stackable)
+                    {
+                        data.Add(new Tuple<string, string>(Strings.Shop.QuickSellAll, string.Empty));
+                    }
+                    else
+                    {
+                        data.Add(new Tuple<string, string>(Strings.Shop.QuickSell, string.Empty));
+                    }
+                }
             }
 
             // Do we have any data to display? If so, generate the element and add the data to it.

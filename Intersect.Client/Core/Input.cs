@@ -272,6 +272,8 @@ namespace Intersect.Client.Core
                                         Globals.Me?.TryFaceTarget(false, true);
 
                                         break;
+                                    default:
+                                        break;
                                 }
 
                                 break;
@@ -442,7 +444,9 @@ namespace Intersect.Client.Core
                 return;
             }
 
-            if (Globals.InputManager.KeyDown(Keys.Shift) != true)
+
+            var inventoryOpen = Interface.Interface.GameUi?.GameMenu?.InventoryWindowIsVisible() ?? false;
+            if (Globals.InputManager.KeyDown(Keys.Shift) != true || inventoryOpen)
             {
                 return;
             }

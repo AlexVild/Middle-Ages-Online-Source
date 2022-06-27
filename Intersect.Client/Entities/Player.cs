@@ -383,6 +383,12 @@ namespace Intersect.Client.Entities
                         );
                     } else
                     {
+                        // Quick drop
+                        if (Globals.InputManager.KeyDown(Keys.Shift))
+                        {
+                            PacketSender.SendDropItem(index, Inventory[index].Quantity);
+                            return;
+                        }
                         var iBox = new InputBox(
                             Strings.Inventory.dropitem,
                             Strings.Inventory.dropitemprompt.ToString(ItemBase.Get(Inventory[index].ItemId).Name), true,
@@ -401,6 +407,12 @@ namespace Intersect.Client.Entities
                         );
                     } else
                     {
+                        // Quick drop
+                        if (Globals.InputManager.KeyDown(Keys.Shift))
+                        {
+                            PacketSender.SendDropItem(index, 1);
+                            return;
+                        }
                         var iBox = new InputBox(
                             Strings.Inventory.dropitem,
                             Strings.Inventory.dropprompt.ToString(ItemBase.Get(Inventory[index].ItemId).Name), true,
@@ -583,6 +595,13 @@ namespace Intersect.Client.Entities
                     
                     if (Inventory[index].Quantity > 1)
                     {
+                        // Quick sell the whole stack if the gui modifier key is pressed
+                        if (Globals.InputManager.KeyDown(Keys.Shift)) 
+                        {
+                            PacketSender.SendSellItem(index, Inventory[index].Quantity);
+                            return;
+                        }
+                        
                         var iBox = new InputBox(
                             Strings.Shop.sellitem,
                             Strings.Shop.sellitemprompt.ToString(ItemBase.Get(Inventory[index].ItemId).Name), true,
@@ -591,6 +610,13 @@ namespace Intersect.Client.Entities
                     }
                     else
                     {
+                        // Quick sell the item
+                        if (Globals.InputManager.KeyDown(Keys.Shift))
+                        {
+                            PacketSender.SendSellItem(index, 1);
+                            return;
+                        }
+                        
                         var iBox = new InputBox(
                             Strings.Shop.sellitem,
                             Strings.Shop.sellprompt.ToString(ItemBase.Get(Inventory[index].ItemId).Name), true,
@@ -683,7 +709,7 @@ namespace Intersect.Client.Entities
                     var iBox = new InputBox(
                         Strings.Bank.withdrawitem,
                         Strings.Bank.withdrawitemprompt.ToString(ItemBase.Get(Globals.Bank[index].ItemId).Name), true,
-                        InputBox.InputType.NumericInput, WithdrawItemInputBoxOkay, null, index
+                        InputBox.InputType.NumericInput, WithdrawItemInputBoxOkay, null, index, Globals.Bank[index].Quantity
                     );
                 }
                 else

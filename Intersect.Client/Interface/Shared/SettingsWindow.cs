@@ -310,6 +310,10 @@ namespace Intersect.Client.Interface.Shared
                 var name = Enum.GetName(typeof(Control), control)?.ToLower();
                 
                 var label = new Label(mKeybindingSettingsContainer, $"Control{Enum.GetName(typeof(Control), control)}Label");
+                if (!Strings.Controls.controldict.ContainsKey(name))
+                {
+                    continue;
+                }
                 label.Text = Strings.Controls.controldict[name];
                 label.AutoSizeToContents = true;
                 label.Font = defaultFont;
@@ -439,6 +443,11 @@ namespace Intersect.Client.Interface.Shared
                 // KeybindingBtns.
                 foreach (Control control in Enum.GetValues(typeof(Control)))
                 {
+                    if (!mKeybindingBtns.ContainsKey(control))
+                    {
+                        continue;
+                    }
+
                     mKeybindingBtns[control][0].Text =
                         Strings.Keys.keydict[
                             Enum.GetName(typeof(Keys), mKeybindingEditControls.ControlMapping[control].Key1).ToLower()];

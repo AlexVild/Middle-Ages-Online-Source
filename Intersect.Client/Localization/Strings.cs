@@ -1708,6 +1708,12 @@ namespace Intersect.Client.Localization
 
             public static LocalizedString costs = @"Costs {00} {01}(s)";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString QuickSell = "(Shift + Right Click - quick sell)";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString QuickSellAll = "(Shift + Right Click - quick sell all)";
+
             public static LocalizedString sellitem = @"Sell Item";
 
             public static LocalizedString sellitemprompt = @"How many/much {00} would you like to sell?";

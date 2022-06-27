@@ -72,7 +72,7 @@
         
         TurnCounterClockwise,
 
-        FaceTarget
+        FaceTarget,
     }
 
 }
