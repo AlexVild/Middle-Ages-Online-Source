@@ -53,6 +53,8 @@ namespace Intersect.Editor.General
 
         public static int SelectedMapNpc = -1;
 
+        public static int SelectedSpawnGroup = 0;
+
         public static TilesetBase CurrentTileset = null;
 
         public static int CurrentTool = (int) EditingTool.Pen;
@@ -144,8 +146,6 @@ namespace Intersect.Editor.General
 
         //Selection Moving Copying and Pasting
         public static int SelectionType = (int) SelectionTypes.AllLayers;
-
-        public static Core.Sys System = new Core.Sys();
 
         public static int TileDragX = 0;
 

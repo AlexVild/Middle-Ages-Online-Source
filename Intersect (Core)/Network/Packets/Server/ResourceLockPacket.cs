@@ -10,12 +10,20 @@ namespace Intersect.Network.Packets.Server
         {
         }
 
-        public ResourceLockPacket(bool resourceLock)
+        public ResourceLockPacket(bool resourceLock, double harvestBonus, int harvestsRemaining)
         {
             ResourceLock = resourceLock;
+            HarvestBonus = harvestBonus;
+            HarvestsRemaining = harvestsRemaining;
         }
 
         [Key(0)]
         public bool ResourceLock { get; set; }
+
+        [Key(1)]
+        public double HarvestBonus { get; set; }
+
+        [Key(2)]
+        public int HarvestsRemaining { get; set; }
     }
 }

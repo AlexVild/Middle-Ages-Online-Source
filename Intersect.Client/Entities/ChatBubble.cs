@@ -1,10 +1,11 @@
 ﻿using System;
 
 using Intersect.Client.Core;
-using Intersect.Client.Framework.File_Management;
 using Intersect.Client.Framework.GenericClasses;
 using Intersect.Client.Framework.Graphics;
 using Intersect.Client.General;
+using Intersect.Utilities;
+using static Intersect.Client.Framework.File_Management.GameContentManager;
 
 namespace Intersect.Client.Entities
 {
@@ -39,13 +40,13 @@ namespace Intersect.Client.Entities
 
             mOwner = owner;
             mSourceText = text;
-            mRenderTimer = Globals.System.GetTimeMs() + 5000;
-            mBubbleTex = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Misc, "chatbubble.png");
+            mRenderTimer = Timing.Global.Milliseconds + 5000;
+            mBubbleTex = Globals.ContentManager.GetTexture(TextureType.Misc, "chatbubble.png");
         }
 
         public bool Update()
         {
-            if (mRenderTimer < Globals.System.GetTimeMs())
+            if (mRenderTimer < Timing.Global.Milliseconds)
             {
                 return false;
             }

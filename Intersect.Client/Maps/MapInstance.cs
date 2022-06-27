@@ -99,6 +99,9 @@ namespace Intersect.Client.Maps
 
         private Dictionary<string, GameTileBuffer[][]> mTileBuffers = new Dictionary<string, GameTileBuffer[][]>(); //[Layer][Autotile Frame][Buffer Index]
 
+        // Traps
+        private Dictionary<Guid, MapTrapInstance> mMapTraps = new Dictionary<Guid, MapTrapInstance>();
+
         //Initialization
         public MapInstance(Guid id) : base(id)
         {
@@ -187,7 +190,7 @@ namespace Intersect.Client.Maps
         {
             if (isLocal)
             {
-                mLastUpdateTime = Globals.System.GetTimeMs() + 10000;
+                mLastUpdateTime = Timing.Global.Milliseconds + 10000;
                 UpdateMapAttributes();
                 if (BackgroundSound == null && !TextUtils.IsNone(Sound))
                 {
@@ -226,6 +229,27 @@ namespace Intersect.Client.Maps
                     critter.Value.Update();
                 }
 
+                foreach (var trap in mMapTraps.Values)
+                {
+                    if (trap.TrapAnimation == null)
+                    {
+                        continue;
+                    }
+
+                    // Always display traps on safe zones.
+                    if (ZoneType != MapZones.Safe)
+                    {
+                        var isNpc = !(trap.Owner is Player);
+                        var inGuild = ((Player)trap.Owner).Guild == Globals.Me.Guild;
+                        var inParty = Globals.Me.Party.FindIndex(member => member.Id == ((Player)trap.Owner).Id) >= 0;
+
+                        // Hide trap if it's an unfriendly player's
+                        trap.TrapAnimation.Hidden = !isNpc && !inGuild && !inParty;
+                    }
+
+                    trap.TrapAnimation.Update();
+                }
+
                 for (var i = 0; i < LocalEntitiesToDispose.Count; i++)
                 {
                     LocalEntities.Remove(LocalEntitiesToDispose[i]);
@@ -235,12 +259,13 @@ namespace Intersect.Client.Maps
             }
             else
             {
-                if (Globals.System.GetTimeMs() > mLastUpdateTime)
+                if (Timing.Global.Milliseconds > mLastUpdateTime)
                 {
                     Dispose();
                 }
 
                 HideActiveAnimations();
+                DisposeTraps();
             }
         }
 
@@ -594,12 +619,12 @@ namespace Intersect.Client.Maps
         }
 
         //Animations
-        public void AddTileAnimation(Guid animId, int tileX, int tileY, int dir = -1, Entity owner = null)
+        public MapAnimation AddTileAnimation(Guid animId, int tileX, int tileY, int dir = -1, Entity owner = null)
         {
             var animBase = AnimationBase.Get(animId);
             if (animBase == null)
             {
-                return;
+                return default;
             }
 
             var anim = new MapAnimation(animBase, tileX, tileY, dir, owner);
@@ -608,6 +633,8 @@ namespace Intersect.Client.Maps
                 GetX() + tileX * Options.TileWidth + Options.TileWidth / 2,
                 GetY() + tileY * Options.TileHeight + Options.TileHeight / 2, tileX, tileY, Id, dir
             );
+
+            return anim;
         }
 
         private void HideActiveAnimations()
@@ -991,8 +1018,8 @@ namespace Intersect.Client.Maps
                 return;
             }
 
-            float ecTime = Globals.System.GetTimeMs() - mFogUpdateTime;
-            mFogUpdateTime = Globals.System.GetTimeMs();
+            float ecTime = Timing.Global.Milliseconds - mFogUpdateTime;
+            mFogUpdateTime = Timing.Global.Milliseconds;
             if (Id == Globals.Me.CurrentMap)
             {
                 if (mCurFogIntensity != 1)
@@ -1104,7 +1131,7 @@ namespace Intersect.Client.Maps
 
             if ((WeatherXSpeed != 0 || WeatherYSpeed != 0) && Globals.Me.MapInstance == this)
             {
-                if (Globals.System.GetTimeMs() > _weatherParticleSpawnTime)
+                if (Timing.Global.Milliseconds > _weatherParticleSpawnTime)
                 {
                     _weatherParticles.Add(new WeatherParticle(_removeParticles, WeatherXSpeed, WeatherYSpeed, anim));
                     var spawnTime = 25 + (int) (475 * (float) (1f - (float) (WeatherIntensity / 100f)));
@@ -1112,7 +1139,7 @@ namespace Intersect.Client.Maps
                                        (480000f /
                                         (Graphics.Renderer.GetScreenWidth() * Graphics.Renderer.GetScreenHeight())));
 
-                    _weatherParticleSpawnTime = Globals.System.GetTimeMs() + spawnTime;
+                    _weatherParticleSpawnTime = Timing.Global.Milliseconds + spawnTime;
                 }
             }
 
@@ -1148,8 +1175,8 @@ namespace Intersect.Client.Maps
 
         public void DrawPanorama()
         {
-            float ecTime = Globals.System.GetTimeMs() - mPanoramaUpdateTime;
-            mPanoramaUpdateTime = Globals.System.GetTimeMs();
+            float ecTime = Timing.Global.Milliseconds - mPanoramaUpdateTime;
+            mPanoramaUpdateTime = Timing.Global.Milliseconds;
             if (Id == Globals.Me.CurrentMap)
             {
                 if (mPanoramaIntensity != 1)
@@ -1182,8 +1209,8 @@ namespace Intersect.Client.Maps
 
         public void DrawOverlayGraphic()
         {
-            float ecTime = Globals.System.GetTimeMs() - mOverlayUpdateTime;
-            mOverlayUpdateTime = Globals.System.GetTimeMs();
+            float ecTime = Timing.Global.Milliseconds - mOverlayUpdateTime;
+            mOverlayUpdateTime = Timing.Global.Milliseconds;
             if (Id == Globals.Me.CurrentMap)
             {
                 if (mOverlayIntensity != 1)
@@ -1274,7 +1301,7 @@ namespace Intersect.Client.Maps
                     ActionMsgs[n].Y * Options.TileHeight -
                     Options.TileHeight *
                     2 *
-                    (Options.ActionMessageTime - (ActionMsgs[n].TransmittionTimer - Globals.System.GetTimeMs())) /
+                    (Options.ActionMessageTime - (ActionMsgs[n].TransmittionTimer - Timing.Global.Milliseconds)) /
                     Options.ActionMessageTime + ActionMsgs[n].YOffset
                 );
 
@@ -1282,7 +1309,7 @@ namespace Intersect.Client.Maps
                 var textWidth = Graphics.Renderer.MeasureText(ActionMsgs[n].Msg, Graphics.ActionMsgFont, 1).X;
 
                 Color fadingColor = ActionMsgs[n].Clr;
-                double alphaRatio = Math.Abs((float) (Globals.System.GetTimeMs() - ActionMsgs[n].TransmittionTimer) / (float) Options.ActionMessageTime);
+                double alphaRatio = Math.Abs((float) (Timing.Global.Milliseconds - ActionMsgs[n].TransmittionTimer) / (float) Options.ActionMessageTime);
                 alphaRatio = MathHelper.Clamp(alphaRatio, 0.0f, 1.0f);
                 fadingColor.A = (byte) (255 * alphaRatio);
 
@@ -1314,6 +1341,45 @@ namespace Intersect.Client.Maps
             }
         }
 
+        public void AddTrap(Guid trapId, Guid animationId, Guid ownerId, byte x, byte y)
+        {
+            // If we already have this trap, ignore
+            if (mMapTraps.ContainsKey(trapId))
+            {
+                return;
+            }
+            if (!Globals.Entities.TryGetValue(ownerId, out var owner))
+            {
+                return;
+            }
+            var anim = AnimationBase.Get(animationId);
+            if (anim == null)
+            {
+                return;
+            }
+
+            MapTrapInstance mapTrapInstance;
+
+            // Else, add the trap's animation
+            mapTrapInstance.TrapAnimation = new Animation(anim, true);
+            mapTrapInstance.TrapAnimation.SetPosition(
+                GetX() + x * Options.TileWidth + Options.TileWidth / 2,
+                GetY() + y * Options.TileHeight + Options.TileHeight / 2, x, y, Id, 0
+            );
+            mapTrapInstance.Owner = owner;
+
+            mMapTraps.Add(trapId, mapTrapInstance);
+        }
+
+        public void RemoveTrap(Guid trapId)
+        {
+            if (mMapTraps.TryGetValue(trapId, out var trapInstance))
+            {
+                trapInstance.TrapAnimation.Dispose();
+            }
+            mMapTraps.Remove(trapId);
+        }
+
         public new static MapInstance Get(Guid id)
         {
             return MapInstance.Lookup.Get<MapInstance>(id);
@@ -1325,6 +1391,15 @@ namespace Intersect.Client.Maps
             {
                 Lookup.Delete(this);
             }
+        }
+
+        public void DisposeTraps()
+        {
+            foreach (var trap in mMapTraps.Values)
+            {
+                trap.TrapAnimation.Dispose();
+            }
+            mMapTraps.Clear();
         }
 
         //Dispose
@@ -1360,6 +1435,7 @@ namespace Intersect.Client.Maps
             ClearWeather();
             ClearMapAttributes();
             ClearAttributeSounds();
+            DisposeTraps();
             DestroyVBOs();
             Delete();
         }

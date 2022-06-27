@@ -94,7 +94,7 @@ namespace Intersect.Utilities
         /// <summary>
         /// Gets the real-world unix time in milliseconds.
         /// </summary>
-        public long MillisecondsUTC
+        public long MillisecondsUtc
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)] get => TicksUTC / TimeSpan.TicksPerMillisecond;
         }

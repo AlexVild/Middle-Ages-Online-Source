@@ -1,5 +1,6 @@
 ﻿using MessagePack;
 using System;
+using System.Collections.Generic;
 
 namespace Intersect.Network.Packets.Server
 {
@@ -66,6 +67,9 @@ namespace Intersect.Network.Packets.Server
 
         [Key(10)]
         public MapItemsPacket MapItems { get; set; }
+
+        [Key(11)]
+        public List<MapTrapPacket> MapTrapPackets { get; set; }
 
     }
 

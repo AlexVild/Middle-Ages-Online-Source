@@ -270,7 +270,8 @@ namespace Intersect.Server.Admin.Actions
             if (target != null)
             {
                 if (TargetAccessIsHigher(client, target)) return;
-                player.Warp(target.MapId, (byte) target.X, (byte) target.Y);
+                var forceInstanceChange = target.InstanceType != player.InstanceType;
+                player.AdminWarp(target.MapId, (byte) target.X, (byte) target.Y, target.MapInstanceId, target.InstanceType, forceInstanceChange);
                 PacketSender.SendChatMsg(player, Strings.Player.warpedto.ToString(target.Name), Enums.ChatMessageType.Admin);
                 PacketSender.SendChatMsg(target, Strings.Player.warpedtoyou.ToString(player.Name), Enums.ChatMessageType.Notice);
             }
@@ -299,9 +300,29 @@ namespace Intersect.Server.Admin.Actions
             if (target != null)
             {
                 if (TargetAccessIsHigher(client, target)) return;
-                target.Warp(player.MapId, (byte) player.X, (byte) player.Y);
+                var forceInstanceChange = target.InstanceType != player.InstanceType;
+                target.AdminWarp(player.MapId, (byte) player.X, (byte) player.Y, player.MapInstanceId, player.InstanceType, forceInstanceChange);
                 PacketSender.SendChatMsg(player, Strings.Player.haswarpedto.ToString(target.Name), Enums.ChatMessageType.Admin, player.Name);
                 PacketSender.SendChatMsg(target, Strings.Player.beenwarpedto.ToString(player.Name), Enums.ChatMessageType.Notice, player.Name);
+            }
+            else
+            {
+                PacketSender.SendChatMsg(player, Strings.Player.offline, Enums.ChatMessageType.Admin);
+            }
+        }
+
+        //ReturnToOverworld
+        public static void ProcessAction(Client client, Player player, ReturnToOverworldAction action)
+        {
+            var target = Player.FindOnline(action.PlayerName);
+            if (target != null)
+            {
+                target.WarpToLastOverworldLocation(false);
+                PacketSender.SendChatMsg(target, Strings.Player.overworldreturned.ToString(target.Name), Enums.ChatMessageType.Notice, player.Name);
+                
+                if (player == null || target.Name == player.Name) return;
+
+                PacketSender.SendChatMsg(player, Strings.Player.overworldreturnadmin.ToString(target.Name), Enums.ChatMessageType.Admin, player.Name);
             }
             else
             {

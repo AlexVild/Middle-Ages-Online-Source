@@ -278,6 +278,8 @@ namespace Intersect.Client.Localization
             public static LocalizedString warp2me = @"Warp To Me";
 
             public static LocalizedString warpme2 = @"Warp Me To";
+            
+            public static LocalizedString overworldreturn = @"Leave Instance";
 
         }
 
@@ -626,11 +628,7 @@ namespace Intersect.Client.Localization
                 {"facetarget", @"Face Target:"}
             };
 
-            public static LocalizedString edit = @"Edit Controls";
-
             public static LocalizedString listening = @"Listening";
-
-            public static LocalizedString title = @"Controls";
 
         }
 
@@ -992,6 +990,9 @@ namespace Intersect.Client.Localization
         public struct ItemDescription
         {
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString BackstabMultiplier = @"Backstab Multiplier:";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString BaseDamageType = @"Damage Type:";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -1084,6 +1085,8 @@ namespace Intersect.Client.Localization
                 {3, @"Tenacity:"},
                 {4, @"Luck:"},
                 {5, @"Bonus Experience:"},
+                {6, @"Affinity:"},
+                {7, @"Critical Bonus:"},
             };
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -1105,11 +1108,15 @@ namespace Intersect.Client.Localization
             public static Dictionary<int, LocalizedString> Rarity = new Dictionary<int, LocalizedString>
             {
                 {0, @"None"},
-                {1, @"Common"},
-                {2, @"Uncommon"},
-                {3, @"Rare"},
-                {4, @"Epic"},
-                {5, @"Legendary"},
+                {1, @"Tier 1"},
+                {2, @"Tier 2"},
+                {3, @"Tier 3"},
+                {4, @"Tier 4"},
+                {5, @"Tier 5"},
+                {6, @"Tier 6"},
+                {7, @"Tier 7"},
+                {8, @"Tier 8"},
+                {9, @"Tier 9"},
             };
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -1159,6 +1166,9 @@ namespace Intersect.Client.Localization
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString RestrictionOr = @"OR {00}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString DestroyOnInstance = @"Instance Item";
         }
 
         public struct Keys
@@ -1392,74 +1402,113 @@ namespace Intersect.Client.Localization
 
         public struct MainMenu
         {
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Credits = @"Credits";
 
-            public static LocalizedString credits = @"Credits";
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Exit = @"Exit";
 
-            public static LocalizedString exit = @"Exit";
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Login = @"Login";
 
-            public static LocalizedString login = @"Login";
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Register = @"Register";
 
-            public static LocalizedString options = @"Settings";
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Settings = @"Settings";
 
-            public static LocalizedString optionstooltip = @"";
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString SettingsTooltip = @"";
 
-            public static LocalizedString register = @"Register";
-
-            public static LocalizedString title = @"Main Menu";
-
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Title = @"Main Menu";
         }
 
-        public struct Options
+        public struct Settings
         {
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Apply = @"Apply";
 
-            public static LocalizedString fps30 = @"30";
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString AudioSettingsTab = @"Audio";
 
-            public static LocalizedString fps60 = @"60";
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString AutoCloseWindows = @"Auto-close Windows";
 
-            public static LocalizedString fps90 = @"90";
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Cancel = @"Cancel";
 
-            public static LocalizedString fps120 = @"120";
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Fps120 = @"120";
 
-            public static LocalizedString apply = @"Apply";
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Fps30 = @"30";
 
-            public static LocalizedString back = @"Back";
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Fps60 = @"60";
 
-            public static LocalizedString cancel = @"Cancel";
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Fps90 = @"90";
 
-            public static LocalizedString fullscreen = @"Fullscreen";
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Fullscreen = @"Fullscreen";
 
-            public static LocalizedString AutocloseWindows = @"Auto-close Windows";
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString GameSettingsTab = @"Game";
 
-            public static LocalizedString musicvolume = @"Music Volume: {00}%";
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString KeyBindingSettingsTab = @"Controls";
 
-            public static LocalizedString resolution = @"Resolution:";
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString MusicVolume = @"Music Volume: {00}%";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Resolution = @"Resolution:";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString ResolutionCustom = @"Custom Resolution";
 
-            public static LocalizedString restore = @"Restore Defaults";
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Restore = @"Restore Defaults";
 
-            public static LocalizedString soundvolume = @"Sound Volume: {00}%";
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString SoundVolume = @"Sound Volume: {00}%";
 
-            public static LocalizedString targetfps = @"Target FPS:";
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString TargetFps = @"Target FPS:";
 
-            public static LocalizedString title = @"Options";
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Title = @"Settings";
 
-            public static LocalizedString unlimitedfps = @"No Limit";
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString UnlimitedFps = @"No Limit";
 
-            public static LocalizedString vsync = @"V-Sync";
-            
-            public static LocalizedString taptoturn = @"Tap-to-Turn";
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString VideoSettingsTab = @"Video";
 
-            public static LocalizedString enablescanlines = @"Enable Scanlines";
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Vsync = @"V-Sync";
 
-            public static LocalizedString faceonlock = @"Face Target on Lock";
-            
-            public static LocalizedString leftclicktarget = @"Left Click Target";
-            
-            public static LocalizedString combatflash = @"Combat Screen Flashes";
-            
-            public static LocalizedString combatshake = @"Combat Shake";
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString TapToTurn = @"Tap-to-Turn";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString EnableScanlines = @"Enable Scanlines";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString FaceOnLock = @"Face Target on Lock";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString LeftClickTarget = @"Left Click Target";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString CombatFlash = @"Combat Screen Flashes";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString CombatShake = @"Combat Shake";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Fade = @"Fade Instead of Wipe";
         }
 
         public struct Parties
@@ -1659,6 +1708,12 @@ namespace Intersect.Client.Localization
 
             public static LocalizedString costs = @"Costs {00} {01}(s)";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString QuickSell = "(Shift + Right Click - quick sell)";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString QuickSellAll = "(Shift + Right Click - quick sell all)";
+
             public static LocalizedString sellitem = @"Sell Item";
 
             public static LocalizedString sellitemprompt = @"How many/much {00} would you like to sell?";
@@ -1833,6 +1888,12 @@ namespace Intersect.Client.Localization
                 {10, @"Sleep"},
                 {11, @"On-Hit"},
                 {12, @"Taunt"},
+                {13, @"Swift"},
+                {14, @"Accurate"},
+                {15, @"Haste"},
+                {16, @"Slowed"},
+                {17, @"Confused"},
+                {18, @"Steady"},
             };
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -1880,6 +1941,11 @@ namespace Intersect.Client.Localization
                 {10, @"Makes the target fall asleep"},
                 {11, @"Applies an On Hit effect to the target"},
                 {12, @"Taunts Target"},
+                {13, @"Swiftens Target"},
+                {14, @"Increases Target Crit Chance"},
+                {15, @"Increases target movement speed"},
+                {16, @"Decreases target movement speed"},
+                {17, @"Confuses target"},
             };
 
         }
@@ -1894,7 +1960,8 @@ namespace Intersect.Client.Localization
             public static LocalizedString forgetspellprompt = @"Are you sure you want to forget {00}?";
 
             public static LocalizedString title = @"Spells";
-
+            
+            public static LocalizedString targetneeded = @"You must have a target selected to cast this spell.";
         }
 
         public struct Trading
@@ -1931,19 +1998,23 @@ namespace Intersect.Client.Localization
 
         public struct EscapeMenu
         {
-
-            public static LocalizedString Title = @"Menu";
-
-            public static LocalizedString Options = @"Options";
-
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString CharacterSelect = @"Characters";
 
-            public static LocalizedString Logout = @"Logout";
-
-            public static LocalizedString ExitToDesktop = @"Desktop";
-
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString Close = @"Close";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ExitToDesktop = @"Desktop";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Logout = @"Logout";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Settings = @"Settings";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Title = @"Menu";
         }
 
         public struct Numbers
@@ -1982,10 +2053,31 @@ namespace Intersect.Client.Localization
 
         }
 
+        public struct HarvestBonus
+        {
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Bonus = @"Current Harvest Speed Bonus: {00}%";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Remaining = @"Required harvests until next bonus: {00}";
+        }
+
         public struct GameWindow
         {
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString EntityNameAndLevel = @"{00} [Lv. {01}]";
+        }
+
+        public struct TimerWindow
+        {
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ElapsedMinutes = @"{0:D1}:{1:D2}.{2:D1}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ElapsedHours = @"{0:D1}:{1:D2}:{2:D2}.{3:D1}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ElapsedDays = @"{0:D1}D {1:D2}:{2:D2}";
         }
 
     }

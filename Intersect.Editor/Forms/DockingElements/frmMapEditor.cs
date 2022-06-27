@@ -1056,7 +1056,7 @@ namespace Intersect.Editor.Forms.DockingElements
                                     SaveMap();
                                 }
 
-                                Globals.MainForm.EnterMap(Globals.MapGrid.Grid[x, y].MapId);
+                                Globals.MainForm.EnterMap(Globals.MapGrid.Grid[x, y].MapId, true);
                             }
                             else
                             {
@@ -1117,7 +1117,7 @@ namespace Intersect.Editor.Forms.DockingElements
                             SaveMap();
                         }
 
-                        Globals.MainForm.EnterMap(newMapId);
+                        Globals.MainForm.EnterMap(newMapId, true);
                     }
 
                     return;
@@ -1204,6 +1204,7 @@ namespace Intersect.Editor.Forms.DockingElements
                     {
                         spawn.X = Globals.CurTileX;
                         spawn.Y = Globals.CurTileY;
+                            Globals.MapLayersWindow.SetSpawnGroupValue(spawn.SpawnGroup);
                         mMapChanged = true;
                     }
 

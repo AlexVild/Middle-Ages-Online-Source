@@ -46,7 +46,15 @@ namespace Intersect.Client.Core
                         break;
                     }
 
-                    Fade.FadeIn();
+                    if (Globals.Database.FadeTransitions)
+                    {
+                        Fade.FadeIn();
+                    }
+                    else
+                    {
+                        Wipe.FadeIn();
+                    }
+
                     Globals.GameState = GameStates.Menu;
 
                     return;
@@ -241,7 +249,7 @@ namespace Intersect.Client.Core
                                         break;
 
                                     case Control.OpenSettings:
-                                        Interface.Interface.GameUi?.EscapeMenu?.OpenSettings();
+                                        Interface.Interface.GameUi?.EscapeMenu?.OpenSettingsWindow();
 
                                         break;
 
@@ -263,6 +271,8 @@ namespace Intersect.Client.Core
                                     case Control.FaceTarget:
                                         Globals.Me?.TryFaceTarget(false, true);
 
+                                        break;
+                                    default:
                                         break;
                                 }
 
@@ -434,7 +444,9 @@ namespace Intersect.Client.Core
                 return;
             }
 
-            if (Globals.InputManager.KeyDown(Keys.Shift) != true)
+
+            var inventoryOpen = Interface.Interface.GameUi?.GameMenu?.InventoryWindowIsVisible() ?? false;
+            if (Globals.InputManager.KeyDown(Keys.Shift) != true || inventoryOpen)
             {
                 return;
             }

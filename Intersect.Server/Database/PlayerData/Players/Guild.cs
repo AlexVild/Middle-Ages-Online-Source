@@ -21,6 +21,8 @@ using Intersect.Utilities;
 using Intersect.Server.Localization;
 using Intersect.Server.Database.Logging.Entities;
 using static Intersect.Server.Database.Logging.Entities.GuildHistory;
+using Intersect.Server.Core;
+using Intersect.GameObjects.Timers;
 
 namespace Intersect.Server.Database.PlayerData.Players
 {
@@ -244,6 +246,9 @@ namespace Intersect.Server.Database.PlayerData.Players
                         // Send our new guild list to everyone that's online.
                         UpdateMemberList();
 
+                        // Send this guild's current visible timers to this player
+                        SendGuildTimersTo(player);
+
                         // Send our entity data to nearby players.
                         PacketSender.SendEntityDataToProximity(Player.FindOnline(player.Id));
 
@@ -272,6 +277,8 @@ namespace Intersect.Server.Database.PlayerData.Players
 
                         context.ChangeTracker.DetectChanges();
                         context.SaveChanges();
+
+                        StopGuildTimersFor(player, Id);
 
                         player.Guild = null;
                         player.GuildRank = 0;
@@ -310,7 +317,7 @@ namespace Intersect.Server.Database.PlayerData.Players
             {
                 PacketSender.SendGuild(member);
             }
-            LastUpdateTime = Globals.Timing.Milliseconds;
+            LastUpdateTime = Timing.Global.Milliseconds;
         }
 
         /// <summary>
@@ -484,6 +491,7 @@ namespace Intersect.Server.Database.PlayerData.Players
                             plyr.WarpToLastOverworldLocation(false);
                         }
                     }
+                    StopGuildTimersFor(plyr, guild.Id);
                 }
 
                 foreach (var member in context.Players.Where(p => p.DbGuild.Id == guild.Id))
@@ -500,6 +508,12 @@ namespace Intersect.Server.Database.PlayerData.Players
                 context.SaveChanges();
 
                 LogActivity(guild.Id, initiator, null, GuildActivityType.Disbanded);
+            }
+
+            // Remove dangling timers
+            foreach (var timer in TimerProcessor.ActiveTimers.Where(timer => timer.Descriptor.OwnerType == GameObjects.Timers.TimerOwnerType.Guild && timer.OwnerId == guild.Id).ToArray())
+            {
+                TimerProcessor.RemoveTimer(timer);
             }
         }
 
@@ -679,6 +693,27 @@ namespace Intersect.Server.Database.PlayerData.Players
             return true;
         }
 
+        /// <summary>
+        /// Gets all guild timers that belong to this player's guild and sends timer packets if necessary
+        /// </summary>
+        private void SendGuildTimersTo(Player player)
+        {
+            foreach (var timer in TimerProcessor.ActiveTimers.ToArray().Where(t => t.Descriptor.OwnerType == TimerOwnerType.Guild && t.OwnerId == Id))
+            {
+                timer.SendTimerPacketTo(player);
+            }
+        }
+
+        /// <summary>
+        /// Gets all guild timers that belong to this player's guild and sends timer packets if necessary
+        /// </summary>
+        private static void StopGuildTimersFor(Player player, Guid GuildId)
+        {
+            foreach (var timer in TimerProcessor.ActiveTimers.ToArray().Where(t => t.Descriptor.OwnerType == TimerOwnerType.Guild && t.OwnerId == GuildId))
+            {
+                timer.SendTimerStopPacketTo(player);
+            }
+        }
 
         /// <summary>
         /// Updates the db with this guild state & bank slots

@@ -343,6 +343,11 @@ namespace Intersect.GameObjects.Maps
             return mCachedAttributeData;
         }
 
+        public List<NpcSpawn> SpawnsInGroup(int spawnGroup)
+        {
+            return Spawns.FindAll(spawn => spawn.SpawnGroup == spawnGroup || (spawn.CumulativeSpawning && spawn.SpawnGroup <= spawnGroup));
+        }
+
         public class MapControllers : DatabaseObjectLookup
         {
 

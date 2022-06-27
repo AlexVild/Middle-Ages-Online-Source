@@ -58,6 +58,8 @@ namespace Intersect.Configuration
 
         public const string TARGET_SOUND = "al_target.wav";
 
+        public const bool FADE_TRANSITION = false;
+
         #endregion
 
         #region Static Properties and Methods
@@ -153,6 +155,8 @@ namespace Intersect.Configuration
         public int UITextSoundTimer { get; set; } = UI_TEXT_SOUND_TIMER;
         
         public string TargetSound { get; set; } = TARGET_SOUND;
+        
+        public bool FadeTransition { get; set; } = FADE_TRANSITION;
 
         #endregion
 

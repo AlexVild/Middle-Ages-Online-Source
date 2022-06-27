@@ -7,6 +7,7 @@ using Intersect.Client.Interface.Game;
 using Intersect.Client.Maps;
 using Intersect.Network.Packets.Client;
 using Intersect.Enums;
+using Intersect.Utilities;
 
 namespace Intersect.Client.Networking
 {
@@ -34,11 +35,11 @@ namespace Intersect.Client.Networking
             Network.SendPacket(new NeedMapPacket(mapId));
             if (MapInstance.MapRequests.ContainsKey(mapId))
             {
-                MapInstance.MapRequests[mapId] = Globals.System.GetTimeMs() + 3000;
+                MapInstance.MapRequests[mapId] = Timing.Global.Milliseconds + 3000;
             }
             else
             {
-                MapInstance.MapRequests.Add(mapId, Globals.System.GetTimeMs() + 3000);
+                MapInstance.MapRequests.Add(mapId, Timing.Global.Milliseconds + 3000);
             }
         }
 

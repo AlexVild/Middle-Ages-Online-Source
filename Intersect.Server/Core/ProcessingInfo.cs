@@ -25,6 +25,8 @@ namespace Intersect.Server.Core
         public static Dictionary<Guid, int> PlayersInInstance = new Dictionary<Guid, int>();
 
         public static Dictionary<Guid, HashSet<string>> PermadeadNpcs = new Dictionary<Guid, HashSet<string>>();
+        
+        public static Dictionary<Guid, Dictionary<Guid, int>> PermaSpawnGroups = new Dictionary<Guid, Dictionary<Guid, int>>();
 
         /// <summary>
         /// Maintains a list of unique instance Ids that players may be on
@@ -57,6 +59,15 @@ namespace Intersect.Server.Core
                 }
             }
 
+            foreach (var key in PermaSpawnGroups.Keys.ToList())
+            {
+                if (!ActiveMapInstanceIds.Contains(key))
+                {
+                    Logging.Log.Info($"Cleaning up permanent spawn groups for instance {key}");
+                    PermaSpawnGroups.Remove(key);
+                }
+            }
+
             // Clean up instance variables where the instance has been marked dead
             InstanceVariables.Keys.ToList()
                 .Where(instanceId => !ActiveMapInstanceIds.Contains(instanceId)).ToList()
@@ -80,6 +91,22 @@ namespace Intersect.Server.Core
                     InstanceVariables.Add(instanceId, instVarValues);
                 }
             });
+        }
+
+        public static void AddInstanceVariable(Guid instanceVarId)
+        {
+            foreach(var instance in ActiveMapInstanceIds)
+            {
+                if (InstanceVariables.ContainsKey(instance) && !InstanceVariables[instance].ContainsKey(instanceVarId))
+                {
+                    VariableValue copyValue = new VariableValue();
+                    var instVar = (InstanceVariableBase)InstanceVariableBase.Lookup[instanceVarId];
+                    copyValue.SetValue(instVar.DefaultValue.Value);
+                    copyValue.Type = instVar.Type;
+                    InstanceVariables[instance][instanceVarId] = copyValue;
+                }
+            }
+            
         }
     }
 }

@@ -11,6 +11,9 @@ using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Switches_and_Variables;
 using Intersect.Server.General;
 using Intersect.Server.Maps;
+using Intersect.Utilities;
+using Intersect.Server.Core;
+using Intersect.GameObjects.Timers;
 
 namespace Intersect.Server.Entities.Events
 {
@@ -389,9 +392,16 @@ namespace Intersect.Server.Entities.Events
                 var entities = mapInstance.GetEntities();
                 foreach (var en in entities)
                 {
-                    if (en.GetType() == typeof(Npc))
+                    if (en is Npc npc)
                     {
-                        return false;
+                        if (!condition.SpecificNpc)
+                        {
+                            return false;
+                        }
+                        else if (npc.Base?.Id == condition.NpcId)
+                        {
+                            return false;
+                        }
                     }
                 }
 
@@ -657,7 +667,7 @@ namespace Intersect.Server.Entities.Events
             if (player != null && player.ClassInfo.ContainsKey(condition.ClassId))
             {
                 var classInfo = player.ClassInfo[condition.ClassId];
-                return (classInfo.LastTaskStartTime + Options.TaskCooldown > Globals.Timing.MillisecondsUTC);
+                return (classInfo.LastTaskStartTime + Options.TaskCooldown > Timing.Global.MillisecondsUtc);
             }
             return false;
         }
@@ -676,6 +686,44 @@ namespace Intersect.Server.Entities.Events
                     .First().Rank >= condition.ClassRank;
             }
             return false;
+        }
+        
+        public static bool MeetsCondition(
+            TimerIsActive condition,
+            Player player,
+            Event eventInstance,
+            QuestBase questBase
+        )
+        {
+            if (player == null)
+            {
+                return false;
+            }
+
+            var descriptor = TimerDescriptor.Get(condition.descriptorId);
+            if (descriptor == null)
+            {
+                return false;
+            }
+
+            if (TimerProcessor.TryGetOwnerId(descriptor.OwnerType, condition.descriptorId, player, out var ownerId) && TimerProcessor.TryGetActiveTimer(condition.descriptorId, ownerId, out var timer))
+            {
+                switch (condition.ConditionType)
+                {
+                    case TimerActiveConditions.IsActive:
+                        return true;
+                    case TimerActiveConditions.Elapsed:
+                        return timer.ElapsedTime >= condition.ElapsedSeconds * 1000;
+                    case TimerActiveConditions.Repetitions:
+                        return timer.CompletionCount >= condition.Repetitions;
+                    default:
+                        throw new NotImplementedException("Invalid TimerActiveCondition given while evaluating TimerIsActive condition");
+                }
+            }
+            else
+            {
+                return false;
+            }
         }
 
         //Variable Comparison Processing

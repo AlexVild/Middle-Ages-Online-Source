@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
 using Intersect.Client.Framework.File_Management;
 using Intersect.Client.Framework.Graphics;
 using Intersect.Client.General;
@@ -12,6 +11,7 @@ using Intersect.Configuration;
 using Intersect.Enums;
 using Intersect.GameObjects;
 using Intersect.GameObjects.Maps;
+using Intersect.Utilities;
 
 // ReSharper disable All
 
@@ -38,7 +38,6 @@ namespace Intersect.Client.Core
 
             //Init Network
             Networking.Network.InitNetwork(context);
-            Fade.FadeIn();
 
             //Make Json.Net Familiar with Our Object Types
             var id = Guid.NewGuid();
@@ -69,8 +68,8 @@ namespace Intersect.Client.Core
             lock (Globals.GameLock)
             {
                 Networking.Network.Update();
-                Globals.System.Update();
                 Fade.Update();
+                Wipe.Update();
                 Flash.Update();
                 Interface.Interface.ToggleInput(Globals.GameState != GameStates.Intro);
 
@@ -124,26 +123,40 @@ namespace Intersect.Client.Core
                 {
                     if (Globals.IntroStartTime == -1)
                     {
-                        if (Fade.DoneFading())
+                        if ((Globals.Database.FadeTransitions && Fade.DoneFading()) || (!Globals.Database.FadeTransitions && Wipe.DoneFading()))
                         {
                             if (Globals.IntroComing)
                             {
-                                Globals.IntroStartTime = Globals.System.GetTimeMs();
+                                Globals.IntroStartTime = Timing.Global.Milliseconds;
                             }
                             else
                             {
                                 Globals.IntroIndex++;
-                                Fade.FadeIn();
+                                if (Globals.Database.FadeTransitions)
+                                {
+                                    Fade.FadeIn();
+                                }
+                                else
+                                {
+                                    Wipe.FadeIn();
+                                }
                                 Globals.IntroComing = true;
                             }
                         }
                     }
                     else
                     {
-                        if (Globals.System.GetTimeMs() > Globals.IntroStartTime + Globals.IntroDelay)
+                        if (Timing.Global.Milliseconds > Globals.IntroStartTime + Globals.IntroDelay)
                         {
                             //If we have shown an image long enough, fade to black -- keep track that the image is going
-                            Fade.FadeOut();
+                            if (Globals.Database.FadeTransitions)
+                            {
+                                Fade.FadeOut();
+                            }
+                            else
+                            {
+                                Wipe.FadeOut();
+                            }
                             Globals.IntroStartTime = -1;
                             Globals.IntroComing = false;
                         }
@@ -189,7 +202,14 @@ namespace Intersect.Client.Core
 
             Audio.PlayMusic(MapInstance.Get(Globals.Me.CurrentMap).Music, 6f, 10f, true);
             Globals.GameState = GameStates.InGame;
-            Fade.FadeIn();
+            if (Globals.Database.FadeTransitions)
+            {
+                Fade.FadeIn();
+            }
+            else
+            {
+                Wipe.FadeIn();
+            }
         }
 
         private static void ProcessGame()
@@ -272,7 +292,7 @@ namespace Intersect.Client.Core
                                 var map = MapInstance.Get(Globals.MapGrid[x, y]);
                                 if (map == null &&
                                     (!MapInstance.MapRequests.ContainsKey(Globals.MapGrid[x, y]) ||
-                                     MapInstance.MapRequests[Globals.MapGrid[x, y]] < Globals.System.GetTimeMs()))
+                                     MapInstance.MapRequests[Globals.MapGrid[x, y]] < Timing.Global.Milliseconds))
                                 {
                                     //Send for the map
                                     PacketSender.SendNeedMap(Globals.MapGrid[x, y]);
@@ -320,7 +340,7 @@ namespace Intersect.Client.Core
             }
 
             //Update Game Animations
-            if (_animTimer < Globals.System.GetTimeMs())
+            if (_animTimer < Timing.Global.Milliseconds)
             {
                 Globals.AnimFrame++;
                 if (Globals.AnimFrame == 3)
@@ -328,7 +348,7 @@ namespace Intersect.Client.Core
                     Globals.AnimFrame = 0;
                 }
 
-                _animTimer = Globals.System.GetTimeMs() + 500;
+                _animTimer = Timing.Global.Milliseconds + 500;
             }
 
             //Remove Event Holds If Invalid
@@ -360,7 +380,15 @@ namespace Intersect.Client.Core
         public static void Logout(bool characterSelect)
         {
             Audio.PlayMusic(ClientConfiguration.Instance.MenuMusic, 6f, 10f, true);
-            Fade.FadeOut();
+            if (Globals.Database.FadeTransitions)
+            {
+                Fade.FadeOut();
+            }
+            else
+            {
+                Wipe.FadeOut();
+            }
+            
             PacketSender.SendLogout(characterSelect);
             Globals.LoggedIn = false;
             Globals.WaitingOnServer = false;
@@ -394,8 +422,17 @@ namespace Intersect.Client.Core
             Globals.EventHolds.Clear();
             Globals.PendingEvents.Clear();
 
+            Timers.ActiveTimers.Clear();
+
             Interface.Interface.InitGwen();
-            Fade.FadeIn();
+            if (Globals.Database.FadeTransitions)
+            {
+                Fade.FadeIn();
+            }
+            else
+            {
+                Wipe.FadeIn();
+            }
         }
 
     }

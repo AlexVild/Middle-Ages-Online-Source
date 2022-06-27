@@ -67,6 +67,8 @@ namespace Intersect.GameObjects.Events
 
         HighestClassRankIs,
 
+        TimerIsActive,
+
     }
 
     public class Condition
@@ -279,12 +281,21 @@ namespace Intersect.GameObjects.Events
 
         public Guid QuestId { get; set; }
 
+        public string GetPrettyString()
+        {
+            return $"Completion of quest: \"{QuestBase.GetName(QuestId)}\"";
+        }
+
     }
 
     public class NoNpcsOnMapCondition : Condition
     {
 
         public override ConditionTypes Type { get; } = ConditionTypes.NoNpcsOnMap;
+
+        public bool SpecificNpc { get; set; }
+
+        public Guid NpcId { get; set; }
 
     }
 
@@ -425,7 +436,7 @@ namespace Intersect.GameObjects.Events
                 var letters = tagSplit.ToCharArray();
                 if (letters.Length > 0)
                 {
-                    letters[0] = char.ToUpper(tmpTag[0]);
+                    letters[0] = char.ToUpper(letters[0]);
                 }
                 words.Add(new string(letters));
             }
@@ -500,6 +511,31 @@ namespace Intersect.GameObjects.Events
         public override ConditionTypes Type { get; } = ConditionTypes.HighestClassRankIs;
 
         public int ClassRank { get; set; }
+
+        public string GetPrettyString()
+        {
+            return $"Highest CR {ClassRank}+";
+        }
+    }
+
+    public enum TimerActiveConditions
+    {
+        IsActive,
+        Elapsed,
+        Repetitions,
+    }
+
+    public class TimerIsActive : Condition
+    {
+        public override ConditionTypes Type { get; } = ConditionTypes.TimerIsActive;
+
+        public Guid descriptorId { get; set; }
+
+        public TimerActiveConditions ConditionType { get; set; }
+
+        public int ElapsedSeconds { get; set; }
+
+        public int Repetitions { get; set; }
     }
 
     public class VariableCompaison

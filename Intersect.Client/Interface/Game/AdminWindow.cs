@@ -74,6 +74,8 @@ namespace Intersect.Client.Interface.Game
         private Button mWarpMeToButton;
 
         private Button mWarpToMeButton;
+        
+        private Button mOverworldReturnButton;
 
         public ImagePanel SpriteContainer;
 
@@ -117,6 +119,14 @@ namespace Intersect.Client.Interface.Game
 
             mWarpMeToButton.SetBounds(6, 64, 80, 18);
             mWarpMeToButton.Clicked += _warpMeToButton_Clicked;
+
+            mOverworldReturnButton = new Button(mAdminWindow)
+            {
+                Text = Strings.Admin.overworldreturn
+            };
+
+            mOverworldReturnButton.SetBounds(6, 84, 80, 18);
+            mOverworldReturnButton.Clicked += _overworldReturn_Clicked;
 
             mKickButton = new Button(mAdminWindow)
             {
@@ -390,6 +400,14 @@ namespace Intersect.Client.Interface.Game
             if (mNameTextbox.Text.Trim().Length > 0)
             {
                 PacketSender.SendAdminAction(new WarpMeToAction(mNameTextbox.Text));
+            }
+        }
+        
+        void _overworldReturn_Clicked(Base sender, ClickedEventArgs arguments)
+        {
+            if (mNameTextbox.Text.Trim().Length > 0)
+            {
+                PacketSender.SendAdminAction(new ReturnToOverworldAction(mNameTextbox.Text));
             }
         }
 

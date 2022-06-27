@@ -102,6 +102,9 @@ namespace Intersect.Editor.Forms.Editors
             cmbHitAnimation.Items.Clear();
             cmbHitAnimation.Items.Add(Strings.General.none);
             cmbHitAnimation.Items.AddRange(AnimationBase.Names);
+            cmbTrapAnimation.Items.Clear();
+            cmbTrapAnimation.Items.Add(Strings.General.none);
+            cmbTrapAnimation.Items.AddRange(AnimationBase.Names);
             cmbEvent.Items.Clear();
             cmbEvent.Items.Add(Strings.General.none);
             cmbEvent.Items.AddRange(EventBase.Names);
@@ -168,6 +171,7 @@ namespace Intersect.Editor.Forms.Editors
             lblDesc.Text = Strings.SpellEditor.description;
             lblCastAnimation.Text = Strings.SpellEditor.castanimation;
             lblHitAnimation.Text = Strings.SpellEditor.hitanimation;
+            lblTrapAnimation.Text = Strings.SpellEditor.TrapAnimation;
             chkBound.Text = Strings.SpellEditor.bound;
 
             grpRequirements.Text = Strings.SpellEditor.requirements;
@@ -290,6 +294,7 @@ namespace Intersect.Editor.Forms.Editors
                 cmbCastAnimation.SelectedIndex = AnimationBase.ListIndex(mEditorItem.CastAnimationId) + 1;
                 cmbHitAnimation.SelectedIndex = AnimationBase.ListIndex(mEditorItem.HitAnimationId) + 1;
                 cmbOverTimeAnimation.SelectedIndex = AnimationBase.ListIndex(mEditorItem.OverTimeAnimationId) + 1;
+                cmbTrapAnimation.SelectedIndex = AnimationBase.ListIndex(mEditorItem.TrapAnimationId) + 1;
 
                 chkBound.Checked = mEditorItem.Bound;
 
@@ -421,6 +426,8 @@ namespace Intersect.Editor.Forms.Editors
             cmbProjectile.Hide();
             lblDuration.Hide();
             nudDuration.Hide();
+            lblTrapAnimation.Hide();
+            cmbTrapAnimation.Hide();
 
             if (cmbTargetType.SelectedIndex == (int) SpellTargetTypes.Single)
             {
@@ -455,6 +462,9 @@ namespace Intersect.Editor.Forms.Editors
                 lblProjectile.Show();
                 cmbProjectile.Show();
                 cmbProjectile.SelectedIndex = ProjectileBase.ListIndex(mEditorItem.Combat.ProjectileId);
+                lblTrapAnimation.Show();
+                cmbTrapAnimation.Show();
+                lblTrapAnimation.Text = Strings.SpellEditor.SpawnerAnimation;
             }
 
             if (cmbTargetType.SelectedIndex == (int) SpellTargetTypes.OnHit)
@@ -469,6 +479,10 @@ namespace Intersect.Editor.Forms.Editors
                 lblDuration.Show();
                 nudDuration.Show();
                 nudDuration.Value = mEditorItem.Combat.TrapDuration;
+                lblTrapAnimation.Show();
+                cmbTrapAnimation.Show();
+                cmbTrapAnimation.SelectedIndex = AnimationBase.ListIndex(mEditorItem.TrapAnimationId) + 1;
+                lblTrapAnimation.Text = Strings.SpellEditor.TrapAnimation;
             }
         }
 
@@ -1084,6 +1098,12 @@ namespace Intersect.Editor.Forms.Editors
         private void chkInheritStats_CheckedChanged(object sender, EventArgs e)
         {
             mEditorItem.WeaponSpell = chkInheritStats.Checked;
+        }
+
+        private void cmbTrapAnimation_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Guid animationId = AnimationBase.IdFromList(cmbTrapAnimation.SelectedIndex - 1);
+            mEditorItem.TrapAnimation = AnimationBase.Get(animationId);
         }
     }
 

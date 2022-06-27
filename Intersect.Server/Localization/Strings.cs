@@ -109,6 +109,9 @@ namespace Intersect.Server.Localization
             public readonly LocalizedString onlytradeempty = @"Cannot trade bag unless it's empty!";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString SlotOccupied = @"That slot is occupied by another item!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString tradebound = @"Cannot trade bound items!";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -364,6 +367,12 @@ namespace Intersect.Server.Localization
                     {10, @"SLEEP!"},
                     {11, @"ON HIT!"},
                     {12, @"TAUNT!"},
+                    {13, @"SWIFT!"},
+                    {14, @"ACCCURATE!"},
+                    {15, @"HASTE!"},
+                    {16, @"SLOWED!"},
+                    {17, @"CONFUSED!"},
+                    {18, @"STEADY!"},
                 }
             );
 
@@ -572,6 +581,18 @@ namespace Intersect.Server.Localization
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString commandparameter = @"\param";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString Elapsed = @"\elapsed";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString ElapsedMinutes = @"{0:D1}:{1:D2}.{2:D3}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString ElapsedHours = @"{0:D1}:{1:D2}:{2:D2}.{3:D3}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString ElapsedDays = @"{0:D1} Day(s) and {1:D2}:{2:D2}:{3:D2}.{4:D3}";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString eventnamecommand = @"\en";
@@ -1110,6 +1131,12 @@ namespace Intersect.Server.Localization
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]            public readonly LocalizedString beenwarpedto = @"You have been warped to {00}.";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)] public readonly LocalizedString instanceupdate = @"Your instance ID has changed from {00} to {01}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)] public readonly LocalizedString overworldreturnadmin = @"You have returned {00} to the overworld.";
+            
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)] public readonly LocalizedString overworldreturned = @"You have been returned to the overworld.";
+
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]            public readonly LocalizedString changeownpower = @"You cannot alter your own power!";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]            public readonly LocalizedString deadmin = @"{00} has had their administrative powers revoked!";
@@ -1388,6 +1415,18 @@ namespace Intersect.Server.Localization
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString resourcegathered =
                 @"You have harvested a resource of this type {00} times!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString resourcegatheredbonus =
+                @"You have harvested a resource of this type {00} times! Harvest it {01} more times to receive a harvest speed bonus!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString resourcegatheredbonusunlock =
+                @"You've unlocked a resource harvesting bonus for this resource! You will now harvest it faster. Your next bonus will be unlocked at {00} harvests.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString resourcegatheredbonusunlockcomplete =
+                @"Congratulations, you have maxed out your harvesting bonus for this resource!";
         }
 
         public sealed class RequirementsNamespace : LocaleNamespace

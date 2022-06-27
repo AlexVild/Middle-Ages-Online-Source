@@ -16,6 +16,7 @@ using Intersect.Server.Maps;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
+using Intersect.GameObjects.Timers;
 
 namespace Intersect.Server.Database.GameData
 {
@@ -101,6 +102,9 @@ namespace Intersect.Server.Database.GameData
         //Quest Boards
         public DbSet<QuestBoardBase> QuestBoards { get; set; }
 
+        // Timers
+        public DbSet<TimerDescriptor> Timers { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
         }
@@ -122,7 +126,7 @@ namespace Intersect.Server.Database.GameData
                 BoundItemExtensionMigration.Run(this);
             }
 
-            if (migrations.IndexOf("20211031200145_FixQuestTaskCompletionEvents") > -1)
+            if (migrations.IndexOf("20211031200145_FixQuestTaskCompletionEvents") > -1 || migrations.IndexOf("20220321165144_FixQuestsAgainMigration") > -1)
             {
                 FixQuestTaskCompletionEventsMigration.Run(this);
             }

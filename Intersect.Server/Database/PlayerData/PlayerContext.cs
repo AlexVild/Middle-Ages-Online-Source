@@ -12,6 +12,7 @@ using Intersect.Server.Entities;
 
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Intersect.GameObjects.Timers;
 
 namespace Intersect.Server.Database.PlayerData
 {
@@ -69,6 +70,8 @@ namespace Intersect.Server.Database.PlayerData
         public DbSet<GuildBankSlot> Guild_Bank { get; set; }
         
         public DbSet<PlayerRecord> Player_Record { get; set; }
+        
+        public DbSet<TimerInstance> Timers { get; set; }
 
         internal async ValueTask Commit(
             bool commit = false,

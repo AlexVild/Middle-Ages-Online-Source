@@ -30,6 +30,18 @@ namespace Intersect.Enums
 
         Taunt = 12,
 
+        Swift = 13,
+
+        Accurate = 14,
+
+        Haste = 15,
+
+        Slowed = 16,
+        
+        Confused = 17,
+
+        Steady = 18,
+
     }
 
 }

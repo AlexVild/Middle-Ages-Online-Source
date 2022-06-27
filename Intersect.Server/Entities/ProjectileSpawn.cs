@@ -27,7 +27,7 @@ namespace Intersect.Server.Entities
 
         public ProjectileBase ProjectileBase;
 
-        public long TransmittionTimer = Globals.Timing.Milliseconds;
+        public long TransmittionTimer = Timing.Global.Milliseconds;
 
         public long ProjectileActiveTime;
 
@@ -68,9 +68,9 @@ namespace Intersect.Server.Entities
             Dir = dir;
             ProjectileBase = projectileBase;
             Parent = parent;
-            TransmittionTimer = Globals.Timing.Milliseconds +
+            TransmittionTimer = Timing.Global.Milliseconds +
                                 (long) ((float) ProjectileBase.Speed / (float) ProjectileBase.Range);
-            ProjectileActiveTime = Globals.Timing.Milliseconds + (Options.Instance.Processing.ProjectileUpdateInterval * Options.Instance.Processing.ProjectileTicksUntilDamageInSpawn);
+            ProjectileActiveTime = Timing.Global.Milliseconds + (Options.Instance.Processing.ProjectileUpdateInterval * Options.Instance.Processing.ProjectileTicksUntilDamageInSpawn);
         }
 
         public bool IsAtLocation(Guid mapId, int x, int y, int z)
@@ -103,7 +103,7 @@ namespace Intersect.Server.Entities
             var targetEntity = en;
             if (targetEntity is EventPageInstance || en == null) return false;
 
-            bool projectileCantDamageYet = Globals.Timing.Milliseconds < ProjectileActiveTime && InitX == X && InitY == Y;
+            bool projectileCantDamageYet = Timing.Global.Milliseconds < ProjectileActiveTime && InitX == X && InitY == Y;
             if (projectileCantDamageYet)
             {
                 return false;
@@ -183,26 +183,58 @@ namespace Intersect.Server.Entities
                 }
                 else if (targetEntity.GetType() == typeof(Resource))
                 {
-                    if (((Resource) targetEntity).IsDead() && !ProjectileBase.IgnoreExhaustedResources ||
-                        !((Resource) targetEntity).IsDead() && !ProjectileBase.IgnoreActiveResources)
+                    var resourceTarget = targetEntity as Resource;
+
+                    if (ProjectileBase.Tool != -1 || resourceTarget.Base.Tool == -1) // if the projectile can be handled as a tool or the resource does not demand a tool, do some things differently
                     {
-                        if (Parent.Owner.GetType() == typeof(Player) && !((Resource) targetEntity).IsDead())
+                        // If the projectile is the right tool for the job, make an attack
+                        var validTool = false;
+                        if (!((Resource)targetEntity).IsDead() && (ProjectileBase.Tool == ((Resource)targetEntity).Base.Tool)) 
                         {
                             Parent.Owner.TryAttack(targetEntity, Parent.Base, Parent.Spell, Parent.Item, Dir);
-                            if (Dir <= 3 && Parent.Base.GrappleHook && !Parent.HasGrappled
-                            ) //Don't handle directional projectile grapplehooks
+                            validTool = true;
+                        }
+                        // then, determine if the projectile spawn should die
+
+                        if (Parent.Base.PierceTarget)
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            if (validTool)
                             {
-                                Parent.HasGrappled = true;
-                                Parent.Owner.Dir = Dir;
-                                new Dash(
-                                    Parent.Owner, Distance, (byte) Parent.Owner.Dir, Parent.Base.IgnoreMapBlocks,
-                                    Parent.Base.IgnoreActiveResources, Parent.Base.IgnoreExhaustedResources,
-                                    Parent.Base.IgnoreZDimension
-                                );
+                                return true;
+                            } 
+                            else
+                            {
+                                return ((Resource)targetEntity).IsDead() && !ProjectileBase.IgnoreExhaustedResources ||
+                                    !((Resource)targetEntity).IsDead() && !ProjectileBase.IgnoreActiveResources;
                             }
                         }
+                    }
+                    else
+                    {
+                        if (((Resource)targetEntity).IsDead() && !ProjectileBase.IgnoreExhaustedResources ||
+                        !((Resource)targetEntity).IsDead() && !ProjectileBase.IgnoreActiveResources)
+                        {
+                            if (Parent.Owner.GetType() == typeof(Player) && !((Resource)targetEntity).IsDead())
+                            {
+                                Parent.Owner.TryAttack(targetEntity, Parent.Base, Parent.Spell, Parent.Item, Dir);
+                                if (Dir <= 3 && Parent.Base.GrappleHook && !Parent.HasGrappled) //Don't handle directional projectile grapplehooks
+                                {
+                                    Parent.HasGrappled = true;
+                                    Parent.Owner.Dir = Dir;
+                                    new Dash(
+                                        Parent.Owner, Distance, (byte)Parent.Owner.Dir, Parent.Base.IgnoreMapBlocks,
+                                        Parent.Base.IgnoreActiveResources, Parent.Base.IgnoreExhaustedResources,
+                                        Parent.Base.IgnoreZDimension
+                                    );
+                                }
+                            }
 
-                        return true;
+                            return true;
+                        }
                     }
                 }
                 else //Any other Parent.Target

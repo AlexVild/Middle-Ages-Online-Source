@@ -11,6 +11,7 @@ using Intersect.Client.Localization;
 using Intersect.Client.Networking;
 using Intersect.Enums;
 using Intersect.GameObjects;
+using Intersect.Utilities;
 
 namespace Intersect.Client.Interface.Game
 {
@@ -154,7 +155,7 @@ namespace Intersect.Client.Interface.Game
         {
             if (Globals.Me.StatPoints > 0 && !mCharacterWindow.IsVisible())
             {
-                var time = Globals.System.GetTimeMs();
+                var time = Timing.Global.Milliseconds;
                 if (!mNotificationFlash)
                 {
                     mNotificationFlash = true;
@@ -298,6 +299,11 @@ namespace Intersect.Client.Interface.Game
         public InventoryWindow GetInventoryWindow()
         {
             return mInventoryWindow;
+        }
+
+        public bool InventoryWindowIsVisible()
+        {
+            return mInventoryWindow.IsVisible();
         }
 
         public void TogglePartyWindow()

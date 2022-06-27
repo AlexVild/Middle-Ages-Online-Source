@@ -20,11 +20,11 @@ using Intersect.Network;
 using Intersect.Network.Packets;
 using Intersect.Network.Packets.Server;
 using Intersect.Utilities;
-using Newtonsoft.Json;
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Intersect.GameObjects.Timers;
 
 namespace Intersect.Client.Networking
 {
@@ -147,11 +147,11 @@ namespace Intersect.Client.Networking
             if (packet.RequestingReply)
             {
                 PacketSender.SendPing();
-                PingTime = Globals.System.GetTimeMs();
+                PingTime = Timing.Global.Milliseconds;
             }
             else
             {
-                Network.Ping = (int) (Globals.System.GetTimeMs() - PingTime) / 2;
+                Network.Ping = (int) (Timing.Global.Milliseconds - PingTime) / 2;
             }
         }
 
@@ -222,6 +222,15 @@ namespace Intersect.Client.Networking
                 if (packet.MapItems != null)
                 {
                     HandlePacket(packet.MapItems);
+                }
+
+                map.DisposeTraps();
+                if (packet.MapTrapPackets.Count > 0)
+                {
+                    foreach (var trapPacket in packet.MapTrapPackets)
+                    {
+                        HandlePacket(trapPacket);
+                    }
                 }
 
                 if (Globals.PendingEvents.ContainsKey(mapId))
@@ -373,8 +382,8 @@ namespace Intersect.Client.Networking
             }
         }
 
-        // MapLayerChanged Packet (for traveling between map "instances")
-        public void HandlePacket(IPacketSender packetSender, MapLayerChangedPacket packet)
+        // MapInstanceChanged Packet
+        public void HandlePacket(IPacketSender packetSender, MapInstanceChangedPacket packet)
         {
             var disposingEntities = new List<Guid>();
             foreach (var pkt in packet.EntitiesToDispose)
@@ -396,6 +405,7 @@ namespace Intersect.Client.Networking
                     Globals.EntitiesToDispose.AddRange(map.LocalEntities.Values
                         .ToList()
                         .Select(en => en.Id));
+                    map.DisposeTraps();
                 }
             }
         }
@@ -437,7 +447,7 @@ namespace Intersect.Client.Networking
             }
 
             if (en == Globals.Me &&
-                (Globals.Me.DashQueue.Count > 0 || Globals.Me.DashTimer > Globals.System.GetTimeMs()))
+                (Globals.Me.DashQueue.Count > 0 || Globals.Me.DashTimer > Timing.Global.Milliseconds))
             {
                 return;
             }
@@ -529,6 +539,11 @@ namespace Intersect.Client.Networking
                         new Color(packet.Color.A, packet.Color.R, packet.Color.G, packet.Color.B)
                     )
                 );
+
+                if (!string.IsNullOrEmpty(packet.MapSound))
+                {
+                    Audio.AddMapSound(packet.MapSound, packet.X, packet.Y, map.Id, false, 0, 10);
+                }
             }
         }
 
@@ -616,9 +631,10 @@ namespace Intersect.Client.Networking
                 return;
             }
 
-            if (en is Player && Options.Combat.MovementCancelsCast)
+            if (en is Player pl && Options.Combat.MovementCancelsCast)
             {
                 en.CastTime = 0;
+                pl.LastProjectileCastTime = 0;
             }
 
             if (en.Dashing != null || en.DashQueue.Count > 0)
@@ -725,7 +741,7 @@ namespace Intersect.Client.Networking
                 {
                     if (en.CombatTimeRemaining > 0)
                     {
-                        Globals.Me.CombatTimer = Globals.System.GetTimeMs() + en.CombatTimeRemaining;
+                        Globals.Me.CombatTimer = Timing.Global.Milliseconds + en.CombatTimeRemaining;
                     }
                 }
             }
@@ -781,6 +797,10 @@ namespace Intersect.Client.Networking
                     if (instance.Type == StatusTypes.Stun || instance.Type == StatusTypes.Silence)
                     {
                         entity.CastTime = 0;
+                        if (entity is Player player)
+                        {
+                            player.LastProjectileCastTime = 0;
+                        }
                     }
                     else if (instance.Type == StatusTypes.Shield)
                     {
@@ -849,7 +869,7 @@ namespace Intersect.Client.Networking
             {
                 if (packet.CombatTimeRemaining > 0)
                 {
-                    Globals.Me.CombatTimer = Globals.System.GetTimeMs() + packet.CombatTimeRemaining;
+                    Globals.Me.CombatTimer = Timing.Global.Milliseconds + packet.CombatTimeRemaining;
                 }
             }
 
@@ -866,6 +886,11 @@ namespace Intersect.Client.Networking
                 if (instance.Type == StatusTypes.Stun || instance.Type == StatusTypes.Silence)
                 {
                     en.CastTime = 0;
+                    // Clear the players movement stun if counterspelled
+                    if (en is Player player)
+                    {
+                        player.LastProjectileCastTime = 0;
+                    }
                 }
                 else if (instance.Type == StatusTypes.Shield)
                 {
@@ -1125,7 +1150,14 @@ namespace Intersect.Client.Networking
         //ErrorMessagePacket
         public void HandlePacket(IPacketSender packetSender, ErrorMessagePacket packet)
         {
-            Fade.FadeIn();
+            if (Globals.Database.FadeTransitions)
+            {
+                Fade.FadeIn();
+            }
+            else
+            {
+                Wipe.FadeIn();
+            }
             Globals.WaitingOnServer = false;
             Interface.Interface.MsgboxErrors.Add(new KeyValuePair<string, string>(packet.Header, packet.Error));
             Interface.Interface.MenuUi.Reset();
@@ -1315,7 +1347,7 @@ namespace Intersect.Client.Networking
             var spellId = packet.SpellId;
             if (SpellBase.Get(spellId) != null && Globals.Entities.ContainsKey(entityId))
             {
-                Globals.Entities[entityId].CastTime = Globals.System.GetTimeMs() + SpellBase.Get(spellId).CastDuration;
+                Globals.Entities[entityId].CastTime = Timing.Global.Milliseconds + SpellBase.Get(spellId).CastDuration;
                 Globals.Entities[entityId].SpellCast = spellId;
             }
         }
@@ -1325,7 +1357,7 @@ namespace Intersect.Client.Networking
         {
             foreach (var cd in packet.SpellCds)
             {
-                var time = Globals.System.GetTimeMs() + cd.Value;
+                var time = Timing.Global.Milliseconds + cd.Value;
                 if (!Globals.Me.SpellCooldowns.ContainsKey(cd.Key))
                 {
                     Globals.Me.SpellCooldowns.Add(cd.Key, time);
@@ -1342,7 +1374,7 @@ namespace Intersect.Client.Networking
         {
             foreach (var cd in packet.ItemCds)
             {
-                var time = Globals.System.GetTimeMs() + cd.Value;
+                var time = Timing.Global.Milliseconds + cd.Value;
                 if (!Globals.Me.ItemCooldowns.ContainsKey(cd.Key))
                 {
                     Globals.Me.ItemCooldowns.Add(cd.Key, time);
@@ -1520,7 +1552,7 @@ namespace Intersect.Client.Networking
         public void HandlePacket(IPacketSender packetSender, ShowPicturePacket packet)
         {
             PacketSender.SendClosePicture(Globals.Picture?.EventId ?? Guid.Empty);
-            packet.ReceiveTime = Globals.System.GetTimeMs();
+            packet.ReceiveTime = Timing.Global.Milliseconds;
             Globals.Picture = packet;
         }
 
@@ -1655,7 +1687,7 @@ namespace Intersect.Client.Networking
                     var lookup = type.GetLookup();
                     if (deleted)
                     {
-                        lookup.Get(id).Delete();
+                        lookup.Get(id)?.Delete();
                     }
                     else
                     {
@@ -1710,11 +1742,11 @@ namespace Intersect.Client.Networking
                         Globals.GridMaps.Add(Globals.MapGrid[x, y]);
                         if (MapInstance.MapRequests.ContainsKey(Globals.MapGrid[x, y]))
                         {
-                            MapInstance.MapRequests[Globals.MapGrid[x, y]] = Globals.System.GetTimeMs() + 2000;
+                            MapInstance.MapRequests[Globals.MapGrid[x, y]] = Timing.Global.Milliseconds + 2000;
                         }
                         else
                         {
-                            MapInstance.MapRequests.Add(Globals.MapGrid[x, y], Globals.System.GetTimeMs() + 2000);
+                            MapInstance.MapRequests.Add(Globals.MapGrid[x, y], Timing.Global.Milliseconds + 2000);
                         }
                     }
                 }
@@ -2076,7 +2108,14 @@ namespace Intersect.Client.Networking
         public void HandlePacket(IPacketSender packetSender, EnteringGamePacket packet)
         {
             //Fade out, we're finally loading the game world!
-            Fade.FadeOut();
+            if (Globals.Database.FadeTransitions)
+            {
+                Fade.FadeOut();
+            }
+            else
+            {
+                Wipe.FadeOut();
+            }
         }
 
         //CancelCastPacket
@@ -2086,6 +2125,10 @@ namespace Intersect.Client.Networking
             {
                 Globals.Entities[packet.EntityId].CastTime = 0;
                 Globals.Entities[packet.EntityId].SpellCast = Guid.Empty;
+                if (Globals.Entities[packet.EntityId] is Player player)
+                {
+                    player.LastProjectileCastTime = 0L;
+                }
             }
         }
 
@@ -2118,14 +2161,33 @@ namespace Intersect.Client.Networking
         {
             if (packet.FadeIn)
             {
-                if (Fade.GetFade() > 0)
+                if (Globals.Database.FadeTransitions)
                 {
-                    Fade.FadeIn(true);
+                    if (Fade.GetFade() > 0)
+                    {
+                        Fade.FadeIn(true);
+                    }
                 }
+                else
+                {
+                    if (Wipe.GetFade() > 0)
+                    {
+                        Wipe.FadeIn(true);
+                    }
+                }
+
                 Globals.InMapTransition = false;
             } else
             {
-                Fade.FadeOut(true, true);
+                if (Globals.Database.FadeTransitions)
+                {
+                    Fade.FadeOut(true, true);
+                }
+                else
+                {
+                    Wipe.FadeOut(true, true);
+                }
+                
                 Globals.InMapTransition = true;
             }
         }
@@ -2209,7 +2271,9 @@ namespace Intersect.Client.Networking
         {
             if (Globals.Me == null) return;
 
-            Globals.Me.resourceLocked = packet.ResourceLock;
+            Globals.Me.ResourceLocked = packet.ResourceLock;
+            Globals.Me.CurrentHarvestBonus = packet.HarvestBonus;
+            Globals.Me.HarvestsRemaining = packet.HarvestsRemaining;
         }
 
         // QuestBoardPacket
@@ -2278,7 +2342,7 @@ namespace Intersect.Client.Networking
                 Entity affectedTarget = Globals.Entities[packet.TargetId];
                 affectedTarget.Flash = true;
                 affectedTarget.FlashColor = packet.EntityFlashColor;
-                affectedTarget.FlashEndTime = Globals.System.GetTimeMs() + 200; // TODO config
+                affectedTarget.FlashEndTime = Timing.Global.Milliseconds + 200; // TODO config
                 if (!string.IsNullOrEmpty(packet.Sound))
                 {
                     Audio.AddMapSound(packet.Sound, affectedTarget.X, affectedTarget.Y, affectedTarget.CurrentMap, false, 0, 10);
@@ -2291,7 +2355,7 @@ namespace Intersect.Client.Networking
                 }
                 Globals.Me.Flash = true;
                 Globals.Me.FlashColor = packet.EntityFlashColor;
-                Globals.Me.FlashEndTime = Globals.System.GetTimeMs() + 200; // TODO config
+                Globals.Me.FlashEndTime = Timing.Global.Milliseconds + 200; // TODO config
             }
         }
 
@@ -2299,6 +2363,62 @@ namespace Intersect.Client.Networking
         public void HandlePacket(IPacketSender packetSender, DestroyConditionPacket packet)
         {
             Globals.Me.TryDropItem(packet.Index, true, packet.CanDestroy);
+        }
+
+        //MapTrapPacket
+        public void HandlePacket(IPacketSender packetSender, MapTrapPacket packet)
+        {
+            var map = MapInstance.Get(packet.MapId);
+            if (map == null) return;
+
+            if (!packet.Remove)
+            {
+                map.AddTrap(packet.TrapId, packet.AnimationId, packet.OwnerId, packet.X, packet.Y);
+            }
+            else
+            {
+                map.RemoveTrap(packet.TrapId);
+            }
+        }
+
+        //ProjectileCastDelayPacket
+        public void HandlePacket(IPacketSender packetSender, ProjectileCastDelayPacket packet)
+        {
+            Globals.Me.LastProjectileCastTime = Timing.Global.Milliseconds + packet.DelayTime;
+        }
+
+        //TimerPacket
+        public void HandlePacket(IPacketSender packetSender, TimerPacket packet)
+        {
+            var activeTimer = Timers.ActiveTimers.Find(t => t.DescriptorId == packet.DescriptorId);
+            if (activeTimer != default)
+            {
+                // Timer already being shown - update it
+                activeTimer.Timestamp = packet.Timestamp;
+                activeTimer.StartTime = packet.StartTime;
+                return;
+            }
+
+            var displayType = packet.Type == TimerType.Countdown ? TimerDisplayType.Descending : TimerDisplayType.Ascending;
+
+            var timer = new Timer(packet.DescriptorId, packet.Timestamp, packet.StartTime, displayType, packet.DisplayName, packet.ContinueAfterExpiration);
+            Timers.ActiveTimers.Add(timer);
+
+            // Display the most recently added timer to the user
+            if (Interface.Interface.GameUi != null)
+            {
+                Interface.Interface.GameUi.GoToTimer(timer.DescriptorId);
+            }
+        }
+
+        //TimerStopPacket
+        public void HandlePacket(IPacketSender packetSender, TimerStopPacket packet)
+        {
+            foreach (var timer in Timers.ActiveTimers.FindAll(t => t.DescriptorId == packet.DescriptorId))
+            {
+                timer.ElapsedTime = packet.ElapsedTime;
+                timer.EndTimer();
+            }
         }
     }
 }

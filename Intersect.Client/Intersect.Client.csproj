@@ -84,6 +84,7 @@
     <Compile Include="Core\Controls\ControlEnum.cs" />
     <Compile Include="Core\Controls\ControlMap.cs" />
     <Compile Include="Core\Controls\Controls.cs" />
+    <Compile Include="Core\Wipe.cs" />
     <Compile Include="Core\Fade.cs" />
     <Compile Include="Core\Flash.cs" />
     <Compile Include="Core\Graphics.cs" />
@@ -109,8 +110,10 @@
     <Compile Include="Entities\Resource.cs" />
     <Compile Include="Entities\SpriteAnimations.cs" />
     <Compile Include="Entities\Status.cs" />
+    <Compile Include="Entities\Timer.cs" />
     <Compile Include="General\Time.cs" />
     <Compile Include="General\Globals.cs" />
+    <Compile Include="General\Timers.cs" />
     <Compile Include="Interface\Game\AnnouncementWindow.cs" />
     <Compile Include="Interface\Game\ComboText.cs" />
     <Compile Include="Interface\Game\DescriptionWindows\Components\ComponentBase.cs" />
@@ -122,18 +125,22 @@
     <Compile Include="Interface\Game\DescriptionWindows\SpellDescriptionWindow.cs" />
     <Compile Include="Interface\Game\DescriptionWindows\ItemDescriptionWindow.cs" />
     <Compile Include="Interface\Game\GuildWindow.cs" />
+    <Compile Include="Interface\Game\HarvestBonusWindow.cs" />
     <Compile Include="Interface\Game\MapItem\MapItemIcon.cs" />
     <Compile Include="Interface\Game\MapItem\MapItemWindow.cs" />
     <Compile Include="Interface\Game\QuestBoardWindow.cs" />
+    <Compile Include="Interface\Game\TimerWindow.cs" />
     <Compile Include="Interface\Game\WarningWindow.cs" />
     <Compile Include="Interface\MutableInterface.cs" />
     <Compile Include="Interface\Shared\Errors\ErrorWindow.cs" />
+    <Compile Include="Interface\Shared\SettingsWindow.cs" />
     <Compile Include="Items\Item.cs" />
     <Compile Include="Items\MapItem.cs" />
     <Compile Include="Localization\Strings.cs" />
     <Compile Include="Maps\ActionMessage.cs" />
     <Compile Include="Maps\MapAnimation.cs" />
     <Compile Include="Maps\MapInstance.cs" />
+    <Compile Include="Maps\MapTrapInstance.cs" />
     <Compile Include="Maps\WeatherParticle.cs" />
     <Compile Include="MonoGame\Audio\MonoAudioInstance.cs" />
     <Compile Include="MonoGame\Graphics\MonoTileBuffer.cs" />
@@ -174,7 +181,6 @@
     <Compile Include="MonoGame\Graphics\MonoShader.cs" />
     <Compile Include="MonoGame\Graphics\MonoTexture.cs" />
     <Compile Include="MonoGame\Input\MonoInput.cs" />
-    <Compile Include="MonoGame\System\MonoSystem.cs" />
     <Compile Include="Networking\Network.cs" />
     <Compile Include="Networking\PacketHandler.cs" />
     <Compile Include="Networking\PacketSender.cs" />
@@ -210,7 +216,6 @@
     <Compile Include="Interface\Menu\MainMenu.cs" />
     <Compile Include="Interface\Menu\MenuGuiBase.cs" />
     <Compile Include="Interface\Menu\RegisterWindow.cs" />
-    <Compile Include="Interface\Shared\OptionsWindow.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="MonoGame\IntersectGame.cs" />
     <Compile Include="Program.cs" />

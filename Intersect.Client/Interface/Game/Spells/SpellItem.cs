@@ -1,5 +1,4 @@
 ﻿using System;
-
 using Intersect.Client.Framework.File_Management;
 using Intersect.Client.Framework.GenericClasses;
 using Intersect.Client.Framework.Gwen.Control;
@@ -11,6 +10,7 @@ using Intersect.Client.Interface.Game.DescriptionWindows;
 using Intersect.Client.Localization;
 using Intersect.Client.Networking;
 using Intersect.GameObjects;
+using Intersect.Utilities;
 
 namespace Intersect.Client.Interface.Game.Spells
 {
@@ -71,7 +71,7 @@ namespace Intersect.Client.Interface.Game.Spells
 
         void pnl_Clicked(Base sender, ClickedEventArgs arguments)
         {
-            mClickTime = Globals.System.GetTimeMs() + 500;
+            mClickTime = Timing.Global.Milliseconds + 500;
         }
 
         void pnl_RightClicked(Base sender, ClickedEventArgs arguments)
@@ -137,8 +137,8 @@ namespace Intersect.Client.Interface.Game.Spells
                  spell != null && mTexLoaded != spell.Icon ||
                  mCurrentSpellId != Globals.Me.Spells[mYindex].SpellId ||
                  mIconCd !=
-                 Globals.Me.GetSpellCooldown(Globals.Me.Spells[mYindex].SpellId) > Globals.System.GetTimeMs() ||
-                 Globals.Me.GetSpellCooldown(Globals.Me.Spells[mYindex].SpellId) > Globals.System.GetTimeMs()))
+                 Globals.Me.GetSpellCooldown(Globals.Me.Spells[mYindex].SpellId) > Timing.Global.Milliseconds ||
+                 Globals.Me.GetSpellCooldown(Globals.Me.Spells[mYindex].SpellId) > Timing.Global.Milliseconds))
             {
                 mCooldownLabel.IsHidden = true;
                 if (spell != null)
@@ -148,7 +148,7 @@ namespace Intersect.Client.Interface.Game.Spells
                     {
                         Pnl.Texture = spellTex;
                         if (Globals.Me.GetSpellCooldown(Globals.Me.Spells[mYindex].SpellId) >
-                            Globals.System.GetTimeMs())
+                            Timing.Global.Milliseconds)
                         {
                             Pnl.RenderColor = new Color(100, 255, 255, 255);
                         }
@@ -168,14 +168,14 @@ namespace Intersect.Client.Interface.Game.Spells
                     mTexLoaded = spell.Icon;
                     mCurrentSpellId = Globals.Me.Spells[mYindex].SpellId;
                     mIconCd = Globals.Me.GetSpellCooldown(Globals.Me.Spells[mYindex].SpellId) >
-                              Globals.System.GetTimeMs();
+                              Timing.Global.Milliseconds;
 
                     if (mIconCd)
                     {
                         mCooldownLabel.IsHidden = false;
                         var secondsRemaining =
                             (float) (Globals.Me.GetSpellCooldown(Globals.Me.Spells[mYindex].SpellId) -
-                                     Globals.System.GetTimeMs()) /
+                                     Timing.Global.Milliseconds) /
                             1000f;
 
                         if (secondsRemaining > 10f)
@@ -210,7 +210,7 @@ namespace Intersect.Client.Interface.Game.Spells
                         mCanDrag = true;
                         mMouseX = -1;
                         mMouseY = -1;
-                        if (Globals.System.GetTimeMs() < mClickTime)
+                        if (Timing.Global.Milliseconds < mClickTime)
                         {
                             Globals.Me.TryUseSpell(mYindex);
                             mClickTime = 0;

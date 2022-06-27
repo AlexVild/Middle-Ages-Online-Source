@@ -20,6 +20,7 @@ using Intersect.GameObjects.Maps;
 using Intersect.Logging;
 using Intersect.Network.Packets.Server;
 using Intersect.Utilities;
+using static Intersect.Client.Framework.File_Management.GameContentManager;
 
 namespace Intersect.Client.Entities
 {
@@ -222,7 +223,7 @@ namespace Intersect.Client.Entities
                 }
             }
 
-            AnimationTimer = Globals.System.GetTimeMs() + Globals.Random.Next(0, 500);
+            AnimationTimer = Timing.Global.Milliseconds + Globals.Random.Next(0, 500);
 
             //TODO Remove because fixed orrrrr change the exception text
             if (Options.EquipmentSlots.Count == 0)
@@ -510,9 +511,18 @@ namespace Intersect.Client.Entities
             
             time *= (float)Options.SpeedModifier;
 
+            if (StatusIsActive(StatusTypes.Slowed))
+            {
+                time *= Options.Instance.CombatOpts.SlowedModifier;
+            }
+            else if (StatusIsActive(StatusTypes.Haste))
+            {
+                time /= Options.Instance.CombatOpts.HasteModifier;
+            }
+
             return Math.Min(1000f, time);
         }
-
+        
         //Movement Processing
         public virtual bool Update()
         {
@@ -538,14 +548,14 @@ namespace Intersect.Client.Entities
             RenderList = DetermineRenderOrder(RenderList, map);
             if (mLastUpdate == 0)
             {
-                mLastUpdate = Globals.System.GetTimeMs();
+                mLastUpdate = Timing.Global.Milliseconds;
             }
 
-            var ecTime = (float) (Globals.System.GetTimeMs() - mLastUpdate);
+            var ecTime = (float)(Timing.Global.Milliseconds - mLastUpdate);
             elapsedtime = ecTime;
 
             // Update flash timer
-            if (Flash && Globals.System.GetTimeMs() > FlashEndTime)
+            if (Flash && Timing.Global.Milliseconds > FlashEndTime)
             {
                 Flash = false;
             }
@@ -554,7 +564,7 @@ namespace Intersect.Client.Entities
             {
                 WalkFrame = Options.Instance.Sprites.NormalSheetDashFrame; //Fix the frame whilst dashing
             }
-            else if (mWalkTimer < Globals.System.GetTimeMs())
+            else if (mWalkTimer < Timing.Global.Milliseconds)
             {
                 if (!IsMoving && DashQueue.Count > 0)
                 {
@@ -562,7 +572,7 @@ namespace Intersect.Client.Entities
                     Dashing.Start(this);
                     OffsetX = 0;
                     OffsetY = 0;
-                    DashTimer = Globals.System.GetTimeMs() + Options.MaxDashSpeed;
+                    DashTimer = Timing.Global.Milliseconds + Options.MaxDashSpeed;
                 }
                 else
                 {
@@ -586,7 +596,7 @@ namespace Intersect.Client.Entities
                         }
                     }
 
-                    mWalkTimer = Globals.System.GetTimeMs() + Options.Instance.Sprites.MovingFrameDuration;
+                    mWalkTimer = Timing.Global.Milliseconds + Options.Instance.Sprites.MovingFrameDuration;
                 }
             }
 
@@ -730,9 +740,9 @@ namespace Intersect.Client.Entities
                 }
             }
 
-            if (AnimationTimer < Globals.System.GetTimeMs())
+            if (AnimationTimer < Timing.Global.Milliseconds)
             {
-                AnimationTimer = Globals.System.GetTimeMs() + 200;
+                AnimationTimer = Timing.Global.Milliseconds + 200;
                 AnimationFrame++;
                 if (AnimationFrame >= SpriteFrames)
                 {
@@ -793,7 +803,7 @@ namespace Intersect.Client.Entities
                 }
             }
 
-            mLastUpdate = Globals.System.GetTimeMs();
+            mLastUpdate = Timing.Global.Milliseconds;
 
             UpdateSpriteAnimation();
 
@@ -1721,7 +1731,7 @@ namespace Intersect.Client.Entities
 
         public void DrawCastingBar()
         {
-            if (CastTime < Globals.System.GetTimeMs())
+            if (CastTime < Timing.Global.Milliseconds)
             {
                 return;
             }
@@ -1735,8 +1745,8 @@ namespace Intersect.Client.Entities
             if (castSpell != null)
             {
                 var width = Options.TileWidth - 8;
-                var fillratio = (castSpell.CastDuration - (CastTime - Globals.System.GetTimeMs())) /
-                                (float) castSpell.CastDuration;
+                var fillratio = (castSpell.CastDuration - (CastTime - Timing.Global.Milliseconds)) /
+                                (float)castSpell.CastDuration;
 
                 var castFillWidth = fillratio * width;
                 var y = (int) Math.Ceiling(GetCenterPos().Y);
@@ -1790,23 +1800,24 @@ namespace Intersect.Client.Entities
                 return;
             }
 
-            var srcRectangle = new FloatRect();
-            var destRectangle = new FloatRect();
-            var targetTex = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Misc, "target.png");
+            var targetTex = Globals.ContentManager.GetTexture(TextureType.Misc, "target.png");
             if (targetTex != null)
             {
-                destRectangle.X = GetCenterPos().X - (int) targetTex.GetWidth() / 4;
-                destRectangle.Y = GetCenterPos().Y - (int) targetTex.GetHeight() / 2;
-
-                srcRectangle = new FloatRect(
-                    priority * (int) targetTex.GetWidth() / 2, 0, (int) targetTex.GetWidth() / 2,
-                    (int) targetTex.GetHeight()
+                var srcRectangle = new FloatRect(
+                    priority * targetTex.GetWidth() / 2f,
+                    0,
+                    targetTex.GetWidth() / 2f,
+                    targetTex.GetHeight()
                 );
 
-                destRectangle.Width = srcRectangle.Width;
-                destRectangle.Height = srcRectangle.Height;
+                var destRectangle = new FloatRect(
+                    (float) Math.Ceiling(GetCenterPos().X - targetTex.GetWidth() / 4f),
+                    (float) Math.Ceiling(GetCenterPos().Y - targetTex.GetHeight() / 2f),
+                    srcRectangle.Width,
+                    srcRectangle.Height
+                );
 
-                Graphics.DrawGameTexture(targetTex, srcRectangle, destRectangle, Intersect.Color.White);
+                Graphics.DrawGameTexture(targetTex, srcRectangle, destRectangle, Color.White);
             }
         }
 
@@ -1840,6 +1851,24 @@ namespace Intersect.Client.Entities
             return false;
         }
 
+        public bool StatusIsActive(StatusTypes status, Action action = default)
+        {
+            bool statusFound = false;
+            for (var n = 0; n < Status.Count; n++)
+            {
+                if (Status[n].Type == status)
+                {
+                    statusFound = true;
+                    if (action != default)
+                    {
+                        action();
+                    }
+                }
+            }
+
+            return statusFound;
+        }
+
         public Status GetStatus(Guid guid)
         {
             foreach (var status in Status)
@@ -1856,7 +1885,7 @@ namespace Intersect.Client.Entities
         public void SortStatuses()
         {
             //Sort Status effects by remaining time
-            Status = Status.OrderByDescending(x => x.RemainingMs()).ToList();
+            Status = Status.OrderByDescending(x => x.RemainingMs).ToList();
         }
 
         public void UpdateSpriteAnimation()
@@ -1869,16 +1898,16 @@ namespace Intersect.Client.Entities
                 return;
             }
 
-            SpriteAnimation = AnimatedTextures[SpriteAnimations.Idle] != null && LastActionTime + Options.Instance.Sprites.TimeBeforeIdle < Globals.System.GetTimeMs() ? SpriteAnimations.Idle : SpriteAnimations.Normal;
+            SpriteAnimation = AnimatedTextures[SpriteAnimations.Idle] != null && LastActionTime + Options.Instance.Sprites.TimeBeforeIdle < Timing.Global.Milliseconds ? SpriteAnimations.Idle : SpriteAnimations.Normal;
             if (IsMoving)
             {
                 SpriteAnimation = SpriteAnimations.Normal;
-                LastActionTime = Globals.System.GetTimeMs();
+                LastActionTime = Timing.Global.Milliseconds;
             }
             else if (AttackTimer > Timing.Global.Ticks / TimeSpan.TicksPerMillisecond) //Attacking
             {
                 var timeIn = CalculateAttackTime() - (AttackTimer - Timing.Global.Ticks / TimeSpan.TicksPerMillisecond);
-                LastActionTime = Globals.System.GetTimeMs();
+                LastActionTime = Timing.Global.Milliseconds;
 
                 if (AnimatedTextures[SpriteAnimations.Attack] != null)
                 {
@@ -1925,13 +1954,13 @@ namespace Intersect.Client.Entities
                     SpriteFrame = (int)Math.Floor((timeIn / (CalculateAttackTime() / (float)SpriteFrames)));
                 }
             }
-            else if (CastTime > Globals.System.GetTimeMs())
+            else if (CastTime > Timing.Global.Milliseconds)
             {
                 var spell = SpellBase.Get(SpellCast);
                 if (spell != null)
                 {
                     var duration = spell.CastDuration;
-                    var timeIn = duration - (CastTime - Globals.System.GetTimeMs());
+                    var timeIn = duration - (CastTime - Timing.Global.Milliseconds);
 
                     if (AnimatedTextures[SpriteAnimations.Cast] != null)
                     {
@@ -1946,7 +1975,7 @@ namespace Intersect.Client.Entities
 
                     SpriteFrame = (int)Math.Floor((timeIn / (duration / (float)SpriteFrames)));
                 }
-                LastActionTime = Globals.System.GetTimeMs();
+                LastActionTime = Timing.Global.Milliseconds;
             }
 
             if (SpriteAnimation == SpriteAnimations.Normal)
@@ -1955,14 +1984,14 @@ namespace Intersect.Client.Entities
             }
             else if (SpriteAnimation == SpriteAnimations.Idle)
             {
-                if (SpriteFrameTimer + Options.Instance.Sprites.IdleFrameDuration < Globals.System.GetTimeMs())
+                if (SpriteFrameTimer + Options.Instance.Sprites.IdleFrameDuration < Timing.Global.Milliseconds)
                 {
                     SpriteFrame++;
                     if (SpriteFrame >= SpriteFrames)
                     {
                         SpriteFrame = 0;
                     }
-                    SpriteFrameTimer = Globals.System.GetTimeMs();
+                    SpriteFrameTimer = Timing.Global.Milliseconds;
                 }
             }
         }
@@ -1970,7 +1999,7 @@ namespace Intersect.Client.Entities
         public void ResetSpriteFrame()
         {
             SpriteFrame = 0;
-            SpriteFrameTimer = Globals.System.GetTimeMs();
+            SpriteFrameTimer = Timing.Global.Milliseconds;
         }
 
         public void LoadAnimationTextures(string tex)

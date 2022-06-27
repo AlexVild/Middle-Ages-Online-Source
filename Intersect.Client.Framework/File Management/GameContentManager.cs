@@ -389,6 +389,16 @@ namespace Intersect.Client.Framework.File_Management
                 return uiJson;
             }
 
+            var resolutionWidth = int.Parse(resolution.Split('x')[0]);
+            var resolutionSizeKey = GetUiSize(resolutionWidth);
+
+            var alternateKey = new KeyValuePair<UI, string>(stage, $"{name}.{resolutionSizeKey}.json");
+            if (mUiDict.TryGetValue(alternateKey, out string uiJsonAlt))
+            {
+                loadedCachedJson = true;
+                return uiJsonAlt;
+            }
+
             loadedCachedJson = false;
 
             var layouts = Path.Combine("resources", "gui", "layouts");
@@ -407,6 +417,11 @@ namespace Intersect.Client.Framework.File_Management
             if (resolution != null)
             {
                 path = Path.Combine(dir, name + "." + resolution + ".json");
+                if (File.Exists(path))
+                {
+                    return File.ReadAllText(path);
+                }
+                path = Path.Combine(dir, name + "." + resolutionSizeKey + ".json");
                 if (File.Exists(path))
                 {
                     return File.ReadAllText(path);
@@ -439,6 +454,18 @@ namespace Intersect.Client.Framework.File_Management
             }
 
             return "";
+        }
+
+        private string GetUiSize(int width)
+        {
+            if (width > 1366)
+            {
+                return "lg";
+            }
+            else
+            {
+                return "sm";
+            }
         }
 
         public virtual void SaveUIJson(UI stage, string name, string json, string resolution)

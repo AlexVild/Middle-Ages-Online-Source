@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 using Intersect.Enums;
-
+using Intersect.GameObjects.Timers;
 using Newtonsoft.Json;
 
 namespace Intersect.GameObjects.Events.Commands
@@ -898,6 +898,10 @@ namespace Intersect.GameObjects.Events.Commands
         public Guid QuestId { get; set; }
 
         public Guid TaskId { get; set; }
+        
+        public bool SkipCompletionEvent { get; set; }
+        
+        public bool DoNotNotify { get; set; }
 
     }
 
@@ -909,6 +913,8 @@ namespace Intersect.GameObjects.Events.Commands
         public Guid QuestId { get; set; }
 
         public bool SkipCompletionEvent { get; set; }
+        
+        public bool ResetQuest { get; set; }
 
     }
 
@@ -1156,5 +1162,63 @@ namespace Intersect.GameObjects.Events.Commands
         public override EventCommandType Type { get; } = EventCommandType.AddInspiration;
 
         public long Seconds { get; set; }
+    }
+
+    public abstract class TimerCommand : EventCommand
+    {
+        public Guid DescriptorId { get; set; }
+    }
+
+    public class StartTimerCommand : TimerCommand
+    {
+        public override EventCommandType Type { get; } = EventCommandType.StartTimer;   
+    }
+
+    public class ModifyTimerCommand : TimerCommand
+    {
+        public override EventCommandType Type { get; } = EventCommandType.ModifyTimer;
+
+        public TimerOperator Operator { get; set; }
+
+        public int Amount { get; set; } = 1;
+
+        public bool IsStatic { get; set; } = true;
+
+        public VariableTypes VariableType { get; set; }
+        
+        public Guid VariableDescriptorId { get; set; }
+    }
+
+    public class StopTimerCommand : TimerCommand
+    {
+        public override EventCommandType Type { get; } = EventCommandType.StopTimer;
+
+        public TimerStopType StopType { get; set; }
+    }
+
+    public enum ChangeSpawnOperator
+    {
+        SET,
+        ADD,
+        SUBTRACT
+    }
+
+    public class ChangeSpawnGroupCommand : EventCommand
+    {
+        public override EventCommandType Type { get; } = EventCommandType.ChangeSpawnGroup;
+
+        public Guid MapId { get; set; }
+
+        public bool UsePlayerMap { get; set; }
+
+        public bool SurroundingMaps { get; set; }
+
+        public int SpawnGroup { get; set; }
+
+        public bool ResetNpcs { get; set; }
+
+        public bool PersistCleanup { get; set; }
+
+        public ChangeSpawnOperator Operator { get; set; } = ChangeSpawnOperator.SET;
     }
 }

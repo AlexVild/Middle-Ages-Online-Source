@@ -1,4 +1,8 @@
-﻿namespace Intersect.Config
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.Serialization;
+
+namespace Intersect.Config
 {
 
     public class CombatOptions
@@ -81,11 +85,36 @@
         public float DefaultBackstabMultiplier = 1.25f;
         
         public float SneakAttackMultiplier = 1.5f;
+        
+        public float SwiftAttackSpeedMod = 0.75f;
+        
+        public int AccurateCritChanceMultiplier = 3;
 
+        public float HasteModifier = 1.2f;
+        
+        public float SlowedModifier = 1.6f;
+        
+        public int ConfusionMissPercent = 50;
+
+        public bool TurnWhileCasting = true;
         //Combat
         public int RegenTime = 5000; //5 seconds
 
         public bool EnableCombatChatMessages = false; // Enables or disables combat chat messages.
+
+        public long ProjectileSpellMovementDelay = 250;
+
+        public bool StunPreventsItems { get; set;  } = false;
+
+        public List<int> HarvestBonusIntervals = new List<int>()
+        {
+            30, 90, 250, 500, 1000
+        };
+
+        public List<double> HarvestBonuses = new List<double>()
+        {
+            0.05f, 0.1f, 0.25f, 0.33f, 0.5f
+        };
 
         //Spells
 
@@ -128,6 +157,20 @@
         /// Configures the maximum distance a target is allowed to be from the player when auto targetting.
         /// </summary>
         public int MaxPlayerAutoTargetRadius = 15;
+
+        [OnDeserializing]
+        internal void OnDeserializingMethod(StreamingContext context)
+        {
+            HarvestBonuses.Clear();
+            HarvestBonusIntervals.Clear();
+        }
+
+        [OnDeserialized]
+        internal void OnDeserializedMethod(StreamingContext context)
+        {
+            HarvestBonuses = new List<double>(HarvestBonuses.Distinct());
+            HarvestBonusIntervals = new List<int>(HarvestBonusIntervals.Distinct());
+        }
     }
 
 }

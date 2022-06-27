@@ -12,6 +12,7 @@ using Intersect.GameObjects.QuestBoard;
 using Intersect.GameObjects.QuestList;
 using Intersect.GameObjects.Maps.MapList;
 using Intersect.Logging;
+using Intersect.GameObjects.Timers;
 
 namespace Intersect.Editor.Forms.Editors.Events
 {
@@ -1247,6 +1248,13 @@ namespace Intersect.Editor.Forms.Editors.Events
 
         private static string GetCommandText(EndQuestCommand command, MapInstance map)
         {
+            if (command.ResetQuest)
+            {
+                return Strings.EventCommandList.endquest.ToString(
+                    QuestBase.GetName(command.QuestId), Strings.EventCommandList.resetquest
+                );
+            }
+
             if (!command.SkipCompletionEvent)
             {
                 return Strings.EventCommandList.endquest.ToString(
@@ -1411,6 +1419,30 @@ namespace Intersect.Editor.Forms.Editors.Events
                     break;
                 case Enums.VariableMods.SystemTime:
                     varvalue = Strings.EventCommandList.systemtimevariable;
+
+                    break;
+                case Enums.VariableMods.PlayerLevel:
+                    varvalue = Strings.EventCommandList.varplayerlevel;
+
+                    break;
+                case Enums.VariableMods.PlayerX:
+                    varvalue = Strings.EventCommandList.varplayerx;
+
+                    break;
+                case Enums.VariableMods.PlayerY:
+                    varvalue = Strings.EventCommandList.varplayery;
+
+                    break;
+                case Enums.VariableMods.EventX:
+                    varvalue = Strings.EventCommandList.vareventx;
+
+                    break;
+                case Enums.VariableMods.EventY:
+                    varvalue = Strings.EventCommandList.vareventy;
+
+                    break;
+                case Enums.VariableMods.SpawnGroup:
+                    varvalue = Strings.EventCommandList.VarSpawnGroup;
 
                     break;
                 case Enums.VariableMods.DupPlayerVar:
@@ -1652,6 +1684,92 @@ namespace Intersect.Editor.Forms.Editors.Events
         private static string GetCommandText(AddInspirationCommand command, MapInstance map)
         {
             return Strings.EventCommandList.addinspiration.ToString(command.Seconds);
+        }
+
+        private static string GetCommandText(StartTimerCommand command, MapInstance map)
+        {
+            var descriptor = TimerDescriptor.Get(command.DescriptorId);
+            if (descriptor == null)
+            {
+                return Strings.EventCommandList.TimerStart.ToString(Strings.General.none);
+            }
+
+            return Strings.EventCommandList.TimerStart.ToString(descriptor.Name);
+        }
+
+        private static string GetCommandText(ModifyTimerCommand command, MapInstance map)
+        {
+            var descriptor = TimerDescriptor.Get(command.DescriptorId);
+            var op = Enum.GetName(typeof(TimerOperator), command.Operator);
+            var amount = command.Amount.ToString();
+
+            if (descriptor == null)
+            {
+                return Strings.EventCommandList.TimerModify.ToString(Strings.General.none, op, amount);
+            }
+
+            if (command.IsStatic)
+            {
+                return Strings.EventCommandList.TimerModify.ToString(descriptor.Name, op, amount);
+            }
+            else 
+            {
+                string varType = Enum.GetName(typeof(VariableTypes), command.VariableType);
+                string varName = string.Empty;
+                switch(command.VariableType)
+                {
+                    case VariableTypes.PlayerVariable:
+                        varName = PlayerVariableBase.GetName(command.VariableDescriptorId);
+                        break;
+                    case VariableTypes.ServerVariable:
+                        varName = ServerVariableBase.GetName(command.VariableDescriptorId);
+                        break;
+                    case VariableTypes.InstanceVariable:
+                        varName = InstanceVariableBase.GetName(command.VariableDescriptorId);
+                        break;
+                }
+
+                return Strings.EventCommandList.TimerModifyVar.ToString(descriptor.Name, op, varType, varName);
+            }
+        }
+
+        private static string GetCommandText(StopTimerCommand command, MapInstance map)
+        {
+            var descriptor = TimerDescriptor.Get(command.DescriptorId);
+            if (descriptor == null)
+            {
+                return Strings.EventCommandList.TimerStop.ToString(Strings.General.none, Strings.EventCommandList.TimerStopCommands[command.StopType].ToString());
+            }
+
+            return Strings.EventCommandList.TimerStop.ToString(descriptor.Name, Strings.EventCommandList.TimerStopCommands[command.StopType].ToString());
+        }
+
+        private static string GetCommandText(ChangeSpawnGroupCommand command, MapInstance map)
+        {
+            var mapName = Strings.EventCommandList.mapnotfound;
+            if (command.UsePlayerMap)
+            {
+                mapName = "Player Map";
+            }
+            else
+            {
+                for (var i = 0; i < MapList.OrderedMaps.Count; i++)
+                {
+                    if (MapList.OrderedMaps[i].MapId == command.MapId)
+                    {
+                        mapName = MapList.OrderedMaps[i].Name;
+                    }
+                }
+            }
+
+            var op = Enum.GetName(typeof(ChangeSpawnOperator), command.Operator);
+
+            if (command.ResetNpcs)
+            {
+                return Strings.EventCommandList.ChangeSpawnGroupReset.ToString(command.SpawnGroup.ToString(), mapName, command.SurroundingMaps.ToString(), op, command.PersistCleanup.ToString());
+            }
+
+            return Strings.EventCommandList.ChangeSpawnGroup.ToString(command.SpawnGroup.ToString(), mapName, command.SurroundingMaps.ToString(), op, command.PersistCleanup.ToString());
         }
 
     }

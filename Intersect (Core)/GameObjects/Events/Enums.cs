@@ -244,7 +244,14 @@
         NPCGuildManagement,
         
         // Inspiration
-        AddInspiration
+        AddInspiration,
+
+        // Timers
+        StartTimer,
+        ModifyTimer,
+        StopTimer,
+
+        ChangeSpawnGroup,
     }
 
     public enum NPCGuildManagementSelection

@@ -26,6 +26,9 @@ using Intersect.Server.Localization;
 using Intersect.Server.Maps;
 using Intersect.Utilities;
 using Newtonsoft.Json;
+using Intersect.Server.Classes.Maps;
+using Intersect.GameObjects.Timers;
+using Intersect.Server.Database.PlayerData;
 
 namespace Intersect.Server.Networking
 {
@@ -51,10 +54,10 @@ namespace Intersect.Server.Networking
         //PingPacket
         public static void SendPing(Client client, bool request = true)
         {
-            if (client != null && client.LastPing + 250 < Globals.Timing.Milliseconds)
+            if (client != null && client.LastPing + 250 < Timing.Global.Milliseconds)
             {
                 client.Send(new PingPacket(request), TransmissionMode.Any);
-                client.LastPing = Globals.Timing.Milliseconds;
+                client.LastPing = Timing.Global.Milliseconds;
             }
         }
 
@@ -196,6 +199,7 @@ namespace Intersect.Server.Networking
                 {
                     mapPacket.MapItems = GenerateMapItemsPacket(client.Entity, mapId);
                     mapPacket.MapEntities = GenerateMapEntitiesPacket(mapId, client.Entity);
+                    mapPacket.MapTrapPackets = GenerateMapTrapsPacket(mapId, client.Entity);
 
                     return mapPacket;
                 }
@@ -220,7 +224,7 @@ namespace Intersect.Server.Networking
             {
                 if (sentMaps.TryGetValue(mapId, out var sentMap))
                 {
-                    if (sentMap.Item1 > Globals.Timing.Milliseconds && sentMap.Item2 == map.Revision)
+                    if (sentMap.Item1 > Timing.Global.Milliseconds && sentMap.Item2 == map.Revision)
                     {
                         return;
                     }
@@ -230,7 +234,7 @@ namespace Intersect.Server.Networking
 
                 try
                 {
-                    sentMaps.Add(mapId, new Tuple<long, int>(Globals.Timing.Milliseconds + 5000, map.Revision));
+                    sentMaps.Add(mapId, new Tuple<long, int>(Timing.Global.Milliseconds + 5000, map.Revision));
                 }
                 catch (Exception exception)
                 {
@@ -329,6 +333,24 @@ namespace Intersect.Server.Networking
             return null;
         }
 
+        public static List<MapTrapPacket> GenerateMapTrapsPacket(Guid mapId, Player forPlayer)
+        {
+            var trapPackets = new List<MapTrapPacket>();
+            if (MapController.TryGetInstanceFromMap(mapId, forPlayer.MapInstanceId, out var mapInstance))
+            {
+                var traps = new List<MapTrapInstance>();
+                
+                traps.AddRange(mapInstance.MapTraps.Values);
+
+                foreach (var trap in traps)
+                {
+                    trapPackets.Add(new MapTrapPacket(trap.MapId, trap.Id, trap.ParentSpell.TrapAnimationId, trap.Owner.Id, trap.X, trap.Y, false));
+                }
+            }
+
+            return trapPackets;
+        }
+
         //EntityPacket
         public static void SendEntityDataTo(Player player, Entity en)
         {
@@ -415,7 +437,7 @@ namespace Intersect.Server.Networking
                     enPackets.Add(entitiesToDispose[i].EntityPacket(null, player));
                 }
 
-                player?.SendPacket(new MapLayerChangedPacket(enPackets.ToArray(), effectedMaps.ToList()));
+                player?.SendPacket(new MapInstanceChangedPacket(enPackets.ToArray(), effectedMaps.ToList()));
             }
         }
 
@@ -869,7 +891,7 @@ namespace Intersect.Server.Networking
         {
             return new EntityVitalsPacket(
                 en.Id, en.GetEntityType(), en.MapId, en.GetVitals(), en.GetMaxVitals(), en.StatusPackets(),
-                en.CombatTimer - Globals.Timing.Milliseconds
+                en.CombatTimer - Timing.Global.Milliseconds
             );
         }
 
@@ -1445,7 +1467,7 @@ namespace Intersect.Server.Networking
             if (player.SpellCooldowns.ContainsKey(spellId))
             {
                 var cds = new Dictionary<Guid, long>();
-                cds.Add(spellId, player.SpellCooldowns[spellId] - Globals.Timing.MillisecondsUTC);
+                cds.Add(spellId, player.SpellCooldowns[spellId] - Timing.Global.MillisecondsUtc);
                 player.SendPacket(new SpellCooldownPacket(cds), TransmissionMode.All);
             }
         }
@@ -1457,7 +1479,7 @@ namespace Intersect.Server.Networking
                 var cds = new Dictionary<Guid, long>();
                 foreach (var cd in player.SpellCooldowns)
                 {
-                    cds.Add(cd.Key, cd.Value - Globals.Timing.MillisecondsUTC);
+                    cds.Add(cd.Key, cd.Value - Timing.Global.MillisecondsUtc);
                 }
 
                 player.SendPacket(new SpellCooldownPacket(cds), TransmissionMode.All);
@@ -1470,7 +1492,7 @@ namespace Intersect.Server.Networking
             if (player.ItemCooldowns.ContainsKey(itemId))
             {
                 var cds = new Dictionary<Guid, long>();
-                cds.Add(itemId, player.ItemCooldowns[itemId] - Globals.Timing.MillisecondsUTC);
+                cds.Add(itemId, player.ItemCooldowns[itemId] - Timing.Global.MillisecondsUtc);
                 player.SendPacket(new ItemCooldownPacket(cds), TransmissionMode.All);
             }
         }
@@ -1482,7 +1504,7 @@ namespace Intersect.Server.Networking
                 var cds = new Dictionary<Guid, long>();
                 foreach (var cd in player.ItemCooldowns)
                 {
-                    cds.Add(cd.Key, cd.Value - Globals.Timing.MillisecondsUTC);
+                    cds.Add(cd.Key, cd.Value - Timing.Global.MillisecondsUtc);
                 }
 
                 player.SendPacket(new ItemCooldownPacket(cds), TransmissionMode.All);
@@ -1746,6 +1768,12 @@ namespace Intersect.Server.Networking
                         SendGameObject(client, obj.Value, false, false, packetList);
                     }
                     break;
+                case GameObjectType.Timer:
+                    foreach (var obj in TimerDescriptor.Lookup)
+                    {
+                        SendGameObject(client, obj.Value, false, false, packetList);
+                    }
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }
@@ -1838,9 +1866,9 @@ namespace Intersect.Server.Networking
         }
 
         //ActionMsgPacket
-        public static void SendActionMsg(Entity en, string message, Color color)
+        public static void SendActionMsg(Entity en, string message, Color color, string mapSound = "")
         {
-            if (en == null || en is Resource && Options.HideResourceHealthBars)
+            if (en == null)
             {
                 return;
             }
@@ -1849,11 +1877,11 @@ namespace Intersect.Server.Networking
             {
                 if (Options.Instance.Packets.BatchActionMessagePackets)
                 {
-                    mapInstance.AddBatchedActionMessage(new ActionMsgPacket(en.MapId, en.X, en.Y, message, color));
+                    mapInstance.AddBatchedActionMessage(new ActionMsgPacket(en.MapId, en.X, en.Y, message, color, mapSound));
                 }
                 else
                 {
-                    SendDataToProximityOnMapInstance(en.MapId, en.MapInstanceId, new ActionMsgPacket(en.MapId, en.X, en.Y, message, color));
+                    SendDataToProximityOnMapInstance(en.MapId, en.MapInstanceId, new ActionMsgPacket(en.MapId, en.X, en.Y, message, color, mapSound));
                 }
             }
         }
@@ -2324,9 +2352,9 @@ namespace Intersect.Server.Networking
             client?.Send(new FlashScreenPacket(dur, col, intensity, soundFile));
         }
 
-        public static void SendResourceLockPacket(Player player, bool resourceLock)
+        public static void SendResourceLockPacket(Player player, bool resourceLock, double harvestBonus, int harvestsRemaining)
         {
-            player?.SendPacket(new ResourceLockPacket(resourceLock));
+            player?.SendPacket(new ResourceLockPacket(resourceLock, harvestBonus, harvestsRemaining));
         }
 
         public static void SendShakeScreenPacket(Client client, float intensity)
@@ -2337,6 +2365,27 @@ namespace Intersect.Server.Networking
         public static void SendCombatEffectPacket(Client client, Guid targetId, float shakeAmount, Color entityFlashColor, string sound, float flashIntensity, float flashDuration, Color flashColor)
         {
             client?.Send(new CombatEffectPacket(targetId, shakeAmount, entityFlashColor, sound, flashIntensity, flashDuration, flashColor));
+        }
+
+        public static void SendMapTrapPacket(Player player, Guid mapId, Guid trapId, Guid animationId, Guid ownerId, byte x, byte y, bool remove = false)
+        {
+            player?.SendPacket(new MapTrapPacket(mapId, trapId, animationId, ownerId, x, y, remove));
+        }
+        
+        public static void SendProjectileCastDelayPacket(Player player, long delayTime)
+        {
+            player?.SendPacket(new ProjectileCastDelayPacket(delayTime));
+        }
+
+        public static void SendTimerPacket(Player player, TimerInstance timer)
+        {
+            var descriptor = timer.Descriptor;
+            player?.SendPacket(new TimerPacket(timer.DescriptorId, timer.TimeRemaining, timer.StartTime, descriptor.Type, descriptor.DisplayName, descriptor.ContinueAfterExpiration));
+        }
+
+        public static void SendTimerStopPacket(Player player, TimerInstance timer)
+        {
+            player?.SendPacket(new TimerStopPacket(timer.DescriptorId, timer.ElapsedTime));
         }
     }
 

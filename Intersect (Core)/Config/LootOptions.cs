@@ -47,5 +47,15 @@
         /// When killing an npc which spawns individualized loot for all of it's attackers, include loot for all their party members, even if they didn't participate (deal damage) to the npc
         /// </summary>
         public bool IndividualizedLootAutoIncludePartyMembers { get; set; } = false;
+
+        /// <summary>
+        /// Defines the despawn time for player-owned items that have been dropped
+        /// </summary>
+        public int PlayerDroppedItemDespawnTime { get; set; } = 30000;
+
+        /// <summary>
+        /// Defines the despawn time for player-owned items that have been dropped ond death
+        /// </summary>
+        public int PlayerDeathItemDespawnTime { get; set; } = 90000;
     }
 }

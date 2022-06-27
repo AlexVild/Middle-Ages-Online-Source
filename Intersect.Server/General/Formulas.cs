@@ -146,6 +146,11 @@ namespace Intersect.Server.General
                     result = -result;
                 }
 
+                if (attacker.StatusActive(StatusTypes.Confused) && Randomization.Next(1, 101) <= Options.Instance.CombatOpts.ConfusionMissPercent)
+                {
+                    result = 0.0;
+                }
+
                 return (int) Math.Round(result);
             }
             catch (Exception ex)
@@ -156,6 +161,11 @@ namespace Intersect.Server.General
 
         public static bool AttackEvaded(int baseDamage, DamageType damageType, Entity attacker, Entity victim, double critMultiplier, int scaling, Stats scalingStat)
         {
+            if (damageType == DamageType.True)
+            {
+                return false;
+            }
+
             var victimsEvasionExpr = damageType == DamageType.Physical ? new Expression(mFormulas.Evasion) : new Expression(mFormulas.Resistance);
             mFormulas.ReadParams(ref victimsEvasionExpr, baseDamage, attacker, victim, critMultiplier, scaling, scalingStat);
             var evasion = (int) Math.Round(Convert.ToDouble(victimsEvasionExpr.Evaluate()));

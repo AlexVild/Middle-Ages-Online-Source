@@ -37,6 +37,8 @@ namespace Intersect.Editor.Forms.Editors
             this.txtSearch = new DarkUI.Controls.DarkTextBox();
             this.lstGameObjects = new Intersect.Editor.Forms.Controls.GameObjectList();
             this.grpGeneral = new DarkUI.Controls.DarkGroupBox();
+            this.lblExp = new System.Windows.Forms.Label();
+            this.nudExp = new DarkUI.Controls.DarkNumericUpDown();
             this.btnAddFolder = new DarkUI.Controls.DarkButton();
             this.lblFolder = new System.Windows.Forms.Label();
             this.cmbFolder = new DarkUI.Controls.DarkComboBox();
@@ -103,10 +105,10 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemPaste = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
-            this.nudExp = new DarkUI.Controls.DarkNumericUpDown();
-            this.lblExp = new System.Windows.Forms.Label();
+            this.chkDoNotRecord = new DarkUI.Controls.DarkCheckBox();
             this.grpResources.SuspendLayout();
             this.grpGeneral.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudExp)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMaxHp)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMinHp)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudSpawnDuration)).BeginInit();
@@ -124,7 +126,6 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudDropAmount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudDropChance)).BeginInit();
             this.toolStrip.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudExp)).BeginInit();
             this.SuspendLayout();
             // 
             // grpResources
@@ -212,6 +213,31 @@ namespace Intersect.Editor.Forms.Editors
             this.grpGeneral.TabIndex = 15;
             this.grpGeneral.TabStop = false;
             this.grpGeneral.Text = "General";
+            // 
+            // lblExp
+            // 
+            this.lblExp.AutoSize = true;
+            this.lblExp.Location = new System.Drawing.Point(5, 208);
+            this.lblExp.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblExp.Name = "lblExp";
+            this.lblExp.Size = new System.Drawing.Size(79, 13);
+            this.lblExp.TabIndex = 31;
+            this.lblExp.Text = "Inspiration Exp:";
+            // 
+            // nudExp
+            // 
+            this.nudExp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudExp.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudExp.Location = new System.Drawing.Point(123, 206);
+            this.nudExp.Name = "nudExp";
+            this.nudExp.Size = new System.Drawing.Size(87, 20);
+            this.nudExp.TabIndex = 31;
+            this.nudExp.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudExp.ValueChanged += new System.EventHandler(this.nudExp_ValueChanged);
             // 
             // btnAddFolder
             // 
@@ -718,6 +744,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpRegen.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpRegen.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpRegen.Controls.Add(this.chkDoNotRecord);
             this.grpRegen.Controls.Add(this.nudHpRegen);
             this.grpRegen.Controls.Add(this.lblHpRegen);
             this.grpRegen.Controls.Add(this.lblRegenHint);
@@ -1048,30 +1075,14 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
             // 
-            // nudExp
+            // chkDoNotRecord
             // 
-            this.nudExp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudExp.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudExp.Location = new System.Drawing.Point(123, 206);
-            this.nudExp.Name = "nudExp";
-            this.nudExp.Size = new System.Drawing.Size(87, 20);
-            this.nudExp.TabIndex = 31;
-            this.nudExp.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudExp.ValueChanged += new System.EventHandler(this.nudExp_ValueChanged);
-            // 
-            // lblExp
-            // 
-            this.lblExp.AutoSize = true;
-            this.lblExp.Location = new System.Drawing.Point(5, 208);
-            this.lblExp.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblExp.Name = "lblExp";
-            this.lblExp.Size = new System.Drawing.Size(79, 13);
-            this.lblExp.TabIndex = 31;
-            this.lblExp.Text = "Inspiration Exp:";
+            this.chkDoNotRecord.Location = new System.Drawing.Point(8, 84);
+            this.chkDoNotRecord.Name = "chkDoNotRecord";
+            this.chkDoNotRecord.Size = new System.Drawing.Size(98, 21);
+            this.chkDoNotRecord.TabIndex = 36;
+            this.chkDoNotRecord.Text = "Do Not Record";
+            this.chkDoNotRecord.CheckedChanged += new System.EventHandler(this.darkCheckBox1_CheckedChanged);
             // 
             // FrmResource
             // 
@@ -1098,6 +1109,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpResources.PerformLayout();
             this.grpGeneral.ResumeLayout(false);
             this.grpGeneral.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudExp)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMaxHp)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMinHp)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudSpawnDuration)).EndInit();
@@ -1121,7 +1133,6 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudDropChance)).EndInit();
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudExp)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1201,5 +1212,6 @@ namespace Intersect.Editor.Forms.Editors
         private DarkTextBox txtCannotHarvest;
         private System.Windows.Forms.Label lblExp;
         private DarkNumericUpDown nudExp;
+        private DarkCheckBox chkDoNotRecord;
     }
 }

@@ -78,7 +78,11 @@ namespace Intersect.Client.Entities
 
         public bool UnspentPointsWarning = false;
 
-        public bool resourceLocked = false;
+        public bool ResourceLocked = false;
+        
+        public double CurrentHarvestBonus = 0.0f;
+        
+        public int HarvestsRemaining = 0;
 
         public long CombatTimer { get; set; }
 
@@ -101,6 +105,8 @@ namespace Intersect.Client.Entities
         public string QuestPoints { get; set; }
 
         public string LifetimeQuestPoints { get; set; }
+
+        private long mLastSpellCastMessageSent = 0L;
 
         // Used for doing smart direction changing if requesting to face a target
         public long DirRequestTime { get; set; }
@@ -149,6 +155,8 @@ namespace Intersect.Client.Entities
         public string VehicleSprite = string.Empty;
         
         public long VehicleSpeed = 0L;
+
+        public long LastProjectileCastTime = 0L;
 
         public Player(Guid id, PlayerEntityPacket packet) : base(id, packet)
         {
@@ -241,14 +249,14 @@ namespace Intersect.Client.Entities
                     ProcessDirectionalInput();
                 }
 
-                if (Controls.KeyDown(Control.AttackInteract) || resourceLocked)
+                if (Controls.KeyDown(Control.AttackInteract) || ResourceLocked)
                 {
                     if (!Globals.Me.TryAttack())
                     {
                         UpdateAttackTimer();
                     }
                 }
-            } else if (CanHarvest() && resourceLocked) // Allow resource locking to persist in more situations than attacking
+            } else if (CanHarvest() && ResourceLocked) // Allow resource locking to persist in more situations than attacking
             {
                 if (!Globals.Me.TryAttack())
                 {
@@ -276,7 +284,7 @@ namespace Intersect.Client.Entities
 
             bool wasMoving = IsMoving;
             bool smartDirPossible = false;
-            if (DirRequestTime > Globals.System.GetTimeMs()) // If we're still in the potential zone for a smart dir change
+            if (DirRequestTime > Timing.Global.Milliseconds) // If we're still in the potential zone for a smart dir change
             {
                 smartDirPossible = true;
             }
@@ -311,7 +319,7 @@ namespace Intersect.Client.Entities
             Gender = pkt.Gender;
             Class = pkt.ClassId;
             Type = pkt.AccessLevel;
-            CombatTimer = pkt.CombatTimeRemaining + Globals.System.GetTimeMs();
+            CombatTimer = pkt.CombatTimeRemaining + Timing.Global.Milliseconds;
             Guild = pkt.Guild;
             Rank = pkt.GuildRank;
             InVehicle = pkt.InVehicle;
@@ -375,6 +383,12 @@ namespace Intersect.Client.Entities
                         );
                     } else
                     {
+                        // Quick drop
+                        if (Globals.InputManager.KeyDown(Keys.Shift))
+                        {
+                            PacketSender.SendDropItem(index, Inventory[index].Quantity);
+                            return;
+                        }
                         var iBox = new InputBox(
                             Strings.Inventory.dropitem,
                             Strings.Inventory.dropitemprompt.ToString(ItemBase.Get(Inventory[index].ItemId).Name), true,
@@ -393,6 +407,12 @@ namespace Intersect.Client.Entities
                         );
                     } else
                     {
+                        // Quick drop
+                        if (Globals.InputManager.KeyDown(Keys.Shift))
+                        {
+                            PacketSender.SendDropItem(index, 1);
+                            return;
+                        }
                         var iBox = new InputBox(
                             Strings.Inventory.dropitem,
                             Strings.Inventory.dropprompt.ToString(ItemBase.Get(Inventory[index].ItemId).Name), true,
@@ -536,7 +556,7 @@ namespace Intersect.Client.Entities
                 var itm = Inventory[slot];
                 if (itm.ItemId != Guid.Empty)
                 {
-                    if (ItemCooldowns.ContainsKey(itm.ItemId) && ItemCooldowns[itm.ItemId] > Globals.System.GetTimeMs())
+                    if (ItemCooldowns.ContainsKey(itm.ItemId) && ItemCooldowns[itm.ItemId] > Timing.Global.Milliseconds)
                     {
                         return true;
                     }
@@ -553,40 +573,14 @@ namespace Intersect.Client.Entities
                 var itm = Inventory[slot];
                 if (itm.ItemId != Guid.Empty)
                 {
-                    if (ItemCooldowns.ContainsKey(itm.ItemId) && ItemCooldowns[itm.ItemId] > Globals.System.GetTimeMs())
+                    if (ItemCooldowns.ContainsKey(itm.ItemId) && ItemCooldowns[itm.ItemId] > Timing.Global.Milliseconds)
                     {
-                        return ItemCooldowns[itm.ItemId] - Globals.System.GetTimeMs();
+                        return ItemCooldowns[itm.ItemId] - Timing.Global.Milliseconds;
                     }
                 }
             }
 
             return 0;
-        }
-
-        public decimal GetCooldownReduction()
-        {
-            var cooldown = 0;
-
-            for (var i = 0; i < Options.EquipmentSlots.Count; i++)
-            {
-                if (MyEquipment[i] > -1)
-                {
-                    if (Inventory[MyEquipment[i]].ItemId != Guid.Empty)
-                    {
-                        var item = ItemBase.Get(Inventory[MyEquipment[i]].ItemId);
-                        if (item != null)
-                        {
-                            //Check for cooldown reduction
-                            if (item.Effect.Type == EffectType.CooldownReduction)
-                            {
-                                cooldown += item.Effect.Percentage;
-                            }
-                        }
-                    }
-                }
-            }
-
-            return cooldown;
         }
         
         public void TrySellItem(int index)
@@ -601,6 +595,13 @@ namespace Intersect.Client.Entities
                     
                     if (Inventory[index].Quantity > 1)
                     {
+                        // Quick sell the whole stack if the gui modifier key is pressed
+                        if (Globals.InputManager.KeyDown(Keys.Shift)) 
+                        {
+                            PacketSender.SendSellItem(index, Inventory[index].Quantity);
+                            return;
+                        }
+                        
                         var iBox = new InputBox(
                             Strings.Shop.sellitem,
                             Strings.Shop.sellitemprompt.ToString(ItemBase.Get(Inventory[index].ItemId).Name), true,
@@ -609,6 +610,13 @@ namespace Intersect.Client.Entities
                     }
                     else
                     {
+                        // Quick sell the item
+                        if (Globals.InputManager.KeyDown(Keys.Shift))
+                        {
+                            PacketSender.SendSellItem(index, 1);
+                            return;
+                        }
+                        
                         var iBox = new InputBox(
                             Strings.Shop.sellitem,
                             Strings.Shop.sellprompt.ToString(ItemBase.Get(Inventory[index].ItemId).Name), true,
@@ -701,7 +709,7 @@ namespace Intersect.Client.Entities
                     var iBox = new InputBox(
                         Strings.Bank.withdrawitem,
                         Strings.Bank.withdrawitemprompt.ToString(ItemBase.Get(Globals.Bank[index].ItemId).Name), true,
-                        InputBox.InputType.NumericInput, WithdrawItemInputBoxOkay, null, index
+                        InputBox.InputType.NumericInput, WithdrawItemInputBoxOkay, null, index, Globals.Bank[index].Quantity
                     );
                 }
                 else
@@ -843,9 +851,12 @@ namespace Intersect.Client.Entities
         //Spell Processing
         public void SwapSpells(int spell1, int spell2)
         {
-            var tmpInstance = Spells[spell2].Clone();
-            Spells[spell2] = Spells[spell1].Clone();
-            Spells[spell1] = tmpInstance.Clone();
+            if (CastTime == 0)
+            {
+                var tmpInstance = Spells[spell2].Clone();
+                Spells[spell2] = Spells[spell1].Clone();
+                Spells[spell1] = tmpInstance.Clone();
+            }
         }
 
         public void TryForgetSpell(int index)
@@ -869,13 +880,23 @@ namespace Intersect.Client.Entities
         {
             if (Spells[index].SpellId != Guid.Empty &&
                 (!Globals.Me.SpellCooldowns.ContainsKey(Spells[index].SpellId) ||
-                 Globals.Me.SpellCooldowns[Spells[index].SpellId] < Globals.System.GetTimeMs()))
+                 Globals.Me.SpellCooldowns[Spells[index].SpellId] < Timing.Global.Milliseconds))
             {
                 var spellBase = SpellBase.Get(Spells[index].SpellId);
 
                 if (spellBase.CastDuration > 0 && (Options.Instance.CombatOpts.MovementCancelsCast && Globals.Me.IsMoving))
                 {
                     return;
+                }
+
+                if (spellBase.Combat.TargetType == SpellTargetTypes.Single && Timing.Global.Milliseconds > mLastSpellCastMessageSent)
+                {
+                    if (TargetIndex == Guid.Empty)
+                    {
+                        Audio.AddGameSound(Options.UIDenySound, false);
+                        ChatboxMsg.AddMessage(new ChatboxMsg(Strings.Spells.targetneeded, CustomColors.Alerts.Error, ChatMessageType.Spells));
+                        mLastSpellCastMessageSent = Timing.Global.Milliseconds + 5000;
+                    }
                 }
 
                 PacketSender.SendUseSpell(index, TargetIndex);
@@ -1004,65 +1025,49 @@ namespace Intersect.Client.Entities
 
             if (Controls.KeyDown(Control.MoveUp))
             {
-                movey = 1;
+                if (StatusIsActive(StatusTypes.Confused))
+                {
+                    movey = -1;
+                }
+                else 
+                {
+                    movey = 1;
+                }
             }
 
             if (Controls.KeyDown(Control.MoveDown))
             {
-                movey = -1;
+                if (StatusIsActive(StatusTypes.Confused))
+                {
+                    movey = 1;
+                }
+                else
+                {
+                    movey = -1;
+                }
             }
 
             if (Controls.KeyDown(Control.MoveLeft))
             {
-                movex = -1;
+                if (StatusIsActive(StatusTypes.Confused))
+                {
+                    movex = 1;
+                }
+                else
+                {
+                    movex = -1;
+                }
             }
 
             if (Controls.KeyDown(Control.MoveRight))
             {
-                movex = 1;
-            }
-
-            if (!IsMoving && movex == 0 && movey == 0 && !DirKeyPressed)
-            {
-                if (Controls.KeyDown(Control.TurnClockwise))
+                if (StatusIsActive(StatusTypes.Confused))
                 {
-                    DirKeyPressed = true;
-                    switch (Dir)
-                    {
-                        case (byte)Directions.Up:
-                            Dir = (byte)Directions.Right;
-                            break;
-                        case (byte)Directions.Down:
-                            Dir = (byte)Directions.Left;
-                            break;
-                        case (byte)Directions.Left:
-                            Dir = (byte)Directions.Up;
-                            break;
-                        case (byte)Directions.Right:
-                            Dir = (byte)Directions.Down;
-                            break;
-                    }
-                    PacketSender.SendDirection(Dir);
+                    movex = -1;
                 }
-                else if (Controls.KeyDown(Control.TurnCounterClockwise))
+                else
                 {
-                    DirKeyPressed = true;
-                    switch (Dir)
-                    {
-                        case (byte)Directions.Up:
-                            Dir = (byte)Directions.Left;
-                            break;
-                        case (byte)Directions.Down:
-                            Dir = (byte)Directions.Right;
-                            break;
-                        case (byte)Directions.Left:
-                            Dir = (byte)Directions.Down;
-                            break;
-                        case (byte)Directions.Right:
-                            Dir = (byte)Directions.Up;
-                            break;
-                    }
-                    PacketSender.SendDirection(Dir);
+                    movex = 1;
                 }
             }
 
@@ -1103,16 +1108,16 @@ namespace Intersect.Client.Entities
                                 //Turn Only
                                 Dir = (byte)Globals.Me.MoveDir;
                                 PacketSender.SendDirection((byte)Globals.Me.MoveDir);
-                                MoveDirectionTimers[i] = Globals.System.GetTimeMs() + Options.DirChangeTimer;
+                                MoveDirectionTimers[i] = Timing.Global.Milliseconds + Options.DirChangeTimer;
                                 Globals.Me.MoveDir = -1;
                             }
                             //If we're already facing the direction then just start moving (set the timer to now)
                             else if (MoveDirectionTimers[i] == -1 && !Globals.Me.IsMoving && Dir == Globals.Me.MoveDir)
                             {
-                                MoveDirectionTimers[i] = Globals.System.GetTimeMs();
+                                MoveDirectionTimers[i] = Timing.Global.Milliseconds;
                             }
                             //The timer is greater than the currect time, let's cancel the move.
-                            else if (MoveDirectionTimers[i] > Globals.System.GetTimeMs() && !Globals.Me.IsMoving)
+                            else if (MoveDirectionTimers[i] > Timing.Global.Milliseconds && !Globals.Me.IsMoving)
                             {
                                 //Don't trigger the actual move immediately, wait until button is held
                                 Globals.Me.MoveDir = -1;
@@ -1136,7 +1141,7 @@ namespace Intersect.Client.Entities
                     mLastHotbarUseTime.Add(barSlot, 0);
                 }
 
-                if (Controls.KeyDown((Control)barSlot + 9))
+                if (Controls.KeyDown((Control)barSlot + (int)Control.Hotkey1))
                 {
                     castInput = barSlot;
                 }
@@ -1733,8 +1738,40 @@ namespace Intersect.Client.Entities
 
         }
 
+        public bool DoIfInStatus(List<StatusTypes> statuses, Action action = default)
+        {
+            bool statusFound = false;
+            for (var n = 0; n < Status.Count; n++)
+            {
+                if (statuses.Contains(Status[n].Type))
+                {
+                    statusFound = true;
+                    if (action != default)
+                    {
+                        action();
+                    }
+                }
+            }
+
+            return statusFound;
+        }
+
         public bool TryFaceTarget(bool skipSmartDir = false, bool force = false)
         {
+            // Check if we're currently casting
+            if (CastTime > Timing.Global.Milliseconds) return false;
+
+            //check if player is stunned or snared, if so don't let them turn.
+            for (var n = 0; n < Status.Count; n++)
+            {
+                if (Status[n].Type == StatusTypes.Stun ||
+                    Status[n].Type == StatusTypes.Snare ||
+                    Status[n].Type == StatusTypes.Sleep)
+                {
+                    return false;
+                }
+            }
+
             if (TargetIndex != null && (Globals.Database.FaceOnLock || force))
             {
                 foreach (var en in Globals.Entities)
@@ -1749,7 +1786,7 @@ namespace Intersect.Client.Entities
                             return true;
                         } else if (!skipSmartDir)
                         {
-                            DirRequestTime = Globals.System.GetTimeMs() + Options.Combat.FaceTargetPredictionTime;
+                            DirRequestTime = Timing.Global.Milliseconds + Options.Combat.FaceTargetPredictionTime;
                             return false;
                         }
                     }
@@ -1866,12 +1903,26 @@ namespace Intersect.Client.Entities
             {
                 if (weapon.AttackSpeedModifier == 1) // Static
                 {
-                    attackTime = weapon.AttackSpeedValue;
+                    // Calculating resource harvest bonus
+                    if (ResourceLocked)
+                    {
+                        var harvestBonus = (int)Math.Floor(weapon.AttackSpeedValue * CurrentHarvestBonus);
+                        attackTime = weapon.AttackSpeedValue - harvestBonus;
+                    }
+                    else
+                    {
+                        attackTime = weapon.AttackSpeedValue;
+                    }
                 }
                 else if (weapon.AttackSpeedModifier == 2) //Percentage
                 {
                     attackTime = (int) (attackTime * (100f / weapon.AttackSpeedValue));
                 }
+            }
+
+            if (StatusIsActive(StatusTypes.Swift))
+            {
+                attackTime = (int) Math.Floor(attackTime * Options.Instance.CombatOpts.SwiftAttackSpeedMod);
             }
 
             return attackTime;
@@ -1917,12 +1968,19 @@ namespace Intersect.Client.Entities
             }
 
             //Check if the player is dashing, if so don't let them move.
-            if (Dashing != null || DashQueue.Count > 0 || DashTimer > Globals.System.GetTimeMs())
+            if (Dashing != null || DashQueue.Count > 0 || DashTimer > Timing.Global.Milliseconds)
             {
                 return;
             }
 
             if (AttackTimer > Timing.Global.Ticks / TimeSpan.TicksPerMillisecond && !Options.Instance.PlayerOpts.AllowCombatMovement)
+            {
+                return;
+            }
+
+
+            // If the player has recently casted a projectile
+            if (LastProjectileCastTime >= Timing.Global.Milliseconds)
             {
                 return;
             }
@@ -1934,7 +1992,7 @@ namespace Intersect.Client.Entities
             if (MoveDir > -1 && Globals.EventDialogs.Count == 0)
             {
                 //Try to move if able and not casting spells.
-                if (!IsMoving && MoveTimer < Timing.Global.Ticks / TimeSpan.TicksPerMillisecond && (Options.Combat.MovementCancelsCast || CastTime < Globals.System.GetTimeMs())) 
+                if (!IsMoving && MoveTimer < Timing.Global.Ticks / TimeSpan.TicksPerMillisecond && (Options.Combat.MovementCancelsCast || CastTime < Timing.Global.Milliseconds)) 
                 {
                     if (Options.Combat.MovementCancelsCast)
                     {
@@ -2061,6 +2119,54 @@ namespace Intersect.Client.Entities
                             mLastBumpedEvent = blockedBy;
                         }
                     }
+                }
+            }
+            else if (!IsMoving && !DirKeyPressed)
+            {
+                if (CastTime > Timing.Global.Milliseconds && !Options.Instance.CombatOpts.TurnWhileCasting)
+                {
+                    return;
+                }
+
+                if (Controls.KeyDown(Control.TurnClockwise))
+                {
+                    DirKeyPressed = true;
+                    switch (Dir)
+                    {
+                        case (byte)Directions.Up:
+                            Dir = (byte)Directions.Right;
+                            break;
+                        case (byte)Directions.Down:
+                            Dir = (byte)Directions.Left;
+                            break;
+                        case (byte)Directions.Left:
+                            Dir = (byte)Directions.Up;
+                            break;
+                        case (byte)Directions.Right:
+                            Dir = (byte)Directions.Down;
+                            break;
+                    }
+                    PacketSender.SendDirection(Dir);
+                }
+                else if (Controls.KeyDown(Control.TurnCounterClockwise))
+                {
+                    DirKeyPressed = true;
+                    switch (Dir)
+                    {
+                        case (byte)Directions.Up:
+                            Dir = (byte)Directions.Left;
+                            break;
+                        case (byte)Directions.Down:
+                            Dir = (byte)Directions.Right;
+                            break;
+                        case (byte)Directions.Left:
+                            Dir = (byte)Directions.Down;
+                            break;
+                        case (byte)Directions.Right:
+                            Dir = (byte)Directions.Up;
+                            break;
+                    }
+                    PacketSender.SendDirection(Dir);
                 }
             }
         }

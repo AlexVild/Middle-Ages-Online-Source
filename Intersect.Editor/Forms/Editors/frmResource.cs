@@ -259,6 +259,7 @@ namespace Intersect.Editor.Forms.Editors
                 chkExhaustedBelowEntities.Checked = mEditorItem.Exhausted.RenderBelowEntities;
                 txtCannotHarvest.Text = mEditorItem.CannotHarvestMessage;
                 nudExp.Value = mEditorItem.Experience;
+                chkDoNotRecord.Checked = mEditorItem.DoNotRecord;
 
                 //Regen
                 nudHpRegen.Value = mEditorItem.VitalRegen;
@@ -986,6 +987,11 @@ namespace Intersect.Editor.Forms.Editors
         private void nudExp_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.Experience = (long) nudExp.Value;
+        }
+
+        private void darkCheckBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.DoNotRecord = chkDoNotRecord.Checked;
         }
     }
 

@@ -81,6 +81,8 @@ namespace Intersect.Editor.Forms
         private frmQuestList mQuestListEditor;
 
         private frmQuestBoard mQuestBoardEditor;
+        
+        private frmTimers mTimerEditor;
 
         //General Editting Variables
         bool mTMouseDown;
@@ -411,11 +413,11 @@ namespace Intersect.Editor.Forms
             form.ShowDialog(this);
         }
 
-        public void EnterMap(Guid mapId)
+        public void EnterMap(Guid mapId, bool userEntered = false)
         {
             if (InvokeRequired)
             {
-                Invoke((MethodInvoker) delegate { EnterMap(mapId); });
+                Invoke((MethodInvoker) delegate { EnterMap(mapId, userEntered); });
 
                 return;
             }
@@ -439,6 +441,12 @@ namespace Intersect.Editor.Forms
             PacketSender.SendNeedMap(mapId);
             PacketSender.SendNeedGrid(mapId);
             Core.Graphics.TilePreviewUpdated = true;
+
+            // Save that we've opened this map last if this was a user triggered action. This way we can load it again should we restart the editor.
+            if (userEntered)
+            {
+                Preferences.SavePreference("LastMapOpened", mapId.ToString());
+            }
         }
 
         private void GrabMouseDownEvents()
@@ -1654,6 +1662,15 @@ namespace Intersect.Editor.Forms
                         }
 
                         break;
+                    case GameObjectType.Timer:
+                        if (mTimerEditor == null || mTimerEditor.Visible == false)
+                        {
+                            mTimerEditor = new frmTimers();
+                            mTimerEditor.InitEditor();
+                            mTimerEditor.Show();
+                        }
+
+                        break;
                     default:
                         return;
                 }
@@ -2055,6 +2072,11 @@ namespace Intersect.Editor.Forms
         private void questBoardEditorToolStripMenuItem_Click(object sender, EventArgs e)
         {
             PacketSender.SendOpenEditor(GameObjectType.QuestBoard);
+        }
+
+        private void timerEditorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PacketSender.SendOpenEditor(GameObjectType.Timer);
         }
     }
 

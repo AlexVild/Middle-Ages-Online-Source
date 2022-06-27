@@ -275,6 +275,13 @@ namespace Intersect
 
         }
 
+        public sealed class HarvestBonusNamespace
+        {
+            public Color HarvestBonusColor = new Color(255, 255, 255, 255);
+
+            public Color HarvestBonusRemainderColor = new Color(255, 169, 169, 169);
+        }
+
         #region Serialization
 
         public static bool Load()
@@ -350,6 +357,8 @@ namespace Intersect
             public readonly GeneralNamespace General = new GeneralNamespace();
             
             public readonly ItemDescNamespace ItemDesc = new ItemDescNamespace();
+            
+            public readonly HarvestBonusNamespace HarvestBonus = new HarvestBonusNamespace();
 
         }
 
@@ -374,6 +383,8 @@ namespace Intersect
         public static GeneralNamespace General => Root.General;
         
         public static ItemDescNamespace ItemDesc => Root.ItemDesc;
+        
+        public static HarvestBonusNamespace HarvestBonus => Root.HarvestBonus;
 
         #endregion
 

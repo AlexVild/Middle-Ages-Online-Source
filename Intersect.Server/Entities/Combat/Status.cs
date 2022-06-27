@@ -38,6 +38,9 @@ namespace Intersect.Server.Entities.Combat
             StatusTypes.OnHit,
             StatusTypes.Shield,
             StatusTypes.Transform,
+            StatusTypes.Swift,
+            StatusTypes.Accurate,
+            StatusTypes.Haste,
         };
 
         public static List<StatusTypes> InterruptStatusses = new List<StatusTypes>()
@@ -45,6 +48,7 @@ namespace Intersect.Server.Entities.Combat
             StatusTypes.Silence,
             StatusTypes.Sleep,
             StatusTypes.Stun,
+            StatusTypes.Confused,
         };
 
         public Status(Entity en, Entity attacker, SpellBase spell, StatusTypes type, int duration, string data)
@@ -62,7 +66,7 @@ namespace Intersect.Server.Entities.Combat
                 // Get our player's Tenacity stat!
                 if (!TenacityExcluded.Contains(type))
                 {
-                    tenacity = player.GetEquipmentBonusEffect(EffectType.Tenacity); ;
+                    tenacity = player.GetEquipmentBonusEffect(EffectType.Tenacity);
                 } 
             }
 
@@ -191,7 +195,7 @@ namespace Intersect.Server.Entities.Combat
 
         public void TryRemoveStatus()
         {
-            if (Duration <= Globals.Timing.Milliseconds) //Check the timer
+            if (Duration <= Timing.Global.Milliseconds) //Check the timer
             {
                 RemoveStatus();
             }

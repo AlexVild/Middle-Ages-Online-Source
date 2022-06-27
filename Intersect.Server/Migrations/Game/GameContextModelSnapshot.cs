@@ -286,6 +286,8 @@ namespace Intersect.Server.Migrations.Game
 
                     b.Property<string>("Description");
 
+                    b.Property<bool>("DestroyOnInstanceChange");
+
                     b.Property<int>("DropChanceOnDeath");
 
                     b.Property<Guid>("EquipmentAnimationId")
@@ -436,6 +438,9 @@ namespace Intersect.Server.Migrations.Game
                     b.Property<Guid>("DeathAnimationId")
                         .HasColumnName("DeathAnimation");
 
+                    b.Property<Guid>("DeathTransformId")
+                        .HasColumnName("DeathTransformId");
+
                     b.Property<long>("Experience");
 
                     b.Property<byte>("FleeHealthPercentage");
@@ -497,9 +502,13 @@ namespace Intersect.Server.Migrations.Game
 
                     b.Property<int>("SpawnDuration");
 
+                    b.Property<Guid>("SpellAttackOverrideId");
+
                     b.Property<int>("SpellFrequency");
 
                     b.Property<string>("Sprite");
+
+                    b.Property<bool>("StandStill");
 
                     b.Property<bool>("Swarm");
 
@@ -580,6 +589,8 @@ namespace Intersect.Server.Migrations.Game
                         .HasColumnName("Spell");
 
                     b.Property<long>("TimeCreated");
+
+                    b.Property<int>("Tool");
 
                     b.HasKey("Id");
 
@@ -696,6 +707,8 @@ namespace Intersect.Server.Migrations.Game
                         .HasColumnName("Animation");
 
                     b.Property<string>("CannotHarvestMessage");
+
+                    b.Property<bool>("DoNotRecord");
 
                     b.Property<Guid>("EventId")
                         .HasColumnName("Event");
@@ -840,6 +853,9 @@ namespace Intersect.Server.Migrations.Game
 
                     b.Property<long>("TimeCreated");
 
+                    b.Property<Guid>("TrapAnimationId")
+                        .HasColumnName("TrapAnimation");
+
                     b.Property<string>("VitalCostJson")
                         .HasColumnName("VitalCost");
 
@@ -881,6 +897,54 @@ namespace Intersect.Server.Migrations.Game
                     b.HasKey("Id");
 
                     b.ToTable("Time");
+                });
+
+            modelBuilder.Entity("Intersect.GameObjects.Timers.TimerDescriptor", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<Guid>("CancellationEventId");
+
+                    b.Property<byte>("CompletionBehavior");
+
+                    b.Property<Guid>("CompletionEventId");
+
+                    b.Property<bool>("ContinueAfterExpiration");
+
+                    b.Property<bool>("ContinueOnDeath");
+
+                    b.Property<bool>("ContinueOnInstanceChange");
+
+                    b.Property<string>("DisplayName");
+
+                    b.Property<Guid>("ElapsedTimeVariableId");
+
+                    b.Property<Guid>("ExpirationEventId");
+
+                    b.Property<string>("Folder");
+
+                    b.Property<bool>("Hidden");
+
+                    b.Property<int>("LogoutBehavior");
+
+                    b.Property<string>("Name");
+
+                    b.Property<byte>("OwnerType");
+
+                    b.Property<int>("Repetitions");
+
+                    b.Property<bool>("StartWithServer");
+
+                    b.Property<long>("TimeCreated");
+
+                    b.Property<long>("TimeLimit");
+
+                    b.Property<int>("Type");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Timers");
                 });
 
             modelBuilder.Entity("Intersect.Server.Maps.MapController", b =>

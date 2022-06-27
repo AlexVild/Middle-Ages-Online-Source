@@ -1,11 +1,12 @@
 ﻿using Intersect.Client.General;
+using Intersect.Utilities;
 
 namespace Intersect.Client.Core
 {
 
     public static class Fade
     {
-        private const float STANDARD_FADE_RATE = 1800f;
+        private const float STANDARD_FADE_RATE = 800f;
         private const float FAST_FADE_RATE = 800f;
 
         public enum FadeType
@@ -31,11 +32,17 @@ namespace Intersect.Client.Core
 
         public static void FadeIn(bool fast = false)
         {
+            if (!Globals.Database.FadeTransitions)
+            {
+                Wipe.FadeIn(fast);
+                return;
+            }
+
             sFadeRate = fast ? FAST_FADE_RATE : STANDARD_FADE_RATE;
 
             sCurrentAction = FadeType.In;
             sFadeAmt = 255f;
-            sLastUpdate = Globals.System.GetTimeMs();
+            sLastUpdate = Timing.Global.Milliseconds;
         }
 
         public static void FadeOut(bool alertServerWhenFaded = false, bool fast = false)
@@ -44,13 +51,20 @@ namespace Intersect.Client.Core
             
             sCurrentAction = FadeType.Out;
             sFadeAmt = 0f;
-            sLastUpdate = Globals.System.GetTimeMs();
+            sLastUpdate = Timing.Global.Milliseconds;
             sAlertServerWhenFaded = alertServerWhenFaded;
         }
 
         public static bool DoneFading()
         {
-            return sCurrentAction == FadeType.None;
+            if (!Globals.Database.FadeTransitions)
+            {
+                return Wipe.DoneFading();
+            }
+            else
+            {
+                return sCurrentAction == FadeType.None;
+            }
         }
 
         public static float GetFade()
@@ -60,9 +74,15 @@ namespace Intersect.Client.Core
 
         public static void Update()
         {
+            if (!Globals.Database.FadeTransitions)
+            {
+                Wipe.Update();
+                return;
+            }
+
             if (sCurrentAction == FadeType.In)
             {
-                sFadeAmt -= (Globals.System.GetTimeMs() - sLastUpdate) / sFadeRate * 255f;
+                sFadeAmt -= (Timing.Global.Milliseconds - sLastUpdate) / sFadeRate * 255f;
                 if (sFadeAmt <= 0f)
                 {
                     sCurrentAction = FadeType.None;
@@ -71,7 +91,7 @@ namespace Intersect.Client.Core
             }
             else if (sCurrentAction == FadeType.Out)
             {
-                sFadeAmt += (Globals.System.GetTimeMs() - sLastUpdate) / sFadeRate * 255f;
+                sFadeAmt += (Timing.Global.Milliseconds - sLastUpdate) / sFadeRate * 255f;
                 if (sFadeAmt >= 255f)
                 {
                     sCurrentAction = FadeType.None;
@@ -84,7 +104,7 @@ namespace Intersect.Client.Core
                 }
             }
 
-            sLastUpdate = Globals.System.GetTimeMs();
+            sLastUpdate = Timing.Global.Milliseconds;
         }
 
     }

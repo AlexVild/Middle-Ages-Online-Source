@@ -66,6 +66,8 @@ namespace Intersect.GameObjects.Events
 
         public bool WalkingAnimation { get; set; } = true;
 
+        public bool OnePlayer { get; set; } = false;
+
     }
 
 }

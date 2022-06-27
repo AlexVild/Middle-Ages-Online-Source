@@ -779,6 +779,22 @@ namespace Intersect.Editor.Forms.Editors.Events
                     tmpCommand = new AddInspirationCommand();
 
                     break;
+                case EventCommandType.StartTimer:
+                    tmpCommand = new StartTimerCommand();
+
+                    break;
+                case EventCommandType.ModifyTimer:
+                    tmpCommand = new ModifyTimerCommand();
+
+                    break;
+                case EventCommandType.StopTimer:
+                    tmpCommand = new StopTimerCommand();
+
+                    break;
+                case EventCommandType.ChangeSpawnGroup:
+                    tmpCommand = new ChangeSpawnGroupCommand();
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -1091,6 +1107,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             chkHideName.Checked = Convert.ToBoolean(CurrentPage.HideName);
             chkDisableInspector.Checked = Convert.ToBoolean(CurrentPage.DisablePreview);
             chkDirectionFix.Checked = Convert.ToBoolean(CurrentPage.DirectionFix);
+            chkKillAfterOne.Checked = Convert.ToBoolean(CurrentPage.OnePlayer);
             chkWalkingAnimation.Checked = Convert.ToBoolean(CurrentPage.WalkingAnimation);
             chkInteractionFreeze.Checked = Convert.ToBoolean(CurrentPage.InteractionFreeze);
             txtDesc.Text = CurrentPage.Description;
@@ -1417,6 +1434,22 @@ namespace Intersect.Editor.Forms.Editors.Events
                     break;
                 case EventCommandType.AddInspiration:
                     cmdWindow = new EventCommand_AddInspiration((AddInspirationCommand)command, this);
+
+                    break;
+                case EventCommandType.StartTimer:
+                    cmdWindow = new EventCommand_StartTimer((StartTimerCommand)command, this);
+
+                    break;
+                case EventCommandType.ModifyTimer:
+                    cmdWindow = new EventCommand_ModifyTimer((ModifyTimerCommand)command, this);
+
+                    break;
+                case EventCommandType.StopTimer:
+                    cmdWindow = new EventCommand_StopTimer((StopTimerCommand)command, this);
+
+                    break;
+                case EventCommandType.ChangeSpawnGroup:
+                    cmdWindow = new EventCommand_ChangeMapSpawnGroup((ChangeSpawnGroupCommand)command, this);
 
                     break;
                 default:
@@ -1759,6 +1792,30 @@ namespace Intersect.Editor.Forms.Editors.Events
             }
         }
 
+        /// <summary>
+        /// Custom renderer for event commands to draw labels in green for easier visibility.
+        /// </summary>
+        private void lstEventCommands_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            e.DrawBackground();
+            Graphics g = e.Graphics;
+
+            if (e.Index > -1 && e.Index < lstEventCommands.Items.Count && e.Index < mCommandProperties.Count)
+            {
+                if (mCommandProperties[e.Index].Type == EventCommandType.Label)
+                {
+                    g.DrawString(lstEventCommands.Items[e.Index].ToString(), e.Font, Brushes.SpringGreen, new PointF(e.Bounds.X, e.Bounds.Y));
+                }
+                else
+                {
+                    g.DrawString(lstEventCommands.Items[e.Index].ToString(), e.Font, new SolidBrush(e.ForeColor), new PointF(e.Bounds.X, e.Bounds.Y));
+                }
+            }
+
+
+            e.DrawFocusRectangle();
+        }
+
         #endregion
 
         #region "Movement Options"
@@ -1885,6 +1942,11 @@ namespace Intersect.Editor.Forms.Editors.Events
                     {
                         cmbClass.SelectedIndex = 0;
                     }
+                }
+                else if (cmbTrigger.SelectedIndex == (int)CommonEventTrigger.ComboReached)
+                {
+                    nudRecordNumber.Show();
+                    lblRecordNumber.Show();
                 }
                 else if (cmbTrigger.SelectedIndex == (int)CommonEventTrigger.NpcsDefeated ||
                     cmbTrigger.SelectedIndex == (int)CommonEventTrigger.ResourcesGathered ||
@@ -2078,6 +2140,11 @@ namespace Intersect.Editor.Forms.Editors.Events
                     CurrentPage.TriggerId = CraftBase.IdFromList(cmbRecordItem.SelectedIndex);
                 }
             }
+        }
+
+        private void chkKillAfterOne_CheckedChanged(object sender, EventArgs e)
+        {
+            CurrentPage.OnePlayer = chkKillAfterOne.Checked;
         }
     }
 

@@ -90,7 +90,6 @@
     <Compile Include="Core\Database.cs" />
     <Compile Include="Core\Graphics.cs" />
     <Compile Include="Core\Main.cs" />
-    <Compile Include="Core\Sys.cs" />
     <Compile Include="Core\Preferences.cs" />
     <Compile Include="Core\Program.cs" />
     <Compile Include="Entities\Animation.cs" />
@@ -106,11 +105,23 @@
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_AddInspiration.Designer.cs">
       <DependentUpon>EventCommand_AddInspiration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_ChangeMapSpawnGroup.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_ChangeMapSpawnGroup.Designer.cs">
+      <DependentUpon>EventCommand_ChangeMapSpawnGroup.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_FlashScreen.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_FlashScreen.Designer.cs">
       <DependentUpon>EventCommand_FlashScreen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_ModifyTimer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_ModifyTimer.Designer.cs">
+      <DependentUpon>EventCommand_ModifyTimer.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_NPCGuildManagement.cs">
       <SubType>UserControl</SubType>
@@ -160,6 +171,19 @@
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_SetVehicle.Designer.cs">
       <DependentUpon>EventCommand_SetVehicle.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_StartTimer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_StartTimer.Designer.cs">
+      <DependentUpon>EventCommand_StartTimer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_StopTimer.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_StopTimer.Designer.cs">
+      <DependentUpon>EventCommand_StopTimer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\TimerCommandHelpers.cs" />
     <Compile Include="Forms\Editors\frmQuestBoard.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -171,6 +195,12 @@
     </Compile>
     <Compile Include="Forms\Editors\frmQuestList.Designer.cs">
       <DependentUpon>frmQuestList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Editors\frmTimers.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\frmTimers.Designer.cs">
+      <DependentUpon>frmTimers.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmUpdate.cs">
       <SubType>Form</SubType>
@@ -718,17 +748,26 @@
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_ChangeItems.resx">
       <DependentUpon>EventCommand_ChangeItems.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_ChangeMapSpawnGroup.resx">
+      <DependentUpon>EventCommand_ChangeMapSpawnGroup.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_CompleteQuestTask.resx">
       <DependentUpon>EventCommand_CompleteQuestTask.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_ConditionalBranch.resx">
       <DependentUpon>EventCommand_ConditionalBranch.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_EndQuest.resx">
+      <DependentUpon>EventCommand_EndQuest.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_FlashScreen.resx">
       <DependentUpon>EventCommand_FlashScreen.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_GiveExperience.resx">
       <DependentUpon>EventCommand_GiveExperience.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_ModifyTimer.resx">
+      <DependentUpon>EventCommand_ModifyTimer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_NPCGuildManagement.resx">
       <DependentUpon>EventCommand_NPCGuildManagement.cs</DependentUpon>
@@ -742,6 +781,12 @@
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_SetVehicle.resx">
       <DependentUpon>EventCommand_SetVehicle.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_StartTimer.resx">
+      <DependentUpon>EventCommand_StartTimer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_StopTimer.resx">
+      <DependentUpon>EventCommand_StopTimer.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_Variable.resx">
       <DependentUpon>EventCommand_Variable.cs</DependentUpon>
     </EmbeddedResource>
@@ -753,6 +798,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\frmQuestList.resx">
       <DependentUpon>frmQuestList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\frmTimers.resx">
+      <DependentUpon>frmTimers.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Shaders\radialgradient_editor.xnb" />
   </ItemGroup>

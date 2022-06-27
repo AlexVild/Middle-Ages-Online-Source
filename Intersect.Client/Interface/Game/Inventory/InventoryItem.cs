@@ -12,6 +12,7 @@ using Intersect.Client.Interface.Game.DescriptionWindows;
 using Intersect.Client.Localization;
 using Intersect.Client.Networking;
 using Intersect.GameObjects;
+using Intersect.Utilities;
 
 namespace Intersect.Client.Interface.Game.Inventory
 {
@@ -82,7 +83,6 @@ namespace Intersect.Client.Interface.Game.Inventory
             EquipLabel.IsHidden = true;
             EquipLabel.Text = Strings.Inventory.equippedicon;
             EquipLabel.TextColor = new Color(0, 255, 255, 255);
-            Container.RenderColor = Color.Transparent; // Alex: "Unequipped" display
             mCooldownLabel = new Label(Pnl, "InventoryItemCooldownLabel");
             mCooldownLabel.IsHidden = true;
             mCooldownLabel.TextColor = new Color(0, 255, 255, 255);
@@ -90,7 +90,7 @@ namespace Intersect.Client.Interface.Game.Inventory
 
         void pnl_Clicked(Base sender, ClickedEventArgs arguments)
         {
-            mClickTime = Globals.System.GetTimeMs() + 500;
+            mClickTime = Timing.Global.Milliseconds + 500;
         }
 
         void pnl_RightClicked(Base sender, ClickedEventArgs arguments)
@@ -251,7 +251,14 @@ namespace Intersect.Client.Interface.Game.Inventory
                 */
                 
                 // Alex: This is my addition - also note that InventoryWindow has some new logic as well in its update loop
-                Container.RenderColor = mIsEquipped ? Color.White : Color.Transparent;
+                if (mIsEquipped)
+                {
+                    Container.Texture = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Gui, "inventoryitemequipped.png");
+                }
+                else
+                {
+                    Container.Texture = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Gui, "inventoryitem.png");
+                }
                 EquipPanel.IsHidden = true; // Alex: Don't want, at the moment
                 EquipLabel.IsHidden = true;
 
@@ -324,7 +331,7 @@ namespace Intersect.Client.Interface.Game.Inventory
                         mCanDrag = true;
                         mMouseX = -1;
                         mMouseY = -1;
-                        if (Globals.System.GetTimeMs() < mClickTime)
+                        if (Timing.Global.Milliseconds < mClickTime)
                         {
                             Globals.Me.TryUseItem(mMySlot);
                             mClickTime = 0;

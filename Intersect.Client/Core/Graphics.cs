@@ -492,11 +492,27 @@ namespace Intersect.Client.Core
 
             Interface.Interface.DrawGui();
 
-            // Draw the current Fade
-            DrawGameTexture(
-                Renderer.GetWhiteTexture(), new FloatRect(0, 0, 1, 1), CurrentView,
-                new Color((int) Fade.GetFade(), 0, 0, 0), null, GameBlendModes.None
-            );
+            if (Globals.Database.FadeTransitions)
+            {
+                // Draw the current Fade
+                DrawGameTexture(
+                    Renderer.GetWhiteTexture(), new FloatRect(0, 0, 1, 1), CurrentView,
+                    new Color((int)Fade.GetFade(), 0, 0, 0), null, GameBlendModes.None
+                );
+            }
+            else // Wipe transition
+            {
+                // Left shutter
+                DrawGameTexture(
+                    Renderer.GetWhiteTexture(), new FloatRect(0, 0, 1, 1), new FloatRect(CurrentView.X, CurrentView.Y, (int)Wipe.GetFade(), CurrentView.Height),
+                    new Color(255, 0, 0, 0), null, GameBlendModes.None
+                );
+                // Right shutter
+                DrawGameTexture(
+                    Renderer.GetWhiteTexture(), new FloatRect(0, 0, 1, 1), new FloatRect(CurrentView.X + (CurrentView.Width / 2 + (int)Wipe.GetFade(true)), CurrentView.Y, CurrentView.Width / 2, CurrentView.Height),
+                    new Color(255, 0, 0, 0), null, GameBlendModes.None
+                );
+            }
 
             // Draw the current Flash over top that
             DrawGameTexture(
@@ -565,7 +581,7 @@ namespace Intersect.Client.Core
             var map = MapInstance.Get(Globals.Me.CurrentMap);
             if (map != null)
             {
-                float ecTime = Globals.System.GetTimeMs() - sOverlayUpdate;
+                float ecTime = Timing.Global.Milliseconds - sOverlayUpdate;
 
                 if (OverlayColor.A != map.AHue ||
                     OverlayColor.R != map.RHue ||
@@ -671,7 +687,7 @@ namespace Intersect.Client.Core
             }
 
             DrawGameTexture(Renderer.GetWhiteTexture(), new FloatRect(0, 0, 1, 1), CurrentView, OverlayColor, null);
-            sOverlayUpdate = Globals.System.GetTimeMs();
+            sOverlayUpdate = Timing.Global.Milliseconds;
         }
 
         public static FloatRect GetSourceRect(GameTexture gameTexture)
@@ -789,11 +805,26 @@ namespace Intersect.Client.Core
             {
                 CurrentShake = 0.0f;
                 CurrentView = new FloatRect(0, 0, Renderer.GetScreenWidth(), Renderer.GetScreenHeight());
+                if (!Globals.InitialFade)
+                {
+                    if (Globals.Database.FadeTransitions)
+                    {
+                        Fade.FadeIn();
+                    }
+                    else
+                    {
+                        Wipe.FadeIn();
+                    }
+                    
+                    Globals.InitialFade = true;
+                }
                 Renderer.SetView(CurrentView);
+
+                sLastUpdate = Timing.Global.Milliseconds;
                 return;
             }
 
-            var shakeReduction = (Globals.System.GetTimeMs() - sLastUpdate) / Options.ShakeDeltaDurationDivider;
+            var shakeReduction = (Timing.Global.Milliseconds - sLastUpdate) / Options.ShakeDeltaDurationDivider;
             
             CurrentShake = Utilities.MathHelper.Clamp(CurrentShake - shakeReduction, 0.0f, 100.0f);
             var yShake = CurrentShake;
@@ -882,7 +913,7 @@ namespace Intersect.Client.Core
             }
 
             Renderer.SetView(CurrentView);
-            sLastUpdate = Globals.System.GetTimeMs();
+            sLastUpdate = Timing.Global.Milliseconds;
         }
 
         //Lighting
@@ -1001,7 +1032,7 @@ namespace Intersect.Client.Core
             var map = MapInstance.Get(Globals.Me.CurrentMap);
             if (map != null)
             {
-                float ecTime = Globals.System.GetTimeMs() - sLightUpdate;
+                float ecTime = Timing.Global.Milliseconds - sLightUpdate;
                 var valChange = 255 * ecTime / 2000f;
                 var brightnessTarget = (byte) (map.Brightness / 100f * 255);
                 if (BrightnessLevel < brightnessTarget)
@@ -1180,7 +1211,9 @@ namespace Intersect.Client.Core
                     }
                 }
 
-                sLightUpdate = Globals.System.GetTimeMs();
+                // Cap instensity between 0 and 255 so as not to overflow (as it is an alpha value)
+                sPlayerLightIntensity = (float) MathHelper.Clamp(sPlayerLightIntensity, 0f, 255f);
+                sLightUpdate = Timing.Global.Milliseconds;
             }
         }
 

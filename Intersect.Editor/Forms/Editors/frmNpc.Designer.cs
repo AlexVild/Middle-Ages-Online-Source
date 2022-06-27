@@ -77,6 +77,9 @@ namespace Intersect.Editor.Forms.Editors
             this.lblHP = new System.Windows.Forms.Label();
             this.lblExp = new System.Windows.Forms.Label();
             this.pnlContainer = new System.Windows.Forms.Panel();
+            this.grpDeathTransform = new DarkUI.Controls.DarkGroupBox();
+            this.cmbTransformIntoNpc = new DarkUI.Controls.DarkComboBox();
+            this.lblDeathTransform = new System.Windows.Forms.Label();
             this.grpAnimation = new DarkUI.Controls.DarkGroupBox();
             this.cmbDeathAnimation = new DarkUI.Controls.DarkComboBox();
             this.lblDeathAnimation = new System.Windows.Forms.Label();
@@ -117,6 +120,7 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbOnDeathEventKiller = new DarkUI.Controls.DarkComboBox();
             this.lblOnDeathEventKiller = new System.Windows.Forms.Label();
             this.grpBehavior = new DarkUI.Controls.DarkGroupBox();
+            this.chkStandStill = new DarkUI.Controls.DarkCheckBox();
             this.nudResetRadius = new DarkUI.Controls.DarkNumericUpDown();
             this.lblResetRadius = new System.Windows.Forms.Label();
             this.lblFocusDamageDealer = new System.Windows.Forms.Label();
@@ -178,6 +182,9 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
             this.searchableDarkTreeView1 = new Intersect.Editor.Forms.Controls.SearchableDarkTreeView();
+            this.grpAttackOverrides = new DarkUI.Controls.DarkGroupBox();
+            this.cmbSpellAttackOverride = new DarkUI.Controls.DarkComboBox();
+            this.lblAttackOverride = new System.Windows.Forms.Label();
             this.grpNpcs.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudRgbaA)).BeginInit();
@@ -198,6 +205,7 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudMag)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudStr)).BeginInit();
             this.pnlContainer.SuspendLayout();
+            this.grpDeathTransform.SuspendLayout();
             this.grpAnimation.SuspendLayout();
             this.grpImmunities.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudTenacity)).BeginInit();
@@ -222,6 +230,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpNpcVsNpc.SuspendLayout();
             this.grpSpells.SuspendLayout();
             this.toolStrip.SuspendLayout();
+            this.grpAttackOverrides.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpNpcs
@@ -886,6 +895,8 @@ namespace Intersect.Editor.Forms.Editors
             // pnlContainer
             // 
             this.pnlContainer.AutoScroll = true;
+            this.pnlContainer.Controls.Add(this.grpAttackOverrides);
+            this.pnlContainer.Controls.Add(this.grpDeathTransform);
             this.pnlContainer.Controls.Add(this.grpAnimation);
             this.pnlContainer.Controls.Add(this.grpImmunities);
             this.pnlContainer.Controls.Add(this.grpCombat);
@@ -901,6 +912,52 @@ namespace Intersect.Editor.Forms.Editors
             this.pnlContainer.Name = "pnlContainer";
             this.pnlContainer.Size = new System.Drawing.Size(464, 529);
             this.pnlContainer.TabIndex = 17;
+            // 
+            // grpDeathTransform
+            // 
+            this.grpDeathTransform.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpDeathTransform.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpDeathTransform.Controls.Add(this.cmbTransformIntoNpc);
+            this.grpDeathTransform.Controls.Add(this.lblDeathTransform);
+            this.grpDeathTransform.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpDeathTransform.Location = new System.Drawing.Point(216, 1200);
+            this.grpDeathTransform.Margin = new System.Windows.Forms.Padding(2);
+            this.grpDeathTransform.Name = "grpDeathTransform";
+            this.grpDeathTransform.Padding = new System.Windows.Forms.Padding(2);
+            this.grpDeathTransform.Size = new System.Drawing.Size(229, 68);
+            this.grpDeathTransform.TabIndex = 34;
+            this.grpDeathTransform.TabStop = false;
+            this.grpDeathTransform.Text = "Death Transform";
+            // 
+            // cmbTransformIntoNpc
+            // 
+            this.cmbTransformIntoNpc.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbTransformIntoNpc.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbTransformIntoNpc.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbTransformIntoNpc.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbTransformIntoNpc.DrawDropdownHoverOutline = false;
+            this.cmbTransformIntoNpc.DrawFocusRectangle = false;
+            this.cmbTransformIntoNpc.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbTransformIntoNpc.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbTransformIntoNpc.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbTransformIntoNpc.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbTransformIntoNpc.FormattingEnabled = true;
+            this.cmbTransformIntoNpc.Location = new System.Drawing.Point(12, 36);
+            this.cmbTransformIntoNpc.Name = "cmbTransformIntoNpc";
+            this.cmbTransformIntoNpc.Size = new System.Drawing.Size(182, 21);
+            this.cmbTransformIntoNpc.TabIndex = 19;
+            this.cmbTransformIntoNpc.Text = null;
+            this.cmbTransformIntoNpc.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbTransformIntoNpc.SelectedIndexChanged += new System.EventHandler(this.cmbTransformIntoNpc_SelectedIndexChanged);
+            // 
+            // lblDeathTransform
+            // 
+            this.lblDeathTransform.AutoSize = true;
+            this.lblDeathTransform.Location = new System.Drawing.Point(9, 20);
+            this.lblDeathTransform.Name = "lblDeathTransform";
+            this.lblDeathTransform.Size = new System.Drawing.Size(78, 13);
+            this.lblDeathTransform.TabIndex = 18;
+            this.lblDeathTransform.Text = "Transform Into:";
             // 
             // grpAnimation
             // 
@@ -1482,6 +1539,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpBehavior.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpBehavior.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpBehavior.Controls.Add(this.chkStandStill);
             this.grpBehavior.Controls.Add(this.nudResetRadius);
             this.grpBehavior.Controls.Add(this.lblResetRadius);
             this.grpBehavior.Controls.Add(this.lblFocusDamageDealer);
@@ -1504,6 +1562,16 @@ namespace Intersect.Editor.Forms.Editors
             this.grpBehavior.TabIndex = 32;
             this.grpBehavior.TabStop = false;
             this.grpBehavior.Text = "Behavior:";
+            // 
+            // chkStandStill
+            // 
+            this.chkStandStill.AutoSize = true;
+            this.chkStandStill.Location = new System.Drawing.Point(153, 16);
+            this.chkStandStill.Name = "chkStandStill";
+            this.chkStandStill.Size = new System.Drawing.Size(73, 17);
+            this.chkStandStill.TabIndex = 77;
+            this.chkStandStill.Text = "Stand Still";
+            this.chkStandStill.CheckedChanged += new System.EventHandler(this.chkStandStill_CheckedChanged);
             // 
             // nudResetRadius
             // 
@@ -2278,6 +2346,52 @@ namespace Intersect.Editor.Forms.Editors
             this.searchableDarkTreeView1.TabIndex = 46;
             this.searchableDarkTreeView1.Visible = false;
             // 
+            // grpAttackOverrides
+            // 
+            this.grpAttackOverrides.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpAttackOverrides.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpAttackOverrides.Controls.Add(this.cmbSpellAttackOverride);
+            this.grpAttackOverrides.Controls.Add(this.lblAttackOverride);
+            this.grpAttackOverrides.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpAttackOverrides.Location = new System.Drawing.Point(2, 1262);
+            this.grpAttackOverrides.Margin = new System.Windows.Forms.Padding(2);
+            this.grpAttackOverrides.Name = "grpAttackOverrides";
+            this.grpAttackOverrides.Padding = new System.Windows.Forms.Padding(2);
+            this.grpAttackOverrides.Size = new System.Drawing.Size(209, 82);
+            this.grpAttackOverrides.TabIndex = 35;
+            this.grpAttackOverrides.TabStop = false;
+            this.grpAttackOverrides.Text = "Attack Overrides";
+            // 
+            // cmbSpellAttackOverride
+            // 
+            this.cmbSpellAttackOverride.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbSpellAttackOverride.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbSpellAttackOverride.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbSpellAttackOverride.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbSpellAttackOverride.DrawDropdownHoverOutline = false;
+            this.cmbSpellAttackOverride.DrawFocusRectangle = false;
+            this.cmbSpellAttackOverride.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbSpellAttackOverride.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbSpellAttackOverride.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbSpellAttackOverride.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbSpellAttackOverride.FormattingEnabled = true;
+            this.cmbSpellAttackOverride.Location = new System.Drawing.Point(12, 36);
+            this.cmbSpellAttackOverride.Name = "cmbSpellAttackOverride";
+            this.cmbSpellAttackOverride.Size = new System.Drawing.Size(182, 21);
+            this.cmbSpellAttackOverride.TabIndex = 19;
+            this.cmbSpellAttackOverride.Text = null;
+            this.cmbSpellAttackOverride.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbSpellAttackOverride.SelectedIndexChanged += new System.EventHandler(this.cmbSpellAttackOverride_SelectedIndexChanged);
+            // 
+            // lblAttackOverride
+            // 
+            this.lblAttackOverride.AutoSize = true;
+            this.lblAttackOverride.Location = new System.Drawing.Point(9, 20);
+            this.lblAttackOverride.Name = "lblAttackOverride";
+            this.lblAttackOverride.Size = new System.Drawing.Size(110, 13);
+            this.lblAttackOverride.TabIndex = 18;
+            this.lblAttackOverride.Text = "Spell Attack Override:";
+            // 
             // FrmNpc
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2324,6 +2438,8 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudMag)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudStr)).EndInit();
             this.pnlContainer.ResumeLayout(false);
+            this.grpDeathTransform.ResumeLayout(false);
+            this.grpDeathTransform.PerformLayout();
             this.grpAnimation.ResumeLayout(false);
             this.grpAnimation.PerformLayout();
             this.grpImmunities.ResumeLayout(false);
@@ -2359,6 +2475,8 @@ namespace Intersect.Editor.Forms.Editors
             this.grpSpells.PerformLayout();
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
+            this.grpAttackOverrides.ResumeLayout(false);
+            this.grpAttackOverrides.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -2510,5 +2628,12 @@ namespace Intersect.Editor.Forms.Editors
         private DarkGroupBox grpAnimation;
         private DarkComboBox cmbDeathAnimation;
         private System.Windows.Forms.Label lblDeathAnimation;
+        private DarkGroupBox grpDeathTransform;
+        private DarkComboBox cmbTransformIntoNpc;
+        private System.Windows.Forms.Label lblDeathTransform;
+        private DarkCheckBox chkStandStill;
+        private DarkGroupBox grpAttackOverrides;
+        private DarkComboBox cmbSpellAttackOverride;
+        private System.Windows.Forms.Label lblAttackOverride;
     }
 }

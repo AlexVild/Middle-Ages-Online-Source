@@ -85,6 +85,9 @@ namespace Intersect.Server.Entities
         private int mResetMax = 100;
         private bool mResetting = false;
 
+        private int mLastTargetDir = -1;
+        private long mLastOverrideAttack = 0L;
+
         /// <summary>
         /// The map on which this NPC was "aggro'd" and started chasing a target.
         /// </summary>
@@ -181,12 +184,16 @@ namespace Intersect.Server.Entities
                 if (MapController.TryGetInstanceFromMap(MapId, MapInstanceId, out var instance))
                 {
                     instance.RemoveEntity(this);
+                    if (Base.DeathTransformId != Guid.Empty)
+                    {
+                        instance.SpawnNpc((byte)X, (byte)Y, (byte)Dir, Base.DeathTransformId);
+                    }
                 }
                 PacketSender.SendEntityDie(this);
                 PacketSender.SendEntityLeave(this);
 
-                // Do not process permadeaths on the overworld
-                if (MapInstanceId != Guid.Empty)
+                // Do not process permadeaths on the overworld or if the entity was not killed by some other entity
+                if (MapInstanceId != Guid.Empty && killer != null)
                 {
                     if (!String.IsNullOrEmpty(PermadeathKey) && ProcessingInfo.PermadeadNpcs.TryGetValue(MapInstanceId, out var permadeadNpcs))
                     {
@@ -399,6 +406,19 @@ namespace Intersect.Server.Entities
                 return;
             }
 
+            // If this enemy "attacks" with a spell, then don't bother with traditional attacking.
+            var spellOverride = Base.SpellAttackOverrideId;
+            if (Base.SpellAttackOverrideId != default)
+            {
+                if (CanCastSpell(spellOverride, target) && Timing.Global.MillisecondsUtc > mLastOverrideAttack)
+                {
+                    CastSpell(spellOverride);
+                    mLastOverrideAttack = Timing.Global.MillisecondsUtc + CalculateAttackTime();
+                }
+
+                return;
+            }
+
             if (!CanAttack(target, null))
             {
                 return;
@@ -419,7 +439,7 @@ namespace Intersect.Server.Entities
 
             //We were forcing at LEAST 1hp base damage.. but then you can't have guards that won't hurt the player.
             //https://www.ascensiongamedev.com/community/bug_tracker/intersect/npc-set-at-0-attack-damage-still-damages-player-by-1-initially-r915/
-            if (AttackTimer < Globals.Timing.Milliseconds)
+            if (AttackTimer < Timing.Global.Milliseconds)
             {
                 if (Base.AttackAnimation != null)
                 {
@@ -497,23 +517,8 @@ namespace Intersect.Server.Entities
                 case StatusTypes.Sleep:
                 case StatusTypes.Stun:
                     return true;
-
-                case StatusTypes.Silence:
-                case StatusTypes.None:
-                case StatusTypes.Snare:
-                case StatusTypes.Blind:
-                case StatusTypes.Stealth:
-                case StatusTypes.Transform:
-                case StatusTypes.Cleanse:
-                case StatusTypes.Invulnerable:
-                case StatusTypes.Shield:
-                case StatusTypes.OnHit:
-                case StatusTypes.Taunt:
-                case null:
-                    return false;
-
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    return false;
             }
         }
 
@@ -525,28 +530,20 @@ namespace Intersect.Server.Entities
                 case StatusTypes.Sleep:
                 case StatusTypes.Stun:
                     return true;
-
-                case StatusTypes.None:
-                case StatusTypes.Snare:
-                case StatusTypes.Blind:
-                case StatusTypes.Stealth:
-                case StatusTypes.Transform:
-                case StatusTypes.Cleanse:
-                case StatusTypes.Invulnerable:
-                case StatusTypes.Shield:
-                case StatusTypes.OnHit:
-                case StatusTypes.Taunt:
-                case null:
-                    return false;
-
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    return false;
             }
         }
 
         public override int CanMove(int moveDir)
         {
             var canMove = base.CanMove(moveDir);
+
+            // If configured & blocked by an entity, ignore the entity and proceed to move
+            if (Options.Instance.NpcOpts.IntangibleDuringReset && canMove > -1 )
+            {
+                canMove = mResetting ? -1 : canMove;
+            }
             if ((canMove == -1 || canMove == -4) && IsFleeing() && Options.Instance.NpcOpts.AllowResetRadius)
             {
                 var yOffset = 0;
@@ -621,12 +618,12 @@ namespace Intersect.Server.Entities
             }
 
             //Check if NPC is casting a spell
-            if (CastTime > Globals.Timing.Milliseconds)
+            if (CastTime > Timing.Global.Milliseconds)
             {
                 return; //can't move while casting
             }
 
-            if (CastFreq >= Globals.Timing.Milliseconds)
+            if (CastFreq >= Timing.Global.Milliseconds)
             {
                 return;
             }
@@ -669,14 +666,14 @@ namespace Intersect.Server.Entities
                 var dirToEnemy = DirToEnemy(target);
                 if (dirToEnemy != Dir)
                 {
-                    if (LastRandomMove >= Globals.Timing.Milliseconds)
+                    if (LastRandomMove >= Timing.Global.Milliseconds)
                     {
                         return;
                     }
 
                     //Face the target -- next frame fire -- then go on with life
                     ChangeDir(dirToEnemy); // Gotta get dir to enemy
-                    LastRandomMove = Globals.Timing.Milliseconds + Randomization.Next(1000, 3000);
+                    LastRandomMove = Timing.Global.Milliseconds + Randomization.Next(1000, 3000);
 
                     return;
                 }
@@ -703,7 +700,7 @@ namespace Intersect.Server.Entities
                 return;
             }
 
-            if (SpellCooldowns.ContainsKey(spell.SpellId) && SpellCooldowns[spell.SpellId] >= Globals.Timing.MillisecondsUTC)
+            if (SpellCooldowns.ContainsKey(spell.SpellId) && SpellCooldowns[spell.SpellId] >= Timing.Global.MillisecondsUtc)
             {
                 return;
             }
@@ -714,7 +711,7 @@ namespace Intersect.Server.Entities
                 return;
             }
 
-            CastTime = Globals.Timing.Milliseconds + spellBase.CastDuration;
+            CastTime = Timing.Global.Milliseconds + spellBase.CastDuration;
 
             if (spellBase.VitalCost[(int) Vitals.Mana] > 0)
             {
@@ -746,27 +743,27 @@ namespace Intersect.Server.Entities
             switch (Base.SpellFrequency)
             {
                 case 0:
-                    CastFreq = Globals.Timing.Milliseconds + 30000;
+                    CastFreq = Timing.Global.Milliseconds + 30000;
 
                     break;
 
                 case 1:
-                    CastFreq = Globals.Timing.Milliseconds + 15000;
+                    CastFreq = Timing.Global.Milliseconds + 15000;
 
                     break;
 
                 case 2:
-                    CastFreq = Globals.Timing.Milliseconds + 8000;
+                    CastFreq = Timing.Global.Milliseconds + 8000;
 
                     break;
 
                 case 3:
-                    CastFreq = Globals.Timing.Milliseconds + 4000;
+                    CastFreq = Timing.Global.Milliseconds + 4000;
 
                     break;
 
                 case 4:
-                    CastFreq = Globals.Timing.Milliseconds + 2000;
+                    CastFreq = Timing.Global.Milliseconds + 2000;
 
                     break;
             }
@@ -788,7 +785,7 @@ namespace Intersect.Server.Entities
             if (Base.FleeHealthPercentage > 0)
             {
                 var fleeHpCutoff = GetMaxVital(Vitals.Health) * ((float)Base.FleeHealthPercentage / 100f);
-                if (GetVital(Vitals.Health) < fleeHpCutoff)
+                if (GetVital(Vitals.Health) < fleeHpCutoff || (Base.FleeHealthPercentage >= 100 && Target != default))
                 {
                     return true;
                 }
@@ -820,7 +817,7 @@ namespace Intersect.Server.Entities
 
                     var fleeing = IsFleeing();
 
-                    if (MoveTimer < Globals.Timing.Milliseconds)
+                    if (MoveTimer < Timing.Global.Milliseconds)
                     {
                         var targetMap = Guid.Empty;
                         var targetX = 0;
@@ -828,7 +825,7 @@ namespace Intersect.Server.Entities
                         var targetZ = 0;
 
                         //TODO Clear Damage Map if out of combat (target is null and combat timer is to the point that regen has started)
-                        if (tempTarget != null && Timing.Global.Milliseconds > CombatTimer)
+                        if (tempTarget != null && (Options.Instance.NpcOpts.ResetIfCombatTimerExceeded && Timing.Global.Milliseconds > CombatTimer))
                         {
                             if (CheckForResetLocation(true))
                             {
@@ -847,15 +844,7 @@ namespace Intersect.Server.Entities
                             // Have we reached our destination? If so, clear it.
                             if (distance < 1)
                             {
-                                targetMap = Guid.Empty;
-
-                                // Reset our aggro center so we can get "pulled" again.
-                                AggroCenterMap = null;
-                                AggroCenterX = 0;
-                                AggroCenterY = 0;
-                                AggroCenterZ = 0;
-                                mPathFinder?.SetTarget(null);
-                                mResetting = false;
+                                ResetAggroCenter(out targetMap);
                             }
 
                             ResetNpc(Options.Instance.NpcOpts.ContinuouslyResetVitalsAndStatuses);
@@ -868,12 +857,11 @@ namespace Intersect.Server.Entities
                             else 
                             {
                                 // Something is fishy here.. We appear to be stuck in a reset loop?
-                                // Give it a few more attempts and kill the Npc is it keeps going!
+                                // Give it a few more attempts and reset the NPC's center if we're stuck!
                                 mResetCounter++;
                                 if (mResetCounter > mResetMax)
                                 {
-                                    // Kill the Npc, and simply do not drop any loot or give any credit.
-                                    Die(false, null);
+                                    ResetAggroCenter(out targetMap);
                                     mResetCounter = 0;
                                     mResetDistance = 0;
                                 }
@@ -1018,6 +1006,20 @@ namespace Intersect.Server.Entities
                                             }
                                             else
                                             {
+                                                if (Base.StandStill && Target != null)
+                                                {
+                                                    var dirTarget = GetDirectionTo(Target);
+                                                    if (mLastTargetDir < 0 || mLastTargetDir != dirTarget)
+                                                    {
+                                                        mLastTargetDir = dirTarget;
+                                                        Dir = dirTarget;
+                                                        PacketSender.SendEntityDir(this);
+                                                    }
+                                                    if ((Base.SpellAttackOverrideId == default && CanAttack(Target, null)) || (Base.SpellAttackOverrideId != default && CanAttack(Target, SpellBase.Get(Base.SpellAttackOverrideId))))
+                                                    {
+                                                        TryAttack(Target);
+                                                    }
+                                                }
                                                 mPathFinder.PathFailed(timeMs);
                                             }
 
@@ -1128,7 +1130,7 @@ namespace Intersect.Server.Entities
                                             }
                                             else
                                             {
-                                                if (CanAttack(tempTarget, null))
+                                                if ((Base.SpellAttackOverrideId == default && CanAttack(Target, null)) || (Base.SpellAttackOverrideId != default && CanAttack(Target, SpellBase.Get(Base.SpellAttackOverrideId))))
                                                 {
                                                     TryAttack(tempTarget);
                                                 }
@@ -1147,21 +1149,21 @@ namespace Intersect.Server.Entities
                             return;
                         }
 
-                        if (LastRandomMove >= Globals.Timing.Milliseconds || CastTime > 0)
+                        if (LastRandomMove >= Timing.Global.Milliseconds || CastTime > 0)
                         {
                             return;
                         }
 
                         if (Base.Movement == (int)NpcMovement.StandStill)
                         {
-                            LastRandomMove = Globals.Timing.Milliseconds + Randomization.Next(1000, 3000);
+                            LastRandomMove = Timing.Global.Milliseconds + Randomization.Next(1000, 3000);
 
                             return;
                         }
                         else if (Base.Movement == (int)NpcMovement.TurnRandomly)
                         {
                             ChangeDir((byte)Randomization.Next(0, 4));
-                            LastRandomMove = Globals.Timing.Milliseconds + Randomization.Next(1000, 3000);
+                            LastRandomMove = Timing.Global.Milliseconds + Randomization.Next(1000, 3000);
 
                             return;
                         }
@@ -1187,11 +1189,11 @@ namespace Intersect.Server.Entities
                             }
                         }
 
-                        LastRandomMove = Globals.Timing.Milliseconds + Randomization.Next(1000, 3000);
+                        LastRandomMove = Timing.Global.Milliseconds + Randomization.Next(1000, 3000);
 
                         if (fleeing)
                         {
-                            LastRandomMove = Globals.Timing.Milliseconds + (long) GetMovementTime();
+                            LastRandomMove = Timing.Global.Milliseconds + (long) GetMovementTime();
                         }
                     }
 
@@ -1223,6 +1225,23 @@ namespace Intersect.Server.Entities
                     Monitor.Exit(EntityLock);
                 }
             }
+        }
+
+        /// <summary>
+        /// Resets the NPCs position to be "pulled" from
+        /// </summary>
+        /// <param name="targetMap">For referencing the map that the enemy's target WAS on before a reset.</param>
+        private void ResetAggroCenter(out Guid targetMap)
+        {
+            targetMap = Guid.Empty;
+
+            // Reset our aggro center so we can get "pulled" again.
+            AggroCenterMap = null;
+            AggroCenterX = 0;
+            AggroCenterY = 0;
+            AggroCenterZ = 0;
+            mPathFinder?.SetTarget(null);
+            mResetting = false;
         }
 
         private bool CheckForResetLocation(bool forceDistance = false)
@@ -1568,7 +1587,8 @@ namespace Intersect.Server.Entities
             bool mapSave = false,
             bool fromWarpEvent = false,
             MapInstanceType mapInstanceType = MapInstanceType.NoChange,
-            bool fromLogin = false
+            bool fromLogin = false,
+            bool forceInstanceChange = false
         )
         {
             if (!MapController.TryGetInstanceFromMap(newMapId, MapInstanceId, out var map))

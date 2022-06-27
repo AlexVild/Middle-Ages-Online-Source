@@ -92,6 +92,17 @@ namespace Intersect.Enums
 
         RightShiftInstanceVar,
 
+        PlayerX,
+
+        PlayerY,
+
+        PlayerLevel,
+
+        EventX,
+
+        EventY,
+
+        SpawnGroup,
     }
 
     public enum VariableComparators

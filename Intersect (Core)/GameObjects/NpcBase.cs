@@ -137,6 +137,19 @@ namespace Intersect.GameObjects
             set => DeathAnimationId = value?.Id ?? Guid.Empty;
         }
 
+        [Column("DeathTransformId")]
+        public Guid DeathTransformId { get; set; }
+
+        [NotMapped]
+        [JsonIgnore]
+        public NpcBase DeathTransform
+        {
+            get => Get(DeathTransformId);
+            set => DeathTransformId = value?.Id ?? Guid.Empty;
+        }
+
+        public Guid SpellAttackOverrideId { get; set; }
+
         //Behavior
         public bool Aggressive { get; set; }
 
@@ -149,6 +162,8 @@ namespace Intersect.GameObjects
         public bool FocusHighestDamageDealer { get; set; } = true;
 
         public int ResetRadius { get; set; }
+
+        public bool StandStill { get; set; }
 
         //Conditions
         [Column("PlayerFriendConditions")]
