@@ -300,7 +300,6 @@ namespace Intersect.Server.Entities
         [NotMapped, JsonIgnore]
         public Dictionary<Guid, PlayerClassStats> ClassInfo = new Dictionary<Guid, PlayerClassStats>();
 
-        [JsonIgnore]
         [Column("ClassInfo")]
         public string ClassInfoJson
         {

@@ -1664,7 +1664,7 @@ namespace Intersect.Editor.Forms.Editors.Events
                 case NPCGuildManagementSelection.ChangeRank:
                     return Strings.EventCommandList.npcmanage.ToString(
                         ClassBase.GetName(command.ClassId),
-                        Strings.EventCommandList.npcmanagechangerank.ToString(command.NewRank.ToString())
+                        Strings.EventCommandList.npcmanagechangerank.ToString(command.Value.ToString())
                         );
                 case NPCGuildManagementSelection.ChangeSpecialAssignment:
                     return Strings.EventCommandList.npcmanage.ToString(
@@ -1675,6 +1675,11 @@ namespace Intersect.Editor.Forms.Editors.Events
                     return Strings.EventCommandList.npcmanage.ToString(
                         ClassBase.GetName(command.ClassId),
                         Strings.EventCommandList.npcmanageclearcooldown.ToString(command.SelectionValue.ToString())
+                        );
+                case NPCGuildManagementSelection.ChangeTasksRemaining:
+                    return Strings.EventCommandList.npcmanage.ToString(
+                        ClassBase.GetName(command.ClassId),
+                        Strings.EventCommandList.NpcManageTasksCompleted.ToString(command.Value.ToString())
                         );
                 default:
                     return Strings.EventCommandList.npcmanage.ToString(Strings.General.none);

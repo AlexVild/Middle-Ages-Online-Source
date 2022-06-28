@@ -31,15 +31,15 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         {
             this.grpManagement = new DarkUI.Controls.DarkGroupBox();
             this.nudClassRank = new DarkUI.Controls.DarkNumericUpDown();
+            this.cmbValue = new DarkUI.Controls.DarkComboBox();
+            this.lblValue = new System.Windows.Forms.Label();
+            this.cmbClass = new DarkUI.Controls.DarkComboBox();
+            this.lblClass = new System.Windows.Forms.Label();
             this.lblRank = new System.Windows.Forms.Label();
             this.lblType = new System.Windows.Forms.Label();
             this.cmbSelection = new DarkUI.Controls.DarkComboBox();
             this.btnCancel = new DarkUI.Controls.DarkButton();
             this.btnSave = new DarkUI.Controls.DarkButton();
-            this.lblClass = new System.Windows.Forms.Label();
-            this.cmbClass = new DarkUI.Controls.DarkComboBox();
-            this.lblValue = new System.Windows.Forms.Label();
-            this.cmbValue = new DarkUI.Controls.DarkComboBox();
             this.grpManagement.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudClassRank)).BeginInit();
             this.SuspendLayout();
@@ -86,14 +86,77 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             0});
             this.nudClassRank.ValueChanged += new System.EventHandler(this.nudClassRank_ValueChanged);
             // 
+            // cmbValue
+            // 
+            this.cmbValue.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbValue.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbValue.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbValue.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbValue.DrawDropdownHoverOutline = false;
+            this.cmbValue.DrawFocusRectangle = false;
+            this.cmbValue.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbValue.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbValue.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbValue.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbValue.FormattingEnabled = true;
+            this.cmbValue.Items.AddRange(new object[] {
+            "False",
+            "True"});
+            this.cmbValue.Location = new System.Drawing.Point(112, 114);
+            this.cmbValue.Name = "cmbValue";
+            this.cmbValue.Size = new System.Drawing.Size(114, 21);
+            this.cmbValue.TabIndex = 29;
+            this.cmbValue.Text = "False";
+            this.cmbValue.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbValue.SelectedIndexChanged += new System.EventHandler(this.cmbValue_SelectedIndexChanged);
+            // 
+            // lblValue
+            // 
+            this.lblValue.AutoSize = true;
+            this.lblValue.Location = new System.Drawing.Point(6, 117);
+            this.lblValue.Name = "lblValue";
+            this.lblValue.Size = new System.Drawing.Size(37, 13);
+            this.lblValue.TabIndex = 28;
+            this.lblValue.Text = "Value:";
+            // 
+            // cmbClass
+            // 
+            this.cmbClass.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbClass.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbClass.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbClass.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbClass.DrawDropdownHoverOutline = false;
+            this.cmbClass.DrawFocusRectangle = false;
+            this.cmbClass.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbClass.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbClass.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbClass.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbClass.FormattingEnabled = true;
+            this.cmbClass.Location = new System.Drawing.Point(68, 73);
+            this.cmbClass.Name = "cmbClass";
+            this.cmbClass.Size = new System.Drawing.Size(158, 21);
+            this.cmbClass.TabIndex = 27;
+            this.cmbClass.Text = null;
+            this.cmbClass.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbClass.SelectedIndexChanged += new System.EventHandler(this.cmbClass_SelectedIndexChanged);
+            // 
+            // lblClass
+            // 
+            this.lblClass.AutoSize = true;
+            this.lblClass.Location = new System.Drawing.Point(6, 76);
+            this.lblClass.Name = "lblClass";
+            this.lblClass.Size = new System.Drawing.Size(35, 13);
+            this.lblClass.TabIndex = 26;
+            this.lblClass.Text = "Class:";
+            // 
             // lblRank
             // 
             this.lblRank.AutoSize = true;
             this.lblRank.Location = new System.Drawing.Point(4, 117);
             this.lblRank.Name = "lblRank";
-            this.lblRank.Size = new System.Drawing.Size(64, 13);
+            this.lblRank.Size = new System.Drawing.Size(37, 13);
             this.lblRank.TabIndex = 24;
-            this.lblRank.Text = "Class Rank:";
+            this.lblRank.Text = "Value:";
             // 
             // lblType
             // 
@@ -144,69 +207,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.btnSave.TabIndex = 19;
             this.btnSave.Text = "Ok";
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
-            // 
-            // lblClass
-            // 
-            this.lblClass.AutoSize = true;
-            this.lblClass.Location = new System.Drawing.Point(6, 76);
-            this.lblClass.Name = "lblClass";
-            this.lblClass.Size = new System.Drawing.Size(35, 13);
-            this.lblClass.TabIndex = 26;
-            this.lblClass.Text = "Class:";
-            // 
-            // cmbClass
-            // 
-            this.cmbClass.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbClass.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbClass.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbClass.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbClass.DrawDropdownHoverOutline = false;
-            this.cmbClass.DrawFocusRectangle = false;
-            this.cmbClass.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbClass.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbClass.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbClass.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbClass.FormattingEnabled = true;
-            this.cmbClass.Location = new System.Drawing.Point(68, 73);
-            this.cmbClass.Name = "cmbClass";
-            this.cmbClass.Size = new System.Drawing.Size(158, 21);
-            this.cmbClass.TabIndex = 27;
-            this.cmbClass.Text = null;
-            this.cmbClass.TextPadding = new System.Windows.Forms.Padding(2);
-            this.cmbClass.SelectedIndexChanged += new System.EventHandler(this.cmbClass_SelectedIndexChanged);
-            // 
-            // lblValue
-            // 
-            this.lblValue.AutoSize = true;
-            this.lblValue.Location = new System.Drawing.Point(6, 117);
-            this.lblValue.Name = "lblValue";
-            this.lblValue.Size = new System.Drawing.Size(37, 13);
-            this.lblValue.TabIndex = 28;
-            this.lblValue.Text = "Value:";
-            // 
-            // cmbValue
-            // 
-            this.cmbValue.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbValue.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbValue.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbValue.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbValue.DrawDropdownHoverOutline = false;
-            this.cmbValue.DrawFocusRectangle = false;
-            this.cmbValue.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbValue.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbValue.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbValue.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbValue.FormattingEnabled = true;
-            this.cmbValue.Items.AddRange(new object[] {
-            "False",
-            "True"});
-            this.cmbValue.Location = new System.Drawing.Point(112, 114);
-            this.cmbValue.Name = "cmbValue";
-            this.cmbValue.Size = new System.Drawing.Size(114, 21);
-            this.cmbValue.TabIndex = 29;
-            this.cmbValue.Text = "False";
-            this.cmbValue.TextPadding = new System.Windows.Forms.Padding(2);
-            this.cmbValue.SelectedIndexChanged += new System.EventHandler(this.cmbValue_SelectedIndexChanged);
             // 
             // EventCommand_NPCGuildManagement
             // 

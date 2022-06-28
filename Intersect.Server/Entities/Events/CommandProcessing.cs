@@ -2365,6 +2365,7 @@ namespace Intersect.Server.Entities.Events
             Stack<CommandInstance> callStack
         )
         {
+            var cls = ClassBase.Get(command.ClassId);
             if (player == null || !player.ClassInfo.TryGetValue(command.ClassId, out var classInfo))
             {
                 return;
@@ -2385,20 +2386,38 @@ namespace Intersect.Server.Entities.Events
                         player.LeaveNpcGuildOfClass(command.ClassId);
                     }
                     break;
+                case NPCGuildManagementSelection.ChangeTasksRemaining:
+                    classInfo.TasksRemaining = command.Value;
+                    classInfo.AssignmentAvailable = classInfo.TasksRemaining == 0;
+                    if (classInfo.AssignmentAvailable)
+                    {
+                        PacketSender.SendChatMsg(player,
+                               Strings.Quests.newspecialassignment.ToString(cls.Name),
+                               ChatMessageType.Quest,
+                               CustomColors.Quests.Completed);
+                    }
+                    else
+                    {
+                        PacketSender.SendChatMsg(player,
+                            Strings.Quests.tasksremaining.ToString(classInfo.TasksRemaining, cls.Name),
+                            ChatMessageType.Quest,
+                            CustomColors.Quests.TaskUpdated);
+                    }
+                    break;
                 case NPCGuildManagementSelection.ChangeRank:
                     var oldRank = classInfo.Rank;
-                    classInfo.Rank = command.NewRank;
+                    classInfo.Rank = command.Value;
                     if (oldRank < classInfo.Rank)
                     {
                         PacketSender.SendChatMsg(player,
-                            Strings.Quests.classrankincreased.ToString(ClassBase.Get(command.ClassId).Name, classInfo.Rank.ToString()),
+                            Strings.Quests.classrankincreased.ToString(cls.Name, classInfo.Rank.ToString()),
                             ChatMessageType.Quest,
                             CustomColors.Quests.Completed);
                     }
                     else if (oldRank > classInfo.Rank)
                     {
                         PacketSender.SendChatMsg(player,
-                            Strings.Quests.classrankdecreased.ToString(ClassBase.Get(command.ClassId).Name, classInfo.Rank.ToString()),
+                            Strings.Quests.classrankdecreased.ToString(cls.Name, classInfo.Rank.ToString()),
                             ChatMessageType.Quest,
                             CustomColors.Quests.Abandoned);
                     }

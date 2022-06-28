@@ -2069,6 +2069,9 @@ Tick timer saved in server config.json.";
             public static LocalizedString npcmanageclearcooldown = @"Clear Task Cooldown";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString NpcManageTasksCompleted = @"Change Tasks Completed to {00}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString addinspiration = @"Add {00} seconds of inspiration";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
