@@ -34,8 +34,9 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
 
             cmbSelection.SelectedIndex = (int)refCommand.Selection;
             cmbClass.SelectedIndex = ClassBase.ListIndex(refCommand.ClassId);
-            nudClassRank.Maximum = Options.MaxClassRank;
-            nudClassRank.Value = MathHelper.Clamp(refCommand.NewRank, 0, Options.MaxClassRank);
+
+            UpdateValueLimits();
+
             if (refCommand.SelectionValue)
             {
                 cmbValue.SelectedIndex = 1;
@@ -96,12 +97,30 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     cmbValue.Show();
                     break;
                 case NPCGuildManagementSelection.ChangeRank:
+                case NPCGuildManagementSelection.ChangeTasksRemaining:
                     lblRank.Show();
                     nudClassRank.Show();
                     break;
                 case NPCGuildManagementSelection.ClearCooldown:
                     // Intentionally blank
                     break;
+            }
+
+            UpdateValueLimits();
+        }
+
+        private void UpdateValueLimits()
+        {
+            if (mMyCommand.Selection == NPCGuildManagementSelection.ChangeRank)
+            {
+                nudClassRank.Maximum = Options.MaxClassRank;
+                nudClassRank.Minimum = 0;
+                nudClassRank.Value = MathHelper.Clamp(mMyCommand.Value, 0, Options.MaxClassRank);
+            }
+            if (mMyCommand.Selection == NPCGuildManagementSelection.ChangeTasksRemaining)
+            {
+                nudClassRank.Maximum = 1000;
+                nudClassRank.Minimum = -1;
             }
         }
 
@@ -117,7 +136,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
 
         private void nudClassRank_ValueChanged(object sender, EventArgs e)
         {
-            mMyCommand.NewRank = (int) nudClassRank.Value;
+            mMyCommand.Value = (int) nudClassRank.Value;
         }
 
         private void cmbSelection_SelectedIndexChanged(object sender, EventArgs e)

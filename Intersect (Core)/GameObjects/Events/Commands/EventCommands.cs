@@ -1154,7 +1154,7 @@ namespace Intersect.GameObjects.Events.Commands
 
         public bool SelectionValue { get; set; }
         
-        public int NewRank { get; set; }
+        public int Value { get; set; }
     }
 
     public class AddInspirationCommand : EventCommand

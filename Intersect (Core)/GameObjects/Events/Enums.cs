@@ -261,5 +261,6 @@
         ChangeRank,
         ChangeGuildStatus,
         ChangeSpecialAssignment,
+        ChangeTasksRemaining,
     }
 }
