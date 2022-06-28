@@ -6,6 +6,8 @@ using Intersect.Client.Framework.Gwen.Control.EventArguments;
 using Intersect.Client.General;
 using Intersect.Client.Localization;
 using Intersect.Client.Networking;
+using System;
+using System.Linq;
 
 namespace Intersect.Client.Interface.Game
 {
@@ -38,6 +40,8 @@ namespace Intersect.Client.Interface.Game
 
         private Button mEventResponse4;
 
+        private Label mSpeakerLabel;
+
         //Init
         public EventWindow(Canvas gameCanvas)
         {
@@ -55,6 +59,8 @@ namespace Intersect.Client.Interface.Game
             mEventDialogAreaNoFace = new ScrollControl(mEventDialogWindow, "EventDialogAreaNoFace");
             mEventDialogLabelNoFaceTemplate = new Label(mEventDialogAreaNoFace, "EventDialogLabel");
             mEventDialogLabelNoFace = new RichLabel(mEventDialogAreaNoFace);
+
+            mSpeakerLabel = new Label(mEventDialogWindow, "SpeakerLabel");
 
             mEventResponse1 = new Button(mEventDialogWindow, "EventResponse1");
             mEventResponse1.Clicked += EventResponse1_Clicked;
@@ -126,28 +132,77 @@ namespace Intersect.Client.Interface.Game
                     mEventResponse2.Name = "";
                     mEventResponse3.Name = "";
                     mEventResponse4.Name = "";
+
+                    // Determine whether or not this event is a "dialog", with a speaker, to display the event differently.
+                    bool hasSpeaker = false;
+                    var prompt = Globals.EventDialogs[0].Prompt;
+                    var splitPrompt = prompt.Split(new string[] { ":\r\n" }, StringSplitOptions.None).ToList();
+                    if (splitPrompt.Count > 1 && splitPrompt[0].Split(' ').Length <= 4)
+                    {
+                        hasSpeaker = true;
+                        mSpeakerLabel.Show();
+                        mSpeakerLabel.Text = $"{splitPrompt[0]}:";
+                        prompt = string.Concat(splitPrompt.Skip(1));
+                    }
+                    else
+                    {
+                        mSpeakerLabel.Hide();
+                    }
+
                     switch (maxResponse)
                     {
                         case 1:
-                            mEventDialogWindow.Name = "EventDialogWindow_1Response";
+                            if (hasSpeaker)
+                            {
+                                mEventDialogWindow.Name = "EventDialogWindow_1ResponseSpeaker";
+                            }
+                            else
+                            {
+                                mEventDialogWindow.Name = "EventDialogWindow_1Response";
+                            }
+                            
                             mEventResponse1.Name = "Response1Button";
 
                             break;
                         case 2:
-                            mEventDialogWindow.Name = "EventDialogWindow_2Responses";
+                            if (hasSpeaker)
+                            {
+                                mEventDialogWindow.Name = "EventDialogWindow_2ResponsesSpeaker";
+                            }
+                            else
+                            {
+                                mEventDialogWindow.Name = "EventDialogWindow_2Responses";
+                            }
+                            
                             mEventResponse1.Name = "Response1Button";
                             mEventResponse2.Name = "Response2Button";
 
                             break;
                         case 3:
-                            mEventDialogWindow.Name = "EventDialogWindow_3Responses";
+                            if (hasSpeaker)
+                            {
+                                mEventDialogWindow.Name = "EventDialogWindow_3ResponsesSpeaker";
+                            }
+                            else
+                            {
+                                mEventDialogWindow.Name = "EventDialogWindow_3Responses";
+                            }
+                            
                             mEventResponse1.Name = "Response1Button";
                             mEventResponse2.Name = "Response2Button";
                             mEventResponse3.Name = "Response3Button";
 
                             break;
                         case 4:
-                            mEventDialogWindow.Name = "EventDialogWindow_4Responses";
+                            if (hasSpeaker)
+                            {
+                                mEventDialogWindow.Name = "EventDialogWindow_4ResponsesSpeaker";
+                            }
+                            else
+                            {
+                                mEventDialogWindow.Name = "EventDialogWindow_4Responses";
+                            }
+                            
                             mEventResponse1.Name = "Response1Button";
                             mEventResponse2.Name = "Response2Button";
                             mEventResponse3.Name = "Response3Button";
@@ -236,7 +291,7 @@ namespace Intersect.Client.Interface.Game
                                                   mEventDialogArea.GetVerticalScrollBar().Width;
 
                         mEventDialogLabel.AddText(
-                            Globals.EventDialogs[0].Prompt, mEventDialogLabelTemplate.TextColor,
+                            prompt, mEventDialogLabelTemplate.TextColor,
                             mEventDialogLabelTemplate.CurAlignments.Count > 0
                                 ? mEventDialogLabelTemplate.CurAlignments[0]
                                 : Alignments.Left, mEventDialogLabelTemplate.Font
@@ -252,7 +307,7 @@ namespace Intersect.Client.Interface.Game
                                                         mEventDialogAreaNoFace.GetVerticalScrollBar().Width;
 
                         mEventDialogLabelNoFace.AddText(
-                            Globals.EventDialogs[0].Prompt, mEventDialogLabelNoFaceTemplate.TextColor,
+                            prompt, mEventDialogLabelNoFaceTemplate.TextColor,
                             mEventDialogLabelNoFaceTemplate.CurAlignments.Count > 0
                                 ? mEventDialogLabelNoFaceTemplate.CurAlignments[0]
                                 : Alignments.Left, mEventDialogLabelNoFaceTemplate.Font
