@@ -4036,46 +4036,42 @@ namespace Intersect.Server.Entities
         //Craft a new item
         public void CraftItem(Guid id)
         {
-            if (CraftingTableId != Guid.Empty)
+            if (CraftingTableId == default)
             {
-                var invbackup = new List<Item>();
-                foreach (var item in Items)
-                {
-                    invbackup.Add(item.Clone());
-                }
+                return;
+            }
 
-                //Quickly Look through the inventory and create a catalog of what items we have, and how many
-                var itemdict = new Dictionary<Guid, int>();
-                foreach (var item in Items)
+            var invbackup = new List<Item>();
+            foreach (var item in Items)
+            {
+                invbackup.Add(item.Clone());
+            }
+
+            //Quickly Look through the inventory and create a catalog of what items we have, and how many
+            var itemdict = new Dictionary<Guid, int>();
+            foreach (var item in Items)
+            {
+                if (item != null)
                 {
-                    if (item != null)
+                    if (itemdict.ContainsKey(item.ItemId))
                     {
-                        if (itemdict.ContainsKey(item.ItemId))
-                        {
-                            itemdict[item.ItemId] += item.Quantity;
-                        }
-                        else
-                        {
-                            itemdict.Add(item.ItemId, item.Quantity);
-                        }
+                        itemdict[item.ItemId] += item.Quantity;
+                    }
+                    else
+                    {
+                        itemdict.Add(item.ItemId, item.Quantity);
                     }
                 }
+            }
 
-                //Check the player actually has the items
-                foreach (var c in CraftBase.Get(id).Ingredients)
+            //Check the player actually has the items
+            foreach (var c in CraftBase.Get(id).Ingredients)
+            {
+                if (itemdict.ContainsKey(c.ItemId))
                 {
-                    if (itemdict.ContainsKey(c.ItemId))
+                    if (itemdict[c.ItemId] >= c.Quantity)
                     {
-                        if (itemdict[c.ItemId] >= c.Quantity)
-                        {
-                            itemdict[c.ItemId] -= c.Quantity;
-                        }
-                        else
-                        {
-                            CraftId = Guid.Empty;
-
-                            return;
-                        }
+                        itemdict[c.ItemId] -= c.Quantity;
                     }
                     else
                     {
@@ -4084,53 +4080,18 @@ namespace Intersect.Server.Entities
                         return;
                     }
                 }
-
-                //Take the items
-                foreach (var c in CraftBase.Get(id).Ingredients)
-                {
-                    if (!TryTakeItem(c.ItemId, c.Quantity))
-                    {
-                        for (var i = 0; i < invbackup.Count; i++)
-                        {
-                            Items[i].Set(invbackup[i]);
-                        }
-
-                        PacketSender.SendInventory(this);
-                        CraftId = Guid.Empty;
-
-                        return;
-                    }
-                }
-
-                //Give them the craft
-                var quantity = Math.Max(CraftBase.Get(id).Quantity, 1);
-                var itm = ItemBase.Get(CraftBase.Get(id).ItemId);
-                if (itm == null || !itm.IsStackable)
-                {
-                    quantity = 1;
-                }
-
-                if (TryGiveItem(CraftBase.Get(id).ItemId, quantity))
-                {
-                    var craftedItem = CraftBase.Get(id);
-                    String itemName = ItemBase.GetName(craftedItem.ItemId);
-                    PacketSender.SendChatMsg(
-                        this, Strings.Crafting.crafted.ToString(itemName), ChatMessageType.Crafting,
-                        CustomColors.Alerts.Success
-                    );
-                    
-                    // Update our record of how many of this item we've crafted
-                    int recordCrafted = IncrementRecord(RecordType.ItemCrafted, id);
-                    if (Options.SendCraftingRecordUpdates && recordCrafted % Options.CraftingRecordUpdateInterval == 0)
-                    {
-                        SendRecordUpdate(Strings.Records.itemcrafted.ToString(recordCrafted, itemName));
-                    }
-                    GiveInspiredExperience(craftedItem.Experience);
-
-                    if (CraftBase.Get(id).Event != null)
-                        StartCommonEvent(craftedItem.Event);
-                }
                 else
+                {
+                    CraftId = Guid.Empty;
+
+                    return;
+                }
+            }
+
+            //Take the items
+            foreach (var c in CraftBase.Get(id).Ingredients)
+            {
+                if (!TryTakeItem(c.ItemId, c.Quantity))
                 {
                     for (var i = 0; i < invbackup.Count; i++)
                     {
@@ -4138,13 +4099,54 @@ namespace Intersect.Server.Entities
                     }
 
                     PacketSender.SendInventory(this);
-                    PacketSender.SendChatMsg(
-                        this, Strings.Crafting.nospace.ToString(ItemBase.GetName(CraftBase.Get(id).ItemId)), ChatMessageType.Crafting,
-                        CustomColors.Alerts.Error
-                    );
+                    CraftId = Guid.Empty;
+
+                    return;
+                }
+            }
+
+            //Give them the craft
+            var quantity = Math.Max(CraftBase.Get(id).Quantity, 1);
+            var itm = ItemBase.Get(CraftBase.Get(id).ItemId);
+            if (itm == null || !itm.IsStackable)
+            {
+                quantity = 1;
+            }
+
+            if (TryGiveItem(CraftBase.Get(id).ItemId, quantity))
+            {
+                CraftId = Guid.Empty;
+                var craftedItem = CraftBase.Get(id);
+                String itemName = ItemBase.GetName(craftedItem.ItemId);
+                PacketSender.SendChatMsg(
+                    this, Strings.Crafting.crafted.ToString(itemName), ChatMessageType.Crafting,
+                    CustomColors.Alerts.Success
+                );
+                    
+                // Update our record of how many of this item we've crafted
+                int recordCrafted = IncrementRecord(RecordType.ItemCrafted, id);
+                if (Options.SendCraftingRecordUpdates && recordCrafted % Options.CraftingRecordUpdateInterval == 0)
+                {
+                    SendRecordUpdate(Strings.Records.itemcrafted.ToString(recordCrafted, itemName));
+                }
+                GiveInspiredExperience(craftedItem.Experience);
+
+                if (CraftBase.Get(id).Event != null)
+                    StartCommonEvent(craftedItem.Event);
+            }
+            else
+            {
+                CraftId = Guid.Empty;
+                for (var i = 0; i < invbackup.Count; i++)
+                {
+                    Items[i].Set(invbackup[i]);
                 }
 
-                CraftId = Guid.Empty;
+                PacketSender.SendInventory(this);
+                PacketSender.SendChatMsg(
+                    this, Strings.Crafting.nospace.ToString(ItemBase.GetName(CraftBase.Get(id).ItemId)), ChatMessageType.Crafting,
+                    CustomColors.Alerts.Error
+                );
             }
         }
 
