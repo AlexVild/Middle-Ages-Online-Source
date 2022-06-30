@@ -1749,16 +1749,22 @@ namespace Intersect.Server.Entities
             }
 
             if (entity is Npc npc)
-            {   
-                if (!npc.CanPlayerAttack(this) && !npc.IsAllyOf(this))
-                {
-                    PacketSender.SendActionMsg(npc, Strings.Combat.invulnerable, CustomColors.Combat.Invulnerable, Options.BlockSound);
-                }
-
-                return !friendly && npc.CanPlayerAttack(this) || friendly && npc.IsAllyOf(this);
+            {
+                return CanAttackNpc(npc, spell);
             }
 
             return true;
+        }
+
+        public bool CanAttackNpc(Npc npc, SpellBase spell = null)
+        {
+            var friendly = spell?.Combat != null && spell.Combat.Friendly;
+            if (!npc.CanPlayerAttack(this) && !npc.IsAllyOf(this))
+            {
+                PacketSender.SendActionMsg(npc, Strings.Combat.invulnerable, CustomColors.Combat.Invulnerable, Options.BlockSound);
+            }
+
+            return !friendly && npc.CanPlayerAttack(this) || friendly && npc.IsAllyOf(this);
         }
 
         public override void NotifySwarm(Entity attacker)
@@ -2781,7 +2787,7 @@ namespace Intersect.Server.Entities
             }
 
             // Get this information so we can use it later.
-            var openSlots = FindOpenInventorySlots().Count;
+            var openSlotCount = FindOpenInventorySlots().Count;
             var slotsRequired = (int)Math.Ceiling(item.Quantity / (double) item.Descriptor.MaxInventoryStack);
 
             int spawnAmount = 0;
@@ -2804,16 +2810,32 @@ namespace Intersect.Server.Entities
                         GiveItem(item, sendUpdate);
                         success = true;
                     }
-                    else if (item.Descriptor.Stackable && openSlots < slotsRequired) // Is stackable, but no inventory space.
+                    else if (item.Descriptor.Stackable && openSlotCount < slotsRequired && item.Descriptor.MaxInventoryStack > 1) // Is stackable (> 1, else treat as unstackable), but no inventory space.
                     {
-                        spawnAmount = item.Quantity;
+                        var itemDesc = item.Descriptor;
+                        var slots = FindInventoryItemSlots(item.ItemId);
+                        var openSlots = FindOpenInventorySlots();
+                        slots.AddRange(openSlots);
+                        var amountToGive = item.Quantity;
+                        foreach (var slot in slots)
+                        {
+                            amountToGive -= itemDesc.MaxInventoryStack - slot.Quantity;
+                        }
+
+                        // Fill up any stacks we can
+                        if (amountToGive != item.Quantity)
+                        {
+                            GiveItem(item, sendUpdate);
+                        }
+
+                        spawnAmount = amountToGive;
                     }
                     else // Time to give them as much as they can take, and spawn the rest on the map!
                     {
-                        spawnAmount = item.Quantity - openSlots;
-                        if (openSlots > 0)
+                        spawnAmount = item.Quantity - openSlotCount;
+                        if (openSlotCount > 0)
                         {
-                            item.Quantity = openSlots;
+                            item.Quantity = openSlotCount;
                             GiveItem(item, sendUpdate);
                         }
                     }
@@ -2832,9 +2854,9 @@ namespace Intersect.Server.Entities
                         GiveItem(item, sendUpdate);
                         success = true;
                     }
-                    else if (!item.Descriptor.Stackable && openSlots >= slotsRequired) // Is not stackable, has space for some.
+                    else if (!item.Descriptor.Stackable && openSlotCount >= slotsRequired) // Is not stackable, has space for some.
                     {
-                        item.Quantity = openSlots;
+                        item.Quantity = openSlotCount;
                         GiveItem(item, sendUpdate);
                         success = true;
                     }
@@ -2909,7 +2931,7 @@ namespace Intersect.Server.Entities
                 {
                     var openSlots = FindOpenInventorySlots();
                     var total = toGive; // Copy this as we're going to be editing toGive.
-                    for (var slot = 0; slot < Math.Ceiling((double)total / item.Descriptor.MaxInventoryStack); slot++)
+                    for (var slot = 0; slot < openSlots.Count && slot < Math.Ceiling((double)total / item.Descriptor.MaxInventoryStack); slot++)
                     {
                         var quantity = item.Descriptor.MaxInventoryStack <= toGive ?
                             item.Descriptor.MaxInventoryStack :
@@ -3277,7 +3299,7 @@ namespace Intersect.Server.Entities
 
                         if (itemBase.QuickCast)
                         {
-                            if (!CanSpellCast(itemBase.Spell, target, false))
+                            if (!CanSpellCast(itemBase.Spell, target, false, true))
                             {
                                 return;
                             }
@@ -5330,7 +5352,7 @@ namespace Intersect.Server.Entities
             }
         }
 
-        public bool CanSpellCast(SpellBase spell, Entity target, bool checkVitalReqs)
+        public bool CanSpellCast(SpellBase spell, Entity target, bool checkVitalReqs, bool isQuickCast = false)
         {
             if (!Conditions.MeetsConditionLists(spell.CastingRequirements, this, null))
             {
@@ -5353,7 +5375,7 @@ namespace Intersect.Server.Entities
             }
 
             //Check if the caster is silenced or stunned. Clense casts break the rule.
-            if (spell.Combat.Effect != StatusTypes.Cleanse)
+            if ((spell.Combat.Effect != StatusTypes.Cleanse && !isQuickCast) || (spell.Combat.Effect != StatusTypes.Cleanse && !Options.Instance.CombatOpts.CleanseThruStun))
             {
                 foreach (var status in CachedStatuses)
                 {
