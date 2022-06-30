@@ -3299,7 +3299,7 @@ namespace Intersect.Server.Entities
 
                         if (itemBase.QuickCast)
                         {
-                            if (!CanSpellCast(itemBase.Spell, target, false))
+                            if (!CanSpellCast(itemBase.Spell, target, false, true))
                             {
                                 return;
                             }
@@ -5352,7 +5352,7 @@ namespace Intersect.Server.Entities
             }
         }
 
-        public bool CanSpellCast(SpellBase spell, Entity target, bool checkVitalReqs)
+        public bool CanSpellCast(SpellBase spell, Entity target, bool checkVitalReqs, bool isQuickCast = false)
         {
             if (!Conditions.MeetsConditionLists(spell.CastingRequirements, this, null))
             {
@@ -5375,7 +5375,7 @@ namespace Intersect.Server.Entities
             }
 
             //Check if the caster is silenced or stunned. Clense casts break the rule.
-            if (spell.Combat.Effect != StatusTypes.Cleanse)
+            if ((spell.Combat.Effect != StatusTypes.Cleanse && !isQuickCast) || (spell.Combat.Effect != StatusTypes.Cleanse && !Options.Instance.CombatOpts.CleanseThruStun))
             {
                 foreach (var status in CachedStatuses)
                 {
