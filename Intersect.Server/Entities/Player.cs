@@ -1749,16 +1749,22 @@ namespace Intersect.Server.Entities
             }
 
             if (entity is Npc npc)
-            {   
-                if (!npc.CanPlayerAttack(this) && !npc.IsAllyOf(this))
-                {
-                    PacketSender.SendActionMsg(npc, Strings.Combat.invulnerable, CustomColors.Combat.Invulnerable, Options.BlockSound);
-                }
-
-                return !friendly && npc.CanPlayerAttack(this) || friendly && npc.IsAllyOf(this);
+            {
+                return CanAttackNpc(npc, spell);
             }
 
             return true;
+        }
+
+        public bool CanAttackNpc(Npc npc, SpellBase spell = null)
+        {
+            var friendly = spell?.Combat != null && spell.Combat.Friendly;
+            if (!npc.CanPlayerAttack(this) && !npc.IsAllyOf(this))
+            {
+                PacketSender.SendActionMsg(npc, Strings.Combat.invulnerable, CustomColors.Combat.Invulnerable, Options.BlockSound);
+            }
+
+            return !friendly && npc.CanPlayerAttack(this) || friendly && npc.IsAllyOf(this);
         }
 
         public override void NotifySwarm(Entity attacker)

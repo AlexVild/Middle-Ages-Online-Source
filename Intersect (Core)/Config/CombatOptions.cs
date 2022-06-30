@@ -104,6 +104,8 @@ namespace Intersect.Config
 
         public long ProjectileSpellMovementDelay = 250;
 
+        public bool InvulnerableNpcsAffectedByNonDamaging = true;
+
         public bool StunPreventsItems { get; set;  } = false;
 
         public List<int> HarvestBonusIntervals = new List<int>()

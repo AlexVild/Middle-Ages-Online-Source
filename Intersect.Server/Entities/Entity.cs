@@ -1573,6 +1573,18 @@ namespace Intersect.Server.Entities
             var deadAnimations = new List<KeyValuePair<Guid, sbyte>>();
             var aliveAnimations = new List<KeyValuePair<Guid, sbyte>>();
 
+            if (this is Player pl && target is Npc np && !pl.CanAttackNpc(np))
+            {
+                if (spellBase.Combat.VitalDiff[(int)Vitals.Health] != 0 || spellBase.Combat.VitalDiff[(int)Vitals.Mana] != 0)
+                {
+                    return;
+                }
+                else if (!Options.Instance.CombatOpts.InvulnerableNpcsAffectedByNonDamaging)
+                {
+                    return;
+                }
+            }
+
             //Only count safe zones and friendly fire if its a dangerous spell! (If one has been used)
             if (!spellBase.Combat.Friendly &&
                 (spellBase.Combat.TargetType != (int) SpellTargetTypes.Self || onHitTrigger))
