@@ -148,6 +148,9 @@ namespace Intersect.Server.Entities
                     if (Parent.Owner != Parent.Target)
                     {
                         Parent.Owner.TryAttack(targetEntity, Parent.Base, Parent.Spell, Parent.Item, Dir);
+                        // Do not grapple players - commented out
+
+                        /*
                         if (Dir <= 3 && Parent.Base.GrappleHook && !Parent.HasGrappled
                         ) //Don't handle directional projectile grapplehooks
                         {
@@ -159,6 +162,7 @@ namespace Intersect.Server.Entities
                                 Parent.Base.IgnoreZDimension
                             );
                         }
+                        */
 
                         if (!Parent.Base.PierceTarget)
                         {
@@ -221,6 +225,10 @@ namespace Intersect.Server.Entities
                             if (Parent.Owner.GetType() == typeof(Player) && !((Resource)targetEntity).IsDead())
                             {
                                 Parent.Owner.TryAttack(targetEntity, Parent.Base, Parent.Spell, Parent.Item, Dir);
+
+                                // Do not grapple resources -- commented out
+
+                                /*
                                 if (Dir <= 3 && Parent.Base.GrappleHook && !Parent.HasGrappled) //Don't handle directional projectile grapplehooks
                                 {
                                     Parent.HasGrappled = true;
@@ -231,6 +239,7 @@ namespace Intersect.Server.Entities
                                         Parent.Base.IgnoreZDimension
                                     );
                                 }
+                                */
                             }
 
                             return true;
@@ -244,6 +253,10 @@ namespace Intersect.Server.Entities
                         ownerNpc.CanNpcCombat(targetEntity, Parent.Spell != null && Parent.Spell.Combat.Friendly))
                     {
                         Parent.Owner.TryAttack(targetEntity, Parent.Base, Parent.Spell, Parent.Item, Dir);
+
+                        // Do not grapple NPCs - commented out
+
+                        /*
                         if (Dir <= 3 && Parent.Base.GrappleHook && !Parent.HasGrappled
                         ) //Don't handle directional projectile grapplehooks
                         {
@@ -255,6 +268,7 @@ namespace Intersect.Server.Entities
                                 Parent.Base.IgnoreZDimension
                             );
                         }
+                        */
 
                         if (!Parent.Base.PierceTarget)
                         {
