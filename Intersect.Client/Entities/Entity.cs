@@ -1430,6 +1430,11 @@ namespace Intersect.Client.Entities
 
         public virtual void DrawName(Color textColor, Color borderColor = null, Color backgroundColor = null)
         {
+            if (!Globals.Database.DisplayNpcNames && !(this is Player))
+            {
+                return;
+            }
+
             // Always draw name if event, player, is targeted, or is aggressive.
             if (!(this is Event) && !(this is Player) && !IsTargeted && Type != -1)
             {

@@ -292,7 +292,7 @@ namespace Intersect.Client.Entities.Events
 
         public override void DrawName(Color textColor, Color borderColor, Color backgroundColor)
         {
-            if (HideName || Name.Trim().Length == 0)
+            if (HideName || Name.Trim().Length == 0 || !Globals.Database.DisplayNpcNames)
             {
                 return;
             }

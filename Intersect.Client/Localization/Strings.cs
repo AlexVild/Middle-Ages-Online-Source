@@ -1510,6 +1510,18 @@ namespace Intersect.Client.Localization
             public static LocalizedString CombatShake = @"Combat Shake";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString PlayerNames = @"Display Player Names";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString NPCNames = @"Display NPC Names";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString PartyMembers = @"Highlight Party Members";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ClanMembers = @"Highlight Clan Members";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString Fade = @"Fade Instead of Wipe";
         }
 

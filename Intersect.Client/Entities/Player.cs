@@ -2235,6 +2235,11 @@ namespace Intersect.Client.Entities
         //Override of the original function, used for rendering the color of a player based on rank
         public override void DrawName(Color textColor, Color borderColor, Color backgroundColor)
         {
+            if (!Globals.Database.DisplayPlayerNames)
+            {
+                return;
+            }
+
             if (textColor == null)
             {
                 if (Type == 1) //Mod
@@ -2267,7 +2272,7 @@ namespace Intersect.Client.Entities
                 }
             }
 
-            if (Globals.Me.Id != Id && Globals.Me.IsInMyParty(this) && CustomColors.Names.Players.ContainsKey("Party"))
+            if (Globals.Me.Id != Id && Globals.Me.IsInMyParty(this) && CustomColors.Names.Players.ContainsKey("Party") && Globals.Database.DisplayPartyMembers)
             {
                 textColor = CustomColors.Names.Players["Party"].Name;
                 borderColor = CustomColors.Names.Players["Party"].Outline;
@@ -2335,7 +2340,7 @@ namespace Intersect.Client.Entities
             }
 
             // If the other player is in the same guild as the client, display their guild appropriately
-            if (Globals.Me.Guild != null && Globals.Me.Id != Id && Guild == Globals.Me.Guild && CustomColors.Names.Players.ContainsKey("Guild"))
+            if (Globals.Database.DisplayClanMembers && Globals.Me.Guild != null && Globals.Me.Id != Id && Guild == Globals.Me.Guild && CustomColors.Names.Players.ContainsKey("Guild"))
             {
                 textColor = CustomColors.Names.Players["Guild"].Name;
                 borderColor = CustomColors.Names.Players["Guild"].Outline;

@@ -115,6 +115,14 @@ namespace Intersect.Client.Interface.Shared
         private readonly LabeledCheckBox mCombatScreenShakeCheckbox;
 
         private readonly LabeledCheckBox mFadeOutCheckbox;
+        
+        private readonly LabeledCheckBox mDisplayPlayerNamesCheckbox;
+
+        private readonly LabeledCheckBox mDisplayNPCNamesCheckbox;
+
+        private readonly LabeledCheckBox mDisplayPartyMembersCheckbox;
+
+        private readonly LabeledCheckBox mDisplayClanMembersCheckbox;
 
         // Open settings
         private bool mReturnToMenu;
@@ -188,6 +196,26 @@ namespace Intersect.Client.Interface.Shared
             mFadeOutCheckbox = new LabeledCheckBox(mGameSettingsContainer, "FadeOutCheckbox")
             {
                 Text = Strings.Settings.Fade
+            };
+
+            mDisplayClanMembersCheckbox = new LabeledCheckBox(mGameSettingsContainer, "ClanHighlightCheckbox")
+            {
+                Text = Strings.Settings.ClanMembers
+            };
+
+            mDisplayPartyMembersCheckbox = new LabeledCheckBox(mGameSettingsContainer, "PartyHighlightCheckbox")
+            {
+                Text = Strings.Settings.PartyMembers
+            };
+
+            mDisplayNPCNamesCheckbox = new LabeledCheckBox(mGameSettingsContainer, "NPCNameCheckbox")
+            {
+                Text = Strings.Settings.NPCNames
+            };
+
+            mDisplayPlayerNamesCheckbox = new LabeledCheckBox(mGameSettingsContainer, "PlayerNameCheckbox")
+            {
+                Text = Strings.Settings.PlayerNames
             };
             // TODO: Place our configurable gameplay related settings into their respective container for initialization here!
 
@@ -619,6 +647,10 @@ namespace Intersect.Client.Interface.Shared
             mCombatScreenFlashCheckbox.IsChecked = Globals.Database.CombatFlash;
             mCombatScreenShakeCheckbox.IsChecked = Globals.Database.CombatShake;
             mFadeOutCheckbox.IsChecked = Globals.Database.FadeTransitions;
+            mDisplayClanMembersCheckbox.IsChecked = Globals.Database.DisplayClanMembers;
+            mDisplayPartyMembersCheckbox.IsChecked = Globals.Database.DisplayPartyMembers;
+            mDisplayNPCNamesCheckbox.IsChecked = Globals.Database.DisplayNpcNames;
+            mDisplayPlayerNamesCheckbox.IsChecked = Globals.Database.DisplayPlayerNames;
 
             // Video Settings.
             mAutoCloseWindowsCheckbox.IsChecked = Globals.Database.HideOthersOnWindowOpen;
@@ -783,6 +815,10 @@ namespace Intersect.Client.Interface.Shared
             Globals.Database.CombatFlash = mCombatScreenFlashCheckbox.IsChecked;
             Globals.Database.CombatShake = mCombatScreenShakeCheckbox.IsChecked;
             Globals.Database.FadeTransitions = mFadeOutCheckbox.IsChecked;
+            Globals.Database.DisplayPlayerNames = mDisplayPlayerNamesCheckbox.IsChecked;
+            Globals.Database.DisplayPartyMembers = mDisplayPartyMembersCheckbox.IsChecked;
+            Globals.Database.DisplayClanMembers = mDisplayClanMembersCheckbox.IsChecked;
+            Globals.Database.DisplayNpcNames = mDisplayNPCNamesCheckbox.IsChecked;
 
             if (shouldReset)
             {

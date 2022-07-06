@@ -37,6 +37,14 @@ namespace Intersect.Client.Framework.Database
 
         public bool LeftClickTarget;
 
+        public bool DisplayPartyMembers;
+
+        public bool DisplayClanMembers;
+
+        public bool DisplayNpcNames;
+        
+        public bool DisplayPlayerNames;
+
         //Saving password, other stuff we don't want in the games directory
         public abstract void SavePreference(string key, object value);
 
@@ -71,6 +79,10 @@ namespace Intersect.Client.Framework.Database
             CombatFlash = LoadPreference("CombatFlash", true);
             EnableScanlines = LoadPreference("EnableScanlines", true);
             FadeTransitions = LoadPreference("FadeTransitions", false);
+            DisplayPartyMembers = LoadPreference("DisplayPartyMembers", true);
+            DisplayClanMembers = LoadPreference("DisplayClanMembers", true);
+            DisplayNpcNames = LoadPreference("DisplayNpcNames", true);
+            DisplayPlayerNames = LoadPreference("DisplayPlayerNames", true);
         }
 
         public virtual void SavePreferences()
@@ -89,6 +101,10 @@ namespace Intersect.Client.Framework.Database
             SavePreference("CombatShake", CombatShake.ToString());
             SavePreference("CombatFlash", CombatFlash.ToString());
             SavePreference("FadeTransitions", FadeTransitions.ToString());
+            SavePreference("DisplayPartyMembers", DisplayPartyMembers.ToString());
+            SavePreference("DisplayClanMembers", DisplayClanMembers.ToString());
+            SavePreference("DisplayNpcNames", DisplayNpcNames.ToString());
+            SavePreference("DisplayPlayerNames", DisplayPlayerNames.ToString());
         }
 
         public abstract bool LoadConfig();
