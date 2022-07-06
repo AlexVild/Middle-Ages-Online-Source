@@ -84,6 +84,8 @@ namespace Intersect
         
         public NPCGuildOptions NpcGuild = new NPCGuildOptions();
 
+        public BankOptions Bank = new BankOptions();
+
         public static Options Instance { get; private set; }
 
         [JsonIgnore]
@@ -111,8 +113,6 @@ namespace Intersect
         public static int MaxInvItems => Instance.PlayerOpts.MaxInventory;
 
         public static int MaxPlayerSkills => Instance.PlayerOpts.MaxSpells;
-
-        public static int MaxBankSlots => Instance.PlayerOpts.MaxBank;
 
         public static int MaxCharacters => Instance.PlayerOpts.MaxCharacters;
 
