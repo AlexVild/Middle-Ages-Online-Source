@@ -641,20 +641,6 @@ namespace Intersect.Server.Entities
                         }
                     }
 
-                    // Check to see if combos expired
-                    if (ComboWindow > 0)
-                    {
-                        // Detract from the window
-                        ComboWindow = (int)(ComboTimestamp - Timing.Global.Milliseconds);
-                        if (ComboWindow < 0)
-                        {
-                            EndCombo(); // This will also send a packet - this way, we're not flooding the client with packets when there's no active combo
-                        } else
-                        {
-                            PacketSender.SendComboPacket(Client, CurrentCombo, ComboWindow, ComboExp, MaxComboWindow);
-                        }
-                    }
-
                     // Check if the resource we're locked to has died - if so, alert client
                     if (resourceLock != null && resourceLock.IsDead())
                     {
@@ -850,6 +836,21 @@ namespace Intersect.Server.Entities
                             }
 
                             RemoveEvent(evt.Value.Id);
+                        }
+                    }
+
+                    // Check to see if combos expired
+                    if (ComboWindow > 0)
+                    {
+                        // Detract from the window
+                        ComboWindow = (int)(ComboTimestamp - Timing.Global.Milliseconds);
+                        if (ComboWindow < 0)
+                        {
+                            EndCombo(); // This will also send a packet - this way, we're not flooding the client with packets when there's no active combo
+                        }
+                        else
+                        {
+                            PacketSender.SendComboPacket(Client, CurrentCombo, ComboWindow, ComboExp, MaxComboWindow);
                         }
                     }
                 }
@@ -1449,11 +1450,14 @@ namespace Intersect.Server.Entities
 
         public void UpdateComboTime()
         {
-            ComboWindow = MaxComboWindow;
-            ComboTimestamp = Timing.Global.Milliseconds + ComboWindow;
-            CurrentCombo++;
-            StartCommonEventsWithTrigger(CommonEventTrigger.ComboUp);
-            StartCommonEventsWithTrigger(CommonEventTrigger.ComboReached, "", "", CurrentCombo);
+            lock (EntityLock)
+            {
+                ComboWindow = MaxComboWindow;
+                ComboTimestamp = Timing.Global.Milliseconds + ComboWindow;
+                CurrentCombo++;
+                StartCommonEventsWithTrigger(CommonEventTrigger.ComboUp);
+                StartCommonEventsWithTrigger(CommonEventTrigger.ComboReached, "", "", CurrentCombo);
+            }
         }
 
         public void EndCombo()
