@@ -2387,6 +2387,11 @@ namespace Intersect.Server.Networking
         {
             player?.SendPacket(new TimerStopPacket(timer.DescriptorId, timer.ElapsedTime));
         }
+
+        public static void SendInstanceLivesPacket(Player player, byte amount, bool clear = false)
+        {
+            player?.SendPacket(new InstanceLivesPacket(clear, amount));
+        }
     }
 
 }

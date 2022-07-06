@@ -126,6 +126,7 @@
     <Compile Include="Interface\Game\DescriptionWindows\ItemDescriptionWindow.cs" />
     <Compile Include="Interface\Game\GuildWindow.cs" />
     <Compile Include="Interface\Game\HarvestBonusWindow.cs" />
+    <Compile Include="Interface\Game\InstanceLifeWindow.cs" />
     <Compile Include="Interface\Game\MapItem\MapItemIcon.cs" />
     <Compile Include="Interface\Game\MapItem\MapItemWindow.cs" />
     <Compile Include="Interface\Game\QuestBoardWindow.cs" />

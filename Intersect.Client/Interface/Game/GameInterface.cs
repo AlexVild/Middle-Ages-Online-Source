@@ -55,6 +55,8 @@ namespace Intersect.Client.Interface.Game
         
         private QuestBoardWindow mQuestBoardWindow;
 
+        private InstanceLifeWindow mInstanceLifeDisplay;
+
         private ShopWindow mShopWindow;
 
         private MapItemWindow mMapItemWindow;
@@ -142,6 +144,7 @@ namespace Intersect.Client.Interface.Game
             mBankWindow = new BankWindow(GameCanvas);
             mComboText = new ComboText(GameCanvas);
             mHarvestBonusWindow = new HarvestBonusWindow(GameCanvas);
+            mInstanceLifeDisplay = new InstanceLifeWindow(GameCanvas);
             mWarnings = new WarningWindow(GameCanvas);
         }
 
@@ -339,6 +342,8 @@ namespace Intersect.Client.Interface.Game
             Globals.InTrade = true;
         }
 
+        // Timers
+
         public void GoToTimer(Guid timerId)
         {
             mTimerWindow.ShowTimer(timerId);
@@ -402,6 +407,7 @@ namespace Intersect.Client.Interface.Game
             mHarvestBonusWindow?.Update();
             mWarnings?.Update();
             mTimerWindow?.Update();
+            mInstanceLifeDisplay?.Update();
 
             if (Globals.QuestOffers.Count > 0)
             {

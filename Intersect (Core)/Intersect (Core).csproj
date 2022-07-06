@@ -425,6 +425,7 @@
     <Compile Include="Network\Packets\Server\EntityMovementPackets.cs" />
     <Compile Include="Network\Packets\Server\FlashScreenPacket.cs" />
     <Compile Include="Network\Packets\Server\GUINotificationPacket.cs" />
+    <Compile Include="Network\Packets\Server\InstanceLivesPacket.cs" />
     <Compile Include="Network\Packets\Server\MapFadePacket.cs" />
     <Compile Include="Network\Packets\Server\GuildInvitePacket.cs" />
     <Compile Include="Network\Packets\Server\GuildPacket.cs" />

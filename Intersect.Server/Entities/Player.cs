@@ -2157,6 +2157,7 @@ namespace Intersect.Server.Entities
 
         public void SendLivesRemainingMessage()
         {
+            PacketSender.SendInstanceLivesPacket(this, (byte)InstanceLives, false);
             if (InstanceLives > 0)
             {
                 PacketSender.SendChatMsg(this, Strings.Parties.instancelivesremaining.ToString(InstanceLives), ChatMessageType.Party, CustomColors.Chat.PartyChat);
@@ -2363,8 +2364,22 @@ namespace Intersect.Server.Entities
 
             // Remove items that are meant to only exist in an instance
             RemoveInstanceItems();
+            // Update instance lives information for the client
+            UpdateInstanceLivesMessaging();
             // Remove timers that aren't meant to proceed beyond an instance change
             EndInstanceChangeTimers();
+        }
+
+        private void UpdateInstanceLivesMessaging()
+        {
+            if (InstanceType == MapInstanceType.Shared)
+            {
+                PacketSender.SendInstanceLivesPacket(this, (byte)InstanceLives, false);
+            }
+            else
+            {
+                PacketSender.SendInstanceLivesPacket(this, (byte)0, true);
+            }
         }
 
         private void RemoveInstanceItems()

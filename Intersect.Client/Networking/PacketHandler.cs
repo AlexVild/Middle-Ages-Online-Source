@@ -2441,5 +2441,17 @@ namespace Intersect.Client.Networking
                 timer.EndTimer();
             }
         }
+
+        // InstanceLivesPacket
+        public void HandlePacket(IPacketSender packetSender, InstanceLivesPacket packet)
+        {
+            if (Globals.Me == null)
+            {
+                return;
+            }
+
+            Globals.Me.DungeonLives = packet.Amount;
+            Globals.Me.InDungeon = !packet.ClearLives;
+        }
     }
 }

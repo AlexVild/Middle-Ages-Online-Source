@@ -2080,6 +2080,12 @@ namespace Intersect.Client.Localization
             public static LocalizedString ElapsedDays = @"{0:D1}D {1:D2}:{2:D2}";
         }
 
+        public struct LifeCounterWindow
+        {
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Label = @"";
+        }
+
     }
 
 }

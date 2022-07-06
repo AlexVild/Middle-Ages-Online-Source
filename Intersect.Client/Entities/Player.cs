@@ -158,6 +158,10 @@ namespace Intersect.Client.Entities
 
         public long LastProjectileCastTime = 0L;
 
+        public byte DungeonLives = 0;
+
+        public bool InDungeon = false;
+
         public Player(Guid id, PlayerEntityPacket packet) : base(id, packet)
         {
             for (var i = 0; i < Options.MaxHotbar; i++)
