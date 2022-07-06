@@ -1827,14 +1827,14 @@ namespace Intersect.Client.Entities
         }
 
         //Chatting
-        public void AddChatBubble(string text)
+        public void AddChatBubble(string text, ChatBubbleType type)
         {
             if (string.IsNullOrEmpty(text))
             {
                 return;
             }
 
-            mChatBubbles.Add(new ChatBubble(this, text));
+            mChatBubbles.Add(new ChatBubble(this, text, type));
         }
 
         //Statuses

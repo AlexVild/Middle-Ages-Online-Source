@@ -1841,7 +1841,19 @@ namespace Intersect.Client.Networking
                 return;
             }
 
-            en.AddChatBubble(packet.Text);
+            if (en is Player player)
+            {
+                if (packet.BubbleType == ChatBubbleType.Party && !Globals.Me.IsInMyParty(player))
+                {
+                    return;
+                }
+                if (packet.BubbleType == ChatBubbleType.Guild && Globals.Me.Guild != player.Guild)
+                {
+                    return;
+                }
+            }
+
+            en.AddChatBubble(packet.Text, packet.BubbleType);
         }
 
         //QuestOfferPacket

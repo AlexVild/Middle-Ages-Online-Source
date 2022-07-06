@@ -198,46 +198,46 @@ namespace Intersect
             }
             else if (name == "White" || name == colors[1])
             {
-                return White;
+                return CustomColors.General.GeneralPrimary;
             }
             else if (name == "Pink" || name == colors[2])
             {
-                return Pink;
+                return new Color(255, 224, 112, 178);
             }
             else if (name == "Blue" || name == colors[3])
             {
-                return Blue;
+                return new Color(255, 105, 158, 252);
             }
             else if (name == "Red" || name == colors[4])
             {
-                return Red;
+                return CustomColors.General.GeneralDisabled;
             }
             else if (name == "Green" || name == colors[5])
             {
-                return Green;
+                return CustomColors.General.GeneralCompleted;
             }
             else if (name == "Yellow" || name == colors[6])
             {
-                return Yellow;
+                return new Color(255, 166, 167, 37);
             }
             else if (name == "Orange" || name == colors[7])
             {
-                return Orange;
+                return CustomColors.General.GeneralWarning;
             }
             else if (name == "Purple" || name == colors[8])
             {
-                return Magenta;
+                return new Color(255, 174, 118, 255);
             }
             else if (name == "Gray" || name == colors[9])
             {
-                return Gray;
+                return CustomColors.General.GeneralMuted;
             }
             else if (name == "Cyan" || name == colors[10])
             {
-                return Cyan;
+                return new Color(255, 86, 179, 192);
             }
 
-            return White;
+            return CustomColors.General.GeneralPrimary;
         }
 
         public static Color FromArgb(int a, int r, int g, int b)

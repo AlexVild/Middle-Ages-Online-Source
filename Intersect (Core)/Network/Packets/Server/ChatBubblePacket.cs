@@ -5,6 +5,13 @@ using MessagePack;
 
 namespace Intersect.Network.Packets.Server
 {
+    public enum ChatBubbleType
+    {
+        Public,
+        Party,
+        Guild
+    }
+
     [MessagePackObject]
     public class ChatBubblePacket : IntersectPacket
     {
@@ -13,12 +20,13 @@ namespace Intersect.Network.Packets.Server
         {
         }
 
-        public ChatBubblePacket(Guid entityId, EntityTypes type, Guid mapId, string text)
+        public ChatBubblePacket(Guid entityId, EntityTypes type, Guid mapId, string text, ChatBubbleType bubbleType)
         {
             EntityId = entityId;
             Type = type;
             MapId = mapId;
             Text = text;
+            BubbleType = bubbleType;
         }
 
         [Key(0)]
@@ -32,6 +40,9 @@ namespace Intersect.Network.Packets.Server
 
         [Key(3)]
         public string Text { get; set; }
+
+        [Key(4)]
+        public ChatBubbleType BubbleType { get; set; }
 
     }
 

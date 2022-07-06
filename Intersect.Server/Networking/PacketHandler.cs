@@ -829,7 +829,7 @@ namespace Intersect.Server.Networking
                     Strings.Chat.local.ToString(player.Name, msg), ChatMessageType.Local, player.MapId, player.MapInstanceId, chatColor,
                     player.Name
                 );
-                PacketSender.SendChatBubble(player.Id, player.MapInstanceId, (int) EntityTypes.GlobalEntity, msg, player.MapId);
+                PacketSender.SendChatBubble(player.Id, player.MapInstanceId, (int) EntityTypes.GlobalEntity, msg, player.MapId, Network.Packets.Server.ChatBubbleType.Public);
                 ChatHistory.LogMessage(player, msg.Trim(), ChatMessageType.Local, Guid.Empty);
             }
             else if (cmd == Strings.Chat.allcmd || cmd == Strings.Chat.globalcmd)
@@ -864,6 +864,7 @@ namespace Intersect.Server.Networking
                     PacketSender.SendPartyMsg(
                         player, Strings.Chat.party.ToString(player.Name, msg), CustomColors.Chat.PartyChat, player.Name
                     );
+                    PacketSender.SendChatBubble(player.Id, player.MapInstanceId, (int)EntityTypes.GlobalEntity, msg, player.MapId, Network.Packets.Server.ChatBubbleType.Party);
                     ChatHistory.LogMessage(player, msg.Trim(), ChatMessageType.Party, Guid.Empty);
                 }
                 else
@@ -902,8 +903,8 @@ namespace Intersect.Server.Networking
                 //Normalize Rank
                 var rank = Options.Instance.Guild.Ranks[Math.Max(0, Math.Min(player.GuildRank, Options.Instance.Guild.Ranks.Length - 1))].Title;
                 PacketSender.SendGuildMsg(player, Strings.Guilds.guildchat.ToString(rank, player.Name, msg), CustomColors.Chat.GuildChat);
+                PacketSender.SendChatBubble(player.Id, player.MapInstanceId, (int)EntityTypes.GlobalEntity, msg, player.MapId, Network.Packets.Server.ChatBubbleType.Guild);
                 ChatHistory.LogMessage(player, msg.Trim(), ChatMessageType.Guild, player.Guild.Id);
-
             }
             else if (cmd == Strings.Chat.announcementcmd)
             {

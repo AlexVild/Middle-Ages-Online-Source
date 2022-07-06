@@ -4967,6 +4967,11 @@ namespace Intersect.Server.Entities
         //Parties
         public void InviteToParty(Player fromPlayer)
         {
+            if (fromPlayer == null)
+            {
+                return;
+            }
+
             if (Party.Count != 0)
             {
                 PacketSender.SendChatMsg(fromPlayer, Strings.Parties.inparty.ToString(Name), ChatMessageType.Party, CustomColors.Alerts.Error);
@@ -4974,7 +4979,7 @@ namespace Intersect.Server.Entities
                 return;
             }
 
-            if (fromPlayer.InstanceType != MapInstanceType.Overworld || fromPlayer.InstanceType != MapInstanceType.Guild)
+            if (fromPlayer.InstanceType == MapInstanceType.Shared || fromPlayer.InstanceType == MapInstanceType.Personal)
             {
                 PacketSender.SendChatMsg(fromPlayer, Strings.Parties.ininstance, ChatMessageType.Party, CustomColors.Alerts.Error);
 

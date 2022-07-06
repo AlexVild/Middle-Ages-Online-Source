@@ -4,6 +4,7 @@ using Intersect.Client.Core;
 using Intersect.Client.Framework.GenericClasses;
 using Intersect.Client.Framework.Graphics;
 using Intersect.Client.General;
+using Intersect.Network.Packets.Server;
 using Intersect.Utilities;
 using static Intersect.Client.Framework.File_Management.GameContentManager;
 
@@ -31,7 +32,9 @@ namespace Intersect.Client.Entities
 
         private Rectangle mTextureBounds;
 
-        public ChatBubble(Entity owner, string text)
+        private ChatBubbleType mBubbleType;
+
+        public ChatBubble(Entity owner, string text, ChatBubbleType type)
         {
             if (string.IsNullOrEmpty(text))
             {
@@ -42,6 +45,7 @@ namespace Intersect.Client.Entities
             mSourceText = text;
             mRenderTimer = Timing.Global.Milliseconds + 5000;
             mBubbleTex = Globals.ContentManager.GetTexture(TextureType.Misc, "chatbubble.png");
+            mBubbleType = type;
         }
 
         public bool Update()
@@ -184,11 +188,22 @@ namespace Intersect.Client.Entities
                 for (var i = mText.Length - 1; i > -1; i--)
                 {
                     var textSize = Graphics.Renderer.MeasureText(mText[i], Graphics.ChatBubbleFont, 1);
+                    var color = CustomColors.Chat.ChatBubbleText;
+
+                    if (mBubbleType == ChatBubbleType.Party)
+                    {
+                        color = CustomColors.Chat.PartyBubbleText; 
+                    }
+                    else if (mBubbleType == ChatBubbleType.Guild)
+                    {
+                        color = CustomColors.Chat.GuildBubbleText;
+                    }
+
                     Graphics.Renderer.DrawString(
                         mText[i], Graphics.ChatBubbleFont,
                         (int) (x - mTextureBounds.Width / 2 + (mTextureBounds.Width - textSize.X) / 2f),
                         (int) (y - mTextureBounds.Height - yoffset + 8 + i * 16), 1,
-                        Color.FromArgb(CustomColors.Chat.ChatBubbleText.ToArgb()), true, null
+                        color, true, null
                     );
                 }
             }

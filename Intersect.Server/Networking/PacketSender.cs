@@ -1973,9 +1973,9 @@ namespace Intersect.Server.Networking
         }
 
         //ChatBubblePacket
-        public static void SendChatBubble(Guid entityId, Guid mapInstanceId, EntityTypes type, string text, Guid mapId)
+        public static void SendChatBubble(Guid entityId, Guid mapInstanceId, EntityTypes type, string text, Guid mapId, ChatBubbleType bubbleType)
         {
-            SendDataToProximityOnMapInstance(mapId, mapInstanceId, new ChatBubblePacket(entityId, type, mapId, text), null, TransmissionMode.Any);
+            SendDataToProximityOnMapInstance(mapId, mapInstanceId, new ChatBubblePacket(entityId, type, mapId, text, bubbleType), null, TransmissionMode.Any);
         }
 
         //QuestOfferPacket
