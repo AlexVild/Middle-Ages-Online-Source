@@ -588,7 +588,7 @@ namespace Intersect.Server.Networking
                 return;
             }
 
-            player.SendPacket(new NpcAggressionPacket(npc.Id, npc.GetAggression(player)), TransmissionMode.Any);
+            player.SendPacket(new NpcAggressionPacket(npc.Id, npc.GetAggression(player), npc.Target?.Id ?? default), TransmissionMode.Any);
         }
 
         //EntityLeftArea

@@ -1963,7 +1963,16 @@ namespace Intersect.Client.Networking
         {
             if (Globals.Entities.ContainsKey(packet.EntityId))
             {
-                Globals.Entities[packet.EntityId].Type = packet.Aggression;
+                var entity = Globals.Entities[packet.EntityId];
+                entity.Type = packet.Aggression;
+                if (packet.Aggression < 0) // has some target
+                {
+                    entity.EntityTarget = packet.TargetId;
+                }
+                else
+                {
+                    entity.EntityTarget = Guid.Empty;
+                }
             }
         }
 

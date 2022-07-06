@@ -156,6 +156,8 @@ namespace Intersect.Client.Entities
 
         public int Target = -1;
 
+        public Guid EntityTarget = Guid.Empty;
+
         public GameTexture Texture;
 
         #region "Animation Textures and Timing"
@@ -1456,7 +1458,14 @@ namespace Intersect.Client.Entities
                 switch (Type)
                 {
                     case -1: //When entity has a target (showing aggression)
-                        color = CustomColors.Names.Npcs["Aggressive"];
+                        if (EntityTarget == Globals.Me.Id) // If that target is YOU!
+                        {
+                            color = CustomColors.Names.Npcs["PlayerAggro"];
+                        }
+                        else
+                        {
+                            color = CustomColors.Names.Npcs["Aggressive"];
+                        }
 
                         break;
                     case 0: //Attack when attacked
