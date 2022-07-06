@@ -4974,6 +4974,13 @@ namespace Intersect.Server.Entities
                 return;
             }
 
+            if (fromPlayer.InstanceType != MapInstanceType.Overworld || fromPlayer.InstanceType != MapInstanceType.Guild)
+            {
+                PacketSender.SendChatMsg(fromPlayer, Strings.Parties.ininstance, ChatMessageType.Party, CustomColors.Alerts.Error);
+
+                return;
+            }
+
             if (fromPlayer.PartyRequests.ContainsKey(this))
             {
                 fromPlayer.PartyRequests.Remove(this);

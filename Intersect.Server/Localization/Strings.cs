@@ -1110,6 +1110,9 @@ namespace Intersect.Server.Localization
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString instancefailed = @"Your party has failed the instance...";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString ininstance = @"You cannot invite someone to a party while in an instance!";
         }
 
         public sealed class PasswordResetNotificationNamespace : LocaleNamespace
