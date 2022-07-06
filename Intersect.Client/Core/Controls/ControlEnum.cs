@@ -73,6 +73,14 @@
         TurnCounterClockwise,
 
         FaceTarget,
+
+        TargetParty1,
+
+        TargetParty2,
+
+        TargetParty3,
+
+        TargetParty4,
     }
 
 }

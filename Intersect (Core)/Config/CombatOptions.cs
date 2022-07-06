@@ -108,6 +108,8 @@ namespace Intersect.Config
         
         public bool CleanseThruStun = false;
 
+        public int PartyTargetDistance = 10;
+
         public bool StunPreventsItems { get; set;  } = false;
 
         public List<int> HarvestBonusIntervals = new List<int>()

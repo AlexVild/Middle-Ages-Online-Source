@@ -625,7 +625,11 @@ namespace Intersect.Client.Localization
                 {"togglegui", @"Toggle Interface:"},
                 {"turnclockwise", @"Turn Clockwise:"},
                 {"turncounterclockwise", @"Turn Counter Clockwise:"},
-                {"facetarget", @"Face Target:"}
+                {"facetarget", @"Face Target:"},
+                {"targetparty1", @"Target Self/Party 1:"},
+                {"targetparty2", @"Target Party 2:"},
+                {"targetparty3", @"Target Party 3:"},
+                {"targetparty4", @"Target Party 4:"},
             };
 
             public static LocalizedString listening = @"Listening";

@@ -272,6 +272,22 @@ namespace Intersect.Client.Core
                                         Globals.Me?.TryFaceTarget(false, true);
 
                                         break;
+                                    case Control.TargetParty1:
+                                        Globals.Me.TargetPartyMember(0);
+                                        
+                                        break;
+                                    case Control.TargetParty2:
+                                        Globals.Me.TargetPartyMember(1);
+
+                                        break;
+                                    case Control.TargetParty3:
+                                        Globals.Me.TargetPartyMember(2);
+
+                                        break;
+                                    case Control.TargetParty4:
+                                        Globals.Me.TargetPartyMember(4);
+
+                                        break;
                                     default:
                                         break;
                                 }
