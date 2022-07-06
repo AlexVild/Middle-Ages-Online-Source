@@ -667,6 +667,12 @@ namespace Intersect.Client.Entities
 
                 if (Inventory[index].Quantity > 1)
                 {
+                    if (Globals.InputManager.KeyDown(Keys.Shift))
+                    {
+                        PacketSender.SendDepositItem(index, Inventory[index].Quantity);
+                        return;
+                    }
+
                     var iBox = new InputBox(
                         Strings.Bank.deposititem,
                         Strings.Bank.deposititemprompt.ToString(ItemBase.Get(Inventory[index].ItemId).Name), true,
@@ -706,6 +712,12 @@ namespace Intersect.Client.Entities
 
                 if (Globals.Bank[index].Quantity > 1)
                 {
+                    if (Globals.InputManager.KeyDown(Keys.Shift))
+                    {
+                        PacketSender.SendWithdrawItem(index, Globals.Bank[index].Quantity);
+                        return;
+                    }
+
                     var iBox = new InputBox(
                         Strings.Bank.withdrawitem,
                         Strings.Bank.withdrawitemprompt.ToString(ItemBase.Get(Globals.Bank[index].ItemId).Name), true,
