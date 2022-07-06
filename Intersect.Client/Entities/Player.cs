@@ -2251,6 +2251,13 @@ namespace Intersect.Client.Entities
                 }
             }
 
+            if (Globals.Me.Id != Id && Globals.Me.IsInMyParty(this) && CustomColors.Names.Players.ContainsKey("Party"))
+            {
+                textColor = CustomColors.Names.Players["Party"].Name;
+                borderColor = CustomColors.Names.Players["Party"].Outline;
+                backgroundColor = CustomColors.Names.Players["Party"].Background;
+            }
+
             DrawNameAndLabels(textColor, borderColor, backgroundColor);
         }
 
@@ -2309,6 +2316,14 @@ namespace Intersect.Client.Entities
                     Graphics.Renderer.GetWhiteTexture(), new Framework.GenericClasses.FloatRect(0, 0, 1, 1),
                     new Framework.GenericClasses.FloatRect(x - textSize.X / 2f - 4, y, textSize.X + 8, textSize.Y), backgroundColor
                 );
+            }
+
+            // If the other player is in the same guild as the client, display their guild appropriately
+            if (Globals.Me.Guild != null && Globals.Me.Id != Id && Guild == Globals.Me.Guild && CustomColors.Names.Players.ContainsKey("Guild"))
+            {
+                textColor = CustomColors.Names.Players["Guild"].Name;
+                borderColor = CustomColors.Names.Players["Guild"].Outline;
+                backgroundColor = CustomColors.Names.Players["Guild"].Background;
             }
 
             Graphics.Renderer.DrawString(

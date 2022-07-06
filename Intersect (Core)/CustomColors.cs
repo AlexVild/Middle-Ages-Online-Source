@@ -84,6 +84,8 @@ namespace Intersect
                 {"Normal", new LabelColor(new Color(255, 255, 255, 255), Color.Black, new Color(180, 0, 0, 0))},
                 {"Moderator", new LabelColor(new Color(255, 0, 255, 255), Color.Black, new Color(180, 0, 0, 0))},
                 {"Admin", new LabelColor(new Color(255, 255, 255, 0), Color.Black, new Color(180, 0, 0, 0))},
+                {"Guild", new LabelColor(new Color(255, 190, 214, 253), Color.Black, new Color(0, 0, 0, 0))},
+                {"Party", new LabelColor(new Color(255, 190, 214, 253), Color.Black, new Color(0, 0, 0, 0))},
             };
 
         }
