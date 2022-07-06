@@ -137,7 +137,7 @@ namespace Intersect.Client.Interface.Game
                     bool hasSpeaker = false;
                     var prompt = Globals.EventDialogs[0].Prompt;
                     var splitPrompt = prompt.Split(new string[] { ":\r\n" }, StringSplitOptions.None).ToList();
-                    if (splitPrompt.Count > 1 && splitPrompt[0].Split(' ').Length <= 4)
+                    if (splitPrompt.Count > 1 && splitPrompt[0].Split(' ').Length <= 4 && splitPrompt[0][0] != '"')
                     {
                         hasSpeaker = true;
                         mSpeakerLabel.Show();
