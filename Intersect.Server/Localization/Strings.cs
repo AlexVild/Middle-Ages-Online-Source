@@ -744,6 +744,9 @@ namespace Intersect.Server.Localization
             public readonly LocalizedString NotInGuild = @"You are not in a guild.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString NotInGuildInstructions = @"You are not in a clan. To start a clan, visit any Inn and speak to the Guild Marm therein.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString NotReceivedInvite = @"You've not received any guild invites yet.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]

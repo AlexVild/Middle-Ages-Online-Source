@@ -938,6 +938,8 @@ namespace Intersect.Client.Localization
 
             public static LocalizedString NotAllowedSwap = @"You do not have permission to swap items around within {00}'s guild bank!";
 
+            public static LocalizedString NotInGuildInstructions = @"You are not in a clan. To start a clan, visit any Inn and speak to the clan ambassador therein.";
+
             public static LocalizedString InviteAlreadyInGuild = @"The player you're trying to invite is already in a guild or has a pending invite.";
         }
 

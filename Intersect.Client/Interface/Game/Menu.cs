@@ -1,4 +1,5 @@
 ﻿using Intersect.Client.Core;
+using Intersect.Client.Entities.Events;
 using Intersect.Client.Framework.File_Management;
 using Intersect.Client.Framework.Gwen.Control;
 using Intersect.Client.Framework.Gwen.Control.EventArguments;
@@ -430,6 +431,10 @@ namespace Intersect.Client.Interface.Game
             else
             {
                 ChatboxMsg.AddMessage(new ChatboxMsg(Strings.Guilds.NotInGuild, CustomColors.Alerts.Error, ChatMessageType.Guild));
+                var dialog = new Dialog();
+                dialog.Prompt = Strings.Guilds.NotInGuildInstructions;
+
+                Globals.EventDialogs.Add(dialog);
             }
         }
 
