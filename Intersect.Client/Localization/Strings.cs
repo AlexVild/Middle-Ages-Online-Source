@@ -516,7 +516,7 @@ namespace Intersect.Client.Localization
                 { ChatboxTab.Local, @"Local" },
                 { ChatboxTab.Party, @"Party" },
                 { ChatboxTab.Global, @"Global" },
-                { ChatboxTab.Guild, @"Guild" },
+                { ChatboxTab.Guild, @"Clan" },
                 { ChatboxTab.System, @"System" },
             };
 
