@@ -905,6 +905,31 @@ namespace Intersect.Client.Entities
             return renderList;
         }
 
+        public virtual int DetermineRenderDirection(Byte dir)
+        {
+            switch (dir)
+            {
+                case 0:
+                    return 3;
+
+                    break;
+                case 1:
+                    return 0;
+
+                    break;
+                case 2:
+                    return 1;
+
+                    break;
+                case 3:
+                    return 2;
+
+                    break;
+                default:
+                    return 3;
+            }
+        }
+
         //Rendering Functions
         public virtual void Draw()
         {
@@ -922,7 +947,7 @@ namespace Intersect.Client.Entities
 
             var srcRectangle = new FloatRect();
             var destRectangle = new FloatRect();
-            var d = 0;
+            var dir = 0;
 
             var sprite = "";
             // Copy the actual render color, because we'll be editing it later and don't want to overwrite it.
@@ -992,29 +1017,14 @@ namespace Intersect.Client.Entities
                 }
 
                 destRectangle.X -= texture.GetWidth() / (SpriteFrames * 2);
-                switch (Dir)
+
+                if (this is Player player && player.CombatMode)
                 {
-                    case 0:
-                        d = 3;
-
-                        break;
-                    case 1:
-                        d = 0;
-
-                        break;
-                    case 2:
-                        d = 1;
-
-                        break;
-                    case 3:
-                        d = 2;
-
-                        break;
-                    default:
-                        Dir = 0;
-                        d = 3;
-
-                        break;
+                    dir = DetermineRenderDirection(player.FaceDirection);
+                }
+                else
+                {
+                    dir = DetermineRenderDirection(Dir);
                 }
 
                 destRectangle.X = (int)Math.Ceiling(destRectangle.X);
@@ -1022,7 +1032,7 @@ namespace Intersect.Client.Entities
                 if (Options.AnimatedSprites.Contains(sprite.ToLower()))
                 {
                     srcRectangle = new FloatRect(
-                        AnimationFrame * (int)texture.GetWidth() / SpriteFrames, d * (int)texture.GetHeight() / Options.Instance.Sprites.Directions,
+                        AnimationFrame * (int)texture.GetWidth() / SpriteFrames, dir * (int)texture.GetHeight() / Options.Instance.Sprites.Directions,
                         (int)texture.GetWidth() / SpriteFrames, (int)texture.GetHeight() / Options.Instance.Sprites.Directions
                     );
                 }
@@ -1034,7 +1044,7 @@ namespace Intersect.Client.Entities
                         if (inAction && !(this is Player play && play.InVehicle))
                         {
                             srcRectangle = new FloatRect(
-                                Options.Instance.Sprites.NormalSheetAttackFrame * (int)texture.GetWidth() / SpriteFrames, d * (int)texture.GetHeight() / Options.Instance.Sprites.Directions,
+                                Options.Instance.Sprites.NormalSheetAttackFrame * (int)texture.GetWidth() / SpriteFrames, dir * (int)texture.GetHeight() / Options.Instance.Sprites.Directions,
                                 (int)texture.GetWidth() / SpriteFrames, (int)texture.GetHeight() / Options.Instance.Sprites.Directions
                             );
                         }
@@ -1042,7 +1052,7 @@ namespace Intersect.Client.Entities
                         {
                             //Restore Original Attacking/Blocking Code
                             srcRectangle = new FloatRect(
-                                WalkFrame * (int) texture.GetWidth() / SpriteFrames, d * (int) texture.GetHeight() / Options.Instance.Sprites.Directions,
+                                WalkFrame * (int) texture.GetWidth() / SpriteFrames, dir * (int) texture.GetHeight() / Options.Instance.Sprites.Directions,
                                 (int) texture.GetWidth() / SpriteFrames, (int) texture.GetHeight() / Options.Instance.Sprites.Directions
                             );
                         }
@@ -1050,7 +1060,7 @@ namespace Intersect.Client.Entities
                     else
                     {
                         srcRectangle = new FloatRect(
-                            SpriteFrame * (int)texture.GetWidth() / SpriteFrames, d * (int)texture.GetHeight() / Options.Instance.Sprites.Directions,
+                            SpriteFrame * (int)texture.GetWidth() / SpriteFrames, dir * (int)texture.GetHeight() / Options.Instance.Sprites.Directions,
                             (int)texture.GetWidth() / SpriteFrames, (int)texture.GetHeight() / Options.Instance.Sprites.Directions
                         );
                     }
@@ -1062,9 +1072,9 @@ namespace Intersect.Client.Entities
                 WorldPos = destRectangle;
 
                 //Order the layers of paperdolls and sprites
-                for (var z = 0; z < Options.PaperdollOrder[Dir].Count; z++)
+                for (var z = 0; z < Options.PaperdollOrder[dir].Count; z++)
                 {
-                    var paperdoll = Options.PaperdollOrder[Dir][z];
+                    var paperdoll = Options.PaperdollOrder[dir][z];
                     var equipSlot = Options.EquipmentSlots.IndexOf(paperdoll);
                     var decorSlot = Options.DecorSlots.IndexOf(paperdoll);
 
@@ -1109,11 +1119,11 @@ namespace Intersect.Client.Entities
                                 {
                                     if (Gender == 0)
                                     {
-                                        DrawEquipment(item.MalePaperdoll, renderColor.A);
+                                        DrawEquipment(item.MalePaperdoll, renderColor.A, dir);
                                     }
                                     else
                                     {
-                                        DrawEquipment(item.FemalePaperdoll, renderColor.A);
+                                        DrawEquipment(item.FemalePaperdoll, renderColor.A, dir);
                                     }
                                 }
                             }
@@ -1141,7 +1151,7 @@ namespace Intersect.Client.Entities
 
                             if (MyDecors[decorSlot] != null && shouldDraw)
                             {
-                                DrawEquipment(MyDecors[decorSlot], renderColor.A, GameContentManager.TextureType.Decor);
+                                DrawEquipment(MyDecors[decorSlot], renderColor.A, dir, GameContentManager.TextureType.Decor);
                             }
                         }
                     }
@@ -1186,7 +1196,7 @@ namespace Intersect.Client.Entities
             }
         }
 
-        public virtual void DrawEquipment(string filename, int alpha, GameContentManager.TextureType textureType = GameContentManager.TextureType.Paperdoll)
+        public virtual void DrawEquipment(string filename, int alpha, int dir, GameContentManager.TextureType textureType = GameContentManager.TextureType.Paperdoll)
         {
             var map = MapInstance.Get(CurrentMap);
             if (map == null)
@@ -1196,7 +1206,6 @@ namespace Intersect.Client.Entities
 
             var srcRectangle = new FloatRect();
             var destRectangle = new FloatRect();
-            var d = 0;
 
             GameTexture paperdollTex = null;
             var filenameNoExt = Path.GetFileNameWithoutExtension(filename);
@@ -1230,26 +1239,6 @@ namespace Intersect.Client.Entities
                     destRectangle.X -= (paperdollTex.GetWidth() / spriteFrames - Options.TileWidth) / 2;
                 }
 
-                switch (Dir)
-                {
-                    case 0:
-                        d = 3;
-
-                        break;
-                    case 1:
-                        d = 0;
-
-                        break;
-                    case 2:
-                        d = 1;
-
-                        break;
-                    case 3:
-                        d = 2;
-
-                        break;
-                }
-
                 destRectangle.X = (int) Math.Ceiling(destRectangle.X);
                 destRectangle.Y = (int) Math.Ceiling(destRectangle.Y);
                 if (SpriteAnimation == SpriteAnimations.Normal)
@@ -1257,14 +1246,14 @@ namespace Intersect.Client.Entities
                     if (AttackTimer - CalculateAttackTime() / 2 > Timing.Global.Ticks / TimeSpan.TicksPerMillisecond || Blocking)
                     {
                         srcRectangle = new FloatRect(
-                            3 * (int)paperdollTex.GetWidth() / spriteFrames, d * (int)paperdollTex.GetHeight() / Options.Instance.Sprites.Directions,
+                            3 * (int)paperdollTex.GetWidth() / spriteFrames, dir * (int)paperdollTex.GetHeight() / Options.Instance.Sprites.Directions,
                             (int)paperdollTex.GetWidth() / spriteFrames, (int)paperdollTex.GetHeight() / Options.Instance.Sprites.Directions
                         );
                     }
                     else
                     {
                         srcRectangle = new FloatRect(
-                            WalkFrame * (int) paperdollTex.GetWidth() / spriteFrames, d * (int) paperdollTex.GetHeight() / Options.Instance.Sprites.Directions,
+                            WalkFrame * (int) paperdollTex.GetWidth() / spriteFrames, dir * (int) paperdollTex.GetHeight() / Options.Instance.Sprites.Directions,
                             (int) paperdollTex.GetWidth() / spriteFrames, (int) paperdollTex.GetHeight() / Options.Instance.Sprites.Directions
                         );
                     }
@@ -1272,7 +1261,7 @@ namespace Intersect.Client.Entities
                 else
                 {
                     srcRectangle = new FloatRect(
-                        SpriteFrame * (int)paperdollTex.GetWidth() / spriteFrames, d * (int)paperdollTex.GetHeight() / Options.Instance.Sprites.Directions,
+                        SpriteFrame * (int)paperdollTex.GetWidth() / spriteFrames, dir * (int)paperdollTex.GetHeight() / Options.Instance.Sprites.Directions,
                         (int)paperdollTex.GetWidth() / spriteFrames, (int)paperdollTex.GetHeight() / Options.Instance.Sprites.Directions
                     );
                 }

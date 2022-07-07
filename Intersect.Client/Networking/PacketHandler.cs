@@ -658,6 +658,10 @@ namespace Intersect.Client.Networking
                 if (en is Player p)
                 {
                     p.MoveDir = dir;
+                    if (p.CombatMode)
+                    {
+                        p.FaceDirection = packet.FaceDirection;
+                    }
                 }
                 en.IsMoving = true;
 
@@ -1012,7 +1016,15 @@ namespace Intersect.Client.Networking
                 return;
             }
 
-            en.Dir = packet.Direction;
+            
+            if (en is Player player && player.CombatMode)
+            {
+                player.FaceDirection = packet.Direction;
+            }
+            else
+            {
+                en.Dir = packet.Direction;
+            }
         }
 
         //EntityAttackPacket
@@ -2028,6 +2040,7 @@ namespace Intersect.Client.Networking
         //MoveRoutePacket
         public void HandlePacket(IPacketSender packetSender, MoveRoutePacket packet)
         {
+            Globals.Me.CombatMode = false;
             Globals.MoveRouteActive = packet.Active;
         }
 

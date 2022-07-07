@@ -1217,6 +1217,11 @@ namespace Intersect.Server.Maps
         {
             mEntityMovements.Add(en, correction, forPlayer);
         }
+        
+        public void AddBatchedMovement(Player en, bool correction, int faceDirection, Player forPlayer)
+        {
+            mEntityMovements.Add(en, correction, faceDirection, forPlayer);
+        }
 
         public void AddBatchedActionMessage(ActionMsgPacket packet)
         {

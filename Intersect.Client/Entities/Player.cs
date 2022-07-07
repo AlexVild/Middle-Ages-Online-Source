@@ -162,6 +162,10 @@ namespace Intersect.Client.Entities
 
         public bool InDungeon = false;
 
+        public bool CombatMode = true;
+
+        public byte FaceDirection = 0;
+
         public Player(Guid id, PlayerEntityPacket packet) : base(id, packet)
         {
             for (var i = 0; i < Options.MaxHotbar; i++)
@@ -1096,7 +1100,9 @@ namespace Intersect.Client.Entities
             }
 
             Globals.Me.MoveDir = -1;
-            if (movex != 0f || movey != 0f)
+            var isMoving = movex != 0f || movey != 0f;
+
+            if (isMoving)
             {
                 if (movey < 0)
                 {
@@ -1118,7 +1124,7 @@ namespace Intersect.Client.Entities
                     Globals.Me.MoveDir = 3;
                 }
 
-                if (Globals.Database.TapToTurn)
+                if (Globals.Database.TapToTurn && !CombatMode)
                 {
                     //Loop through our direction timers and keep track of how long we've been requesting to move in each direction
                     //If we have only just tapped a button we will set Globals.Me.MoveDir to -1 in order to cancel the movement
@@ -1154,7 +1160,6 @@ namespace Intersect.Client.Entities
                         }
                     }
                 }
-                
             }
 
             var castInput = -1;
@@ -1979,6 +1984,31 @@ namespace Intersect.Client.Entities
                                     (float)Options.MaxStatValue)));
         }
 
+        private static byte GetDirectionFromMouse()
+        {
+            var right = false;
+            var bottom = false;
+            var xDiff = (Graphics.Renderer.GetScreenWidth() / 2) - Globals.InputManager.GetMousePosition().X;
+            var yDiff = (Graphics.Renderer.GetScreenHeight() / 2) - Globals.InputManager.GetMousePosition().Y;
+            if (Math.Sign(xDiff) > 0)
+            {
+                right = true;
+            }
+            if (Math.Sign(yDiff) > 0)
+            {
+                bottom = true;
+            }
+
+            if (Math.Abs(yDiff) > Math.Abs(xDiff))
+            {
+                return (byte)(bottom ? 0 : 1);
+            }
+            else
+            {
+                return (byte)(right ? 2 : 3);
+            }
+        }
+
         //Movement Processing
         private void ProcessDirectionalInput()
         {
@@ -2026,6 +2056,18 @@ namespace Intersect.Client.Entities
             var tmpX = (sbyte) X;
             var tmpY = (sbyte) Y;
             Entity blockedBy = null;
+
+            if (CombatMode && !IsBusy())
+            {
+                var prevFace = FaceDirection;
+
+                FaceDirection = GetDirectionFromMouse();
+
+                if (MoveDir == -1 && FaceDirection != prevFace)
+                {
+                    PacketSender.SendDirection(FaceDirection);
+                }
+            }
 
             if (MoveDir > -1 && Globals.EventDialogs.Count == 0)
             {
@@ -2168,7 +2210,7 @@ namespace Intersect.Client.Entities
                     }
                 }
             }
-            else if (!IsMoving && !DirKeyPressed)
+            else if (!IsMoving && !DirKeyPressed && !CombatMode)
             {
                 if (CastTime > Timing.Global.Milliseconds && !Options.Instance.CombatOpts.TurnWhileCasting)
                 {
@@ -2249,7 +2291,7 @@ namespace Intersect.Client.Entities
             }
         }
 
-        public override void DrawEquipment(string filename, int alpha, GameContentManager.TextureType textureType = GameContentManager.TextureType.Paperdoll)
+        public override void DrawEquipment(string filename, int alpha, int dir, GameContentManager.TextureType textureType = GameContentManager.TextureType.Paperdoll)
         {
             //check if player is stunned or snared, if so don't let them move.
             for (var n = 0; n < Status.Count; n++)
@@ -2259,8 +2301,15 @@ namespace Intersect.Client.Entities
                     return;
                 }
             }
-
-            base.DrawEquipment(filename, alpha, textureType);
+            
+            if (this is Player player && player.CombatMode)
+            {
+                base.DrawEquipment(filename, alpha, DetermineRenderDirection(FaceDirection), textureType);
+            }
+            else
+            {
+                base.DrawEquipment(filename, alpha, DetermineRenderDirection(Dir), textureType);
+            }
         }
 
         //Override of the original function, used for rendering the color of a player based on rank

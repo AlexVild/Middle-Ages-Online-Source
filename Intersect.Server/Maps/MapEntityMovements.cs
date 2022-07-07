@@ -25,6 +25,22 @@ namespace Intersect.Server.Maps
             }
         }
 
+        public void Add(Player player, bool correction, int faceDirection, Player forPlayer = null)
+        {
+            lock (mMovements)
+            {
+                var id = forPlayer?.Id ?? Guid.Empty;
+                if (!mMovements.ContainsKey(id))
+                {
+                    mMovements.Add(id, new List<EntityMovePacket>());
+                }
+                mMovements[id].Add(new EntityMovePacket(player.Id, player.GetEntityType(), 
+                    player.MapId, (byte)player.X, (byte)player.Y, (byte)player.GetRealDir(), 
+                    correction, (byte)faceDirection));
+            }
+        }
+
+
         public void SendPackets(HashSet<Player> nearbyPlayers)
         {
             if (mMovements.Count > 0)

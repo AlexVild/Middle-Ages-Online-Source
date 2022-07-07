@@ -22,6 +22,12 @@ namespace Intersect.Network.Packets.Server
             Y = y;
             Direction = dir;
             Correction = correction;
+            FaceDirection = Direction;
+        }
+
+        public EntityMovePacket(Guid id, EntityTypes type, Guid mapId, byte x, byte y, byte direction, bool correction, byte faceDirection) : this(id, type, mapId, x, y, direction, correction)
+        {
+            FaceDirection = faceDirection;
         }
 
         [Key(0)]
@@ -45,6 +51,8 @@ namespace Intersect.Network.Packets.Server
         [Key(6)]
         public bool Correction { get; set; }
 
+        [Key(7)]
+        public byte FaceDirection { get; set; }
     }
 
 }

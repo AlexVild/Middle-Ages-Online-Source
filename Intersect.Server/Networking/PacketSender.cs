@@ -861,6 +861,18 @@ namespace Intersect.Server.Networking
             }
         }
 
+        public static void SendEntityMove(Player player, int faceDirection, bool correction = false)
+        {
+            if (player == null)
+            {
+                return;
+            }
+            if (MapController.TryGetInstanceFromMap(player.Map.Id, player.MapInstanceId, out var mapInstance))
+            {
+                mapInstance.AddBatchedMovement(player, correction, faceDirection, null);
+            }
+        }
+
         //EntityMovePacket
         public static void SendEntityMoveTo(Player player, Entity en, bool correction = false)
         {

@@ -286,6 +286,12 @@ namespace Intersect.Server.Entities
 
         public long InspirationTime { get; set; } = 0L;
 
+        [NotMapped]
+        public bool CombatMode = false;
+
+        [NotMapped]
+        public int FaceDirection = 0;
+
         [JsonIgnore]
         public virtual List<PlayerRecord> PlayerRecords { get; set; } = new List<PlayerRecord>();
 
@@ -7448,14 +7454,16 @@ namespace Intersect.Server.Entities
             return -1;
         }
 
-        public override void Move(int moveDir, Player forPlayer, bool dontUpdate = false, bool correction = false)
+        public override void Move(int moveDir, Player forPlayer, bool dontUpdate = false, bool correction = false, int faceDirection = -1)
         {
             lock (EntityLock)
             {
                 SetResourceLock(false);
 
                 var oldMap = MapId;
-                base.Move(moveDir, forPlayer, dontUpdate, correction);
+                FaceDirection = faceDirection;
+                CombatMode = FaceDirection != -1;
+                base.Move(moveDir, forPlayer, dontUpdate, correction, faceDirection);
 
                 // Check for a warp, if so warp the player.
                 var attribute = MapController.Get(MapId).Attributes[X, Y];

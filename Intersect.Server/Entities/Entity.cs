@@ -78,7 +78,24 @@ namespace Intersect.Server.Entities
 
         public int Z { get; set; }
 
-        public int Dir { get; set; }
+        private int _dir;
+        /// <summary>
+        /// An override of Dir that will instead return a player's face direction if needed because I'm lazy and this might work?
+        /// </summary>
+        public int Dir 
+        {
+            get => this is Player player && player.CombatMode && player.FaceDirection != -1 ? player.FaceDirection : _dir;
+            set => _dir = value;
+        }
+
+        /// <summary>
+        /// Used if we ACTUALLY just want the Dir
+        /// </summary>
+        /// <returns></returns>
+        public int GetRealDir()
+        {
+            return _dir;
+        }
 
         public string Sprite { get; set; }
 
@@ -840,7 +857,22 @@ namespace Intersect.Server.Entities
             return EntityTypes.GlobalEntity;
         }
 
-        public virtual void Move(int moveDir, Player forPlayer, bool doNotUpdate = false, bool correction = false)
+        public virtual void Move(int moveDir, Player forPlayer)
+        {
+            Move(moveDir, forPlayer, false, false, -1);
+        }
+
+        public virtual void Move(int moveDir, Player forPlayer, bool doNotUpdate)
+        {
+            Move(moveDir, forPlayer, doNotUpdate, false, -1);
+        }
+
+        public virtual void Move(int moveDir, Player forPlayer, bool doNotUpdate, bool correction)
+        {
+            Move(moveDir, forPlayer, doNotUpdate, correction, -1);
+        }
+
+        public virtual void Move(int moveDir, Player forPlayer, bool doNotUpdate = false, bool correction = false, int faceDirection = -1)
         {
             if (Timing.Global.Milliseconds < MoveTimer || (!Options.Combat.MovementCancelsCast && CastTime > 0))
             {
@@ -849,6 +881,12 @@ namespace Intersect.Server.Entities
 
             lock (EntityLock)
             {
+                // If we're not specifying a face direction, just face the movement direction
+                if (faceDirection == -1)
+                {
+                    faceDirection = moveDir;
+                }
+
                 if (this is Player && CastTime > 0 && Options.Combat.MovementCancelsCast)
                 {
                     CastTarget = null;
@@ -884,8 +922,8 @@ namespace Intersect.Server.Entities
                         return;
                 }
 
+                // We are facing the direction given to us by the client
                 Dir = moveDir;
-
 
                 var tile = new TileHelper(MapId, X, Y);
 
@@ -939,8 +977,6 @@ namespace Intersect.Server.Entities
 
                     }
 
-
-
                     if (doNotUpdate == false)
                     {
                         if (this is EventPageInstance)
@@ -956,7 +992,15 @@ namespace Intersect.Server.Entities
                         }
                         else
                         {
-                            PacketSender.SendEntityMove(this, correction);
+                            // Preserve face direction if player
+                            if (this is Player pl)
+                            {
+                                PacketSender.SendEntityMove(pl, pl.FaceDirection, correction);
+                            }
+                            else
+                            {
+                                PacketSender.SendEntityMove(this, correction);
+                            }
                         }
 
                         //Check if moving into a projectile.. if so this npc needs to be hit
@@ -1038,6 +1082,10 @@ namespace Intersect.Server.Entities
 
             if (Dir != dir)
             {
+                if (this is Player pl)
+                {
+                    pl.FaceDirection = dir;
+                }
                 Dir = dir;
 
                 if (this is EventPageInstance eventPageInstance && eventPageInstance.Player != null)
@@ -2380,6 +2428,18 @@ namespace Intersect.Server.Entities
             }
 
             return true;
+        }
+
+        public int GetDir()
+        {
+            if (this is Player player && player.CombatMode && player.FaceDirection != -1)
+            {
+                return player.FaceDirection;
+            }
+            else
+            {
+                return Dir;
+            }
         }
 
         public virtual void CastSpell(Guid spellId, int spellSlot = -1, bool prayerSpell = false, Entity prayerTarget = null, int prayerSpellDir = -1)
