@@ -94,7 +94,9 @@ namespace Intersect.Config
         
         public float SlowedModifier = 1.6f;
 
-        public float CombatModeModifier = 1.33f;
+        public float CombatModeBackModifier = 1.33f;
+        
+        public float CombatModeStrafeModifier = 1.15f;
 
         public int ConfusionMissPercent = 50;
 

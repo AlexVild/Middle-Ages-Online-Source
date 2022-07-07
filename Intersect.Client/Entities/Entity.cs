@@ -515,7 +515,60 @@ namespace Intersect.Client.Entities
 
             if (this is Player pl && pl.CombatMode)
             {
-                time *= Options.Instance.CombatOpts.CombatModeModifier;
+                var moveDir = pl.Dir;
+                var faceDir = pl.FaceDirection;
+
+                if (moveDir != faceDir)
+                {
+                    switch (moveDir)
+                    {
+                        //up
+                        case 0:
+                            if (faceDir == 1)
+                            {
+                                time *= Options.Instance.CombatOpts.CombatModeBackModifier;
+                            }
+                            else
+                            {
+                                time *= Options.Instance.CombatOpts.CombatModeStrafeModifier;
+                            }
+
+                            break;
+                        //down
+                        case 1:
+                            if (faceDir == 0)
+                            {
+                                time *= Options.Instance.CombatOpts.CombatModeBackModifier;
+                            }
+                            else
+                            {
+                                time *= Options.Instance.CombatOpts.CombatModeStrafeModifier;
+                            }
+                            break;
+                        //left
+                        case 2:
+                            if (faceDir == 3)
+                            {
+                                time *= Options.Instance.CombatOpts.CombatModeBackModifier;
+                            }
+                            else
+                            {
+                                time *= Options.Instance.CombatOpts.CombatModeStrafeModifier;
+                            }
+                            break;
+                        //right
+                        case 3:
+                            if (faceDir == 2)
+                            {
+                                time *= Options.Instance.CombatOpts.CombatModeBackModifier;
+                            }
+                            else
+                            {
+                                time *= Options.Instance.CombatOpts.CombatModeStrafeModifier;
+                            }
+                            break;
+                    }
+                }
             }
             if (StatusIsActive(StatusTypes.Slowed))
             {
