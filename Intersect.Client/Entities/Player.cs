@@ -162,7 +162,7 @@ namespace Intersect.Client.Entities
 
         public bool InDungeon = false;
 
-        public bool CombatMode = true;
+        public bool CombatMode = false;
 
         public byte FaceDirection = 0;
 
@@ -278,6 +278,14 @@ namespace Intersect.Client.Entities
                 {
                     UpdateAttackTimer();
                 }
+            } else
+            {
+                CombatMode = false;
+            }
+
+            if (InVehicle && CombatMode)
+            {
+                CombatMode = false;
             }
 
             if (TargetBox != null)
@@ -290,7 +298,6 @@ namespace Intersect.Client.Entities
                 TargetBox = new EntityBox(Interface.Interface.GameUi.GameCanvas, EntityTypes.Player, null);
                 TargetBox.Hide();
             }
-
 
             // Hide our Guild window if we're not in a guild!
             if (this == Globals.Me && string.IsNullOrEmpty(Guild) && Interface.Interface.GameUi != null)
@@ -1224,14 +1231,14 @@ namespace Intersect.Client.Entities
             }
         }
 
-        public void AutoTarget()
+        public bool TryAutoTarget(bool onlyAggro, Guid exclude = default)
         {
             //Check for taunt status if so don't allow to change target
             for (var i = 0; i < Status.Count; i++)
             {
                 if (Status[i].Type == StatusTypes.Taunt)
                 {
-                    return;
+                    return false;
                 }
             }
 
@@ -1239,7 +1246,7 @@ namespace Intersect.Client.Entities
             // Depends on what type of map we're currently on.
             if (Globals.Me.MapInstance == null)
             {
-                return;
+                return false;
             }
             var canTargetPlayers = Globals.Me.MapInstance.ZoneType == MapZones.Safe ? false : true;
 
@@ -1353,7 +1360,11 @@ namespace Intersect.Client.Entities
             }
 
             // Reduce the number of targets down to what is in our allowed range.
-            validEntities = validEntities.Where(en => en.Value.DistanceTo <= Options.Combat.MaxPlayerAutoTargetRadius).ToArray();
+            validEntities = validEntities.Where(en => en.Value.DistanceTo <= Options.Combat.MaxPlayerAutoTargetRadius && en.Key.Id != exclude).ToArray();
+            if (onlyAggro)
+            {
+                validEntities = validEntities.Where(en => en.Key.Type == -1).ToArray();
+            }
 
             int currentDistance = 9999;
             long currentTime = Timing.Global.Milliseconds;
@@ -1401,7 +1412,7 @@ namespace Intersect.Client.Entities
             if (currentEntity == null)
             {
                 mLastEntitySelected = null;
-                return;
+                return false;
             }
 
             if (mlastTargetList.ContainsKey(currentEntity))
@@ -1410,13 +1421,18 @@ namespace Intersect.Client.Entities
             }
             mLastEntitySelected = currentEntity;
 
-            if (TargetIndex != currentEntity.Id)
+            if (TargetIndex != currentEntity.Id && currentEntity.Id != exclude)
             {
+                Console.WriteLine($"New target: {currentEntity.Name} with ID {currentEntity.Id}, exlcuding ID {exclude}");
                 SetTargetBox(currentEntity);
                 TargetIndex = currentEntity.Id;
                 TargetType = 0;
                 TryFaceTarget();
-            } 
+
+                return true;
+            }
+            
+            return false;
         }
 
         private void SetTargetBox(Entity en)
@@ -1443,6 +1459,21 @@ namespace Intersect.Client.Entities
 
             Audio.AddGameSound(Configuration.ClientConfiguration.Instance.TargetSound, false);
             TargetBox?.Show();
+
+            if (!CombatMode && Globals.Database.EnterCombatOnTarget)
+            {
+                var friendlyTarget = false;
+                if (en is Player pl)
+                {
+                    friendlyTarget = Globals.Me.MapInstance.ZoneType != MapZones.Arena && (IsInMyParty(pl) || pl.Guild == Guild);
+                }
+
+                // Don't enter combat mode on self-target, event target, or friendly target
+                if (en.Id != Id && en.GetEntityType() != EntityTypes.Event && !friendlyTarget)
+                {
+                    ToggleCombatMode();
+                }
+            }
         }
 
         public bool TryBlock()
@@ -1488,7 +1519,8 @@ namespace Intersect.Client.Entities
             int x = Globals.Me.X;
             int y = Globals.Me.Y;
             var map = Globals.Me.CurrentMap;
-            switch (Globals.Me.Dir)
+            var dir = Globals.Me.CombatMode ? Globals.Me.FaceDirection : Globals.Me.Dir;
+            switch (dir)
             {
                 case 0:
                     y--;
@@ -1799,20 +1831,33 @@ namespace Intersect.Client.Entities
             return statusFound;
         }
 
-        public bool TryFaceTarget(bool skipSmartDir = false, bool force = false)
+        /// <summary>
+        /// Returns whether or not a character is stunned via status
+        /// </summary>
+        /// <returns>true if stunned/snared/sleep</returns>
+        private bool IsStunned()
         {
-            // Check if we're currently casting
-            if (CastTime > Timing.Global.Milliseconds) return false;
-
-            //check if player is stunned or snared, if so don't let them turn.
             for (var n = 0; n < Status.Count; n++)
             {
                 if (Status[n].Type == StatusTypes.Stun ||
                     Status[n].Type == StatusTypes.Snare ||
                     Status[n].Type == StatusTypes.Sleep)
                 {
-                    return false;
+                    return true;
                 }
+            }
+            return false;
+        }
+
+        public bool TryFaceTarget(bool skipSmartDir = false, bool force = false)
+        {
+            // Check if we're currently casting
+            if (CastTime > Timing.Global.Milliseconds) return false;
+
+            //check if player is stunned or snared, if so don't let them turn.
+            if (IsStunned())
+            {
+                return false;
             }
 
             if (TargetIndex != null && (Globals.Database.FaceOnLock || force))
@@ -1839,6 +1884,31 @@ namespace Intersect.Client.Entities
             return false;
         }
 
+        /// <summary>
+        /// Toggles combat mode, and returns whether it's now true
+        /// </summary>
+        /// <returns>true if combat mode set to true</returns>
+        public bool ToggleCombatMode(bool sound = false)
+        {
+            if (IsBusy() || InVehicle)
+            {
+                return false;
+            }
+
+            CombatMode = !CombatMode;
+            if (CombatMode)
+            {
+                Audio.AddGameSound("al_combat_enter.wav", false);
+            }
+            else if (sound)
+            {
+                Audio.AddGameSound("al_combat_end.wav", false);
+            }
+
+            TryFaceTarget();
+            return CombatMode;
+        }
+
         public bool noDirectionalInputPressed()
         {
             return !Controls.KeyDown(Control.MoveLeft)
@@ -1849,12 +1919,22 @@ namespace Intersect.Client.Entities
                 && !Controls.KeyDown(Control.TurnCounterClockwise);
         }
 
-        public void ClearTarget()
+        public void ClearTarget(bool fromDeath = false, Guid entityId = default)
         {
             SetTargetBox(null);
-
             TargetIndex = Guid.Empty;
             TargetType = -1;
+
+            // If we're in combat mode when our target is cleared via entity death, try to grab the next closest aggro target.
+            if (fromDeath && CombatMode && TryAutoTarget(true, entityId))
+            {
+                return;
+            }
+
+            if (Globals.Database.EnterCombatOnTarget)
+            {
+                CombatMode = false;
+            }
         }
 
         /// <summary>
@@ -1984,12 +2064,16 @@ namespace Intersect.Client.Entities
                                     (float)Options.MaxStatValue)));
         }
 
-        private static byte GetDirectionFromMouse()
+        private byte GetDirectionFromMouse(FloatRect fromRect)
         {
+            var fromX = fromRect.Left + fromRect.Width / 2;
+            var fromY = fromRect.Top + fromRect.Height / 2;
+
             var right = false;
             var bottom = false;
-            var xDiff = (Graphics.Renderer.GetScreenWidth() / 2) - Globals.InputManager.GetMousePosition().X;
-            var yDiff = (Graphics.Renderer.GetScreenHeight() / 2) - Globals.InputManager.GetMousePosition().Y;
+            var mousePos = Graphics.ConvertToWorldPoint(Globals.InputManager.GetMousePosition());
+            var xDiff = fromX - mousePos.X;
+            var yDiff = fromY - mousePos.Y;
             if (Math.Sign(xDiff) > 0)
             {
                 right = true;
@@ -2025,14 +2109,9 @@ namespace Intersect.Client.Entities
             }
 
             //check if player is stunned or snared, if so don't let them move.
-            for (var n = 0; n < Status.Count; n++)
+            if (IsStunned())
             {
-                if (Status[n].Type == StatusTypes.Stun ||
-                    Status[n].Type == StatusTypes.Snare ||
-                    Status[n].Type == StatusTypes.Sleep)
-                {
-                    return;
-                }
+                return;
             }
 
             //Check if the player is dashing, if so don't let them move.
@@ -2057,11 +2136,10 @@ namespace Intersect.Client.Entities
             var tmpY = (sbyte) Y;
             Entity blockedBy = null;
 
+            var prevFace = FaceDirection;
             if (CombatMode && !IsBusy())
             {
-                var prevFace = FaceDirection;
-
-                FaceDirection = GetDirectionFromMouse();
+                FaceDirection = GetDirectionFromMouse(WorldPos);
 
                 if (MoveDir == -1 && FaceDirection != prevFace)
                 {
@@ -2187,10 +2265,14 @@ namespace Intersect.Client.Entities
                     }
                     else
                     {
-                        if (MoveDir != Dir)
+                        if (MoveDir != Dir && !CombatMode)
                         {
                             Dir = (byte) MoveDir;
                             PacketSender.SendDirection(Dir);
+                        }
+                        else if (CombatMode)
+                        {
+                            PacketSender.SendDirection(FaceDirection);
                         }
 
                         if (blockedBy != null && mLastBumpedEvent != blockedBy && blockedBy.GetType() == typeof(Event))
@@ -2201,7 +2283,7 @@ namespace Intersect.Client.Entities
                     }
                 }
                 // Trying to move while casting? turn the player
-                else if (!IsMoving && CastTime >= Timing.Global.Milliseconds)
+                else if (!IsMoving && CastTime >= Timing.Global.Milliseconds && !CombatMode)
                 {
                     if (MoveDir != Dir)
                     {

@@ -1112,6 +1112,11 @@ namespace Intersect.Client.Networking
             }
 
             en.ClearAnimations(null);
+
+            if (Globals.Me.TargetIndex == id)
+            {
+                Globals.Me.ClearTarget(true, en.Id);
+            }
         }
 
         //EventDialogPacket

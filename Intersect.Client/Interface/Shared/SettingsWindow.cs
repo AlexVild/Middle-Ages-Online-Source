@@ -125,6 +125,8 @@ namespace Intersect.Client.Interface.Shared
         private readonly LabeledCheckBox mDisplayClanMembersCheckbox;
         
         private readonly LabeledCheckBox mAttackCancelCheckbox;
+        
+        private readonly LabeledCheckBox mEnterCombatOnTargetCheckbox;
 
         // Open settings
         private bool mReturnToMenu;
@@ -223,6 +225,11 @@ namespace Intersect.Client.Interface.Shared
             mAttackCancelCheckbox = new LabeledCheckBox(mGameSettingsContainer, "AttackCancelsCastCheckbox")
             {
                 Text = Strings.Settings.AttackCancelsCast
+            };
+
+            mEnterCombatOnTargetCheckbox = new LabeledCheckBox(mGameSettingsContainer, "EnterCombatOnTargetCheckbox")
+            {
+                Text = Strings.Settings.EnterCombatOnTarget
             };
             // TODO: Place our configurable gameplay related settings into their respective container for initialization here!
 
@@ -659,6 +666,7 @@ namespace Intersect.Client.Interface.Shared
             mDisplayNPCNamesCheckbox.IsChecked = Globals.Database.DisplayNpcNames;
             mDisplayPlayerNamesCheckbox.IsChecked = Globals.Database.DisplayPlayerNames;
             mAttackCancelCheckbox.IsChecked = Globals.Database.AttackCancelsCast;
+            mEnterCombatOnTargetCheckbox.IsChecked = Globals.Database.EnterCombatOnTarget;
 
             // Video Settings.
             mAutoCloseWindowsCheckbox.IsChecked = Globals.Database.HideOthersOnWindowOpen;
@@ -828,6 +836,7 @@ namespace Intersect.Client.Interface.Shared
             Globals.Database.DisplayClanMembers = mDisplayClanMembersCheckbox.IsChecked;
             Globals.Database.DisplayNpcNames = mDisplayNPCNamesCheckbox.IsChecked;
             Globals.Database.AttackCancelsCast = mAttackCancelCheckbox.IsChecked;
+            Globals.Database.EnterCombatOnTarget = mEnterCombatOnTargetCheckbox.IsChecked;
 
             if (shouldReset)
             {

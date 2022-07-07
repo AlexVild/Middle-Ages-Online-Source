@@ -840,6 +840,10 @@ namespace Intersect.Server.Entities
 
             time *= (float)Options.SpeedModifier;
 
+            if (this is Player pl && pl.CombatMode)
+            {
+                time *= Options.Instance.CombatOpts.CombatModeModifier;
+            }
             if (StatusActive(StatusTypes.Slowed))
             {
                 time *= Options.Instance.CombatOpts.SlowedModifier;

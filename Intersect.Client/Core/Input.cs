@@ -188,7 +188,7 @@ namespace Intersect.Client.Core
                                         break;
 
                                     case Control.AutoTarget:
-                                        Globals.Me?.AutoTarget();
+                                        Globals.Me?.TryAutoTarget(false);
 
                                         break;
 
@@ -269,7 +269,7 @@ namespace Intersect.Client.Core
                                         break;
 
                                     case Control.FaceTarget:
-                                        Globals.Me?.TryFaceTarget(false, true);
+                                        Globals.Me.ToggleCombatMode(true);
 
                                         break;
                                     case Control.TargetParty1:
@@ -375,9 +375,12 @@ namespace Intersect.Client.Core
                 return;
             }
 
-            if (Controls.Controls.ControlHasKey(Control.FaceTarget, key) && Globals.Me.TryFaceTarget(false, true))
+            if (Controls.Controls.ControlHasKey(Control.FaceTarget, key) && Globals.Me.ToggleCombatMode())
             {
-                return;
+                if (Globals.Me.TryFaceTarget(false, true))
+                {
+                    return;
+                }
             }
 
             if (Globals.Database.LeftClickTarget)
@@ -393,8 +396,6 @@ namespace Intersect.Client.Core
                     return;
                 }
             }
-
-            
 
             if (Controls.Controls.ControlHasKey(Control.PickUp, key))
             {

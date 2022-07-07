@@ -95,6 +95,14 @@ namespace Intersect.Client.Core
 
         private static long sLastUpdate;
 
+        private static long sCurrentCombatWidth = 0;
+
+        private static long sLastCombatWidthUpdate;
+
+        private static bool mDrawingCombatMode;
+
+        private static byte mCombatModeState = 0;
+
         //Init Functions
         public static void InitGraphics()
         {
@@ -354,6 +362,7 @@ namespace Intersect.Client.Core
 
             //Draw the players targets
             Globals.Me.DrawTargets();
+            DrawCombatMode();
 
             DrawOverlay();
 
@@ -573,6 +582,84 @@ namespace Intersect.Client.Core
                 }
 
                 map.DrawPanorama();
+            }
+        }
+
+        public static void DrawCombatMode()
+        {
+            FloatRect top;
+            FloatRect bottom;
+            switch (mCombatModeState)
+            {
+                // Empty
+                case 0:
+                    if (Globals.Me.CombatMode)
+                    {
+                        mCombatModeState = 1;
+                    }
+                    break;
+                // reset
+                case 1:
+                    sLastCombatWidthUpdate = Timing.Global.Milliseconds;
+                    mCombatModeState = Globals.Me.CombatMode ? (byte)2 : (byte)4;
+                    break;
+                // fade in
+                case 2:
+                    sCurrentCombatWidth = MathHelper.Clamp((int)Math.Round(((Timing.Global.Milliseconds - sLastCombatWidthUpdate) / 250f) * 64f), 0, 64);
+                    top = new FloatRect(CurrentView.Left, CurrentView.Top, CurrentView.Width, sCurrentCombatWidth);
+                    bottom = new FloatRect(CurrentView.Left, CurrentView.Top + CurrentView.Height - sCurrentCombatWidth, CurrentView.Width, sCurrentCombatWidth);
+
+                    DrawGameTexture(Renderer.GetWhiteTexture(), new FloatRect(0, 0, 1, 1), top, new Color(255, 0, 0, 0), null);
+                    DrawGameTexture(Renderer.GetWhiteTexture(), new FloatRect(0, 0, 1, 1), bottom, new Color(255, 0, 0, 0), null);
+                    if (!Globals.Me.CombatMode)
+                    {
+                        var now = Timing.Global.Milliseconds;
+                        var remainingTransition = 250 - (Timing.Global.Milliseconds - sLastCombatWidthUpdate);
+                        sLastCombatWidthUpdate = now - remainingTransition;
+                        mCombatModeState = 4;
+                    }
+                    if (sCurrentCombatWidth >= 64)
+                    {
+                        mCombatModeState = 3;
+                    }
+                    break;
+                // Done
+                case 3:
+                    top = new FloatRect(CurrentView.Left, CurrentView.Top, CurrentView.Width, 64);
+                    bottom = new FloatRect(CurrentView.Left, CurrentView.Top + CurrentView.Height - 64, CurrentView.Width, 64);
+
+                    DrawGameTexture(Renderer.GetWhiteTexture(), new FloatRect(0, 0, 1, 1), top, new Color(255, 0, 0, 0), null);
+                    DrawGameTexture(Renderer.GetWhiteTexture(), new FloatRect(0, 0, 1, 1), bottom, new Color(255, 0, 0, 0), null);
+
+                    if (!Globals.Me.CombatMode)
+                    {
+                        sLastCombatWidthUpdate = Timing.Global.Milliseconds;
+                        mCombatModeState = 4;
+                    }
+                    break;
+                // Fade out
+                case 4:
+                    sCurrentCombatWidth = MathHelper.Clamp(64 - ((int)Math.Round(((Timing.Global.Milliseconds - sLastCombatWidthUpdate) / 250f) * 64f)), 0, 64);
+                    top = new FloatRect(CurrentView.Left, CurrentView.Top, CurrentView.Width, sCurrentCombatWidth);
+                    bottom = new FloatRect(CurrentView.Left, CurrentView.Top + CurrentView.Height - sCurrentCombatWidth, CurrentView.Width, sCurrentCombatWidth);
+
+                    DrawGameTexture(Renderer.GetWhiteTexture(), new FloatRect(0, 0, 1, 1), top, new Color(255, 0, 0, 0), null);
+                    DrawGameTexture(Renderer.GetWhiteTexture(), new FloatRect(0, 0, 1, 1), bottom, new Color(255, 0, 0, 0), null);
+                    if (Globals.Me.CombatMode)
+                    {
+                        var now = Timing.Global.Milliseconds;
+                        var remainingTransition = 250 - (Timing.Global.Milliseconds - sLastCombatWidthUpdate);
+                        sLastCombatWidthUpdate = now - remainingTransition;
+                        mCombatModeState = 2;
+                    }
+                    if (sCurrentCombatWidth <= 0)
+                    {
+                        mCombatModeState = 0;
+                    }
+                    break;
+                default:
+                    mCombatModeState = 0;
+                    break;
             }
         }
 

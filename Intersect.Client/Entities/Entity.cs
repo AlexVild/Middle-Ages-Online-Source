@@ -513,6 +513,10 @@ namespace Intersect.Client.Entities
             
             time *= (float)Options.SpeedModifier;
 
+            if (this is Player pl && pl.CombatMode)
+            {
+                time *= Options.Instance.CombatOpts.CombatModeModifier;
+            }
             if (StatusIsActive(StatusTypes.Slowed))
             {
                 time *= Options.Instance.CombatOpts.SlowedModifier;
@@ -1018,9 +1022,11 @@ namespace Intersect.Client.Entities
 
                 destRectangle.X -= texture.GetWidth() / (SpriteFrames * 2);
 
+                var paperdollDir = Dir;
                 if (this is Player player && player.CombatMode)
                 {
                     dir = DetermineRenderDirection(player.FaceDirection);
+                    paperdollDir = player.FaceDirection;
                 }
                 else
                 {
@@ -1072,9 +1078,10 @@ namespace Intersect.Client.Entities
                 WorldPos = destRectangle;
 
                 //Order the layers of paperdolls and sprites
-                for (var z = 0; z < Options.PaperdollOrder[dir].Count; z++)
+                for (var z = 0; z < Options.PaperdollOrder[paperdollDir].Count; z++)
                 {
-                    var paperdoll = Options.PaperdollOrder[dir][z];
+                    var stuff = Options.PaperdollOrder;
+                    var paperdoll = Options.PaperdollOrder[paperdollDir][z];
                     var equipSlot = Options.EquipmentSlots.IndexOf(paperdoll);
                     var decorSlot = Options.DecorSlots.IndexOf(paperdoll);
 

@@ -1502,6 +1502,9 @@ namespace Intersect.Client.Localization
             public static LocalizedString EnableScanlines = @"Enable Scanlines";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString EnterCombatOnTarget = @"Combat Mode on Target";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString FaceOnLock = @"Face Target on Lock";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
