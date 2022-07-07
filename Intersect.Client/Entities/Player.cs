@@ -255,6 +255,14 @@ namespace Intersect.Client.Entities
 
                 if (Controls.KeyDown(Control.AttackInteract) || ResourceLocked)
                 {
+                    if (Globals.Database.AttackCancelsCast)
+                    {
+                        if (Globals.Me.CastTime - Options.Instance.CombatOpts.CancelCastLeeway > Timing.Global.Milliseconds)
+                        {
+                            PacketSender.CancelPlayerCast(Id);
+                        }
+                    }
+
                     if (!Globals.Me.TryAttack())
                     {
                         UpdateAttackTimer();
@@ -2148,6 +2156,15 @@ namespace Intersect.Client.Entities
                             PacketSender.SendBumpEvent(blockedBy.CurrentMap, blockedBy.Id);
                             mLastBumpedEvent = blockedBy;
                         }
+                    }
+                }
+                // Trying to move while casting? turn the player
+                else if (!IsMoving && CastTime >= Timing.Global.Milliseconds)
+                {
+                    if (MoveDir != Dir)
+                    {
+                        Dir = (byte)MoveDir;
+                        PacketSender.SendDirection(Dir);
                     }
                 }
             }

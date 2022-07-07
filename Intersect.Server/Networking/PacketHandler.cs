@@ -3043,6 +3043,22 @@ namespace Intersect.Server.Networking
             player.OfferQuestList(packet.QuestList);
         }
 
+        public void HandlePacket(Client client, CancelPlayerCastPacket packet)
+        {
+            var player = client?.Entity;
+
+            if (player == null)
+            {
+                return;
+            }
+
+            player.CastTime = 0;
+            player.CastTarget = null;
+            player.SpellCastSlot = -1;
+            player.UpdateGlobalCooldown();
+            PacketSender.SendEntityCancelCast(player);
+        }
+
         #endregion
 
         #region "Editor Packets"

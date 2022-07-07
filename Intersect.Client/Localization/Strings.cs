@@ -1527,6 +1527,9 @@ namespace Intersect.Client.Localization
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString Fade = @"Fade Instead of Wipe";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString AttackCancelsCast = @"Attack Cancels Cast";
         }
 
         public struct Parties

@@ -461,6 +461,11 @@ namespace Intersect.Client.Networking
         {
             Network.SendPacket(new RequestQuestsFromListPacket(questList));
         }
+        
+        public static void CancelPlayerCast(Guid playerId)
+        {
+            Network.SendPacket(new CancelPlayerCastPacket(playerId));
+        }
     }
 
 }

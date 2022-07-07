@@ -110,6 +110,9 @@ namespace Intersect.Config
 
         public int PartyTargetDistance = 10;
 
+        // How many ms before cancel cast can't happen
+        public int CancelCastLeeway = 200;
+
         public bool StunPreventsItems { get; set;  } = false;
 
         public List<int> HarvestBonusIntervals = new List<int>()

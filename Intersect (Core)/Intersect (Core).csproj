@@ -384,6 +384,7 @@
     <Compile Include="Network\Packets\Client\BuyItemPacket.cs" />
     <Compile Include="Network\Packets\Client\ChatMsgPacket.cs" />
     <Compile Include="Network\Packets\Client\ClassInfoPacket.cs" />
+    <Compile Include="Network\Packets\Client\CancelPlayerCastPacket.cs" />
     <Compile Include="Network\Packets\Client\CloseBagPacket.cs" />
     <Compile Include="Network\Packets\Client\CloseBankPacket.cs" />
     <Compile Include="Network\Packets\Client\CloseCraftingPacket.cs" />

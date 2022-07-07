@@ -44,6 +44,8 @@ namespace Intersect.Client.Framework.Database
         public bool DisplayNpcNames;
         
         public bool DisplayPlayerNames;
+        
+        public bool AttackCancelsCast;
 
         //Saving password, other stuff we don't want in the games directory
         public abstract void SavePreference(string key, object value);
@@ -83,6 +85,7 @@ namespace Intersect.Client.Framework.Database
             DisplayClanMembers = LoadPreference("DisplayClanMembers", true);
             DisplayNpcNames = LoadPreference("DisplayNpcNames", true);
             DisplayPlayerNames = LoadPreference("DisplayPlayerNames", true);
+            AttackCancelsCast = LoadPreference("AttackCancelsCast", true);
         }
 
         public virtual void SavePreferences()
@@ -105,6 +108,7 @@ namespace Intersect.Client.Framework.Database
             SavePreference("DisplayClanMembers", DisplayClanMembers.ToString());
             SavePreference("DisplayNpcNames", DisplayNpcNames.ToString());
             SavePreference("DisplayPlayerNames", DisplayPlayerNames.ToString());
+            SavePreference("AttackCancelsCast", AttackCancelsCast.ToString());
         }
 
         public abstract bool LoadConfig();
