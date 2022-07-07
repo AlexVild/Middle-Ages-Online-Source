@@ -224,6 +224,11 @@ namespace Intersect.Client.Entities
 
         public bool IsInMyParty(Guid id) => Party.Any(member => member.Id == id);
 
+        public bool InCutscene()
+        {
+            return Globals.EventHolds.Count > 0 || Globals.MoveRouteActive;
+        }
+
         public bool IsBusy()
         {
             return !(Globals.EventHolds.Count == 0 &&
@@ -1423,7 +1428,6 @@ namespace Intersect.Client.Entities
 
             if (TargetIndex != currentEntity.Id && currentEntity.Id != exclude)
             {
-                Console.WriteLine($"New target: {currentEntity.Name} with ID {currentEntity.Id}, exlcuding ID {exclude}");
                 SetTargetBox(currentEntity);
                 TargetIndex = currentEntity.Id;
                 TargetType = 0;

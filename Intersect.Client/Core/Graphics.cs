@@ -99,9 +99,13 @@ namespace Intersect.Client.Core
 
         private static long sLastCombatWidthUpdate;
 
-        private static bool mDrawingCombatMode;
-
         private static byte mCombatModeState = 0;
+
+        private static long sCutsceneWidth = 0;
+
+        private static long sCutsceneUpdate;
+
+        private static byte sCutsceneState = 0;
 
         //Init Functions
         public static void InitGraphics()
@@ -362,7 +366,6 @@ namespace Intersect.Client.Core
 
             //Draw the players targets
             Globals.Me.DrawTargets();
-            DrawCombatMode();
 
             DrawOverlay();
 
@@ -430,6 +433,14 @@ namespace Intersect.Client.Core
             }
 
             DrawScanlines();
+            
+            // Start widescreen state-machine for combat mode
+            DrawWideScreen(Globals.ContentManager.GetTexture(GameContentManager.TextureType.Misc, "combatmode.png"), Globals.Me.CombatMode, Color.White,
+                ref mCombatModeState, ref sLastCombatWidthUpdate, ref sCurrentCombatWidth);
+
+            // Aaaand for cutscenes (holding player)
+            DrawWideScreen(Renderer.GetWhiteTexture(), Globals.Me.InCutscene(), Color.Black,
+                ref sCutsceneState, ref sCutsceneUpdate, ref sCutsceneWidth);
         }
 
         public static void DrawScanlines()
@@ -585,80 +596,93 @@ namespace Intersect.Client.Core
             }
         }
 
-        public static void DrawCombatMode()
+        public static void DrawWideScreen(GameTexture texture, bool flag, Color drawColor, ref byte state, ref long lastUpdate, ref long size)
         {
             FloatRect top;
+            FloatRect left;
+            FloatRect right;
             FloatRect bottom;
-            switch (mCombatModeState)
+            var textureWidth = texture.GetWidth();
+            switch (state)
             {
                 // Empty
                 case 0:
-                    if (Globals.Me.CombatMode)
+                    if (flag)
                     {
-                        mCombatModeState = 1;
+                        state = 1;
                     }
                     break;
                 // reset
                 case 1:
-                    sLastCombatWidthUpdate = Timing.Global.Milliseconds;
-                    mCombatModeState = Globals.Me.CombatMode ? (byte)2 : (byte)4;
+                    lastUpdate = Timing.Global.Milliseconds;
+                    state = flag ? (byte)2 : (byte)4;
                     break;
                 // fade in
                 case 2:
-                    sCurrentCombatWidth = MathHelper.Clamp((int)Math.Round(((Timing.Global.Milliseconds - sLastCombatWidthUpdate) / 250f) * 64f), 0, 64);
-                    top = new FloatRect(CurrentView.Left, CurrentView.Top, CurrentView.Width, sCurrentCombatWidth);
-                    bottom = new FloatRect(CurrentView.Left, CurrentView.Top + CurrentView.Height - sCurrentCombatWidth, CurrentView.Width, sCurrentCombatWidth);
+                    size = MathHelper.Clamp((int)Math.Round(((Timing.Global.Milliseconds - lastUpdate) / 250f) * 64f), 0, 64);
+                    for(var i = 0; i < CurrentView.Width / textureWidth; i++)
+                    {
+                        top = new FloatRect(CurrentView.Left + (i * textureWidth), CurrentView.Top, textureWidth, size);
+                        bottom = new FloatRect(CurrentView.Left + (i * textureWidth), CurrentView.Top + CurrentView.Height - size, textureWidth, size);
 
-                    DrawGameTexture(Renderer.GetWhiteTexture(), new FloatRect(0, 0, 1, 1), top, new Color(255, 0, 0, 0), null);
-                    DrawGameTexture(Renderer.GetWhiteTexture(), new FloatRect(0, 0, 1, 1), bottom, new Color(255, 0, 0, 0), null);
-                    if (!Globals.Me.CombatMode)
+                        DrawGameTexture(texture, new FloatRect(0, 0, 64, 64), top, drawColor, null);
+                        DrawGameTexture(texture, new FloatRect(0, 0, 64, 64), bottom, drawColor, null, rotationDegrees: 180.0f);
+                    }
+
+                    if (!flag)
                     {
                         var now = Timing.Global.Milliseconds;
-                        var remainingTransition = 250 - (Timing.Global.Milliseconds - sLastCombatWidthUpdate);
-                        sLastCombatWidthUpdate = now - remainingTransition;
-                        mCombatModeState = 4;
+                        var remainingTransition = 250 - (Timing.Global.Milliseconds - lastUpdate);
+                        lastUpdate = now - remainingTransition;
+                        state = 4;
                     }
-                    if (sCurrentCombatWidth >= 64)
+                    if (size >= 64)
                     {
-                        mCombatModeState = 3;
+                        state = 3;
                     }
                     break;
                 // Done
                 case 3:
-                    top = new FloatRect(CurrentView.Left, CurrentView.Top, CurrentView.Width, 64);
-                    bottom = new FloatRect(CurrentView.Left, CurrentView.Top + CurrentView.Height - 64, CurrentView.Width, 64);
-
-                    DrawGameTexture(Renderer.GetWhiteTexture(), new FloatRect(0, 0, 1, 1), top, new Color(255, 0, 0, 0), null);
-                    DrawGameTexture(Renderer.GetWhiteTexture(), new FloatRect(0, 0, 1, 1), bottom, new Color(255, 0, 0, 0), null);
-
-                    if (!Globals.Me.CombatMode)
+                    for (var i = 0; i < CurrentView.Width / textureWidth; i++)
                     {
-                        sLastCombatWidthUpdate = Timing.Global.Milliseconds;
-                        mCombatModeState = 4;
+                        top = new FloatRect(CurrentView.Left + (i * textureWidth), CurrentView.Top, textureWidth, size);
+                        bottom = new FloatRect(CurrentView.Left + (i * textureWidth), CurrentView.Top + CurrentView.Height - size, textureWidth, size);
+
+                        DrawGameTexture(texture, new FloatRect(0, 0, 64, 64), top, drawColor, null);
+                        DrawGameTexture(texture, new FloatRect(0, 0, 64, 64), bottom, drawColor, null, rotationDegrees: 180.0f);
+                    }
+
+                    if (!flag)
+                    {
+                        lastUpdate = Timing.Global.Milliseconds;
+                        state = 4;
                     }
                     break;
                 // Fade out
                 case 4:
-                    sCurrentCombatWidth = MathHelper.Clamp(64 - ((int)Math.Round(((Timing.Global.Milliseconds - sLastCombatWidthUpdate) / 250f) * 64f)), 0, 64);
-                    top = new FloatRect(CurrentView.Left, CurrentView.Top, CurrentView.Width, sCurrentCombatWidth);
-                    bottom = new FloatRect(CurrentView.Left, CurrentView.Top + CurrentView.Height - sCurrentCombatWidth, CurrentView.Width, sCurrentCombatWidth);
+                    size = MathHelper.Clamp(64 - ((int)Math.Round(((Timing.Global.Milliseconds - lastUpdate) / 250f) * 64f)), 0, 64);
+                    for (var i = 0; i < CurrentView.Width / textureWidth; i++)
+                    {
+                        top = new FloatRect(CurrentView.Left + (i * textureWidth), CurrentView.Top, textureWidth, size);
+                        bottom = new FloatRect(CurrentView.Left + (i * textureWidth), CurrentView.Top + CurrentView.Height - size, textureWidth, size);
 
-                    DrawGameTexture(Renderer.GetWhiteTexture(), new FloatRect(0, 0, 1, 1), top, new Color(255, 0, 0, 0), null);
-                    DrawGameTexture(Renderer.GetWhiteTexture(), new FloatRect(0, 0, 1, 1), bottom, new Color(255, 0, 0, 0), null);
-                    if (Globals.Me.CombatMode)
+                        DrawGameTexture(texture, new FloatRect(0, 0, 64, 64), top, drawColor, null);
+                        DrawGameTexture(texture, new FloatRect(0, 0, 64, 64), bottom, drawColor, null, rotationDegrees: 180.0f);
+                    }
+                    if (flag)
                     {
                         var now = Timing.Global.Milliseconds;
-                        var remainingTransition = 250 - (Timing.Global.Milliseconds - sLastCombatWidthUpdate);
-                        sLastCombatWidthUpdate = now - remainingTransition;
-                        mCombatModeState = 2;
+                        var remainingTransition = 250 - (Timing.Global.Milliseconds - lastUpdate);
+                        lastUpdate = now - remainingTransition;
+                        state = 2;
                     }
-                    if (sCurrentCombatWidth <= 0)
+                    if (size <= 0)
                     {
-                        mCombatModeState = 0;
+                        state = 0;
                     }
                     break;
                 default:
-                    mCombatModeState = 0;
+                    state = 0;
                     break;
             }
         }
