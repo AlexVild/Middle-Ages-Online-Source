@@ -25,7 +25,7 @@ namespace Intersect.Server.Maps
             }
         }
 
-        public void Add(Player player, bool correction, int faceDirection, Player forPlayer = null)
+        public void Add(Player player, bool correction, int faceDirection, bool combatMode, Player forPlayer = null)
         {
             lock (mMovements)
             {
@@ -36,10 +36,9 @@ namespace Intersect.Server.Maps
                 }
                 mMovements[id].Add(new EntityMovePacket(player.Id, player.GetEntityType(), 
                     player.MapId, (byte)player.X, (byte)player.Y, (byte)player.GetRealDir(), 
-                    correction, (byte)faceDirection));
+                    correction, (byte)faceDirection, combatMode));
             }
         }
-
 
         public void SendPackets(HashSet<Player> nearbyPlayers)
         {

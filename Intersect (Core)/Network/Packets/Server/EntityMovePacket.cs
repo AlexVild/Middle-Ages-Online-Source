@@ -25,9 +25,10 @@ namespace Intersect.Network.Packets.Server
             FaceDirection = Direction;
         }
 
-        public EntityMovePacket(Guid id, EntityTypes type, Guid mapId, byte x, byte y, byte direction, bool correction, byte faceDirection) : this(id, type, mapId, x, y, direction, correction)
+        public EntityMovePacket(Guid id, EntityTypes type, Guid mapId, byte x, byte y, byte direction, bool correction, byte faceDirection, bool combatMode) : this(id, type, mapId, x, y, direction, correction)
         {
             FaceDirection = faceDirection;
+            CombatMode = combatMode;
         }
 
         [Key(0)]
@@ -53,6 +54,9 @@ namespace Intersect.Network.Packets.Server
 
         [Key(7)]
         public byte FaceDirection { get; set; }
+        
+        [Key(8)]
+        public bool CombatMode { get; set; }
     }
 
 }

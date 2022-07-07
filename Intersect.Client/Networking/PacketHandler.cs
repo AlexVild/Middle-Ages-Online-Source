@@ -658,6 +658,7 @@ namespace Intersect.Client.Networking
                 if (en is Player p)
                 {
                     p.MoveDir = dir;
+                    p.CombatMode = packet.CombatMode;
                     if (p.CombatMode)
                     {
                         p.FaceDirection = packet.FaceDirection;

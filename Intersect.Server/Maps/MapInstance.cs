@@ -1218,9 +1218,9 @@ namespace Intersect.Server.Maps
             mEntityMovements.Add(en, correction, forPlayer);
         }
         
-        public void AddBatchedMovement(Player en, bool correction, int faceDirection, Player forPlayer)
+        public void AddBatchedMovement(Player en, bool correction, int faceDirection, bool combatMode, Player forPlayer)
         {
-            mEntityMovements.Add(en, correction, faceDirection, forPlayer);
+            mEntityMovements.Add(en, correction, faceDirection, combatMode, forPlayer);
         }
 
         public void AddBatchedActionMessage(ActionMsgPacket packet)

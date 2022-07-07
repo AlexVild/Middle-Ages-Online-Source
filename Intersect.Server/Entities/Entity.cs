@@ -1052,7 +1052,7 @@ namespace Intersect.Server.Entities
                             // Preserve face direction if player
                             if (this is Player pl)
                             {
-                                PacketSender.SendEntityMove(pl, pl.FaceDirection, correction);
+                                PacketSender.SendEntityMove(pl, pl.FaceDirection, pl.CombatMode, correction);
                             }
                             else
                             {

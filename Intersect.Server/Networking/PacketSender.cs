@@ -861,7 +861,7 @@ namespace Intersect.Server.Networking
             }
         }
 
-        public static void SendEntityMove(Player player, int faceDirection, bool correction = false)
+        public static void SendEntityMove(Player player, int faceDirection, bool combatMode, bool correction = false)
         {
             if (player == null)
             {
@@ -869,7 +869,7 @@ namespace Intersect.Server.Networking
             }
             if (MapController.TryGetInstanceFromMap(player.Map.Id, player.MapInstanceId, out var mapInstance))
             {
-                mapInstance.AddBatchedMovement(player, correction, faceDirection, null);
+                mapInstance.AddBatchedMovement(player, correction, faceDirection, combatMode, null);
             }
         }
 
