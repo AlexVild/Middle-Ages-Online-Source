@@ -1842,33 +1842,16 @@ namespace Intersect.Client.Entities
                     );
                 }
 
-                if (!string.IsNullOrEmpty(castSpell.Icon))
+                if (!string.IsNullOrEmpty(castSpell.Icon) && castSpell.Icon != Strings.General.none)
                 {
                     DrawSpellIcon(x, y, castSpell.Icon);
                 }
+
+                if (castSpell.Combat.TargetType == SpellTargetTypes.Single && EntityTarget == Globals.Me?.Id)
+                {
+                    DrawCasterIndicator(castSpell.Combat.CastRange);
+                }
             }
-        }
-
-        private static void DrawSpellIcon(int x, int y, string icon)
-        {
-            var backgroundTex = Globals.ContentManager.GetTexture(TextureType.Misc, "spellcast.png");
-            var texture = Globals.ContentManager.GetTexture(TextureType.Spell, icon);
-            var iconWidth = 40;
-            var iconHeight = 40;
-
-            var iconX = x - iconWidth * 2;
-            var iconY = y - iconHeight / 2;
-
-            // Draw BG
-            Graphics.DrawGameTexture(
-                backgroundTex, new FloatRect(0, 0, backgroundTex.GetWidth(), backgroundTex.GetHeight()),
-                new FloatRect(iconX, iconY, iconWidth, iconHeight), Color.White
-            );
-
-            Graphics.DrawGameTexture(
-                texture, new FloatRect(0, 0, texture.GetWidth(), texture.GetHeight()),
-                new FloatRect(iconX + 4, iconY + 4, 32, 32), Color.White
-            );
         }
 
         //
@@ -2389,6 +2372,118 @@ namespace Intersect.Client.Entities
         ~Entity()
         {
             Dispose();
+        }
+    }
+
+    // New drawing functions
+    public partial class Entity
+    {
+        private bool IndicatorFlash = false;
+        private const int IndicatorFrames = 2;
+        private long LastFlash;
+        private const int IndicatorRadius = 48;
+
+        public double CalculateDirectionTo(Entity en)
+        {
+            var selfX = GetCenterPos().X;
+            var selfY = GetCenterPos().Y;
+
+            var otherX = en.GetCenterPos().X;
+            var otherY = en.GetCenterPos().Y;
+
+            return Math.Atan2(otherY - selfY, otherX - selfX) * (180 / Math.PI);
+        }
+
+        public double CalculateDistanceTo(Entity en)
+        {
+            var selfX = GetCenterPos().X;
+            var selfY = GetCenterPos().Y;
+
+            var otherX = en.GetCenterPos().X;
+            var otherY = en.GetCenterPos().Y;
+
+            var a = Math.Pow(otherX - selfX, 2);
+            var b = Math.Pow(otherY - selfY, 2);
+
+            return Math.Sqrt(a + b);
+        }
+
+        private void DrawCasterIndicator(int castRange)
+        {
+            if (Globals.Me == null || Globals.Me.Id == Id)
+            {
+                return;
+            }
+
+            var angle = Globals.Me.CalculateDirectionTo(this);
+            var texture = Globals.ContentManager.GetTexture(TextureType.Misc, "caster_indicator.png");
+            var width = texture.GetWidth() / IndicatorFrames;
+            var height = texture.GetHeight();
+            
+            var x = Globals.Me.GetCenterPos().X - (width / 2);
+            var y = Globals.Me.GetCenterPos().Y;
+
+            if (Timing.Global.Milliseconds > LastFlash)
+            {
+                LastFlash = Timing.Global.Milliseconds + 150;
+                IndicatorFlash = !IndicatorFlash;
+            }
+
+            // Add 1 to cast range here as just a simple error buffer, since center point isn't exact
+            var maxCastingDistance = (castRange + 1) * Options.Map.TileWidth; 
+            var distanceBetween = CalculateDistanceTo(Globals.Me);
+            var alpha = 255 - (int)Math.Round((distanceBetween / maxCastingDistance) * 255f);
+
+            // Cap alpha values to prevent opacity jitter
+            switch (alpha)
+            {
+                case var _ when alpha >= 150:
+                    alpha = 255;
+                    break;
+                case var _ when alpha >= 20:
+                    alpha = 185;
+                    break;
+                case var _ when alpha < 20 && alpha > 0:
+                    alpha = 115;
+                    break;
+                default:
+                    alpha = 0;
+                    break;
+            }
+
+            var rcos = IndicatorRadius * Math.Cos(angle * (Math.PI / 180.0));
+            var rsin = IndicatorRadius * Math.Sin(angle * (Math.PI / 180.0));
+            var xPos = x + rcos;
+            var yPos = y + rsin;
+
+            var frame = Convert.ToInt32(IndicatorFlash);
+            Graphics.DrawGameTexture(
+               texture, new FloatRect(width * frame, 0, width, height),
+               new FloatRect((float)xPos, (float)yPos, width, height), new Color(alpha, 255, 255, 255),
+               rotationDegrees: (float)angle
+           );
+        }
+
+        private static void DrawSpellIcon(int x, int y, string icon)
+        {
+            var backgroundTex = Globals.ContentManager.GetTexture(TextureType.Misc, "spellcast.png");
+            var texture = Globals.ContentManager.GetTexture(TextureType.Spell, icon);
+            var iconWidth = 40;
+            var iconHeight = 40;
+
+            var iconX = x - iconWidth * 2;
+            var iconY = y - iconHeight / 2;
+
+            // Draw BG
+            Graphics.DrawGameTexture(
+                backgroundTex, new FloatRect(0, 0, backgroundTex.GetWidth(), backgroundTex.GetHeight()),
+                new FloatRect(iconX, iconY, iconWidth, iconHeight), Color.White
+            );
+
+            Graphics.DrawGameTexture(
+                texture, new FloatRect(0, 0, texture.GetWidth(), texture.GetHeight()),
+                new FloatRect(iconX + 4, iconY + 4, 32, 32), Color.White
+            );
         }
     }
 }

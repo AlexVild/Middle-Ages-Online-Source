@@ -513,7 +513,7 @@ namespace Intersect.Client.Networking
                 packet.Type == ChatMessageType.Trading ||
                 packet.Type == ChatMessageType.Quest)
             {
-                Interface.Interface.GameUi.NotifyChat();
+                Interface.Interface.GameUi?.NotifyChat();
             }
 
             ChatboxMsg.AddMessage(
