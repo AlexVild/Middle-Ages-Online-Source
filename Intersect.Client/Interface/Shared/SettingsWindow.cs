@@ -41,6 +41,8 @@ namespace Intersect.Client.Interface.Shared
         private readonly ScrollControl mAudioSettingsContainer;
 
         private readonly ScrollControl mKeybindingSettingsContainer;
+        
+        private readonly ScrollControl mKeybindingOptionsContainer;
 
         // Tabs.
         private readonly Button mGameSettingsTab;
@@ -101,6 +103,10 @@ namespace Intersect.Client.Interface.Shared
 
         private readonly Dictionary<Control, Button[]> mKeybindingBtns = new Dictionary<Control, Button[]>();
 
+        private readonly LabeledCheckBox mClassicModeCheckbox;
+
+        private readonly Label mClassicModeControlLabel;
+
         // Game settings
         private readonly LabeledCheckBox mTapToTurnCheckbox;
 
@@ -127,6 +133,8 @@ namespace Intersect.Client.Interface.Shared
         private readonly LabeledCheckBox mAttackCancelCheckbox;
         
         private readonly LabeledCheckBox mEnterCombatOnTargetCheckbox;
+        
+        private readonly LabeledCheckBox mChangeTargetCheckbox;
 
         // Open settings
         private bool mReturnToMenu;
@@ -231,6 +239,12 @@ namespace Intersect.Client.Interface.Shared
             {
                 Text = Strings.Settings.EnterCombatOnTarget
             };
+
+            mChangeTargetCheckbox = new LabeledCheckBox(mGameSettingsContainer, "ChangeTargetCheckbox")
+            {
+                Text = Strings.Settings.ChangeTarget
+            };
+            
             // TODO: Place our configurable gameplay related settings into their respective container for initialization here!
 
             #endregion
@@ -336,13 +350,20 @@ namespace Intersect.Client.Interface.Shared
             
             // KeybindingSettings Get Stored in the KeybindingSettings Scroll Control
             mKeybindingSettingsContainer = new ScrollControl(mSettingsPanel, "KeybindingSettingsContainer");
+            mKeybindingOptionsContainer = new ScrollControl(mSettingsPanel, "KeybindingOptionsContainer");
             mKeybindingSettingsContainer.EnableScroll(false, true);
 
             // Keybinding Settings - Restore Default Keys Button.
             mKeybindingRestoreBtn = new Button(mSettingsPanel, "KeybindingsRestoreBtn");
             mKeybindingRestoreBtn.Text = Strings.Settings.Restore;
             mKeybindingRestoreBtn.Clicked += KeybindingsRestoreBtn_Clicked;
+            mKeybindingOptionsContainer.EnableScroll(false, false);
 
+            mClassicModeCheckbox = new LabeledCheckBox(mKeybindingOptionsContainer, "ClassicModeCheckbox")
+            {
+                Text = Strings.Settings.ClassicMode
+            };
+            mClassicModeCheckbox.CheckChanged += ClassicModeCheck_Clicked;
             // Keybinding Settings - Controls 
             var row = 0;
             var defaultFont = GameContentManager.Current?.GetFont("sourcesansproblack", 16);
@@ -350,13 +371,25 @@ namespace Intersect.Client.Interface.Shared
             {
                 var offset = row * 32;
                 var name = Enum.GetName(typeof(Control), control)?.ToLower();
-                
-                var label = new Label(mKeybindingSettingsContainer, $"Control{Enum.GetName(typeof(Control), control)}Label");
-                if (!Strings.Controls.controldict.ContainsKey(name))
+
+
+                Label label;
+                if (control == Control.FaceTarget)
+                {
+                    mClassicModeControlLabel = new Label(mKeybindingSettingsContainer, $"Control{Enum.GetName(typeof(Control), control)}Label");
+                    mClassicModeControlLabel.Text = Globals.Database.ClassicMode ? Strings.Controls.FaceTarget : Strings.Controls.CombatMode;
+                    label = mClassicModeControlLabel;
+                }
+                else if (!Strings.Controls.controldict.ContainsKey(name))
                 {
                     continue;
                 }
-                label.Text = Strings.Controls.controldict[name];
+                else
+                {
+                    label = new Label(mKeybindingSettingsContainer, $"Control{Enum.GetName(typeof(Control), control)}Label");
+                    label.Text = Strings.Controls.controldict[name];
+                }
+
                 label.AutoSizeToContents = true;
                 label.Font = defaultFont;
                 label.SetBounds(8, 8 + offset, 0, 24);
@@ -412,9 +445,12 @@ namespace Intersect.Client.Interface.Shared
                 mVideoSettingsContainer.Hide();
                 mAudioSettingsContainer.Hide();
                 mKeybindingSettingsContainer.Hide();
+                mKeybindingOptionsContainer.Hide();
                 
                 // Restore Default KeybindingSettings Button.
                 mKeybindingRestoreBtn.Hide();
+
+                ReloadControlType(mClassicModeCheckbox.IsChecked);
             }
         }
 
@@ -434,7 +470,8 @@ namespace Intersect.Client.Interface.Shared
                 mVideoSettingsContainer.Show();
                 mAudioSettingsContainer.Hide();
                 mKeybindingSettingsContainer.Hide();
-                
+                mKeybindingOptionsContainer.Hide();
+
                 // Restore Default KeybindingSettings Button.
                 mKeybindingRestoreBtn.Hide();
             }
@@ -456,7 +493,8 @@ namespace Intersect.Client.Interface.Shared
                 mVideoSettingsContainer.Hide();
                 mAudioSettingsContainer.Show();
                 mKeybindingSettingsContainer.Hide();
-                
+                mKeybindingOptionsContainer.Hide();
+
                 // Restore Default KeybindingSettings Button.
                 mKeybindingRestoreBtn.Hide();
             }
@@ -478,6 +516,7 @@ namespace Intersect.Client.Interface.Shared
                 mVideoSettingsContainer.Hide();
                 mAudioSettingsContainer.Hide();
                 mKeybindingSettingsContainer.Show();
+                mKeybindingOptionsContainer.Show();
 
                 // Restore Default KeybindingSettings Button.
                 mKeybindingRestoreBtn.Show();
@@ -498,6 +537,8 @@ namespace Intersect.Client.Interface.Shared
                         Strings.Keys.keydict[
                             Enum.GetName(typeof(Keys), mKeybindingEditControls.ControlMapping[control].Key2).ToLower()];
                 }
+
+                ReloadControlType(mClassicModeCheckbox.IsChecked);
             }
         }
 
@@ -511,6 +552,7 @@ namespace Intersect.Client.Interface.Shared
             mVideoSettingsContainer.Hide();
             mAudioSettingsContainer.Hide();
             mKeybindingSettingsContainer.Hide();
+            mKeybindingOptionsContainer.Hide();
 
             // Tabs.
             mGameSettingsTab.Show();
@@ -667,6 +709,7 @@ namespace Intersect.Client.Interface.Shared
             mDisplayPlayerNamesCheckbox.IsChecked = Globals.Database.DisplayPlayerNames;
             mAttackCancelCheckbox.IsChecked = Globals.Database.AttackCancelsCast;
             mEnterCombatOnTargetCheckbox.IsChecked = Globals.Database.EnterCombatOnTarget;
+            mChangeTargetCheckbox.IsChecked = Globals.Database.ChangeTargetOnDeath;
 
             // Video Settings.
             mAutoCloseWindowsCheckbox.IsChecked = Globals.Database.HideOthersOnWindowOpen;
@@ -679,6 +722,10 @@ namespace Intersect.Client.Interface.Shared
             mSoundSlider.Value = Globals.Database.SoundVolume;
             mMusicLabel.Text = Strings.Settings.MusicVolume.ToString((int) mMusicSlider.Value);
             mSoundLabel.Text = Strings.Settings.SoundVolume.ToString((int) mSoundSlider.Value);
+
+            // Keybinding settings
+            mClassicModeCheckbox.IsChecked = Globals.Database.ClassicMode;
+            ReloadControlType(Globals.Database.ClassicMode);
 
             // Settings Window is not hidden anymore.
             mSettingsPanel.Show();
@@ -767,6 +814,18 @@ namespace Intersect.Client.Interface.Shared
             }
         }
 
+
+        private void ClassicModeCheck_Clicked(Base control, EventArgs args)
+        {
+            ReloadControlType(mClassicModeCheckbox.IsChecked);
+        }
+
+        private void ReloadControlType(bool classicControls)
+        {
+            mEnterCombatOnTargetCheckbox.IsDisabled = classicControls;
+            mClassicModeControlLabel.Text = classicControls ? Strings.Controls.FaceTarget : Strings.Controls.CombatMode;
+        }
+
         private void SettingsApplyBtn_Clicked(Base sender, ClickedEventArgs arguments)
         {
             var shouldReset = false;
@@ -837,6 +896,10 @@ namespace Intersect.Client.Interface.Shared
             Globals.Database.DisplayNpcNames = mDisplayNPCNamesCheckbox.IsChecked;
             Globals.Database.AttackCancelsCast = mAttackCancelCheckbox.IsChecked;
             Globals.Database.EnterCombatOnTarget = mEnterCombatOnTargetCheckbox.IsChecked;
+            Globals.Database.ChangeTargetOnDeath = mChangeTargetCheckbox.IsChecked;
+
+            // Save keybinding settings
+            Globals.Database.ClassicMode = mClassicModeCheckbox.IsChecked;
 
             if (shouldReset)
             {

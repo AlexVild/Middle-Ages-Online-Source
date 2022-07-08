@@ -198,6 +198,11 @@ namespace Intersect.Client.Core
                                         break;
 
                                     case Control.Enter:
+                                        if (Interface.Interface.GameUi.ChatIsHidden())
+                                        {
+                                            Interface.Interface.GameUi.OpenQuickChat();
+                                        }
+
                                         if (canFocusChat)
                                         {
                                             Interface.Interface.GameUi.FocusChat = true;
@@ -375,11 +380,15 @@ namespace Intersect.Client.Core
                 return;
             }
 
-            if (Controls.Controls.ControlHasKey(Control.FaceTarget, key) && Globals.Me.ToggleCombatMode())
+            if (Controls.Controls.ControlHasKey(Control.FaceTarget, key))
             {
-                if (Globals.Me.TryFaceTarget(false, true))
+                if (Globals.Database.ClassicMode && Globals.Me.TryFaceTarget(false, true))
                 {
                     return;
+                }
+                else if (!Globals.Database.ClassicMode)
+                {
+                    Globals.Me.ToggleCombatMode();
                 }
             }
 

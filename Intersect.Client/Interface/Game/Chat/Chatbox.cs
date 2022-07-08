@@ -36,6 +36,10 @@ namespace Intersect.Client.Interface.Game.Chat
 
         private Button mChatboxSendButton;
 
+        private Button mChatboxHideButton;
+
+        private Button mChatboxShowButton;
+
         private Label mChatboxText;
 
         private Label mChatboxTitle;
@@ -48,6 +52,8 @@ namespace Intersect.Client.Interface.Game.Chat
         //Window Controls
         private ImagePanel mChatboxWindow;
 
+        private ImagePanel mChatboxHiddenWindow;
+
         private GameInterface mGameUi;
 
         private long mLastChatTime = -1;
@@ -55,6 +61,15 @@ namespace Intersect.Client.Interface.Game.Chat
         private int mMessageIndex;
 
         private bool mReceivedMessage;
+
+        private bool mChatHidden;
+
+        private long mQuickChatNotificationCooldown;
+
+        public bool GetChatHidden()
+        {
+            return mChatHidden;
+        }
 
         /// <summary>
         /// Defines which chat tab we are currently looking at.
@@ -74,6 +89,14 @@ namespace Intersect.Client.Interface.Game.Chat
             { ChatboxTab.System, 0 },
         };
 
+        private bool mChatMessageAwaiting { get; set; }
+
+        private long mLastMessageFlash;
+
+        private bool mIsFlashing;
+
+        private bool mHideAfterSending;
+
         //Init
         public Chatbox(Canvas gameCanvas, GameInterface gameUi)
         {
@@ -81,6 +104,7 @@ namespace Intersect.Client.Interface.Game.Chat
 
             //Chatbox Window
             mChatboxWindow = new ImagePanel(gameCanvas, "ChatboxWindow");
+            mChatboxHiddenWindow = new ImagePanel(gameCanvas, "ChatboxHiddenWindow");
             mChatboxMessages = new ListBox(mChatboxWindow, "MessageList");
             mChatboxMessages.EnableScroll(false, true);
             mChatboxWindow.ShouldCacheToTexture = true;
@@ -139,9 +163,19 @@ namespace Intersect.Client.Interface.Game.Chat
             mChatboxSendButton = new Button(mChatboxWindow, "ChatboxSendButton");
             mChatboxSendButton.Text = Strings.Chatbox.send;
             mChatboxSendButton.Clicked += ChatBoxSendBtn_Clicked;
+            
+            mChatboxHideButton = new Button(mChatboxHiddenWindow, "ChatboxHideButton");
+            mChatboxHideButton.Clicked += ChatBoxHideToggle_Clicked;
+            mChatboxHideButton.SetToolTipText(Strings.Chatbox.hide);
+            
+            mChatboxShowButton = new Button(mChatboxHiddenWindow, "ChatboxShowButton");
+            mChatboxShowButton.Clicked += ChatBoxHideToggle_Clicked;
+            mChatboxShowButton.SetToolTipText(Strings.Chatbox.show);
 
+            mChatboxHiddenWindow.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
             mChatboxWindow.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
 
+            mChatboxShowButton.Hide();
             mChatboxText.IsHidden = true;
 
             // Disable this to start, since this is the default tab we open the client on.
@@ -232,16 +266,56 @@ namespace Intersect.Client.Interface.Game.Chat
             }
         }
 
+        public void NewAwaitingMessage()
+        {
+            if (mChatHidden && !mChatMessageAwaiting && Timing.Global.Milliseconds > mQuickChatNotificationCooldown)
+            {
+                mLastMessageFlash = Timing.Global.Milliseconds;
+                mChatMessageAwaiting = true;
+                mChatboxShowButton.SetImage(null, "showchat_hovered.png", Button.ControlState.Normal);
+                mChatboxShowButton.Redraw();
+            }
+        }
+
+        public void QuickShowChat()
+        {
+            mHideAfterSending = true;
+            if (mChatHidden)
+            {
+                ToggleShowChat();
+            }
+        }
+
         //Update
         public void Update()
         {
             if (Globals.Me.InCutscene())
             {
                 mChatboxWindow.Hide();
+                mChatboxHiddenWindow.Hide();
             }
             else
             {
-                mChatboxWindow.Show();
+                mChatboxWindow.IsHidden = mChatHidden;
+                if (!mChatHidden && mChatMessageAwaiting)
+                {
+                    ClearAwaitNotification();
+                }
+                mChatboxHiddenWindow.Show();
+            }
+
+            if (mChatHidden && mChatMessageAwaiting)
+            {
+                var delta = Timing.Global.Milliseconds - mLastMessageFlash;
+                if (delta > 800)
+                {
+                    mIsFlashing = !mIsFlashing;
+                    mLastMessageFlash = Timing.Global.Milliseconds;
+                    var texture = mIsFlashing ? "showchat.png" : "showchat_hovered.png";
+
+                    mChatboxShowButton.SetImage(null, texture, Button.ControlState.Normal);
+                    mChatboxShowButton.Redraw();
+                }
             }
 
             var vScrollBar = mChatboxMessages.GetVerticalScrollBar();
@@ -379,8 +453,41 @@ namespace Intersect.Client.Interface.Game.Chat
             TrySendMessage();
         }
 
+        private void ClearAwaitNotification()
+        {
+            mChatMessageAwaiting = false;
+            mIsFlashing = false;
+            mChatboxShowButton.SetImage(null, "showchat.png", Button.ControlState.Normal);
+            mChatboxShowButton.Redraw();
+        }
+
+        void ChatBoxHideToggle_Clicked(Base sender, ClickedEventArgs arguments)
+        {
+            mHideAfterSending = false;
+            ToggleShowChat();
+        }
+
+        private void ToggleShowChat()
+        {
+            mChatHidden = !mChatHidden;
+            mChatboxShowButton.IsHidden = !mChatHidden;
+            mChatboxHideButton.IsHidden = mChatHidden;
+            if (!mChatHidden)
+            {
+                ClearAwaitNotification();
+            }
+        }
+
         void TrySendMessage()
         {
+            // If we're doing a quick-open, re-close the chat
+            if (mHideAfterSending)
+            {
+                ToggleShowChat();
+                mQuickChatNotificationCooldown = Timing.Global.Milliseconds + 500;
+            }
+            mHideAfterSending = false;
+
             var msg = mChatboxInput.Text.Trim();
             if (string.IsNullOrWhiteSpace(msg) || string.Equals(msg, GetDefaultInputText(), StringComparison.Ordinal))
             {

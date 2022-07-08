@@ -1237,7 +1237,7 @@ namespace Intersect.Client.Entities
             }
         }
 
-        public bool TryAutoTarget(bool onlyAggro, Guid exclude = default)
+        public bool TryAutoTarget(bool onlyAggro, Guid exclude = default, bool dontTryFace = false)
         {
             //Check for taunt status if so don't allow to change target
             for (var i = 0; i < Status.Count; i++)
@@ -1432,7 +1432,10 @@ namespace Intersect.Client.Entities
                 SetTargetBox(currentEntity);
                 TargetIndex = currentEntity.Id;
                 TargetType = 0;
-                TryFaceTarget();
+                if (Globals.Database.ClassicMode && !dontTryFace)
+                {
+                    TryFaceTarget();
+                }
 
                 return true;
             }
@@ -1465,7 +1468,7 @@ namespace Intersect.Client.Entities
             Audio.AddGameSound(Configuration.ClientConfiguration.Instance.TargetSound, false);
             TargetBox?.Show();
 
-            if (!CombatMode && Globals.Database.EnterCombatOnTarget)
+            if (!CombatMode && Globals.Database.EnterCombatOnTarget && !Globals.Database.ClassicMode)
             {
                 var friendlyTarget = false;
                 if (en is Player pl)
@@ -1483,35 +1486,12 @@ namespace Intersect.Client.Entities
 
         public bool TryBlock()
         {
-            /*if (AttackTimer > Timing.Global.Ticks / TimeSpan.TicksPerMillisecond)
-            {
-                return false;
-            }
-
-            if (Options.ShieldIndex > -1 && Globals.Me.MyEquipment[Options.ShieldIndex] > -1)
-            {
-                var item = ItemBase.Get(Globals.Me.Inventory[Globals.Me.MyEquipment[Options.ShieldIndex]].ItemId);
-                if (item != null)
-                {
-                    PacketSender.SendBlock(true);
-                    Blocking = true;
-
-                    return true;
-                }
-            }*/
-
             return false;
         }
 
         public void StopBlocking()
         {
             Blocking = false;
-            //if (Blocking)
-            //{
-                //Blocking = false;
-                //PacketSender.SendBlock(false);
-                //AttackTimer = Timing.Global.Ticks / TimeSpan.TicksPerMillisecond + CalculateAttackTime();
-            //}
         }
 
         public bool TryAttack()
@@ -1923,6 +1903,12 @@ namespace Intersect.Client.Entities
         /// <returns>true if combat mode set to true</returns>
         public bool ToggleCombatMode(bool sound = false)
         {
+            if (Globals.Database.ClassicMode)
+            {
+                TryFaceTarget();
+                return true;
+            }
+
             if (IsBusy() || InVehicle)
             {
                 return false;
@@ -1938,7 +1924,6 @@ namespace Intersect.Client.Entities
                 Audio.AddGameSound("al_combat_end.wav", false);
             }
 
-            TryFaceTarget();
             return CombatMode;
         }
 
@@ -1959,7 +1944,7 @@ namespace Intersect.Client.Entities
             TargetType = -1;
 
             // If we're in combat mode when our target is cleared via entity death, try to grab the next closest aggro target.
-            if (fromDeath && CombatMode && TryAutoTarget(true, entityId))
+            if (fromDeath && (CombatMode || Globals.Database.ClassicMode) && TryAutoTarget(true, entityId, true))
             {
                 return;
             }

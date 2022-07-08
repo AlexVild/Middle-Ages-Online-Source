@@ -507,6 +507,10 @@ namespace Intersect.Client.Localization
 
             public static LocalizedString send = @"Send";
 
+            public static LocalizedString hide = @"Hide chat";
+
+            public static LocalizedString show = @"Show chat";
+
             public static LocalizedString title = @"Chat";
 
             public static LocalizedString toofast = @"You are chatting too fast!";
@@ -631,6 +635,10 @@ namespace Intersect.Client.Localization
                 {"targetparty3", @"Target Party 3:"},
                 {"targetparty4", @"Target Party 4:"},
             };
+
+            public static LocalizedString CombatMode = @"Enter Combat Mode";
+
+            public static LocalizedString FaceTarget = @"Face Target";
 
             public static LocalizedString listening = @"Listening";
 
@@ -1505,6 +1513,9 @@ namespace Intersect.Client.Localization
             public static LocalizedString EnterCombatOnTarget = @"Combat Mode on Target";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ClassicMode = @"Classic Controls";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString FaceOnLock = @"Face Target on Lock";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -1521,6 +1532,9 @@ namespace Intersect.Client.Localization
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString NPCNames = @"Display NPC Names";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ChangeTarget = @"Change Target on Death";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString PartyMembers = @"Highlight Party Members";

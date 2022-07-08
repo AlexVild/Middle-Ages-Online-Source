@@ -49,6 +49,10 @@ namespace Intersect.Client.Framework.Database
 
         public bool EnterCombatOnTarget;
 
+        public bool ChangeTargetOnDeath;
+
+        public bool ClassicMode;
+
         //Saving password, other stuff we don't want in the games directory
         public abstract void SavePreference(string key, object value);
 
@@ -88,7 +92,9 @@ namespace Intersect.Client.Framework.Database
             DisplayNpcNames = LoadPreference("DisplayNpcNames", true);
             DisplayPlayerNames = LoadPreference("DisplayPlayerNames", true);
             AttackCancelsCast = LoadPreference("AttackCancelsCast", true);
-            EnterCombatOnTarget = LoadPreference("EnterCombatOnTarget", true);
+            EnterCombatOnTarget = LoadPreference("EnterCombatOnTarget", false);
+            ChangeTargetOnDeath = LoadPreference("ChangeTargetOnDeath", true);
+            ClassicMode = LoadPreference("ClassicMode", false);
         }
 
         public virtual void SavePreferences()
@@ -113,6 +119,8 @@ namespace Intersect.Client.Framework.Database
             SavePreference("DisplayPlayerNames", DisplayPlayerNames.ToString());
             SavePreference("AttackCancelsCast", AttackCancelsCast.ToString());
             SavePreference("EnterCombatOnTarget", EnterCombatOnTarget.ToString());
+            SavePreference("ChangeTargetOnDeath", ChangeTargetOnDeath.ToString());
+            SavePreference("ClassicMode", ClassicMode.ToString());
         }
 
         public abstract bool LoadConfig();

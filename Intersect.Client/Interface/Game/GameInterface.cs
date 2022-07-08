@@ -296,6 +296,22 @@ namespace Intersect.Client.Interface.Game
             Globals.InCraft = true;
         }
 
+        // Chat
+        public void NotifyChat()
+        {
+            mChatBox.NewAwaitingMessage();
+        }
+
+        public bool ChatIsHidden()
+        {
+            return mChatBox.GetChatHidden();
+        }
+
+        public void OpenQuickChat()
+        {
+            mChatBox.QuickShowChat();
+        }
+
         //Quest Log
         public void NotifyQuestsUpdated()
         {

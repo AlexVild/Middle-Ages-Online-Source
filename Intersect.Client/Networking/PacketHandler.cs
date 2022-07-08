@@ -504,6 +504,18 @@ namespace Intersect.Client.Networking
         //ChatMsgPacket
         public void HandlePacket(IPacketSender packetSender, ChatMsgPacket packet)
         {
+            if (packet.Type == ChatMessageType.Admin ||
+                packet.Type == ChatMessageType.Error ||
+                packet.Type == ChatMessageType.Friend ||
+                packet.Type == ChatMessageType.Global ||
+                packet.Type == ChatMessageType.Local ||
+                packet.Type == ChatMessageType.PM ||
+                packet.Type == ChatMessageType.Trading ||
+                packet.Type == ChatMessageType.Quest)
+            {
+                Interface.Interface.GameUi.NotifyChat();
+            }
+
             ChatboxMsg.AddMessage(
                 new ChatboxMsg(
                     packet.Message ?? "", new Color(packet.Color.A, packet.Color.R, packet.Color.G, packet.Color.B), packet.Type,
