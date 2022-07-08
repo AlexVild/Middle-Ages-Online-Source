@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Linq;
 using Intersect.Client.Core;
 using Intersect.Client.Framework.File_Management;
 using Intersect.Client.Framework.Gwen.Control;
@@ -86,7 +86,7 @@ namespace Intersect.Client.Interface.Game.Crafting
             mLblProduct = new Label(mCraftWindow, "ProductLabel");
             mLblProduct.Text = Strings.Crafting.product;
 
-            //Recepie list
+            //Recipe list
             mRecipes = new ListBox(mCraftWindow, "RecipesList");
 
             //Progress Bar
@@ -387,7 +387,21 @@ namespace Intersect.Client.Interface.Game.Crafting
                 //Load the craft data
                 if (( Globals.ActiveCraftingTable?.Crafts?.Count > 0 && !Refresh ) || resetSelection)
                 {
-                    LoadCraftItems(Globals.ActiveCraftingTable.Crafts[0]);
+                    // Don't initialize on a craft we can't do
+                    var validCrafts = Globals.ActiveCraftingTable.Crafts
+                        .ToList()
+                        .Where(c => !Globals.ActiveCraftingTable.HiddenCrafts.Contains(c))
+                        .ToArray();
+
+                    // if we don't now HAVE any valid crafts...
+                    if (validCrafts.Length <= 0)
+                    {
+                        // End the table
+                        StopCrafting();
+                        Close();
+                    }
+
+                    LoadCraftItems(validCrafts[0]);
                 }
                 mInitialized = true;
                 Refresh = false;
