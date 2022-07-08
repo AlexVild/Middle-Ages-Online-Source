@@ -119,6 +119,7 @@ namespace Intersect.Client.Interface.Game.Inventory
 
         void pnl_HoverLeave(Base sender, EventArgs arguments)
         {
+            Interface.GameUi.FocusedInventory = false;
             mMouseOver = false;
             mMouseX = -1;
             mMouseY = -1;
@@ -135,6 +136,8 @@ namespace Intersect.Client.Interface.Game.Inventory
             {
                 return;
             }
+            
+            Interface.GameUi.FocusedInventory = true;
 
             mMouseOver = true;
             mCanDrag = true;

@@ -1909,7 +1909,7 @@ namespace Intersect.Client.Entities
                 return true;
             }
 
-            if (IsBusy() || InVehicle)
+            if (IsBusy() || InVehicle || Interface.Interface.GameUi.FocusedInventory)
             {
                 return false;
             }

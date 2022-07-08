@@ -26,6 +26,8 @@ namespace Intersect.Client.Interface.Game
 
         public bool UnfocusChat;
 
+        public bool FocusedInventory;
+
         public bool ChatFocussed => mChatBox.HasFocus;
 
         //Public Components - For clicking/dragging
