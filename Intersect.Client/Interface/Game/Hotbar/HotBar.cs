@@ -58,6 +58,15 @@ namespace Intersect.Client.Interface.Game.Hotbar
 
         public void Update()
         {
+            if (Globals.Me.InCutscene())
+            {
+                HotbarWindow.Hide();
+            }
+            else
+            {
+                HotbarWindow.Show();
+            }
+
             if (Globals.Me == null)
             {
                 return;

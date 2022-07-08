@@ -1628,6 +1628,11 @@ namespace Intersect.Client.Networking
             }
         }
 
+        public void HandlePacket(IPacketSender packetSender, CraftStatusPacket packet)
+        {
+            Interface.Interface.GameUi.UpdateCraftStatus(packet.AmountRemaining);
+        }
+
         //BankPacket
         public void HandlePacket(IPacketSender packetSender, BankPacket packet)
         {

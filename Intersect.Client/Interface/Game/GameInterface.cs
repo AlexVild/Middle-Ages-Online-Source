@@ -271,6 +271,14 @@ namespace Intersect.Client.Interface.Game
             mShouldUpdateCraftingTable = true;
         }
 
+        public void UpdateCraftStatus(int amount)
+        {
+            if (mCraftingWindow != null && mCraftingWindow.IsVisible())
+            {
+                mCraftingWindow.ReceiveStatusUpdate(amount);
+            }
+        }
+
         public void NotifyCloseCraftingTable()
         {
             mShouldCloseCraftingTable = true;

@@ -154,6 +154,15 @@ namespace Intersect.Client.Interface.Game
         //Methods
         public void Update(bool updateQuestLog)
         {
+            if (Globals.Me.InCutscene())
+            {
+                mMenuContainer.Hide();
+            }
+            else
+            {
+                mMenuContainer.Show();
+            }
+
             if (Globals.Me.StatPoints > 0 && !mCharacterWindow.IsVisible())
             {
                 var time = Timing.Global.Milliseconds;

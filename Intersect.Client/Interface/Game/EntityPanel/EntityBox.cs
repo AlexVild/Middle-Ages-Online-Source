@@ -409,6 +409,15 @@ namespace Intersect.Client.Interface.Game.EntityPanel
             //Update the event/entity face.
             UpdateImage();
 
+            if (Globals.Me.InCutscene())
+            {
+                EntityWindow.Hide();
+            }
+            else
+            {
+                EntityWindow.Show();
+            }
+
             IsHidden = true;
             if (EntityType != EntityTypes.Event)
             {

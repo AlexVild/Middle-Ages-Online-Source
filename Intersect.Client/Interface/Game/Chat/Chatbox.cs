@@ -235,6 +235,15 @@ namespace Intersect.Client.Interface.Game.Chat
         //Update
         public void Update()
         {
+            if (Globals.Me.InCutscene())
+            {
+                mChatboxWindow.Hide();
+            }
+            else
+            {
+                mChatboxWindow.Show();
+            }
+
             var vScrollBar = mChatboxMessages.GetVerticalScrollBar();
             var scrollAmount = vScrollBar.ScrollAmount;
             var scrollBarVisible = vScrollBar.ContentSize > mChatboxMessages.Height;

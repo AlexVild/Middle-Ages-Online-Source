@@ -232,9 +232,9 @@ namespace Intersect.Client.Networking
             Network.SendPacket(new SwapBankItemsPacket(slot1, slot2));
         }
 
-        public static void SendCraftItem(Guid id)
+        public static void SendCraftItem(Guid id, int amount)
         {
-            Network.SendPacket(new CraftItemPacket(id));
+            Network.SendPacket(new CraftItemPacket(id, amount));
         }
 
         public static void SendPartyInvite(Guid targetId)

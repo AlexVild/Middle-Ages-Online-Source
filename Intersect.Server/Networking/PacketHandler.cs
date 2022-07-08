@@ -1916,6 +1916,7 @@ namespace Intersect.Server.Networking
             }
 
             player.CraftId = packet.CraftId;
+            player.CraftAmount = packet.Amount;
             player.CraftTimer = Timing.Global.Milliseconds;
         }
 

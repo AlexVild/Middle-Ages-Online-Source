@@ -524,6 +524,7 @@ namespace Intersect.Server.Entities
             QuestOffers.Clear();
             CraftingTableId = Guid.Empty;
             CraftId = Guid.Empty;
+            CraftAmount = 0;
             CraftTimer = 0;
             PartyRequester = null;
             PartyRequests.Clear();
@@ -588,6 +589,56 @@ namespace Intersect.Server.Entities
             Dispose();
         }
 
+        private void StopCrafting()
+        {
+            CraftId = Guid.Empty;
+            CraftAmount = 0;
+            PacketSender.SendCraftingStatusPacket(this, 0);
+        }
+
+        private void ContinueCrafting()
+        {
+            CraftTimer = Timing.Global.Milliseconds;
+            PacketSender.SendCraftingStatusPacket(this, CraftAmount);
+        }
+
+        private void UpdateCrafting(long timeMs)
+        {
+            // Is it time to give the player the crafted item?
+            if (CraftTimer + CraftBase.Get(CraftId).Time < timeMs)
+            {
+                // Try to give the player the item
+                if (TryCraftItem(CraftId))
+                {
+                    // Update their craft amount
+                    CraftAmount = MathHelper.Clamp(CraftAmount - 1, 0, int.MaxValue);
+                    // If we've crafted all we've requested, we're done!
+                    if (CraftAmount == 0)
+                    {
+                        StopCrafting();
+                    }
+                    // Otherwise, start the timer again for the next craft
+                    else
+                    {
+                        ContinueCrafting();
+                    }
+                }
+                else
+                {
+                    // If we couldn't craft the item, stop crafting
+                    StopCrafting();
+                }
+            }
+            else
+            {
+                // If at any point we can't craft the item anymore, cancel crafting
+                if (!CheckCrafting(CraftId))
+                {
+                    StopCrafting();
+                }
+            }
+        }
+
         //Update
         public override void Update(long timeMs)
         {
@@ -624,27 +675,10 @@ namespace Intersect.Server.Entities
                         }
                     }
 
-                    if (CraftingTableId != Guid.Empty && CraftId != Guid.Empty)
+                    // Are we craftin'?
+                    if (IsCrafting)
                     {
-                        var b = CraftingTableBase.Get(CraftingTableId);
-                        if (b.Crafts.Contains(CraftId))
-                        {
-                            if (CraftTimer + CraftBase.Get(CraftId).Time < timeMs)
-                            {
-                                CraftItem(CraftId);
-                            }
-                            else
-                            {
-                                if (!CheckCrafting(CraftId))
-                                {
-                                    CraftId = Guid.Empty;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            CraftId = Guid.Empty;
-                        }
+                        UpdateCrafting(timeMs);
                     }
 
                     // Check if the resource we're locked to has died - if so, alert client
@@ -4080,23 +4114,16 @@ namespace Intersect.Server.Entities
             return table.HiddenCrafts.Count < table.Crafts.Count;
         }
 
-        //Craft a new item
-        public void CraftItem(Guid id)
+        /// <summary>
+        /// Creates a dictionary containing item IDs and their quantities
+        /// </summary>
+        /// <param name="items">A <see cref="List{InventorySlot}"/>containing inventory items</param>
+        /// <returns>A <see cref="Dictionary{Guid, int}"/> containing item IDs and their quantities within the 
+        /// given list of inventory slots</returns>
+        private static Dictionary<Guid, int> GetAllItemsAndQuantities(List<InventorySlot> items)
         {
-            if (CraftingTableId == default)
-            {
-                return;
-            }
-
-            var invbackup = new List<Item>();
-            foreach (var item in Items)
-            {
-                invbackup.Add(item.Clone());
-            }
-
-            //Quickly Look through the inventory and create a catalog of what items we have, and how many
             var itemdict = new Dictionary<Guid, int>();
-            foreach (var item in Items)
+            foreach (var item in items)
             {
                 if (item != null)
                 {
@@ -4111,120 +4138,19 @@ namespace Intersect.Server.Entities
                 }
             }
 
-            //Check the player actually has the items
-            foreach (var c in CraftBase.Get(id).Ingredients)
-            {
-                if (itemdict.ContainsKey(c.ItemId))
-                {
-                    if (itemdict[c.ItemId] >= c.Quantity)
-                    {
-                        itemdict[c.ItemId] -= c.Quantity;
-                    }
-                    else
-                    {
-                        CraftId = Guid.Empty;
-
-                        return;
-                    }
-                }
-                else
-                {
-                    CraftId = Guid.Empty;
-
-                    return;
-                }
-            }
-
-            //Take the items
-            foreach (var c in CraftBase.Get(id).Ingredients)
-            {
-                if (!TryTakeItem(c.ItemId, c.Quantity))
-                {
-                    for (var i = 0; i < invbackup.Count; i++)
-                    {
-                        Items[i].Set(invbackup[i]);
-                    }
-
-                    PacketSender.SendInventory(this);
-                    CraftId = Guid.Empty;
-
-                    return;
-                }
-            }
-
-            //Give them the craft
-            var quantity = Math.Max(CraftBase.Get(id).Quantity, 1);
-            var itm = ItemBase.Get(CraftBase.Get(id).ItemId);
-            if (itm == null || !itm.IsStackable)
-            {
-                quantity = 1;
-            }
-
-            if (TryGiveItem(CraftBase.Get(id).ItemId, quantity))
-            {
-                CraftId = Guid.Empty;
-                var craftedItem = CraftBase.Get(id);
-                String itemName = ItemBase.GetName(craftedItem.ItemId);
-                PacketSender.SendChatMsg(
-                    this, Strings.Crafting.crafted.ToString(itemName), ChatMessageType.Crafting,
-                    CustomColors.Alerts.Success
-                );
-                    
-                // Update our record of how many of this item we've crafted
-                int recordCrafted = IncrementRecord(RecordType.ItemCrafted, id);
-                if (Options.SendCraftingRecordUpdates && recordCrafted % Options.CraftingRecordUpdateInterval == 0)
-                {
-                    SendRecordUpdate(Strings.Records.itemcrafted.ToString(recordCrafted, itemName));
-                }
-                GiveInspiredExperience(craftedItem.Experience);
-
-                if (CraftBase.Get(id).Event != null)
-                    StartCommonEvent(craftedItem.Event);
-            }
-            else
-            {
-                CraftId = Guid.Empty;
-                for (var i = 0; i < invbackup.Count; i++)
-                {
-                    Items[i].Set(invbackup[i]);
-                }
-
-                PacketSender.SendInventory(this);
-                PacketSender.SendChatMsg(
-                    this, Strings.Crafting.nospace.ToString(ItemBase.GetName(CraftBase.Get(id).ItemId)), ChatMessageType.Crafting,
-                    CustomColors.Alerts.Error
-                );
-            }
+            return itemdict;
         }
 
-        public bool CheckCrafting(Guid id)
+        private bool CheckHasCraftIngredients(Guid craftId, Dictionary<Guid, int> itemsAndQuantities)
         {
-            //See if we have lost the items needed for our current craft, if so end the crafting session
-            //Quickly Look through the inventory and create a catalog of what items we have, and how many
-            var itemdict = new Dictionary<Guid, int>();
-            foreach (var item in Items)
+            var craft = CraftBase.Get(craftId);
+            foreach (var ingredient in craft.Ingredients)
             {
-                if (item != null)
+                if (itemsAndQuantities.ContainsKey(ingredient.ItemId))
                 {
-                    if (itemdict.ContainsKey(item.ItemId))
+                    if (itemsAndQuantities[ingredient.ItemId] >= ingredient.Quantity)
                     {
-                        itemdict[item.ItemId] += item.Quantity;
-                    }
-                    else
-                    {
-                        itemdict.Add(item.ItemId, item.Quantity);
-                    }
-                }
-            }
-
-            //Check the player actually has the items
-            foreach (var c in CraftBase.Get(id).Ingredients)
-            {
-                if (itemdict.ContainsKey(c.ItemId))
-                {
-                    if (itemdict[c.ItemId] >= c.Quantity)
-                    {
-                        itemdict[c.ItemId] -= c.Quantity;
+                        itemsAndQuantities[ingredient.ItemId] -= ingredient.Quantity;
                     }
                     else
                     {
@@ -4238,6 +4164,124 @@ namespace Intersect.Server.Entities
             }
 
             return true;
+        }
+
+        //Craft a new item
+        public bool TryCraftItem(Guid id)
+        {
+            // If we suddenly can't craft for any reason, abort
+            if (!CheckCrafting(id))
+            {
+                return false;
+            }
+
+            // Make a backup of inventory items in case things go sour
+            var invbackup = new List<Item>();
+            foreach (var item in Items)
+            {
+                invbackup.Add(item.Clone());
+            }
+
+            var craft = CraftBase.Get(id);
+
+            //Take the items
+            foreach (var c in craft.Ingredients)
+            {
+                // If we fail to take any of the items...
+                if (!TryTakeItem(c.ItemId, c.Quantity))
+                {
+                    // Refund the backups
+                    for (var i = 0; i < invbackup.Count; i++)
+                    {
+                        Items[i].Set(invbackup[i]);
+                    }
+
+                    // and alert the client
+                    PacketSender.SendInventory(this);
+
+                    return false;
+                }
+            }
+
+            //Give them the craft
+            var quantity = Math.Max(craft.Quantity, 1);
+            var itm = ItemBase.Get(craft.ItemId);
+            if (itm == null || !itm.IsStackable)
+            {
+                quantity = 1;
+            }
+
+            if (TryGiveItem(craft.ItemId, quantity))
+            {
+                // Tell the player about their new craft!
+                string itemName = ItemBase.GetName(craft.ItemId);
+                PacketSender.SendChatMsg(
+                    this, Strings.Crafting.crafted.ToString(itemName), ChatMessageType.Crafting,
+                    CustomColors.Alerts.Success
+                );
+                    
+                // Update our record of how many of this item we've crafted
+                int recordCrafted = IncrementRecord(RecordType.ItemCrafted, id);
+                if (Options.SendCraftingRecordUpdates && recordCrafted % Options.CraftingRecordUpdateInterval == 0)
+                {
+                    SendRecordUpdate(Strings.Records.itemcrafted.ToString(recordCrafted, itemName));
+                }
+
+                // Give inspiration exp
+                GiveInspiredExperience(craft.Experience);
+
+                // Start any related common events
+                if (CraftBase.Get(id).Event != null)
+                {
+                    StartCommonEvent(craft.Event);
+                }
+
+                return true;
+            }
+            else
+            {
+                // Refund
+                for (var i = 0; i < invbackup.Count; i++)
+                {
+                    Items[i].Set(invbackup[i]);
+                }
+
+                // Tell the player the tragic story
+                PacketSender.SendInventory(this);
+                PacketSender.SendChatMsg(
+                    this, Strings.Crafting.nospace.ToString(ItemBase.GetName(CraftBase.Get(id).ItemId)), ChatMessageType.Crafting,
+                    CustomColors.Alerts.Error
+                );
+
+                return false;
+            }
+        }
+
+        public bool CheckCrafting(Guid id)
+        {
+            if (CraftingTableId == default || id == default)
+            {
+                return false;
+            }
+
+            var table = CraftingTableBase.Get(CraftingTableId);
+            if (!table.Crafts.Contains(id))
+            {
+                return false;
+            }
+
+            var craft = CraftBase.Get(id);
+            // Make sure crafting requirements are still met
+            if (!Conditions.MeetsConditionLists(craft.Requirements, this, null))
+            {
+                return false;
+            }
+
+            // Quickly look through the inventory and create a catalog of what items we have, and how many
+            var itemsAndQuantities = GetAllItemsAndQuantities(Items);
+
+            //Check the player actually has the items
+            return CheckHasCraftIngredients(id, itemsAndQuantities);
         }
 
         //Business
@@ -7964,8 +8008,12 @@ namespace Intersect.Server.Entities
         [NotMapped, JsonIgnore] public Guid CraftingTableId = Guid.Empty;
 
         [NotMapped, JsonIgnore] public Guid CraftId = Guid.Empty;
+        
+        [NotMapped, JsonIgnore] public int CraftAmount = 0;
 
         [NotMapped, JsonIgnore] public long CraftTimer = 0;
+
+        [NotMapped, JsonIgnore] public bool IsCrafting => CraftingTableId != Guid.Empty && CraftId != Guid.Empty;
 
         #endregion
 

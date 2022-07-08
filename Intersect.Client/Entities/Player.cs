@@ -25,6 +25,7 @@ using Intersect.Client.Items;
 using Intersect.Client.Interface.Game.Chat;
 using Intersect.Config.Guilds;
 using Intersect.Client.Interface.Game.DescriptionWindows;
+using Intersect.GameObjects.Crafting;
 
 namespace Intersect.Client.Entities
 {
@@ -1817,22 +1818,50 @@ namespace Intersect.Client.Entities
 
         }
 
-        public bool DoIfInStatus(List<StatusTypes> statuses, Action action = default)
+        public Dictionary<Guid, int> GetInventoryItemsAndQuantities()
         {
-            bool statusFound = false;
-            for (var n = 0; n < Status.Count; n++)
+            var itemsAndQuantities = new Dictionary<Guid, int>();
+            foreach (var item in Inventory)
             {
-                if (statuses.Contains(Status[n].Type))
+                if (item != null)
                 {
-                    statusFound = true;
-                    if (action != default)
+                    if (itemsAndQuantities.ContainsKey(item.ItemId))
                     {
-                        action();
+                        itemsAndQuantities[item.ItemId] += item.Quantity;
+                    }
+                    else
+                    {
+                        itemsAndQuantities.Add(item.ItemId, item.Quantity);
                     }
                 }
             }
 
-            return statusFound;
+            return itemsAndQuantities;
+        }
+
+        public bool CanCraftItem(Guid craftId)
+        {
+            var inventoryItemsAndQuantities = GetInventoryItemsAndQuantities();
+            foreach (var craft in CraftBase.Get(craftId).Ingredients)
+            {
+                if (inventoryItemsAndQuantities.ContainsKey(craft.ItemId))
+                {
+                    if (inventoryItemsAndQuantities[craft.ItemId] >= craft.Quantity)
+                    {
+                        inventoryItemsAndQuantities[craft.ItemId] -= craft.Quantity;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         /// <summary>

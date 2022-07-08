@@ -39,13 +39,11 @@ namespace Intersect.Client.Interface.Game.Crafting
 
         private Button mCraftAll;
 
-        private Guid mAutoCraftId = Guid.Empty;
-
-        private int mAutoCraftAmount = 0;
-
         private ImagePanel mCraftedItemTemplate;
 
         private Guid mCraftId;
+
+        private int AmountRemaining;
 
         //Controls
         private WindowControl mCraftWindow;
@@ -184,21 +182,7 @@ namespace Intersect.Client.Interface.Game.Crafting
             mValues.Clear();
 
             //Quickly Look through the inventory and create a catalog of what items we have, and how many
-            var itemdict = new Dictionary<Guid, int>();
-            foreach (var item in Globals.Me.Inventory)
-            {
-                if (item != null)
-                {
-                    if (itemdict.ContainsKey(item.ItemId))
-                    {
-                        itemdict[item.ItemId] += item.Quantity;
-                    }
-                    else
-                    {
-                        itemdict.Add(item.ItemId, item.Quantity);
-                    }
-                }
-            }
+            var itemsAndQuantities = Globals.Me.GetInventoryItemsAndQuantities();
 
             var craftableQuantity = -1;
 
@@ -211,9 +195,9 @@ namespace Intersect.Client.Interface.Game.Crafting
                 var lblTemp = new Label(mItems[i].Container, "IngredientItemValue");
 
                 var onHand = 0;
-                if (itemdict.ContainsKey(craft.Ingredients[i].ItemId))
+                if (itemsAndQuantities.ContainsKey(craft.Ingredients[i].ItemId))
                 {
-                    onHand = itemdict[craft.Ingredients[i].ItemId];
+                    onHand = itemsAndQuantities[craft.Ingredients[i].ItemId];
                 }
 
                 lblTemp.Text = onHand + "/" + craft.Ingredients[i].Quantity;
@@ -248,77 +232,47 @@ namespace Intersect.Client.Interface.Game.Crafting
                     );
             }
 
-            //If crafting & we no longer have the items for the craft then stop!
-            if (Crafting)
+            //Update craft buttons!
+            DetermineCraftAllVisibility(craftableQuantity);
+            mCraftAll.UserData = craftableQuantity;
+        }
+
+        private void DetermineCraftAllVisibility(int quantity)
+        {
+            if (quantity > 1)
             {
-                var cancraft = true;
-                foreach (var c in CraftBase.Get(mCraftId).Ingredients)
-                {
-                    if (itemdict.ContainsKey(c.ItemId))
-                    {
-                        if (itemdict[c.ItemId] >= c.Quantity)
-                        {
-                            itemdict[c.ItemId] -= c.Quantity;
-                        }
-                        else
-                        {
-                            cancraft = false;
-
-                            break;
-                        }
-                    }
-                    else
-                    {
-                        cancraft = false;
-
-                        break;
-                    }
-                }
-
-                if (!cancraft)
-                {
-                    Crafting = false;
-                    mCraftWindow.IsClosable = true;
-                    mBar.Width = 0;
-                    ChatboxMsg.AddMessage(new ChatboxMsg(Strings.Crafting.incorrectresources, CustomColors.Alerts.Declined, Enums.ChatMessageType.Crafting));
-
-                    return;
-                }
+                mCraftAll.Show();
+                mCraftAll.SetText(Strings.Crafting.craftall.ToString(quantity.ToString()));
             }
             else
             {
-                var autoCrafting = false;
-
-                //Auto craft if that's what we were doing
-                if (mAutoCraftId != Guid.Empty && mCraftId == mAutoCraftId)
-                {
-                    if (mAutoCraftAmount > 0 && CanCraft())
-                    {
-                        craft_Clicked(null, null);
-                        mAutoCraftAmount--;
-                        autoCrafting = true;
-                    }
-                    else
-                    {
-                        mAutoCraftId = Guid.Empty;
-                    }
-                }
-
-                if (!autoCrafting)
-                {
-                    //Update craft buttons!
-                    if (craftableQuantity > 1)
-                    {
-                        mCraftAll.Show();
-                        mCraftAll.SetText(Strings.Crafting.craftall.ToString(craftableQuantity.ToString()));
-                    }
-                    else
-                    {
-                        mCraftAll.Hide();
-                    }
-                    mCraftAll.UserData = craftableQuantity;
-                }
+                mCraftAll.Hide();
             }
+        }
+
+        private void StopCrafting()
+        {
+            Crafting = false;
+            mCraftWindow.IsClosable = true;
+            mBar.Width = 0;
+            AmountRemaining = 0;
+            PacketSender.SendCraftItem(default, 0);
+        }
+
+        private void StartCrafting(int amountToCraft)
+        {
+            AmountRemaining = amountToCraft;
+            Crafting = true;
+            mBarTimer = Timing.Global.Milliseconds;
+            mCraftWindow.IsClosable = false;
+            mCraftAll.Hide();
+            PacketSender.SendCraftItem(mCraftId, amountToCraft);
+        }
+
+        public void ReceiveStatusUpdate(int amountRemaining)
+        {
+            AmountRemaining = amountRemaining;
+            mBarTimer = Timing.Global.Milliseconds;
         }
 
         public void Close()
@@ -351,78 +305,20 @@ namespace Intersect.Client.Interface.Game.Crafting
             }
         }
 
-        bool CanCraft()
-        {
-            //This shouldn't be client side :(
-            //Quickly Look through the inventory and create a catalog of what items we have, and how many
-            var availableItemQuantities = new Dictionary<Guid, int>();
-            foreach (var item in Globals.Me.Inventory)
-            {
-                if (item != null)
-                {
-                    if (availableItemQuantities.ContainsKey(item.ItemId))
-                    {
-                        availableItemQuantities[item.ItemId] += item.Quantity;
-                    }
-                    else
-                    {
-                        availableItemQuantities.Add(item.ItemId, item.Quantity);
-                    }
-                }
-            }
-
-            var craftDescriptor = CraftBase.Get(mCraftId);
-            var canCraft = craftDescriptor?.Ingredients != null;
-
-            if (canCraft)
-            {
-                foreach (var ingredient in craftDescriptor.Ingredients)
-                {
-                    if (!availableItemQuantities.TryGetValue(ingredient.ItemId, out var availableQuantity))
-                    {
-                        canCraft = false;
-
-                        break;
-                    }
-
-                    if (availableQuantity < ingredient.Quantity)
-                    {
-                        canCraft = false;
-
-                        break;
-                    }
-
-                    availableItemQuantities[ingredient.ItemId] -= ingredient.Quantity;
-                }
-            }
-
-            return canCraft;
-        }
-
-        //Craft the item
-        void craft_Clicked(Base sender, ClickedEventArgs arguments)
+        private void ToggleStartCrafting(int amountToCraft = 1)
         {
             if (Crafting)
             {
-                PacketSender.SendCraftItem(Guid.Empty);
-                Crafting = false;
-                mCraftWindow.IsClosable = true;
-                mBar.Width = 0;
-                mAutoCraftAmount = 0;
-                mAutoCraftId = Guid.Empty;
+                StopCrafting();
 
                 LoadCraftItems(mCraftId);
 
                 return;
             }
-
-            if (CanCraft())
+            
+            if (Globals.Me.CanCraftItem(mCraftId))
             {
-                Crafting = true;
-                mBarTimer = Timing.Global.Milliseconds;
-                PacketSender.SendCraftItem(mCraftId);
-                mCraftWindow.IsClosable = false;
-                mCraftAll.Hide();
+                StartCrafting(amountToCraft);
 
                 return;
             }
@@ -430,20 +326,17 @@ namespace Intersect.Client.Interface.Game.Crafting
             ChatboxMsg.AddMessage(new ChatboxMsg(Strings.Crafting.incorrectresources, CustomColors.Alerts.Declined, Enums.ChatMessageType.Crafting));
         }
 
+        //Craft the item
+        void craft_Clicked(Base sender, ClickedEventArgs arguments)
+        {
+            ToggleStartCrafting(1);
+        }
+
         //Craft all the items
         void craftAll_Clicked(Base sender, ClickedEventArgs arguments)
         {
-            if (CanCraft())
-            {
-                craft_Clicked(null, null);
-                mAutoCraftAmount = (int)mCraftAll.UserData - 1;
-                mAutoCraftId = mCraftId;
-                mCraftAll.Hide();
-            }
-            else
-            {
-                ChatboxMsg.AddMessage(new ChatboxMsg(Strings.Crafting.incorrectresources, CustomColors.Alerts.Declined, Enums.ChatMessageType.Crafting));
-            }
+            var amountToCraft = (int)mCraftAll.UserData;
+            ToggleStartCrafting(amountToCraft);
         }
 
         //Update the crafting bar
@@ -469,7 +362,7 @@ namespace Intersect.Client.Interface.Game.Crafting
 
                     if (Globals.ActiveCraftingTable.HiddenCrafts.Contains(activeCraft.Id))
                     {
-                        if (activeCraft.Id == mCraftId && mAutoCraftAmount == 0)
+                        if (activeCraft.Id == mCraftId)
                         {
                             // The craft the user had seelcted is no longer available - clear it from their selection
                             resetSelection = true;
@@ -544,6 +437,8 @@ namespace Intersect.Client.Interface.Game.Crafting
             );
 
             mBar.Width = Convert.ToInt32(width);
+
+            Crafting = AmountRemaining > 0;
         }
     }
 }

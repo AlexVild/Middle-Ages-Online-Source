@@ -435,8 +435,18 @@ namespace Intersect.Client.Core
             DrawScanlines();
             
             // Start widescreen state-machine for combat mode
-            DrawWideScreen(Globals.ContentManager.GetTexture(GameContentManager.TextureType.Misc, "combatmode.png"), Globals.Me.CombatMode, Color.White,
-                ref mCombatModeState, ref sLastCombatWidthUpdate, ref sCurrentCombatWidth);
+            if (Globals.Me.MapInstance.IsIndoors && Globals.Me.MapInstance.Brightness < 50)
+            {
+                // Use a colored background for low-light areas
+                DrawWideScreen(Globals.ContentManager.GetTexture(GameContentManager.TextureType.Misc, "combatmode.png"), Globals.Me.CombatMode, Color.White,
+                    ref mCombatModeState, ref sLastCombatWidthUpdate, ref sCurrentCombatWidth);
+            }
+            else 
+            {
+                // Use a _black_ background when in lighter areas
+                DrawWideScreen(Globals.ContentManager.GetTexture(GameContentManager.TextureType.Misc, "combatmode.png"), Globals.Me.CombatMode, Color.Black,
+                    ref mCombatModeState, ref sLastCombatWidthUpdate, ref sCurrentCombatWidth);
+            }
 
             // Aaaand for cutscenes (holding player)
             DrawWideScreen(Renderer.GetWhiteTexture(), Globals.Me.InCutscene(), Color.Black,

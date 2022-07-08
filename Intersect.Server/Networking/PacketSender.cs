@@ -2404,6 +2404,11 @@ namespace Intersect.Server.Networking
         {
             player?.SendPacket(new InstanceLivesPacket(clear, amount));
         }
+
+        public static void SendCraftingStatusPacket(Player player, int amountRemaining)
+        {
+            player?.SendPacket(new CraftStatusPacket(amountRemaining));
+        }
     }
 
 }
