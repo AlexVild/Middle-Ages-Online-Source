@@ -1821,13 +1821,9 @@ namespace Intersect.Client.Entities
                     y += 3;
                 }
 
-                var castBackground = Globals.ContentManager.GetTexture(
-                    GameContentManager.TextureType.Misc, "castbackground.png"
-                );
+                var castBackground = Globals.ContentManager.GetTexture(TextureType.Misc, "castbackground.png");
 
-                var castForeground = Globals.ContentManager.GetTexture(
-                    GameContentManager.TextureType.Misc, "castbar.png"
-                );
+                var castForeground = Globals.ContentManager.GetTexture(TextureType.Misc, "castbar.png");
 
                 if (castBackground != null)
                 {
@@ -1845,7 +1841,34 @@ namespace Intersect.Client.Entities
                         new FloatRect((int) (x - width / 2), (int) (y - 1), castFillWidth, 9), Color.White
                     );
                 }
+
+                if (!string.IsNullOrEmpty(castSpell.Icon))
+                {
+                    DrawSpellIcon(x, y, castSpell.Icon);
+                }
             }
+        }
+
+        private static void DrawSpellIcon(int x, int y, string icon)
+        {
+            var backgroundTex = Globals.ContentManager.GetTexture(TextureType.Misc, "spellcast.png");
+            var texture = Globals.ContentManager.GetTexture(TextureType.Spell, icon);
+            var iconWidth = 40;
+            var iconHeight = 40;
+
+            var iconX = x - iconWidth * 2;
+            var iconY = y - iconHeight / 2;
+
+            // Draw BG
+            Graphics.DrawGameTexture(
+                backgroundTex, new FloatRect(0, 0, backgroundTex.GetWidth(), backgroundTex.GetHeight()),
+                new FloatRect(iconX, iconY, iconWidth, iconHeight), Color.White
+            );
+
+            Graphics.DrawGameTexture(
+                texture, new FloatRect(0, 0, texture.GetWidth(), texture.GetHeight()),
+                new FloatRect(iconX + 4, iconY + 4, 32, 32), Color.White
+            );
         }
 
         //
