@@ -1796,6 +1796,7 @@ namespace Intersect.Client.Entities
         {
             if (CastTime < Timing.Global.Milliseconds)
             {
+                SpellCast = default;
                 return;
             }
 
@@ -2381,6 +2382,58 @@ namespace Intersect.Client.Entities
         }
     }
 
+    public partial class Entity
+    {
+        public bool IsAllyOf(Entity en)
+        {
+            if (en == null || CurrentMap == default || en.CurrentMap == default)
+            {
+                return false;
+            }
+
+            var myMap = MapInstance.Get(CurrentMap);
+            var targetMap = MapInstance.Get(en.CurrentMap);
+
+            var entityType = en.GetEntityType();
+            if (entityType == EntityTypes.Resource || entityType == EntityTypes.Event)
+            {
+                return true;
+            }
+
+            if (Id == Globals.Me.Id)
+            {
+                return true;
+            }
+
+            if (en is Player targetPlayer)
+            {
+                // Player V Player
+                if (this is Player me)
+                {
+                    // Always a friend in a safe zone!
+                    if (myMap.ZoneType == MapZones.Safe)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Player {targetPlayer.Name} in {me.Name}'s party: {me.IsInMyParty(targetPlayer.Id)}");
+                        return me.IsInMyParty(targetPlayer.Id) || targetPlayer.IsInMyParty(me.Id) || (!string.IsNullOrEmpty(me.Guild) && me.Guild == targetPlayer.Guild);
+                    }
+                }
+                // Entity V Player
+                else
+                {
+                    return Type != -1;
+                }
+            }
+            else
+            {
+                return Type != -1;
+            }
+        }
+    }
+
     // New drawing functions
     public partial class Entity
     {
@@ -2389,21 +2442,24 @@ namespace Intersect.Client.Entities
         private long LastFlash;
         private const int IndicatorRadius = 48;
         private List<FloatRect> AoeRectangles = new List<FloatRect>();
-        private GameTexture AOE_TEXTURE = Globals.ContentManager.GetTexture(TextureType.Misc, "aoe.png");
         private GameTexture CASTER_INDICATOR_TEXTURE = Globals.ContentManager.GetTexture(TextureType.Misc, "caster_indicator.png");
+        
         private int AoeAlpha = MAX_AOE_ALPHA;
         private int AoeAlphaDir = -1;
         private long AoeAlphaUpdate;
+        private GameTexture AOE_TEXTURE = Globals.ContentManager.GetTexture(TextureType.Misc, "aoe.png");
+        private GameTexture AOE_TEXTURE_NEUTRAL = Globals.ContentManager.GetTexture(TextureType.Misc, "aoe_neutral.png");
+        private GameTexture AOE_TEXTURE_FRIENDLY = Globals.ContentManager.GetTexture(TextureType.Misc, "aoe_heal.png");
 
         public double CalculateDirectionTo(Entity en)
         {
-            var selfTile = GetCurrentTileRectangle();
-            var selfX = selfTile.CenterX;
-            var selfY = selfTile.CenterY;
+            var selfTile = GetCenterPos();
+            var selfX = selfTile.X;
+            var selfY = selfTile.Y;
 
-            var otherTile = en.GetCurrentTileRectangle();
-            var otherX = otherTile.CenterX;
-            var otherY = otherTile.CenterY;
+            var otherTile = en.GetCenterPos();
+            var otherX = otherTile.X;
+            var otherY = otherTile.Y;
 
             return CalculateDirectionToPoint(selfX, selfY, otherX, otherY);
         }
@@ -2489,7 +2545,7 @@ namespace Intersect.Client.Entities
             var frame = Convert.ToInt32(IndicatorFlash);
             Graphics.DrawGameTexture(
                CASTER_INDICATOR_TEXTURE, new FloatRect(width * frame, 0, width, height),
-               new FloatRect((float)xPos, (float)yPos, width, height), new Color(alpha, 255, 255, 255),
+               new FloatRect((float)xPos, (float)yPos, width * 4, height * 4), new Color(alpha, 255, 255, 255),
                rotationDegrees: (float)angle
            );
         }
@@ -2516,10 +2572,10 @@ namespace Intersect.Client.Entities
         }
 
         private const int MAX_AOE_ALPHA = 200;
-        private const int MIN_AOE_ALPHA = 50;
+        private const int MIN_AOE_ALPHA = 125;
         private const int AOE_UPDATE_MS = 100;
-        private const int AOE_UPDATE_AMT = 50;
-        public void DrawAoe(int castRange, MapInstance spawnMap, byte spawnX, byte spawnY, bool friendly)
+        private const int AOE_UPDATE_AMT = 15;
+        public void DrawAoe(SpellBase spell, MapInstance spawnMap, byte spawnX, byte spawnY, bool friendlyAoe)
         {
             AoeRectangles.Clear(); // TODO move this to a smarter spot?
 
@@ -2545,22 +2601,34 @@ namespace Intersect.Client.Entities
             }
             */
 
+            var hitRadius = spell.Combat.HitRadius;
             // The start coordinates are calculated knowing that the AoE spawn is always the center
-            int left = spawnX - castRange;
-            int right = spawnX + castRange;
-            int top = spawnY - castRange;
-            int bottom = spawnY + castRange;
+            int left = spawnX - hitRadius;
+            int right = spawnX + hitRadius;
+            int top = spawnY - hitRadius;
+            int bottom = spawnY + hitRadius;
 
             var spawnRect = GetTileRectangle(spawnMap, spawnX, spawnY);
             var spawnXpxl = spawnRect.X;
             var spawnYpxl = spawnRect.Y;
+
+            // Determine texture
+            var texture = AOE_TEXTURE;
+            if (friendlyAoe)
+            {
+                texture = spell.Combat.Friendly ? AOE_TEXTURE_FRIENDLY : AOE_TEXTURE_NEUTRAL;   
+            }
+            else
+            {
+                texture = spell.Combat.Friendly ? AOE_TEXTURE_NEUTRAL : AOE_TEXTURE;
+            }
 
             for (int y = top; y <= bottom; y++)
             {
                 for (int x = left; x <= right; x++)
                 {
                     var distanceFromCaster = CalculateDistanceToPoint(spawnX, spawnY, x, y);
-                    if (Math.Floor(distanceFromCaster) > castRange)
+                    if (Math.Floor(distanceFromCaster) > hitRadius)
                     {
                         continue;
                     }
@@ -2573,8 +2641,13 @@ namespace Intersect.Client.Entities
                     var tile = GetTileRectangle(currMap, (byte)mapX, (byte)mapY);
 
                     AoeRectangles.Add(tile);
+
+                    if (texture == AOE_TEXTURE) // If we're drawing the "DANGER" texture, give it a light so we can see it in darkness
+                    {
+                        Graphics.AddLight((int)tile.CenterX, (int)tile.CenterY, 100, 200, 1.0f, new Color(255, 222, 124, 112));
+                    }
                     Graphics.DrawGameTexture(
-                        AOE_TEXTURE, new FloatRect(0, 0, AOE_TEXTURE.Width, AOE_TEXTURE.Height),
+                        texture, new FloatRect(0, 0, texture.Width, texture.Height),
                         AoeRectangles.Last(), new Color(AoeAlpha, 255, 255, 255)
                     );
                 }

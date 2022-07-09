@@ -257,13 +257,42 @@ namespace Intersect.Client.Core
                 {
                     foreach (var entity in RenderingEntities[x, y]) 
                     { 
-                        if (entity.SpellCast != default)
+                        if (entity.SpellCast == default || entity.CurrentMap == default)
                         {
-                            var castSpell = SpellBase.Get(entity.SpellCast);
-                            if (castSpell.Combat.TargetType == SpellTargetTypes.AoE && entity.CurrentMap != default)
-                            {
-                                entity.DrawAoe(castSpell.Combat.CastRange, MapInstance.Get(entity.CurrentMap), entity.X, entity.Y, false);
-                            }
+                            continue;
+                        }
+
+                        var castSpell = SpellBase.Get(entity.SpellCast);
+                        var map = MapInstance.Get(entity.CurrentMap);
+                        switch (castSpell.Combat.TargetType)
+                        {
+                            case SpellTargetTypes.AoE:
+                                entity.DrawAoe(castSpell, map, entity.X, entity.Y, entity.IsAllyOf(Globals.Me));
+                                break;
+                            case SpellTargetTypes.Single:
+                                if (castSpell.Combat.HitRadius <= 0)
+                                {
+                                    break;
+                                }
+                                if (!Globals.Entities.TryGetValue(entity.EntityTarget, out var target) || target.CurrentMap == default)
+                                {
+                                    break;
+                                }
+
+                                var entityX = entity.GetCurrentTileRectangle().CenterX;
+                                var entityY = entity.GetCurrentTileRectangle().CenterY;
+                                var targetX = target.GetCurrentTileRectangle().CenterX;
+                                var targetY = target.GetCurrentTileRectangle().CenterY;
+
+                                var distance = Math.Floor(Entity.CalculateDistanceToPoint(entityX, entityY, targetX, targetY) / Options.TileWidth);
+                                if (distance > castSpell.Combat.CastRange)
+                                {
+                                    break;
+                                }
+
+                                var targetMap = MapInstance.Get(target.CurrentMap);
+                                target.DrawAoe(castSpell, targetMap, target.X, target.Y, entity.IsAllyOf(Globals.Me));
+                                break;
                         }
                     }
                 }
