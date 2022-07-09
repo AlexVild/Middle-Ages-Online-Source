@@ -186,6 +186,11 @@ namespace Intersect.Client.Interface.Game.Chat
             {
                 ChatboxMsg.AddMessage(new ChatboxMsg(Strings.Chatbox.UnableToCopy, CustomColors.Alerts.Error, ChatMessageType.Error));
             }
+
+            if (Globals.Database.ChatHidden)
+            {
+                ToggleShowChat();
+            }
         }
 
         /// <summary>
@@ -476,6 +481,9 @@ namespace Intersect.Client.Interface.Game.Chat
             {
                 ClearAwaitNotification();
             }
+
+            Globals.Database.ChatHidden = mChatHidden;
+            Globals.Database.SavePreferences();
         }
 
         void TrySendMessage()

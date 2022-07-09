@@ -53,6 +53,8 @@ namespace Intersect.Client.Framework.Database
 
         public bool ClassicMode;
 
+        public bool ChatHidden;
+
         //Saving password, other stuff we don't want in the games directory
         public abstract void SavePreference(string key, object value);
 
@@ -95,6 +97,7 @@ namespace Intersect.Client.Framework.Database
             EnterCombatOnTarget = LoadPreference("EnterCombatOnTarget", false);
             ChangeTargetOnDeath = LoadPreference("ChangeTargetOnDeath", true);
             ClassicMode = LoadPreference("ClassicMode", false);
+            ChatHidden = LoadPreference("ChatHidden", false);
         }
 
         public virtual void SavePreferences()
@@ -121,6 +124,7 @@ namespace Intersect.Client.Framework.Database
             SavePreference("EnterCombatOnTarget", EnterCombatOnTarget.ToString());
             SavePreference("ChangeTargetOnDeath", ChangeTargetOnDeath.ToString());
             SavePreference("ClassicMode", ClassicMode.ToString());
+            SavePreference("ChatHidden", ChatHidden.ToString());
         }
 
         public abstract bool LoadConfig();

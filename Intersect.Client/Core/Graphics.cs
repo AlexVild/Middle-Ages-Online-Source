@@ -186,7 +186,7 @@ namespace Intersect.Client.Core
             if (GridSwitched)
             {
                 //Brightness
-                var brightnessTarget = (byte) (currentMap.Brightness / 100f * 255);
+                var brightnessTarget = (byte)(currentMap.Brightness / 100f * 255);
                 BrightnessLevel = brightnessTarget;
                 PlayerLightColor.R = currentMap.PlayerLightColor.R;
                 PlayerLightColor.G = currentMap.PlayerLightColor.G;
@@ -196,10 +196,10 @@ namespace Intersect.Client.Core
                 sPlayerLightExpand = currentMap.PlayerLightExpand;
 
                 //Overlay
-                OverlayColor.A = (byte) currentMap.AHue;
-                OverlayColor.R = (byte) currentMap.RHue;
-                OverlayColor.G = (byte) currentMap.GHue;
-                OverlayColor.B = (byte) currentMap.BHue;
+                OverlayColor.A = (byte)currentMap.AHue;
+                OverlayColor.R = (byte)currentMap.RHue;
+                OverlayColor.G = (byte)currentMap.GHue;
+                OverlayColor.B = (byte)currentMap.BHue;
 
                 //Fog && Panorama
                 currentMap.GridSwitched();
@@ -247,6 +247,24 @@ namespace Intersect.Client.Core
                         Globals.MapGrid[x, y] != Guid.Empty)
                     {
                         DrawMap(Globals.MapGrid[x, y], 0);
+                    }
+                }
+            }
+
+            for (var y = 0; y < Options.MapHeight * 5; y++)
+            {
+                for (var x = 0; x < 6; x++)
+                {
+                    foreach (var entity in RenderingEntities[x, y]) 
+                    { 
+                        if (entity.SpellCast != default)
+                        {
+                            var castSpell = SpellBase.Get(entity.SpellCast);
+                            if (castSpell.Combat.TargetType == SpellTargetTypes.AoE && entity.CurrentMap != default)
+                            {
+                                entity.DrawAoe(castSpell.Combat.CastRange, MapInstance.Get(entity.CurrentMap), entity.X, entity.Y, false);
+                            }
+                        }
                     }
                 }
             }

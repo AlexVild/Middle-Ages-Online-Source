@@ -1799,11 +1799,12 @@ namespace Intersect.Client.Entities
                 return;
             }
 
-            if (MapInstance.Get(CurrentMap) == null)
+            if (CurrentMap == default)
             {
                 return;
             }
 
+            var map = MapInstance.Get(CurrentMap);
             var castSpell = SpellBase.Get(SpellCast);
             if (castSpell != null)
             {
@@ -1851,6 +1852,11 @@ namespace Intersect.Client.Entities
                 {
                     DrawCasterIndicator(castSpell.Combat.CastRange);
                 }
+
+                /*if (castSpell.Combat.TargetType == SpellTargetTypes.AoE)
+                {
+                    DrawAoe(castSpell.Combat.CastRange, map, X, Y, false);
+                }*/
             }
         }
 
@@ -2382,26 +2388,51 @@ namespace Intersect.Client.Entities
         private const int IndicatorFrames = 2;
         private long LastFlash;
         private const int IndicatorRadius = 48;
+        private List<FloatRect> AoeRectangles = new List<FloatRect>();
+        private GameTexture AOE_TEXTURE = Globals.ContentManager.GetTexture(TextureType.Misc, "aoe.png");
+        private GameTexture CASTER_INDICATOR_TEXTURE = Globals.ContentManager.GetTexture(TextureType.Misc, "caster_indicator.png");
+        private int AoeAlpha = MAX_AOE_ALPHA;
+        private int AoeAlphaDir = -1;
+        private long AoeAlphaUpdate;
 
         public double CalculateDirectionTo(Entity en)
         {
-            var selfX = GetCenterPos().X;
-            var selfY = GetCenterPos().Y;
+            var selfTile = GetCurrentTileRectangle();
+            var selfX = selfTile.CenterX;
+            var selfY = selfTile.CenterY;
 
-            var otherX = en.GetCenterPos().X;
-            var otherY = en.GetCenterPos().Y;
+            var otherTile = en.GetCurrentTileRectangle();
+            var otherX = otherTile.CenterX;
+            var otherY = otherTile.CenterY;
 
+            return CalculateDirectionToPoint(selfX, selfY, otherX, otherY);
+        }
+
+        public static double CalculateDirectionToPoint(float selfX, float selfY, float otherX, float otherY)
+        {
             return Math.Atan2(otherY - selfY, otherX - selfX) * (180 / Math.PI);
         }
 
         public double CalculateDistanceTo(Entity en)
         {
-            var selfX = GetCenterPos().X;
-            var selfY = GetCenterPos().Y;
+            if (en == null)
+            {
+                throw new ArgumentNullException(nameof(en));
+            }
 
-            var otherX = en.GetCenterPos().X;
-            var otherY = en.GetCenterPos().Y;
+            var selfTile = GetCurrentTileRectangle();
+            var selfX = selfTile.CenterX;
+            var selfY = selfTile.CenterY;
 
+            var otherTile = en.GetCurrentTileRectangle();
+            var otherX = otherTile.CenterX;
+            var otherY = otherTile.CenterY;
+
+            return CalculateDistanceToPoint(selfX, selfY, otherX, otherY);
+        }
+
+        public static double CalculateDistanceToPoint(float selfX, float selfY, float otherX, float otherY)
+        {
             var a = Math.Pow(otherX - selfX, 2);
             var b = Math.Pow(otherY - selfY, 2);
 
@@ -2416,9 +2447,8 @@ namespace Intersect.Client.Entities
             }
 
             var angle = Globals.Me.CalculateDirectionTo(this);
-            var texture = Globals.ContentManager.GetTexture(TextureType.Misc, "caster_indicator.png");
-            var width = texture.GetWidth() / IndicatorFrames;
-            var height = texture.GetHeight();
+            var width = CASTER_INDICATOR_TEXTURE.GetWidth() / IndicatorFrames;
+            var height = CASTER_INDICATOR_TEXTURE.GetHeight();
             
             var x = Globals.Me.GetCenterPos().X - (width / 2);
             var y = Globals.Me.GetCenterPos().Y;
@@ -2458,10 +2488,97 @@ namespace Intersect.Client.Entities
 
             var frame = Convert.ToInt32(IndicatorFlash);
             Graphics.DrawGameTexture(
-               texture, new FloatRect(width * frame, 0, width, height),
+               CASTER_INDICATOR_TEXTURE, new FloatRect(width * frame, 0, width, height),
                new FloatRect((float)xPos, (float)yPos, width, height), new Color(alpha, 255, 255, 255),
                rotationDegrees: (float)angle
            );
+        }
+
+        public FloatRect GetCurrentTileRectangle()
+        {
+            var selfMap = MapInstance.Get(CurrentMap);
+            return GetTileRectangle(selfMap, X, Y);
+        }
+
+
+        public static FloatRect GetTileRectangle(MapInstance map, byte x, byte y)
+        {
+            if (map == null)
+            {
+                throw new ArgumentNullException(nameof(map));
+            }
+
+            return new FloatRect(
+                map.GetX() + x * Options.TileWidth,
+                map.GetY() + y * Options.TileHeight,
+                Options.TileWidth,
+                Options.TileHeight);
+        }
+
+        private const int MAX_AOE_ALPHA = 200;
+        private const int MIN_AOE_ALPHA = 50;
+        private const int AOE_UPDATE_MS = 100;
+        private const int AOE_UPDATE_AMT = 50;
+        public void DrawAoe(int castRange, MapInstance spawnMap, byte spawnX, byte spawnY, bool friendly)
+        {
+            AoeRectangles.Clear(); // TODO move this to a smarter spot?
+
+            if (Timing.Global.Milliseconds > AoeAlphaUpdate)
+            {
+                AoeAlphaUpdate = Timing.Global.Milliseconds + AOE_UPDATE_MS;
+
+                if (AoeAlpha <= MIN_AOE_ALPHA)
+                {
+                    AoeAlphaDir = 1;
+                }
+                else if (AoeAlpha >= MAX_AOE_ALPHA)
+                {
+                    AoeAlphaDir = -1;
+                }
+                AoeAlpha = MathHelper.Clamp(AoeAlpha + (AOE_UPDATE_AMT * AoeAlphaDir), MIN_AOE_ALPHA, MAX_AOE_ALPHA);
+            }
+
+            /* TODO - Can this actually be cached like this? What if the entity moves while these are being drawn?
+            if (AoeRectangles.Count <= 0)
+            {
+                return;
+            }
+            */
+
+            // The start coordinates are calculated knowing that the AoE spawn is always the center
+            int left = spawnX - castRange;
+            int right = spawnX + castRange;
+            int top = spawnY - castRange;
+            int bottom = spawnY + castRange;
+
+            var spawnRect = GetTileRectangle(spawnMap, spawnX, spawnY);
+            var spawnXpxl = spawnRect.X;
+            var spawnYpxl = spawnRect.Y;
+
+            for (int y = top; y <= bottom; y++)
+            {
+                for (int x = left; x <= right; x++)
+                {
+                    var distanceFromCaster = CalculateDistanceToPoint(spawnX, spawnY, x, y);
+                    if (Math.Floor(distanceFromCaster) > castRange)
+                    {
+                        continue;
+                    }
+
+                    if (!MapInstance.TryGetMapInstanceFromCoords(CurrentMap, x, y, out var currMap, out var mapX, out var mapY))
+                    {
+                        continue;
+                    }
+
+                    var tile = GetTileRectangle(currMap, (byte)mapX, (byte)mapY);
+
+                    AoeRectangles.Add(tile);
+                    Graphics.DrawGameTexture(
+                        AOE_TEXTURE, new FloatRect(0, 0, AOE_TEXTURE.Width, AOE_TEXTURE.Height),
+                        AoeRectangles.Last(), new Color(AoeAlpha, 255, 255, 255)
+                    );
+                }
+            }
         }
 
         private static void DrawSpellIcon(int x, int y, string icon)

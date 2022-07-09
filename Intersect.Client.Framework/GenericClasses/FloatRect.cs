@@ -46,6 +46,10 @@ namespace Intersect.Client.Framework.GenericClasses
 
         public float Right => X + Width;
 
+        public float CenterX => Left + (Width / 2);
+
+        public float CenterY => Top + (Height / 2);
+
         public static FloatRect Empty => new FloatRect();
 
         public FloatRect(float x, float y, float w, float h)
@@ -115,7 +119,6 @@ namespace Intersect.Client.Framework.GenericClasses
         {
             return Contains(pt.X, pt.Y);
         }
-
     }
 
 }

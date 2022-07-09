@@ -1380,6 +1380,118 @@ namespace Intersect.Client.Maps
             mMapTraps.Remove(trapId);
         }
 
+        public static bool TryGetMapInstanceFromCoords(Guid mapId, int x, int y, out MapInstance mapInstance, out byte? mapX, out byte? mapY)
+        {
+            mapInstance = default;
+            mapX = default;
+            mapY = default;
+
+            var currMap = Get(mapId);
+
+            var gridX = 1;
+            var gridY = 1;
+
+            if (x < 0 || x >= Options.MapWidth)
+            {
+                gridX = x < 0 ? 0 : 2;
+                if (x < 0)
+                {
+                    mapX = (byte)(Options.MapWidth - Math.Abs(x));
+                }
+                else if (x >= Options.MapWidth)
+                {
+                    mapX = (byte)(x - Options.MapWidth);
+                }
+            }
+            if (y < 0 || y >= Options.MapHeight)
+            {
+                gridY = y < 0 ? 0 : 2;
+                if (y < 0)
+                {
+                    mapY = (byte)(Options.MapHeight - Math.Abs(y));
+                }
+                else if (y >= Options.MapHeight)
+                {
+                    mapY = (byte)(y - Options.MapHeight);
+                }
+            }
+
+            var potentialId = Guid.Empty;
+
+            // Center
+            if (gridX == 1 && gridY == 1)
+            {
+                potentialId = mapId;
+            }
+
+            // If we haven't assigned these guys yet, do it now
+            mapX = mapX == default ? (byte)x : mapX;
+            mapY = mapY == default ? (byte)y : mapY;
+
+            // Left
+            if (gridX == 0 && potentialId == default)
+            {
+                // Diaganol
+                if (gridY != 1 && currMap.Left != default)
+                {
+                    var leftMap = Get(currMap.Left);
+                    // Check diaganols up/down
+                    if (gridY == 0 && leftMap.Up != default)
+                    {
+                        potentialId = leftMap.Up;
+                    }
+                    if (gridY == 2 && leftMap.Down != default)
+                    {
+                        potentialId = leftMap.Down;
+                    }
+                }
+                else
+                {
+                    potentialId = currMap.Left;
+                }
+            }
+            // Right
+            if (gridX == 2 && potentialId == default)
+            {
+                // Diaganol
+                if (gridY != 1 && currMap.Right != default)
+                {
+                    var rightMap = Get(currMap.Right);
+                    // Check diaganols up/down
+                    if (gridY == 0 && rightMap.Up != default)
+                    {
+                        potentialId = rightMap.Up;
+                    }
+                    if (gridY == 2 && rightMap.Down != default)
+                    {
+                        potentialId = rightMap.Down;
+                    }
+                }
+                else
+                {
+                    potentialId = currMap.Right;
+                }
+            }
+            // Up
+            if (gridY == 0 && potentialId == default)
+            {
+                potentialId = currMap.Up;
+            }
+            // Down
+            if (gridY == 2 && potentialId == default)
+            {
+                potentialId = currMap.Down;
+            }
+
+            if (potentialId == default)
+            {
+                return false;
+            }
+
+            mapInstance = Get(potentialId);
+            return mapInstance != default;
+        }
+
         public new static MapInstance Get(Guid id)
         {
             return MapInstance.Lookup.Get<MapInstance>(id);
