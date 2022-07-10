@@ -2441,20 +2441,19 @@ namespace Intersect.Client.Entities
         private const int IndicatorFrames = 2;
         private long LastFlash;
         private const int IndicatorRadius = 48;
-        private List<FloatRect> AoeRectangles = new List<FloatRect>();
         private GameTexture CASTER_INDICATOR_TEXTURE = Globals.ContentManager.GetTexture(TextureType.Misc, "caster_indicator.png");
         
         private int AoeAlpha = MAX_AOE_ALPHA;
         private int AoeAlphaDir = -1;
         private long AoeAlphaUpdate;
-        private GameTexture AOE_TEXTURE = Globals.ContentManager.GetTexture(TextureType.Misc, "aoe.png");
-        private GameTexture AOE_TEXTURE_NEUTRAL = Globals.ContentManager.GetTexture(TextureType.Misc, "aoe_neutral.png");
-        private GameTexture AOE_TEXTURE_FRIENDLY = Globals.ContentManager.GetTexture(TextureType.Misc, "aoe_heal.png");
+        private GameTexture COMBAT_TILE = Globals.ContentManager.GetTexture(TextureType.Misc, "aoe.png");
+        private GameTexture COMBAT_TILE_NEUTRAL = Globals.ContentManager.GetTexture(TextureType.Misc, "aoe_neutral.png");
+        private GameTexture COMBAT_TILE_FRIENDLY = Globals.ContentManager.GetTexture(TextureType.Misc, "aoe_heal.png");
 
         public double CalculateDirectionTo(Entity en)
         {
             var selfTile = GetCenterPos();
-            var selfX = selfTile.X;
+            var selfX = selfTile.X; 
             var selfY = selfTile.Y;
 
             var otherTile = en.GetCenterPos();
@@ -2537,8 +2536,8 @@ namespace Intersect.Client.Entities
                     break;
             }
 
-            var rcos = IndicatorRadius * Math.Cos(angle * (Math.PI / 180.0));
-            var rsin = IndicatorRadius * Math.Sin(angle * (Math.PI / 180.0));
+            var rcos = IndicatorRadius * MathHelper.DCos(angle);
+            var rsin = IndicatorRadius * MathHelper.DSin(angle);
             var xPos = x + rcos;
             var yPos = y + rsin;
 
@@ -2577,8 +2576,6 @@ namespace Intersect.Client.Entities
         private const int AOE_UPDATE_AMT = 15;
         public void DrawAoe(SpellBase spell, MapInstance spawnMap, byte spawnX, byte spawnY, bool friendlyAoe)
         {
-            AoeRectangles.Clear(); // TODO move this to a smarter spot?
-
             if (Timing.Global.Milliseconds > AoeAlphaUpdate)
             {
                 AoeAlphaUpdate = Timing.Global.Milliseconds + AOE_UPDATE_MS;
@@ -2594,13 +2591,6 @@ namespace Intersect.Client.Entities
                 AoeAlpha = MathHelper.Clamp(AoeAlpha + (AOE_UPDATE_AMT * AoeAlphaDir), MIN_AOE_ALPHA, MAX_AOE_ALPHA);
             }
 
-            /* TODO - Can this actually be cached like this? What if the entity moves while these are being drawn?
-            if (AoeRectangles.Count <= 0)
-            {
-                return;
-            }
-            */
-
             var hitRadius = spell.Combat.HitRadius;
             // The start coordinates are calculated knowing that the AoE spawn is always the center
             int left = spawnX - hitRadius;
@@ -2608,19 +2598,15 @@ namespace Intersect.Client.Entities
             int top = spawnY - hitRadius;
             int bottom = spawnY + hitRadius;
 
-            var spawnRect = GetTileRectangle(spawnMap, spawnX, spawnY);
-            var spawnXpxl = spawnRect.X;
-            var spawnYpxl = spawnRect.Y;
-
             // Determine texture
-            var texture = AOE_TEXTURE;
+            GameTexture texture;
             if (friendlyAoe)
             {
-                texture = spell.Combat.Friendly ? AOE_TEXTURE_FRIENDLY : AOE_TEXTURE_NEUTRAL;   
+                texture = spell.Combat.Friendly ? COMBAT_TILE_FRIENDLY : COMBAT_TILE_NEUTRAL;   
             }
             else
             {
-                texture = spell.Combat.Friendly ? AOE_TEXTURE_NEUTRAL : AOE_TEXTURE;
+                texture = spell.Combat.Friendly ? COMBAT_TILE_NEUTRAL : COMBAT_TILE;
             }
 
             for (int y = top; y <= bottom; y++)
@@ -2640,18 +2626,300 @@ namespace Intersect.Client.Entities
 
                     var tile = GetTileRectangle(currMap, (byte)mapX, (byte)mapY);
 
-                    AoeRectangles.Add(tile);
-
-                    if (texture == AOE_TEXTURE) // If we're drawing the "DANGER" texture, give it a light so we can see it in darkness
+                    if (texture == COMBAT_TILE) // If we're drawing the "DANGER" texture, give it a light so we can see it in darkness
                     {
                         Graphics.AddLight((int)tile.CenterX, (int)tile.CenterY, 100, 200, 1.0f, new Color(255, 222, 124, 112));
                     }
                     Graphics.DrawGameTexture(
                         texture, new FloatRect(0, 0, texture.Width, texture.Height),
-                        AoeRectangles.Last(), new Color(AoeAlpha, 255, 255, 255)
+                        tile, new Color(AoeAlpha, 255, 255, 255)
                     );
                 }
             }
+        }
+
+        public void DrawProjectileSpawns(SpellBase spell, MapInstance spawnMap, byte spawnX, byte spawnY, bool friendly)
+        {
+            if (Timing.Global.Milliseconds > AoeAlphaUpdate)
+            {
+                AoeAlphaUpdate = Timing.Global.Milliseconds + AOE_UPDATE_MS;
+
+                if (AoeAlpha <= MIN_AOE_ALPHA)
+                {
+                    AoeAlphaDir = 1;
+                }
+                else if (AoeAlpha >= MAX_AOE_ALPHA)
+                {
+                    AoeAlphaDir = -1;
+                }
+                AoeAlpha = MathHelper.Clamp(AoeAlpha + (AOE_UPDATE_AMT * AoeAlphaDir), MIN_AOE_ALPHA, MAX_AOE_ALPHA);
+            }
+
+            var dir = Dir;
+            if (this is Player player && player.CombatMode)
+            {
+                dir = player.FaceDirection;
+            }
+
+            // Get our information
+            var projectile = spell.Combat.Projectile;
+            var range = projectile.Range;
+
+            // Get the possible bounds for the projectile spawner
+            int left = spawnX - (ProjectileBase.SPAWN_LOCATIONS_WIDTH / 2);
+            int right = spawnX + (ProjectileBase.SPAWN_LOCATIONS_WIDTH / 2);
+            int top = spawnY - (ProjectileBase.SPAWN_LOCATIONS_HEIGHT / 2);
+            int bottom = spawnY + (ProjectileBase.SPAWN_LOCATIONS_HEIGHT / 2);
+
+            // Loop through the possible projectile spawner locations
+            var projectileX = 0;
+            var projectileY = 0;
+
+            List<FloatRect> tilesDrawn = new List<FloatRect>();
+
+            // We have to rotate the spawn locations in accordance to the direction of the caster
+            Location[,] rotatedLocations = (Location[,]) projectile.SpawnLocations.Clone();
+            switch (dir)
+            {
+                // Left
+                case 2:
+                    rotatedLocations = MathHelper.RotateArray90CW(5, rotatedLocations);
+                    rotatedLocations = MathHelper.RotateArray90CW(5, rotatedLocations);
+                    rotatedLocations = MathHelper.RotateArray90CW(5, rotatedLocations);
+                    break;
+                // Down
+                case 1:
+                    rotatedLocations = MathHelper.RotateArray90CW(5, rotatedLocations);
+                    rotatedLocations = MathHelper.RotateArray90CW(5, rotatedLocations);
+                    break;
+                // Right
+                case 3:
+                    rotatedLocations = MathHelper.RotateArray90CW(5, rotatedLocations);
+                    break;
+            }
+
+            for (int y = top; y <= bottom; y++, projectileY++)
+            {
+                projectileX = 0;
+                for (int x = left; x <= right; x++, projectileX++)
+                {
+                    var directions = rotatedLocations[projectileX, projectileY].Directions;
+
+                    // If this projectile spawn location doesn't have anything to show, don't bother
+                    if (!directions.Contains(true))
+                    {
+                        continue;
+                    }
+                    // Otherwise, draw 'em... first, get our spawner's tile
+                    if (!MapInstance.TryGetMapInstanceFromCoords(CurrentMap, x, y, out var currMap, out var mapX, out var mapY))
+                    {
+                        continue;
+                    }
+                    // Then, for each direction, draw a tile for each in the range
+                    for (var dirId = 0; dirId < directions.Length; dirId++)
+                    {
+                        if (!directions[dirId])
+                        {
+                            continue;
+                        }
+                        DrawProjectilePath(dir, dirId, range, (int)mapX, (int)mapY, currMap, ref tilesDrawn, friendly, spell.Combat.Friendly);
+                    }
+                }
+            }
+        }
+
+        private void DrawProjectilePath(byte dir, int dirId, int range, int x, int y, MapInstance map, ref List<FloatRect> tilesDrawn, bool friendly, bool combatFriendly)
+        {
+            for (var pathIdx = 0; pathIdx < range; pathIdx++)
+            {
+                var right = x + pathIdx;
+                var left = x - pathIdx;
+                var up = y - pathIdx;
+                var down = y + pathIdx;
+
+                switch (dirId)
+                {
+                    // Up
+                    case 0:
+                        switch (dir)
+                        {
+                            case 0:
+                                DrawProjectileTile(map.Id, x, up, ref tilesDrawn, friendly, combatFriendly);
+                                break;
+                            case 1:
+                                DrawProjectileTile(map.Id, x, down, ref tilesDrawn, friendly, combatFriendly);
+                                break;
+                            case 2:
+                                DrawProjectileTile(map.Id, left, y, ref tilesDrawn, friendly, combatFriendly);
+                                break;
+                            case 3:
+                                DrawProjectileTile(map.Id, right, y, ref tilesDrawn, friendly, combatFriendly);
+                                break;
+                        }
+                        break;
+                    // Down
+                    case 1:
+                        switch (dir)
+                        {
+                            case 0:
+                                DrawProjectileTile(map.Id, x, down, ref tilesDrawn, friendly, combatFriendly);
+                                break;
+                            case 1:
+                                DrawProjectileTile(map.Id, x, up, ref tilesDrawn, friendly, combatFriendly);
+                                break;
+                            case 2:
+                                DrawProjectileTile(map.Id, right, y, ref tilesDrawn, friendly, combatFriendly);
+                                break;
+                            case 3:
+                                DrawProjectileTile(map.Id, left, y, ref tilesDrawn, friendly, combatFriendly);
+                                break;
+                        }
+                        break;
+                    // Left
+                    case 2:
+                        switch (dir)
+                        {
+                            case 0:
+                                DrawProjectileTile(map.Id, left, y, ref tilesDrawn, friendly, combatFriendly);
+                                break;
+                            case 1:
+                                DrawProjectileTile(map.Id, right, y, ref tilesDrawn, friendly, combatFriendly);
+                                break;
+                            case 2:
+                                DrawProjectileTile(map.Id, x, up, ref tilesDrawn, friendly, combatFriendly);
+                                break;
+                            case 3:
+                                DrawProjectileTile(map.Id, x, down, ref tilesDrawn, friendly, combatFriendly);
+                                break;
+                        }
+                        break;
+                    // Right
+                    case 3:
+                        switch (dir)
+                        {
+                            case 0:
+                                DrawProjectileTile(map.Id, right, y, ref tilesDrawn, friendly, combatFriendly);
+                                break;
+                            case 1:
+                                DrawProjectileTile(map.Id, left, y, ref tilesDrawn, friendly, combatFriendly);
+                                break;
+                            case 2:
+                                DrawProjectileTile(map.Id, x, down, ref tilesDrawn, friendly, combatFriendly);
+                                break;
+                            case 3:
+                                DrawProjectileTile(map.Id, x, up, ref tilesDrawn, friendly, combatFriendly);
+                                break;
+                        }
+                        break;
+                    // Top-left
+                    case 4:
+                        switch (dir)
+                        {
+                            case 0:
+                                DrawProjectileTile(map.Id, left, up, ref tilesDrawn, friendly, combatFriendly);
+                                break;
+                            case 1:
+                                DrawProjectileTile(map.Id, right, down, ref tilesDrawn, friendly, combatFriendly);
+                                break;
+                            case 2:
+                                DrawProjectileTile(map.Id, left, up, ref tilesDrawn, friendly, combatFriendly);
+                                break;
+                            case 3:
+                                DrawProjectileTile(map.Id, right, down, ref tilesDrawn, friendly, combatFriendly);
+                                break;
+                        }
+                        break;
+                    // Top-right
+                    case 5:
+                        switch (dir)
+                        {
+                            case 0:
+                                DrawProjectileTile(map.Id, right, up, ref tilesDrawn, friendly, combatFriendly);
+                                break;
+                            case 1:
+                                DrawProjectileTile(map.Id, left, down, ref tilesDrawn, friendly, combatFriendly);
+                                break;
+                            case 2:
+                                DrawProjectileTile(map.Id, left, down, ref tilesDrawn, friendly, combatFriendly);
+                                break;
+                            case 3:
+                                DrawProjectileTile(map.Id, right, up, ref tilesDrawn, friendly, combatFriendly);
+                                break;
+                        }
+                        break;
+                    // Bottom-left
+                    case 6:
+                        switch (dir)
+                        {
+                            case 0:
+                                DrawProjectileTile(map.Id, left, down, ref tilesDrawn, friendly, combatFriendly);
+                                break;
+                            case 1:
+                                DrawProjectileTile(map.Id, right, up, ref tilesDrawn, friendly, combatFriendly);
+                                break;
+                            case 2:
+                                DrawProjectileTile(map.Id, right, up, ref tilesDrawn, friendly, combatFriendly);
+                                break;
+                            case 3:
+                                DrawProjectileTile(map.Id, left, down, ref tilesDrawn, friendly, combatFriendly);
+                                break;
+                        }
+                        break;
+                    // Bottom-right
+                    case 7:
+                        switch (dir)
+                        {
+                            case 0:
+                                DrawProjectileTile(map.Id, right, down, ref tilesDrawn, friendly, combatFriendly);
+                                break;
+                            case 1:
+                                DrawProjectileTile(map.Id, left, up, ref tilesDrawn, friendly, combatFriendly);
+                                break;
+                            case 2:
+                                DrawProjectileTile(map.Id, right, down, ref tilesDrawn, friendly, combatFriendly);
+                                break;
+                            case 3:
+                                DrawProjectileTile(map.Id, left, up, ref tilesDrawn, friendly, combatFriendly);
+                                break;
+                        }
+                        break;
+                }
+            }
+        }
+
+        private void DrawProjectileTile(Guid mapId, int x, int y, ref List<FloatRect> tilesDrawn, bool friendly, bool combatFriendly)
+        {
+            if (!MapInstance.TryGetMapInstanceFromCoords(mapId, x, y, out var currMap, out var mapX, out var mapY))
+            {
+                return;
+            }
+            var tile = GetTileRectangle(currMap, (byte)mapX, (byte)mapY);
+
+            if (tilesDrawn.Any(t => t.X == tile.X && t.Y == tile.Y))
+            {
+                return;
+            }
+            tilesDrawn.Add(tile);
+
+            GameTexture texture;
+            if (friendly)
+            {
+                texture = combatFriendly ? COMBAT_TILE_FRIENDLY : COMBAT_TILE_NEUTRAL;
+            }
+            else
+            {
+                texture = combatFriendly ? COMBAT_TILE_NEUTRAL : COMBAT_TILE;
+            }
+
+            if (texture == COMBAT_TILE) // If we're drawing the "DANGER" texture, give it a light so we can see it in darkness
+            {
+                Graphics.AddLight((int)tile.CenterX, (int)tile.CenterY, 100, 200, 1.0f, new Color(255, 222, 124, 112));
+            }
+
+            Graphics.DrawGameTexture(
+                texture, new FloatRect(0, 0, texture.GetWidth(), texture.GetHeight()),
+                tile, new Color(AoeAlpha, 255, 255, 255)
+            );
         }
 
         private static void DrawSpellIcon(int x, int y, string icon)

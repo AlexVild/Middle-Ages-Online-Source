@@ -3,7 +3,7 @@
 namespace Intersect.Utilities
 {
 
-    public static class MathHelper
+    public static partial class MathHelper
     {
         public static decimal Clamp(decimal value, decimal minimum, decimal maximum)
         {
@@ -54,7 +54,63 @@ namespace Intersect.Utilities
         {
             return Math.Min(Math.Max(value, minimum), maximum);
         }
+    }
 
+    public static partial class MathHelper
+    {
+        public static T[,] RotateArray90CW<T>(int N, T[,] array)
+        {
+            // Consider all
+            // squares one by one
+            for (int x = 0; x < N / 2; x++)
+            {
+                // Consider elements
+                // in group of 4 in
+                // current square
+                for (int y = x; y < N - x - 1; y++)
+                {
+                    // store current cell
+                    // in temp variable
+                    T temp = array[x, y];
+
+                    // move values from
+                    // right to top
+                    array[x, y] = array[y, N - 1 - x];
+
+                    // move values from
+                    // bottom to right
+                    array[y, N - 1 - x]
+                        = array[N - 1 - x, N - 1 - y];
+
+                    // move values from
+                    // left to bottom
+                    array[N - 1 - x, N - 1 - y]
+                        = array[N - 1 - y, x];
+
+                    // assign temp to left
+                    array[N - 1 - y, x] = temp;
+                }
+            }
+
+            return array;
+        }
+
+        public static void SwapInts(ref int a, ref int b)
+        {
+            a = a + b;
+            b = a - b;
+            a = a - b;
+        }
+
+        public static double DCos(double val)
+        {
+            return Math.Cos(val * (Math.PI / 180.0));
+        }
+
+        public static double DSin(double val)
+        {
+            return Math.Sin(val * (Math.PI / 180.0));
+        }
     }
 
 }

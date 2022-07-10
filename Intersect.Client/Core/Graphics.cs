@@ -293,6 +293,9 @@ namespace Intersect.Client.Core
                                 var targetMap = MapInstance.Get(target.CurrentMap);
                                 target.DrawAoe(castSpell, targetMap, target.X, target.Y, entity.IsAllyOf(Globals.Me));
                                 break;
+                            case SpellTargetTypes.Projectile:
+                                entity.DrawProjectileSpawns(castSpell, map, entity.X, entity.Y, entity.IsAllyOf(Globals.Me));
+                                break;
                         }
                     }
                 }
