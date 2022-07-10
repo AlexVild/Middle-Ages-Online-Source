@@ -36,6 +36,8 @@ namespace Intersect.Client.Interface.Game
         private Label mQuestTitle;
 
         private Label mQuestOfferAmount;
+        
+        private Label mCompletedLabel;
 
         public QuestOfferWindow(Canvas gameCanvas)
         {
@@ -45,6 +47,8 @@ namespace Intersect.Client.Interface.Game
 
             //Menu Header
             mQuestTitle = new Label(mQuestOfferWindow, "QuestTitle");
+            mCompletedLabel = new Label(mQuestOfferWindow, "CompletedLabel");
+            mCompletedLabel.SetText(Strings.QuestOffer.Completed);
             mQuestPromptArea = new ScrollControl(mQuestOfferWindow, "QuestOfferArea");
             mQuestPromptTemplate = new Label(mQuestPromptArea, "QuestOfferTemplate");
             mQuestPromptLabel = new RichLabel(mQuestPromptArea);
@@ -72,6 +76,10 @@ namespace Intersect.Client.Interface.Game
 
             mNextQuest.Hide();
             mPreviousQuest.Hide();
+            if (Globals.QuestOffers.Count > 0)
+            {
+                mCompletedLabel.IsHidden = !Globals.Me.QuestProgress[Globals.QuestOffers[0]].Completed;
+            }
         }
 
         private void _declineButton_Clicked(Base sender, ClickedEventArgs arguments)
@@ -156,6 +164,7 @@ namespace Intersect.Client.Interface.Game
                 }
 
                 mQuestTitle.Text = quest.Name;
+                mCompletedLabel.IsHidden = !Globals.Me.QuestProgress[quest.Id].Completed;
                 if (mQuestOfferText != quest.StartDescription)
                 {
                     mQuestPromptLabel.ClearText();

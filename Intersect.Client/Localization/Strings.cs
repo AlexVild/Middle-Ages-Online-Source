@@ -1631,6 +1631,9 @@ namespace Intersect.Client.Localization
 
             public static LocalizedString accept = @"Accept";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Completed = @"Completed!";
+
             public static LocalizedString decline = @"Decline";
 
             public static LocalizedString title = @"Quest Offer";
