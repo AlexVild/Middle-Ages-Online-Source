@@ -55,6 +55,14 @@ namespace Intersect.Client.Framework.Database
 
         public bool ChatHidden;
 
+        public bool CastingIndicator;
+
+        public bool HostileTileMarkers;
+        
+        public bool PartyTileMarkers;
+        
+        public bool SelfTileMarkers;
+
         //Saving password, other stuff we don't want in the games directory
         public abstract void SavePreference(string key, object value);
 
@@ -98,6 +106,10 @@ namespace Intersect.Client.Framework.Database
             ChangeTargetOnDeath = LoadPreference("ChangeTargetOnDeath", true);
             ClassicMode = LoadPreference("ClassicMode", false);
             ChatHidden = LoadPreference("ChatHidden", false);
+            CastingIndicator = LoadPreference("CastingIndicator", true);
+            HostileTileMarkers = LoadPreference("EnemyTileMarkers", true);
+            PartyTileMarkers = LoadPreference("PartyTileMarkers", true);
+            SelfTileMarkers = LoadPreference("SelfTileMarkers", true);
         }
 
         public virtual void SavePreferences()
@@ -125,6 +137,10 @@ namespace Intersect.Client.Framework.Database
             SavePreference("ChangeTargetOnDeath", ChangeTargetOnDeath.ToString());
             SavePreference("ClassicMode", ClassicMode.ToString());
             SavePreference("ChatHidden", ChatHidden.ToString());
+            SavePreference("CastingIndicator", CastingIndicator.ToString());
+            SavePreference("EnemyTileMarkers", HostileTileMarkers.ToString());
+            SavePreference("PartyTileMarkers", PartyTileMarkers.ToString());
+            SavePreference("SelfTileMarkers", SelfTileMarkers.ToString());
         }
 
         public abstract bool LoadConfig();

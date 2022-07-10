@@ -136,6 +136,14 @@ namespace Intersect.Client.Interface.Shared
         
         private readonly LabeledCheckBox mChangeTargetCheckbox;
 
+        private readonly LabeledCheckBox mCastingIndicator;
+
+        private readonly LabeledCheckBox mHostileTileMarkers;
+
+        private readonly LabeledCheckBox mPartyTileMarkers;
+
+        private readonly LabeledCheckBox mSelfTileMarkers;
+
         // Open settings
         private bool mReturnToMenu;
 
@@ -244,7 +252,27 @@ namespace Intersect.Client.Interface.Shared
             {
                 Text = Strings.Settings.ChangeTarget
             };
+
+            mCastingIndicator = new LabeledCheckBox(mGameSettingsContainer, "CastingIndicator")
+            {
+                Text = Strings.Settings.CastingIndicators
+            };
+
+            mHostileTileMarkers = new LabeledCheckBox(mGameSettingsContainer, "HostileTileMarkers")
+            {
+                Text = Strings.Settings.HostileTileMarkers
+            };
             
+            mPartyTileMarkers = new LabeledCheckBox(mGameSettingsContainer, "PartyTileMarkers")
+            {
+                Text = Strings.Settings.PartyTileMarkers
+            };
+
+            mSelfTileMarkers = new LabeledCheckBox(mGameSettingsContainer, "SelfTileMarkers")
+            {
+                Text = Strings.Settings.SelfTileMakers
+            };
+
             // TODO: Place our configurable gameplay related settings into their respective container for initialization here!
 
             #endregion
@@ -710,6 +738,10 @@ namespace Intersect.Client.Interface.Shared
             mAttackCancelCheckbox.IsChecked = Globals.Database.AttackCancelsCast;
             mEnterCombatOnTargetCheckbox.IsChecked = Globals.Database.EnterCombatOnTarget;
             mChangeTargetCheckbox.IsChecked = Globals.Database.ChangeTargetOnDeath;
+            mCastingIndicator.IsChecked = Globals.Database.CastingIndicator;
+            mHostileTileMarkers.IsChecked = Globals.Database.HostileTileMarkers;
+            mPartyTileMarkers.IsChecked = Globals.Database.PartyTileMarkers;
+            mSelfTileMarkers.IsChecked = Globals.Database.SelfTileMarkers;
 
             // Video Settings.
             mAutoCloseWindowsCheckbox.IsChecked = Globals.Database.HideOthersOnWindowOpen;
@@ -897,6 +929,10 @@ namespace Intersect.Client.Interface.Shared
             Globals.Database.AttackCancelsCast = mAttackCancelCheckbox.IsChecked;
             Globals.Database.EnterCombatOnTarget = mEnterCombatOnTargetCheckbox.IsChecked;
             Globals.Database.ChangeTargetOnDeath = mChangeTargetCheckbox.IsChecked;
+            Globals.Database.CastingIndicator = mCastingIndicator.IsChecked;
+            Globals.Database.HostileTileMarkers = mHostileTileMarkers.IsChecked;
+            Globals.Database.PartyTileMarkers = mPartyTileMarkers.IsChecked;
+            Globals.Database.SelfTileMarkers = mSelfTileMarkers.IsChecked;
 
             // Save keybinding settings
             Globals.Database.ClassicMode = mClassicModeCheckbox.IsChecked;

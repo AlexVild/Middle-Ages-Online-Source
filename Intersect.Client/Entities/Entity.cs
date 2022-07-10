@@ -1851,7 +1851,7 @@ namespace Intersect.Client.Entities
 
                 if (castSpell.Combat.TargetType == SpellTargetTypes.Single && EntityTarget == Globals.Me?.Id)
                 {
-                    DrawCasterIndicator(castSpell.Combat.CastRange);
+                    DrawCasterIndicator(castSpell.Combat.CastRange, IsAllyOf(Globals.Me));
                 }
 
                 /*if (castSpell.Combat.TargetType == SpellTargetTypes.AoE)
@@ -2417,7 +2417,6 @@ namespace Intersect.Client.Entities
                     }
                     else
                     {
-                        Console.WriteLine($"Player {targetPlayer.Name} in {me.Name}'s party: {me.IsInMyParty(targetPlayer.Id)}");
                         return me.IsInMyParty(targetPlayer.Id) || targetPlayer.IsInMyParty(me.Id) || (!string.IsNullOrEmpty(me.Guild) && me.Guild == targetPlayer.Guild);
                     }
                 }
@@ -2432,28 +2431,11 @@ namespace Intersect.Client.Entities
                 return Type != -1;
             }
         }
-    }
-
-    // New drawing functions
-    public partial class Entity
-    {
-        private bool IndicatorFlash = false;
-        private const int IndicatorFrames = 2;
-        private long LastFlash;
-        private const int IndicatorRadius = 48;
-        private GameTexture CASTER_INDICATOR_TEXTURE = Globals.ContentManager.GetTexture(TextureType.Misc, "caster_indicator.png");
-        
-        private int AoeAlpha = MAX_AOE_ALPHA;
-        private int AoeAlphaDir = -1;
-        private long AoeAlphaUpdate;
-        private GameTexture COMBAT_TILE = Globals.ContentManager.GetTexture(TextureType.Misc, "aoe.png");
-        private GameTexture COMBAT_TILE_NEUTRAL = Globals.ContentManager.GetTexture(TextureType.Misc, "aoe_neutral.png");
-        private GameTexture COMBAT_TILE_FRIENDLY = Globals.ContentManager.GetTexture(TextureType.Misc, "aoe_heal.png");
 
         public double CalculateDirectionTo(Entity en)
         {
             var selfTile = GetCenterPos();
-            var selfX = selfTile.X; 
+            var selfX = selfTile.X;
             var selfY = selfTile.Y;
 
             var otherTile = en.GetCenterPos();
@@ -2493,9 +2475,31 @@ namespace Intersect.Client.Entities
 
             return Math.Sqrt(a + b);
         }
+    }
 
-        private void DrawCasterIndicator(int castRange)
+    // New drawing functions
+    public partial class Entity
+    {
+        private bool IndicatorFlash = false;
+        private const int IndicatorFrames = 2;
+        private long LastFlash;
+        private const int IndicatorRadius = 48;
+        private GameTexture CASTER_INDICATOR_TEXTURE = Globals.ContentManager.GetTexture(TextureType.Misc, "caster_indicator.png");
+        
+        private int AoeAlpha = MAX_AOE_ALPHA;
+        private int AoeAlphaDir = -1;
+        private long AoeAlphaUpdate;
+        private GameTexture COMBAT_TILE = Globals.ContentManager.GetTexture(TextureType.Misc, "aoe.png");
+        private GameTexture COMBAT_TILE_NEUTRAL = Globals.ContentManager.GetTexture(TextureType.Misc, "aoe_neutral.png");
+        private GameTexture COMBAT_TILE_FRIENDLY = Globals.ContentManager.GetTexture(TextureType.Misc, "aoe_heal.png");
+
+        private void DrawCasterIndicator(int castRange, bool friendly)
         {
+            if (friendly || !Globals.Database.CastingIndicator)
+            {
+                return;
+            }
+
             if (Globals.Me == null || Globals.Me.Id == Id)
             {
                 return;
@@ -2570,12 +2574,44 @@ namespace Intersect.Client.Entities
                 Options.TileHeight);
         }
 
+        private bool ShouldRenderMarkers(bool friendly)
+        {
+            if (!friendly && !Globals.Database.HostileTileMarkers)
+            {
+                return false;
+            }
+            if (friendly)
+            {
+                if (Id == Globals.Me.Id && !Globals.Database.SelfTileMarkers)
+                {
+                    return false;
+                }
+                else if (this is Player friendlyPlayer && friendlyPlayer.Id != Globals.Me.Id)
+                {
+                    if (!Globals.Me.IsInMyParty(friendlyPlayer.Id) && !friendlyPlayer.IsInMyParty(Globals.Me.Id))
+                    {
+                        return false;
+                    }
+                    else if (!Globals.Database.PartyTileMarkers)
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
         private const int MAX_AOE_ALPHA = 200;
         private const int MIN_AOE_ALPHA = 125;
         private const int AOE_UPDATE_MS = 100;
         private const int AOE_UPDATE_AMT = 15;
         public void DrawAoe(SpellBase spell, MapInstance spawnMap, byte spawnX, byte spawnY, bool friendlyAoe)
         {
+            if (!ShouldRenderMarkers(friendlyAoe))
+            {
+                return;
+            }
+
             if (Timing.Global.Milliseconds > AoeAlphaUpdate)
             {
                 AoeAlphaUpdate = Timing.Global.Milliseconds + AOE_UPDATE_MS;
@@ -2640,6 +2676,11 @@ namespace Intersect.Client.Entities
 
         public void DrawProjectileSpawns(SpellBase spell, MapInstance spawnMap, byte spawnX, byte spawnY, bool friendly)
         {
+            if (!ShouldRenderMarkers(friendly))
+            {
+                return;
+            }
+
             if (Timing.Global.Milliseconds > AoeAlphaUpdate)
             {
                 AoeAlphaUpdate = Timing.Global.Milliseconds + AOE_UPDATE_MS;

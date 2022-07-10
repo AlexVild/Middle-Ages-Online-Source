@@ -1547,6 +1547,18 @@ namespace Intersect.Client.Localization
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString AttackCancelsCast = @"Attack Cancels Cast";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString CastingIndicators = @"Casting Indicator";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString HostileTileMarkers = @"Hostile Tile Markers";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString PartyTileMarkers = @"Party Tile Markers";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString SelfTileMakers = @"Self Tile Markers";
         }
 
         public struct Parties
