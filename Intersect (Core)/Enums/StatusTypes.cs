@@ -1,5 +1,23 @@
+using System.Collections.Generic;
+
 namespace Intersect.Enums
 {
+    public static class StatusHelpers
+    {
+        public static List<StatusTypes> TenacityExcluded = new List<StatusTypes>()
+        {
+            StatusTypes.None,
+            StatusTypes.Stealth,
+            StatusTypes.Cleanse,
+            StatusTypes.Invulnerable,
+            StatusTypes.OnHit,
+            StatusTypes.Shield,
+            StatusTypes.Transform,
+            StatusTypes.Swift,
+            StatusTypes.Accurate,
+            StatusTypes.Haste,
+        };
+    }
 
     public enum StatusTypes
     {

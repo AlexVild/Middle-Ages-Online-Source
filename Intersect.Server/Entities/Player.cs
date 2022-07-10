@@ -306,6 +306,9 @@ namespace Intersect.Server.Entities
         [NotMapped, JsonIgnore]
         public Dictionary<Guid, PlayerClassStats> ClassInfo = new Dictionary<Guid, PlayerClassStats>();
 
+        [NotMapped, JsonIgnore]
+        public long ChatErrorLastSent;
+
         [Column("ClassInfo")]
         public string ClassInfoJson
         {
@@ -1325,6 +1328,7 @@ namespace Intersect.Server.Entities
 
         public void GiveExperience(long amount, bool partyCombo = false, int opponentLevel = -1)
         {
+            var expToGive = amount;
             if (Level < Options.MaxLevel)
             {
                 if (ShouldAwardExp(opponentLevel)) // Don't give exp at all if more than X levels between
@@ -1332,14 +1336,22 @@ namespace Intersect.Server.Entities
                     if (CurrentCombo > 0)
                     {
                         ComboExp = CalculateComboExperience(amount, partyCombo, opponentLevel);
-                        Exp += ComboExp;
+                        expToGive += ComboExp;
                     }
 
-                    Exp += (int)(amount * GetEquipmentBonusEffect(EffectType.EXP, 100) / 100);
+                    expToGive += (int)(amount * GetEquipmentBonusEffect(EffectType.EXP, 100) / 100);
+
+                    if (expToGive > 0)
+                    {
+                        PacketSender.SendActionMsg(this, Strings.Combat.inspiredexp.ToString(expToGive), CustomColors.Combat.LevelUp);
+                    }
+                    
+                    Exp += expToGive;
                     if (Exp < 0)
                     {
                         Exp = 0;
                     }
+
 
                     if (!CheckLevelUp())
                     {
@@ -5437,13 +5449,17 @@ namespace Intersect.Server.Entities
         {
             if (!Conditions.MeetsConditionLists(spell.CastingRequirements, this, null))
             {
-                if (!string.IsNullOrWhiteSpace(spell.CannotCastMessage))
+                if (Timing.Global.Milliseconds > ChatErrorLastSent)
                 {
-                    PacketSender.SendChatMsg(this, spell.CannotCastMessage, ChatMessageType.Error, "", true);
-                }
-                else
-                {
-                    PacketSender.SendChatMsg(this, Strings.Combat.dynamicreq, ChatMessageType.Spells, CustomColors.Alerts.Error);
+                    if (!string.IsNullOrWhiteSpace(spell.CannotCastMessage))
+                    {
+                        PacketSender.SendChatMsg(this, spell.CannotCastMessage, ChatMessageType.Error, "", true);
+                    }
+                    else
+                    {
+                        PacketSender.SendChatMsg(this, Strings.Combat.dynamicreq, ChatMessageType.Spells, CustomColors.Alerts.Error);
+                    }
+                    ChatErrorLastSent = Timing.Global.Milliseconds + 1000;
                 }
 
                 return false;

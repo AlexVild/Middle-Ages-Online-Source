@@ -587,6 +587,8 @@ namespace Intersect.Client.Localization
 
             public static LocalizedString notenoughmp = @"Not enough MP!";
 
+            public static LocalizedString silenced = @"Silenced!";
+
             public static LocalizedString lowhealth = @"HP LOW!";
         }
 
@@ -2015,6 +2017,8 @@ namespace Intersect.Client.Localization
             public static LocalizedString title = @"Spells";
             
             public static LocalizedString targetneeded = @"You must have a target selected to cast this spell.";
+            
+            public static LocalizedString silenced = @"You're silenced and can't cast spells!";
         }
 
         public struct Trading

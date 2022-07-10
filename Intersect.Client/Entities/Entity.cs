@@ -1820,7 +1820,7 @@ namespace Intersect.Client.Entities
                 if (entityTex != null)
                 {
                     y = y + (int) (entityTex.GetHeight() / (Options.Instance.Sprites.Directions * 2));
-                    y += 3;
+                    y += 19;
                 }
 
                 var castBackground = Globals.ContentManager.GetTexture(TextureType.Misc, "castbackground.png");
@@ -1853,11 +1853,6 @@ namespace Intersect.Client.Entities
                 {
                     DrawCasterIndicator(castSpell.Combat.CastRange, IsAllyOf(Globals.Me));
                 }
-
-                /*if (castSpell.Combat.TargetType == SpellTargetTypes.AoE)
-                {
-                    DrawAoe(castSpell.Combat.CastRange, map, X, Y, false);
-                }*/
             }
         }
 
@@ -2983,6 +2978,129 @@ namespace Intersect.Client.Entities
                 texture, new FloatRect(0, 0, texture.GetWidth(), texture.GetHeight()),
                 new FloatRect(iconX + 4, iconY + 4, 32, 32), Color.White
             );
+        }
+
+        public void DrawStatuses()
+        {
+            if (Texture == null)
+            {
+                return;
+            }
+
+            List<GameTexture> statusTextures = new List<GameTexture>();
+            foreach(StatusTypes status in Enum.GetValues(typeof(StatusTypes)))
+            {
+                if (!StatusIsActive(status))
+                {
+                    continue;
+                }
+
+                var texture = GetStatusTexture(status);
+                if (texture == null)
+                {
+                    continue;
+                }
+
+                statusTextures.Add(texture);
+            }
+
+            // Fetch DoT/HoT and the like
+            foreach(Status status in Status)
+            {
+                if (status.Type != StatusTypes.None || status.SpellId == default)
+                {
+                    continue;
+                }
+
+                var spell = SpellBase.Get(status.SpellId);
+
+                var texture = Globals.ContentManager.GetTexture(TextureType.Spell, spell.Icon);
+
+                if (texture == null)
+                {
+                    continue;
+                }
+
+                statusTextures.Add(texture);
+            }
+
+            // We need to know our index of each status we're drawing to position it appropriately
+            for (var txtIdx = 0; txtIdx < statusTextures.Count; txtIdx++)
+            {
+                var width = 16;
+                var height = 16;
+                var currTexture = statusTextures[txtIdx];
+                var texturesRemaining = statusTextures.Count - (txtIdx + 1);
+                var xPadding = 4;
+                var yPadding = 2;
+                var textureSpace = xPadding + width;
+
+                // Initialize X to be centered with the entity
+                var center = (int)Math.Ceiling(GetCenterPos().X) - (width / 2);
+                var x = center;
+                if (statusTextures.Count % 2 == 0)
+                {
+                    var texturesPerSide = statusTextures.Count / 2;
+                    // Draw to the left of center
+                    if (txtIdx + 1 <= texturesPerSide)
+                    {
+                        // move our center point, as we have an even number of statuses to display
+                        center -= (textureSpace / 2);
+                        var leftIdx = texturesPerSide - txtIdx - 1;
+                        x = center - (textureSpace * leftIdx);
+                    }
+                    // Draw to the right of center
+                    else
+                    {
+                        // move our center point, as we have an even number of statuses to display
+                        center += (textureSpace / 2);
+                        var rightIdx = (txtIdx) - texturesPerSide;
+                        x = center + (textureSpace * rightIdx);
+                    }
+                }
+                else
+                {
+                    // If we are the median index for an odd-number amount of statuses, don't mess with x - it's already centered
+                    var median = (statusTextures.Count + 1) / 2;
+                    var texturesPerSide = median - 1;
+                    // Draw to the left of center
+                    if (txtIdx < median)
+                    {
+                        var leftIdx = texturesPerSide - txtIdx;
+                        x = center - (textureSpace * leftIdx);
+                    }
+                    // Draw to the right of center
+                    else
+                    {
+                        var rightIdx = txtIdx - texturesPerSide;
+                        x = textureSpace * rightIdx + center;
+                    }
+                }
+
+                var y = GetCenterPos().Y + 48;
+
+                var srcRectangle = new FloatRect(0, 0, currTexture.GetWidth(), currTexture.GetHeight());
+                var location = new FloatRect(x, y, height, width);
+
+                Graphics.DrawGameTexture(currTexture, srcRectangle, location, Color.White);
+            }
+        }
+
+        private GameTexture GetStatusTexture(StatusTypes status)
+        {
+            var textureName = $"status_{Enum.GetName(typeof(StatusTypes), status)}.png";
+            return Globals.ContentManager.GetTexture(TextureType.Misc, textureName);
+        }
+
+        public void ShowActionMessage(string text, Color color)
+        {
+            if (CurrentMap == default)
+            {
+                return;
+            }
+
+            var map = MapInstance.Get(CurrentMap);
+            map.ActionMsgs.Add(new ActionMessage(map, X, Y, text, color));
         }
     }
 }

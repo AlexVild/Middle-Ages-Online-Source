@@ -919,6 +919,19 @@ namespace Intersect.Client.Entities
 
         public void TryUseSpell(int index)
         {
+            if (StatusIsActive(StatusTypes.Silence))
+            {
+                if (Timing.Global.Milliseconds > mLastSpellCastMessageSent)
+                {
+                    Audio.AddGameSound(Options.UIDenySound, false);
+                    mLastSpellCastMessageSent = Timing.Global.Milliseconds + 1000;
+                    ChatboxMsg.AddMessage(new ChatboxMsg(Strings.Spells.silenced, CustomColors.Alerts.Error, ChatMessageType.Spells));
+
+                    ShowActionMessage(Strings.Combat.silenced, CustomColors.Combat.Status);
+                }
+                return;
+            }
+
             if (Spells[index].SpellId != Guid.Empty &&
                 (!Globals.Me.SpellCooldowns.ContainsKey(Spells[index].SpellId) ||
                  Globals.Me.SpellCooldowns[Spells[index].SpellId] < Timing.Global.Milliseconds))

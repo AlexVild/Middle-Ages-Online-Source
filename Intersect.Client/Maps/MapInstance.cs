@@ -1296,16 +1296,25 @@ namespace Intersect.Client.Maps
         {
             for (var n = ActionMsgs.Count - 1; n > -1; n--)
             {
-                var y = (int) Math.Ceiling(
-                    GetY() +
-                    ActionMsgs[n].Y * Options.TileHeight -
-                    Options.TileHeight *
-                    2 *
-                    (Options.ActionMessageTime - (ActionMsgs[n].TransmittionTimer - Timing.Global.Milliseconds)) /
-                    Options.ActionMessageTime + ActionMsgs[n].YOffset
-                );
+                var y = (int)Math.Ceiling(
+                        GetY() +
+                        ActionMsgs[n].Y * Options.TileHeight + (Options.TileHeight / 2));
+                var x = (int)Math.Ceiling(GetX() + (ActionMsgs[n].X + 1) * Options.TileWidth - (Options.TileWidth / 2));
+                // Move numbers upward, otherwise stay still
+                if (int.TryParse(ActionMsgs[n].Msg, out _))
+                {
+                    y = (int)Math.Ceiling(
+                        GetY() +
+                        ActionMsgs[n].Y * Options.TileHeight -
+                        Options.TileHeight *
+                        2 *
+                        (Options.ActionMessageTime - (ActionMsgs[n].TransmittionTimer - Timing.Global.Milliseconds)) /
+                        Options.ActionMessageTime + ActionMsgs[n].YOffset
+                    );
 
-                var x = (int) Math.Ceiling(GetX() + ActionMsgs[n].X * Options.TileWidth + ActionMsgs[n].XOffset);
+                    x = (int)Math.Ceiling(GetX() + ActionMsgs[n].X * Options.TileWidth + ActionMsgs[n].XOffset);
+                }
+                
                 var textWidth = Graphics.Renderer.MeasureText(ActionMsgs[n].Msg, Graphics.ActionMsgFont, 1).X;
 
                 Color fadingColor = ActionMsgs[n].Clr;
