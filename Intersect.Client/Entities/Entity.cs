@@ -3092,7 +3092,7 @@ namespace Intersect.Client.Entities
             return Globals.ContentManager.GetTexture(TextureType.Misc, textureName);
         }
 
-        public void ShowActionMessage(string text, Color color)
+        public void ShowActionMessage(string text, Color color, bool stationary)
         {
             if (CurrentMap == default)
             {
@@ -3100,7 +3100,7 @@ namespace Intersect.Client.Entities
             }
 
             var map = MapInstance.Get(CurrentMap);
-            map.ActionMsgs.Add(new ActionMessage(map, X, Y, text, color));
+            map.ActionMsgs.Add(new ActionMessage(map, X, Y, text, color, stationary));
         }
     }
 }

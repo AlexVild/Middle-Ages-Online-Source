@@ -141,7 +141,7 @@ namespace Intersect.Client.Interface.Game
                     {
                         hasSpeaker = true;
                         mSpeakerLabel.Show();
-                        mSpeakerLabel.Text = $"{splitPrompt[0]}:";
+                        mSpeakerLabel.Text = $"{splitPrompt[0].ToUpper()}:";
                         prompt = string.Concat(splitPrompt.Skip(1));
                     }
                     else

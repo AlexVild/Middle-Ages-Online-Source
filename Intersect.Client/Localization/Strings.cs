@@ -569,6 +569,8 @@ namespace Intersect.Client.Localization
 
             public static LocalizedString vital1 = @"Mana";
 
+            public static LocalizedString targetneeded = @"Needs Target!";
+
             public static LocalizedString warningtitle = @"Combat Warning!";
 
             public static LocalizedString warningforceclose =
@@ -588,6 +590,11 @@ namespace Intersect.Client.Localization
             public static LocalizedString notenoughmp = @"Not enough MP!";
 
             public static LocalizedString silenced = @"Silenced!";
+            public static LocalizedString stunned = @"Stunned!";
+            public static LocalizedString snared = @"Snared!";
+            public static LocalizedString sleep = @"Asleep!";
+            public static LocalizedString blind = @"Blind!";
+            public static LocalizedString confused = @"Confused!";
 
             public static LocalizedString lowhealth = @"HP LOW!";
         }
@@ -2019,6 +2026,16 @@ namespace Intersect.Client.Localization
             public static LocalizedString targetneeded = @"You must have a target selected to cast this spell.";
             
             public static LocalizedString silenced = @"You're silenced and can't cast spells!";
+            
+            public static LocalizedString stunned = @"You're stunned and can not move or attack!";
+            
+            public static LocalizedString sleep = @"You're asleep and can not move, use items, or attack!";
+            
+            public static LocalizedString blind = @"You're blinded, and your attack misses!";
+
+            public static LocalizedString confused = @"You're confused, and your accuracy is affected!";
+
+            public static LocalizedString snared = @"You're snared and can not move!";
         }
 
         public struct Trading

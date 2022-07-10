@@ -495,6 +495,12 @@ namespace Intersect.Client.Entities
 
         public void TryUseItem(int index)
         {
+            if (StatusIsActive(StatusTypes.Sleep))
+            {
+                SendAlert(Strings.Spells.sleep, Strings.Combat.sleep);
+                return;
+            }
+
             if (Globals.GameShop == null && Globals.InBank == false && Globals.InQuestBoard == false && Globals.InTrade == false && !ItemOnCd(index) &&
                 index >= 0 && index < Globals.Me.Inventory.Length && Globals.Me.Inventory[index]?.Quantity > 0)
             {
@@ -921,14 +927,7 @@ namespace Intersect.Client.Entities
         {
             if (StatusIsActive(StatusTypes.Silence))
             {
-                if (Timing.Global.Milliseconds > mLastSpellCastMessageSent)
-                {
-                    Audio.AddGameSound(Options.UIDenySound, false);
-                    mLastSpellCastMessageSent = Timing.Global.Milliseconds + 1000;
-                    ChatboxMsg.AddMessage(new ChatboxMsg(Strings.Spells.silenced, CustomColors.Alerts.Error, ChatMessageType.Spells));
-
-                    ShowActionMessage(Strings.Combat.silenced, CustomColors.Combat.Status);
-                }
+                SendAlert(Strings.Spells.silenced, Strings.Combat.silenced);
                 return;
             }
 
@@ -943,13 +942,11 @@ namespace Intersect.Client.Entities
                     return;
                 }
 
-                if (spellBase.Combat.TargetType == SpellTargetTypes.Single && Timing.Global.Milliseconds > mLastSpellCastMessageSent)
+                if (spellBase.Combat.TargetType == SpellTargetTypes.Single && TargetIndex == Guid.Empty)
                 {
                     if (TargetIndex == Guid.Empty)
                     {
-                        Audio.AddGameSound(Options.UIDenySound, false);
-                        ChatboxMsg.AddMessage(new ChatboxMsg(Strings.Spells.targetneeded, CustomColors.Alerts.Error, ChatMessageType.Spells));
-                        mLastSpellCastMessageSent = Timing.Global.Milliseconds + 5000;
+                        SendAlert(Strings.Spells.targetneeded, Strings.Combat.targetneeded);
                     }
                 }
 
@@ -1514,6 +1511,11 @@ namespace Intersect.Client.Entities
                 return false;
             }
 
+            if (StatusIsActive(StatusTypes.Blind) || StatusIsActive(StatusTypes.Confused))
+            {
+                SendAttackStatusAlerts();
+            }
+
             int x = Globals.Me.X;
             int y = Globals.Me.Y;
             var map = Globals.Me.CurrentMap;
@@ -1883,6 +1885,7 @@ namespace Intersect.Client.Entities
             //check if player is stunned or snared, if so don't let them turn.
             if (IsStunned())
             {
+                SendStunAlerts();
                 return false;
             }
 
@@ -2142,6 +2145,7 @@ namespace Intersect.Client.Entities
             //check if player is stunned or snared, if so don't let them move.
             if (IsStunned())
             {
+                SendStunAlerts();
                 return;
             }
 
@@ -2689,5 +2693,65 @@ namespace Intersect.Client.Entities
         }
 
     }
+    
+    public partial class Player : Entity
+    {
+        private void SendStunAlerts()
+        {
+            if (Timing.Global.Milliseconds > mLastSpellCastMessageSent)
+            {
+                if (StatusIsActive(StatusTypes.Sleep))
+                {
+                    SendAlert(Strings.Spells.sleep, Strings.Combat.sleep);
+                }
+                else if (StatusIsActive(StatusTypes.Stun))
+                {
+                    SendAlert(Strings.Spells.stunned, Strings.Combat.stunned);
+                }
+                else if (StatusIsActive(StatusTypes.Snare))
+                {
+                    SendAlert(Strings.Spells.snared, Strings.Combat.snared);
+                }
+            }
+        }
 
+        private void SendAlert(string chatMsg, string actionMsg)
+        {
+            if (Timing.Global.Milliseconds > mLastSpellCastMessageSent)
+            {
+                Audio.AddGameSound(Options.UIDenySound, false);
+                mLastSpellCastMessageSent = Timing.Global.Milliseconds + 700;
+                ChatboxMsg.AddMessage(new ChatboxMsg(chatMsg, CustomColors.Alerts.Error, ChatMessageType.Spells));
+
+                ShowActionMessage(actionMsg, CustomColors.General.GeneralDisabled, true);
+            }
+        }
+
+        private void SendAttackStatusAlerts()
+        {
+            if (Timing.Global.Milliseconds > mLastSpellCastMessageSent)
+            {
+                if (StatusIsActive(StatusTypes.Blind))
+                {
+                    SendAlert(Strings.Spells.blind, Strings.Combat.blind);
+                }
+                if (StatusIsActive(StatusTypes.Sleep))
+                {
+                    SendAlert(Strings.Spells.sleep, Strings.Combat.sleep);
+                }
+                else if (StatusIsActive(StatusTypes.Stun))
+                {
+                    SendAlert(Strings.Spells.stunned, Strings.Combat.stunned);
+                }
+                else if (StatusIsActive(StatusTypes.Snare))
+                {
+                    SendAlert(Strings.Spells.snared, Strings.Combat.snared);
+                }
+                else if (StatusIsActive(StatusTypes.Confused))
+                {
+                    SendAlert(Strings.Spells.confused, Strings.Combat.confused);
+                }
+            }
+        }
+    }
 }

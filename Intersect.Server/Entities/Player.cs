@@ -3200,6 +3200,12 @@ namespace Intersect.Server.Entities
 
         public void UseItem(int slot, Entity target = null)
         {
+            // Can not use items while sleeping
+            if (StatusActive(StatusTypes.Sleep))
+            {
+                return;
+            }
+
             if (resourceLock != null)
             {
                 SetResourceLock(false);

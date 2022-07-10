@@ -1296,12 +1296,11 @@ namespace Intersect.Client.Maps
         {
             for (var n = ActionMsgs.Count - 1; n > -1; n--)
             {
-                var y = (int)Math.Ceiling(
-                        GetY() +
-                        ActionMsgs[n].Y * Options.TileHeight + (Options.TileHeight / 2));
-                var x = (int)Math.Ceiling(GetX() + (ActionMsgs[n].X + 1) * Options.TileWidth - (Options.TileWidth / 2));
-                // Move numbers upward, otherwise stay still
-                if (int.TryParse(ActionMsgs[n].Msg, out _))
+                int y = (int)Math.Ceiling(
+                    GetY() +
+                    ActionMsgs[n].Y * Options.TileHeight + (Options.TileHeight / 2));
+
+                if (!ActionMsgs[n].Stationary)
                 {
                     y = (int)Math.Ceiling(
                         GetY() +
@@ -1311,7 +1310,11 @@ namespace Intersect.Client.Maps
                         (Options.ActionMessageTime - (ActionMsgs[n].TransmittionTimer - Timing.Global.Milliseconds)) /
                         Options.ActionMessageTime + ActionMsgs[n].YOffset
                     );
-
+                }
+                var x = (int)Math.Ceiling(GetX() + (ActionMsgs[n].X + 1) * Options.TileWidth - (Options.TileWidth / 2));
+                // Move numbers randomly
+                if (int.TryParse(ActionMsgs[n].Msg, out _))
+                {
                     x = (int)Math.Ceiling(GetX() + ActionMsgs[n].X * Options.TileWidth + ActionMsgs[n].XOffset);
                 }
                 
@@ -1320,11 +1323,11 @@ namespace Intersect.Client.Maps
                 Color fadingColor = ActionMsgs[n].Clr;
                 double alphaRatio = Math.Abs((float) (Timing.Global.Milliseconds - ActionMsgs[n].TransmittionTimer) / (float) Options.ActionMessageTime);
                 alphaRatio = MathHelper.Clamp(alphaRatio, 0.0f, 1.0f);
-                fadingColor.A = (byte) (255 * alphaRatio);
+                //fadingColor.A = (byte) (255 * alphaRatio);
 
                 Graphics.Renderer.DrawString(
                     ActionMsgs[n].Msg, Graphics.ActionMsgFont, (int) x - textWidth / 2f, (int) y, 1, fadingColor,
-                    true, null, new Color(fadingColor.A, 40, 40, 40)
+                    true, null, new Color(fadingColor.A, 0, 0, 0)
                 );
 
                 //Try to remove

@@ -548,7 +548,7 @@ namespace Intersect.Client.Networking
                 map.ActionMsgs.Add(
                     new ActionMessage(
                         map, packet.X, packet.Y, packet.Message,
-                        new Color(packet.Color.A, packet.Color.R, packet.Color.G, packet.Color.B)
+                        new Color(packet.Color.A, packet.Color.R, packet.Color.G, packet.Color.B), false
                     )
                 );
 

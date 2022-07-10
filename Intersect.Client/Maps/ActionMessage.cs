@@ -23,7 +23,9 @@ namespace Intersect.Client.Maps
 
         public int Y;
 
-        public ActionMessage(MapInstance map, int x, int y, string message, Color color)
+        public bool Stationary;
+
+        public ActionMessage(MapInstance map, int x, int y, string message, Color color, bool stationary)
         {
             Map = map;
             X = x;
@@ -33,6 +35,7 @@ namespace Intersect.Client.Maps
             XOffset = Globals.Random.Next(-32, 32); //+- 16 pixels so action msg's don't overlap!
             YOffset = Globals.Random.Next(-20, 20);
             TransmittionTimer = Timing.Global.Milliseconds + Options.ActionMessageTime;
+            Stationary = stationary;
         }
 
         public void TryRemove()
