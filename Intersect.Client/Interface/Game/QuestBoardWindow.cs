@@ -11,6 +11,7 @@ using Intersect.GameObjects.QuestBoard;
 using Intersect.GameObjects.QuestList;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Intersect.Client.Interface.Game
 {
@@ -103,8 +104,10 @@ namespace Intersect.Client.Interface.Game
                 var questListId = mQuestBoard.QuestLists[i];
                 mQuestLists.Add(questListId);
                 // Keep button in a list so we have some reference of which to dispose of it
-                mQuestListButtons.Add(SetupSelectionButton(mQuestLists[i]));
-                var button = mQuestListButtons[i];
+                var selectionElements = SetupSelectionButton(mQuestLists[i]);
+                var button = selectionElements.Item1;
+                var completionLabel = selectionElements.Item2;
+                mQuestListButtons.Add(button);
                 // Load in button styling
                 button.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
 
@@ -117,10 +120,24 @@ namespace Intersect.Client.Interface.Game
                 // Position of button
                 var dynamicY = baseY + (button.Height * i) + (upperMargin * (Math.Sign(i) * i)); // Sign() allows us not to calc margin on first iteration
                 button.SetPosition(baseX, dynamicY);
+
+                completionLabel.IsHidden = !QuestListCompleted(questListId);
             }
         }
 
-        public Button SetupSelectionButton(Guid questListId)
+        private static bool QuestListCompleted(Guid listId)
+        {
+            if (listId == default)
+            {
+                return false;
+            }
+
+            var questList = QuestListBase.Get(listId);
+
+            return !questList.Quests.Any(q => !Globals.Me.QuestProgress[q].Completed);
+        }
+
+        public Tuple<Button, ImagePanel> SetupSelectionButton(Guid questListId)
         {
             var button = new Button(mQuestBoardWindow, $"QuestBoardSelection");
             button.Text = QuestListBase.Get(questListId).Name;
@@ -128,7 +145,9 @@ namespace Intersect.Client.Interface.Game
             button.Clicked += QuestList_Clicked;
             button.UserData = questListId;
 
-            return button;
+            var completedPanel = new ImagePanel(button, "CompletedMarker");
+
+            return new Tuple<Button, ImagePanel>(button, completedPanel);
         }
 
         public bool IsVisible()

@@ -7,6 +7,7 @@ using Intersect.Client.General;
 using Intersect.Client.Localization;
 using Intersect.Client.Networking;
 using Intersect.GameObjects;
+using System.Linq;
 
 namespace Intersect.Client.Interface.Game
 {
@@ -80,6 +81,26 @@ namespace Intersect.Client.Interface.Game
             {
                 mCompletedLabel.IsHidden = !Globals.Me.QuestProgress[Globals.QuestOffers[0]].Completed;
             }
+        }
+
+        /// <summary>
+        /// Used to abbreviate titles of "tasks", i.e "Rogue Task: Some shit"
+        /// </summary>
+        /// <returns></returns>
+        private static string ChopTitle(string title)
+        {
+            var split = title.Split(':');
+            if (split.Length <= 1)
+            {
+                return title;
+            }
+
+            if (!split[0].ToLower().Contains("task"))
+            {
+                return title;
+            }
+
+            return string.Concat(split.Skip(1)).Trim();
         }
 
         private void _declineButton_Clicked(Base sender, ClickedEventArgs arguments)
@@ -163,7 +184,7 @@ namespace Intersect.Client.Interface.Game
                     mDeclineButton.SetText(Strings.QuestOffer.decline);
                 }
 
-                mQuestTitle.Text = quest.Name;
+                mQuestTitle.Text = ChopTitle(quest.Name);
                 mCompletedLabel.IsHidden = !Globals.Me.QuestProgress[quest.Id].Completed;
                 if (mQuestOfferText != quest.StartDescription)
                 {
