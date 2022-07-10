@@ -11,7 +11,7 @@ using Intersect.Utilities;
 namespace Intersect.Server.General
 {
 
-    public static class Globals
+    public static partial class Globals
     {
 
         public static readonly object ClientLock = new object();
@@ -60,6 +60,23 @@ namespace Intersect.Server.General
             }
         }
 
+    }
+
+    public static partial class Globals
+    {
+        public static List<ResourceBase> CachedResources = new List<ResourceBase>();
+
+        public static void RefreshCachedResources()
+        {
+            Logging.Log.Debug($"Caching resources...");
+            if (CachedResources.Count <= 0)
+            {
+                foreach (var v in ResourceBase.Lookup.ToList())
+                {
+                    CachedResources.Add((ResourceBase)v.Value);
+                }
+            }
+        }
     }
 
 }

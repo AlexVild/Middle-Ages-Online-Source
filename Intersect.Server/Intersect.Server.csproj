@@ -794,6 +794,10 @@
     <Compile Include="Migrations\Game\20220527122512_TimerInstanceChangeMigration.designer.cs">
       <DependentUpon>20220527122512_TimerInstanceChangeMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20220710214245_ResourceGroupMigration.cs" />
+    <Compile Include="Migrations\Game\20220710214245_ResourceGroupMigration.designer.cs">
+      <DependentUpon>20220710214245_ResourceGroupMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

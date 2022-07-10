@@ -4987,6 +4987,12 @@ Tick timer saved in server config.json.";
             
             public static LocalizedString inspirationexp = @"Inspiration Exp:";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ResourceGroupEditor = @"Add Resource Group";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ResourceGroupPrompt = @"Enter a name for the resource group you'd like to add:";
+
         }
 
         public struct ShopEditor

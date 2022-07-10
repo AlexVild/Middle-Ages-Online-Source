@@ -88,20 +88,21 @@ namespace Intersect.Server.Entities
 
                 // Increment records/determine resource bonuses
                 int recordKilled = playerKiller.IncrementRecord(RecordType.ResourceGathered, Base.Id);
+                int amountHarvested = GetAmountInGroupHarvested(playerKiller);
                 List<int> intervals = Options.Instance.CombatOpts.HarvestBonusIntervals;
-                int progressUntilNextBonus = GetHarvestsUntilNextBonus(recordKilled);
+                int progressUntilNextBonus = GetHarvestsUntilNextBonus(playerKiller);
 
                 if (Options.SendResourceRecordUpdates)
                 {
-                    if (recordKilled <= intervals.Last())
+                    if (amountHarvested <= intervals.Last())
                     {
                         // If we just unlocked a new harvesting bonus
-                        if (intervals.Find(x => x == recordKilled) != default)
+                        if (intervals.Find(x => x == amountHarvested) != default)
                         {
-                            if (recordKilled != intervals.Last())
+                            if (amountHarvested != intervals.Last())
                             {
                                 // The player still has some unlocks to go.
-                                var nextIntervalIdx = intervals.FindIndex(x => x == recordKilled) + 1;
+                                var nextIntervalIdx = intervals.FindIndex(x => x == amountHarvested) + 1;
                                 var nextInterval = intervals[nextIntervalIdx];
                                 PacketSender.SendEventDialog(playerKiller, Strings.Records.resourcegatheredbonusunlock.ToString(nextInterval.ToString()), "", Guid.NewGuid());
                             }
@@ -111,15 +112,15 @@ namespace Intersect.Server.Entities
                                 PacketSender.SendEventDialog(playerKiller, Strings.Records.resourcegatheredbonusunlockcomplete, "", Guid.NewGuid());
                             }
                         }
-                        else if (recordKilled % Options.ResourceRecordUpdateInterval == 0)
+                        else if (amountHarvested % Options.ResourceRecordUpdateInterval == 0)
                         {
                             // Otherwise, figure out when their next bonus will be awarded and let them know about it.
-                            playerKiller.SendRecordUpdate(Strings.Records.resourcegatheredbonus.ToString(recordKilled, progressUntilNextBonus));
+                            playerKiller.SendRecordUpdate(Strings.Records.resourcegatheredbonus.ToString(amountHarvested, progressUntilNextBonus));
                         }
                     }
-                    else if (recordKilled % Options.ResourceRecordUpdateInterval == 0)
+                    else if (amountHarvested % Options.ResourceRecordUpdateInterval == 0)
                     {
-                        playerKiller.SendRecordUpdate(Strings.Records.resourcegathered.ToString(recordKilled));
+                        playerKiller.SendRecordUpdate(Strings.Records.resourcegathered.ToString(amountHarvested));
                     }
                 }
             }
@@ -129,20 +130,9 @@ namespace Intersect.Server.Entities
         {
             if (player == null) return 0;
 
-            int currentHarvests = 0;
-            var currentRecord = player.PlayerRecords.Find(record => record.Type == RecordType.ResourceGathered && record.RecordId == Base.Id);
-            if (currentRecord != default)
-            {
-                currentHarvests = currentRecord.Amount;
-            }
+            int currentHarvests = GetAmountInGroupHarvested(player);
 
-            var intervals = Options.Instance.CombatOpts.HarvestBonusIntervals;
-            if (currentHarvests >= intervals.Last())
-            {
-                return 0;
-            }
-
-            return intervals.Find(x => currentHarvests < x) - currentHarvests;
+            return GetHarvestsUntilNextBonus(currentHarvests);
         }
 
         public int GetHarvestsUntilNextBonus(int currentHarvests)
@@ -288,13 +278,54 @@ namespace Intersect.Server.Entities
             return IsDead() & Base.WalkableAfter || !IsDead() && Base.WalkableBefore;
         }
 
+        public int GetAmountInGroupHarvested(Player player)
+        {
+            if (player == null)
+            {
+                return 0;
+            }
+
+            var playerRecord = player.PlayerRecords.Find(record => record.Type == RecordType.ResourceGathered && record.RecordId == Base.Id);
+
+            // Handle resource groups
+            if (!string.IsNullOrEmpty(Base.ResourceGroup))
+            {
+                var resources = Globals.CachedResources.Where(rsc => Base.ResourceGroup == rsc.ResourceGroup).ToArray();
+                var totalHarvested = 0;
+                foreach (var resource in resources)
+                {
+                    var tmpRecord = player.PlayerRecords.Find(record => record.Type == RecordType.ResourceGathered && record.RecordId == resource.Id);
+                    if (tmpRecord == default)
+                    {
+                        continue;
+                    }
+                    totalHarvested += tmpRecord.Amount;
+                }
+
+                return totalHarvested;
+            }
+            else
+            {
+                if (playerRecord == default)
+                {
+                    return -1;
+                }
+                return playerRecord.Amount;
+            }
+        }
+
         public double CalculateHarvestBonus(Player attacker)
         {
-            var playerRecord = attacker.PlayerRecords.Find(record => record.Type == RecordType.ResourceGathered && record.RecordId == Base.Id);
+            if (attacker == null)
+            {
+                return 0.0;
+            }
 
-            if (playerRecord == null) return 0.0f;
-
-            int amtHarvested = playerRecord.Amount;
+            int amtHarvested = GetAmountInGroupHarvested(attacker);
+            if (amtHarvested <= 0)
+            {
+                return 0.0f;
+            }
 
             var intervals = Options.Instance.CombatOpts.HarvestBonusIntervals;
             var bonuses = Options.Instance.CombatOpts.HarvestBonuses;

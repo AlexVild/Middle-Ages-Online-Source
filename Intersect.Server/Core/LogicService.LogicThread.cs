@@ -21,6 +21,7 @@ using Intersect.Server.Database.PlayerData.Players;
 using Intersect.Utilities;
 using Intersect.Server.Database.PlayerData;
 using Intersect.GameObjects.Timers;
+using Intersect.GameObjects;
 
 namespace Intersect.Server.Core
 {
@@ -93,6 +94,9 @@ namespace Intersect.Server.Core
                     // Initialize timers instance and load in values
                     TimerProcessor.ActiveTimers = new TimerList();
                     LoadTimers();
+
+                    // Initialize cached list of resources (for resource group logic)
+                    Globals.RefreshCachedResources();
 
                     while (ServerContext.Instance.IsRunning)
                     {

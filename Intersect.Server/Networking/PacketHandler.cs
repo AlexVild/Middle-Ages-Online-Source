@@ -3936,6 +3936,7 @@ namespace Intersect.Server.Networking
                 else if (type == GameObjectType.Resource)
                 {
                     Globals.KillResourcesOf((ResourceBase) obj);
+                    Globals.RefreshCachedResources();
                 }
                 else if (type == GameObjectType.Npc)
                 {
@@ -4086,6 +4087,10 @@ namespace Intersect.Server.Networking
                     else if (type == GameObjectType.Projectile)
                     {
                         Globals.KillProjectilesOf((ProjectileBase) obj);
+                    }
+                    else if (type == GameObjectType.Resource)
+                    {
+                        Globals.RefreshCachedResources();
                     }
 
                     obj.Load(packet.Data);

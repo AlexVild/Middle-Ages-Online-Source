@@ -260,6 +260,7 @@ namespace Intersect.Editor.Forms.Editors
                 txtCannotHarvest.Text = mEditorItem.CannotHarvestMessage;
                 nudExp.Value = mEditorItem.Experience;
                 chkDoNotRecord.Checked = mEditorItem.DoNotRecord;
+                cmbResourceGroup.Text = mEditorItem.ResourceGroup;
 
                 //Regen
                 nudHpRegen.Value = mEditorItem.VitalRegen;
@@ -890,16 +891,27 @@ namespace Intersect.Editor.Forms.Editors
             var mFolders = new List<string>();
             foreach (var itm in ResourceBase.Lookup)
             {
-                if (!string.IsNullOrEmpty(((ResourceBase) itm.Value).Folder) &&
-                    !mFolders.Contains(((ResourceBase) itm.Value).Folder))
+                ResourceBase resource = (ResourceBase) itm.Value;
+                if (!string.IsNullOrEmpty(resource.Folder) &&
+                    !mFolders.Contains(resource.Folder))
                 {
-                    mFolders.Add(((ResourceBase) itm.Value).Folder);
-                    if (!mKnownFolders.Contains(((ResourceBase) itm.Value).Folder))
+                    mFolders.Add(resource.Folder);
+                    if (!mKnownFolders.Contains(resource.Folder))
                     {
-                        mKnownFolders.Add(((ResourceBase) itm.Value).Folder);
+                        mKnownFolders.Add(resource.Folder);
                     }
                 }
+
+                if (!string.IsNullOrWhiteSpace(resource.ResourceGroup) && !mKnownResourceGroups.Contains(resource.ResourceGroup))
+                {
+                    mKnownResourceGroups.Add(resource.ResourceGroup);
+                }
             }
+
+            mKnownResourceGroups.Sort();
+            cmbResourceGroup.Items.Clear();
+            cmbResourceGroup.Items.Add(string.Empty);
+            cmbResourceGroup.Items.AddRange(mKnownResourceGroups.ToArray());
 
             mFolders.Sort();
             mKnownFolders.Sort();
@@ -993,6 +1005,32 @@ namespace Intersect.Editor.Forms.Editors
         {
             mEditorItem.DoNotRecord = chkDoNotRecord.Checked;
         }
-    }
 
+        private void btnAddResourceGroup_Click(object sender, EventArgs e)
+        {
+            var resourceGroupName = "";
+            var result = DarkInputBox.ShowInformation(
+                Strings.ResourceEditor.ResourceGroupPrompt, Strings.ResourceEditor.ResourceGroupEditor, ref resourceGroupName,
+                DarkDialogButton.OkCancel
+            );
+
+            if (result == DialogResult.OK && !string.IsNullOrEmpty(resourceGroupName))
+            {
+                if (!cmbResourceGroup.Items.Contains(resourceGroupName))
+                {
+                    mEditorItem.ResourceGroup = resourceGroupName;
+                    mKnownResourceGroups.Add(resourceGroupName);
+                    InitEditor();
+                    cmbResourceGroup.Text = resourceGroupName;
+                }
+            }
+        }
+
+        private List<string> mKnownResourceGroups = new List<string>();
+
+        private void cmbResourceGroup_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mEditorItem.ResourceGroup = cmbResourceGroup.Text;
+        }
+    }
 }

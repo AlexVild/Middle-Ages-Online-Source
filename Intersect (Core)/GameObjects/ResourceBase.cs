@@ -33,7 +33,7 @@ namespace Intersect.GameObjects
 
     }
 
-    public class ResourceBase : DatabaseObject<ResourceBase>, IFolderable
+    public partial class ResourceBase : DatabaseObject<ResourceBase>, IFolderable
     {
 
         [NotMapped] public List<ResourceDrop> Drops = new List<ResourceDrop>();
@@ -137,6 +137,11 @@ namespace Intersect.GameObjects
 
         }
 
+    }
+
+    public partial class ResourceBase : DatabaseObject<ResourceBase>, IFolderable
+    {
+        public string ResourceGroup { get; set; } = string.Empty;
     }
 
 }
