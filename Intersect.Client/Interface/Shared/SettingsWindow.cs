@@ -143,6 +143,10 @@ namespace Intersect.Client.Interface.Shared
         private readonly LabeledCheckBox mPartyTileMarkers;
 
         private readonly LabeledCheckBox mSelfTileMarkers;
+        
+        private readonly LabeledCheckBox mStatusMarkers;
+        
+        private readonly LabeledCheckBox mSelfStatusMarkers;
 
         // Open settings
         private bool mReturnToMenu;
@@ -271,6 +275,16 @@ namespace Intersect.Client.Interface.Shared
             mSelfTileMarkers = new LabeledCheckBox(mGameSettingsContainer, "SelfTileMarkers")
             {
                 Text = Strings.Settings.SelfTileMakers
+            };
+            
+            mStatusMarkers = new LabeledCheckBox(mGameSettingsContainer, "StatusMarkers")
+            {
+                Text = Strings.Settings.StatusMarkers
+            };
+
+            mSelfStatusMarkers = new LabeledCheckBox(mGameSettingsContainer, "SelfStatusMarkers")
+            {
+                Text = Strings.Settings.SelfStatusMarkers
             };
 
             // TODO: Place our configurable gameplay related settings into their respective container for initialization here!
@@ -742,6 +756,8 @@ namespace Intersect.Client.Interface.Shared
             mHostileTileMarkers.IsChecked = Globals.Database.HostileTileMarkers;
             mPartyTileMarkers.IsChecked = Globals.Database.PartyTileMarkers;
             mSelfTileMarkers.IsChecked = Globals.Database.SelfTileMarkers;
+            mStatusMarkers.IsChecked = Globals.Database.DisplayStatusMarkers;
+            mSelfStatusMarkers.IsChecked = Globals.Database.DisplaySelfStatusMarkers;
 
             // Video Settings.
             mAutoCloseWindowsCheckbox.IsChecked = Globals.Database.HideOthersOnWindowOpen;
@@ -933,6 +949,8 @@ namespace Intersect.Client.Interface.Shared
             Globals.Database.HostileTileMarkers = mHostileTileMarkers.IsChecked;
             Globals.Database.PartyTileMarkers = mPartyTileMarkers.IsChecked;
             Globals.Database.SelfTileMarkers = mSelfTileMarkers.IsChecked;
+            Globals.Database.DisplayStatusMarkers = mStatusMarkers.IsChecked;
+            Globals.Database.DisplaySelfStatusMarkers = mSelfStatusMarkers.IsChecked;
 
             // Save keybinding settings
             Globals.Database.ClassicMode = mClassicModeCheckbox.IsChecked;

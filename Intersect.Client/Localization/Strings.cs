@@ -1540,6 +1540,12 @@ namespace Intersect.Client.Localization
             public static LocalizedString PlayerNames = @"Display Player Names";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString StatusMarkers = @"Display Entity Statuses";
+            
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString SelfStatusMarkers = @"Display Self Statuses";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString NPCNames = @"Display NPC Names";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]

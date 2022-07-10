@@ -63,6 +63,10 @@ namespace Intersect.Client.Framework.Database
         
         public bool SelfTileMarkers;
 
+        public bool DisplayStatusMarkers;
+        
+        public bool DisplaySelfStatusMarkers;
+
         //Saving password, other stuff we don't want in the games directory
         public abstract void SavePreference(string key, object value);
 
@@ -110,6 +114,8 @@ namespace Intersect.Client.Framework.Database
             HostileTileMarkers = LoadPreference("EnemyTileMarkers", true);
             PartyTileMarkers = LoadPreference("PartyTileMarkers", true);
             SelfTileMarkers = LoadPreference("SelfTileMarkers", true);
+            DisplayStatusMarkers = LoadPreference("DisplayStatusMarkers", true);
+            DisplaySelfStatusMarkers = LoadPreference("DisplaySelfStatusMarkers", true);
         }
 
         public virtual void SavePreferences()
@@ -141,6 +147,8 @@ namespace Intersect.Client.Framework.Database
             SavePreference("EnemyTileMarkers", HostileTileMarkers.ToString());
             SavePreference("PartyTileMarkers", PartyTileMarkers.ToString());
             SavePreference("SelfTileMarkers", SelfTileMarkers.ToString());
+            SavePreference("DisplayStatusMarkers", DisplayStatusMarkers.ToString());
+            SavePreference("DisplaySelfStatusMarkers", DisplaySelfStatusMarkers.ToString());
         }
 
         public abstract bool LoadConfig();

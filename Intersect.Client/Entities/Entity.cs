@@ -2987,6 +2987,16 @@ namespace Intersect.Client.Entities
                 return;
             }
 
+            if (!Globals.Database.DisplaySelfStatusMarkers && Id == Globals.Me.Id)
+            {
+                return;
+            }
+
+            if (!Globals.Database.DisplayStatusMarkers && Id != Globals.Me.Id)
+            {
+                return;
+            }
+
             List<GameTexture> statusTextures = new List<GameTexture>();
             foreach(StatusTypes status in Enum.GetValues(typeof(StatusTypes)))
             {
