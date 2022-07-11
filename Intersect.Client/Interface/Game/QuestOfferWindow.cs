@@ -77,9 +77,13 @@ namespace Intersect.Client.Interface.Game
 
             mNextQuest.Hide();
             mPreviousQuest.Hide();
-            if (Globals.QuestOffers.Count > 0)
+            if (Globals.QuestOffers.Count > 0 && Globals.Me.QuestProgress.TryGetValue(Globals.QuestOffers[0], out var quest))
             {
-                mCompletedLabel.IsHidden = !Globals.Me.QuestProgress[Globals.QuestOffers[0]].Completed;
+                mCompletedLabel.IsHidden = !quest.Completed;
+            }
+            else
+            {
+                mCompletedLabel.Hide();
             }
         }
 
@@ -185,7 +189,15 @@ namespace Intersect.Client.Interface.Game
                 }
 
                 mQuestTitle.Text = ChopTitle(quest.Name);
-                mCompletedLabel.IsHidden = !Globals.Me.QuestProgress[quest.Id].Completed;
+                if (Globals.QuestOffers.Count > 0 && Globals.Me.QuestProgress.TryGetValue(quest.Id, out var questProgress))
+                {
+                    mCompletedLabel.IsHidden = !questProgress.Completed;
+                }
+                else
+                {
+                    mCompletedLabel.IsHidden = true;
+                }
+
                 if (mQuestOfferText != quest.StartDescription)
                 {
                     mQuestPromptLabel.ClearText();

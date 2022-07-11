@@ -88,7 +88,8 @@ namespace Intersect.Client.Networking
             me.DirRequestTimes.Push(now);
             var lastRequest = me.DirRequestTimes.Peek();
 
-            if (!force && lastRequest + Options.Instance.PlayerOpts.DirectionChangeLimiter > now)
+            // > 2 because we want to give a little leeway for turning 180 in combat mode
+            if (!force && lastRequest + Options.Instance.PlayerOpts.DirectionChangeLimiter > now && me.DirRequestTimes.Count > 2)
             {
                 // We're sending too many packets, ignore the request and wait for the player to chill in the Player#Update() method
                 return;
