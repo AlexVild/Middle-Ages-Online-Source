@@ -1885,7 +1885,7 @@ namespace Intersect.Client.Entities
             //check if player is stunned or snared, if so don't let them turn.
             if (IsStunned())
             {
-                SendStunAlerts();
+                SendStunAlerts(false);
                 return false;
             }
 
@@ -1937,6 +1937,8 @@ namespace Intersect.Client.Entities
             }
             else if (sound)
             {
+                Dir = FaceDirection;
+                PacketSender.SendDirection(Dir);
                 Audio.AddGameSound("al_combat_end.wav", false);
             }
 
@@ -2145,7 +2147,7 @@ namespace Intersect.Client.Entities
             //check if player is stunned or snared, if so don't let them move.
             if (IsStunned())
             {
-                SendStunAlerts();
+                SendStunAlerts(true);
                 return;
             }
 
@@ -2696,32 +2698,36 @@ namespace Intersect.Client.Entities
     
     public partial class Player : Entity
     {
-        private void SendStunAlerts()
+        private void SendStunAlerts(bool quiet)
         {
             if (Timing.Global.Milliseconds > mLastSpellCastMessageSent)
             {
                 if (StatusIsActive(StatusTypes.Sleep))
                 {
-                    SendAlert(Strings.Spells.sleep, Strings.Combat.sleep);
+                    SendAlert(Strings.Spells.sleep, Strings.Combat.sleep, quiet);
                 }
                 else if (StatusIsActive(StatusTypes.Stun))
                 {
-                    SendAlert(Strings.Spells.stunned, Strings.Combat.stunned);
+                    SendAlert(Strings.Spells.stunned, Strings.Combat.stunned, quiet);
                 }
                 else if (StatusIsActive(StatusTypes.Snare))
                 {
-                    SendAlert(Strings.Spells.snared, Strings.Combat.snared);
+                    SendAlert(Strings.Spells.snared, Strings.Combat.snared, quiet);
                 }
             }
         }
 
-        private void SendAlert(string chatMsg, string actionMsg)
+        private void SendAlert(string chatMsg, string actionMsg, bool quiet = false)
         {
             if (Timing.Global.Milliseconds > mLastSpellCastMessageSent)
             {
-                Audio.AddGameSound(Options.UIDenySound, false);
                 mLastSpellCastMessageSent = Timing.Global.Milliseconds + 700;
-                ChatboxMsg.AddMessage(new ChatboxMsg(chatMsg, CustomColors.Alerts.Error, ChatMessageType.Spells));
+                if (!quiet)
+                {
+                    Audio.AddGameSound(Options.UIDenySound, false);
+                    
+                    ChatboxMsg.AddMessage(new ChatboxMsg(chatMsg, CustomColors.Alerts.Error, ChatMessageType.Spells));
+                }
 
                 ShowActionMessage(actionMsg, CustomColors.General.GeneralDisabled, true);
             }
