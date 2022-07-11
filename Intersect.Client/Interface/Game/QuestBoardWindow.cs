@@ -134,7 +134,14 @@ namespace Intersect.Client.Interface.Game
 
             var questList = QuestListBase.Get(listId);
 
-            return !questList.Quests.Any(q => !Globals.Me.QuestProgress[q].Completed);
+            return !questList.Quests.Any(q => 
+            {
+                if (!Globals.Me.QuestProgress.TryGetValue(q, out var quest))
+                {
+                    return true;
+                }
+                return !Globals.Me.QuestProgress[q].Completed;
+            });
         }
 
         public Tuple<Button, ImagePanel> SetupSelectionButton(Guid questListId)
