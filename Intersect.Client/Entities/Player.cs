@@ -260,6 +260,17 @@ namespace Intersect.Client.Entities
 
             if (!IsBusy())
             {
+                // Combat mode direction processing
+                if (this == Globals.Me && CombatMode)
+                {
+                    var prevFace = FaceDirection;
+                    FaceDirection = GetDirectionFromMouse(WorldPos);
+                    if (FaceDirection != prevFace)
+                    {
+                        PacketSender.SendDirection(FaceDirection);
+                    }
+                }
+
                 if (this == Globals.Me && IsMoving == false)
                 {
                     ProcessDirectionalInput();
@@ -1526,7 +1537,7 @@ namespace Intersect.Client.Entities
             int x = Globals.Me.X;
             int y = Globals.Me.Y;
             var map = Globals.Me.CurrentMap;
-            var dir = Globals.Me.CombatMode ? Globals.Me.FaceDirection : Globals.Me.Dir;
+            var dir = RelevantDir;
             switch (dir)
             {
                 case 0:
@@ -2181,15 +2192,6 @@ namespace Intersect.Client.Entities
             Entity blockedBy = null;
 
             var prevFace = FaceDirection;
-            if (CombatMode && !IsBusy())
-            {
-                FaceDirection = GetDirectionFromMouse(WorldPos);
-
-                if (MoveDir == -1 && FaceDirection != prevFace)
-                {
-                    PacketSender.SendDirection(FaceDirection);
-                }
-            }
 
             if (MoveDir > -1 && Globals.EventDialogs.Count == 0)
             {

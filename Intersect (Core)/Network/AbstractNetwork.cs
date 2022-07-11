@@ -214,11 +214,8 @@ namespace Intersect.Network
                 return;
             }
 
-            var data = buffer.ToBytes();
-            var packet = (IPacket)MessagePacker.Instance.Deserialize(data);
             if (PreProcessHandler != null)
             {
-                Console.WriteLine($"Received packet of type {packet.GetType()}");
                 if (!PreProcessHandler.Invoke(connection, buffer.Length))
                 {
                     return;
@@ -226,9 +223,11 @@ namespace Intersect.Network
             }
 
             // Incorporate Ceras
+            var data = buffer.ToBytes();
 
             // Get Packet From Data using MessagePack
-            
+            var packet = (IPacket)MessagePacker.Instance.Deserialize(data);
+
             if (packet != null)
             {
                 if (Handler != null)

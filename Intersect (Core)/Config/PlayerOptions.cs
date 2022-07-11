@@ -128,7 +128,7 @@ namespace Intersect.Config
         /// <summary>
         /// How often, in ms, a player will send a dir change packet
         /// </summary>
-        public long DirectionChangeLimiter = 150;
+        public long DirectionChangeLimiter = 100;
 
         [OnDeserializing]
         internal void OnDeserializingMethod(StreamingContext context)
