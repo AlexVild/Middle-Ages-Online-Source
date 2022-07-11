@@ -110,7 +110,7 @@ namespace Intersect.Client.Entities
         private long mLastSpellCastMessageSent = 0L;
 
         // Used for doing smart direction changing if requesting to face a target
-        public long DirRequestTime { get; set; }
+        public long SmartDirTime { get; set; }
 
         // Target data
         private long mlastTargetScanTime = 0;
@@ -166,6 +166,8 @@ namespace Intersect.Client.Entities
         public bool CombatMode = false;
 
         public byte FaceDirection = 0;
+
+        public byte RelevantDir => CombatMode ? FaceDirection : Dir;
 
         public Player(Guid id, PlayerEntityPacket packet) : base(id, packet)
         {
@@ -313,7 +315,7 @@ namespace Intersect.Client.Entities
 
             bool wasMoving = IsMoving;
             bool smartDirPossible = false;
-            if (DirRequestTime > Timing.Global.Milliseconds) // If we're still in the potential zone for a smart dir change
+            if (SmartDirTime > Timing.Global.Milliseconds) // If we're still in the potential zone for a smart dir change
             {
                 smartDirPossible = true;
             }
@@ -327,6 +329,11 @@ namespace Intersect.Client.Entities
                 {
                     TryFaceTarget(true);
                 }
+            }
+
+            if (DirRequestTimes.Count > 0 && DirRequestTimes.Peek() + Options.Instance.PlayerOpts.DirectionChangeLimiter < Timing.Global.Milliseconds)
+            {
+                PacketSender.SendDirection(RelevantDir, true);
             }
 
             return returnval;
@@ -1903,7 +1910,7 @@ namespace Intersect.Client.Entities
                             return true;
                         } else if (!skipSmartDir)
                         {
-                            DirRequestTime = Timing.Global.Milliseconds + Options.Combat.FaceTargetPredictionTime;
+                            SmartDirTime = Timing.Global.Milliseconds + Options.Combat.FaceTargetPredictionTime;
                             return false;
                         }
                     }
@@ -2307,7 +2314,7 @@ namespace Intersect.Client.Entities
                             Dir = (byte) MoveDir;
                             PacketSender.SendDirection(Dir);
                         }
-                        else if (CombatMode)
+                        else if (CombatMode && FaceDirection != prevFace)
                         {
                             PacketSender.SendDirection(FaceDirection);
                         }
@@ -2759,5 +2766,15 @@ namespace Intersect.Client.Entities
                 }
             }
         }
+    }
+
+    /// <summary>
+    /// This is setup so that if a user is spamming direction changes, they stop happening until 300ms has passed since the last one.
+    /// Setup so that a user does not send more than <see cref="NewDirThreshold"/> requests per <see cref="DirectionLockoutTimer"/> ms
+    /// If they do, we wait <see cref="ResendDirectionTimer"/> ms to update the server.
+    /// </summary>
+    public partial class Player : Entity
+    {
+        public Stack<long> DirRequestTimes = new Stack<long>();
     }
 }

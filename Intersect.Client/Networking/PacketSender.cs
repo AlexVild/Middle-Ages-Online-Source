@@ -8,6 +8,7 @@ using Intersect.Client.Maps;
 using Intersect.Network.Packets.Client;
 using Intersect.Enums;
 using Intersect.Utilities;
+using Intersect.Client.Entities;
 
 namespace Intersect.Client.Networking
 {
@@ -70,8 +71,32 @@ namespace Intersect.Client.Networking
             Network.SendPacket(new BlockPacket(blocking));
         }
 
-        public static void SendDirection(byte dir)
+        public static void SendDirection(byte dir, bool force = false)
         {
+            var me = Globals.Me;
+            if (me == null)
+            {
+                return;
+            }
+
+            // Clear any stale requests
+            var now = Timing.Global.Milliseconds;
+            while (me.DirRequestTimes.Count > 0 && me.DirRequestTimes.Peek() + Options.Instance.PlayerOpts.DirectionChangeLimiter <= now)
+            {
+                me.DirRequestTimes.Pop();
+            }
+            me.DirRequestTimes.Push(now);
+            var lastRequest = me.DirRequestTimes.Peek();
+
+            if (!force && lastRequest + Options.Instance.PlayerOpts.DirectionChangeLimiter > now)
+            {
+                // We're sending too many packets, ignore the request and wait for the player to chill in the Player#Update() method
+                return;
+            }
+            else if (force)
+            {
+                me.DirRequestTimes.Clear();
+            }
             Network.SendPacket(new DirectionPacket(dir));
         }
 

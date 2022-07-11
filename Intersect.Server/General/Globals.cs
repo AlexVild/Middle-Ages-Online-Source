@@ -68,14 +68,13 @@ namespace Intersect.Server.General
 
         public static void RefreshCachedResources()
         {
+            CachedResources.Clear();
             Logging.Log.Debug($"Caching resources...");
-            if (CachedResources.Count <= 0)
+            foreach (var v in ResourceBase.Lookup.ToList())
             {
-                foreach (var v in ResourceBase.Lookup.ToList())
-                {
-                    CachedResources.Add((ResourceBase)v.Value);
-                }
+                CachedResources.Add((ResourceBase)v.Value);
             }
+            Logging.Log.Debug($"Resources cached");
         }
     }
 

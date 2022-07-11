@@ -125,6 +125,11 @@ namespace Intersect.Config
         
         public string TaskCompletedVarGuid = "546e9490-f152-4318-9cc6-2c26555fea78";
 
+        /// <summary>
+        /// How often, in ms, a player will send a dir change packet
+        /// </summary>
+        public long DirectionChangeLimiter = 150;
+
         [OnDeserializing]
         internal void OnDeserializingMethod(StreamingContext context)
         {
