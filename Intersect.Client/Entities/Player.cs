@@ -112,6 +112,8 @@ namespace Intersect.Client.Entities
         // Used for doing smart direction changing if requesting to face a target
         public long SmartDirTime { get; set; }
 
+        public bool IsCasting => CastTime > Timing.Global.Milliseconds;
+
         // Target data
         private long mlastTargetScanTime = 0;
 
@@ -278,14 +280,6 @@ namespace Intersect.Client.Entities
 
                 if (Controls.KeyDown(Control.AttackInteract) || ResourceLocked)
                 {
-                    if (Globals.Database.AttackCancelsCast)
-                    {
-                        if (Globals.Me.CastTime - Options.Instance.CombatOpts.CancelCastLeeway > Timing.Global.Milliseconds)
-                        {
-                            PacketSender.CancelPlayerCast(Id);
-                        }
-                    }
-
                     if (!Globals.Me.TryAttack())
                     {
                         UpdateAttackTimer();
@@ -949,11 +943,12 @@ namespace Intersect.Client.Entities
                 return;
             }
 
-            if (Spells[index].SpellId != Guid.Empty &&
-                (!Globals.Me.SpellCooldowns.ContainsKey(Spells[index].SpellId) ||
-                 Globals.Me.SpellCooldowns[Spells[index].SpellId] < Timing.Global.Milliseconds))
+            var spell = Spells[index];
+            if (spell.SpellId != Guid.Empty &&
+                (!Globals.Me.SpellCooldowns.ContainsKey(spell.SpellId) ||
+                 Globals.Me.SpellCooldowns[spell.SpellId] < Timing.Global.Milliseconds))
             {
-                var spellBase = SpellBase.Get(Spells[index].SpellId);
+                var spellBase = SpellBase.Get(spell.SpellId);
 
                 if (spellBase.CastDuration > 0 && (Options.Instance.CombatOpts.MovementCancelsCast && Globals.Me.IsMoving))
                 {
@@ -968,7 +963,17 @@ namespace Intersect.Client.Entities
                     }
                 }
 
-                PacketSender.SendUseSpell(index, TargetIndex);
+                var timeWindow = GetCastStart() + Options.Instance.CombatOpts.CancelCastLeeway;
+                if (IsCasting && SpellCast == spell.SpellId 
+                    && Globals.Database.AttackCancelsCast 
+                    && Timing.Global.Milliseconds > timeWindow)
+                {
+                    PacketSender.CancelPlayerCast(Globals.Me.Id);
+                }
+                else
+                {
+                    PacketSender.SendUseSpell(index, TargetIndex);
+                }
             }
         }
 
@@ -1898,7 +1903,7 @@ namespace Intersect.Client.Entities
         public bool TryFaceTarget(bool skipSmartDir = false, bool force = false)
         {
             // Check if we're currently casting
-            if (CastTime > Timing.Global.Milliseconds) return false;
+            if (IsCasting) return false;
 
             //check if player is stunned or snared, if so don't let them turn.
             if (IsStunned())

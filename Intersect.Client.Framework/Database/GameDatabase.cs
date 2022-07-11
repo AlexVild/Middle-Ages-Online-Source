@@ -105,7 +105,7 @@ namespace Intersect.Client.Framework.Database
             DisplayClanMembers = LoadPreference("DisplayClanMembers", true);
             DisplayNpcNames = LoadPreference("DisplayNpcNames", true);
             DisplayPlayerNames = LoadPreference("DisplayPlayerNames", true);
-            AttackCancelsCast = LoadPreference("AttackCancelsCast", true);
+            AttackCancelsCast = LoadPreference("AttackCancelsCast", false);
             EnterCombatOnTarget = LoadPreference("EnterCombatOnTarget", false);
             ChangeTargetOnDeath = LoadPreference("ChangeTargetOnDeath", true);
             ClassicMode = LoadPreference("ClassicMode", false);

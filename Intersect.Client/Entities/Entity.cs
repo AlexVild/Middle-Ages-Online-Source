@@ -3113,4 +3113,18 @@ namespace Intersect.Client.Entities
             map.ActionMsgs.Add(new ActionMessage(map, X, Y, text, color, stationary));
         }
     }
+
+    public partial class Entity
+    {
+        public long GetCastStart() 
+        {
+            var now = Timing.Global.Milliseconds;
+            if (SpellCast == default)
+            {
+                return now;
+            }
+
+            return CastTime - SpellBase.Get(SpellCast).CastDuration;
+        }
+    }
 }

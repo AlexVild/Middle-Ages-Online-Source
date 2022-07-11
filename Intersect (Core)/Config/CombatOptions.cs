@@ -115,7 +115,7 @@ namespace Intersect.Config
         public int PartyTargetDistance = 10;
 
         // How many ms before cancel cast can't happen
-        public int CancelCastLeeway = 200;
+        public int CancelCastLeeway = 250;
 
         public bool StunPreventsItems { get; set;  } = false;
 
