@@ -510,6 +510,10 @@ namespace Intersect.Client.Core
             }
         }
 
+        public static bool QuickModifierActive()
+        {
+            return Globals.InputManager.KeyDown(Keys.Shift)
+        }
     }
 
 }

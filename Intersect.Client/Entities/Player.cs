@@ -425,7 +425,7 @@ namespace Intersect.Client.Entities
                     } else
                     {
                         // Quick drop
-                        if (Globals.InputManager.KeyDown(Keys.Shift))
+                        if (Input.QuickModifierActive())
                         {
                             PacketSender.SendDropItem(index, Inventory[index].Quantity);
                             return;
@@ -449,7 +449,7 @@ namespace Intersect.Client.Entities
                     } else
                     {
                         // Quick drop
-                        if (Globals.InputManager.KeyDown(Keys.Shift))
+                        if (Input.QuickModifierActive())
                         {
                             PacketSender.SendDropItem(index, 1);
                             return;
@@ -643,7 +643,7 @@ namespace Intersect.Client.Entities
                     if (Inventory[index].Quantity > 1)
                     {
                         // Quick sell the whole stack if the gui modifier key is pressed
-                        if (Globals.InputManager.KeyDown(Keys.Shift)) 
+                        if (Input.QuickModifierActive()) 
                         {
                             PacketSender.SendSellItem(index, Inventory[index].Quantity);
                             return;
@@ -658,7 +658,7 @@ namespace Intersect.Client.Entities
                     else
                     {
                         // Quick sell the item
-                        if (Globals.InputManager.KeyDown(Keys.Shift))
+                        if (Input.QuickModifierActive())
                         {
                             PacketSender.SendSellItem(index, 1);
                             return;
@@ -714,7 +714,7 @@ namespace Intersect.Client.Entities
 
                 if (Inventory[index].Quantity > 1)
                 {
-                    if (Globals.InputManager.KeyDown(Keys.Shift))
+                    if (Input.QuickModifierActive())
                     {
                         PacketSender.SendDepositItem(index, Inventory[index].Quantity);
                         return;
@@ -759,7 +759,7 @@ namespace Intersect.Client.Entities
 
                 if (Globals.Bank[index].Quantity > 1)
                 {
-                    if (Globals.InputManager.KeyDown(Keys.Shift))
+                    if (Input.QuickModifierActive())
                     {
                         PacketSender.SendWithdrawItem(index, Globals.Bank[index].Quantity);
                         return;
@@ -790,16 +790,23 @@ namespace Intersect.Client.Entities
         //Bag
         public void TryStoreBagItem(int invSlot, int bagSlot)
         {
-            if (ItemBase.Get(Inventory[invSlot].ItemId) != null)
+            var inventoryItem = Inventory[invSlot];
+            var item = ItemBase.Get(inventoryItem.ItemId);
+            if (item != null)
             {
-                if (Inventory[invSlot].Quantity > 1)
+                if (inventoryItem.Quantity > 1)
                 {
-                    int[] userData = new int[2] { invSlot, bagSlot };
+                    if (Input.QuickModifierActive())
+                    {
+                        PacketSender.SendStoreBagItem(invSlot, inventoryItem.Quantity, bagSlot);
+                        return;
+                    }
 
+                    int[] userData = new int[2] { invSlot, bagSlot };
                     var iBox = new InputBox(
                         Strings.Bags.storeitem,
-                        Strings.Bags.storeitemprompt.ToString(ItemBase.Get(Inventory[invSlot].ItemId).Name), true,
-                        InputBox.InputType.NumericInput, StoreBagItemInputBoxOkay, null, userData, Inventory[invSlot].Quantity
+                        Strings.Bags.storeitemprompt.ToString(item.Name), true,
+                        InputBox.InputType.NumericInput, StoreBagItemInputBoxOkay, null, userData, inventoryItem.Quantity
                     );
                 }
                 else
@@ -821,16 +828,23 @@ namespace Intersect.Client.Entities
 
         public void TryRetreiveBagItem(int bagSlot, int invSlot)
         {
-            if (Globals.Bag[bagSlot] != null && ItemBase.Get(Globals.Bag[bagSlot].ItemId) != null)
+            var bagItem = Globals.Bag[bagSlot];
+            var item = ItemBase.Get(bagItem.ItemId);
+            if (bagItem != null && item != null)
             {
-                int[] userData = new int[2] { bagSlot, invSlot };
+                if (Input.QuickModifierActive())
+                {
+                    PacketSender.SendRetrieveBagItem(bagSlot, bagItem.Quantity, invSlot);
+                    return;
+                }
 
+                int[] userData = new int[2] { bagSlot, invSlot };
                 if (Globals.Bag[bagSlot].Quantity > 1)
                 {
                     var iBox = new InputBox(
                         Strings.Bags.retreiveitem,
-                        Strings.Bags.retreiveitemprompt.ToString(ItemBase.Get(Globals.Bag[bagSlot].ItemId).Name), true,
-                        InputBox.InputType.NumericInput, RetreiveBagItemInputBoxOkay, null, userData
+                        Strings.Bags.retreiveitemprompt.ToString(item.Name), true,
+                        InputBox.InputType.NumericInput, RetreiveBagItemInputBoxOkay, null, userData, bagItem.Quantity
                     );
                 }
                 else
@@ -853,14 +867,21 @@ namespace Intersect.Client.Entities
         //Trade
         public void TryTradeItem(int index)
         {
-            if (ItemBase.Get(Inventory[index].ItemId) != null)
+            var inventoryItem = Inventory[index];
+            var item = ItemBase.Get(inventoryItem.ItemId);
+            if (item != null)
             {
                 if (Inventory[index].Quantity > 1)
                 {
+                    if (Input.QuickModifierActive())
+                    {
+                        PacketSender.SendOfferTradeItem(index, inventoryItem.Quantity);
+                        return;
+                    }
                     var iBox = new InputBox(
                         Strings.Trading.offeritem,
-                        Strings.Trading.offeritemprompt.ToString(ItemBase.Get(Inventory[index].ItemId).Name), true,
-                        InputBox.InputType.NumericInput, TradeItemInputBoxOkay, null, index, Inventory[index].Quantity
+                        Strings.Trading.offeritemprompt.ToString(item.Name), true,
+                        InputBox.InputType.NumericInput, TradeItemInputBoxOkay, null, index, inventoryItem.Quantity
                     );
                 }
                 else
@@ -881,14 +902,23 @@ namespace Intersect.Client.Entities
 
         public void TryRevokeItem(int index)
         {
-            if (Globals.Trade[0, index] != null && ItemBase.Get(Globals.Trade[0, index].ItemId) != null)
+            var tradeItem = Globals.Trade[0, index];
+            var item = ItemBase.Get(Globals.Trade[0, index].ItemId);
+
+            if (tradeItem != null && item != null)
             {
+                if (Input.QuickModifierActive())
+                {
+                    PacketSender.SendRevokeTradeItem(index, tradeItem.Quantity);
+                    return;
+                }
+
                 if (Globals.Trade[0, index].Quantity > 1)
                 {
                     var iBox = new InputBox(
                         Strings.Trading.revokeitem,
-                        Strings.Trading.revokeitemprompt.ToString(ItemBase.Get(Globals.Trade[0, index].ItemId).Name),
-                        true, InputBox.InputType.NumericInput, RevokeItemInputBoxOkay, null, index
+                        Strings.Trading.revokeitemprompt.ToString(item.Name),
+                        true, InputBox.InputType.NumericInput, RevokeItemInputBoxOkay, null, index, tradeItem.Quantity
                     );
                 }
                 else
