@@ -69,13 +69,15 @@ namespace Intersect.Client.Maps
         private Dictionary<MapAttribute, Animation> mAttributeAnimInstances = new Dictionary<MapAttribute, Animation>();
         private Dictionary<MapAttribute, Entity> mAttributeCritterInstances = new Dictionary<MapAttribute, Entity>();
 
-        protected float mCurFogIntensity;
+        protected float mCurFogIntensity = 0f;
 
         private List<Event> mEvents = new List<Event>();
 
         protected float mFogCurrentX;
 
         protected float mFogCurrentY;
+
+        protected GameTexture mFogTex;
 
         //Fog Variables
         protected long mFogUpdateTime = -1;
@@ -140,6 +142,7 @@ namespace Intersect.Client.Maps
             Autotiles = new MapAutotiles(this);
             OnMapLoaded -= HandleMapLoaded;
             OnMapLoaded += HandleMapLoaded;
+            mFogTex = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Fog, Fog);
             MapRequests.Remove(Id);
         }
 
@@ -1010,54 +1013,37 @@ namespace Intersect.Client.Maps
         //Fogs/Panorama/Overlay
         public void DrawFog()
         {
-            if (Globals.Me == null || Lookup.Get(Globals.Me.CurrentMap) == null)
+            if (Globals.Me == null || Get(Globals.Me.CurrentMap) == null)
             {
                 return;
             }
 
             float ecTime = Timing.Global.Milliseconds - mFogUpdateTime;
+            var intensityChange = ecTime / 2000f;
             mFogUpdateTime = Timing.Global.Milliseconds;
+
             if (Id == Globals.Me.CurrentMap)
             {
-                if (mCurFogIntensity != 1)
+                if (mCurFogIntensity < 1)
                 {
-                    if (mCurFogIntensity < 1)
-                    {
-                        mCurFogIntensity += ecTime / 2000f;
-                        if (mCurFogIntensity > 1)
-                        {
-                            mCurFogIntensity = 1;
-                        }
-                    }
-                    else
-                    {
-                        mCurFogIntensity -= ecTime / 2000f;
-                        if (mCurFogIntensity < 1)
-                        {
-                            mCurFogIntensity = 1;
-                        }
-                    }
+                    mCurFogIntensity = (float)MathHelper.Clamp(mCurFogIntensity + intensityChange, 0, 1);
+                }
+                else if (mCurFogIntensity > 1)
+                {
+                    mCurFogIntensity = (float)MathHelper.Clamp(mCurFogIntensity - intensityChange, 1, double.MaxValue);
                 }
             }
             else
             {
-                if (mCurFogIntensity != 0)
-                {
-                    mCurFogIntensity -= ecTime / 2000f;
-                    if (mCurFogIntensity < 0)
-                    {
-                        mCurFogIntensity = 0;
-                    }
-                }
+                mCurFogIntensity = (float)MathHelper.Clamp(mCurFogIntensity - intensityChange, 0, 1);
             }
 
             if (Fog != null && Fog.Length > 0)
             {
-                var fogTex = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Fog, Fog);
-                if (fogTex != null)
+                if (mFogTex != null)
                 {
-                    var xCount = (int) (Options.MapWidth * Options.TileWidth * 3 / fogTex.GetWidth());
-                    var yCount = (int) (Options.MapHeight * Options.TileHeight * 3 / fogTex.GetHeight());
+                    var xCount = (int) (Options.MapWidth * Options.TileWidth * 3 / mFogTex.GetWidth());
+                    var yCount = (int) (Options.MapHeight * Options.TileHeight * 3 / mFogTex.GetHeight());
 
                     mFogCurrentX -= ecTime / 1000f * FogXSpeed * -6;
                     mFogCurrentY += ecTime / 1000f * FogYSpeed * 2;
@@ -1066,24 +1052,24 @@ namespace Intersect.Client.Maps
                     float deltaY = 0;
                     mFogCurrentY -= deltaY;
 
-                    if (mFogCurrentX < fogTex.GetWidth())
+                    if (mFogCurrentX < mFogTex.GetWidth())
                     {
-                        mFogCurrentX += fogTex.GetWidth();
+                        mFogCurrentX += mFogTex.GetWidth();
                     }
 
-                    if (mFogCurrentX > fogTex.GetWidth())
+                    if (mFogCurrentX > mFogTex.GetWidth())
                     {
-                        mFogCurrentX -= fogTex.GetWidth();
+                        mFogCurrentX -= mFogTex.GetWidth();
                     }
 
-                    if (mFogCurrentY < fogTex.GetHeight())
+                    if (mFogCurrentY < mFogTex.GetHeight())
                     {
-                        mFogCurrentY += fogTex.GetHeight();
+                        mFogCurrentY += mFogTex.GetHeight();
                     }
 
-                    if (mFogCurrentY > fogTex.GetHeight())
+                    if (mFogCurrentY > mFogTex.GetHeight())
                     {
-                        mFogCurrentY -= fogTex.GetHeight();
+                        mFogCurrentY -= mFogTex.GetHeight();
                     }
 
                     var drawX = (float) Math.Round(mFogCurrentX);
@@ -1093,10 +1079,10 @@ namespace Intersect.Client.Maps
                     {
                         for (var y = -1; y < yCount; y++)
                         {
-                            var fogW = fogTex.GetWidth();
-                            var fogH = fogTex.GetHeight();
+                            var fogW = mFogTex.GetWidth();
+                            var fogH = mFogTex.GetHeight();
                             Graphics.DrawGameTexture(
-                                fogTex, new FloatRect(0, 0, fogW, fogH),
+                                mFogTex, new FloatRect(0, 0, fogW, fogH),
                                 new FloatRect(
                                     GetX() - Options.MapWidth * Options.TileWidth * 1f + x * fogW + drawX,
                                     GetY() - Options.MapHeight * Options.TileHeight * 1f + y * fogH + drawY, fogW, fogH

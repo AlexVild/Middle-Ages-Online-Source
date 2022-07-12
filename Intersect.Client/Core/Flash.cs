@@ -58,6 +58,7 @@ namespace Intersect.Client.Core
                 if (sFadeAmt <= 0f)
                 {
                     sFadeAmt = 0f;
+                    sDone = true;
                 }
             }
         }
