@@ -3044,6 +3044,10 @@ namespace Intersect.Server.Entities
                             toGive;
 
                         toGive -= quantity;
+                        if (slot >= openSlots.Count)
+                        {
+                            break;
+                        }
                         openSlots[slot].Set(new Item(item.ItemId, quantity));
                         updateSlots.Add(openSlots[slot].Slot);
                     }
