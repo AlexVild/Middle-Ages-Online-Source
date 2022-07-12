@@ -1848,11 +1848,6 @@ namespace Intersect.Client.Entities
                 {
                     DrawSpellIcon(x, y, castSpell.Icon);
                 }
-
-                if (castSpell.Combat.TargetType == SpellTargetTypes.Single && EntityTarget == Globals.Me?.Id)
-                {
-                    DrawCasterIndicator(castSpell.Combat.CastRange, IsAllyOf(Globals.Me));
-                }
             }
         }
 
@@ -2488,13 +2483,16 @@ namespace Intersect.Client.Entities
         private GameTexture COMBAT_TILE_NEUTRAL = Globals.ContentManager.GetTexture(TextureType.Misc, "aoe_neutral.png");
         private GameTexture COMBAT_TILE_FRIENDLY = Globals.ContentManager.GetTexture(TextureType.Misc, "aoe_heal.png");
 
-        private void DrawCasterIndicator(int castRange, bool friendly)
+        public void DrawAggroIndicator(int maxRange, bool friendly)
         {
+            if (!(this is Player) && EntityTarget != Globals.Me.Id)
+            {
+                return;
+            }
             if (friendly || !Globals.Database.CastingIndicator)
             {
                 return;
             }
-
             if (Globals.Me == null || Globals.Me.Id == Id)
             {
                 return;
@@ -2514,26 +2512,10 @@ namespace Intersect.Client.Entities
             }
 
             // Add 1 to cast range here as just a simple error buffer, since center point isn't exact
-            var maxCastingDistance = (castRange + 1) * Options.Map.TileWidth; 
+            var maxCastingDistance = (maxRange + 1) * Options.Map.TileWidth; 
             var distanceBetween = CalculateDistanceTo(Globals.Me);
             var alpha = 255 - (int)Math.Round((distanceBetween / maxCastingDistance) * 255f);
-
-            // Cap alpha values to prevent opacity jitter
-            switch (alpha)
-            {
-                case var _ when alpha >= 150:
-                    alpha = 255;
-                    break;
-                case var _ when alpha >= 20:
-                    alpha = 185;
-                    break;
-                case var _ when alpha < 20 && alpha > 0:
-                    alpha = 115;
-                    break;
-                default:
-                    alpha = 0;
-                    break;
-            }
+            alpha = MathHelper.Clamp(alpha, 0, 255);
 
             var rcos = IndicatorRadius * MathHelper.DCos(angle);
             var rsin = IndicatorRadius * MathHelper.DSin(angle);

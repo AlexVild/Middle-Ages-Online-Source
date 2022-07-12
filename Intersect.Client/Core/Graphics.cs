@@ -435,6 +435,7 @@ namespace Intersect.Client.Core
                         {
                             entity.DrawHpBar();
                             entity.DrawCastingBar();
+                            entity.DrawAggroIndicator(12, entity.IsAllyOf(Globals.Me));
                         }
 
                         entity.DrawChatBubbles();
