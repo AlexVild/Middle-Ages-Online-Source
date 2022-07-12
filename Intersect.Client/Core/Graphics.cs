@@ -267,9 +267,10 @@ namespace Intersect.Client.Core
                         switch (castSpell.Combat.TargetType)
                         {
                             case SpellTargetTypes.AoE:
-                                entity.DrawAoe(castSpell, map, entity.X, entity.Y, entity.IsAllyOf(Globals.Me));
+                                entity.DrawAoe(castSpell, map, entity.X, entity.Y, entity.IsAllyOf(Globals.Me), castSpell.Combat.HitRadius);
                                 break;
                             case SpellTargetTypes.Single:
+                                entity.DrawAoe(castSpell, map, entity.X, entity.Y, entity.IsAllyOf(Globals.Me), castSpell.Combat.CastRange, true);
                                 if (castSpell.Combat.HitRadius <= 0)
                                 {
                                     break;
@@ -291,7 +292,7 @@ namespace Intersect.Client.Core
                                 }
 
                                 var targetMap = MapInstance.Get(target.CurrentMap);
-                                target.DrawAoe(castSpell, targetMap, target.X, target.Y, entity.IsAllyOf(Globals.Me));
+                                target.DrawAoe(castSpell, targetMap, target.X, target.Y, entity.IsAllyOf(Globals.Me), castSpell.Combat.HitRadius);
                                 break;
                             case SpellTargetTypes.Projectile:
                                 entity.DrawProjectileSpawns(castSpell, map, entity.X, entity.Y, entity.IsAllyOf(Globals.Me));

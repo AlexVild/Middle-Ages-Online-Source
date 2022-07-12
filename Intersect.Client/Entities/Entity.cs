@@ -2600,9 +2600,13 @@ namespace Intersect.Client.Entities
         private const int MIN_AOE_ALPHA = 125;
         private const int AOE_UPDATE_MS = 100;
         private const int AOE_UPDATE_AMT = 15;
-        public void DrawAoe(SpellBase spell, MapInstance spawnMap, byte spawnX, byte spawnY, bool friendlyAoe)
+        public void DrawAoe(SpellBase spell, MapInstance spawnMap, byte spawnX, byte spawnY, bool friendlyAoe, int size, bool onlyMe = false)
         {
             if (!ShouldRenderMarkers(friendlyAoe))
+            {
+                return;
+            }
+            if (onlyMe && EntityTarget != Globals.Me.Id)
             {
                 return;
             }
@@ -2622,12 +2626,11 @@ namespace Intersect.Client.Entities
                 AoeAlpha = MathHelper.Clamp(AoeAlpha + (AOE_UPDATE_AMT * AoeAlphaDir), MIN_AOE_ALPHA, MAX_AOE_ALPHA);
             }
 
-            var hitRadius = spell.Combat.HitRadius;
             // The start coordinates are calculated knowing that the AoE spawn is always the center
-            int left = spawnX - hitRadius;
-            int right = spawnX + hitRadius;
-            int top = spawnY - hitRadius;
-            int bottom = spawnY + hitRadius;
+            int left = spawnX - size;
+            int right = spawnX + size;
+            int top = spawnY - size;
+            int bottom = spawnY + size;
 
             // Determine texture
             GameTexture texture;
@@ -2645,7 +2648,7 @@ namespace Intersect.Client.Entities
                 for (int x = left; x <= right; x++)
                 {
                     var distanceFromCaster = CalculateDistanceToPoint(spawnX, spawnY, x, y);
-                    if (Math.Floor(distanceFromCaster) > hitRadius)
+                    if (Math.Floor(distanceFromCaster) > size)
                     {
                         continue;
                     }
