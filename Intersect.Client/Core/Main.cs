@@ -385,6 +385,7 @@ namespace Intersect.Client.Core
             PacketSender.SendLogout(characterSelect);
             Globals.LoggedIn = false;
             Globals.WaitingOnServer = false;
+            Graphics.CurrentShake = 0f;
             Globals.GameState = GameStates.Menu;
             Globals.JoiningGame = false;
             Globals.NeedsMaps = true;
