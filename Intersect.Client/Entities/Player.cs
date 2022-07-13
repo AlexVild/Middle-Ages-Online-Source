@@ -243,6 +243,7 @@ namespace Intersect.Client.Entities
                      Globals.InCraft == false &&
                      Globals.InQuestBoard == false &&
                      Globals.InTrade == false &&
+                     Globals.InMapTransition == false &&
                      !Interface.Interface.HasInputFocus());
         }
 
@@ -1639,6 +1640,7 @@ namespace Intersect.Client.Entities
                         if (en.Value.GetType() == typeof(Event))
                         {
                             //Talk to Event
+                            CombatMode = false;
                             PacketSender.SendActivateEvent(en.Key);
                             AttackTimer = Timing.Global.Ticks / TimeSpan.TicksPerMillisecond + CalculateAttackTime();
 
@@ -2351,6 +2353,11 @@ namespace Intersect.Client.Entities
                             Y = (byte) tmpY;
                         }
 
+                        // because we want to disable combat mode on warp tiles
+                        if (CurrentMap != default && MapInstance.Get(CurrentMap)?.Attributes[X, Y]?.Type == MapAttributes.Warp)
+                        {
+                            CombatMode = false;
+                        }
                         TryToChangeDimension();
                         PacketSender.SendMove();
                         MoveTimer = (Timing.Global.Ticks / TimeSpan.TicksPerMillisecond) + (long)GetMovementTime();
@@ -2369,6 +2376,7 @@ namespace Intersect.Client.Entities
 
                         if (blockedBy != null && mLastBumpedEvent != blockedBy && blockedBy.GetType() == typeof(Event))
                         {
+                            CombatMode = false;
                             PacketSender.SendBumpEvent(blockedBy.CurrentMap, blockedBy.Id);
                             mLastBumpedEvent = blockedBy;
                         }
