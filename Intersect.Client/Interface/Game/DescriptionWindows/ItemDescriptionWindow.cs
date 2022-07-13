@@ -528,30 +528,49 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             }
         }
 
-        private int GetBonusEffectDifference()
+        private int GetBonusEffectDifference(ItemBase itm1, ItemBase itm2, bool inverse = false)
         {
-            var slot = mItem.EquipmentSlot;
-            if (Globals.Me.MyEquipment[slot] != -1)
-            {
-                var equippedItem = Globals.Me.Inventory[Globals.Me.MyEquipment[slot]].Base;
+            var multiplier = inverse ? -1 : 1;
 
-                if (equippedItem != null && equippedItem.Effect.Type == mItem.Effect.Type)
-                {
-                    return mItem.Effect.Percentage - equippedItem.Effect.Percentage;
-                }
-                else
-                {
-                    return mItem.Effect.Percentage;
-                }
+            if (itm1 == null && itm2 == null)
+            {
+                return 0 * multiplier;
+            }
+
+            if (itm1 == null)
+            {
+                return itm2.Effect.Percentage * multiplier;
+            }
+
+            if (itm2 == null)
+            {
+                return itm1.Effect.Percentage * multiplier;
+            }
+
+            if (itm2.Effect.Type == itm1.Effect.Type)
+            {
+                return (itm1.Effect.Percentage - itm2.Effect.Percentage) * multiplier;
             }
             else
             {
-                return mItem.Effect.Percentage;
+                return itm1.Effect.Percentage * multiplier;
             }
         }
 
         protected void SetupEquipmentInfo()
         {
+            var slot = mItem.EquipmentSlot;
+            Item equippedItem = null;
+            ItemBase equippedItemBase = null;
+            var hasEquippedSlot = false;
+            if (Globals.Me.MyEquipment[slot] != -1)
+            {
+                equippedItem = Globals.Me.Inventory[Globals.Me.MyEquipment[slot]];
+                equippedItemBase = equippedItem.Base;
+
+                hasEquippedSlot = equippedItem != null && equippedItemBase != null;
+            }
+
             // Add a divider.
             AddDivider();
 
@@ -634,22 +653,26 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             // Vitals
             for (var i = 0; i < (int)Vitals.VitalCount; i++)
             {
-                if (mItem.VitalsGiven[i] != 0 && mItem.PercentageVitalsGiven[i] != 0)
+                var equippedVitals = equippedItemBase?.VitalsGiven ?? new int[] { 0, 0 };
+                var equippedVitalPercent = equippedItemBase?.PercentageVitalsGiven ?? new int[] { 0, 0 };
+                var equippedVitalRegen = equippedItemBase?.VitalsRegen ?? new int[] { 0, 0 };
+
+                if ((mItem.VitalsGiven[i] != 0 && mItem.PercentageVitalsGiven[i] != 0) || (equippedVitals[i] != 0 && equippedVitalPercent[i] != 0))
                 {
                     var (vitalDiff, percentDiff) = GetVitalPercentageAndFlatDifference(i);
                     DisplayKeyValueRowWithDifferenceAndPercent(vitalDiff, percentDiff, Strings.ItemDescription.Vitals[i], Strings.ItemDescription.RegularAndPercentage.ToString(mItem.VitalsGiven[i], mItem.PercentageVitalsGiven[i]), rows);
                 }
-                else if (mItem.VitalsGiven[i] != 0)
+                else if (mItem.VitalsGiven[i] != 0 || equippedVitals[i] != 0)
                 {
                     DisplayKeyValueRowWithDifference(GetVitalDifference(i), Strings.ItemDescription.Vitals[i], mItem.VitalsGiven[i].ToString(), rows);
                 }
-                else if (mItem.PercentageVitalsGiven[i] != 0)
+                else if (mItem.PercentageVitalsGiven[i] != 0 || equippedVitalPercent[i] != 0)
                 {
                     DisplayKeyValueRowWithDifference(GetPercentageVitalDifference(i), Strings.ItemDescription.Vitals[i], Strings.ItemDescription.Percentage.ToString(mItem.PercentageVitalsGiven[i]), rows, "%");
                 }
 
                 // Regen
-                if (mItem.VitalsRegen[i] != 0)
+                if (mItem.VitalsRegen[i] != 0 || equippedVitalRegen[i] != 0)
                 {
                     DisplayKeyValueRowWithDifference(GetVitalRegenDifference(i), Strings.ItemDescription.VitalRegens[i], mItem.VitalsRegen[i].ToString(), rows, "/s");
                 }
@@ -658,13 +681,6 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             // Stats
             if (mStatBuffs != null)
             {
-                var slot = mItem.EquipmentSlot;
-                Item equippedItem = null;
-                if (Globals.Me.MyEquipment[slot] != -1) 
-                {
-                    equippedItem = Globals.Me.Inventory[Globals.Me.MyEquipment[slot]];
-                }
-                
                 for (var i = 0; i < (int)Stats.StatCount; i++)
                 {
                     var flatStat = mItem.StatsGiven[i] + mStatBuffs[i];
@@ -691,11 +707,11 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                             var (flatStatDiff, percentStatDiff) = GetStatPercentageAndFlatDifference(i);
                             DisplayKeyValueRowWithDifferenceAndPercent(flatStatDiff, percentStatDiff, Strings.ItemDescription.StatCounts[i], Strings.ItemDescription.RegularAndPercentage.ToString(flatStat, mItem.PercentageStatsGiven[i]), rows);
                         }
-                        else if (flatStat != 0)
+                        else if (equippedFlatStat != 0)
                         {
                             DisplayKeyValueRowWithDifference(GetStatDifference(i), Strings.ItemDescription.StatCounts[i], flatStat.ToString(), rows);
                         }
-                        else if (mItem.PercentageStatsGiven[i] != 0)
+                        else if (equippedPerecentage != 0)
                         {
                             DisplayKeyValueRowWithDifference(GetStatPercentageDifference(i), Strings.ItemDescription.StatCounts[i], Strings.ItemDescription.Percentage.ToString(mItem.PercentageStatsGiven[i]), rows, "%");
                         }
@@ -704,9 +720,16 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             }
 
             // Bonus Effect
+
+            // if the comparing items have the same type, or this item has a different type
             if (mItem.Effect.Type != EffectType.None && mItem.Effect.Percentage != 0)
             {
-                DisplayKeyValueRowWithDifference(GetBonusEffectDifference(), Strings.ItemDescription.BonusEffects[(int)mItem.Effect.Type], Strings.ItemDescription.Percentage.ToString(mItem.Effect.Percentage), rows);
+                DisplayKeyValueRowWithDifference(GetBonusEffectDifference(mItem, equippedItemBase), Strings.ItemDescription.BonusEffects[(int)mItem.Effect.Type], Strings.ItemDescription.Percentage.ToString(mItem.Effect.Percentage), rows, "%");
+            }
+            // If the comparing items had different types, display what we're losing
+            if (hasEquippedSlot && (equippedItemBase.Effect.Type != EffectType.None && equippedItemBase.Effect.Type != mItem.Effect.Type && equippedItemBase.Effect.Percentage != 0))
+            {
+                DisplayKeyValueRowWithDifference(GetBonusEffectDifference(equippedItemBase, mItem, true), Strings.ItemDescription.BonusEffects[(int)equippedItemBase.Effect.Type], Strings.ItemDescription.Percentage.ToString(0), rows, "%");
             }
 
             // Resize the container.
