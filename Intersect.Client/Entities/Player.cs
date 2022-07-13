@@ -1982,6 +1982,11 @@ namespace Intersect.Client.Entities
             {
                 return false;
             }
+            if (IsMoving && CombatMode)
+            {
+                ChangeCombatModeNextTile = true;
+                return CombatMode;
+            }
 
             CombatMode = !CombatMode;
             if (CombatMode)
@@ -2233,6 +2238,12 @@ namespace Intersect.Client.Entities
                 //Try to move if able and not casting spells.
                 if (!IsMoving && MoveTimer < Timing.Global.Ticks / TimeSpan.TicksPerMillisecond && (Options.Combat.MovementCancelsCast || CastTime < Timing.Global.Milliseconds)) 
                 {
+                    if (ChangeCombatModeNextTile)
+                    {
+                        ChangeCombatModeNextTile = false;
+                        ToggleCombatMode(true);
+                    }
+
                     if (Options.Combat.MovementCancelsCast)
                     {
                         CastTime = 0;
@@ -2810,5 +2821,7 @@ namespace Intersect.Client.Entities
     public partial class Player : Entity
     {
         public Stack<long> DirRequestTimes = new Stack<long>();
+
+        public bool ChangeCombatModeNextTile;
     }
 }
