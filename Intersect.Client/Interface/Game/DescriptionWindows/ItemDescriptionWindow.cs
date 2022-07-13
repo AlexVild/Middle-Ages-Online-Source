@@ -683,33 +683,65 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             {
                 for (var i = 0; i < (int)Stats.StatCount; i++)
                 {
-                    var flatStat = mItem.StatsGiven[i] + mStatBuffs[i];
-                    if (flatStat != 0 && mItem.PercentageStatsGiven[i] != 0)
+                    // bcause we want to separate the stat buff from the stat in the display
+                    var stat = mItem.StatsGiven[i];
+                    var statString = stat.ToString();
+
+                    if (Math.Sign(mStatBuffs[i]) == -1)
+                    {
+                        if (stat == 0)
+                        {
+                            statString = Strings.ItemDescription.StatAndBuff.ToString("", "", mStatBuffs[i]);
+                        }
+                        else
+                        {
+                            statString = Strings.ItemDescription.StatAndBuff.ToString(stat, "", mStatBuffs[i]);
+                        }
+                        
+                    }
+                    else if (Math.Sign(mStatBuffs[i]) == 1)
+                    {
+                        if (stat == 0)
+                        {
+                            statString = Strings.ItemDescription.StatAndBuff.ToString("", "+", mStatBuffs[i]);
+                        }
+                        else
+                        {
+                            statString = Strings.ItemDescription.StatAndBuff.ToString(stat, "+", mStatBuffs[i]);
+                        }
+                    }
+
+                    var calculatedStat = stat + mStatBuffs[i];
+
+                    if (calculatedStat != 0 && mItem.PercentageStatsGiven[i] != 0)
                     {
                         var (flatStatDiff, percentStatDiff) = GetStatPercentageAndFlatDifference(i);
-                        DisplayKeyValueRowWithDifferenceAndPercent(flatStatDiff, percentStatDiff, Strings.ItemDescription.StatCounts[i], Strings.ItemDescription.RegularAndPercentage.ToString(flatStat, mItem.PercentageStatsGiven[i]), rows);
+                        DisplayKeyValueRowWithDifferenceAndPercent(flatStatDiff, percentStatDiff, Strings.ItemDescription.StatCounts[i], Strings.ItemDescription.RegularAndPercentage.ToString(statString, mItem.PercentageStatsGiven[i]), rows);
                     }
-                    else if (flatStat != 0)
+                    else if (calculatedStat != 0)
                     {
-                        DisplayKeyValueRowWithDifference(GetStatDifference(i), Strings.ItemDescription.StatCounts[i], flatStat.ToString(), rows);
+                        DisplayKeyValueRowWithDifference(GetStatDifference(i), Strings.ItemDescription.StatCounts[i], statString.ToString(), rows);
                     }
                     else if (mItem.PercentageStatsGiven[i] != 0)
                     {
                         DisplayKeyValueRowWithDifference(GetStatPercentageDifference(i), Strings.ItemDescription.StatCounts[i], Strings.ItemDescription.Percentage.ToString(mItem.PercentageStatsGiven[i]), rows, "%");
                     }
-                    // Display stats that this item straight-up doesn't have, to show what you'll be missing out on.
+                    // because we want to display stats that the highlighted item doesn't have that our equipment does
                     else if (equippedItem != null && equippedItem.Base != null)
                     {
-                        var equippedFlatStat = equippedItem.Base.StatsGiven[i] + equippedItem.StatBuffs[i];
+                        var equippedStat = equippedItem.Base.StatsGiven[i];
+                        var calcualtedEquippedStat = equippedStat + equippedItem.StatBuffs[i];
+                        var equippedStatString = "0";
+
                         var equippedPerecentage = equippedItem.Base.PercentageStatsGiven[i];
-                        if (equippedFlatStat != 0 && equippedPerecentage != 0)
+                        if (calcualtedEquippedStat != 0 && equippedPerecentage != 0)
                         {
                             var (flatStatDiff, percentStatDiff) = GetStatPercentageAndFlatDifference(i);
-                            DisplayKeyValueRowWithDifferenceAndPercent(flatStatDiff, percentStatDiff, Strings.ItemDescription.StatCounts[i], Strings.ItemDescription.RegularAndPercentage.ToString(flatStat, mItem.PercentageStatsGiven[i]), rows);
+                            DisplayKeyValueRowWithDifferenceAndPercent(flatStatDiff, percentStatDiff, Strings.ItemDescription.StatCounts[i], Strings.ItemDescription.RegularAndPercentage.ToString(equippedStatString, mItem.PercentageStatsGiven[i]), rows);
                         }
-                        else if (equippedFlatStat != 0)
+                        else if (calcualtedEquippedStat != 0)
                         {
-                            DisplayKeyValueRowWithDifference(GetStatDifference(i), Strings.ItemDescription.StatCounts[i], flatStat.ToString(), rows);
+                            DisplayKeyValueRowWithDifference(GetStatDifference(i), Strings.ItemDescription.StatCounts[i], equippedStatString.ToString(), rows);
                         }
                         else if (equippedPerecentage != 0)
                         {

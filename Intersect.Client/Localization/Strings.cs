@@ -1192,6 +1192,9 @@ namespace Intersect.Client.Localization
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString DestroyOnInstance = @"Instance Item";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString StatAndBuff = @"{00}{01}{02}";
         }
 
         public struct Keys
