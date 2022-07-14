@@ -292,7 +292,7 @@ namespace Intersect.Client.Interface.Game.EntityPanel
             ShieldBar.Hide();
             UpdateHpBar(0, true);
             UpdateMpBar(0, true);
-            if (MyEntity is Player)
+            if (MyEntity is Entities.Player)
             {
                 UpdateXpBar(0, true);
             }
@@ -847,7 +847,7 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                 var decor = MyEntity.MyDecors;
 
                 bool inVehicle = false;
-                if (MyEntity is Player player)
+                if (MyEntity is Entities.Player player)
                 {
                     inVehicle = player.InVehicle;
                 }
@@ -1055,7 +1055,7 @@ namespace Intersect.Client.Interface.Game.EntityPanel
 
         void guildRequest_Clicked(Base sender, ClickedEventArgs arguments)
         {
-            if (MyEntity is Player plyr && MyEntity != Globals.Me)
+            if (MyEntity is Entities.Player plyr && MyEntity != Globals.Me)
             {
                 if (string.IsNullOrWhiteSpace(plyr.Guild))
                 {
@@ -1081,7 +1081,7 @@ namespace Intersect.Client.Interface.Game.EntityPanel
         void TryShowGuildButton()
         {
             var show = false;
-            if (MyEntity is Player plyr && MyEntity != Globals.Me && string.IsNullOrWhiteSpace(plyr.Guild))
+            if (MyEntity is Entities.Player plyr && MyEntity != Globals.Me && string.IsNullOrWhiteSpace(plyr.Guild))
             {
                 if (Globals.Me?.GuildRank?.Permissions?.Invite ?? false)
                 {

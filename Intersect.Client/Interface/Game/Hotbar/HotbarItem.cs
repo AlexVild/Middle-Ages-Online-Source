@@ -85,6 +85,11 @@ namespace Intersect.Client.Interface.Game.Hotbar
 
         public ImagePanel Pnl;
 
+        public Base GetWindow()
+        {
+            return mHotbarWindow;
+        }
+
         public HotbarItem(byte index, Base hotbarWindow)
         {
             mYindex = index;
@@ -222,18 +227,7 @@ namespace Intersect.Client.Interface.Game.Hotbar
             }
 
             //See if Label Should be changed
-            if (mHotKey != Controls.ActiveControls.ControlMapping[Control.Hotkey1 + mYindex].Key1)
-            {
-                KeyLabel.SetText(
-                    Strings.Keys.keydict[
-                        Enum.GetName(
-                                typeof(Keys), Controls.ActiveControls.ControlMapping[Control.Hotkey1 + mYindex].Key1
-                            )
-                            .ToLower()]
-                );
-
-                mHotKey = Controls.ActiveControls.ControlMapping[Control.Hotkey1 + mYindex].Key1;
-            }
+            // Moved to `HotbarWindow`
 
             var slot = Globals.Me.Hotbar[mYindex];
             var updateDisplay =
@@ -339,6 +333,7 @@ namespace Intersect.Client.Interface.Game.Hotbar
 
             if (updateDisplay) //Item on cd and/or fade is incorrect
             {
+                Pnl.Texture = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Gui, "hotbaritem.png");
                 if (mCurrentItem != null)
                 {
                     mCooldownLabel.IsHidden = true;
@@ -349,8 +344,13 @@ namespace Intersect.Client.Interface.Game.Hotbar
 
                     if (mInventoryItemIndex > -1)
                     {
-                        EquipPanel.IsHidden = !Globals.Me.IsEquipped(mInventoryItemIndex);
-                        EquipLabel.IsHidden = !Globals.Me.IsEquipped(mInventoryItemIndex);
+                        // Don't want these, change the hotbar texture instead
+                        EquipPanel.IsHidden = true;
+                        EquipLabel.IsHidden = true;
+                        if (Globals.Me.IsEquipped(mInventoryItemIndex))
+                        {
+                            Pnl.Texture = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Gui, "hotbaritemequipped.png");
+                        }
                         mIsFaded = Globals.Me.ItemOnCd(mInventoryItemIndex);
                         if (mIsFaded)
                         {

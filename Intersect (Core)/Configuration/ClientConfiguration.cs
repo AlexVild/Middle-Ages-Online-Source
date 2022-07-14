@@ -109,6 +109,13 @@ namespace Intersect.Configuration
         /// The font family to use on action messages
         /// </summary>
         public string ActionMsgFont { get; set; } = DEFAULT_FONT;
+        
+        /// <summary>
+        /// The font used for the player's HUD
+        /// </summary>
+        public string HudFont { get; set; } = DEFAULT_FONT;
+        
+        public string HudFontSmall { get; set; } = DEFAULT_FONT;
 
         /// <summary>
         /// The font family to use on unstyled windows such as the debug menu/admin window

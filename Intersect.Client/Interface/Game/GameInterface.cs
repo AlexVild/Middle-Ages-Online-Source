@@ -10,6 +10,7 @@ using Intersect.Client.Interface.Game.Crafting;
 using Intersect.Client.Interface.Game.EntityPanel;
 using Intersect.Client.Interface.Game.Hotbar;
 using Intersect.Client.Interface.Game.Inventory;
+using Intersect.Client.Interface.Game.HUD;
 using Intersect.Client.Interface.Game.Shop;
 using Intersect.Client.Interface.Game.Trades;
 using Intersect.Client.Networking;
@@ -19,7 +20,7 @@ using Intersect.GameObjects;
 namespace Intersect.Client.Interface.Game
 {
 
-    public class GameInterface : MutableInterface
+    public partial class GameInterface : MutableInterface
     {
 
         public bool FocusChat;
@@ -131,6 +132,7 @@ namespace Intersect.Client.Interface.Game
             mChatBox = new Chatbox(GameCanvas, this);
             GameMenu = new Menu(GameCanvas);
             Hotbar = new HotBarWindow(GameCanvas);
+            mHUD = new PlayerHud();
             PlayerBox = new EntityBox(GameCanvas, EntityTypes.Player, Globals.Me, true);
             PlayerBox.SetEntity(Globals.Me);
             if (mPictureWindow == null)
@@ -422,10 +424,11 @@ namespace Intersect.Client.Interface.Game
             mChatBox?.Update();
             GameMenu?.Update(mShouldUpdateQuestLog);
             mShouldUpdateQuestLog = false;
+            mHUD.Draw();
             Hotbar?.Update();
             mDebugMenu?.Update();
             EscapeMenu.Update();
-            PlayerBox?.Update();
+            //PlayerBox?.Update();
             mMapItemWindow.Update();
             AnnouncementWindow?.Update();
             mPictureWindow?.Update();
@@ -745,4 +748,19 @@ namespace Intersect.Client.Interface.Game
 
     }
 
+
+    public partial class GameInterface : MutableInterface
+    {
+        private PlayerHud mHUD;
+
+        public PlayerHud GetHud()
+        {
+            return mHUD;
+        }
+
+        public float GetHudOpacity()
+        {
+            return mHUD.GetOpacity();
+        }
+    }
 }

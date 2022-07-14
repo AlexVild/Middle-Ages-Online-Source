@@ -46,13 +46,6 @@ namespace Intersect.Client.Interface.Game.Hotbar
                 Items.Add(new HotbarItem((byte) i, HotbarWindow));
                 Items[i].Pnl = new ImagePanel(HotbarWindow, "HotbarContainer" + i);
                 Items[i].Setup();
-                Items[i].KeyLabel = new Label(Items[i].Pnl, "HotbarLabel" + i);
-                Items[i]
-                    .KeyLabel.SetText(
-                        Strings.Keys.keydict[
-                            Enum.GetName(typeof(Keys), Controls.ActiveControls.ControlMapping[Control.Hotkey1 + i].Key1)
-                                .ToLower()]
-                    );
             }
         }
 
@@ -75,7 +68,39 @@ namespace Intersect.Client.Interface.Game.Hotbar
             for (var i = 0; i < Options.MaxHotbar; i++)
             {
                 Items[i].Update();
+                DrawHotKey(i, Items[i]);
             }
+        }
+
+        private void DrawHotKey(int keyIdx, HotbarItem item)
+        {
+            if (Globals.Me == null || Globals.Me.InCutscene())
+            {
+                return;
+            }
+
+            var font = Graphics.HUDFontSmall;
+            var key = Strings.Keys.keydict[
+                Enum.GetName(
+                    typeof(Keys), Controls.ActiveControls.ControlMapping[Control.Hotkey1 + keyIdx].Key1
+                )
+                .ToLower()].ToString().ToUpper();
+
+            var hotbarBase = item.GetWindow();
+
+            var x = hotbarBase.X;
+            var y = hotbarBase.Bottom + 2;
+
+            x += item.Pnl.X + (item.Pnl.Width / 2);
+
+            var controlLength = Graphics.Renderer.MeasureText(key, font, 1).X;
+            x = (int)(x - (controlLength / 2)); // center under hotkey item
+
+            var hud = Interface.GameUi.GetHud();
+
+            Graphics.Renderer.DrawString(
+                key, font, x + Graphics.CurrentView.X, y + Graphics.CurrentView.Y, 1, hud.Secondary
+            );
         }
 
         public FloatRect RenderBounds()

@@ -1354,6 +1354,8 @@ namespace Intersect.Client.Networking
 
                 var hotbarEntry = Globals.Me.Hotbar[i];
                 hotbarEntry.Load(packet.SlotData[i]);
+
+
             }
         }
 

@@ -7,6 +7,7 @@ using Intersect.Client.Framework.File_Management;
 using Intersect.Client.Framework.GenericClasses;
 using Intersect.Client.Framework.Graphics;
 using Intersect.Client.General;
+using Intersect.Client.Interface.Game.HUD;
 using Intersect.Client.Maps;
 using Intersect.Configuration;
 using Intersect.Enums;
@@ -16,7 +17,7 @@ using Intersect.Utilities;
 namespace Intersect.Client.Core
 {
 
-    public static class Graphics
+    public static partial class Graphics
     {
 
         public static GameFont ActionMsgFont;
@@ -118,6 +119,8 @@ namespace Intersect.Client.Core
             EntityNameFont = FindFont(ClientConfiguration.Instance.EntityNameFont);
             ChatBubbleFont = FindFont(ClientConfiguration.Instance.ChatBubbleFont);
             ActionMsgFont = FindFont(ClientConfiguration.Instance.ActionMsgFont);
+            HUDFont = FindFont(ClientConfiguration.Instance.HudFont);
+            HUDFontSmall = FindFont(ClientConfiguration.Instance.HudFontSmall);
         }
 
         public static GameFont FindFont(string font)
@@ -494,7 +497,7 @@ namespace Intersect.Client.Core
                 DrawWideScreen(Globals.ContentManager.GetTexture(GameContentManager.TextureType.Misc, "combatmode.png"), Globals.Me.CombatMode, Color.White,
                     ref mCombatModeState, ref sLastCombatWidthUpdate, ref sCurrentCombatWidth);
                 DrawWideScreen(Renderer.GetWhiteTexture(), Globals.Me.InCutscene(), new Color(255, 60, 60, 60),
-                    ref sCutsceneState, ref sCutsceneUpdate, ref sCutsceneWidth);
+                    ref sCutsceneState, ref sCutsceneUpdate, ref sCutsceneWidth, false);
             }
             else 
             {
@@ -502,7 +505,7 @@ namespace Intersect.Client.Core
                 DrawWideScreen(Globals.ContentManager.GetTexture(GameContentManager.TextureType.Misc, "combatmode.png"), Globals.Me.CombatMode, Color.Black,
                     ref mCombatModeState, ref sLastCombatWidthUpdate, ref sCurrentCombatWidth);
                 DrawWideScreen(Renderer.GetWhiteTexture(), Globals.Me.InCutscene(), Color.Black,
-                    ref sCutsceneState, ref sCutsceneUpdate, ref sCutsceneWidth);
+                    ref sCutsceneState, ref sCutsceneUpdate, ref sCutsceneWidth, false);
             }
         }
 
@@ -659,13 +662,16 @@ namespace Intersect.Client.Core
             }
         }
 
-        public static void DrawWideScreen(GameTexture texture, bool flag, Color drawColor, ref byte state, ref long lastUpdate, ref long size)
+        public static void DrawWideScreen(GameTexture texture, bool flag, Color drawColor, ref byte state, ref long lastUpdate, ref long size, bool regardHud = true)
         {
             FloatRect top;
             FloatRect left;
             FloatRect right;
             FloatRect bottom;
             var textureWidth = texture.GetWidth();
+
+            float currTop = !Interface.Interface.HideUi && regardHud ? CurrentView.Top + PlayerHud.Height : CurrentView.Top;
+
             switch (state)
             {
                 // Empty
@@ -685,7 +691,7 @@ namespace Intersect.Client.Core
                     size = MathHelper.Clamp((int)Math.Round(((Timing.Global.Milliseconds - lastUpdate) / 250f) * 64f), 0, 64);
                     for(var i = 0; i < CurrentView.Width / textureWidth; i++)
                     {
-                        top = new FloatRect(CurrentView.Left + (i * textureWidth), CurrentView.Top, textureWidth, size);
+                        top = new FloatRect(CurrentView.Left + (i * textureWidth), currTop, textureWidth, size);
                         bottom = new FloatRect(CurrentView.Left + (i * textureWidth), CurrentView.Top + CurrentView.Height - size, textureWidth, size);
 
                         DrawGameTexture(texture, new FloatRect(0, 0, 64, 64), top, drawColor, null);
@@ -708,7 +714,7 @@ namespace Intersect.Client.Core
                 case 3:
                     for (var i = 0; i < CurrentView.Width / textureWidth; i++)
                     {
-                        top = new FloatRect(CurrentView.Left + (i * textureWidth), CurrentView.Top, textureWidth, size);
+                        top = new FloatRect(CurrentView.Left + (i * textureWidth), currTop, textureWidth, size);
                         bottom = new FloatRect(CurrentView.Left + (i * textureWidth), CurrentView.Top + CurrentView.Height - size, textureWidth, size);
 
                         DrawGameTexture(texture, new FloatRect(0, 0, 64, 64), top, drawColor, null);
@@ -726,7 +732,7 @@ namespace Intersect.Client.Core
                     size = MathHelper.Clamp(64 - ((int)Math.Round(((Timing.Global.Milliseconds - lastUpdate) / 250f) * 64f)), 0, 64);
                     for (var i = 0; i < CurrentView.Width / textureWidth; i++)
                     {
-                        top = new FloatRect(CurrentView.Left + (i * textureWidth), CurrentView.Top, textureWidth, size);
+                        top = new FloatRect(CurrentView.Left + (i * textureWidth), currTop, textureWidth, size);
                         bottom = new FloatRect(CurrentView.Left + (i * textureWidth), CurrentView.Top + CurrentView.Height - size, textureWidth, size);
 
                         DrawGameTexture(texture, new FloatRect(0, 0, 64, 64), top, drawColor, null);
@@ -1528,4 +1534,10 @@ namespace Intersect.Client.Core
 
     }
 
+    public static partial class Graphics
+    {
+        public static GameFont HUDFont;
+        
+        public static GameFont HUDFontSmall;
+    }
 }

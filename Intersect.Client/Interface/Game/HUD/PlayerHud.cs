@@ -1,0 +1,307 @@
+﻿using Intersect.Client.Core;
+using Intersect.Client.Framework.GenericClasses;
+using Intersect.Client.Framework.Graphics;
+using Intersect.Client.General;
+using Intersect.Client.Maps;
+using Intersect.Enums;
+using Intersect.GameObjects;
+using Intersect.Utilities;
+using System;
+using System.Linq;
+using System.Text;
+
+namespace Intersect.Client.Interface.Game.HUD
+{
+    public class PlayerHud
+    {
+        public bool IsVisible;
+
+        public static readonly int Height = 72;
+
+        private float Left => Graphics.CurrentView.Left;
+        private float Width => Graphics.CurrentView.Width;
+        private float Top => Graphics.CurrentView.Top;
+
+        private const int SmallBarPadding = 8;
+        private const int LargeBarPadding = 16;
+        private int BarPadding => UseLargeBars ? LargeBarPadding : SmallBarPadding;
+
+        private GameTexture BarBackground;
+        private GameTexture HpTexture;
+        private GameTexture ManaTexture;
+        private GameTexture ExpTexture;
+        private GameTexture MapTexture;
+
+        private bool CenterBarsBetweenElements => Width < 1280;
+
+        private bool UseLargeBars => Width >= 1600;
+
+        private float Opacity = 255f;
+
+        private float NameWidth;
+
+        public Color TextureColor => new Color((int)GetOpacity(), 255, 255, 255);
+        public Color Primary => new Color((int)GetOpacity(), 255, 255, 255);
+        public Color Secondary => new Color((int)GetOpacity(), 188, 188, 188);
+        public Color MapNameColor => new Color((int)GetOpacity(), 50, 19, 0);
+
+        private string MapName => MapInstance.Get(Globals.Me?.CurrentMap ?? default)?.Name ?? string.Empty;
+
+        public PlayerHud()
+        {
+            IsVisible = true;
+            InitTextures();
+        }
+
+        private void InitTextures() 
+        {
+            BarBackground = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar.png");
+            HpTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_health.png");
+            ManaTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_magic.png");
+            ExpTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_exp.png");
+            MapTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hud_map.png");
+        }
+
+        private void DetermineTextureScaling()
+        {
+            if (UseLargeBars && !BarBackground.Name.Contains("_lg"))
+            {
+                BarBackground = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_lg.png");
+                HpTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_health_lg.png");
+                ManaTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_magic_lg.png");
+                ExpTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_exp_lg.png");
+            }
+            else if (BarBackground.Name.Contains("_lg") && !UseLargeBars)
+            {
+                BarBackground = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar.png");
+                HpTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_health.png");
+                ManaTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_magic.png");
+                ExpTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_exp.png");
+            }
+        }
+
+        public void Draw()
+        {
+            if (Globals.Me == null)
+            {
+                return;
+            }
+            if (Globals.Me.InCutscene())
+            {
+                return;
+            }
+
+            Opacity = Globals.Me.GetCurrentTileRectangle().Bottom < Top + Height + Options.TileHeight ? 75 : 255;
+
+            DetermineTextureScaling();
+
+            DrawBackground(Height);
+
+            DrawPlayerNameAndLevel(Left, Top + 12);
+            // On small screens, center the bars between the hotbar and the name
+            if (CenterBarsBetweenElements)
+            {
+                var nameEnd = Left + NameWidth;
+                var hotBarStart = (float)Interface.GameUi.Hotbar.HotbarWindow.X;
+                hotBarStart += Left;
+
+                var width = hotBarStart - nameEnd;
+                var centerPoint = nameEnd + width / 2;
+
+                DrawBarContainer(centerPoint, Top + 4);
+            }
+            // Otherwise, center on the middle of the bar container
+            else
+            {
+                DrawBarContainer(Left + Width / 2, Top + 4);
+            }
+
+            DrawMapLabel(Left + Width / 2, Top + Height - 4, MapName);
+        }
+
+        public float GetOpacity()
+        {
+            return Opacity;
+        }
+
+        private void DrawBackground(int height)
+        {
+            var dimensions = new FloatRect(Left, Top, Graphics.Renderer.GetScreenWidth(), height);
+            Graphics.DrawGameTexture(Graphics.Renderer.GetWhiteTexture(), new FloatRect(0, 0, 1, 1), dimensions, new Color((int)Opacity, 0, 0, 0));
+        }
+
+        private void DrawPlayerNameAndLevel(float x, float y)
+        {
+            var font = Graphics.HUDFont;
+
+            var playerName = Globals.Me.Name.ToUpper();
+            var level = Globals.Me.Level.ToString();
+
+            var levelString = $"LVL {level}".ToUpper();
+            if (Globals.Me.Class != default)
+            {
+                var className = ClassBase.Get(Globals.Me.Class)?.Name;
+                levelString = $"LVL {level} {className}".ToUpper();
+            }
+
+            var playerNameWidth = Graphics.Renderer.MeasureText(playerName, font, 1).X;
+            var playerNameHeight = Graphics.Renderer.MeasureText(playerName, font, 1).Y;
+            var levelWidth = Graphics.Renderer.MeasureText(levelString, font, 1).X;
+            var levelYPadding = 4;
+
+            var xPadding = 8;
+            var maxWidth = Math.Max(levelWidth, playerNameWidth);
+            x += (maxWidth / 2) + xPadding;
+
+            NameWidth = maxWidth + xPadding;
+
+            // Name
+            Graphics.Renderer.DrawString(
+                playerName, font, (int)x - playerNameWidth / 2f, (int)y, 1, Primary
+            );
+            // Level & Class
+            Graphics.Renderer.DrawString(
+                levelString, font, (int)x - levelWidth / 2f, (int)y + playerNameHeight + levelYPadding, 1, Secondary
+            );
+        }
+
+        private void DrawBarContainer(float x, float y)
+        {   
+            var numberOfBars = 3;
+
+            // because 8 is our padding between bars and 3 is t
+            var width = (BarBackground.GetWidth() + BarPadding) * numberOfBars;
+            var height = BarBackground.GetHeight() * 2; // leaves space for labels
+            x -= width / 2; // Center container
+
+            var currentHp = Globals.Me.Vital[(int)Vitals.Health];
+            var maxHp = Globals.Me.MaxVital[(int)Vitals.Health];
+            DrawBar(BarBackground, HpTexture, x ,y, width, height, "HP", $"{currentHp} / {maxHp}", currentHp, maxHp);
+
+            var currentMana = Globals.Me.Vital[(int)Vitals.Mana];
+            var maxMana = Globals.Me.MaxVital[(int)Vitals.Mana];
+            x += BarBackground.GetWidth() + BarPadding;
+            DrawBar(BarBackground, ManaTexture, x, y, width, height, "MP", $"{currentMana} / {maxMana}", currentMana, maxMana);
+
+            var currentExp = Globals.Me.Experience;
+            var tnlExp = Globals.Me.ExperienceToNextLevel;
+            x += BarBackground.GetWidth() + BarPadding;
+
+            if (Globals.Me.Level == Options.MaxLevel)
+            {
+                DrawBar(BarBackground, ExpTexture, x, y, width, height, "EXP", $"MAX LEVEL", 1, 1);
+            }
+            else
+            {
+                DrawBar(BarBackground, ExpTexture, x, y, width, height, "EXP", $"{currentExp} / {tnlExp}", currentExp, tnlExp);
+            }
+        }
+
+        private void DrawBar(GameTexture bgTexture, GameTexture innerTexture, float x, float y, float width, float height, string label1, string label2, long currAmt, long maxAmt)
+        {
+            if (bgTexture == null || innerTexture == null)
+            {
+                return;
+            }
+
+            var font = Graphics.HUDFont;
+            var font2 = Graphics.HUDFontSmall;
+            var label1Clr = Color.White;
+            label1Clr.A = (byte)Opacity;
+
+            var lbl2Clr = new Color((int)Opacity, 188, 188, 188);
+
+            var centerX = (bgTexture.GetWidth() / 2) + x;
+
+            var lbl1width = Graphics.Renderer.MeasureText(label1, font, 1).X;
+            var lbl1height = Graphics.Renderer.MeasureText(label1, font, 1).Y;
+            var lbl2width = Graphics.Renderer.MeasureText(label2, font2, 1).X;
+            var lbl2height = Graphics.Renderer.MeasureText(label2, font2, 1).Y;
+
+            var lbl1X = centerX - lbl1width / 2;
+            var lbl2X = centerX - lbl2width / 2;
+            var lbl2y = y + lbl1height;
+
+            // Name
+            Graphics.Renderer.DrawString(
+                label1, font, (int)lbl1X, (int)y, 1, label1Clr
+            );
+            // Level & Class
+            Graphics.Renderer.DrawString(
+                label2, font2, (int)lbl2X, (int)lbl2y, 1, lbl2Clr
+            );
+
+            var barY = lbl2y + lbl2height;
+            var barX = centerX - bgTexture.GetWidth() / 2;
+
+            Graphics.DrawGameTexture(bgTexture,
+                new FloatRect(0, 0, bgTexture.GetWidth(), bgTexture.GetHeight()),
+                new FloatRect(barX, barY, bgTexture.GetWidth(), bgTexture.GetHeight()),
+                TextureColor);
+
+            int barWidth = MathHelper.RoundNearestMultiple((int)(currAmt / (float)maxAmt * innerTexture.GetWidth()), 4);
+            barWidth = MathHelper.Clamp(barWidth, 0, innerTexture.GetWidth());
+
+            Graphics.DrawGameTexture(innerTexture,
+                new FloatRect(0, 0, barWidth, innerTexture.GetHeight()),
+                new FloatRect(barX + 4, barY + 4, barWidth, innerTexture.GetHeight()),
+                TextureColor);
+        }
+
+        private void DrawMapLabel(float x, float y, string mapName)
+        {
+            mapName = mapName.Trim().ToUpper();
+            var font = Graphics.HUDFont;
+
+            Graphics.DrawGameTexture(MapTexture,
+                new FloatRect(0, 0, MapTexture.GetWidth(), MapTexture.GetHeight()),
+                new FloatRect(x - MapTexture.GetWidth() / 2, y, MapTexture.GetWidth(), MapTexture.GetHeight()),
+                TextureColor);
+
+            var nameWidth = Graphics.Renderer.MeasureText(mapName, font, 1).X;
+            // because we want to fit the name in between the bolts of the map texture
+            var maxNameWidth = MapTexture.GetWidth() - 56;
+            if (nameWidth >= maxNameWidth)
+            {
+                var sb = new StringBuilder();
+                if (mapName.Contains("-"))
+                {
+                    var split = mapName.Split('-');
+                    if (split.Length > 0)
+                    {
+                        var prefix = split[0];
+                        var prefixWords = prefix.Split(' ');
+                        if (prefixWords.Length > 0)
+                        {
+                            sb.Append($"{prefixWords[0][0]}. {string.Concat(prefixWords.Skip(1)).Trim()} - {string.Concat(split.Skip(1)).Trim()}");
+                        }
+                    }
+                    
+                    var tmpWidth = Graphics.Renderer.MeasureText(sb.ToString(), font, 1).X;
+                    if (tmpWidth >= maxNameWidth)
+                    {
+                        mapName = $"{sb.ToString().Substring(0, 37)}...";
+                    }
+                    else
+                    {
+                        mapName = sb.ToString();
+                    }
+                }
+                else
+                {
+                    sb.Append($"{mapName.Substring(0, 37)}...");
+                    mapName = sb.ToString();
+                }
+
+                nameWidth = Graphics.Renderer.MeasureText(mapName, font, 1).X;
+            }
+
+            var nameX = x - nameWidth / 2;
+            var nameY = y + 4;
+
+            Graphics.Renderer.DrawString(
+                mapName, font, (int)nameX, (int)nameY, 1, MapNameColor
+            );
+        }
+    }
+}
