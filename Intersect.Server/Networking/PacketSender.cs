@@ -928,7 +928,7 @@ namespace Intersect.Server.Networking
             SendDataToProximityOnMapInstance(map.Id, mapInstanceId,new MapEntityVitalsPacket(map.Id, data.ToArray()));
         }
 
-        public static void SendMapEntityStatusUpdate(MapController map, Entity[] entities, Guid mapInstanceId)
+        public static void SendMapEntitiesStatusUpdate(MapController map, Entity[] entities, Guid mapInstanceId)
         {
             // Generate a list of statuses to send to our users!
             var data = new List<EntityStatusData>();
@@ -941,6 +941,20 @@ namespace Intersect.Server.Networking
                     Statuses = entity.StatusPackets()
                 });
             }
+
+            // Send the data to the surroundings!
+            SendDataToProximityOnMapInstance(map.Id, mapInstanceId, new MapEntityStatusPacket(map.Id, data.ToArray()));
+        }
+        public static void SendMapEntityStatusUpdate(MapController map, Entity entity, Guid mapInstanceId)
+        {
+            // Generate a list of statuses to send to our users!
+            var data = new List<EntityStatusData>();
+            data.Add(new EntityStatusData()
+            {
+                Id = entity.Id,
+                Type = entity.GetEntityType(),
+                Statuses = entity.StatusPackets()
+            });
 
             // Send the data to the surroundings!
             SendDataToProximityOnMapInstance(map.Id, mapInstanceId, new MapEntityStatusPacket(map.Id, data.ToArray()));

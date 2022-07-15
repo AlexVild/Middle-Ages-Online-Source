@@ -626,7 +626,7 @@ namespace Intersect.Client.Interface.Game.EntityPanel
         {
             var targetHpWidth = 0f;
             var targetShieldWidth = 0f;
-            var width = HpBar?.Texture?.GetWidth() ?? 0;
+            var maxWidth = HpBar?.Texture?.GetWidth() ?? 0;
             if (MyEntity.MaxVital[(int) Vitals.Health] > 0)
             {
                 var maxVital = MyEntity.MaxVital[(int) Vitals.Health];
@@ -639,11 +639,11 @@ namespace Intersect.Client.Interface.Game.EntityPanel
 
                 var hpfillRatio = (float) MyEntity.Vital[(int) Vitals.Health] / maxVital;
                 hpfillRatio = (float) MathHelper.Clamp(hpfillRatio, 0f, 1f);
-                targetHpWidth = MathHelper.RoundNearestMultiple((int) (hpfillRatio * width), 4);
+                targetHpWidth = MathHelper.RoundNearestMultiple((int) (hpfillRatio * maxWidth), 4);
 
                 var shieldfillRatio = (float) shieldSize / maxVital;
-                shieldfillRatio = Math.Min(1, Math.Max(0, shieldfillRatio));
-                targetShieldWidth = (float) Math.Floor(shieldfillRatio * width);
+                shieldfillRatio = (float) MathHelper.Clamp(shieldfillRatio, 0f, 1f);
+                targetShieldWidth = MathHelper.RoundNearestMultiple((int)(shieldfillRatio * maxWidth), 4);
 
                 //Fix the Labels
                 HpLbl.Text = Strings.EntityBox.vital0val.ToString(
@@ -653,36 +653,19 @@ namespace Intersect.Client.Interface.Game.EntityPanel
             else
             {
                 HpLbl.Text = Strings.EntityBox.vital0val.ToString(0, 0);
-                targetHpWidth = HpBackground.Width;
+                targetHpWidth = 0;
             }
             
             HpBar.SetTextureRect(0, 0, (int)targetHpWidth, HpBar.Height);
             HpBar.Width = (int)targetHpWidth;
             HpBar.IsHidden = targetHpWidth == 0;
 
-            if ((int)targetShieldWidth != CurShieldWidth)
-            {
-                CurShieldWidth = (int)targetShieldWidth;
-
-                if (CurShieldWidth == 0)
-                {
-                    ShieldBar.IsHidden = true;
-                }
-                else
-                {
-                    ShieldBar.Width = (int)CurShieldWidth;
-                    ShieldBar.SetBounds(CurHpWidth + HpBar.X, HpBar.Y, CurShieldWidth, ShieldBar.Height);
-                    ShieldBar.SetTextureRect(
-                        (int)(HpBackground.Width - CurShieldWidth), 0, (int)CurShieldWidth, ShieldBar.Height
-                    );
-
-                    ShieldBar.IsHidden = false;
-                }
-            }
-            else
-            {
-                ShieldBar.SetPosition(HpBar.X + CurHpWidth, HpBar.Y);
-            }
+            ShieldBar.IsHidden = (int)targetShieldWidth == 0;
+            ShieldBar.Width = (int)targetShieldWidth;
+            ShieldBar.SetBounds(targetHpWidth + HpBar.X, HpBar.Y, targetShieldWidth, ShieldBar.Height);
+            ShieldBar.SetTextureRect(
+                (int)(HpBar.Width - targetShieldWidth), 0, (int)targetShieldWidth, ShieldBar.Height
+            );
         }
 
         private void UpdateMpBar(float elapsedTime, bool instant = false)

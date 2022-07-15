@@ -1420,11 +1420,16 @@ namespace Intersect.Server.Entities
             }
 
             //Check for any shields.
+            var oldAmount = amount;
             foreach (var status in CachedStatuses)
             {
                 if (status.Type == StatusTypes.Shield)
                 {
                     status.DamageShield(vital, ref amount);
+                    if (oldAmount != amount)
+                    {
+                        PacketSender.SendMapEntityStatusUpdate(Map, this, MapInstanceId);
+                    }
                 }
             }
 

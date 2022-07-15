@@ -1335,7 +1335,7 @@ namespace Intersect.Server.Maps
 
             if (statusUpdates.Count > 0)
             {
-                PacketSender.SendMapEntityStatusUpdate(mMapController, statusUpdates.ToArray(), MapInstanceId);
+                PacketSender.SendMapEntitiesStatusUpdate(mMapController, statusUpdates.ToArray(), MapInstanceId);
             }
         }
 
