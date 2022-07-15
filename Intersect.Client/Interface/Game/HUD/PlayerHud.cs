@@ -44,6 +44,8 @@ namespace Intersect.Client.Interface.Game.HUD
         public Color Primary => new Color((int)GetOpacity(), 255, 255, 255);
         public Color Secondary => new Color((int)GetOpacity(), 188, 188, 188);
         public Color MapNameColor => new Color((int)GetOpacity(), 50, 19, 0);
+        public Color BackgroundColor => new Color((int)Opacity, 0, 0, 0);
+        public Color BackgroundBorderColor => new Color((int)Opacity, 50, 19, 0);
 
         private string MapName => MapInstance.Get(Globals.Me?.CurrentMap ?? default)?.Name ?? string.Empty;
 
@@ -126,8 +128,10 @@ namespace Intersect.Client.Interface.Game.HUD
 
         private void DrawBackground(int height)
         {
-            var dimensions = new FloatRect(Left, Top, Graphics.Renderer.GetScreenWidth(), height);
-            Graphics.DrawGameTexture(Graphics.Renderer.GetWhiteTexture(), new FloatRect(0, 0, 1, 1), dimensions, new Color((int)Opacity, 0, 0, 0));
+            var borderDimensions = new FloatRect(Left, Top, Graphics.Renderer.GetScreenWidth(), height);
+            var backgroundDimensions = new FloatRect(Left, Top - 4, Graphics.Renderer.GetScreenWidth(), height);
+            Graphics.DrawGameTexture(Graphics.Renderer.GetWhiteTexture(), new FloatRect(0, 0, 1, 1), borderDimensions, BackgroundBorderColor);
+            Graphics.DrawGameTexture(Graphics.Renderer.GetWhiteTexture(), new FloatRect(0, 0, 1, 1), backgroundDimensions, BackgroundColor);
         }
 
         private void DrawPlayerNameAndLevel(float x, float y)

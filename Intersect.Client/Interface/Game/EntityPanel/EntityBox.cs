@@ -119,11 +119,9 @@ namespace Intersect.Client.Interface.Game.EntityPanel
             EntityWindow =
                 playerBox ? new ImagePanel(gameCanvas, "PlayerBox") : new ImagePanel(gameCanvas, "TargetBox");
 
-            EntityWindow.ShouldCacheToTexture = true;
-
             EntityInfoPanel = new ImagePanel(EntityWindow, "EntityInfoPanel");
 
-            EntityName = new Framework.Gwen.Control.Label(EntityInfoPanel, "EntityNameLabel") {Text = myEntity?.Name};
+            EntityName = new Framework.Gwen.Control.Label(EntityInfoPanel, "EntityNameLabel") {Text = myEntity?.Name.ToUpper()};
             EntityLevel = new Framework.Gwen.Control.Label(EntityInfoPanel, "EntityLevelLabel");
             EntityNameAndLevel = new Framework.Gwen.Control.Label(EntityInfoPanel, "NameAndLevelLabel")
                 {IsHidden = true};
@@ -175,23 +173,23 @@ namespace Intersect.Client.Interface.Game.EntityPanel
             ExpTitle.SetText(Strings.EntityBox.exp);
             ExpLbl = new Framework.Gwen.Control.Label(EntityInfoPanel, "EXPLabel");
 
-            TradeLabel = new Button(EntityInfoPanel, "TradeButton");
+            TradeLabel = new Button(EntityWindow, "TradeButton");
             TradeLabel.SetText(Strings.EntityBox.trade);
             TradeLabel.SetToolTipText(Strings.EntityBox.tradetip.ToString(MyEntity?.Name));
             TradeLabel.Clicked += tradeRequest_Clicked;
 
-            PartyLabel = new Button(EntityInfoPanel, "PartyButton");
+            PartyLabel = new Button(EntityWindow, "PartyButton");
             PartyLabel.SetText(Strings.EntityBox.party);
             PartyLabel.SetToolTipText(Strings.EntityBox.partytip.ToString(MyEntity?.Name));
             PartyLabel.Clicked += invite_Clicked;
 
-            FriendLabel = new Button(EntityInfoPanel, "FriendButton");
+            FriendLabel = new Button(EntityWindow, "FriendButton");
             FriendLabel.SetText(Strings.EntityBox.friend);
             FriendLabel.SetToolTipText(Strings.EntityBox.friendtip.ToString(MyEntity?.Name));
             FriendLabel.Clicked += friendRequest_Clicked;
             FriendLabel.IsHidden = true;
 
-            GuildLabel = new Button(EntityInfoPanel, "GuildButton");
+            GuildLabel = new Button(EntityWindow, "GuildButton");
             GuildLabel.SetText(Strings.Guilds.Guild);
             GuildLabel.SetToolTipText(Strings.Guilds.guildtip.ToString(MyEntity?.Name));
             GuildLabel.Clicked += guildRequest_Clicked;
@@ -318,6 +316,13 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                     }
                     else
                     {
+                        if (MyEntity is Player player)
+                        {
+                            TryShowPartyButton();
+                            TryShowGuildButton();
+                            TryShowFriendButton();
+                        }
+                        
                         ExpBackground.Hide();
                         ExpBar.Hide();
                         ExpLbl.Hide();
@@ -364,8 +369,34 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                     break;
             }
 
-            EntityName.SetText(MyEntity.Name);
+            EntityName.SetText(MyEntity.Name.ToUpper());
             ShieldBar.Hide();
+        }
+
+        private void TryShowPartyButton()
+        {
+            if (Globals.Me == null)
+            {
+                return;
+            }
+
+            if (MyEntity is Player player)
+            {
+                PartyLabel.IsHidden = Globals.Me.IsInMyParty(player) || player.IsInMyParty(Globals.Me.Id);
+            }
+        }
+
+        private void TryShowFriendButton()
+        {
+            if (Globals.Me == null)
+            {
+                return;
+            }
+
+            if (MyEntity is Player player)
+            {
+                FriendLabel.IsHidden = Globals.Me.Friends.Select(f => f.Name).Contains(player.Name);
+            }
         }
 
         //Update
@@ -421,7 +452,7 @@ namespace Intersect.Client.Interface.Game.EntityPanel
             IsHidden = true;
             if (EntityType != EntityTypes.Event)
             {
-                EntityName.SetText(MyEntity.Name);
+                EntityName.SetText(MyEntity.Name.ToUpper());
                 UpdateLevel();
                 UpdateMap();
                 UpdateHpBar(elapsedTime);
@@ -432,7 +463,7 @@ namespace Intersect.Client.Interface.Game.EntityPanel
             {
                 if (!EntityNameAndLevel.IsHidden)
                 {
-                    EntityNameAndLevel.Text = MyEntity.Name;
+                    EntityNameAndLevel.Text = MyEntity.Name.ToUpper();
                 }
             }
 
@@ -454,8 +485,8 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                 else if (TradeLabel.IsHidden || PartyLabel.IsHidden || FriendLabel.IsHidden)
                 {
                     TradeLabel.Show();
-                    PartyLabel.Show();
-                    FriendLabel.Show();
+                    TryShowPartyButton();
+                    TryShowFriendButton();
                     TryShowGuildButton();
                 }
             }
@@ -480,6 +511,8 @@ namespace Intersect.Client.Interface.Game.EntityPanel
             {
                 return;
             }
+
+            EntityStatusPanel.Y = MyEntity is Player ? 172 : 160;
 
             //Remove 'Dead' Statuses
             var statuses = mActiveStatuses.Keys.ToArray();
@@ -556,7 +589,7 @@ namespace Intersect.Client.Interface.Game.EntityPanel
 
             if (!EntityNameAndLevel.IsHidden)
             {
-                EntityNameAndLevel.Text = Strings.EntityBox.NameAndLevel.ToString(MyEntity.Name, levelString);
+                EntityNameAndLevel.Text = Strings.EntityBox.NameAndLevel.ToString(MyEntity.Name.ToUpper(), levelString);
             }
         }
 
@@ -593,6 +626,7 @@ namespace Intersect.Client.Interface.Game.EntityPanel
         {
             var targetHpWidth = 0f;
             var targetShieldWidth = 0f;
+            var width = HpBar?.Texture?.GetWidth() ?? 0;
             if (MyEntity.MaxVital[(int) Vitals.Health] > 0)
             {
                 var maxVital = MyEntity.MaxVital[(int) Vitals.Health];
@@ -603,11 +637,9 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                     maxVital = shieldSize + MyEntity.Vital[(int)Vitals.Health];
                 }
 
-                var width = HpBackground.Width;
-
                 var hpfillRatio = (float) MyEntity.Vital[(int) Vitals.Health] / maxVital;
-                hpfillRatio = Math.Min(1, Math.Max(0, hpfillRatio));
-                targetHpWidth = (float) Math.Ceiling(hpfillRatio * width);
+                hpfillRatio = (float) MathHelper.Clamp(hpfillRatio, 0f, 1f);
+                targetHpWidth = MathHelper.RoundNearestMultiple((int) (hpfillRatio * width), 4);
 
                 var shieldfillRatio = (float) shieldSize / maxVital;
                 shieldfillRatio = Math.Min(1, Math.Max(0, shieldfillRatio));
@@ -623,70 +655,14 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                 HpLbl.Text = Strings.EntityBox.vital0val.ToString(0, 0);
                 targetHpWidth = HpBackground.Width;
             }
-
-            if ((int)targetHpWidth != CurHpWidth)
-            {
-                if (!instant)
-                {
-                    if ((int)targetHpWidth > CurHpWidth)
-                    {
-                        CurHpWidth += 100f * elapsedTime;
-                        if (CurHpWidth > (int)targetHpWidth)
-                        {
-                            CurHpWidth = targetHpWidth;
-                        }
-                    }
-                    else
-                    {
-                        CurHpWidth -= 100f * elapsedTime;
-                        if (CurHpWidth < targetHpWidth)
-                        {
-                            CurHpWidth = targetHpWidth;
-                        }
-                    }
-                }
-                else
-                {
-                    CurHpWidth = (int)targetHpWidth;
-                }
-
-                if (CurHpWidth == 0)
-                {
-                    HpBar.IsHidden = true;
-                }
-                else
-                {
-                    HpBar.Width = (int)CurHpWidth;
-                    HpBar.SetTextureRect(0, 0, (int)CurHpWidth, HpBar.Height);
-                    HpBar.IsHidden = false;
-                }
-            }
+            
+            HpBar.SetTextureRect(0, 0, (int)targetHpWidth, HpBar.Height);
+            HpBar.Width = (int)targetHpWidth;
+            HpBar.IsHidden = targetHpWidth == 0;
 
             if ((int)targetShieldWidth != CurShieldWidth)
             {
-                if (!instant)
-                {
-                    if ((int)targetShieldWidth > CurShieldWidth)
-                    {
-                        CurShieldWidth += 100f * elapsedTime;
-                        if (CurShieldWidth > (int)targetShieldWidth)
-                        {
-                            CurShieldWidth = targetShieldWidth;
-                        }
-                    }
-                    else
-                    {
-                        CurShieldWidth -= 100f * elapsedTime;
-                        if (CurShieldWidth < targetShieldWidth)
-                        {
-                            CurShieldWidth = targetShieldWidth;
-                        }
-                    }
-                }
-                else
-                {
-                    CurShieldWidth = (int)targetShieldWidth;
-                }
+                CurShieldWidth = (int)targetShieldWidth;
 
                 if (CurShieldWidth == 0)
                 {
@@ -711,60 +687,28 @@ namespace Intersect.Client.Interface.Game.EntityPanel
 
         private void UpdateMpBar(float elapsedTime, bool instant = false)
         {
+            if (MyEntity.MaxVital[(int)Vitals.Mana] <= 0)
+            {
+                MpBar.Hide();
+                MpBackground.Hide();
+                MpTitle.Hide();
+                MpLbl.Hide();
+                return;
+            }
+
             var targetMpWidth = 0f;
-            if (MyEntity.MaxVital[(int) Vitals.Mana] > 0)
-            {
-                targetMpWidth = MyEntity.Vital[(int) Vitals.Mana] / (float) MyEntity.MaxVital[(int) Vitals.Mana];
-                targetMpWidth = Math.Min(1, Math.Max(0, targetMpWidth));
-                MpLbl.Text = Strings.EntityBox.vital1val.ToString(
-                    MyEntity.Vital[(int) Vitals.Mana], MyEntity.MaxVital[(int) Vitals.Mana]
-                );
+            var width = MpBar?.Texture?.GetWidth() ?? 0;
 
-                targetMpWidth *= MpBackground.Width;
-            }
-            else
-            {
-                MpLbl.Text = Strings.EntityBox.vital1val.ToString(0, 0);
-                targetMpWidth = MpBackground.Width;
-            }
+            var mpRatio = MyEntity.Vital[(int)Vitals.Mana] / (float)MyEntity.MaxVital[(int)Vitals.Mana];
+            mpRatio = (float)MathHelper.Clamp(mpRatio, 0f, 1f);
+            MpLbl.Text = Strings.EntityBox.vital1val.ToString(
+                MyEntity.Vital[(int)Vitals.Mana], MyEntity.MaxVital[(int)Vitals.Mana]
+            );
 
-            if ((int)targetMpWidth != CurMpWidth)
-            {
-                if (!instant)
-                {
-                    if ((int)targetMpWidth > CurMpWidth)
-                    {
-                        CurMpWidth += 100f * elapsedTime;
-                        if (CurMpWidth > (int)targetMpWidth)
-                        {
-                            CurMpWidth = targetMpWidth;
-                        }
-                    }
-                    else
-                    {
-                        CurMpWidth -= 100f * elapsedTime;
-                        if (CurMpWidth < targetMpWidth)
-                        {
-                            CurMpWidth = targetMpWidth;
-                        }
-                    }
-                }
-                else
-                {
-                    CurMpWidth = (int)targetMpWidth;
-                }
+            targetMpWidth = MathHelper.RoundNearestMultiple((int)(mpRatio * width), 4);
 
-                if (CurMpWidth == 0)
-                {
-                    MpBar.IsHidden = true;
-                }
-                else
-                {
-                    MpBar.Width = (int)CurMpWidth;
-                    MpBar.SetTextureRect(0, 0, (int)CurMpWidth, MpBar.Height);
-                    MpBar.IsHidden = false;
-                }
-            }
+            MpBar.Width = (int)targetMpWidth;
+            MpBar.SetTextureRect(0, 0, (int)targetMpWidth, MpBar.Height);
         }
 
         private void UpdateXpBar(float elapsedTime, bool instant = false)

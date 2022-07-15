@@ -2497,6 +2497,10 @@ namespace Intersect.Client.Entities
             {
                 return;
             }
+            if (this is Player)
+            {
+                return;
+            }
 
             var angle = Globals.Me.CalculateDirectionTo(this);
             var width = CASTER_INDICATOR_TEXTURE.GetWidth() / IndicatorFrames;
@@ -2511,8 +2515,7 @@ namespace Intersect.Client.Entities
                 IndicatorFlash = !IndicatorFlash;
             }
 
-            // Add 1 to cast range here as just a simple error buffer, since center point isn't exact
-            var maxCastingDistance = (maxRange + 1) * Options.Map.TileWidth; 
+            var maxCastingDistance = maxRange * Options.Map.TileWidth; 
             var distanceBetween = CalculateDistanceTo(Globals.Me);
             var alpha = 255 - (int)Math.Round((distanceBetween / maxCastingDistance) * 255f);
             alpha = MathHelper.Clamp(alpha, 0, 255);
@@ -2541,7 +2544,7 @@ namespace Intersect.Client.Entities
         {
             if (map == null)
             {
-                throw new ArgumentNullException(nameof(map));
+                return new FloatRect(0, 0, 0, 0);
             }
 
             return new FloatRect(

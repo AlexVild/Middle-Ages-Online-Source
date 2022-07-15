@@ -86,10 +86,15 @@ namespace Intersect.Client.Interface.Game.Hotbar
                 )
                 .ToLower()].ToString().ToUpper();
 
+            if (key.Length >= 3)
+            {
+                key = $"{key.Substring(0, 3)}.";
+            }
+
             var hotbarBase = item.GetWindow();
 
             var x = hotbarBase.X;
-            var y = hotbarBase.Bottom + 2;
+            var y = hotbarBase.Bottom + 3;
 
             x += item.Pnl.X + (item.Pnl.Width / 2);
 

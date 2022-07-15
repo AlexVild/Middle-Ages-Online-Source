@@ -694,8 +694,8 @@ namespace Intersect.Client.Core
                         top = new FloatRect(CurrentView.Left + (i * textureWidth), currTop, textureWidth, size);
                         bottom = new FloatRect(CurrentView.Left + (i * textureWidth), CurrentView.Top + CurrentView.Height - size, textureWidth, size);
 
-                        DrawGameTexture(texture, new FloatRect(0, 0, 64, 64), top, drawColor, null);
-                        DrawGameTexture(texture, new FloatRect(0, 0, 64, 64), bottom, drawColor, null, rotationDegrees: 180.0f);
+                        DrawGameTexture(texture, new FloatRect(0, 0, 64, size), top, drawColor, null);
+                        DrawGameTexture(texture, new FloatRect(0, 0, 64, size), bottom, drawColor, null, rotationDegrees: 180.0f);
                     }
 
                     if (!flag)
@@ -717,8 +717,8 @@ namespace Intersect.Client.Core
                         top = new FloatRect(CurrentView.Left + (i * textureWidth), currTop, textureWidth, size);
                         bottom = new FloatRect(CurrentView.Left + (i * textureWidth), CurrentView.Top + CurrentView.Height - size, textureWidth, size);
 
-                        DrawGameTexture(texture, new FloatRect(0, 0, 64, 64), top, drawColor, null);
-                        DrawGameTexture(texture, new FloatRect(0, 0, 64, 64), bottom, drawColor, null, rotationDegrees: 180.0f);
+                        DrawGameTexture(texture, new FloatRect(0, 0, 64, size), top, drawColor, null);
+                        DrawGameTexture(texture, new FloatRect(0, 0, 64, size), bottom, drawColor, null, rotationDegrees: 180.0f);
                     }
 
                     if (!flag)
@@ -735,8 +735,8 @@ namespace Intersect.Client.Core
                         top = new FloatRect(CurrentView.Left + (i * textureWidth), currTop, textureWidth, size);
                         bottom = new FloatRect(CurrentView.Left + (i * textureWidth), CurrentView.Top + CurrentView.Height - size, textureWidth, size);
 
-                        DrawGameTexture(texture, new FloatRect(0, 0, 64, 64), top, drawColor, null);
-                        DrawGameTexture(texture, new FloatRect(0, 0, 64, 64), bottom, drawColor, null, rotationDegrees: 180.0f);
+                        DrawGameTexture(texture, new FloatRect(0, 0, 64, size), top, drawColor, null);
+                        DrawGameTexture(texture, new FloatRect(0, 0, 64, size), bottom, drawColor, null, rotationDegrees: 180.0f);
                     }
                     if (flag)
                     {
