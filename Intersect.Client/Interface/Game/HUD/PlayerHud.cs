@@ -31,6 +31,7 @@ namespace Intersect.Client.Interface.Game.HUD
         private GameTexture ManaTexture;
         private GameTexture ExpTexture;
         private GameTexture MapTexture;
+        private GameTexture ShieldTexture;
 
         private bool CenterBarsBetweenElements => Width < 1280;
 
@@ -49,6 +50,11 @@ namespace Intersect.Client.Interface.Game.HUD
 
         private string MapName => MapInstance.Get(Globals.Me?.CurrentMap ?? default)?.Name ?? string.Empty;
 
+        // Used so shields know where to draw
+        private float HpX;
+        private float HpY;
+        private int HpWidth;
+
         public PlayerHud()
         {
             IsVisible = true;
@@ -62,6 +68,7 @@ namespace Intersect.Client.Interface.Game.HUD
             ManaTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_magic.png");
             ExpTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_exp.png");
             MapTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hud_map.png");
+            ShieldTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_shield.png");
         }
 
         private void DetermineTextureScaling()
@@ -72,6 +79,7 @@ namespace Intersect.Client.Interface.Game.HUD
                 HpTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_health_lg.png");
                 ManaTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_magic_lg.png");
                 ExpTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_exp_lg.png");
+                ShieldTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_shield_lg.png");
             }
             else if (BarBackground.Name.Contains("_lg") && !UseLargeBars)
             {
@@ -79,6 +87,7 @@ namespace Intersect.Client.Interface.Game.HUD
                 HpTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_health.png");
                 ManaTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_magic.png");
                 ExpTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_exp.png");
+                ShieldTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_shield.png");
             }
         }
 
@@ -180,7 +189,13 @@ namespace Intersect.Client.Interface.Game.HUD
 
             var currentHp = Globals.Me.Vital[(int)Vitals.Health];
             var maxHp = Globals.Me.MaxVital[(int)Vitals.Health];
-            DrawBar(BarBackground, HpTexture, x ,y, width, height, "HP", $"{currentHp} / {maxHp}", currentHp, maxHp);
+            var currentShield = Globals.Me.GetShieldSize();
+            if (currentHp + currentShield > maxHp)
+            {
+                maxHp = currentHp + currentShield;
+            }
+            DrawBar(BarBackground, HpTexture, x ,y, width, height, "HP", $"{currentHp + currentShield} / {maxHp}", currentHp, maxHp, true);
+            DrawShield(ShieldTexture, currentHp, maxHp, Globals.Me.GetShieldSize());
 
             var currentMana = Globals.Me.Vital[(int)Vitals.Mana];
             var maxMana = Globals.Me.MaxVital[(int)Vitals.Mana];
@@ -201,7 +216,7 @@ namespace Intersect.Client.Interface.Game.HUD
             }
         }
 
-        private void DrawBar(GameTexture bgTexture, GameTexture innerTexture, float x, float y, float width, float height, string label1, string label2, long currAmt, long maxAmt)
+        private void DrawBar(GameTexture bgTexture, GameTexture innerTexture, float x, float y, float width, float height, string label1, string label2, long currAmt, long maxAmt, bool isHp = false)
         {
             if (bgTexture == null || innerTexture == null)
             {
@@ -246,10 +261,30 @@ namespace Intersect.Client.Interface.Game.HUD
             int barWidth = MathHelper.RoundNearestMultiple((int)(currAmt / (float)maxAmt * innerTexture.GetWidth()), 4);
             barWidth = MathHelper.Clamp(barWidth, 0, innerTexture.GetWidth());
 
+            // used for shield positioning
+            if (isHp)
+            {
+                HpX = barX + 4;
+                HpY = barY + 4;
+                HpWidth = barWidth;
+            }
+
             Graphics.DrawGameTexture(innerTexture,
                 new FloatRect(0, 0, barWidth, innerTexture.GetHeight()),
                 new FloatRect(barX + 4, barY + 4, barWidth, innerTexture.GetHeight()),
                 TextureColor);
+        }
+
+        private void DrawShield(GameTexture shieldTexture, long currAmt, long maxAmt, int totalShield)
+        {
+            var shieldfillRatio = (float)totalShield / maxAmt;
+            shieldfillRatio = (float)MathHelper.Clamp(shieldfillRatio, 0f, 1f);
+            var shieldfillWidth = MathHelper.RoundNearestMultiple((int)(shieldfillRatio * shieldTexture.GetWidth()), 4);
+
+            Graphics.DrawGameTexture(shieldTexture,
+               new FloatRect(0, 0, shieldTexture.GetWidth(), shieldTexture.GetHeight()),
+               new FloatRect(HpX + HpWidth, HpY, shieldfillWidth, shieldTexture.GetHeight()),
+               TextureColor);
         }
 
         private void DrawMapLabel(float x, float y, string mapName)

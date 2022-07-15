@@ -421,10 +421,7 @@ namespace Intersect.Client.Interface.Game.EntityPanel
 
             if (PlayerBox)
             {
-                if (EntityWindow.IsHidden)
-                {
-                    EntityWindow.Show();
-                }
+                EntityWindow.Show();
 
                 if (MyEntity.IsDisposed())
                 {
@@ -512,7 +509,10 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                 return;
             }
 
-            EntityStatusPanel.Y = MyEntity is Player ? 172 : 160;
+            if (!PlayerBox)
+            {
+                EntityStatusPanel.Y = MyEntity is Player && MyEntity.Id != Globals.Me?.Id ? 172 : 160;
+            }
 
             //Remove 'Dead' Statuses
             var statuses = mActiveStatuses.Keys.ToArray();

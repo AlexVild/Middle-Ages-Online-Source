@@ -428,7 +428,7 @@ namespace Intersect.Client.Interface.Game
             Hotbar?.Update();
             mDebugMenu?.Update();
             EscapeMenu.Update();
-            //PlayerBox?.Update();
+            PlayerBox?.Update();
             mMapItemWindow.Update();
             AnnouncementWindow?.Update();
             mPictureWindow?.Update();
