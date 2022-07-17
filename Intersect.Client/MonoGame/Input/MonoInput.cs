@@ -120,6 +120,11 @@ namespace Intersect.Client.MonoGame.Input
             }
         }
 
+        public override int GetMouseVScroll()
+        {
+            return mMouseVScroll;
+        }
+
         public override bool KeyDown(Keys key)
         {
             if (mKeyDictionary.ContainsKey(key))

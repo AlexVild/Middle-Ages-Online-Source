@@ -42,6 +42,8 @@ namespace Intersect.Client.Framework.Input
 
         public abstract void Update();
 
+        public abstract int GetMouseVScroll();
+
         public abstract void OpenKeyboard(
             KeyboardType type,
             string text,

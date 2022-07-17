@@ -19,6 +19,8 @@ namespace Intersect.Client.Interface.Game.MapScreen
         private float SlowSpeed = 0.5f;
         private float CurrentSpeed => Input.QuickModifierActive() ? FastSpeed : SlowSpeed;
 
+        private int LastMouseScrollPos;
+
         private float Left => Graphics.CurrentView.Left;
         private float Width => Graphics.CurrentView.Width;
         private float Top => Graphics.CurrentView.Top;
@@ -78,6 +80,8 @@ namespace Intersect.Client.Interface.Game.MapScreen
             FogTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "map_fog.png");
             LocationTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "map_current.png");
             MeTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "map_me.png");
+
+            LastMouseScrollPos = Globals.InputManager.GetMouseVScroll();
         }
 
         public void RegenerateMap()
@@ -96,8 +100,11 @@ namespace Intersect.Client.Interface.Game.MapScreen
             IsOpen = !IsOpen;
             if (IsOpen)
             {
+                LastMouseScrollPos = Globals.InputManager.GetMouseVScroll();
+                
                 Audio.AddGameSound("al_book_turn.wav", false);
                 GenerateMap();
+                
                 ZoomIdx = ZoomLevels.Length > DefaultZoomIdx ? DefaultZoomIdx : 0;
                 ResetToCenterOfGrid();
             }
@@ -256,16 +263,30 @@ namespace Intersect.Client.Interface.Game.MapScreen
                 return;
             }
 
-            if (!Globals.InputManager.KeyDown(Keys.Add) && !Globals.InputManager.KeyDown(Keys.Subtract))
+            if (!Globals.InputManager.KeyDown(Keys.Add) && !Globals.InputManager.KeyDown(Keys.Subtract) && Globals.InputManager.GetMouseVScroll() == LastMouseScrollPos)
             {
                 IsZooming = false;
+                
                 return;
             }
 
             if (!IsZooming)
             {
+                bool zoomIn;
+                if (Globals.InputManager.GetMouseVScroll() != LastMouseScrollPos)
+                {
+                    IsZooming = false;
+                    var tmpScroll = Globals.InputManager.GetMouseVScroll();
+                    zoomIn = tmpScroll > LastMouseScrollPos;
+                    LastMouseScrollPos = Globals.InputManager.GetMouseVScroll();
+                }
+                else
+                {
+                    zoomIn = Globals.InputManager.KeyDown(Keys.Add);
+                }
+
                 var prevZoom = CurrentZoom;
-                bool zoomIn = Globals.InputManager.KeyDown(Keys.Add);
+                
                 ZoomIdx = zoomIn ? ZoomIdx + 1 : ZoomIdx - 1;
                 ZoomIdx = MathHelper.Clamp(ZoomIdx, 0, ZoomLevels.Length - 1);
 
