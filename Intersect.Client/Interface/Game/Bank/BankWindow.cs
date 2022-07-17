@@ -62,10 +62,11 @@ namespace Intersect.Client.Interface.Game.Bank
             mValueLabel = new Label(mBankWindow, "ValueLabel");
             mValueLabel.SetText(Strings.Bank.bankvalue.ToString(Strings.FormatQuantityAbbreviated(Globals.BankValue)));
             mValueLabel.SetToolTipText(Strings.Bank.bankvalue.ToString(Globals.BankValue.ToString("N0").Replace(",", Strings.Numbers.comma)));
-            
-            mBankWindow.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
+
             _BankWindow();
 
+            mBankWindow.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
+            
             InitItemContainer();
             Close();
         }
@@ -237,6 +238,9 @@ namespace Intersect.Client.Interface.Game.Bank
     public partial class BankWindow
     {
         private TextBox mSearch;
+        private ImagePanel mTextboxBg;
+        private Label mSearchLabel;
+        private Button mClearButton;
         public List<BankSlot> SortedBank;
         private bool RefreshBank = false;
 
@@ -254,7 +258,13 @@ namespace Intersect.Client.Interface.Game.Bank
 
         private void _BankWindow()
         {
-            mSearch = new TextBox(mBankWindow, "SearchBox");
+            mSearchLabel = new Label(mBankWindow, "SearchLabel");
+            mSearchLabel.Text = "Search:";
+            mClearButton = new Button(mBankWindow, "ClearButton");
+            mClearButton.Pressed += mClear_Pressed;
+            mClearButton.Text = "Clear";
+            mTextboxBg = new ImagePanel(mBankWindow, "Textbox");
+            mSearch = new TextBox(mTextboxBg, "SearchBox");
             mSearch.TextChanged += mSearch_textChanged;
         }
 
@@ -317,6 +327,12 @@ namespace Intersect.Client.Interface.Game.Bank
         private void mSearch_textChanged(Base control, EventArgs args)
         {
             mItemContainer.ScrollToTop();
+            InitRefreshBank();
+        }
+
+        private void mClear_Pressed(Base control, EventArgs args)
+        {
+            mSearch.Text = string.Empty;
             InitRefreshBank();
         }
 

@@ -106,6 +106,8 @@ namespace Intersect.Client.Interface.Game.Crafting
             mCraftAll.SetText(Strings.Crafting.craftall.ToString("1"));
             mCraftAll.Clicked += craftAll_Clicked;
 
+            _CraftingWindow();
+
             mCraftWindow.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
 
             Interface.InputBlockingElements.Add(mCraftWindow);
@@ -115,8 +117,6 @@ namespace Intersect.Client.Interface.Game.Crafting
                 //Refresh crafting window items
                 LoadCraftItems(mCraftId);
             };
-
-            _CraftingWindow();
         }
 
         //Location
