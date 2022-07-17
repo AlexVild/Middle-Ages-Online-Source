@@ -317,9 +317,9 @@ namespace Intersect.Client.Interface.Game.HUD
                     }
                     
                     var tmpWidth = Graphics.Renderer.MeasureText(sb.ToString(), font, 1).X;
-                    if (tmpWidth >= maxNameWidth)
+                    if (tmpWidth >= maxNameWidth && sb.ToString().Length >= 25)
                     {
-                        mapName = $"{sb.ToString().Substring(0, 37)}...";
+                        mapName = $"{sb.ToString().Substring(0, 25)}...";
                     }
                     else
                     {
