@@ -20,10 +20,6 @@ namespace Intersect.Client.Interface.Game.Crafting
     public partial class CraftingWindow
     {
 
-        private static int sItemXPadding = 4;
-
-        private static int sItemYPadding = 4;
-
         public bool Crafting;
 
         private ImagePanel mBar;
@@ -40,8 +36,6 @@ namespace Intersect.Client.Interface.Game.Crafting
 
         private Button mCraftAll;
 
-        private ImagePanel mCraftedItemTemplate;
-
         private Guid mCraftId;
 
         private int AmountRemaining;
@@ -57,8 +51,6 @@ namespace Intersect.Client.Interface.Game.Crafting
 
         private List<RecipeItem> mItems = new List<RecipeItem>();
 
-        private ImagePanel mItemTemplate;
-
         private Label mLblIngredients;
 
         private Label mLblProduct;
@@ -72,7 +64,7 @@ namespace Intersect.Client.Interface.Game.Crafting
 
         public CraftingWindow(Canvas gameCanvas)
         {
-            mCraftWindow = new WindowControl(gameCanvas, Globals.ActiveCraftingTable.Name, false, "CraftingWindow");
+            mCraftWindow = new WindowControl(gameCanvas, Globals.ActiveCraftingTable.Name.ToUpper(), false, "CraftingWindow");
             mCraftWindow.DisableResizing();
 
             mItemContainer = new ScrollControl(mCraftWindow, "IngredientsContainer");
@@ -98,8 +90,6 @@ namespace Intersect.Client.Interface.Game.Crafting
             mCraft = new Button(mCraftWindow, "CraftButton");
             mCraft.SetText(Strings.Crafting.craft);
             mCraft.Clicked += craft_Clicked;
-
-            mSearch = new TextBox(mCraftWindow, "SearchBox");
 
             //Craft all button
             mCraftAll = new Button(mCraftWindow, "CraftAllButton");
@@ -386,8 +376,8 @@ namespace Intersect.Client.Interface.Game.Crafting
                     tmpRow.UserData = mCrafts[i];
                     tmpRow.DoubleClicked += tmpNode_DoubleClicked;
                     tmpRow.Clicked += tmpNode_DoubleClicked;
-                    tmpRow.SetTextColor(Color.White);
-                    tmpRow.RenderColor = new Color(50, 255, 255, 255);
+                    tmpRow.SetTextColor(new Color(255, 50, 19, 0));
+                    tmpRow.RenderColor = new Color(100, 232, 208, 170);
                 }
 
                 //Load the craft data
@@ -445,7 +435,7 @@ namespace Intersect.Client.Interface.Game.Crafting
             }
 
             var ratio = craft.Time == 0 ? 0 : Convert.ToDecimal(delta) / Convert.ToDecimal(craft.Time);
-            var width = ratio * mBarContainer?.Width ?? 0;
+            var width = Intersect.Utilities.MathHelper.RoundNearestMultiple((int)(ratio * mBarContainer?.Width ?? 0), 4);
 
             if (mBar == null)
             {
@@ -465,10 +455,20 @@ namespace Intersect.Client.Interface.Game.Crafting
     public partial class CraftingWindow
     {
         private TextBox mSearch;
+        private ImagePanel mTextboxBg;
         private List<Guid> mCrafts;
+        private Label mSearchLabel;
+        private Button mClearButton;
 
         private void _CraftingWindow()
         {
+            mTextboxBg = new ImagePanel(mCraftWindow, "Textbox");
+            mSearch = new TextBox(mTextboxBg, "SearchBox");
+            mSearchLabel = new Label(mCraftWindow, "SearchLabel");
+            mSearchLabel.Text = "Search:";
+            mClearButton = new Button(mCraftWindow, "ClearButton");
+            mClearButton.Pressed += mClear_Pressed;
+            mClearButton.Text = "Clear";
             mSearch.TextChanged += mSearch_textChanged;
         }
 
@@ -477,6 +477,7 @@ namespace Intersect.Client.Interface.Game.Crafting
             LoadCrafts();
             Refresh = true;
             LoadCraftItems(mCraftId);
+            mRecipes.ScrollToTop();
         }
 
         private void LoadCrafts()
@@ -492,6 +493,14 @@ namespace Intersect.Client.Interface.Game.Crafting
             var craft = CraftBase.Get(craftId);
 
             return !Globals.ActiveCraftingTable.HiddenCrafts.Contains(craftId) && SearchHelper.IsSearchable(craft.Name, mSearch.Text);
+        }
+
+        private void mClear_Pressed(Base control, EventArgs args)
+        {
+            mSearch.Text = string.Empty;
+            LoadCrafts();
+            Refresh = true;
+            LoadCraftItems(mCraftId);
         }
     }
 }
