@@ -9,6 +9,7 @@ using Intersect.Client.General;
 using Intersect.Client.Interface.Game.Chat;
 using Intersect.Client.Localization;
 using Intersect.Client.Networking;
+using Intersect.Client.Utilities;
 using Intersect.GameObjects;
 using Intersect.GameObjects.Crafting;
 using Intersect.Utilities;
@@ -16,7 +17,7 @@ using Intersect.Utilities;
 namespace Intersect.Client.Interface.Game.Crafting
 {
 
-    public class CraftingWindow
+    public partial class CraftingWindow
     {
 
         private static int sItemXPadding = 4;
@@ -98,6 +99,8 @@ namespace Intersect.Client.Interface.Game.Crafting
             mCraft.SetText(Strings.Crafting.craft);
             mCraft.Clicked += craft_Clicked;
 
+            mSearch = new TextBox(mCraftWindow, "SearchBox");
+
             //Craft all button
             mCraftAll = new Button(mCraftWindow, "CraftAllButton");
             mCraftAll.SetText(Strings.Crafting.craftall.ToString("1"));
@@ -112,6 +115,8 @@ namespace Intersect.Client.Interface.Game.Crafting
                 //Refresh crafting window items
                 LoadCraftItems(mCraftId);
             };
+
+            _CraftingWindow();
         }
 
         //Location
@@ -301,7 +306,7 @@ namespace Intersect.Client.Interface.Game.Crafting
         {
             if (Crafting == false)
             {
-                LoadCraftItems((Guid) ((ListBoxRow) sender).UserData);
+                LoadCraftItems((Guid)((ListBoxRow)sender).UserData);
             }
         }
 
@@ -315,7 +320,7 @@ namespace Intersect.Client.Interface.Game.Crafting
 
                 return;
             }
-            
+
             if (Globals.Me.CanCraftItem(mCraftId))
             {
                 StartCrafting(amountToCraft);
@@ -342,6 +347,7 @@ namespace Intersect.Client.Interface.Game.Crafting
         //Update the crafting bar
         public void Update()
         {
+            LoadCrafts();
             var resetSelection = false;
             if (Refresh)
             {
@@ -352,9 +358,9 @@ namespace Intersect.Client.Interface.Game.Crafting
             if (!mInitialized || Refresh)
             {
                 var displayIndex = 0;
-                for (var i = 0; i < Globals.ActiveCraftingTable?.Crafts?.Count; ++i)
+                for (var i = 0; i < mCrafts.Count; ++i)
                 {
-                    var activeCraft = CraftBase.Get(Globals.ActiveCraftingTable.Crafts[i]);
+                    var activeCraft = CraftBase.Get(mCrafts[i]);
                     if (activeCraft == null)
                     {
                         continue;
@@ -377,7 +383,7 @@ namespace Intersect.Client.Interface.Game.Crafting
                         continue;
                     }
 
-                    tmpRow.UserData = Globals.ActiveCraftingTable.Crafts[i];
+                    tmpRow.UserData = mCrafts[i];
                     tmpRow.DoubleClicked += tmpNode_DoubleClicked;
                     tmpRow.Clicked += tmpNode_DoubleClicked;
                     tmpRow.SetTextColor(Color.White);
@@ -385,7 +391,7 @@ namespace Intersect.Client.Interface.Game.Crafting
                 }
 
                 //Load the craft data
-                if (( Globals.ActiveCraftingTable?.Crafts?.Count > 0 && !Refresh ) || resetSelection)
+                if ((Globals.ActiveCraftingTable?.Crafts?.Count > 0 && !Refresh) || resetSelection)
                 {
                     // Don't initialize on a craft we can't do
                     var validCrafts = Globals.ActiveCraftingTable.Crafts
@@ -453,6 +459,39 @@ namespace Intersect.Client.Interface.Game.Crafting
             mBar.Width = Convert.ToInt32(width);
 
             Crafting = AmountRemaining > 0;
+        }
+    }
+
+    public partial class CraftingWindow
+    {
+        private TextBox mSearch;
+        private List<Guid> mCrafts;
+
+        private void _CraftingWindow()
+        {
+            mSearch.TextChanged += mSearch_textChanged;
+        }
+
+        private void mSearch_textChanged(Base control, EventArgs args)
+        {
+            LoadCrafts();
+            Refresh = true;
+            LoadCraftItems(mCraftId);
+        }
+
+        private void LoadCrafts()
+        {
+            var items = Globals.ActiveCraftingTable.Crafts
+                .Where(craftId => CraftIsValid(craftId))
+                .ToList();
+            mCrafts = items;
+        }
+
+        private bool CraftIsValid(Guid craftId)
+        {
+            var craft = CraftBase.Get(craftId);
+
+            return !Globals.ActiveCraftingTable.HiddenCrafts.Contains(craftId) && SearchHelper.IsSearchable(craft.Name, mSearch.Text);
         }
     }
 }

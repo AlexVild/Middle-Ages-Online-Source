@@ -1682,6 +1682,7 @@ namespace Intersect.Client.Networking
             {
                 Globals.Bank[slot] = null;
             }
+            Interface.Interface.GameUi.RefreshBank();
         }
 
         //BankUpdateValuePacket

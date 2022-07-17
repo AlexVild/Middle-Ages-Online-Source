@@ -154,7 +154,6 @@ namespace Intersect.Client.Interface.Game.MapScreen
             ProcessZoom(mousePos);
             if (Globals.InputManager.MouseButtonDown(Framework.Input.GameInput.MouseButtons.Middle))
             {
-                Audio.AddGameSound("ui_press.wav", false);
                 ZoomIdx = ZoomLevels.Length > DefaultZoomIdx ? DefaultZoomIdx : 0;
                 ResetToCenterOfGrid();
             }
