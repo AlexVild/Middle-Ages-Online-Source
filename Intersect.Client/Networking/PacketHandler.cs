@@ -25,6 +25,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Intersect.GameObjects.Timers;
+using Newtonsoft.Json.Linq;
 
 namespace Intersect.Client.Networking
 {
@@ -37,7 +38,7 @@ namespace Intersect.Client.Networking
 
             public VirtualPacketSender(IApplicationContext applicationContext) =>
                 ApplicationContext = applicationContext ?? throw new ArgumentNullException(nameof(applicationContext));
-            
+
             #region Implementation of IPacketSender
 
             /// <inheritdoc />
@@ -151,7 +152,7 @@ namespace Intersect.Client.Networking
             }
             else
             {
-                Network.Ping = (int) (Timing.Global.Milliseconds - PingTime) / 2;
+                Network.Ping = (int)(Timing.Global.Milliseconds - PingTime) / 2;
             }
         }
 
@@ -263,7 +264,7 @@ namespace Intersect.Client.Networking
                 en.Load(packet);
                 if (packet.IsSelf)
                 {
-                    Globals.Me = (Player) Globals.Entities[packet.EntityId];
+                    Globals.Me = (Player)Globals.Entities[packet.EntityId];
                 }
             }
             else
@@ -271,7 +272,7 @@ namespace Intersect.Client.Networking
                 Globals.Entities.Add(packet.EntityId, new Player(packet.EntityId, packet));
                 if (packet.IsSelf)
                 {
-                    Globals.Me = (Player) Globals.Entities[packet.EntityId];
+                    Globals.Me = (Player)Globals.Entities[packet.EntityId];
                 }
             }
         }
@@ -527,7 +528,7 @@ namespace Intersect.Client.Networking
         //AnnouncementPacket
         public void HandlePacket(IPacketSender packetSender, AnnouncementPacket packet)
         {
-            Interface.Interface.GameUi.AnnouncementWindow.ShowAnnouncement(packet.Message, packet.Duration);   
+            Interface.Interface.GameUi.AnnouncementWindow.ShowAnnouncement(packet.Message, packet.Duration);
         }
 
         //ActionMsgPackets
@@ -707,9 +708,9 @@ namespace Intersect.Client.Networking
             if (entityMap.Attributes[en.X, en.Y] != null &&
                 entityMap.Attributes[en.X, en.Y].Type == MapAttributes.ZDimension)
             {
-                if (((MapZDimensionAttribute) entityMap.Attributes[en.X, en.Y]).GatewayTo > 0)
+                if (((MapZDimensionAttribute)entityMap.Attributes[en.X, en.Y]).GatewayTo > 0)
                 {
-                    en.Z = (byte) (((MapZDimensionAttribute) entityMap.Attributes[en.X, en.Y]).GatewayTo - 1);
+                    en.Z = (byte)(((MapZDimensionAttribute)entityMap.Attributes[en.X, en.Y]).GatewayTo - 1);
                 }
             }
         }
@@ -1029,7 +1030,7 @@ namespace Intersect.Client.Networking
                 return;
             }
 
-            
+
             if (en is Player player && player.CombatMode)
             {
                 player.FaceDirection = packet.Direction;
@@ -1092,7 +1093,7 @@ namespace Intersect.Client.Networking
             var id = packet.Id;
             var type = packet.Type;
             var mapId = packet.MapId;
-            
+
             Entity en = null;
             if (type < EntityTypes.Event)
             {
@@ -1100,7 +1101,7 @@ namespace Intersect.Client.Networking
                 {
                     return;
                 }
-                
+
                 en = Globals.Entities[id];
             }
             else
@@ -1203,10 +1204,10 @@ namespace Intersect.Client.Networking
             }
 
             map.MapItems.Clear();
-            foreach(var item in packet.Items)
+            foreach (var item in packet.Items)
             {
-                var mapItem = new MapItemInstance(item.TileIndex,item.Id, item.ItemId, item.BagId, item.Quantity, item.StatBuffs);
-                
+                var mapItem = new MapItemInstance(item.TileIndex, item.Id, item.ItemId, item.BagId, item.Quantity, item.StatBuffs);
+
                 if (!map.MapItems.ContainsKey(mapItem.TileIndex))
                 {
                     map.MapItems.Add(mapItem.TileIndex, new List<MapItemInstance>());
@@ -1229,7 +1230,7 @@ namespace Intersect.Client.Networking
             if (packet.ItemId == Guid.Empty)
             {
                 // Find our item based on our unique Id and remove it.
-                foreach(var location in map.MapItems.Keys)
+                foreach (var location in map.MapItems.Keys)
                 {
                     var tempItem = map.MapItems[location].Where(item => item.UniqueId == packet.Id).SingleOrDefault();
                     if (tempItem != null)
@@ -1261,7 +1262,7 @@ namespace Intersect.Client.Networking
                 {
                     // Reverse the array again to match server, add item.. then  reverse again to get the right render order.
                     map.MapItems[packet.TileIndex].Add(mapItem);
-                } 
+                }
             }
         }
 
@@ -1759,11 +1760,12 @@ namespace Intersect.Client.Networking
             Globals.MapGridHeight = packet.Grid.GetLength(1);
             var clearKnownMaps = packet.ClearKnownMaps;
             Globals.MapGrid = new Guid[Globals.MapGridWidth, Globals.MapGridHeight];
+            Globals.GridNames = new Dictionary<Guid, string>();
             if (clearKnownMaps)
             {
                 foreach (var map in MapInstance.Lookup.Values.ToArray())
                 {
-                    ((MapInstance) map).Dispose();
+                    ((MapInstance)map).Dispose();
                 }
             }
 
@@ -1777,6 +1779,7 @@ namespace Intersect.Client.Networking
                     if (Globals.MapGrid[x, y] != Guid.Empty)
                     {
                         Globals.GridMaps.Add(Globals.MapGrid[x, y]);
+                        Globals.GridNames.Add(Globals.MapGrid[x, y], packet.MapNames[x, y]);
                         MapInstance.UpdateMapRequestTime(Globals.MapGrid[x, y]);
                     }
                 }
@@ -2151,7 +2154,7 @@ namespace Intersect.Client.Networking
         public void HandlePacket(IPacketSender packetSender, TargetOverridePacket packet)
         {
             if (Globals.Entities.ContainsKey(packet.TargetId))
-            { 
+            {
                 Globals.Me.TryTarget(Globals.Entities[packet.TargetId], true);
             }
         }
@@ -2239,7 +2242,7 @@ namespace Intersect.Client.Networking
                 {
                     Wipe.FadeOut(true, true);
                 }
-                
+
                 Globals.InMapTransition = true;
             }
         }
@@ -2258,7 +2261,7 @@ namespace Intersect.Client.Networking
         public void HandlePacket(IPacketSender packetSender, ComboPacket packet)
         {
             if (Globals.Me == null) return;
-            
+
             Globals.Me.CurrentCombo = packet.ComboSize;
             if (packet.ComboSize == 0)
             {
@@ -2371,7 +2374,7 @@ namespace Intersect.Client.Networking
                 Graphics.CurrentShake = packet.Intensity;
             }
         }
-        
+
         // Combat Effect packet
         public void HandlePacket(IPacketSender packetSender, CombatEffectPacket packet)
         {
@@ -2383,7 +2386,7 @@ namespace Intersect.Client.Networking
             {
                 Graphics.CurrentShake = packet.ShakeAmount;
             }
-            
+
             if (packet.FlashColor != null && Globals.Database.CombatFlash)
             {
                 Flash.FlashScreen(packet.FlashDuration, packet.FlashColor, packet.FlashIntensity);
@@ -2483,6 +2486,20 @@ namespace Intersect.Client.Networking
 
             Globals.Me.DungeonLives = packet.Amount;
             Globals.Me.InDungeon = !packet.ClearLives;
+        }
+    }
+
+    internal sealed partial class PacketHandler
+    {
+        // MapsExploredPacket
+        public void HandlePacket(IPacketSender packetSender, MapsExploredPacket packet)
+        {
+            if (Globals.Me == null)
+            {
+                return;
+            }
+
+            Globals.Me.MapsExplored = packet.Maps;
         }
     }
 }

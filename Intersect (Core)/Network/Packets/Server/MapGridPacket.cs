@@ -11,11 +11,12 @@ namespace Intersect.Network.Packets.Server
         {
         }
 
-        public MapGridPacket(Guid[,] grid, string[,] editorGrid, bool clearKnownMaps)
+        public MapGridPacket(Guid[,] grid, string[,] editorGrid, bool clearKnownMaps, string[,] mapNames)
         {
             Grid = grid;
             EditorGrid = editorGrid;
             ClearKnownMaps = clearKnownMaps;
+            MapNames = mapNames;
         }
 
         [Key(0)]
@@ -26,6 +27,9 @@ namespace Intersect.Network.Packets.Server
 
         [Key(2)]
         public bool ClearKnownMaps { get; set; }
+
+        [Key(3)]
+        public string[,] MapNames { get; set; }
 
     }
 

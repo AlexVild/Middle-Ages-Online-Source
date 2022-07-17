@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 using Intersect.Server.Database;
-
+using Intersect.Server.Localization;
 using Newtonsoft.Json.Linq;
 
 namespace Intersect.Server.Maps
@@ -178,6 +178,26 @@ namespace Intersect.Server.Maps
         public Guid[,] GetClientData()
         {
             return MyGrid;
+        }
+
+        public string[,] GetMapNames()
+        {
+            var names = new string[Width, Height];
+            for (var x = XMin; x < XMax; x++)
+            {
+                for (var y = YMin; y < YMax; y++)
+                {
+                    var map = MapController.Get(MyGrid[x, y]);
+                    if (map == null) 
+                    { 
+                        continue; 
+                    }
+                    var name = map.Name != "New Map" && map.Name != "null" ? map.Name : string.Empty;
+                    names[x, y] = name;
+                }
+            }
+
+            return names;
         }
 
     }

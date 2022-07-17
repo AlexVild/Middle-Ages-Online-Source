@@ -396,6 +396,7 @@ namespace Intersect.Server.Entities
             LoadGuild();
             LoadRecords();
             LoadTimers();
+            LoadMapsExplored();
 
             //Upon Sign In Remove Any Items/Spells that have been deleted
             foreach (var itm in Items)
@@ -8348,4 +8349,29 @@ namespace Intersect.Server.Entities
         #endregion
     }
 
+
+    public partial class Player : Entity
+    {
+        [JsonIgnore]
+        public virtual List<MapExploredInstance> MapsExplored { get; set; } = new List<MapExploredInstance>();
+
+        public void MarkMapExplored(Guid mapId)
+        {
+            lock (EntityLock)
+            {
+                var thisMap = MapsExplored
+                    .Where(mapExplore => mapExplore.MapId == mapId)
+                    .ToArray();
+
+                if (thisMap.Length > 0)
+                {
+                    return;
+                }
+
+                MapsExplored.Add(new MapExploredInstance(Id, mapId));
+
+                PacketSender.SendMapsExploredPacketTo(this);
+            }
+        }
+    }
 }

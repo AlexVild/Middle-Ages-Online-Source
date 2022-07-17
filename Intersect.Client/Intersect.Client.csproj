@@ -130,6 +130,7 @@
     <Compile Include="Interface\Game\MapItem\MapItemIcon.cs" />
     <Compile Include="Interface\Game\MapItem\MapItemWindow.cs" />
     <Compile Include="Interface\Game\HUD\PlayerHud.cs" />
+    <Compile Include="Interface\Game\MapScreen\MapScreen.cs" />
     <Compile Include="Interface\Game\QuestBoardWindow.cs" />
     <Compile Include="Interface\Game\TimerWindow.cs" />
     <Compile Include="Interface\Game\WarningWindow.cs" />

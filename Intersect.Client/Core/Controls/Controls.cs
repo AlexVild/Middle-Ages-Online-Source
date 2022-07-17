@@ -93,6 +93,7 @@ namespace Intersect.Client.Core.Controls
             CreateControlMap(Control.TargetParty2, Keys.NumPad2, Keys.None);
             CreateControlMap(Control.TargetParty3, Keys.NumPad3, Keys.None);
             CreateControlMap(Control.TargetParty4, Keys.NumPad4, Keys.None);
+            CreateControlMap(Control.OpenOverworldMap, Keys.M, Keys.None);
         }
 
         public void Save()

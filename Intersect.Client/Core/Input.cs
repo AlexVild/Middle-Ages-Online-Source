@@ -293,6 +293,10 @@ namespace Intersect.Client.Core
                                         Globals.Me.TargetPartyMember(4);
 
                                         break;
+                                    case Control.OpenOverworldMap:
+                                        Interface.Interface.GameUi.Map.ToggleOpen();
+
+                                        break;
                                     default:
                                         break;
                                 }

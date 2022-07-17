@@ -109,6 +109,7 @@ namespace Intersect.Server.Networking
                 player.LoginWarp();
 
                 SendEntityDataTo(client.Entity, player);
+                SendMapsExploredPacketTo(player);
 
                 //Search for login activated events and run them
                 player.StartCommonEventsWithTrigger(CommonEventTrigger.Login);
@@ -1458,11 +1459,11 @@ namespace Intersect.Server.Networking
 
             if (client.IsEditor)
             {
-                client.Send(new MapGridPacket(null, grid.GetEditorData(), clearKnownMaps));
+                client.Send(new MapGridPacket(null, grid.GetEditorData(), clearKnownMaps, null));
             }
             else
             {
-                client.Send(new MapGridPacket(grid.GetClientData(), null, clearKnownMaps));
+                client.Send(new MapGridPacket(grid.GetClientData(), null, clearKnownMaps, grid.GetMapNames()));
                 if (clearKnownMaps)
                 {
                     SendAreaPacket(client.Entity);
@@ -2422,6 +2423,20 @@ namespace Intersect.Server.Networking
         public static void SendCraftingStatusPacket(Player player, int amountRemaining)
         {
             player?.SendPacket(new CraftStatusPacket(amountRemaining));
+        }
+    }
+
+    public static partial class PacketSender
+    {
+        public static void SendMapsExploredPacketTo(Player player)
+        {
+            if (player == null)
+            {
+                return;
+            }
+
+            var mapsExplored = player.MapsExplored.Select(mapsExp => mapsExp.MapId).ToList();
+            player?.SendPacket(new MapsExploredPacket(mapsExplored));
         }
     }
 

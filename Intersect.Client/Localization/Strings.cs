@@ -643,6 +643,7 @@ namespace Intersect.Client.Localization
                 {"targetparty2", @"Target Party 2:"},
                 {"targetparty3", @"Target Party 3:"},
                 {"targetparty4", @"Target Party 4:"},
+                {"openoverworldmap", @"Overworld Map:"},
             };
 
             public static LocalizedString CombatMode = @"Enter Combat Mode";

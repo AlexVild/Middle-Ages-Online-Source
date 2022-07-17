@@ -74,6 +74,8 @@ namespace Intersect.Server.Database.PlayerData
         public DbSet<PlayerRecord> Player_Record { get; set; }
         
         public DbSet<TimerInstance> Timers { get; set; }
+        
+        public DbSet<MapExploredInstance> Maps_Explored { get; set; }
 
         internal async ValueTask Commit(
             bool commit = false,
@@ -135,6 +137,7 @@ namespace Intersect.Server.Database.PlayerData
             modelBuilder.Entity<GuildBankSlot>().HasOne(b => b.Bag);
 
             modelBuilder.Entity<Player>().HasMany(b => b.PlayerRecords).WithOne(p => p.Player);
+            modelBuilder.Entity<Player>().HasMany(b => b.MapsExplored).WithOne(p => p.Player);
         }
 
         public void Seed()

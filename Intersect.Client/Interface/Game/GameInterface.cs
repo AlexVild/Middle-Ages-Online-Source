@@ -110,6 +110,8 @@ namespace Intersect.Client.Interface.Game
 
         public EntityBox PlayerBox;
 
+        public MapScreen.MapScreen Map;
+
         public GameInterface(Canvas canvas) : base(canvas)
         {
             GameCanvas = canvas;
@@ -150,6 +152,7 @@ namespace Intersect.Client.Interface.Game
             mHarvestBonusWindow = new HarvestBonusWindow(GameCanvas);
             mInstanceLifeDisplay = new InstanceLifeWindow(GameCanvas);
             mWarnings = new WarningWindow(GameCanvas);
+            Map = new MapScreen.MapScreen();
         }
 
         //Chatbox
@@ -427,16 +430,17 @@ namespace Intersect.Client.Interface.Game
             mHUD.Draw();
             Hotbar?.Update();
             mDebugMenu?.Update();
-            EscapeMenu.Update();
-            PlayerBox?.Update();
-            mMapItemWindow.Update();
-            AnnouncementWindow?.Update();
-            mPictureWindow?.Update();
             mComboText?.Update();
             mHarvestBonusWindow?.Update();
             mWarnings?.Update();
             mTimerWindow?.Update();
             mInstanceLifeDisplay?.Update();
+            Map.Update();
+            EscapeMenu.Update();
+            PlayerBox?.Update();
+            mMapItemWindow.Update();
+            AnnouncementWindow?.Update();
+            mPictureWindow?.Update();
 
             if (Globals.QuestOffers.Count > 0)
             {
@@ -743,6 +747,7 @@ namespace Intersect.Client.Interface.Game
             CloseCraftingTable();
             CloseShop();
             CloseTrading();
+            Map.Dispose();
             GameCanvas.Dispose();
         }
 

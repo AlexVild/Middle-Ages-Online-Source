@@ -879,6 +879,11 @@ namespace Intersect.Client.Core
 
         public static void DrawFullScreenTexture(GameTexture tex, float alpha = 1f)
         {
+            DrawFullScreenTexture(tex, new Color((int)(alpha * 255f), 255, 255, 255));
+        }
+
+        public static void DrawFullScreenTexture(GameTexture tex, Color color)
+        {
             var bgx = Renderer.GetScreenWidth() / 2 - tex.GetWidth() / 2;
             var bgy = Renderer.GetScreenHeight() / 2 - tex.GetHeight() / 2;
             var bgw = tex.GetWidth();
@@ -901,7 +906,7 @@ namespace Intersect.Client.Core
             DrawGameTexture(
                 tex, GetSourceRect(tex),
                 new FloatRect(bgx + Renderer.GetView().X, bgy + Renderer.GetView().Y, bgw, bgh),
-                new Color((int) (alpha * 255f), 255, 255, 255)
+                color
             );
         }
 

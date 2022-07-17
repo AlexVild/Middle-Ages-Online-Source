@@ -80,7 +80,9 @@
 
         TargetParty3,
 
-        TargetParty4
+        TargetParty4,
+
+        OpenOverworldMap,
     }
 
 }

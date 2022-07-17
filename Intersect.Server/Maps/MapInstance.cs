@@ -367,6 +367,8 @@ namespace Intersect.Server.Maps
                 PacketSender.SendMapItems(player, surroundingMapInstance.GetController().Id);
             }
             PacketSender.SendEntityDataToProximity(player, player);
+
+            player.MarkMapExplored(mMapController.Id);
         }
 
         /// <summary>

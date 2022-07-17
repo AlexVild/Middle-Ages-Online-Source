@@ -465,6 +465,24 @@ namespace Intersect.Server.Entities
         }
         #endregion
 
+        #region Explored Maps
+        public void LoadMapsExplored()
+        {
+            try
+            {
+                using (var context = DbInterface.CreatePlayerContext())
+                {
+                    MapsExplored = context.Maps_Explored.Where(f => f.Player.Id == Id).ToList();
+                    Log.Info($"Successfully loaded explored maps for {Name}. Count of maps is {MapsExplored.Count}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, $"Failed to load explored maps for {Name}.");
+            }
+        }
+        #endregion
+
         #endregion
 
     }

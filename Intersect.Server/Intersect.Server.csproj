@@ -484,6 +484,7 @@
     <Compile Include="Database\Item.cs" />
     <Compile Include="Database\PlayerData\Players\IPlayerOwned.cs" />
     <Compile Include="Database\PlayerData\Players\ISlot.cs" />
+    <Compile Include="Database\PlayerData\Players\MapExploredInstance.cs" />
     <Compile Include="Database\PlayerData\Players\Quest.cs" />
     <Compile Include="Database\PlayerData\Players\PlayerRecord.cs" />
     <Compile Include="Database\PlayerData\Players\SlotHelper.cs" />
@@ -603,6 +604,10 @@
     <Compile Include="Migrations\20220331140427_GuildBankMaxSlotsMigration.cs" />
     <Compile Include="Migrations\20220331140427_GuildBankMaxSlotsMigration.designer.cs">
       <DependentUpon>20220331140427_GuildBankMaxSlotsMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20220716235951_MapsExploredMigration.cs" />
+    <Compile Include="Migrations\20220716235951_MapsExploredMigration.designer.cs">
+      <DependentUpon>20220716235951_MapsExploredMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.cs" />
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.Designer.cs">

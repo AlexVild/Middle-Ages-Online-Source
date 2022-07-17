@@ -244,6 +244,7 @@ namespace Intersect.Client.Entities
                      Globals.InQuestBoard == false &&
                      Globals.InTrade == false &&
                      Globals.InMapTransition == false &&
+                     !Interface.Interface.GameUi.Map.IsOpen &&
                      !Interface.Interface.HasInputFocus());
         }
 
@@ -1565,6 +1566,11 @@ namespace Intersect.Client.Entities
                 return false;
             }
 
+            if (Interface.Interface.GameUi.Map.IsOpen)
+            {
+                return false;
+            }
+
             if (StatusIsActive(StatusTypes.Blind) || StatusIsActive(StatusTypes.Confused))
             {
                 SendAttackStatusAlerts();
@@ -2222,6 +2228,10 @@ namespace Intersect.Client.Entities
                 return;
             }
 
+            if (Interface.Interface.GameUi.Map.IsOpen)
+            {
+                return;
+            }
 
             // If the player has recently casted a projectile
             if (LastProjectileCastTime >= Timing.Global.Milliseconds)
@@ -2829,6 +2839,7 @@ namespace Intersect.Client.Entities
     public partial class Player : Entity
     {
         public Stack<long> DirRequestTimes = new Stack<long>();
+        public List<Guid> MapsExplored;
 
         public bool ChangeCombatModeNextTile;
     }

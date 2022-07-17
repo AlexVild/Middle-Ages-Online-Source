@@ -137,6 +137,7 @@ namespace Intersect.Client.General
 
         //Map/Chunk Array
         public static Guid[,] MapGrid;
+        public static Dictionary<Guid, string> GridNames;
 
         public static long MapGridHeight;
 

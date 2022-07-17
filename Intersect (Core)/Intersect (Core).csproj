@@ -437,6 +437,7 @@
     <Compile Include="Network\Packets\Server\AnnouncementPacket.cs" />
     <Compile Include="Network\Packets\Server\CancelCastPacket.cs" />
     <Compile Include="Network\Packets\Server\MapInstanceChangedPacket.cs" />
+    <Compile Include="Network\Packets\Server\MapsExploredPacket.cs" />
     <Compile Include="Network\Packets\Server\MapTrapPacket.cs" />
     <Compile Include="Network\Packets\Server\PlayAnimationPackets.cs" />
     <Compile Include="Network\Packets\Server\PlayerStatsPacket.cs" />
