@@ -1429,6 +1429,14 @@ namespace Intersect.Server.Entities
                     if (oldAmount != amount)
                     {
                         PacketSender.SendMapEntityStatusUpdate(Map, this, MapInstanceId);
+                        // Send shield party update
+                        if (this is Player player)
+                        {
+                            for (var i = 0; i < player.Party.Count; i++)
+                            {
+                                PacketSender.SendPartyUpdateTo(player.Party[i], player);
+                            }
+                        }
                     }
                 }
             }
@@ -3416,4 +3424,20 @@ namespace Intersect.Server.Entities
 
     }
 
+    public partial class Entity : IDisposable
+    {
+        public int GetCurrentShield()
+        {
+            var shield = 0;
+            foreach (var status in CachedStatuses)
+            {
+                if (status.Type == StatusTypes.Shield)
+                {
+                    shield += status.shield[(int)Vitals.Health];
+                }
+            }
+
+            return shield;
+        }
+    }
 }

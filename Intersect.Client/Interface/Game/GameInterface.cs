@@ -137,7 +137,6 @@ namespace Intersect.Client.Interface.Game
             mChatBox = new Chatbox(GameCanvas, this);
             GameMenu = new Menu(GameCanvas);
             Hotbar = new HotBarWindow(GameCanvas);
-            mHUD = new PlayerHud();
             PlayerBox = new EntityBox(GameCanvas, EntityTypes.Player, Globals.Me, true);
             PlayerBox.SetEntity(Globals.Me);
             if (mPictureWindow == null)
@@ -156,6 +155,8 @@ namespace Intersect.Client.Interface.Game
             mInstanceLifeDisplay = new InstanceLifeWindow(GameCanvas);
             mWarnings = new WarningWindow(GameCanvas);
             Map = new MapScreen.MapScreen();
+
+            _InitGameGui();
         }
 
         //Chatbox
@@ -430,7 +431,7 @@ namespace Intersect.Client.Interface.Game
             mChatBox?.Update();
             GameMenu?.Update(mShouldUpdateQuestLog);
             mShouldUpdateQuestLog = false;
-            mHUD.Draw();
+            _Draw();
             Hotbar?.Update();
             mDebugMenu?.Update();
             mComboText?.Update();
@@ -760,6 +761,19 @@ namespace Intersect.Client.Interface.Game
     public partial class GameInterface : MutableInterface
     {
         private PlayerHud mHUD;
+        private PartyHud mPartyHUD;
+
+        private void _InitGameGui()
+        {
+            mHUD = new PlayerHud();
+            mPartyHUD = new PartyHud();
+        }
+
+        private void _Draw()
+        {
+            mHUD.Draw();
+            mPartyHUD.Draw();
+        }
 
         public PlayerHud GetHud()
         {
@@ -779,6 +793,11 @@ namespace Intersect.Client.Interface.Game
         public void RefreshBank()
         {
             mBankWindow.InitRefreshBank();
+        }
+
+        public int GetChatboxHeight()
+        {
+            return mChatBox.GetHeight();
         }
     }
 }

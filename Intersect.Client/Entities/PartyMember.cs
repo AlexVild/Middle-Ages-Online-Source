@@ -18,13 +18,16 @@ namespace Intersect.Client.Entities
 
         public int[] Vital = new int[(int) Vitals.VitalCount];
 
-        public PartyMember(Guid id, string name, int[] vital, int[] maxVital, int level)
+        public int Shield;
+
+        public PartyMember(Guid id, string name, int[] vital, int[] maxVital, int level, int shield)
         {
             Id = id;
             Name = name;
             Vital = vital;
             MaxVital = maxVital;
             Level = level;
+            Shield = shield;
         }
 
     }

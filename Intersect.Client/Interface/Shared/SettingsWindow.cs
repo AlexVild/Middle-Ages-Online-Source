@@ -147,6 +147,8 @@ namespace Intersect.Client.Interface.Shared
         private readonly LabeledCheckBox mStatusMarkers;
         
         private readonly LabeledCheckBox mSelfStatusMarkers;
+        
+        private readonly LabeledCheckBox mDisplayPartyInfo;
 
         // Open settings
         private bool mReturnToMenu;
@@ -285,6 +287,11 @@ namespace Intersect.Client.Interface.Shared
             mSelfStatusMarkers = new LabeledCheckBox(mGameSettingsContainer, "SelfStatusMarkers")
             {
                 Text = Strings.Settings.SelfStatusMarkers
+            };
+
+            mDisplayPartyInfo = new LabeledCheckBox(mGameSettingsContainer, "PartyInfo")
+            {
+                Text = Strings.Settings.PartyInfo
             };
 
             // TODO: Place our configurable gameplay related settings into their respective container for initialization here!
@@ -758,6 +765,7 @@ namespace Intersect.Client.Interface.Shared
             mSelfTileMarkers.IsChecked = Globals.Database.SelfTileMarkers;
             mStatusMarkers.IsChecked = Globals.Database.DisplayStatusMarkers;
             mSelfStatusMarkers.IsChecked = Globals.Database.DisplaySelfStatusMarkers;
+            mDisplayPartyInfo.IsChecked = Globals.Database.DisplayPartyInfo;
 
             // Video Settings.
             mAutoCloseWindowsCheckbox.IsChecked = Globals.Database.HideOthersOnWindowOpen;
@@ -951,6 +959,7 @@ namespace Intersect.Client.Interface.Shared
             Globals.Database.SelfTileMarkers = mSelfTileMarkers.IsChecked;
             Globals.Database.DisplayStatusMarkers = mStatusMarkers.IsChecked;
             Globals.Database.DisplaySelfStatusMarkers = mSelfStatusMarkers.IsChecked;
+            Globals.Database.DisplayPartyInfo = mDisplayPartyInfo.IsChecked;
 
             // Save keybinding settings
             Globals.Database.ClassicMode = mClassicModeCheckbox.IsChecked;

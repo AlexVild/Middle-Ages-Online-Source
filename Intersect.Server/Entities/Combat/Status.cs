@@ -100,6 +100,13 @@ namespace Intersect.Server.Entities.Combat
                     shield[i] = Math.Abs(vitalDiff) +
                                 (int)(spell.Combat.Scaling * en.Stat[spell.Combat.ScalingStat].BaseStat / 100f);
                 }
+                if (en is Player p)
+                {
+                    for (var i = 0; i < p.Party.Count; i++)
+                    {
+                        PacketSender.SendPartyUpdateTo(p.Party[i], p, shield[(int) Vitals.Health]);
+                    }
+                }
             }
 
             // If new Cleanse spell, remove all opposite statusses. (ie friendly dispels unfriendly and vice versa)
@@ -210,7 +217,6 @@ namespace Intersect.Server.Entities.Combat
                         return;
                     }
                 }
-
                 RemoveStatus();
             }
         }
@@ -224,6 +230,16 @@ namespace Intersect.Server.Entities.Combat
             if (mEntity is Npc npc && Type == StatusTypes.Taunt)
             {
                 npc.TryFindNewTarget(0, Guid.Empty, true);
+            }
+            if (Type == StatusTypes.Shield)
+            {
+                if (mEntity is Player p)
+                {
+                    for (var i = 0; i < p.Party.Count; i++)
+                    {
+                        PacketSender.SendPartyUpdateTo(p.Party[i], p, 0);
+                    }
+                }
             }
         }
 

@@ -1961,7 +1961,7 @@ namespace Intersect.Server.Networking
             {
                 var mem = player.Party[i];
                 memberPackets[i] = new PartyMemberPacket(
-                    mem.Id, mem.Name, mem.GetVitals(), mem.GetMaxVitals(), mem.Level
+                    mem.Id, mem.Name, mem.GetVitals(), mem.GetMaxVitals(), mem.Level, mem.GetCurrentShield()
                 );
             }
 
@@ -1969,7 +1969,7 @@ namespace Intersect.Server.Networking
         }
 
         //PartyUpdatePacket
-        public static void SendPartyUpdateTo(Player player, Player member)
+        public static void SendPartyUpdateTo(Player player, Player member, int shield = 0)
         {
             var partyIndex = -1;
             for (var i = 0; i < player.Party.Count; i++)
@@ -1982,11 +1982,16 @@ namespace Intersect.Server.Networking
 
             if (partyIndex > -1)
             {
+                // because we cache statuses, but we might have gotten this update from elsewhere
+                if (shield == 0)
+                {
+                    shield = member.GetCurrentShield();
+                }
                 player.SendPacket(
                     new PartyUpdatePacket(
                         partyIndex,
                         new PartyMemberPacket(
-                            member.Id, member.Name, member.GetVitals(), member.GetMaxVitals(), member.Level
+                            member.Id, member.Name, member.GetVitals(), member.GetMaxVitals(), member.Level, shield
                         )
                     ), TransmissionMode.Any
                 );

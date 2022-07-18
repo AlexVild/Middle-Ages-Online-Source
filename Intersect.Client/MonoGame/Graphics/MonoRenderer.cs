@@ -21,7 +21,7 @@ using XNAColor = Microsoft.Xna.Framework.Color;
 namespace Intersect.Client.MonoGame.Graphics
 {
 
-    public class MonoRenderer : GameRenderer
+    public partial class MonoRenderer : GameRenderer
     {
 
         private readonly List<MonoTexture> mAllTextures = new List<MonoTexture>();
@@ -74,7 +74,7 @@ namespace Intersect.Client.MonoGame.Graphics
 
         private DisplayMode mOldDisplayMode;
 
-        RasterizerState mRasterizerState = new RasterizerState() {ScissorTestEnable = true};
+        RasterizerState mRasterizerState = new RasterizerState() { ScissorTestEnable = true };
 
         private int mScreenHeight;
 
@@ -251,8 +251,8 @@ namespace Intersect.Client.MonoGame.Graphics
         public Pointf GetMouseOffset()
         {
             return new Pointf(
-                mGraphics.PreferredBackBufferWidth / (float) mGameWindow.ClientBounds.Width,
-                mGraphics.PreferredBackBufferHeight / (float) mGameWindow.ClientBounds.Height
+                mGraphics.PreferredBackBufferWidth / (float)mGameWindow.ClientBounds.Width,
+                mGraphics.PreferredBackBufferHeight / (float)mGameWindow.ClientBounds.Height
             );
         }
 
@@ -287,7 +287,7 @@ namespace Intersect.Client.MonoGame.Graphics
 
                 if (target != null)
                 {
-                    mGraphicsDevice?.SetRenderTarget((RenderTarget2D) target.GetTexture());
+                    mGraphicsDevice?.SetRenderTarget((RenderTarget2D)target.GetTexture());
                 }
                 else
                 {
@@ -332,7 +332,7 @@ namespace Intersect.Client.MonoGame.Graphics
 
                 if (shader != null)
                 {
-                    useEffect = (Effect) shader.GetShader();
+                    useEffect = (Effect)shader.GetShader();
                     shader.ResetChanged();
                 }
 
@@ -389,7 +389,7 @@ namespace Intersect.Client.MonoGame.Graphics
             mGraphicsDevice.SamplerStates[0] = SamplerState.LinearClamp;
             mGraphicsDevice.DepthStencilState = DepthStencilState.None;
 
-            ((MonoTileBuffer) buffer).Draw(mBasicEffect, mCurrentView);
+            ((MonoTileBuffer)buffer).Draw(mBasicEffect, mCurrentView);
         }
 
         public override void Close()
@@ -428,7 +428,7 @@ namespace Intersect.Client.MonoGame.Graphics
                 return;
             }
 
-            var font = (SpriteFont) gameFont.GetFont();
+            var font = (SpriteFont)gameFont.GetFont();
             if (font == null)
             {
                 return;
@@ -492,7 +492,7 @@ namespace Intersect.Client.MonoGame.Graphics
 
             //clipRect.X += _currentView.X;
             //clipRect.Y += _currentView.Y;
-            var font = (SpriteFont) gameFont.GetFont();
+            var font = (SpriteFont)gameFont.GetFont();
             if (font == null)
             {
                 return;
@@ -506,7 +506,7 @@ namespace Intersect.Client.MonoGame.Graphics
 
             //Set the current scissor rectangle
             mSpriteBatch.GraphicsDevice.ScissorRectangle = new Microsoft.Xna.Framework.Rectangle(
-                (int) clipRect.X, (int) clipRect.Y, (int) clipRect.Width, (int) clipRect.Height
+                (int)clipRect.X, (int)clipRect.Y, (int)clipRect.Width, (int)clipRect.Height
             );
 
             foreach (var chr in text)
@@ -612,21 +612,21 @@ namespace Intersect.Client.MonoGame.Graphics
             var origin = Vector2.Zero;
             if (Math.Abs(rotationDegrees) > 0.01)
             {
-                rotationDegrees = (float) (Math.PI / 180 * rotationDegrees);
+                rotationDegrees = (float)(Math.PI / 180 * rotationDegrees);
                 origin = new Vector2(sw / 2f, sh / 2f);
 
                 //TODO: Optimize in terms of memory AND performance.
                 var pnt = new Pointf(0, 0);
-                var pnt1 = new Pointf((float) tw, 0);
-                var pnt2 = new Pointf(0, (float) th);
-                var cntr = new Pointf((float) tw / 2, (float) th / 2);
+                var pnt1 = new Pointf((float)tw, 0);
+                var pnt2 = new Pointf(0, (float)th);
+                var cntr = new Pointf((float)tw / 2, (float)th / 2);
 
                 var pntMod = Rotate(pnt, cntr, rotationDegrees);
                 var pntMod2 = Rotate(pnt1, cntr, rotationDegrees);
                 var pntMod3 = Rotate(pnt2, cntr, rotationDegrees);
 
-                var width = (int) Math.Round(GetDistance(pntMod.X, pntMod.Y, pntMod2.X, pntMod2.Y));
-                var height = (int) Math.Round(GetDistance(pntMod.X, pntMod.Y, pntMod3.X, pntMod3.Y));
+                var width = (int)Math.Round(GetDistance(pntMod.X, pntMod.Y, pntMod2.X, pntMod2.Y));
+                var height = (int)Math.Round(GetDistance(pntMod.X, pntMod.Y, pntMod3.X, pntMod3.Y));
 
                 if (packRotated)
                 {
@@ -650,7 +650,7 @@ namespace Intersect.Client.MonoGame.Graphics
                 StartSpritebatch(mCurrentView, blendMode, shader, null, false, null, drawImmediate);
 
                 mSpriteBatch.Draw(
-                    (Texture2D) texture, new Vector2(tx, ty), new XNARectangle((int) sx, (int) sy, (int) sw, (int) sh),
+                    (Texture2D)texture, new Vector2(tx, ty), new XNARectangle((int)sx, (int)sy, (int)sw, (int)sh),
                     ConvertColor(renderColor), rotationDegrees, origin, new Vector2(tw / sw, th / sh),
                     SpriteEffects.None, 0
                 );
@@ -663,7 +663,7 @@ namespace Intersect.Client.MonoGame.Graphics
                 );
 
                 mSpriteBatch.Draw(
-                    (Texture2D) texture, new Vector2(tx, ty), new XNARectangle((int) sx, (int) sy, (int) sw, (int) sh),
+                    (Texture2D)texture, new Vector2(tx, ty), new XNARectangle((int)sx, (int)sy, (int)sw, (int)sh),
                     ConvertColor(renderColor), rotationDegrees, origin, new Vector2(tw / sw, th / sh),
                     SpriteEffects.None, 0
                 );
@@ -682,8 +682,8 @@ namespace Intersect.Client.MonoGame.Graphics
         private Pointf Rotate(Pointf pnt, Pointf ctr, float angle)
         {
             return new Pointf(
-                (float) (pnt.X + ctr.X * Math.Cos(angle) - ctr.Y * Math.Sin(angle)),
-                (float) (pnt.Y + ctr.X * Math.Sin(angle) + ctr.Y * Math.Cos(angle))
+                (float)(pnt.X + ctr.X * Math.Cos(angle) - ctr.Y * Math.Sin(angle)),
+                (float)(pnt.Y + ctr.X * Math.Sin(angle) + ctr.Y * Math.Cos(angle))
             );
         }
 
@@ -887,7 +887,7 @@ namespace Intersect.Client.MonoGame.Graphics
                 return Pointf.Empty;
             }
 
-            var font = (SpriteFont) gameFont.GetFont();
+            var font = (SpriteFont)gameFont.GetFont();
             if (font == null)
             {
                 return Pointf.Empty;
@@ -981,6 +981,29 @@ namespace Intersect.Client.MonoGame.Graphics
             End();
         }
 
+    }
+
+    public partial class MonoRenderer : GameRenderer
+    {
+        public override int GetMaxCharsWithinWidth(string text, GameFont gameFont, float fontScale, int maxWidth)
+        {
+            if (string.IsNullOrEmpty(text))
+            {
+                return 0;
+            }
+
+            int maxChars = text.Length;
+            var tmpNameWidth = MeasureText(text, gameFont, fontScale).X;
+            var tmpStr = text;
+            while (tmpNameWidth > maxWidth)
+            {
+                maxChars--;
+                tmpStr = tmpStr.Substring(0, maxChars);
+                tmpNameWidth = MeasureText(tmpStr, gameFont, 1).X;
+            }
+
+            return maxChars;
+        }
     }
 
 }

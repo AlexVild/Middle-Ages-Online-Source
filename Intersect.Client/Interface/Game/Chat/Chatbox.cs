@@ -19,7 +19,7 @@ using Intersect.Utilities;
 namespace Intersect.Client.Interface.Game.Chat
 {
 
-    public class Chatbox
+    public partial class Chatbox
     {
 
         private ComboBox mChannelCombobox;
@@ -551,4 +551,18 @@ namespace Intersect.Client.Interface.Game.Chat
 
     }
 
+    public partial class Chatbox
+    {
+        public int GetHeight()
+        {
+            if (mChatHidden)
+            {
+                return mChatboxHideButton.Height;
+            }
+            else
+            {
+                return mChatboxHideButton.Height + mChatboxWindow.Height;
+            }
+        }
+    }
 }

@@ -1578,6 +1578,9 @@ namespace Intersect.Client.Localization
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString SelfTileMakers = @"Self Tile Markers";
+            
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString PartyInfo = @"Show Party Info";
         }
 
         public struct Parties

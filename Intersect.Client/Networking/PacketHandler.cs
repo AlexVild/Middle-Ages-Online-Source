@@ -1814,7 +1814,7 @@ namespace Intersect.Client.Networking
             for (var i = 0; i < packet.MemberData.Length; i++)
             {
                 var mem = packet.MemberData[i];
-                Globals.Me.Party.Add(new PartyMember(mem.Id, mem.Name, mem.Vital, mem.MaxVital, mem.Level));
+                Globals.Me.Party.Add(new PartyMember(mem.Id, mem.Name, mem.Vital, mem.MaxVital, mem.Level, mem.Shield));
             }
         }
 
@@ -1825,7 +1825,7 @@ namespace Intersect.Client.Networking
             if (index < Globals.Me.Party.Count)
             {
                 var mem = packet.MemberData;
-                Globals.Me.Party[index] = new PartyMember(mem.Id, mem.Name, mem.Vital, mem.MaxVital, mem.Level);
+                Globals.Me.Party[index] = new PartyMember(mem.Id, mem.Name, mem.Vital, mem.MaxVital, mem.Level, mem.Shield);
             }
         }
 

@@ -7,7 +7,7 @@ using Intersect.Client.Framework.GenericClasses;
 namespace Intersect.Client.Framework.Graphics
 {
 
-    public abstract class GameRenderer
+    public abstract partial class GameRenderer
     {
 
         public GameRenderer()
@@ -152,6 +152,11 @@ namespace Intersect.Client.Framework.Graphics
             ScreenshotRequests.Add(File.OpenWrite(screenshotFile));
         }
 
+    }
+
+    public abstract partial class GameRenderer
+    {
+        public abstract int GetMaxCharsWithinWidth(string text, GameFont gameFont, float fontScale, int maxLen);
     }
 
 }

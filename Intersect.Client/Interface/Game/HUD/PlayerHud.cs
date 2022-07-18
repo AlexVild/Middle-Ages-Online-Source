@@ -298,7 +298,7 @@ namespace Intersect.Client.Interface.Game.HUD
 
             // 56 because that is the distance on either side of the label texture's "bolts"
             var font = Graphics.HUDFont;
-            mapName = UiHelper.GetMapName(mapName, Graphics.HUDFont, MapNameTexture.GetWidth() - 56);
+            mapName = UiHelper.TruncateString(mapName, Graphics.HUDFont, MapNameTexture.GetWidth() - 56).ToUpper();
             
             var nameWidth = Graphics.Renderer.MeasureText(mapName, font, 1).X;
             var nameX = x - nameWidth / 2;

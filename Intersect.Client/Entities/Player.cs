@@ -1854,6 +1854,11 @@ namespace Intersect.Client.Entities
 
             var targetType = entity is Event ? 1 : 0;
 
+            if (entity.CalculateDistanceTo(this) > Options.Combat.MaxPlayerAutoTargetRadius * Options.TileWidth)
+            {
+                return false;
+            }
+
             if (entity.GetType() == typeof(Player))
             {
                 //Select in admin window if open

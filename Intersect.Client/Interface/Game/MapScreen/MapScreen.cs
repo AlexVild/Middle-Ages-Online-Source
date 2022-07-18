@@ -3,6 +3,7 @@ using Intersect.Client.Core.Controls;
 using Intersect.Client.Framework.GenericClasses;
 using Intersect.Client.Framework.Graphics;
 using Intersect.Client.General;
+using Intersect.Client.Utilities;
 using Intersect.Utilities;
 using System;
 using System.Linq;
@@ -149,7 +150,7 @@ namespace Intersect.Client.Interface.Game.MapScreen
 
         private void HandleInput()
         {
-            var mousePos = GetCorrectedMousePos();
+            var mousePos = UiHelper.GetViewMousePos();
             ProcessPan(mousePos);
             ProcessZoom(mousePos);
             if (Globals.InputManager.MouseButtonDown(Framework.Input.GameInput.MouseButtons.Middle))
@@ -201,15 +202,6 @@ namespace Intersect.Client.Interface.Game.MapScreen
             return true;
         }
 
-        private static Pointf GetCorrectedMousePos()
-        {
-            var mousePos = Globals.InputManager.GetMousePosition();
-            mousePos.X += Graphics.CurrentView.X;
-            mousePos.Y += Graphics.CurrentView.Y;
-
-            return mousePos;
-        }
-
         private void ProcessPan(Pointf mousePos)
         {
             if (!Globals.InputManager.MouseButtonDown(Framework.Input.GameInput.MouseButtons.Left))
@@ -242,17 +234,17 @@ namespace Intersect.Client.Interface.Game.MapScreen
         private void ClampPanPosition()
         {
             // +- 2 because we want to still be able to center a barely-filled map
-            var minX = MathHelper.Clamp(MinX - 1, 0, int.MaxValue);
-            var maxX = MathHelper.Clamp(MaxX + 2, 0, Globals.MapGrid.GetLength(0));
-            var minY = MathHelper.Clamp(MinY - 1, 0, int.MaxValue);
-            var maxY = MathHelper.Clamp(MaxY + 2, 0, Globals.MapGrid.GetLength(1));
+            var minX = Intersect.Utilities.MathHelper.Clamp(MinX - 1, 0, int.MaxValue);
+            var maxX = Intersect.Utilities.MathHelper.Clamp(MaxX + 2, 0, Globals.MapGrid.GetLength(0));
+            var minY = Intersect.Utilities.MathHelper.Clamp(MinY - 1, 0, int.MaxValue);
+            var maxY = Intersect.Utilities.MathHelper.Clamp(MaxY + 2, 0, Globals.MapGrid.GetLength(1));
 
             minX = minX * MapScreenGridWidth;
             maxX = maxX * MapScreenGridWidth - (MapWidth / CurrentZoom);
             minY = minY * MapScreenGridHeight;
             maxY = maxY * MapScreenGridHeight - (MapHeight / CurrentZoom);
-            CurrentX = (float)MathHelper.Clamp(CurrentX, minX, maxX);
-            CurrentY = (float)MathHelper.Clamp(CurrentY, minY, maxY);
+            CurrentX = (float)Intersect.Utilities.MathHelper.Clamp(CurrentX, minX, maxX);
+            CurrentY = (float)Intersect.Utilities.MathHelper.Clamp(CurrentY, minY, maxY);
         }
 
         private void ProcessZoom(Pointf mousePos)
@@ -287,7 +279,7 @@ namespace Intersect.Client.Interface.Game.MapScreen
                 var prevZoom = CurrentZoom;
                 
                 ZoomIdx = zoomIn ? ZoomIdx + 1 : ZoomIdx - 1;
-                ZoomIdx = MathHelper.Clamp(ZoomIdx, 0, ZoomLevels.Length - 1);
+                ZoomIdx = Intersect.Utilities.MathHelper.Clamp(ZoomIdx, 0, ZoomLevels.Length - 1);
 
                 if (prevZoom == CurrentZoom)
                 {
@@ -332,8 +324,8 @@ namespace Intersect.Client.Interface.Game.MapScreen
             newPos.X = (float)Math.Floor(newPos.X / (MapScreenGridWidth * CurrentZoom));
             newPos.Y = (float)Math.Floor(newPos.Y / (MapScreenGridHeight * CurrentZoom));
             
-            newPos.X = (float)MathHelper.Clamp(newPos.X, 0, Globals.MapGridWidth - 1);
-            newPos.Y = (float)MathHelper.Clamp(newPos.Y, 0, Globals.MapGridHeight - 1);
+            newPos.X = (float)Intersect.Utilities.MathHelper.Clamp(newPos.X, 0, Globals.MapGridWidth - 1);
+            newPos.Y = (float)Intersect.Utilities.MathHelper.Clamp(newPos.Y, 0, Globals.MapGridHeight - 1);
            
             return newPos;
         }
@@ -398,7 +390,7 @@ namespace Intersect.Client.Interface.Game.MapScreen
 
         private void DrawMapName()
         {
-            var mousePos = GetCorrectedMousePos();
+            var mousePos = UiHelper.GetViewMousePos();
             var nameWidth = Graphics.Renderer.MeasureText(CurrentMap, Graphics.HUDFont, 1);
 
             var x = mousePos.X - (nameWidth.X / 2);

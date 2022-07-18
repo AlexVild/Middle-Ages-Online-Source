@@ -5091,7 +5091,7 @@ namespace Intersect.Server.Entities
                 return;
             }
 
-            if (fromPlayer.InstanceType == MapInstanceType.Shared || fromPlayer.InstanceType == MapInstanceType.Personal)
+            if (InstanceType == MapInstanceType.Shared || InstanceType == MapInstanceType.Personal || fromPlayer.InstanceType == MapInstanceType.Shared || fromPlayer.InstanceType == MapInstanceType.Personal)
             {
                 PacketSender.SendChatMsg(fromPlayer, Strings.Parties.ininstance, ChatMessageType.Party, CustomColors.Alerts.Error);
 
@@ -5133,12 +5133,14 @@ namespace Intersect.Server.Entities
             }
             else
             {
+                /* ALEX - Don't want?
                 if (Party[0] != this)
                 {
                     PacketSender.SendChatMsg(this, Strings.Parties.leaderinvonly, ChatMessageType.Party, CustomColors.Alerts.Error);
 
                     return;
                 }
+                */
 
                 //Check for member being already in the party, if so cancel
                 for (var i = 0; i < Party.Count; i++)
