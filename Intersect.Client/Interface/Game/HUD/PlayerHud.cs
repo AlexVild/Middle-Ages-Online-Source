@@ -3,6 +3,7 @@ using Intersect.Client.Framework.GenericClasses;
 using Intersect.Client.Framework.Graphics;
 using Intersect.Client.General;
 using Intersect.Client.Maps;
+using Intersect.Client.Utilities;
 using Intersect.Enums;
 using Intersect.GameObjects;
 using Intersect.Utilities;
@@ -30,7 +31,7 @@ namespace Intersect.Client.Interface.Game.HUD
         private GameTexture HpTexture;
         private GameTexture ManaTexture;
         private GameTexture ExpTexture;
-        private GameTexture MapTexture;
+        private GameTexture MapNameTexture;
         private GameTexture ShieldTexture;
 
         private bool CenterBarsBetweenElements => Width < 1280;
@@ -67,7 +68,7 @@ namespace Intersect.Client.Interface.Game.HUD
             HpTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_health.png");
             ManaTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_magic.png");
             ExpTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_exp.png");
-            MapTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hud_map.png");
+            MapNameTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hud_map.png");
             ShieldTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_shield.png");
         }
 
@@ -258,8 +259,8 @@ namespace Intersect.Client.Interface.Game.HUD
                 new FloatRect(barX, barY, bgTexture.GetWidth(), bgTexture.GetHeight()),
                 TextureColor);
 
-            int barWidth = MathHelper.RoundNearestMultiple((int)(currAmt / (float)maxAmt * innerTexture.GetWidth()), 4);
-            barWidth = MathHelper.Clamp(barWidth, 0, innerTexture.GetWidth());
+            int barWidth = Intersect.Utilities.MathHelper.RoundNearestMultiple((int)(currAmt / (float)maxAmt * innerTexture.GetWidth()), 4);
+            barWidth = Intersect.Utilities.MathHelper.Clamp(barWidth, 0, innerTexture.GetWidth());
 
             // used for shield positioning
             if (isHp)
@@ -278,8 +279,8 @@ namespace Intersect.Client.Interface.Game.HUD
         private void DrawShield(GameTexture shieldTexture, long currAmt, long maxAmt, int totalShield)
         {
             var shieldfillRatio = (float)totalShield / maxAmt;
-            shieldfillRatio = (float)MathHelper.Clamp(shieldfillRatio, 0f, 1f);
-            var shieldfillWidth = MathHelper.RoundNearestMultiple((int)(shieldfillRatio * shieldTexture.GetWidth()), 4);
+            shieldfillRatio = (float)Intersect.Utilities.MathHelper.Clamp(shieldfillRatio, 0f, 1f);
+            var shieldfillWidth = Intersect.Utilities.MathHelper.RoundNearestMultiple((int)(shieldfillRatio * shieldTexture.GetWidth()), 4);
 
             Graphics.DrawGameTexture(shieldTexture,
                new FloatRect(0, 0, shieldTexture.GetWidth(), shieldTexture.GetHeight()),
@@ -289,52 +290,17 @@ namespace Intersect.Client.Interface.Game.HUD
 
         private void DrawMapLabel(float x, float y, string mapName)
         {
-            mapName = mapName.Trim().ToUpper();
-            var font = Graphics.HUDFont;
-
-            Graphics.DrawGameTexture(MapTexture,
-                new FloatRect(0, 0, MapTexture.GetWidth(), MapTexture.GetHeight()),
-                new FloatRect(x - MapTexture.GetWidth() / 2, y, MapTexture.GetWidth(), MapTexture.GetHeight()),
+            // Draw background
+            Graphics.DrawGameTexture(MapNameTexture,
+                new FloatRect(0, 0, MapNameTexture.GetWidth(), MapNameTexture.GetHeight()),
+                new FloatRect(x - MapNameTexture.GetWidth() / 2, y, MapNameTexture.GetWidth(), MapNameTexture.GetHeight()),
                 TextureColor);
 
+            // 56 because that is the distance on either side of the label texture's "bolts"
+            var font = Graphics.HUDFont;
+            mapName = UiHelper.GetMapName(mapName, Graphics.HUDFont, MapNameTexture.GetWidth() - 56);
+            
             var nameWidth = Graphics.Renderer.MeasureText(mapName, font, 1).X;
-            // because we want to fit the name in between the bolts of the map texture
-            var maxNameWidth = MapTexture.GetWidth() - 56;
-            if (nameWidth >= maxNameWidth)
-            {
-                var sb = new StringBuilder();
-                if (mapName.Contains("-"))
-                {
-                    var split = mapName.Split('-');
-                    if (split.Length > 0)
-                    {
-                        var prefix = split[0];
-                        var prefixWords = prefix.Split(' ');
-                        if (prefixWords.Length > 0)
-                        {
-                            sb.Append($"{prefixWords[0][0]}. {string.Concat(prefixWords.Skip(1)).Trim()} - {string.Concat(split.Skip(1)).Trim()}");
-                        }
-                    }
-                    
-                    var tmpWidth = Graphics.Renderer.MeasureText(sb.ToString(), font, 1).X;
-                    if (tmpWidth >= maxNameWidth && sb.ToString().Length >= 25)
-                    {
-                        mapName = $"{sb.ToString().Substring(0, 25)}...";
-                    }
-                    else
-                    {
-                        mapName = sb.ToString();
-                    }
-                }
-                else
-                {
-                    sb.Append($"{mapName.Substring(0, 37)}...");
-                    mapName = sb.ToString();
-                }
-
-                nameWidth = Graphics.Renderer.MeasureText(mapName, font, 1).X;
-            }
-
             var nameX = x - nameWidth / 2;
             var nameY = y + 4;
 
