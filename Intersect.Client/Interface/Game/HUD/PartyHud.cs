@@ -48,7 +48,7 @@ namespace Intersect.Client.Interface.Game.HUD
 
         public void Draw()
         {
-            if (!Globals.Database.DisplayPartyInfo || Globals.Me == null || !Globals.Me.IsInParty())
+            if (!Globals.Database.DisplayPartyInfo || Globals.Me == null || !Globals.Me.IsInParty() || Globals.Me.InCutscene())
             {
                 return;
             }

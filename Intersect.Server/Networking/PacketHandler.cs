@@ -4243,4 +4243,27 @@ namespace Intersect.Server.Networking
 
         #endregion
     }
+
+    internal sealed partial class PacketHandler
+    {
+        public void HandlePacket(Client client, PartyInviteNamePacket packet)
+        {
+            var player = client?.Entity;
+
+            if (player == null)
+            {
+                return;
+            }
+
+            var target = Player.FindOnline(packet.Name);
+
+            if (target == null)
+            {
+                PacketSender.SendChatMsg(player, Strings.Guilds.InviteNotOnline, ChatMessageType.Error);
+                return;
+            }
+
+            target.InviteToParty(player);
+        }
+    }
 }

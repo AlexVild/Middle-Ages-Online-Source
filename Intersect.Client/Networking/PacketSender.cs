@@ -498,4 +498,11 @@ namespace Intersect.Client.Networking
         }
     }
 
+    public static partial class PacketSender
+    {
+        public static void SendPartyInviteName(string playerName)
+        {
+            Network.SendPacket(new PartyInviteNamePacket(playerName));
+        }
+    }
 }

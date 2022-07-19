@@ -1615,6 +1615,14 @@ namespace Intersect.Client.Localization
 
             public static LocalizedString vital1val = @"{00} / {01}";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Invite = @"Invite";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString InviteTitle = @"INVITE TO PARTY";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString InvitePopupPrompt = @"Who would you like to invite to your party?";
         }
 
         public struct QuestLog
