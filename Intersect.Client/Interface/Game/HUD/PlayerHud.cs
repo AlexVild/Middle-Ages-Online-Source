@@ -34,7 +34,7 @@ namespace Intersect.Client.Interface.Game.HUD
         private GameTexture MapNameTexture;
         private GameTexture ShieldTexture;
 
-        private bool CenterBarsBetweenElements => Width < 1280;
+        private bool CenterBarsBetweenElements => Width <= 1280;
 
         private bool UseLargeBars => Width >= 1600;
 
