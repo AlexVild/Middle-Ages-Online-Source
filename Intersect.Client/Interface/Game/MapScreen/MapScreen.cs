@@ -111,9 +111,15 @@ namespace Intersect.Client.Interface.Game.MapScreen
             }
             else
             {
-                Audio.AddGameSound("al_book_drop.wav", false);
-                NeedsGenerating = true;
+                Close();
             }
+        }
+
+        public void Close()
+        {
+            IsOpen = false;
+            Audio.AddGameSound("al_book_drop.wav", false);
+            NeedsGenerating = true;
         }
 
         private void ResetToCenterOfGrid()
@@ -138,11 +144,8 @@ namespace Intersect.Client.Interface.Game.MapScreen
 
             if (Globals.Me.InCutscene())
             {
-                IsOpen = false;
-                return;
+                Close();
             }
-
-            var currentMap = Globals.Me.MapInstance;
 
             Draw();
             HandleInput();

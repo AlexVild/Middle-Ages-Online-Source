@@ -740,6 +740,12 @@ namespace Intersect.Client.Interface.Game
                 closedWindows = true;
             }
 
+            if (Map != null && Map.IsOpen)
+            {
+                Map.Close();
+                closedWindows = true;
+            }
+
             return closedWindows;
         }
 
