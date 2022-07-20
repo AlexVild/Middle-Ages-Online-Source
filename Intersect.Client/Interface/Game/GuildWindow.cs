@@ -8,6 +8,7 @@ using Intersect.Client.Framework.Gwen.Control.EventArguments;
 using Intersect.Client.General;
 using Intersect.Client.Localization;
 using Intersect.Client.Networking;
+using Intersect.Client.Utilities;
 using Intersect.Network.Packets.Server;
 using static Intersect.Client.Entities.Player;
 
@@ -129,7 +130,7 @@ namespace Intersect.Client.Interface.Game
             // Force our window title to co-operate, might be empty after creating/joining a guild.
             if (mGuildWindow.Title != Globals.Me.Guild)
             {
-                mGuildWindow.Title = Globals.Me.Guild;
+                mGuildWindow.Title = UiHelper.TruncateString(Globals.Me.Guild.ToUpper(), Graphics.HUDFont, 256);
             }
         }
 
@@ -198,19 +199,46 @@ namespace Intersect.Client.Interface.Game
                 mGuildMembers.Clear();
             }
 
-            foreach (var f in Globals.Me.GuildMembers)
+            foreach (var member in Globals.Me.GuildMembers)
             {
-                var str = f.Online ? Strings.Guilds.OnlineListEntry : Strings.Guilds.OfflineListEntry;
-                var row = mGuildMembers.AddRow(str.ToString(Options.Instance.Guild.Ranks[f.Rank].Title, f.Name, f.Map));
+                var str = member.Online ? Strings.Guilds.OnlineListEntry : Strings.Guilds.OfflineListEntry;
+
+                var rank = Options.Instance.Guild.Ranks[member.Rank].Title;
+                if (rank.Length > 3)
+                {
+                    rank = $"{rank.Substring(0, 3)}.";
+                }
+
+                ListBoxRow row;
+                if (member.Online)
+                {
+                    var mapName = member.Map;
+                    var mapSplit = member.Map?.Split('-');
+                    if ((mapSplit?.Length ?? 0) > 1)
+                    {
+                        mapName = mapSplit[1].Trim();
+                    }
+
+                    var nameWidth = (int)Graphics.Renderer.MeasureText(member.Name, Graphics.HUDFontSmall, 1).X;
+                    var rankWidth = (int)Graphics.Renderer.MeasureText(rank, Graphics.HUDFontSmall, 1).X;
+                    mapName = UiHelper.TruncateString(mapName, Graphics.HUDFontSmall, 190 - nameWidth - rankWidth);
+
+                    row = mGuildMembers.AddRow(Strings.Guilds.OnlineListEntry.ToString(rank, member.Name, mapName));
+                }
+                else
+                {
+                    row = mGuildMembers.AddRow(Strings.Guilds.OfflineListEntry.ToString(rank, member.Name));
+                }
+
                 row.Name = "GuildMemberRow";
                 row.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
-                row.SetToolTipText(Strings.Guilds.Tooltip.ToString(f.Level, f.Class));
-                row.UserData = f;
+                row.SetToolTipText(Strings.Guilds.Tooltip.ToString(member.Level, member.Class));
+                row.UserData = member;
                 row.Clicked += member_Clicked;
                 row.RightClicked += member_RightClicked;
 
                 //Row Render color (red = offline, green = online)
-                if (f.Online == true)
+                if (member.Online == true)
                 {
                     row.SetTextColor(CustomColors.General.GeneralCompleted);
                 }

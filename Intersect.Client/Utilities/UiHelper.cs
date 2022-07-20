@@ -11,6 +11,11 @@ namespace Intersect.Client.Utilities
     {
         public static string TruncateString(string str, GameFont font, int maxNameWidth)
         {
+            if (string.IsNullOrEmpty(str))
+            {
+                return str;
+            }
+
             str = str.Trim();
 
             var nameWidth = Graphics.Renderer.MeasureText(str, font, 1).X;

@@ -63,8 +63,6 @@ namespace Intersect.Client.Interface.Game
 
         private readonly SpellsWindow mSpellsWindow;
 
-        private readonly MapItemWindow mMapItemWindow;
-
         private readonly ImagePanel mGuildBackground;
 
         private readonly Button mGuildButton;
@@ -147,7 +145,6 @@ namespace Intersect.Client.Interface.Game
             mSpellsWindow = new SpellsWindow(gameCanvas);
             mCharacterWindow = new CharacterWindow(gameCanvas);
             mQuestsWindow = new QuestsWindow(gameCanvas);
-            mMapItemWindow = new MapItemWindow(gameCanvas);
             mGuildWindow = new GuildWindow(gameCanvas);
         }
 
@@ -205,7 +202,6 @@ namespace Intersect.Client.Interface.Game
             mPartyWindow.Update();
             mFriendsWindow.Update();
             mQuestsWindow.Update(updateQuestLog);
-            mMapItemWindow.Update();
             mGuildWindow.Update();
         }
 

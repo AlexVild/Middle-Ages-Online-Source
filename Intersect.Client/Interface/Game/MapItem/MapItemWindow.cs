@@ -115,7 +115,6 @@ namespace Intersect.Client.Interface.Game.Inventory
                                 {
                                     mValues[itemSlot].IsHidden = true;
                                 }
-
                                 mFoundItems = true;
                                 itemSlot++;
                             }
@@ -135,9 +134,13 @@ namespace Intersect.Client.Interface.Game.Inventory
                 {
                     if (slot > itemSlot - 1)
                     {
-                        Items[slot].MyItem = null;
-                        Items[slot].Pnl.IsHidden = true;
-                        mValues[slot].IsHidden = true;
+                        Items[slot].Container.IsHidden = true;
+                        Items[slot].Container.SetPosition(0, 0);
+                    }
+                    else
+                    {
+                        Items[slot].Container.IsHidden = false;
+                        SetItemPosition(slot);
                     }
 
                     Items[slot].Update();
@@ -172,20 +175,25 @@ namespace Intersect.Client.Interface.Game.Inventory
 
                 Items[i].Container.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
 
-                var xPadding = Items[i].Container.Margin.Left + Items[i].Container.Margin.Right;
-                var yPadding = Items[i].Container.Margin.Top + Items[i].Container.Margin.Bottom;
-                Items[i]
-                    .Container.SetPosition(
-                        i %
-                        (mItemContainer.Width / (Items[i].Container.Width + xPadding)) *
-                        (Items[i].Container.Width + xPadding) +
-                        xPadding,
-                        i /
-                        (mItemContainer.Width / (Items[i].Container.Width + xPadding)) *
-                        (Items[i].Container.Height + yPadding) +
-                        yPadding
-                    );
+                Items[i].Container.IsHidden = true;
             }
+        }
+
+        private void SetItemPosition(int i)
+        {
+            var xPadding = Items[i].Container.Margin.Left + Items[i].Container.Margin.Right;
+            var yPadding = Items[i].Container.Margin.Top + Items[i].Container.Margin.Bottom;
+            Items[i]
+                .Container.SetPosition(
+                    i %
+                    (mItemContainer.Width / (Items[i].Container.Width + xPadding)) *
+                    (Items[i].Container.Width + xPadding) +
+                    xPadding,
+                    i /
+                    (mItemContainer.Width / (Items[i].Container.Width + xPadding)) *
+                    (Items[i].Container.Height + yPadding) +
+                    yPadding
+                );
         }
 
         private void MBtnLootAll_Clicked(Base sender, ClickedEventArgs arguments)
