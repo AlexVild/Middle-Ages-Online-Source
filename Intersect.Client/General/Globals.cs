@@ -17,7 +17,7 @@ using Intersect.Network.Packets.Server;
 namespace Intersect.Client.General
 {
 
-    public static class Globals
+    public static partial class Globals
     {
 
         //Only need 1 table, and that is the one we see at a given moment in time.
@@ -206,4 +206,8 @@ namespace Intersect.Client.General
 
     }
 
+    public static partial class Globals
+    {
+        public static bool TradeAccepted { get; set; }
+    }
 }

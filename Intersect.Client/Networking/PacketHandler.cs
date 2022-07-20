@@ -2492,7 +2492,6 @@ namespace Intersect.Client.Networking
 
     internal sealed partial class PacketHandler
     {
-        // MapsExploredPacket
         public void HandlePacket(IPacketSender packetSender, MapsExploredPacket packet)
         {
             if (Globals.Me == null)
@@ -2501,6 +2500,16 @@ namespace Intersect.Client.Networking
             }
 
             Globals.Me.MapsExplored = packet.Maps;
+        }
+
+        public void HandlePacket(IPacketSender packetSender, TradeAcceptedPacket packet)
+        {
+            if (Globals.Me == null)
+            {
+                return;
+            }
+
+            Globals.TradeAccepted = true;
         }
     }
 }

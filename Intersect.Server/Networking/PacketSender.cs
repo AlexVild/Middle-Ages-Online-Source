@@ -2443,6 +2443,15 @@ namespace Intersect.Server.Networking
             var mapsExplored = player.MapsExplored.Select(mapsExp => mapsExp.MapId).ToList();
             player?.SendPacket(new MapsExploredPacket(mapsExplored));
         }
+        public static void SendTradeAcceptPacketTo(Player player)
+        {
+            if (player == null)
+            {
+                return;
+            }
+
+            player?.SendPacket(new TradeAcceptedPacket());
+        }
     }
 
 }
