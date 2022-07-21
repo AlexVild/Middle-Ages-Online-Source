@@ -55,10 +55,9 @@ namespace Intersect.Client.Interface.Menu
             mWindowHeader = new Label(mResetWindow, "Header");
             mWindowHeader.SetText(Strings.ForgotPass.title);
 
-            mInputBackground = new ImagePanel(mResetWindow, "InputPanel");
-
             //Login Username Label
-            mInputLabel = new Label(mInputBackground, "InputLabel");
+            mInputLabel = new Label(mResetWindow, "InputLabel");
+            mInputBackground = new ImagePanel(mResetWindow, "InputPanel");
             mInputLabel.SetText(Strings.ForgotPass.label);
 
             //Login Username Textbox

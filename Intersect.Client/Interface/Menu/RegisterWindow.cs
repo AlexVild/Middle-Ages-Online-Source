@@ -72,7 +72,7 @@ namespace Intersect.Client.Interface.Menu
             mUsernameBackground = new ImagePanel(mRegistrationPanel, "UsernamePanel");
 
             //Register Username Label
-            mUsernameLabel = new Label(mUsernameBackground, "UsernameLabel");
+            mUsernameLabel = new Label(mRegistrationPanel, "UsernameLabel");
             mUsernameLabel.SetText(Strings.Registration.username);
 
             //Register Username Textbox
@@ -83,7 +83,7 @@ namespace Intersect.Client.Interface.Menu
             mEmailBackground = new ImagePanel(mRegistrationPanel, "EmailPanel");
 
             //Register Email Label
-            mEmailLabel = new Label(mEmailBackground, "EmailLabel");
+            mEmailLabel = new Label(mRegistrationPanel, "EmailLabel");
             mEmailLabel.SetText(Strings.Registration.email);
 
             //Register Email Textbox
@@ -94,7 +94,7 @@ namespace Intersect.Client.Interface.Menu
             mPasswordBackground = new ImagePanel(mRegistrationPanel, "Password1Panel");
 
             //Register Password Label
-            mPasswordLabel = new Label(mPasswordBackground, "Password1Label");
+            mPasswordLabel = new Label(mRegistrationPanel, "Password1Label");
             mPasswordLabel.SetText(Strings.Registration.password);
 
             //Register Password Textbox
@@ -105,7 +105,7 @@ namespace Intersect.Client.Interface.Menu
             mPasswordBackground2 = new ImagePanel(mRegistrationPanel, "Password2Panel");
 
             //Register Password Label2
-            mPasswordLabel2 = new Label(mPasswordBackground2, "Password2Label");
+            mPasswordLabel2 = new Label(mRegistrationPanel, "Password2Label");
             mPasswordLabel2.SetText(Strings.Registration.confirmpass);
 
             //Register Password Textbox2

@@ -66,21 +66,19 @@ namespace Intersect.Client.Interface.Menu
             mLoginHeader = new Label(mLoginWindow, "LoginHeader");
             mLoginHeader.SetText(Strings.Login.title);
 
-            mUsernameBackground = new ImagePanel(mLoginWindow, "UsernamePanel");
-
             //Login Username Label
-            mUsernameLabel = new Label(mUsernameBackground, "UsernameLabel");
+            mUsernameLabel = new Label(mLoginWindow, "UsernameLabel");
             mUsernameLabel.SetText(Strings.Login.username);
+            mUsernameBackground = new ImagePanel(mLoginWindow, "UsernamePanel");
 
             //Login Username Textbox
             mUsernameTextbox = new TextBox(mUsernameBackground, "UsernameField");
             mUsernameTextbox.SubmitPressed += UsernameTextbox_SubmitPressed;
             mUsernameTextbox.Clicked += _usernameTextbox_Clicked;
 
-            mPasswordBackground = new ImagePanel(mLoginWindow, "PasswordPanel");
-
             //Login Password Label
-            mPasswordLabel = new Label(mPasswordBackground, "PasswordLabel");
+            mPasswordLabel = new Label(mLoginWindow, "PasswordLabel");
+            mPasswordBackground = new ImagePanel(mLoginWindow, "PasswordPanel");
             mPasswordLabel.SetText(Strings.Login.password);
 
             //Login Password Textbox

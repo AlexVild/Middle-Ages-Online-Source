@@ -67,10 +67,9 @@ namespace Intersect.Client.Interface.Menu
             mWindowHeader.SetText(Strings.ResetPass.title);
 
             //Code Fields/Labels
-            mCodeInputBackground = new ImagePanel(mResetWindow, "CodePanel");
-
-            mCodeInputLabel = new Label(mCodeInputBackground, "CodeLabel");
+            mCodeInputLabel = new Label(mResetWindow, "CodeLabel");
             mCodeInputLabel.SetText(Strings.ResetPass.code);
+            mCodeInputBackground = new ImagePanel(mResetWindow, "CodePanel");
 
             mCodeInputTextbox = new TextBox(mCodeInputBackground, "CodeField");
             mCodeInputTextbox.SubmitPressed += Textbox_SubmitPressed;
@@ -78,19 +77,16 @@ namespace Intersect.Client.Interface.Menu
 
             //Password Fields/Labels
             //Register Password Background
-            mPasswordBackground = new ImagePanel(mResetWindow, "Password1Panel");
-
-            mPasswordLabel = new Label(mPasswordBackground, "Password1Label");
+            mPasswordLabel = new Label(mResetWindow, "Password1Label");
             mPasswordLabel.SetText(Strings.ResetPass.password);
-
+            mPasswordBackground = new ImagePanel(mResetWindow, "Password1Panel");
             mPasswordTextbox = new TextBoxPassword(mPasswordBackground, "Password1Field");
             mPasswordTextbox.SubmitPressed += PasswordTextbox_SubmitPressed;
 
             //Confirm Password Fields/Labels
-            mPasswordBackground2 = new ImagePanel(mResetWindow, "Password2Panel");
-
-            mPasswordLabel2 = new Label(mPasswordBackground2, "Password2Label");
+            mPasswordLabel2 = new Label(mResetWindow, "Password2Label");
             mPasswordLabel2.SetText(Strings.ResetPass.password2);
+            mPasswordBackground2 = new ImagePanel(mResetWindow, "Password2Panel");
 
             mPasswordTextbox2 = new TextBoxPassword(mPasswordBackground2, "Password2Field");
             mPasswordTextbox2.SubmitPressed += PasswordTextbox2_SubmitPressed;
