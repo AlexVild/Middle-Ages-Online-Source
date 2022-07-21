@@ -185,7 +185,10 @@ namespace Intersect.Client.Interface.Game
             }
             else
             {
-                LogoutToCharacterSelect(null, null);
+                var box = new InputBox(
+                    Strings.EscapeMenu.CharSelectTitle, Strings.EscapeMenu.CharSelectPrompt, true, InputBox.InputType.YesNo,
+                    LogoutToCharacterSelect, null, null
+                );
             }
         }
 
@@ -202,7 +205,10 @@ namespace Intersect.Client.Interface.Game
             }
             else
             {
-                LogoutToMainMenu(null, null);
+                var box = new InputBox(
+                    Strings.EscapeMenu.LogoutTitle, Strings.EscapeMenu.LogoutPrompt, true, InputBox.InputType.YesNo,
+                    LogoutToMainMenu, null, null
+                );
             }
         }
 
@@ -219,7 +225,10 @@ namespace Intersect.Client.Interface.Game
             }
             else
             {
-                ExitToDesktop(null, null);
+                var box = new InputBox(
+                    Strings.EscapeMenu.DesktopWarningTitle, Strings.EscapeMenu.DesktopWarningPrompt, true, InputBox.InputType.YesNo,
+                    ExitToDesktop, null, null
+                );
             }
         }
 

@@ -17,7 +17,7 @@ using Intersect.Utilities;
 namespace Intersect.Client.Interface.Game
 {
 
-    public class Menu
+    public partial class Menu
     {
 
         private readonly ImagePanel mCharacterBackground;
@@ -135,6 +135,8 @@ namespace Intersect.Client.Interface.Game
             mMenuButton = new Button(mMenuBackground, "MenuButton");
             mMenuButton.SetToolTipText(Strings.GameMenu.Menu);
             mMenuButton.Clicked += MenuButtonClicked;
+
+            _Menu();
 
             mMenuContainer.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
 
@@ -367,6 +369,8 @@ namespace Intersect.Client.Interface.Game
             mPartyWindow.Hide();
 
             mGuildWindow.Hide();
+
+            _CloseAllWindows();
         }
 
         public bool HasWindowsOpen()
@@ -407,6 +411,8 @@ namespace Intersect.Client.Interface.Game
             {
                 windowsOpen = true;
             }
+
+            windowsOpen = windowsOpen || _HasWindowsOpen();
 
             return windowsOpen;
         }
@@ -464,4 +470,36 @@ namespace Intersect.Client.Interface.Game
         }
     }
 
+    public partial class Menu
+    {
+        private ImagePanel mMapBackground;
+        private Button mMapButton;
+        private void _Menu()
+        {
+            mMapBackground = new ImagePanel(mMenuContainer, "MapContainer");
+            mMapButton = new Button(mMapBackground, "MapButton");
+            mMapButton.SetToolTipText(Strings.GameMenu.Map);
+            mMapButton.Clicked += MapButton_Clicked;
+        }
+
+        private void _CloseAllWindows()
+        {
+            Interface.GameUi.Map.Close();
+        }
+
+        public bool _HasWindowsOpen()
+        {
+            if (Interface.GameUi.Map.IsOpen)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        private void MapButton_Clicked(Base sender, ClickedEventArgs arguments)
+        {
+            Interface.GameUi.Map.ToggleOpen();
+        }
+    }
 }

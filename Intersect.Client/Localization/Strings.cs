@@ -890,7 +890,7 @@ namespace Intersect.Client.Localization
             public static LocalizedString Remove = @"Remove from friends";
         }
 
-        public struct GameMenu
+        public partial struct GameMenu
         {
 
             public static LocalizedString character = @"Character Info";
@@ -2117,7 +2117,7 @@ namespace Intersect.Client.Localization
 
         }
 
-        public struct EscapeMenu
+        public partial struct EscapeMenu
         {
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString CharacterSelect = @"Characters";
@@ -2189,6 +2189,16 @@ namespace Intersect.Client.Localization
             public static LocalizedString EntityNameAndLevel = @"{00} [Lv. {01}]";
         }
 
+    }
+
+    public static partial class Strings
+    {
+        public struct LifeCounterWindow
+        {
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Label = @"";
+        }
+
         public struct TimerWindow
         {
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -2201,12 +2211,31 @@ namespace Intersect.Client.Localization
             public static LocalizedString ElapsedDays = @"{0:D1}D {1:D2}:{2:D2}";
         }
 
-        public struct LifeCounterWindow
+        public partial struct GameMenu
         {
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public static LocalizedString Label = @"";
+            public static LocalizedString Map = @"Overworld Map";
         }
 
-    }
+        public partial struct EscapeMenu
+        {
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString DesktopWarningTitle = @"EXIT TO DESKTOP";
+            
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString DesktopWarningPrompt = @"Are you sure you want to exit to desktop?";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString LogoutTitle = @"LOGOUT";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString LogoutPrompt = @"Are you sure you want to logout?";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString CharSelectTitle = @"CHARACTER CHANGE";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString CharSelectPrompt = @"Are you sure you want switch characters?";
+        }
+    }
 }
