@@ -16,7 +16,7 @@ using Intersect.Utilities;
 namespace Intersect.Client.Interface.Menu
 {
 
-    public class CreateCharacterWindow
+    public partial class CreateCharacterWindow
     {
 
         private Button mBackButton;
@@ -154,27 +154,29 @@ namespace Intersect.Client.Interface.Menu
             mCharCreationHeader = new Label(mCharCreationPanel, "CharacterCreationHeader");
             mCharCreationHeader.SetText(Strings.CharacterCreation.title);
 
+            //Character name Label
+            mCharnameLabel = new Label(mCharCreationPanel, "CharacterNameLabel");
+            mCharnameLabel.SetText(Strings.CharacterCreation.name);
+
             //Character Name Background
             mCharacterNameBackground = new ImagePanel(mCharCreationPanel, "CharacterNamePanel");
-
-            //Character name Label
-            mCharnameLabel = new Label(mCharacterNameBackground, "CharacterNameLabel");
-            mCharnameLabel.SetText(Strings.CharacterCreation.name);
 
             //Character name Textbox
             mCharnameTextbox = new TextBox(mCharacterNameBackground, "CharacterNameField");
             mCharnameTextbox.SubmitPressed += CharnameTextbox_SubmitPressed;
+            
+            //Class Label
+            mClassLabel = new Label(mCharCreationPanel, "ClassLabel");
+            mClassLabel.SetText(Strings.CharacterCreation.Class);
 
             //Class Background
             mClassBackground = new ImagePanel(mCharCreationPanel, "ClassPanel");
 
-            //Class Label
-            mClassLabel = new Label(mClassBackground, "ClassLabel");
-            mClassLabel.SetText(Strings.CharacterCreation.Class);
-
             //Class Combobox
             mClassCombobox = new ComboBox(mClassBackground, "ClassCombobox");
             mClassCombobox.ItemSelected += classCombobox_ItemSelected;
+
+            _CreateCharacterWindow();
 
             //Hint Label
             mHintLabel = new Label(mCharCreationPanel, "HintLabel");
@@ -332,6 +334,7 @@ namespace Intersect.Client.Interface.Menu
         private void UpdateDisplay()
         {
             var isFace = true;
+            UpdateClassInfoText();
             if (GetClass() != null && mDisplaySpriteIndex != -1)
             {
                 mCharacterPortrait.IsHidden = false;
@@ -917,5 +920,51 @@ namespace Intersect.Client.Interface.Menu
             }
         }
 
+    }
+
+    public partial class CreateCharacterWindow
+    {
+        private ScrollControl ClassInfoContainer { get; set; }
+
+        private RichLabel ClassInfoText { get; set; }
+
+        private Label ClassInfoTemplate { get; set; }
+
+        void _CreateCharacterWindow()
+        {
+            ClassInfoContainer = new ScrollControl(mCharCreationPanel, "ClassInfoContainer");
+            ClassInfoTemplate = new Label(ClassInfoContainer, "ClassInfoTemplate");
+            ClassInfoText = new RichLabel(ClassInfoContainer);
+
+            ClassInfoContainer.ScrollToTop();
+        }
+
+        private void UpdateClassInfoText()
+        {
+            var cls = GetClass();
+            string text;
+            switch(cls.Name.ToLower())
+            {
+                case "mage":
+                    text = Strings.CharacterCreation.ClassInfoMage;
+                    break;
+                case "rogue":
+                    text = Strings.CharacterCreation.ClassInfoRogue;
+                    break;
+                case "warrior":
+                    text = Strings.CharacterCreation.ClassInfoWarrior;
+                    break;
+                default:
+                    text = Strings.CharacterCreation.ClassInfoMage;
+                    break;
+            }
+
+            ClassInfoText.ClearText();
+            ClassInfoText.Width = ClassInfoContainer.Width -
+                ClassInfoContainer.GetVerticalScrollBar().Width;
+            ClassInfoText.AddText(text, ClassInfoTemplate);
+            ClassInfoText.SizeToChildren(false, true);
+            ClassInfoContainer.ScrollToTop();
+        }
     }
 }

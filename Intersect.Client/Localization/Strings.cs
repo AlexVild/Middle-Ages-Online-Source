@@ -418,7 +418,7 @@ namespace Intersect.Client.Localization
             public static LocalizedString calculatestats = @"Calculate Stats?";
         }
 
-        public struct CharacterCreation
+        public partial struct CharacterCreation
         {
 
             public static LocalizedString back = @"Back";
@@ -2236,6 +2236,19 @@ namespace Intersect.Client.Localization
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString CharSelectPrompt = @"Are you sure you want switch characters?";
+        }
+
+        public partial struct CharacterCreation
+        {
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ClassInfoMage = @"The mage excels at ranged combat, preferring to keep enemies at a distance as they are susceptible to receiving a lot of damage should an enemy get close.\nThey can play both a high damage role and a high support role depending on their staff selection.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ClassInfoRogue = @"The rogue is all about high damage-per-second and mobility.\nA rogue with a dagger can stack backstab damage with critical hits or stealth attacks to deal incredible burst damage.\nA rogue with a bow can keep enemies at bay while staying safe from harm.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ClassInfoWarrior = @"A warrior is built to withstand damage, and deal it back with incredible blows.\nA warrior wielding a shield can provide boosts to surrounding players, and learn ranged and crowd control magic pwoers.\nA warrior wielding a 2-handed weapon can deal massive damage to a crowd with the sword's multi-target swipe.";
+
         }
     }
 }

@@ -13,7 +13,7 @@ namespace Intersect.Client.Framework.Gwen.Control
     /// <summary>
     ///     Multiline label with text chunks having different color/font.
     /// </summary>
-    public class RichLabel : Base
+    public partial class RichLabel : Base
     {
 
         private readonly string[] mNewline;
@@ -339,4 +339,16 @@ namespace Intersect.Client.Framework.Gwen.Control
 
     }
 
+    public partial class RichLabel : Base
+    {
+        public void AddText(string text, Label template)
+        {
+            AddText(
+                text, template.TextColor,
+                template.CurAlignments.Count > 0
+                    ? template.CurAlignments[0]
+                    : Alignments.Left, template.Font
+            );
+        }
+    }
 }
