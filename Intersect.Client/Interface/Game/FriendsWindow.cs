@@ -105,7 +105,7 @@ namespace Intersect.Client.Interface.Game
                 var friendNameWidth = (int)Graphics.Renderer.MeasureText(f.Name, Graphics.HUDFontSmall, 1).X;
                 var row = f.Online ? 
                     mFriends.AddRow($"{f.Name} ({UiHelper.TruncateString(mapName, Graphics.HUDFontSmall, 190 - friendNameWidth)})") : 
-                    mFriends.AddRow($"${UiHelper.TruncateString(f.Name, Graphics.HUDFontSmall, 204)}");
+                    mFriends.AddRow($"{UiHelper.TruncateString(f.Name, Graphics.HUDFontSmall, 204)}");
                 row.UserData = f;
                 row.Clicked += friends_Clicked;
                 row.RightClicked += friend_RightClicked;
