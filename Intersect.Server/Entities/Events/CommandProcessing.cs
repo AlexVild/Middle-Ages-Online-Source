@@ -1872,19 +1872,19 @@ namespace Intersect.Server.Entities.Events
 
             if (command.VariableType == VariableTypes.PlayerVariable)
             {
+                if (changed)
+                {
+                    player.StartCommonEventsWithTrigger(CommonEventTrigger.PlayerVariableChange, "", command.VariableId.ToString());
+                }
                 // Set the party member switches too if Sync Party enabled!
                 if (command.SyncParty)
                 {
-                    if (changed)
-                    {
-                        player.StartCommonEventsWithTrigger(CommonEventTrigger.PlayerVariableChange, "", command.VariableId.ToString());
-                    }
-
                     foreach (var partyMember in player.Party)
                     {
                         if (partyMember != player)
                         {
                             partyMember.SetSwitchValue(command.VariableId, mod.Value);
+                            partyMember.StartCommonEventsWithTrigger(CommonEventTrigger.PlayerVariableChange, "", command.VariableId.ToString());
                         }
                     }
                 }
