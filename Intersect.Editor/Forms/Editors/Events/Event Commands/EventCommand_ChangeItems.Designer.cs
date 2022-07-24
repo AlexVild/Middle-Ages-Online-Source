@@ -32,6 +32,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         {
             this.grpChangeItems = new DarkUI.Controls.DarkGroupBox();
             this.grpVariableAmount = new DarkUI.Controls.DarkGroupBox();
+            this.rdoInstanceVariable = new DarkUI.Controls.DarkRadioButton();
             this.cmbVariable = new DarkUI.Controls.DarkComboBox();
             this.lblVariable = new System.Windows.Forms.Label();
             this.rdoGlobalVariable = new DarkUI.Controls.DarkRadioButton();
@@ -50,7 +51,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.lblAction = new System.Windows.Forms.Label();
             this.btnCancel = new DarkUI.Controls.DarkButton();
             this.btnSave = new DarkUI.Controls.DarkButton();
-            this.rdoInstanceVariable = new DarkUI.Controls.DarkRadioButton();
+            this.chkStacks = new DarkUI.Controls.DarkCheckBox();
             this.grpChangeItems.SuspendLayout();
             this.grpVariableAmount.SuspendLayout();
             this.grpManualAmount.SuspendLayout();
@@ -62,6 +63,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             this.grpChangeItems.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.grpChangeItems.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpChangeItems.Controls.Add(this.chkStacks);
             this.grpChangeItems.Controls.Add(this.grpVariableAmount);
             this.grpChangeItems.Controls.Add(this.grpManualAmount);
             this.grpChangeItems.Controls.Add(this.grpAmountType);
@@ -76,7 +78,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpChangeItems.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpChangeItems.Location = new System.Drawing.Point(3, 3);
             this.grpChangeItems.Name = "grpChangeItems";
-            this.grpChangeItems.Size = new System.Drawing.Size(306, 265);
+            this.grpChangeItems.Size = new System.Drawing.Size(306, 293);
             this.grpChangeItems.TabIndex = 17;
             this.grpChangeItems.TabStop = false;
             this.grpChangeItems.Text = "Change Player Items:";
@@ -98,6 +100,16 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpVariableAmount.TabStop = false;
             this.grpVariableAmount.Text = "Variable Amount:";
             this.grpVariableAmount.Visible = false;
+            // 
+            // rdoInstanceVariable
+            // 
+            this.rdoInstanceVariable.AutoSize = true;
+            this.rdoInstanceVariable.Location = new System.Drawing.Point(6, 58);
+            this.rdoInstanceVariable.Name = "rdoInstanceVariable";
+            this.rdoInstanceVariable.Size = new System.Drawing.Size(107, 17);
+            this.rdoInstanceVariable.TabIndex = 40;
+            this.rdoInstanceVariable.Text = "Instance Variable";
+            this.rdoInstanceVariable.CheckedChanged += new System.EventHandler(this.rdoInstanceVariable_CheckedChanged);
             // 
             // cmbVariable
             // 
@@ -329,7 +341,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(225, 236);
+            this.btnCancel.Location = new System.Drawing.Point(225, 264);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Padding = new System.Windows.Forms.Padding(5);
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
@@ -339,7 +351,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(8, 236);
+            this.btnSave.Location = new System.Drawing.Point(8, 264);
             this.btnSave.Name = "btnSave";
             this.btnSave.Padding = new System.Windows.Forms.Padding(5);
             this.btnSave.Size = new System.Drawing.Size(75, 23);
@@ -347,15 +359,13 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.btnSave.Text = "Ok";
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
-            // rdoInstanceVariable
+            // chkStacks
             // 
-            this.rdoInstanceVariable.AutoSize = true;
-            this.rdoInstanceVariable.Location = new System.Drawing.Point(6, 58);
-            this.rdoInstanceVariable.Name = "rdoInstanceVariable";
-            this.rdoInstanceVariable.Size = new System.Drawing.Size(107, 17);
-            this.rdoInstanceVariable.TabIndex = 40;
-            this.rdoInstanceVariable.Text = "Instance Variable";
-            this.rdoInstanceVariable.CheckedChanged += new System.EventHandler(this.rdoInstanceVariable_CheckedChanged);
+            this.chkStacks.Location = new System.Drawing.Point(8, 241);
+            this.chkStacks.Name = "chkStacks";
+            this.chkStacks.Size = new System.Drawing.Size(98, 17);
+            this.chkStacks.TabIndex = 60;
+            this.chkStacks.Text = "Stacks?";
             // 
             // EventCommandChangeItems
             // 
@@ -365,7 +375,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.Controls.Add(this.grpChangeItems);
             this.Name = "EventCommandChangeItems";
-            this.Size = new System.Drawing.Size(314, 276);
+            this.Size = new System.Drawing.Size(314, 306);
             this.grpChangeItems.ResumeLayout(false);
             this.grpChangeItems.PerformLayout();
             this.grpVariableAmount.ResumeLayout(false);
@@ -402,5 +412,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private DarkRadioButton rdoGlobalVariable;
         private DarkRadioButton rdoPlayerVariable;
         private DarkRadioButton rdoInstanceVariable;
+        private DarkCheckBox chkStacks;
     }
 }

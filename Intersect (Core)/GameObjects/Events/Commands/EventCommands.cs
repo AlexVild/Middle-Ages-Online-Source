@@ -424,7 +424,7 @@ namespace Intersect.GameObjects.Events.Commands
 
     }
 
-    public class ChangeItemsCommand : EventCommand
+    public partial class ChangeItemsCommand : EventCommand
     {
 
         //For Json Deserialization
@@ -1220,5 +1220,10 @@ namespace Intersect.GameObjects.Events.Commands
         public bool PersistCleanup { get; set; }
 
         public ChangeSpawnOperator Operator { get; set; } = ChangeSpawnOperator.SET;
+    }
+
+    public partial class ChangeItemsCommand : EventCommand
+    {
+        public bool Stacks { get; set; }
     }
 }

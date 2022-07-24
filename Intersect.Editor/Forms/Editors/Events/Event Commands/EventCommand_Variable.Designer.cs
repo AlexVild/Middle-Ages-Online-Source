@@ -40,6 +40,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.btnCancel = new DarkUI.Controls.DarkButton();
             this.btnSave = new DarkUI.Controls.DarkButton();
             this.grpNumericVariable = new DarkUI.Controls.DarkGroupBox();
+            this.rdoSpawnGroup = new DarkUI.Controls.DarkRadioButton();
             this.optEventX = new DarkUI.Controls.DarkRadioButton();
             this.optEventY = new DarkUI.Controls.DarkRadioButton();
             this.optNumericRightShift = new DarkUI.Controls.DarkRadioButton();
@@ -89,7 +90,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpStringSet = new DarkUI.Controls.DarkGroupBox();
             this.lblStringValue = new System.Windows.Forms.Label();
             this.txtStringValue = new DarkUI.Controls.DarkTextBox();
-            this.rdoSpawnGroup = new DarkUI.Controls.DarkRadioButton();
+            this.rdoInventorySlots = new DarkUI.Controls.DarkRadioButton();
             this.grpSetVariable.SuspendLayout();
             this.grpSelectVariable.SuspendLayout();
             this.grpNumericVariable.SuspendLayout();
@@ -226,6 +227,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             this.grpNumericVariable.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.grpNumericVariable.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpNumericVariable.Controls.Add(this.rdoInventorySlots);
             this.grpNumericVariable.Controls.Add(this.rdoSpawnGroup);
             this.grpNumericVariable.Controls.Add(this.optEventX);
             this.grpNumericVariable.Controls.Add(this.optEventY);
@@ -250,6 +252,16 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpNumericVariable.TabIndex = 36;
             this.grpNumericVariable.TabStop = false;
             this.grpNumericVariable.Text = "Numeric Variable:";
+            // 
+            // rdoSpawnGroup
+            // 
+            this.rdoSpawnGroup.AutoSize = true;
+            this.rdoSpawnGroup.Location = new System.Drawing.Point(98, 90);
+            this.rdoSpawnGroup.Name = "rdoSpawnGroup";
+            this.rdoSpawnGroup.Size = new System.Drawing.Size(90, 17);
+            this.rdoSpawnGroup.TabIndex = 55;
+            this.rdoSpawnGroup.Text = "Spawn Group";
+            this.rdoSpawnGroup.CheckedChanged += new System.EventHandler(this.rdoSpawnGroup_CheckedChanged);
             // 
             // optEventX
             // 
@@ -879,15 +891,15 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.txtStringValue.Size = new System.Drawing.Size(207, 20);
             this.txtStringValue.TabIndex = 62;
             // 
-            // rdoSpawnGroup
+            // rdoInventorySlots
             // 
-            this.rdoSpawnGroup.AutoSize = true;
-            this.rdoSpawnGroup.Location = new System.Drawing.Point(98, 90);
-            this.rdoSpawnGroup.Name = "rdoSpawnGroup";
-            this.rdoSpawnGroup.Size = new System.Drawing.Size(90, 17);
-            this.rdoSpawnGroup.TabIndex = 55;
-            this.rdoSpawnGroup.Text = "Spawn Group";
-            this.rdoSpawnGroup.CheckedChanged += new System.EventHandler(this.rdoSpawnGroup_CheckedChanged);
+            this.rdoInventorySlots.AutoSize = true;
+            this.rdoInventorySlots.Location = new System.Drawing.Point(194, 90);
+            this.rdoInventorySlots.Name = "rdoInventorySlots";
+            this.rdoInventorySlots.Size = new System.Drawing.Size(98, 17);
+            this.rdoInventorySlots.TabIndex = 56;
+            this.rdoInventorySlots.Text = "Open Inv. Slots";
+            this.rdoInventorySlots.CheckedChanged += new System.EventHandler(this.rdoInventorySlots_CheckedChanged);
             // 
             // EventCommandVariable
             // 
@@ -984,5 +996,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         internal DarkRadioButton optPlayerX;
         internal DarkRadioButton optPlayerLevel;
         internal DarkRadioButton rdoSpawnGroup;
+        internal DarkRadioButton rdoInventorySlots;
     }
 }

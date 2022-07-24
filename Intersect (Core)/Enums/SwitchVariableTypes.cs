@@ -103,6 +103,8 @@ namespace Intersect.Enums
         EventY,
 
         SpawnGroup,
+
+        OpenSlots
     }
 
     public enum VariableComparators

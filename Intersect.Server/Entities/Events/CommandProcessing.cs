@@ -515,6 +515,12 @@ namespace Intersect.Server.Entities.Events
                 }
             }
 
+            if (command.Stacks)
+            {
+                var item = ItemBase.Get(command.ItemId);
+                quantity *= item.MaxInventoryStack;
+            }
+
             if (!skip)
             {
                 if (command.Add)
@@ -2028,6 +2034,10 @@ namespace Intersect.Server.Entities.Events
                         value.Integer = playerMap.NpcSpawnGroup;
                     }
                     
+                    break;
+                case Enums.VariableMods.OpenSlots:
+                    value.Integer = player.FindOpenInventorySlots().Count;
+
                     break;
                 case Enums.VariableMods.DupPlayerVar:
                     value.Integer = player.GetVariableValue(mod.DuplicateVariableId).Integer;

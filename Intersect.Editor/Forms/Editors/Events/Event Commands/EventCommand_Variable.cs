@@ -461,6 +461,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                         rdoSpawnGroup.Checked = true;
 
                         break;
+                    case VariableMods.OpenSlots:
+                        rdoInventorySlots.Checked = true;
+
+                        break;
                     case VariableMods.DupPlayerVar:
                         optNumericSet.Checked = true;
                         optNumericClonePlayerVar.Checked = true;
@@ -756,6 +760,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             {
                 mod.ModType = VariableMods.SpawnGroup;
             }
+            else if (rdoInventorySlots.Checked)
+            {
+                mod.ModType = VariableMods.OpenSlots;
+            }
             else if (optNumericClonePlayerVar.Checked)
             {
                 if (optNumericSet.Checked)
@@ -960,6 +968,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         }
 
         private void rdoSpawnGroup_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateNumericFormElements();
+        }
+
+        private void rdoInventorySlots_CheckedChanged(object sender, EventArgs e)
         {
             UpdateNumericFormElements();
         }

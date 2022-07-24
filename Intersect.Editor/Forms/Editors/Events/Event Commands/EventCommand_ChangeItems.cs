@@ -31,6 +31,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             cmbAction.SelectedIndex = mMyCommand.Add ? 0 : 1;
             cmbItem.SelectedIndex = ItemBase.ListIndex(mMyCommand.ItemId);
             cmbMethod.SelectedIndex = (int)mMyCommand.ItemHandling;
+            chkStacks.Checked = mMyCommand.Stacks;
 
             rdoVariable.Checked = mMyCommand.UseVariable;
             rdoGlobalVariable.Checked = mMyCommand.VariableType == VariableTypes.ServerVariable;
@@ -96,6 +97,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             mMyCommand.UseVariable = !rdoManual.Checked;
             mMyCommand.Quantity = (int) nudGiveTakeAmount.Value;
             mMyCommand.ItemHandling = (ItemHandling) cmbMethod.SelectedIndex;
+            mMyCommand.Stacks = chkStacks.Checked;
             mEventEditor.FinishCommandEdit();
         }
 
@@ -220,7 +222,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
 
             nudGiveTakeAmount.Value = Math.Max(1, mMyCommand.Quantity);
         }
-
     }
 
 }
