@@ -6992,7 +6992,7 @@ namespace Intersect.Server.Entities
             return v.Value;
         }
 
-        public void SetVariableValue(Guid id, long value, RecordScoring scoring)
+        public void SetVariableValue(Guid id, long value, RecordScoring scoring, bool setRecord)
         {
             var v = GetVariable(id);
             var changed = true;
@@ -7013,7 +7013,7 @@ namespace Intersect.Server.Entities
 
             if (changed)
             {
-                if (TrySetRecord(RecordType.PlayerVariable, v.VariableId, v.Value.Integer, scoring))
+                if (setRecord && TrySetRecord(RecordType.PlayerVariable, v.VariableId, v.Value.Integer, scoring))
                 {
                     PacketSender.SendChatMsg(this, Strings.Records.NewRecordGeneric, ChatMessageType.Local, Color.FromName("Blue", Strings.Colors.presets));
                 }
@@ -8272,12 +8272,22 @@ namespace Intersect.Server.Entities
             }
         }
 
-        public bool TrySetRecord(RecordType type, Guid recordId, long amount, RecordScoring scoreType)
+        /// <summary>
+        /// Sets a new record, if there is one, for the given type and teammembers
+        /// </summary>
+        /// <param name="type">The type of record</param>
+        /// <param name="recordId">The ID that the record cares about - player var ID, NPC ID, etc</param>
+        /// <param name="amount">The number we're trying to update to</param>
+        /// <param name="scoreType">Whether we are scoring this record high or low</param>
+        /// <param name="teammates">Any teammates involved with setting of the record</param>
+        /// <returns></returns>
+        public bool TrySetRecord(RecordType type, Guid recordId, long amount, RecordScoring scoreType, List<Player> teammates = null)
         {
             lock (EntityLock)
             {
                 long recordAmt = 0;
 
+                // If this is a player var record, but the var doesn't exist or isn't recordable, quit
                 if (type == RecordType.PlayerVariable)
                 {
                     var playerVar = PlayerVariableBase.Get(recordId);
@@ -8292,10 +8302,37 @@ namespace Intersect.Server.Entities
                     }
                 }
 
-                PlayerRecord matchingRecord = PlayerRecords.Find(record => record.Type == type && record.RecordId == recordId && record.ScoreType == scoreType);
+                PlayerRecord matchingRecord;
+                // If this is a "team" record, find the record, if any, that contains the same team
+                if (teammates != null && teammates.Count > 0)
+                {
+                    var teamRecords = new List<PlayerRecord>();
+                    foreach(var teammate in teammates)
+                    {
+                        teamRecords.AddRange(teammate.PlayerRecords);
+                    }
+
+                    matchingRecord = teamRecords.Find(record => record.Type == type && record.RecordId == recordId && record.ScoreType == scoreType &&
+                        teammates.All(t => record.Teammates.Select(tm => tm.PlayerId).Contains(t.Id)));
+                }
+                // Solo record
+                else
+                {
+                    matchingRecord = PlayerRecords.Find(record => record.Type == type && record.RecordId == recordId && record.ScoreType == scoreType && record.Teammates.Count == 0);
+                }
+                // We couldn't find a record that satisfies our needs, so create a new one
                 if (matchingRecord == null)
                 {
                     PlayerRecord newRecord = new PlayerRecord(Id, type, recordId, 1, scoreType);
+
+                    // Team record? If so, add the team mates
+                    if (teammates != null && teammates.Count > 0)
+                    {
+                        foreach (var member in teammates)
+                        {
+                            newRecord.Teammates.Add(new RecordTeammateInstance(newRecord.Id, member.Id));
+                        }
+                    }
                     PlayerRecords.Add(newRecord);
                     recordAmt = amount;
                 }

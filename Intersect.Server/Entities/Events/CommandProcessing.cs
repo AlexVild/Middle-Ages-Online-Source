@@ -2190,11 +2190,17 @@ namespace Intersect.Server.Entities.Events
 
             if (command.VariableType == VariableTypes.PlayerVariable)
             {
+                var newRecord = false;
                 if (changed)
                 {
-                    if (player.TrySetRecord(RecordType.PlayerVariable, command.VariableId, value.Integer, command.scoreType))
+                    var teammates = player.Party?.ToList() ?? default;
+                    if (player.TrySetRecord(RecordType.PlayerVariable, command.VariableId, value.Integer, command.scoreType, teammates))
                     {
-                        PacketSender.SendChatMsg(player, Strings.Records.NewRecordGeneric, ChatMessageType.Local, Color.FromName("Blue", Strings.Colors.presets));
+                        newRecord = true;
+                        var msg = command.SyncParty && (player.Party?.Count ?? 0) > 1 ?
+                            Strings.Records.NewRecordGenericParty :
+                            Strings.Records.NewRecordGeneric;
+                        PacketSender.SendChatMsg(player, msg, ChatMessageType.Experience, Color.FromName("Blue", Strings.Colors.presets));
                     }
                     player.StartCommonEventsWithTrigger(CommonEventTrigger.PlayerVariableChange, "", command.VariableId.ToString());
                 }
@@ -2204,9 +2210,20 @@ namespace Intersect.Server.Entities.Events
                 {
                     foreach (var partyMember in player.Party)
                     {
+                        if (command.InstanceSync && partyMember.MapInstanceId != player.MapInstanceId)
+                        {
+                            continue;
+                        }
                         if (partyMember != player)
                         {
-                            partyMember.SetVariableValue(command.VariableId, value.Integer, command.scoreType);
+                            // We don't want to set a record for this party member - but we want to tell them if
+                            // a new record has been set
+                            partyMember.SetVariableValue(command.VariableId, value.Integer, command.scoreType, false);
+                            if (!newRecord)
+                            {
+                                continue;
+                            }
+                            PacketSender.SendChatMsg(partyMember, Strings.Records.NewRecordGenericParty, ChatMessageType.Experience, Color.FromName("Blue", Strings.Colors.presets));
                         }
                     }
                 }

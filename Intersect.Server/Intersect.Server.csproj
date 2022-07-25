@@ -489,6 +489,7 @@
     <Compile Include="Database\PlayerData\Players\PlayerRecord.cs" />
     <Compile Include="Database\PlayerData\Players\SlotHelper.cs" />
     <Compile Include="Database\PlayerData\Players\SpellSlot.cs" />
+    <Compile Include="Database\PlayerData\RecordTeammateInstance.cs" />
     <Compile Include="Database\PlayerData\TimerInstance.cs" />
     <Compile Include="Entities\BankInterface.cs" />
     <Compile Include="Entities\Combat\Buff.cs" />
@@ -612,6 +613,10 @@
     <Compile Include="Migrations\20220725150345_RecorPlayerVariableMigration.cs" />
     <Compile Include="Migrations\20220725150345_RecorPlayerVariableMigration.designer.cs">
       <DependentUpon>20220725150345_RecorPlayerVariableMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20220725163234_RecordTeammateMigration.cs" />
+    <Compile Include="Migrations\20220725163234_RecordTeammateMigration.designer.cs">
+      <DependentUpon>20220725163234_RecordTeammateMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.cs" />
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.Designer.cs">

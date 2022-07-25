@@ -1,14 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-
-using Intersect.GameObjects;
 using Intersect.GameObjects.Events;
-using Intersect.Logging;
 using Intersect.Server.Entities;
-using Microsoft.EntityFrameworkCore;
-
 using Newtonsoft.Json;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Local
@@ -67,5 +61,8 @@ namespace Intersect.Server.Database.PlayerData.Players
         public Guid RecordId { get; set; }
         
         public RecordScoring ScoreType { get; set; }
+
+        [JsonIgnore]
+        public virtual List<RecordTeammateInstance> Teammates { get; set; } = new List<RecordTeammateInstance>();
     }
 }

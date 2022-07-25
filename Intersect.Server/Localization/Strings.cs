@@ -1669,6 +1669,10 @@ namespace Intersect.Server.Localization
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString NewRecordGeneric =
                 @"You've set a new personal record!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString NewRecordGenericParty =
+                @"You've set a new record with this party!";
         }
     }
 }

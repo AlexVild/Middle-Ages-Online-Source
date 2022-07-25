@@ -73,6 +73,8 @@ namespace Intersect.Server.Database.PlayerData
         
         public DbSet<PlayerRecord> Player_Record { get; set; }
         
+        public DbSet<RecordTeammateInstance> Record_Teammate { get; set; }
+        
         public DbSet<TimerInstance> Timers { get; set; }
         
         public DbSet<MapExploredInstance> Maps_Explored { get; set; }
@@ -138,6 +140,8 @@ namespace Intersect.Server.Database.PlayerData
 
             modelBuilder.Entity<Player>().HasMany(b => b.PlayerRecords).WithOne(p => p.Player);
             modelBuilder.Entity<Player>().HasMany(b => b.MapsExplored).WithOne(p => p.Player);
+
+            modelBuilder.Entity<PlayerRecord>().HasMany(b => b.Teammates).WithOne(p => p.Record);
         }
 
         public void Seed()

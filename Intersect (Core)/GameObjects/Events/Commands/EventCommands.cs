@@ -1230,5 +1230,7 @@ namespace Intersect.GameObjects.Events.Commands
     public partial class SetVariableCommand : EventCommand
     {
         public RecordScoring scoreType;
+        
+        public bool InstanceSync;
     }
 }

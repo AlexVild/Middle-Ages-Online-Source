@@ -45,5 +45,7 @@ namespace Intersect.Server.Database.PlayerData
         DbSet<TimerInstance> Timers { get; set; }
         
         DbSet<MapExploredInstance> Maps_Explored { get; set; }
+
+        DbSet<RecordTeammateInstance> Record_Teammate { get; set; }
     }
 }

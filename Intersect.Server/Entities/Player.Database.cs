@@ -453,7 +453,15 @@ namespace Intersect.Server.Entities
             {
                 using (var context = DbInterface.CreatePlayerContext())
                 {
-                    PlayerRecords = context.Player_Record.Where(f => f.Player.Id == Id).ToList();
+                    PlayerRecords = context.Player_Record
+                        .Where(f => f.Player.Id == Id)
+                        .ToList();
+                    foreach(var record in PlayerRecords)
+                    {
+                        record.Teammates = context.Record_Teammate
+                            .Where(tm => tm.RecordInstanceId == record.Id)
+                            .ToList();
+                    }
                     Log.Info($"Successfully loaded player records for {Name}. Count of records is {PlayerRecords.Count}");
                 }
             }
