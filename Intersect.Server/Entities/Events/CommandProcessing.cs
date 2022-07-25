@@ -2314,7 +2314,10 @@ namespace Intersect.Server.Entities.Events
                 Player.StartCommonEventsWithTriggerForAllOnInstance(Enums.CommonEventTrigger.InstanceVariableChange, player.MapInstanceId, "", command.VariableId.ToString());
             }
         }
+    }
 
+    public static partial class CommandProcessing
+    {
         private static void ProcessCommand(
             RandomQuestCommand command,
             Player player,
@@ -2339,7 +2342,8 @@ namespace Intersect.Server.Entities.Events
             if (viableQuests.Count <= 0)
             {
                 PacketSender.SendChatMsg(player, Strings.Quests.reqsnotmetforlist.ToString(), ChatMessageType.Local, CustomColors.Alerts.Declined);
-            } else
+            }
+            else
             {
                 var randomQuestIndex = rand.Next(viableQuests.Count);
 
@@ -2379,7 +2383,8 @@ namespace Intersect.Server.Entities.Events
             {
                 player.VehicleSpeed = command.VehicleSpeed;
                 player.VehicleSprite = command.VehicleSprite;
-            } else 
+            }
+            else
             {
                 player.VehicleSpeed = 0L;
                 player.VehicleSprite = string.Empty;
@@ -2388,7 +2393,8 @@ namespace Intersect.Server.Entities.Events
             PacketSender.SendEntityDataToProximity(player);
         }
 
-        //Set Vehicle Command
+        //NPC Guild Management Command
+
         private static void ProcessCommand(
             NPCGuildManagementCommand command,
             Player player,
@@ -2403,7 +2409,7 @@ namespace Intersect.Server.Entities.Events
                 return;
             }
 
-            switch(command.Selection)
+            switch (command.Selection)
             {
                 case NPCGuildManagementSelection.ChangeComplete:
                     classInfo.TaskCompleted = command.SelectionValue;
@@ -2453,7 +2459,7 @@ namespace Intersect.Server.Entities.Events
                             ChatMessageType.Quest,
                             CustomColors.Quests.Abandoned);
                     }
-                    
+
                     classInfo.TasksRemaining = player.TasksRemainingForClassRank(classInfo.Rank);
                     break;
                 case NPCGuildManagementSelection.ChangeSpecialAssignment:
@@ -2520,7 +2526,7 @@ namespace Intersect.Server.Entities.Events
                 {
                     TimerProcessor.AddTimer(command.DescriptorId, ownerId, now);
                 }
-                
+
             }
         }
 
@@ -2608,7 +2614,7 @@ namespace Intersect.Server.Entities.Events
                     }
                     else
                     {
-                        switch(command.VariableType)
+                        switch (command.VariableType)
                         {
                             case VariableTypes.PlayerVariable:
                                 amount = player.GetVariableValue(command.VariableDescriptorId).Integer;
@@ -2702,6 +2708,18 @@ namespace Intersect.Server.Entities.Events
                 }
             }
         }
-    }
 
+        private static void ProcessCommand(
+            OpenLeaderboardCommand command,
+            Player player,
+            Event instance,
+            CommandInstance stackInfo,
+            Stack<CommandInstance> callStack
+        )
+        {
+            if (player == null) return;
+
+            // TODO this
+        }
+    }
 }

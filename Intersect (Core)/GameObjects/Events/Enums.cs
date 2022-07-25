@@ -252,6 +252,8 @@
         StopTimer,
 
         ChangeSpawnGroup,
+
+        OpenLeaderboard
     }
 
     public enum NPCGuildManagementSelection
@@ -271,5 +273,14 @@
     {
         High = 0,
         Low,
+    }
+
+    public enum RecordType
+    {
+        NpcKilled = 0,
+        ItemCrafted,
+        ResourceGathered,
+        PlayerVariable,
+        Combo
     }
 }

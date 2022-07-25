@@ -10,14 +10,6 @@ using Newtonsoft.Json;
 
 namespace Intersect.Server.Database.PlayerData.Players
 {
-    public enum RecordType
-    {
-        NpcKilled = 0,
-        ItemCrafted,
-        ResourceGathered,
-        PlayerVariable,
-        Combo
-    }
 
     public class PlayerRecord : IPlayerOwned
     {

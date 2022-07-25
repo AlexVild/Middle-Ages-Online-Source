@@ -1229,8 +1229,21 @@ namespace Intersect.GameObjects.Events.Commands
 
     public partial class SetVariableCommand : EventCommand
     {
-        public RecordScoring scoreType;
+        public RecordScoring scoreType { get; set; }
         
-        public bool InstanceSync;
+        public bool InstanceSync { get; set; }
+    }
+
+    public class OpenLeaderboardCommand : EventCommand
+    {
+        public override EventCommandType Type { get; } = EventCommandType.OpenLeaderboard;
+
+        public RecordType RecordType { get; set; }
+
+        public Guid RecordId { get; set; }
+
+        public RecordScoring ScoreType { get; set; }
+
+        public string DisplayName { get; set; }
     }
 }
