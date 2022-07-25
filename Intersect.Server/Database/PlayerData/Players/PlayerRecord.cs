@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
 using Intersect.GameObjects;
+using Intersect.GameObjects.Events;
 using Intersect.Logging;
 using Intersect.Server.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -19,7 +20,8 @@ namespace Intersect.Server.Database.PlayerData.Players
     {
         NpcKilled = 0,
         ItemCrafted,
-        ResourceGathered
+        ResourceGathered,
+        PlayerVariable,
     }
 
     public class PlayerRecord : IPlayerOwned
@@ -38,11 +40,21 @@ namespace Intersect.Server.Database.PlayerData.Players
             Type = type;
             RecordId = recordId;
             Amount = initialAmount;
+            ScoreType = RecordScoring.High;
+        }
+
+        public PlayerRecord(Guid playerId, RecordType type, Guid recordId, int amount, RecordScoring scoreType)
+        {
+            PlayerId = playerId;
+            Type = type;
+            RecordId = recordId;
+            Amount = amount;
+            ScoreType = scoreType;
         }
 
         public RecordType Type { get; set; }
 
-        public int Amount { get; set; }
+        public long Amount { get; set; }
 
         [ForeignKey(nameof(Player))]
         [JsonIgnore]
@@ -52,5 +64,7 @@ namespace Intersect.Server.Database.PlayerData.Players
         public virtual Player Player { get; private set; }
 
         public Guid RecordId { get; set; }
+        
+        public RecordScoring ScoreType { get; set; }
     }
 }

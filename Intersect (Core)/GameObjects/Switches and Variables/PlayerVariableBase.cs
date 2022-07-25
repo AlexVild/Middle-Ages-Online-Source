@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 namespace Intersect.GameObjects
 {
 
-    public class PlayerVariableBase : DatabaseObject<PlayerVariableBase>, IFolderable
+    public partial class PlayerVariableBase : DatabaseObject<PlayerVariableBase>, IFolderable
     {
 
         [JsonConstructor]
@@ -69,4 +69,8 @@ namespace Intersect.GameObjects
         }
     }
 
+    public partial class PlayerVariableBase : DatabaseObject<PlayerVariableBase>, IFolderable
+    {
+        public bool Recordable { get; set; }
+    }
 }

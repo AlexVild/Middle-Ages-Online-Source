@@ -40,6 +40,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.btnCancel = new DarkUI.Controls.DarkButton();
             this.btnSave = new DarkUI.Controls.DarkButton();
             this.grpNumericVariable = new DarkUI.Controls.DarkGroupBox();
+            this.rdoInventorySlots = new DarkUI.Controls.DarkRadioButton();
             this.rdoSpawnGroup = new DarkUI.Controls.DarkRadioButton();
             this.optEventX = new DarkUI.Controls.DarkRadioButton();
             this.optEventY = new DarkUI.Controls.DarkRadioButton();
@@ -90,7 +91,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpStringSet = new DarkUI.Controls.DarkGroupBox();
             this.lblStringValue = new System.Windows.Forms.Label();
             this.txtStringValue = new DarkUI.Controls.DarkTextBox();
-            this.rdoInventorySlots = new DarkUI.Controls.DarkRadioButton();
+            this.chkScoreLowest = new DarkUI.Controls.DarkCheckBox();
             this.grpSetVariable.SuspendLayout();
             this.grpSelectVariable.SuspendLayout();
             this.grpNumericVariable.SuspendLayout();
@@ -109,6 +110,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             this.grpSetVariable.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.grpSetVariable.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpSetVariable.Controls.Add(this.chkScoreLowest);
             this.grpSetVariable.Controls.Add(this.grpSelectVariable);
             this.grpSetVariable.Controls.Add(this.btnCancel);
             this.grpSetVariable.Controls.Add(this.btnSave);
@@ -252,6 +254,16 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpNumericVariable.TabIndex = 36;
             this.grpNumericVariable.TabStop = false;
             this.grpNumericVariable.Text = "Numeric Variable:";
+            // 
+            // rdoInventorySlots
+            // 
+            this.rdoInventorySlots.AutoSize = true;
+            this.rdoInventorySlots.Location = new System.Drawing.Point(194, 90);
+            this.rdoInventorySlots.Name = "rdoInventorySlots";
+            this.rdoInventorySlots.Size = new System.Drawing.Size(98, 17);
+            this.rdoInventorySlots.TabIndex = 56;
+            this.rdoInventorySlots.Text = "Open Inv. Slots";
+            this.rdoInventorySlots.CheckedChanged += new System.EventHandler(this.rdoInventorySlots_CheckedChanged);
             // 
             // rdoSpawnGroup
             // 
@@ -891,15 +903,15 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.txtStringValue.Size = new System.Drawing.Size(207, 20);
             this.txtStringValue.TabIndex = 62;
             // 
-            // rdoInventorySlots
+            // chkScoreLowest
             // 
-            this.rdoInventorySlots.AutoSize = true;
-            this.rdoInventorySlots.Location = new System.Drawing.Point(194, 90);
-            this.rdoInventorySlots.Name = "rdoInventorySlots";
-            this.rdoInventorySlots.Size = new System.Drawing.Size(98, 17);
-            this.rdoInventorySlots.TabIndex = 56;
-            this.rdoInventorySlots.Text = "Open Inv. Slots";
-            this.rdoInventorySlots.CheckedChanged += new System.EventHandler(this.rdoInventorySlots_CheckedChanged);
+            this.chkScoreLowest.AutoSize = true;
+            this.chkScoreLowest.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.chkScoreLowest.Location = new System.Drawing.Point(229, 374);
+            this.chkScoreLowest.Name = "chkScoreLowest";
+            this.chkScoreLowest.Size = new System.Drawing.Size(100, 17);
+            this.chkScoreLowest.TabIndex = 42;
+            this.chkScoreLowest.Text = "Record lowest?";
             // 
             // EventCommandVariable
             // 
@@ -911,6 +923,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.Name = "EventCommandVariable";
             this.Size = new System.Drawing.Size(447, 415);
             this.grpSetVariable.ResumeLayout(false);
+            this.grpSetVariable.PerformLayout();
             this.grpSelectVariable.ResumeLayout(false);
             this.grpSelectVariable.PerformLayout();
             this.grpNumericVariable.ResumeLayout(false);
@@ -997,5 +1010,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         internal DarkRadioButton optPlayerLevel;
         internal DarkRadioButton rdoSpawnGroup;
         internal DarkRadioButton rdoInventorySlots;
+        private DarkCheckBox chkScoreLowest;
     }
 }

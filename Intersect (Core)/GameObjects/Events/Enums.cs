@@ -263,4 +263,13 @@
         ChangeSpecialAssignment,
         ChangeTasksRemaining,
     }
+
+    /// <summary>
+    /// Used for if a record should store the highest value (high), or lowest (low)
+    /// </summary>
+    public enum RecordScoring
+    {
+        High = 0,
+        Low,
+    }
 }

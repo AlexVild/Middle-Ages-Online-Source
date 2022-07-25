@@ -190,7 +190,7 @@ namespace Intersect.GameObjects.Events.Commands
 
     }
 
-    public class SetVariableCommand : EventCommand
+    public partial class SetVariableCommand : EventCommand
     {
 
         public override EventCommandType Type { get; } = EventCommandType.SetVariable;
@@ -1225,5 +1225,10 @@ namespace Intersect.GameObjects.Events.Commands
     public partial class ChangeItemsCommand : EventCommand
     {
         public bool Stacks { get; set; }
+    }
+
+    public partial class SetVariableCommand : EventCommand
+    {
+        public RecordScoring scoreType;
     }
 }

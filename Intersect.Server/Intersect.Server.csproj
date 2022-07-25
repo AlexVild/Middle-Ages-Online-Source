@@ -609,6 +609,10 @@
     <Compile Include="Migrations\20220716235951_MapsExploredMigration.designer.cs">
       <DependentUpon>20220716235951_MapsExploredMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\20220725150345_RecorPlayerVariableMigration.cs" />
+    <Compile Include="Migrations\20220725150345_RecorPlayerVariableMigration.designer.cs">
+      <DependentUpon>20220725150345_RecorPlayerVariableMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.cs" />
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.Designer.cs">
       <DependentUpon>20201222164741_NpcResetRadius.cs</DependentUpon>
@@ -802,6 +806,10 @@
     <Compile Include="Migrations\Game\20220710214245_ResourceGroupMigration.cs" />
     <Compile Include="Migrations\Game\20220710214245_ResourceGroupMigration.designer.cs">
       <DependentUpon>20220710214245_ResourceGroupMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20220725153029_PlayerVariableRecordableMigration.cs" />
+    <Compile Include="Migrations\Game\20220725153029_PlayerVariableRecordableMigration.designer.cs">
+      <DependentUpon>20220725153029_PlayerVariableRecordableMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">

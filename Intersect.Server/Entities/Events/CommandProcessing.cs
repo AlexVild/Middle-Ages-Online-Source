@@ -2192,6 +2192,7 @@ namespace Intersect.Server.Entities.Events
             {
                 if (changed)
                 {
+                    player.TrySetRecord(RecordType.PlayerVariable, command.VariableId, value.Integer, command.scoreType);
                     player.StartCommonEventsWithTrigger(CommonEventTrigger.PlayerVariableChange, "", command.VariableId.ToString());
                 }
 
@@ -2202,7 +2203,7 @@ namespace Intersect.Server.Entities.Events
                     {
                         if (partyMember != player)
                         {
-                            partyMember.SetVariableValue(command.VariableId, value.Integer);
+                            partyMember.SetVariableValue(command.VariableId, value.Integer, command.scoreType);
                         }
                     }
                 }

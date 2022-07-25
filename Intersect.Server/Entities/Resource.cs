@@ -87,10 +87,10 @@ namespace Intersect.Server.Entities
                 }
 
                 // Increment records/determine resource bonuses
-                int recordKilled = playerKiller.IncrementRecord(RecordType.ResourceGathered, Base.Id);
-                int amountHarvested = GetAmountInGroupHarvested(playerKiller);
+                long recordKilled = playerKiller.IncrementRecord(RecordType.ResourceGathered, Base.Id);
+                long amountHarvested = GetAmountInGroupHarvested(playerKiller);
                 List<int> intervals = Options.Instance.CombatOpts.HarvestBonusIntervals;
-                int progressUntilNextBonus = GetHarvestsUntilNextBonus(playerKiller);
+                long progressUntilNextBonus = GetHarvestsUntilNextBonus(playerKiller);
 
                 if (Options.SendResourceRecordUpdates)
                 {
@@ -126,16 +126,16 @@ namespace Intersect.Server.Entities
             }
         }
 
-        public int GetHarvestsUntilNextBonus(Player player)
+        public long GetHarvestsUntilNextBonus(Player player)
         {
             if (player == null) return 0;
 
-            int currentHarvests = GetAmountInGroupHarvested(player);
+            long currentHarvests = GetAmountInGroupHarvested(player);
 
             return GetHarvestsUntilNextBonus(currentHarvests);
         }
 
-        public int GetHarvestsUntilNextBonus(int currentHarvests)
+        public long GetHarvestsUntilNextBonus(long currentHarvests)
         {
             var intervals = Options.Instance.CombatOpts.HarvestBonusIntervals;
             if (currentHarvests >= intervals.Last())
@@ -278,7 +278,7 @@ namespace Intersect.Server.Entities
             return IsDead() & Base.WalkableAfter || !IsDead() && Base.WalkableBefore;
         }
 
-        public int GetAmountInGroupHarvested(Player player)
+        public long GetAmountInGroupHarvested(Player player)
         {
             if (player == null)
             {
@@ -291,7 +291,7 @@ namespace Intersect.Server.Entities
             if (!string.IsNullOrEmpty(Base.ResourceGroup))
             {
                 var resources = Globals.CachedResources.Where(rsc => Base.ResourceGroup == rsc.ResourceGroup).ToArray();
-                var totalHarvested = 0;
+                long totalHarvested = 0;
                 foreach (var resource in resources)
                 {
                     var tmpRecord = player.PlayerRecords.Find(record => record.Type == RecordType.ResourceGathered && record.RecordId == resource.Id);
@@ -321,7 +321,7 @@ namespace Intersect.Server.Entities
                 return 0.0;
             }
 
-            int amtHarvested = GetAmountInGroupHarvested(attacker);
+            long amtHarvested = GetAmountInGroupHarvested(attacker);
             if (amtHarvested <= 0)
             {
                 return 0.0f;

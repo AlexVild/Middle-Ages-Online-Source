@@ -33,6 +33,7 @@ namespace Intersect.Editor.Forms.Editors
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmSwitchVariable));
             this.grpTypes = new DarkUI.Controls.DarkGroupBox();
+            this.rdoInstanceVariables = new DarkUI.Controls.DarkRadioButton();
             this.rdoGlobalVariables = new DarkUI.Controls.DarkRadioButton();
             this.rdoPlayerVariables = new DarkUI.Controls.DarkRadioButton();
             this.grpList = new DarkUI.Controls.DarkGroupBox();
@@ -65,7 +66,7 @@ namespace Intersect.Editor.Forms.Editors
             this.btnAlphabetical = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
-            this.rdoInstanceVariables = new DarkUI.Controls.DarkRadioButton();
+            this.chkRecordable = new DarkUI.Controls.DarkCheckBox();
             this.grpTypes.SuspendLayout();
             this.grpList.SuspendLayout();
             this.grpEditor.SuspendLayout();
@@ -89,6 +90,16 @@ namespace Intersect.Editor.Forms.Editors
             this.grpTypes.TabIndex = 0;
             this.grpTypes.TabStop = false;
             this.grpTypes.Text = "Variable Type";
+            // 
+            // rdoInstanceVariables
+            // 
+            this.rdoInstanceVariables.AutoSize = true;
+            this.rdoInstanceVariables.Location = new System.Drawing.Point(240, 20);
+            this.rdoInstanceVariables.Name = "rdoInstanceVariables";
+            this.rdoInstanceVariables.Size = new System.Drawing.Size(112, 17);
+            this.rdoInstanceVariables.TabIndex = 4;
+            this.rdoInstanceVariables.Text = "Instance Variables";
+            this.rdoInstanceVariables.CheckedChanged += new System.EventHandler(this.rdoInstanceVariables_CheckedChanged);
             // 
             // rdoGlobalVariables
             // 
@@ -171,6 +182,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpEditor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpEditor.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpEditor.Controls.Add(this.chkRecordable);
             this.grpEditor.Controls.Add(this.btnAddFolder);
             this.grpEditor.Controls.Add(this.lblFolder);
             this.grpEditor.Controls.Add(this.cmbFolder);
@@ -507,15 +519,16 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
             // 
-            // rdoInstanceVariables
+            // chkRecordable
             // 
-            this.rdoInstanceVariables.AutoSize = true;
-            this.rdoInstanceVariables.Location = new System.Drawing.Point(240, 20);
-            this.rdoInstanceVariables.Name = "rdoInstanceVariables";
-            this.rdoInstanceVariables.Size = new System.Drawing.Size(112, 17);
-            this.rdoInstanceVariables.TabIndex = 4;
-            this.rdoInstanceVariables.Text = "Instance Variables";
-            this.rdoInstanceVariables.CheckedChanged += new System.EventHandler(this.rdoInstanceVariables_CheckedChanged);
+            this.chkRecordable.AutoSize = true;
+            this.chkRecordable.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.chkRecordable.Location = new System.Drawing.Point(13, 359);
+            this.chkRecordable.Name = "chkRecordable";
+            this.chkRecordable.Size = new System.Drawing.Size(87, 17);
+            this.chkRecordable.TabIndex = 55;
+            this.chkRecordable.Text = "Recordable?";
+            this.chkRecordable.CheckedChanged += new System.EventHandler(this.chkRecordable_CheckedChanged);
             // 
             // FrmSwitchVariable
             // 
@@ -586,5 +599,6 @@ namespace Intersect.Editor.Forms.Editors
         private DarkTextBox txtStringValue;
         private Controls.GameObjectList lstGameObjects;
         private DarkRadioButton rdoInstanceVariables;
+        private DarkCheckBox chkRecordable;
     }
 }

@@ -292,8 +292,7 @@ namespace Intersect.Server.Entities
         [NotMapped]
         public int FaceDirection = 0;
 
-        [JsonIgnore]
-        public virtual List<PlayerRecord> PlayerRecords { get; set; } = new List<PlayerRecord>();
+        
 
         /// <summary>
         /// Used to determine if the player is performing an attack out of stealth
@@ -4244,7 +4243,7 @@ namespace Intersect.Server.Entities
                 );
                     
                 // Update our record of how many of this item we've crafted
-                int recordCrafted = IncrementRecord(RecordType.ItemCrafted, id);
+                long recordCrafted = IncrementRecord(RecordType.ItemCrafted, id);
                 if (Options.SendCraftingRecordUpdates && recordCrafted % Options.CraftingRecordUpdateInterval == 0)
                 {
                     SendRecordUpdate(Strings.Records.itemcrafted.ToString(recordCrafted, itemName));
@@ -6003,7 +6002,7 @@ namespace Intersect.Server.Entities
             }
         }
 
-        public void StartCommonEventsWithTrigger(CommonEventTrigger trigger, string command = "", string param = "", int val = -1)
+        public void StartCommonEventsWithTrigger(CommonEventTrigger trigger, string command = "", string param = "", long val = -1)
         {
             foreach (var value in EventBase.Lookup.Values)
             {
@@ -6988,7 +6987,7 @@ namespace Intersect.Server.Entities
             return v.Value;
         }
 
-        public void SetVariableValue(Guid id, long value)
+        public void SetVariableValue(Guid id, long value, RecordScoring scoring)
         {
             var v = GetVariable(id);
             var changed = true;
@@ -7009,6 +7008,7 @@ namespace Intersect.Server.Entities
 
             if (changed)
             {
+                TrySetRecord(RecordType.PlayerVariable, v.VariableId, v.Value.Integer, scoring);
                 StartCommonEventsWithTrigger(CommonEventTrigger.PlayerVariableChange, "", id.ToString());
             }
         }
@@ -7355,7 +7355,7 @@ namespace Intersect.Server.Entities
             CommonEventTrigger trigger = CommonEventTrigger.None,
             string command = "",
             string param = "",
-            int val = -1
+            long val = -1
         )
         {
             if (baseEvent == null)
@@ -7967,7 +7967,7 @@ namespace Intersect.Server.Entities
                 resourceLock = resource;
 
                 double harvestBonus = 0.0f;
-                int progressUntilNextBonus = 0;
+                long progressUntilNextBonus = 0;
                 if (resource != null)
                 {
                     harvestBonus = resource.CalculateHarvestBonus(this);
@@ -8192,13 +8192,42 @@ namespace Intersect.Server.Entities
         [JsonIgnore] public ConcurrentDictionary<Guid, long> ItemCooldowns = new ConcurrentDictionary<Guid, long>();
 
         #endregion
+    }
 
-        #region Player Records
-        public int IncrementRecord(RecordType type, Guid recordId)
+
+    public partial class Player : Entity
+    {
+        [JsonIgnore]
+        public virtual List<PlayerRecord> PlayerRecords { get; set; } = new List<PlayerRecord>();
+
+        [JsonIgnore]
+        public virtual List<MapExploredInstance> MapsExplored { get; set; } = new List<MapExploredInstance>();
+
+        public void MarkMapExplored(Guid mapId)
         {
             lock (EntityLock)
             {
-                int recordAmt = 0;
+                var thisMap = MapsExplored
+                    .Where(mapExplore => mapExplore.MapId == mapId)
+                    .ToArray();
+
+                if (thisMap.Length > 0)
+                {
+                    return;
+                }
+
+                MapsExplored.Add(new MapExploredInstance(Id, mapId));
+
+                PacketSender.SendMapsExploredPacketTo(this);
+            }
+        }
+
+        #region Player Records
+        public long IncrementRecord(RecordType type, Guid recordId)
+        {
+            lock (EntityLock)
+            {
+                long recordAmt = 0;
                 PlayerRecord matchingRecord = PlayerRecords.Find(record => record.Type == type && record.RecordId == recordId);
                 if (matchingRecord != null)
                 {
@@ -8235,11 +8264,73 @@ namespace Intersect.Server.Entities
             }
         }
 
+        public bool TrySetRecord(RecordType type, Guid recordId, long amount, RecordScoring scoreType)
+        {
+            lock (EntityLock)
+            {
+                long recordAmt = 0;
+
+                if (type == RecordType.PlayerVariable)
+                {
+                    var playerVar = PlayerVariableBase.Get(recordId);
+                    if (playerVar == null)
+                    {
+                        return false;
+                    }
+
+                    if (!playerVar.Recordable)
+                    {
+                        return false;
+                    }
+                }
+
+                PlayerRecord matchingRecord = PlayerRecords.Find(record => record.Type == type && record.RecordId == recordId && record.ScoreType == scoreType);
+                if (matchingRecord == null)
+                {
+                    PlayerRecord newRecord = new PlayerRecord(Id, type, recordId, 1, scoreType);
+                    PlayerRecords.Add(newRecord);
+                    recordAmt = amount;
+                }
+                else if (matchingRecord.ScoreType == RecordScoring.High && matchingRecord.Amount >= amount ||
+                    matchingRecord.ScoreType == RecordScoring.Low && matchingRecord.Amount <= amount)
+                {
+                    // Our record didn't improve
+                    return false;
+                }
+                else
+                {
+                    matchingRecord.Amount = amount;
+                }
+
+                // Search for relevant common events and fire them
+                CommonEventTrigger evtTrigger = CommonEventTrigger.NpcsDefeated;
+                switch (type)
+                {
+                    case RecordType.NpcKilled:
+                        evtTrigger = CommonEventTrigger.NpcsDefeated;
+                        break;
+                    case RecordType.ItemCrafted:
+                        evtTrigger = CommonEventTrigger.CraftsCreated;
+                        break;
+                    case RecordType.ResourceGathered:
+                        evtTrigger = CommonEventTrigger.ResourcesGathered;
+                        break;
+                    default:
+                        evtTrigger = CommonEventTrigger.NpcsDefeated;
+                        break;
+                }
+                StartCommonEventsWithTrigger(evtTrigger, "", recordId.ToString(), recordAmt);
+
+                return true;
+            }
+        }
+
         public void SendRecordUpdate(string message)
         {
             PacketSender.SendChatMsg(this, message, ChatMessageType.Experience);
         }
         #endregion
+
 
         #region inspiration
         public void GiveInspiredExperience(long amount)
@@ -8278,7 +8369,7 @@ namespace Intersect.Server.Entities
             {
                 var timers = context.Timers;
 
-                foreach(var timer in timers.ToArray().Where(t => t.OwnerId == Id && t.Descriptor.OwnerType == TimerOwnerType.Player))
+                foreach (var timer in timers.ToArray().Where(t => t.OwnerId == Id && t.Descriptor.OwnerType == TimerOwnerType.Player))
                 {
                     // Check if the timer is already being processed - ignore it
                     if (TimerProcessor.ActiveTimers.Contains(timer))
@@ -8325,13 +8416,13 @@ namespace Intersect.Server.Entities
                 {
                     var descriptor = timer.Descriptor;
                     TimerProcessor.ActiveTimers.Remove(timer); // Remove from processing queue, not from DB
-                
+
                     switch (descriptor.LogoutBehavior)
                     {
                         case TimerLogoutBehavior.Pause:
                             // Store how much time the timer has until its next expiry, so we can re-populate it on login
                             timer.TimeRemaining -= now;
-                            
+
                             break;
                         case TimerLogoutBehavior.Continue:
                             // Intentinoally blank - leave as is, and it'll be processed when the player returns
@@ -8349,31 +8440,5 @@ namespace Intersect.Server.Entities
             }
         }
         #endregion
-    }
-
-
-    public partial class Player : Entity
-    {
-        [JsonIgnore]
-        public virtual List<MapExploredInstance> MapsExplored { get; set; } = new List<MapExploredInstance>();
-
-        public void MarkMapExplored(Guid mapId)
-        {
-            lock (EntityLock)
-            {
-                var thisMap = MapsExplored
-                    .Where(mapExplore => mapExplore.MapId == mapId)
-                    .ToArray();
-
-                if (thisMap.Length > 0)
-                {
-                    return;
-                }
-
-                MapsExplored.Add(new MapExploredInstance(Id, mapId));
-
-                PacketSender.SendMapsExploredPacketTo(this);
-            }
-        }
     }
 }
