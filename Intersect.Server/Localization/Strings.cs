@@ -1408,33 +1408,6 @@ namespace Intersect.Server.Localization
 
         }
 
-        public sealed class RecordsNamespace : LocaleNamespace
-        {
-            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public readonly LocalizedString enemykilled =
-                @"You have slain a total of {00} {01}!";
-
-            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public readonly LocalizedString itemcrafted =
-                @"You have crafted a total of {00} {01}!";
-
-            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public readonly LocalizedString resourcegathered =
-                @"You have harvested a resource of this type {00} times!";
-
-            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public readonly LocalizedString resourcegatheredbonus =
-                @"You have harvested a resource of this type {00} times! Harvest it {01} more times to receive a harvest speed bonus!";
-
-            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public readonly LocalizedString resourcegatheredbonusunlock =
-                @"You've unlocked a resource harvesting bonus for this resource! You will now harvest it faster. Your next bonus will be unlocked at {00} harvests.";
-
-            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public readonly LocalizedString resourcegatheredbonusunlockcomplete =
-                @"Congratulations, you have maxed out your harvesting bonus for this resource!";
-        }
-
         public sealed class RequirementsNamespace : LocaleNamespace
         {
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -1661,4 +1634,41 @@ namespace Intersect.Server.Localization
 
     }
 
+    public static partial class Strings
+    {
+        public sealed class RecordsNamespace : LocaleNamespace
+        {
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString enemykilled =
+                @"You have slain a total of {00} {01}!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString itemcrafted =
+                @"You have crafted a total of {00} {01}!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString resourcegathered =
+                @"You have harvested a resource of this type {00} times!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString resourcegatheredbonus =
+                @"You have harvested a resource of this type {00} times! Harvest it {01} more times to receive a harvest speed bonus!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString resourcegatheredbonusunlock =
+                @"You've unlocked a resource harvesting bonus for this resource! You will now harvest it faster. Your next bonus will be unlocked at {00} harvests.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString resourcegatheredbonusunlockcomplete =
+                @"Congratulations, you have maxed out your harvesting bonus for this resource!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString NewHighestCombo =
+                @"You broke your combo record! Your new highest combo is {00}.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString NewRecordGeneric =
+                @"You've set a new personal record!";
+        }
+    }
 }

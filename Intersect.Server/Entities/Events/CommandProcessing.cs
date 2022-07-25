@@ -2192,7 +2192,10 @@ namespace Intersect.Server.Entities.Events
             {
                 if (changed)
                 {
-                    player.TrySetRecord(RecordType.PlayerVariable, command.VariableId, value.Integer, command.scoreType);
+                    if (player.TrySetRecord(RecordType.PlayerVariable, command.VariableId, value.Integer, command.scoreType))
+                    {
+                        PacketSender.SendChatMsg(player, Strings.Records.NewRecordGeneric, ChatMessageType.Local, Color.FromName("Blue", Strings.Colors.presets));
+                    }
                     player.StartCommonEventsWithTrigger(CommonEventTrigger.PlayerVariableChange, "", command.VariableId.ToString());
                 }
 

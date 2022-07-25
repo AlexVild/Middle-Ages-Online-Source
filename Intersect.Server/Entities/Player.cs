@@ -1516,6 +1516,11 @@ namespace Intersect.Server.Entities
         {
             if (CurrentCombo > 0) // prevents flooding the client with useless combo packets
             {
+                if (TrySetRecord(RecordType.Combo, Id, CurrentCombo, RecordScoring.High))
+                {
+                    PacketSender.SendChatMsg(this, Strings.Records.NewHighestCombo.ToString(CurrentCombo), ChatMessageType.Local, Color.FromName("Blue", Strings.Colors.presets));
+                }
+                
                 ComboTimestamp = -1;
                 ComboWindow = -1;
                 ComboExp = 0;
@@ -7008,7 +7013,10 @@ namespace Intersect.Server.Entities
 
             if (changed)
             {
-                TrySetRecord(RecordType.PlayerVariable, v.VariableId, v.Value.Integer, scoring);
+                if (TrySetRecord(RecordType.PlayerVariable, v.VariableId, v.Value.Integer, scoring))
+                {
+                    PacketSender.SendChatMsg(this, Strings.Records.NewRecordGeneric, ChatMessageType.Local, Color.FromName("Blue", Strings.Colors.presets));
+                }
                 StartCommonEventsWithTrigger(CommonEventTrigger.PlayerVariableChange, "", id.ToString());
             }
         }

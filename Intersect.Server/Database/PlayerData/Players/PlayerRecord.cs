@@ -22,6 +22,7 @@ namespace Intersect.Server.Database.PlayerData.Players
         ItemCrafted,
         ResourceGathered,
         PlayerVariable,
+        Combo
     }
 
     public class PlayerRecord : IPlayerOwned
