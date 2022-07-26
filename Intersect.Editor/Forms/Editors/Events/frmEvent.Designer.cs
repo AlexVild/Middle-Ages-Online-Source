@@ -150,31 +150,33 @@ namespace Intersect.Editor.Forms.Editors.Events
             treeNode59,
             treeNode60});
             System.Windows.Forms.TreeNode treeNode62 = new System.Windows.Forms.TreeNode("Wait...");
-            System.Windows.Forms.TreeNode treeNode63 = new System.Windows.Forms.TreeNode("Etc", new System.Windows.Forms.TreeNode[] {
-            treeNode62});
-            System.Windows.Forms.TreeNode treeNode64 = new System.Windows.Forms.TreeNode("Open Bank");
-            System.Windows.Forms.TreeNode treeNode65 = new System.Windows.Forms.TreeNode("Open Shop");
-            System.Windows.Forms.TreeNode treeNode66 = new System.Windows.Forms.TreeNode("Open Crafting Station");
-            System.Windows.Forms.TreeNode treeNode67 = new System.Windows.Forms.TreeNode("Shop and Bank", new System.Windows.Forms.TreeNode[] {
-            treeNode64,
+            System.Windows.Forms.TreeNode treeNode63 = new System.Windows.Forms.TreeNode("Open Leaderboard...");
+            System.Windows.Forms.TreeNode treeNode64 = new System.Windows.Forms.TreeNode("Etc", new System.Windows.Forms.TreeNode[] {
+            treeNode62,
+            treeNode63});
+            System.Windows.Forms.TreeNode treeNode65 = new System.Windows.Forms.TreeNode("Open Bank");
+            System.Windows.Forms.TreeNode treeNode66 = new System.Windows.Forms.TreeNode("Open Shop");
+            System.Windows.Forms.TreeNode treeNode67 = new System.Windows.Forms.TreeNode("Open Crafting Station");
+            System.Windows.Forms.TreeNode treeNode68 = new System.Windows.Forms.TreeNode("Shop and Bank", new System.Windows.Forms.TreeNode[] {
             treeNode65,
-            treeNode66});
-            System.Windows.Forms.TreeNode treeNode68 = new System.Windows.Forms.TreeNode("Create Guild");
-            System.Windows.Forms.TreeNode treeNode69 = new System.Windows.Forms.TreeNode("Disband Guild");
-            System.Windows.Forms.TreeNode treeNode70 = new System.Windows.Forms.TreeNode("Open Guild Bank");
-            System.Windows.Forms.TreeNode treeNode71 = new System.Windows.Forms.TreeNode("Set Guild Bank Slots Count");
-            System.Windows.Forms.TreeNode treeNode72 = new System.Windows.Forms.TreeNode("Guilds", new System.Windows.Forms.TreeNode[] {
-            treeNode68,
+            treeNode66,
+            treeNode67});
+            System.Windows.Forms.TreeNode treeNode69 = new System.Windows.Forms.TreeNode("Create Guild");
+            System.Windows.Forms.TreeNode treeNode70 = new System.Windows.Forms.TreeNode("Disband Guild");
+            System.Windows.Forms.TreeNode treeNode71 = new System.Windows.Forms.TreeNode("Open Guild Bank");
+            System.Windows.Forms.TreeNode treeNode72 = new System.Windows.Forms.TreeNode("Set Guild Bank Slots Count");
+            System.Windows.Forms.TreeNode treeNode73 = new System.Windows.Forms.TreeNode("Guilds", new System.Windows.Forms.TreeNode[] {
             treeNode69,
             treeNode70,
-            treeNode71});
-            System.Windows.Forms.TreeNode treeNode73 = new System.Windows.Forms.TreeNode("Start Timer");
-            System.Windows.Forms.TreeNode treeNode74 = new System.Windows.Forms.TreeNode("Modify Timer");
-            System.Windows.Forms.TreeNode treeNode75 = new System.Windows.Forms.TreeNode("Stop Timer");
-            System.Windows.Forms.TreeNode treeNode76 = new System.Windows.Forms.TreeNode("Timers", new System.Windows.Forms.TreeNode[] {
-            treeNode73,
+            treeNode71,
+            treeNode72});
+            System.Windows.Forms.TreeNode treeNode74 = new System.Windows.Forms.TreeNode("Start Timer");
+            System.Windows.Forms.TreeNode treeNode75 = new System.Windows.Forms.TreeNode("Modify Timer");
+            System.Windows.Forms.TreeNode treeNode76 = new System.Windows.Forms.TreeNode("Stop Timer");
+            System.Windows.Forms.TreeNode treeNode77 = new System.Windows.Forms.TreeNode("Timers", new System.Windows.Forms.TreeNode[] {
             treeNode74,
-            treeNode75});
+            treeNode75,
+            treeNode76});
             this.lblName = new System.Windows.Forms.Label();
             this.txtEventname = new DarkUI.Controls.DarkTextBox();
             this.grpEntityOptions = new DarkUI.Controls.DarkGroupBox();
@@ -183,6 +185,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.lblQuestAnimation = new System.Windows.Forms.Label();
             this.cmbQuest = new DarkUI.Controls.DarkComboBox();
             this.grpExtra = new DarkUI.Controls.DarkGroupBox();
+            this.chkKillAfterOne = new DarkUI.Controls.DarkCheckBox();
             this.chkInteractionFreeze = new DarkUI.Controls.DarkCheckBox();
             this.chkWalkingAnimation = new DarkUI.Controls.DarkCheckBox();
             this.chkDirectionFix = new DarkUI.Controls.DarkCheckBox();
@@ -253,7 +256,6 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.btnTabsRight = new DarkUI.Controls.DarkButton();
             this.btnTabsLeft = new DarkUI.Controls.DarkButton();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.chkKillAfterOne = new DarkUI.Controls.DarkCheckBox();
             this.grpEntityOptions.SuspendLayout();
             this.grpQuestAnimation.SuspendLayout();
             this.grpExtra.SuspendLayout();
@@ -395,6 +397,16 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.grpExtra.TabIndex = 9;
             this.grpExtra.TabStop = false;
             this.grpExtra.Text = "Extra";
+            // 
+            // chkKillAfterOne
+            // 
+            this.chkKillAfterOne.AutoSize = true;
+            this.chkKillAfterOne.Location = new System.Drawing.Point(125, 41);
+            this.chkKillAfterOne.Name = "chkKillAfterOne";
+            this.chkKillAfterOne.Size = new System.Drawing.Size(78, 17);
+            this.chkKillAfterOne.TabIndex = 7;
+            this.chkKillAfterOne.Text = "One Player";
+            this.chkKillAfterOne.CheckedChanged += new System.EventHandler(this.chkKillAfterOne_CheckedChanged);
             // 
             // chkInteractionFreeze
             // 
@@ -1220,44 +1232,47 @@ namespace Intersect.Editor.Forms.Editors.Events
             treeNode62.Name = "wait";
             treeNode62.Tag = "34";
             treeNode62.Text = "Wait...";
-            treeNode63.Name = "etc";
-            treeNode63.Text = "Etc";
-            treeNode64.Name = "openbank";
-            treeNode64.Tag = "35";
-            treeNode64.Text = "Open Bank";
-            treeNode65.Name = "openshop";
-            treeNode65.Tag = "36";
-            treeNode65.Text = "Open Shop";
-            treeNode66.Name = "opencraftingstation";
-            treeNode66.Tag = "37";
-            treeNode66.Text = "Open Crafting Station";
-            treeNode67.Name = "shopandbank";
-            treeNode67.Text = "Shop and Bank";
-            treeNode68.Name = "createguild";
-            treeNode68.Tag = "53";
-            treeNode68.Text = "Create Guild";
-            treeNode69.Name = "disbandguild";
-            treeNode69.Tag = "54";
-            treeNode69.Text = "Disband Guild";
-            treeNode70.Name = "openguildbank";
-            treeNode70.Tag = "55";
-            treeNode70.Text = "Open Guild Bank";
-            treeNode71.Name = "setguildbankslots";
-            treeNode71.Tag = "56";
-            treeNode71.Text = "Set Guild Bank Slots Count";
-            treeNode72.Name = "guilds";
-            treeNode72.Text = "Guilds";
-            treeNode73.Name = "starttimer";
-            treeNode73.Tag = "64";
-            treeNode73.Text = "Start Timer";
-            treeNode74.Name = "modifytimer";
-            treeNode74.Tag = "65";
-            treeNode74.Text = "Modify Timer";
-            treeNode75.Name = "stoptimer";
-            treeNode75.Tag = "66";
-            treeNode75.Text = "Stop Timer";
-            treeNode76.Name = "timers";
-            treeNode76.Text = "Timers";
+            treeNode63.Name = "openleaderboard";
+            treeNode63.Tag = "68";
+            treeNode63.Text = "Open Leaderboard...";
+            treeNode64.Name = "etc";
+            treeNode64.Text = "Etc";
+            treeNode65.Name = "openbank";
+            treeNode65.Tag = "35";
+            treeNode65.Text = "Open Bank";
+            treeNode66.Name = "openshop";
+            treeNode66.Tag = "36";
+            treeNode66.Text = "Open Shop";
+            treeNode67.Name = "opencraftingstation";
+            treeNode67.Tag = "37";
+            treeNode67.Text = "Open Crafting Station";
+            treeNode68.Name = "shopandbank";
+            treeNode68.Text = "Shop and Bank";
+            treeNode69.Name = "createguild";
+            treeNode69.Tag = "53";
+            treeNode69.Text = "Create Guild";
+            treeNode70.Name = "disbandguild";
+            treeNode70.Tag = "54";
+            treeNode70.Text = "Disband Guild";
+            treeNode71.Name = "openguildbank";
+            treeNode71.Tag = "55";
+            treeNode71.Text = "Open Guild Bank";
+            treeNode72.Name = "setguildbankslots";
+            treeNode72.Tag = "56";
+            treeNode72.Text = "Set Guild Bank Slots Count";
+            treeNode73.Name = "guilds";
+            treeNode73.Text = "Guilds";
+            treeNode74.Name = "starttimer";
+            treeNode74.Tag = "64";
+            treeNode74.Text = "Start Timer";
+            treeNode75.Name = "modifytimer";
+            treeNode75.Tag = "65";
+            treeNode75.Text = "Modify Timer";
+            treeNode76.Name = "stoptimer";
+            treeNode76.Tag = "66";
+            treeNode76.Text = "Stop Timer";
+            treeNode77.Name = "timers";
+            treeNode77.Text = "Timers";
             this.lstCommands.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
             treeNode5,
             treeNode13,
@@ -1265,10 +1280,10 @@ namespace Intersect.Editor.Forms.Editors.Events
             treeNode46,
             treeNode55,
             treeNode61,
-            treeNode63,
-            treeNode67,
-            treeNode72,
-            treeNode76});
+            treeNode64,
+            treeNode68,
+            treeNode73,
+            treeNode77});
             this.lstCommands.Size = new System.Drawing.Size(445, 440);
             this.lstCommands.TabIndex = 2;
             this.lstCommands.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.lstCommands_NodeMouseDoubleClick);
@@ -1537,16 +1552,6 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(811, 574);
             this.panel1.TabIndex = 23;
-            // 
-            // chkKillAfterOne
-            // 
-            this.chkKillAfterOne.AutoSize = true;
-            this.chkKillAfterOne.Location = new System.Drawing.Point(125, 41);
-            this.chkKillAfterOne.Name = "chkKillAfterOne";
-            this.chkKillAfterOne.Size = new System.Drawing.Size(78, 17);
-            this.chkKillAfterOne.TabIndex = 7;
-            this.chkKillAfterOne.Text = "One Player";
-            this.chkKillAfterOne.CheckedChanged += new System.EventHandler(this.chkKillAfterOne_CheckedChanged);
             // 
             // FrmEvent
             // 

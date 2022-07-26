@@ -129,6 +129,12 @@
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_NPCGuildManagement.Designer.cs">
       <DependentUpon>EventCommand_NPCGuildManagement.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_OpenLeaderboard.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_OpenLeaderboard.Designer.cs">
+      <DependentUpon>EventCommand_OpenLeaderboard.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_OpenQuestBoard.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -771,6 +777,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_NPCGuildManagement.resx">
       <DependentUpon>EventCommand_NPCGuildManagement.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_OpenLeaderboard.resx">
+      <DependentUpon>EventCommand_OpenLeaderboard.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_OpenQuestBoard.resx">
       <DependentUpon>EventCommand_OpenQuestBoard.cs</DependentUpon>

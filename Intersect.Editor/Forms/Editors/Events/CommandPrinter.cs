@@ -17,7 +17,7 @@ using Intersect.GameObjects.Timers;
 namespace Intersect.Editor.Forms.Editors.Events
 {
 
-    public static class CommandPrinter
+    public static partial class CommandPrinter
     {
 
         /// <summary>
@@ -1636,12 +1636,17 @@ namespace Intersect.Editor.Forms.Editors.Events
             return Strings.EventCommandList.invalid;
         }
 
+    }
+
+    public static partial class CommandPrinter
+    {
         private static string GetCommandText(SetVehicleCommand command, MapInstance map)
         {
             if (command.InVehicle)
             {
                 return Strings.EventCommandList.setvehicle.ToString(command.VehicleSprite);
-            } else
+            }
+            else
             {
                 return Strings.EventCommandList.setvehicle.ToString(Strings.General.none);
             }
@@ -1649,7 +1654,7 @@ namespace Intersect.Editor.Forms.Editors.Events
 
         private static string GetCommandText(NPCGuildManagementCommand command, MapInstance map)
         {
-            switch(command.Selection)
+            switch (command.Selection)
             {
                 case NPCGuildManagementSelection.ChangeComplete:
                     return Strings.EventCommandList.npcmanage.ToString(
@@ -1717,11 +1722,11 @@ namespace Intersect.Editor.Forms.Editors.Events
             {
                 return Strings.EventCommandList.TimerModify.ToString(descriptor.Name, op, amount);
             }
-            else 
+            else
             {
                 string varType = Enum.GetName(typeof(VariableTypes), command.VariableType);
                 string varName = string.Empty;
-                switch(command.VariableType)
+                switch (command.VariableType)
                 {
                     case VariableTypes.PlayerVariable:
                         varName = PlayerVariableBase.GetName(command.VariableDescriptorId);
@@ -1777,6 +1782,45 @@ namespace Intersect.Editor.Forms.Editors.Events
             return Strings.EventCommandList.ChangeSpawnGroup.ToString(command.SpawnGroup.ToString(), mapName, command.SurroundingMaps.ToString(), op, command.PersistCleanup.ToString());
         }
 
-    }
+        private static string GetCommandText(OpenLeaderboardCommand command, MapInstance map)
+        {
+            var recordValue = Strings.EventCommandList.mapnotfound;
 
+            switch (command.RecordType)
+            {
+                case RecordType.NpcKilled:
+                    recordValue = NpcBase.Get(command.RecordId)?.Name ?? $"NPC {Strings.EventCommandList.mapnotfound}";
+                    break;
+                case RecordType.ItemCrafted:
+                    recordValue = ItemBase.Get(command.RecordId)?.Name ?? $"Item {Strings.EventCommandList.mapnotfound}";
+                    break;
+                case RecordType.ResourceGathered:
+                    recordValue = ResourceBase.Get(command.RecordId)?.Name ?? $"Resource {Strings.EventCommandList.mapnotfound}";
+                    break;
+                case RecordType.PlayerVariable:
+                    recordValue = PlayerVariableBase.Get(command.RecordId)?.Name ?? $"Player Var {Strings.EventCommandList.mapnotfound}";
+                    break;
+                case RecordType.Combo:
+                    recordValue = "Combo";
+                    break;
+                default:
+                    recordValue = Strings.EventCommandList.mapnotfound;
+                    break;
+            }
+
+            var displayMode = Strings.EventCommandList.mapnotfound;
+            var scoreType = Strings.EventCommandList.mapnotfound;
+
+            if ((int)command.DisplayMode < Enum.GetNames(typeof(LeaderboardDisplayMode)).Length)
+            {
+                displayMode = Enum.GetName(typeof(LeaderboardDisplayMode), command.DisplayMode);
+            }
+            if ((int)command.ScoreType < Enum.GetNames(typeof(RecordScoring)).Length)
+            {
+                scoreType = Enum.GetName(typeof(RecordScoring), command.ScoreType);
+            }
+
+            return Strings.EventCommandList.OpenLeaderboard.ToString(command.DisplayName, recordValue, scoreType, displayMode);
+        }
+    }
 }

@@ -1674,7 +1674,7 @@ Tick timer saved in server config.json.";
 
         }
 
-        public struct EventCommandList
+        public partial struct EventCommandList
         {
 
             public static LocalizedString addvariable = @"Add {00}";
@@ -2200,6 +2200,7 @@ Tick timer saved in server config.json.";
                 {"modifytimer", @"Modify Timer"},
                 {"stoptimer", @"Stop Timer"},
                 {"changemapspawngroup", @"Change Map Spawn Group"},
+                {"openleaderboard", @"Open Leaderboard"},
             };
 
         }
@@ -5871,7 +5872,10 @@ Negative values for time to flow backwards.";
             public static LocalizedString title = @"Warp Tile Selection";
 
         }
+    }
 
+    public static partial class Strings
+    {
         public struct QuestListEditor
         {
 
@@ -5935,7 +5939,7 @@ Negative values for time to flow backwards.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString sortalphabetically = @"Order Alphabetically";
-            
+
             public static LocalizedString copy = @"Copy Quest List";
 
             public static LocalizedString paste = @"Copy Quest List";
@@ -6058,7 +6062,12 @@ Negative values for time to flow backwards.";
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString cancel = @"Cancel";
         }
-    }
 
+        public partial struct EventCommandList
+        {
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString OpenLeaderboard = @"Open leaderboard '{00}' for {01} (sort: {02}, display type: {03})";
+        }
+    }
 }
 

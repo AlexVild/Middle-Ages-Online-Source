@@ -1234,6 +1234,11 @@ namespace Intersect.GameObjects.Events.Commands
         public bool InstanceSync { get; set; }
     }
 
+    public enum LeaderboardDisplayMode
+    {
+        Value = 0,
+        Time,
+    }
     public class OpenLeaderboardCommand : EventCommand
     {
         public override EventCommandType Type { get; } = EventCommandType.OpenLeaderboard;
@@ -1245,5 +1250,7 @@ namespace Intersect.GameObjects.Events.Commands
         public RecordScoring ScoreType { get; set; }
 
         public string DisplayName { get; set; }
+
+        public LeaderboardDisplayMode DisplayMode { get; set; }
     }
 }

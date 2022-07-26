@@ -795,6 +795,10 @@ namespace Intersect.Editor.Forms.Editors.Events
                     tmpCommand = new ChangeSpawnGroupCommand();
 
                     break;
+                case EventCommandType.OpenLeaderboard:
+                    tmpCommand = new OpenLeaderboardCommand();
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -1450,6 +1454,10 @@ namespace Intersect.Editor.Forms.Editors.Events
                     break;
                 case EventCommandType.ChangeSpawnGroup:
                     cmdWindow = new EventCommand_ChangeMapSpawnGroup((ChangeSpawnGroupCommand)command, this);
+
+                    break;
+                case EventCommandType.OpenLeaderboard:
+                    cmdWindow = new EventCommand_OpenLeaderboard((OpenLeaderboardCommand)command, this);
 
                     break;
                 default:
