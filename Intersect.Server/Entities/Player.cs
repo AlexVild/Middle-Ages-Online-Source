@@ -8267,7 +8267,7 @@ namespace Intersect.Server.Entities
                         break;
                 }
                 StartCommonEventsWithTrigger(evtTrigger, "", recordId.ToString(), recordAmt);
-
+                matchingRecord.SaveToContext();
                 return recordAmt;
             }
         }
@@ -8323,17 +8323,17 @@ namespace Intersect.Server.Entities
                 // We couldn't find a record that satisfies our needs, so create a new one
                 if (matchingRecord == null)
                 {
-                    PlayerRecord newRecord = new PlayerRecord(Id, type, recordId, 1, scoreType);
+                    matchingRecord = new PlayerRecord(Id, type, recordId, 1, scoreType);
 
                     // Team record? If so, add the team mates
                     if (teammates != null && teammates.Count > 0)
                     {
                         foreach (var member in teammates)
                         {
-                            newRecord.Teammates.Add(new RecordTeammateInstance(newRecord.Id, member.Id));
+                            matchingRecord.Teammates.Add(new RecordTeammateInstance(matchingRecord.Id, member.Id));
                         }
                     }
-                    PlayerRecords.Add(newRecord);
+                    PlayerRecords.Add(matchingRecord);
                     recordAmt = amount;
                 }
                 else if (matchingRecord.ScoreType == RecordScoring.High && matchingRecord.Amount >= amount ||
@@ -8365,7 +8365,7 @@ namespace Intersect.Server.Entities
                         break;
                 }
                 StartCommonEventsWithTrigger(evtTrigger, "", recordId.ToString(), recordAmt);
-
+                matchingRecord.SaveToContext();
                 return true;
             }
         }

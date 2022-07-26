@@ -446,6 +446,7 @@
     <Compile Include="Network\Packets\Server\QuestBoardPacket.cs" />
     <Compile Include="Network\Packets\Server\QuestOfferListPacket.cs" />
     <Compile Include="Network\Packets\Server\QuestPointPacket.cs" />
+    <Compile Include="Network\Packets\Server\RecordsPacket.cs" />
     <Compile Include="Network\Packets\Server\ResourceLockPacket.cs" />
     <Compile Include="Network\Packets\Server\ShakeScreenPacket.cs" />
     <Compile Include="Network\Packets\Server\TimerPacket.cs" />

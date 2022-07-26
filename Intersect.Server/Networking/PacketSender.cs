@@ -113,6 +113,7 @@ namespace Intersect.Server.Networking
 
                 //Search for login activated events and run them
                 player.StartCommonEventsWithTrigger(CommonEventTrigger.Login);
+                PlayerRecord._debugSendRecordsTo(player);
             }
         }
 

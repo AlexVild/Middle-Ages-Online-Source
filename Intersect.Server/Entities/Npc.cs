@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 using Intersect.Enums;
 using Intersect.GameObjects;
+using Intersect.GameObjects.Events;
 using Intersect.Logging;
 using Intersect.Network.Packets.Server;
 using Intersect.Server.Core;
