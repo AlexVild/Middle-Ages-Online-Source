@@ -18,6 +18,18 @@ namespace Intersect.Server.Database.PlayerData.Players
     public class PlayerRecord : IPlayerOwned
     {
         /// <summary>
+        /// Locking context to prevent saving this recprd to the db twice at the same time
+        /// </summary>
+        [NotMapped]
+        [JsonIgnore]
+        private object mLock = new object();
+
+        /// <summary>
+        /// Getter for the guild lock
+        /// </summary>
+        public object Lock => mLock;
+
+        /// <summary>
         /// The amount of records to return per visible page
         /// </summary>
         public static readonly int PageLimit = 20;
@@ -71,19 +83,22 @@ namespace Intersect.Server.Database.PlayerData.Players
         /// </summary>
         public void SaveToContext()
         {
-            using (var context = DbInterface.CreatePlayerContext(readOnly: false))
+            lock (mLock)
             {
-                context.Player_Record.Update(this);
-                context.ChangeTracker.DetectChanges();
-                context.SaveChanges();
+                using (var context = DbInterface.CreatePlayerContext(readOnly: false))
+                {
+                    context.Player_Record.Update(this);
+                    context.ChangeTracker.DetectChanges();
+                    context.SaveChanges();
+                }
             }
         }
 
-        public static void _debugSendRecordsTo(Player player)
+        public static void OpenLeaderboardFor(Player player, RecordType recordType, Guid recordId, RecordScoring scoringType)
         {
             var recordBuilder = new StringBuilder();
 
-            var records = GetRecords(RecordType.PlayerVariable, new Guid("ec4e3a68-7f79-490e-8b39-260095c8dca1"), RecordScoring.High, 0);
+            var records = GetRecords(recordType, recordId, scoringType, 0);
             foreach(var record in records)
             {
                 recordBuilder.AppendLine(string.Join(": ", record.RecordDisplay, record.Participants));

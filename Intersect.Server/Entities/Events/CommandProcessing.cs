@@ -2719,7 +2719,7 @@ namespace Intersect.Server.Entities.Events
         {
             if (player == null) return;
 
-            // TODO this
+            PlayerRecord.OpenLeaderboardFor(player, command.RecordType, command.RecordId, command.ScoreType);
         }
     }
 }

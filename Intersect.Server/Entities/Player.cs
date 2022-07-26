@@ -394,7 +394,7 @@ namespace Intersect.Server.Entities
             LoadFriends();
             LoadGuild();
             LoadRecords();
-            LoadTimers();
+            DbInterface.Pool.QueueWorkItem(LoadTimers);
             LoadMapsExplored();
 
             //Upon Sign In Remove Any Items/Spells that have been deleted
@@ -480,7 +480,7 @@ namespace Intersect.Server.Entities
             LeaveParty(true);
 
             // Update timers
-            LogoutPlayerTimers();
+            DbInterface.Pool.QueueWorkItem(LogoutPlayerTimers);
 
             // End combo
             EndCombo();
@@ -8233,10 +8233,11 @@ namespace Intersect.Server.Entities
         #region Player Records
         public long IncrementRecord(RecordType type, Guid recordId)
         {
+            PlayerRecord matchingRecord;
+            long recordAmt = 0;
             lock (EntityLock)
             {
-                long recordAmt = 0;
-                PlayerRecord matchingRecord = PlayerRecords.Find(record => record.Type == type && record.RecordId == recordId);
+                matchingRecord = PlayerRecords.Find(record => record.Type == type && record.RecordId == recordId);
                 if (matchingRecord != null)
                 {
                     matchingRecord.Amount++;
@@ -8267,9 +8268,13 @@ namespace Intersect.Server.Entities
                         break;
                 }
                 StartCommonEventsWithTrigger(evtTrigger, "", recordId.ToString(), recordAmt);
-                matchingRecord.SaveToContext();
-                return recordAmt;
             }
+            if (matchingRecord != null)
+            {
+                DbInterface.Pool.QueueWorkItem(matchingRecord.SaveToContext);
+            }
+            
+            return recordAmt;
         }
 
         /// <summary>
@@ -8283,6 +8288,7 @@ namespace Intersect.Server.Entities
         /// <returns></returns>
         public bool TrySetRecord(RecordType type, Guid recordId, long amount, RecordScoring scoreType, List<Player> teammates = null)
         {
+            PlayerRecord matchingRecord;
             lock (EntityLock)
             {
                 long recordAmt = 0;
@@ -8302,7 +8308,6 @@ namespace Intersect.Server.Entities
                     }
                 }
 
-                PlayerRecord matchingRecord;
                 // If this is a "team" record, find the record, if any, that contains the same team
                 if (teammates != null && teammates.Count > 0)
                 {
@@ -8365,9 +8370,12 @@ namespace Intersect.Server.Entities
                         break;
                 }
                 StartCommonEventsWithTrigger(evtTrigger, "", recordId.ToString(), recordAmt);
-                matchingRecord.SaveToContext();
-                return true;
             }
+            if (matchingRecord != null)
+            {
+                DbInterface.Pool.QueueWorkItem(matchingRecord.SaveToContext);
+            }
+            return true;
         }
 
         public void SendRecordUpdate(string message)

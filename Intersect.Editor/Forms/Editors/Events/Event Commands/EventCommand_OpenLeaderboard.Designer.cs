@@ -38,19 +38,19 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.lblRecord = new System.Windows.Forms.Label();
             this.lblType = new System.Windows.Forms.Label();
             this.grpBoardDetails = new DarkUI.Controls.DarkGroupBox();
-            this.grpOrder = new DarkUI.Controls.DarkGroupBox();
-            this.rdoDesc = new DarkUI.Controls.DarkRadioButton();
-            this.rdoAsc = new DarkUI.Controls.DarkRadioButton();
+            this.lblName = new System.Windows.Forms.Label();
+            this.txtDisplayName = new DarkUI.Controls.DarkTextBox();
             this.grpDisplay = new DarkUI.Controls.DarkGroupBox();
             this.rdoTime = new DarkUI.Controls.DarkRadioButton();
             this.rdoVal = new DarkUI.Controls.DarkRadioButton();
-            this.txtDisplayName = new DarkUI.Controls.DarkTextBox();
-            this.lblName = new System.Windows.Forms.Label();
+            this.grpOrder = new DarkUI.Controls.DarkGroupBox();
+            this.rdoDesc = new DarkUI.Controls.DarkRadioButton();
+            this.rdoAsc = new DarkUI.Controls.DarkRadioButton();
             this.grpOpenLeaderboard.SuspendLayout();
             this.grpRecord.SuspendLayout();
             this.grpBoardDetails.SuspendLayout();
-            this.grpOrder.SuspendLayout();
             this.grpDisplay.SuspendLayout();
+            this.grpOrder.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpOpenLeaderboard
@@ -62,9 +62,9 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpOpenLeaderboard.Controls.Add(this.grpRecord);
             this.grpOpenLeaderboard.Controls.Add(this.grpBoardDetails);
             this.grpOpenLeaderboard.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpOpenLeaderboard.Location = new System.Drawing.Point(3, 3);
+            this.grpOpenLeaderboard.Location = new System.Drawing.Point(3, 0);
             this.grpOpenLeaderboard.Name = "grpOpenLeaderboard";
-            this.grpOpenLeaderboard.Size = new System.Drawing.Size(314, 315);
+            this.grpOpenLeaderboard.Size = new System.Drawing.Size(314, 318);
             this.grpOpenLeaderboard.TabIndex = 29;
             this.grpOpenLeaderboard.TabStop = false;
             this.grpOpenLeaderboard.Text = "Open Leaderboard";
@@ -181,41 +181,26 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpBoardDetails.TabStop = false;
             this.grpBoardDetails.Text = "Board Details";
             // 
-            // grpOrder
+            // lblName
             // 
-            this.grpOrder.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.grpOrder.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpOrder.Controls.Add(this.rdoDesc);
-            this.grpOrder.Controls.Add(this.rdoAsc);
-            this.grpOrder.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpOrder.Location = new System.Drawing.Point(9, 58);
-            this.grpOrder.Name = "grpOrder";
-            this.grpOrder.Size = new System.Drawing.Size(203, 49);
-            this.grpOrder.TabIndex = 30;
-            this.grpOrder.TabStop = false;
-            this.grpOrder.Text = "Sort Order";
+            this.lblName.AutoSize = true;
+            this.lblName.Location = new System.Drawing.Point(6, 32);
+            this.lblName.Name = "lblName";
+            this.lblName.Size = new System.Drawing.Size(72, 13);
+            this.lblName.TabIndex = 28;
+            this.lblName.Text = "Display Name";
             // 
-            // rdoDesc
+            // txtDisplayName
             // 
-            this.rdoDesc.AutoSize = true;
-            this.rdoDesc.Checked = true;
-            this.rdoDesc.Location = new System.Drawing.Point(6, 19);
-            this.rdoDesc.Name = "rdoDesc";
-            this.rdoDesc.Size = new System.Drawing.Size(82, 17);
-            this.rdoDesc.TabIndex = 29;
-            this.rdoDesc.TabStop = true;
-            this.rdoDesc.Text = "Descending";
-            this.rdoDesc.CheckedChanged += new System.EventHandler(this.rdoDesc_CheckedChanged);
-            // 
-            // rdoAsc
-            // 
-            this.rdoAsc.AutoSize = true;
-            this.rdoAsc.Location = new System.Drawing.Point(100, 19);
-            this.rdoAsc.Name = "rdoAsc";
-            this.rdoAsc.Size = new System.Drawing.Size(75, 17);
-            this.rdoAsc.TabIndex = 27;
-            this.rdoAsc.Text = "Ascending";
-            this.rdoAsc.CheckedChanged += new System.EventHandler(this.rdoAsc_CheckedChanged);
+            this.txtDisplayName.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.txtDisplayName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtDisplayName.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.txtDisplayName.Location = new System.Drawing.Point(84, 30);
+            this.txtDisplayName.Name = "txtDisplayName";
+            this.txtDisplayName.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
+            this.txtDisplayName.Size = new System.Drawing.Size(192, 20);
+            this.txtDisplayName.TabIndex = 57;
+            this.txtDisplayName.TextChanged += new System.EventHandler(this.txtDisplayName_TextChanged);
             // 
             // grpDisplay
             // 
@@ -253,26 +238,41 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.rdoVal.Text = "Value";
             this.rdoVal.CheckedChanged += new System.EventHandler(this.rdoVal_CheckedChanged);
             // 
-            // txtDisplayName
+            // grpOrder
             // 
-            this.txtDisplayName.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.txtDisplayName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtDisplayName.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.txtDisplayName.Location = new System.Drawing.Point(84, 30);
-            this.txtDisplayName.Name = "txtDisplayName";
-            this.txtDisplayName.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
-            this.txtDisplayName.Size = new System.Drawing.Size(192, 20);
-            this.txtDisplayName.TabIndex = 57;
-            this.txtDisplayName.TextChanged += new System.EventHandler(this.txtDisplayName_TextChanged);
+            this.grpOrder.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.grpOrder.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpOrder.Controls.Add(this.rdoDesc);
+            this.grpOrder.Controls.Add(this.rdoAsc);
+            this.grpOrder.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpOrder.Location = new System.Drawing.Point(9, 58);
+            this.grpOrder.Name = "grpOrder";
+            this.grpOrder.Size = new System.Drawing.Size(203, 49);
+            this.grpOrder.TabIndex = 30;
+            this.grpOrder.TabStop = false;
+            this.grpOrder.Text = "Sort Order";
             // 
-            // lblName
+            // rdoDesc
             // 
-            this.lblName.AutoSize = true;
-            this.lblName.Location = new System.Drawing.Point(6, 32);
-            this.lblName.Name = "lblName";
-            this.lblName.Size = new System.Drawing.Size(72, 13);
-            this.lblName.TabIndex = 28;
-            this.lblName.Text = "Display Name";
+            this.rdoDesc.AutoSize = true;
+            this.rdoDesc.Checked = true;
+            this.rdoDesc.Location = new System.Drawing.Point(6, 19);
+            this.rdoDesc.Name = "rdoDesc";
+            this.rdoDesc.Size = new System.Drawing.Size(82, 17);
+            this.rdoDesc.TabIndex = 29;
+            this.rdoDesc.TabStop = true;
+            this.rdoDesc.Text = "Descending";
+            this.rdoDesc.CheckedChanged += new System.EventHandler(this.rdoDesc_CheckedChanged);
+            // 
+            // rdoAsc
+            // 
+            this.rdoAsc.AutoSize = true;
+            this.rdoAsc.Location = new System.Drawing.Point(100, 19);
+            this.rdoAsc.Name = "rdoAsc";
+            this.rdoAsc.Size = new System.Drawing.Size(75, 17);
+            this.rdoAsc.TabIndex = 27;
+            this.rdoAsc.Text = "Ascending";
+            this.rdoAsc.CheckedChanged += new System.EventHandler(this.rdoAsc_CheckedChanged);
             // 
             // EventCommand_OpenLeaderboard
             // 
@@ -287,10 +287,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpRecord.PerformLayout();
             this.grpBoardDetails.ResumeLayout(false);
             this.grpBoardDetails.PerformLayout();
-            this.grpOrder.ResumeLayout(false);
-            this.grpOrder.PerformLayout();
             this.grpDisplay.ResumeLayout(false);
             this.grpDisplay.PerformLayout();
+            this.grpOrder.ResumeLayout(false);
+            this.grpOrder.PerformLayout();
             this.ResumeLayout(false);
 
         }
