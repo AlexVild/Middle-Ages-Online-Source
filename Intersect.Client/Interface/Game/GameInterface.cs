@@ -19,6 +19,7 @@ using Intersect.GameObjects;
 using Intersect.Client.Items;
 using System.Collections.Generic;
 using static Intersect.Client.Interface.Game.Bank.BankWindow;
+using Intersect.Client.General.Leaderboards;
 
 namespace Intersect.Client.Interface.Game
 {
@@ -768,6 +769,7 @@ namespace Intersect.Client.Interface.Game
     {
         private PlayerHud mHUD;
         private PartyHud mPartyHUD;
+        public Leaderboard Leaderboard => Globals.Me?.Leaderboard ?? new Leaderboard();
 
         private void _InitGameGui()
         {

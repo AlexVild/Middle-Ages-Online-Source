@@ -26,6 +26,7 @@ using Intersect.Client.Interface.Game.Chat;
 using Intersect.Config.Guilds;
 using Intersect.Client.Interface.Game.DescriptionWindows;
 using Intersect.GameObjects.Crafting;
+using Intersect.Client.General.Leaderboards;
 
 namespace Intersect.Client.Entities
 {
@@ -2836,16 +2837,16 @@ namespace Intersect.Client.Entities
         }
     }
 
-    /// <summary>
-    /// This is setup so that if a user is spamming direction changes, they stop happening until 300ms has passed since the last one.
-    /// Setup so that a user does not send more than <see cref="NewDirThreshold"/> requests per <see cref="DirectionLockoutTimer"/> ms
-    /// If they do, we wait <see cref="ResendDirectionTimer"/> ms to update the server.
-    /// </summary>
     public partial class Player : Entity
     {
         public Stack<long> DirRequestTimes = new Stack<long>();
         public List<Guid> MapsExplored;
 
         public bool ChangeCombatModeNextTile;
+    }
+
+    public partial class Player : Entity
+    {
+        public Leaderboard Leaderboard = new Leaderboard();
     }
 }

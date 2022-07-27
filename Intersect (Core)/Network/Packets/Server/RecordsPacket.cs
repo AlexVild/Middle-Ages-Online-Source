@@ -1,9 +1,6 @@
 ﻿using MessagePack;
-using System;
+using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Intersect.Network.Packets.Server
 {
@@ -28,7 +25,9 @@ namespace Intersect.Network.Packets.Server
 
         RecordsPacket(List<RecordDto> records)
         {
-            
+            JsonConvert.PopulateObject(
+                RecordsJson, records, new JsonSerializerSettings()
+            );
         }
     }
 }

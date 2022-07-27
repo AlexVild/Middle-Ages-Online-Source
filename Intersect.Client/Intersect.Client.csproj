@@ -111,6 +111,8 @@
     <Compile Include="Entities\SpriteAnimations.cs" />
     <Compile Include="Entities\Status.cs" />
     <Compile Include="Entities\Timer.cs" />
+    <Compile Include="General\Leaderboards\Leaderboard.cs" />
+    <Compile Include="General\Leaderboards\Record.cs" />
     <Compile Include="General\Time.cs" />
     <Compile Include="General\Globals.cs" />
     <Compile Include="General\Timers.cs" />
@@ -128,6 +130,8 @@
     <Compile Include="Interface\Game\HarvestBonusWindow.cs" />
     <Compile Include="Interface\Game\HUD\PartyHud.cs" />
     <Compile Include="Interface\Game\InstanceLifeWindow.cs" />
+    <Compile Include="Interface\Game\Leaderboards\LeaderboardRecord.cs" />
+    <Compile Include="Interface\Game\Leaderboards\LeaderboardWindow.cs" />
     <Compile Include="Interface\Game\MapItem\MapItemIcon.cs" />
     <Compile Include="Interface\Game\MapItem\MapItemWindow.cs" />
     <Compile Include="Interface\Game\HUD\PlayerHud.cs" />

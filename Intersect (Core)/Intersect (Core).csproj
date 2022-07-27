@@ -392,6 +392,7 @@
     <Compile Include="Network\Packets\Client\CloseShopPacket.cs" />
     <Compile Include="Network\Packets\Client\CraftItemPacket.cs" />
     <Compile Include="Network\Packets\Client\PartyInviteNamePacket.cs" />
+    <Compile Include="Network\Packets\Client\RequestLeaderboardPacket.cs" />
     <Compile Include="Network\Packets\Server\CraftStatusPacket.cs" />
     <Compile Include="Network\Packets\Client\CreateAccountPacket.cs" />
     <Compile Include="Network\Packets\Client\CreateCharacterPacket.cs" />
@@ -440,6 +441,7 @@
     <Compile Include="Network\Packets\Server\MapInstanceChangedPacket.cs" />
     <Compile Include="Network\Packets\Server\MapsExploredPacket.cs" />
     <Compile Include="Network\Packets\Server\MapTrapPacket.cs" />
+    <Compile Include="Network\Packets\Server\OpenLeaderboardPacket.cs" />
     <Compile Include="Network\Packets\Server\PlayAnimationPackets.cs" />
     <Compile Include="Network\Packets\Server\PlayerStatsPacket.cs" />
     <Compile Include="Network\Packets\Server\ProjectileCastDelayPacket.cs" />
