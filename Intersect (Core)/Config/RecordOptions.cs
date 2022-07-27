@@ -19,5 +19,7 @@ namespace Intersect.Config
         public bool SendCraftingRecordUpdates = true;
 
         public int CraftingRecordUpdateInterval = 10;
+
+        public int RecordCacheIntervalMinutes = 15;
     }
 }

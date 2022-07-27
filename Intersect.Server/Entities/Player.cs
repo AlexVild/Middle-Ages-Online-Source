@@ -8231,7 +8231,7 @@ namespace Intersect.Server.Entities
         }
 
         #region Player Records
-        public long IncrementRecord(RecordType type, Guid recordId)
+        public long IncrementRecord(RecordType type, Guid recordId, bool instantSave = false)
         {
             PlayerRecord matchingRecord;
             long recordAmt = 0;
@@ -8269,7 +8269,7 @@ namespace Intersect.Server.Entities
                 }
                 StartCommonEventsWithTrigger(evtTrigger, "", recordId.ToString(), recordAmt);
             }
-            if (matchingRecord != null)
+            if (matchingRecord != null && instantSave)
             {
                 DbInterface.Pool.QueueWorkItem(matchingRecord.SaveToContext);
             }
@@ -8286,7 +8286,7 @@ namespace Intersect.Server.Entities
         /// <param name="scoreType">Whether we are scoring this record high or low</param>
         /// <param name="teammates">Any teammates involved with setting of the record</param>
         /// <returns></returns>
-        public bool TrySetRecord(RecordType type, Guid recordId, long amount, RecordScoring scoreType, List<Player> teammates = null)
+        public bool TrySetRecord(RecordType type, Guid recordId, long amount, RecordScoring scoreType, List<Player> teammates = null, bool instantSave = false)
         {
             PlayerRecord matchingRecord;
             lock (EntityLock)
@@ -8371,7 +8371,7 @@ namespace Intersect.Server.Entities
                 }
                 StartCommonEventsWithTrigger(evtTrigger, "", recordId.ToString(), recordAmt);
             }
-            if (matchingRecord != null)
+            if (matchingRecord != null && instantSave)
             {
                 DbInterface.Pool.QueueWorkItem(matchingRecord.SaveToContext);
             }

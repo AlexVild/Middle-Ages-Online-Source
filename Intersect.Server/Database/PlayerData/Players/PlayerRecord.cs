@@ -14,6 +14,46 @@ using Newtonsoft.Json;
 
 namespace Intersect.Server.Database.PlayerData.Players
 {
+    public static class PlayerRecordCache
+    {
+        public static Dictionary<string, LeaderboardPage> CachedRecords = new Dictionary<string, LeaderboardPage>();
+
+        /// <summary>
+        /// Creates a key from a record search that can be used to cache searches
+        /// </summary>
+        /// <param name="recordType"></param>
+        /// <param name="recordId"></param>
+        /// <param name="scoringType"></param>
+        /// <returns></returns>
+        public static string CreateSearchQueryString(RecordType recordType, Guid recordId, RecordScoring scoringType, int page)
+        {
+            return $"type={Enum.GetName(typeof(RecordType), recordType)}&id={recordId}&scoring={Enum.GetName(typeof(RecordScoring), scoringType)}&page={page}";
+        }
+    }
+
+    public class LeaderboardPage
+    {
+        public static readonly long TimeUntilRequery = Options.Instance.RecordOpts.RecordCacheIntervalMinutes * Intersect.Utilities.Timing.Minutes; // 15 minutes
+        public List<RecordDto> Records { get; set; }
+        public long QueryTimestamp { get; set; }
+        public long RequeryTimestamp => QueryTimestamp + TimeUntilRequery;
+
+        public LeaderboardPage()
+        {
+        }
+
+        public LeaderboardPage(List<RecordDto> records, long queryTimestamp)
+        {
+            Records = records;
+            QueryTimestamp = queryTimestamp;
+        }
+
+        public void Cache(string key)
+        {
+            Console.WriteLine($"Caching {key}...");
+            PlayerRecordCache.CachedRecords[key] = this;
+        }
+    }
 
     public class PlayerRecord : IPlayerOwned
     {
@@ -98,8 +138,14 @@ namespace Intersect.Server.Database.PlayerData.Players
         {
             var recordBuilder = new StringBuilder();
 
-            var records = GetRecords(recordType, recordId, scoringType, 0);
-            foreach(var record in records)
+            var records = GetLeaderboardPage(recordType, recordId, scoringType, 0);
+            if (records?.Records == null)
+            {
+                PacketSender.SendChatMsg(player, "There was an error while opening this leaderboard.", Enums.ChatMessageType.Error);
+                return;
+            }
+
+            foreach(var record in records?.Records)
             {
                 recordBuilder.AppendLine(string.Join(": ", record.RecordDisplay, record.Participants));
             }
@@ -115,25 +161,49 @@ namespace Intersect.Server.Database.PlayerData.Players
         /// <param name="scoreType">The type of scoring we want for the record</param>
         /// <param name="page">The page of record results we're returning</param>
         /// <param name="recordTransformer">A function that returns a string from a long that transforms a long as desired to give the correct output of the record</param>
-        /// <returns>A list of <see cref="RecordDto"/> that we can use to send a packet of</returns>
-        public static List<RecordDto> GetRecords(RecordType type, Guid recordId, RecordScoring scoreType, int page, Func<long, string> recordTransformer = null)
+        /// <returns>A <see cref="LeaderboardPage"/> that we can use to send a packet of</returns>
+        public static LeaderboardPage GetLeaderboardPage(RecordType type, Guid recordId, RecordScoring scoreType, int page, Func<long, string> recordTransformer = null)
         {
             if (recordTransformer == null)
             {
                 recordTransformer = (val) => val.ToString();
             }
 
-            var dtos = new List<RecordDto>();
+            // Check if we can just access the cache for results
+            var queryString = PlayerRecordCache.CreateSearchQueryString(type, recordId, scoreType, page);
+            if (TryGetCachedLeaderboardPage(queryString, out var cachedResults))
+            {
+                return cachedResults;
+            }
+
+            // Otherwise, do a DB search for this new leaderboard lookup and update the cache afterward
+            var results = new LeaderboardPage();
             var records = new List<PlayerRecord>();
             Dictionary<Guid, string> playerNameLookup = new Dictionary<Guid, string>();
             using (var context = DbInterface.CreatePlayerContext())
             {
                 records.AddRange(GetMatchingRecords(context, type, recordId, scoreType, page));
                 playerNameLookup = GetPlayerNameLookup(context, records);
-                dtos = CreateRecordDtos(records.ToArray(), playerNameLookup, recordTransformer);
+                results = CreateLeaderboardPage(records.ToArray(), playerNameLookup, recordTransformer);
             }
 
-            return dtos;
+            results.Cache(queryString);
+            return results;
+        }
+
+        public static bool TryGetCachedLeaderboardPage(string searchKey, out LeaderboardPage results)
+        {
+            results = null;
+            if (PlayerRecordCache.CachedRecords.TryGetValue(searchKey, out var cachedResults))
+            {
+                if (cachedResults.RequeryTimestamp >= Intersect.Utilities.Timing.Global.MillisecondsUtc)
+                {
+                    Console.WriteLine("Returning cached result!");
+                    results = cachedResults;
+                }
+            }
+
+            return results != null;
         }
 
         /// <summary>
@@ -145,10 +215,21 @@ namespace Intersect.Server.Database.PlayerData.Players
         /// <param name="page">The page of record results we're returning</param>
         /// <param name="term">The player name we're looking up</param>
         /// <param name="recordTransformer">A function that returns a string from a long that transforms a long as desired to give the correct output of the record</param>
-        /// <returns>A list of <see cref="RecordDto"/> that we can use to send a packet of</returns>
-        public static List<RecordDto> GetRecordsForPlayerName(RecordType type, Guid recordId, RecordScoring scoreType, int page, string term, Func<long, string> recordTransformer = null)
+        /// <returns>A <see cref="LeaderboardPage"/> that we can use to send a packet of</returns>
+        public static LeaderboardPage GetLeaderboardPageOfPlayer(RecordType type, Guid recordId, RecordScoring scoreType, int page, string term, Func<long, string> recordTransformer = null)
         {
-            var dtos = new List<RecordDto>();
+            if (recordTransformer == null)
+            {
+                recordTransformer = (val) => val.ToString();
+            }
+
+            var queryString = PlayerRecordCache.CreateSearchQueryString(type, recordId, scoreType, page);
+            if (TryGetCachedLeaderboardPage(queryString, out var cachedResults))
+            {
+                return cachedResults;
+            }
+
+            var results = new LeaderboardPage();
             var records = new List<PlayerRecord>();
             Dictionary<Guid, string> playerNameLookup = new Dictionary<Guid, string>();
             using (var context = DbInterface.CreatePlayerContext())
@@ -162,15 +243,15 @@ namespace Intersect.Server.Database.PlayerData.Players
 
                 if (playerId == default)
                 {
-                    return dtos;
+                    return results;
                 }
 
                 var relevantRecords = GetMatchingRecordsForPlayer(playerId, context, type, recordId, scoreType, page);
                 playerNameLookup = GetPlayerNameLookup(context, records);
-                dtos = CreateRecordDtos(relevantRecords, playerNameLookup, recordTransformer);
+                results = CreateLeaderboardPage(relevantRecords, playerNameLookup, recordTransformer);
             }
 
-            return dtos;
+            return results;
         }
 
         private static PlayerRecord[] GetMatchingRecords(PlayerContext context, RecordType type, Guid recordId, RecordScoring scoreType, int page)
@@ -271,7 +352,7 @@ namespace Intersect.Server.Database.PlayerData.Players
             return playerNameLookup;
         }
 
-        private static List<RecordDto> CreateRecordDtos(PlayerRecord[] records, Dictionary<Guid, string> playerNameLookup, Func<long, string> recordTransformer)
+        private static LeaderboardPage CreateLeaderboardPage(PlayerRecord[] records, Dictionary<Guid, string> playerNameLookup, Func<long, string> recordTransformer)
         {
             List<RecordDto> dtos = new List<RecordDto>();
             foreach (var record in records)
@@ -295,7 +376,7 @@ namespace Intersect.Server.Database.PlayerData.Players
                 dtos.Add(new RecordDto(name, formattedRecord));
             }
 
-            return dtos;
+            return new LeaderboardPage(dtos, Intersect.Utilities.Timing.Global.MillisecondsUtc);
         }
     }
 }

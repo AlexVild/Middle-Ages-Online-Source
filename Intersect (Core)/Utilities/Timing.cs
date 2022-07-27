@@ -6,7 +6,7 @@ namespace Intersect.Utilities
     /// <summary>
     /// Utility class for timing.
     /// </summary>
-    public sealed class Timing
+    public sealed partial class Timing
     {
         private static int lastTicks = -1;
         private static DateTime lastDateTime = DateTime.MinValue;
@@ -98,5 +98,10 @@ namespace Intersect.Utilities
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)] get => TicksUTC / TimeSpan.TicksPerMillisecond;
         }
+    }
+
+    public sealed partial class Timing
+    {
+        public static readonly long Minutes = 60000;
     }
 }
