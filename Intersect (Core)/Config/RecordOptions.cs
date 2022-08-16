@@ -21,5 +21,7 @@ namespace Intersect.Config
         public int CraftingRecordUpdateInterval = 10;
 
         public int RecordCacheIntervalMinutes = 15;
+
+        public int RecordsPerLeaderboardPage = 20;
     }
 }

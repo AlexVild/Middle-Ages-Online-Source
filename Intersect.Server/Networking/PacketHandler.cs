@@ -4269,5 +4269,18 @@ namespace Intersect.Server.Networking
 
             target.InviteToParty(player);
         }
+
+        public void HandlePacket(Client client, RequestLeaderboardPacket packet)
+        {
+            var player = client?.Entity;
+
+            if (player == null)
+            {
+                return;
+            }
+
+            PlayerRecord.OpenLeaderboardFor(player, packet.Type, packet.RecordId, packet.ScoreType);
+        }
+
     }
 }

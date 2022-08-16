@@ -22,6 +22,7 @@ using Intersect.Utilities;
 using Intersect.GameObjects.Timers;
 using Intersect.Server.Database.PlayerData;
 using Intersect.Server.Core;
+using Intersect.Network.Packets.Server;
 
 namespace Intersect.Server.Entities.Events
 {
@@ -2719,7 +2720,7 @@ namespace Intersect.Server.Entities.Events
         {
             if (player == null) return;
 
-            PlayerRecord.OpenLeaderboardFor(player, command.RecordType, command.RecordId, command.ScoreType);
+            player.SendPacket(new OpenLeaderboardPacket(command.RecordType, command.DisplayName, command.ScoreType, command.RecordId));
         }
     }
 }

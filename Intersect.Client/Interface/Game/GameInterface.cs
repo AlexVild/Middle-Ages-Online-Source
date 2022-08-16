@@ -20,6 +20,7 @@ using Intersect.Client.Items;
 using System.Collections.Generic;
 using static Intersect.Client.Interface.Game.Bank.BankWindow;
 using Intersect.Client.General.Leaderboards;
+using Intersect.Client.Interface.Game.Leaderboards;
 
 namespace Intersect.Client.Interface.Game
 {
@@ -157,7 +158,7 @@ namespace Intersect.Client.Interface.Game
             mWarnings = new WarningWindow(GameCanvas);
             Map = new MapScreen.MapScreen();
 
-            _InitGameGui();
+            _InitGameGui(GameCanvas);
         }
 
         //Chatbox
@@ -770,17 +771,21 @@ namespace Intersect.Client.Interface.Game
         private PlayerHud mHUD;
         private PartyHud mPartyHUD;
         public Leaderboard Leaderboard => Globals.Me?.Leaderboard ?? new Leaderboard();
+        public LeaderboardWindow LeaderboardWindow;
 
-        private void _InitGameGui()
+        private void _InitGameGui(Canvas gameCanvas)
         {
             mHUD = new PlayerHud();
             mPartyHUD = new PartyHud();
+            LeaderboardWindow = new LeaderboardWindow(gameCanvas);
         }
 
         private void _Draw()
         {
             mHUD.Draw();
             mPartyHUD.Draw();
+
+            LeaderboardWindow.Update();
         }
 
         public PlayerHud GetHud()

@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 namespace Intersect
 {
 
-    public class Options
+    public partial class Options
     {
 
         //Caching Json
@@ -59,8 +59,6 @@ namespace Intersect
         [JsonProperty("Security")] public SecurityOptions SecurityOpts = new SecurityOptions();
 
         [JsonProperty("Loot")] public LootOptions LootOpts = new LootOptions();
-        
-        [JsonProperty("Records")] public RecordOptions RecordOpts = new RecordOptions();
 
         public ProcessingOptions Processing = new ProcessingOptions();
 
@@ -458,4 +456,8 @@ namespace Intersect
 
     }
 
+    public partial class Options
+    {
+        [JsonProperty("Records")] public RecordOptions RecordOpts = new RecordOptions();
+    }
 }

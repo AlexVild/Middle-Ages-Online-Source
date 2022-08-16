@@ -26,6 +26,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Intersect.GameObjects.Timers;
 using Newtonsoft.Json.Linq;
+using Intersect.Client.General.Leaderboards;
 
 namespace Intersect.Client.Networking
 {
@@ -2510,6 +2511,44 @@ namespace Intersect.Client.Networking
             }
 
             Globals.TradeAccepted = true;
+        }
+
+        public void HandlePacket(IPacketSender packetSender, OpenLeaderboardPacket packet)
+        {
+            if (Globals.Me == null)
+            {
+                return;
+            }
+
+            Globals.Me.Leaderboard.Clear();
+            Globals.Me.Leaderboard.DisplayName = packet.DisplayName;
+            Globals.Me.Leaderboard.Page = 0;
+            Globals.Me.Leaderboard.RecordId = packet.RecordId;
+            Globals.Me.Leaderboard.ScoreType = packet.ScoreType;
+            Globals.Me.Leaderboard.Open();
+        }
+        
+        public void HandlePacket(IPacketSender packetSender, LeaderboardPagePacket packet)
+        {
+            if (Globals.Me == null)
+            {
+                return;
+            }
+
+            Globals.Me.Leaderboard.Records.Clear();
+            var recordPage = new List<Record>();
+            var maxPage = Options.Instance.RecordOpts.RecordsPerLeaderboardPage;
+
+            var idx = maxPage * Globals.Me.Leaderboard.Page;
+            foreach (var record in packet.Records)
+            {
+                var rec = new Record(record.Participants, idx, record.RecordDisplay);
+                recordPage.Add(rec);
+                idx++;
+            }
+
+            Interface.Interface.GameUi.LeaderboardWindow.LoadRecords();
+            Globals.Me.Leaderboard.Loading = false;
         }
     }
 }

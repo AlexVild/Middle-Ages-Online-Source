@@ -50,7 +50,6 @@ namespace Intersect.Server.Database.PlayerData.Players
 
         public void Cache(string key)
         {
-            Console.WriteLine($"Caching {key}...");
             PlayerRecordCache.CachedRecords[key] = this;
         }
     }
@@ -72,7 +71,7 @@ namespace Intersect.Server.Database.PlayerData.Players
         /// <summary>
         /// The amount of records to return per visible page
         /// </summary>
-        public static readonly int PageLimit = 20;
+        public static readonly int PageLimit = Options.Instance.RecordOpts.RecordsPerLeaderboardPage;
 
         /// <summary>
         /// The database Id of the record.
@@ -136,21 +135,14 @@ namespace Intersect.Server.Database.PlayerData.Players
 
         public static void OpenLeaderboardFor(Player player, RecordType recordType, Guid recordId, RecordScoring scoringType)
         {
-            var recordBuilder = new StringBuilder();
-
-            var records = GetLeaderboardPage(recordType, recordId, scoringType, 0);
-            if (records?.Records == null)
+            var leaderboard = GetLeaderboardPage(recordType, recordId, scoringType, 0);
+            if (leaderboard?.Records == null)
             {
                 PacketSender.SendChatMsg(player, "There was an error while opening this leaderboard.", Enums.ChatMessageType.Error);
                 return;
             }
 
-            foreach(var record in records?.Records)
-            {
-                recordBuilder.AppendLine(string.Join(": ", record.RecordDisplay, record.Participants));
-            }
-
-            PacketSender.SendEventDialog(player, recordBuilder.ToString(), string.Empty, default);
+            PacketSender.SendRecordPageTo(player, leaderboard.Records);
         }
 
         /// <summary>

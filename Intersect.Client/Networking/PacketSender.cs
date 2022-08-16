@@ -9,6 +9,7 @@ using Intersect.Network.Packets.Client;
 using Intersect.Enums;
 using Intersect.Utilities;
 using Intersect.Client.Entities;
+using Intersect.Client.General.Leaderboards;
 
 namespace Intersect.Client.Networking
 {
@@ -503,6 +504,16 @@ namespace Intersect.Client.Networking
         public static void SendPartyInviteName(string playerName)
         {
             Network.SendPacket(new PartyInviteNamePacket(playerName));
+        }
+
+        public static void SendLeaderboardRequest(Leaderboard leaderboard)
+        {
+            if (Globals.Me == null || Globals.Me.Leaderboard == null)
+            {
+                return;
+            }
+
+            Network.SendPacket(new RequestLeaderboardPacket(leaderboard.Page, leaderboard.Type, leaderboard.ScoreType, leaderboard.RecordId, leaderboard.SearchTerm));
         }
     }
 }

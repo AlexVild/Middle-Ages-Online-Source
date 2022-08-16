@@ -2443,6 +2443,7 @@ namespace Intersect.Server.Networking
             var mapsExplored = player.MapsExplored.Select(mapsExp => mapsExp.MapId).ToList();
             player?.SendPacket(new MapsExploredPacket(mapsExplored));
         }
+        
         public static void SendTradeAcceptPacketTo(Player player)
         {
             if (player == null)
@@ -2451,6 +2452,16 @@ namespace Intersect.Server.Networking
             }
 
             player?.SendPacket(new TradeAcceptedPacket());
+        }
+
+        public static void SendRecordPageTo(Player player, List<RecordDto> records)
+        {
+            if (player == null)
+            {
+                return;
+            }
+
+            player?.SendPacket(new LeaderboardPagePacket(records));
         }
     }
 

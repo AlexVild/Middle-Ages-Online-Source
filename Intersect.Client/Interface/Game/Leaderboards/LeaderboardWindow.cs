@@ -73,14 +73,6 @@ namespace Intersect.Client.Interface.Game.Leaderboards
             Background.Title = CurrentLeaderboard.DisplayName;
         }
 
-        public void Open()
-        {
-            ClearRecords();
-            CurrentLeaderboard.Loading = true;
-            CurrentLeaderboard.IsOpen = true;
-            // Request leaderboard information
-        }
-
         private void ClearRecords()
         {
             foreach (var record in Records)
