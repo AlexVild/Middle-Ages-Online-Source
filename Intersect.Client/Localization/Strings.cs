@@ -2250,5 +2250,32 @@ namespace Intersect.Client.Localization
             public static LocalizedString ClassInfoWarrior = @"A warrior is built to withstand damage, and deal it back with incredible blows.\nA warrior wielding a shield can provide boosts to surrounding players, and learn ranged and crowd control magic pwoers.\nA warrior wielding a 2-handed weapon can deal massive damage to a crowd with the sword's multi-target swipe.";
 
         }
+        
+        public partial struct Leaderboard
+        {
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Loading = @"Fetching records...";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Next = @"Next";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString NoRecords = @"No records found!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Page = @"Page {00}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Prev = @"Prev";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Record = @"Record";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString RecordHolder = @"Record Holder";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString SearchButton = @"Search";
+        }
     }
 }

@@ -4279,7 +4279,7 @@ namespace Intersect.Server.Networking
                 return;
             }
 
-            PlayerRecord.OpenLeaderboardFor(player, packet.Type, packet.RecordId, packet.ScoreType);
+            PlayerRecord.SendLeaderboardPageTo(player, packet.Type, packet.RecordId, packet.ScoreType, packet.Page);
         }
 
     }

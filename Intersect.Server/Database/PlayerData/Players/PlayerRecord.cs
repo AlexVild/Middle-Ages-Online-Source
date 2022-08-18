@@ -37,15 +37,17 @@ namespace Intersect.Server.Database.PlayerData.Players
         public List<RecordDto> Records { get; set; }
         public long QueryTimestamp { get; set; }
         public long RequeryTimestamp => QueryTimestamp + TimeUntilRequery;
+        public int CurrentPage { get; set; }
 
         public LeaderboardPage()
         {
         }
 
-        public LeaderboardPage(List<RecordDto> records, long queryTimestamp)
+        public LeaderboardPage(List<RecordDto> records, long queryTimestamp, int currentPage)
         {
             Records = records;
             QueryTimestamp = queryTimestamp;
+            CurrentPage = currentPage;
         }
 
         public void Cache(string key)
@@ -117,6 +119,9 @@ namespace Intersect.Server.Database.PlayerData.Players
         [JsonIgnore]
         public virtual List<RecordTeammateInstance> Teammates { get; set; } = new List<RecordTeammateInstance>();
 
+        [JsonIgnore, NotMapped]
+        public int Index;
+
         /// <summary>
         /// Saves this player record to the player context
         /// </summary>
@@ -133,16 +138,28 @@ namespace Intersect.Server.Database.PlayerData.Players
             }
         }
 
-        public static void OpenLeaderboardFor(Player player, RecordType recordType, Guid recordId, RecordScoring scoringType)
+        public static int GetPlayersPage(Player player, PlayerRecord[] records)
         {
-            var leaderboard = GetLeaderboardPage(recordType, recordId, scoringType, 0);
+            var firstRecord = records.FirstOrDefault(record => record.PlayerId == player.Id || record.Teammates.Select(tm => tm.PlayerId).Contains(player.Id));
+            // Player doesn't have a record yet - give them the first page
+            if (firstRecord == default)
+            {
+                return 0;
+            }
+
+            return (int)Math.Ceiling(firstRecord.Index / (double)Options.Instance.RecordOpts.RecordsPerLeaderboardPage);
+        }
+
+        public static void SendLeaderboardPageTo(Player player, RecordType recordType, Guid recordId, RecordScoring scoringType, int pageNum)
+        {
+            var leaderboard = GetLeaderboardPage(player, recordType, recordId, scoringType, pageNum);
             if (leaderboard?.Records == null)
             {
                 PacketSender.SendChatMsg(player, "There was an error while opening this leaderboard.", Enums.ChatMessageType.Error);
                 return;
             }
 
-            PacketSender.SendRecordPageTo(player, leaderboard.Records);
+            PacketSender.SendRecordPageTo(player, leaderboard.Records, leaderboard.CurrentPage);
         }
 
         /// <summary>
@@ -154,7 +171,7 @@ namespace Intersect.Server.Database.PlayerData.Players
         /// <param name="page">The page of record results we're returning</param>
         /// <param name="recordTransformer">A function that returns a string from a long that transforms a long as desired to give the correct output of the record</param>
         /// <returns>A <see cref="LeaderboardPage"/> that we can use to send a packet of</returns>
-        public static LeaderboardPage GetLeaderboardPage(RecordType type, Guid recordId, RecordScoring scoreType, int page, Func<long, string> recordTransformer = null)
+        public static LeaderboardPage GetLeaderboardPage(Player player, RecordType type, Guid recordId, RecordScoring scoreType, int page, Func<long, string> recordTransformer = null)
         {
             if (recordTransformer == null)
             {
@@ -174,13 +191,33 @@ namespace Intersect.Server.Database.PlayerData.Players
             Dictionary<Guid, string> playerNameLookup = new Dictionary<Guid, string>();
             using (var context = DbInterface.CreatePlayerContext())
             {
-                records.AddRange(GetMatchingRecords(context, type, recordId, scoreType, page));
+                var allRecords = GetMatchingRecords(context, type, recordId, scoreType);
+                // Fetch the first page that contains the player as a holder
+                if (page == -1)
+                {
+                    page = GetPlayersPage(player, allRecords);
+                }
+                var paginatedRecords = PaginateRecords(allRecords, page);
+                // Link up teammate information _after_ paging the set to save on time
+                foreach(var record in paginatedRecords)
+                {
+                    record.Teammates = context.Record_Teammate.Where(teammate => teammate.RecordInstanceId == record.Id).ToList();
+                }
+                records.AddRange(PaginateRecords(allRecords, page));
                 playerNameLookup = GetPlayerNameLookup(context, records);
-                results = CreateLeaderboardPage(records.ToArray(), playerNameLookup, recordTransformer);
+
+                results = CreateLeaderboardPage(records.ToArray(), playerNameLookup, recordTransformer, page);
             }
 
             results.Cache(queryString);
             return results;
+        }
+
+        public static PlayerRecord[] PaginateRecords(PlayerRecord[] records, int page)
+        {
+            return records.Skip(page * PageLimit)
+                    .Take(PageLimit)
+                    .ToArray();
         }
 
         public static bool TryGetCachedLeaderboardPage(string searchKey, out LeaderboardPage results)
@@ -198,55 +235,7 @@ namespace Intersect.Server.Database.PlayerData.Players
             return results != null;
         }
 
-        /// <summary>
-        /// Gets all records within a certain type/ID that are associated with a certain player by name
-        /// </summary>
-        /// <param name="type">The record type we're looking for</param>
-        /// <param name="recordId">The record ID for identification within the record type</param>
-        /// <param name="scoreType">The type of scoring we want for the record</param>
-        /// <param name="page">The page of record results we're returning</param>
-        /// <param name="term">The player name we're looking up</param>
-        /// <param name="recordTransformer">A function that returns a string from a long that transforms a long as desired to give the correct output of the record</param>
-        /// <returns>A <see cref="LeaderboardPage"/> that we can use to send a packet of</returns>
-        public static LeaderboardPage GetLeaderboardPageOfPlayer(RecordType type, Guid recordId, RecordScoring scoreType, int page, string term, Func<long, string> recordTransformer = null)
-        {
-            if (recordTransformer == null)
-            {
-                recordTransformer = (val) => val.ToString();
-            }
-
-            var queryString = PlayerRecordCache.CreateSearchQueryString(type, recordId, scoreType, page);
-            if (TryGetCachedLeaderboardPage(queryString, out var cachedResults))
-            {
-                return cachedResults;
-            }
-
-            var results = new LeaderboardPage();
-            var records = new List<PlayerRecord>();
-            Dictionary<Guid, string> playerNameLookup = new Dictionary<Guid, string>();
-            using (var context = DbInterface.CreatePlayerContext())
-            {
-                var playerId = context.Players
-                    .Where(player => player.Name.Trim().ToLower() == term.Trim().ToLower())
-                    .Take(1)
-                    .Select(player => player.Id)
-                    .ToList()
-                    .FirstOrDefault();
-
-                if (playerId == default)
-                {
-                    return results;
-                }
-
-                var relevantRecords = GetMatchingRecordsForPlayer(playerId, context, type, recordId, scoreType, page);
-                playerNameLookup = GetPlayerNameLookup(context, records);
-                results = CreateLeaderboardPage(relevantRecords, playerNameLookup, recordTransformer);
-            }
-
-            return results;
-        }
-
-        private static PlayerRecord[] GetMatchingRecords(PlayerContext context, RecordType type, Guid recordId, RecordScoring scoreType, int page)
+        private static PlayerRecord[] GetMatchingRecords(PlayerContext context, RecordType type, Guid recordId, RecordScoring scoreType)
         {
             if (context == null)
             {
@@ -260,8 +249,6 @@ namespace Intersect.Server.Database.PlayerData.Players
                 queryRecords = context.Player_Record
                     .Where(record => record.Type == type && record.RecordId == recordId && record.ScoreType == scoreType)
                     .OrderByDescending(record => record.Amount)
-                    .Skip(page * PageLimit)
-                    .Take(PageLimit)
                     .ToArray();
             }
             else
@@ -269,52 +256,17 @@ namespace Intersect.Server.Database.PlayerData.Players
                 queryRecords = context.Player_Record
                     .Where(record => record.Type == type && record.RecordId == recordId && record.ScoreType == scoreType)
                     .OrderBy(record => record.Amount)
-                    .Skip(page * PageLimit)
-                    .Take(PageLimit)
                     .ToArray();
             }
 
+            var idx = 0;
             foreach (var record in queryRecords)
             {
-                record.Teammates = context.Record_Teammate.Where(teammate => teammate.RecordInstanceId == record.Id).ToList();
+                record.Index = idx;
+                idx++;
             }
 
             return queryRecords;
-        }
-
-        private static PlayerRecord[] GetMatchingRecordsForPlayer(Guid playerId, PlayerContext context, RecordType type, Guid recordId, RecordScoring scoreType, int page)
-        {
-            if (context == null)
-            {
-                return Array.Empty<PlayerRecord>();
-            }
-
-            var teammateRecords = context.Record_Teammate
-                    .Where(tm => tm.PlayerId == playerId)
-                    .Select(tm => tm.RecordInstanceId)
-                    .ToList();
-
-            PlayerRecord[] relevantRecords;
-            if (scoreType == RecordScoring.High)
-            {
-                relevantRecords = context.Player_Record
-                    .Where(record => record.Type == type && (teammateRecords.Contains(record.Id) || record.PlayerId == playerId) && record.RecordId == recordId && record.ScoreType == scoreType)
-                    .OrderByDescending(record => record.Amount)
-                    .Skip(page * PageLimit)
-                    .Take(PageLimit)
-                    .ToArray();
-            }
-            else
-            {
-                relevantRecords = context.Player_Record
-                    .Where(record => record.Type == type && (teammateRecords.Contains(record.Id) || record.PlayerId == playerId) && record.RecordId == recordId && record.ScoreType == scoreType)
-                    .OrderBy(record => record.Amount)
-                    .Skip(page * PageLimit)
-                    .Take(PageLimit)
-                    .ToArray();
-            }
-
-            return relevantRecords;
         }
 
         private static Dictionary<Guid, string> GetPlayerNameLookup(PlayerContext context, List<PlayerRecord> records)
@@ -344,7 +296,7 @@ namespace Intersect.Server.Database.PlayerData.Players
             return playerNameLookup;
         }
 
-        private static LeaderboardPage CreateLeaderboardPage(PlayerRecord[] records, Dictionary<Guid, string> playerNameLookup, Func<long, string> recordTransformer)
+        private static LeaderboardPage CreateLeaderboardPage(PlayerRecord[] records, Dictionary<Guid, string> playerNameLookup, Func<long, string> recordTransformer, int currentPage)
         {
             List<RecordDto> dtos = new List<RecordDto>();
             foreach (var record in records)
@@ -365,10 +317,10 @@ namespace Intersect.Server.Database.PlayerData.Players
                 var name = string.Join(", ", names);
                 string formattedRecord = recordTransformer(record.Amount);
 
-                dtos.Add(new RecordDto(name, formattedRecord));
+                dtos.Add(new RecordDto(name, formattedRecord, record.Index));
             }
 
-            return new LeaderboardPage(dtos, Intersect.Utilities.Timing.Global.MillisecondsUtc);
+            return new LeaderboardPage(dtos, Intersect.Utilities.Timing.Global.MillisecondsUtc, currentPage);
         }
     }
 }

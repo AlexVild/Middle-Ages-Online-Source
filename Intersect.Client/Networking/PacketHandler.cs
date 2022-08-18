@@ -2526,6 +2526,7 @@ namespace Intersect.Client.Networking
             Globals.Me.Leaderboard.RecordId = packet.RecordId;
             Globals.Me.Leaderboard.ScoreType = packet.ScoreType;
             Globals.Me.Leaderboard.Open();
+            Globals.Me.Leaderboard.RequestPlayersRecord();
         }
         
         public void HandlePacket(IPacketSender packetSender, LeaderboardPagePacket packet)
@@ -2537,16 +2538,12 @@ namespace Intersect.Client.Networking
 
             Globals.Me.Leaderboard.Records.Clear();
             var recordPage = new List<Record>();
-            var maxPage = Options.Instance.RecordOpts.RecordsPerLeaderboardPage;
-
-            var idx = maxPage * Globals.Me.Leaderboard.Page;
             foreach (var record in packet.Records)
             {
-                var rec = new Record(record.Participants, idx, record.RecordDisplay);
-                recordPage.Add(rec);
-                idx++;
+                recordPage.Add(new Record(record.Participants, record.Index, record.RecordDisplay));
             }
-
+            Globals.Me.Leaderboard.Page = packet.CurrentPage;
+            Globals.Me.Leaderboard.Records = recordPage;
             Interface.Interface.GameUi.LeaderboardWindow.LoadRecords();
             Globals.Me.Leaderboard.Loading = false;
         }

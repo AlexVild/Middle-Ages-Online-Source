@@ -33,28 +33,32 @@ namespace Intersect.Client.General.Leaderboards
             SearchTerm = string.Empty;
         }
 
-        public void RequestPage()
+        public void RequestPage(int page)
         {
             Loading = true;
-            PacketSender.SendLeaderboardRequest(this);
+            PacketSender.SendLeaderboardRequest(this, page);
+        }
+
+        public void RequestPlayersRecord()
+        {
+            Loading = true;
+            PacketSender.SendLeaderboardRequestForPlayer(this);
         }
 
         public void NextPage()
         {
-            Page++;
-            RequestPage();
+            RequestPage(Page + 1);
         }
 
         public void PreviousPage()
         {
-            Page = MathHelper.Clamp(Page--, 0, int.MaxValue);
-            RequestPage();
+            RequestPage(Page - 1);
         }
 
         public void GotoPage(int page)
         {
             Page = page;
-            RequestPage();
+            RequestPage(page);
         }
 
         public void Open()

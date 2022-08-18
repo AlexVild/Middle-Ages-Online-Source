@@ -11,10 +11,14 @@ namespace Intersect.Network.Packets.Server
         [Key(1)]
         public string RecordDisplay { get; set; }
 
-        public RecordDto(string participants, string recordDisplay)
+        [Key(2)]
+        public int Index { get; set; }
+
+        public RecordDto(string participants, string recordDisplay, int index)
         {
             Participants = participants;
             RecordDisplay = recordDisplay;
+            Index = index;
         }
     }
 }

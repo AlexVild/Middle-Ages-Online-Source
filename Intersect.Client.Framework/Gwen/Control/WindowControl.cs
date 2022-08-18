@@ -13,7 +13,7 @@ namespace Intersect.Client.Framework.Gwen.Control
     /// <summary>
     ///     Movable window with title bar.
     /// </summary>
-    public class WindowControl : ResizableControl
+    public partial class WindowControl : ResizableControl
     {
 
         public enum ControlState
@@ -55,7 +55,7 @@ namespace Intersect.Client.Framework.Gwen.Control
         /// <param name="parent">Parent control.</param>
         /// <param name="caption">Window caption.</param>
         /// <param name="modal">Determines whether the window should be modal.</param>
-        public WindowControl(Base parent, string title = "", bool modal = false, string name = "") : base(parent, name)
+        public WindowControl(Base parent, string title = "", bool modal = false, string name = "", Action onClose = null) : base(parent, name)
         {
             mTitleBar = new Dragger(this);
             mTitleBar.Height = 24;
@@ -92,6 +92,8 @@ namespace Intersect.Client.Framework.Gwen.Control
             {
                 MakeModal();
             }
+
+            _WindowControl(parent, title, modal, name, onClose);
         }
 
         /// <summary>
@@ -252,6 +254,8 @@ namespace Intersect.Client.Framework.Gwen.Control
             {
                 Parent.RemoveChild(this, true);
             }
+
+            _CloseButtonPressed(control, args);
         }
 
         /// <summary>
@@ -449,4 +453,21 @@ namespace Intersect.Client.Framework.Gwen.Control
 
     }
 
+    public partial class WindowControl : ResizableControl
+    {
+        private Action OnClose;
+
+        public void _WindowControl(Base parent, string title = "", bool modal = false, string name = "", Action onClose = null)
+        {
+            OnClose = onClose;
+        }
+
+        protected virtual void _CloseButtonPressed(Base control, EventArgs args)
+        {
+            if (OnClose != null)
+            {
+                OnClose.Invoke();
+            }
+        }
+    }
 }

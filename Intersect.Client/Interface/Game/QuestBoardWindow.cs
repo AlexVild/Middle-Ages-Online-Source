@@ -164,6 +164,10 @@ namespace Intersect.Client.Interface.Game
 
         public void Close()
         {
+            foreach(var child in mQuestBoardWindow.Children.ToArray())
+            {
+                mQuestBoardWindow.RemoveChild(child, false);
+            }
             mQuestBoardWindow.Close();
         }
 

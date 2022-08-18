@@ -246,6 +246,7 @@ namespace Intersect.Client.Entities
                      Globals.InTrade == false &&
                      Globals.InMapTransition == false &&
                      !Interface.Interface.GameUi.Map.IsOpen &&
+                     (!Globals.Me.Leaderboard?.IsOpen ?? true) &&
                      !Interface.Interface.HasInputFocus());
         }
 

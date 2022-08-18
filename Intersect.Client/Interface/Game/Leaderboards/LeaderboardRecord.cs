@@ -10,12 +10,12 @@ using System.Threading.Tasks;
 
 namespace Intersect.Client.Interface.Game.Leaderboards
 {
-    public class LeaderboardRecord : IDisposable
+    public class LeaderboardRecord : Base
     {
         public Base Container { get; set; }
         private Record CurrentRecord { get; set; }
 
-        private ImagePanel RecordBackground { get; set; }
+        public ImagePanel RecordBackground { get; set; }
         private Label RecordIndex { get; set; }
         private Label RecordValue { get; set; }
         private Label RecordHolder { get; set; }
@@ -29,7 +29,7 @@ namespace Intersect.Client.Interface.Game.Leaderboards
 
             RecordIndex = new Label(RecordBackground, "RecordIndex")
             {
-                Text = record.Index.ToString()
+                Text = (record.Index + 1).ToString()
             };
 
             RecordValue = new Label(RecordBackground, "RecordValue")
@@ -51,6 +51,14 @@ namespace Intersect.Client.Interface.Game.Leaderboards
         public void Dispose()
         {
             RecordBackground.Dispose();
+        }
+
+        public void SetRecord(Record record)
+        {
+            CurrentRecord = record;
+            RecordIndex.Text = record.Index.ToString();
+            RecordValue.Text = record.Value;
+            RecordHolder.Text = record.Holder;
         }
     }
 }

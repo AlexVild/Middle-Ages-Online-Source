@@ -9,9 +9,13 @@ namespace Intersect.Network.Packets.Server
         [Key(0)]
         public List<RecordDto> Records;
 
-        public LeaderboardPagePacket(List<RecordDto> records)
+        [Key(1)]
+        public int CurrentPage;
+
+        public LeaderboardPagePacket(List<RecordDto> records, int currentPage)
         {
             Records = records;
+            CurrentPage = currentPage;
         }
     }
 }

@@ -506,14 +506,25 @@ namespace Intersect.Client.Networking
             Network.SendPacket(new PartyInviteNamePacket(playerName));
         }
 
-        public static void SendLeaderboardRequest(Leaderboard leaderboard)
+        public static void SendLeaderboardRequest(Leaderboard leaderboard, int page)
         {
             if (Globals.Me == null || Globals.Me.Leaderboard == null)
             {
                 return;
             }
 
-            Network.SendPacket(new RequestLeaderboardPacket(leaderboard.Page, leaderboard.Type, leaderboard.ScoreType, leaderboard.RecordId, leaderboard.SearchTerm));
+            Network.SendPacket(new RequestLeaderboardPacket(page, leaderboard.Type, leaderboard.ScoreType, leaderboard.RecordId, leaderboard.SearchTerm));
+        }
+
+        public static void SendLeaderboardRequestForPlayer(Leaderboard leaderboard)
+        {
+            if (Globals.Me == null || Globals.Me.Leaderboard == null)
+            {
+                return;
+            }
+
+            // a page of -1 indicates we want whatever page the player is on, or 0 if not found
+            Network.SendPacket(new RequestLeaderboardPacket(-1, leaderboard.Type, leaderboard.ScoreType, leaderboard.RecordId, leaderboard.SearchTerm));
         }
     }
 }
