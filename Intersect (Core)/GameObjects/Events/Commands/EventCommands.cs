@@ -1239,6 +1239,7 @@ namespace Intersect.GameObjects.Events.Commands
         Value = 0,
         Time,
     }
+
     public class OpenLeaderboardCommand : EventCommand
     {
         public override EventCommandType Type { get; } = EventCommandType.OpenLeaderboard;
@@ -1252,5 +1253,16 @@ namespace Intersect.GameObjects.Events.Commands
         public string DisplayName { get; set; }
 
         public LeaderboardDisplayMode DisplayMode { get; set; }
+    }
+
+    public class ClearRecordCommand : EventCommand
+    {
+        public override EventCommandType Type { get; } = EventCommandType.ClearRecord;
+
+        public RecordType RecordType { get; set; }
+
+        public Guid RecordId { get; set; }
+
+        public RecordScoring ScoreType { get; set; }
     }
 }

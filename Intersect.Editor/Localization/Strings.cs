@@ -2201,6 +2201,7 @@ Tick timer saved in server config.json.";
                 {"stoptimer", @"Stop Timer"},
                 {"changemapspawngroup", @"Change Map Spawn Group"},
                 {"openleaderboard", @"Open Leaderboard"},
+                {"clearrecord", @"Clear Record"},
             };
 
         }
@@ -6065,6 +6066,9 @@ Negative values for time to flow backwards.";
 
         public partial struct EventCommandList
         {
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ClearRecord = @"Clear Record for {00} with score type {01}";
+
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString OpenLeaderboard = @"Open leaderboard '{00}' for {01} (sort: {02}, display type: {03})";
         }

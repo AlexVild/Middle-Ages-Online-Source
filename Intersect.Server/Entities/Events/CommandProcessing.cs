@@ -2722,5 +2722,18 @@ namespace Intersect.Server.Entities.Events
 
             player.SendPacket(new OpenLeaderboardPacket(command.RecordType, command.DisplayName, command.ScoreType, command.RecordId));
         }
+
+        private static void ProcessCommand(
+            ClearRecordCommand command,
+            Player player,
+            Event instance,
+            CommandInstance stackInfo,
+            Stack<CommandInstance> callStack
+        )
+        {
+            if (player == null) return;
+
+            player.DeleteRecord(command.RecordType, command.RecordId, command.ScoreType);
+        }
     }
 }

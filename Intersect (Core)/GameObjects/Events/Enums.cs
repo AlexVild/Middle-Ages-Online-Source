@@ -253,7 +253,8 @@
 
         ChangeSpawnGroup,
 
-        OpenLeaderboard
+        OpenLeaderboard,
+        ClearRecord
     }
 
     public enum NPCGuildManagementSelection

@@ -111,6 +111,12 @@
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_ChangeMapSpawnGroup.Designer.cs">
       <DependentUpon>EventCommand_ChangeMapSpawnGroup.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_ClearRecord.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_ClearRecord.Designer.cs">
+      <DependentUpon>EventCommand_ClearRecord.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_FlashScreen.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -756,6 +762,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_ChangeMapSpawnGroup.resx">
       <DependentUpon>EventCommand_ChangeMapSpawnGroup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_ClearRecord.resx">
+      <DependentUpon>EventCommand_ClearRecord.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_CompleteQuestTask.resx">
       <DependentUpon>EventCommand_CompleteQuestTask.cs</DependentUpon>

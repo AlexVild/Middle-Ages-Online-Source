@@ -6,6 +6,7 @@ using System.Text;
 using Intersect.GameObjects.Events;
 using Intersect.Network.Packets.Server;
 using Intersect.Server.Entities;
+using Intersect.Server.Localization;
 using Intersect.Server.Networking;
 using Newtonsoft.Json;
 
@@ -132,6 +133,19 @@ namespace Intersect.Server.Database.PlayerData.Players
                 using (var context = DbInterface.CreatePlayerContext(readOnly: false))
                 {
                     context.Player_Record.Update(this);
+                    context.ChangeTracker.DetectChanges();
+                    context.SaveChanges();
+                }
+            }
+        }
+
+        public void Remove()
+        {
+            lock (mLock)
+            {
+                using (var context = DbInterface.CreatePlayerContext(readOnly: false))
+                {
+                    context.Player_Record.Remove(this);
                     context.ChangeTracker.DetectChanges();
                     context.SaveChanges();
                 }
@@ -291,6 +305,13 @@ namespace Intersect.Server.Database.PlayerData.Players
             foreach (var player in relevantPlayers)
             {
                 playerNameLookup[player.Id] = player.Name;
+            }
+
+            // If there are players that are no longer in our DB context/can't be found, then mark them as such
+            var missingPlayers = playersInRecords.Except(playerNameLookup.Keys);
+            foreach (var player in missingPlayers)
+            {
+                playerNameLookup[player] = Strings.Records.DeletedHolder;
             }
 
             return playerNameLookup;

@@ -1639,6 +1639,9 @@ namespace Intersect.Server.Localization
         public sealed class RecordsNamespace : LocaleNamespace
         {
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString DeletedHolder = @"DELETED_PLAYER";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString enemykilled =
                 @"You have slain a total of {00} {01}!";
 

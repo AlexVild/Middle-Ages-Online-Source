@@ -1822,5 +1822,41 @@ namespace Intersect.Editor.Forms.Editors.Events
 
             return Strings.EventCommandList.OpenLeaderboard.ToString(command.DisplayName, recordValue, scoreType, displayMode);
         }
+
+        private static string GetCommandText(ClearRecordCommand command, MapInstance map)
+        {
+            var recordValue = Strings.EventCommandList.mapnotfound;
+
+            switch (command.RecordType)
+            {
+                case RecordType.NpcKilled:
+                    recordValue = NpcBase.Get(command.RecordId)?.Name ?? $"NPC {Strings.EventCommandList.mapnotfound}";
+                    break;
+                case RecordType.ItemCrafted:
+                    recordValue = ItemBase.Get(command.RecordId)?.Name ?? $"Item {Strings.EventCommandList.mapnotfound}";
+                    break;
+                case RecordType.ResourceGathered:
+                    recordValue = ResourceBase.Get(command.RecordId)?.Name ?? $"Resource {Strings.EventCommandList.mapnotfound}";
+                    break;
+                case RecordType.PlayerVariable:
+                    recordValue = PlayerVariableBase.Get(command.RecordId)?.Name ?? $"Player Var {Strings.EventCommandList.mapnotfound}";
+                    break;
+                case RecordType.Combo:
+                    recordValue = "Combo";
+                    break;
+                default:
+                    recordValue = Strings.EventCommandList.mapnotfound;
+                    break;
+            }
+
+            var scoreType = Strings.EventCommandList.mapnotfound;
+
+            if ((int)command.ScoreType < Enum.GetNames(typeof(RecordScoring)).Length)
+            {
+                scoreType = Enum.GetName(typeof(RecordScoring), command.ScoreType);
+            }
+
+            return Strings.EventCommandList.ClearRecord.ToString(recordValue, scoreType);
+        }
     }
 }

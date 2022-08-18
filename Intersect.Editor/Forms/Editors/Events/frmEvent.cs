@@ -799,6 +799,10 @@ namespace Intersect.Editor.Forms.Editors.Events
                     tmpCommand = new OpenLeaderboardCommand();
 
                     break;
+                case EventCommandType.ClearRecord:
+                    tmpCommand = new ClearRecordCommand();
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -1458,6 +1462,10 @@ namespace Intersect.Editor.Forms.Editors.Events
                     break;
                 case EventCommandType.OpenLeaderboard:
                     cmdWindow = new EventCommand_OpenLeaderboard((OpenLeaderboardCommand)command, this);
+
+                    break;
+                case EventCommandType.ClearRecord:
+                    cmdWindow = new EventCommand_ClearRecord((ClearRecordCommand)command, this);
 
                     break;
                 default:

@@ -8382,6 +8382,20 @@ namespace Intersect.Server.Entities
         {
             PacketSender.SendChatMsg(this, message, ChatMessageType.Experience);
         }
+
+        public void DeleteRecord(RecordType type, Guid recordId, RecordScoring scoreType)
+        {
+            PlayerRecord matchingRecord;
+            matchingRecord = PlayerRecords.Find(record => record.Type == type && record.RecordId == recordId && record.ScoreType == scoreType && record.Teammates.Count == 0);
+
+            if (matchingRecord == default)
+            {
+                // Record doesn't exist
+                return;
+            }
+            PlayerRecords.Remove(matchingRecord);
+            DbInterface.Pool.QueueWorkItem(matchingRecord.Remove);
+        }
         #endregion
 
 
