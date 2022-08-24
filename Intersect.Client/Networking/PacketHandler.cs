@@ -2525,6 +2525,8 @@ namespace Intersect.Client.Networking
             Globals.Me.Leaderboard.Page = 0;
             Globals.Me.Leaderboard.RecordId = packet.RecordId;
             Globals.Me.Leaderboard.ScoreType = packet.ScoreType;
+            Globals.Me.Leaderboard.Type = packet.RecordType;
+            Globals.Me.Leaderboard.DisplayMode = packet.DisplayMode;
             Globals.Me.Leaderboard.Open();
             Globals.Me.Leaderboard.RequestPlayersRecord();
         }

@@ -1,4 +1,5 @@
 ﻿using Intersect.GameObjects.Events;
+using Intersect.GameObjects.Events.Commands;
 using MessagePack;
 using System;
 
@@ -19,12 +20,16 @@ namespace Intersect.Network.Packets.Server
         [Key(3)]
         public Guid RecordId { get; set; }
 
-        public OpenLeaderboardPacket(RecordType recordType, string displayName, RecordScoring scoreType, Guid recordId)
+        [Key(4)]
+        public LeaderboardDisplayMode DisplayMode { get; set; }
+
+        public OpenLeaderboardPacket(RecordType recordType, string displayName, RecordScoring scoreType, Guid recordId, LeaderboardDisplayMode displayMode)
         {
             RecordType = recordType;
             DisplayName = displayName;
             ScoreType = scoreType;
             RecordId = recordId;
+            DisplayMode = displayMode;
         }
     }
 }

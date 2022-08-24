@@ -8328,7 +8328,7 @@ namespace Intersect.Server.Entities
                 // We couldn't find a record that satisfies our needs, so create a new one
                 if (matchingRecord == null)
                 {
-                    matchingRecord = new PlayerRecord(Id, type, recordId, 1, scoreType);
+                    matchingRecord = new PlayerRecord(Id, type, recordId, amount, scoreType);
 
                     // Team record? If so, add the team mates
                     if (teammates != null && teammates.Count > 0)
@@ -8339,7 +8339,6 @@ namespace Intersect.Server.Entities
                         }
                     }
                     PlayerRecords.Add(matchingRecord);
-                    recordAmt = amount;
                 }
                 else if (matchingRecord.ScoreType == RecordScoring.High && matchingRecord.Amount >= amount ||
                     matchingRecord.ScoreType == RecordScoring.Low && matchingRecord.Amount <= amount)
@@ -8383,18 +8382,21 @@ namespace Intersect.Server.Entities
             PacketSender.SendChatMsg(this, message, ChatMessageType.Experience);
         }
 
-        public void DeleteRecord(RecordType type, Guid recordId, RecordScoring scoreType)
+        public void DeleteRecord(RecordType type, Guid recordId)
         {
-            PlayerRecord matchingRecord;
-            matchingRecord = PlayerRecords.Find(record => record.Type == type && record.RecordId == recordId && record.ScoreType == scoreType && record.Teammates.Count == 0);
+            List<PlayerRecord> matchingRecords;
+            matchingRecords = PlayerRecords.FindAll(record => record.Type == type && record.RecordId == recordId && record.Teammates.Count == 0);
 
-            if (matchingRecord == default)
+            if (matchingRecords.Count == 0)
             {
                 // Record doesn't exist
                 return;
             }
-            PlayerRecords.Remove(matchingRecord);
-            DbInterface.Pool.QueueWorkItem(matchingRecord.Remove);
+            foreach(var record in matchingRecords)
+            {
+                PlayerRecords.Remove(record);
+                DbInterface.Pool.QueueWorkItem(record.Remove);
+            }
         }
         #endregion
 

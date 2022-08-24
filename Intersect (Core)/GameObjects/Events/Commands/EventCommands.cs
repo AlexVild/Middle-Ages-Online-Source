@@ -1262,7 +1262,5 @@ namespace Intersect.GameObjects.Events.Commands
         public RecordType RecordType { get; set; }
 
         public Guid RecordId { get; set; }
-
-        public RecordScoring ScoreType { get; set; }
     }
 }

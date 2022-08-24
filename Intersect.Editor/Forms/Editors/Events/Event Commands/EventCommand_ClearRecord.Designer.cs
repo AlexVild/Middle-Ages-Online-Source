@@ -33,16 +33,12 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.btnCancel = new DarkUI.Controls.DarkButton();
             this.btnOk = new DarkUI.Controls.DarkButton();
             this.grpRecord = new DarkUI.Controls.DarkGroupBox();
-            this.grpOrder = new DarkUI.Controls.DarkGroupBox();
-            this.rdoDesc = new DarkUI.Controls.DarkRadioButton();
-            this.rdoAsc = new DarkUI.Controls.DarkRadioButton();
             this.cmbType = new DarkUI.Controls.DarkComboBox();
             this.cmbValue = new DarkUI.Controls.DarkComboBox();
             this.lblRecord = new System.Windows.Forms.Label();
             this.lblType = new System.Windows.Forms.Label();
             this.grpOpenLeaderboard.SuspendLayout();
             this.grpRecord.SuspendLayout();
-            this.grpOrder.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpOpenLeaderboard
@@ -55,14 +51,14 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpOpenLeaderboard.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpOpenLeaderboard.Location = new System.Drawing.Point(3, 0);
             this.grpOpenLeaderboard.Name = "grpOpenLeaderboard";
-            this.grpOpenLeaderboard.Size = new System.Drawing.Size(314, 199);
+            this.grpOpenLeaderboard.Size = new System.Drawing.Size(314, 146);
             this.grpOpenLeaderboard.TabIndex = 30;
             this.grpOpenLeaderboard.TabStop = false;
             this.grpOpenLeaderboard.Text = "Open Leaderboard";
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(232, 170);
+            this.btnCancel.Location = new System.Drawing.Point(232, 115);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Padding = new System.Windows.Forms.Padding(5);
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
@@ -72,7 +68,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             // btnOk
             // 
-            this.btnOk.Location = new System.Drawing.Point(151, 170);
+            this.btnOk.Location = new System.Drawing.Point(151, 115);
             this.btnOk.Name = "btnOk";
             this.btnOk.Padding = new System.Windows.Forms.Padding(5);
             this.btnOk.Size = new System.Drawing.Size(75, 23);
@@ -84,7 +80,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             this.grpRecord.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.grpRecord.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpRecord.Controls.Add(this.grpOrder);
             this.grpRecord.Controls.Add(this.cmbType);
             this.grpRecord.Controls.Add(this.cmbValue);
             this.grpRecord.Controls.Add(this.lblRecord);
@@ -92,46 +87,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpRecord.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpRecord.Location = new System.Drawing.Point(6, 19);
             this.grpRecord.Name = "grpRecord";
-            this.grpRecord.Size = new System.Drawing.Size(301, 145);
+            this.grpRecord.Size = new System.Drawing.Size(301, 90);
             this.grpRecord.TabIndex = 24;
             this.grpRecord.TabStop = false;
             this.grpRecord.Text = "Record Details";
-            // 
-            // grpOrder
-            // 
-            this.grpOrder.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.grpOrder.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpOrder.Controls.Add(this.rdoDesc);
-            this.grpOrder.Controls.Add(this.rdoAsc);
-            this.grpOrder.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpOrder.Location = new System.Drawing.Point(9, 86);
-            this.grpOrder.Name = "grpOrder";
-            this.grpOrder.Size = new System.Drawing.Size(203, 49);
-            this.grpOrder.TabIndex = 31;
-            this.grpOrder.TabStop = false;
-            this.grpOrder.Text = "Score Type";
-            // 
-            // rdoDesc
-            // 
-            this.rdoDesc.AutoSize = true;
-            this.rdoDesc.Checked = true;
-            this.rdoDesc.Location = new System.Drawing.Point(6, 19);
-            this.rdoDesc.Name = "rdoDesc";
-            this.rdoDesc.Size = new System.Drawing.Size(82, 17);
-            this.rdoDesc.TabIndex = 29;
-            this.rdoDesc.TabStop = true;
-            this.rdoDesc.Text = "Descending";
-            this.rdoDesc.CheckedChanged += new System.EventHandler(this.rdoDesc_CheckedChanged);
-            // 
-            // rdoAsc
-            // 
-            this.rdoAsc.AutoSize = true;
-            this.rdoAsc.Location = new System.Drawing.Point(100, 19);
-            this.rdoAsc.Name = "rdoAsc";
-            this.rdoAsc.Size = new System.Drawing.Size(75, 17);
-            this.rdoAsc.TabIndex = 27;
-            this.rdoAsc.Text = "Ascending";
-            this.rdoAsc.CheckedChanged += new System.EventHandler(this.rdoAsc_CheckedChanged);
             // 
             // cmbType
             // 
@@ -200,12 +159,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.Controls.Add(this.grpOpenLeaderboard);
             this.Name = "EventCommand_ClearRecord";
-            this.Size = new System.Drawing.Size(325, 205);
+            this.Size = new System.Drawing.Size(322, 151);
             this.grpOpenLeaderboard.ResumeLayout(false);
             this.grpRecord.ResumeLayout(false);
             this.grpRecord.PerformLayout();
-            this.grpOrder.ResumeLayout(false);
-            this.grpOrder.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -220,8 +177,5 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private DarkUI.Controls.DarkComboBox cmbValue;
         private System.Windows.Forms.Label lblRecord;
         private System.Windows.Forms.Label lblType;
-        private DarkUI.Controls.DarkGroupBox grpOrder;
-        private DarkUI.Controls.DarkRadioButton rdoDesc;
-        private DarkUI.Controls.DarkRadioButton rdoAsc;
     }
 }

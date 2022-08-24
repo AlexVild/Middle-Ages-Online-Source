@@ -36,9 +36,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
 
             UpdateValues();
             PopulateValue();
-
-            rdoAsc.Checked = mMyCommand.ScoreType == RecordScoring.Low;
-            rdoDesc.Checked = mMyCommand.ScoreType == RecordScoring.High;
         }
 
         private void UpdateValues()
@@ -142,18 +139,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                 return;
             }
             PopulateCommandValue();
-        }
-
-        private void rdoDesc_CheckedChanged(object sender, EventArgs e)
-        {
-            if (IsLoading) return;
-            mMyCommand.ScoreType = RecordScoring.High;
-        }
-
-        private void rdoAsc_CheckedChanged(object sender, EventArgs e)
-        {
-            if (IsLoading) return;
-            mMyCommand.ScoreType = RecordScoring.Low;
         }
 
         private void btnOk_Click(object sender, EventArgs e)

@@ -6067,7 +6067,7 @@ Negative values for time to flow backwards.";
         public partial struct EventCommandList
         {
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public static LocalizedString ClearRecord = @"Clear Record for {00} with score type {01}";
+            public static LocalizedString ClearRecord = @"Clear Records for {00}";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString OpenLeaderboard = @"Open leaderboard '{00}' for {01} (sort: {02}, display type: {03})";

@@ -1773,32 +1773,7 @@ namespace Intersect.Server.Entities.Events
 
                     if (double.TryParse(digits.ToString(), out var ms))
                     {
-                        string elapsedString = string.Empty;
-                        TimeSpan t = TimeSpan.FromMilliseconds(ms);
-                        switch ((int)ms)
-                        {
-                            case int n when n < TimerConstants.HourMillis:
-                                elapsedString = string.Format(Strings.Events.ElapsedMinutes,
-                                    t.Minutes,
-                                    t.Seconds,
-                                    t.Milliseconds);
-                                break;
-                            case int n when n >= TimerConstants.HourMillis && n < TimerConstants.DayMillis:
-                                elapsedString = string.Format(Strings.Events.ElapsedHours,
-                                    t.Hours,
-                                    t.Minutes,
-                                    t.Seconds,
-                                    t.Milliseconds);
-                                break;
-                            case int n when n >= TimerConstants.DayMillis:
-                                elapsedString = string.Format(Strings.Events.ElapsedDays,
-                                    t.Days,
-                                    t.Hours,
-                                    t.Minutes,
-                                    t.Seconds,
-                                    t.Milliseconds);
-                                break;
-                        }
+                        string elapsedString = TextUtils.GetTimeElapsedString((long)ms, Strings.Events.ElapsedMinutes, Strings.Events.ElapsedHours, Strings.Events.ElapsedDays);
 
                         finalSb.Replace(match.ToString(), elapsedString);
                     }
@@ -2720,7 +2695,7 @@ namespace Intersect.Server.Entities.Events
         {
             if (player == null) return;
 
-            player.SendPacket(new OpenLeaderboardPacket(command.RecordType, command.DisplayName, command.ScoreType, command.RecordId));
+            player.SendPacket(new OpenLeaderboardPacket(command.RecordType, command.DisplayName, command.ScoreType, command.RecordId, command.DisplayMode));
         }
 
         private static void ProcessCommand(
@@ -2733,7 +2708,7 @@ namespace Intersect.Server.Entities.Events
         {
             if (player == null) return;
 
-            player.DeleteRecord(command.RecordType, command.RecordId, command.ScoreType);
+            player.DeleteRecord(command.RecordType, command.RecordId);
         }
     }
 }

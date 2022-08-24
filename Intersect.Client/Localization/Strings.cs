@@ -2254,6 +2254,18 @@ namespace Intersect.Client.Localization
         public partial struct Leaderboard
         {
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ElapsedMinutes = @"{0:D1}:{1:D2}.{2:D3}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ElapsedHours = @"{0:D1}:{1:D2}:{2:D2}.{3:D3}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ElapsedDays = @"{0:D1} Day(s) and {1:D2}:{2:D2}:{3:D2}.{4:D3}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString First = @"First";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString Loading = @"Fetching records...";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]

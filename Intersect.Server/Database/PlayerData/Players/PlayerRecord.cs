@@ -8,6 +8,7 @@ using Intersect.Network.Packets.Server;
 using Intersect.Server.Entities;
 using Intersect.Server.Localization;
 using Intersect.Server.Networking;
+using Intersect.Utilities;
 using Newtonsoft.Json;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Local
@@ -28,7 +29,16 @@ namespace Intersect.Server.Database.PlayerData.Players
         /// <returns></returns>
         public static string CreateSearchQueryString(RecordType recordType, Guid recordId, RecordScoring scoringType, int page)
         {
+            if (page == -1)
+            {
+                return string.Empty;
+            }
             return $"type={Enum.GetName(typeof(RecordType), recordType)}&id={recordId}&scoring={Enum.GetName(typeof(RecordScoring), scoringType)}&page={page}";
+        }
+
+        public static void RemoveCachedRecord(string queryString)
+        {
+            CachedRecords.Remove(queryString);
         }
     }
 
@@ -84,7 +94,7 @@ namespace Intersect.Server.Database.PlayerData.Players
 
         public PlayerRecord() { } // EF
 
-        public PlayerRecord(Guid player, RecordType type, Guid recordId, int initialAmount)
+        public PlayerRecord(Guid player, RecordType type, Guid recordId, long initialAmount)
         {
             PlayerId = player;
             Type = type;
@@ -93,7 +103,7 @@ namespace Intersect.Server.Database.PlayerData.Players
             ScoreType = RecordScoring.High;
         }
 
-        public PlayerRecord(Guid playerId, RecordType type, Guid recordId, int amount, RecordScoring scoreType)
+        public PlayerRecord(Guid playerId, RecordType type, Guid recordId, long amount, RecordScoring scoreType)
         {
             PlayerId = playerId;
             Type = type;
@@ -161,19 +171,34 @@ namespace Intersect.Server.Database.PlayerData.Players
                 return 0;
             }
 
-            return (int)Math.Ceiling(firstRecord.Index / (double)Options.Instance.RecordOpts.RecordsPerLeaderboardPage);
+            var value = firstRecord.Index / (double)Options.Instance.RecordOpts.RecordsPerLeaderboardPage;
+            int roundedVal = (int)Math.Floor(value);
+            return roundedVal;
         }
 
         public static void SendLeaderboardPageTo(Player player, RecordType recordType, Guid recordId, RecordScoring scoringType, int pageNum)
         {
-            var leaderboard = GetLeaderboardPage(player, recordType, recordId, scoringType, pageNum);
-            if (leaderboard?.Records == null)
+            try
             {
-                PacketSender.SendChatMsg(player, "There was an error while opening this leaderboard.", Enums.ChatMessageType.Error);
+                Func<long, string> recordTransformer = null;
+                if (true)
+                {
+                    recordTransformer = (recordVal) => TextUtils.GetTimeElapsedString(recordVal, Strings.Events.ElapsedMinutes, Strings.Events.ElapsedHours, Strings.Events.ElapsedDays);
+                }
+
+                var leaderboard = GetLeaderboardPage(player, recordType, recordId, scoringType, pageNum, recordTransformer);
+                if (leaderboard?.Records == null)
+                {
+                    PacketSender.SendChatMsg(player, "There was an error while opening this leaderboard.", Enums.ChatMessageType.Error);
+                    return;
+                }
+
+                PacketSender.SendRecordPageTo(player, leaderboard.Records, leaderboard.CurrentPage);
+            } catch (Exception e)
+            {
+                Console.WriteLine($"Error thrown when sending leaderboard page to {player.Name}");
                 return;
             }
-
-            PacketSender.SendRecordPageTo(player, leaderboard.Records, leaderboard.CurrentPage);
         }
 
         /// <summary>
@@ -187,14 +212,20 @@ namespace Intersect.Server.Database.PlayerData.Players
         /// <returns>A <see cref="LeaderboardPage"/> that we can use to send a packet of</returns>
         public static LeaderboardPage GetLeaderboardPage(Player player, RecordType type, Guid recordId, RecordScoring scoreType, int page, Func<long, string> recordTransformer = null)
         {
+            if (player == null)
+            {
+                throw new ArgumentNullException(nameof(player));
+            }
+
             if (recordTransformer == null)
             {
                 recordTransformer = (val) => val.ToString();
             }
 
             // Check if we can just access the cache for results
-            var queryString = PlayerRecordCache.CreateSearchQueryString(type, recordId, scoreType, page);
-            if (TryGetCachedLeaderboardPage(queryString, out var cachedResults))
+            string queryString;
+            queryString = PlayerRecordCache.CreateSearchQueryString(type, recordId, scoreType, page);
+            if (TryGetCachedLeaderboardPage(queryString, player.Id, out var cachedResults))
             {
                 return cachedResults;
             }
@@ -203,6 +234,7 @@ namespace Intersect.Server.Database.PlayerData.Players
             var results = new LeaderboardPage();
             var records = new List<PlayerRecord>();
             Dictionary<Guid, string> playerNameLookup = new Dictionary<Guid, string>();
+
             using (var context = DbInterface.CreatePlayerContext())
             {
                 var allRecords = GetMatchingRecords(context, type, recordId, scoreType);
@@ -211,6 +243,13 @@ namespace Intersect.Server.Database.PlayerData.Players
                 {
                     page = GetPlayersPage(player, allRecords);
                 }
+                // Try getting the cache _now_...
+                queryString = PlayerRecordCache.CreateSearchQueryString(type, recordId, scoreType, page);
+                if (TryGetCachedLeaderboardPage(queryString, player.Id, out var cachedResults2))
+                {
+                    return cachedResults2;
+                }
+
                 var paginatedRecords = PaginateRecords(allRecords, page);
                 // Link up teammate information _after_ paging the set to save on time
                 foreach(var record in paginatedRecords)
@@ -234,15 +273,26 @@ namespace Intersect.Server.Database.PlayerData.Players
                     .ToArray();
         }
 
-        public static bool TryGetCachedLeaderboardPage(string searchKey, out LeaderboardPage results)
+        public static bool TryGetCachedLeaderboardPage(string searchKey, Guid playerId, out LeaderboardPage results)
         {
             results = null;
+
+            if (string.IsNullOrEmpty(searchKey))
+            {
+                return false;
+            }
+
             if (PlayerRecordCache.CachedRecords.TryGetValue(searchKey, out var cachedResults))
             {
                 if (cachedResults.RequeryTimestamp >= Intersect.Utilities.Timing.Global.MillisecondsUtc)
                 {
                     Console.WriteLine("Returning cached result!");
                     results = cachedResults;
+                }
+                // Otherwise clear the cached record
+                else
+                {
+                    PlayerRecordCache.RemoveCachedRecord(searchKey);
                 }
             }
 
@@ -258,17 +308,24 @@ namespace Intersect.Server.Database.PlayerData.Players
 
             PlayerRecord[] queryRecords;
 
+            // We don't want the score type to affect our queries/cache lookups for non-variable records
+            var queryScoreType = scoreType;
+            if (type != RecordType.PlayerVariable)
+            {
+                queryScoreType = RecordScoring.High;
+            }
+
             if (scoreType == RecordScoring.High)
             {
                 queryRecords = context.Player_Record
-                    .Where(record => record.Type == type && record.RecordId == recordId && record.ScoreType == scoreType)
+                    .Where(record => record.Type == type && record.RecordId == recordId && record.ScoreType == queryScoreType)
                     .OrderByDescending(record => record.Amount)
                     .ToArray();
             }
             else
             {
                 queryRecords = context.Player_Record
-                    .Where(record => record.Type == type && record.RecordId == recordId && record.ScoreType == scoreType)
+                    .Where(record => record.Type == type && record.RecordId == recordId && record.ScoreType == queryScoreType)
                     .OrderBy(record => record.Amount)
                     .ToArray();
             }

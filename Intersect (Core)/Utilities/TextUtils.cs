@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Intersect.GameObjects.Timers;
+using System;
 
 namespace Intersect.Utilities
 {
 
-    public static class TextUtils
+    public static partial class TextUtils
     {
 
         static TextUtils()
@@ -39,6 +40,46 @@ namespace Intersect.Utilities
             return IsNone(nullableString) ? null : nullableString;
         }
 
+    }
+
+    public static partial class TextUtils
+    {
+        public static string GetTimeElapsedString(long timeMs, string minutesString, string hoursString, string daysString)
+        {
+            string elapsedString = string.Empty;
+            if (timeMs < 0)
+            {
+                return elapsedString;
+            }
+
+            TimeSpan t = TimeSpan.FromMilliseconds(timeMs);
+            switch ((int)timeMs)
+            {
+                case int n when n < TimerConstants.HourMillis:
+                    elapsedString = string.Format(minutesString,
+                        t.Minutes,
+                        t.Seconds,
+                        t.Milliseconds);
+                    break;
+                case int n when n >= TimerConstants.HourMillis && n < TimerConstants.DayMillis:
+                    elapsedString = string.Format(hoursString,
+                        t.Hours,
+                        t.Minutes,
+                        t.Seconds,
+                        t.Milliseconds);
+                    break;
+                case int n when n >= TimerConstants.DayMillis:
+                    elapsedString = string.Format(daysString,
+                        t.Days,
+                        t.Hours,
+                        t.Minutes,
+                        t.Seconds,
+                        t.Milliseconds);
+                    break;
+            }
+
+            return elapsedString;
+        }
     }
 
 }

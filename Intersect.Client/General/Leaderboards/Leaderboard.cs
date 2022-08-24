@@ -1,6 +1,7 @@
 ﻿using Intersect.Client.Networking;
 using Intersect.Client.Utilities;
 using Intersect.GameObjects.Events;
+using Intersect.GameObjects.Events.Commands;
 using System;
 using System.Collections.Generic;
 
@@ -25,6 +26,8 @@ namespace Intersect.Client.General.Leaderboards
         public Guid RecordId { get; set; }
 
         public RecordScoring ScoreType { get; set; }
+
+        public LeaderboardDisplayMode DisplayMode { get; set; }
 
         public void Clear()
         {

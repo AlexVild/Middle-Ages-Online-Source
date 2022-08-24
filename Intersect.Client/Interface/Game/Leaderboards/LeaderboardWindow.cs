@@ -25,6 +25,7 @@ namespace Intersect.Client.Interface.Game.Leaderboards
         private ScrollControl RecordContainer;
         private List<LeaderboardRecord> Records;
 
+        private Button FirstPage;
         private Button NextPage;
         private Label CurrentPage;
         private Button PrevPage;
@@ -62,6 +63,11 @@ namespace Intersect.Client.Interface.Game.Leaderboards
             RecordContainer = new ScrollControl(Background, "RecordContainer");
             Records = new List<LeaderboardRecord>();
 
+            FirstPage = new Button(Background, "FirstPageButton")
+            {
+                Text = Strings.Leaderboard.First
+            };
+            FirstPage.Clicked += FirstPageClicked;
             NextPage = new Button(Background, "NextPageButton")
             {
                 Text = Strings.Leaderboard.Next
@@ -122,6 +128,7 @@ namespace Intersect.Client.Interface.Game.Leaderboards
             SearchButton.IsDisabled = CurrentLeaderboard.Loading || string.IsNullOrEmpty(Search.Text);
             NextPage.IsDisabled = (CurrentLeaderboard.Records.Count != Options.Instance.RecordOpts.RecordsPerLeaderboardPage) || CurrentLeaderboard.Loading;
             PrevPage.IsDisabled = CurrentLeaderboard.Page == 0 || CurrentLeaderboard.Loading;
+            FirstPage.IsDisabled = PrevPage.IsDisabled;
 
             Background.Title = CurrentLeaderboard.DisplayName;
             CurrentPage.Text = Strings.Leaderboard.Page.ToString(CurrentLeaderboard?.Page + 1 ?? 1);
@@ -180,6 +187,11 @@ namespace Intersect.Client.Interface.Game.Leaderboards
         private void PrevPageClicked(Base sender, ClickedEventArgs arguments)
         {
             CurrentLeaderboard.PreviousPage();
+        }
+        
+        private void FirstPageClicked(Base sender, ClickedEventArgs arguments)
+        {
+            CurrentLeaderboard.GotoPage(0);
         }
 
         public void Dispose()

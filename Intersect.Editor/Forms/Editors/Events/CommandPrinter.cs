@@ -1849,14 +1849,7 @@ namespace Intersect.Editor.Forms.Editors.Events
                     break;
             }
 
-            var scoreType = Strings.EventCommandList.mapnotfound;
-
-            if ((int)command.ScoreType < Enum.GetNames(typeof(RecordScoring)).Length)
-            {
-                scoreType = Enum.GetName(typeof(RecordScoring), command.ScoreType);
-            }
-
-            return Strings.EventCommandList.ClearRecord.ToString(recordValue, scoreType);
+            return Strings.EventCommandList.ClearRecord.ToString(recordValue);
         }
     }
 }

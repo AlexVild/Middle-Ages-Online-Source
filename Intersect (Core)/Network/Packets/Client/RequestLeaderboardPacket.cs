@@ -1,4 +1,5 @@
 ﻿using Intersect.GameObjects.Events;
+using Intersect.GameObjects.Events.Commands;
 using MessagePack;
 using System;
 using System.Collections.Generic;
@@ -26,13 +27,17 @@ namespace Intersect.Network.Packets.Client
         [Key(4)]
         public string Term { get; set; }
 
-        public RequestLeaderboardPacket(int page, RecordType type, RecordScoring scoreType, Guid recordId, string term)
+        [Key(5)]
+        public LeaderboardDisplayMode DisplayMode { get; set; }
+
+        public RequestLeaderboardPacket(int page, RecordType type, RecordScoring scoreType, Guid recordId, string term, LeaderboardDisplayMode displayMode)
         {
             Page = page;
             Type = type;
             ScoreType = scoreType;
             RecordId = recordId;
             Term = term;
+            DisplayMode = displayMode;
         }
     }
 }
