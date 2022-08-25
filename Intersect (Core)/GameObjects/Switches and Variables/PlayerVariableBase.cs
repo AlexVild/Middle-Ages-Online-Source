@@ -72,5 +72,6 @@ namespace Intersect.GameObjects
     public partial class PlayerVariableBase : DatabaseObject<PlayerVariableBase>, IFolderable
     {
         public bool Recordable { get; set; }
+        public bool RecordLow { get; set; }
     }
 }

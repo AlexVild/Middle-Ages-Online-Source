@@ -41,6 +41,7 @@ namespace Intersect.Editor.Forms.Editors
             this.txtSearch = new DarkUI.Controls.DarkTextBox();
             this.lstGameObjects = new Intersect.Editor.Forms.Controls.GameObjectList();
             this.grpEditor = new DarkUI.Controls.DarkGroupBox();
+            this.chkRecordable = new DarkUI.Controls.DarkCheckBox();
             this.btnAddFolder = new DarkUI.Controls.DarkButton();
             this.lblFolder = new System.Windows.Forms.Label();
             this.cmbFolder = new DarkUI.Controls.DarkComboBox();
@@ -66,7 +67,7 @@ namespace Intersect.Editor.Forms.Editors
             this.btnAlphabetical = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
-            this.chkRecordable = new DarkUI.Controls.DarkCheckBox();
+            this.chkRecordLow = new DarkUI.Controls.DarkCheckBox();
             this.grpTypes.SuspendLayout();
             this.grpList.SuspendLayout();
             this.grpEditor.SuspendLayout();
@@ -182,6 +183,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpEditor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpEditor.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpEditor.Controls.Add(this.chkRecordLow);
             this.grpEditor.Controls.Add(this.chkRecordable);
             this.grpEditor.Controls.Add(this.btnAddFolder);
             this.grpEditor.Controls.Add(this.lblFolder);
@@ -202,6 +204,17 @@ namespace Intersect.Editor.Forms.Editors
             this.grpEditor.TabStop = false;
             this.grpEditor.Text = "Variable Editor";
             this.grpEditor.Visible = false;
+            // 
+            // chkRecordable
+            // 
+            this.chkRecordable.AutoSize = true;
+            this.chkRecordable.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.chkRecordable.Location = new System.Drawing.Point(13, 359);
+            this.chkRecordable.Name = "chkRecordable";
+            this.chkRecordable.Size = new System.Drawing.Size(87, 17);
+            this.chkRecordable.TabIndex = 55;
+            this.chkRecordable.Text = "Recordable?";
+            this.chkRecordable.CheckedChanged += new System.EventHandler(this.chkRecordable_CheckedChanged);
             // 
             // btnAddFolder
             // 
@@ -519,16 +532,16 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
             // 
-            // chkRecordable
+            // chkRecordLow
             // 
-            this.chkRecordable.AutoSize = true;
-            this.chkRecordable.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.chkRecordable.Location = new System.Drawing.Point(13, 359);
-            this.chkRecordable.Name = "chkRecordable";
-            this.chkRecordable.Size = new System.Drawing.Size(87, 17);
-            this.chkRecordable.TabIndex = 55;
-            this.chkRecordable.Text = "Recordable?";
-            this.chkRecordable.CheckedChanged += new System.EventHandler(this.chkRecordable_CheckedChanged);
+            this.chkRecordLow.AutoSize = true;
+            this.chkRecordLow.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.chkRecordLow.Location = new System.Drawing.Point(117, 359);
+            this.chkRecordLow.Name = "chkRecordLow";
+            this.chkRecordLow.Size = new System.Drawing.Size(104, 17);
+            this.chkRecordLow.TabIndex = 67;
+            this.chkRecordLow.Text = "Record Lowest?";
+            this.chkRecordLow.CheckedChanged += new System.EventHandler(this.chkRecordLow_CheckedChanged);
             // 
             // FrmSwitchVariable
             // 
@@ -600,5 +613,6 @@ namespace Intersect.Editor.Forms.Editors
         private Controls.GameObjectList lstGameObjects;
         private DarkRadioButton rdoInstanceVariables;
         private DarkCheckBox chkRecordable;
+        private DarkCheckBox chkRecordLow;
     }
 }

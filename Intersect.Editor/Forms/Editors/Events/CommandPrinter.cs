@@ -1849,7 +1849,7 @@ namespace Intersect.Editor.Forms.Editors.Events
                     break;
             }
 
-            return Strings.EventCommandList.ClearRecord.ToString(recordValue);
+            return Strings.EventCommandList.ClearRecord.ToString(recordValue, command.ClearAll);
         }
     }
 }

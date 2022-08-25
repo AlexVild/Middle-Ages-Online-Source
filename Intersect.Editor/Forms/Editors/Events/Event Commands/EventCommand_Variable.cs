@@ -136,7 +136,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             }
 
             chkSyncParty.Checked = mMyCommand.SyncParty;
-            chkScoreLowest.Checked = mMyCommand.scoreType == RecordScoring.Low;
             chkInstanceSync.Checked = mMyCommand.InstanceSync;
 
             UpdateFormElements();
@@ -266,7 +265,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
 
             mMyCommand.SyncParty = chkSyncParty.Checked;
             mMyCommand.InstanceSync = chkInstanceSync.Checked;
-            mMyCommand.scoreType = chkScoreLowest.Checked ? RecordScoring.Low : RecordScoring.High;
 
             mEventEditor.FinishCommandEdit();
         }

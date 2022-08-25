@@ -1262,5 +1262,7 @@ namespace Intersect.GameObjects.Events.Commands
         public RecordType RecordType { get; set; }
 
         public Guid RecordId { get; set; }
+
+        public bool ClearAll { get; set; }
     }
 }

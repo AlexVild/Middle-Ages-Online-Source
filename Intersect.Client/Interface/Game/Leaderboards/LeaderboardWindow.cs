@@ -51,6 +51,7 @@ namespace Intersect.Client.Interface.Game.Leaderboards
             {
                 Text = Strings.Leaderboard.SearchButton
             };
+            SearchButton.Clicked += SearchClicked;
 
             HeadingHolder = new Label(Background, "HeadingHolder")
             {
@@ -112,6 +113,7 @@ namespace Intersect.Client.Interface.Game.Leaderboards
                 Interface.InputBlockingElements.Add(this);
             }
 
+            Background.SendToBack();
             LoadingLabel.IsHidden = !CurrentLeaderboard.Loading;
             if (Globals.Me.Leaderboard.Records.Count == 0)
             {
@@ -125,6 +127,7 @@ namespace Intersect.Client.Interface.Game.Leaderboards
 
             RecordContainer.IsHidden = CurrentLeaderboard.Loading && CurrentLeaderboard.Records.Count > 0;
 
+            CurrentLeaderboard.SearchTerm = Search.Text;
             SearchButton.IsDisabled = CurrentLeaderboard.Loading || string.IsNullOrEmpty(Search.Text);
             NextPage.IsDisabled = (CurrentLeaderboard.Records.Count != Options.Instance.RecordOpts.RecordsPerLeaderboardPage) || CurrentLeaderboard.Loading;
             PrevPage.IsDisabled = CurrentLeaderboard.Page == 0 || CurrentLeaderboard.Loading;
@@ -162,7 +165,7 @@ namespace Intersect.Client.Interface.Game.Leaderboards
                 foreach(var holder in holders)
                 {
                     var username = holder.Replace(",", string.Empty).Trim();
-                    if (username == Globals.Me.Name)
+                    if (username == CurrentLeaderboard.HighlightedPlayer)
                     {
                         row.RecordBackground.Texture = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Gui, "leaderboard_banding_self.png");
                         break;
@@ -176,6 +179,7 @@ namespace Intersect.Client.Interface.Game.Leaderboards
 
         private void OnClose()
         {
+            Search.Text = string.Empty;
             CurrentLeaderboard.IsOpen = false;
         }
 
@@ -192,6 +196,11 @@ namespace Intersect.Client.Interface.Game.Leaderboards
         private void FirstPageClicked(Base sender, ClickedEventArgs arguments)
         {
             CurrentLeaderboard.GotoPage(0);
+        }
+
+        private void SearchClicked(Base sender, ClickedEventArgs arguments)
+        {
+            CurrentLeaderboard.Search();
         }
 
         public void Dispose()

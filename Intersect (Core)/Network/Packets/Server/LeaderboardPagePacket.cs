@@ -12,10 +12,14 @@ namespace Intersect.Network.Packets.Server
         [Key(1)]
         public int CurrentPage;
 
-        public LeaderboardPagePacket(List<RecordDto> records, int currentPage)
+        [Key(2)]
+        public string HighlightedPlayer;
+
+        public LeaderboardPagePacket(List<RecordDto> records, int currentPage, string highlightedPlayer)
         {
             Records = records;
             CurrentPage = currentPage;
+            HighlightedPlayer = highlightedPlayer;
         }
     }
 }

@@ -1676,6 +1676,10 @@ namespace Intersect.Server.Localization
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString NewRecordGenericParty =
                 @"You've set a new record with this party!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString SearchNotFound =
+                @"No records were found containing this player name. Note that leaderboard queries are case-sensitive, and can not contain spaces!";
         }
     }
 }

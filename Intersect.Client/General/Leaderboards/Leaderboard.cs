@@ -29,11 +29,13 @@ namespace Intersect.Client.General.Leaderboards
 
         public LeaderboardDisplayMode DisplayMode { get; set; }
 
+        public string HighlightedPlayer { get; set; }
+
         public void Clear()
         {
             Records.Clear();
             Page = 0;
-            SearchTerm = string.Empty;
+            HighlightedPlayer = string.Empty;
         }
 
         public void RequestPage(int page)
@@ -46,6 +48,12 @@ namespace Intersect.Client.General.Leaderboards
         {
             Loading = true;
             PacketSender.SendLeaderboardRequestForPlayer(this);
+        }
+
+        public void Search()
+        {
+            Loading = true;
+            PacketSender.SendLeaderboardRequestSearchTerm(this);
         }
 
         public void NextPage()
@@ -67,6 +75,7 @@ namespace Intersect.Client.General.Leaderboards
         public void Open()
         {
             IsOpen = true;
+            HighlightedPlayer = Globals.Me.Name;
         }
 
         public void Close()

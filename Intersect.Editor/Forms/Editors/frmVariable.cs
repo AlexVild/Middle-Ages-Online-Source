@@ -240,6 +240,8 @@ namespace Intersect.Editor.Forms.Editors
                     cmbFolder.Text = ((PlayerVariableBase) mEditorItem).Folder;
                     cmbVariableType.SelectedIndex = (int) (((PlayerVariableBase) mEditorItem).Type - 1);
                     chkRecordable.Checked = ((PlayerVariableBase)mEditorItem).Recordable;
+                    chkRecordLow.Checked = ((PlayerVariableBase)mEditorItem).RecordLow;
+                    chkRecordLow.Enabled = chkRecordable.Checked;
                     grpValue.Hide();
                 }
                 else if (rdoGlobalVariables.Checked)
@@ -772,6 +774,16 @@ namespace Intersect.Editor.Forms.Editors
                 return;
             }
             ((PlayerVariableBase)mEditorItem).Recordable = chkRecordable.Checked;
+            chkRecordLow.Enabled = chkRecordable.Checked;
+        }
+
+        private void chkRecordLow_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!rdoPlayerVariables.Checked)
+            {
+                return;
+            }
+            ((PlayerVariableBase)mEditorItem).RecordLow = chkRecordLow.Checked;
         }
     }
 

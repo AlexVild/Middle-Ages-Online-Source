@@ -2454,14 +2454,14 @@ namespace Intersect.Server.Networking
             player?.SendPacket(new TradeAcceptedPacket());
         }
 
-        public static void SendRecordPageTo(Player player, List<RecordDto> records, int currentPage)
+        public static void SendRecordPageTo(Player player, List<RecordDto> records, int currentPage, string highlightedPlayer)
         {
             if (player == null)
             {
                 return;
             }
 
-            player?.SendPacket(new LeaderboardPagePacket(records, currentPage));
+            player?.SendPacket(new LeaderboardPagePacket(records, currentPage, highlightedPlayer));
         }
     }
 

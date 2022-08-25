@@ -2170,7 +2170,7 @@ namespace Intersect.Server.Entities.Events
                 if (changed)
                 {
                     var teammates = player.Party?.ToList() ?? default;
-                    if (player.TrySetRecord(RecordType.PlayerVariable, command.VariableId, value.Integer, command.scoreType, teammates))
+                    if (player.TrySetRecord(RecordType.PlayerVariable, command.VariableId, value.Integer, teammates))
                     {
                         newRecord = true;
                         var msg = command.SyncParty && (player.Party?.Count ?? 0) > 1 ?
@@ -2194,7 +2194,7 @@ namespace Intersect.Server.Entities.Events
                         {
                             // We don't want to set a record for this party member - but we want to tell them if
                             // a new record has been set
-                            partyMember.SetVariableValue(command.VariableId, value.Integer, command.scoreType, false);
+                            partyMember.SetVariableValue(command.VariableId, value.Integer, false);
                             if (!newRecord)
                             {
                                 continue;
@@ -2708,7 +2708,21 @@ namespace Intersect.Server.Entities.Events
         {
             if (player == null) return;
 
-            player.DeleteRecord(command.RecordType, command.RecordId);
+            if (!command.ClearAll)
+            {
+                player.DeleteRecord(command.RecordType, command.RecordId);
+                return;
+            }
+
+            using (var context = DbInterface.CreatePlayerContext(readOnly: false))
+            {
+                var recordsToDelete = context.Player_Record.Where(record => record.RecordId == command.RecordId && record.Type == command.RecordType).ToArray();
+
+                context.Player_Record.RemoveRange(recordsToDelete);
+
+                context.ChangeTracker.DetectChanges();
+                context.SaveChanges();
+            }
         }
     }
 }

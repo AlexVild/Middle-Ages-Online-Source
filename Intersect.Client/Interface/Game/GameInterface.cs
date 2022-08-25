@@ -770,7 +770,6 @@ namespace Intersect.Client.Interface.Game
     {
         private PlayerHud mHUD;
         private PartyHud mPartyHUD;
-        public Leaderboard Leaderboard => Globals.Me?.Leaderboard ?? new Leaderboard();
         public LeaderboardWindow LeaderboardWindow;
 
         private void _InitGameGui(Canvas gameCanvas)

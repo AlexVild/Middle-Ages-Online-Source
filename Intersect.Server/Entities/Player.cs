@@ -1516,7 +1516,7 @@ namespace Intersect.Server.Entities
         {
             if (CurrentCombo > 0) // prevents flooding the client with useless combo packets
             {
-                if (TrySetRecord(RecordType.Combo, Guid.Empty, CurrentCombo, RecordScoring.High))
+                if (TrySetRecord(RecordType.Combo, Guid.Empty, CurrentCombo))
                 {
                     PacketSender.SendChatMsg(this, Strings.Records.NewHighestCombo.ToString(CurrentCombo), ChatMessageType.Local, Color.FromName("Blue", Strings.Colors.presets));
                 }
@@ -6992,7 +6992,7 @@ namespace Intersect.Server.Entities
             return v.Value;
         }
 
-        public void SetVariableValue(Guid id, long value, RecordScoring scoring, bool setRecord)
+        public void SetVariableValue(Guid id, long value, bool setRecord)
         {
             var v = GetVariable(id);
             var changed = true;
@@ -7013,7 +7013,7 @@ namespace Intersect.Server.Entities
 
             if (changed)
             {
-                if (setRecord && TrySetRecord(RecordType.PlayerVariable, v.VariableId, v.Value.Integer, scoring))
+                if (setRecord && TrySetRecord(RecordType.PlayerVariable, v.VariableId, v.Value.Integer))
                 {
                     PacketSender.SendChatMsg(this, Strings.Records.NewRecordGeneric, ChatMessageType.Local, Color.FromName("Blue", Strings.Colors.presets));
                 }
@@ -8283,12 +8283,12 @@ namespace Intersect.Server.Entities
         /// <param name="type">The type of record</param>
         /// <param name="recordId">The ID that the record cares about - player var ID, NPC ID, etc</param>
         /// <param name="amount">The number we're trying to update to</param>
-        /// <param name="scoreType">Whether we are scoring this record high or low</param>
         /// <param name="teammates">Any teammates involved with setting of the record</param>
         /// <returns></returns>
-        public bool TrySetRecord(RecordType type, Guid recordId, long amount, RecordScoring scoreType, List<Player> teammates = null, bool instantSave = false)
+        public bool TrySetRecord(RecordType type, Guid recordId, long amount, List<Player> teammates = null, bool instantSave = false)
         {
             PlayerRecord matchingRecord;
+            var scoreType = RecordScoring.High;
             lock (EntityLock)
             {
                 long recordAmt = 0;
@@ -8306,6 +8306,11 @@ namespace Intersect.Server.Entities
                     {
                         return false;
                     }
+
+                    if (playerVar.RecordLow)
+                    {
+                        scoreType = RecordScoring.Low;
+                    }
                 }
 
                 // If this is a "team" record, find the record, if any, that contains the same team
@@ -8317,13 +8322,13 @@ namespace Intersect.Server.Entities
                         teamRecords.AddRange(teammate.PlayerRecords);
                     }
 
-                    matchingRecord = teamRecords.Find(record => record.Type == type && record.RecordId == recordId && record.ScoreType == scoreType &&
+                    matchingRecord = teamRecords.Find(record => record.Type == type && record.RecordId == recordId &&
                         teammates.All(t => record.Teammates.Select(tm => tm.PlayerId).Contains(t.Id)));
                 }
                 // Solo record
                 else
                 {
-                    matchingRecord = PlayerRecords.Find(record => record.Type == type && record.RecordId == recordId && record.ScoreType == scoreType && record.Teammates.Count == 0);
+                    matchingRecord = PlayerRecords.Find(record => record.Type == type && record.RecordId == recordId && record.Teammates.Count == 0);
                 }
                 // We couldn't find a record that satisfies our needs, so create a new one
                 if (matchingRecord == null)

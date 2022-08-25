@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using Intersect.GameObjects.Events;
+using Intersect.GameObjects.Events.Commands;
 using Intersect.Network.Packets.Server;
 using Intersect.Server.Entities;
 using Intersect.Server.Localization;
@@ -176,24 +177,44 @@ namespace Intersect.Server.Database.PlayerData.Players
             return roundedVal;
         }
 
-        public static void SendLeaderboardPageTo(Player player, RecordType recordType, Guid recordId, RecordScoring scoringType, int pageNum)
+        public static void SendLeaderboardPageTo(Player player, RecordType recordType, Guid recordId, RecordScoring scoringType, int pageNum, LeaderboardDisplayMode displayMode, string searchTerm)
         {
             try
             {
+                var queryPlayer = player;
+                if (!string.IsNullOrEmpty(searchTerm))
+                {
+                    Player matchingPlayer = null;
+                    using (var context = DbInterface.CreatePlayerContext(readOnly: true))
+                    {
+                        matchingPlayer = context.Players.Where(p => p.Name == searchTerm).FirstOrDefault();
+                    }
+
+                    if (matchingPlayer == default)
+                    {
+                        PacketSender.SendEventDialog(player, Strings.Records.SearchNotFound, string.Empty, Guid.Empty);
+                        // Continue on as if we're just finding the requesting player's results
+                    }
+                    else
+                    {
+                        queryPlayer = matchingPlayer;
+                    }
+                }
+
                 Func<long, string> recordTransformer = null;
-                if (true)
+                if (displayMode == LeaderboardDisplayMode.Time)
                 {
                     recordTransformer = (recordVal) => TextUtils.GetTimeElapsedString(recordVal, Strings.Events.ElapsedMinutes, Strings.Events.ElapsedHours, Strings.Events.ElapsedDays);
                 }
 
-                var leaderboard = GetLeaderboardPage(player, recordType, recordId, scoringType, pageNum, recordTransformer);
+                var leaderboard = GetLeaderboardPage(queryPlayer, recordType, recordId, scoringType, pageNum, recordTransformer);
                 if (leaderboard?.Records == null)
                 {
                     PacketSender.SendChatMsg(player, "There was an error while opening this leaderboard.", Enums.ChatMessageType.Error);
                     return;
                 }
 
-                PacketSender.SendRecordPageTo(player, leaderboard.Records, leaderboard.CurrentPage);
+                PacketSender.SendRecordPageTo(player, leaderboard.Records, leaderboard.CurrentPage, queryPlayer.Name);
             } catch (Exception e)
             {
                 Console.WriteLine($"Error thrown when sending leaderboard page to {player.Name}");
@@ -308,24 +329,17 @@ namespace Intersect.Server.Database.PlayerData.Players
 
             PlayerRecord[] queryRecords;
 
-            // We don't want the score type to affect our queries/cache lookups for non-variable records
-            var queryScoreType = scoreType;
-            if (type != RecordType.PlayerVariable)
-            {
-                queryScoreType = RecordScoring.High;
-            }
-
             if (scoreType == RecordScoring.High)
             {
                 queryRecords = context.Player_Record
-                    .Where(record => record.Type == type && record.RecordId == recordId && record.ScoreType == queryScoreType)
+                    .Where(record => record.Type == type && record.RecordId == recordId)
                     .OrderByDescending(record => record.Amount)
                     .ToArray();
             }
             else
             {
                 queryRecords = context.Player_Record
-                    .Where(record => record.Type == type && record.RecordId == recordId && record.ScoreType == queryScoreType)
+                    .Where(record => record.Type == type && record.RecordId == recordId)
                     .OrderBy(record => record.Amount)
                     .ToArray();
             }

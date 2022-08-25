@@ -2546,6 +2546,7 @@ namespace Intersect.Client.Networking
             }
             Globals.Me.Leaderboard.Page = packet.CurrentPage;
             Globals.Me.Leaderboard.Records = recordPage;
+            Globals.Me.Leaderboard.HighlightedPlayer = packet.HighlightedPlayer;
             Interface.Interface.GameUi.LeaderboardWindow.LoadRecords();
             Globals.Me.Leaderboard.Loading = false;
         }

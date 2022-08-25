@@ -72,6 +72,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             {
                 cmbValue.SelectedIndex = 0;
             }
+
+            chkClearAll.Checked = mMyCommand.ClearAll;
             PopulateCommandValue();
         }
 
@@ -149,6 +151,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private void btnCancel_Click(object sender, EventArgs e)
         {
             mEventEditor.CancelCommandEdit();
+        }
+
+        private void chkClearAll_CheckedChanged(object sender, EventArgs e)
+        {
+            mMyCommand.ClearAll = chkClearAll.Checked;
         }
     }
 }

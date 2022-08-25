@@ -37,6 +37,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbValue = new DarkUI.Controls.DarkComboBox();
             this.lblRecord = new System.Windows.Forms.Label();
             this.lblType = new System.Windows.Forms.Label();
+            this.chkClearAll = new DarkUI.Controls.DarkCheckBox();
             this.grpOpenLeaderboard.SuspendLayout();
             this.grpRecord.SuspendLayout();
             this.SuspendLayout();
@@ -45,6 +46,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             this.grpOpenLeaderboard.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.grpOpenLeaderboard.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpOpenLeaderboard.Controls.Add(this.chkClearAll);
             this.grpOpenLeaderboard.Controls.Add(this.btnCancel);
             this.grpOpenLeaderboard.Controls.Add(this.btnOk);
             this.grpOpenLeaderboard.Controls.Add(this.grpRecord);
@@ -152,6 +154,17 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.lblType.TabIndex = 24;
             this.lblType.Text = "Type";
             // 
+            // chkClearAll
+            // 
+            this.chkClearAll.AutoSize = true;
+            this.chkClearAll.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.chkClearAll.Location = new System.Drawing.Point(38, 119);
+            this.chkClearAll.Name = "chkClearAll";
+            this.chkClearAll.Size = new System.Drawing.Size(69, 17);
+            this.chkClearAll.TabIndex = 56;
+            this.chkClearAll.Text = "Clear all?";
+            this.chkClearAll.CheckedChanged += new System.EventHandler(this.chkClearAll_CheckedChanged);
+            // 
             // EventCommand_ClearRecord
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -161,6 +174,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.Name = "EventCommand_ClearRecord";
             this.Size = new System.Drawing.Size(322, 151);
             this.grpOpenLeaderboard.ResumeLayout(false);
+            this.grpOpenLeaderboard.PerformLayout();
             this.grpRecord.ResumeLayout(false);
             this.grpRecord.PerformLayout();
             this.ResumeLayout(false);
@@ -177,5 +191,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private DarkUI.Controls.DarkComboBox cmbValue;
         private System.Windows.Forms.Label lblRecord;
         private System.Windows.Forms.Label lblType;
+        private DarkUI.Controls.DarkCheckBox chkClearAll;
     }
 }

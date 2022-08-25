@@ -232,7 +232,7 @@ namespace Intersect.Server.Database.PlayerData
                     case TimerOwnerType.Party:
                         foreach (var player in GetAffectedPlayers())
                         {
-                            player.SetVariableValue(descriptor.ElapsedTimeVariableId, ElapsedTime, RecordScoring.Low, true);
+                            player.SetVariableValue(descriptor.ElapsedTimeVariableId, ElapsedTime, true);
                         }
                         break;
                     case TimerOwnerType.Instance:

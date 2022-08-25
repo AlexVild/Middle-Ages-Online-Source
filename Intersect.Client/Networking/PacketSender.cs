@@ -513,7 +513,7 @@ namespace Intersect.Client.Networking
                 return;
             }
 
-            Network.SendPacket(new RequestLeaderboardPacket(page, leaderboard.Type, leaderboard.ScoreType, leaderboard.RecordId, leaderboard.SearchTerm, leaderboard.DisplayMode));
+            Network.SendPacket(new RequestLeaderboardPacket(page, leaderboard.Type, leaderboard.ScoreType, leaderboard.RecordId, string.Empty, leaderboard.DisplayMode));
         }
 
         public static void SendLeaderboardRequestForPlayer(Leaderboard leaderboard)
@@ -524,6 +524,16 @@ namespace Intersect.Client.Networking
             }
 
             // a page of -1 indicates we want whatever page the player is on, or 0 if not found
+            Network.SendPacket(new RequestLeaderboardPacket(-1, leaderboard.Type, leaderboard.ScoreType, leaderboard.RecordId, string.Empty, leaderboard.DisplayMode));
+        }
+
+        public static void SendLeaderboardRequestSearchTerm(Leaderboard leaderboard)
+        {
+            if (Globals.Me == null || Globals.Me.Leaderboard == null)
+            {
+                return;
+            }
+
             Network.SendPacket(new RequestLeaderboardPacket(-1, leaderboard.Type, leaderboard.ScoreType, leaderboard.RecordId, leaderboard.SearchTerm, leaderboard.DisplayMode));
         }
     }
