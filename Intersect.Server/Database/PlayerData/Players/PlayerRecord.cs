@@ -41,6 +41,11 @@ namespace Intersect.Server.Database.PlayerData.Players
         {
             CachedRecords.Remove(queryString);
         }
+
+        public static void ClearCache()
+        {
+            CachedRecords.Clear();
+        }
     }
 
     public class LeaderboardPage

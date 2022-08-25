@@ -9,7 +9,7 @@ namespace Intersect.Server.Localization
     public static partial class Strings
     {
 
-        public sealed class CommandsNamespace : LocaleCommandNamespace
+        public sealed partial class CommandsNamespace : LocaleCommandNamespace
         {
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]            public readonly LocaleCommand Announcement = new LocaleCommand
@@ -414,6 +414,17 @@ namespace Intersect.Server.Localization
                 };
             }
 
+        }
+
+        public sealed partial class CommandsNamespace : LocaleCommandNamespace
+        {
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocaleCommand ClearRecordsCacheCommand = new LocaleCommand
+            {
+                Name = @"clearrecordscache",
+                Description = @"Clears the records cache.",
+                Help = @"clears the records cache, allowing a complete refresh of records when viewed by a player"
+            };
         }
 
     }
