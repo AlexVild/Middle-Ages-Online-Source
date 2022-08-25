@@ -2714,15 +2714,7 @@ namespace Intersect.Server.Entities.Events
                 return;
             }
 
-            using (var context = DbInterface.CreatePlayerContext(readOnly: false))
-            {
-                var recordsToDelete = context.Player_Record.Where(record => record.RecordId == command.RecordId && record.Type == command.RecordType).ToArray();
-
-                context.Player_Record.RemoveRange(recordsToDelete);
-
-                context.ChangeTracker.DetectChanges();
-                context.SaveChanges();
-            }
+            PlayerRecord.RemoveAllRecordsOfType(command.RecordId, command.RecordType);
         }
     }
 }

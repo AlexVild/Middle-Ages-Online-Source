@@ -419,5 +419,18 @@ namespace Intersect.Server.Database.PlayerData.Players
 
             return new LeaderboardPage(dtos, Intersect.Utilities.Timing.Global.MillisecondsUtc, currentPage);
         }
+
+        public static void RemoveAllRecordsOfType(Guid recordId, RecordType type)
+        {
+            using (var context = DbInterface.CreatePlayerContext(readOnly: false))
+            {
+                var recordsToDelete = context.Player_Record.Where(record => record.RecordId == recordId && record.Type == type).ToArray();
+
+                context.Player_Record.RemoveRange(recordsToDelete);
+
+                context.ChangeTracker.DetectChanges();
+                context.SaveChanges();
+            }
+        }
     }
 }
