@@ -2254,6 +2254,9 @@ namespace Intersect.Client.Localization
         public partial struct Leaderboard
         {
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString CacheWarning = @"Results may take up to {00} minutes to show accurately due to caching.";
+            
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString ElapsedMinutes = @"{0:D1}:{1:D2}.{2:D3}";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]

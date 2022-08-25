@@ -17,9 +17,18 @@ using Newtonsoft.Json;
 
 namespace Intersect.Server.Database.PlayerData.Players
 {
+    public class CachedRecord
+    {
+        public static readonly long TimeUntilRequery = Options.Instance.RecordOpts.RecordCacheIntervalMinutes * Intersect.Utilities.Timing.Minutes; // 15 minutes
+        public long QueryTimestamp { get; set; }
+        public long RequeryTimestamp => QueryTimestamp + TimeUntilRequery;
+
+        public Dictionary<int, LeaderboardPage> Pages = new Dictionary<int, LeaderboardPage>();
+    }
+
     public static class PlayerRecordCache
     {
-        public static Dictionary<string, LeaderboardPage> CachedRecords = new Dictionary<string, LeaderboardPage>();
+        public static Dictionary<string, CachedRecord> CachedRecords = new Dictionary<string, CachedRecord>();
 
         /// <summary>
         /// Creates a key from a record search that can be used to cache searches
@@ -28,13 +37,9 @@ namespace Intersect.Server.Database.PlayerData.Players
         /// <param name="recordId"></param>
         /// <param name="scoringType"></param>
         /// <returns></returns>
-        public static string CreateSearchQueryString(RecordType recordType, Guid recordId, RecordScoring scoringType, int page)
+        public static string CreateSearchQueryString(RecordType recordType, Guid recordId, RecordScoring scoringType)
         {
-            if (page == -1)
-            {
-                return string.Empty;
-            }
-            return $"type={Enum.GetName(typeof(RecordType), recordType)}&id={recordId}&scoring={Enum.GetName(typeof(RecordScoring), scoringType)}&page={page}";
+            return $"type={Enum.GetName(typeof(RecordType), recordType)}&id={recordId}&scoring={Enum.GetName(typeof(RecordScoring), scoringType)}";
         }
 
         public static void RemoveCachedRecord(string queryString)
@@ -50,26 +55,30 @@ namespace Intersect.Server.Database.PlayerData.Players
 
     public class LeaderboardPage
     {
-        public static readonly long TimeUntilRequery = Options.Instance.RecordOpts.RecordCacheIntervalMinutes * Intersect.Utilities.Timing.Minutes; // 15 minutes
         public List<RecordDto> Records { get; set; }
-        public long QueryTimestamp { get; set; }
-        public long RequeryTimestamp => QueryTimestamp + TimeUntilRequery;
         public int CurrentPage { get; set; }
 
         public LeaderboardPage()
         {
         }
 
-        public LeaderboardPage(List<RecordDto> records, long queryTimestamp, int currentPage)
+        public LeaderboardPage(List<RecordDto> records, int currentPage)
         {
             Records = records;
-            QueryTimestamp = queryTimestamp;
             CurrentPage = currentPage;
         }
 
-        public void Cache(string key)
+        public void Cache(string key, int page)
         {
-            PlayerRecordCache.CachedRecords[key] = this;
+            if (page < 0)
+            {
+                return;
+            }
+
+            PlayerRecordCache.CachedRecords[key] = new CachedRecord();
+
+            PlayerRecordCache.CachedRecords[key].QueryTimestamp = Timing.Global.MillisecondsUtc;
+            PlayerRecordCache.CachedRecords[key].Pages[page] = this;
         }
     }
 
@@ -222,7 +231,7 @@ namespace Intersect.Server.Database.PlayerData.Players
                 PacketSender.SendRecordPageTo(player, leaderboard.Records, leaderboard.CurrentPage, queryPlayer.Name);
             } catch (Exception e)
             {
-                Console.WriteLine($"Error thrown when sending leaderboard page to {player.Name}");
+                Console.WriteLine($"Error thrown when sending leaderboard page to {player.Name}: {e.Message}");
                 return;
             }
         }
@@ -250,8 +259,8 @@ namespace Intersect.Server.Database.PlayerData.Players
 
             // Check if we can just access the cache for results
             string queryString;
-            queryString = PlayerRecordCache.CreateSearchQueryString(type, recordId, scoreType, page);
-            if (TryGetCachedLeaderboardPage(queryString, player.Id, out var cachedResults))
+            queryString = PlayerRecordCache.CreateSearchQueryString(type, recordId, scoreType);
+            if (TryGetCachedLeaderboardPage(queryString, player.Id, page, out var cachedResults))
             {
                 return cachedResults;
             }
@@ -270,8 +279,8 @@ namespace Intersect.Server.Database.PlayerData.Players
                     page = GetPlayersPage(player, allRecords);
                 }
                 // Try getting the cache _now_...
-                queryString = PlayerRecordCache.CreateSearchQueryString(type, recordId, scoreType, page);
-                if (TryGetCachedLeaderboardPage(queryString, player.Id, out var cachedResults2))
+                queryString = PlayerRecordCache.CreateSearchQueryString(type, recordId, scoreType);
+                if (TryGetCachedLeaderboardPage(queryString, player.Id, page, out var cachedResults2))
                 {
                     return cachedResults2;
                 }
@@ -288,7 +297,7 @@ namespace Intersect.Server.Database.PlayerData.Players
                 results = CreateLeaderboardPage(records.ToArray(), playerNameLookup, recordTransformer, page);
             }
 
-            results.Cache(queryString);
+            results.Cache(queryString, page);
             return results;
         }
 
@@ -299,7 +308,7 @@ namespace Intersect.Server.Database.PlayerData.Players
                     .ToArray();
         }
 
-        public static bool TryGetCachedLeaderboardPage(string searchKey, Guid playerId, out LeaderboardPage results)
+        public static bool TryGetCachedLeaderboardPage(string searchKey, Guid playerId, int page, out LeaderboardPage results)
         {
             results = null;
 
@@ -308,12 +317,17 @@ namespace Intersect.Server.Database.PlayerData.Players
                 return false;
             }
 
-            if (PlayerRecordCache.CachedRecords.TryGetValue(searchKey, out var cachedResults))
+            // Can't cache without actually knowing what page to pull
+            if (page == -1)
             {
-                if (cachedResults.RequeryTimestamp >= Intersect.Utilities.Timing.Global.MillisecondsUtc)
+                return false;
+            }
+
+            if (PlayerRecordCache.CachedRecords.TryGetValue(searchKey, out var cachedResults) && cachedResults.Pages.TryGetValue(page, out var cachedResult))
+            {
+                if (cachedResults.RequeryTimestamp >= Timing.Global.MillisecondsUtc)
                 {
-                    Console.WriteLine("Returning cached result!");
-                    results = cachedResults;
+                    results = cachedResult;
                 }
                 // Otherwise clear the cached record
                 else
@@ -417,7 +431,7 @@ namespace Intersect.Server.Database.PlayerData.Players
                 dtos.Add(new RecordDto(name, formattedRecord, record.Index));
             }
 
-            return new LeaderboardPage(dtos, Intersect.Utilities.Timing.Global.MillisecondsUtc, currentPage);
+            return new LeaderboardPage(dtos, currentPage);
         }
 
         public static void RemoveAllRecordsOfType(Guid recordId, RecordType type)

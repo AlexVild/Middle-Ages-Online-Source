@@ -22,6 +22,8 @@ namespace Intersect.Client.Interface.Game.Leaderboards
         private Label HeadingValue;
         private Label HeadingHolder;
 
+        private Label CacheWarning;
+
         private ScrollControl RecordContainer;
         private List<LeaderboardRecord> Records;
 
@@ -89,6 +91,11 @@ namespace Intersect.Client.Interface.Game.Leaderboards
                 Text = Strings.Leaderboard.Loading
             };
 
+            CacheWarning = new Label(Background, "CacheWarning")
+            {
+                Text = Strings.Leaderboard.CacheWarning.ToString(Options.Instance.RecordOpts.RecordCacheIntervalMinutes)
+            };
+
             Interface.FocusElements.Add(Search);
 
             Background.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
@@ -127,6 +134,7 @@ namespace Intersect.Client.Interface.Game.Leaderboards
 
             RecordContainer.IsHidden = CurrentLeaderboard.Loading && CurrentLeaderboard.Records.Count > 0;
 
+            CacheWarning.IsHidden = Options.Instance.RecordOpts.RecordCacheIntervalMinutes < 1;
             CurrentLeaderboard.SearchTerm = Search.Text;
             SearchButton.IsDisabled = CurrentLeaderboard.Loading || string.IsNullOrEmpty(Search.Text);
             NextPage.IsDisabled = (CurrentLeaderboard.Records.Count != Options.Instance.RecordOpts.RecordsPerLeaderboardPage) || CurrentLeaderboard.Loading;
