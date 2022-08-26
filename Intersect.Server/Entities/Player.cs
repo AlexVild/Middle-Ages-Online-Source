@@ -7015,7 +7015,7 @@ namespace Intersect.Server.Entities
             {
                 if (setRecord && TrySetRecord(RecordType.PlayerVariable, v.VariableId, v.Value.Integer))
                 {
-                    PacketSender.SendChatMsg(this, Strings.Records.NewRecordGeneric, ChatMessageType.Local, Color.FromName("Blue", Strings.Colors.presets));
+                    PlayerRecord.SendNewVariableRecordMessage(id, true, this);
                 }
                 StartCommonEventsWithTrigger(CommonEventTrigger.PlayerVariableChange, "", id.ToString());
             }
@@ -8211,6 +8211,9 @@ namespace Intersect.Server.Entities
         [JsonIgnore]
         public virtual List<MapExploredInstance> MapsExplored { get; set; } = new List<MapExploredInstance>();
 
+        [NotMapped, JsonIgnore]
+        public bool CloseLeaderboard { get; set; }
+
         public void MarkMapExplored(Guid mapId)
         {
             lock (EntityLock)
@@ -8311,6 +8314,16 @@ namespace Intersect.Server.Entities
                     {
                         scoreType = RecordScoring.Low;
                     }
+
+                    // Short term fix to prevent mods/admins from setting hot times for dungeons
+                    if (!Options.Instance.RecordOpts.EnableModVariableRecords)
+                    {
+                        if (Power != UserRights.None || (Party.Count > 0 && !Party.All(p => p.Power == UserRights.None)))
+                        {
+                            PacketSender.SendChatMsg(this, Strings.Records.VoidRecord, ChatMessageType.Notice, CustomColors.General.GeneralMuted);
+                            return false;
+                        }
+                    }
                 }
 
                 // If this is a "team" record, find the record, if any, that contains the same team
@@ -8345,8 +8358,8 @@ namespace Intersect.Server.Entities
                     }
                     PlayerRecords.Add(matchingRecord);
                 }
-                else if (matchingRecord.ScoreType == RecordScoring.High && matchingRecord.Amount >= amount ||
-                    matchingRecord.ScoreType == RecordScoring.Low && matchingRecord.Amount <= amount)
+                else if (scoreType == RecordScoring.High && matchingRecord.Amount >= amount ||
+                    scoreType == RecordScoring.Low && matchingRecord.Amount <= amount)
                 {
                     // Our record didn't improve
                     return false;
@@ -8399,8 +8412,7 @@ namespace Intersect.Server.Entities
             }
             foreach(var record in matchingRecords)
             {
-                PlayerRecords.Remove(record);
-                DbInterface.Pool.QueueWorkItem(record.Remove);
+                PlayerRecord.Remove(record, this);
             }
         }
         #endregion

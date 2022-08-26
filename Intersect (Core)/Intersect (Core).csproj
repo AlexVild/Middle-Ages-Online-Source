@@ -388,6 +388,7 @@
     <Compile Include="Network\Packets\Client\CloseBagPacket.cs" />
     <Compile Include="Network\Packets\Client\CloseBankPacket.cs" />
     <Compile Include="Network\Packets\Client\CloseCraftingPacket.cs" />
+    <Compile Include="Network\Packets\Client\CloseLeaderboardPacket.cs" />
     <Compile Include="Network\Packets\Client\CloseQuestBoardPacket.cs" />
     <Compile Include="Network\Packets\Client\CloseShopPacket.cs" />
     <Compile Include="Network\Packets\Client\CraftItemPacket.cs" />

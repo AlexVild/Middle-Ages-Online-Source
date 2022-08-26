@@ -2170,13 +2170,15 @@ namespace Intersect.Server.Entities.Events
                 if (changed)
                 {
                     var teammates = player.Party?.ToList() ?? default;
+                    if (command.InstanceSync)
+                    {
+                        teammates = teammates.FindAll(tm => tm.MapInstanceId == player.MapInstanceId);
+                    }
                     if (player.TrySetRecord(RecordType.PlayerVariable, command.VariableId, value.Integer, teammates))
                     {
                         newRecord = true;
-                        var msg = command.SyncParty && (player.Party?.Count ?? 0) > 1 ?
-                            Strings.Records.NewRecordGenericParty :
-                            Strings.Records.NewRecordGeneric;
-                        PacketSender.SendChatMsg(player, msg, ChatMessageType.Experience, Color.FromName("Blue", Strings.Colors.presets));
+
+                        PlayerRecord.SendNewVariableRecordMessage(command.VariableId, command.SyncParty && (player.Party?.Count > 0), player);
                     }
                     player.StartCommonEventsWithTrigger(CommonEventTrigger.PlayerVariableChange, "", command.VariableId.ToString());
                 }
@@ -2695,7 +2697,10 @@ namespace Intersect.Server.Entities.Events
         {
             if (player == null) return;
 
+            player.CloseLeaderboard = false;
             player.SendPacket(new OpenLeaderboardPacket(command.RecordType, command.DisplayName, command.ScoreType, command.RecordId, command.DisplayMode));
+
+            callStack.Peek().WaitingForResponse = CommandInstance.EventResponse.Leaderboard;
         }
 
         private static void ProcessCommand(

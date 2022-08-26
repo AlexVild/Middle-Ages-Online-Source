@@ -34,6 +34,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                 (int)mMyCommand.RecordType :
                 0;
 
+            chkClearAll.Checked = mMyCommand.ClearAll;
             UpdateValues();
             PopulateValue();
         }
@@ -73,7 +74,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                 cmbValue.SelectedIndex = 0;
             }
 
-            chkClearAll.Checked = mMyCommand.ClearAll;
             PopulateCommandValue();
         }
 

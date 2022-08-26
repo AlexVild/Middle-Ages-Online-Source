@@ -23,5 +23,7 @@ namespace Intersect.Config
         public int RecordCacheIntervalMinutes = 15;
 
         public int RecordsPerLeaderboardPage = 20;
+
+        public bool EnableModVariableRecords = false;
     }
 }

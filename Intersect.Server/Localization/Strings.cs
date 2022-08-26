@@ -1650,6 +1650,10 @@ namespace Intersect.Server.Localization
                 @"You have crafted a total of {00} {01}!";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString VoidRecord =
+                @"Note: You cannot set new variable records (such as dungeon times) as a mod or admin/with one in your party.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString resourcegathered =
                 @"You have harvested a resource of this type {00} times!";
 

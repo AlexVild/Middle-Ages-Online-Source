@@ -536,5 +536,10 @@ namespace Intersect.Client.Networking
 
             Network.SendPacket(new RequestLeaderboardPacket(-1, leaderboard.Type, leaderboard.ScoreType, leaderboard.RecordId, leaderboard.SearchTerm, leaderboard.DisplayMode));
         }
+
+        public static void SendCloseLeaderboardPacket()
+        {
+            Network.SendPacket(new CloseLeaderboardPacket());
+        }
     }
 }

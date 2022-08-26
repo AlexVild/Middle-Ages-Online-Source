@@ -31,7 +31,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private void InitializeComponent()
         {
             this.grpSetVariable = new DarkUI.Controls.DarkGroupBox();
-            this.chkScoreLowest = new DarkUI.Controls.DarkCheckBox();
+            this.chkInstanceSync = new DarkUI.Controls.DarkCheckBox();
             this.grpSelectVariable = new DarkUI.Controls.DarkGroupBox();
             this.rdoInstanceVariable = new DarkUI.Controls.DarkRadioButton();
             this.chkSyncParty = new DarkUI.Controls.DarkCheckBox();
@@ -92,7 +92,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpStringSet = new DarkUI.Controls.DarkGroupBox();
             this.lblStringValue = new System.Windows.Forms.Label();
             this.txtStringValue = new DarkUI.Controls.DarkTextBox();
-            this.chkInstanceSync = new DarkUI.Controls.DarkCheckBox();
             this.grpSetVariable.SuspendLayout();
             this.grpSelectVariable.SuspendLayout();
             this.grpNumericVariable.SuspendLayout();
@@ -112,7 +111,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpSetVariable.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.grpSetVariable.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.grpSetVariable.Controls.Add(this.chkInstanceSync);
-            this.grpSetVariable.Controls.Add(this.chkScoreLowest);
             this.grpSetVariable.Controls.Add(this.grpSelectVariable);
             this.grpSetVariable.Controls.Add(this.btnCancel);
             this.grpSetVariable.Controls.Add(this.btnSave);
@@ -127,15 +125,15 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpSetVariable.TabStop = false;
             this.grpSetVariable.Text = "Set Variable";
             // 
-            // chkScoreLowest
+            // chkInstanceSync
             // 
-            this.chkScoreLowest.AutoSize = true;
-            this.chkScoreLowest.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.chkScoreLowest.Location = new System.Drawing.Point(229, 374);
-            this.chkScoreLowest.Name = "chkScoreLowest";
-            this.chkScoreLowest.Size = new System.Drawing.Size(100, 17);
-            this.chkScoreLowest.TabIndex = 42;
-            this.chkScoreLowest.Text = "Record lowest?";
+            this.chkInstanceSync.AutoSize = true;
+            this.chkInstanceSync.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.chkInstanceSync.Location = new System.Drawing.Point(124, 374);
+            this.chkInstanceSync.Name = "chkInstanceSync";
+            this.chkInstanceSync.Size = new System.Drawing.Size(100, 17);
+            this.chkInstanceSync.TabIndex = 42;
+            this.chkInstanceSync.Text = "Instance Sync?";
             // 
             // grpSelectVariable
             // 
@@ -915,16 +913,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.txtStringValue.Size = new System.Drawing.Size(207, 20);
             this.txtStringValue.TabIndex = 62;
             // 
-            // chkInstanceSync
-            // 
-            this.chkInstanceSync.AutoSize = true;
-            this.chkInstanceSync.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.chkInstanceSync.Location = new System.Drawing.Point(124, 374);
-            this.chkInstanceSync.Name = "chkInstanceSync";
-            this.chkInstanceSync.Size = new System.Drawing.Size(100, 17);
-            this.chkInstanceSync.TabIndex = 42;
-            this.chkInstanceSync.Text = "Instance Sync?";
-            // 
             // EventCommandVariable
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1022,7 +1010,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         internal DarkRadioButton optPlayerLevel;
         internal DarkRadioButton rdoSpawnGroup;
         internal DarkRadioButton rdoInventorySlots;
-        private DarkCheckBox chkScoreLowest;
         private DarkCheckBox chkInstanceSync;
     }
 }

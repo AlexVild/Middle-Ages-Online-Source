@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
+using Intersect.Enums;
+using Intersect.GameObjects;
 using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Events.Commands;
 using Intersect.Network.Packets.Server;
 using Intersect.Server.Entities;
+using Intersect.Server.General;
 using Intersect.Server.Localization;
 using Intersect.Server.Networking;
 using Intersect.Utilities;
@@ -164,17 +167,32 @@ namespace Intersect.Server.Database.PlayerData.Players
             }
         }
 
-        public void Remove()
+        public static void Remove(PlayerRecord record, Player player)
         {
-            lock (mLock)
+            if (player == null)
             {
-                using (var context = DbInterface.CreatePlayerContext(readOnly: false))
-                {
-                    context.Player_Record.Remove(this);
-                    context.ChangeTracker.DetectChanges();
-                    context.SaveChanges();
-                }
+                return;
             }
+
+            if (!player.PlayerRecords.Contains(record))
+            {
+                return;
+            }
+
+            using (var context = DbInterface.CreatePlayerContext(readOnly: false))
+            {
+                player.PlayerRecords.RemoveAll(r => r.PlayerHasRecord(record, player.Id));
+
+                context.Player_Record.RemoveRange(context.Player_Record.Where(r => r.PlayerHasRecord(record, player.Id)));
+
+                context.ChangeTracker.DetectChanges();
+                context.SaveChanges();
+            }
+        }
+
+        private bool PlayerHasRecord(PlayerRecord comparingRecord, Guid playerId)
+        {
+            return RecordId == comparingRecord.RecordId && Type == comparingRecord.Type && PlayerId == playerId && comparingRecord.Teammates.Count == 0;
         }
 
         public static int GetPlayersPage(Player player, PlayerRecord[] records)
@@ -438,13 +456,29 @@ namespace Intersect.Server.Database.PlayerData.Players
         {
             using (var context = DbInterface.CreatePlayerContext(readOnly: false))
             {
-                var recordsToDelete = context.Player_Record.Where(record => record.RecordId == recordId && record.Type == type).ToArray();
+                foreach (var player in Globals.OnlineList)
+                {
+                    player.PlayerRecords.RemoveAll(r => r.RecordId == recordId && r.Type == type);
+                }
 
-                context.Player_Record.RemoveRange(recordsToDelete);
+                context.Player_Record.RemoveRange(context.Player_Record.Where(record => record.RecordId == recordId && record.Type == type));
 
                 context.ChangeTracker.DetectChanges();
                 context.SaveChanges();
             }
+        }
+
+        public static void SendNewVariableRecordMessage(Guid variableId, bool inParty, Player player)
+        {
+            var baseV = PlayerVariableBase.Get(variableId);
+            if (baseV.RecordSilently)
+            {
+                return;
+            }
+            var msg = inParty ?
+                Strings.Records.NewRecordGenericParty :
+                Strings.Records.NewRecordGeneric;
+            PacketSender.SendChatMsg(player, msg, ChatMessageType.Experience, Color.FromName("Blue", Strings.Colors.presets));
         }
     }
 }

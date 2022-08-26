@@ -468,7 +468,6 @@ namespace Intersect.Server.Entities
             catch (Exception ex)
             {
                 Log.Error(ex, $"Failed to load player records for {Name}.");
-                //ServerContext.DispatchUnhandledException(new Exception("Failed to save user, shutting down to prevent rollbacks!"), true);
             }
         }
         #endregion

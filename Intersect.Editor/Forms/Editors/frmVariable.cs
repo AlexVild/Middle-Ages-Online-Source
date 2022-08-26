@@ -241,7 +241,9 @@ namespace Intersect.Editor.Forms.Editors
                     cmbVariableType.SelectedIndex = (int) (((PlayerVariableBase) mEditorItem).Type - 1);
                     chkRecordable.Checked = ((PlayerVariableBase)mEditorItem).Recordable;
                     chkRecordLow.Checked = ((PlayerVariableBase)mEditorItem).RecordLow;
+                    chkSilent.Checked = ((PlayerVariableBase)mEditorItem).RecordSilently;
                     chkRecordLow.Enabled = chkRecordable.Checked;
+                    chkSilent.Enabled = chkRecordable.Checked;
                     grpValue.Hide();
                 }
                 else if (rdoGlobalVariables.Checked)
@@ -775,6 +777,7 @@ namespace Intersect.Editor.Forms.Editors
             }
             ((PlayerVariableBase)mEditorItem).Recordable = chkRecordable.Checked;
             chkRecordLow.Enabled = chkRecordable.Checked;
+            chkSilent.Enabled = chkRecordable.Checked;
         }
 
         private void chkRecordLow_CheckedChanged(object sender, EventArgs e)
@@ -784,6 +787,15 @@ namespace Intersect.Editor.Forms.Editors
                 return;
             }
             ((PlayerVariableBase)mEditorItem).RecordLow = chkRecordLow.Checked;
+        }
+
+        private void chkSilent_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!rdoPlayerVariables.Checked)
+            {
+                return;
+            }
+            ((PlayerVariableBase)mEditorItem).RecordSilently = chkSilent.Checked;
         }
     }
 

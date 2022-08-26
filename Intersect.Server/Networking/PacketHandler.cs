@@ -4282,5 +4282,16 @@ namespace Intersect.Server.Networking
             PlayerRecord.SendLeaderboardPageTo(player, packet.Type, packet.RecordId, packet.ScoreType, packet.Page, packet.DisplayMode, packet.Term);
         }
 
+        public void HandlePacket(Client client, CloseLeaderboardPacket packet)
+        {
+            var player = client?.Entity;
+
+            if (player == null)
+            {
+                return;
+            }
+
+            player.CloseLeaderboard = true;
+        }
     }
 }

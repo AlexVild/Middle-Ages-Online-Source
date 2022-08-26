@@ -5,6 +5,7 @@ using Intersect.Client.Framework.Gwen.Control.EventArguments;
 using Intersect.Client.General;
 using Intersect.Client.General.Leaderboards;
 using Intersect.Client.Localization;
+using Intersect.Client.Networking;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -189,6 +190,7 @@ namespace Intersect.Client.Interface.Game.Leaderboards
         {
             Search.Text = string.Empty;
             CurrentLeaderboard.IsOpen = false;
+            PacketSender.SendCloseLeaderboardPacket();
         }
 
         private void NextPageClicked(Base sender, ClickedEventArgs arguments)
