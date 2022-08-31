@@ -456,13 +456,6 @@ namespace Intersect.Editor.Forms.Editors
             lstDrops.Items.Clear();
 
             var drops = mEditorItem.Drops.ToArray();
-            foreach (var drop in drops)
-            {
-                if (ItemBase.Get(drop.ItemId) == null)
-                {
-                    mEditorItem.Drops.Remove(drop);
-                }
-            }
 
             for (var i = 0; i < mEditorItem.Drops.Count; i++)
             {
@@ -477,7 +470,12 @@ namespace Intersect.Editor.Forms.Editors
                 }
                 else
                 {
-                    lstDrops.Items.Add(TextUtils.None);
+                    lstDrops.Items.Add(
+                        Strings.NpcEditor.dropdisplay.ToString(
+                            TextUtils.None, 1,
+                            mEditorItem.Drops[i].Chance
+                        )
+                    );
                 }
             }
 

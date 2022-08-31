@@ -77,6 +77,9 @@ namespace Intersect.Editor.Forms.Editors
             this.lblHP = new System.Windows.Forms.Label();
             this.lblExp = new System.Windows.Forms.Label();
             this.pnlContainer = new System.Windows.Forms.Panel();
+            this.grpAttackOverrides = new DarkUI.Controls.DarkGroupBox();
+            this.cmbSpellAttackOverride = new DarkUI.Controls.DarkComboBox();
+            this.lblAttackOverride = new System.Windows.Forms.Label();
             this.grpDeathTransform = new DarkUI.Controls.DarkGroupBox();
             this.cmbTransformIntoNpc = new DarkUI.Controls.DarkComboBox();
             this.lblDeathTransform = new System.Windows.Forms.Label();
@@ -182,9 +185,6 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
             this.searchableDarkTreeView1 = new Intersect.Editor.Forms.Controls.SearchableDarkTreeView();
-            this.grpAttackOverrides = new DarkUI.Controls.DarkGroupBox();
-            this.cmbSpellAttackOverride = new DarkUI.Controls.DarkComboBox();
-            this.lblAttackOverride = new System.Windows.Forms.Label();
             this.grpNpcs.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudRgbaA)).BeginInit();
@@ -205,6 +205,7 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudMag)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudStr)).BeginInit();
             this.pnlContainer.SuspendLayout();
+            this.grpAttackOverrides.SuspendLayout();
             this.grpDeathTransform.SuspendLayout();
             this.grpAnimation.SuspendLayout();
             this.grpImmunities.SuspendLayout();
@@ -230,7 +231,6 @@ namespace Intersect.Editor.Forms.Editors
             this.grpNpcVsNpc.SuspendLayout();
             this.grpSpells.SuspendLayout();
             this.toolStrip.SuspendLayout();
-            this.grpAttackOverrides.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpNpcs
@@ -912,6 +912,52 @@ namespace Intersect.Editor.Forms.Editors
             this.pnlContainer.Name = "pnlContainer";
             this.pnlContainer.Size = new System.Drawing.Size(464, 529);
             this.pnlContainer.TabIndex = 17;
+            // 
+            // grpAttackOverrides
+            // 
+            this.grpAttackOverrides.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpAttackOverrides.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpAttackOverrides.Controls.Add(this.cmbSpellAttackOverride);
+            this.grpAttackOverrides.Controls.Add(this.lblAttackOverride);
+            this.grpAttackOverrides.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpAttackOverrides.Location = new System.Drawing.Point(2, 1262);
+            this.grpAttackOverrides.Margin = new System.Windows.Forms.Padding(2);
+            this.grpAttackOverrides.Name = "grpAttackOverrides";
+            this.grpAttackOverrides.Padding = new System.Windows.Forms.Padding(2);
+            this.grpAttackOverrides.Size = new System.Drawing.Size(209, 82);
+            this.grpAttackOverrides.TabIndex = 35;
+            this.grpAttackOverrides.TabStop = false;
+            this.grpAttackOverrides.Text = "Attack Overrides";
+            // 
+            // cmbSpellAttackOverride
+            // 
+            this.cmbSpellAttackOverride.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbSpellAttackOverride.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbSpellAttackOverride.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbSpellAttackOverride.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbSpellAttackOverride.DrawDropdownHoverOutline = false;
+            this.cmbSpellAttackOverride.DrawFocusRectangle = false;
+            this.cmbSpellAttackOverride.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbSpellAttackOverride.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbSpellAttackOverride.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbSpellAttackOverride.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbSpellAttackOverride.FormattingEnabled = true;
+            this.cmbSpellAttackOverride.Location = new System.Drawing.Point(12, 36);
+            this.cmbSpellAttackOverride.Name = "cmbSpellAttackOverride";
+            this.cmbSpellAttackOverride.Size = new System.Drawing.Size(182, 21);
+            this.cmbSpellAttackOverride.TabIndex = 19;
+            this.cmbSpellAttackOverride.Text = null;
+            this.cmbSpellAttackOverride.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbSpellAttackOverride.SelectedIndexChanged += new System.EventHandler(this.cmbSpellAttackOverride_SelectedIndexChanged);
+            // 
+            // lblAttackOverride
+            // 
+            this.lblAttackOverride.AutoSize = true;
+            this.lblAttackOverride.Location = new System.Drawing.Point(9, 20);
+            this.lblAttackOverride.Name = "lblAttackOverride";
+            this.lblAttackOverride.Size = new System.Drawing.Size(110, 13);
+            this.lblAttackOverride.TabIndex = 18;
+            this.lblAttackOverride.Text = "Spell Attack Override:";
             // 
             // grpDeathTransform
             // 
@@ -1915,6 +1961,11 @@ namespace Intersect.Editor.Forms.Editors
             0,
             131072});
             this.nudDropChance.Location = new System.Drawing.Point(6, 198);
+            this.nudDropChance.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
             this.nudDropChance.Name = "nudDropChance";
             this.nudDropChance.Size = new System.Drawing.Size(195, 20);
             this.nudDropChance.TabIndex = 60;
@@ -1960,9 +2011,9 @@ namespace Intersect.Editor.Forms.Editors
             this.lblDropChance.AutoSize = true;
             this.lblDropChance.Location = new System.Drawing.Point(3, 181);
             this.lblDropChance.Name = "lblDropChance";
-            this.lblDropChance.Size = new System.Drawing.Size(64, 13);
+            this.lblDropChance.Size = new System.Drawing.Size(87, 13);
             this.lblDropChance.TabIndex = 13;
-            this.lblDropChance.Text = "Chance (%):";
+            this.lblDropChance.Text = "Chance (weight):";
             // 
             // lblDropItem
             // 
@@ -2346,52 +2397,6 @@ namespace Intersect.Editor.Forms.Editors
             this.searchableDarkTreeView1.TabIndex = 46;
             this.searchableDarkTreeView1.Visible = false;
             // 
-            // grpAttackOverrides
-            // 
-            this.grpAttackOverrides.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.grpAttackOverrides.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpAttackOverrides.Controls.Add(this.cmbSpellAttackOverride);
-            this.grpAttackOverrides.Controls.Add(this.lblAttackOverride);
-            this.grpAttackOverrides.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpAttackOverrides.Location = new System.Drawing.Point(2, 1262);
-            this.grpAttackOverrides.Margin = new System.Windows.Forms.Padding(2);
-            this.grpAttackOverrides.Name = "grpAttackOverrides";
-            this.grpAttackOverrides.Padding = new System.Windows.Forms.Padding(2);
-            this.grpAttackOverrides.Size = new System.Drawing.Size(209, 82);
-            this.grpAttackOverrides.TabIndex = 35;
-            this.grpAttackOverrides.TabStop = false;
-            this.grpAttackOverrides.Text = "Attack Overrides";
-            // 
-            // cmbSpellAttackOverride
-            // 
-            this.cmbSpellAttackOverride.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbSpellAttackOverride.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbSpellAttackOverride.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbSpellAttackOverride.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbSpellAttackOverride.DrawDropdownHoverOutline = false;
-            this.cmbSpellAttackOverride.DrawFocusRectangle = false;
-            this.cmbSpellAttackOverride.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbSpellAttackOverride.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbSpellAttackOverride.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbSpellAttackOverride.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbSpellAttackOverride.FormattingEnabled = true;
-            this.cmbSpellAttackOverride.Location = new System.Drawing.Point(12, 36);
-            this.cmbSpellAttackOverride.Name = "cmbSpellAttackOverride";
-            this.cmbSpellAttackOverride.Size = new System.Drawing.Size(182, 21);
-            this.cmbSpellAttackOverride.TabIndex = 19;
-            this.cmbSpellAttackOverride.Text = null;
-            this.cmbSpellAttackOverride.TextPadding = new System.Windows.Forms.Padding(2);
-            this.cmbSpellAttackOverride.SelectedIndexChanged += new System.EventHandler(this.cmbSpellAttackOverride_SelectedIndexChanged);
-            // 
-            // lblAttackOverride
-            // 
-            this.lblAttackOverride.AutoSize = true;
-            this.lblAttackOverride.Location = new System.Drawing.Point(9, 20);
-            this.lblAttackOverride.Name = "lblAttackOverride";
-            this.lblAttackOverride.Size = new System.Drawing.Size(110, 13);
-            this.lblAttackOverride.TabIndex = 18;
-            this.lblAttackOverride.Text = "Spell Attack Override:";
-            // 
             // FrmNpc
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2438,6 +2443,8 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudMag)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudStr)).EndInit();
             this.pnlContainer.ResumeLayout(false);
+            this.grpAttackOverrides.ResumeLayout(false);
+            this.grpAttackOverrides.PerformLayout();
             this.grpDeathTransform.ResumeLayout(false);
             this.grpDeathTransform.PerformLayout();
             this.grpAnimation.ResumeLayout(false);
@@ -2475,8 +2482,6 @@ namespace Intersect.Editor.Forms.Editors
             this.grpSpells.PerformLayout();
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
-            this.grpAttackOverrides.ResumeLayout(false);
-            this.grpAttackOverrides.PerformLayout();
             this.ResumeLayout(false);
 
         }
