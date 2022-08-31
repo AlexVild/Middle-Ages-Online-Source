@@ -3172,10 +3172,8 @@ namespace Intersect.Server.Entities
             Dead = true;
         }
 
-        private void DropItems(Entity killer, bool sendUpdate = true)
+        public virtual void DropItems(Entity killer, bool sendUpdate = true)
         {
-            // Drop items
-            if (Map.ZoneType != MapZones.Normal && this is Player) return; // Only drop items in PVP
             for (var n = 0; n < Items.Count; n++)
             {
                 if (Items[n] == null)
@@ -3192,71 +3190,35 @@ namespace Intersect.Server.Entities
                     continue;
                 }
 
-                //Don't lose bound items on death for players.
-                if (this.GetType() == typeof(Player))
-                {
-                    if (itemBase.DropChanceOnDeath == 0)
-                    {
-                        continue;
-                    }
-                }
-
                 //Calculate the killers luck (If they are a player)
                 var playerKiller = killer as Player;
                 var luck = 1 + playerKiller?.GetEquipmentBonusEffect(EffectType.Luck) / 100f;
 
                 Guid lootOwner = Guid.Empty;
-                if (this is Player)
+
+                //Npc drop rates
+                var randomChance = Randomization.Next(1, 100001);
+                if (randomChance >= (item.DropChance * 1000) * luck)
                 {
-                    //Player drop rates
-                    if (Randomization.Next(1, 101) >= itemBase.DropChanceOnDeath * luck)
-                    {
-                        continue;
-                    }
-
-                    // It's a player, try and set ownership to the player that killed them.. If it was a player.
-                    // Otherwise set to self, so they can come and reclaim their items.
-                    lootOwner = playerKiller?.Id ?? Id;
+                    continue;
                 }
-                else
+
+                // Set owner to player that killed this, if there is any.
+                if (playerKiller != null)
                 {
-                    //Npc drop rates
-                    var randomChance = Randomization.Next(1, 100001);
-                    if (randomChance >= (item.DropChance * 1000) * luck)
-                    {
-                        continue;
-                    }
-
-                    // Set owner to player that killed this, if there is any.
-                    if (playerKiller != null && this is Npc thisNpc)
-                    {
-                        // Yes, so set the owner to the player that killed it.
-                        lootOwner = playerKiller.Id;
-                    }
-
-                    // Set the attributes for this item.
-                    item.Set(new Item(item.ItemId, item.Quantity, true));
+                    // Yes, so set the owner to the player that killed it.
+                    lootOwner = playerKiller.Id;
                 }
+
+                // Set the attributes for this item.
+                item.Set(new Item(item.ItemId, item.Quantity, true));
 
                 // Spawn the actual item!
                 if (MapController.TryGetInstanceFromMap(MapId, MapInstanceId, out var instance))
                 {
-                    if (this is Player)
-                    {
-                        instance.SpawnItem(X, Y, item, item.Quantity, lootOwner, sendUpdate, MapInstance.ItemSpawnType.PlayerDeath);
-                    }
-                    else
-                    {
-                        instance.SpawnItem(X, Y, item, item.Quantity, lootOwner, sendUpdate);
-                    }
+                    instance.SpawnItem(X, Y, item, item.Quantity, lootOwner, sendUpdate);
                 }
-
-                // Remove the item from inventory if a player.
-                var player = this as Player;
-                player?.TryTakeItem(Items[n], item.Quantity);
             }
-
-
         }
 
         public virtual bool IsDead()

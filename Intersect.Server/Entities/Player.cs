@@ -8526,5 +8526,61 @@ namespace Intersect.Server.Entities
             }
         }
         #endregion
+
+        public override void DropItems(Entity killer, bool sendUpdate = true)
+        {
+            // Drop items
+            if (Map.ZoneType != MapZones.Normal)
+            {
+                return; // Only drop items in PVP
+            }
+            
+            for (var n = 0; n < Items.Count; n++)
+            {
+                if (Items[n] == null)
+                {
+                    continue;
+                }
+
+                // Don't mess with the actual object.
+                var item = Items[n].Clone();
+
+                var itemBase = ItemBase.Get(item.ItemId);
+                if (itemBase == null)
+                {
+                    continue;
+                }
+
+                //Don't lose bound items on death for players.
+                if (itemBase.DropChanceOnDeath == 0)
+                {
+                    continue;
+                }
+
+                //Calculate the killers luck (If they are a player)
+                var playerKiller = killer as Player;
+                var luck = 1 + playerKiller?.GetEquipmentBonusEffect(EffectType.Luck) / 100f;
+
+                Guid lootOwner = Guid.Empty;
+                //Player drop rates
+                if (Randomization.Next(1, 101) >= itemBase.DropChanceOnDeath * luck)
+                {
+                    continue;
+                }
+
+                // It's a player, try and set ownership to the player that killed them.. If it was a player.
+                // Otherwise set to self, so they can come and reclaim their items.
+                lootOwner = playerKiller?.Id ?? Id;
+
+                // Spawn the actual item!
+                if (MapController.TryGetInstanceFromMap(MapId, MapInstanceId, out var instance))
+                {
+                    instance.SpawnItem(X, Y, item, item.Quantity, lootOwner, sendUpdate, MapInstance.ItemSpawnType.PlayerDeath);
+                }
+
+                // Remove the item from inventory if a player.
+                TryTakeItem(Items[n], item.Quantity);
+            }
+        }
     }
 }

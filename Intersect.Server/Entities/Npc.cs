@@ -1677,4 +1677,83 @@ namespace Intersect.Server.Entities
 
     }
 
+    public partial class Npc : Entity
+    {
+        public override void DropItems(Entity killer, bool sendUpdate = true)
+        {
+            // Stores drop tables by their maximum roll
+            var dropTable = new Dictionary<double, Item>();
+
+            // TODO move this to NPC Items instantiation?
+            Items.Sort((a, b) =>
+            {
+                return a.DropChance.CompareTo(b.DropChance);
+            });
+
+            for (var n = 0; n < Items.Count; n++)
+            {
+                var lastWeight = dropTable.Keys.FirstOrDefault();
+                if (Items[n] == null)
+                {
+                    continue;
+                }
+
+                // Don't mess with the actual object.
+                var item = Items[n].Clone();
+
+                var itemBase = ItemBase.Get(item.ItemId);
+                if (itemBase == null && item.ItemId != Guid.Empty)
+                {
+                    continue;
+                }
+
+                // Build the weighted drop table
+                if (item.ItemId == Guid.Empty) // "none" item, put it on the table
+                {
+                    dropTable.Add(lastWeight + item.DropChance, null);
+                }
+                else
+                {
+                    dropTable.Add(lastWeight + item.DropChance, item);
+                }
+
+            }
+
+            var maxRoll = (int)Math.Ceiling(dropTable.Keys.LastOrDefault());
+            if (maxRoll <= 0)
+            {
+                return;
+            }
+
+            //Calculate the killers luck (If they are a player)
+            var playerKiller = killer as Player;
+            var luck = 1 + playerKiller?.GetEquipmentBonusEffect(EffectType.Luck) / 100f;
+
+            Guid lootOwner = Guid.Empty;
+
+            //Npc drop rates
+            var randomChance = Randomization.Next(1, maxRoll);
+            var rolledItem = dropTable.Where(kv => kv.Key >= randomChance).FirstOrDefault().Value;
+            if (rolledItem == default)
+            {
+                return;
+            }
+
+            // Set owner to player that killed this, if there is any.
+            if (playerKiller != null)
+            {
+                // Yes, so set the owner to the player that killed it.
+                lootOwner = playerKiller.Id;
+            }
+
+            // Set the attributes for this item.
+            rolledItem.Set(new Item(rolledItem.ItemId, rolledItem.Quantity, true));
+
+            // Spawn the actual item!
+            if (MapController.TryGetInstanceFromMap(MapId, MapInstanceId, out var instance))
+            {
+                instance.SpawnItem(X, Y, rolledItem, rolledItem.Quantity, lootOwner, sendUpdate);
+            }
+        }
+    }
 }
