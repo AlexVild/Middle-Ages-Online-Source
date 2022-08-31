@@ -53,6 +53,11 @@ namespace Intersect.Server.Maps
     /// </summary>
     public class MapInstance : IDisposable
     {
+        /// <summary>
+        /// Reference to stay consistent/easy-to-read with overworld behavior
+        /// </summary>
+        public static readonly Guid OverworldInstanceId = Guid.Empty;
+
         private MapController mMapController;
 
         /// <summary>
@@ -178,7 +183,7 @@ namespace Intersect.Server.Maps
 
         public bool ShouldBeCleaned()
         {
-            return (!mIsProcessing && LastRequestedUpdateTime > mLastUpdateTime + Options.Map.TimeUntilMapCleanup);
+            return (MapInstanceId != OverworldInstanceId && !mIsProcessing && LastRequestedUpdateTime > mLastUpdateTime + Options.Map.TimeUntilMapCleanup);
         }
 
         public void RemoveInstanceFromController()
@@ -1353,7 +1358,7 @@ namespace Intersect.Server.Maps
                     if (npcSpawnInstance != null && npcSpawnInstance.Entity != null && npcSpawnInstance.Entity.Dead)
                     {
                         // Do not respawn NPCs that aren't supposed to respawn - unless on overworld
-                        if (spawns[i].PreventRespawn && MapInstanceId != Guid.Empty) continue;
+                        if (spawns[i].PreventRespawn && MapInstanceId != OverworldInstanceId) continue;
 
                         // If the entity is dead, but needs respawning, set its respawn time (or, wait for more players to show up before starting the timer)
                         if (npcSpawnInstance.RespawnTime == -1 || !NpcHasEnoughPlayersToSpawn(i))
