@@ -84,7 +84,11 @@ namespace Intersect.Server.Core
         public static void ProcessTimers(long now)
         {
             // Process all timers that aren't indefinite
-            foreach (var timer in ActiveTimers.Where(t => t.Descriptor.TimeLimit < TimerConstants.TimerIndefiniteTimeLimit).ToArray())
+            if (ActiveTimers == null)
+            {
+                ActiveTimers = new TimerList();
+            }
+            foreach (var timer in ActiveTimers.Where(t => t?.Descriptor?.TimeLimit < TimerConstants.TimerIndefiniteTimeLimit).ToArray())
             {
                 // Short-circuit out if the newest timer is not yet expired
                 if (timer.TimeRemaining > now)
