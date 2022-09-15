@@ -581,6 +581,10 @@ namespace Intersect.Server.Database
                     TimerDescriptor.Lookup.Clear();
 
                     break;
+                case GameObjectType.LootTable:
+                    LootTableDescriptor.Lookup.Clear();
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }
@@ -721,23 +725,30 @@ namespace Intersect.Server.Database
                         case GameObjectType.Time:
                             break;
                        case GameObjectType.QuestList:
-                            foreach (var psw in context.QuestLists)
+                            foreach (var questList in context.QuestLists)
                             {
-                                QuestListBase.Lookup.Set(psw.Id, psw);
+                                QuestListBase.Lookup.Set(questList.Id, questList);
                             }
 
                             break;
                         case GameObjectType.QuestBoard:
-                           foreach (var psw in context.QuestBoards)
+                           foreach (var questBoard in context.QuestBoards)
                             {
-                                QuestBoardBase.Lookup.Set(psw.Id, psw);
+                                QuestBoardBase.Lookup.Set(questBoard.Id, questBoard);
                             }
 
                             break;
                         case GameObjectType.Timer:
-                           foreach (var psw in context.Timers)
+                           foreach (var timer in context.Timers)
                             {
-                                TimerDescriptor.Lookup.Set(psw.Id, psw);
+                                TimerDescriptor.Lookup.Set(timer.Id, timer);
+                            }
+
+                            break;
+                        case GameObjectType.LootTable:
+                           foreach (var lootTable in context.LootTables)
+                            {
+                                LootTableDescriptor.Lookup.Set(lootTable.Id, lootTable);
                             }
 
                             break;
@@ -855,7 +866,10 @@ namespace Intersect.Server.Database
                     ((QuestBase) dbObj).EndEvent.CommonEvent = false;
 
                     break;
+                case GameObjectType.LootTable:
+                    dbObj = new LootTableDescriptor(predefinedid);
 
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(gameObjectType), gameObjectType, null);
             }
@@ -999,7 +1013,11 @@ namespace Intersect.Server.Database
                             TimerDescriptor.Lookup.Set(dbObj.Id, dbObj);
 
                             break;
+                        case GameObjectType.LootTable:
+                            context.LootTables.Add((LootTableDescriptor)dbObj);
+                            LootTableDescriptor.Lookup.Set(dbObj.Id, dbObj);
 
+                            break;
                         default:
                             throw new ArgumentOutOfRangeException(nameof(gameObjectType), gameObjectType, null);
                     }
@@ -1134,6 +1152,10 @@ namespace Intersect.Server.Database
                             context.Timers.Remove((TimerDescriptor)gameObject);
 
                             break;
+                        case GameObjectType.LootTable:
+                            context.LootTables.Remove((LootTableDescriptor)gameObject);
+
+                            break;
                     }
 
                     if (gameObject.Type.GetLookup().Values.Contains(gameObject))
@@ -1264,6 +1286,10 @@ namespace Intersect.Server.Database
                             break;
                         case GameObjectType.Timer:
                             context.Timers.Update((TimerDescriptor)gameObject);
+
+                            break;
+                        case GameObjectType.LootTable:
+                            context.LootTables.Update((LootTableDescriptor)gameObject);
 
                             break;
                     }

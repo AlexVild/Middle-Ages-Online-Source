@@ -3926,6 +3926,10 @@ namespace Intersect.Server.Networking
                     }
 
                     break;
+                case GameObjectType.LootTable:
+                    obj = LootTableDescriptor.Get(id);
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -4069,7 +4073,10 @@ namespace Intersect.Server.Networking
                     obj = DatabaseObject<TimerDescriptor>.Lookup.Get(id);
 
                     break;
+                case GameObjectType.LootTable:
+                    obj = DatabaseObject<LootTableDescriptor>.Lookup.Get(id);
 
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }

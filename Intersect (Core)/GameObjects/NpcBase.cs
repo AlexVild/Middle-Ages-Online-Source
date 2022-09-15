@@ -335,7 +335,7 @@ namespace Intersect.GameObjects
 
     }
 
-    public class NpcDrop
+    public partial class NpcDrop
     {
 
         public double Chance;
@@ -344,6 +344,11 @@ namespace Intersect.GameObjects
 
         public int Quantity;
 
+    }
+
+    public partial class NpcDrop
+    {
+        public Guid LootTableId;
     }
 
 }

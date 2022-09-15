@@ -1311,7 +1311,7 @@ Tick timer saved in server config.json.";
 
         }
 
-        public struct DynamicRequirements
+        public partial struct DynamicRequirements
         {
 
             public static LocalizedString addcondition = @"Add Condition";
@@ -6071,6 +6071,12 @@ Negative values for time to flow backwards.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString OpenLeaderboard = @"Open leaderboard '{00}' for {01} (sort: {02}, display type: {03})";
+        }
+
+        public partial struct DynamicRequirements
+        {
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString LootTable = @"Loot Table";
         }
     }
 }

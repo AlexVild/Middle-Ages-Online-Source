@@ -698,6 +698,19 @@ namespace Intersect.Editor.Networking
                         TimerDescriptor.Lookup.Set(id, timer);
                     }
                     break;
+                case GameObjectType.LootTable:
+                    if (deleted)
+                    {
+                        var lt = LootTableDescriptor.Get(id);
+                        lt.Delete();
+                    }
+                    else
+                    {
+                        var lt = new LootTableDescriptor(id);
+                        lt.Load(json);
+                        LootTableDescriptor.Lookup.Set(id, lt);
+                    }
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }

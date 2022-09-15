@@ -75,6 +75,9 @@ namespace Intersect.Enums
 
         [GameObjectInfo(typeof(TimerDescriptor), "timers")]
         Timer,
+
+        [GameObjectInfo(typeof(LootTableDescriptor), "loot_tables")]
+        LootTable,
     }
 
 }

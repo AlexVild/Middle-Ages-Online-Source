@@ -83,6 +83,8 @@ namespace Intersect.Editor.Forms
         private frmQuestBoard mQuestBoardEditor;
         
         private frmTimers mTimerEditor;
+        
+        private frmLootTables mTableEditor;
 
         //General Editting Variables
         bool mTMouseDown;
@@ -1671,6 +1673,15 @@ namespace Intersect.Editor.Forms
                         }
 
                         break;
+                    case GameObjectType.LootTable:
+                        if (mTableEditor == null || mTableEditor.Visible == false)
+                        {
+                            mTableEditor = new frmLootTables();
+                            mTableEditor.InitEditor();
+                            mTableEditor.Show();
+                        }
+
+                        break;
                     default:
                         return;
                 }
@@ -2077,6 +2088,11 @@ namespace Intersect.Editor.Forms
         private void timerEditorToolStripMenuItem_Click(object sender, EventArgs e)
         {
             PacketSender.SendOpenEditor(GameObjectType.Timer);
+        }
+
+        private void lootTableEditorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PacketSender.SendOpenEditor(GameObjectType.LootTable);
         }
     }
 
