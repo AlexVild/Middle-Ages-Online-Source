@@ -486,31 +486,27 @@ namespace Intersect.Editor.Forms.Editors
             }
         }
 
-        private void ChangeDropType(DropType dropType, int index = -1)
+        private void ChangeDropType(DropType dropType)
         {
             FillItemCombobox(dropType);
             if (dropType == DropType.Item)
             {
                 nudDropAmount.Enabled = true;
-                if (index > -1)
-                {
-                    // +1 for "empty" item
-                    cmbDropItem.SelectedIndex = index + 1;
-                }
             }
             else
             {
                 nudDropAmount.Enabled = false;
-                if (index > -1)
-                {
-                    cmbDropItem.SelectedIndex = index;
-                }
             }
         }
 
         private void rdoTable_CheckedChanged(object sender, EventArgs e)
         {
             ChangeDropType(DropType.Table);
+        }
+
+        private void btnUnselectItem_Click(object sender, EventArgs e)
+        {
+            lstDrops.SelectedIndex = -1;
         }
     }
 }
