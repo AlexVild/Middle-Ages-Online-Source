@@ -4351,7 +4351,7 @@ Tick timer saved in server config.json.";
 
         }
 
-        public struct NpcEditor
+        public partial struct NpcEditor
         {
 
             public static LocalizedString abilitypower = @"Ability Pwr:";
@@ -4425,7 +4425,7 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString dropremove = @"Remove";
 
-            public static LocalizedString dropdisplay = @"{00} x{01} - {02}%";
+            public static LocalizedString dropdisplay = @"{00} x{01} - {02}wt.";
 
             public static LocalizedString enabled = @"Enabled?";
 
@@ -6077,6 +6077,12 @@ Negative values for time to flow backwards.";
         {
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString LootTable = @"Loot Table";
+        }
+
+        public partial struct NpcEditor
+        {
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString LootTableDrop = @"Table: {00} - {01}";
         }
     }
 }

@@ -69,6 +69,9 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbFolder = new DarkUI.Controls.DarkComboBox();
             this.lblName = new System.Windows.Forms.Label();
             this.txtName = new DarkUI.Controls.DarkTextBox();
+            this.grpTypes = new DarkUI.Controls.DarkGroupBox();
+            this.rdoTable = new DarkUI.Controls.DarkRadioButton();
+            this.rdoItem = new DarkUI.Controls.DarkRadioButton();
             this.toolStrip.SuspendLayout();
             this.grpTables.SuspendLayout();
             this.pnlTableSettings.SuspendLayout();
@@ -77,6 +80,7 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudDropAmount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudDropChance)).BeginInit();
             this.grpGeneral.SuspendLayout();
+            this.grpTypes.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolStrip
@@ -98,7 +102,7 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Padding = new System.Windows.Forms.Padding(5, 0, 1, 0);
-            this.toolStrip.Size = new System.Drawing.Size(695, 25);
+            this.toolStrip.Size = new System.Drawing.Size(696, 25);
             this.toolStrip.TabIndex = 46;
             this.toolStrip.Text = "toolStrip1";
             // 
@@ -210,7 +214,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpTables.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpTables.Location = new System.Drawing.Point(12, 28);
             this.grpTables.Name = "grpTables";
-            this.grpTables.Size = new System.Drawing.Size(204, 373);
+            this.grpTables.Size = new System.Drawing.Size(204, 387);
             this.grpTables.TabIndex = 47;
             this.grpTables.TabStop = false;
             this.grpTables.Text = "Loot Tables";
@@ -249,12 +253,12 @@ namespace Intersect.Editor.Forms.Editors
             this.lstGameObjects.Location = new System.Drawing.Point(6, 46);
             this.lstGameObjects.Name = "lstGameObjects";
             this.lstGameObjects.SelectedImageIndex = 0;
-            this.lstGameObjects.Size = new System.Drawing.Size(190, 319);
+            this.lstGameObjects.Size = new System.Drawing.Size(190, 333);
             this.lstGameObjects.TabIndex = 2;
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(388, 411);
+            this.btnSave.Location = new System.Drawing.Point(404, 421);
             this.btnSave.Name = "btnSave";
             this.btnSave.Padding = new System.Windows.Forms.Padding(5);
             this.btnSave.Size = new System.Drawing.Size(132, 27);
@@ -265,7 +269,7 @@ namespace Intersect.Editor.Forms.Editors
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(543, 411);
+            this.btnCancel.Location = new System.Drawing.Point(551, 421);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Padding = new System.Windows.Forms.Padding(5);
             this.btnCancel.Size = new System.Drawing.Size(132, 27);
@@ -279,7 +283,7 @@ namespace Intersect.Editor.Forms.Editors
             this.pnlTableSettings.Controls.Add(this.grpGeneral);
             this.pnlTableSettings.Location = new System.Drawing.Point(222, 28);
             this.pnlTableSettings.Name = "pnlTableSettings";
-            this.pnlTableSettings.Size = new System.Drawing.Size(461, 365);
+            this.pnlTableSettings.Size = new System.Drawing.Size(461, 387);
             this.pnlTableSettings.TabIndex = 57;
             this.pnlTableSettings.Visible = false;
             // 
@@ -291,7 +295,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpProperties.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpProperties.Location = new System.Drawing.Point(10, 116);
             this.grpProperties.Name = "grpProperties";
-            this.grpProperties.Size = new System.Drawing.Size(443, 226);
+            this.grpProperties.Size = new System.Drawing.Size(443, 263);
             this.grpProperties.TabIndex = 101;
             this.grpProperties.TabStop = false;
             this.grpProperties.Text = "Properties";
@@ -300,6 +304,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpDrops.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpDrops.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpDrops.Controls.Add(this.grpTypes);
             this.grpDrops.Controls.Add(this.btnDynamicRequirements);
             this.grpDrops.Controls.Add(this.btnDropRemove);
             this.grpDrops.Controls.Add(this.btnDropAdd);
@@ -313,14 +318,14 @@ namespace Intersect.Editor.Forms.Editors
             this.grpDrops.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpDrops.Location = new System.Drawing.Point(7, 19);
             this.grpDrops.Name = "grpDrops";
-            this.grpDrops.Size = new System.Drawing.Size(427, 199);
+            this.grpDrops.Size = new System.Drawing.Size(427, 238);
             this.grpDrops.TabIndex = 31;
             this.grpDrops.TabStop = false;
             this.grpDrops.Text = "Drops";
             // 
             // btnDynamicRequirements
             // 
-            this.btnDynamicRequirements.Location = new System.Drawing.Point(222, 169);
+            this.btnDynamicRequirements.Location = new System.Drawing.Point(222, 208);
             this.btnDynamicRequirements.Name = "btnDynamicRequirements";
             this.btnDynamicRequirements.Padding = new System.Windows.Forms.Padding(5);
             this.btnDynamicRequirements.Size = new System.Drawing.Size(163, 23);
@@ -330,7 +335,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             // btnDropRemove
             // 
-            this.btnDropRemove.Location = new System.Drawing.Point(310, 140);
+            this.btnDropRemove.Location = new System.Drawing.Point(310, 179);
             this.btnDropRemove.Name = "btnDropRemove";
             this.btnDropRemove.Padding = new System.Windows.Forms.Padding(5);
             this.btnDropRemove.Size = new System.Drawing.Size(75, 23);
@@ -340,7 +345,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             // btnDropAdd
             // 
-            this.btnDropAdd.Location = new System.Drawing.Point(222, 140);
+            this.btnDropAdd.Location = new System.Drawing.Point(222, 179);
             this.btnDropAdd.Name = "btnDropAdd";
             this.btnDropAdd.Padding = new System.Windows.Forms.Padding(5);
             this.btnDropAdd.Size = new System.Drawing.Size(75, 23);
@@ -356,7 +361,7 @@ namespace Intersect.Editor.Forms.Editors
             this.lstDrops.FormattingEnabled = true;
             this.lstDrops.Location = new System.Drawing.Point(9, 19);
             this.lstDrops.Name = "lstDrops";
-            this.lstDrops.Size = new System.Drawing.Size(192, 171);
+            this.lstDrops.Size = new System.Drawing.Size(192, 210);
             this.lstDrops.TabIndex = 62;
             this.lstDrops.SelectedIndexChanged += new System.EventHandler(this.lstDrops_SelectedIndexChanged);
             // 
@@ -364,7 +369,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.nudDropAmount.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.nudDropAmount.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudDropAmount.Location = new System.Drawing.Point(210, 75);
+            this.nudDropAmount.Location = new System.Drawing.Point(211, 114);
             this.nudDropAmount.Maximum = new decimal(new int[] {
             10000000,
             0,
@@ -390,7 +395,7 @@ namespace Intersect.Editor.Forms.Editors
             0,
             0,
             131072});
-            this.nudDropChance.Location = new System.Drawing.Point(210, 114);
+            this.nudDropChance.Location = new System.Drawing.Point(211, 153);
             this.nudDropChance.Maximum = new decimal(new int[] {
             100000,
             0,
@@ -419,7 +424,7 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbDropItem.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbDropItem.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbDropItem.FormattingEnabled = true;
-            this.cmbDropItem.Location = new System.Drawing.Point(210, 35);
+            this.cmbDropItem.Location = new System.Drawing.Point(211, 74);
             this.cmbDropItem.Name = "cmbDropItem";
             this.cmbDropItem.Size = new System.Drawing.Size(195, 21);
             this.cmbDropItem.TabIndex = 17;
@@ -430,7 +435,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblDropAmount
             // 
             this.lblDropAmount.AutoSize = true;
-            this.lblDropAmount.Location = new System.Drawing.Point(207, 59);
+            this.lblDropAmount.Location = new System.Drawing.Point(208, 98);
             this.lblDropAmount.Name = "lblDropAmount";
             this.lblDropAmount.Size = new System.Drawing.Size(46, 13);
             this.lblDropAmount.TabIndex = 15;
@@ -439,7 +444,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblDropChance
             // 
             this.lblDropChance.AutoSize = true;
-            this.lblDropChance.Location = new System.Drawing.Point(207, 98);
+            this.lblDropChance.Location = new System.Drawing.Point(208, 137);
             this.lblDropChance.Name = "lblDropChance";
             this.lblDropChance.Size = new System.Drawing.Size(44, 13);
             this.lblDropChance.TabIndex = 13;
@@ -448,7 +453,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblDropItem
             // 
             this.lblDropItem.AutoSize = true;
-            this.lblDropItem.Location = new System.Drawing.Point(207, 19);
+            this.lblDropItem.Location = new System.Drawing.Point(208, 58);
             this.lblDropItem.Name = "lblDropItem";
             this.lblDropItem.Size = new System.Drawing.Size(30, 13);
             this.lblDropItem.TabIndex = 11;
@@ -554,12 +559,48 @@ namespace Intersect.Editor.Forms.Editors
             this.txtName.TabIndex = 18;
             this.txtName.TextChanged += new System.EventHandler(this.txtName_TextChanged);
             // 
+            // grpTypes
+            // 
+            this.grpTypes.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpTypes.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpTypes.Controls.Add(this.rdoTable);
+            this.grpTypes.Controls.Add(this.rdoItem);
+            this.grpTypes.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpTypes.Location = new System.Drawing.Point(211, 13);
+            this.grpTypes.Name = "grpTypes";
+            this.grpTypes.Size = new System.Drawing.Size(195, 42);
+            this.grpTypes.TabIndex = 58;
+            this.grpTypes.TabStop = false;
+            this.grpTypes.Text = "Drop Type";
+            // 
+            // rdoTable
+            // 
+            this.rdoTable.AutoSize = true;
+            this.rdoTable.Location = new System.Drawing.Point(93, 20);
+            this.rdoTable.Name = "rdoTable";
+            this.rdoTable.Size = new System.Drawing.Size(76, 17);
+            this.rdoTable.TabIndex = 3;
+            this.rdoTable.Text = "Loot Table";
+            this.rdoTable.CheckedChanged += new System.EventHandler(this.rdoTable_CheckedChanged);
+            // 
+            // rdoItem
+            // 
+            this.rdoItem.AutoSize = true;
+            this.rdoItem.Checked = true;
+            this.rdoItem.Location = new System.Drawing.Point(11, 20);
+            this.rdoItem.Name = "rdoItem";
+            this.rdoItem.Size = new System.Drawing.Size(45, 17);
+            this.rdoItem.TabIndex = 1;
+            this.rdoItem.TabStop = true;
+            this.rdoItem.Text = "Item";
+            this.rdoItem.CheckedChanged += new System.EventHandler(this.rdoItem_CheckedChanged);
+            // 
             // frmLootTables
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.ClientSize = new System.Drawing.Size(695, 456);
+            this.ClientSize = new System.Drawing.Size(696, 464);
             this.Controls.Add(this.pnlTableSettings);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnSave);
@@ -579,6 +620,8 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudDropChance)).EndInit();
             this.grpGeneral.ResumeLayout(false);
             this.grpGeneral.PerformLayout();
+            this.grpTypes.ResumeLayout(false);
+            this.grpTypes.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -623,5 +666,8 @@ namespace Intersect.Editor.Forms.Editors
         private System.Windows.Forms.Label lblDropChance;
         private System.Windows.Forms.Label lblDropItem;
         private DarkUI.Controls.DarkButton btnDynamicRequirements;
+        private DarkUI.Controls.DarkGroupBox grpTypes;
+        private DarkUI.Controls.DarkRadioButton rdoTable;
+        private DarkUI.Controls.DarkRadioButton rdoItem;
     }
 }
