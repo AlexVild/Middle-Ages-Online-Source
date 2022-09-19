@@ -40,6 +40,8 @@ namespace Intersect.Editor.Forms.Editors
 
         private bool mMouseDown;
 
+        private bool mDropTypeUpdate = false;
+
         //General Editting Variables
         bool mTMouseDown;
 
@@ -111,9 +113,7 @@ namespace Intersect.Editor.Forms.Editors
             cmbAnimation.Items.Clear();
             cmbAnimation.Items.Add(Strings.General.none);
             cmbAnimation.Items.AddRange(AnimationBase.Names);
-            cmbDropItem.Items.Clear();
-            cmbDropItem.Items.Add(Strings.General.none);
-            cmbDropItem.Items.AddRange(ItemBase.Names);
+            FillItemCombobox(DropType.Item);
             InitLocalization();
             UpdateEditor();
         }
@@ -288,20 +288,13 @@ namespace Intersect.Editor.Forms.Editors
             lstDrops.Items.Clear();
 
             var drops = mEditorItem.Drops.ToArray();
-            foreach (var drop in drops)
-            {
-                if (ItemBase.Get(drop.ItemId) == null)
-                {
-                    mEditorItem.Drops.Remove(drop);
-                }
-            }
 
             for (var i = 0; i < mEditorItem.Drops.Count; i++)
             {
                 if (mEditorItem.Drops[i].ItemId != Guid.Empty)
                 {
                     lstDrops.Items.Add(
-                        Strings.ResourceEditor.dropdisplay.ToString(
+                        Strings.NpcEditor.dropdisplay.ToString(
                             ItemBase.GetName(mEditorItem.Drops[i].ItemId), mEditorItem.Drops[i].Quantity,
                             mEditorItem.Drops[i].Chance
                         )
@@ -309,7 +302,24 @@ namespace Intersect.Editor.Forms.Editors
                 }
                 else
                 {
-                    lstDrops.Items.Add(TextUtils.None);
+                    if (mEditorItem.Drops[i].LootTableId != Guid.Empty)
+                    {
+                        lstDrops.Items.Add(
+                            Strings.NpcEditor.LootTableDrop.ToString(
+                                LootTableDescriptor.GetName(mEditorItem.Drops[i].LootTableId),
+                                mEditorItem.Drops[i].Chance
+                            )
+                        );
+                    }
+                    else
+                    {
+                        lstDrops.Items.Add(
+                            Strings.NpcEditor.dropdisplay.ToString(
+                                TextUtils.None, 1,
+                                mEditorItem.Drops[i].Chance
+                            )
+                        );
+                    }
                 }
             }
 
@@ -603,9 +613,20 @@ namespace Intersect.Editor.Forms.Editors
 
         private void cmbDropItem_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (mDropTypeUpdate)
+            {
+                return;
+            }
             if (lstDrops.SelectedIndex > -1 && lstDrops.SelectedIndex < mEditorItem.Drops.Count)
             {
-                mEditorItem.Drops[lstDrops.SelectedIndex].ItemId = ItemBase.IdFromList(cmbDropItem.SelectedIndex - 1);
+                if (rdoItem.Checked)
+                {
+                    mEditorItem.Drops[lstDrops.SelectedIndex].ItemId = ItemBase.IdFromList(cmbDropItem.SelectedIndex - 1);
+                }
+                else
+                {
+                    mEditorItem.Drops[lstDrops.SelectedIndex].LootTableId = LootTableDescriptor.IdFromList(cmbDropItem.SelectedIndex);
+                }
             }
 
             UpdateDropValues(true);
@@ -627,20 +648,72 @@ namespace Intersect.Editor.Forms.Editors
 
         private void lstDrops_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (mDropTypeUpdate)
+            {
+                return;
+            }
             if (lstDrops.SelectedIndex > -1)
             {
-                cmbDropItem.SelectedIndex = ItemBase.ListIndex(mEditorItem.Drops[lstDrops.SelectedIndex].ItemId) + 1;
+                if (mEditorItem.Drops[lstDrops.SelectedIndex].ItemId != Guid.Empty)
+                {
+                    if (!rdoItem.Checked)
+                    {
+                        rdoItem.Checked = true;
+                    }
+                    cmbDropItem.SelectedIndex = ItemBase.ListIndex(mEditorItem.Drops[lstDrops.SelectedIndex].ItemId) + 1;
+                }
+                else
+                {
+                    if (mEditorItem.Drops[lstDrops.SelectedIndex].LootTableId != Guid.Empty)
+                    {
+                        if (!rdoTable.Checked)
+                        {
+                            rdoTable.Checked = true;
+                        }
+                        cmbDropItem.SelectedIndex = LootTableDescriptor.ListIndex(mEditorItem.Drops[lstDrops.SelectedIndex].LootTableId);
+                    }
+                    else
+                    {
+                        if (!rdoItem.Checked)
+                        {
+                            rdoItem.Checked = true;
+                        }
+                        cmbDropItem.SelectedIndex = 0; // none
+                    }
+                }
                 nudDropAmount.Value = mEditorItem.Drops[lstDrops.SelectedIndex].Quantity;
-                nudDropChance.Value = (decimal) mEditorItem.Drops[lstDrops.SelectedIndex].Chance;
+                nudDropChance.Value = (decimal)mEditorItem.Drops[lstDrops.SelectedIndex].Chance;
             }
         }
 
         private void btnDropAdd_Click(object sender, EventArgs e)
         {
-            mEditorItem.Drops.Add(new ResourceBase.ResourceDrop());
-            mEditorItem.Drops[mEditorItem.Drops.Count - 1].ItemId = ItemBase.IdFromList(cmbDropItem.SelectedIndex - 1);
-            mEditorItem.Drops[mEditorItem.Drops.Count - 1].Quantity = (int) nudDropAmount.Value;
-            mEditorItem.Drops[mEditorItem.Drops.Count - 1].Chance = (double) nudDropChance.Value;
+            if (rdoItem.Checked)
+            {
+                if (nudDropAmount.Value <= 0 || nudDropChance.Value <= 0)
+                {
+                    return;
+                }
+                mEditorItem.Drops.Add(new ResourceBase.ResourceDrop());
+                mEditorItem.Drops[mEditorItem.Drops.Count - 1].ItemId = ItemBase.IdFromList(cmbDropItem.SelectedIndex - 1);
+                mEditorItem.Drops[mEditorItem.Drops.Count - 1].LootTableId = Guid.Empty;
+                mEditorItem.Drops[mEditorItem.Drops.Count - 1].Quantity = (int)nudDropAmount.Value;
+            }
+            else
+            {
+                // Don't allow adding a loot table to itself
+                var lootTableId = LootTableDescriptor.IdFromList(cmbDropItem.SelectedIndex);
+                if (lootTableId == mEditorItem.Id || nudDropChance.Value <= 0)
+                {
+                    return;
+                }
+                mEditorItem.Drops.Add(new ResourceBase.ResourceDrop());
+                mEditorItem.Drops[mEditorItem.Drops.Count - 1].ItemId = Guid.Empty;
+                mEditorItem.Drops[mEditorItem.Drops.Count - 1].LootTableId = LootTableDescriptor.IdFromList(cmbDropItem.SelectedIndex);
+                mEditorItem.Drops[mEditorItem.Drops.Count - 1].Quantity = (int)nudDropAmount.Value;
+            }
+
+            mEditorItem.Drops[mEditorItem.Drops.Count - 1].Chance = (double)nudDropChance.Value;
 
             UpdateDropValues();
         }
@@ -1031,6 +1104,49 @@ namespace Intersect.Editor.Forms.Editors
         private void cmbResourceGroup_SelectedIndexChanged(object sender, EventArgs e)
         {
             mEditorItem.ResourceGroup = cmbResourceGroup.Text;
+        }
+
+        private void rdoItem_CheckedChanged(object sender, EventArgs e)
+        {
+            ChangeDropType(DropType.Item);
+        }
+
+        private void rdoTable_CheckedChanged(object sender, EventArgs e)
+        {
+            ChangeDropType(DropType.Table);
+        }
+
+        private void ChangeDropType(DropType dropType)
+        {
+            FillItemCombobox(dropType);
+            if (dropType == DropType.Item)
+            {
+                nudDropAmount.Enabled = true;
+            }
+            else
+            {
+                nudDropAmount.Enabled = false;
+            }
+        }
+
+        private void FillItemCombobox(DropType dropType)
+        {
+            if (dropType == DropType.Item)
+            {
+                cmbDropItem.Items.Clear();
+                cmbDropItem.Items.Add(Strings.General.none);
+                cmbDropItem.Items.AddRange(ItemBase.Names);
+            }
+            else
+            {
+                cmbDropItem.Items.Clear();
+                cmbDropItem.Items.AddRange(LootTableDescriptor.Names);
+            }
+        }
+
+        private void btnUnselectItem_Click(object sender, EventArgs e)
+        {
+            lstDrops.SelectedIndex = -1;
         }
     }
 }

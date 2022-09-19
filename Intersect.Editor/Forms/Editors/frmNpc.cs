@@ -30,6 +30,8 @@ namespace Intersect.Editor.Forms.Editors
 
         private List<string> mKnownFolders = new List<string>();
 
+        private bool mDropTypeUpdate = false;
+
         public FrmNpc()
         {
             ApplyHooks();
@@ -769,9 +771,20 @@ namespace Intersect.Editor.Forms.Editors
 
         private void cmbDropItem_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (mDropTypeUpdate)
+            {
+                return;
+            }
             if (lstDrops.SelectedIndex > -1 && lstDrops.SelectedIndex < mEditorItem.Drops.Count)
             {
-                mEditorItem.Drops[lstDrops.SelectedIndex].ItemId = ItemBase.IdFromList(cmbDropItem.SelectedIndex - 1);
+                if (rdoItem.Checked)
+                {
+                    mEditorItem.Drops[lstDrops.SelectedIndex].ItemId = ItemBase.IdFromList(cmbDropItem.SelectedIndex - 1);
+                }
+                else
+                {
+                    mEditorItem.Drops[lstDrops.SelectedIndex].LootTableId = LootTableDescriptor.IdFromList(cmbDropItem.SelectedIndex);
+                }
             }
 
             UpdateDropValues(true);
@@ -793,6 +806,11 @@ namespace Intersect.Editor.Forms.Editors
 
         private void lstDrops_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (mDropTypeUpdate)
+            {
+                return;
+            }
+            mDropTypeUpdate = true;
             if (lstDrops.SelectedIndex > -1)
             {
                 if (mEditorItem.Drops[lstDrops.SelectedIndex].ItemId != Guid.Empty)
@@ -825,6 +843,7 @@ namespace Intersect.Editor.Forms.Editors
                 nudDropAmount.Value = mEditorItem.Drops[lstDrops.SelectedIndex].Quantity;
                 nudDropChance.Value = (decimal)mEditorItem.Drops[lstDrops.SelectedIndex].Chance;
             }
+            mDropTypeUpdate = false;
         }
 
         private void btnDropAdd_Click(object sender, EventArgs e)
@@ -1223,6 +1242,7 @@ namespace Intersect.Editor.Forms.Editors
 
         private void FillItemCombobox(DropType dropType)
         {
+            mDropTypeUpdate = true;
             if (dropType == DropType.Item)
             {
                 cmbDropItem.Items.Clear();
@@ -1234,6 +1254,7 @@ namespace Intersect.Editor.Forms.Editors
                 cmbDropItem.Items.Clear();
                 cmbDropItem.Items.AddRange(LootTableDescriptor.Names);
             }
+            mDropTypeUpdate = false;
         }
 
         private void btnUnselectItem_Click(object sender, EventArgs e)

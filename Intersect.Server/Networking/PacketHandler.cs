@@ -4101,6 +4101,7 @@ namespace Intersect.Server.Networking
                     }
                     else if (type == GameObjectType.Resource)
                     {
+                        Globals.KillResourcesOf((ResourceBase)obj);
                         Globals.RefreshCachedResources();
                     }
 

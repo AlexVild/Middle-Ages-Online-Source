@@ -126,7 +126,7 @@ namespace Intersect.GameObjects
 
         public bool DoNotRecord { get; set; } = false;
 
-        public class ResourceDrop
+        public partial class ResourceDrop
         {
 
             public double Chance;
@@ -142,6 +142,11 @@ namespace Intersect.GameObjects
     public partial class ResourceBase : DatabaseObject<ResourceBase>, IFolderable
     {
         public string ResourceGroup { get; set; } = string.Empty;
+
+        public partial class ResourceDrop
+        {
+            public Guid LootTableId;
+        }
     }
 
 }
