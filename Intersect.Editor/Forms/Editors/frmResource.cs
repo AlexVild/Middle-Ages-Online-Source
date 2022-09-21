@@ -287,7 +287,7 @@ namespace Intersect.Editor.Forms.Editors
             var index = lstDrops.SelectedIndex;
             lstDrops.Items.Clear();
 
-            var drops = mEditorItem.Drops.ToArray();
+            var totalWeight = LootTableHelpers.GetTotalWeight(mEditorItem.Drops);
 
             for (var i = 0; i < mEditorItem.Drops.Count; i++)
             {
@@ -296,7 +296,7 @@ namespace Intersect.Editor.Forms.Editors
                     lstDrops.Items.Add(
                         Strings.NpcEditor.dropdisplay.ToString(
                             ItemBase.GetName(mEditorItem.Drops[i].ItemId), mEditorItem.Drops[i].Quantity,
-                            mEditorItem.Drops[i].Chance
+                            mEditorItem.Drops[i].Chance, totalWeight
                         )
                     );
                 }
@@ -307,7 +307,7 @@ namespace Intersect.Editor.Forms.Editors
                         lstDrops.Items.Add(
                             Strings.NpcEditor.LootTableDrop.ToString(
                                 LootTableDescriptor.GetName(mEditorItem.Drops[i].LootTableId),
-                                mEditorItem.Drops[i].Chance
+                                mEditorItem.Drops[i].Chance, totalWeight
                             )
                         );
                     }
@@ -316,7 +316,7 @@ namespace Intersect.Editor.Forms.Editors
                         lstDrops.Items.Add(
                             Strings.NpcEditor.dropdisplay.ToString(
                                 TextUtils.None, 1,
-                                mEditorItem.Drops[i].Chance
+                                mEditorItem.Drops[i].Chance, totalWeight
                             )
                         );
                     }
@@ -694,7 +694,7 @@ namespace Intersect.Editor.Forms.Editors
                 {
                     return;
                 }
-                mEditorItem.Drops.Add(new ResourceBase.ResourceDrop());
+                mEditorItem.Drops.Add(new BaseDrop());
                 mEditorItem.Drops[mEditorItem.Drops.Count - 1].ItemId = ItemBase.IdFromList(cmbDropItem.SelectedIndex - 1);
                 mEditorItem.Drops[mEditorItem.Drops.Count - 1].LootTableId = Guid.Empty;
                 mEditorItem.Drops[mEditorItem.Drops.Count - 1].Quantity = (int)nudDropAmount.Value;
@@ -707,7 +707,7 @@ namespace Intersect.Editor.Forms.Editors
                 {
                     return;
                 }
-                mEditorItem.Drops.Add(new ResourceBase.ResourceDrop());
+                mEditorItem.Drops.Add(new BaseDrop());
                 mEditorItem.Drops[mEditorItem.Drops.Count - 1].ItemId = Guid.Empty;
                 mEditorItem.Drops[mEditorItem.Drops.Count - 1].LootTableId = LootTableDescriptor.IdFromList(cmbDropItem.SelectedIndex);
                 mEditorItem.Drops[mEditorItem.Drops.Count - 1].Quantity = (int)nudDropAmount.Value;

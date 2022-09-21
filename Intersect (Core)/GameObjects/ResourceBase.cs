@@ -36,7 +36,7 @@ namespace Intersect.GameObjects
     public partial class ResourceBase : DatabaseObject<ResourceBase>, IFolderable
     {
 
-        [NotMapped] public List<ResourceDrop> Drops = new List<ResourceDrop>();
+        [NotMapped] public List<BaseDrop> Drops = new List<BaseDrop>();
 
         [NotMapped] public ConditionLists HarvestingRequirements = new ConditionLists();
 
@@ -80,7 +80,7 @@ namespace Intersect.GameObjects
         public string JsonDrops
         {
             get => JsonConvert.SerializeObject(Drops);
-            set => Drops = JsonConvert.DeserializeObject<List<ResourceDrop>>(value);
+            set => Drops = JsonConvert.DeserializeObject<List<BaseDrop>>(value);
         }
 
         //Requirements
@@ -126,27 +126,11 @@ namespace Intersect.GameObjects
 
         public bool DoNotRecord { get; set; } = false;
 
-        public partial class ResourceDrop
-        {
-
-            public double Chance;
-
-            public Guid ItemId;
-
-            public int Quantity;
-
-        }
-
     }
 
     public partial class ResourceBase : DatabaseObject<ResourceBase>, IFolderable
     {
         public string ResourceGroup { get; set; } = string.Empty;
-
-        public partial class ResourceDrop
-        {
-            public Guid LootTableId;
-        }
     }
 
 }

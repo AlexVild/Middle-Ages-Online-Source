@@ -288,6 +288,7 @@
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Factories\FactoryRegistry.cs" />
     <Compile Include="Factories\IFactory.cs" />
+    <Compile Include="GameObjects\BaseDrop.cs" />
     <Compile Include="GameObjects\Events\VariableMod.cs" />
     <Compile Include="Enums\Timers.cs" />
     <Compile Include="GameObjects\LootTableDescriptor.cs" />
@@ -740,6 +741,7 @@
     <Compile Include="Utilities\Formula.cs" />
     <Compile Include="Utilities\GameObjectTypeUtils.cs" />
     <Compile Include="Utilities\GuidUtils.cs" />
+    <Compile Include="Utilities\LootTableHelpers.cs" />
     <Compile Include="Utilities\MathHelper.cs" />
     <Compile Include="Extensions\RandomExtensions.cs" />
     <Compile Include="Network\PortHelper.cs" />

@@ -60,7 +60,7 @@ namespace Intersect.GameObjects
 
         [NotMapped] public ConditionLists AttackOnSightConditions = new ConditionLists();
 
-        [NotMapped] public List<NpcDrop> Drops = new List<NpcDrop>();
+        [NotMapped] public List<BaseDrop> Drops = new List<BaseDrop>();
 
         [NotMapped] public int[] MaxVital = new int[(int) Vitals.VitalCount];
 
@@ -234,7 +234,7 @@ namespace Intersect.GameObjects
         public string JsonDrops
         {
             get => JsonConvert.SerializeObject(Drops);
-            set => Drops = JsonConvert.DeserializeObject<List<NpcDrop>>(value);
+            set => Drops = JsonConvert.DeserializeObject<List<BaseDrop>>(value);
         }
 
         /// <summary>
@@ -337,7 +337,7 @@ namespace Intersect.GameObjects
 
     public partial class NpcBase : DatabaseObject<NpcBase>, IFolderable
     {
-        [NotMapped] public List<NpcDrop> SecondaryDrops = new List<NpcDrop>();
+        [NotMapped] public List<BaseDrop> SecondaryDrops = new List<BaseDrop>();
 
         [Column("SecondaryDrops")]
         [JsonIgnore]
@@ -346,17 +346,17 @@ namespace Intersect.GameObjects
             get => JsonConvert.SerializeObject(SecondaryDrops);
             set
             {
-                SecondaryDrops = JsonConvert.DeserializeObject<List<NpcDrop>>(value ?? string.Empty);
+                SecondaryDrops = JsonConvert.DeserializeObject<List<BaseDrop>>(value ?? string.Empty);
                 if (SecondaryDrops == null)
                 {
-                    SecondaryDrops = new List<NpcDrop>();
+                    SecondaryDrops = new List<BaseDrop>();
                 }
             }
         }
 
         public double SecondaryChance = 0.0;
 
-        [NotMapped] public List<NpcDrop> TertiaryDrops = new List<NpcDrop>();
+        [NotMapped] public List<BaseDrop> TertiaryDrops = new List<BaseDrop>();
 
         [Column("TertiaryDrops")]
         [JsonIgnore]
@@ -365,31 +365,15 @@ namespace Intersect.GameObjects
             get => JsonConvert.SerializeObject(TertiaryDrops);
             set
             {
-                TertiaryDrops = JsonConvert.DeserializeObject<List<NpcDrop>>(value ?? string.Empty);
+                TertiaryDrops = JsonConvert.DeserializeObject<List<BaseDrop>>(value ?? string.Empty);
                 if (TertiaryDrops == null)
                 {
-                    TertiaryDrops = new List<NpcDrop>();
+                    TertiaryDrops = new List<BaseDrop>();
                 }
             }
         }
 
         public double TertiaryChance = 0.0;
-    }
-
-    public partial class NpcDrop
-    {
-
-        public double Chance;
-
-        public Guid ItemId;
-
-        public int Quantity;
-
-    }
-
-    public partial class NpcDrop
-    {
-        public Guid LootTableId;
     }
 
 }

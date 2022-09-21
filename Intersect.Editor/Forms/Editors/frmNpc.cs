@@ -50,6 +50,7 @@ namespace Intersect.Editor.Forms.Editors
         private void AssignEditorItem(Guid id)
         {
             mEditorItem = NpcBase.Get(id);
+            rdoMain.Checked = true;
             UpdateEditor();
         }
 
@@ -458,7 +459,7 @@ namespace Intersect.Editor.Forms.Editors
             picNpc.BackgroundImage = picSpriteBmp;
         }
 
-        private List<NpcDrop> GetCurrentDrops()
+        private List<BaseDrop> GetCurrentDrops()
         {
             switch (CurrentTable)
             {
@@ -475,19 +476,21 @@ namespace Intersect.Editor.Forms.Editors
 
         private void UpdateDropValues(bool keepIndex = false)
         {
-            var drops = GetCurrentDrops().ToArray();
+            var drops = GetCurrentDrops();
 
             var index = lstDrops.SelectedIndex;
             lstDrops.Items.Clear();
 
-            for (var i = 0; i < drops.Length; i++)
+            var totalWeight = LootTableHelpers.GetTotalWeight(drops);
+
+            for (var i = 0; i < drops.Count; i++)
             {
                 if (drops[i].ItemId != Guid.Empty)
                 {
                     lstDrops.Items.Add(
                         Strings.NpcEditor.dropdisplay.ToString(
                             ItemBase.GetName(drops[i].ItemId), drops[i].Quantity,
-                            drops[i].Chance
+                            drops[i].Chance, totalWeight
                         )
                     );
                 }
@@ -498,7 +501,7 @@ namespace Intersect.Editor.Forms.Editors
                         lstDrops.Items.Add(
                             Strings.NpcEditor.LootTableDrop.ToString(
                                 LootTableDescriptor.GetName(drops[i].LootTableId),
-                                drops[i].Chance
+                                drops[i].Chance, totalWeight
                             )
                         );
                     }
@@ -507,7 +510,7 @@ namespace Intersect.Editor.Forms.Editors
                         lstDrops.Items.Add(
                             Strings.NpcEditor.dropdisplay.ToString(
                                 TextUtils.None, 1,
-                                drops[i].Chance
+                                drops[i].Chance, totalWeight
                             )
                         );
                     }
@@ -880,7 +883,7 @@ namespace Intersect.Editor.Forms.Editors
                 {
                     return;
                 }
-                drops.Add(new NpcDrop());
+                drops.Add(new BaseDrop());
                 drops[drops.Count - 1].ItemId = ItemBase.IdFromList(cmbDropItem.SelectedIndex - 1);
                 drops[drops.Count - 1].LootTableId = Guid.Empty;
                 drops[drops.Count - 1].Quantity = (int)nudDropAmount.Value;
@@ -893,7 +896,7 @@ namespace Intersect.Editor.Forms.Editors
                 {
                     return;
                 }
-                drops.Add(new NpcDrop());
+                drops.Add(new BaseDrop());
                 drops[drops.Count - 1].ItemId = Guid.Empty;
                 drops[drops.Count - 1].LootTableId = LootTableDescriptor.IdFromList(cmbDropItem.SelectedIndex);
                 drops[drops.Count - 1].Quantity = (int)nudDropAmount.Value;

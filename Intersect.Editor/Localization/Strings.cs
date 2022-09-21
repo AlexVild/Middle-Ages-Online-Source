@@ -4425,7 +4425,7 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString dropremove = @"Remove";
 
-            public static LocalizedString dropdisplay = @"{00} x{01} - {02}wt.";
+            public static LocalizedString dropdisplay = @"{00} x{01}: {02}/{03} chance";
 
             public static LocalizedString enabled = @"Enabled?";
 
@@ -4917,7 +4917,7 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString dropremove = @"Remove";
 
-            public static LocalizedString dropdisplay = @"{00} x{01} - {02}%";
+            public static LocalizedString dropdisplay = @"{00} x{01}: {02}/{03} chance";
 
             public static LocalizedString exhaustedgraphic = @"Exhausted Graphic:";
 
@@ -6082,7 +6082,7 @@ Negative values for time to flow backwards.";
         public partial struct NpcEditor
         {
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public static LocalizedString LootTableDrop = @"Table: {00} - {01}";
+            public static LocalizedString LootTableDrop = @"[TABLE] {00}: {01}/{02} chance";
         }
     }
 }

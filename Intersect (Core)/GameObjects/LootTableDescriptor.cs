@@ -32,14 +32,14 @@ namespace Intersect.GameObjects
             set => DropConditions.Load(value);
         }
 
-        [NotMapped] public List<NpcDrop> Drops = new List<NpcDrop>();
+        [NotMapped] public List<BaseDrop> Drops = new List<BaseDrop>();
 
         [Column("Drops")]
         [JsonIgnore]
         public string JsonDrops
         {
             get => JsonConvert.SerializeObject(Drops);
-            set => Drops = JsonConvert.DeserializeObject<List<NpcDrop>>(value);
+            set => Drops = JsonConvert.DeserializeObject<List<BaseDrop>>(value);
         }
 
         public string DisplayName { get; set; }
