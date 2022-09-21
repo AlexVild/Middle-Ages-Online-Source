@@ -44,13 +44,11 @@ namespace Intersect.Editor.Forms.Editors
         {
             ApplyHooks();
             InitializeComponent();
-
             lstGameObjects.Init(UpdateToolStripItems, AssignEditorItem, toolStripItemNew_Click, toolStripItemCopy_Click, toolStripItemUndo_Click, toolStripItemPaste_Click, toolStripItemDelete_Click);
         }
         private void AssignEditorItem(Guid id)
         {
             mEditorItem = NpcBase.Get(id);
-            rdoMain.Checked = true;
             UpdateEditor();
         }
 
@@ -278,12 +276,16 @@ namespace Intersect.Editor.Forms.Editors
 
             btnSave.Text = Strings.NpcEditor.save;
             btnCancel.Text = Strings.NpcEditor.cancel;
+
+            nudTableChance.Value = 100;
+            nudTableChance.Enabled = false;
         }
 
         private void UpdateEditor()
         {
             if (mEditorItem != null)
             {
+                rdoMain.Checked = true;
                 pnlContainer.Show();
 
                 txtName.Text = mEditorItem.Name;

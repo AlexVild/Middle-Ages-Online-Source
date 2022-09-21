@@ -92,7 +92,6 @@ namespace Intersect.Server.Core
                     var players = 0;
 
                     // Initialize timers instance and load in values
-                    TimerProcessor.ActiveTimers = new TimerList();
                     LoadTimers();
 
                     // Initialize cached list of resources (for resource group logic)

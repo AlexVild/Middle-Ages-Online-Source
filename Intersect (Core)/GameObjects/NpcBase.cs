@@ -354,7 +354,7 @@ namespace Intersect.GameObjects
             }
         }
 
-        public double SecondaryChance = 0.0;
+        public double SecondaryChance { get; set; } = 0.0;
 
         [NotMapped] public List<BaseDrop> TertiaryDrops = new List<BaseDrop>();
 
@@ -373,7 +373,7 @@ namespace Intersect.GameObjects
             }
         }
 
-        public double TertiaryChance = 0.0;
+        public double TertiaryChance { get; set; } = 0.0;
     }
 
 }

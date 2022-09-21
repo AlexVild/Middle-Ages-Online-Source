@@ -20,6 +20,7 @@ using Intersect.Server.General;
 using Intersect.Server.Localization;
 using Intersect.Server.Maps;
 using Intersect.Server.Networking;
+using Intersect.Server.Utilities;
 using Intersect.Utilities;
 
 namespace Intersect.Server.Entities
@@ -134,17 +135,6 @@ namespace Intersect.Server.Entities
                 slot.Set(new Spell(Base.Spells[I]));
                 Spells.Add(slot);
                 spellSlot++;
-            }
-
-            //Give NPC Drops
-            var itemSlot = 0;
-            foreach (var drop in myBase.Drops)
-            {
-                var slot = new InventorySlot(itemSlot);
-                slot.Set(new Item(drop.ItemId, drop.Quantity));
-                slot.DropChance = drop.Chance;
-                Items.Add(slot);
-                itemSlot++;
             }
 
             for (var i = 0; i < (int) Vitals.VitalCount; i++)
@@ -1681,64 +1671,16 @@ namespace Intersect.Server.Entities
     {
         public override void DropItems(Entity killer, bool sendUpdate = true)
         {
-            // Stores drop tables by their maximum roll
-            var dropTable = new Dictionary<double, Item>();
-
-            // TODO move this to NPC Items instantiation?
-            Items.Sort((a, b) =>
-            {
-                return a.DropChance.CompareTo(b.DropChance);
-            });
-
-            for (var n = 0; n < Items.Count; n++)
-            {
-                var lastWeight = dropTable.Keys.FirstOrDefault();
-                if (Items[n] == null)
-                {
-                    continue;
-                }
-
-                // Don't mess with the actual object.
-                var item = Items[n].Clone();
-
-                var itemBase = ItemBase.Get(item.ItemId);
-                if (itemBase == null && item.ItemId != Guid.Empty)
-                {
-                    continue;
-                }
-
-                // Build the weighted drop table
-                if (item.ItemId == Guid.Empty) // "none" item, put it on the table
-                {
-                    dropTable.Add(lastWeight + item.DropChance, null);
-                }
-                else
-                {
-                    dropTable.Add(lastWeight + item.DropChance, item);
-                }
-
-            }
-
-            var maxRoll = (int)Math.Ceiling(dropTable.Keys.LastOrDefault());
-            if (maxRoll <= 0)
+            if (!(killer is Player))
             {
                 return;
             }
-
-            //Calculate the killers luck (If they are a player)
             var playerKiller = killer as Player;
-            var luck = 1 + playerKiller?.GetEquipmentBonusEffect(EffectType.Luck) / 100f;
+            
+            // Check to see if we hit the secondary or tertiary tables
+            var luck = playerKiller?.GetLuckModifier();
 
             Guid lootOwner = Guid.Empty;
-
-            //Npc drop rates
-            var randomChance = Randomization.Next(1, maxRoll);
-            var rolledItem = dropTable.Where(kv => kv.Key >= randomChance).FirstOrDefault().Value;
-            if (rolledItem == default)
-            {
-                return;
-            }
-
             // Set owner to player that killed this, if there is any.
             if (playerKiller != null)
             {
@@ -1746,13 +1688,36 @@ namespace Intersect.Server.Entities
                 lootOwner = playerKiller.Id;
             }
 
-            // Set the attributes for this item.
-            rolledItem.Set(new Item(rolledItem.ItemId, rolledItem.Quantity, true));
+            var rolledItems = new List<Item>();
+            var baseDropTable = LootTableServerHelpers.GenerateDropTable(Base.Drops, playerKiller);
+            rolledItems.Add(LootTableServerHelpers.GetItemFromTable(baseDropTable));
 
-            // Spawn the actual item!
-            if (MapController.TryGetInstanceFromMap(MapId, MapInstanceId, out var instance))
+            // Check for secondary/tertiary tables
+            if (Randomization.Next(1, 101) < Base.SecondaryChance * luck)
             {
-                instance.SpawnItem(X, Y, rolledItem, rolledItem.Quantity, lootOwner, sendUpdate);
+                var secondaryDropTable = LootTableServerHelpers.GenerateDropTable(Base.SecondaryDrops, playerKiller);
+                rolledItems.Add(LootTableServerHelpers.GetItemFromTable(secondaryDropTable));
+            }
+            if (Randomization.Next(1, 101) < Base.TertiaryChance * luck)
+            {
+                var tertiaryDropTable = LootTableServerHelpers.GenerateDropTable(Base.TertiaryDrops, playerKiller);
+                rolledItems.Add(LootTableServerHelpers.GetItemFromTable(tertiaryDropTable));
+            }
+
+            foreach(var rolledItem in rolledItems)
+            {
+                if (rolledItem == null)
+                {
+                    continue;
+                }
+                // Set the attributes for this item.
+                rolledItem.Set(new Item(rolledItem.ItemId, rolledItem.Quantity, true));
+
+                // Spawn the actual item!
+                if (MapController.TryGetInstanceFromMap(MapId, MapInstanceId, out var instance))
+                {
+                    instance.SpawnItem(X, Y, rolledItem, rolledItem.Quantity, lootOwner, sendUpdate);
+                }
             }
         }
     }

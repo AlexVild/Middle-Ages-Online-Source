@@ -12,6 +12,7 @@ using Intersect.Server.General;
 using Intersect.Server.Localization;
 using Intersect.Server.Maps;
 using Intersect.Server.Networking;
+using Intersect.Server.Utilities;
 using Intersect.Utilities;
 
 namespace Intersect.Server.Entities
@@ -67,7 +68,7 @@ namespace Intersect.Server.Entities
 
             if (dropItems)
             {
-                SpawnResourceItems(killer);
+                DropItems(killer);
                 if (Base.AnimationId != Guid.Empty)
                 {
                     PacketSender.SendAnimationToProximity(
@@ -158,94 +159,10 @@ namespace Intersect.Server.Entities
             SetMaxVital(Vitals.Health, Randomization.Next(Base.MinHp, Base.MaxHp + 1));
             RestoreVital(Vitals.Health);
             Passable = Base.WalkableBefore;
-            Items.Clear();
-
-            //Give Resource Drops
-            var itemSlot = 0;
-            foreach (var drop in Base.Drops)
-            {
-                if (Randomization.Next(1, 10001) <= drop.Chance * 100 && ItemBase.Get(drop.ItemId) != null)
-                {
-                    var slot = new InventorySlot(itemSlot);
-                    slot.Set(new Item(drop.ItemId, drop.Quantity));
-                    Items.Add(slot);
-                    itemSlot++;
-                }
-            }
 
             Dead = false;
             PacketSender.SendEntityDataToProximity(this);
             PacketSender.SendEntityPositionToAll(this);
-        }
-
-        public void SpawnResourceItems(Entity killer)
-        {
-            //Find tile to spawn items
-            var tiles = new List<TileHelper>();
-            for (var x = X - 1; x <= X + 1; x++)
-            {
-                for (var y = Y - 1; y <= Y + 1; y++)
-                {
-                    var tileHelper = new TileHelper(MapId, x, y);
-                    if (tileHelper.TryFix())
-                    {
-                        //Tile is valid.. let's see if its open
-                        var mapId = tileHelper.GetMapId();
-                        if (MapController.TryGetInstanceFromMap(mapId, MapInstanceId, out var mapInstance))
-                        {
-                            if (!mapInstance.TileBlocked(tileHelper.GetX(), tileHelper.GetY()))
-                            {
-                                tiles.Add(tileHelper);
-                            }
-                            else
-                            {
-                                if (killer.MapId == tileHelper.GetMapId() &&
-                                    killer.X == tileHelper.GetX() &&
-                                    killer.Y == tileHelper.GetY())
-                                {
-                                    tiles.Add(tileHelper);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (tiles.Count > 0)
-            {
-                TileHelper selectedTile = null;
-
-                //Prefer the players tile, otherwise choose randomly
-                for (var i = 0; i < tiles.Count; i++)
-                {
-                    if (tiles[i].GetMapId() == killer.MapId &&
-                        tiles[i].GetX() == killer.X &&
-                        tiles[i].GetY() == killer.Y)
-                    {
-                        selectedTile = tiles[i];
-                    }
-                }
-
-                if (selectedTile == null)
-                {
-                    selectedTile = tiles[Randomization.Next(0, tiles.Count)];
-                }
-
-                // Drop items
-                foreach (var item in Items)
-                {
-                    if (ItemBase.Get(item.ItemId) != null)
-                    {
-                        var mapId = selectedTile.GetMapId();
-                        if (MapController.TryGetInstanceFromMap(mapId, MapInstanceId, out var mapInstance))
-                        {
-                            mapInstance.SpawnItem(selectedTile.GetX(), selectedTile.GetY(), item, item.Quantity, killer.Id);
-                        }
-                    }
-                }
-            }
-
-            Items.Clear();
         }
 
         public override void ProcessRegen()
@@ -371,6 +288,46 @@ namespace Intersect.Server.Entities
         public override EntityTypes GetEntityType()
         {
             return EntityTypes.Resource;
+        }
+    }
+
+    public partial class Resource : Entity
+    {
+        public override void DropItems(Entity killer, bool sendUpdate = true)
+        {
+            if (!(killer is Player))
+            {
+                return;
+            }
+            var playerKiller = killer as Player;
+
+            Guid lootOwner = Guid.Empty;
+            // Set owner to player that killed this, if there is any.
+            if (playerKiller != null)
+            {
+                // Yes, so set the owner to the player that killed it.
+                lootOwner = playerKiller.Id;
+            }
+
+            var rolledItems = new List<Item>();
+            var baseDropTable = LootTableServerHelpers.GenerateDropTable(Base.Drops, playerKiller);
+            rolledItems.Add(LootTableServerHelpers.GetItemFromTable(baseDropTable));
+
+            foreach (var rolledItem in rolledItems)
+            {
+                if (rolledItem == null)
+                {
+                    continue;
+                }
+                // Set the attributes for this item.
+                rolledItem.Set(new Item(rolledItem.ItemId, rolledItem.Quantity, true));
+
+                // Spawn the actual item!
+                if (MapController.TryGetInstanceFromMap(MapId, MapInstanceId, out var instance))
+                {
+                    instance.SpawnItem(X, Y, rolledItem, rolledItem.Quantity, lootOwner, sendUpdate);
+                }
+            }
         }
     }
 

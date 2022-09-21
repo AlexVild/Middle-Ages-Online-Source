@@ -8582,5 +8582,10 @@ namespace Intersect.Server.Entities
                 TryTakeItem(Items[n], item.Quantity);
             }
         }
+
+        public double GetLuckModifier()
+        {
+            return 1 + GetEquipmentBonusEffect(EffectType.Luck) / 100f;
+        }
     }
 }

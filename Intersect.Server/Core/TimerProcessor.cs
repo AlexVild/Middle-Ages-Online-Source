@@ -75,7 +75,7 @@ namespace Intersect.Server.Core
         /// <summary>
         /// A list of all active timers of all types
         /// </summary>
-        public static TimerList ActiveTimers;
+        public static TimerList ActiveTimers = new TimerList();
 
         /// <summary>
         /// Processes the current list of timers, in a set sorted by expiry time.
@@ -84,10 +84,6 @@ namespace Intersect.Server.Core
         public static void ProcessTimers(long now)
         {
             // Process all timers that aren't indefinite
-            if (ActiveTimers == null)
-            {
-                ActiveTimers = new TimerList();
-            }
             foreach (var timer in ActiveTimers.Where(t => t?.Descriptor?.TimeLimit < TimerConstants.TimerIndefiniteTimeLimit).ToArray())
             {
                 // Short-circuit out if the newest timer is not yet expired

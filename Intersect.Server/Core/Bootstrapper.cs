@@ -242,6 +242,8 @@ namespace Intersect.Server.Core
 
             CustomColors.Load();
 
+
+
             if (Options.Instance.Metrics.Enable)
             {
                 MetricsRoot.Init();
