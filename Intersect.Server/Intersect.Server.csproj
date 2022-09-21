@@ -829,6 +829,10 @@
     <Compile Include="Migrations\Game\20220915151233_InitialLootTableMigration.designer.cs">
       <DependentUpon>20220915151233_InitialLootTableMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20220921140307_AdditionalNPCTablesMigration.cs" />
+    <Compile Include="Migrations\Game\20220921140307_AdditionalNPCTablesMigration.designer.cs">
+      <DependentUpon>20220921140307_AdditionalNPCTablesMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

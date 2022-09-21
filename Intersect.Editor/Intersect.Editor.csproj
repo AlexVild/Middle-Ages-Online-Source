@@ -817,6 +817,12 @@
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_Warp.resx">
       <DependentUpon>EventCommand_Warp.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\frmLootTables.aa-DJ.resx">
+      <DependentUpon>frmLootTables.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\frmLootTables.aa.resx">
+      <DependentUpon>frmLootTables.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\frmLootTables.resx">
       <DependentUpon>frmLootTables.cs</DependentUpon>
     </EmbeddedResource>

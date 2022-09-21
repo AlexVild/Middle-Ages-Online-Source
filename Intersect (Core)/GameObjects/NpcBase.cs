@@ -55,7 +55,7 @@ namespace Intersect.GameObjects
         Taunt
     }
 
-    public class NpcBase : DatabaseObject<NpcBase>, IFolderable
+    public partial class NpcBase : DatabaseObject<NpcBase>, IFolderable
     {
 
         [NotMapped] public ConditionLists AttackOnSightConditions = new ConditionLists();
@@ -333,6 +333,47 @@ namespace Intersect.GameObjects
             return SpellBase.Get(spellId);
         }
 
+    }
+
+    public partial class NpcBase : DatabaseObject<NpcBase>, IFolderable
+    {
+        [NotMapped] public List<NpcDrop> SecondaryDrops = new List<NpcDrop>();
+
+        [Column("SecondaryDrops")]
+        [JsonIgnore]
+        public string JsonSecondaryDrops
+        {
+            get => JsonConvert.SerializeObject(SecondaryDrops);
+            set
+            {
+                SecondaryDrops = JsonConvert.DeserializeObject<List<NpcDrop>>(value ?? string.Empty);
+                if (SecondaryDrops == null)
+                {
+                    SecondaryDrops = new List<NpcDrop>();
+                }
+            }
+        }
+
+        public double SecondaryChance = 0.0;
+
+        [NotMapped] public List<NpcDrop> TertiaryDrops = new List<NpcDrop>();
+
+        [Column("TertiaryDrops")]
+        [JsonIgnore]
+        public string JsonTertiaryDrops
+        {
+            get => JsonConvert.SerializeObject(TertiaryDrops);
+            set
+            {
+                TertiaryDrops = JsonConvert.DeserializeObject<List<NpcDrop>>(value ?? string.Empty);
+                if (TertiaryDrops == null)
+                {
+                    TertiaryDrops = new List<NpcDrop>();
+                }
+            }
+        }
+
+        public double TertiaryChance = 0.0;
     }
 
     public partial class NpcDrop
