@@ -153,6 +153,12 @@
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_RandomQuest.Designer.cs">
       <DependentUpon>EventCommand_RandomQuest.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_RollLoot.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_RollLoot.Designer.cs">
+      <DependentUpon>EventCommand_RollLoot.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_SetGuildBankSlots.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -801,6 +807,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_RandomQuest.resx">
       <DependentUpon>EventCommand_RandomQuest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_RollLoot.resx">
+      <DependentUpon>EventCommand_RollLoot.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_SetVehicle.resx">
       <DependentUpon>EventCommand_SetVehicle.cs</DependentUpon>

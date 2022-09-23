@@ -1851,5 +1851,10 @@ namespace Intersect.Editor.Forms.Editors.Events
 
             return Strings.EventCommandList.ClearRecord.ToString(recordValue, command.ClearAll);
         }
+
+        private static string GetCommandText(RollLootCommand command, MapInstance map)
+        {
+            return Strings.EventCommandList.RollLoot;
+        }
     }
 }

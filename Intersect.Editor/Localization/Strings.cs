@@ -2202,6 +2202,7 @@ Tick timer saved in server config.json.";
                 {"changemapspawngroup", @"Change Map Spawn Group"},
                 {"openleaderboard", @"Open Leaderboard"},
                 {"clearrecord", @"Clear Record"},
+                {"rollloot", @"Roll Loot"},
             };
 
         }
@@ -6071,6 +6072,9 @@ Negative values for time to flow backwards.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString OpenLeaderboard = @"Open leaderboard '{00}' for {01} (sort: {02}, display type: {03})";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString RollLoot = @"Roll Loot";
         }
 
         public partial struct DynamicRequirements
@@ -6083,6 +6087,12 @@ Negative values for time to flow backwards.";
         {
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString LootTableDrop = @"[TABLE] {00}: {01}/{02} chance";
+        }
+
+        public partial struct EventCommandRollLoot
+        {
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Table = @"{00} x{01} times";
         }
     }
 }

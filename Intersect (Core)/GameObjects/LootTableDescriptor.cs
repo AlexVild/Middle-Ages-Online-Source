@@ -47,4 +47,24 @@ namespace Intersect.GameObjects
         /// <inheritdoc />
         public string Folder { get; set; } = "";
     }
+
+    public class LootRoll
+    {
+        public Guid DescriptorId;
+
+        public LootTableDescriptor LootTable => LootTableDescriptor.Get(DescriptorId) ?? null;
+
+        public int Rolls = 0;
+
+        public LootRoll(Guid descriptorId, int rolls)
+        {
+            DescriptorId = descriptorId;
+            Rolls = rolls;
+        }
+
+        public LootRoll Clone()
+        {
+            return new LootRoll(this.DescriptorId, this.Rolls);
+        }
+    }
 }

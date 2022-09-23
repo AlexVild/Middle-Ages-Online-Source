@@ -1265,4 +1265,11 @@ namespace Intersect.GameObjects.Events.Commands
 
         public bool ClearAll { get; set; }
     }
+
+    public class RollLootCommand : EventCommand
+    {
+        public override EventCommandType Type { get; } = EventCommandType.RollLoot;
+
+        public List<LootRoll> LootTables { get; set; }
+    }
 }

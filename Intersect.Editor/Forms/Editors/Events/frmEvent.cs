@@ -803,6 +803,10 @@ namespace Intersect.Editor.Forms.Editors.Events
                     tmpCommand = new ClearRecordCommand();
 
                     break;
+                case EventCommandType.RollLoot:
+                    tmpCommand = new RollLootCommand();
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -1466,6 +1470,10 @@ namespace Intersect.Editor.Forms.Editors.Events
                     break;
                 case EventCommandType.ClearRecord:
                     cmdWindow = new EventCommand_ClearRecord((ClearRecordCommand)command, this);
+
+                    break;
+                case EventCommandType.RollLoot:
+                    cmdWindow = new EventCommand_RollLoot((RollLootCommand)command, this);
 
                     break;
                 default:
