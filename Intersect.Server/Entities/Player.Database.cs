@@ -341,7 +341,7 @@ namespace Intersect.Server.Entities
                             compiledQuery = sortDirection == SortDirection.Ascending ? compiledQuery.OrderBy(u => u.Name.ToUpper()) : compiledQuery.OrderByDescending(u => u.Name.ToUpper());
                             break;
                     }
-                    
+
                     return compiledQuery.Skip(skip).Take(take).ToList();
                 }
             }
@@ -456,7 +456,7 @@ namespace Intersect.Server.Entities
                     PlayerRecords = context.Player_Record
                         .Where(f => f.Player.Id == Id)
                         .ToList();
-                    foreach(var record in PlayerRecords)
+                    foreach (var record in PlayerRecords)
                     {
                         record.Teammates = context.Record_Teammate
                             .Where(tm => tm.RecordInstanceId == record.Id)
@@ -492,6 +492,13 @@ namespace Intersect.Server.Entities
 
         #endregion
 
+
+        #region Loot rolls
+        public void RollForLoot(Guid lootTableId)
+        {
+
+        }
+        #endregion
     }
 
 }

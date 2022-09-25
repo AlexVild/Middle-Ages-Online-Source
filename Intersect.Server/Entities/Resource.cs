@@ -313,21 +313,7 @@ namespace Intersect.Server.Entities
             var baseDropTable = LootTableServerHelpers.GenerateDropTable(Base.Drops, playerKiller);
             rolledItems.Add(LootTableServerHelpers.GetItemFromTable(baseDropTable));
 
-            foreach (var rolledItem in rolledItems)
-            {
-                if (rolledItem == null)
-                {
-                    continue;
-                }
-                // Set the attributes for this item.
-                rolledItem.Set(new Item(rolledItem.ItemId, rolledItem.Quantity, true));
-
-                // Spawn the actual item!
-                if (MapController.TryGetInstanceFromMap(MapId, MapInstanceId, out var instance))
-                {
-                    instance.SpawnItem(X, Y, rolledItem, rolledItem.Quantity, lootOwner, sendUpdate);
-                }
-            }
+            LootTableServerHelpers.SpawnItemsOnMap(rolledItems, MapId, MapInstanceId, killer.X, killer.Y, lootOwner, sendUpdate);
         }
     }
 

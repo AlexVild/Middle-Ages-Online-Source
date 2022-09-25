@@ -23,6 +23,7 @@ using Intersect.GameObjects.Timers;
 using Intersect.Server.Database.PlayerData;
 using Intersect.Server.Core;
 using Intersect.Network.Packets.Server;
+using Intersect.Server.Utilities;
 
 namespace Intersect.Server.Entities.Events
 {
@@ -2720,6 +2721,35 @@ namespace Intersect.Server.Entities.Events
             }
 
             PlayerRecord.RemoveAllRecordsOfType(command.RecordId, command.RecordType);
+        }
+
+        private static void ProcessCommand(
+            RollLootCommand command,
+            Player player,
+            Event instance,
+            CommandInstance stackInfo,
+            Stack<CommandInstance> callStack
+        )
+        {
+            if (player == null) return;
+
+            List<Item> loot = new List<Item>();
+            foreach (var roll in command.LootTables)
+            {
+                var table = roll.LootTable;
+                if (table == null || !Conditions.MeetsConditionLists(table.DropConditions, player, null))
+                {
+                    continue;
+                }
+
+                for (var i = 0; i < roll.Rolls; i++)
+                {
+                    var dropTable = LootTableServerHelpers.GenerateDropTable(table.Drops);
+                    loot.Add(LootTableServerHelpers.GetItemFromTable(dropTable));
+                }
+            }
+
+            LootTableServerHelpers.SpawnItemsOnMap(loot, player.MapId, player.MapInstanceId, player.X, player.Y, player.Id, true);
         }
     }
 }

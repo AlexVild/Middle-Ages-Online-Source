@@ -2,6 +2,7 @@
 using Intersect.Server.Database;
 using Intersect.Server.Entities;
 using Intersect.Server.Entities.Events;
+using Intersect.Server.Maps;
 using Intersect.Utilities;
 using System;
 using System.Collections.Generic;
@@ -78,7 +79,7 @@ namespace Intersect.Server.Utilities
             return rolledItem;
         }
 
-        public static List<BaseDrop> FlattenDropTable(List<BaseDrop> drops, Player forPlayer = null)
+        private static List<BaseDrop> FlattenDropTable(List<BaseDrop> drops, Player forPlayer = null)
         {
             var flattenedDrops = new List<BaseDrop>();
             if (drops == null)
@@ -106,6 +107,25 @@ namespace Intersect.Server.Utilities
             }
 
             return flattenedDrops;
+        }
+
+        public static void SpawnItemsOnMap(List<Item> rolledItems, Guid mapId, Guid mapInstanceId, int X, int Y, Guid lootOwner, bool sendUpdate = true)
+        {
+            foreach (var rolledItem in rolledItems)
+            {
+                if (rolledItem == null)
+                {
+                    continue;
+                }
+                // Set the attributes for this item.
+                rolledItem.Set(new Item(rolledItem.ItemId, rolledItem.Quantity, true));
+
+                // Spawn the actual item!
+                if (MapController.TryGetInstanceFromMap(mapId, mapInstanceId, out var instance))
+                {
+                    instance.SpawnItem(X, Y, rolledItem, rolledItem.Quantity, lootOwner, sendUpdate);
+                }
+            }
         }
     }
 }
