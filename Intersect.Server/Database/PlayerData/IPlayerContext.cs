@@ -47,5 +47,7 @@ namespace Intersect.Server.Database.PlayerData
         DbSet<MapExploredInstance> Maps_Explored { get; set; }
 
         DbSet<RecordTeammateInstance> Record_Teammate { get; set; }
+
+        DbSet<LootRollInstance> Loot_Rolls { get; set; }
     }
 }

@@ -485,6 +485,7 @@
     <Compile Include="Database\Item.cs" />
     <Compile Include="Database\PlayerData\Players\IPlayerOwned.cs" />
     <Compile Include="Database\PlayerData\Players\ISlot.cs" />
+    <Compile Include="Database\PlayerData\Players\LootRollInstance.cs" />
     <Compile Include="Database\PlayerData\Players\MapExploredInstance.cs" />
     <Compile Include="Database\PlayerData\Players\Quest.cs" />
     <Compile Include="Database\PlayerData\Players\PlayerRecord.cs" />
@@ -618,6 +619,10 @@
     <Compile Include="Migrations\20220725163234_RecordTeammateMigration.cs" />
     <Compile Include="Migrations\20220725163234_RecordTeammateMigration.designer.cs">
       <DependentUpon>20220725163234_RecordTeammateMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20220926191034_LootRollDbMigration.cs" />
+    <Compile Include="Migrations\20220926191034_LootRollDbMigration.designer.cs">
+      <DependentUpon>20220926191034_LootRollDbMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.cs" />
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.Designer.cs">

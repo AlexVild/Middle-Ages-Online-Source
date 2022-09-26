@@ -491,14 +491,6 @@ namespace Intersect.Server.Entities
         #endregion
 
         #endregion
-
-
-        #region Loot rolls
-        public void RollForLoot(Guid lootTableId)
-        {
-
-        }
-        #endregion
     }
 
 }

@@ -38,6 +38,7 @@ using Intersect.Server.Database.PlayerData;
 using static Intersect.Server.Maps.MapInstance;
 using Intersect.Server.Core;
 using Intersect.GameObjects.Timers;
+using Intersect.Server.Utilities;
 
 namespace Intersect.Server.Entities
 {
@@ -291,8 +292,6 @@ namespace Intersect.Server.Entities
 
         [NotMapped]
         public int FaceDirection = 0;
-
-        
 
         /// <summary>
         /// Used to determine if the player is performing an attack out of stealth
@@ -8214,6 +8213,12 @@ namespace Intersect.Server.Entities
         [NotMapped, JsonIgnore]
         public bool CloseLeaderboard { get; set; }
 
+        [NotMapped, JsonIgnore]
+        public List<Item> CurrentLoot { get; set; }
+
+        [JsonIgnore]
+        public virtual List<LootRollInstance> LootRolls { get; set; } = new List<LootRollInstance>();
+
         public void MarkMapExplored(Guid mapId)
         {
             lock (EntityLock)
@@ -8232,6 +8237,59 @@ namespace Intersect.Server.Entities
                 PacketSender.SendMapsExploredPacketTo(this);
             }
         }
+
+        #region Rolling Loot
+        /// <summary>
+        /// Creates or fetches a list of items that an event called for rolling for this player.
+        /// </summary>
+        /// <param name="eventId">The event that is requesting a roll of loot tables</param>
+        /// <param name="lootRolls">The rolls the event wants to make</param>
+        /// <returns></returns>
+        public List<Item> GetLootRollItems(Guid eventId, List<LootRoll> lootRolls)
+        {
+            lock(EntityLock)
+            {
+                using (var context = DbInterface.CreatePlayerContext(readOnly: false))
+                {
+                    // Check to see if the player has a pending roll on this event - if they do, return them the list of items from that roll
+                    var existingRoll = context.Loot_Rolls.Where(roll => roll.EventId == eventId && roll.PlayerId == Id).FirstOrDefault();
+
+                    // If there is an existing roll, return that.
+                    if (existingRoll != default) 
+                    {
+                        return existingRoll.Loot;
+                    }
+
+                    var newRoll = new LootRollInstance(this, eventId, lootRolls);
+
+                    context.Loot_Rolls.Add(newRoll);
+                    context.ChangeTracker.DetectChanges();
+                    context.SaveChanges();
+
+                    return newRoll.Loot;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Removes all of a player's loot rolls that have some event ID associated with them.
+        /// </summary>
+        /// <param name="eventId"></param>
+        public void ClearLootRollsForEvent(Guid eventId)
+        {
+            lock (EntityLock)
+            {
+                using (var context = DbInterface.CreatePlayerContext(readOnly: false))
+                {
+                    // Check to see if the player has a pending roll on this event - if they do, return them the list of items from that roll
+                    context.RemoveRange(context.Loot_Rolls.Where(roll => roll.EventId == eventId && roll.PlayerId == Id).FirstOrDefault());
+
+                    context.ChangeTracker.DetectChanges();
+                    context.SaveChanges();
+                }
+            }
+        }
+        #endregion
 
         #region Player Records
         public long IncrementRecord(RecordType type, Guid recordId, bool instantSave = false)

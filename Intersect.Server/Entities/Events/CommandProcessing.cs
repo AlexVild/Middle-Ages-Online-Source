@@ -2733,22 +2733,7 @@ namespace Intersect.Server.Entities.Events
         {
             if (player == null) return;
 
-            List<Item> loot = new List<Item>();
-            foreach (var roll in command.LootTables)
-            {
-                var table = roll.LootTable;
-                if (table == null || !Conditions.MeetsConditionLists(table.DropConditions, player, null))
-                {
-                    continue;
-                }
-
-                for (var i = 0; i < roll.Rolls; i++)
-                {
-                    var dropTable = LootTableServerHelpers.GenerateDropTable(table.Drops);
-                    loot.Add(LootTableServerHelpers.GetItemFromTable(dropTable));
-                }
-            }
-
+            var loot = player.GetLootRollItems(instance.Id, command.LootTables);
             LootTableServerHelpers.SpawnItemsOnMap(loot, player.MapId, player.MapInstanceId, player.X, player.Y, player.Id, true);
         }
     }
