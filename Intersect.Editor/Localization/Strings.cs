@@ -6074,7 +6074,7 @@ Negative values for time to flow backwards.";
             public static LocalizedString OpenLeaderboard = @"Open leaderboard '{00}' for {01} (sort: {02}, display type: {03})";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public static LocalizedString RollLoot = @"Roll Loot";
+            public static LocalizedString RollLoot = @"Roll Loot ({00})";
         }
 
         public partial struct DynamicRequirements

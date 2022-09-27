@@ -30,6 +30,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private void InitializeComponent()
         {
             this.grpRollTables = new DarkUI.Controls.DarkGroupBox();
+            this.btnClear = new DarkUI.Controls.DarkButton();
             this.lblTables = new System.Windows.Forms.Label();
             this.btnDropRemove = new DarkUI.Controls.DarkButton();
             this.btnDropAdd = new DarkUI.Controls.DarkButton();
@@ -40,7 +41,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.lblTable = new System.Windows.Forms.Label();
             this.btnCancel = new DarkUI.Controls.DarkButton();
             this.btnSave = new DarkUI.Controls.DarkButton();
-            this.btnClear = new DarkUI.Controls.DarkButton();
+            this.lblTitle = new System.Windows.Forms.Label();
+            this.txtTitle = new DarkUI.Controls.DarkTextBox();
             this.grpRollTables.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudRolls)).BeginInit();
             this.SuspendLayout();
@@ -49,6 +51,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             this.grpRollTables.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.grpRollTables.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpRollTables.Controls.Add(this.txtTitle);
+            this.grpRollTables.Controls.Add(this.lblTitle);
             this.grpRollTables.Controls.Add(this.btnClear);
             this.grpRollTables.Controls.Add(this.lblTables);
             this.grpRollTables.Controls.Add(this.btnDropRemove);
@@ -63,15 +67,26 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpRollTables.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpRollTables.Location = new System.Drawing.Point(3, 3);
             this.grpRollTables.Name = "grpRollTables";
-            this.grpRollTables.Size = new System.Drawing.Size(285, 358);
+            this.grpRollTables.Size = new System.Drawing.Size(285, 398);
             this.grpRollTables.TabIndex = 22;
             this.grpRollTables.TabStop = false;
             this.grpRollTables.Text = "Add Inspiration";
             // 
+            // btnClear
+            // 
+            this.btnClear.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.btnClear.Location = new System.Drawing.Point(172, 60);
+            this.btnClear.Name = "btnClear";
+            this.btnClear.Padding = new System.Windows.Forms.Padding(5);
+            this.btnClear.Size = new System.Drawing.Size(92, 23);
+            this.btnClear.TabIndex = 69;
+            this.btnClear.Text = "Clear Selection";
+            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
+            // 
             // lblTables
             // 
             this.lblTables.AutoSize = true;
-            this.lblTables.Location = new System.Drawing.Point(20, 31);
+            this.lblTables.Location = new System.Drawing.Point(18, 73);
             this.lblTables.Name = "lblTables";
             this.lblTables.Size = new System.Drawing.Size(67, 13);
             this.lblTables.TabIndex = 68;
@@ -80,7 +95,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // btnDropRemove
             // 
             this.btnDropRemove.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.btnDropRemove.Location = new System.Drawing.Point(182, 274);
+            this.btnDropRemove.Location = new System.Drawing.Point(180, 316);
             this.btnDropRemove.Name = "btnDropRemove";
             this.btnDropRemove.Padding = new System.Windows.Forms.Padding(5);
             this.btnDropRemove.Size = new System.Drawing.Size(75, 23);
@@ -91,7 +106,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // btnDropAdd
             // 
             this.btnDropAdd.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.btnDropAdd.Location = new System.Drawing.Point(101, 274);
+            this.btnDropAdd.Location = new System.Drawing.Point(99, 316);
             this.btnDropAdd.Name = "btnDropAdd";
             this.btnDropAdd.Padding = new System.Windows.Forms.Padding(5);
             this.btnDropAdd.Size = new System.Drawing.Size(75, 23);
@@ -103,7 +118,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             this.nudRolls.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.nudRolls.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudRolls.Location = new System.Drawing.Point(23, 248);
+            this.nudRolls.Location = new System.Drawing.Point(21, 290);
             this.nudRolls.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -128,7 +143,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             this.lblRolls.AutoSize = true;
             this.lblRolls.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.lblRolls.Location = new System.Drawing.Point(20, 232);
+            this.lblRolls.Location = new System.Drawing.Point(18, 274);
             this.lblRolls.Name = "lblRolls";
             this.lblRolls.Size = new System.Drawing.Size(62, 13);
             this.lblRolls.TabIndex = 23;
@@ -147,7 +162,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbTable.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbTable.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbTable.FormattingEnabled = true;
-            this.cmbTable.Location = new System.Drawing.Point(23, 208);
+            this.cmbTable.Location = new System.Drawing.Point(21, 250);
             this.cmbTable.Name = "cmbTable";
             this.cmbTable.Size = new System.Drawing.Size(243, 21);
             this.cmbTable.TabIndex = 64;
@@ -161,7 +176,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.lstTables.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.lstTables.ForeColor = System.Drawing.Color.Gainsboro;
             this.lstTables.FormattingEnabled = true;
-            this.lstTables.Location = new System.Drawing.Point(23, 47);
+            this.lstTables.Location = new System.Drawing.Point(21, 89);
             this.lstTables.Name = "lstTables";
             this.lstTables.Size = new System.Drawing.Size(243, 132);
             this.lstTables.TabIndex = 63;
@@ -170,7 +185,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // lblTable
             // 
             this.lblTable.AutoSize = true;
-            this.lblTable.Location = new System.Drawing.Point(20, 192);
+            this.lblTable.Location = new System.Drawing.Point(18, 234);
             this.lblTable.Name = "lblTable";
             this.lblTable.Size = new System.Drawing.Size(34, 13);
             this.lblTable.TabIndex = 24;
@@ -178,7 +193,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(133, 322);
+            this.btnCancel.Location = new System.Drawing.Point(131, 364);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Padding = new System.Windows.Forms.Padding(5);
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
@@ -188,7 +203,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(52, 322);
+            this.btnSave.Location = new System.Drawing.Point(50, 364);
             this.btnSave.Name = "btnSave";
             this.btnSave.Padding = new System.Windows.Forms.Padding(5);
             this.btnSave.Size = new System.Drawing.Size(75, 23);
@@ -196,16 +211,25 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.btnSave.Text = "Ok";
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
-            // btnClear
+            // lblTitle
             // 
-            this.btnClear.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.btnClear.Location = new System.Drawing.Point(174, 18);
-            this.btnClear.Name = "btnClear";
-            this.btnClear.Padding = new System.Windows.Forms.Padding(5);
-            this.btnClear.Size = new System.Drawing.Size(92, 23);
-            this.btnClear.TabIndex = 69;
-            this.btnClear.Text = "Clear Selection";
-            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
+            this.lblTitle.AutoSize = true;
+            this.lblTitle.Location = new System.Drawing.Point(18, 29);
+            this.lblTitle.Name = "lblTitle";
+            this.lblTitle.Size = new System.Drawing.Size(27, 13);
+            this.lblTitle.TabIndex = 29;
+            this.lblTitle.Text = "Title";
+            // 
+            // txtTitle
+            // 
+            this.txtTitle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.txtTitle.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtTitle.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.txtTitle.Location = new System.Drawing.Point(68, 27);
+            this.txtTitle.Name = "txtTitle";
+            this.txtTitle.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
+            this.txtTitle.Size = new System.Drawing.Size(196, 20);
+            this.txtTitle.TabIndex = 70;
             // 
             // EventCommand_RollLoot
             // 
@@ -214,7 +238,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.Controls.Add(this.grpRollTables);
             this.Name = "EventCommand_RollLoot";
-            this.Size = new System.Drawing.Size(293, 367);
+            this.Size = new System.Drawing.Size(293, 404);
             this.grpRollTables.ResumeLayout(false);
             this.grpRollTables.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudRolls)).EndInit();
@@ -236,5 +260,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private DarkUI.Controls.DarkNumericUpDown nudRolls;
         private System.Windows.Forms.Label lblRolls;
         private DarkUI.Controls.DarkButton btnClear;
+        private System.Windows.Forms.Label lblTitle;
+        private DarkUI.Controls.DarkTextBox txtTitle;
     }
 }

@@ -2469,6 +2469,21 @@ namespace Intersect.Server.Networking
 
             player?.SendPacket(new LeaderboardPagePacket(records, currentPage, highlightedPlayer));
         }
+
+        public static void SendOpenLootPacketTo(Player player, string title)
+        {
+            var lootObjs = new List<Loot>();
+            foreach(var item in player.CurrentLoot)
+            {
+                var lootObj = new Loot();
+                lootObj.ItemId = item.ItemId;
+                lootObj.Quantity = item.Quantity;
+                lootObj.StatBuffs = item.StatBuffs;
+                lootObjs.Add(lootObj);
+            }
+
+            player?.SendPacket(new OpenLootRollPacket(lootObjs, title));
+        }
     }
 
 }

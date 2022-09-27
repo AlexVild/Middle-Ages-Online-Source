@@ -223,6 +223,7 @@
     <Compile Include="Config\LayerOptions.cs" />
     <Compile Include="Config\LoggingOptions.cs" />
     <Compile Include="Config\LootOptions.cs" />
+    <Compile Include="Config\LootRollOptions.cs" />
     <Compile Include="Config\MetricsOptions.cs" />
     <Compile Include="Config\NPCGuildOptions.cs" />
     <Compile Include="Config\NpcOptions.cs" />
@@ -446,6 +447,7 @@
     <Compile Include="Network\Packets\Server\MapsExploredPacket.cs" />
     <Compile Include="Network\Packets\Server\MapTrapPacket.cs" />
     <Compile Include="Network\Packets\Server\OpenLeaderboardPacket.cs" />
+    <Compile Include="Network\Packets\Server\OpenLootRollPacket.cs" />
     <Compile Include="Network\Packets\Server\PlayAnimationPackets.cs" />
     <Compile Include="Network\Packets\Server\PlayerStatsPacket.cs" />
     <Compile Include="Network\Packets\Server\ProjectileCastDelayPacket.cs" />

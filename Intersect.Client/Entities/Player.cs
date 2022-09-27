@@ -2850,4 +2850,31 @@ namespace Intersect.Client.Entities
     {
         public Leaderboard Leaderboard = new Leaderboard();
     }
+
+    public partial class Player : Entity
+    {
+        public List<Item> RolledLoot;
+
+        public void LoadRolledLoot(List<Loot> loot)
+        {
+            RolledLoot = new List<Item>();
+            if (loot == null)
+            {
+                return;
+            }
+            foreach(var drop in loot)
+            {
+                var item = new Item();
+                item.Load(drop.ItemId, drop.Quantity, null, drop.StatBuffs);
+                RolledLoot.Add(item);
+            }
+
+            Interface.Interface.GameUi.LootRollWindow.Show();
+        }
+
+        public void ResetLoot()
+        {
+            RolledLoot = null;
+        }
+    }
 }

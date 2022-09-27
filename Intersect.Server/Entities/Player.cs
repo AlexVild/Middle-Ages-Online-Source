@@ -8217,6 +8217,9 @@ namespace Intersect.Server.Entities
         [NotMapped, JsonIgnore]
         public List<Item> CurrentLoot { get; set; }
 
+        [NotMapped, JsonIgnore]
+        public Guid LootEventId { get; set; }
+
         [JsonIgnore]
         public virtual List<LootRollInstance> LootRolls { get; set; } = new List<LootRollInstance>();
 
@@ -8240,13 +8243,19 @@ namespace Intersect.Server.Entities
         }
 
         #region Rolling Loot
+        public void OpenLootRoll(Guid eventId, List<LootRoll> lootRolls)
+        {
+            CurrentLoot = GetLootRollItems(eventId, lootRolls);
+            LootEventId = eventId;
+        }
+
         /// <summary>
         /// Creates or fetches a list of items that an event called for rolling for this player.
         /// </summary>
         /// <param name="eventId">The event that is requesting a roll of loot tables</param>
         /// <param name="lootRolls">The rolls the event wants to make</param>
         /// <returns></returns>
-        public List<Item> GetLootRollItems(Guid eventId, List<LootRoll> lootRolls)
+        private List<Item> GetLootRollItems(Guid eventId, List<LootRoll> lootRolls)
         {
             var existingRoll = LootRolls.Where(roll => roll.EventId == eventId && roll.PlayerId == Id).FirstOrDefault();
 

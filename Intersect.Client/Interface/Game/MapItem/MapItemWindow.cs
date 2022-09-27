@@ -166,7 +166,7 @@ namespace Intersect.Client.Interface.Game.Inventory
         {
             for (var i = 0; i < Options.Loot.MaximumLootWindowItems; i++)
             {
-                Items.Add(new MapItemIcon(this));
+                Items.Add(new MapItemIcon(mMapItemWindow));
                 Items[i].Container = new ImagePanel(mItemContainer, "MapItemIcon");
                 Items[i].Setup();
 

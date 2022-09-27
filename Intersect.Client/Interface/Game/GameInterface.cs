@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using static Intersect.Client.Interface.Game.Bank.BankWindow;
 using Intersect.Client.General.Leaderboards;
 using Intersect.Client.Interface.Game.Leaderboards;
+using Intersect.Client.Interface.Game.LootRoll;
 
 namespace Intersect.Client.Interface.Game
 {
@@ -771,12 +772,14 @@ namespace Intersect.Client.Interface.Game
         private PlayerHud mHUD;
         private PartyHud mPartyHUD;
         public LeaderboardWindow LeaderboardWindow;
+        public LootRollWindow LootRollWindow;
 
         private void _InitGameGui(Canvas gameCanvas)
         {
             mHUD = new PlayerHud();
             mPartyHUD = new PartyHud();
             LeaderboardWindow = new LeaderboardWindow(gameCanvas);
+            LootRollWindow = new LootRollWindow(gameCanvas);
         }
 
         private void _Draw()
@@ -785,6 +788,7 @@ namespace Intersect.Client.Interface.Game
             mPartyHUD.Draw();
 
             LeaderboardWindow.Update();
+            LootRollWindow.Update();
         }
 
         public PlayerHud GetHud()

@@ -480,6 +480,201 @@
   <data name="&gt;&gt;btnCancel.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
+  <data name="&gt;&gt;btnUnselectItem.Name" xml:space="preserve">
+    <value>btnUnselectItem</value>
+  </data>
+  <data name="&gt;&gt;btnUnselectItem.Type" xml:space="preserve">
+    <value>DarkUI.Controls.DarkButton, DarkUI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;btnUnselectItem.Parent" xml:space="preserve">
+    <value>grpDrops</value>
+  </data>
+  <data name="&gt;&gt;btnUnselectItem.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;grpTypes.Name" xml:space="preserve">
+    <value>grpTypes</value>
+  </data>
+  <data name="&gt;&gt;grpTypes.Type" xml:space="preserve">
+    <value>DarkUI.Controls.DarkGroupBox, DarkUI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;grpTypes.Parent" xml:space="preserve">
+    <value>grpDrops</value>
+  </data>
+  <data name="&gt;&gt;grpTypes.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;btnDropRemove.Name" xml:space="preserve">
+    <value>btnDropRemove</value>
+  </data>
+  <data name="&gt;&gt;btnDropRemove.Type" xml:space="preserve">
+    <value>DarkUI.Controls.DarkButton, DarkUI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;btnDropRemove.Parent" xml:space="preserve">
+    <value>grpDrops</value>
+  </data>
+  <data name="&gt;&gt;btnDropRemove.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;btnDropAdd.Name" xml:space="preserve">
+    <value>btnDropAdd</value>
+  </data>
+  <data name="&gt;&gt;btnDropAdd.Type" xml:space="preserve">
+    <value>DarkUI.Controls.DarkButton, DarkUI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;btnDropAdd.Parent" xml:space="preserve">
+    <value>grpDrops</value>
+  </data>
+  <data name="&gt;&gt;btnDropAdd.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;lstDrops.Name" xml:space="preserve">
+    <value>lstDrops</value>
+  </data>
+  <data name="&gt;&gt;lstDrops.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ListBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lstDrops.Parent" xml:space="preserve">
+    <value>grpDrops</value>
+  </data>
+  <data name="&gt;&gt;lstDrops.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;nudDropAmount.Name" xml:space="preserve">
+    <value>nudDropAmount</value>
+  </data>
+  <data name="&gt;&gt;nudDropAmount.Type" xml:space="preserve">
+    <value>DarkUI.Controls.DarkNumericUpDown, DarkUI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;nudDropAmount.Parent" xml:space="preserve">
+    <value>grpDrops</value>
+  </data>
+  <data name="&gt;&gt;nudDropAmount.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;nudDropChance.Name" xml:space="preserve">
+    <value>nudDropChance</value>
+  </data>
+  <data name="&gt;&gt;nudDropChance.Type" xml:space="preserve">
+    <value>DarkUI.Controls.DarkNumericUpDown, DarkUI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;nudDropChance.Parent" xml:space="preserve">
+    <value>grpDrops</value>
+  </data>
+  <data name="&gt;&gt;nudDropChance.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="&gt;&gt;cmbDropItem.Name" xml:space="preserve">
+    <value>cmbDropItem</value>
+  </data>
+  <data name="&gt;&gt;cmbDropItem.Type" xml:space="preserve">
+    <value>DarkUI.Controls.DarkComboBox, DarkUI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;cmbDropItem.Parent" xml:space="preserve">
+    <value>grpDrops</value>
+  </data>
+  <data name="&gt;&gt;cmbDropItem.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="&gt;&gt;lblDropAmount.Name" xml:space="preserve">
+    <value>lblDropAmount</value>
+  </data>
+  <data name="&gt;&gt;lblDropAmount.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblDropAmount.Parent" xml:space="preserve">
+    <value>grpDrops</value>
+  </data>
+  <data name="&gt;&gt;lblDropAmount.ZOrder" xml:space="preserve">
+    <value>8</value>
+  </data>
+  <data name="&gt;&gt;lblDropChance.Name" xml:space="preserve">
+    <value>lblDropChance</value>
+  </data>
+  <data name="&gt;&gt;lblDropChance.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblDropChance.Parent" xml:space="preserve">
+    <value>grpDrops</value>
+  </data>
+  <data name="&gt;&gt;lblDropChance.ZOrder" xml:space="preserve">
+    <value>9</value>
+  </data>
+  <data name="&gt;&gt;lblDropItem.Name" xml:space="preserve">
+    <value>lblDropItem</value>
+  </data>
+  <data name="&gt;&gt;lblDropItem.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblDropItem.Parent" xml:space="preserve">
+    <value>grpDrops</value>
+  </data>
+  <data name="&gt;&gt;lblDropItem.ZOrder" xml:space="preserve">
+    <value>10</value>
+  </data>
+  <data name="grpDrops.Location" type="System.Drawing.Point, System.Drawing">
+    <value>7, 19</value>
+  </data>
+  <data name="grpDrops.Size" type="System.Drawing.Size, System.Drawing">
+    <value>427, 209</value>
+  </data>
+  <data name="grpDrops.TabIndex" type="System.Int32, mscorlib">
+    <value>31</value>
+  </data>
+  <data name="grpDrops.Text" xml:space="preserve">
+    <value>Drops</value>
+  </data>
+  <data name="&gt;&gt;grpDrops.Name" xml:space="preserve">
+    <value>grpDrops</value>
+  </data>
+  <data name="&gt;&gt;grpDrops.Type" xml:space="preserve">
+    <value>DarkUI.Controls.DarkGroupBox, DarkUI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;grpDrops.Parent" xml:space="preserve">
+    <value>grpProperties</value>
+  </data>
+  <data name="&gt;&gt;grpDrops.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="btnDynamicRequirements.Location" type="System.Drawing.Point, System.Drawing">
+    <value>229, 234</value>
+  </data>
+  <data name="btnDynamicRequirements.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>5, 5, 5, 5</value>
+  </data>
+  <data name="btnDynamicRequirements.Size" type="System.Drawing.Size, System.Drawing">
+    <value>163, 23</value>
+  </data>
+  <data name="btnDynamicRequirements.TabIndex" type="System.Int32, mscorlib">
+    <value>33</value>
+  </data>
+  <data name="btnDynamicRequirements.Text" xml:space="preserve">
+    <value>Table Requirements</value>
+  </data>
+  <data name="&gt;&gt;btnDynamicRequirements.Name" xml:space="preserve">
+    <value>btnDynamicRequirements</value>
+  </data>
+  <data name="&gt;&gt;btnDynamicRequirements.Type" xml:space="preserve">
+    <value>DarkUI.Controls.DarkButton, DarkUI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;btnDynamicRequirements.Parent" xml:space="preserve">
+    <value>grpProperties</value>
+  </data>
+  <data name="&gt;&gt;btnDynamicRequirements.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="grpProperties.Location" type="System.Drawing.Point, System.Drawing">
+    <value>10, 116</value>
+  </data>
+  <data name="grpProperties.Size" type="System.Drawing.Size, System.Drawing">
+    <value>443, 263</value>
+  </data>
+  <data name="grpProperties.TabIndex" type="System.Int32, mscorlib">
+    <value>101</value>
+  </data>
+  <data name="grpProperties.Text" xml:space="preserve">
+    <value>Properties</value>
+  </data>
   <data name="&gt;&gt;grpProperties.Name" xml:space="preserve">
     <value>grpProperties</value>
   </data>
@@ -491,6 +686,102 @@
   </data>
   <data name="&gt;&gt;grpProperties.ZOrder" xml:space="preserve">
     <value>0</value>
+  </data>
+  <data name="&gt;&gt;btnAddFolder.Name" xml:space="preserve">
+    <value>btnAddFolder</value>
+  </data>
+  <data name="&gt;&gt;btnAddFolder.Type" xml:space="preserve">
+    <value>DarkUI.Controls.DarkButton, DarkUI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;btnAddFolder.Parent" xml:space="preserve">
+    <value>grpGeneral</value>
+  </data>
+  <data name="&gt;&gt;btnAddFolder.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;txtDisplayName.Name" xml:space="preserve">
+    <value>txtDisplayName</value>
+  </data>
+  <data name="&gt;&gt;txtDisplayName.Type" xml:space="preserve">
+    <value>DarkUI.Controls.DarkTextBox, DarkUI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;txtDisplayName.Parent" xml:space="preserve">
+    <value>grpGeneral</value>
+  </data>
+  <data name="&gt;&gt;txtDisplayName.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="&gt;&gt;lblDisplayName.Name" xml:space="preserve">
+    <value>lblDisplayName</value>
+  </data>
+  <data name="&gt;&gt;lblDisplayName.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblDisplayName.Parent" xml:space="preserve">
+    <value>grpGeneral</value>
+  </data>
+  <data name="&gt;&gt;lblDisplayName.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;lblFolder.Name" xml:space="preserve">
+    <value>lblFolder</value>
+  </data>
+  <data name="&gt;&gt;lblFolder.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblFolder.Parent" xml:space="preserve">
+    <value>grpGeneral</value>
+  </data>
+  <data name="&gt;&gt;lblFolder.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="&gt;&gt;cmbFolder.Name" xml:space="preserve">
+    <value>cmbFolder</value>
+  </data>
+  <data name="&gt;&gt;cmbFolder.Type" xml:space="preserve">
+    <value>DarkUI.Controls.DarkComboBox, DarkUI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;cmbFolder.Parent" xml:space="preserve">
+    <value>grpGeneral</value>
+  </data>
+  <data name="&gt;&gt;cmbFolder.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;lblName.Name" xml:space="preserve">
+    <value>lblName</value>
+  </data>
+  <data name="&gt;&gt;lblName.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblName.Parent" xml:space="preserve">
+    <value>grpGeneral</value>
+  </data>
+  <data name="&gt;&gt;lblName.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;txtName.Name" xml:space="preserve">
+    <value>txtName</value>
+  </data>
+  <data name="&gt;&gt;txtName.Type" xml:space="preserve">
+    <value>DarkUI.Controls.DarkTextBox, DarkUI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;txtName.Parent" xml:space="preserve">
+    <value>grpGeneral</value>
+  </data>
+  <data name="&gt;&gt;txtName.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="grpGeneral.Location" type="System.Drawing.Point, System.Drawing">
+    <value>97, 7</value>
+  </data>
+  <data name="grpGeneral.Size" type="System.Drawing.Size, System.Drawing">
+    <value>274, 103</value>
+  </data>
+  <data name="grpGeneral.TabIndex" type="System.Int32, mscorlib">
+    <value>36</value>
+  </data>
+  <data name="grpGeneral.Text" xml:space="preserve">
+    <value>General</value>
   </data>
   <data name="&gt;&gt;grpGeneral.Name" xml:space="preserve">
     <value>grpGeneral</value>
@@ -526,210 +817,6 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;pnlTableSettings.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;grpDrops.Name" xml:space="preserve">
-    <value>grpDrops</value>
-  </data>
-  <data name="&gt;&gt;grpDrops.Type" xml:space="preserve">
-    <value>DarkUI.Controls.DarkGroupBox, DarkUI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;grpDrops.Parent" xml:space="preserve">
-    <value>grpProperties</value>
-  </data>
-  <data name="&gt;&gt;grpDrops.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="grpProperties.Location" type="System.Drawing.Point, System.Drawing">
-    <value>10, 116</value>
-  </data>
-  <data name="grpProperties.Size" type="System.Drawing.Size, System.Drawing">
-    <value>443, 263</value>
-  </data>
-  <data name="grpProperties.TabIndex" type="System.Int32, mscorlib">
-    <value>101</value>
-  </data>
-  <data name="grpProperties.Text" xml:space="preserve">
-    <value>Properties</value>
-  </data>
-  <data name="&gt;&gt;grpProperties.Name" xml:space="preserve">
-    <value>grpProperties</value>
-  </data>
-  <data name="&gt;&gt;grpProperties.Type" xml:space="preserve">
-    <value>DarkUI.Controls.DarkGroupBox, DarkUI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;grpProperties.Parent" xml:space="preserve">
-    <value>pnlTableSettings</value>
-  </data>
-  <data name="&gt;&gt;grpProperties.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;btnUnselectItem.Name" xml:space="preserve">
-    <value>btnUnselectItem</value>
-  </data>
-  <data name="&gt;&gt;btnUnselectItem.Type" xml:space="preserve">
-    <value>DarkUI.Controls.DarkButton, DarkUI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;btnUnselectItem.Parent" xml:space="preserve">
-    <value>grpDrops</value>
-  </data>
-  <data name="&gt;&gt;btnUnselectItem.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;grpTypes.Name" xml:space="preserve">
-    <value>grpTypes</value>
-  </data>
-  <data name="&gt;&gt;grpTypes.Type" xml:space="preserve">
-    <value>DarkUI.Controls.DarkGroupBox, DarkUI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;grpTypes.Parent" xml:space="preserve">
-    <value>grpDrops</value>
-  </data>
-  <data name="&gt;&gt;grpTypes.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;btnDynamicRequirements.Name" xml:space="preserve">
-    <value>btnDynamicRequirements</value>
-  </data>
-  <data name="&gt;&gt;btnDynamicRequirements.Type" xml:space="preserve">
-    <value>DarkUI.Controls.DarkButton, DarkUI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;btnDynamicRequirements.Parent" xml:space="preserve">
-    <value>grpDrops</value>
-  </data>
-  <data name="&gt;&gt;btnDynamicRequirements.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;btnDropRemove.Name" xml:space="preserve">
-    <value>btnDropRemove</value>
-  </data>
-  <data name="&gt;&gt;btnDropRemove.Type" xml:space="preserve">
-    <value>DarkUI.Controls.DarkButton, DarkUI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;btnDropRemove.Parent" xml:space="preserve">
-    <value>grpDrops</value>
-  </data>
-  <data name="&gt;&gt;btnDropRemove.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="&gt;&gt;btnDropAdd.Name" xml:space="preserve">
-    <value>btnDropAdd</value>
-  </data>
-  <data name="&gt;&gt;btnDropAdd.Type" xml:space="preserve">
-    <value>DarkUI.Controls.DarkButton, DarkUI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;btnDropAdd.Parent" xml:space="preserve">
-    <value>grpDrops</value>
-  </data>
-  <data name="&gt;&gt;btnDropAdd.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
-  <data name="&gt;&gt;lstDrops.Name" xml:space="preserve">
-    <value>lstDrops</value>
-  </data>
-  <data name="&gt;&gt;lstDrops.Type" xml:space="preserve">
-    <value>System.Windows.Forms.ListBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;lstDrops.Parent" xml:space="preserve">
-    <value>grpDrops</value>
-  </data>
-  <data name="&gt;&gt;lstDrops.ZOrder" xml:space="preserve">
-    <value>5</value>
-  </data>
-  <data name="&gt;&gt;nudDropAmount.Name" xml:space="preserve">
-    <value>nudDropAmount</value>
-  </data>
-  <data name="&gt;&gt;nudDropAmount.Type" xml:space="preserve">
-    <value>DarkUI.Controls.DarkNumericUpDown, DarkUI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;nudDropAmount.Parent" xml:space="preserve">
-    <value>grpDrops</value>
-  </data>
-  <data name="&gt;&gt;nudDropAmount.ZOrder" xml:space="preserve">
-    <value>6</value>
-  </data>
-  <data name="&gt;&gt;nudDropChance.Name" xml:space="preserve">
-    <value>nudDropChance</value>
-  </data>
-  <data name="&gt;&gt;nudDropChance.Type" xml:space="preserve">
-    <value>DarkUI.Controls.DarkNumericUpDown, DarkUI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;nudDropChance.Parent" xml:space="preserve">
-    <value>grpDrops</value>
-  </data>
-  <data name="&gt;&gt;nudDropChance.ZOrder" xml:space="preserve">
-    <value>7</value>
-  </data>
-  <data name="&gt;&gt;cmbDropItem.Name" xml:space="preserve">
-    <value>cmbDropItem</value>
-  </data>
-  <data name="&gt;&gt;cmbDropItem.Type" xml:space="preserve">
-    <value>DarkUI.Controls.DarkComboBox, DarkUI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;cmbDropItem.Parent" xml:space="preserve">
-    <value>grpDrops</value>
-  </data>
-  <data name="&gt;&gt;cmbDropItem.ZOrder" xml:space="preserve">
-    <value>8</value>
-  </data>
-  <data name="&gt;&gt;lblDropAmount.Name" xml:space="preserve">
-    <value>lblDropAmount</value>
-  </data>
-  <data name="&gt;&gt;lblDropAmount.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;lblDropAmount.Parent" xml:space="preserve">
-    <value>grpDrops</value>
-  </data>
-  <data name="&gt;&gt;lblDropAmount.ZOrder" xml:space="preserve">
-    <value>9</value>
-  </data>
-  <data name="&gt;&gt;lblDropChance.Name" xml:space="preserve">
-    <value>lblDropChance</value>
-  </data>
-  <data name="&gt;&gt;lblDropChance.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;lblDropChance.Parent" xml:space="preserve">
-    <value>grpDrops</value>
-  </data>
-  <data name="&gt;&gt;lblDropChance.ZOrder" xml:space="preserve">
-    <value>10</value>
-  </data>
-  <data name="&gt;&gt;lblDropItem.Name" xml:space="preserve">
-    <value>lblDropItem</value>
-  </data>
-  <data name="&gt;&gt;lblDropItem.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;lblDropItem.Parent" xml:space="preserve">
-    <value>grpDrops</value>
-  </data>
-  <data name="&gt;&gt;lblDropItem.ZOrder" xml:space="preserve">
-    <value>11</value>
-  </data>
-  <data name="grpDrops.Location" type="System.Drawing.Point, System.Drawing">
-    <value>7, 19</value>
-  </data>
-  <data name="grpDrops.Size" type="System.Drawing.Size, System.Drawing">
-    <value>427, 238</value>
-  </data>
-  <data name="grpDrops.TabIndex" type="System.Int32, mscorlib">
-    <value>31</value>
-  </data>
-  <data name="grpDrops.Text" xml:space="preserve">
-    <value>Drops</value>
-  </data>
-  <data name="&gt;&gt;grpDrops.Name" xml:space="preserve">
-    <value>grpDrops</value>
-  </data>
-  <data name="&gt;&gt;grpDrops.Type" xml:space="preserve">
-    <value>DarkUI.Controls.DarkGroupBox, DarkUI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;grpDrops.Parent" xml:space="preserve">
-    <value>grpProperties</value>
-  </data>
-  <data name="&gt;&gt;grpDrops.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
   <data name="btnUnselectItem.Location" type="System.Drawing.Point, System.Drawing">
@@ -861,33 +948,6 @@
   <data name="&gt;&gt;rdoItem.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
-  <data name="btnDynamicRequirements.Location" type="System.Drawing.Point, System.Drawing">
-    <value>222, 208</value>
-  </data>
-  <data name="btnDynamicRequirements.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
-    <value>5, 5, 5, 5</value>
-  </data>
-  <data name="btnDynamicRequirements.Size" type="System.Drawing.Size, System.Drawing">
-    <value>163, 23</value>
-  </data>
-  <data name="btnDynamicRequirements.TabIndex" type="System.Int32, mscorlib">
-    <value>33</value>
-  </data>
-  <data name="btnDynamicRequirements.Text" xml:space="preserve">
-    <value>Drop Requirements</value>
-  </data>
-  <data name="&gt;&gt;btnDynamicRequirements.Name" xml:space="preserve">
-    <value>btnDynamicRequirements</value>
-  </data>
-  <data name="&gt;&gt;btnDynamicRequirements.Type" xml:space="preserve">
-    <value>DarkUI.Controls.DarkButton, DarkUI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;btnDynamicRequirements.Parent" xml:space="preserve">
-    <value>grpDrops</value>
-  </data>
-  <data name="&gt;&gt;btnDynamicRequirements.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
   <data name="btnDropRemove.Location" type="System.Drawing.Point, System.Drawing">
     <value>310, 179</value>
   </data>
@@ -913,7 +973,7 @@
     <value>grpDrops</value>
   </data>
   <data name="&gt;&gt;btnDropRemove.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>2</value>
   </data>
   <data name="btnDropAdd.Location" type="System.Drawing.Point, System.Drawing">
     <value>222, 179</value>
@@ -940,13 +1000,13 @@
     <value>grpDrops</value>
   </data>
   <data name="&gt;&gt;btnDropAdd.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>3</value>
   </data>
   <data name="lstDrops.Location" type="System.Drawing.Point, System.Drawing">
     <value>9, 45</value>
   </data>
   <data name="lstDrops.Size" type="System.Drawing.Size, System.Drawing">
-    <value>192, 184</value>
+    <value>192, 158</value>
   </data>
   <data name="lstDrops.TabIndex" type="System.Int32, mscorlib">
     <value>62</value>
@@ -961,7 +1021,7 @@
     <value>grpDrops</value>
   </data>
   <data name="&gt;&gt;lstDrops.ZOrder" xml:space="preserve">
-    <value>5</value>
+    <value>4</value>
   </data>
   <data name="nudDropAmount.Location" type="System.Drawing.Point, System.Drawing">
     <value>211, 114</value>
@@ -982,7 +1042,7 @@
     <value>grpDrops</value>
   </data>
   <data name="&gt;&gt;nudDropAmount.ZOrder" xml:space="preserve">
-    <value>6</value>
+    <value>5</value>
   </data>
   <data name="nudDropChance.Location" type="System.Drawing.Point, System.Drawing">
     <value>211, 153</value>
@@ -1003,7 +1063,7 @@
     <value>grpDrops</value>
   </data>
   <data name="&gt;&gt;nudDropChance.ZOrder" xml:space="preserve">
-    <value>7</value>
+    <value>6</value>
   </data>
   <data name="cmbDropItem.FlatStyle" type="System.Windows.Forms.FlatStyle, System.Windows.Forms">
     <value>Flat</value>
@@ -1030,7 +1090,7 @@
     <value>grpDrops</value>
   </data>
   <data name="&gt;&gt;cmbDropItem.ZOrder" xml:space="preserve">
-    <value>8</value>
+    <value>7</value>
   </data>
   <data name="lblDropAmount.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1057,7 +1117,7 @@
     <value>grpDrops</value>
   </data>
   <data name="&gt;&gt;lblDropAmount.ZOrder" xml:space="preserve">
-    <value>9</value>
+    <value>8</value>
   </data>
   <data name="lblDropChance.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1084,7 +1144,7 @@
     <value>grpDrops</value>
   </data>
   <data name="&gt;&gt;lblDropChance.ZOrder" xml:space="preserve">
-    <value>10</value>
+    <value>9</value>
   </data>
   <data name="lblDropItem.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1111,115 +1171,7 @@
     <value>grpDrops</value>
   </data>
   <data name="&gt;&gt;lblDropItem.ZOrder" xml:space="preserve">
-    <value>11</value>
-  </data>
-  <data name="&gt;&gt;btnAddFolder.Name" xml:space="preserve">
-    <value>btnAddFolder</value>
-  </data>
-  <data name="&gt;&gt;btnAddFolder.Type" xml:space="preserve">
-    <value>DarkUI.Controls.DarkButton, DarkUI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;btnAddFolder.Parent" xml:space="preserve">
-    <value>grpGeneral</value>
-  </data>
-  <data name="&gt;&gt;btnAddFolder.ZOrder" xml:space="preserve">
-    <value>0</value>
-  </data>
-  <data name="&gt;&gt;txtDisplayName.Name" xml:space="preserve">
-    <value>txtDisplayName</value>
-  </data>
-  <data name="&gt;&gt;txtDisplayName.Type" xml:space="preserve">
-    <value>DarkUI.Controls.DarkTextBox, DarkUI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;txtDisplayName.Parent" xml:space="preserve">
-    <value>grpGeneral</value>
-  </data>
-  <data name="&gt;&gt;txtDisplayName.ZOrder" xml:space="preserve">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;lblDisplayName.Name" xml:space="preserve">
-    <value>lblDisplayName</value>
-  </data>
-  <data name="&gt;&gt;lblDisplayName.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;lblDisplayName.Parent" xml:space="preserve">
-    <value>grpGeneral</value>
-  </data>
-  <data name="&gt;&gt;lblDisplayName.ZOrder" xml:space="preserve">
-    <value>2</value>
-  </data>
-  <data name="&gt;&gt;lblFolder.Name" xml:space="preserve">
-    <value>lblFolder</value>
-  </data>
-  <data name="&gt;&gt;lblFolder.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;lblFolder.Parent" xml:space="preserve">
-    <value>grpGeneral</value>
-  </data>
-  <data name="&gt;&gt;lblFolder.ZOrder" xml:space="preserve">
-    <value>3</value>
-  </data>
-  <data name="&gt;&gt;cmbFolder.Name" xml:space="preserve">
-    <value>cmbFolder</value>
-  </data>
-  <data name="&gt;&gt;cmbFolder.Type" xml:space="preserve">
-    <value>DarkUI.Controls.DarkComboBox, DarkUI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;cmbFolder.Parent" xml:space="preserve">
-    <value>grpGeneral</value>
-  </data>
-  <data name="&gt;&gt;cmbFolder.ZOrder" xml:space="preserve">
-    <value>4</value>
-  </data>
-  <data name="&gt;&gt;lblName.Name" xml:space="preserve">
-    <value>lblName</value>
-  </data>
-  <data name="&gt;&gt;lblName.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;lblName.Parent" xml:space="preserve">
-    <value>grpGeneral</value>
-  </data>
-  <data name="&gt;&gt;lblName.ZOrder" xml:space="preserve">
-    <value>5</value>
-  </data>
-  <data name="&gt;&gt;txtName.Name" xml:space="preserve">
-    <value>txtName</value>
-  </data>
-  <data name="&gt;&gt;txtName.Type" xml:space="preserve">
-    <value>DarkUI.Controls.DarkTextBox, DarkUI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;txtName.Parent" xml:space="preserve">
-    <value>grpGeneral</value>
-  </data>
-  <data name="&gt;&gt;txtName.ZOrder" xml:space="preserve">
-    <value>6</value>
-  </data>
-  <data name="grpGeneral.Location" type="System.Drawing.Point, System.Drawing">
-    <value>97, 7</value>
-  </data>
-  <data name="grpGeneral.Size" type="System.Drawing.Size, System.Drawing">
-    <value>274, 103</value>
-  </data>
-  <data name="grpGeneral.TabIndex" type="System.Int32, mscorlib">
-    <value>36</value>
-  </data>
-  <data name="grpGeneral.Text" xml:space="preserve">
-    <value>General</value>
-  </data>
-  <data name="&gt;&gt;grpGeneral.Name" xml:space="preserve">
-    <value>grpGeneral</value>
-  </data>
-  <data name="&gt;&gt;grpGeneral.Type" xml:space="preserve">
-    <value>DarkUI.Controls.DarkGroupBox, DarkUI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
-  </data>
-  <data name="&gt;&gt;grpGeneral.Parent" xml:space="preserve">
-    <value>pnlTableSettings</value>
-  </data>
-  <data name="&gt;&gt;grpGeneral.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>10</value>
   </data>
   <data name="btnAddFolder.Location" type="System.Drawing.Point, System.Drawing">
     <value>245, 44</value>

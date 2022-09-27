@@ -2292,5 +2292,17 @@ namespace Intersect.Client.Localization
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString SearchButton = @"Search";
         }
+
+        public partial struct LootRoll
+        {
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString BankAll = @"Bank All";
+            
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString DismissRemaining = @"Dismiss";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString TakeAll = @"Take All";
+        }
     }
 }

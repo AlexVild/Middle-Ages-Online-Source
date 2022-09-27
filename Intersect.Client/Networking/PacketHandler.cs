@@ -2550,5 +2550,16 @@ namespace Intersect.Client.Networking
             Interface.Interface.GameUi.LeaderboardWindow.LoadRecords();
             Globals.Me.Leaderboard.Loading = false;
         }
+
+        public void HandlePacket(IPacketSender packetSender, OpenLootRollPacket packet)
+        {
+            if (Globals.Me == null)
+            {
+                return;
+            }
+
+            Interface.Interface.GameUi.LootRollWindow.SetTitle(packet.Title);
+            Globals.Me.LoadRolledLoot(packet.Loot);
+        }
     }
 }

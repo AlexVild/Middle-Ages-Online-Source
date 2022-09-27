@@ -2733,8 +2733,8 @@ namespace Intersect.Server.Entities.Events
         {
             if (player == null) return;
 
-            var loot = player.GetLootRollItems(instance.Id, command.LootTables);
-            LootTableServerHelpers.SpawnItemsOnMap(loot, player.MapId, player.MapInstanceId, player.X, player.Y, player.Id, true);
+            player.OpenLootRoll(instance.BaseEvent.Id, command.LootTables);
+            PacketSender.SendOpenLootPacketTo(player, command.Title);
         }
     }
 }

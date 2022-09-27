@@ -241,6 +241,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpProperties.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpProperties.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.grpProperties.Controls.Add(this.grpDrops);
+            this.grpProperties.Controls.Add(this.btnDynamicRequirements);
             this.grpProperties.ForeColor = System.Drawing.Color.Gainsboro;
             resources.ApplyResources(this.grpProperties, "grpProperties");
             this.grpProperties.Name = "grpProperties";
@@ -252,7 +253,6 @@ namespace Intersect.Editor.Forms.Editors
             this.grpDrops.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.grpDrops.Controls.Add(this.btnUnselectItem);
             this.grpDrops.Controls.Add(this.grpTypes);
-            this.grpDrops.Controls.Add(this.btnDynamicRequirements);
             this.grpDrops.Controls.Add(this.btnDropRemove);
             this.grpDrops.Controls.Add(this.btnDropAdd);
             this.grpDrops.Controls.Add(this.lstDrops);

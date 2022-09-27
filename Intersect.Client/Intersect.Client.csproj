@@ -132,6 +132,8 @@
     <Compile Include="Interface\Game\InstanceLifeWindow.cs" />
     <Compile Include="Interface\Game\Leaderboards\LeaderboardRecord.cs" />
     <Compile Include="Interface\Game\Leaderboards\LeaderboardWindow.cs" />
+    <Compile Include="Interface\Game\LootRoll\LootRollIcon.cs" />
+    <Compile Include="Interface\Game\LootRoll\LootRollWindow.cs" />
     <Compile Include="Interface\Game\MapItem\MapItemIcon.cs" />
     <Compile Include="Interface\Game\MapItem\MapItemWindow.cs" />
     <Compile Include="Interface\Game\HUD\PlayerHud.cs" />

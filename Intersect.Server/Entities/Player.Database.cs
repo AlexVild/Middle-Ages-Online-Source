@@ -480,9 +480,9 @@ namespace Intersect.Server.Entities
                 using (var context = DbInterface.CreatePlayerContext())
                 {
                     LootRolls = context.Loot_Rolls
-                        .Where(f => f.Player.Id == Id)
+                        .Where(f => f.PlayerId == Id)
                         .ToList();
-                    Log.Info($"Successfully loaded loot rolls for {Name}. Count of records is {LootRolls.Count}");
+                    Log.Info($"Successfully loaded loot rolls for {Name}. Count of rolls is {LootRolls.Count}");
                 }
             }
             catch (Exception ex)

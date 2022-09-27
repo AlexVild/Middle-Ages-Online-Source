@@ -1271,5 +1271,7 @@ namespace Intersect.GameObjects.Events.Commands
         public override EventCommandType Type { get; } = EventCommandType.RollLoot;
 
         public List<LootRoll> LootTables { get; set; }
+
+        public string Title { get; set; }
     }
 }

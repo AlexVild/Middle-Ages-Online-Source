@@ -1854,7 +1854,7 @@ namespace Intersect.Editor.Forms.Editors.Events
 
         private static string GetCommandText(RollLootCommand command, MapInstance map)
         {
-            return Strings.EventCommandList.RollLoot;
+            return Strings.EventCommandList.RollLoot.ToString(command.Title);
         }
     }
 }

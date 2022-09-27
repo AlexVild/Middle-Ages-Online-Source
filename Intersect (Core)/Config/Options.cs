@@ -459,5 +459,7 @@ namespace Intersect
     public partial class Options
     {
         [JsonProperty("Records")] public RecordOptions RecordOpts = new RecordOptions();
+
+        [JsonProperty("LootRolling")] public LootRollOptions LootRollOpts = new LootRollOptions();
     }
 }

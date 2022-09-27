@@ -27,11 +27,11 @@ namespace Intersect.Client.Interface.Game.Inventory
     
         public ImagePanel Pnl;
 
-        private MapItemWindow mMapItemWindow;
+        private Base mMapItemWindow;
 
         private ItemDescriptionWindow mDescWindow;
 
-        public MapItemIcon(MapItemWindow window)
+        public MapItemIcon(Base window)
         {
             mMapItemWindow = window;
         }

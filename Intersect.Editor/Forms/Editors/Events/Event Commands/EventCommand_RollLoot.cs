@@ -39,6 +39,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             UpdateTableList();
             cmbTable.Items.Clear();
             cmbTable.Items.AddRange(LootTableDescriptor.Names);
+
+            txtTitle.Text = mMyCommand?.Title ?? "Loot";
         }
 
         private void UpdateTableList(bool keepIndex = false)
@@ -75,6 +77,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             {
                 mMyCommand.LootTables.Add(table.Clone());
             }
+            mMyCommand.Title = txtTitle.Text;
             mEventEditor.FinishCommandEdit();
         }
 
