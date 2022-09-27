@@ -393,6 +393,7 @@ namespace Intersect.Server.Entities
             LoadFriends();
             LoadGuild();
             LoadRecords();
+            DbInterface.Pool.QueueWorkItem(LoadLootRolls);
             DbInterface.Pool.QueueWorkItem(LoadTimers);
             LoadMapsExplored();
 
@@ -8247,45 +8248,41 @@ namespace Intersect.Server.Entities
         /// <returns></returns>
         public List<Item> GetLootRollItems(Guid eventId, List<LootRoll> lootRolls)
         {
-            lock(EntityLock)
+            var existingRoll = LootRolls.Where(roll => roll.EventId == eventId && roll.PlayerId == Id).FirstOrDefault();
+
+            // If there is an existing roll, return that.
+            if (existingRoll != default)
             {
-                using (var context = DbInterface.CreatePlayerContext(readOnly: false))
-                {
-                    // Check to see if the player has a pending roll on this event - if they do, return them the list of items from that roll
-                    var existingRoll = context.Loot_Rolls.Where(roll => roll.EventId == eventId && roll.PlayerId == Id).FirstOrDefault();
-
-                    // If there is an existing roll, return that.
-                    if (existingRoll != default) 
-                    {
-                        return existingRoll.Loot;
-                    }
-
-                    var newRoll = new LootRollInstance(this, eventId, lootRolls);
-
-                    context.Loot_Rolls.Add(newRoll);
-                    context.ChangeTracker.DetectChanges();
-                    context.SaveChanges();
-
-                    return newRoll.Loot;
-                }
+                return existingRoll.Loot;
             }
+
+            var newRoll = new LootRollInstance(this, eventId, lootRolls);
+            LootRolls.Add(newRoll);
+            return newRoll.Loot;
         }
 
         /// <summary>
         /// Removes all of a player's loot rolls that have some event ID associated with them.
         /// </summary>
         /// <param name="eventId"></param>
-        public void ClearLootRollsForEvent(Guid eventId)
+        public void ClearLootRollsForEvent(Guid eventId, bool force = false)
         {
             lock (EntityLock)
             {
-                using (var context = DbInterface.CreatePlayerContext(readOnly: false))
+                if (force)
                 {
-                    // Check to see if the player has a pending roll on this event - if they do, return them the list of items from that roll
-                    context.RemoveRange(context.Loot_Rolls.Where(roll => roll.EventId == eventId && roll.PlayerId == Id).FirstOrDefault());
+                    using (var context = DbInterface.CreatePlayerContext(readOnly: false))
+                    {
+                        // Check to see if the player has a pending roll on this event - if they do, return them the list of items from that roll
+                        context.RemoveRange(context.Loot_Rolls.Where(roll => roll.EventId == eventId && roll.PlayerId == Id).FirstOrDefault());
 
-                    context.ChangeTracker.DetectChanges();
-                    context.SaveChanges();
+                        context.ChangeTracker.DetectChanges();
+                        context.SaveChanges();
+                    }
+                }
+                else
+                {
+                    LootRolls.RemoveAll(roll => roll.EventId == eventId);                
                 }
             }
         }

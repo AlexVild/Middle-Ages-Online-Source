@@ -472,6 +472,26 @@ namespace Intersect.Server.Entities
         }
         #endregion
 
+        #region Loot rolls
+        public void LoadLootRolls()
+        {
+            try
+            {
+                using (var context = DbInterface.CreatePlayerContext())
+                {
+                    LootRolls = context.Loot_Rolls
+                        .Where(f => f.Player.Id == Id)
+                        .ToList();
+                    Log.Info($"Successfully loaded loot rolls for {Name}. Count of records is {LootRolls.Count}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, $"Failed to load loot rolls for {Name}.");
+            }
+        }
+        #endregion
+
         #region Explored Maps
         public void LoadMapsExplored()
         {

@@ -15,6 +15,13 @@ namespace Intersect.Server.Database.PlayerData.Players
     public class LootRollInstance : IPlayerOwned
     {
         /// <summary>
+        /// Locking context to prevent saving this recprd to the db twice at the same time
+        /// </summary>
+        [NotMapped]
+        [JsonIgnore]
+        private object mLock = new object();
+
+        /// <summary>
         /// The database Id of the record.
         /// </summary>
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -28,7 +35,11 @@ namespace Intersect.Server.Database.PlayerData.Players
             PlayerId = player?.Id ?? Guid.Empty;
             EventId = eventId;
 
-            // Generate loot
+            GenerateLootFor(player, lootRolls);
+        }
+
+        private void GenerateLootFor(Player player, List<LootRoll> lootRolls)
+        {
             Loot = new List<Item>();
             if (lootRolls == null)
             {
@@ -71,6 +82,19 @@ namespace Intersect.Server.Database.PlayerData.Players
                 if (Loot == null)
                 {
                     Loot = new List<Item>();
+                }
+            }
+        }
+
+        public void SaveToContext()
+        {
+            lock (mLock)
+            {
+                using (var context = DbInterface.CreatePlayerContext(readOnly: false))
+                {
+                    context.Loot_Rolls.Add(this);
+                    context.ChangeTracker.DetectChanges();
+                    context.SaveChanges();
                 }
             }
         }
