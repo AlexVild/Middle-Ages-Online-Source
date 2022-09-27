@@ -2472,6 +2472,11 @@ namespace Intersect.Server.Networking
 
         public static void SendOpenLootPacketTo(Player player, string title)
         {
+            if (player == null)
+            {
+                return;
+            }
+
             var lootObjs = new List<Loot>();
             foreach(var item in player.CurrentLoot)
             {
@@ -2483,6 +2488,26 @@ namespace Intersect.Server.Networking
             }
 
             player?.SendPacket(new OpenLootRollPacket(lootObjs, title));
+        }
+
+        public static void SendLootUpdatePacketTo(Player player)
+        {
+            if (player == null)
+            {
+                return;
+            }
+
+            var lootObjs = new List<Loot>();
+            foreach (var item in player.CurrentLoot ?? new List<Item>())
+            {
+                var lootObj = new Loot();
+                lootObj.ItemId = item.ItemId;
+                lootObj.Quantity = item.Quantity;
+                lootObj.StatBuffs = item.StatBuffs;
+                lootObjs.Add(lootObj);
+            }
+
+            player?.SendPacket(new LootRollUpdatePacket(lootObjs));
         }
     }
 

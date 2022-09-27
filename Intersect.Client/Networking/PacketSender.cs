@@ -541,5 +541,10 @@ namespace Intersect.Client.Networking
         {
             Network.SendPacket(new CloseLeaderboardPacket());
         }
+
+        public static void SendLootUpdateRequest(LootUpdateType type, int idx = -1)
+        {
+            Network.SendPacket(new RequestLootUpdatePacket(type, idx));
+        }
     }
 }

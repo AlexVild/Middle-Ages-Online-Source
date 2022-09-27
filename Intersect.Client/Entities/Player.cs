@@ -2868,8 +2868,6 @@ namespace Intersect.Client.Entities
                 item.Load(drop.ItemId, drop.Quantity, null, drop.StatBuffs);
                 RolledLoot.Add(item);
             }
-
-            Interface.Interface.GameUi.LootRollWindow.Show();
         }
 
         public void ResetLoot()

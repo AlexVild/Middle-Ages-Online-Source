@@ -33,7 +33,9 @@ namespace Intersect.Server.Entities.Events
 
             RandomQuest,
 
-            Leaderboard
+            Leaderboard,
+
+            LootRoll,
 
         }
 

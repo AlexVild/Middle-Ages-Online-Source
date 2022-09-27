@@ -16,7 +16,9 @@ namespace Intersect.Client.Interface.Game.LootRoll
     using global::Intersect.Client.General;
     using global::Intersect.Client.Interface.Game.DescriptionWindows;
     using global::Intersect.Client.Items;
+    using global::Intersect.Client.Networking;
     using global::Intersect.GameObjects;
+    using global::Intersect.Network.Packets.Client;
 
     namespace Intersect.Client.Interface.Game.Inventory
     {
@@ -28,9 +30,7 @@ namespace Intersect.Client.Interface.Game.LootRoll
 
             public Item MyItem;
 
-            public Guid MapId;
-
-            public int TileIndex;
+            public int LootIndex;
 
             public ImagePanel Pnl;
 
@@ -43,12 +43,13 @@ namespace Intersect.Client.Interface.Game.LootRoll
                 mBackground = window;
             }
 
-            public void Setup()
+            public void Setup(int idx)
             {
                 Pnl = new ImagePanel(Container, "LootRollIcon");
                 Pnl.HoverEnter += pnl_HoverEnter;
                 Pnl.HoverLeave += pnl_HoverLeave;
                 Pnl.Clicked += pnl_Clicked;
+                LootIndex = idx;
             }
 
             void pnl_Clicked(Base sender, ClickedEventArgs arguments)
@@ -57,6 +58,8 @@ namespace Intersect.Client.Interface.Game.LootRoll
                 {
                     return;
                 }
+
+                PacketSender.SendLootUpdateRequest(LootUpdateType.TakeAt, LootIndex);
             }
 
             void pnl_HoverLeave(Base sender, EventArgs arguments)

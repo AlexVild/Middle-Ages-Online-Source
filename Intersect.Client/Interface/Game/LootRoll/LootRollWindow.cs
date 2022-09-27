@@ -7,6 +7,8 @@ using Intersect.Client.Interface.Game.Inventory;
 using Intersect.Client.Interface.Game.LootRoll.Intersect.Client.Interface.Game.Inventory;
 using Intersect.Client.Items;
 using Intersect.Client.Localization;
+using Intersect.Client.Networking;
+using Intersect.Network.Packets.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -52,13 +54,13 @@ namespace Intersect.Client.Interface.Game.LootRoll
             {
                 Text = Strings.LootRoll.BankAll
             };
-            //mBankAllButton.Clicked += DismissRemaining;
+            mBankAllButton.Clicked += BankAllClicked;
 
             mTakeAllButton = new Button(mBackground, "TakeAllButton")
             {
                 Text = Strings.LootRoll.TakeAll
             };
-            //mTakeAllButton.Clicked += DismissRemaining;
+            mTakeAllButton.Clicked += TakeAllClicked;
 
             mBackground.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
             InitLootContainer();
@@ -75,7 +77,7 @@ namespace Intersect.Client.Interface.Game.LootRoll
             {
                 LootItems.Add(new LootRollIcon(mBackground));
                 LootItems[i].Container = new ImagePanel(mLootContainer, "LootRollIcon");
-                LootItems[i].Setup();
+                LootItems[i].Setup(i);
 
                 mLootValues.Add(new Label(LootItems[i].Container, "MapItemValue"));
                 mLootValues[i].Text = "";
@@ -106,15 +108,18 @@ namespace Intersect.Client.Interface.Game.LootRoll
         public void Update()
         {
             HandleInputBlocking();
-            if (mBackground.IsHidden)
-            {
-                return;
-            }
 
             if (Loot == null)
             {
-                Close();
+                if (mBackground.IsVisible)
+                {
+                    mBackground.Hide();
+                }
                 return;
+            }
+            else if (mBackground.IsHidden)
+            {
+                mBackground.Show();
             }
 
             var idx = 0;
@@ -182,21 +187,12 @@ namespace Intersect.Client.Interface.Game.LootRoll
 
         public void Close()
         {
-            Globals.Me.ResetLoot();
+            PacketSender.SendLootUpdateRequest(LootUpdateType.DismissAll);
+            //Globals.Me.ResetLoot();
             // TODO: Send packet
-            mBackground.Hide();
+            //mBackground.Hide();
         }
-
-        public void Show()
-        {
-            mBackground.Show();
-        }
-
-        public void Hide()
-        {
-            mBackground.Hide();
-        }
-
+        
         #region handlers
         private void OnClose()
         {
@@ -206,6 +202,16 @@ namespace Intersect.Client.Interface.Game.LootRoll
         private void DismissClicked(Base sender, ClickedEventArgs arguments)
         {
             OnClose();
+        }
+
+        private void BankAllClicked(Base sender, ClickedEventArgs arguments)
+        {
+            PacketSender.SendLootUpdateRequest(LootUpdateType.BankAll);
+        }
+
+        private void TakeAllClicked(Base sender, ClickedEventArgs arguments)
+        {
+            PacketSender.SendLootUpdateRequest(LootUpdateType.TakeAll);
         }
         #endregion
     }

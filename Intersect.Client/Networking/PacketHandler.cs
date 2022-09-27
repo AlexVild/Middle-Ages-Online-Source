@@ -2561,5 +2561,21 @@ namespace Intersect.Client.Networking
             Interface.Interface.GameUi.LootRollWindow.SetTitle(packet.Title);
             Globals.Me.LoadRolledLoot(packet.Loot);
         }
+
+        public void HandlePacket(IPacketSender packetSender, LootRollUpdatePacket packet)
+        {
+            if (Globals.Me == null)
+            {
+                return;
+            }
+
+            if (packet.UpdatedLoot == null || packet.UpdatedLoot.Count <= 0)
+            {
+                Globals.Me.ResetLoot();
+                return;
+            }
+
+            Globals.Me.LoadRolledLoot(packet.UpdatedLoot);
+        }
     }
 }

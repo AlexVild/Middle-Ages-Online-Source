@@ -4301,5 +4301,82 @@ namespace Intersect.Server.Networking
 
             player.CloseLeaderboard = true;
         }
+
+        public void HandlePacket(Client client, RequestLootUpdatePacket packet)
+        {
+            var player = client?.Entity;
+
+            if (player == null)
+            {
+                return;
+            }
+
+            var loot = player.CurrentLoot;
+            if (packet.Index > -1 && packet.Index >= loot.Count)
+            {
+#if DEBUG
+                throw new IndexOutOfRangeException($"Requested loot index of {packet.Index} but loot count is {loot.Count}. Aborting.");
+#else
+                Log.Error($"Requested loot index of {packet.Index} but loot count is {loot.Count}. Aborting.");
+                return;
+#endif
+            }
+
+            switch(packet.Type)
+            {
+                case LootUpdateType.TakeAt:
+                    var lootAt = loot[packet.Index];
+                    if (!player.TryGiveItem(lootAt.ItemId, lootAt.Quantity, ItemHandling.Overflow))
+                    {
+                        return;
+                    }
+
+                    player.CurrentLoot.RemoveAt(packet.Index);
+
+                    PacketSender.SendLootUpdatePacketTo(player);
+                    break;
+                case LootUpdateType.TakeAll:
+                    var idx = 0;
+                    foreach(var item in loot)
+                    {
+                        if (!player.TryGiveItem(item.ItemId, item.Quantity, ItemHandling.Overflow))
+                        {
+                            idx++;
+                            continue;
+                        }
+
+                        player.CurrentLoot.RemoveAt(idx);
+                        idx++;
+                    }
+                    
+                    PacketSender.SendLootUpdatePacketTo(player);
+                    break;
+                case LootUpdateType.BankAt:
+
+                    break;
+                case LootUpdateType.BankAll:
+
+                    break;
+                case LootUpdateType.DismissAt:
+                    player.CurrentLoot.RemoveAt(packet.Index);
+
+                    PacketSender.SendLootUpdatePacketTo(player);
+                    break;
+                case LootUpdateType.DismissAll:
+                    player.ClearLootRoll();
+
+                    PacketSender.SendLootUpdatePacketTo(player);
+                    break;
+            }
+
+            // If the player has cleared out their loot, then allow them to generate a new roll in the future by clearing the DB reference
+            if (player.CurrentLoot?.Count <= 0)
+            {
+                player.ClearLootRoll();
+            }
+
+            // Update the players backend reference so that if they save midway through taking loot the loot stays updated.
+            player.RefreshLootReference();
+        }
     }
 }

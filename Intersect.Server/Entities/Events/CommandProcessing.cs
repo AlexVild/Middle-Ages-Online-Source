@@ -2735,6 +2735,8 @@ namespace Intersect.Server.Entities.Events
 
             player.OpenLootRoll(instance.BaseEvent.Id, command.LootTables);
             PacketSender.SendOpenLootPacketTo(player, command.Title);
+
+            callStack.Peek().WaitingForResponse = CommandInstance.EventResponse.LootRoll;
         }
     }
 }

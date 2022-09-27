@@ -397,6 +397,7 @@
     <Compile Include="Network\Packets\Client\CraftItemPacket.cs" />
     <Compile Include="Network\Packets\Client\PartyInviteNamePacket.cs" />
     <Compile Include="Network\Packets\Client\RequestLeaderboardPacket.cs" />
+    <Compile Include="Network\Packets\Client\RequestLootUpdatePacket.cs" />
     <Compile Include="Network\Packets\Server\CraftStatusPacket.cs" />
     <Compile Include="Network\Packets\Client\CreateAccountPacket.cs" />
     <Compile Include="Network\Packets\Client\CreateCharacterPacket.cs" />
@@ -435,6 +436,7 @@
     <Compile Include="Network\Packets\Server\GUINotificationPacket.cs" />
     <Compile Include="Network\Packets\Server\InstanceLivesPacket.cs" />
     <Compile Include="Network\Packets\Server\LeaderboardPagePacket.cs" />
+    <Compile Include="Network\Packets\Server\LootRollUpdatePacket.cs" />
     <Compile Include="Network\Packets\Server\MapFadePacket.cs" />
     <Compile Include="Network\Packets\Server\GuildInvitePacket.cs" />
     <Compile Include="Network\Packets\Server\GuildPacket.cs" />

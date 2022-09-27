@@ -8295,6 +8295,22 @@ namespace Intersect.Server.Entities
                 }
             }
         }
+
+        public void RefreshLootReference()
+        {
+            var rolls = LootRolls.Where(roll => roll.EventId == LootEventId);
+            foreach(var roll in rolls)
+            {
+                roll.Loot = new List<Item>(CurrentLoot);
+            }
+        }
+
+        public void ClearLootRoll()
+        {
+            ClearLootRollsForEvent(LootEventId, true);
+            CurrentLoot = default;
+            LootEventId = default;
+        }
         #endregion
 
         #region Player Records
