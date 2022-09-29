@@ -2847,7 +2847,7 @@ namespace Intersect.Server.Entities
         /// <param name="overflowTileX">The x coordinate of the tile in which overflow should spawn on, if the player cannot hold the full amount.</param>
         /// <param name="overflowTileY">The y coordinate of the tile in which overflow should spawn on, if the player cannot hold the full amount.</param>
         /// <returns>Whether the player received the item or not.</returns>
-        public bool TryGiveItem(Item item, ItemHandling handler = ItemHandling.Normal, bool bankOverflow = false, bool sendUpdate = true, int overflowTileX = -1, int overflowTileY = -1)
+        public bool TryGiveItem(Item item, ItemHandling handler = ItemHandling.Normal, bool bankOverflow = false, bool sendUpdate = true, int overflowTileX = -1, int overflowTileY = -1, bool fromLootRoll = false)
         {
             var success = false;
 
@@ -2919,8 +2919,15 @@ namespace Intersect.Server.Entities
                     // Do we have any items to spawn to the map?
                     if (spawnAmount > 0 && MapController.TryGetInstanceFromMap(Map.Id, MapInstanceId, out var instance))
                     {
-                        instance.SpawnItem(overflowTileX > -1 ? overflowTileX : X, overflowTileY > -1 ? overflowTileY : Y, item, spawnAmount, Id, true, ItemSpawnType.Dropped);
-                        success = true;
+                        instance.SpawnItem(overflowTileX > -1 ? overflowTileX : X, overflowTileY > -1 ? overflowTileY : Y, item, spawnAmount, Id, true, fromLootRoll ? ItemSpawnType.LootRoll : ItemSpawnType.Dropped);
+                        if (fromLootRoll)
+                        {
+                            success = true;
+                        }
+                        else
+                        {
+                            success = spawnAmount != item.Quantity;
+                        }
                     }
 
                     break;

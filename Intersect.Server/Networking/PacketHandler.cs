@@ -4312,6 +4312,7 @@ namespace Intersect.Server.Networking
             }
 
             var loot = player.CurrentLoot;
+            Item lootAt = null;
             if (packet.Index > -1 && packet.Index >= loot.Count)
             {
 #if DEBUG
@@ -4321,45 +4322,44 @@ namespace Intersect.Server.Networking
                 return;
 #endif
             }
+            else if (packet.Index > -1)
+            {
+                lootAt = loot[packet.Index];
+            }
 
-            switch(packet.Type)
+            var bankInterface = new BankInterface(player, ((IEnumerable<Item>)player.Bank).ToList(), new object(), null, Options.Instance.PlayerOpts.InitialBankslots);
+            switch (packet.Type)
             {
                 case LootUpdateType.TakeAt:
-                    var lootAt = loot[packet.Index];
-                    if (!player.TryGiveItem(lootAt.ItemId, lootAt.Quantity, ItemHandling.Overflow))
+                    if (!player.TryGiveItem(lootAt, ItemHandling.Overflow, false, true, -1, -1, true))
                     {
                         return;
                     }
 
-                    player.CurrentLoot.RemoveAt(packet.Index);
-
-                    PacketSender.SendLootUpdatePacketTo(player);
+                    loot.RemoveAt(packet.Index);
                     break;
                 case LootUpdateType.TakeAll:
-                    var idx = 0;
-                    var indicesTaken = new List<int>();
-
-                    loot.RemoveAll(item => player.TryGiveItem(item.ItemId, item.Quantity, ItemHandling.Overflow)); 
-
-                    PacketSender.SendLootUpdatePacketTo(player);
+                    player.CurrentLoot.RemoveAll(item => player.TryGiveItem(item, ItemHandling.Overflow, false, true, -1, -1, true)); 
                     break;
                 case LootUpdateType.BankAt:
+                    if (!bankInterface.TryDepositItem(lootAt, false))
+                    {
+                        return;
+                    }
 
+                    loot.RemoveAt(packet.Index);
                     break;
                 case LootUpdateType.BankAll:
-
+                    player.CurrentLoot.RemoveAll(item => bankInterface.TryDepositItem(item, false));
                     break;
                 case LootUpdateType.DismissAt:
-                    player.CurrentLoot.RemoveAt(packet.Index);
-
-                    PacketSender.SendLootUpdatePacketTo(player);
+                    loot.RemoveAt(packet.Index);
                     break;
                 case LootUpdateType.DismissAll:
                     player.CurrentLoot = new List<Item>();
                     break;
             }
 
-            // Update the players backend reference so that if they save midway through taking loot the loot stays updated.
             player.ClearLootIfDone();
 
             PacketSender.SendLootUpdatePacketTo(player);

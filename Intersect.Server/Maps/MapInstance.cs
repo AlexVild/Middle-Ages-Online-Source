@@ -723,7 +723,8 @@ namespace Intersect.Server.Maps
         {
             Normal,
             Dropped,
-            PlayerDeath
+            PlayerDeath,
+            LootRoll,
         }
 
         /// <summary>
@@ -856,6 +857,9 @@ namespace Intersect.Server.Maps
                     break;
                 case ItemSpawnType.PlayerDeath:
                     despawnTime += Options.Instance.LootOpts.PlayerDeathItemDespawnTime;
+                    break;
+                case ItemSpawnType.LootRoll:
+                    despawnTime += Options.Instance.LootOpts.PlayerLootRollOverflowSpawnTime;
                     break;
                 default:
                     despawnTime += Options.Instance.LootOpts.ItemDespawnTime;

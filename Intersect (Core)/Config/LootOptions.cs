@@ -57,5 +57,10 @@
         /// Defines the despawn time for player-owned items that have been dropped ond death
         /// </summary>
         public int PlayerDeathItemDespawnTime { get; set; } = 90000;
+
+        /// <summary>
+        /// Defines the despawn time for player-owned items that have been dropped ond death
+        /// </summary>
+        public int PlayerLootRollOverflowSpawnTime { get; set; } = 60000;
     }
 }
