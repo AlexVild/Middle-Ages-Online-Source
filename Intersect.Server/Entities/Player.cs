@@ -8260,7 +8260,7 @@ namespace Intersect.Server.Entities
             var existingRoll = LootRolls.Where(roll => roll.EventId == eventId && roll.PlayerId == Id).FirstOrDefault();
 
             // If there is an existing roll, return that.
-            if (existingRoll != default)
+            if (existingRoll != default && existingRoll?.Loot?.Count > 0)
             {
                 return existingRoll.Loot;
             }
@@ -8274,25 +8274,13 @@ namespace Intersect.Server.Entities
         /// Removes all of a player's loot rolls that have some event ID associated with them.
         /// </summary>
         /// <param name="eventId"></param>
-        public void ClearLootRollsForEvent(Guid eventId, bool force = false)
+        public void ClearLootRollsForEvent(Guid eventId)
         {
             lock (EntityLock)
             {
-                if (force)
-                {
-                    using (var context = DbInterface.CreatePlayerContext(readOnly: false))
-                    {
-                        // Check to see if the player has a pending roll on this event - if they do, return them the list of items from that roll
-                        context.RemoveRange(context.Loot_Rolls.Where(roll => roll.EventId == eventId && roll.PlayerId == Id).FirstOrDefault());
-
-                        context.ChangeTracker.DetectChanges();
-                        context.SaveChanges();
-                    }
-                }
-                else
-                {
-                    LootRolls.RemoveAll(roll => roll.EventId == eventId);                
-                }
+                LootRolls
+                    .Where(roll => roll.EventId == eventId)
+                    .Select(roll => roll.Loot = null);
             }
         }
 
@@ -8307,7 +8295,7 @@ namespace Intersect.Server.Entities
 
         public void ClearLootRoll()
         {
-            ClearLootRollsForEvent(LootEventId, true);
+            ClearLootRollsForEvent(LootEventId);
             CurrentLoot = default;
             LootEventId = default;
         }
