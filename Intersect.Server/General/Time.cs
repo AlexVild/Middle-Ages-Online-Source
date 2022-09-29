@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 using Intersect.GameObjects;
 using Intersect.Server.Networking;
@@ -41,7 +41,7 @@ namespace Intersect.Server.General
                 );
             }
 
-            sTimeRange = 0;
+            sTimeRange = -1;
             sUpdateTime = 0;
         }
 
@@ -50,15 +50,15 @@ namespace Intersect.Server.General
             var timeBase = TimeBase.GetTimeBase();
             if (Timing.Global.Milliseconds > sUpdateTime)
             {
-                if (timeBase.SyncTime)
+                if (!timeBase.SyncTime)
                 {
-                    sGameTime = DateTime.Now;
+                    sGameTime = sGameTime.Add(new TimeSpan(0, 0, 0, 0, (int) (1000 * timeBase.Rate)));
+
+                    //Not sure if Rate is negative if time will go backwards but we can hope!
                 }
                 else
                 {
-                    sGameTime = sGameTime.Add(new TimeSpan(0, 0, 0, 0, (int)(1000 * timeBase.Rate)));
-
-                    //Not sure if Rate is negative if time will go backwards but we can hope!
+                    sGameTime = DateTime.Now;
                 }
 
                 //Calculate what "timeRange" we should be in, if we're not then switch and notify the world
@@ -85,8 +85,7 @@ namespace Intersect.Server.General
 
         public static Color GetTimeColor()
         {
-            var time = TimeBase.GetTimeBase();
-            return time.DaylightHues[sTimeRange];
+            return TimeBase.GetTimeBase().DaylightHues[sTimeRange];
         }
 
         public static int GetTimeRange()
