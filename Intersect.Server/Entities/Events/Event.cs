@@ -165,10 +165,10 @@ namespace Intersect.Server.Entities.Events
                             Player.CloseLeaderboard = false;
                         }
 
-                        if (curStack.WaitingForResponse == CommandInstance.EventResponse.LootRoll && Player.CurrentLoot == null || Player.CurrentLoot?.Count <= 0)
+                        if (curStack.WaitingForResponse == CommandInstance.EventResponse.LootRoll && (Player.CurrentLoot == null || Player.CurrentLoot?.Count <= 0))
                         {
                             curStack.WaitingForResponse = CommandInstance.EventResponse.None;
-                            Player.ClearLootRoll();
+                            Player.ClearLootIfDone();
                         }
 
                         if (curStack.WaitingForResponse == CommandInstance.EventResponse.RandomQuest)

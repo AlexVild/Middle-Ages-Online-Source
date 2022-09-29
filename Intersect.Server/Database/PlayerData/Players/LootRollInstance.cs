@@ -35,15 +35,15 @@ namespace Intersect.Server.Database.PlayerData.Players
             PlayerId = player?.Id ?? Guid.Empty;
             EventId = eventId;
 
-            GenerateLootFor(player, lootRolls);
+            Loot = new List<Item>(GenerateLootFor(player, lootRolls));
         }
 
-        private void GenerateLootFor(Player player, List<LootRoll> lootRolls)
+        public static List<Item> GenerateLootFor(Player player, List<LootRoll> lootRolls)
         {
-            Loot = new List<Item>();
+            var loot = new List<Item>();
             if (lootRolls == null)
             {
-                return;
+                return loot;
             }
             foreach (var lootRoll in lootRolls)
             {
@@ -56,9 +56,11 @@ namespace Intersect.Server.Database.PlayerData.Players
                 for (var i = 0; i < lootRoll.Rolls; i++)
                 {
                     var dropTable = LootTableServerHelpers.GenerateDropTable(table.Drops);
-                    Loot.Add(LootTableServerHelpers.GetItemFromTable(dropTable));
+                    loot.Add(LootTableServerHelpers.GetItemFromTable(dropTable));
                 }
             }
+
+            return loot;
         }
 
         [ForeignKey(nameof(Player))]

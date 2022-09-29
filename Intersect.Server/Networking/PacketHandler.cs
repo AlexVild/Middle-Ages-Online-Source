@@ -4337,18 +4337,10 @@ namespace Intersect.Server.Networking
                     break;
                 case LootUpdateType.TakeAll:
                     var idx = 0;
-                    foreach(var item in loot)
-                    {
-                        if (!player.TryGiveItem(item.ItemId, item.Quantity, ItemHandling.Overflow))
-                        {
-                            idx++;
-                            continue;
-                        }
+                    var indicesTaken = new List<int>();
 
-                        player.CurrentLoot.RemoveAt(idx);
-                        idx++;
-                    }
-                    
+                    loot.RemoveAll(item => player.TryGiveItem(item.ItemId, item.Quantity, ItemHandling.Overflow)); 
+
                     PacketSender.SendLootUpdatePacketTo(player);
                     break;
                 case LootUpdateType.BankAt:
@@ -4363,20 +4355,14 @@ namespace Intersect.Server.Networking
                     PacketSender.SendLootUpdatePacketTo(player);
                     break;
                 case LootUpdateType.DismissAll:
-                    player.ClearLootRoll();
-
-                    PacketSender.SendLootUpdatePacketTo(player);
+                    player.CurrentLoot = new List<Item>();
                     break;
             }
 
-            // If the player has cleared out their loot, then allow them to generate a new roll in the future by clearing the DB reference
-            if (player.CurrentLoot?.Count <= 0)
-            {
-                player.ClearLootRoll();
-            }
-
             // Update the players backend reference so that if they save midway through taking loot the loot stays updated.
-            player.RefreshLootReference();
+            player.ClearLootIfDone();
+
+            PacketSender.SendLootUpdatePacketTo(player);
         }
     }
 }

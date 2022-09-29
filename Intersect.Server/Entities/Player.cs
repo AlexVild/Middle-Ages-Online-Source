@@ -2920,7 +2920,7 @@ namespace Intersect.Server.Entities
                     if (spawnAmount > 0 && MapController.TryGetInstanceFromMap(Map.Id, MapInstanceId, out var instance))
                     {
                         instance.SpawnItem(overflowTileX > -1 ? overflowTileX : X, overflowTileY > -1 ? overflowTileY : Y, item, spawnAmount, Id, true, ItemSpawnType.Dropped);
-                        success = spawnAmount != item.Quantity;
+                        success = true;
                     }
 
                     break;
@@ -8215,7 +8215,24 @@ namespace Intersect.Server.Entities
         public bool CloseLeaderboard { get; set; }
 
         [NotMapped, JsonIgnore]
-        public List<Item> CurrentLoot { get; set; }
+        public List<Item> CurrentLoot {
+            get 
+            {
+                return LootRolls?.Find(roll => roll.EventId == LootEventId)?.Loot ?? null;
+            }
+            set
+            {
+                var currentRoll = LootRolls?.Find(roll => roll.EventId == LootEventId);
+
+                // Couldn't find - make a new roll instance
+                if (currentRoll == default)
+                {
+                    return;
+                }
+
+                currentRoll.Loot = value;
+            }
+        } 
 
         [NotMapped, JsonIgnore]
         public Guid LootEventId { get; set; }
@@ -8245,8 +8262,8 @@ namespace Intersect.Server.Entities
         #region Rolling Loot
         public void OpenLootRoll(Guid eventId, List<LootRoll> lootRolls)
         {
-            CurrentLoot = GetLootRollItems(eventId, lootRolls);
             LootEventId = eventId;
+            GenerateCurrentLoot(eventId, lootRolls);
         }
 
         /// <summary>
@@ -8255,49 +8272,31 @@ namespace Intersect.Server.Entities
         /// <param name="eventId">The event that is requesting a roll of loot tables</param>
         /// <param name="lootRolls">The rolls the event wants to make</param>
         /// <returns></returns>
-        private List<Item> GetLootRollItems(Guid eventId, List<LootRoll> lootRolls)
+        private void GenerateCurrentLoot(Guid eventId, List<LootRoll> lootRolls)
         {
-            var existingRoll = LootRolls.Where(roll => roll.EventId == eventId && roll.PlayerId == Id).FirstOrDefault();
-
-            // If there is an existing roll, return that.
-            if (existingRoll != default && existingRoll?.Loot?.Count > 0)
+            // If we don't have a loot reference for the current event id...
+            if (CurrentLoot == null && LootEventId != default)
             {
-                return existingRoll.Loot;
+                // Make one
+                var newRoll = new LootRollInstance(this, eventId, lootRolls);
+                LootRolls.Add(newRoll);
+                return;
             }
 
-            var newRoll = new LootRollInstance(this, eventId, lootRolls);
-            LootRolls.Add(newRoll);
-            return newRoll.Loot;
-        }
-
-        /// <summary>
-        /// Removes all of a player's loot rolls that have some event ID associated with them.
-        /// </summary>
-        /// <param name="eventId"></param>
-        public void ClearLootRollsForEvent(Guid eventId)
-        {
-            lock (EntityLock)
+            // If the current reference is out of loot
+            if (CurrentLoot.Count <= 0)
             {
-                LootRolls
-                    .Where(roll => roll.EventId == eventId)
-                    .Select(roll => roll.Loot = null);
+                var reroll = LootRollInstance.GenerateLootFor(this, lootRolls);
+                CurrentLoot = reroll;
             }
         }
 
-        public void RefreshLootReference()
+        public void ClearLootIfDone()
         {
-            var rolls = LootRolls.Where(roll => roll.EventId == LootEventId);
-            foreach(var roll in rolls)
+            if (CurrentLoot?.Count <= 0)
             {
-                roll.Loot = new List<Item>(CurrentLoot);
+                LootEventId = default;
             }
-        }
-
-        public void ClearLootRoll()
-        {
-            ClearLootRollsForEvent(LootEventId);
-            CurrentLoot = default;
-            LootEventId = default;
         }
         #endregion
 
