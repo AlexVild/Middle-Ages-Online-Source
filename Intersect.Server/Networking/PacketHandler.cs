@@ -4337,9 +4337,31 @@ namespace Intersect.Server.Networking
                     }
 
                     loot.RemoveAt(packet.Index);
+
+                    if (lootAt.Descriptor.AnimationId != default && lootAt.Descriptor.ItemType == ItemTypes.Equipment && !string.IsNullOrEmpty(lootAt.Descriptor.Animation?.Sound))
+                    {
+                        PacketSender.SendPlaySound(player, lootAt.Descriptor.Animation?.Sound);
+                    }
+                    else
+                    {
+                        PacketSender.SendPlaySound(player, Options.Instance.LootRollOpts.TakeSound);
+                    }
                     break;
                 case LootUpdateType.TakeAll:
+                    var preTakeCount = player.CurrentLoot.Count;
                     player.CurrentLoot.RemoveAll(item => player.TryGiveItem(item, ItemHandling.Overflow, false, true, -1, -1, true)); 
+
+                    if (preTakeCount != player.CurrentLoot?.Count)
+                    {
+                        if (preTakeCount - player.CurrentLoot.Count == 1)
+                        {
+                            PacketSender.SendPlaySound(player, Options.Instance.LootRollOpts.TakeSound);
+                        }
+                        else
+                        {
+                            PacketSender.SendPlaySound(player, Options.Instance.LootRollOpts.TakeAllSound);
+                        }
+                    }
                     break;
                 case LootUpdateType.BankAt:
                     if (!bankInterface.TryDepositItem(lootAt, false))
@@ -4348,14 +4370,37 @@ namespace Intersect.Server.Networking
                     }
 
                     loot.RemoveAt(packet.Index);
+                    PacketSender.SendPlaySound(player, Options.Instance.LootRollOpts.BankSound);
                     break;
                 case LootUpdateType.BankAll:
+                    var preBankCount = player.CurrentLoot.Count;
                     player.CurrentLoot.RemoveAll(item => bankInterface.TryDepositItem(item, false));
+
+                    if (preBankCount != player.CurrentLoot?.Count)
+                    {
+                        if (preBankCount - player.CurrentLoot?.Count == 1)
+                        {
+                            PacketSender.SendPlaySound(player, Options.Instance.LootRollOpts.BankSound);
+                        }
+                        else
+                        {
+                            PacketSender.SendPlaySound(player, Options.Instance.LootRollOpts.BankAllSound);
+                        }
+                    }
                     break;
                 case LootUpdateType.DismissAt:
                     loot.RemoveAt(packet.Index);
+                    PacketSender.SendPlaySound(player, Options.Instance.LootRollOpts.DismissSound);
                     break;
                 case LootUpdateType.DismissAll:
+                    if (player.CurrentLoot.Count > 1)
+                    {
+                        PacketSender.SendPlaySound(player, Options.Instance.LootRollOpts.DismissAllSound);
+                    }
+                    else
+                    {
+                        PacketSender.SendPlaySound(player, Options.Instance.LootRollOpts.DismissSound);
+                    }
                     player.CurrentLoot = new List<Item>();
                     break;
             }
