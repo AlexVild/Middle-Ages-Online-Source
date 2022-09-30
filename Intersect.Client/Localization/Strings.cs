@@ -2297,12 +2297,33 @@ namespace Intersect.Client.Localization
         {
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString BankAll = @"Bank All";
-            
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString BankItem = @"Send to Bank";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString DismissPrompt = @"Are you sure you wish to dismiss the remaining loot? All remaining items will be permanently lost.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString DismissTitle = @"Dismiss All";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString DismissItem = @"Dismiss Item";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString DismissItemPrompt = @"Are you sure you wish to dismiss the item: {00}? The item will be permanently lost.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString DismissItemTitle = @"Dismiss Item";
+
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString DismissRemaining = @"Dismiss";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString TakeAll = @"Take All";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString TakeItem = @"Take Item";
         }
     }
 }

@@ -35,10 +35,19 @@ namespace Intersect.Client.Interface.Game.LootRoll
 
         private List<Item> Loot => Globals.Me?.RolledLoot ?? null;
 
+        // Context Menu
+        private Framework.Gwen.Control.Menu mContextMenu;
+
+        private MenuItem mDismissOption;
+        private MenuItem mBankOption;
+        private MenuItem mTakeOption;
+
+        private int mSelectedItemIdx;
+
         public LootRollWindow(Canvas gameCanvas)
         {
             mGameCanvas = gameCanvas;
-            mBackground = new WindowControl(gameCanvas, string.Empty, false, "LootRollWindow", onClose: OnClose);
+            mBackground = new WindowControl(gameCanvas, string.Empty, false, "LootRollWindow", onClose: Close);
             mBackground.IsClosable = false;
 
             mLootContainer = new ScrollControl(mBackground, "LootContainer");
@@ -62,6 +71,22 @@ namespace Intersect.Client.Interface.Game.LootRoll
             };
             mTakeAllButton.Clicked += TakeAllClicked;
 
+            mContextMenu = new Framework.Gwen.Control.Menu(gameCanvas, "LootRollContextMenu");
+            mContextMenu.IsHidden = true;
+            mContextMenu.IconMarginDisabled = true;
+
+            mContextMenu.Children.Clear();
+
+            mTakeOption = mContextMenu.AddItem(Strings.LootRoll.TakeItem);
+            mTakeOption.Clicked += TakeItem_Clicked;
+
+            mBankOption = mContextMenu.AddItem(Strings.LootRoll.BankItem);
+            mBankOption.Clicked += BankItem_Clicked;
+
+            mDismissOption = mContextMenu.AddItem(Strings.LootRoll.DismissItem);
+            mDismissOption.Clicked += DismissOption_Clicked;
+
+            mContextMenu.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
             mBackground.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
             InitLootContainer();
         }
@@ -85,6 +110,8 @@ namespace Intersect.Client.Interface.Game.LootRoll
                 LootItems[i].Container.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
 
                 LootItems[i].Container.IsHidden = true;
+                LootItems[i].Pnl.UserData = i;
+                LootItems[i].Pnl.RightClicked += item_RightClicked;
             }
         }
 
@@ -188,20 +215,27 @@ namespace Intersect.Client.Interface.Game.LootRoll
         public void Close()
         {
             PacketSender.SendLootUpdateRequest(LootUpdateType.DismissAll);
-            //Globals.Me.ResetLoot();
-            // TODO: Send packet
-            //mBackground.Hide();
+        }
+
+        public void DismissItem(object sender, EventArgs e)
+        {
+            var input = (InputBox)sender;
+            var idx = input.UserData;
+            PacketSender.SendLootUpdateRequest(LootUpdateType.DismissAt, mSelectedItemIdx);
         }
         
         #region handlers
-        private void OnClose()
+        public void DismissAll(object sender, EventArgs e)
         {
             Close();
         }
 
         private void DismissClicked(Base sender, ClickedEventArgs arguments)
         {
-            OnClose();
+            _ = new InputBox(
+                Strings.LootRoll.DismissTitle, Strings.LootRoll.DismissPrompt, true, InputBox.InputType.YesNo,
+                DismissAll, null, null
+            );
         }
 
         private void BankAllClicked(Base sender, ClickedEventArgs arguments)
@@ -212,6 +246,44 @@ namespace Intersect.Client.Interface.Game.LootRoll
         private void TakeAllClicked(Base sender, ClickedEventArgs arguments)
         {
             PacketSender.SendLootUpdateRequest(LootUpdateType.TakeAll);
+        }
+
+        private void DismissOption_Clicked(Base sender, ClickedEventArgs arguments)
+        {
+            if (mSelectedItemIdx >= 0 && mSelectedItemIdx < Loot.Count)
+            {
+                var item = Loot[mSelectedItemIdx];
+                _ = new InputBox(
+                    Strings.LootRoll.DismissItemTitle, Strings.LootRoll.DismissItemPrompt.ToString(item?.Base?.Name), true, InputBox.InputType.YesNo,
+                    DismissItem, null, mSelectedItemIdx
+                );
+            }
+        }
+
+        private void BankItem_Clicked(Base sender, ClickedEventArgs arguments)
+        {
+            if (mSelectedItemIdx >= 0 && mSelectedItemIdx < Loot.Count)
+            {
+                PacketSender.SendLootUpdateRequest(LootUpdateType.BankAt, mSelectedItemIdx);
+            }
+        }
+
+        private void TakeItem_Clicked(Base sender, ClickedEventArgs arguments)
+        {
+            if (mSelectedItemIdx >= 0 && mSelectedItemIdx < Loot.Count)
+            {
+                PacketSender.SendLootUpdateRequest(LootUpdateType.TakeAt, mSelectedItemIdx);
+            }
+        }
+
+        private void item_RightClicked(Base sender, ClickedEventArgs arguments)
+        {
+            var panel = (ImagePanel)sender;
+            mSelectedItemIdx = (int)panel.UserData;
+            mContextMenu.IsHidden = false;
+            mContextMenu.SetSize(mContextMenu.Width, mContextMenu.Height);
+            mContextMenu.Open(Framework.Gwen.Pos.None);
+            mContextMenu.MoveTo(mContextMenu.X, mContextMenu.Y);
         }
         #endregion
     }
