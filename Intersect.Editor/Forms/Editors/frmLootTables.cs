@@ -1,4 +1,5 @@
 ﻿using DarkUI.Forms;
+using Intersect.Editor.Forms.Helpers;
 using Intersect.Editor.General;
 using Intersect.Editor.Localization;
 using Intersect.Editor.Networking;
@@ -215,12 +216,12 @@ namespace Intersect.Editor.Forms.Editors
 
         private void txtSearch_TextChanged(object sender, EventArgs e)
         {
-
+            InitEditor();
         }
 
         private void btnClearSearch_Click(object sender, EventArgs e)
         {
-
+            FormHelpers.ClearSearchPressed(ref txtSearch);
         }
 
         private void btnSave_Click(object sender, EventArgs e)

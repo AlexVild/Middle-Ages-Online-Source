@@ -292,6 +292,7 @@
     <Compile Include="GameObjects\BaseDrop.cs" />
     <Compile Include="GameObjects\Events\VariableMod.cs" />
     <Compile Include="Enums\Timers.cs" />
+    <Compile Include="GameObjects\LabelDescriptor.cs" />
     <Compile Include="GameObjects\LootTableDescriptor.cs" />
     <Compile Include="GameObjects\QuestBoardBase.cs" />
     <Compile Include="GameObjects\QuestListBase.cs" />

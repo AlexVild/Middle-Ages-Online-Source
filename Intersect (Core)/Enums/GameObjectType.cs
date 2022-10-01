@@ -78,6 +78,9 @@ namespace Intersect.Enums
 
         [GameObjectInfo(typeof(LootTableDescriptor), "loot_tables")]
         LootTable,
+
+        [GameObjectInfo(typeof(LabelDescriptor), "labels")]
+        Label,
     }
 
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 
 using DarkUI.Forms;
-
+using Intersect.Editor.Forms.Helpers;
 using Intersect.Editor.General;
 using Intersect.Editor.Localization;
 using Intersect.Editor.Networking;
@@ -345,6 +345,11 @@ namespace Intersect.Editor.Forms.Editors
             Hide();
             Globals.CurrentEditor = -1;
             Dispose();
+        }
+
+        private void btnClearSearch_Click(object sender, EventArgs e)
+        {
+            FormHelpers.ClearSearchPressed(ref txtSearch);
         }
     }
 }

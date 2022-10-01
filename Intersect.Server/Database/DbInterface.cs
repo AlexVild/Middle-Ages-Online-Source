@@ -585,6 +585,10 @@ namespace Intersect.Server.Database
                     LootTableDescriptor.Lookup.Clear();
 
                     break;
+                case GameObjectType.Label:
+                    LabelDescriptor.Lookup.Clear();
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }
@@ -752,6 +756,13 @@ namespace Intersect.Server.Database
                             }
 
                             break;
+                        case GameObjectType.Label:
+                            foreach (var label in context.Labels)
+                            {
+                                LootTableDescriptor.Lookup.Set(label.Id, label);
+                            }
+
+                            break;
                         default:
                             throw new ArgumentOutOfRangeException(nameof(gameObjectType), gameObjectType, null);
                     }
@@ -868,6 +879,10 @@ namespace Intersect.Server.Database
                     break;
                 case GameObjectType.LootTable:
                     dbObj = new LootTableDescriptor(predefinedid);
+
+                    break;
+                case GameObjectType.Label:
+                    dbObj = new LabelDescriptor(predefinedid);
 
                     break;
                 default:
@@ -1018,6 +1033,11 @@ namespace Intersect.Server.Database
                             LootTableDescriptor.Lookup.Set(dbObj.Id, dbObj);
 
                             break;
+                        case GameObjectType.Label:
+                            context.Labels.Add((LabelDescriptor)dbObj);
+                            LabelDescriptor.Lookup.Set(dbObj.Id, dbObj);
+
+                            break;
                         default:
                             throw new ArgumentOutOfRangeException(nameof(gameObjectType), gameObjectType, null);
                     }
@@ -1156,6 +1176,10 @@ namespace Intersect.Server.Database
                             context.LootTables.Remove((LootTableDescriptor)gameObject);
 
                             break;
+                        case GameObjectType.Label:
+                            context.Labels.Remove((LabelDescriptor)gameObject);
+
+                            break;
                     }
 
                     if (gameObject.Type.GetLookup().Values.Contains(gameObject))
@@ -1290,6 +1314,10 @@ namespace Intersect.Server.Database
                             break;
                         case GameObjectType.LootTable:
                             context.LootTables.Update((LootTableDescriptor)gameObject);
+
+                            break;
+                        case GameObjectType.Label:
+                            context.Labels.Update((LabelDescriptor)gameObject);
 
                             break;
                     }

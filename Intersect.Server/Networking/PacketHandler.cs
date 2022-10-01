@@ -3930,6 +3930,10 @@ namespace Intersect.Server.Networking
                     obj = LootTableDescriptor.Get(id);
 
                     break;
+                case GameObjectType.Label:
+                    obj = LabelDescriptor.Get(id);
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -4075,6 +4079,10 @@ namespace Intersect.Server.Networking
                     break;
                 case GameObjectType.LootTable:
                     obj = DatabaseObject<LootTableDescriptor>.Lookup.Get(id);
+
+                    break;
+                case GameObjectType.Label:
+                    obj = DatabaseObject<LabelDescriptor>.Lookup.Get(id);
 
                     break;
                 default:

@@ -93,6 +93,7 @@ namespace Intersect.Editor.Forms.Editors
             this.btnClearSearch.Size = new System.Drawing.Size(17, 17);
             this.btnClearSearch.TabIndex = 19;
             this.btnClearSearch.Text = "X";
+            this.btnClearSearch.Click += new System.EventHandler(this.btnClearSearch_Click);
             // 
             // txtSearch
             // 

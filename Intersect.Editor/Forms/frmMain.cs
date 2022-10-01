@@ -85,6 +85,8 @@ namespace Intersect.Editor.Forms
         private frmTimers mTimerEditor;
         
         private frmLootTables mTableEditor;
+        
+        private frmLabel mLabelEditor;
 
         //General Editting Variables
         bool mTMouseDown;
@@ -1682,6 +1684,15 @@ namespace Intersect.Editor.Forms
                         }
 
                         break;
+                    case GameObjectType.Label:
+                        if (mLabelEditor == null || mLabelEditor.Visible == false)
+                        {
+                            mLabelEditor = new frmLabel();
+                            mLabelEditor.InitEditor();
+                            mLabelEditor.Show();
+                        }
+                        
+                        break;
                     default:
                         return;
                 }
@@ -2093,6 +2104,11 @@ namespace Intersect.Editor.Forms
         private void lootTableEditorToolStripMenuItem_Click(object sender, EventArgs e)
         {
             PacketSender.SendOpenEditor(GameObjectType.LootTable);
+        }
+
+        private void labelEditorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PacketSender.SendOpenEditor(GameObjectType.Label);
         }
     }
 

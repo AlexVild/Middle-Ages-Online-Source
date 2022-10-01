@@ -106,6 +106,8 @@ namespace Intersect.Server.Database.GameData
         public DbSet<TimerDescriptor> Timers { get; set; }
         
         public DbSet<LootTableDescriptor> LootTables { get; set; }
+        
+        public DbSet<LabelDescriptor> Labels { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

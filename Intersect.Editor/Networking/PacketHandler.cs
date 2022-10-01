@@ -711,6 +711,19 @@ namespace Intersect.Editor.Networking
                         LootTableDescriptor.Lookup.Set(id, lt);
                     }
                     break;
+                case GameObjectType.Label:
+                    if (deleted)
+                    {
+                        var label = LabelDescriptor.Get(id);
+                        label.Delete();
+                    }
+                    else
+                    {
+                        var label = new LabelDescriptor(id);
+                        label.Load(json);
+                        LabelDescriptor.Lookup.Set(id, label);
+                    }
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }

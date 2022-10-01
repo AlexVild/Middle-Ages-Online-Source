@@ -6094,6 +6094,21 @@ Negative values for time to flow backwards.";
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString Table = @"{00} x{01} times";
         }
+
+        public partial struct EditorGenerics
+        {
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString SearchPlaceHolder = @"Search...";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString FolderLabel = @"Folder:";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString FolderTitle = @"Add Folder";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString FolderPrompt = @"Enter a name for the folder you'd like to add:";
+        }
     }
 }
 
