@@ -1,16 +1,9 @@
 ﻿using Intersect.Editor.Forms.Helpers;
 using Intersect.Enums;
 using Intersect.GameObjects;
-using Intersect.Models;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace Intersect.Editor.Forms.Editors
 {
@@ -21,6 +14,8 @@ namespace Intersect.Editor.Forms.Editors
         private LabelDescriptor mEditorItem;
         
         private string mCopiedItem;
+
+        private bool mPopulating = false;
         
         private List<string> mKnownFolders = new List<string>();
 
@@ -29,6 +24,11 @@ namespace Intersect.Editor.Forms.Editors
             ApplyHooks();
             InitializeComponent();
             
+            if (mEditorItem == null)
+            {
+                grpProperties.Hide();
+            }
+
             lstGameObjects.Init(UpdateToolStripItems, AssignEditorItem, toolStripItemNew_Click, toolStripItemCopy_Click, toolStripItemUndo_Click, toolStripItemPaste_Click, toolStripItemDelete_Click);
         }
 
@@ -57,10 +57,26 @@ namespace Intersect.Editor.Forms.Editors
                     UpdateToolStripItems,
                     () =>
                     {
+                        mPopulating = true;
+
                         txtName.Text = mEditorItem.Name;
                         cmbFolder.Text = mEditorItem.Folder;
                         txtLabel.Text = mEditorItem.DisplayName;
                         txtHint.Text = mEditorItem.Hint;
+                        
+                        var color = mEditorItem.Color;
+                        if (color == null)
+                        {
+                            color = Color.White;
+                        }
+
+                        pnlColor.BackColor = System.Drawing.Color.FromArgb(color.A, color.R, color.G, color.B);
+                        chkMatchColor.Checked = mEditorItem.MatchNameColor;
+                        ToggleColorAvailability();
+                        rdoHeader.Checked = mEditorItem.Position == LabelPosition.Header;
+                        rdoFooter.Checked = mEditorItem.Position == LabelPosition.Footer;
+
+                        mPopulating = false;
                     }
                 );
         }
@@ -150,6 +166,51 @@ namespace Intersect.Editor.Forms.Editors
         private void txtHint_TextChanged(object sender, EventArgs e)
         {
             mEditorItem.Hint = txtHint.Text;
+        }
+
+        private void ToggleColorAvailability()
+        {
+            btnSelectLightColor.Enabled = !mEditorItem.MatchNameColor;
+        }
+
+        private void btnSelectLightColor_Click(object sender, EventArgs e)
+        {
+            colorDialog.Color = pnlColor.BackColor;
+            if (colorDialog.ShowDialog() == DialogResult.OK)
+            {
+                pnlColor.BackColor = colorDialog.Color;
+                mEditorItem.Color = Color.FromArgb(
+                    pnlColor.BackColor.A, pnlColor.BackColor.R, pnlColor.BackColor.G, pnlColor.BackColor.B
+                );
+            }
+        }
+
+        private void chkMatchColor_CheckedChanged(object sender, EventArgs e)
+        {
+            if (mPopulating)
+            {
+                return;
+            }
+            mEditorItem.MatchNameColor = chkMatchColor.Checked;
+            ToggleColorAvailability();
+        }
+
+        private void rdoHeader_CheckedChanged(object sender, EventArgs e)
+        {
+            if (mPopulating)
+            {
+                return;
+            }
+            mEditorItem.Position = LabelPosition.Header;
+        }
+
+        private void rdoFooter_CheckedChanged(object sender, EventArgs e)
+        {
+            if (mPopulating)
+            {
+                return;
+            }
+            mEditorItem.Position = LabelPosition.Footer;
         }
     }
 }

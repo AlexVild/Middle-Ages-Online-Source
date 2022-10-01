@@ -59,10 +59,22 @@ namespace Intersect.Editor.Forms.Editors
             this.lblLabel = new System.Windows.Forms.Label();
             this.btnSave = new DarkUI.Controls.DarkButton();
             this.btnCancel = new DarkUI.Controls.DarkButton();
+            this.chkMatchColor = new DarkUI.Controls.DarkCheckBox();
+            this.grpColor = new DarkUI.Controls.DarkGroupBox();
+            this.darkCheckBox1 = new DarkUI.Controls.DarkCheckBox();
+            this.grpPosition = new DarkUI.Controls.DarkGroupBox();
+            this.darkCheckBox2 = new DarkUI.Controls.DarkCheckBox();
+            this.rdoHeader = new DarkUI.Controls.DarkRadioButton();
+            this.rdoFooter = new DarkUI.Controls.DarkRadioButton();
+            this.btnSelectLightColor = new DarkUI.Controls.DarkButton();
+            this.pnlColor = new System.Windows.Forms.Panel();
+            this.colorDialog = new System.Windows.Forms.ColorDialog();
             this.toolStrip.SuspendLayout();
             this.grpLabels.SuspendLayout();
             this.grpProperties.SuspendLayout();
             this.darkGroupBox1.SuspendLayout();
+            this.grpColor.SuspendLayout();
+            this.grpPosition.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolStrip
@@ -84,7 +96,7 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Padding = new System.Windows.Forms.Padding(5, 0, 1, 0);
-            this.toolStrip.Size = new System.Drawing.Size(527, 25);
+            this.toolStrip.Size = new System.Drawing.Size(534, 25);
             this.toolStrip.TabIndex = 47;
             this.toolStrip.Text = "toolStrip1";
             // 
@@ -311,7 +323,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpProperties.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpProperties.Location = new System.Drawing.Point(239, 28);
             this.grpProperties.Name = "grpProperties";
-            this.grpProperties.Size = new System.Drawing.Size(279, 298);
+            this.grpProperties.Size = new System.Drawing.Size(279, 429);
             this.grpProperties.TabIndex = 49;
             this.grpProperties.TabStop = false;
             this.grpProperties.Text = "Label Properties";
@@ -320,6 +332,8 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.darkGroupBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.darkGroupBox1.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.darkGroupBox1.Controls.Add(this.grpPosition);
+            this.darkGroupBox1.Controls.Add(this.grpColor);
             this.darkGroupBox1.Controls.Add(this.txtHint);
             this.darkGroupBox1.Controls.Add(this.txtLabel);
             this.darkGroupBox1.Controls.Add(this.lblHint);
@@ -327,7 +341,7 @@ namespace Intersect.Editor.Forms.Editors
             this.darkGroupBox1.ForeColor = System.Drawing.Color.Gainsboro;
             this.darkGroupBox1.Location = new System.Drawing.Point(9, 74);
             this.darkGroupBox1.Name = "darkGroupBox1";
-            this.darkGroupBox1.Size = new System.Drawing.Size(264, 218);
+            this.darkGroupBox1.Size = new System.Drawing.Size(264, 349);
             this.darkGroupBox1.TabIndex = 54;
             this.darkGroupBox1.TabStop = false;
             this.darkGroupBox1.Text = "In-Game Display";
@@ -377,7 +391,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(239, 352);
+            this.btnSave.Location = new System.Drawing.Point(239, 463);
             this.btnSave.Name = "btnSave";
             this.btnSave.Padding = new System.Windows.Forms.Padding(5);
             this.btnSave.Size = new System.Drawing.Size(135, 27);
@@ -388,7 +402,7 @@ namespace Intersect.Editor.Forms.Editors
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(383, 352);
+            this.btnCancel.Location = new System.Drawing.Point(383, 463);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Padding = new System.Windows.Forms.Padding(5);
             this.btnCancel.Size = new System.Drawing.Size(139, 27);
@@ -396,12 +410,110 @@ namespace Intersect.Editor.Forms.Editors
             this.btnCancel.Text = "Cancel";
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
+            // chkMatchColor
+            // 
+            this.chkMatchColor.AutoSize = true;
+            this.chkMatchColor.Location = new System.Drawing.Point(13, 19);
+            this.chkMatchColor.Name = "chkMatchColor";
+            this.chkMatchColor.Size = new System.Drawing.Size(152, 17);
+            this.chkMatchColor.TabIndex = 110;
+            this.chkMatchColor.Text = "Match Player Name Color?";
+            this.chkMatchColor.CheckedChanged += new System.EventHandler(this.chkMatchColor_CheckedChanged);
+            // 
+            // grpColor
+            // 
+            this.grpColor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpColor.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpColor.Controls.Add(this.pnlColor);
+            this.grpColor.Controls.Add(this.btnSelectLightColor);
+            this.grpColor.Controls.Add(this.darkCheckBox1);
+            this.grpColor.Controls.Add(this.chkMatchColor);
+            this.grpColor.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpColor.Location = new System.Drawing.Point(9, 218);
+            this.grpColor.Name = "grpColor";
+            this.grpColor.Size = new System.Drawing.Size(249, 71);
+            this.grpColor.TabIndex = 111;
+            this.grpColor.TabStop = false;
+            this.grpColor.Text = "Color";
+            // 
+            // darkCheckBox1
+            // 
+            this.darkCheckBox1.AutoSize = true;
+            this.darkCheckBox1.Location = new System.Drawing.Point(76, 312);
+            this.darkCheckBox1.Name = "darkCheckBox1";
+            this.darkCheckBox1.Size = new System.Drawing.Size(104, 17);
+            this.darkCheckBox1.TabIndex = 110;
+            this.darkCheckBox1.Text = "Run indefinitely?";
+            // 
+            // grpPosition
+            // 
+            this.grpPosition.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpPosition.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpPosition.Controls.Add(this.rdoFooter);
+            this.grpPosition.Controls.Add(this.rdoHeader);
+            this.grpPosition.Controls.Add(this.darkCheckBox2);
+            this.grpPosition.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpPosition.Location = new System.Drawing.Point(9, 295);
+            this.grpPosition.Name = "grpPosition";
+            this.grpPosition.Size = new System.Drawing.Size(249, 48);
+            this.grpPosition.TabIndex = 112;
+            this.grpPosition.TabStop = false;
+            this.grpPosition.Text = "Position";
+            // 
+            // darkCheckBox2
+            // 
+            this.darkCheckBox2.AutoSize = true;
+            this.darkCheckBox2.Location = new System.Drawing.Point(76, 312);
+            this.darkCheckBox2.Name = "darkCheckBox2";
+            this.darkCheckBox2.Size = new System.Drawing.Size(104, 17);
+            this.darkCheckBox2.TabIndex = 110;
+            this.darkCheckBox2.Text = "Run indefinitely?";
+            // 
+            // rdoHeader
+            // 
+            this.rdoHeader.AutoSize = true;
+            this.rdoHeader.Location = new System.Drawing.Point(13, 19);
+            this.rdoHeader.Name = "rdoHeader";
+            this.rdoHeader.Size = new System.Drawing.Size(60, 17);
+            this.rdoHeader.TabIndex = 111;
+            this.rdoHeader.Text = "Header";
+            this.rdoHeader.CheckedChanged += new System.EventHandler(this.rdoHeader_CheckedChanged);
+            // 
+            // rdoFooter
+            // 
+            this.rdoFooter.AutoSize = true;
+            this.rdoFooter.Location = new System.Drawing.Point(79, 19);
+            this.rdoFooter.Name = "rdoFooter";
+            this.rdoFooter.Size = new System.Drawing.Size(55, 17);
+            this.rdoFooter.TabIndex = 112;
+            this.rdoFooter.Text = "Footer";
+            this.rdoFooter.CheckedChanged += new System.EventHandler(this.rdoFooter_CheckedChanged);
+            // 
+            // btnSelectLightColor
+            // 
+            this.btnSelectLightColor.Location = new System.Drawing.Point(13, 42);
+            this.btnSelectLightColor.Name = "btnSelectLightColor";
+            this.btnSelectLightColor.Padding = new System.Windows.Forms.Padding(5);
+            this.btnSelectLightColor.Size = new System.Drawing.Size(90, 23);
+            this.btnSelectLightColor.TabIndex = 111;
+            this.btnSelectLightColor.Text = "Select Color";
+            this.btnSelectLightColor.Click += new System.EventHandler(this.btnSelectLightColor_Click);
+            // 
+            // pnlColor
+            // 
+            this.pnlColor.BackColor = System.Drawing.Color.White;
+            this.pnlColor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pnlColor.Location = new System.Drawing.Point(200, 36);
+            this.pnlColor.Name = "pnlColor";
+            this.pnlColor.Size = new System.Drawing.Size(31, 29);
+            this.pnlColor.TabIndex = 112;
+            // 
             // frmLabel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.ClientSize = new System.Drawing.Size(527, 391);
+            this.ClientSize = new System.Drawing.Size(534, 545);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.grpProperties);
@@ -418,6 +530,10 @@ namespace Intersect.Editor.Forms.Editors
             this.grpProperties.PerformLayout();
             this.darkGroupBox1.ResumeLayout(false);
             this.darkGroupBox1.PerformLayout();
+            this.grpColor.ResumeLayout(false);
+            this.grpColor.PerformLayout();
+            this.grpPosition.ResumeLayout(false);
+            this.grpPosition.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -452,5 +568,15 @@ namespace Intersect.Editor.Forms.Editors
         private DarkUI.Controls.DarkTextBox txtHint;
         private DarkUI.Controls.DarkButton btnSave;
         private DarkUI.Controls.DarkButton btnCancel;
+        private DarkUI.Controls.DarkGroupBox grpPosition;
+        private DarkUI.Controls.DarkCheckBox darkCheckBox2;
+        private DarkUI.Controls.DarkGroupBox grpColor;
+        private DarkUI.Controls.DarkCheckBox darkCheckBox1;
+        private DarkUI.Controls.DarkCheckBox chkMatchColor;
+        private DarkUI.Controls.DarkRadioButton rdoFooter;
+        private DarkUI.Controls.DarkRadioButton rdoHeader;
+        private DarkUI.Controls.DarkButton btnSelectLightColor;
+        public System.Windows.Forms.Panel pnlColor;
+        private System.Windows.Forms.ColorDialog colorDialog;
     }
 }

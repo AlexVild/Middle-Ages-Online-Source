@@ -492,6 +492,26 @@ namespace Intersect.Server.Entities
         }
         #endregion
 
+        #region Labels
+        public void LoadLabels()
+        {
+            try
+            {
+                using (var context = DbInterface.CreatePlayerContext())
+                {
+                    UnlockedLabels = context.Player_Labels
+                        .Where(f => f.PlayerId == Id)
+                        .ToList();
+                    Log.Info($"Successfully loaded unlocked labels for {Name}. Count is {UnlockedLabels.Count}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, $"Failed to load labels for {Name}.");
+            }
+        }
+        #endregion
+
         #region Explored Maps
         public void LoadMapsExplored()
         {

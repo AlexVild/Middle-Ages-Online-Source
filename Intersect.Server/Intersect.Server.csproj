@@ -485,6 +485,7 @@
     <Compile Include="Database\Item.cs" />
     <Compile Include="Database\PlayerData\Players\IPlayerOwned.cs" />
     <Compile Include="Database\PlayerData\Players\ISlot.cs" />
+    <Compile Include="Database\PlayerData\Players\LabelInstance.cs" />
     <Compile Include="Database\PlayerData\Players\LootRollInstance.cs" />
     <Compile Include="Database\PlayerData\Players\MapExploredInstance.cs" />
     <Compile Include="Database\PlayerData\Players\Quest.cs" />
@@ -623,6 +624,10 @@
     <Compile Include="Migrations\20220926191034_LootRollDbMigration.cs" />
     <Compile Include="Migrations\20220926191034_LootRollDbMigration.designer.cs">
       <DependentUpon>20220926191034_LootRollDbMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20221001171312_LabelReworkMigration.cs" />
+    <Compile Include="Migrations\20221001171312_LabelReworkMigration.designer.cs">
+      <DependentUpon>20221001171312_LabelReworkMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.cs" />
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.Designer.cs">
@@ -845,6 +850,10 @@
     <Compile Include="Migrations\Game\20221001161959_AddLabelObjectMigration.cs" />
     <Compile Include="Migrations\Game\20221001161959_AddLabelObjectMigration.designer.cs">
       <DependentUpon>20221001161959_AddLabelObjectMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20221001170821_AddLabelOptionsMigration.cs" />
+    <Compile Include="Migrations\Game\20221001170821_AddLabelOptionsMigration.designer.cs">
+      <DependentUpon>20221001170821_AddLabelOptionsMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">

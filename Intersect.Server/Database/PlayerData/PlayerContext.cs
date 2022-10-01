@@ -80,6 +80,8 @@ namespace Intersect.Server.Database.PlayerData
         public DbSet<MapExploredInstance> Maps_Explored { get; set; }
         
         public DbSet<LootRollInstance> Loot_Rolls { get; set; }
+        
+        public DbSet<LabelInstance> Player_Labels { get; set; }
 
         internal async ValueTask Commit(
             bool commit = false,
@@ -146,6 +148,9 @@ namespace Intersect.Server.Database.PlayerData
             modelBuilder.Entity<PlayerRecord>().HasMany(b => b.Teammates).WithOne(p => p.Record);
 
             modelBuilder.Entity<Player>().HasMany(b => b.LootRolls).WithOne(p => p.Player);
+
+            modelBuilder.Entity<Player>().HasMany(player => player.UnlockedLabels).WithOne(label => label.Player);
+            modelBuilder.Entity<LabelInstance>().HasIndex(label => label.DescriptorId).IsUnique();
         }
 
         public void Seed()

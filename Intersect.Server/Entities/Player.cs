@@ -394,6 +394,7 @@ namespace Intersect.Server.Entities
             LoadGuild();
             LoadRecords();
             DbInterface.Pool.QueueWorkItem(LoadLootRolls);
+            DbInterface.Pool.QueueWorkItem(LoadLabels);
             DbInterface.Pool.QueueWorkItem(LoadTimers);
             LoadMapsExplored();
 
@@ -8247,6 +8248,9 @@ namespace Intersect.Server.Entities
         [JsonIgnore]
         public virtual List<LootRollInstance> LootRolls { get; set; } = new List<LootRollInstance>();
 
+        [JsonIgnore]
+        public virtual List<LabelInstance> UnlockedLabels { get; set; } = new List<LabelInstance>();
+
         public void MarkMapExplored(Guid mapId)
         {
             lock (EntityLock)
@@ -8661,5 +8665,33 @@ namespace Intersect.Server.Entities
         {
             return 1 + GetEquipmentBonusEffect(EffectType.Luck) / 100f;
         }
+
+        #region Labels
+        public void SetLabelTo(Guid labelDescriptor)
+        {
+            var label = UnlockedLabels.Find(lbl => lbl.DescriptorId == labelDescriptor);
+            if (label == default)
+            {
+                return;
+            }
+
+            var descriptor = label.Descriptor;
+
+            var color = descriptor.Color;
+            if (descriptor.MatchNameColor)
+            {
+                color = Color.Transparent;
+            }
+
+            if (descriptor.Position == LabelPosition.Header) // Header
+            {
+                HeaderLabel = new Label(descriptor.DisplayName, color);
+            }
+            else if (descriptor.Position == LabelPosition.Footer) // Footer
+            {
+                FooterLabel = new Label(descriptor.DisplayName, color);
+            }
+        }
+        #endregion
     }
 }
