@@ -1856,5 +1856,24 @@ namespace Intersect.Editor.Forms.Editors.Events
         {
             return Strings.EventCommandList.RollLoot.ToString(command.Title);
         }
+
+        private static string GetCommandText(UnlockLabelCommand command, MapInstance map)
+        {
+            var label = LabelDescriptor.Get(command.LabelId);
+            var labelName = Strings.EditorGenerics.NotFound;
+            if (label != default)
+            {
+                labelName = label.Name;
+            }
+
+            var type = "unlocked";
+
+            if (command.Status == UnlockLabelCommand.LabelUnlockStatus.Remove)
+            {
+                type = "remove";
+            }
+
+            return Strings.EventCommandList.UnlockLabel.ToString(labelName, type);
+        }
     }
 }

@@ -807,6 +807,10 @@ namespace Intersect.Editor.Forms.Editors.Events
                     tmpCommand = new RollLootCommand();
 
                     break;
+                case EventCommandType.UnlockLabel:
+                    tmpCommand = new UnlockLabelCommand();
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -1474,6 +1478,10 @@ namespace Intersect.Editor.Forms.Editors.Events
                     break;
                 case EventCommandType.RollLoot:
                     cmdWindow = new EventCommand_RollLoot((RollLootCommand)command, this);
+
+                    break;
+                case EventCommandType.UnlockLabel:
+                    cmdWindow = new EventCommand_UnlockLabel((UnlockLabelCommand)command, this);
 
                     break;
                 default:

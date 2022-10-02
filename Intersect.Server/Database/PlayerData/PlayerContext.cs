@@ -234,6 +234,15 @@ namespace Intersect.Server.Database.PlayerData
 
             foreach (var itm in player.Bank)
                 Entry(itm).State = EntityState.Detached;
+
+            foreach (var itm in player.LootRolls)
+                Entry(itm).State = EntityState.Detached;
+
+            foreach (var itm in player.PlayerRecords)
+                Entry(itm).State = EntityState.Detached;
+
+            foreach (var itm in player.UnlockedLabels)
+                Entry(itm).State = EntityState.Detached;
         }
 
     }

@@ -17,9 +17,9 @@ namespace Intersect.Server.Database.PlayerData.Players
         // EF
         public LabelInstance() { }
 
-        public LabelInstance(Guid id, Guid playerId, Guid descriptorId)
+        public LabelInstance(Guid playerId, Guid descriptorId)
         {
-            Id = id;
+            Id = Guid.NewGuid();
             PlayerId = playerId;
             DescriptorId = descriptorId;
             IsNew = true;

@@ -2203,6 +2203,7 @@ Tick timer saved in server config.json.";
                 {"openleaderboard", @"Open Leaderboard"},
                 {"clearrecord", @"Clear Record"},
                 {"rollloot", @"Roll Loot"},
+                {"unlocklabel", @"Unlock Label"},
             };
 
         }
@@ -6075,6 +6076,9 @@ Negative values for time to flow backwards.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString RollLoot = @"Roll Loot ({00})";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString UnlockLabel = @"Label Status Update: {00} label {01}";
         }
 
         public partial struct DynamicRequirements
@@ -6098,9 +6102,6 @@ Negative values for time to flow backwards.";
         public partial struct EditorGenerics
         {
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public static LocalizedString SearchPlaceHolder = @"Search...";
-
-            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString FolderLabel = @"Folder:";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -6108,6 +6109,12 @@ Negative values for time to flow backwards.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString FolderPrompt = @"Enter a name for the folder you'd like to add:";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString NotFound = @"NOT FOUND";
+            
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString SearchPlaceHolder = @"Search...";
         }
     }
 }

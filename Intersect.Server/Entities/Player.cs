@@ -8692,6 +8692,29 @@ namespace Intersect.Server.Entities
                 FooterLabel = new Label(descriptor.DisplayName, color);
             }
         }
+
+        public void ChangeLabelUnlockStatus(Guid labelId, UnlockLabelCommand.LabelUnlockStatus status)
+        {
+            if (status == UnlockLabelCommand.LabelUnlockStatus.Unlock)
+            {
+                var label = UnlockedLabels.Find(lbl => lbl.DescriptorId == labelId);
+                if (label != default)
+                {
+                    // Label is already unlocked
+                    return;
+                }
+
+                UnlockedLabels.Add(new LabelInstance(Id, labelId));
+                return;
+            }
+            else if (status == UnlockLabelCommand.LabelUnlockStatus.Remove)
+            {
+                UnlockedLabels.RemoveAll(label => label.DescriptorId == labelId);
+                return;
+            }
+
+            throw new NotImplementedException("ChageLabelUnlockStatus did not contain a valid label unlock status");
+        }
         #endregion
     }
 }

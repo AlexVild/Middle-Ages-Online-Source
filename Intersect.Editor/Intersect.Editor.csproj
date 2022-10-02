@@ -201,6 +201,12 @@
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_StopTimer.Designer.cs">
       <DependentUpon>EventCommand_StopTimer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_UnlockLabel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_UnlockLabel.Designer.cs">
+      <DependentUpon>EventCommand_UnlockLabel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Editors\Events\Event Commands\TimerCommandHelpers.cs" />
     <Compile Include="Forms\Editors\frmLabel.cs">
       <SubType>Form</SubType>
@@ -238,6 +244,7 @@
     <Compile Include="Forms\frmUpdate.Designer.cs">
       <DependentUpon>frmUpdate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Helpers\EventFormHelpers.cs" />
     <Compile Include="Forms\Helpers\FormHelpers.cs" />
     <Compile Include="Forms\Helpers\GridHelper.cs" />
     <Compile Include="Maps\MapGridItem.cs" />
@@ -826,6 +833,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_StopTimer.resx">
       <DependentUpon>EventCommand_StopTimer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_UnlockLabel.resx">
+      <DependentUpon>EventCommand_UnlockLabel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_Variable.resx">
       <DependentUpon>EventCommand_Variable.cs</DependentUpon>

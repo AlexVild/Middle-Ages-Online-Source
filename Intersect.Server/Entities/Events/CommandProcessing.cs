@@ -2738,5 +2738,24 @@ namespace Intersect.Server.Entities.Events
 
             callStack.Peek().WaitingForResponse = CommandInstance.EventResponse.LootRoll;
         }
+
+        private static void ProcessCommand(
+            UnlockLabelCommand command,
+            Player player,
+            Event instance,
+            CommandInstance stackInfo,
+            Stack<CommandInstance> callStack
+        )
+        {
+            if (player == null) return;
+
+            try
+            {
+                player.ChangeLabelUnlockStatus(command.LabelId, command.Status);
+            } catch(NotImplementedException e)
+            {
+                Logging.Log.Error($"Player command processing exception: {e.Message}");
+            }
+        }
     }
 }

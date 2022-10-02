@@ -1274,4 +1274,19 @@ namespace Intersect.GameObjects.Events.Commands
 
         public string Title { get; set; }
     }
+    
+    public class UnlockLabelCommand : EventCommand
+    {
+        public enum LabelUnlockStatus
+        {
+            Unlock = 0,
+            Remove
+        }
+
+        public override EventCommandType Type { get; } = EventCommandType.UnlockLabel;
+
+        public Guid LabelId { get; set; }
+
+        public LabelUnlockStatus Status { get; set; }
+    }
 }

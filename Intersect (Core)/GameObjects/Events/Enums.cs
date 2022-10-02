@@ -256,6 +256,7 @@
         OpenLeaderboard,
         ClearRecord,
         RollLoot,
+        UnlockLabel,
     }
 
     public enum NPCGuildManagementSelection
