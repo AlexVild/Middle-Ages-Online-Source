@@ -8713,7 +8713,7 @@ namespace Intersect.Server.Entities
                 return;
             }
 
-            throw new NotImplementedException("ChageLabelUnlockStatus did not contain a valid label unlock status");
+            throw new NotImplementedException("ChangeLabelUnlockStatus did not contain a valid label unlock status");
         }
         #endregion
     }

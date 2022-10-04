@@ -625,9 +625,9 @@
     <Compile Include="Migrations\20220926191034_LootRollDbMigration.designer.cs">
       <DependentUpon>20220926191034_LootRollDbMigration.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\20221001171312_LabelReworkMigration.cs" />
-    <Compile Include="Migrations\20221001171312_LabelReworkMigration.designer.cs">
-      <DependentUpon>20221001171312_LabelReworkMigration.cs</DependentUpon>
+    <Compile Include="Migrations\20221004190807_LabelPlayerMigration.cs" />
+    <Compile Include="Migrations\20221004190807_LabelPlayerMigration.designer.cs">
+      <DependentUpon>20221004190807_LabelPlayerMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.cs" />
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.Designer.cs">

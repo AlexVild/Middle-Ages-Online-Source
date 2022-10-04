@@ -2,6 +2,7 @@
 using Intersect.Server.Entities;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using System.Text.Json.Serialization;
 
 namespace Intersect.Server.Database.PlayerData.Players
@@ -25,13 +26,29 @@ namespace Intersect.Server.Database.PlayerData.Players
             IsNew = true;
         }
 
+        public static LabelInstance Create(Guid playerId, Guid descriptorId)
+        {
+            LabelInstance label;
+            using (var context = DbInterface.CreatePlayerContext(readOnly: false))
+            {
+                label = new LabelInstance(playerId, descriptorId);
+                context.Player_Labels.Add(label);
+
+                context.ChangeTracker.DetectChanges();
+                context.SaveChanges();
+
+                return label;
+            }
+
+            return null;
+        }
+
         [ForeignKey(nameof(Player))]
         public Guid PlayerId { get; private set; }
 
         [JsonIgnore]
         public virtual Player Player { get; private set; }
 
-        [ForeignKey(nameof(Descriptor))]
         public Guid DescriptorId { get; set; }
 
         [JsonIgnore, NotMapped]

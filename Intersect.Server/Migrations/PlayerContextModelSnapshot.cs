@@ -288,9 +288,6 @@ namespace Intersect.Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DescriptorId")
-                        .IsUnique();
-
                     b.HasIndex("PlayerId");
 
                     b.ToTable("Player_Labels");

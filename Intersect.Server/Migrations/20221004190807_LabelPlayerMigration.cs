@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Intersect.Server.Migrations
 {
-    public partial class LabelReworkMigration : Migration
+    public partial class LabelPlayerMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -26,12 +26,6 @@ namespace Intersect.Server.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Player_Labels_DescriptorId",
-                table: "Player_Labels",
-                column: "DescriptorId",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Player_Labels_PlayerId",

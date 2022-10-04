@@ -150,7 +150,6 @@ namespace Intersect.Server.Database.PlayerData
             modelBuilder.Entity<Player>().HasMany(b => b.LootRolls).WithOne(p => p.Player);
 
             modelBuilder.Entity<Player>().HasMany(player => player.UnlockedLabels).WithOne(label => label.Player);
-            modelBuilder.Entity<LabelInstance>().HasIndex(label => label.DescriptorId).IsUnique();
         }
 
         public void Seed()
@@ -239,6 +238,9 @@ namespace Intersect.Server.Database.PlayerData
                 Entry(itm).State = EntityState.Detached;
 
             foreach (var itm in player.PlayerRecords)
+                Entry(itm).State = EntityState.Detached;
+
+            foreach (var itm in player.MapsExplored)
                 Entry(itm).State = EntityState.Detached;
 
             foreach (var itm in player.UnlockedLabels)

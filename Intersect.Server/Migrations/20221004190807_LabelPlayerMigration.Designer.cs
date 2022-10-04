@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Intersect.Server.Migrations
 {
     [DbContext(typeof(PlayerContext))]
-    [Migration("20221001171312_LabelReworkMigration")]
-    partial class LabelReworkMigration
+    [Migration("20221004190807_LabelPlayerMigration")]
+    partial class LabelPlayerMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -289,9 +289,6 @@ namespace Intersect.Server.Migrations
                     b.Property<Guid>("PlayerId");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("DescriptorId")
-                        .IsUnique();
 
                     b.HasIndex("PlayerId");
 

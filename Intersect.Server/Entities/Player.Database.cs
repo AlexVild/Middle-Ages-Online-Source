@@ -499,9 +499,9 @@ namespace Intersect.Server.Entities
             {
                 using (var context = DbInterface.CreatePlayerContext())
                 {
-                    UnlockedLabels = context.Player_Labels
+                    UnlockedLabels.AddRange(context.Player_Labels
                         .Where(f => f.PlayerId == Id)
-                        .ToList();
+                        .ToList());
                     Log.Info($"Successfully loaded unlocked labels for {Name}. Count is {UnlockedLabels.Count}");
                 }
             }
