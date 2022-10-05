@@ -734,6 +734,9 @@ namespace Intersect.Server.Database.PlayerData
                     .ThenInclude(p => p.LootRolls)
                     .Include(p => p.Players)
                     .ThenInclude(p => p.UnlockedLabels)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.PlayerRecords)
+                    .ThenInclude(p => p.Teammates)
                     .FirstOrDefault()
             ) ??
             throw new InvalidOperationException();
@@ -765,6 +768,9 @@ namespace Intersect.Server.Database.PlayerData
                     .ThenInclude(p => p.LootRolls)
                     .Include(p => p.Players)
                     .ThenInclude(p => p.UnlockedLabels)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.PlayerRecords)
+                    .ThenInclude(p => p.Teammates)
                     .FirstOrDefault()
             ) ??
             throw new InvalidOperationException();
@@ -795,6 +801,9 @@ namespace Intersect.Server.Database.PlayerData
                     .ThenInclude(p => p.LootRolls)
                     .Include(p => p.Players)
                     .ThenInclude(p => p.UnlockedLabels)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.PlayerRecords)
+                    .ThenInclude(p => p.Teammates)
                     .FirstOrDefault()
             ) ??
             throw new InvalidOperationException();
@@ -825,6 +834,9 @@ namespace Intersect.Server.Database.PlayerData
                     .ThenInclude(p => p.LootRolls)
                     .Include(p => p.Players)
                     .ThenInclude(p => p.UnlockedLabels)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.PlayerRecords)
+                    .ThenInclude(p => p.Teammates)
                     .FirstOrDefault()
                 ) ?? throw new InvalidOperationException();
 
@@ -864,6 +876,9 @@ namespace Intersect.Server.Database.PlayerData
                     .ThenInclude(p => p.LootRolls)
                     .Include(p => p.Players)
                     .ThenInclude(p => p.UnlockedLabels)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.PlayerRecords)
+                    .ThenInclude(p => p.Teammates)
                     .FirstOrDefault()
                 ) ?? throw new InvalidOperationException();
 

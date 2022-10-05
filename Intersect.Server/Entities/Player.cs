@@ -392,7 +392,6 @@ namespace Intersect.Server.Entities
 
             LoadFriends();
             LoadGuild();
-            LoadRecords();
             DbInterface.Pool.QueueWorkItem(LoadTimers);
 
             //Upon Sign In Remove Any Items/Spells that have been deleted
@@ -8313,6 +8312,9 @@ namespace Intersect.Server.Entities
         {
             PlayerRecord matchingRecord;
             long recordAmt = 0;
+
+            var test = PlayerRecords.FindAll(rec => rec.Teammates?.Count > 0);
+
             lock (EntityLock)
             {
                 matchingRecord = PlayerRecords.Find(record => record.Type == type && record.RecordId == recordId);

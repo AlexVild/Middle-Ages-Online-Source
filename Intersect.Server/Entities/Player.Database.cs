@@ -397,6 +397,8 @@ namespace Intersect.Server.Entities
                     .Include(p => p.LootRolls)
                     .Include(p => p.MapsExplored)
                     .Include(p => p.UnlockedLabels)
+                    .Include(p => p.PlayerRecords)
+                    .ThenInclude(p => p.Teammates)
             ) ??
             throw new InvalidOperationException();
 
@@ -416,6 +418,8 @@ namespace Intersect.Server.Entities
                     .Include(p => p.LootRolls)
                     .Include(p => p.MapsExplored)
                     .Include(p => p.UnlockedLabels)
+                    .Include(p => p.PlayerRecords)
+                    .ThenInclude(p => p.Teammates)
             ) ??
             throw new InvalidOperationException();
 
@@ -431,6 +435,8 @@ namespace Intersect.Server.Entities
                     .Include(p => p.LootRolls)
                     .Include(p => p.MapsExplored)
                     .Include(p => p.UnlockedLabels)
+                    .Include(p => p.PlayerRecords)
+                    .ThenInclude(p => p.Teammates)
                     .FirstOrDefault()
             ) ??
             throw new InvalidOperationException();
@@ -448,6 +454,8 @@ namespace Intersect.Server.Entities
                     .Include(p => p.LootRolls)
                     .Include(p => p.MapsExplored)
                     .Include(p => p.UnlockedLabels)
+                    .Include(p => p.PlayerRecords)
+                    .ThenInclude(p => p.Teammates)
                     .FirstOrDefault()
             ) ??
             throw new InvalidOperationException();
@@ -459,6 +467,7 @@ namespace Intersect.Server.Entities
         #endregion
 
         #region Player Records
+        [Obsolete("Updated to use compiled queries")]
         public void LoadRecords()
         {
             try
@@ -485,6 +494,7 @@ namespace Intersect.Server.Entities
         #endregion
 
         #region Loot rolls
+        [Obsolete("Updated to use compiled queries")]
         public void LoadLootRolls()
         {
             try
@@ -505,6 +515,7 @@ namespace Intersect.Server.Entities
         #endregion
 
         #region Labels
+        [Obsolete("Updated to use compiled queries")]
         public void LoadLabels()
         {
             try
@@ -525,6 +536,7 @@ namespace Intersect.Server.Entities
         #endregion
 
         #region Explored Maps
+        [Obsolete("Updated to use compiled queries")]
         public void LoadMapsExplored()
         {
             try
