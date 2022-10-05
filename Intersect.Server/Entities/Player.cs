@@ -393,10 +393,7 @@ namespace Intersect.Server.Entities
             LoadFriends();
             LoadGuild();
             LoadRecords();
-            DbInterface.Pool.QueueWorkItem(LoadLootRolls);
-            DbInterface.Pool.QueueWorkItem(LoadLabels);
             DbInterface.Pool.QueueWorkItem(LoadTimers);
-            LoadMapsExplored();
 
             //Upon Sign In Remove Any Items/Spells that have been deleted
             foreach (var itm in Items)
@@ -8691,6 +8688,8 @@ namespace Intersect.Server.Entities
             {
                 FooterLabel = new Label(descriptor.DisplayName, color);
             }
+
+            label.IsNew = false;
         }
 
         public void ChangeLabelUnlockStatus(Guid labelId, UnlockLabelCommand.LabelUnlockStatus status)
@@ -8704,7 +8703,13 @@ namespace Intersect.Server.Entities
                     return;
                 }
 
-                UnlockedLabels.Add(new LabelInstance(Id, labelId));
+                using (var context = DbInterface.CreatePlayerContext(readOnly: false)) 
+                {
+                    UnlockedLabels.Add(new LabelInstance(Id, labelId));
+
+                    context.ChangeTracker.DetectChanges();
+                    context.SaveChanges();
+                }
                 return;
             }
             else if (status == UnlockLabelCommand.LabelUnlockStatus.Remove)

@@ -17,7 +17,6 @@ namespace Intersect.Server.Database.PlayerData.Players
 
         public MapExploredInstance(Guid playerId, Guid mapId)
         {
-            Id = new Guid();
             PlayerId = playerId;
             MapId = mapId;
         }

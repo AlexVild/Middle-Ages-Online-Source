@@ -31,7 +31,6 @@ namespace Intersect.Server.Database.PlayerData.Players
 
         public LootRollInstance(Player player, Guid eventId, List<LootRoll> lootRolls)
         {
-            Id = new Guid();
             PlayerId = player?.Id ?? Guid.Empty;
             EventId = eventId;
 

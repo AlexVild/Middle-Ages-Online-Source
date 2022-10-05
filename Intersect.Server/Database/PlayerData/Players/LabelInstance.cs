@@ -20,7 +20,6 @@ namespace Intersect.Server.Database.PlayerData.Players
 
         public LabelInstance(Guid playerId, Guid descriptorId)
         {
-            Id = Guid.NewGuid();
             PlayerId = playerId;
             DescriptorId = descriptorId;
             IsNew = true;
@@ -46,7 +45,7 @@ namespace Intersect.Server.Database.PlayerData.Players
         [ForeignKey(nameof(Player))]
         public Guid PlayerId { get; private set; }
 
-        [JsonIgnore]
+        [JsonIgnore, NotMapped]
         public virtual Player Player { get; private set; }
 
         public Guid DescriptorId { get; set; }

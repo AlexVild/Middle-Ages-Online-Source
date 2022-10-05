@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Intersect.Server.Migrations
 {
-    public partial class LabelPlayerMigration : Migration
+    public partial class AddLabelMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

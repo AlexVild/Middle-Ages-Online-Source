@@ -728,6 +728,12 @@ namespace Intersect.Server.Database.PlayerData
                     .ThenInclude(c => c.Spells)
                     .Include(p => p.Players)
                     .ThenInclude(c => c.Bank)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.MapsExplored)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.LootRolls)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.UnlockedLabels)
                     .FirstOrDefault()
             ) ??
             throw new InvalidOperationException();
@@ -753,6 +759,12 @@ namespace Intersect.Server.Database.PlayerData
                     .ThenInclude(c => c.Spells)
                     .Include(p => p.Players)
                     .ThenInclude(c => c.Bank)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.MapsExplored)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.LootRolls)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.UnlockedLabels)
                     .FirstOrDefault()
             ) ??
             throw new InvalidOperationException();
@@ -777,6 +789,12 @@ namespace Intersect.Server.Database.PlayerData
                     .ThenInclude(c => c.Spells)
                     .Include(p => p.Players)
                     .ThenInclude(c => c.Bank)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.MapsExplored)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.LootRolls)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.UnlockedLabels)
                     .FirstOrDefault()
             ) ??
             throw new InvalidOperationException();
@@ -801,6 +819,12 @@ namespace Intersect.Server.Database.PlayerData
                     .ThenInclude(c => c.Spells)
                     .Include(p => p.Players)
                     .ThenInclude(c => c.Bank)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.MapsExplored)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.LootRolls)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.UnlockedLabels)
                     .FirstOrDefault()
                 ) ?? throw new InvalidOperationException();
 
@@ -834,6 +858,12 @@ namespace Intersect.Server.Database.PlayerData
                     .ThenInclude(c => c.Spells)
                     .Include(p => p.Players)
                     .ThenInclude(c => c.Bank)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.MapsExplored)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.LootRolls)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.UnlockedLabels)
                     .FirstOrDefault()
                 ) ?? throw new InvalidOperationException();
 

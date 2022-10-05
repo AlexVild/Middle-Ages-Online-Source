@@ -1907,6 +1907,8 @@ namespace Intersect.Server.Database
                     MigrateDbSet(context.QuestLists, newGameContext.QuestLists);
                     MigrateDbSet(context.QuestBoards, newGameContext.QuestBoards);
                     MigrateDbSet(context.Timers, newGameContext.Timers);
+                    MigrateDbSet(context.Labels, newGameContext.Labels);
+                    MigrateDbSet(context.LootTables, newGameContext.LootTables);
                     newGameContext.ChangeTracker.DetectChanges();
                     newGameContext.SaveChanges();
                     newGameContext.Dispose();
@@ -1934,6 +1936,10 @@ namespace Intersect.Server.Database
                     MigrateDbSet(context.Bans, newPlayerContext.Bans);
                     MigrateDbSet(context.Player_Record, newPlayerContext.Player_Record);
                     MigrateDbSet(context.Timers, newPlayerContext.Timers);
+                    MigrateDbSet(context.Maps_Explored, newPlayerContext.Maps_Explored);
+                    MigrateDbSet(context.Loot_Rolls, newPlayerContext.Loot_Rolls);
+                    MigrateDbSet(context.Player_Labels, newPlayerContext.Player_Labels);
+
                     newPlayerContext.ChangeTracker.DetectChanges();
                     newPlayerContext.SaveChanges();
                     newPlayerContext.Dispose();

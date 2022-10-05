@@ -25,8 +25,6 @@ namespace Intersect.Server.Database.PlayerData
 
         public TimerInstance(Guid descriptorId, Guid ownerId, long now, int completionCount)
         {
-            Id = Guid.NewGuid();
-
             DescriptorId = descriptorId;
             OwnerId = ownerId;
             TimeRemaining = now + (Descriptor.TimeLimit * 1000); // TimeLimit is in seconds, multiply accordingly

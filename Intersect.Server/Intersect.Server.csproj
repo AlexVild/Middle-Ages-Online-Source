@@ -625,9 +625,9 @@
     <Compile Include="Migrations\20220926191034_LootRollDbMigration.designer.cs">
       <DependentUpon>20220926191034_LootRollDbMigration.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\20221004190807_LabelPlayerMigration.cs" />
-    <Compile Include="Migrations\20221004190807_LabelPlayerMigration.designer.cs">
-      <DependentUpon>20221004190807_LabelPlayerMigration.cs</DependentUpon>
+    <Compile Include="Migrations\20221005022511_AddLabelMigration.cs" />
+    <Compile Include="Migrations\20221005022511_AddLabelMigration.designer.cs">
+      <DependentUpon>20221005022511_AddLabelMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.cs" />
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.Designer.cs">
@@ -851,9 +851,9 @@
     <Compile Include="Migrations\Game\20221001161959_AddLabelObjectMigration.designer.cs">
       <DependentUpon>20221001161959_AddLabelObjectMigration.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\Game\20221001170821_AddLabelOptionsMigration.cs" />
-    <Compile Include="Migrations\Game\20221001170821_AddLabelOptionsMigration.designer.cs">
-      <DependentUpon>20221001170821_AddLabelOptionsMigration.cs</DependentUpon>
+    <Compile Include="Migrations\Game\20221005022330_AddLabelOptionsMigration.cs" />
+    <Compile Include="Migrations\Game\20221005022330_AddLabelOptionsMigration.designer.cs">
+      <DependentUpon>20221005022330_AddLabelOptionsMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
