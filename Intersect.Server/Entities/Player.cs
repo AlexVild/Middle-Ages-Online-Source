@@ -8701,11 +8701,12 @@ namespace Intersect.Server.Entities
         public void ChangeLabelUnlockStatus(Guid labelId, UnlockLabelCommand.LabelUnlockStatus status)
         {
             var descriptor = LabelDescriptor.Get(labelId);
-            /*if (descriptor == default)
+            var all = LabelDescriptor.GetNameList();
+            if (descriptor == default)
             {
                 Log.Debug($"Could not find label descriptor for ID: {labelId} for player {Name}");
                 return;
-            }*/
+            }
 
             if (status == UnlockLabelCommand.LabelUnlockStatus.Unlock)
             {
@@ -8726,7 +8727,7 @@ namespace Intersect.Server.Entities
                 UnlockedLabels.RemoveAll(label => label.DescriptorId == labelId);
                 if (preCount > UnlockedLabels.Count)
                 {
-                    //RemoveLabel(Id, labelId);
+                    DbRemoveLabel(Id, labelId);
                     PacketSender.SendChatMsg(this, Strings.Labels.LabelRemoved.ToString(descriptor?.DisplayName), ChatMessageType.Notice, CustomColors.General.GeneralDisabled);
                 }
                 return;

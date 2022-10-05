@@ -534,7 +534,7 @@ namespace Intersect.Server.Entities
             }
         }
 
-        public static void RemoveLabel(Guid playerId, Guid labelId)
+        public static void DbRemoveLabel(Guid playerId, Guid labelId)
         {
             if (playerId == default || labelId == default)
             {

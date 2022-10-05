@@ -13,14 +13,12 @@ namespace Intersect.GameObjects
 
     public class LabelDescriptor : DatabaseObject<LabelDescriptor>, IFolderable
     {
-        [JsonConstructor]
-        public LabelDescriptor(Guid id) : base(id)
+        public LabelDescriptor() : this(default)
         {
-            Name = "New Label";
         }
 
-        // EF
-        public LabelDescriptor()
+        [JsonConstructor]
+        public LabelDescriptor(Guid id) : base(id)
         {
             Name = "New Label";
             Position = LabelPosition.Header;

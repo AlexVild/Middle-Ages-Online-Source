@@ -24,7 +24,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
 
         private void InitEditor()
         {
-            cmbLabels.Items.AddRange(LabelDescriptor.GetNameList());
+            cmbLabels.Items.AddRange(LabelDescriptor.Names);
             PopulateEditor();
         }
 
