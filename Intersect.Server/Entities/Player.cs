@@ -8675,6 +8675,10 @@ namespace Intersect.Server.Entities
             }
 
             var descriptor = label.Descriptor;
+            if (descriptor == default)
+            {
+                Log.Debug($"Could not get descriptor for {labelDescriptor} and thus could not set label properties for player {Name}");
+            }
 
             var color = descriptor.Color;
             if (descriptor.MatchNameColor)
@@ -8696,6 +8700,13 @@ namespace Intersect.Server.Entities
 
         public void ChangeLabelUnlockStatus(Guid labelId, UnlockLabelCommand.LabelUnlockStatus status)
         {
+            var descriptor = LabelDescriptor.Get(labelId);
+            /*if (descriptor == default)
+            {
+                Log.Debug($"Could not find label descriptor for ID: {labelId} for player {Name}");
+                return;
+            }*/
+
             if (status == UnlockLabelCommand.LabelUnlockStatus.Unlock)
             {
                 var label = UnlockedLabels.Find(lbl => lbl.DescriptorId == labelId);
@@ -8705,18 +8716,19 @@ namespace Intersect.Server.Entities
                     return;
                 }
 
-                using (var context = DbInterface.CreatePlayerContext(readOnly: false)) 
-                {
-                    UnlockedLabels.Add(new LabelInstance(Id, labelId));
-
-                    context.ChangeTracker.DetectChanges();
-                    context.SaveChanges();
-                }
+                UnlockedLabels.Add(new LabelInstance(Id, labelId));
+                PacketSender.SendChatMsg(this, Strings.Labels.LabelUnlocked.ToString(descriptor?.DisplayName), ChatMessageType.Notice, CustomColors.General.GeneralCompleted);
                 return;
             }
             else if (status == UnlockLabelCommand.LabelUnlockStatus.Remove)
             {
+                var preCount = UnlockedLabels.Count;
                 UnlockedLabels.RemoveAll(label => label.DescriptorId == labelId);
+                if (preCount > UnlockedLabels.Count)
+                {
+                    //RemoveLabel(Id, labelId);
+                    PacketSender.SendChatMsg(this, Strings.Labels.LabelRemoved.ToString(descriptor?.DisplayName), ChatMessageType.Notice, CustomColors.General.GeneralDisabled);
+                }
                 return;
             }
 

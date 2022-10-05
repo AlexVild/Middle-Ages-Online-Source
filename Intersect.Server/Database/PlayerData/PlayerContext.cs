@@ -149,7 +149,9 @@ namespace Intersect.Server.Database.PlayerData
 
             modelBuilder.Entity<Player>().HasMany(b => b.LootRolls).WithOne(p => p.Player);
 
-            modelBuilder.Entity<Player>().HasMany(player => player.UnlockedLabels).WithOne(label => label.Player);
+            modelBuilder.Entity<Player>()
+                .HasMany(player => player.UnlockedLabels)
+                .WithOne(label => label.Player);
         }
 
         public void Seed()

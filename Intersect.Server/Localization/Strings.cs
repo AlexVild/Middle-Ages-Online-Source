@@ -1551,6 +1551,8 @@ namespace Intersect.Server.Localization
             
             public readonly RecordsNamespace Records = new RecordsNamespace();
             
+            public readonly LabelsNamespace Labels = new LabelsNamespace();
+            
             public readonly RequirementsNamespace Requirements = new RequirementsNamespace();
 
         }
@@ -1629,6 +1631,8 @@ namespace Intersect.Server.Localization
         public static UpnpNamespace Upnp => Root.Upnp;
         
         public static RecordsNamespace Records => Root.Records;
+        
+        public static LabelsNamespace Labels => Root.Labels;
 
         #endregion
 
@@ -1684,6 +1688,17 @@ namespace Intersect.Server.Localization
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString SearchNotFound =
                 @"No records were found containing this player name. Note that leaderboard queries are case-sensitive, and can not contain spaces!";
+        }
+
+        public sealed class LabelsNamespace : LocaleNamespace
+        {
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString LabelUnlocked =
+                @"You've unlocked a new name tag: {00}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString LabelRemoved =
+                @"You have lost access to a name tag: {00}";
         }
     }
 }

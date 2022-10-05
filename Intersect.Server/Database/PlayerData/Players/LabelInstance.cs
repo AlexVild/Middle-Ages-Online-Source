@@ -25,23 +25,6 @@ namespace Intersect.Server.Database.PlayerData.Players
             IsNew = true;
         }
 
-        public static LabelInstance Create(Guid playerId, Guid descriptorId)
-        {
-            LabelInstance label;
-            using (var context = DbInterface.CreatePlayerContext(readOnly: false))
-            {
-                label = new LabelInstance(playerId, descriptorId);
-                context.Player_Labels.Add(label);
-
-                context.ChangeTracker.DetectChanges();
-                context.SaveChanges();
-
-                return label;
-            }
-
-            return null;
-        }
-
         [ForeignKey(nameof(Player))]
         public Guid PlayerId { get; private set; }
 

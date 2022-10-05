@@ -533,6 +533,31 @@ namespace Intersect.Server.Entities
                 Log.Error(ex, $"Failed to load labels for {Name}.");
             }
         }
+
+        public static void RemoveLabel(Guid playerId, Guid labelId)
+        {
+            if (playerId == default || labelId == default)
+            {
+                return;
+            }
+
+            try
+            {
+                using (var context = DbInterface.CreatePlayerContext(readOnly: false))
+                {
+                    var label = context.Player_Labels.Where(f => f.PlayerId == playerId && f.DescriptorId == labelId).FirstOrDefault();
+                    if (label != null)
+                    {
+                        context.Entry(label).State = EntityState.Deleted;
+                    }
+                    context.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, $"Failed to remove label with ID {labelId} for player {playerId}.");
+            }
+        }
         #endregion
 
         #region Explored Maps
