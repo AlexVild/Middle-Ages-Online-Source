@@ -1554,6 +1554,8 @@ namespace Intersect.Server.Localization
             public readonly LabelsNamespace Labels = new LabelsNamespace();
             
             public readonly RequirementsNamespace Requirements = new RequirementsNamespace();
+            
+            public readonly TextTemplateNamespace TextTemplates = new TextTemplateNamespace();
 
         }
 
@@ -1633,6 +1635,8 @@ namespace Intersect.Server.Localization
         public static RecordsNamespace Records => Root.Records;
         
         public static LabelsNamespace Labels => Root.Labels;
+        
+        public static TextTemplateNamespace TextTemplates => Root.TextTemplates;
 
         #endregion
 
@@ -1640,7 +1644,7 @@ namespace Intersect.Server.Localization
 
     public static partial class Strings
     {
-        public sealed class RecordsNamespace : LocaleNamespace
+        public sealed partial class RecordsNamespace : LocaleNamespace
         {
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString DeletedHolder = @"DELETED_PLAYER";
@@ -1690,7 +1694,7 @@ namespace Intersect.Server.Localization
                 @"No records were found containing this player name. Note that leaderboard queries are case-sensitive, and can not contain spaces!";
         }
 
-        public sealed class LabelsNamespace : LocaleNamespace
+        public sealed partial class LabelsNamespace : LocaleNamespace
         {
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString LabelUnlocked =
@@ -1699,6 +1703,21 @@ namespace Intersect.Server.Localization
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString LabelRemoved =
                 @"You have lost access to a name tag: {00}";
+        }
+
+        public sealed partial class TextTemplateNamespace : LocaleNamespace
+        {
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString ItemObtained = @"You have obtained a {00}.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString ItemObtainedMany = @"You have obtained {00} {01}s.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString NoSpace = @"You don't have enough inventory space to receive an item! Make room and try again.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString QuestCompleted = @"You've completed the quest: {00}!";
         }
     }
 }

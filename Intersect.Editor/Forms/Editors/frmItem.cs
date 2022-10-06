@@ -13,6 +13,7 @@ using Intersect.Editor.Localization;
 using Intersect.Editor.Networking;
 using Intersect.Enums;
 using Intersect.GameObjects;
+using Intersect.GameObjects.Crafting;
 using Intersect.GameObjects.Events;
 using Intersect.Utilities;
 
@@ -37,6 +38,12 @@ namespace Intersect.Editor.Forms.Editors
         private string mSelectedTag = string.Empty;
 
         private List<NpcBase> mNpcs = new List<NpcBase>();
+        
+        private List<LootTableDescriptor> mLootTables = new List<LootTableDescriptor>();
+        
+        private List<ShopBase> mShops = new List<ShopBase>();
+
+        private List<CraftBase> mCrafts = new List<CraftBase>();
 
         public FrmItem()
         {
@@ -58,10 +65,21 @@ namespace Intersect.Editor.Forms.Editors
             cmbProjectile.Items.Add(Strings.General.none);
             cmbProjectile.Items.AddRange(ProjectileBase.Names);
 
-            var npcs = NpcBase.GetNameList();
             for (var i = 0; i < NpcBase.GetNameList().Length; i++)
             {
                 mNpcs.Add(NpcBase.Get(NpcBase.IdFromList(i)));
+            }
+            for (var i = 0; i < LootTableDescriptor.GetNameList().Length; i++)
+            {
+                mLootTables.Add(LootTableDescriptor.Get(LootTableDescriptor.IdFromList(i)));
+            }
+            for (var i = 0; i < ShopBase.GetNameList().Length; i++)
+            {
+                mShops.Add(ShopBase.Get(ShopBase.IdFromList(i)));
+            }
+            for (var i = 0; i < CraftBase.GetNameList().Length; i++)
+            {
+                mCrafts.Add(CraftBase.Get(CraftBase.IdFromList(i)));
             }
 
             lstGameObjects.Init(UpdateToolStripItems, AssignEditorItem, toolStripItemNew_Click, toolStripItemCopy_Click, toolStripItemUndo_Click, toolStripItemPaste_Click, toolStripItemDelete_Click);
@@ -486,13 +504,63 @@ namespace Intersect.Editor.Forms.Editors
                 cmbTags.Text = string.Empty;
 
                 lstDrops.Items.Clear();
+                lstCrafts.Items.Clear();
+                lstShops.Items.Clear();
+                lstShopsBuy.Items.Clear();
                 foreach (var npc in mNpcs)
                 {
+                    var totalPrimary = LootTableHelpers.GetTotalWeight(npc.Drops, true);
+                    var totalSecondary = LootTableHelpers.GetTotalWeight(npc.SecondaryDrops, true);
+                    var totalTertiary = LootTableHelpers.GetTotalWeight(npc.TertiaryDrops, true);
+
                     npc.Drops.FindAll(drop => drop.ItemId == mEditorItem.Id).ForEach(drop =>
                     {
-                        string itemString = $"{npc.Name} LV {npc.Level}: {drop.Chance} % chance";
+                        string itemString = $"{npc.Name} LV {npc.Level}: {LootTableHelpers.GetPrettyChance(drop.Chance, totalPrimary)}";
                         lstDrops.Items.Add(itemString);
                     });
+                    npc.SecondaryDrops.FindAll(drop => drop.ItemId == mEditorItem.Id).ForEach(drop =>
+                    {
+                        string itemString = $"{npc.Name} LV {npc.Level} (secondary, {npc.SecondaryChance}%): {LootTableHelpers.GetPrettyChance(drop.Chance, totalSecondary)}";
+                        lstDrops.Items.Add(itemString);
+                    });
+                    npc.TertiaryDrops.FindAll(drop => drop.ItemId == mEditorItem.Id).ForEach(drop =>
+                    {
+                        string itemString = $"{npc.Name} LV {npc.Level} (tertiary, {npc.SecondaryChance}%): {LootTableHelpers.GetPrettyChance(drop.Chance, totalTertiary)}";
+                        lstDrops.Items.Add(itemString);
+                    });
+                }
+                foreach (var table in mLootTables)
+                {
+                    var totalWeight = LootTableHelpers.GetTotalWeight(table.Drops, true);
+
+                    table.Drops.FindAll(drop => drop.ItemId == mEditorItem.Id).ForEach(drop =>
+                    {
+                        string itemString = $"[TABLE] {table.Name}: {drop.Chance} / {totalWeight}";
+                        lstDrops.Items.Add(itemString);
+                    });
+                }
+                foreach (var shop in mShops)
+                {
+                    var buying = shop.BuyingItems.FindAll(itm => itm.ItemId == mEditorItem.Id);
+                    var selling = shop.SellingItems.FindAll(itm => itm.ItemId == mEditorItem.Id);
+
+                    foreach(var buyItem in buying)
+                    {
+                        var currency = ItemBase.Get(buyItem.CostItemId)?.Name;
+                        lstShopsBuy.Items.Add($"{shop.Name} buys for {buyItem.CostItemQuantity} {currency}");
+                    }
+                    foreach (var sellItem in selling)
+                    {
+                        var currency = ItemBase.Get(sellItem.CostItemId)?.Name;
+                        lstShops.Items.Add($"{shop.Name} sells for {sellItem.CostItemQuantity} {currency}");
+                    }
+                }
+                var validCrafts = mCrafts
+                    .FindAll(crft => crft.Ingredients.Select(ing => ing.ItemId).Contains(mEditorItem.Id));
+                foreach (var craft in validCrafts)
+                {
+                    var ingredient = craft.Ingredients.Find(ing => ing.ItemId == mEditorItem.Id);
+                    lstCrafts.Items.Add($"{craft.Name} - {ingredient.Quantity}x");
                 }
 
                 chkLockStrength.Checked = GetStatLock(Stats.Attack);

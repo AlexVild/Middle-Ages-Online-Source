@@ -4427,7 +4427,7 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString dropremove = @"Remove";
 
-            public static LocalizedString dropdisplay = @"{00} x{01}: {02}/{03} chance";
+            public static LocalizedString dropdisplay = @"{00} x{01}: {02} chance";
 
             public static LocalizedString enabled = @"Enabled?";
 
@@ -6076,6 +6076,12 @@ Negative values for time to flow backwards.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString RollLoot = @"Roll Loot ({00})";
+            
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ShowTextTemplate = @"Show Text: [{00} template], Chatbox: {01}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ShowTextChatbox = @"Show Text & Chatbox: [{00}]";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString UnlockLabel = @"Label Status Update: {00} label {01}";
@@ -6090,7 +6096,7 @@ Negative values for time to flow backwards.";
         public partial struct NpcEditor
         {
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public static LocalizedString LootTableDrop = @"[TABLE] {00}: {01}/{02} chance";
+            public static LocalizedString LootTableDrop = @"[TABLE] {00}: {01} chance";
         }
 
         public partial struct EventCommandRollLoot
@@ -6115,6 +6121,9 @@ Negative values for time to flow backwards.";
             
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString SearchPlaceHolder = @"Search...";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString UseLast = @"Use Last";
         }
     }
 }

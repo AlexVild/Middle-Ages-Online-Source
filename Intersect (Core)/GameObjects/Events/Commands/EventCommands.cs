@@ -35,7 +35,7 @@ namespace Intersect.GameObjects.Events.Commands
 
     }
 
-    public class ShowTextCommand : EventCommand
+    public partial class ShowTextCommand : EventCommand
     {
 
         public override EventCommandType Type { get; } = EventCommandType.ShowText;
@@ -1288,5 +1288,29 @@ namespace Intersect.GameObjects.Events.Commands
         public Guid LabelId { get; set; }
 
         public LabelUnlockStatus Status { get; set; }
+    }
+
+    public partial class ShowTextCommand : EventCommand
+    {
+        public enum ShowTextTemplate
+        {
+            ItemObtained = 0,
+            QuestCompleted,
+            NoSpace,
+        }
+
+        public ShowTextTemplate Template;
+
+        public bool UseTemplate = false;
+        
+        public bool SendToChatbox = false;
+
+        public Guid ItemId;
+
+        public Guid QuestId;
+
+        public string Color { get; set; } = "";
+
+        public ChatboxChannel Channel { get; set; } = ChatboxChannel.Player;
     }
 }

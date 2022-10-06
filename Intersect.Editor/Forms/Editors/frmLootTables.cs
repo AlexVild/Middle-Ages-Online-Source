@@ -314,16 +314,13 @@ namespace Intersect.Editor.Forms.Editors
             lstDrops.Items.Clear();
 
             var totalWeight = LootTableHelpers.GetTotalWeight(mEditorItem.Drops);
-
             for (var i = 0; i < mEditorItem.Drops.Count; i++)
             {
+                var prettyChance = LootTableHelpers.GetPrettyChance(mEditorItem.Drops[i].Chance, totalWeight);
                 if (mEditorItem.Drops[i].ItemId != Guid.Empty)
                 {
                     lstDrops.Items.Add(
-                        Strings.NpcEditor.dropdisplay.ToString(
-                            ItemBase.GetName(mEditorItem.Drops[i].ItemId), mEditorItem.Drops[i].Quantity,
-                            mEditorItem.Drops[i].Chance, totalWeight
-                        )
+                        $"{ItemBase.GetName(mEditorItem.Drops[i].ItemId)} x{mEditorItem.Drops[i].Quantity}: {prettyChance} chance"
                     );
                 }
                 else
@@ -333,16 +330,13 @@ namespace Intersect.Editor.Forms.Editors
                         lstDrops.Items.Add(
                             Strings.NpcEditor.LootTableDrop.ToString(
                                 LootTableDescriptor.GetName(mEditorItem.Drops[i].LootTableId),
-                                mEditorItem.Drops[i].Chance, totalWeight
+                                prettyChance
                             )
                         );
                     } else
                     {
                         lstDrops.Items.Add(
-                            Strings.NpcEditor.dropdisplay.ToString(
-                                TextUtils.None, 1,
-                                mEditorItem.Drops[i].Chance, totalWeight
-                            )
+                            $"{TextUtils.None} x{mEditorItem.Drops[i].Quantity}: {prettyChance} chance"
                         );
                     }
                 }

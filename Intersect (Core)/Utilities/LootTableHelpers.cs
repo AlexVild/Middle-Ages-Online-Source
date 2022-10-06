@@ -36,5 +36,16 @@ namespace Intersect.Utilities
                 }
             });
         }
+
+        public static string GetPrettyChance(double chance, double total)
+        {
+            // Makeup for the decimals allowed in the editor due to legacy
+            uint iChance = (uint)Math.Abs((int)Math.Round(chance * 100));
+            uint iTotal = (uint)Math.Abs(Math.Round(total * 100));
+
+            var gcd = MathHelper.GCD(iChance, iTotal);
+
+            return $"{iChance / gcd} / {iTotal / gcd}";
+        }
     }
 }

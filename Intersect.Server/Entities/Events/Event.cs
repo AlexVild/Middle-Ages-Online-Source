@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using Intersect.Enums;
+using Intersect.GameObjects;
 using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Events.Commands;
 using Intersect.GameObjects.QuestList;
@@ -478,6 +479,15 @@ namespace Intersect.Server.Entities.Events
             return output;
         }
 
+    }
+
+    public partial class Event
+    {
+        public int LastItemQuantity = 0;
+
+        public Guid LastItemId;
+
+        public ItemBase LastItem => ItemBase.Get(LastItemId) ?? null;
     }
 
 }

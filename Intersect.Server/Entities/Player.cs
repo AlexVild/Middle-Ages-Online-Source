@@ -6594,6 +6594,7 @@ namespace Intersect.Server.Entities
                     MarkQuestComplete(quest, questProgress);
                     if (!skipCompletionEvent)
                     {
+                        LastQuestCompleted = quest.Name;
                         StartCommonEvent(EventBase.Get(quest.EndEventId));
                         PacketSender.SendChatMsg(this, Strings.Quests.completed.ToString(quest.Name), ChatMessageType.Quest, CustomColors.Alerts.Accepted);
                     }
@@ -8217,6 +8218,9 @@ namespace Intersect.Server.Entities
 
         [NotMapped, JsonIgnore]
         public bool CloseLeaderboard { get; set; }
+
+        [NotMapped, JsonIgnore]
+        public string LastQuestCompleted { get; set; }
 
         [NotMapped, JsonIgnore]
         public List<Item> CurrentLoot {

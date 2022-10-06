@@ -24,6 +24,7 @@ using Intersect.Server.Database.PlayerData;
 using Intersect.Server.Core;
 using Intersect.Network.Packets.Server;
 using Intersect.Server.Utilities;
+using static Intersect.GameObjects.Events.Commands.ShowTextCommand;
 
 namespace Intersect.Server.Entities.Events
 {
@@ -52,9 +53,102 @@ namespace Intersect.Server.Entities.Events
             Stack<CommandInstance> callStack
         )
         {
-            PacketSender.SendEventDialog(
-                player, ParseEventText(command.Text, player, instance), command.Face, instance.PageInstance.Id
-            );
+            if (player == null)
+            {
+                return;
+            }
+
+            var text = command.Text;
+            if (command.UseTemplate)
+            {
+                switch(command.Template)
+                {
+                    case ShowTextTemplate.ItemObtained:
+                        var item = ItemBase.Get(command.ItemId);
+                        if (item == default)
+                        {
+                            item = instance.LastItem;
+                            if (item == default)
+                            {
+                                return;
+                            }
+                        }
+
+                        var name = item.Name.Trim();
+
+                        if (instance.LastItemQuantity <= 1)
+                        {
+                            text = Strings.TextTemplates.ItemObtained.ToString(name);
+                        }
+                        else
+                        {
+                            if (name.EndsWith("s"))
+                            {
+                                name = name.Substring(0, name.Length - 1);
+                            }
+                            text = Strings.TextTemplates.ItemObtainedMany.ToString(instance.LastItemQuantity, name);
+                        }
+
+                        if (!string.IsNullOrEmpty(item.Animation?.Sound))
+                        {
+                            PacketSender.SendPlaySound(player, item.Animation?.Sound);
+                        }
+                        else
+                        {
+                            PacketSender.SendPlaySound(player, Options.Instance.LootRollOpts.TakeSound);
+                        }
+
+                        PacketSender.SendEventDialog(
+                                player, ParseEventText(text, player, instance), item.Icon, instance.PageInstance.Id
+                            );
+                        break;
+                    case ShowTextTemplate.QuestCompleted:
+                        var quest = QuestBase.Get(command.QuestId)?.Name;
+                        if (quest == default)
+                        {
+                            quest = player.LastQuestCompleted;
+                            return;
+                        }
+                        text = Strings.TextTemplates.QuestCompleted.ToString(quest);
+                        PacketSender.SendEventDialog(
+                            player, ParseEventText(text, player, instance), string.Empty, instance.PageInstance.Id
+                        );
+                        break;
+                    case ShowTextTemplate.NoSpace:
+                        text = Strings.TextTemplates.NoSpace;
+                        PacketSender.SendPlaySound(player, Options.UIDenySound);
+                        PacketSender.SendEventDialog(
+                            player, ParseEventText(text, player, instance), string.Empty, instance.PageInstance.Id
+                        );
+                        break;
+                    default:
+                        var errMsg = $"Invalid template for event text command for {player.Name}: {command.Template}";
+#if DEBUG
+                        throw new NotImplementedException(errMsg);
+#else
+                        Logging.Log.Error(errMsg)
+#endif
+                }
+            }
+            else
+            {
+                text = command.Text;
+                PacketSender.SendEventDialog(
+                    player, ParseEventText(command.Text, player, instance), command.Face, instance.PageInstance.Id
+                );
+            }
+
+            if (command.SendToChatbox)
+            {
+                try
+                {
+                    ProcessChatboxCommand(text, player, instance, command.Channel, command.Color);
+                }
+                catch (Exception e)
+                {
+                    Logging.Log.Error($"Failed to send chatbox message with text event for ${player.Name}");
+                }
+            }
 
             stackInfo.WaitingForResponse = CommandInstance.EventResponse.Dialogue;
         }
@@ -139,36 +233,7 @@ namespace Intersect.Server.Entities.Events
             Stack<CommandInstance> callStack
         )
         {
-            var txt = ParseEventText(command.Text, player, instance);
-            var color = Color.FromName(command.Color, Strings.Colors.presets);
-            switch (command.Channel)
-            {
-                case ChatboxChannel.Player:
-                    PacketSender.SendChatMsg(player, txt, command.MessageType, color);
-
-                    break;
-                case ChatboxChannel.Local:
-                    PacketSender.SendProximityMsg(txt, ChatMessageType.Local, player.MapId, color);
-
-                    break;
-                case ChatboxChannel.Global:
-                    PacketSender.SendGlobalMsg(txt, color, string.Empty, ChatMessageType.Global);
-
-                    break;
-                case ChatboxChannel.Party:
-                    if (player.Party?.Count > 0)
-                    {
-                        PacketSender.SendPartyMsg(player, txt, color, player.Name);
-                    }
-                    
-                    break;
-                case ChatboxChannel.Guild:
-                    if (player.Guild != null)
-                    {
-                        PacketSender.SendGuildMsg(player, txt, color, player.Name);
-                    }
-                    break;
-            }
+            ProcessChatboxCommand(command.Text, player, instance, command.Channel, command.Color);
         }
 
         //Set Variable Commands
@@ -557,6 +622,8 @@ namespace Intersect.Server.Entities.Events
                 CommandIndex = 0,
             };
 
+            instance.LastItemId = command.ItemId;
+            instance.LastItemQuantity = quantity;
             callStack.Push(tmpStack);
         }
 
@@ -2755,6 +2822,40 @@ namespace Intersect.Server.Entities.Events
             } catch(NotImplementedException e)
             {
                 Logging.Log.Error($"Player command processing exception: {e.Message}");
+            }
+        }
+
+        private static void ProcessChatboxCommand(string text, Player player, Event instance, ChatboxChannel channel, string clr)
+        {
+            var txt = ParseEventText(text, player, instance);
+            var color = Color.FromName(clr, Strings.Colors.presets);
+            switch (channel)
+            {
+                case ChatboxChannel.Player:
+                    PacketSender.SendChatMsg(player, txt, ChatMessageType.Notice, color);
+
+                    break;
+                case ChatboxChannel.Local:
+                    PacketSender.SendProximityMsg(txt, ChatMessageType.Local, player.MapId, color);
+
+                    break;
+                case ChatboxChannel.Global:
+                    PacketSender.SendGlobalMsg(txt, color, string.Empty, ChatMessageType.Global);
+
+                    break;
+                case ChatboxChannel.Party:
+                    if (player.Party?.Count > 0)
+                    {
+                        PacketSender.SendPartyMsg(player, txt, color, player.Name);
+                    }
+
+                    break;
+                case ChatboxChannel.Guild:
+                    if (player.Guild != null)
+                    {
+                        PacketSender.SendGuildMsg(player, txt, color, player.Name);
+                    }
+                    break;
             }
         }
     }

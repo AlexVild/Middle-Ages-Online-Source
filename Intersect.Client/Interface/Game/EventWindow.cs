@@ -102,6 +102,13 @@ namespace Intersect.Client.Interface.Game
                     var faceTex = Globals.ContentManager.GetTexture(
                         GameContentManager.TextureType.Face, Globals.EventDialogs[0].Face
                     );
+                    if (faceTex == null)
+                    {
+                        // Check for item texture if we can't find a face
+                        faceTex = Globals.ContentManager.GetTexture(
+                            GameContentManager.TextureType.Item, Globals.EventDialogs[0].Face
+                        );
+                    }
 
                     var responseCount = 0;
                     var maxResponse = 1;

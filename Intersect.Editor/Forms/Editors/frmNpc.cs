@@ -487,13 +487,11 @@ namespace Intersect.Editor.Forms.Editors
 
             for (var i = 0; i < drops.Count; i++)
             {
+                var prettyChance = LootTableHelpers.GetPrettyChance(drops[i].Chance, totalWeight);
                 if (drops[i].ItemId != Guid.Empty)
                 {
                     lstDrops.Items.Add(
-                        Strings.NpcEditor.dropdisplay.ToString(
-                            ItemBase.GetName(drops[i].ItemId), drops[i].Quantity,
-                            drops[i].Chance, totalWeight
-                        )
+                        $"{ItemBase.GetName(drops[i].ItemId)} x{drops[i].Quantity}: {prettyChance} chance"
                     );
                 }
                 else
@@ -501,19 +499,13 @@ namespace Intersect.Editor.Forms.Editors
                     if (drops[i].LootTableId != Guid.Empty)
                     {
                         lstDrops.Items.Add(
-                            Strings.NpcEditor.LootTableDrop.ToString(
-                                LootTableDescriptor.GetName(drops[i].LootTableId),
-                                drops[i].Chance, totalWeight
-                            )
+                            $"[TABLE] {LootTableDescriptor.GetName(drops[i].LootTableId)}: {prettyChance} chance"
                         );
                     }
                     else
                     {
                         lstDrops.Items.Add(
-                            Strings.NpcEditor.dropdisplay.ToString(
-                                TextUtils.None, 1,
-                                drops[i].Chance, totalWeight
-                            )
+                            $"{TextUtils.None} x{drops[i].Quantity}: {prettyChance} chance"
                         );
                     }
                 }

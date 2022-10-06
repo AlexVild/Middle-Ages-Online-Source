@@ -834,6 +834,9 @@
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_StopTimer.resx">
       <DependentUpon>EventCommand_StopTimer.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_Text.resx">
+      <DependentUpon>EventCommand_Text.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_UnlockLabel.resx">
       <DependentUpon>EventCommand_UnlockLabel.cs</DependentUpon>
     </EmbeddedResource>

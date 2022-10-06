@@ -119,6 +119,19 @@ namespace Intersect.Utilities
                 MidpointRounding.AwayFromZero
             ) * factor;
         }
+
+        public static uint GCD(uint a, uint b)
+        {
+            while (a != 0 && b != 0)
+            {
+                if (a > b)
+                    a %= b;
+                else
+                    b %= a;
+            }
+
+            return a | b;
+        }
     }
 
 }

@@ -13,6 +13,7 @@ using Intersect.GameObjects.QuestList;
 using Intersect.GameObjects.Maps.MapList;
 using Intersect.Logging;
 using Intersect.GameObjects.Timers;
+using static Intersect.GameObjects.Events.Commands.ShowTextCommand;
 
 namespace Intersect.Editor.Forms.Editors.Events
 {
@@ -678,6 +679,20 @@ namespace Intersect.Editor.Forms.Editors.Events
 
         private static string GetCommandText(ShowTextCommand command, MapInstance map)
         {
+            if (command.SendToChatbox && !command.UseTemplate)
+            {
+                return Strings.EventCommandList.ShowTextChatbox.ToString(Truncate(command.Text, 30));
+            }
+            if (command.UseTemplate)
+            {
+                var names = Enum.GetNames(typeof(ShowTextTemplate));
+                string template = Strings.EditorGenerics.NotFound;
+                if ((int)command.Template < names.Length)
+                {
+                    template = names[(int)command.Template];
+                }
+                return Strings.EventCommandList.ShowTextTemplate.ToString(template, command.SendToChatbox);
+            }
             return Strings.EventCommandList.showtext.ToString(Truncate(command.Text, 30));
         }
 

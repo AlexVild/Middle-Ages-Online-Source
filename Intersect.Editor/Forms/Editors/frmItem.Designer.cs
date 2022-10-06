@@ -41,9 +41,8 @@ namespace Intersect.Editor.Forms.Editors
             this.btnCancel = new DarkUI.Controls.DarkButton();
             this.btnSave = new DarkUI.Controls.DarkButton();
             this.grpGeneral = new DarkUI.Controls.DarkGroupBox();
-            this.lblDrops = new System.Windows.Forms.Label();
-            this.lstDrops = new System.Windows.Forms.ListBox();
             this.grpDestroy = new DarkUI.Controls.DarkGroupBox();
+            this.chkInstanceDestroy = new DarkUI.Controls.DarkCheckBox();
             this.chkEnableDestroy = new DarkUI.Controls.DarkCheckBox();
             this.lblDestroyMessage = new System.Windows.Forms.Label();
             this.txtCannotDestroy = new DarkUI.Controls.DarkTextBox();
@@ -105,6 +104,8 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbType = new DarkUI.Controls.DarkComboBox();
             this.lblName = new System.Windows.Forms.Label();
             this.txtName = new DarkUI.Controls.DarkTextBox();
+            this.lblDrops = new System.Windows.Forms.Label();
+            this.lstDrops = new System.Windows.Forms.ListBox();
             this.grpEquipment = new DarkUI.Controls.DarkGroupBox();
             this.grpAdditionalWeaponProps = new DarkUI.Controls.DarkGroupBox();
             this.lblBackstabMultiplier = new System.Windows.Forms.Label();
@@ -231,6 +232,13 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbConsume = new DarkUI.Controls.DarkComboBox();
             this.lblInterval = new System.Windows.Forms.Label();
             this.pnlContainer = new System.Windows.Forms.Panel();
+            this.grpAuxInfo = new DarkUI.Controls.DarkGroupBox();
+            this.lstShopsBuy = new System.Windows.Forms.ListBox();
+            this.lblShopsBuy = new System.Windows.Forms.Label();
+            this.lblShops = new System.Windows.Forms.Label();
+            this.lstShops = new System.Windows.Forms.ListBox();
+            this.lstCrafts = new System.Windows.Forms.ListBox();
+            this.lblCraftsUsed = new System.Windows.Forms.Label();
             this.toolStrip = new DarkUI.Controls.DarkToolStrip();
             this.toolStripItemNew = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -243,7 +251,6 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
             this.vS2015DarkTheme1 = new WeifenLuo.WinFormsUI.Docking.VS2015DarkTheme();
-            this.chkInstanceDestroy = new DarkUI.Controls.DarkCheckBox();
             this.grpItems.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             this.grpDestroy.SuspendLayout();
@@ -304,6 +311,7 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudIntervalPercentage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudInterval)).BeginInit();
             this.pnlContainer.SuspendLayout();
+            this.grpAuxInfo.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -387,8 +395,6 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpGeneral.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpGeneral.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpGeneral.Controls.Add(this.lblDrops);
-            this.grpGeneral.Controls.Add(this.lstDrops);
             this.grpGeneral.Controls.Add(this.grpDestroy);
             this.grpGeneral.Controls.Add(this.grpTags);
             this.grpGeneral.Controls.Add(this.grpRequirements);
@@ -439,33 +445,12 @@ namespace Intersect.Editor.Forms.Editors
             this.grpGeneral.Controls.Add(this.lblName);
             this.grpGeneral.Controls.Add(this.txtName);
             this.grpGeneral.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpGeneral.Location = new System.Drawing.Point(2, 1);
+            this.grpGeneral.Location = new System.Drawing.Point(3, 0);
             this.grpGeneral.Name = "grpGeneral";
-            this.grpGeneral.Size = new System.Drawing.Size(439, 691);
+            this.grpGeneral.Size = new System.Drawing.Size(460, 691);
             this.grpGeneral.TabIndex = 2;
             this.grpGeneral.TabStop = false;
             this.grpGeneral.Text = "General";
-            // 
-            // lblDrops
-            // 
-            this.lblDrops.AutoSize = true;
-            this.lblDrops.Location = new System.Drawing.Point(259, 425);
-            this.lblDrops.Name = "lblDrops";
-            this.lblDrops.Size = new System.Drawing.Size(104, 13);
-            this.lblDrops.TabIndex = 108;
-            this.lblDrops.Text = "NPCs that Drop This";
-            // 
-            // lstDrops
-            // 
-            this.lstDrops.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.lstDrops.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lstDrops.Cursor = System.Windows.Forms.Cursors.Default;
-            this.lstDrops.ForeColor = System.Drawing.Color.Gainsboro;
-            this.lstDrops.FormattingEnabled = true;
-            this.lstDrops.Location = new System.Drawing.Point(262, 441);
-            this.lstDrops.Name = "lstDrops";
-            this.lstDrops.Size = new System.Drawing.Size(171, 106);
-            this.lstDrops.TabIndex = 107;
             // 
             // grpDestroy
             // 
@@ -485,6 +470,16 @@ namespace Intersect.Editor.Forms.Editors
             this.grpDestroy.TabIndex = 101;
             this.grpDestroy.TabStop = false;
             this.grpDestroy.Text = "Item Destruction";
+            // 
+            // chkInstanceDestroy
+            // 
+            this.chkInstanceDestroy.AutoSize = true;
+            this.chkInstanceDestroy.Location = new System.Drawing.Point(8, 95);
+            this.chkInstanceDestroy.Name = "chkInstanceDestroy";
+            this.chkInstanceDestroy.Size = new System.Drawing.Size(169, 17);
+            this.chkInstanceDestroy.TabIndex = 103;
+            this.chkInstanceDestroy.Text = "Destroy On Instance Change?";
+            this.chkInstanceDestroy.CheckedChanged += new System.EventHandler(this.chkInstanceDestroy_CheckedChanged);
             // 
             // chkEnableDestroy
             // 
@@ -1277,6 +1272,27 @@ namespace Intersect.Editor.Forms.Editors
             this.txtName.Size = new System.Drawing.Size(145, 20);
             this.txtName.TabIndex = 0;
             this.txtName.TextChanged += new System.EventHandler(this.txtName_TextChanged);
+            // 
+            // lblDrops
+            // 
+            this.lblDrops.AutoSize = true;
+            this.lblDrops.Location = new System.Drawing.Point(14, 19);
+            this.lblDrops.Name = "lblDrops";
+            this.lblDrops.Size = new System.Drawing.Size(104, 13);
+            this.lblDrops.TabIndex = 108;
+            this.lblDrops.Text = "NPCs that Drop This";
+            // 
+            // lstDrops
+            // 
+            this.lstDrops.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.lstDrops.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lstDrops.Cursor = System.Windows.Forms.Cursors.Default;
+            this.lstDrops.ForeColor = System.Drawing.Color.Gainsboro;
+            this.lstDrops.FormattingEnabled = true;
+            this.lstDrops.Location = new System.Drawing.Point(17, 35);
+            this.lstDrops.Name = "lstDrops";
+            this.lstDrops.Size = new System.Drawing.Size(229, 106);
+            this.lstDrops.TabIndex = 107;
             // 
             // grpEquipment
             // 
@@ -3139,6 +3155,7 @@ namespace Intersect.Editor.Forms.Editors
             // pnlContainer
             // 
             this.pnlContainer.AutoScroll = true;
+            this.pnlContainer.Controls.Add(this.grpAuxInfo);
             this.pnlContainer.Controls.Add(this.grpEquipment);
             this.pnlContainer.Controls.Add(this.grpGeneral);
             this.pnlContainer.Controls.Add(this.grpConsumable);
@@ -3147,9 +3164,94 @@ namespace Intersect.Editor.Forms.Editors
             this.pnlContainer.Controls.Add(this.grpSpell);
             this.pnlContainer.Location = new System.Drawing.Point(221, 34);
             this.pnlContainer.Name = "pnlContainer";
-            this.pnlContainer.Size = new System.Drawing.Size(463, 442);
+            this.pnlContainer.Size = new System.Drawing.Size(764, 442);
             this.pnlContainer.TabIndex = 43;
             this.pnlContainer.Visible = false;
+            // 
+            // grpAuxInfo
+            // 
+            this.grpAuxInfo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpAuxInfo.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpAuxInfo.Controls.Add(this.lstShopsBuy);
+            this.grpAuxInfo.Controls.Add(this.lblShopsBuy);
+            this.grpAuxInfo.Controls.Add(this.lblShops);
+            this.grpAuxInfo.Controls.Add(this.lstShops);
+            this.grpAuxInfo.Controls.Add(this.lstCrafts);
+            this.grpAuxInfo.Controls.Add(this.lblCraftsUsed);
+            this.grpAuxInfo.Controls.Add(this.lstDrops);
+            this.grpAuxInfo.Controls.Add(this.lblDrops);
+            this.grpAuxInfo.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpAuxInfo.Location = new System.Drawing.Point(468, 2);
+            this.grpAuxInfo.Margin = new System.Windows.Forms.Padding(2);
+            this.grpAuxInfo.Name = "grpAuxInfo";
+            this.grpAuxInfo.Padding = new System.Windows.Forms.Padding(2);
+            this.grpAuxInfo.Size = new System.Drawing.Size(277, 555);
+            this.grpAuxInfo.TabIndex = 104;
+            this.grpAuxInfo.TabStop = false;
+            this.grpAuxInfo.Text = "Metadata";
+            // 
+            // lstShopsBuy
+            // 
+            this.lstShopsBuy.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.lstShopsBuy.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lstShopsBuy.Cursor = System.Windows.Forms.Cursors.Default;
+            this.lstShopsBuy.ForeColor = System.Drawing.Color.Gainsboro;
+            this.lstShopsBuy.FormattingEnabled = true;
+            this.lstShopsBuy.Location = new System.Drawing.Point(17, 439);
+            this.lstShopsBuy.Name = "lstShopsBuy";
+            this.lstShopsBuy.Size = new System.Drawing.Size(229, 106);
+            this.lstShopsBuy.TabIndex = 114;
+            // 
+            // lblShopsBuy
+            // 
+            this.lblShopsBuy.AutoSize = true;
+            this.lblShopsBuy.Location = new System.Drawing.Point(14, 419);
+            this.lblShopsBuy.Name = "lblShopsBuy";
+            this.lblShopsBuy.Size = new System.Drawing.Size(102, 13);
+            this.lblShopsBuy.TabIndex = 113;
+            this.lblShopsBuy.Text = "Shops that Buy This";
+            // 
+            // lblShops
+            // 
+            this.lblShops.AutoSize = true;
+            this.lblShops.Location = new System.Drawing.Point(14, 283);
+            this.lblShops.Name = "lblShops";
+            this.lblShops.Size = new System.Drawing.Size(101, 13);
+            this.lblShops.TabIndex = 112;
+            this.lblShops.Text = "Shops that Sell This";
+            // 
+            // lstShops
+            // 
+            this.lstShops.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.lstShops.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lstShops.Cursor = System.Windows.Forms.Cursors.Default;
+            this.lstShops.ForeColor = System.Drawing.Color.Gainsboro;
+            this.lstShops.FormattingEnabled = true;
+            this.lstShops.Location = new System.Drawing.Point(17, 303);
+            this.lstShops.Name = "lstShops";
+            this.lstShops.Size = new System.Drawing.Size(229, 106);
+            this.lstShops.TabIndex = 111;
+            // 
+            // lstCrafts
+            // 
+            this.lstCrafts.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.lstCrafts.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lstCrafts.Cursor = System.Windows.Forms.Cursors.Default;
+            this.lstCrafts.ForeColor = System.Drawing.Color.Gainsboro;
+            this.lstCrafts.FormattingEnabled = true;
+            this.lstCrafts.Location = new System.Drawing.Point(17, 170);
+            this.lstCrafts.Name = "lstCrafts";
+            this.lstCrafts.Size = new System.Drawing.Size(229, 106);
+            this.lstCrafts.TabIndex = 110;
+            // 
+            // lblCraftsUsed
+            // 
+            this.lblCraftsUsed.AutoSize = true;
+            this.lblCraftsUsed.Location = new System.Drawing.Point(14, 150);
+            this.lblCraftsUsed.Name = "lblCraftsUsed";
+            this.lblCraftsUsed.Size = new System.Drawing.Size(100, 13);
+            this.lblCraftsUsed.TabIndex = 109;
+            this.lblCraftsUsed.Text = "Crafts that Use This";
             // 
             // toolStrip
             // 
@@ -3170,7 +3272,7 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Padding = new System.Windows.Forms.Padding(5, 0, 1, 0);
-            this.toolStrip.Size = new System.Drawing.Size(686, 25);
+            this.toolStrip.Size = new System.Drawing.Size(1019, 25);
             this.toolStrip.TabIndex = 44;
             this.toolStrip.Text = "toolStrip1";
             // 
@@ -3272,23 +3374,13 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
             // 
-            // chkInstanceDestroy
-            // 
-            this.chkInstanceDestroy.AutoSize = true;
-            this.chkInstanceDestroy.Location = new System.Drawing.Point(8, 95);
-            this.chkInstanceDestroy.Name = "chkInstanceDestroy";
-            this.chkInstanceDestroy.Size = new System.Drawing.Size(169, 17);
-            this.chkInstanceDestroy.TabIndex = 103;
-            this.chkInstanceDestroy.Text = "Destroy On Instance Change?";
-            this.chkInstanceDestroy.CheckedChanged += new System.EventHandler(this.chkInstanceDestroy_CheckedChanged);
-            // 
             // FrmItem
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.ClientSize = new System.Drawing.Size(686, 517);
+            this.ClientSize = new System.Drawing.Size(1009, 517);
             this.ControlBox = false;
             this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.btnCancel);
@@ -3381,6 +3473,8 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudIntervalPercentage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudInterval)).EndInit();
             this.pnlContainer.ResumeLayout(false);
+            this.grpAuxInfo.ResumeLayout(false);
+            this.grpAuxInfo.PerformLayout();
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
             this.ResumeLayout(false);
@@ -3598,5 +3692,12 @@ namespace Intersect.Editor.Forms.Editors
         private ListBox lstDrops;
         private Label lblDrops;
         private DarkCheckBox chkInstanceDestroy;
+        private DarkGroupBox grpAuxInfo;
+        private ListBox lstCrafts;
+        private Label lblCraftsUsed;
+        private Label lblShops;
+        private ListBox lstShops;
+        private ListBox lstShopsBuy;
+        private Label lblShopsBuy;
     }
 }
