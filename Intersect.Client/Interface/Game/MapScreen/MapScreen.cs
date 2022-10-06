@@ -15,9 +15,11 @@ namespace Intersect.Client.Interface.Game.MapScreen
         public const int MapScreenGridWidth = 128;
         public const int MapScreenGridHeight = 104;
         private const int DefaultZoomIdx = 1;
+        
+        private long LastUpdate;
 
-        private float FastSpeed = 1f;
-        private float SlowSpeed = 0.5f;
+        private float FastSpeed = 0.8f;
+        private float SlowSpeed = 0.35f;
         private float CurrentSpeed => Input.QuickModifierActive() ? FastSpeed : SlowSpeed;
 
         private int LastMouseScrollPos;
@@ -139,16 +141,19 @@ namespace Intersect.Client.Interface.Game.MapScreen
         {
             if (!IsOpen || Globals.Me == null)
             {
+                LastUpdate = Timing.Global.Milliseconds;
                 return;
             }
 
             if (Globals.Me.InCutscene())
             {
+                LastUpdate = Timing.Global.Milliseconds;
                 Close();
             }
 
             Draw();
             HandleInput();
+            LastUpdate = Timing.Global.Milliseconds;
         }
 
         private void HandleInput()
@@ -172,21 +177,25 @@ namespace Intersect.Client.Interface.Game.MapScreen
                 return;
             }
 
+            var now = Timing.Global.Milliseconds;
+            var time_delta = (now - LastUpdate);
+            var move_delta = CurrentSpeed / CurrentZoom;
+            var amt = time_delta * move_delta;
             if (Controls.KeyDown(Control.MoveLeft))
             {
-                CurrentX -= CurrentSpeed / CurrentZoom;
+                CurrentX -= amt;
             }
             if (Controls.KeyDown(Control.MoveRight))
             {
-                CurrentX += CurrentSpeed / CurrentZoom;
+                CurrentX += amt;
             }
             if (Controls.KeyDown(Control.MoveDown))
             {
-                CurrentY += CurrentSpeed / CurrentZoom;
+                CurrentY += amt;
             }
             if (Controls.KeyDown(Control.MoveUp))
             {
-                CurrentY -= CurrentSpeed / CurrentZoom;
+                CurrentY -= amt;
             }
             ClampPanPosition();
         }

@@ -66,7 +66,7 @@ namespace Intersect.Client.Interface.Game
             KickButton.Clicked += kick_Clicked;
             KickButton.Text = Strings.Parties.kicklbl;
 
-            if (Globals.Me.Party.Count > mMemberIdx)
+            if (Globals.Me.Party?.Count > mMemberIdx)
             {
                 //Only show the kick buttons if its you or you are the party leader
                 if (Globals.Me.Party[0].Id == Globals.Me.Id)
