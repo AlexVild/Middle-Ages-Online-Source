@@ -977,6 +977,11 @@ namespace Intersect.Client.Entities
                 return;
             }
 
+            if (IsBusy())
+            {
+                return;
+            }
+
             var spell = Spells[index];
             if (spell.SpellId != Guid.Empty &&
                 (!Globals.Me.SpellCooldowns.ContainsKey(spell.SpellId) ||

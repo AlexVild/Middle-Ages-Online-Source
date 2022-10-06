@@ -253,14 +253,11 @@ namespace Intersect.Server.Entities
                 return 0.0f;
             }
 
-            if (amtHarvested >= intervals.Last())
+            intervals.Reverse();
+            bonuses.Reverse();
+            for (int i = 0; i < intervals.Count; i++)
             {
-                return bonuses.Last();
-            }
-
-            for(int i = 0; i < intervals.Count - 2; i++)
-            {
-                if (amtHarvested >= intervals[i] && amtHarvested < intervals[i + 1])
+                if (amtHarvested >= intervals[i])
                 {
                     return bonuses[i];
                 }
