@@ -77,6 +77,8 @@ namespace Intersect.Server.Core
         /// </summary>
         public static TimerList ActiveTimers = new TimerList();
 
+        public static readonly object mLock = new object();
+
         /// <summary>
         /// Processes the current list of timers, in a set sorted by expiry time.
         /// </summary>
@@ -84,7 +86,7 @@ namespace Intersect.Server.Core
         public static void ProcessTimers(long now)
         {
             // Process all timers that aren't indefinite
-            foreach (var timer in ActiveTimers.Where(t => t?.Descriptor?.TimeLimit < TimerConstants.TimerIndefiniteTimeLimit).ToArray())
+            foreach (var timer in ActiveTimers.ToArray().Where(t => t?.Descriptor?.TimeLimit < TimerConstants.TimerIndefiniteTimeLimit))
             {
                 // Short-circuit out if the newest timer is not yet expired
                 if (timer.TimeRemaining > now)
@@ -128,18 +130,21 @@ namespace Intersect.Server.Core
         /// <param name="completionCount">How many times this timer has been completed. By default, 0.</param>
         public static void AddTimer(Guid descriptorId, Guid ownerId, long now, int completionCount = 0)
         {
-            var timer = new TimerInstance(descriptorId, ownerId, now, completionCount);
-
-            using (var context = DbInterface.CreatePlayerContext(readOnly: false))
+            lock(mLock)
             {
-                ActiveTimers.Add(timer);
+                var timer = new TimerInstance(descriptorId, ownerId, now, completionCount);
 
-                context.Timers.Add(timer);
-                context.ChangeTracker.DetectChanges();
-                context.SaveChanges();
+                using (var context = DbInterface.CreatePlayerContext(readOnly: false))
+                {
+                    ActiveTimers.Add(timer);
+
+                    context.Timers.Add(timer);
+                    context.ChangeTracker.DetectChanges();
+                    context.SaveChanges();
+                }
+
+                timer?.SendTimerPackets();
             }
-
-            timer?.SendTimerPackets();
         }
 
         /// <summary>
@@ -149,19 +154,22 @@ namespace Intersect.Server.Core
         /// /// <param name="storeElapsed">When false, do not store the elapsed time in a variable; default true</param>
         public static void RemoveTimer(TimerInstance timer, bool storeElapsed = true)
         {
-            if (storeElapsed)
+            lock(mLock)
             {
-                timer?.StoreElapsedTime();
-            }
-            timer?.SendTimerStopPackets();
+                if (storeElapsed)
+                {
+                    timer?.StoreElapsedTime();
+                }
+                timer?.SendTimerStopPackets();
 
-            using (var context = DbInterface.CreatePlayerContext(readOnly: false))
-            {
-                ActiveTimers.Remove(timer);
-                context.Timers.Remove(timer);
+                using (var context = DbInterface.CreatePlayerContext(readOnly: false))
+                {
+                    ActiveTimers.Remove(timer);
+                    context.Timers.Remove(timer);
 
-                context.ChangeTracker.DetectChanges();
-                context.SaveChanges();
+                    context.ChangeTracker.DetectChanges();
+                    context.SaveChanges();
+                }
             }
         }
 
@@ -234,9 +242,12 @@ namespace Intersect.Server.Core
         /// <returns>True if we successfully found a timer and populated activeTimer</returns>
         public static bool TryGetActiveTimer(Guid descriptorId, Guid ownerId, out TimerInstance activeTimer)
         {
-            activeTimer = ActiveTimers.ToList().Find(t => t.DescriptorId == descriptorId && t.OwnerId == ownerId);
+            lock(mLock)
+            {
+                activeTimer = ActiveTimers.ToList().Find(t => t.DescriptorId == descriptorId && t.OwnerId == ownerId);
 
-            return activeTimer != default;
+                return activeTimer != default;
+            }
         }
     }
 }
