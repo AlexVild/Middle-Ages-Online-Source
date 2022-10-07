@@ -2858,5 +2858,61 @@ namespace Intersect.Server.Entities.Events
                     break;
             }
         }
+
+        private static void ProcessCommand(
+            ResetVariableCommand command,
+            Player player,
+            Event instance,
+            CommandInstance stackInfo,
+            Stack<CommandInstance> callStack
+        )
+        {
+            if (player == null) return;
+
+            var players = new List<Player> { player };
+            if (command.SyncParty && player.Party?.Count > 1)
+            {
+                foreach(var member in player.Party.Where(mem => mem.Id != player.Id).ToArray())
+                {
+                    players.Add(member);
+                }
+            }
+
+            foreach(var validPlayer in players)
+            {
+                var varsInGroup = validPlayer.Variables
+                    .FindAll(playerVar => PlayerVariableBase.Get(playerVar.VariableId)?.VariableGroup == command.Group)
+                    .ToArray();
+
+                foreach (var playerVar in varsInGroup)
+                {
+                    var change = false;
+                    switch (playerVar.Value.Type)
+                    {
+                        case VariableDataTypes.Boolean:
+                            change = playerVar.Value.Boolean != default;
+                            playerVar.Value.Boolean = default;
+                            break;
+                        case VariableDataTypes.Integer:
+                        case VariableDataTypes.Number:
+                            change = playerVar.Value.Integer != default;
+                            playerVar.Value.Integer = default;
+                            if (validPlayer.TrySetRecord(RecordType.PlayerVariable, playerVar.VariableId, playerVar.Value.Integer))
+                            {
+                                PlayerRecord.SendNewVariableRecordMessage(playerVar.VariableId, true, validPlayer);
+                            }
+                            break;
+                        case VariableDataTypes.String:
+                            change = !string.IsNullOrEmpty(playerVar.Value.String);
+                            playerVar.Value.String = string.Empty;
+                            break;
+                    }
+                    if (change && command.FireCommonEvents)
+                    {
+                        validPlayer.StartCommonEventsWithTrigger(CommonEventTrigger.PlayerVariableChange, "", playerVar.VariableId.ToString());
+                    }
+                }
+            }
+        }
     }
 }

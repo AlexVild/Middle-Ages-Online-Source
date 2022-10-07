@@ -257,6 +257,7 @@
         ClearRecord,
         RollLoot,
         UnlockLabel,
+        VarGroupReset, // 72
     }
 
     public enum NPCGuildManagementSelection

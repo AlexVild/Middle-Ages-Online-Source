@@ -2204,6 +2204,7 @@ Tick timer saved in server config.json.";
                 {"clearrecord", @"Clear Record"},
                 {"rollloot", @"Roll Loot"},
                 {"unlocklabel", @"Unlock Label"},
+                {"resetvariables", @"Reset Variables in Group"},
             };
 
         }
@@ -6073,6 +6074,9 @@ Negative values for time to flow backwards.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString OpenLeaderboard = @"Open leaderboard '{00}' for {01} (sort: {02}, display type: {03})";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ResetVariableGroup = @"Reset all Player Variables in Group: {00}";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString RollLoot = @"Roll Loot ({00})";

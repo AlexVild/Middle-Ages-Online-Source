@@ -1890,5 +1890,10 @@ namespace Intersect.Editor.Forms.Editors.Events
 
             return Strings.EventCommandList.UnlockLabel.ToString(labelName, type);
         }
+
+        private static string GetCommandText(ResetVariableCommand command, MapInstance map)
+        {
+            return Strings.EventCommandList.ResetVariableGroup.ToString(command.Group);
+        }
     }
 }

@@ -34,6 +34,10 @@ namespace Intersect.Editor.Forms.Editors
 
         private List<string> mKnownFolders = new List<string>();
 
+        private List<string> mKnownGroups = new List<string>();
+
+        private bool IsPopulating = false;
+
         public FrmSwitchVariable()
         {
             ApplyHooks();
@@ -229,25 +233,40 @@ namespace Intersect.Editor.Forms.Editors
 
         private void UpdateEditor()
         {
+            IsPopulating = true;
             if (mEditorItem != null)
             {
                 grpEditor.Show();
                 if (rdoPlayerVariables.Checked)
                 {
+                    var baseVar = (PlayerVariableBase)mEditorItem;
                     lblObject.Text = Strings.VariableEditor.playervariable;
-                    txtObjectName.Text = ((PlayerVariableBase) mEditorItem).Name;
-                    txtId.Text = ((PlayerVariableBase) mEditorItem).TextId;
-                    cmbFolder.Text = ((PlayerVariableBase) mEditorItem).Folder;
-                    cmbVariableType.SelectedIndex = (int) (((PlayerVariableBase) mEditorItem).Type - 1);
-                    chkRecordable.Checked = ((PlayerVariableBase)mEditorItem).Recordable;
-                    chkRecordLow.Checked = ((PlayerVariableBase)mEditorItem).RecordLow;
-                    chkSilent.Checked = ((PlayerVariableBase)mEditorItem).RecordSilently;
+                    txtObjectName.Text = baseVar.Name;
+                    txtId.Text = baseVar.TextId;
+                    cmbFolder.Text = baseVar.Folder;
+                    cmbVariableType.SelectedIndex = (int)(baseVar.Type - 1);
+                    chkRecordable.Checked = baseVar.Recordable;
+                    chkRecordLow.Checked = baseVar.RecordLow;
+                    chkSilent.Checked = baseVar.RecordSilently;
                     chkRecordLow.Enabled = chkRecordable.Checked;
                     chkSilent.Enabled = chkRecordable.Checked;
+                    cmbVariableGroup.Enabled = true;
+                    btnAddGroup.Enabled = true;
+                    if (cmbVariableGroup.Items.Contains(baseVar.VariableGroup))
+                    {
+                        cmbVariableGroup.SelectedIndex = cmbVariableGroup.Items.IndexOf(baseVar.VariableGroup);
+                    }
+                    else
+                    {
+                        cmbVariableGroup.SelectedIndex = 0;
+                    }
+
                     grpValue.Hide();
                 }
                 else if (rdoGlobalVariables.Checked)
                 {
+                    cmbVariableGroup.Enabled = false;
+                    btnAddGroup.Enabled = false;
                     lblObject.Text = Strings.VariableEditor.globalvariable;
                     txtObjectName.Text = ((ServerVariableBase) mEditorItem).Name;
                     txtId.Text = ((ServerVariableBase) mEditorItem).TextId;
@@ -257,6 +276,8 @@ namespace Intersect.Editor.Forms.Editors
                 }
                 else if (rdoInstanceVariables.Checked)
                 {
+                    cmbVariableGroup.Enabled = false;
+                    btnAddGroup.Enabled = false;
                     lblObject.Text = Strings.VariableEditor.instancevariable;
                     txtObjectName.Text = ((InstanceVariableBase)mEditorItem).Name;
                     txtId.Text = ((InstanceVariableBase)mEditorItem).TextId;
@@ -272,6 +293,7 @@ namespace Intersect.Editor.Forms.Editors
                 grpEditor.Hide();
             }
 
+            IsPopulating = false;
             UpdateToolStripItems();
         }
 
@@ -580,20 +602,28 @@ namespace Intersect.Editor.Forms.Editors
             {
                 foreach (var itm in PlayerVariableBase.Lookup)
                 {
-                    if (!string.IsNullOrEmpty(((PlayerVariableBase) itm.Value).Folder) &&
-                        !mFolders.Contains(((PlayerVariableBase) itm.Value).Folder))
+                    var baseVar = (PlayerVariableBase)itm.Value;
+                    var folder = baseVar.Folder;
+                    var group = baseVar.VariableGroup;
+                    if (!string.IsNullOrEmpty(folder) && !mFolders.Contains(folder))
                     {
-                        mFolders.Add(((PlayerVariableBase) itm.Value).Folder);
-                        if (!mKnownFolders.Contains(((PlayerVariableBase) itm.Value).Folder))
+                        mFolders.Add(folder);
+                        if (!mKnownFolders.Contains(folder))
                         {
-                            mKnownFolders.Add(((PlayerVariableBase) itm.Value).Folder);
+                            mKnownFolders.Add(folder);
                         }
+                    }
+                    if (!string.IsNullOrEmpty(group) && !mKnownGroups.Contains(group))
+                    {
+                        mKnownGroups.Add(group);
                     }
                 }
 
                 mKnownFolders.Sort();
                 cmbFolder.Items.AddRange(mKnownFolders.ToArray());
                 lblId.Text = Strings.VariableEditor.textidpv;
+
+                InitializeGroups();
             }
             else if (rdoGlobalVariables.Checked)
             {
@@ -796,6 +826,50 @@ namespace Intersect.Editor.Forms.Editors
                 return;
             }
             ((PlayerVariableBase)mEditorItem).RecordSilently = chkSilent.Checked;
+        }
+
+        private void InitializeGroups()
+        {
+            mKnownGroups.Sort();
+            cmbVariableGroup.Items.Clear();
+            cmbVariableGroup.Items.Add(string.Empty);
+            cmbVariableGroup.Items.AddRange(mKnownGroups.ToArray());
+        }
+
+        private void btnAddGroup_Click(object sender, EventArgs e)
+        {
+            if (!rdoPlayerVariables.Checked)
+            {
+                return;
+            }
+
+            var groupName = "";
+            var result = DarkInputBox.ShowInformation(
+                Strings.ItemEditor.newtagprompt, Strings.ItemEditor.newtagtitle, ref groupName,
+                DarkDialogButton.OkCancel
+            );
+
+            if (result == DialogResult.OK && !string.IsNullOrEmpty(groupName))
+            {
+                if (!cmbVariableGroup.Items.Contains(groupName))
+                {
+                    ((PlayerVariableBase)mEditorItem).VariableGroup = groupName;
+                    mKnownGroups.Add(groupName);
+                    // load/sort new tags
+                    InitializeGroups();
+                    cmbVariableGroup.Text = ((PlayerVariableBase)mEditorItem).VariableGroup;
+                }
+            }
+        }
+
+        private void cmbVariableGroup_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!rdoPlayerVariables.Checked && IsPopulating)
+            {
+                return;
+            }
+
+            ((PlayerVariableBase)mEditorItem).VariableGroup = (string)cmbVariableGroup.SelectedItem;
         }
     }
 

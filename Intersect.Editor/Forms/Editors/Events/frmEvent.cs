@@ -811,6 +811,10 @@ namespace Intersect.Editor.Forms.Editors.Events
                     tmpCommand = new UnlockLabelCommand();
 
                     break;
+                case EventCommandType.VarGroupReset:
+                    tmpCommand = new ResetVariableCommand();
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -1482,6 +1486,10 @@ namespace Intersect.Editor.Forms.Editors.Events
                     break;
                 case EventCommandType.UnlockLabel:
                     cmdWindow = new EventCommand_UnlockLabel((UnlockLabelCommand)command, this);
+
+                    break;
+                case EventCommandType.VarGroupReset:
+                    cmdWindow = new EventCommand_ResetVariables((ResetVariableCommand)command, this);
 
                     break;
                 default:

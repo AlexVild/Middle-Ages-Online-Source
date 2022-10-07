@@ -603,6 +603,8 @@ namespace Intersect.Server.Migrations.Game
 
                     b.Property<byte>("Type");
 
+                    b.Property<string>("VariableGroup");
+
                     b.HasKey("Id");
 
                     b.ToTable("PlayerVariables");

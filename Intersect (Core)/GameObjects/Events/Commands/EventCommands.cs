@@ -1313,4 +1313,15 @@ namespace Intersect.GameObjects.Events.Commands
 
         public ChatboxChannel Channel { get; set; } = ChatboxChannel.Player;
     }
+
+    public partial class ResetVariableCommand : EventCommand
+    {
+        public override EventCommandType Type { get; } = EventCommandType.VarGroupReset;
+
+        public string Group;
+
+        public bool FireCommonEvents;
+
+        public bool SyncParty;
+    }
 }

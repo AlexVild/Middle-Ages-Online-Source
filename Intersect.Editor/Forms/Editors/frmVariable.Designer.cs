@@ -41,6 +41,10 @@ namespace Intersect.Editor.Forms.Editors
             this.txtSearch = new DarkUI.Controls.DarkTextBox();
             this.lstGameObjects = new Intersect.Editor.Forms.Controls.GameObjectList();
             this.grpEditor = new DarkUI.Controls.DarkGroupBox();
+            this.btnAddGroup = new DarkUI.Controls.DarkButton();
+            this.cmbVariableGroup = new DarkUI.Controls.DarkComboBox();
+            this.lblGroup = new System.Windows.Forms.Label();
+            this.chkSilent = new DarkUI.Controls.DarkCheckBox();
             this.chkRecordLow = new DarkUI.Controls.DarkCheckBox();
             this.chkRecordable = new DarkUI.Controls.DarkCheckBox();
             this.btnAddFolder = new DarkUI.Controls.DarkButton();
@@ -68,7 +72,6 @@ namespace Intersect.Editor.Forms.Editors
             this.btnAlphabetical = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
-            this.chkSilent = new DarkUI.Controls.DarkCheckBox();
             this.grpTypes.SuspendLayout();
             this.grpList.SuspendLayout();
             this.grpEditor.SuspendLayout();
@@ -184,6 +187,9 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpEditor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpEditor.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpEditor.Controls.Add(this.btnAddGroup);
+            this.grpEditor.Controls.Add(this.cmbVariableGroup);
+            this.grpEditor.Controls.Add(this.lblGroup);
             this.grpEditor.Controls.Add(this.chkSilent);
             this.grpEditor.Controls.Add(this.chkRecordLow);
             this.grpEditor.Controls.Add(this.chkRecordable);
@@ -206,6 +212,57 @@ namespace Intersect.Editor.Forms.Editors
             this.grpEditor.TabStop = false;
             this.grpEditor.Text = "Variable Editor";
             this.grpEditor.Visible = false;
+            // 
+            // btnAddGroup
+            // 
+            this.btnAddGroup.Location = new System.Drawing.Point(240, 145);
+            this.btnAddGroup.Name = "btnAddGroup";
+            this.btnAddGroup.Padding = new System.Windows.Forms.Padding(5);
+            this.btnAddGroup.Size = new System.Drawing.Size(18, 22);
+            this.btnAddGroup.TabIndex = 71;
+            this.btnAddGroup.Text = "+";
+            this.btnAddGroup.Click += new System.EventHandler(this.btnAddGroup_Click);
+            // 
+            // cmbVariableGroup
+            // 
+            this.cmbVariableGroup.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbVariableGroup.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbVariableGroup.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbVariableGroup.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbVariableGroup.DrawDropdownHoverOutline = false;
+            this.cmbVariableGroup.DrawFocusRectangle = false;
+            this.cmbVariableGroup.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbVariableGroup.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbVariableGroup.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbVariableGroup.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbVariableGroup.FormattingEnabled = true;
+            this.cmbVariableGroup.Location = new System.Drawing.Point(85, 146);
+            this.cmbVariableGroup.Name = "cmbVariableGroup";
+            this.cmbVariableGroup.Size = new System.Drawing.Size(149, 21);
+            this.cmbVariableGroup.TabIndex = 70;
+            this.cmbVariableGroup.Text = null;
+            this.cmbVariableGroup.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbVariableGroup.SelectedIndexChanged += new System.EventHandler(this.cmbVariableGroup_SelectedIndexChanged);
+            // 
+            // lblGroup
+            // 
+            this.lblGroup.AutoSize = true;
+            this.lblGroup.Location = new System.Drawing.Point(10, 149);
+            this.lblGroup.Name = "lblGroup";
+            this.lblGroup.Size = new System.Drawing.Size(36, 13);
+            this.lblGroup.TabIndex = 69;
+            this.lblGroup.Text = "Group";
+            // 
+            // chkSilent
+            // 
+            this.chkSilent.AutoSize = true;
+            this.chkSilent.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.chkSilent.Location = new System.Drawing.Point(206, 359);
+            this.chkSilent.Name = "chkSilent";
+            this.chkSilent.Size = new System.Drawing.Size(58, 17);
+            this.chkSilent.TabIndex = 68;
+            this.chkSilent.Text = "Silent?";
+            this.chkSilent.CheckedChanged += new System.EventHandler(this.chkSilent_CheckedChanged);
             // 
             // chkRecordLow
             // 
@@ -277,9 +334,9 @@ namespace Intersect.Editor.Forms.Editors
             this.grpValue.Controls.Add(this.cmbBooleanValue);
             this.grpValue.Controls.Add(this.nudVariableValue);
             this.grpValue.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpValue.Location = new System.Drawing.Point(13, 146);
+            this.grpValue.Location = new System.Drawing.Point(13, 191);
             this.grpValue.Name = "grpValue";
-            this.grpValue.Size = new System.Drawing.Size(251, 200);
+            this.grpValue.Size = new System.Drawing.Size(251, 162);
             this.grpValue.TabIndex = 63;
             this.grpValue.TabStop = false;
             this.grpValue.Text = "Value";
@@ -545,17 +602,6 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
             // 
-            // chkSilent
-            // 
-            this.chkSilent.AutoSize = true;
-            this.chkSilent.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.chkSilent.Location = new System.Drawing.Point(206, 359);
-            this.chkSilent.Name = "chkSilent";
-            this.chkSilent.Size = new System.Drawing.Size(58, 17);
-            this.chkSilent.TabIndex = 68;
-            this.chkSilent.Text = "Silent?";
-            this.chkSilent.CheckedChanged += new System.EventHandler(this.chkSilent_CheckedChanged);
-            // 
             // FrmSwitchVariable
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -628,5 +674,8 @@ namespace Intersect.Editor.Forms.Editors
         private DarkCheckBox chkRecordable;
         private DarkCheckBox chkRecordLow;
         private DarkCheckBox chkSilent;
+        private DarkButton btnAddGroup;
+        private DarkComboBox cmbVariableGroup;
+        private System.Windows.Forms.Label lblGroup;
     }
 }
