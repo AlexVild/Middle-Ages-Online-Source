@@ -41,6 +41,8 @@ namespace Intersect.Editor.Forms.Editors
             this.btnCancel = new DarkUI.Controls.DarkButton();
             this.btnSave = new DarkUI.Controls.DarkButton();
             this.grpGeneral = new DarkUI.Controls.DarkGroupBox();
+            this.cmbTypeDisplayOverride = new DarkUI.Controls.DarkComboBox();
+            this.lblOverride = new System.Windows.Forms.Label();
             this.grpDestroy = new DarkUI.Controls.DarkGroupBox();
             this.chkInstanceDestroy = new DarkUI.Controls.DarkCheckBox();
             this.chkEnableDestroy = new DarkUI.Controls.DarkCheckBox();
@@ -251,6 +253,7 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
             this.vS2015DarkTheme1 = new WeifenLuo.WinFormsUI.Docking.VS2015DarkTheme();
+            this.btnClearOverride = new DarkUI.Controls.DarkButton();
             this.grpItems.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             this.grpDestroy.SuspendLayout();
@@ -395,6 +398,9 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpGeneral.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpGeneral.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpGeneral.Controls.Add(this.btnClearOverride);
+            this.grpGeneral.Controls.Add(this.cmbTypeDisplayOverride);
+            this.grpGeneral.Controls.Add(this.lblOverride);
             this.grpGeneral.Controls.Add(this.grpDestroy);
             this.grpGeneral.Controls.Add(this.grpTags);
             this.grpGeneral.Controls.Add(this.grpRequirements);
@@ -451,6 +457,36 @@ namespace Intersect.Editor.Forms.Editors
             this.grpGeneral.TabIndex = 2;
             this.grpGeneral.TabStop = false;
             this.grpGeneral.Text = "General";
+            // 
+            // cmbTypeDisplayOverride
+            // 
+            this.cmbTypeDisplayOverride.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbTypeDisplayOverride.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbTypeDisplayOverride.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbTypeDisplayOverride.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbTypeDisplayOverride.DrawDropdownHoverOutline = false;
+            this.cmbTypeDisplayOverride.DrawFocusRectangle = false;
+            this.cmbTypeDisplayOverride.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbTypeDisplayOverride.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbTypeDisplayOverride.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbTypeDisplayOverride.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbTypeDisplayOverride.FormattingEnabled = true;
+            this.cmbTypeDisplayOverride.Location = new System.Drawing.Point(89, 128);
+            this.cmbTypeDisplayOverride.Name = "cmbTypeDisplayOverride";
+            this.cmbTypeDisplayOverride.Size = new System.Drawing.Size(113, 21);
+            this.cmbTypeDisplayOverride.TabIndex = 103;
+            this.cmbTypeDisplayOverride.Text = "None";
+            this.cmbTypeDisplayOverride.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbTypeDisplayOverride.SelectedIndexChanged += new System.EventHandler(this.cmbTypeDisplayOverride_SelectedIndexChanged);
+            // 
+            // lblOverride
+            // 
+            this.lblOverride.AutoSize = true;
+            this.lblOverride.Location = new System.Drawing.Point(9, 131);
+            this.lblOverride.Name = "lblOverride";
+            this.lblOverride.Size = new System.Drawing.Size(74, 13);
+            this.lblOverride.TabIndex = 102;
+            this.lblOverride.Text = "Type Override";
             // 
             // grpDestroy
             // 
@@ -663,7 +699,7 @@ namespace Intersect.Editor.Forms.Editors
             // chkCanGuildBank
             // 
             this.chkCanGuildBank.AutoSize = true;
-            this.chkCanGuildBank.Location = new System.Drawing.Point(121, 241);
+            this.chkCanGuildBank.Location = new System.Drawing.Point(343, 427);
             this.chkCanGuildBank.Name = "chkCanGuildBank";
             this.chkCanGuildBank.Size = new System.Drawing.Size(106, 17);
             this.chkCanGuildBank.TabIndex = 99;
@@ -732,7 +768,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.nudDeathDropChance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.nudDeathDropChance.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudDeathDropChance.Location = new System.Drawing.Point(154, 300);
+            this.nudDeathDropChance.Location = new System.Drawing.Point(401, 486);
             this.nudDeathDropChance.Name = "nudDeathDropChance";
             this.nudDeathDropChance.Size = new System.Drawing.Size(48, 20);
             this.nudDeathDropChance.TabIndex = 94;
@@ -746,7 +782,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblDeathDropChance
             // 
             this.lblDeathDropChance.AutoSize = true;
-            this.lblDeathDropChance.Location = new System.Drawing.Point(12, 305);
+            this.lblDeathDropChance.Location = new System.Drawing.Point(259, 491);
             this.lblDeathDropChance.Name = "lblDeathDropChance";
             this.lblDeathDropChance.Size = new System.Drawing.Size(136, 13);
             this.lblDeathDropChance.TabIndex = 93;
@@ -755,7 +791,7 @@ namespace Intersect.Editor.Forms.Editors
             // chkCanSell
             // 
             this.chkCanSell.AutoSize = true;
-            this.chkCanSell.Location = new System.Drawing.Point(121, 281);
+            this.chkCanSell.Location = new System.Drawing.Point(343, 467);
             this.chkCanSell.Name = "chkCanSell";
             this.chkCanSell.Size = new System.Drawing.Size(71, 17);
             this.chkCanSell.TabIndex = 92;
@@ -765,7 +801,7 @@ namespace Intersect.Editor.Forms.Editors
             // chkCanTrade
             // 
             this.chkCanTrade.AutoSize = true;
-            this.chkCanTrade.Location = new System.Drawing.Point(13, 281);
+            this.chkCanTrade.Location = new System.Drawing.Point(260, 467);
             this.chkCanTrade.Name = "chkCanTrade";
             this.chkCanTrade.Size = new System.Drawing.Size(82, 17);
             this.chkCanTrade.TabIndex = 91;
@@ -775,7 +811,7 @@ namespace Intersect.Editor.Forms.Editors
             // chkCanBag
             // 
             this.chkCanBag.AutoSize = true;
-            this.chkCanBag.Location = new System.Drawing.Point(121, 261);
+            this.chkCanBag.Location = new System.Drawing.Point(343, 447);
             this.chkCanBag.Name = "chkCanBag";
             this.chkCanBag.Size = new System.Drawing.Size(73, 17);
             this.chkCanBag.TabIndex = 90;
@@ -785,7 +821,7 @@ namespace Intersect.Editor.Forms.Editors
             // chkCanBank
             // 
             this.chkCanBank.AutoSize = true;
-            this.chkCanBank.Location = new System.Drawing.Point(13, 261);
+            this.chkCanBank.Location = new System.Drawing.Point(260, 447);
             this.chkCanBank.Name = "chkCanBank";
             this.chkCanBank.Size = new System.Drawing.Size(79, 17);
             this.chkCanBank.TabIndex = 89;
@@ -1028,7 +1064,7 @@ namespace Intersect.Editor.Forms.Editors
             "Rare",
             "Epic",
             "Legendary"});
-            this.cmbRarity.Location = new System.Drawing.Point(53, 127);
+            this.cmbRarity.Location = new System.Drawing.Point(53, 163);
             this.cmbRarity.Name = "cmbRarity";
             this.cmbRarity.Size = new System.Drawing.Size(149, 21);
             this.cmbRarity.TabIndex = 41;
@@ -1039,7 +1075,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblRarity
             // 
             this.lblRarity.AutoSize = true;
-            this.lblRarity.Location = new System.Drawing.Point(8, 130);
+            this.lblRarity.Location = new System.Drawing.Point(8, 168);
             this.lblRarity.Name = "lblRarity";
             this.lblRarity.Size = new System.Drawing.Size(37, 13);
             this.lblRarity.TabIndex = 40;
@@ -1107,7 +1143,7 @@ namespace Intersect.Editor.Forms.Editors
             // chkCanDrop
             // 
             this.chkCanDrop.AutoSize = true;
-            this.chkCanDrop.Location = new System.Drawing.Point(13, 241);
+            this.chkCanDrop.Location = new System.Drawing.Point(260, 427);
             this.chkCanDrop.Name = "chkCanDrop";
             this.chkCanDrop.Size = new System.Drawing.Size(77, 17);
             this.chkCanDrop.TabIndex = 26;
@@ -1138,7 +1174,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblDesc
             // 
             this.lblDesc.AutoSize = true;
-            this.lblDesc.Location = new System.Drawing.Point(11, 152);
+            this.lblDesc.Location = new System.Drawing.Point(11, 230);
             this.lblDesc.Name = "lblDesc";
             this.lblDesc.Size = new System.Drawing.Size(35, 13);
             this.lblDesc.TabIndex = 13;
@@ -1149,7 +1185,7 @@ namespace Intersect.Editor.Forms.Editors
             this.txtDesc.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.txtDesc.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtDesc.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.txtDesc.Location = new System.Drawing.Point(12, 168);
+            this.txtDesc.Location = new System.Drawing.Point(12, 246);
             this.txtDesc.Multiline = true;
             this.txtDesc.Name = "txtDesc";
             this.txtDesc.Size = new System.Drawing.Size(186, 67);
@@ -3272,7 +3308,7 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Padding = new System.Windows.Forms.Padding(5, 0, 1, 0);
-            this.toolStrip.Size = new System.Drawing.Size(1019, 25);
+            this.toolStrip.Size = new System.Drawing.Size(1009, 25);
             this.toolStrip.TabIndex = 44;
             this.toolStrip.Text = "toolStrip1";
             // 
@@ -3373,6 +3409,16 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo.Size = new System.Drawing.Size(23, 22);
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
+            // 
+            // btnClearOverride
+            // 
+            this.btnClearOverride.Location = new System.Drawing.Point(208, 129);
+            this.btnClearOverride.Name = "btnClearOverride";
+            this.btnClearOverride.Padding = new System.Windows.Forms.Padding(5);
+            this.btnClearOverride.Size = new System.Drawing.Size(18, 20);
+            this.btnClearOverride.TabIndex = 45;
+            this.btnClearOverride.Text = "X";
+            this.btnClearOverride.Click += new System.EventHandler(this.btnClearOverride_Click);
             // 
             // FrmItem
             // 
@@ -3699,5 +3745,8 @@ namespace Intersect.Editor.Forms.Editors
         private ListBox lstShops;
         private ListBox lstShopsBuy;
         private Label lblShopsBuy;
+        private DarkComboBox cmbTypeDisplayOverride;
+        private Label lblOverride;
+        private DarkButton btnClearOverride;
     }
 }

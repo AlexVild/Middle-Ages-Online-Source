@@ -7,6 +7,7 @@ using Intersect.Client.General;
 using Intersect.Client.Localization;
 using Intersect.Client.Framework.File_Management;
 using Intersect.Client.Items;
+using Intersect.Localization;
 
 namespace Intersect.Client.Interface.Game.DescriptionWindows
 {
@@ -45,7 +46,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             SetPosition(x, y);
 
             // If a spell, also display the spell description!
-            if (mItem.ItemType == ItemTypes.Spell)
+            if (mItem.ItemType == ItemTypes.Spell && !mItem.QuickCast)
             {
                 mSpellDescWindow = new SpellDescriptionWindow(mItem.SpellId, x, mContainer.Bottom);
             }
@@ -133,7 +134,16 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
 
             // Set up the description telling us what type of item this is.
             // if equipment, also list what kind.
-            Strings.ItemDescription.ItemTypes.TryGetValue((int) mItem.ItemType, out var typeDesc);
+            LocalizedString typeDesc;
+            if (!string.IsNullOrEmpty(mItem.TypeDisplayOverride))
+            {
+                typeDesc = mItem.TypeDisplayOverride;
+            }
+            else
+            {
+                Strings.ItemDescription.ItemTypes.TryGetValue((int)mItem.ItemType, out typeDesc);
+            }
+
             if (mItem.ItemType == ItemTypes.Equipment)
             {
                 var equipSlot = Options.Equipment.Slots[mItem.EquipmentSlot];

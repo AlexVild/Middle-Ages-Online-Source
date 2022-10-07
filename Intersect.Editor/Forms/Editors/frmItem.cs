@@ -65,6 +65,12 @@ namespace Intersect.Editor.Forms.Editors
             cmbProjectile.Items.Add(Strings.General.none);
             cmbProjectile.Items.AddRange(ProjectileBase.Names);
 
+            cmbTypeDisplayOverride.Items.Clear();
+            var sortedOverrides = new List<string>(Options.Equipment.DisplayOverrides);
+            sortedOverrides.Sort();
+            cmbTypeDisplayOverride.Items.AddRange(sortedOverrides.ToArray());
+            cmbTypeDisplayOverride.SelectedIndex = -1;
+
             for (var i = 0; i < NpcBase.GetNameList().Length; i++)
             {
                 mNpcs.Add(NpcBase.Get(NpcBase.IdFromList(i)));
@@ -572,6 +578,15 @@ namespace Intersect.Editor.Forms.Editors
                 chkEnableDestroy.Checked = mEditorItem.CanDestroy;
                 txtCannotDestroy.Text = mEditorItem.CannotDestroyMessage;
                 chkInstanceDestroy.Checked = mEditorItem.DestroyOnInstanceChange;
+
+                if (cmbTypeDisplayOverride.Items.Contains(mEditorItem.TypeDisplayOverride ?? string.Empty))
+                {
+                    cmbTypeDisplayOverride.SelectedItem = mEditorItem.TypeDisplayOverride;
+                }
+                else
+                {
+                    cmbTypeDisplayOverride.SelectedIndex = -1;
+                }
 
                 if (mChanged.IndexOf(mEditorItem) == -1)
                 {
@@ -1609,6 +1624,17 @@ namespace Intersect.Editor.Forms.Editors
         private void chkInstanceDestroy_CheckedChanged(object sender, EventArgs e)
         {
             mEditorItem.DestroyOnInstanceChange = chkInstanceDestroy.Checked;
+        }
+
+        private void cmbTypeDisplayOverride_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mEditorItem.TypeDisplayOverride = (string)cmbTypeDisplayOverride.SelectedItem;
+        }
+
+        private void btnClearOverride_Click(object sender, EventArgs e)
+        {
+            mEditorItem.TypeDisplayOverride = null;
+            cmbTypeDisplayOverride.SelectedIndex = -1;
         }
     }
 }

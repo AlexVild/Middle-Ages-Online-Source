@@ -16,7 +16,7 @@ using Newtonsoft.Json;
 namespace Intersect.GameObjects
 {
 
-    public class ItemBase : DatabaseObject<ItemBase>, IFolderable
+    public partial class ItemBase : DatabaseObject<ItemBase>, IFolderable
     {
 
         [NotMapped] public ConditionLists UsageRequirements = new ConditionLists();
@@ -477,6 +477,11 @@ namespace Intersect.GameObjects
 
         public int Percentage { get; set; }
 
+    }
+
+    public partial class ItemBase : DatabaseObject<ItemBase>, IFolderable
+    {
+        public string TypeDisplayOverride { get; set; } = string.Empty;
     }
 
 }
