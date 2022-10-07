@@ -496,7 +496,7 @@ namespace Intersect.Client.Core
             {
                 DrawWideScreen(Globals.ContentManager.GetTexture(GameContentManager.TextureType.Misc, "combatmode.png"), Globals.Me.CombatMode, Color.White,
                     ref mCombatModeState, ref sLastCombatWidthUpdate, ref sCurrentCombatWidth);
-                DrawWideScreen(Renderer.GetWhiteTexture(), Globals.Me.InCutscene(), new Color(255, 60, 60, 60),
+                DrawWideScreen(Renderer.GetWhiteTexture(), Globals.Me.InCutscene(), new Color(255, 20, 20, 20),
                     ref sCutsceneState, ref sCutsceneUpdate, ref sCutsceneWidth, false);
             }
             else 
