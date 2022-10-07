@@ -57,7 +57,7 @@ namespace Intersect.Client.Interface.Game.HUD
             var y = Bottom - (Interface.GameUi.GetChatboxHeight() + BottomPadding + Dimensions.Y);
 
             var totalHeight = Dimensions.Y * (Globals.Me.Party.Count - 1);
-            var currBounds = new FloatRect(Left + x, y + Dimensions.Y - totalHeight, Dimensions.X, totalHeight);
+            var currBounds = new FloatRect(x, y + Dimensions.Y - totalHeight, Dimensions.X, totalHeight);
             Opacity = Globals.Me.GetCurrentTileRectangle().IntersectsWith(currBounds) ? 100 : 255;
 
             HoveredMember = null;

@@ -35,7 +35,15 @@ namespace Intersect.Client.Utilities
                         var prefixWords = prefix.Split(' ');
                         if (prefixWords.Length > 0)
                         {
-                            sb.Append($"{prefixWords[0][0]}. {string.Concat(prefixWords.Skip(1)).Trim()} - {string.Concat(split.Skip(1)).Trim()}");
+                            var abbreviatedFirst = prefixWords[0];
+                            if (abbreviatedFirst.ToLower() == "the")
+                            {
+                                sb.Append($"{string.Concat(prefixWords.Skip(1)).Trim()} - {string.Concat(split.Skip(1)).Trim()}");
+                            }
+                            else
+                            {
+                                sb.Append($"{abbreviatedFirst[0]}. {string.Concat(prefixWords.Skip(1)).Trim()} - {string.Concat(split.Skip(1)).Trim()}");
+                            }
                         }
                     }
 

@@ -33,6 +33,8 @@ namespace Intersect.Client.Interface.Game.HUD
         private GameTexture ExpTexture;
         private GameTexture MapNameTexture;
         private GameTexture ShieldTexture;
+        private GameTexture PvpTexture;
+        private GameTexture ArenaTexture;
 
         private bool CenterBarsBetweenElements => Width <= 1280;
 
@@ -50,6 +52,7 @@ namespace Intersect.Client.Interface.Game.HUD
         public Color BackgroundBorderColor => new Color((int)Opacity, 50, 19, 0);
 
         private string MapName => MapInstance.Get(Globals.Me?.CurrentMap ?? default)?.Name ?? string.Empty;
+        private MapZones CurrentMapZone => MapInstance.Get(Globals.Me?.CurrentMap ?? default)?.ZoneType ?? MapZones.Normal;
 
         // Used so shields know where to draw
         private float HpX;
@@ -70,6 +73,8 @@ namespace Intersect.Client.Interface.Game.HUD
             ExpTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_exp.png");
             MapNameTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hud_map.png");
             ShieldTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_shield.png");
+            PvpTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hud_pvp.png");
+            ArenaTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hud_arena.png");
         }
 
         private void DetermineTextureScaling()
@@ -128,7 +133,7 @@ namespace Intersect.Client.Interface.Game.HUD
                 DrawBarContainer(Left + Width / 2, Top + 4);
             }
 
-            DrawMapLabel(Left + Width / 2, Top + Height - 4, MapName);
+            DrawMapLabel(Left + Width / 2, Top + Height - 3, MapName);
         }
 
         public float GetOpacity()
@@ -298,7 +303,10 @@ namespace Intersect.Client.Interface.Game.HUD
 
             // 56 because that is the distance on either side of the label texture's "bolts"
             var font = Graphics.HUDFont;
-            mapName = UiHelper.TruncateString(mapName, Graphics.HUDFont, MapNameTexture.GetWidth() - 56).ToUpper();
+            var zoneType = CurrentMapZone;
+            var maxNameWidth = zoneType == MapZones.Safe ? 56 : 100;
+
+            mapName = UiHelper.TruncateString(mapName, Graphics.HUDFont, MapNameTexture.GetWidth() - maxNameWidth).ToUpper();
             
             var nameWidth = Graphics.Renderer.MeasureText(mapName, font, 1).X;
             var nameX = x - nameWidth / 2;
@@ -307,6 +315,17 @@ namespace Intersect.Client.Interface.Game.HUD
             Graphics.Renderer.DrawString(
                 mapName, font, (int)nameX, (int)nameY, 1, MapNameColor
             );
+
+            if (zoneType != MapZones.Safe)
+            {
+                var zoneTexture = zoneType == MapZones.Normal ? PvpTexture : ArenaTexture;
+                var zoneTextCenterX = zoneTexture.GetWidth() / 2;
+                var zoneTextCenterY = zoneTexture.GetHeight() / 2;
+                Graphics.DrawGameTexture(zoneTexture,
+                   new FloatRect(0, 0, zoneTexture.GetWidth(), zoneTexture.GetHeight()),
+                   new FloatRect(x + (MapNameTexture.GetWidth() / 2) - zoneTextCenterX - 52, y + zoneTextCenterY - 3, zoneTexture.GetWidth() * 4, zoneTexture.GetHeight() * 4),
+                   TextureColor);
+            }
         }
     }
 }
