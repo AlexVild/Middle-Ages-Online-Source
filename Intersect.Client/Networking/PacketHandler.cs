@@ -2577,5 +2577,10 @@ namespace Intersect.Client.Networking
 
             Globals.Me.LoadRolledLoot(packet.UpdatedLoot);
         }
+
+        public void HandlePacket(IPacketSender packetSender, ServerDisposedPacket packet)
+        {
+            Globals.WaitingOnServerDispose = false;
+        }
     }
 }

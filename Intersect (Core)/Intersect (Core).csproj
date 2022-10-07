@@ -459,6 +459,7 @@
     <Compile Include="Network\Packets\Server\QuestPointPacket.cs" />
     <Compile Include="Network\Packets\Server\RecordDto.cs" />
     <Compile Include="Network\Packets\Server\ResourceLockPacket.cs" />
+    <Compile Include="Network\Packets\Server\ServerDisposedPacket.cs" />
     <Compile Include="Network\Packets\Server\ShakeScreenPacket.cs" />
     <Compile Include="Network\Packets\Server\TimerPacket.cs" />
     <Compile Include="Network\Packets\Server\TimerStopPacket.cs" />

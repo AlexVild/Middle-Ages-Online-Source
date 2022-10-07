@@ -125,29 +125,10 @@ namespace Intersect.Client.Interface.Menu
                 Interface.MsgboxErrors.Add(new KeyValuePair<string, string>("", Strings.Errors.lostconnection));
             }
 
-            // Re-Enable our buttons if we're not waiting for the server anymore with it disabled.
-            if (!Globals.WaitingOnServer)
-            {
-                if (mPlayButton.IsDisabled)
-                {
-                    mPlayButton.Enable();
-                }
-
-                if (mNewButton.IsDisabled)
-                {
-                    mNewButton.Enable();
-                }
-
-                if (mDeleteButton.IsDisabled)
-                {
-                    mDeleteButton.Enable();
-                }
-
-                if (mLogoutButton.IsDisabled)
-                {
-                    mLogoutButton.Enable();
-                }
-            }
+            mPlayButton.IsDisabled = Globals.WaitingOnServer || Globals.WaitingOnServerDispose;
+            mNewButton.IsDisabled = Globals.WaitingOnServer || Globals.WaitingOnServerDispose;
+            mDeleteButton.IsDisabled = Globals.WaitingOnServer || Globals.WaitingOnServerDispose;
+            mLogoutButton.IsDisabled = Globals.WaitingOnServer;
         }
 
         private void UpdateDisplay()

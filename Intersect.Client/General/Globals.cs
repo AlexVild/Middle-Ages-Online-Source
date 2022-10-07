@@ -173,6 +173,8 @@ namespace Intersect.Client.General
         //Scene management
         public static bool WaitingOnServer = false;
 
+        public static bool WaitingOnServerDispose = false;
+
         public static bool InMapTransition = false;
 
         // Used for when a warp is using a transition - we want to transition them AFTER the client has "faded out"

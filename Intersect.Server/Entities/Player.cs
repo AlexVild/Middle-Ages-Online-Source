@@ -447,11 +447,14 @@ namespace Intersect.Server.Entities
             }
 
             base.Dispose();
+
+            PacketSender.SendServerDisposedPacket(ClientReference);
         }
 
         public void TryLogout(bool force = false, bool softLogout = false)
         {
             LastOnline = DateTime.Now;
+            ClientReference = Client;
             Client = default;
 
             if (LoginTime != null)
@@ -8036,6 +8039,8 @@ namespace Intersect.Server.Entities
         [NotMapped, JsonIgnore] public Guid LastMapEntered = Guid.Empty;
 
         [JsonIgnore, NotMapped] public Client Client { get; set; }
+
+        [JsonIgnore, NotMapped] public Client ClientReference { get; set; }
 
         [JsonIgnore, NotMapped]
         public UserRights Power => Client?.Power ?? UserRights.None;

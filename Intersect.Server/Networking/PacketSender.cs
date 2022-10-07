@@ -2515,6 +2515,16 @@ namespace Intersect.Server.Networking
 
             player?.SendPacket(new LootRollUpdatePacket(lootObjs));
         }
+
+        public static void SendServerDisposedPacket(Client client)
+        {
+            if (client == null)
+            {
+                return;
+            }
+
+            client?.Send(new ServerDisposedPacket());
+        }
     }
 
 }

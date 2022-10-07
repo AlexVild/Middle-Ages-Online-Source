@@ -196,6 +196,7 @@ namespace Intersect.Client.Interface.Menu
 
         public void Reset()
         {
+            Globals.WaitingOnServerDispose = false;
             mLoginWindow.Hide();
             mRegisterWindow.Hide();
             mSettingsWindow.Hide();
