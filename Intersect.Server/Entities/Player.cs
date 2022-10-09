@@ -8278,6 +8278,9 @@ namespace Intersect.Server.Entities
         public string LastQuestCompleted { get; set; }
 
         [NotMapped, JsonIgnore]
+        public bool ClientAwaitingFadeCompletion { get; set; }
+
+        [NotMapped, JsonIgnore]
         public List<Item> CurrentLoot {
             get 
             {

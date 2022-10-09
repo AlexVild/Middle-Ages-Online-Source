@@ -37,6 +37,8 @@ namespace Intersect.Server.Entities.Events
 
             LootRoll,
 
+            Fade
+
         }
 
         public Guid[]

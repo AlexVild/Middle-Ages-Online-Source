@@ -396,6 +396,7 @@
     <Compile Include="Network\Packets\Client\CloseQuestBoardPacket.cs" />
     <Compile Include="Network\Packets\Client\CloseShopPacket.cs" />
     <Compile Include="Network\Packets\Client\CraftItemPacket.cs" />
+    <Compile Include="Network\Packets\Client\FinishedFadePacket.cs" />
     <Compile Include="Network\Packets\Client\PartyInviteNamePacket.cs" />
     <Compile Include="Network\Packets\Client\RequestLeaderboardPacket.cs" />
     <Compile Include="Network\Packets\Client\RequestLootUpdatePacket.cs" />
@@ -433,6 +434,7 @@
     <Compile Include="Network\Packets\Server\ComboPacket.cs" />
     <Compile Include="Network\Packets\Server\CraftingInfoPacket.cs" />
     <Compile Include="Network\Packets\Server\EntityMovementPackets.cs" />
+    <Compile Include="Network\Packets\Server\FadePacket.cs" />
     <Compile Include="Network\Packets\Server\FlashScreenPacket.cs" />
     <Compile Include="Network\Packets\Server\GUINotificationPacket.cs" />
     <Compile Include="Network\Packets\Server\InstanceLivesPacket.cs" />

@@ -2582,5 +2582,33 @@ namespace Intersect.Client.Networking
         {
             Globals.WaitingOnServerDispose = false;
         }
+
+        public void HandlePacket(IPacketSender packetSender, FadePacket packet)
+        {
+            if (packet.FadeIn)
+            {
+                if (Globals.Database.FadeTransitions)
+                {
+                    Fade.FadeIn();
+                }
+                else
+                {
+                    Wipe.FadeIn();
+                }
+            }
+            else
+            {
+                if (Globals.Database.FadeTransitions)
+                {
+                    Fade.FadeOut();
+                }
+                else
+                {
+                    Wipe.FadeOut();
+                }
+            }
+
+            Globals.WaitFade = true;
+        }
     }
 }

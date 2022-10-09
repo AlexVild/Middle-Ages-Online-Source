@@ -546,5 +546,11 @@ namespace Intersect.Client.Networking
         {
             Network.SendPacket(new RequestLootUpdatePacket(type, idx));
         }
+
+        public static void SendFadeFinishPacket()
+        {
+            Globals.WaitFade = false;
+            Network.SendPacket(new FinishedFadePacket());
+        }
     }
 }

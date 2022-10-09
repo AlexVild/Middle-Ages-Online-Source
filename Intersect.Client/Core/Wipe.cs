@@ -88,6 +88,11 @@ namespace Intersect.Client.Core
 
                 if (sFadeAmt <= 0f && sInvertFadeAmt >= maxWidth)
                 {
+                    if (Globals.WaitFade)
+                    {
+                        Networking.PacketSender.SendFadeFinishPacket();
+                    }
+
                     sCurrentAction = FadeType.None;
                     sFadeAmt = 0f;
                     sInvertFadeAmt = maxWidth;
@@ -101,6 +106,10 @@ namespace Intersect.Client.Core
                 if (sFadeAmt >= maxWidth && sInvertFadeAmt <= 0f)
                 {
                     sCurrentAction = FadeType.None;
+                    if (Globals.WaitFade)
+                    {
+                        Networking.PacketSender.SendFadeFinishPacket();
+                    }
                     if (sAlertServerWhenFaded)
                     {
                         Networking.PacketSender.SendMapTransitionReady(Globals.futureWarpMapId, Globals.futureWarpX, Globals.futureWarpY, Globals.futureWarpDir, Globals.futureWarpInstanceType);

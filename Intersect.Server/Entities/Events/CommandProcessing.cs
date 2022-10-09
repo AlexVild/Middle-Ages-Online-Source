@@ -2759,7 +2759,7 @@ namespace Intersect.Server.Entities.Events
                 // If it's not, then simply _prepare_ that instance for what its spawn group _should_ be, when it gets instantiated
                 ProcessingInfo.ChangeSpawnGroup(player.MapInstanceId, mapId, spawnGroup, command.PersistCleanup);
             }
-            
+
             return;
         }
 
@@ -2827,7 +2827,7 @@ namespace Intersect.Server.Entities.Events
             try
             {
                 player.ChangeLabelUnlockStatus(command.LabelId, command.Status);
-            } catch(NotImplementedException e)
+            } catch (NotImplementedException e)
             {
                 Logging.Log.Error($"Player command processing exception: {e.Message}");
             }
@@ -2880,13 +2880,13 @@ namespace Intersect.Server.Entities.Events
             var players = new List<Player> { player };
             if (command.SyncParty && player.Party?.Count > 1)
             {
-                foreach(var member in player.Party.Where(mem => mem.Id != player.Id).ToArray())
+                foreach (var member in player.Party.Where(mem => mem.Id != player.Id).ToArray())
                 {
                     players.Add(member);
                 }
             }
 
-            foreach(var validPlayer in players)
+            foreach (var validPlayer in players)
             {
                 var varsInGroup = validPlayer.Variables
                     .FindAll(playerVar => PlayerVariableBase.Get(playerVar.VariableId)?.VariableGroup == command.Group)
@@ -2953,6 +2953,45 @@ namespace Intersect.Server.Entities.Events
             }
 
             ProcessingInfo.ClearPermadeadNpcs(player.MapInstanceId, mapId, command.RefreshSpawns);
+        }
+
+        private static void ProcessCommand(
+            FadeInCommand command,
+            Player player,
+            Event instance,
+            CommandInstance stackInfo,
+            Stack<CommandInstance> callStack
+        )
+        {
+            player.ClientAwaitingFadeCompletion = true;
+            player?.SendPacket(new FadePacket(true));
+
+            callStack.Peek().WaitingForResponse = CommandInstance.EventResponse.Fade;
+        }
+
+        private static void ProcessCommand(
+            FadeOutCommand command,
+            Player player,
+            Event instance,
+            CommandInstance stackInfo,
+            Stack<CommandInstance> callStack
+        )
+        {
+            player.ClientAwaitingFadeCompletion = true;
+            player?.SendPacket(new FadePacket(false));
+
+            callStack.Peek().WaitingForResponse = CommandInstance.EventResponse.Fade;
+        }
+
+        private static void ProcessCommand(
+            ShakeScreenCommand command,
+            Player player,
+            Event instance,
+            CommandInstance stackInfo,
+            Stack<CommandInstance> callStack
+        )
+        {
+            player?.SendPacket(new ShakeScreenPacket(command.Intensity));
         }
     }
 }

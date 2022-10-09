@@ -219,6 +219,12 @@
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_UnlockLabel.Designer.cs">
       <DependentUpon>EventCommand_UnlockLabel.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_ShakeScreen.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_ShakeScreen.Designer.cs">
+      <DependentUpon>EventCommand_ShakeScreen.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Editors\Events\Event Commands\TimerCommandHelpers.cs" />
     <Compile Include="Forms\Editors\frmLabel.cs">
       <SubType>Form</SubType>
@@ -863,6 +869,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_Warp.resx">
       <DependentUpon>EventCommand_Warp.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_ShakeScreen.resx">
+      <DependentUpon>EventCommand_ShakeScreen.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\frmLabel.resx">
       <DependentUpon>frmLabel.cs</DependentUpon>

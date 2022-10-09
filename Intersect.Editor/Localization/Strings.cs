@@ -2206,6 +2206,9 @@ Tick timer saved in server config.json.";
                 {"unlocklabel", @"Unlock Label"},
                 {"resetvariables", @"Reset Variables in Group"},
                 {"resetpermadeadnpcs", @"Reset Permadead NPCs in Map"},
+                {"fadein", @"Fade In"},
+                {"fadeout", @"Fade Out"},
+                {"shakescreen", @"Shake Screen"},
             };
 
         }
@@ -6074,6 +6077,12 @@ Negative values for time to flow backwards.";
             public static LocalizedString ClearRecord = @"Clear Records for {00}, clear all: {01}";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString FadeIn = @"Fade In";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString FadeOut = @"Fade Out";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString OpenLeaderboard = @"Open leaderboard '{00}' for {01} (sort: {02}, display type: {03})";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -6084,7 +6093,10 @@ Negative values for time to flow backwards.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString RollLoot = @"Roll Loot ({00})";
-            
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ShakeScreenCommand = @"Shake Screen [Intensity: {00}]";
+
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString ShowTextTemplate = @"Show Text: [{00} template], Chatbox: {01}";
 

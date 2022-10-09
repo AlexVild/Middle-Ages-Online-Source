@@ -172,6 +172,12 @@ namespace Intersect.Server.Entities.Events
                             Player.ClearLootIfDone();
                         }
 
+                        if (curStack.WaitingForResponse == CommandInstance.EventResponse.Fade && !Player.ClientAwaitingFadeCompletion)
+                        {
+                            curStack.WaitingForResponse = CommandInstance.EventResponse.None;
+                            Player.ClientAwaitingFadeCompletion = false;
+                        }
+
                         if (curStack.WaitingForResponse == CommandInstance.EventResponse.RandomQuest)
                         {
                             var randomQuestList = ((RandomQuestCommand)curStack.WaitingOnCommand).QuestListId;

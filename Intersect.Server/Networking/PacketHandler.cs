@@ -4417,5 +4417,17 @@ namespace Intersect.Server.Networking
 
             PacketSender.SendLootUpdatePacketTo(player);
         }
+
+        public void HandlePacket(Client client, FinishedFadePacket packet)
+        {
+            var player = client?.Entity;
+
+            if (player == null)
+            {
+                return;
+            }
+
+            player.ClientAwaitingFadeCompletion = false;
+        }
     }
 }

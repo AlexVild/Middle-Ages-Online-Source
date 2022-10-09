@@ -819,6 +819,18 @@ namespace Intersect.Editor.Forms.Editors.Events
                     tmpCommand = new ResetPermadeadNpcsCommand();
 
                     break;
+                case EventCommandType.FadeIn:
+                    tmpCommand = new FadeInCommand();
+
+                    break;
+                case EventCommandType.FadeOut:
+                    tmpCommand = new FadeOutCommand();
+
+                    break;
+                case EventCommandType.ShakeScreen:
+                    tmpCommand = new ShakeScreenCommand();
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -1498,6 +1510,16 @@ namespace Intersect.Editor.Forms.Editors.Events
                     break;
                 case EventCommandType.ResetPermadeadNpcs:
                     cmdWindow = new EventCommand_ResetPermadeadNpcs((ResetPermadeadNpcsCommand)command, this);
+
+                    break;
+                case EventCommandType.FadeIn:
+                    //No editor
+                    break;
+                case EventCommandType.FadeOut:
+                    //No editor
+                    break;
+                case EventCommandType.ShakeScreen:
+                    cmdWindow = new EventCommand_ShakeScreen((ShakeScreenCommand)command, this);
 
                     break;
                 default:

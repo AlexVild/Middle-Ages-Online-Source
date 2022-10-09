@@ -2525,6 +2525,16 @@ namespace Intersect.Server.Networking
 
             client?.Send(new ServerDisposedPacket());
         }
+
+        public static void SendFadePacket(Player player, bool fadeIn)
+        {
+            if (player == null)
+            {
+                return;
+            }
+
+            player?.SendPacket(new FadePacket(fadeIn));
+        }
     }
 
 }

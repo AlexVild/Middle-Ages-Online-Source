@@ -259,6 +259,9 @@
         UnlockLabel,
         VarGroupReset, // 72
         ResetPermadeadNpcs, // 73
+        FadeIn, // 74
+        FadeOut, // 75
+        ShakeScreen // 76
     }
 
     public enum NPCGuildManagementSelection

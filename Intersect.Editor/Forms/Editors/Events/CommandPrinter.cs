@@ -1916,5 +1916,20 @@ namespace Intersect.Editor.Forms.Editors.Events
 
             return Strings.EventCommandList.ResetPermadeads.ToString(mapName, command.RefreshSpawns);
         }
+
+        private static string GetCommandText(FadeInCommand command, MapInstance map)
+        {
+            return Strings.EventCommandList.FadeIn.ToString();
+        }
+
+        private static string GetCommandText(FadeOutCommand command, MapInstance map)
+        {
+            return Strings.EventCommandList.FadeOut.ToString();
+        }
+
+        private static string GetCommandText(ShakeScreenCommand command, MapInstance map)
+        {
+            return Strings.EventCommandList.ShakeScreenCommand.ToString(command.Intensity);
+        }
     }
 }

@@ -1335,4 +1335,21 @@ namespace Intersect.GameObjects.Events.Commands
 
         public bool RefreshSpawns;
     }
+
+    public partial class FadeInCommand : EventCommand
+    {
+        public override EventCommandType Type { get; } = EventCommandType.FadeIn;
+    }
+
+    public partial class FadeOutCommand : EventCommand
+    {
+        public override EventCommandType Type { get; } = EventCommandType.FadeOut;
+    }
+
+    public partial class ShakeScreenCommand : EventCommand
+    {
+        public override EventCommandType Type { get; } = EventCommandType.ShakeScreen;
+
+        public float Intensity { get; set; }
+    }
 }
