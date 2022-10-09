@@ -440,6 +440,7 @@
     <Compile Include="Core\Commands\ClearRecordCacheCommand.cs" />
     <Compile Include="Core\Commands\GuildWarsCommand.cs" />
     <Compile Include="Core\Commands\MetricsCommand.cs" />
+    <Compile Include="Core\Commands\PanicCommand.cs" />
     <Compile Include="Core\Commands\SetVarCommand.cs" />
     <Compile Include="Core\IServerContext.cs" />
     <Compile Include="Core\LogicService.cs" />

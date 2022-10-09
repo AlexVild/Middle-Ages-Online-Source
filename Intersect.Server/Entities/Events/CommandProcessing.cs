@@ -2613,12 +2613,12 @@ namespace Intersect.Server.Entities.Events
                             TimerProcessor.RemoveTimer(activeTimer);
                             break;
                         case TimerStopType.Cancel:
-                            stopAction((pl) => pl.StartCommonEvent(descriptor.CancellationEvent));
+                            stopAction((pl) => pl.EnqueueStartCommonEvent(descriptor.CancellationEvent));
                             TimerProcessor.RemoveTimer(activeTimer);
                             break;
 
                         case TimerStopType.Complete:
-                            stopAction((pl) => pl.StartCommonEvent(descriptor.CompletionEvent));
+                            stopAction((pl) => pl.EnqueueStartCommonEvent(descriptor.CompletionEvent));
                             TimerProcessor.RemoveTimer(activeTimer);
                             break;
 
