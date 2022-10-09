@@ -887,7 +887,8 @@ namespace Intersect.Server.Entities
                                 startCommonEventMetadata.EventDescriptor,
                                 startCommonEventMetadata.Trigger,
                                 startCommonEventMetadata.Command,
-                                startCommonEventMetadata.Parameter
+                                startCommonEventMetadata.Parameter,
+                                startCommonEventMetadata.Value
                             );
                         }
                     }
