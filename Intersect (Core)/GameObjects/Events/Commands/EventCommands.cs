@@ -1324,4 +1324,15 @@ namespace Intersect.GameObjects.Events.Commands
 
         public bool SyncParty;
     }
+
+    public partial class ResetPermadeadNpcsCommand : EventCommand
+    {
+        public override EventCommandType Type { get; } = EventCommandType.ResetPermadeadNpcs;
+
+        public Guid MapId;
+
+        public bool UsePlayerMap;
+
+        public bool RefreshSpawns;
+    }
 }

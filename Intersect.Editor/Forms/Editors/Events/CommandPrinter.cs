@@ -1895,5 +1895,26 @@ namespace Intersect.Editor.Forms.Editors.Events
         {
             return Strings.EventCommandList.ResetVariableGroup.ToString(command.Group);
         }
+
+        private static string GetCommandText(ResetPermadeadNpcsCommand command, MapInstance map)
+        {
+            var mapName = Strings.EventCommandList.mapnotfound;
+            if (command.UsePlayerMap)
+            {
+                mapName = "Player Map";
+            }
+            else
+            {
+                for (var i = 0; i < MapList.OrderedMaps.Count; i++)
+                {
+                    if (MapList.OrderedMaps[i].MapId == command.MapId)
+                    {
+                        mapName = MapList.OrderedMaps[i].Name;
+                    }
+                }
+            }
+
+            return Strings.EventCommandList.ResetPermadeads.ToString(mapName, command.RefreshSpawns);
+        }
     }
 }

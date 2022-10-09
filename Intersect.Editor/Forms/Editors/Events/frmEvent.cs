@@ -815,6 +815,10 @@ namespace Intersect.Editor.Forms.Editors.Events
                     tmpCommand = new ResetVariableCommand();
 
                     break;
+                case EventCommandType.ResetPermadeadNpcs:
+                    tmpCommand = new ResetPermadeadNpcsCommand();
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -1490,6 +1494,10 @@ namespace Intersect.Editor.Forms.Editors.Events
                     break;
                 case EventCommandType.VarGroupReset:
                     cmdWindow = new EventCommand_ResetVariables((ResetVariableCommand)command, this);
+
+                    break;
+                case EventCommandType.ResetPermadeadNpcs:
+                    cmdWindow = new EventCommand_ResetPermadeadNpcs((ResetPermadeadNpcsCommand)command, this);
 
                     break;
                 default:

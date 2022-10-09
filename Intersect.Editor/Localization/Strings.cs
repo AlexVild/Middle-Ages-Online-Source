@@ -2205,6 +2205,7 @@ Tick timer saved in server config.json.";
                 {"rollloot", @"Roll Loot"},
                 {"unlocklabel", @"Unlock Label"},
                 {"resetvariables", @"Reset Variables in Group"},
+                {"resetpermadeadnpcs", @"Reset Permadead NPCs in Map"},
             };
 
         }
@@ -6076,7 +6077,10 @@ Negative values for time to flow backwards.";
             public static LocalizedString OpenLeaderboard = @"Open leaderboard '{00}' for {01} (sort: {02}, display type: {03})";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public static LocalizedString ResetVariableGroup = @"Reset all Player Variables in Group: {00}";
+            public static LocalizedString ResetPermadeads = @"Reset Permadead NPCs in Map: {00}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ResetVariableGroup = @"Reset all Player Variables in Group: {00} [Force Refres: {01}]";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString RollLoot = @"Roll Loot ({00})";

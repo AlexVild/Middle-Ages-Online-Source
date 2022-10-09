@@ -2922,5 +2922,37 @@ namespace Intersect.Server.Entities.Events
                 }
             }
         }
+
+        private static void ProcessCommand(
+            ResetPermadeadNpcsCommand command,
+            Player player,
+            Event instance,
+            CommandInstance stackInfo,
+            Stack<CommandInstance> callStack
+        )
+        {
+            if (player == null)
+            {
+                return;
+            }
+
+            Guid mapId;
+
+            if (command.UsePlayerMap)
+            {
+                mapId = player.MapId;
+            }
+            else
+            {
+                mapId = command.MapId;
+            }
+
+            if (mapId == default)
+            {
+                return;
+            }
+
+            ProcessingInfo.ClearPermadeadNpcs(player.MapInstanceId, mapId, command.RefreshSpawns);
+        }
     }
 }

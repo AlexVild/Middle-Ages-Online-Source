@@ -168,5 +168,29 @@ namespace Intersect.Server.Core
                 MapSpawnGroups.Add(instanceId, newInstanceGroups);
             }
         }
+
+        public static void ClearPermadeadNpcs(Guid instanceId, Guid mapControllerId, bool forceRespawn)
+        {
+            if (!PermadeadNpcs.TryGetValue(instanceId, out var permadeadKeys))
+            {
+                return;
+            }
+
+            // TODO why did I think this was okay. Could just use a dictionary of controller IDs like for spawn groups
+            permadeadKeys.RemoveWhere(key =>
+            {
+                var split = key.Split('_');
+                if (split.Length <= 1)
+                {
+                    return false;
+                }
+                return split[0] == mapControllerId.ToString();
+            });
+
+            if (forceRespawn && MapController.TryGetInstanceFromMap(mapControllerId, instanceId, out var instance))
+            {
+                instance.RefreshNpcs();
+            }
+        }
     }
 }

@@ -1615,5 +1615,11 @@ namespace Intersect.Server.Maps
     public partial class MapInstance : IDisposable
     {
         private long mSpawnGroupLastChangedAt { get; set; }
+
+        public void RefreshNpcs()
+        {
+            DespawnNpcs();
+            SpawnMapNpcs();
+        }
     }
 }

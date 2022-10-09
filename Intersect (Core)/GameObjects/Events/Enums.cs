@@ -258,6 +258,7 @@
         RollLoot,
         UnlockLabel,
         VarGroupReset, // 72
+        ResetPermadeadNpcs, // 73
     }
 
     public enum NPCGuildManagementSelection

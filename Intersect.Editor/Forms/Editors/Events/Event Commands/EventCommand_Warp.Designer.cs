@@ -80,7 +80,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // chkChangeInstance
             // 
             this.chkChangeInstance.AutoSize = true;
-            this.chkChangeInstance.Location = new System.Drawing.Point(183, 18);
+            this.chkChangeInstance.Location = new System.Drawing.Point(183, 63);
             this.chkChangeInstance.Name = "chkChangeInstance";
             this.chkChangeInstance.Size = new System.Drawing.Size(112, 17);
             this.chkChangeInstance.TabIndex = 63;
@@ -95,7 +95,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpInstanceSettings.Controls.Add(this.cmbInstanceType);
             this.grpInstanceSettings.Controls.Add(this.lblInstanceType);
             this.grpInstanceSettings.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpInstanceSettings.Location = new System.Drawing.Point(183, 46);
+            this.grpInstanceSettings.Location = new System.Drawing.Point(183, 86);
             this.grpInstanceSettings.Name = "grpInstanceSettings";
             this.grpInstanceSettings.Size = new System.Drawing.Size(183, 102);
             this.grpInstanceSettings.TabIndex = 62;
@@ -207,7 +207,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbMap.FormattingEnabled = true;
             this.cmbMap.Location = new System.Drawing.Point(46, 16);
             this.cmbMap.Name = "cmbMap";
-            this.cmbMap.Size = new System.Drawing.Size(121, 21);
+            this.cmbMap.Size = new System.Drawing.Size(301, 21);
             this.cmbMap.TabIndex = 16;
             this.cmbMap.Text = null;
             this.cmbMap.TextPadding = new System.Windows.Forms.Padding(2);

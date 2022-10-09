@@ -153,6 +153,12 @@
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_RandomQuest.Designer.cs">
       <DependentUpon>EventCommand_RandomQuest.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_ResetPermadeadNpcs.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_ResetPermadeadNpcs.Designer.cs">
+      <DependentUpon>EventCommand_ResetPermadeadNpcs.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_ResetVariables.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -827,6 +833,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_RandomQuest.resx">
       <DependentUpon>EventCommand_RandomQuest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_ResetPermadeadNpcs.resx">
+      <DependentUpon>EventCommand_ResetPermadeadNpcs.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_ResetVariables.resx">
       <DependentUpon>EventCommand_ResetVariables.cs</DependentUpon>
