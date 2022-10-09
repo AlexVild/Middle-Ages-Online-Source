@@ -7,6 +7,25 @@ using Intersect.Server.Maps;
 
 namespace Intersect.Server.Core
 {
+    public class SpawnInfo
+    {
+        public SpawnInfo()
+        {
+            Group = 0;
+            PersistCleanup = false;
+        }
+
+        public SpawnInfo(int group, bool persistCleanup)
+        {
+            Group = group;
+            PersistCleanup = persistCleanup;
+        }
+
+        public int Group { get; set; }
+
+        public bool PersistCleanup { get; set; }
+    }
+
     public static class ProcessingInfo
     {
         /// <summary>
@@ -26,12 +45,12 @@ namespace Intersect.Server.Core
 
         public static Dictionary<Guid, HashSet<string>> PermadeadNpcs = new Dictionary<Guid, HashSet<string>>();
         
-        public static Dictionary<Guid, Dictionary<Guid, int>> PermaSpawnGroups = new Dictionary<Guid, Dictionary<Guid, int>>();
+        public static Dictionary<Guid, Dictionary<Guid, SpawnInfo>> MapSpawnGroups = new Dictionary<Guid, Dictionary<Guid, SpawnInfo>>();
 
         /// <summary>
         /// Maintains a list of unique instance Ids that players may be on
         /// </summary>
-        public static void UpdateActiveInstanceList(List<MapInstance> activeMaps)
+        public static void UpdateInstances(List<MapInstance> activeMaps)
         {
             // Update our list of unique active instance IDs
             ActiveMapInstanceIds.Clear();
@@ -59,12 +78,28 @@ namespace Intersect.Server.Core
                 }
             }
 
-            foreach (var key in PermaSpawnGroups.Keys.ToList())
+            foreach (var instanceId in MapSpawnGroups.Keys.ToList())
             {
-                if (!ActiveMapInstanceIds.Contains(key))
+                // Clean up spawn groups that are in orphaned instances
+                if (!ActiveMapInstanceIds.Contains(instanceId))
                 {
-                    Logging.Log.Info($"Cleaning up permanent spawn groups for instance {key}");
-                    PermaSpawnGroups.Remove(key);
+                    Logging.Log.Info($"Cleaning up permanent spawn groups for instance {instanceId}");
+                    MapSpawnGroups.Remove(instanceId);
+                    continue;
+                }
+
+                // Clean up spawn groups that are NOT in orphaned instances, but aren't meant to persist
+                var needCleaned = MapSpawnGroups[instanceId]
+                    .ToArray()
+                    .Where(mapSpawnInfos => !mapSpawnInfos.Value.PersistCleanup && !MapController.TryGetInstanceFromMap(mapSpawnInfos.Key, instanceId, out _));
+                foreach (var mapInstance in needCleaned)
+                {
+                    MapSpawnGroups[instanceId].Remove(mapInstance.Key);
+                }
+                // Clean up the groups if there's nothing left to keep track of
+                if (MapSpawnGroups[instanceId].Count == 0)
+                {
+                    MapSpawnGroups.Remove(instanceId);
                 }
             }
 
@@ -106,7 +141,32 @@ namespace Intersect.Server.Core
                     InstanceVariables[instance][instanceVarId] = copyValue;
                 }
             }
-            
+        }
+
+        public static void ChangeSpawnGroup(Guid instanceId, Guid controllerId, int spawnGroup, bool persistCleanup)
+        {
+            // If we already have spawn groups for this instance
+            if (MapSpawnGroups.TryGetValue(instanceId, out var instanceGroups))
+            {
+                // Find the one for the map we want
+                if (instanceGroups.ContainsKey(controllerId))
+                {
+                    // And update it
+                    instanceGroups[controllerId].Group = spawnGroup;
+                    instanceGroups[controllerId].PersistCleanup = persistCleanup;
+                }
+                else
+                {
+                    // And create the spawn group for the fresh map 
+                    instanceGroups.Add(controllerId, new SpawnInfo(spawnGroup, persistCleanup));
+                }
+            }
+            else
+            {
+                var newInstanceGroups = new Dictionary<Guid, SpawnInfo>();
+                newInstanceGroups.Add(controllerId, new SpawnInfo(spawnGroup, persistCleanup));
+                MapSpawnGroups.Add(instanceId, newInstanceGroups);
+            }
         }
     }
 }

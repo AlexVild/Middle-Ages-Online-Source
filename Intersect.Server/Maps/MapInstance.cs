@@ -51,7 +51,7 @@ namespace Intersect.Server.Maps
     /// </para>
     /// </remarks>
     /// </summary>
-    public class MapInstance : IDisposable
+    public partial class MapInstance : IDisposable
     {
         /// <summary>
         /// Reference to stay consistent/easy-to-read with overworld behavior
@@ -114,7 +114,20 @@ namespace Intersect.Server.Maps
 
         // NPCs
         public ConcurrentDictionary<NpcSpawn, MapNpcSpawn> NpcSpawnInstances = new ConcurrentDictionary<NpcSpawn, MapNpcSpawn>();
-        public int NpcSpawnGroup { get; private set; } = 0;
+        public int NpcSpawnGroup
+        {
+            get
+            {
+                if (ProcessingInfo.MapSpawnGroups.TryGetValue(MapInstanceId, out var spawnGroups))
+                {
+                    return spawnGroups.TryGetValue(mMapController.Id, out var spawnGroup) ? spawnGroup.Group : 0;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+        }
 
         // Items
         public ConcurrentDictionary<Guid, MapItemSpawn> ItemRespawns = new ConcurrentDictionary<Guid, MapItemSpawn>();
@@ -165,15 +178,6 @@ namespace Intersect.Server.Maps
             lock (GetLock())
             {
                 mIsProcessing = true;
-
-                // Set default spawn group if one was saved in the permanents list
-                if (ProcessingInfo.PermaSpawnGroups.TryGetValue(MapInstanceId, out var instancePermaSpawns))
-                {
-                    if (instancePermaSpawns.TryGetValue(mMapController.Id, out var defaultSpawnGroup))
-                    {
-                        NpcSpawnGroup = defaultSpawnGroup;
-                    }
-                }
 
                 CacheMapBlocks();
                 DespawnEverything();
@@ -1398,35 +1402,28 @@ namespace Intersect.Server.Maps
         }
 
         /// <summary>
-        /// Changes the spawn group of the map instance
+        /// Changes the spawn group of the map instance, and does extra processing if need be
         /// </summary>
         /// <param name="group">The group to change to</param>
         /// <param name="reset">Whether or not to despawn current NPCs on change</param>
         /// <param name="instancePermanent">Whether or not this change should persist map cleanup so long as there are players on the instance</param>
-        public void ChangeSpawnGroup(int group, bool reset, bool instancePermanent)
+        public void ChangeSpawnGroup(int group, bool reset, bool persistCleanup)
         {
+            // Shit bad way of making it so two players don't request a spawn group change too close to one another
+            if (Timing.Global.MillisecondsUtc < mSpawnGroupLastChangedAt + Options.Instance.Instancing.NpcSpawnGroupChangeMinimum)
+            {
+                return;
+            }
+            mSpawnGroupLastChangedAt = Timing.Global.MillisecondsUtc;
+
             // Can optionally get rid of all NPCs not belonging to this new group
             if (reset)
             {
                 DespawnNpcs();
             }
-            if (group >= 0)
-            {
-                NpcSpawnGroup = group;
-            }
-            if (instancePermanent)
-            {
-                if (ProcessingInfo.PermaSpawnGroups.TryGetValue(MapInstanceId, out var instanceSpawnGroups) && !instanceSpawnGroups.ContainsKey(mMapController.Id))
-                {
-                    instanceSpawnGroups[mMapController.Id] = NpcSpawnGroup;
-                }
-                else
-                {
-                    var savedSpawnGroup = new Dictionary<Guid, int>();
-                    savedSpawnGroup[mMapController.Id] = NpcSpawnGroup;
-                    ProcessingInfo.PermaSpawnGroups[MapInstanceId] = savedSpawnGroup;
-                }
-            }
+            // This will initialize spawn groups for the instance/map if needed. Saves processing time if we only keep track of
+            // spawn groups that are actually ever being modified and assume 0 for all others.
+            ProcessingInfo.ChangeSpawnGroup(MapInstanceId, mMapController.Id, group, persistCleanup);
             // Spawn the NPCs that belong to the new group
             SpawnMapNpcs();
         }
@@ -1613,5 +1610,10 @@ namespace Intersect.Server.Maps
             }
         }
         #endregion
+    }
+
+    public partial class MapInstance : IDisposable
+    {
+        private long mSpawnGroupLastChangedAt { get; set; }
     }
 }
