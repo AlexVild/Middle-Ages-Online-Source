@@ -2662,29 +2662,37 @@ namespace Intersect.Server.Entities.Events
                 mapId = command.MapId;
             }
 
-            // We can not currently set the spawn group of a map that has not yet been created in the player's current instance
+            // First, check to see if the map we want to affect is currently being processed on the player's instance ID
+            var spawnGroup = command.SpawnGroup;
             if (MapController.TryGetInstanceFromMap(mapId, player.MapInstanceId, out var mapInstance))
             {
-                var spawnGroup = command.SpawnGroup;
+                // If it IS, change it, and allow the instance the opportunity to refresh, as players might be there right now
+                // and need accurate spawn group data
+                var mapSpawnGroup = mapInstance.NpcSpawnGroup;
                 switch (command.Operator)
                 {
                     case ChangeSpawnOperator.ADD:
-                        spawnGroup += mapInstance.NpcSpawnGroup;
+                        mapSpawnGroup += spawnGroup;
                         break;
                     case ChangeSpawnOperator.SUBTRACT:
-                        spawnGroup = mapInstance.NpcSpawnGroup - spawnGroup;
+                        mapSpawnGroup -= spawnGroup;
                         break;
+                    case ChangeSpawnOperator.SET:
+                        mapSpawnGroup = spawnGroup;
+                        break;
+                    default:
+                        throw new NotImplementedException($"Invalid change spawn operator for change spawn group command for player {player?.Name}");
                 }
-
-                mapInstance.ChangeSpawnGroup(spawnGroup, command.ResetNpcs, command.PersistCleanup);
-                if (command.SurroundingMaps)
-                {
-                    foreach (var neighboringInstance in MapController.GetSurroundingMapInstances(player.MapId, player.MapInstanceId, false))
-                    {
-                        neighboringInstance.ChangeSpawnGroup(spawnGroup, command.ResetNpcs, command.PersistCleanup);
-                    }
-                }
+                mapInstance.ChangeSpawnGroup(mapSpawnGroup, command.ResetNpcs, command.PersistCleanup);
             }
+            // if we want this spawn group to continue even after the map is swept up (default 3 mins not on overworld)
+            else if (command.PersistCleanup)
+            {
+                // If it's not, then simply _prepare_ that instance for what its spawn group _should_ be, when it gets instantiated
+                ProcessingInfo.ChangeSpawnGroup(player.MapInstanceId, mapId, spawnGroup, command.PersistCleanup);
+            }
+            
+            return;
         }
 
         private static void ProcessCommand(

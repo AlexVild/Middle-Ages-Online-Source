@@ -19,6 +19,8 @@ namespace Intersect.Config
         
         public bool RegenManaOnInstanceDeath = false;
 
+        public long NpcSpawnGroupChangeMinimum = 1000;
+
         [OnDeserialized]
         internal void OnDeserializedMethod(StreamingContext context)
         {
