@@ -120,7 +120,7 @@ namespace Intersect.Server.Database.PlayerData
         {
             foreach (var player in GetAffectedPlayers())
             {
-                player.StartCommonEvent(Descriptor.CancellationEvent);
+                player.EnqueueStartCommonEvent(Descriptor.CancellationEvent);
             }
         }
 
@@ -198,16 +198,16 @@ namespace Intersect.Server.Database.PlayerData
             // If this timer is set to repeat and we're not done repeating yet, run expire event
             if (reps >= 0 && CompletionCount != reps + 1)
             {
-                player.StartCommonEvent(EventBase.Get(Descriptor.ExpirationEventId));
+                player.EnqueueStartCommonEvent(EventBase.Get(Descriptor.ExpirationEventId));
                 return;
             }
             
             // Otherwise, the timer is "complete". Fire the necessary events
             if (Descriptor.CompletionBehavior == TimerCompletionBehavior.ExpirationThenCompletion)
             {
-                player.StartCommonEvent(Descriptor.ExpirationEvent);
+                player.EnqueueStartCommonEvent(Descriptor.ExpirationEvent);
             }
-            player.StartCommonEvent(Descriptor.CompletionEvent);
+            player.EnqueueStartCommonEvent(Descriptor.CompletionEvent);
         }
 
         /// <summary>

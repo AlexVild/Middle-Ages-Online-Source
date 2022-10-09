@@ -155,7 +155,7 @@ namespace Intersect.Server.Entities
         //HotBar
         [JsonIgnore]
         public virtual List<HotbarSlot> Hotbar { get; set; } = new List<HotbarSlot>();
-       
+
         //Quests
         [JsonIgnore]
         public virtual List<Quest> Quests { get; set; } = new List<Quest>();
@@ -292,7 +292,7 @@ namespace Intersect.Server.Entities
         [NotMapped]
         public int FaceDirection = 0;
 
-        
+
 
         /// <summary>
         /// Used to determine if the player is performing an attack out of stealth
@@ -586,7 +586,7 @@ namespace Intersect.Server.Entities
         }
 
         public void CompleteLogout()
-        { 
+        {
             User?.Save();
 
             Dispose();
@@ -705,7 +705,7 @@ namespace Intersect.Server.Entities
                                 {
                                     autorunEvents += evt.Pages.Count(p => p.CommonTrigger == CommonEventTrigger.Autorun);
                                 }
-                                StartCommonEvent(evt, CommonEventTrigger.Autorun);
+                                EnqueueStartCommonEvent(evt, CommonEventTrigger.Autorun);
                             }
                         }
 
@@ -880,6 +880,16 @@ namespace Intersect.Server.Entities
 
                             RemoveEvent(evt.Value.Id);
                         }
+
+                        while (_queueStartCommonEvent.TryDequeue(out var startCommonEventMetadata))
+                        {
+                            _ = UnsafeStartCommonEvent(
+                                startCommonEventMetadata.EventDescriptor,
+                                startCommonEventMetadata.Trigger,
+                                startCommonEventMetadata.Command,
+                                startCommonEventMetadata.Parameter
+                            );
+                        }
                     }
 
                     // Check to see if combos expired
@@ -911,7 +921,7 @@ namespace Intersect.Server.Entities
         {
             Event outInstance;
             EventLookup.TryRemove(id, out outInstance);
-            if (outInstance != null) 
+            if (outInstance != null)
             {
                 EventBaseIdLookup.TryRemove(outInstance.BaseEvent.Id, out Event evt);
             }
@@ -1345,7 +1355,7 @@ namespace Intersect.Server.Entities
                     {
                         PacketSender.SendActionMsg(this, Strings.Combat.inspiredexp.ToString(expToGive), CustomColors.Combat.LevelUp);
                     }
-                    
+
                     Exp += expToGive;
                     if (Exp < 0)
                     {
@@ -1357,7 +1367,7 @@ namespace Intersect.Server.Entities
                     {
                         PacketSender.SendExperience(this, ComboExp);
                     }
-                }   
+                }
             }
         }
 
@@ -1380,7 +1390,7 @@ namespace Intersect.Server.Entities
 
             PacketSender.SendExperience(this);
         }
-        
+
         private bool CheckLevelUp()
         {
             var levelCount = 0;
@@ -1432,7 +1442,7 @@ namespace Intersect.Server.Entities
                                 {
                                     if ((Options.Party.NpcDeathCommonEventStartRange <= 0 || partyMember.InRangeOf(this, Options.Party.NpcDeathCommonEventStartRange)) && !(partyMember == this && playerEvent != null))
                                     {
-                                        partyMember.StartCommonEvent(partyEvent);
+                                        partyMember.EnqueueStartCommonEvent(partyEvent);
                                     }
                                 }
                             }
@@ -1446,7 +1456,7 @@ namespace Intersect.Server.Entities
 
                         if (playerEvent != null)
                         {
-                            StartCommonEvent(playerEvent);
+                            EnqueueStartCommonEvent(playerEvent);
                         }
 
                         if (Equipment[Options.PrayerIndex] >= 0)
@@ -1467,7 +1477,7 @@ namespace Intersect.Server.Entities
                         var descriptor = resource.Base;
                         if (descriptor?.Event != null)
                         {
-                            StartCommonEvent(descriptor.Event);
+                            EnqueueStartCommonEvent(descriptor.Event);
                         }
 
                         break;
@@ -1520,7 +1530,7 @@ namespace Intersect.Server.Entities
                 {
                     PacketSender.SendChatMsg(this, Strings.Records.NewHighestCombo.ToString(CurrentCombo), ChatMessageType.Local, Color.FromName("Blue", Strings.Colors.presets));
                 }
-                
+
                 ComboTimestamp = -1;
                 ComboWindow = -1;
                 ComboExp = 0;
@@ -1629,7 +1639,7 @@ namespace Intersect.Server.Entities
                     }
                     else
                     {
-                        if (parentItem == null || descriptor.Tool != parentItem.Tool) 
+                        if (parentItem == null || descriptor.Tool != parentItem.Tool)
                         {
                             PacketSender.SendChatMsg(
                                this, Strings.Combat.toolrequired.ToString(Options.ToolTypes[descriptor.Tool]), ChatMessageType.Error
@@ -1723,7 +1733,7 @@ namespace Intersect.Server.Entities
                         PacketSender.SendChatMsg(
                             this, Strings.Combat.toolrequired.ToString(Options.ToolTypes[descriptor.Tool]), ChatMessageType.Error
                         );
-                        
+
                         SetResourceLock(false);
 
                         return;
@@ -2144,7 +2154,7 @@ namespace Intersect.Server.Entities
                 }
 
                 mSentMap = true;
-                    
+
                 StartCommonEventsWithTrigger(CommonEventTrigger.MapChanged);
             }
             else // Player moved on same map?
@@ -2270,7 +2280,7 @@ namespace Intersect.Server.Entities
                             if (!Options.BootAllFromInstanceWhenOutOfLives || Party == null || Party.Count < 2)
                             {
                                 WarpToLastOverworldLocation(false);
-                            } else 
+                            } else
                             {
                                 // Oh shit, hard mode enabled - boot ALL party members out of instance. No more lives.
                                 foreach (Player member in Party)
@@ -2627,7 +2637,7 @@ namespace Intersect.Server.Entities
                     }
                     // Use whatever your shared instance id is for the warp
                     newMapLayerId = SharedMapInstanceId;
-                    
+
                     break;
                 default:
                     Log.Error($"Player {Name} requested an instance type that is not supported. Their map instance settings will not change.");
@@ -3406,7 +3416,7 @@ namespace Intersect.Server.Entities
                         break;
                     case ItemTypes.Event:
                         var evt = EventBase.Get(itemBase.EventId);
-                        if (evt == null || !StartCommonEvent(evt))
+                        if (evt == null || !UnsafeStartCommonEvent(evt))
                         {
                             return;
                         }
@@ -3447,7 +3457,7 @@ namespace Intersect.Server.Entities
                 }
             }
         }
-        
+
         public bool CanDestroyItem(int slot)
         {
             return Conditions.MeetsConditionLists(Items[slot].Descriptor.DestroyRequirements, this, null);
@@ -3704,10 +3714,10 @@ namespace Intersect.Server.Entities
         /// </summary>
         /// <param name="slot">The <see cref="InventorySlot"/> to find</param>
         /// <returns>An <see cref="int"/>containing the relevant index, or -1 if not found</returns>
-        public int FindInventoryItemSlotIndex(InventorySlot slot) 
+        public int FindInventoryItemSlotIndex(InventorySlot slot)
         {
             return Items.FindIndex(sl => sl.Id == slot.Id);
-        } 
+        }
 
         /// <summary>
         /// Finds all inventory slots matching the desired item and quantity.
@@ -4145,7 +4155,7 @@ namespace Intersect.Server.Entities
         /// Creates a dictionary containing item IDs and their quantities
         /// </summary>
         /// <param name="items">A <see cref="List{InventorySlot}"/>containing inventory items</param>
-        /// <returns>A <see cref="Dictionary{Guid, int}"/> containing item IDs and their quantities within the 
+        /// <returns>A <see cref="Dictionary{Guid, int}"/> containing item IDs and their quantities within the
         /// given list of inventory slots</returns>
         private static Dictionary<Guid, int> GetAllItemsAndQuantities(List<InventorySlot> items)
         {
@@ -4246,7 +4256,7 @@ namespace Intersect.Server.Entities
                     this, Strings.Crafting.crafted.ToString(itemName), ChatMessageType.Crafting,
                     CustomColors.Alerts.Success
                 );
-                    
+
                 // Update our record of how many of this item we've crafted
                 long recordCrafted = IncrementRecord(RecordType.ItemCrafted, id);
                 if (Options.SendCraftingRecordUpdates && recordCrafted % Options.CraftingRecordUpdateInterval == 0)
@@ -4260,7 +4270,7 @@ namespace Intersect.Server.Entities
                 // Start any related common events
                 if (CraftBase.Get(id).Event != null)
                 {
-                    StartCommonEvent(craft.Event);
+                    EnqueueStartCommonEvent(craft.Event);
                 }
 
                 return true;
@@ -5231,10 +5241,10 @@ namespace Intersect.Server.Entities
             if (Party.Count > 0 && Party.Contains(this))
             {
                 var oldMember = this;
-                
+
                 // Remove any client timers from this player
                 oldMember.StopPartyTimers();
-                
+
                 // Remove them from the party
                 Party.Remove(this);
 
@@ -5473,7 +5483,7 @@ namespace Intersect.Server.Entities
         public virtual bool IsAllyOf(Player otherPlayer)
         {
             if (Guild != null && otherPlayer != null)
-            {   
+            {
                 return this.InParty(otherPlayer) || this.Guild.IsMember(otherPlayer.Id) || this == otherPlayer;
             }
             else if (otherPlayer != null)
@@ -5602,7 +5612,7 @@ namespace Intersect.Server.Entities
             }
 
             //Check if snared and spell is a dash or warp
-            if (spell.SpellType == SpellTypes.Dash || 
+            if (spell.SpellType == SpellTypes.Dash ||
                 spell.SpellType == SpellTypes.Warp ||
                 spell.SpellType == SpellTypes.WarpTo)
             {
@@ -5794,7 +5804,7 @@ namespace Intersect.Server.Entities
                         var evt = spellBase.Event;
                         if (evt != null)
                         {
-                            StartCommonEvent(evt);
+                            EnqueueStartCommonEvent(evt);
                         }
 
                         base.CastSpell(spellId, spellSlot, prayerSpell, prayerTarget, prayerSpellDir); //To get cooldown :P
@@ -5807,7 +5817,7 @@ namespace Intersect.Server.Entities
                     break;
             }
         }
-        
+
         public int CalculateStealthDamage(int baseDamage, ItemBase item)
         {
             if (StealthAttack && item.ProjectileId == Guid.Empty)
@@ -5962,7 +5972,7 @@ namespace Intersect.Server.Entities
                 }
             }
 
-            
+
             if (changed)
             {
                 FixVitals();
@@ -5990,13 +6000,13 @@ namespace Intersect.Server.Entities
                 var item = Items[itemSlot];
                 var descriptor = item?.Descriptor;
 
-                if (descriptor == default || 
-                    descriptor.ItemType != ItemTypes.Equipment || 
+                if (descriptor == default ||
+                    descriptor.ItemType != ItemTypes.Equipment ||
                     !Conditions.MeetsConditionLists(descriptor.UsageRequirements, this, null))
                 {
                     Equipment[i] = -1;
                     updated = true;
-                }                
+                }
             }
             if (updated)
             {
@@ -6013,7 +6023,7 @@ namespace Intersect.Server.Entities
             {
                 if (value is EventBase eventDescriptor && eventDescriptor.Pages.Any(p => p.CommonTrigger == trigger))
                 {
-                    StartCommonEvent(eventDescriptor, trigger, command, param, val);
+                    EnqueueStartCommonEvent(eventDescriptor, trigger, command, param, val);
                 }
             }
         }
@@ -6027,7 +6037,7 @@ namespace Intersect.Server.Entities
                 {
                     foreach (var player in players)
                     {
-                        player.StartCommonEvent(eventDescriptor, trigger, command, param);
+                        player.EnqueueStartCommonEvent(eventDescriptor, trigger, command, param);
                     }
                 }
             }
@@ -6043,7 +6053,7 @@ namespace Intersect.Server.Entities
                 {
                     foreach (var player in relevantPlayers)
                     {
-                        player.StartCommonEvent(eventDescriptor, trigger, command, param);
+                        player.EnqueueStartCommonEvent(eventDescriptor, trigger, command, param);
                     }
                 }
             }
@@ -6085,7 +6095,7 @@ namespace Intersect.Server.Entities
                     Hotbar[index].ItemOrSpellId = spell.SpellId;
                 }
             }
-        }  
+        }
 
         public void HotbarSwap(int index, int swapIndex)
         {
@@ -6118,7 +6128,7 @@ namespace Intersect.Server.Entities
                 ChatMessageType.Quest,
                 CustomColors.Quests.Completed);
         }
-        
+
         public void LeaveNpcGuildOfClass(Guid classId)
         {
             if (ClassInfo.ContainsKey(classId))
@@ -6403,9 +6413,7 @@ namespace Intersect.Server.Entities
                     UpdateGatherItemQuests(quest.Tasks[0].TargetId);
                 }
 
-                HandleSpecialQuestStart(quest);
-
-                StartCommonEvent(EventBase.Get(quest.StartEventId));
+                EnqueueStartCommonEvent(EventBase.Get(quest.StartEventId));
                 PacketSender.SendChatMsg(
                     this, Strings.Quests.started.ToString(quest.Name), ChatMessageType.Quest, CustomColors.Quests.Started
                 );
@@ -6456,7 +6464,7 @@ namespace Intersect.Server.Entities
             {
                 lock (mEventLock)
                 {
-                    
+
                     QuestOffers.Remove(questId);
                     if (!fromQuestBoard) // don't alert the player otherwise
                     {
@@ -6503,7 +6511,7 @@ namespace Intersect.Server.Entities
                         var questProgress = FindQuest(quest.Id);
                         questProgress.TaskId = Guid.Empty;
                         questProgress.TaskProgress = -1;
-                        
+
                         HandleSpecialQuestAbandon(quest);
 
                         PacketSender.SendChatMsg(
@@ -6538,14 +6546,14 @@ namespace Intersect.Server.Entities
 
                                 if (!skipCompletion && quest.Tasks[i].CompletionEvent != null)
                                 {
-                                    StartCommonEvent(quest.Tasks[i].CompletionEvent);
+                                    EnqueueStartCommonEvent(quest.Tasks[i].CompletionEvent);
                                 }
 
                                 if (i == quest.Tasks.Count - 1)
                                 {
                                     //Complete Quest
                                     MarkQuestComplete(quest, questProgress);
-                                    StartCommonEvent(EventBase.Get(quest.EndEventId));
+                                    EnqueueStartCommonEvent(EventBase.Get(quest.EndEventId));
                                     PacketSender.SendChatMsg(
                                         this, Strings.Quests.completed.ToString(quest.Name), ChatMessageType.Quest, CustomColors.Alerts.Accepted
                                     );
@@ -6590,10 +6598,10 @@ namespace Intersect.Server.Entities
                     MarkQuestComplete(quest, questProgress);
                     if (!skipCompletionEvent)
                     {
-                        StartCommonEvent(EventBase.Get(quest.EndEventId));
+                        EnqueueStartCommonEvent(EventBase.Get(quest.EndEventId));
                         PacketSender.SendChatMsg(this, Strings.Quests.completed.ToString(quest.Name), ChatMessageType.Quest, CustomColors.Alerts.Accepted);
                     }
-                    
+
                     PacketSender.SendQuestsProgress(this);
                 }
             }
@@ -6714,7 +6722,7 @@ namespace Intersect.Server.Entities
                                            Strings.Quests.totaltaskscompleted.ToString(taskClassInfo.TotalTasksComplete.ToString(), ClassBase.Get(quest.RelatedClassId).Name),
                                            ChatMessageType.Quest,
                                            CustomColors.Quests.TaskUpdated);
-                            
+
                             // If this was a NEW task within their current rank, update SA progress
                             if (taskClassInfo.Rank == quest.QuestClassRank)
                             {
@@ -6730,19 +6738,19 @@ namespace Intersect.Server.Entities
                                     if (taskClassInfo.TasksRemaining == 0)
                                     {
                                         taskClassInfo.AssignmentAvailable = true;
-                                        PacketSender.SendChatMsg(this, 
+                                        PacketSender.SendChatMsg(this,
                                             Strings.Quests.newspecialassignment.ToString(ClassBase.Get(quest.RelatedClassId).Name),
-                                            ChatMessageType.Quest, 
+                                            ChatMessageType.Quest,
                                             CustomColors.Quests.Completed);
                                     } else
                                     {
-                                        PacketSender.SendChatMsg(this, 
+                                        PacketSender.SendChatMsg(this,
                                             Strings.Quests.tasksremaining.ToString(taskClassInfo.TasksRemaining.ToString(), ClassBase.Get(quest.RelatedClassId).Name),
-                                            ChatMessageType.Quest, 
+                                            ChatMessageType.Quest,
                                             CustomColors.Quests.TaskUpdated);
                                     }
                                 }
-                            } 
+                            }
                             else // Otherwise, check if they have an SA and alert them
                             {
                                 if (taskClassInfo.Rank < Options.MaxClassRank)
@@ -6844,7 +6852,7 @@ namespace Intersect.Server.Entities
                  * Return a marker that we can use on login (since CR stuff can only be changed via server restart) to determine
                  * whether we need to refresh this value or not.
                  */
-                return -1; 
+                return -1;
             }
 
             return Options.RequiredTasksPerClassRank.ToArray().ElementAtOrDefault(classRank);
@@ -7358,7 +7366,46 @@ namespace Intersect.Server.Entities
             }
         }
 
-        public bool StartCommonEvent(
+        [NotMapped, JsonIgnore]
+        private readonly ConcurrentQueue<StartCommonEventMetadata> _queueStartCommonEvent = new ConcurrentQueue<StartCommonEventMetadata>();
+
+        public class StartCommonEventMetadata
+        {
+            public string Command { get; }
+
+            public EventBase EventDescriptor { get; }
+
+            public string Parameter { get; }
+
+            public CommonEventTrigger Trigger { get; }
+
+            public long Value { get; }
+
+            public StartCommonEventMetadata(
+                string command,
+                EventBase eventDescriptor,
+                string parameter,
+                CommonEventTrigger trigger,
+                long value
+            )
+            {
+                Command = command;
+                EventDescriptor = eventDescriptor;
+                Parameter = parameter;
+                Trigger = trigger;
+                Value = value;
+            }
+        }
+
+        public void EnqueueStartCommonEvent(
+            EventBase eventDescriptor,
+            CommonEventTrigger trigger = CommonEventTrigger.None,
+            string command = default,
+            string parameter = default,
+            long value = -1
+        ) => _queueStartCommonEvent.Enqueue(new StartCommonEventMetadata(command ?? string.Empty, eventDescriptor, parameter ?? string.Empty, trigger, value));
+
+        public bool UnsafeStartCommonEvent(
             EventBase baseEvent,
             CommonEventTrigger trigger = CommonEventTrigger.None,
             string command = "",
@@ -7814,7 +7861,7 @@ namespace Intersect.Server.Entities
             var matchingSpells = Array.Empty<SpellBase>();
             var itemsUpdated = false;
             var spellsUpdated = false;
-            
+
             if (type == GameObjectType.Item || Options.Combat.LinkSpellAndItemCooldowns)
             {
                 matchingItems = ItemBase.GetCooldownGroup(group);
@@ -7830,7 +7877,7 @@ namespace Intersect.Server.Entities
             {
                 // Get our highest cooldown value from all available options.
                 matchedCooldowntime = Math.Max(
-                    matchingItems.Length > 0 ? matchingItems.Max(i => i.Cooldown) : 0, 
+                    matchingItems.Length > 0 ? matchingItems.Max(i => i.Cooldown) : 0,
                     matchingSpells.Length > 0 ? matchingSpells.Max(i => i.CooldownDuration) : 0);
             }
 
@@ -7941,7 +7988,7 @@ namespace Intersect.Server.Entities
 
             // Send our data around!
             PacketSender.SendEntityDataToProximity(this);
-            
+
             return true;
 
         }
@@ -8069,7 +8116,7 @@ namespace Intersect.Server.Entities
         [NotMapped, JsonIgnore] public Guid CraftingTableId = Guid.Empty;
 
         [NotMapped, JsonIgnore] public Guid CraftId = Guid.Empty;
-        
+
         [NotMapped, JsonIgnore] public int CraftAmount = 0;
 
         [NotMapped, JsonIgnore] public long CraftTimer = 0;
@@ -8109,7 +8156,7 @@ namespace Intersect.Server.Entities
                     }
                     else // Otherwise, simply instantiate a new CR instance
                     {
-                        
+
                         ClassInfo[cls.Id] = new PlayerClassStats();
                     }
                 }
@@ -8276,7 +8323,7 @@ namespace Intersect.Server.Entities
             {
                 DbInterface.Pool.QueueWorkItem(matchingRecord.SaveToContext);
             }
-            
+
             return recordAmt;
         }
 
