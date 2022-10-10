@@ -1149,6 +1149,7 @@ namespace Intersect.Client.Networking
             }
 
             ed.EventId = packet.EventId;
+            Interface.Interface.GameUi.SetDialogResponses(ed.Opt1, ed.Opt2, ed.Opt3, ed.Opt4);
             Globals.EventDialogs.Add(ed);
         }
 

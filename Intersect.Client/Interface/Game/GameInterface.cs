@@ -815,5 +815,10 @@ namespace Intersect.Client.Interface.Game
         {
             return mChatBox.GetHeight();
         }
+
+        public void SetDialogResponses(string response1, string response2, string response3, string response4)
+        {
+            mEventWindow.SetResponses(response1, response2, response3, response4);
+        }
     }
 }

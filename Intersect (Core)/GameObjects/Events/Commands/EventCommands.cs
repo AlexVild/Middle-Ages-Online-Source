@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using Intersect.Enums;
+using Intersect.GameObjects.Conditions;
 using Intersect.GameObjects.Timers;
 using Newtonsoft.Json;
 
@@ -46,7 +47,7 @@ namespace Intersect.GameObjects.Events.Commands
 
     }
 
-    public class ShowOptionsCommand : EventCommand
+    public partial class ShowOptionsCommand : EventCommand
     {
 
         //For Json Deserialization
@@ -1368,5 +1369,13 @@ namespace Intersect.GameObjects.Events.Commands
         public Directions Direction { get; set; } = Directions.Down;
 
         public bool Reset { get; set; }
+    }
+
+    public partial class ShowOptionsCommand : EventCommand
+    {
+        public ConditionLists Opt1Conditions = new ConditionLists();
+        public ConditionLists Opt2Conditions = new ConditionLists();
+        public ConditionLists Opt3Conditions = new ConditionLists();
+        public ConditionLists Opt4Conditions = new ConditionLists();
     }
 }

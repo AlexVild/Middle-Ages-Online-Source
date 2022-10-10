@@ -7,10 +7,17 @@ using Intersect.Client.General;
 using Intersect.Client.Localization;
 using Intersect.Client.Networking;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Intersect.Client.Interface.Game
 {
+
+    public class EventResponse
+    {
+        public string Response { get; set; }
+        public byte Index { get; set; }
+    }
 
     public class EventWindow : Base
     {
@@ -41,6 +48,8 @@ namespace Intersect.Client.Interface.Game
         private Button mEventResponse4;
 
         private Label mSpeakerLabel;
+
+        private List<EventResponse> Responses;
 
         //Init
         public EventWindow(Canvas gameCanvas)
@@ -73,6 +82,29 @@ namespace Intersect.Client.Interface.Game
 
             mEventResponse4 = new Button(mEventDialogWindow, "EventResponse4");
             mEventResponse4.Clicked += EventResponse4_Clicked;
+
+            Responses = new List<EventResponse>();
+        }
+
+        public void SetResponses(string response1, string response2, string response3, string response4)
+        {
+            var responses = new List<string> {
+                            response1, response2,
+                            response3, response4
+                        };
+
+            Responses.Clear();
+            byte idx = 1;
+            foreach (var response in responses)
+            {
+                var eventResponse = new EventResponse();
+                eventResponse.Response = response;
+                eventResponse.Index = idx;
+                Responses.Add(eventResponse);
+                idx++;
+            }
+
+            Responses = Responses.Where(response => !string.IsNullOrEmpty(response.Response)).ToList();
         }
 
         //Update
@@ -112,28 +144,9 @@ namespace Intersect.Client.Interface.Game
 
                     var responseCount = 0;
                     var maxResponse = 1;
-                    if (Globals.EventDialogs[0].Opt1.Length > 0)
-                    {
-                        responseCount++;
-                    }
 
-                    if (Globals.EventDialogs[0].Opt2.Length > 0)
-                    {
-                        responseCount++;
-                        maxResponse = 2;
-                    }
-
-                    if (Globals.EventDialogs[0].Opt3.Length > 0)
-                    {
-                        responseCount++;
-                        maxResponse = 3;
-                    }
-
-                    if (Globals.EventDialogs[0].Opt4.Length > 0)
-                    {
-                        responseCount++;
-                        maxResponse = 4;
-                    }
+                    responseCount = Responses.Count;
+                    maxResponse = responseCount;
 
                     mEventResponse1.Name = "";
                     mEventResponse2.Name = "";
@@ -246,40 +259,44 @@ namespace Intersect.Client.Interface.Game
                     }
                     else
                     {
-                        if (Globals.EventDialogs[0].Opt1 != "")
+                        if (Responses.Count >= 1 && !string.IsNullOrEmpty(Responses[0].Response))
                         {
                             mEventResponse1.Show();
-                            mEventResponse1.SetText(Globals.EventDialogs[0].Opt1);
+                            mEventResponse1.SetText(Responses[0].Response);
+                            mEventResponse1.UserData = Responses[0].Index;
                         }
                         else
                         {
                             mEventResponse1.Hide();
                         }
 
-                        if (Globals.EventDialogs[0].Opt2 != "")
+                        if (Responses.Count >= 2 && !string.IsNullOrEmpty(Responses[1].Response))
                         {
                             mEventResponse2.Show();
-                            mEventResponse2.SetText(Globals.EventDialogs[0].Opt2);
+                            mEventResponse2.SetText(Responses[1].Response);
+                            mEventResponse2.UserData = Responses[1].Index;
                         }
                         else
                         {
                             mEventResponse2.Hide();
                         }
 
-                        if (Globals.EventDialogs[0].Opt3 != "")
+                        if (Responses.Count >= 3 && !string.IsNullOrEmpty(Responses[2].Response))
                         {
                             mEventResponse3.Show();
-                            mEventResponse3.SetText(Globals.EventDialogs[0].Opt3);
+                            mEventResponse3.SetText(Responses[2].Response);
+                            mEventResponse3.UserData = Responses[2].Index;
                         }
                         else
                         {
                             mEventResponse3.Hide();
                         }
 
-                        if (Globals.EventDialogs[0].Opt4 != "")
+                        if (Responses.Count >= 4 && !string.IsNullOrEmpty(Responses[3].Response))
                         {
                             mEventResponse4.Show();
-                            mEventResponse4.SetText(Globals.EventDialogs[0].Opt4);
+                            mEventResponse4.SetText(Responses[3].Response);
+                            mEventResponse4.UserData = Responses[3].Index;
                         }
                         else
                         {
@@ -336,7 +353,7 @@ namespace Intersect.Client.Interface.Game
                 return;
             }
 
-            PacketSender.SendEventResponse(4, ed);
+            PacketSender.SendEventResponse(Responses[3].Index, ed);
             mEventDialogWindow.RemoveModal();
             mEventDialogWindow.IsHidden = true;
             ed.ResponseSent = 1;
@@ -351,7 +368,7 @@ namespace Intersect.Client.Interface.Game
                 return;
             }
 
-            PacketSender.SendEventResponse(3, ed);
+            PacketSender.SendEventResponse(Responses[2].Index, ed);
             mEventDialogWindow.RemoveModal();
             mEventDialogWindow.IsHidden = true;
             ed.ResponseSent = 1;
@@ -366,7 +383,7 @@ namespace Intersect.Client.Interface.Game
                 return;
             }
 
-            PacketSender.SendEventResponse(2, ed);
+            PacketSender.SendEventResponse(Responses[1].Index, ed);
             mEventDialogWindow.RemoveModal();
             mEventDialogWindow.IsHidden = true;
             ed.ResponseSent = 1;
@@ -381,7 +398,14 @@ namespace Intersect.Client.Interface.Game
                 return;
             }
 
-            PacketSender.SendEventResponse(1, ed);
+            if (Responses.Count > 0)
+            {
+                PacketSender.SendEventResponse(Responses[0].Index, ed);
+            }
+            else
+            {
+                PacketSender.SendEventResponse(0, ed);
+            }
             mEventDialogWindow.RemoveModal();
             mEventDialogWindow.IsHidden = true;
             ed.ResponseSent = 1;

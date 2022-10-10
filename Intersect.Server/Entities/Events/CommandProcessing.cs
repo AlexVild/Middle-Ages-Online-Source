@@ -163,10 +163,10 @@ namespace Intersect.Server.Entities.Events
         )
         {
             var txt = ParseEventText(command.Text, player, instance);
-            var opt1 = ParseEventText(command.Options[0], player, instance);
-            var opt2 = ParseEventText(command.Options[1], player, instance);
-            var opt3 = ParseEventText(command.Options[2], player, instance);
-            var opt4 = ParseEventText(command.Options[3], player, instance);
+            var opt1 = Conditions.MeetsConditionLists(command.Opt1Conditions, player, instance) ? ParseEventText(command.Options[0], player, instance) : string.Empty;
+            var opt2 = Conditions.MeetsConditionLists(command.Opt2Conditions, player, instance) ? ParseEventText(command.Options[1], player, instance) : string.Empty;
+            var opt3 = Conditions.MeetsConditionLists(command.Opt3Conditions, player, instance) ? ParseEventText(command.Options[2], player, instance) : string.Empty;
+            var opt4 = Conditions.MeetsConditionLists(command.Opt4Conditions, player, instance) ? ParseEventText(command.Options[3], player, instance) : string.Empty;
             PacketSender.SendEventDialog(player, txt, opt1, opt2, opt3, opt4, command.Face, instance.PageInstance.Id);
             stackInfo.WaitingForResponse = CommandInstance.EventResponse.Dialogue;
             stackInfo.WaitingOnCommand = command;

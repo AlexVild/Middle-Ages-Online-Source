@@ -846,6 +846,9 @@
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_OpenQuestBoard.resx">
       <DependentUpon>EventCommand_OpenQuestBoard.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_Options.resx">
+      <DependentUpon>EventCommand_Options.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_RandomQuest.resx">
       <DependentUpon>EventCommand_RandomQuest.cs</DependentUpon>
     </EmbeddedResource>

@@ -38,6 +38,8 @@ namespace Intersect.Editor.Forms.Editors
         ItemDestroy,
 
         LootTable,
+
+        DialogOptions,
     }
 
     public partial class FrmDynamicRequirements : Form
@@ -117,6 +119,10 @@ namespace Intersect.Editor.Forms.Editors
 
                     break;
                 case RequirementType.LootTable:
+                    lblInstructions.Text = Strings.DynamicRequirements.LootTable;
+
+                    break;
+                case RequirementType.DialogOptions:
                     lblInstructions.Text = Strings.DynamicRequirements.LootTable;
 
                     break;

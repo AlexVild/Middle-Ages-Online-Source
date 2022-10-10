@@ -6117,6 +6117,9 @@ Negative values for time to flow backwards.";
         public partial struct DynamicRequirements
         {
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString DialogOptions = @"Determines whether or not this option should appear";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString LootTable = @"Loot Table";
         }
 

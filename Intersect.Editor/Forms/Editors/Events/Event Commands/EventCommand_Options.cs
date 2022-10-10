@@ -102,6 +102,33 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             );
         }
 
+        private void btnCnd1_Click(object sender, EventArgs e)
+        {
+            /*var frm = new FrmDynamicRequirements(mMyCommand.Opt1Conditions, RequirementType.DialogOptions);
+            frm.TopMost = true;
+            frm.ShowDialog();*/
+        }
+
+        private void btnCnd2_Click(object sender, EventArgs e)
+        {
+            var frm = new FrmDynamicRequirements(mMyCommand.Opt2Conditions, RequirementType.DialogOptions);
+            frm.TopMost = true;
+            frm.ShowDialog();
+        }
+
+        private void btnCnd3_Click(object sender, EventArgs e)
+        {
+            var frm = new FrmDynamicRequirements(mMyCommand.Opt3Conditions, RequirementType.DialogOptions);
+            frm.TopMost = true;
+            frm.ShowDialog();
+        }
+
+        private void btnCnd4_Click(object sender, EventArgs e)
+        {
+            var frm = new FrmDynamicRequirements(mMyCommand.Opt4Conditions, RequirementType.DialogOptions);
+            frm.TopMost = true;
+            frm.ShowDialog();
+        }
     }
 
 }
