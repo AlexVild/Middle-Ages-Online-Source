@@ -88,13 +88,13 @@ namespace Intersect.Client.Entities
 
         public long CombatTimer { get; set; }
 
-        public int ComboWindow { get; set; }
-
         public int ComboExp { get; set; }
 
         public int CurrentCombo { get; set; }
 
-        public int MaxComboWindow { get; set; }
+        public long MaxComboWindow { get; set; }
+
+        public long LastComboUpdate { get; set; }
 
         public string MiningTier { get; set; }
 

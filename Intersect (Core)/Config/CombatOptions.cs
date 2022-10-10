@@ -19,6 +19,8 @@ namespace Intersect.Config
 
         public int BaseComboTime = 3000; //3 seconds
 
+        public int BasePartyComboTime = 5000; //5 seconds
+
         public int MaxNpcStat = 500;
 
         public string MissSound = "";

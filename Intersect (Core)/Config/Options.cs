@@ -169,6 +169,8 @@ namespace Intersect
         public static int CombatTime => Instance.CombatOpts.CombatTime;
 
         public static int BaseComboTime => Instance.CombatOpts.BaseComboTime;
+        
+        public static int BasePartyComboTime => Instance.CombatOpts.BasePartyComboTime;
 
         public static float MaxComboExpModifier => Instance.CombatOpts.MaxComboExpModifier;
 

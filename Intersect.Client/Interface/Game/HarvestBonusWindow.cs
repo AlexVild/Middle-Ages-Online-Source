@@ -61,8 +61,6 @@ namespace Intersect.Client.Interface.Game
             }
 
             // else, update members
-            ComboWindow = Globals.Me.ComboWindow;
-            MaxComboWindow = Globals.Me.MaxComboWindow;
             mSize = Globals.Me.CurrentCombo.ToString();
 
             var bonusReadable = (int) (Globals.Me.CurrentHarvestBonus * 100);

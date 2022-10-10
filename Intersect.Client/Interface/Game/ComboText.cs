@@ -9,6 +9,7 @@ using Intersect.Client.Interface.Game.Chat;
 using Intersect.Client.Framework.Gwen.Control;
 using Intersect.Client.Framework.File_Management;
 using Intersect.Client.Core;
+using Intersect.Utilities;
 
 namespace Intersect.Client.Interface.Game
 {
@@ -26,9 +27,9 @@ namespace Intersect.Client.Interface.Game
 
         private bool mIsFlashing { get; set; }
 
-        private int ComboWindow { get; set; }
-
-        private int MaxComboWindow { get; set; }
+        private long MaxComboWindow => Globals.Me?.MaxComboWindow ?? -1;
+        
+        private long LastComboUpdate => Globals.Me?.LastComboUpdate ?? -1;
 
         private Label mComboLabel;
 
@@ -71,11 +72,9 @@ namespace Intersect.Client.Interface.Game
 
             mFlashCounter++;
             // else, update members
-            ComboWindow = Globals.Me.ComboWindow;
-            MaxComboWindow = Globals.Me.MaxComboWindow;
             mSize = Globals.Me.CurrentCombo.ToString();
 
-            mAlpha = mGenerateTextAlpha(ComboWindow, MaxComboWindow);
+            mAlpha = mGenerateTextAlpha();
 
             if (mFlashCounter % 100 == 0) // flash every 100 ticks-ish?
             {
@@ -103,16 +102,18 @@ namespace Intersect.Client.Interface.Game
             mExpLabel.SetTextColor(mExpDrawColor, Label.ControlState.Normal);
         }
 
-        private int mGenerateTextAlpha(int comboWindow, int maxComboWindow)
+        private int mGenerateTextAlpha()
         {
-            if (maxComboWindow > 0 && comboWindow > 0)
-            {
-                var amount = (double)comboWindow / maxComboWindow * 255;
-                return (int)amount;
-            } else
+            var diff = (LastComboUpdate + MaxComboWindow) - Timing.Global.Milliseconds;
+            if (diff <= 0)
             {
                 return 0;
             }
+
+            diff = MathHelper.Clamp(diff, 0, MaxComboWindow);
+
+            var amount = ((double)diff / MaxComboWindow) * 255;
+            return (int)amount;
         }
     }
 }

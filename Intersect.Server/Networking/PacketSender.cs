@@ -2375,9 +2375,9 @@ namespace Intersect.Server.Networking
             }
         }
 
-        public static void SendComboPacket(Client client, int comboSize, int comboWindow, int bonusExp, int maxComboWindow)
+        public static void SendComboPacket(Player player, int comboSize, int comboWindow, int bonusExp, int maxComboWindow)
         {
-            client?.Send(new ComboPacket(comboSize, comboWindow, bonusExp, maxComboWindow));
+            player?.SendPacket(new ComboPacket(comboSize, comboWindow, bonusExp, maxComboWindow));
         }
 
         public static void SendCraftingInfoPacket(Client client, string miningTier, string fishingTier, string woodcutTier, Dictionary<string, int> classRanks)

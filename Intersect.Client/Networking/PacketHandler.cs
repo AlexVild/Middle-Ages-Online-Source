@@ -2270,8 +2270,8 @@ namespace Intersect.Client.Networking
             {
                 Globals.Me.ComboExp = 0;
             }
-            Globals.Me.ComboWindow = packet.ComboWindow;
             Globals.Me.MaxComboWindow = packet.MaxComboWindow;
+            Globals.Me.LastComboUpdate = Timing.Global.Milliseconds;
         }
 
         // Crafting Info packet

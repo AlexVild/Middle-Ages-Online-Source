@@ -192,7 +192,7 @@ namespace Intersect.Server.Entities
         public int ComboWindow { get; set; } = -1;
 
         [NotMapped]
-        public int MaxComboWindow { get; set; } = Options.BaseComboTime;
+        public int MaxComboWindow =>  Party?.Count > 1 ? Options.BasePartyComboTime : Options.BaseComboTime;
 
         [NotMapped]
         public int ComboExp { get; set; } = 0;
@@ -905,10 +905,6 @@ namespace Intersect.Server.Entities
                         {
                             EndCombo(); // This will also send a packet - this way, we're not flooding the client with packets when there's no active combo
                         }
-                        else
-                        {
-                            PacketSender.SendComboPacket(Client, CurrentCombo, ComboWindow, ComboExp, MaxComboWindow);
-                        }
                     }
                 }
             }
@@ -1529,6 +1525,7 @@ namespace Intersect.Server.Entities
                 StartCommonEventsWithTrigger(CommonEventTrigger.ComboUp);
                 StartCommonEventsWithTrigger(CommonEventTrigger.ComboReached, "", "", CurrentCombo);
             }
+            PacketSender.SendComboPacket(this, CurrentCombo, ComboWindow, ComboExp, MaxComboWindow);
         }
 
         public void EndCombo()
@@ -1544,7 +1541,7 @@ namespace Intersect.Server.Entities
                 ComboWindow = -1;
                 ComboExp = 0;
                 CurrentCombo = 0;
-                PacketSender.SendComboPacket(Client, CurrentCombo, ComboWindow, ComboExp, MaxComboWindow); // sends the final packet of the combo
+                PacketSender.SendComboPacket(this, CurrentCombo, ComboWindow, ComboExp, MaxComboWindow); // sends the final packet of the combo
                 StartCommonEventsWithTrigger(CommonEventTrigger.ComboEnd);
             }
         }
