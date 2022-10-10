@@ -482,6 +482,10 @@ namespace Intersect.GameObjects
     public partial class ItemBase : DatabaseObject<ItemBase>, IFolderable
     {
         public string TypeDisplayOverride { get; set; } = string.Empty;
+
+        public int StrafeBonus { get; set; }
+
+        public int BackstepBonus { get; set; }
     }
 
 }

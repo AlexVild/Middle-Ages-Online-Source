@@ -518,19 +518,33 @@ namespace Intersect.Client.Entities
                 var moveDir = pl.Dir;
                 var faceDir = pl.FaceDirection;
 
+                var maximumTime = time;
+
+                var strafeBonus = 0;
+                var backstepBonus = 0;
+                if (pl.Equipment[Options.WeaponIndex] != default)
+                {
+                    var weapon = ItemBase.Get(pl.Equipment[Options.WeaponIndex]);
+                    strafeBonus = weapon?.StrafeBonus / 100 ?? 0;
+                    backstepBonus = weapon?.BackstepBonus / 100 ?? 0;
+                }
+
+                // Bonuses apply as percentages of the original speed modifiers - if backstep is 50% slower, and you have 10% backstep bonus, then backstep is now 50 - (.1 * 50) = 45% slower
+                var backstepModifier = Options.Instance.CombatOpts.CombatModeBackModifier - ((Options.Instance.CombatOpts.CombatModeBackModifier - 1) * backstepBonus);
+                var strafeModifier = Options.Instance.CombatOpts.CombatModeStrafeModifier - ((Options.Instance.CombatOpts.CombatModeStrafeModifier - 1) * backstepBonus);
+
                 if (moveDir != faceDir)
                 {
                     switch (moveDir)
                     {
-                        //up
                         case 0:
                             if (faceDir == 1)
                             {
-                                time *= Options.Instance.CombatOpts.CombatModeBackModifier;
+                                time *= backstepModifier;
                             }
                             else
                             {
-                                time *= Options.Instance.CombatOpts.CombatModeStrafeModifier;
+                                time *= strafeModifier;
                             }
 
                             break;
@@ -538,33 +552,33 @@ namespace Intersect.Client.Entities
                         case 1:
                             if (faceDir == 0)
                             {
-                                time *= Options.Instance.CombatOpts.CombatModeBackModifier;
+                                time *= backstepModifier;
                             }
                             else
                             {
-                                time *= Options.Instance.CombatOpts.CombatModeStrafeModifier;
+                                time *= strafeModifier;
                             }
                             break;
                         //left
                         case 2:
                             if (faceDir == 3)
                             {
-                                time *= Options.Instance.CombatOpts.CombatModeBackModifier;
+                                time *= backstepModifier;
                             }
                             else
                             {
-                                time *= Options.Instance.CombatOpts.CombatModeStrafeModifier;
+                                time *= strafeModifier;
                             }
                             break;
                         //right
                         case 3:
                             if (faceDir == 2)
                             {
-                                time *= Options.Instance.CombatOpts.CombatModeBackModifier;
+                                time *= backstepModifier;
                             }
                             else
                             {
-                                time *= Options.Instance.CombatOpts.CombatModeStrafeModifier;
+                                time *= strafeModifier;
                             }
                             break;
                     }

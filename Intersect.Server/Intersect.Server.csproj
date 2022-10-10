@@ -876,6 +876,10 @@
     <Compile Include="Migrations\Game\20221010173719_SoloOnlyVariableMigration.designer.cs">
       <DependentUpon>20221010173719_SoloOnlyVariableMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20221010191023_MovementBonusesOnWeaponsMigration.cs" />
+    <Compile Include="Migrations\Game\20221010191023_MovementBonusesOnWeaponsMigration.designer.cs">
+      <DependentUpon>20221010191023_MovementBonusesOnWeaponsMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

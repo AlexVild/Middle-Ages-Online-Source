@@ -579,6 +579,9 @@ namespace Intersect.Editor.Forms.Editors
                 txtCannotDestroy.Text = mEditorItem.CannotDestroyMessage;
                 chkInstanceDestroy.Checked = mEditorItem.DestroyOnInstanceChange;
 
+                nudStrafeBoost.Value = mEditorItem.StrafeBonus;
+                nudBackBoost.Value = mEditorItem.BackstepBonus;
+
                 if (cmbTypeDisplayOverride.Items.Contains(mEditorItem.TypeDisplayOverride ?? string.Empty))
                 {
                     cmbTypeDisplayOverride.SelectedItem = mEditorItem.TypeDisplayOverride;
@@ -1635,6 +1638,16 @@ namespace Intersect.Editor.Forms.Editors
         {
             mEditorItem.TypeDisplayOverride = null;
             cmbTypeDisplayOverride.SelectedIndex = -1;
+        }
+
+        private void nudStrafeBoost_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.StrafeBonus = (int)nudStrafeBoost.Value;
+        }
+
+        private void nudBackBoost_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.BackstepBonus = (int)nudBackBoost.Value;
         }
     }
 }

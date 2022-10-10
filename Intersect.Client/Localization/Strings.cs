@@ -1037,6 +1037,12 @@ namespace Intersect.Client.Localization
         public struct ItemDescription
         {
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString BackstepSpeedBonus = @"Backstep Speed Bonus:";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString StrafeSpeedBonus = @"Strafe Speed Bonus:";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString BackstabMultiplier = @"Backstab Multiplier:";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]

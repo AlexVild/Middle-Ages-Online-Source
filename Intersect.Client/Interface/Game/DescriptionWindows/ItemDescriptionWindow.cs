@@ -447,6 +447,50 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             }
         }
 
+        private int GetBackstepBonusDifference()
+        {
+            var slot = mItem.EquipmentSlot;
+            if (Globals.Me.MyEquipment[slot] != -1)
+            {
+                var equippedItem = Globals.Me.Inventory[Globals.Me.MyEquipment[slot]].Base;
+
+                if (equippedItem != null && equippedItem.BackstepBonus > 0)
+                {
+                    return mItem.BackstepBonus - equippedItem.BackstepBonus;
+                }
+                else
+                {
+                    return mItem.BackstepBonus;
+                }
+            }
+            else
+            {
+                return mItem.BackstepBonus;
+            }
+        }
+
+        private int GetStrafeBonusDifference()
+        {
+            var slot = mItem.EquipmentSlot;
+            if (Globals.Me.MyEquipment[slot] != -1)
+            {
+                var equippedItem = Globals.Me.Inventory[Globals.Me.MyEquipment[slot]].Base;
+
+                if (equippedItem != null && equippedItem.StrafeBonus > 0)
+                {
+                    return mItem.StrafeBonus - equippedItem.StrafeBonus;
+                }
+                else
+                {
+                    return mItem.StrafeBonus;
+                }
+            }
+            else
+            {
+                return mItem.StrafeBonus;
+            }
+        }
+
         private int GetVitalDifference(int vitalIndex)
         {
             var slot = mItem.EquipmentSlot;
@@ -614,6 +658,15 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 if (mItem.CanBackstab)
                 {
                     DisplayKeyValueRowWithDifference(Decimal.Round(GetBackstabDifference(), 2), Strings.ItemDescription.BackstabMultiplier, Strings.ItemDescription.Multiplier.ToString(mItem.BackstabMultiplier), rows, "x");
+                }
+
+                if (mItem.StrafeBonus > 0 || equippedItem?.Base?.StrafeBonus > 0)
+                {
+                    DisplayKeyValueRowWithDifference(GetStrafeBonusDifference(), Strings.ItemDescription.StrafeSpeedBonus, Strings.ItemDescription.Percentage.ToString(mItem.StrafeBonus), rows, "%");
+                }
+                if (mItem.BackstepBonus > 0 || equippedItem?.Base?.BackstepBonus > 0)
+                {
+                    DisplayKeyValueRowWithDifference(GetBackstepBonusDifference(), Strings.ItemDescription.BackstepSpeedBonus, Strings.ItemDescription.Percentage.ToString(mItem.BackstepBonus), rows, "%");
                 }
 
                 // Attack Speed

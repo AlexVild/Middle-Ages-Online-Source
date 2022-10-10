@@ -41,6 +41,7 @@ namespace Intersect.Editor.Forms.Editors
             this.btnCancel = new DarkUI.Controls.DarkButton();
             this.btnSave = new DarkUI.Controls.DarkButton();
             this.grpGeneral = new DarkUI.Controls.DarkGroupBox();
+            this.btnClearOverride = new DarkUI.Controls.DarkButton();
             this.cmbTypeDisplayOverride = new DarkUI.Controls.DarkComboBox();
             this.lblOverride = new System.Windows.Forms.Label();
             this.grpDestroy = new DarkUI.Controls.DarkGroupBox();
@@ -110,6 +111,10 @@ namespace Intersect.Editor.Forms.Editors
             this.lstDrops = new System.Windows.Forms.ListBox();
             this.grpEquipment = new DarkUI.Controls.DarkGroupBox();
             this.grpAdditionalWeaponProps = new DarkUI.Controls.DarkGroupBox();
+            this.lblBackBoost = new System.Windows.Forms.Label();
+            this.nudBackBoost = new DarkUI.Controls.DarkNumericUpDown();
+            this.nudStrafeBoost = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblStrafeModifier = new System.Windows.Forms.Label();
             this.lblBackstabMultiplier = new System.Windows.Forms.Label();
             this.chkBackstab = new DarkUI.Controls.DarkCheckBox();
             this.nudBackstabMultiplier = new DarkUI.Controls.DarkNumericUpDown();
@@ -253,7 +258,6 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
             this.vS2015DarkTheme1 = new WeifenLuo.WinFormsUI.Docking.VS2015DarkTheme();
-            this.btnClearOverride = new DarkUI.Controls.DarkButton();
             this.grpItems.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             this.grpDestroy.SuspendLayout();
@@ -271,6 +275,8 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.picItem)).BeginInit();
             this.grpEquipment.SuspendLayout();
             this.grpAdditionalWeaponProps.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudBackBoost)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudStrafeBoost)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudBackstabMultiplier)).BeginInit();
             this.grpHelmetPaperdollProps.SuspendLayout();
             this.grpPrayerProperties.SuspendLayout();
@@ -457,6 +463,16 @@ namespace Intersect.Editor.Forms.Editors
             this.grpGeneral.TabIndex = 2;
             this.grpGeneral.TabStop = false;
             this.grpGeneral.Text = "General";
+            // 
+            // btnClearOverride
+            // 
+            this.btnClearOverride.Location = new System.Drawing.Point(208, 129);
+            this.btnClearOverride.Name = "btnClearOverride";
+            this.btnClearOverride.Padding = new System.Windows.Forms.Padding(5);
+            this.btnClearOverride.Size = new System.Drawing.Size(18, 20);
+            this.btnClearOverride.TabIndex = 45;
+            this.btnClearOverride.Text = "X";
+            this.btnClearOverride.Click += new System.EventHandler(this.btnClearOverride_Click);
             // 
             // cmbTypeDisplayOverride
             // 
@@ -1358,7 +1374,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpEquipment.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpEquipment.Location = new System.Drawing.Point(2, 700);
             this.grpEquipment.Name = "grpEquipment";
-            this.grpEquipment.Size = new System.Drawing.Size(439, 847);
+            this.grpEquipment.Size = new System.Drawing.Size(439, 886);
             this.grpEquipment.TabIndex = 12;
             this.grpEquipment.TabStop = false;
             this.grpEquipment.Text = "Equipment";
@@ -1368,6 +1384,10 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpAdditionalWeaponProps.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpAdditionalWeaponProps.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpAdditionalWeaponProps.Controls.Add(this.lblBackBoost);
+            this.grpAdditionalWeaponProps.Controls.Add(this.nudBackBoost);
+            this.grpAdditionalWeaponProps.Controls.Add(this.nudStrafeBoost);
+            this.grpAdditionalWeaponProps.Controls.Add(this.lblStrafeModifier);
             this.grpAdditionalWeaponProps.Controls.Add(this.lblBackstabMultiplier);
             this.grpAdditionalWeaponProps.Controls.Add(this.chkBackstab);
             this.grpAdditionalWeaponProps.Controls.Add(this.nudBackstabMultiplier);
@@ -1376,10 +1396,78 @@ namespace Intersect.Editor.Forms.Editors
             this.grpAdditionalWeaponProps.Margin = new System.Windows.Forms.Padding(2);
             this.grpAdditionalWeaponProps.Name = "grpAdditionalWeaponProps";
             this.grpAdditionalWeaponProps.Padding = new System.Windows.Forms.Padding(2);
-            this.grpAdditionalWeaponProps.Size = new System.Drawing.Size(277, 90);
+            this.grpAdditionalWeaponProps.Size = new System.Drawing.Size(218, 136);
             this.grpAdditionalWeaponProps.TabIndex = 60;
             this.grpAdditionalWeaponProps.TabStop = false;
-            this.grpAdditionalWeaponProps.Text = "Additional Weapon Properties";
+            this.grpAdditionalWeaponProps.Text = "Additional Weap. Properties";
+            // 
+            // lblBackBoost
+            // 
+            this.lblBackBoost.AutoSize = true;
+            this.lblBackBoost.Location = new System.Drawing.Point(4, 108);
+            this.lblBackBoost.Name = "lblBackBoost";
+            this.lblBackBoost.Size = new System.Drawing.Size(102, 13);
+            this.lblBackBoost.TabIndex = 109;
+            this.lblBackBoost.Text = "Backstep Bonus (%)";
+            // 
+            // nudBackBoost
+            // 
+            this.nudBackBoost.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudBackBoost.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudBackBoost.Location = new System.Drawing.Point(112, 106);
+            this.nudBackBoost.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.nudBackBoost.Minimum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            -2147483648});
+            this.nudBackBoost.Name = "nudBackBoost";
+            this.nudBackBoost.Size = new System.Drawing.Size(76, 20);
+            this.nudBackBoost.TabIndex = 108;
+            this.nudBackBoost.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudBackBoost.ValueChanged += new System.EventHandler(this.nudBackBoost_ValueChanged);
+            // 
+            // nudStrafeBoost
+            // 
+            this.nudStrafeBoost.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudStrafeBoost.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudStrafeBoost.Location = new System.Drawing.Point(112, 80);
+            this.nudStrafeBoost.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.nudStrafeBoost.Minimum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            -2147483648});
+            this.nudStrafeBoost.Name = "nudStrafeBoost";
+            this.nudStrafeBoost.Size = new System.Drawing.Size(76, 20);
+            this.nudStrafeBoost.TabIndex = 107;
+            this.nudStrafeBoost.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudStrafeBoost.ValueChanged += new System.EventHandler(this.nudStrafeBoost_ValueChanged);
+            // 
+            // lblStrafeModifier
+            // 
+            this.lblStrafeModifier.AutoSize = true;
+            this.lblStrafeModifier.Location = new System.Drawing.Point(4, 82);
+            this.lblStrafeModifier.Name = "lblStrafeModifier";
+            this.lblStrafeModifier.Size = new System.Drawing.Size(85, 13);
+            this.lblStrafeModifier.TabIndex = 106;
+            this.lblStrafeModifier.Text = "Strafe Bonus (%)";
             // 
             // lblBackstabMultiplier
             // 
@@ -1410,7 +1498,7 @@ namespace Intersect.Editor.Forms.Editors
             0,
             0,
             131072});
-            this.nudBackstabMultiplier.Location = new System.Drawing.Point(104, 54);
+            this.nudBackstabMultiplier.Location = new System.Drawing.Point(112, 54);
             this.nudBackstabMultiplier.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -3410,16 +3498,6 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
             // 
-            // btnClearOverride
-            // 
-            this.btnClearOverride.Location = new System.Drawing.Point(208, 129);
-            this.btnClearOverride.Name = "btnClearOverride";
-            this.btnClearOverride.Padding = new System.Windows.Forms.Padding(5);
-            this.btnClearOverride.Size = new System.Drawing.Size(18, 20);
-            this.btnClearOverride.TabIndex = 45;
-            this.btnClearOverride.Text = "X";
-            this.btnClearOverride.Click += new System.EventHandler(this.btnClearOverride_Click);
-            // 
             // FrmItem
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3465,6 +3543,8 @@ namespace Intersect.Editor.Forms.Editors
             this.grpEquipment.PerformLayout();
             this.grpAdditionalWeaponProps.ResumeLayout(false);
             this.grpAdditionalWeaponProps.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudBackBoost)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudStrafeBoost)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudBackstabMultiplier)).EndInit();
             this.grpHelmetPaperdollProps.ResumeLayout(false);
             this.grpHelmetPaperdollProps.PerformLayout();
@@ -3748,5 +3828,9 @@ namespace Intersect.Editor.Forms.Editors
         private DarkComboBox cmbTypeDisplayOverride;
         private Label lblOverride;
         private DarkButton btnClearOverride;
+        private Label lblBackBoost;
+        private DarkNumericUpDown nudBackBoost;
+        private DarkNumericUpDown nudStrafeBoost;
+        private Label lblStrafeModifier;
     }
 }
