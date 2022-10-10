@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 
@@ -116,6 +117,11 @@ namespace Intersect.Config
 
         // How many ms before cancel cast can't happen
         public int CancelCastLeeway = 250;
+
+        // Multiply by an NPC's combat level to determine overworld hostility
+        public float DefaultAggroLevelMultiplier = 1.35f;
+
+        public string DungeonInstanceVarGuid = "df755027-8588-46c6-820b-d314f7825730";
 
         public bool StunPreventsItems { get; set;  } = false;
 

@@ -1344,27 +1344,32 @@ namespace Intersect.Server.Entities
             }
         }
 
-        public bool ShouldAttackPlayerOnSight(Player en)
+        public bool ShouldAttackPlayerOnSight(Player player)
         {
-            if (IsAllyOf(en))
+            if (player == null)
             {
                 return false;
             }
 
+            if (IsAllyOf(player))
+            {
+                return false;
+            }
+
+            var aggroConditions = Base.AttackOnSightConditions.Lists.Count > 0 && Conditions.MeetsConditionLists(Base.AttackOnSightConditions, player, null);
+
             if (Base.Aggressive)
             {
-                if (Base.AttackOnSightConditions.Lists.Count > 0 &&
-                    Conditions.MeetsConditionLists(Base.AttackOnSightConditions, en, null))
+                if (aggroConditions)
                 {
                     return false;
                 }
 
-                return true;
+                return IsOverworldDefaultAggroToward(player) || IsDungeonAggroToward(player);
             }
             else
             {
-                if (Base.AttackOnSightConditions.Lists.Count > 0 &&
-                    Conditions.MeetsConditionLists(Base.AttackOnSightConditions, en, null))
+                if (aggroConditions)
                 {
                     return true;
                 }
@@ -1705,6 +1710,26 @@ namespace Intersect.Server.Entities
             }
 
             LootTableServerHelpers.SpawnItemsOnMap(rolledItems, MapId, MapInstanceId, X, Y, lootOwner, sendUpdate);
+        }
+
+        public bool IsOverworldDefaultAggroToward(Player player)
+        {
+            return Math.Ceiling(Base.Level * Options.Combat.DefaultAggroLevelMultiplier) >= player.Level;
+        }
+
+        public bool IsDungeonAggroToward(Player player)
+        {
+            if (player.MapInstanceId == MapInstanceId && player.InstanceType == MapInstanceType.Shared
+                && Map.TryGetInstance(MapInstanceId, out var instance))
+            {
+                var dungeonVar = instance.GetInstanceVariable(Guid.Parse(Options.Combat.DungeonInstanceVarGuid ?? Guid.Empty.ToString()));
+                if (dungeonVar == null || dungeonVar.Type != VariableDataTypes.Boolean)
+                {
+                    return false;
+                }
+                return dungeonVar.Boolean;
+            }
+            return false;
         }
     }
 }
