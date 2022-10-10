@@ -163,11 +163,18 @@ namespace Intersect.Server.Entities.Events
         )
         {
             var txt = ParseEventText(command.Text, player, instance);
-            var opt1 = Conditions.MeetsConditionLists(command.Opt1Conditions, player, instance) ? ParseEventText(command.Options[0], player, instance) : string.Empty;
-            var opt2 = Conditions.MeetsConditionLists(command.Opt2Conditions, player, instance) ? ParseEventText(command.Options[1], player, instance) : string.Empty;
-            var opt3 = Conditions.MeetsConditionLists(command.Opt3Conditions, player, instance) ? ParseEventText(command.Options[2], player, instance) : string.Empty;
-            var opt4 = Conditions.MeetsConditionLists(command.Opt4Conditions, player, instance) ? ParseEventText(command.Options[3], player, instance) : string.Empty;
-            PacketSender.SendEventDialog(player, txt, opt1, opt2, opt3, opt4, command.Face, instance.PageInstance.Id);
+            if (string.IsNullOrEmpty(command.Options[0]))
+            {
+                PacketSender.SendEventDialog(player, txt, string.Empty, string.Empty, string.Empty, string.Empty, command.Face, instance.PageInstance.Id);
+            }
+            else
+            {
+                var opt1 = command.Opt1Conditions == null || Conditions.MeetsConditionLists(command.Opt1Conditions, player, instance) ? ParseEventText(command.Options[0], player, instance) : string.Empty;
+                var opt2 = command.Opt2Conditions == null || Conditions.MeetsConditionLists(command.Opt2Conditions, player, instance) ? ParseEventText(command.Options[1], player, instance) : string.Empty;
+                var opt3 = command.Opt3Conditions == null || Conditions.MeetsConditionLists(command.Opt3Conditions, player, instance) ? ParseEventText(command.Options[2], player, instance) : string.Empty;
+                var opt4 = command.Opt4Conditions == null || Conditions.MeetsConditionLists(command.Opt4Conditions, player, instance) ? ParseEventText(command.Options[3], player, instance) : string.Empty;
+                PacketSender.SendEventDialog(player, txt, opt1, opt2, opt3, opt4, command.Face, instance.PageInstance.Id);
+            }
             stackInfo.WaitingForResponse = CommandInstance.EventResponse.Dialogue;
             stackInfo.WaitingOnCommand = command;
             stackInfo.BranchIds = command.BranchIds;

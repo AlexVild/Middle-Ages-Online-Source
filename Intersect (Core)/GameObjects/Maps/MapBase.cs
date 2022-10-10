@@ -40,6 +40,18 @@ namespace Intersect.GameObjects.Maps
         //Cached Att Data
         private byte[] mCachedAttributeData = null;
 
+        [Column("LoginEvent")]
+        [JsonProperty]
+        public Guid LoginEventId { get; set; }
+
+        [NotMapped]
+        [JsonIgnore]
+        public EventBase LoginEvent
+        {
+            get => EventBase.Get(LoginEventId);
+            set => LoginEventId = value?.Id ?? Guid.Empty;
+        }
+
         //SyncLock
         [JsonIgnore] [NotMapped] protected object mMapLock = new object();
 

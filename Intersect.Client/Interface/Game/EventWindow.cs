@@ -146,7 +146,7 @@ namespace Intersect.Client.Interface.Game
                     var maxResponse = 1;
 
                     responseCount = Responses.Count;
-                    maxResponse = responseCount;
+                    maxResponse = responseCount == 0 ? 1 : responseCount;
 
                     mEventResponse1.Name = "";
                     mEventResponse2.Name = "";

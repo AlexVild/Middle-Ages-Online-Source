@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-
+using System.Linq;
 using Intersect.Editor.Content;
 using Intersect.Editor.Core;
 using Intersect.Editor.General;
 using Intersect.Editor.Localization;
 using Intersect.Enums;
 using Intersect.GameObjects;
+using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Maps;
 using Intersect.Utilities;
 
@@ -554,6 +555,45 @@ namespace Intersect.Editor.Maps
             }
         }
 
+        [CustomCategory("misc"), CustomDescription("logineventdesc"), CustomDisplayName("loginevent"),
+          DefaultValue("None"), TypeConverter(typeof(LoginEventProperty)), Browsable(true)]
+        public string LoginEvent
+        {
+            get
+            {
+                var eventList = new List<string>
+                {
+                    Strings.General.none
+                };
+
+                eventList.AddRange(EventBase.Names);
+                var name = EventBase.GetName(mMyMap.LoginEventId);
+                if (EventBase.Get(mMyMap.LoginEventId) == null)
+                {
+                    name = null;
+                }
+
+                return TextUtils.NullToNone(name);
+            }
+            set
+            {
+                var idVal = Guid.Empty;
+                if (!TextUtils.IsNone(value))
+                {
+                    var eventNames = new List<string>(EventBase.Names);
+                    var index = eventNames.IndexOf(value);
+                    idVal = EventBase.IdFromList(index);
+                }
+
+                if (mMyMap.LoginEventId != idVal)
+                {
+                    Globals.MapEditorWindow.PrepUndoState();
+                    mMyMap.LoginEvent = EventBase.Get(idVal);
+                    Globals.MapEditorWindow.AddUndoState();
+                }
+            }
+        }
+
     }
 
     public class MapMusicProperty : StringConverter
@@ -731,6 +771,36 @@ namespace Intersect.Editor.Maps
             WeatherList.AddRange(AnimationBase.Names);
 
             return new StandardValuesCollection(WeatherList.ToArray());
+        }
+
+    }
+
+    public class LoginEventProperty : StringConverter
+    {
+
+        public override bool GetStandardValuesSupported(ITypeDescriptorContext context)
+        {
+            //true means show a combobox
+            return true;
+        }
+
+        public override bool GetStandardValuesExclusive(ITypeDescriptorContext context)
+        {
+            //true will limit to list. false will show the list, 
+            //but allow free-form entry
+            return false;
+        }
+
+        public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
+        {
+            var EventList = new List<string>
+            {
+                Strings.General.none
+            };
+
+            EventList.AddRange(EventBase.Names);
+
+            return new StandardValuesCollection(EventList.ToArray());
         }
 
     }

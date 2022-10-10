@@ -113,6 +113,10 @@ namespace Intersect.Server.Networking
 
                 //Search for login activated events and run them
                 player.StartCommonEventsWithTrigger(CommonEventTrigger.Login);
+                if (player.Map != null && player.Map.LoginEvent != default)
+                {
+                    player.EnqueueStartCommonEvent(player.Map.LoginEvent);
+                }
             }
         }
 

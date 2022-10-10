@@ -4306,6 +4306,7 @@ Tick timer saved in server config.json.";
                 {"weatherxspeed", @"Weather X Speed"},
                 {"weatheryspeed", @"Weather Y Speed"},
                 {"weatherintensity", @"Weather Intensity"},
+                {"loginevent", @"Login Event"},
             };
 
             public static Dictionary<string, string> descriptions = new Dictionary<string, string>()
@@ -4346,6 +4347,7 @@ Tick timer saved in server config.json.";
                 },
                 {"weatheryspeeddesc", @"How fast vertically weather particles move across the screen. (Range -5 to 5)"},
                 {"weatherintensitydesc", @"How intence the weather is (number of particles). (Range 0 to 100)"},
+                {"logineventdesc", @"An event to run if the player logs in to this map."},
             };
 
             public static LocalizedString title = @"Map Properties";
