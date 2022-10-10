@@ -78,7 +78,7 @@ namespace Intersect.Client.Interface.Game
                 mNameLabel.Text = Strings.Parties.name.ToString(
                     memberName, Globals.Me.Party[mMemberIdx].Level
                 );
-                KickButton
+                KickButton?
                     .SetToolTipText(
                         Strings.Parties.kick.ToString(Globals.Entities[Globals.Me.Party[mMemberIdx].Id].Name)
                     );
