@@ -1723,6 +1723,12 @@ namespace Intersect.Server.Localization
         public sealed partial class PlayerNamespace : LocaleNamespace
         {
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString DeathExp = @"You've died, and lost {00} experience points.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString ItemsLost = @"You've died in a PvP zone, and lost the following items: {00}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString SpawnChanged = @"Your respawn point has been updated.";
         }
     }

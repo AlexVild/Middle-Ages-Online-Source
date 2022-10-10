@@ -39,6 +39,7 @@ using static Intersect.Server.Maps.MapInstance;
 using Intersect.Server.Core;
 using Intersect.GameObjects.Timers;
 using Intersect.Server.Utilities;
+using System.Text;
 
 namespace Intersect.Server.Entities
 {
@@ -1079,15 +1080,20 @@ namespace Intersect.Server.Entities
             {
                 if (Options.Instance.PlayerOpts.ExpLossOnDeathPercent > 0)
                 {
+                    double expLoss = -1;
                     if (Options.Instance.PlayerOpts.ExpLossFromCurrentExp)
                     {
-                        var ExpLoss = (this.Exp * (Options.Instance.PlayerOpts.ExpLossOnDeathPercent / 100.0));
-                        TakeExperience((long)ExpLoss);
+                        expLoss = (this.Exp * (Options.Instance.PlayerOpts.ExpLossOnDeathPercent / 100.0));
+                        TakeExperience((long)expLoss);
                     }
                     else
                     {
-                        var ExpLoss = (GetExperienceToNextLevel(this.Level) * (Options.Instance.PlayerOpts.ExpLossOnDeathPercent / 100.0));
-                        TakeExperience((long)ExpLoss);
+                        expLoss = (GetExperienceToNextLevel(this.Level) * (Options.Instance.PlayerOpts.ExpLossOnDeathPercent / 100.0));
+                        TakeExperience((long)expLoss);
+                    }
+                    if (expLoss >= 1)
+                    {
+                        PacketSender.SendChatMsg(this, Strings.Player.DeathExp.ToString((int)expLoss), ChatMessageType.Notice, CustomColors.General.GeneralDisabled);
                     }
                 }
             }
@@ -8725,7 +8731,8 @@ namespace Intersect.Server.Entities
             {
                 return; // Only drop items in PVP
             }
-            
+
+            var itemsLost = new List<string>();
             for (var n = 0; n < Items.Count; n++)
             {
                 if (Items[n] == null)
@@ -8770,7 +8777,26 @@ namespace Intersect.Server.Entities
                 }
 
                 // Remove the item from inventory if a player.
-                TryTakeItem(Items[n], item.Quantity);
+                var taken = TryTakeItem(Items[n], item.Quantity);
+                if (taken)
+                {
+                    if (item.Quantity > 1)
+                    {
+                        var trimmedName = item.ItemName.TrimEnd('s');
+                        itemsLost.Add($"{item.Quantity} {trimmedName}s");
+                    }
+                    else
+                    {
+                        itemsLost.Add(item.ItemName);
+                    }
+                }
+            }
+
+            if (itemsLost.Count > 0)
+            {
+                var itemsLostString = string.Join(", ", itemsLost.ToArray());
+
+                PacketSender.SendChatMsg(this, Strings.Player.ItemsLost.ToString(itemsLostString), ChatMessageType.Inventory, CustomColors.General.GeneralWarning);
             }
         }
 
