@@ -239,6 +239,7 @@ namespace Intersect.Editor.Forms.Editors
                 grpEditor.Show();
                 if (rdoPlayerVariables.Checked)
                 {
+                    grpRecordOptions.Show();
                     var baseVar = (PlayerVariableBase)mEditorItem;
                     lblObject.Text = Strings.VariableEditor.playervariable;
                     txtObjectName.Text = baseVar.Name;
@@ -248,8 +249,10 @@ namespace Intersect.Editor.Forms.Editors
                     chkRecordable.Checked = baseVar.Recordable;
                     chkRecordLow.Checked = baseVar.RecordLow;
                     chkSilent.Checked = baseVar.RecordSilently;
+                    chkSoloOnly.Checked = baseVar.SoloRecordOnly;
                     chkRecordLow.Enabled = chkRecordable.Checked;
                     chkSilent.Enabled = chkRecordable.Checked;
+                    chkSoloOnly.Enabled = chkRecordable.Checked;
                     cmbVariableGroup.Enabled = true;
                     btnAddGroup.Enabled = true;
                     if (cmbVariableGroup.Items.Contains(baseVar.VariableGroup))
@@ -265,6 +268,7 @@ namespace Intersect.Editor.Forms.Editors
                 }
                 else if (rdoGlobalVariables.Checked)
                 {
+                    grpRecordOptions.Hide();
                     cmbVariableGroup.Enabled = false;
                     btnAddGroup.Enabled = false;
                     lblObject.Text = Strings.VariableEditor.globalvariable;
@@ -276,6 +280,7 @@ namespace Intersect.Editor.Forms.Editors
                 }
                 else if (rdoInstanceVariables.Checked)
                 {
+                    grpRecordOptions.Hide();
                     cmbVariableGroup.Enabled = false;
                     btnAddGroup.Enabled = false;
                     lblObject.Text = Strings.VariableEditor.instancevariable;
@@ -808,6 +813,7 @@ namespace Intersect.Editor.Forms.Editors
             ((PlayerVariableBase)mEditorItem).Recordable = chkRecordable.Checked;
             chkRecordLow.Enabled = chkRecordable.Checked;
             chkSilent.Enabled = chkRecordable.Checked;
+            chkSoloOnly.Enabled = chkRecordable.Checked;
         }
 
         private void chkRecordLow_CheckedChanged(object sender, EventArgs e)
@@ -870,6 +876,15 @@ namespace Intersect.Editor.Forms.Editors
             }
 
             ((PlayerVariableBase)mEditorItem).VariableGroup = (string)cmbVariableGroup.SelectedItem;
+        }
+
+        private void chkSoloOnly_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!rdoPlayerVariables.Checked)
+            {
+                return;
+            }
+            ((PlayerVariableBase)mEditorItem).SoloRecordOnly = chkSoloOnly.Checked;
         }
     }
 

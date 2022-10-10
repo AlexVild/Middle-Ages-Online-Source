@@ -8486,6 +8486,7 @@ namespace Intersect.Server.Entities
         {
             PlayerRecord matchingRecord;
             var scoreType = RecordScoring.High;
+            var soloOnly = false;
             lock (EntityLock)
             {
                 long recordAmt = 0;
@@ -8509,6 +8510,8 @@ namespace Intersect.Server.Entities
                         scoreType = RecordScoring.Low;
                     }
 
+                    soloOnly = playerVar.SoloRecordOnly;
+
                     // Short term fix to prevent mods/admins from setting hot times for dungeons
                     if (!Options.Instance.RecordOpts.EnableModVariableRecords)
                     {
@@ -8521,7 +8524,7 @@ namespace Intersect.Server.Entities
                 }
 
                 // If this is a "team" record, find the record, if any, that contains the same team
-                if (teammates != null && teammates.Count > 0)
+                if (!soloOnly && teammates != null && teammates.Count > 0)
                 {
                     var teamRecords = new List<PlayerRecord>();
                     foreach(var teammate in teammates)
@@ -8543,7 +8546,7 @@ namespace Intersect.Server.Entities
                     matchingRecord = new PlayerRecord(Id, type, recordId, amount, scoreType);
 
                     // Team record? If so, add the team mates
-                    if (teammates != null && teammates.Count > 0)
+                    if (!soloOnly && teammates != null && teammates.Count > 0)
                     {
                         foreach (var member in teammates)
                         {

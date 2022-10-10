@@ -76,6 +76,8 @@ namespace Intersect.GameObjects
         public bool RecordLow { get; set; }
 
         public bool RecordSilently { get; set; }
+        
+        public bool SoloRecordOnly { get; set; }
 
         public string VariableGroup { get; set; }
     }

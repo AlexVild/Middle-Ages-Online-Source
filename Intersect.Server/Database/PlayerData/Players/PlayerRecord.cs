@@ -475,7 +475,7 @@ namespace Intersect.Server.Database.PlayerData.Players
             {
                 return;
             }
-            var msg = inParty ?
+            var msg = inParty && !baseV.SoloRecordOnly ?
                 Strings.Records.NewRecordGenericParty :
                 Strings.Records.NewRecordGeneric;
             PacketSender.SendChatMsg(player, msg, ChatMessageType.Experience, Color.FromName("Blue", Strings.Colors.presets));
