@@ -944,8 +944,12 @@ namespace Intersect.Client.Interface.Shared
             Globals.Database.EnableScanlines = mScanlinesCheckbox.IsChecked;
             Globals.Database.FaceOnLock = mFaceTargetOnLockCheckbox.IsChecked;
             Globals.Database.CombatFlash = mCombatScreenFlashCheckbox.IsChecked;
+            if (Globals.Database.FadeTransitions != mFadeOutCheckbox.IsChecked)
+            {
+                Globals.Database.FadeTransitions = mFadeOutCheckbox.IsChecked;
+                shouldReset = true;
+            }
             Globals.Database.CombatShake = mCombatScreenShakeCheckbox.IsChecked;
-            Globals.Database.FadeTransitions = mFadeOutCheckbox.IsChecked;
             Globals.Database.DisplayPlayerNames = mDisplayPlayerNamesCheckbox.IsChecked;
             Globals.Database.DisplayPartyMembers = mDisplayPartyMembersCheckbox.IsChecked;
             Globals.Database.DisplayClanMembers = mDisplayClanMembersCheckbox.IsChecked;
@@ -970,6 +974,7 @@ namespace Intersect.Client.Interface.Shared
                 Graphics.Renderer.OverrideResolution = Resolution.Empty;
                 Graphics.Renderer.Init();
                 Fade.FadeIn();
+                Wipe.FadeIn();
             }
 
             // Hide our current window.

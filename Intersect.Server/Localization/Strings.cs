@@ -1125,7 +1125,7 @@ namespace Intersect.Server.Localization
 
         }
 
-        public sealed class PlayerNamespace : LocaleNamespace
+        public sealed partial class PlayerNamespace : LocaleNamespace
         {
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]            public readonly LocalizedString admin = @"{00} has been given administrative powers!";
@@ -1718,6 +1718,12 @@ namespace Intersect.Server.Localization
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString QuestCompleted = @"You've completed the quest: {00}!";
+        }
+
+        public sealed partial class PlayerNamespace : LocaleNamespace
+        {
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString SpawnChanged = @"Your respawn point has been updated.";
         }
     }
 }

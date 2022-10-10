@@ -630,6 +630,10 @@
     <Compile Include="Migrations\20221005022511_AddLabelMigration.designer.cs">
       <DependentUpon>20221005022511_AddLabelMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\20221010003432_SpawnPointChangeMigration.cs" />
+    <Compile Include="Migrations\20221010003432_SpawnPointChangeMigration.designer.cs">
+      <DependentUpon>20221010003432_SpawnPointChangeMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.cs" />
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.Designer.cs">
       <DependentUpon>20201222164741_NpcResetRadius.cs</DependentUpon>

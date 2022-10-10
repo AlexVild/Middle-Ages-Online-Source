@@ -1352,4 +1352,21 @@ namespace Intersect.GameObjects.Events.Commands
 
         public float Intensity { get; set; }
     }
+
+    public partial class ChangeSpawnCommand : EventCommand
+    {
+        public override EventCommandType Type { get; } = EventCommandType.ChangeSpawn;
+
+        public RespawnChangeType RespawnType { get; set; } = RespawnChangeType.Default;
+
+        public Guid MapId { get; set; }
+
+        public byte X { get; set; }
+
+        public byte Y { get; set; }
+        
+        public Directions Direction { get; set; } = Directions.Down;
+
+        public bool Reset { get; set; }
+    }
 }

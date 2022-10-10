@@ -2250,7 +2250,8 @@ namespace Intersect.Server.Entities
                     {
                         // Warp to the start of the shared instance - no concern for life total
                         Warp(SharedInstanceRespawnId, SharedInstanceRespawnX, SharedInstanceRespawnY, (Byte)SharedInstanceRespawnDir);
-                    } else
+                    } 
+                    else
                     {
                         // Check if the player/party have enough lives to spawn in-instance
                         if (InstanceLives > 0)
@@ -2277,13 +2278,15 @@ namespace Intersect.Server.Entities
 
                             // And warp to the instance start
                             Warp(SharedInstanceRespawnId, SharedInstanceRespawnX, SharedInstanceRespawnY, (Byte)SharedInstanceRespawnDir);
-                        } else
+                        } 
+                        else
                         {
                             // The player has ran out of lives - too bad, back to instance entrance you go.
                             if (!Options.BootAllFromInstanceWhenOutOfLives || Party == null || Party.Count < 2)
                             {
                                 WarpToLastOverworldLocation(false);
-                            } else
+                            } 
+                            else
                             {
                                 // Oh shit, hard mode enabled - boot ALL party members out of instance. No more lives.
                                 foreach (Player member in Party)
@@ -2301,37 +2304,56 @@ namespace Intersect.Server.Entities
                             }
                         }
                     }
-                } else
+                } 
+                else
                 {
                     // invalid map - try overworld (which will throw to class spawn if itself is invalid)
                     WarpToLastOverworldLocation(false);
                 }
-            } else
+
+                return;
+            } 
+            else if (Map.ZoneType == MapZones.Arena && ArenaRespawnMap != null)
             {
-                var cls = ClassBase.Get(ClassId);
-                if (cls != null)
-                {
-                    if (MapController.Lookup.Keys.Contains(cls.SpawnMapId))
-                    {
-                        mapId = cls.SpawnMapId;
-                    }
+                Warp(ArenaRespawnMapId, ArenaRespawnX, ArenaRespawnY, (byte)ArenaRespawnDir);
 
-                    x = (byte)cls.SpawnX;
-                    y = (byte)cls.SpawnY;
-                    dir = (byte)cls.SpawnDir;
-                }
-
-                if (mapId == Guid.Empty)
-                {
-                    using (var mapenum = MapController.Lookup.GetEnumerator())
-                    {
-                        mapenum.MoveNext();
-                        mapId = mapenum.Current.Value.Id;
-                    }
-                }
-
-                Warp(mapId, x, y, dir, false, 0, false, false, MapInstanceType.Overworld);
             }
+            else if (RespawnOverrideMap != null)
+            {
+                Warp(RespawnOverrideMapId, RespawnOverrideX, RespawnOverrideY, (byte)RespawnOverrideDir);
+                return;
+            }
+            ClassRespawn();
+        }
+
+        public void ClassRespawn()
+        {
+            var mapId = Guid.Empty;
+            byte x = 0, y = 0, dir = 0;
+
+            var cls = ClassBase.Get(ClassId);
+            if (cls != null)
+            {
+                if (MapController.Lookup.Keys.Contains(cls.SpawnMapId))
+                {
+                    mapId = cls.SpawnMapId;
+                }
+
+                x = (byte)cls.SpawnX;
+                y = (byte)cls.SpawnY;
+                dir = (byte)cls.SpawnDir;
+            }
+
+            if (mapId == Guid.Empty)
+            {
+                using (var mapenum = MapController.Lookup.GetEnumerator())
+                {
+                    mapenum.MoveNext();
+                    mapId = mapenum.Current.Value.Id;
+                }
+            }
+
+            Warp(mapId, x, y, dir, false, 0, false, false, MapInstanceType.Overworld);
         }
 
         // Instancing
@@ -8279,6 +8301,36 @@ namespace Intersect.Server.Entities
 
         [NotMapped, JsonIgnore]
         public bool ClientAwaitingFadeCompletion { get; set; }
+
+        // For changing spawn points
+        [Column("RespawnOverride")]
+        [JsonProperty]
+        public Guid RespawnOverrideMapId { get; set; }
+        [NotMapped]
+        [JsonIgnore]
+        public MapBase RespawnOverrideMap
+        {
+            get => MapBase.Get(RespawnOverrideMapId);
+            set => RespawnOverrideMapId = value?.Id ?? Guid.Empty;
+        }
+        public int RespawnOverrideX { get; set; }
+        public int RespawnOverrideY { get; set; }
+        public int RespawnOverrideDir { get; set; }
+
+        // For respawning if killed in arena
+        [Column("ArenaRespawn")]
+        [JsonProperty]
+        public Guid ArenaRespawnMapId { get; set; }
+        [NotMapped]
+        [JsonIgnore]
+        public MapBase ArenaRespawnMap
+        {
+            get => MapBase.Get(ArenaRespawnMapId);
+            set => ArenaRespawnMapId = value?.Id ?? Guid.Empty;
+        }
+        public int ArenaRespawnX { get; set; }
+        public int ArenaRespawnY { get; set; }
+        public int ArenaRespawnDir { get; set; }
 
         [NotMapped, JsonIgnore]
         public List<Item> CurrentLoot {

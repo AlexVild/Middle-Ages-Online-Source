@@ -2209,6 +2209,7 @@ Tick timer saved in server config.json.";
                 {"fadein", @"Fade In"},
                 {"fadeout", @"Fade Out"},
                 {"shakescreen", @"Shake Screen"},
+                {"changespawn", @"Change Respawn Point"},
             };
 
         }
@@ -6073,6 +6074,12 @@ Negative values for time to flow backwards.";
 
         public partial struct EventCommandList
         {
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ChangeOverworldSpawn = @"Change Overworld Spawn Point [Map: {00}, X: {01}, Y: {02}, Dir: {03}]";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ChangeArenaSpawn = @"Change Arena Spawn Point [Map: {00}, X: {01}, Y: {02}, Dir: {03}]";
+
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString ClearRecord = @"Clear Records for {00}, clear all: {01}";
 

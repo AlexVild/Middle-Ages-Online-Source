@@ -95,6 +95,11 @@ namespace Intersect.Server.Core
                 }
 
                 var descriptor = timer.Descriptor;
+
+                if (descriptor == null)
+                {
+                    continue;
+                }
                 
                 // If this timer was aborted (player logout with logout type "Cancel on Login"), fire its cancellation events
                 if (timer.TimeRemaining == TimerConstants.TimerAborted)

@@ -831,6 +831,10 @@ namespace Intersect.Editor.Forms.Editors.Events
                     tmpCommand = new ShakeScreenCommand();
 
                     break;
+                case EventCommandType.ChangeSpawn:
+                    tmpCommand = new ChangeSpawnCommand();
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -1520,6 +1524,10 @@ namespace Intersect.Editor.Forms.Editors.Events
                     break;
                 case EventCommandType.ShakeScreen:
                     cmdWindow = new EventCommand_ShakeScreen((ShakeScreenCommand)command, this);
+
+                    break;
+                case EventCommandType.ChangeSpawn:
+                    cmdWindow = new EventCommand_ChangeSpawn((ChangeSpawnCommand)command, this);
 
                     break;
                 default:

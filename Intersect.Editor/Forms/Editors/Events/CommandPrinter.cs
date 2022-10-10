@@ -1931,5 +1931,37 @@ namespace Intersect.Editor.Forms.Editors.Events
         {
             return Strings.EventCommandList.ShakeScreenCommand.ToString(command.Intensity);
         }
+
+        private static string GetCommandText(ChangeSpawnCommand command, MapInstance map)
+        {
+            var mapName = Strings.EventCommandList.mapnotfound;
+            if (command.Reset)
+            {
+                mapName = "Reset to Default";
+            }
+            else
+            {
+                for (var i = 0; i < MapList.OrderedMaps.Count; i++)
+                {
+                    if (MapList.OrderedMaps[i].MapId == command.MapId)
+                    {
+                        mapName = MapList.OrderedMaps[i].Name;
+                    }
+                }
+            }
+
+            if (command.RespawnType == RespawnChangeType.Default)
+            {
+                return Strings.EventCommandList.ChangeOverworldSpawn.ToString(
+                    mapName, command.X, command.Y, Strings.Directions.dir[(int)command.Direction]
+                );
+            }
+            else
+            {
+                return Strings.EventCommandList.ChangeArenaSpawn.ToString(
+                    mapName, command.X, command.Y, Strings.Directions.dir[(int)command.Direction]
+                );
+            }
+        }
     }
 }

@@ -2993,5 +2993,51 @@ namespace Intersect.Server.Entities.Events
         {
             player?.SendPacket(new ShakeScreenPacket(command.Intensity));
         }
+
+        private static void ProcessCommand(
+            ChangeSpawnCommand command,
+            Player player,
+            Event instance,
+            CommandInstance stackInfo,
+            Stack<CommandInstance> callStack
+        )
+        {
+            if (player == null)
+            {
+                return;
+            }
+
+            if (command.RespawnType == RespawnChangeType.Default)
+            {
+                if (command.Reset)
+                {
+                    player.RespawnOverrideMapId = Guid.Empty;
+                    return;
+                }
+
+                player.RespawnOverrideMapId = command.MapId;
+                player.RespawnOverrideX = command.X;
+                player.RespawnOverrideY = command.Y;
+                player.RespawnOverrideDir = (byte)command.Direction;
+                PacketSender.SendChatMsg(player, Strings.Player.SpawnChanged, ChatMessageType.Notice, CustomColors.General.GeneralPrimary);
+                return;
+            }
+            else if (command.RespawnType == RespawnChangeType.Arena)
+            {
+                if (command.Reset)
+                {
+                    player.ArenaRespawnMapId = Guid.Empty;
+                    return;
+                }
+
+                player.ArenaRespawnMapId = command.MapId;
+                player.ArenaRespawnX = command.X;
+                player.ArenaRespawnY = command.Y;
+                player.ArenaRespawnDir = (byte)command.Direction;
+                return;
+            }
+
+            throw new NotImplementedException($"Invalid respawn change type for player {player.Name}");
+        }
     }
 }

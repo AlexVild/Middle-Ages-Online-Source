@@ -261,7 +261,8 @@
         ResetPermadeadNpcs, // 73
         FadeIn, // 74
         FadeOut, // 75
-        ShakeScreen // 76
+        ShakeScreen, // 76
+        ChangeSpawn, // 77
     }
 
     public enum NPCGuildManagementSelection
@@ -290,5 +291,11 @@
         ResourceGathered,
         PlayerVariable,
         Combo
+    }
+
+    public enum RespawnChangeType
+    {
+        Default,
+        Arena
     }
 }
