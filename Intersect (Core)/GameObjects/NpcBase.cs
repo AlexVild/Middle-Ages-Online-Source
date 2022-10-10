@@ -52,7 +52,11 @@ namespace Intersect.GameObjects
         /// <summary>
         /// Whether the NPC can be affected by taunt
         /// </summary>
-        Taunt
+        Taunt,
+        
+        Slowed,
+
+        Confused,
     }
 
     public partial class NpcBase : DatabaseObject<NpcBase>, IFolderable

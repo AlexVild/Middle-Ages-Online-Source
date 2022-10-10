@@ -145,6 +145,12 @@ namespace Intersect.Editor.Forms.Editors
             this.lblManaRegen = new System.Windows.Forms.Label();
             this.lblRegenHint = new System.Windows.Forms.Label();
             this.grpDrops = new DarkUI.Controls.DarkGroupBox();
+            this.grpTableSelection = new DarkUI.Controls.DarkGroupBox();
+            this.nudTableChance = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblTableChance = new System.Windows.Forms.Label();
+            this.rdoTertiary = new DarkUI.Controls.DarkRadioButton();
+            this.rdoSecondary = new DarkUI.Controls.DarkRadioButton();
+            this.rdoMain = new DarkUI.Controls.DarkRadioButton();
             this.btnUnselectItem = new DarkUI.Controls.DarkButton();
             this.grpTypes = new DarkUI.Controls.DarkGroupBox();
             this.rdoTable = new DarkUI.Controls.DarkRadioButton();
@@ -188,12 +194,8 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemPaste = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
-            this.grpTableSelection = new DarkUI.Controls.DarkGroupBox();
-            this.rdoSecondary = new DarkUI.Controls.DarkRadioButton();
-            this.rdoMain = new DarkUI.Controls.DarkRadioButton();
-            this.rdoTertiary = new DarkUI.Controls.DarkRadioButton();
-            this.lblTableChance = new System.Windows.Forms.Label();
-            this.nudTableChance = new DarkUI.Controls.DarkNumericUpDown();
+            this.chkSlowed = new DarkUI.Controls.DarkCheckBox();
+            this.chkConfused = new DarkUI.Controls.DarkCheckBox();
             this.grpNpcs.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudRgbaA)).BeginInit();
@@ -235,14 +237,14 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudMpRegen)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudHpRegen)).BeginInit();
             this.grpDrops.SuspendLayout();
+            this.grpTableSelection.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudTableChance)).BeginInit();
             this.grpTypes.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudDropAmount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudDropChance)).BeginInit();
             this.grpNpcVsNpc.SuspendLayout();
             this.grpSpells.SuspendLayout();
             this.toolStrip.SuspendLayout();
-            this.grpTableSelection.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudTableChance)).BeginInit();
             this.SuspendLayout();
             // 
             // grpNpcs
@@ -1067,6 +1069,8 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpImmunities.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpImmunities.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpImmunities.Controls.Add(this.chkConfused);
+            this.grpImmunities.Controls.Add(this.chkSlowed);
             this.grpImmunities.Controls.Add(this.nudTenacity);
             this.grpImmunities.Controls.Add(this.lblTenacity);
             this.grpImmunities.Controls.Add(this.chkTaunt);
@@ -1082,7 +1086,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpImmunities.Margin = new System.Windows.Forms.Padding(2);
             this.grpImmunities.Name = "grpImmunities";
             this.grpImmunities.Padding = new System.Windows.Forms.Padding(2);
-            this.grpImmunities.Size = new System.Drawing.Size(226, 181);
+            this.grpImmunities.Size = new System.Drawing.Size(226, 222);
             this.grpImmunities.TabIndex = 33;
             this.grpImmunities.TabStop = false;
             this.grpImmunities.Text = "Immunities";
@@ -1097,7 +1101,7 @@ namespace Intersect.Editor.Forms.Editors
             0,
             0,
             131072});
-            this.nudTenacity.Location = new System.Drawing.Point(5, 138);
+            this.nudTenacity.Location = new System.Drawing.Point(11, 171);
             this.nudTenacity.Name = "nudTenacity";
             this.nudTenacity.Size = new System.Drawing.Size(195, 20);
             this.nudTenacity.TabIndex = 79;
@@ -1111,7 +1115,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblTenacity
             // 
             this.lblTenacity.AutoSize = true;
-            this.lblTenacity.Location = new System.Drawing.Point(5, 122);
+            this.lblTenacity.Location = new System.Drawing.Point(11, 155);
             this.lblTenacity.Name = "lblTenacity";
             this.lblTenacity.Size = new System.Drawing.Size(68, 13);
             this.lblTenacity.TabIndex = 79;
@@ -1903,6 +1907,85 @@ namespace Intersect.Editor.Forms.Editors
             this.grpDrops.TabStop = false;
             this.grpDrops.Text = "Drops";
             // 
+            // grpTableSelection
+            // 
+            this.grpTableSelection.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpTableSelection.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpTableSelection.Controls.Add(this.nudTableChance);
+            this.grpTableSelection.Controls.Add(this.lblTableChance);
+            this.grpTableSelection.Controls.Add(this.rdoTertiary);
+            this.grpTableSelection.Controls.Add(this.rdoSecondary);
+            this.grpTableSelection.Controls.Add(this.rdoMain);
+            this.grpTableSelection.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpTableSelection.Location = new System.Drawing.Point(14, 64);
+            this.grpTableSelection.Name = "grpTableSelection";
+            this.grpTableSelection.Size = new System.Drawing.Size(195, 127);
+            this.grpTableSelection.TabIndex = 60;
+            this.grpTableSelection.TabStop = false;
+            this.grpTableSelection.Text = "Table";
+            // 
+            // nudTableChance
+            // 
+            this.nudTableChance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudTableChance.DecimalPlaces = 2;
+            this.nudTableChance.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudTableChance.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            196608});
+            this.nudTableChance.Location = new System.Drawing.Point(6, 91);
+            this.nudTableChance.Name = "nudTableChance";
+            this.nudTableChance.Size = new System.Drawing.Size(179, 20);
+            this.nudTableChance.TabIndex = 79;
+            this.nudTableChance.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudTableChance.ValueChanged += new System.EventHandler(this.nudTableChance_ValueChanged);
+            // 
+            // lblTableChance
+            // 
+            this.lblTableChance.AutoSize = true;
+            this.lblTableChance.Location = new System.Drawing.Point(8, 68);
+            this.lblTableChance.Name = "lblTableChance";
+            this.lblTableChance.Size = new System.Drawing.Size(113, 13);
+            this.lblTableChance.TabIndex = 79;
+            this.lblTableChance.Text = "% Chance to use table";
+            // 
+            // rdoTertiary
+            // 
+            this.rdoTertiary.AutoSize = true;
+            this.rdoTertiary.Location = new System.Drawing.Point(11, 43);
+            this.rdoTertiary.Name = "rdoTertiary";
+            this.rdoTertiary.Size = new System.Drawing.Size(60, 17);
+            this.rdoTertiary.TabIndex = 4;
+            this.rdoTertiary.Text = "Tertiary";
+            this.rdoTertiary.CheckedChanged += new System.EventHandler(this.rdoTertiary_CheckedChanged);
+            // 
+            // rdoSecondary
+            // 
+            this.rdoSecondary.AutoSize = true;
+            this.rdoSecondary.Location = new System.Drawing.Point(93, 20);
+            this.rdoSecondary.Name = "rdoSecondary";
+            this.rdoSecondary.Size = new System.Drawing.Size(76, 17);
+            this.rdoSecondary.TabIndex = 3;
+            this.rdoSecondary.Text = "Secondary";
+            this.rdoSecondary.CheckedChanged += new System.EventHandler(this.rdoSecondary_CheckedChanged);
+            // 
+            // rdoMain
+            // 
+            this.rdoMain.AutoSize = true;
+            this.rdoMain.Checked = true;
+            this.rdoMain.Location = new System.Drawing.Point(11, 20);
+            this.rdoMain.Name = "rdoMain";
+            this.rdoMain.Size = new System.Drawing.Size(48, 17);
+            this.rdoMain.TabIndex = 1;
+            this.rdoMain.TabStop = true;
+            this.rdoMain.Text = "Main";
+            this.rdoMain.CheckedChanged += new System.EventHandler(this.rdoMain_CheckedChanged);
+            // 
             // btnUnselectItem
             // 
             this.btnUnselectItem.Location = new System.Drawing.Point(191, 275);
@@ -2445,84 +2528,25 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
             // 
-            // grpTableSelection
+            // chkSlowed
             // 
-            this.grpTableSelection.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.grpTableSelection.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpTableSelection.Controls.Add(this.nudTableChance);
-            this.grpTableSelection.Controls.Add(this.lblTableChance);
-            this.grpTableSelection.Controls.Add(this.rdoTertiary);
-            this.grpTableSelection.Controls.Add(this.rdoSecondary);
-            this.grpTableSelection.Controls.Add(this.rdoMain);
-            this.grpTableSelection.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpTableSelection.Location = new System.Drawing.Point(14, 64);
-            this.grpTableSelection.Name = "grpTableSelection";
-            this.grpTableSelection.Size = new System.Drawing.Size(195, 127);
-            this.grpTableSelection.TabIndex = 60;
-            this.grpTableSelection.TabStop = false;
-            this.grpTableSelection.Text = "Table";
+            this.chkSlowed.AutoSize = true;
+            this.chkSlowed.Location = new System.Drawing.Point(11, 118);
+            this.chkSlowed.Name = "chkSlowed";
+            this.chkSlowed.Size = new System.Drawing.Size(61, 17);
+            this.chkSlowed.TabIndex = 87;
+            this.chkSlowed.Text = "Slowed";
+            this.chkSlowed.CheckedChanged += new System.EventHandler(this.chkSlowed_CheckedChanged);
             // 
-            // rdoSecondary
+            // chkConfused
             // 
-            this.rdoSecondary.AutoSize = true;
-            this.rdoSecondary.Location = new System.Drawing.Point(93, 20);
-            this.rdoSecondary.Name = "rdoSecondary";
-            this.rdoSecondary.Size = new System.Drawing.Size(76, 17);
-            this.rdoSecondary.TabIndex = 3;
-            this.rdoSecondary.Text = "Secondary";
-            this.rdoSecondary.CheckedChanged += new System.EventHandler(this.rdoSecondary_CheckedChanged);
-            // 
-            // rdoMain
-            // 
-            this.rdoMain.AutoSize = true;
-            this.rdoMain.Checked = true;
-            this.rdoMain.Location = new System.Drawing.Point(11, 20);
-            this.rdoMain.Name = "rdoMain";
-            this.rdoMain.Size = new System.Drawing.Size(48, 17);
-            this.rdoMain.TabIndex = 1;
-            this.rdoMain.TabStop = true;
-            this.rdoMain.Text = "Main";
-            this.rdoMain.CheckedChanged += new System.EventHandler(this.rdoMain_CheckedChanged);
-            // 
-            // rdoTertiary
-            // 
-            this.rdoTertiary.AutoSize = true;
-            this.rdoTertiary.Location = new System.Drawing.Point(11, 43);
-            this.rdoTertiary.Name = "rdoTertiary";
-            this.rdoTertiary.Size = new System.Drawing.Size(60, 17);
-            this.rdoTertiary.TabIndex = 4;
-            this.rdoTertiary.Text = "Tertiary";
-            this.rdoTertiary.CheckedChanged += new System.EventHandler(this.rdoTertiary_CheckedChanged);
-            // 
-            // lblTableChance
-            // 
-            this.lblTableChance.AutoSize = true;
-            this.lblTableChance.Location = new System.Drawing.Point(8, 68);
-            this.lblTableChance.Name = "lblTableChance";
-            this.lblTableChance.Size = new System.Drawing.Size(113, 13);
-            this.lblTableChance.TabIndex = 79;
-            this.lblTableChance.Text = "% Chance to use table";
-            // 
-            // nudTableChance
-            // 
-            this.nudTableChance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudTableChance.DecimalPlaces = 2;
-            this.nudTableChance.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudTableChance.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            196608});
-            this.nudTableChance.Location = new System.Drawing.Point(6, 91);
-            this.nudTableChance.Name = "nudTableChance";
-            this.nudTableChance.Size = new System.Drawing.Size(179, 20);
-            this.nudTableChance.TabIndex = 79;
-            this.nudTableChance.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudTableChance.ValueChanged += new System.EventHandler(this.nudTableChance_ValueChanged);
+            this.chkConfused.AutoSize = true;
+            this.chkConfused.Location = new System.Drawing.Point(116, 118);
+            this.chkConfused.Name = "chkConfused";
+            this.chkConfused.Size = new System.Drawing.Size(71, 17);
+            this.chkConfused.TabIndex = 88;
+            this.chkConfused.Text = "Confused";
+            this.chkConfused.CheckedChanged += new System.EventHandler(this.chkConfused_CheckedChanged);
             // 
             // FrmNpc
             // 
@@ -2600,6 +2624,9 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudHpRegen)).EndInit();
             this.grpDrops.ResumeLayout(false);
             this.grpDrops.PerformLayout();
+            this.grpTableSelection.ResumeLayout(false);
+            this.grpTableSelection.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudTableChance)).EndInit();
             this.grpTypes.ResumeLayout(false);
             this.grpTypes.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudDropAmount)).EndInit();
@@ -2610,9 +2637,6 @@ namespace Intersect.Editor.Forms.Editors
             this.grpSpells.PerformLayout();
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
-            this.grpTableSelection.ResumeLayout(false);
-            this.grpTableSelection.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudTableChance)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -2780,5 +2804,7 @@ namespace Intersect.Editor.Forms.Editors
         private DarkRadioButton rdoTertiary;
         private DarkRadioButton rdoSecondary;
         private DarkRadioButton rdoMain;
+        private DarkCheckBox chkConfused;
+        private DarkCheckBox chkSlowed;
     }
 }

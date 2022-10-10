@@ -3355,6 +3355,10 @@ namespace Intersect.Server.Entities
                     return Immunities.Taunt;
                 case StatusTypes.Transform:
                     return Immunities.Transform;
+                case StatusTypes.Confused:
+                    return Immunities.Confused;
+                case StatusTypes.Slowed:
+                    return Immunities.Slowed;
                 default:
                     return Immunities.None;
             }

@@ -659,6 +659,9 @@ namespace Intersect.Editor.Forms.Editors
             chkTransform.Checked = GetImmunityValue(Immunities.Transform);
             chkTaunt.Checked = GetImmunityValue(Immunities.Taunt);
             chkBlind.Checked = GetImmunityValue(Immunities.Blind);
+            chkBlind.Checked = GetImmunityValue(Immunities.Blind);
+            chkSlowed.Checked = GetImmunityValue(Immunities.Slowed);
+            chkConfused.Checked = GetImmunityValue(Immunities.Confused);
         }
 
         private bool GetImmunityValue(Immunities immunity)
@@ -1334,6 +1337,16 @@ namespace Intersect.Editor.Forms.Editors
                     mEditorItem.TertiaryChance = (double)nudTableChance.Value;
                     break;
             }
+        }
+
+        private void chkSlowed_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Immunities[Immunities.Slowed] = chkSlowed.Checked;
+        }
+
+        private void chkConfused_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Immunities[Immunities.Confused] = chkConfused.Checked;
         }
     }
 
