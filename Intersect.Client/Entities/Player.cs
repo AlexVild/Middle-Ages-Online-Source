@@ -232,7 +232,7 @@ namespace Intersect.Client.Entities
 
         public bool InCutscene()
         {
-            return Globals.EventHolds.Count > 0 || Globals.MoveRouteActive;
+            return Globals.EventHolds.Count > 0 || Globals.MoveRouteActive || IsDead;
         }
 
         public bool IsBusy()

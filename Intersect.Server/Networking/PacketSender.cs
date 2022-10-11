@@ -2570,6 +2570,35 @@ namespace Intersect.Server.Networking
 
             me.SendPacket(new PlayerDeathUpdatePacket(player.Id, player.PlayerDead));
         }
+
+        public static void SendPlayerDeathType(Player player, DeathType type, long expLost = -1, List<Item> itemsLost = null)
+        {
+            if (player == null)
+            {
+                return;
+            }
+
+            var itemImageStrings = new List<string>();
+            if (itemsLost != null && itemsLost.Count > 0)
+            {
+                foreach(var item in itemsLost)
+                {
+                    itemImageStrings.Add(item?.Descriptor?.Icon);
+                }
+            }
+
+            player.SendPacket(new PlayerDeathTypePacket(type, expLost, itemImageStrings.Distinct().ToList()));
+        }
+
+        public static void SendRespawnFinished(Player player)
+        {
+            if (player == null)
+            {
+                return;
+            }
+
+            player.SendPacket(new RespawnFinishedPacket());
+        }
     }
 
 }

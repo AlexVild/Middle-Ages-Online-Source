@@ -435,6 +435,11 @@ namespace Intersect.Server.Entities
             {
                 SendInspirationUpdateText(-1);
             }
+
+            if (PlayerDead)
+            {
+                PacketSender.SendPlayerDeathType(this, DeathType.Safe);
+            }
         }
 
         public void SendPacket(IPacket packet, TransmissionMode mode = TransmissionMode.All)
@@ -1027,6 +1032,7 @@ namespace Intersect.Server.Entities
             }
 
             PacketSender.SendEntityDataToProximity(this);
+            PacketSender.SendRespawnFinished(this);
 
             //Search death common event trigger
             StartCommonEventsWithTrigger(CommonEventTrigger.OnRespawn);
@@ -1069,11 +1075,11 @@ namespace Intersect.Server.Entities
             }
 
             // EXP Loss - don't lose in shared instance, or in an Arena zone
+            double expLoss = -1;
             if ((InstanceType != MapInstanceType.Shared || Options.Instance.Instancing.LoseExpOnInstanceDeath) && currentMapZoneType != MapZones.Arena)
             {
                 if (Options.Instance.PlayerOpts.ExpLossOnDeathPercent > 0)
                 {
-                    double expLoss = -1;
                     if (Options.Instance.PlayerOpts.ExpLossFromCurrentExp)
                     {
                         expLoss = (this.Exp * (Options.Instance.PlayerOpts.ExpLossOnDeathPercent / 100.0));
@@ -1099,6 +1105,7 @@ namespace Intersect.Server.Entities
             Statuses.Clear();
             CachedStatuses = new Status[0];
 
+            PacketSender.SendPlayerDeathType(this, GetDeathType((long)expLoss), (long)expLoss, ItemsLost);
             PacketSender.SendEntityDie(this);
             PacketSender.SendInventory(this);
         }
@@ -8390,6 +8397,9 @@ namespace Intersect.Server.Entities
         public int RespawnOverrideY { get; set; }
         public int RespawnOverrideDir { get; set; }
 
+        [NotMapped, JsonIgnore]
+        public List<Item> ItemsLost { get; set; } = new List<Item>();
+
         // For respawning if killed in arena
         [Column("ArenaRespawn")]
         [JsonProperty]
@@ -8804,7 +8814,8 @@ namespace Intersect.Server.Entities
                 return; // Only drop items in PVP
             }
 
-            var itemsLost = new List<string>();
+            var itemsLostString = new List<string>();
+            ItemsLost = new List<Item>();
             for (var n = 0; n < Items.Count; n++)
             {
                 if (Items[n] == null)
@@ -8852,23 +8863,22 @@ namespace Intersect.Server.Entities
                 var taken = TryTakeItem(Items[n], item.Quantity);
                 if (taken)
                 {
+                    ItemsLost.Add(item);
                     if (item.Quantity > 1)
                     {
                         var trimmedName = item.ItemName.TrimEnd('s');
-                        itemsLost.Add($"{item.Quantity} {trimmedName}s");
+                        itemsLostString.Add($"{item.Quantity} {trimmedName}s");
                     }
                     else
                     {
-                        itemsLost.Add(item.ItemName);
+                        itemsLostString.Add(item.ItemName);
                     }
                 }
             }
 
-            if (itemsLost.Count > 0)
+            if (itemsLostString.Count > 0)
             {
-                var itemsLostString = string.Join(", ", itemsLost.ToArray());
-
-                PacketSender.SendChatMsg(this, Strings.Player.ItemsLost.ToString(itemsLostString), ChatMessageType.Inventory, CustomColors.General.GeneralWarning);
+                PacketSender.SendChatMsg(this, Strings.Player.ItemsLost.ToString(string.Join(", ", itemsLostString.ToArray())), ChatMessageType.Inventory, CustomColors.General.GeneralWarning);
             }
         }
 
@@ -8965,6 +8975,23 @@ namespace Intersect.Server.Entities
         {
             PlayerDead = false;
             base.Reset();
+        }
+
+        private DeathType GetDeathType(long expLoss)
+        {
+            if (expLoss <= 0)
+            {
+                return DeathType.Safe;
+            }
+            if (ItemsLost.Count > 0)
+            {
+                return DeathType.PvP;
+            }
+            if (InstanceType == MapInstanceType.Shared)
+            {
+                return DeathType.Dungeon;
+            }
+            return DeathType.PvE;
         }
     }
 }

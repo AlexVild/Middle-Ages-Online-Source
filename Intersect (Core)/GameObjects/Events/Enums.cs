@@ -298,4 +298,12 @@
         Default,
         Arena
     }
+
+    public enum DeathType
+    {
+        PvE = 0,
+        PvP,
+        Dungeon,
+        Safe,
+    }
 }

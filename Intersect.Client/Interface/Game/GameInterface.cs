@@ -773,6 +773,7 @@ namespace Intersect.Client.Interface.Game
         private PartyHud mPartyHUD;
         public LeaderboardWindow LeaderboardWindow;
         public LootRollWindow LootRollWindow;
+        public PlayerRespawnWindow RespawnWindow;
 
         private void _InitGameGui(Canvas gameCanvas)
         {
@@ -780,6 +781,7 @@ namespace Intersect.Client.Interface.Game
             mPartyHUD = new PartyHud();
             LeaderboardWindow = new LeaderboardWindow(gameCanvas);
             LootRollWindow = new LootRollWindow(gameCanvas);
+            RespawnWindow = new PlayerRespawnWindow(gameCanvas);
         }
 
         private void _Draw()
@@ -789,6 +791,7 @@ namespace Intersect.Client.Interface.Game
 
             LeaderboardWindow.Update();
             LootRollWindow.Update();
+            RespawnWindow.Update();
         }
 
         public PlayerHud GetHud()

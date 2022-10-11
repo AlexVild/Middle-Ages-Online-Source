@@ -552,5 +552,15 @@ namespace Intersect.Client.Networking
             Globals.WaitFade = false;
             Network.SendPacket(new FinishedFadePacket());
         }
+
+        public static void SendRequestRespawn()
+        {
+            Network.SendPacket(new RequestRespawnPacket());
+        }
+
+        public static void SendRequestInstanceLeave()
+        {
+            Network.SendPacket(new RequestInstanceLeavePacket());
+        }
     }
 }

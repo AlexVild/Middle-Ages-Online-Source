@@ -4429,5 +4429,47 @@ namespace Intersect.Server.Networking
 
             player.ClientAwaitingFadeCompletion = false;
         }
+
+        public void HandlePacket(Client client, RequestRespawnPacket packet)
+        {
+            var player = client?.Entity;
+
+            if (player == null)
+            {
+                return;
+            }
+
+            if (!player.PlayerDead)
+            {
+                // Maybe the client's out of sync?
+                PacketSender.SendPlayerDeathInfoTo(player, player);
+                PacketSender.SendRespawnFinished(player);
+                return;
+            }
+
+            player.AcceptRespawn();
+        }
+
+        public void HandlePacket(Client client, RequestInstanceLeavePacket packet)
+        {
+            var player = client?.Entity;
+
+            if (player == null)
+            {
+                return;
+            }
+
+            if (!player.PlayerDead)
+            {
+                // Maybe the client's out of sync?
+                PacketSender.SendPlayerDeathInfoTo(player, player);
+            }
+            else
+            {
+                player.WarpToLastOverworldLocation(false);
+            }
+
+            PacketSender.SendRespawnFinished(player);
+        }
     }
 }

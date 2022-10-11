@@ -139,6 +139,7 @@
     <Compile Include="Interface\Game\HUD\PlayerHud.cs" />
     <Compile Include="Interface\Game\MapScreen\MapScreen.cs" />
     <Compile Include="Interface\Game\PartyWindowMember.cs" />
+    <Compile Include="Interface\Game\PlayerRespawnWindow.cs" />
     <Compile Include="Interface\Game\QuestBoardWindow.cs" />
     <Compile Include="Interface\Game\TimerWindow.cs" />
     <Compile Include="Interface\Game\WarningWindow.cs" />

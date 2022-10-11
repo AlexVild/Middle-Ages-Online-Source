@@ -398,8 +398,10 @@
     <Compile Include="Network\Packets\Client\CraftItemPacket.cs" />
     <Compile Include="Network\Packets\Client\FinishedFadePacket.cs" />
     <Compile Include="Network\Packets\Client\PartyInviteNamePacket.cs" />
+    <Compile Include="Network\Packets\Client\RequestInstanceLeavePacket.cs" />
     <Compile Include="Network\Packets\Client\RequestLeaderboardPacket.cs" />
     <Compile Include="Network\Packets\Client\RequestLootUpdatePacket.cs" />
+    <Compile Include="Network\Packets\Client\RequestRespawnPacket.cs" />
     <Compile Include="Network\Packets\Server\CraftStatusPacket.cs" />
     <Compile Include="Network\Packets\Client\CreateAccountPacket.cs" />
     <Compile Include="Network\Packets\Client\CreateCharacterPacket.cs" />
@@ -433,6 +435,7 @@
     <Compile Include="Network\Packets\Server\CombatEffectPacket.cs" />
     <Compile Include="Network\Packets\Server\ComboPacket.cs" />
     <Compile Include="Network\Packets\Server\CraftingInfoPacket.cs" />
+    <Compile Include="Network\Packets\Server\PlayerDeathTypePacket.cs" />
     <Compile Include="Network\Packets\Server\EntityMovementPackets.cs" />
     <Compile Include="Network\Packets\Server\FadePacket.cs" />
     <Compile Include="Network\Packets\Server\FlashScreenPacket.cs" />
@@ -462,6 +465,7 @@
     <Compile Include="Network\Packets\Server\QuestPointPacket.cs" />
     <Compile Include="Network\Packets\Server\RecordDto.cs" />
     <Compile Include="Network\Packets\Server\ResourceLockPacket.cs" />
+    <Compile Include="Network\Packets\Server\RespawnFinishedPacket.cs" />
     <Compile Include="Network\Packets\Server\ServerDisposedPacket.cs" />
     <Compile Include="Network\Packets\Server\ShakeScreenPacket.cs" />
     <Compile Include="Network\Packets\Server\TimerPacket.cs" />
