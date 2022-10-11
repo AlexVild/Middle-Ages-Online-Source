@@ -1723,7 +1723,7 @@ namespace Intersect.Server.Entities
 
         public bool IsDungeonAggroToward(Player player)
         {
-            if (player.MapInstanceId == MapInstanceId && player.InstanceType == MapInstanceType.Shared
+            if (player.MapInstanceId == MapInstanceId && player.InstanceType != MapInstanceType.Overworld
                 && Map.TryGetInstance(MapInstanceId, out var instance))
             {
                 var dungeonVar = instance.GetInstanceVariable(Guid.Parse(Options.Combat.DungeonInstanceVarGuid ?? Guid.Empty.ToString()));
