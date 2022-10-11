@@ -61,6 +61,7 @@ namespace Intersect.Client.Interface.Game
         public void Update()
         {
             var time = Timing.Global.Milliseconds;
+
             if (Globals.Me.MPWarning)
             {
                 Globals.Me.MPWarning = false; // the warning is always in a state of fading out. Each new packet just refreshes the fade

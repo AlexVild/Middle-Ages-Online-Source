@@ -1454,6 +1454,10 @@ namespace Intersect.Server.Entities
             {
                 foreach (var entity in instance.GetCachedEntities())
                 {
+                    if (entity is Player pl && pl.PlayerDead)
+                    {
+                        continue;
+                    }
                     if (entity != null && !entity.IsDead() && entity != this && entity.Id != avoidId)
                     {
                         //TODO Check if NPC is allowed to attack player with new conditions

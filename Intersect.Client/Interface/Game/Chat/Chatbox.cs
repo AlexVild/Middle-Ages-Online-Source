@@ -488,6 +488,11 @@ namespace Intersect.Client.Interface.Game.Chat
 
         void TrySendMessage()
         {
+            if (Globals.Me?.IsDead ?? true)
+            {
+                return;
+            }
+
             // If we're doing a quick-open, re-close the chat
             if (mHideAfterSending)
             {

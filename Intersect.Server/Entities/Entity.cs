@@ -529,12 +529,12 @@ namespace Intersect.Server.Entities
                     {
                         //Set a target if a projectile
                         CollisionIndex = en.Id;
-                        if (en is Player)
+                        if (en is Player ply)
                         {
                             if (this is Player)
                             {
                                 //Check if this target player is passable....
-                                if (!Options.Instance.Passability.Passable[(int)targetMap.ZoneType])
+                                if (!Options.Instance.Passability.Passable[(int)targetMap.ZoneType] && !ply.PlayerDead)
                                 {
                                     return (int)EntityTypes.Player;
                                 }
@@ -3242,7 +3242,7 @@ namespace Intersect.Server.Entities
             return Dead;
         }
 
-        public void Reset()
+        public virtual void Reset()
         {
             for (var i = 0; i < (int) Vitals.VitalCount; i++)
             {

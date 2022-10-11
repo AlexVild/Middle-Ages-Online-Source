@@ -2021,8 +2021,26 @@ namespace Intersect.Client.Networking
                 Globals.Entities[packet.PlayerId].DashQueue.Clear();
                 Globals.Entities[packet.PlayerId].Dashing = null;
                 Globals.Entities[packet.PlayerId].DashTimer = 0;
+                Globals.Entities[packet.PlayerId].IsDead = true;
+                if (packet.PlayerId == Globals.Me?.Id)
+                {
+                    Globals.Me.ToggleCombatMode();
+                    Globals.Me.HPWarning = false;
+                    Globals.Me.MPWarning = false;
+                    Globals.Me.CombatTimer = Timing.Global.Milliseconds;
+                }
             }
         }
+
+        //PlayerRespawnPacket
+        public void HandlePacket(IPacketSender packetSender, PlayerDeathUpdatePacket packet)
+        {
+            if (Globals.Entities.ContainsKey(packet.PlayerId))
+            {
+                Globals.Entities[packet.PlayerId].IsDead = packet.IsDead;
+            }
+        }
+
 
         //EntityZDimensionPacket
         public void HandlePacket(IPacketSender packetSender, EntityZDimensionPacket packet)

@@ -128,6 +128,10 @@ namespace Intersect.Server.Entities
                 {
                     if (!Parent.Base.PierceTarget)
                     {
+                        if (((Player)en).PlayerDead)
+                        {
+                            return false;
+                        }
                         if ((en != null && Options.Instance.Passability.Passable[(int)en.Map.ZoneType]) && (Parent.Spell != null && !Parent.Spell.Combat.Friendly))
                         {
                             return false;

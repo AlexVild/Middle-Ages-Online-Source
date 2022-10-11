@@ -634,6 +634,10 @@
     <Compile Include="Migrations\20221010003432_SpawnPointChangeMigration.designer.cs">
       <DependentUpon>20221010003432_SpawnPointChangeMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\20221011005935_AddPlayerDeathMigration.cs" />
+    <Compile Include="Migrations\20221011005935_AddPlayerDeathMigration.designer.cs">
+      <DependentUpon>20221011005935_AddPlayerDeathMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.cs" />
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.Designer.cs">
       <DependentUpon>20201222164741_NpcResetRadius.cs</DependentUpon>

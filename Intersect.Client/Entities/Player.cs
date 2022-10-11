@@ -254,6 +254,7 @@ namespace Intersect.Client.Entities
         {
             return (Globals.EventHolds.Count == 0 &&
                      !Globals.MoveRouteActive &&
+                     !IsDead &&
                      Globals.GameShop == null);
         }
 
@@ -410,6 +411,11 @@ namespace Intersect.Client.Entities
         // Alex: The two default values here can be set to FALSE if we want to drop through to "DROP" functionality - but this means we won't ever see the "cannot destroy message"
         public void TryDropItem(int index, bool fromPacket = true, bool canDestroy = true)
         {
+            if (IsDead)
+            {
+                return;
+            }
+
             if (ItemBase.Get(Inventory[index].ItemId) != null)
             {
                 var destroyable = Inventory[index].Base.CanDestroy;
@@ -511,6 +517,11 @@ namespace Intersect.Client.Entities
 
         public void TryUseItem(int index)
         {
+            if (IsDead)
+            {
+                return;
+            }
+
             if (StatusIsActive(StatusTypes.Sleep))
             {
                 SendAlert(Strings.Spells.sleep, Strings.Combat.sleep);
@@ -1033,6 +1044,11 @@ namespace Intersect.Client.Entities
                 return;
             }
 
+            if (IsDead)
+            {
+                return;
+            }
+
             for (var i = 0; i < Spells.Length; i++)
             {
                 if (Spells[i].SpellId == spellId)
@@ -1297,6 +1313,10 @@ namespace Intersect.Client.Entities
 
         public void TargetPartyMember(int idx)
         {
+            if (IsDead)
+            {
+                return;
+            }
             if (Globals.Me.IsInParty() && idx < Globals.Me.Party.Count)
             {
                 if (Globals.Entities.TryGetValue(Globals.Me.Party[idx].Id, out var partyMember) && GetDistanceTo(partyMember) <= Options.Instance.CombatOpts.PartyTargetDistance)
@@ -1578,6 +1598,11 @@ namespace Intersect.Client.Entities
                 return false;
             }
 
+            if (IsDead)
+            {
+                return false;
+            }
+
             if (StatusIsActive(StatusTypes.Blind) || StatusIsActive(StatusTypes.Confused))
             {
                 SendAttackStatusAlerts();
@@ -1725,6 +1750,11 @@ namespace Intersect.Client.Entities
 
         public bool TryTarget()
         {
+            if (IsDead)
+            {
+                return false;
+            }
+
             //Check for taunt status if so don't allow to change target
             for (var i = 0; i < Status.Count; i++)
             {
@@ -1821,7 +1851,7 @@ namespace Intersect.Client.Entities
                                 ClearTarget();
                                 return true;
                             }
-                            else if (bestMatch.Id == TargetIndex)
+                            else if (bestMatch.Id == TargetIndex && !bestMatch.IsDead)
                             {
                                 TryFaceTarget();
 
@@ -1839,6 +1869,11 @@ namespace Intersect.Client.Entities
 
         public bool TryTarget(Entity entity, bool force = false)
         {
+            if (IsDead)
+            {
+                return false;
+            }
+
             //Check for taunt status if so don't allow to change target
             for (var i = 0; i < Status.Count; i++)
             {
@@ -1992,6 +2027,11 @@ namespace Intersect.Client.Entities
         /// <returns>true if combat mode set to true</returns>
         public bool ToggleCombatMode(bool sound = false)
         {
+            if (IsDead)
+            {
+                return false;
+            }
+
             if (Globals.Database.ClassicMode)
             {
                 TryFaceTarget();
@@ -2226,6 +2266,11 @@ namespace Intersect.Client.Entities
             if (IsStunned())
             {
                 SendStunAlerts(true);
+                return;
+            }
+
+            if (IsDead)
+            {
                 return;
             }
 
@@ -2636,6 +2681,11 @@ namespace Intersect.Client.Entities
 
         public void DrawTargets()
         {
+            if (IsDead)
+            {
+                return;
+            }
+
             foreach (var en in Globals.Entities)
             {
                 if (en.Value == null)

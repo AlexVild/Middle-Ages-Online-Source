@@ -297,7 +297,14 @@ namespace Intersect.Server.Maps
         /// <param name="en">The entity to add.</param>
         public void AddEntity(Entity en)
         {
-            if (en != null && !en.IsDead() && en.MapInstanceId == MapInstanceId)
+            var isDead = en.IsDead();
+            // It's okay if a player is dead - we want to add them anyway since they're still 'there'
+            if (en is Player player)
+            {
+                isDead = false;
+            }
+
+            if (en != null && !isDead && en.MapInstanceId == MapInstanceId)
             {
                 if (!mEntities.ContainsKey(en.Id))
                 {

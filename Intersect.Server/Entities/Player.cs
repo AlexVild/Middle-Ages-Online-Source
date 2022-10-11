@@ -797,102 +797,108 @@ namespace Intersect.Server.Entities
                         //Check to see if we can spawn events, if already spawned.. update them.
                         lock (mEventLock)
                         {
-                            var autorunEvents = 0;
-                            foreach (var mapEvent in mapInstance.EventsCache)
+                            if (!PlayerDead)
                             {
-                                if (mapEvent != null)
+                                var autorunEvents = 0;
+                                foreach (var mapEvent in mapInstance.EventsCache)
                                 {
-                                    //Look for event
-                                    var loc = new MapTileLoc(surrMap.Id, mapEvent.SpawnX, mapEvent.SpawnY);
-                                    var foundEvent = EventExists(loc);
-                                    if (foundEvent == null)
+                                    if (mapEvent != null)
                                     {
-                                        var tmpEvent = new Event(Guid.NewGuid(), surrMap, this, mapEvent)
+                                        //Look for event
+                                        var loc = new MapTileLoc(surrMap.Id, mapEvent.SpawnX, mapEvent.SpawnY);
+                                        var foundEvent = EventExists(loc);
+                                        if (foundEvent == null)
                                         {
-                                            Global = mapEvent.Global,
-                                            MapId = surrMap.Id,
-                                            SpawnX = mapEvent.SpawnX,
-                                            SpawnY = mapEvent.SpawnY
-                                        };
+                                            var tmpEvent = new Event(Guid.NewGuid(), surrMap, this, mapEvent)
+                                            {
+                                                Global = mapEvent.Global,
+                                                MapId = surrMap.Id,
+                                                SpawnX = mapEvent.SpawnX,
+                                                SpawnY = mapEvent.SpawnY
+                                            };
 
-                                        EventLookup.AddOrUpdate(tmpEvent.Id, tmpEvent, (key, oldValue) => tmpEvent);
-                                        EventBaseIdLookup.AddOrUpdate(mapEvent.Id, tmpEvent, (key, oldvalue) => tmpEvent);
-                                        //var newTileLookup = new Dictionary<MapTileLoc, Event>(EventTileLookup);
-                                        ////If we get a collision here we need to rethink the MapTileLoc struct..
-                                        ////We want a fast lookup through this dictionary and this is hopefully a solution over using a slow Tuple.
-                                        //newTileLookup.Add(loc, tmpEvent);
-                                        //EventTileLookup = newTileLookup;
+                                            EventLookup.AddOrUpdate(tmpEvent.Id, tmpEvent, (key, oldValue) => tmpEvent);
+                                            EventBaseIdLookup.AddOrUpdate(mapEvent.Id, tmpEvent, (key, oldvalue) => tmpEvent);
+                                            //var newTileLookup = new Dictionary<MapTileLoc, Event>(EventTileLookup);
+                                            ////If we get a collision here we need to rethink the MapTileLoc struct..
+                                            ////We want a fast lookup through this dictionary and this is hopefully a solution over using a slow Tuple.
+                                            //newTileLookup.Add(loc, tmpEvent);
+                                            //EventTileLookup = newTileLookup;
 
-                                        EventTileLookup.AddOrUpdate(loc, tmpEvent, (key, oldvalue) => tmpEvent);
-                                    }
-                                    else
-                                    {
-                                        foundEvent.Update(timeMs, foundEvent.MapController);
-                                    }
-                                    if (Options.Instance.Metrics.Enable)
-                                    {
-                                        autorunEvents += mapEvent.Pages.Count(p => p.Trigger == EventTrigger.Autorun);
+                                            EventTileLookup.AddOrUpdate(loc, tmpEvent, (key, oldvalue) => tmpEvent);
+                                        }
+                                        else
+                                        {
+                                            foundEvent.Update(timeMs, foundEvent.MapController);
+                                        }
+                                        if (Options.Instance.Metrics.Enable)
+                                        {
+                                            autorunEvents += mapEvent.Pages.Count(p => p.Trigger == EventTrigger.Autorun);
+                                        }
                                     }
                                 }
+                                MapAutorunEvents = autorunEvents;
                             }
-                            MapAutorunEvents = autorunEvents;
                         }
                     }
 
                     //Check to see if we can spawn events, if already spawned.. update them.
                     lock (mEventLock)
                     {
-                        foreach (var evt in EventLookup)
+                        if (!PlayerDead)
                         {
-                            if (evt.Value == null)
+                            foreach (var evt in EventLookup)
                             {
-                                continue;
-                            }
-
-                            var eventFound = false;
-                            var eventMap = map;
-
-                            if (evt.Value.MapId != Guid.Empty)
-                            {
-                                if (evt.Value.MapId != MapId)
+                                if (evt.Value == null)
                                 {
-                                    eventMap = evt.Value.MapController;
-                                    eventFound = map.SurroundingMapIds.Contains(eventMap.Id);
+                                    continue;
                                 }
-                                else
+
+                                var eventFound = false;
+                                var eventMap = map;
+
+                                if (evt.Value.MapId != Guid.Empty)
                                 {
-                                    eventFound = true;
+                                    if (evt.Value.MapId != MapId)
+                                    {
+                                        eventMap = evt.Value.MapController;
+                                        eventFound = map.SurroundingMapIds.Contains(eventMap.Id);
+                                    }
+                                    else
+                                    {
+                                        eventFound = true;
+                                    }
                                 }
-                            }
 
 
-                            if (evt.Value.MapId == Guid.Empty)
-                            {
-                                evt.Value.Update(timeMs, eventMap);
-                                if (evt.Value.CallStack.Count > 0)
+                                if (evt.Value.MapId == Guid.Empty)
                                 {
-                                    eventFound = true;
+                                    evt.Value.Update(timeMs, eventMap);
+                                    if (evt.Value.CallStack.Count > 0)
+                                    {
+                                        eventFound = true;
+                                    }
                                 }
+
+
+                                if (eventFound)
+                                {
+                                    continue;
+                                }
+
+                                RemoveEvent(evt.Value.Id);
                             }
 
-
-                            if (eventFound)
+                            while (_queueStartCommonEvent.TryDequeue(out var startCommonEventMetadata))
                             {
-                                continue;
+                                _ = UnsafeStartCommonEvent(
+                                    startCommonEventMetadata.EventDescriptor,
+                                    startCommonEventMetadata.Trigger,
+                                    startCommonEventMetadata.Command,
+                                    startCommonEventMetadata.Parameter,
+                                    startCommonEventMetadata.Value
+                                );
                             }
-
-                            RemoveEvent(evt.Value.Id);
-                        }
-
-                        while (_queueStartCommonEvent.TryDequeue(out var startCommonEventMetadata))
-                        {
-                            _ = UnsafeStartCommonEvent(
-                                startCommonEventMetadata.EventDescriptor,
-                                startCommonEventMetadata.Trigger,
-                                startCommonEventMetadata.Command,
-                                startCommonEventMetadata.Parameter,
-                                startCommonEventMetadata.Value
-                            );
                         }
                     }
 
@@ -1010,16 +1016,6 @@ namespace Intersect.Server.Entities
         //Spawning/Dying
         private void Respawn()
         {
-            EndCombo();
-
-            //Remove any damage over time effects
-            DoT.Clear();
-            CachedDots = new DoT[0];
-            Statuses.Clear();
-            CachedStatuses = new Status[0];
-
-            CombatTimer = 0;
-
             var cls = ClassBase.Get(ClassId);
             if (cls != null)
             {
@@ -1069,6 +1065,7 @@ namespace Intersect.Server.Entities
             lock (EntityLock)
             {
                 base.Die(dropItems, killer);
+                PlayerDead = true;
             }
 
             // EXP Loss - don't lose in shared instance, or in an Arena zone
@@ -1093,9 +1090,16 @@ namespace Intersect.Server.Entities
                     }
                 }
             }
+            CombatTimer = 0;
+            EndCombo();
+
+            //Remove any damage over time effects
+            DoT.Clear();
+            CachedDots = new DoT[0];
+            Statuses.Clear();
+            CachedStatuses = new Status[0];
+
             PacketSender.SendEntityDie(this);
-            Reset();
-            Respawn();
             PacketSender.SendInventory(this);
         }
 
@@ -1135,6 +1139,11 @@ namespace Intersect.Server.Entities
 
         public override void ProcessRegen()
         {
+            if (PlayerDead)
+            {
+                return;
+            }
+
             Debug.Assert(ClassBase.Lookup != null, "ClassBase.Lookup != null");
 
             var playerClass = ClassBase.Get(ClassId);
@@ -1436,6 +1445,10 @@ namespace Intersect.Server.Entities
                             var partyExperience = (int)(descriptor.Experience * multiplier) / partyMembersInXpRange.Length;
                             foreach (var partyMember in partyMembersInXpRange)
                             {
+                                if (partyMember.PlayerDead)
+                                {
+                                    continue;
+                                }
                                 partyMember.GiveExperience(partyExperience, true, entity.Level);
                                 partyMember.UpdateQuestKillTasks(entity);
                                 partyMember.UpdateComboTime();
@@ -1781,6 +1794,10 @@ namespace Intersect.Server.Entities
 
         public override bool CanAttack(Entity entity, SpellBase spell)
         {
+            if (PlayerDead)
+            {
+                return false;
+            }
             // Do not allow spells while in a vehicle
             if (InVehicle && spell != null)
             {
@@ -1811,6 +1828,10 @@ namespace Intersect.Server.Entities
             var friendly = spell?.Combat != null && spell.Combat.Friendly;
             if (entity is Player player)
             {
+                if (player.PlayerDead)
+                {
+                    return false;
+                }
                 if (player.InParty(this) || this == player || (!Options.Instance.Guild.AllowGuildMemberPvp && friendly != (player.Guild != null && player.Guild == this.Guild)))
                 {
                     return friendly;
@@ -2887,6 +2908,10 @@ namespace Intersect.Server.Entities
         /// <returns>Whether the player received the item or not.</returns>
         public bool TryGiveItem(Item item, ItemHandling handler = ItemHandling.Normal, bool bankOverflow = false, bool sendUpdate = true, int overflowTileX = -1, int overflowTileY = -1, bool fromLootRoll = false)
         {
+            if (PlayerDead)
+            {
+                return false;
+            }
             var success = false;
 
             // Is this a valid item?
@@ -3012,7 +3037,10 @@ namespace Intersect.Server.Entities
         /// <param name="sendUpdate"></param>
         private void GiveItem(Item item, bool sendUpdate)
         {
-
+            if (PlayerDead)
+            {
+                return;
+            }
             // Decide how we're going to handle this item.
             var existingSlots = FindInventoryItemSlots(item.Descriptor.Id);
             var updateSlots = new List<int>();
@@ -3173,6 +3201,11 @@ namespace Intersect.Server.Entities
         /// <returns>if an item was dropped</returns>
         public bool TryDropItemFrom(int slotIndex, int amount)
         {
+            if (PlayerDead)
+            {
+                return false;
+            }
+
             if (!TryGetItemAt(slotIndex, out var itemInSlot))
             {
                 return false;
@@ -3254,6 +3287,11 @@ namespace Intersect.Server.Entities
 
         public void UseItem(int slot, Entity target = null)
         {
+            if (PlayerDead)
+            {
+                return;
+            }
+
             // Can not use items while sleeping
             if (StatusActive(StatusTypes.Sleep))
             {
@@ -4241,6 +4279,11 @@ namespace Intersect.Server.Entities
         //Craft a new item
         public bool TryCraftItem(Guid id)
         {
+            if (PlayerDead)
+            {
+                return false;
+            }
+
             // If we suddenly can't craft for any reason, abort
             if (!CheckCrafting(id))
             {
@@ -5820,6 +5863,11 @@ namespace Intersect.Server.Entities
 
         public override void CastSpell(Guid spellId, int spellSlot = -1, bool prayerSpell = false, Entity prayerTarget = null, int prayerSpellDir = -1)
         {
+            if (PlayerDead)
+            {
+                return;
+            }
+
             if (resourceLock != null)
             {
                 SetResourceLock(false);
@@ -7439,7 +7487,10 @@ namespace Intersect.Server.Entities
             string command = default,
             string parameter = default,
             long value = -1
-        ) => _queueStartCommonEvent.Enqueue(new StartCommonEventMetadata(command ?? string.Empty, eventDescriptor, parameter ?? string.Empty, trigger, value));
+        ) 
+        {
+            _queueStartCommonEvent.Enqueue(new StartCommonEventMetadata(command ?? string.Empty, eventDescriptor, parameter ?? string.Empty, trigger, value));
+        }
 
         public bool UnsafeStartCommonEvent(
             EventBase baseEvent,
@@ -7610,6 +7661,11 @@ namespace Intersect.Server.Entities
                 }
             }
 
+            if (PlayerDead)
+            {
+                return -5;
+            }
+
             return base.CanMove(moveDir);
         }
 
@@ -7705,6 +7761,11 @@ namespace Intersect.Server.Entities
 
         public void TryBumpEvent(Guid mapId, Guid eventId)
         {
+            if (PlayerDead)
+            {
+                return;
+            }
+
             foreach (var evt in EventLookup)
             {
                 if (evt.Value.MapId == mapId)
@@ -7736,6 +7797,11 @@ namespace Intersect.Server.Entities
 
         public void HandleEventCollision(Event evt, int pageNum)
         {
+            if (PlayerDead)
+            {
+                return;
+            }
+
             var eventInstance = evt;
             if (evt.Player == null) //Global
             {
@@ -8050,6 +8116,10 @@ namespace Intersect.Server.Entities
 
         public void SetResourceLock(bool val, Resource resource = null)
         {
+            if (PlayerDead)
+            {
+                return;
+            }
             if (resource != null && resource.Base != null && resource.Base.DoNotRecord) return;
 
             val = (resource != null);
@@ -8334,6 +8404,8 @@ namespace Intersect.Server.Entities
         public int ArenaRespawnX { get; set; }
         public int ArenaRespawnY { get; set; }
         public int ArenaRespawnDir { get; set; }
+
+        public bool PlayerDead { get; set; }
 
         [NotMapped, JsonIgnore]
         public List<Item> CurrentLoot {
@@ -8876,5 +8948,23 @@ namespace Intersect.Server.Entities
             throw new NotImplementedException("ChangeLabelUnlockStatus did not contain a valid label unlock status");
         }
         #endregion
+
+        public void AcceptRespawn()
+        {
+            Reset();
+            Respawn();
+            SendPlayerDeathStatus();
+        }
+
+        private void SendPlayerDeathStatus()
+        {
+            PacketSender.SendPlayerDeathInfoOf(this);
+        }
+
+        public override void Reset()
+        {
+            PlayerDead = false;
+            base.Reset();
+        }
     }
 }

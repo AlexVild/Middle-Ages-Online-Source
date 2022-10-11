@@ -111,6 +111,11 @@ namespace Intersect.Server.Networking
                 SendEntityDataTo(client.Entity, player);
                 SendMapsExploredPacketTo(player);
 
+                if (player.PlayerDead)
+                {
+                    //player.AcceptRespawn();
+                }
+
                 //Search for login activated events and run them
                 player.StartCommonEventsWithTrigger(CommonEventTrigger.Login);
                 if (player.Map != null && player.Map.LoginEvent != default)
@@ -385,6 +390,7 @@ namespace Intersect.Server.Networking
             if (en.GetType() == typeof(Player))
             {
                 SendPlayerEquipmentTo(player, (Player) en);
+                SendPlayerDeathInfoTo(player, (Player) en);
             }
 
             if (en.GetType() == typeof(Npc))
@@ -423,6 +429,10 @@ namespace Intersect.Server.Networking
                 if (sendEntities[i].GetType() == typeof(Npc))
                 {
                     SendNpcAggressionTo(player, (Npc) sendEntities[i]);
+                }
+                if (sendEntities[i].GetType() == typeof(Player))
+                {
+                    SendPlayerDeathInfoTo(player, (Player)sendEntities[i]);
                 }
             }
         }
@@ -490,6 +500,7 @@ namespace Intersect.Server.Networking
             if (en.GetType() == typeof(Player))
             {
                 SendPlayerEquipmentToProximity((Player) en);
+                SendPlayerDeathInfoOf((Player)en);
             }
 
             if (en.GetType() == typeof(Npc))
@@ -2538,6 +2549,26 @@ namespace Intersect.Server.Networking
             }
 
             player?.SendPacket(new FadePacket(fadeIn));
+        }
+
+        public static void SendPlayerDeathInfoOf(Player player)
+        {
+            if (player == null)
+            {
+                return;
+            }
+            
+            SendDataToProximityOnMapInstance(player.MapId, player.MapInstanceId, new PlayerDeathUpdatePacket(player.Id, player.PlayerDead));
+        }
+
+        public static void SendPlayerDeathInfoTo(Player me, Player player)
+        {
+            if (me == null || player == null)
+            {
+                return;
+            }
+
+            me.SendPacket(new PlayerDeathUpdatePacket(player.Id, player.PlayerDead));
         }
     }
 

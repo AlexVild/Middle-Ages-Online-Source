@@ -1004,7 +1004,7 @@ namespace Intersect.Client.Entities
         //Rendering Functions
         public virtual void Draw()
         {
-            if (HideEntity)
+            if (HideEntity || IsDead)
             {
                 return; //Don't draw if the entity is hidden
             }
@@ -1509,6 +1509,11 @@ namespace Intersect.Client.Entities
                 return;
             }
 
+            if (IsDead)
+            {
+                return;
+            }
+
             if (borderColor == null)
             {
                 borderColor = Color.Transparent;
@@ -1699,6 +1704,11 @@ namespace Intersect.Client.Entities
                 return;
             }
 
+            if (IsDead)
+            {
+                return;
+            }
+
             if (this is Resource && Options.HideResourceHealthBars)
             {
                 return;
@@ -1819,6 +1829,11 @@ namespace Intersect.Client.Entities
                 return;
             }
 
+            if (IsDead)
+            {
+                return;
+            }
+
             var map = MapInstance.Get(CurrentMap);
             var castSpell = SpellBase.Get(SpellCast);
             if (castSpell != null)
@@ -1881,6 +1896,11 @@ namespace Intersect.Client.Entities
             {
                 return;
             }
+            
+            if (IsDead)
+            {
+                return;
+            }
 
             var targetTex = Globals.ContentManager.GetTexture(TextureType.Misc, "target.png");
             if (targetTex != null)
@@ -1905,7 +1925,7 @@ namespace Intersect.Client.Entities
 
         public virtual bool CanBeAttacked()
         {
-            return true;
+            return !IsDead;
         }
 
         //Chatting
@@ -1976,6 +1996,11 @@ namespace Intersect.Client.Entities
 
             //Exit if textures haven't been loaded yet
             if (AnimatedTextures.Count == 0)
+            {
+                return;
+            }
+
+            if (IsDead)
             {
                 return;
             }
@@ -2272,7 +2297,7 @@ namespace Intersect.Client.Entities
                                 {
                                     //Return the entity key as this should block the player.  Only exception is if the MapZone this entity is on is passable.
                                     var entityMap = MapInstance.Get(en.Value.CurrentMap);
-                                    if (Options.Instance.Passability.Passable[(int)entityMap.ZoneType])
+                                    if (Options.Instance.Passability.Passable[(int)entityMap.ZoneType] || ((Player)en.Value).IsDead)
                                     {
                                         continue;
                                     }
@@ -2498,6 +2523,7 @@ namespace Intersect.Client.Entities
         private GameTexture COMBAT_TILE = Globals.ContentManager.GetTexture(TextureType.Misc, "aoe.png");
         private GameTexture COMBAT_TILE_NEUTRAL = Globals.ContentManager.GetTexture(TextureType.Misc, "aoe_neutral.png");
         private GameTexture COMBAT_TILE_FRIENDLY = Globals.ContentManager.GetTexture(TextureType.Misc, "aoe_heal.png");
+        public bool IsDead;
 
         public void DrawAggroIndicator(int maxRange, bool friendly)
         {
