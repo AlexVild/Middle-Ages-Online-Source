@@ -1718,7 +1718,7 @@ namespace Intersect.Server.Entities
 
         public bool IsOverworldDefaultAggroToward(Player player)
         {
-            return Math.Ceiling(Base.Level * Options.Combat.DefaultAggroLevelMultiplier) >= player.Level;
+            return Map?.ZoneType != MapZones.Safe || Math.Ceiling(Base.Level * Options.Combat.DefaultAggroLevelMultiplier) >= player.Level;
         }
 
         public bool IsDungeonAggroToward(Player player)
