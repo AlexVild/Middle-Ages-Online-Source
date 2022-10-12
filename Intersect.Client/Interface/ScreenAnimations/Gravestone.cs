@@ -11,7 +11,7 @@ namespace Intersect.Client.Interface.ScreenAnimations
         protected override int VFrames => 4;
         protected override int FPS => 3;
         protected override bool LoopAnimation => true;
-        protected override Action AnimationEnd => null;
+        protected override string Sound => string.Empty;
         protected override GameTexture Texture => Globals.ContentManager.GetTexture(TextureType.Gui, "gravestone.png");
     }
 }

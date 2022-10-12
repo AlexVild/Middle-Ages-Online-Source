@@ -5,6 +5,7 @@ using Intersect.Client.Framework.Gwen.Control.EventArguments;
 using Intersect.Client.General;
 using Intersect.Client.Interface.Game.Inventory;
 using Intersect.Client.Interface.Game.LootRoll.Intersect.Client.Interface.Game.Inventory;
+using Intersect.Client.Interface.ScreenAnimations;
 using Intersect.Client.Items;
 using Intersect.Client.Localization;
 using Intersect.Client.Networking;
@@ -41,6 +42,8 @@ namespace Intersect.Client.Interface.Game.LootRoll
         private MenuItem mDismissOption;
         private MenuItem mBankOption;
         private MenuItem mTakeOption;
+
+        private LootChest LootChestAnim;
 
         private int mSelectedItemIdx;
 
@@ -89,6 +92,12 @@ namespace Intersect.Client.Interface.Game.LootRoll
             mContextMenu.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
             mBackground.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
             InitLootContainer();
+
+            LootChestAnim = new LootChest(() =>
+            {
+                Flash.FlashScreen(1000, new Color(255, 201, 226, 158), 255);
+                mBackground.Show();
+            });
         }
 
         public void SetTitle(string title)
@@ -146,7 +155,11 @@ namespace Intersect.Client.Interface.Game.LootRoll
             }
             else if (mBackground.IsHidden)
             {
-                mBackground.Show();
+                if (LootChestAnim.Done)
+                {
+                    LootChestAnim.ResetAnimation();
+                }
+                LootChestAnim.Draw();
             }
 
             var idx = 0;

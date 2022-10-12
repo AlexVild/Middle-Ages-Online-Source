@@ -40,7 +40,7 @@ namespace Intersect.Client.Interface.ScreenAnimations
 
         protected abstract bool LoopAnimation { get; }
 
-        protected abstract Action AnimationEnd { get; }
+        protected virtual Action AnimationEnd { get; set; } = null;
 
         /// <summary>
         /// Helper for finding centerX of current view
@@ -56,13 +56,16 @@ namespace Intersect.Client.Interface.ScreenAnimations
         /// The <see cref="GameTexture"/> of which to draw
         /// </summary>
         protected abstract GameTexture Texture { get; }
+        protected abstract string Sound { get; }
 
         private bool ThrownLog { get; set; }
         private long LastUpdateTime { get; set; }
-        private bool Done { get; set; }
+        public bool Done { get; protected set; }
+        private bool SoundPlayed { get; set; }
 
-        public ScreenAnimation()
+        public ScreenAnimation(Action animationEndCallback = null)
         {
+            AnimationEnd = animationEndCallback;
             LastUpdateTime = Timing.Global.Milliseconds;
         }
 
@@ -75,6 +78,7 @@ namespace Intersect.Client.Interface.ScreenAnimations
             CurrentVFrame = 0;
             LastUpdateTime = Timing.Global.Milliseconds;
             Done = false;
+            SoundPlayed = false;
         }
 
         /// <summary>
@@ -92,6 +96,12 @@ namespace Intersect.Client.Interface.ScreenAnimations
                 if (LoopAnimation && Timing.Global.Milliseconds - LastUpdateTime >= ResetTime)
                 {
                     ResetAnimation();
+                }
+
+                if (!SoundPlayed && CurrentHFrame == 0 && CurrentVFrame == 0 && !string.IsNullOrEmpty(Sound))
+                {
+                    Audio.AddGameSound(Sound, false);
+                    SoundPlayed = true;
                 }
 
                 var srcWidth = Texture.GetWidth() / HFrames;
@@ -141,7 +151,7 @@ namespace Intersect.Client.Interface.ScreenAnimations
                     {
                         if (LoopAnimation)
                         {
-                            CurrentVFrame = 0;
+                            ResetAnimation();
                         }
                         else
                         {

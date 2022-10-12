@@ -27,6 +27,7 @@ using System.Linq;
 using Intersect.GameObjects.Timers;
 using Newtonsoft.Json.Linq;
 using Intersect.Client.General.Leaderboards;
+using Intersect.Client.Interface.ScreenAnimations;
 
 namespace Intersect.Client.Networking
 {
