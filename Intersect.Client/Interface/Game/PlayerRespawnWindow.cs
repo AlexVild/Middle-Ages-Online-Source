@@ -4,15 +4,12 @@ using Intersect.Client.Framework.GenericClasses;
 using Intersect.Client.Framework.Gwen.Control;
 using Intersect.Client.Framework.Gwen.Control.EventArguments;
 using Intersect.Client.General;
-using Intersect.Client.Interface.Game.HUD;
+using Intersect.Client.Interface.ScreenAnimations;
 using Intersect.Client.Localization;
 using Intersect.Client.Networking;
 using Intersect.GameObjects.Events;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Intersect.Client.Interface.Game
 {

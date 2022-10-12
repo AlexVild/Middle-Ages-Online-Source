@@ -2028,7 +2028,7 @@ namespace Intersect.Client.Networking
                     Globals.Me.HPWarning = false;
                     Globals.Me.MPWarning = false;
                     Globals.Me.CombatTimer = Timing.Global.Milliseconds;
-                    Flash.FlashScreen(1000, CustomColors.General.GeneralWarning, 180);
+                    Flash.FlashScreen(1000, CustomColors.General.GeneralWarning, 255);
                 }
             }
         }
