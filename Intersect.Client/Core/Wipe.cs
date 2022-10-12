@@ -1,5 +1,6 @@
 ﻿using Intersect.Client.General;
 using Intersect.Utilities;
+using System;
 
 namespace Intersect.Client.Core
 {
@@ -22,6 +23,21 @@ namespace Intersect.Client.Core
 
         private static FadeType sCurrentAction;
 
+        private static FadeType CurrentAction
+        {
+            get
+            {
+                return sCurrentAction;
+            }
+            set {
+                sCurrentAction = value;
+                if (sCurrentAction == FadeType.None && CompleteCallback != null)
+                {
+                    CompleteCallback();
+                }
+            }
+        }
+
         private static float sFadeAmt;
 
         private static float sInvertFadeAmt = Graphics.CurrentView.Width / 2;
@@ -32,30 +48,34 @@ namespace Intersect.Client.Core
 
         private static bool sAlertServerWhenFaded;
 
-        public static void FadeIn(bool fast = false)
+        private static Action CompleteCallback;
+
+        public static void FadeIn(bool fast = false, Action callback = null)
         {
             sFadeRate = fast ? FAST_FADE_RATE : STANDARD_FADE_RATE;
 
-            sCurrentAction = FadeType.In;
+            CurrentAction = FadeType.In;
             sFadeAmt = Graphics.CurrentView.Width / 2;
             sInvertFadeAmt = 0f;
             sLastUpdate = Timing.Global.Milliseconds;
+            CompleteCallback = callback;
         }
 
-        public static void FadeOut(bool alertServerWhenFaded = false, bool fast = false)
+        public static void FadeOut(bool alertServerWhenFaded = false, bool fast = false, Action callback = null)
         {
             sFadeRate = fast ? FAST_FADE_RATE : STANDARD_FADE_RATE;
             
-            sCurrentAction = FadeType.Out;
+            CurrentAction = FadeType.Out;
             sFadeAmt = 0f;
             sInvertFadeAmt = Graphics.CurrentView.Width / 2;
             sLastUpdate = Timing.Global.Milliseconds;
             sAlertServerWhenFaded = alertServerWhenFaded;
+            CompleteCallback = callback;
         }
 
         public static bool DoneFading()
         {
-            return sCurrentAction == FadeType.None;
+            return CurrentAction == FadeType.None;
         }
 
         public static float GetFade(bool inverted = false)
@@ -81,7 +101,7 @@ namespace Intersect.Client.Core
             float maxWidth = Graphics.CurrentView.Width / 2;
             var amountChange = (Timing.Global.Milliseconds - sLastUpdate) / sFadeRate * maxWidth;
 
-            if (sCurrentAction == FadeType.In)
+            if (CurrentAction == FadeType.In)
             {
                 sFadeAmt -= amountChange;
                 sInvertFadeAmt += amountChange;
@@ -92,20 +112,19 @@ namespace Intersect.Client.Core
                     {
                         Networking.PacketSender.SendFadeFinishPacket();
                     }
-
-                    sCurrentAction = FadeType.None;
+                    CurrentAction = FadeType.None;
                     sFadeAmt = 0f;
                     sInvertFadeAmt = maxWidth;
                 }
             }
-            else if (sCurrentAction == FadeType.Out)
+            else if (CurrentAction == FadeType.Out)
             {
                 sFadeAmt += amountChange;
                 sInvertFadeAmt -= amountChange;
 
                 if (sFadeAmt >= maxWidth && sInvertFadeAmt <= 0f)
                 {
-                    sCurrentAction = FadeType.None;
+                    CurrentAction = FadeType.None;
                     if (Globals.WaitFade)
                     {
                         Networking.PacketSender.SendFadeFinishPacket();

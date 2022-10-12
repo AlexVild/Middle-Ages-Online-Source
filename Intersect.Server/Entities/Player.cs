@@ -1040,6 +1040,12 @@ namespace Intersect.Server.Entities
 
         public override void Die(bool dropItems = true, Entity killer = null)
         {
+            // Can't die twice
+            if (PlayerDead)
+            {
+                return;
+            }
+
             var currentMapZoneType = MapController.Get(Map.Id).ZoneType;
             CastTime = 0;
             CastTarget = null;
@@ -1098,6 +1104,36 @@ namespace Intersect.Server.Entities
             }
             CombatTimer = 0;
             EndCombo();
+
+            // Subtract from instance lives if in a shared instance
+            if (InstanceType == MapInstanceType.Shared && Options.MaxSharedInstanceLives >= 0)
+            {
+                InstanceLives--;
+                SendLivesRemainingMessage();
+                // And the totals from any party members
+                if (Party != null && Party.Count > 1)
+                {
+                    foreach (Player member in Party)
+                    {
+                        if (member.Id != Id)
+                        {
+                            // Keep party member instance lives in sync
+                            member.InstanceLives--;
+                            if (member.InstanceType == MapInstanceType.Shared && member.MapInstanceId == MapInstanceId)
+                            {
+                                if (member.InstanceLives < 0 && Options.BootAllFromInstanceWhenOutOfLives)
+                                {
+                                    member.Die();
+                                }
+                                else
+                                {
+                                    member.SendLivesRemainingMessage();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
 
             //Remove any damage over time effects
             DoT.Clear();
@@ -2285,54 +2321,14 @@ namespace Intersect.Server.Entities
                     else
                     {
                         // Check if the player/party have enough lives to spawn in-instance
-                        if (InstanceLives > 0)
+                        if (InstanceLives >= 0)
                         {
-                            // If they do, subtract from this player's life total...
-                            InstanceLives--;
-                            SendLivesRemainingMessage();
-                            // And the totals from any party members
-                            if (Party != null && Party.Count > 1)
-                            {
-                                foreach (Player member in Party)
-                                {
-                                    if (member.Id != Id)
-                                    {
-                                        // Keep party member instance lives in sync
-                                        member.InstanceLives--;
-                                        if (member.InstanceType == MapInstanceType.Shared)
-                                        {
-                                            member.SendLivesRemainingMessage();
-                                        }
-                                    }
-                                }
-                            }
-
-                            // And warp to the instance start
                             Warp(SharedInstanceRespawnId, SharedInstanceRespawnX, SharedInstanceRespawnY, (Byte)SharedInstanceRespawnDir);
                         } 
                         else
                         {
                             // The player has ran out of lives - too bad, back to instance entrance you go.
-                            if (!Options.BootAllFromInstanceWhenOutOfLives || Party == null || Party.Count < 2)
-                            {
-                                WarpToLastOverworldLocation(false);
-                            } 
-                            else
-                            {
-                                // Oh shit, hard mode enabled - boot ALL party members out of instance. No more lives.
-                                foreach (Player member in Party)
-                                {
-                                    // Only warp players in the instance
-                                    if (member.InstanceType == MapInstanceType.Shared)
-                                    {
-                                        lock (EntityLock)
-                                        {
-                                            member.WarpToLastOverworldLocation(false);
-                                            PacketSender.SendChatMsg(member, Strings.Parties.instancefailed, ChatMessageType.Party, CustomColors.Chat.PartyChat);
-                                        }
-                                    }
-                                }
-                            }
+                            WarpToLastOverworldLocation(false);
                         }
                     }
                 } 
@@ -2421,6 +2417,11 @@ namespace Intersect.Server.Entities
                     if (fromLogin)
                     {
                         isValid = false;
+                        if (PlayerDead)
+                        {
+                            Reset();
+                            SendPlayerDeathStatus();
+                        }
                     }
                     if (Party != null && Party.Count > 0 && !Options.RejoinableSharedInstances) // Always valid warp if solo/instances are rejoinable
                     {
@@ -4874,6 +4875,12 @@ namespace Intersect.Server.Entities
         //Friends
         public void FriendRequest(Player fromPlayer)
         {
+            if (Map?.ZoneType != MapZones.Safe && !fromPlayer.IsAllyOf(this))
+            {
+                PacketSender.SendChatMsg(fromPlayer, Strings.Friends.FriendEnemy, ChatMessageType.Friend, CustomColors.Alerts.Error);
+                return;
+            }
+
             if (fromPlayer.FriendRequests.ContainsKey(this))
             {
                 fromPlayer.FriendRequests.Remove(this);
@@ -4917,6 +4924,12 @@ namespace Intersect.Server.Entities
             if (Trading.Requests == null)
             {
                 Trading = new Trading(this);
+            }
+
+            if (Map?.ZoneType != MapZones.Safe && !fromPlayer.IsAllyOf(this))
+            {
+                PacketSender.SendChatMsg(fromPlayer, Strings.Trading.PvPTrade, ChatMessageType.Trading, CustomColors.Alerts.Error);
+                return;
             }
 
             if (fromPlayer.Trading.Requests == null)
@@ -5180,6 +5193,12 @@ namespace Intersect.Server.Entities
         {
             if (fromPlayer == null)
             {
+                return;
+            }
+
+            if (Map?.ZoneType == MapZones.Safe && !fromPlayer.IsAllyOf(this))
+            {
+                PacketSender.SendChatMsg(fromPlayer, Strings.Parties.PartyEnemy, ChatMessageType.Friend, CustomColors.Alerts.Error);
                 return;
             }
 
@@ -8966,7 +8985,7 @@ namespace Intersect.Server.Entities
             SendPlayerDeathStatus();
         }
 
-        private void SendPlayerDeathStatus()
+        public void SendPlayerDeathStatus()
         {
             PacketSender.SendPlayerDeathInfoOf(this);
         }
@@ -8979,19 +8998,24 @@ namespace Intersect.Server.Entities
 
         private DeathType GetDeathType(long expLoss)
         {
-            if (expLoss <= 0)
-            {
-                return DeathType.Safe;
-            }
             if (ItemsLost.Count > 0)
             {
                 return DeathType.PvP;
+            }
+            if (expLoss > 0)
+            {
+                return DeathType.PvE;
             }
             if (InstanceType == MapInstanceType.Shared)
             {
                 return DeathType.Dungeon;
             }
-            return DeathType.PvE;
+            return DeathType.Safe;
+        }
+
+        public override bool IsPassable()
+        {
+            return base.IsPassable() || PlayerDead;
         }
     }
 }

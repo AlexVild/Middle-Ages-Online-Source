@@ -2501,6 +2501,11 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
+            if (target is Player player && player.PlayerDead)
+            {
+                return false;
+            }
+
             var spellCombat = spellDescriptor.Combat;
             if (spellDescriptor.SpellType != SpellTypes.CombatSpell && spellDescriptor.SpellType != SpellTypes.Event ||
                 spellCombat == null)
@@ -3006,6 +3011,11 @@ namespace Intersect.Server.Entities
 
         public bool InRangeOf(Entity target, int range)
         {
+            if (target is Player player && player.PlayerDead)
+            {
+                return false;
+            }
+
             var dist = GetDistanceTo(target);
             if (dist == 9999)
             {

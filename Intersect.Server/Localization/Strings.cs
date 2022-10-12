@@ -682,7 +682,7 @@ namespace Intersect.Server.Localization
 
         }
 
-        public sealed class FriendsNamespace : LocaleNamespace
+        public sealed partial class FriendsNamespace : LocaleNamespace
         {
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -1046,7 +1046,7 @@ namespace Intersect.Server.Localization
 
         }
 
-        public sealed class PartiesNamespace : LocaleNamespace
+        public sealed partial class PartiesNamespace : LocaleNamespace
         {
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -1343,7 +1343,7 @@ namespace Intersect.Server.Localization
 
         }
 
-        public sealed class TradingNamespace : LocaleNamespace
+        public sealed partial class TradingNamespace : LocaleNamespace
         {
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -1730,6 +1730,24 @@ namespace Intersect.Server.Localization
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString SpawnChanged = @"Your respawn point has been updated.";
+        }
+
+        public sealed partial class TradingNamespace : LocaleNamespace
+        {
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString PvPTrade = @"You can't trade an enemy!";
+        }
+
+        public sealed partial class FriendsNamespace : LocaleNamespace
+        {
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString FriendEnemy = @"You can't send friend requests to a player that you can currently harm!";
+        }
+
+        public sealed partial class PartiesNamespace : LocaleNamespace
+        {
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString PartyEnemy = @"You can't send party requests to a player that you can currently harm!";
         }
     }
 }

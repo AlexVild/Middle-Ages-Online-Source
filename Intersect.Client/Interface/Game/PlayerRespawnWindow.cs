@@ -22,6 +22,7 @@ namespace Intersect.Client.Interface.Game
 
         private ImagePanel Background;
 
+        private ScrollControl TextContainer;
         private RichLabel DeathText;
         private Label DeathTextTemplate;
 
@@ -35,8 +36,9 @@ namespace Intersect.Client.Interface.Game
 
             Background = new ImagePanel(GameCanvas, "PlayerRespawnWindow");
 
-            DeathTextTemplate = new Label(Background, "EventDialogLabel");
-            DeathText = new RichLabel(Background);
+            TextContainer = new ScrollControl(Background, "TextContainer");
+            DeathTextTemplate = new Label(TextContainer, "DeathInfoLabel");
+            DeathText = new RichLabel(TextContainer);
 
             NormalRespawnButton = new Button(Background, "NormalRespawnButton")
             {
@@ -74,7 +76,7 @@ namespace Intersect.Client.Interface.Game
 
             NormalRespawnButton.IsDisabled = RequestingRespawn;
             LeaveInstanceButton.IsDisabled = RequestingRespawn;
-            DungeonRespawnButton.IsDisabled = RequestingRespawn;
+            DungeonRespawnButton.IsDisabled = RequestingRespawn || Globals.Me?.DungeonLives > Options.Instance.Instancing.MaxSharedInstanceLives;
         }
 
         public void SetType(DeathType deathType, long expLost, List<string> itemsLost)
@@ -83,34 +85,46 @@ namespace Intersect.Client.Interface.Game
             DungeonRespawnButton.Hide();
             LeaveInstanceButton.Hide();
             NormalRespawnButton.Hide();
-            DeathText.Width = Background.Width - (Background.Padding.Left + Background.Padding.Right);
-            DeathText.Height = Background.Height - (Background.Padding.Bottom + Background.Padding.Top);
+            DeathText.Width = TextContainer.Width - TextContainer.GetVerticalScrollBar().Width;
             if (deathType == DeathType.PvE)
             {
                 DeathText.AddText(Strings.RespawnWindow.DeathPvE.ToString(expLost), DeathTextTemplate);
                 NormalRespawnButton.Show();
-                return;
             }
             if (deathType == DeathType.PvP)
             {
                 DeathText.AddText(Strings.RespawnWindow.DeathItems.ToString(expLost), DeathTextTemplate);
                 NormalRespawnButton.Show();
-                return;
             }
             if (deathType == DeathType.Safe)
             {
                 DeathText.AddText(Strings.RespawnWindow.DeathSafe, DeathTextTemplate);
                 NormalRespawnButton.Show();
-                return;
             }
             if (deathType == DeathType.Dungeon)
             {
-                DeathText.AddText(Strings.RespawnWindow.DeathDungeon.ToString(Globals.Me?.DungeonLives ?? 0), DeathTextTemplate);
+                if (Globals.Me?.DungeonLives > Options.Instance.Instancing.MaxSharedInstanceLives)
+                {
+                    DeathText.AddText(Strings.RespawnWindow.DeathDungeonFinal, DeathTextTemplate);
+                }
+                else
+                {
+                    if (Globals.Me?.IsInParty() ?? false)
+                    {
+                        DeathText.AddText(Strings.RespawnWindow.DeathDungeon.ToString(Globals.Me?.DungeonLives + 1 ?? 0), DeathTextTemplate);
+                    }
+                    else
+                    {
+                        DeathText.AddText(Strings.RespawnWindow.DeathDungeonSolo.ToString(Globals.Me?.DungeonLives + 1 ?? 0), DeathTextTemplate);
+                    }
+                }
+                
                 DungeonRespawnButton.Show();
                 LeaveInstanceButton.Show();
-                return;
             }
-            DeathText.AddText(Strings.RespawnWindow.DeathSafe, DeathTextTemplate);
+
+            DeathText.SizeToChildren(false, true);
+            TextContainer.ScrollToTop();
         }
 
         #region Handlers
@@ -121,19 +135,66 @@ namespace Intersect.Client.Interface.Game
 
         void LeaveInstanceButton_Clicked(Base sender, ClickedEventArgs arguments)
         {
-            RequestInstanceLeave();
+            if (Globals.Me?.DungeonLives <= Options.Instance.Instancing.MaxSharedInstanceLives)
+            {
+                OpenInstanceLeaveMenu();
+            }
+            else
+            {
+                RequestInstanceLeave(null, null);
+            }
         }
 
         private void RequestRespawn()
         {
             RequestingRespawn = true;
-            PacketSender.SendRequestRespawn();
+
+            if (Globals.Database.FadeTransitions)
+            {
+                Fade.FadeOut(false, false, () =>
+                {
+                    PacketSender.SendRequestRespawn();
+                    Fade.FadeIn();
+                });
+            }
+            else
+            {
+                Wipe.FadeOut(false, false, () =>
+                {
+                    PacketSender.SendRequestRespawn();
+                    Wipe.FadeIn();
+                });
+            }
         }
 
-        private void RequestInstanceLeave()
+        private void OpenInstanceLeaveMenu()
+        {
+            var box = new InputBox(
+                Strings.RespawnWindow.LeaveInstanceTitle, Strings.RespawnWindow.LeaveInstancePrompt, true, InputBox.InputType.YesNo,
+                RequestInstanceLeave, null, null
+            );
+        }
+
+        private void RequestInstanceLeave(object sender, EventArgs e)
         {
             RequestingRespawn = true;
-            PacketSender.SendRequestRespawn();
+
+            if (Globals.Database.FadeTransitions)
+            {
+                Fade.FadeOut(false, false, () =>
+                {
+                    PacketSender.SendRequestInstanceLeave();
+                    Fade.FadeIn();
+                });
+            }
+            else
+            {
+                Wipe.FadeOut(false, false, () =>
+                {
+                    PacketSender.SendRequestInstanceLeave();
+                    Wipe.FadeIn();
+                });
+            }
         }
 
         public void ServerRespawned()

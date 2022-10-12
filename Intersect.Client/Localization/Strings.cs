@@ -2338,6 +2338,12 @@ namespace Intersect.Client.Localization
             public static LocalizedString DeathDungeon = @"You've lost a life! Your party has {00} remaining.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString DeathDungeonSolo = @"You've lost a life! You have {00} remaining.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString DeathDungeonFinal = @"You've lost your last life! You can no longer respawn in this instance, and must reset.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString DeathItems = @"You've died! You've lost {00} experience points and some of your items...";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -2347,10 +2353,17 @@ namespace Intersect.Client.Localization
             public static LocalizedString DeathSafe = @"You've died!";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public static LocalizedString InstanceRespawnButton = @"Use Life";
+            public static LocalizedString InstanceRespawnButton = @"Respawn";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public static LocalizedString LeaveInstanceButton = @"Leave Instance";
+            public static LocalizedString LeaveInstanceButton = @"Leave";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString LeaveInstancePrompt = @"Are you sure you want to leave this instance? You will not be able to come back.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString LeaveInstanceTitle = @"Leave Instance";
+
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString RespawnButton = @"Respawn";

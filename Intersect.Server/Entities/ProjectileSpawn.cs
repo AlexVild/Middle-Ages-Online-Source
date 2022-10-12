@@ -120,18 +120,18 @@ namespace Intersect.Server.Entities
                 scalingStat = (Enums.Stats) Parent.Item.ScalingStat;
             }
 
+            if (targetEntity is Player player && player.PlayerDead)
+            {
+                return false;
+            }
+
             if (targetEntity != null && targetEntity != Parent.Owner)
             {
-
                 // Have we collided with this entity before? If so, cancel out.
                 if (mEntitiesCollided.Contains(targetEntity.Id))
                 {
                     if (!Parent.Base.PierceTarget)
                     {
-                        if (((Player)en).PlayerDead)
-                        {
-                            return false;
-                        }
                         if ((en != null && Options.Instance.Passability.Passable[(int)en.Map.ZoneType]) && (Parent.Spell != null && !Parent.Spell.Combat.Friendly))
                         {
                             return false;

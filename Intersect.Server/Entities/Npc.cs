@@ -373,6 +373,10 @@ namespace Intersect.Server.Entities
             else if (entity.GetType() == typeof(Player))
             {
                 var player = (Player) entity;
+                if (player.PlayerDead)
+                {
+                    return false;
+                }
                 var friendly = spell != null && spell.Combat.Friendly;
                 if (friendly && IsAllyOf(player))
                 {

@@ -4467,6 +4467,8 @@ namespace Intersect.Server.Networking
             else
             {
                 player.WarpToLastOverworldLocation(false);
+                player.Reset();
+                player.SendPlayerDeathStatus();
             }
 
             PacketSender.SendRespawnFinished(player);

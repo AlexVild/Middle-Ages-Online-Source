@@ -1,5 +1,6 @@
 ﻿using Intersect.Client.General;
 using Intersect.Utilities;
+using System;
 
 namespace Intersect.Client.Core
 {
@@ -21,6 +22,19 @@ namespace Intersect.Client.Core
         }
 
         private static FadeType sCurrentAction;
+        private static FadeType CurrentAction
+        {
+            get => sCurrentAction;
+
+            set
+            {
+                sCurrentAction = value;
+                if (sCurrentAction == FadeType.None && CompleteCallback != null)
+                {
+                    CompleteCallback();
+                }
+            }
+        }
 
         private static float sFadeAmt;
 
@@ -30,7 +44,9 @@ namespace Intersect.Client.Core
 
         private static bool sAlertServerWhenFaded;
 
-        public static void FadeIn(bool fast = false)
+        private static Action CompleteCallback;
+
+        public static void FadeIn(bool fast = false, Action callback = null)
         {
             if (!Globals.Database.FadeTransitions)
             {
@@ -40,19 +56,23 @@ namespace Intersect.Client.Core
 
             sFadeRate = fast ? FAST_FADE_RATE : STANDARD_FADE_RATE;
 
-            sCurrentAction = FadeType.In;
+            CurrentAction = FadeType.In;
             sFadeAmt = 255f;
             sLastUpdate = Timing.Global.Milliseconds;
+
+            CompleteCallback = callback;
         }
 
-        public static void FadeOut(bool alertServerWhenFaded = false, bool fast = false)
+        public static void FadeOut(bool alertServerWhenFaded = false, bool fast = false, Action callback = null)
         {
             sFadeRate = fast ? FAST_FADE_RATE : STANDARD_FADE_RATE;
             
-            sCurrentAction = FadeType.Out;
+            CurrentAction = FadeType.Out;
             sFadeAmt = 0f;
             sLastUpdate = Timing.Global.Milliseconds;
             sAlertServerWhenFaded = alertServerWhenFaded;
+
+            CompleteCallback = callback;
         }
 
         public static bool DoneFading()
@@ -63,7 +83,7 @@ namespace Intersect.Client.Core
             }
             else
             {
-                return sCurrentAction == FadeType.None;
+                return CurrentAction == FadeType.None;
             }
         }
 
@@ -80,7 +100,7 @@ namespace Intersect.Client.Core
                 return;
             }
 
-            if (sCurrentAction == FadeType.In)
+            if (CurrentAction == FadeType.In)
             {
                 sFadeAmt -= (Timing.Global.Milliseconds - sLastUpdate) / sFadeRate * 255f;
                 if (sFadeAmt <= 0f)
@@ -89,16 +109,16 @@ namespace Intersect.Client.Core
                     {
                         Networking.PacketSender.SendFadeFinishPacket();
                     }
-                    sCurrentAction = FadeType.None;
+                    CurrentAction = FadeType.None;
                     sFadeAmt = 0f;
                 }
             }
-            else if (sCurrentAction == FadeType.Out)
+            else if (CurrentAction == FadeType.Out)
             {
                 sFadeAmt += (Timing.Global.Milliseconds - sLastUpdate) / sFadeRate * 255f;
                 if (sFadeAmt >= 255f)
                 {
-                    sCurrentAction = FadeType.None;
+                    CurrentAction = FadeType.None;
                     if (Globals.WaitFade)
                     {
                         Networking.PacketSender.SendFadeFinishPacket();
