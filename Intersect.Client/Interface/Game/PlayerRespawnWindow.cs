@@ -4,6 +4,7 @@ using Intersect.Client.Framework.GenericClasses;
 using Intersect.Client.Framework.Gwen.Control;
 using Intersect.Client.Framework.Gwen.Control.EventArguments;
 using Intersect.Client.General;
+using Intersect.Client.Interface.Game.HUD;
 using Intersect.Client.Localization;
 using Intersect.Client.Networking;
 using Intersect.GameObjects.Events;
@@ -29,6 +30,8 @@ namespace Intersect.Client.Interface.Game
         private Button NormalRespawnButton;
         private Button LeaveInstanceButton;
         private Button DungeonRespawnButton;
+
+        private Gravestone GravestoneAnimation;
 
         public PlayerRespawnWindow(Canvas gameCanvas)
         {
@@ -62,6 +65,8 @@ namespace Intersect.Client.Interface.Game
 
             Background.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
             SetType(DeathType.Safe, -1, new List<string>());
+
+            GravestoneAnimation = new Gravestone();
         }
 
         public void Update()
@@ -73,6 +78,7 @@ namespace Intersect.Client.Interface.Game
             }
 
             Graphics.DrawGameTexture(Graphics.Renderer.GetWhiteTexture(), new FloatRect(0, 0, 1, 1), Graphics.CurrentView, new Color(150, 0, 0, 0));
+            GravestoneAnimation.Draw();
 
             NormalRespawnButton.IsDisabled = RequestingRespawn;
             LeaveInstanceButton.IsDisabled = RequestingRespawn;

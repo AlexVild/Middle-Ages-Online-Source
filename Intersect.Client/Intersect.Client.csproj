@@ -128,6 +128,7 @@
     <Compile Include="Interface\Game\DescriptionWindows\ItemDescriptionWindow.cs" />
     <Compile Include="Interface\Game\GuildWindow.cs" />
     <Compile Include="Interface\Game\HarvestBonusWindow.cs" />
+    <Compile Include="Interface\Game\HUD\Gravestone.cs" />
     <Compile Include="Interface\Game\HUD\PartyHud.cs" />
     <Compile Include="Interface\Game\InstanceLifeWindow.cs" />
     <Compile Include="Interface\Game\Leaderboards\LeaderboardRecord.cs" />
