@@ -19,7 +19,11 @@ namespace Intersect.Server.Maps
 
         public int X { get; private set; }
 
-        public int Y { get; private set; } 
+        public int Y { get; private set; }
+
+        public bool UseCustomSpawnTime { get; set; } = false;
+
+        public int CustomSpawnTime { get; set; } = 0;
 
         [JsonIgnore] public int TileIndex => Y * Options.MapWidth + X;
 

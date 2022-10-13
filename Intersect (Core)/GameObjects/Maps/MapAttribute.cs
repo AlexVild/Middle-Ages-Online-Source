@@ -82,11 +82,17 @@ namespace Intersect.GameObjects.Maps
 
         public int Quantity { get; set; }
 
+        public bool UseCustomSpawnTime { get; set; }
+
+        public int CustomSpawnTime { get; set; }
+
         public override MapAttribute Clone()
         {
             var att = (MapItemAttribute) base.Clone();
             att.ItemId = ItemId;
             att.Quantity = Quantity;
+            att.UseCustomSpawnTime = UseCustomSpawnTime;
+            att.CustomSpawnTime = CustomSpawnTime;
 
             return att;
         }

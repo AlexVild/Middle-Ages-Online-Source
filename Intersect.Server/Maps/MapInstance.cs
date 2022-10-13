@@ -922,12 +922,17 @@ namespace Intersect.Server.Maps
                 {
                     if (respawn)
                     {
+                        var now = Timing.Global.Milliseconds;
                         var spawn = new MapItemSpawn()
                         {
                             AttributeSpawnX = item.X,
                             AttributeSpawnY = item.Y,
-                            RespawnTime = Timing.Global.Milliseconds + Options.Map.ItemAttributeRespawnTime
+                            RespawnTime = now + Options.Map.ItemAttributeRespawnTime
                         };
+                        if (item.UseCustomSpawnTime)
+                        {
+                            spawn.RespawnTime = now + item.CustomSpawnTime;
+                        }
                         ItemRespawns.TryAdd(spawn.Id, spawn);
                     }
                 }
@@ -965,16 +970,22 @@ namespace Intersect.Server.Maps
         /// <param name="y">Y co-ordinate to spawn</param>
         private void SpawnAttributeItem(int x, int y)
         {
-            var item = ItemBase.Get(((MapItemAttribute)mMapController.Attributes[x, y]).ItemId);
+            var itemAttr = (MapItemAttribute)mMapController.Attributes[x, y];
+            var item = ItemBase.Get(itemAttr.ItemId);
             if (item != null)
             {
-                var mapItem = new MapItem(item.Id, ((MapItemAttribute)mMapController.Attributes[x, y]).Quantity, x, y);
+                var mapItem = new MapItem(item.Id, itemAttr.Quantity, x, y);
                 mapItem.DespawnTime = -1;
                 mapItem.AttributeSpawnX = x;
                 mapItem.AttributeSpawnY = y;
                 if (item.ItemType == ItemTypes.Equipment)
                 {
                     mapItem.Quantity = 1;
+                }
+                mapItem.UseCustomSpawnTime = itemAttr.UseCustomSpawnTime;
+                if (mapItem.UseCustomSpawnTime)
+                {
+                    mapItem.CustomSpawnTime = itemAttr.CustomSpawnTime;
                 }
                 AddItem(mapItem);
                 PacketSender.SendMapItemUpdate(mMapController.Id, MapInstanceId, mapItem, false);

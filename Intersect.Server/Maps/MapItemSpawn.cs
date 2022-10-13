@@ -13,6 +13,10 @@ namespace Intersect.Server.Maps
 
         public long RespawnTime = -1;
 
+        public bool UseCustomSpawnTime = false;
+
+        public int CustomSpawnTime = 0;
+
     }
 
 }

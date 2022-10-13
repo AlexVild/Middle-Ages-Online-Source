@@ -468,12 +468,14 @@ namespace Intersect.Editor.Forms.DockingElements
         {
             HideAttributeMenus();
             grpItem.Visible = true;
+            grpCustomSpawnTime.Visible = true;
             cmbItemAttribute.Items.Clear();
             cmbItemAttribute.Items.AddRange(ItemBase.Names);
             if (cmbItemAttribute.Items.Count > 0)
             {
                 cmbItemAttribute.SelectedIndex = 0;
             }
+            nudItemSpawnTime.Value = Options.Map.ItemAttributeRespawnTime / 1000;
         }
 
         private void rbBlocked_CheckedChanged(object sender, EventArgs e)
@@ -706,6 +708,15 @@ namespace Intersect.Editor.Forms.DockingElements
                     var itemAttribute = attribute as MapItemAttribute;
                     itemAttribute.ItemId = ItemBase.IdFromList(cmbItemAttribute.SelectedIndex);
                     itemAttribute.Quantity = (int)nudItemQuantity.Value;
+                    itemAttribute.UseCustomSpawnTime = chkCustomSpawn.Checked;
+                    if (itemAttribute.UseCustomSpawnTime)
+                    {
+                        itemAttribute.CustomSpawnTime = (int)nudItemSpawnTime.Value * 1000;
+                    }
+                    else
+                    {
+                        itemAttribute.CustomSpawnTime = 0;
+                    }
                     break;
 
                 case MapAttributes.ZDimension:
@@ -1515,6 +1526,11 @@ namespace Intersect.Editor.Forms.DockingElements
         {
             // Fires value changed event
             nudSpawnGroup.Value = spawnGroup;
+        }
+
+        private void chkCustomSpawn_CheckedChanged(object sender, EventArgs e)
+        {
+            grpCustomSpawnTime.Enabled = chkCustomSpawn.Checked;
         }
     }
 
