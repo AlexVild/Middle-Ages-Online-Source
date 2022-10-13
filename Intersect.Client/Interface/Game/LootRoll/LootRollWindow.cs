@@ -95,7 +95,7 @@ namespace Intersect.Client.Interface.Game.LootRoll
 
             LootChestAnim = new LootChest(() =>
             {
-                Flash.FlashScreen(1000, new Color(255, 201, 226, 158), 255);
+                Flash.FlashScreen(1000, new Color(255, 201, 226, 158), 150);
                 mBackground.Show();
             });
         }
