@@ -486,6 +486,8 @@ namespace Intersect.GameObjects
         public int StrafeBonus { get; set; }
 
         public int BackstepBonus { get; set; }
+
+        public bool ShortHair { get; set; }
     }
 
 }

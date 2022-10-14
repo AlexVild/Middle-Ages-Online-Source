@@ -1207,6 +1207,7 @@ namespace Intersect.Client.Entities
                             var hideBeard = false;
                             var hideExtra = false;
                             var shouldDraw = true;
+                            var shortHair = false;
 
                             if (Equipment[Options.HelmetIndex] != Guid.Empty)
                             {
@@ -1214,6 +1215,7 @@ namespace Intersect.Client.Entities
                                 hideHair = helmet.HideHair;
                                 hideBeard = helmet.HideBeard;
                                 hideExtra = helmet.HideExtra;
+                                shortHair = helmet.ShortHair;
 
                                 if (decorSlot == Options.HairSlot && hideHair
                                     || decorSlot == Options.BeardSlot && hideBeard
@@ -1225,7 +1227,15 @@ namespace Intersect.Client.Entities
 
                             if (MyDecors[decorSlot] != null && shouldDraw)
                             {
-                                DrawEquipment(MyDecors[decorSlot], renderColor.A, dir, GameContentManager.TextureType.Decor);
+                                // Do mappings for short hair if needed
+                                if (decorSlot == Options.HairSlot && shortHair && Options.Instance.PlayerOpts.ShortHairMappings.TryGetValue(MyDecors[decorSlot], out var hairText))
+                                {
+                                    DrawEquipment(hairText, renderColor.A, dir, GameContentManager.TextureType.Decor);
+                                }
+                                else
+                                {
+                                    DrawEquipment(MyDecors[decorSlot], renderColor.A, dir, GameContentManager.TextureType.Decor);
+                                }
                             }
                         }
                     }

@@ -804,6 +804,7 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                 var hideHair = false;
                 var hideBeard = false;
                 var hideExtra = false;
+                var shortHair = false;
                 if (equipment[Options.HelmetIndex] != Guid.Empty)
                 {
                     var helmet = ItemBase.Get(equipment[Options.HelmetIndex]);
@@ -812,6 +813,7 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                         hideHair = helmet.HideHair;
                         hideBeard = helmet.HideBeard;
                         hideExtra = helmet.HideExtra;
+                        shortHair = helmet.ShortHair;
                     }
                 }
 
@@ -855,7 +857,16 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                         }
                         else
                         {
-                            paperdoll = decor[slotToDraw];
+                            if (slotToDraw == Options.HairSlot 
+                                && shortHair 
+                                && Options.Instance.PlayerOpts.ShortHairMappings.TryGetValue(decor[slotToDraw], out var hairText))
+                            {
+                                paperdoll = hairText;
+                            }
+                            else
+                            {
+                                paperdoll = decor[slotToDraw];
+                            }
                         }
                         textureType = GameContentManager.TextureType.Decor;
                     }

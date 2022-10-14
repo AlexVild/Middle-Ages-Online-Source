@@ -258,6 +258,7 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
             this.vS2015DarkTheme1 = new WeifenLuo.WinFormsUI.Docking.VS2015DarkTheme();
+            this.chkShortHair = new DarkUI.Controls.DarkCheckBox();
             this.grpItems.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             this.grpDestroy.SuspendLayout();
@@ -1523,13 +1524,14 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpHelmetPaperdollProps.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpHelmetPaperdollProps.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpHelmetPaperdollProps.Controls.Add(this.chkShortHair);
             this.grpHelmetPaperdollProps.Controls.Add(this.chkHelmHideExtra);
             this.grpHelmetPaperdollProps.Controls.Add(this.chkHelmHideBeard);
             this.grpHelmetPaperdollProps.Controls.Add(this.chkHelmHideHair);
             this.grpHelmetPaperdollProps.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpHelmetPaperdollProps.Location = new System.Drawing.Point(221, 8);
             this.grpHelmetPaperdollProps.Name = "grpHelmetPaperdollProps";
-            this.grpHelmetPaperdollProps.Size = new System.Drawing.Size(207, 110);
+            this.grpHelmetPaperdollProps.Size = new System.Drawing.Size(207, 126);
             this.grpHelmetPaperdollProps.TabIndex = 61;
             this.grpHelmetPaperdollProps.TabStop = false;
             this.grpHelmetPaperdollProps.Text = "Paperdoll Properties";
@@ -3498,6 +3500,16 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
             // 
+            // chkShortHair
+            // 
+            this.chkShortHair.AutoSize = true;
+            this.chkShortHair.Location = new System.Drawing.Point(41, 96);
+            this.chkShortHair.Name = "chkShortHair";
+            this.chkShortHair.Size = new System.Drawing.Size(79, 17);
+            this.chkShortHair.TabIndex = 104;
+            this.chkShortHair.Text = "Short Hair?";
+            this.chkShortHair.CheckedChanged += new System.EventHandler(this.chkShortHair_CheckedChanged);
+            // 
             // FrmItem
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3832,5 +3844,6 @@ namespace Intersect.Editor.Forms.Editors
         private DarkNumericUpDown nudBackBoost;
         private DarkNumericUpDown nudStrafeBoost;
         private Label lblStrafeModifier;
+        private DarkCheckBox chkShortHair;
     }
 }

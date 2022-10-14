@@ -227,6 +227,7 @@ namespace Intersect.Client.Interface.Game.Character
                 var hideHair = false;
                 var hideBeard = false;
                 var hideExtra = false;
+                var shortHair = false;
                 if (Globals.Me.MyEquipment[Options.HelmetIndex] > -1)
                 {
                     var helmet = ItemBase.Get(Globals.Me.Inventory[Globals.Me.MyEquipment[Options.HelmetIndex]].ItemId);
@@ -235,6 +236,7 @@ namespace Intersect.Client.Interface.Game.Character
                         hideHair = helmet.HideHair;
                         hideBeard = helmet.HideBeard;
                         hideExtra = helmet.HideExtra;
+                        shortHair = helmet.ShortHair;
                     }
                 }
 
@@ -277,7 +279,16 @@ namespace Intersect.Client.Interface.Game.Character
                             paperdoll = "";
                         } else
                         {
-                            paperdoll = Globals.Me.MyDecors[slotToDraw];
+                            if (slotToDraw == Options.HairSlot
+                               && shortHair
+                               && Options.Instance.PlayerOpts.ShortHairMappings.TryGetValue(Globals.Me.MyDecors[slotToDraw], out var hairText))
+                            {
+                                paperdoll = hairText;
+                            }
+                            else
+                            {
+                                paperdoll = Globals.Me.MyDecors[slotToDraw];
+                            }
                         }
                         
                         textureGroup = GameContentManager.TextureType.Decor;

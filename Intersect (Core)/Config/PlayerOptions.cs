@@ -103,6 +103,19 @@ namespace Intersect.Config
             "Beard",
         };
 
+        public Dictionary<string, string> ShortHairMappings = new Dictionary<string, string>()
+        {
+            { "hair_f_buns_blue.png", "hair_u_short_blue.png" },
+            { "hair_f_buns_brown.png", "hair_u_short_red.png" },
+            { "hair_f_buns_pink.png", "hair_u_short_pink.png" },
+            { "hair_f_ponytail_blonde.png", "hair_u_short_blonde.png" },
+            { "hair_f_ponytail_green.png", "hair_u_short_green.png" },
+            { "hair_f_ponytail_red.png", "hair_u_short_red.png" },
+            { "hair_u_afro_black.png", "hair_u_short_red.png" },
+            { "hair_u_afro_brown.png", "hair_u_short_red.png" },
+            { "hair_u_afro_pink.png", "hair_u_short_pink.png" },
+        };
+
         public int HairSlot = 0;
 
         public int BeardSlot = 4;

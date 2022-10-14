@@ -2340,7 +2340,7 @@ namespace Intersect.Server.Entities
 
                 return;
             } 
-            else if (Map.ZoneType == MapZones.Arena && ArenaRespawnMap != null)
+            else if (Map?.ZoneType == MapZones.Arena && ArenaRespawnMap != null)
             {
                 Warp(ArenaRespawnMapId, ArenaRespawnX, ArenaRespawnY, (byte)ArenaRespawnDir);
 

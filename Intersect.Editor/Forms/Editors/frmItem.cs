@@ -501,6 +501,7 @@ namespace Intersect.Editor.Forms.Editors
                 chkHelmHideHair.Checked = Convert.ToBoolean(mEditorItem.HideHair);
                 chkHelmHideBeard.Checked = Convert.ToBoolean(mEditorItem.HideBeard);
                 chkHelmHideExtra.Checked = Convert.ToBoolean(mEditorItem.HideExtra);
+                chkShortHair.Checked = mEditorItem.ShortHair;
 
                 lstTags.Items.Clear();
                 foreach (string tag in mEditorItem.Tags)
@@ -1485,6 +1486,7 @@ namespace Intersect.Editor.Forms.Editors
         private void chkHelmHideHair_CheckedChanged(object sender, EventArgs e)
         {
             mEditorItem.HideHair = chkHelmHideHair.Checked;
+            chkShortHair.Enabled = chkHelmHideHair.Checked;
         }
 
         private void chkHelmHideBeard_CheckedChanged(object sender, EventArgs e)
@@ -1648,6 +1650,11 @@ namespace Intersect.Editor.Forms.Editors
         private void nudBackBoost_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.BackstepBonus = (int)nudBackBoost.Value;
+        }
+
+        private void chkShortHair_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.ShortHair = chkShortHair.Checked;
         }
     }
 }
