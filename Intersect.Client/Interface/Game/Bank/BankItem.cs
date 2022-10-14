@@ -120,7 +120,7 @@ namespace Intersect.Client.Interface.Game.Bank
                 mDescWindow = null;
             }
 
-            if (SortedBank[mMySlot]?.Item.Base != null)
+            if (SortedBank[mMySlot]?.Item?.Base != null)
             {
                 mDescWindow = new ItemDescriptionWindow(
                     SortedBank[mMySlot].Item.Base, SortedBank[mMySlot].Item.Quantity, mBankWindow.X, mBankWindow.Y,
