@@ -2421,9 +2421,14 @@ namespace Intersect.Client.Entities
                         }
 
                         // because we want to disable combat mode on warp tiles
-                        if (CurrentMap != default && MapInstance.Get(CurrentMap)?.Attributes[X, Y]?.Type == MapAttributes.Warp)
+                        var currAttr = MapInstance.Get(CurrentMap)?.Attributes[X, Y];
+                        if (CurrentMap != default && currAttr?.Type == MapAttributes.Warp)
                         {
                             CombatMode = false;
+                        }
+                        if (currAttr?.Type == MapAttributes.Footstep) 
+                        {
+                            Audio.AddGameSound(((MapFootstepAttribute)currAttr).File, false);
                         }
                         TryToChangeDimension();
                         PacketSender.SendMove();

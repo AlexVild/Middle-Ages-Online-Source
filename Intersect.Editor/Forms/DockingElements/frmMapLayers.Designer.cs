@@ -54,6 +54,13 @@ namespace Intersect.Editor.Forms.DockingElements
             this.cmbResourceAttribute = new DarkUI.Controls.DarkComboBox();
             this.lblResource = new System.Windows.Forms.Label();
             this.grpItem = new DarkUI.Controls.DarkGroupBox();
+            this.grpFootstep = new DarkUI.Controls.DarkGroupBox();
+            this.cmbFootstepSound = new DarkUI.Controls.DarkComboBox();
+            this.lblFootstep = new System.Windows.Forms.Label();
+            this.grpCustomSpawnTime = new DarkUI.Controls.DarkGroupBox();
+            this.nudItemSpawnTime = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblSpawnTime = new System.Windows.Forms.Label();
+            this.chkCustomSpawn = new System.Windows.Forms.CheckBox();
             this.nudItemQuantity = new DarkUI.Controls.DarkNumericUpDown();
             this.cmbItemAttribute = new DarkUI.Controls.DarkComboBox();
             this.lblMaxItemAmount = new System.Windows.Forms.Label();
@@ -123,11 +130,8 @@ namespace Intersect.Editor.Forms.DockingElements
             this.btnEventsHeader = new DarkUI.Controls.DarkButton();
             this.btnNpcsHeader = new DarkUI.Controls.DarkButton();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.pnlNpcs = new System.Windows.Forms.Panel();
-            this.grpSpawnGroup = new DarkUI.Controls.DarkGroupBox();
-            this.nudSpawnGroup = new DarkUI.Controls.DarkNumericUpDown();
-            this.lblSpawnGroup = new System.Windows.Forms.Label();
             this.pnlAttributes = new System.Windows.Forms.Panel();
+            this.rdoFootstep = new DarkUI.Controls.DarkRadioButton();
             this.grpBlock = new DarkUI.Controls.DarkGroupBox();
             this.chkGroundLevel = new System.Windows.Forms.CheckBox();
             this.grpCritter = new DarkUI.Controls.DarkGroupBox();
@@ -148,6 +152,10 @@ namespace Intersect.Editor.Forms.DockingElements
             this.cmbCritterAnimation = new DarkUI.Controls.DarkComboBox();
             this.lblCritterAnimation = new System.Windows.Forms.Label();
             this.rbCritter = new DarkUI.Controls.DarkRadioButton();
+            this.pnlNpcs = new System.Windows.Forms.Panel();
+            this.grpSpawnGroup = new DarkUI.Controls.DarkGroupBox();
+            this.nudSpawnGroup = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblSpawnGroup = new System.Windows.Forms.Label();
             this.pnlTiles = new System.Windows.Forms.Panel();
             this.cmbMapLayer = new DarkUI.Controls.DarkComboBox();
             this.picLayer5 = new System.Windows.Forms.PictureBox();
@@ -155,18 +163,17 @@ namespace Intersect.Editor.Forms.DockingElements
             this.picLayer3 = new System.Windows.Forms.PictureBox();
             this.picLayer2 = new System.Windows.Forms.PictureBox();
             this.picLayer1 = new System.Windows.Forms.PictureBox();
-            this.pnlTilesetContainer = new Intersect.Editor.Forms.Controls.AutoDragPanel();
-            this.picTileset = new System.Windows.Forms.PictureBox();
             this.pnlEvents = new System.Windows.Forms.Panel();
             this.pnlLights = new System.Windows.Forms.Panel();
+            this.pnlTilesetContainer = new Intersect.Editor.Forms.Controls.AutoDragPanel();
+            this.picTileset = new System.Windows.Forms.PictureBox();
             this.lightEditor = new Intersect.Editor.Forms.Controls.LightEditorCtrl();
-            this.chkCustomSpawn = new System.Windows.Forms.CheckBox();
-            this.grpCustomSpawnTime = new DarkUI.Controls.DarkGroupBox();
-            this.lblSpawnTime = new System.Windows.Forms.Label();
-            this.nudItemSpawnTime = new DarkUI.Controls.DarkNumericUpDown();
             this.grpResource.SuspendLayout();
             this.grpZResource.SuspendLayout();
             this.grpItem.SuspendLayout();
+            this.grpFootstep.SuspendLayout();
+            this.grpCustomSpawnTime.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudItemSpawnTime)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudItemQuantity)).BeginInit();
             this.grpWarp.SuspendLayout();
             this.grpInstanceSettings.SuspendLayout();
@@ -186,26 +193,24 @@ namespace Intersect.Editor.Forms.DockingElements
             ((System.ComponentModel.ISupportInitialize)(this.nudInstanceSpawnLimit)).BeginInit();
             this.grpSpawnLoc.SuspendLayout();
             this.panel1.SuspendLayout();
-            this.pnlNpcs.SuspendLayout();
-            this.grpSpawnGroup.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSpawnGroup)).BeginInit();
             this.pnlAttributes.SuspendLayout();
             this.grpBlock.SuspendLayout();
             this.grpCritter.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudCritterMoveFrequency)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudCritterMoveSpeed)).BeginInit();
+            this.pnlNpcs.SuspendLayout();
+            this.grpSpawnGroup.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSpawnGroup)).BeginInit();
             this.pnlTiles.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picLayer5)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picLayer4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picLayer3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picLayer2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picLayer1)).BeginInit();
-            this.pnlTilesetContainer.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picTileset)).BeginInit();
             this.pnlEvents.SuspendLayout();
             this.pnlLights.SuspendLayout();
-            this.grpCustomSpawnTime.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudItemSpawnTime)).BeginInit();
+            this.pnlTilesetContainer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picTileset)).BeginInit();
             this.SuspendLayout();
             // 
             // lblLayer
@@ -398,7 +403,6 @@ namespace Intersect.Editor.Forms.DockingElements
             this.rbBlocked.Name = "rbBlocked";
             this.rbBlocked.Size = new System.Drawing.Size(64, 17);
             this.rbBlocked.TabIndex = 20;
-            this.rbBlocked.TabStop = true;
             this.rbBlocked.Text = "Blocked";
             this.rbBlocked.CheckedChanged += new System.EventHandler(this.rbBlocked_CheckedChanged);
             // 
@@ -501,6 +505,110 @@ namespace Intersect.Editor.Forms.DockingElements
             this.grpItem.TabStop = false;
             this.grpItem.Text = "Map Item";
             this.grpItem.Visible = false;
+            // 
+            // grpFootstep
+            // 
+            this.grpFootstep.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpFootstep.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpFootstep.Controls.Add(this.cmbFootstepSound);
+            this.grpFootstep.Controls.Add(this.lblFootstep);
+            this.grpFootstep.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpFootstep.Location = new System.Drawing.Point(8, 181);
+            this.grpFootstep.Name = "grpFootstep";
+            this.grpFootstep.Size = new System.Drawing.Size(246, 65);
+            this.grpFootstep.TabIndex = 31;
+            this.grpFootstep.TabStop = false;
+            this.grpFootstep.Text = "Footstep";
+            this.grpFootstep.Visible = false;
+            // 
+            // cmbFootstepSound
+            // 
+            this.cmbFootstepSound.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbFootstepSound.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbFootstepSound.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbFootstepSound.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbFootstepSound.DrawDropdownHoverOutline = false;
+            this.cmbFootstepSound.DrawFocusRectangle = false;
+            this.cmbFootstepSound.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbFootstepSound.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbFootstepSound.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbFootstepSound.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbFootstepSound.FormattingEnabled = true;
+            this.cmbFootstepSound.Location = new System.Drawing.Point(16, 32);
+            this.cmbFootstepSound.Name = "cmbFootstepSound";
+            this.cmbFootstepSound.Size = new System.Drawing.Size(219, 21);
+            this.cmbFootstepSound.TabIndex = 9;
+            this.cmbFootstepSound.Text = null;
+            this.cmbFootstepSound.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbFootstepSound.SelectedIndexChanged += new System.EventHandler(this.cmbFootstepSound_SelectedIndexChanged);
+            // 
+            // lblFootstep
+            // 
+            this.lblFootstep.AutoSize = true;
+            this.lblFootstep.Location = new System.Drawing.Point(13, 16);
+            this.lblFootstep.Name = "lblFootstep";
+            this.lblFootstep.Size = new System.Drawing.Size(82, 13);
+            this.lblFootstep.TabIndex = 7;
+            this.lblFootstep.Text = "Footstep Sound";
+            // 
+            // grpCustomSpawnTime
+            // 
+            this.grpCustomSpawnTime.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpCustomSpawnTime.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpCustomSpawnTime.Controls.Add(this.nudItemSpawnTime);
+            this.grpCustomSpawnTime.Controls.Add(this.lblSpawnTime);
+            this.grpCustomSpawnTime.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpCustomSpawnTime.Location = new System.Drawing.Point(16, 122);
+            this.grpCustomSpawnTime.Name = "grpCustomSpawnTime";
+            this.grpCustomSpawnTime.Size = new System.Drawing.Size(219, 62);
+            this.grpCustomSpawnTime.TabIndex = 30;
+            this.grpCustomSpawnTime.TabStop = false;
+            this.grpCustomSpawnTime.Text = "Spawn Config";
+            this.grpCustomSpawnTime.Visible = false;
+            // 
+            // nudItemSpawnTime
+            // 
+            this.nudItemSpawnTime.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudItemSpawnTime.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudItemSpawnTime.Location = new System.Drawing.Point(11, 36);
+            this.nudItemSpawnTime.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.nudItemSpawnTime.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudItemSpawnTime.Name = "nudItemSpawnTime";
+            this.nudItemSpawnTime.Size = new System.Drawing.Size(197, 20);
+            this.nudItemSpawnTime.TabIndex = 31;
+            this.nudItemSpawnTime.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // lblSpawnTime
+            // 
+            this.lblSpawnTime.AutoSize = true;
+            this.lblSpawnTime.Location = new System.Drawing.Point(9, 19);
+            this.lblSpawnTime.Name = "lblSpawnTime";
+            this.lblSpawnTime.Size = new System.Drawing.Size(118, 13);
+            this.lblSpawnTime.TabIndex = 31;
+            this.lblSpawnTime.Text = "Spawn Time (seconds):";
+            // 
+            // chkCustomSpawn
+            // 
+            this.chkCustomSpawn.AutoSize = true;
+            this.chkCustomSpawn.Location = new System.Drawing.Point(16, 105);
+            this.chkCustomSpawn.Name = "chkCustomSpawn";
+            this.chkCustomSpawn.Size = new System.Drawing.Size(144, 17);
+            this.chkCustomSpawn.TabIndex = 29;
+            this.chkCustomSpawn.Text = "Use custom spawn time?";
+            this.chkCustomSpawn.UseVisualStyleBackColor = true;
+            this.chkCustomSpawn.CheckedChanged += new System.EventHandler(this.chkCustomSpawn_CheckedChanged);
             // 
             // nudItemQuantity
             // 
@@ -1438,63 +1546,10 @@ namespace Intersect.Editor.Forms.DockingElements
             this.panel1.Size = new System.Drawing.Size(278, 568);
             this.panel1.TabIndex = 23;
             // 
-            // pnlNpcs
-            // 
-            this.pnlNpcs.Controls.Add(this.grpSpawnGroup);
-            this.pnlNpcs.Controls.Add(this.grpNpcList);
-            this.pnlNpcs.Controls.Add(this.lstMapNpcs);
-            this.pnlNpcs.Controls.Add(this.grpSpawnLoc);
-            this.pnlNpcs.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlNpcs.Location = new System.Drawing.Point(0, 0);
-            this.pnlNpcs.Name = "pnlNpcs";
-            this.pnlNpcs.Size = new System.Drawing.Size(276, 566);
-            this.pnlNpcs.TabIndex = 1;
-            // 
-            // grpSpawnGroup
-            // 
-            this.grpSpawnGroup.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.grpSpawnGroup.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpSpawnGroup.Controls.Add(this.nudSpawnGroup);
-            this.grpSpawnGroup.Controls.Add(this.lblSpawnGroup);
-            this.grpSpawnGroup.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpSpawnGroup.Location = new System.Drawing.Point(5, 3);
-            this.grpSpawnGroup.Name = "grpSpawnGroup";
-            this.grpSpawnGroup.Size = new System.Drawing.Size(260, 37);
-            this.grpSpawnGroup.TabIndex = 55;
-            this.grpSpawnGroup.TabStop = false;
-            this.grpSpawnGroup.Text = "Spawn Group";
-            // 
-            // nudSpawnGroup
-            // 
-            this.nudSpawnGroup.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudSpawnGroup.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudSpawnGroup.Location = new System.Drawing.Point(172, 14);
-            this.nudSpawnGroup.Maximum = new decimal(new int[] {
-            99,
-            0,
-            0,
-            0});
-            this.nudSpawnGroup.Name = "nudSpawnGroup";
-            this.nudSpawnGroup.Size = new System.Drawing.Size(64, 20);
-            this.nudSpawnGroup.TabIndex = 55;
-            this.nudSpawnGroup.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudSpawnGroup.ValueChanged += new System.EventHandler(this.nudSpawnGroup_ValueChanged);
-            // 
-            // lblSpawnGroup
-            // 
-            this.lblSpawnGroup.AutoSize = true;
-            this.lblSpawnGroup.Location = new System.Drawing.Point(5, 16);
-            this.lblSpawnGroup.Name = "lblSpawnGroup";
-            this.lblSpawnGroup.Size = new System.Drawing.Size(117, 13);
-            this.lblSpawnGroup.TabIndex = 55;
-            this.lblSpawnGroup.Text = "Selected Spawn Group";
-            // 
             // pnlAttributes
             // 
+            this.pnlAttributes.Controls.Add(this.rdoFootstep);
+            this.pnlAttributes.Controls.Add(this.grpFootstep);
             this.pnlAttributes.Controls.Add(this.grpItem);
             this.pnlAttributes.Controls.Add(this.grpWarp);
             this.pnlAttributes.Controls.Add(this.grpBlock);
@@ -1520,6 +1575,17 @@ namespace Intersect.Editor.Forms.DockingElements
             this.pnlAttributes.Name = "pnlAttributes";
             this.pnlAttributes.Size = new System.Drawing.Size(276, 566);
             this.pnlAttributes.TabIndex = 1;
+            // 
+            // rdoFootstep
+            // 
+            this.rdoFootstep.AutoSize = true;
+            this.rdoFootstep.ForeColor = System.Drawing.Color.Gainsboro;
+            this.rdoFootstep.Location = new System.Drawing.Point(115, 92);
+            this.rdoFootstep.Name = "rdoFootstep";
+            this.rdoFootstep.Size = new System.Drawing.Size(66, 17);
+            this.rdoFootstep.TabIndex = 40;
+            this.rdoFootstep.Text = "Footstep";
+            this.rdoFootstep.CheckedChanged += new System.EventHandler(this.rdoFootstep_CheckedChanged);
             // 
             // grpBlock
             // 
@@ -1801,6 +1867,61 @@ namespace Intersect.Editor.Forms.DockingElements
             this.rbCritter.Text = "Critter";
             this.rbCritter.CheckedChanged += new System.EventHandler(this.rbCritter_CheckedChanged);
             // 
+            // pnlNpcs
+            // 
+            this.pnlNpcs.Controls.Add(this.grpSpawnGroup);
+            this.pnlNpcs.Controls.Add(this.grpNpcList);
+            this.pnlNpcs.Controls.Add(this.lstMapNpcs);
+            this.pnlNpcs.Controls.Add(this.grpSpawnLoc);
+            this.pnlNpcs.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlNpcs.Location = new System.Drawing.Point(0, 0);
+            this.pnlNpcs.Name = "pnlNpcs";
+            this.pnlNpcs.Size = new System.Drawing.Size(276, 566);
+            this.pnlNpcs.TabIndex = 1;
+            // 
+            // grpSpawnGroup
+            // 
+            this.grpSpawnGroup.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpSpawnGroup.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpSpawnGroup.Controls.Add(this.nudSpawnGroup);
+            this.grpSpawnGroup.Controls.Add(this.lblSpawnGroup);
+            this.grpSpawnGroup.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpSpawnGroup.Location = new System.Drawing.Point(5, 3);
+            this.grpSpawnGroup.Name = "grpSpawnGroup";
+            this.grpSpawnGroup.Size = new System.Drawing.Size(260, 37);
+            this.grpSpawnGroup.TabIndex = 55;
+            this.grpSpawnGroup.TabStop = false;
+            this.grpSpawnGroup.Text = "Spawn Group";
+            // 
+            // nudSpawnGroup
+            // 
+            this.nudSpawnGroup.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudSpawnGroup.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudSpawnGroup.Location = new System.Drawing.Point(172, 14);
+            this.nudSpawnGroup.Maximum = new decimal(new int[] {
+            99,
+            0,
+            0,
+            0});
+            this.nudSpawnGroup.Name = "nudSpawnGroup";
+            this.nudSpawnGroup.Size = new System.Drawing.Size(64, 20);
+            this.nudSpawnGroup.TabIndex = 55;
+            this.nudSpawnGroup.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudSpawnGroup.ValueChanged += new System.EventHandler(this.nudSpawnGroup_ValueChanged);
+            // 
+            // lblSpawnGroup
+            // 
+            this.lblSpawnGroup.AutoSize = true;
+            this.lblSpawnGroup.Location = new System.Drawing.Point(5, 16);
+            this.lblSpawnGroup.Name = "lblSpawnGroup";
+            this.lblSpawnGroup.Size = new System.Drawing.Size(117, 13);
+            this.lblSpawnGroup.TabIndex = 55;
+            this.lblSpawnGroup.Text = "Selected Spawn Group";
+            // 
             // pnlTiles
             // 
             this.pnlTiles.Controls.Add(this.cmbMapLayer);
@@ -1892,6 +2013,25 @@ namespace Intersect.Editor.Forms.DockingElements
             this.picLayer1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.picMapLayer_MouseClick);
             this.picLayer1.MouseHover += new System.EventHandler(this.picMapLayer_MouseHover);
             // 
+            // pnlEvents
+            // 
+            this.pnlEvents.Controls.Add(this.lblEventInstructions);
+            this.pnlEvents.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlEvents.Location = new System.Drawing.Point(0, 0);
+            this.pnlEvents.Name = "pnlEvents";
+            this.pnlEvents.Size = new System.Drawing.Size(276, 566);
+            this.pnlEvents.TabIndex = 1;
+            // 
+            // pnlLights
+            // 
+            this.pnlLights.Controls.Add(this.lightEditor);
+            this.pnlLights.Controls.Add(this.lblLightInstructions);
+            this.pnlLights.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlLights.Location = new System.Drawing.Point(0, 0);
+            this.pnlLights.Name = "pnlLights";
+            this.pnlLights.Size = new System.Drawing.Size(276, 566);
+            this.pnlLights.TabIndex = 1;
+            // 
             // pnlTilesetContainer
             // 
             this.pnlTilesetContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -1916,25 +2056,6 @@ namespace Intersect.Editor.Forms.DockingElements
             this.picTileset.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picTileset_MouseMove);
             this.picTileset.MouseUp += new System.Windows.Forms.MouseEventHandler(this.picTileset_MouseUp);
             // 
-            // pnlEvents
-            // 
-            this.pnlEvents.Controls.Add(this.lblEventInstructions);
-            this.pnlEvents.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlEvents.Location = new System.Drawing.Point(0, 0);
-            this.pnlEvents.Name = "pnlEvents";
-            this.pnlEvents.Size = new System.Drawing.Size(276, 566);
-            this.pnlEvents.TabIndex = 1;
-            // 
-            // pnlLights
-            // 
-            this.pnlLights.Controls.Add(this.lightEditor);
-            this.pnlLights.Controls.Add(this.lblLightInstructions);
-            this.pnlLights.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlLights.Location = new System.Drawing.Point(0, 0);
-            this.pnlLights.Name = "pnlLights";
-            this.pnlLights.Size = new System.Drawing.Size(276, 566);
-            this.pnlLights.TabIndex = 1;
-            // 
             // lightEditor
             // 
             this.lightEditor.ForeColor = System.Drawing.Color.Gainsboro;
@@ -1944,65 +2065,6 @@ namespace Intersect.Editor.Forms.DockingElements
             this.lightEditor.TabIndex = 2;
             this.lightEditor.Visible = false;
             this.lightEditor.Load += new System.EventHandler(this.lightEditor_Load);
-            // 
-            // chkCustomSpawn
-            // 
-            this.chkCustomSpawn.AutoSize = true;
-            this.chkCustomSpawn.Location = new System.Drawing.Point(16, 105);
-            this.chkCustomSpawn.Name = "chkCustomSpawn";
-            this.chkCustomSpawn.Size = new System.Drawing.Size(144, 17);
-            this.chkCustomSpawn.TabIndex = 29;
-            this.chkCustomSpawn.Text = "Use custom spawn time?";
-            this.chkCustomSpawn.UseVisualStyleBackColor = true;
-            this.chkCustomSpawn.CheckedChanged += new System.EventHandler(this.chkCustomSpawn_CheckedChanged);
-            // 
-            // grpCustomSpawnTime
-            // 
-            this.grpCustomSpawnTime.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.grpCustomSpawnTime.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpCustomSpawnTime.Controls.Add(this.nudItemSpawnTime);
-            this.grpCustomSpawnTime.Controls.Add(this.lblSpawnTime);
-            this.grpCustomSpawnTime.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpCustomSpawnTime.Location = new System.Drawing.Point(16, 122);
-            this.grpCustomSpawnTime.Name = "grpCustomSpawnTime";
-            this.grpCustomSpawnTime.Size = new System.Drawing.Size(219, 62);
-            this.grpCustomSpawnTime.TabIndex = 30;
-            this.grpCustomSpawnTime.TabStop = false;
-            this.grpCustomSpawnTime.Text = "Spawn Config";
-            this.grpCustomSpawnTime.Visible = false;
-            // 
-            // lblSpawnTime
-            // 
-            this.lblSpawnTime.AutoSize = true;
-            this.lblSpawnTime.Location = new System.Drawing.Point(9, 19);
-            this.lblSpawnTime.Name = "lblSpawnTime";
-            this.lblSpawnTime.Size = new System.Drawing.Size(118, 13);
-            this.lblSpawnTime.TabIndex = 31;
-            this.lblSpawnTime.Text = "Spawn Time (seconds):";
-            // 
-            // nudItemSpawnTime
-            // 
-            this.nudItemSpawnTime.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudItemSpawnTime.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudItemSpawnTime.Location = new System.Drawing.Point(11, 36);
-            this.nudItemSpawnTime.Maximum = new decimal(new int[] {
-            1000000,
-            0,
-            0,
-            0});
-            this.nudItemSpawnTime.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nudItemSpawnTime.Name = "nudItemSpawnTime";
-            this.nudItemSpawnTime.Size = new System.Drawing.Size(197, 20);
-            this.nudItemSpawnTime.TabIndex = 31;
-            this.nudItemSpawnTime.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
             // 
             // FrmMapLayers
             // 
@@ -2035,6 +2097,11 @@ namespace Intersect.Editor.Forms.DockingElements
             this.grpZResource.PerformLayout();
             this.grpItem.ResumeLayout(false);
             this.grpItem.PerformLayout();
+            this.grpFootstep.ResumeLayout(false);
+            this.grpFootstep.PerformLayout();
+            this.grpCustomSpawnTime.ResumeLayout(false);
+            this.grpCustomSpawnTime.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudItemSpawnTime)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudItemQuantity)).EndInit();
             this.grpWarp.ResumeLayout(false);
             this.grpWarp.PerformLayout();
@@ -2063,10 +2130,6 @@ namespace Intersect.Editor.Forms.DockingElements
             this.grpSpawnLoc.ResumeLayout(false);
             this.grpSpawnLoc.PerformLayout();
             this.panel1.ResumeLayout(false);
-            this.pnlNpcs.ResumeLayout(false);
-            this.grpSpawnGroup.ResumeLayout(false);
-            this.grpSpawnGroup.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSpawnGroup)).EndInit();
             this.pnlAttributes.ResumeLayout(false);
             this.pnlAttributes.PerformLayout();
             this.grpBlock.ResumeLayout(false);
@@ -2075,6 +2138,10 @@ namespace Intersect.Editor.Forms.DockingElements
             this.grpCritter.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudCritterMoveFrequency)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudCritterMoveSpeed)).EndInit();
+            this.pnlNpcs.ResumeLayout(false);
+            this.grpSpawnGroup.ResumeLayout(false);
+            this.grpSpawnGroup.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSpawnGroup)).EndInit();
             this.pnlTiles.ResumeLayout(false);
             this.pnlTiles.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picLayer5)).EndInit();
@@ -2082,14 +2149,11 @@ namespace Intersect.Editor.Forms.DockingElements
             ((System.ComponentModel.ISupportInitialize)(this.picLayer3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picLayer2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picLayer1)).EndInit();
-            this.pnlTilesetContainer.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.picTileset)).EndInit();
             this.pnlEvents.ResumeLayout(false);
             this.pnlEvents.PerformLayout();
             this.pnlLights.ResumeLayout(false);
-            this.grpCustomSpawnTime.ResumeLayout(false);
-            this.grpCustomSpawnTime.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudItemSpawnTime)).EndInit();
+            this.pnlTilesetContainer.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.picTileset)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -2227,5 +2291,9 @@ namespace Intersect.Editor.Forms.DockingElements
         private Label lblSpawnTime;
         private CheckBox chkCustomSpawn;
         private DarkNumericUpDown nudItemSpawnTime;
+        private DarkRadioButton rdoFootstep;
+        private DarkGroupBox grpFootstep;
+        private DarkComboBox cmbFootstepSound;
+        private Label lblFootstep;
     }
 }

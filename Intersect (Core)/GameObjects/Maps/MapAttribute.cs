@@ -39,6 +39,8 @@ namespace Intersect.GameObjects.Maps
                     return new MapSlideAttribute();
                 case MapAttributes.Critter:
                     return new MapCritterAttribute();
+                case MapAttributes.Footstep:
+                    return new MapFootstepAttribute();
             }
 
             return null;
@@ -293,6 +295,23 @@ namespace Intersect.GameObjects.Maps
 
             return att;
         }
+    }
+
+    public class MapFootstepAttribute : MapAttribute
+    {
+
+        public override MapAttributes Type { get; } = MapAttributes.Footstep;
+
+        public string File { get; set; }
+
+        public override MapAttribute Clone()
+        {
+            var att = (MapFootstepAttribute)base.Clone();
+            att.File = File;
+
+            return att;
+        }
+
     }
 
 }

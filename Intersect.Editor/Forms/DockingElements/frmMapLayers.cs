@@ -462,6 +462,7 @@ namespace Intersect.Editor.Forms.DockingElements
             grpAnimation.Visible = false;
             grpSlide.Visible = false;
             grpCritter.Visible = false;
+            grpFootstep.Visible = false;
         }
 
         private void rbItem_CheckedChanged(object sender, EventArgs e)
@@ -621,6 +622,10 @@ namespace Intersect.Editor.Forms.DockingElements
             {
                 return (int) MapAttributes.Critter;
             }
+            else if (rdoFootstep.Checked == true)
+            {
+                return (int)MapAttributes.Footstep;
+            }
 
             return (int) MapAttributes.Walkable;
         }
@@ -682,6 +687,11 @@ namespace Intersect.Editor.Forms.DockingElements
                 if (rbCritter.Checked)
                 {
                     return MapAttributes.Critter;
+                }
+
+                if (rdoFootstep.Checked)
+                {
+                    return MapAttributes.Footstep;
                 }
 
                 return (MapAttributes) byte.MaxValue;
@@ -772,6 +782,11 @@ namespace Intersect.Editor.Forms.DockingElements
                     critterAttribute.IgnoreNpcAvoids = chkCritterIgnoreNpcAvoids.Checked;
                     critterAttribute.BlockPlayers = chkCritterBlockPlayers.Checked;
                     critterAttribute.Direction = (byte)cmbCritterDirection.SelectedIndex;
+                    break;
+
+                case MapAttributes.Footstep:
+                    var footstepAttribute = attribute as MapFootstepAttribute;
+                    footstepAttribute.File = TextUtils.SanitizeNone(cmbFootstepSound.Text);
                     break;
 
                 default:
@@ -1531,6 +1546,23 @@ namespace Intersect.Editor.Forms.DockingElements
         private void chkCustomSpawn_CheckedChanged(object sender, EventArgs e)
         {
             grpCustomSpawnTime.Enabled = chkCustomSpawn.Checked;
+        }
+
+        private void rdoFootstep_CheckedChanged(object sender, EventArgs e)
+        {
+            HideAttributeMenus();
+            grpFootstep.Visible = true;
+            cmbFootstepSound.Items.Clear();
+            cmbFootstepSound.Items.AddRange(GameContentManager.SmartSortedSoundNames);            
+            if (cmbFootstepSound.Items.Count > 0)
+            {
+                cmbFootstepSound.SelectedIndex = 0;
+            }
+        }
+
+        private void cmbFootstepSound_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 
