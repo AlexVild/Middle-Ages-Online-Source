@@ -76,6 +76,8 @@ namespace Intersect.Editor.Forms.Editors
             this.chkIgnoreMapBlocks = new DarkUI.Controls.DarkCheckBox();
             this.chkIgnoreActiveResources = new DarkUI.Controls.DarkCheckBox();
             this.pnlContainer = new System.Windows.Forms.Panel();
+            this.grpGrappleOptions = new DarkUI.Controls.DarkGroupBox();
+            this.chkGrappleEntities = new DarkUI.Controls.DarkCheckBox();
             this.grpAmmo = new DarkUI.Controls.DarkGroupBox();
             this.nudConsume = new DarkUI.Controls.DarkNumericUpDown();
             this.cmbItem = new DarkUI.Controls.DarkComboBox();
@@ -106,6 +108,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpAnimations.SuspendLayout();
             this.grpCollisions.SuspendLayout();
             this.pnlContainer.SuspendLayout();
+            this.grpGrappleOptions.SuspendLayout();
             this.grpAmmo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudConsume)).BeginInit();
             this.toolStrip.SuspendLayout();
@@ -696,6 +699,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             // pnlContainer
             // 
+            this.pnlContainer.Controls.Add(this.grpGrappleOptions);
             this.pnlContainer.Controls.Add(this.grpAmmo);
             this.pnlContainer.Controls.Add(this.grpCollisions);
             this.pnlContainer.Controls.Add(this.grpProperties);
@@ -706,6 +710,29 @@ namespace Intersect.Editor.Forms.Editors
             this.pnlContainer.Size = new System.Drawing.Size(473, 500);
             this.pnlContainer.TabIndex = 30;
             this.pnlContainer.Visible = false;
+            // 
+            // grpGrappleOptions
+            // 
+            this.grpGrappleOptions.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpGrappleOptions.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpGrappleOptions.Controls.Add(this.chkGrappleEntities);
+            this.grpGrappleOptions.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpGrappleOptions.Location = new System.Drawing.Point(192, 457);
+            this.grpGrappleOptions.Name = "grpGrappleOptions";
+            this.grpGrappleOptions.Size = new System.Drawing.Size(272, 43);
+            this.grpGrappleOptions.TabIndex = 47;
+            this.grpGrappleOptions.TabStop = false;
+            this.grpGrappleOptions.Text = "Grapple Options";
+            // 
+            // chkGrappleEntities
+            // 
+            this.chkGrappleEntities.AutoSize = true;
+            this.chkGrappleEntities.Location = new System.Drawing.Point(6, 19);
+            this.chkGrappleEntities.Name = "chkGrappleEntities";
+            this.chkGrappleEntities.Size = new System.Drawing.Size(100, 17);
+            this.chkGrappleEntities.TabIndex = 41;
+            this.chkGrappleEntities.Text = "Grapple Entities";
+            this.chkGrappleEntities.CheckedChanged += new System.EventHandler(this.chkGrappleEntities_CheckedChanged);
             // 
             // grpAmmo
             // 
@@ -785,7 +812,7 @@ namespace Intersect.Editor.Forms.Editors
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(496, 542);
+            this.btnCancel.Location = new System.Drawing.Point(495, 573);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Padding = new System.Windows.Forms.Padding(5);
             this.btnCancel.Size = new System.Drawing.Size(190, 27);
@@ -795,7 +822,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(301, 542);
+            this.btnSave.Location = new System.Drawing.Point(300, 573);
             this.btnSave.Name = "btnSave";
             this.btnSave.Padding = new System.Windows.Forms.Padding(5);
             this.btnSave.Size = new System.Drawing.Size(190, 27);
@@ -930,7 +957,7 @@ namespace Intersect.Editor.Forms.Editors
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.ClientSize = new System.Drawing.Size(698, 581);
+            this.ClientSize = new System.Drawing.Size(698, 612);
             this.ControlBox = false;
             this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.btnCancel);
@@ -960,6 +987,8 @@ namespace Intersect.Editor.Forms.Editors
             this.grpCollisions.ResumeLayout(false);
             this.grpCollisions.PerformLayout();
             this.pnlContainer.ResumeLayout(false);
+            this.grpGrappleOptions.ResumeLayout(false);
+            this.grpGrappleOptions.PerformLayout();
             this.grpAmmo.ResumeLayout(false);
             this.grpAmmo.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudConsume)).EndInit();
@@ -1033,5 +1062,7 @@ namespace Intersect.Editor.Forms.Editors
         private DarkCheckBox chkGrounded;
         private System.Windows.Forms.Label lblToolType;
         private DarkComboBox cmbToolType;
+        private DarkGroupBox grpGrappleOptions;
+        private DarkCheckBox chkGrappleEntities;
     }
 }

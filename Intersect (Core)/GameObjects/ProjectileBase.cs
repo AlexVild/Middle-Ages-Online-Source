@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 namespace Intersect.GameObjects
 {
 
-    public class ProjectileBase : DatabaseObject<ProjectileBase>, IFolderable
+    public partial class ProjectileBase : DatabaseObject<ProjectileBase>, IFolderable
     {
 
         public const int MAX_PROJECTILE_DIRECTIONS = 8;
@@ -143,6 +143,11 @@ namespace Intersect.GameObjects
             AutoRotate = autoRotate;
         }
 
+    }
+
+    public partial class ProjectileBase : DatabaseObject<ProjectileBase>, IFolderable
+    {
+        public bool AttachToEntities { get; set; } = false;
     }
 
 }

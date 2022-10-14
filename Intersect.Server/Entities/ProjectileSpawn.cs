@@ -154,10 +154,17 @@ namespace Intersect.Server.Entities
                         Parent.Owner.TryAttack(targetEntity, Parent.Base, Parent.Spell, Parent.Item, Dir);
                         // Do not grapple players - commented out
 
-                        /*
-                        if (Dir <= 3 && Parent.Base.GrappleHook && !Parent.HasGrappled
+                        
+                        if (Dir <= 3 && Parent.Base.GrappleHook && !Parent.HasGrappled && Parent.Base.AttachToEntities
                         ) //Don't handle directional projectile grapplehooks
                         {
+                            if (Parent.Base.Spell != null)
+                            {
+                                if (!Parent.Owner.CanAttack(targetEntity, Parent.Base.Spell))
+                                {
+                                    return false;
+                                }
+                            }
                             Parent.HasGrappled = true;
                             Parent.Owner.Dir = Dir;
                             new Dash(
@@ -166,7 +173,7 @@ namespace Intersect.Server.Entities
                                 Parent.Base.IgnoreZDimension
                             );
                         }
-                        */
+                        
 
                         if (!Parent.Base.PierceTarget)
                         {
@@ -260,10 +267,18 @@ namespace Intersect.Server.Entities
 
                         // Do not grapple NPCs - commented out
 
-                        /*
-                        if (Dir <= 3 && Parent.Base.GrappleHook && !Parent.HasGrappled
+                        
+                        if (Dir <= 3 && Parent.Base.GrappleHook && !Parent.HasGrappled && Parent.Base.AttachToEntities
                         ) //Don't handle directional projectile grapplehooks
                         {
+                            if (Parent.Base.Spell != null)
+                            {
+                                if (!Parent.Owner.CanAttack(targetEntity, Parent.Base.Spell))
+                                {
+                                    return false;
+                                }
+                            }
+
                             Parent.HasGrappled = true;
                             Parent.Owner.Dir = Dir;
                             new Dash(
@@ -272,7 +287,7 @@ namespace Intersect.Server.Entities
                                 Parent.Base.IgnoreZDimension
                             );
                         }
-                        */
+                        
 
                         if (!Parent.Base.PierceTarget)
                         {

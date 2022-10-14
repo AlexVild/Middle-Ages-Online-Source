@@ -181,8 +181,18 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             description.AddText(Strings.ItemDescription.Description.ToString(mSpell.Description), Color.White);
         }
 
-        protected void SetupCombatInfo()
+        protected void SetupCombatInfo(SpellBase spellOverride = null)
         {
+            var spell = mSpell;
+            if (spellOverride != null)
+            {
+                spell = spellOverride;
+            }
+            if (spell == null)
+            {
+                return;
+            }
+
             // Add a divider.
             AddDivider();
 
@@ -195,34 +205,34 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             var isDamage = false;
             for (var i = 0; i < (int)Vitals.VitalCount; i++)
             {
-                if (mSpell.Combat.VitalDiff[i] < 0)
+                if (spell.Combat.VitalDiff[i] < 0)
                 {
-                    rows.AddKeyValueRow(Strings.SpellDescription.VitalRecovery[i], Math.Abs(mSpell.Combat.VitalDiff[i]).ToString());
+                    rows.AddKeyValueRow(Strings.SpellDescription.VitalRecovery[i], Math.Abs(spell.Combat.VitalDiff[i]).ToString());
                     isHeal = true;
                 }
-                else if (mSpell.Combat.VitalDiff[i] > 0)
+                else if (spell.Combat.VitalDiff[i] > 0)
                 {
-                    rows.AddKeyValueRow(Strings.SpellDescription.VitalDamage[i], mSpell.Combat.VitalDiff[i].ToString());
+                    rows.AddKeyValueRow(Strings.SpellDescription.VitalDamage[i], spell.Combat.VitalDiff[i].ToString());
                     isDamage = true;
                 }
             }
 
             // Damage Type:
-            Strings.SpellDescription.DamageTypes.TryGetValue(mSpell.Combat.DamageType, out var damageType);
+            Strings.SpellDescription.DamageTypes.TryGetValue(spell.Combat.DamageType, out var damageType);
             rows.AddKeyValueRow(Strings.SpellDescription.DamageType, damageType);
 
-            if (mSpell.Combat.Scaling > 0)
+            if (spell.Combat.Scaling > 0)
             {
-                Strings.SpellDescription.Stats.TryGetValue(mSpell.Combat.ScalingStat, out var stat);
+                Strings.SpellDescription.Stats.TryGetValue(spell.Combat.ScalingStat, out var stat);
                 rows.AddKeyValueRow(Strings.SpellDescription.ScalingStat, stat);
-                rows.AddKeyValueRow(Strings.SpellDescription.ScalingPercentage, Strings.SpellDescription.Percentage.ToString(mSpell.Combat.Scaling));
+                rows.AddKeyValueRow(Strings.SpellDescription.ScalingPercentage, Strings.SpellDescription.Percentage.ToString(spell.Combat.Scaling));
             }
 
             // Crit Chance
-            if (mSpell.Combat.CritChance > 0)
+            if (spell.Combat.CritChance > 0)
             {
-                rows.AddKeyValueRow(Strings.SpellDescription.CritChance, Strings.SpellDescription.Percentage.ToString(mSpell.Combat.CritChance));
-                rows.AddKeyValueRow(Strings.SpellDescription.CritMultiplier, Strings.SpellDescription.Multiplier.ToString(mSpell.Combat.CritMultiplier));
+                rows.AddKeyValueRow(Strings.SpellDescription.CritChance, Strings.SpellDescription.Percentage.ToString(spell.Combat.CritChance));
+                rows.AddKeyValueRow(Strings.SpellDescription.CritMultiplier, Strings.SpellDescription.Multiplier.ToString(spell.Combat.CritMultiplier));
             }
 
             var showDuration = false;
@@ -231,17 +241,17 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             for (var i = 0; i < (int)Stats.StatCount; i++)
             {
                 Tuple<string, string> data = null;
-                if (mSpell.Combat.StatDiff[i] != 0 && mSpell.Combat.PercentageStatDiff[i] != 0)
+                if (spell.Combat.StatDiff[i] != 0 && spell.Combat.PercentageStatDiff[i] != 0)
                 {
-                    data = new Tuple<string, string>(Strings.SpellDescription.StatCounts[i], Strings.SpellDescription.RegularAndPercentage.ToString(mSpell.Combat.StatDiff[i], mSpell.Combat.PercentageStatDiff[i]));
+                    data = new Tuple<string, string>(Strings.SpellDescription.StatCounts[i], Strings.SpellDescription.RegularAndPercentage.ToString(spell.Combat.StatDiff[i], spell.Combat.PercentageStatDiff[i]));
                 }
-                else if (mSpell.Combat.StatDiff[i] != 0)
+                else if (spell.Combat.StatDiff[i] != 0)
                 {
-                    data = new Tuple<string, string>(Strings.SpellDescription.StatCounts[i], mSpell.Combat.StatDiff[i].ToString());
+                    data = new Tuple<string, string>(Strings.SpellDescription.StatCounts[i], spell.Combat.StatDiff[i].ToString());
                 }
-                else if (mSpell.Combat.PercentageStatDiff[i] != 0)
+                else if (spell.Combat.PercentageStatDiff[i] != 0)
                 {
-                    data = new Tuple<string, string>(Strings.SpellDescription.StatCounts[i], Strings.ItemDescription.Percentage.ToString(mSpell.Combat.PercentageStatDiff[i]));
+                    data = new Tuple<string, string>(Strings.SpellDescription.StatCounts[i], Strings.ItemDescription.Percentage.ToString(spell.Combat.PercentageStatDiff[i]));
                 }
 
                 // Make sure we only add a blank row the first time we add a stat row.
@@ -260,7 +270,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             }
 
             // Handle HoT and DoT displays.
-            if (mSpell.Combat.HoTDoT)
+            if (spell.Combat.HoTDoT)
             {
                 showDuration = true;
                 rows.AddKeyValueRow(string.Empty, string.Empty);
@@ -272,24 +282,24 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 {
                     rows.AddKeyValueRow(Strings.SpellDescription.DoT, string.Empty);
                 }
-                rows.AddKeyValueRow(Strings.SpellDescription.Tick, Strings.SpellDescription.Seconds.ToString(mSpell.Combat.HotDotInterval / 1000f));
+                rows.AddKeyValueRow(Strings.SpellDescription.Tick, Strings.SpellDescription.Seconds.ToString(spell.Combat.HotDotInterval / 1000f));
             }
 
             // Handle effect display.
-            if (mSpell.Combat.Effect != StatusTypes.None)
+            if (spell.Combat.Effect != StatusTypes.None)
             {
                 showDuration = true;
                 rows.AddKeyValueRow(string.Empty, string.Empty);
-                rows.AddKeyValueRow(Strings.SpellDescription.Effect, Strings.SpellDescription.Effects[(int) mSpell.Combat.Effect]);
+                rows.AddKeyValueRow(Strings.SpellDescription.Effect, Strings.SpellDescription.Effects[(int) spell.Combat.Effect]);
             }
 
             // Show Stat Buff / Effect / HoT / DoT duration.
             if (showDuration)
             {
-                rows.AddKeyValueRow(Strings.SpellDescription.Duration, Strings.SpellDescription.Seconds.ToString(mSpell.Combat.Duration / 1000f));
+                rows.AddKeyValueRow(Strings.SpellDescription.Duration, Strings.SpellDescription.Seconds.ToString(spell.Combat.Duration / 1000f));
             }
 
-            if (mSpell.WeaponSpell)
+            if (spell.WeaponSpell)
             {
                 rows.AddKeyValueRow(Strings.SpellDescription.WeaponSkill, string.Empty, CustomColors.ItemDesc.Special, Color.White);
             }
@@ -331,6 +341,11 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             if (Options.Map.ZDimensionVisible && mSpell.Dash.IgnoreZDimensionAttributes)
             {
                 rows.AddKeyValueRow(Strings.SpellDescription.IgnoreZDimension, String.Empty);
+            }
+
+            if (mSpell.Dash.Spell != null)
+            {
+                SetupCombatInfo();
             }
 
             // Resize and position the container.

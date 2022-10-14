@@ -175,6 +175,7 @@ namespace Intersect.Editor.Forms.Editors
                 chkIgnoreInactiveResources.Checked = mEditorItem.IgnoreExhaustedResources;
                 chkIgnoreZDimensionBlocks.Checked = mEditorItem.IgnoreZDimension;
                 chkGrapple.Checked = mEditorItem.GrappleHook;
+                chkGrappleEntities.Checked = mEditorItem.AttachToEntities;
                 chkPierce.Checked = mEditorItem.PierceTarget;
                 cmbItem.SelectedIndex = ItemBase.ListIndex(mEditorItem.AmmoItemId) + 1;
                 nudConsume.Value = mEditorItem.AmmoRequired;
@@ -498,6 +499,7 @@ namespace Intersect.Editor.Forms.Editors
         private void chkGrapple_CheckedChanged(object sender, EventArgs e)
         {
             mEditorItem.GrappleHook = chkGrapple.Checked;
+            grpGrappleOptions.Visible = chkGrapple.Checked;
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
@@ -776,6 +778,11 @@ namespace Intersect.Editor.Forms.Editors
         private void cmbToolType_SelectedIndexChanged(object sender, EventArgs e)
         {
             mEditorItem.Tool = cmbToolType.SelectedIndex - 1;
+        }
+
+        private void chkGrappleEntities_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.AttachToEntities = chkGrappleEntities.Checked;
         }
     }
 
