@@ -392,6 +392,26 @@ namespace Intersect.Editor.Forms.Editors
             }
             else if (cmbType.SelectedIndex == (int) SpellTypes.Dash)
             {
+                cmbDashSpell.Items.Clear();
+                cmbDashSpell.Items.Add(Strings.General.none);
+                cmbDashSpell.Items.AddRange(SpellBase.Names);
+                if (mEditorItem.Dash.Spell != null)
+                {
+                    var idx = SpellBase.ListIndex(mEditorItem.Dash.SpellId) + 1;
+                    if (idx < cmbDashSpell.Items.Count)
+                    {
+                        cmbDashSpell.SelectedIndex = idx;
+                    }
+                    else
+                    {
+                        cmbDashSpell.SelectedIndex = 0;
+                    }
+                }
+                else
+                {
+                    cmbDashSpell.SelectedIndex = 0;
+                }
+
                 grpDash.Show();
                 scrlRange.Value = mEditorItem.Combat.CastRange;
                 lblRange.Text = Strings.SpellEditor.dashrange.ToString(scrlRange.Value);
@@ -399,6 +419,7 @@ namespace Intersect.Editor.Forms.Editors
                 chkIgnoreActiveResources.Checked = mEditorItem.Dash.IgnoreActiveResources;
                 chkIgnoreInactiveResources.Checked = mEditorItem.Dash.IgnoreInactiveResources;
                 chkIgnoreZDimensionBlocks.Checked = mEditorItem.Dash.IgnoreZDimensionAttributes;
+                chkEntities.Checked = mEditorItem.Dash.IgnoreEntites;
             }
 
             if (cmbType.SelectedIndex == (int) SpellTypes.Event)
@@ -1104,6 +1125,17 @@ namespace Intersect.Editor.Forms.Editors
         {
             Guid animationId = AnimationBase.IdFromList(cmbTrapAnimation.SelectedIndex - 1);
             mEditorItem.TrapAnimation = AnimationBase.Get(animationId);
+        }
+
+        private void chkEntities_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Dash.IgnoreEntites = chkEntities.Checked;
+        }
+
+        private void cmbDashSpell_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Dash.SpellId = SpellBase.IdFromList(cmbDashSpell.SelectedIndex - 1);
+            Console.Write(mEditorItem.Dash.SpellId);
         }
     }
 

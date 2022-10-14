@@ -888,6 +888,14 @@
     <Compile Include="Migrations\Game\20221014022649_AddShortHairMigration.designer.cs">
       <DependentUpon>20221014022649_AddShortHairMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20221014140741_DashConfigMigration.cs" />
+    <Compile Include="Migrations\Game\20221014140741_DashConfigMigration.designer.cs">
+      <DependentUpon>20221014140741_DashConfigMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20221014144350_DashSpellMigration.cs" />
+    <Compile Include="Migrations\Game\20221014144350_DashSpellMigration.designer.cs">
+      <DependentUpon>20221014144350_DashSpellMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

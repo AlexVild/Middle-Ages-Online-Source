@@ -2708,7 +2708,9 @@ namespace Intersect.Server.Entities
                         this, spellBase.Combat.CastRange, (byte) Dir, Convert.ToBoolean(spellBase.Dash.IgnoreMapBlocks),
                         Convert.ToBoolean(spellBase.Dash.IgnoreActiveResources),
                         Convert.ToBoolean(spellBase.Dash.IgnoreInactiveResources),
-                        Convert.ToBoolean(spellBase.Dash.IgnoreZDimensionAttributes)
+                        Convert.ToBoolean(spellBase.Dash.IgnoreZDimensionAttributes),
+                        Convert.ToBoolean(spellBase.Dash.IgnoreEntites),
+                        spellBase.Dash.Spell
                     );
 
                     break;
@@ -3430,6 +3432,25 @@ namespace Intersect.Server.Entities
             }
 
             return shield;
+        }
+
+        public List<Entity> GetEntitiesOnTile(int tileX, int tileY)
+        {
+            var tileEntities = new List<Entity>();
+
+            if (Map != null && Map.TryGetInstance(MapInstanceId, out var mapInstance))
+            {
+                foreach (var en in mapInstance.GetCachedEntities())
+                {
+                    if (en.Id == Id) continue;
+                    if (en != null && en.X == tileX && en.Y == tileY && en.Z == Z && !en.Passable)
+                    {
+                        tileEntities.Add(en);
+                    }
+                }
+            }
+            
+            return tileEntities;
         }
     }
 }

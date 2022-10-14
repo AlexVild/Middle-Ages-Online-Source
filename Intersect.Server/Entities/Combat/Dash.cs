@@ -1,5 +1,7 @@
 ﻿using Intersect.Enums;
+using Intersect.GameObjects;
 using Intersect.Server.General;
+using Intersect.Server.Maps;
 using Intersect.Server.Networking;
 using Intersect.Utilities;
 
@@ -19,6 +21,8 @@ namespace Intersect.Server.Entities.Combat
 
         public long TransmittionTimer;
 
+        public SpellBase Spell;
+
         public Dash(
             Entity en,
             int range,
@@ -26,14 +30,17 @@ namespace Intersect.Server.Entities.Combat
             bool blockPass = false,
             bool activeResourcePass = false,
             bool deadResourcePass = false,
-            bool zdimensionPass = false
+            bool zdimensionPass = false,
+            bool entityPass = false,
+            SpellBase spell = null
         )
         {
             DistanceTraveled = 0;
             Direction = direction;
             Facing = (byte) en.Dir;
+            Spell = spell;
 
-            CalculateRange(en, range, blockPass, activeResourcePass, deadResourcePass, zdimensionPass);
+            CalculateRange(en, range, blockPass, activeResourcePass, deadResourcePass, zdimensionPass, entityPass);
             if (Range <= 0)
             {
                 return;
@@ -54,7 +61,8 @@ namespace Intersect.Server.Entities.Combat
             bool blockPass = false,
             bool activeResourcePass = false,
             bool deadResourcePass = false,
-            bool zdimensionPass = false
+            bool zdimensionPass = false,
+            bool entityPass = false
         )
         {
             var n = 0;
@@ -88,7 +96,79 @@ namespace Intersect.Server.Entities.Combat
                     return;
                 } //Check for players and solid events
 
-                if (n == (int) EntityTypes.Player || n == (int) EntityTypes.Event)
+                if (n == (int) EntityTypes.Player && (entityPass == false || i == range))
+                {
+                    return;
+                }
+                // Proc dash spell if an enemy
+                else if (n == (int) EntityTypes.Player && Spell != null)
+                {
+                    var xOffset = 0;
+                    var yOffset = 0;
+
+                    var tile = new TileHelper(en.MapId, en.X, en.Y);
+                    switch (Direction)
+                    {
+                        case 0: //Up
+                            yOffset--;
+
+                            break;
+                        case 1: //Down
+                            yOffset++;
+
+                            break;
+                        case 2: //Left
+                            xOffset--;
+
+                            break;
+                        case 3: //Right
+                            xOffset++;
+
+                            break;
+                        case 4: //NW
+                            yOffset--;
+                            xOffset--;
+
+                            break;
+                        case 5: //NE
+                            yOffset--;
+                            xOffset++;
+
+                            break;
+                        case 6: //SW
+                            yOffset++;
+                            xOffset--;
+
+                            break;
+                        case 7: //SE
+                            yOffset++;
+                            xOffset++;
+
+                            break;
+                    }
+
+                    MapController mapController = null;
+                    int tileX = 0;
+                    int tileY = 0;
+
+                    if (tile.Translate(xOffset, yOffset))
+                    {
+                        mapController = MapController.Get(tile.GetMapId());
+                        tileX = tile.GetX();
+                        tileY = tile.GetY();
+
+                        var entities = en.GetEntitiesOnTile(tileX, tileY);
+                        foreach(var collidedEntity in entities)
+                        {
+                            if (en.CanAttack(collidedEntity, Spell))
+                            {
+                                en.CastSpell(Spell.Id);
+                            }
+                        }
+                    }
+                }
+
+                if (n == (int) EntityTypes.Event)
                 {
                     return;
                 }

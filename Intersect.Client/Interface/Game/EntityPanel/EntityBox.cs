@@ -859,7 +859,7 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                         {
                             if (slotToDraw == Options.HairSlot 
                                 && shortHair 
-                                && Options.Instance.PlayerOpts.ShortHairMappings.TryGetValue(decor[slotToDraw], out var hairText))
+                                && Options.Instance.PlayerOpts.ShortHairMappings.TryGetValue(decor[slotToDraw] ?? string.Empty, out var hairText))
                             {
                                 paperdoll = hairText;
                             }

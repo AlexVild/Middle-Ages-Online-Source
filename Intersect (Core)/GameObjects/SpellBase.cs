@@ -294,6 +294,17 @@ namespace Intersect.GameObjects
 
         public bool IgnoreZDimensionAttributes { get; set; }
 
+        public bool IgnoreEntites { get; set; }
+
+        public Guid SpellId { get; set; }
+
+        [NotMapped, JsonIgnore]
+        public SpellBase Spell
+        {
+            get => SpellBase.Get(SpellId) ?? null;
+            set => SpellId = value?.Id ?? Guid.Empty;
+        }
+
     }
 
 }
