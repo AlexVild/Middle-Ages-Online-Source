@@ -3604,7 +3604,7 @@ Tick timer saved in server config.json.";
 
         }
 
-        public struct ItemEditor
+        public partial struct ItemEditor
         {
 
             public static LocalizedString abilitypowerbonus = @"Ability Pwr:";
@@ -6156,6 +6156,12 @@ Negative values for time to flow backwards.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString UseLast = @"Use Last";
+        }
+
+        public partial struct ItemEditor
+        {
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString BonusEffectItem = @"{00}: {01}%";
         }
     }
 }

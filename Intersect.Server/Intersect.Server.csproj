@@ -456,6 +456,7 @@
     <Compile Include="Database\GameData\GameContext.cs" />
     <Compile Include="Database\GameData\IGameContext.cs" />
     <Compile Include="Database\GameData\Migrations\Beta6Migration.cs" />
+    <Compile Include="Database\GameData\Migrations\BonusEffectsToListMigration.cs" />
     <Compile Include="Database\GameData\Migrations\FixQuestTaskCompletionEventsMigration.cs" />
     <Compile Include="Database\GameData\Migrations\BoundItemExtensionMigration.cs" />
     <Compile Include="Database\GameData\Migrations\CerasVersionToleranceMigration.cs" />
@@ -899,6 +900,14 @@
     <Compile Include="Migrations\Game\20221014153324_ProjectileAttachmentMigration.cs" />
     <Compile Include="Migrations\Game\20221014153324_ProjectileAttachmentMigration.designer.cs">
       <DependentUpon>20221014153324_ProjectileAttachmentMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20221015154313_MultipleBonusesMigration.cs" />
+    <Compile Include="Migrations\Game\20221015154313_MultipleBonusesMigration.designer.cs">
+      <DependentUpon>20221015154313_MultipleBonusesMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20221015154500_MigrateOldBonusEffectToNewListMigration.cs" />
+    <Compile Include="Migrations\Game\20221015154500_MigrateOldBonusEffectToNewListMigration.designer.cs">
+      <DependentUpon>20221015154500_MigrateOldBonusEffectToNewListMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">

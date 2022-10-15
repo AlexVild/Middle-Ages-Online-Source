@@ -182,6 +182,7 @@ namespace Intersect.GameObjects
 
         public bool TwoHanded { get; set; }
 
+        [Obsolete("Use Effects (List<EffectData>) instead")]
         public EffectData Effect { get; set; }
 
         public int SlotCount { get; set; }
@@ -451,7 +452,7 @@ namespace Intersect.GameObjects
             VitalsRegen = new int[(int) Vitals.VitalCount];
             PercentageVitalsGiven = new int[(int) Vitals.VitalCount];
             Consumable = new ConsumableData();
-            Effect = new EffectData();
+            Effects = new List<EffectData>();
             Color = new Color(255, 255, 255, 255);
         }
 
@@ -473,6 +474,18 @@ namespace Intersect.GameObjects
     public class EffectData
     {
 
+        public EffectData()
+        {
+            Type = default;
+            Percentage = default;
+        }
+
+        public EffectData(EffectType type, int percentage)
+        {
+            Type = type;
+            Percentage = percentage;
+        }
+
         public EffectType Type { get; set; }
 
         public int Percentage { get; set; }
@@ -488,6 +501,35 @@ namespace Intersect.GameObjects
         public int BackstepBonus { get; set; }
 
         public bool ShortHair { get; set; }
+
+        [NotMapped]
+        public List<EffectData> Effects { get; set; }
+
+        [Column("Effects")]
+        [JsonIgnore]
+        public string EffectsJson
+        {
+            get => JsonConvert.SerializeObject(Effects);
+            set => Effects = JsonConvert.DeserializeObject<List<EffectData>>(value ?? "") ?? new List<EffectData>();
+        }
+
+        public int GetEffectPercentage(EffectType type)
+        {
+            return Effects
+                .FindAll(effect => effect.Type == type)
+                .Aggregate(0, (int prev, EffectData next) => prev + next.Percentage);
+        }
+        
+        [NotMapped, JsonIgnore]
+        public EffectType[] EffectsEnabled
+        {
+            get => Effects.Select(effect => effect.Type).ToArray();
+        }
+
+        public void SetEffectOfType(EffectType type, int value)
+        {
+            Effects.FindAll(effect => effect.Type == type).Select(effect => effect.Percentage = value);
+        }
     }
 
 }

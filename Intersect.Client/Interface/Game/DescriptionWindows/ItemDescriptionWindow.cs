@@ -8,6 +8,7 @@ using Intersect.Client.Localization;
 using Intersect.Client.Framework.File_Management;
 using Intersect.Client.Items;
 using Intersect.Localization;
+using System.Linq;
 
 namespace Intersect.Client.Interface.Game.DescriptionWindows
 {
@@ -582,8 +583,11 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             }
         }
 
-        private int GetBonusEffectDifference(ItemBase itm1, ItemBase itm2, bool inverse = false)
+        private int GetBonusEffectDifference(ItemBase itm1, ItemBase itm2, EffectType effectType, bool inverse = false)
         {
+            var itm1EffectVals = itm1.GetEffectPercentage(effectType);
+            var itm2EffectVals = itm2.GetEffectPercentage(effectType);
+
             var multiplier = inverse ? -1 : 1;
 
             if (itm1 == null && itm2 == null)
@@ -593,22 +597,15 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
 
             if (itm1 == null)
             {
-                return itm2.Effect.Percentage * multiplier;
+                return itm2EffectVals * multiplier;
             }
 
             if (itm2 == null)
             {
-                return itm1.Effect.Percentage * multiplier;
+                return itm2EffectVals * multiplier;
             }
-
-            if (itm2.Effect.Type == itm1.Effect.Type)
-            {
-                return (itm1.Effect.Percentage - itm2.Effect.Percentage) * multiplier;
-            }
-            else
-            {
-                return itm1.Effect.Percentage * multiplier;
-            }
+            
+            return (itm1EffectVals - itm2EffectVals) * multiplier;
         }
 
         protected void SetupEquipmentInfo()
@@ -816,17 +813,41 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
 
             // Bonus Effect
 
-            // if the comparing items have the same type, or this item has a different type
-            if (mItem.Effect.Type != EffectType.None && mItem.Effect.Percentage != 0)
+            // Collect all bonus effects from each item
+            var effects = new List<EffectData>();
+            if (mItem != null)
             {
-                DisplayKeyValueRowWithDifference(GetBonusEffectDifference(mItem, equippedItemBase), Strings.ItemDescription.BonusEffects[(int)mItem.Effect.Type], Strings.ItemDescription.Percentage.ToString(mItem.Effect.Percentage), rows, "%");
+                effects.AddRange(mItem.Effects.FindAll(effect => effect.Type != EffectType.None));
             }
-            // If the comparing items had different types, display what we're losing
-            if (hasEquippedSlot && (equippedItemBase.Effect.Type != EffectType.None && equippedItemBase.Effect.Type != mItem.Effect.Type && equippedItemBase.Effect.Percentage != 0))
+            if (equippedItemBase != null)
             {
-                DisplayKeyValueRowWithDifference(GetBonusEffectDifference(equippedItemBase, mItem, true), Strings.ItemDescription.BonusEffects[(int)equippedItemBase.Effect.Type], Strings.ItemDescription.Percentage.ToString(0), rows, "%");
+                effects.AddRange(equippedItemBase.Effects.FindAll(effect => effect.Type != EffectType.None));
             }
+            if (effects.Count > 0)
+            {
+                List<EffectType> typesDisplayed = new List<EffectType>();
+                foreach(var effect in effects)
+                {
+                    if (typesDisplayed.Contains(effect.Type))
+                    {
+                        continue;
+                    }
+                    // Logic to make sure we don't show the same thing twice
+                    typesDisplayed.Add(effect.Type);
 
+                    if (mItem.Effects.Find(newEffect => newEffect.Type == effect.Type) != default)
+                    {
+                        var amt = mItem.GetEffectPercentage(effect.Type);
+                        DisplayKeyValueRowWithDifference(GetBonusEffectDifference(mItem, equippedItemBase, effect.Type), Strings.ItemDescription.BonusEffects[(int)effect.Type], Strings.ItemDescription.Percentage.ToString(amt), rows, "%");
+                    }
+                    else
+                    {
+                        // If we're _LOSING_ an effect, display it in the inverse
+                        DisplayKeyValueRowWithDifference(GetBonusEffectDifference(equippedItemBase, mItem, effect.Type, true), Strings.ItemDescription.BonusEffects[(int)effect.Type], Strings.ItemDescription.Percentage.ToString(0), rows, "%");
+                    }
+                }
+            }
+            
             // Resize the container.
             rows.SizeToChildren(true, true);
         }
