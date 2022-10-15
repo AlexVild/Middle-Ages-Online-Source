@@ -427,12 +427,11 @@ namespace Intersect.Editor.Forms.Editors
                 cmbToolType.SelectedIndex = mEditorItem.Tool + 1;
                 cmbAttackAnimation.SelectedIndex = AnimationBase.ListIndex(mEditorItem.AttackAnimationId) + 1;
                 RefreshExtendedData();
-                if (mEditorItem.ItemType == ItemTypes.Equipment)
+                if (mEditorItem.ItemType == ItemTypes.Equipment && cmbEquipmentBonus.Items.Count > 0)
                 {
-                    cmbEquipmentBonus.SelectedIndex = (int) mEditorItem.Effect.Type;
+                    cmbEquipmentBonus.SelectedIndex = 0;
                 }
 
-                nudEffectPercent.Value = mEditorItem.Effect.Percentage;
                 chk2Hand.Checked = mEditorItem.TwoHanded;
                 
                 chkBackstab.Checked = Convert.ToBoolean(mEditorItem.CanBackstab);
@@ -668,6 +667,8 @@ namespace Intersect.Editor.Forms.Editors
                 // Whether this item type is stackable is not up for debate.
                 chkStackable.Checked = false;
                 chkStackable.Enabled = false;
+
+                RefreshBonusList();
             }
             else if (cmbType.SelectedIndex == (int) ItemTypes.Bag)
             {
@@ -777,7 +778,6 @@ namespace Intersect.Editor.Forms.Editors
 
         private void cmbEquipmentBonus_SelectedIndexChanged(object sender, EventArgs e)
         {
-            mEditorItem.Effect.Type = (EffectType) cmbEquipmentBonus.SelectedIndex;
         }
 
         private void chk2Hand_CheckedChanged(object sender, EventArgs e)
@@ -938,7 +938,6 @@ namespace Intersect.Editor.Forms.Editors
 
         private void nudEffectPercent_ValueChanged(object sender, EventArgs e)
         {
-            mEditorItem.Effect.Percentage = (int) nudEffectPercent.Value;
         }
 
         private void nudRange_ValueChanged(object sender, EventArgs e)
@@ -1655,6 +1654,46 @@ namespace Intersect.Editor.Forms.Editors
         private void chkShortHair_CheckedChanged(object sender, EventArgs e)
         {
             mEditorItem.ShortHair = chkShortHair.Checked;
+        }
+
+        private void RefreshBonusList()
+        {
+            lstBonusEffects.Items.Clear();
+            foreach (var effect in mEditorItem.Effects)
+            {
+                var effectName = Strings.ItemEditor.bonuseffects[(int)effect.Type];
+                var effectAmt = mEditorItem.GetEffectPercentage(effect.Type);
+                var editorString = Strings.ItemEditor.BonusEffectItem.ToString(effectName, effectAmt);
+                lstBonusEffects.Items.Add(editorString);
+            }
+        }
+
+        private void btnAddBonus_Click(object sender, EventArgs e)
+        {
+            var effectType = (EffectType)cmbEquipmentBonus.SelectedIndex;
+            var effectPercentage = (int)nudEffectPercent.Value;
+            var effect = new EffectData(effectType, effectPercentage);
+
+            if (!mEditorItem.EffectsEnabled.Contains(effectType))
+            {
+                mEditorItem.Effects.Add(effect);
+                var editorString = Strings.ItemEditor.BonusEffectItem.ToString(cmbEquipmentBonus.Text, effectPercentage);
+                lstBonusEffects.Items.Add(editorString);
+            }
+            else
+            {
+                mEditorItem.SetEffectOfType(effectType, effectPercentage);
+                RefreshBonusList();
+            }
+        }
+
+        private void btnRemoveBonus_Click(object sender, EventArgs e)
+        {
+            if (lstBonusEffects.SelectedIndex >= 0 && lstBonusEffects.SelectedIndex < lstBonusEffects.Items.Count)
+            {
+                mEditorItem.Effects.RemoveAt(lstBonusEffects.SelectedIndex);
+                RefreshBonusList();
+            }
         }
     }
 }

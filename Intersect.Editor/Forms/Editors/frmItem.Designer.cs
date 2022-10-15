@@ -119,6 +119,7 @@ namespace Intersect.Editor.Forms.Editors
             this.chkBackstab = new DarkUI.Controls.DarkCheckBox();
             this.nudBackstabMultiplier = new DarkUI.Controls.DarkNumericUpDown();
             this.grpHelmetPaperdollProps = new DarkUI.Controls.DarkGroupBox();
+            this.chkShortHair = new DarkUI.Controls.DarkCheckBox();
             this.chkHelmHideExtra = new DarkUI.Controls.DarkCheckBox();
             this.chkHelmHideBeard = new DarkUI.Controls.DarkCheckBox();
             this.chkHelmHideHair = new DarkUI.Controls.DarkCheckBox();
@@ -258,7 +259,10 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
             this.vS2015DarkTheme1 = new WeifenLuo.WinFormsUI.Docking.VS2015DarkTheme();
-            this.chkShortHair = new DarkUI.Controls.DarkCheckBox();
+            this.grpBonusEffects = new DarkUI.Controls.DarkGroupBox();
+            this.lstBonusEffects = new System.Windows.Forms.ListBox();
+            this.btnAddBonus = new DarkUI.Controls.DarkButton();
+            this.btnRemoveBonus = new DarkUI.Controls.DarkButton();
             this.grpItems.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             this.grpDestroy.SuspendLayout();
@@ -323,6 +327,7 @@ namespace Intersect.Editor.Forms.Editors
             this.pnlContainer.SuspendLayout();
             this.grpAuxInfo.SuspendLayout();
             this.toolStrip.SuspendLayout();
+            this.grpBonusEffects.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpItems
@@ -1351,6 +1356,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpEquipment.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpEquipment.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpEquipment.Controls.Add(this.grpBonusEffects);
             this.grpEquipment.Controls.Add(this.grpAdditionalWeaponProps);
             this.grpEquipment.Controls.Add(this.grpHelmetPaperdollProps);
             this.grpEquipment.Controls.Add(this.grpPrayerProperties);
@@ -1358,14 +1364,10 @@ namespace Intersect.Editor.Forms.Editors
             this.grpEquipment.Controls.Add(this.grpVitalBonuses);
             this.grpEquipment.Controls.Add(this.cmbEquipmentAnimation);
             this.grpEquipment.Controls.Add(this.lblEquipmentAnimation);
-            this.grpEquipment.Controls.Add(this.nudEffectPercent);
             this.grpEquipment.Controls.Add(this.grpStatBonuses);
             this.grpEquipment.Controls.Add(this.cmbFemalePaperdoll);
             this.grpEquipment.Controls.Add(this.lblFemalePaperdoll);
             this.grpEquipment.Controls.Add(this.picFemalePaperdoll);
-            this.grpEquipment.Controls.Add(this.lblEffectPercent);
-            this.grpEquipment.Controls.Add(this.cmbEquipmentBonus);
-            this.grpEquipment.Controls.Add(this.lblBonusEffect);
             this.grpEquipment.Controls.Add(this.cmbEquipmentSlot);
             this.grpEquipment.Controls.Add(this.lblEquipmentSlot);
             this.grpEquipment.Controls.Add(this.cmbMalePaperdoll);
@@ -1375,7 +1377,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpEquipment.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpEquipment.Location = new System.Drawing.Point(2, 700);
             this.grpEquipment.Name = "grpEquipment";
-            this.grpEquipment.Size = new System.Drawing.Size(439, 886);
+            this.grpEquipment.Size = new System.Drawing.Size(439, 920);
             this.grpEquipment.TabIndex = 12;
             this.grpEquipment.TabStop = false;
             this.grpEquipment.Text = "Equipment";
@@ -1393,11 +1395,11 @@ namespace Intersect.Editor.Forms.Editors
             this.grpAdditionalWeaponProps.Controls.Add(this.chkBackstab);
             this.grpAdditionalWeaponProps.Controls.Add(this.nudBackstabMultiplier);
             this.grpAdditionalWeaponProps.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpAdditionalWeaponProps.Location = new System.Drawing.Point(9, 742);
+            this.grpAdditionalWeaponProps.Location = new System.Drawing.Point(12, 745);
             this.grpAdditionalWeaponProps.Margin = new System.Windows.Forms.Padding(2);
             this.grpAdditionalWeaponProps.Name = "grpAdditionalWeaponProps";
             this.grpAdditionalWeaponProps.Padding = new System.Windows.Forms.Padding(2);
-            this.grpAdditionalWeaponProps.Size = new System.Drawing.Size(218, 136);
+            this.grpAdditionalWeaponProps.Size = new System.Drawing.Size(199, 136);
             this.grpAdditionalWeaponProps.TabIndex = 60;
             this.grpAdditionalWeaponProps.TabStop = false;
             this.grpAdditionalWeaponProps.Text = "Additional Weap. Properties";
@@ -1536,6 +1538,16 @@ namespace Intersect.Editor.Forms.Editors
             this.grpHelmetPaperdollProps.TabStop = false;
             this.grpHelmetPaperdollProps.Text = "Paperdoll Properties";
             this.grpHelmetPaperdollProps.Visible = false;
+            // 
+            // chkShortHair
+            // 
+            this.chkShortHair.AutoSize = true;
+            this.chkShortHair.Location = new System.Drawing.Point(41, 96);
+            this.chkShortHair.Name = "chkShortHair";
+            this.chkShortHair.Size = new System.Drawing.Size(79, 17);
+            this.chkShortHair.TabIndex = 104;
+            this.chkShortHair.Text = "Short Hair?";
+            this.chkShortHair.CheckedChanged += new System.EventHandler(this.chkShortHair_CheckedChanged);
             // 
             // chkHelmHideExtra
             // 
@@ -1943,7 +1955,7 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbEquipmentAnimation.FormattingEnabled = true;
             this.cmbEquipmentAnimation.Items.AddRange(new object[] {
             "None"});
-            this.cmbEquipmentAnimation.Location = new System.Drawing.Point(221, 509);
+            this.cmbEquipmentAnimation.Location = new System.Drawing.Point(9, 711);
             this.cmbEquipmentAnimation.Name = "cmbEquipmentAnimation";
             this.cmbEquipmentAnimation.Size = new System.Drawing.Size(207, 21);
             this.cmbEquipmentAnimation.TabIndex = 57;
@@ -1954,7 +1966,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblEquipmentAnimation
             // 
             this.lblEquipmentAnimation.AutoSize = true;
-            this.lblEquipmentAnimation.Location = new System.Drawing.Point(218, 493);
+            this.lblEquipmentAnimation.Location = new System.Drawing.Point(12, 693);
             this.lblEquipmentAnimation.Name = "lblEquipmentAnimation";
             this.lblEquipmentAnimation.Size = new System.Drawing.Size(109, 13);
             this.lblEquipmentAnimation.TabIndex = 56;
@@ -1964,9 +1976,9 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.nudEffectPercent.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.nudEffectPercent.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudEffectPercent.Location = new System.Drawing.Point(103, 510);
+            this.nudEffectPercent.Location = new System.Drawing.Point(9, 177);
             this.nudEffectPercent.Name = "nudEffectPercent";
-            this.nudEffectPercent.Size = new System.Drawing.Size(114, 20);
+            this.nudEffectPercent.Size = new System.Drawing.Size(177, 20);
             this.nudEffectPercent.TabIndex = 55;
             this.nudEffectPercent.Value = new decimal(new int[] {
             0,
@@ -2464,7 +2476,7 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbFemalePaperdoll.FormattingEnabled = true;
             this.cmbFemalePaperdoll.Items.AddRange(new object[] {
             "None"});
-            this.cmbFemalePaperdoll.Location = new System.Drawing.Point(221, 550);
+            this.cmbFemalePaperdoll.Location = new System.Drawing.Point(222, 501);
             this.cmbFemalePaperdoll.Name = "cmbFemalePaperdoll";
             this.cmbFemalePaperdoll.Size = new System.Drawing.Size(168, 21);
             this.cmbFemalePaperdoll.TabIndex = 36;
@@ -2475,7 +2487,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblFemalePaperdoll
             // 
             this.lblFemalePaperdoll.AutoSize = true;
-            this.lblFemalePaperdoll.Location = new System.Drawing.Point(218, 533);
+            this.lblFemalePaperdoll.Location = new System.Drawing.Point(219, 484);
             this.lblFemalePaperdoll.Name = "lblFemalePaperdoll";
             this.lblFemalePaperdoll.Size = new System.Drawing.Size(91, 13);
             this.lblFemalePaperdoll.TabIndex = 35;
@@ -2484,7 +2496,7 @@ namespace Intersect.Editor.Forms.Editors
             // picFemalePaperdoll
             // 
             this.picFemalePaperdoll.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.picFemalePaperdoll.Location = new System.Drawing.Point(221, 578);
+            this.picFemalePaperdoll.Location = new System.Drawing.Point(222, 529);
             this.picFemalePaperdoll.Name = "picFemalePaperdoll";
             this.picFemalePaperdoll.Size = new System.Drawing.Size(200, 155);
             this.picFemalePaperdoll.TabIndex = 34;
@@ -2493,7 +2505,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblEffectPercent
             // 
             this.lblEffectPercent.AutoSize = true;
-            this.lblEffectPercent.Location = new System.Drawing.Point(10, 512);
+            this.lblEffectPercent.Location = new System.Drawing.Point(6, 161);
             this.lblEffectPercent.Name = "lblEffectPercent";
             this.lblEffectPercent.Size = new System.Drawing.Size(94, 13);
             this.lblEffectPercent.TabIndex = 31;
@@ -2512,9 +2524,9 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbEquipmentBonus.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbEquipmentBonus.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbEquipmentBonus.FormattingEnabled = true;
-            this.cmbEquipmentBonus.Location = new System.Drawing.Point(103, 483);
+            this.cmbEquipmentBonus.Location = new System.Drawing.Point(9, 134);
             this.cmbEquipmentBonus.Name = "cmbEquipmentBonus";
-            this.cmbEquipmentBonus.Size = new System.Drawing.Size(114, 21);
+            this.cmbEquipmentBonus.Size = new System.Drawing.Size(177, 21);
             this.cmbEquipmentBonus.TabIndex = 29;
             this.cmbEquipmentBonus.Text = null;
             this.cmbEquipmentBonus.TextPadding = new System.Windows.Forms.Padding(2);
@@ -2523,7 +2535,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblBonusEffect
             // 
             this.lblBonusEffect.AutoSize = true;
-            this.lblBonusEffect.Location = new System.Drawing.Point(10, 486);
+            this.lblBonusEffect.Location = new System.Drawing.Point(9, 118);
             this.lblBonusEffect.Name = "lblBonusEffect";
             this.lblBonusEffect.Size = new System.Drawing.Size(71, 13);
             this.lblBonusEffect.TabIndex = 28;
@@ -2574,7 +2586,7 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbMalePaperdoll.FormattingEnabled = true;
             this.cmbMalePaperdoll.Items.AddRange(new object[] {
             "None"});
-            this.cmbMalePaperdoll.Location = new System.Drawing.Point(11, 550);
+            this.cmbMalePaperdoll.Location = new System.Drawing.Point(12, 501);
             this.cmbMalePaperdoll.Name = "cmbMalePaperdoll";
             this.cmbMalePaperdoll.Size = new System.Drawing.Size(168, 21);
             this.cmbMalePaperdoll.TabIndex = 22;
@@ -2585,7 +2597,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblMalePaperdoll
             // 
             this.lblMalePaperdoll.AutoSize = true;
-            this.lblMalePaperdoll.Location = new System.Drawing.Point(8, 533);
+            this.lblMalePaperdoll.Location = new System.Drawing.Point(9, 484);
             this.lblMalePaperdoll.Name = "lblMalePaperdoll";
             this.lblMalePaperdoll.Size = new System.Drawing.Size(80, 13);
             this.lblMalePaperdoll.TabIndex = 21;
@@ -2594,7 +2606,7 @@ namespace Intersect.Editor.Forms.Editors
             // picMalePaperdoll
             // 
             this.picMalePaperdoll.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.picMalePaperdoll.Location = new System.Drawing.Point(11, 577);
+            this.picMalePaperdoll.Location = new System.Drawing.Point(12, 528);
             this.picMalePaperdoll.Name = "picMalePaperdoll";
             this.picMalePaperdoll.Size = new System.Drawing.Size(200, 156);
             this.picMalePaperdoll.TabIndex = 16;
@@ -3500,15 +3512,58 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
             // 
-            // chkShortHair
+            // grpBonusEffects
             // 
-            this.chkShortHair.AutoSize = true;
-            this.chkShortHair.Location = new System.Drawing.Point(41, 96);
-            this.chkShortHair.Name = "chkShortHair";
-            this.chkShortHair.Size = new System.Drawing.Size(79, 17);
-            this.chkShortHair.TabIndex = 104;
-            this.chkShortHair.Text = "Short Hair?";
-            this.chkShortHair.CheckedChanged += new System.EventHandler(this.chkShortHair_CheckedChanged);
+            this.grpBonusEffects.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpBonusEffects.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpBonusEffects.Controls.Add(this.btnRemoveBonus);
+            this.grpBonusEffects.Controls.Add(this.btnAddBonus);
+            this.grpBonusEffects.Controls.Add(this.lstBonusEffects);
+            this.grpBonusEffects.Controls.Add(this.lblBonusEffect);
+            this.grpBonusEffects.Controls.Add(this.lblEffectPercent);
+            this.grpBonusEffects.Controls.Add(this.cmbEquipmentBonus);
+            this.grpBonusEffects.Controls.Add(this.nudEffectPercent);
+            this.grpBonusEffects.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpBonusEffects.Location = new System.Drawing.Point(224, 693);
+            this.grpBonusEffects.Margin = new System.Windows.Forms.Padding(2);
+            this.grpBonusEffects.Name = "grpBonusEffects";
+            this.grpBonusEffects.Padding = new System.Windows.Forms.Padding(2);
+            this.grpBonusEffects.Size = new System.Drawing.Size(203, 212);
+            this.grpBonusEffects.TabIndex = 110;
+            this.grpBonusEffects.TabStop = false;
+            this.grpBonusEffects.Text = "Bonus Effects";
+            // 
+            // lstBonusEffects
+            // 
+            this.lstBonusEffects.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.lstBonusEffects.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lstBonusEffects.Cursor = System.Windows.Forms.Cursors.Default;
+            this.lstBonusEffects.ForeColor = System.Drawing.Color.Gainsboro;
+            this.lstBonusEffects.FormattingEnabled = true;
+            this.lstBonusEffects.Location = new System.Drawing.Point(8, 15);
+            this.lstBonusEffects.Name = "lstBonusEffects";
+            this.lstBonusEffects.Size = new System.Drawing.Size(176, 67);
+            this.lstBonusEffects.TabIndex = 115;
+            // 
+            // btnAddBonus
+            // 
+            this.btnAddBonus.Location = new System.Drawing.Point(9, 88);
+            this.btnAddBonus.Name = "btnAddBonus";
+            this.btnAddBonus.Padding = new System.Windows.Forms.Padding(5);
+            this.btnAddBonus.Size = new System.Drawing.Size(74, 23);
+            this.btnAddBonus.TabIndex = 116;
+            this.btnAddBonus.Text = "Add";
+            this.btnAddBonus.Click += new System.EventHandler(this.btnAddBonus_Click);
+            // 
+            // btnRemoveBonus
+            // 
+            this.btnRemoveBonus.Location = new System.Drawing.Point(110, 88);
+            this.btnRemoveBonus.Name = "btnRemoveBonus";
+            this.btnRemoveBonus.Padding = new System.Windows.Forms.Padding(5);
+            this.btnRemoveBonus.Size = new System.Drawing.Size(74, 23);
+            this.btnRemoveBonus.TabIndex = 117;
+            this.btnRemoveBonus.Text = "Remove";
+            this.btnRemoveBonus.Click += new System.EventHandler(this.btnRemoveBonus_Click);
             // 
             // FrmItem
             // 
@@ -3615,6 +3670,8 @@ namespace Intersect.Editor.Forms.Editors
             this.grpAuxInfo.PerformLayout();
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
+            this.grpBonusEffects.ResumeLayout(false);
+            this.grpBonusEffects.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -3845,5 +3902,9 @@ namespace Intersect.Editor.Forms.Editors
         private DarkNumericUpDown nudStrafeBoost;
         private Label lblStrafeModifier;
         private DarkCheckBox chkShortHair;
+        private DarkGroupBox grpBonusEffects;
+        private DarkButton btnRemoveBonus;
+        private DarkButton btnAddBonus;
+        private ListBox lstBonusEffects;
     }
 }
