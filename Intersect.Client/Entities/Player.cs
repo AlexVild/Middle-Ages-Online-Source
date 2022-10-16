@@ -2201,6 +2201,7 @@ namespace Intersect.Client.Entities
             {
                 attackTime = (int) Math.Floor(attackTime * Options.Instance.CombatOpts.SwiftAttackSpeedMod);
             }
+            attackTime = CalculateEffectBonus(attackTime, EffectType.Swiftness, true);
 
             return attackTime;
         }
@@ -2937,6 +2938,61 @@ namespace Intersect.Client.Entities
         public void ResetLoot()
         {
             RolledLoot = null;
+        }
+        
+        /// <summary>
+        /// Caclulate crit chance based on the player's current affinity
+        /// </summary>
+        /// <param name="amount"></param>
+        /// <param name="effect"></param>
+        /// <returns></returns>
+        public int CalculateEffectBonus(int amount, EffectType effect, bool subtractive = false)
+        {
+            int effectAmt = GetEquipmentBonusEffect(effect, 0);
+
+            if (effectAmt <= 0) return amount;
+
+            float effectMod = effectAmt / 100f;
+            if (subtractive)
+            {
+                amount -= (int)Math.Round(amount * (1 + effectMod));
+            }
+            else
+            {
+                amount = (int)Math.Round(amount * (1 + effectMod));
+            }
+
+            return amount;
+        }
+
+        /// <summary>
+        /// Gets the value of a bonus effect as granted by the currently equipped gear.
+        /// </summary>
+        /// <param name="effect">The <see cref="EffectType"/> to retrieve the amount for.</param>
+        /// <param name="startValue">The starting value to which we're adding our gear amount.</param>
+        /// <returns></returns>
+        public int GetEquipmentBonusEffect(EffectType effect, int startValue = 0)
+        {
+            var value = startValue;
+
+            for (var i = 0; i < Options.EquipmentSlots.Count; i++)
+            {
+                if (Equipment[i] == default)
+                {
+                    continue;
+                }
+                
+                var item = ItemBase.Get(Equipment[i]);
+
+                if (item == null || !item.EffectsEnabled.Contains(effect))
+                {
+                    continue;
+                }
+
+                value += item.GetEffectPercentage(effect);
+            }
+
+            return value;
         }
     }
 }

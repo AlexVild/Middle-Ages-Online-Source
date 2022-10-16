@@ -20,6 +20,8 @@
 
         CritBonus = 7,
 
+        Swiftness = 8,
+
     }
 
 }

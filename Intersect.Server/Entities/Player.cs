@@ -1974,6 +1974,8 @@ namespace Intersect.Server.Entities
                 attackTime = (int)Math.Floor(attackTime * Options.Instance.CombatOpts.SwiftAttackSpeedMod);
             }
 
+            attackTime = CalculateEffectBonus(attackTime, EffectType.Swiftness, true);
+
             return
                 attackTime -
                 100; //subtracting 100 to account for a moderate ping to the server so some attacks dont get cancelled.
@@ -8166,14 +8168,21 @@ namespace Intersect.Server.Entities
         /// <param name="amount"></param>
         /// <param name="effect"></param>
         /// <returns></returns>
-        public int CalculateEffectBonus(int amount, EffectType effect)
+        public int CalculateEffectBonus(int amount, EffectType effect, bool subtractive = false)
         {
             int effectAmt = GetEquipmentBonusEffect(effect, 0);
 
             if (effectAmt <= 0) return amount;
 
             float effectMod = effectAmt / 100f;
-            amount = (int) Math.Round(amount * (1 + effectMod));
+            if (subtractive)
+            {
+                amount -= (int)Math.Round(amount * (1 + effectMod));
+            }
+            else
+            {
+                amount = (int)Math.Round(amount * (1 + effectMod));
+            }
 
             return amount;
         }

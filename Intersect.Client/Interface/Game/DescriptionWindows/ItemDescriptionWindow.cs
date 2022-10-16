@@ -585,8 +585,8 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
 
         private int GetBonusEffectDifference(ItemBase itm1, ItemBase itm2, EffectType effectType, bool inverse = false)
         {
-            var itm1EffectVals = itm1.GetEffectPercentage(effectType);
-            var itm2EffectVals = itm2.GetEffectPercentage(effectType);
+            var itm1EffectVals = itm1?.GetEffectPercentage(effectType) ?? 0;
+            var itm2EffectVals = itm2?.GetEffectPercentage(effectType) ?? 0;
 
             var multiplier = inverse ? -1 : 1;
 
