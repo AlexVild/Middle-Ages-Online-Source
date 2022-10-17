@@ -5140,7 +5140,7 @@ Tick timer saved in server config.json.";
             public static LocalizedString sellsound = @"Sell Sound:";
         }
 
-        public struct SpellEditor
+        public partial struct SpellEditor
         {
 
             public static LocalizedString abilitypower = @"Ability Pwr:";
@@ -6151,7 +6151,7 @@ Negative values for time to flow backwards.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString NotFound = @"NOT FOUND";
-            
+
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString SearchPlaceHolder = @"Search...";
 
@@ -6163,6 +6163,12 @@ Negative values for time to flow backwards.";
         {
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString BonusEffectItem = @"{00}: {01}%";
+        }
+
+        public partial struct SpellEditor
+        {
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ComponentItem = @"{00} x{01}";
         }
     }
 }

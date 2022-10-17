@@ -14,8 +14,22 @@ using Newtonsoft.Json;
 
 namespace Intersect.GameObjects
 {
+    public class SpellCastingComponent
+    {
+        public Guid ItemId { get; set; }
 
-    public class SpellBase : DatabaseObject<SpellBase>, IFolderable
+        public ItemBase Item { get => ItemBase.Get(ItemId) ?? null; }
+
+        public int Quantity { get; set; }
+
+        public SpellCastingComponent(Guid itemId, int quantity)
+        {
+            ItemId = itemId;
+            Quantity = quantity;
+        }
+    }
+
+    public partial class SpellBase : DatabaseObject<SpellBase>, IFolderable
     {
 
         [NotMapped] public int[] VitalCost = new int[(int) Vitals.VitalCount];
@@ -307,4 +321,43 @@ namespace Intersect.GameObjects
 
     }
 
+    public partial class SpellBase : DatabaseObject<SpellBase>, IFolderable
+    {
+        /// <summary>
+        /// A mapping of some <see cref="ItemBase"/> ID mapped to its quantity
+        /// </summary>
+        [NotMapped]
+        public List<SpellCastingComponent> CastingComponents { get; set; }
+
+        public string[] GetComponentDisplay()
+        {
+            var componentDisplays = new List<string>();
+            foreach(var component in CastingComponents)
+            {
+                var notFound = "NOT FOUND";
+                componentDisplays.Add($"{ItemBase.Get(component.ItemId)?.Name ?? notFound} x{component.Quantity}");
+            }
+
+            return componentDisplays.ToArray();
+        }
+
+        [Column("CastingComponents")]
+        [JsonIgnore]
+        public string CastingComponentsJson
+        {
+            get => JsonConvert.SerializeObject(CastingComponents);
+            set => CastingComponents = JsonConvert.DeserializeObject<List<SpellCastingComponent>>(value ?? "") ?? new List<SpellCastingComponent>();
+        }
+
+        public void AddCastingComponent(Guid itemId, int quantity)
+        {
+            if (CastingComponents.Select(component => component.ItemId).Contains(itemId)) 
+            {
+                var component = CastingComponents.Find(comp => comp.ItemId == itemId);
+                component.Quantity = quantity;
+                return;
+            }
+            CastingComponents.Add(new SpellCastingComponent(itemId, quantity));
+        }   
+    }
 }

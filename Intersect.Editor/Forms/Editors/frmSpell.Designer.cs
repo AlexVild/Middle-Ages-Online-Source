@@ -33,7 +33,17 @@ namespace Intersect.Editor.Forms.Editors
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmSpell));
             this.pnlContainer = new System.Windows.Forms.Panel();
+            this.grpComponents = new DarkUI.Controls.DarkGroupBox();
+            this.lblComponentQuantity = new System.Windows.Forms.Label();
+            this.nudComponentQuantity = new DarkUI.Controls.DarkNumericUpDown();
+            this.btnRemoveComponent = new DarkUI.Controls.DarkButton();
+            this.btnAddComponent = new DarkUI.Controls.DarkButton();
+            this.lblComponent = new System.Windows.Forms.Label();
+            this.cmbComponents = new DarkUI.Controls.DarkComboBox();
+            this.lstComponents = new System.Windows.Forms.ListBox();
             this.grpDash = new DarkUI.Controls.DarkGroupBox();
+            this.cmbDashSpell = new DarkUI.Controls.DarkComboBox();
+            this.lblDashSpell = new System.Windows.Forms.Label();
             this.grpDashCollisions = new DarkUI.Controls.DarkGroupBox();
             this.chkEntities = new DarkUI.Controls.DarkCheckBox();
             this.chkIgnoreInactiveResources = new DarkUI.Controls.DarkCheckBox();
@@ -180,9 +190,9 @@ namespace Intersect.Editor.Forms.Editors
             this.btnClearSearch = new DarkUI.Controls.DarkButton();
             this.txtSearch = new DarkUI.Controls.DarkTextBox();
             this.lstGameObjects = new Intersect.Editor.Forms.Controls.GameObjectList();
-            this.lblDashSpell = new System.Windows.Forms.Label();
-            this.cmbDashSpell = new DarkUI.Controls.DarkComboBox();
             this.pnlContainer.SuspendLayout();
+            this.grpComponents.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudComponentQuantity)).BeginInit();
             this.grpDash.SuspendLayout();
             this.grpDashCollisions.SuspendLayout();
             this.grpGeneral.SuspendLayout();
@@ -232,6 +242,7 @@ namespace Intersect.Editor.Forms.Editors
             // pnlContainer
             // 
             this.pnlContainer.AutoScroll = true;
+            this.pnlContainer.Controls.Add(this.grpComponents);
             this.pnlContainer.Controls.Add(this.grpDash);
             this.pnlContainer.Controls.Add(this.grpGeneral);
             this.pnlContainer.Controls.Add(this.grpSpellCost);
@@ -242,9 +253,124 @@ namespace Intersect.Editor.Forms.Editors
             this.pnlContainer.Controls.Add(this.grpWarp);
             this.pnlContainer.Location = new System.Drawing.Point(221, 40);
             this.pnlContainer.Name = "pnlContainer";
-            this.pnlContainer.Size = new System.Drawing.Size(460, 473);
+            this.pnlContainer.Size = new System.Drawing.Size(692, 473);
             this.pnlContainer.TabIndex = 41;
             this.pnlContainer.Visible = false;
+            // 
+            // grpComponents
+            // 
+            this.grpComponents.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpComponents.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpComponents.Controls.Add(this.lblComponentQuantity);
+            this.grpComponents.Controls.Add(this.nudComponentQuantity);
+            this.grpComponents.Controls.Add(this.btnRemoveComponent);
+            this.grpComponents.Controls.Add(this.btnAddComponent);
+            this.grpComponents.Controls.Add(this.lblComponent);
+            this.grpComponents.Controls.Add(this.cmbComponents);
+            this.grpComponents.Controls.Add(this.lstComponents);
+            this.grpComponents.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpComponents.Location = new System.Drawing.Point(446, 0);
+            this.grpComponents.Name = "grpComponents";
+            this.grpComponents.Size = new System.Drawing.Size(213, 240);
+            this.grpComponents.TabIndex = 58;
+            this.grpComponents.TabStop = false;
+            this.grpComponents.Text = "Casting Components";
+            this.grpComponents.Visible = false;
+            // 
+            // lblComponentQuantity
+            // 
+            this.lblComponentQuantity.AutoSize = true;
+            this.lblComponentQuantity.Location = new System.Drawing.Point(6, 158);
+            this.lblComponentQuantity.Name = "lblComponentQuantity";
+            this.lblComponentQuantity.Size = new System.Drawing.Size(46, 13);
+            this.lblComponentQuantity.TabIndex = 110;
+            this.lblComponentQuantity.Text = "Quantity";
+            // 
+            // nudComponentQuantity
+            // 
+            this.nudComponentQuantity.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudComponentQuantity.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudComponentQuantity.Location = new System.Drawing.Point(6, 174);
+            this.nudComponentQuantity.Maximum = new decimal(new int[] {
+            -100,
+            49,
+            0,
+            0});
+            this.nudComponentQuantity.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudComponentQuantity.Name = "nudComponentQuantity";
+            this.nudComponentQuantity.Size = new System.Drawing.Size(200, 20);
+            this.nudComponentQuantity.TabIndex = 58;
+            this.nudComponentQuantity.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // btnRemoveComponent
+            // 
+            this.btnRemoveComponent.Location = new System.Drawing.Point(117, 202);
+            this.btnRemoveComponent.Name = "btnRemoveComponent";
+            this.btnRemoveComponent.Padding = new System.Windows.Forms.Padding(5);
+            this.btnRemoveComponent.Size = new System.Drawing.Size(89, 27);
+            this.btnRemoveComponent.TabIndex = 109;
+            this.btnRemoveComponent.Text = "Remove";
+            this.btnRemoveComponent.Click += new System.EventHandler(this.btnRemoveComponent_Click);
+            // 
+            // btnAddComponent
+            // 
+            this.btnAddComponent.Location = new System.Drawing.Point(6, 202);
+            this.btnAddComponent.Name = "btnAddComponent";
+            this.btnAddComponent.Padding = new System.Windows.Forms.Padding(5);
+            this.btnAddComponent.Size = new System.Drawing.Size(88, 27);
+            this.btnAddComponent.TabIndex = 52;
+            this.btnAddComponent.Text = "Add";
+            this.btnAddComponent.Click += new System.EventHandler(this.btnAddComponent_Click);
+            // 
+            // lblComponent
+            // 
+            this.lblComponent.AutoSize = true;
+            this.lblComponent.Location = new System.Drawing.Point(6, 108);
+            this.lblComponent.Name = "lblComponent";
+            this.lblComponent.Size = new System.Drawing.Size(61, 13);
+            this.lblComponent.TabIndex = 58;
+            this.lblComponent.Text = "Component";
+            // 
+            // cmbComponents
+            // 
+            this.cmbComponents.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbComponents.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbComponents.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbComponents.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbComponents.DrawDropdownHoverOutline = false;
+            this.cmbComponents.DrawFocusRectangle = false;
+            this.cmbComponents.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbComponents.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbComponents.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbComponents.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbComponents.FormattingEnabled = true;
+            this.cmbComponents.Location = new System.Drawing.Point(6, 124);
+            this.cmbComponents.Name = "cmbComponents";
+            this.cmbComponents.Size = new System.Drawing.Size(200, 21);
+            this.cmbComponents.TabIndex = 58;
+            this.cmbComponents.Text = null;
+            this.cmbComponents.TextPadding = new System.Windows.Forms.Padding(2);
+            // 
+            // lstComponents
+            // 
+            this.lstComponents.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.lstComponents.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lstComponents.Cursor = System.Windows.Forms.Cursors.Default;
+            this.lstComponents.ForeColor = System.Drawing.Color.Gainsboro;
+            this.lstComponents.FormattingEnabled = true;
+            this.lstComponents.Location = new System.Drawing.Point(6, 19);
+            this.lstComponents.Name = "lstComponents";
+            this.lstComponents.Size = new System.Drawing.Size(201, 80);
+            this.lstComponents.TabIndex = 108;
+            this.lstComponents.SelectedIndexChanged += new System.EventHandler(this.lstComponents_SelectedIndexChanged);
             // 
             // grpDash
             // 
@@ -263,6 +389,36 @@ namespace Intersect.Editor.Forms.Editors
             this.grpDash.TabStop = false;
             this.grpDash.Text = "Dash";
             this.grpDash.Visible = false;
+            // 
+            // cmbDashSpell
+            // 
+            this.cmbDashSpell.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbDashSpell.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbDashSpell.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbDashSpell.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbDashSpell.DrawDropdownHoverOutline = false;
+            this.cmbDashSpell.DrawFocusRectangle = false;
+            this.cmbDashSpell.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbDashSpell.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbDashSpell.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbDashSpell.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbDashSpell.FormattingEnabled = true;
+            this.cmbDashSpell.Location = new System.Drawing.Point(14, 224);
+            this.cmbDashSpell.Name = "cmbDashSpell";
+            this.cmbDashSpell.Size = new System.Drawing.Size(200, 21);
+            this.cmbDashSpell.TabIndex = 18;
+            this.cmbDashSpell.Text = null;
+            this.cmbDashSpell.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbDashSpell.SelectedIndexChanged += new System.EventHandler(this.cmbDashSpell_SelectedIndexChanged);
+            // 
+            // lblDashSpell
+            // 
+            this.lblDashSpell.AutoSize = true;
+            this.lblDashSpell.Location = new System.Drawing.Point(11, 208);
+            this.lblDashSpell.Name = "lblDashSpell";
+            this.lblDashSpell.Size = new System.Drawing.Size(58, 13);
+            this.lblDashSpell.TabIndex = 57;
+            this.lblDashSpell.Text = "Dash Spell";
             // 
             // grpDashCollisions
             // 
@@ -2235,7 +2391,7 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Padding = new System.Windows.Forms.Padding(5, 0, 1, 0);
-            this.toolStrip.Size = new System.Drawing.Size(681, 25);
+            this.toolStrip.Size = new System.Drawing.Size(932, 25);
             this.toolStrip.TabIndex = 51;
             this.toolStrip.Text = "toolStrip1";
             // 
@@ -2340,7 +2496,7 @@ namespace Intersect.Editor.Forms.Editors
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(476, 519);
+            this.btnCancel.Location = new System.Drawing.Point(730, 516);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Padding = new System.Windows.Forms.Padding(5);
             this.btnCancel.Size = new System.Drawing.Size(190, 27);
@@ -2350,7 +2506,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(280, 519);
+            this.btnSave.Location = new System.Drawing.Point(530, 514);
             this.btnSave.Name = "btnSave";
             this.btnSave.Padding = new System.Windows.Forms.Padding(5);
             this.btnSave.Size = new System.Drawing.Size(190, 27);
@@ -2413,43 +2569,13 @@ namespace Intersect.Editor.Forms.Editors
             this.lstGameObjects.Size = new System.Drawing.Size(191, 422);
             this.lstGameObjects.TabIndex = 32;
             // 
-            // lblDashSpell
-            // 
-            this.lblDashSpell.AutoSize = true;
-            this.lblDashSpell.Location = new System.Drawing.Point(11, 208);
-            this.lblDashSpell.Name = "lblDashSpell";
-            this.lblDashSpell.Size = new System.Drawing.Size(58, 13);
-            this.lblDashSpell.TabIndex = 57;
-            this.lblDashSpell.Text = "Dash Spell";
-            // 
-            // cmbDashSpell
-            // 
-            this.cmbDashSpell.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbDashSpell.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbDashSpell.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbDashSpell.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbDashSpell.DrawDropdownHoverOutline = false;
-            this.cmbDashSpell.DrawFocusRectangle = false;
-            this.cmbDashSpell.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbDashSpell.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbDashSpell.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbDashSpell.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbDashSpell.FormattingEnabled = true;
-            this.cmbDashSpell.Location = new System.Drawing.Point(14, 224);
-            this.cmbDashSpell.Name = "cmbDashSpell";
-            this.cmbDashSpell.Size = new System.Drawing.Size(200, 21);
-            this.cmbDashSpell.TabIndex = 18;
-            this.cmbDashSpell.Text = null;
-            this.cmbDashSpell.TextPadding = new System.Windows.Forms.Padding(2);
-            this.cmbDashSpell.SelectedIndexChanged += new System.EventHandler(this.cmbDashSpell_SelectedIndexChanged);
-            // 
             // FrmSpell
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.ClientSize = new System.Drawing.Size(681, 549);
+            this.ClientSize = new System.Drawing.Size(932, 549);
             this.ControlBox = false;
             this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.btnCancel);
@@ -2466,6 +2592,9 @@ namespace Intersect.Editor.Forms.Editors
             this.Load += new System.EventHandler(this.frmSpell_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.form_KeyDown);
             this.pnlContainer.ResumeLayout(false);
+            this.grpComponents.ResumeLayout(false);
+            this.grpComponents.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudComponentQuantity)).EndInit();
             this.grpDash.ResumeLayout(false);
             this.grpDash.PerformLayout();
             this.grpDashCollisions.ResumeLayout(false);
@@ -2680,5 +2809,13 @@ namespace Intersect.Editor.Forms.Editors
         private DarkCheckBox chkEntities;
         private DarkComboBox cmbDashSpell;
         private System.Windows.Forms.Label lblDashSpell;
+        private DarkGroupBox grpComponents;
+        private System.Windows.Forms.ListBox lstComponents;
+        private System.Windows.Forms.Label lblComponent;
+        private DarkComboBox cmbComponents;
+        private DarkButton btnAddComponent;
+        private DarkButton btnRemoveComponent;
+        private System.Windows.Forms.Label lblComponentQuantity;
+        private DarkNumericUpDown nudComponentQuantity;
     }
 }

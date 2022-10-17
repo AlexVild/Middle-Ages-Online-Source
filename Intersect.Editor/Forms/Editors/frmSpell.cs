@@ -16,6 +16,7 @@ using Intersect.GameObjects;
 using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Maps.MapList;
 using Intersect.Utilities;
+using static Intersect.GameObjects.SpellBase;
 
 namespace Intersect.Editor.Forms.Editors
 {
@@ -142,7 +143,7 @@ namespace Intersect.Editor.Forms.Editors
 
             nudCastDuration.Maximum = Int32.MaxValue;
             nudCooldownDuration.Maximum = Int32.MaxValue;
-
+            
             InitLocalization();
             UpdateEditor();
         }
@@ -279,6 +280,7 @@ namespace Intersect.Editor.Forms.Editors
             if (mEditorItem != null)
             {
                 pnlContainer.Show();
+                grpComponents.Show();
 
                 txtName.Text = mEditorItem.Name;
                 cmbFolder.Text = mEditorItem.Folder;
@@ -317,6 +319,8 @@ namespace Intersect.Editor.Forms.Editors
                     mChanged.Add(mEditorItem);
                     mEditorItem.MakeBackup();
                 }
+
+                RefreshComponentsList();
             }
             else
             {
@@ -324,6 +328,12 @@ namespace Intersect.Editor.Forms.Editors
             }
 
             UpdateToolStripItems();
+        }
+
+        private void RefreshComponentsList()
+        {
+            lstComponents.Items.Clear();
+            lstComponents.Items.AddRange(mEditorItem.GetComponentDisplay());
         }
 
         private void UpdateSpellTypePanels()
@@ -1036,6 +1046,9 @@ namespace Intersect.Editor.Forms.Editors
             var items = SpellBase.Lookup.OrderBy(p => p.Value?.Name).Select(pair => new KeyValuePair<Guid, KeyValuePair<string, string>>(pair.Key,
                 new KeyValuePair<string, string>(((SpellBase)pair.Value)?.Name ?? Models.DatabaseObject<SpellBase>.Deleted, ((SpellBase)pair.Value)?.Folder ?? ""))).ToArray();
             lstGameObjects.Repopulate(items, mFolders, btnAlphabetical.Checked, CustomSearch(), txtSearch.Text);
+
+            cmbComponents.Items.Clear();
+            cmbComponents.Items.AddRange(ItemBase.Names);
         }
 
         private void btnAddFolder_Click(object sender, EventArgs e)
@@ -1136,6 +1149,54 @@ namespace Intersect.Editor.Forms.Editors
         {
             mEditorItem.Dash.SpellId = SpellBase.IdFromList(cmbDashSpell.SelectedIndex - 1);
             Console.Write(mEditorItem.Dash.SpellId);
+        }
+
+        private void btnAddComponent_Click(object sender, EventArgs e)
+        {
+            var componentId = ItemBase.IdFromList(cmbComponents.SelectedIndex);
+            var componentQuantity = (int)nudComponentQuantity.Value;
+
+            if (componentId == default || componentQuantity == 0)
+            {
+                return;
+            }
+
+            mEditorItem.CastingComponents.Add(new SpellCastingComponent(componentId, componentQuantity));
+            RefreshComponentsList();
+        }
+
+        private void btnRemoveComponent_Click(object sender, EventArgs e)
+        {
+            var idx = lstComponents.SelectedIndex;
+            if (idx < 0 || idx >= lstComponents.Items.Count)
+            {
+                return;
+            }
+            
+            lstComponents.Items.RemoveAt(idx);
+            mEditorItem.CastingComponents.RemoveAt(idx);
+            
+            RefreshComponentsList();
+        }
+
+        private void lstComponents_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var idx = lstComponents.SelectedIndex;
+            if (idx < 0 || idx >= lstComponents.Items.Count || idx >= mEditorItem.CastingComponents.Count)
+            {
+                return;
+            }
+
+            try
+            {
+                var component = mEditorItem.CastingComponents[idx] ?? null;
+                cmbComponents.SelectedIndex = ItemBase.ListIndex(component?.ItemId ?? Guid.Empty);
+                nudComponentQuantity.Value = component?.Quantity ?? 1;
+            }
+            catch (Exception exception)
+            {
+                return;
+            }
         }
     }
 

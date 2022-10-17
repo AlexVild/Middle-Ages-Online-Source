@@ -909,6 +909,10 @@
     <Compile Include="Migrations\Game\20221015154500_MigrateOldBonusEffectToNewListMigration.designer.cs">
       <DependentUpon>20221015154500_MigrateOldBonusEffectToNewListMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20221017170844_SpellComponentMigration.cs" />
+    <Compile Include="Migrations\Game\20221017170844_SpellComponentMigration.designer.cs">
+      <DependentUpon>20221017170844_SpellComponentMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>
