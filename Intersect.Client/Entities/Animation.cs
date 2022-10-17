@@ -471,30 +471,11 @@ namespace Intersect.Client.Entities
             if (animBase != null)
             {
                 int thresh = animBase.BrightnessThreshold;
-                var map = Globals.Me?.MapInstance;
-                if (map == null) return false;
-                if (map.IsIndoors)
-                {
-                    if (thresh < map.Brightness)
-                    {
-                        return false;
-                    }
-                }
-                else
-                {
-                    if (thresh < Time.GetBrightnessFromAlpha())
-                    {
-                        return false;
-                    }
-                }
-
-                return true;
+                return thresh >= Graphics.BrightnessLevel;
             } else
             {
                 return false;
             }
-            
         }
     }
-
 }

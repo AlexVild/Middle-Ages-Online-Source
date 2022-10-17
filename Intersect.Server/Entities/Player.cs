@@ -5712,6 +5712,59 @@ namespace Intersect.Server.Entities
                 }
             }
 
+            var castingComponents = spell.CastingComponents;
+            if (castingComponents.Count > 0)
+            {
+                List<string> missingComponents = new List<string>();
+                foreach (var component in castingComponents)
+                {
+                    if (FindInventoryItemSlot(component.ItemId, component.Quantity) == null)
+                    {
+                        missingComponents.Add(ItemBase.GetName(component.ItemId));
+                    }
+                }
+
+                if (missingComponents.Count > 0)
+                {
+                    var sb = new StringBuilder();
+                    var idx = 0;
+                    foreach (var componentName in missingComponents)
+                    {
+                        var display = componentName;
+                        if (componentName.Last() == 's')
+                        {
+                            display = componentName.TrimEnd('s');
+                        }
+
+                        if (idx == 0)
+                        {
+                            sb.Append($"{display}s");
+                        }
+                        else if (idx == 1 && idx == missingComponents.Count - 1)
+                        {
+                            sb.Append($" nor {display}s");
+                        }
+                        else if (idx < missingComponents.Count - 1)
+                        {
+                            sb.Append($", {display}s");
+                        }
+                        else
+                        {
+                            sb.Append($", and {componentName}s");
+                        }
+                        idx++;
+                    }
+
+                    PacketSender.SendChatMsg(
+                            this, Strings.Player.NotEnoughComponents.ToString(sb.ToString()),
+                            ChatMessageType.Inventory,
+                            CustomColors.Alerts.Error
+                        );
+
+                    return false;
+                }
+            }
+
             //Check if snared and spell is a dash or warp
             if (spell.SpellType == SpellTypes.Dash ||
                 spell.SpellType == SpellTypes.Warp ||
@@ -5834,7 +5887,7 @@ namespace Intersect.Server.Entities
                     SpellCastSlot = spellSlot;
                     CastTarget = Target;
 
-                    //Check if the caster has the right ammunition if a projectile
+                    // Get rid of projectile ammo if necessary
                     if (spell.SpellType == SpellTypes.CombatSpell &&
                         spell.Combat.TargetType == SpellTargetTypes.Projectile &&
                         spell.Combat.ProjectileId != Guid.Empty)
@@ -5843,6 +5896,25 @@ namespace Intersect.Server.Entities
                         if (projectileBase != null && projectileBase.AmmoItemId != Guid.Empty)
                         {
                             TryTakeItem(projectileBase.AmmoItemId, projectileBase.AmmoRequired);
+                        }
+                    }
+
+                    // Get rid of the player's casting components if necessary
+                    var components = spell.CastingComponents;
+                    if (components.Count > 0)
+                    {
+                        foreach (var component in components)
+                        {
+                            if (!TryTakeItem(component.ItemId, component.Quantity))
+                            {
+                                PacketSender.SendChatMsg(
+                                    this, Strings.Items.notenough.ToString(ItemBase.GetName(component.ItemId)),
+                                    ChatMessageType.Inventory,
+                                    CustomColors.Alerts.Error
+                                );
+                                
+                                return;
+                            }
                         }
                     }
 

@@ -335,7 +335,13 @@ namespace Intersect.GameObjects
             foreach(var component in CastingComponents)
             {
                 var notFound = "NOT FOUND";
-                componentDisplays.Add($"{ItemBase.Get(component.ItemId)?.Name ?? notFound} x{component.Quantity}");
+                var itemName = ItemBase.Get(component.ItemId)?.Name;
+                if (itemName.ToLower().Last() == 's' && component.Quantity > 1)
+                {
+                    itemName = itemName.Trim('s');
+                }
+
+                componentDisplays.Add($"{itemName ?? notFound} x{component.Quantity}");
             }
 
             return componentDisplays.ToArray();

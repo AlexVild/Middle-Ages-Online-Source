@@ -37,6 +37,11 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 SetupDescription();
             }
 
+            if (mSpell.CastingComponents.Count > 0)
+            {
+                SetupComponentInfo();
+            }
+
             // Set up requirements
             if (mSpell.RestrictionStrings.Count > 0)
             {
@@ -389,6 +394,37 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 {
                     data.Add(new Tuple<string, string>(Strings.ItemDescription.RestrictionOr.ToString(restriction), String.Empty));
                 }
+            }
+
+            // Do we have any data to display? If so, generate the element and add the data to it.
+            if (data.Count > 0)
+            {
+                // Add a divider.
+                AddDivider();
+
+                // Add a row component.
+                var rows = AddRowContainer();
+
+                foreach (var item in data)
+                {
+                    rows.AddKeyValueRow(item.Item1, item.Item2, CustomColors.ItemDesc.Notice, Color.White);
+                }
+
+                // Resize and position the container.
+                rows.SizeToChildren(true, true);
+            }
+        }
+
+        protected void SetupComponentInfo()
+        {
+            // Our list of data to add, should we need to.
+            var data = new List<Tuple<string, string>>();
+
+            // Display each condition list as returned to us by the server
+            data.Add(new Tuple<string, string>(Strings.ItemDescription.ComponentsNeeded, string.Empty));
+            foreach (var component in mSpell.GetComponentDisplay())
+            {
+                data.Add(new Tuple<string, string>(component, string.Empty));
             }
 
             // Do we have any data to display? If so, generate the element and add the data to it.

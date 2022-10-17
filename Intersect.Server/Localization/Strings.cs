@@ -1729,7 +1729,11 @@ namespace Intersect.Server.Localization
             public readonly LocalizedString ItemsLost = @"You've died in a PvP zone, and lost the following items: {00}";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString NotEnoughComponents = @"You don't have enough {00} to cast this spell!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString SpawnChanged = @"Your respawn point has been updated.";
+
         }
 
         public sealed partial class TradingNamespace : LocaleNamespace

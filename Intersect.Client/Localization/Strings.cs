@@ -1180,6 +1180,9 @@ namespace Intersect.Client.Localization
             public static LocalizedString CastSpell = @"Casts Spell: {00}";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ComponentsNeeded = @"Components Needed:";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString TeachSpell = @"Teaches Spell: {00}";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
