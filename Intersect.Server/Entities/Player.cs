@@ -840,6 +840,17 @@ namespace Intersect.Server.Entities
                                         {
                                             autorunEvents += mapEvent.Pages.Count(p => p.Trigger == EventTrigger.Autorun);
                                         }
+
+                                        while (_queueStartCommonEvent.TryDequeue(out var startCommonEventMetadata))
+                                        {
+                                            _ = UnsafeStartCommonEvent(
+                                                startCommonEventMetadata.EventDescriptor,
+                                                startCommonEventMetadata.Trigger,
+                                                startCommonEventMetadata.Command,
+                                                startCommonEventMetadata.Parameter,
+                                                startCommonEventMetadata.Value
+                                            );
+                                        }
                                     }
                                 }
                                 MapAutorunEvents = autorunEvents;
@@ -892,17 +903,6 @@ namespace Intersect.Server.Entities
                                 }
 
                                 RemoveEvent(evt.Value.Id);
-                            }
-
-                            while (_queueStartCommonEvent.TryDequeue(out var startCommonEventMetadata))
-                            {
-                                _ = UnsafeStartCommonEvent(
-                                    startCommonEventMetadata.EventDescriptor,
-                                    startCommonEventMetadata.Trigger,
-                                    startCommonEventMetadata.Command,
-                                    startCommonEventMetadata.Parameter,
-                                    startCommonEventMetadata.Value
-                                );
                             }
                         }
                     }
@@ -5750,7 +5750,7 @@ namespace Intersect.Server.Entities
                         }
                         else
                         {
-                            sb.Append($", and {componentName}s");
+                            sb.Append($", nor {componentName}s");
                         }
                         idx++;
                     }
