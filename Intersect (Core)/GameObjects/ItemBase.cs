@@ -471,6 +471,16 @@ namespace Intersect.GameObjects
     }
 
     [Owned]
+    public class SpecialAttackData
+    {
+        public Guid SpellId { get; set; }
+
+        public long ChargeTime { get; set; }
+
+        public SpellBase SpecialAttack { get => SpellBase.Get(SpellId) ?? null; }
+    }
+
+    [Owned]
     public class EffectData
     {
 
@@ -501,6 +511,8 @@ namespace Intersect.GameObjects
         public int BackstepBonus { get; set; }
 
         public bool ShortHair { get; set; }
+
+        public SpecialAttackData SpecialAttack { get; set; }
 
         [NotMapped]
         public List<EffectData> Effects { get; set; }

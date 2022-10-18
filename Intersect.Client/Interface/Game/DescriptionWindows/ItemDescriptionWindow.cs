@@ -44,17 +44,27 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
 
             GenerateComponents();
             SetupDescriptionWindow();
-            SetPosition(x, y);
 
             // If a spell, also display the spell description!
             if (mItem.ItemType == ItemTypes.Spell && !mItem.QuickCast)
             {
-                mSpellDescWindow = new SpellDescriptionWindow(mItem.SpellId, x, mContainer.Bottom);
+                mSpellDescWindow = new SpellDescriptionWindow(mItem.SpellId, x, y);
             }
             if (mItem.ItemType == ItemTypes.Equipment && mItem.EquipmentSlot == Options.PrayerIndex)
             {
-                mSpellDescWindow = new SpellDescriptionWindow(mItem.ComboSpellId, x, mContainer.Bottom);
+                mSpellDescWindow = new SpellDescriptionWindow(mItem.ComboSpellId, x, y);
             }
+            if (mItem.SpecialAttack.SpellId != default)
+            {
+                mSpellDescWindow = new SpellDescriptionWindow(mItem.SpecialAttack.SpellId, x, y);
+            }
+
+            if (mSpellDescWindow != default)
+            {
+                x -= mSpellDescWindow.Container.Width + 4;
+            }
+
+            SetPosition(x, y);
         }
 
         protected void SetupDescriptionWindow()
@@ -631,6 +641,13 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             // Is this a weapon?
             if (mItem.EquipmentSlot == Options.WeaponIndex)
             {
+                // Special attack
+                if (mItem.SpecialAttack.SpellId != default)
+                {
+                    var attackName = SpellBase.GetName(mItem.SpecialAttack.SpellId);
+                    rows.AddKeyValueRow("Special Attack:", attackName, CustomColors.ItemDesc.Special, CustomColors.ItemDesc.Special);
+                }
+
                 // Base Damage:
                 DisplayKeyValueRowWithDifference(GetBaseDamageDifference(), Strings.ItemDescription.BaseDamage, mItem.Damage.ToString(), rows);
 

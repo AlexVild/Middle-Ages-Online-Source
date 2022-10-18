@@ -668,6 +668,16 @@ namespace Intersect.Editor.Forms.Editors
                 chkStackable.Checked = false;
                 chkStackable.Enabled = false;
 
+                if (mEditorItem.SpecialAttack.SpellId != default)
+                {
+                    cmbSpecialAttack.SelectedIndex = SpellBase.ListIndex(mEditorItem.SpecialAttack.SpellId) + 1; // +1 for none
+                }
+                else
+                {
+                    cmbSpecialAttack.SelectedIndex = 0;
+                }
+                nudSpecialAttackChargeTime.Value = mEditorItem.SpecialAttack.ChargeTime;
+
                 RefreshBonusList();
             }
             else if (cmbType.SelectedIndex == (int) ItemTypes.Bag)
@@ -1399,6 +1409,10 @@ namespace Intersect.Editor.Forms.Editors
             var items = ItemBase.Lookup.OrderBy(p => p.Value?.Name).Select(pair => new KeyValuePair<Guid, KeyValuePair<string, string>>(pair.Key,
                 new KeyValuePair<string, string>(((ItemBase)pair.Value)?.Name ?? Models.DatabaseObject<ItemBase>.Deleted, ((ItemBase)pair.Value)?.Folder ?? ""))).ToArray();
             lstGameObjects.Repopulate(items, mFolders, btnAlphabetical.Checked, CustomSearch(), txtSearch.Text);
+
+            cmbSpecialAttack.Items.Clear();
+            cmbSpecialAttack.Items.Add(Strings.General.none);
+            cmbSpecialAttack.Items.AddRange(SpellBase.Names);
         }
 
         private void btnAddFolder_Click(object sender, EventArgs e)
@@ -1694,6 +1708,24 @@ namespace Intersect.Editor.Forms.Editors
                 mEditorItem.Effects.RemoveAt(lstBonusEffects.SelectedIndex);
                 RefreshBonusList();
             }
+        }
+
+        private void nudSpecialAttackChargeTime_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.SpecialAttack.ChargeTime = (long)nudSpecialAttackChargeTime.Value;
+        }
+
+        private void darkComboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmbSpecialAttack.SelectedIndex == 0)
+            {
+                mEditorItem.SpecialAttack.SpellId = Guid.Empty;
+                nudSpecialAttackChargeTime.Enabled = false;
+                return;
+            }
+
+            nudSpecialAttackChargeTime.Enabled = true;
+            mEditorItem.SpecialAttack.SpellId = SpellBase.IdFromList(cmbSpecialAttack.SelectedIndex - 1); // -1 for None
         }
     }
 }

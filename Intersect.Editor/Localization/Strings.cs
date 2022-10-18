@@ -6150,6 +6150,9 @@ Negative values for time to flow backwards.";
             public static LocalizedString FolderPrompt = @"Enter a name for the folder you'd like to add:";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString None = @"None";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString NotFound = @"NOT FOUND";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]

@@ -3344,11 +3344,21 @@ namespace Intersect.Server.Entities
                     {
                         if (Equipment[i] == slot)
                         {
+                            var equip = ItemBase.Get(Items[Equipment[i]].ItemId);
                             Equipment[i] = -1;
                             FixVitals();
                             StartCommonEventsWithTrigger(CommonEventTrigger.EquipChange);
                             PacketSender.SendPlayerEquipmentToProximity(this);
                             PacketSender.SendEntityStats(this);
+
+                            if (equip.SpecialAttack.SpellId != default)
+                            {
+                                var spellSlot = FindSpell(equip.SpecialAttack.SpellId);
+                                if (spellSlot > -1)
+                                {
+                                    ForgetSpell(spellSlot);
+                                }
+                            }
 
                             return;
                         }
@@ -6073,6 +6083,12 @@ namespace Intersect.Server.Entities
                     {
                         Equipment[itemBase.EquipmentSlot] = slot;
                     }
+                }
+
+
+                if (itemBase.SpecialAttack.SpellId != default)
+                {
+                    TryTeachSpell(new Spell(itemBase.SpecialAttack.SpellId), true);
                 }
 
                 FixVitals();
