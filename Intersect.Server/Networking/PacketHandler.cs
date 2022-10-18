@@ -1169,115 +1169,64 @@ namespace Intersect.Server.Networking
 
             player.ClientAttackTimer = clientTime + (long) player.CalculateAttackTime();
 
-            if (Options.WeaponIndex > -1)
+            if (player.TryGetEquippedItem(Options.WeaponIndex, out var equippedWeapon))
             {
-                if (player.Equipment[Options.WeaponIndex] >= 0 &&
-                    ItemBase.Get(player.Items[player.Equipment[Options.WeaponIndex]].ItemId) != null)
+                var weaponItem = equippedWeapon.Descriptor;
+
+                //Check for animation
+                var attackAnim = weaponItem.AttackAnimation;
+
+                if (attackAnim != null && attackingTile.TryFix() && weaponItem.ProjectileId == Guid.Empty)
                 {
+                    PacketSender.SendAnimationToProximity(
+                        attackAnim.Id, -1, player.Id, attackingTile.GetMapId(), attackingTile.GetX(),
+                        attackingTile.GetY(), (sbyte)player.Dir, player.MapInstanceId
+                    );
+                }
 
-                    var weaponItem = ItemBase.Get(player.Items[player.Equipment[Options.WeaponIndex]].ItemId);
+                var projectileBase = ProjectileBase.Get(weaponItem?.ProjectileId ?? Guid.Empty);
 
-                    //Check for animation
-                    var attackAnim = weaponItem.AttackAnimation;
-
-                    if (attackAnim != null && attackingTile.TryFix() && weaponItem.ProjectileId == Guid.Empty)
+                if (projectileBase != null)
+                {
+                    if (projectileBase.AmmoItemId != Guid.Empty)
                     {
-                        PacketSender.SendAnimationToProximity(
-                            attackAnim.Id, -1, player.Id, attackingTile.GetMapId(), attackingTile.GetX(),
-                            attackingTile.GetY(), (sbyte) player.Dir, player.MapInstanceId
+                        var itemSlot = player.FindInventoryItemSlot(
+                            projectileBase.AmmoItemId, projectileBase.AmmoRequired
                         );
-                    }
 
-                    var weaponInvSlot = player.Equipment[Options.WeaponIndex];
-                    var invItem = player.Items[weaponInvSlot];
-                    var weapon = ItemBase.Get(invItem?.ItemId ?? Guid.Empty);
-                    var projectileBase = ProjectileBase.Get(weapon?.ProjectileId ?? Guid.Empty);
-
-                    if (projectileBase != null)
-                    {
-                        if (projectileBase.AmmoItemId != Guid.Empty)
+                        if (itemSlot == null)
                         {
-                            var itemSlot = player.FindInventoryItemSlot(
-                                projectileBase.AmmoItemId, projectileBase.AmmoRequired
+                            PacketSender.SendChatMsg(
+                                player,
+                                Strings.Items.notenough.ToString(ItemBase.GetName(projectileBase.AmmoItemId)),
+                                ChatMessageType.Inventory,
+                                CustomColors.Combat.NoAmmo
                             );
 
-                            if (itemSlot == null)
-                            {
-                                PacketSender.SendChatMsg(
-                                    player,
-                                    Strings.Items.notenough.ToString(ItemBase.GetName(projectileBase.AmmoItemId)),
-                                    ChatMessageType.Inventory,
-                                    CustomColors.Combat.NoAmmo
-                                );
-
-                                return;
-                            }
-#if INTERSECT_DIAGNOSTIC
-                                PacketSender.SendPlayerMsg(client,
-                                    Strings.Get("items", "notenough", $"REGISTERED_AMMO ({projectileBase.Ammo}:'{ItemBase.GetName(projectileBase.Ammo)}':{projectileBase.AmmoRequired})"),
-                                    ChatMessageType.Inventory, CustomColors.NoAmmo);
-#endif
-                            if (!player.TryTakeItem(projectileBase.AmmoItemId, projectileBase.AmmoRequired))
-                            {
-#if INTERSECT_DIAGNOSTIC
-                                    PacketSender.SendPlayerMsg(client,
-                                        Strings.Get("items", "notenough", "FAILED_TO_DEDUCT_AMMO"),
-                                        CustomColors.NoAmmo);
-                                    PacketSender.SendPlayerMsg(client,
-                                        Strings.Get("items", "notenough", $"FAILED_TO_DEDUCT_AMMO {client.Entity.CountItems(projectileBase.Ammo)}"),
-                                        ChatMessageType.Inventory, CustomColors.NoAmmo);
-#endif
-                            }
-                        }
-#if INTERSECT_DIAGNOSTIC
-                            else
-                            {
-                                PacketSender.SendPlayerMsg(client,
-                                    Strings.Get("items", "notenough", "NO_REGISTERED_AMMO"),
-                                    ChatMessageType.Inventory, CustomColors.NoAmmo);
-                            }
-#endif
-                        if (MapController.TryGetInstanceFromMap(player.MapId, player.MapInstanceId, out var mapInstance))
-                        {
-                            mapInstance
-                            .SpawnMapProjectile(
-                                player, projectileBase, null, weaponItem, player.MapId,
-                                (byte)player.X, (byte)player.Y, (byte)player.Z,
-                                (byte)player.Dir, null
-                            );
-
-                            player.AttackTimer = Timing.Global.Milliseconds +
-                                                 latencyAdjustmentMs +
-                                                 player.CalculateAttackTime();
-                        }
-
-                        return;
-                    }
-#if INTERSECT_DIAGNOSTIC
-                        else
-                        {
-                            PacketSender.SendPlayerMsg(client,
-                                Strings.Get("items", "notenough", "NONPROJECTILE"),
-                                ChatMessageType.Inventory, CustomColors.NoAmmo);
                             return;
                         }
-#endif
-                }
-                else
-                {
-                    unequippedAttack = true;
-#if INTERSECT_DIAGNOSTIC
-                        PacketSender.SendPlayerMsg(client,
-                            Strings.Get("items", "notenough", "NO_WEAPON"),
-                            ChatMessageType.Inventory, CustomColors.NoAmmo);
-#endif
+                    }
+                    if (MapController.TryGetInstanceFromMap(player.MapId, player.MapInstanceId, out var mapInstance))
+                    {
+                        mapInstance
+                        .SpawnMapProjectile(
+                            player, projectileBase, null, weaponItem, player.MapId,
+                            (byte)player.X, (byte)player.Y, (byte)player.Z,
+                            (byte)player.Dir, null
+                        );
+
+                        player.AttackTimer = Timing.Global.Milliseconds +
+                                             latencyAdjustmentMs +
+                                             player.CalculateAttackTime();
+                    }
+
+                    return;
                 }
             }
             else
             {
                 unequippedAttack = true;
             }
-
             if (unequippedAttack)
             {
                 var classBase = ClassBase.Get(player.ClassId);
@@ -1288,7 +1237,7 @@ namespace Intersect.Server.Networking
                     {
                         PacketSender.SendAnimationToProximity(
                             classBase.AttackAnimationId, -1, player.Id, attackingTile.GetMapId(), attackingTile.GetX(),
-                            attackingTile.GetY(), (sbyte) player.Dir, player.MapInstanceId
+                            attackingTile.GetY(), (sbyte)player.Dir, player.MapInstanceId
                         );
                     }
                 }
