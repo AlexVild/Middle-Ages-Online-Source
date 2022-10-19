@@ -862,20 +862,20 @@ namespace Intersect.Server.Entities
                                         {
                                             autorunEvents += mapEvent.Pages.Count(p => p.Trigger == EventTrigger.Autorun);
                                         }
-
-                                        while (_queueStartCommonEvent.TryDequeue(out var startCommonEventMetadata))
-                                        {
-                                            _ = UnsafeStartCommonEvent(
-                                                startCommonEventMetadata.EventDescriptor,
-                                                startCommonEventMetadata.Trigger,
-                                                startCommonEventMetadata.Command,
-                                                startCommonEventMetadata.Parameter,
-                                                startCommonEventMetadata.Value
-                                            );
-                                        }
                                     }
                                 }
                                 MapAutorunEvents = autorunEvents;
+
+                                while (_queueStartCommonEvent.TryDequeue(out var startCommonEventMetadata))
+                                {
+                                    _ = UnsafeStartCommonEvent(
+                                        startCommonEventMetadata.EventDescriptor,
+                                        startCommonEventMetadata.Trigger,
+                                        startCommonEventMetadata.Command,
+                                        startCommonEventMetadata.Parameter,
+                                        startCommonEventMetadata.Value
+                                    );
+                                }
                             }
                         }
                     }
@@ -3340,7 +3340,7 @@ namespace Intersect.Server.Entities
                 // (Need this for silly devs who give people items and then later add restrictions...)
                 if (itemBase.ItemType == ItemTypes.Equipment && SlotIsEquipped(slot, out var equippedSlot))
                 {
-                    if (TryGetEquippedItem(equippedSlot, out var equippedItem) && equippedItem.Descriptor?.SpecialAttack?.SpellId != default)
+                    if (TryGetEquippedItem(equippedSlot, out var equippedItem) && equippedItem.Descriptor?.SpecialAttack?.SpellId != Guid.Empty)
                     {
                         var spellSlot = FindSpell(equippedItem.Descriptor.SpecialAttack.SpellId);
                         if (spellSlot > -1)

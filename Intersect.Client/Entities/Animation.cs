@@ -471,7 +471,7 @@ namespace Intersect.Client.Entities
             if (animBase != null)
             {
                 int thresh = animBase.BrightnessThreshold;
-                return thresh >= Graphics.BrightnessLevel;
+                return thresh >= (Graphics.BrightnessLevel / 255) * 100;
             } else
             {
                 return false;

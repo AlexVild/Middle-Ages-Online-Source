@@ -1227,6 +1227,7 @@ namespace Intersect.Server.Networking
             {
                 unequippedAttack = true;
             }
+            
             if (unequippedAttack)
             {
                 var classBase = ClassBase.Get(player.ClassId);
