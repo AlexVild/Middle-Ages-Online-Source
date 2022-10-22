@@ -151,14 +151,21 @@ namespace Intersect.Editor.Forms.Editors
             {
                 pnlContainer.Show();
                 txtName.Text = mEditorItem.Name;
-                nudAttack.Value = mEditorItem.BaseStat[(int) Stats.Attack];
+                nudBluntAttack.Value = mEditorItem.BaseStat[(int) Stats.Attack];
                 nudMag.Value = mEditorItem.BaseStat[(int) Stats.AbilityPower];
-                nudDef.Value = mEditorItem.BaseStat[(int) Stats.Defense];
+                nudBluntRes.Value = mEditorItem.BaseStat[(int) Stats.Defense];
                 nudMR.Value = mEditorItem.BaseStat[(int) Stats.MagicResist];
                 nudSpd.Value = mEditorItem.BaseStat[(int) Stats.Speed];
                 nudBaseHP.Value = Math.Max(
                     Math.Min(mEditorItem.BaseVital[(int) Vitals.Health], nudBaseHP.Maximum), nudBaseHP.Minimum
                 );
+
+                nudSlashAtk.Value = mEditorItem.BaseStat[(int)Stats.SlashAttack];
+                nudSlashRes.Value = mEditorItem.BaseStat[(int)Stats.SlashResistance];
+                nudPierceAttack.Value = mEditorItem.BaseStat[(int)Stats.PierceAttack];
+                nudPierceRes.Value = mEditorItem.BaseStat[(int)Stats.PierceResistance];
+                nudEvasion.Value = mEditorItem.BaseStat[(int)Stats.Evasion];
+                nudAccuracy.Value = mEditorItem.BaseStat[(int)Stats.Accuracy];
 
                 nudBaseMana.Value = mEditorItem.BaseVital[(int) Vitals.Mana];
                 nudPoints.Value = mEditorItem.BasePoints;
@@ -304,11 +311,17 @@ namespace Intersect.Editor.Forms.Editors
                 cmbScalingStat.Items.Add(Globals.GetStatName(x));
             }
 
-            nudAttack.Maximum = Options.MaxStatValue;
+            nudBluntAttack.Maximum = Options.MaxStatValue;
             nudMag.Maximum = Options.MaxStatValue;
-            nudDef.Maximum = Options.MaxStatValue;
+            nudBluntRes.Maximum = Options.MaxStatValue;
             nudMR.Maximum = Options.MaxStatValue;
             nudSpd.Maximum = Options.MaxStatValue;
+            nudSlashAtk.Maximum = Options.MaxStatValue;
+            nudSlashRes.Maximum = Options.MaxStatValue;
+            nudPierceAttack.Maximum = Options.MaxStatValue;
+            nudPierceRes.Maximum = Options.MaxStatValue;
+            nudAccuracy.Maximum = Options.MaxStatValue;
+            nudEvasion.Maximum = Options.MaxStatValue;
 
             InitLocalization();
             UpdateEditor();
@@ -361,11 +374,6 @@ namespace Intersect.Editor.Forms.Editors
             grpBaseStats.Text = Strings.ClassEditor.basestats;
             lblHP.Text = Strings.ClassEditor.basehp;
             lblMana.Text = Strings.ClassEditor.basemp;
-            lblAttack.Text = Strings.ClassEditor.baseattack;
-            lblDef.Text = Strings.ClassEditor.basearmor;
-            lblSpd.Text = Strings.ClassEditor.basespeed;
-            lblMag.Text = Strings.ClassEditor.baseabilitypower;
-            lblMR.Text = Strings.ClassEditor.basemagicresist;
             lblPoints.Text = Strings.ClassEditor.basepoints;
 
             grpSpells.Text = Strings.ClassEditor.learntspells;
@@ -753,31 +761,43 @@ namespace Intersect.Editor.Forms.Editors
             {
                 nudHpIncrease.Maximum = 10000;
                 nudMpIncrease.Maximum = 10000;
-                nudStrengthIncrease.Maximum = Options.MaxStatValue;
-                nudArmorIncrease.Maximum = Options.MaxStatValue;
+                nudBluntAtkIncrease.Maximum = Options.MaxStatValue;
+                nudBluntResIncrease.Maximum = Options.MaxStatValue;
                 nudMagicIncrease.Maximum = Options.MaxStatValue;
                 nudMagicResistIncrease.Maximum = Options.MaxStatValue;
                 nudSpeedIncrease.Maximum = Options.MaxStatValue;
+                nudSlashAtkIncrease.Maximum = Options.MaxStatValue;
+                nudSlashResIncrease.Maximum = Options.MaxStatValue;
+                nudPierceAtkIncrease.Maximum = Options.MaxStatValue;
+                nudPierceResIncrease.Maximum = Options.MaxStatValue;
+                nudAccuracyIncrease.Maximum = Options.MaxStatValue;
+                nudEvasionIncrease.Maximum = Options.MaxStatValue;
             }
             else
             {
                 nudHpIncrease.Maximum = 100;
                 nudMpIncrease.Maximum = 100;
-                nudStrengthIncrease.Maximum = 100;
-                nudArmorIncrease.Maximum = 100;
+                nudBluntAtkIncrease.Maximum = 100;
+                nudBluntResIncrease.Maximum = 100;
                 nudMagicIncrease.Maximum = 100;
                 nudMagicResistIncrease.Maximum = 100;
                 nudSpeedIncrease.Maximum = 100;
+                nudSlashAtkIncrease.Maximum = 100;
+                nudSlashResIncrease.Maximum = 100;
+                nudPierceAtkIncrease.Maximum = 100;
+                nudPierceResIncrease.Maximum = 100;
+                nudAccuracyIncrease.Maximum = 100;
+                nudEvasionIncrease.Maximum = 100;
             }
 
             nudHpIncrease.Value = Math.Min(nudHpIncrease.Maximum, mEditorItem.VitalIncrease[(int) Vitals.Health]);
             nudMpIncrease.Value = Math.Min(nudMpIncrease.Maximum, mEditorItem.VitalIncrease[(int) Vitals.Mana]);
 
-            nudStrengthIncrease.Value = Math.Min(
-                nudStrengthIncrease.Maximum, mEditorItem.StatIncrease[(int) Stats.Attack]
+            nudBluntAtkIncrease.Value = Math.Min(
+                nudBluntAtkIncrease.Maximum, mEditorItem.StatIncrease[(int) Stats.Attack]
             );
 
-            nudArmorIncrease.Value = Math.Min(nudArmorIncrease.Maximum, mEditorItem.StatIncrease[(int) Stats.Defense]);
+            nudBluntResIncrease.Value = Math.Min(nudBluntResIncrease.Maximum, mEditorItem.StatIncrease[(int) Stats.Defense]);
             nudMagicIncrease.Value = Math.Min(
                 nudMagicIncrease.Maximum, mEditorItem.StatIncrease[(int) Stats.AbilityPower]
             );
@@ -787,6 +807,30 @@ namespace Intersect.Editor.Forms.Editors
             );
 
             nudSpeedIncrease.Value = Math.Min(nudSpeedIncrease.Maximum, mEditorItem.StatIncrease[(int) Stats.Speed]);
+
+            nudSlashAtkIncrease.Value = Math.Min(
+                nudSlashAtkIncrease.Maximum, mEditorItem.StatIncrease[(int)Stats.SlashAttack]
+            );
+
+            nudSlashResIncrease.Value = Math.Min(
+                nudSlashResIncrease.Maximum, mEditorItem.StatIncrease[(int)Stats.SlashResistance]
+            );
+
+            nudPierceAtkIncrease.Value = Math.Min(
+                nudPierceAtkIncrease.Maximum, mEditorItem.StatIncrease[(int)Stats.PierceAttack]
+            );
+
+            nudPierceResIncrease.Value = Math.Min(
+                nudPierceResIncrease.Maximum, mEditorItem.StatIncrease[(int)Stats.PierceResistance]
+            );
+
+            nudAccuracyIncrease.Value = Math.Min(
+                nudAccuracyIncrease.Maximum, mEditorItem.StatIncrease[(int)Stats.Accuracy]
+            );
+
+            nudEvasionIncrease.Value = Math.Min(
+                nudEvasionIncrease.Maximum, mEditorItem.StatIncrease[(int)Stats.Evasion]
+            );
 
             lblHpIncrease.Text = Strings.ClassEditor.hpboost.ToString(
                 rdoStaticIncrease.Checked ? "" : Strings.ClassEditor.boostpercent.ToString()
@@ -955,7 +999,7 @@ namespace Intersect.Editor.Forms.Editors
 
         private void nudStr_ValueChanged(object sender, EventArgs e)
         {
-            mEditorItem.BaseStat[(int) Stats.Attack] = (int) nudAttack.Value;
+            mEditorItem.BaseStat[(int) Stats.Attack] = (int) nudBluntAttack.Value;
         }
 
         private void nudMag_ValueChanged(object sender, EventArgs e)
@@ -965,7 +1009,7 @@ namespace Intersect.Editor.Forms.Editors
 
         private void nudDef_ValueChanged(object sender, EventArgs e)
         {
-            mEditorItem.BaseStat[(int) Stats.Defense] = (int) nudDef.Value;
+            mEditorItem.BaseStat[(int) Stats.Defense] = (int) nudBluntRes.Value;
         }
 
         private void nudMR_ValueChanged(object sender, EventArgs e)
@@ -1032,7 +1076,7 @@ namespace Intersect.Editor.Forms.Editors
 
         private void nudArmorIncrease_ValueChanged(object sender, EventArgs e)
         {
-            mEditorItem.StatIncrease[(int) Stats.Defense] = (int) nudArmorIncrease.Value;
+            mEditorItem.StatIncrease[(int) Stats.Defense] = (int) nudBluntResIncrease.Value;
             UpdateIncreases();
         }
 
@@ -1044,7 +1088,7 @@ namespace Intersect.Editor.Forms.Editors
 
         private void nudStrengthIncrease_ValueChanged(object sender, EventArgs e)
         {
-            mEditorItem.StatIncrease[(int) Stats.Attack] = (int) nudStrengthIncrease.Value;
+            mEditorItem.StatIncrease[(int) Stats.Attack] = (int) nudBluntAtkIncrease.Value;
             UpdateIncreases();
         }
 
@@ -1525,6 +1569,71 @@ namespace Intersect.Editor.Forms.Editors
 
         #endregion
 
+        private void nudSlashAtk_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.BaseStat[(int)Stats.SlashAttack] = (int)nudSlashAtk.Value;
+        }
+
+        private void nudPierceAttack_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.BaseStat[(int)Stats.PierceAttack] = (int)nudPierceAttack.Value;
+        }
+
+        private void nudSlashRes_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.BaseStat[(int)Stats.SlashResistance] = (int)nudSlashRes.Value;
+        }
+
+        private void nudPierceRes_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.BaseStat[(int)Stats.PierceResistance] = (int)nudPierceRes.Value;
+        }
+
+        private void nudAccuracy_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.BaseStat[(int)Stats.Accuracy] = (int)nudAccuracy.Value;
+        }
+
+        private void nudEvasion_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.BaseStat[(int)Stats.Evasion] = (int)nudEvasion.Value;
+        }
+
+        private void darkNumericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.StatIncrease[(int)Stats.SlashAttack] = (int)nudSlashAtkIncrease.Value;
+            UpdateIncreases();
+        }
+
+        private void nudPierceAtkIncrease_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.StatIncrease[(int)Stats.PierceAttack] = (int)nudPierceAtkIncrease.Value;
+            UpdateIncreases();
+        }
+
+        private void nudPierceResIncrease_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.StatIncrease[(int)Stats.PierceResistance] = (int)nudPierceResIncrease.Value;
+            UpdateIncreases();
+        }
+
+        private void nudSlashResIncrease_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.StatIncrease[(int)Stats.SlashResistance] = (int)nudSlashResIncrease.Value;
+            UpdateIncreases();
+        }
+
+        private void nudAccuracyIncrease_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.StatIncrease[(int)Stats.Accuracy] = (int)nudAccuracyIncrease.Value;
+            UpdateIncreases();
+        }
+
+        private void nudEvasionIncrease_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.StatIncrease[(int)Stats.Evasion] = (int)nudEvasionIncrease.Value;
+            UpdateIncreases();
+        }
     }
 
 }

@@ -4,15 +4,27 @@ namespace Intersect.Enums
     public enum Stats
     {
 
-        Attack = 0,
+        Attack = 0, // Blunt Attack
 
-        AbilityPower,
-
-        Defense,
+        AbilityPower, // Magic Attack
+        
+        Defense, // Blunt Resistance
 
         MagicResist,
 
         Speed,
+
+        SlashAttack,
+
+        SlashResistance,
+
+        PierceAttack,
+
+        PierceResistance,
+
+        Evasion,
+
+        Accuracy,
 
         StatCount
 

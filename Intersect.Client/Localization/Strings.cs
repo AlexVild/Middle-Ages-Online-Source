@@ -1087,7 +1087,13 @@ namespace Intersect.Client.Localization
                 {1, @"Ability Power"},
                 {2, @"Physical Defense"},
                 {3, @"Magic Defense"},
-                {4, @"Agility"}
+                {4, @"Agility"},
+                {5, @"Slash Attack"},
+                {6, @"Slash Resistance"},
+                {7, @"Pierce Attack"},
+                {8, @"Pierce Resistance"},
+                {9, @"Evasion"},
+                {10, @"Accuracy"},
             };
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -1097,7 +1103,13 @@ namespace Intersect.Client.Localization
                 {1, @"Ability Power:"},
                 {2, @"Physical Defense:"},
                 {3, @"Magic Defense:"},
-                {4, @"Agility:"}
+                {4, @"Agility:"},
+                {5, @"Slash Attack:"},
+                {6, @"Slash Resistance:"},
+                {7, @"Pierce Attack:"},
+                {8, @"Pierce Resistance:"},
+                {9, @"Evasion:"},
+                {10, @"Accuracy:"},
             };
             
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -1967,7 +1979,13 @@ namespace Intersect.Client.Localization
                 {1, @"Ability Power"},
                 {2, @"Physical Defense"},
                 {3, @"Magic Defense"},
-                {4, @"Agility"}
+                {4, @"Agility"},
+                {5, @"Slash Attack"},
+                {6, @"Slash Resistance"},
+                {7, @"Pierce Attack"},
+                {8, @"Pierce Resistance"},
+                {9, @"Evasion"},
+                {10, @"Accuracy"},
             };
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -2028,7 +2046,13 @@ namespace Intersect.Client.Localization
                 {1, @"Ability Power:"},
                 {2, @"Physical Defense:"},
                 {3, @"Magic Defense:"},
-                {4, @"Agility:"}
+                {4, @"Agility:"},
+                {5, @"Slash Attack"},
+                {6, @"Slash Resistance"},
+                {7, @"Pierce Attack"},
+                {8, @"Pierce Resistance"},
+                {9, @"Evasion"},
+                {10, @"Accuracy"},
             };
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]

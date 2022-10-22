@@ -342,11 +342,17 @@ namespace Intersect.Server.Localization
             public readonly LocaleDictionary<int, LocalizedString> stats = new LocaleDictionary<int, LocalizedString>(
                 new Dictionary<int, LocalizedString>
                 {
-                    {0, @"Attack"},
-                    {1, @"Ability Power"},
-                    {2, @"Defense"},
-                    {3, @"Magic Resist"},
-                    {4, @"Speed"}
+                    {0, @"Blunt Attack"},
+                    {1, @"Magic Attack"},
+                    {2, @"Blunt Defense"},
+                    {3, @"Magic Resistance"},
+                    {4, @"Speed"},
+                    {5, @"Slash Attack"},
+                    {6, @"Slash Resistance"},
+                    {7, @"Pierce Attack"},
+                    {8, @"Pierce Resistance"},
+                    {9, @"Evasion"},
+                    {10, @"Accuracy"},
                 }
             );
 
