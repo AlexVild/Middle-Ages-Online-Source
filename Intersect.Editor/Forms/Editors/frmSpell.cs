@@ -314,6 +314,7 @@ namespace Intersect.Editor.Forms.Editors
                 txtCannotCast.Text = mEditorItem.CannotCastMessage;
 
                 UpdateSpellTypePanels();
+
                 if (mChanged.IndexOf(mEditorItem) == -1)
                 {
                     mChanged.Add(mEditorItem);
@@ -362,12 +363,24 @@ namespace Intersect.Editor.Forms.Editors
                 nudSpd.Value = mEditorItem.Combat.StatDiff[(int) Stats.Speed];
                 nudMag.Value = mEditorItem.Combat.StatDiff[(int) Stats.AbilityPower];
                 nudMR.Value = mEditorItem.Combat.StatDiff[(int) Stats.MagicResist];
+                nudSlash.Value = mEditorItem.Combat.StatDiff[(int)Stats.SlashAttack];
+                nudSlashResist.Value = mEditorItem.Combat.StatDiff[(int)Stats.SlashResistance];
+                nudPierce.Value = mEditorItem.Combat.StatDiff[(int)Stats.PierceAttack];
+                nudPiercePercentage.Value = mEditorItem.Combat.StatDiff[(int)Stats.PierceResistance];
+                nudAccuracy.Value = mEditorItem.Combat.StatDiff[(int)Stats.Accuracy];
+                nudEvasion.Value = mEditorItem.Combat.StatDiff[(int)Stats.Evasion];
 
                 nudStrPercentage.Value = mEditorItem.Combat.PercentageStatDiff[(int) Stats.Attack];
                 nudDefPercentage.Value = mEditorItem.Combat.PercentageStatDiff[(int) Stats.Defense];
                 nudMagPercentage.Value = mEditorItem.Combat.PercentageStatDiff[(int) Stats.AbilityPower];
                 nudMRPercentage.Value = mEditorItem.Combat.PercentageStatDiff[(int) Stats.MagicResist];
                 nudSpdPercentage.Value = mEditorItem.Combat.PercentageStatDiff[(int) Stats.Speed];
+                nudSlashPercentage.Value = mEditorItem.Combat.PercentageStatDiff[(int)Stats.SlashAttack];
+                nudSlashResistPercentage.Value = mEditorItem.Combat.PercentageStatDiff[(int)Stats.SlashResistance];
+                nudPiercePercentage.Value = mEditorItem.Combat.PercentageStatDiff[(int)Stats.PierceAttack];
+                nudPierceResistPercentage.Value = mEditorItem.Combat.PercentageStatDiff[(int)Stats.PierceResistance];
+                nudAccuracyPercentage.Value = mEditorItem.Combat.PercentageStatDiff[(int)Stats.Accuracy];
+                nudEvasionPercentage.Value = mEditorItem.Combat.PercentageStatDiff[(int)Stats.Evasion];
 
                 chkFriendly.Checked = Convert.ToBoolean(mEditorItem.Combat.Friendly);
                 chkInheritStats.Checked = Convert.ToBoolean(mEditorItem.WeaponSpell);
@@ -382,6 +395,8 @@ namespace Intersect.Editor.Forms.Editors
                 nudTick.Value = mEditorItem.Combat.HotDotInterval;
                 cmbExtraEffect.SelectedIndex = (int) mEditorItem.Combat.Effect;
                 cmbExtraEffect_SelectedIndexChanged(null, null);
+
+                PopulateDamageTypes();
             }
             else if (cmbType.SelectedIndex == (int) SpellTypes.Warp)
             {
@@ -1197,6 +1212,157 @@ namespace Intersect.Editor.Forms.Editors
             {
                 return;
             }
+        }
+
+        private void PopulateDamageTypes()
+        {
+            chkDamageBlunt.Checked = false;
+            chkDamagePierce.Checked = false;
+            chkDamageSlash.Checked = false;
+            chkDamageMagic.Checked = false;
+
+            foreach (var type in mEditorItem.Combat.DamageTypes)
+            {
+                switch (type)
+                {
+                    case AttackTypes.Blunt:
+                        chkDamageBlunt.Checked = true;
+                        break;
+                    case AttackTypes.Slashing:
+                        chkDamageSlash.Checked = true;
+                        break;
+                    case AttackTypes.Magic:
+                        chkDamageMagic.Checked = true;
+                        break;
+                    case AttackTypes.Piercing:
+                        chkDamagePierce.Checked = true;
+                        break;
+                }
+
+            }
+        }
+
+        private void AddDamageType(AttackTypes type)
+        {
+            if (mEditorItem.Combat.DamageTypes.Contains(type))
+            {
+                return;
+            }
+
+            mEditorItem.Combat.DamageTypes.Add(type);
+        }
+
+        private void RemoveDamageType(AttackTypes type)
+        {
+            mEditorItem.Combat.DamageTypes.Remove(type);
+        }
+
+        private void chkDamageBlunt_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkDamageBlunt.Checked)
+            {
+                AddDamageType(AttackTypes.Blunt);
+            }
+            else
+            {
+                RemoveDamageType(AttackTypes.Blunt);
+            }
+        }
+
+        private void chkDamageSlash_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkDamageSlash.Checked)
+            {
+                AddDamageType(AttackTypes.Slashing);
+            }
+            else
+            {
+                RemoveDamageType(AttackTypes.Slashing);
+            }
+        }
+
+        private void chkDamagePierce_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkDamagePierce.Checked)
+            {
+                AddDamageType(AttackTypes.Piercing);
+            }
+            else
+            {
+                RemoveDamageType(AttackTypes.Piercing);
+            }
+        }
+
+        private void chkDamageMagic_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkDamageMagic.Checked)
+            {
+                AddDamageType(AttackTypes.Magic);
+            }
+            else
+            {
+                RemoveDamageType(AttackTypes.Magic);
+            }
+        }
+
+        private void nudSlash_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.StatDiff[(int)Stats.SlashAttack] = (int)nudSlash.Value;
+        }
+
+        private void nudSlashPercentage_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.PercentageStatDiff[(int)Stats.SlashAttack] = (int)nudSlashPercentage.Value;
+        }
+
+        private void nudSlashResist_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.StatDiff[(int)Stats.SlashResistance] = (int)nudSlashResist.Value;
+        }
+
+        private void nudSlashResistPercentage_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.PercentageStatDiff[(int)Stats.SlashResistance] = (int)nudSlashResistPercentage.Value;
+        }
+
+        private void nudPierce_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.StatDiff[(int)Stats.PierceAttack] = (int)nudPierce.Value;
+        }
+
+        private void nudPiercePercentage_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.PercentageStatDiff[(int)Stats.PierceAttack] = (int)nudPiercePercentage.Value;
+        }
+
+        private void nudPierceResist_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.StatDiff[(int)Stats.PierceResistance] = (int)nudPierceResist.Value;
+        }
+
+        private void nudPierceResistPercentage_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.PercentageStatDiff[(int)Stats.PierceResistance] = (int)nudPierceResistPercentage.Value;
+        }
+
+        private void nudAccuracy_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.StatDiff[(int)Stats.Accuracy] = (int)nudAccuracy.Value;
+        }
+
+        private void nudAccuracyPercentage_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.PercentageStatDiff[(int)Stats.Accuracy] = (int)nudAccuracyPercentage.Value;
+        }
+
+        private void nudEvasion_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.StatDiff[(int)Stats.Evasion] = (int)nudEvasion.Value;
+        }
+
+        private void nudEvasionPercentage_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.PercentageStatDiff[(int)Stats.Evasion] = (int)nudEvasionPercentage.Value;
         }
     }
 
