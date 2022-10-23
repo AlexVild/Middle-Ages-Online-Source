@@ -225,11 +225,6 @@ namespace Intersect.Editor.Forms.Editors
             lblOTanimationDisclaimer.Text = Strings.SpellEditor.overTimeDisclaimer1 + Strings.General.none + Strings.SpellEditor.overTimeDisclaimer2;
 
             grpStats.Text = Strings.SpellEditor.stats;
-            lblStr.Text = Strings.SpellEditor.attack;
-            lblDef.Text = Strings.SpellEditor.defense;
-            lblSpd.Text = Strings.SpellEditor.speed;
-            lblMag.Text = Strings.SpellEditor.abilitypower;
-            lblMR.Text = Strings.SpellEditor.magicresist;
 
             grpEffectDuration.Text = Strings.SpellEditor.boostduration;
             lblBuffDuration.Text = Strings.SpellEditor.duration;

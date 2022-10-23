@@ -191,11 +191,6 @@ namespace Intersect.Editor.Forms.Editors
             grpStats.Text = Strings.NpcEditor.stats;
             lblHP.Text = Strings.NpcEditor.hp;
             lblMana.Text = Strings.NpcEditor.mana;
-            lblStr.Text = Strings.NpcEditor.attack;
-            lblDef.Text = Strings.NpcEditor.defense;
-            lblSpd.Text = Strings.NpcEditor.speed;
-            lblMag.Text = Strings.NpcEditor.abilitypower;
-            lblMR.Text = Strings.NpcEditor.magicresist;
             lblExp.Text = Strings.NpcEditor.exp;
 
             grpRegen.Text = Strings.NpcEditor.regen;
@@ -327,11 +322,20 @@ namespace Intersect.Editor.Forms.Editors
                 nudDef.Value = mEditorItem.Stats[(int) Stats.Defense];
                 nudMR.Value = mEditorItem.Stats[(int) Stats.MagicResist];
                 nudSpd.Value = mEditorItem.Stats[(int) Stats.Speed];
+                nudSlash.Value = mEditorItem.Stats[(int)Stats.SlashAttack];
+                nudSlashResist.Value = mEditorItem.Stats[(int)Stats.SlashResistance];
+                nudPierce.Value = mEditorItem.Stats[(int)Stats.PierceAttack];
+                nudPierceResist.Value = mEditorItem.Stats[(int)Stats.PierceResistance];
+                nudAccuracy.Value = mEditorItem.Stats[(int)Stats.Accuracy];
+                nudEvasion.Value = mEditorItem.Stats[(int)Stats.Evasion];
+
                 nudHp.Value = mEditorItem.MaxVital[(int) Vitals.Health];
                 nudMana.Value = mEditorItem.MaxVital[(int) Vitals.Mana];
                 nudExp.Value = mEditorItem.Experience;
                 chkAttackAllies.Checked = mEditorItem.AttackAllies;
                 chkEnabled.Checked = mEditorItem.NpcVsNpcEnabled;
+
+                PopulateDamageTypes();
 
                 //Combat
                 nudDamage.Value = mEditorItem.Damage;
@@ -1347,6 +1351,132 @@ namespace Intersect.Editor.Forms.Editors
         private void chkConfused_CheckedChanged(object sender, EventArgs e)
         {
             mEditorItem.Immunities[Immunities.Confused] = chkConfused.Checked;
+        }
+
+        private void lblSpd_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void nudSlash_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Stats[(int)Stats.SlashAttack] = (int)nudSlash.Value;
+        }
+
+        private void nudSlashResist_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Stats[(int)Stats.SlashResistance] = (int)nudSlashResist.Value;
+        }
+
+        private void nudPierce_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Stats[(int)Stats.PierceAttack] = (int)nudPierce.Value;
+        }
+
+        private void nudPierceResist_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Stats[(int)Stats.PierceResistance] = (int)nudPierceResist.Value;
+        }
+
+        private void nudAccuracy_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Stats[(int)Stats.Accuracy] = (int)nudAccuracy.Value;
+        }
+
+        private void nudEvasion_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Stats[(int)Stats.Evasion] = (int)nudEvasion.Value;
+        }
+
+        private void PopulateDamageTypes()
+        {
+            chkDamageBlunt.Checked = false;
+            chkDamagePierce.Checked = false;
+            chkDamageSlash.Checked = false;
+            chkDamageMagic.Checked = false;
+
+            foreach (var type in mEditorItem.AttackTypes)
+            {
+                switch (type)
+                {
+                    case AttackTypes.Blunt:
+                        chkDamageBlunt.Checked = true;
+                        break;
+                    case AttackTypes.Slashing:
+                        chkDamageSlash.Checked = true;
+                        break;
+                    case AttackTypes.Magic:
+                        chkDamageMagic.Checked = true;
+                        break;
+                    case AttackTypes.Piercing:
+                        chkDamagePierce.Checked = true;
+                        break;
+                }
+
+            }
+        }
+
+        private void AddDamageType(AttackTypes type)
+        {
+            if (mEditorItem.AttackTypes.Contains(type))
+            {
+                return;
+            }
+
+            mEditorItem.AttackTypes.Add(type);
+        }
+
+        private void RemoveDamageType(AttackTypes type)
+        {
+            mEditorItem.AttackTypes.Remove(type);
+        }
+
+        private void chkDamageBlunt_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkDamageBlunt.Checked)
+            {
+                AddDamageType(AttackTypes.Blunt);
+            }
+            else
+            {
+                RemoveDamageType(AttackTypes.Blunt);
+            }
+        }
+
+        private void chkDamageSlash_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkDamageSlash.Checked)
+            {
+                AddDamageType(AttackTypes.Slashing);
+            }
+            else
+            {
+                RemoveDamageType(AttackTypes.Slashing);
+            }
+        }
+
+        private void chkDamagePierce_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkDamagePierce.Checked)
+            {
+                AddDamageType(AttackTypes.Piercing);
+            }
+            else
+            {
+                RemoveDamageType(AttackTypes.Piercing);
+            }
+        }
+
+        private void chkDamageMagic_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkDamageMagic.Checked)
+            {
+                AddDamageType(AttackTypes.Magic);
+            }
+            else
+            {
+                RemoveDamageType(AttackTypes.Magic);
+            }
         }
     }
 

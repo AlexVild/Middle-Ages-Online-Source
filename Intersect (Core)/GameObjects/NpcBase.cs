@@ -378,6 +378,17 @@ namespace Intersect.GameObjects
         }
 
         public double TertiaryChance { get; set; } = 0.0;
+
+        [NotMapped]
+        public List<AttackTypes> AttackTypes { get; set; }
+
+        [Column("AttackTypes")]
+        [JsonIgnore]
+        public string AttackTypesJson
+        {
+            get => JsonConvert.SerializeObject(AttackTypes);
+            set => AttackTypes = JsonConvert.DeserializeObject<List<AttackTypes>>(value ?? "") ?? new List<AttackTypes>();
+        }
     }
 
 }
