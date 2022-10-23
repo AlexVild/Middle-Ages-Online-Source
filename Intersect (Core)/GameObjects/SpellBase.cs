@@ -207,6 +207,17 @@ namespace Intersect.GameObjects
 
         public int DamageType { get; set; } = 1;
 
+        [NotMapped]
+        public List<AttackTypes> DamageTypes { get; set; }
+
+        [Column("AttackTypes")]
+        [JsonIgnore]
+        public string DamageTypesJson
+        {
+            get => JsonConvert.SerializeObject(DamageTypes);
+            set => DamageTypes = JsonConvert.DeserializeObject<List<AttackTypes>>(value ?? "") ?? new List<AttackTypes>();
+        }
+
         public int HitRadius { get; set; }
 
         public bool Friendly { get; set; }

@@ -30,4 +30,15 @@ namespace Intersect.Enums
 
     }
 
+    /// <summary>
+    /// A convenience mapping from an attack type to a stat
+    /// </summary>
+    public enum AttackTypes
+    {
+        Blunt = 0,
+        Magic = 1,
+        Slashing = 5,
+        Piercing = 7,
+    }
+
 }

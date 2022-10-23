@@ -917,6 +917,10 @@
     <Compile Include="Migrations\Game\20221018141529_SpecialAttackMigration.designer.cs">
       <DependentUpon>20221018141529_SpecialAttackMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20221023144746_MultipleDamageTypesMigration.cs" />
+    <Compile Include="Migrations\Game\20221023144746_MultipleDamageTypesMigration.designer.cs">
+      <DependentUpon>20221023144746_MultipleDamageTypesMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

@@ -253,11 +253,6 @@ namespace Intersect.Editor.Forms.Editors
             grpEquipment.Text = Strings.ItemEditor.equipment;
             lblEquipmentSlot.Text = Strings.ItemEditor.slot;
             grpStatBonuses.Text = Strings.ItemEditor.bonuses;
-            lblStr.Text = Strings.ItemEditor.attackbonus;
-            lblDef.Text = Strings.ItemEditor.defensebonus;
-            lblSpd.Text = Strings.ItemEditor.speedbonus;
-            lblMag.Text = Strings.ItemEditor.abilitypowerbonus;
-            lblMR.Text = Strings.ItemEditor.magicresistbonus;
             lblRange.Text = Strings.ItemEditor.bonusrange;
             lblBonusEffect.Text = Strings.ItemEditor.bonuseffect;
             lblEffectPercent.Text = Strings.ItemEditor.bonusamount;
@@ -393,12 +388,24 @@ namespace Intersect.Editor.Forms.Editors
                 nudDef.Value = mEditorItem.StatsGiven[2];
                 nudMR.Value = mEditorItem.StatsGiven[3];
                 nudSpd.Value = mEditorItem.StatsGiven[4];
+                nudSlash.Value = mEditorItem.StatsGiven[(int)Stats.SlashAttack];
+                nudSlashResist.Value = mEditorItem.StatsGiven[(int)Stats.SlashResistance];
+                nudPierce.Value = mEditorItem.StatsGiven[(int)Stats.PierceAttack];
+                nudPierceResist.Value = mEditorItem.StatsGiven[(int)Stats.PierceResistance];
+                nudAccuracy.Value = mEditorItem.StatsGiven[(int)Stats.Accuracy];
+                nudEvasion.Value = mEditorItem.StatsGiven[(int)Stats.Evasion];
 
                 nudStrPercentage.Value = mEditorItem.PercentageStatsGiven[0];
                 nudMagPercentage.Value = mEditorItem.PercentageStatsGiven[1];
                 nudDefPercentage.Value = mEditorItem.PercentageStatsGiven[2];
                 nudMRPercentage.Value = mEditorItem.PercentageStatsGiven[3];
                 nudSpdPercentage.Value = mEditorItem.PercentageStatsGiven[4];
+                nudSlashPercentage.Value = mEditorItem.PercentageStatsGiven[(int)Stats.SlashAttack];
+                nudSlashResistPercentage.Value = mEditorItem.PercentageStatsGiven[(int)Stats.SlashResistance];
+                nudPiercePercentage.Value = mEditorItem.PercentageStatsGiven[(int)Stats.PierceAttack];
+                nudPierceResistPercentage.Value = mEditorItem.PercentageStatsGiven[(int)Stats.PierceResistance];
+                nudAccuracyPercent.Value = mEditorItem.PercentageStatsGiven[(int)Stats.Accuracy];
+                nudEvasionPercent.Value = mEditorItem.PercentageStatsGiven[(int)Stats.Evasion];
 
                 nudHealthBonus.Value = mEditorItem.VitalsGiven[0];
                 nudManaBonus.Value = mEditorItem.VitalsGiven[1];
@@ -406,6 +413,8 @@ namespace Intersect.Editor.Forms.Editors
                 nudMPPercentage.Value = mEditorItem.PercentageVitalsGiven[1];
                 nudHPRegen.Value = mEditorItem.VitalsRegen[0];
                 nudMpRegen.Value = mEditorItem.VitalsRegen[1];
+
+                PopulateDamageTypes();
 
                 nudDamage.Value = mEditorItem.Damage;
                 nudCritChance.Value = mEditorItem.CritChance;
@@ -1726,6 +1735,187 @@ namespace Intersect.Editor.Forms.Editors
 
             nudSpecialAttackChargeTime.Enabled = true;
             mEditorItem.SpecialAttack.SpellId = SpellBase.IdFromList(cmbSpecialAttack.SelectedIndex - 1); // -1 for None
+        }
+
+        private void nudSlash_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.StatsGiven[(int)Stats.SlashAttack] = (int)nudSlash.Value;
+        }
+
+        private void nudSlashPercentage_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.PercentageStatsGiven[(int)Stats.SlashAttack] = (int)nudSlashPercentage.Value;
+        }
+
+        private void chkLockSlash_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateStatLock(Stats.SlashAttack, chkLockSlash.Checked);
+        }
+
+        private void nudSlashResist_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.StatsGiven[(int)Stats.SlashResistance] = (int)nudSlashResist.Value;
+        }
+
+        private void nudSlashResistPercentage_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.PercentageStatsGiven[(int)Stats.SlashResistance] = (int)nudSlashResistPercentage.Value;
+        }
+
+        private void chkLockSlashResist_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateStatLock(Stats.SlashResistance, chkLockSlash.Checked);
+        }
+
+        private void nudPierce_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.StatsGiven[(int)Stats.PierceAttack] = (int)nudPierce.Value;
+        }
+
+        private void nudPiercePercentage_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.PercentageStatsGiven[(int)Stats.PierceAttack] = (int)nudPiercePercentage.Value;
+        }
+
+        private void chkLockPierce_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateStatLock(Stats.PierceAttack, chkLockPierce.Checked);
+        }
+
+        private void nudPierceResist_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.StatsGiven[(int)Stats.PierceResistance] = (int)nudPierceResist.Value;
+        }
+
+        private void nudPierceResistPercentage_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.PercentageStatsGiven[(int)Stats.PierceResistance] = (int)nudPierceResistPercentage.Value;
+        }
+
+        private void chkLockPierceResist_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateStatLock(Stats.PierceResistance, chkLockPierceResist.Checked);
+        }
+
+        private void nudAccuracy_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.StatsGiven[(int)Stats.Accuracy] = (int)nudAccuracy.Value;
+        }
+
+        private void nuAccuracyPercent_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.PercentageStatsGiven[(int)Stats.Accuracy] = (int)nudAccuracyPercent.Value;
+        }
+
+        private void chkLockAccuracy_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateStatLock(Stats.Accuracy, chkLockAccuracy.Checked);
+        }
+
+        private void nudEvasion_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.StatsGiven[(int)Stats.Accuracy] = (int)nudEvasion.Value;
+        }
+
+        private void nudEvasionPercent_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.PercentageStatsGiven[(int)Stats.Evasion] = (int)nudEvasionPercent.Value;
+        }
+
+        private void chkLockEvasion_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateStatLock(Stats.Evasion, chkLockEvasion.Checked);
+        }
+
+        private void PopulateDamageTypes()
+        {
+            chkBluntDamage.Checked = false;
+            chkDamagePierce.Checked = false;
+            chkDamageSlash.Checked = false;
+            chkDamageMagic.Checked = false;
+
+            foreach(var type in mEditorItem.AttackTypes)
+            {
+                switch(type)
+                {
+                    case AttackTypes.Blunt:
+                        chkBluntDamage.Checked = true;
+                        break;
+                    case AttackTypes.Slashing:
+                        chkDamageSlash.Checked = true;
+                        break;
+                    case AttackTypes.Magic:
+                        chkDamageMagic.Checked = true;
+                        break;
+                    case AttackTypes.Piercing:
+                        chkDamagePierce.Checked = true;
+                        break;
+                }
+
+            }
+        }
+
+        private void AddDamageType(AttackTypes type)
+        {
+            if (mEditorItem.AttackTypes.Contains(type))
+            {
+                return;
+            }
+
+            mEditorItem.AttackTypes.Add(type);
+        }
+
+        private void RemoveDamageType(AttackTypes type)
+        {
+            mEditorItem.AttackTypes.Remove(type);
+        }
+
+        private void chkBluntDamage_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkBluntDamage.Checked)
+            {
+                AddDamageType(AttackTypes.Blunt);
+            }
+            else
+            {
+                RemoveDamageType(AttackTypes.Blunt);
+            }
+        }
+
+        private void chkDamageSlash_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkDamageSlash.Checked)
+            {
+                AddDamageType(AttackTypes.Slashing);
+            }
+            else
+            {
+                RemoveDamageType(AttackTypes.Slashing);
+            }
+        }
+
+        private void chkDamagePierce_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkDamagePierce.Checked)
+            {
+                AddDamageType(AttackTypes.Piercing);
+            }
+            else
+            {
+                RemoveDamageType(AttackTypes.Piercing);
+            }
+        }
+
+        private void chkDamageMagic_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkDamageMagic.Checked)
+            {
+                AddDamageType(AttackTypes.Magic);
+            }
+            else
+            {
+                RemoveDamageType(AttackTypes.Magic);
+            }
         }
     }
 }

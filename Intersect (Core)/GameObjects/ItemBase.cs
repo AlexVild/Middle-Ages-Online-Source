@@ -525,6 +525,17 @@ namespace Intersect.GameObjects
             set => Effects = JsonConvert.DeserializeObject<List<EffectData>>(value ?? "") ?? new List<EffectData>();
         }
 
+        [NotMapped]
+        public List<AttackTypes> AttackTypes { get; set; }
+
+        [Column("AttackTypes")]
+        [JsonIgnore]
+        public string AttackTypesJson
+        {
+            get => JsonConvert.SerializeObject(AttackTypes);
+            set => AttackTypes = JsonConvert.DeserializeObject<List<AttackTypes>>(value ?? "") ?? new List<AttackTypes>();
+        }
+
         public int GetEffectPercentage(EffectType type)
         {
             return Effects
