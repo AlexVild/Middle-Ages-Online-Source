@@ -1068,6 +1068,12 @@ namespace Intersect.Server.Entities
                 return;
             }
 
+            if (killer is Player playerKiller)
+            {
+                playerKiller.StartCommonEventsWithTrigger(CommonEventTrigger.PVPKill, "", Name);
+                StartCommonEventsWithTrigger(CommonEventTrigger.PVPDeath, "", killer?.Name);
+            }
+
             var currentMapZoneType = MapController.Get(Map.Id).ZoneType;
             CastTime = 0;
             CastTarget = null;
@@ -1740,112 +1746,6 @@ namespace Intersect.Server.Entities
             } else
             {
                 return null;
-            }
-        }
-
-        public void TryAttack(Entity target)
-        {
-            if (CastTime >= Timing.Global.Milliseconds)
-            {
-                if (Options.Combat.EnableCombatChatMessages)
-                {
-                    PacketSender.SendChatMsg(this, Strings.Combat.channelingnoattack, ChatMessageType.Combat);
-                }
-
-                return;
-            }
-
-            if (!IsOneBlockAway(target))
-            {
-                return;
-            }
-
-            if (!CanAttack(target, null))
-            {
-                SetResourceLock(false);
-                return;
-            }
-
-            if (target is EventPage)
-            {
-                return;
-            }
-
-            var weapon = TryGetEquippedItem(Options.WeaponIndex, out var item) ? item.Descriptor : null;
-
-            //If Entity is resource, check for the correct tool and make sure its not a spell cast.
-            if (target is Resource resource)
-            {
-                if (resource.IsDead())
-                {
-                    SetResourceLock(false);
-                    return;
-                }
-
-                // Check that a resource is actually required.
-                var descriptor = resource.Base;
-
-                //Check Dynamic Requirements
-                if (!Conditions.MeetsConditionLists(descriptor.HarvestingRequirements, this, null))
-                {
-                    if (!string.IsNullOrWhiteSpace(descriptor.CannotHarvestMessage))
-                    {
-                        PacketSender.SendChatMsg(this, descriptor.CannotHarvestMessage, ChatMessageType.Error);
-                    }
-                    else
-                    {
-                        PacketSender.SendChatMsg(this, Strings.Combat.resourcereqs, ChatMessageType.Error);
-                    }
-
-                    SetResourceLock(false);
-
-                    return;
-                }
-
-                if (descriptor.Tool > -1 && descriptor.Tool < Options.ToolTypes.Count)
-                {
-                    if (weapon == null || descriptor.Tool != weapon.Tool)
-                    {
-                        PacketSender.SendChatMsg(
-                            this, Strings.Combat.toolrequired.ToString(Options.ToolTypes[descriptor.Tool]), ChatMessageType.Error
-                        );
-
-                        SetResourceLock(false);
-
-                        return;
-                    }
-                }
-
-                if (!resource.IsDead())
-                {
-                    SetResourceLock(true, resource);
-                }
-            } else
-            {
-                SetResourceLock(false);
-            }
-
-            if (weapon != null)
-            {
-                base.TryAttack(
-                    target, weapon.Damage, (DamageType) weapon.DamageType, (Stats) weapon.ScalingStat, weapon.Scaling,
-                    weapon.CritChance, weapon.CritMultiplier, null, null, weapon
-                );
-            }
-            else
-            {
-                var classBase = ClassBase.Get(ClassId);
-                if (classBase != null)
-                {
-                    base.TryAttack(
-                        target, classBase.Damage, (DamageType) classBase.DamageType, (Stats) classBase.ScalingStat,
-                        classBase.Scaling, classBase.CritChance, classBase.CritMultiplier
-                    );
-                }
-                else
-                {
-                    base.TryAttack(target, 1, DamageType.Physical, Stats.Attack, 100, 10, 1.5);
-                }
             }
         }
 
@@ -8200,31 +8100,6 @@ namespace Intersect.Server.Entities
             {
                 PacketSender.SendGUINotification(Client, GUINotification.LowHP, true);
                 HPWarningSent = true;
-            }
-        }
-
-        public void SetResourceLock(bool val, Resource resource = null)
-        {
-            if (PlayerDead)
-            {
-                return;
-            }
-            if (resource != null && resource.Base != null && resource.Base.DoNotRecord) return;
-
-            val = (resource != null);
-            if (resourceLock != resource) // change has occured
-            {
-                resourceLock = resource;
-
-                double harvestBonus = 0.0f;
-                long progressUntilNextBonus = 0;
-                if (resource != null)
-                {
-                    harvestBonus = resource.CalculateHarvestBonus(this);
-                    progressUntilNextBonus = resource.GetHarvestsUntilNextBonus(this);
-                }
-
-                PacketSender.SendResourceLockPacket(this, val, harvestBonus, progressUntilNextBonus);
             }
         }
 

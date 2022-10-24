@@ -1302,7 +1302,7 @@ namespace Intersect.Server.Entities
 
         public virtual bool CanAttack(Entity entity, SpellBase spell)
         {
-            return CastTime <= 0;
+            return CastTime <= 0 && entity != null && !entity.IsDisposed;
         }
 
         public virtual void ProcessRegen()
@@ -1957,101 +1957,18 @@ namespace Intersect.Server.Entities
             }
         }
 
-        //Attacking with weapon or unarmed.
-        public virtual void TryAttack(Entity target)
-        {
-            //See player and npc override of this virtual void
-        }
-
-        //Attack using a weapon or unarmed
-        public virtual void TryAttack(
-            Entity target,
-            int baseDamage,
-            DamageType damageType,
-            Stats scalingStat,
-            int scaling,
-            int critChance,
-            double critMultiplier,
-            List<KeyValuePair<Guid, sbyte>> deadAnimations = null,
-            List<KeyValuePair<Guid, sbyte>> aliveAnimations = null,
-            ItemBase weapon = null
-        )
-        {
-            if (AttackTimer > Timing.Global.Milliseconds)
-            {
-                return;
-            }
-
-            //Check for parties and safe zones, friendly fire off (unless its healing)
-            if (target is Player targetPlayer && this is Player player)
-            {
-                if (player.InParty(targetPlayer))
-                {
-                    return;
-                }
-
-                //Check if either the attacker or the defender is in a "safe zone" (Only apply if combat is PVP)
-                //Player interaction common events
-                targetPlayer.StartCommonEventsWithTrigger(CommonEventTrigger.PlayerInteract, "", this.Name);
-
-                if (MapController.Get(MapId)?.ZoneType == MapZones.Safe)
-                {
-                    return;
-                }
-
-                if (MapController.Get(target.MapId)?.ZoneType == MapZones.Safe)
-                {
-                    return;
-                }
-            }
-
-            //Check for taunt status and trying to attack a target that has not taunted you.
-            foreach (var status in CachedStatuses)
-            {
-                if (status.Type == StatusTypes.Taunt)
-                {
-                    if (Target != target)
-                    {
-                        PacketSender.SendActionMsg(this, Strings.Combat.miss, CustomColors.Combat.Missed);
-
-                        return;
-                    }
-                }
-            }
-
-            AttackTimer = Timing.Global.Milliseconds + CalculateAttackTime();
-
-            //Check if the attacker is blinded.
-            if (IsOneBlockAway(target))
-            {
-                foreach (var status in CachedStatuses)
-                {
-                    if (status.Type == StatusTypes.Stun ||
-                        status.Type == StatusTypes.Blind ||
-                        status.Type == StatusTypes.Sleep)
-                    {
-                        PacketSender.SendActionMsg(this, Strings.Combat.miss, CustomColors.Combat.Missed);
-                        PacketSender.SendEntityAttack(this, CalculateAttackTime());
-
-                        return;
-                    }
-                }
-            }
-
-            if (weapon != null)
-            {
-                baseDamage = CalculateSpecialDamage(weapon.Damage, weapon, target);
-            }
-            Attack(
-                target, baseDamage, 0, damageType, scalingStat, scaling, critChance, critMultiplier, deadAnimations,
-                aliveAnimations, true
-            );
-        }
-
         public enum AttackFailures
         {
             BLOCKED,
             MISSED
+        }
+
+        public enum AttackType
+        {
+            Unarmed,
+            Weapon,
+            Projectile,
+            Spell,
         }
 
         public Dictionary<AttackFailures, bool> Attack(
@@ -2160,26 +2077,10 @@ namespace Intersect.Server.Entities
                             break;
                     }
 
-                    var toRemove = new List<Status>();
-                    foreach (var status in enemy.CachedStatuses.ToArray())  // ToArray the Array since removing a status will.. you know, change the collection.
-                    {
-                        //Wake up any sleeping targets targets and take stealthed entities out of stealth
-                        if (status.Type == StatusTypes.Sleep || status.Type == StatusTypes.Stealth)
-                        {
-                            status.RemoveStatus();
-                        }
-                    }
-
                     // Add the attacker to the Npcs threat and loot table.
                     if (enemy is Npc enemyNpc)
                     {
-                        var dmgMap = enemyNpc.DamageMap;
-                        dmgMap.TryGetValue(this, out var damage);
-                        dmgMap[this] = damage + baseDamage;
-
-                        enemyNpc.LootMap.TryAdd(Id, true);
-                        enemyNpc.LootMapCache = enemyNpc.LootMap.Keys.ToArray();
-                        enemyNpc.TryFindNewTarget(Timing.Global.Milliseconds, default, false, this);
+                        enemyNpc.AddToDamageAndLootMaps(this, baseDamage);
                     }
 
                     enemy.NotifySwarm(this);
@@ -2195,11 +2096,7 @@ namespace Intersect.Server.Entities
                     // Add the attacker to the Npcs threat table only
                     if (enemy is Npc enemyNpc)
                     {
-                        var dmgMap = enemyNpc.DamageMap;
-                        dmgMap.TryGetValue(this, out var damage);
-                        dmgMap[this] = damage + baseDamage;
-
-                        enemyNpc.TryFindNewTarget(Timing.Global.Milliseconds, default, false, this);
+                        enemyNpc.AddToDamageAndLootMaps(this, baseDamage);
                     }
 
                     enemy.NotifySwarm(this);
@@ -2377,7 +2274,7 @@ namespace Intersect.Server.Entities
             }
         }
 
-        private void SendCombatEffects(Entity enemy, bool isCrit, int damage)
+        protected void SendCombatEffects(Entity enemy, bool isCrit, int damage)
         {
             // Calculate combat special effects (entity/screen flash, screen shake, extra sounds)
             // Define vars that will be used for combat effects

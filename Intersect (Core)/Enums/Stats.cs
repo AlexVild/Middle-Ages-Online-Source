@@ -1,3 +1,5 @@
+using System;
+
 namespace Intersect.Enums
 {
 
@@ -39,6 +41,26 @@ namespace Intersect.Enums
         Magic = 1,
         Slashing = 5,
         Piercing = 7,
+    }
+
+    public class StatHelpers
+    {
+        public static Stats GetResistanceStat(AttackTypes attackType)
+        {
+            switch(attackType)
+            {
+                case AttackTypes.Blunt:
+                    return Stats.Defense;
+                case AttackTypes.Magic:
+                    return Stats.MagicResist;
+                case AttackTypes.Piercing:
+                    return Stats.PierceResistance;
+                case AttackTypes.Slashing:
+                    return Stats.SlashResistance;
+                default:
+                    throw new NotImplementedException($"Invalid attack type given: {attackType}");
+            }
+        }
     }
 
 }

@@ -394,65 +394,6 @@ namespace Intersect.Server.Entities
             return true;
         }
 
-        public override void TryAttack(Entity target)
-        {
-            if (target.IsDisposed)
-            {
-                return;
-            }
-
-            // If this enemy "attacks" with a spell, then don't bother with traditional attacking.
-            var spellOverride = Base.SpellAttackOverrideId;
-            if (Base.SpellAttackOverrideId != default)
-            {
-                if (CanCastSpell(spellOverride, target) && Timing.Global.MillisecondsUtc > mLastOverrideAttack)
-                {
-                    CastSpell(spellOverride);
-                    mLastOverrideAttack = Timing.Global.MillisecondsUtc + CalculateAttackTime();
-                }
-
-                return;
-            }
-
-            if (!CanAttack(target, null))
-            {
-                return;
-            }
-
-            if (!IsOneBlockAway(target))
-            {
-                return;
-            }
-
-            if (!IsFacingTarget(target))
-            {
-                return;
-            }
-
-            var deadAnimations = new List<KeyValuePair<Guid, sbyte>>();
-            var aliveAnimations = new List<KeyValuePair<Guid, sbyte>>();
-
-            //We were forcing at LEAST 1hp base damage.. but then you can't have guards that won't hurt the player.
-            //https://www.ascensiongamedev.com/community/bug_tracker/intersect/npc-set-at-0-attack-damage-still-damages-player-by-1-initially-r915/
-            if (AttackTimer < Timing.Global.Milliseconds)
-            {
-                if (Base.AttackAnimation != null)
-                {
-                    PacketSender.SendAnimationToProximity(
-                        Base.AttackAnimationId, -1, Guid.Empty, target.MapId, (byte) target.X, (byte) target.Y,
-                        (sbyte) Dir, target.MapInstanceId
-                    );
-                }
-
-                base.TryAttack(
-                    target, Base.Damage, (DamageType) Base.DamageType, (Stats) Base.ScalingStat, Base.Scaling,
-                    Base.CritChance, Base.CritMultiplier, deadAnimations, aliveAnimations
-                );
-
-                PacketSender.SendEntityAttack(this, CalculateAttackTime());
-            }
-        }
-
         public bool CanNpcCombat(Entity enemy, bool friendly = false)
         {
             //Check for NpcVsNpc Combat, both must be enabled and the attacker must have it as an enemy or attack all types of npc.
@@ -1012,7 +953,7 @@ namespace Intersect.Server.Entities
                                                     }
                                                     if ((Base.SpellAttackOverrideId == default && CanAttack(Target, null)) || (Base.SpellAttackOverrideId != default && CanAttack(Target, SpellBase.Get(Base.SpellAttackOverrideId))))
                                                     {
-                                                        TryAttack(Target);
+                                                        MeleeAttack(Target, false);
                                                     }
                                                 }
                                                 mPathFinder.PathFailed(timeMs);
@@ -1127,7 +1068,7 @@ namespace Intersect.Server.Entities
                                             {
                                                 if ((Base.SpellAttackOverrideId == default && CanAttack(Target, null)) || (Base.SpellAttackOverrideId != default && CanAttack(Target, SpellBase.Get(Base.SpellAttackOverrideId))))
                                                 {
-                                                    TryAttack(tempTarget);
+                                                    MeleeAttack(tempTarget, false);
                                                 }
                                             }
                                         }
@@ -1738,6 +1679,22 @@ namespace Intersect.Server.Entities
                 return dungeonVar.Boolean;
             }
             return false;
+        }
+
+        /// <summary>
+        /// Adds an attacking entity to this NPC's damage map
+        /// </summary>
+        /// <param name="attacker">The attacking entity</param>
+        /// <param name="newDamage">The amount of damage to add</param>
+        public void AddToDamageAndLootMaps(Entity attacker, int newDamage)
+        {
+            var dmgMap = DamageMap;
+            dmgMap.TryGetValue(attacker, out var damage);
+            dmgMap[attacker] = damage + newDamage;
+
+            LootMap.TryAdd(Id, true);
+            LootMapCache = LootMap.Keys.ToArray();
+            TryFindNewTarget(Timing.Global.Milliseconds, default, false, attacker);
         }
     }
 }

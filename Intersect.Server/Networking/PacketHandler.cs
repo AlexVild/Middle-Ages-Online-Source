@@ -1073,7 +1073,6 @@ namespace Intersect.Server.Networking
                 return;
             }
 
-            var unequippedAttack = false;
             var target = packet.Target;
 
             var clientTime = packet.Adjusted / TimeSpan.TicksPerMillisecond;
@@ -1083,109 +1082,27 @@ namespace Intersect.Server.Networking
                 return;
             }
 
-            if (player.AttackTimer > Timing.Global.Milliseconds)
+            if (!player.MeleeAvailable())
             {
-                return;
-            }
-
-            if (player.CastTime > Timing.Global.Milliseconds)
-            {
-                if (Options.Combat.EnableCombatChatMessages)
-                {
-                    PacketSender.SendChatMsg(player, Strings.Combat.channelingnoattack, ChatMessageType.Combat);
-                }
-
                 return;
             }
 
             var utcDeltaMs = (Timing.Global.TicksUTC - packet.UTC) / TimeSpan.TicksPerMillisecond;
             var latencyAdjustmentMs = -(client.Ping + Math.Max(0, utcDeltaMs));
 
-            // Reset stealth attack status
-            player.StealthAttack = false;
-            //check if player is blinded or stunned or in stealth mode
-            foreach (var status in player.CachedStatuses)
-            {
-                if (status.Type == StatusTypes.Stun)
-                {
-                    if (Options.Combat.EnableCombatChatMessages)
-                    {
-                        PacketSender.SendChatMsg(player, Strings.Combat.stunattacking, ChatMessageType.Combat);
-                    }
-
-                    return;
-                }
-
-                if (status.Type == StatusTypes.Sleep)
-                {
-                    if (Options.Combat.EnableCombatChatMessages)
-                    {
-                        PacketSender.SendChatMsg(player, Strings.Combat.sleepattacking, ChatMessageType.Combat);
-                    }
-
-                    return;
-                }
-
-                if (status.Type == StatusTypes.Blind)
-                {
-                    PacketSender.SendActionMsg(player, Strings.Combat.miss, CustomColors.Combat.Missed);
-
-                    return;
-                }
-
-                //Remove stealth status.
-                if (status.Type == StatusTypes.Stealth)
-                {
-                    player.StealthAttack = true;
-                    status.RemoveStatus();
-                }
-            }
-
-            var attackingTile = new TileHelper(player.MapId, player.X, player.Y);
-            switch (player.Dir)
-            {
-                case 0:
-                    attackingTile.Translate(0, -1);
-
-                    break;
-
-                case 1:
-                    attackingTile.Translate(0, 1);
-
-                    break;
-
-                case 2:
-                    attackingTile.Translate(-1, 0);
-
-                    break;
-
-                case 3:
-                    attackingTile.Translate(1, 0);
-
-                    break;
-            }
-
+            player.IncrementAttackTimer();
+            player.ClientAttackTimer = clientTime + (long)player.CalculateAttackTime();
+            
+            // Make the client see the attack, even if it misses!
             PacketSender.SendEntityAttack(player, player.CalculateAttackTime());
-
-            player.ClientAttackTimer = clientTime + (long) player.CalculateAttackTime();
-
+            player.SendAttackAnimation(null);
+            
+            // Spawn projectiles if can/need be
             if (player.TryGetEquippedItem(Options.WeaponIndex, out var equippedWeapon))
             {
                 var weaponItem = equippedWeapon.Descriptor;
 
-                //Check for animation
-                var attackAnim = weaponItem.AttackAnimation;
-
-                if (attackAnim != null && attackingTile.TryFix() && weaponItem.ProjectileId == Guid.Empty)
-                {
-                    PacketSender.SendAnimationToProximity(
-                        attackAnim.Id, -1, player.Id, attackingTile.GetMapId(), attackingTile.GetX(),
-                        attackingTile.GetY(), (sbyte)player.Dir, player.MapInstanceId
-                    );
-                }
-
                 var projectileBase = ProjectileBase.Get(weaponItem?.ProjectileId ?? Guid.Empty);
-
                 if (projectileBase != null)
                 {
                     if (projectileBase.AmmoItemId != Guid.Empty)
@@ -1223,26 +1140,7 @@ namespace Intersect.Server.Networking
                     return;
                 }
             }
-            else
-            {
-                unequippedAttack = true;
-            }
             
-            if (unequippedAttack)
-            {
-                var classBase = ClassBase.Get(player.ClassId);
-                if (classBase != null)
-                {
-                    //Check for animation
-                    if (classBase.AttackAnimation != null)
-                    {
-                        PacketSender.SendAnimationToProximity(
-                            classBase.AttackAnimationId, -1, player.Id, attackingTile.GetMapId(), attackingTile.GetX(),
-                            attackingTile.GetY(), (sbyte)player.Dir, player.MapInstanceId
-                        );
-                    }
-                }
-            }
 
             foreach (var mapInstance in MapController.GetSurroundingMapInstances(player.Map.Id, player.MapInstanceId, true))
             {
@@ -1250,13 +1148,14 @@ namespace Intersect.Server.Networking
                 {
                     if (entity.Id == target)
                     {
-                        player.TryAttack(entity);
+                        player.MeleeAttack(entity, false);
 
                         break;
                     }
                 }
             }
 
+            // lag compensation
             if (player.AttackTimer > Timing.Global.Milliseconds)
             {
                 player.AttackTimer = Timing.Global.Milliseconds + latencyAdjustmentMs + player.CalculateAttackTime();
