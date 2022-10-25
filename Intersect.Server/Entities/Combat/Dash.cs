@@ -160,9 +160,9 @@ namespace Intersect.Server.Entities.Combat
                         var entities = en.GetEntitiesOnTile(tileX, tileY);
                         foreach(var collidedEntity in entities)
                         {
-                            if (en.CanAttack(collidedEntity, Spell))
+                            if (en.CanAttack(collidedEntity, Spell) && en is AttackingEntity attacker)
                             {
-                                en.CastSpell(Spell.Id);
+                                attacker.CastSpell(Spell.Id);
                             }
                         }
                     }

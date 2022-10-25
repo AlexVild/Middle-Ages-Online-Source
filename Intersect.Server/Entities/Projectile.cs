@@ -34,7 +34,7 @@ namespace Intersect.Server.Entities
 
         private int mTotalSpawns;
 
-        public Entity Owner;
+        public AttackingEntity Owner;
 
         // Individual Spawns
         public ProjectileSpawn[] Spawns;
@@ -44,7 +44,7 @@ namespace Intersect.Server.Entities
         public Entity Target;
 
         public Projectile(
-            Entity owner,
+            AttackingEntity owner,
             SpellBase parentSpell,
             ItemBase parentItem,
             ProjectileBase projectile,
@@ -545,6 +545,22 @@ namespace Intersect.Server.Entities
             return EntityTypes.Projectile;
         }
 
+        public void HandleProjectileSpell(Entity enemy, bool isProjectileTool = false)
+        {
+            if (enemy == null || Spell == null || Spell.Combat == null)
+            {
+                return;
+            }
+
+            Owner.HandleAoESpell(Base.SpellId,
+                        Spell.Combat?.HitRadius ?? 0,
+                        enemy.MapId,
+                        enemy.X,
+                        enemy.Y,
+                        null,
+                        true,
+                        isProjectileTool);
+        }
     }
 
 }

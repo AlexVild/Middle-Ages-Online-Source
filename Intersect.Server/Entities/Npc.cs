@@ -26,7 +26,7 @@ using Intersect.Utilities;
 namespace Intersect.Server.Entities
 {
 
-    public partial class Npc : Entity
+    public partial class Npc : AttackingEntity
     {
 
         //Spell casting
@@ -1621,7 +1621,7 @@ namespace Intersect.Server.Entities
 
     }
 
-    public partial class Npc : Entity
+    public partial class Npc : AttackingEntity
     {
         public override void DropItems(Entity killer, bool sendUpdate = true)
         {

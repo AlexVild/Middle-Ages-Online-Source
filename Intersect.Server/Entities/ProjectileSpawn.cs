@@ -100,206 +100,179 @@ namespace Intersect.Server.Entities
 
         public bool HitEntity(Entity en)
         {
-            var targetEntity = en;
-            if (targetEntity is EventPageInstance || en == null) return false;
-
             bool projectileCantDamageYet = Timing.Global.Milliseconds < ProjectileActiveTime && InitX == X && InitY == Y;
-            if (projectileCantDamageYet)
+            if (en == null ||
+                Parent.Base == null ||
+                en is EventPageInstance ||
+                en == Parent.Owner ||
+                projectileCantDamageYet)
             {
                 return false;
             }
-
-            var scalingStat = Enums.Stats.StatCount;
-
-            if (Parent.Spell != null && Parent.Spell.Combat != null)
+            
+            var targetEntity = en;
+            if (targetEntity is Player deadPlayer && deadPlayer.PlayerDead)
             {
-                scalingStat = (Enums.Stats) Parent.Spell.Combat.ScalingStat;
-            }
-            if (Parent.Item != null)
-            {
-                scalingStat = (Enums.Stats) Parent.Item.ScalingStat;
-            }
-
-            if (targetEntity is Player player && player.PlayerDead)
-            {
+                // Don't bother with players who are dead but haven't respawned - go right through
                 return false;
             }
 
-            if (targetEntity != null && targetEntity != Parent.Owner)
+            // Have we collided with this entity before? If so, cancel out.
+            if (mEntitiesCollided.Contains(targetEntity.Id))
             {
-                // Have we collided with this entity before? If so, cancel out.
-                if (mEntitiesCollided.Contains(targetEntity.Id))
+                if (!Piercing)
                 {
-                    if (!Parent.Base.PierceTarget)
+                    var mapPassable = Options.Instance.Passability.Passable[(int)en.Map.ZoneType];
+                    var friendlySpell = Parent.Spell?.Combat?.Friendly ?? false;
+                    if (mapPassable && !friendlySpell)
                     {
-                        if ((en != null && Options.Instance.Passability.Passable[(int)en.Map.ZoneType]) && (Parent.Spell != null && !Parent.Spell.Combat.Friendly))
-                        {
-                            return false;
-                        } else
-                        {
-                            return true;
-                        }
+                        return false;
+                    } else
+                    {
+                        return true;
                     }
-                    else
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            mEntitiesCollided.Add(targetEntity.Id);
+
+            if (targetEntity is Player player)
+            {
+                Parent.Owner.ProjectileAttack(player, Parent, Parent.Spell, Parent.Item, Dir);
+                if (GrappleAvailable && Parent.Base.AttachToEntities)
+                {
+                    // If the projectile's spell can't affect the target, ignore
+                    if (Parent.Base.Spell != null && !Parent.Owner.CanAttack(player, Parent.Base.Spell))
                     {
                         return false;
                     }
+                    Grapple(Dir);
                 }
-                mEntitiesCollided.Add(targetEntity.Id);
 
-                if (targetEntity.GetType() == typeof(Player)) //Player
+                if (!Piercing)
                 {
-                    if (Parent.Owner != Parent.Target)
+                    if (Parent.Spell != null)
                     {
-                        Parent.Owner.TryAttack(targetEntity, Parent.Base, Parent.Spell, Parent.Item, Dir);
-                        // Do not grapple players - commented out
-
-                        
-                        if (Dir <= 3 && Parent.Base.GrappleHook && !Parent.HasGrappled && Parent.Base.AttachToEntities
-                        ) //Don't handle directional projectile grapplehooks
-                        {
-                            if (Parent.Base.Spell != null)
-                            {
-                                if (!Parent.Owner.CanAttack(targetEntity, Parent.Base.Spell))
-                                {
-                                    return false;
-                                }
-                            }
-                            Parent.HasGrappled = true;
-                            Parent.Owner.Dir = Dir;
-                            new Dash(
-                                Parent.Owner, Distance, (byte) Parent.Owner.Dir, Parent.Base.IgnoreMapBlocks,
-                                Parent.Base.IgnoreActiveResources, Parent.Base.IgnoreExhaustedResources,
-                                Parent.Base.IgnoreZDimension
-                            );
-                        }
-                        
-
-                        if (!Parent.Base.PierceTarget)
-                        {
-                            if (Parent.Spell != null)
-                            {
-                                // Friendly projectiles should never pass through, as they need to take effect.
-                                if (Options.Instance.Passability.Passable[(int)targetEntity.Map.ZoneType] && !Parent.Spell.Combat.Friendly)
-                                {
-                                    return false;
-                                }
-                                else
-                                {
-                                    return true;
-                                }
-                            } else
-                            {
-                                // If on a passable map, allow passthrough
-                                return !Options.Instance.Passability.Passable[(int)targetEntity.Map.ZoneType];
-                            }
-                        }
-                    }
-                }
-                else if (targetEntity.GetType() == typeof(Resource))
-                {
-                    var resourceTarget = targetEntity as Resource;
-
-                    if (ProjectileBase.Tool != -1 || resourceTarget.Base.Tool == -1) // if the projectile can be handled as a tool or the resource does not demand a tool, do some things differently
-                    {
-                        // If the projectile is the right tool for the job, make an attack
-                        var validTool = false;
-                        if (!((Resource)targetEntity).IsDead() && (ProjectileBase.Tool == ((Resource)targetEntity).Base.Tool)) 
-                        {
-                            Parent.Owner.TryAttack(targetEntity, Parent.Base, Parent.Spell, Parent.Item, Dir);
-                            validTool = true;
-                        }
-                        // then, determine if the projectile spawn should die
-
-                        if (Parent.Base.PierceTarget)
+                        // Friendly projectiles should never pass through, as they need to take effect.
+                        if (Options.Instance.Passability.Passable[(int)targetEntity.Map.ZoneType] && !Parent.Spell.Combat.Friendly)
                         {
                             return false;
                         }
                         else
                         {
-                            if (validTool)
-                            {
-                                return true;
-                            } 
-                            else
-                            {
-                                return ((Resource)targetEntity).IsDead() && !ProjectileBase.IgnoreExhaustedResources ||
-                                    !((Resource)targetEntity).IsDead() && !ProjectileBase.IgnoreActiveResources;
-                            }
+                            return true;
                         }
                     }
                     else
                     {
-                        if (((Resource)targetEntity).IsDead() && !ProjectileBase.IgnoreExhaustedResources ||
-                        !((Resource)targetEntity).IsDead() && !ProjectileBase.IgnoreActiveResources)
-                        {
-                            if (Parent.Owner.GetType() == typeof(Player) && !((Resource)targetEntity).IsDead())
-                            {
-                                Parent.Owner.TryAttack(targetEntity, Parent.Base, Parent.Spell, Parent.Item, Dir);
-
-                                // Do not grapple resources -- commented out
-
-                                /*
-                                if (Dir <= 3 && Parent.Base.GrappleHook && !Parent.HasGrappled) //Don't handle directional projectile grapplehooks
-                                {
-                                    Parent.HasGrappled = true;
-                                    Parent.Owner.Dir = Dir;
-                                    new Dash(
-                                        Parent.Owner, Distance, (byte)Parent.Owner.Dir, Parent.Base.IgnoreMapBlocks,
-                                        Parent.Base.IgnoreActiveResources, Parent.Base.IgnoreExhaustedResources,
-                                        Parent.Base.IgnoreZDimension
-                                    );
-                                }
-                                */
-                            }
-
-                            return true;
-                        }
+                        // If on a passable map, allow passthrough
+                        return !Options.Instance.Passability.Passable[(int)targetEntity.Map.ZoneType];
                     }
                 }
-                else //Any other Parent.Target
+
+                return false;
+            }
+
+            if (targetEntity is Npc npc)
+            {
+                // Handle NPC vs NPC
+                var ownerNpc = Parent.Owner as Npc;
+                if (ownerNpc == null ||
+                    ownerNpc.CanNpcCombat(npc, FriendlySpell))
                 {
-                    var ownerNpc = Parent.Owner as Npc;
-                    if (ownerNpc == null ||
-                        ownerNpc.CanNpcCombat(targetEntity, Parent.Spell != null && Parent.Spell.Combat.Friendly))
+                    Parent.Owner.ProjectileAttack(npc, Parent, Parent.Spell, Parent.Item, Dir);
+
+                    if (GrappleAvailable && Parent.Base.AttachToEntities)
                     {
-                        Parent.Owner.TryAttack(targetEntity, Parent.Base, Parent.Spell, Parent.Item, Dir);
-
-                        // Do not grapple NPCs - commented out
-
-                        
-                        if (Dir <= 3 && Parent.Base.GrappleHook && !Parent.HasGrappled && Parent.Base.AttachToEntities
-                        ) //Don't handle directional projectile grapplehooks
+                        if (Parent.Base.Spell != null && !Parent.Owner.CanAttack(npc, Parent.Base.Spell))
                         {
-                            if (Parent.Base.Spell != null)
-                            {
-                                if (!Parent.Owner.CanAttack(targetEntity, Parent.Base.Spell))
-                                {
-                                    return false;
-                                }
-                            }
-
-                            Parent.HasGrappled = true;
-                            Parent.Owner.Dir = Dir;
-                            new Dash(
-                                Parent.Owner, Distance, (byte) Parent.Owner.Dir, Parent.Base.IgnoreMapBlocks,
-                                Parent.Base.IgnoreActiveResources, Parent.Base.IgnoreExhaustedResources,
-                                Parent.Base.IgnoreZDimension
-                            );
+                            return false;
                         }
-                        
 
-                        if (!Parent.Base.PierceTarget)
-                        {
-                            return true;
-                        }
+                        Grapple(Dir);
                     }
                 }
+
+                return !Piercing;
+            }
+
+
+            if (targetEntity is Resource resourceTarget)
+            {
+                // If the owner is an NPC, don't bother trying to harvest
+                if (Parent.Owner as Player != null)
+                {
+                    Parent.Owner.ProjectileAttack(resourceTarget, Parent, Parent.Spell, Parent.Item, Dir);                    
+                }
+
+                return !IgnoreResource(resourceTarget);
             }
 
             return false;
         }
 
+    }
+
+    public partial class ProjectileSpawn
+    {
+        public bool ValidGrappleDir => Dir <= 3;
+
+        public bool GrappleAvailable => ValidGrappleDir && 
+            (Parent?.Base?.GrappleHook ?? false) && 
+            (!Parent?.HasGrappled ?? false);
+
+        public bool Piercing => Parent?.Base?.PierceTarget ?? false;
+
+        public bool FriendlySpell => Parent?.Spell?.Combat?.Friendly ?? false;
+
+        public void Grapple(byte dir)
+        {
+            Parent.HasGrappled = true;
+            Parent.Owner.Dir = dir;
+            new Dash(
+                Parent.Owner, Distance, (byte)Parent.Owner.Dir, Parent.Base.IgnoreMapBlocks,
+                Parent.Base.IgnoreActiveResources, Parent.Base.IgnoreExhaustedResources,
+                Parent.Base.IgnoreZDimension
+            );
+        }
+
+        public bool IgnoreResource(Resource resource)
+        {
+            if (ProjectileBase == null)
+            {
+                return false;
+            }
+
+            if (resource == null || resource.Base == null)
+            {
+                return true;
+            }
+
+            if (resource.Base.WalkableBefore)
+            {
+                return true;
+            }
+
+            if (resource.Base.WalkableAfter && resource.IsDead())
+            {
+                return true;
+            }
+
+            if (resource.IsDead() && ProjectileBase.IgnoreExhaustedResources)
+            {
+                return true;
+            }
+
+            if (!resource.IsDead() && ProjectileBase.IgnoreActiveResources)
+            {
+                return true;
+            }
+
+            return false;
+        }
     }
 
 }

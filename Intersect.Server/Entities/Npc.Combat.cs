@@ -1,4 +1,5 @@
 ﻿using Intersect.Enums;
+using Intersect.GameObjects;
 using Intersect.Server.Database;
 using Intersect.Server.Networking;
 using Intersect.Utilities;
@@ -10,8 +11,13 @@ using System.Threading.Tasks;
 
 namespace Intersect.Server.Entities
 {
-    public partial class Npc : Entity, AttackingEntity
+    public partial class Npc : AttackingEntity
     {
+        public override void ProjectileAttack(Entity enemy, Projectile projectile, SpellBase parentSpell, ItemBase parentWeapon, byte projectileDir)
+        {
+            throw new NotImplementedException();
+        }
+
         public override void TakeDamage(Entity attacker, int damage)
         {
             AddToDamageAndLootMaps(attacker, damage);
@@ -33,7 +39,7 @@ namespace Intersect.Server.Entities
                     List<AttackTypes> attackTypes,
                     int dmgScaling,
                     double critMultiplier,
-                    Item weapon,
+                    ItemBase weapon,
                     out int damage)
         {
             damage = 0;
@@ -52,7 +58,7 @@ namespace Intersect.Server.Entities
             return base.TryDealDamageTo(enemy, attackTypes, dmgScaling, critMultiplier, weapon, out damage);
         }
 
-        public void MeleeAttack(Entity enemy, bool ignoreEvasion)
+        public override void MeleeAttack(Entity enemy, bool ignoreEvasion)
         {
             var spellOverride = Base?.SpellAttackOverrideId ?? default;
             if (spellOverride != default)
@@ -86,7 +92,7 @@ namespace Intersect.Server.Entities
             }
         }
 
-        public void SendAttackAnimation(Entity enemy)
+        public override void SendAttackAnimation(Entity enemy)
         {
             PacketSender.SendEntityAttack(this, CalculateAttackTime());
             if (Base.AttackAnimation == null)

@@ -44,7 +44,7 @@ using System.Text;
 namespace Intersect.Server.Entities
 {
 
-    public partial class Player : Entity
+    public partial class Player : AttackingEntity
     {
         [NotMapped, JsonIgnore]
         public Guid PreviousMapInstanceId = Guid.Empty;
@@ -8329,7 +8329,7 @@ namespace Intersect.Server.Entities
     }
 
 
-    public partial class Player : Entity
+    public partial class Player : AttackingEntity
     {
         [JsonIgnore]
         public virtual List<PlayerRecord> PlayerRecords { get; set; } = new List<PlayerRecord>();

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Intersect.Server.Entities
 {
-    public partial class Player : Entity
+    public partial class Player : AttackingEntity
     {
         public void SetResourceLock(bool val, Resource resource = null)
         {
@@ -50,20 +50,19 @@ namespace Intersect.Server.Entities
             }
         }
 
-        private bool TryHarvestResourceMelee(Resource target)
+        private bool CanHarvest(Resource target)
         {
             if (target == null || target.Base == null)
             {
                 return false;
             }
 
+            var descriptor = target.Base;
             if (target.IsDead())
             {
                 return false;
             }
 
-            TryGetEquippedItem(Options.WeaponIndex, out var weapon);
-            var descriptor = target.Base;
             if (!Conditions.MeetsConditionLists(descriptor.HarvestingRequirements, this, null))
             {
                 if (!string.IsNullOrWhiteSpace(descriptor.CannotHarvestMessage))
@@ -77,18 +76,63 @@ namespace Intersect.Server.Entities
 
                 return false;
             }
-            if (descriptor.Tool > -1 && descriptor.Tool < Options.ToolTypes.Count)
-            {
-                if (weapon == null || descriptor.Tool != weapon.Descriptor.Tool)
-                {
-                    PacketSender.SendChatMsg(
-                        this, Strings.Combat.toolrequired.ToString(Options.ToolTypes[descriptor.Tool]), ChatMessageType.Error
-                    );
 
-                    return false;
-                }
+            return true;
+        }
+
+        private bool CanHarvestWithTool(Resource target, int tool)
+        {
+            if (!CanHarvest(target))
+            {
+                return false;
             }
 
+            var descriptor = target.Base;
+            if (descriptor.Tool != tool)
+            {
+                PacketSender.SendChatMsg(
+                    this, Strings.Combat.toolrequired.ToString(Options.ToolTypes[descriptor.Tool]), ChatMessageType.Error
+                );
+
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool TryHarvestResourceProjectile(Resource target, Projectile projectile)
+        {
+            if (target == null || target.Base == null || projectile == null || projectile.Base == null)
+            {
+                return false;
+            }
+
+            if (!CanHarvestWithTool(target, projectile.Base.Tool))
+            {
+                return false;
+            }
+
+            var dmg = ClassBase.Get(ClassId)?.Damage ?? 1;
+            if (projectile.Item != null)
+            {
+                dmg = projectile.Item.Damage;
+            }
+
+            projectile.HandleProjectileSpell(target, true);
+            target.TakeDamage(this, dmg);
+            SendCombatEffects(target, false, dmg);
+
+            return true;
+        }
+
+        private bool TryHarvestResourceMelee(Resource target)
+        {
+            TryGetEquippedItem(Options.WeaponIndex, out var weapon);
+            if (!CanHarvestWithTool(target, weapon?.Descriptor?.Tool ?? -1))
+            {
+                return false;
+            }
+            
             var dmg = ClassBase.Get(ClassId)?.Damage ?? 1;
             if (weapon != null)
             {

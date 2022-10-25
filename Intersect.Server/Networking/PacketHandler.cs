@@ -1098,50 +1098,12 @@ namespace Intersect.Server.Networking
             player.SendAttackAnimation(null);
             
             // Spawn projectiles if can/need be
-            if (player.TryGetEquippedItem(Options.WeaponIndex, out var equippedWeapon))
+            if (player.TrySpawnWeaponProjectile(latencyAdjustmentMs))
             {
-                var weaponItem = equippedWeapon.Descriptor;
-
-                var projectileBase = ProjectileBase.Get(weaponItem?.ProjectileId ?? Guid.Empty);
-                if (projectileBase != null)
-                {
-                    if (projectileBase.AmmoItemId != Guid.Empty)
-                    {
-                        var itemSlot = player.FindInventoryItemSlot(
-                            projectileBase.AmmoItemId, projectileBase.AmmoRequired
-                        );
-
-                        if (itemSlot == null)
-                        {
-                            PacketSender.SendChatMsg(
-                                player,
-                                Strings.Items.notenough.ToString(ItemBase.GetName(projectileBase.AmmoItemId)),
-                                ChatMessageType.Inventory,
-                                CustomColors.Combat.NoAmmo
-                            );
-
-                            return;
-                        }
-                    }
-                    if (MapController.TryGetInstanceFromMap(player.MapId, player.MapInstanceId, out var mapInstance))
-                    {
-                        mapInstance
-                        .SpawnMapProjectile(
-                            player, projectileBase, null, weaponItem, player.MapId,
-                            (byte)player.X, (byte)player.Y, (byte)player.Z,
-                            (byte)player.Dir, null
-                        );
-
-                        player.AttackTimer = Timing.Global.Milliseconds +
-                                             latencyAdjustmentMs +
-                                             player.CalculateAttackTime();
-                    }
-
-                    return;
-                }
+                return;
             }
             
-
+            // Else, melee attack the target
             foreach (var mapInstance in MapController.GetSurroundingMapInstances(player.Map.Id, player.MapInstanceId, true))
             {
                 foreach (var entity in mapInstance.GetEntities())

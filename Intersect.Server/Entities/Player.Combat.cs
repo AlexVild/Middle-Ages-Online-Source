@@ -1,6 +1,7 @@
 ﻿using Intersect.Enums;
 using Intersect.GameObjects;
 using Intersect.Server.Database;
+using Intersect.Server.Entities.Combat;
 using Intersect.Server.Entities.Events;
 using Intersect.Server.Localization;
 using Intersect.Server.Maps;
@@ -14,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace Intersect.Server.Entities
 {
-    public partial class Player : Entity, AttackingEntity
+    public partial class Player : AttackingEntity
     {
         public override bool MeleeAvailable()
         {
@@ -55,13 +56,13 @@ namespace Intersect.Server.Entities
             List<AttackTypes> attackTypes,
             int dmgScaling,
             double critMultiplier,
-            Item weapon,
+            ItemBase weapon,
             out int damage)
         {
             damage = 0;
             critMultiplier = 1.0; // override - determined by item or spell
             // If this is an unarmed attack, use class stats
-            if (weapon == null || weapon.Descriptor == null)
+            if (weapon == null)
             {
                 var cls = ClassBase.Get(ClassId);
                 if (cls == null)
@@ -75,9 +76,9 @@ namespace Intersect.Server.Entities
                     critMultiplier = CalculateEffectBonus(critMultiplier, EffectType.CritBonus);
                 }
             }
-            else if (IsCriticalHit(weapon.Descriptor.CritChance))
+            else if (IsCriticalHit(weapon.CritChance))
             {
-                critMultiplier = weapon.Descriptor.CritMultiplier;
+                critMultiplier = weapon.CritMultiplier;
                 critMultiplier = CalculateEffectBonus(critMultiplier, EffectType.CritBonus);
             }
 
@@ -86,7 +87,7 @@ namespace Intersect.Server.Entities
             return base.TryDealDamageTo(enemy, attackTypes, dmgScaling, critMultiplier, weapon, out damage);
         }
 
-        public void MeleeAttack(Entity enemy, bool ignoreEvasion)
+        public override void MeleeAttack(Entity enemy, bool ignoreEvasion)
         {
             StealthAttack = IsStealthed;
             Unstealth();
@@ -122,7 +123,7 @@ namespace Intersect.Server.Entities
                 attackTypes.AddRange(weapon.Descriptor.AttackTypes);
             }
 
-            if (!TryDealDamageTo(enemy, attackTypes, 100, 1.0, weapon, out int damage))
+            if (!TryDealDamageTo(enemy, attackTypes, 100, 1.0, weapon?.Descriptor, out int damage))
             {
                 return;
             }
@@ -132,6 +133,70 @@ namespace Intersect.Server.Entities
                 PacketSender.SendActionMsg(
                     this, Strings.Combat.addsymbol + (int)healthRecovered, CustomColors.Combat.Heal
                 );
+            }
+        }
+
+        public override void ProjectileAttack(Entity enemy, Projectile projectile, SpellBase parentSpell, ItemBase parentWeapon, byte projectileDir)
+        {
+            if (projectile == null || projectile.Base == null)
+            {
+                return;
+            }
+            if (!CanRangeTarget(enemy))
+            {
+                return;
+            }
+
+            var descriptor = projectile.Base;
+
+            if (enemy is Player pvpTarget)
+            {
+                pvpTarget.StartCommonEventsWithTrigger(CommonEventTrigger.PlayerInteract, "", Name);
+                if (!CanPvpPlayer(pvpTarget))
+                {
+                    return;
+                }
+            }
+            else if (enemy is Resource resource)
+            {
+                _ = TryHarvestResourceProjectile(resource, projectile);
+                return;
+            }
+
+            // Handle the _projectile's_ spell
+            projectile.HandleProjectileSpell(enemy, false);
+
+            // Handle the spell cast from the parent
+            if (parentSpell != null)
+            {
+                TryAttackSpell(enemy, parentSpell, out bool spellMissed, out bool spellBlocked, (sbyte)projectileDir, true);
+            }
+            // Otherwise, handle the weapon
+            else if (parentWeapon != null)
+            {
+                var deadAnimations = new List<KeyValuePair<Guid, sbyte>>();
+                var aliveAnimations = new List<KeyValuePair<Guid, sbyte>>();
+
+                if (parentWeapon.AttackAnimationId != Guid.Empty)
+                {
+                    deadAnimations.Add(new KeyValuePair<Guid, sbyte>(parentWeapon.AttackAnimationId, (sbyte)projectileDir));
+                    aliveAnimations.Add(new KeyValuePair<Guid, sbyte>(parentWeapon.AttackAnimationId, (sbyte)projectileDir));
+                }
+
+                if (!TryDealDamageTo(enemy, parentWeapon.AttackTypes, 100, 1.0, parentWeapon, out int weaponDamage))
+                {
+                    return;
+                }
+            }
+
+            if (descriptor.Knockback > 0 && projectileDir < 4 && !enemy.IsImmuneTo(Immunities.Knockback) && !StatusActive(StatusTypes.Steady))
+            {
+                if (!(enemy is AttackingEntity) || enemy.IsDead() || enemy.IsDisposed)
+                {
+                    return;
+                }
+
+                ((AttackingEntity)enemy).Knockback(projectileDir, descriptor.Knockback);
             }
         }
 
@@ -163,7 +228,7 @@ namespace Intersect.Server.Entities
             return true;
         }
 
-        public void SendAttackAnimation(Entity enemy)
+        public override void SendAttackAnimation(Entity enemy)
         {
             TryGetEquippedItem(Options.WeaponIndex, out var weapon);
             List<AttackTypes> attackTypes = new List<AttackTypes>();
@@ -205,6 +270,55 @@ namespace Intersect.Server.Entities
                     attackingTile.GetY(), (sbyte)Dir, MapInstanceId
                 );
             }
+        }
+
+        public bool TrySpawnWeaponProjectile(long latencyAdjustmentMs)
+        {
+            if (!TryGetEquippedItem(Options.WeaponIndex, out var weapon))
+            {
+                return false;
+            }
+
+            var projectile = weapon.Descriptor?.Projectile;
+            if (projectile == default)
+            {
+                return false;
+            }
+
+            if (projectile.Ammo != default)
+            {
+                var itemSlot = FindInventoryItemSlot(
+                    projectile.AmmoItemId, projectile.AmmoRequired
+                );
+
+                if (itemSlot == null)
+                {
+                    PacketSender.SendChatMsg(
+                        this,
+                        Strings.Items.notenough.ToString(ItemBase.GetName(projectile.AmmoItemId)),
+                        ChatMessageType.Inventory,
+                        CustomColors.Combat.NoAmmo
+                    );
+
+                    return false;
+                }
+            }
+
+            if (MapController.TryGetInstanceFromMap(MapId, MapInstanceId, out var mapInstance))
+            {
+                mapInstance
+                        .SpawnMapProjectile(
+                            this, projectile, null, weapon.Descriptor, MapId,
+                            (byte)X, (byte)Y, (byte)Z,
+                            (byte)Dir, null
+                        );
+
+                AttackTimer = Timing.Global.Milliseconds +
+                    latencyAdjustmentMs +
+                    CalculateAttackTime();
+            }
+
+            return true;
         }
     }
 }

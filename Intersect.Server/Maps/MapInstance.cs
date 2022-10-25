@@ -1033,7 +1033,7 @@ namespace Intersect.Server.Maps
         /// <param name="direction">Direction in which to spawn</param>
         /// <param name="target">The target of the projectil</param>
         public void SpawnMapProjectile(
-            Entity owner,
+            AttackingEntity owner,
             ProjectileBase projectile,
             SpellBase parentSpell,
             ItemBase parentItem,
