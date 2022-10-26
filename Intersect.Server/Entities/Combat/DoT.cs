@@ -14,7 +14,7 @@ namespace Intersect.Server.Entities.Combat
     {
         public Guid Id = Guid.NewGuid();
 
-        public Entity Attacker;
+        public AttackingEntity Attacker;
 
         public int Count;
 
@@ -22,7 +22,7 @@ namespace Intersect.Server.Entities.Combat
 
         public SpellBase SpellBase;
 
-        public DoT(Entity attacker, Guid spellId, Entity target)
+        public DoT(AttackingEntity attacker, Guid spellId, Entity target)
         {
             SpellBase = SpellBase.Get(spellId);
 
@@ -111,15 +111,18 @@ namespace Intersect.Server.Entities.Combat
             var damageHealth = SpellBase.Combat.VitalDiff[(int)Vitals.Health];
             var damageMana = SpellBase.Combat.VitalDiff[(int)Vitals.Mana];
 
-            Attacker?.Attack(
-                Target, damageHealth, damageMana,
-                (DamageType) SpellBase.Combat.DamageType, (Stats) SpellBase.Combat.ScalingStat,
-                SpellBase.Combat.Scaling, SpellBase.Combat.CritChance, SpellBase.Combat.CritMultiplier, deadAnimations,
-                aliveAnimations, false, true
-            );
-
             mInterval = Timing.Global.Milliseconds + SpellBase.Combat.HotDotInterval;
             Count--;
+
+            var attackTypes = SpellBase.Combat?.DamageTypes;
+            var scaling = SpellBase.Combat?.Scaling ?? 100;
+
+
+            Attacker.SpellDoTAnimation(SpellBase, Target, (sbyte)Directions.Up);
+            if (!Attacker.TryDealDamageTo(Target, attackTypes, scaling, 1.0, null, SpellBase, out int damage))
+            {
+                // Do somethin
+            }
         }
 
     }

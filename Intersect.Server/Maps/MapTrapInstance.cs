@@ -21,7 +21,7 @@ namespace Intersect.Server.Classes.Maps
 
         public Guid MapInstanceId;
 
-        public Entity Owner;
+        public AttackingEntity Owner;
 
         public SpellBase ParentSpell;
 
@@ -33,7 +33,7 @@ namespace Intersect.Server.Classes.Maps
 
         public byte Z;
 
-        public MapTrapInstance(Entity owner, SpellBase parentSpell, Guid mapId, Guid mapInstanceId, byte x, byte y, byte z)
+        public MapTrapInstance(AttackingEntity owner, SpellBase parentSpell, Guid mapId, Guid mapInstanceId, byte x, byte y, byte z)
         {
             Owner = owner;
             ParentSpell = parentSpell;
@@ -60,12 +60,12 @@ namespace Intersect.Server.Classes.Maps
                         }
                     }
 
-                    if (entity is EventPageInstance)
+                    if (entity is EventPageInstance || entity is Resource)
                     {
                         return;
                     }
 
-                    Owner.TryAttackSpell(entity, ParentSpell, out var miss, out var block, (sbyte) Directions.Up, false, true);
+                    Owner.AttackSpell(entity, ParentSpell, (sbyte) Directions.Up, null);
                     Triggered = true;
                 }
             }

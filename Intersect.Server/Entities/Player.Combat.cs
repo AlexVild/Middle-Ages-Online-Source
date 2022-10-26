@@ -42,6 +42,11 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
+            if (target is Npc npcTarget && IsAllyOf(npcTarget))
+            {
+                return false;
+            }
+
             return base.CanMeleeTarget(target);
         }
 
@@ -52,17 +57,18 @@ namespace Intersect.Server.Entities
             return base.IsCriticalHit(critChance);
         }
 
-        protected override bool TryDealDamageTo(Entity enemy,
+        public override bool TryDealDamageTo(Entity enemy,
             List<AttackTypes> attackTypes,
             int dmgScaling,
             double critMultiplier,
             ItemBase weapon,
+            SpellBase spell,
             out int damage)
         {
             damage = 0;
             critMultiplier = 1.0; // override - determined by item or spell
             // If this is an unarmed attack, use class stats
-            if (weapon == null)
+            if (weapon == null && spell == null)
             {
                 var cls = ClassBase.Get(ClassId);
                 if (cls == null)
@@ -76,15 +82,32 @@ namespace Intersect.Server.Entities
                     critMultiplier = CalculateEffectBonus(critMultiplier, EffectType.CritBonus);
                 }
             }
-            else if (IsCriticalHit(weapon.CritChance))
+            else if (weapon != null && spell == null && IsCriticalHit(weapon.CritChance))
             {
                 critMultiplier = weapon.CritMultiplier;
                 critMultiplier = CalculateEffectBonus(critMultiplier, EffectType.CritBonus);
+            } else if (spell != null && spell.Combat != null)
+            {
+                var spellCrit = false;
+                if (weapon == null)
+                {
+                    spellCrit = IsCriticalHit(spell.Combat.CritChance);
+                }
+                else if (spell.WeaponSpell)
+                {
+                    spellCrit = IsCriticalHit(spell.Combat.CritChance + weapon.CritChance);
+                }
+
+                if (spellCrit)
+                {
+                    critMultiplier += spell.Combat.CritMultiplier;
+                    critMultiplier = CalculateEffectBonus(critMultiplier, EffectType.CritBonus);
+                }
             }
 
             // TODO evasion
             // if (!ignoreInvasion)...
-            return base.TryDealDamageTo(enemy, attackTypes, dmgScaling, critMultiplier, weapon, out damage);
+            return base.TryDealDamageTo(enemy, attackTypes, dmgScaling, critMultiplier, weapon, null, out damage);
         }
 
         public override void MeleeAttack(Entity enemy, bool ignoreEvasion)
@@ -123,7 +146,7 @@ namespace Intersect.Server.Entities
                 attackTypes.AddRange(weapon.Descriptor.AttackTypes);
             }
 
-            if (!TryDealDamageTo(enemy, attackTypes, 100, 1.0, weapon?.Descriptor, out int damage))
+            if (!TryDealDamageTo(enemy, attackTypes, 100, 1.0, weapon?.Descriptor, null, out int damage))
             {
                 return;
             }
@@ -136,6 +159,179 @@ namespace Intersect.Server.Entities
             }
         }
 
+        public override void UseSpell(SpellBase spell, int spellSlot, bool ignoreVitals = false, bool prayerSpell = false, byte prayerSpellDir = 0, Entity prayerTarget = null)
+        {
+            if (PlayerDead)
+            {
+                return;
+            }
+
+            if (resourceLock != null)
+            {
+                SetResourceLock(false);
+            }
+
+            CastingWeapon = GetEquippedWeapon();
+
+            switch (spell.SpellType)
+            {
+                case SpellTypes.Event:
+                    var evt = spell.Event;
+                    if (evt != null)
+                    {
+                        EnqueueStartCommonEvent(evt);
+                    }
+
+                    base.UseSpell(spell, spellSlot, ignoreVitals, prayerSpell, prayerSpellDir, prayerTarget);
+                    break;
+
+                default:
+                    base.UseSpell(spell, spellSlot, ignoreVitals, prayerSpell, prayerSpellDir, prayerTarget);
+                    break;
+            }
+        }
+
+        protected override void PopulateExtraSpellDamage(ref int scaling, 
+            ref List<AttackTypes> attackTypes,
+            ref int critChance,
+            ref double critMultiplier)
+        {
+            if (CastingWeapon == null)
+            {
+                return;
+            }
+
+            scaling += CastingWeapon.Scaling;
+            attackTypes.AddRange(CastingWeapon.AttackTypes);
+            critChance += CastingWeapon.CritChance;
+            critMultiplier += CastingWeapon.CritMultiplier;
+        }
+
+        public override bool MeetsSpellVitalReqs(SpellBase spell)
+        {
+            if (spell == null)
+            {
+                throw new ArgumentNullException(nameof(spell));
+            }
+
+            if (spell.VitalCost[(int)Vitals.Mana] > GetVital(Vitals.Mana))
+            {
+                if (Options.Combat.EnableCombatChatMessages)
+                {
+                    PacketSender.SendChatMsg(this, Strings.Combat.lowmana, ChatMessageType.Combat);
+                }
+                if (MPWarningSent < Timing.Global.Milliseconds) // attempt to limit how often we send this notification
+                {
+                    MPWarningSent = Timing.Global.Milliseconds + Options.Combat.MPWarningDisplayTime;
+                    PacketSender.SendGUINotification(Client, GUINotification.NotEnoughMp, true);
+                }
+
+                return false;
+            }
+
+            if (spell.VitalCost[(int)Vitals.Health] > GetVital(Vitals.Health))
+            {
+                if (Options.Combat.EnableCombatChatMessages)
+                {
+                    PacketSender.SendChatMsg(this, Strings.Combat.lowhealth, ChatMessageType.Combat);
+                }
+
+                return false;
+            }
+
+            return true;
+        }
+
+        public override void UpdateSpellCooldown(int spellSlot)
+        {
+            if (spellSlot < 0 || spellSlot > Spells.Count)
+            {
+                return;
+            }
+
+            var spell = SpellBase.Get(Spells[spellSlot].SpellId);
+            if (spell == null)
+            {
+                return;
+            }
+
+            UpdateCooldown(spell);
+
+            // Trigger the global cooldown, if we're allowed to.
+            if (!spell.IgnoreGlobalCooldown)
+            {
+                UpdateGlobalCooldown();
+            }
+        }
+
+        protected override bool EntityMeetsCastingRequirements(SpellBase spell)
+        {
+            if (spell == null)
+            {
+                throw new ArgumentNullException(nameof(spell));
+            }
+
+            if (!EntityHasCastingMaterials(spell))
+            {
+                return false;
+            }
+
+            if (!Conditions.MeetsConditionLists(spell.CastingRequirements, this, null))
+            {
+                if (Timing.Global.Milliseconds > ChatErrorLastSent)
+                {
+                    if (!string.IsNullOrWhiteSpace(spell.CannotCastMessage))
+                    {
+                        PacketSender.SendChatMsg(this, spell.CannotCastMessage, ChatMessageType.Error, "", true);
+                    }
+                    else
+                    {
+                        PacketSender.SendChatMsg(this, Strings.Combat.dynamicreq, ChatMessageType.Spells, CustomColors.Alerts.Error);
+                    }
+                    ChatErrorLastSent = Timing.Global.Milliseconds + 1000;
+                }
+
+                return false;
+            }
+
+            return true;
+        }
+
+        protected override bool EntityHasCastingMaterials(SpellBase spell)
+        {
+            if (spell == null)
+            {
+                throw new ArgumentNullException(nameof(spell));
+            }
+
+            if (spell.RequiresAmmo && !HasProjectileAmmo(spell.Combat.Projectile))
+            {
+                return false;
+            }
+
+            if (!HasCastingComponents(spell.CastingComponents))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        protected override bool TryConsumeCastingMaterials(SpellBase spell)
+        {
+            if (spell.RequiresAmmo && !TryConsumeProjectileAmmo(spell.Combat.Projectile))
+            {
+                return false;
+            }
+
+            if (!TryConsumeCastingComponents(spell))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         public override void ProjectileAttack(Entity enemy, Projectile projectile, SpellBase parentSpell, ItemBase parentWeapon, byte projectileDir)
         {
             if (projectile == null || projectile.Base == null)
@@ -146,8 +342,6 @@ namespace Intersect.Server.Entities
             {
                 return;
             }
-
-            var descriptor = projectile.Base;
 
             if (enemy is Player pvpTarget)
             {
@@ -163,47 +357,13 @@ namespace Intersect.Server.Entities
                 return;
             }
 
-            // Handle the _projectile's_ spell
-            projectile.HandleProjectileSpell(enemy, false);
-
-            // Handle the spell cast from the parent
-            if (parentSpell != null)
-            {
-                TryAttackSpell(enemy, parentSpell, out bool spellMissed, out bool spellBlocked, (sbyte)projectileDir, true);
-            }
-            // Otherwise, handle the weapon
-            else if (parentWeapon != null)
-            {
-                var deadAnimations = new List<KeyValuePair<Guid, sbyte>>();
-                var aliveAnimations = new List<KeyValuePair<Guid, sbyte>>();
-
-                if (parentWeapon.AttackAnimationId != Guid.Empty)
-                {
-                    deadAnimations.Add(new KeyValuePair<Guid, sbyte>(parentWeapon.AttackAnimationId, (sbyte)projectileDir));
-                    aliveAnimations.Add(new KeyValuePair<Guid, sbyte>(parentWeapon.AttackAnimationId, (sbyte)projectileDir));
-                }
-
-                if (!TryDealDamageTo(enemy, parentWeapon.AttackTypes, 100, 1.0, parentWeapon, out int weaponDamage))
-                {
-                    return;
-                }
-            }
-
-            if (descriptor.Knockback > 0 && projectileDir < 4 && !enemy.IsImmuneTo(Immunities.Knockback) && !StatusActive(StatusTypes.Steady))
-            {
-                if (!(enemy is AttackingEntity) || enemy.IsDead() || enemy.IsDisposed)
-                {
-                    return;
-                }
-
-                ((AttackingEntity)enemy).Knockback(projectileDir, descriptor.Knockback);
-            }
+            base.ProjectileAttack(enemy, projectile, parentSpell, parentWeapon, projectileDir);
         }
 
         private bool CanPvpPlayer(Player target)
         {
             return !(target == null
-                || InParty(target)
+                || IsAllyOf(target)
                 || Map.ZoneType == MapZones.Safe
                 || target.Map?.ZoneType == MapZones.Safe);
         }

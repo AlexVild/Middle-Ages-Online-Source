@@ -1572,6 +1572,11 @@ namespace Intersect.Server.Networking
             bool projectileHitAnim = false
         )
         {
+            if (animId == Guid.Empty)
+            {
+                return;
+            }
+
             if (MapController.TryGetInstanceFromMap(mapId, mapInstanceId, out var mapInstance))
             {
                 if (Options.Instance.Packets.BatchAnimationPackets)

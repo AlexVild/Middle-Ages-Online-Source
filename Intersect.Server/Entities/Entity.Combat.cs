@@ -21,10 +21,9 @@ namespace Intersect.Server.Entities
         public int Health => GetVital(Vitals.Health);
         public int Mana => GetVital(Vitals.Mana);
 
-
         protected bool IsStealthed => CachedStatuses.ToArray().Select(status => status.Type).Contains(StatusTypes.Stealth);
 
-        protected void Unstealth()
+        protected virtual void Unstealth()
         {
             foreach(var cachedStatus in CachedStatuses.Where(status => status.Type == StatusTypes.Stealth))
             {
@@ -58,28 +57,11 @@ namespace Intersect.Server.Entities
                 {
                     Die(true, attacker);
                 }
-                /* TODO this?
-                if (deadAnimations != null)
-                {
-                    foreach (var anim in deadAnimations)
-                    {
-                        PacketSender.SendAnimationToProximity(
-                            anim.Key, -1, Id, enemy.MapId, (byte)enemy.X, (byte)enemy.Y, anim.Value, MapInstanceId
-                        );
-                    }
-                }*/
             }
-            // Nah, but you need to be mad
             else
             {
-                // TODO this
-                /*if (aliveAnimations?.Count > 0)
-                {
-                    Animate(enemy, aliveAnimations, fromProjectile);
-                }*/
-
                 // TODO wtf is "isAutoAttack"?
-                //attacker.CheckForOnhitAttack(this, isAutoAttack);
+                // attacker.CheckForOnhitAttack(this, isAutoAttack);
             }
         }
 
@@ -127,6 +109,44 @@ namespace Intersect.Server.Entities
             }
 
             return false;
+        }
+
+        private enum DamageBonus
+        {
+            None = 0,
+            Backstab,
+            Stealth
+        };
+        public int CalculateSpecialDamage(int baseDamage, ItemBase item, Entity target)
+        {
+            if (target is Resource) return baseDamage;
+            if (item == null || target == null) return baseDamage;
+
+            var damageBonus = DamageBonus.None;
+            if (target.Dir == Dir) // Player is hitting something from behind
+            {
+                if (item.CanBackstab)
+                {
+                    baseDamage = (int)Math.Floor(baseDamage * item.BackstabMultiplier);
+                    damageBonus = DamageBonus.Backstab;
+                }
+                if (this is Player player && player.StealthAttack && item.ProjectileId == Guid.Empty) // Melee weapons only for stealth attacks
+                {
+                    baseDamage += player.CalculateStealthDamage(baseDamage, item);
+                    damageBonus = DamageBonus.Stealth;
+                }
+
+                if (damageBonus == DamageBonus.Backstab)
+                {
+                    PacketSender.SendActionMsg(target, Strings.Combat.backstab, CustomColors.Combat.Backstab);
+                }
+                else if (damageBonus == DamageBonus.Stealth)
+                {
+                    PacketSender.SendActionMsg(target, Strings.Combat.stealthattack, CustomColors.Combat.Backstab);
+                }
+            }
+
+            return baseDamage;
         }
     }
 }

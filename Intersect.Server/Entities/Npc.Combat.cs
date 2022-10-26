@@ -15,7 +15,21 @@ namespace Intersect.Server.Entities
     {
         public override void ProjectileAttack(Entity enemy, Projectile projectile, SpellBase parentSpell, ItemBase parentWeapon, byte projectileDir)
         {
-            throw new NotImplementedException();
+            if (projectile == null || projectile.Base == null)
+            {
+                return;
+            }
+            if (!CanRangeTarget(enemy))
+            {
+                return;
+            }
+
+            if (!(enemy is Player) || !(enemy is Npc))
+            {
+                return;
+            }
+
+            base.ProjectileAttack(enemy, projectile, parentSpell, parentWeapon, projectileDir);
         }
 
         public override void TakeDamage(Entity attacker, int damage)
@@ -32,14 +46,20 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
+            if (IsAllyOf(target))
+            {
+                return false;
+            }
+
             return base.CanMeleeTarget(target);
         }
 
-        protected virtual bool TryDealDamageTo(Entity enemy,
+        public virtual bool TryDealDamageTo(Entity enemy,
                     List<AttackTypes> attackTypes,
                     int dmgScaling,
                     double critMultiplier,
                     ItemBase weapon,
+                    SpellBase spell,
                     out int damage)
         {
             damage = 0;
@@ -49,23 +69,73 @@ namespace Intersect.Server.Entities
             }
 
             critMultiplier = 1.0; // override - determined by item or spell
-            if (IsCriticalHit(Base.CritChance))
+            if (spell == null && IsCriticalHit(Base.CritChance))
             {
                 critMultiplier = Base.CritMultiplier;
             }
-            
-            SendAttackAnimation(enemy);
-            return base.TryDealDamageTo(enemy, attackTypes, dmgScaling, critMultiplier, weapon, out damage);
+            else if (spell != null && spell.Combat != null)
+            {
+                critMultiplier = spell.Combat.CritMultiplier;
+            }
+
+            return base.TryDealDamageTo(enemy, attackTypes, dmgScaling, critMultiplier, weapon, null, out damage);
+        }
+
+        // An NPC always has casting materials
+        protected override bool EntityHasCastingMaterials(SpellBase spell) => true;
+        protected override bool TryConsumeCastingMaterials(SpellBase spell) => true;
+        protected override bool EntityMeetsCastingRequirements(SpellBase spell) => true;
+
+        public override bool MeetsSpellVitalReqs(SpellBase spell)
+        {
+            if (spell.VitalCost[(int)Vitals.Mana] > GetVital(Vitals.Mana))
+            {
+                return false;
+            }
+
+            // Ignore this one ;), we want NPCs to be able to suicide
+            /*if (spell.VitalCost[(int)Vitals.Health] > GetVital(Vitals.Health))
+            {
+                return false;
+            }*/
+
+            return true;
+        }
+
+        public override void UpdateSpellCooldown(int spellSlot)
+        {
+            if (spellSlot < 0 || spellSlot > Spells.Count)
+            {
+                return;
+            }
+
+            var spell = SpellBase.Get(Spells[spellSlot].SpellId);
+            if (spell == null)
+            {
+                return;
+            }
+
+            SpellCooldowns[Spells[spellSlot].SpellId] = Timing.Global.MillisecondsUtc + (int)(spell.CooldownDuration);
+        }
+
+        protected override void PopulateExtraSpellDamage(ref int scaling,
+            ref List<AttackTypes> attackTypes,
+            ref int critChance,
+            ref double critMultiplier)
+        { 
+            // intentionally blank
         }
 
         public override void MeleeAttack(Entity enemy, bool ignoreEvasion)
         {
+            Unstealth();
             var spellOverride = Base?.SpellAttackOverrideId ?? default;
             if (spellOverride != default)
             {
-                if (CanCastSpell(spellOverride, enemy) && Timing.Global.MillisecondsUtc > mLastOverrideAttack)
+                var spell = SpellBase.Get(spellOverride);
+                if (Timing.Global.MillisecondsUtc > mLastOverrideAttack)
                 {
-                    CastSpell(spellOverride);
+                    UseSpell(spell, -1);
                     mLastOverrideAttack = Timing.Global.MillisecondsUtc + CalculateAttackTime();
                 }
 
@@ -76,9 +146,6 @@ namespace Intersect.Server.Entities
             {
                 return;
             }
-
-            IncrementAttackTimer();
-            List<AttackTypes> attackTypes = new List<AttackTypes>(Base.AttackTypes);
             
             // Attack literally misses
             if (!CanMeleeTarget(enemy))
@@ -86,7 +153,11 @@ namespace Intersect.Server.Entities
                 return;
             }
 
-            if (!TryDealDamageTo(enemy, attackTypes, 100, 1.0, null, out int damage))
+            IncrementAttackTimer();
+            List<AttackTypes> attackTypes = new List<AttackTypes>(Base.AttackTypes);
+
+            SendAttackAnimation(enemy);
+            if (!TryDealDamageTo(enemy, attackTypes, 100, 1.0, null, null, out int damage))
             {
                 return;
             }

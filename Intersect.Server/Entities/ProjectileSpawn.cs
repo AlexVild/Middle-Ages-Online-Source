@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using Intersect.GameObjects;
 using Intersect.Server.Entities.Combat;
 using Intersect.Server.Entities.Events;
-using Intersect.Server.General;
-using Intersect.Server.Networking;
 using Intersect.Server.Maps;
 using Intersect.Server.Database;
 using Intersect.Enums;
@@ -180,8 +178,7 @@ namespace Intersect.Server.Entities
             {
                 // Handle NPC vs NPC
                 var ownerNpc = Parent.Owner as Npc;
-                if (ownerNpc == null ||
-                    ownerNpc.CanNpcCombat(npc, FriendlySpell))
+                if (ownerNpc == null || ownerNpc.CanNpcCombat(npc, FriendlySpell))
                 {
                     Parent.Owner.ProjectileAttack(npc, Parent, Parent.Spell, Parent.Item, Dir);
 
@@ -199,7 +196,6 @@ namespace Intersect.Server.Entities
                 return !Piercing;
             }
 
-
             if (targetEntity is Resource resourceTarget)
             {
                 // If the owner is an NPC, don't bother trying to harvest
@@ -213,7 +209,6 @@ namespace Intersect.Server.Entities
 
             return false;
         }
-
     }
 
     public partial class ProjectileSpawn

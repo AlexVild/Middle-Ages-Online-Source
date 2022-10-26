@@ -1543,10 +1543,13 @@ namespace Intersect.Server.Entities
                         if (Equipment[Options.PrayerIndex] >= 0)
                         {
                             var prayer = ItemBase.Get(Items[Equipment[Options.PrayerIndex]].ItemId);
-                            var prayerSpellId = prayer.ComboSpellId;
-                            if (prayerSpellId != Guid.Empty && prayer.ComboInterval > 0 && CurrentCombo % prayer.ComboInterval == 0) // If there's a spell and we're on the right combo interval (every 2 kills, etc)
+                            var prayerSpell = SpellBase.Get(prayer.ComboSpellId);
+                            // If there's a spell and we're on the right combo interval (every 2 kills, etc)
+                            if (prayerSpell != default 
+                                && prayer.ComboInterval > 0 
+                                && CurrentCombo % prayer.ComboInterval == 0)
                             {
-                                CastSpell(prayerSpellId, -1, true, npc, Dir);
+                                UseSpell(prayerSpell, -1, true, true, (byte)Dir, npc);
                             }
                         }
 
@@ -1665,77 +1668,6 @@ namespace Intersect.Server.Entities
             }
         }
 
-        public override void TryAttack(
-            Entity target,
-            ProjectileBase projectile,
-            SpellBase parentSpell,
-            ItemBase parentItem,
-            byte projectileDir
-        )
-        {
-            if (!CanAttack(target, parentSpell))
-            {
-                return;
-            }
-
-            //If Entity is resource, check for the correct tool and make sure its not a spell cast.
-            if (target is Resource resource)
-            {
-                if (resource.IsDead())
-                {
-                    return;
-                }
-
-                // We don't here deal in them fancy projectile tools o'er in dis town!
-                if (parentSpell != null && projectile.Tool != resource.Base.Tool)
-                {
-                    return;
-                }
-
-                // Check that a resource is actually required.
-                var descriptor = resource.Base;
-
-                //Check Dynamic Requirements
-                if (!Conditions.MeetsConditionLists(descriptor.HarvestingRequirements, this, null))
-                {
-                    if (!string.IsNullOrWhiteSpace(descriptor.CannotHarvestMessage))
-                    {
-                        PacketSender.SendChatMsg(this, descriptor.CannotHarvestMessage, ChatMessageType.Error);
-                    }
-                    else
-                    {
-                        PacketSender.SendChatMsg(this, Strings.Combat.resourcereqs, ChatMessageType.Error);
-                    }
-
-                    return;
-                }
-
-                if (descriptor.Tool > -1 && descriptor.Tool < Options.ToolTypes.Count)
-                {
-                    if (projectile != null)
-                    {
-                        if (projectile.Tool != descriptor.Tool)
-                        {
-                            return;
-                        }
-                    }
-                    else
-                    {
-                        if (parentItem == null || descriptor.Tool != parentItem.Tool)
-                        {
-                            PacketSender.SendChatMsg(
-                               this, Strings.Combat.toolrequired.ToString(Options.ToolTypes[descriptor.Tool]), ChatMessageType.Error
-                           );
-
-                            return;
-                        }
-                    }
-                }
-            }
-
-            base.TryAttack(target, projectile, parentSpell, parentItem, projectileDir);
-        }
-
         private ItemBase GetEquippedWeapon()
         {
             if (Options.WeaponIndex > -1 &&
@@ -1762,12 +1694,7 @@ namespace Intersect.Server.Entities
             }
 
             // If self-cast, AoE, Projectile, Trap, or Dash.. always accept.
-            if (spell?.Combat.TargetType == SpellTargetTypes.Self ||
-                spell?.Combat.TargetType == SpellTargetTypes.AoE ||
-                spell?.Combat.TargetType == SpellTargetTypes.Projectile ||
-                spell?.Combat.TargetType == SpellTargetTypes.Trap ||
-                spell?.SpellType == SpellTypes.Dash
-                )
+            if (spell != null && spell?.Combat.TargetType != SpellTargetTypes.Single)
             {
                 return true;
             }
@@ -1777,7 +1704,7 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
-            if (entity is EventPage)
+            if (entity is EventPageInstance)
             {
                 return false;
             }
@@ -1789,18 +1716,15 @@ namespace Intersect.Server.Entities
                 {
                     return false;
                 }
-                if (player.InParty(this) || this == player || (!Options.Instance.Guild.AllowGuildMemberPvp && friendly != (player.Guild != null && player.Guild == this.Guild)))
+                if (player.IsAllyOf(this))
                 {
                     return friendly;
                 }
             }
 
-            if (entity is Resource)
+            if (entity is Resource && spell != null)
             {
-                if (spell != null)
-                {
-                    return false;
-                }
+                return false;
             }
 
             if (entity is Npc npc)
@@ -3363,13 +3287,12 @@ namespace Intersect.Server.Entities
 
                         if (itemBase.QuickCast)
                         {
-                            if (!CanSpellCast(itemBase.Spell, target, false, true))
+                            if (!CanCastSpell(itemBase.Spell, target))
                             {
                                 return;
                             }
-
-                            CastTarget = target;
-                            CastSpell(itemBase.SpellId);
+                            Target = target;
+                            UseSpell(itemBase.Spell, -1, true);
                         }
                         else if (!TryTeachSpell(new Spell(itemBase.SpellId)))
                         {
@@ -5445,416 +5368,40 @@ namespace Intersect.Server.Entities
             }
         }
 
-        public virtual bool IsAllyOf(Player otherPlayer)
+        public bool IsAllyOf(Player otherPlayer)
         {
-            if (Guild != null && otherPlayer != null)
+            if (otherPlayer == null)
             {
-                return this.InParty(otherPlayer) || this.Guild.IsMember(otherPlayer.Id) || this == otherPlayer;
+                return false;
             }
-            else if (otherPlayer != null)
+
+            var allies = false;
+            if (Guild != null)
             {
-                return this.InParty(otherPlayer) || this == otherPlayer;
+                allies = InParty(otherPlayer) || Guild.IsMember(otherPlayer.Id) || this == otherPlayer;
             }
             else
             {
-                return false;
+                allies = InParty(otherPlayer) || this == otherPlayer;
             }
+
+            if (allies)
+            {
+                return true;
+            }
+            else if (Map?.ZoneType == MapZones.Safe || otherPlayer.Map?.ZoneType == MapZones.Safe)
+            {
+                return true;
+            }
+
+            return false;
         }
 
-        public bool CanSpellCast(SpellBase spell, Entity target, bool checkVitalReqs, bool isQuickCast = false)
+        public void UseSpellInHotbarSlot(int spellSlot, Entity target)
         {
-            if (!Conditions.MeetsConditionLists(spell.CastingRequirements, this, null))
+            if (CanStartCast(Timing.Global.Milliseconds, spellSlot, target))
             {
-                if (Timing.Global.Milliseconds > ChatErrorLastSent)
-                {
-                    if (!string.IsNullOrWhiteSpace(spell.CannotCastMessage))
-                    {
-                        PacketSender.SendChatMsg(this, spell.CannotCastMessage, ChatMessageType.Error, "", true);
-                    }
-                    else
-                    {
-                        PacketSender.SendChatMsg(this, Strings.Combat.dynamicreq, ChatMessageType.Spells, CustomColors.Alerts.Error);
-                    }
-                    ChatErrorLastSent = Timing.Global.Milliseconds + 1000;
-                }
-
-                return false;
-            }
-
-
-            if (!CanAttack(target, spell))
-            {
-                return false;
-            }
-
-            //Check if the caster is silenced or stunned. Clense casts break the rule.
-            if ((spell.Combat.Effect != StatusTypes.Cleanse && !isQuickCast) || (spell.Combat.Effect != StatusTypes.Cleanse && !Options.Instance.CombatOpts.CleanseThruStun))
-            {
-                foreach (var status in CachedStatuses)
-                {
-                    if (status.Type == StatusTypes.Silence)
-                    {
-                        if (Options.Combat.EnableCombatChatMessages)
-                        {
-                            PacketSender.SendChatMsg(this, Strings.Combat.silenced, ChatMessageType.Combat);
-                        }
-
-                        return false;
-                    }
-
-                    if (status.Type == StatusTypes.Stun)
-                    {
-                        if (Options.Combat.EnableCombatChatMessages)
-                        {
-                            PacketSender.SendChatMsg(this, Strings.Combat.stunned, ChatMessageType.Combat);
-                        }
-
-                        return false;
-                    }
-
-                    if (status.Type == StatusTypes.Sleep)
-                    {
-                        if (Options.Combat.EnableCombatChatMessages)
-                        {
-                            PacketSender.SendChatMsg(this, Strings.Combat.sleep, ChatMessageType.Combat);
-                        }
-
-                        return false;
-                    }
-                }
-            }
-
-            if (target is Player)
-            {
-                //Only count safe zones and friendly fire if its a dangerous spell! (If one has been used)
-                if (!spell.Combat.Friendly &&
-                    (spell.Combat.TargetType != SpellTargetTypes.Self &&
-                    spell.Combat.TargetType != SpellTargetTypes.AoE &&
-                    spell.Combat.TargetType != SpellTargetTypes.Projectile &&
-                    spell.SpellType == SpellTypes.CombatSpell
-                    )
-                 )
-                {
-                    // Check if either the attacker or the defender is in a "safe zone" (Only apply if combat is PVP)
-                    if (MapController.Get(MapId).ZoneType == MapZones.Safe || MapController.Get(target.MapId).ZoneType == MapZones.Safe)
-                    {
-                        return false;
-                    }
-
-                    // Also consider this an issue if either player is in a different map zone type.
-                    if (MapController.Get(MapId).ZoneType != MapController.Get(target.MapId).ZoneType)
-                    {
-                        return false;
-                    }
-
-                }
-            }
-
-            //Check if the caster has the right ammunition if a projectile
-            if (spell.SpellType == SpellTypes.CombatSpell &&
-                spell.Combat.TargetType == SpellTargetTypes.Projectile &&
-                spell.Combat.ProjectileId != Guid.Empty)
-            {
-                var projectileBase = spell.Combat.Projectile;
-                if (projectileBase == null)
-                {
-                    return false;
-                }
-
-                if (projectileBase.AmmoItemId != Guid.Empty)
-                {
-                    if (FindInventoryItemSlot(projectileBase.AmmoItemId, projectileBase.AmmoRequired) == null)
-                    {
-                        PacketSender.SendChatMsg(
-                            this, Strings.Items.notenough.ToString(ItemBase.GetName(projectileBase.AmmoItemId)),
-                            ChatMessageType.Inventory,
-                            CustomColors.Alerts.Error
-                        );
-
-                        return false;
-                    }
-                }
-            }
-
-            var castingComponents = spell.CastingComponents;
-            if (castingComponents.Count > 0)
-            {
-                List<string> missingComponents = new List<string>();
-                foreach (var component in castingComponents)
-                {
-                    if (FindInventoryItemSlot(component.ItemId, component.Quantity) == null)
-                    {
-                        missingComponents.Add(ItemBase.GetName(component.ItemId));
-                    }
-                }
-
-                if (missingComponents.Count > 0)
-                {
-                    var sb = new StringBuilder();
-                    var idx = 0;
-                    foreach (var componentName in missingComponents)
-                    {
-                        var display = componentName;
-                        if (componentName.Last() == 's')
-                        {
-                            display = componentName.TrimEnd('s');
-                        }
-
-                        if (idx == 0)
-                        {
-                            sb.Append($"{display}s");
-                        }
-                        else if (idx == 1 && idx == missingComponents.Count - 1)
-                        {
-                            sb.Append($" nor {display}s");
-                        }
-                        else if (idx < missingComponents.Count - 1)
-                        {
-                            sb.Append($", {display}s");
-                        }
-                        else
-                        {
-                            sb.Append($", nor {componentName}s");
-                        }
-                        idx++;
-                    }
-
-                    PacketSender.SendChatMsg(
-                            this, Strings.Player.NotEnoughComponents.ToString(sb.ToString()),
-                            ChatMessageType.Inventory,
-                            CustomColors.Alerts.Error
-                        );
-
-                    return false;
-                }
-            }
-
-            //Check if snared and spell is a dash or warp
-            if (spell.SpellType == SpellTypes.Dash ||
-                spell.SpellType == SpellTypes.Warp ||
-                spell.SpellType == SpellTypes.WarpTo)
-            {
-                // Don't cast if on snare status
-                foreach (var status in CachedStatuses)
-                {
-                    if (status.Type == StatusTypes.Snare)
-                    {
-                        return false;
-                    }
-                }
-            }
-
-            var singleTargetSpell = (spell.SpellType == SpellTypes.CombatSpell && spell.Combat.TargetType == SpellTargetTypes.Single) || spell.SpellType == SpellTypes.WarpTo;
-
-            if (target == null && singleTargetSpell)
-            {
-                return false;
-            }
-
-            if (target == this && spell.SpellType == SpellTypes.WarpTo)
-            {
-                return false;
-            }
-
-            if (target != null && singleTargetSpell)
-            {
-                if (! (MapController.Get(target.MapId)?.ZoneType == MapZones.Safe && MapController.Get(MapId)?.ZoneType == MapZones.Safe) )
-                {
-                    if (spell.Combat.Friendly != IsAllyOf(target))
-                    {
-                        return false;
-                    }
-                }
-            }
-
-            //Check for range of a single target spell
-            if (singleTargetSpell && target != this)
-            {
-                if (!InRangeOf(target, spell.Combat.CastRange))
-                {
-                    if (Options.Combat.EnableCombatChatMessages)
-                    {
-                        PacketSender.SendChatMsg(this, Strings.Combat.targetoutsiderange, ChatMessageType.Combat);
-                    }
-                    return false;
-                }
-            }
-
-            if (checkVitalReqs)
-            {
-                if (spell.VitalCost[(int)Vitals.Mana] > GetVital(Vitals.Mana))
-                {
-                    if (Options.Combat.EnableCombatChatMessages)
-                    {
-                        PacketSender.SendChatMsg(this, Strings.Combat.lowmana, ChatMessageType.Combat);
-                    }
-                    if (MPWarningSent < Timing.Global.Milliseconds) // attempt to limit how often we send this notification
-                    {
-                        MPWarningSent = Timing.Global.Milliseconds + Options.Combat.MPWarningDisplayTime;
-                        PacketSender.SendGUINotification(Client, GUINotification.NotEnoughMp, true);
-                    }
-
-                    return false;
-                }
-
-                if (spell.VitalCost[(int)Vitals.Health] > GetVital(Vitals.Health))
-                {
-                    if (Options.Combat.EnableCombatChatMessages)
-                    {
-                        PacketSender.SendChatMsg(this, Strings.Combat.lowhealth, ChatMessageType.Combat);
-                    }
-
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        public void UseSpell(int spellSlot, Entity target)
-        {
-            var spellNum = Spells[spellSlot].SpellId;
-            Target = target;
-            var spell = SpellBase.Get(spellNum);
-            if (spell == null)
-            {
-                return;
-            }
-
-            if (!CanSpellCast(spell, target, true))
-            {
-                return;
-            }
-
-            // Reset stealth attack status
-            StealthAttack = false;
-            if (!SpellCooldowns.ContainsKey(Spells[spellSlot].SpellId) ||
-                SpellCooldowns[Spells[spellSlot].SpellId] < Timing.Global.MillisecondsUtc)
-            {
-                if (CastTime == 0)
-                {
-                    CastTime = Timing.Global.Milliseconds + spell.CastDuration;
-
-                    //Remove stealth status.
-                    foreach (var status in CachedStatuses)
-                    {
-                        if (status.Type == StatusTypes.Stealth)
-                        {
-                            if (spell.WeaponSpell)
-                            {
-                                StealthAttack = true;
-                            }
-                            status.RemoveStatus();
-                        }
-                    }
-
-                    SpellCastSlot = spellSlot;
-                    CastTarget = Target;
-
-                    // Get rid of projectile ammo if necessary
-                    if (spell.SpellType == SpellTypes.CombatSpell &&
-                        spell.Combat.TargetType == SpellTargetTypes.Projectile &&
-                        spell.Combat.ProjectileId != Guid.Empty)
-                    {
-                        var projectileBase = spell.Combat.Projectile;
-                        if (projectileBase != null && projectileBase.AmmoItemId != Guid.Empty)
-                        {
-                            TryTakeItem(projectileBase.AmmoItemId, projectileBase.AmmoRequired);
-                        }
-                    }
-
-                    // Get rid of the player's casting components if necessary
-                    var components = spell.CastingComponents;
-                    if (components.Count > 0)
-                    {
-                        foreach (var component in components)
-                        {
-                            if (!TryTakeItem(component.ItemId, component.Quantity))
-                            {
-                                PacketSender.SendChatMsg(
-                                    this, Strings.Items.notenough.ToString(ItemBase.GetName(component.ItemId)),
-                                    ChatMessageType.Inventory,
-                                    CustomColors.Alerts.Error
-                                );
-                                
-                                return;
-                            }
-                        }
-                    }
-
-                if (spell.CastAnimationId != Guid.Empty)
-                {
-                    PacketSender.SendAnimationToProximity(
-                        spell.CastAnimationId, 1, base.Id, MapId, 0, 0, (sbyte) Dir, MapInstanceId
-                    ); //Target Type 1 will be global entity
-                }
-
-                    //Check if cast should be instance
-                    if (Timing.Global.Milliseconds >= CastTime)
-                    {
-                        //Cast now!
-                        CastTime = 0;
-                        CastSpell(Spells[SpellCastSlot].SpellId, SpellCastSlot);
-                        CastTarget = null;
-                    }
-                    else
-                    {
-                        //Tell the client we are channeling the spell
-                        PacketSender.SendEntityCastTime(this, spellNum);
-                    }
-                }
-                else
-                {
-                    if (Options.Combat.EnableCombatChatMessages)
-                    {
-                        PacketSender.SendChatMsg(this, Strings.Combat.channeling, ChatMessageType.Combat);
-                    }
-                }
-            }
-            else
-            {
-                if (Options.Combat.EnableCombatChatMessages)
-                {
-                    PacketSender.SendChatMsg(this, Strings.Combat.cooldown, ChatMessageType.Combat);
-                }
-            }
-        }
-
-        public override void CastSpell(Guid spellId, int spellSlot = -1, bool prayerSpell = false, Entity prayerTarget = null, int prayerSpellDir = -1)
-        {
-            if (PlayerDead)
-            {
-                return;
-            }
-
-            if (resourceLock != null)
-            {
-                SetResourceLock(false);
-            }
-            var spellBase = SpellBase.Get(spellId);
-            if (spellBase == null)
-            {
-                return;
-            }
-
-            CastingWeapon = GetEquippedWeapon();
-
-            switch (spellBase.SpellType)
-            {
-                case SpellTypes.Event:
-                    var evt = spellBase.Event;
-                    if (evt != null)
-                    {
-                        EnqueueStartCommonEvent(evt);
-                    }
-
-                        base.CastSpell(spellId, spellSlot, prayerSpell, prayerTarget, prayerSpellDir); //To get cooldown :P
-
-                    break;
-                default:
-                    base.CastSpell(spellId, spellSlot, prayerSpell, prayerTarget, prayerSpellDir);
-
-                    break;
+                StartCast(spellSlot, target);
             }
         }
 
@@ -8961,6 +8508,115 @@ namespace Intersect.Server.Entities
         public override bool IsPassable()
         {
             return base.IsPassable() || PlayerDead;
+        }
+
+        private bool HasCastingComponents(List<SpellCastingComponent> castingComponents)
+        {
+            if (castingComponents.Count <= 0)
+            {
+                return true;
+            }
+
+            List<string> missingComponents = new List<string>();
+            foreach (var component in castingComponents)
+            {
+                if (FindInventoryItemSlot(component.ItemId, component.Quantity) == null)
+                {
+                    missingComponents.Add(ItemBase.GetName(component.ItemId));
+                }
+            }
+
+            if (missingComponents.Count > 0)
+            {
+                var sb = new StringBuilder();
+                var idx = 0;
+                foreach (var componentName in missingComponents)
+                {
+                    var display = componentName;
+                    if (componentName.Last() == 's')
+                    {
+                        display = componentName.TrimEnd('s');
+                    }
+
+                    if (idx == 0)
+                    {
+                        sb.Append($"{display}s");
+                    }
+                    else if (idx == 1 && idx == missingComponents.Count - 1)
+                    {
+                        sb.Append($" nor {display}s");
+                    }
+                    else if (idx < missingComponents.Count - 1)
+                    {
+                        sb.Append($", {display}s");
+                    }
+                    else
+                    {
+                        sb.Append($", nor {componentName}s");
+                    }
+                    idx++;
+                }
+
+                PacketSender.SendChatMsg(
+                        this, Strings.Player.NotEnoughComponents.ToString(sb.ToString()),
+                        ChatMessageType.Inventory,
+                        CustomColors.Alerts.Error
+                    );
+
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool HasProjectileAmmo(ProjectileBase projectile)
+        {
+            if (FindInventoryItemSlot(projectile.AmmoItemId, projectile.AmmoRequired) == default)
+            {
+                PacketSender.SendChatMsg(
+                    this, Strings.Items.notenough.ToString(ItemBase.GetName(projectile.AmmoItemId)),
+                    ChatMessageType.Inventory,
+                    CustomColors.Alerts.Error
+                );
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool TryConsumeProjectileAmmo(ProjectileBase projectile)
+        {
+            // Don't take if don't have
+            if (!HasProjectileAmmo(projectile))
+            {
+                return false;
+            }
+            return TryTakeItem(projectile.AmmoItemId, projectile.AmmoRequired);
+        }
+
+        public bool TryConsumeCastingComponents(SpellBase spell)
+        {
+            // Don't take if don't have
+            if (!HasCastingComponents(spell.CastingComponents))
+            {
+                return false;
+            }
+
+            foreach (var component in spell.CastingComponents)
+            {
+                if (!TryTakeItem(component.ItemId, component.Quantity))
+                {
+                    PacketSender.SendChatMsg(
+                        this, Strings.Items.notenough.ToString(ItemBase.GetName(component.ItemId)),
+                        ChatMessageType.Inventory,
+                        CustomColors.Alerts.Error
+                    );
+
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }

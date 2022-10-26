@@ -316,6 +316,11 @@ namespace Intersect.Server.Entities
             }
         }
 
+        public virtual void CheckForSpellCast(long timeMs)
+        {
+            // intentionally blank
+        }
+
         public virtual void Update(long timeMs)
         {
             var lockObtained = false;
@@ -325,15 +330,7 @@ namespace Intersect.Server.Entities
                 if (lockObtained)
                 {
                     //Cast timers
-                    if (this is AttackingEntity attackingEntity)
-                    {
-                        if (CastTime != 0 && CastTime < timeMs && SpellCastSlot < Spells.Count && SpellCastSlot >= 0)
-                        {
-                            CastTime = 0;
-                            attackingEntity.CastSpell(Spells[SpellCastSlot].SpellId, SpellCastSlot);
-                            CastTarget = null;
-                        }
-                    }
+                    CheckForSpellCast(timeMs);
 
                     //DoT/HoT timers
                     foreach (var dot in CachedDots)
@@ -963,9 +960,9 @@ namespace Intersect.Server.Entities
                     faceDirection = moveDir;
                 }
 
-                if (this is Player && CastTime > 0 && Options.Combat.MovementCancelsCast)
+                if (this is Player pl && CastTime > 0 && Options.Combat.MovementCancelsCast)
                 {
-                    CastTarget = null;
+                    pl.CancelCast();
                 }
 
                 var xOffset = 0;
@@ -1069,9 +1066,9 @@ namespace Intersect.Server.Entities
                         else
                         {
                             // Preserve face direction if player
-                            if (this is Player pl)
+                            if (this is Player ply)
                             {
-                                PacketSender.SendEntityMove(pl, pl.FaceDirection, pl.CombatMode, correction);
+                                PacketSender.SendEntityMove(ply, ply.FaceDirection, ply.CombatMode, correction);
                             }
                             else
                             {
@@ -1143,7 +1140,7 @@ namespace Intersect.Server.Entities
                             }
                         }
 
-                        var dash = new Dash(this, 1, (byte)Dir);
+                        _ = new Dash(this, 1, (byte)Dir);
                     }
                 }
             }
@@ -1279,25 +1276,6 @@ namespace Intersect.Server.Entities
                                     (float) Options.MaxStatValue)));
         }
 
-        public void TryBlock(bool blocking)
-        {
-            // Seeing as blocking doesn't... do anything, let's just get rid of this.
-            /*if (AttackTimer < Timing.Global.Milliseconds)
-            {
-                if (blocking && !Blocking && AttackTimer < Timing.Global.Milliseconds)
-                {
-                    Blocking = true;
-                    PacketSender.SendEntityAttack(this, -1);
-                }
-                else if (!blocking && Blocking)
-                {
-                    Blocking = false;
-                    AttackTimer = Timing.Global.Milliseconds + CalculateAttackTime();
-                    PacketSender.SendEntityAttack(this, 0);
-                }
-            }*/
-        }
-
         public virtual int GetWeaponDamage()
         {
             return 0;
@@ -1305,7 +1283,7 @@ namespace Intersect.Server.Entities
 
         public virtual bool CanAttack(Entity entity, SpellBase spell)
         {
-            return CastTime <= 0 && entity != null && !entity.IsDisposed;
+            return entity != null && !entity.IsDisposed;
         }
 
         public virtual void ProcessRegen()
@@ -1349,8 +1327,6 @@ namespace Intersect.Server.Entities
 
             mVitals[vital] = value;
         }
-
-        
 
         public void SetVital(Vitals vital, int value)
         {
@@ -1482,476 +1458,6 @@ namespace Intersect.Server.Entities
             return this == otherEntity;
         }
 
-        //Attacking with projectile
-        public virtual void TryAttack(
-            Entity target,
-            ProjectileBase projectile,
-            SpellBase parentSpell,
-            ItemBase parentItem,
-            byte projectileDir
-        )
-        {
-            bool projectileTool = false;
-            if (target is Resource && projectile.Tool != ((Resource)target).Base.Tool)
-            {
-                return;
-            } else if (target is Resource)
-            {
-                projectileTool = true; // this is a projectile being used as a tool on a resource
-            }
-
-            //Check for taunt status and trying to attack a target that has not taunted you.
-            foreach (var status in CachedStatuses)
-            {
-                if (status.Type == StatusTypes.Taunt)
-                {
-                    if (Target != target)
-                    {
-                        PacketSender.SendActionMsg(this, Strings.Combat.miss, CustomColors.Combat.Missed);
-
-                        return;
-                    }
-                }
-            }
-
-            bool parentSpellMissed = false;
-            if (target is Resource && projectile.SpellId != Guid.Empty)
-            {
-                TryAttackSpell(target, projectile.Spell, out bool spellMissed, out bool spellBlocked, (sbyte)projectileDir, true);
-                parentSpellMissed = spellMissed;
-            }
-            else if (parentSpell != null && target != null)
-            {
-                TryAttackSpell(target, parentSpell, out bool spellMissed, out bool spellBlocked, (sbyte)projectileDir, true);
-                parentSpellMissed = spellMissed;
-            }
-
-            var targetPlayer = target as Player;
-            var targetResource = target as Resource;
-
-            if (this is Player player && targetPlayer != null)
-            {
-                //Player interaction common events
-                if (projectile == null && parentSpell == null)
-                {
-                    targetPlayer.StartCommonEventsWithTrigger(CommonEventTrigger.PlayerInteract, "", this.Name);
-                }
-
-                if (MapController.Get(MapId).ZoneType == MapZones.Safe)
-                {
-                    return;
-                }
-
-                if (MapController.Get(target.MapId).ZoneType == MapZones.Safe)
-                {
-                    return;
-                }
-
-                if (player.InParty(targetPlayer))
-                {
-                    return;
-                }
-            }
-
-            Dictionary<AttackFailures, bool> attackFailures = new Dictionary<AttackFailures, bool>();
-            if (parentSpell == null && parentItem != null)
-            {
-                DamageType damageType = (DamageType)parentItem.DamageType;
-                if (projectileTool)
-                {
-                    damageType = DamageType.True;
-                }
-
-                var deadAnimations = new List<KeyValuePair<Guid, sbyte>>();
-                var aliveAnimations = new List<KeyValuePair<Guid, sbyte>>();
-                
-                if (parentItem.AttackAnimationId != Guid.Empty)
-                {
-                    deadAnimations.Add(new KeyValuePair<Guid, sbyte>(parentItem.AttackAnimationId, (sbyte)projectileDir));
-                    aliveAnimations.Add(new KeyValuePair<Guid, sbyte>(parentItem.AttackAnimationId, (sbyte)projectileDir));
-                }
-
-                int damage = CalculateSpecialDamage(parentItem.Damage, parentItem, target);
-                attackFailures = Attack(
-                    target, damage, 0, damageType, (Stats) parentItem.ScalingStat,
-                    parentItem.Scaling, parentItem.CritChance, parentItem.CritMultiplier, deadAnimations, aliveAnimations, true, false, true
-                );
-            }
-
-            if ((attackFailures.TryGetValue(AttackFailures.MISSED, out var val) && val) || parentSpellMissed)
-            {
-                return; // do not further process the projectile, it missed.
-            }
-
-            //If projectile, check if a splash spell is applied
-            if (projectile == null)
-            {
-                return;
-            }
-
-            if (projectile.SpellId != Guid.Empty)
-            {
-                var s = projectile.Spell;
-                if (s != null)
-                {
-                    HandleAoESpell(projectile.SpellId, s.Combat.HitRadius, target.MapId, target.X, target.Y, null, true, projectileTool, true);
-                }
-
-                //Check that the npc has not been destroyed by the splash spell
-                //TODO: Actually implement this, since null check is wrong.
-                if (target == null)
-                {
-                    return;
-                }
-            }
-
-            if (targetPlayer == null && !(target is Npc) || target.IsDead())
-            {
-                return;
-            }
-
-            //If there is a knockback, knock them backwards and make sure its linear (diagonal player movement not coded).
-            if (projectile.Knockback > 0 && projectileDir < 4 && !target.IsImmuneTo(Immunities.Knockback) && !StatusActive(StatusTypes.Steady))
-            {
-                _ = new Dash(target, projectile.Knockback, projectileDir, false, false, false, false);
-            }
-        }
-
-        private enum DamageBonus
-        {
-            None = 0,
-            Backstab,
-            Stealth
-        };
-        public int CalculateSpecialDamage(int baseDamage, ItemBase item, Entity target)
-        {
-            if (target is Resource) return baseDamage;
-            if (item == null || target == null) return baseDamage;
-
-            var damageBonus = DamageBonus.None;
-            if (target.Dir == Dir) // Player is hitting something from behind
-            {
-                if (item.CanBackstab)
-                {
-                    baseDamage = (int)Math.Floor(baseDamage * item.BackstabMultiplier);
-                    damageBonus = DamageBonus.Backstab;
-                }
-                if (this is Player player && player.StealthAttack && item.ProjectileId == Guid.Empty) // Melee weapons only for stealth attacks
-                {
-                    baseDamage += player.CalculateStealthDamage(baseDamage, item);
-                    damageBonus = DamageBonus.Stealth;
-                }
-
-                if (damageBonus == DamageBonus.Backstab)
-                {
-                    PacketSender.SendActionMsg(target, Strings.Combat.backstab, CustomColors.Combat.Backstab);
-                }
-                else if (damageBonus == DamageBonus.Stealth)
-                {
-                    PacketSender.SendActionMsg(target, Strings.Combat.stealthattack, CustomColors.Combat.Backstab);
-                }
-            }
-
-            return baseDamage;
-        }
-
-        //Attacking with spell
-        /* Alex - Okay, so this WAS a `TryAttack` override. I had to add two out vars to it to handle spell missing and blocking
-         * This was ONLY DONE to support the fact that a Projectile with a parent spell would call this method with the parent's spell base,
-         * but then we needed to know the RESULT of the try attack, and I didn't want to rework try attack everywhere to support failures the
-         * same way the Attack() method does, so... now we have _this_. HOWEVER, if we ever DO need to know attack missed/blocked anywhere else,
-         * we can now!
-        */
-        public virtual void TryAttackSpell(
-            Entity target,
-            SpellBase spellBase,
-            out bool spellMissed,
-            out bool spellBlocked,
-            sbyte attackAnimDir = (sbyte)Directions.Up,
-            bool fromProjectile = false,
-            bool onHitTrigger = false,
-            bool trapTrigger = false
-        )
-        {
-            spellMissed = false;
-            spellBlocked = false;
-
-            bool projectileTool = false;
-            if (target is Resource && !fromProjectile) // will only be from a projectile with a target resource if the projectile is the appropriate tool
-            {
-                return;
-            } else if (target is Resource)
-            {
-                projectileTool = true;
-            }
-
-            if (spellBase == null)
-            {
-                return;
-            }
-
-            //Check for taunt status and trying to attack a target that has not taunted you.
-            if (!trapTrigger) //Traps ignore taunts.
-            {
-                foreach (var status in CachedStatuses)
-                {
-                    if (status.Type == StatusTypes.Taunt)
-                    {
-                        if (Target != target)
-                        {
-                            PacketSender.SendActionMsg(this, Strings.Combat.miss, CustomColors.Combat.Missed);
-
-                            return;
-                        }
-                    }
-                }
-            }
-
-            var deadAnimations = new List<KeyValuePair<Guid, sbyte>>();
-            var aliveAnimations = new List<KeyValuePair<Guid, sbyte>>();
-
-            if (this is Player pl && target is Npc np && !pl.CanAttackNpc(np))
-            {
-                if (spellBase.Combat.VitalDiff[(int)Vitals.Health] != 0 || spellBase.Combat.VitalDiff[(int)Vitals.Mana] != 0)
-                {
-                    return;
-                }
-                else if (!Options.Instance.CombatOpts.InvulnerableNpcsAffectedByNonDamaging)
-                {
-                    return;
-                }
-            }
-
-            //Only count safe zones and friendly fire if its a dangerous spell! (If one has been used)
-            if (!spellBase.Combat.Friendly &&
-                (spellBase.Combat.TargetType != (int) SpellTargetTypes.Self || onHitTrigger))
-            {
-                //If about to hit self with an unfriendly spell (maybe aoe?) return
-                if (target == this && spellBase.Combat.Effect != StatusTypes.OnHit)
-                {
-                    return;
-                }
-
-                //Check for parties and safe zones, friendly fire off (unless its healing)
-                if (target is Npc && this is Npc npc)
-                {
-                    if (!npc.CanNpcCombat(target, spellBase.Combat.Friendly))
-                    {
-                        return;
-                    }
-                }
-
-                if (target is Player targetPlayer && this is Player player)
-                {
-                    if (player.IsAllyOf(targetPlayer))
-                    {
-                        return;
-                    }
-
-                    // Check if either the attacker or the defender is in a "safe zone" (Only apply if combat is PVP)
-                    if (MapController.Get(MapId).ZoneType == MapZones.Safe)
-                    {
-                        return;
-                    }
-
-                    if (MapController.Get(target.MapId).ZoneType == MapZones.Safe)
-                    {
-                        return;
-                    }
-                }
-
-                if (!CanAttack(target, spellBase))
-                {
-                    return;
-                }
-            }
-            else
-            {
-                // Friendly Spell! Do not attack other players/npcs around us.
-                /* switch (target)
-                 {
-                     case Player targetPlayer
-                         when this is Player player && (!IsAllyOf(targetPlayer) || (MapController.Get(target.MapId)?.ZoneType == MapZones.Safe && MapController.Get(MapId)?.ZoneType == MapZones.Safe) ) && this != target:
-                     case Npc _ when this is Npc npc && !npc.CanNpcCombat(target, spellBase.Combat.Friendly):
-                         return;
-                 }*/
-
-                if (target is Player targetPlayer)
-                {
-                    if (! (MapController.Get(target.MapId)?.ZoneType == MapZones.Safe && MapController.Get(MapId)?.ZoneType == MapZones.Safe) )
-                    {
-                        if (!IsAllyOf(targetPlayer) && this != target)
-                        {
-                            return;
-                        }
-                    }
-                } else if (target is Npc npc)
-                {
-                    if (!npc.CanNpcCombat(target, spellBase.Combat.Friendly))
-                    {
-                        return;
-                    }
-                }
-
-                if (target?.GetType() != GetType())
-                {
-                    return; // Don't let players aoe heal npcs. Don't let npcs aoe heal players.
-                }
-            }
-
-            if (spellBase.HitAnimationId != Guid.Empty &&
-                (spellBase.Combat.Effect != StatusTypes.OnHit || onHitTrigger))
-            {
-                deadAnimations.Add(new KeyValuePair<Guid, sbyte>(spellBase.HitAnimationId, attackAnimDir));
-                aliveAnimations.Add(new KeyValuePair<Guid, sbyte>(spellBase.HitAnimationId, attackAnimDir));
-            }
-
-            var statBuffTime = -1;
-            var expireTime = Timing.Global.Milliseconds + spellBase.Combat.Duration;
-            for (var i = 0; i < (int) Stats.StatCount; i++)
-            {
-                target.Stat[i]
-                    .AddBuff(
-                        new Buff(spellBase, spellBase.Combat.StatDiff[i], spellBase.Combat.PercentageStatDiff[i], expireTime)
-                    );
-
-                if (spellBase.Combat.StatDiff[i] != 0 || spellBase.Combat.PercentageStatDiff[i] != 0)
-                {
-                    statBuffTime = spellBase.Combat.Duration;
-                }
-            }
-
-            if (statBuffTime == -1)
-            {
-                if (spellBase.Combat.HoTDoT && spellBase.Combat.HotDotInterval > 0)
-                {
-                    statBuffTime = spellBase.Combat.Duration;
-                }
-            }
-
-            var damageHealth = spellBase.Combat.VitalDiff[(int)Vitals.Health];
-            var damageMana = spellBase.Combat.VitalDiff[(int)Vitals.Mana];
-
-            Dictionary<AttackFailures, bool> attackFailures = new Dictionary<AttackFailures, bool>();
-            var scaling = spellBase.Combat.Scaling;
-            Stats scalingStat = (Stats)spellBase.Combat.ScalingStat;
-            DamageType damageType = (DamageType)spellBase.Combat.DamageType;
-            var critChance = spellBase.Combat.CritChance;
-            var critMultiplier = spellBase.Combat.CritMultiplier;
-
-            if ((spellBase.Combat.Effect != StatusTypes.OnHit || onHitTrigger) &&
-                spellBase.Combat.Effect != StatusTypes.Shield)
-            {
-                if (this is Player player && spellBase.WeaponSpell && player.CastingWeapon != null ) // add on weapon stats if needed
-                {
-                    damageHealth += CalculateSpecialDamage(player.CastingWeapon.Damage, player.CastingWeapon, target);
-                    scaling += player.CastingWeapon.Scaling;
-                    scalingStat = (Stats) player.CastingWeapon.ScalingStat;
-                    damageType = (DamageType) player.CastingWeapon.DamageType;
-                    critChance += player.CastingWeapon.CritChance;
-                    critMultiplier += player.CastingWeapon.CritMultiplier;
-                }
-
-                if (projectileTool)
-                {
-                    damageType = DamageType.True;
-                }
-
-                attackFailures = Attack(
-                    target, damageHealth, damageMana, damageType,
-                    scalingStat, scaling, critChance,
-                    critMultiplier, deadAnimations, aliveAnimations, false, spellBase.Combat.Friendly, fromProjectile
-                );
-            }
-
-            if (attackFailures.TryGetValue(AttackFailures.MISSED, out bool miss) && miss)
-            {
-                spellMissed = miss;
-                return;
-            }
-            if (attackFailures.TryGetValue(AttackFailures.BLOCKED, out bool blocked) && blocked)
-            {
-                spellBlocked = blocked;
-                // We don't return on a blocked - the spell can still do its status effects
-            }
-
-            if (spellBase.Combat.Effect > 0) //Handle status effects
-            {
-                //Check for onhit effect to avoid the onhit effect recycling.
-                if (!(onHitTrigger && spellBase.Combat.Effect == StatusTypes.OnHit))
-                {
-                    // If the entity is immune to some status, then just inform the client of such
-                    if (target.IsImmuneTo(StatusToImmunity(spellBase.Combat.Effect))) {
-                        PacketSender.SendActionMsg(
-                            target, Strings.Combat.immunetoeffect, CustomColors.Combat.Status
-                        );
-                    } else
-                    {
-                        // Else, apply the status
-                        new Status(
-                            target, this, spellBase, spellBase.Combat.Effect, spellBase.Combat.Duration,
-                            spellBase.Combat.TransformSprite
-                        );
-
-                        PacketSender.SendActionMsg(
-                            target, Strings.Combat.status[(int)spellBase.Combat.Effect], CustomColors.Combat.Status
-                        );
-
-                        //If an onhit or shield status bail out as we don't want to do any damage.
-                        if (spellBase.Combat.Effect == StatusTypes.OnHit || spellBase.Combat.Effect == StatusTypes.Shield)
-                        {
-                            Animate(target, aliveAnimations);
-
-                            return;
-                        }
-                    }
-                }
-            }
-            else
-            {
-                if (statBuffTime > -1)
-                {
-                    if (!target.IsImmuneTo(StatusToImmunity(spellBase.Combat.Effect)))
-                    {
-                        new Status(target, this, spellBase, spellBase.Combat.Effect, statBuffTime, "");
-                    } else
-                    {
-                        PacketSender.SendActionMsg(target, Strings.Combat.immunetoeffect, CustomColors.Combat.Status);
-                    }
-                }
-            }
-
-            //Handle DoT/HoT spells]
-            // Alex: This was the old way.
-            /*
-            if (spellBase.Combat.HoTDoT)
-            {
-                var doTFound = false;
-                foreach (var dot in target.CachedDots)
-                {
-                    if (dot.SpellBase.Id == spellBase.Id && dot.Target == this)
-                    {
-                        doTFound = true;
-                    }
-                }
-
-                if (doTFound == false) //no duplicate DoT/HoT spells.
-                {
-                    new DoT(this, spellBase.Id, target);
-                }
-            }
-            */
-            
-            if (spellBase.Combat.HoTDoT)
-            {
-                target.CachedDots.ToList()
-                    .FindAll((DoT dot) => dot.SpellBase.Id == spellBase.Id && dot.Attacker == this)
-                    .ForEach((DoT dot) => dot.Expire());
-
-                new DoT(this, spellBase.Id, target);
-            }
-        }
-
         private void Animate(Entity target, List<KeyValuePair<Guid, sbyte>> animations, bool fromProjectile = false)
         {
             foreach (var anim in animations)
@@ -1972,272 +1478,6 @@ namespace Intersect.Server.Entities
             Weapon,
             Projectile,
             Spell,
-        }
-
-        public Dictionary<AttackFailures, bool> Attack(
-            Entity enemy,
-            int baseDamage,
-            int secondaryDamage,
-            DamageType damageType,
-            Stats scalingStat,
-            int scaling,
-            int critChance,
-            double critMultiplier,
-            List<KeyValuePair<Guid, sbyte>> deadAnimations = null,
-            List<KeyValuePair<Guid, sbyte>> aliveAnimations = null,
-            bool isAutoAttack = false,
-            bool ignoreEvasion = false,
-            bool fromProjectile = false
-        )
-        {
-            var originalBaseDamage = baseDamage;
-            var damagingAttack = baseDamage > 0;
-            if (enemy == null)
-            {
-                return new Dictionary<AttackFailures, bool>();
-            }
-
-            var invulnerable = enemy.CachedStatuses.Any(status => status.Type == StatusTypes.Invulnerable);
-
-            bool isCrit = false;
-            //Is this a critical hit?
-            if (this is Player player)
-            {
-                critChance = player.CalculateEffectBonus(critChance, EffectType.Affinity);
-                critMultiplier = player.CalculateEffectBonus(critMultiplier, EffectType.CritBonus);
-            }
-
-            if (StatusActive(StatusTypes.Accurate))
-            {
-                critChance *= Options.Instance.CombatOpts.AccurateCritChanceMultiplier;
-            }
-
-            if (Randomization.Next(1, 101) > critChance)
-            {
-                critMultiplier = 1;
-            }
-            else
-            {
-                isCrit = true;
-            }
-
-            //Calculate Damages
-            var attackMissed = false;
-            if (!ignoreEvasion)
-            {
-                attackMissed = Formulas.AttackEvaded(baseDamage, damageType, this, enemy, critMultiplier, scaling, scalingStat);
-            }
-            if (!attackMissed)
-            {
-                baseDamage = Formulas.CalculateDamage(baseDamage, damageType, scalingStat, scaling, critMultiplier, this, enemy);
-            }
-            else
-            {
-                baseDamage = 0;
-            }
-            var wasBlocked = (originalBaseDamage != 0 && baseDamage == 0) && !attackMissed;
-
-            if (originalBaseDamage != 0)
-            {
-                if (enemy is Resource)
-                {
-                    baseDamage = originalBaseDamage;
-                }
-                
-                if (baseDamage < 0 && damagingAttack)
-                {
-                    baseDamage = 0;
-                }
-
-                if (baseDamage > 0 && enemy.HasVital(Vitals.Health) && !invulnerable)
-                {
-                    if (isCrit)
-                    {
-                        PacketSender.SendActionMsg(enemy, Strings.Combat.critical, CustomColors.Combat.Critical);
-                    }
-
-                    enemy.SubVital(Vitals.Health, (int) baseDamage);
-                    switch (damageType)
-                    {
-                        case DamageType.Physical:
-                            PacketSender.SendActionMsg(
-                                enemy, Strings.Combat.removesymbol + (int) baseDamage,
-                                CustomColors.Combat.PhysicalDamage
-                            );
-
-                            break;
-                        case DamageType.Magic:
-                            PacketSender.SendActionMsg(
-                                enemy, Strings.Combat.removesymbol + (int) baseDamage, CustomColors.Combat.MagicDamage
-                            );
-
-                            break;
-                        case DamageType.True:
-                            PacketSender.SendActionMsg(
-                                enemy, Strings.Combat.removesymbol + (int) baseDamage, CustomColors.Combat.TrueDamage
-                            );
-
-                            break;
-                    }
-
-                    // Add the attacker to the Npcs threat and loot table.
-                    if (enemy is Npc enemyNpc)
-                    {
-                        enemyNpc.AddToDamageAndLootMaps(this, baseDamage);
-                    }
-
-                    enemy.NotifySwarm(this);
-                }
-                else if (baseDamage < 0 && !enemy.IsFullVital(Vitals.Health))
-                {
-                    enemy.AddVital(Vitals.Health, (int) -baseDamage);
-                    PacketSender.SendActionMsg(
-                        enemy, Strings.Combat.addsymbol + (int) Math.Abs(baseDamage), CustomColors.Combat.Heal
-                    );
-                } else if (attackMissed || wasBlocked)
-                {
-                    // Add the attacker to the Npcs threat table only
-                    if (enemy is Npc enemyNpc)
-                    {
-                        enemyNpc.AddToDamageAndLootMaps(this, baseDamage);
-                    }
-
-                    enemy.NotifySwarm(this);
-                }
-            }
-
-            if (secondaryDamage != 0 && !attackMissed)
-            {
-                secondaryDamage = Formulas.CalculateDamage(
-                    secondaryDamage, damageType, scalingStat, scaling, critMultiplier, this, enemy
-                );
-
-                if (secondaryDamage < 0 && damagingAttack && !(enemy is Player))
-                {
-                    secondaryDamage = 0;
-                }
-
-                if (secondaryDamage > 0 && enemy.HasVital(Vitals.Mana) && !invulnerable)
-                {
-                    //If we took damage lets reset our combat timer
-                    enemy.SubVital(Vitals.Mana, (int) secondaryDamage);
-                    PacketSender.SendActionMsg(
-                        enemy, Strings.Combat.removesymbol + (int) secondaryDamage, CustomColors.Combat.RemoveMana
-                    );
-
-                    //No Matter what, if we attack the entitiy, make them chase us
-                    if (enemy is Npc enemyNpc)
-                    {
-                        enemyNpc.TryFindNewTarget(Timing.Global.Milliseconds, default, false, this);
-                    }
-
-                    enemy.NotifySwarm(this);
-                }
-                else if (secondaryDamage < 0 && !enemy.IsFullVital(Vitals.Mana))
-                {
-                    enemy.AddVital(Vitals.Mana, (int) -secondaryDamage);
-                    PacketSender.SendActionMsg(
-                        enemy, Strings.Combat.addsymbol + (int) Math.Abs(secondaryDamage), CustomColors.Combat.AddMana
-                    );
-                }
-            }
-
-            // Set combat timers!
-            enemy.CombatTimer = Timing.Global.Milliseconds + Options.CombatTime;
-            CombatTimer = Timing.Global.Milliseconds + Options.CombatTime;
-
-            //Check for lifesteal
-            if (GetType() == typeof(Player) && enemy.GetType() != typeof(Resource))
-            {
-                var lifesteal = ((Player) this).GetEquipmentBonusEffect(EffectType.Lifesteal) / 100f;
-                var healthRecovered = lifesteal * baseDamage;
-                if (healthRecovered > 0) //Don't send any +0 msg's.
-                {
-                    AddVital(Vitals.Health, (int) healthRecovered);
-                    PacketSender.SendActionMsg(
-                        this, Strings.Combat.addsymbol + (int) healthRecovered, CustomColors.Combat.Heal
-                    );
-                }
-            }
-
-            //Dead entity check
-            if (enemy.GetVital(Vitals.Health) <= 0)
-            {
-                if (enemy.GetType() == typeof(Npc) || enemy.GetType() == typeof(Resource))
-                {
-                    lock (enemy.EntityLock)
-                    {
-                        enemy.Die(true, this);
-                    }
-                }
-                else
-                {
-                    //PVP Kill common events
-                    if (!enemy.Dead && enemy is Player && this is Player)
-                    {
-                        ((Player)this).StartCommonEventsWithTrigger(CommonEventTrigger.PVPKill, "", enemy.Name);
-                        ((Player)enemy).StartCommonEventsWithTrigger(CommonEventTrigger.PVPDeath, "", this.Name);
-                    }
-
-                    lock (enemy.EntityLock)
-                    {
-                        enemy.Die(true, this);
-                    }
-                }
-
-                if (deadAnimations != null)
-                {
-                    foreach (var anim in deadAnimations)
-                    {
-                        PacketSender.SendAnimationToProximity(
-                            anim.Key, -1, Id, enemy.MapId, (byte) enemy.X, (byte) enemy.Y, anim.Value, MapInstanceId
-                        );
-                    }
-                }
-            }
-            else
-            {
-                //Hit him, make him mad and send the vital update.
-                if (aliveAnimations?.Count > 0)
-                {
-                    Animate(enemy, aliveAnimations, fromProjectile);
-                }
-
-                //Check for any onhit damage bonus effects!
-                CheckForOnhitAttack(enemy, isAutoAttack);
-            }
-
-            // Add a timer before able to make the next move.
-            if (GetType() == typeof(Npc))
-            {
-                ((Npc) this).MoveTimer = Timing.Global.Milliseconds + (long) GetMovementTime();
-            }
-
-            if (!wasBlocked && !attackMissed && !invulnerable)
-            {
-                SendCombatEffects(enemy, isCrit, baseDamage);
-            }
-            else if (invulnerable)
-            {
-                PacketSender.SendActionMsg(enemy, Strings.Combat.invulnerable, CustomColors.Combat.Invulnerable, Options.BlockSound);
-            }
-
-            if (damageType != DamageType.True && !(enemy is Resource)) // Alex - dumb fix
-            {
-                if (wasBlocked) 
-                {
-                    SendBlockedAttackMessage(enemy);
-                }
-                else if (attackMissed)
-                {
-                    SendMissedAttackMessage(enemy, damageType);
-                }
-            }
-
-            var failures = new Dictionary<AttackFailures, bool>();
-            failures.Add(AttackFailures.BLOCKED, wasBlocked);
-            failures.Add(AttackFailures.MISSED, attackMissed);
-            return failures;
         }
 
         protected void SendMissedAttackMessage(Entity en, DamageType damageType)
@@ -2264,17 +1504,17 @@ namespace Intersect.Server.Entities
 
         void CheckForOnhitAttack(Entity enemy, bool isAutoAttack)
         {
-            if (isAutoAttack) //Ignore spell damage.
+            /*if (isAutoAttack) //Ignore spell damage.
             {
                 foreach (var status in CachedStatuses)
                 {
                     if (status.Type == StatusTypes.OnHit)
                     {
-                        TryAttackSpell(enemy, status.Spell, out bool miss, out bool blocked, (sbyte) Directions.Up, true);
+                        TryAttackSpell(enemy, status.Spell, out bool miss, out bool blocked, (sbyte) Directions.Up);
                         status.RemoveStatus();
                     }
                 }
-            }
+            }*/
         }
 
         protected void SendCombatEffects(Entity enemy, bool isCrit, int damage)
@@ -2389,110 +1629,7 @@ namespace Intersect.Server.Entities
         {
         }
 
-        public bool CanCastSpell(Guid spellId, Entity target)
-        {
-            return CanCastSpell(SpellBase.Get(spellId), target);
-        }
-
-        public virtual bool CanCastSpell(SpellBase spellDescriptor, Entity target)
-        {
-            if (spellDescriptor == null)
-            {
-                return false;
-            }
-
-            if (target is Player player && player.PlayerDead)
-            {
-                return false;
-            }
-
-            var spellCombat = spellDescriptor.Combat;
-            if (spellDescriptor.SpellType != SpellTypes.CombatSpell && spellDescriptor.SpellType != SpellTypes.Event ||
-                spellCombat == null)
-            {
-                return true;
-            }
-
-            if (spellCombat.TargetType == SpellTargetTypes.Single)
-            {
-                return target == null || InRangeOf(target, spellCombat.CastRange);
-            }
-
-            return true;
-        }
-
-        public int GetDir()
-        {
-            if (this is Player player && player.CombatMode && player.FaceDirection != -1)
-            {
-                return player.FaceDirection;
-            }
-            else
-            {
-                return Dir;
-            }
-        }
-
-        public void HandleAoESpell(
-            Guid spellId,
-            int range,
-            Guid startMapId,
-            int startX,
-            int startY,
-            Entity spellTarget,
-            bool ignoreEvasion = false,
-            bool isProjectileTool = false,
-            bool ignoreMissMessage = false
-        )
-        {
-            var spellBase = SpellBase.Get(spellId);
-            if (spellBase != null)
-            {
-                int entitiesHit = 0;
-                bool miss;
-                bool blocked;
-                var startMap = MapController.Get(startMapId);
-                foreach (var instance in MapController.GetSurroundingMapInstances(startMapId, MapInstanceId, true))
-                {
-                    foreach (var entity in instance.GetCachedEntities())
-                    {
-                        if (entity != null && (entity is Player || entity is Npc))
-                        {
-                            if (spellTarget == null || spellTarget == entity)
-                            {
-                                if (entity.GetDistanceTo(startMap, startX, startY) <= range)
-                                {
-                                    //Check to handle a warp to spell
-                                    if (spellBase.SpellType == SpellTypes.WarpTo)
-                                    {
-                                        if (spellTarget != null)
-                                        {
-                                            //Spelltarget used to be Target. I don't know if this is correct or not.
-                                            int[] position = GetPositionNearTarget(spellTarget.MapId, spellTarget.X, spellTarget.Y, spellTarget.Dir);
-                                            Warp(spellTarget.MapId, (byte)position[0], (byte)position[1], (byte)Dir);
-                                            ChangeDir(DirToEnemy(spellTarget));
-                                        }
-                                    }
-
-                                    TryAttackSpell(entity, spellBase, out miss, out blocked, (sbyte)Directions.Up, ignoreEvasion); //Handle damage
-                                    entitiesHit++;
-                                }
-                            }
-                        }
-                    }
-                }
-                if (!spellBase.Combat.Friendly && entitiesHit <= 1 && !isProjectileTool && !ignoreMissMessage) // Will count yourself - which is FINE in the case of a friendly spell, otherwise ignore it
-                {
-                    if (this is Player)
-                    {
-                        PacketSender.SendChatMsg((Player)this, "There weren't any targets in your spell's AoE range.", ChatMessageType.Spells, CustomColors.General.GeneralWarning);
-                    }
-                    SendMissedAttackMessage(this, DamageType.True);
-                }
-            }
-        }
-
-        private int[] GetPositionNearTarget(Guid mapId, int x, int y, int dir)
+        protected int[] GetPositionNearTarget(Guid mapId, int x, int y, int dir)
         {
             if (MapController.TryGetInstanceFromMap(mapId, MapInstanceId, out var instance))
             {
@@ -3054,7 +2191,7 @@ namespace Intersect.Server.Entities
             return statusPackets;
         }
 
-        Immunities StatusToImmunity(StatusTypes status)
+        protected Immunities StatusToImmunity(StatusTypes status)
         {
             switch (status)
             {

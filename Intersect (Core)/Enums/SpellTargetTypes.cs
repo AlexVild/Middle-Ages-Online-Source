@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Intersect.Enums
 {
 
@@ -16,6 +18,29 @@ namespace Intersect.Enums
 
         Trap = 5
 
+    }
+
+    public static class SpellTypeHelpers
+    {
+        public static bool IsMovementSpell(SpellTypes type) => MovementSpells.Contains(type);
+
+        public static bool SpellTypeRequiresTarget(SpellTargetTypes type) => !NoTargetSpells.Contains(type);
+
+        private static List<SpellTargetTypes> NoTargetSpells = new List<SpellTargetTypes>()
+        {
+            SpellTargetTypes.Self,
+            SpellTargetTypes.Projectile,
+            SpellTargetTypes.Trap,
+            SpellTargetTypes.OnHit,
+            SpellTargetTypes.AoE,
+        };
+
+        private static List<SpellTypes> MovementSpells = new List<SpellTypes>()
+        {
+            SpellTypes.Dash,
+            SpellTypes.Warp,
+            SpellTypes.WarpTo,
+        };
     }
 
 }

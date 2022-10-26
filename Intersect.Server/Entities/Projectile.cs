@@ -371,7 +371,7 @@ namespace Intersect.Server.Entities
                         spawn.Parent.HasGrappled = true;
 
                         //Only grapple if the player hasnt left the firing position.. if they have then we assume they dont wanna grapple
-                        if (Owner.X == X && Owner.Y == Y && Owner.MapId == MapId)
+                        if (Owner.X == X && Owner.Y == Y && Owner.MapId == MapId && spawn.Distance > 1)
                         {
                             Owner.Dir = spawn.Dir;
                             new Dash(

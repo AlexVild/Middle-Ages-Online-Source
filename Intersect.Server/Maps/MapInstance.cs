@@ -1077,7 +1077,7 @@ namespace Intersect.Server.Maps
             MapProjectilesCached = MapProjectiles.Values.ToArray();
         }
 
-        public void SpawnTrap(Entity owner, SpellBase parentSpell, byte x, byte y, byte z)
+        public void SpawnTrap(AttackingEntity owner, SpellBase parentSpell, byte x, byte y, byte z)
         {
             var trap = new MapTrapInstance(owner, parentSpell, mMapController.Id, MapInstanceId, x, y, z);
             foreach(var player in GetPlayers(true))

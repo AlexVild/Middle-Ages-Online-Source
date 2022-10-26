@@ -201,6 +201,9 @@ namespace Intersect.GameObjects
 
         [NotMapped] public int[] VitalDiff = new int[(int) Vitals.VitalCount];
 
+        [NotMapped, JsonIgnore]
+        public bool IsDamaging => VitalDiff[(int)Vitals.Health] != 0 || VitalDiff[(int)Vitals.Mana] != 0;
+
         public int CritChance { get; set; }
 
         public double CritMultiplier { get; set; } = 1.5;
@@ -334,6 +337,13 @@ namespace Intersect.GameObjects
 
     public partial class SpellBase : DatabaseObject<SpellBase>, IFolderable
     {
+        [NotMapped, JsonIgnore]
+        public bool RequiresAmmo => Combat != null &&
+            Combat.TargetType == SpellTargetTypes.Projectile &&
+            Combat.Projectile != null &&
+            Combat.Projectile.AmmoItemId != null &&
+            Combat.Projectile.AmmoItemId != Guid.Empty;
+
         /// <summary>
         /// A mapping of some <see cref="ItemBase"/> ID mapped to its quantity
         /// </summary>
@@ -375,6 +385,6 @@ namespace Intersect.GameObjects
                 return;
             }
             CastingComponents.Add(new SpellCastingComponent(itemId, quantity));
-        }   
+        }  
     }
 }

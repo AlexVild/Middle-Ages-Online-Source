@@ -1029,27 +1029,6 @@ namespace Intersect.Server.Networking
             {
                 return;
             }
-
-            /*//check if player is blinded or stunned
-            var statuses = client.Entity.Statuses.Values.ToArray();
-            foreach (var status in statuses)
-            {
-                if (status.Type == StatusTypes.Stun)
-                {
-                    PacketSender.SendChatMsg(player, Strings.Combat.stunblocking, ChatMessageType.Combat);
-
-                    return;
-                }
-
-                if (status.Type == StatusTypes.Sleep)
-                {
-                    PacketSender.SendChatMsg(player, Strings.Combat.sleepblocking, ChatMessageType.Combat);
-
-                    return;
-                }
-            }*/
-
-            client.Entity.TryBlock(packet.Blocking);
         }
 
         //BumpPacket
@@ -1588,7 +1567,7 @@ namespace Intersect.Server.Networking
                     {
                         if (en.Id == packet.TargetId)
                         {
-                            player.UseSpell(packet.Slot, en);
+                            player.UseSpellInHotbarSlot(packet.Slot, en);
                             casted = true;
 
                             break;
@@ -1599,7 +1578,7 @@ namespace Intersect.Server.Networking
 
             if (!casted)
             {
-                player.UseSpell(packet.Slot, null);
+                player.UseSpellInHotbarSlot(packet.Slot, null);
             }
             
             PacketSender.SendEntityPositionTo(client, client.Entity);
@@ -2874,11 +2853,8 @@ namespace Intersect.Server.Networking
                 return;
             }
 
-            player.CastTime = 0;
-            player.CastTarget = null;
-            player.SpellCastSlot = -1;
+            player.CancelCast();
             player.UpdateGlobalCooldown();
-            PacketSender.SendEntityCancelCast(player);
         }
 
         #endregion
