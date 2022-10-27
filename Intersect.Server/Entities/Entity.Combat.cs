@@ -21,7 +21,7 @@ namespace Intersect.Server.Entities
         public int Health => GetVital(Vitals.Health);
         public int Mana => GetVital(Vitals.Mana);
 
-        protected bool IsStealthed => CachedStatuses.ToArray().Select(status => status.Type).Contains(StatusTypes.Stealth);
+        public bool IsStealthed => CachedStatuses.ToArray().Select(status => status.Type).Contains(StatusTypes.Stealth);
 
         protected virtual void Unstealth()
         {

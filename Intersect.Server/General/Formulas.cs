@@ -85,9 +85,10 @@ namespace Intersect.Server.General
 
             // Go through each of the attack types that apply to the damage
             var totalDamage = 0;
-            foreach(var element in attackTypes)
+            float decScaling = (float)scaling / 100; // scaling comes into this function as a percent number, i.e 110%, so we need that to be 1.1
+            foreach (var element in attackTypes)
             {
-                var dmg = attacker.Stat[(int)element].Value();
+                var dmg = (int)Math.Round(attacker.Stat[(int)element].Value() * decScaling);
                 // If we're not gonna be doing damage, dismiss
                 if (dmg == 0)
                 {
@@ -110,10 +111,7 @@ namespace Intersect.Server.General
                 totalDamage += Randomization.Next(lowestDmg, highestDmg + 1);
             }
 
-
-            double decScaling = scaling / 100; // scaling comes into this function as a percent number, i.e 110%, so we need that to be 1.1
-
-            return (int)Math.Round((totalDamage * decScaling) * critMultiplier);
+            return (int)Math.Round(totalDamage * critMultiplier);
         } 
             
 

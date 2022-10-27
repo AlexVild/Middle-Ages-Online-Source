@@ -102,7 +102,7 @@ namespace Intersect.Server.Entities
             return true;
         }
 
-        public override void UpdateSpellCooldown(int spellSlot)
+        protected override void UpdateSpellCooldown(int spellSlot)
         {
             if (spellSlot < 0 || spellSlot > Spells.Count)
             {

@@ -497,6 +497,7 @@
     <Compile Include="Database\PlayerData\RecordTeammateInstance.cs" />
     <Compile Include="Database\PlayerData\TimerInstance.cs" />
     <Compile Include="Entities\AttackingEntity.cs" />
+    <Compile Include="Entities\AttackingEntity.Spells.cs" />
     <Compile Include="Entities\BankInterface.cs" />
     <Compile Include="Entities\Combat\Buff.cs" />
     <Compile Include="Entities\Combat\Dash.cs" />

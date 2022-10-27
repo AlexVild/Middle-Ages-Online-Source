@@ -5,6 +5,7 @@ using System.Linq;
 using Intersect.Enums;
 using Intersect.GameObjects;
 using Intersect.Server.General;
+using Intersect.Server.Networking;
 using Intersect.Utilities;
 
 namespace Intersect.Server.Entities.Combat
@@ -118,13 +119,60 @@ namespace Intersect.Server.Entities.Combat
             var scaling = SpellBase.Combat?.Scaling ?? 100;
 
 
-            Attacker.SpellDoTAnimation(SpellBase, Target, (sbyte)Directions.Up);
+            SendDoTAnimation(SpellBase, Target, (sbyte)Directions.Up);
             if (!Attacker.TryDealDamageTo(Target, attackTypes, scaling, 1.0, null, SpellBase, out int damage))
             {
                 // Do somethin
             }
         }
 
+        private void SendDoTAnimation(SpellBase spell, Entity target, sbyte dir)
+        {
+            if (target == null)
+            {
+                return;
+            }
+
+            var animation = spell?.OverTimeAnimationId ?? spell?.HitAnimationId ?? Guid.Empty;
+
+            PacketSender.SendAnimationToProximity(
+                animation, -1, Attacker.Id, target.MapId, (byte)target.X, (byte)target.Y, (sbyte)dir, target.MapInstanceId
+            );
+        }
+
+        /// <summary>
+        /// Applies a spell's DoT
+        /// </summary>
+        /// <param name="spell"></param>
+        /// <param name="attacker"></param>
+        /// <param name="target"></param>
+        public static void AddSpellDoTsTo(SpellBase spell, AttackingEntity attacker, Entity target)
+        {
+            if (spell == null || attacker == null || target == null)
+            {
+                return;
+            }
+
+            if (spell.Combat.HoTDoT)
+            {
+                WipeDoTsFromTarget(spell.Id, attacker, target);
+
+                _ = new DoT(attacker, spell.Id, target);
+            }
+        }
+
+        /// <summary>
+        /// Wipes all instances of a DoT that share the same properties of the given
+        /// </summary>
+        /// <param name="spellId"></param>
+        /// <param name="attacker"></param>
+        /// <param name="target"></param>
+        private static void WipeDoTsFromTarget(Guid spellId, Entity attacker, Entity target)
+        {
+            target.CachedDots.ToList()
+                    .FindAll((DoT dot) => dot.SpellBase.Id == spellId && dot.Attacker == attacker)
+                    .ForEach((DoT dot) => dot.Expire());
+        }
     }
 
 }
