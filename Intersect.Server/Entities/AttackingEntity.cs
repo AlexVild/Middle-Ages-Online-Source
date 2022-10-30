@@ -85,8 +85,9 @@ namespace Intersect.Server.Entities
                 }
             }
 
+            var animation = parentWeapon?.AttackAnimationId ?? parentSpell?.HitAnimationId ?? Guid.Empty;
             PacketSender.SendAnimationToProximity(
-                parentWeapon?.AttackAnimationId ?? Guid.Empty, -1, Id, enemy.MapId, (byte)enemy.X, (byte)enemy.Y, (sbyte)projectileDir, MapInstanceId
+                animation, -1, Id, enemy.MapId, (byte)enemy.X, (byte)enemy.Y, (sbyte)projectileDir, MapInstanceId
             );
 
             if (descriptor.Knockback > 0 && projectileDir < 4 && !enemy.IsImmuneTo(Immunities.Knockback) && !StatusActive(StatusTypes.Steady))
