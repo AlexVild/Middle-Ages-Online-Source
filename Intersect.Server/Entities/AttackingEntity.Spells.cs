@@ -69,6 +69,12 @@ namespace Intersect.Server.Entities
         /// <returns>True if we can cast the spell</returns>
         public bool CanCastSpell(SpellBase spell, Entity target)
         {
+            // Status affliction!
+            if (IsUnableToCastSpells)
+            {
+                return false;
+            }
+
             if (!MeetsSpellVitalReqs(spell))
             {
                 // Not enough vitals!
@@ -188,7 +194,6 @@ namespace Intersect.Server.Entities
             if (instant)
             {
                 UseSpell(spell, SpellCastSlot);
-                CastingFinished();
             }
             else
             {
@@ -212,7 +217,6 @@ namespace Intersect.Server.Entities
         /// </summary>
         public virtual void CastingFinished()
         {
-            CastTime = 0;
             CastTarget = null;
             SpellCastSlot = -1;
         }
@@ -280,12 +284,17 @@ namespace Intersect.Server.Entities
         }
 
         /// <summary>
-        /// Applies any buffs a spell contains to some target entity
+        /// Applies any 1` a spell contains to some target entity
         /// </summary>
         /// <param name="spell">The spell being cast</param>
         /// <param name="target">The target being cast to</param>
         private void ApplySpellBuffsTo(SpellBase spell, Entity target)
         {
+            if (spell == null || target == null || target.IsDead())
+            {
+                return;
+            }
+
             if (spell.Combat?.Duration <= 0)
             {
                 return;
@@ -397,6 +406,8 @@ namespace Intersect.Server.Entities
             {
                 return;
             }
+
+            CastTime = 0;
 
             switch (spell.SpellType)
             {
@@ -514,7 +525,8 @@ namespace Intersect.Server.Entities
                 case SpellTypes.Dash:
                     PacketSender.SendActionMsg(this, Strings.Combat.dash, CustomColors.Combat.Dash);
                     _ = new Dash(
-                        this, spell.Combat.CastRange, (byte)Dir, Convert.ToBoolean(spell.Dash.IgnoreMapBlocks),
+                        this, spell.Combat.CastRange, (byte)Dir, 
+                        Convert.ToBoolean(spell.Dash.IgnoreMapBlocks),
                         Convert.ToBoolean(spell.Dash.IgnoreActiveResources),
                         Convert.ToBoolean(spell.Dash.IgnoreInactiveResources),
                         Convert.ToBoolean(spell.Dash.IgnoreZDimensionAttributes),
@@ -536,6 +548,9 @@ namespace Intersect.Server.Entities
             {
                 Die();
             }
+            
+            // Clear casting target info
+            CastingFinished();
         }
 
         /// <summary>
@@ -548,7 +563,6 @@ namespace Intersect.Server.Entities
             {
                 var spell = SpellBase.Get(Spells[SpellCastSlot].SpellId);
                 UseSpell(spell, SpellCastSlot);
-                CastingFinished();
             }
         }
 

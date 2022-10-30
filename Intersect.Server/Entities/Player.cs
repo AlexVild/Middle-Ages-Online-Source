@@ -8618,5 +8618,10 @@ namespace Intersect.Server.Entities
 
             return true;
         }
+
+        public override bool IsDead()
+        {
+            return Dead || PlayerDead;
+        }
     }
 }
