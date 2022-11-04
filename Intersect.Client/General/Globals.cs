@@ -13,6 +13,7 @@ using Intersect.Enums;
 using Intersect.GameObjects;
 using Intersect.GameObjects.QuestBoard;
 using Intersect.Network.Packets.Server;
+using Intersect.Utilities;
 
 namespace Intersect.Client.General
 {
@@ -122,7 +123,7 @@ namespace Intersect.Client.General
 
         public static bool IntroComing = true;
 
-        public static long IntroDelay = 2000;
+        public static long IntroDelay = 3500;
 
         //Engine Progression
         public static int IntroIndex = 0;

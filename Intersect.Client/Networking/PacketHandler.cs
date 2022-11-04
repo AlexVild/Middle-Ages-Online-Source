@@ -2185,6 +2185,8 @@ namespace Intersect.Client.Networking
         //EnteringGamePacket
         public void HandlePacket(IPacketSender packetSender, EnteringGamePacket packet)
         {
+            // Update the graphics' last update timers
+            Graphics.SetLastUpdate();
             //Fade out, we're finally loading the game world!
             if (Globals.Database.FadeTransitions)
             {

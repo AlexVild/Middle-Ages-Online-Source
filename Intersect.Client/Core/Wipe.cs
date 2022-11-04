@@ -1,29 +1,19 @@
 ﻿using Intersect.Client.General;
 using Intersect.Utilities;
 using System;
+using static Intersect.Client.Core.Fade;
 
 namespace Intersect.Client.Core
 {
 
     public static class Wipe
     {
-        private const float STANDARD_FADE_RATE = 500f;
-        private const float FAST_FADE_RATE = 500f;
-
-        public enum FadeType
-        {
-
-            None = 0,
-
-            In = 1,
-
-            Out = 2,
-
-        }
+        private const float STANDARD_FADE_RATE = 650f;
+        private const float FAST_FADE_RATE = 650f;
 
         private static FadeType sCurrentAction;
 
-        private static FadeType CurrentAction
+        public static FadeType CurrentAction
         {
             get
             {
@@ -38,9 +28,24 @@ namespace Intersect.Client.Core
             }
         }
 
+        // Used to add some extra time when the wipe is "closed"
+        private const int OUT_EXTRA_TIME = 200;
+        private static long sTimeFadedOut;
+        private static bool sIsFaded = false;
+
         private static float sFadeAmt;
+        public static float FadeAmt
+        {
+            get => sFadeAmt;
+            set => sFadeAmt = value;
+        }
 
         private static float sInvertFadeAmt = Graphics.CurrentView.Width / 2;
+        public static float InvertFadeAmt
+        {
+            get => sInvertFadeAmt;
+            set => sInvertFadeAmt = value;
+        }
 
         private static float sFadeRate = STANDARD_FADE_RATE;
 
@@ -63,6 +68,7 @@ namespace Intersect.Client.Core
 
         public static void FadeOut(bool alertServerWhenFaded = false, bool fast = false, Action callback = null)
         {
+            sIsFaded = false;
             sFadeRate = fast ? FAST_FADE_RATE : STANDARD_FADE_RATE;
             
             CurrentAction = FadeType.Out;
@@ -81,7 +87,7 @@ namespace Intersect.Client.Core
         public static float GetFade(bool inverted = false)
         {
             float maxWidth = Graphics.CurrentView.Width / 2;
-            int transitionNum = 8;
+            int transitionNum = 10;
 
             var fade = sFadeAmt;
             if (inverted) fade = sInvertFadeAmt;
@@ -103,8 +109,8 @@ namespace Intersect.Client.Core
 
             if (CurrentAction == FadeType.In)
             {
-                sFadeAmt -= amountChange;
-                sInvertFadeAmt += amountChange;
+                sFadeAmt = (float)MathHelper.Clamp(sFadeAmt - amountChange, 0f, maxWidth);
+                sInvertFadeAmt = (float)MathHelper.Clamp(sInvertFadeAmt + amountChange, 0f, maxWidth);
 
                 if (sFadeAmt <= 0f && sInvertFadeAmt >= maxWidth)
                 {
@@ -119,11 +125,20 @@ namespace Intersect.Client.Core
             }
             else if (CurrentAction == FadeType.Out)
             {
-                sFadeAmt += amountChange;
-                sInvertFadeAmt -= amountChange;
+                sFadeAmt = (float)MathHelper.Clamp(sFadeAmt + amountChange, 0f, maxWidth);
+                sInvertFadeAmt = (float)MathHelper.Clamp(sInvertFadeAmt - amountChange, 0f, maxWidth);
 
                 if (sFadeAmt >= maxWidth && sInvertFadeAmt <= 0f)
                 {
+                    if (!sIsFaded)
+                    {
+                        sIsFaded = true;
+                        sTimeFadedOut = Timing.Global.Milliseconds + OUT_EXTRA_TIME;
+                    }
+                    if (Timing.Global.Milliseconds < sTimeFadedOut)
+                    {
+                        return;
+                    }
                     CurrentAction = FadeType.None;
                     if (Globals.WaitFade)
                     {

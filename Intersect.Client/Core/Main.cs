@@ -113,68 +113,40 @@ namespace Intersect.Client.Core
 
         private static void ProcessIntro()
         {
-            if (ClientConfiguration.Instance.IntroImages.Count > 0)
+            if (ClientConfiguration.Instance.IntroImages.Count <= 0 || 
+                Globals.IntroIndex >= ClientConfiguration.Instance.IntroImages.Count)
             {
-                GameTexture imageTex = Globals.ContentManager.GetTexture(
+                Globals.GameState = GameStates.Menu;
+                FadeService.FadeIn();
+                return;
+            }
+
+            GameTexture imageTex = Globals.ContentManager.GetTexture(
                     GameContentManager.TextureType.Image, ClientConfiguration.Instance.IntroImages[Globals.IntroIndex]
                 );
 
-                if (imageTex != null)
+            if (imageTex != null)
+            {
+                if (Globals.IntroStartTime == -1 && FadeService.DoneFading())
                 {
-                    if (Globals.IntroStartTime == -1)
+                    FadeService.FadeIn(callback: () =>
                     {
-                        if ((Globals.Database.FadeTransitions && Fade.DoneFading()) || (!Globals.Database.FadeTransitions && Wipe.DoneFading()))
-                        {
-                            if (Globals.IntroComing)
-                            {
-                                Globals.IntroStartTime = Timing.Global.Milliseconds;
-                            }
-                            else
-                            {
-                                Globals.IntroIndex++;
-                                if (Globals.Database.FadeTransitions)
-                                {
-                                    Fade.FadeIn();
-                                }
-                                else
-                                {
-                                    Wipe.FadeIn();
-                                }
-                                Globals.IntroComing = true;
-                            }
-                        }
-                    }
-                    else
+                        Globals.IntroStartTime = Timing.Global.Milliseconds;
+                    });
+                }
+                else if(Timing.Global.Milliseconds > Globals.IntroStartTime + Globals.IntroDelay && FadeService.DoneFading())
+                {
+                    //If we have shown an image long enough, fade to black -- keep track that the image is going
+                    FadeService.FadeOut(callback: () =>
                     {
-                        if (Timing.Global.Milliseconds > Globals.IntroStartTime + Globals.IntroDelay)
-                        {
-                            //If we have shown an image long enough, fade to black -- keep track that the image is going
-                            if (Globals.Database.FadeTransitions)
-                            {
-                                Fade.FadeOut();
-                            }
-                            else
-                            {
-                                Wipe.FadeOut();
-                            }
-                            Globals.IntroStartTime = -1;
-                            Globals.IntroComing = false;
-                        }
-                    }
-                }
-                else
-                {
-                    Globals.IntroIndex++;
-                }
-
-                if (Globals.IntroIndex >= ClientConfiguration.Instance.IntroImages.Count)
-                {
-                    Globals.GameState = GameStates.Menu;
+                        Globals.IntroStartTime = -1;
+                        Globals.IntroIndex++;
+                    });
                 }
             }
             else
             {
-                Globals.GameState = GameStates.Menu;
+                Globals.IntroIndex++;
             }
         }
 
@@ -183,7 +155,6 @@ namespace Intersect.Client.Core
             if (!Globals.JoiningGame)
                 return;
 
-            //if (GameGraphics.FadeAmt != 255f) return;
             //Check if maps are loaded and ready
             Globals.GameState = GameStates.Loading;
             Interface.Interface.DestroyGwen();
@@ -202,14 +173,7 @@ namespace Intersect.Client.Core
 
             Audio.PlayMusic(MapInstance.Get(Globals.Me.CurrentMap).Music, 6f, 10f, true);
             Globals.GameState = GameStates.InGame;
-            if (Globals.Database.FadeTransitions)
-            {
-                Fade.FadeIn();
-            }
-            else
-            {
-                Wipe.FadeIn();
-            }
+            FadeService.FadeIn();
         }
 
         private static void ProcessGame()
@@ -372,62 +336,49 @@ namespace Intersect.Client.Core
 
         public static void Logout(bool characterSelect)
         {
-            Audio.PlayMusic(ClientConfiguration.Instance.MenuMusic, 6f, 10f, true);
-            if (Globals.Database.FadeTransitions)
+            FadeService.FadeOut(callback: () =>
             {
-                Fade.FadeOut();
-            }
-            else
-            {
-                Wipe.FadeOut();
-            }
-            
-            PacketSender.SendLogout(characterSelect);
-            Globals.LoggedIn = false;
-            Globals.WaitingOnServer = false;
-            Globals.WaitingOnServerDispose = characterSelect;
-            Graphics.CurrentShake = 0f;
-            Globals.GameState = GameStates.Menu;
-            Globals.JoiningGame = false;
-            Globals.NeedsMaps = true;
-            Globals.Picture = null;
-            Interface.Interface.HideUi = false;
+                Audio.PlayMusic(ClientConfiguration.Instance.MenuMusic, 6f, 10f, true);
+                PacketSender.SendLogout(characterSelect);
+                Globals.LoggedIn = false;
+                Globals.WaitingOnServer = false;
+                Globals.WaitingOnServerDispose = characterSelect;
+                Graphics.CurrentShake = 0f;
+                Globals.GameState = GameStates.Menu;
+                Globals.JoiningGame = false;
+                Globals.NeedsMaps = true;
+                Globals.Picture = null;
+                Interface.Interface.HideUi = false;
 
-            //Dump Game Objects
-            Globals.Me = null;
-            Globals.HasGameData = false;
-            foreach (var map in MapInstance.Lookup)
-            {
-                var mp = (MapInstance) map.Value;
-                mp.Dispose(false, true);
-            }
+                //Dump Game Objects
+                Globals.Me = null;
+                Globals.HasGameData = false;
+                foreach (var map in MapInstance.Lookup)
+                {
+                    var mp = (MapInstance)map.Value;
+                    mp.Dispose(false, true);
+                }
 
-            foreach (var en in Globals.Entities.ToArray())
-            {
-                en.Value.Dispose();
-            }
+                foreach (var en in Globals.Entities.ToArray())
+                {
+                    en.Value.Dispose();
+                }
 
-            MapBase.Lookup.Clear();
-            MapInstance.Lookup.Clear();
+                MapBase.Lookup.Clear();
+                MapInstance.Lookup.Clear();
 
-            Globals.Entities.Clear();
-            Globals.MapGrid = null;
-            Globals.GridMaps.Clear();
-            Globals.EventDialogs.Clear();
-            Globals.EventHolds.Clear();
-            Globals.PendingEvents.Clear();
+                Globals.Entities.Clear();
+                Globals.MapGrid = null;
+                Globals.GridMaps.Clear();
+                Globals.EventDialogs.Clear();
+                Globals.EventHolds.Clear();
+                Globals.PendingEvents.Clear();
 
-            Timers.ActiveTimers.Clear();
+                Timers.ActiveTimers.Clear();
 
-            Interface.Interface.InitGwen();
-            if (Globals.Database.FadeTransitions)
-            {
-                Fade.FadeIn();
-            }
-            else
-            {
-                Wipe.FadeIn();
-            }
+                Interface.Interface.InitGwen();
+                FadeService.FadeIn();
+            });
         }
 
     }

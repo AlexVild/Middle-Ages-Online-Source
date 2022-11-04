@@ -94,7 +94,7 @@ namespace Intersect.Client.Core
 
         private static float mShakeDecrement = 0.12f;
 
-        private static long sLastUpdate;
+        private static long sLastUpdate = Timing.Global.Milliseconds;
 
         private static long sCurrentCombatWidth = 0;
 
@@ -121,6 +121,7 @@ namespace Intersect.Client.Core
             ActionMsgFont = FindFont(ClientConfiguration.Instance.ActionMsgFont);
             HUDFont = FindFont(ClientConfiguration.Instance.HudFont);
             HUDFontSmall = FindFont(ClientConfiguration.Instance.HudFontSmall);
+            FadeService.SetFade(255f);
         }
 
         public static GameFont FindFont(string font)
@@ -992,16 +993,11 @@ namespace Intersect.Client.Core
                 CurrentView = new FloatRect(0, 0, Renderer.GetScreenWidth(), Renderer.GetScreenHeight());
                 if (!Globals.InitialFade)
                 {
-                    if (Globals.Database.FadeTransitions)
-                    {
-                        Fade.FadeIn();
-                    }
-                    else
-                    {
-                        Wipe.FadeIn();
-                    }
-                    
                     Globals.InitialFade = true;
+                    FadeService.FadeIn(callback: () =>
+                    {
+                        Globals.IntroStartTime = Timing.Global.Milliseconds;
+                    });
                 }
                 Renderer.SetView(CurrentView);
 
@@ -1098,6 +1094,11 @@ namespace Intersect.Client.Core
             }
 
             Renderer.SetView(CurrentView);
+            sLastUpdate = Timing.Global.Milliseconds;
+        }
+
+        public static void SetLastUpdate()
+        {
             sLastUpdate = Timing.Global.Milliseconds;
         }
 

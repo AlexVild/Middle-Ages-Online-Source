@@ -20,7 +20,7 @@ namespace Intersect.Client.Framework.Database
         
         public bool EnableScanlines;
         
-        public bool FadeTransitions;
+        public bool FadeTransitions { get; set; }
 
         public bool TargetAccountDirection;
 

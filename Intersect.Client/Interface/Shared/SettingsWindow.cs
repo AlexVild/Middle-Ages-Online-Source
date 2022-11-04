@@ -930,14 +930,6 @@ namespace Intersect.Client.Interface.Shared
                 Globals.Database.TargetFps = newFps;
             }
 
-            // Save Settings.
-            Globals.Database.MusicVolume = (int) mMusicSlider.Value;
-            Globals.Database.SoundVolume = (int) mSoundSlider.Value;
-            Audio.UpdateGlobalVolume();
-            Controls.ActiveControls = mKeybindingEditControls;
-            Controls.ActiveControls.Save();
-            Globals.Database.SavePreferences();
-
             // Save game settings
             Globals.Database.TapToTurn = mTapToTurnCheckbox.IsChecked;
             Globals.Database.LeftClickTarget = mLeftClickTargetCheckbox.IsChecked;
@@ -973,9 +965,16 @@ namespace Intersect.Client.Interface.Shared
                 mCustomResolutionMenuItem?.Hide();
                 Graphics.Renderer.OverrideResolution = Resolution.Empty;
                 Graphics.Renderer.Init();
-                Fade.FadeIn();
-                Wipe.FadeIn();
+                FadeService.SetFade(0f);
             }
+
+            // Save Settings.
+            Globals.Database.MusicVolume = (int)mMusicSlider.Value;
+            Globals.Database.SoundVolume = (int)mSoundSlider.Value;
+            Audio.UpdateGlobalVolume();
+            Controls.ActiveControls = mKeybindingEditControls;
+            Controls.ActiveControls.Save();
+            Globals.Database.SavePreferences();
 
             // Hide our current window.
             Hide();

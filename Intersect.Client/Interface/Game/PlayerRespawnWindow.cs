@@ -152,22 +152,11 @@ namespace Intersect.Client.Interface.Game
         {
             RequestingRespawn = true;
 
-            if (Globals.Database.FadeTransitions)
+            FadeService.FadeOut(false, false, () =>
             {
-                Fade.FadeOut(false, false, () =>
-                {
-                    PacketSender.SendRequestRespawn();
-                    Fade.FadeIn();
-                });
-            }
-            else
-            {
-                Wipe.FadeOut(false, false, () =>
-                {
-                    PacketSender.SendRequestRespawn();
-                    Wipe.FadeIn();
-                });
-            }
+                PacketSender.SendRequestRespawn();
+                FadeService.FadeIn();
+            });
         }
 
         private void OpenInstanceLeaveMenu()
@@ -182,22 +171,11 @@ namespace Intersect.Client.Interface.Game
         {
             RequestingRespawn = true;
 
-            if (Globals.Database.FadeTransitions)
+            FadeService.FadeOut(false, false, () =>
             {
-                Fade.FadeOut(false, false, () =>
-                {
-                    PacketSender.SendRequestInstanceLeave();
-                    Fade.FadeIn();
-                });
-            }
-            else
-            {
-                Wipe.FadeOut(false, false, () =>
-                {
-                    PacketSender.SendRequestInstanceLeave();
-                    Wipe.FadeIn();
-                });
-            }
+                PacketSender.SendRequestInstanceLeave();
+                FadeService.FadeIn();
+            });
         }
 
         public void ServerRespawned()

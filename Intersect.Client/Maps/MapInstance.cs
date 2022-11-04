@@ -80,7 +80,7 @@ namespace Intersect.Client.Maps
         protected GameTexture mFogTex;
 
         //Fog Variables
-        protected long mFogUpdateTime = -1;
+        protected long mFogUpdateTime = Timing.Global.Milliseconds;
 
         //Update Timer
         private long mLastUpdateTime;
@@ -88,12 +88,12 @@ namespace Intersect.Client.Maps
         protected float mOverlayIntensity;
 
         //Overlay Image Variables
-        protected long mOverlayUpdateTime = -1;
+        protected long mOverlayUpdateTime = Timing.Global.Milliseconds;
 
         protected float mPanoramaIntensity;
 
         //Panorama Variables
-        protected long mPanoramaUpdateTime = -1;
+        protected long mPanoramaUpdateTime = Timing.Global.Milliseconds;
 
         private bool mTexturesFound = false;
 

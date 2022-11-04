@@ -10,6 +10,7 @@ using Intersect.Client.Maps;
 using Intersect.Client.Networking;
 using Intersect.Logging;
 using Intersect.Utilities;
+using static Intersect.Client.Core.Fade;
 
 namespace Intersect.Client.Core
 {
@@ -41,22 +42,16 @@ namespace Intersect.Client.Core
             switch (key)
             {
                 case Keys.Escape:
-                    if (Globals.GameState != GameStates.Intro)
+                    if (Globals.GameState != GameStates.Intro || FadeService.FadeType == FadeType.Out)
                     {
                         break;
                     }
-
-                    if (Globals.Database.FadeTransitions)
+                    FadeService.FadeOut(callback: () =>
                     {
-                        Fade.FadeIn();
-                    }
-                    else
-                    {
-                        Wipe.FadeIn();
-                    }
-
-                    Globals.GameState = GameStates.Menu;
-
+                        Globals.GameState = GameStates.Menu;
+                        FadeService.FadeIn();
+                    });
+                    
                     return;
 
                 case Keys.Enter:
