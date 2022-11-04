@@ -123,7 +123,7 @@ namespace Intersect.Client.General
 
         public static bool IntroComing = true;
 
-        public static long IntroDelay = 3500;
+        public static long IntroDelay = 3200;
 
         //Engine Progression
         public static int IntroIndex = 0;
@@ -213,5 +213,15 @@ namespace Intersect.Client.General
     {
         public static bool TradeAccepted { get; set; }
         public static bool WaitFade { get; set; }
+        public static int IntroHFrame { get; set; }
+        public static int IntroVFrame { get; set; }
+        public static bool AnimatedIntro { get; set; }
+        public static int IntroFps { get; set; } = 10;
+        public static int IntroHFrames { get; set; }
+        public static int IntroVFrames { get; set; }
+        public static long IntroUpdateTime { get; set; }
+        public static bool StartMenuMusic { get; set; }
+        public static long IntroBlackDelay { get; set; } = 2500;
+        public static bool JinglePlayed { get; set; }
     }
 }

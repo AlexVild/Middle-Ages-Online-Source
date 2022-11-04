@@ -121,7 +121,7 @@ namespace Intersect.Client.Core
             ActionMsgFont = FindFont(ClientConfiguration.Instance.ActionMsgFont);
             HUDFont = FindFont(ClientConfiguration.Instance.HudFont);
             HUDFontSmall = FindFont(ClientConfiguration.Instance.HudFontSmall);
-            FadeService.SetFade(255f);
+            FadeService.SetFade(255f, true);
         }
 
         public static GameFont FindFont(string font)
@@ -152,13 +152,50 @@ namespace Intersect.Client.Core
 
         public static void DrawIntro()
         {
+            // Forces a delay before showing intro, just to give everything a second.
+            if (Timing.Global.Milliseconds < Globals.IntroBlackDelay)
+            {
+                return;
+            }
+
             var imageTex = sContentManager.GetTexture(
                 GameContentManager.TextureType.Image, ClientConfiguration.Instance.IntroImages[Globals.IntroIndex]
             );
-
-            if (imageTex != null)
+            if (Globals.AnimatedIntro)
+            {
+                AnimateIntro();
+                DrawFullScreenTextureFitMinimum(imageTex, Globals.IntroHFrames, Globals.IntroVFrames, Globals.IntroHFrame, Globals.IntroVFrame);
+            }
+            else
             {
                 DrawFullScreenTextureFitMinimum(imageTex);
+            }
+        }
+
+        private static void AnimateIntro()
+        {
+            if (Globals.IntroHFrame == 1 && Globals.IntroVFrame == 0 && !Globals.JinglePlayed)
+            {
+                Audio.AddGameSound("Grimhaus Jingle.wav", false);
+                Globals.JinglePlayed = true;
+            }
+            if (Globals.IntroUpdateTime < Timing.Global.Milliseconds)
+            {
+                if (Globals.IntroHFrames - 1 > Globals.IntroHFrame)
+                {
+                    Globals.IntroHFrame++;
+                }
+                else if (Globals.IntroVFrames - 1 > Globals.IntroVFrame)
+                {
+                    Globals.IntroHFrame = 0;
+                    Globals.IntroVFrame++;
+                }
+                else
+                {
+                    Globals.IntroHFrame = 0;
+                    Globals.IntroVFrame = 0;
+                }
+                Globals.IntroUpdateTime = Timing.Global.Milliseconds + (Globals.IntroFps * 10);
             }
         }
 
@@ -579,7 +616,7 @@ namespace Intersect.Client.Core
 
             Interface.Interface.DrawGui();
 
-            if (Globals.Database.FadeTransitions)
+            if (FadeService.FadeInstead)
             {
                 // Draw the current Fade
                 DrawGameTexture(
@@ -871,11 +908,16 @@ namespace Intersect.Client.Core
             sOverlayUpdate = Timing.Global.Milliseconds;
         }
 
-        public static FloatRect GetSourceRect(GameTexture gameTexture)
+        public static FloatRect GetSourceRect(GameTexture gameTexture, int hFrames = 1, int vFrames = 1, int currHframe = 0, int currVframe = 0)
         {
+            var srcWidth = gameTexture.GetWidth() / hFrames;
+            var srcHeight = gameTexture.GetHeight() / vFrames;
+            var srcX = srcWidth * currHframe;
+            var srcY = srcHeight * currVframe;
+
             return gameTexture == null
                 ? new FloatRect()
-                : new FloatRect(0, 0, gameTexture.GetWidth(), gameTexture.GetHeight());
+                : new FloatRect(srcX, srcY, srcWidth, srcHeight);
         }
 
         public static void DrawFullScreenTexture(GameTexture tex, float alpha = 1f)
@@ -925,51 +967,51 @@ namespace Intersect.Client.Core
             );
         }
 
-        public static void DrawFullScreenTextureStretched(GameTexture tex)
+        public static void DrawFullScreenTextureStretched(GameTexture tex, int hFrames = 1, int vFrames = 1, int currHframe = 0, int currVframe = 0)
         {
             DrawGameTexture(
-                tex, GetSourceRect(tex),
+                tex, GetSourceRect(tex, hFrames, vFrames, currHframe, currVframe),
                 new FloatRect(
                     Renderer.GetView().X, Renderer.GetView().Y, Renderer.GetScreenWidth(), Renderer.GetScreenHeight()
                 ), Color.White
             );
         }
 
-        public static void DrawFullScreenTextureFitWidth(GameTexture tex)
+        public static void DrawFullScreenTextureFitWidth(GameTexture tex, int hFrames = 1, int vFrames = 1, int currHframe = 0, int currVframe = 0)
         {
             var scale = Renderer.GetScreenWidth() / (float) tex.GetWidth();
             var scaledHeight = tex.GetHeight() * scale;
             var offsetY = (Renderer.GetScreenHeight() - tex.GetHeight()) / 2f;
             DrawGameTexture(
-                tex, GetSourceRect(tex),
+                tex, GetSourceRect(tex, hFrames, vFrames, currHframe, currVframe),
                 new FloatRect(
                     Renderer.GetView().X, Renderer.GetView().Y + offsetY, Renderer.GetScreenWidth(), scaledHeight
                 ), Color.White
             );
         }
 
-        public static void DrawFullScreenTextureFitHeight(GameTexture tex)
+        public static void DrawFullScreenTextureFitHeight(GameTexture tex, int hFrames = 1, int vFrames = 1, int currHframe = 0, int currVframe = 0)
         {
-            var scale = Renderer.GetScreenHeight() / (float) tex.GetHeight();
-            var scaledWidth = tex.GetWidth() * scale;
+            var scale = Renderer.GetScreenHeight() / ((float) tex.GetHeight() / vFrames);
+            var scaledWidth = (tex.GetWidth() / hFrames) * scale;
             var offsetX = (Renderer.GetScreenWidth() - scaledWidth) / 2f;
-            DrawGameTexture(
-                tex, GetSourceRect(tex),
-                new FloatRect(
-                    Renderer.GetView().X + offsetX, Renderer.GetView().Y, scaledWidth, Renderer.GetScreenHeight()
-                ), Color.White
+            var sourceRect = GetSourceRect(tex, hFrames, vFrames, currHframe, currVframe);
+            var destRect = new FloatRect(
+                Renderer.GetView().X + offsetX, Renderer.GetView().Y, scaledWidth, Renderer.GetScreenHeight()
             );
+            
+            DrawGameTexture(tex, sourceRect, destRect, Color.White);
         }
 
-        public static void DrawFullScreenTextureFitMinimum(GameTexture tex)
+        public static void DrawFullScreenTextureFitMinimum(GameTexture tex, int hFrames = 1, int vFrames = 1, int currHframe = 0, int currVframe = 0)
         {
             if (Renderer.GetScreenWidth() > Renderer.GetScreenHeight())
             {
-                DrawFullScreenTextureFitHeight(tex);
+                DrawFullScreenTextureFitHeight(tex, hFrames, vFrames, currHframe, currVframe);
             }
             else
             {
-                DrawFullScreenTextureFitWidth(tex);
+                DrawFullScreenTextureFitWidth(tex, hFrames, vFrames, currHframe, currVframe);
             }
         }
 

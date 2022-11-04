@@ -960,14 +960,6 @@ namespace Intersect.Client.Interface.Shared
             // Save keybinding settings
             Globals.Database.ClassicMode = mClassicModeCheckbox.IsChecked;
 
-            if (shouldReset)
-            {
-                mCustomResolutionMenuItem?.Hide();
-                Graphics.Renderer.OverrideResolution = Resolution.Empty;
-                Graphics.Renderer.Init();
-                FadeService.SetFade(0f);
-            }
-
             // Save Settings.
             Globals.Database.MusicVolume = (int)mMusicSlider.Value;
             Globals.Database.SoundVolume = (int)mSoundSlider.Value;
@@ -977,6 +969,14 @@ namespace Intersect.Client.Interface.Shared
             Globals.Database.SavePreferences();
 
             // Hide our current window.
+            if (shouldReset)
+            {
+                mCustomResolutionMenuItem?.Hide();
+                Graphics.Renderer.OverrideResolution = Resolution.Empty;
+                Graphics.Renderer.Init();
+                FadeService.SetFade(0f, true);
+            }
+
             Hide();
         }
 

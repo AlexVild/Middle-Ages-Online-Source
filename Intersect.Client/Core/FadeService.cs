@@ -6,11 +6,11 @@ namespace Intersect.Client.Core
 {
     public static class FadeService
     {
-        public static bool FadeInstead => Globals.Database?.FadeTransitions ?? false;
+        public static bool FadeInstead => (Globals.Database?.FadeTransitions ?? false) || Globals.GameState == GameStates.Intro;
 
         public static void FadeIn(bool fast = false, Action callback = null)
         {
-            if (Globals.Database.FadeTransitions)
+            if (FadeInstead)
             {
                 Fade.FadeIn(fast, callback);
             }
@@ -20,23 +20,26 @@ namespace Intersect.Client.Core
             }
         }
 
-        public static void SetFade(float amt)
+        public static void SetFade(float amt, bool both = false)
         {
-            if (Globals.Database.FadeTransitions)
+            if (FadeInstead || both)
             {
                 Fade.FadeAmt = amt;
+                Fade.CurrentAction = FadeType.None;
+                if (!both)
+                {
+                    return;
+                }
             }
-            else
-            {
-                float maxWidth = Graphics.CurrentView.Width / 2;
-                Wipe.FadeAmt = (maxWidth / 255) * amt;
-                Wipe.InvertFadeAmt = maxWidth - Wipe.FadeAmt;
-            }
+            float maxWidth = Graphics.CurrentView.Width / 2;
+            Wipe.FadeAmt = (maxWidth / 255) * amt;
+            Wipe.InvertFadeAmt = maxWidth - Wipe.FadeAmt;
+            Wipe.CurrentAction = FadeType.None;
         }
 
         public static void FadeOut(bool alertServerWhenFaded = false, bool fast = false, Action callback = null)
         {
-            if (Globals.Database.FadeTransitions)
+            if (FadeInstead)
             {
                 Fade.FadeOut(alertServerWhenFaded, fast, callback);
             }
@@ -48,7 +51,7 @@ namespace Intersect.Client.Core
 
         public static bool DoneFading()
         {
-            if (Globals.Database.FadeTransitions)
+            if (FadeInstead)
             {
                 return Fade.DoneFading();
             }
@@ -62,7 +65,7 @@ namespace Intersect.Client.Core
         {
             get
             {
-                if (Globals.Database.FadeTransitions)
+                if (FadeInstead)
                 {
                     return Fade.CurrentAction;
                 }

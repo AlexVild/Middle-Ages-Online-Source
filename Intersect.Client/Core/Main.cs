@@ -34,10 +34,11 @@ namespace Intersect.Client.Core
 
             //Load Sounds
             Audio.Init();
-            Audio.PlayMusic(ClientConfiguration.Instance.MenuMusic, 6f, 10f, true);
 
             //Init Network
             Networking.Network.InitNetwork(context);
+
+            CheckForAnimatedIntro();
 
             //Make Json.Net Familiar with Our Object Types
             var id = Guid.NewGuid();
@@ -121,6 +122,14 @@ namespace Intersect.Client.Core
                 return;
             }
 
+            // Forces a delay before showing intro, just to give everything a second.
+            if (Timing.Global.Milliseconds < Globals.IntroBlackDelay)
+            {
+                // Prevents our first image from being done displaying immediately.
+                Globals.IntroStartTime = Timing.Global.Milliseconds;
+                return;
+            }
+
             GameTexture imageTex = Globals.ContentManager.GetTexture(
                     GameContentManager.TextureType.Image, ClientConfiguration.Instance.IntroImages[Globals.IntroIndex]
                 );
@@ -139,25 +148,86 @@ namespace Intersect.Client.Core
                     //If we have shown an image long enough, fade to black -- keep track that the image is going
                     FadeService.FadeOut(callback: () =>
                     {
-                        Globals.IntroStartTime = -1;
-                        Globals.IntroIndex++;
+                        NextIntro();
                     });
                 }
             }
             else
             {
-                Globals.IntroIndex++;
+                NextIntro();
             }
+        }
+
+        private static void NextIntro()
+        {
+            Globals.IntroStartTime = -1;
+            Globals.IntroIndex++;
+            // Start the menu music if we've made it past the Grimhaus logo
+            if (Globals.IntroIndex > 0)
+            {
+                TryStartMenuMusic();
+            }
+            CheckForAnimatedIntro();
+        }
+
+        private static void CheckForAnimatedIntro()
+        {
+            Globals.AnimatedIntro = false;
+            var introImages = ClientConfiguration.Instance.IntroImages;
+            if (introImages.Count <= Globals.IntroIndex)
+            {
+                return;
+            }
+
+            var nextImage = introImages[Globals.IntroIndex];
+            // If the intro image contains something like "strip_44", the last number is the amount of frames
+            var frameNameSplit = nextImage.Split('_');
+            if (frameNameSplit.Length <= 0 || !frameNameSplit.Contains("strip"))
+            {
+                return;
+            }
+            try
+            {
+                // Split on HFRAMEsxVFRAMES.ext
+                var frameData = frameNameSplit.Last().Split('.').First();
+                Globals.IntroHFrames = int.Parse(frameData.Split('x').First());
+                Globals.IntroVFrames = int.Parse(frameData.Split('x').Last());
+                InitializeAnimatedIntro();
+            }
+            catch (Exception e)
+            {
+                return; // just swallow, we won't animate
+            }
+
+            Globals.IntroStartTime = Timing.Global.Milliseconds + Globals.IntroFps;
+        }
+
+        private static void InitializeAnimatedIntro()
+        {
+            Globals.IntroHFrame = 0;
+            Globals.IntroVFrame = 0;
+            Globals.AnimatedIntro = true;
+            Globals.IntroUpdateTime = Timing.Global.Milliseconds + (Globals.IntroFps * 10);
         }
 
         private static void ProcessMenu()
         {
+            TryStartMenuMusic();
             if (!Globals.JoiningGame)
                 return;
 
             //Check if maps are loaded and ready
             Globals.GameState = GameStates.Loading;
             Interface.Interface.DestroyGwen();
+        }
+
+        private static void TryStartMenuMusic()
+        {
+            if (!Globals.StartMenuMusic)
+            {
+                Audio.PlayMusic(ClientConfiguration.Instance.MenuMusic, 6f, 10f, true);
+                Globals.StartMenuMusic = true;
+            }
         }
 
         private static void ProcessLoading()
@@ -336,9 +406,9 @@ namespace Intersect.Client.Core
 
         public static void Logout(bool characterSelect)
         {
+            Globals.StartMenuMusic = false;
             FadeService.FadeOut(callback: () =>
             {
-                Audio.PlayMusic(ClientConfiguration.Instance.MenuMusic, 6f, 10f, true);
                 PacketSender.SendLogout(characterSelect);
                 Globals.LoggedIn = false;
                 Globals.WaitingOnServer = false;

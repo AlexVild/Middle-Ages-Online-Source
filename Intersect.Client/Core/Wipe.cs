@@ -107,6 +107,15 @@ namespace Intersect.Client.Core
             float maxWidth = Graphics.CurrentView.Width / 2;
             var amountChange = (Timing.Global.Milliseconds - sLastUpdate) / sFadeRate * maxWidth;
 
+            // If we're supposed to be done, but there's remnants remaining
+            if (CurrentAction == FadeType.None 
+                && ( (sInvertFadeAmt < maxWidth && sInvertFadeAmt > maxWidth / 2) || (sFadeAmt > 0 && sFadeAmt < maxWidth / 2) ))
+            {
+                // Clear them
+                sFadeAmt = 0f;
+                sInvertFadeAmt = maxWidth;
+            }
+
             if (CurrentAction == FadeType.In)
             {
                 sFadeAmt = (float)MathHelper.Clamp(sFadeAmt - amountChange, 0f, maxWidth);

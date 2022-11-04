@@ -46,6 +46,7 @@ namespace Intersect.Client.Core
                     {
                         break;
                     }
+                    Audio.StopAllSounds();
                     FadeService.FadeOut(callback: () =>
                     {
                         Globals.GameState = GameStates.Menu;
