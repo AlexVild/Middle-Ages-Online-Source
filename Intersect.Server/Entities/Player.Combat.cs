@@ -125,7 +125,7 @@ namespace Intersect.Server.Entities
             }
             
             // Short-circuit out if resource and let resource harvesting logic go
-            if (enemy is Resource targetResource)
+            if (enemy is Resource targetResource && targetResource.Base.Tool >= 0)
             {
                 HandleResourceMelee(targetResource);
                 return;

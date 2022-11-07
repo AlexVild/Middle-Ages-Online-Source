@@ -291,7 +291,7 @@ namespace Intersect.Server.Entities
                 }
                 SendCombatEffects(enemy, critMultiplier > 1, damage);
 
-                PacketSender.SendCombatNumber(DetermineCombatNumberType(damage, secondaryDamage, false, critMultiplier), enemy, damage);
+                PacketSender.SendCombatNumber(DetermineCombatNumberType(damage, secondaryDamage, enemy is Resource, critMultiplier), enemy, damage);
                 enemy.TakeDamage(this, damage, secondaryDamage ? Vitals.Mana : Vitals.Health);
             }
         }

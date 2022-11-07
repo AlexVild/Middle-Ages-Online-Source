@@ -182,7 +182,6 @@ namespace Intersect.Server.Entities
 
             CastTime = Timing.Global.Milliseconds + spell.CastDuration;
             Target = target;
-            Unstealth();
 
             if (spell.CastAnimationId != Guid.Empty)
             {
@@ -405,6 +404,12 @@ namespace Intersect.Server.Entities
             if (!ValidateCast(spell, CastTarget, ignoreVitals))
             {
                 return;
+            }
+
+            // Without this, stealth spells... immediately unstealth you.
+            if (spell.Combat.Effect != StatusTypes.Stealth)
+            {
+                Unstealth();
             }
 
             CastTime = 0;

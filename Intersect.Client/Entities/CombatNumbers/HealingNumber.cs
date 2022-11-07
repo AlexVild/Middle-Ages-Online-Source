@@ -69,6 +69,11 @@ namespace Intersect.Client.Entities.CombatNumbers
 
         private void UpdateWipe()
         {
+            if (!FrameHeights.ContainsKey(CurrentFrame))
+            {
+                return;
+            }
+
             DrawText = false;
             var backgroundHeight = CurrentBackground.Height;
             HealingSourceRect = new FloatRect(

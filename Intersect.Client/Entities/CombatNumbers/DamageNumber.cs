@@ -45,7 +45,7 @@ namespace Intersect.Client.Entities.CombatNumbers
 
         protected override void Animate()
         {
-            if (CurrentFrame < YOffsetsPerFrame.Count)
+            if (YOffsetsPerFrame.ContainsKey(CurrentFrame))
             {
                 YOffset += YOffsetsPerFrame[CurrentFrame];
             }

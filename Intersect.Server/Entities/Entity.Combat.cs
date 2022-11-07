@@ -39,7 +39,10 @@ namespace Intersect.Server.Entities
         /// <param name="vital">The affected vital</param>
         public virtual void TakeDamage(Entity attacker, int damage, Vitals vital = Vitals.Health)
         {
-            RemoveStatusesOnDamage();
+            if (damage > 0)
+            {
+                RemoveStatusesOnDamage();
+            }
             NotifySwarm(attacker);
 
             if (damage > 0)
