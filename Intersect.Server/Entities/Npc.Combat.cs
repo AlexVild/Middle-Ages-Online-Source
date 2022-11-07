@@ -32,10 +32,10 @@ namespace Intersect.Server.Entities
             base.ProjectileAttack(enemy, projectile, parentSpell, parentWeapon, projectileDir);
         }
 
-        public override void TakeDamage(Entity attacker, int damage)
+        public override void TakeDamage(Entity attacker, int damage, Vitals vital = Vitals.Health)
         {
             AddToDamageAndLootMaps(attacker, damage);
-            base.TakeDamage(attacker, damage);
+            base.TakeDamage(attacker, damage, vital);
         }
 
         public override bool CanMeleeTarget(Entity target)

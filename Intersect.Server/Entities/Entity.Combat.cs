@@ -36,18 +36,19 @@ namespace Intersect.Server.Entities
         /// </summary>
         /// <param name="attacker">The attacking entity dealing damage to this entity</param>
         /// <param name="damage">The amount of damage to take</param>
-        public virtual void TakeDamage(Entity attacker, int damage)
+        /// <param name="vital">The affected vital</param>
+        public virtual void TakeDamage(Entity attacker, int damage, Vitals vital = Vitals.Health)
         {
             RemoveStatusesOnDamage();
             NotifySwarm(attacker);
 
             if (damage > 0)
             {
-                SubVital(Vitals.Health, damage);
+                SubVital(vital, damage);
             }
-            else if (!IsFullVital(Vitals.Health))
+            else if (!IsFullVital(vital))
             {
-                AddVital(Vitals.Health, damage);
+                AddVital(vital, damage);
             }
 
             // You dead?

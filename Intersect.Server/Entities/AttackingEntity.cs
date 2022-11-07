@@ -250,7 +250,17 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
-            DealDamageTo(enemy, attackTypes, dmgScaling, critMultiplier, weapon, out damage);
+            var secondary = false; // Deal damage to mana instead
+            if (spell != null)
+            {
+                secondary = spell.Combat.DamageType == (int)DamageType.Magic;
+            }
+            if (weapon != null)
+            {
+                secondary = weapon.DamageType == (int)DamageType.Magic;
+            }
+
+            DealDamageTo(enemy, attackTypes, dmgScaling, critMultiplier, weapon, secondary, out damage);
             return true;
         }
 
@@ -259,6 +269,7 @@ namespace Intersect.Server.Entities
             int scaling,
             double critMultiplier,
             ItemBase weaponMetadata,
+            bool secondaryDamage, 
             out int damage)
         {
             // TODO secondary damage?
@@ -280,8 +291,8 @@ namespace Intersect.Server.Entities
                 }
                 SendCombatEffects(enemy, critMultiplier > 1, damage);
 
-                PacketSender.SendCombatNumber(DetermineCombatNumberType(damage, false, false, critMultiplier), enemy, damage);
-                enemy.TakeDamage(this, damage);
+                PacketSender.SendCombatNumber(DetermineCombatNumberType(damage, secondaryDamage, false, critMultiplier), enemy, damage);
+                enemy.TakeDamage(this, damage, secondaryDamage ? Vitals.Mana : Vitals.Health);
             }
         }
 
