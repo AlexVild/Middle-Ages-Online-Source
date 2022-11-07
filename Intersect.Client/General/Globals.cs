@@ -221,7 +221,7 @@ namespace Intersect.Client.General
         public static int IntroVFrames { get; set; }
         public static long IntroUpdateTime { get; set; }
         public static bool StartMenuMusic { get; set; }
-        public static long IntroBlackDelay { get; set; } = 2500;
+        public static long IntroBlackDelay { get; set; } = 2700;
         public static bool JinglePlayed { get; set; }
     }
 }

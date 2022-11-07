@@ -306,4 +306,14 @@
         Dungeon,
         Safe,
     }
+
+    public enum CombatNumberType
+    {
+        DamageHealth,
+        DamageMana,
+        DamageCritical,
+        HealHealth,
+        HealMana,
+        Neutral,
+    }
 }

@@ -141,6 +141,7 @@ namespace Intersect.Server.Entities
 
             target.TakeDamage(this, dmg);
             SendCombatEffects(target, false, dmg);
+            PacketSender.SendCombatNumber(DetermineCombatNumberType(dmg, false, true, 1.0), target, dmg);
 
             return true;
         }

@@ -1260,6 +1260,11 @@ namespace Intersect.Server.Maps
         {
             mActionMessages.Add(packet);
         }
+
+        public void AddBatchedCombatNumber(CombatNumberPacket packet)
+        {
+            mActionMessages.Add(packet);
+        }
         #endregion
 
         #region Caching

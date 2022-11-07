@@ -97,6 +97,12 @@
     <Compile Include="Core\Sounds\Sound.cs" />
     <Compile Include="Entities\Animation.cs" />
     <Compile Include="Entities\ChatBubble.cs" />
+    <Compile Include="Entities\CombatNumbers\AnimatedCombatNumber.cs" />
+    <Compile Include="Entities\CombatNumbers\CombatNumber.cs" />
+    <Compile Include="Entities\CombatNumbers\CombatNumberManager.cs" />
+    <Compile Include="Entities\CombatNumbers\DamageNumber.cs" />
+    <Compile Include="Entities\CombatNumbers\HealingNumber.cs" />
+    <Compile Include="Entities\CombatNumbers\ICombatNumberDisplayer.cs" />
     <Compile Include="Entities\Critter.cs" />
     <Compile Include="Entities\Dash.cs" />
     <Compile Include="Entities\Entity.cs" />

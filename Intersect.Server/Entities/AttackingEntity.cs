@@ -272,14 +272,50 @@ namespace Intersect.Server.Entities
 
             damage = Formulas.CalculateDamageMAO(damageTypes, critMultiplier, scaling, this, enemy);
 
-            if (damage > 0)
+            if (damage != 0)
             {
                 if (weaponMetadata != null && weaponMetadata != null)
                 {
                     damage = CalculateSpecialDamage(damage, weaponMetadata, enemy);
                 }
                 SendCombatEffects(enemy, critMultiplier > 1, damage);
+
+                PacketSender.SendCombatNumber(DetermineCombatNumberType(damage, false, false, critMultiplier), enemy, damage);
                 enemy.TakeDamage(this, damage);
+            }
+        }
+
+        protected static CombatNumberType DetermineCombatNumberType(int damage, bool isSecondary, bool isNeutral, double critMultiplier)
+        {
+            if (isNeutral)
+            {
+                return CombatNumberType.Neutral;
+            }
+            if (critMultiplier > 1.0f && damage > 0)
+            {
+                return CombatNumberType.DamageCritical;
+            }
+            if (!isSecondary)
+            {
+                if (damage >= 0)
+                {
+                    return CombatNumberType.DamageHealth;
+                }
+                else
+                {
+                    return CombatNumberType.HealHealth;
+                }
+            }
+            else
+            {
+                if (damage >= 0)
+                {
+                    return CombatNumberType.DamageMana;
+                }
+                else
+                {
+                    return CombatNumberType.HealMana;
+                }
             }
         }
 

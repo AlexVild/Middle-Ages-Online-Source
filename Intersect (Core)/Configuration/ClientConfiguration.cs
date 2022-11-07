@@ -117,6 +117,8 @@ namespace Intersect.Configuration
         
         public string HudFontSmall { get; set; } = DEFAULT_FONT;
 
+        public string DamageFont { get; set; } = DEFAULT_FONT;
+
         /// <summary>
         /// The font family to use on unstyled windows such as the debug menu/admin window
         /// </summary>

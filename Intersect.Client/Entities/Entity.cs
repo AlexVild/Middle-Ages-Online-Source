@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 
 using Intersect.Client.Core;
+using Intersect.Client.Entities.CombatNumbers;
 using Intersect.Client.Entities.Events;
 using Intersect.Client.Entities.Projectiles;
 using Intersect.Client.Framework.File_Management;
@@ -16,6 +17,7 @@ using Intersect.Client.Maps;
 using Intersect.Client.Spells;
 using Intersect.Enums;
 using Intersect.GameObjects;
+using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Maps;
 using Intersect.Logging;
 using Intersect.Network.Packets.Server;

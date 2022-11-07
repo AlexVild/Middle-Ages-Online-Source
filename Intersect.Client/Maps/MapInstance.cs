@@ -7,6 +7,7 @@ using System.Text;
 using Intersect.Client.Core;
 using Intersect.Client.Core.Sounds;
 using Intersect.Client.Entities;
+using Intersect.Client.Entities.CombatNumbers;
 using Intersect.Client.Entities.Events;
 using Intersect.Client.Framework.File_Management;
 using Intersect.Client.Framework.GenericClasses;
@@ -17,6 +18,7 @@ using Intersect.Client.Localization;
 using Intersect.Compression;
 using Intersect.Enums;
 using Intersect.GameObjects;
+using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Maps;
 using Intersect.Network.Packets.Server;
 using Intersect.Utilities;
@@ -1559,5 +1561,4 @@ namespace Intersect.Client.Maps
             MapRequests.Add(mapId, Timing.Global.Milliseconds + 2000);
         }
     }
-
 }

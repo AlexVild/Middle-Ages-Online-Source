@@ -298,6 +298,9 @@ namespace Intersect.Client.Entities
                 return;
             }
 
+            WorldPos.Reset();
+            WorldPos = mDestRectangle;
+
             if (Texture != null)
             {
                 Graphics.DrawGameTexture(Texture, mSrcRectangle, mDestRectangle, Intersect.Color.White);

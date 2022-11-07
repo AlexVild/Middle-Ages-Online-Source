@@ -402,6 +402,8 @@
     <Compile Include="Network\Packets\Client\RequestLeaderboardPacket.cs" />
     <Compile Include="Network\Packets\Client\RequestLootUpdatePacket.cs" />
     <Compile Include="Network\Packets\Client\RequestRespawnPacket.cs" />
+    <Compile Include="Network\Packets\Server\CombatNumberPacket.cs" />
+    <Compile Include="Network\Packets\Server\CombatNumberPackets.cs" />
     <Compile Include="Network\Packets\Server\CraftStatusPacket.cs" />
     <Compile Include="Network\Packets\Client\CreateAccountPacket.cs" />
     <Compile Include="Network\Packets\Client\CreateCharacterPacket.cs" />

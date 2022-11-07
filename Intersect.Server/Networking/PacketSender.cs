@@ -2604,6 +2604,24 @@ namespace Intersect.Server.Networking
 
             player.SendPacket(new RespawnFinishedPacket());
         }
+
+        public static void SendCombatNumber(CombatNumberType type, Entity target, int value, Entity visibleTo = null)
+        {
+            if (!MapController.TryGetInstanceFromMap(target.Map.Id, target.MapInstanceId, out var mapInstance))
+            {
+                return;
+            }
+            
+            var packet = new CombatNumberPacket(type, Math.Abs(value), target.Id, visibleTo?.Id ?? Guid.Empty, target.X, target.Y, target.MapId);
+            if (Options.Instance.Packets.BatchActionMessagePackets)
+            {
+                mapInstance.AddBatchedCombatNumber(packet);
+            }
+            else
+            {
+                SendDataToProximityOnMapInstance(target.MapId, target.MapInstanceId, packet);
+            }
+        }
     }
 
 }

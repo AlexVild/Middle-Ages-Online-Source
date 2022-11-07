@@ -28,6 +28,7 @@ using Intersect.GameObjects.Timers;
 using Newtonsoft.Json.Linq;
 using Intersect.Client.General.Leaderboards;
 using Intersect.Client.Interface.ScreenAnimations;
+using Intersect.Client.Entities.CombatNumbers;
 
 namespace Intersect.Client.Networking
 {
@@ -2652,6 +2653,30 @@ namespace Intersect.Client.Networking
             }
 
             Interface.Interface.GameUi.RespawnWindow.ServerRespawned();
+        }
+
+        public void HandlePacket(IPacketSender packetSender, CombatNumberPackets packet)
+        {
+            foreach (var pkt in packet.Packets)
+            {
+                HandlePacket(pkt);
+            }
+        }
+
+        public void HandlePacket(IPacketSender packetSender, CombatNumberPacket packet)
+        {
+            if (Globals.Me == null)
+            {
+                return;
+            }
+
+            Entity visibleTo = null;
+            if (packet.VisibleTo != Guid.Empty && !Globals.Entities.TryGetValue(packet.VisibleTo, out visibleTo))
+            {
+                visibleTo = null;
+            }
+
+            CombatNumberManager.AddCombatNumber(packet.Target, packet.Value, packet.Type, packet.X, packet.Y, packet.MapId, visibleTo);
         }
     }
 }

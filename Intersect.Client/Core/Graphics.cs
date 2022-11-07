@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Intersect.Client.Entities;
+using Intersect.Client.Entities.CombatNumbers;
 using Intersect.Client.Entities.Events;
 using Intersect.Client.Framework.File_Management;
 using Intersect.Client.Framework.GenericClasses;
@@ -121,7 +122,9 @@ namespace Intersect.Client.Core
             ActionMsgFont = FindFont(ClientConfiguration.Instance.ActionMsgFont);
             HUDFont = FindFont(ClientConfiguration.Instance.HudFont);
             HUDFontSmall = FindFont(ClientConfiguration.Instance.HudFontSmall);
+            DamageFont = FindFont(ClientConfiguration.Instance.DamageFont);
             FadeService.SetFade(255f, true);
+            CombatNumberManager.CacheTextureRefs();
         }
 
         public static GameFont FindFont(string font)
@@ -521,6 +524,8 @@ namespace Intersect.Client.Core
                     map?.DrawActionMsgs();
                 }
             }
+
+            CombatNumberManager.UpdateAndDrawCombatNumbers();
 
             foreach (var animInstance in animations)
             {
@@ -1587,5 +1592,7 @@ namespace Intersect.Client.Core
         public static GameFont HUDFont;
         
         public static GameFont HUDFontSmall;
+        
+        public static GameFont DamageFont;
     }
 }

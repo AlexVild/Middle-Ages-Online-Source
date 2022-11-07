@@ -58,11 +58,6 @@ namespace Intersect.Server.Entities
                     Die(true, attacker);
                 }
             }
-            else
-            {
-                // TODO wtf is "isAutoAttack"?
-                // attacker.CheckForOnhitAttack(this, isAutoAttack);
-            }
         }
 
         private void RemoveStatusesOnDamage()

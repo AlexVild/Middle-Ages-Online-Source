@@ -3254,9 +3254,18 @@ namespace Intersect.Server.Entities
                                 throw new IndexOutOfRangeException();
                         }
 
-                        var symbol = value < 0 ? Strings.Combat.removesymbol : Strings.Combat.addsymbol;
-                        var number = $"{symbol}{Math.Abs(value)}";
-                        PacketSender.SendActionMsg(this, number, color);
+                        if (itemBase.Consumable.Type != ConsumableType.Experience)
+                        {
+                            // Reverse the value - a positive consumable value _gives_ health
+                            var revValue = value * -1;
+                            PacketSender.SendCombatNumber(DetermineCombatNumberType(revValue, itemBase.Consumable.Type == ConsumableType.Mana, false, 1.0), this, revValue);
+                        }
+                        else
+                        {
+                            var symbol = value < 0 ? Strings.Combat.removesymbol : Strings.Combat.addsymbol;
+                            var number = $"{symbol}{Math.Abs(value)}";
+                            PacketSender.SendActionMsg(this, number, color);
+                        }
 
                         if (die)
                         {
