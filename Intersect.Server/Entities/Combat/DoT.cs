@@ -96,28 +96,11 @@ namespace Intersect.Server.Entities.Combat
                 return;
             }
 
-            var deadAnimations = new List<KeyValuePair<Guid, sbyte>>();
-            var aliveAnimations = new List<KeyValuePair<Guid, sbyte>>();
-            if (SpellBase.OverTimeAnimationId != Guid.Empty)
-            {
-                deadAnimations.Add(new KeyValuePair<Guid, sbyte>(SpellBase.OverTimeAnimationId, (sbyte)Directions.Up));
-                aliveAnimations.Add(new KeyValuePair<Guid, sbyte>(SpellBase.OverTimeAnimationId, (sbyte)Directions.Up));
-            } else if (SpellBase.HitAnimationId != Guid.Empty)
-            {
-                deadAnimations.Add(new KeyValuePair<Guid, sbyte>(SpellBase.HitAnimationId, (sbyte)Directions.Up));
-                aliveAnimations.Add(new KeyValuePair<Guid, sbyte>(SpellBase.HitAnimationId, (sbyte)Directions.Up));
-            }
-            
-
-            var damageHealth = SpellBase.Combat.VitalDiff[(int)Vitals.Health];
-            var damageMana = SpellBase.Combat.VitalDiff[(int)Vitals.Mana];
-
             mInterval = Timing.Global.Milliseconds + SpellBase.Combat.HotDotInterval;
             Count--;
 
             var attackTypes = SpellBase.Combat?.DamageTypes;
             var scaling = SpellBase.Combat?.Scaling ?? 100;
-
 
             SendDoTAnimation(SpellBase, Target, (sbyte)Directions.Up);
             if (!Attacker.TryDealDamageTo(Target, attackTypes, scaling, 1.0, null, SpellBase, out int damage))
@@ -134,9 +117,10 @@ namespace Intersect.Server.Entities.Combat
             }
 
             var animation = spell?.OverTimeAnimationId ?? spell?.HitAnimationId ?? Guid.Empty;
+            var targetType = (target.IsDead() || target.IsDisposed) ? -1 : 1;
 
             PacketSender.SendAnimationToProximity(
-                animation, -1, Attacker.Id, target.MapId, (byte)target.X, (byte)target.Y, (sbyte)dir, target.MapInstanceId
+                animation, targetType, target.Id, target.MapId, (byte)target.X, (byte)target.Y, (sbyte)dir, target.MapInstanceId
             );
         }
 

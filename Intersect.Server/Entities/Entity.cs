@@ -1459,11 +1459,11 @@ namespace Intersect.Server.Entities
             return this == otherEntity;
         }
 
-        private void Animate(Entity target, List<KeyValuePair<Guid, sbyte>> animations, bool fromProjectile = false)
+        protected void Animate(Entity target, List<KeyValuePair<Guid, sbyte>> animations, bool fromProjectile = false)
         {
             foreach (var anim in animations)
             {
-                PacketSender.SendAnimationToProximity(anim.Key, 1, target.Id, target.MapId, 0, 0, anim.Value, MapInstanceId, fromProjectile);
+                PacketSender.SendAnimationToProximity(anim.Key, 1, Id, target.MapId, 0, 0, anim.Value, MapInstanceId, fromProjectile);
             }
         }
 
@@ -1520,6 +1520,11 @@ namespace Intersect.Server.Entities
 
         protected void SendCombatEffects(Entity enemy, bool isCrit, int damage)
         {
+            if (damage == 0)
+            {
+                return;
+            }
+
             // Calculate combat special effects (entity/screen flash, screen shake, extra sounds)
             // Define vars that will be used for combat effects
             Color flashColor = null;
@@ -1600,6 +1605,7 @@ namespace Intersect.Server.Entities
                     entityFlashColor = CustomColors.Combat.GenericHealingReceivedEntityFlashColor;
                     flashColor = CustomColors.Combat.HealingFlashColor;
                     shakeAmount = 0.0f;
+                    damageSound = string.Empty;
                 }
                 else if (damage > 0)
                 {

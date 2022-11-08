@@ -202,7 +202,10 @@ namespace Intersect.GameObjects
         [NotMapped] public int[] VitalDiff = new int[(int) Vitals.VitalCount];
 
         [NotMapped, JsonIgnore]
-        public bool IsDamaging => VitalDiff[(int)Vitals.Health] != 0 || VitalDiff[(int)Vitals.Mana] != 0;
+        public bool IsDamaging => VitalDiff[(int)Vitals.Health] > 0 || VitalDiff[(int)Vitals.Mana] > 0;
+
+        [NotMapped, JsonIgnore]
+        public bool ChangesVitals => VitalDiff[(int)Vitals.Health] != 0 || VitalDiff[(int)Vitals.Mana] != 0;
 
         public int CritChance { get; set; }
 

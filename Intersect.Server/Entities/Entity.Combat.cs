@@ -23,12 +23,36 @@ namespace Intersect.Server.Entities
 
         public bool IsStealthed => CachedStatuses.ToArray().Select(status => status.Type).Contains(StatusTypes.Stealth);
 
-        protected virtual void Unstealth()
+        public virtual void Unstealth()
         {
             foreach(var cachedStatus in CachedStatuses.Where(status => status.Type == StatusTypes.Stealth))
             {
                 cachedStatus.RemoveStatus();
             }
+        }
+
+        public bool CanHaveVitalDamaged(Vitals vital)
+        {
+            if (this == null || IsDisposed || IsDead())
+            {
+                return false;
+            }
+
+            // Invulnerable?
+            if (CachedStatuses.Any(status => status.Type == StatusTypes.Invulnerable))
+            {
+                // TODO message
+                PacketSender.SendActionMsg(this, Strings.Combat.invulnerable, CustomColors.Combat.Invulnerable, Options.BlockSound);
+                return false;
+            }
+
+            // Enemy doesn't have any health
+            if (!HasVital(vital))
+            {
+                return false;
+            }
+
+            return true;
         }
 
         /// <summary>
@@ -51,7 +75,7 @@ namespace Intersect.Server.Entities
             }
             else if (!IsFullVital(vital))
             {
-                AddVital(vital, damage);
+                AddVital(vital, damage * -1);
             }
 
             // You dead?

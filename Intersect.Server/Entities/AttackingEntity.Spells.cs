@@ -313,6 +313,12 @@ namespace Intersect.Server.Entities
                 statBuffTime = spell.Combat.Duration;
             }
 
+            if (statBuffTime == -1 && spell.Combat.HoTDoT && spell.Combat.HotDotInterval > 0)
+            {
+                statBuffTime = spell.Combat.Duration;
+            }
+
+            // Is there an effect? If so, apply its status
             if (spell.Combat.Effect > 0) //Handle status effects
             {
                 // If the entity is immune to some status, then just inform the client of such
@@ -331,6 +337,21 @@ namespace Intersect.Server.Entities
                     PacketSender.SendActionMsg(
                         target, Strings.Combat.status[(int)spell.Combat.Effect], CustomColors.Combat.Status
                     );
+                }
+
+                if (target is Npc npc)
+                {
+                    npc.AssignTarget(this);
+                }
+            }
+            // Otherwise, add a status for the stat boost
+            else
+            {
+                new Status(target, this, spell, spell.Combat.Effect, statBuffTime, "");
+
+                if (target is Npc npc)
+                {
+                    npc.AssignTarget(this);
                 }
             }
         }
@@ -424,7 +445,7 @@ namespace Intersect.Server.Entities
                         case SpellTargetTypes.Self:
                             if (spell.HitAnimationId != Guid.Empty && spell.Combat.Effect != StatusTypes.OnHit)
                             {
-                                SendSpellHitAnimation(spell, this);
+                                SendSpellHitAnimation(spell, this, Id);
                             }
                             SpellAttack(this, spell, (sbyte)Dir, null);
 
@@ -440,7 +461,7 @@ namespace Intersect.Server.Entities
                             else
                             {
                                 SpellAttack(CastTarget, spell, (sbyte)Dir, null);
-                                SendSpellHitAnimation(spell, CastTarget);
+                                SendSpellHitAnimation(spell, CastTarget, Target.Id);
                             }
 
                             break;
@@ -494,7 +515,7 @@ namespace Intersect.Server.Entities
                                     this, Strings.Combat.status[(int)spell.Combat.Effect],
                                     CustomColors.Combat.Status
                                 );
-                                SendSpellHitAnimation(spell, this);
+                                SendSpellHitAnimation(spell, this, Id);
                             }
 
                             break;
@@ -513,7 +534,7 @@ namespace Intersect.Server.Entities
                 case SpellTypes.Warp:
                     if (this is Player)
                     {
-                        SendSpellHitAnimation(spell, this);
+                        SendSpellHitAnimation(spell, this, Id);
                         Warp(
                             spell.Warp.MapId, spell.Warp.X, spell.Warp.Y,
                             spell.Warp.Dir - 1 == -1 ? (byte)this.Dir : (byte)(spell.Warp.Dir - 1)
@@ -616,6 +637,11 @@ namespace Intersect.Server.Entities
                             continue;
                         }
 
+                        if ((spellBase.Combat.Friendly && !IsAllyOf(entity)) || (!spellBase.Combat.Friendly && IsAllyOf(entity)))
+                        {
+                            continue;
+                        }
+
                         //Check to handle a warp to spell
                         if (spellBase.SpellType == SpellTypes.WarpTo)
                         {
@@ -629,11 +655,11 @@ namespace Intersect.Server.Entities
                         }
 
                         SpellAttack(entity, spellBase, (sbyte)Directions.Up, null); //Handle damage
-                        SendSpellHitAnimation(spellBase, entity);
+                        SendSpellHitAnimation(spellBase, entity, entity.Id);
                         entitiesHit++;
                     }
                 }
-                if (!spellBase.Combat.Friendly && entitiesHit < 1 && !isProjectileTool && !ignoreMissMessage) // Will count yourself - which is FINE in the case of a friendly spell, otherwise ignore it
+                if (entitiesHit < 1 && !isProjectileTool && !ignoreMissMessage) // Will count yourself - which is FINE in the case of a friendly spell, otherwise ignore it
                 {
                     if (this is Player)
                     {
@@ -650,7 +676,7 @@ namespace Intersect.Server.Entities
         /// <param name="spell"></param>
         /// <param name="target"></param>
         /// <param name="dirOverride"></param>
-        public void SendSpellHitAnimation(SpellBase spell, Entity target, sbyte? dirOverride = null)
+        public void SendSpellHitAnimation(SpellBase spell, Entity target, Guid entityId, sbyte? dirOverride = null)
         {
             if (target == null)
             {
@@ -663,8 +689,12 @@ namespace Intersect.Server.Entities
                 dir = dirOverride.Value;
             }
 
+            var anim = spell?.HitAnimationId ?? Guid.Empty;
+
+            var targetType = (target.IsDead() || target.IsDisposed) ? -1 : 1;
+
             PacketSender.SendAnimationToProximity(
-                spell?.HitAnimationId ?? Guid.Empty, -1, Id, target.MapId, (byte)target.X, (byte)target.Y, (sbyte)dir, target.MapInstanceId
+                anim, targetType, entityId, target.MapId, (byte)target.X, (byte)target.Y, (sbyte)dir, target.MapInstanceId
             );
         }
 

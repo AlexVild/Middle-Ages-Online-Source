@@ -45,6 +45,15 @@ namespace Intersect.Editor.Forms.Editors
 
         private List<CraftBase> mCrafts = new List<CraftBase>();
 
+        private void UpdateOverrides()
+        {
+            cmbTypeDisplayOverride.Items.Clear();
+            var sortedOverrides = new List<string>(Options.Equipment.DisplayOverrides);
+            sortedOverrides.Sort();
+            cmbTypeDisplayOverride.Items.AddRange(sortedOverrides.ToArray());
+            cmbTypeDisplayOverride.SelectedIndex = -1;
+        }
+
         public FrmItem()
         {
             ApplyHooks();
@@ -61,15 +70,11 @@ namespace Intersect.Editor.Forms.Editors
                 cmbEquipmentBonus.Items.Add(Strings.ItemEditor.bonuseffects[i]);
             }
 
+            UpdateOverrides();
+
             cmbProjectile.Items.Clear();
             cmbProjectile.Items.Add(Strings.General.none);
             cmbProjectile.Items.AddRange(ProjectileBase.Names);
-
-            cmbTypeDisplayOverride.Items.Clear();
-            var sortedOverrides = new List<string>(Options.Equipment.DisplayOverrides);
-            sortedOverrides.Sort();
-            cmbTypeDisplayOverride.Items.AddRange(sortedOverrides.ToArray());
-            cmbTypeDisplayOverride.SelectedIndex = -1;
 
             for (var i = 0; i < NpcBase.GetNameList().Length; i++)
             {
@@ -1915,6 +1920,25 @@ namespace Intersect.Editor.Forms.Editors
             else
             {
                 RemoveDamageType(AttackTypes.Magic);
+            }
+        }
+
+        private void btnAddTypeOverride_Click(object sender, EventArgs e)
+        {
+            var typeOverride = "";
+            var result = DarkInputBox.ShowInformation(
+                "Enter the type override you'd like to display on the client for this item", "Type Override", ref typeOverride,
+                DarkDialogButton.OkCancel
+            );
+
+            if (result == DialogResult.OK && !string.IsNullOrEmpty(typeOverride))
+            {
+                if (!cmbFolder.Items.Contains(typeOverride))
+                {
+                    mEditorItem.TypeDisplayOverride = typeOverride;
+                    cmbTypeDisplayOverride.Text = typeOverride;
+                    UpdateOverrides();
+                }
             }
         }
     }

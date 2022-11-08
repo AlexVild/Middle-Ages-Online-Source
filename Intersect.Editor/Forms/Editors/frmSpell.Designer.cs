@@ -109,7 +109,6 @@ namespace Intersect.Editor.Forms.Editors
             this.chkDamagePierce = new DarkUI.Controls.DarkCheckBox();
             this.chkDamageSlash = new DarkUI.Controls.DarkCheckBox();
             this.chkDamageBlunt = new DarkUI.Controls.DarkCheckBox();
-            this.label13 = new System.Windows.Forms.Label();
             this.label22 = new System.Windows.Forms.Label();
             this.nudEvasionPercentage = new DarkUI.Controls.DarkNumericUpDown();
             this.label23 = new System.Windows.Forms.Label();
@@ -225,6 +224,11 @@ namespace Intersect.Editor.Forms.Editors
             this.btnClearSearch = new DarkUI.Controls.DarkButton();
             this.txtSearch = new DarkUI.Controls.DarkTextBox();
             this.lstGameObjects = new Intersect.Editor.Forms.Controls.GameObjectList();
+            this.grpDamageTypes = new DarkUI.Controls.DarkGroupBox();
+            this.label14 = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
+            this.label17 = new System.Windows.Forms.Label();
             this.pnlContainer.SuspendLayout();
             this.grpComponents.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudComponentQuantity)).BeginInit();
@@ -284,6 +288,7 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudWarpX)).BeginInit();
             this.toolStrip.SuspendLayout();
             this.grpSpells.SuspendLayout();
+            this.grpDamageTypes.SuspendLayout();
             this.SuspendLayout();
             // 
             // pnlContainer
@@ -429,7 +434,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpDash.Controls.Add(this.lblRange);
             this.grpDash.Controls.Add(this.scrlRange);
             this.grpDash.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpDash.Location = new System.Drawing.Point(215, 105);
+            this.grpDash.Location = new System.Drawing.Point(3, 444);
             this.grpDash.Name = "grpDash";
             this.grpDash.Size = new System.Drawing.Size(220, 251);
             this.grpDash.TabIndex = 38;
@@ -830,7 +835,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpSpellCost.Controls.Add(this.lblCastDuration);
             this.grpSpellCost.Controls.Add(this.lblCooldownDuration);
             this.grpSpellCost.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpSpellCost.Location = new System.Drawing.Point(3, 362);
+            this.grpSpellCost.Location = new System.Drawing.Point(3, 300);
             this.grpSpellCost.Name = "grpSpellCost";
             this.grpSpellCost.Size = new System.Drawing.Size(438, 143);
             this.grpSpellCost.TabIndex = 36;
@@ -1031,9 +1036,9 @@ namespace Intersect.Editor.Forms.Editors
             this.grpRequirements.Controls.Add(this.txtCannotCast);
             this.grpRequirements.Controls.Add(this.btnDynamicRequirements);
             this.grpRequirements.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpRequirements.Location = new System.Drawing.Point(215, -32);
+            this.grpRequirements.Location = new System.Drawing.Point(212, 201);
             this.grpRequirements.Name = "grpRequirements";
-            this.grpRequirements.Size = new System.Drawing.Size(226, 96);
+            this.grpRequirements.Size = new System.Drawing.Size(226, 98);
             this.grpRequirements.TabIndex = 18;
             this.grpRequirements.TabStop = false;
             this.grpRequirements.Text = "Casting Requirements";
@@ -1085,7 +1090,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpTargetInfo.Controls.Add(this.lblTargetType);
             this.grpTargetInfo.Controls.Add(this.nudCastRange);
             this.grpTargetInfo.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpTargetInfo.Location = new System.Drawing.Point(215, 73);
+            this.grpTargetInfo.Location = new System.Drawing.Point(213, 3);
             this.grpTargetInfo.Name = "grpTargetInfo";
             this.grpTargetInfo.Size = new System.Drawing.Size(225, 192);
             this.grpTargetInfo.TabIndex = 19;
@@ -1279,7 +1284,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpEvent.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.grpEvent.Controls.Add(this.cmbEvent);
             this.grpEvent.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpEvent.Location = new System.Drawing.Point(0, 507);
+            this.grpEvent.Location = new System.Drawing.Point(0, 445);
             this.grpEvent.Name = "grpEvent";
             this.grpEvent.Size = new System.Drawing.Size(441, 48);
             this.grpEvent.TabIndex = 40;
@@ -1312,15 +1317,16 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpCombat.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpCombat.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpCombat.Controls.Add(this.grpDamageTypes);
             this.grpCombat.Controls.Add(this.grpStats);
             this.grpCombat.Controls.Add(this.grpHotDot);
             this.grpCombat.Controls.Add(this.grpEffect);
             this.grpCombat.Controls.Add(this.grpEffectDuration);
             this.grpCombat.Controls.Add(this.grpDamage);
             this.grpCombat.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpCombat.Location = new System.Drawing.Point(3, 507);
+            this.grpCombat.Location = new System.Drawing.Point(3, 445);
             this.grpCombat.Name = "grpCombat";
-            this.grpCombat.Size = new System.Drawing.Size(482, 596);
+            this.grpCombat.Size = new System.Drawing.Size(447, 596);
             this.grpCombat.TabIndex = 39;
             this.grpCombat.TabStop = false;
             this.grpCombat.Text = "Combat Spell";
@@ -1330,11 +1336,6 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpStats.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpStats.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpStats.Controls.Add(this.chkDamageMagic);
-            this.grpStats.Controls.Add(this.chkDamagePierce);
-            this.grpStats.Controls.Add(this.chkDamageSlash);
-            this.grpStats.Controls.Add(this.chkDamageBlunt);
-            this.grpStats.Controls.Add(this.label13);
             this.grpStats.Controls.Add(this.label22);
             this.grpStats.Controls.Add(this.nudEvasionPercentage);
             this.grpStats.Controls.Add(this.label23);
@@ -1393,7 +1394,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpStats.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpStats.Location = new System.Drawing.Point(201, 19);
             this.grpStats.Name = "grpStats";
-            this.grpStats.Size = new System.Drawing.Size(275, 328);
+            this.grpStats.Size = new System.Drawing.Size(238, 328);
             this.grpStats.TabIndex = 50;
             this.grpStats.TabStop = false;
             this.grpStats.Text = "Stat Modifiers";
@@ -1401,7 +1402,7 @@ namespace Intersect.Editor.Forms.Editors
             // chkDamageMagic
             // 
             this.chkDamageMagic.AutoSize = true;
-            this.chkDamageMagic.Location = new System.Drawing.Point(233, 192);
+            this.chkDamageMagic.Location = new System.Drawing.Point(159, 31);
             this.chkDamageMagic.Name = "chkDamageMagic";
             this.chkDamageMagic.Size = new System.Drawing.Size(15, 14);
             this.chkDamageMagic.TabIndex = 106;
@@ -1410,7 +1411,7 @@ namespace Intersect.Editor.Forms.Editors
             // chkDamagePierce
             // 
             this.chkDamagePierce.AutoSize = true;
-            this.chkDamagePierce.Location = new System.Drawing.Point(233, 141);
+            this.chkDamagePierce.Location = new System.Drawing.Point(115, 31);
             this.chkDamagePierce.Name = "chkDamagePierce";
             this.chkDamagePierce.Size = new System.Drawing.Size(15, 14);
             this.chkDamagePierce.TabIndex = 105;
@@ -1419,7 +1420,7 @@ namespace Intersect.Editor.Forms.Editors
             // chkDamageSlash
             // 
             this.chkDamageSlash.AutoSize = true;
-            this.chkDamageSlash.Location = new System.Drawing.Point(233, 88);
+            this.chkDamageSlash.Location = new System.Drawing.Point(62, 31);
             this.chkDamageSlash.Name = "chkDamageSlash";
             this.chkDamageSlash.Size = new System.Drawing.Size(15, 14);
             this.chkDamageSlash.TabIndex = 104;
@@ -1428,21 +1429,11 @@ namespace Intersect.Editor.Forms.Editors
             // chkDamageBlunt
             // 
             this.chkDamageBlunt.AutoSize = true;
-            this.chkDamageBlunt.Location = new System.Drawing.Point(233, 37);
+            this.chkDamageBlunt.Location = new System.Drawing.Point(12, 31);
             this.chkDamageBlunt.Name = "chkDamageBlunt";
             this.chkDamageBlunt.Size = new System.Drawing.Size(15, 14);
             this.chkDamageBlunt.TabIndex = 65;
             this.chkDamageBlunt.CheckedChanged += new System.EventHandler(this.chkDamageBlunt_CheckedChanged);
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(195, 14);
-            this.label13.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(80, 13);
-            this.label13.TabIndex = 103;
-            this.label13.Text = "Damage Type?";
             // 
             // label22
             // 
@@ -2848,7 +2839,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpWarp.Controls.Add(this.lblX);
             this.grpWarp.Controls.Add(this.lblMap);
             this.grpWarp.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpWarp.Location = new System.Drawing.Point(3, 515);
+            this.grpWarp.Location = new System.Drawing.Point(3, 453);
             this.grpWarp.Name = "grpWarp";
             this.grpWarp.Size = new System.Drawing.Size(247, 182);
             this.grpWarp.TabIndex = 35;
@@ -3177,6 +3168,68 @@ namespace Intersect.Editor.Forms.Editors
             this.lstGameObjects.Size = new System.Drawing.Size(191, 422);
             this.lstGameObjects.TabIndex = 32;
             // 
+            // grpDamageTypes
+            // 
+            this.grpDamageTypes.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpDamageTypes.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpDamageTypes.Controls.Add(this.chkDamageMagic);
+            this.grpDamageTypes.Controls.Add(this.label14);
+            this.grpDamageTypes.Controls.Add(this.chkDamagePierce);
+            this.grpDamageTypes.Controls.Add(this.label15);
+            this.grpDamageTypes.Controls.Add(this.chkDamageSlash);
+            this.grpDamageTypes.Controls.Add(this.label16);
+            this.grpDamageTypes.Controls.Add(this.chkDamageBlunt);
+            this.grpDamageTypes.Controls.Add(this.label17);
+            this.grpDamageTypes.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpDamageTypes.Location = new System.Drawing.Point(8, 505);
+            this.grpDamageTypes.Margin = new System.Windows.Forms.Padding(2);
+            this.grpDamageTypes.Name = "grpDamageTypes";
+            this.grpDamageTypes.Padding = new System.Windows.Forms.Padding(2);
+            this.grpDamageTypes.Size = new System.Drawing.Size(188, 56);
+            this.grpDamageTypes.TabIndex = 119;
+            this.grpDamageTypes.TabStop = false;
+            this.grpDamageTypes.Text = "Damage Types";
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(150, 15);
+            this.label14.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(36, 13);
+            this.label14.TabIndex = 113;
+            this.label14.Text = "Magic";
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(101, 15);
+            this.label15.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(45, 13);
+            this.label15.TabIndex = 112;
+            this.label15.Text = "Piercing";
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(46, 15);
+            this.label16.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(47, 13);
+            this.label16.TabIndex = 111;
+            this.label16.Text = "Slashing";
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(4, 15);
+            this.label17.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(31, 13);
+            this.label17.TabIndex = 44;
+            this.label17.Text = "Blunt";
+            // 
             // FrmSpell
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3273,6 +3326,8 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStrip.PerformLayout();
             this.grpSpells.ResumeLayout(false);
             this.grpSpells.PerformLayout();
+            this.grpDamageTypes.ResumeLayout(false);
+            this.grpDamageTypes.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -3383,7 +3438,6 @@ namespace Intersect.Editor.Forms.Editors
         private DarkCheckBox chkDamagePierce;
         private DarkCheckBox chkDamageSlash;
         private DarkCheckBox chkDamageBlunt;
-        private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Label label22;
         private DarkNumericUpDown nudEvasionPercentage;
         private System.Windows.Forms.Label label23;
@@ -3472,5 +3526,10 @@ namespace Intersect.Editor.Forms.Editors
         private System.Windows.Forms.Label lblDamageType;
         private System.Windows.Forms.Label lblHPDamage;
         private System.Windows.Forms.Label lblManaDamage;
+        private DarkGroupBox grpDamageTypes;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Label label17;
     }
 }

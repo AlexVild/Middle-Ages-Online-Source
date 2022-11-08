@@ -119,9 +119,7 @@ namespace Intersect.Server.Entities
             }
 
             projectile.HandleProjectileSpell(target, true);
-            target.TakeDamage(this, dmg);
-            SendCombatEffects(target, false, dmg);
-            PacketSender.SendCombatNumber(DetermineCombatNumberType(dmg, false, true, 1.0), target, dmg);
+            DealTrueDamageTo(target, 0, dmg, false, true);
 
             return true;
         }
@@ -140,9 +138,7 @@ namespace Intersect.Server.Entities
                 dmg = weapon.Descriptor?.Damage ?? 1;
             }
 
-            target.TakeDamage(this, dmg);
-            SendCombatEffects(target, false, dmg);
-            PacketSender.SendCombatNumber(DetermineCombatNumberType(dmg, false, true, 1.0), target, dmg);
+            DealTrueDamageTo(target, 0, dmg, false, true);
 
             return true;
         }

@@ -1308,7 +1308,7 @@ namespace Intersect.Client.Maps
                 Color fadingColor = ActionMsgs[n].Clr;
                 double alphaRatio = Math.Abs((float) (Timing.Global.Milliseconds - ActionMsgs[n].TransmittionTimer) / (float) Options.ActionMessageTime);
                 alphaRatio = MathHelper.Clamp(alphaRatio, 0.0f, 1.0f);
-                //fadingColor.A = (byte) (255 * alphaRatio);
+                fadingColor.A = (byte) (255 * alphaRatio);
 
                 Graphics.Renderer.DrawString(
                     ActionMsgs[n].Msg, Graphics.ActionMsgFont, (int) x - textWidth / 2f, (int) y, 1, fadingColor,

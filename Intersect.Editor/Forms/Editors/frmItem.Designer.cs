@@ -124,6 +124,15 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbEquipmentBonus = new DarkUI.Controls.DarkComboBox();
             this.nudEffectPercent = new DarkUI.Controls.DarkNumericUpDown();
             this.grpAdditionalWeaponProps = new DarkUI.Controls.DarkGroupBox();
+            this.grpDamageTypes = new DarkUI.Controls.DarkGroupBox();
+            this.chkBluntDamage = new DarkUI.Controls.DarkCheckBox();
+            this.chkDamageSlash = new DarkUI.Controls.DarkCheckBox();
+            this.chkDamagePierce = new DarkUI.Controls.DarkCheckBox();
+            this.chkDamageMagic = new DarkUI.Controls.DarkCheckBox();
+            this.label23 = new System.Windows.Forms.Label();
+            this.label22 = new System.Windows.Forms.Label();
+            this.label21 = new System.Windows.Forms.Label();
+            this.label20 = new System.Windows.Forms.Label();
             this.lblBackBoost = new System.Windows.Forms.Label();
             this.nudBackBoost = new DarkUI.Controls.DarkNumericUpDown();
             this.nudStrafeBoost = new DarkUI.Controls.DarkNumericUpDown();
@@ -131,6 +140,31 @@ namespace Intersect.Editor.Forms.Editors
             this.lblBackstabMultiplier = new System.Windows.Forms.Label();
             this.chkBackstab = new DarkUI.Controls.DarkCheckBox();
             this.nudBackstabMultiplier = new DarkUI.Controls.DarkNumericUpDown();
+            this.grpWeaponProperties = new DarkUI.Controls.DarkGroupBox();
+            this.nudCritMultiplier = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblCritMultiplier = new System.Windows.Forms.Label();
+            this.grpAttackSpeed = new DarkUI.Controls.DarkGroupBox();
+            this.nudAttackSpeedValue = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblAttackSpeedValue = new System.Windows.Forms.Label();
+            this.cmbAttackSpeedModifier = new DarkUI.Controls.DarkComboBox();
+            this.lblAttackSpeedModifier = new System.Windows.Forms.Label();
+            this.nudScaling = new DarkUI.Controls.DarkNumericUpDown();
+            this.nudCritChance = new DarkUI.Controls.DarkNumericUpDown();
+            this.nudDamage = new DarkUI.Controls.DarkNumericUpDown();
+            this.cmbProjectile = new DarkUI.Controls.DarkComboBox();
+            this.cmbScalingStat = new DarkUI.Controls.DarkComboBox();
+            this.lblScalingStat = new System.Windows.Forms.Label();
+            this.lblScalingAmount = new System.Windows.Forms.Label();
+            this.cmbDamageType = new DarkUI.Controls.DarkComboBox();
+            this.lblDamageType = new System.Windows.Forms.Label();
+            this.lblCritChance = new System.Windows.Forms.Label();
+            this.cmbAttackAnimation = new DarkUI.Controls.DarkComboBox();
+            this.lblAttackAnimation = new System.Windows.Forms.Label();
+            this.chk2Hand = new DarkUI.Controls.DarkCheckBox();
+            this.lblToolType = new System.Windows.Forms.Label();
+            this.cmbToolType = new DarkUI.Controls.DarkComboBox();
+            this.lblProjectile = new System.Windows.Forms.Label();
+            this.lblDamage = new System.Windows.Forms.Label();
             this.grpHelmetPaperdollProps = new DarkUI.Controls.DarkGroupBox();
             this.chkShortHair = new DarkUI.Controls.DarkCheckBox();
             this.chkHelmHideExtra = new DarkUI.Controls.DarkCheckBox();
@@ -163,6 +197,42 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbEquipmentAnimation = new DarkUI.Controls.DarkComboBox();
             this.lblEquipmentAnimation = new System.Windows.Forms.Label();
             this.grpStatBonuses = new DarkUI.Controls.DarkGroupBox();
+            this.chkLockEvasion = new DarkUI.Controls.DarkCheckBox();
+            this.label16 = new System.Windows.Forms.Label();
+            this.nudEvasionPercent = new DarkUI.Controls.DarkNumericUpDown();
+            this.label17 = new System.Windows.Forms.Label();
+            this.nudEvasion = new DarkUI.Controls.DarkNumericUpDown();
+            this.label18 = new System.Windows.Forms.Label();
+            this.chkLockAccuracy = new DarkUI.Controls.DarkCheckBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.nudAccuracyPercent = new DarkUI.Controls.DarkNumericUpDown();
+            this.label14 = new System.Windows.Forms.Label();
+            this.nudAccuracy = new DarkUI.Controls.DarkNumericUpDown();
+            this.label15 = new System.Windows.Forms.Label();
+            this.chkLockPierceResist = new DarkUI.Controls.DarkCheckBox();
+            this.chkLockSlashResist = new DarkUI.Controls.DarkCheckBox();
+            this.chkLockPierce = new DarkUI.Controls.DarkCheckBox();
+            this.chkLockSlash = new DarkUI.Controls.DarkCheckBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.nudPierceResistPercentage = new DarkUI.Controls.DarkNumericUpDown();
+            this.nudSlashResistPercentage = new DarkUI.Controls.DarkNumericUpDown();
+            this.nudPiercePercentage = new DarkUI.Controls.DarkNumericUpDown();
+            this.nudSlashPercentage = new DarkUI.Controls.DarkNumericUpDown();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.nudPierceResist = new DarkUI.Controls.DarkNumericUpDown();
+            this.nudSlashResist = new DarkUI.Controls.DarkNumericUpDown();
+            this.nudPierce = new DarkUI.Controls.DarkNumericUpDown();
+            this.label11 = new System.Windows.Forms.Label();
+            this.nudSlash = new DarkUI.Controls.DarkNumericUpDown();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
             this.chkLockSpeed = new DarkUI.Controls.DarkCheckBox();
             this.chkLockMagicResist = new DarkUI.Controls.DarkCheckBox();
             this.chkLockArmor = new DarkUI.Controls.DarkCheckBox();
@@ -204,31 +274,6 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbMalePaperdoll = new DarkUI.Controls.DarkComboBox();
             this.lblMalePaperdoll = new System.Windows.Forms.Label();
             this.picMalePaperdoll = new System.Windows.Forms.PictureBox();
-            this.grpWeaponProperties = new DarkUI.Controls.DarkGroupBox();
-            this.nudCritMultiplier = new DarkUI.Controls.DarkNumericUpDown();
-            this.lblCritMultiplier = new System.Windows.Forms.Label();
-            this.grpAttackSpeed = new DarkUI.Controls.DarkGroupBox();
-            this.nudAttackSpeedValue = new DarkUI.Controls.DarkNumericUpDown();
-            this.lblAttackSpeedValue = new System.Windows.Forms.Label();
-            this.cmbAttackSpeedModifier = new DarkUI.Controls.DarkComboBox();
-            this.lblAttackSpeedModifier = new System.Windows.Forms.Label();
-            this.nudScaling = new DarkUI.Controls.DarkNumericUpDown();
-            this.nudCritChance = new DarkUI.Controls.DarkNumericUpDown();
-            this.nudDamage = new DarkUI.Controls.DarkNumericUpDown();
-            this.cmbProjectile = new DarkUI.Controls.DarkComboBox();
-            this.cmbScalingStat = new DarkUI.Controls.DarkComboBox();
-            this.lblScalingStat = new System.Windows.Forms.Label();
-            this.lblScalingAmount = new System.Windows.Forms.Label();
-            this.cmbDamageType = new DarkUI.Controls.DarkComboBox();
-            this.lblDamageType = new System.Windows.Forms.Label();
-            this.lblCritChance = new System.Windows.Forms.Label();
-            this.cmbAttackAnimation = new DarkUI.Controls.DarkComboBox();
-            this.lblAttackAnimation = new System.Windows.Forms.Label();
-            this.chk2Hand = new DarkUI.Controls.DarkCheckBox();
-            this.lblToolType = new System.Windows.Forms.Label();
-            this.cmbToolType = new DarkUI.Controls.DarkComboBox();
-            this.lblProjectile = new System.Windows.Forms.Label();
-            this.lblDamage = new System.Windows.Forms.Label();
             this.grpEvent = new DarkUI.Controls.DarkGroupBox();
             this.chkSingleUseEvent = new DarkUI.Controls.DarkCheckBox();
             this.cmbEvent = new DarkUI.Controls.DarkComboBox();
@@ -268,47 +313,6 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
             this.vS2015DarkTheme1 = new WeifenLuo.WinFormsUI.Docking.VS2015DarkTheme();
-            this.chkLockSlashResist = new DarkUI.Controls.DarkCheckBox();
-            this.chkLockSlash = new DarkUI.Controls.DarkCheckBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.nudSlashResistPercentage = new DarkUI.Controls.DarkNumericUpDown();
-            this.nudSlashPercentage = new DarkUI.Controls.DarkNumericUpDown();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.nudSlashResist = new DarkUI.Controls.DarkNumericUpDown();
-            this.nudSlash = new DarkUI.Controls.DarkNumericUpDown();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.chkLockPierceResist = new DarkUI.Controls.DarkCheckBox();
-            this.chkLockPierce = new DarkUI.Controls.DarkCheckBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
-            this.nudPierceResistPercentage = new DarkUI.Controls.DarkNumericUpDown();
-            this.nudPiercePercentage = new DarkUI.Controls.DarkNumericUpDown();
-            this.label9 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
-            this.nudPierceResist = new DarkUI.Controls.DarkNumericUpDown();
-            this.nudPierce = new DarkUI.Controls.DarkNumericUpDown();
-            this.label11 = new System.Windows.Forms.Label();
-            this.label12 = new System.Windows.Forms.Label();
-            this.chkLockAccuracy = new DarkUI.Controls.DarkCheckBox();
-            this.label13 = new System.Windows.Forms.Label();
-            this.nudAccuracyPercent = new DarkUI.Controls.DarkNumericUpDown();
-            this.label14 = new System.Windows.Forms.Label();
-            this.nudAccuracy = new DarkUI.Controls.DarkNumericUpDown();
-            this.label15 = new System.Windows.Forms.Label();
-            this.chkLockEvasion = new DarkUI.Controls.DarkCheckBox();
-            this.label16 = new System.Windows.Forms.Label();
-            this.nudEvasionPercent = new DarkUI.Controls.DarkNumericUpDown();
-            this.label17 = new System.Windows.Forms.Label();
-            this.nudEvasion = new DarkUI.Controls.DarkNumericUpDown();
-            this.label18 = new System.Windows.Forms.Label();
-            this.label19 = new System.Windows.Forms.Label();
-            this.chkBluntDamage = new DarkUI.Controls.DarkCheckBox();
-            this.chkDamageSlash = new DarkUI.Controls.DarkCheckBox();
-            this.chkDamagePierce = new DarkUI.Controls.DarkCheckBox();
-            this.chkDamageMagic = new DarkUI.Controls.DarkCheckBox();
             this.grpItems.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             this.grpDestroy.SuspendLayout();
@@ -330,9 +334,17 @@ namespace Intersect.Editor.Forms.Editors
             this.grpBonusEffects.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudEffectPercent)).BeginInit();
             this.grpAdditionalWeaponProps.SuspendLayout();
+            this.grpDamageTypes.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudBackBoost)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudStrafeBoost)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudBackstabMultiplier)).BeginInit();
+            this.grpWeaponProperties.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudCritMultiplier)).BeginInit();
+            this.grpAttackSpeed.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudAttackSpeedValue)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudScaling)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudCritChance)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudDamage)).BeginInit();
             this.grpHelmetPaperdollProps.SuspendLayout();
             this.grpPrayerProperties.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudComboExpBoost)).BeginInit();
@@ -346,6 +358,18 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudManaBonus)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudHealthBonus)).BeginInit();
             this.grpStatBonuses.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudEvasionPercent)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudEvasion)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudAccuracyPercent)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudAccuracy)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPierceResistPercentage)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSlashResistPercentage)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPiercePercentage)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSlashPercentage)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPierceResist)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSlashResist)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPierce)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSlash)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudSpdPercentage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMRPercentage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudDefPercentage)).BeginInit();
@@ -359,13 +383,6 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudStr)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picFemalePaperdoll)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picMalePaperdoll)).BeginInit();
-            this.grpWeaponProperties.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudCritMultiplier)).BeginInit();
-            this.grpAttackSpeed.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudAttackSpeedValue)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudScaling)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudCritChance)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudDamage)).BeginInit();
             this.grpEvent.SuspendLayout();
             this.grpSpell.SuspendLayout();
             this.grpBags.SuspendLayout();
@@ -376,18 +393,6 @@ namespace Intersect.Editor.Forms.Editors
             this.pnlContainer.SuspendLayout();
             this.grpAuxInfo.SuspendLayout();
             this.toolStrip.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSlashResistPercentage)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSlashPercentage)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSlashResist)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSlash)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudPierceResistPercentage)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudPiercePercentage)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudPierceResist)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudPierce)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudAccuracyPercent)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudAccuracy)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudEvasionPercent)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudEvasion)).BeginInit();
             this.SuspendLayout();
             // 
             // grpItems
@@ -1632,6 +1637,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpAdditionalWeaponProps.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpAdditionalWeaponProps.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpAdditionalWeaponProps.Controls.Add(this.grpDamageTypes);
             this.grpAdditionalWeaponProps.Controls.Add(this.lblBackBoost);
             this.grpAdditionalWeaponProps.Controls.Add(this.nudBackBoost);
             this.grpAdditionalWeaponProps.Controls.Add(this.nudStrafeBoost);
@@ -1644,10 +1650,108 @@ namespace Intersect.Editor.Forms.Editors
             this.grpAdditionalWeaponProps.Margin = new System.Windows.Forms.Padding(2);
             this.grpAdditionalWeaponProps.Name = "grpAdditionalWeaponProps";
             this.grpAdditionalWeaponProps.Padding = new System.Windows.Forms.Padding(2);
-            this.grpAdditionalWeaponProps.Size = new System.Drawing.Size(199, 136);
+            this.grpAdditionalWeaponProps.Size = new System.Drawing.Size(199, 188);
             this.grpAdditionalWeaponProps.TabIndex = 60;
             this.grpAdditionalWeaponProps.TabStop = false;
             this.grpAdditionalWeaponProps.Text = "Additional Weap. Properties";
+            // 
+            // grpDamageTypes
+            // 
+            this.grpDamageTypes.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpDamageTypes.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpDamageTypes.Controls.Add(this.chkBluntDamage);
+            this.grpDamageTypes.Controls.Add(this.chkDamageSlash);
+            this.grpDamageTypes.Controls.Add(this.chkDamagePierce);
+            this.grpDamageTypes.Controls.Add(this.chkDamageMagic);
+            this.grpDamageTypes.Controls.Add(this.label23);
+            this.grpDamageTypes.Controls.Add(this.label22);
+            this.grpDamageTypes.Controls.Add(this.label21);
+            this.grpDamageTypes.Controls.Add(this.label20);
+            this.grpDamageTypes.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpDamageTypes.Location = new System.Drawing.Point(4, 128);
+            this.grpDamageTypes.Margin = new System.Windows.Forms.Padding(2);
+            this.grpDamageTypes.Name = "grpDamageTypes";
+            this.grpDamageTypes.Padding = new System.Windows.Forms.Padding(2);
+            this.grpDamageTypes.Size = new System.Drawing.Size(188, 56);
+            this.grpDamageTypes.TabIndex = 118;
+            this.grpDamageTypes.TabStop = false;
+            this.grpDamageTypes.Text = "Damage Types";
+            // 
+            // chkBluntDamage
+            // 
+            this.chkBluntDamage.AutoSize = true;
+            this.chkBluntDamage.Location = new System.Drawing.Point(12, 31);
+            this.chkBluntDamage.Name = "chkBluntDamage";
+            this.chkBluntDamage.Size = new System.Drawing.Size(15, 14);
+            this.chkBluntDamage.TabIndex = 135;
+            this.chkBluntDamage.CheckedChanged += new System.EventHandler(this.chkBluntDamage_CheckedChanged);
+            // 
+            // chkDamageSlash
+            // 
+            this.chkDamageSlash.AutoSize = true;
+            this.chkDamageSlash.Location = new System.Drawing.Point(62, 31);
+            this.chkDamageSlash.Name = "chkDamageSlash";
+            this.chkDamageSlash.Size = new System.Drawing.Size(15, 14);
+            this.chkDamageSlash.TabIndex = 136;
+            this.chkDamageSlash.CheckedChanged += new System.EventHandler(this.chkDamageSlash_CheckedChanged);
+            // 
+            // chkDamagePierce
+            // 
+            this.chkDamagePierce.AutoSize = true;
+            this.chkDamagePierce.Location = new System.Drawing.Point(114, 31);
+            this.chkDamagePierce.Name = "chkDamagePierce";
+            this.chkDamagePierce.Size = new System.Drawing.Size(15, 14);
+            this.chkDamagePierce.TabIndex = 137;
+            this.chkDamagePierce.CheckedChanged += new System.EventHandler(this.chkDamagePierce_CheckedChanged);
+            // 
+            // chkDamageMagic
+            // 
+            this.chkDamageMagic.AutoSize = true;
+            this.chkDamageMagic.Location = new System.Drawing.Point(161, 31);
+            this.chkDamageMagic.Name = "chkDamageMagic";
+            this.chkDamageMagic.Size = new System.Drawing.Size(15, 14);
+            this.chkDamageMagic.TabIndex = 138;
+            this.chkDamageMagic.CheckedChanged += new System.EventHandler(this.chkDamageMagic_CheckedChanged);
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(150, 15);
+            this.label23.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(36, 13);
+            this.label23.TabIndex = 113;
+            this.label23.Text = "Magic";
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Location = new System.Drawing.Point(101, 15);
+            this.label22.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(45, 13);
+            this.label22.TabIndex = 112;
+            this.label22.Text = "Piercing";
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(46, 15);
+            this.label21.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(47, 13);
+            this.label21.TabIndex = 111;
+            this.label21.Text = "Slashing";
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(4, 15);
+            this.label20.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(31, 13);
+            this.label20.TabIndex = 44;
+            this.label20.Text = "Blunt";
             // 
             // lblBackBoost
             // 
@@ -1766,6 +1870,395 @@ namespace Intersect.Editor.Forms.Editors
             0,
             65536});
             this.nudBackstabMultiplier.ValueChanged += new System.EventHandler(this.nudBackstabMultiplier_ValueChanged);
+            // 
+            // grpWeaponProperties
+            // 
+            this.grpWeaponProperties.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpWeaponProperties.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpWeaponProperties.Controls.Add(this.nudCritMultiplier);
+            this.grpWeaponProperties.Controls.Add(this.lblCritMultiplier);
+            this.grpWeaponProperties.Controls.Add(this.grpAttackSpeed);
+            this.grpWeaponProperties.Controls.Add(this.nudScaling);
+            this.grpWeaponProperties.Controls.Add(this.nudCritChance);
+            this.grpWeaponProperties.Controls.Add(this.nudDamage);
+            this.grpWeaponProperties.Controls.Add(this.cmbProjectile);
+            this.grpWeaponProperties.Controls.Add(this.cmbScalingStat);
+            this.grpWeaponProperties.Controls.Add(this.lblScalingStat);
+            this.grpWeaponProperties.Controls.Add(this.lblScalingAmount);
+            this.grpWeaponProperties.Controls.Add(this.cmbDamageType);
+            this.grpWeaponProperties.Controls.Add(this.lblDamageType);
+            this.grpWeaponProperties.Controls.Add(this.lblCritChance);
+            this.grpWeaponProperties.Controls.Add(this.cmbAttackAnimation);
+            this.grpWeaponProperties.Controls.Add(this.lblAttackAnimation);
+            this.grpWeaponProperties.Controls.Add(this.chk2Hand);
+            this.grpWeaponProperties.Controls.Add(this.lblToolType);
+            this.grpWeaponProperties.Controls.Add(this.cmbToolType);
+            this.grpWeaponProperties.Controls.Add(this.lblProjectile);
+            this.grpWeaponProperties.Controls.Add(this.lblDamage);
+            this.grpWeaponProperties.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpWeaponProperties.Location = new System.Drawing.Point(221, 14);
+            this.grpWeaponProperties.Name = "grpWeaponProperties";
+            this.grpWeaponProperties.Size = new System.Drawing.Size(207, 463);
+            this.grpWeaponProperties.TabIndex = 39;
+            this.grpWeaponProperties.TabStop = false;
+            this.grpWeaponProperties.Text = "Weapon Properties";
+            this.grpWeaponProperties.Visible = false;
+            // 
+            // nudCritMultiplier
+            // 
+            this.nudCritMultiplier.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudCritMultiplier.DecimalPlaces = 2;
+            this.nudCritMultiplier.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudCritMultiplier.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            this.nudCritMultiplier.Location = new System.Drawing.Point(15, 111);
+            this.nudCritMultiplier.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.nudCritMultiplier.Name = "nudCritMultiplier";
+            this.nudCritMultiplier.Size = new System.Drawing.Size(180, 20);
+            this.nudCritMultiplier.TabIndex = 58;
+            this.nudCritMultiplier.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudCritMultiplier.ValueChanged += new System.EventHandler(this.nudCritMultiplier_ValueChanged);
+            // 
+            // lblCritMultiplier
+            // 
+            this.lblCritMultiplier.AutoSize = true;
+            this.lblCritMultiplier.Location = new System.Drawing.Point(12, 97);
+            this.lblCritMultiplier.Name = "lblCritMultiplier";
+            this.lblCritMultiplier.Size = new System.Drawing.Size(135, 13);
+            this.lblCritMultiplier.TabIndex = 57;
+            this.lblCritMultiplier.Text = "Crit Multiplier (Default 1.5x):";
+            // 
+            // grpAttackSpeed
+            // 
+            this.grpAttackSpeed.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpAttackSpeed.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpAttackSpeed.Controls.Add(this.nudAttackSpeedValue);
+            this.grpAttackSpeed.Controls.Add(this.lblAttackSpeedValue);
+            this.grpAttackSpeed.Controls.Add(this.cmbAttackSpeedModifier);
+            this.grpAttackSpeed.Controls.Add(this.lblAttackSpeedModifier);
+            this.grpAttackSpeed.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpAttackSpeed.Location = new System.Drawing.Point(15, 371);
+            this.grpAttackSpeed.Name = "grpAttackSpeed";
+            this.grpAttackSpeed.Size = new System.Drawing.Size(180, 86);
+            this.grpAttackSpeed.TabIndex = 56;
+            this.grpAttackSpeed.TabStop = false;
+            this.grpAttackSpeed.Text = "Attack Speed";
+            // 
+            // nudAttackSpeedValue
+            // 
+            this.nudAttackSpeedValue.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudAttackSpeedValue.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudAttackSpeedValue.Location = new System.Drawing.Point(60, 58);
+            this.nudAttackSpeedValue.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.nudAttackSpeedValue.Name = "nudAttackSpeedValue";
+            this.nudAttackSpeedValue.Size = new System.Drawing.Size(114, 20);
+            this.nudAttackSpeedValue.TabIndex = 56;
+            this.nudAttackSpeedValue.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudAttackSpeedValue.ValueChanged += new System.EventHandler(this.nudAttackSpeedValue_ValueChanged);
+            // 
+            // lblAttackSpeedValue
+            // 
+            this.lblAttackSpeedValue.AutoSize = true;
+            this.lblAttackSpeedValue.Location = new System.Drawing.Point(9, 60);
+            this.lblAttackSpeedValue.Name = "lblAttackSpeedValue";
+            this.lblAttackSpeedValue.Size = new System.Drawing.Size(37, 13);
+            this.lblAttackSpeedValue.TabIndex = 29;
+            this.lblAttackSpeedValue.Text = "Value:";
+            // 
+            // cmbAttackSpeedModifier
+            // 
+            this.cmbAttackSpeedModifier.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbAttackSpeedModifier.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbAttackSpeedModifier.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbAttackSpeedModifier.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbAttackSpeedModifier.DrawDropdownHoverOutline = false;
+            this.cmbAttackSpeedModifier.DrawFocusRectangle = false;
+            this.cmbAttackSpeedModifier.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbAttackSpeedModifier.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbAttackSpeedModifier.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbAttackSpeedModifier.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbAttackSpeedModifier.FormattingEnabled = true;
+            this.cmbAttackSpeedModifier.Location = new System.Drawing.Point(60, 24);
+            this.cmbAttackSpeedModifier.Name = "cmbAttackSpeedModifier";
+            this.cmbAttackSpeedModifier.Size = new System.Drawing.Size(114, 21);
+            this.cmbAttackSpeedModifier.TabIndex = 28;
+            this.cmbAttackSpeedModifier.Text = null;
+            this.cmbAttackSpeedModifier.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbAttackSpeedModifier.SelectedIndexChanged += new System.EventHandler(this.cmbAttackSpeedModifier_SelectedIndexChanged);
+            // 
+            // lblAttackSpeedModifier
+            // 
+            this.lblAttackSpeedModifier.AutoSize = true;
+            this.lblAttackSpeedModifier.Location = new System.Drawing.Point(9, 27);
+            this.lblAttackSpeedModifier.Name = "lblAttackSpeedModifier";
+            this.lblAttackSpeedModifier.Size = new System.Drawing.Size(47, 13);
+            this.lblAttackSpeedModifier.TabIndex = 0;
+            this.lblAttackSpeedModifier.Text = "Modifier:";
+            // 
+            // nudScaling
+            // 
+            this.nudScaling.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudScaling.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudScaling.Location = new System.Drawing.Point(15, 234);
+            this.nudScaling.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.nudScaling.Name = "nudScaling";
+            this.nudScaling.Size = new System.Drawing.Size(180, 20);
+            this.nudScaling.TabIndex = 55;
+            this.nudScaling.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudScaling.ValueChanged += new System.EventHandler(this.nudScaling_ValueChanged);
+            // 
+            // nudCritChance
+            // 
+            this.nudCritChance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudCritChance.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudCritChance.Location = new System.Drawing.Point(15, 73);
+            this.nudCritChance.Name = "nudCritChance";
+            this.nudCritChance.Size = new System.Drawing.Size(180, 20);
+            this.nudCritChance.TabIndex = 54;
+            this.nudCritChance.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudCritChance.ValueChanged += new System.EventHandler(this.nudCritChance_ValueChanged);
+            // 
+            // nudDamage
+            // 
+            this.nudDamage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudDamage.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudDamage.Location = new System.Drawing.Point(15, 36);
+            this.nudDamage.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.nudDamage.Name = "nudDamage";
+            this.nudDamage.Size = new System.Drawing.Size(180, 20);
+            this.nudDamage.TabIndex = 49;
+            this.nudDamage.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudDamage.ValueChanged += new System.EventHandler(this.nudDamage_ValueChanged);
+            // 
+            // cmbProjectile
+            // 
+            this.cmbProjectile.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbProjectile.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbProjectile.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbProjectile.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbProjectile.DrawDropdownHoverOutline = false;
+            this.cmbProjectile.DrawFocusRectangle = false;
+            this.cmbProjectile.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbProjectile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbProjectile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbProjectile.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbProjectile.FormattingEnabled = true;
+            this.cmbProjectile.Location = new System.Drawing.Point(15, 270);
+            this.cmbProjectile.Name = "cmbProjectile";
+            this.cmbProjectile.Size = new System.Drawing.Size(180, 21);
+            this.cmbProjectile.TabIndex = 47;
+            this.cmbProjectile.Text = null;
+            this.cmbProjectile.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbProjectile.SelectedIndexChanged += new System.EventHandler(this.cmbProjectile_SelectedIndexChanged);
+            // 
+            // cmbScalingStat
+            // 
+            this.cmbScalingStat.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbScalingStat.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbScalingStat.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbScalingStat.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbScalingStat.DrawDropdownHoverOutline = false;
+            this.cmbScalingStat.DrawFocusRectangle = false;
+            this.cmbScalingStat.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbScalingStat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbScalingStat.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbScalingStat.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbScalingStat.FormattingEnabled = true;
+            this.cmbScalingStat.Location = new System.Drawing.Point(16, 193);
+            this.cmbScalingStat.Name = "cmbScalingStat";
+            this.cmbScalingStat.Size = new System.Drawing.Size(180, 21);
+            this.cmbScalingStat.TabIndex = 46;
+            this.cmbScalingStat.Text = null;
+            this.cmbScalingStat.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbScalingStat.SelectedIndexChanged += new System.EventHandler(this.cmbScalingStat_SelectedIndexChanged);
+            // 
+            // lblScalingStat
+            // 
+            this.lblScalingStat.AutoSize = true;
+            this.lblScalingStat.Location = new System.Drawing.Point(13, 176);
+            this.lblScalingStat.Name = "lblScalingStat";
+            this.lblScalingStat.Size = new System.Drawing.Size(67, 13);
+            this.lblScalingStat.TabIndex = 45;
+            this.lblScalingStat.Text = "Scaling Stat:";
+            // 
+            // lblScalingAmount
+            // 
+            this.lblScalingAmount.AutoSize = true;
+            this.lblScalingAmount.Location = new System.Drawing.Point(12, 219);
+            this.lblScalingAmount.Name = "lblScalingAmount";
+            this.lblScalingAmount.Size = new System.Drawing.Size(84, 13);
+            this.lblScalingAmount.TabIndex = 44;
+            this.lblScalingAmount.Text = "Scaling Amount:";
+            // 
+            // cmbDamageType
+            // 
+            this.cmbDamageType.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbDamageType.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbDamageType.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbDamageType.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbDamageType.DrawDropdownHoverOutline = false;
+            this.cmbDamageType.DrawFocusRectangle = false;
+            this.cmbDamageType.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbDamageType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbDamageType.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbDamageType.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbDamageType.FormattingEnabled = true;
+            this.cmbDamageType.Items.AddRange(new object[] {
+            "Physical",
+            "Magic",
+            "True"});
+            this.cmbDamageType.Location = new System.Drawing.Point(16, 152);
+            this.cmbDamageType.Name = "cmbDamageType";
+            this.cmbDamageType.Size = new System.Drawing.Size(180, 21);
+            this.cmbDamageType.TabIndex = 42;
+            this.cmbDamageType.Text = "Physical";
+            this.cmbDamageType.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbDamageType.SelectedIndexChanged += new System.EventHandler(this.cmbDamageType_SelectedIndexChanged);
+            // 
+            // lblDamageType
+            // 
+            this.lblDamageType.AutoSize = true;
+            this.lblDamageType.Location = new System.Drawing.Point(13, 135);
+            this.lblDamageType.Name = "lblDamageType";
+            this.lblDamageType.Size = new System.Drawing.Size(77, 13);
+            this.lblDamageType.TabIndex = 41;
+            this.lblDamageType.Text = "Damage Type:";
+            // 
+            // lblCritChance
+            // 
+            this.lblCritChance.AutoSize = true;
+            this.lblCritChance.Location = new System.Drawing.Point(12, 59);
+            this.lblCritChance.Name = "lblCritChance";
+            this.lblCritChance.Size = new System.Drawing.Size(82, 13);
+            this.lblCritChance.TabIndex = 40;
+            this.lblCritChance.Text = "Crit Chance (%):";
+            // 
+            // cmbAttackAnimation
+            // 
+            this.cmbAttackAnimation.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbAttackAnimation.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbAttackAnimation.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbAttackAnimation.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbAttackAnimation.DrawDropdownHoverOutline = false;
+            this.cmbAttackAnimation.DrawFocusRectangle = false;
+            this.cmbAttackAnimation.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbAttackAnimation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbAttackAnimation.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbAttackAnimation.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbAttackAnimation.FormattingEnabled = true;
+            this.cmbAttackAnimation.Location = new System.Drawing.Point(15, 308);
+            this.cmbAttackAnimation.Name = "cmbAttackAnimation";
+            this.cmbAttackAnimation.Size = new System.Drawing.Size(180, 21);
+            this.cmbAttackAnimation.TabIndex = 38;
+            this.cmbAttackAnimation.Text = null;
+            this.cmbAttackAnimation.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbAttackAnimation.SelectedIndexChanged += new System.EventHandler(this.cmbAttackAnimation_SelectedIndexChanged);
+            // 
+            // lblAttackAnimation
+            // 
+            this.lblAttackAnimation.AutoSize = true;
+            this.lblAttackAnimation.Location = new System.Drawing.Point(12, 293);
+            this.lblAttackAnimation.Name = "lblAttackAnimation";
+            this.lblAttackAnimation.Size = new System.Drawing.Size(90, 13);
+            this.lblAttackAnimation.TabIndex = 37;
+            this.lblAttackAnimation.Text = "Attack Animation:";
+            // 
+            // chk2Hand
+            // 
+            this.chk2Hand.AutoSize = true;
+            this.chk2Hand.Location = new System.Drawing.Point(134, 14);
+            this.chk2Hand.Name = "chk2Hand";
+            this.chk2Hand.Size = new System.Drawing.Size(61, 17);
+            this.chk2Hand.TabIndex = 25;
+            this.chk2Hand.Text = "2 Hand";
+            this.chk2Hand.CheckedChanged += new System.EventHandler(this.chk2Hand_CheckedChanged);
+            // 
+            // lblToolType
+            // 
+            this.lblToolType.AutoSize = true;
+            this.lblToolType.Location = new System.Drawing.Point(13, 335);
+            this.lblToolType.Name = "lblToolType";
+            this.lblToolType.Size = new System.Drawing.Size(58, 13);
+            this.lblToolType.TabIndex = 26;
+            this.lblToolType.Text = "Tool Type:";
+            // 
+            // cmbToolType
+            // 
+            this.cmbToolType.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbToolType.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbToolType.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbToolType.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbToolType.DrawDropdownHoverOutline = false;
+            this.cmbToolType.DrawFocusRectangle = false;
+            this.cmbToolType.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbToolType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbToolType.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbToolType.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbToolType.FormattingEnabled = true;
+            this.cmbToolType.Location = new System.Drawing.Point(16, 349);
+            this.cmbToolType.Name = "cmbToolType";
+            this.cmbToolType.Size = new System.Drawing.Size(180, 21);
+            this.cmbToolType.TabIndex = 27;
+            this.cmbToolType.Text = null;
+            this.cmbToolType.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbToolType.SelectedIndexChanged += new System.EventHandler(this.cmbToolType_SelectedIndexChanged);
+            // 
+            // lblProjectile
+            // 
+            this.lblProjectile.AutoSize = true;
+            this.lblProjectile.Location = new System.Drawing.Point(12, 254);
+            this.lblProjectile.Name = "lblProjectile";
+            this.lblProjectile.Size = new System.Drawing.Size(53, 13);
+            this.lblProjectile.TabIndex = 33;
+            this.lblProjectile.Text = "Projectile:";
+            // 
+            // lblDamage
+            // 
+            this.lblDamage.AutoSize = true;
+            this.lblDamage.Location = new System.Drawing.Point(12, 19);
+            this.lblDamage.Name = "lblDamage";
+            this.lblDamage.Size = new System.Drawing.Size(77, 13);
+            this.lblDamage.TabIndex = 11;
+            this.lblDamage.Text = "Base Damage:";
             // 
             // grpHelmetPaperdollProps
             // 
@@ -2221,11 +2714,6 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpStatBonuses.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpStatBonuses.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpStatBonuses.Controls.Add(this.chkDamageMagic);
-            this.grpStatBonuses.Controls.Add(this.chkDamagePierce);
-            this.grpStatBonuses.Controls.Add(this.chkDamageSlash);
-            this.grpStatBonuses.Controls.Add(this.chkBluntDamage);
-            this.grpStatBonuses.Controls.Add(this.label19);
             this.grpStatBonuses.Controls.Add(this.chkLockEvasion);
             this.grpStatBonuses.Controls.Add(this.label16);
             this.grpStatBonuses.Controls.Add(this.nudEvasionPercent);
@@ -2298,10 +2786,484 @@ namespace Intersect.Editor.Forms.Editors
             this.grpStatBonuses.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpStatBonuses.Location = new System.Drawing.Point(434, 15);
             this.grpStatBonuses.Name = "grpStatBonuses";
-            this.grpStatBonuses.Size = new System.Drawing.Size(292, 482);
+            this.grpStatBonuses.Size = new System.Drawing.Size(212, 482);
             this.grpStatBonuses.TabIndex = 40;
             this.grpStatBonuses.TabStop = false;
             this.grpStatBonuses.Text = "Stat Bonuses";
+            // 
+            // chkLockEvasion
+            // 
+            this.chkLockEvasion.AutoSize = true;
+            this.chkLockEvasion.Location = new System.Drawing.Point(180, 376);
+            this.chkLockEvasion.Name = "chkLockEvasion";
+            this.chkLockEvasion.Size = new System.Drawing.Size(15, 14);
+            this.chkLockEvasion.TabIndex = 133;
+            this.chkLockEvasion.CheckedChanged += new System.EventHandler(this.chkLockEvasion_CheckedChanged);
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(161, 376);
+            this.label16.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(15, 13);
+            this.label16.TabIndex = 132;
+            this.label16.Text = "%";
+            // 
+            // nudEvasionPercent
+            // 
+            this.nudEvasionPercent.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudEvasionPercent.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudEvasionPercent.Location = new System.Drawing.Point(118, 376);
+            this.nudEvasionPercent.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.nudEvasionPercent.Name = "nudEvasionPercent";
+            this.nudEvasionPercent.Size = new System.Drawing.Size(43, 20);
+            this.nudEvasionPercent.TabIndex = 131;
+            this.nudEvasionPercent.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudEvasionPercent.ValueChanged += new System.EventHandler(this.nudEvasionPercent_ValueChanged);
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(103, 378);
+            this.label17.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(13, 13);
+            this.label17.TabIndex = 130;
+            this.label17.Text = "+";
+            // 
+            // nudEvasion
+            // 
+            this.nudEvasion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudEvasion.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudEvasion.Location = new System.Drawing.Point(13, 375);
+            this.nudEvasion.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.nudEvasion.Name = "nudEvasion";
+            this.nudEvasion.Size = new System.Drawing.Size(90, 20);
+            this.nudEvasion.TabIndex = 129;
+            this.nudEvasion.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudEvasion.ValueChanged += new System.EventHandler(this.nudEvasion_ValueChanged);
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(10, 359);
+            this.label18.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(48, 13);
+            this.label18.TabIndex = 128;
+            this.label18.Text = "Evasion:";
+            // 
+            // chkLockAccuracy
+            // 
+            this.chkLockAccuracy.AutoSize = true;
+            this.chkLockAccuracy.Location = new System.Drawing.Point(180, 335);
+            this.chkLockAccuracy.Name = "chkLockAccuracy";
+            this.chkLockAccuracy.Size = new System.Drawing.Size(15, 14);
+            this.chkLockAccuracy.TabIndex = 127;
+            this.chkLockAccuracy.CheckedChanged += new System.EventHandler(this.chkLockAccuracy_CheckedChanged);
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(161, 335);
+            this.label13.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(15, 13);
+            this.label13.TabIndex = 126;
+            this.label13.Text = "%";
+            // 
+            // nudAccuracyPercent
+            // 
+            this.nudAccuracyPercent.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudAccuracyPercent.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudAccuracyPercent.Location = new System.Drawing.Point(118, 335);
+            this.nudAccuracyPercent.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.nudAccuracyPercent.Name = "nudAccuracyPercent";
+            this.nudAccuracyPercent.Size = new System.Drawing.Size(43, 20);
+            this.nudAccuracyPercent.TabIndex = 125;
+            this.nudAccuracyPercent.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudAccuracyPercent.ValueChanged += new System.EventHandler(this.nuAccuracyPercent_ValueChanged);
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(103, 337);
+            this.label14.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(13, 13);
+            this.label14.TabIndex = 124;
+            this.label14.Text = "+";
+            // 
+            // nudAccuracy
+            // 
+            this.nudAccuracy.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudAccuracy.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudAccuracy.Location = new System.Drawing.Point(13, 334);
+            this.nudAccuracy.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.nudAccuracy.Name = "nudAccuracy";
+            this.nudAccuracy.Size = new System.Drawing.Size(90, 20);
+            this.nudAccuracy.TabIndex = 123;
+            this.nudAccuracy.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudAccuracy.ValueChanged += new System.EventHandler(this.nudAccuracy_ValueChanged);
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(10, 318);
+            this.label15.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(55, 13);
+            this.label15.TabIndex = 122;
+            this.label15.Text = "Accuracy:";
+            // 
+            // chkLockPierceResist
+            // 
+            this.chkLockPierceResist.AutoSize = true;
+            this.chkLockPierceResist.Location = new System.Drawing.Point(180, 227);
+            this.chkLockPierceResist.Name = "chkLockPierceResist";
+            this.chkLockPierceResist.Size = new System.Drawing.Size(15, 14);
+            this.chkLockPierceResist.TabIndex = 119;
+            this.chkLockPierceResist.CheckedChanged += new System.EventHandler(this.chkLockPierceResist_CheckedChanged);
+            // 
+            // chkLockSlashResist
+            // 
+            this.chkLockSlashResist.AutoSize = true;
+            this.chkLockSlashResist.Location = new System.Drawing.Point(180, 149);
+            this.chkLockSlashResist.Name = "chkLockSlashResist";
+            this.chkLockSlashResist.Size = new System.Drawing.Size(15, 14);
+            this.chkLockSlashResist.TabIndex = 121;
+            this.chkLockSlashResist.CheckedChanged += new System.EventHandler(this.chkLockSlashResist_CheckedChanged);
+            // 
+            // chkLockPierce
+            // 
+            this.chkLockPierce.AutoSize = true;
+            this.chkLockPierce.Location = new System.Drawing.Point(180, 188);
+            this.chkLockPierce.Name = "chkLockPierce";
+            this.chkLockPierce.Size = new System.Drawing.Size(15, 14);
+            this.chkLockPierce.TabIndex = 118;
+            this.chkLockPierce.CheckedChanged += new System.EventHandler(this.chkLockPierce_CheckedChanged);
+            // 
+            // chkLockSlash
+            // 
+            this.chkLockSlash.AutoSize = true;
+            this.chkLockSlash.Location = new System.Drawing.Point(180, 110);
+            this.chkLockSlash.Name = "chkLockSlash";
+            this.chkLockSlash.Size = new System.Drawing.Size(15, 14);
+            this.chkLockSlash.TabIndex = 120;
+            this.chkLockSlash.CheckedChanged += new System.EventHandler(this.chkLockSlash_CheckedChanged);
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(163, 224);
+            this.label7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(15, 13);
+            this.label7.TabIndex = 117;
+            this.label7.Text = "%";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(163, 146);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(15, 13);
+            this.label1.TabIndex = 119;
+            this.label1.Text = "%";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(161, 186);
+            this.label8.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(15, 13);
+            this.label8.TabIndex = 116;
+            this.label8.Text = "%";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(161, 108);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(15, 13);
+            this.label2.TabIndex = 118;
+            this.label2.Text = "%";
+            // 
+            // nudPierceResistPercentage
+            // 
+            this.nudPierceResistPercentage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudPierceResistPercentage.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudPierceResistPercentage.Location = new System.Drawing.Point(120, 225);
+            this.nudPierceResistPercentage.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.nudPierceResistPercentage.Name = "nudPierceResistPercentage";
+            this.nudPierceResistPercentage.Size = new System.Drawing.Size(43, 20);
+            this.nudPierceResistPercentage.TabIndex = 115;
+            this.nudPierceResistPercentage.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudPierceResistPercentage.ValueChanged += new System.EventHandler(this.nudPierceResistPercentage_ValueChanged);
+            // 
+            // nudSlashResistPercentage
+            // 
+            this.nudSlashResistPercentage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudSlashResistPercentage.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudSlashResistPercentage.Location = new System.Drawing.Point(120, 147);
+            this.nudSlashResistPercentage.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.nudSlashResistPercentage.Name = "nudSlashResistPercentage";
+            this.nudSlashResistPercentage.Size = new System.Drawing.Size(43, 20);
+            this.nudSlashResistPercentage.TabIndex = 117;
+            this.nudSlashResistPercentage.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudSlashResistPercentage.ValueChanged += new System.EventHandler(this.nudSlashResistPercentage_ValueChanged);
+            // 
+            // nudPiercePercentage
+            // 
+            this.nudPiercePercentage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudPiercePercentage.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudPiercePercentage.Location = new System.Drawing.Point(118, 186);
+            this.nudPiercePercentage.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.nudPiercePercentage.Name = "nudPiercePercentage";
+            this.nudPiercePercentage.Size = new System.Drawing.Size(43, 20);
+            this.nudPiercePercentage.TabIndex = 114;
+            this.nudPiercePercentage.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudPiercePercentage.ValueChanged += new System.EventHandler(this.nudPiercePercentage_ValueChanged);
+            // 
+            // nudSlashPercentage
+            // 
+            this.nudSlashPercentage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudSlashPercentage.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudSlashPercentage.Location = new System.Drawing.Point(118, 108);
+            this.nudSlashPercentage.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.nudSlashPercentage.Name = "nudSlashPercentage";
+            this.nudSlashPercentage.Size = new System.Drawing.Size(43, 20);
+            this.nudSlashPercentage.TabIndex = 116;
+            this.nudSlashPercentage.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudSlashPercentage.ValueChanged += new System.EventHandler(this.nudSlashPercentage_ValueChanged);
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(105, 226);
+            this.label9.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(13, 13);
+            this.label9.TabIndex = 113;
+            this.label9.Text = "+";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(105, 148);
+            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(13, 13);
+            this.label3.TabIndex = 115;
+            this.label3.Text = "+";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(103, 188);
+            this.label10.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(13, 13);
+            this.label10.TabIndex = 112;
+            this.label10.Text = "+";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(103, 110);
+            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(13, 13);
+            this.label4.TabIndex = 114;
+            this.label4.Text = "+";
+            // 
+            // nudPierceResist
+            // 
+            this.nudPierceResist.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudPierceResist.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudPierceResist.Location = new System.Drawing.Point(13, 224);
+            this.nudPierceResist.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.nudPierceResist.Name = "nudPierceResist";
+            this.nudPierceResist.Size = new System.Drawing.Size(90, 20);
+            this.nudPierceResist.TabIndex = 111;
+            this.nudPierceResist.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudPierceResist.ValueChanged += new System.EventHandler(this.nudPierceResist_ValueChanged);
+            // 
+            // nudSlashResist
+            // 
+            this.nudSlashResist.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudSlashResist.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudSlashResist.Location = new System.Drawing.Point(13, 146);
+            this.nudSlashResist.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.nudSlashResist.Name = "nudSlashResist";
+            this.nudSlashResist.Size = new System.Drawing.Size(90, 20);
+            this.nudSlashResist.TabIndex = 113;
+            this.nudSlashResist.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudSlashResist.ValueChanged += new System.EventHandler(this.nudSlashResist_ValueChanged);
+            // 
+            // nudPierce
+            // 
+            this.nudPierce.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudPierce.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudPierce.Location = new System.Drawing.Point(13, 185);
+            this.nudPierce.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.nudPierce.Name = "nudPierce";
+            this.nudPierce.Size = new System.Drawing.Size(90, 20);
+            this.nudPierce.TabIndex = 110;
+            this.nudPierce.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudPierce.ValueChanged += new System.EventHandler(this.nudPierce_ValueChanged);
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(10, 208);
+            this.label11.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(96, 13);
+            this.label11.TabIndex = 109;
+            this.label11.Text = "Pierce Resistance:";
+            // 
+            // nudSlash
+            // 
+            this.nudSlash.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudSlash.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudSlash.Location = new System.Drawing.Point(13, 107);
+            this.nudSlash.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.nudSlash.Name = "nudSlash";
+            this.nudSlash.Size = new System.Drawing.Size(90, 20);
+            this.nudSlash.TabIndex = 112;
+            this.nudSlash.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudSlash.ValueChanged += new System.EventHandler(this.nudSlash_ValueChanged);
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(11, 169);
+            this.label12.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(74, 13);
+            this.label12.TabIndex = 108;
+            this.label12.Text = "Pierce Attack:";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(10, 130);
+            this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(92, 13);
+            this.label5.TabIndex = 111;
+            this.label5.Text = "Slash Resistance:";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(11, 91);
+            this.label6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(70, 13);
+            this.label6.TabIndex = 110;
+            this.label6.Text = "Slash Attack:";
             // 
             // chkLockSpeed
             // 
@@ -2844,395 +3806,6 @@ namespace Intersect.Editor.Forms.Editors
             this.picMalePaperdoll.TabIndex = 16;
             this.picMalePaperdoll.TabStop = false;
             // 
-            // grpWeaponProperties
-            // 
-            this.grpWeaponProperties.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.grpWeaponProperties.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpWeaponProperties.Controls.Add(this.nudCritMultiplier);
-            this.grpWeaponProperties.Controls.Add(this.lblCritMultiplier);
-            this.grpWeaponProperties.Controls.Add(this.grpAttackSpeed);
-            this.grpWeaponProperties.Controls.Add(this.nudScaling);
-            this.grpWeaponProperties.Controls.Add(this.nudCritChance);
-            this.grpWeaponProperties.Controls.Add(this.nudDamage);
-            this.grpWeaponProperties.Controls.Add(this.cmbProjectile);
-            this.grpWeaponProperties.Controls.Add(this.cmbScalingStat);
-            this.grpWeaponProperties.Controls.Add(this.lblScalingStat);
-            this.grpWeaponProperties.Controls.Add(this.lblScalingAmount);
-            this.grpWeaponProperties.Controls.Add(this.cmbDamageType);
-            this.grpWeaponProperties.Controls.Add(this.lblDamageType);
-            this.grpWeaponProperties.Controls.Add(this.lblCritChance);
-            this.grpWeaponProperties.Controls.Add(this.cmbAttackAnimation);
-            this.grpWeaponProperties.Controls.Add(this.lblAttackAnimation);
-            this.grpWeaponProperties.Controls.Add(this.chk2Hand);
-            this.grpWeaponProperties.Controls.Add(this.lblToolType);
-            this.grpWeaponProperties.Controls.Add(this.cmbToolType);
-            this.grpWeaponProperties.Controls.Add(this.lblProjectile);
-            this.grpWeaponProperties.Controls.Add(this.lblDamage);
-            this.grpWeaponProperties.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpWeaponProperties.Location = new System.Drawing.Point(221, 14);
-            this.grpWeaponProperties.Name = "grpWeaponProperties";
-            this.grpWeaponProperties.Size = new System.Drawing.Size(207, 463);
-            this.grpWeaponProperties.TabIndex = 39;
-            this.grpWeaponProperties.TabStop = false;
-            this.grpWeaponProperties.Text = "Weapon Properties";
-            this.grpWeaponProperties.Visible = false;
-            // 
-            // nudCritMultiplier
-            // 
-            this.nudCritMultiplier.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudCritMultiplier.DecimalPlaces = 2;
-            this.nudCritMultiplier.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudCritMultiplier.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            131072});
-            this.nudCritMultiplier.Location = new System.Drawing.Point(15, 111);
-            this.nudCritMultiplier.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.nudCritMultiplier.Name = "nudCritMultiplier";
-            this.nudCritMultiplier.Size = new System.Drawing.Size(180, 20);
-            this.nudCritMultiplier.TabIndex = 58;
-            this.nudCritMultiplier.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudCritMultiplier.ValueChanged += new System.EventHandler(this.nudCritMultiplier_ValueChanged);
-            // 
-            // lblCritMultiplier
-            // 
-            this.lblCritMultiplier.AutoSize = true;
-            this.lblCritMultiplier.Location = new System.Drawing.Point(12, 97);
-            this.lblCritMultiplier.Name = "lblCritMultiplier";
-            this.lblCritMultiplier.Size = new System.Drawing.Size(135, 13);
-            this.lblCritMultiplier.TabIndex = 57;
-            this.lblCritMultiplier.Text = "Crit Multiplier (Default 1.5x):";
-            // 
-            // grpAttackSpeed
-            // 
-            this.grpAttackSpeed.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.grpAttackSpeed.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpAttackSpeed.Controls.Add(this.nudAttackSpeedValue);
-            this.grpAttackSpeed.Controls.Add(this.lblAttackSpeedValue);
-            this.grpAttackSpeed.Controls.Add(this.cmbAttackSpeedModifier);
-            this.grpAttackSpeed.Controls.Add(this.lblAttackSpeedModifier);
-            this.grpAttackSpeed.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpAttackSpeed.Location = new System.Drawing.Point(15, 371);
-            this.grpAttackSpeed.Name = "grpAttackSpeed";
-            this.grpAttackSpeed.Size = new System.Drawing.Size(180, 86);
-            this.grpAttackSpeed.TabIndex = 56;
-            this.grpAttackSpeed.TabStop = false;
-            this.grpAttackSpeed.Text = "Attack Speed";
-            // 
-            // nudAttackSpeedValue
-            // 
-            this.nudAttackSpeedValue.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudAttackSpeedValue.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudAttackSpeedValue.Location = new System.Drawing.Point(60, 58);
-            this.nudAttackSpeedValue.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.nudAttackSpeedValue.Name = "nudAttackSpeedValue";
-            this.nudAttackSpeedValue.Size = new System.Drawing.Size(114, 20);
-            this.nudAttackSpeedValue.TabIndex = 56;
-            this.nudAttackSpeedValue.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudAttackSpeedValue.ValueChanged += new System.EventHandler(this.nudAttackSpeedValue_ValueChanged);
-            // 
-            // lblAttackSpeedValue
-            // 
-            this.lblAttackSpeedValue.AutoSize = true;
-            this.lblAttackSpeedValue.Location = new System.Drawing.Point(9, 60);
-            this.lblAttackSpeedValue.Name = "lblAttackSpeedValue";
-            this.lblAttackSpeedValue.Size = new System.Drawing.Size(37, 13);
-            this.lblAttackSpeedValue.TabIndex = 29;
-            this.lblAttackSpeedValue.Text = "Value:";
-            // 
-            // cmbAttackSpeedModifier
-            // 
-            this.cmbAttackSpeedModifier.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbAttackSpeedModifier.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbAttackSpeedModifier.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbAttackSpeedModifier.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbAttackSpeedModifier.DrawDropdownHoverOutline = false;
-            this.cmbAttackSpeedModifier.DrawFocusRectangle = false;
-            this.cmbAttackSpeedModifier.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbAttackSpeedModifier.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbAttackSpeedModifier.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbAttackSpeedModifier.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbAttackSpeedModifier.FormattingEnabled = true;
-            this.cmbAttackSpeedModifier.Location = new System.Drawing.Point(60, 24);
-            this.cmbAttackSpeedModifier.Name = "cmbAttackSpeedModifier";
-            this.cmbAttackSpeedModifier.Size = new System.Drawing.Size(114, 21);
-            this.cmbAttackSpeedModifier.TabIndex = 28;
-            this.cmbAttackSpeedModifier.Text = null;
-            this.cmbAttackSpeedModifier.TextPadding = new System.Windows.Forms.Padding(2);
-            this.cmbAttackSpeedModifier.SelectedIndexChanged += new System.EventHandler(this.cmbAttackSpeedModifier_SelectedIndexChanged);
-            // 
-            // lblAttackSpeedModifier
-            // 
-            this.lblAttackSpeedModifier.AutoSize = true;
-            this.lblAttackSpeedModifier.Location = new System.Drawing.Point(9, 27);
-            this.lblAttackSpeedModifier.Name = "lblAttackSpeedModifier";
-            this.lblAttackSpeedModifier.Size = new System.Drawing.Size(47, 13);
-            this.lblAttackSpeedModifier.TabIndex = 0;
-            this.lblAttackSpeedModifier.Text = "Modifier:";
-            // 
-            // nudScaling
-            // 
-            this.nudScaling.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudScaling.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudScaling.Location = new System.Drawing.Point(15, 234);
-            this.nudScaling.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.nudScaling.Name = "nudScaling";
-            this.nudScaling.Size = new System.Drawing.Size(180, 20);
-            this.nudScaling.TabIndex = 55;
-            this.nudScaling.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudScaling.ValueChanged += new System.EventHandler(this.nudScaling_ValueChanged);
-            // 
-            // nudCritChance
-            // 
-            this.nudCritChance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudCritChance.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudCritChance.Location = new System.Drawing.Point(15, 73);
-            this.nudCritChance.Name = "nudCritChance";
-            this.nudCritChance.Size = new System.Drawing.Size(180, 20);
-            this.nudCritChance.TabIndex = 54;
-            this.nudCritChance.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudCritChance.ValueChanged += new System.EventHandler(this.nudCritChance_ValueChanged);
-            // 
-            // nudDamage
-            // 
-            this.nudDamage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudDamage.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudDamage.Location = new System.Drawing.Point(15, 36);
-            this.nudDamage.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.nudDamage.Name = "nudDamage";
-            this.nudDamage.Size = new System.Drawing.Size(180, 20);
-            this.nudDamage.TabIndex = 49;
-            this.nudDamage.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudDamage.ValueChanged += new System.EventHandler(this.nudDamage_ValueChanged);
-            // 
-            // cmbProjectile
-            // 
-            this.cmbProjectile.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbProjectile.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbProjectile.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbProjectile.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbProjectile.DrawDropdownHoverOutline = false;
-            this.cmbProjectile.DrawFocusRectangle = false;
-            this.cmbProjectile.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbProjectile.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbProjectile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbProjectile.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbProjectile.FormattingEnabled = true;
-            this.cmbProjectile.Location = new System.Drawing.Point(15, 270);
-            this.cmbProjectile.Name = "cmbProjectile";
-            this.cmbProjectile.Size = new System.Drawing.Size(180, 21);
-            this.cmbProjectile.TabIndex = 47;
-            this.cmbProjectile.Text = null;
-            this.cmbProjectile.TextPadding = new System.Windows.Forms.Padding(2);
-            this.cmbProjectile.SelectedIndexChanged += new System.EventHandler(this.cmbProjectile_SelectedIndexChanged);
-            // 
-            // cmbScalingStat
-            // 
-            this.cmbScalingStat.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbScalingStat.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbScalingStat.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbScalingStat.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbScalingStat.DrawDropdownHoverOutline = false;
-            this.cmbScalingStat.DrawFocusRectangle = false;
-            this.cmbScalingStat.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbScalingStat.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbScalingStat.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbScalingStat.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbScalingStat.FormattingEnabled = true;
-            this.cmbScalingStat.Location = new System.Drawing.Point(16, 193);
-            this.cmbScalingStat.Name = "cmbScalingStat";
-            this.cmbScalingStat.Size = new System.Drawing.Size(180, 21);
-            this.cmbScalingStat.TabIndex = 46;
-            this.cmbScalingStat.Text = null;
-            this.cmbScalingStat.TextPadding = new System.Windows.Forms.Padding(2);
-            this.cmbScalingStat.SelectedIndexChanged += new System.EventHandler(this.cmbScalingStat_SelectedIndexChanged);
-            // 
-            // lblScalingStat
-            // 
-            this.lblScalingStat.AutoSize = true;
-            this.lblScalingStat.Location = new System.Drawing.Point(13, 176);
-            this.lblScalingStat.Name = "lblScalingStat";
-            this.lblScalingStat.Size = new System.Drawing.Size(67, 13);
-            this.lblScalingStat.TabIndex = 45;
-            this.lblScalingStat.Text = "Scaling Stat:";
-            // 
-            // lblScalingAmount
-            // 
-            this.lblScalingAmount.AutoSize = true;
-            this.lblScalingAmount.Location = new System.Drawing.Point(12, 219);
-            this.lblScalingAmount.Name = "lblScalingAmount";
-            this.lblScalingAmount.Size = new System.Drawing.Size(84, 13);
-            this.lblScalingAmount.TabIndex = 44;
-            this.lblScalingAmount.Text = "Scaling Amount:";
-            // 
-            // cmbDamageType
-            // 
-            this.cmbDamageType.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbDamageType.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbDamageType.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbDamageType.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbDamageType.DrawDropdownHoverOutline = false;
-            this.cmbDamageType.DrawFocusRectangle = false;
-            this.cmbDamageType.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbDamageType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbDamageType.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbDamageType.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbDamageType.FormattingEnabled = true;
-            this.cmbDamageType.Items.AddRange(new object[] {
-            "Physical",
-            "Magic",
-            "True"});
-            this.cmbDamageType.Location = new System.Drawing.Point(16, 152);
-            this.cmbDamageType.Name = "cmbDamageType";
-            this.cmbDamageType.Size = new System.Drawing.Size(180, 21);
-            this.cmbDamageType.TabIndex = 42;
-            this.cmbDamageType.Text = "Physical";
-            this.cmbDamageType.TextPadding = new System.Windows.Forms.Padding(2);
-            this.cmbDamageType.SelectedIndexChanged += new System.EventHandler(this.cmbDamageType_SelectedIndexChanged);
-            // 
-            // lblDamageType
-            // 
-            this.lblDamageType.AutoSize = true;
-            this.lblDamageType.Location = new System.Drawing.Point(13, 135);
-            this.lblDamageType.Name = "lblDamageType";
-            this.lblDamageType.Size = new System.Drawing.Size(77, 13);
-            this.lblDamageType.TabIndex = 41;
-            this.lblDamageType.Text = "Damage Type:";
-            // 
-            // lblCritChance
-            // 
-            this.lblCritChance.AutoSize = true;
-            this.lblCritChance.Location = new System.Drawing.Point(12, 59);
-            this.lblCritChance.Name = "lblCritChance";
-            this.lblCritChance.Size = new System.Drawing.Size(82, 13);
-            this.lblCritChance.TabIndex = 40;
-            this.lblCritChance.Text = "Crit Chance (%):";
-            // 
-            // cmbAttackAnimation
-            // 
-            this.cmbAttackAnimation.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbAttackAnimation.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbAttackAnimation.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbAttackAnimation.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbAttackAnimation.DrawDropdownHoverOutline = false;
-            this.cmbAttackAnimation.DrawFocusRectangle = false;
-            this.cmbAttackAnimation.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbAttackAnimation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbAttackAnimation.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbAttackAnimation.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbAttackAnimation.FormattingEnabled = true;
-            this.cmbAttackAnimation.Location = new System.Drawing.Point(15, 308);
-            this.cmbAttackAnimation.Name = "cmbAttackAnimation";
-            this.cmbAttackAnimation.Size = new System.Drawing.Size(180, 21);
-            this.cmbAttackAnimation.TabIndex = 38;
-            this.cmbAttackAnimation.Text = null;
-            this.cmbAttackAnimation.TextPadding = new System.Windows.Forms.Padding(2);
-            this.cmbAttackAnimation.SelectedIndexChanged += new System.EventHandler(this.cmbAttackAnimation_SelectedIndexChanged);
-            // 
-            // lblAttackAnimation
-            // 
-            this.lblAttackAnimation.AutoSize = true;
-            this.lblAttackAnimation.Location = new System.Drawing.Point(12, 293);
-            this.lblAttackAnimation.Name = "lblAttackAnimation";
-            this.lblAttackAnimation.Size = new System.Drawing.Size(90, 13);
-            this.lblAttackAnimation.TabIndex = 37;
-            this.lblAttackAnimation.Text = "Attack Animation:";
-            // 
-            // chk2Hand
-            // 
-            this.chk2Hand.AutoSize = true;
-            this.chk2Hand.Location = new System.Drawing.Point(134, 14);
-            this.chk2Hand.Name = "chk2Hand";
-            this.chk2Hand.Size = new System.Drawing.Size(61, 17);
-            this.chk2Hand.TabIndex = 25;
-            this.chk2Hand.Text = "2 Hand";
-            this.chk2Hand.CheckedChanged += new System.EventHandler(this.chk2Hand_CheckedChanged);
-            // 
-            // lblToolType
-            // 
-            this.lblToolType.AutoSize = true;
-            this.lblToolType.Location = new System.Drawing.Point(13, 335);
-            this.lblToolType.Name = "lblToolType";
-            this.lblToolType.Size = new System.Drawing.Size(58, 13);
-            this.lblToolType.TabIndex = 26;
-            this.lblToolType.Text = "Tool Type:";
-            // 
-            // cmbToolType
-            // 
-            this.cmbToolType.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbToolType.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbToolType.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbToolType.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbToolType.DrawDropdownHoverOutline = false;
-            this.cmbToolType.DrawFocusRectangle = false;
-            this.cmbToolType.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbToolType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbToolType.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbToolType.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbToolType.FormattingEnabled = true;
-            this.cmbToolType.Location = new System.Drawing.Point(16, 349);
-            this.cmbToolType.Name = "cmbToolType";
-            this.cmbToolType.Size = new System.Drawing.Size(180, 21);
-            this.cmbToolType.TabIndex = 27;
-            this.cmbToolType.Text = null;
-            this.cmbToolType.TextPadding = new System.Windows.Forms.Padding(2);
-            this.cmbToolType.SelectedIndexChanged += new System.EventHandler(this.cmbToolType_SelectedIndexChanged);
-            // 
-            // lblProjectile
-            // 
-            this.lblProjectile.AutoSize = true;
-            this.lblProjectile.Location = new System.Drawing.Point(12, 254);
-            this.lblProjectile.Name = "lblProjectile";
-            this.lblProjectile.Size = new System.Drawing.Size(53, 13);
-            this.lblProjectile.TabIndex = 33;
-            this.lblProjectile.Text = "Projectile:";
-            // 
-            // lblDamage
-            // 
-            this.lblDamage.AutoSize = true;
-            this.lblDamage.Location = new System.Drawing.Point(12, 19);
-            this.lblDamage.Name = "lblDamage";
-            this.lblDamage.Size = new System.Drawing.Size(77, 13);
-            this.lblDamage.TabIndex = 11;
-            this.lblDamage.Text = "Base Damage:";
-            // 
             // grpEvent
             // 
             this.grpEvent.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
@@ -3744,526 +4317,6 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
             // 
-            // chkLockSlashResist
-            // 
-            this.chkLockSlashResist.AutoSize = true;
-            this.chkLockSlashResist.Location = new System.Drawing.Point(180, 149);
-            this.chkLockSlashResist.Name = "chkLockSlashResist";
-            this.chkLockSlashResist.Size = new System.Drawing.Size(15, 14);
-            this.chkLockSlashResist.TabIndex = 121;
-            this.chkLockSlashResist.CheckedChanged += new System.EventHandler(this.chkLockSlashResist_CheckedChanged);
-            // 
-            // chkLockSlash
-            // 
-            this.chkLockSlash.AutoSize = true;
-            this.chkLockSlash.Location = new System.Drawing.Point(180, 110);
-            this.chkLockSlash.Name = "chkLockSlash";
-            this.chkLockSlash.Size = new System.Drawing.Size(15, 14);
-            this.chkLockSlash.TabIndex = 120;
-            this.chkLockSlash.CheckedChanged += new System.EventHandler(this.chkLockSlash_CheckedChanged);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(163, 146);
-            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(15, 13);
-            this.label1.TabIndex = 119;
-            this.label1.Text = "%";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(161, 108);
-            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(15, 13);
-            this.label2.TabIndex = 118;
-            this.label2.Text = "%";
-            // 
-            // nudSlashResistPercentage
-            // 
-            this.nudSlashResistPercentage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudSlashResistPercentage.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudSlashResistPercentage.Location = new System.Drawing.Point(120, 147);
-            this.nudSlashResistPercentage.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.nudSlashResistPercentage.Name = "nudSlashResistPercentage";
-            this.nudSlashResistPercentage.Size = new System.Drawing.Size(43, 20);
-            this.nudSlashResistPercentage.TabIndex = 117;
-            this.nudSlashResistPercentage.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudSlashResistPercentage.ValueChanged += new System.EventHandler(this.nudSlashResistPercentage_ValueChanged);
-            // 
-            // nudSlashPercentage
-            // 
-            this.nudSlashPercentage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudSlashPercentage.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudSlashPercentage.Location = new System.Drawing.Point(118, 108);
-            this.nudSlashPercentage.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.nudSlashPercentage.Name = "nudSlashPercentage";
-            this.nudSlashPercentage.Size = new System.Drawing.Size(43, 20);
-            this.nudSlashPercentage.TabIndex = 116;
-            this.nudSlashPercentage.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudSlashPercentage.ValueChanged += new System.EventHandler(this.nudSlashPercentage_ValueChanged);
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(105, 148);
-            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(13, 13);
-            this.label3.TabIndex = 115;
-            this.label3.Text = "+";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(103, 110);
-            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(13, 13);
-            this.label4.TabIndex = 114;
-            this.label4.Text = "+";
-            // 
-            // nudSlashResist
-            // 
-            this.nudSlashResist.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudSlashResist.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudSlashResist.Location = new System.Drawing.Point(13, 146);
-            this.nudSlashResist.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.nudSlashResist.Name = "nudSlashResist";
-            this.nudSlashResist.Size = new System.Drawing.Size(90, 20);
-            this.nudSlashResist.TabIndex = 113;
-            this.nudSlashResist.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudSlashResist.ValueChanged += new System.EventHandler(this.nudSlashResist_ValueChanged);
-            // 
-            // nudSlash
-            // 
-            this.nudSlash.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudSlash.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudSlash.Location = new System.Drawing.Point(13, 107);
-            this.nudSlash.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.nudSlash.Name = "nudSlash";
-            this.nudSlash.Size = new System.Drawing.Size(90, 20);
-            this.nudSlash.TabIndex = 112;
-            this.nudSlash.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudSlash.ValueChanged += new System.EventHandler(this.nudSlash_ValueChanged);
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(10, 130);
-            this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(92, 13);
-            this.label5.TabIndex = 111;
-            this.label5.Text = "Slash Resistance:";
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(11, 91);
-            this.label6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(70, 13);
-            this.label6.TabIndex = 110;
-            this.label6.Text = "Slash Attack:";
-            // 
-            // chkLockPierceResist
-            // 
-            this.chkLockPierceResist.AutoSize = true;
-            this.chkLockPierceResist.Location = new System.Drawing.Point(180, 227);
-            this.chkLockPierceResist.Name = "chkLockPierceResist";
-            this.chkLockPierceResist.Size = new System.Drawing.Size(15, 14);
-            this.chkLockPierceResist.TabIndex = 119;
-            this.chkLockPierceResist.CheckedChanged += new System.EventHandler(this.chkLockPierceResist_CheckedChanged);
-            // 
-            // chkLockPierce
-            // 
-            this.chkLockPierce.AutoSize = true;
-            this.chkLockPierce.Location = new System.Drawing.Point(180, 188);
-            this.chkLockPierce.Name = "chkLockPierce";
-            this.chkLockPierce.Size = new System.Drawing.Size(15, 14);
-            this.chkLockPierce.TabIndex = 118;
-            this.chkLockPierce.CheckedChanged += new System.EventHandler(this.chkLockPierce_CheckedChanged);
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(163, 224);
-            this.label7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(15, 13);
-            this.label7.TabIndex = 117;
-            this.label7.Text = "%";
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(161, 186);
-            this.label8.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(15, 13);
-            this.label8.TabIndex = 116;
-            this.label8.Text = "%";
-            // 
-            // nudPierceResistPercentage
-            // 
-            this.nudPierceResistPercentage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudPierceResistPercentage.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudPierceResistPercentage.Location = new System.Drawing.Point(120, 225);
-            this.nudPierceResistPercentage.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.nudPierceResistPercentage.Name = "nudPierceResistPercentage";
-            this.nudPierceResistPercentage.Size = new System.Drawing.Size(43, 20);
-            this.nudPierceResistPercentage.TabIndex = 115;
-            this.nudPierceResistPercentage.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudPierceResistPercentage.ValueChanged += new System.EventHandler(this.nudPierceResistPercentage_ValueChanged);
-            // 
-            // nudPiercePercentage
-            // 
-            this.nudPiercePercentage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudPiercePercentage.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudPiercePercentage.Location = new System.Drawing.Point(118, 186);
-            this.nudPiercePercentage.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.nudPiercePercentage.Name = "nudPiercePercentage";
-            this.nudPiercePercentage.Size = new System.Drawing.Size(43, 20);
-            this.nudPiercePercentage.TabIndex = 114;
-            this.nudPiercePercentage.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudPiercePercentage.ValueChanged += new System.EventHandler(this.nudPiercePercentage_ValueChanged);
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(105, 226);
-            this.label9.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(13, 13);
-            this.label9.TabIndex = 113;
-            this.label9.Text = "+";
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(103, 188);
-            this.label10.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(13, 13);
-            this.label10.TabIndex = 112;
-            this.label10.Text = "+";
-            // 
-            // nudPierceResist
-            // 
-            this.nudPierceResist.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudPierceResist.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudPierceResist.Location = new System.Drawing.Point(13, 224);
-            this.nudPierceResist.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.nudPierceResist.Name = "nudPierceResist";
-            this.nudPierceResist.Size = new System.Drawing.Size(90, 20);
-            this.nudPierceResist.TabIndex = 111;
-            this.nudPierceResist.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudPierceResist.ValueChanged += new System.EventHandler(this.nudPierceResist_ValueChanged);
-            // 
-            // nudPierce
-            // 
-            this.nudPierce.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudPierce.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudPierce.Location = new System.Drawing.Point(13, 185);
-            this.nudPierce.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.nudPierce.Name = "nudPierce";
-            this.nudPierce.Size = new System.Drawing.Size(90, 20);
-            this.nudPierce.TabIndex = 110;
-            this.nudPierce.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudPierce.ValueChanged += new System.EventHandler(this.nudPierce_ValueChanged);
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(10, 208);
-            this.label11.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(96, 13);
-            this.label11.TabIndex = 109;
-            this.label11.Text = "Pierce Resistance:";
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(11, 169);
-            this.label12.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(74, 13);
-            this.label12.TabIndex = 108;
-            this.label12.Text = "Pierce Attack:";
-            // 
-            // chkLockAccuracy
-            // 
-            this.chkLockAccuracy.AutoSize = true;
-            this.chkLockAccuracy.Location = new System.Drawing.Point(180, 335);
-            this.chkLockAccuracy.Name = "chkLockAccuracy";
-            this.chkLockAccuracy.Size = new System.Drawing.Size(15, 14);
-            this.chkLockAccuracy.TabIndex = 127;
-            this.chkLockAccuracy.CheckedChanged += new System.EventHandler(this.chkLockAccuracy_CheckedChanged);
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(161, 335);
-            this.label13.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(15, 13);
-            this.label13.TabIndex = 126;
-            this.label13.Text = "%";
-            // 
-            // nudAccuracyPercent
-            // 
-            this.nudAccuracyPercent.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudAccuracyPercent.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudAccuracyPercent.Location = new System.Drawing.Point(118, 335);
-            this.nudAccuracyPercent.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.nudAccuracyPercent.Name = "nudAccuracyPercent";
-            this.nudAccuracyPercent.Size = new System.Drawing.Size(43, 20);
-            this.nudAccuracyPercent.TabIndex = 125;
-            this.nudAccuracyPercent.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudAccuracyPercent.ValueChanged += new System.EventHandler(this.nuAccuracyPercent_ValueChanged);
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(103, 337);
-            this.label14.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(13, 13);
-            this.label14.TabIndex = 124;
-            this.label14.Text = "+";
-            // 
-            // nudAccuracy
-            // 
-            this.nudAccuracy.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudAccuracy.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudAccuracy.Location = new System.Drawing.Point(13, 334);
-            this.nudAccuracy.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.nudAccuracy.Name = "nudAccuracy";
-            this.nudAccuracy.Size = new System.Drawing.Size(90, 20);
-            this.nudAccuracy.TabIndex = 123;
-            this.nudAccuracy.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudAccuracy.ValueChanged += new System.EventHandler(this.nudAccuracy_ValueChanged);
-            // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(10, 318);
-            this.label15.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(55, 13);
-            this.label15.TabIndex = 122;
-            this.label15.Text = "Accuracy:";
-            // 
-            // chkLockEvasion
-            // 
-            this.chkLockEvasion.AutoSize = true;
-            this.chkLockEvasion.Location = new System.Drawing.Point(180, 376);
-            this.chkLockEvasion.Name = "chkLockEvasion";
-            this.chkLockEvasion.Size = new System.Drawing.Size(15, 14);
-            this.chkLockEvasion.TabIndex = 133;
-            this.chkLockEvasion.CheckedChanged += new System.EventHandler(this.chkLockEvasion_CheckedChanged);
-            // 
-            // label16
-            // 
-            this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(161, 376);
-            this.label16.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(15, 13);
-            this.label16.TabIndex = 132;
-            this.label16.Text = "%";
-            // 
-            // nudEvasionPercent
-            // 
-            this.nudEvasionPercent.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudEvasionPercent.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudEvasionPercent.Location = new System.Drawing.Point(118, 376);
-            this.nudEvasionPercent.Maximum = new decimal(new int[] {
-            1000,
-            0,
-            0,
-            0});
-            this.nudEvasionPercent.Name = "nudEvasionPercent";
-            this.nudEvasionPercent.Size = new System.Drawing.Size(43, 20);
-            this.nudEvasionPercent.TabIndex = 131;
-            this.nudEvasionPercent.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudEvasionPercent.ValueChanged += new System.EventHandler(this.nudEvasionPercent_ValueChanged);
-            // 
-            // label17
-            // 
-            this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(103, 378);
-            this.label17.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(13, 13);
-            this.label17.TabIndex = 130;
-            this.label17.Text = "+";
-            // 
-            // nudEvasion
-            // 
-            this.nudEvasion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudEvasion.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudEvasion.Location = new System.Drawing.Point(13, 375);
-            this.nudEvasion.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.nudEvasion.Name = "nudEvasion";
-            this.nudEvasion.Size = new System.Drawing.Size(90, 20);
-            this.nudEvasion.TabIndex = 129;
-            this.nudEvasion.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudEvasion.ValueChanged += new System.EventHandler(this.nudEvasion_ValueChanged);
-            // 
-            // label18
-            // 
-            this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(10, 359);
-            this.label18.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(48, 13);
-            this.label18.TabIndex = 128;
-            this.label18.Text = "Evasion:";
-            // 
-            // label19
-            // 
-            this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(207, 12);
-            this.label19.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(80, 13);
-            this.label19.TabIndex = 134;
-            this.label19.Text = "Damage Type?";
-            // 
-            // chkBluntDamage
-            // 
-            this.chkBluntDamage.AutoSize = true;
-            this.chkBluntDamage.Location = new System.Drawing.Point(227, 31);
-            this.chkBluntDamage.Name = "chkBluntDamage";
-            this.chkBluntDamage.Size = new System.Drawing.Size(15, 14);
-            this.chkBluntDamage.TabIndex = 135;
-            this.chkBluntDamage.CheckedChanged += new System.EventHandler(this.chkBluntDamage_CheckedChanged);
-            // 
-            // chkDamageSlash
-            // 
-            this.chkDamageSlash.AutoSize = true;
-            this.chkDamageSlash.Location = new System.Drawing.Point(227, 112);
-            this.chkDamageSlash.Name = "chkDamageSlash";
-            this.chkDamageSlash.Size = new System.Drawing.Size(15, 14);
-            this.chkDamageSlash.TabIndex = 136;
-            this.chkDamageSlash.CheckedChanged += new System.EventHandler(this.chkDamageSlash_CheckedChanged);
-            // 
-            // chkDamagePierce
-            // 
-            this.chkDamagePierce.AutoSize = true;
-            this.chkDamagePierce.Location = new System.Drawing.Point(227, 188);
-            this.chkDamagePierce.Name = "chkDamagePierce";
-            this.chkDamagePierce.Size = new System.Drawing.Size(15, 14);
-            this.chkDamagePierce.TabIndex = 137;
-            this.chkDamagePierce.CheckedChanged += new System.EventHandler(this.chkDamagePierce_CheckedChanged);
-            // 
-            // chkDamageMagic
-            // 
-            this.chkDamageMagic.AutoSize = true;
-            this.chkDamageMagic.Location = new System.Drawing.Point(227, 261);
-            this.chkDamageMagic.Name = "chkDamageMagic";
-            this.chkDamageMagic.Size = new System.Drawing.Size(15, 14);
-            this.chkDamageMagic.TabIndex = 138;
-            this.chkDamageMagic.CheckedChanged += new System.EventHandler(this.chkDamageMagic_CheckedChanged);
-            // 
             // FrmItem
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -4315,9 +4368,20 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudEffectPercent)).EndInit();
             this.grpAdditionalWeaponProps.ResumeLayout(false);
             this.grpAdditionalWeaponProps.PerformLayout();
+            this.grpDamageTypes.ResumeLayout(false);
+            this.grpDamageTypes.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudBackBoost)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudStrafeBoost)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudBackstabMultiplier)).EndInit();
+            this.grpWeaponProperties.ResumeLayout(false);
+            this.grpWeaponProperties.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudCritMultiplier)).EndInit();
+            this.grpAttackSpeed.ResumeLayout(false);
+            this.grpAttackSpeed.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudAttackSpeedValue)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudScaling)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudCritChance)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudDamage)).EndInit();
             this.grpHelmetPaperdollProps.ResumeLayout(false);
             this.grpHelmetPaperdollProps.PerformLayout();
             this.grpPrayerProperties.ResumeLayout(false);
@@ -4336,6 +4400,18 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudHealthBonus)).EndInit();
             this.grpStatBonuses.ResumeLayout(false);
             this.grpStatBonuses.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudEvasionPercent)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudEvasion)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudAccuracyPercent)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudAccuracy)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPierceResistPercentage)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSlashResistPercentage)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPiercePercentage)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSlashPercentage)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPierceResist)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSlashResist)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPierce)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSlash)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudSpdPercentage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMRPercentage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudDefPercentage)).EndInit();
@@ -4349,15 +4425,6 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudStr)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picFemalePaperdoll)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picMalePaperdoll)).EndInit();
-            this.grpWeaponProperties.ResumeLayout(false);
-            this.grpWeaponProperties.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudCritMultiplier)).EndInit();
-            this.grpAttackSpeed.ResumeLayout(false);
-            this.grpAttackSpeed.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudAttackSpeedValue)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudScaling)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudCritChance)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudDamage)).EndInit();
             this.grpEvent.ResumeLayout(false);
             this.grpEvent.PerformLayout();
             this.grpSpell.ResumeLayout(false);
@@ -4374,18 +4441,6 @@ namespace Intersect.Editor.Forms.Editors
             this.grpAuxInfo.PerformLayout();
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSlashResistPercentage)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSlashPercentage)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSlashResist)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSlash)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudPierceResistPercentage)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudPiercePercentage)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudPierceResist)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudPierce)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudAccuracyPercent)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudAccuracy)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudEvasionPercent)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudEvasion)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -4665,6 +4720,10 @@ namespace Intersect.Editor.Forms.Editors
         private DarkCheckBox chkDamagePierce;
         private DarkCheckBox chkDamageSlash;
         private DarkCheckBox chkBluntDamage;
-        private Label label19;
+        private DarkGroupBox grpDamageTypes;
+        private Label label23;
+        private Label label22;
+        private Label label21;
+        private Label label20;
     }
 }

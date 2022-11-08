@@ -86,8 +86,10 @@ namespace Intersect.Server.Entities
             }
 
             var animation = parentWeapon?.AttackAnimationId ?? parentSpell?.HitAnimationId ?? Guid.Empty;
+
+            var targetType = (enemy.IsDead() || enemy.IsDisposed) ? -1 : 1;
             PacketSender.SendAnimationToProximity(
-                animation, -1, Id, enemy.MapId, (byte)enemy.X, (byte)enemy.Y, (sbyte)projectileDir, MapInstanceId
+                animation, targetType, enemy.Id, enemy.MapId, (byte)enemy.X, (byte)enemy.Y, (sbyte)projectileDir, MapInstanceId
             );
 
             if (descriptor.Knockback > 0 && projectileDir < 4 && !enemy.IsImmuneTo(Immunities.Knockback) && !StatusActive(StatusTypes.Steady))
@@ -222,6 +224,24 @@ namespace Intersect.Server.Entities
             return attackingTile;
         }
 
+        public virtual bool TryDealManaDamageTo(Entity enemy,
+            int dmg,
+            int dmgScaling,
+            double critMultiplier,
+            out int damage)
+        {
+            damage = 0;
+            if (enemy == null || !enemy.CanHaveVitalDamaged(Vitals.Mana))
+            {
+                return false;
+            }
+
+            damage = dmg;
+            DealTrueDamageTo(enemy, dmgScaling, dmg, true, false);
+
+            return true;
+        }
+
         public virtual bool TryDealDamageTo(Entity enemy,
             List<AttackTypes> attackTypes,
             int dmgScaling,
@@ -231,37 +251,57 @@ namespace Intersect.Server.Entities
             out int damage)
         {
             damage = 0;
-            if (enemy == null || enemy.IsDisposed || enemy.IsDead())
+            if (enemy == null || !enemy.CanHaveVitalDamaged(Vitals.Health))
             {
                 return false;
             }
 
-            // Invulnerable?
-            if (enemy.CachedStatuses.Any(status => status.Type == StatusTypes.Invulnerable))
+            var manaDamage = 0;
+            if (spell != null && spell.Combat != null && spell.Combat.VitalDiff[(int)Vitals.Mana] != 0)
             {
-                // TODO message
-                PacketSender.SendActionMsg(enemy, Strings.Combat.invulnerable, CustomColors.Combat.Invulnerable, Options.BlockSound);
-                return false;
+                _ = TryDealManaDamageTo(enemy, spell.Combat.VitalDiff[(int)Vitals.Mana], dmgScaling, critMultiplier, out manaDamage);
             }
 
-            // Enemy doesn't have any health
-            if (!enemy.HasVital(Vitals.Health))
+            // If we have a true damage override in our attack somewhere...
+            if (weapon?.DamageType == (int)DamageType.True || spell?.Combat?.DamageType == (int)DamageType.True)
             {
-                return false;
+                var trueDamage = weapon?.Damage ?? 0;
+                if (spell != null)
+                {
+                    if (spell.WeaponSpell && weapon != null)
+                    {
+                        trueDamage += spell.Combat?.VitalDiff[(int)Vitals.Health] ?? 0;
+                    }
+                    else
+                    {
+                        trueDamage = spell.Combat?.VitalDiff[(int)Vitals.Health] ?? 0;
+                    }
+                }
+                DealTrueDamageTo(enemy, dmgScaling, trueDamage, false, false);
+            }
+            // Otherwise, we're dealing non-true damage and need to do some calcs
+            else
+            {
+                DealDamageTo(enemy, attackTypes, dmgScaling, critMultiplier, weapon, false, out damage);
+            }
+            return damage != 0 || manaDamage != 0;
+        }
+
+        public void DealTrueDamageTo(Entity enemy, int scaling, int damage, bool isSecondary, bool isNeutral)
+        {
+            if (enemy == null)
+            {
+                return;
             }
 
-            var secondary = false; // Deal damage to mana instead
-            if (spell != null)
-            {
-                secondary = spell.Combat.DamageType == (int)DamageType.Magic;
-            }
-            if (weapon != null)
-            {
-                secondary = weapon.DamageType == (int)DamageType.Magic;
-            }
+            UpdateCombatTimers(this, enemy);
 
-            DealDamageTo(enemy, attackTypes, dmgScaling, critMultiplier, weapon, secondary, out damage);
-            return true;
+            float decScaling = (float)scaling / 100; // scaling comes into this function as a percent number, i.e 110%, so we need that to be 1.1
+            var dmg = (int)Math.Round(damage * decScaling);
+            enemy.TakeDamage(this, dmg, isSecondary ? Vitals.Mana : Vitals.Health);
+            
+            SendCombatEffects(enemy, false, damage);
+            PacketSender.SendCombatNumber(DetermineCombatNumberType(damage, isSecondary, isNeutral, 1.0), enemy, dmg);
         }
 
         private void DealDamageTo(Entity enemy,
@@ -272,7 +312,6 @@ namespace Intersect.Server.Entities
             bool secondaryDamage, 
             out int damage)
         {
-            // TODO secondary damage?
             damage = 0;
             if (enemy == null)
             {

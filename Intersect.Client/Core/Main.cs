@@ -250,7 +250,7 @@ namespace Intersect.Client.Core
         {
             if (Globals.ConnectionLost)
             {
-                Main.Logout(false);
+                Main.ForceLogout(false);
                 Interface.Interface.MsgboxErrors.Add(
                     new KeyValuePair<string, string>("", Strings.Errors.lostconnection)
                 );
@@ -409,46 +409,52 @@ namespace Intersect.Client.Core
             Globals.StartMenuMusic = false;
             FadeService.FadeOut(callback: () =>
             {
-                PacketSender.SendLogout(characterSelect);
-                Globals.LoggedIn = false;
-                Globals.WaitingOnServer = false;
-                Globals.WaitingOnServerDispose = characterSelect;
-                Graphics.CurrentShake = 0f;
-                Globals.GameState = GameStates.Menu;
-                Globals.JoiningGame = false;
-                Globals.NeedsMaps = true;
-                Globals.Picture = null;
-                Interface.Interface.HideUi = false;
-
-                //Dump Game Objects
-                Globals.Me = null;
-                Globals.HasGameData = false;
-                foreach (var map in MapInstance.Lookup)
-                {
-                    var mp = (MapInstance)map.Value;
-                    mp.Dispose(false, true);
-                }
-
-                foreach (var en in Globals.Entities.ToArray())
-                {
-                    en.Value.Dispose();
-                }
-
-                MapBase.Lookup.Clear();
-                MapInstance.Lookup.Clear();
-
-                Globals.Entities.Clear();
-                Globals.MapGrid = null;
-                Globals.GridMaps.Clear();
-                Globals.EventDialogs.Clear();
-                Globals.EventHolds.Clear();
-                Globals.PendingEvents.Clear();
-
-                Timers.ActiveTimers.Clear();
-
-                Interface.Interface.InitGwen();
-                FadeService.FadeIn();
+                ForceLogout(characterSelect);
             });
+        }
+
+        public static void ForceLogout(bool characterSelect)
+        {
+            Globals.StartMenuMusic = false;
+            PacketSender.SendLogout(characterSelect);
+            Globals.LoggedIn = false;
+            Globals.WaitingOnServer = false;
+            Globals.WaitingOnServerDispose = characterSelect;
+            Graphics.CurrentShake = 0f;
+            Globals.GameState = GameStates.Menu;
+            Globals.JoiningGame = false;
+            Globals.NeedsMaps = true;
+            Globals.Picture = null;
+            Interface.Interface.HideUi = false;
+
+            //Dump Game Objects
+            Globals.Me = null;
+            Globals.HasGameData = false;
+            foreach (var map in MapInstance.Lookup)
+            {
+                var mp = (MapInstance)map.Value;
+                mp.Dispose(false, true);
+            }
+
+            foreach (var en in Globals.Entities.ToArray())
+            {
+                en.Value.Dispose();
+            }
+
+            MapBase.Lookup.Clear();
+            MapInstance.Lookup.Clear();
+
+            Globals.Entities.Clear();
+            Globals.MapGrid = null;
+            Globals.GridMaps.Clear();
+            Globals.EventDialogs.Clear();
+            Globals.EventHolds.Clear();
+            Globals.PendingEvents.Clear();
+
+            Timers.ActiveTimers.Clear();
+
+            Interface.Interface.InitGwen();
+            FadeService.FadeIn();
         }
 
     }
