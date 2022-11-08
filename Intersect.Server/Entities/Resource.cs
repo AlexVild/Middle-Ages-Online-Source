@@ -307,6 +307,15 @@ namespace Intersect.Server.Entities
             }
 
             var rolledItems = new List<Item>();
+
+            // Calculate RP
+            var rpBase = ItemBase.Get(Guid.Parse(Options.Instance.LootOpts.RPItemGuid));
+            if (rpBase != null && Base?.RP > 0)
+            {
+                var rp = new Item(rpBase.Id, Base.RP);
+                rolledItems.Add(rp);
+            }
+
             var baseDropTable = LootTableServerHelpers.GenerateDropTable(Base.Drops, playerKiller);
             rolledItems.Add(LootTableServerHelpers.GetItemFromTable(baseDropTable));
 

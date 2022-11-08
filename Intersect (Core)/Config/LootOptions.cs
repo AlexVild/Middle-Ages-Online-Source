@@ -62,5 +62,7 @@
         /// Defines the despawn time for player-owned items that have been dropped ond death
         /// </summary>
         public int PlayerLootRollOverflowSpawnTime { get; set; } = 60000;
+
+        public string RPItemGuid { get; set; } = "76e6932f-3b5c-4a50-8ec5-0d1b58b7e5fd";
     }
 }

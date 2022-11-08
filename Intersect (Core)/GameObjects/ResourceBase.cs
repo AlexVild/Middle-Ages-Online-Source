@@ -131,6 +131,8 @@ namespace Intersect.GameObjects
     public partial class ResourceBase : DatabaseObject<ResourceBase>, IFolderable
     {
         public string ResourceGroup { get; set; } = string.Empty;
+
+        public int RP { get; set; } = 0;
     }
 
 }

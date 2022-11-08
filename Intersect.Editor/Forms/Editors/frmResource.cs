@@ -262,6 +262,8 @@ namespace Intersect.Editor.Forms.Editors
                 chkDoNotRecord.Checked = mEditorItem.DoNotRecord;
                 cmbResourceGroup.Text = mEditorItem.ResourceGroup;
 
+                nudRP.Value = mEditorItem.RP;
+
                 //Regen
                 nudHpRegen.Value = mEditorItem.VitalRegen;
                 PopulateInitialGraphicList();
@@ -1142,6 +1144,11 @@ namespace Intersect.Editor.Forms.Editors
         private void btnUnselectItem_Click(object sender, EventArgs e)
         {
             lstDrops.SelectedIndex = -1;
+        }
+
+        private void nudRP_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.RP = (int)nudRP.Value;
         }
     }
 }

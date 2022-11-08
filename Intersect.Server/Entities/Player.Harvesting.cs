@@ -138,7 +138,7 @@ namespace Intersect.Server.Entities
                 dmg = weapon.Descriptor?.Damage ?? 1;
             }
 
-            DealTrueDamageTo(target, 0, dmg, false, true);
+            DealTrueDamageTo(target, 100, dmg, false, true);
 
             return true;
         }
