@@ -118,6 +118,7 @@ namespace Intersect.Client.Core
                 Globals.IntroIndex >= ClientConfiguration.Instance.IntroImages.Count)
             {
                 Globals.GameState = GameStates.Menu;
+                Graphics.ResetMenu();
                 FadeService.FadeIn();
                 return;
             }
@@ -204,10 +205,10 @@ namespace Intersect.Client.Core
 
         private static void InitializeAnimatedIntro()
         {
-            Globals.IntroHFrame = 0;
-            Globals.IntroVFrame = 0;
+            Graphics.IntroHFrame = 0;
+            Graphics.IntroVFrame = 0;
             Globals.AnimatedIntro = true;
-            Globals.IntroUpdateTime = Timing.Global.Milliseconds + (Globals.IntroFps * 10);
+            Graphics.IntroUpdateTime = Timing.Global.Milliseconds + (Globals.IntroFps * 10);
         }
 
         private static void ProcessMenu()

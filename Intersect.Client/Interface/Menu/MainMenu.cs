@@ -96,32 +96,28 @@ namespace Intersect.Client.Interface.Menu
 
             //Login Button
             mLoginButton = new Button(mMenuWindow, "LoginButton");
-            mLoginButton.SetText(Strings.MainMenu.Login);
             mLoginButton.Clicked += LoginButton_Clicked;
+            mLoginButton.SetToolTipText(Strings.MainMenu.Login);
 
             //Register Button
             mRegisterButton = new Button(mMenuWindow, "RegisterButton");
-            mRegisterButton.SetText(Strings.MainMenu.Register);
             mRegisterButton.Clicked += RegisterButton_Clicked;
+            mRegisterButton.SetToolTipText(Strings.MainMenu.Register);
 
             //Credits Button
             mCreditsButton = new Button(mMenuWindow, "CreditsButton");
-            mCreditsButton.SetText(Strings.MainMenu.Credits);
             mCreditsButton.Clicked += CreditsButton_Clicked;
+            mCreditsButton.SetToolTipText(Strings.MainMenu.Credits);
 
             //Exit Button
             mExitButton = new Button(mMenuWindow, "ExitButton");
-            mExitButton.SetText(Strings.MainMenu.Exit);
             mExitButton.Clicked += ExitButton_Clicked;
+            mExitButton.SetToolTipText(Strings.MainMenu.Exit);
 
             //Settings Button
             mSettingsButton = new Button(mMenuWindow, "SettingsButton");
             mSettingsButton.Clicked += SettingsButton_Clicked;
-            mSettingsButton.SetText(Strings.MainMenu.Settings);
-            if (!string.IsNullOrEmpty(Strings.MainMenu.SettingsTooltip))
-            {
-                mSettingsButton.SetToolTipText(Strings.MainMenu.SettingsTooltip);
-            }
+            mSettingsButton.SetToolTipText(Strings.MainMenu.Settings);
 
             mMenuWindow.LoadJsonUi(GameContentManager.UI.Menu, Graphics.Renderer.GetResolutionString());
 
@@ -161,37 +157,75 @@ namespace Intersect.Client.Interface.Menu
         //Methods
         public void Update()
         {
+            var hideLogo = false;
+            UpdateButtonFades();
+
             if (mShouldOpenCharacterSelection)
             {
                 CreateCharacterSelection();
+                hideLogo = true;
             }
 
             if (mShouldOpenCharacterCreation)
             {
                 CreateCharacterCreation();
+                hideLogo = true;
             }
 
             if (!mLoginWindow.IsHidden)
             {
                 mLoginWindow.Update();
+                hideLogo = true;
             }
 
             if (!mCreateCharacterWindow.IsHidden)
             {
                 mCreateCharacterWindow.Update();
+                hideLogo = true;
             }
 
             if (!mRegisterWindow.IsHidden)
             {
                 mRegisterWindow.Update();
+                hideLogo = true;
             }
 
             if (!mSelectCharacterWindow.IsHidden)
             {
                 mSelectCharacterWindow.Update();
+                hideLogo = true;
+            }
+
+            if (mSettingsWindow.IsVisible())
+            {
+                hideLogo = true;
+            }
+
+            if (!mCreditsWindow.IsHidden)
+            {
+                hideLogo = true;
             }
 
             mSettingsWindow.Update();
+            Graphics.HideLogo = hideLogo;
+        }
+        
+        public void UpdateButtonFades()
+        {
+            mLoginButton.RenderColor = new Color(Graphics.LogoAlpha, 255, 255, 255);
+            mLoginButton.MouseInputEnabled = Graphics.LogoAlpha >= 255;
+            
+            mRegisterButton.RenderColor = new Color(Graphics.LogoAlpha, 255, 255, 255);
+            mRegisterButton.MouseInputEnabled = Graphics.LogoAlpha >= 255;
+
+            mCreditsButton.RenderColor = new Color(Graphics.LogoAlpha, 255, 255, 255);
+            mCreditsButton.MouseInputEnabled = Graphics.LogoAlpha >= 255;
+
+            mSettingsButton.RenderColor = new Color(Graphics.LogoAlpha, 255, 255, 255);
+            mSettingsButton.MouseInputEnabled = Graphics.LogoAlpha >= 255;
+
+            mExitButton.RenderColor = new Color(Graphics.LogoAlpha, 255, 255, 255);
+            mExitButton.MouseInputEnabled = Graphics.LogoAlpha >= 255;
         }
 
         public void Reset()

@@ -123,6 +123,12 @@ namespace Intersect.Client.Core
             HUDFont = FindFont(ClientConfiguration.Instance.HudFont);
             HUDFontSmall = FindFont(ClientConfiguration.Instance.HudFontSmall);
             DamageFont = FindFont(ClientConfiguration.Instance.DamageFont);
+            MenuTexture = sContentManager.GetTexture(
+                GameContentManager.TextureType.Gui, ClientConfiguration.Instance.MenuBackground
+            );
+            LogoTexture = sContentManager.GetTexture(
+                GameContentManager.TextureType.Gui, ClientConfiguration.Instance.Logo
+            );
             FadeService.SetFade(255f, true);
             CombatNumberManager.CacheTextureRefs();
         }
@@ -167,7 +173,7 @@ namespace Intersect.Client.Core
             if (Globals.AnimatedIntro)
             {
                 AnimateIntro();
-                DrawFullScreenTextureFitMinimum(imageTex, Globals.IntroHFrames, Globals.IntroVFrames, Globals.IntroHFrame, Globals.IntroVFrame);
+                DrawFullScreenTextureFitMinimum(imageTex, Globals.IntroHFrames, Globals.IntroVFrames, IntroHFrame, IntroVFrame);
             }
             else
             {
@@ -175,43 +181,15 @@ namespace Intersect.Client.Core
             }
         }
 
-        private static void AnimateIntro()
-        {
-            if (Globals.IntroHFrame == 1 && Globals.IntroVFrame == 0 && !Globals.JinglePlayed)
-            {
-                Audio.AddGameSound("Grimhaus Jingle.wav", false);
-                Globals.JinglePlayed = true;
-            }
-            if (Globals.IntroUpdateTime < Timing.Global.Milliseconds)
-            {
-                if (Globals.IntroHFrames - 1 > Globals.IntroHFrame)
-                {
-                    Globals.IntroHFrame++;
-                }
-                else if (Globals.IntroVFrames - 1 > Globals.IntroVFrame)
-                {
-                    Globals.IntroHFrame = 0;
-                    Globals.IntroVFrame++;
-                }
-                else
-                {
-                    Globals.IntroHFrame = 0;
-                    Globals.IntroVFrame = 0;
-                }
-                Globals.IntroUpdateTime = Timing.Global.Milliseconds + (Globals.IntroFps * 10);
-            }
-        }
-
         public static void DrawMenu()
         {
-            var imageTex = sContentManager.GetTexture(
-                GameContentManager.TextureType.Gui, ClientConfiguration.Instance.MenuBackground
-            );
-
-            if (imageTex != null)
+            if (MenuTexture == null)
             {
-                DrawFullScreenTextureCutoff(imageTex);
+                return;
             }
+            AnimateMainMenu();
+            DrawFullScreenTextureFitMinimum(MenuTexture, MenuHFrames, MenuVFrames, MenuHFrame, MenuVFrame);
+            DrawLogo();
         }
 
         public static void DrawInGame()
@@ -1594,5 +1572,156 @@ namespace Intersect.Client.Core
         public static GameFont HUDFontSmall;
         
         public static GameFont DamageFont;
+
+        private static GameTexture MenuTexture;
+        private static readonly int MenuHFrames = 4;
+        private static readonly int MenuVFrames = 2;
+        private static int MenuHFrame = 0;
+        private static int MenuVFrame = 0;
+        private static readonly int MenuFrameRate = 10;
+        private static long LastMenuFrameUpdate = 0;
+        public static long IntroUpdateTime = 0;
+
+        public static int IntroHFrame = 0;
+        public static int IntroVFrame = 0;
+
+        public static bool HideLogo = false;
+        public static int LogoAlpha = 0;
+        private static long LogoAlphaUpdateTime = 0;
+        private static readonly long LogoAlphaUpdateInterval = 100;
+        private static readonly int LogoAlphaUpdateAmount = 15;
+        private static GameTexture LogoTexture;
+        private static readonly int MenuBackgroundAlpha = 80;
+
+        public static long LogoDelayTime = 0;
+        private static readonly long LogoDelayInterval = 1000;
+
+        private static void AnimateIntro()
+        {
+            if (TryAnimate(ref IntroUpdateTime, ref IntroHFrame, Globals.IntroHFrames, ref IntroVFrame, Globals.IntroVFrames, Globals.IntroFps, false))
+            {
+                if (IntroHFrame == 1 && IntroVFrame == 0 && !Globals.JinglePlayed)
+                {
+                    Audio.AddGameSound("Grimhaus Jingle.wav", false);
+                    Globals.JinglePlayed = true;
+                }
+            }
+        }
+
+        public static void ResetMainMenuAnimation()
+        {
+            MenuHFrame = 0;
+            MenuVFrame = 0;
+            LastMenuFrameUpdate = Timing.Global.Milliseconds + (MenuFrameRate * 10);
+        }
+
+        public static void AnimateMainMenu()
+        {
+            _ = TryAnimate(ref LastMenuFrameUpdate, ref MenuHFrame, MenuHFrames, ref MenuVFrame, MenuVFrames, MenuFrameRate, true);
+        }
+
+        public static void DrawLogo()
+        {
+            // Draw a background to tint the animation
+            if (LogoAlpha > 0)
+            {
+                var bgAlphaRatio = LogoAlpha / 255f;
+                var currAlpha = MathHelper.Clamp(MenuBackgroundAlpha * bgAlphaRatio, 0f, MenuBackgroundAlpha);
+                DrawFullScreenTexture(Renderer.GetWhiteTexture(), new Color((int)currAlpha, 0, 0, 0));
+            }
+
+            if ((LogoAlpha < 255 && Timing.Global.Milliseconds < LogoDelayTime) || HideLogo)
+            {
+                return;
+            }
+
+            _ = TryFadeIn(ref LogoAlphaUpdateTime, ref LogoAlpha, LogoAlphaUpdateInterval, LogoAlphaUpdateAmount);
+            DrawGameTexture(LogoTexture,
+                new FloatRect(0, 0, LogoTexture.GetWidth(), LogoTexture.GetHeight()),
+                new FloatRect(CurrentView.CenterX - (LogoTexture.GetWidth() / 2), CurrentView.CenterY - LogoTexture.GetHeight(), LogoTexture.GetWidth(), LogoTexture.GetHeight()),
+                new Color(LogoAlpha, 255, 255, 255)
+                );
+        }
+
+        /// <summary>
+        /// Proceeds frames for an animation and returns whether or not an advancement was made.
+        /// </summary>
+        /// <param name="lastUpdate">The timestamp the animation was last updated at.</param>
+        /// <param name="hFrame">The current horizontal frame, by reference</param>
+        /// <param name="totalH">The total Hframes of the animation sheet</param>
+        /// <param name="vFrame">The current vertical frame, by reference</param>
+        /// <param name="totalV">The total VFrames of the animation sheet</param>
+        /// <param name="frameRate">The frame rate, in FPS, of the animation</param>
+        /// <param name="loop">Whether or not the animation should loop</param>
+        /// <returns></returns>
+        public static bool TryAnimate(ref long lastUpdate, ref int hFrame, int totalH, ref int vFrame, int totalV, long frameRate, bool loop)
+        {
+            // If the animation shouldn't progress yet - either not enough time has passed or a non-looping animation has finished
+            if (lastUpdate >= Timing.Global.Milliseconds || (!loop && hFrame == totalH - 1 && vFrame == totalV - 1))
+            {
+                return false;
+            }
+
+            bool nextHFrame = totalH - 1 > hFrame;
+            bool nextVFrame = totalV - 1 > vFrame;
+
+            if (nextHFrame)
+            {
+                hFrame++;
+            }
+            else if (nextVFrame)
+            {
+                hFrame = 0;
+                vFrame++;
+            }
+            else if (loop)
+            {
+                // reset
+                hFrame = 0;
+                vFrame = 0;
+            }
+            
+            var fpsMillis = frameRate * 10;
+            lastUpdate = Timing.Global.Milliseconds + fpsMillis;
+            
+            return true;
+        }
+
+        public static void ResetMenu()
+        {
+            LogoDelayTime = Timing.Global.Milliseconds + LogoDelayInterval;
+            ResetMainMenuAnimation();
+        }
+
+        public static void ResetLogoFade()
+        {
+            LogoAlpha = 0;
+            LogoAlphaUpdateTime = Timing.Global.Milliseconds + LogoAlphaUpdateInterval;
+        }
+
+        public static bool TryFadeIn(ref long lastFade, ref int alpha, long fadeRate, int fadeAmount)
+        {
+            if (Timing.Global.Milliseconds < lastFade || alpha >= 255)
+            {
+                // Alpha beyond this causes overflow behavior
+                if (alpha > 255)
+                {
+                    alpha = 255;
+                }
+                return false;
+            }
+
+            alpha += fadeAmount;
+            alpha = MathHelper.Clamp(alpha, 0, 255);
+
+            lastFade = Timing.Global.Milliseconds + fadeRate;
+            return true;
+        }
+
+        public static void EndLogoFade()
+        {
+            LogoDelayTime = Timing.Global.Milliseconds;
+            LogoAlpha = 255;
+        }
     }
 }

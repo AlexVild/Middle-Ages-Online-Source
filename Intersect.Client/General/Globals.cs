@@ -213,8 +213,6 @@ namespace Intersect.Client.General
     {
         public static bool TradeAccepted { get; set; }
         public static bool WaitFade { get; set; }
-        public static int IntroHFrame { get; set; }
-        public static int IntroVFrame { get; set; }
         public static bool AnimatedIntro { get; set; }
         public static int IntroFps { get; set; } = 10;
         public static int IntroHFrames { get; set; }

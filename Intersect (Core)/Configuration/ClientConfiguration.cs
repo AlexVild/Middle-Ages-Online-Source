@@ -138,6 +138,7 @@ namespace Intersect.Configuration
         /// Menu background art
         /// </summary>
         public string MenuBackground { get; set; } = DEFAULT_MENU_BACKGROUND;
+        public string Logo { get; set; } = "logo.png";
 
         /// <summary>
         /// Sound that plays when a negative GUI event happens

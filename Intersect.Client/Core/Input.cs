@@ -42,14 +42,21 @@ namespace Intersect.Client.Core
             switch (key)
             {
                 case Keys.Escape:
+                    if (Globals.GameState == GameStates.Menu && Graphics.LogoAlpha < 255)
+                    {
+                        Graphics.EndLogoFade();
+                        break;
+                    }
                     if (Globals.GameState != GameStates.Intro || FadeService.FadeType == FadeType.Out)
                     {
                         break;
                     }
+                    
                     Audio.StopAllSounds();
                     FadeService.FadeOut(callback: () =>
                     {
                         Globals.GameState = GameStates.Menu;
+                        Graphics.ResetMenu();
                         FadeService.FadeIn();
                     });
                     

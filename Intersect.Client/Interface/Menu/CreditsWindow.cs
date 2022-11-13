@@ -114,6 +114,8 @@ namespace Intersect.Client.Interface.Menu
             mRichLabel.SizeToChildren(false, true);
         }
 
+        public bool IsHidden => mCreditsWindow.IsHidden;
+
     }
 
 }
