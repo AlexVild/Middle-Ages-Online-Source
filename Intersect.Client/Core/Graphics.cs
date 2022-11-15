@@ -189,6 +189,7 @@ namespace Intersect.Client.Core
             }
             AnimateMainMenu();
             DrawFullScreenTextureFitMinimum(MenuTexture, MenuHFrames, MenuVFrames, MenuHFrame, MenuVFrame);
+            DrawScanlines();
             DrawLogo();
         }
 

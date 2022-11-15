@@ -79,9 +79,9 @@
       <Project>{BC304B43-1F2C-4454-9EDC-48F47357CA94}</Project>
       <Name>Intersect %28Core%29</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Intersect.Server\Intersect.Server.csproj">
+    <ProjectReference Include="..\Intersect.Server\draw.csproj">
       <Project>{9FFC7331-87BE-403B-82A0-B86D3CCE7C53}</Project>
-      <Name>Intersect.Server</Name>
+      <Name>draw</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
