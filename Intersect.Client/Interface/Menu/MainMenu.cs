@@ -347,7 +347,7 @@ namespace Intersect.Client.Interface.Menu
 
         void ExitButton_Clicked(Base sender, ClickedEventArgs arguments)
         {
-            Globals.IsRunning = false;
+            FadeService.FadeOut(callback: () => Globals.IsRunning = false);
         }
 
         private void HandleNetworkStatusChanged()

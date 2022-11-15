@@ -169,7 +169,7 @@ namespace Intersect.Client.Interface.Game
                 Globals.Me.CombatTimer = 0;
             }
 
-            Globals.IsRunning = false;
+            FadeService.FadeOut(callback: () => Globals.IsRunning = false);
         }
 
         private void GoToCharacterSelect_Clicked(Base sender, ClickedEventArgs arguments)

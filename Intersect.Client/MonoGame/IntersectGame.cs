@@ -292,7 +292,7 @@ namespace Intersect.Client.MonoGame
                 Globals.Me.CombatTimer = 0;
             }
 
-            Globals.IsRunning = false;
+            FadeService.FadeOut(callback: () => Globals.IsRunning = false);
         }
 
         protected override void OnExiting(object sender, EventArgs args)
