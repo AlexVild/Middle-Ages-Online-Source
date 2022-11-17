@@ -124,7 +124,12 @@
     <Compile Include="General\Globals.cs" />
     <Compile Include="General\Timers.cs" />
     <Compile Include="Interface\Game\AnnouncementWindow.cs" />
+    <Compile Include="Interface\Game\Character\CharacterWindowMAO.cs" />
+    <Compile Include="Interface\Game\Character\Equipment\CharacterEquipmentWindow.cs" />
+    <Compile Include="Interface\Game\Character\CharacterWindowPanel.cs" />
+    <Compile Include="Interface\Game\Character\StatPanel\CharacterStatsWindow.cs" />
     <Compile Include="Interface\Game\ComboText.cs" />
+    <Compile Include="Interface\Game\Components\NumberContainerComponent.cs" />
     <Compile Include="Interface\Game\DescriptionWindows\Components\ComponentBase.cs" />
     <Compile Include="Interface\Game\DescriptionWindows\Components\DescriptionComponent.cs" />
     <Compile Include="Interface\Game\DescriptionWindows\Components\DividerComponent.cs" />
@@ -357,6 +362,9 @@
   <ItemGroup>
     <Content Include="MAO.ico" />
     <Content Include="mao_icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Interface\Game\Character\BonusStats\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

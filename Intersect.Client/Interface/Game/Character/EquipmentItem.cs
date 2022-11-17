@@ -19,7 +19,7 @@ namespace Intersect.Client.Interface.Game.Character
 
         public ImagePanel ContentPanel;
 
-        private WindowControl mCharacterWindow;
+        private Base mCharacterWindow;
 
         private Guid mCurrentItemId;
 
