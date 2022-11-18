@@ -948,7 +948,7 @@ namespace Intersect.Server.Entities
         public virtual void Move(int moveDir, Player forPlayer, bool doNotUpdate = false, bool correction = false, int faceDirection = -1)
         {
             var now = Timing.Global.Milliseconds;
-            if (now < MoveTimer || (!Options.Combat.MovementCancelsCast && CastTime > 0))
+            if (now < MoveTimer || (!Options.Combat.MovementCancelsCast && CastTime > 0) || now < DashTransmissionTimer)
             {
                 return;
             }
@@ -2285,5 +2285,11 @@ namespace Intersect.Server.Entities
             
             return tileEntities;
         }
+    }
+
+    public partial class Entity : IDisposable
+    {
+        [NotMapped, JsonIgnore]
+        public long DashTransmissionTimer { get; set; }
     }
 }

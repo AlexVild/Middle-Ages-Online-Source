@@ -192,7 +192,7 @@ namespace Intersect.Server.Entities
 
         public void Knockback(byte dir, int amount)
         {
-            _ = new Dash(this, amount, dir, false, false, false, false);
+            _ = new Dash(this, amount, dir, false, false, false, false, stunMs: 250);
         }
 
         protected TileHelper GetMeleeAttackTile()

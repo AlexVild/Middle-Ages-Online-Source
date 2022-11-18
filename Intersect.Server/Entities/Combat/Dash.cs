@@ -19,7 +19,7 @@ namespace Intersect.Server.Entities.Combat
 
         public int Range;
 
-        public long TransmittionTimer;
+        public long TransmissionTimer;
 
         public SpellBase Spell;
 
@@ -32,7 +32,8 @@ namespace Intersect.Server.Entities.Combat
             bool deadResourcePass = false,
             bool zdimensionPass = false,
             bool entityPass = false,
-            SpellBase spell = null
+            SpellBase spell = null,
+            long stunMs = 0
         )
         {
             DistanceTraveled = 0;
@@ -46,7 +47,8 @@ namespace Intersect.Server.Entities.Combat
                 return;
             } //Remove dash instance if no where to dash
 
-            TransmittionTimer = Timing.Global.Milliseconds + (long) ((float) Options.MaxDashSpeed / (float) Range);
+            TransmissionTimer = Timing.Global.Milliseconds + (long) ((float) Options.MaxDashSpeed / (float) Range);
+            en.DashTransmissionTimer = TransmissionTimer + stunMs;
             PacketSender.SendEntityDash(
                 en, en.MapId, (byte) en.X, (byte) en.Y, (int) (Options.MaxDashSpeed * (Range / 10f)),
                 Direction == Facing ? (sbyte) Direction : (sbyte) -1

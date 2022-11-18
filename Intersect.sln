@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29709.97
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "draw", "Intersect.Server\draw.csproj", "{9FFC7331-87BE-403B-82A0-B86D3CCE7C53}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intersect.Server", "Intersect.Server\Intersect.Server.csproj", "{9FFC7331-87BE-403B-82A0-B86D3CCE7C53}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intersect (Core)", "Intersect (Core)\Intersect (Core).csproj", "{BC304B43-1F2C-4454-9EDC-48F47357CA94}"
 EndProject

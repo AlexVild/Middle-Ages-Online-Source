@@ -1044,8 +1044,11 @@ namespace Intersect.Server.Entities
                                             }
                                         }
 
-                                        Move(dir, null);
-                                        fleed = true;
+                                        if (Timing.Global.Milliseconds > DashTransmissionTimer)
+                                        {
+                                            Move(dir, null);
+                                            fleed = true;
+                                        }
                                     }
                                 }
 
