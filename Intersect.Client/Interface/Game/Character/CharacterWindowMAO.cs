@@ -20,6 +20,10 @@ namespace Intersect.Client.Interface.Game.Character
     {
         Equipment = 0,
         Stats,
+        Bonuses,
+        Harvesting,
+        Recipes,
+        Decor
     }
 
     public partial class CharacterWindowMAO

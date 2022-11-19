@@ -8,6 +8,7 @@ using Intersect.Client.Framework.Gwen.Control;
 using Intersect.Client.Framework.Gwen.Control.EventArguments;
 using Intersect.Client.General;
 using Intersect.Client.Interface.Game.Character.Equipment;
+using Intersect.Client.Interface.Game.Character.Panels;
 using Intersect.Client.Interface.Game.Character.StatPanel;
 using Intersect.Client.Interface.Game.Components;
 using Intersect.Client.Localization;
@@ -25,12 +26,17 @@ namespace Intersect.Client.Interface.Game.Character
 
         private List<Button> PanelSelectors { get; set; }
         private Button StatsButton { get; set; }
+        private Button BonusesButton { get; set; }
+        private Button HarvestingButton { get; set; }
+        private Button RecipesButton { get; set; }
+        private Button DecorButton { get; set; }
 
         private CharacterWindowMAO Parent { get; set; }
 
         private CharacterWindowPanel CurrentPanel { get; set; }
 
         private CharacterStatsWindow StatsPanel { get; set; }
+        private CharacterHarvestingWindow HarvestingPanel { get; set; }
 
         public CharacterWindowPanelController(Canvas gameCanvas, CharacterWindowMAO parent)
         {
@@ -38,16 +44,7 @@ namespace Intersect.Client.Interface.Game.Character
 
             Container = new ImagePanel(gameCanvas, "CharacterWindowPanelContainer");
 
-            StatsButton = new Button(Container, "StatsPanelSelector")
-            {
-                Text = "STATS"
-            };
-            StatsButton.Clicked += StatsClicked;
-
-            PanelSelectors = new List<Button>
-            {
-                StatsButton
-            };
+            InitializePanelSelectors();
             
             PanelContainer = new ImagePanel(Container, "PanelContainer");
             PanelHideButton = new Button(PanelContainer, "HidePanelButton");
@@ -56,10 +53,56 @@ namespace Intersect.Client.Interface.Game.Character
             Container.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
 
             StatsPanel = new CharacterStatsWindow(PanelContainer);
+            StatsPanel.Hide();
+            
+            HarvestingPanel = new CharacterHarvestingWindow(PanelContainer);
+            HarvestingPanel.Hide();
 
             PositionToParent();
             Hide();
             CurrentPanel = StatsPanel; // Default to equipment
+        }
+
+        private void InitializePanelSelectors()
+        {
+            StatsButton = new Button(Container, "StatsPanelSelector")
+            {
+                Text = "STATS"
+            };
+            StatsButton.Clicked += StatsClicked;
+            
+            BonusesButton = new Button(Container, "BonusesPanelSelector")
+            {
+                Text = "BONUSES"
+            };
+            BonusesButton.Clicked += BonusesClicked;
+
+            HarvestingButton = new Button(Container, "HarvestingPanelSelector")
+            {
+                Text = "GATHERING"
+            };
+            HarvestingButton.Clicked += HarvestingClicked;
+
+            RecipesButton = new Button(Container, "RecipesPanelSelector")
+            {
+                Text = "RECIPES"
+            };
+            RecipesButton.Clicked += RecipesClicked;
+
+            DecorButton = new Button(Container, "DecorPanelSelector")
+            {
+                Text = "COSMETICS"
+            };
+            DecorButton.Clicked += DecorClicked;
+
+            PanelSelectors = new List<Button>
+            {
+                StatsButton,
+                BonusesButton,
+                HarvestingButton,
+                RecipesButton,
+                DecorButton,
+            };
         }
 
         private void PositionToParent()
@@ -114,6 +157,24 @@ namespace Intersect.Client.Interface.Game.Character
                     StatsButton.Disable();
                     CurrentPanel = StatsPanel;
                     break;
+                case CharacterPanelType.Bonuses:
+                    BonusesButton.Disable();
+                    CurrentPanel = StatsPanel;
+                    break;
+                case CharacterPanelType.Harvesting:
+                    HarvestingButton.Disable();
+                    CurrentPanel = HarvestingPanel;
+                    break;
+                case CharacterPanelType.Recipes:
+                    RecipesButton.Disable();
+                    CurrentPanel = StatsPanel;
+                    break;
+                case CharacterPanelType.Decor:
+                    DecorButton.Disable();
+                    CurrentPanel = StatsPanel;
+                    break;
+                default:
+                    throw new ArgumentException($"Invalid enum for {nameof(type)}");
             }
 
             CurrentPanel?.Show();
@@ -157,6 +218,26 @@ namespace Intersect.Client.Interface.Game.Character
         private void StatsClicked(Base control, EventArgs args)
         {
             ChangePanel(CharacterPanelType.Stats);
+        }
+
+        private void BonusesClicked(Base control, EventArgs args)
+        {
+            ChangePanel(CharacterPanelType.Bonuses);
+        }
+
+        private void HarvestingClicked(Base control, EventArgs args)
+        {
+            ChangePanel(CharacterPanelType.Harvesting);
+        }
+
+        private void RecipesClicked(Base control, EventArgs args)
+        {
+            ChangePanel(CharacterPanelType.Recipes);
+        }
+
+        private void DecorClicked(Base control, EventArgs args)
+        {
+            ChangePanel(CharacterPanelType.Decor);
         }
     }
 }

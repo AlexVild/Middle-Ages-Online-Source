@@ -126,9 +126,10 @@
     <Compile Include="Interface\Game\AnnouncementWindow.cs" />
     <Compile Include="Interface\Game\Character\CharacterWindowPanelController.cs" />
     <Compile Include="Interface\Game\Character\CharacterWindowMAO.cs" />
-    <Compile Include="Interface\Game\Character\Equipment\CharacterEquipmentWindow.cs" />
+    <Compile Include="Interface\Game\Character\Panels\CharacterEquipmentWindow.cs" />
     <Compile Include="Interface\Game\Character\CharacterWindowPanel.cs" />
-    <Compile Include="Interface\Game\Character\StatPanel\CharacterStatsWindow.cs" />
+    <Compile Include="Interface\Game\Character\Panels\CharacterHarvestingWindow.cs" />
+    <Compile Include="Interface\Game\Character\Panels\CharacterStatsWindow.cs" />
     <Compile Include="Interface\Game\ComboText.cs" />
     <Compile Include="Interface\Game\Components\ImageLabelComponent.cs" />
     <Compile Include="Interface\Game\Components\NumberContainerComponent.cs" />
@@ -365,9 +366,7 @@
     <Content Include="MAO.ico" />
     <Content Include="mao_icon.ico" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Interface\Game\Character\BonusStats\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
