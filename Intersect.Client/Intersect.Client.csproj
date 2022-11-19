@@ -124,11 +124,13 @@
     <Compile Include="General\Globals.cs" />
     <Compile Include="General\Timers.cs" />
     <Compile Include="Interface\Game\AnnouncementWindow.cs" />
+    <Compile Include="Interface\Game\Character\CharacterWindowPanelController.cs" />
     <Compile Include="Interface\Game\Character\CharacterWindowMAO.cs" />
     <Compile Include="Interface\Game\Character\Equipment\CharacterEquipmentWindow.cs" />
     <Compile Include="Interface\Game\Character\CharacterWindowPanel.cs" />
     <Compile Include="Interface\Game\Character\StatPanel\CharacterStatsWindow.cs" />
     <Compile Include="Interface\Game\ComboText.cs" />
+    <Compile Include="Interface\Game\Components\ImageLabelComponent.cs" />
     <Compile Include="Interface\Game\Components\NumberContainerComponent.cs" />
     <Compile Include="Interface\Game\DescriptionWindows\Components\ComponentBase.cs" />
     <Compile Include="Interface\Game\DescriptionWindows\Components\DescriptionComponent.cs" />

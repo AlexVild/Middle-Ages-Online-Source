@@ -26,32 +26,26 @@ namespace Intersect.Client.Interface.Game.Character
     {
         private WindowControl mCharacterWindow;
         private CharacterEquipmentWindow mEquipmentPanel;
-        private CharacterStatsWindow mStatPanel;
-        private CharacterWindowPanel CurrentPanel;
-        private ImagePanel Container;
+        private ImagePanel PlayerContainer;
+        private CharacterWindowPanelController PanelContainer;
 
         public WindowControl CharacterWindow => mCharacterWindow;
 
-        //Location
-        public int X;
-
-        public int Y;
+        public int X => mCharacterWindow.X;
+        public int Y => mCharacterWindow.Y;
+        public int Width => mCharacterWindow.Width;
+        public int Height => mCharacterWindow.Height;
 
         public CharacterWindowMAO(Canvas gameCanvas)
         {
-            mCharacterWindow = new WindowControl(gameCanvas, Strings.Character.title, false, "CharacterWindowMAO");
+            mCharacterWindow = new WindowControl(gameCanvas, Strings.Character.title, false, "CharacterWindowMAO", onClose: Hide);
             mCharacterWindow.DisableResizing();
-            Container = new ImagePanel(mCharacterWindow, "Container");
-
+            PlayerContainer = new ImagePanel(mCharacterWindow, "Container");
             mCharacterWindow.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
+            PanelContainer = new CharacterWindowPanelController(gameCanvas, this);
 
-            mEquipmentPanel = new CharacterEquipmentWindow(this, Container);
-            mEquipmentPanel.Hide();
-            
-            mStatPanel = new CharacterStatsWindow(Container);
-            mStatPanel.Hide();
-
-            CurrentPanel = mEquipmentPanel; // Default to equipment
+            mEquipmentPanel = new CharacterEquipmentWindow(this, PlayerContainer);
+            mEquipmentPanel.Show();
         }
 
         public bool IsVisible()
@@ -61,13 +55,14 @@ namespace Intersect.Client.Interface.Game.Character
 
         public void Hide()
         {
+            PanelContainer.Hide();
             mCharacterWindow.Hide();
         }
 
         public void Show()
         {
             mCharacterWindow.Show();
-            CurrentPanel?.Show();
+            PanelContainer.Show();
         }
 
         public void Update()
@@ -77,21 +72,8 @@ namespace Intersect.Client.Interface.Game.Character
                 return;
             }
 
-            CurrentPanel?.Update();
-        }
-
-        public void ChangePanel(CharacterPanelType type)
-        {
-            CurrentPanel?.Hide();
-
-            switch(type)
-            {
-                case CharacterPanelType.Equipment:
-                    CurrentPanel = mEquipmentPanel;
-                    break;
-            }
-
-            CurrentPanel?.Show();
+            mEquipmentPanel.Update();
+            PanelContainer.Update();
         }
     }
 }

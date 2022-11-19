@@ -9,6 +9,7 @@ using Intersect.Client.Framework.Gwen.Control;
 using Intersect.Client.Framework.Gwen.Control.EventArguments;
 using Intersect.Client.General;
 using Intersect.Client.Interface.Game.Character.Equipment;
+using Intersect.Client.Interface.Game.Components;
 using Intersect.Client.Localization;
 using Intersect.Client.Networking;
 using Intersect.Enums;
@@ -19,34 +20,69 @@ namespace Intersect.Client.Interface.Game.Character.StatPanel
 {
     public partial class CharacterStatsWindow : CharacterWindowPanel
     {
+        private Color LabelColor => new Color(255, 50, 19, 0);
+        private Color LabelHoverColor => new Color(255, 111, 63, 0);
+        private Color StatLabelColor => new Color(255, 166, 167, 37);
+        private Color StatColor => new Color(255, 255, 255, 255);
+
         public CharacterPanelType Type { get; } = CharacterPanelType.Stats;
 
-        Label mHpCurrent { get; set; }
-        Label mHpTotal { get; set; }
+        ImagePanel HpLabelContainer { get; set; }
+        ImageLabelComponent HpLabel { get; set; }
 
-        Label mMpCurrent { get; set; }
-        Label mMpTotal { get; set; }
+        ImagePanel MpLabelContainer { get; set; }
+        ImageLabelComponent MpLabel { get; set; }
 
-        Label mEvasionBase { get; set; }
-        Label mEvasionEqp { get; set; }
-        Label mEvasionTotal { get; set; }
+        ImagePanel EvasionLabelContainer { get; set; }
+        ImageLabelComponent EvasionLabel { get; set; }
 
-        Label mAccuracyBase { get; set; }
-        Label mAccuracyEqp { get; set; }
-        Label mAccuracyTotal { get; set; }
+        ImagePanel AccuracyLabelContainer { get; set; }
+        ImageLabelComponent AccuracyLabel { get; set; }
 
-        Label mSpeedBase { get; set; }
-        Label mSpeedEqp { get; set; }
-        Label mSpeedTotal { get; set; }
+        ImagePanel SpeedLabelContainer { get; set; }
+        ImageLabelComponent SpeedLabel { get; set; }
 
-        public CharacterStatsWindow(ImagePanel characterWindow)
+        ImagePanel HpContainer { get; set; }
+        NumberContainerComponent mHpCurrent { get; set; }
+        ImagePanel HpTotalContainer { get; set; }
+        NumberContainerComponent mHpTotal { get; set; }
+
+        ImagePanel MpContainer { get; set; }
+        NumberContainerComponent mMpCurrent { get; set; }
+        ImagePanel MpTotalContainer { get; set; }
+        NumberContainerComponent mMpTotal { get; set; }
+
+        ImagePanel EvasionBaseContainer { get; set; }
+        NumberContainerComponent mEvasionBase { get; set; }
+        ImagePanel EvasionEqpContainer { get; set; }
+        NumberContainerComponent mEvasionEqp { get; set; }
+        ImagePanel EvasionTotalContainer { get; set; }
+        NumberContainerComponent mEvasionTotal { get; set; }
+
+        ImagePanel AccuracyBaseContainer { get; set; }
+        ImagePanel AccuracyEqpContainer { get; set; }
+        ImagePanel AccuracyTotalContainer { get; set; }
+        NumberContainerComponent mAccuracyBase { get; set; }
+        NumberContainerComponent mAccuracyEqp { get; set; }
+        NumberContainerComponent mAccuracyTotal { get; set; }
+
+        ImagePanel SpeedBaseContainer { get; set; }
+        ImagePanel SpeedEqpContainer { get; set; }
+        ImagePanel SpeedTotalContainer { get; set; }
+        NumberContainerComponent mSpeedBase { get; set; }
+        NumberContainerComponent mSpeedEqp { get; set; }
+        NumberContainerComponent mSpeedTotal { get; set; }
+
+        public CharacterStatsWindow(ImagePanel panelBackground)
         {
-            mParentContainer = characterWindow;
-            mBackground = new ImagePanel(mParentContainer, "CharacterWindowMAO_Equipment");
+            mParentContainer = panelBackground;
+            mBackground = new ImagePanel(mParentContainer, "CharacterWindowMAO_Stats");
 
-            InitializeStats();
+            InitializeStatContainers();
 
             mBackground.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
+
+            InitializeStats();
         }
 
         public override void Update()
@@ -59,25 +95,79 @@ namespace Intersect.Client.Interface.Game.Character.StatPanel
             PopulateStats();
         }
 
+        private void InitializeStatContainers()
+        {
+            HpLabelContainer = new ImagePanel(mBackground, "HPLabel");
+            HpContainer = new ImagePanel(mBackground, "HP");
+            HpTotalContainer = new ImagePanel(mBackground, "HPTotal");
+
+            MpLabelContainer = new ImagePanel(mBackground, "MPLabel");
+            MpContainer = new ImagePanel(mBackground, "MP");
+            MpTotalContainer = new ImagePanel(mBackground, "MPTotal");
+
+            EvasionLabelContainer = new ImagePanel(mBackground, "EvasionLabel");
+            EvasionBaseContainer = new ImagePanel(mBackground, "EvasionBase");
+            EvasionEqpContainer = new ImagePanel(mBackground, "EvasionEqp");
+            EvasionTotalContainer = new ImagePanel(mBackground, "EvasionTotal");
+
+            AccuracyLabelContainer = new ImagePanel(mBackground, "AccuracyLabel");
+            AccuracyBaseContainer = new ImagePanel(mBackground,  "AccuracyBase");
+            AccuracyEqpContainer = new ImagePanel(mBackground,   "AccuracyEqp");
+            AccuracyTotalContainer = new ImagePanel(mBackground, "AccuracyTotal");
+
+            SpeedLabelContainer = new ImagePanel(mBackground, "SpeedLabel");
+            SpeedBaseContainer = new ImagePanel(mBackground,  "SpeedBase");
+            SpeedEqpContainer = new ImagePanel(mBackground,   "SpeedEqp");
+            SpeedTotalContainer = new ImagePanel(mBackground, "SpeedTotal");
+        }
+
         private void InitializeStats()
         {
-            mHpCurrent = GenerateLabel("HpBase");
-            mHpTotal = GenerateLabel("HpTotal");
+            mHpCurrent = new NumberContainerComponent(HpContainer);
+            mHpTotal = new NumberContainerComponent(HpTotalContainer);
 
-            mMpCurrent = GenerateLabel("MpBase");
-            mMpTotal = GenerateLabel("MpTotal");
+            mMpCurrent = new NumberContainerComponent(MpContainer);
+            mMpTotal = new NumberContainerComponent(MpTotalContainer);
 
-            mEvasionBase = GenerateLabel("EvasionBase");
-            mEvasionEqp = GenerateLabel("EvasionEqp");
-            mEvasionTotal = GenerateLabel("EvasionTotal");
+            mEvasionBase = new NumberContainerComponent(EvasionBaseContainer);
+            mEvasionEqp = new NumberContainerComponent(EvasionEqpContainer);
+            mEvasionTotal = new NumberContainerComponent(EvasionTotalContainer);
 
-            mAccuracyBase = GenerateLabel("AccuracyBase");
-            mAccuracyEqp = GenerateLabel("AccuracyEqp");
-            mAccuracyTotal = GenerateLabel("AccuracyTotal");
+            mAccuracyBase = new NumberContainerComponent(AccuracyBaseContainer);
+            mAccuracyEqp = new NumberContainerComponent(AccuracyEqpContainer);
+            mAccuracyTotal = new NumberContainerComponent(AccuracyTotalContainer);
 
-            mSpeedBase = GenerateLabel("SpeedBase");
-            mSpeedEqp = GenerateLabel("SpeedEqp");
-            mSpeedTotal = GenerateLabel("SpeedTotal");
+            mSpeedBase = new NumberContainerComponent(SpeedBaseContainer);
+            mSpeedEqp = new NumberContainerComponent(SpeedEqpContainer);
+            mSpeedTotal = new NumberContainerComponent(SpeedTotalContainer);
+
+            HpLabel = new ImageLabelComponent(HpLabelContainer);
+            HpLabel.Initialize(LabelColor, LabelHoverColor, "character_stats_health.png", "HEALTH", "Your health pool.");
+            mHpCurrent.Initialize(StatLabelColor, StatColor, "CURR", string.Empty);
+            mHpTotal.Initialize(StatLabelColor, StatColor, "MAX", string.Empty);
+
+            MpLabel = new ImageLabelComponent(MpLabelContainer);
+            MpLabel.Initialize(LabelColor, LabelHoverColor, "character_stats_mana.png", "MANA", "Your mana pool.");
+            mMpCurrent.Initialize(StatLabelColor, StatColor, "CURR", string.Empty);
+            mMpTotal.Initialize(StatLabelColor, StatColor, "MAX", string.Empty);
+
+            EvasionLabel = new ImageLabelComponent(EvasionLabelContainer);
+            EvasionLabel.Initialize(LabelColor, LabelHoverColor, "character_stats_evasion.png", "EVASION", "Dodge chance vs. opponent's accuracy.");
+            mEvasionBase.Initialize(StatLabelColor, StatColor, "BASE", string.Empty);
+            mEvasionEqp.Initialize(StatLabelColor, StatColor, "EQP", string.Empty);
+            mEvasionTotal.Initialize(StatLabelColor, StatColor, "TOTAL", string.Empty);
+
+            AccuracyLabel = new ImageLabelComponent(AccuracyLabelContainer);
+            AccuracyLabel.Initialize(LabelColor, LabelHoverColor, "character_stats_accuracy.png", "ACCURACY", "Hit chance vs. opponent's evasion.");
+            mAccuracyBase.Initialize(StatLabelColor, StatColor, "BASE", string.Empty);
+            mAccuracyEqp.Initialize(StatLabelColor, StatColor, "EQP", string.Empty);
+            mAccuracyTotal.Initialize(StatLabelColor, StatColor, "TOTAL", string.Empty);
+
+            SpeedLabel = new ImageLabelComponent(SpeedLabelContainer);
+            SpeedLabel.Initialize(LabelColor, LabelHoverColor, "character_stats_speed.png", "SPEED", "Determines movement speed.");
+            mSpeedBase.Initialize(StatLabelColor, StatColor, "BASE", string.Empty);
+            mSpeedEqp.Initialize(StatLabelColor, StatColor, "EQP", string.Empty);
+            mSpeedTotal.Initialize(StatLabelColor, StatColor, "TOTAL", string.Empty);
         }
 
         private void PopulateStats()
@@ -91,22 +181,22 @@ namespace Intersect.Client.Interface.Game.Character.StatPanel
             var accuracyRow = new StatRow(Me, Stats.Accuracy);
             var speedRow = new StatRow(Me, Stats.Speed);
 
-            mHpCurrent.SetText(currHp);
-            mHpTotal.SetText(maxHp);
-            mMpCurrent.SetText(currMp);
-            mMpTotal.SetText(maxMp);
+            mHpCurrent.SetValue(currHp);
+            mHpTotal.SetValue(maxHp);
+            mMpCurrent.SetValue(currMp);
+            mMpTotal.SetValue(maxMp);
 
-            mEvasionBase.SetText(evasionRow.Base);
-            mEvasionEqp.SetText(evasionRow.Equip);
-            mEvasionTotal.SetText(evasionRow.Total);
+            mEvasionBase.SetValue(evasionRow.Base);
+            mEvasionEqp.SetValue(evasionRow.Equip);
+            mEvasionTotal.SetValue(evasionRow.Total);
 
-            mAccuracyBase.SetText(accuracyRow.Base);
-            mAccuracyEqp.SetText(accuracyRow.Equip);
-            mAccuracyTotal.SetText(accuracyRow.Total);
+            mAccuracyBase.SetValue(accuracyRow.Base);
+            mAccuracyEqp.SetValue(accuracyRow.Equip);
+            mAccuracyTotal.SetValue(accuracyRow.Total);
 
-            mSpeedBase.SetText(speedRow.Base);
-            mSpeedEqp.SetText(speedRow.Equip);
-            mSpeedTotal.SetText(speedRow.Total);
+            mSpeedBase.SetValue(speedRow.Base);
+            mSpeedEqp.SetValue(speedRow.Equip);
+            mSpeedTotal.SetValue(speedRow.Total);
         }
 
         struct StatRow

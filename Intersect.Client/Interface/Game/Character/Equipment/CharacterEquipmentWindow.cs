@@ -391,7 +391,7 @@ namespace Intersect.Client.Interface.Game.Character.Equipment
                 return;
             }
 
-            if (Globals.Me.MapInstance.IsIndoors)
+            if (Globals.Me.MapInstance?.IsIndoors ?? false)
             {
                 mCharacterBackground.Texture = InteriorBgTexture;
                 return;
