@@ -1,0 +1,123 @@
+﻿using Intersect.Client.Framework.Gwen.Control;
+using Intersect.Client.Interface.Components;
+using Intersect.Client.Utilities;
+using static Intersect.Client.Framework.File_Management.GameContentManager;
+
+namespace Intersect.Client.Interface.Game.Components
+{
+    public class HarvestProgressRowComponent : GwenComponent
+    {
+        string ResourceFrame => Harvestable ? "character_resource_unlocked_bg.png" : "character_resource_locked_bg.png";
+        TextureType ResourceTextureType => TextureType.Resource;
+        private string ResourceTextureString { get; set; }
+        private ImageFrameComponent ResourceImage { get; set; }
+        
+        private string ResourceText { get; set; }
+        private Label ResourceName { get; set; }
+
+        private string ProgressBarBgTexture => "character_harvest_progressbar.png";
+        private string ProgressBarTexture => "character_harvest_progressbar_fill.png";
+        private string ProgressBarCompleteTexture => "character_harvest_progressbar_complete.png";
+        private Color CurrHarvestColor => new Color(255, 169, 169, 169);
+        private Color NextHarvestColor => new Color(255, 255, 255, 255);
+        private int CurrentLevel { get; set; }
+        private int NextLevel { get; set; }
+        private int HarvestsRemaining { get; set; }
+        private int MaxLevel => Options.Combat.HarvestBonuses.Count - 1;
+        private bool IsMaxed => CurrentLevel >= MaxLevel;
+
+        private float _Percent;
+        private float Percent { 
+            get
+            {
+                return _Percent;
+            }
+            set 
+            {
+                _Percent = MathHelper.Clamp(value, 0f, 1f);
+            }
+        }
+        private HarvestProgressBarComponent ProgressBar { get; set; }
+
+        private bool Harvestable { get; set; }
+        private string CannotHarvestMessage { get; set; }
+        
+        private Label CannotHarvestLabelTemplate { get; set; }
+        private RichLabel CannotHarvestLabel { get; set; }
+
+        public HarvestProgressRowComponent(
+            ImagePanel parent,
+            string containerName,
+            string resourceTexture,
+            string resourceText,
+            int currentLevel,
+            int nextLevel,
+            int harvestsRemaining,
+            float percent,
+            bool harvestable,
+            string cannotHarvestMessage,
+            ComponentList<GwenComponent> referenceList = null
+            ) : base(parent, containerName, "HarvestProgressRowComponent", referenceList)
+        {
+            ResourceTextureString = resourceTexture;
+            ResourceText = resourceText;
+            CurrentLevel = currentLevel;
+            NextLevel = nextLevel;
+            HarvestsRemaining = harvestsRemaining;
+            Percent = percent;
+            Harvestable = harvestable;
+            CannotHarvestMessage = cannotHarvestMessage;
+        }
+
+        public override void Initialize()
+        {
+            SelfContainer = new ImagePanel(ParentContainer, ComponentName);
+            ResourceImage = new ImageFrameComponent(SelfContainer, "ResourceImage", ResourceFrame, ResourceTextureString, ResourceTextureType, 4, 4);
+
+            ResourceName = new Label(SelfContainer, "ResourceName")
+            {
+                Text = ResourceText
+            };
+
+            CannotHarvestLabelTemplate = new Label(SelfContainer, "CannotHarvestMsg");
+            CannotHarvestLabel = new RichLabel(SelfContainer);
+
+            ProgressBar = new HarvestProgressBarComponent(SelfContainer,
+                "ProgressBar",
+                ProgressBarBgTexture,
+                IsMaxed ? ProgressBarCompleteTexture : ProgressBarTexture,
+                bottomLabel: $"{HarvestsRemaining} to go!",
+                leftLabel: $"{CurrentLevel}",
+                leftLabelColor: CurrHarvestColor,
+                rightLabel: IsMaxed ? "MAX" : $"{NextLevel}",
+                rightLabelColor: NextHarvestColor);
+            ProgressBar.Percent = IsMaxed ? 1.0f : Percent;
+
+            base.Initialize();
+            FitParentToComponent();
+
+            ResourceImage.Initialize();
+
+            if (Harvestable)
+            {
+                ResourceName.SetTextColor(NextHarvestColor, Label.ControlState.Normal);
+                ProgressBar.Initialize();
+            }
+            else
+            {
+                FormatCannotHarvestMessage();
+
+                ResourceName.SetTextColor(CurrHarvestColor, Label.ControlState.Normal);
+            }
+        }
+
+        private void FormatCannotHarvestMessage()
+        {
+            CannotHarvestLabel.ClearText();
+            CannotHarvestLabel.Width = SelfContainer.Width / 2 + 24;
+            CannotHarvestLabel.X = SelfContainer.Width / 2 - 24;
+            CannotHarvestLabel.AddText(CannotHarvestMessage, CannotHarvestLabelTemplate);
+            CannotHarvestLabel.SizeToChildren(false, true);
+        }
+    }
+}

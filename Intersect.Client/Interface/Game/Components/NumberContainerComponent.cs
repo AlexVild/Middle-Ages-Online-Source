@@ -29,11 +29,6 @@ namespace Intersect.Client.Interface.Game.Components
             LabelText = label;
             TooltipText = tooltipText;
 
-            Container = new ImagePanel(ParentContainer, "NumberContainer");
-            
-            Label = new Label(Container, "Label");
-            Value = new Label(Container, "Value");
-
             if (referenceList != null)
             {
                 referenceList.Add(this);
@@ -42,6 +37,11 @@ namespace Intersect.Client.Interface.Game.Components
 
         public void Initialize()
         {
+            Container = new ImagePanel(ParentContainer, "NumberContainer");
+
+            Label = new Label(Container, "Label");
+            Value = new Label(Container, "Value");
+
             Container.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
             Container.SetToolTipText(TooltipText);
 

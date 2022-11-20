@@ -29,11 +29,6 @@ namespace Intersect.Client.Interface.Game.Components
         public ImageLabelComponent(Base parent, string parentContainerName, Color labelColor, Color hoverColor, string texture, string label, string toolTipText, ComponentList<ImageLabelComponent> referenceList = null)
         {
             ParentContainer = new ImagePanel(parent, parentContainerName);
-            
-            Container = new ImagePanel(ParentContainer, "ImageLabel");
-
-            Label = new Label(Container, "Label");
-            Image = new ImagePanel(Container, "Image");
 
             LabelColor = labelColor;
             HoverColor = hoverColor;
@@ -49,6 +44,11 @@ namespace Intersect.Client.Interface.Game.Components
 
         public void Initialize()
         {
+            Container = new ImagePanel(ParentContainer, "ImageLabel");
+
+            Label = new Label(Container, "Label");
+            Image = new ImagePanel(Container, "Image");
+
             Container.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
 
             SetImage(Texture);

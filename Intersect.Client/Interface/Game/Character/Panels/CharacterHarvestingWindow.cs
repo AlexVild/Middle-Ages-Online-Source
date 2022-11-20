@@ -50,7 +50,17 @@ namespace Intersect.Client.Interface.Game.Character.Panels
             WoodcutLevel = new NumberContainerComponent(TiersContainer, "WoodcutContainer", StatLabelColor, StatColor, "TIER", "Your mining tier-level.", ContainerComponents);
             FishingLevel = new NumberContainerComponent(TiersContainer, "FishingContainer", StatLabelColor, StatColor, "TIER", "Your fishing tier-level.", ContainerComponents);
 
+            var x = new HarvestProgressRowComponent(
+                mBackground, "HarvestProgressRow", "al_coal.png", "COAL", 1, 2, 23, 0.23f, true, "Can't harvest yet!"
+            );
+            var y = new HarvestProgressRowComponent(
+                mBackground, "HarvestProgressRow2", "al_iron.png", "IRON", 1, 2, 23, 0f, false, "You must have a mining tier of at least 2+ to mine this resource!"
+            );
+
             mBackground.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
+
+            x.Initialize();
+            y.Initialize();
 
             ContainerComponents.InitializeAll();
         }
