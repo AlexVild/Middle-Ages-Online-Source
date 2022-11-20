@@ -562,5 +562,10 @@ namespace Intersect.Client.Networking
         {
             Network.SendPacket(new RequestInstanceLeavePacket());
         }
+
+        public static void SendRequestResourceInfo(int tool)
+        {
+            Network.SendPacket(new ResourceInfoRequestPacket(tool));
+        }
     }
 }

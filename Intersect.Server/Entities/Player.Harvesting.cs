@@ -3,6 +3,7 @@ using Intersect.GameObjects;
 using Intersect.Server.Entities.Events;
 using Intersect.Server.Localization;
 using Intersect.Server.Networking;
+using Intersect.Server.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,8 +31,8 @@ namespace Intersect.Server.Entities
                 long progressUntilNextBonus = 0;
                 if (resource != null)
                 {
-                    harvestBonus = resource.CalculateHarvestBonus(this);
-                    progressUntilNextBonus = resource.GetHarvestsUntilNextBonus(this);
+                    harvestBonus = HarvestBonusHelper.CalculateHarvestBonus(this, resource.Id);
+                    progressUntilNextBonus = HarvestBonusHelper.GetHarvestsUntilNextBonus(this, resource.Id);
                 }
 
                 PacketSender.SendResourceLockPacket(this, val, harvestBonus, progressUntilNextBonus);

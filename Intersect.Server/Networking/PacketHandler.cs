@@ -35,6 +35,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using Intersect.GameObjects.Timers;
+using Intersect.Server.Utilities;
+using Intersect.Server.DTOs;
 
 namespace Intersect.Server.Networking
 {
@@ -4260,6 +4262,41 @@ namespace Intersect.Server.Networking
             }
 
             PacketSender.SendRespawnFinished(player);
+        }
+
+        public void HandlePacket(Client client, ResourceInfoRequestPacket packet)
+        {
+            var player = client?.Entity;
+
+            if (player == null)
+            {
+                return;
+            }
+
+            var tool = packet.Tool;
+
+            var resources = ResourceBase.Lookup.Select(kv => (ResourceBase)kv.Value)
+                .Where(resource => resource.Tool == tool && !resource.DoNotRecord)
+                .ToArray();
+
+            var nonGroupedResource = resources.Where(resource => string.IsNullOrEmpty(resource.ResourceGroup));
+
+            var groupedResources = resources
+                .GroupBy(resource => new { resource.ResourceGroup })
+                .Select(resourceGroupings => resourceGroupings.First());
+
+            var validResources = new List<ResourceBase>();
+            validResources.AddRange(nonGroupedResource);
+            validResources.AddRange(groupedResources);
+
+            var allInfo = new Network.Packets.Server.ResourceInfoPackets();
+            foreach(var resource in validResources)
+            {
+                var dto = new PlayerHarvestDTO(player, resource);
+                allInfo.Packets.Add(dto.Packetize());
+            }
+
+            player?.SendPacket(allInfo);
         }
     }
 }

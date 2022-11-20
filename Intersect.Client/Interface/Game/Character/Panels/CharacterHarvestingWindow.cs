@@ -8,6 +8,7 @@ using Intersect.Client.Framework.Gwen;
 using Intersect.Client.Framework.Gwen.Control;
 using Intersect.Client.Framework.Gwen.Control.EventArguments;
 using Intersect.Client.General;
+using Intersect.Client.Interface.Components;
 using Intersect.Client.Interface.Game.Character.Equipment;
 using Intersect.Client.Interface.Game.Components;
 using Intersect.Client.Localization;
@@ -23,42 +24,41 @@ namespace Intersect.Client.Interface.Game.Character.Panels
         private Color StatLabelColor => new Color(255, 166, 167, 37);
         private Color StatColor => new Color(255, 255, 255, 255);
 
+        private ImagePanel TiersContainer { get; set; }
         private ImagePanel MiningIcon { get; set; }
         private ImagePanel WoodcutIcon { get; set; }
         private ImagePanel FishingIcon { get; set; }
 
-        private ImagePanel MiningContainer { get; set; }
         private NumberContainerComponent MiningLevel { get; set; }
-        
-        private ImagePanel WoodcutContainer { get; set; }
         private NumberContainerComponent WoodcutLevel { get; set; }
-
-        private ImagePanel FishingContainer { get; set; }
         private NumberContainerComponent FishingLevel { get; set; }
+
+        private ComponentList<NumberContainerComponent> ContainerComponents { get; set; }
 
         public CharacterHarvestingWindow(ImagePanel panelBackground)
         {
             mParentContainer = panelBackground;
             mBackground = new ImagePanel(mParentContainer, "CharacterWindowMAO_Harvesting");
 
-            MiningIcon = new ImagePanel(mBackground, "MiningIcon");
-            WoodcutIcon = new ImagePanel(mBackground, "WoodcutIcon");
-            FishingIcon = new ImagePanel(mBackground, "FishingIcon");
+            TiersContainer = new ImagePanel(mBackground, "TiersContainer");
+            MiningIcon = new ImagePanel(TiersContainer, "MiningIcon");
+            WoodcutIcon = new ImagePanel(TiersContainer, "WoodcutIcon");
+            FishingIcon = new ImagePanel(TiersContainer, "FishingIcon");
 
-            MiningContainer = new ImagePanel(mBackground, "MiningContainer");
-            WoodcutContainer = new ImagePanel(mBackground, "WoodcutContainer");
-            FishingContainer = new ImagePanel(mBackground, "FishingContainer");
+            ContainerComponents = new ComponentList<NumberContainerComponent>();
+            MiningLevel = new NumberContainerComponent(TiersContainer, "MiningContainer", StatLabelColor, StatColor, "TIER", "Your mining tier-level.", ContainerComponents);
+            WoodcutLevel = new NumberContainerComponent(TiersContainer, "WoodcutContainer", StatLabelColor, StatColor, "TIER", "Your mining tier-level.", ContainerComponents);
+            FishingLevel = new NumberContainerComponent(TiersContainer, "FishingContainer", StatLabelColor, StatColor, "TIER", "Your fishing tier-level.", ContainerComponents);
 
             mBackground.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
 
-            MiningLevel = new NumberContainerComponent(MiningContainer);
-            MiningLevel.Initialize(StatLabelColor, StatColor, "TIER", "Your mining tier-level.");
+            ContainerComponents.InitializeAll();
+        }
 
-            WoodcutLevel = new NumberContainerComponent(WoodcutContainer);
-            WoodcutLevel.Initialize(StatLabelColor, StatColor, "TIER", "Your woodcutting tier-level.");
-
-            FishingLevel = new NumberContainerComponent(FishingContainer);
-            FishingLevel.Initialize(StatLabelColor, StatColor, "TIER", "Your fishing tier-level.");
+        public override void Show()
+        {
+            PacketSender.SendRequestResourceInfo(1);
+            base.Show();
         }
 
         public override void Update()

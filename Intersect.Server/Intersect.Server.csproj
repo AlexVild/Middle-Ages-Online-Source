@@ -496,6 +496,7 @@
     <Compile Include="Database\PlayerData\Players\SpellSlot.cs" />
     <Compile Include="Database\PlayerData\RecordTeammateInstance.cs" />
     <Compile Include="Database\PlayerData\TimerInstance.cs" />
+    <Compile Include="DTOs\PlayerHarvestDTO.cs" />
     <Compile Include="Entities\AttackingEntity.cs" />
     <Compile Include="Entities\AttackingEntity.Spells.cs" />
     <Compile Include="Entities\BankInterface.cs" />
@@ -1114,6 +1115,7 @@
     <Compile Include="Migrations\PlayerContextModelSnapshot.cs" />
     <Compile Include="Plugins\Helpers\ServerLifecycleHelper.cs" />
     <Compile Include="Plugins\ServerPluginContext.cs" />
+    <Compile Include="Utilities\HarvestBonusHelper.cs" />
     <Compile Include="Utilities\LootTableServerHelpers.cs" />
     <Compile Include="Web\RestApi\Attributes\DebugAuthorizeAttribute.cs" />
     <Compile Include="Web\RestApi\Attributes\ConfigurableAuthorizeAttribute.cs" />

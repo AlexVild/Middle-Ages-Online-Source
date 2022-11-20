@@ -2,12 +2,13 @@
 using Intersect.Client.Framework.File_Management;
 using Intersect.Client.Framework.Gwen.Control;
 using Intersect.Client.General;
+using Intersect.Client.Interface.Components;
 
 namespace Intersect.Client.Interface.Game.Components
 {
-    class ImageLabelComponent
+    class ImageLabelComponent : IGwenComponent
     {
-        private Base Parent { get; set; }
+        public ImagePanel ParentContainer { get; set; }
 
         private ImagePanel Container { get; set; }
 
@@ -15,28 +16,50 @@ namespace Intersect.Client.Interface.Game.Components
 
         private ImagePanel Image { get; set; }
 
-        public ImageLabelComponent(Base parent)
+        private Color LabelColor { get; set; }
+
+        private Color HoverColor { get; set; }
+
+        private string Texture { get; set; }
+
+        private string LabelText { get; set; }
+
+        private string TooltipText { get; set; }
+
+        public ImageLabelComponent(Base parent, string parentContainerName, Color labelColor, Color hoverColor, string texture, string label, string toolTipText, ComponentList<ImageLabelComponent> referenceList = null)
         {
-            Parent = parent;
-            Container = new ImagePanel(parent, "ImageLabel");
+            ParentContainer = new ImagePanel(parent, parentContainerName);
+            
+            Container = new ImagePanel(ParentContainer, "ImageLabel");
 
             Label = new Label(Container, "Label");
             Image = new ImagePanel(Container, "Image");
+
+            LabelColor = labelColor;
+            HoverColor = hoverColor;
+            Texture = texture;
+            LabelText = label;
+            TooltipText = toolTipText;
+
+            if (referenceList != null)
+            {
+                referenceList.Add(this);
+            }
         }
 
-        public void Initialize(Color labelColor, Color hoverColor, string texture, string label, string toolTipText)
+        public void Initialize()
         {
             Container.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
 
-            SetImage(texture);
+            SetImage(Texture);
 
-            Parent?.SetSize(Container.Width, Container.Height);
-            Parent?.ProcessAlignments();
+            ParentContainer?.SetSize(Container.Width, Container.Height);
+            ParentContainer?.ProcessAlignments();
 
-            Label.SetTextColor(hoverColor, Label.ControlState.Hovered);
-            Label.SetTextColor(labelColor, Label.ControlState.Normal);
-            Label.SetText(label);
-            Label.SetToolTipText(toolTipText);
+            Label.SetTextColor(HoverColor, Label.ControlState.Hovered);
+            Label.SetTextColor(LabelColor, Label.ControlState.Normal);
+            Label.SetText(LabelText);
+            Label.SetToolTipText(TooltipText);
         }
 
         public void SetLabel(string text)

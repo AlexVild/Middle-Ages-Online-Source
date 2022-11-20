@@ -9,6 +9,7 @@ using Intersect.Client.Framework.Gwen;
 using Intersect.Client.Framework.Gwen.Control;
 using Intersect.Client.Framework.Gwen.Control.EventArguments;
 using Intersect.Client.General;
+using Intersect.Client.Interface.Components;
 using Intersect.Client.Interface.Game.Components;
 using Intersect.Client.Localization;
 using Intersect.Client.Networking;
@@ -36,23 +37,15 @@ namespace Intersect.Client.Interface.Game.Character.Equipment
         public ImagePanel[] PaperdollPanels { get; set; }
         public string[] PaperdollTextures { get; set; }
 
-        ImagePanel mBluntAtkContainer { get; set; }
-        ImagePanel mBluntDefContainer { get; set; }
         NumberContainerComponent mBluntAtk { get; set; }
         NumberContainerComponent mBluntDef { get; set; }
 
-        ImagePanel mSlashAtkContainer { get; set; }
-        ImagePanel mSlashDefContainer { get; set; }
         NumberContainerComponent mSlashAtk { get; set; }
         NumberContainerComponent mSlashDef { get; set; }
 
-        ImagePanel mPierceAtkContainer { get; set; }
-        ImagePanel mPierceDefContainer { get; set; }
         NumberContainerComponent mPierceAtk { get; set; }
         NumberContainerComponent mPierceDef { get; set; }
 
-        ImagePanel mMagicAtkContainer { get; set; }
-        ImagePanel mMagicDefContainer { get; set; }
         NumberContainerComponent mMagicAtk { get; set; }
         NumberContainerComponent mMagicDef { get; set; }
 
@@ -65,6 +58,8 @@ namespace Intersect.Client.Interface.Game.Character.Equipment
         private int[] mEmptyStatBoost = new int[(int)Stats.StatCount];
 
         private Guid PreviousMap;
+
+        private ComponentList<NumberContainerComponent> ContainerComponents;
 
         public CharacterEquipmentWindow(CharacterWindowMAO parent, ImagePanel characterWindow)
         {
@@ -82,7 +77,7 @@ namespace Intersect.Client.Interface.Game.Character.Equipment
 
             mBackground.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
 
-            InitializeEquipmentStats();
+            ContainerComponents.InitializeAll();
         }
 
         public override void Show()
@@ -322,44 +317,19 @@ namespace Intersect.Client.Interface.Game.Character.Equipment
 
         private void InitializeEquipmentStatContainers()
         {
-            mBluntAtkContainer = new ImagePanel(mBackground, "BluntAttackContainer");
-            mBluntDefContainer = new ImagePanel(mBackground, "BluntDefenseContainer");
+            ContainerComponents = new ComponentList<NumberContainerComponent>();
+            
+            mBluntAtk = new NumberContainerComponent(mBackground, "BluntAttackContainer", AtkLabelColor, StatColor, "ATK", "Blunt Attack Damage", ContainerComponents);
+            mBluntDef = new NumberContainerComponent(mBackground, "BluntDefenseContainer", DefLabelColor, StatColor, "DEF", "Blunt Attack Resistance", ContainerComponents);
 
-            mSlashAtkContainer = new ImagePanel(mBackground, "SlashAttackContainer");
-            mSlashDefContainer = new ImagePanel(mBackground, "SlashDefenseContainer");
+            mSlashAtk = new NumberContainerComponent(mBackground, "SlashAttackContainer", AtkLabelColor, StatColor, "ATK", "Slash Attack Damage", ContainerComponents);
+            mSlashDef = new NumberContainerComponent(mBackground, "SlashDefenseContainer", DefLabelColor, StatColor, "DEF", "Slash Attack Resistance", ContainerComponents);
 
-            mPierceAtkContainer = new ImagePanel(mBackground, "PierceAttackContainer");
-            mPierceDefContainer = new ImagePanel(mBackground, "PierceDefenseContainer");
+            mPierceAtk = new NumberContainerComponent(mBackground, "PierceAttackContainer", AtkLabelColor, StatColor, "ATK", "Pierce Attack Damage", ContainerComponents);
+            mPierceDef = new NumberContainerComponent(mBackground, "PierceDefenseContainer", DefLabelColor, StatColor, "DEF", "Pierce Attack Resistance", ContainerComponents);
 
-            mMagicAtkContainer = new ImagePanel(mBackground, "MagicAttackContainer");
-            mMagicDefContainer = new ImagePanel(mBackground, "MagicDefenseContainer");
-        }
-
-        private void InitializeEquipmentStats()
-        {
-            mBluntAtk = new NumberContainerComponent(mBluntAtkContainer);
-            mBluntDef = new NumberContainerComponent(mBluntDefContainer);
-
-            mSlashAtk = new NumberContainerComponent(mSlashAtkContainer);
-            mSlashDef = new NumberContainerComponent(mSlashDefContainer);
-
-            mPierceAtk = new NumberContainerComponent(mPierceAtkContainer);
-            mPierceDef = new NumberContainerComponent(mPierceDefContainer);
-
-            mMagicAtk = new NumberContainerComponent(mMagicAtkContainer);
-            mMagicDef = new NumberContainerComponent(mMagicDefContainer);
-
-            mBluntAtk.Initialize(AtkLabelColor, StatColor, "ATK", "Blunt Attack Damage");
-            mBluntDef.Initialize(DefLabelColor, StatColor, "DEF", "Blunt Attack Resistance");
-
-            mSlashAtk.Initialize(AtkLabelColor, StatColor, "ATK", "Slash Attack Damage");
-            mSlashDef.Initialize(DefLabelColor, StatColor, "DEF", "Slash Attack Resistance");
-
-            mPierceAtk.Initialize(AtkLabelColor, StatColor, "ATK", "Pierce Attack Damage");
-            mPierceDef.Initialize(DefLabelColor, StatColor, "DEF", "Pierce Attack Resistance");
-
-            mMagicAtk.Initialize(AtkLabelColor, StatColor, "ATK", "Magic Attack Damage");
-            mMagicDef.Initialize(DefLabelColor, StatColor, "DEF", "Magic Attack Resistance");
+            mMagicAtk = new NumberContainerComponent(mBackground, "MagicAttackContainer", AtkLabelColor, StatColor, "ATK", "Magic Attack Damage", ContainerComponents);
+            mMagicDef = new NumberContainerComponent(mBackground, "MagicDefenseContainer", DefLabelColor, StatColor, "DEF", "Magic Attack Resistance", ContainerComponents);
         }
 
         private void InitializeCharacterDisplay()

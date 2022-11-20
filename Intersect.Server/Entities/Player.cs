@@ -1786,7 +1786,7 @@ namespace Intersect.Server.Entities
                 {
                     if (resourceLock != null)
                     {
-                        var speedMod = (int) Math.Floor(weapon.AttackSpeedValue * resourceLock.CalculateHarvestBonus(this));
+                        var speedMod = (int) Math.Floor(weapon.AttackSpeedValue * HarvestBonusHelper.CalculateHarvestBonus(this, resourceLock.Id));
 
                         attackTime = weapon.AttackSpeedValue - speedMod;
                     }

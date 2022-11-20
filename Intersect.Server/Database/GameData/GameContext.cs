@@ -151,7 +151,6 @@ namespace Intersect.Server.Database.GameData
 
             internal static readonly Func<int, int, IEnumerable<ServerVariableBase>> ServerVariables =
                 (int page, int count) => ServerVariableBase.Lookup.Select(v => (ServerVariableBase)v.Value).OrderBy(v => v.Id.ToString()).Skip(page * count).Take(count);
-
         }
 
     }

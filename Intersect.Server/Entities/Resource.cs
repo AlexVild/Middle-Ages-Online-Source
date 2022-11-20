@@ -90,9 +90,9 @@ namespace Intersect.Server.Entities
 
                 // Increment records/determine resource bonuses
                 long recordKilled = playerKiller.IncrementRecord(RecordType.ResourceGathered, Base.Id);
-                long amountHarvested = GetAmountInGroupHarvested(playerKiller);
+                long amountHarvested = HarvestBonusHelper.GetAmountInGroupHarvested(playerKiller, Base.Id);
                 List<int> intervals = Options.Instance.CombatOpts.HarvestBonusIntervals;
-                long progressUntilNextBonus = GetHarvestsUntilNextBonus(playerKiller);
+                long progressUntilNextBonus = HarvestBonusHelper.GetHarvestsUntilNextBonus(playerKiller, Base.Id);
 
                 if (Options.SendResourceRecordUpdates)
                 {
@@ -126,26 +126,6 @@ namespace Intersect.Server.Entities
                     }
                 }
             }
-        }
-
-        public long GetHarvestsUntilNextBonus(Player player)
-        {
-            if (player == null) return 0;
-
-            long currentHarvests = GetAmountInGroupHarvested(player);
-
-            return GetHarvestsUntilNextBonus(currentHarvests);
-        }
-
-        public long GetHarvestsUntilNextBonus(long currentHarvests)
-        {
-            var intervals = Options.Instance.CombatOpts.HarvestBonusIntervals;
-            if (currentHarvests >= intervals.Last())
-            {
-                return 0;
-            }
-
-            return intervals.Find(x => currentHarvests < x) - currentHarvests;
         }
 
         public void Spawn()
@@ -194,76 +174,6 @@ namespace Intersect.Server.Entities
         public override bool IsPassable()
         {
             return IsDead() & Base.WalkableAfter || !IsDead() && Base.WalkableBefore;
-        }
-
-        public long GetAmountInGroupHarvested(Player player)
-        {
-            if (player == null)
-            {
-                return 0;
-            }
-
-            var playerRecord = player.PlayerRecords.Find(record => record.Type == RecordType.ResourceGathered && record.RecordId == Base.Id);
-
-            // Handle resource groups
-            if (!string.IsNullOrEmpty(Base.ResourceGroup))
-            {
-                var resources = Globals.CachedResources.Where(rsc => Base.ResourceGroup == rsc.ResourceGroup).ToArray();
-                long totalHarvested = 0;
-                foreach (var resource in resources)
-                {
-                    var tmpRecord = player.PlayerRecords.Find(record => record.Type == RecordType.ResourceGathered && record.RecordId == resource.Id);
-                    if (tmpRecord == default)
-                    {
-                        continue;
-                    }
-                    totalHarvested += tmpRecord.Amount;
-                }
-
-                return totalHarvested;
-            }
-            else
-            {
-                if (playerRecord == default)
-                {
-                    return -1;
-                }
-                return playerRecord.Amount;
-            }
-        }
-
-        public double CalculateHarvestBonus(Player attacker)
-        {
-            if (attacker == null)
-            {
-                return 0.0;
-            }
-
-            long amtHarvested = GetAmountInGroupHarvested(attacker);
-            if (amtHarvested <= 0)
-            {
-                return 0.0f;
-            }
-
-            var intervals = Options.Instance.CombatOpts.HarvestBonusIntervals;
-            var bonuses = Options.Instance.CombatOpts.HarvestBonuses;
-            if (bonuses.Count != intervals.Count)
-            {
-                Logging.Log.Error($"You fucked up the server config for harvest bonuses. Count is {bonuses.Count}, must be {intervals.Count}");
-                return 0.0f;
-            }
-
-            intervals.Reverse();
-            bonuses.Reverse();
-            for (int i = 0; i < intervals.Count; i++)
-            {
-                if (amtHarvested >= intervals[i])
-                {
-                    return bonuses[i];
-                }
-            }
-
-            return 0.0f;
         }
 
         public override EntityPacket EntityPacket(EntityPacket packet = null, Player forPlayer = null)

@@ -402,6 +402,7 @@
     <Compile Include="Network\Packets\Client\RequestLeaderboardPacket.cs" />
     <Compile Include="Network\Packets\Client\RequestLootUpdatePacket.cs" />
     <Compile Include="Network\Packets\Client\RequestRespawnPacket.cs" />
+    <Compile Include="Network\Packets\Client\ResourceInfoRequestPacket.cs" />
     <Compile Include="Network\Packets\Server\CombatNumberPacket.cs" />
     <Compile Include="Network\Packets\Server\CombatNumberPackets.cs" />
     <Compile Include="Network\Packets\Server\CraftStatusPacket.cs" />
@@ -466,6 +467,7 @@
     <Compile Include="Network\Packets\Server\QuestOfferListPacket.cs" />
     <Compile Include="Network\Packets\Server\QuestPointPacket.cs" />
     <Compile Include="Network\Packets\Server\RecordDto.cs" />
+    <Compile Include="Network\Packets\Server\ResourceInfoPacket.cs" />
     <Compile Include="Network\Packets\Server\ResourceLockPacket.cs" />
     <Compile Include="Network\Packets\Server\RespawnFinishedPacket.cs" />
     <Compile Include="Network\Packets\Server\ServerDisposedPacket.cs" />

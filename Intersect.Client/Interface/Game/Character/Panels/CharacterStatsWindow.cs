@@ -8,6 +8,7 @@ using Intersect.Client.Framework.Gwen;
 using Intersect.Client.Framework.Gwen.Control;
 using Intersect.Client.Framework.Gwen.Control.EventArguments;
 using Intersect.Client.General;
+using Intersect.Client.Interface.Components;
 using Intersect.Client.Interface.Game.Character.Equipment;
 using Intersect.Client.Interface.Game.Components;
 using Intersect.Client.Localization;
@@ -27,51 +28,26 @@ namespace Intersect.Client.Interface.Game.Character.StatPanel
 
         public CharacterPanelType Type { get; } = CharacterPanelType.Stats;
 
-        ImagePanel HpLabelContainer { get; set; }
-        ImageLabelComponent HpLabel { get; set; }
-
-        ImagePanel MpLabelContainer { get; set; }
-        ImageLabelComponent MpLabel { get; set; }
-
-        ImagePanel EvasionLabelContainer { get; set; }
-        ImageLabelComponent EvasionLabel { get; set; }
-
-        ImagePanel AccuracyLabelContainer { get; set; }
-        ImageLabelComponent AccuracyLabel { get; set; }
-
-        ImagePanel SpeedLabelContainer { get; set; }
-        ImageLabelComponent SpeedLabel { get; set; }
-
-        ImagePanel HpContainer { get; set; }
         NumberContainerComponent mHpCurrent { get; set; }
-        ImagePanel HpTotalContainer { get; set; }
         NumberContainerComponent mHpTotal { get; set; }
 
-        ImagePanel MpContainer { get; set; }
         NumberContainerComponent mMpCurrent { get; set; }
-        ImagePanel MpTotalContainer { get; set; }
         NumberContainerComponent mMpTotal { get; set; }
 
-        ImagePanel EvasionBaseContainer { get; set; }
         NumberContainerComponent mEvasionBase { get; set; }
-        ImagePanel EvasionEqpContainer { get; set; }
         NumberContainerComponent mEvasionEqp { get; set; }
-        ImagePanel EvasionTotalContainer { get; set; }
         NumberContainerComponent mEvasionTotal { get; set; }
 
-        ImagePanel AccuracyBaseContainer { get; set; }
-        ImagePanel AccuracyEqpContainer { get; set; }
-        ImagePanel AccuracyTotalContainer { get; set; }
         NumberContainerComponent mAccuracyBase { get; set; }
         NumberContainerComponent mAccuracyEqp { get; set; }
         NumberContainerComponent mAccuracyTotal { get; set; }
 
-        ImagePanel SpeedBaseContainer { get; set; }
-        ImagePanel SpeedEqpContainer { get; set; }
-        ImagePanel SpeedTotalContainer { get; set; }
         NumberContainerComponent mSpeedBase { get; set; }
         NumberContainerComponent mSpeedEqp { get; set; }
         NumberContainerComponent mSpeedTotal { get; set; }
+
+        private ComponentList<NumberContainerComponent> ContainerComponents { get; set; }
+        private ComponentList<ImageLabelComponent> ImageLabelComponents { get; set; }
 
         public CharacterStatsWindow(ImagePanel panelBackground)
         {
@@ -97,77 +73,36 @@ namespace Intersect.Client.Interface.Game.Character.StatPanel
 
         private void InitializeStatContainers()
         {
-            HpLabelContainer = new ImagePanel(mBackground, "HPLabel");
-            HpContainer = new ImagePanel(mBackground, "HP");
-            HpTotalContainer = new ImagePanel(mBackground, "HPTotal");
+            ContainerComponents = new ComponentList<NumberContainerComponent>();
+            ImageLabelComponents = new ComponentList<ImageLabelComponent>();
+            _ = new ImageLabelComponent(mBackground, "HPLabel", LabelColor, LabelHoverColor, "character_stats_health.png", "HEALTH", "Your health pool.", ImageLabelComponents);
+            mHpCurrent = new NumberContainerComponent(mBackground, "HP", StatLabelColor, StatColor, "CURR", string.Empty, ContainerComponents);
+            mHpTotal = new NumberContainerComponent(mBackground, "HPTotal", StatLabelColor, StatColor, "MAX", string.Empty, ContainerComponents);
 
-            MpLabelContainer = new ImagePanel(mBackground, "MPLabel");
-            MpContainer = new ImagePanel(mBackground, "MP");
-            MpTotalContainer = new ImagePanel(mBackground, "MPTotal");
+            _ = new ImageLabelComponent(mBackground, "MPLabel", LabelColor, LabelHoverColor, "character_stats_mana.png", "MANA", "Your mana pool.", ImageLabelComponents);
+            mMpCurrent = new NumberContainerComponent(mBackground, "MP", StatLabelColor, StatColor, "CURR", string.Empty, ContainerComponents);
+            mMpTotal = new NumberContainerComponent(mBackground, "MPTotal", StatLabelColor, StatColor, "MAX", string.Empty, ContainerComponents);
 
-            EvasionLabelContainer = new ImagePanel(mBackground, "EvasionLabel");
-            EvasionBaseContainer = new ImagePanel(mBackground, "EvasionBase");
-            EvasionEqpContainer = new ImagePanel(mBackground, "EvasionEqp");
-            EvasionTotalContainer = new ImagePanel(mBackground, "EvasionTotal");
+            _ = new ImageLabelComponent(mBackground, "EvasionLabel", LabelColor, LabelHoverColor, "character_stats_evasion.png", "EVASION", "Dodge chance vs. opponent's accuracy.", ImageLabelComponents);
+            mEvasionBase = new NumberContainerComponent(mBackground, "EvasionBase", StatLabelColor, StatColor, "CURR", string.Empty, ContainerComponents);
+            mEvasionEqp = new NumberContainerComponent(mBackground, "EvasionEqp", StatLabelColor, StatColor, "MAX", string.Empty, ContainerComponents);
+            mEvasionTotal = new NumberContainerComponent(mBackground, "EvasionTotal", StatLabelColor, StatColor, "MAX", string.Empty, ContainerComponents);
 
-            AccuracyLabelContainer = new ImagePanel(mBackground, "AccuracyLabel");
-            AccuracyBaseContainer = new ImagePanel(mBackground,  "AccuracyBase");
-            AccuracyEqpContainer = new ImagePanel(mBackground,   "AccuracyEqp");
-            AccuracyTotalContainer = new ImagePanel(mBackground, "AccuracyTotal");
+            _ = new ImageLabelComponent(mBackground, "AccuracyLabel", LabelColor, LabelHoverColor, "character_stats_accuracy.png", "ACCURACY", "Hit chance vs. opponent's evasion.", ImageLabelComponents);
+            mAccuracyBase = new NumberContainerComponent(mBackground, "AccuracyBase", StatLabelColor, StatColor, "CURR", string.Empty, ContainerComponents);
+            mAccuracyEqp = new NumberContainerComponent(mBackground, "AccuracyEqp", StatLabelColor, StatColor, "MAX", string.Empty, ContainerComponents);
+            mAccuracyTotal = new NumberContainerComponent(mBackground, "AccuracyTotal", StatLabelColor, StatColor, "MAX", string.Empty, ContainerComponents);
 
-            SpeedLabelContainer = new ImagePanel(mBackground, "SpeedLabel");
-            SpeedBaseContainer = new ImagePanel(mBackground,  "SpeedBase");
-            SpeedEqpContainer = new ImagePanel(mBackground,   "SpeedEqp");
-            SpeedTotalContainer = new ImagePanel(mBackground, "SpeedTotal");
+            _ = new ImageLabelComponent(mBackground, "SpeedLabel", LabelColor, LabelHoverColor, "character_stats_speed.png", "SPEED", "Determines movement speed.", ImageLabelComponents);
+            mSpeedBase = new NumberContainerComponent(mBackground, "SpeedBase", StatLabelColor, StatColor, "CURR", string.Empty, ContainerComponents);
+            mSpeedEqp = new NumberContainerComponent(mBackground, "SpeedEqp", StatLabelColor, StatColor, "MAX", string.Empty, ContainerComponents);
+            mSpeedTotal = new NumberContainerComponent(mBackground, "SpeedTotal", StatLabelColor, StatColor, "MAX", string.Empty, ContainerComponents);
         }
 
         private void InitializeStats()
         {
-            mHpCurrent = new NumberContainerComponent(HpContainer);
-            mHpTotal = new NumberContainerComponent(HpTotalContainer);
-
-            mMpCurrent = new NumberContainerComponent(MpContainer);
-            mMpTotal = new NumberContainerComponent(MpTotalContainer);
-
-            mEvasionBase = new NumberContainerComponent(EvasionBaseContainer);
-            mEvasionEqp = new NumberContainerComponent(EvasionEqpContainer);
-            mEvasionTotal = new NumberContainerComponent(EvasionTotalContainer);
-
-            mAccuracyBase = new NumberContainerComponent(AccuracyBaseContainer);
-            mAccuracyEqp = new NumberContainerComponent(AccuracyEqpContainer);
-            mAccuracyTotal = new NumberContainerComponent(AccuracyTotalContainer);
-
-            mSpeedBase = new NumberContainerComponent(SpeedBaseContainer);
-            mSpeedEqp = new NumberContainerComponent(SpeedEqpContainer);
-            mSpeedTotal = new NumberContainerComponent(SpeedTotalContainer);
-
-            HpLabel = new ImageLabelComponent(HpLabelContainer);
-            HpLabel.Initialize(LabelColor, LabelHoverColor, "character_stats_health.png", "HEALTH", "Your health pool.");
-            mHpCurrent.Initialize(StatLabelColor, StatColor, "CURR", string.Empty);
-            mHpTotal.Initialize(StatLabelColor, StatColor, "MAX", string.Empty);
-
-            MpLabel = new ImageLabelComponent(MpLabelContainer);
-            MpLabel.Initialize(LabelColor, LabelHoverColor, "character_stats_mana.png", "MANA", "Your mana pool.");
-            mMpCurrent.Initialize(StatLabelColor, StatColor, "CURR", string.Empty);
-            mMpTotal.Initialize(StatLabelColor, StatColor, "MAX", string.Empty);
-
-            EvasionLabel = new ImageLabelComponent(EvasionLabelContainer);
-            EvasionLabel.Initialize(LabelColor, LabelHoverColor, "character_stats_evasion.png", "EVASION", "Dodge chance vs. opponent's accuracy.");
-            mEvasionBase.Initialize(StatLabelColor, StatColor, "BASE", string.Empty);
-            mEvasionEqp.Initialize(StatLabelColor, StatColor, "EQP", string.Empty);
-            mEvasionTotal.Initialize(StatLabelColor, StatColor, "TOTAL", string.Empty);
-
-            AccuracyLabel = new ImageLabelComponent(AccuracyLabelContainer);
-            AccuracyLabel.Initialize(LabelColor, LabelHoverColor, "character_stats_accuracy.png", "ACCURACY", "Hit chance vs. opponent's evasion.");
-            mAccuracyBase.Initialize(StatLabelColor, StatColor, "BASE", string.Empty);
-            mAccuracyEqp.Initialize(StatLabelColor, StatColor, "EQP", string.Empty);
-            mAccuracyTotal.Initialize(StatLabelColor, StatColor, "TOTAL", string.Empty);
-
-            SpeedLabel = new ImageLabelComponent(SpeedLabelContainer);
-            SpeedLabel.Initialize(LabelColor, LabelHoverColor, "character_stats_speed.png", "SPEED", "Determines movement speed.");
-            mSpeedBase.Initialize(StatLabelColor, StatColor, "BASE", string.Empty);
-            mSpeedEqp.Initialize(StatLabelColor, StatColor, "EQP", string.Empty);
-            mSpeedTotal.Initialize(StatLabelColor, StatColor, "TOTAL", string.Empty);
+            ImageLabelComponents.InitializeAll();
+            ContainerComponents.InitializeAll();
         }
 
         private void PopulateStats()
