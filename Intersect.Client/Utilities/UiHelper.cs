@@ -63,7 +63,10 @@ namespace Intersect.Client.Utilities
                 {
                     int maxChars = Graphics.Renderer.GetMaxCharsWithinWidth(str, font, 1, maxNameWidth);
                     // -3 cause we're adding 3 chars with the ellipses
-                    sb.Append($"{str.Substring(0, maxChars - 3)}...");
+                    if (maxChars - 3 >= 0)
+                    {
+                        sb.Append($"{str.Substring(0, maxChars - 3)}...");
+                    }
                     str = sb.ToString();
                 }
             }

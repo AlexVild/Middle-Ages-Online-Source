@@ -168,7 +168,8 @@ namespace Intersect.Client.Interface.Game.Components
 
         public void SetBarWidth()
         {
-            var barWidth = Intersect.Utilities.MathHelper.RoundNearestMultiple((int)(Percent * BarFg.Width), 4);
+            //var barWidth = Intersect.Utilities.MathHelper.RoundNearestMultiple((int)(Percent * BarFg.Width), 4);
+            var barWidth = (int)Math.Floor(Percent * BarFg.Width);
 
             BarFg.SetBounds(BarFg.X, BarFg.Y, barWidth, BarFg.Height);
             BarFg.SetTextureRect(BarFg.X, BarFg.Y, barWidth, BarFg.Height);

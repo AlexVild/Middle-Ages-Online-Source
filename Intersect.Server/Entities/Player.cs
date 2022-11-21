@@ -1786,7 +1786,7 @@ namespace Intersect.Server.Entities
                 {
                     if (resourceLock != null)
                     {
-                        var speedMod = (int) Math.Floor(weapon.AttackSpeedValue * HarvestBonusHelper.CalculateHarvestBonus(this, resourceLock.Id));
+                        var speedMod = (int) Math.Floor(weapon.AttackSpeedValue * HarvestBonusHelper.CalculateHarvestBonus(this, resourceLock.Base?.Id ?? Guid.Empty));
 
                         attackTime = weapon.AttackSpeedValue - speedMod;
                     }
@@ -6654,6 +6654,7 @@ namespace Intersect.Server.Entities
                 {
                     PlayerRecord.SendNewVariableRecordMessage(id, true, this);
                 }
+                
                 StartCommonEventsWithTrigger(CommonEventTrigger.PlayerVariableChange, "", id.ToString());
             }
         }
@@ -7086,6 +7087,12 @@ namespace Intersect.Server.Entities
                         if (varChangeEvent && param != baseEvent.Pages[i].TriggerId.ToString())
                         {
                             continue;
+                        }
+
+                        if (varChangeEvent)
+                        {
+                            // A resource's harvestability might have changed - generate fresh info if requested
+                            UseCachedHarvestInfo = false;
                         }
 
                         // If this is a class rank increase event, but not for the correct class type, back out of processing
@@ -8632,5 +8639,14 @@ namespace Intersect.Server.Entities
         {
             return Dead || PlayerDead;
         }
+    }
+
+    public partial class Player : AttackingEntity
+    {
+        [JsonIgnore, NotMapped]
+        public bool UseCachedHarvestInfo = false;
+
+        [JsonIgnore, NotMapped]
+        public Dictionary<int, ResourceInfoPackets> CachedHarvestInfo = new Dictionary<int, ResourceInfoPackets>();
     }
 }

@@ -56,7 +56,7 @@ namespace Intersect.Client.Interface.Game.Character.Panels
             ProgressComponents = new ComponentList<IGwenComponent>();
 
             MiningLevel = new NumberContainerComponent(TiersContainer, "MiningContainer", StatLabelColor, StatColor, "TIER", "Your mining tier-level.", ContainerComponents);
-            WoodcutLevel = new NumberContainerComponent(TiersContainer, "WoodcutContainer", StatLabelColor, StatColor, "TIER", "Your mining tier-level.", ContainerComponents);
+            WoodcutLevel = new NumberContainerComponent(TiersContainer, "WoodcutContainer", StatLabelColor, StatColor, "TIER", "Your woodcutting tier-level.", ContainerComponents);
             FishingLevel = new NumberContainerComponent(TiersContainer, "FishingContainer", StatLabelColor, StatColor, "TIER", "Your fishing tier-level.", ContainerComponents);
 
             ProgressContainer = new ImagePanel(mBackground, "ProgressContainer");
@@ -79,7 +79,9 @@ namespace Intersect.Client.Interface.Game.Character.Panels
 
         public override void Hide()
         {
-            ProgressComponents?.DisposeAll();
+            ClearProgressComponents();
+            // Forces a refresh of information from the server
+            HarvestInfoRows.CurrentRows.Clear();
             base.Hide();
         }
 

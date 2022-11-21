@@ -80,50 +80,55 @@ namespace Intersect.Server.Entities
             PacketSender.SendEntityDataToProximity(this);
             PacketSender.SendEntityPositionToAll(this);
 
-            if (killer is Player playerKiller)
+            if (!(killer is Player playerKiller))
             {
-                playerKiller.GiveInspiredExperience(Base.Experience);
-                if (Base.DoNotRecord)
-                {
-                    return;
-                }
+                return;
+            }
 
-                // Increment records/determine resource bonuses
-                long recordKilled = playerKiller.IncrementRecord(RecordType.ResourceGathered, Base.Id);
-                long amountHarvested = HarvestBonusHelper.GetAmountInGroupHarvested(playerKiller, Base.Id);
-                List<int> intervals = Options.Instance.CombatOpts.HarvestBonusIntervals;
-                long progressUntilNextBonus = HarvestBonusHelper.GetHarvestsUntilNextBonus(playerKiller, Base.Id);
+            playerKiller.GiveInspiredExperience(Base.Experience);
+            if (Base.DoNotRecord)
+            {
+                return;
+            }
 
-                if (Options.SendResourceRecordUpdates)
+            // Increment records/determine resource bonuses
+            long recordKilled = playerKiller.IncrementRecord(RecordType.ResourceGathered, Base.Id);
+            long amountHarvested = HarvestBonusHelper.GetAmountInGroupHarvested(playerKiller, Base.Id);
+            List<int> intervals = Options.Instance.CombatOpts.HarvestBonusIntervals;
+            long progressUntilNextBonus = HarvestBonusHelper.GetHarvestsUntilNextBonus(playerKiller, Base.Id);
+            
+            // Harvest info updated - generate fresh if requested
+            playerKiller.UseCachedHarvestInfo = false;
+
+            if (Options.SendResourceRecordUpdates)
+            {
+                if (amountHarvested <= intervals.Last())
                 {
-                    if (amountHarvested <= intervals.Last())
+                    // If we just unlocked a new harvesting bonus
+                    if (intervals.Find(x => x == amountHarvested) != default)
                     {
-                        // If we just unlocked a new harvesting bonus
-                        if (intervals.Find(x => x == amountHarvested) != default)
+                        if (amountHarvested != intervals.Last())
                         {
-                            if (amountHarvested != intervals.Last())
-                            {
-                                // The player still has some unlocks to go.
-                                var nextIntervalIdx = intervals.FindIndex(x => x == amountHarvested) + 1;
-                                var nextInterval = intervals[nextIntervalIdx];
-                                PacketSender.SendEventDialog(playerKiller, Strings.Records.resourcegatheredbonusunlock.ToString(nextInterval.ToString()), "", Guid.NewGuid());
-                            }
-                            else
-                            {
-                                // The player has completed these resource bonuses
-                                PacketSender.SendEventDialog(playerKiller, Strings.Records.resourcegatheredbonusunlockcomplete, "", Guid.NewGuid());
-                            }
+                            // The player still has some unlocks to go.
+                            var nextIntervalIdx = intervals.FindIndex(x => x == amountHarvested) + 1;
+                            var nextInterval = intervals[nextIntervalIdx];
+                            PacketSender.SendEventDialog(playerKiller, Strings.Records.resourcegatheredbonusunlock.ToString(nextInterval.ToString()), "", Guid.NewGuid());
                         }
-                        else if (amountHarvested % Options.ResourceRecordUpdateInterval == 0)
+                        else
                         {
-                            // Otherwise, figure out when their next bonus will be awarded and let them know about it.
-                            playerKiller.SendRecordUpdate(Strings.Records.resourcegatheredbonus.ToString(amountHarvested, progressUntilNextBonus));
+                            // The player has completed these resource bonuses
+                            PacketSender.SendEventDialog(playerKiller, Strings.Records.resourcegatheredbonusunlockcomplete, "", Guid.NewGuid());
                         }
                     }
                     else if (amountHarvested % Options.ResourceRecordUpdateInterval == 0)
                     {
-                        playerKiller.SendRecordUpdate(Strings.Records.resourcegathered.ToString(amountHarvested));
+                        // Otherwise, figure out when their next bonus will be awarded and let them know about it.
+                        playerKiller.SendRecordUpdate(Strings.Records.resourcegatheredbonus.ToString(amountHarvested, progressUntilNextBonus));
                     }
+                }
+                else if (amountHarvested % Options.ResourceRecordUpdateInterval == 0)
+                {
+                    playerKiller.SendRecordUpdate(Strings.Records.resourcegathered.ToString(amountHarvested));
                 }
             }
         }

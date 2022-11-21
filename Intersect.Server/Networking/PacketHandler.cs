@@ -4273,6 +4273,14 @@ namespace Intersect.Server.Networking
                 return;
             }
 
+            // If the players harvest info hasn't changed (new record or variable change), and
+            // we have a cached value for the requested tool type
+            if (player.UseCachedHarvestInfo && player.CachedHarvestInfo.TryGetValue(packet.Tool, out var cachedInfo))
+            {
+                player?.SendPacket(cachedInfo);
+                return;
+            }
+
             var tool = packet.Tool;
 
             var resources = ResourceBase.Lookup.Select(kv => (ResourceBase)kv.Value)
@@ -4288,14 +4296,21 @@ namespace Intersect.Server.Networking
             var validResources = new List<ResourceBase>();
             validResources.AddRange(nonGroupedResource);
             validResources.AddRange(groupedResources);
+            validResources = validResources
+                .GroupBy(resource => new { resource.Name })
+                .Select(resourceGroupings => resourceGroupings.First())
+                .OrderBy(resource => resource.Name).ToList();
 
             var allInfo = new Network.Packets.Server.ResourceInfoPackets();
             foreach(var resource in validResources)
             {
                 var dto = new PlayerHarvestDTO(player, resource);
+                
                 allInfo.Packets.Add(dto.Packetize());
             }
 
+            player.CachedHarvestInfo[packet.Tool] = allInfo;
+            player.UseCachedHarvestInfo = true;
             player?.SendPacket(allInfo);
         }
     }

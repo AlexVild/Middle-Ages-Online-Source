@@ -49,7 +49,7 @@ namespace Intersect.Server.Utilities
             {
                 if (playerRecord == default)
                 {
-                    return -1;
+                    return 0;
                 }
                 return playerRecord.Amount;
             }
@@ -66,7 +66,7 @@ namespace Intersect.Server.Utilities
 
         public static long GetHarvestsUntilNextBonus(long currentHarvests)
         {
-            var intervals = Options.Instance.CombatOpts.HarvestBonusIntervals;
+            var intervals = Options.Instance.CombatOpts.HarvestBonusIntervals.ToList();
             if (currentHarvests >= intervals.Last())
             {
                 return 0;
@@ -75,26 +75,35 @@ namespace Intersect.Server.Utilities
             return intervals.Find(x => currentHarvests < x) - currentHarvests;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="attacker"></param>
+        /// <param name="resourceId"></param>
+        /// <returns>-1 if the player has not unlocked a bonus level yet</returns>
         public static int GetHarvestBonusLevel(Player attacker, Guid resourceId)
         {
             long amtHarvested = GetAmountInGroupHarvested(attacker, resourceId);
             if (amtHarvested <= 0)
             {
-                return 0;
+                return -1;
             }
 
-            var intervals = Options.Instance.CombatOpts.HarvestBonusIntervals;
+            var intervals = Options.Instance.CombatOpts.HarvestBonusIntervals.ToList();
 
-            intervals.Reverse();
-            for (int i = 0; i < intervals.Count; i++)
+            for (int i = 0; i < intervals.Count - 1; i++)
             {
-                if (amtHarvested >= intervals[i])
+                if (amtHarvested >= intervals[i] && amtHarvested < intervals[i + 1])
                 {
                     return i;
                 }
+                else if (amtHarvested > intervals[i])
+                {
+                    return i + 1;
+                }
             }
 
-            return 0;
+            return -1;
         }
 
         public static double CalculateHarvestBonus(Player attacker, Guid resourceId)
@@ -104,23 +113,23 @@ namespace Intersect.Server.Utilities
                 return 0.0;
             }
 
-            long amtHarvested = GetAmountInGroupHarvested(attacker, resourceId);
-            if (amtHarvested <= 0)
-            {
-                return 0.0f;
-            }
-
-            var intervals = Options.Instance.CombatOpts.HarvestBonusIntervals;
-            var bonuses = Options.Instance.CombatOpts.HarvestBonuses;
+            var intervals = Options.Instance.CombatOpts.HarvestBonusIntervals.ToList();
+            var bonuses = Options.Instance.CombatOpts.HarvestBonuses.ToList();
             if (bonuses.Count != intervals.Count)
             {
                 Logging.Log.Error($"You fucked up the server config for harvest bonuses. Count is {bonuses.Count}, must be {intervals.Count}");
                 return 0.0f;
             }
 
-            bonuses.Reverse();
-            
-            return bonuses[GetHarvestBonusLevel(attacker, resourceId)];
+            var bonusLevel = GetHarvestBonusLevel(attacker, resourceId);
+            if (bonusLevel < 0)
+            {
+                return 0;
+            }
+            else
+            {
+                return bonuses[bonusLevel];
+            }
         }
     }
 }

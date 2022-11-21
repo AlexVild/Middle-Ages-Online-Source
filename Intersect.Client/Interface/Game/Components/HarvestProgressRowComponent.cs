@@ -85,10 +85,7 @@ namespace Intersect.Client.Interface.Game.Components
             SelfContainer = new ImagePanel(ParentContainer, ComponentName);
             ResourceImage = new ImageFrameComponent(SelfContainer, "ResourceImage", ResourceFrame, ResourceTextureString, ResourceTextureType, 4, 4);
 
-            ResourceName = new Label(SelfContainer, "ResourceName")
-            {
-                Text = ResourceText
-            };
+            ResourceName = new Label(SelfContainer, "ResourceName");
 
             CannotHarvestLabelTemplate = new Label(SelfContainer, "CannotHarvestMsg");
             CannotHarvestLabel = new RichLabel(SelfContainer);
@@ -100,6 +97,7 @@ namespace Intersect.Client.Interface.Game.Components
                 ProgressBarBgTexture,
                 IsMaxed ? ProgressBarCompleteTexture : ProgressBarTexture,
                 bottomLabel: IsMaxed ? string.Empty : $"{formattedRemaining} to go!",
+                bottomLabelColor: CurrHarvestColor,
                 leftLabel: $"{CurrentLevel}",
                 leftLabelColor: CurrHarvestColor,
                 rightLabel: IsMaxed ? "MAX" : $"{NextLevel}",
@@ -109,7 +107,11 @@ namespace Intersect.Client.Interface.Game.Components
             base.Initialize();
             FitParentToComponent();
 
+            var truncatedName = UiHelper.TruncateString(ResourceText, ResourceName.Font, 64).ToUpper();
+            ResourceName.SetText(truncatedName);
+            
             ResourceImage.Initialize();
+            ResourceImage.SetTooltipText(ResourceText);
 
             if (Harvestable)
             {
@@ -133,8 +135,9 @@ namespace Intersect.Client.Interface.Game.Components
         private void FormatCannotHarvestMessage()
         {
             CannotHarvestLabel.ClearText();
-            CannotHarvestLabel.Width = SelfContainer.Width / 2 + 24;
-            CannotHarvestLabel.X = SelfContainer.Width / 2 - 24;
+            CannotHarvestLabel.Width = SelfContainer.Width / 2 - 8;
+            CannotHarvestLabel.X = SelfContainer.Width / 2 - 16;
+            CannotHarvestLabel.Y += SelfContainer.Padding.Top;
             CannotHarvestLabel.AddText(CannotHarvestMessage, CannotHarvestLabelTemplate);
             CannotHarvestLabel.SizeToChildren(false, true);
         }

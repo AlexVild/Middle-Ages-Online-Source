@@ -42,7 +42,9 @@ namespace Intersect.Client.Interface.Game.Components
 
             Frame = new ImagePanel(SelfContainer, "Frame");
             Image = new ImagePanel(Frame, "Image");
-            
+
+            SelfContainer.LoadJsonUi(UI.InGame, Graphics.Renderer.GetResolutionString());
+
             var frameTexture = Globals.ContentManager.GetTexture(TextureType.Gui, FrameTexture);
             Frame.Texture = frameTexture;
             var imageTexture = Globals.ContentManager.GetTexture(ImageTextureType, ImageTexture);
@@ -54,6 +56,11 @@ namespace Intersect.Client.Interface.Game.Components
             SelfContainer.SetSize(Frame.Width, Frame.Height);
 
             FitParentToComponent();
+        }
+
+        public void SetTooltipText(string text)
+        {
+            Frame.SetToolTipText(text);
         }
     }
 }
