@@ -22,10 +22,10 @@ namespace Intersect.Network.Packets.Server
         public string HarvestBonus { get; set; }
 
         [Key(3)]
-        public string HarvestLevel { get; set; }
+        public int HarvestLevel { get; set; }
 
         [Key(4)]
-        public string Remaining { get; set; }
+        public long Remaining { get; set; }
 
         [Key(5)]
         public float PercentRemaining { get; set; }
@@ -36,7 +36,7 @@ namespace Intersect.Network.Packets.Server
         [Key(7)]
         public string CannotHarvestMessage { get; set; }
 
-        public ResourceInfoPacket(string resourceName, string resourceTexture, string harvestBonus, string harvestLevel, string remaining, float percentRemaining, bool harvestable, string cannotHarvestMessage)
+        public ResourceInfoPacket(string resourceName, string resourceTexture, string harvestBonus, int harvestLevel, long remaining, float percentRemaining, bool harvestable, string cannotHarvestMessage)
         {
             ResourceName = resourceName;
             ResourceTexture = resourceTexture;

@@ -46,7 +46,7 @@ namespace Intersect.Client.Interface.Game.Character.StatPanel
         NumberContainerComponent mSpeedEqp { get; set; }
         NumberContainerComponent mSpeedTotal { get; set; }
 
-        private ComponentList<NumberContainerComponent> ContainerComponents { get; set; }
+        private ComponentList<IGwenComponent> ContainerComponents { get; set; }
         private ComponentList<ImageLabelComponent> ImageLabelComponents { get; set; }
 
         public CharacterStatsWindow(ImagePanel panelBackground)
@@ -73,7 +73,7 @@ namespace Intersect.Client.Interface.Game.Character.StatPanel
 
         private void InitializeStatContainers()
         {
-            ContainerComponents = new ComponentList<NumberContainerComponent>();
+            ContainerComponents = new ComponentList<IGwenComponent>();
             ImageLabelComponents = new ComponentList<ImageLabelComponent>();
             _ = new ImageLabelComponent(mBackground, "HPLabel", LabelColor, LabelHoverColor, "character_stats_health.png", "HEALTH", "Your health pool.", ImageLabelComponents);
             mHpCurrent = new NumberContainerComponent(mBackground, "HP", StatLabelColor, StatColor, "CURR", string.Empty, ContainerComponents);

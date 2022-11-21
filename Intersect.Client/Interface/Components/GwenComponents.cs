@@ -13,10 +13,18 @@ namespace Intersect.Client.Interface.Components
         /// Call this, generally, AFTER loading the parent's UI from JSON
         /// </summary>
         void Initialize();
+
+        void Dispose();
     }
 
     public class ComponentList<T> : List<T> where T : IGwenComponent
     {
+        public void DisposeAll()
+        {
+            ForEach(comp => comp.Dispose());
+            Clear();
+        }
+
         public void InitializeAll()
         {
             ForEach(comp => comp.Initialize());

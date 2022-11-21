@@ -57,8 +57,8 @@ namespace Intersect.Server.DTOs
             return new ResourceInfoPacket(ResourceName, 
                 ResourceTexture, 
                 HarvestBonus, 
-                HarvestLevel.ToString(), 
-                Remaining.ToString(), 
+                HarvestLevel, 
+                Remaining, 
                 PercentCompleted,
                 Harvestable,
                 CannotHarvestMessage);

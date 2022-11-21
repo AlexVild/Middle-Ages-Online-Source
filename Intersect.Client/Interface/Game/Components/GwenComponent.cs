@@ -9,6 +9,8 @@ namespace Intersect.Client.Interface.Game.Components
     {
         public bool IsHidden => SelfContainer.IsHidden;
 
+        private Base Parent { get; set; }
+
         /// <summary>
         /// The container containing this component on its parent - will be modifiable only as an image panel in the parent's JSON
         /// </summary>
@@ -22,11 +24,12 @@ namespace Intersect.Client.Interface.Game.Components
         protected ImagePanel SelfContainer { get; set; }
 
         public GwenComponent(
-            ImagePanel parent,
+            Base parent,
             string containerName,
             string componentName,
             ComponentList<GwenComponent> referenceList = null)
         {
+            Parent = parent;
             ParentContainer = new ImagePanel(parent, containerName);
             ComponentName = componentName;
 
@@ -55,6 +58,11 @@ namespace Intersect.Client.Interface.Game.Components
         public void Hide()
         {
             SelfContainer.Hide();
+        }
+
+        public void Dispose()
+        {
+            ParentContainer.Dispose();
         }
     }
 }

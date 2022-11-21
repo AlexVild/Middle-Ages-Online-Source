@@ -1,4 +1,6 @@
-﻿using Intersect.Client.Framework.Gwen.Control;
+﻿using Intersect.Client.Framework.Graphics;
+using Intersect.Client.Framework.Gwen.Control;
+using Intersect.Client.General;
 using Intersect.Client.Interface.Components;
 using Intersect.Client.Utilities;
 using static Intersect.Client.Framework.File_Management.GameContentManager;
@@ -18,11 +20,12 @@ namespace Intersect.Client.Interface.Game.Components
         private string ProgressBarBgTexture => "character_harvest_progressbar.png";
         private string ProgressBarTexture => "character_harvest_progressbar_fill.png";
         private string ProgressBarCompleteTexture => "character_harvest_progressbar_complete.png";
+        private GameTexture BandingTexture => Globals.ContentManager.GetTexture(TextureType.Gui, "character_harvest_banding.png");
         private Color CurrHarvestColor => new Color(255, 169, 169, 169);
         private Color NextHarvestColor => new Color(255, 255, 255, 255);
         private int CurrentLevel { get; set; }
         private int NextLevel { get; set; }
-        private int HarvestsRemaining { get; set; }
+        private long HarvestsRemaining { get; set; }
         private int MaxLevel => Options.Combat.HarvestBonuses.Count - 1;
         private bool IsMaxed => CurrentLevel >= MaxLevel;
 
@@ -45,14 +48,17 @@ namespace Intersect.Client.Interface.Game.Components
         private Label CannotHarvestLabelTemplate { get; set; }
         private RichLabel CannotHarvestLabel { get; set; }
 
+        public int X => SelfContainer.X;
+        public int Y => SelfContainer.X;
+
         public HarvestProgressRowComponent(
-            ImagePanel parent,
+            Base parent,
             string containerName,
             string resourceTexture,
             string resourceText,
             int currentLevel,
             int nextLevel,
-            int harvestsRemaining,
+            long harvestsRemaining,
             float percent,
             bool harvestable,
             string cannotHarvestMessage,
@@ -69,6 +75,11 @@ namespace Intersect.Client.Interface.Game.Components
             CannotHarvestMessage = cannotHarvestMessage;
         }
 
+        public void SetBanding()
+        {
+            SelfContainer.Texture = BandingTexture;
+        }
+
         public override void Initialize()
         {
             SelfContainer = new ImagePanel(ParentContainer, ComponentName);
@@ -82,11 +93,13 @@ namespace Intersect.Client.Interface.Game.Components
             CannotHarvestLabelTemplate = new Label(SelfContainer, "CannotHarvestMsg");
             CannotHarvestLabel = new RichLabel(SelfContainer);
 
+            var formattedRemaining =  HarvestsRemaining.ToString("N0");
+
             ProgressBar = new HarvestProgressBarComponent(SelfContainer,
                 "ProgressBar",
                 ProgressBarBgTexture,
                 IsMaxed ? ProgressBarCompleteTexture : ProgressBarTexture,
-                bottomLabel: $"{HarvestsRemaining} to go!",
+                bottomLabel: IsMaxed ? string.Empty : $"{formattedRemaining} to go!",
                 leftLabel: $"{CurrentLevel}",
                 leftLabelColor: CurrHarvestColor,
                 rightLabel: IsMaxed ? "MAX" : $"{NextLevel}",
@@ -109,6 +122,12 @@ namespace Intersect.Client.Interface.Game.Components
 
                 ResourceName.SetTextColor(CurrHarvestColor, Label.ControlState.Normal);
             }
+        }
+
+        public void SetPosition(int x, int y)
+        {
+            ParentContainer.X = x;
+            ParentContainer.Y = y;
         }
 
         private void FormatCannotHarvestMessage()

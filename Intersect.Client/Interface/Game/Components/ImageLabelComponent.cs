@@ -77,5 +77,10 @@ namespace Intersect.Client.Interface.Game.Components
 
             Image.Texture = image;
         }
+
+        public void Dispose()
+        {
+            Container.Dispose();
+        }
     }
 }

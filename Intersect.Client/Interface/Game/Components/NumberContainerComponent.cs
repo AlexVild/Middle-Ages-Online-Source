@@ -20,7 +20,7 @@ namespace Intersect.Client.Interface.Game.Components
         public string LabelText { get; set; }
         public string TooltipText { get; set; }
 
-        public NumberContainerComponent(Base parent, string parentContainerName, Color labelColor, Color valueColor, string label, string tooltipText, ComponentList<NumberContainerComponent> referenceList = null)
+        public NumberContainerComponent(Base parent, string parentContainerName, Color labelColor, Color valueColor, string label, string tooltipText, ComponentList<IGwenComponent> referenceList = null)
         {
             ParentContainer = new ImagePanel(parent, parentContainerName);
 
@@ -62,6 +62,11 @@ namespace Intersect.Client.Interface.Game.Components
         public void SetValue(string text)
         {
             Value.SetText(text);
+        }
+
+        public void Dispose()
+        {
+            ParentContainer.Dispose();
         }
     }
 }

@@ -29,6 +29,7 @@ using Newtonsoft.Json.Linq;
 using Intersect.Client.General.Leaderboards;
 using Intersect.Client.Interface.ScreenAnimations;
 using Intersect.Client.Entities.CombatNumbers;
+using Intersect.Client.Interface.Objects;
 
 namespace Intersect.Client.Networking
 {
@@ -2677,6 +2678,15 @@ namespace Intersect.Client.Networking
             }
 
             CombatNumberManager.AddCombatNumber(packet.Target, packet.Value, packet.Type, packet.X, packet.Y, packet.MapId, visibleTo);
+        }
+
+        public void HandlePacket(IPacketSender packetSender, ResourceInfoPackets packet)
+        {
+            HarvestInfoRows.CurrentRows.Clear();
+            foreach(var pkt in packet.Packets)
+            {
+                HarvestInfoRows.CurrentRows.Add(new HarvestInfo(pkt));
+            }
         }
     }
 }

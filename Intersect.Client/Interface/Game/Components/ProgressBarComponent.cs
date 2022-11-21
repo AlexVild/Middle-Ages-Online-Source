@@ -178,5 +178,11 @@ namespace Intersect.Client.Interface.Game.Components
         {
             SetBarWidth();
         }
+
+        public void Dispose()
+        {
+            ParentContainer.DeleteAllNestedChildren();
+            ParentContainer.Dispose();
+        }
     }
 }

@@ -11,6 +11,7 @@ using Intersect.Client.General;
 using Intersect.Client.Interface.Components;
 using Intersect.Client.Interface.Game.Character.Equipment;
 using Intersect.Client.Interface.Game.Components;
+using Intersect.Client.Interface.Objects;
 using Intersect.Client.Localization;
 using Intersect.Client.Networking;
 using Intersect.Enums;
@@ -29,11 +30,17 @@ namespace Intersect.Client.Interface.Game.Character.Panels
         private ImagePanel WoodcutIcon { get; set; }
         private ImagePanel FishingIcon { get; set; }
 
+        private ImagePanel ProgressContainer { get; set; }
+        private ScrollControl ProgressScrollContainer { get; set; }
+        private bool RefreshProgress { get; set; }
+
         private NumberContainerComponent MiningLevel { get; set; }
         private NumberContainerComponent WoodcutLevel { get; set; }
         private NumberContainerComponent FishingLevel { get; set; }
 
-        private ComponentList<NumberContainerComponent> ContainerComponents { get; set; }
+        private ComponentList<IGwenComponent> ContainerComponents { get; set; }
+        
+        private ComponentList<IGwenComponent> ProgressComponents { get; set; }
 
         public CharacterHarvestingWindow(ImagePanel panelBackground)
         {
@@ -45,30 +52,35 @@ namespace Intersect.Client.Interface.Game.Character.Panels
             WoodcutIcon = new ImagePanel(TiersContainer, "WoodcutIcon");
             FishingIcon = new ImagePanel(TiersContainer, "FishingIcon");
 
-            ContainerComponents = new ComponentList<NumberContainerComponent>();
+            ContainerComponents = new ComponentList<IGwenComponent>();
+            ProgressComponents = new ComponentList<IGwenComponent>();
+
             MiningLevel = new NumberContainerComponent(TiersContainer, "MiningContainer", StatLabelColor, StatColor, "TIER", "Your mining tier-level.", ContainerComponents);
             WoodcutLevel = new NumberContainerComponent(TiersContainer, "WoodcutContainer", StatLabelColor, StatColor, "TIER", "Your mining tier-level.", ContainerComponents);
             FishingLevel = new NumberContainerComponent(TiersContainer, "FishingContainer", StatLabelColor, StatColor, "TIER", "Your fishing tier-level.", ContainerComponents);
 
-            var x = new HarvestProgressRowComponent(
-                mBackground, "HarvestProgressRow", "al_coal.png", "COAL", 1, 2, 23, 0.23f, true, "Can't harvest yet!"
-            );
-            var y = new HarvestProgressRowComponent(
-                mBackground, "HarvestProgressRow2", "al_iron.png", "IRON", 1, 2, 23, 0f, false, "You must have a mining tier of at least 2+ to mine this resource!"
-            );
+            ProgressContainer = new ImagePanel(mBackground, "ProgressContainer");
+            ProgressScrollContainer = new ScrollControl(ProgressContainer, "ScrollContainer");
+            ProgressScrollContainer.EnableScroll(false, true);
 
             mBackground.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
 
-            x.Initialize();
-            y.Initialize();
-
             ContainerComponents.InitializeAll();
+
+            RefreshProgress = true;
         }
 
         public override void Show()
         {
             PacketSender.SendRequestResourceInfo(1);
+            RefreshProgress = true;
             base.Show();
+        }
+
+        public override void Hide()
+        {
+            ProgressComponents?.DisposeAll();
+            base.Hide();
         }
 
         public override void Update()
@@ -85,6 +97,60 @@ namespace Intersect.Client.Interface.Game.Character.Panels
             MiningLevel.SetValue(miningTier);
             WoodcutLevel.SetValue(woodcutTier);
             FishingLevel.SetValue(fishingTier);
+
+            if (RefreshProgress && HarvestInfoRows.CurrentRows.Count != 0)
+            {
+                LoadProgressComponents();
+            }
+
+            // Constantly prep for a UI update if we haven't gotten our server response yet
+            if (HarvestInfoRows.CurrentRows.Count == 0)
+            {
+                RefreshProgress = true;
+            }
+        }
+
+        private void ClearProgressComponents()
+        {
+            ProgressComponents?.DisposeAll();
+            foreach (var child in ProgressScrollContainer.Children.ToArray())
+            {
+                ProgressScrollContainer.RemoveChild(child, false);
+            }
+        }
+
+        private void LoadProgressComponents()
+        {
+            ClearProgressComponents();
+            var idx = 0;
+            var yPadding = 56;
+            foreach(var harvestRow in HarvestInfoRows.CurrentRows)
+            {
+                var row = new HarvestProgressRowComponent(
+                    ProgressScrollContainer,
+                    "HarvestProgressRow",
+                    harvestRow.ResourceTexture,
+                    harvestRow.ResourceName,
+                    harvestRow.HarvestLevel,
+                    harvestRow.HarvestLevel + 1,
+                    harvestRow.Remaining,
+                    harvestRow.PercentRemaining,
+                    harvestRow.Harvestable,
+                    harvestRow.CannotHarvestMessage
+                );
+
+                ProgressComponents.Add(row);
+                row.Initialize();
+                row.SetPosition(row.X, row.Y + (yPadding * idx));
+                if (idx % 2 == 1)
+                {
+                    row.SetBanding();
+                }
+
+                idx++;
+            }
+
+            RefreshProgress = false;
         }
     }
 }

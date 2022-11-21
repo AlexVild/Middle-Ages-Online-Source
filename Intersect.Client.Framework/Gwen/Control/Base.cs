@@ -719,6 +719,14 @@ namespace Intersect.Client.Framework.Gwen.Control
             GC.SuppressFinalize(this);
         }
 
+        ~Base()
+        {
+            if (Name == "HarvestProgressRowComponent")
+            {
+                Console.WriteLine("HarvestProgressRowComponent cleaned");
+            }
+        }
+
         /// <summary>
         ///     Invoked before this control is drawn
         /// </summary>
@@ -1503,6 +1511,24 @@ namespace Intersect.Client.Framework.Gwen.Control
             while (mChildren.Count > 0)
             {
                 RemoveChild(mChildren[0], true);
+            }
+        }
+
+        public virtual void DeleteAllNestedChildren(string withName = null)
+        {
+            foreach(var child in mChildren.ToArray())
+            {
+                if (withName != null && child.Name != withName)
+                {
+                    continue;
+                }
+                
+                if (child.mChildren.Count > 0)
+                {
+                    DeleteAllNestedChildren(withName);
+                }
+
+                RemoveChild(child, true);
             }
         }
 

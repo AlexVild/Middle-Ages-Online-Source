@@ -59,7 +59,7 @@ namespace Intersect.Client.Interface.Game.Character.Equipment
 
         private Guid PreviousMap;
 
-        private ComponentList<NumberContainerComponent> ContainerComponents;
+        private ComponentList<IGwenComponent> ContainerComponents;
 
         public CharacterEquipmentWindow(CharacterWindowMAO parent, ImagePanel characterWindow)
         {
@@ -317,7 +317,7 @@ namespace Intersect.Client.Interface.Game.Character.Equipment
 
         private void InitializeEquipmentStatContainers()
         {
-            ContainerComponents = new ComponentList<NumberContainerComponent>();
+            ContainerComponents = new ComponentList<IGwenComponent>();
             
             mBluntAtk = new NumberContainerComponent(mBackground, "BluntAttackContainer", AtkLabelColor, StatColor, "ATK", "Blunt Attack Damage", ContainerComponents);
             mBluntDef = new NumberContainerComponent(mBackground, "BluntDefenseContainer", DefLabelColor, StatColor, "DEF", "Blunt Attack Resistance", ContainerComponents);
