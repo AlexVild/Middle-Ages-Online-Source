@@ -27,6 +27,8 @@ namespace Intersect.Client.Interface.Game.Character.Panels
 
     public class CharacterHarvestingWindow : CharacterWindowPanel
     {
+        public CharacterPanelType Type = CharacterPanelType.Harvesting;
+
         private bool WaitingOnServer => CharacterHarvestingWindowController.WaitingOnServer;
 
         private Color StatLabelColor => new Color(255, 166, 167, 37);

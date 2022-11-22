@@ -426,6 +426,14 @@ namespace Intersect.Client.Framework.Gwen.Control
             return mHorizontalScrollBar;
         }
 
+        public void ClearCreatedChildren()
+        {
+            foreach (var child in Children.ToArray())
+            {
+                RemoveChild(child, false);
+            }
+        }
+
     }
 
 }

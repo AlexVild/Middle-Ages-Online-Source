@@ -2994,5 +2994,33 @@ namespace Intersect.Client.Entities
 
             return value;
         }
+
+        public Dictionary<EffectType, int> GetAllBonusEffects()
+        {
+            var effectValues = new Dictionary<EffectType, int>();
+
+            for (var i = 0; i < Options.EquipmentSlots.Count; i++)
+            {
+                if (Equipment[i] == default)
+                {
+                    continue;
+                }
+
+                var item = ItemBase.Get(Equipment[i]);
+                
+                foreach (var effect in item.EffectsEnabled)
+                {
+                    var amt = item.GetEffectPercentage(effect);
+                    if (!effectValues.ContainsKey(effect))
+                    {
+                        effectValues[effect] = amt;
+                        continue;
+                    }
+                    effectValues[effect] += amt;
+                }
+            }
+
+            return effectValues;
+        }
     }
 }

@@ -22,6 +22,7 @@ using static Intersect.Client.Interface.Game.Bank.BankWindow;
 using Intersect.Client.General.Leaderboards;
 using Intersect.Client.Interface.Game.Leaderboards;
 using Intersect.Client.Interface.Game.LootRoll;
+using Intersect.Client.Interface.Game.Character;
 
 namespace Intersect.Client.Interface.Game
 {
@@ -774,6 +775,12 @@ namespace Intersect.Client.Interface.Game
         public LeaderboardWindow LeaderboardWindow;
         public LootRollWindow LootRollWindow;
         public PlayerRespawnWindow RespawnWindow;
+        private CharacterPanelType _CurrentCharPanel;
+        public CharacterPanelType CurrentCharacterPanel
+        {
+            get => !GameMenu?.CharacterWindowOpen() ?? true ? CharacterPanelType.None : _CurrentCharPanel;
+            set => _CurrentCharPanel = value;
+        }
 
         private void _InitGameGui(Canvas gameCanvas)
         {

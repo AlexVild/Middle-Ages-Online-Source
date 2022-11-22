@@ -18,7 +18,8 @@ namespace Intersect.Client.Interface.Game.Character
 {
     public enum CharacterPanelType
     {
-        Equipment = 0,
+        None = 0,
+        Equipment,
         Stats,
         Bonuses,
         Harvesting,

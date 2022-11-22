@@ -224,7 +224,6 @@ namespace Intersect.Client.Interface.Game
                 return;
             }
 
-            mCharacterWindow.Hide();
             mFriendsWindow.Hide();
             mInventoryWindow.Hide();
             mPartyWindow.Hide();
@@ -500,6 +499,11 @@ namespace Intersect.Client.Interface.Game
         private void MapButton_Clicked(Base sender, ClickedEventArgs arguments)
         {
             Interface.GameUi.Map.ToggleOpen();
+        }
+
+        public bool CharacterWindowOpen()
+        {
+            return mCharacterWindow.IsVisible();
         }
     }
 }

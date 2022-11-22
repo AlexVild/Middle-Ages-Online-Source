@@ -127,6 +127,7 @@
     <Compile Include="Interface\Game\AnnouncementWindow.cs" />
     <Compile Include="Interface\Game\Character\CharacterWindowPanelController.cs" />
     <Compile Include="Interface\Game\Character\CharacterWindowMAO.cs" />
+    <Compile Include="Interface\Game\Character\Panels\CharacterBonusesPanel.cs" />
     <Compile Include="Interface\Game\Character\Panels\CharacterEquipmentWindow.cs" />
     <Compile Include="Interface\Game\Character\CharacterWindowPanel.cs" />
     <Compile Include="Interface\Game\Character\Panels\CharacterHarvestingWindow.cs" />

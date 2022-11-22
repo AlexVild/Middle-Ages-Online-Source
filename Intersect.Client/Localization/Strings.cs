@@ -416,6 +416,34 @@ namespace Intersect.Client.Localization
             public static LocalizedString classranktip = @"Your Class Rank(s). This can be increased at a Class Guild Hall.";
             
             public static LocalizedString calculatestats = @"Calculate Stats?";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static Dictionary<int, LocalizedString> BonusEffects = new Dictionary<int, LocalizedString>
+            {
+                {0, @""},
+                {1, @"Cooldown Reduction:"}, // Cooldown Reduction
+                {2, @"Lifesteal:"}, // Lifesteal
+                {3, @"Tenacity:"}, // Tenacity
+                {4, @"Luck:"}, // Luck
+                {5, @"Bonus Experience:"}, // Bonus Experience
+                {6, @"Affinity:"}, // Affinity
+                {7, @"Critical Bonus:"}, // Critical bonus
+                {8, @"Swiftness:"}, // Swiftness
+            };
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static Dictionary<int, LocalizedString> BonusEffectDescriptions = new Dictionary<int, LocalizedString>
+            {
+                {0, @""},
+                {1, @"Cooldown Reduction:"}, // Cooldown Reduction
+                {2, @"Lifesteal:"}, // Lifesteal
+                {3, @"Tenacity:"}, // Tenacity
+                {4, @"Luck:"}, // Luck
+                {5, @"Bonus Experience:"}, // Bonus Experience
+                {6, @"Affinity:"}, // Affinity
+                {7, @"Critical Bonus:"}, // Critical bonus
+                {8, @"Swiftness:"}, // Swiftness
+            };
         }
 
         public partial struct CharacterCreation
