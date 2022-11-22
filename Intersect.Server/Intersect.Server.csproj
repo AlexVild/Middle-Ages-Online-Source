@@ -936,6 +936,10 @@
     <Compile Include="Migrations\Game\20221108204314_RPMigration.designer.cs">
       <DependentUpon>20221108204314_RPMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20221122165612_ResourceDisplayNameMigration.cs" />
+    <Compile Include="Migrations\Game\20221122165612_ResourceDisplayNameMigration.designer.cs">
+      <DependentUpon>20221122165612_ResourceDisplayNameMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

@@ -37,6 +37,8 @@ namespace Intersect.Editor.Forms.Editors
             this.txtSearch = new DarkUI.Controls.DarkTextBox();
             this.lstGameObjects = new Intersect.Editor.Forms.Controls.GameObjectList();
             this.grpGeneral = new DarkUI.Controls.DarkGroupBox();
+            this.txtDisplayName = new DarkUI.Controls.DarkTextBox();
+            this.lblDisplayName = new System.Windows.Forms.Label();
             this.chkDoNotRecord = new DarkUI.Controls.DarkCheckBox();
             this.lblExp = new System.Windows.Forms.Label();
             this.nudExp = new DarkUI.Controls.DarkNumericUpDown();
@@ -200,6 +202,8 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpGeneral.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpGeneral.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpGeneral.Controls.Add(this.txtDisplayName);
+            this.grpGeneral.Controls.Add(this.lblDisplayName);
             this.grpGeneral.Controls.Add(this.chkDoNotRecord);
             this.grpGeneral.Controls.Add(this.lblExp);
             this.grpGeneral.Controls.Add(this.nudExp);
@@ -227,6 +231,26 @@ namespace Intersect.Editor.Forms.Editors
             this.grpGeneral.TabIndex = 15;
             this.grpGeneral.TabStop = false;
             this.grpGeneral.Text = "General";
+            // 
+            // txtDisplayName
+            // 
+            this.txtDisplayName.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.txtDisplayName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtDisplayName.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.txtDisplayName.Location = new System.Drawing.Point(82, 301);
+            this.txtDisplayName.Name = "txtDisplayName";
+            this.txtDisplayName.Size = new System.Drawing.Size(128, 20);
+            this.txtDisplayName.TabIndex = 54;
+            this.txtDisplayName.TextChanged += new System.EventHandler(this.txtDisplayName_TextChanged);
+            // 
+            // lblDisplayName
+            // 
+            this.lblDisplayName.AutoSize = true;
+            this.lblDisplayName.Location = new System.Drawing.Point(7, 303);
+            this.lblDisplayName.Name = "lblDisplayName";
+            this.lblDisplayName.Size = new System.Drawing.Size(75, 13);
+            this.lblDisplayName.TabIndex = 53;
+            this.lblDisplayName.Text = "Display Name:";
             // 
             // chkDoNotRecord
             // 
@@ -865,7 +889,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             // lblRegenHint
             // 
-            this.lblRegenHint.Location = new System.Drawing.Point(102, 28);
+            this.lblRegenHint.Location = new System.Drawing.Point(100, 13);
             this.lblRegenHint.Name = "lblRegenHint";
             this.lblRegenHint.Size = new System.Drawing.Size(137, 72);
             this.lblRegenHint.TabIndex = 0;
@@ -1379,5 +1403,7 @@ namespace Intersect.Editor.Forms.Editors
         private DarkButton btnUnselectItem;
         private System.Windows.Forms.Label lblRp;
         private DarkNumericUpDown nudRP;
+        private DarkTextBox txtDisplayName;
+        private System.Windows.Forms.Label lblDisplayName;
     }
 }

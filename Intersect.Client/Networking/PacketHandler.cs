@@ -30,6 +30,7 @@ using Intersect.Client.General.Leaderboards;
 using Intersect.Client.Interface.ScreenAnimations;
 using Intersect.Client.Entities.CombatNumbers;
 using Intersect.Client.Interface.Objects;
+using Intersect.Client.Interface.Game.Character.Panels;
 
 namespace Intersect.Client.Networking
 {
@@ -2687,6 +2688,7 @@ namespace Intersect.Client.Networking
             {
                 HarvestInfoRows.CurrentRows.Add(new HarvestInfo(pkt));
             }
+            CharacterHarvestingWindowController.WaitingOnServer = false;
         }
     }
 }

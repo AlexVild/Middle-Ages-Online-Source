@@ -97,7 +97,7 @@ namespace Intersect.Server.Utilities
                 {
                     return i;
                 }
-                else if (amtHarvested > intervals[i])
+                else if (amtHarvested > intervals[i] && i == intervals.Count - 2)
                 {
                     return i + 1;
                 }

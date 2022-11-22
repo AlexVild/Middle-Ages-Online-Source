@@ -3,6 +3,7 @@ using Intersect.Client.Framework.File_Management;
 using Intersect.Client.Framework.Gwen.Control;
 using Intersect.Client.General;
 using Intersect.Client.Interface.Components;
+using System;
 using System.Collections.Generic;
 using static Intersect.Client.Framework.File_Management.GameContentManager;
 
@@ -51,8 +52,23 @@ namespace Intersect.Client.Interface.Game.Components
             Image.Texture = imageTexture;
 
             Frame.SetSize(frameTexture.GetWidth() * Scale, frameTexture.GetHeight() * Scale);
-            Image.SetSize(Frame.Width - (BorderWidth * Scale), Frame.Height - (BorderWidth * Scale));
-            Image.AddAlignment(Framework.Gwen.Alignments.Center);
+
+            // fit to texture height
+            if (Image.Texture != null)
+            {
+                var frameWidth = Frame.Width - BorderWidth;
+                var frameHeight = Frame.Height - BorderWidth;
+
+                var maxSize = Math.Min(frameHeight, Image.Texture.Height);
+
+                var ratio = (float)maxSize / Image.Texture.Height;
+                var height = maxSize;
+                var width = Image.Texture.Width * ratio;
+
+                Image.SetSize((int)width, height);
+                Image.AddAlignment(Framework.Gwen.Alignments.Center);
+            }
+
             SelfContainer.SetSize(Frame.Width, Frame.Height);
 
             FitParentToComponent();

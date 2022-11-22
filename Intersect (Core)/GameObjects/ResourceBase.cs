@@ -133,6 +133,8 @@ namespace Intersect.GameObjects
         public string ResourceGroup { get; set; } = string.Empty;
 
         public int RP { get; set; } = 0;
+
+        public string DisplayName { get; set; }
     }
 
 }

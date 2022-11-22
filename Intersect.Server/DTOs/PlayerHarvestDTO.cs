@@ -26,10 +26,6 @@ namespace Intersect.Server.DTOs
 
         public PlayerHarvestDTO(Player player, ResourceBase resource)
         {
-            if (resource.Name.Contains("Coal"))
-            {
-                Console.WriteLine("Hey");
-            }
             var id = resource.Id;
             var bonusValue = HarvestBonusHelper.CalculateHarvestBonus(player, id);
 
@@ -47,7 +43,7 @@ namespace Intersect.Server.DTOs
                 PercentCompleted = (float)currAmt / Options.Combat.HarvestBonusIntervals[HarvestLevel];
             }
 
-            ResourceName = resource.Name;
+            ResourceName = string.IsNullOrEmpty(resource.DisplayName) ? resource.Name : resource.DisplayName;
             ResourceTexture = !resource.Initial.GraphicFromTileset ? resource.Initial.Graphic : string.Empty;
 
             Harvestable = Conditions.MeetsConditionLists(resource.HarvestingRequirements, player, null);

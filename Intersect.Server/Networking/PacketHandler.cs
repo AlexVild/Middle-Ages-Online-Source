@@ -4289,9 +4289,42 @@ namespace Intersect.Server.Networking
 
             var nonGroupedResource = resources.Where(resource => string.IsNullOrEmpty(resource.ResourceGroup));
 
+            // Manipulate group resources such that:
+            // A) They use a display name if one is given in the group
+            // B) They use a non-empty, non-tileset graphic if one is in the group
             var groupedResources = resources
                 .GroupBy(resource => new { resource.ResourceGroup })
-                .Select(resourceGroupings => resourceGroupings.First());
+                .Select((resourceGroupings) =>
+                {
+                    var resourceToReturn = resourceGroupings.First();
+                    if (!string.IsNullOrEmpty(resourceToReturn.DisplayName) 
+                        && !string.IsNullOrEmpty(resourceToReturn.Initial.Graphic)
+                        && !resourceToReturn.Initial.GraphicFromTileset)
+                    {
+                        return resourceToReturn;
+                    }
+
+                    var texture = resourceToReturn.Initial.Graphic;
+                    var displayName = resourceToReturn.Name;
+                    // Do any of the others have a display name to use?
+                    if (string.IsNullOrEmpty(resourceToReturn.DisplayName))
+                    {
+                        displayName = resourceGroupings.Where(resource => !string.IsNullOrEmpty(resource.DisplayName)).ToList().FirstOrDefault()?.DisplayName ?? resourceToReturn.Name;
+                    }
+                    if (string.IsNullOrEmpty(texture))
+                    {
+                        texture = resourceGroupings.Where(resource => !string.IsNullOrEmpty(resource.Initial.Graphic) && !resource.Initial.GraphicFromTileset).ToList().FirstOrDefault()?.Initial.Graphic ?? string.Empty;
+                        if (!string.IsNullOrEmpty(texture))
+                        {
+                            resourceToReturn.Initial.GraphicFromTileset = false;
+                        }
+                    }
+
+                    resourceToReturn.DisplayName = displayName;
+                    resourceToReturn.Initial.Graphic = texture;
+
+                    return resourceToReturn;
+                });
 
             var validResources = new List<ResourceBase>();
             validResources.AddRange(nonGroupedResource);

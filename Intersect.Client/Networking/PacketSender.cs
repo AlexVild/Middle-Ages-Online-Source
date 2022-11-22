@@ -10,6 +10,7 @@ using Intersect.Enums;
 using Intersect.Utilities;
 using Intersect.Client.Entities;
 using Intersect.Client.General.Leaderboards;
+using Intersect.Client.Interface.Game.Character.Panels;
 
 namespace Intersect.Client.Networking
 {
@@ -565,6 +566,7 @@ namespace Intersect.Client.Networking
 
         public static void SendRequestResourceInfo(int tool)
         {
+            CharacterHarvestingWindowController.WaitingOnServer = true;
             Network.SendPacket(new ResourceInfoRequestPacket(tool));
         }
     }

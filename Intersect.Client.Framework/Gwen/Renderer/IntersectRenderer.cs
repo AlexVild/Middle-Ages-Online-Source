@@ -176,14 +176,14 @@ namespace Intersect.Client.Framework.Gwen.Renderer
             float v2 = 1
         )
         {
+            var translatedRect = Translate(targetRect);
             var rect = new FloatRect(
-                Translate(targetRect).X, Translate(targetRect).Y, Translate(targetRect).Width,
-                Translate(targetRect).Height
+                translatedRect.X, translatedRect.Y, translatedRect.Width,
+                translatedRect.Height
             );
 
             if (null == tex)
             {
-                //DrawMissingImage(targetRect);
                 return;
             }
 
@@ -200,6 +200,9 @@ namespace Intersect.Client.Framework.Gwen.Renderer
                 clip.Width = (int) Math.Round(clip.Width * Scale);
                 clip.Height = (int) Math.Round(clip.Height * Scale);
 
+                var widthRatio = u2 / rect.Width;
+                var heightRatio = v2 / rect.Height;
+
                 float diff = 0;
                 float vdiff = 0;
                 if (rect.X < clip.X)
@@ -208,7 +211,7 @@ namespace Intersect.Client.Framework.Gwen.Renderer
                     vdiff = diff;
                     rect.X += diff;
                     rect.Width -= diff;
-                    u1 += vdiff;
+                    u1 += vdiff * widthRatio;
                 }
 
                 if (rect.X + rect.Width > clip.X + clip.Width)
@@ -216,7 +219,7 @@ namespace Intersect.Client.Framework.Gwen.Renderer
                     diff = rect.X + rect.Width - (clip.X + clip.Width);
                     vdiff = diff;
                     rect.Width -= diff;
-                    u2 -= vdiff;
+                    u2 -= vdiff * widthRatio;
                 }
 
                 if (rect.Y < clip.Y)
@@ -225,7 +228,7 @@ namespace Intersect.Client.Framework.Gwen.Renderer
                     vdiff = diff;
                     rect.Y += diff;
                     rect.Height -= diff;
-                    v1 += vdiff;
+                    v1 += vdiff * heightRatio;
                 }
 
                 if (rect.Y + rect.Height > clip.Y + clip.Height)
@@ -233,7 +236,7 @@ namespace Intersect.Client.Framework.Gwen.Renderer
                     diff = rect.Y + rect.Height - (clip.Y + clip.Height);
                     vdiff = diff;
                     rect.Height -= diff;
-                    v2 -= vdiff;
+                    v2 -= vdiff * heightRatio;
                 }
 
                 if (rect.Width <= 0)
@@ -247,10 +250,6 @@ namespace Intersect.Client.Framework.Gwen.Renderer
                 }
             }
 
-            //u1 /= tex.GetWidth();
-            //v1 /= tex.GetHeight();
-            //u2 /= tex.GetWidth();
-            //v2 /= tex.GetHeight();
             if (mRenderTarget == null)
             {
                 mRenderer.DrawTexture(

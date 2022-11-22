@@ -83,7 +83,7 @@ namespace Intersect.Client.Interface.Game.Components
         public override void Initialize()
         {
             SelfContainer = new ImagePanel(ParentContainer, ComponentName);
-            ResourceImage = new ImageFrameComponent(SelfContainer, "ResourceImage", ResourceFrame, ResourceTextureString, ResourceTextureType, 4, 4);
+            ResourceImage = new ImageFrameComponent(SelfContainer, "ResourceImage", ResourceFrame, ResourceTextureString, ResourceTextureType, 1, 8);
 
             ResourceName = new Label(SelfContainer, "ResourceName");
 
@@ -100,8 +100,9 @@ namespace Intersect.Client.Interface.Game.Components
                 bottomLabelColor: CurrHarvestColor,
                 leftLabel: $"{CurrentLevel}",
                 leftLabelColor: CurrHarvestColor,
-                rightLabel: IsMaxed ? "MAX" : $"{NextLevel}",
-                rightLabelColor: NextHarvestColor);
+                rightLabel: IsMaxed ? string.Empty : $"{NextLevel}",
+                rightLabelColor: NextHarvestColor,
+                topLabel: IsMaxed ? "MAX!" : string.Empty);
             ProgressBar.Percent = IsMaxed ? 1.0f : Percent;
 
             base.Initialize();
@@ -137,9 +138,9 @@ namespace Intersect.Client.Interface.Game.Components
             CannotHarvestLabel.ClearText();
             CannotHarvestLabel.Width = SelfContainer.Width / 2 - 8;
             CannotHarvestLabel.X = SelfContainer.Width / 2 - 16;
-            CannotHarvestLabel.Y += SelfContainer.Padding.Top;
             CannotHarvestLabel.AddText(CannotHarvestMessage, CannotHarvestLabelTemplate);
             CannotHarvestLabel.SizeToChildren(false, true);
+            CannotHarvestLabel.Y += SelfContainer.Padding.Top;
         }
     }
 }

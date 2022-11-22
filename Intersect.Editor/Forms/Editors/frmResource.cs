@@ -262,6 +262,7 @@ namespace Intersect.Editor.Forms.Editors
                 chkDoNotRecord.Checked = mEditorItem.DoNotRecord;
                 cmbResourceGroup.Text = mEditorItem.ResourceGroup;
 
+                txtDisplayName.Text = mEditorItem.DisplayName;
                 nudRP.Value = mEditorItem.RP;
 
                 //Regen
@@ -1149,6 +1150,11 @@ namespace Intersect.Editor.Forms.Editors
         private void nudRP_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.RP = (int)nudRP.Value;
+        }
+
+        private void txtDisplayName_TextChanged(object sender, EventArgs e)
+        {
+            mEditorItem.DisplayName = txtDisplayName.Text;
         }
     }
 }
