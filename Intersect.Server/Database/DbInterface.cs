@@ -759,7 +759,7 @@ namespace Intersect.Server.Database
                         case GameObjectType.Label:
                             foreach (var label in context.Labels)
                             {
-                                LootTableDescriptor.Lookup.Set(label.Id, label);
+                                LabelDescriptor.Lookup.Set(label.Id, label);
                             }
 
                             break;

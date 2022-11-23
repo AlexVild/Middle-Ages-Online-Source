@@ -1330,7 +1330,7 @@ namespace Intersect.Client.Networking
                 }
             }
 
-            if (entityId == Globals.Me.Id && Interface.Interface.GameUi.CurrentCharacterPanel == Interface.Game.Character.CharacterPanelType.Bonuses)
+            if (entityId == Globals.Me?.Id && Interface.Interface.GameUi?.CurrentCharacterPanel == Interface.Game.Character.CharacterPanelType.Bonuses)
             {
                 CharacterBonusesPanelController.Refresh = true;
             }

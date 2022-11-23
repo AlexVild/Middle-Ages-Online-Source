@@ -128,6 +128,7 @@
     <Compile Include="Interface\Game\Character\CharacterWindowPanelController.cs" />
     <Compile Include="Interface\Game\Character\CharacterWindowMAO.cs" />
     <Compile Include="Interface\Game\Character\Panels\CharacterBonusesPanel.cs" />
+    <Compile Include="Interface\Game\Character\Panels\CharacterCosmeticPanel.cs" />
     <Compile Include="Interface\Game\Character\Panels\CharacterEquipmentWindow.cs" />
     <Compile Include="Interface\Game\Character\CharacterWindowPanel.cs" />
     <Compile Include="Interface\Game\Character\Panels\CharacterHarvestingWindow.cs" />
@@ -138,6 +139,7 @@
     <Compile Include="Interface\Game\Components\HarvestProgressRowComponent.cs" />
     <Compile Include="Interface\Game\Components\ImageFrameComponent.cs" />
     <Compile Include="Interface\Game\Components\ImageLabelComponent.cs" />
+    <Compile Include="Interface\Game\Components\LabelRowComponent.cs" />
     <Compile Include="Interface\Game\Components\NumberContainerComponent.cs" />
     <Compile Include="Interface\Game\Components\ProgressBarComponent.cs" />
     <Compile Include="Interface\Game\DescriptionWindows\Components\ComponentBase.cs" />

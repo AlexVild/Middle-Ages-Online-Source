@@ -38,6 +38,7 @@ namespace Intersect.Client.Interface.Game.Character
         private CharacterStatsWindow StatsPanel { get; set; }
         private CharacterHarvestingWindow HarvestingPanel { get; set; }
         private CharacterBonusesPanel BonusesPanel { get; set; }
+        private CharacterCosmeticPanel CosmeticsPanel { get; set; }
 
         public CharacterWindowPanelController(Canvas gameCanvas, CharacterWindowMAO parent)
         {
@@ -61,6 +62,9 @@ namespace Intersect.Client.Interface.Game.Character
 
             BonusesPanel = new CharacterBonusesPanel(PanelContainer);
             BonusesPanel.Hide();
+
+            CosmeticsPanel = new CharacterCosmeticPanel(PanelContainer);
+            CosmeticsPanel.Hide();
 
             PositionToParent();
             Hide();
@@ -175,7 +179,7 @@ namespace Intersect.Client.Interface.Game.Character
                     break;
                 case CharacterPanelType.Decor:
                     DecorButton.Disable();
-                    CurrentPanel = StatsPanel;
+                    CurrentPanel = CosmeticsPanel;
                     break;
                 default:
                     throw new ArgumentException($"Invalid enum for {nameof(type)}");
@@ -190,6 +194,7 @@ namespace Intersect.Client.Interface.Game.Character
         {
             HidePanel();
             Container.Hide();
+            CurrentPanel?.Hide();
         }
 
         public void Show()
