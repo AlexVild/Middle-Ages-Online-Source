@@ -4346,5 +4346,18 @@ namespace Intersect.Server.Networking
             player.UseCachedHarvestInfo = true;
             player?.SendPacket(allInfo);
         }
+
+        public void HandlePacket(Client client, RequestLabelsPacket packet)
+        {
+            var player = client?.Entity;
+
+            player?.SendPacket(new Network.Packets.Server.PlayerLabelPackets(player.GetUnlockedLabels()));
+        }
+
+        public void HandlePacket(Client client, SetLabelPacket packet)
+        {
+            client?.Entity?.SetLabelTo(packet.DescriptorId);
+            PacketSender.SendEntityDataToProximity(client?.Entity);
+        }
     }
 }

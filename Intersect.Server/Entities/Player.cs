@@ -40,6 +40,7 @@ using Intersect.Server.Core;
 using Intersect.GameObjects.Timers;
 using Intersect.Server.Utilities;
 using System.Text;
+using System.ComponentModel;
 
 namespace Intersect.Server.Entities
 {
@@ -8415,8 +8416,22 @@ namespace Intersect.Server.Entities
         }
 
         #region Labels
+        [NotMapped, JsonIgnore]
+        private List<PlayerLabelPacket> CachedLabelPackets { get; set; }
+        
+        [NotMapped, JsonIgnore]
+        private bool UseLabelCache { get; set; }
+
         public void SetLabelTo(Guid labelDescriptor)
         {
+            // Process a "remove label" request
+            if (labelDescriptor == Guid.Empty)
+            {
+                HeaderLabel = new Label(string.Empty, Color.White);
+                FooterLabel = new Label(string.Empty, Color.White);
+                return;
+            }
+
             var label = UnlockedLabels.Find(lbl => lbl.DescriptorId == labelDescriptor);
             if (label == default)
             {
@@ -8438,10 +8453,12 @@ namespace Intersect.Server.Entities
             if (descriptor.Position == LabelPosition.Header) // Header
             {
                 HeaderLabel = new Label(descriptor.DisplayName, color);
+                FooterLabel = new Label(string.Empty, Color.White);
             }
             else if (descriptor.Position == LabelPosition.Footer) // Footer
             {
                 FooterLabel = new Label(descriptor.DisplayName, color);
+                HeaderLabel = new Label(string.Empty, Color.White);
             }
 
             label.IsNew = false;
@@ -8468,6 +8485,8 @@ namespace Intersect.Server.Entities
 
                 UnlockedLabels.Add(new LabelInstance(Id, labelId));
                 PacketSender.SendChatMsg(this, Strings.Labels.LabelUnlocked.ToString(descriptor?.DisplayName), ChatMessageType.Notice, CustomColors.General.GeneralCompleted);
+
+                UseLabelCache = false;
                 return;
             }
             else if (status == UnlockLabelCommand.LabelUnlockStatus.Remove)
@@ -8479,10 +8498,24 @@ namespace Intersect.Server.Entities
                     DbRemoveLabel(Id, labelId);
                     PacketSender.SendChatMsg(this, Strings.Labels.LabelRemoved.ToString(descriptor?.DisplayName), ChatMessageType.Notice, CustomColors.General.GeneralDisabled);
                 }
+
+                UseLabelCache = false;
                 return;
             }
 
             throw new NotImplementedException("ChangeLabelUnlockStatus did not contain a valid label unlock status");
+        }
+
+        public List<PlayerLabelPacket> GetUnlockedLabels()
+        {
+            if (UseLabelCache && CachedLabelPackets != null)
+            {
+                return CachedLabelPackets;
+            }
+
+            CachedLabelPackets = UnlockedLabels.Select(lbl => lbl.Packetize()).ToList();
+            UseLabelCache = true;
+            return CachedLabelPackets;
         }
         #endregion
 

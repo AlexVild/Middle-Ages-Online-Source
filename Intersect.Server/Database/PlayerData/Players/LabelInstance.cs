@@ -1,8 +1,8 @@
 ﻿using Intersect.GameObjects;
+using Intersect.Network.Packets.Server;
 using Intersect.Server.Entities;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
 using System.Text.Json.Serialization;
 
 namespace Intersect.Server.Database.PlayerData.Players
@@ -37,5 +37,10 @@ namespace Intersect.Server.Database.PlayerData.Players
         public LabelDescriptor Descriptor { get => LabelDescriptor.Get(DescriptorId) ?? null; }
 
         public bool IsNew { get; set; }
+
+        public PlayerLabelPacket Packetize()
+        {
+            return new PlayerLabelPacket(DescriptorId, IsNew);
+        }
     }
 }

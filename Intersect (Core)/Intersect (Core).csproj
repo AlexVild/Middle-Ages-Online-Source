@@ -399,10 +399,12 @@
     <Compile Include="Network\Packets\Client\FinishedFadePacket.cs" />
     <Compile Include="Network\Packets\Client\PartyInviteNamePacket.cs" />
     <Compile Include="Network\Packets\Client\RequestInstanceLeavePacket.cs" />
+    <Compile Include="Network\Packets\Client\RequestLabelsPacket.cs" />
     <Compile Include="Network\Packets\Client\RequestLeaderboardPacket.cs" />
     <Compile Include="Network\Packets\Client\RequestLootUpdatePacket.cs" />
     <Compile Include="Network\Packets\Client\RequestRespawnPacket.cs" />
     <Compile Include="Network\Packets\Client\ResourceInfoRequestPacket.cs" />
+    <Compile Include="Network\Packets\Client\SetLabelPacket.cs" />
     <Compile Include="Network\Packets\Server\CombatNumberPacket.cs" />
     <Compile Include="Network\Packets\Server\CombatNumberPackets.cs" />
     <Compile Include="Network\Packets\Server\CraftStatusPacket.cs" />
@@ -461,6 +463,7 @@
     <Compile Include="Network\Packets\Server\OpenLootRollPacket.cs" />
     <Compile Include="Network\Packets\Server\PlayAnimationPackets.cs" />
     <Compile Include="Network\Packets\Server\PlayerDeathUpdatePacket.cs" />
+    <Compile Include="Network\Packets\Server\PlayerLabelPacket.cs" />
     <Compile Include="Network\Packets\Server\PlayerStatsPacket.cs" />
     <Compile Include="Network\Packets\Server\ProjectileCastDelayPacket.cs" />
     <Compile Include="Network\Packets\Server\QuestBoardPacket.cs" />

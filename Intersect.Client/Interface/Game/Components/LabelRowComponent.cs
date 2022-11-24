@@ -1,5 +1,8 @@
 ﻿using Intersect.Client.Framework.Gwen.Control;
+using Intersect.Client.General;
 using Intersect.Client.Interface.Components;
+using Intersect.Client.Interface.Game.Character.Panels;
+using Intersect.Client.Networking;
 using Intersect.Client.Utilities;
 using Intersect.GameObjects;
 using System;
@@ -25,26 +28,31 @@ namespace Intersect.Client.Interface.Game.Components
         private CheckBox UseCheckbox { get; set; }
         private const string UseToolTip = "Set as name tag";
 
-        private bool IsUnlocked { get; set; }
-        private bool IsUsed { get; set; }
-
         public int X => ParentContainer.X;
         public int Y => ParentContainer.Y;
         public int Height => ParentContainer.Height;
 
+        private bool ForceSelection { get; set; }
+
+        public int Index { get; set; }
+
+        private readonly Color LockedColor = new Color(255, 169, 169, 169);
+        private readonly Color UnlockedColor = new Color(255, 255, 255, 255);
+
+        private CharacterCosmeticPanel Panel;
+
         public LabelRowComponent(
             Base parent,
+            CharacterCosmeticPanel panel,
             string containerName,
             Guid labelId,
-            bool isUnlocked,
-            bool isUsed,
+            int idx,
             ComponentList<GwenComponent> referenceList = null) : base(parent, containerName, "LabelRowComponent", referenceList)
         {
+            Panel = panel;
             LabelId = labelId;
             Label = LabelDescriptor.Get(LabelId);
-
-            IsUnlocked = isUnlocked;
-            IsUsed = isUsed;
+            Index = idx;
         }
 
         public override void Initialize()
@@ -67,7 +75,7 @@ namespace Intersect.Client.Interface.Game.Components
             ShowMore.Clicked += ShowMore_Clicked;
 
             UseCheckbox = new CheckBox(SelfContainer, "UseCheckbox");
-            UseCheckbox.SetToolTipText(UseToolTip);
+            UseCheckbox.CheckChanged += UseCheckbox_CheckChanged;
 
             base.Initialize();
             FitParentToComponent();
@@ -82,6 +90,64 @@ namespace Intersect.Client.Interface.Game.Components
                 ShowMore.Show();
                 ShowMore.SetPosition(ShowMore.X, LabelHint.Y + LabelHint.Height);
             }
+
+            if (CharacterCosmeticPanelController.UnlockedLabels.TryGetValue(Label.Id, out var isNew))
+            {
+                SetUnlocked(isNew);
+            }
+            else
+            {
+                SetLocked();
+            }
+
+            if (Globals.Me?.LabelDescriptorId == Label.Id)
+            {
+                Select();
+            }
+        }
+
+        private void UseCheckbox_CheckChanged(Base sender, EventArgs arguments)
+        {
+            if (ForceSelection)
+            {
+                ForceSelection = false;
+                return;
+            }
+
+            // Selecting a new label
+            if (CharacterCosmeticPanelController.SelectedLabelIndex != Index)
+            {
+                Panel.UncheckPrevious();
+            }
+
+            // Removing a label
+            if (!UseCheckbox.IsChecked)
+            {
+                CharacterCosmeticPanelController.SelectedLabelIndex = -1;
+                PacketSender.SendSetLabelPacket(Guid.Empty);
+                return;
+            }
+
+            CharacterCosmeticPanelController.SelectedLabelIndex = Index;
+            PacketSender.SendSetLabelPacket(Label.Id);
+        }
+
+        public void SetLocked()
+        {
+            UseCheckbox.Disable();
+            LabelName.SetTextColor(LockedColor, Framework.Gwen.Control.Label.ControlState.Normal);
+            UseCheckbox.SetToolTipText(string.Empty);
+        }
+
+        public void SetUnlocked(bool isNew)
+        {
+            UseCheckbox.Enable();
+            LabelName.SetTextColor(UnlockedColor, Framework.Gwen.Control.Label.ControlState.Normal);
+            if (isNew)
+            {
+                LabelName.SetText($"{LabelName.Text}*");
+            }
+            UseCheckbox.SetToolTipText(UseToolTip);
         }
 
         public void SetPosition(int x, int y)
@@ -96,6 +162,18 @@ namespace Intersect.Client.Interface.Game.Components
                 Label.Hint, true,
                 InputBox.InputType.OkayOnly, null, null, null
             );
+        }
+
+        public void Unselect()
+        {
+            ForceSelection = true;
+            UseCheckbox.IsChecked = false;
+        }
+
+        public void Select()
+        {
+            ForceSelection = true;
+            UseCheckbox.IsChecked = true;
         }
     }
 }

@@ -4,7 +4,10 @@ using Intersect.Client.Framework.Gwen.Control;
 using Intersect.Client.General;
 using Intersect.Client.Interface.Components;
 using Intersect.Client.Interface.Game.Components;
+using Intersect.Client.Networking;
+using Intersect.Client.Utilities;
 using Intersect.GameObjects;
+using Intersect.Network.Packets.Server;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +16,20 @@ using System.Threading.Tasks;
 
 namespace Intersect.Client.Interface.Game.Character.Panels
 {
+    public static class CharacterCosmeticPanelController
+    {
+        /// <summary>
+        /// Dictionary of <LabelDescriptorId, LabelIsNew>
+        /// </summary>
+        public static Dictionary<Guid, bool> UnlockedLabels { get; set; } = new Dictionary<Guid, bool>();
+
+        public static bool RefreshLabels { get; set; } = false;
+
+        public static bool UncheckPrevious { get; set; }
+
+        public static int SelectedLabelIndex { get; set; } = -1;
+    }
+
     public class CharacterCosmeticPanel : CharacterWindowPanel
     {
         private ImagePanel LabelSearchContainer { get; set; }
@@ -21,13 +38,23 @@ namespace Intersect.Client.Interface.Game.Character.Panels
 
         private ScrollControl LabelContainer { get; set; }
 
+        private bool RefreshLabels
+        {
+            get => CharacterCosmeticPanelController.RefreshLabels;
+            set => CharacterCosmeticPanelController.RefreshLabels = value;
+        }
         private Label LabelSearchLabel { get; set; }
         private ImagePanel LabelSearchBg { get; set; }
         private TextBox LabelSearchBar { get; set; }
+        private string SearchTerm 
+        {
+            get => LabelSearchBar.Text;
+            set => LabelSearchBar.SetText(value);
+        }
 
         private Button LabelClearButton { get; set; }
 
-        private ComponentList<GwenComponent> LabelRows { get; set; }
+        private ComponentList<GwenComponent> LabelRows { get; set; } = new ComponentList<GwenComponent>();
 
         public CharacterCosmeticPanel(ImagePanel characterWindow)
         {
@@ -41,10 +68,13 @@ namespace Intersect.Client.Interface.Game.Character.Panels
             };
             LabelSearchBg = new ImagePanel(LabelSearchContainer, "LabelSearchBg");
             LabelSearchBar = new TextBox(LabelSearchBg, "LabelSearchBar");
+            LabelSearchBar.TextChanged += LabelSearchBar_textChanged;
+
             LabelClearButton = new Button(LabelSearchContainer, "LabelSearchButton")
             {
                 Text = "CLEAR"
             };
+            LabelClearButton.Clicked += LabelClearButton_Clicked;
 
             LabelsBackground = new ImagePanel(mBackground, "LabelBackground");
             LabelContainer = new ScrollControl(LabelsBackground, "LabelContainer");
@@ -52,9 +82,19 @@ namespace Intersect.Client.Interface.Game.Character.Panels
             mBackground.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
         }
 
+        private void LabelClearButton_Clicked(Base sender, Framework.Gwen.Control.EventArguments.ClickedEventArgs arguments)
+        {
+            SearchTerm = string.Empty;
+        }
+
+        private void LabelSearchBar_textChanged(Base control, EventArgs args)
+        {
+            RefreshLabels = true;
+        }
+
         public override void Show()
         {
-            LoadLabels();
+            PacketSender.SendRequestLabelInfo();
             Interface.InputBlockingElements.Add(LabelSearchBar);
 
             base.Show();
@@ -72,13 +112,17 @@ namespace Intersect.Client.Interface.Game.Character.Panels
         {
             ClearLabels();
             
-            var labels = LabelDescriptor.Lookup.OrderBy(p => p.Value?.Name).Select(p => (LabelDescriptor)p.Value).ToArray();
+            var labels = LabelDescriptor.Lookup
+                .OrderBy(p => ((LabelDescriptor)p.Value)?.DisplayName)
+                .Select(p => (LabelDescriptor)p.Value)
+                .Where(p => string.IsNullOrEmpty(SearchTerm) || SearchHelper.IsSearchable(p.DisplayName, SearchTerm))
+                .ToArray();
 
             var idx = 0;
             var yPadding = 0;
             foreach (var label in labels)
             {
-                var row = new LabelRowComponent(LabelContainer, "LabelRow", label.Id, true, false, LabelRows);
+                var row = new LabelRowComponent(LabelContainer, this, "LabelRow", label.Id, idx, LabelRows);
                 row.Initialize();
 
                 row.SetPosition(row.X, row.Y + (idx * (row.Height + yPadding)));
@@ -93,9 +137,29 @@ namespace Intersect.Client.Interface.Game.Character.Panels
             LabelRows?.DisposeAll();
         }
 
+        public void UncheckPrevious()
+        {
+            if (LabelRows == null || LabelRows.Count <= CharacterCosmeticPanelController.SelectedLabelIndex)
+            {
+                return;
+            }
+
+            if (CharacterCosmeticPanelController.SelectedLabelIndex == -1)
+            {
+                return;
+            }
+            
+            var row = (LabelRowComponent)LabelRows[CharacterCosmeticPanelController.SelectedLabelIndex];
+            row.Unselect();
+        }
+
         public override void Update()
         {
-            // Intentionally blank
+            if (RefreshLabels)
+            {
+                LoadLabels();
+                RefreshLabels = false;
+            }
         }
     }
 }

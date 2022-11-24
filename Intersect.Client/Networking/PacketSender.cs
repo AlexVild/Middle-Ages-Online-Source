@@ -569,5 +569,20 @@ namespace Intersect.Client.Networking
             CharacterHarvestingWindowController.WaitingOnServer = true;
             Network.SendPacket(new ResourceInfoRequestPacket(tool));
         }
+
+        public static void SendRequestLabelInfo()
+        {
+            Network.SendPacket(new RequestLabelsPacket());
+        }
+
+        public static void SendSetLabelPacket(Guid descriptorId)
+        {
+            if (Globals.Me != null)
+            {
+                Globals.Me.LabelDescriptorId = descriptorId;
+            }
+
+            Network.SendPacket(new SetLabelPacket(descriptorId));
+        }
     }
 }

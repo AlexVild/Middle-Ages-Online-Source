@@ -3023,4 +3023,9 @@ namespace Intersect.Client.Entities
             return effectValues;
         }
     }
+
+    public partial class Player : Entity
+    { 
+        public Guid LabelDescriptorId { get; set; }
+    }
 }

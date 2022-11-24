@@ -2695,5 +2695,15 @@ namespace Intersect.Client.Networking
             }
             CharacterHarvestingWindowController.WaitingOnServer = false;
         }
+
+        public void HandlePacket(IPacketSender packetSender, PlayerLabelPackets packet)
+        {
+            CharacterCosmeticPanelController.UnlockedLabels.Clear();
+            foreach (var pkt in packet.Packets)
+            {
+                CharacterCosmeticPanelController.UnlockedLabels[pkt.DescriptorId] = pkt.IsNew;
+            }
+            CharacterCosmeticPanelController.RefreshLabels = true;
+        }
     }
 }
