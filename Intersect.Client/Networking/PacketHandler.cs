@@ -2698,12 +2698,12 @@ namespace Intersect.Client.Networking
 
         public void HandlePacket(IPacketSender packetSender, PlayerLabelPackets packet)
         {
-            CharacterCosmeticPanelController.UnlockedLabels.Clear();
+            CharacterNameTagPanelController.UnlockedLabels.Clear();
             foreach (var pkt in packet.Packets)
             {
-                CharacterCosmeticPanelController.UnlockedLabels[pkt.DescriptorId] = pkt.IsNew;
+                CharacterNameTagPanelController.UnlockedLabels[pkt.DescriptorId] = pkt.IsNew;
             }
-            CharacterCosmeticPanelController.RefreshLabels = true;
+            CharacterNameTagPanelController.RefreshLabels = true;
         }
     }
 }

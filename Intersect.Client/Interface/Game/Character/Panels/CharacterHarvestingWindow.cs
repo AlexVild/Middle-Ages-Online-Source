@@ -182,7 +182,6 @@ namespace Intersect.Client.Interface.Game.Character.Panels
         {
             ClearProgressComponents();
             var idx = 0;
-            var yPadding = 56;
             foreach(var harvestRow in HarvestInfoRows.CurrentRows)
             {
                 var row = new HarvestProgressRowComponent(
@@ -200,7 +199,8 @@ namespace Intersect.Client.Interface.Game.Character.Panels
 
                 ProgressComponents.Add(row);
                 row.Initialize();
-                row.SetPosition(row.X, row.Y + (yPadding * idx));
+
+                row.SetPosition(row.X, row.Y + (row.Height * idx));
                 if (idx % 2 == 1)
                 {
                     row.SetBanding();

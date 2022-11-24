@@ -39,11 +39,11 @@ namespace Intersect.Client.Interface.Game.Components
         private readonly Color LockedColor = new Color(255, 169, 169, 169);
         private readonly Color UnlockedColor = new Color(255, 255, 255, 255);
 
-        private CharacterCosmeticPanel Panel;
+        private CharacterNameTagPanel Panel;
 
         public LabelRowComponent(
             Base parent,
-            CharacterCosmeticPanel panel,
+            CharacterNameTagPanel panel,
             string containerName,
             Guid labelId,
             int idx,
@@ -91,7 +91,7 @@ namespace Intersect.Client.Interface.Game.Components
                 ShowMore.SetPosition(ShowMore.X, LabelHint.Y + LabelHint.Height);
             }
 
-            if (CharacterCosmeticPanelController.UnlockedLabels.TryGetValue(Label.Id, out var isNew))
+            if (CharacterNameTagPanelController.UnlockedLabels.TryGetValue(Label.Id, out var isNew))
             {
                 SetUnlocked(isNew);
             }
@@ -115,7 +115,7 @@ namespace Intersect.Client.Interface.Game.Components
             }
 
             // Selecting a new label
-            if (CharacterCosmeticPanelController.SelectedLabelIndex != Index)
+            if (CharacterNameTagPanelController.SelectedLabelIndex != Index)
             {
                 Panel.UncheckPrevious();
             }
@@ -123,12 +123,12 @@ namespace Intersect.Client.Interface.Game.Components
             // Removing a label
             if (!UseCheckbox.IsChecked)
             {
-                CharacterCosmeticPanelController.SelectedLabelIndex = -1;
+                CharacterNameTagPanelController.SelectedLabelIndex = -1;
                 PacketSender.SendSetLabelPacket(Guid.Empty);
                 return;
             }
 
-            CharacterCosmeticPanelController.SelectedLabelIndex = Index;
+            CharacterNameTagPanelController.SelectedLabelIndex = Index;
             PacketSender.SendSetLabelPacket(Label.Id);
         }
 

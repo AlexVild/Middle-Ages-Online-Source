@@ -51,6 +51,8 @@ namespace Intersect.Client.Interface.Game.Components
         public int X => SelfContainer.X;
         public int Y => SelfContainer.X;
 
+        public int Height => SelfContainer.Height;
+
         public HarvestProgressRowComponent(
             Base parent,
             string containerName,

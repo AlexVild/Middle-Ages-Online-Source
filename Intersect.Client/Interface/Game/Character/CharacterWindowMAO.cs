@@ -24,7 +24,7 @@ namespace Intersect.Client.Interface.Game.Character
         Bonuses,
         Harvesting,
         Recipes,
-        Decor
+        NameTag
     }
 
     public partial class CharacterWindowMAO
@@ -74,6 +74,12 @@ namespace Intersect.Client.Interface.Game.Character
         {
             if (mCharacterWindow.IsHidden)
             {
+                return;
+            }
+
+            if (Globals.Me.InCutscene())
+            {
+                Hide();
                 return;
             }
 

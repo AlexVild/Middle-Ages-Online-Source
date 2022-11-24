@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace Intersect.Client.Interface.Game.Character.Panels
 {
-    public static class CharacterCosmeticPanelController
+    public static class CharacterNameTagPanelController
     {
         /// <summary>
         /// Dictionary of <LabelDescriptorId, LabelIsNew>
@@ -25,12 +25,10 @@ namespace Intersect.Client.Interface.Game.Character.Panels
 
         public static bool RefreshLabels { get; set; } = false;
 
-        public static bool UncheckPrevious { get; set; }
-
         public static int SelectedLabelIndex { get; set; } = -1;
     }
 
-    public class CharacterCosmeticPanel : CharacterWindowPanel
+    public class CharacterNameTagPanel : CharacterWindowPanel
     {
         private ImagePanel LabelSearchContainer { get; set; }
 
@@ -40,8 +38,8 @@ namespace Intersect.Client.Interface.Game.Character.Panels
 
         private bool RefreshLabels
         {
-            get => CharacterCosmeticPanelController.RefreshLabels;
-            set => CharacterCosmeticPanelController.RefreshLabels = value;
+            get => CharacterNameTagPanelController.RefreshLabels;
+            set => CharacterNameTagPanelController.RefreshLabels = value;
         }
         private Label LabelSearchLabel { get; set; }
         private ImagePanel LabelSearchBg { get; set; }
@@ -56,7 +54,7 @@ namespace Intersect.Client.Interface.Game.Character.Panels
 
         private ComponentList<GwenComponent> LabelRows { get; set; } = new ComponentList<GwenComponent>();
 
-        public CharacterCosmeticPanel(ImagePanel characterWindow)
+        public CharacterNameTagPanel(ImagePanel characterWindow)
         {
             mParentContainer = characterWindow;
             mBackground = new ImagePanel(mParentContainer, "CharacterWindowMAO_Cosmetics");
@@ -139,17 +137,17 @@ namespace Intersect.Client.Interface.Game.Character.Panels
 
         public void UncheckPrevious()
         {
-            if (LabelRows == null || LabelRows.Count <= CharacterCosmeticPanelController.SelectedLabelIndex)
+            if (LabelRows == null || LabelRows.Count <= CharacterNameTagPanelController.SelectedLabelIndex)
             {
                 return;
             }
 
-            if (CharacterCosmeticPanelController.SelectedLabelIndex == -1)
+            if (CharacterNameTagPanelController.SelectedLabelIndex == -1)
             {
                 return;
             }
             
-            var row = (LabelRowComponent)LabelRows[CharacterCosmeticPanelController.SelectedLabelIndex];
+            var row = (LabelRowComponent)LabelRows[CharacterNameTagPanelController.SelectedLabelIndex];
             row.Unselect();
         }
 

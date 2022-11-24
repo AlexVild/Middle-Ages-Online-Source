@@ -120,6 +120,31 @@ namespace Intersect.Client.Interface.Game.Character.Panels
             return new Tuple<float, double>(critChance, critMulti);
         }
 
+        private string GetAttackSpeed()
+        {
+            int attackSpeedMs = 0;
+
+            var equippedWeaponSlot = Globals.Me.MyEquipment[Options.Equipment.WeaponSlot];
+            if (equippedWeaponSlot != -1 && equippedWeaponSlot < Globals.Me.Inventory.Length)
+            {
+                var equippedWeapon = Globals.Me.Inventory[equippedWeaponSlot];
+                attackSpeedMs = equippedWeapon.Base.AttackSpeedValue;
+            }
+            else
+            {
+                var cls = ClassBase.Get(Globals.Me.Class);
+                if (cls == null)
+                {
+                    return null;
+                }
+                attackSpeedMs = cls.AttackSpeedValue;
+            }
+
+            var speed = attackSpeedMs / 1000f;
+
+            return $"{speed.ToString("N2")}s";
+        }
+
         public void RefreshValues()
         {
             ClearBonusRows();
@@ -131,7 +156,9 @@ namespace Intersect.Client.Interface.Game.Character.Panels
             }
 
             var critInfo = GetCritInfo();
+            var attackSpeed = GetAttackSpeed();
             var bonusEffects = Globals.Me?.GetAllBonusEffects();
+
             if (critInfo == null && bonusEffects == null)
             {
                 NoBonusesLabel.Show();
@@ -142,6 +169,7 @@ namespace Intersect.Client.Interface.Game.Character.Panels
 
             var yStart = 0;
             AddCritInfo(critInfo, yStart, out var y);
+            AddAttackSpeed(attackSpeed, y, out y);
             AddBonusEffectInfo(bonusEffects, y, out _);
 
             BonusRows.InitializeAll();
@@ -150,6 +178,11 @@ namespace Intersect.Client.Interface.Game.Character.Panels
         private void AddCritInfo(Tuple<float, double> critInfo, int yStart, out int yEnd)
         {
             yEnd = yStart;
+            if (critInfo == null)
+            {
+                return;
+            }
+
             var critChance = $"{critInfo.Item1.ToString("N2")}%";
             var critMulti = $"{critInfo.Item2.ToString("N2")}x";
 
@@ -165,8 +198,12 @@ namespace Intersect.Client.Interface.Game.Character.Panels
         private void AddBonusEffectInfo(Dictionary<EffectType, int> bonusEffects, int yStart, out int yEnd)
         {
             var idx = 0;
-            
             yEnd = yStart;
+
+            if (bonusEffects == null || bonusEffects.Count == 0)
+            {
+                return;
+            }
             
             foreach (var effectMapping in bonusEffects)
             {
@@ -189,6 +226,20 @@ namespace Intersect.Client.Interface.Game.Character.Panels
             }
 
             yEnd = yStart + (idx * YPadding);
+        }
+
+        private void AddAttackSpeed(string atkSpeed, int yStart, out int yEnd)
+        {
+            yEnd = yStart;
+            if (atkSpeed == null)
+            {
+                return;
+            }
+
+            var attackSpeedRow = new CharacterBonusRow(BonusContainer, "AtkSpeedRow", "Base Atk. Speed", atkSpeed, "Your base attack speed.", BonusRows);
+            attackSpeedRow.SetPosition(attackSpeedRow.X, attackSpeedRow.Y + yStart);
+
+            yEnd = attackSpeedRow.Y + YPadding;
         }
 
         public override void Update()
