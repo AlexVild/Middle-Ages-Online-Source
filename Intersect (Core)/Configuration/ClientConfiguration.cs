@@ -119,6 +119,10 @@ namespace Intersect.Configuration
 
         public string DamageFont { get; set; } = DEFAULT_FONT;
 
+        public string ToastFont { get; set; } = DEFAULT_FONT;
+
+        public string ToastFontSmall { get; set; } = DEFAULT_FONT;
+
         /// <summary>
         /// The font family to use on unstyled windows such as the debug menu/admin window
         /// </summary>

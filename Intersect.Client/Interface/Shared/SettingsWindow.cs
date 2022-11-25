@@ -11,6 +11,7 @@ using Intersect.Client.Framework.Gwen.Control;
 using Intersect.Client.Framework.Gwen.Control.EventArguments;
 using Intersect.Client.General;
 using Intersect.Client.Interface.Game;
+using Intersect.Client.Interface.Game.Toasts;
 using Intersect.Client.Interface.Menu;
 using Intersect.Client.Localization;
 using Intersect.Utilities;

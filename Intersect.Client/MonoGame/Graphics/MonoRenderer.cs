@@ -17,6 +17,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using XNARectangle = Microsoft.Xna.Framework.Rectangle;
 using XNAColor = Microsoft.Xna.Framework.Color;
+using Intersect.Client.Interface.Game.Toasts;
 
 namespace Intersect.Client.MonoGame.Graphics
 {

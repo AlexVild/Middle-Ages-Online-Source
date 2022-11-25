@@ -23,6 +23,7 @@ using Intersect.Client.General.Leaderboards;
 using Intersect.Client.Interface.Game.Leaderboards;
 using Intersect.Client.Interface.Game.LootRoll;
 using Intersect.Client.Interface.Game.Character;
+using Intersect.Client.Interface.Game.Toasts;
 
 namespace Intersect.Client.Interface.Game
 {
@@ -776,6 +777,9 @@ namespace Intersect.Client.Interface.Game
         public LootRollWindow LootRollWindow;
         public PlayerRespawnWindow RespawnWindow;
         private CharacterPanelType _CurrentCharPanel;
+
+        private readonly Toast TestToast = new Toast("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.");
+
         public CharacterPanelType CurrentCharacterPanel
         {
             get => !GameMenu?.CharacterWindowOpen() ?? true ? CharacterPanelType.None : _CurrentCharPanel;
@@ -799,6 +803,12 @@ namespace Intersect.Client.Interface.Game
             LeaderboardWindow.Update();
             LootRollWindow.Update();
             RespawnWindow.Update();
+
+            if (ToastService.CurrentToast == null)
+            {
+                ToastService.SetToast(TestToast);
+            }
+            ToastService.Draw();
         }
 
         public PlayerHud GetHud()
