@@ -85,17 +85,17 @@ namespace Intersect.Client.Interface.Game.Character.StatPanel
 
             _ = new ImageLabelComponent(mBackground, "EvasionLabel", LabelColor, LabelHoverColor, "character_stats_evasion.png", "EVASION", "Dodge chance vs. opponent's accuracy.", ImageLabelComponents);
             mEvasionBase = new NumberContainerComponent(mBackground, "EvasionBase", StatLabelColor, StatColor, "CURR", string.Empty, ContainerComponents);
-            mEvasionEqp = new NumberContainerComponent(mBackground, "EvasionEqp", StatLabelColor, StatColor, "MAX", string.Empty, ContainerComponents);
+            mEvasionEqp = new NumberContainerComponent(mBackground, "EvasionEqp", StatLabelColor, StatColor, "EQP", string.Empty, ContainerComponents);
             mEvasionTotal = new NumberContainerComponent(mBackground, "EvasionTotal", StatLabelColor, StatColor, "MAX", string.Empty, ContainerComponents);
 
             _ = new ImageLabelComponent(mBackground, "AccuracyLabel", LabelColor, LabelHoverColor, "character_stats_accuracy.png", "ACCURACY", "Hit chance vs. opponent's evasion.", ImageLabelComponents);
             mAccuracyBase = new NumberContainerComponent(mBackground, "AccuracyBase", StatLabelColor, StatColor, "CURR", string.Empty, ContainerComponents);
-            mAccuracyEqp = new NumberContainerComponent(mBackground, "AccuracyEqp", StatLabelColor, StatColor, "MAX", string.Empty, ContainerComponents);
+            mAccuracyEqp = new NumberContainerComponent(mBackground, "AccuracyEqp", StatLabelColor, StatColor, "EQP", string.Empty, ContainerComponents);
             mAccuracyTotal = new NumberContainerComponent(mBackground, "AccuracyTotal", StatLabelColor, StatColor, "MAX", string.Empty, ContainerComponents);
 
             _ = new ImageLabelComponent(mBackground, "SpeedLabel", LabelColor, LabelHoverColor, "character_stats_speed.png", "SPEED", "Determines movement speed.", ImageLabelComponents);
             mSpeedBase = new NumberContainerComponent(mBackground, "SpeedBase", StatLabelColor, StatColor, "CURR", string.Empty, ContainerComponents);
-            mSpeedEqp = new NumberContainerComponent(mBackground, "SpeedEqp", StatLabelColor, StatColor, "MAX", string.Empty, ContainerComponents);
+            mSpeedEqp = new NumberContainerComponent(mBackground, "SpeedEqp", StatLabelColor, StatColor, "EQP", string.Empty, ContainerComponents);
             mSpeedTotal = new NumberContainerComponent(mBackground, "SpeedTotal", StatLabelColor, StatColor, "MAX", string.Empty, ContainerComponents);
         }
 
