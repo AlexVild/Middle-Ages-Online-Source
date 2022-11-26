@@ -651,9 +651,9 @@ namespace Intersect.Server.Networking
         /// <param name="type">The type of message we are sending.</param>
         /// <param name="target">The sender of this message, should we decide to respond from the client.</param>
         /// <param name="sound">Whether to play a GUI Cancel SFX (hardcoded)</param>
-        public static void SendChatMsg(Player player, string message, ChatMessageType type, string target = "", bool sound = false)
+        public static void SendChatMsg(Player player, string message, ChatMessageType type, string target = "", bool sound = false, bool sendToast = false)
         {
-            SendChatMsg(player, message, type, CustomColors.Chat.PlayerMsg, target);
+            SendChatMsg(player, message, type, CustomColors.Chat.PlayerMsg, target, sendToast);
             if (sound || type == ChatMessageType.Error)
             {
                 SendPlaySound(player, Options.UIDenySound);
@@ -668,7 +668,7 @@ namespace Intersect.Server.Networking
         /// <param name="type">The type of message we are sending.</param>
         /// <param name="color">The color assigned to this message.</param>
         /// <param name="target">The sender of this message, should we decide to respond from the client.</param>
-        public static void SendChatMsg(Player player, string message, ChatMessageType type, Color color, string target = "")
+        public static void SendChatMsg(Player player, string message, ChatMessageType type, Color color, string target = "", bool sendToast = false)
         {
             if (player == null)
             {
@@ -679,6 +679,11 @@ namespace Intersect.Server.Networking
             if (type == ChatMessageType.Error || color == CustomColors.Alerts.Error)
             {
                 SendPlaySound(player, Options.UIDenySound);
+            }
+
+            if (sendToast)
+            {
+                SendToast(player, message);
             }
         }
 
@@ -2621,6 +2626,11 @@ namespace Intersect.Server.Networking
             {
                 SendDataToProximityOnMapInstance(target.MapId, target.MapInstanceId, packet);
             }
+        }
+
+        public static void SendToast(Player player, string message)
+        {
+            player?.SendPacket(new ToastPacket(message));
         }
     }
 

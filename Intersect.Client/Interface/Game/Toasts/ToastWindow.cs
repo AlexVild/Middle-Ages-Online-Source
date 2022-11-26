@@ -16,8 +16,22 @@ namespace Intersect.Client.Interface.Game.Toasts
     {
         const float SmallWidth = 1280;
         const float BorderWidth = 4;
+        const int ContainerPadding = 116;
+        const int SlideInTime = 150;
+        const long DisplayTime = 8000;
+
+        private static long FlashEndTime;
+        const long FlashTime = 35;
+        private static bool HasFlashed;
+        private static bool Flashing;
+
+        const string Sound = "al_new_toast.wav";
+
         static readonly Color BorderColor = Color.White;
-        static readonly Color BackgroundColor = Color.Black;
+        static readonly Color FlashingBackgroundColor = Color.White;
+        static readonly Color StaticBackgroundColor = Color.Black;
+
+        static Color BackgroundColor => Flashing ? FlashingBackgroundColor : StaticBackgroundColor;
 
         public static bool IsVisible;
 
@@ -43,12 +57,13 @@ namespace Intersect.Client.Interface.Game.Toasts
         private static float ViewX => Graphics.CurrentView.X;
         private static float ViewCenterY => Graphics.CurrentView.CenterY;
         private static float ViewTop => Graphics.CurrentView.Top;
+        private static float ViewBottom => Graphics.CurrentView.Bottom;
         private static float ViewWidth => Graphics.CurrentView.Width;
 
         private static float ResX => Graphics.Renderer.ActiveResolution.X;
         private static float ResY => Graphics.Renderer.ActiveResolution.Y;
 
-        private static int MaxWidth => IsSmall ? 220 : 480;
+        private static int MaxWidth => IsSmall ? 480 : 640;
         private static GameTexture WhiteTexture = Graphics.Renderer.GetWhiteTexture();
         private static FloatRect SrcRect = new FloatRect(0, 0, 1, 1);
 
@@ -58,33 +73,94 @@ namespace Intersect.Client.Interface.Game.Toasts
         private static Padding TextInnerPadding = new Padding(0, 4, 0, 0);
         private static int TextMaxWidth => MaxWidth - TextPadding.Left - TextPadding.Right;
 
+        private static List<string> Lines { get; set; } = new List<string>();
+
+        private static int EndingY => ContainerPadding;
+
         public static void Draw()
         {
+            if (ToastService.CurrentToast.CreatedAt + DisplayTime < Timing.Global.Milliseconds)
+            {
+                IsVisible = false;
+            }
+
             if (!IsVisible)
             {
                 return;
             }
 
-            X = ResX / 2;
-            Y = ResY / 2;
+            Animate();
 
             DrawTextContainer();
             DrawText();
         }
 
-        public static void RecalculateContainer()
+        private static void Animate()
         {
             var toast = ToastService.CurrentToast;
+            var now = Timing.Global.Milliseconds;
 
-            var textLen = Graphics.Renderer.MeasureText(toast.Message, Font, 1.0f);
-            Width = Math.Min(MaxWidth, (int)textLen.X + TextPadding.Left + TextPadding.Right);
-            Height += (int)textLen.Y + TextPadding.Top + TextPadding.Bottom;
-
-            while (textLen.X > TextMaxWidth)
+            if (now > toast.CreatedAt + SlideInTime)
             {
-                Height += (int)textLen.Y + TextInnerPadding.Top + TextInnerPadding.Bottom;
-                textLen.X -= TextMaxWidth;
+                Y = EndingY;
+
+                if (Y == EndingY + ViewTop && !HasFlashed)
+                {
+                    FlashEndTime = Timing.Global.Milliseconds + FlashTime;
+                    Flashing = true;
+                    HasFlashed = true;
+                    Audio.AddGameSound(Sound, false);
+                }
+                if (HasFlashed && FlashEndTime < now)
+                {
+                    Flashing = false;
+                }
+
+                return;
             }
+            
+            SlideIn(toast, now);
+        }
+
+        private static void SlideIn(Toast toast, long now)
+        {
+            var elapsed = now - toast.CreatedAt;
+
+            var distanceRatio = (float)elapsed / SlideInTime;
+
+            Y = EndingY * distanceRatio;
+        }
+
+        public static void ResetAnimation()
+        {
+            Y = 0;
+            HasFlashed = false;
+            FlashEndTime = 0L;
+            Flashing = false;
+        }
+
+        public static void RecalculateContainer()
+        {
+            GetLines();
+
+            var maxLine = 0;
+            var idx = 0;
+            Height = TextPadding.Top + TextPadding.Bottom;
+            foreach (var line in Lines)
+            {
+                var textLen = Graphics.Renderer.MeasureText(line, Font, 1.0f);
+                maxLine = Math.Max(maxLine, (int)textLen.X);
+
+                // Don't top-pad the first line
+                var padding = idx == 0 ? TextInnerPadding.Bottom : TextInnerPadding.Top + TextInnerPadding.Bottom;
+
+                Height += (int)textLen.Y + padding;
+                idx++;
+            }
+
+            Width = Math.Min(MaxWidth, maxLine + TextPadding.Left + TextPadding.Right);
+
+            X = ResX / 2 - (Width / 2);
         }
 
         private static void DrawTextContainer()
@@ -119,10 +195,9 @@ namespace Intersect.Client.Interface.Game.Toasts
             Graphics.DrawGameTexture(WhiteTexture, SrcRect, destRect, BackgroundColor);
         }
 
-        private static void DrawText()
+        private static void GetLines()
         {
-            var textX = X + TextPadding.Left;
-            var textY = Y + TextPadding.Top;
+            Lines.Clear();
 
             var toast = ToastService.CurrentToast;
             var message = toast.Message;
@@ -132,10 +207,9 @@ namespace Intersect.Client.Interface.Game.Toasts
             var sb = new StringBuilder();
             var lineNum = 0;
             var prevLine = 0;
-            for(var idx = 0; idx < messageSplit.ToArray().Length - 1; idx++)
+            for (var idx = 0; idx < messageSplit.ToArray().Length; idx++)
             {
                 var word = messageSplit.ToArray()[idx];
-
                 // if we're either doing the first word, or the first word of a new line, don't append a space
                 if (idx == 0 || lineNum != prevLine)
                 {
@@ -145,37 +219,52 @@ namespace Intersect.Client.Interface.Game.Toasts
                 {
                     sb.Append($" {word}");
                 }
+
                 prevLine = lineNum;
+
+                if (idx == messageSplit.Length - 1)
+                {
+                    continue;
+                }
 
                 var nextWord = $"{sb} {messageSplit[idx + 1]}";
                 var textLen = Graphics.Renderer.MeasureText(nextWord, Font, 1.0f);
 
                 if (textLen.X > TextMaxWidth)
                 {
-                    Graphics.Renderer.DrawString(
-                        sb.ToString(), Font, textX, textY, 1.0f, toast.TextColor
-                    );
+                    Lines.Add(sb.ToString());
                     sb.Clear();
 
-                    textY += textLen.Y + TextInnerPadding.Top + TextInnerPadding.Bottom;
                     lineNum++;
                 }
             }
 
-            // Add on the last word
-            if (messageSplit.Length > 1)
+            if (!string.IsNullOrEmpty(sb.ToString()))
             {
-                sb.Append($" {messageSplit.LastOrDefault()}");
+                Lines.Add($"{sb}");
             }
-            else // Otherwise this is a one word toast
+        }
+
+        private static void DrawText()
+        {
+            if (Flashing)
             {
-                sb.Append($"{messageSplit.LastOrDefault()}");
+                return;
             }
 
-            // Draw either the last line, or the text did not need wrapped, so draw without it
-            Graphics.Renderer.DrawString(
-                sb.ToString(), Font, textX, textY, 1.0f, toast.TextColor
-            );
+            var textX = X + TextPadding.Left;
+            var textY = Y + TextPadding.Top;
+
+            var toast = ToastService.CurrentToast;
+
+            foreach(var line in Lines)
+            {
+                var textLen = Graphics.Renderer.MeasureText(line, Font, 1.0f);
+                Graphics.Renderer.DrawString(
+                    line, Font, textX, textY, 1.0f, toast.TextColor
+                );
+                textY += textLen.Y + TextInnerPadding.Top + TextInnerPadding.Bottom;
+            }
         }
     }
 }

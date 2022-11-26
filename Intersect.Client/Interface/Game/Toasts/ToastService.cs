@@ -23,6 +23,7 @@ namespace Intersect.Client.Interface.Game.Toasts
                 if (!ToastWindow.IsVisible)
                 {
                     Show();
+                    ToastWindow.ResetAnimation();
                 }
                 ToastWindow.Draw();
             }

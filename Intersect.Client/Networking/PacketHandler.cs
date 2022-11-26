@@ -31,6 +31,7 @@ using Intersect.Client.Interface.ScreenAnimations;
 using Intersect.Client.Entities.CombatNumbers;
 using Intersect.Client.Interface.Objects;
 using Intersect.Client.Interface.Game.Character.Panels;
+using Intersect.Client.Interface.Game.Toasts;
 
 namespace Intersect.Client.Networking
 {
@@ -2704,6 +2705,11 @@ namespace Intersect.Client.Networking
                 CharacterNameTagPanelController.UnlockedLabels[pkt.DescriptorId] = pkt.IsNew;
             }
             CharacterNameTagPanelController.RefreshLabels = true;
+        }
+
+        public void HandlePacket(IPacketSender packetSender, ToastPacket packet)
+        {
+            ToastService.SetToast(new Toast(packet.Message));
         }
     }
 }

@@ -13,7 +13,7 @@ namespace Intersect.Client.Interface.Game.Toasts
 
         public readonly Color TextColor = Color.White;
 
-        private long CreatedAt { get; set; }
+        public long CreatedAt { get; set; }
 
         public Toast(string message)
         {

@@ -2485,7 +2485,7 @@ namespace Intersect.Server.Entities.Events
                         PacketSender.SendChatMsg(player,
                                Strings.Quests.newspecialassignment.ToString(cls.Name),
                                ChatMessageType.Quest,
-                               CustomColors.Quests.Completed);
+                               CustomColors.Quests.Completed, sendToast: true);
                     }
                     else
                     {
@@ -2503,14 +2503,14 @@ namespace Intersect.Server.Entities.Events
                         PacketSender.SendChatMsg(player,
                             Strings.Quests.classrankincreased.ToString(cls.Name, classInfo.Rank.ToString()),
                             ChatMessageType.Quest,
-                            CustomColors.Quests.Completed);
+                            CustomColors.Quests.Completed, sendToast: true);
                     }
                     else if (oldRank > classInfo.Rank)
                     {
                         PacketSender.SendChatMsg(player,
                             Strings.Quests.classrankdecreased.ToString(cls.Name, classInfo.Rank.ToString()),
                             ChatMessageType.Quest,
-                            CustomColors.Quests.Abandoned);
+                            CustomColors.Quests.Abandoned, sendToast: true);
                     }
 
                     classInfo.TasksRemaining = player.TasksRemainingForClassRank(classInfo.Rank);
@@ -2522,7 +2522,7 @@ namespace Intersect.Server.Entities.Events
                         PacketSender.SendChatMsg(player,
                             Strings.Quests.newspecialassignment.ToString(ClassBase.Get(command.ClassId).Name),
                             ChatMessageType.Quest,
-                            CustomColors.Quests.Completed);
+                            CustomColors.Quests.Completed, sendToast: true);
                     }
                     break;
                 case NPCGuildManagementSelection.ClearCooldown:
@@ -3026,7 +3026,7 @@ namespace Intersect.Server.Entities.Events
                 player.RespawnOverrideX = command.X;
                 player.RespawnOverrideY = command.Y;
                 player.RespawnOverrideDir = (byte)command.Direction;
-                PacketSender.SendChatMsg(player, Strings.Player.SpawnChanged, ChatMessageType.Notice, CustomColors.General.GeneralPrimary);
+                PacketSender.SendChatMsg(player, Strings.Player.SpawnChanged, ChatMessageType.Notice, CustomColors.General.GeneralPrimary, sendToast: true);
                 return;
             }
             else if (command.RespawnType == RespawnChangeType.Arena)

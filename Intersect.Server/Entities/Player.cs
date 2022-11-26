@@ -6371,13 +6371,13 @@ namespace Intersect.Server.Entities
                                         PacketSender.SendChatMsg(this,
                                             Strings.Quests.newspecialassignment.ToString(ClassBase.Get(quest.RelatedClassId).Name),
                                             ChatMessageType.Quest,
-                                            CustomColors.Quests.Completed);
+                                            CustomColors.Quests.Completed, sendToast: true);
                                     } else
                                     {
                                         PacketSender.SendChatMsg(this,
                                             Strings.Quests.tasksremaining.ToString(taskClassInfo.TasksRemaining.ToString(), ClassBase.Get(quest.RelatedClassId).Name),
                                             ChatMessageType.Quest,
-                                            CustomColors.Quests.TaskUpdated);
+                                            CustomColors.Quests.TaskUpdated, sendToast: true);
                                     }
                                 }
                             }
@@ -6396,7 +6396,7 @@ namespace Intersect.Server.Entities
                                     PacketSender.SendChatMsg(this,
                                             Strings.Quests.newspecialassignment.ToString(ClassBase.Get(quest.RelatedClassId).Name),
                                             ChatMessageType.Quest,
-                                            CustomColors.Quests.Completed);
+                                            CustomColors.Quests.Completed, sendToast: true);
                                 }
                             }
                         }
@@ -6430,7 +6430,7 @@ namespace Intersect.Server.Entities
                         PacketSender.SendChatMsg(this,
                             Strings.Quests.classrankincreased.ToString(ClassBase.Get(quest.RelatedClassId).Name, assignmentClassInfo.Rank.ToString()),
                             ChatMessageType.Quest,
-                            CustomColors.Quests.Completed);
+                            CustomColors.Quests.Completed, sendToast: true);
 
                         if (assignmentClassInfo.TasksRemaining > 0)
                         {
@@ -8204,7 +8204,7 @@ namespace Intersect.Server.Entities
 
         public void SendRecordUpdate(string message)
         {
-            PacketSender.SendChatMsg(this, message, ChatMessageType.Experience);
+            PacketSender.SendChatMsg(this, message, ChatMessageType.Experience, sendToast: true);
         }
 
         public void DeleteRecord(RecordType type, Guid recordId)
@@ -8484,7 +8484,7 @@ namespace Intersect.Server.Entities
                 }
 
                 UnlockedLabels.Add(new LabelInstance(Id, labelId));
-                PacketSender.SendChatMsg(this, Strings.Labels.LabelUnlocked.ToString(descriptor?.DisplayName), ChatMessageType.Notice, CustomColors.General.GeneralCompleted);
+                PacketSender.SendChatMsg(this, Strings.Labels.LabelUnlocked.ToString(descriptor?.DisplayName), ChatMessageType.Notice, CustomColors.General.GeneralCompleted, sendToast: true);
 
                 UseLabelCache = false;
                 return;
@@ -8496,7 +8496,7 @@ namespace Intersect.Server.Entities
                 if (preCount > UnlockedLabels.Count)
                 {
                     DbRemoveLabel(Id, labelId);
-                    PacketSender.SendChatMsg(this, Strings.Labels.LabelRemoved.ToString(descriptor?.DisplayName), ChatMessageType.Notice, CustomColors.General.GeneralDisabled);
+                    PacketSender.SendChatMsg(this, Strings.Labels.LabelRemoved.ToString(descriptor?.DisplayName), ChatMessageType.Notice, CustomColors.General.GeneralDisabled, sendToast: true);
                 }
 
                 UseLabelCache = false;
