@@ -737,6 +737,8 @@ namespace Intersect.Server.Database.PlayerData
                     .Include(p => p.Players)
                     .ThenInclude(p => p.PlayerRecords)
                     .ThenInclude(p => p.Teammates)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.UnlockedCosmetics)
                     .FirstOrDefault()
             ) ??
             throw new InvalidOperationException();
@@ -771,6 +773,8 @@ namespace Intersect.Server.Database.PlayerData
                     .Include(p => p.Players)
                     .ThenInclude(p => p.PlayerRecords)
                     .ThenInclude(p => p.Teammates)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.UnlockedCosmetics)
                     .FirstOrDefault()
             ) ??
             throw new InvalidOperationException();
@@ -804,6 +808,8 @@ namespace Intersect.Server.Database.PlayerData
                     .Include(p => p.Players)
                     .ThenInclude(p => p.PlayerRecords)
                     .ThenInclude(p => p.Teammates)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.UnlockedCosmetics)
                     .FirstOrDefault()
             ) ??
             throw new InvalidOperationException();
@@ -837,6 +843,8 @@ namespace Intersect.Server.Database.PlayerData
                     .Include(p => p.Players)
                     .ThenInclude(p => p.PlayerRecords)
                     .ThenInclude(p => p.Teammates)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.UnlockedCosmetics)
                     .FirstOrDefault()
                 ) ?? throw new InvalidOperationException();
 
@@ -879,6 +887,8 @@ namespace Intersect.Server.Database.PlayerData
                     .Include(p => p.Players)
                     .ThenInclude(p => p.PlayerRecords)
                     .ThenInclude(p => p.Teammates)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.UnlockedCosmetics)
                     .FirstOrDefault()
                 ) ?? throw new InvalidOperationException();
 

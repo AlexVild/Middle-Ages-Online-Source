@@ -18,6 +18,7 @@ namespace Intersect.Enums
 
         Bag = 6,
 
+        Cosmetic = 7,
     }
 
 }

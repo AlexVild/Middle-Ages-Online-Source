@@ -110,6 +110,9 @@ namespace Intersect.Editor.Forms.Editors
             this.lblDrops = new System.Windows.Forms.Label();
             this.lstDrops = new System.Windows.Forms.ListBox();
             this.grpEquipment = new DarkUI.Controls.DarkGroupBox();
+            this.grpCosmetic = new DarkUI.Controls.DarkGroupBox();
+            this.txtCosmeticDisplayName = new DarkUI.Controls.DarkTextBox();
+            this.lblCosmeticDisplayName = new System.Windows.Forms.Label();
             this.grpSpecialAttack = new DarkUI.Controls.DarkGroupBox();
             this.lblSpecialAttack = new System.Windows.Forms.Label();
             this.lblSpecialAttackCharge = new System.Windows.Forms.Label();
@@ -329,6 +332,7 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudPrice)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picItem)).BeginInit();
             this.grpEquipment.SuspendLayout();
+            this.grpCosmetic.SuspendLayout();
             this.grpSpecialAttack.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudSpecialAttackChargeTime)).BeginInit();
             this.grpBonusEffects.SuspendLayout();
@@ -1421,6 +1425,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpEquipment.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpEquipment.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpEquipment.Controls.Add(this.grpCosmetic);
             this.grpEquipment.Controls.Add(this.grpSpecialAttack);
             this.grpEquipment.Controls.Add(this.grpBonusEffects);
             this.grpEquipment.Controls.Add(this.grpAdditionalWeaponProps);
@@ -1448,6 +1453,42 @@ namespace Intersect.Editor.Forms.Editors
             this.grpEquipment.TabStop = false;
             this.grpEquipment.Text = "Equipment";
             this.grpEquipment.Visible = false;
+            // 
+            // grpCosmetic
+            // 
+            this.grpCosmetic.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpCosmetic.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpCosmetic.Controls.Add(this.txtCosmeticDisplayName);
+            this.grpCosmetic.Controls.Add(this.lblCosmeticDisplayName);
+            this.grpCosmetic.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpCosmetic.Location = new System.Drawing.Point(223, 178);
+            this.grpCosmetic.Margin = new System.Windows.Forms.Padding(2);
+            this.grpCosmetic.Name = "grpCosmetic";
+            this.grpCosmetic.Padding = new System.Windows.Forms.Padding(2);
+            this.grpCosmetic.Size = new System.Drawing.Size(198, 76);
+            this.grpCosmetic.TabIndex = 119;
+            this.grpCosmetic.TabStop = false;
+            this.grpCosmetic.Text = "Cosmetic";
+            // 
+            // txtCosmeticDisplayName
+            // 
+            this.txtCosmeticDisplayName.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.txtCosmeticDisplayName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtCosmeticDisplayName.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.txtCosmeticDisplayName.Location = new System.Drawing.Point(16, 40);
+            this.txtCosmeticDisplayName.Name = "txtCosmeticDisplayName";
+            this.txtCosmeticDisplayName.Size = new System.Drawing.Size(165, 20);
+            this.txtCosmeticDisplayName.TabIndex = 54;
+            this.txtCosmeticDisplayName.TextChanged += new System.EventHandler(this.txtCosmeticDisplayName_TextChanged);
+            // 
+            // lblCosmeticDisplayName
+            // 
+            this.lblCosmeticDisplayName.AutoSize = true;
+            this.lblCosmeticDisplayName.Location = new System.Drawing.Point(13, 22);
+            this.lblCosmeticDisplayName.Name = "lblCosmeticDisplayName";
+            this.lblCosmeticDisplayName.Size = new System.Drawing.Size(72, 13);
+            this.lblCosmeticDisplayName.TabIndex = 28;
+            this.lblCosmeticDisplayName.Text = "Display Name";
             // 
             // grpSpecialAttack
             // 
@@ -4360,6 +4401,8 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.picItem)).EndInit();
             this.grpEquipment.ResumeLayout(false);
             this.grpEquipment.PerformLayout();
+            this.grpCosmetic.ResumeLayout(false);
+            this.grpCosmetic.PerformLayout();
             this.grpSpecialAttack.ResumeLayout(false);
             this.grpSpecialAttack.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudSpecialAttackChargeTime)).EndInit();
@@ -4725,5 +4768,8 @@ namespace Intersect.Editor.Forms.Editors
         private Label label22;
         private Label label21;
         private Label label20;
+        private DarkGroupBox grpCosmetic;
+        private Label lblCosmeticDisplayName;
+        private DarkTextBox txtCosmeticDisplayName;
     }
 }

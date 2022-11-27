@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using Newtonsoft.Json;
 
@@ -80,6 +81,7 @@ namespace Intersect.Utilities
             return JsonConvert.SerializeObject(output);
         }
 
+
         public static string[] LoadStringArray(string json, int arrayLen)
         {
             var output = new string[arrayLen];
@@ -87,6 +89,47 @@ namespace Intersect.Utilities
             if (json != null)
             {
                 jsonList = JsonConvert.DeserializeObject<List<string>>(json);
+            }
+
+            for (var i = 0; i < arrayLen && i < jsonList.Count; i++)
+            {
+                output[i] = jsonList[i];
+            }
+
+            return output;
+        }
+
+        public static string SaveGuidArray(Guid[] array, int arrayLen)
+        {
+            if (array == null)
+            {
+                array = new Guid[arrayLen];
+            }
+
+            var output = new List<Guid>();
+            for (var i = 0; i < arrayLen; i++)
+            {
+                if (i < array.Length)
+                {
+                    output.Add(array[i]);
+                }
+                else
+                {
+                    output.Add(Guid.Empty);
+                }
+            }
+
+            return JsonConvert.SerializeObject(output);
+        }
+
+
+        public static Guid[] LoadGuidArray(string json, int arrayLen)
+        {
+            var output = new Guid[arrayLen];
+            var jsonList = new List<Guid>();
+            if (json != null)
+            {
+                jsonList = JsonConvert.DeserializeObject<List<Guid>>(json);
             }
 
             for (var i = 0; i < arrayLen && i < jsonList.Count; i++)

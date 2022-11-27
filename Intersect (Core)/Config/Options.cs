@@ -157,6 +157,8 @@ namespace Intersect
         public static int ShieldIndex => Instance.EquipmentOpts.ShieldSlot;
 
         public static List<string> EquipmentSlots => Instance.EquipmentOpts.Slots;
+        
+        public static List<string> CosmeticSlots => Instance.EquipmentOpts.Slots;
 
         public static List<string>[] PaperdollOrder => Instance.EquipmentOpts.Paperdoll.Directions;
 

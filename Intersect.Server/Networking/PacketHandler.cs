@@ -4359,5 +4359,11 @@ namespace Intersect.Server.Networking
             client?.Entity?.SetLabelTo(packet.DescriptorId);
             PacketSender.SendEntityDataToProximity(client?.Entity);
         }
+
+        /*public void HandlePacket(Client client, CosmeticChangePacket packet)
+        {
+            client?.Entity?.SetCosmetic(packet.ItemId);
+            PacketSender.SendEntityDataToProximity(client?.Entity);
+        }*/
     }
 }

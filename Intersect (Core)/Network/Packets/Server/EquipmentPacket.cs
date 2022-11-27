@@ -12,12 +12,13 @@ namespace Intersect.Network.Packets.Server
         }
 
         //We send item ids for the equipment of others, but we send the correlating inventory slots for wearers because we want the equipped icons to show in the inventory.
-        public EquipmentPacket(Guid entityId, int[] invSlots, Guid[] itemIds, string[] decor)
+        public EquipmentPacket(Guid entityId, int[] invSlots, Guid[] itemIds, string[] decor, Guid[] cosmeticItemIds)
         {
             EntityId = entityId;
             InventorySlots = invSlots;
             ItemIds = itemIds;
             Decor = decor;
+            CosmeticItemIds = cosmeticItemIds;
         }
 
         [Key(0)]
@@ -31,6 +32,9 @@ namespace Intersect.Network.Packets.Server
 
         [Key(3)]
         public string[] Decor { get; set; }
+
+        [Key(4)]
+        public Guid[] CosmeticItemIds { get; set; }
     }
 
 }

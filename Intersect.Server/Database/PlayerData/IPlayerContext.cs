@@ -51,5 +51,7 @@ namespace Intersect.Server.Database.PlayerData
         DbSet<LootRollInstance> Loot_Rolls { get; set; }
         
         DbSet<LabelInstance> Player_Labels { get; set; }
+        
+        DbSet<CosmeticInstance> Player_Cosmetics { get; set; }
     }
 }

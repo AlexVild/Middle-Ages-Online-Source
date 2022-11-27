@@ -801,6 +801,7 @@ namespace Intersect.Server.Entities
                                     return 1;
                                 }
                             case ItemTypes.Consumable:
+                            case ItemTypes.Cosmetic:
                             default:
                                 return -1;
                         }

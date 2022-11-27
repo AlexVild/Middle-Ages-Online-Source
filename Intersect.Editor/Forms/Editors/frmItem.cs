@@ -523,6 +523,8 @@ namespace Intersect.Editor.Forms.Editors
                 }
                 cmbTags.Text = string.Empty;
 
+                txtCosmeticDisplayName.Text = mEditorItem.CosmeticDisplayName;
+
                 lstDrops.Items.Clear();
                 lstCrafts.Items.Clear();
                 lstShops.Items.Clear();
@@ -667,7 +669,7 @@ namespace Intersect.Editor.Forms.Editors
                 chkSingleUseEvent.Checked = mEditorItem.SingleUse;
                 grpEvent.Visible = true;
             }
-            else if (cmbType.SelectedIndex == (int) ItemTypes.Equipment)
+            else if (cmbType.SelectedIndex == (int) ItemTypes.Equipment || cmbType.SelectedIndex == (int) ItemTypes.Cosmetic)
             {
                 grpEquipment.Visible = true;
                 if (mEditorItem.EquipmentSlot < -1 || mEditorItem.EquipmentSlot >= cmbEquipmentSlot.Items.Count)
@@ -761,6 +763,29 @@ namespace Intersect.Editor.Forms.Editors
         private void cmbEquipmentSlot_SelectedIndexChanged(object sender, EventArgs e)
         {
             mEditorItem.EquipmentSlot = cmbEquipmentSlot.SelectedIndex;
+
+            if (cmbType.SelectedIndex == (int)ItemTypes.Cosmetic)
+            {
+                grpCosmetic.Show();
+
+                grpWeaponProperties.Hide();
+
+                if(cmbEquipmentSlot.SelectedIndex == Options.HelmetIndex)
+                {
+                    grpHelmetPaperdollProps.Show();
+                }
+                else
+                {
+                    grpHelmetPaperdollProps.Hide();
+                }
+
+                grpHelmetPaperdollProps.Show();
+                grpPrayerProperties.Hide();
+                grpAdditionalWeaponProps.Hide();
+                return;
+            }
+
+            grpCosmetic.Hide();
             if (cmbEquipmentSlot.SelectedIndex == Options.WeaponIndex)
             {
                 grpWeaponProperties.Show();
@@ -1940,6 +1965,11 @@ namespace Intersect.Editor.Forms.Editors
                     UpdateOverrides();
                 }
             }
+        }
+
+        private void txtCosmeticDisplayName_TextChanged(object sender, EventArgs e)
+        {
+            mEditorItem.CosmeticDisplayName = txtCosmeticDisplayName.Text;
         }
     }
 }

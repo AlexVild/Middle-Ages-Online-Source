@@ -3332,6 +3332,11 @@ namespace Intersect.Server.Entities
                         OpenBag(Item, itemBase);
 
                         break;
+                    case ItemTypes.Cosmetic:
+                        ChangeCosmeticUnlockStatus(Item.ItemId, true);
+                        TryTakeItem(Items[slot], 1);
+
+                        break;
                     default:
                         PacketSender.SendChatMsg(this, Strings.Items.notimplemented, ChatMessageType.Error);
 

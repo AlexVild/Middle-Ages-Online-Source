@@ -478,6 +478,7 @@
     <Compile Include="Database\PlayerData\IPlayerContext.cs" />
     <Compile Include="Database\PlayerData\Players\Bag.cs" />
     <Compile Include="Database\PlayerData\Players\BagSlot.cs" />
+    <Compile Include="Database\PlayerData\Players\CosmeticInstance.cs" />
     <Compile Include="Database\PlayerData\Players\GuildBankSlot.cs" />
     <Compile Include="Database\PlayerData\Players\BankSlot.cs" />
     <Compile Include="Database\PlayerData\Players\Friend.cs" />
@@ -511,6 +512,7 @@
     <Compile Include="Entities\Label.cs" />
     <Compile Include="Entities\Npc.Combat.cs" />
     <Compile Include="Entities\Player.Combat.cs" />
+    <Compile Include="Entities\Player.Cosmetics.cs" />
     <Compile Include="Entities\Player.Database.cs" />
     <Compile Include="Database\Spell.cs" />
     <Compile Include="Database\PlayerData\Players\Switch.cs" />
@@ -645,6 +647,10 @@
     <Compile Include="Migrations\20221011005935_AddPlayerDeathMigration.cs" />
     <Compile Include="Migrations\20221011005935_AddPlayerDeathMigration.designer.cs">
       <DependentUpon>20221011005935_AddPlayerDeathMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20221127161920_CosmeticMigration.cs" />
+    <Compile Include="Migrations\20221127161920_CosmeticMigration.designer.cs">
+      <DependentUpon>20221127161920_CosmeticMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.cs" />
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.Designer.cs">
@@ -939,6 +945,10 @@
     <Compile Include="Migrations\Game\20221122165612_ResourceDisplayNameMigration.cs" />
     <Compile Include="Migrations\Game\20221122165612_ResourceDisplayNameMigration.designer.cs">
       <DependentUpon>20221122165612_ResourceDisplayNameMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20221127160339_ComseticItemMigration.cs" />
+    <Compile Include="Migrations\Game\20221127160339_ComseticItemMigration.designer.cs">
+      <DependentUpon>20221127160339_ComseticItemMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">

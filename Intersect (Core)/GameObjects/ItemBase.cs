@@ -553,6 +553,8 @@ namespace Intersect.GameObjects
         {
             Effects.FindAll(effect => effect.Type == type).Select(effect => effect.Percentage = value);
         }
+
+        public string CosmeticDisplayName { get; set; }
     }
 
 }

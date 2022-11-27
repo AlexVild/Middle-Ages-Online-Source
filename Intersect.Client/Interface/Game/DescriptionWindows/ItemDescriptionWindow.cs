@@ -117,6 +117,10 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 case ItemTypes.Bag:
                     SetupBagInfo();
                     break;
+                
+                case ItemTypes.Cosmetic:
+                    SetupCosmeticInfo();
+                    break;
             }
 
             // Set up additional information such as amounts and shop values.
@@ -140,7 +144,14 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
 
             // Set up the header as the item name.
             CustomColors.Items.Rarities.TryGetValue(mItem.Rarity, out var rarityColor);
-            var name = !string.IsNullOrWhiteSpace(mTitleOverride) ? mTitleOverride : mItem.Name;
+
+            var itemName = mItem.ItemType == ItemTypes.Cosmetic ? 
+                string.IsNullOrEmpty(mItem.CosmeticDisplayName) ? 
+                    mItem.Name : 
+                    mItem.CosmeticDisplayName : 
+                mItem.Name;
+
+            var name = !string.IsNullOrWhiteSpace(mTitleOverride) ? mTitleOverride : itemName;
             header.SetTitle(name, rarityColor ?? Color.White);
 
             // Set up the description telling us what type of item this is.
@@ -1112,6 +1123,17 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 // Resize and position the container.
                 rows.SizeToChildren(true, true);
             }
+        }
+
+        protected void SetupCosmeticInfo()
+        {
+            AddDivider();
+
+            var rows = AddRowContainer();
+
+            rows.AddKeyValueRow(Strings.ItemDescription.CosmeticDesc, string.Empty);
+
+            rows.SizeToChildren(true, true);
         }
 
         /// <inheritdoc/>

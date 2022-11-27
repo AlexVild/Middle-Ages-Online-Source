@@ -1740,6 +1740,11 @@ namespace Intersect.Server.Localization
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString SpawnChanged = @"Your respawn point has been updated.";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString CosmeticUnlocked = @"You've unlocked a new cosmetic: {00}. You can change your cosmetics from the character menu.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString CosmeticLost = @"You've lost a cosmetic: {00}.";
         }
 
         public sealed partial class TradingNamespace : LocaleNamespace

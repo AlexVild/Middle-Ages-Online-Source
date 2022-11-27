@@ -1262,36 +1262,42 @@ namespace Intersect.Server.Networking
         }
 
         //EquipmentPacket
-        public static EquipmentPacket GenerateEquipmentPacket(Player forPlayer, Player en)
+        public static EquipmentPacket GenerateEquipmentPacket(Player forPlayer, Player player)
         {
-            if (forPlayer != null && forPlayer == en)
+            if (forPlayer != null && forPlayer == player)
             {
-                return new EquipmentPacket(en.Id, en.Equipment, null, en.Decor);
+                return new EquipmentPacket(player.Id, player.Equipment, null, player.Decor, player.Cosmetics);
             }
             else
             {
                 var equipment = new Guid[Options.EquipmentSlots.Count];
+                var cosmetics = new Guid[Options.CosmeticSlots.Count];
                 var decor = new string[Options.DecorSlots.Count];
 
                 for (var i = 0; i < Options.EquipmentSlots.Count; i++)
                 {
-                    if (en.Equipment[i] == -1 || en.Items[en.Equipment[i]].ItemId == Guid.Empty)
+                    if (player.Equipment[i] == -1 || player.Items[player.Equipment[i]].ItemId == Guid.Empty)
                     {
                         equipment[i] = Guid.Empty;
                     }
                     else
                     {
-                        equipment[i] = en.Items[en.Equipment[i]].ItemId;
+                        equipment[i] = player.Items[player.Equipment[i]].ItemId;
                     }
 
                 }
 
                 for (var i = 0; i < Options.DecorSlots.Count; i++)
                 {
-                    decor[i] = en.Decor[i];
+                    decor[i] = player.Decor[i];
                 }
 
-                return new EquipmentPacket(en.Id, null, equipment, decor);
+                for (var i = 0; i < Options.CosmeticSlots.Count; i++)
+                {
+                    cosmetics[i] = player.Cosmetics[i];
+                }
+
+                return new EquipmentPacket(player.Id, null, equipment, decor, cosmetics);
             }
         }
 
@@ -1347,6 +1353,7 @@ namespace Intersect.Server.Networking
                 {
                     var equipmentArray = character.Equipment;
                     var decorArray = character.Decor;
+                    var cosmeticArray = character.Cosmetics;
 
                     var equipment = new string[Options.EquipmentSlots.Count + 1];
                     var decor = new string[Options.DecorSlots.Count + 1];
@@ -1360,14 +1367,19 @@ namespace Intersect.Server.Networking
                         var paperdollSlot = Options.PaperdollOrder[(int) Directions.Down][z];
                         if (Options.EquipmentSlots.IndexOf(paperdollSlot) > -1)
                         {
-                            if (equipmentArray[Options.EquipmentSlots.IndexOf(paperdollSlot)] > -1 &&
-                                equipmentArray[Options.EquipmentSlots.IndexOf(paperdollSlot)] <
+                            var equipmentSlot = Options.EquipmentSlots.IndexOf(paperdollSlot);
+                            if (equipmentArray[equipmentSlot] > -1 &&
+                                equipmentArray[equipmentSlot] <
                                 Options.MaxInvItems)
                             {
-                                var equipmentIndex = Options.EquipmentSlots.IndexOf(paperdollSlot);
                                 var itemId = character
                                     .Items[equipmentArray[Options.EquipmentSlots.IndexOf(paperdollSlot)]]
                                     .ItemId;
+
+                                if (cosmeticArray[equipmentSlot] != Guid.Empty)
+                                {
+                                    itemId = cosmeticArray[equipmentSlot];
+                                }
 
                                 ItemBase item = ItemBase.Get(itemId);
 
@@ -1380,11 +1392,11 @@ namespace Intersect.Server.Networking
                                     var itemdata = ItemBase.Get(itemId);
                                     if (character.Gender == Gender.Male)
                                     {
-                                        equipment[equipmentIndex] = itemdata.MalePaperdoll;
+                                        equipment[equipmentSlot] = itemdata.MalePaperdoll;
                                     }
                                     else
                                     {
-                                        equipment[equipmentIndex] = itemdata.FemalePaperdoll;
+                                        equipment[equipmentSlot] = itemdata.FemalePaperdoll;
                                     }
                                 }
                             }
