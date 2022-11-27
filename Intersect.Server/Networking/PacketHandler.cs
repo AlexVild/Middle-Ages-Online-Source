@@ -4360,10 +4360,30 @@ namespace Intersect.Server.Networking
             PacketSender.SendEntityDataToProximity(client?.Entity);
         }
 
-        /*public void HandlePacket(Client client, CosmeticChangePacket packet)
+        public void HandlePacket(Client client, RequestCosmeticsPacket packet)
         {
-            client?.Entity?.SetCosmetic(packet.ItemId);
+            var player = client?.Entity;
+
+            if (player == null)
+            {
+                return;
+            }
+
+            var cosmetics = new List<Guid>();
+            cosmetics.AddRange(player.UnlockedCosmetics.ToArray().Select(c => c.ItemId));
+
+            player?.SendPacket(new Network.Packets.Server.CosmeticUnlocksPacket(cosmetics));
+        }
+
+        public void HandlePacket(Client client, CosmeticChangePacket packet)
+        {
+            if (client?.Entity == null)
+            {
+                return;
+            }
+            
+            client?.Entity?.SetCosmetic(packet.ItemId, packet.Slot);
             PacketSender.SendEntityDataToProximity(client?.Entity);
-        }*/
+        }
     }
 }

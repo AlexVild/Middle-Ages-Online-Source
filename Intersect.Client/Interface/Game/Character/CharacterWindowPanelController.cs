@@ -30,6 +30,7 @@ namespace Intersect.Client.Interface.Game.Character
         private Button HarvestingButton { get; set; }
         private Button RecipesButton { get; set; }
         private Button DecorButton { get; set; }
+        private Button CosmeticsButton { get; set; }
 
         private CharacterWindowMAO Parent { get; set; }
 
@@ -39,6 +40,7 @@ namespace Intersect.Client.Interface.Game.Character
         private CharacterHarvestingWindow HarvestingPanel { get; set; }
         private CharacterBonusesPanel BonusesPanel { get; set; }
         private CharacterNameTagPanel NameTagPanel { get; set; }
+        private CharacterCosmeticsPanel CosmeticsPanel { get; set; }
 
         public CharacterWindowPanelController(Canvas gameCanvas, CharacterWindowMAO parent)
         {
@@ -65,6 +67,9 @@ namespace Intersect.Client.Interface.Game.Character
 
             NameTagPanel = new CharacterNameTagPanel(PanelContainer);
             NameTagPanel.Hide();
+
+            CosmeticsPanel = new CharacterCosmeticsPanel(PanelContainer);
+            CosmeticsPanel.Hide();
 
             PositionToParent();
             Hide();
@@ -103,6 +108,12 @@ namespace Intersect.Client.Interface.Game.Character
             };
             DecorButton.Clicked += DecorClicked;
 
+            CosmeticsButton = new Button(Container, "CosmeticsPanelSelector")
+            {
+                Text = "COSMETICS"
+            };
+            CosmeticsButton.Clicked += CosmeticsClicked;
+
             PanelSelectors = new List<Button>
             {
                 StatsButton,
@@ -110,6 +121,7 @@ namespace Intersect.Client.Interface.Game.Character
                 HarvestingButton,
                 RecipesButton,
                 DecorButton,
+                CosmeticsButton,
             };
         }
 
@@ -181,6 +193,10 @@ namespace Intersect.Client.Interface.Game.Character
                     DecorButton.Disable();
                     CurrentPanel = NameTagPanel;
                     break;
+                case CharacterPanelType.Cosmetics:
+                    CosmeticsButton.Disable();
+                    CurrentPanel = CosmeticsPanel;
+                    break;
                 default:
                     throw new ArgumentException($"Invalid enum for {nameof(type)}");
             }
@@ -250,6 +266,11 @@ namespace Intersect.Client.Interface.Game.Character
         private void DecorClicked(Base control, EventArgs args)
         {
             ChangePanel(CharacterPanelType.NameTag);
+        } 
+        
+        private void CosmeticsClicked(Base control, EventArgs args)
+        {
+            ChangePanel(CharacterPanelType.Cosmetics);
         }
     }
 }

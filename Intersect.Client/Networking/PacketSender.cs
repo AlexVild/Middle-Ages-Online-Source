@@ -584,5 +584,10 @@ namespace Intersect.Client.Networking
 
             Network.SendPacket(new SetLabelPacket(descriptorId));
         }
+
+        public static void SendRequestCosmetics()
+        {
+            Network.SendPacket(new RequestCosmeticsPacket());
+        }
     }
 }

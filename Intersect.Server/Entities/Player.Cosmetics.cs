@@ -66,7 +66,7 @@ namespace Intersect.Server.Entities
 
         public void SetCosmetic(Guid itemId, string slot)
         {
-            var slotIdx = Options.EquipmentSlots.IndexOf(slot);
+            var slotIdx = Options.CosmeticSlots.IndexOf(slot);
             if (slotIdx == -1)
             {
                 return;

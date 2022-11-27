@@ -127,13 +127,16 @@
     <Compile Include="Interface\Game\AnnouncementWindow.cs" />
     <Compile Include="Interface\Game\Character\CharacterWindowPanelController.cs" />
     <Compile Include="Interface\Game\Character\CharacterWindowMAO.cs" />
+    <Compile Include="Interface\Game\Character\CosmeticItem.cs" />
     <Compile Include="Interface\Game\Character\Panels\CharacterBonusesPanel.cs" />
+    <Compile Include="Interface\Game\Character\Panels\CharacterCosmeticsPanel.cs" />
     <Compile Include="Interface\Game\Character\Panels\CharacterNameTagPanel.cs" />
     <Compile Include="Interface\Game\Character\Panels\CharacterEquipmentWindow.cs" />
     <Compile Include="Interface\Game\Character\CharacterWindowPanel.cs" />
     <Compile Include="Interface\Game\Character\Panels\CharacterHarvestingWindow.cs" />
     <Compile Include="Interface\Game\Character\Panels\CharacterStatsWindow.cs" />
     <Compile Include="Interface\Game\ComboText.cs" />
+    <Compile Include="Interface\Game\Components\CosmeticSelectionComponent.cs" />
     <Compile Include="Interface\Game\Components\GwenComponent.cs" />
     <Compile Include="Interface\Game\Components\HarvestProgressBarComponent.cs" />
     <Compile Include="Interface\Game\Components\HarvestProgressRowComponent.cs" />

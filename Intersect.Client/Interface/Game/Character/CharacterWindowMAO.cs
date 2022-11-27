@@ -24,7 +24,8 @@ namespace Intersect.Client.Interface.Game.Character
         Bonuses,
         Harvesting,
         Recipes,
-        NameTag
+        NameTag,
+        Cosmetics
     }
 
     public partial class CharacterWindowMAO

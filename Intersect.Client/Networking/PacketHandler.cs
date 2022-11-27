@@ -2711,5 +2711,48 @@ namespace Intersect.Client.Networking
         {
             ToastService.SetToast(new Toast(packet.Message));
         }
+
+        public void HandlePacket(IPacketSender packetSender, CosmeticUnlocksPacket packet)
+        {
+            var unlockedCosmetics = CharacterCosmeticsPanelController.UnlockedCosmetics;
+            unlockedCosmetics.Clear();
+            foreach(var cosmetic in packet.UnlockedCosmetics)
+            {
+                var item = ItemBase.Get(cosmetic);
+                var slot = item?.EquipmentSlot ?? -1;
+
+                // Bounds checking
+                if (item == default 
+                    || slot < 0 
+                    || slot >= Options.CosmeticSlots.Count)
+                {
+                    continue;
+                }
+
+                // If we haven't added any cosmetics for this slot yet
+                if (!unlockedCosmetics.TryGetValue(slot, out var slotCosmetics))
+                {
+                    unlockedCosmetics[slot] = new List<Guid> { cosmetic };
+                    continue;
+                }
+
+                // Otherwise, add to the collection
+                slotCosmetics.Add(cosmetic);
+            }
+
+            // Sort the items in each collection by name/display name
+            var sortedCollection = new Dictionary<int, List<Guid>>();
+            foreach (var slot in unlockedCosmetics.Keys)
+            {
+                sortedCollection[slot] = unlockedCosmetics[slot]
+                    .ToList()
+                    .Select(c => ItemBase.Get(c))
+                    .Where(c => c != default)
+                    .OrderBy(c => string.IsNullOrEmpty(c?.CosmeticDisplayName) ? c.Name : c.CosmeticDisplayName)
+                    .Select(c => c.Id)
+                    .ToList();
+            }
+            unlockedCosmetics = sortedCollection;
+        }
     }
 }
