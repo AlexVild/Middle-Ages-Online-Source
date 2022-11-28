@@ -1190,6 +1190,12 @@ namespace Intersect.Client.Entities
                                     itemId = Equipment[equipSlot];
                                 }
 
+                                // Cosmetic override
+                                if (this is Player cosmeticOverride && cosmeticOverride.Cosmetics.ElementAtOrDefault(equipSlot) != default)
+                                {
+                                    itemId = cosmeticOverride.Cosmetics[equipSlot];
+                                }
+
                                 var item = ItemBase.Get(itemId);
                                 if (item != null)
                                 {
@@ -1203,7 +1209,23 @@ namespace Intersect.Client.Entities
                                     }
                                 }
                             }
-                        } else if (decorSlot > -1 && decorSlot < Options.Player.DecorSlots.Count)
+                        } 
+                        else if (this is Player cosmetic && cosmetic.Cosmetics.ElementAtOrDefault(equipSlot) != default)
+                        {
+                            var item = ItemBase.Get(cosmetic.Cosmetics[equipSlot]);
+                            if (item != null)
+                            {
+                                if (Gender == 0)
+                                {
+                                    DrawEquipment(item.MalePaperdoll, renderColor.A, dir);
+                                }
+                                else
+                                {
+                                    DrawEquipment(item.FemalePaperdoll, renderColor.A, dir);
+                                }
+                            }
+                        }
+                        else if (decorSlot > -1 && decorSlot < Options.Player.DecorSlots.Count)
                         {
                             var hideHair = false;
                             var hideBeard = false;

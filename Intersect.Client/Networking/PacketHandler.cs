@@ -1328,12 +1328,21 @@ namespace Intersect.Client.Networking
                         entity.Equipment = packet.ItemIds;
                     }
                     entity.MyDecors = packet.Decor;
+                    if (entity is Player pl)
+                    {
+                        pl.Cosmetics = packet.CosmeticItemIds;
+                    }
                 }
             }
 
             if (entityId == Globals.Me?.Id && Interface.Interface.GameUi?.CurrentCharacterPanel == Interface.Game.Character.CharacterPanelType.Bonuses)
             {
                 CharacterBonusesPanelController.Refresh = true;
+            }
+
+            if (entityId == Globals.Me?.Id && Interface.Interface.GameUi?.CurrentCharacterPanel == Interface.Game.Character.CharacterPanelType.Cosmetics)
+            {
+                Globals.Me?.CosmeticsUpdateDelegate?.Invoke();
             }
         }
 
@@ -2752,7 +2761,9 @@ namespace Intersect.Client.Networking
                     .Select(c => c.Id)
                     .ToList();
             }
-            unlockedCosmetics = sortedCollection;
+            CharacterCosmeticsPanelController.UnlockedCosmetics = sortedCollection;
+
+            CharacterCosmeticsPanelController.RefreshCosmeticsPanel = true;
         }
     }
 }

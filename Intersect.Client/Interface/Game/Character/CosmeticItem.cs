@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Intersect.Client.Core;
 using Intersect.Client.Framework.File_Management;
 using Intersect.Client.Framework.GenericClasses;
 using Intersect.Client.Framework.Gwen.Control;
@@ -7,6 +8,7 @@ using Intersect.Client.Framework.Gwen.Control.EventArguments;
 using Intersect.Client.Framework.Gwen.Input;
 using Intersect.Client.Framework.Input;
 using Intersect.Client.General;
+using Intersect.Client.Interface.Game.Character.Panels;
 using Intersect.Client.Interface.Game.DescriptionWindows;
 using Intersect.Client.Networking;
 using Intersect.GameObjects;
@@ -18,75 +20,57 @@ namespace Intersect.Client.Interface.Game.Character
 
         public ImagePanel ContentPanel;
 
-        private Base CharacterWindow;
+        private Base CosmeticContainer;
 
         private Guid CurrentItemId;
 
-        private ItemDescriptionWindow DescWindow;
-
-        private int[] mStatBoost = new int[(int)Enums.Stats.StatCount];
-
-        private bool TexLoaded;
-
         private int Index;
+        
+        private int SlotType;
 
         public ImagePanel Pnl;
 
-        public CosmeticItem(int index, Base characterWindow)
+        private bool IsEquipped;
+
+        public string Name;
+
+        public CosmeticItem(int index, Base characterWindow, Guid itemId, int slot)
         {
             Index = index;
-            CharacterWindow = characterWindow;
+            CosmeticContainer = characterWindow;
+            CurrentItemId = itemId;
+            SlotType = slot;
         }
 
         public void Setup()
         {
-            Pnl.HoverEnter += pnl_HoverEnter;
-            Pnl.HoverLeave += pnl_HoverLeave;
+            Pnl = new ImagePanel(CosmeticContainer, "CosmeticItem");
             Pnl.Clicked += Pnl_Clicked;
 
             ContentPanel = new ImagePanel(Pnl, "CosmeticIcon");
             ContentPanel.MouseInputEnabled = false;
+
+            Pnl.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
+
+            Update();
+        }
+
+        public void SetPosition(float x, float y)
+        {
+            Pnl.SetPosition(x, y);
         }
 
         private void Pnl_Clicked(Base sender, ClickedEventArgs arguments)
         {
-            // Intentionally Blank
-        }
-
-        void pnl_HoverLeave(Base sender, EventArgs arguments)
-        {
-            if (DescWindow != null)
+            Audio.AddGameSound("al_cloth-heavy.wav", false);
+            if (IsEquipped)
             {
-                DescWindow.Dispose();
-                DescWindow = null;
+                PacketSender.SendCosmeticChange(Guid.Empty, SlotType);
             }
-        }
-
-        void pnl_HoverEnter(Base sender, EventArgs arguments)
-        {
-            if (InputHandler.MouseFocus != null)
+            else
             {
-                return;
+                PacketSender.SendCosmeticChange(CurrentItemId, SlotType);
             }
-
-            if (Globals.InputManager.MouseButtonDown(GameInput.MouseButtons.Left))
-            {
-                return;
-            }
-
-            if (DescWindow != null)
-            {
-                DescWindow.Dispose();
-                DescWindow = null;
-            }
-
-            var item = ItemBase.Get(CurrentItemId);
-            if (item == null)
-            {
-                return;
-            }
-
-            DescWindow = new ItemDescriptionWindow(item, 1, CharacterWindow.X, CharacterWindow.Y, mStatBoost, item.Name);
         }
 
         public FloatRect RenderBounds()
@@ -102,35 +86,40 @@ namespace Intersect.Client.Interface.Game.Character
             return rect;
         }
 
-        public void Update(Guid currentItemId, int[] statBoost)
+        public void Update()
         {
-            if (currentItemId != CurrentItemId || !TexLoaded)
+            var item = ItemBase.Get(CurrentItemId);
+            if (item != null)
             {
-                CurrentItemId = currentItemId;
-                mStatBoost = statBoost;
-                var item = ItemBase.Get(CurrentItemId);
-                if (item != null)
+                var itemTex = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Item, item.Icon);
+                if (itemTex != null)
                 {
-                    var itemTex = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Item, item.Icon);
-                    if (itemTex != null)
-                    {
-                        ContentPanel.Show();
-                        ContentPanel.Texture = itemTex;
-                        ContentPanel.RenderColor = item.Color;
-                    }
-                    else
-                    {
-                        ContentPanel.Hide();
-                    }
+                    ContentPanel.Show();
+                    ContentPanel.Texture = itemTex;
+                    ContentPanel.RenderColor = item.Color;
+                    Name = string.IsNullOrEmpty(item.CosmeticDisplayName) ? item.Name : item.CosmeticDisplayName;
+                    Pnl.SetToolTipText(Name);
+
+                    UpdateEquipped();
+
+                    Pnl.Texture = IsEquipped ? CharacterCosmeticsPanelController.CosmeticEquippedTexture : CharacterCosmeticsPanelController.CosmeticUnequippedTexture;
                 }
                 else
                 {
                     ContentPanel.Hide();
                 }
-
-                TexLoaded = true;
+            }
+            else
+            {
+                ContentPanel.Hide();
             }
         }
 
+
+        public void UpdateEquipped()
+        {
+            IsEquipped = Globals.Me?.Cosmetics[SlotType] == CurrentItemId;
+            Pnl.Texture = IsEquipped ? CharacterCosmeticsPanelController.CosmeticEquippedTexture : CharacterCosmeticsPanelController.CosmeticUnequippedTexture;
+        }
     }
 }

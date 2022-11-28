@@ -102,6 +102,7 @@ namespace Intersect.Client.Interface.Game.Character.Panels
         {
             Interface.InputBlockingElements.Remove(LabelSearchBar);
             ClearLabels();
+            SearchTerm = string.Empty;
             
             base.Hide();
         }

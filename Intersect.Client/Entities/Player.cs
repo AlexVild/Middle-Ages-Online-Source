@@ -377,14 +377,19 @@ namespace Intersect.Client.Entities
 
             if (playerPacket.Equipment != null)
             {
-                this.MyDecors = playerPacket.Equipment.Decor;
+                MyDecors = playerPacket.Equipment.Decor;
                 if (this == Globals.Me && playerPacket.Equipment.InventorySlots != null)
                 {
-                    this.MyEquipment = playerPacket.Equipment.InventorySlots;
+                    MyEquipment = playerPacket.Equipment.InventorySlots;
                 }
                 else if (playerPacket.Equipment.ItemIds != null)
                 {
-                    this.Equipment = playerPacket.Equipment.ItemIds;
+                    Equipment = playerPacket.Equipment.ItemIds;
+                }
+                
+                if (this == Globals.Me)
+                {
+                    Cosmetics = playerPacket.Equipment.CosmeticItemIds;
                 }
             }
 
@@ -3025,7 +3030,12 @@ namespace Intersect.Client.Entities
     }
 
     public partial class Player : Entity
-    { 
+    {
+        public Guid[] Cosmetics = new Guid[Options.CosmeticSlots.Count];
         public Guid LabelDescriptorId { get; set; }
+
+        public delegate void CosmeticsUpdate();
+
+        public CosmeticsUpdate CosmeticsUpdateDelegate;
     }
 }

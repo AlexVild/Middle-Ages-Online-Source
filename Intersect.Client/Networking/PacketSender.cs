@@ -589,5 +589,15 @@ namespace Intersect.Client.Networking
         {
             Network.SendPacket(new RequestCosmeticsPacket());
         }
+
+        public static void SendCosmeticChange(Guid itemId, int slot)
+        {
+            if (slot >= Options.CosmeticSlots.Count || slot < 0)
+            {
+                return;
+            }
+
+            Network.SendPacket(new CosmeticChangePacket(itemId, Options.CosmeticSlots[slot]));
+        }
     }
 }

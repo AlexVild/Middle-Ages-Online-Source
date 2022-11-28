@@ -40,6 +40,8 @@ namespace Intersect.Server.Entities
                 }
             }
 
+            var name = string.IsNullOrEmpty(descriptor.CosmeticDisplayName) ? descriptor.Name : descriptor.CosmeticDisplayName;
+
             // If the cosmetic is already unlocked, but we want to lock it
             if (cosmetic != default && !unlocked)
             {
@@ -47,7 +49,7 @@ namespace Intersect.Server.Entities
 
                 // Alert the player of their lost cosmetic
                 PacketSender.SendChatMsg(this,
-                    Strings.Player.CosmeticLost.ToString(descriptor.CosmeticDisplayName ?? string.Empty),
+                    Strings.Player.CosmeticLost.ToString(name),
                     Enums.ChatMessageType.Experience,
                     CustomColors.General.GeneralWarning);
                 return;
@@ -58,7 +60,7 @@ namespace Intersect.Server.Entities
             
             // Alert the player of their new unlock
             PacketSender.SendChatMsg(this, 
-                Strings.Player.CosmeticUnlocked.ToString(descriptor.CosmeticDisplayName ?? string.Empty), 
+                Strings.Player.CosmeticUnlocked.ToString(name), 
                 Enums.ChatMessageType.Experience, 
                 CustomColors.General.GeneralCompleted, 
                 sendToast: true);
@@ -74,17 +76,5 @@ namespace Intersect.Server.Entities
 
             Cosmetics[slotIdx] = itemId;
         }
-
-        /*public List<PlayerLabelPacket> GetUnlockedLabels()
-        {
-            if (UseLabelCache && CachedLabelPackets != null)
-            {
-                return CachedLabelPackets;
-            }
-
-            CachedLabelPackets = UnlockedLabels.Select(lbl => lbl.Packetize()).ToList();
-            UseLabelCache = true;
-            return CachedLabelPackets;
-        }*/
     }
 }

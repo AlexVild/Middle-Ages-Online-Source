@@ -112,12 +112,12 @@ namespace Intersect.Server.Entities
                             // The player still has some unlocks to go.
                             var nextIntervalIdx = intervals.FindIndex(x => x == amountHarvested) + 1;
                             var nextInterval = intervals[nextIntervalIdx];
-                            PacketSender.SendEventDialog(playerKiller, Strings.Records.resourcegatheredbonusunlock.ToString(nextInterval.ToString()), "", Guid.NewGuid());
+                            PacketSender.SendChatMsg(playerKiller, Strings.Records.resourcegatheredbonusunlock.ToString(nextInterval.ToString()), ChatMessageType.Experience, CustomColors.General.GeneralCompleted, sendToast: true);
                         }
                         else
                         {
                             // The player has completed these resource bonuses
-                            PacketSender.SendEventDialog(playerKiller, Strings.Records.resourcegatheredbonusunlockcomplete, "", Guid.NewGuid());
+                            PacketSender.SendChatMsg(playerKiller, Strings.Records.resourcegatheredbonusunlockcomplete, ChatMessageType.Experience, CustomColors.General.GeneralCompleted, sendToast: true);
                         }
                     }
                     else if (amountHarvested % Options.ResourceRecordUpdateInterval == 0)

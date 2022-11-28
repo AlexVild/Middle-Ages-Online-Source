@@ -1,4 +1,8 @@
-﻿using Intersect.Client.Framework.Gwen.Control;
+﻿using Intersect.Client.Core;
+using Intersect.Client.Framework.File_Management;
+using Intersect.Client.Framework.Graphics;
+using Intersect.Client.Framework.Gwen.Control;
+using Intersect.Client.General;
 using Intersect.Client.Interface.Components;
 using Intersect.Client.Interface.Game.Components;
 using Intersect.Client.Networking;
@@ -18,6 +22,9 @@ namespace Intersect.Client.Interface.Game.Character.Panels
         /// A mapping of equipment slot -> cosmetic item ID
         /// </summary>
         public static Dictionary<int, List<Guid>> UnlockedCosmetics = new Dictionary<int, List<Guid>>();
+
+        public static GameTexture CosmeticUnequippedTexture = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Gui, "inventoryitem.png");
+        public static GameTexture CosmeticEquippedTexture = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Gui, "inventoryitemequipped.png");
     }
 
     public class CharacterCosmeticsPanel : CharacterWindowPanel
@@ -38,6 +45,8 @@ namespace Intersect.Client.Interface.Game.Character.Panels
         private Button SearchClearButton { get; set; }
 
         private bool RefreshContainers { get; set; }
+
+        private ScrollControl Components { get; set; }
 
         private ComponentList<GwenComponent> SelectionContainers { get; set; } = new ComponentList<GwenComponent>();
 
@@ -60,11 +69,41 @@ namespace Intersect.Client.Interface.Game.Character.Panels
                 Text = "CLEAR"
             };
             SearchClearButton.Clicked += SearchClearButton_Clicked;
+
+            Components = new ScrollControl(mBackground, "ComponentContainer");
+
+            mBackground.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
+
+            var helmets = new CosmeticSelectionComponent(Components, "HelmetSelection", "Helmets", "character_harvest_fishing.png", Options.HelmetIndex, SelectionContainers);
+            var armors = new CosmeticSelectionComponent(Components, "ArmorSelection", "Armors", "character_harvest_mining.png", 1, SelectionContainers);
+            var boots = new CosmeticSelectionComponent(Components, "BootSelection", "Boots", "character_harvest_fishing.png", 4, SelectionContainers);
+
+            var padding = 8;
+            for(var i = 0; i < SelectionContainers.Count; i++)
+            {
+                var container = (CosmeticSelectionComponent)SelectionContainers[i];
+                container.Initialize();
+
+                var amt = padding + container.Height;
+                container.Y += amt * i;
+            }
+
+
+            if (Globals.Me != null)
+            {
+                Globals.Me.CosmeticsUpdateDelegate = () =>
+                {
+                    UpdateEquippedStatus();
+                };
+            }
         }
 
         private void SearchBar_TextChanged(Base sender, EventArgs arguments)
         {
-            RefreshContainers = true;
+            foreach(var container in SelectionContainers)
+            {
+                ((CosmeticSelectionComponent)container).Search(SearchTerm);
+            }
         }
 
         private void SearchClearButton_Clicked(Base sender, Framework.Gwen.Control.EventArguments.ClickedEventArgs arguments)
@@ -76,6 +115,7 @@ namespace Intersect.Client.Interface.Game.Character.Panels
         {
             PacketSender.SendRequestCosmetics();
             Interface.InputBlockingElements.Add(SearchBar);
+            SearchTerm = string.Empty;
 
             base.Show(); 
         }
@@ -84,12 +124,34 @@ namespace Intersect.Client.Interface.Game.Character.Panels
         {
             Interface.InputBlockingElements.Remove(SearchBar);
 
+            foreach (var el in SelectionContainers)
+            {
+                ((CosmeticSelectionComponent)el).ClearCosmetics();
+            }
+
             base.Hide();
         }
 
         public override void Update()
         {
+            if (CharacterCosmeticsPanelController.RefreshCosmeticsPanel)
+            {
+                foreach(var component in SelectionContainers)
+                {
+                    ((CosmeticSelectionComponent)component).Update();
+                }
+
+                CharacterCosmeticsPanelController.RefreshCosmeticsPanel = false;
+            }
             // intentionally blank
+        }
+
+        private void UpdateEquippedStatus()
+        {
+            foreach (var component in SelectionContainers)
+            {
+                ((CosmeticSelectionComponent)component).UpdateEquippedStatus();
+            }
         }
     }
 }

@@ -824,12 +824,37 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                     var paperdollSlot = Options.PaperdollOrder[(int)Directions.Down][z];
                     var textureType = GameContentManager.TextureType.Paperdoll;
 
-                    if (Options.EquipmentSlots.IndexOf(paperdollSlot) > -1 &&
+                    var equipSlot = Options.EquipmentSlots.IndexOf(paperdollSlot);
+
+                    if (equipSlot > -1 &&
                         equipment.Length == Options.EquipmentSlots.Count && !inVehicle)
                     {
-                        if (equipment[Options.EquipmentSlots.IndexOf(paperdollSlot)] != Guid.Empty)
+                        if (equipment[equipSlot] != Guid.Empty)
                         {
-                            var itemId = equipment[Options.EquipmentSlots.IndexOf(paperdollSlot)];
+                            var itemId = equipment[equipSlot];
+
+                            // Cosmetic override
+                            if (MyEntity is Player pl && pl.Cosmetics.ElementAtOrDefault(equipSlot) != default)
+                            {
+                                itemId = pl.Cosmetics[equipSlot];
+                            }
+                            if (ItemBase.Get(itemId) != null)
+                            {
+                                var itemdata = ItemBase.Get(itemId);
+                                if (MyEntity.Gender == 0)
+                                {
+                                    paperdoll = itemdata.MalePaperdoll;
+                                }
+                                else
+                                {
+                                    paperdoll = itemdata.FemalePaperdoll;
+                                }
+                            }
+                        }
+                        // Is there a cosmetic though?
+                        else if (MyEntity is Player ply && ply.Cosmetics.ElementAtOrDefault(equipSlot) != default)
+                        {
+                            var itemId = ply.Cosmetics[equipSlot];
                             if (ItemBase.Get(itemId) != null)
                             {
                                 var itemdata = ItemBase.Get(itemId);

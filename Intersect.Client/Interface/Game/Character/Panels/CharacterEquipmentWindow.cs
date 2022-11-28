@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Intersect.Client.Core;
 using Intersect.Client.Entities;
@@ -210,16 +211,24 @@ namespace Intersect.Client.Interface.Game.Character.Equipment
             {
                 var paperdoll = "";
                 var textureGroup = GameContentManager.TextureType.Paperdoll;
+                var equipmentSlot = Options.EquipmentSlots.IndexOf(Options.PaperdollOrder[1][z]);
+
                 if (Options.EquipmentSlots.IndexOf(Options.PaperdollOrder[1][z]) > -1)
                 {
                     var equipment = Globals.Me.MyEquipment;
-                    if (equipment[Options.EquipmentSlots.IndexOf(Options.PaperdollOrder[1][z])] > -1 &&
-                        equipment[Options.EquipmentSlots.IndexOf(Options.PaperdollOrder[1][z])] <
-                        Options.MaxInvItems)
+                    var cosmetics = Globals.Me.Cosmetics;
+                    if (equipment[equipmentSlot] > -1 && equipment[equipmentSlot] < Options.MaxInvItems)
                     {
                         var itemNum = Globals.Me
-                            .Inventory[equipment[Options.EquipmentSlots.IndexOf(Options.PaperdollOrder[1][z])]]
+                            .Inventory[equipment[equipmentSlot]]
                             .ItemId;
+
+                        // Override the equipped item?
+                        var cosmeticSlot = Globals.Me.Cosmetics.ElementAtOrDefault(equipmentSlot);
+                        if (cosmeticSlot != default && cosmeticSlot != Guid.Empty)
+                        {
+                            itemNum = cosmeticSlot;
+                        }
 
                         if (ItemBase.Get(itemNum) != null)
                         {
@@ -234,6 +243,25 @@ namespace Intersect.Client.Interface.Game.Character.Equipment
                             }
                         }
                     }
+                    // Do we have a cosmetic to display?
+                    else if (cosmetics.ElementAtOrDefault(equipmentSlot) != default)
+                    {
+                        var itemNum = cosmetics[equipmentSlot];
+
+                        if (ItemBase.Get(itemNum) != null)
+                        {
+                            var itemdata = ItemBase.Get(itemNum);
+                            if (Globals.Me.Gender == 0)
+                            {
+                                paperdoll = itemdata.MalePaperdoll;
+                            }
+                            else
+                            {
+                                paperdoll = itemdata.FemalePaperdoll;
+                            }
+                        }
+                    }
+
                 }
                 else if (Options.DecorSlots.IndexOf(Options.PaperdollOrder[1][z]) > -1)
                 {

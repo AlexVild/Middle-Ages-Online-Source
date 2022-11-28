@@ -4,6 +4,7 @@ using Intersect.Client.General;
 using Intersect.Client.Interface.Components;
 using Intersect.Client.Interface.Game.Character;
 using Intersect.Client.Interface.Game.Character.Panels;
+using Intersect.Client.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,11 +25,20 @@ namespace Intersect.Client.Interface.Game.Components
         private ImagePanel ScrollContainer { get; set; }
         private ScrollControl CosmeticItemContainer { get; set; }
 
-        private List<CosmeticItem> Items { get; set; }
+        private List<CosmeticItem> Items { get; set; } = new List<CosmeticItem>();
         private int EquipmentSlot { get; set; }
 
         private Dictionary<int, List<Guid>> UnlockedCosmetics => CharacterCosmeticsPanelController.UnlockedCosmetics;
         private List<Guid> CosmeticItems;
+
+        public int X => ParentContainer.X;
+        public int Y
+        {
+            get => ParentContainer.Y;
+            set => ParentContainer.SetPosition(ParentContainer.X, value);
+        }
+
+        public int Height => ParentContainer.Height;
 
         public CosmeticSelectionComponent(Base parent, 
             string containerName, 
@@ -64,14 +74,21 @@ namespace Intersect.Client.Interface.Game.Components
             CosmeticItemContainer = new ScrollControl(ScrollContainer, "CosmeticItemContainer");
 
             base.Initialize();
+            FitParentToComponent();
 
-            RefreshUnlockedCosmetics();
+            ContainerImage.Texture = ContainerImageTexture;
         }
 
-        private void ClearCosmetics()
+        public void SetPosition(float x, float y)
+        {
+            ParentContainer.SetPosition(x, y);
+        }
+
+        public void ClearCosmetics()
         {
             CosmeticItemContainer.ClearCreatedChildren();
             CosmeticItems?.Clear();
+            Items?.Clear();
         }
 
         private void RefreshUnlockedCosmetics()
@@ -85,8 +102,70 @@ namespace Intersect.Client.Interface.Game.Components
             var idx = 0;
             foreach(var cosmetic in CosmeticItems)
             {
-                var cosmeticItem = new CosmeticItem(idx, CosmeticItemContainer);
+                var cosmeticItem = new CosmeticItem(idx, CosmeticItemContainer, cosmetic, EquipmentSlot);
                 cosmeticItem.Setup();
+
+                var xPadding = cosmeticItem.Pnl.Margin.Left + cosmeticItem.Pnl.Margin.Right;
+                var yPadding = cosmeticItem.Pnl.Margin.Top + cosmeticItem.Pnl.Margin.Bottom;
+
+                cosmeticItem.SetPosition(
+                    idx %
+                    ((CosmeticItemContainer.Width - CosmeticItemContainer.GetVerticalScrollBar().Width) / (cosmeticItem.Pnl.Width + xPadding)) *
+                    (cosmeticItem.Pnl.Width + xPadding) +
+                    xPadding,
+                    idx /
+                    ((CosmeticItemContainer.Width - CosmeticItemContainer.GetVerticalScrollBar().Width) / (cosmeticItem.Pnl.Width + xPadding)) *
+                    (cosmeticItem.Pnl.Height + yPadding) +
+                    yPadding
+                );
+
+                idx++;
+                Items.Add(cosmeticItem);
+            }
+        }
+
+        public void Update()
+        {
+            if (CharacterCosmeticsPanelController.RefreshCosmeticsPanel)
+            {
+                RefreshUnlockedCosmetics();
+            }
+        }
+
+        public void UpdateEquippedStatus()
+        {
+            foreach (var item in Items)
+            {
+                item.UpdateEquipped();
+            }
+        }
+
+
+        public void Search(string term)
+        {
+            var idx = 0;
+            foreach(var item in Items)
+            {
+                if (!SearchHelper.IsSearchable(item.Name, term))
+                {
+                    item.Pnl.Hide();
+                    continue;
+                }
+
+                item.Pnl.Show();
+                var xPadding = item.Pnl.Margin.Left + item.Pnl.Margin.Right;
+                var yPadding = item.Pnl.Margin.Top + item.Pnl.Margin.Bottom;
+
+                item.SetPosition(
+                    idx %
+                    ((CosmeticItemContainer.Width - CosmeticItemContainer.GetVerticalScrollBar().Width) / (item.Pnl.Width + xPadding)) *
+                    (item.Pnl.Width + xPadding) +
+                    xPadding,
+                    idx /
+                    ((CosmeticItemContainer.Width - CosmeticItemContainer.GetVerticalScrollBar().Width) / (item.Pnl.Width + xPadding)) *
+                    (item.Pnl.Height + yPadding) +
+                    yPadding
+                );
 
                 idx++;
             }
