@@ -40,7 +40,7 @@ namespace Intersect.Editor.Forms.Editors
 
         protected override void GameObjectUpdatedDelegate(GameObjectType type)
         {
-            FormHelpers.GameObjectUpdatedDelegate(GameObjectType.Label, ref mEditorItem, InitEditor, UpdateEditor);
+            FormHelpers.GameObjectUpdatedDelegate(ref mEditorItem, InitEditor, UpdateEditor);
         }
 
         private void UpdateToolStripItems()

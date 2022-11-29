@@ -120,6 +120,7 @@ namespace Intersect.Editor.Forms
             this.timerEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timeEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lootTableEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.labelEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.postQuestionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reportBugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -127,7 +128,7 @@ namespace Intersect.Editor.Forms
             this.menuStrip = new DarkUI.Controls.DarkMenuStrip();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.packageUpdateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.labelEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.recipeEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.menuStrip.SuspendLayout();
@@ -815,6 +816,7 @@ namespace Intersect.Editor.Forms
             this.classEditorToolStripMenuItem,
             this.commonEventEditorToolStripMenuItem,
             this.craftsEditorToolStripMenuItem,
+            this.recipeEditorToolStripMenuItem,
             this.craftingTableEditorToolStripMenuItem,
             this.itemEditorToolStripMenuItem,
             this.npcEditorToolStripMenuItem,
@@ -979,6 +981,14 @@ namespace Intersect.Editor.Forms
             this.lootTableEditorToolStripMenuItem.Text = "Loot Table Editor";
             this.lootTableEditorToolStripMenuItem.Click += new System.EventHandler(this.lootTableEditorToolStripMenuItem_Click);
             // 
+            // labelEditorToolStripMenuItem
+            // 
+            this.labelEditorToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.labelEditorToolStripMenuItem.Name = "labelEditorToolStripMenuItem";
+            this.labelEditorToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+            this.labelEditorToolStripMenuItem.Text = "Label Editor";
+            this.labelEditorToolStripMenuItem.Click += new System.EventHandler(this.labelEditorToolStripMenuItem_Click);
+            // 
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -1049,13 +1059,13 @@ namespace Intersect.Editor.Forms
             this.packageUpdateToolStripMenuItem.Text = "Package Update";
             this.packageUpdateToolStripMenuItem.Click += new System.EventHandler(this.packageUpdateToolStripMenuItem_Click);
             // 
-            // labelEditorToolStripMenuItem
+            // recipeEditorToolStripMenuItem
             // 
-            this.labelEditorToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.labelEditorToolStripMenuItem.Name = "labelEditorToolStripMenuItem";
-            this.labelEditorToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
-            this.labelEditorToolStripMenuItem.Text = "Label Editor";
-            this.labelEditorToolStripMenuItem.Click += new System.EventHandler(this.labelEditorToolStripMenuItem_Click);
+            this.recipeEditorToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.recipeEditorToolStripMenuItem.Name = "recipeEditorToolStripMenuItem";
+            this.recipeEditorToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+            this.recipeEditorToolStripMenuItem.Text = "Recipe Editor";
+            this.recipeEditorToolStripMenuItem.Click += new System.EventHandler(this.recipeEditorToolStripMenuItem_Click);
             // 
             // FrmMain
             // 
@@ -1181,5 +1191,6 @@ namespace Intersect.Editor.Forms
         private ToolStripMenuItem timerEditorToolStripMenuItem;
         private ToolStripMenuItem lootTableEditorToolStripMenuItem;
         private ToolStripMenuItem labelEditorToolStripMenuItem;
+        private ToolStripMenuItem recipeEditorToolStripMenuItem;
     }
 }

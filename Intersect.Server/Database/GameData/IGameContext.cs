@@ -45,5 +45,7 @@ namespace Intersect.Server.Database.GameData
         DbSet<TilesetBase> Tilesets { get; set; }
 
         DbSet<TimeBase> Time { get; set; }
+        
+        DbSet<RecipeDescriptor> Recipes { get; set; }
     }
 }

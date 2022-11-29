@@ -724,6 +724,19 @@ namespace Intersect.Editor.Networking
                         LabelDescriptor.Lookup.Set(id, label);
                     }
                     break;
+                case GameObjectType.Recipe:
+                    if (deleted)
+                    {
+                        var recipe = RecipeDescriptor.Get(id);
+                        recipe.Delete();
+                    }
+                    else
+                    {
+                        var recipe = new RecipeDescriptor(id);
+                        recipe.Load(json);
+                        RecipeDescriptor.Lookup.Set(id, recipe);
+                    }
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }

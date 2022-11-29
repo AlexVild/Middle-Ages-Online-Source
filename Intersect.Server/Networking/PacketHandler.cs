@@ -3724,6 +3724,10 @@ namespace Intersect.Server.Networking
                     obj = LabelDescriptor.Get(id);
 
                     break;
+                case GameObjectType.Recipe:
+                    obj = RecipeDescriptor.Get(id);
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -3873,6 +3877,10 @@ namespace Intersect.Server.Networking
                     break;
                 case GameObjectType.Label:
                     obj = DatabaseObject<LabelDescriptor>.Lookup.Get(id);
+
+                    break;
+                case GameObjectType.Recipe:
+                    obj = DatabaseObject<RecipeDescriptor>.Lookup.Get(id);
 
                     break;
                 default:

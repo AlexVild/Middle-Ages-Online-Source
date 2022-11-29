@@ -53,5 +53,7 @@ namespace Intersect.Server.Database.PlayerData
         DbSet<LabelInstance> Player_Labels { get; set; }
         
         DbSet<CosmeticInstance> Player_Cosmetics { get; set; }
+        
+        DbSet<RecipeInstance> Player_Recipes { get; set; }
     }
 }

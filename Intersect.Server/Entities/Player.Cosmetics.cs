@@ -27,7 +27,7 @@ namespace Intersect.Server.Entities
 
         public void ChangeCosmeticUnlockStatus(Guid itemId, bool unlocked = true)
         {
-            var cosmetic = UnlockedCosmetics.Find(lbl => lbl.ItemId == itemId);
+            var cosmetic = UnlockedCosmetics.Find(csm => csm.ItemId == itemId && csm.Unlocked);
             var descriptor = ItemBase.Get(itemId);
 
             // If the cosmetic is already unlocked, and we are TRYING to unlock it

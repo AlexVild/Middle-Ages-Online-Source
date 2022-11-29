@@ -87,6 +87,8 @@ namespace Intersect.Editor.Forms
         private frmLootTables mTableEditor;
         
         private frmLabel mLabelEditor;
+        
+        private frmRecipe mRecipeEditor;
 
         //General Editting Variables
         bool mTMouseDown;
@@ -1693,6 +1695,15 @@ namespace Intersect.Editor.Forms
                         }
                         
                         break;
+                    case GameObjectType.Recipe:
+                        if (mRecipeEditor == null || mRecipeEditor.Visible == false)
+                        {
+                            mRecipeEditor = new frmRecipe();
+                            mRecipeEditor.InitEditor();
+                            mRecipeEditor.Show();
+                        }
+                        
+                        break;
                     default:
                         return;
                 }
@@ -2109,6 +2120,11 @@ namespace Intersect.Editor.Forms
         private void labelEditorToolStripMenuItem_Click(object sender, EventArgs e)
         {
             PacketSender.SendOpenEditor(GameObjectType.Label);
+        }
+
+        private void recipeEditorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PacketSender.SendOpenEditor(GameObjectType.Recipe);
         }
     }
 

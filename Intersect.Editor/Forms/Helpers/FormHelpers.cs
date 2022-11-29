@@ -32,16 +32,13 @@ namespace Intersect.Editor.Forms.Helpers
                    txtSearch.Text != Strings.EditorGenerics.SearchPlaceHolder;
         }
 
-        public static void GameObjectUpdatedDelegate<T>(GameObjectType type, ref T mEditorItem, Action initEditor, Action updateEditor) where T : DatabaseObject<T>
+        public static void GameObjectUpdatedDelegate<T>(ref T mEditorItem, Action initEditor, Action updateEditor) where T : DatabaseObject<T>
         {
-            if (type == GameObjectType.Label)
+            initEditor();
+            if (mEditorItem != null && !DatabaseObject<T>.Lookup.Values.Contains(mEditorItem))
             {
-                initEditor();
-                if (mEditorItem != null && !DatabaseObject<T>.Lookup.Values.Contains(mEditorItem))
-                {
-                    mEditorItem = null;
-                    updateEditor();
-                }
+                mEditorItem = null;
+                updateEditor();
             }
         }
 

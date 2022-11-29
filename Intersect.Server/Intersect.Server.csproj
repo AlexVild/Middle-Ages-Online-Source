@@ -493,6 +493,7 @@
     <Compile Include="Database\PlayerData\Players\MapExploredInstance.cs" />
     <Compile Include="Database\PlayerData\Players\Quest.cs" />
     <Compile Include="Database\PlayerData\Players\PlayerRecord.cs" />
+    <Compile Include="Database\PlayerData\Players\RecipeInstance.cs" />
     <Compile Include="Database\PlayerData\Players\SlotHelper.cs" />
     <Compile Include="Database\PlayerData\Players\SpellSlot.cs" />
     <Compile Include="Database\PlayerData\RecordTeammateInstance.cs" />
@@ -522,6 +523,7 @@
     <Compile Include="Database\PlayerData\PlayerContext.cs" />
     <Compile Include="Entities\Events\Event.cs" />
     <Compile Include="Entities\Player.Harvesting.cs" />
+    <Compile Include="Entities\Player.Recipes.cs" />
     <Compile Include="Entities\PlayerData\PlayerClassStats.cs" />
     <Compile Include="Entities\Projectile.cs" />
     <Compile Include="Entities\ProjectileSpawn.cs" />
@@ -651,6 +653,10 @@
     <Compile Include="Migrations\20221127161920_CosmeticMigration.cs" />
     <Compile Include="Migrations\20221127161920_CosmeticMigration.designer.cs">
       <DependentUpon>20221127161920_CosmeticMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20221129185153_RecipeMigration.cs" />
+    <Compile Include="Migrations\20221129185153_RecipeMigration.designer.cs">
+      <DependentUpon>20221129185153_RecipeMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.cs" />
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.Designer.cs">
@@ -949,6 +955,10 @@
     <Compile Include="Migrations\Game\20221127160339_ComseticItemMigration.cs" />
     <Compile Include="Migrations\Game\20221127160339_ComseticItemMigration.designer.cs">
       <DependentUpon>20221127160339_ComseticItemMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20221129185129_RecipeDescriptorMigration.cs" />
+    <Compile Include="Migrations\Game\20221129185129_RecipeDescriptorMigration.designer.cs">
+      <DependentUpon>20221129185129_RecipeDescriptorMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">

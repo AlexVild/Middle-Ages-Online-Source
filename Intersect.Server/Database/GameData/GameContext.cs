@@ -108,6 +108,8 @@ namespace Intersect.Server.Database.GameData
         public DbSet<LootTableDescriptor> LootTables { get; set; }
         
         public DbSet<LabelDescriptor> Labels { get; set; }
+        
+        public DbSet<RecipeDescriptor> Recipes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

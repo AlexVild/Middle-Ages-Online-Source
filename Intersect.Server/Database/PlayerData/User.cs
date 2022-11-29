@@ -739,6 +739,8 @@ namespace Intersect.Server.Database.PlayerData
                     .ThenInclude(p => p.Teammates)
                     .Include(p => p.Players)
                     .ThenInclude(p => p.UnlockedCosmetics)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.UnlockedRecipes)
                     .FirstOrDefault()
             ) ??
             throw new InvalidOperationException();
@@ -775,6 +777,8 @@ namespace Intersect.Server.Database.PlayerData
                     .ThenInclude(p => p.Teammates)
                     .Include(p => p.Players)
                     .ThenInclude(p => p.UnlockedCosmetics)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.UnlockedRecipes)
                     .FirstOrDefault()
             ) ??
             throw new InvalidOperationException();
@@ -810,6 +814,8 @@ namespace Intersect.Server.Database.PlayerData
                     .ThenInclude(p => p.Teammates)
                     .Include(p => p.Players)
                     .ThenInclude(p => p.UnlockedCosmetics)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.UnlockedRecipes)
                     .FirstOrDefault()
             ) ??
             throw new InvalidOperationException();
@@ -845,6 +851,8 @@ namespace Intersect.Server.Database.PlayerData
                     .ThenInclude(p => p.Teammates)
                     .Include(p => p.Players)
                     .ThenInclude(p => p.UnlockedCosmetics)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.UnlockedRecipes)
                     .FirstOrDefault()
                 ) ?? throw new InvalidOperationException();
 
@@ -889,6 +897,8 @@ namespace Intersect.Server.Database.PlayerData
                     .ThenInclude(p => p.Teammates)
                     .Include(p => p.Players)
                     .ThenInclude(p => p.UnlockedCosmetics)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.UnlockedRecipes)
                     .FirstOrDefault()
                 ) ?? throw new InvalidOperationException();
 

@@ -1850,6 +1850,12 @@ namespace Intersect.Server.Networking
                         SendGameObject(client, obj.Value, false, false, packetList);
                     }
                     break;
+                case GameObjectType.Recipe:
+                    foreach (var obj in RecipeDescriptor.Lookup)
+                    {
+                        SendGameObject(client, obj.Value, false, false, packetList);
+                    }
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }

@@ -84,6 +84,8 @@ namespace Intersect.Server.Database.PlayerData
         public DbSet<LabelInstance> Player_Labels { get; set; }
         
         public DbSet<CosmeticInstance> Player_Cosmetics { get; set; }
+        
+        public DbSet<RecipeInstance> Player_Recipes { get; set; }
 
         internal async ValueTask Commit(
             bool commit = false,
@@ -158,6 +160,10 @@ namespace Intersect.Server.Database.PlayerData
             modelBuilder.Entity<Player>()
                 .HasMany(player => player.UnlockedCosmetics)
                 .WithOne(cosmetic => cosmetic.Player);
+
+            modelBuilder.Entity<Player>()
+                .HasMany(player => player.UnlockedRecipes)
+                .WithOne(recipe => recipe.Player);
         }
 
         public void Seed()

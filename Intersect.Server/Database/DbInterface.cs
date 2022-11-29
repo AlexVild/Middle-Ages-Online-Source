@@ -589,6 +589,10 @@ namespace Intersect.Server.Database
                     LabelDescriptor.Lookup.Clear();
 
                     break;
+                case GameObjectType.Recipe:
+                    RecipeDescriptor.Lookup.Clear();
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }
@@ -763,6 +767,13 @@ namespace Intersect.Server.Database
                             }
 
                             break;
+                        case GameObjectType.Recipe:
+                            foreach (var recipe in context.Recipes)
+                            {
+                                RecipeDescriptor.Lookup.Set(recipe.Id, recipe);
+                            }
+
+                            break;
                         default:
                             throw new ArgumentOutOfRangeException(nameof(gameObjectType), gameObjectType, null);
                     }
@@ -883,6 +894,10 @@ namespace Intersect.Server.Database
                     break;
                 case GameObjectType.Label:
                     dbObj = new LabelDescriptor(predefinedid);
+
+                    break;
+                case GameObjectType.Recipe:
+                    dbObj = new RecipeDescriptor(predefinedid);
 
                     break;
                 default:
@@ -1038,6 +1053,11 @@ namespace Intersect.Server.Database
                             LabelDescriptor.Lookup.Set(dbObj.Id, dbObj);
 
                             break;
+                        case GameObjectType.Recipe:
+                            context.Recipes.Add((RecipeDescriptor)dbObj);
+                            RecipeDescriptor.Lookup.Set(dbObj.Id, dbObj);
+
+                            break;
                         default:
                             throw new ArgumentOutOfRangeException(nameof(gameObjectType), gameObjectType, null);
                     }
@@ -1180,6 +1200,10 @@ namespace Intersect.Server.Database
                             context.Labels.Remove((LabelDescriptor)gameObject);
 
                             break;
+                        case GameObjectType.Recipe:
+                            context.Recipes.Remove((RecipeDescriptor)gameObject);
+
+                            break;
                     }
 
                     if (gameObject.Type.GetLookup().Values.Contains(gameObject))
@@ -1318,6 +1342,10 @@ namespace Intersect.Server.Database
                             break;
                         case GameObjectType.Label:
                             context.Labels.Update((LabelDescriptor)gameObject);
+
+                            break;
+                        case GameObjectType.Recipe:
+                            context.Recipes.Update((RecipeDescriptor)gameObject);
 
                             break;
                     }
@@ -1909,6 +1937,7 @@ namespace Intersect.Server.Database
                     MigrateDbSet(context.Timers, newGameContext.Timers);
                     MigrateDbSet(context.Labels, newGameContext.Labels);
                     MigrateDbSet(context.LootTables, newGameContext.LootTables);
+                    MigrateDbSet(context.Recipes, newGameContext.Recipes);
                     newGameContext.ChangeTracker.DetectChanges();
                     newGameContext.SaveChanges();
                     newGameContext.Dispose();
@@ -1939,6 +1968,7 @@ namespace Intersect.Server.Database
                     MigrateDbSet(context.Maps_Explored, newPlayerContext.Maps_Explored);
                     MigrateDbSet(context.Loot_Rolls, newPlayerContext.Loot_Rolls);
                     MigrateDbSet(context.Player_Labels, newPlayerContext.Player_Labels);
+                    MigrateDbSet(context.Player_Recipes, newPlayerContext.Player_Recipes);
 
                     newPlayerContext.ChangeTracker.DetectChanges();
                     newPlayerContext.SaveChanges();

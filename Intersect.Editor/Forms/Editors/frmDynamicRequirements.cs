@@ -40,6 +40,8 @@ namespace Intersect.Editor.Forms.Editors
         LootTable,
 
         DialogOptions,
+
+        RecipeUnlock,
     }
 
     public partial class FrmDynamicRequirements : Form
@@ -124,6 +126,10 @@ namespace Intersect.Editor.Forms.Editors
                     break;
                 case RequirementType.DialogOptions:
                     lblInstructions.Text = Strings.DynamicRequirements.LootTable;
+
+                    break;
+                case RequirementType.RecipeUnlock:
+                    lblInstructions.Text = Strings.DynamicRequirements.RecipeUnlock;
 
                     break;
                 default:

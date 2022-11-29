@@ -81,6 +81,9 @@ namespace Intersect.Enums
 
         [GameObjectInfo(typeof(LabelDescriptor), "labels")]
         Label,
+
+        [GameObjectInfo(typeof(RecipeDescriptor), "recipes")]
+        Recipe,
     }
 
 }
