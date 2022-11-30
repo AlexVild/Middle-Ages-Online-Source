@@ -319,7 +319,10 @@ namespace Intersect.Editor.Forms.Editors
 
         private void btnAddReq_Click(object sender, EventArgs e)
         {
-            var newReq = new RecipeRequirement(mEditorItem.Id, cmbTriggerType.SelectedIndex, (int)nudAmt.Value);
+            var triggerVal = GetTriggerParamValue();
+
+            var newReq = new RecipeRequirement(mEditorItem.Id, triggerVal, cmbTriggerType.SelectedIndex, (int)nudAmt.Value);
+            mEditorItem.RecipeRequirements.Add(newReq);
             RefreshRequirementsList();
         }
 

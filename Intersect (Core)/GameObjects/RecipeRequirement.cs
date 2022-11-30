@@ -22,6 +22,7 @@ namespace Intersect.GameObjects
         [ForeignKey(nameof(Recipe))]
         public Guid DescriptorId { get; set; }
 
+        [NotMapped, JsonIgnore]
         public RecipeDescriptor Recipe { get; set; }
         
         public Guid TriggerId { get; set; }
@@ -34,25 +35,27 @@ namespace Intersect.GameObjects
 
         public int Amount { get; set; }
 
-        [JsonConstructor]
-        public RecipeRequirement(Guid descriptorId, int triggerValue, bool value)
+        public RecipeRequirement() { }
+
+        public RecipeRequirement(Guid descriptorId, Guid triggerId, int triggerValue, bool value)
         {
             DescriptorId = descriptorId;
+            TriggerId = triggerId;
             TriggerValue = triggerValue;
             BoolValue = value;
             IsBool = true;
         }
 
-        [JsonConstructor]
-        public RecipeRequirement(Guid descriptorId, int triggerValue, int value)
+        public RecipeRequirement(Guid descriptorId, Guid triggerId, int triggerValue, int value)
         {
             DescriptorId = descriptorId;
+            TriggerId = triggerId;
             TriggerValue = triggerValue;
             Amount = value;
             IsBool = false;
         }
 
-        public string TriggerItemName => Trigger.GetRelatedTable().GetLookup().Get(DescriptorId)?.Name ?? "NOT FOUND";
+        public string TriggerItemName => Trigger.GetRelatedTable().GetLookup().Get(TriggerId)?.Name ?? "NOT FOUND";
 
         public override string ToString()
         {
@@ -62,7 +65,7 @@ namespace Intersect.GameObjects
             }
             else
             {
-                return $"{Trigger.GetDescription()}: {TriggerItemName}x {Amount}";
+                return $"{Trigger.GetDescription()}: {TriggerItemName} x{Amount}";
             }
         }
     }

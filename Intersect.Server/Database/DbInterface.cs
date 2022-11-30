@@ -603,7 +603,7 @@ namespace Intersect.Server.Database
             ClearGameObjects(gameObjectType);
             try
             {
-                using (var context = CreateGameContext(readOnly: true))
+                using (var context = CreateGameContext(readOnly: false))
                 {
                     switch (gameObjectType)
                     {
@@ -771,8 +771,8 @@ namespace Intersect.Server.Database
                             foreach (var recipe in context.Recipes)
                             {
                                 RecipeDescriptor.Lookup.Set(recipe.Id, recipe);
-                                var desc = RecipeDescriptor.Lookup.Get(recipe.Id) as RecipeDescriptor;
-                                desc.RecipeRequirements = GameContext.Queries.RecipeRequirementsByDescriptorId(recipe.Id);
+
+                                recipe.RecipeRequirements = context.RecipeRequirements.Where(requirement => requirement.DescriptorId == recipe.Id).ToList();
                             }
 
                             break;
@@ -1349,6 +1349,11 @@ namespace Intersect.Server.Database
 
                             break;
                         case GameObjectType.Recipe:
+                            var currReq = ((RecipeDescriptor)gameObject).RecipeRequirements.Select(rqr => rqr.Id).ToArray();
+
+                            var removedRequirements = context.RecipeRequirements.Where(rqr => !currReq.Contains(rqr.Id));
+                            context.RecipeRequirements.RemoveRange(removedRequirements);
+
                             context.Recipes.Update((RecipeDescriptor)gameObject);
 
                             break;
