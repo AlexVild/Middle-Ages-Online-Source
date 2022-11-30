@@ -771,6 +771,8 @@ namespace Intersect.Server.Database
                             foreach (var recipe in context.Recipes)
                             {
                                 RecipeDescriptor.Lookup.Set(recipe.Id, recipe);
+                                var desc = RecipeDescriptor.Lookup.Get(recipe.Id) as RecipeDescriptor;
+                                desc.RecipeRequirements = GameContext.Queries.RecipeRequirementsByDescriptorId(recipe.Id);
                             }
 
                             break;
@@ -1201,7 +1203,9 @@ namespace Intersect.Server.Database
 
                             break;
                         case GameObjectType.Recipe:
+                            var id = gameObject.Id;
                             context.Recipes.Remove((RecipeDescriptor)gameObject);
+                            context.RecipeRequirements.RemoveRange(GameContext.Queries.RecipeRequirementsByDescriptorId(id));
 
                             break;
                     }
@@ -1938,6 +1942,7 @@ namespace Intersect.Server.Database
                     MigrateDbSet(context.Labels, newGameContext.Labels);
                     MigrateDbSet(context.LootTables, newGameContext.LootTables);
                     MigrateDbSet(context.Recipes, newGameContext.Recipes);
+                    MigrateDbSet(context.RecipeRequirements, newGameContext.RecipeRequirements);
                     newGameContext.ChangeTracker.DetectChanges();
                     newGameContext.SaveChanges();
                     newGameContext.Dispose();

@@ -202,6 +202,7 @@
     <Compile Include="Admin\Actions\ReturnToOverworldAction.cs" />
     <Compile Include="Admin\Actions\WarpToMeAction.cs" />
     <Compile Include="AlphanumComparatorFast.cs" />
+    <Compile Include="Attributes\Attributes.cs" />
     <Compile Include="Collections\NamedInstanceStore.cs" />
     <Compile Include="Collections\ReadOnlyList.cs" />
     <Compile Include="Collections\SanitizedValue.cs" />
@@ -297,6 +298,7 @@
     <Compile Include="GameObjects\QuestBoardBase.cs" />
     <Compile Include="GameObjects\QuestListBase.cs" />
     <Compile Include="GameObjects\RecipeDescriptor.cs" />
+    <Compile Include="GameObjects\RecipeRequirement.cs" />
     <Compile Include="GameObjects\Switches and Variables\InstanceVariableBase.cs" />
     <Compile Include="GameObjects\Switches and Variables\VariableValue.cs" />
     <Compile Include="GameObjects\Timers\TimerDescriptor.cs" />

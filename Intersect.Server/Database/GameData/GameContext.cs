@@ -110,9 +110,14 @@ namespace Intersect.Server.Database.GameData
         public DbSet<LabelDescriptor> Labels { get; set; }
         
         public DbSet<RecipeDescriptor> Recipes { get; set; }
+        
+        public DbSet<RecipeRequirement> RecipeRequirements { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<RecipeDescriptor>()
+                .HasMany(recipe => recipe.RecipeRequirements)
+                .WithOne(requirement => requirement.Recipe);
         }
 
         public override void MigrationsProcessed(string[] migrations)
@@ -146,6 +151,10 @@ namespace Intersect.Server.Database.GameData
 
         internal static class Queries
         {
+            internal static readonly Func<Guid, List<RecipeRequirement>> RecipeRequirementsByDescriptorId =
+                (Guid id) => RecipeDescriptor.Lookup.Where(recipeDesc => recipeDesc.Key == id).Any()
+                    ? RecipeDescriptor.Lookup.Where(recipeDesc => recipeDesc.Key == id).Select(r => r.Value as RecipeDescriptor).First().RecipeRequirements 
+                    : new List<RecipeRequirement>();
 
             internal static readonly Func<Guid, ServerVariableBase> ServerVariableById =
                 (Guid id) => ServerVariableBase.Lookup.Where(variable => variable.Key == id).Any() ? (ServerVariableBase)ServerVariableBase.Lookup.Where(variable => variable.Key == id).First().Value : null;

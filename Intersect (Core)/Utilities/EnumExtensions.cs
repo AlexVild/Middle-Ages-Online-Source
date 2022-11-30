@@ -2,6 +2,8 @@
 using System.ComponentModel;
 using System.Reflection;
 using System.Linq;
+using Intersect.Attributes;
+using Intersect.Enums;
 
 namespace Intersect.Utilities
 {
@@ -26,6 +28,27 @@ namespace Intersect.Utilities
                 }
             }
             return string.Empty;
+        }
+
+        public static GameObjectType GetRelatedTable(this Enum value)
+        {
+            Type type = value.GetType();
+            string name = Enum.GetName(type, value);
+            if (name != null)
+            {
+                FieldInfo field = type.GetField(name);
+                if (field != null)
+                {
+                    RelatedTable attr =
+                           Attribute.GetCustomAttribute(field,
+                             typeof(RelatedTable)) as RelatedTable;
+                    if (attr != null)
+                    {
+                        return attr.TableType;
+                    }
+                }
+            }
+            throw new ArgumentException($"{nameof(value)} did not have a valid RelatedTable attribute to pull from");
         }
 
         public static string[] GetDescriptions(Type enumType)

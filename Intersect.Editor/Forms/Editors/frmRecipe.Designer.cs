@@ -49,11 +49,19 @@ namespace Intersect.Editor.Forms.Editors
             this.btnSave = new DarkUI.Controls.DarkButton();
             this.btnCancel = new DarkUI.Controls.DarkButton();
             this.grpProperties = new DarkUI.Controls.DarkGroupBox();
-            this.grpLogic = new DarkUI.Controls.DarkGroupBox();
+            this.grpRequirements = new DarkUI.Controls.DarkGroupBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.darkTextBox1 = new DarkUI.Controls.DarkTextBox();
+            this.btnRemoveReq = new DarkUI.Controls.DarkButton();
+            this.btnAddReq = new DarkUI.Controls.DarkButton();
+            this.lblValue = new System.Windows.Forms.Label();
+            this.nudAmt = new DarkUI.Controls.DarkNumericUpDown();
+            this.lstRequirements = new System.Windows.Forms.ListBox();
             this.cmbTriggerParams = new DarkUI.Controls.DarkComboBox();
+            this.lblTriggerType = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.cmbTriggerType = new DarkUI.Controls.DarkComboBox();
-            this.lblTriggerType = new System.Windows.Forms.Label();
+            this.grpLogic = new DarkUI.Controls.DarkGroupBox();
             this.btnDynamicRequirements = new DarkUI.Controls.DarkButton();
             this.darkGroupBox1 = new DarkUI.Controls.DarkGroupBox();
             this.chkHidden = new DarkUI.Controls.DarkCheckBox();
@@ -74,6 +82,8 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStrip.SuspendLayout();
             this.grpRecipes.SuspendLayout();
             this.grpProperties.SuspendLayout();
+            this.grpRequirements.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudAmt)).BeginInit();
             this.grpLogic.SuspendLayout();
             this.darkGroupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picItem)).BeginInit();
@@ -98,7 +108,7 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Padding = new System.Windows.Forms.Padding(5, 0, 1, 0);
-            this.toolStrip.Size = new System.Drawing.Size(509, 25);
+            this.toolStrip.Size = new System.Drawing.Size(1021, 25);
             this.toolStrip.TabIndex = 48;
             this.toolStrip.Text = "toolStrip1";
             // 
@@ -254,7 +264,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(221, 593);
+            this.btnSave.Location = new System.Drawing.Point(735, 590);
             this.btnSave.Name = "btnSave";
             this.btnSave.Padding = new System.Windows.Forms.Padding(5);
             this.btnSave.Size = new System.Drawing.Size(135, 27);
@@ -265,7 +275,7 @@ namespace Intersect.Editor.Forms.Editors
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(361, 593);
+            this.btnCancel.Location = new System.Drawing.Point(876, 590);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Padding = new System.Windows.Forms.Padding(5);
             this.btnCancel.Size = new System.Drawing.Size(139, 27);
@@ -277,6 +287,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpProperties.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpProperties.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpProperties.Controls.Add(this.grpRequirements);
             this.grpProperties.Controls.Add(this.grpLogic);
             this.grpProperties.Controls.Add(this.darkGroupBox1);
             this.grpProperties.Controls.Add(this.btnAddFolder);
@@ -287,27 +298,115 @@ namespace Intersect.Editor.Forms.Editors
             this.grpProperties.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpProperties.Location = new System.Drawing.Point(221, 12);
             this.grpProperties.Name = "grpProperties";
-            this.grpProperties.Size = new System.Drawing.Size(279, 564);
+            this.grpProperties.Size = new System.Drawing.Size(794, 564);
             this.grpProperties.TabIndex = 53;
             this.grpProperties.TabStop = false;
             this.grpProperties.Text = "Recipe Properties";
             // 
-            // grpLogic
+            // grpRequirements
             // 
-            this.grpLogic.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.grpLogic.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpLogic.Controls.Add(this.cmbTriggerParams);
-            this.grpLogic.Controls.Add(this.label1);
-            this.grpLogic.Controls.Add(this.cmbTriggerType);
-            this.grpLogic.Controls.Add(this.lblTriggerType);
-            this.grpLogic.Controls.Add(this.btnDynamicRequirements);
-            this.grpLogic.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpLogic.Location = new System.Drawing.Point(9, 387);
-            this.grpLogic.Name = "grpLogic";
-            this.grpLogic.Size = new System.Drawing.Size(264, 170);
-            this.grpLogic.TabIndex = 57;
-            this.grpLogic.TabStop = false;
-            this.grpLogic.Text = "Unlock Logic";
+            this.grpRequirements.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpRequirements.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpRequirements.Controls.Add(this.label2);
+            this.grpRequirements.Controls.Add(this.darkTextBox1);
+            this.grpRequirements.Controls.Add(this.btnRemoveReq);
+            this.grpRequirements.Controls.Add(this.btnAddReq);
+            this.grpRequirements.Controls.Add(this.lblValue);
+            this.grpRequirements.Controls.Add(this.nudAmt);
+            this.grpRequirements.Controls.Add(this.lstRequirements);
+            this.grpRequirements.Controls.Add(this.cmbTriggerParams);
+            this.grpRequirements.Controls.Add(this.lblTriggerType);
+            this.grpRequirements.Controls.Add(this.label1);
+            this.grpRequirements.Controls.Add(this.cmbTriggerType);
+            this.grpRequirements.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpRequirements.Location = new System.Drawing.Point(279, 19);
+            this.grpRequirements.Name = "grpRequirements";
+            this.grpRequirements.Size = new System.Drawing.Size(505, 539);
+            this.grpRequirements.TabIndex = 60;
+            this.grpRequirements.TabStop = false;
+            this.grpRequirements.Text = "Requirements";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(244, 41);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(26, 13);
+            this.label2.TabIndex = 61;
+            this.label2.Text = "Hint";
+            // 
+            // darkTextBox1
+            // 
+            this.darkTextBox1.AcceptsReturn = true;
+            this.darkTextBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.darkTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.darkTextBox1.ForeColor = System.Drawing.Color.Gainsboro;
+            this.darkTextBox1.Location = new System.Drawing.Point(244, 64);
+            this.darkTextBox1.Multiline = true;
+            this.darkTextBox1.Name = "darkTextBox1";
+            this.darkTextBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.darkTextBox1.Size = new System.Drawing.Size(249, 150);
+            this.darkTextBox1.TabIndex = 61;
+            // 
+            // btnRemoveReq
+            // 
+            this.btnRemoveReq.Location = new System.Drawing.Point(96, 191);
+            this.btnRemoveReq.Name = "btnRemoveReq";
+            this.btnRemoveReq.Padding = new System.Windows.Forms.Padding(5);
+            this.btnRemoveReq.Size = new System.Drawing.Size(81, 23);
+            this.btnRemoveReq.TabIndex = 115;
+            this.btnRemoveReq.Text = "Remove";
+            this.btnRemoveReq.Click += new System.EventHandler(this.btnRemoveReq_Click);
+            // 
+            // btnAddReq
+            // 
+            this.btnAddReq.Location = new System.Drawing.Point(9, 191);
+            this.btnAddReq.Name = "btnAddReq";
+            this.btnAddReq.Padding = new System.Windows.Forms.Padding(5);
+            this.btnAddReq.Size = new System.Drawing.Size(81, 23);
+            this.btnAddReq.TabIndex = 34;
+            this.btnAddReq.Text = "Add";
+            this.btnAddReq.Click += new System.EventHandler(this.btnAddReq_Click);
+            // 
+            // lblValue
+            // 
+            this.lblValue.AutoSize = true;
+            this.lblValue.Location = new System.Drawing.Point(6, 136);
+            this.lblValue.Name = "lblValue";
+            this.lblValue.Size = new System.Drawing.Size(34, 13);
+            this.lblValue.TabIndex = 114;
+            this.lblValue.Text = "Value";
+            // 
+            // nudAmt
+            // 
+            this.nudAmt.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudAmt.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudAmt.Location = new System.Drawing.Point(9, 152);
+            this.nudAmt.Maximum = new decimal(new int[] {
+            2147483647,
+            0,
+            0,
+            0});
+            this.nudAmt.Name = "nudAmt";
+            this.nudAmt.Size = new System.Drawing.Size(229, 20);
+            this.nudAmt.TabIndex = 113;
+            this.nudAmt.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            // 
+            // lstRequirements
+            // 
+            this.lstRequirements.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.lstRequirements.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lstRequirements.Cursor = System.Windows.Forms.Cursors.Default;
+            this.lstRequirements.ForeColor = System.Drawing.Color.Gainsboro;
+            this.lstRequirements.FormattingEnabled = true;
+            this.lstRequirements.Location = new System.Drawing.Point(9, 244);
+            this.lstRequirements.Name = "lstRequirements";
+            this.lstRequirements.Size = new System.Drawing.Size(484, 275);
+            this.lstRequirements.TabIndex = 112;
             // 
             // cmbTriggerParams
             // 
@@ -322,7 +421,7 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbTriggerParams.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbTriggerParams.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbTriggerParams.FormattingEnabled = true;
-            this.cmbTriggerParams.Location = new System.Drawing.Point(20, 135);
+            this.cmbTriggerParams.Location = new System.Drawing.Point(9, 93);
             this.cmbTriggerParams.Name = "cmbTriggerParams";
             this.cmbTriggerParams.Size = new System.Drawing.Size(229, 21);
             this.cmbTriggerParams.TabIndex = 59;
@@ -330,10 +429,19 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbTriggerParams.TextPadding = new System.Windows.Forms.Padding(2);
             this.cmbTriggerParams.SelectedIndexChanged += new System.EventHandler(this.cmbTriggerParams_SelectedIndexChanged);
             // 
+            // lblTriggerType
+            // 
+            this.lblTriggerType.AutoSize = true;
+            this.lblTriggerType.Location = new System.Drawing.Point(6, 19);
+            this.lblTriggerType.Name = "lblTriggerType";
+            this.lblTriggerType.Size = new System.Drawing.Size(67, 13);
+            this.lblTriggerType.TabIndex = 57;
+            this.lblTriggerType.Text = "Trigger Type";
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(17, 119);
+            this.label1.Location = new System.Drawing.Point(6, 74);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(73, 13);
             this.label1.TabIndex = 58;
@@ -352,7 +460,7 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbTriggerType.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbTriggerType.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbTriggerType.FormattingEnabled = true;
-            this.cmbTriggerType.Location = new System.Drawing.Point(20, 76);
+            this.cmbTriggerType.Location = new System.Drawing.Point(9, 35);
             this.cmbTriggerType.Name = "cmbTriggerType";
             this.cmbTriggerType.Size = new System.Drawing.Size(229, 21);
             this.cmbTriggerType.TabIndex = 57;
@@ -360,14 +468,18 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbTriggerType.TextPadding = new System.Windows.Forms.Padding(2);
             this.cmbTriggerType.SelectedIndexChanged += new System.EventHandler(this.cmbTriggerType_SelectedIndexChanged);
             // 
-            // lblTriggerType
+            // grpLogic
             // 
-            this.lblTriggerType.AutoSize = true;
-            this.lblTriggerType.Location = new System.Drawing.Point(17, 60);
-            this.lblTriggerType.Name = "lblTriggerType";
-            this.lblTriggerType.Size = new System.Drawing.Size(67, 13);
-            this.lblTriggerType.TabIndex = 57;
-            this.lblTriggerType.Text = "Trigger Type";
+            this.grpLogic.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpLogic.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpLogic.Controls.Add(this.btnDynamicRequirements);
+            this.grpLogic.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpLogic.Location = new System.Drawing.Point(9, 387);
+            this.grpLogic.Name = "grpLogic";
+            this.grpLogic.Size = new System.Drawing.Size(264, 57);
+            this.grpLogic.TabIndex = 57;
+            this.grpLogic.TabStop = false;
+            this.grpLogic.Text = "Unlock Logic";
             // 
             // btnDynamicRequirements
             // 
@@ -590,7 +702,7 @@ namespace Intersect.Editor.Forms.Editors
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.ClientSize = new System.Drawing.Size(509, 629);
+            this.ClientSize = new System.Drawing.Size(1021, 629);
             this.Controls.Add(this.grpProperties);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnSave);
@@ -606,8 +718,10 @@ namespace Intersect.Editor.Forms.Editors
             this.grpRecipes.PerformLayout();
             this.grpProperties.ResumeLayout(false);
             this.grpProperties.PerformLayout();
+            this.grpRequirements.ResumeLayout(false);
+            this.grpRequirements.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudAmt)).EndInit();
             this.grpLogic.ResumeLayout(false);
-            this.grpLogic.PerformLayout();
             this.darkGroupBox1.ResumeLayout(false);
             this.darkGroupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picItem)).EndInit();
@@ -657,5 +771,13 @@ namespace Intersect.Editor.Forms.Editors
         private System.Windows.Forms.PictureBox picItem;
         private DarkUI.Controls.DarkComboBox cmbImage;
         private DarkUI.Controls.DarkCheckBox chkHidden;
+        private DarkUI.Controls.DarkGroupBox grpRequirements;
+        private System.Windows.Forms.ListBox lstRequirements;
+        private System.Windows.Forms.Label lblValue;
+        private DarkUI.Controls.DarkNumericUpDown nudAmt;
+        private DarkUI.Controls.DarkButton btnRemoveReq;
+        private DarkUI.Controls.DarkButton btnAddReq;
+        private System.Windows.Forms.Label label2;
+        private DarkUI.Controls.DarkTextBox darkTextBox1;
     }
 }

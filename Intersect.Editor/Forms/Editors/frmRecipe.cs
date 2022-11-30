@@ -30,6 +30,8 @@ namespace Intersect.Editor.Forms.Editors
 
         private List<string> mKnownFolders = new List<string>();
 
+        private List<RecipeRequirement> mRecipeReqs;
+
         public frmRecipe()
         {
             ApplyHooks();
@@ -69,24 +71,13 @@ namespace Intersect.Editor.Forms.Editors
         private void LoadTriggerParams()
         {
             cmbTriggerParams.Items.Clear();
-            switch ((RecipeTrigger)cmbTriggerType.SelectedIndex)
+            var triggerType = (RecipeTrigger)cmbTriggerType.SelectedIndex;
+            switch (triggerType)
             {
                 case RecipeTrigger.None:
                     break;
-                case RecipeTrigger.CraftCrafted:
-                    cmbTriggerParams.Items.AddRange(CraftBase.Names);
-                    break;
-                case RecipeTrigger.ItemObtained:
-                    cmbTriggerParams.Items.AddRange(ItemBase.Names);
-                    break;
-                case RecipeTrigger.PlayerVarChange:
-                    cmbTriggerParams.Items.AddRange(PlayerVariableBase.Names);
-                    break;
-                case RecipeTrigger.ResourceHarvested:
-                    cmbTriggerParams.Items.AddRange(ResourceBase.Names);
-                    break;
-                case RecipeTrigger.EnemyKilled:
-                    cmbTriggerParams.Items.AddRange(NpcBase.Names);
+                default:
+                    cmbTriggerParams.Items.AddRange(triggerType.GetRelatedTable().Names());
                     break;
             }
             cmbTriggerParams.SelectedIndex = -1;
@@ -95,47 +86,27 @@ namespace Intersect.Editor.Forms.Editors
 
         private Guid GetTriggerParamValue()
         {
-            switch ((RecipeTrigger)cmbTriggerType.SelectedIndex)
+            var triggerType = (RecipeTrigger)cmbTriggerType.SelectedIndex;
+            switch (triggerType)
             {
                 case RecipeTrigger.None:
                     return Guid.Empty;
-                case RecipeTrigger.CraftCrafted:
-                    return CraftBase.IdFromList(cmbTriggerParams.SelectedIndex);
-                case RecipeTrigger.ItemObtained:
-                    return ItemBase.IdFromList(cmbTriggerParams.SelectedIndex);
-                case RecipeTrigger.PlayerVarChange:
-                    return PlayerVariableBase.IdFromList(cmbTriggerParams.SelectedIndex);
-                case RecipeTrigger.ResourceHarvested:
-                    return ResourceBase.IdFromList(cmbTriggerParams.SelectedIndex);
-                case RecipeTrigger.EnemyKilled:
-                    return NpcBase.IdFromList(cmbTriggerParams.SelectedIndex);
+                default:
+                    return triggerType.GetRelatedTable().IdFromList(cmbTriggerParams.SelectedIndex);
             }
-
-            return Guid.Empty;
         }
 
         private void SetTriggerParamValue()
         {
-            switch ((RecipeTrigger)cmbTriggerType.SelectedIndex)
+            var triggerType = (RecipeTrigger)cmbTriggerType.SelectedIndex;
+            switch (triggerType)
             {
                 case RecipeTrigger.None:
                     cmbTriggerParams.SelectedIndex = -1;
                     cmbTriggerParams.Text = string.Empty;
                     return;
-                case RecipeTrigger.CraftCrafted:
-                    cmbTriggerParams.SelectedIndex = CraftBase.ListIndex(mEditorItem.TriggerParam);
-                    return;
-                case RecipeTrigger.ItemObtained:
-                    cmbTriggerParams.SelectedIndex = ItemBase.ListIndex(mEditorItem.TriggerParam);
-                    return;
-                case RecipeTrigger.PlayerVarChange:
-                    cmbTriggerParams.SelectedIndex = PlayerVariableBase.ListIndex(mEditorItem.TriggerParam);
-                    return;
-                case RecipeTrigger.ResourceHarvested:
-                    cmbTriggerParams.SelectedIndex = ResourceBase.ListIndex(mEditorItem.TriggerParam);
-                    return;
-                case RecipeTrigger.EnemyKilled:
-                    cmbTriggerParams.SelectedIndex = NpcBase.ListIndex(mEditorItem.TriggerParam);
+                default:
+                    cmbTriggerParams.SelectedIndex = triggerType.GetRelatedTable().ListIndex(mEditorItem.TriggerParam);
                     return;
             }
         }
@@ -148,6 +119,8 @@ namespace Intersect.Editor.Forms.Editors
         private void UpdateFields()
         {
             mPopulating = true;
+
+            mRecipeReqs = mEditorItem.RecipeRequirements;
 
             txtName.Text = mEditorItem.Name;
             cmbFolder.Text = mEditorItem.Folder;
@@ -167,6 +140,8 @@ namespace Intersect.Editor.Forms.Editors
             cmbTriggerType.SelectedIndex = mEditorItem.TriggerValue;
             LoadTriggerParams();
             SetTriggerParamValue();
+
+            RefreshRequirementsList();
 
             UpdateDisabled();
 
@@ -284,16 +259,8 @@ namespace Intersect.Editor.Forms.Editors
                 return;
             }
 
-            // No new change
-            if (mEditorItem.TriggerValue == cmbTriggerType.SelectedIndex)
-            {
-                return;
-            }
-
-            mEditorItem.TriggerValue = cmbTriggerType.SelectedIndex;
             UpdateDisabled();
             LoadTriggerParams();
-            mEditorItem.TriggerParam = Guid.Empty;
         }
 
         private void cmbTriggerParams_SelectedIndexChanged(object sender, EventArgs e)
@@ -348,6 +315,34 @@ namespace Intersect.Editor.Forms.Editors
             gfx.Dispose();
 
             picItem.BackgroundImage = picItemBmp;
+        }
+
+        private void btnAddReq_Click(object sender, EventArgs e)
+        {
+            var newReq = new RecipeRequirement(mEditorItem.Id, cmbTriggerType.SelectedIndex, (int)nudAmt.Value);
+            RefreshRequirementsList();
+        }
+
+        private void RefreshRequirementsList()
+        {
+            lstRequirements.Items.Clear();
+            foreach(var req in mEditorItem.RecipeRequirements)
+            {
+                lstRequirements.Items.Add(req.ToString());
+            }
+        }
+
+        private void btnRemoveReq_Click(object sender, EventArgs e)
+        {
+            var idx = lstRequirements.SelectedIndex;
+
+            if (idx < 0)
+            {
+                return;
+            }
+
+            mEditorItem.RecipeRequirements.RemoveAt(idx);
+            RefreshRequirementsList();
         }
     }
 }

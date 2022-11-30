@@ -960,6 +960,14 @@
     <Compile Include="Migrations\Game\20221129185129_RecipeDescriptorMigration.designer.cs">
       <DependentUpon>20221129185129_RecipeDescriptorMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20221130151137_RecipeRequirementsMigration.cs" />
+    <Compile Include="Migrations\Game\20221130151137_RecipeRequirementsMigration.designer.cs">
+      <DependentUpon>20221130151137_RecipeRequirementsMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20221130162605_RecipeRequirementsNewFieldMigration.cs" />
+    <Compile Include="Migrations\Game\20221130162605_RecipeRequirementsNewFieldMigration.designer.cs">
+      <DependentUpon>20221130162605_RecipeRequirementsNewFieldMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

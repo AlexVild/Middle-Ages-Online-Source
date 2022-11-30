@@ -1,4 +1,6 @@
-﻿using Intersect.GameObjects.Conditions;
+﻿using Intersect.Attributes;
+using Intersect.GameObjects.Conditions;
+using Intersect.GameObjects.Crafting;
 using Intersect.Models;
 using Intersect.Utilities;
 using Newtonsoft.Json;
@@ -44,19 +46,19 @@ namespace Intersect.GameObjects
         [Description("None")]
         None = 0,
 
-        [Description("Player Variable Change")]
+        [Description("Player Variable Change"), RelatedTable(Enums.GameObjectType.PlayerVariable)]
         PlayerVarChange,
 
-        [Description("Enemy Killed")]
+        [Description("Enemy Killed"), RelatedTable(Enums.GameObjectType.Npc)]
         EnemyKilled,
 
-        [Description("Resource Harvested")]
+        [Description("Resource Harvested"), RelatedTable(Enums.GameObjectType.Resource)]
         ResourceHarvested,
 
-        [Description("Craft Crafted")]
+        [Description("Craft Crafted"), RelatedTable(Enums.GameObjectType.Crafts)]
         CraftCrafted,
 
-        [Description("Item Obtained")]
+        [Description("Item Obtained"), RelatedTable(Enums.GameObjectType.Item)]
         ItemObtained,
     }
 
@@ -99,6 +101,8 @@ namespace Intersect.GameObjects
 
         public bool HiddenUntilUnlocked { get; set; }
 
+        public List<RecipeRequirement> RecipeRequirements { get; set; }
+
         public RecipeDescriptor() : this(default)
         {
         }
@@ -107,6 +111,7 @@ namespace Intersect.GameObjects
         public RecipeDescriptor(Guid id) : base(id)
         {
             Name = "New Recipe";
+            RecipeRequirements = new List<RecipeRequirement>();
         }
     }
 }
