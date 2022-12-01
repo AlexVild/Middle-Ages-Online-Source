@@ -74,12 +74,13 @@ namespace Intersect.GameObjects
         [NotMapped, JsonIgnore]
         public RecipeCraftType CraftType => Enum.IsDefined(typeof(RecipeCraftType), CraftTypeValue) ? (RecipeCraftType)CraftTypeValue : RecipeCraftType.Other;
 
-        [Column("Trigger")]
+        [Column("Trigger"), Obsolete("Moved props to RequirementRecipes")]
         public int TriggerValue { get; set; }
 
-        [NotMapped, JsonIgnore]
+        [NotMapped, JsonIgnore, Obsolete("Moved props to RequirementRecipes")]
         public RecipeTrigger Trigger => Enum.IsDefined(typeof(RecipeTrigger), TriggerValue) ? (RecipeTrigger)TriggerValue : RecipeTrigger.None;
 
+        [Obsolete("Moved props to RequirementRecipes")]
         public Guid TriggerParam { get; set; }
 
         public string DisplayCraftType => CraftType.GetDescription();

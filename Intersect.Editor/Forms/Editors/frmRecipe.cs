@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using DarkUI.Forms;
 using Intersect.Editor.Content;
 using Intersect.Editor.Forms.Helpers;
 using Intersect.Editor.Localization;
@@ -30,7 +31,7 @@ namespace Intersect.Editor.Forms.Editors
 
         private List<string> mKnownFolders = new List<string>();
 
-        private List<RecipeRequirement> mRecipeReqs;
+        private List<RecipeRequirement> mRecipeReqs => mEditorItem?.RecipeRequirements;
 
         public frmRecipe()
         {
@@ -96,7 +97,7 @@ namespace Intersect.Editor.Forms.Editors
             }
         }
 
-        private void SetTriggerParamValue()
+        private void SetTriggerParamValue(RecipeRequirement requirement)
         {
             var triggerType = (RecipeTrigger)cmbTriggerType.SelectedIndex;
             switch (triggerType)
@@ -106,7 +107,7 @@ namespace Intersect.Editor.Forms.Editors
                     cmbTriggerParams.Text = string.Empty;
                     return;
                 default:
-                    cmbTriggerParams.SelectedIndex = triggerType.GetRelatedTable().ListIndex(mEditorItem.TriggerParam);
+                    cmbTriggerParams.SelectedIndex = triggerType.GetRelatedTable().ListIndex(requirement.TriggerId);
                     return;
             }
         }
@@ -119,8 +120,6 @@ namespace Intersect.Editor.Forms.Editors
         private void UpdateFields()
         {
             mPopulating = true;
-
-            mRecipeReqs = mEditorItem.RecipeRequirements;
 
             txtName.Text = mEditorItem.Name;
             cmbFolder.Text = mEditorItem.Folder;
@@ -137,12 +136,20 @@ namespace Intersect.Editor.Forms.Editors
             }
             chkHidden.Checked = mEditorItem.HiddenUntilUnlocked;
 
-            cmbTriggerType.SelectedIndex = mEditorItem.TriggerValue;
-            LoadTriggerParams();
-            SetTriggerParamValue();
+            RefreshRequirementsList(true);
 
-            RefreshRequirementsList();
+            cmbTriggerType.SelectedIndex = -1;
+            if (cmbTriggerType.Items.Count >= 1)
+            {
+                cmbTriggerType.SelectedIndex = 0;
+            }
+            cmbTriggerParams.SelectedIndex = -1;
 
+            txtRequireHint.Text = string.Empty;
+            chkRequireTrue.Checked = false;
+            nudAmt.Value = 0;
+
+            UpdateBoolRequireDisplay(false);
             UpdateDisabled();
 
             mPopulating = false;
@@ -254,23 +261,61 @@ namespace Intersect.Editor.Forms.Editors
 
         private void cmbTriggerType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (mPopulating)
+            UpdateDisabled();
+            if (!TryGetSelectedRequirement(out var requirement) || mPopulating)
             {
                 return;
             }
 
-            UpdateDisabled();
+            requirement.TriggerValue = cmbTriggerType.SelectedIndex;
             LoadTriggerParams();
+
+            RefreshRequirementsList(false);
+        }
+
+        private void CheckForBoolParams()
+        {
+            if ((RecipeTrigger)cmbTriggerType.SelectedIndex != RecipeTrigger.PlayerVarChange)
+            {
+                return;
+            }
+
+            var playerVar = PlayerVariableBase.Get(GetTriggerParamValue()); 
+            if (playerVar == default)
+            {
+                return;
+            }
+
+            if (playerVar.Type == VariableDataTypes.Boolean)
+            {
+                if (TryGetSelectedRequirement(out var boolReq))
+                {
+                    boolReq.IsBool = true;
+                }
+                UpdateBoolRequireDisplay(true);
+            }
+            else
+            {
+                if (TryGetSelectedRequirement(out var intReq))
+                {
+                    intReq.IsBool = false;
+                }
+                UpdateBoolRequireDisplay(false);
+            }
         }
 
         private void cmbTriggerParams_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (mPopulating)
+            CheckForBoolParams();
+
+            if (!TryGetSelectedRequirement(out var requirement) || mPopulating)
             {
                 return;
             }
 
-            mEditorItem.TriggerParam = GetTriggerParamValue();
+            requirement.TriggerId = GetTriggerParamValue();
+
+            RefreshRequirementsList(false);
         }
 
         private void cmbCraftType_SelectedIndexChanged(object sender, EventArgs e)
@@ -323,16 +368,28 @@ namespace Intersect.Editor.Forms.Editors
 
             var newReq = new RecipeRequirement(mEditorItem.Id, triggerVal, cmbTriggerType.SelectedIndex, (int)nudAmt.Value);
             mEditorItem.RecipeRequirements.Add(newReq);
-            RefreshRequirementsList();
+            RefreshRequirementsList(true);
         }
 
-        private void RefreshRequirementsList()
+        private void RefreshRequirementsList(bool reset)
         {
+            mPopulating = true;
+            var selected = lstRequirements.SelectedIndex;
             lstRequirements.Items.Clear();
-            foreach(var req in mEditorItem.RecipeRequirements)
+            foreach(var req in mRecipeReqs)
             {
                 lstRequirements.Items.Add(req.ToString());
             }
+
+            if (reset)
+            {
+                lstRequirements.SelectedIndex = -1;
+            }
+            else if (selected < lstRequirements.Items.Count)
+            {
+                lstRequirements.SelectedIndex = selected;
+            }
+            mPopulating = false;
         }
 
         private void btnRemoveReq_Click(object sender, EventArgs e)
@@ -345,7 +402,121 @@ namespace Intersect.Editor.Forms.Editors
             }
 
             mEditorItem.RecipeRequirements.RemoveAt(idx);
-            RefreshRequirementsList();
+            RefreshRequirementsList(false);
+        }
+
+        private void btnClearSelection_Click(object sender, EventArgs e)
+        {
+            lstRequirements.SelectedIndex = -1;
+        }
+
+        private void RemoveAllRequirements()
+        {
+            mEditorItem.RecipeRequirements.Clear();
+        }
+
+        private void btnRemoveAll_Click(object sender, EventArgs e)
+        {
+            if (mRecipeReqs.Count == 0)
+            {
+                return;
+            }
+
+            if (DarkMessageBox.ShowWarning(
+                        "Remove All Requirements", "Would you like to remove all requirements from this recipe?",
+                        DarkDialogButton.YesNo, Properties.Resources.Icon
+                ) ==
+                DialogResult.Yes)
+            {
+                RemoveAllRequirements();
+                RefreshRequirementsList(true);
+            }
+        }
+
+        private void UpdateRequirementFields()
+        {
+            var requirement = mRecipeReqs.ElementAtOrDefault(lstRequirements.SelectedIndex);
+            if (requirement == default)
+            {
+                return;
+            }
+
+            mPopulating = true;
+            cmbTriggerType.SelectedIndex = requirement.TriggerValue;
+            LoadTriggerParams();
+            SetTriggerParamValue(requirement);
+
+            txtRequireHint.Text = requirement.Hint;
+
+            UpdateBoolRequireDisplay(requirement.IsBool);
+
+            chkRequireTrue.Checked = requirement.BoolValue;
+            nudAmt.Value = requirement.Amount;
+
+            UpdateDisabled();
+            
+            mPopulating = false;
+        }
+
+        private void UpdateBoolRequireDisplay(bool isBool)
+        {
+            chkRequireTrue.Visible = isBool;
+            nudAmt.Visible = !isBool;
+        }
+
+        private void lstRequirements_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (mPopulating)
+            {
+                return;
+            }
+
+            UpdateRequirementFields();
+        }
+
+        private bool TryGetSelectedRequirement(out RecipeRequirement requirement)
+        {
+            var idx = lstRequirements.SelectedIndex;
+            requirement = mRecipeReqs.ElementAtOrDefault(idx);
+
+            if (requirement == default)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private void nudAmt_ValueChanged(object sender, EventArgs e)
+        {
+            if (!TryGetSelectedRequirement(out var requirement) || mPopulating)
+            {
+                return;
+            }
+
+            requirement.Amount = (int)nudAmt.Value;
+            RefreshRequirementsList(false);
+        }
+
+        private void chkRequireTrue_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!TryGetSelectedRequirement(out var requirement) || mPopulating)
+            {
+                return;
+            }
+
+            requirement.BoolValue = chkRequireTrue.Checked;
+            RefreshRequirementsList(false);
+        }
+
+        private void txtRequireHint_TextChanged(object sender, EventArgs e)
+        {
+            if (!TryGetSelectedRequirement(out var requirement) || mPopulating)
+            {
+                return;
+            }
+
+            requirement.Hint = txtRequireHint.Text;
         }
     }
 }

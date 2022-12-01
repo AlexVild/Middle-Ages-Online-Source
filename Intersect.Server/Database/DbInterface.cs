@@ -1351,7 +1351,7 @@ namespace Intersect.Server.Database
                         case GameObjectType.Recipe:
                             var currReq = ((RecipeDescriptor)gameObject).RecipeRequirements.Select(rqr => rqr.Id).ToArray();
 
-                            var removedRequirements = context.RecipeRequirements.Where(rqr => !currReq.Contains(rqr.Id));
+                            var removedRequirements = context.RecipeRequirements.Where(rqr => rqr.DescriptorId == gameObject.Id && !currReq.Contains(rqr.Id));
                             context.RecipeRequirements.RemoveRange(removedRequirements);
 
                             context.Recipes.Update((RecipeDescriptor)gameObject);
