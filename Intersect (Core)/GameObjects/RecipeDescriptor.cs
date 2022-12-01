@@ -49,13 +49,13 @@ namespace Intersect.GameObjects
         [Description("Player Variable Change"), RelatedTable(Enums.GameObjectType.PlayerVariable)]
         PlayerVarChange,
 
-        [Description("Enemy Killed"), RelatedTable(Enums.GameObjectType.Npc)]
+        [Description("Enemy Killed"), RelatedTable(Enums.GameObjectType.Npc), RecordType(Events.RecordType.NpcKilled)]
         EnemyKilled,
 
-        [Description("Resource Harvested"), RelatedTable(Enums.GameObjectType.Resource)]
+        [Description("Resource Harvested"), RelatedTable(Enums.GameObjectType.Resource), RecordType(Events.RecordType.ResourceGathered)]
         ResourceHarvested,
 
-        [Description("Craft Crafted"), RelatedTable(Enums.GameObjectType.Crafts)]
+        [Description("Craft Crafted"), RelatedTable(Enums.GameObjectType.Crafts), RecordType(Events.RecordType.ItemCrafted)]
         CraftCrafted,
 
         [Description("Item Obtained"), RelatedTable(Enums.GameObjectType.Item)]

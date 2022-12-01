@@ -29,6 +29,10 @@ namespace Intersect.Utilities
             }
             return string.Empty;
         }
+        public static string[] GetDescriptions(Type enumType)
+        {
+            return Enum.GetValues(enumType).Cast<Enum>().Select(value => value.GetDescription()).ToArray();
+        }
 
         public static GameObjectType GetRelatedTable(this Enum value)
         {
@@ -51,9 +55,25 @@ namespace Intersect.Utilities
             throw new ArgumentException($"{nameof(value)} did not have a valid RelatedTable attribute to pull from");
         }
 
-        public static string[] GetDescriptions(Type enumType)
+        public static GameObjects.Events.RecordType GetRelatedRecordType(this Enum value)
         {
-            return Enum.GetValues(enumType).Cast<Enum>().Select(value => value.GetDescription()).ToArray();
+            Type type = value.GetType();
+            string name = Enum.GetName(type, value);
+            if (name != null)
+            {
+                FieldInfo field = type.GetField(name);
+                if (field != null)
+                {
+                    RecordType attr =
+                           Attribute.GetCustomAttribute(field,
+                             typeof(RecordType)) as RecordType;
+                    if (attr != null)
+                    {
+                        return attr.Type;
+                    }
+                }
+            }
+            throw new ArgumentException($"{nameof(value)} did not have a valid RelatedTable attribute to pull from");
         }
     }
 }

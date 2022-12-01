@@ -454,6 +454,9 @@ namespace Intersect.Server.Entities
             // Initialize Class Rank info for any new classes that have been added/underlying updates to CR stuff in Options
             InitClassRanks();
 
+            // Refresh recipe unlock statuses in the event they've changed since the player last logged in
+            RecipeUnlockWatcher.RefreshPlayer(this);
+
             if (InspirationTime > Timing.Global.MillisecondsUtc)
             {
                 SendInspirationUpdateText(-1);
@@ -2850,6 +2853,7 @@ namespace Intersect.Server.Entities
 
             if (success)
             {
+                RecipeUnlockWatcher.EnqueueNewPlayer(this, item.Descriptor.Id, RecipeTrigger.ItemObtained);
                 StartCommonEventsWithTrigger(CommonEventTrigger.InventoryChanged);
                 if (CraftingTableId != Guid.Empty) // Update our crafting table if we have one
                 {
@@ -6584,6 +6588,7 @@ namespace Intersect.Server.Entities
 
             if (changed)
             {
+                RecipeUnlockWatcher.EnqueueNewPlayer(this, id, RecipeTrigger.PlayerVarChange);
                 StartCommonEventsWithTrigger(CommonEventTrigger.PlayerVariableChange, "", id.ToString());
             }
         }
@@ -6660,7 +6665,9 @@ namespace Intersect.Server.Entities
                 {
                     PlayerRecord.SendNewVariableRecordMessage(id, true, this);
                 }
-                
+
+                RecipeUnlockWatcher.EnqueueNewPlayer(this, id, RecipeTrigger.PlayerVarChange);
+
                 StartCommonEventsWithTrigger(CommonEventTrigger.PlayerVariableChange, "", id.ToString());
             }
         }
@@ -8068,12 +8075,15 @@ namespace Intersect.Server.Entities
                 {
                     case RecordType.NpcKilled:
                         evtTrigger = CommonEventTrigger.NpcsDefeated;
+                        RecipeUnlockWatcher.EnqueueNewPlayer(this, recordId, RecipeTrigger.EnemyKilled);
                         break;
                     case RecordType.ItemCrafted:
                         evtTrigger = CommonEventTrigger.CraftsCreated;
+                        RecipeUnlockWatcher.EnqueueNewPlayer(this, recordId, RecipeTrigger.CraftCrafted);
                         break;
                     case RecordType.ResourceGathered:
                         evtTrigger = CommonEventTrigger.ResourcesGathered;
+                        RecipeUnlockWatcher.EnqueueNewPlayer(this, recordId, RecipeTrigger.ResourceHarvested);
                         break;
                     default:
                         evtTrigger = CommonEventTrigger.NpcsDefeated;

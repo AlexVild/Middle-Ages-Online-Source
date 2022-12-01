@@ -3742,7 +3742,7 @@ namespace Intersect.Server.Networking
                 else if (type == GameObjectType.Resource)
                 {
                     Globals.KillResourcesOf((ResourceBase) obj);
-                    Globals.RefreshCachedResources();
+                    Globals.RefreshGameObjectCache(GameObjectType.Resource, Globals.CachedResources);
                 }
                 else if (type == GameObjectType.Npc)
                 {
@@ -3752,6 +3752,11 @@ namespace Intersect.Server.Networking
                 {
                     // Update a player's Class Rank info to remove this class
                     Globals.OnlineList.ForEach(player => player.ClassInfo.Remove(obj.Id));
+                }
+                else if (type == GameObjectType.Recipe)
+                {
+                    Globals.RefreshGameObjectCache(GameObjectType.Recipe, Globals.CachedRecipes);
+                    RecipeUnlockWatcher.QueueRefresh();
                 }
 
                 DbInterface.DeleteGameObject(obj);
@@ -3908,7 +3913,12 @@ namespace Intersect.Server.Networking
                     else if (type == GameObjectType.Resource)
                     {
                         Globals.KillResourcesOf((ResourceBase)obj);
-                        Globals.RefreshCachedResources();
+                        Globals.RefreshGameObjectCache(GameObjectType.Resource, Globals.CachedResources);
+                    }
+                    else if (type == GameObjectType.Recipe)
+                    {
+                        Globals.RefreshGameObjectCache(GameObjectType.Recipe, Globals.CachedRecipes);
+                        RecipeUnlockWatcher.QueueRefresh();
                     }
 
                     obj.Load(packet.Data);

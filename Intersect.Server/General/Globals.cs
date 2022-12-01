@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using Intersect.Enums;
 using Intersect.GameObjects;
 using Intersect.Server.Entities;
 using Intersect.Server.Maps;
@@ -66,15 +66,18 @@ namespace Intersect.Server.General
     {
         public static List<ResourceBase> CachedResources = new List<ResourceBase>();
 
-        public static void RefreshCachedResources()
+        public static List<RecipeDescriptor> CachedRecipes = new List<RecipeDescriptor>();
+
+        public static void RefreshGameObjectCache<T>(GameObjectType type, List<T> cacheList)
         {
-            CachedResources.Clear();
-            Logging.Log.Debug($"Caching resources...");
-            foreach (var v in ResourceBase.Lookup.ToList())
+            cacheList.Clear();
+            var objectName = Enum.GetName(typeof(GameObjectType), type);
+            Logging.Log.Debug($"Caching game object {objectName}...");
+            foreach (var v in type.GetLookup().ToList())
             {
-                CachedResources.Add((ResourceBase)v.Value);
+                cacheList.Add((T)v.Value);
             }
-            Logging.Log.Debug($"Resources cached");
+            Logging.Log.Debug($"{objectName} objects cached");
         }
     }
 

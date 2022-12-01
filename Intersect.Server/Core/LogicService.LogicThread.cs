@@ -90,12 +90,14 @@ namespace Intersect.Server.Core
                     var processedMapInstances = new HashSet<Guid>();
                     var sourceMapInstance = new HashSet<Guid>();
                     var players = 0;
+                    var recipeIteratorIdx = 0;
 
                     // Initialize timers instance and load in values
                     LoadTimers();
 
                     // Initialize cached list of resources (for resource group logic)
-                    Globals.RefreshCachedResources();
+                    Globals.RefreshGameObjectCache(Enums.GameObjectType.Resource, Globals.CachedResources);
+                    Globals.RefreshGameObjectCache(Enums.GameObjectType.Recipe, Globals.CachedRecipes);
 
                     while (ServerContext.Instance.IsRunning)
                     {
@@ -312,6 +314,15 @@ namespace Intersect.Server.Core
                         }
 
                         TimerProcessor.ProcessTimers(Timing.Global.MillisecondsUtc);
+
+                        if (RecipeUnlockWatcher.ShouldRefresh)
+                        {
+                            RecipeUnlockWatcher.DoRefresh();
+                        }
+                        else
+                        {
+                            RecipeUnlockWatcher.Iterate();
+                        }
 
                         if (Options.Instance.Processing.CpsLock)
                         {
