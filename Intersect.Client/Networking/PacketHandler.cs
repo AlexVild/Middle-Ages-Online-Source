@@ -2765,5 +2765,15 @@ namespace Intersect.Client.Networking
 
             CharacterCosmeticsPanelController.RefreshCosmeticsPanel = true;
         }
+
+        public void HandlePacket(IPacketSender packetSender, RecipeDisplayPackets packet)
+        {
+            // TODO this with the UI
+        }
+
+        public void HandlePacket(IPacketSender packetSender, RecipeRequirementPackets packet)
+        {
+            // TODO this with the UI
+        }
     }
 }

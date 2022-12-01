@@ -4403,5 +4403,29 @@ namespace Intersect.Server.Networking
             client?.Entity?.SetCosmetic(packet.ItemId, packet.Slot);
             PacketSender.SendEntityDataToProximity(client?.Entity);
         }
+
+        public void HandlePacket(Client client, RequestRecipesPacket packet)
+        {
+            var player = client?.Entity;
+
+            if (player == null)
+            {
+                return;
+            }
+
+            player.SendPacket(player.GetRecipes());
+        }
+
+        public void HandlePacket(Client client, RequestRecipeRequirementsPacket packet)
+        {
+            var player = client?.Entity;
+
+            if (player == null)
+            {
+                return;
+            }
+
+            player.SendPacket(player.GetRecipeProgress(packet.RecipeId));
+        }
     }
 }

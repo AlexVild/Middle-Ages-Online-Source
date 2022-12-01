@@ -599,5 +599,15 @@ namespace Intersect.Client.Networking
 
             Network.SendPacket(new CosmeticChangePacket(itemId, Options.CosmeticSlots[slot]));
         }
+
+        public static void SendRequestRecipes()
+        {
+            Network.SendPacket(new RequestRecipesPacket());
+        }
+
+        public static void SendRequestRecipeRequirements(Guid recipeId)
+        {
+            Network.SendPacket(new RequestRecipeRequirementsPacket(recipeId));
+        }
     }
 }

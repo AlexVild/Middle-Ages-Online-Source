@@ -6,13 +6,9 @@ using Intersect.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Intersect.Server.Core
 {
-    
-
     public static class RecipeUnlockWatcher
     {
         private struct QueuedPlayer
@@ -188,6 +184,44 @@ namespace Intersect.Server.Core
         /// <returns></returns>
         public static bool RequirementComplete(Player player, RecipeRequirement requirement)
         {
+            if (requirement == null || player == null)
+            {
+                return false;
+            }
+
+            if (requirement.IsBool)
+            {
+                if (requirement.Trigger == RecipeTrigger.PlayerVarChange)
+                {
+                    var variableValue = player.GetVariableValue(requirement.TriggerId);
+                    if (variableValue.Type == Enums.VariableDataTypes.Boolean)
+                    {
+                        return requirement.IsBool && variableValue.Value;
+                    }
+
+                    Logging.Log.Error("Invalid variable type when evaluating recipe unlock");
+                    return false;
+                }
+            }
+
+            // The recipe is only relying on its condition lists - if the player succeeded those (which we check prior), then we're good
+            if (requirement.Trigger == RecipeTrigger.None)
+            {
+                return true;
+            }
+
+            var progress = GetNumericRequirementProgress(player, requirement);
+
+            return progress >= requirement.Amount;
+        }
+
+        public static int GetNumericRequirementProgress(Player player, RecipeRequirement requirement)
+        {
+            if (requirement == null || player == null)
+            {
+                return 0;
+            }
+
             try
             {
                 var recordType = requirement.Trigger.GetRelatedRecordType();
@@ -199,44 +233,32 @@ namespace Intersect.Server.Core
 
                 if (relevantRecord == default)
                 {
-                    return false;
+                    return 0;
                 }
 
-                if (relevantRecord.Amount < requirement.Amount)
-                {
-                    return false;
-                }
-
-                return true;
+                return (int)relevantRecord.Amount;
             }
             // Failed to parse the trigger type as a PlayerRecord - get their values in different ways
             catch (ArgumentException e)
             {
                 switch (requirement.Trigger)
                 {
-                    case RecipeTrigger.None:
-                        return true; // The recipe is only relying on its condition lists - if the player succeeded those (which we check prior), then we're good
                     case RecipeTrigger.PlayerVarChange:
                         var variableValue = player.GetVariableValue(requirement.TriggerId);
 
-                        switch(variableValue.Type)
+                        switch (variableValue.Type)
                         {
-                            case Enums.VariableDataTypes.String:
-                                return false;
-                            case Enums.VariableDataTypes.Boolean:
-                                return requirement.IsBool && variableValue.Value;
-                            case Enums.VariableDataTypes.Integer:
                             case Enums.VariableDataTypes.Number:
-                                return variableValue.Value >= requirement.Amount;
+                                return variableValue.Value;
                             default:
                                 Logging.Log.Error("Invalid variable type when evaluating recipe unlock");
-                                return false;
+                                return 0;
                         }
                     case RecipeTrigger.ItemObtained:
-                        return player.CountItems(requirement.TriggerId, true, true) >= requirement.Amount;
+                        return player.CountItems(requirement.TriggerId, true, true);
                     default:
                         Logging.Log.Error("Invalid trigger type when evaluating recipe unlock");
-                        return false;
+                        return 0;
                 }
             }
         }

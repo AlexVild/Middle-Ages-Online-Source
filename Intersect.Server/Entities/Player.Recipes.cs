@@ -2,8 +2,13 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using Intersect.Enums;
 using Intersect.GameObjects;
+using Intersect.GameObjects.Crafting;
+using Intersect.Network.Packets.Server;
+using Intersect.Server.Core;
 using Intersect.Server.Database.PlayerData.Players;
+using Intersect.Server.General;
 using Intersect.Server.Networking;
 using Intersect.Utilities;
 using Newtonsoft.Json;
@@ -69,6 +74,88 @@ namespace Intersect.Server.Entities
             {
                 recipe.Unlocked = false;
             }
+        }
+
+        public RecipeDisplayPackets GetRecipes()
+        {
+            var recipes = new List<RecipeDisplayPacket>();
+            foreach (var recipe in Globals.CachedRecipes)
+            {
+                var packet = new RecipeDisplayPacket();
+                packet.DescriptorId = recipe.Id;
+                packet.IsUnlocked = UnlockedRecipeIds.Contains(recipe.Id);
+
+                recipes.Add(packet);
+            }
+
+            return new RecipeDisplayPackets(recipes);
+        }
+
+        public RecipeRequirementPackets GetRecipeProgress(Guid recipeId)
+        {
+            var requirements = new List<RecipeRequirementPacket>();
+            var recipe = RecipeDescriptor.Get(recipeId);
+            if (recipe == default)
+            {
+                return new RecipeRequirementPackets(requirements);
+            }
+
+            foreach (var req in recipe.RecipeRequirements)
+            {
+                var packet = new RecipeRequirementPacket();
+                packet.RecipeId = recipe.Id;
+
+                packet.Completed = RecipeUnlockWatcher.RequirementComplete(this, req);
+
+                packet.Hint = req.Hint;
+                
+                if (!packet.Completed)
+                {
+                    packet.Amount = req.IsBool ? 1 : req.Amount;
+                    packet.Progress = req.IsBool ? 0 : RecipeUnlockWatcher.GetNumericRequirementProgress(this, req);
+                }
+
+                if (req.Trigger == RecipeTrigger.None || req.Trigger == RecipeTrigger.PlayerVarChange)
+                {
+                    packet.Image = string.Empty;
+                }
+                else
+                {
+                    var gameObject = req.Trigger.GetRelatedTable();
+                    switch (gameObject)
+                    {
+                        case GameObjectType.Crafts:
+                            var craft = gameObject.GetLookup().Get(req.TriggerId) as CraftBase;
+                            packet.Image = ItemBase.Get(craft.ItemId)?.Icon ?? string.Empty;
+                            packet.ImageSourceDir = 1; // TextureType.Item
+                            break;
+                        case GameObjectType.Resource:
+                            var resource = gameObject.GetLookup().Get(req.TriggerId) as ResourceBase;
+                            // Don't support resource from tileset
+                            packet.Image = resource?.Initial?.GraphicFromTileset ?? true 
+                                ? string.Empty : resource?.Initial?.Graphic ?? string.Empty;
+                            packet.ImageSourceDir = 8;
+                            break;
+                        case GameObjectType.Npc:
+                            var npc = gameObject.GetLookup().Get(req.TriggerId) as NpcBase;
+                            packet.Image = npc?.Sprite ?? string.Empty;
+                            packet.ImageSourceDir = 2;
+                            break;
+                        case GameObjectType.Item:
+                            var item = gameObject.GetLookup().Get(req.TriggerId) as ItemBase;
+                            packet.Image = item?.Icon ?? string.Empty;
+                            packet.ImageSourceDir = 1;
+                            break;
+                        default:
+                            packet.Image = string.Empty;
+                            break;
+                    }
+                }
+
+                requirements.Add(packet);
+            }
+
+            return new RecipeRequirementPackets(requirements);
         }
     }
 }

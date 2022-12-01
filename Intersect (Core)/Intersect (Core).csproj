@@ -407,6 +407,8 @@
     <Compile Include="Network\Packets\Client\RequestLabelsPacket.cs" />
     <Compile Include="Network\Packets\Client\RequestLeaderboardPacket.cs" />
     <Compile Include="Network\Packets\Client\RequestLootUpdatePacket.cs" />
+    <Compile Include="Network\Packets\Client\RequestRecipeRequirementsPacket.cs" />
+    <Compile Include="Network\Packets\Client\RequestRecipesPacket.cs" />
     <Compile Include="Network\Packets\Client\RequestRespawnPacket.cs" />
     <Compile Include="Network\Packets\Client\ResourceInfoRequestPacket.cs" />
     <Compile Include="Network\Packets\Client\SetLabelPacket.cs" />
@@ -475,6 +477,8 @@
     <Compile Include="Network\Packets\Server\QuestBoardPacket.cs" />
     <Compile Include="Network\Packets\Server\QuestOfferListPacket.cs" />
     <Compile Include="Network\Packets\Server\QuestPointPacket.cs" />
+    <Compile Include="Network\Packets\Server\RecipeDisplayPacket.cs" />
+    <Compile Include="Network\Packets\Server\RecipeRequirementPacket.cs" />
     <Compile Include="Network\Packets\Server\RecordDto.cs" />
     <Compile Include="Network\Packets\Server\ResourceInfoPacket.cs" />
     <Compile Include="Network\Packets\Server\ResourceLockPacket.cs" />
