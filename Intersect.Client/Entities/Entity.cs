@@ -1248,6 +1248,21 @@ namespace Intersect.Client.Entities
                                     shouldDraw = false;
                                 }
                             }
+                            else if (this is Player cosmeticOvr && cosmeticOvr.Cosmetics[Options.HelmetIndex] != Guid.Empty)
+                            {
+                                var helmet = ItemBase.Get(cosmeticOvr.Cosmetics[Options.HelmetIndex]);
+                                hideHair = helmet.HideHair;
+                                hideBeard = helmet.HideBeard;
+                                hideExtra = helmet.HideExtra;
+                                shortHair = helmet.ShortHair;
+
+                                if (decorSlot == Options.HairSlot && hideHair
+                                    || decorSlot == Options.BeardSlot && hideBeard
+                                    || decorSlot == Options.ExtraSlot && hideExtra)
+                                {
+                                    shouldDraw = false;
+                                }
+                            }
 
                             if (MyDecors[decorSlot] != null && shouldDraw)
                             {

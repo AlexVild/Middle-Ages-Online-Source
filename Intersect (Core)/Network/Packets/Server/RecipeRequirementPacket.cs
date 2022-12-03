@@ -31,10 +31,16 @@ namespace Intersect.Network.Packets.Server
 
         [Key(6)]
         public string Hint { get; set; }
+        
+        [Key(7)]
+        public RecipeTrigger TriggerType { get; set; }
+        
+        [Key(8)]
+        public Guid TriggerId { get; set; }
 
         public RecipeRequirementPacket() { }
 
-        public RecipeRequirementPacket(Guid recipeId, bool completed, string image, int amount, int progress, int imageSrcDir, string hint)
+        public RecipeRequirementPacket(Guid recipeId, bool completed, string image, int amount, int progress, int imageSrcDir, string hint, RecipeTrigger triggerType, Guid triggerId)
         {
             RecipeId = recipeId;
             Completed = completed;
@@ -43,6 +49,8 @@ namespace Intersect.Network.Packets.Server
             Progress = progress;
             ImageSourceDir = imageSrcDir;
             Hint = hint;
+            TriggerType = triggerType;
+            TriggerId = triggerId;
         }
     }
 

@@ -816,6 +816,17 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                         shortHair = helmet.ShortHair;
                     }
                 }
+                else if (MyEntity is Player cosmeticOvr && cosmeticOvr.Cosmetics[Options.HelmetIndex] != Guid.Empty)
+                {
+                    var helmet = ItemBase.Get(cosmeticOvr.Cosmetics[Options.HelmetIndex]);
+                    if (helmet != null)
+                    {
+                        hideHair = helmet.HideHair;
+                        hideBeard = helmet.HideBeard;
+                        hideExtra = helmet.HideExtra;
+                        shortHair = helmet.ShortHair;
+                    }
+                }
 
                 var n = 0;
                 for (var z = 0; z < Options.PaperdollOrder[(int)Directions.Down].Count; z++)

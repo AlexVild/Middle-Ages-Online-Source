@@ -75,7 +75,7 @@ namespace Intersect.Server.Core
         {
             foreach(var recipe in Globals.CachedRecipes.ToArray())
             {
-                if (!player.Online)
+                if (!player.Online || recipe == null)
                 {
                     return;
                 }
@@ -116,7 +116,7 @@ namespace Intersect.Server.Core
             QueuedPlayer currentPlayer = UpdateQueue.Peek();
             var recipe = Globals.CachedRecipes.ElementAtOrDefault(RecipeIdx);
 
-            if (RecipeIdx >= Globals.CachedRecipes.Count || !currentPlayer.Player.Online)
+            if (recipe == null || RecipeIdx >= Globals.CachedRecipes.Count || !currentPlayer.Player.Online)
             {
                 Logging.Log.Debug("Recipe loop completed");
                 Dequeue();
@@ -139,10 +139,7 @@ namespace Intersect.Server.Core
                 return;
             }
 
-            var requirements = recipe?.RecipeRequirements.Where(rqr =>
-            {
-                return rqr.TriggerId == currentPlayer.TriggerId && rqr.Trigger == currentPlayer.TriggerType;
-            }).ToArray();
+            var requirements = recipe.RecipeRequirements.ToArray();
 
             if (requirements.Length == 0)
             {
@@ -196,7 +193,7 @@ namespace Intersect.Server.Core
                     var variableValue = player.GetVariableValue(requirement.TriggerId);
                     if (variableValue.Type == Enums.VariableDataTypes.Boolean)
                     {
-                        return requirement.IsBool && variableValue.Value;
+                        return requirement.IsBool && variableValue.Boolean;
                     }
 
                     Logging.Log.Error("Invalid variable type when evaluating recipe unlock");

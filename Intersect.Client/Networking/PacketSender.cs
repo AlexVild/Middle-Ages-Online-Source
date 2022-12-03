@@ -11,6 +11,7 @@ using Intersect.Utilities;
 using Intersect.Client.Entities;
 using Intersect.Client.General.Leaderboards;
 using Intersect.Client.Interface.Game.Character.Panels;
+using Intersect.GameObjects;
 
 namespace Intersect.Client.Networking
 {
@@ -600,9 +601,9 @@ namespace Intersect.Client.Networking
             Network.SendPacket(new CosmeticChangePacket(itemId, Options.CosmeticSlots[slot]));
         }
 
-        public static void SendRequestRecipes()
+        public static void SendRequestRecipes(RecipeCraftType craftType)
         {
-            Network.SendPacket(new RequestRecipesPacket());
+            Network.SendPacket(new RequestRecipesPacket(craftType));
         }
 
         public static void SendRequestRecipeRequirements(Guid recipeId)

@@ -44,8 +44,6 @@ namespace Intersect.Client.Interface.Game.Character.Panels
         }
         private Button SearchClearButton { get; set; }
 
-        private bool RefreshContainers { get; set; }
-
         private ScrollControl Components { get; set; }
 
         private ComponentList<GwenComponent> SelectionContainers { get; set; } = new ComponentList<GwenComponent>();

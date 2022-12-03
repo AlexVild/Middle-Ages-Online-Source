@@ -21,6 +21,12 @@ namespace Intersect.Client.Interface.Game.Components
         private TextureType ImageTextureType { get; set; }
         private ImagePanel Image { get; set; }
 
+        public int X => ParentContainer.X;
+        public int Y => ParentContainer.Y;
+        public int Width => ParentContainer.Width;
+        
+        public int Bottom => ParentContainer.Bottom;
+
         public ImageFrameComponent(ImagePanel parent, 
             string containerName, 
             string frameTexture,
@@ -35,6 +41,11 @@ namespace Intersect.Client.Interface.Game.Components
             ImageTexture = imageTexture;
             Scale = scale;
             BorderWidth = borderWidth;
+        }
+
+        public void SetPosition(int x, int y)
+        {
+            ParentContainer.SetPosition(x, y);
         }
 
         public override void Initialize()

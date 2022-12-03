@@ -17,7 +17,7 @@ namespace Intersect.Server.Entities
 {
     public partial class Player : AttackingEntity
     {
-        public List<RecipeInstance> UnlockedRecipes { get; set; }
+        public List<RecipeInstance> UnlockedRecipes { get; set; } = new List<RecipeInstance>();
 
         [NotMapped, JsonIgnore]
         public Guid[] UnlockedRecipeIds => UnlockedRecipes.Where(recipe => recipe.Unlocked).Select(recipe => recipe.DescriptorId).ToArray();
@@ -70,16 +70,23 @@ namespace Intersect.Server.Entities
         /// <param name="descriptorId"></param>
         public void RemoveRecipes(Guid descriptorId)
         {
+            if (UnlockedRecipes == null)
+            {
+                return;
+            }
+
             foreach(var recipe in UnlockedRecipes.Where(recipe => recipe.DescriptorId == descriptorId))
             {
                 recipe.Unlocked = false;
             }
         }
 
-        public RecipeDisplayPackets GetRecipes()
+        public RecipeDisplayPackets GetRecipes(RecipeCraftType craftType)
         {
             var recipes = new List<RecipeDisplayPacket>();
-            foreach (var recipe in Globals.CachedRecipes)
+            foreach (var recipe in Globals.CachedRecipes.ToArray()
+                .Where(r => r.CraftType == craftType)
+                .OrderBy(r => r.DisplayName ?? r.Name))
             {
                 var packet = new RecipeDisplayPacket();
                 packet.DescriptorId = recipe.Id;
@@ -108,10 +115,12 @@ namespace Intersect.Server.Entities
                 packet.Completed = RecipeUnlockWatcher.RequirementComplete(this, req);
 
                 packet.Hint = req.Hint;
-                
+                packet.TriggerType = req.Trigger;
+                packet.TriggerId = req.TriggerId;
+                packet.Amount = req.IsBool ? 1 : req.Amount;
+
                 if (!packet.Completed)
                 {
-                    packet.Amount = req.IsBool ? 1 : req.Amount;
                     packet.Progress = req.IsBool ? 0 : RecipeUnlockWatcher.GetNumericRequirementProgress(this, req);
                 }
 

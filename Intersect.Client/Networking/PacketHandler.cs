@@ -2768,12 +2768,21 @@ namespace Intersect.Client.Networking
 
         public void HandlePacket(IPacketSender packetSender, RecipeDisplayPackets packet)
         {
-            // TODO this with the UI
+            CharacterRecipePanelController.Recipes.Clear();
+            CharacterRecipePanelController.Recipes.AddRange(packet.Packets);
+            CharacterRecipePanelController.Refresh = true;
         }
 
         public void HandlePacket(IPacketSender packetSender, RecipeRequirementPackets packet)
         {
-            // TODO this with the UI
+            var descId = packet.Packets.FirstOrDefault()?.RecipeId ?? Guid.Empty;
+
+            if (descId == Guid.Empty)
+            {
+                return;
+            }
+
+            CharacterRecipePanelController.ExpandedRecipes[descId] = packet.Packets;
         }
     }
 }

@@ -1,12 +1,17 @@
-﻿using MessagePack;
+﻿using Intersect.GameObjects;
+using MessagePack;
 
 namespace Intersect.Network.Packets.Client
 {
     [MessagePackObject]
     public class RequestRecipesPacket : IntersectPacket
     {
-        public RequestRecipesPacket()
+        [Key(0)]
+        public RecipeCraftType CraftType { get; set; }
+
+        public RequestRecipesPacket(RecipeCraftType craftType)
         {
+            CraftType = craftType;
         }
     }
 }

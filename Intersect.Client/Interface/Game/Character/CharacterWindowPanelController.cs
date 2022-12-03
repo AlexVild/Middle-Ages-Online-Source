@@ -41,6 +41,7 @@ namespace Intersect.Client.Interface.Game.Character
         private CharacterBonusesPanel BonusesPanel { get; set; }
         private CharacterNameTagPanel NameTagPanel { get; set; }
         private CharacterCosmeticsPanel CosmeticsPanel { get; set; }
+        private CharacterRecipePanel RecipesPanel { get; set; }
 
         public CharacterWindowPanelController(Canvas gameCanvas, CharacterWindowMAO parent)
         {
@@ -70,6 +71,9 @@ namespace Intersect.Client.Interface.Game.Character
 
             CosmeticsPanel = new CharacterCosmeticsPanel(PanelContainer);
             CosmeticsPanel.Hide();
+
+            RecipesPanel = new CharacterRecipePanel(PanelContainer);
+            RecipesPanel.Hide();
 
             PositionToParent();
             Hide();
@@ -187,7 +191,7 @@ namespace Intersect.Client.Interface.Game.Character
                     break;
                 case CharacterPanelType.Recipes:
                     RecipesButton.Disable();
-                    CurrentPanel = StatsPanel;
+                    CurrentPanel = RecipesPanel;
                     break;
                 case CharacterPanelType.NameTag:
                     DecorButton.Disable();

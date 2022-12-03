@@ -4413,7 +4413,7 @@ namespace Intersect.Server.Networking
                 return;
             }
 
-            player.SendPacket(player.GetRecipes());
+            player.SendPacket(player.GetRecipes(packet.CraftType));
         }
 
         public void HandlePacket(Client client, RequestRecipeRequirementsPacket packet)

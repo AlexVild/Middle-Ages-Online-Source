@@ -206,6 +206,17 @@ namespace Intersect.Client.Interface.Game.Character.Equipment
                     shortHair = helmet.ShortHair;
                 }
             }
+            else if (Globals.Me.Cosmetics[Options.HelmetIndex] != Guid.Empty)
+            {
+                var helmet = ItemBase.Get(Globals.Me.Cosmetics[Options.HelmetIndex]);
+                if (helmet != null)
+                {
+                    hideHair = helmet.HideHair;
+                    hideBeard = helmet.HideBeard;
+                    hideExtra = helmet.HideExtra;
+                    shortHair = helmet.ShortHair;
+                }
+            }
 
             for (var z = 0; z < Options.PaperdollOrder[1].Count; z++)
             {

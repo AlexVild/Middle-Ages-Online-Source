@@ -1360,14 +1360,35 @@ namespace Intersect.Server.Networking
                     var hideHair = false;
                     var hideBeard = false;
                     var hideExtra = false;
+                    var shortHair = false;
+
+                    if (cosmeticArray[Options.HelmetIndex] != Guid.Empty)
+                    {
+                        var item = ItemBase.Get(cosmeticArray[Options.HelmetIndex]);
+                        hideHair = item?.HideHair ?? false;
+                        hideBeard = item?.HideBeard ?? false;
+                        hideExtra = item?.HideExtra ?? false;
+                        shortHair = item?.ShortHair ?? false;
+                    }
+                    else if (equipmentArray[Options.HelmetIndex] > 0)
+                    {
+                        var itemId = character
+                                    .Items[equipmentArray[Options.HelmetIndex]]
+                                    .ItemId;
+                        var item = ItemBase.Get(itemId);
+                        hideHair = item?.HideHair ?? false;
+                        hideBeard = item?.HideBeard ?? false;
+                        hideExtra = item?.HideExtra ?? false;
+                        shortHair = item?.ShortHair ?? false;
+                    }
 
                     //Draw the equipment/paperdolls
                     for (var z = 0; z < Options.PaperdollOrder[(int) Directions.Down].Count; z++)
                     {
                         var paperdollSlot = Options.PaperdollOrder[(int) Directions.Down][z];
-                        if (Options.EquipmentSlots.IndexOf(paperdollSlot) > -1)
+                        var equipmentSlot = Options.EquipmentSlots.IndexOf(paperdollSlot);
+                        if (equipmentSlot > -1)
                         {
-                            var equipmentSlot = Options.EquipmentSlots.IndexOf(paperdollSlot);
                             if (equipmentArray[equipmentSlot] > -1 &&
                                 equipmentArray[equipmentSlot] <
                                 Options.MaxInvItems)
@@ -1385,25 +1406,43 @@ namespace Intersect.Server.Networking
 
                                 if (item != null)
                                 {
-                                    if (item.HideHair) hideHair = true;
-                                    if (item.HideBeard) hideBeard = true;
-                                    if (item.HideExtra) hideExtra = true;
-
-                                    var itemdata = ItemBase.Get(itemId);
                                     if (character.Gender == Gender.Male)
                                     {
-                                        equipment[equipmentSlot] = itemdata.MalePaperdoll;
+                                        equipment[equipmentSlot] = item.MalePaperdoll;
                                     }
                                     else
                                     {
-                                        equipment[equipmentSlot] = itemdata.FemalePaperdoll;
+                                        equipment[equipmentSlot] = item.FemalePaperdoll;
                                     }
                                 }
                             }
-                        } else if (Options.DecorSlots.IndexOf(paperdollSlot) > -1)
+                            else if (cosmeticArray[equipmentSlot] != Guid.Empty)
+                            {
+                                var item = ItemBase.Get(cosmeticArray[equipmentSlot]);
+                                if (item == default)
+                                {
+                                    continue;
+                                }
+                                if (character.Gender == Gender.Male)
+                                {
+                                    equipment[equipmentSlot] = item.MalePaperdoll;
+                                }
+                                else
+                                {
+                                    equipment[equipmentSlot] = item.FemalePaperdoll;
+                                }
+                            }
+                        }
+                        else if (Options.DecorSlots.IndexOf(paperdollSlot) > -1)
                         {
                             var decorIndex = Options.DecorSlots.IndexOf(paperdollSlot);
-                            var decorImg = character.Decor[Options.DecorSlots.IndexOf(paperdollSlot)];
+                            if (decorIndex == Options.HairSlot && shortHair && Options.Instance.PlayerOpts.ShortHairMappings.TryGetValue(character.Decor[decorIndex], out var shortHairText))
+                            {
+                                decor[decorIndex] = shortHairText;
+                                continue;
+                            }
+                            // Otherwise, just draw the hair
+                            var decorImg = character.Decor[decorIndex];
                             if (decorImg != null)
                             {
                                 decor[decorIndex] = decorImg;

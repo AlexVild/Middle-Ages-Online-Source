@@ -134,6 +134,7 @@
     <Compile Include="Interface\Game\Character\Panels\CharacterEquipmentWindow.cs" />
     <Compile Include="Interface\Game\Character\CharacterWindowPanel.cs" />
     <Compile Include="Interface\Game\Character\Panels\CharacterHarvestingWindow.cs" />
+    <Compile Include="Interface\Game\Character\Panels\CharacterRecipePanel.cs" />
     <Compile Include="Interface\Game\Character\Panels\CharacterStatsWindow.cs" />
     <Compile Include="Interface\Game\ComboText.cs" />
     <Compile Include="Interface\Game\Components\CosmeticSelectionComponent.cs" />
@@ -145,6 +146,9 @@
     <Compile Include="Interface\Game\Components\LabelRowComponent.cs" />
     <Compile Include="Interface\Game\Components\NumberContainerComponent.cs" />
     <Compile Include="Interface\Game\Components\ProgressBarComponent.cs" />
+    <Compile Include="Interface\Game\Components\RecipeRequirementComponent.cs" />
+    <Compile Include="Interface\Game\Components\RecipeRequirementProgressBarComponent.cs" />
+    <Compile Include="Interface\Game\Components\RecipeRowComponent.cs" />
     <Compile Include="Interface\Game\DescriptionWindows\Components\ComponentBase.cs" />
     <Compile Include="Interface\Game\DescriptionWindows\Components\DescriptionComponent.cs" />
     <Compile Include="Interface\Game\DescriptionWindows\Components\DividerComponent.cs" />

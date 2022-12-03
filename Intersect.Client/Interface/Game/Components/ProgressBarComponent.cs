@@ -64,6 +64,8 @@ namespace Intersect.Client.Interface.Game.Components
         private Label LeftLabel { get; set; }
         private Label RightLabel { get; set; }
 
+        public int Width => ParentContainer.Width;
+
         public float Percent { get; set; }
 
         public ProgressBarComponent(
@@ -184,6 +186,16 @@ namespace Intersect.Client.Interface.Game.Components
         {
             ParentContainer.DeleteAllNestedChildren();
             ParentContainer.Dispose();
+        }
+
+        public void Show()
+        {
+            ParentContainer.Show();
+        }
+
+        public void Hide()
+        {
+            ParentContainer.Hide();
         }
     }
 }
