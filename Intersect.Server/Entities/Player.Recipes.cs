@@ -8,6 +8,7 @@ using Intersect.GameObjects.Crafting;
 using Intersect.Network.Packets.Server;
 using Intersect.Server.Core;
 using Intersect.Server.Database.PlayerData.Players;
+using Intersect.Server.Entities.Events;
 using Intersect.Server.General;
 using Intersect.Server.Networking;
 using Intersect.Utilities;
@@ -88,9 +89,21 @@ namespace Intersect.Server.Entities
                 .Where(r => r.CraftType == craftType)
                 .OrderBy(r => r.DisplayName ?? r.Name))
             {
+                // The player hasn't even unlocked the recipe in their diary yet, let alone the actual recipe
+                if (!Conditions.MeetsConditionLists(recipe.Requirements, this, null))
+                {
+                    continue;
+                }
+
                 var packet = new RecipeDisplayPacket();
                 packet.DescriptorId = recipe.Id;
                 packet.IsUnlocked = UnlockedRecipeIds.Contains(recipe.Id);
+
+                // The recipe is only meant to appear after it is unlocked
+                if (!packet.IsUnlocked && recipe.HiddenUntilUnlocked)
+                {
+                    continue;
+                }
 
                 recipes.Add(packet);
             }

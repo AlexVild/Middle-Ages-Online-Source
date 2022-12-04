@@ -201,10 +201,10 @@ namespace Intersect.Server.Core
                 }
             }
 
-            // The recipe is only relying on its condition lists - if the player succeeded those (which we check prior), then we're good
+            // This requirement is just meant to supply a hint - the requirement is fulfilled when the recipe is unlocked.
             if (requirement.Trigger == RecipeTrigger.None)
             {
-                return true;
+                return player.UnlockedRecipeIds.Contains(requirement.DescriptorId);
             }
 
             var progress = GetNumericRequirementProgress(player, requirement);

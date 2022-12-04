@@ -43,7 +43,7 @@ namespace Intersect.GameObjects
 
     public enum RecipeTrigger
     {
-        [Description("None")]
+        [Description("Event")]
         None = 0,
 
         [Description("Player Variable Change"), RelatedTable(Enums.GameObjectType.PlayerVariable)]

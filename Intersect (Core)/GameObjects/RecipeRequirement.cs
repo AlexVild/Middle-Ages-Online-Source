@@ -37,35 +37,42 @@ namespace Intersect.GameObjects
 
         public RecipeRequirement() { }
 
-        public RecipeRequirement(Guid descriptorId, Guid triggerId, int triggerValue, bool value)
+        public RecipeRequirement(Guid descriptorId, Guid triggerId, int triggerValue, bool value, string hint)
         {
             DescriptorId = descriptorId;
             TriggerId = triggerId;
             TriggerValue = triggerValue;
             BoolValue = value;
             IsBool = true;
+            Hint = hint;
         }
 
-        public RecipeRequirement(Guid descriptorId, Guid triggerId, int triggerValue, int value)
+        public RecipeRequirement(Guid descriptorId, Guid triggerId, int triggerValue, int value, string hint)
         {
             DescriptorId = descriptorId;
             TriggerId = triggerId;
             TriggerValue = triggerValue;
             Amount = value;
             IsBool = false;
+            Hint = hint;
         }
-
-        public string TriggerItemName => Trigger.GetRelatedTable().GetLookup().Get(TriggerId)?.Name ?? "NOT FOUND";
 
         public override string ToString()
         {
+            if (Trigger == RecipeTrigger.None)
+            {
+                return $"{Trigger.GetDescription()}: {Hint}";
+            }
+
+            var triggerItemName = Trigger.GetRelatedTable().GetLookup().Get(TriggerId)?.Name ?? "NOT FOUND";
+
             if (IsBool)
             {
-                return $"{Trigger.GetDescription()}: {TriggerItemName} is {BoolValue}";
+                return $"{Trigger.GetDescription()}: {triggerItemName} is {BoolValue}";
             }
             else
             {
-                return $"{Trigger.GetDescription()}: {TriggerItemName} x{Amount}";
+                return $"{Trigger.GetDescription()}: {triggerItemName} x{Amount}";
             }
         }
     }

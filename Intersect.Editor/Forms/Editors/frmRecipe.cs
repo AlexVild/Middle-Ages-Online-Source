@@ -73,6 +73,10 @@ namespace Intersect.Editor.Forms.Editors
         {
             cmbTriggerParams.Items.Clear();
             var triggerType = (RecipeTrigger)cmbTriggerType.SelectedIndex;
+            if (cmbTriggerType.SelectedIndex == -1)
+            {
+                triggerType = RecipeTrigger.None;
+            }
             switch (triggerType)
             {
                 case RecipeTrigger.None:
@@ -262,13 +266,13 @@ namespace Intersect.Editor.Forms.Editors
         private void cmbTriggerType_SelectedIndexChanged(object sender, EventArgs e)
         {
             UpdateDisabled();
+            LoadTriggerParams();
             if (!TryGetSelectedRequirement(out var requirement) || mPopulating)
             {
                 return;
             }
 
             requirement.TriggerValue = cmbTriggerType.SelectedIndex;
-            LoadTriggerParams();
 
             RefreshRequirementsList(false);
         }
@@ -366,7 +370,24 @@ namespace Intersect.Editor.Forms.Editors
         {
             var triggerVal = GetTriggerParamValue();
 
-            var newReq = new RecipeRequirement(mEditorItem.Id, triggerVal, cmbTriggerType.SelectedIndex, (int)nudAmt.Value);
+            RecipeRequirement newReq;
+
+            if (chkRequireTrue.Visible || cmbTriggerType.SelectedIndex == -1 || cmbTriggerType.SelectedIndex == (int)RecipeTrigger.None)
+            {
+                if (cmbTriggerType.SelectedIndex == -1 || cmbTriggerType.SelectedIndex == (int)RecipeTrigger.None)
+                {
+                    newReq = new RecipeRequirement(mEditorItem.Id, triggerVal, cmbTriggerType.SelectedIndex, true, txtRequireHint.Text);
+                }
+                else
+                {
+                    newReq = new RecipeRequirement(mEditorItem.Id, triggerVal, cmbTriggerType.SelectedIndex, chkRequireTrue.Checked, txtRequireHint.Text);
+                }
+            }
+            else
+            {
+                newReq = new RecipeRequirement(mEditorItem.Id, triggerVal, cmbTriggerType.SelectedIndex, (int)nudAmt.Value, txtRequireHint.Text);
+            }
+
             mEditorItem.RecipeRequirements.Add(newReq);
             RefreshRequirementsList(true);
         }
