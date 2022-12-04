@@ -72,9 +72,9 @@ namespace Intersect.Client.Interface.Game.Character.Panels
 
             mBackground.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
 
-            var helmets = new CosmeticSelectionComponent(Components, "HelmetSelection", "Helmets", "character_harvest_fishing.png", Options.HelmetIndex, SelectionContainers);
-            var armors = new CosmeticSelectionComponent(Components, "ArmorSelection", "Armors", "character_harvest_mining.png", 1, SelectionContainers);
-            var boots = new CosmeticSelectionComponent(Components, "BootSelection", "Boots", "character_harvest_fishing.png", 4, SelectionContainers);
+            var helmets = new CosmeticSelectionComponent(Components, "HelmetSelection", "Helmets", "character_cosmetic_helmet.png", Options.HelmetIndex, SelectionContainers);
+            var armors = new CosmeticSelectionComponent(Components, "ArmorSelection", "Armors", "character_cosmetic_armor.png", 1, SelectionContainers);
+            var boots = new CosmeticSelectionComponent(Components, "BootSelection", "Boots", "character_cosmetic_boots.png", 4, SelectionContainers);
 
             var padding = 8;
             for(var i = 0; i < SelectionContainers.Count; i++)
