@@ -410,6 +410,7 @@
     <Compile Include="Network\Packets\Client\RequestRecipeRequirementsPacket.cs" />
     <Compile Include="Network\Packets\Client\RequestRecipesPacket.cs" />
     <Compile Include="Network\Packets\Client\RequestRespawnPacket.cs" />
+    <Compile Include="Network\Packets\Client\RequestUnlockedRecipesPacket.cs" />
     <Compile Include="Network\Packets\Client\ResourceInfoRequestPacket.cs" />
     <Compile Include="Network\Packets\Client\SetLabelPacket.cs" />
     <Compile Include="Network\Packets\Server\CombatNumberPacket.cs" />
@@ -489,6 +490,7 @@
     <Compile Include="Network\Packets\Server\TimerStopPacket.cs" />
     <Compile Include="Network\Packets\Server\ToastPacket.cs" />
     <Compile Include="Network\Packets\Server\TradeAcceptedPacket.cs" />
+    <Compile Include="Network\Packets\Server\UnlockedRecipesPacket.cs" />
     <Compile Include="Network\Packets\Server\UpdateFutureWarpPacket.cs" />
     <Compile Include="Network\Packets\SlotQuantityPacket.cs" />
     <Compile Include="Network\Packets\Client\SwapBankItemsPacket.cs" />

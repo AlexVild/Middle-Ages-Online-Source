@@ -1655,7 +1655,7 @@ namespace Intersect.Client.Networking
                     Interface.Interface.GameUi.NotifyOpenCraftingTable();
                 } else
                 {
-                    Interface.Interface.GameUi.UpdateCraftingTable();
+                    PacketSender.SendRequestUnlockedRecipes();
                 }
             }
             else
@@ -2783,6 +2783,14 @@ namespace Intersect.Client.Networking
             }
 
             CharacterRecipePanelController.ExpandedRecipes[descId] = packet.Packets;
+        }
+
+        public void HandlePacket(IPacketSender packetSender, UnlockedRecipesPacket packet)
+        {
+            Globals.Me?.UnlockedRecipes?.Clear();
+            Globals.Me?.UnlockedRecipes?.AddRange(packet.UnlockedRecipes);
+
+            Interface.Interface.GameUi.UpdateCraftingTable();
         }
     }
 }

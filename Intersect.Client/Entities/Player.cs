@@ -3037,5 +3037,7 @@ namespace Intersect.Client.Entities
         public delegate void CosmeticsUpdate();
 
         public CosmeticsUpdate CosmeticsUpdateDelegate;
+
+        public List<Guid> UnlockedRecipes { get; set; } = new List<Guid>();
     }
 }

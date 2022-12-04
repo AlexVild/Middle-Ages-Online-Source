@@ -606,6 +606,11 @@ namespace Intersect.Client.Networking
             Network.SendPacket(new RequestRecipesPacket(craftType));
         }
 
+        public static void SendRequestUnlockedRecipes()
+        {
+            Network.SendPacket(new RequestUnlockedRecipesPacket());
+        }
+
         public static void SendRequestRecipeRequirements(Guid recipeId)
         {
             Network.SendPacket(new RequestRecipeRequirementsPacket(recipeId));

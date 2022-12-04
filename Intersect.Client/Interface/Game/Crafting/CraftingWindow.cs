@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Intersect.Client.Core;
 using Intersect.Client.Framework.File_Management;
+using Intersect.Client.Framework.Graphics;
 using Intersect.Client.Framework.Gwen.Control;
 using Intersect.Client.Framework.Gwen.Control.EventArguments;
 using Intersect.Client.General;
@@ -12,6 +13,7 @@ using Intersect.Client.Networking;
 using Intersect.Client.Utilities;
 using Intersect.GameObjects;
 using Intersect.GameObjects.Crafting;
+using Intersect.Network.Packets.Server;
 using Intersect.Utilities;
 
 namespace Intersect.Client.Interface.Game.Crafting
@@ -62,6 +64,11 @@ namespace Intersect.Client.Interface.Game.Crafting
 
         private List<Label> mValues = new List<Label>();
 
+        private Label NeedsRecipeLabel;
+
+        private GameTexture CanCraftBg => Globals.ContentManager.GetTexture(GameContentManager.TextureType.Gui, "crafting.png");
+        private GameTexture CantCraftBg => Globals.ContentManager.GetTexture(GameContentManager.TextureType.Gui, "crafting_locked_recipe.png");
+
         public CraftingWindow(Canvas gameCanvas)
         {
             mCraftWindow = new WindowControl(gameCanvas, Globals.ActiveCraftingTable.Name.ToUpper(), false, "CraftingWindow");
@@ -95,6 +102,8 @@ namespace Intersect.Client.Interface.Game.Crafting
             mCraftAll = new Button(mCraftWindow, "CraftAllButton");
             mCraftAll.SetText(Strings.Crafting.craftall.ToString("1"));
             mCraftAll.Clicked += craftAll_Clicked;
+
+            NeedsRecipeLabel = new Label(mCraftWindow, "NeedsRecipeLabel");
 
             _CraftingWindow();
 
@@ -225,6 +234,40 @@ namespace Intersect.Client.Interface.Game.Crafting
                         (mItems[i].Container.Height + yPadding) +
                         yPadding
                     );
+            }
+
+            if (craft.Recipe != Guid.Empty && !Globals.Me.UnlockedRecipes.Contains(craft.Recipe))
+            {
+                mCraftWindow.SetImage(CantCraftBg, CantCraftBg.Name, WindowControl.ControlState.Active);
+                mCraftWindow.SetImage(CantCraftBg, CantCraftBg.Name, WindowControl.ControlState.Inactive);
+                mCraft.Disable();
+                mCraftAll.Disable();
+                NeedsRecipeLabel.Show();
+
+                var recipe = RecipeDescriptor.Get(craft.Recipe);
+                var recipeName = recipe.DisplayName ?? recipe.Name ?? "NOT FOUND";
+                var craftType = recipe.CraftType;
+
+                if (craftType == RecipeCraftType.Other)
+                {
+                    NeedsRecipeLabel.SetText($"Requires recipe: {recipeName}");
+                }
+                else
+                {
+                    NeedsRecipeLabel.SetText($"Requires {recipe.DisplayCraftType} recipe: {recipeName}");
+                }
+                mBar.Hide();
+                mBarContainer.Hide();
+            }
+            else
+            {
+                mCraftWindow.SetImage(CanCraftBg, CanCraftBg.Name, WindowControl.ControlState.Active);
+                mCraftWindow.SetImage(CanCraftBg, CanCraftBg.Name, WindowControl.ControlState.Inactive);
+                mCraft.Enable();
+                mCraftAll.Enable();
+                NeedsRecipeLabel.Hide();
+                mBar.Show();
+                mBarContainer.Show();
             }
 
             //Update craft buttons!
@@ -376,7 +419,14 @@ namespace Intersect.Client.Interface.Game.Crafting
                     tmpRow.UserData = mCrafts[i];
                     tmpRow.DoubleClicked += tmpNode_DoubleClicked;
                     tmpRow.Clicked += tmpNode_DoubleClicked;
-                    tmpRow.SetTextColor(new Color(255, 50, 19, 0));
+                    if (activeCraft.Recipe != Guid.Empty && !Globals.Me.UnlockedRecipes.Contains(activeCraft.Recipe))
+                    {
+                        tmpRow.SetTextColor(new Color(255, 100, 100, 100));
+                    }
+                    else
+                    {
+                        tmpRow.SetTextColor(new Color(255, 50, 19, 0));
+                    }
                     tmpRow.RenderColor = new Color(100, 232, 208, 170);
                 }
 

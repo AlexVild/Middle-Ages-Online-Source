@@ -4427,5 +4427,18 @@ namespace Intersect.Server.Networking
 
             player.SendPacket(player.GetRecipeProgress(packet.RecipeId));
         }
+
+        public void HandlePacket(Client client, RequestUnlockedRecipesPacket packet)
+        {
+            var player = client?.Entity;
+
+            if (player == null)
+            {
+                return;
+            }
+
+            player.SendPacket(new Network.Packets.Server.UnlockedRecipesPacket(player.UnlockedRecipeIds.ToList()));
+
+        }
     }
 }

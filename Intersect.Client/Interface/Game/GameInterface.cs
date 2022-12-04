@@ -308,6 +308,7 @@ namespace Intersect.Client.Interface.Game
                 mCraftingWindow.Close();
             }
 
+            PacketSender.SendRequestUnlockedRecipes();
             mCraftingWindow = new CraftingWindow(GameCanvas);
             mShouldOpenCraftingTable = false;
             Globals.InCraft = true;

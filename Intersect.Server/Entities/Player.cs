@@ -4203,6 +4203,12 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
+            // Make sure we have any required recipe unlocked
+            if (craft.Recipe != Guid.Empty && !UnlockedRecipeIds.Contains(craft.Recipe))
+            {
+                return false;
+            }
+
             // Quickly look through the inventory and create a catalog of what items we have, and how many
             var itemsAndQuantities = GetAllItemsAndQuantities(Items);
 
