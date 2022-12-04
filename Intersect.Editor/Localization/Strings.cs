@@ -12,6 +12,7 @@ using Intersect.Config;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Intersect.GameObjects.Timers;
+using Intersect.Utilities;
 
 namespace Intersect.Editor.Localization
 {
@@ -387,6 +388,25 @@ namespace Intersect.Editor.Localization
                 default:
                     throw new NotImplementedException("Invalid TimerActiveCondition for TimerIsActive condition when trying to print command");
             }
+        }
+
+        public static string GetEventConditionalDesc(RecordIs condition)
+        {
+            var name = condition.RecordType.GetDescription();
+            try
+            {
+                var recordOf = condition.RecordType.GetRelatedTable().GetLookup().Get(condition.RecordId);
+                return EventConditionDesc.RecordIsExtra.ToString(name, recordOf.Name, condition.Value);
+            }
+            catch (ArgumentException)
+            {
+                return EventConditionDesc.RecordIs.ToString(name, condition.Value);
+            }
+        }
+
+        public static string GetEventConditionalDesc(RecipeUnlocked condition)
+        {
+            return EventConditionDesc.HasRecipe.ToString(RecipeDescriptor.GetName(condition.RecipeId));
         }
 
         public static string GetVariableComparisonString(VariableCompaison comparison)
@@ -2216,6 +2236,7 @@ Tick timer saved in server config.json.";
                 {"fadeout", @"Fade Out"},
                 {"shakescreen", @"Shake Screen"},
                 {"changespawn", @"Change Respawn Point"},
+                {"changerecipeunlock", @"Change Recipes"},
             };
 
         }
@@ -2342,6 +2363,8 @@ Tick timer saved in server config.json.";
                 {30, @"Has task on cooldown for class..."},
                 {31, @"Has highest class rank of at least X..."},
                 {32, @"Timer X Is Active..."},
+                {33, @"Record is at least..."},
+                {34, @"Has recipe X..."},
             };
 
             public static LocalizedString endrange = @"End Range:";
@@ -2623,6 +2646,9 @@ Tick timer saved in server config.json.";
             public static LocalizedString HasFreeInventorySlots = @"Player has {00} free inventory slot(s)";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString HasRecipe = @"Has learned recipe: {00}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString MapZoneTypeIs = @"Map Zone Type is {00}";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -2657,6 +2683,12 @@ Tick timer saved in server config.json.";
             
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString highestclassrank = @"Highest class rank is at least {00}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString RecordIs = @"Record of type {00} is at least {01}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString RecordIsExtra = @"Record of type {00} for {01} is at least {02}";
 
             public static Dictionary<int, LocalizedString> selfswitches = new Dictionary<int, LocalizedString>
             {
@@ -6122,6 +6154,9 @@ Negative values for time to flow backwards.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString UnlockLabel = @"Label Status Update: {00} label {01}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString UnlockRecipe = @"Recipe Update: Set recipe {00} unlock to {01}";
         }
 
         public partial struct DynamicRequirements

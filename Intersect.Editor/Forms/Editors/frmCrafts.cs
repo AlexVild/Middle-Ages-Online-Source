@@ -45,6 +45,9 @@ namespace Intersect.Editor.Forms.Editors
             cmbEvent.Items.Clear();
             cmbEvent.Items.Add(Strings.General.none);
             cmbEvent.Items.AddRange(EventBase.Names);
+            cmbRecipe.Items.Clear();
+            cmbRecipe.Items.Add(Strings.General.none);
+            cmbRecipe.Items.AddRange(RecipeDescriptor.Names);
             btnDynamicRequirements.Click += buttonRequirements_clicked;
 
             lstGameObjects.Init(UpdateToolStripItems, AssignEditorItem, toolStripItemNew_Click, toolStripItemCopy_Click, toolStripItemUndo_Click, toolStripItemPaste_Click, toolStripItemDelete_Click);
@@ -125,6 +128,8 @@ namespace Intersect.Editor.Forms.Editors
                 }
 
                 cmbEvent.SelectedIndex = EventBase.ListIndex(mEditorItem.EventId) + 1;
+                
+                cmbRecipe.SelectedIndex = RecipeDescriptor.ListIndex(mEditorItem.Recipe) + 1;
 
                 nudExp.Value = mEditorItem.Experience;
 
@@ -592,6 +597,11 @@ namespace Intersect.Editor.Forms.Editors
         private void nudExp_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.Experience = (long)nudExp.Value;
+        }
+
+        private void cmbRecipe_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Recipe = RecipeDescriptor.IdFromList(cmbRecipe.SelectedIndex - 1);
         }
     }
 

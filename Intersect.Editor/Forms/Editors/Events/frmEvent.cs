@@ -835,6 +835,10 @@ namespace Intersect.Editor.Forms.Editors.Events
                     tmpCommand = new ChangeSpawnCommand();
 
                     break;
+                case EventCommandType.ChangeRecipeStatus:
+                    tmpCommand = new ChangeRecipeStatusCommand();
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -1528,6 +1532,10 @@ namespace Intersect.Editor.Forms.Editors.Events
                     break;
                 case EventCommandType.ChangeSpawn:
                     cmdWindow = new EventCommand_ChangeSpawn((ChangeSpawnCommand)command, this);
+
+                    break;
+                case EventCommandType.ChangeRecipeStatus:
+                    cmdWindow = new EventCommand_ChangeRecipeUnlock((ChangeRecipeStatusCommand)command, this);
 
                     break;
                 default:

@@ -1,4 +1,8 @@
-﻿namespace Intersect.GameObjects.Events
+﻿using Intersect.Attributes;
+using Intersect.Enums;
+using System.ComponentModel;
+
+namespace Intersect.GameObjects.Events
 {
 
     public enum MoveRouteEnum
@@ -263,6 +267,7 @@
         FadeOut, // 75
         ShakeScreen, // 76
         ChangeSpawn, // 77
+        ChangeRecipeStatus, // 78
     }
 
     public enum NPCGuildManagementSelection
@@ -286,10 +291,19 @@
 
     public enum RecordType
     {
+        [Description("NPCs Killed"), RelatedTable(GameObjectType.Npc)]
         NpcKilled = 0,
+
+        [Description("Items Crafted"), RelatedTable(GameObjectType.Item)]
         ItemCrafted,
+
+        [Description("Resources Gathered"), RelatedTable(GameObjectType.Resource)]
         ResourceGathered,
+
+        [Description("Player Variable Set"), RelatedTable(GameObjectType.PlayerVariable)]
         PlayerVariable,
+        
+        [Description("Highest Combo")]
         Combo
     }
 

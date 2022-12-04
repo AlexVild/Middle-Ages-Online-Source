@@ -55,6 +55,7 @@ namespace Intersect.Editor.Forms.Editors
             this.txtName = new DarkUI.Controls.DarkTextBox();
             this.lblSpeed = new System.Windows.Forms.Label();
             this.grpIngredients = new DarkUI.Controls.DarkGroupBox();
+            this.lblCost = new System.Windows.Forms.Label();
             this.cmbEvent = new DarkUI.Controls.DarkComboBox();
             this.lblCommonEvent = new System.Windows.Forms.Label();
             this.nudQuantity = new DarkUI.Controls.DarkNumericUpDown();
@@ -76,7 +77,8 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemPaste = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
-            this.lblCost = new System.Windows.Forms.Label();
+            this.lblRecipe = new System.Windows.Forms.Label();
+            this.cmbRecipe = new DarkUI.Controls.DarkComboBox();
             this.grpCrafts.SuspendLayout();
             this.pnlContainer.SuspendLayout();
             this.grpGeneral.SuspendLayout();
@@ -188,6 +190,8 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpGeneral.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpGeneral.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpGeneral.Controls.Add(this.cmbRecipe);
+            this.grpGeneral.Controls.Add(this.lblRecipe);
             this.grpGeneral.Controls.Add(this.nudExp);
             this.grpGeneral.Controls.Add(this.lblExp);
             this.grpGeneral.Controls.Add(this.btnAddFolder);
@@ -418,6 +422,15 @@ namespace Intersect.Editor.Forms.Editors
             this.grpIngredients.TabIndex = 30;
             this.grpIngredients.TabStop = false;
             this.grpIngredients.Text = "Ingredients";
+            // 
+            // lblCost
+            // 
+            this.lblCost.AutoSize = true;
+            this.lblCost.Location = new System.Drawing.Point(8, 227);
+            this.lblCost.Name = "lblCost";
+            this.lblCost.Size = new System.Drawing.Size(140, 13);
+            this.lblCost.TabIndex = 49;
+            this.lblCost.Text = "Item Cost: 100; Craft Cost: X";
             // 
             // cmbEvent
             // 
@@ -679,14 +692,35 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
             // 
-            // lblCost
+            // lblRecipe
             // 
-            this.lblCost.AutoSize = true;
-            this.lblCost.Location = new System.Drawing.Point(8, 227);
-            this.lblCost.Name = "lblCost";
-            this.lblCost.Size = new System.Drawing.Size(140, 13);
-            this.lblCost.TabIndex = 49;
-            this.lblCost.Text = "Item Cost: 100; Craft Cost: X";
+            this.lblRecipe.AutoSize = true;
+            this.lblRecipe.Location = new System.Drawing.Point(6, 176);
+            this.lblRecipe.Name = "lblRecipe";
+            this.lblRecipe.Size = new System.Drawing.Size(41, 13);
+            this.lblRecipe.TabIndex = 49;
+            this.lblRecipe.Text = "Recipe";
+            // 
+            // cmbRecipe
+            // 
+            this.cmbRecipe.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbRecipe.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbRecipe.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbRecipe.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbRecipe.DrawDropdownHoverOutline = false;
+            this.cmbRecipe.DrawFocusRectangle = false;
+            this.cmbRecipe.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbRecipe.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbRecipe.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbRecipe.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbRecipe.FormattingEnabled = true;
+            this.cmbRecipe.Location = new System.Drawing.Point(73, 173);
+            this.cmbRecipe.Name = "cmbRecipe";
+            this.cmbRecipe.Size = new System.Drawing.Size(190, 21);
+            this.cmbRecipe.TabIndex = 50;
+            this.cmbRecipe.Text = null;
+            this.cmbRecipe.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbRecipe.SelectedIndexChanged += new System.EventHandler(this.cmbRecipe_SelectedIndexChanged);
             // 
             // FrmCrafts
             // 
@@ -774,5 +808,7 @@ namespace Intersect.Editor.Forms.Editors
         private DarkNumericUpDown nudExp;
         private System.Windows.Forms.Label lblExp;
         private System.Windows.Forms.Label lblCost;
+        private DarkComboBox cmbRecipe;
+        private System.Windows.Forms.Label lblRecipe;
     }
 }

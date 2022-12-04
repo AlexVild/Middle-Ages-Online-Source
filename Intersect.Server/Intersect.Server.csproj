@@ -969,6 +969,10 @@
     <Compile Include="Migrations\Game\20221130162605_RecipeRequirementsNewFieldMigration.designer.cs">
       <DependentUpon>20221130162605_RecipeRequirementsNewFieldMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20221204170126_CraftRecipeMigration.cs" />
+    <Compile Include="Migrations\Game\20221204170126_CraftRecipeMigration.designer.cs">
+      <DependentUpon>20221204170126_CraftRecipeMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

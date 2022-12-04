@@ -74,6 +74,8 @@ namespace Intersect.GameObjects.Crafting
             set => Requirements.Load(value);
         }
 
+        public Guid Recipe { get; set; }
+
     }
 
     public class CraftIngredient

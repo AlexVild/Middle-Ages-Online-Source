@@ -8,6 +8,7 @@ using Intersect.GameObjects;
 using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Events.Commands;
 using Intersect.GameObjects.Timers;
+using Intersect.Utilities;
 
 namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
 {
@@ -489,6 +490,14 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     Condition = new TimerIsActive();
 
                     break;
+                case ConditionTypes.RecordIs:
+                    Condition = new RecordIs();
+
+                    break;
+                case ConditionTypes.RecipeUnlocked:
+                    Condition = new RecipeUnlocked();
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -519,6 +528,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             lblClassRank.Hide();
             nudClassRank.Hide();
             grpTimers.Hide();
+            grpRecordIs.Hide();
+            grpRecipes.Hide();
             switch (type)
             {
                 case ConditionTypes.VariableIs:
@@ -708,6 +719,24 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                 case ConditionTypes.TimerIsActive:
                     grpTimers.Show();
                     TimerCommandHelpers.InitializeSelectionFields(Guid.Empty, ref cmbTimerType, ref cmbTimer);
+                    break;
+                case ConditionTypes.RecordIs:
+                    grpRecordIs.Show();
+                    cmbRecordType.Items.Clear();
+                    cmbRecordType.Items.AddRange(EnumExtensions.GetDescriptions(typeof(RecordType)));
+                    if (cmbRecordType.Items.Count > 0)
+                    {
+                        cmbRecordType.SelectedIndex = 0;
+                    }
+                    break;
+                case ConditionTypes.RecipeUnlocked:
+                    grpRecipes.Show();
+                    cmbRecipe.Items.Clear();
+                    cmbRecipe.Items.AddRange(RecipeDescriptor.Names);
+                    if (cmbRecipe.Items.Count > 0)
+                    {
+                        cmbRecipe.SelectedIndex = 0;
+                    }
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -1552,6 +1581,28 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             }
         }
 
+        private void SetupFormValues(RecordIs condition)
+        {
+            cmbRecordType.SelectedIndex = (int)condition.RecordType;
+            nudRecordVal.Value = condition.Value;
+            
+            cmbRecordOf.Enabled = true;
+            try
+            {
+                var selectedIdx = condition.RecordType.GetRelatedTable().ListIndex(condition.RecordId);
+                cmbRecordOf.SelectedIndex = selectedIdx;
+            }
+            catch (ArgumentException)
+            {
+                cmbRecordOf.Enabled = false;
+            }
+        }
+
+        private void SetupFormValues(RecipeUnlocked condition)
+        {
+            cmbRecipe.SelectedIndex = RecipeDescriptor.ListIndex(condition.RecipeId);
+        }
+
         #endregion
 
         #region "SaveFormValues"
@@ -1813,6 +1864,28 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             condition.Repetitions = (int) nudRepetitionsMade.Value;
             condition.ElapsedSeconds = (int) nudSecondsElapsed.Value;
         }
+
+        private void SaveFormValues(RecordIs condition)
+        {
+            RecordType selected = (RecordType)cmbRecordType.SelectedIndex;
+
+            condition.RecordType = selected;
+            condition.Value = (int)nudRecordVal.Value;
+
+            try
+            {
+                condition.RecordId = selected.GetRelatedTable().IdFromList(cmbRecordOf.SelectedIndex);
+            }
+            catch (ArgumentException)
+            {
+                condition.RecordId = Guid.Empty;
+            }
+        }
+
+        private void SaveFormValues(RecipeUnlocked condition)
+        {
+            condition.RecipeId = RecipeDescriptor.IdFromList(cmbRecipe.SelectedIndex);
+        }
         #endregion
 
         private void chkNpc_CheckedChanged(object sender, EventArgs e)
@@ -1857,6 +1930,27 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private void rdoRepsMade_CheckedChanged(object sender, EventArgs e)
         {
             TimerActiveConditionChange();
+        }
+
+        private void cmbRecordType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                cmbRecordOf.Items.Clear();
+                cmbRecordOf.Enabled = true;
+
+                RecordType selected = (RecordType)cmbRecordType.SelectedIndex;
+                cmbRecordOf.Items.AddRange(selected.GetRelatedTable().Names());
+                if (cmbRecordOf.Items.Count > 0)
+                {
+                    cmbRecordOf.SelectedIndex = 0;
+                }
+            }
+            catch (ArgumentException)
+            {
+                cmbRecordOf.Items.Clear();
+                cmbRecordOf.Enabled = false;
+            }
         }
     }
 

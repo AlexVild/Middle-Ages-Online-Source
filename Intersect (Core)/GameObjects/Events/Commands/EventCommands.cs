@@ -1374,8 +1374,20 @@ namespace Intersect.GameObjects.Events.Commands
     public partial class ShowOptionsCommand : EventCommand
     {
         public ConditionLists Opt1Conditions = new ConditionLists();
+        
         public ConditionLists Opt2Conditions = new ConditionLists();
+
         public ConditionLists Opt3Conditions = new ConditionLists();
+
         public ConditionLists Opt4Conditions = new ConditionLists();
+    }
+
+    public partial class ChangeRecipeStatusCommand : EventCommand
+    {
+        public override EventCommandType Type { get; } = EventCommandType.ChangeRecipeStatus;
+
+        public Guid RecipeId { get; set; }
+
+        public bool IsUnlocked { get; set; }
     }
 }

@@ -3046,5 +3046,23 @@ namespace Intersect.Server.Entities.Events
 
             throw new NotImplementedException($"Invalid respawn change type for player {player.Name}");
         }
+
+        private static void ProcessCommand(
+            ChangeRecipeStatusCommand command,
+            Player player,
+            Event instance,
+            CommandInstance stackInfo,
+            Stack<CommandInstance> callStack
+        )
+        {
+            if (command.IsUnlocked)
+            {
+                player?.UnlockRecipe(command.RecipeId);
+            }
+            else
+            {
+                player?.RemoveRecipes(command.RecipeId);
+            }
+        }
     }
 }

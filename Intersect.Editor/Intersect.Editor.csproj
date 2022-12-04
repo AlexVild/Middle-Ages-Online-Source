@@ -111,6 +111,12 @@
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_ChangeMapSpawnGroup.Designer.cs">
       <DependentUpon>EventCommand_ChangeMapSpawnGroup.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_ChangeRecipeUnlock.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_ChangeRecipeUnlock.Designer.cs">
+      <DependentUpon>EventCommand_ChangeRecipeUnlock.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_ChangeSpawn.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -818,6 +824,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_ChangeMapSpawnGroup.resx">
       <DependentUpon>EventCommand_ChangeMapSpawnGroup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_ChangeRecipeUnlock.resx">
+      <DependentUpon>EventCommand_ChangeRecipeUnlock.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_ChangeSpawn.resx">
       <DependentUpon>EventCommand_ChangeSpawn.cs</DependentUpon>

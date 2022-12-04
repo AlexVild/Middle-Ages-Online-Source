@@ -1963,5 +1963,10 @@ namespace Intersect.Editor.Forms.Editors.Events
                 );
             }
         }
+
+        private static string GetCommandText(ChangeRecipeStatusCommand command, MapInstance map)
+        {
+            return Strings.EventCommandList.UnlockRecipe.ToString(RecipeDescriptor.GetName(command.RecipeId), command.IsUnlocked);
+        }
     }
 }

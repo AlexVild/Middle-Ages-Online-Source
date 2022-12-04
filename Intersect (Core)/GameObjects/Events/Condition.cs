@@ -69,6 +69,10 @@ namespace Intersect.GameObjects.Events
 
         TimerIsActive,
 
+        RecordIs,
+
+        RecipeUnlocked,
+
     }
 
     public class Condition
@@ -518,6 +522,13 @@ namespace Intersect.GameObjects.Events
         }
     }
 
+    public class RecipeUnlocked : Condition
+    {
+        public override ConditionTypes Type { get; } = ConditionTypes.RecipeUnlocked;
+
+        public Guid RecipeId { get; set; }
+    }
+
     public enum TimerActiveConditions
     {
         IsActive,
@@ -536,6 +547,17 @@ namespace Intersect.GameObjects.Events
         public int ElapsedSeconds { get; set; }
 
         public int Repetitions { get; set; }
+    }
+
+    public class RecordIs : Condition
+    {
+        public override ConditionTypes Type { get; } = ConditionTypes.RecordIs;
+
+        public RecordType RecordType { get; set; }
+
+        public Guid RecordId { get; set; }
+
+        public int Value { get; set; }
     }
 
     public class VariableCompaison

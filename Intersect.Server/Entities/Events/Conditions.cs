@@ -14,6 +14,7 @@ using Intersect.Server.Maps;
 using Intersect.Utilities;
 using Intersect.Server.Core;
 using Intersect.GameObjects.Timers;
+using Intersect.Server.Database.PlayerData.Players;
 
 namespace Intersect.Server.Entities.Events
 {
@@ -720,6 +721,27 @@ namespace Intersect.Server.Entities.Events
             {
                 return false;
             }
+        }
+
+        public static bool MeetsCondition(
+            RecordIs condition,
+            Player player,
+            Event eventInstance,
+            QuestBase questBase
+        )
+        {
+            PlayerRecord record = player?.PlayerRecords.Find(r => r.Type == condition.RecordType && r.RecordId == condition.RecordId);
+            return record?.Amount >= condition.Value;
+        }
+
+        public static bool MeetsCondition(
+            RecipeUnlocked condition,
+            Player player,
+            Event eventInstance,
+            QuestBase questBase
+        )
+        {
+            return player?.UnlockedRecipeIds.Contains(condition.RecipeId) ?? false;
         }
 
         //Variable Comparison Processing
