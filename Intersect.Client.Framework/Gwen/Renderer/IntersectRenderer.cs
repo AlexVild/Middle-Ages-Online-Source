@@ -200,8 +200,11 @@ namespace Intersect.Client.Framework.Gwen.Renderer
                 clip.Width = (int) Math.Round(clip.Width * Scale);
                 clip.Height = (int) Math.Round(clip.Height * Scale);
 
-                var widthRatio = u2 / rect.Width;
-                var heightRatio = v2 / rect.Height;
+                // Commenting this out for now as it was causing weird behaviors - work around is just not to have scaled textures in scroll containers.
+                /*var widthRatio = u2 / rect.Width;
+                var heightRatio = v2 / rect.Height;*/
+                var widthRatio = 1;
+                var heightRatio = 1;
 
                 float diff = 0;
                 float vdiff = 0;
