@@ -118,6 +118,7 @@
     <Compile Include="Entities\SpriteAnimations.cs" />
     <Compile Include="Entities\Status.cs" />
     <Compile Include="Entities\Timer.cs" />
+    <Compile Include="General\Bestiary\BestiaryController.cs" />
     <Compile Include="General\Leaderboards\Leaderboard.cs" />
     <Compile Include="General\Leaderboards\Record.cs" />
     <Compile Include="General\Time.cs" />

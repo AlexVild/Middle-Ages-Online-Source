@@ -22,6 +22,13 @@ namespace Intersect.Attributes
         public RecordType(GameObjects.Events.RecordType db) { Type = db; }
     }
 
+    public class DefaultKillCount : Attribute
+    {
+        public int Value { get; set; }
+
+        public DefaultKillCount(int val) { Value = val; }
+    }
+
     // TODO this is dumb and maybe texture type should just be available at the core level
     public enum TextureTypeCore
     {

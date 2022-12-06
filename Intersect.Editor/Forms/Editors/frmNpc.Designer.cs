@@ -60,10 +60,6 @@ namespace Intersect.Editor.Forms.Editors
             this.nudSightRange = new DarkUI.Controls.DarkNumericUpDown();
             this.lblSightRange = new System.Windows.Forms.Label();
             this.grpStats = new DarkUI.Controls.DarkGroupBox();
-            this.chkDamageMagic = new DarkUI.Controls.DarkCheckBox();
-            this.chkDamagePierce = new DarkUI.Controls.DarkCheckBox();
-            this.chkDamageSlash = new DarkUI.Controls.DarkCheckBox();
-            this.chkDamageBlunt = new DarkUI.Controls.DarkCheckBox();
             this.nudEvasion = new DarkUI.Controls.DarkNumericUpDown();
             this.nudAccuracy = new DarkUI.Controls.DarkNumericUpDown();
             this.label5 = new System.Windows.Forms.Label();
@@ -92,7 +88,19 @@ namespace Intersect.Editor.Forms.Editors
             this.lblMana = new System.Windows.Forms.Label();
             this.lblHP = new System.Windows.Forms.Label();
             this.lblExp = new System.Windows.Forms.Label();
+            this.chkDamageMagic = new DarkUI.Controls.DarkCheckBox();
+            this.chkDamagePierce = new DarkUI.Controls.DarkCheckBox();
+            this.chkDamageSlash = new DarkUI.Controls.DarkCheckBox();
+            this.chkDamageBlunt = new DarkUI.Controls.DarkCheckBox();
             this.pnlContainer = new System.Windows.Forms.Panel();
+            this.grpBestiary = new DarkUI.Controls.DarkGroupBox();
+            this.btnBestiaryDefaults = new DarkUI.Controls.DarkButton();
+            this.nudKillCount = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblDescription = new System.Windows.Forms.Label();
+            this.txtStartDesc = new DarkUI.Controls.DarkTextBox();
+            this.lblKillCount = new System.Windows.Forms.Label();
+            this.lstBestiaryUnlocks = new System.Windows.Forms.ListBox();
+            this.lblBestiary = new System.Windows.Forms.Label();
             this.grpAttackOverrides = new DarkUI.Controls.DarkGroupBox();
             this.cmbSpellAttackOverride = new DarkUI.Controls.DarkComboBox();
             this.lblAttackOverride = new System.Windows.Forms.Label();
@@ -116,6 +124,11 @@ namespace Intersect.Editor.Forms.Editors
             this.chkSilence = new DarkUI.Controls.DarkCheckBox();
             this.chkKnockback = new DarkUI.Controls.DarkCheckBox();
             this.grpCombat = new DarkUI.Controls.DarkGroupBox();
+            this.grpDamageTypes = new DarkUI.Controls.DarkGroupBox();
+            this.label14 = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
+            this.label17 = new System.Windows.Forms.Label();
             this.grpAttackSpeed = new DarkUI.Controls.DarkGroupBox();
             this.nudAttackSpeedValue = new DarkUI.Controls.DarkNumericUpDown();
             this.lblAttackSpeedValue = new System.Windows.Forms.Label();
@@ -212,11 +225,7 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemPaste = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
-            this.grpDamageTypes = new DarkUI.Controls.DarkGroupBox();
-            this.label14 = new System.Windows.Forms.Label();
-            this.label15 = new System.Windows.Forms.Label();
-            this.label16 = new System.Windows.Forms.Label();
-            this.label17 = new System.Windows.Forms.Label();
+            this.chkBestiary = new DarkUI.Controls.DarkCheckBox();
             this.grpNpcs.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudRgbaA)).BeginInit();
@@ -243,12 +252,15 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudMag)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudStr)).BeginInit();
             this.pnlContainer.SuspendLayout();
+            this.grpBestiary.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudKillCount)).BeginInit();
             this.grpAttackOverrides.SuspendLayout();
             this.grpDeathTransform.SuspendLayout();
             this.grpAnimation.SuspendLayout();
             this.grpImmunities.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudTenacity)).BeginInit();
             this.grpCombat.SuspendLayout();
+            this.grpDamageTypes.SuspendLayout();
             this.grpAttackSpeed.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudAttackSpeedValue)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudCritMultiplier)).BeginInit();
@@ -272,7 +284,6 @@ namespace Intersect.Editor.Forms.Editors
             this.grpNpcVsNpc.SuspendLayout();
             this.grpSpells.SuspendLayout();
             this.toolStrip.SuspendLayout();
-            this.grpDamageTypes.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpNpcs
@@ -709,42 +720,6 @@ namespace Intersect.Editor.Forms.Editors
             this.grpStats.TabStop = false;
             this.grpStats.Text = "Stats:";
             // 
-            // chkDamageMagic
-            // 
-            this.chkDamageMagic.AutoSize = true;
-            this.chkDamageMagic.Location = new System.Drawing.Point(159, 31);
-            this.chkDamageMagic.Name = "chkDamageMagic";
-            this.chkDamageMagic.Size = new System.Drawing.Size(15, 14);
-            this.chkDamageMagic.TabIndex = 93;
-            this.chkDamageMagic.CheckedChanged += new System.EventHandler(this.chkDamageMagic_CheckedChanged);
-            // 
-            // chkDamagePierce
-            // 
-            this.chkDamagePierce.AutoSize = true;
-            this.chkDamagePierce.Location = new System.Drawing.Point(115, 31);
-            this.chkDamagePierce.Name = "chkDamagePierce";
-            this.chkDamagePierce.Size = new System.Drawing.Size(15, 14);
-            this.chkDamagePierce.TabIndex = 92;
-            this.chkDamagePierce.CheckedChanged += new System.EventHandler(this.chkDamagePierce_CheckedChanged);
-            // 
-            // chkDamageSlash
-            // 
-            this.chkDamageSlash.AutoSize = true;
-            this.chkDamageSlash.Location = new System.Drawing.Point(61, 31);
-            this.chkDamageSlash.Name = "chkDamageSlash";
-            this.chkDamageSlash.Size = new System.Drawing.Size(15, 14);
-            this.chkDamageSlash.TabIndex = 91;
-            this.chkDamageSlash.CheckedChanged += new System.EventHandler(this.chkDamageSlash_CheckedChanged);
-            // 
-            // chkDamageBlunt
-            // 
-            this.chkDamageBlunt.AutoSize = true;
-            this.chkDamageBlunt.Location = new System.Drawing.Point(12, 31);
-            this.chkDamageBlunt.Name = "chkDamageBlunt";
-            this.chkDamageBlunt.Size = new System.Drawing.Size(15, 14);
-            this.chkDamageBlunt.TabIndex = 89;
-            this.chkDamageBlunt.CheckedChanged += new System.EventHandler(this.chkDamageBlunt_CheckedChanged);
-            // 
             // nudEvasion
             // 
             this.nudEvasion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
@@ -1163,9 +1138,46 @@ namespace Intersect.Editor.Forms.Editors
             this.lblExp.TabIndex = 11;
             this.lblExp.Text = "Exp:";
             // 
+            // chkDamageMagic
+            // 
+            this.chkDamageMagic.AutoSize = true;
+            this.chkDamageMagic.Location = new System.Drawing.Point(159, 31);
+            this.chkDamageMagic.Name = "chkDamageMagic";
+            this.chkDamageMagic.Size = new System.Drawing.Size(15, 14);
+            this.chkDamageMagic.TabIndex = 93;
+            this.chkDamageMagic.CheckedChanged += new System.EventHandler(this.chkDamageMagic_CheckedChanged);
+            // 
+            // chkDamagePierce
+            // 
+            this.chkDamagePierce.AutoSize = true;
+            this.chkDamagePierce.Location = new System.Drawing.Point(115, 31);
+            this.chkDamagePierce.Name = "chkDamagePierce";
+            this.chkDamagePierce.Size = new System.Drawing.Size(15, 14);
+            this.chkDamagePierce.TabIndex = 92;
+            this.chkDamagePierce.CheckedChanged += new System.EventHandler(this.chkDamagePierce_CheckedChanged);
+            // 
+            // chkDamageSlash
+            // 
+            this.chkDamageSlash.AutoSize = true;
+            this.chkDamageSlash.Location = new System.Drawing.Point(61, 31);
+            this.chkDamageSlash.Name = "chkDamageSlash";
+            this.chkDamageSlash.Size = new System.Drawing.Size(15, 14);
+            this.chkDamageSlash.TabIndex = 91;
+            this.chkDamageSlash.CheckedChanged += new System.EventHandler(this.chkDamageSlash_CheckedChanged);
+            // 
+            // chkDamageBlunt
+            // 
+            this.chkDamageBlunt.AutoSize = true;
+            this.chkDamageBlunt.Location = new System.Drawing.Point(12, 31);
+            this.chkDamageBlunt.Name = "chkDamageBlunt";
+            this.chkDamageBlunt.Size = new System.Drawing.Size(15, 14);
+            this.chkDamageBlunt.TabIndex = 89;
+            this.chkDamageBlunt.CheckedChanged += new System.EventHandler(this.chkDamageBlunt_CheckedChanged);
+            // 
             // pnlContainer
             // 
             this.pnlContainer.AutoScroll = true;
+            this.pnlContainer.Controls.Add(this.grpBestiary);
             this.pnlContainer.Controls.Add(this.grpAttackOverrides);
             this.pnlContainer.Controls.Add(this.grpDeathTransform);
             this.pnlContainer.Controls.Add(this.grpAnimation);
@@ -1183,6 +1195,111 @@ namespace Intersect.Editor.Forms.Editors
             this.pnlContainer.Name = "pnlContainer";
             this.pnlContainer.Size = new System.Drawing.Size(699, 529);
             this.pnlContainer.TabIndex = 17;
+            // 
+            // grpBestiary
+            // 
+            this.grpBestiary.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpBestiary.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpBestiary.Controls.Add(this.chkBestiary);
+            this.grpBestiary.Controls.Add(this.btnBestiaryDefaults);
+            this.grpBestiary.Controls.Add(this.nudKillCount);
+            this.grpBestiary.Controls.Add(this.lblDescription);
+            this.grpBestiary.Controls.Add(this.txtStartDesc);
+            this.grpBestiary.Controls.Add(this.lblKillCount);
+            this.grpBestiary.Controls.Add(this.lstBestiaryUnlocks);
+            this.grpBestiary.Controls.Add(this.lblBestiary);
+            this.grpBestiary.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpBestiary.Location = new System.Drawing.Point(447, 709);
+            this.grpBestiary.Margin = new System.Windows.Forms.Padding(2);
+            this.grpBestiary.Name = "grpBestiary";
+            this.grpBestiary.Padding = new System.Windows.Forms.Padding(2);
+            this.grpBestiary.Size = new System.Drawing.Size(226, 355);
+            this.grpBestiary.TabIndex = 89;
+            this.grpBestiary.TabStop = false;
+            this.grpBestiary.Text = "Bestiary";
+            // 
+            // btnBestiaryDefaults
+            // 
+            this.btnBestiaryDefaults.Location = new System.Drawing.Point(115, 186);
+            this.btnBestiaryDefaults.Name = "btnBestiaryDefaults";
+            this.btnBestiaryDefaults.Padding = new System.Windows.Forms.Padding(5);
+            this.btnBestiaryDefaults.Size = new System.Drawing.Size(102, 23);
+            this.btnBestiaryDefaults.TabIndex = 94;
+            this.btnBestiaryDefaults.Text = "Use Defaults";
+            this.btnBestiaryDefaults.Click += new System.EventHandler(this.btnBestiaryDefaults_Click);
+            // 
+            // nudKillCount
+            // 
+            this.nudKillCount.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudKillCount.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudKillCount.Location = new System.Drawing.Point(10, 160);
+            this.nudKillCount.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.nudKillCount.Name = "nudKillCount";
+            this.nudKillCount.Size = new System.Drawing.Size(207, 20);
+            this.nudKillCount.TabIndex = 93;
+            this.nudKillCount.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudKillCount.ValueChanged += new System.EventHandler(this.nudKillCount_ValueChanged);
+            // 
+            // lblDescription
+            // 
+            this.lblDescription.AutoSize = true;
+            this.lblDescription.Location = new System.Drawing.Point(7, 224);
+            this.lblDescription.Name = "lblDescription";
+            this.lblDescription.Size = new System.Drawing.Size(60, 13);
+            this.lblDescription.TabIndex = 92;
+            this.lblDescription.Text = "Description";
+            // 
+            // txtStartDesc
+            // 
+            this.txtStartDesc.AcceptsReturn = true;
+            this.txtStartDesc.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.txtStartDesc.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtStartDesc.ForeColor = System.Drawing.Color.Gainsboro;
+            this.txtStartDesc.Location = new System.Drawing.Point(10, 242);
+            this.txtStartDesc.Multiline = true;
+            this.txtStartDesc.Name = "txtStartDesc";
+            this.txtStartDesc.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtStartDesc.Size = new System.Drawing.Size(207, 92);
+            this.txtStartDesc.TabIndex = 91;
+            this.txtStartDesc.TextChanged += new System.EventHandler(this.txtStartDesc_TextChanged);
+            // 
+            // lblKillCount
+            // 
+            this.lblKillCount.AutoSize = true;
+            this.lblKillCount.Location = new System.Drawing.Point(10, 143);
+            this.lblKillCount.Name = "lblKillCount";
+            this.lblKillCount.Size = new System.Drawing.Size(163, 13);
+            this.lblKillCount.TabIndex = 89;
+            this.lblKillCount.Text = "Kill Count (0 for always unlocked)";
+            // 
+            // lstBestiaryUnlocks
+            // 
+            this.lstBestiaryUnlocks.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.lstBestiaryUnlocks.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lstBestiaryUnlocks.ForeColor = System.Drawing.Color.Gainsboro;
+            this.lstBestiaryUnlocks.FormattingEnabled = true;
+            this.lstBestiaryUnlocks.Location = new System.Drawing.Point(10, 30);
+            this.lstBestiaryUnlocks.Name = "lstBestiaryUnlocks";
+            this.lstBestiaryUnlocks.Size = new System.Drawing.Size(207, 106);
+            this.lstBestiaryUnlocks.TabIndex = 80;
+            this.lstBestiaryUnlocks.SelectedIndexChanged += new System.EventHandler(this.lstBestiaryUnlocks_SelectedIndexChanged);
+            // 
+            // lblBestiary
+            // 
+            this.lblBestiary.AutoSize = true;
+            this.lblBestiary.Location = new System.Drawing.Point(10, 15);
+            this.lblBestiary.Name = "lblBestiary";
+            this.lblBestiary.Size = new System.Drawing.Size(46, 13);
+            this.lblBestiary.TabIndex = 79;
+            this.lblBestiary.Text = "Unlocks";
             // 
             // grpAttackOverrides
             // 
@@ -1505,6 +1622,68 @@ namespace Intersect.Editor.Forms.Editors
             this.grpCombat.TabIndex = 17;
             this.grpCombat.TabStop = false;
             this.grpCombat.Text = "Combat";
+            // 
+            // grpDamageTypes
+            // 
+            this.grpDamageTypes.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpDamageTypes.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpDamageTypes.Controls.Add(this.chkDamageMagic);
+            this.grpDamageTypes.Controls.Add(this.label14);
+            this.grpDamageTypes.Controls.Add(this.chkDamagePierce);
+            this.grpDamageTypes.Controls.Add(this.label15);
+            this.grpDamageTypes.Controls.Add(this.chkDamageSlash);
+            this.grpDamageTypes.Controls.Add(this.label16);
+            this.grpDamageTypes.Controls.Add(this.label17);
+            this.grpDamageTypes.Controls.Add(this.chkDamageBlunt);
+            this.grpDamageTypes.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpDamageTypes.Location = new System.Drawing.Point(15, 309);
+            this.grpDamageTypes.Margin = new System.Windows.Forms.Padding(2);
+            this.grpDamageTypes.Name = "grpDamageTypes";
+            this.grpDamageTypes.Padding = new System.Windows.Forms.Padding(2);
+            this.grpDamageTypes.Size = new System.Drawing.Size(188, 56);
+            this.grpDamageTypes.TabIndex = 120;
+            this.grpDamageTypes.TabStop = false;
+            this.grpDamageTypes.Text = "Damage Types";
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(150, 15);
+            this.label14.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(36, 13);
+            this.label14.TabIndex = 113;
+            this.label14.Text = "Magic";
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(101, 15);
+            this.label15.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(45, 13);
+            this.label15.TabIndex = 112;
+            this.label15.Text = "Piercing";
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(46, 15);
+            this.label16.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(47, 13);
+            this.label16.TabIndex = 111;
+            this.label16.Text = "Slashing";
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(4, 15);
+            this.label17.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(31, 13);
+            this.label17.TabIndex = 44;
+            this.label17.Text = "Blunt";
             // 
             // grpAttackSpeed
             // 
@@ -2806,67 +2985,15 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
             // 
-            // grpDamageTypes
+            // chkBestiary
             // 
-            this.grpDamageTypes.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.grpDamageTypes.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpDamageTypes.Controls.Add(this.chkDamageMagic);
-            this.grpDamageTypes.Controls.Add(this.label14);
-            this.grpDamageTypes.Controls.Add(this.chkDamagePierce);
-            this.grpDamageTypes.Controls.Add(this.label15);
-            this.grpDamageTypes.Controls.Add(this.chkDamageSlash);
-            this.grpDamageTypes.Controls.Add(this.label16);
-            this.grpDamageTypes.Controls.Add(this.label17);
-            this.grpDamageTypes.Controls.Add(this.chkDamageBlunt);
-            this.grpDamageTypes.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpDamageTypes.Location = new System.Drawing.Point(15, 309);
-            this.grpDamageTypes.Margin = new System.Windows.Forms.Padding(2);
-            this.grpDamageTypes.Name = "grpDamageTypes";
-            this.grpDamageTypes.Padding = new System.Windows.Forms.Padding(2);
-            this.grpDamageTypes.Size = new System.Drawing.Size(188, 56);
-            this.grpDamageTypes.TabIndex = 120;
-            this.grpDamageTypes.TabStop = false;
-            this.grpDamageTypes.Text = "Damage Types";
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(150, 15);
-            this.label14.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(36, 13);
-            this.label14.TabIndex = 113;
-            this.label14.Text = "Magic";
-            // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(101, 15);
-            this.label15.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(45, 13);
-            this.label15.TabIndex = 112;
-            this.label15.Text = "Piercing";
-            // 
-            // label16
-            // 
-            this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(46, 15);
-            this.label16.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(47, 13);
-            this.label16.TabIndex = 111;
-            this.label16.Text = "Slashing";
-            // 
-            // label17
-            // 
-            this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(4, 15);
-            this.label17.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(31, 13);
-            this.label17.TabIndex = 44;
-            this.label17.Text = "Blunt";
+            this.chkBestiary.AutoSize = true;
+            this.chkBestiary.Location = new System.Drawing.Point(122, 10);
+            this.chkBestiary.Name = "chkBestiary";
+            this.chkBestiary.Size = new System.Drawing.Size(99, 17);
+            this.chkBestiary.TabIndex = 95;
+            this.chkBestiary.Text = "Not in bestiary?";
+            this.chkBestiary.CheckedChanged += new System.EventHandler(this.chkBestiary_CheckedChanged);
             // 
             // FrmNpc
             // 
@@ -2919,6 +3046,9 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudMag)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudStr)).EndInit();
             this.pnlContainer.ResumeLayout(false);
+            this.grpBestiary.ResumeLayout(false);
+            this.grpBestiary.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudKillCount)).EndInit();
             this.grpAttackOverrides.ResumeLayout(false);
             this.grpAttackOverrides.PerformLayout();
             this.grpDeathTransform.ResumeLayout(false);
@@ -2930,6 +3060,8 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudTenacity)).EndInit();
             this.grpCombat.ResumeLayout(false);
             this.grpCombat.PerformLayout();
+            this.grpDamageTypes.ResumeLayout(false);
+            this.grpDamageTypes.PerformLayout();
             this.grpAttackSpeed.ResumeLayout(false);
             this.grpAttackSpeed.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudAttackSpeedValue)).EndInit();
@@ -2963,8 +3095,6 @@ namespace Intersect.Editor.Forms.Editors
             this.grpSpells.PerformLayout();
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
-            this.grpDamageTypes.ResumeLayout(false);
-            this.grpDamageTypes.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -3155,5 +3285,14 @@ namespace Intersect.Editor.Forms.Editors
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Label label17;
+        private DarkGroupBox grpBestiary;
+        private System.Windows.Forms.Label lblKillCount;
+        private System.Windows.Forms.ListBox lstBestiaryUnlocks;
+        private System.Windows.Forms.Label lblBestiary;
+        private System.Windows.Forms.Label lblDescription;
+        private DarkTextBox txtStartDesc;
+        private DarkNumericUpDown nudKillCount;
+        private DarkButton btnBestiaryDefaults;
+        private DarkCheckBox chkBestiary;
     }
 }

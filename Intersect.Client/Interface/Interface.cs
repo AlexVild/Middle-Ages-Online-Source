@@ -10,6 +10,7 @@ using Intersect.Client.Framework.Gwen.Input;
 using Intersect.Client.Framework.Gwen.Skin;
 using Intersect.Client.General;
 using Intersect.Client.Interface.Game;
+using Intersect.Client.Interface.Game.Toasts;
 using Intersect.Client.Interface.Menu;
 using Intersect.Client.Interface.Shared.Errors;
 
@@ -181,6 +182,7 @@ namespace Intersect.Client.Interface
                      ((!Interface.GameUi?.EscapeMenu?.IsHidden ?? true) || !HideUi))
             {
                 GameUi.Draw();
+                ToastService.Draw();
             }
         }
 

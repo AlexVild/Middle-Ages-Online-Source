@@ -10,6 +10,7 @@ using Intersect.Client.Framework.Gwen;
 using Intersect.Client.Framework.Gwen.Control;
 using Intersect.Client.Framework.Gwen.Control.EventArguments;
 using Intersect.Client.General;
+using Intersect.Client.General.Bestiary;
 using Intersect.Client.Localization;
 using Intersect.Client.Networking;
 using Intersect.Enums;
@@ -109,6 +110,8 @@ namespace Intersect.Client.Interface.Game.EntityPanel
         public bool IsHidden;
 
         public Button GuildLabel;
+
+        private static Bestiary MyBestiary => BestiaryController.MyBestiary;
 
         //Init
         public EntityBox(Canvas gameCanvas, EntityTypes entityType, Entity myEntity, bool playerBox = false)
@@ -449,7 +452,15 @@ namespace Intersect.Client.Interface.Game.EntityPanel
             IsHidden = true;
             if (EntityType != EntityTypes.Event)
             {
-                EntityName.SetText(MyEntity.Name.ToUpper());
+                if (MyEntity.NpcId != default)
+                {
+                    var text = MyBestiary.HasUnlock(MyEntity.NpcId, GameObjects.Events.BestiaryUnlock.NameAndDescription) ? MyEntity.Name : "???";
+                    EntityName.SetText(text.ToUpper());
+                }
+                else
+                {
+                    EntityName.SetText(MyEntity.Name.ToUpper());
+                }
                 UpdateLevel();
                 UpdateMap();
                 UpdateHpBar(elapsedTime);
@@ -658,9 +669,12 @@ namespace Intersect.Client.Interface.Game.EntityPanel
             
             HpBar.SetTextureRect(0, 0, (int)targetHpWidth, HpBar.Height);
             HpBar.Width = (int)targetHpWidth;
-            HpBar.IsHidden = targetHpWidth == 0;
+            HpBar.IsHidden = targetHpWidth == 0 || !BestiaryController.MyBestiary.HasUnlock(MyEntity.NpcId, GameObjects.Events.BestiaryUnlock.HP);
+            HpBackground.IsHidden = !BestiaryController.MyBestiary.HasUnlock(MyEntity.NpcId, GameObjects.Events.BestiaryUnlock.HP);
+            HpLbl.IsHidden = !BestiaryController.MyBestiary.HasUnlock(MyEntity.NpcId, GameObjects.Events.BestiaryUnlock.HP);
+            HpTitle.IsHidden = !BestiaryController.MyBestiary.HasUnlock(MyEntity.NpcId, GameObjects.Events.BestiaryUnlock.HP);
 
-            ShieldBar.IsHidden = (int)targetShieldWidth == 0;
+            ShieldBar.IsHidden = (int)targetShieldWidth == 0 || HpBackground.IsHidden;
             ShieldBar.Width = (int)targetShieldWidth;
             ShieldBar.SetBounds(targetHpWidth + HpBar.X, HpBar.Y, targetShieldWidth, ShieldBar.Height);
             ShieldBar.SetTextureRect(
@@ -670,7 +684,7 @@ namespace Intersect.Client.Interface.Game.EntityPanel
 
         private void UpdateMpBar(float elapsedTime, bool instant = false)
         {
-            if (MyEntity.MaxVital[(int)Vitals.Mana] <= 0)
+            if (MyEntity.MaxVital[(int)Vitals.Mana] <= 0 || !BestiaryController.MyBestiary.HasUnlock(MyEntity.NpcId, GameObjects.Events.BestiaryUnlock.MP))
             {
                 MpBar.Hide();
                 MpBackground.Hide();

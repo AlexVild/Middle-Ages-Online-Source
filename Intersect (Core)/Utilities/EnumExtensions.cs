@@ -96,5 +96,26 @@ namespace Intersect.Utilities
             }
             throw new ArgumentException($"{nameof(value)} did not have a valid RelatedTable attribute to pull from");
         }
+
+        public static int GetDefaultKillCount(this Enum value)
+        {
+            Type type = value.GetType();
+            string name = Enum.GetName(type, value);
+            if (name != null)
+            {
+                FieldInfo field = type.GetField(name);
+                if (field != null)
+                {
+                    DefaultKillCount attr =
+                           Attribute.GetCustomAttribute(field,
+                             typeof(DefaultKillCount)) as DefaultKillCount;
+                    if (attr != null)
+                    {
+                        return attr.Value;
+                    }
+                }
+            }
+            return 0;
+        }
     }
 }

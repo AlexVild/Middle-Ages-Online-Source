@@ -199,6 +199,14 @@ namespace Intersect.Server.Entities
                 if (killer is Player playerKiller)
                 {
                     long recordKilled = playerKiller.IncrementRecord(RecordType.NpcKilled, Base.Id);
+
+                    // If we've just unlocked some bestiary item, send a KC update, which will force a bestiary update on the client
+                    var bestiaryThresholds = Base.BestiaryUnlocks.Values.Where(val => val > 0).ToList();
+                    if (bestiaryThresholds.Contains((int)recordKilled))
+                    {
+                        PacketSender.SendKillCount(playerKiller, Base.Id);
+                    }
+
                     if (Options.SendNpcRecordUpdates && recordKilled % Options.NpcRecordUpdateInterval == 0)
                     {
                         playerKiller.SendRecordUpdate(Strings.Records.enemykilled.ToString(recordKilled, Name));
@@ -1618,6 +1626,7 @@ namespace Intersect.Server.Entities
 
             var pkt = (NpcEntityPacket) packet;
             pkt.Aggression = GetAggression(forPlayer);
+            pkt.NpcId = Base.Id;
 
             return pkt;
         }

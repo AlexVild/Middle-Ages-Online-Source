@@ -330,4 +330,28 @@ namespace Intersect.GameObjects.Events
         HealMana,
         Neutral,
     }
+
+    public enum BestiaryUnlock
+    {
+        [Description("HP"), DefaultKillCount(5)]
+        HP = 0,
+
+        [Description("Name & Description"), DefaultKillCount(1)]
+        NameAndDescription,
+
+        [Description("MP"), DefaultKillCount(10)]
+        MP,
+
+        [Description("Stats"), DefaultKillCount(25)]
+        Stats,
+
+        [Description("Spells"), DefaultKillCount(30)]
+        Spells,
+
+        [Description("Loot"), DefaultKillCount(100)]
+        Loot,
+
+        [Description("Spell Combat Info"), DefaultKillCount(60)]
+        SpellCombatInfo,
+    }
 }

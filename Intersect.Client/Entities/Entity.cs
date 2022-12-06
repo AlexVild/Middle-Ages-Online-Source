@@ -11,6 +11,7 @@ using Intersect.Client.Framework.File_Management;
 using Intersect.Client.Framework.GenericClasses;
 using Intersect.Client.Framework.Graphics;
 using Intersect.Client.General;
+using Intersect.Client.General.Bestiary;
 using Intersect.Client.Items;
 using Intersect.Client.Localization;
 using Intersect.Client.Maps;
@@ -1642,6 +1643,11 @@ namespace Intersect.Client.Entities
                 name = Strings.GameWindow.EntityNameAndLevel.ToString(Name, Level);
             }
 
+            if (NpcId != default && !BestiaryController.MyBestiary.HasUnlock(NpcId, BestiaryUnlock.NameAndDescription))
+            {
+                name = "???";
+            }
+
             var textSize = Graphics.Renderer.MeasureText(name, Graphics.EntityNameFont, 1);
 
             var x = (int) Math.Ceiling(GetCenterPos().X);
@@ -1759,6 +1765,11 @@ namespace Intersect.Client.Entities
             }
 
             if (this is Resource && Options.HideResourceHealthBars)
+            {
+                return;
+            }
+
+            if (!BestiaryController.MyBestiary.HasUnlock(NpcId, BestiaryUnlock.HP))
             {
                 return;
             }
@@ -1883,6 +1894,9 @@ namespace Intersect.Client.Entities
                 return;
             }
 
+            var drawBars = BestiaryController.MyBestiary.HasUnlock(NpcId, BestiaryUnlock.SpellCombatInfo);
+            var drawSpell = BestiaryController.MyBestiary.HasUnlock(NpcId, BestiaryUnlock.Spells);
+
             var map = MapInstance.Get(CurrentMap);
             var castSpell = SpellBase.Get(SpellCast);
             if (castSpell != null)
@@ -1907,7 +1921,7 @@ namespace Intersect.Client.Entities
 
                 var centerX = x - width / 2;
                 y -= 1;
-                if (castBackground != null)
+                if (castBackground != null && drawBars)
                 {
                     Graphics.DrawGameTexture(
                         castBackground, new FloatRect(0, 0, castBackground.GetWidth(), castBackground.GetHeight()),
@@ -1915,7 +1929,7 @@ namespace Intersect.Client.Entities
                     );
                 }
 
-                if (castForeground != null)
+                if (castForeground != null && drawBars)
                 {
                     Graphics.DrawGameTexture(
                         castForeground,
@@ -1924,7 +1938,7 @@ namespace Intersect.Client.Entities
                     );
                 }
 
-                if (!string.IsNullOrEmpty(castSpell.Icon) && castSpell.Icon != Strings.General.none)
+                if (!string.IsNullOrEmpty(castSpell.Icon) && castSpell.Icon != Strings.General.none && drawSpell)
                 {
                     DrawSpellIcon(x, y, castSpell.Icon);
                 }
@@ -2647,6 +2661,11 @@ namespace Intersect.Client.Entities
 
         private bool ShouldRenderMarkers(bool friendly)
         {
+            if (!BestiaryController.MyBestiary.HasUnlock(NpcId, BestiaryUnlock.SpellCombatInfo))
+            {
+                return false;
+            }
+
             if (!friendly && !Globals.Database.HostileTileMarkers)
             {
                 return false;
@@ -3205,5 +3224,7 @@ namespace Intersect.Client.Entities
 
             return CastTime - SpellBase.Get(SpellCast).CastDuration;
         }
+
+        public Guid NpcId;
     }
 }

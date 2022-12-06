@@ -2689,6 +2689,20 @@ namespace Intersect.Server.Networking
         {
             player?.SendPacket(new ToastPacket(message));
         }
+
+        public static void SendKillCounts(Player player)
+        {
+            var killCounts = player?.GetNpcKillCounts();
+
+            player?.SendPacket(new KillCountsPacket(killCounts));
+        }
+        
+        public static void SendKillCount(Player player, Guid npcId)
+        {
+            var killCount = player?.GetNpcKillCount(npcId) ?? 0;
+
+            player?.SendPacket(new KillCountPacket(npcId, killCount));
+        }
     }
 
 }

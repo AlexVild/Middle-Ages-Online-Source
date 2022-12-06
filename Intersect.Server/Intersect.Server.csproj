@@ -513,6 +513,7 @@
     <Compile Include="Entities\Events\VariableCheckHandlerRegistry.cs" />
     <Compile Include="Entities\Label.cs" />
     <Compile Include="Entities\Npc.Combat.cs" />
+    <Compile Include="Entities\Player.Bestiary.cs" />
     <Compile Include="Entities\Player.Combat.cs" />
     <Compile Include="Entities\Player.Cosmetics.cs" />
     <Compile Include="Entities\Player.Database.cs" />
@@ -972,6 +973,14 @@
     <Compile Include="Migrations\Game\20221204170126_CraftRecipeMigration.cs" />
     <Compile Include="Migrations\Game\20221204170126_CraftRecipeMigration.designer.cs">
       <DependentUpon>20221204170126_CraftRecipeMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20221206142831_AddBestiaryInfoMigration.cs" />
+    <Compile Include="Migrations\Game\20221206142831_AddBestiaryInfoMigration.designer.cs">
+      <DependentUpon>20221206142831_AddBestiaryInfoMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20221206155602_AddBestiaryDenialMigration.cs" />
+    <Compile Include="Migrations\Game\20221206155602_AddBestiaryDenialMigration.designer.cs">
+      <DependentUpon>20221206155602_AddBestiaryDenialMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">

@@ -797,7 +797,6 @@ namespace Intersect.Client.Interface.Game
         private void _Draw()
         {
             mComboText?.Update();
-            ToastService.Draw();
             mHUD.Draw();
             mPartyHUD.Draw();
 

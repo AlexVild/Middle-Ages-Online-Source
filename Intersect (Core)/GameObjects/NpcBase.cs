@@ -389,6 +389,28 @@ namespace Intersect.GameObjects
             get => JsonConvert.SerializeObject(AttackTypes);
             set => AttackTypes = JsonConvert.DeserializeObject<List<AttackTypes>>(value ?? "") ?? new List<AttackTypes>();
         }
+
+        [NotMapped]
+        public Dictionary<int, int> BestiaryUnlocks { get; set; } = new Dictionary<int, int>();
+
+        [Column("BestiaryUnlocks")]
+        [JsonIgnore]
+        public string BestiaryUnlocksJson
+        {
+            get => JsonConvert.SerializeObject(BestiaryUnlocks);
+            set
+            {
+                BestiaryUnlocks = JsonConvert.DeserializeObject<Dictionary<int, int>>(value ?? string.Empty);
+                if (BestiaryUnlocks == null)
+                {
+                    BestiaryUnlocks = new Dictionary<int, int>();
+                }
+            }
+        }
+
+        public string Description { get; set; }
+
+        public bool NotInBestiary { get; set; }
     }
 
 }

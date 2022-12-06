@@ -404,6 +404,8 @@
     <Compile Include="Network\Packets\Client\PartyInviteNamePacket.cs" />
     <Compile Include="Network\Packets\Client\RequestCosmeticsPacket.cs" />
     <Compile Include="Network\Packets\Client\RequestInstanceLeavePacket.cs" />
+    <Compile Include="Network\Packets\Client\RequestKillCountPacket.cs" />
+    <Compile Include="Network\Packets\Client\RequestKillCountsPacket.cs" />
     <Compile Include="Network\Packets\Client\RequestLabelsPacket.cs" />
     <Compile Include="Network\Packets\Client\RequestLeaderboardPacket.cs" />
     <Compile Include="Network\Packets\Client\RequestLootUpdatePacket.cs" />
@@ -449,6 +451,8 @@
     <Compile Include="Network\Packets\Server\CombatEffectPacket.cs" />
     <Compile Include="Network\Packets\Server\ComboPacket.cs" />
     <Compile Include="Network\Packets\Server\CraftingInfoPacket.cs" />
+    <Compile Include="Network\Packets\Server\KillCountPacket.cs" />
+    <Compile Include="Network\Packets\Server\KillCountsPacket.cs" />
     <Compile Include="Network\Packets\Server\PlayerDeathTypePacket.cs" />
     <Compile Include="Network\Packets\Server\EntityMovementPackets.cs" />
     <Compile Include="Network\Packets\Server\FadePacket.cs" />

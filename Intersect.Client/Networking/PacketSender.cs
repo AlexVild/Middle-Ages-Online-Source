@@ -615,5 +615,15 @@ namespace Intersect.Client.Networking
         {
             Network.SendPacket(new RequestRecipeRequirementsPacket(recipeId));
         }
+
+        public static void SendRequestKillCounts()
+        {
+            Network.SendPacket(new RequestKillCountsPacket());
+        }
+
+        public static void SendRequestKillCountFor(Guid npcId)
+        {
+            Network.SendPacket(new RequestKillCountPacket(npcId));
+        }
     }
 }

@@ -406,6 +406,15 @@ namespace Intersect.Editor.Forms.Editors
                 cmbDeathAnimation.SelectedIndex = AnimationBase.ListIndex(mEditorItem.DeathAnimationId) + 1;
                 cmbTransformIntoNpc.SelectedIndex = NpcBase.ListIndex(mEditorItem.DeathTransformId) + 1;
                 cmbSpellAttackOverride.SelectedIndex = SpellBase.ListIndex(mEditorItem.SpellAttackOverrideId) + 1;
+
+                // Bestiary
+                if (mEditorItem.BestiaryUnlocks?.Count == 0)
+                {
+                    PopulateBestiaryDefaults();
+                }
+                RefreshBestiaryList(true);
+                txtStartDesc.Text = mEditorItem.Description;
+                chkBestiary.Checked = mEditorItem.NotInBestiary;
             }
             else
             {
@@ -1105,6 +1114,8 @@ namespace Intersect.Editor.Forms.Editors
             cmbFolder.Items.Add("");
             cmbFolder.Items.AddRange(mKnownFolders.ToArray());
 
+            PopulateBestiaryList();
+
             var items = NpcBase.Lookup.OrderBy(p => p.Value?.Name).Select(pair => new KeyValuePair<Guid, KeyValuePair<string, string>>(pair.Key,
                 new KeyValuePair<string, string>(((NpcBase)pair.Value)?.Name ?? Models.DatabaseObject<NpcBase>.Deleted, ((NpcBase)pair.Value)?.Folder ?? ""))).ToArray();
             lstGameObjects.Repopulate(items, mFolders, btnAlphabetical.Checked, CustomSearch(), txtSearch.Text);
@@ -1477,6 +1488,83 @@ namespace Intersect.Editor.Forms.Editors
             {
                 RemoveDamageType(AttackTypes.Magic);
             }
+        }
+        
+        private void PopulateBestiaryList()
+        {
+            lstBestiaryUnlocks.Items.Clear();
+            lstBestiaryUnlocks.Items.AddRange(EnumExtensions.GetDescriptions(typeof(BestiaryUnlock)));
+            lstBestiaryUnlocks.SelectedIndex = -1;
+        }
+
+        private void RefreshBestiaryList(bool resetIndex)
+        {
+            if (resetIndex)
+            {
+                lstBestiaryUnlocks.SelectedIndex = -1;
+            }
+
+            for (int idx = 0; idx < lstBestiaryUnlocks.Items.Count; idx++)
+            {
+                BestiaryUnlock unlock = (BestiaryUnlock)idx;
+                int killCount = 0;
+                if (!mEditorItem?.BestiaryUnlocks?.TryGetValue(idx, out killCount) ?? true)
+                {
+                    lstBestiaryUnlocks.Items[idx] = $"{unlock.GetDescription()}: Unlocked";
+                }
+
+                var killCountStr = killCount > 0 ? $"{killCount} kills" : "Unlocked";
+
+                lstBestiaryUnlocks.Items[idx] = $"{unlock.GetDescription()}: {killCountStr}";
+            }
+        }
+
+        private void PopulateBestiaryDefaults()
+        {
+            foreach(BestiaryUnlock val in Enum.GetValues(typeof(BestiaryUnlock)))
+            {
+                mEditorItem.BestiaryUnlocks[(int)val] = val.GetDefaultKillCount();
+            }
+            RefreshBestiaryList(true);
+        }
+
+        private void nudKillCount_ValueChanged(object sender, EventArgs e)
+        {
+            if (lstBestiaryUnlocks.SelectedIndex < 0 && lstBestiaryUnlocks.SelectedIndex >= lstBestiaryUnlocks.Items.Count)
+            {
+                return;
+            }
+
+            mEditorItem.BestiaryUnlocks[lstBestiaryUnlocks.SelectedIndex] = (int)nudKillCount.Value;
+            RefreshBestiaryList(false);
+        }
+
+        private void txtStartDesc_TextChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Description = txtStartDesc.Text;
+        }
+
+        private void lstBestiaryUnlocks_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lstBestiaryUnlocks.SelectedIndex > -1)
+            {
+                if (mEditorItem.BestiaryUnlocks.TryGetValue(lstBestiaryUnlocks.SelectedIndex, out var killCount))
+                {
+                    nudKillCount.Value = killCount;
+                    return;
+                }
+                nudKillCount.Value = 0;
+            }
+        }
+
+        private void btnBestiaryDefaults_Click(object sender, EventArgs e)
+        {
+            PopulateBestiaryDefaults();
+        }
+
+        private void chkBestiary_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.NotInBestiary = chkBestiary.Checked;
         }
     }
 

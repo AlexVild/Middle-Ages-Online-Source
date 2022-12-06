@@ -3977,6 +3977,14 @@ namespace Intersect.Server.Networking
                     PacketSender.CacheGameDataPacket();
 
                     PacketSender.SendGameObjectToAll(obj, false);
+
+                    if (type == GameObjectType.Npc)
+                    {
+                        foreach (var player in Globals.OnlineList)
+                        {
+                            PacketSender.SendKillCount(player, obj.Id);
+                        }
+                    }
                 }
             }
         }
@@ -4439,6 +4447,16 @@ namespace Intersect.Server.Networking
 
             player.SendPacket(new Network.Packets.Server.UnlockedRecipesPacket(player.UnlockedRecipeIds.ToList()));
 
+        }
+
+        public void HandlePacket(Client client, RequestKillCountsPacket packet)
+        {
+            PacketSender.SendKillCounts(client?.Entity);
+        }
+
+        public void HandlePacket(Client client, RequestKillCountPacket packet)
+        {
+            PacketSender.SendKillCount(client?.Entity, packet.NpcId);
         }
     }
 }

@@ -32,6 +32,7 @@ using Intersect.Client.Entities.CombatNumbers;
 using Intersect.Client.Interface.Objects;
 using Intersect.Client.Interface.Game.Character.Panels;
 using Intersect.Client.Interface.Game.Toasts;
+using Intersect.Client.General.Bestiary;
 
 namespace Intersect.Client.Networking
 {
@@ -291,11 +292,13 @@ namespace Intersect.Client.Networking
             {
                 en.Load(packet);
                 en.Type = packet.Aggression;
+                en.NpcId = packet.NpcId;
             }
             else
             {
                 Globals.Entities.Add(packet.EntityId, new Entity(packet.EntityId, packet));
                 Globals.Entities[packet.EntityId].Type = packet.Aggression;
+                Globals.Entities[packet.EntityId].NpcId = packet.NpcId;
             }
         }
 
@@ -573,6 +576,9 @@ namespace Intersect.Client.Networking
             {
                 HandlePacket(pkt);
             }
+
+            // After we've loaded NPC data, request their kill counts to popualte the bestiary
+            PacketSender.SendRequestKillCounts();
 
             CustomColors.Load(packet.ColorsJson);
             Globals.HasGameData = true;
@@ -2791,6 +2797,23 @@ namespace Intersect.Client.Networking
             Globals.Me?.UnlockedRecipes?.AddRange(packet.UnlockedRecipes);
 
             Interface.Interface.GameUi.UpdateCraftingTable();
+        }
+
+        public void HandlePacket(IPacketSender packetSender, KillCountsPacket packet)
+        {
+            BestiaryController.KnownKillCounts.Clear();
+            foreach(var beast in packet.KillCounts)
+            {
+                BestiaryController.KnownKillCounts[beast.Key] = beast.Value;
+            }
+
+            BestiaryController.RefreshUnlocks(true);
+        }
+
+        public void HandlePacket(IPacketSender packetSender, KillCountPacket packet)
+        {
+            BestiaryController.KnownKillCounts[packet.NpcId] = packet.KillCount;
+            BestiaryController.MyBestiary.UpdateUnlocksFor(packet.NpcId, packet.KillCount, false);
         }
     }
 }
