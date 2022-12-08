@@ -4,6 +4,7 @@ using Intersect.Client.Framework.File_Management;
 using Intersect.Client.Framework.Gwen.Control;
 using Intersect.Client.Framework.Gwen.Control.EventArguments;
 using Intersect.Client.General;
+using Intersect.Client.Interface.Game.BestiaryUi;
 using Intersect.Client.Interface.Game.Character;
 using Intersect.Client.Interface.Game.Chat;
 using Intersect.Client.Interface.Game.Inventory;
@@ -136,7 +137,7 @@ namespace Intersect.Client.Interface.Game
             mMenuButton.SetToolTipText(Strings.GameMenu.Menu);
             mMenuButton.Clicked += MenuButtonClicked;
 
-            _Menu();
+            _Menu(gameCanvas);
 
             mMenuContainer.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
 
@@ -161,10 +162,10 @@ namespace Intersect.Client.Interface.Game
             {
                 mMenuContainer.Show();
             }
-
+            
+            var time = Timing.Global.Milliseconds;
             if (Globals.Me.StatPoints > 0 && !mCharacterWindow.IsVisible())
             {
-                var time = Timing.Global.Milliseconds;
                 if (!mNotificationFlash)
                 {
                     mNotificationFlash = true;
@@ -205,6 +206,7 @@ namespace Intersect.Client.Interface.Game
             mFriendsWindow.Update();
             mQuestsWindow.Update(updateQuestLog);
             mGuildWindow.Update();
+            mBestiaryWindow.Update(time);
         }
 
         public void UpdateFriendsList()
@@ -230,6 +232,7 @@ namespace Intersect.Client.Interface.Game
             mQuestsWindow.Hide();
             mSpellsWindow.Hide();
             mGuildWindow.Hide();
+            mBestiaryWindow.Hide();
         }
 
         public void ToggleCharacterWindow()
@@ -472,22 +475,40 @@ namespace Intersect.Client.Interface.Game
     {
         private ImagePanel mMapBackground;
         private Button mMapButton;
-        private void _Menu()
+
+        private ImagePanel mBestiaryBackground;
+        private Button mBestiaryButton;
+
+        private BestiaryWindow mBestiaryWindow;
+
+        private void _Menu(Canvas gameCanvas)
         {
             mMapBackground = new ImagePanel(mMenuContainer, "MapContainer");
             mMapButton = new Button(mMapBackground, "MapButton");
             mMapButton.SetToolTipText(Strings.GameMenu.Map);
             mMapButton.Clicked += MapButton_Clicked;
+
+            mBestiaryBackground = new ImagePanel(mMenuContainer, "BestiaryContainer");
+            mBestiaryButton = new Button(mBestiaryBackground, "BestiaryButton");
+            mBestiaryButton.SetToolTipText(Strings.GameMenu.Bestiary);
+            mBestiaryButton.Clicked += MBestiaryButton_Clicked;
+
+            mBestiaryWindow = new BestiaryWindow(gameCanvas);
         }
 
         private void _CloseAllWindows()
         {
             Interface.GameUi.Map.Close();
+            mBestiaryWindow.Hide();
         }
 
         public bool _HasWindowsOpen()
         {
             if (Interface.GameUi.Map.IsOpen)
+            {
+                return true;
+            }
+            if (mBestiaryWindow.IsOpen)
             {
                 return true;
             }
@@ -500,9 +521,32 @@ namespace Intersect.Client.Interface.Game
             Interface.GameUi.Map.ToggleOpen();
         }
 
+        private void MBestiaryButton_Clicked(Base sender, ClickedEventArgs arguments)
+        {
+            ToggleBestiaryWindow();
+        }
+
         public bool CharacterWindowOpen()
         {
             return mCharacterWindow.IsVisible();
+        }
+
+        public void ToggleBestiaryWindow()
+        {
+            if (mBestiaryWindow.IsOpen)
+            {
+                mBestiaryWindow.Hide();
+            }
+            else
+            {
+                HideWindows();
+                mBestiaryWindow.Show();
+            }
+        }
+
+        public void CloseBesitary()
+        {
+            mBestiaryWindow.Hide();
         }
     }
 }

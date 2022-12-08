@@ -64,5 +64,15 @@ namespace Intersect.Client.Interface.Game.Components
         {
             ParentContainer.Dispose();
         }
+
+        public virtual void SetPosition(float x, float y)
+        {
+            ParentContainer.SetPosition(x, y);
+        }
+
+        public virtual void ProcessAlignments()
+        {
+            ParentContainer.ProcessAlignments();
+        }
     }
 }

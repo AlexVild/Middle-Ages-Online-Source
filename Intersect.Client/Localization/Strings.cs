@@ -2280,6 +2280,9 @@ namespace Intersect.Client.Localization
         public partial struct GameMenu
         {
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Bestiary = @"Bestiary";
+            
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString Map = @"Overworld Map";
         }
 
@@ -2427,6 +2430,15 @@ namespace Intersect.Client.Localization
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString RespawnButton = @"Respawn";
+        }
+
+        public partial struct Bestiary
+        {
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Unknown = @"???";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString BeastLocked = @"You haven't slain this beast yet, or haven't yet found any information about them.";
         }
     }
 }

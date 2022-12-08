@@ -206,8 +206,7 @@ namespace Intersect.Server.Entities
                     {
                         PacketSender.SendKillCount(playerKiller, Base.Id);
                     }
-
-                    if (Options.SendNpcRecordUpdates && recordKilled % Options.NpcRecordUpdateInterval == 0)
+                    else if (Options.SendNpcRecordUpdates && recordKilled % Options.NpcRecordUpdateInterval == 0)
                     {
                         playerKiller.SendRecordUpdate(Strings.Records.enemykilled.ToString(recordKilled, Name));
                     }

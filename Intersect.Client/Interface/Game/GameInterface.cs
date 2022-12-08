@@ -25,6 +25,7 @@ using Intersect.Client.Interface.Game.LootRoll;
 using Intersect.Client.Interface.Game.Character;
 using Intersect.Client.Interface.Game.Toasts;
 using Intersect.Utilities;
+using Intersect.Client.Interface.Game.BestiaryUi;
 
 namespace Intersect.Client.Interface.Game
 {
@@ -768,7 +769,6 @@ namespace Intersect.Client.Interface.Game
         }
 
     }
-
 
     public partial class GameInterface : MutableInterface
     {

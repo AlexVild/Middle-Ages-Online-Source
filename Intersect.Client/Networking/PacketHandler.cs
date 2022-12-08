@@ -1764,6 +1764,13 @@ namespace Intersect.Client.Networking
 
                     break;
             }
+
+            // If we've recieved NPCs, we need to update the bestiary cache to reflect that
+            if (type == GameObjectType.Npc)
+            {
+                Interface.Interface.GameUi?.GameMenu?.CloseBesitary();
+                BestiaryController.RefreshBeastCache();
+            }
         }
 
         //EntityDashPacket

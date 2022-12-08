@@ -75,7 +75,7 @@ namespace Intersect.Client.Framework.Gwen.Control
         /// <param name="font">Font to use.</param>
         public void AddText(string text, Color color, Alignments alignment = Alignments.Left, GameFont font = null)
         {
-            if (String.IsNullOrEmpty(text))
+            if (string.IsNullOrEmpty(text))
             {
                 return;
             }
@@ -349,6 +349,18 @@ namespace Intersect.Client.Framework.Gwen.Control
                     ? template.CurAlignments[0]
                     : Alignments.Left, template.Font
             );
+        }
+
+        public void SetText(string text, Label template, int width)
+        {
+            ClearText();
+            AddText(text, template.TextColor, template.CurAlignments.Count > 0 ?
+                    template.CurAlignments[0] : Alignments.Left, template.Font);
+            SizeToChildren(false, true);
+            Width = width;
+            
+            SetPosition(template.X, template.Y);
+            ProcessAlignments();
         }
     }
 }

@@ -10,6 +10,36 @@ using System.Threading.Tasks;
 
 namespace Intersect.Client.General.Bestiary
 {
+    sealed public class BestiaryPage
+    {
+        public string Name { get; set; }
+
+        public string Image { get; set; }
+
+        public string Description { get; set; }
+        
+        public int[] Stats { get; set; }
+
+        public int[] Vitals { get; set; }
+
+        public Guid[] Spells { get; set; }
+
+        public BestiaryPage(Guid npcId)
+        {
+            if (!BestiaryController.CachedBeasts.TryGetValue(npcId, out var npc))
+            {
+                return;
+            }
+
+            Name = npc.Name;
+            Image = npc.Sprite;
+            Description = npc.Description;
+            Stats = npc.Stats;
+            Vitals = npc.MaxVital;
+            Spells = npc.Spells.ToArray();
+        }
+    }
+
     sealed public class Bestiary
     {
         /// <summary>
@@ -40,8 +70,7 @@ namespace Intersect.Client.General.Bestiary
         public void UpdateUnlocksFor(Guid npcGuid, long playersKillCount, bool suppressMessaging = true)
         {
             // Get bestiary information from the slain NPC
-            var beast = NpcBase.Get(npcGuid);
-            if (beast == default)
+            if (!BestiaryController.CachedBeasts.TryGetValue(npcGuid, out var beast)) 
             {
                 return;
             }
@@ -110,6 +139,8 @@ namespace Intersect.Client.General.Bestiary
 
     public static class BestiaryController
     {
+        public static Dictionary<Guid, NpcBase> CachedBeasts = new Dictionary<Guid, NpcBase>();
+
         public static Bestiary MyBestiary = new Bestiary();
 
         public static Dictionary<Guid, long> KnownKillCounts = new Dictionary<Guid, long>();
@@ -119,6 +150,21 @@ namespace Intersect.Client.General.Bestiary
             foreach(var killCount in KnownKillCounts)
             {
                 MyBestiary.UpdateUnlocksFor(killCount.Key, killCount.Value, suppressMessaging);
+            }
+        }
+
+        public static void RefreshBeastCache()
+        {
+            var validBeasts = NpcBase.Lookup
+                .Select(kv => kv.Value as NpcBase)
+                .Where(npc => !npc.NotInBestiary)
+                .OrderBy(npc => npc.Name)
+                .ToArray();
+
+            CachedBeasts.Clear();
+            foreach(var beast in validBeasts)
+            {
+                CachedBeasts[beast.Id] = beast;
             }
         }
     }

@@ -434,6 +434,15 @@ namespace Intersect.Client.Framework.Gwen.Control
             }
         }
 
+        public int GetContentWidth(bool noPadding = false)
+        {
+            if (noPadding)
+            {
+                return Width - GetVerticalScrollBar().Width;
+            }
+            return Width - GetVerticalScrollBar().Width - Padding.Left - Padding.Right;
+        }
+
     }
 
 }
