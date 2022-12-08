@@ -2,6 +2,8 @@
 using Intersect.Client.Framework.Gwen.Control;
 using Intersect.Client.General;
 using Intersect.Client.General.Bestiary;
+using Intersect.Client.Interface.Components;
+using Intersect.Client.Interface.Game.Components;
 using Intersect.Client.Localization;
 using Intersect.Client.Networking;
 using Intersect.Client.Utilities;
@@ -45,20 +47,22 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
         private ImagePanel BeastInfo { get; set; }
         private ImagePanel BeastInfoBelowImage { get; set; }
 
-        private Label BeastLockedLabelTemplate { get; set; }
-        private RichLabel BeastLockedLabel { get; set; }
+        private Label NoBeastFoundTemplate { get; set; }
+        private RichLabel NoBeastFoundLabel { get; set; }
         
         private Label NameLabel { get; set; }
         private Label KillCountLabel { get; set; }
         private ImagePanel BeastImage { get; set; }
         private ImagePanel DescriptionBg { get; set; }
-        private ScrollControl DescriptionContainer { get; set; }
+        private ImagePanel DescriptionContainer { get; set; }
         private Label DescriptionTemplate { get; set; }
         private RichLabel Description { get; set; }
 
         private ImagePanel VitalsContainer { get; set; }
         private BestiaryVitalComponent HealthComponent { get; set; }
         private BestiaryVitalComponent ManaComponent { get; set; }
+
+        private BestiaryStatsComponent StatsComponent { get; set; }
 
         public int X => Window.X;
         public int Y => Window.Y;
@@ -70,6 +74,8 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
 
         private int SpriteFrame = 0;
         private long NextSpriteUpdate = 0;
+
+        private ComponentList<GwenComponent> UnlockableComponents = new ComponentList<GwenComponent>();
 
         public BestiaryWindow(Canvas gameCanvas)
         {
@@ -96,8 +102,8 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
             BeastList = new ListBox(ListContainer, "BeastList");
 
             BeastContainer = new ScrollControl(Window, "BeastContainer");
-            BeastLockedLabelTemplate = new Label(BeastContainer, "BeastLockedLabel");
-            BeastLockedLabel = new RichLabel(BeastContainer);
+            NoBeastFoundTemplate = new Label(BeastContainer, "BeastLockedLabel");
+            NoBeastFoundLabel = new RichLabel(BeastContainer);
 
             BeastInfo = new ImagePanel(BeastContainer, "BeastInfo");
 
@@ -108,13 +114,15 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
             BeastInfoBelowImage = new ImagePanel(BeastInfo, "BeastInfoContinued");
 
             DescriptionBg = new ImagePanel(BeastInfoBelowImage, "DescriptionBg");
-            DescriptionContainer = new ScrollControl(DescriptionBg, "DescriptionContainer");
+            DescriptionContainer = new ImagePanel(DescriptionBg, "DescriptionContainer");
             DescriptionTemplate = new Label(DescriptionContainer, "Description");
             Description = new RichLabel(DescriptionContainer);
 
             VitalsContainer = new ImagePanel(BeastInfoBelowImage, "VitalsContainer");
-            HealthComponent = new BestiaryVitalComponent(VitalsContainer, "Health", "character_stats_health.png", "HEALTH", "MAX", "The enemy's total hit points.");
-            ManaComponent = new BestiaryVitalComponent(VitalsContainer, "Mana", "character_stats_mana.png", "MANA", "MAX", "The enemy's total mana pool.");
+            HealthComponent = new BestiaryVitalComponent(VitalsContainer, "Health", "character_stats_health.png", "HEALTH", "MAX", "The enemy's total hit points.", UnlockableComponents);
+            ManaComponent = new BestiaryVitalComponent(VitalsContainer, "Mana", "character_stats_mana.png", "MANA", "MAX", "The enemy's total mana pool.", UnlockableComponents);
+
+            StatsComponent = new BestiaryStatsComponent(BeastInfoBelowImage, "StatsContainer", UnlockableComponents);
 
             Window.LoadJsonUi(Framework.File_Management.GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
 
@@ -125,13 +133,15 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
             HealthComponent.Initialize();
             ManaComponent.Initialize();
 
+            StatsComponent.Initialize();
+
             BeastInfo.SetPosition(BeastContainer.X, BeastContainer.Y);
             BeastInfo.SetSize(BeastContainer.GetContentWidth(true), 1);
             BeastInfo.SizeToChildren(false, true);
 
-            BeastLockedLabel.SetText(Strings.Bestiary.BeastLocked, BeastLockedLabelTemplate, BeastLabelWidth);
+            NoBeastFoundLabel.SetText(Strings.Bestiary.BeastNotFound, NoBeastFoundTemplate, BeastLabelWidth);
 
-            BeastLockedLabel.Hide();
+            NoBeastFoundLabel.Hide();
             BeastInfo.Hide();
         }
 
@@ -194,14 +204,6 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
                 var listBoxRow = (ListBoxRow)sender;
                 var npcId = (Guid)listBoxRow.UserData;
 
-                if (!NameUnlocked(npcId))
-                {
-                    BeastInfo.Hide();
-                    BeastLockedLabel.Show();
-                    return;
-                }
-                BeastLockedLabel.Hide();
-
                 if (BestiaryController.KnownKillCounts.TryGetValue(npcId, out var playerKc))
                 {
                     KillCountLabel.Show();
@@ -214,29 +216,65 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
 
                 if (!BestiaryController.CachedBeasts.TryGetValue(npcId, out var beast))
                 {
-                    BeastLockedLabel.Show();
+                    NoBeastFoundLabel.Show();
                     return;
                 }
+                NoBeastFoundLabel.Hide();
 
-                NameLabel.SetText(beast.Name.ToUpperInvariant());
+                var nameUnlocked = NameUnlocked(npcId);
+
+                var name = nameUnlocked ? beast.Name : Strings.Bestiary.Unknown.ToString();
+
+                NameLabel.SetText(name);
 
                 ResetImage();
-                DrawBeastImage(beast.Sprite, beast.Color);
+
+                var sprite = nameUnlocked ? beast.Sprite : "8bit_unknown.png";
+                var spriteColor = nameUnlocked ? beast.Color : Color.White;
+                DrawBeastImage(sprite, spriteColor);
 
                 BeastInfoBelowImage.SetPosition(0, BeastImage.Bottom + ComponentPadding);
 
-                Description.SetText(beast.Description, DescriptionTemplate, DescriptionContainer.GetContentWidth());
+                var description = nameUnlocked ? beast.Description : Strings.Bestiary.BeastLocked.ToString();
+                Description.SetText(description, DescriptionTemplate, DescriptionContainer.Width);
+
+                // If the player hasn't unlocked _anything_ for this beast yet, hide everything else
+                if (!BestiaryController.MyBestiary.Unlocks.TryGetValue(npcId, out var playerUnlocks)) 
+                {
+                    HideAllComponents();
+                    ShowBeastInfo();
+                    return;
+                }
+                if (playerUnlocks.Values.All(val => val == false))
+                {
+                    HideAllComponents();
+                    ShowBeastInfo();
+                    return;
+                }
+                
+                ShowAllComponents();
 
                 InitializeBeastVitals(beast);
+                InitializeBeastStats(beast);
 
                 BeastInfoBelowImage.SizeToChildren(false, true);
-
+                BeastContainer.UpdateScrollBars();
                 ShowBeastInfo();
                 // Load the appropriate bestiary page
             } catch (InvalidCastException)
             {
                 return;
             }
+        }
+
+        private void ShowAllComponents()
+        {
+            UnlockableComponents.ForEach(comp => comp.Show());
+        }
+
+        private void HideAllComponents()
+        {
+            UnlockableComponents.ForEach(comp => comp.Hide());
         }
 
         private void InitializeBeastVitals(NpcBase beast)
@@ -263,6 +301,17 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
 
             // Resize
             VitalsContainer.SetPosition(0, DescriptionBg.Bottom + ComponentPadding);
+        }
+
+        private void InitializeBeastStats(NpcBase beast)
+        {
+            if (!beast.BestiaryUnlocks.TryGetValue((int)BestiaryUnlock.Stats, out var reqKc))
+            {
+                reqKc = 0;
+            }
+            StatsComponent.SetUnlockStatus(StatsUnlocked(beast.Id));
+            StatsComponent.SetBeast(beast, reqKc);
+            StatsComponent.SetPosition(0, VitalsContainer.Bottom + ComponentPadding);
         }
 
         private void AnimateImage(long timeMs)

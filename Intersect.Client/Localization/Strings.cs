@@ -2435,6 +2435,9 @@ namespace Intersect.Client.Localization
         public partial struct Bestiary
         {
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString BeastNotFound = @"This beast can not be found. Try reloading the bestiary.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString Unknown = @"???";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
