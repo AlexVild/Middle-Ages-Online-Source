@@ -200,46 +200,43 @@ namespace Intersect.Client.Framework.Gwen.Renderer
                 clip.Width = (int) Math.Round(clip.Width * Scale);
                 clip.Height = (int) Math.Round(clip.Height * Scale);
 
-                // Commenting this out for now as it was causing weird behaviors - work around is just not to have scaled textures in scroll containers.
-                /*var widthRatio = u2 / rect.Width;
-                var heightRatio = v2 / rect.Height;*/
-                var widthRatio = 1;
-                var heightRatio = 1;
+                var heightRatio = targetRect.Height * Scale / (float)v2;
+                var widthRatio = targetRect.Width * Scale / (float)u2;
 
                 float diff = 0;
                 float vdiff = 0;
                 if (rect.X < clip.X)
                 {
                     diff = clip.X - rect.X;
-                    vdiff = diff;
+                    vdiff = (int)Math.Floor(diff / widthRatio);
                     rect.X += diff;
                     rect.Width -= diff;
-                    u1 += vdiff * widthRatio;
+                    u1 += vdiff;
                 }
 
                 if (rect.X + rect.Width > clip.X + clip.Width)
                 {
                     diff = rect.X + rect.Width - (clip.X + clip.Width);
-                    vdiff = diff;
+                    vdiff = (int)Math.Floor(diff / widthRatio);
                     rect.Width -= diff;
-                    u2 -= vdiff * widthRatio;
+                    u2 -= vdiff;
                 }
 
                 if (rect.Y < clip.Y)
                 {
                     diff = clip.Y - rect.Y;
-                    vdiff = diff;
+                    vdiff = (int)Math.Floor(diff / heightRatio);
                     rect.Y += diff;
                     rect.Height -= diff;
-                    v1 += vdiff * heightRatio;
+                    v1 += vdiff;
                 }
 
                 if (rect.Y + rect.Height > clip.Y + clip.Height)
                 {
                     diff = rect.Y + rect.Height - (clip.Y + clip.Height);
-                    vdiff = diff;
+                    vdiff = (int)Math.Floor(diff / heightRatio);
                     rect.Height -= diff;
-                    v2 -= vdiff * heightRatio;
+                    v2 -= vdiff;
                 }
 
                 if (rect.Width <= 0)

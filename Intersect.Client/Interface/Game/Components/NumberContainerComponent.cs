@@ -64,6 +64,16 @@ namespace Intersect.Client.Interface.Game.Components
             Value.SetText(text);
         }
 
+        public void Hide()
+        {
+            ParentContainer.Hide();
+        }
+
+        public void Show()
+        {
+            ParentContainer.Show();
+        }
+
         public void Dispose()
         {
             ParentContainer.Dispose();

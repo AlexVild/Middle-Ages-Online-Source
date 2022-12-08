@@ -246,14 +246,14 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
             {
                 reqKc = 0;
             }
-            HealthComponent.SetValues(beast.MaxVital[(int)Vitals.Health], reqKc, true);
+            HealthComponent.SetValues(beast.MaxVital[(int)Vitals.Health], reqKc, HPUnlocked(beast.Id));
 
             // MP
             if (!beast.BestiaryUnlocks.TryGetValue((int)BestiaryUnlock.MP, out reqKc))
             {
                 reqKc = 0;
             }
-            ManaComponent.SetValues(beast.MaxVital[(int)Vitals.Mana], reqKc, true);
+            ManaComponent.SetValues(beast.MaxVital[(int)Vitals.Mana], reqKc, MPUnlocked(beast.Id));
             
             // Don't bother showing if the enemy doesn't have mana
             if (beast.MaxVital[(int)Vitals.Mana] <= 0)

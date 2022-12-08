@@ -1,4 +1,6 @@
-﻿using Intersect.Client.Framework.Gwen.Control;
+﻿using Intersect.Client.Framework.Graphics;
+using Intersect.Client.Framework.Gwen.Control;
+using Intersect.Client.General;
 using Intersect.Client.Interface.Components;
 using Intersect.Client.Interface.Game.Components;
 using System;
@@ -11,6 +13,10 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
 {
     public class BestiaryVitalComponent : GwenComponent
     {
+        private GameTexture UnlockedBg => Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "bestiary_vital.png");
+        private GameTexture LockedBg => Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "bestiary_vital_locked.png");
+        private GameTexture LockTexture => Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "bestiary_lock.png");
+
         private Color LabelColor => new Color(255, 50, 19, 0);
         private Color LabelHoverColor => new Color(255, 111, 63, 0);
         private Color StatLabelColor => new Color(255, 166, 167, 37);
@@ -53,6 +59,23 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
 
             LockLabel.SetText(RequirementString);
             NumberContainer.SetValue(Value);
+
+            if (unlocked)
+            {
+                ImageLabel.Show();
+                NumberContainer.Show();
+                LockLabel.Hide();
+                LockImage.Hide();
+                SelfContainer.Texture = UnlockedBg;
+            }
+            else
+            {
+                ImageLabel.Hide();
+                NumberContainer.Hide();
+                LockLabel.Show();
+                LockImage.Show();
+                SelfContainer.Texture = LockedBg;
+            }
         }
 
         public override void Initialize()
@@ -70,6 +93,13 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
 
             base.Initialize();
             FitParentToComponent();
+
+            LockImage.Texture = LockTexture;
+            LockImage.SetSize(LockTexture.Width, LockTexture.Height);
+            LockImage.ProcessAlignments();
+
+            LockLabel.SetPosition(0, LockImage.Bottom + 8);
+            LockLabel.ProcessAlignments();
 
             ImageLabel.Initialize();
             NumberContainer.Initialize();

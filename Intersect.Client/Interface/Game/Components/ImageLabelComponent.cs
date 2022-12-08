@@ -78,6 +78,16 @@ namespace Intersect.Client.Interface.Game.Components
             Image.Texture = image;
         }
 
+        public void Hide()
+        {
+            ParentContainer.Hide();
+        }
+
+        public void Show()
+        {
+            ParentContainer.Show();
+        }
+
         public void Dispose()
         {
             Container.Dispose();
