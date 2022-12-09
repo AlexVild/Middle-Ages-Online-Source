@@ -24,6 +24,10 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
 
         protected string mValueLabel;
 
+        protected string mDropChance;
+
+        protected double mTableChance;
+
         protected SpellDescriptionWindow mSpellDescWindow;
 
         public ItemDescriptionWindow(
@@ -33,7 +37,9 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             int y,
             int[] statBuffs,
             string titleOverride = "",
-            string valueLabel = ""
+            string valueLabel = "",
+            string dropChance = "",
+            double tableChance = 0d
         ) : base(Interface.GameUi.GameCanvas, "DescriptionWindow")
         {
             mItem = item;
@@ -41,6 +47,8 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             mStatBuffs = statBuffs;
             mTitleOverride = titleOverride;
             mValueLabel = valueLabel;
+            mDropChance = dropChance;
+            mTableChance = tableChance;
 
             GenerateComponents();
             SetupDescriptionWindow();
@@ -78,7 +86,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             SetupHeader();
 
             // Set up our item limit information.
-            SetupItemLimits();
+            // SetupItemLimits(); - Alex: Didn't want
 
             // Display item drop chance if configured.
             if (mItem.DestroyOnInstanceChange)
@@ -1045,9 +1053,20 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             }
 
             // Display item drop chance if configured.
-            if (mItem.DropChanceOnDeath > 0)
+            if (mItem.DropChanceOnDeath > 0 && string.IsNullOrEmpty(mDropChance))
             {
                 data.Add(new Tuple<string, string>(Strings.ItemDescription.DropOnDeath, Strings.ItemDescription.Percentage.ToString(mItem.DropChanceOnDeath)));
+            }
+
+            // Bestiary drop chances
+            if (mTableChance > 0 && !string.IsNullOrEmpty(mDropChance))
+            {
+                data.Add(new Tuple<string, string>(Strings.ItemDescription.BestiaryTableChance, $"{mTableChance.ToString("N2")}%"));
+                data.Add(new Tuple<string, string>(Strings.ItemDescription.BestiaryDropChanceTable, mDropChance));
+            }
+            else if (!string.IsNullOrEmpty(mDropChance))
+            {
+                data.Add(new Tuple<string, string>(Strings.ItemDescription.BestiaryDropChance, mDropChance));
             }
 
             // Display shop value if we have one.

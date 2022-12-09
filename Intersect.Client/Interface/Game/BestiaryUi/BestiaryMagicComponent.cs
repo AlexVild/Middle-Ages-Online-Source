@@ -22,7 +22,7 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
 
         private ScrollControl SpellsContainer { get; set; }
 
-        private ComponentList<GwenComponent> SpellContainers { get; set; } = new ComponentList<GwenComponent>();
+        private List<BeastSpellItem> SpellContainers { get; set; } = new List<BeastSpellItem>();
 
         public BestiaryMagicComponent(Base parent, string containerName, ComponentList<GwenComponent> referenceList = null) : base(parent, containerName, "BestiaryMagicComponent", referenceList)
         {
@@ -48,7 +48,6 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
         private void ClearSpells()
         {
             SpellsContainer.ClearCreatedChildren();
-            SpellContainers.DisposeAll();
             SpellContainers.Clear();
         }
 
@@ -70,7 +69,29 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
                 return;
             }
 
-            // populatiion
+            var idx = 0;
+            foreach(var spell in Beast.Spells)
+            {
+                var spellItem = new BeastSpellItem(idx, SpellsContainer, spell);
+                spellItem.Setup();
+
+                var xPadding = spellItem.Pnl.Margin.Left + spellItem.Pnl.Margin.Right;
+                var yPadding = spellItem.Pnl.Margin.Top + spellItem.Pnl.Margin.Bottom;
+
+                spellItem.SetPosition(
+                    idx %
+                    (SpellsContainer.GetContentWidth() / (spellItem.Pnl.Width + xPadding)) *
+                    (spellItem.Pnl.Width + xPadding) +
+                    xPadding,
+                    idx /
+                    (SpellsContainer.GetContentWidth() / (spellItem.Pnl.Width + xPadding)) *
+                    (spellItem.Pnl.Height + yPadding) +
+                    yPadding
+                );
+
+                idx++;
+                SpellContainers.Add(spellItem);
+            }
         }
 
         public override void SetUnlockStatus(bool unlocked)

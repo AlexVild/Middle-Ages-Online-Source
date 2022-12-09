@@ -73,19 +73,6 @@ namespace Intersect.Client.Interface.Game.Character
             }
         }
 
-        public FloatRect RenderBounds()
-        {
-            var rect = new FloatRect()
-            {
-                X = Pnl.LocalPosToCanvas(new Point(0, 0)).X,
-                Y = Pnl.LocalPosToCanvas(new Point(0, 0)).Y,
-                Width = Pnl.Width,
-                Height = Pnl.Height
-            };
-
-            return rect;
-        }
-
         public void Update()
         {
             var item = ItemBase.Get(CurrentItemId);
@@ -114,7 +101,6 @@ namespace Intersect.Client.Interface.Game.Character
                 ContentPanel.Hide();
             }
         }
-
 
         public void UpdateEquipped()
         {

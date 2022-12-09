@@ -7,6 +7,28 @@ namespace Intersect.Utilities
 {
     public static class LootTableHelpers
     {
+        public static List<BaseDrop> UnfoldDrops(List<BaseDrop> drops)
+        {
+            var currDrops = new List<BaseDrop>();
+            if (drops == null)
+            {
+                return currDrops;
+            }
+
+            foreach(var drop in drops)
+            {
+                if (drop.LootTableId == Guid.Empty)
+                {
+                    currDrops.Add(drop);
+                    continue;
+                }
+                var lootTable = LootTableDescriptor.Get(drop.LootTableId);
+                currDrops.AddRange(UnfoldDrops(lootTable.Drops));
+            }
+
+            return currDrops;
+        }
+
         public static double GetTotalWeight(List<BaseDrop> drops, bool expandTables = false)
         {
             if (drops == null)

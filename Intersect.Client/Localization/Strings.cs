@@ -1263,6 +1263,15 @@ namespace Intersect.Client.Localization
             public static LocalizedString DropOnDeath = @"Death Drop %:";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString BestiaryDropChance = @"Drop chance:";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString BestiaryDropChanceTable = @"Drop Chance:";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString BestiaryTableChance = @"Drop Table Chance:";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString Restriction = @"Requirements:";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]

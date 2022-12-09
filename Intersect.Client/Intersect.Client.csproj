@@ -126,7 +126,10 @@
     <Compile Include="General\Timers.cs" />
     <Compile Include="Interface\Components\GwenComponents.cs" />
     <Compile Include="Interface\Game\AnnouncementWindow.cs" />
+    <Compile Include="Interface\Game\BestiaryUi\BeastLootItem.cs" />
+    <Compile Include="Interface\Game\BestiaryUi\BeastSpellItem.cs" />
     <Compile Include="Interface\Game\BestiaryUi\BestiaryComponent.cs" />
+    <Compile Include="Interface\Game\BestiaryUi\BestiaryLootComponent.cs" />
     <Compile Include="Interface\Game\BestiaryUi\BestiaryMagicComponent.cs" />
     <Compile Include="Interface\Game\BestiaryUi\BestiaryStatsComponent.cs" />
     <Compile Include="Interface\Game\BestiaryUi\BestiaryVitalComponent.cs" />

@@ -65,6 +65,8 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
         private BestiaryStatsComponent StatsComponent { get; set; }
 
         private BestiaryMagicComponent MagicComponent { get; set; }
+        
+        private BestiaryLootComponent LootComponent { get; set; }
 
         public int X => Window.X;
         public int Y => Window.Y;
@@ -127,6 +129,8 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
             StatsComponent = new BestiaryStatsComponent(BeastInfoBelowImage, "StatsContainer", UnlockableComponents);
             
             MagicComponent = new BestiaryMagicComponent(BeastInfoBelowImage, "MagicContainer", UnlockableComponents);
+            
+            LootComponent = new BestiaryLootComponent(BeastInfoBelowImage, "LootContainer", UnlockableComponents);
 
             Window.LoadJsonUi(Framework.File_Management.GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
 
@@ -140,6 +144,8 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
             StatsComponent.Initialize();
 
             MagicComponent.Initialize();
+
+            LootComponent.Initialize();
 
             BeastInfo.SetPosition(BeastContainer.X, BeastContainer.Y);
             BeastInfo.SetSize(BeastContainer.GetContentWidth(true), 1);
@@ -265,6 +271,7 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
                 InitializeBeastVitals(beast);
                 InitializeBeastStats(beast);
                 InitializeBeastMagic(beast);
+                InitializeBeastLoot(beast);
                 
                 BeastInfoBelowImage.SizeToChildren(false, true);
                 ShowBeastInfo();
@@ -344,6 +351,34 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
             MagicComponent.SetBeast(beast, reqKc);
             MagicComponent.SetPosition(0, StatsComponent.Bottom + ComponentPadding);
             MagicComponent.ProcessAlignments();
+        }
+
+        private void InitializeBeastLoot(NpcBase beast)
+        {
+            if (beast.Drops.Count == 0 && beast.SecondaryDrops.Count == 0 && beast.TertiaryDrops.Count == 0)
+            {
+                LootComponent.Hide();
+                LootComponent.SetPosition(0, 0);
+                return;
+            }
+            LootComponent.Show();
+
+            if (!beast.BestiaryUnlocks.TryGetValue((int)BestiaryUnlock.Loot, out var reqKc))
+            {
+                reqKc = 0;
+            }
+            LootComponent.SetUnlockStatus(LootUnlocked(beast.Id));
+            LootComponent.SetBeast(beast, reqKc);
+
+            if (beast.Spells.Count > 0)
+            {
+                LootComponent.SetPosition(0, MagicComponent.Bottom + ComponentPadding);
+            }
+            else
+            {
+                LootComponent.SetPosition(0, StatsComponent.Bottom + ComponentPadding);
+            }
+            LootComponent.ProcessAlignments();
         }
 
         private void AnimateImage(long timeMs)

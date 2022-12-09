@@ -51,10 +51,13 @@ namespace Intersect.Client.Interface.Game.Spells
 
         public ImagePanel Pnl;
 
-        public SpellItem(SpellsWindow spellWindow, int index)
+        public bool DisplayOnly { get; set; }
+
+        public SpellItem(SpellsWindow spellWindow, int index, bool displayOnly = false)
         {
             mSpellWindow = spellWindow;
             mYindex = index;
+            DisplayOnly = displayOnly;
         }
 
         public void Setup()
@@ -62,8 +65,11 @@ namespace Intersect.Client.Interface.Game.Spells
             Pnl = new ImagePanel(Container, "SpellIcon");
             Pnl.HoverEnter += pnl_HoverEnter;
             Pnl.HoverLeave += pnl_HoverLeave;
-            Pnl.RightClicked += pnl_RightClicked;
-            Pnl.Clicked += pnl_Clicked;
+            if (!DisplayOnly)
+            {
+                Pnl.RightClicked += pnl_RightClicked;
+                Pnl.Clicked += pnl_Clicked;
+            }
             mCooldownLabel = new Label(Pnl, "SpellCooldownLabel");
             mCooldownLabel.IsHidden = true;
             mCooldownLabel.TextColor = new Color(0, 255, 255, 255);
