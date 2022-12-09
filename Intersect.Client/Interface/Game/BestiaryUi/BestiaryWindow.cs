@@ -259,15 +259,14 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
                     ShowBeastInfo();
                     return;
                 }
-                
-                ShowAllComponents();
 
+                ShowAllComponents();
+                
                 InitializeBeastVitals(beast);
                 InitializeBeastStats(beast);
                 InitializeBeastMagic(beast);
-
+                
                 BeastInfoBelowImage.SizeToChildren(false, true);
-                BeastContainer.UpdateScrollBars();
                 ShowBeastInfo();
                 // Load the appropriate bestiary page
             } catch (InvalidCastException)
@@ -278,12 +277,16 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
 
         private void ShowAllComponents()
         {
-            UnlockableComponents.ForEach(comp => comp.Show());
+            UnlockableComponents.ShowAll();
         }
 
+        /// <summary>
+        /// Hides components and resizes the beast info panel such that it only shows up to the descrption panel.
+        /// </summary>
         private void HideAllComponents()
         {
-            UnlockableComponents.ForEach(comp => comp.Hide());
+            UnlockableComponents.HideAll();
+            BeastInfoBelowImage.SetSize(BeastInfo.Width, 124);
         }
 
         private void InitializeBeastVitals(NpcBase beast)
