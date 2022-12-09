@@ -9,6 +9,8 @@ namespace Intersect.Client.Interface.Game.Components
     {
         public bool IsHidden => SelfContainer.IsHidden;
 
+        public int Bottom => ParentContainer.Bottom;
+
         private Base Parent { get; set; }
 
         /// <summary>

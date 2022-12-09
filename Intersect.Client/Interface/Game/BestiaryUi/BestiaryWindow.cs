@@ -64,6 +64,8 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
 
         private BestiaryStatsComponent StatsComponent { get; set; }
 
+        private BestiaryMagicComponent MagicComponent { get; set; }
+
         public int X => Window.X;
         public int Y => Window.Y;
         public int Width => Window.Width;
@@ -123,6 +125,8 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
             ManaComponent = new BestiaryVitalComponent(VitalsContainer, "Mana", "character_stats_mana.png", "MANA", "MAX", "The enemy's total mana pool.", UnlockableComponents);
 
             StatsComponent = new BestiaryStatsComponent(BeastInfoBelowImage, "StatsContainer", UnlockableComponents);
+            
+            MagicComponent = new BestiaryMagicComponent(BeastInfoBelowImage, "MagicContainer", UnlockableComponents);
 
             Window.LoadJsonUi(Framework.File_Management.GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
 
@@ -134,6 +138,8 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
             ManaComponent.Initialize();
 
             StatsComponent.Initialize();
+
+            MagicComponent.Initialize();
 
             BeastInfo.SetPosition(BeastContainer.X, BeastContainer.Y);
             BeastInfo.SetSize(BeastContainer.GetContentWidth(true), 1);
@@ -258,6 +264,7 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
 
                 InitializeBeastVitals(beast);
                 InitializeBeastStats(beast);
+                InitializeBeastMagic(beast);
 
                 BeastInfoBelowImage.SizeToChildren(false, true);
                 BeastContainer.UpdateScrollBars();
@@ -314,6 +321,26 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
             StatsComponent.SetUnlockStatus(StatsUnlocked(beast.Id));
             StatsComponent.SetBeast(beast, reqKc);
             StatsComponent.SetPosition(0, VitalsContainer.Bottom + ComponentPadding);
+        }
+
+        private void InitializeBeastMagic(NpcBase beast)
+        {
+            if (beast.Spells.Count <= 0)
+            {
+                MagicComponent.Hide();
+                MagicComponent.SetPosition(0, 0);
+                return;
+            }
+            MagicComponent.Show();
+            
+            if (!beast.BestiaryUnlocks.TryGetValue((int)BestiaryUnlock.Spells, out var reqKc))
+            {
+                reqKc = 0;
+            }
+            MagicComponent.SetUnlockStatus(SpellsUnlocked(beast.Id));
+            MagicComponent.SetBeast(beast, reqKc);
+            MagicComponent.SetPosition(0, StatsComponent.Bottom + ComponentPadding);
+            MagicComponent.ProcessAlignments();
         }
 
         private void AnimateImage(long timeMs)

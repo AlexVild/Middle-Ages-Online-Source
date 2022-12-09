@@ -2441,7 +2441,7 @@ namespace Intersect.Client.Localization
             public static LocalizedString Unknown = @"???";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public static LocalizedString BeastLocked = @"You haven't slain this beast yet, or haven't yet found any information about them.";
+            public static LocalizedString BeastLocked = @"You haven't slain this beast, or haven't yet found any information about them.";
         }
     }
 }

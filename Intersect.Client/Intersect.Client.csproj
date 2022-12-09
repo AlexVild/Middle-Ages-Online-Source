@@ -127,6 +127,7 @@
     <Compile Include="Interface\Components\GwenComponents.cs" />
     <Compile Include="Interface\Game\AnnouncementWindow.cs" />
     <Compile Include="Interface\Game\BestiaryUi\BestiaryComponent.cs" />
+    <Compile Include="Interface\Game\BestiaryUi\BestiaryMagicComponent.cs" />
     <Compile Include="Interface\Game\BestiaryUi\BestiaryStatsComponent.cs" />
     <Compile Include="Interface\Game\BestiaryUi\BestiaryVitalComponent.cs" />
     <Compile Include="Interface\Game\BestiaryUi\BestiaryWindow.cs" />
