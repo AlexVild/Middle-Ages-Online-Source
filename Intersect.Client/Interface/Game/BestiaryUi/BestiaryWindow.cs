@@ -171,6 +171,7 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
 
         private void LoadBeasts()
         {
+            BeastList.ScrollToTop();
             BeastList.Clear();
             foreach (var beast in BestiaryController.CachedBeasts.Values)
             {
@@ -200,6 +201,7 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
         {
             try
             {
+                BeastContainer.Show();
                 BeastContainer.ScrollToTop();
                 var listBoxRow = (ListBoxRow)sender;
                 var npcId = (Guid)listBoxRow.UserData;
@@ -363,6 +365,7 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
         public void Hide()
         {
             BeastList.Clear();
+            BeastContainer.Hide();
             Interface.InputBlockingElements.Remove(SearchBar);
             Window.Hide();
         }
@@ -374,7 +377,6 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
 
         private void SearchBar_TextChanged(Base sender, EventArgs arguments)
         {
-            BeastList.ScrollToTop();
             LoadBeasts();
             // blank
         }
