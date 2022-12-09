@@ -26,7 +26,7 @@ namespace Intersect.Client.Interface.Game.Components
 
         private string TooltipText { get; set; }
 
-        public ImageLabelComponent(Base parent, string parentContainerName, Color labelColor, Color hoverColor, string texture, string label, string toolTipText, ComponentList<ImageLabelComponent> referenceList = null)
+        public ImageLabelComponent(Base parent, string parentContainerName, Color labelColor, Color hoverColor, string texture, string label, string toolTipText, ComponentList<IGwenComponent> referenceList = null)
         {
             ParentContainer = new ImagePanel(parent, parentContainerName);
 

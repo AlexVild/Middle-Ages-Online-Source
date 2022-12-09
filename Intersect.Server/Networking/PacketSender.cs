@@ -1436,7 +1436,10 @@ namespace Intersect.Server.Networking
                         else if (Options.DecorSlots.IndexOf(paperdollSlot) > -1)
                         {
                             var decorIndex = Options.DecorSlots.IndexOf(paperdollSlot);
-                            if (decorIndex == Options.HairSlot && shortHair && Options.Instance.PlayerOpts.ShortHairMappings.TryGetValue(character.Decor[decorIndex], out var shortHairText))
+                            if (decorIndex == Options.HairSlot 
+                                && shortHair 
+                                && !string.IsNullOrEmpty(character.Decor[decorIndex])
+                                && Options.Instance.PlayerOpts.ShortHairMappings.TryGetValue(character.Decor[decorIndex], out var shortHairText))
                             {
                                 decor[decorIndex] = shortHairText;
                                 continue;

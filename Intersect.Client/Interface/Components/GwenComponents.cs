@@ -15,6 +15,10 @@ namespace Intersect.Client.Interface.Components
         void Initialize();
 
         void Dispose();
+
+        void Hide();
+
+        void Show();
     }
 
     public class ComponentList<T> : List<T> where T : IGwenComponent
@@ -28,6 +32,16 @@ namespace Intersect.Client.Interface.Components
         public void InitializeAll()
         {
             ForEach(comp => comp.Initialize());
+        }
+
+        public void ShowAll()
+        {
+            ForEach(comp => comp.Show());
+        }
+
+        public void HideAll()
+        {
+            ForEach(comp => comp.Hide());
         }
     }
 }

@@ -287,6 +287,7 @@ namespace Intersect.Client.Interface.Game.Character.Equipment
                     {
                         if (slotToDraw == Options.HairSlot
                             && shortHair
+                            && !string.IsNullOrEmpty(Globals.Me.MyDecors[slotToDraw])
                             && Options.Instance.PlayerOpts.ShortHairMappings.TryGetValue(Globals.Me.MyDecors[slotToDraw], out var hairText))
                         {
                             paperdoll = hairText;

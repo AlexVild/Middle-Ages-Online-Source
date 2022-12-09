@@ -273,6 +273,8 @@ namespace Intersect.Client.Interface.Game.Character.Panels
         public int X => ParentContainer?.X ?? default;
 
         public int Y => ParentContainer?.Y ?? default;
+        public int Width => ParentContainer?.Width ?? default;
+        public int Height => ParentContainer?.Height ?? default;
 
         public CharacterBonusRow(
             Base parent,
@@ -334,6 +336,12 @@ namespace Intersect.Client.Interface.Game.Character.Panels
         public void SetPosition(int x, int y)
         {
             ParentContainer?.SetPosition(x, y);
+        }
+
+        public void SetSize(int width, int height)
+        {
+            ParentContainer?.SetSize(width, height);
+            ParentContainer?.ProcessAlignments();
         }
     }
 }

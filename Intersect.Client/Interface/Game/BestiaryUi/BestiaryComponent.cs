@@ -79,5 +79,10 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
             LockLabel.SetPosition(0, LockImage.Bottom + 8);
             LockLabel.ProcessAlignments();
         }
+
+        public virtual void Dispose()
+        {
+            ParentContainer.Dispose();
+        }
     }
 }

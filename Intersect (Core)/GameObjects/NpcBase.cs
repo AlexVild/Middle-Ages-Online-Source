@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 
 using Intersect.Enums;
@@ -24,38 +25,48 @@ namespace Intersect.GameObjects
         /// <summary>
         /// Whether the NPC can be affected by knockback
         /// </summary>
+        [Description("Knockback")]
         Knockback,
         /// <summary>
         /// Whether the NPC can be affected by silence
         /// </summary>
+        [Description("Silence")]
         Silence,
         /// <summary>
         /// Whether the NPC can be affected by stun
         /// </summary>
+        [Description("Stun")]
         Stun,
         /// <summary>
         /// Whether the NPC can be affected by snare
         /// </summary>
+        [Description("Snare")]
         Snare,
         /// <summary>
         /// Whether the NPC can be affected by blind
         /// </summary>
+        [Description("Blind")]
         Blind,
         /// <summary>
         /// Whether the NPC can be affected by transform
         /// </summary>
+        [Description("Transform")]
         Transform,
         /// <summary>
         /// Whether the NPC can be affected by sleep
         /// </summary>
+        [Description("Sleep")]
         Sleep,
         /// <summary>
         /// Whether the NPC can be affected by taunt
         /// </summary>
+        [Description("Taunt")]
         Taunt,
-        
+
+        [Description("Slowness")]
         Slowed,
 
+        [Description("Confusion")]
         Confused,
     }
 
