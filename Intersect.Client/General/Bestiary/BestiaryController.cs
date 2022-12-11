@@ -67,11 +67,49 @@ namespace Intersect.Client.General.Bestiary
             return $"Bestiary update for \"{beast}\": {unlocks}";
         }
 
+        public void UpdateUnlocksFor(Guid npcGuid, BestiaryUnlock unlockType, bool status, bool suppressMessaging = true)
+        {
+            if (!BestiaryController.CachedBeasts.TryGetValue(npcGuid, out var beast))
+            {
+                return;
+            }
+
+            var beastUnlocks = beast.BestiaryUnlocks;
+            if (!Unlocks.ContainsKey(npcGuid))
+            {
+                Unlocks[npcGuid] = new Dictionary<BestiaryUnlock, bool>();
+            }
+
+            // Does the NPC have this property unlocked by default/not exist/is not loggable?
+            if (beastUnlocks == null || beast.NotInBestiary || !beastUnlocks.TryGetValue((int)unlockType, out _))
+            {
+                Unlocks[npcGuid][unlockType] = true;
+                return;
+            }
+
+            // Otherwise, change the status for the unlock
+            var previousVal = Unlocks[npcGuid][unlockType];
+            Unlocks[npcGuid][unlockType] = status;
+
+            if (!suppressMessaging && previousVal != Unlocks[npcGuid][unlockType])
+            {
+                ToastService.SetToast(new Toast(UnlockToastMessage(npcGuid, unlockType)));
+            }
+        }
+
         public void UpdateUnlocksFor(Guid npcGuid, long playersKillCount, bool suppressMessaging = true)
         {
             // Get bestiary information from the slain NPC
             if (!BestiaryController.CachedBeasts.TryGetValue(npcGuid, out var beast)) 
             {
+                return;
+            }
+
+            // Defer to the known unlocks list if there are entries there - the player bought a monster manual or something
+            if (BestiaryController.KnownUnlocks.TryGetValue(npcGuid, out var knownUnlocks))
+            {
+                Unlocks[npcGuid].Clear();
+                Unlocks[npcGuid] = knownUnlocks;
                 return;
             }
 
@@ -101,7 +139,7 @@ namespace Intersect.Client.General.Bestiary
                 if (playersKillCount >= requiredKillCount)
                 {
                     Unlocks[npcGuid][bestiaryUnlock] = true;
-                    // If we did not previous have this unlocked, push it to our new list of unlocks for messaging
+                    // If we did not previously have this unlocked, push it to our new list of unlocks for messaging
                     if (unlockStatus != true)
                     {
                         newUnlocks.Add(bestiaryUnlock);
@@ -144,6 +182,8 @@ namespace Intersect.Client.General.Bestiary
         public static Bestiary MyBestiary = new Bestiary();
 
         public static Dictionary<Guid, long> KnownKillCounts = new Dictionary<Guid, long>();
+
+        public static Dictionary<Guid, Dictionary<BestiaryUnlock, bool>> KnownUnlocks = new Dictionary<Guid, Dictionary<BestiaryUnlock, bool>>();
 
         public static void RefreshUnlocks(bool suppressMessaging)
         {

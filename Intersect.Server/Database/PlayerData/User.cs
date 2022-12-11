@@ -741,6 +741,8 @@ namespace Intersect.Server.Database.PlayerData
                     .ThenInclude(p => p.UnlockedCosmetics)
                     .Include(p => p.Players)
                     .ThenInclude(p => p.UnlockedRecipes)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.BestiaryUnlocks)
                     .FirstOrDefault()
             ) ??
             throw new InvalidOperationException();
@@ -779,6 +781,8 @@ namespace Intersect.Server.Database.PlayerData
                     .ThenInclude(p => p.UnlockedCosmetics)
                     .Include(p => p.Players)
                     .ThenInclude(p => p.UnlockedRecipes)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.BestiaryUnlocks)
                     .FirstOrDefault()
             ) ??
             throw new InvalidOperationException();
@@ -816,6 +820,8 @@ namespace Intersect.Server.Database.PlayerData
                     .ThenInclude(p => p.UnlockedCosmetics)
                     .Include(p => p.Players)
                     .ThenInclude(p => p.UnlockedRecipes)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.BestiaryUnlocks)
                     .FirstOrDefault()
             ) ??
             throw new InvalidOperationException();
@@ -853,6 +859,8 @@ namespace Intersect.Server.Database.PlayerData
                     .ThenInclude(p => p.UnlockedCosmetics)
                     .Include(p => p.Players)
                     .ThenInclude(p => p.UnlockedRecipes)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.BestiaryUnlocks)
                     .FirstOrDefault()
                 ) ?? throw new InvalidOperationException();
 
@@ -899,6 +907,8 @@ namespace Intersect.Server.Database.PlayerData
                     .ThenInclude(p => p.UnlockedCosmetics)
                     .Include(p => p.Players)
                     .ThenInclude(p => p.UnlockedRecipes)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.BestiaryUnlocks)
                     .FirstOrDefault()
                 ) ?? throw new InvalidOperationException();
 

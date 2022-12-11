@@ -479,6 +479,7 @@
     <Compile Include="Database\PlayerData\IPlayerContext.cs" />
     <Compile Include="Database\PlayerData\Players\Bag.cs" />
     <Compile Include="Database\PlayerData\Players\BagSlot.cs" />
+    <Compile Include="Database\PlayerData\Players\BestiaryUnlockInstance.cs" />
     <Compile Include="Database\PlayerData\Players\CosmeticInstance.cs" />
     <Compile Include="Database\PlayerData\Players\GuildBankSlot.cs" />
     <Compile Include="Database\PlayerData\Players\BankSlot.cs" />
@@ -659,6 +660,10 @@
     <Compile Include="Migrations\20221129185153_RecipeMigration.cs" />
     <Compile Include="Migrations\20221129185153_RecipeMigration.designer.cs">
       <DependentUpon>20221129185153_RecipeMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20221211175311_AddBestiaryUnlocksMigration.cs" />
+    <Compile Include="Migrations\20221211175311_AddBestiaryUnlocksMigration.designer.cs">
+      <DependentUpon>20221211175311_AddBestiaryUnlocksMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.cs" />
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.Designer.cs">

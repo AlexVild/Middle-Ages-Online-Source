@@ -2822,5 +2822,11 @@ namespace Intersect.Client.Networking
             BestiaryController.KnownKillCounts[packet.NpcId] = packet.KillCount;
             BestiaryController.MyBestiary.UpdateUnlocksFor(packet.NpcId, packet.KillCount, false);
         }
+
+        public void HandlePacket(IPacketSender packetSender, UnlockedBestiaryEntriesPacket packet)
+        {
+            BestiaryController.KnownUnlocks.Clear();
+            BestiaryController.KnownUnlocks = packet.BestiaryUnlocks;
+        }
     }
 }

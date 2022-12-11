@@ -494,6 +494,7 @@
     <Compile Include="Network\Packets\Server\TimerStopPacket.cs" />
     <Compile Include="Network\Packets\Server\ToastPacket.cs" />
     <Compile Include="Network\Packets\Server\TradeAcceptedPacket.cs" />
+    <Compile Include="Network\Packets\Server\UnlockedBestiaryEntriesPacket.cs" />
     <Compile Include="Network\Packets\Server\UnlockedRecipesPacket.cs" />
     <Compile Include="Network\Packets\Server\UpdateFutureWarpPacket.cs" />
     <Compile Include="Network\Packets\SlotQuantityPacket.cs" />

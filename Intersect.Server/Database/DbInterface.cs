@@ -1974,11 +1974,13 @@ namespace Intersect.Server.Database
                     MigrateDbSet(context.Mutes, newPlayerContext.Mutes);
                     MigrateDbSet(context.Bans, newPlayerContext.Bans);
                     MigrateDbSet(context.Player_Record, newPlayerContext.Player_Record);
+                    MigrateDbSet(context.Record_Teammate, newPlayerContext.Record_Teammate);
                     MigrateDbSet(context.Timers, newPlayerContext.Timers);
                     MigrateDbSet(context.Maps_Explored, newPlayerContext.Maps_Explored);
                     MigrateDbSet(context.Loot_Rolls, newPlayerContext.Loot_Rolls);
                     MigrateDbSet(context.Player_Labels, newPlayerContext.Player_Labels);
                     MigrateDbSet(context.Player_Recipes, newPlayerContext.Player_Recipes);
+                    MigrateDbSet(context.Player_Bestiary_Unlocks, newPlayerContext.Player_Bestiary_Unlocks);
 
                     newPlayerContext.ChangeTracker.DetectChanges();
                     newPlayerContext.SaveChanges();

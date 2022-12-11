@@ -2706,6 +2706,12 @@ namespace Intersect.Server.Networking
 
             player?.SendPacket(new KillCountPacket(npcId, killCount));
         }
-    }
 
+        public static void SendBestiaryUnlocks(Player player)
+        {
+            var unlocks = player?.BuildUnlockedBeastList();
+
+            player?.SendPacket(new UnlockedBestiaryEntriesPacket(unlocks));
+        }
+    }
 }

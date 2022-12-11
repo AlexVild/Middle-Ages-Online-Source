@@ -1,13 +1,19 @@
 ﻿using Intersect.GameObjects;
 using Intersect.GameObjects.Events;
+using Intersect.Server.Database.PlayerData.Players;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Text.Json.Serialization;
 
 namespace Intersect.Server.Entities
 {
     public partial class Player : AttackingEntity
     {
+        [NotMapped, JsonIgnore]
+        public List<BestiaryUnlockInstance> BestiaryUnlocks { get; set; }
+
         public Dictionary<Guid, long> GetNpcKillCounts()
         {
             var npcRecords = PlayerRecords.Where(record => record.Type == RecordType.NpcKilled).ToArray();
@@ -76,6 +82,47 @@ namespace Intersect.Server.Entities
             }
 
             return GetNpcKillCount(npcId) >= kc;
+        }
+
+        public void ChangeBeastUnlockStatus(Guid npcId, BestiaryUnlock unlock, bool status)
+        {
+            var beasts = BestiaryUnlocks.FindAll(beastUnlock => beastUnlock.NpcId == npcId && beastUnlock.UnlockType == (int)unlock).ToArray();
+
+            // Have we not hard-unlocked anything for this beast? If so, add a new instance
+            if (beasts.Length == 0)
+            {
+                BestiaryUnlocks.Add(new BestiaryUnlockInstance(Id, npcId, unlock, status));
+            }
+            else // Otherwise, change the status for any found mathces
+            {
+                foreach (var beast in beasts)
+                {
+                    beast.Unlocked = status;
+                }
+            }
+
+            // And update the client
+        }
+
+        public Dictionary<Guid, Dictionary<BestiaryUnlock, bool>> BuildUnlockedBeastList()
+        {
+            var unlocks = new Dictionary<Guid, Dictionary<BestiaryUnlock, bool>>();
+
+            foreach(var instance in BestiaryUnlocks)
+            {
+                var npcId = instance.NpcId;
+                var unlock = instance.UnlockType;
+                var isUnlocked = instance.Unlocked;
+
+                if (!unlocks.ContainsKey(npcId)) 
+                {
+                    unlocks[npcId] = new Dictionary<BestiaryUnlock, bool>();
+                }
+
+                unlocks[npcId][(BestiaryUnlock)unlock] = isUnlocked;
+            }
+
+            return unlocks;
         }
     }
 }
