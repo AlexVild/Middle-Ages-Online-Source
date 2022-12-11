@@ -127,7 +127,7 @@ namespace Intersect.Client.General.Bestiary
             }
             if (!Unlocks.TryGetValue(npcGuid, out var unlocks))
             {
-                return false;
+                return true;
             }
             if (!unlocks.TryGetValue(unlockType, out var unlockStatus))
             {

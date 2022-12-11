@@ -409,6 +409,17 @@ namespace Intersect.Editor.Localization
             return EventConditionDesc.HasRecipe.ToString(RecipeDescriptor.GetName(condition.RecipeId));
         }
 
+        public static string GetEventConditionalDesc(BeastsCompleted condition)
+        {
+            return EventConditionDesc.HasBeastsUnlocked.ToString(condition.Amount);
+        }
+
+        public static string GetEventConditionalDesc(BeastHasUnlock condition)
+        {
+            var beast = NpcBase.GetName(condition.NpcId);
+            return EventConditionDesc.HasUnlockForBeast.ToString(condition.Unlock.GetDescription(), beast);
+        }
+
         public static string GetVariableComparisonString(VariableCompaison comparison)
         {
             return "";
@@ -2365,6 +2376,8 @@ Tick timer saved in server config.json.";
                 {32, @"Timer X Is Active..."},
                 {33, @"Record is at least..."},
                 {34, @"Has recipe X..."},
+                {35, @"Has at least X beasts completed..."},
+                {36, @"Has X unlocked for beast Y..."},
             };
 
             public static LocalizedString endrange = @"End Range:";
@@ -2644,6 +2657,12 @@ Tick timer saved in server config.json.";
 
             [JsonProperty]
             public static LocalizedString HasFreeInventorySlots = @"Player has {00} free inventory slot(s)";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString HasUnlockForBeast = @"Has {00} unlocked for {01}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString HasBeastsUnlocked = @"Has at least {00} beasts completed";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString HasRecipe = @"Has learned recipe: {00}";

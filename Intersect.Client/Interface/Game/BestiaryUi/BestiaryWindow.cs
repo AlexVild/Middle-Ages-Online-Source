@@ -21,6 +21,7 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
 {
     public class BestiaryWindow
     {
+        private readonly Color BeastCompletionColor = new Color(255, 30, 74, 157);
         private readonly Color BeastListTextColor = new Color(255, 50, 19, 0);
         private readonly Color BeastListLockedTextColor = new Color(255, 100, 100, 100);
         private readonly string UnknownString = Strings.Bestiary.Unknown.ToString();
@@ -40,8 +41,9 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
             set => SearchBar.SetText(value);
         }
         private Button SearchClearButton { get; set; }
-
         private ListBox BeastList { get; set; }
+        private LabeledCheckBox HideCheckbox { get; set; }
+        private Label CompletionRateLabel { get; set; }
 
         private ScrollControl BeastContainer { get; set; }
         private ImagePanel BeastInfo { get; set; }
@@ -66,6 +68,8 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
 
         private BestiaryMagicComponent MagicComponent { get; set; }
         
+        private BestiarySpellCombatComponent SpellCombatComponent { get; set; }
+        
         private BestiaryLootComponent LootComponent { get; set; }
 
         public int X => Window.X;
@@ -73,6 +77,7 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
         public int Width => Window.Width;
         public int Height => Window.Height;
         public bool IsOpen => Window.IsVisible;
+        private bool HideUnknown;
 
         private int BeastLabelWidth => BeastContainer.Width - BeastContainer.Padding.Left - BeastContainer.Padding.Bottom - BeastContainer.GetVerticalScrollBar().Width;
 
@@ -105,6 +110,11 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
 
             BeastList = new ListBox(ListContainer, "BeastList");
 
+            HideCheckbox = new LabeledCheckBox(ListContainer, "HideCheckbox");
+            HideCheckbox.CheckChanged += HideCheckbox_CheckChanged;
+            HideCheckbox.Text = "Show/Hide \"???\"";
+            CompletionRateLabel = new Label(ListContainer, "CompletionRateLabel");
+
             BeastContainer = new ScrollControl(Window, "BeastContainer");
             NoBeastFoundTemplate = new Label(BeastContainer, "BeastLockedLabel");
             NoBeastFoundLabel = new RichLabel(BeastContainer);
@@ -130,6 +140,8 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
             
             MagicComponent = new BestiaryMagicComponent(BeastInfoBelowImage, "MagicContainer", UnlockableComponents);
             
+            SpellCombatComponent = new BestiarySpellCombatComponent(BeastInfoBelowImage, "SpellCombatContainer", UnlockableComponents);
+            
             LootComponent = new BestiaryLootComponent(BeastInfoBelowImage, "LootContainer", UnlockableComponents);
 
             Window.LoadJsonUi(Framework.File_Management.GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
@@ -145,6 +157,8 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
 
             MagicComponent.Initialize();
 
+            SpellCombatComponent.Initialize();
+
             LootComponent.Initialize();
 
             BeastInfo.SetPosition(BeastContainer.X, BeastContainer.Y);
@@ -155,6 +169,13 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
 
             NoBeastFoundLabel.Hide();
             BeastInfo.Hide();
+        }
+
+        private void HideCheckbox_CheckChanged(Base sender, EventArgs arguments)
+        {
+            HideCheckbox.IsChecked = !HideUnknown;
+            HideUnknown = HideCheckbox.IsChecked;
+            LoadBeasts();
         }
 
         private void ShowBeastInfo()
@@ -185,10 +206,27 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
         {
             BeastList.ScrollToTop();
             BeastList.Clear();
+            var amountCompleted = 0;
             foreach (var beast in BestiaryController.CachedBeasts.Values)
             {
+                var complete = BeastComplete(beast);
+                if (complete)
+                {
+                    amountCompleted++;
+                }
+
                 var nameUnlocked = NameUnlocked(beast.Id);
                 var name = nameUnlocked ? beast.Name : UnknownString;
+
+                if (name == UnknownString)
+                {
+                    Console.WriteLine("Here");
+                }
+
+                if (!nameUnlocked && HideUnknown)
+                {
+                    continue;
+                }
 
                 if (!string.IsNullOrEmpty(SearchTerm) && !SearchHelper.IsSearchable(name, SearchTerm))
                 {
@@ -206,7 +244,28 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
                 beastRow.SetTextColor(nameUnlocked ? BeastListTextColor : BeastListLockedTextColor);
 
                 beastRow.RenderColor = new Color(100, 232, 208, 170);
+
+                if (complete)
+                {
+                    beastRow.SetTextColor(BeastCompletionColor);
+                }
             }
+
+            var completionRate = ((float)amountCompleted / BestiaryController.CachedBeasts.Count) * 100;
+            CompletionRateLabel.Text = $"{completionRate.ToString("N1")}% Complete";
+            if (completionRate >= 100f)
+            {
+                CompletionRateLabel.SetTextColor(BeastCompletionColor, Label.ControlState.Normal);
+            }
+            else
+            {
+                CompletionRateLabel.SetTextColor(BeastListTextColor, Label.ControlState.Normal);
+            }
+        }
+
+        private bool BeastComplete(NpcBase beast)
+        {
+            return beast.BestiaryUnlocks.Keys.All(unlock => BestiaryController.MyBestiary.HasUnlock(beast.Id, (BestiaryUnlock)unlock));
         }
 
         private void BeastRow_Clicked(Base sender, Framework.Gwen.Control.EventArguments.ClickedEventArgs arguments)
@@ -271,6 +330,7 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
                 InitializeBeastVitals(beast);
                 InitializeBeastStats(beast);
                 InitializeBeastMagic(beast);
+                InitializeBeastSpellCombat(beast);
                 InitializeBeastLoot(beast);
                 
                 BeastInfoBelowImage.SizeToChildren(false, true);
@@ -353,6 +413,26 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
             MagicComponent.ProcessAlignments();
         }
 
+        private void InitializeBeastSpellCombat(NpcBase beast)
+        {
+            if (beast.Spells.Count <= 0)
+            {
+                SpellCombatComponent.Hide();
+                SpellCombatComponent.SetPosition(0, 0);
+                return;
+            }
+            SpellCombatComponent.Show();
+
+            if (!beast.BestiaryUnlocks.TryGetValue((int)BestiaryUnlock.Spells, out var reqKc))
+            {
+                reqKc = 0;
+            }
+            SpellCombatComponent.SetUnlockStatus(SpellCombatUnlocked(beast.Id));
+            SpellCombatComponent.SetBeast(beast, reqKc);
+            SpellCombatComponent.SetPosition(0, MagicComponent.Bottom + ComponentPadding);
+            SpellCombatComponent.ProcessAlignments();
+        }
+
         private void InitializeBeastLoot(NpcBase beast)
         {
             if (beast.Drops.Count == 0 && beast.SecondaryDrops.Count == 0 && beast.TertiaryDrops.Count == 0)
@@ -372,7 +452,7 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
 
             if (beast.Spells.Count > 0)
             {
-                LootComponent.SetPosition(0, MagicComponent.Bottom + ComponentPadding);
+                LootComponent.SetPosition(0, SpellCombatComponent.Bottom + ComponentPadding);
             }
             else
             {
@@ -422,6 +502,7 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
         public void Show()
         {
             PacketSender.SendRequestKillCounts();
+            SearchTerm = string.Empty;
             Interface.InputBlockingElements.Add(SearchBar);
             Window.Show();
             LoadBeasts();

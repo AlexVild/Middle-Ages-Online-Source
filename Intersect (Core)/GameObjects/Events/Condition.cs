@@ -73,6 +73,10 @@ namespace Intersect.GameObjects.Events
 
         RecipeUnlocked,
 
+        BeastsCompleted,
+        
+        BeastHasUnlock,
+
     }
 
     public class Condition
@@ -527,6 +531,22 @@ namespace Intersect.GameObjects.Events
         public override ConditionTypes Type { get; } = ConditionTypes.RecipeUnlocked;
 
         public Guid RecipeId { get; set; }
+    }
+
+    public class BeastsCompleted : Condition
+    {
+        public override ConditionTypes Type { get; } = ConditionTypes.BeastsCompleted;
+
+        public int Amount { get; set; }
+    }
+
+    public class BeastHasUnlock : Condition
+    {
+        public override ConditionTypes Type { get; } = ConditionTypes.BeastHasUnlock;
+
+        public Guid NpcId { get; set; }
+        
+        public BestiaryUnlock Unlock { get; set; }
     }
 
     public enum TimerActiveConditions

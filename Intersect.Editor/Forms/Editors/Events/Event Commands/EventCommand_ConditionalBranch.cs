@@ -498,6 +498,14 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     Condition = new RecipeUnlocked();
 
                     break;
+                case ConditionTypes.BeastsCompleted:
+                    Condition = new BeastsCompleted();
+
+                    break;
+                case ConditionTypes.BeastHasUnlock:
+                    Condition = new BeastHasUnlock();
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -530,6 +538,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             grpTimers.Hide();
             grpRecordIs.Hide();
             grpRecipes.Hide();
+            grpBeastsCompleted.Hide();
+            grpBeastHasUnlock.Hide();
             switch (type)
             {
                 case ConditionTypes.VariableIs:
@@ -737,6 +747,16 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     {
                         cmbRecipe.SelectedIndex = 0;
                     }
+                    break;
+                case ConditionTypes.BeastsCompleted:
+                    grpBeastsCompleted.Show();
+                    break;
+                case ConditionTypes.BeastHasUnlock:
+                    cmbBestiaryUnlocks.Items.Clear();
+                    cmbBestiaryUnlocks.Items.AddRange(EnumExtensions.GetDescriptions(typeof(BestiaryUnlock)));
+                    cmbBeast.Items.Clear();
+                    cmbBeast.Items.AddRange(NpcBase.Names);
+                    grpBeastHasUnlock.Show();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -1603,6 +1623,17 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             cmbRecipe.SelectedIndex = RecipeDescriptor.ListIndex(condition.RecipeId);
         }
 
+        private void SetupFormValues(BeastsCompleted condition)
+        {
+            nudBeastsCompleted.Value = condition.Amount;
+        }
+
+        private void SetupFormValues(BeastHasUnlock condition)
+        {
+            cmbBestiaryUnlocks.SelectedIndex = (int)condition.Unlock;
+            cmbBeast.SelectedIndex = NpcBase.ListIndex(condition.NpcId);
+        }
+
         #endregion
 
         #region "SaveFormValues"
@@ -1885,6 +1916,17 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private void SaveFormValues(RecipeUnlocked condition)
         {
             condition.RecipeId = RecipeDescriptor.IdFromList(cmbRecipe.SelectedIndex);
+        }
+
+        private void SaveFormValues(BeastsCompleted condition)
+        {
+            condition.Amount = (int)nudBeastsCompleted.Value;
+        }
+
+        private void SaveFormValues(BeastHasUnlock condition)
+        {
+            condition.Unlock = (BestiaryUnlock)cmbBestiaryUnlocks.SelectedIndex;
+            condition.NpcId = NpcBase.IdFromList(cmbBeast.SelectedIndex);
         }
         #endregion
 

@@ -744,6 +744,26 @@ namespace Intersect.Server.Entities.Events
             return player?.UnlockedRecipeIds.Contains(condition.RecipeId) ?? false;
         }
 
+        public static bool MeetsCondition(
+            BeastsCompleted condition,
+            Player player,
+            Event eventInstance,
+            QuestBase questBase
+        )
+        {
+            return player?.GetBeastsCompleted() >= condition?.Amount;
+        }
+
+        public static bool MeetsCondition(
+            BeastHasUnlock condition,
+            Player player,
+            Event eventInstance,
+            QuestBase questBase
+        )
+        {
+            return player?.HasUnlockFor(condition.NpcId, condition.Unlock) ?? false;
+        }
+
         //Variable Comparison Processing
 
         public static bool CheckVariableComparison(

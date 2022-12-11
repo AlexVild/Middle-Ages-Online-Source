@@ -17,7 +17,7 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
         public abstract GameTexture LockedBg { get; }
         public GameTexture LockTexture => Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "bestiary_lock.png");
 
-        private ImagePanel LockImage { get; set; }
+        public ImagePanel LockImage { get; set; }
         public Label LockLabel { get; set; }
         
         public bool Unlocked { get; set; }
@@ -70,7 +70,7 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
             SizeLockTo();
         }
 
-        public void SizeLockTo()
+        public virtual void SizeLockTo()
         {
             LockImage.Texture = LockTexture;
             LockImage.SetSize(LockTexture.Width, LockTexture.Height);
