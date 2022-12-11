@@ -4451,7 +4451,7 @@ namespace Intersect.Server.Networking
 
         public void HandlePacket(Client client, RequestKillCountsPacket packet)
         {
-            PacketSender.SendBestiaryUnlocks(client?.Entity);
+            PacketSender.SendBestiaryUnlocks(client?.Entity, false);
             PacketSender.SendKillCounts(client?.Entity);
         }
 

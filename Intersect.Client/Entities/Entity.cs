@@ -432,17 +432,6 @@ namespace Intersect.Client.Entities
                     {
                         Log.Warn($"'{nameof(Interface.Interface.GameUi)}' is null.");
                     }
-                    else
-                    {
-                        if (Interface.Interface.GameUi.PlayerBox == null)
-                        {
-                            Log.Warn($"'{nameof(Interface.Interface.GameUi.PlayerBox)}' is null.");
-                        }
-                        else
-                        {
-                            Interface.Interface.GameUi.PlayerBox.UpdateStatuses = true;
-                        }
-                    }
                 }
                 else if (Id != Guid.Empty && Id == Globals.Me.TargetIndex)
                 {
@@ -1769,11 +1758,6 @@ namespace Intersect.Client.Entities
                 return;
             }
 
-            if (!BestiaryController.MyBestiary.HasUnlock(NpcId, BestiaryUnlock.HP))
-            {
-                return;
-            }
-
             var currentHealth = Vital[(int)Vitals.Health];
             if (currentHealth <= 0)
             {
@@ -1800,6 +1784,11 @@ namespace Intersect.Client.Entities
             }
 
             if (currentHealth == maxVital && shieldSize <= 0)
+            {
+                return;
+            }
+
+            if (!BestiaryController.MyBestiary.HasUnlock(NpcId, BestiaryUnlock.HP))
             {
                 return;
             }

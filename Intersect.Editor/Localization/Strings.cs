@@ -2248,6 +2248,7 @@ Tick timer saved in server config.json.";
                 {"shakescreen", @"Shake Screen"},
                 {"changespawn", @"Change Respawn Point"},
                 {"changerecipeunlock", @"Change Recipes"},
+                {"changebestiary", @"Change Bestiary"},
             };
 
         }
@@ -6135,6 +6136,9 @@ Negative values for time to flow backwards.";
 
         public partial struct EventCommandList
         {
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ChangeBestiary = @"Bestiary Update: Set '{00}' to {01} for {02}";
+
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString ChangeOverworldSpawn = @"Change Overworld Spawn Point [Map: {00}, X: {01}, Y: {02}, Dir: {03}]";
 

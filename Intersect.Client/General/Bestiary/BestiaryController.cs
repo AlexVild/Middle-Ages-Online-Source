@@ -105,14 +105,6 @@ namespace Intersect.Client.General.Bestiary
                 return;
             }
 
-            // Defer to the known unlocks list if there are entries there - the player bought a monster manual or something
-            if (BestiaryController.KnownUnlocks.TryGetValue(npcGuid, out var knownUnlocks))
-            {
-                Unlocks[npcGuid].Clear();
-                Unlocks[npcGuid] = knownUnlocks;
-                return;
-            }
-
             var beastUnlocks = beast.BestiaryUnlocks;
             if (!Unlocks.ContainsKey(npcGuid))
             {
@@ -133,9 +125,24 @@ namespace Intersect.Client.General.Bestiary
                     Unlocks[npcGuid][bestiaryUnlock] = true;
                     continue;
                 }
+                 
+                // Store the current unlock status so we can inform the player of an update
+                Unlocks[npcGuid].TryGetValue(bestiaryUnlock, out var unlockStatus);
+
+                // Otherwise do we know the information from something like a monster manual?
+                if (BestiaryController.KnownUnlocks.TryGetValue(npcGuid, out var knownUnlocks) &&
+                    knownUnlocks.ContainsKey(bestiaryUnlock) && 
+                    knownUnlocks[bestiaryUnlock])
+                {
+                    Unlocks[npcGuid][bestiaryUnlock] = true;
+                    if (unlockStatus != true)
+                    {
+                        newUnlocks.Add(bestiaryUnlock);
+                    }
+                    continue;
+                }
 
                 // Otherwise have we crossed the kill threshold?
-                Unlocks[npcGuid].TryGetValue(bestiaryUnlock, out var unlockStatus);
                 if (playersKillCount >= requiredKillCount)
                 {
                     Unlocks[npcGuid][bestiaryUnlock] = true;
@@ -163,10 +170,13 @@ namespace Intersect.Client.General.Bestiary
             {
                 return true;
             }
+
+            // The NPC doesn't exist/isn't in the bestiary - just default to true, all unlocked
             if (!Unlocks.TryGetValue(npcGuid, out var unlocks))
             {
                 return true;
             }
+            // The NPC exists but we don't yet have anything in their unlocks list - say not unlocked
             if (!unlocks.TryGetValue(unlockType, out var unlockStatus))
             {
                 return false;
@@ -187,9 +197,14 @@ namespace Intersect.Client.General.Bestiary
 
         public static void RefreshUnlocks(bool suppressMessaging)
         {
-            foreach(var killCount in KnownKillCounts)
+            foreach(var beast in CachedBeasts.Keys)
             {
-                MyBestiary.UpdateUnlocksFor(killCount.Key, killCount.Value, suppressMessaging);
+                if (!KnownKillCounts.TryGetValue(beast, out var kc))
+                {
+                    kc = 0;
+                }
+
+                MyBestiary.UpdateUnlocksFor(beast, kc, suppressMessaging);
             }
         }
 

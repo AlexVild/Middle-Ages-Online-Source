@@ -635,6 +635,11 @@ namespace Intersect.Client.Interface.Game.EntityPanel
 
         private void UpdateHpBar(float elapsedTime, bool instant = false)
         {
+            if (EntityInfoPanel.IsHidden)
+            {
+                return;
+            }
+
             var targetHpWidth = 0f;
             var targetShieldWidth = 0f;
             var maxWidth = HpBar?.Texture?.GetWidth() ?? 0;
@@ -684,6 +689,11 @@ namespace Intersect.Client.Interface.Game.EntityPanel
 
         private void UpdateMpBar(float elapsedTime, bool instant = false)
         {
+            if (EntityInfoPanel.IsHidden)
+            {
+                return;
+            }
+
             if (MyEntity.MaxVital[(int)Vitals.Mana] <= 0 || !BestiaryController.MyBestiary.HasUnlock(MyEntity.NpcId, GameObjects.Events.BestiaryUnlock.MP))
             {
                 MpBar.Hide();
@@ -710,6 +720,11 @@ namespace Intersect.Client.Interface.Game.EntityPanel
 
         private void UpdateXpBar(float elapsedTime, bool instant = false)
         {
+            if (EntityInfoPanel.IsHidden)
+            {
+                return;
+            }
+
             float targetExpWidth = 1;
             if (((Player) MyEntity).GetNextLevelExperience() >= 0 && MyEntity.Level != Options.MaxLevel)
             {
@@ -770,6 +785,11 @@ namespace Intersect.Client.Interface.Game.EntityPanel
 
         private void UpdateImage()
         {
+            if (EntityInfoPanel.IsHidden)
+            {
+                return;
+            }
+
             var entityTex = MyEntity.Texture;
             if (entityTex != null)
             {

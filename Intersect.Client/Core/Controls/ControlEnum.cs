@@ -83,6 +83,8 @@
         TargetParty4,
 
         OpenOverworldMap,
+
+        OpenBestiary,
     }
 
 }

@@ -2707,11 +2707,11 @@ namespace Intersect.Server.Networking
             player?.SendPacket(new KillCountPacket(npcId, killCount));
         }
 
-        public static void SendBestiaryUnlocks(Player player)
+        public static void SendBestiaryUnlocks(Player player, bool refresh)
         {
             var unlocks = player?.BuildUnlockedBeastList();
 
-            player?.SendPacket(new UnlockedBestiaryEntriesPacket(unlocks));
+            player?.SendPacket(new UnlockedBestiaryEntriesPacket(unlocks, refresh));
         }
     }
 }

@@ -268,6 +268,7 @@ namespace Intersect.GameObjects.Events
         ShakeScreen, // 76
         ChangeSpawn, // 77
         ChangeRecipeStatus, // 78
+        ChangeBestiary, // 79
     }
 
     public enum NPCGuildManagementSelection

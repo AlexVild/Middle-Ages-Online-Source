@@ -14,6 +14,7 @@ using Intersect.GameObjects.Maps.MapList;
 using Intersect.Logging;
 using Intersect.GameObjects.Timers;
 using static Intersect.GameObjects.Events.Commands.ShowTextCommand;
+using Intersect.Utilities;
 
 namespace Intersect.Editor.Forms.Editors.Events
 {
@@ -1967,6 +1968,11 @@ namespace Intersect.Editor.Forms.Editors.Events
         private static string GetCommandText(ChangeRecipeStatusCommand command, MapInstance map)
         {
             return Strings.EventCommandList.UnlockRecipe.ToString(RecipeDescriptor.GetName(command.RecipeId), command.IsUnlocked);
+        }
+
+        private static string GetCommandText(ChangeBestiaryCommand command, MapInstance map)
+        {
+            return Strings.EventCommandList.ChangeBestiary.ToString(command.UnlockType.GetDescription(), command.UnlockStatus, NpcBase.GetName(command.NpcId));
         }
     }
 }

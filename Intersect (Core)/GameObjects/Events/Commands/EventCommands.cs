@@ -1390,4 +1390,15 @@ namespace Intersect.GameObjects.Events.Commands
 
         public bool IsUnlocked { get; set; }
     }
+
+    public partial class ChangeBestiaryCommand : EventCommand
+    {
+        public override EventCommandType Type { get; } = EventCommandType.ChangeBestiary;
+
+        public Guid NpcId { get; set; }
+
+        public BestiaryUnlock UnlockType { get; set; }
+
+        public bool UnlockStatus { get; set; } = true;
+    }
 }

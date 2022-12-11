@@ -840,17 +840,9 @@ namespace Intersect.Client.Networking
 
                 entity.SortStatuses();
 
-                if (Interface.Interface.GameUi != null)
+                if (Interface.Interface.GameUi != null && en.Id == Globals.Me.TargetIndex && Globals.Me.TargetBox != null)
                 {
-                    //If its you or your target, update the entity box.
-                    if (en.Id == Globals.Me.Id && Interface.Interface.GameUi.PlayerBox != null)
-                    {
-                        Interface.Interface.GameUi.PlayerBox.UpdateStatuses = true;
-                    }
-                    else if (en.Id == Globals.Me.TargetIndex && Globals.Me.TargetBox != null)
-                    {
-                        Globals.Me.TargetBox.UpdateStatuses = true;
-                    }
+                    Globals.Me.TargetBox.UpdateStatuses = true;
                 }
             }
         }
@@ -930,17 +922,9 @@ namespace Intersect.Client.Networking
 
             en.SortStatuses();
 
-            if (Interface.Interface.GameUi != null)
+            if (Interface.Interface.GameUi != null && id == Globals.Me.TargetIndex && Globals.Me.TargetBox != null)
             {
-                //If its you or your target, update the entity box.
-                if (id == Globals.Me.Id && Interface.Interface.GameUi.PlayerBox != null)
-                {
-                    Interface.Interface.GameUi.PlayerBox.UpdateStatuses = true;
-                }
-                else if (id == Globals.Me.TargetIndex && Globals.Me.TargetBox != null)
-                {
-                    Globals.Me.TargetBox.UpdateStatuses = true;
-                }
+                Globals.Me.TargetBox.UpdateStatuses = true;
             }
         }
 
@@ -2827,6 +2811,11 @@ namespace Intersect.Client.Networking
         {
             BestiaryController.KnownUnlocks.Clear();
             BestiaryController.KnownUnlocks = packet.BestiaryUnlocks;
+
+            if (packet.Refresh)
+            {
+                BestiaryController.RefreshUnlocks(false);
+            }
         }
     }
 }

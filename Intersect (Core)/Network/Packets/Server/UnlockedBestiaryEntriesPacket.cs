@@ -18,9 +18,13 @@ namespace Intersect.Network.Packets.Server
         [Key(0)]
         public Dictionary<Guid, Dictionary<BestiaryUnlock, bool>> BestiaryUnlocks;
 
-        public UnlockedBestiaryEntriesPacket(Dictionary<Guid, Dictionary<BestiaryUnlock, bool>> bestiaryUnlocks)
+        [Key(1)]
+        public bool Refresh { get; set; }
+
+        public UnlockedBestiaryEntriesPacket(Dictionary<Guid, Dictionary<BestiaryUnlock, bool>> bestiaryUnlocks, bool refresh)
         {
             BestiaryUnlocks = bestiaryUnlocks;
+            Refresh = refresh;
         }
     }
 }

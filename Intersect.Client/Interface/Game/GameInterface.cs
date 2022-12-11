@@ -118,8 +118,6 @@ namespace Intersect.Client.Interface.Game
 
         private TradingWindow mTradingWindow;
 
-        public EntityBox PlayerBox;
-
         public MapScreen.MapScreen Map;
 
         public GameInterface(Canvas canvas) : base(canvas)
@@ -144,8 +142,6 @@ namespace Intersect.Client.Interface.Game
             mChatBox = new Chatbox(GameCanvas, this);
             GameMenu = new Menu(GameCanvas);
             Hotbar = new HotBarWindow(GameCanvas);
-            PlayerBox = new EntityBox(GameCanvas, EntityTypes.Player, Globals.Me, true);
-            PlayerBox.SetEntity(Globals.Me);
             if (mPictureWindow == null)
             {
                 mPictureWindow = new PictureWindow(GameCanvas);
@@ -431,11 +427,6 @@ namespace Intersect.Client.Interface.Game
 
         public void Draw()
         {
-            if (Globals.Me != null && PlayerBox?.MyEntity != Globals.Me)
-            {
-                PlayerBox?.SetEntity(Globals.Me);
-            }
-
             mChatBox?.Update();
             GameMenu?.Update(mShouldUpdateQuestLog);
             mShouldUpdateQuestLog = false;
@@ -448,7 +439,6 @@ namespace Intersect.Client.Interface.Game
             mInstanceLifeDisplay?.Update();
             Map.Update();
             EscapeMenu.Update();
-            PlayerBox?.Update();
             mMapItemWindow.Update();
             AnnouncementWindow?.Update();
             mPictureWindow?.Update();

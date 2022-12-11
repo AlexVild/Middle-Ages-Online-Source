@@ -3064,5 +3064,16 @@ namespace Intersect.Server.Entities.Events
                 player?.RemoveRecipes(command.RecipeId);
             }
         }
+
+        private static void ProcessCommand(
+            ChangeBestiaryCommand command,
+            Player player,
+            Event instance,
+            CommandInstance stackInfo,
+            Stack<CommandInstance> callStack
+        )
+        {
+            player?.ChangeBeastUnlockStatus(command.NpcId, command.UnlockType, command.UnlockStatus);
+        }
     }
 }

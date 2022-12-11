@@ -297,7 +297,11 @@ namespace Intersect.Client.Core
 
                                         break;
                                     case Control.OpenOverworldMap:
-                                        Interface.Interface.GameUi.Map.ToggleOpen();
+                                        Interface.Interface.GameUi?.Map.ToggleOpen();
+
+                                        break;
+                                    case Control.OpenBestiary:
+                                        Interface.Interface.GameUi?.GameMenu.ToggleBestiaryWindow();
 
                                         break;
                                     default:

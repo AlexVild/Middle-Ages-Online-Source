@@ -1,6 +1,7 @@
 ﻿using Intersect.GameObjects;
 using Intersect.GameObjects.Events;
 using Intersect.Server.Database.PlayerData.Players;
+using Intersect.Server.Networking;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -102,6 +103,7 @@ namespace Intersect.Server.Entities
             }
 
             // And update the client
+            PacketSender.SendBestiaryUnlocks(this, true);
         }
 
         public Dictionary<Guid, Dictionary<BestiaryUnlock, bool>> BuildUnlockedBeastList()

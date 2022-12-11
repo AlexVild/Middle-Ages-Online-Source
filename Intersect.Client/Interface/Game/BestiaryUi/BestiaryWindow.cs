@@ -21,8 +21,10 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
 {
     public class BestiaryWindow
     {
+        private readonly Color BeastCompletionHoverColor = new Color(255, 105, 158, 252);
         private readonly Color BeastCompletionColor = new Color(255, 30, 74, 157);
         private readonly Color BeastListTextColor = new Color(255, 50, 19, 0);
+        private readonly Color BeastListTextHoverColor = new Color(255, 111, 63, 0);
         private readonly Color BeastListLockedTextColor = new Color(255, 100, 100, 100);
         private readonly string UnknownString = Strings.Bestiary.Unknown.ToString();
         private const int ComponentPadding = 16;
@@ -256,11 +258,14 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
             if (completionRate >= 100f)
             {
                 CompletionRateLabel.SetTextColor(BeastCompletionColor, Label.ControlState.Normal);
+                CompletionRateLabel.SetTextColor(BeastCompletionHoverColor, Label.ControlState.Hovered);
             }
             else
             {
                 CompletionRateLabel.SetTextColor(BeastListTextColor, Label.ControlState.Normal);
+                CompletionRateLabel.SetTextColor(BeastListTextHoverColor, Label.ControlState.Hovered);
             }
+            CompletionRateLabel.SetToolTipText($"{amountCompleted} / {BestiaryController.CachedBeasts.Count} entries completed.");
         }
 
         private bool BeastComplete(NpcBase beast)

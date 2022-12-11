@@ -105,6 +105,12 @@
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_AddInspiration.Designer.cs">
       <DependentUpon>EventCommand_AddInspiration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_ChangeBestiary.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_ChangeBestiary.Designer.cs">
+      <DependentUpon>EventCommand_ChangeBestiary.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_ChangeMapSpawnGroup.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -818,6 +824,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_AddInspiration.resx">
       <DependentUpon>EventCommand_AddInspiration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_ChangeBestiary.resx">
+      <DependentUpon>EventCommand_ChangeBestiary.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_ChangeItems.resx">
       <DependentUpon>EventCommand_ChangeItems.cs</DependentUpon>
