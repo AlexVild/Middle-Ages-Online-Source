@@ -139,7 +139,7 @@ namespace Intersect.Server.Entities
 
             if (targetEntity is Player player)
             {
-                Parent.Owner.ProjectileAttack(player, Parent, Parent.Spell, Parent.Item, Dir);
+                Parent.Owner.ProjectileAttack(player, Parent, Parent.Spell, Parent.Item, false, Dir);
                 if (GrappleAvailable && Parent.Base.AttachToEntities)
                 {
                     // If the projectile's spell can't affect the target, ignore
@@ -180,7 +180,7 @@ namespace Intersect.Server.Entities
                 var ownerNpc = Parent.Owner as Npc;
                 if (ownerNpc == null || ownerNpc.CanNpcCombat(npc, FriendlySpell))
                 {
-                    Parent.Owner.ProjectileAttack(npc, Parent, Parent.Spell, Parent.Item, Dir);
+                    Parent.Owner.ProjectileAttack(npc, Parent, Parent.Spell, Parent.Item, false, Dir);
 
                     if (GrappleAvailable && Parent.Base.AttachToEntities)
                     {
@@ -201,7 +201,7 @@ namespace Intersect.Server.Entities
                 // If the owner is an NPC, don't bother trying to harvest
                 if (Parent.Owner as Player != null)
                 {
-                    Parent.Owner.ProjectileAttack(resourceTarget, Parent, Parent.Spell, Parent.Item, Dir);                    
+                    Parent.Owner.ProjectileAttack(resourceTarget, Parent, Parent.Spell, Parent.Item, true, Dir);                    
                 }
 
                 return !IgnoreResource(resourceTarget);

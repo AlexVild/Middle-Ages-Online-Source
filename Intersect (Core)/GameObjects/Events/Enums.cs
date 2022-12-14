@@ -355,4 +355,28 @@ namespace Intersect.GameObjects.Events
         [Description("Spell Combat Info"), DefaultKillCount(60)]
         SpellCombatInfo,
     }
+
+    public enum ThreatLevel
+    {
+        [Description("MIDNIGHT")]
+        Midnight = 0,
+
+        [Description("EXTREME")]
+        Extreme,
+
+        [Description("DEADLY")]
+        Deadly,
+
+        [Description("THREATENING")]
+        Threatening,
+
+        [Description("FAIR")]
+        Fair,
+
+        [Description("WIMPY")]
+        Wimpy,
+
+        [Description("TRIVIAL")]
+        Trivial,
+    }
 }

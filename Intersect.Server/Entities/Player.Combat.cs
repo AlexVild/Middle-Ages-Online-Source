@@ -63,6 +63,7 @@ namespace Intersect.Server.Entities
             double critMultiplier,
             ItemBase weapon,
             SpellBase spell,
+            bool ignoreEvasion,
             out int damage)
         {
             damage = 0;
@@ -108,7 +109,7 @@ namespace Intersect.Server.Entities
             // TODO evasion
             // if (!ignoreInvasion)...
 
-            return base.TryDealDamageTo(enemy, attackTypes, dmgScaling, critMultiplier, weapon, spell, out damage);
+            return base.TryDealDamageTo(enemy, attackTypes, dmgScaling, critMultiplier, weapon, spell, false, out damage);
         }
 
         public override void MeleeAttack(Entity enemy, bool ignoreEvasion)
@@ -146,7 +147,7 @@ namespace Intersect.Server.Entities
                 attackTypes.AddRange(weapon.Descriptor.AttackTypes);
             }
 
-            if (!TryDealDamageTo(enemy, attackTypes, 100, 1.0, weapon?.Descriptor, null, out int damage))
+            if (!TryDealDamageTo(enemy, attackTypes, 100, 1.0, weapon?.Descriptor, null, false, out int damage))
             {
                 return;
             }
@@ -332,7 +333,7 @@ namespace Intersect.Server.Entities
             return true;
         }
 
-        public override void ProjectileAttack(Entity enemy, Projectile projectile, SpellBase parentSpell, ItemBase parentWeapon, byte projectileDir)
+        public override void ProjectileAttack(Entity enemy, Projectile projectile, SpellBase parentSpell, ItemBase parentWeapon, bool ignoreEvasion, byte projectileDir)
         {
             if (projectile == null || projectile.Base == null)
             {
@@ -357,7 +358,7 @@ namespace Intersect.Server.Entities
                 return;
             }
 
-            base.ProjectileAttack(enemy, projectile, parentSpell, parentWeapon, projectileDir);
+            base.ProjectileAttack(enemy, projectile, parentSpell, parentWeapon, false, projectileDir);
         }
 
         private bool CanPvpPlayer(Player target)

@@ -20,6 +20,8 @@ namespace Intersect.Server.Entities
     {
         public int Health => GetVital(Vitals.Health);
         public int Mana => GetVital(Vitals.Mana);
+        public int Accuracy => Stat?.ElementAtOrDefault((int)Stats.Accuracy)?.Value() ?? 0;
+        public int Evasion => Stat?.ElementAtOrDefault((int)Stats.Evasion)?.Value() ?? 0;
 
         public bool IsStealthed => CachedStatuses.ToArray().Select(status => status.Type).Contains(StatusTypes.Stealth);
 
@@ -67,7 +69,6 @@ namespace Intersect.Server.Entities
             {
                 RemoveStatusesOnDamage();
             }
-            NotifySwarm(attacker);
 
             if (damage > 0)
             {
@@ -86,6 +87,11 @@ namespace Intersect.Server.Entities
                     Die(true, attacker);
                 }
             }
+        }
+
+        public virtual void ReactToCombat(Entity attacker)
+        {
+
         }
 
         private void RemoveStatusesOnDamage()

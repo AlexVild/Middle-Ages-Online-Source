@@ -3,9 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using System.Net.Http.Headers;
 using System.Threading;
-using System.Web.UI;
 using Intersect.Enums;
 using Intersect.GameObjects;
 using Intersect.GameObjects.Events;
@@ -16,7 +14,6 @@ using Intersect.Server.Database;
 using Intersect.Server.Database.PlayerData.Players;
 using Intersect.Server.Entities.Combat;
 using Intersect.Server.Entities.Events;
-using Intersect.Server.General;
 using Intersect.Server.Localization;
 using Intersect.Server.Maps;
 using Intersect.Server.Networking;
@@ -38,6 +35,8 @@ namespace Intersect.Server.Entities
         [JsonProperty("MaxVitals"), NotMapped] private int[] _maxVital = new int[(int) Vitals.VitalCount];
 
         [NotMapped, JsonIgnore] public Stat[] Stat = new Stat[(int) Stats.StatCount];
+
+        [NotMapped, JsonIgnore] public int[] StatVals => Stat.Select(stat => stat.Value()).ToArray();
 
         [NotMapped, JsonIgnore] public Entity Target { get; set; } = null;
 
@@ -1496,7 +1495,7 @@ namespace Intersect.Server.Entities
             }
         }
 
-        private void SendBlockedAttackMessage(Entity en)
+        protected void SendBlockedAttackMessage(Entity en)
         {
             if (en == null) return;
 

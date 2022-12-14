@@ -13,7 +13,7 @@ namespace Intersect.Server.Entities
 {
     public partial class Npc : AttackingEntity
     {
-        public override void ProjectileAttack(Entity enemy, Projectile projectile, SpellBase parentSpell, ItemBase parentWeapon, byte projectileDir)
+        public override void ProjectileAttack(Entity enemy, Projectile projectile, SpellBase parentSpell, ItemBase parentWeapon, bool ignoreEvasion, byte projectileDir)
         {
             if (projectile == null || projectile.Base == null)
             {
@@ -29,13 +29,20 @@ namespace Intersect.Server.Entities
                 return;
             }
 
-            base.ProjectileAttack(enemy, projectile, parentSpell, parentWeapon, projectileDir);
+            base.ProjectileAttack(enemy, projectile, parentSpell, parentWeapon, false, projectileDir);
         }
 
         public override void TakeDamage(Entity attacker, int damage, Vitals vital = Vitals.Health)
         {
             AddToDamageAndLootMaps(attacker, damage);
             base.TakeDamage(attacker, damage, vital);
+        }
+
+        public override void ReactToCombat(Entity attacker)
+        {
+            AddToDamageAndLootMaps(attacker, 0);
+            NotifySwarm(attacker);
+            base.ReactToCombat(attacker);
         }
 
         public override bool CanMeleeTarget(Entity target)
@@ -78,7 +85,7 @@ namespace Intersect.Server.Entities
                 critMultiplier = spell.Combat.CritMultiplier;
             }
 
-            return base.TryDealDamageTo(enemy, attackTypes, dmgScaling, critMultiplier, weapon, null, out damage);
+            return base.TryDealDamageTo(enemy, attackTypes, dmgScaling, critMultiplier, weapon, null, false, out damage);
         }
 
         // An NPC always has casting materials

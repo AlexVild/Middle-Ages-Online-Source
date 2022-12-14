@@ -112,6 +112,11 @@ namespace Intersect.Utilities
             return Math.Sin(val * (Math.PI / 180.0));
         }
 
+        public static double DArcTan(double val)
+        {
+            return Math.Atan(val * (Math.PI / 180.0));
+        }
+
         public static int RoundNearestMultiple(int value, int factor)
         {
             return (int)Math.Round(

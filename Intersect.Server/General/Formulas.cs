@@ -63,58 +63,7 @@ namespace Intersect.Server.General
                 throw new Exception(Strings.Formulas.missing, ex);
             }
         }
-
-
-        public static int CalculateDamageMAO(
-            List<AttackTypes> attackTypes,
-            double critMultiplier,
-            int scaling,
-            Entity attacker,
-            Entity defender)
-        {
-            if (attacker == null || defender == null)
-            {
-                return 0;
-            }
-
-            if (attackTypes.Count == 0)
-            {
-                // Default to blunt handling if nothing given, backwards compatible with old logic (def/atk used)
-                attackTypes.Add(AttackTypes.Blunt);
-            }
-
-            // Go through each of the attack types that apply to the damage
-            var totalDamage = 0;
-            float decScaling = (float)scaling / 100; // scaling comes into this function as a percent number, i.e 110%, so we need that to be 1.1
-            foreach (var element in attackTypes)
-            {
-                var dmg = (int)Math.Round(attacker.Stat[(int)element].Value() * decScaling);
-                // If we're not gonna be doing damage, dismiss
-                if (dmg == 0)
-                {
-                    continue;
-                }
-
-                // Otherwise, 
-                var resConst = 0.2;
-                var resistance = resConst * defender.Stat[(int)StatHelpers.GetResistanceStat(element)].Value();
-                var resistanceMod = MathHelper.Clamp(-1.0, resistance / dmg, 1.0);
-
-                // = MEDIAN(0, FLOOR(G6 - (G6 * (0.1 + K6))), 10000)
-                var baseVariance = 0.1;
-                var lowVariance = baseVariance + resistanceMod;
-                var highVariance = baseVariance - resistanceMod;
-
-                var lowestDmg = dmg - (int)Math.Floor(dmg * lowVariance);
-                var highestDmg = dmg + (int)Math.Ceiling(dmg * highVariance);
-
-                totalDamage += Randomization.Next(lowestDmg, highestDmg + 1);
-            }
-
-            return (int)Math.Round(totalDamage * critMultiplier);
-        } 
-            
-
+        
         public static int CalculateDamage(
             int baseDamage,
             DamageType damageType,

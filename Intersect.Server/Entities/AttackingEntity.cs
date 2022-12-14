@@ -56,6 +56,7 @@ namespace Intersect.Server.Entities
             Projectile projectile,
             SpellBase parentSpell,
             ItemBase parentWeapon,
+            bool ignoreEvasion,
             byte projectileDir)
         {
             if (projectile == null || projectile.Base == null)
@@ -64,6 +65,13 @@ namespace Intersect.Server.Entities
             }
             if (!CanRangeTarget(enemy))
             {
+                return;
+            }
+
+            if (!ignoreEvasion && CombatUtilities.AttackMisses(Accuracy, enemy?.Evasion ?? 0))
+            {
+                SendMissedAttackMessage(enemy, DamageType.Physical);
+                enemy?.ReactToCombat(this);
                 return;
             }
 
@@ -79,7 +87,7 @@ namespace Intersect.Server.Entities
             // Otherwise, handle the weapon
             else if (parentWeapon != null)
             {
-                if (!TryDealDamageTo(enemy, parentWeapon.AttackTypes, 100, 1.0, parentWeapon, null, out int weaponDamage))
+                if (!TryDealDamageTo(enemy, parentWeapon.AttackTypes, 100, 1.0, parentWeapon, null, false, out int weaponDamage))
                 {
                     return;
                 }
@@ -248,11 +256,19 @@ namespace Intersect.Server.Entities
             double critMultiplier,
             ItemBase weapon,
             SpellBase spell,
+            bool ignoreEvasion,
             out int damage)
         {
             damage = 0;
             if (enemy == null || !enemy.CanHaveVitalDamaged(Vitals.Health))
             {
+                return false;
+            }
+
+            if (!ignoreEvasion && CombatUtilities.AttackMisses(Accuracy, enemy.Evasion))
+            {
+                SendMissedAttackMessage(enemy, DamageType.Physical);
+                enemy?.ReactToCombat(this);
                 return false;
             }
 
@@ -320,7 +336,7 @@ namespace Intersect.Server.Entities
 
             UpdateCombatTimers(this, enemy);
 
-            damage = Formulas.CalculateDamageMAO(damageTypes, critMultiplier, scaling, this, enemy);
+            damage = CombatUtilities.CalculateDamage(damageTypes, critMultiplier, scaling, StatVals, enemy.StatVals);
 
             if (damage != 0)
             {
@@ -332,6 +348,10 @@ namespace Intersect.Server.Entities
 
                 PacketSender.SendCombatNumber(DetermineCombatNumberType(damage, secondaryDamage, enemy is Resource, critMultiplier), enemy, damage);
                 enemy.TakeDamage(this, damage, secondaryDamage ? Vitals.Mana : Vitals.Health);
+            }
+            else
+            {
+                SendBlockedAttackMessage(enemy);
             }
         }
 

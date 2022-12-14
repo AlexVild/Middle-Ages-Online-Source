@@ -372,6 +372,20 @@ namespace Intersect.Server.Entities
                 return;
             }
 
+            if (CombatUtilities.AttackMisses(Accuracy, target.Evasion))
+            {
+                if (spell?.Combat?.HotDotInterval > 0)
+                {
+                    SendMissedAttackMessage(target, DamageType.Magic);
+                }
+                else
+                {
+                    SendMissedAttackMessage(target, DamageType.Physical);
+                }
+                target?.ReactToCombat(this);
+                return;
+            }
+
             ApplySpellBuffsTo(spell, target);
             Combat.DoT.AddSpellDoTsTo(spell, this, target);
 
@@ -398,12 +412,12 @@ namespace Intersect.Server.Entities
             int damage;
             if (this is Player player && spell.WeaponSpell)
             {
-                if (!TryDealDamageTo(target, attackTypes, scaling, critMultiplier, player.CastingWeapon, spell, out damage))
+                if (!TryDealDamageTo(target, attackTypes, scaling, critMultiplier, player.CastingWeapon, spell, true, out damage))
                 {
                     return;
                 }
             }
-            else if (!TryDealDamageTo(target, attackTypes, scaling, critMultiplier, null, spell, out damage))
+            else if (!TryDealDamageTo(target, attackTypes, scaling, critMultiplier, null, spell, true, out damage))
             {
                 return;
             }
