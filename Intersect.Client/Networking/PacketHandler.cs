@@ -2817,5 +2817,17 @@ namespace Intersect.Client.Networking
                 BestiaryController.RefreshUnlocks(false);
             }
         }
+        
+        public void HandlePacket(IPacketSender packetSender, ExpToastPacket packet)
+        {
+            if (packet.ComboEnder)
+            {
+                ExpToastService.CreateExpToast(packet.Exp, "COMBO!");
+            }
+            else
+            {
+                ExpToastService.CreateExpToast(packet.Exp);
+            }
+        }
     }
 }

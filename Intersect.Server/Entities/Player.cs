@@ -1417,7 +1417,7 @@ namespace Intersect.Server.Entities
             StartCommonEventsWithTrigger(CommonEventTrigger.LevelUp);
         }
 
-        public void GiveExperience(long amount, bool partyCombo = false, Entity opponent = null)
+        public void GiveExperience(long amount, bool partyCombo = false, Entity opponent = null, bool fromComboEnd = false)
         {
             if (Level >= Options.MaxLevel || amount == 0)
             {
@@ -1439,7 +1439,7 @@ namespace Intersect.Server.Entities
 
             if (expToGive > 0)
             {
-                PacketSender.SendActionMsg(this, Strings.Combat.inspiredexp.ToString(expToGive), CustomColors.Combat.LevelUp);
+                PacketSender.SendExpToast(this, expToGive, fromComboEnd);
             }
 
             Exp += expToGive;
@@ -1632,7 +1632,7 @@ namespace Intersect.Server.Entities
             PacketSender.SendComboPacket(this, CurrentCombo, ComboWindow, ComboExp, MaxComboWindow); // sends the final packet of the combo
             StartCommonEventsWithTrigger(CommonEventTrigger.ComboEnd);
             
-            GiveExperience(totalComboExp);
+            GiveExperience(totalComboExp, fromComboEnd: true);
         }
         #endregion
 

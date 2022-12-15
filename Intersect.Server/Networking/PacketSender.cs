@@ -2713,5 +2713,10 @@ namespace Intersect.Server.Networking
 
             player?.SendPacket(new UnlockedBestiaryEntriesPacket(unlocks, refresh));
         }
+
+        public static void SendExpToast(Player player, long exp, bool comboEnder)
+        {
+            player?.SendPacket(new ExpToastPacket(exp, comboEnder));
+        }
     }
 }

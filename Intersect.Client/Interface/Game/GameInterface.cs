@@ -788,6 +788,7 @@ namespace Intersect.Client.Interface.Game
         {
             mComboText?.Update();
             mHUD.Draw();
+            ExpToastService.Draw();
             mPartyHUD.Draw();
 
             LeaderboardWindow.Update();

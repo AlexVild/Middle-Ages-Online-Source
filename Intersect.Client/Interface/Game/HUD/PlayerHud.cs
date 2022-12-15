@@ -30,7 +30,14 @@ namespace Intersect.Client.Interface.Game.HUD
         private GameTexture BarBackground;
         private GameTexture HpTexture;
         private GameTexture ManaTexture;
-        private GameTexture ExpTexture;
+        private GameTexture _expTexture;
+        private bool FlashExp = false;
+        private GameTexture ExpTexture
+        {
+            get => FlashExp ? ExpGainTexture : _expTexture;
+            set => _expTexture = value;
+        }   
+        private GameTexture ExpGainTexture;
         private GameTexture MapNameTexture;
         private GameTexture ShieldTexture;
         private GameTexture PvpTexture;
@@ -59,6 +66,10 @@ namespace Intersect.Client.Interface.Game.HUD
         private float HpY;
         private int HpWidth;
 
+        public float ExpX { get; set; }
+        public float ExpY { get; set; }
+        public float ExpWidth { get; set; }
+
         public PlayerHud()
         {
             IsVisible = true;
@@ -71,6 +82,7 @@ namespace Intersect.Client.Interface.Game.HUD
             HpTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_health.png");
             ManaTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_magic.png");
             ExpTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_exp.png");
+            ExpGainTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_exp_gain.png");
             MapNameTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hud_map.png");
             ShieldTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_shield.png");
             PvpTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hud_pvp.png");
@@ -85,6 +97,7 @@ namespace Intersect.Client.Interface.Game.HUD
                 HpTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_health_lg.png");
                 ManaTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_magic_lg.png");
                 ExpTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_exp_lg.png");
+                ExpGainTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_exp_gain_lg.png");
                 ShieldTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_shield_lg.png");
             }
             else if (BarBackground.Name.Contains("_lg") && !UseLargeBars)
@@ -93,6 +106,7 @@ namespace Intersect.Client.Interface.Game.HUD
                 HpTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_health.png");
                 ManaTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_magic.png");
                 ExpTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_exp.png");
+                ExpGainTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_exp_gain.png");
                 ShieldTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_shield.png");
             }
         }
@@ -212,6 +226,11 @@ namespace Intersect.Client.Interface.Game.HUD
             var tnlExp = Globals.Me.ExperienceToNextLevel;
             x += BarBackground.GetWidth() + BarPadding;
 
+            ExpX = x - Left;
+            ExpY = y - Top;
+            ExpWidth = BarBackground.GetWidth();
+
+            FlashExp = ExpToastService.Toasts.Count > 0;
             if (Globals.Me.Level == Options.MaxLevel)
             {
                 DrawBar(BarBackground, ExpTexture, x, y, width, height, "EXP", $"MAX LEVEL", 1, 1);

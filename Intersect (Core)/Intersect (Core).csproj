@@ -451,6 +451,7 @@
     <Compile Include="Network\Packets\Server\CombatEffectPacket.cs" />
     <Compile Include="Network\Packets\Server\ComboPacket.cs" />
     <Compile Include="Network\Packets\Server\CraftingInfoPacket.cs" />
+    <Compile Include="Network\Packets\Server\ExpToastPacket.cs" />
     <Compile Include="Network\Packets\Server\KillCountPacket.cs" />
     <Compile Include="Network\Packets\Server\KillCountsPacket.cs" />
     <Compile Include="Network\Packets\Server\PlayerDeathTypePacket.cs" />
