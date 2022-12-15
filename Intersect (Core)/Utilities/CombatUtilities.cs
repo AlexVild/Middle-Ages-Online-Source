@@ -1,4 +1,6 @@
 ﻿using Intersect.Enums;
+using Intersect.GameObjects;
+using Intersect.GameObjects.Events;
 using System;
 using System.Collections.Generic;
 
@@ -6,17 +8,22 @@ namespace Intersect.Utilities
 {
     public static class CombatUtilities
     {
-        private const float MissHeight = 0.5f;
-        private const float MissWidth = -0.01f;
+        private const float MissHeight = 0.42f;
+        private const float MissWidth = -0.012f;
         private const float MissDefaultPercent = 0.1f;
+
+        // The points at which a miss factor becomes a problem
+        private const int DangerMissFactor = 25;
 
         public static int CalculateDamage(
             List<AttackTypes> attackTypes,
             double critMultiplier,
             int scaling,
             int[] attackerStats,
-            int[] defenderStats)
+            int[] defenderStats,
+            out int maxHit)
         {
+            maxHit = 0;
             if (attackerStats.Length != (int)Stats.StatCount)
             {
                 throw new ArgumentException("Invalid attacker stats given", nameof(attackerStats));
@@ -57,6 +64,11 @@ namespace Intersect.Utilities
                 var lowestDmg = dmg - (int)Math.Floor(dmg * lowVariance);
                 var highestDmg = dmg + (int)Math.Ceiling(dmg * highVariance);
 
+                if (highestDmg > maxHit)
+                {
+                    maxHit = highestDmg;
+                }
+
                 totalDamage += Randomization.Next(lowestDmg, highestDmg + 1);
             }
 
@@ -80,22 +92,51 @@ namespace Intersect.Utilities
             }
             return Randomization.NextDouble() <= missChance;
         }
-        
+
         /// <summary>
         /// We use ATan here because it allows for a diminishing return on both sides of accuracy/evasion increases
         /// </summary>
         /// <param name="missFactor">A number representing how strong a miss is to occur - a negative number favors evade</param>
         /// <returns>A percentage the attack missed</returns>
-        private static double MissChance(int missFactor)
+        public static double MissChance(int missFactor)
         {
             var radians = Math.Atan(MissWidth * missFactor);
             var missChance = MissHeight * radians + MissDefaultPercent;
             return Math.Max(missChance, 0);
         }
 
-        private static int CalculateMissFactor(int accuracy, int evasion)
+        public static int CalculateMissFactor(int accuracy, int evasion)
         {
             return accuracy - evasion;
+        }
+
+        /// <summary>
+        /// Makes a guess as to whether or not some entity is a spell caster, and, if so, uses their ability power in threat
+        /// estimation instead of their melee stats
+        /// </summary>
+        /// <param name="stats">The stats of the entity in question</param>
+        /// <returns>A list of relevant attack types</returns>
+        public static List<AttackTypes> EstimateEntityAttackTypes(int[] stats, List<AttackTypes> meleeTypes)
+        {
+            var atkTypes = new List<AttackTypes>();
+            var playerMagicPwr = stats[(int)Stats.AbilityPower];
+
+            var playerBluntDmg = stats[(int)Stats.Attack];
+            var playerPierceDmg = stats[(int)Stats.PierceAttack];
+            var playerSlashDmg = stats[(int)Stats.SlashAttack];
+            var playerMeleePwr = playerBluntDmg + playerPierceDmg + playerSlashDmg;
+
+            // Chooses magic as attack type if player's magic is superior to other offensive stats
+            if (playerMagicPwr > playerMeleePwr)
+            {
+                atkTypes.Add(AttackTypes.Magic);
+            }
+            else
+            {
+                atkTypes.AddRange(meleeTypes);
+            }
+
+            return atkTypes;
         }
     }
 }

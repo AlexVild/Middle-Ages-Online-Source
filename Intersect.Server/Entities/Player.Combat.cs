@@ -1,5 +1,6 @@
 ﻿using Intersect.Enums;
 using Intersect.GameObjects;
+using Intersect.GameObjects.Events;
 using Intersect.Server.Database;
 using Intersect.Server.Entities.Combat;
 using Intersect.Server.Entities.Events;
@@ -480,6 +481,92 @@ namespace Intersect.Server.Entities
             }
 
             return true;
+        }
+
+        public double GetThreatLevelExpMod(Entity opponent)
+        {
+            if (opponent == null || !(opponent is Npc npc) || npc.Base == default)
+            {
+                return 1.0;
+            }
+
+            var attackTypes = GetEquippedWeapon()?.AttackTypes ?? new List<AttackTypes>() { AttackTypes.Blunt };
+
+            ThreatLevel threatLevel = ThreatLevel.Fair;
+
+            if (Party?.Count > 1)
+            {
+                var partyVitals = Party.Select(member => member.MaxVitals).ToArray();
+                var partyStats = Party.Select(member => member.StatVals).ToArray();
+                var partyAttackTypes = Party.Select(member => member.GetMeleeAttackTypes()).ToArray();
+                var partyAttackSpeeds = Party.Select(member => GetRawAttackSpeed()).ToArray();
+
+                threatLevel = ThreatLevelUtilities.DetermineNpcThreatLevelParty(partyVitals,
+                   partyStats,
+                   npc.Base.MaxVital,
+                   npc.Base.Stats,
+                   partyAttackTypes,
+                   npc.Base.AttackTypes,
+                   partyAttackSpeeds,
+                   npc.Base.AttackSpeedValue);
+            }
+            else
+            {
+               threatLevel = ThreatLevelUtilities.DetermineNpcThreatLevel(MaxVitals,
+                   StatVals,
+                   npc.Base.MaxVital,
+                   npc.Base.Stats,
+                   attackTypes,
+                   npc.Base.AttackTypes,
+                   GetRawAttackSpeed(),
+                   npc.Base.AttackSpeedValue);
+            }
+
+            if (!Options.Combat.ThreatLevelExpRates.TryGetValue(threatLevel, out var expRate))
+            {
+                return 1.0;
+            }
+
+            return expRate;
+        }
+
+        public long GetRawAttackSpeed()
+        {
+            var attackTime = Options.Combat.MinAttackRate;
+            var cls = ClassBase.Get(ClassId);
+            if (cls != null && cls.AttackSpeedModifier == 1) //Static
+            {
+                attackTime = cls.AttackSpeedValue;
+            }
+
+            var weapon = TryGetEquippedItem(Options.WeaponIndex, out var item) ? item.Descriptor : null;
+
+            if (weapon == null)
+            {
+                return attackTime;
+            }
+
+            if (weapon.AttackSpeedModifier == 1) // Static
+            {
+                attackTime = weapon.AttackSpeedValue;
+            }
+            else if (weapon.AttackSpeedModifier == 2) //Percentage
+            {
+                attackTime = (int)(attackTime * (100f / weapon.AttackSpeedValue));
+            }
+
+            return attackTime;
+        }
+
+        public List<AttackTypes> GetMeleeAttackTypes()
+        {
+            var weapon = GetEquippedWeapon();
+            if (GetEquippedWeapon() == default)
+            {
+                return new List<AttackTypes>() { AttackTypes.Blunt };
+            }
+
+            return weapon.AttackTypes;
         }
     }
 }

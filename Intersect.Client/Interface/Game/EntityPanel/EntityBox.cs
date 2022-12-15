@@ -15,6 +15,7 @@ using Intersect.Client.Localization;
 using Intersect.Client.Networking;
 using Intersect.Enums;
 using Intersect.GameObjects;
+using Intersect.GameObjects.Events;
 using Intersect.Logging;
 using Intersect.Utilities;
 
@@ -111,6 +112,12 @@ namespace Intersect.Client.Interface.Game.EntityPanel
 
         public Button GuildLabel;
 
+        private Framework.Gwen.Control.Label ThreatLevelLabel;
+        
+        private Framework.Gwen.Control.Label ThreatLevelText;
+        
+        private ImagePanel ThreatLevelContainer;
+
         private static Bestiary MyBestiary => BestiaryController.MyBestiary;
 
         //Init
@@ -169,6 +176,13 @@ namespace Intersect.Client.Interface.Game.EntityPanel
             MpTitle = new Framework.Gwen.Control.Label(EntityInfoPanel, "MPTitle");
             MpTitle.SetText(Strings.EntityBox.vital1);
             MpLbl = new Framework.Gwen.Control.Label(EntityInfoPanel, "MPLabel");
+
+            ThreatLevelContainer = new ImagePanel(EntityInfoPanel, "ThreatLevelContainer");
+            ThreatLevelLabel = new Framework.Gwen.Control.Label(ThreatLevelContainer, "ThreatLevelLabel")
+            {
+                Text = "Threat Lvl:"
+            };
+            ThreatLevelText = new Framework.Gwen.Control.Label(ThreatLevelContainer, "ThreatLevel");
 
             ExpBackground = new ImagePanel(EntityInfoPanel, "EXPBackground");
             ExpBar = new ImagePanel(EntityInfoPanel, "EXPBar");
@@ -230,14 +244,7 @@ namespace Intersect.Client.Interface.Game.EntityPanel
             MyEntity = entity;
             if (MyEntity != null)
             {
-                SetupEntityElements();
-                UpdateSpellStatus();
-                if (EntityType == EntityTypes.Event)
-                {
-                    EventDesc.ClearText();
-                    EventDesc.AddText(((Event)MyEntity).Desc, Color.White);
-                    EventDesc.SizeToChildren(false, true);
-                }
+                RefreshEntity();
             }
         }
 
@@ -247,14 +254,20 @@ namespace Intersect.Client.Interface.Game.EntityPanel
             EntityType = type;
             if (MyEntity != null)
             {
-                SetupEntityElements();
-                UpdateSpellStatus();
-                if (EntityType == EntityTypes.Event)
-                {
-                    EventDesc.ClearText();
-                    EventDesc.AddText(((Event)MyEntity).Desc, Color.White);
-                    EventDesc.SizeToChildren(false, true);
-                }
+                RefreshEntity();
+            }
+        }
+
+        public void RefreshEntity()
+        {
+            UpdateThreatLevel();
+            SetupEntityElements();
+            UpdateSpellStatus();
+            if (EntityType == EntityTypes.Event)
+            {
+                EventDesc.ClearText();
+                EventDesc.AddText(((Event)MyEntity).Desc, Color.White);
+                EventDesc.SizeToChildren(false, true);
             }
         }
 
@@ -465,6 +478,7 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                 UpdateMap();
                 UpdateHpBar(elapsedTime);
                 UpdateMpBar(elapsedTime);
+                
                 IsHidden = false;
             }
             else
@@ -511,6 +525,77 @@ namespace Intersect.Client.Interface.Game.EntityPanel
             }
 
             mLastUpdateTime = Timing.Global.Milliseconds;
+        }
+
+        private void UpdateThreatLevel()
+        {
+            if (MyEntity.NpcId != default && BestiaryController.CachedBeasts.TryGetValue(MyEntity.NpcId, out var npc))
+            {
+                ThreatLevelContainer.Show();
+                var playerMelee = new List<AttackTypes> { AttackTypes.Blunt };
+                
+                if (Globals.Me.TryGetEquippedWeaponDescriptor(out var weapon))
+                {
+                    playerMelee = weapon.AttackTypes;
+                }
+
+                var threatLevel = ThreatLevel.Trivial;
+
+                // Are we in a party? Use party calculations
+                if (Globals.Me.Party?.Count > 1)
+                {
+                    var party = Globals.Me.Party;
+                    var totalMembers = Globals.Me.Party.Count;
+                    var vitals = party.Select(member => member.MaxVital).ToArray();
+
+                    var validMembers = party.Where(member => Globals.Entities.TryGetValue(member.Id, out _)).Select(member => Globals.Entities[member.Id] as Player);
+
+                    var stats = validMembers.Select(member => member.Stat).ToArray();
+                    var meleeTypes = validMembers.Select(member =>
+                    {
+                        if (member.TryGetEquippedWeaponDescriptor(out var partyWeapon))
+                        {
+                            return partyWeapon.AttackTypes;
+                        }
+                        return new List<AttackTypes>() { AttackTypes.Blunt };
+                    }).ToArray();
+
+                    var attackSpeeds = validMembers.Select(member => (long)member.AttackSpeed()).ToArray();
+
+                    threatLevel = ThreatLevelUtilities.DetermineNpcThreatLevelParty(vitals,
+                        stats,
+                        npc.MaxVital,
+                        npc.Stats,
+                        meleeTypes,
+                        npc.AttackTypes,
+                        attackSpeeds,
+                        npc.AttackSpeedValue);
+                }
+                // Are we alone? use a single-person calc
+                else
+                {
+                    threatLevel = ThreatLevelUtilities.DetermineNpcThreatLevel(Globals.Me.MaxVital,
+                        Globals.Me.Stat,
+                        npc.MaxVital,
+                        npc.Stats,
+                        playerMelee,
+                        npc.AttackTypes,
+                        Globals.Me.AttackSpeed(),
+                        npc.AttackSpeedValue);
+                }
+
+                ThreatLevelText.SetText(threatLevel.GetDescription());
+                if (!ThreatLevelUtilities.ColorMapping.TryGetValue(threatLevel, out var color))
+                {
+                    color = Color.White; // color not found
+                }
+
+                ThreatLevelText.SetTextColor(color, Framework.Gwen.Control.Label.ControlState.Normal);
+            }
+            else
+            {
+                ThreatLevelContainer.Hide();
+            }
         }
 
         public void UpdateSpellStatus()

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Intersect.GameObjects.Events;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -24,7 +25,7 @@ namespace Intersect.Config
         public int MaxNpcStat = 500;
 
         public string MissSound = "";
-        
+
         public string BlockSound = "";
 
         public long MPWarningDisplayTime = 2000; //2 seconds
@@ -40,9 +41,9 @@ namespace Intersect.Config
         public float HPWarningThreshold = 0.2f;
 
         public float PartyComboModifier = 0.5f;
-        
+
         public int MinComboExpLvlDiff = 5;
-        
+
         public long DirChangeTimer = 90;
 
         public int MaxAttackRate = 200; //5 attacks per second
@@ -78,27 +79,27 @@ namespace Intersect.Config
         public string GenericDamageReceivedSound = "al_take_damage.wav";
 
         public long FaceTargetPredictionTime = 650;
-        
+
         public long ActionMessageTime = 1500;
 
         public string PlayerDeathAnimationId = "a306ad8b-c58c-4d27-b94b-86dd7173dfd8";
 
         public bool HideResourceHealthBars = true;
-        
+
         public float DefaultBackstabMultiplier = 1.25f;
-        
+
         public float SneakAttackMultiplier = 1.5f;
-        
+
         public float SwiftAttackSpeedMod = 0.75f;
-        
+
         public int AccurateCritChanceMultiplier = 3;
 
         public float HasteModifier = 1.2f;
-        
+
         public float SlowedModifier = 1.6f;
 
         public float CombatModeBackModifier = 1.33f;
-        
+
         public float CombatModeStrafeModifier = 1.15f;
 
         public int ConfusionMissPercent = 50;
@@ -112,7 +113,7 @@ namespace Intersect.Config
         public long ProjectileSpellMovementDelay = 250;
 
         public bool InvulnerableNpcsAffectedByNonDamaging = true;
-        
+
         public bool CleanseThruStun = false;
 
         public int PartyTargetDistance = 10;
@@ -125,7 +126,7 @@ namespace Intersect.Config
 
         public string DungeonInstanceVarGuid = "df755027-8588-46c6-820b-d314f7825730";
 
-        public bool StunPreventsItems { get; set;  } = false;
+        public bool StunPreventsItems { get; set; } = false;
 
         public List<int> HarvestBonusIntervals = new List<int>()
         {
@@ -135,6 +136,30 @@ namespace Intersect.Config
         public List<double> HarvestBonuses = new List<double>()
         {
             0.05f, 0.1f, 0.25f, 0.33f, 0.5f
+        };
+
+        // Threat levels
+
+        public Dictionary<ThreatLevel, double> ThreatLevelThresholds = new Dictionary<ThreatLevel, double>()
+        {
+            { ThreatLevel.Midnight, 16 },
+            { ThreatLevel.Extreme, 8 },
+            { ThreatLevel.Deadly, 3 },
+            { ThreatLevel.Threatening, 0.35 },
+            { ThreatLevel.Fair, 0.15 },
+            { ThreatLevel.Wimpy, 0.05 },
+            { ThreatLevel.Trivial, 0 },
+        };
+
+        public Dictionary<ThreatLevel, double> ThreatLevelExpRates = new Dictionary<ThreatLevel, double>()
+        {
+            { ThreatLevel.Midnight, 2.0 },
+            { ThreatLevel.Extreme, 1.5 },
+            { ThreatLevel.Deadly, 1.2 },
+            { ThreatLevel.Threatening, 1.05 },
+            { ThreatLevel.Fair, 1.0 },
+            { ThreatLevel.Wimpy, 0.75 },
+            { ThreatLevel.Trivial, .2 },
         };
 
         //Spells

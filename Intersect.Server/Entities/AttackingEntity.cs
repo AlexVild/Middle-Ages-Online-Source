@@ -336,7 +336,7 @@ namespace Intersect.Server.Entities
 
             UpdateCombatTimers(this, enemy);
 
-            damage = CombatUtilities.CalculateDamage(damageTypes, critMultiplier, scaling, StatVals, enemy.StatVals);
+            damage = CombatUtilities.CalculateDamage(damageTypes, critMultiplier, scaling, StatVals, enemy.StatVals, out _);
 
             if (damage != 0)
             {

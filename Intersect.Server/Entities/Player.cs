@@ -1417,38 +1417,42 @@ namespace Intersect.Server.Entities
             StartCommonEventsWithTrigger(CommonEventTrigger.LevelUp);
         }
 
-        public void GiveExperience(long amount, bool partyCombo = false, int opponentLevel = -1)
+        public void GiveExperience(long amount, bool partyCombo = false, Entity opponent = null)
         {
-            var expToGive = amount;
-            if (Level < Options.MaxLevel)
+            if (Level >= Options.MaxLevel)
             {
-                if (ShouldAwardExp(opponentLevel)) // Don't give exp at all if more than X levels between
-                {
-                    if (CurrentCombo > 0)
-                    {
-                        ComboExp = CalculateComboExperience(amount, partyCombo, opponentLevel);
-                        expToGive += ComboExp;
-                    }
+                return;
+            }
 
-                    expToGive += (int)(amount * GetEquipmentBonusEffect(EffectType.EXP, 100) / 100);
+            var threatLevelExpMod = GetThreatLevelExpMod(opponent);
+            amount = (int)Math.Ceiling(threatLevelExpMod * amount);
+            
+            var expToGive = amount;
 
-                    if (expToGive > 0)
-                    {
-                        PacketSender.SendActionMsg(this, Strings.Combat.inspiredexp.ToString(expToGive), CustomColors.Combat.LevelUp);
-                    }
+            // Award combo EXP if opponent was NPC or player; do not reward if threat level is trivial
+            if (CurrentCombo > 0 && (opponent is Npc || opponent is Player) && threatLevelExpMod != Options.Instance.CombatOpts.ThreatLevelExpRates[ThreatLevel.Trivial])
+            {
+                ComboExp = CalculateComboExperience(amount, partyCombo);
+                expToGive += ComboExp;
+            }
 
-                    Exp += expToGive;
-                    if (Exp < 0)
-                    {
-                        Exp = 0;
-                    }
+            expToGive += (int)(amount * GetEquipmentBonusEffect(EffectType.EXP, 0) / 100);
+
+            if (expToGive > 0)
+            {
+                PacketSender.SendActionMsg(this, Strings.Combat.inspiredexp.ToString(expToGive), CustomColors.Combat.LevelUp);
+            }
+
+            Exp += expToGive;
+            if (Exp < 0)
+            {
+                Exp = 0;
+            }
 
 
-                    if (!CheckLevelUp())
-                    {
-                        PacketSender.SendExperience(this, ComboExp);
-                    }
-                }
+            if (!CheckLevelUp())
+            {
+                PacketSender.SendExperience(this, ComboExp);
             }
         }
 
@@ -1516,7 +1520,7 @@ namespace Intersect.Server.Entities
                                 {
                                     continue;
                                 }
-                                partyMember.GiveExperience(partyExperience, true, entity.Level);
+                                partyMember.GiveExperience(partyExperience, true, entity);
                                 partyMember.UpdateQuestKillTasks(entity);
                                 partyMember.UpdateComboTime();
                             }
@@ -1534,7 +1538,7 @@ namespace Intersect.Server.Entities
                         }
                         else
                         {
-                            GiveExperience(descriptor.Experience, false, entity.Level);
+                            GiveExperience(descriptor.Experience, false, entity);
                             UpdateComboTime();
                             UpdateQuestKillTasks(entity);
                         }
@@ -1574,13 +1578,8 @@ namespace Intersect.Server.Entities
         }
 
         #region Combo Stuff
-        private int CalculateComboExperience(long baseAmount, bool partyCombo, int entityLevel)
+        private int CalculateComboExperience(long baseAmount, bool partyCombo)
         {
-            if (!ShouldAwardExp(entityLevel)) // don't give exp if the level gap was too large
-            {
-                return 0;
-            }
-
             // Check to see if a prayer is equipped that modifies this
             var equipBonus = 0.0f;
             if (Equipment[Options.PrayerIndex] >= 0)

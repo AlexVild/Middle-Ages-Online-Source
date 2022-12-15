@@ -2151,17 +2151,9 @@ namespace Intersect.Client.Entities
             return ExperienceToNextLevel;
         }
 
-        public override int CalculateAttackTime()
+        public bool TryGetEquippedWeaponDescriptor(out ItemBase weapon)
         {
-            ItemBase weapon = null;
-            var attackTime = base.CalculateAttackTime();
-
-            var cls = ClassBase.Get(Class);
-            if (cls != null && cls.AttackSpeedModifier == 1) //Static
-            {
-                attackTime = cls.AttackSpeedValue;
-            }
-
+            weapon = null;
             if (this == Globals.Me)
             {
                 if (Options.WeaponIndex > -1 &&
@@ -2181,7 +2173,44 @@ namespace Intersect.Client.Entities
                 }
             }
 
-            if (weapon != null)
+            return weapon != null;
+        }
+
+        public int AttackSpeed()
+        {
+            var attackTime = 0;
+            var cls = ClassBase.Get(Class);
+            if (cls != null && cls.AttackSpeedModifier == 1) //Static
+            {
+                attackTime = cls.AttackSpeedValue;
+            }
+
+            if (TryGetEquippedWeaponDescriptor(out var weapon))
+            {
+                if (weapon.AttackSpeedModifier == 1) // Static
+                {
+                    attackTime = weapon.AttackSpeedValue;
+                }
+                else if (weapon.AttackSpeedModifier == 2) //Percentage
+                {
+                    attackTime = (int)(attackTime * (100f / weapon.AttackSpeedValue));
+                }
+            }
+
+            return attackTime;
+        }
+
+        public override int CalculateAttackTime()
+        {
+            var attackTime = base.CalculateAttackTime();
+
+            var cls = ClassBase.Get(Class);
+            if (cls != null && cls.AttackSpeedModifier == 1) //Static
+            {
+                attackTime = cls.AttackSpeedValue;
+            }
+
+            if (TryGetEquippedWeaponDescriptor(out var weapon))
             {
                 if (weapon.AttackSpeedModifier == 1) // Static
                 {
