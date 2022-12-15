@@ -1439,7 +1439,7 @@ namespace Intersect.Client.Networking
                 Globals.Me.ExperienceToNextLevel = packet.ExperienceToNextLevel;
                 if (packet.AccumulatedComboExp > 0)
                 {
-                    Globals.Me.ComboExp += packet.AccumulatedComboExp;
+                    Globals.Me.ComboExp = packet.AccumulatedComboExp;
                 }
             }
         }

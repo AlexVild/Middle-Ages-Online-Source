@@ -1419,7 +1419,7 @@ namespace Intersect.Server.Entities
 
         public void GiveExperience(long amount, bool partyCombo = false, Entity opponent = null)
         {
-            if (Level >= Options.MaxLevel)
+            if (Level >= Options.MaxLevel || amount == 0)
             {
                 return;
             }
@@ -1432,8 +1432,7 @@ namespace Intersect.Server.Entities
             // Award combo EXP if opponent was NPC or player; do not reward if threat level is trivial
             if (CurrentCombo > 0 && (opponent is Npc || opponent is Player) && threatLevelExpMod != Options.Instance.CombatOpts.ThreatLevelExpRates[ThreatLevel.Trivial])
             {
-                ComboExp = CalculateComboExperience(amount, partyCombo);
-                expToGive += ComboExp;
+                ComboExp += CalculateComboExperience(amount, partyCombo);
             }
 
             expToGive += (int)(amount * GetEquipmentBonusEffect(EffectType.EXP, 0) / 100);
@@ -1612,20 +1611,28 @@ namespace Intersect.Server.Entities
 
         public void EndCombo()
         {
-            if (CurrentCombo > 0) // prevents flooding the client with useless combo packets
+            // prevents flooding the client with useless combo packets
+            if (CurrentCombo <= 0)
             {
-                if (TrySetRecord(RecordType.Combo, Guid.Empty, CurrentCombo))
-                {
-                    PacketSender.SendChatMsg(this, Strings.Records.NewHighestCombo.ToString(CurrentCombo), ChatMessageType.Local, Color.FromName("Blue", Strings.Colors.presets));
-                }
-
-                ComboTimestamp = -1;
-                ComboWindow = -1;
-                ComboExp = 0;
-                CurrentCombo = 0;
-                PacketSender.SendComboPacket(this, CurrentCombo, ComboWindow, ComboExp, MaxComboWindow); // sends the final packet of the combo
-                StartCommonEventsWithTrigger(CommonEventTrigger.ComboEnd);
+                return;
             }
+
+            var totalComboExp = ComboExp;
+
+            if (TrySetRecord(RecordType.Combo, Guid.Empty, CurrentCombo))
+            {
+                PacketSender.SendChatMsg(this, Strings.Records.NewHighestCombo.ToString(CurrentCombo), ChatMessageType.Local, Color.FromName("Blue", Strings.Colors.presets));
+            }
+
+            ComboTimestamp = -1;
+            ComboWindow = -1;
+            CurrentCombo = 0;
+            ComboExp = 0;
+
+            PacketSender.SendComboPacket(this, CurrentCombo, ComboWindow, ComboExp, MaxComboWindow); // sends the final packet of the combo
+            StartCommonEventsWithTrigger(CommonEventTrigger.ComboEnd);
+            
+            GiveExperience(totalComboExp);
         }
         #endregion
 

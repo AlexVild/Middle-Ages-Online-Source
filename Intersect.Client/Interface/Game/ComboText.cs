@@ -19,7 +19,9 @@ namespace Intersect.Client.Interface.Game
 
         private string mSize { get; set; }
 
-        private int mFlashCounter { get; set; }
+        private long mNextFlash { get; set; }
+
+        private const long FlashDuration = 250;
 
         private Color mDrawColor { get; set; }
 
@@ -58,7 +60,11 @@ namespace Intersect.Client.Interface.Game
             {
                 mComboLabel.Hide();
                 mExpLabel.Hide();
-                mFlashCounter = 0;
+                mNextFlash = 0;
+                mNextFlash = Timing.Global.Milliseconds + FlashDuration;
+                mIsFlashing = false;
+                mDrawColor = Color.Yellow;
+                mAlpha = 255;
                 return;
             }
             else
@@ -70,14 +76,14 @@ namespace Intersect.Client.Interface.Game
                 }
             }
 
-            mFlashCounter++;
             // else, update members
             mSize = Globals.Me.CurrentCombo.ToString();
 
             mAlpha = mGenerateTextAlpha();
 
-            if (mFlashCounter % 100 == 0) // flash every 100 ticks-ish?
+            if (Timing.Global.Milliseconds > mNextFlash) // flash every 100 ticks-ish?
             {
+                mNextFlash = Timing.Global.Milliseconds + FlashDuration;
                 mIsFlashing = !mIsFlashing;
                 if (mIsFlashing)
                 {
