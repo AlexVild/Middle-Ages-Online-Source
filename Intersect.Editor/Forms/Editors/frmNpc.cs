@@ -415,6 +415,8 @@ namespace Intersect.Editor.Forms.Editors
                 RefreshBestiaryList(true);
                 txtStartDesc.Text = mEditorItem.Description;
                 chkBestiary.Checked = mEditorItem.NotInBestiary;
+
+                lblCalcExpVal.Text = $"{NpcExperienceCalculator.Calculate(mEditorItem)} EXP";
             }
             else
             {

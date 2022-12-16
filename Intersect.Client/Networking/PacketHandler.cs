@@ -2237,7 +2237,7 @@ namespace Intersect.Client.Networking
 
             Globals.Me.GuildMembers = packet.Members.OrderByDescending(m => m.Online).ThenBy(m => m.Rank).ThenBy(m => m.Name).ToArray();
 
-            Interface.Interface.GameUi.NotifyUpdateGuildList();
+            Interface.Interface.GameUi?.NotifyUpdateGuildList();
         }
 
 

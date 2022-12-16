@@ -55,6 +55,7 @@ namespace Intersect.Client.Interface.Game
         const long DisappearingFramerate = 16;
 
         private Color Color => new Color(Alpha, TextColor.R, TextColor.G, TextColor.B);
+        private Color OutlineColor => new Color(Alpha, 0, 0, 0);
 
         private long LastUpdate { get; set; }
 
@@ -141,7 +142,7 @@ namespace Intersect.Client.Interface.Game
 
         public void Draw()
         {
-            Graphics.Renderer.DrawString(ExpText, Font, X, Y, 1.0f, Color);
+            Graphics.Renderer.DrawString(ExpText, Font, X, Y, 1.0f, Color, borderColor: OutlineColor);
         }
     }
 }

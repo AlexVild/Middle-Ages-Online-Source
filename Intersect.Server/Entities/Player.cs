@@ -1537,7 +1537,9 @@ namespace Intersect.Server.Entities
                         }
                         else
                         {
-                            GiveExperience(descriptor.Experience, false, entity);
+                            var mobExp = Options.Instance.CombatOpts.UseGeneratedMobExp ? NpcExperienceService.GetExp(descriptor.Id) : descriptor.Experience;
+
+                            GiveExperience(mobExp, false, entity);
                             UpdateComboTime();
                             UpdateQuestKillTasks(entity);
                         }

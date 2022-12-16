@@ -786,6 +786,7 @@
     <Compile Include="Utilities\MathHelper.cs" />
     <Compile Include="Extensions\RandomExtensions.cs" />
     <Compile Include="Network\PortHelper.cs" />
+    <Compile Include="Utilities\NpcExperienceCalculator.cs" />
     <Compile Include="Utilities\Nullability.cs" />
     <Compile Include="Utilities\Randomization.cs" />
     <Compile Include="Utilities\Retry.cs" />

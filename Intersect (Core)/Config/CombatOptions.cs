@@ -127,6 +127,8 @@ namespace Intersect.Config
         public string DungeonInstanceVarGuid = "df755027-8588-46c6-820b-d314f7825730";
 
         public bool StunPreventsItems { get; set; } = false;
+        
+        public bool UseGeneratedMobExp { get; set; } = false;
 
         public List<int> HarvestBonusIntervals = new List<int>()
         {

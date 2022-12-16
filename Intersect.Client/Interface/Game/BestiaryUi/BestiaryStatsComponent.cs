@@ -190,7 +190,7 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
 
                 var immunities = beast.Immunities.Where(imm => imm.Value == true).Select(imm => imm.Key);
                 var tenacity = beast.Tenacity;
-                var exp = beast.Experience;
+                var exp = Options.Instance.CombatOpts.UseGeneratedMobExp ? NpcExperienceCalculator.Calculate(beast) : beast.Experience;
 
                 ClearResistances();
                 var y = 16;

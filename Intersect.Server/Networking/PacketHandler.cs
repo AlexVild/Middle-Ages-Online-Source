@@ -3747,6 +3747,13 @@ namespace Intersect.Server.Networking
                 else if (type == GameObjectType.Npc)
                 {
                     Globals.KillNpcsOf((NpcBase) obj);
+                    if (Options.Instance.CombatOpts.UseGeneratedMobExp)
+                    {
+                        NpcExperienceService.Initialize();
+#if DEBUG
+                        NpcExperienceService.PrettyPrint();
+#endif
+                    }
                 }
                 else if (type == GameObjectType.Class)
                 {
@@ -3905,6 +3912,13 @@ namespace Intersect.Server.Networking
                     else if (type == GameObjectType.Npc)
                     {
                         Globals.KillNpcsOf((NpcBase) obj);
+                        if (Options.Instance.CombatOpts.UseGeneratedMobExp)
+                        {
+                            NpcExperienceService.Initialize();
+#if DEBUG
+                            NpcExperienceService.PrettyPrint();
+#endif
+                        }
                     }
                     else if (type == GameObjectType.Projectile)
                     {

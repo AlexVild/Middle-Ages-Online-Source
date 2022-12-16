@@ -94,6 +94,7 @@ namespace Intersect.Editor.Forms.Editors
             this.chkDamageBlunt = new DarkUI.Controls.DarkCheckBox();
             this.pnlContainer = new System.Windows.Forms.Panel();
             this.grpBestiary = new DarkUI.Controls.DarkGroupBox();
+            this.chkBestiary = new DarkUI.Controls.DarkCheckBox();
             this.btnBestiaryDefaults = new DarkUI.Controls.DarkButton();
             this.nudKillCount = new DarkUI.Controls.DarkNumericUpDown();
             this.lblDescription = new System.Windows.Forms.Label();
@@ -225,7 +226,8 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemPaste = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
-            this.chkBestiary = new DarkUI.Controls.DarkCheckBox();
+            this.lblCalcExp = new System.Windows.Forms.Label();
+            this.lblCalcExpVal = new System.Windows.Forms.Label();
             this.grpNpcs.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudRgbaA)).BeginInit();
@@ -684,6 +686,8 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpStats.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpStats.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpStats.Controls.Add(this.lblCalcExpVal);
+            this.grpStats.Controls.Add(this.lblCalcExp);
             this.grpStats.Controls.Add(this.nudEvasion);
             this.grpStats.Controls.Add(this.nudAccuracy);
             this.grpStats.Controls.Add(this.label5);
@@ -1217,6 +1221,16 @@ namespace Intersect.Editor.Forms.Editors
             this.grpBestiary.TabIndex = 89;
             this.grpBestiary.TabStop = false;
             this.grpBestiary.Text = "Bestiary";
+            // 
+            // chkBestiary
+            // 
+            this.chkBestiary.AutoSize = true;
+            this.chkBestiary.Location = new System.Drawing.Point(122, 10);
+            this.chkBestiary.Name = "chkBestiary";
+            this.chkBestiary.Size = new System.Drawing.Size(99, 17);
+            this.chkBestiary.TabIndex = 95;
+            this.chkBestiary.Text = "Not in bestiary?";
+            this.chkBestiary.CheckedChanged += new System.EventHandler(this.chkBestiary_CheckedChanged);
             // 
             // btnBestiaryDefaults
             // 
@@ -2985,15 +2999,23 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
             // 
-            // chkBestiary
+            // lblCalcExp
             // 
-            this.chkBestiary.AutoSize = true;
-            this.chkBestiary.Location = new System.Drawing.Point(122, 10);
-            this.chkBestiary.Name = "chkBestiary";
-            this.chkBestiary.Size = new System.Drawing.Size(99, 17);
-            this.chkBestiary.TabIndex = 95;
-            this.chkBestiary.Text = "Not in bestiary?";
-            this.chkBestiary.CheckedChanged += new System.EventHandler(this.chkBestiary_CheckedChanged);
+            this.lblCalcExp.AutoSize = true;
+            this.lblCalcExp.Location = new System.Drawing.Point(102, 339);
+            this.lblCalcExp.Name = "lblCalcExp";
+            this.lblCalcExp.Size = new System.Drawing.Size(81, 13);
+            this.lblCalcExp.TabIndex = 58;
+            this.lblCalcExp.Text = "Calculated Exp:";
+            // 
+            // lblCalcExpVal
+            // 
+            this.lblCalcExpVal.AutoSize = true;
+            this.lblCalcExpVal.Location = new System.Drawing.Point(103, 357);
+            this.lblCalcExpVal.Name = "lblCalcExpVal";
+            this.lblCalcExpVal.Size = new System.Drawing.Size(37, 13);
+            this.lblCalcExpVal.TabIndex = 59;
+            this.lblCalcExpVal.Text = "0 EXP";
             // 
             // FrmNpc
             // 
@@ -3294,5 +3316,7 @@ namespace Intersect.Editor.Forms.Editors
         private DarkNumericUpDown nudKillCount;
         private DarkButton btnBestiaryDefaults;
         private DarkCheckBox chkBestiary;
+        private System.Windows.Forms.Label lblCalcExpVal;
+        private System.Windows.Forms.Label lblCalcExp;
     }
 }

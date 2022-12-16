@@ -36,7 +36,7 @@ namespace Intersect.Client.Interface.Game.HUD
         {
             get => FlashExp ? ExpGainTexture : _expTexture;
             set => _expTexture = value;
-        }   
+        }
         private GameTexture ExpGainTexture;
         private GameTexture MapNameTexture;
         private GameTexture ShieldTexture;
@@ -69,6 +69,10 @@ namespace Intersect.Client.Interface.Game.HUD
         public float ExpX { get; set; }
         public float ExpY { get; set; }
         public float ExpWidth { get; set; }
+
+        public long LastExpFlash { get; set; }
+
+        private const long ExpFlashDuration = 250;
 
         public PlayerHud()
         {
@@ -230,7 +234,20 @@ namespace Intersect.Client.Interface.Game.HUD
             ExpY = y - Top;
             ExpWidth = BarBackground.GetWidth();
 
-            FlashExp = ExpToastService.Toasts.Count > 0;
+            if (ExpToastService.Toasts.Count == 0)
+            {
+                LastExpFlash = Timing.Global.Milliseconds;
+                FlashExp = false;
+            }
+            else
+            {
+                if (Timing.Global.Milliseconds > LastExpFlash)
+                {
+                    FlashExp = !FlashExp;
+                    LastExpFlash = Timing.Global.Milliseconds + ExpFlashDuration;
+                }
+            }
+
             if (Globals.Me.Level == Options.MaxLevel)
             {
                 DrawBar(BarBackground, ExpTexture, x, y, width, height, "EXP", $"MAX LEVEL", 1, 1);

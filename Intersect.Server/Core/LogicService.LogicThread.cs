@@ -22,6 +22,7 @@ using Intersect.Utilities;
 using Intersect.Server.Database.PlayerData;
 using Intersect.GameObjects.Timers;
 using Intersect.GameObjects;
+using Intersect.Server.Utilities;
 
 namespace Intersect.Server.Core
 {
@@ -98,6 +99,15 @@ namespace Intersect.Server.Core
                     // Initialize cached list of resources (for resource group logic)
                     Globals.RefreshGameObjectCache(Enums.GameObjectType.Resource, Globals.CachedResources);
                     Globals.RefreshGameObjectCache(Enums.GameObjectType.Recipe, Globals.CachedRecipes);
+                    
+                    if (Options.Instance.CombatOpts.UseGeneratedMobExp)
+                    {
+                        NpcExperienceService.Initialize();
+#if DEBUG
+                        NpcExperienceService.PrettyPrint();
+#endif
+                    }
+
 
                     while (ServerContext.Instance.IsRunning)
                     {
