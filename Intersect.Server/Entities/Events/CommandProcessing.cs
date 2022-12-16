@@ -142,7 +142,7 @@ namespace Intersect.Server.Entities.Events
             {
                 try
                 {
-                    ProcessChatboxCommand(text, player, instance, command.Channel, command.Color);
+                    ProcessChatboxCommand(text, player, instance, command.Channel, command.Color, false);
                 }
                 catch (Exception e)
                 {
@@ -240,7 +240,7 @@ namespace Intersect.Server.Entities.Events
             Stack<CommandInstance> callStack
         )
         {
-            ProcessChatboxCommand(command.Text, player, instance, command.Channel, command.Color);
+            ProcessChatboxCommand(command.Text, player, instance, command.Channel, command.Color, command.SendToast);
         }
 
         //Set Variable Commands
@@ -2840,14 +2840,14 @@ namespace Intersect.Server.Entities.Events
             }
         }
 
-        private static void ProcessChatboxCommand(string text, Player player, Event instance, ChatboxChannel channel, string clr)
+        private static void ProcessChatboxCommand(string text, Player player, Event instance, ChatboxChannel channel, string clr, bool sendToast)
         {
             var txt = ParseEventText(text, player, instance);
             var color = Color.FromName(clr, Strings.Colors.presets);
             switch (channel)
             {
                 case ChatboxChannel.Player:
-                    PacketSender.SendChatMsg(player, txt, ChatMessageType.Notice, color);
+                    PacketSender.SendChatMsg(player, txt, ChatMessageType.Notice, color, sendToast: sendToast);
 
                     break;
                 case ChatboxChannel.Local:

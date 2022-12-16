@@ -726,7 +726,7 @@ namespace Intersect.Editor.Forms.Editors.Events
                     break;
             }
 
-            return Strings.EventCommandList.chatboxtext.ToString(channel, command.Color, Truncate(command.Text, 20));
+            return Strings.EventCommandList.ChatBoxText.ToString(channel, command.Color, Truncate(command.Text, 20), command.SendToast);
         }
 
         private static string GetCommandText(SetVariableCommand command, MapInstance map)

@@ -36,6 +36,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             }
 
             cmbChannel.SelectedIndex = (int) mMyCommand.Channel;
+            chkSendToast.Checked = mMyCommand.SendToast;
         }
 
         private void InitLocalization()
@@ -60,6 +61,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             mMyCommand.Text = txtAddText.Text;
             mMyCommand.Color = cmbColor.Text;
             mMyCommand.Channel = (ChatboxChannel) cmbChannel.SelectedIndex;
+            mMyCommand.SendToast = chkSendToast.Checked;
             mEventEditor.FinishCommandEdit();
         }
 

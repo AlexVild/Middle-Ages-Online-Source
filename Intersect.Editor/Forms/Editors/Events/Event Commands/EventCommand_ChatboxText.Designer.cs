@@ -40,6 +40,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.lblText = new System.Windows.Forms.Label();
             this.btnCancel = new DarkUI.Controls.DarkButton();
             this.btnSave = new DarkUI.Controls.DarkButton();
+            this.chkSendToast = new DarkUI.Controls.DarkCheckBox();
             this.grpChatboxText.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -47,6 +48,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             this.grpChatboxText.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.grpChatboxText.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpChatboxText.Controls.Add(this.chkSendToast);
             this.grpChatboxText.Controls.Add(this.lblCommands);
             this.grpChatboxText.Controls.Add(this.cmbChannel);
             this.grpChatboxText.Controls.Add(this.lblChannel);
@@ -82,9 +84,13 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbChannel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.cmbChannel.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.cmbChannel.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbChannel.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbChannel.DrawDropdownHoverOutline = false;
+            this.cmbChannel.DrawFocusRectangle = false;
             this.cmbChannel.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.cmbChannel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbChannel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbChannel.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbChannel.FormattingEnabled = true;
             this.cmbChannel.Items.AddRange(new object[] {
             "Player",
@@ -94,6 +100,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbChannel.Name = "cmbChannel";
             this.cmbChannel.Size = new System.Drawing.Size(232, 21);
             this.cmbChannel.TabIndex = 26;
+            this.cmbChannel.Text = "Player";
+            this.cmbChannel.TextPadding = new System.Windows.Forms.Padding(2);
             // 
             // lblChannel
             // 
@@ -109,14 +117,20 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbColor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.cmbColor.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.cmbColor.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbColor.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbColor.DrawDropdownHoverOutline = false;
+            this.cmbColor.DrawFocusRectangle = false;
             this.cmbColor.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.cmbColor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbColor.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbColor.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbColor.FormattingEnabled = true;
             this.cmbColor.Location = new System.Drawing.Point(9, 157);
             this.cmbColor.Name = "cmbColor";
             this.cmbColor.Size = new System.Drawing.Size(232, 21);
             this.cmbColor.TabIndex = 24;
+            this.cmbColor.Text = null;
+            this.cmbColor.TextPadding = new System.Windows.Forms.Padding(2);
             // 
             // lblColor
             // 
@@ -168,7 +182,16 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.btnSave.Text = "Ok";
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
-            // EventCommand_ChatboxText
+            // chkSendToast
+            // 
+            this.chkSendToast.AutoSize = true;
+            this.chkSendToast.Location = new System.Drawing.Point(140, 233);
+            this.chkSendToast.Name = "chkSendToast";
+            this.chkSendToast.Size = new System.Drawing.Size(99, 17);
+            this.chkSendToast.TabIndex = 55;
+            this.chkSendToast.Text = "Get In Vehicle?";
+            // 
+            // EventCommandChatboxText
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -195,5 +218,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private DarkComboBox cmbChannel;
         private System.Windows.Forms.Label lblChannel;
         private System.Windows.Forms.Label lblCommands;
+        private DarkCheckBox chkSendToast;
     }
 }

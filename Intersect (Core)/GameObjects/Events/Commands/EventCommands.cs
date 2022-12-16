@@ -189,6 +189,8 @@ namespace Intersect.GameObjects.Events.Commands
 
         public ChatboxChannel Channel { get; set; } = ChatboxChannel.Player;
 
+        public bool SendToast { get; set; } = false;
+
     }
 
     public partial class SetVariableCommand : EventCommand

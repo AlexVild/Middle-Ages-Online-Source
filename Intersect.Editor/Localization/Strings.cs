@@ -1748,6 +1748,9 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString chatboxtext = @"Show Chatbox Text [Channel: {00}, Color: {01}] - {02}";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ChatBoxText = @"Show Chatbox Text [Channel: {00}, Color: {01}] - {02}; Toast: (03)";
+
             public static LocalizedString chatglobal = @"Global";
 
             public static LocalizedString chatlocal = @"Local";

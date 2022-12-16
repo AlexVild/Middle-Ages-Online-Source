@@ -840,6 +840,9 @@
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_ChangeSpawn.resx">
       <DependentUpon>EventCommand_ChangeSpawn.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_ChatboxText.resx">
+      <DependentUpon>EventCommand_ChatboxText.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_ClearRecord.resx">
       <DependentUpon>EventCommand_ClearRecord.cs</DependentUpon>
     </EmbeddedResource>
