@@ -92,6 +92,7 @@ namespace Intersect.Server.Entities
 
         private Dictionary<Guid, ThreatLevel> PlayerThreatLevels = new Dictionary<Guid, ThreatLevel>();
         private long LastThreatLevelReset = 0L;
+        private long DirChangeTime = 0L;
 
         /// <summary>
         /// The map on which this NPC was "aggro'd" and started chasing a target.
@@ -1072,8 +1073,8 @@ namespace Intersect.Server.Entities
                                 {
                                     if (tempTarget != null)
                                     {
-                                        if (Dir != DirToEnemy(tempTarget) && DirToEnemy(tempTarget) != -1)
-                                        {
+                                        if (Dir != DirToEnemy(tempTarget) && DirToEnemy(tempTarget) != -1 && timeMs > DirChangeTime)
+                                        {  
                                             ChangeDir(DirToEnemy(tempTarget));
                                         }
                                         else
@@ -1092,6 +1093,12 @@ namespace Intersect.Server.Entities
                                             }
                                         }
                                     }
+                                }
+
+                                // This is done to prevent an enemy from ALWAYS, immediately, facing you.
+                                if (timeMs > DirChangeTime)
+                                {
+                                    DirChangeTime = timeMs + Options.Instance.CombatOpts.NpcDirChangeTimer - (Base.Stats[(int) Stats.Speed] * Options.Instance.CombatOpts.NpcDirChangeSpeedMult);
                                 }
                             }
                         }
