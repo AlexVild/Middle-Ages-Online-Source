@@ -31,6 +31,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private void InitializeComponent()
         {
             this.grpChatboxText = new DarkUI.Controls.DarkGroupBox();
+            this.chkSendToast = new DarkUI.Controls.DarkCheckBox();
             this.lblCommands = new System.Windows.Forms.Label();
             this.cmbChannel = new DarkUI.Controls.DarkComboBox();
             this.lblChannel = new System.Windows.Forms.Label();
@@ -40,7 +41,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.lblText = new System.Windows.Forms.Label();
             this.btnCancel = new DarkUI.Controls.DarkButton();
             this.btnSave = new DarkUI.Controls.DarkButton();
-            this.chkSendToast = new DarkUI.Controls.DarkCheckBox();
             this.grpChatboxText.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -65,6 +65,15 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpChatboxText.TabIndex = 17;
             this.grpChatboxText.TabStop = false;
             this.grpChatboxText.Text = "Add Chatbox Text";
+            // 
+            // chkSendToast
+            // 
+            this.chkSendToast.AutoSize = true;
+            this.chkSendToast.Location = new System.Drawing.Point(140, 233);
+            this.chkSendToast.Name = "chkSendToast";
+            this.chkSendToast.Size = new System.Drawing.Size(87, 17);
+            this.chkSendToast.TabIndex = 55;
+            this.chkSendToast.Text = "Send Toast?";
             // 
             // lblCommands
             // 
@@ -181,15 +190,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.btnSave.TabIndex = 19;
             this.btnSave.Text = "Ok";
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
-            // 
-            // chkSendToast
-            // 
-            this.chkSendToast.AutoSize = true;
-            this.chkSendToast.Location = new System.Drawing.Point(140, 233);
-            this.chkSendToast.Name = "chkSendToast";
-            this.chkSendToast.Size = new System.Drawing.Size(99, 17);
-            this.chkSendToast.TabIndex = 55;
-            this.chkSendToast.Text = "Get In Vehicle?";
             // 
             // EventCommandChatboxText
             // 

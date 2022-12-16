@@ -483,7 +483,7 @@ namespace Intersect.Client.Core
 
 
             var inventoryOpen = Interface.Interface.GameUi?.GameMenu?.InventoryWindowIsVisible() ?? false;
-            if (Globals.InputManager.KeyDown(Keys.Shift) != true || Interface.Interface.GameUi.FocusedInventory)
+            if (Globals.InputManager.KeyDown(Keys.Alt) != true)
             {
                 return;
             }

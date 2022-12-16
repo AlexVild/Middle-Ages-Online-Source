@@ -70,6 +70,13 @@ namespace Intersect.Client.MonoGame.Input
                             break;
                         }
 
+                        if (key == Keys.Alt)
+                        {
+                            mKeyDictionary.Add(key, Microsoft.Xna.Framework.Input.Keys.LeftAlt);
+
+                            break;
+                        }
+
                         if (key == Keys.Return)
                         {
                             mKeyDictionary.Add(key, Microsoft.Xna.Framework.Input.Keys.Enter);
