@@ -50,7 +50,7 @@ namespace Intersect.Client.Interface.Game
     public class ExpToast
     {
         readonly Color TextColor = new Color(255, 242, 193, 223);
-        const long IdleDuration = 1500;
+        const long IdleDuration = 2000;
         const int Speed = -4;
         const long DisappearingFramerate = 16;
 

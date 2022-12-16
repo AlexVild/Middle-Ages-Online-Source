@@ -90,6 +90,9 @@ namespace Intersect.Server.Entities
         private int mLastTargetDir = -1;
         private long mLastOverrideAttack = 0L;
 
+        private Dictionary<Guid, ThreatLevel> PlayerThreatLevels = new Dictionary<Guid, ThreatLevel>();
+        private long LastThreatLevelReset = 0L;
+
         /// <summary>
         /// The map on which this NPC was "aggro'd" and started chasing a target.
         /// </summary>
@@ -756,6 +759,12 @@ namespace Intersect.Server.Entities
                         {
                             return;
                         }
+                    }
+
+                    if (timeMs > LastThreatLevelReset)
+                    {
+                        LastThreatLevelReset = timeMs + Options.Instance.CombatOpts.ResetThreatLevelAggroTime;
+                        PlayerThreatLevels.Clear();
                     }
 
                     var fleeing = IsFleeing();
@@ -1674,7 +1683,26 @@ namespace Intersect.Server.Entities
 
         public bool IsOverworldDefaultAggroToward(Player player)
         {
-            return Map?.ZoneType != MapZones.Safe || Math.Ceiling(Base.Level * Options.Combat.DefaultAggroLevelMultiplier) >= player.Level;
+            if (!PlayerThreatLevels.TryGetValue(player.Id, out var threatLevel))
+            {
+                threatLevel = SetThreatLevelFor(player);
+            }
+
+            return Map?.ZoneType != MapZones.Safe || threatLevel < ThreatLevel.Wimpy;
+        }
+
+        public ThreatLevel SetThreatLevelFor(Player player)
+        {
+            PlayerThreatLevels[player.Id] = ThreatLevelUtilities.DetermineNpcThreatLevel(player.MaxVitals,
+                player.StatVals,
+                Base.MaxVital,
+                Base.Stats,
+                player.GetMeleeAttackTypes(),
+                Base.AttackTypes,
+                player.GetRawAttackSpeed(),
+                Base.AttackSpeedValue);
+
+            return PlayerThreatLevels[player.Id];
         }
 
         public bool IsDungeonAggroToward(Player player)

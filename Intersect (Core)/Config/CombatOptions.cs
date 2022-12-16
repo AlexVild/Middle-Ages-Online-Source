@@ -130,6 +130,8 @@ namespace Intersect.Config
         
         public bool UseGeneratedMobExp { get; set; } = false;
 
+        public long ResetThreatLevelAggroTime { get; set; } = 30000;
+
         public List<int> HarvestBonusIntervals = new List<int>()
         {
             30, 90, 250, 500, 1000
