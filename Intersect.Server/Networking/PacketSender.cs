@@ -376,7 +376,6 @@ namespace Intersect.Server.Networking
 
             if (en == player)
             {
-                SendExperience(player);
                 SendInventory(player);
                 SendPlayerSpells(player);
                 SendPointsTo(player);
@@ -396,6 +395,12 @@ namespace Intersect.Server.Networking
             if (en.GetType() == typeof(Npc))
             {
                 SendNpcAggressionTo(player, (Npc) en);
+            }
+
+            // Alex: Maaaybe doing this last fixes 0/0 exp bug on client? Seems to be a timing issue
+            if (en == player)
+            {
+                SendExperience(player);
             }
         }
 
