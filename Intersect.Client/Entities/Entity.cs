@@ -12,6 +12,7 @@ using Intersect.Client.Framework.GenericClasses;
 using Intersect.Client.Framework.Graphics;
 using Intersect.Client.General;
 using Intersect.Client.General.Bestiary;
+using Intersect.Client.Interface.Game.Chat;
 using Intersect.Client.Items;
 using Intersect.Client.Localization;
 using Intersect.Client.Maps;
@@ -523,7 +524,7 @@ namespace Intersect.Client.Entities
 
                 // Bonuses apply as percentages of the original speed modifiers - if backstep is 50% slower, and you have 10% backstep bonus, then backstep is now 50 - (.1 * 50) = 45% slower
                 var backstepModifier = Options.Instance.CombatOpts.CombatModeBackModifier - ((Options.Instance.CombatOpts.CombatModeBackModifier - 1) * backstepBonus);
-                var strafeModifier = Options.Instance.CombatOpts.CombatModeStrafeModifier - ((Options.Instance.CombatOpts.CombatModeStrafeModifier - 1) * backstepBonus);
+                var strafeModifier = Options.Instance.CombatOpts.CombatModeStrafeModifier - ((Options.Instance.CombatOpts.CombatModeStrafeModifier - 1) * strafeBonus);
 
                 if (moveDir != faceDir)
                 {

@@ -475,7 +475,12 @@ namespace Intersect.Client.Networking
 
             en.X = packet.X;
             en.Y = packet.Y;
-            en.Dir = packet.Direction;
+            // ALEX - Temp fix; but fixes an issue where casting spells while backstepping/strafing in combat mode caused an insta-warp on the client.
+            // A more permanent fix might be to send over faceDir information and do some shit with it?
+            if (Globals.Me.Id != en.Id)
+            {
+                en.Dir = packet.Direction;
+            }
             en.Passable = packet.Passable;
             en.HideName = packet.HideName;
         }

@@ -265,6 +265,7 @@ namespace Intersect.Client.Entities
                 HandleInput();
             }
 
+
             if (!IsBusy())
             {
                 // Combat mode direction processing
