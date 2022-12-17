@@ -195,8 +195,6 @@ namespace Intersect.Server.Core
                     {
                         return requirement.IsBool && variableValue.Boolean;
                     }
-
-                    Logging.Log.Error("Invalid variable type when evaluating recipe unlock");
                     return false;
                 }
             }
