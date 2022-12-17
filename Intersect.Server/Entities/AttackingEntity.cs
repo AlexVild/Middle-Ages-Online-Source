@@ -82,12 +82,12 @@ namespace Intersect.Server.Entities
             // Handle the spell cast from the parent
             if (parentSpell != null)
             {
-                SpellAttack(enemy, parentSpell, (sbyte)projectile.Dir, projectile);
+                SpellAttack(enemy, parentSpell, (sbyte)projectile.Dir, projectile, true);
             }
             // Otherwise, handle the weapon
             else if (parentWeapon != null)
             {
-                if (!TryDealDamageTo(enemy, parentWeapon.AttackTypes, 100, 1.0, parentWeapon, null, false, out int weaponDamage))
+                if (!TryDealDamageTo(enemy, parentWeapon.AttackTypes, 100, 1.0, parentWeapon, null, true, out int weaponDamage))
                 {
                     return;
                 }
@@ -97,7 +97,7 @@ namespace Intersect.Server.Entities
 
             var targetType = (enemy.IsDead() || enemy.IsDisposed) ? -1 : 1;
             PacketSender.SendAnimationToProximity(
-                animation, targetType, enemy.Id, enemy.MapId, (byte)enemy.X, (byte)enemy.Y, (sbyte)projectileDir, MapInstanceId
+                animation, targetType, enemy.Id, enemy.MapId, (byte)enemy.X, (byte)enemy.Y, (sbyte)projectileDir, MapInstanceId, true
             );
 
             if (descriptor.Knockback > 0 && projectileDir < 4 && !enemy.IsImmuneTo(Immunities.Knockback) && !StatusActive(StatusTypes.Steady))

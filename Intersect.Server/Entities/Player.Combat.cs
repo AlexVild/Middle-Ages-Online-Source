@@ -110,7 +110,7 @@ namespace Intersect.Server.Entities
             // TODO evasion
             // if (!ignoreInvasion)...
 
-            return base.TryDealDamageTo(enemy, attackTypes, dmgScaling, critMultiplier, weapon, spell, false, out damage);
+            return base.TryDealDamageTo(enemy, attackTypes, dmgScaling, critMultiplier, weapon, spell, ignoreEvasion, out damage);
         }
 
         public override void MeleeAttack(Entity enemy, bool ignoreEvasion)

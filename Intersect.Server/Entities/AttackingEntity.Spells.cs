@@ -363,7 +363,7 @@ namespace Intersect.Server.Entities
         /// <param name="spell">The spell that's being used</param>
         /// <param name="attackAnimDir">The direction of animation</param>
         /// <param name="projectile">A projectile attacked to the spell, if there is one</param>
-        public void SpellAttack(Entity target, SpellBase spell, sbyte attackAnimDir, Projectile projectile)
+        public void SpellAttack(Entity target, SpellBase spell, sbyte attackAnimDir, Projectile projectile, bool ignoreEvasion = false)
         {
             if ((spell.Combat?.TargetType == SpellTargetTypes.AoE ||
                 spell.Combat?.TargetType == SpellTargetTypes.Single) &&
@@ -372,7 +372,7 @@ namespace Intersect.Server.Entities
                 return;
             }
 
-            if (CombatUtilities.AttackMisses(Accuracy, target.Evasion))
+            if (!ignoreEvasion && !spell.Combat.Friendly && target.Id != Id && spell.Combat.DamageType != (int)DamageType.True && CombatUtilities.AttackMisses(Accuracy, target.Evasion))
             {
                 if (spell?.Combat?.HotDotInterval > 0)
                 {

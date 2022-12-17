@@ -103,10 +103,7 @@ namespace Intersect.Server.Entities.Combat
             var scaling = SpellBase.Combat?.Scaling ?? 100;
 
             SendDoTAnimation(SpellBase, Target, (sbyte)Directions.Up);
-            if (!Attacker.TryDealDamageTo(Target, attackTypes, scaling, 1.0, null, SpellBase, true, out int damage))
-            {
-                // Do somethin
-            }
+            Attacker.TryDealDamageTo(Target, attackTypes, scaling, 1.0, null, SpellBase, true, out int damage);
         }
 
         private void SendDoTAnimation(SpellBase spell, Entity target, sbyte dir)
