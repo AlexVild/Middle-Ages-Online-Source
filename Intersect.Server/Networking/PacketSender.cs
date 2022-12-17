@@ -1284,7 +1284,6 @@ namespace Intersect.Server.Networking
                     {
                         equipment[i] = player.Items[player.Equipment[i]].ItemId;
                     }
-
                 }
 
                 for (var i = 0; i < Options.DecorSlots.Count; i++)

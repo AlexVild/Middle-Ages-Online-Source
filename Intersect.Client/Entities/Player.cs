@@ -387,11 +387,7 @@ namespace Intersect.Client.Entities
                 {
                     Equipment = playerPacket.Equipment.ItemIds;
                 }
-                
-                if (this == Globals.Me)
-                {
-                    Cosmetics = playerPacket.Equipment.CosmeticItemIds;
-                }
+                Cosmetics = playerPacket.Equipment.CosmeticItemIds;
             }
 
             if (this == Globals.Me && TargetBox == null && Interface.Interface.GameUi != null)
