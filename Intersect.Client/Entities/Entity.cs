@@ -968,7 +968,7 @@ namespace Intersect.Client.Entities
             return renderList;
         }
 
-        public virtual int DetermineRenderDirection(Byte dir)
+        public virtual int DetermineRenderDirection(byte dir)
         {
             switch (dir)
             {

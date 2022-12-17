@@ -11,7 +11,7 @@ namespace Intersect.Client.Interface.Game
 {
     public static class ExpToastService
     {
-        public const int ToastDuration = 2000;
+        public const int ToastDuration = 3000;
 
         public static Queue<ExpToast> Toasts { get; set; } = new Queue<ExpToast>();
 

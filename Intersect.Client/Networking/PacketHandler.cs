@@ -659,7 +659,6 @@ namespace Intersect.Client.Networking
             if (en is Player pl && Options.Combat.MovementCancelsCast)
             {
                 en.CastTime = 0;
-                pl.LastProjectileCastTime = 0;
             }
 
             if (en.Dashing != null || en.DashQueue.Count > 0)
@@ -827,10 +826,6 @@ namespace Intersect.Client.Networking
                     if (instance.Type == StatusTypes.Stun || instance.Type == StatusTypes.Silence)
                     {
                         entity.CastTime = 0;
-                        if (entity is Player player)
-                        {
-                            player.LastProjectileCastTime = 0;
-                        }
                     }
                     else if (instance.Type == StatusTypes.Shield)
                     {
@@ -908,11 +903,6 @@ namespace Intersect.Client.Networking
                 if (instance.Type == StatusTypes.Stun || instance.Type == StatusTypes.Silence)
                 {
                     en.CastTime = 0;
-                    // Clear the players movement stun if counterspelled
-                    if (en is Player player)
-                    {
-                        player.LastProjectileCastTime = 0;
-                    }
                 }
                 else if (instance.Type == StatusTypes.Shield)
                 {
@@ -2220,10 +2210,6 @@ namespace Intersect.Client.Networking
             {
                 Globals.Entities[packet.EntityId].CastTime = 0;
                 Globals.Entities[packet.EntityId].SpellCast = Guid.Empty;
-                if (Globals.Entities[packet.EntityId] is Player player)
-                {
-                    player.LastProjectileCastTime = 0L;
-                }
             }
         }
 
@@ -2479,7 +2465,7 @@ namespace Intersect.Client.Networking
         //ProjectileCastDelayPacket
         public void HandlePacket(IPacketSender packetSender, ProjectileCastDelayPacket packet)
         {
-            Globals.Me.LastProjectileCastTime = Timing.Global.Milliseconds + packet.DelayTime;
+            //Globals.Me.LastProjectileCastTime = Timing.Global.Milliseconds + packet.DelayTime;
         }
 
         //TimerPacket

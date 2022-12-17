@@ -2047,16 +2047,20 @@ namespace Intersect.Client.Entities
             {
                 return false;
             }
-            if (IsMoving && CombatMode)
+            if (IsMoving && CombatMode && !ChangeCombatModeNextTile)
             {
                 ChangeCombatModeNextTile = true;
                 return CombatMode;
             }
+            
+            ChangeCombatModeNextTile = false;
 
             CombatMode = !CombatMode;
             if (CombatMode)
             {
                 Audio.AddGameSound("al_combat_enter.wav", false);
+                FaceDirection = GetDirectionFromMouse(WorldPos);
+                PacketSender.SendDirection(FaceDirection);
             }
             else if (sound)
             {
@@ -2325,12 +2329,6 @@ namespace Intersect.Client.Entities
                 return;
             }
 
-            // If the player has recently casted a projectile
-            if (LastProjectileCastTime >= Timing.Global.Milliseconds)
-            {
-                return;
-            }
-
             var tmpX = (sbyte) X;
             var tmpY = (sbyte) Y;
             Entity blockedBy = null;
@@ -2339,8 +2337,16 @@ namespace Intersect.Client.Entities
 
             if (MoveDir > -1 && Globals.EventDialogs.Count == 0)
             {
+                /* A cheap fix for rubber banding when moving after a cast:
+                 * The issue is that the client knows a spell is done casting before the server does (sometimes). When that happens, the client can pass this check,
+                 * but the server still thinks the player is stuck, and won't let them move. This results in a horrible UX for the player, who will rubber band back to their location.
+                 * 
+                 * A more proper fix, down the line, would be to have some sort of handshake between the server and client about when a player IsCasting and when they !IsCasting. But, for now,
+                 * a simple ~200ms delay should account for all but the worst pings, and also prevent the issue where a player could quickly move out of a projectile's spawn location.
+                 */
+                var castTimePingPadding = CastTime + 200;
                 //Try to move if able and not casting spells.
-                if (!IsMoving && MoveTimer < Timing.Global.Ticks / TimeSpan.TicksPerMillisecond && (Options.Combat.MovementCancelsCast || CastTime < Timing.Global.Milliseconds)) 
+                if (!IsMoving && MoveTimer < Timing.Global.Ticks / TimeSpan.TicksPerMillisecond && (Options.Combat.MovementCancelsCast || castTimePingPadding < Timing.Global.Milliseconds)) 
                 {
                     if (ChangeCombatModeNextTile)
                     {
