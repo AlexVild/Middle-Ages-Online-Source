@@ -62,7 +62,7 @@ namespace Intersect.Client.Interface.Game.Inventory
         public void Update()
         {
             // Is this disabled from the server config? If so, skip doing anything.
-            if (!Options.Loot.EnableLootWindow)
+            if (!Options.Loot.EnableLootWindow || Globals.Me.IsDead)
             {
                 mMapItemWindow.Hide();
                 return;

@@ -2647,6 +2647,7 @@ namespace Intersect.Client.Networking
                 return;
             }
 
+            Interface.Interface.GameUi.CloseAllWindows();
             Interface.Interface.GameUi.RespawnWindow.SetType(packet.Type, packet.ExpLost, packet.ItemsLost);
         }
 

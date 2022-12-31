@@ -2108,6 +2108,11 @@ namespace Intersect.Client.Entities
         /// <returns></returns>
         public bool TryPickupItem(Guid mapId, int tileIndex, Guid uniqueId = new Guid(), bool firstOnly = false)
         {
+            if (IsDead)
+            {
+                return false;
+            }
+
             var map = MapInstance.Get(mapId);
             if (map == null || tileIndex < 0 || tileIndex >= Options.MapWidth * Options.MapHeight)
             {
