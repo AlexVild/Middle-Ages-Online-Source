@@ -987,6 +987,10 @@
     <Compile Include="Migrations\Game\20221206155602_AddBestiaryDenialMigration.designer.cs">
       <DependentUpon>20221206155602_AddBestiaryDenialMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20230101170457_SpellGroupMigration.cs" />
+    <Compile Include="Migrations\Game\20230101170457_SpellGroupMigration.designer.cs">
+      <DependentUpon>20230101170457_SpellGroupMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

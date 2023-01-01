@@ -57,10 +57,17 @@ namespace Intersect.Attributes
         Misc,
     }
 
+    public class ClassName : Attribute
+    {
+        public string Value { get; set; }
+
+        public ClassName(string val) { Value = val; }
+    }
+
     public class TextureType : Attribute
     {
         public TextureTypeCore Type { get; set; }
 
         public TextureType(TextureTypeCore t) { Type = t; }
-    }
+   }
 }

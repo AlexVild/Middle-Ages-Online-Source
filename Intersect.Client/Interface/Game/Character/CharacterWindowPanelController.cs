@@ -31,6 +31,8 @@ namespace Intersect.Client.Interface.Game.Character
         private Button RecipesButton { get; set; }
         private Button DecorButton { get; set; }
         private Button CosmeticsButton { get; set; }
+        private Button SkillsButton { get; set; }
+        private Button ChallengesButton { get; set; }
 
         private CharacterWindowMAO Parent { get; set; }
 
@@ -42,6 +44,7 @@ namespace Intersect.Client.Interface.Game.Character
         private CharacterNameTagPanel NameTagPanel { get; set; }
         private CharacterCosmeticsPanel CosmeticsPanel { get; set; }
         private CharacterRecipePanel RecipesPanel { get; set; }
+        private SkillsPanel SkillsPanel { get; set; }
 
         public CharacterWindowPanelController(Canvas gameCanvas, CharacterWindowMAO parent)
         {
@@ -74,6 +77,8 @@ namespace Intersect.Client.Interface.Game.Character
 
             RecipesPanel = new CharacterRecipePanel(PanelContainer);
             RecipesPanel.Hide();
+
+            SkillsPanel = new SkillsPanel(PanelContainer);
 
             PositionToParent();
             Hide();
@@ -118,6 +123,18 @@ namespace Intersect.Client.Interface.Game.Character
             };
             CosmeticsButton.Clicked += CosmeticsClicked;
 
+            SkillsButton = new Button(Container, "SkillsPanelSelector")
+            {
+                Text = "SKILLS"
+            };
+            SkillsButton.Clicked += SkillsButton_Clicked;
+
+            ChallengesButton = new Button(Container, "ChallengesPanelSelector")
+            {
+                Text = "CHALLENGES"
+            };
+            ChallengesButton.Clicked += ChallengesButton_Clicked;
+
             PanelSelectors = new List<Button>
             {
                 StatsButton,
@@ -126,7 +143,19 @@ namespace Intersect.Client.Interface.Game.Character
                 RecipesButton,
                 DecorButton,
                 CosmeticsButton,
+                SkillsButton,
+                ChallengesButton,
             };
+        }
+
+        private void ChallengesButton_Clicked(Base sender, ClickedEventArgs arguments)
+        {
+            ChangePanel(CharacterPanelType.Challenges);
+        }
+
+        private void SkillsButton_Clicked(Base sender, ClickedEventArgs arguments)
+        {
+            ChangePanel(CharacterPanelType.Skills);
         }
 
         private void PositionToParent()
@@ -200,6 +229,14 @@ namespace Intersect.Client.Interface.Game.Character
                 case CharacterPanelType.Cosmetics:
                     CosmeticsButton.Disable();
                     CurrentPanel = CosmeticsPanel;
+                    break;
+                case CharacterPanelType.Skills:
+                    SkillsButton.Disable();
+                    CurrentPanel = SkillsPanel;
+                    break;
+                case CharacterPanelType.Challenges:
+                    ChallengesButton.Disable();
+                    CurrentPanel = SkillsPanel;
                     break;
                 default:
                     throw new ArgumentException($"Invalid enum for {nameof(type)}");

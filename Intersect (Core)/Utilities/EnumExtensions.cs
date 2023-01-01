@@ -29,7 +29,28 @@ namespace Intersect.Utilities
             }
             return string.Empty;
         }
-        
+
+        public static string GetClassName(this Enum value)
+        {
+            Type type = value.GetType();
+            string name = Enum.GetName(type, value);
+            if (name != null)
+            {
+                FieldInfo field = type.GetField(name);
+                if (field != null)
+                {
+                    ClassName attr =
+                           Attribute.GetCustomAttribute(field,
+                             typeof(ClassName)) as ClassName;
+                    if (attr != null)
+                    {
+                        return attr.Value;
+                    }
+                }
+            }
+            return string.Empty;
+        }
+
         public static string[] GetDescriptions(Type enumType)
         {
             return Enum.GetValues(enumType).Cast<Enum>().Select(value => value.GetDescription()).ToArray();

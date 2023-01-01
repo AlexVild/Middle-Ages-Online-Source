@@ -34,6 +34,8 @@ namespace Intersect.Editor.Forms.Editors
 
         private List<string> mKnownCooldownGroups = new List<string>();
 
+        private List<string> mKnownSpellGroups = new List<string>();
+
         public FrmSpell()
         {
             ApplyHooks();
@@ -276,6 +278,7 @@ namespace Intersect.Editor.Forms.Editors
             {
                 pnlContainer.Show();
                 grpComponents.Show();
+                grpSpellGroup.Show();
 
                 txtName.Text = mEditorItem.Name;
                 cmbFolder.Text = mEditorItem.Folder;
@@ -307,6 +310,17 @@ namespace Intersect.Editor.Forms.Editors
                 nudMpCost.Value = mEditorItem.VitalCost[(int) Vitals.Mana];
 
                 txtCannotCast.Text = mEditorItem.CannotCastMessage;
+
+                if (string.IsNullOrEmpty(mEditorItem.SpellGroup))
+                {
+                    cmbSpellGroup.Text = string.Empty;
+                    cmbSpellGroup.SelectedIndex = -1;
+                    mEditorItem.SpellGroup = string.Empty;
+                }
+                else
+                {
+                    cmbSpellGroup.SelectedItem = mEditorItem.SpellGroup;
+                }
 
                 UpdateSpellTypePanels();
 
@@ -1010,22 +1024,32 @@ namespace Intersect.Editor.Forms.Editors
         {
             //Collect folders
             var mFolders = new List<string>();
+            mKnownSpellGroups.Clear();
+            cmbSpellGroup.Items.Clear();
             foreach (var itm in SpellBase.Lookup)
             {
-                if (!string.IsNullOrEmpty(((SpellBase) itm.Value).Folder) &&
-                    !mFolders.Contains(((SpellBase) itm.Value).Folder))
+                var spell = (SpellBase)itm.Value;
+                if (!string.IsNullOrEmpty(spell.Folder) &&
+                    !mFolders.Contains(spell.Folder))
                 {
-                    mFolders.Add(((SpellBase) itm.Value).Folder);
-                    if (!mKnownFolders.Contains(((SpellBase) itm.Value).Folder))
+                    mFolders.Add(spell.Folder);
+                    if (!mKnownFolders.Contains(spell.Folder))
                     {
-                        mKnownFolders.Add(((SpellBase) itm.Value).Folder);
+                        mKnownFolders.Add(spell.Folder);
                     }
                 }
 
-                if (!string.IsNullOrWhiteSpace(((SpellBase)itm.Value).CooldownGroup) &&
-                    !mKnownCooldownGroups.Contains(((SpellBase)itm.Value).CooldownGroup))
+                if (!string.IsNullOrWhiteSpace(spell.CooldownGroup) &&
+                    !mKnownCooldownGroups.Contains(spell.CooldownGroup))
                 {
-                    mKnownCooldownGroups.Add(((SpellBase)itm.Value).CooldownGroup);
+                    mKnownCooldownGroups.Add(spell.CooldownGroup);
+                }
+
+                if (!string.IsNullOrWhiteSpace(spell.SpellGroup) &&
+                    !mKnownSpellGroups.Contains(spell.SpellGroup))
+                {
+                    mKnownSpellGroups.Add(spell.SpellGroup);
+                    cmbSpellGroup.Items.Add(spell.SpellGroup);
                 }
             }
 
@@ -1358,6 +1382,38 @@ namespace Intersect.Editor.Forms.Editors
         private void nudEvasionPercentage_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.Combat.PercentageStatDiff[(int)Stats.Evasion] = (int)nudEvasionPercentage.Value;
+        }
+
+        private void btnAddSpellGroup_Click(object sender, EventArgs e)
+        {
+            var groupName = "";
+            var result = DarkInputBox.ShowInformation(
+                "Enter a name for the spell group:", "New Spell Group", ref groupName,
+                DarkDialogButton.OkCancel
+            );
+
+            if (result == DialogResult.OK && !string.IsNullOrEmpty(groupName))
+            {
+                if (!cmbSpellGroup.Items.Contains(groupName))
+                {
+                    mEditorItem.SpellGroup = groupName;
+                    cmbSpellGroup.Items.Add(groupName);
+                    cmbSpellGroup.SelectedItem = groupName;
+                    mKnownSpellGroups.Add(groupName);
+                }
+            }
+        }
+
+        private void cmbSpellGroup_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mEditorItem.SpellGroup = cmbSpellGroup.Text;
+        }
+
+        private void btnSetEmpty_Click(object sender, EventArgs e)
+        {
+            cmbSpellGroup.SelectedIndex = -1;
+            cmbSpellGroup.Text = string.Empty;
+            mEditorItem.SpellGroup = string.Empty;
         }
     }
 

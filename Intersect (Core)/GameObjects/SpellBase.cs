@@ -388,6 +388,8 @@ namespace Intersect.GameObjects
                 return;
             }
             CastingComponents.Add(new SpellCastingComponent(itemId, quantity));
-        }  
+        }
+        
+        public string SpellGroup { get; set; }
     }
 }

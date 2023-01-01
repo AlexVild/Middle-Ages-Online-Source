@@ -146,6 +146,7 @@
     <Compile Include="Interface\Game\Character\Panels\CharacterHarvestingWindow.cs" />
     <Compile Include="Interface\Game\Character\Panels\CharacterRecipePanel.cs" />
     <Compile Include="Interface\Game\Character\Panels\CharacterStatsWindow.cs" />
+    <Compile Include="Interface\Game\Character\Panels\SkillsPanel.cs" />
     <Compile Include="Interface\Game\ComboText.cs" />
     <Compile Include="Interface\Game\Components\CosmeticSelectionComponent.cs" />
     <Compile Include="Interface\Game\Components\GwenComponent.cs" />
