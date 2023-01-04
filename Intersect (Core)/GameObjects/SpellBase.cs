@@ -391,5 +391,7 @@ namespace Intersect.GameObjects
         }
         
         public string SpellGroup { get; set; }
+
+        public int RequiredSkillPoints { get; set; }
     }
 }

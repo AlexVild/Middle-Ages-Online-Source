@@ -322,6 +322,8 @@ namespace Intersect.Editor.Forms.Editors
                     cmbSpellGroup.SelectedItem = mEditorItem.SpellGroup;
                 }
 
+                nudSkillPoints.Value = mEditorItem.RequiredSkillPoints;
+
                 UpdateSpellTypePanels();
 
                 if (mChanged.IndexOf(mEditorItem) == -1)
@@ -1415,6 +1417,10 @@ namespace Intersect.Editor.Forms.Editors
             cmbSpellGroup.Text = string.Empty;
             mEditorItem.SpellGroup = string.Empty;
         }
-    }
 
+        private void nudSkillPoints_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.RequiredSkillPoints = (int)nudSkillPoints.Value;
+        }
+    }
 }

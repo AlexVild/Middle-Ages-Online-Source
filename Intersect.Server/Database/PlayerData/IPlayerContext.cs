@@ -1,7 +1,7 @@
 ﻿using Intersect.Server.Database.PlayerData.Api;
 using Intersect.Server.Database.PlayerData.Players;
 using Intersect.Server.Entities;
-
+using Intersect.Server.Entities.PlayerData;
 using Microsoft.EntityFrameworkCore;
 
 namespace Intersect.Server.Database.PlayerData
@@ -57,5 +57,7 @@ namespace Intersect.Server.Database.PlayerData
         DbSet<RecipeInstance> Player_Recipes { get; set; }
         
         DbSet<BestiaryUnlockInstance> Player_Bestiary_Unlocks { get; set; }
+        
+        DbSet<PlayerSkillInstance> Player_Unlocked_Skills { get; set; }
     }
 }

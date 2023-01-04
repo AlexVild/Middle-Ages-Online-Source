@@ -15,6 +15,7 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Intersect.GameObjects.Timers;
 using Microsoft.EntityFrameworkCore.Internal;
+using Intersect.Server.Entities.PlayerData;
 
 namespace Intersect.Server.Database.PlayerData
 {
@@ -88,6 +89,8 @@ namespace Intersect.Server.Database.PlayerData
         public DbSet<RecipeInstance> Player_Recipes { get; set; }
         
         public DbSet<BestiaryUnlockInstance> Player_Bestiary_Unlocks { get; set; }
+        
+        public DbSet<PlayerSkillInstance> Player_Unlocked_Skills { get; set; }
 
         internal async ValueTask Commit(
             bool commit = false,
@@ -170,6 +173,10 @@ namespace Intersect.Server.Database.PlayerData
             modelBuilder.Entity<Player>()
                 .HasMany(player => player.BestiaryUnlocks)
                 .WithOne(unlock => unlock.Player);
+
+            modelBuilder.Entity<Player>()
+                .HasMany(player => player.SkillBook)
+                .WithOne(spellUnlock => spellUnlock.Player);
         }
 
         public void Seed()
@@ -273,6 +280,9 @@ namespace Intersect.Server.Database.PlayerData
                 Entry(itm).State = EntityState.Detached;
 
             foreach (var itm in player.BestiaryUnlocks)
+                Entry(itm).State = EntityState.Detached;
+
+            foreach (var itm in player.SkillBook)
                 Entry(itm).State = EntityState.Detached;
         }
 

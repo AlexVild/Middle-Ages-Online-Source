@@ -527,7 +527,9 @@
     <Compile Include="Entities\Events\Event.cs" />
     <Compile Include="Entities\Player.Harvesting.cs" />
     <Compile Include="Entities\Player.Recipes.cs" />
+    <Compile Include="Entities\Player.SkillBook.cs" />
     <Compile Include="Entities\PlayerData\PlayerClassStats.cs" />
+    <Compile Include="Entities\PlayerData\PlayerSkillInstance.cs" />
     <Compile Include="Entities\Projectile.cs" />
     <Compile Include="Entities\ProjectileSpawn.cs" />
     <Compile Include="Entities\Resource.cs" />
@@ -664,6 +666,10 @@
     <Compile Include="Migrations\20221211175311_AddBestiaryUnlocksMigration.cs" />
     <Compile Include="Migrations\20221211175311_AddBestiaryUnlocksMigration.designer.cs">
       <DependentUpon>20221211175311_AddBestiaryUnlocksMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20230104222457_SkillUnlocksMigration.cs" />
+    <Compile Include="Migrations\20230104222457_SkillUnlocksMigration.designer.cs">
+      <DependentUpon>20230104222457_SkillUnlocksMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.cs" />
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.Designer.cs">
@@ -990,6 +996,10 @@
     <Compile Include="Migrations\Game\20230101170457_SpellGroupMigration.cs" />
     <Compile Include="Migrations\Game\20230101170457_SpellGroupMigration.designer.cs">
       <DependentUpon>20230101170457_SpellGroupMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20230104222431_SkillPointSpellMigration.cs" />
+    <Compile Include="Migrations\Game\20230104222431_SkillPointSpellMigration.designer.cs">
+      <DependentUpon>20230104222431_SkillPointSpellMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">

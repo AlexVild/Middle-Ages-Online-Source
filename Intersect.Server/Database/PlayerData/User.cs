@@ -822,6 +822,8 @@ namespace Intersect.Server.Database.PlayerData
                     .ThenInclude(p => p.UnlockedRecipes)
                     .Include(p => p.Players)
                     .ThenInclude(p => p.BestiaryUnlocks)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.SkillBook)
                     .FirstOrDefault()
             ) ??
             throw new InvalidOperationException();
@@ -861,6 +863,8 @@ namespace Intersect.Server.Database.PlayerData
                     .ThenInclude(p => p.UnlockedRecipes)
                     .Include(p => p.Players)
                     .ThenInclude(p => p.BestiaryUnlocks)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.SkillBook)
                     .FirstOrDefault()
                 ) ?? throw new InvalidOperationException();
 
@@ -909,6 +913,8 @@ namespace Intersect.Server.Database.PlayerData
                     .ThenInclude(p => p.UnlockedRecipes)
                     .Include(p => p.Players)
                     .ThenInclude(p => p.BestiaryUnlocks)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.SkillBook)
                     .FirstOrDefault()
                 ) ?? throw new InvalidOperationException();
 

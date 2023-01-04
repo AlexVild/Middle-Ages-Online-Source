@@ -75,6 +75,8 @@ namespace Intersect.Editor.Forms.Editors
             this.lblName = new System.Windows.Forms.Label();
             this.txtName = new DarkUI.Controls.DarkTextBox();
             this.grpSpellCost = new DarkUI.Controls.DarkGroupBox();
+            this.nudSkillPoints = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblSkillPts = new System.Windows.Forms.Label();
             this.chkIgnoreCdr = new DarkUI.Controls.DarkCheckBox();
             this.chkIgnoreGlobalCooldown = new DarkUI.Controls.DarkCheckBox();
             this.btnAddCooldownGroup = new DarkUI.Controls.DarkButton();
@@ -106,8 +108,8 @@ namespace Intersect.Editor.Forms.Editors
             this.lblTargetType = new System.Windows.Forms.Label();
             this.nudCastRange = new DarkUI.Controls.DarkNumericUpDown();
             this.grpEvent = new DarkUI.Controls.DarkGroupBox();
-            this.cmbEvent = new DarkUI.Controls.DarkComboBox();
             this.grpCombat = new DarkUI.Controls.DarkGroupBox();
+            this.cmbEvent = new DarkUI.Controls.DarkComboBox();
             this.grpDamageTypes = new DarkUI.Controls.DarkGroupBox();
             this.chkDamageMagic = new DarkUI.Controls.DarkCheckBox();
             this.label14 = new System.Windows.Forms.Label();
@@ -242,6 +244,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpGeneral.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picSpell)).BeginInit();
             this.grpSpellCost.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSkillPoints)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudCooldownDuration)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudCastDuration)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMpCost)).BeginInit();
@@ -251,7 +254,6 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudDuration)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudHitRadius)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudCastRange)).BeginInit();
-            this.grpEvent.SuspendLayout();
             this.grpCombat.SuspendLayout();
             this.grpDamageTypes.SuspendLayout();
             this.grpStats.SuspendLayout();
@@ -497,7 +499,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpDash.Controls.Add(this.lblRange);
             this.grpDash.Controls.Add(this.scrlRange);
             this.grpDash.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpDash.Location = new System.Drawing.Point(3, 444);
+            this.grpDash.Location = new System.Drawing.Point(215, 2);
             this.grpDash.Name = "grpDash";
             this.grpDash.Size = new System.Drawing.Size(220, 251);
             this.grpDash.TabIndex = 38;
@@ -884,6 +886,8 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpSpellCost.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpSpellCost.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpSpellCost.Controls.Add(this.nudSkillPoints);
+            this.grpSpellCost.Controls.Add(this.lblSkillPts);
             this.grpSpellCost.Controls.Add(this.chkIgnoreCdr);
             this.grpSpellCost.Controls.Add(this.chkIgnoreGlobalCooldown);
             this.grpSpellCost.Controls.Add(this.btnAddCooldownGroup);
@@ -900,10 +904,34 @@ namespace Intersect.Editor.Forms.Editors
             this.grpSpellCost.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpSpellCost.Location = new System.Drawing.Point(3, 300);
             this.grpSpellCost.Name = "grpSpellCost";
-            this.grpSpellCost.Size = new System.Drawing.Size(438, 143);
+            this.grpSpellCost.Size = new System.Drawing.Size(438, 189);
             this.grpSpellCost.TabIndex = 36;
             this.grpSpellCost.TabStop = false;
             this.grpSpellCost.Text = "Spell Cost:";
+            // 
+            // nudSkillPoints
+            // 
+            this.nudSkillPoints.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudSkillPoints.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudSkillPoints.Location = new System.Drawing.Point(10, 163);
+            this.nudSkillPoints.Name = "nudSkillPoints";
+            this.nudSkillPoints.Size = new System.Drawing.Size(185, 20);
+            this.nudSkillPoints.TabIndex = 59;
+            this.nudSkillPoints.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudSkillPoints.ValueChanged += new System.EventHandler(this.nudSkillPoints_ValueChanged);
+            // 
+            // lblSkillPts
+            // 
+            this.lblSkillPts.AutoSize = true;
+            this.lblSkillPts.Location = new System.Drawing.Point(7, 147);
+            this.lblSkillPts.Name = "lblSkillPts";
+            this.lblSkillPts.Size = new System.Drawing.Size(103, 13);
+            this.lblSkillPts.TabIndex = 58;
+            this.lblSkillPts.Text = "Skill Points to Equip:";
             // 
             // chkIgnoreCdr
             // 
@@ -1345,15 +1373,34 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpEvent.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpEvent.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpEvent.Controls.Add(this.cmbEvent);
             this.grpEvent.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpEvent.Location = new System.Drawing.Point(0, 445);
+            this.grpEvent.Location = new System.Drawing.Point(0, 500);
             this.grpEvent.Name = "grpEvent";
             this.grpEvent.Size = new System.Drawing.Size(441, 48);
             this.grpEvent.TabIndex = 40;
             this.grpEvent.TabStop = false;
             this.grpEvent.Text = "Event";
             this.grpEvent.Visible = false;
+            // 
+            // grpCombat
+            // 
+            this.grpCombat.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpCombat.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpCombat.Controls.Add(this.cmbEvent);
+            this.grpCombat.Controls.Add(this.grpDamageTypes);
+            this.grpCombat.Controls.Add(this.grpStats);
+            this.grpCombat.Controls.Add(this.grpHotDot);
+            this.grpCombat.Controls.Add(this.grpEffect);
+            this.grpCombat.Controls.Add(this.grpEffectDuration);
+            this.grpCombat.Controls.Add(this.grpDamage);
+            this.grpCombat.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpCombat.Location = new System.Drawing.Point(3, 493);
+            this.grpCombat.Name = "grpCombat";
+            this.grpCombat.Size = new System.Drawing.Size(447, 596);
+            this.grpCombat.TabIndex = 39;
+            this.grpCombat.TabStop = false;
+            this.grpCombat.Text = "Combat Spell";
+            this.grpCombat.Visible = false;
             // 
             // cmbEvent
             // 
@@ -1368,32 +1415,13 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbEvent.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbEvent.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbEvent.FormattingEnabled = true;
-            this.cmbEvent.Location = new System.Drawing.Point(9, 17);
+            this.cmbEvent.Location = new System.Drawing.Point(0, 0);
             this.cmbEvent.Name = "cmbEvent";
             this.cmbEvent.Size = new System.Drawing.Size(425, 21);
             this.cmbEvent.TabIndex = 17;
             this.cmbEvent.Text = null;
             this.cmbEvent.TextPadding = new System.Windows.Forms.Padding(2);
             this.cmbEvent.SelectedIndexChanged += new System.EventHandler(this.cmbEvent_SelectedIndexChanged);
-            // 
-            // grpCombat
-            // 
-            this.grpCombat.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.grpCombat.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpCombat.Controls.Add(this.grpDamageTypes);
-            this.grpCombat.Controls.Add(this.grpStats);
-            this.grpCombat.Controls.Add(this.grpHotDot);
-            this.grpCombat.Controls.Add(this.grpEffect);
-            this.grpCombat.Controls.Add(this.grpEffectDuration);
-            this.grpCombat.Controls.Add(this.grpDamage);
-            this.grpCombat.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpCombat.Location = new System.Drawing.Point(3, 445);
-            this.grpCombat.Name = "grpCombat";
-            this.grpCombat.Size = new System.Drawing.Size(447, 596);
-            this.grpCombat.TabIndex = 39;
-            this.grpCombat.TabStop = false;
-            this.grpCombat.Text = "Combat Spell";
-            this.grpCombat.Visible = false;
             // 
             // grpDamageTypes
             // 
@@ -2964,7 +2992,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpWarp.Controls.Add(this.lblX);
             this.grpWarp.Controls.Add(this.lblMap);
             this.grpWarp.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpWarp.Location = new System.Drawing.Point(3, 453);
+            this.grpWarp.Location = new System.Drawing.Point(3, 495);
             this.grpWarp.Name = "grpWarp";
             this.grpWarp.Size = new System.Drawing.Size(247, 182);
             this.grpWarp.TabIndex = 35;
@@ -3329,6 +3357,7 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.picSpell)).EndInit();
             this.grpSpellCost.ResumeLayout(false);
             this.grpSpellCost.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSkillPoints)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudCooldownDuration)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudCastDuration)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMpCost)).EndInit();
@@ -3340,7 +3369,6 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudDuration)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudHitRadius)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudCastRange)).EndInit();
-            this.grpEvent.ResumeLayout(false);
             this.grpCombat.ResumeLayout(false);
             this.grpDamageTypes.ResumeLayout(false);
             this.grpDamageTypes.PerformLayout();
@@ -3599,5 +3627,7 @@ namespace Intersect.Editor.Forms.Editors
         private DarkButton btnAddSpellGroup;
         private DarkComboBox cmbSpellGroup;
         private DarkButton btnSetEmpty;
+        private DarkNumericUpDown nudSkillPoints;
+        private System.Windows.Forms.Label lblSkillPts;
     }
 }
