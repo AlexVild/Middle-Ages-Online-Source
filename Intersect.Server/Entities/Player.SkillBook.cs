@@ -6,12 +6,15 @@ using Intersect.Server.Entities.Events;
 
 using Newtonsoft.Json;
 using Intersect.Server.Entities.PlayerData;
+using Intersect.Utilities;
+using Intersect.Server.Networking;
+using Intersect.GameObjects;
 
 namespace Intersect.Server.Entities
 {
     public partial class Player : AttackingEntity
     {
-        public List<PlayerSkillInstance> SkillBook { get; set; }
+        public List<PlayerSkillInstance> SkillBook { get; set; } = new List<PlayerSkillInstance>();
 
         [NotMapped, JsonIgnore]
         public int SkillPointsAvailable => SkillBook
@@ -21,28 +24,62 @@ namespace Intersect.Server.Entities
 
         public int SkillPointTotal { get; set; }
 
-        public bool SkillInSkillbook(Guid spellId)
+        public bool TryGetSkillInSkillbook(Guid spellId, out PlayerSkillInstance skill)
         {
-            return SkillBook.ToArray().FirstOrDefault(s => s.Id == spellId) != default;
+            skill = SkillBook.ToArray().FirstOrDefault(s => s.Id == spellId);
+            return skill != default;
         }
 
-        public bool TryEquipSpell(Guid spellId, out string reason)
+        public bool SkillPrepared(Guid spellId)
         {
-            reason = string.Empty;
-            var spellBook = SkillBook.ToArray();
-            var spell = spellBook.FirstOrDefault(s => s.Id == spellId);
+            TryGetEquippedItem(Options.WeaponIndex, out var equippedWeapon);
+
+            // Allow special attacks through
+            if (spellId == equippedWeapon?.Descriptor?.SpecialAttack?.SpellId)
+            {
+                return true;
+            }
+
+            if (!TryGetSkillInSkillbook(spellId, out var skill))
+            {
+                return false;
+            }
+
+            return skill.Equipped;
+        }
+
+        public bool TryToggleSkillPrepare(Guid spellId, bool isPrepare, out string failureReason)
+        {
+            failureReason = string.Empty;
+            
+            if (CastTime > Timing.Global.Milliseconds)
+            {
+                failureReason = "You can't prepare/unprepare skills while casting!";
+                return false;
+            }
+
+            if (CombatTimer > Timing.Global.Milliseconds)
+            {
+                failureReason = "You can't prepare/unprepare skills while in combat!";
+                return false;
+            }
 
             // Spell not in spell book
-            if (!SkillInSkillbook(spellId))
+            if (!TryGetSkillInSkillbook(spellId, out var spell)) 
             {
-                reason = "You haven't learned this skill yet!";
                 return false;
+            }
+
+            // The remainder of the logic only pertains to preparing a skill, so if we were un-preparing, we're done
+            if (!isPrepare)
+            {
+                return true;
             }
 
             // Not enough skill points
             if (SkillPointsAvailable < spell.RequiredSkillPoints)
             {
-                reason = "You don't have enough skill points available to equip this skill!";
+                failureReason = "You don't have enough skill points available to equip this skill!";
                 return false;
             }
 
@@ -50,11 +87,11 @@ namespace Intersect.Server.Entities
             {
                 if (!string.IsNullOrEmpty(spell.Spell.CannotCastMessage))
                 {
-                    reason = spell.Spell.CannotCastMessage;
+                    failureReason = spell.Spell.CannotCastMessage;
                 }
                 else
                 {
-                    reason = "You lack some requirement(s) to equip this skill!";
+                    failureReason = "You lack some requirement(s) to equip this skill!";
                 }
                 
                 return false;
@@ -62,6 +99,34 @@ namespace Intersect.Server.Entities
 
             // Player can go ahead
             return true;
+        }
+
+        public void PrepareSkill(Guid spellId)
+        {
+            if (!TryToggleSkillPrepare(spellId, true, out string failureReason))
+            {
+                PacketSender.SendChatMsg(this, failureReason, Enums.ChatMessageType.Error, CustomColors.General.GeneralDisabled);
+                return;
+            }
+
+            if (!TryTeachSpell(new Database.Spell(spellId)))
+            {
+                PacketSender.SendChatMsg(this, "You already have this skill prepared!", Enums.ChatMessageType.Error, CustomColors.General.GeneralDisabled);
+            }
+        }
+
+        public void UnprepareSkill(Guid spellId)
+        {
+            if (!TryToggleSkillPrepare(spellId, false, out string failureReason))
+            {
+                PacketSender.SendChatMsg(this, failureReason, Enums.ChatMessageType.Error, CustomColors.General.GeneralDisabled);
+                return;
+            }
+
+            if (!TryForgetSpell(new Database.Spell(spellId)))
+            {
+                PacketSender.SendChatMsg(this, "You never had this skill prepared!", Enums.ChatMessageType.Error, CustomColors.General.GeneralDisabled);
+            }
         }
     }
 }

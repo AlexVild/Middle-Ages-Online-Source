@@ -161,6 +161,30 @@ namespace Intersect.Server.Entities
             }
         }
 
+        /// <summary>
+        /// Ensures that the spell we're trying to cast, at time of casting, can still be cast.
+        /// Also consumes items if necessary.
+        /// </summary>
+        /// <param name="spell">The spell we're about to cast</param>
+        /// <param name="target">The target we're casting to</param>
+        /// <param name="ignoreVitals">Whether we want to ignore vital requirements for this cast</param>
+        /// <returns>True if the cast is valid and is ready to occur</returns>
+        protected override bool ValidateCast(SpellBase spell, Entity target, bool ignoreVitals)
+        {
+            if (spell == null)
+            {
+                return false;
+            }
+
+            if (!SkillPrepared(spell.Id))
+            {
+                PacketSender.SendChatMsg(this, Strings.Combat.SpellNotPrepared, ChatMessageType.Error, "", true);
+                return false;
+            }
+
+            return base.ValidateCast(spell, target, ignoreVitals);
+        }
+
         public override void UseSpell(SpellBase spell, int spellSlot, bool ignoreVitals = false, bool prayerSpell = false, byte prayerSpellDir = 0, Entity prayerTarget = null)
         {
             if (PlayerDead)
@@ -271,6 +295,12 @@ namespace Intersect.Server.Entities
             if (spell == null)
             {
                 throw new ArgumentNullException(nameof(spell));
+            }
+
+            if (!SkillPrepared(spell.Id))
+            {
+                PacketSender.SendChatMsg(this, Strings.Combat.SpellNotPrepared, ChatMessageType.Error, "", true);
+                return false;
             }
 
             if (!EntityHasCastingMaterials(spell))

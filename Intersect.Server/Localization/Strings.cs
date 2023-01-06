@@ -245,6 +245,10 @@ namespace Intersect.Server.Localization
                 @"You are currently channeling a spell, you cannot attack.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString SpellNotPrepared =
+                @"Youd don't have this spell prepared!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString cooldown = @"This skill is on cooldown.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]

@@ -228,7 +228,7 @@ namespace Intersect.Server.Entities
         /// <param name="target">The target we're casting to</param>
         /// <param name="ignoreVitals">Whether we want to ignore vital requirements for this cast</param>
         /// <returns>True if the cast is valid and is ready to occur</returns>
-        private bool ValidateCast(SpellBase spell, Entity target, bool ignoreVitals)
+        protected virtual bool ValidateCast(SpellBase spell, Entity target, bool ignoreVitals)
         {
             if (spell == null)
             {
