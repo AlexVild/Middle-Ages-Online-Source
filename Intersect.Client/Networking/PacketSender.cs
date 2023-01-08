@@ -625,5 +625,10 @@ namespace Intersect.Client.Networking
         {
             Network.SendPacket(new RequestKillCountPacket(npcId));
         }
+
+        public static void SendSkillPreparationChange(Guid spellId, bool prepared)
+        {
+            Network.SendPacket(new SkillPreparationPacket(spellId, prepared));
+        }
     }
 }

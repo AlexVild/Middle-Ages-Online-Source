@@ -4473,5 +4473,23 @@ namespace Intersect.Server.Networking
         {
             PacketSender.SendKillCount(client?.Entity, packet.NpcId);
         }
+
+        public void HandlePacket(Client client, SkillPreparationPacket packet)
+        {
+            var player = client?.Entity;
+
+            if (player == null)
+            {
+                return;
+            }
+
+            if (!player.TryToggleSkillPrepare(packet.SpellId, packet.Prepared, out var failureMsg))
+            {
+                PacketSender.SendChatMsg(player, failureMsg, ChatMessageType.Error, CustomColors.General.GeneralDisabled);
+                
+                // Resend the skillbook so the client can reset the skill back to its actual prepared value
+                PacketSender.SendSkillbookToClient(player);
+            }
+        }
     }
 }

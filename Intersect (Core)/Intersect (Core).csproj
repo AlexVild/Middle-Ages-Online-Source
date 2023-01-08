@@ -415,6 +415,7 @@
     <Compile Include="Network\Packets\Client\RequestUnlockedRecipesPacket.cs" />
     <Compile Include="Network\Packets\Client\ResourceInfoRequestPacket.cs" />
     <Compile Include="Network\Packets\Client\SetLabelPacket.cs" />
+    <Compile Include="Network\Packets\Client\SkillPreparationPacket.cs" />
     <Compile Include="Network\Packets\Server\CombatNumberPacket.cs" />
     <Compile Include="Network\Packets\Server\CombatNumberPackets.cs" />
     <Compile Include="Network\Packets\Server\CosmeticUnlocksPacket.cs" />
