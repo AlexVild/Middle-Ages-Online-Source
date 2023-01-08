@@ -206,7 +206,6 @@ namespace Intersect.Client.General
 
             return null;
         }
-
     }
 
     public static partial class Globals

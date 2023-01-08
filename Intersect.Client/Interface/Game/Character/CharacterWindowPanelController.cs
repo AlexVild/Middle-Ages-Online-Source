@@ -79,6 +79,7 @@ namespace Intersect.Client.Interface.Game.Character
             RecipesPanel.Hide();
 
             SkillsPanel = new SkillsPanel(PanelContainer);
+            SkillsPanel.Hide();
 
             PositionToParent();
             Hide();

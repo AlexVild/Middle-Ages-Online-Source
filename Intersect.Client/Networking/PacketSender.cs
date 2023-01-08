@@ -630,5 +630,10 @@ namespace Intersect.Client.Networking
         {
             Network.SendPacket(new SkillPreparationPacket(spellId, prepared));
         }
+
+        public static void SendRequestSkillbook()
+        {
+            Network.SendPacket(new RequestSkillbookPacket());
+        }
     }
 }

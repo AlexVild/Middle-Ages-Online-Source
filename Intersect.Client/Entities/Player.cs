@@ -265,6 +265,11 @@ namespace Intersect.Client.Entities
                 HandleInput();
             }
 
+            if (!IsMoving && ChangeCombatModeNextTile)
+            {
+                ChangeCombatModeNextTile = false;
+                ToggleCombatMode(true);
+            }
 
             if (!IsBusy())
             {
@@ -2347,15 +2352,10 @@ namespace Intersect.Client.Entities
                  * a simple ~200ms delay should account for all but the worst pings, and also prevent the issue where a player could quickly move out of a projectile's spawn location.
                  */
                 var castTimePingPadding = CastTime + 200;
+
                 //Try to move if able and not casting spells.
                 if (!IsMoving && MoveTimer < Timing.Global.Ticks / TimeSpan.TicksPerMillisecond && (Options.Combat.MovementCancelsCast || castTimePingPadding < Timing.Global.Milliseconds)) 
                 {
-                    if (ChangeCombatModeNextTile)
-                    {
-                        ChangeCombatModeNextTile = false;
-                        ToggleCombatMode(true);
-                    }
-
                     if (Options.Combat.MovementCancelsCast)
                     {
                         CastTime = 0;
@@ -3080,6 +3080,6 @@ namespace Intersect.Client.Entities
 
     public partial class Player : Entity
     {
-        public List<Guid> Skillbook = new List<Guid>();
+        public Dictionary<Guid, SkillbookInstance> Skillbook = new Dictionary<Guid, SkillbookInstance>();
     }
 }

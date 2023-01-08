@@ -2830,8 +2830,9 @@ namespace Intersect.Client.Networking
                 return;
             }
 
-            Globals.Me.Skillbook.Clear();
-            Globals.Me.Skillbook.AddRange(packet.SkillIds);
+            Globals.Me.Skillbook = packet.SkillBook;
+            SkillsPanelController.RefreshAvailableSkillTypes();
+            SkillsPanelController.RefreshDisplay = true;
         }
     }
 }

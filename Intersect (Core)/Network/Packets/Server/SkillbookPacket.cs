@@ -5,18 +5,38 @@ using System.Collections.Generic;
 namespace Intersect.Network.Packets.Server
 {
     [MessagePackObject]
+    public class SkillbookInstance : IntersectPacket
+    {
+        public SkillbookInstance()
+        {
+        }
+
+        [Key(0)]
+        public bool Prepared { get; set; }
+
+        [Key(1)]
+        public int PointsRequired { get; set; }
+
+        public SkillbookInstance(bool prepared, int pointsRequired)
+        {
+            Prepared = prepared;
+            PointsRequired = pointsRequired;
+        }
+    }
+
+    [MessagePackObject]
     public class SkillbookPacket : IntersectPacket
     {
         [Key(0)]
-        public List<Guid> SkillIds { get; set; }
+        public Dictionary<Guid, SkillbookInstance> SkillBook { get; set; }
 
         public SkillbookPacket()
         {
         }
 
-        public SkillbookPacket(List<Guid> spells)
+        public SkillbookPacket(Dictionary<Guid, SkillbookInstance> skillBook)
         {
-            SkillIds = spells;
+            SkillBook = skillBook;
         }
     }
 }

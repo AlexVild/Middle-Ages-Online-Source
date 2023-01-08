@@ -206,6 +206,17 @@ namespace Intersect.Client.Framework.Gwen.Control
             return item;
         }
 
+        public void RemoveMenuItems()
+        {
+            foreach (var child in mMenu.Children.ToArray())
+            {
+                if (child.GetType() == typeof(MenuItem))
+                {
+                    mMenu.RemoveChild(child, true);
+                }
+            }
+        }
+
         /// <summary>
         ///     Renders the control using specified skin.
         /// </summary>

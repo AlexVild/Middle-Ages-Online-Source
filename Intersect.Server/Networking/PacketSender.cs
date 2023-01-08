@@ -2725,8 +2725,17 @@ namespace Intersect.Server.Networking
 
         public static void SendSkillbookToClient(Player player)
         {
-            var spellIds = player?.SkillBook.Select(s => s.SpellId).ToList() ?? new List<Guid>();
-            player?.SendPacket(new SkillbookPacket(spellIds));
+            var skillBook = new Dictionary<Guid, SkillbookInstance>();
+            foreach (var skill in player?.SkillBook)
+            {
+                if (skillBook.ContainsKey(skill.SpellId))
+                {
+                    continue;
+                }
+                skillBook[skill.SpellId] = new SkillbookInstance(skill.Equipped, skill.RequiredSkillPoints);
+            }
+
+            player?.SendPacket(new SkillbookPacket(skillBook));
         }
     }
 }

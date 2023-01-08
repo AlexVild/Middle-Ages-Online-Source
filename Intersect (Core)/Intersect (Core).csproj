@@ -412,6 +412,7 @@
     <Compile Include="Network\Packets\Client\RequestRecipeRequirementsPacket.cs" />
     <Compile Include="Network\Packets\Client\RequestRecipesPacket.cs" />
     <Compile Include="Network\Packets\Client\RequestRespawnPacket.cs" />
+    <Compile Include="Network\Packets\Client\RequestSkillbookPacket.cs" />
     <Compile Include="Network\Packets\Client\RequestUnlockedRecipesPacket.cs" />
     <Compile Include="Network\Packets\Client\ResourceInfoRequestPacket.cs" />
     <Compile Include="Network\Packets\Client\SetLabelPacket.cs" />

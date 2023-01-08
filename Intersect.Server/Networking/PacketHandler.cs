@@ -4478,18 +4478,28 @@ namespace Intersect.Server.Networking
         {
             var player = client?.Entity;
 
+            if (packet.Prepared)
+            {
+                player?.PrepareSkill(packet.SpellId);
+            }
+            else
+            {
+                player?.UnprepareSkill(packet.SpellId);
+            }
+
+            // Resend the skillbook so the client can reset the skill back to its actual prepared value
+            PacketSender.SendSkillbookToClient(player);
+        }
+        public void HandlePacket(Client client, RequestSkillbookPacket packet)
+        {
+            var player = client?.Entity;
+
             if (player == null)
             {
                 return;
             }
 
-            if (!player.TryToggleSkillPrepare(packet.SpellId, packet.Prepared, out var failureMsg))
-            {
-                PacketSender.SendChatMsg(player, failureMsg, ChatMessageType.Error, CustomColors.General.GeneralDisabled);
-                
-                // Resend the skillbook so the client can reset the skill back to its actual prepared value
-                PacketSender.SendSkillbookToClient(player);
-            }
+            PacketSender.SendSkillbookToClient(player);
         }
     }
 }

@@ -70,6 +70,13 @@ namespace Intersect.Client.Interface.Game.Character
         public void Show()
         {
             mCharacterWindow.Show();
+
+            // Request information from the server if needed
+            if (Globals.Me?.Skillbook.Count == 0)
+            {
+                PacketSender.SendRequestSkillbook();
+            }
+
             PanelContainer.Show();
         }
 

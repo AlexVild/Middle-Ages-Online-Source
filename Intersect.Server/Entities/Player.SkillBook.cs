@@ -67,6 +67,18 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
+            if (InstanceType == Enums.MapInstanceType.Shared)
+            {
+                failureReason = "You can't prepare/unprepare skills while in a dungeon instance!";
+                return false;
+            }
+
+            if (Map.ZoneType != Enums.MapZones.Safe)
+            {
+                failureReason = "You can't prepare/unprepare skills while in a PvP zone!";
+                return false;
+            }
+
             // Spell not in spell book
             if (!TryGetSkillInSkillbook(spellId, out var spell)) 
             {
@@ -116,6 +128,13 @@ namespace Intersect.Server.Entities
             {
                 PacketSender.SendChatMsg(this, "You already have this skill prepared!", Enums.ChatMessageType.Error, CustomColors.General.GeneralDisabled);
             }
+            
+            if (!TryGetSkillInSkillbook(spellId, out var skill))
+            {
+                PacketSender.SendChatMsg(this, "This skill isn't in your skill book!", Enums.ChatMessageType.Error, CustomColors.General.GeneralDisabled);
+            }
+
+            skill.Equipped = true;
         }
 
         public void UnprepareSkill(Guid spellId)
@@ -130,12 +149,13 @@ namespace Intersect.Server.Entities
             {
                 PacketSender.SendChatMsg(this, "You never had this skill prepared!", Enums.ChatMessageType.Error, CustomColors.General.GeneralDisabled);
             }
-        }
 
-        public void SendSkillbookToClient()
-        {
-            var spellIds = SkillBook.Select(s => s.SpellId).ToList();
-            var packet = new SkillbookPacket(spellIds);
+            if (!TryGetSkillInSkillbook(spellId, out var skill))
+            {
+                PacketSender.SendChatMsg(this, "This skill isn't in your skill book!", Enums.ChatMessageType.Error, CustomColors.General.GeneralDisabled);
+            }
+
+            skill.Equipped = false;
         }
 
         public bool TryAddSkillToBook(Guid spellId)
