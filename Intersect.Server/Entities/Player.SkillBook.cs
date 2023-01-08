@@ -9,6 +9,9 @@ using Intersect.Server.Entities.PlayerData;
 using Intersect.Utilities;
 using Intersect.Server.Networking;
 using Intersect.GameObjects;
+using Intersect.Network.Packets.Server;
+using Intersect.Server.Database;
+using Intersect.Server.Localization;
 
 namespace Intersect.Server.Entities
 {
@@ -26,7 +29,7 @@ namespace Intersect.Server.Entities
 
         public bool TryGetSkillInSkillbook(Guid spellId, out PlayerSkillInstance skill)
         {
-            skill = SkillBook.ToArray().FirstOrDefault(s => s.Id == spellId);
+            skill = SkillBook.ToList().Find(s => s.SpellId == spellId);
             return skill != default;
         }
 
@@ -109,7 +112,7 @@ namespace Intersect.Server.Entities
                 return;
             }
 
-            if (!TryTeachSpell(new Database.Spell(spellId)))
+            if (!TryTeachSpell(new Spell(spellId)))
             {
                 PacketSender.SendChatMsg(this, "You already have this skill prepared!", Enums.ChatMessageType.Error, CustomColors.General.GeneralDisabled);
             }
@@ -123,10 +126,73 @@ namespace Intersect.Server.Entities
                 return;
             }
 
-            if (!TryForgetSpell(new Database.Spell(spellId)))
+            if (!TryForgetSpell(new Spell(spellId)))
             {
                 PacketSender.SendChatMsg(this, "You never had this skill prepared!", Enums.ChatMessageType.Error, CustomColors.General.GeneralDisabled);
             }
+        }
+
+        public void SendSkillbookToClient()
+        {
+            var spellIds = SkillBook.Select(s => s.SpellId).ToList();
+            var packet = new SkillbookPacket(spellIds);
+        }
+
+        public bool TryAddSkillToBook(Guid spellId)
+        {
+            if (SkillBook.Find(s => s.SpellId == spellId) != default)
+            {
+                return false;
+            }
+
+            var newSkill = new PlayerSkillInstance(spellId, this);
+            SkillBook.Add(newSkill);
+
+            PacketSender.SendSkillbookToClient(this);
+
+            return true;
+        }
+
+        public void SendSkillAddedMessage(Guid spellId)
+        {
+            var descriptor = SpellBase.Get(spellId);
+            if (string.IsNullOrEmpty(descriptor.SpellGroup))
+            {
+                PacketSender.SendChatMsg(this,
+                    Strings.Combat.SpellLearnedOther.ToString(descriptor?.Name),
+                    Enums.ChatMessageType.Spells, CustomColors.General.GeneralCompleted, sendToast: true);
+            }
+            else
+            {
+                PacketSender.SendChatMsg(this, Strings.Combat.SpellLearned.ToString(descriptor?.SpellGroup, descriptor?.Name),
+                    Enums.ChatMessageType.Spells, CustomColors.General.GeneralCompleted, sendToast: true);
+            }
+        }
+
+        public void SendSkillLostMessage(Guid spellId)
+        {
+            var descriptor = SpellBase.Get(spellId);
+            PacketSender.SendChatMsg(this, Strings.Combat.SpellLost.ToString(descriptor?.Name),
+                    Enums.ChatMessageType.Spells, CustomColors.General.GeneralCompleted, sendToast: true);
+        }
+
+        public bool TryRemoveSkillFromSkillbook(Guid spellId)
+        {
+            var skills = SkillBook.FindAll(s => s.SpellId == spellId).ToList();
+            if (skills?.Count <= 0)
+            {
+                return false;
+            }
+
+            foreach(var skill in skills)
+            {
+                SkillBook.Remove(skill);
+                DbInterface.Pool.QueueWorkItem(skill.RemoveSkillbookEntryDb);
+            }
+
+            PacketSender.SendSkillbookToClient(this);
+
+            return true;
         }
     }
 }

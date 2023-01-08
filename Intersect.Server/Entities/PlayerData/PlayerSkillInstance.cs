@@ -1,4 +1,5 @@
 ﻿using Intersect.GameObjects;
+using Intersect.Server.Database;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -48,5 +49,16 @@ namespace Intersect.Server.Entities.PlayerData
         public int RequiredSkillPoints => Spell?.RequiredSkillPoints ?? 0;
 
         public bool Equipped { get; set; }
+
+        public void RemoveSkillbookEntryDb()
+        {
+            using (var context = DbInterface.CreatePlayerContext(readOnly: false))
+            {
+                context.Player_Unlocked_Skills.Remove(this);
+
+                context.ChangeTracker.DetectChanges();
+                context.SaveChanges();
+            }
+        }
     }
 }

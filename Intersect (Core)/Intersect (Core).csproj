@@ -491,6 +491,7 @@
     <Compile Include="Network\Packets\Server\RespawnFinishedPacket.cs" />
     <Compile Include="Network\Packets\Server\ServerDisposedPacket.cs" />
     <Compile Include="Network\Packets\Server\ShakeScreenPacket.cs" />
+    <Compile Include="Network\Packets\Server\SkillbookPacket.cs" />
     <Compile Include="Network\Packets\Server\TimerPacket.cs" />
     <Compile Include="Network\Packets\Server\TimerStopPacket.cs" />
     <Compile Include="Network\Packets\Server\ToastPacket.cs" />

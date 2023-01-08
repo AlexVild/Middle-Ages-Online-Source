@@ -3077,4 +3077,9 @@ namespace Intersect.Client.Entities
 
         public List<Guid> UnlockedRecipes { get; set; } = new List<Guid>();
     }
+
+    public partial class Player : Entity
+    {
+        public List<Guid> Skillbook = new List<Guid>();
+    }
 }

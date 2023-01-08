@@ -513,18 +513,27 @@ namespace Intersect.Server.Entities.Events
             Stack<CommandInstance> callStack
         )
         {
+            if (player == null)
+            {
+                return;
+            }
+
             //0 is add, 1 is remove
             var success = false;
             if (command.Add) //Try to add a spell
             {
-                success = player.TryTeachSpell(new Spell(command.SpellId));
+                success = player.TryAddSkillToBook(command.SpellId);
+                if (success)
+                {
+                    player.SendSkillAddedMessage(command.SpellId);
+                }
             }
             else
             {
-                if (player.FindSpell(command.SpellId) > -1 && command.SpellId != Guid.Empty)
+                success = player.TryRemoveSkillFromSkillbook(command.SpellId);
+                if (success)
                 {
-                    player.ForgetSpell(player.FindSpell(command.SpellId));
-                    success = true;
+                    player.SendSkillLostMessage(command.SpellId);
                 }
             }
 

@@ -2722,5 +2722,11 @@ namespace Intersect.Server.Networking
         {
             player?.SendPacket(new ExpToastPacket(exp, comboEnder));
         }
+
+        public static void SendSkillbookToClient(Player player)
+        {
+            var spellIds = player?.SkillBook.Select(s => s.SpellId).ToList() ?? new List<Guid>();
+            player?.SendPacket(new SkillbookPacket(spellIds));
+        }
     }
 }

@@ -2822,5 +2822,16 @@ namespace Intersect.Client.Networking
                 ExpToastService.CreateExpToast(packet.Exp);
             }
         }
+
+        public void HandlePacket(IPacketSender packetSender, SkillbookPacket packet)
+        {
+            if (Globals.Me == null)
+            {
+                return;
+            }
+
+            Globals.Me.Skillbook.Clear();
+            Globals.Me.Skillbook.AddRange(packet.SkillIds);
+        }
     }
 }

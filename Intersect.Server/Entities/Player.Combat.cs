@@ -299,7 +299,11 @@ namespace Intersect.Server.Entities
 
             if (!SkillPrepared(spell.Id))
             {
-                PacketSender.SendChatMsg(this, Strings.Combat.SpellNotPrepared, ChatMessageType.Error, "", true);
+                if (Timing.Global.Milliseconds > ChatErrorLastSent)
+                {
+                    PacketSender.SendChatMsg(this, Strings.Combat.SpellNotPrepared, ChatMessageType.Error, "", true);
+                    ChatErrorLastSent = Timing.Global.Milliseconds + 1000;
+                }
                 return false;
             }
 

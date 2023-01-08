@@ -457,6 +457,9 @@ namespace Intersect.Server.Entities
             // Refresh recipe unlock statuses in the event they've changed since the player last logged in
             RecipeUnlockWatcher.RefreshPlayer(this);
 
+            // Send an updated skillbook to the client
+            PacketSender.SendSkillbookToClient(this);
+
             if (InspirationTime > Timing.Global.MillisecondsUtc)
             {
                 SendInspirationUpdateText(-1);

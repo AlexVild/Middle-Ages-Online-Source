@@ -246,7 +246,19 @@ namespace Intersect.Server.Localization
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString SpellNotPrepared =
-                @"Youd don't have this spell prepared!";
+                @"You don't have this spell prepared!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString SpellLearned =
+                @"A new {00} skill has been added to your skill book: {01}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString SpellLearnedOther =
+                @"A new skill has been added to your skill book: {00}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString SpellLost =
+                @"A spell has been removed from your skillbook: {00}";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString cooldown = @"This skill is on cooldown.";
