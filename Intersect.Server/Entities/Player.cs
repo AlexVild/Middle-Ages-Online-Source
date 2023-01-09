@@ -3314,12 +3314,12 @@ namespace Intersect.Server.Entities
 
                         if (itemBase.QuickCast)
                         {
-                            if (!CanCastSpell(itemBase.Spell, target))
+                            if (!CanCastSpell(itemBase.Spell, target, true, true))
                             {
                                 return;
                             }
                             Target = target;
-                            UseSpell(itemBase.Spell, -1, true);
+                            UseSpell(itemBase.Spell, -1, true, instantCast: true);
                         }
                         else if (!TryTeachSpell(new Spell(itemBase.SpellId)))
                         {

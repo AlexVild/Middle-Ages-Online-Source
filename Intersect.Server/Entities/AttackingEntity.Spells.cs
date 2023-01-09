@@ -25,7 +25,7 @@ namespace Intersect.Server.Entities
         /// </summary>
         /// <param name="spell">The spell to cast</param>
         /// <returns>True if the entity meets the requirements</returns>
-        protected abstract bool EntityMeetsCastingRequirements(SpellBase spell);
+        protected abstract bool EntityMeetsCastingRequirements(SpellBase spell, bool instantCast = false);
 
         /// <summary>
         /// Whether an entity has the materials to cast a spell
@@ -67,7 +67,7 @@ namespace Intersect.Server.Entities
         /// <param name="spell">The spell to cast</param>
         /// <param name="target">The target to cast on</param>
         /// <returns>True if we can cast the spell</returns>
-        public bool CanCastSpell(SpellBase spell, Entity target)
+        public bool CanCastSpell(SpellBase spell, Entity target, bool ignoreVitals = false, bool instantCast = false)
         {
             // Status affliction!
             if (IsUnableToCastSpells)
@@ -75,7 +75,7 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
-            if (!MeetsSpellVitalReqs(spell))
+            if (!ignoreVitals && !MeetsSpellVitalReqs(spell))
             {
                 // Not enough vitals!
                 return false;
@@ -95,7 +95,7 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
-            if (!EntityMeetsCastingRequirements(spell))
+            if (!EntityMeetsCastingRequirements(spell, instantCast))
             {
                 // The entity doesn't have extraneous requirements met!
                 return false;
@@ -432,11 +432,11 @@ namespace Intersect.Server.Entities
         /// <param name="prayerSpell">Whether this spell is from a prayer</param>
         /// <param name="prayerSpellDir">What direction the prayer was</param>
         /// <param name="prayerTarget">The prayer's target</param>
-        public virtual void UseSpell(SpellBase spell, int spellSlot, bool ignoreVitals = false, bool prayerSpell = false, byte prayerSpellDir = 0, Entity prayerTarget = null)
+        public virtual void UseSpell(SpellBase spell, int spellSlot, bool ignoreVitals = false, bool prayerSpell = false, byte prayerSpellDir = 0, Entity prayerTarget = null, bool instantCast = false)
         {
             CastTarget = Target;
             // We're actually doing the spell now - use our mats and if we fail, end
-            if (!ValidateCast(spell, CastTarget, ignoreVitals))
+            if (!prayerSpell && !instantCast && !ValidateCast(spell, CastTarget, ignoreVitals))
             {
                 return;
             }

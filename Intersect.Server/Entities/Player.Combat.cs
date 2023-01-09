@@ -185,7 +185,7 @@ namespace Intersect.Server.Entities
             return base.ValidateCast(spell, target, ignoreVitals);
         }
 
-        public override void UseSpell(SpellBase spell, int spellSlot, bool ignoreVitals = false, bool prayerSpell = false, byte prayerSpellDir = 0, Entity prayerTarget = null)
+        public override void UseSpell(SpellBase spell, int spellSlot, bool ignoreVitals = false, bool prayerSpell = false, byte prayerSpellDir = 0, Entity prayerTarget = null, bool instantCast = false)
         {
             if (PlayerDead)
             {
@@ -208,11 +208,11 @@ namespace Intersect.Server.Entities
                         EnqueueStartCommonEvent(evt);
                     }
 
-                    base.UseSpell(spell, spellSlot, ignoreVitals, prayerSpell, prayerSpellDir, prayerTarget);
+                    base.UseSpell(spell, spellSlot, ignoreVitals, prayerSpell, prayerSpellDir, prayerTarget, instantCast);
                     break;
 
                 default:
-                    base.UseSpell(spell, spellSlot, ignoreVitals, prayerSpell, prayerSpellDir, prayerTarget);
+                    base.UseSpell(spell, spellSlot, ignoreVitals, prayerSpell, prayerSpellDir, prayerTarget, instantCast);
                     break;
             }
         }
@@ -290,14 +290,14 @@ namespace Intersect.Server.Entities
             }
         }
 
-        protected override bool EntityMeetsCastingRequirements(SpellBase spell)
+        protected override bool EntityMeetsCastingRequirements(SpellBase spell, bool instantCast = false)
         {
             if (spell == null)
             {
                 throw new ArgumentNullException(nameof(spell));
             }
 
-            if (!SkillPrepared(spell.Id))
+            if (!instantCast && !SkillPrepared(spell.Id))
             {
                 if (Timing.Global.Milliseconds > ChatErrorLastSent)
                 {

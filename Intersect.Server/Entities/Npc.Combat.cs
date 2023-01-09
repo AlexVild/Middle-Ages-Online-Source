@@ -92,7 +92,7 @@ namespace Intersect.Server.Entities
         // An NPC always has casting materials
         protected override bool EntityHasCastingMaterials(SpellBase spell) => true;
         protected override bool TryConsumeCastingMaterials(SpellBase spell) => true;
-        protected override bool EntityMeetsCastingRequirements(SpellBase spell) => true;
+        protected override bool EntityMeetsCastingRequirements(SpellBase spell, bool instantCast = false) => true;
 
         public override bool MeetsSpellVitalReqs(SpellBase spell)
         {
