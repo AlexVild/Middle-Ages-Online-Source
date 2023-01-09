@@ -1,4 +1,5 @@
-﻿using Intersect.Client.Framework.Gwen.Control;
+﻿using Intersect.Client.Framework.Graphics;
+using Intersect.Client.Framework.Gwen.Control;
 using Intersect.Client.General;
 using Intersect.Client.Interface.Components;
 using Intersect.Client.Interface.Game.Character.Panels;
@@ -39,7 +40,11 @@ namespace Intersect.Client.Interface.Game.Components
         private readonly Color LockedColor = new Color(255, 169, 169, 169);
         private readonly Color UnlockedColor = new Color(255, 255, 255, 255);
 
+        private readonly GameTexture RowHoverTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "character_hover_select.png");
+
         private CharacterNameTagPanel Panel;
+
+        private bool Unlocked;
 
         public LabelRowComponent(
             Base parent,
@@ -76,6 +81,9 @@ namespace Intersect.Client.Interface.Game.Components
 
             UseCheckbox = new CheckBox(SelfContainer, "UseCheckbox");
             UseCheckbox.CheckChanged += UseCheckbox_CheckChanged;
+            SelfContainer.Clicked += SelfContainer_Clicked;
+            SelfContainer.HoverEnter += SelfContainer_HoverEnter;
+            SelfContainer.HoverLeave += SelfContainer_HoverLeave;
 
             base.Initialize();
             FitParentToComponent();
@@ -106,6 +114,27 @@ namespace Intersect.Client.Interface.Game.Components
             }
         }
 
+        private void SelfContainer_HoverLeave(Base sender, EventArgs arguments)
+        {
+            if (Unlocked)
+            {
+                SelfContainer.Texture = null;
+            }
+        }
+
+        private void SelfContainer_HoverEnter(Base sender, EventArgs arguments)
+        {
+            if (Unlocked)
+            {
+                SelfContainer.Texture = RowHoverTexture;
+            }
+        }
+
+        private void SelfContainer_Clicked(Base sender, Framework.Gwen.Control.EventArguments.ClickedEventArgs arguments)
+        {
+            UseCheckbox.IsChecked = !UseCheckbox.IsChecked;
+        }
+
         private void UseCheckbox_CheckChanged(Base sender, EventArgs arguments)
         {
             if (ForceSelection)
@@ -134,6 +163,7 @@ namespace Intersect.Client.Interface.Game.Components
 
         public void SetLocked()
         {
+            Unlocked = false;
             UseCheckbox.Disable();
             LabelName.SetTextColor(LockedColor, Framework.Gwen.Control.Label.ControlState.Normal);
             UseCheckbox.SetToolTipText(string.Empty);
@@ -141,6 +171,7 @@ namespace Intersect.Client.Interface.Game.Components
 
         public void SetUnlocked(bool isNew)
         {
+            Unlocked = true;
             UseCheckbox.Enable();
             LabelName.SetTextColor(UnlockedColor, Framework.Gwen.Control.Label.ControlState.Normal);
             if (isNew)

@@ -62,7 +62,7 @@ namespace Intersect.Client.Interface.Game.Components
             SelfContainer.Hide();
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             ParentContainer.Dispose();
         }

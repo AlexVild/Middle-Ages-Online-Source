@@ -1,10 +1,8 @@
 ﻿using Intersect.Client.Core;
-using Intersect.Client.Framework.File_Management;
 using Intersect.Client.Framework.Gwen.Control;
 using Intersect.Client.General;
 using Intersect.Client.Interface.Components;
 using System;
-using System.Collections.Generic;
 using static Intersect.Client.Framework.File_Management.GameContentManager;
 
 namespace Intersect.Client.Interface.Game.Components
@@ -15,11 +13,11 @@ namespace Intersect.Client.Interface.Game.Components
         private int BorderWidth { get; set; }
 
         private string FrameTexture { get; set; }
-        private ImagePanel Frame { get; set; }
+        protected ImagePanel Frame { get; set; }
 
         private string ImageTexture { get; set; }
         private TextureType ImageTextureType { get; set; }
-        private ImagePanel Image { get; set; }
+        protected ImagePanel Image { get; set; }
 
         public int X => ParentContainer.X;
         public int Y => ParentContainer.Y;

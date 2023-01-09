@@ -161,6 +161,7 @@
     <Compile Include="Interface\Game\Components\RecipeRequirementProgressBarComponent.cs" />
     <Compile Include="Interface\Game\Components\RecipeRowComponent.cs" />
     <Compile Include="Interface\Game\Components\SkillRowComponent.cs" />
+    <Compile Include="Interface\Game\Components\SpellImageFrameComponent.cs" />
     <Compile Include="Interface\Game\DescriptionWindows\Components\ComponentBase.cs" />
     <Compile Include="Interface\Game\DescriptionWindows\Components\DescriptionComponent.cs" />
     <Compile Include="Interface\Game\DescriptionWindows\Components\DividerComponent.cs" />
