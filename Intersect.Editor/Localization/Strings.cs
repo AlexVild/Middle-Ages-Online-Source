@@ -196,6 +196,11 @@ namespace Intersect.Editor.Localization
             return Strings.EventConditionDesc.startquest.ToString(QuestBase.GetName(condition.QuestId));
         }
 
+        public static string GetEventConditionalDesc(SpellInSkillbook condition)
+        {
+            return EventConditionDesc.SpellInSpellbook.ToString(SpellBase.GetName(condition.SpellId));
+        }
+
         public static string GetEventConditionalDesc(QuestInProgressCondition condition)
         {
             var quest = QuestBase.Get(condition.QuestId);
@@ -2382,6 +2387,7 @@ Tick timer saved in server config.json.";
                 {34, @"Has recipe X..."},
                 {35, @"Has at least X beasts completed..."},
                 {36, @"Has X unlocked for beast Y..."},
+                {37, @"Has spell X in spellbook..."},
             };
 
             public static LocalizedString endrange = @"End Range:";
@@ -2739,6 +2745,9 @@ Tick timer saved in server config.json.";
             public static LocalizedString TimerReps = @"Timer {00} is active with at least {01} repetitions completed";
 
             public static LocalizedString True = @"True";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString SpellInSpellbook = @"Spell {00} is in skill book";
 
         }
 

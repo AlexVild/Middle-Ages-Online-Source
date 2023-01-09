@@ -77,6 +77,8 @@ namespace Intersect.GameObjects.Events
         
         BeastHasUnlock,
 
+        SpellInSkillbook,
+
     }
 
     public class Condition
@@ -547,6 +549,13 @@ namespace Intersect.GameObjects.Events
         public Guid NpcId { get; set; }
         
         public BestiaryUnlock Unlock { get; set; }
+    }
+
+    public class SpellInSkillbook : Condition
+    {
+        public override ConditionTypes Type { get; } = ConditionTypes.SpellInSkillbook;
+
+        public Guid SpellId { get; set; }
     }
 
     public enum TimerActiveConditions

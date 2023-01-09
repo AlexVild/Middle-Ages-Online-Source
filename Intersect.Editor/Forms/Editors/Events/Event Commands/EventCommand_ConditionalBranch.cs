@@ -506,6 +506,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     Condition = new BeastHasUnlock();
 
                     break;
+                case ConditionTypes.SpellInSkillbook:
+                    Condition = new SpellInSkillbook();
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -757,6 +761,12 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     cmbBeast.Items.Clear();
                     cmbBeast.Items.AddRange(NpcBase.Names);
                     grpBeastHasUnlock.Show();
+                    break;
+                case ConditionTypes.SpellInSkillbook:
+                    grpSpell.Show();
+                    cmbSpell.Items.Clear();
+                    cmbSpell.Items.AddRange(SpellBase.Names);
+
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -1634,6 +1644,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             cmbBeast.SelectedIndex = NpcBase.ListIndex(condition.NpcId);
         }
 
+        private void SetupFormValues(SpellInSkillbook condition)
+        {
+            cmbSpell.SelectedIndex = SpellBase.ListIndex(condition.SpellId);
+        }
+
         #endregion
 
         #region "SaveFormValues"
@@ -1927,6 +1942,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         {
             condition.Unlock = (BestiaryUnlock)cmbBestiaryUnlocks.SelectedIndex;
             condition.NpcId = NpcBase.IdFromList(cmbBeast.SelectedIndex);
+        }
+
+        private void SaveFormValues(SpellInSkillbook condition)
+        {
+            condition.SpellId = SpellBase.IdFromList(cmbSpell.SelectedIndex);
         }
         #endregion
 

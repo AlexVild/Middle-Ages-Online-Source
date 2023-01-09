@@ -31,6 +31,14 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private void InitializeComponent()
         {
             this.grpConditional = new DarkUI.Controls.DarkGroupBox();
+            this.grpBeastHasUnlock = new DarkUI.Controls.DarkGroupBox();
+            this.lblBeast = new System.Windows.Forms.Label();
+            this.lblBestiaryUnlock = new System.Windows.Forms.Label();
+            this.cmbBeast = new DarkUI.Controls.DarkComboBox();
+            this.cmbBestiaryUnlocks = new DarkUI.Controls.DarkComboBox();
+            this.grpBeastsCompleted = new DarkUI.Controls.DarkGroupBox();
+            this.nudBeastsCompleted = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblBeastAmount = new System.Windows.Forms.Label();
             this.grpRecipes = new DarkUI.Controls.DarkGroupBox();
             this.cmbRecipe = new DarkUI.Controls.DarkComboBox();
             this.lblRecipe = new System.Windows.Forms.Label();
@@ -178,15 +186,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpEquippedItem = new DarkUI.Controls.DarkGroupBox();
             this.cmbEquippedItem = new DarkUI.Controls.DarkComboBox();
             this.lblEquippedItem = new System.Windows.Forms.Label();
-            this.grpBeastsCompleted = new DarkUI.Controls.DarkGroupBox();
-            this.lblBeastAmount = new System.Windows.Forms.Label();
-            this.nudBeastsCompleted = new DarkUI.Controls.DarkNumericUpDown();
-            this.grpBeastHasUnlock = new DarkUI.Controls.DarkGroupBox();
-            this.cmbBestiaryUnlocks = new DarkUI.Controls.DarkComboBox();
-            this.cmbBeast = new DarkUI.Controls.DarkComboBox();
-            this.lblBestiaryUnlock = new System.Windows.Forms.Label();
-            this.lblBeast = new System.Windows.Forms.Label();
             this.grpConditional.SuspendLayout();
+            this.grpBeastHasUnlock.SuspendLayout();
+            this.grpBeastsCompleted.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudBeastsCompleted)).BeginInit();
             this.grpRecipes.SuspendLayout();
             this.grpRecordIs.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudRecordVal)).BeginInit();
@@ -225,15 +228,13 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpMapIs.SuspendLayout();
             this.grpGender.SuspendLayout();
             this.grpEquippedItem.SuspendLayout();
-            this.grpBeastsCompleted.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudBeastsCompleted)).BeginInit();
-            this.grpBeastHasUnlock.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpConditional
             // 
             this.grpConditional.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.grpConditional.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpConditional.Controls.Add(this.grpSpell);
             this.grpConditional.Controls.Add(this.grpBeastHasUnlock);
             this.grpConditional.Controls.Add(this.grpBeastsCompleted);
             this.grpConditional.Controls.Add(this.grpRecipes);
@@ -261,7 +262,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpConditional.Controls.Add(this.grpTime);
             this.grpConditional.Controls.Add(this.grpPowerIs);
             this.grpConditional.Controls.Add(this.grpSelfSwitch);
-            this.grpConditional.Controls.Add(this.grpSpell);
             this.grpConditional.Controls.Add(this.grpMapIs);
             this.grpConditional.Controls.Add(this.grpGender);
             this.grpConditional.Controls.Add(this.grpEquippedItem);
@@ -272,6 +272,122 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpConditional.TabIndex = 17;
             this.grpConditional.TabStop = false;
             this.grpConditional.Text = "Conditional";
+            // 
+            // grpBeastHasUnlock
+            // 
+            this.grpBeastHasUnlock.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.grpBeastHasUnlock.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpBeastHasUnlock.Controls.Add(this.lblBeast);
+            this.grpBeastHasUnlock.Controls.Add(this.lblBestiaryUnlock);
+            this.grpBeastHasUnlock.Controls.Add(this.cmbBeast);
+            this.grpBeastHasUnlock.Controls.Add(this.cmbBestiaryUnlocks);
+            this.grpBeastHasUnlock.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpBeastHasUnlock.Location = new System.Drawing.Point(10, 44);
+            this.grpBeastHasUnlock.Name = "grpBeastHasUnlock";
+            this.grpBeastHasUnlock.Size = new System.Drawing.Size(262, 114);
+            this.grpBeastHasUnlock.TabIndex = 65;
+            this.grpBeastHasUnlock.TabStop = false;
+            this.grpBeastHasUnlock.Text = "Beast Has Unlock";
+            // 
+            // lblBeast
+            // 
+            this.lblBeast.AutoSize = true;
+            this.lblBeast.Location = new System.Drawing.Point(16, 65);
+            this.lblBeast.Name = "lblBeast";
+            this.lblBeast.Size = new System.Drawing.Size(34, 13);
+            this.lblBeast.TabIndex = 55;
+            this.lblBeast.Text = "Beast";
+            // 
+            // lblBestiaryUnlock
+            // 
+            this.lblBestiaryUnlock.AutoSize = true;
+            this.lblBestiaryUnlock.Location = new System.Drawing.Point(14, 21);
+            this.lblBestiaryUnlock.Name = "lblBestiaryUnlock";
+            this.lblBestiaryUnlock.Size = new System.Drawing.Size(41, 13);
+            this.lblBestiaryUnlock.TabIndex = 54;
+            this.lblBestiaryUnlock.Text = "Unlock";
+            // 
+            // cmbBeast
+            // 
+            this.cmbBeast.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbBeast.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbBeast.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbBeast.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbBeast.DrawDropdownHoverOutline = false;
+            this.cmbBeast.DrawFocusRectangle = false;
+            this.cmbBeast.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbBeast.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbBeast.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbBeast.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbBeast.FormattingEnabled = true;
+            this.cmbBeast.Location = new System.Drawing.Point(16, 83);
+            this.cmbBeast.Name = "cmbBeast";
+            this.cmbBeast.Size = new System.Drawing.Size(224, 21);
+            this.cmbBeast.TabIndex = 53;
+            this.cmbBeast.Text = null;
+            this.cmbBeast.TextPadding = new System.Windows.Forms.Padding(2);
+            // 
+            // cmbBestiaryUnlocks
+            // 
+            this.cmbBestiaryUnlocks.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbBestiaryUnlocks.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbBestiaryUnlocks.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbBestiaryUnlocks.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbBestiaryUnlocks.DrawDropdownHoverOutline = false;
+            this.cmbBestiaryUnlocks.DrawFocusRectangle = false;
+            this.cmbBestiaryUnlocks.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbBestiaryUnlocks.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbBestiaryUnlocks.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbBestiaryUnlocks.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbBestiaryUnlocks.FormattingEnabled = true;
+            this.cmbBestiaryUnlocks.Location = new System.Drawing.Point(16, 37);
+            this.cmbBestiaryUnlocks.Name = "cmbBestiaryUnlocks";
+            this.cmbBestiaryUnlocks.Size = new System.Drawing.Size(224, 21);
+            this.cmbBestiaryUnlocks.TabIndex = 52;
+            this.cmbBestiaryUnlocks.Text = null;
+            this.cmbBestiaryUnlocks.TextPadding = new System.Windows.Forms.Padding(2);
+            // 
+            // grpBeastsCompleted
+            // 
+            this.grpBeastsCompleted.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.grpBeastsCompleted.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpBeastsCompleted.Controls.Add(this.nudBeastsCompleted);
+            this.grpBeastsCompleted.Controls.Add(this.lblBeastAmount);
+            this.grpBeastsCompleted.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpBeastsCompleted.Location = new System.Drawing.Point(9, 46);
+            this.grpBeastsCompleted.Name = "grpBeastsCompleted";
+            this.grpBeastsCompleted.Size = new System.Drawing.Size(262, 52);
+            this.grpBeastsCompleted.TabIndex = 64;
+            this.grpBeastsCompleted.TabStop = false;
+            this.grpBeastsCompleted.Text = "Beasts Complete";
+            // 
+            // nudBeastsCompleted
+            // 
+            this.nudBeastsCompleted.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudBeastsCompleted.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudBeastsCompleted.Location = new System.Drawing.Point(58, 19);
+            this.nudBeastsCompleted.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.nudBeastsCompleted.Name = "nudBeastsCompleted";
+            this.nudBeastsCompleted.Size = new System.Drawing.Size(194, 20);
+            this.nudBeastsCompleted.TabIndex = 56;
+            this.nudBeastsCompleted.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            // 
+            // lblBeastAmount
+            // 
+            this.lblBeastAmount.AutoSize = true;
+            this.lblBeastAmount.Location = new System.Drawing.Point(6, 21);
+            this.lblBeastAmount.Name = "lblBeastAmount";
+            this.lblBeastAmount.Size = new System.Drawing.Size(42, 13);
+            this.lblBeastAmount.TabIndex = 28;
+            this.lblBeastAmount.Text = "At least";
             // 
             // grpRecipes
             // 
@@ -2402,122 +2518,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.lblEquippedItem.TabIndex = 2;
             this.lblEquippedItem.Text = "Item:";
             // 
-            // grpBeastsCompleted
-            // 
-            this.grpBeastsCompleted.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.grpBeastsCompleted.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpBeastsCompleted.Controls.Add(this.nudBeastsCompleted);
-            this.grpBeastsCompleted.Controls.Add(this.lblBeastAmount);
-            this.grpBeastsCompleted.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpBeastsCompleted.Location = new System.Drawing.Point(9, 46);
-            this.grpBeastsCompleted.Name = "grpBeastsCompleted";
-            this.grpBeastsCompleted.Size = new System.Drawing.Size(262, 52);
-            this.grpBeastsCompleted.TabIndex = 64;
-            this.grpBeastsCompleted.TabStop = false;
-            this.grpBeastsCompleted.Text = "Beasts Complete";
-            // 
-            // lblBeastAmount
-            // 
-            this.lblBeastAmount.AutoSize = true;
-            this.lblBeastAmount.Location = new System.Drawing.Point(6, 21);
-            this.lblBeastAmount.Name = "lblBeastAmount";
-            this.lblBeastAmount.Size = new System.Drawing.Size(42, 13);
-            this.lblBeastAmount.TabIndex = 28;
-            this.lblBeastAmount.Text = "At least";
-            // 
-            // nudBeastsCompleted
-            // 
-            this.nudBeastsCompleted.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudBeastsCompleted.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudBeastsCompleted.Location = new System.Drawing.Point(58, 19);
-            this.nudBeastsCompleted.Maximum = new decimal(new int[] {
-            100000,
-            0,
-            0,
-            0});
-            this.nudBeastsCompleted.Name = "nudBeastsCompleted";
-            this.nudBeastsCompleted.Size = new System.Drawing.Size(194, 20);
-            this.nudBeastsCompleted.TabIndex = 56;
-            this.nudBeastsCompleted.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            // 
-            // grpBeastHasUnlock
-            // 
-            this.grpBeastHasUnlock.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.grpBeastHasUnlock.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpBeastHasUnlock.Controls.Add(this.lblBeast);
-            this.grpBeastHasUnlock.Controls.Add(this.lblBestiaryUnlock);
-            this.grpBeastHasUnlock.Controls.Add(this.cmbBeast);
-            this.grpBeastHasUnlock.Controls.Add(this.cmbBestiaryUnlocks);
-            this.grpBeastHasUnlock.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpBeastHasUnlock.Location = new System.Drawing.Point(10, 44);
-            this.grpBeastHasUnlock.Name = "grpBeastHasUnlock";
-            this.grpBeastHasUnlock.Size = new System.Drawing.Size(262, 114);
-            this.grpBeastHasUnlock.TabIndex = 65;
-            this.grpBeastHasUnlock.TabStop = false;
-            this.grpBeastHasUnlock.Text = "Beast Has Unlock";
-            // 
-            // cmbBestiaryUnlocks
-            // 
-            this.cmbBestiaryUnlocks.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbBestiaryUnlocks.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbBestiaryUnlocks.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbBestiaryUnlocks.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbBestiaryUnlocks.DrawDropdownHoverOutline = false;
-            this.cmbBestiaryUnlocks.DrawFocusRectangle = false;
-            this.cmbBestiaryUnlocks.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbBestiaryUnlocks.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbBestiaryUnlocks.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbBestiaryUnlocks.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbBestiaryUnlocks.FormattingEnabled = true;
-            this.cmbBestiaryUnlocks.Location = new System.Drawing.Point(16, 37);
-            this.cmbBestiaryUnlocks.Name = "cmbBestiaryUnlocks";
-            this.cmbBestiaryUnlocks.Size = new System.Drawing.Size(224, 21);
-            this.cmbBestiaryUnlocks.TabIndex = 52;
-            this.cmbBestiaryUnlocks.Text = null;
-            this.cmbBestiaryUnlocks.TextPadding = new System.Windows.Forms.Padding(2);
-            // 
-            // cmbBeast
-            // 
-            this.cmbBeast.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbBeast.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbBeast.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbBeast.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbBeast.DrawDropdownHoverOutline = false;
-            this.cmbBeast.DrawFocusRectangle = false;
-            this.cmbBeast.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbBeast.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbBeast.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbBeast.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbBeast.FormattingEnabled = true;
-            this.cmbBeast.Location = new System.Drawing.Point(16, 83);
-            this.cmbBeast.Name = "cmbBeast";
-            this.cmbBeast.Size = new System.Drawing.Size(224, 21);
-            this.cmbBeast.TabIndex = 53;
-            this.cmbBeast.Text = null;
-            this.cmbBeast.TextPadding = new System.Windows.Forms.Padding(2);
-            // 
-            // lblBestiaryUnlock
-            // 
-            this.lblBestiaryUnlock.AutoSize = true;
-            this.lblBestiaryUnlock.Location = new System.Drawing.Point(14, 21);
-            this.lblBestiaryUnlock.Name = "lblBestiaryUnlock";
-            this.lblBestiaryUnlock.Size = new System.Drawing.Size(41, 13);
-            this.lblBestiaryUnlock.TabIndex = 54;
-            this.lblBestiaryUnlock.Text = "Unlock";
-            // 
-            // lblBeast
-            // 
-            this.lblBeast.AutoSize = true;
-            this.lblBeast.Location = new System.Drawing.Point(16, 65);
-            this.lblBeast.Name = "lblBeast";
-            this.lblBeast.Size = new System.Drawing.Size(34, 13);
-            this.lblBeast.TabIndex = 55;
-            this.lblBeast.Text = "Beast";
-            // 
             // EventCommandConditionalBranch
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2529,6 +2529,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.Size = new System.Drawing.Size(285, 471);
             this.grpConditional.ResumeLayout(false);
             this.grpConditional.PerformLayout();
+            this.grpBeastHasUnlock.ResumeLayout(false);
+            this.grpBeastHasUnlock.PerformLayout();
+            this.grpBeastsCompleted.ResumeLayout(false);
+            this.grpBeastsCompleted.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudBeastsCompleted)).EndInit();
             this.grpRecipes.ResumeLayout(false);
             this.grpRecipes.PerformLayout();
             this.grpRecordIs.ResumeLayout(false);
@@ -2595,11 +2600,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpGender.PerformLayout();
             this.grpEquippedItem.ResumeLayout(false);
             this.grpEquippedItem.PerformLayout();
-            this.grpBeastsCompleted.ResumeLayout(false);
-            this.grpBeastsCompleted.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudBeastsCompleted)).EndInit();
-            this.grpBeastHasUnlock.ResumeLayout(false);
-            this.grpBeastHasUnlock.PerformLayout();
             this.ResumeLayout(false);
 
         }

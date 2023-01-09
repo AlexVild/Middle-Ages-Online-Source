@@ -764,6 +764,16 @@ namespace Intersect.Server.Entities.Events
             return player?.HasUnlockFor(condition.NpcId, condition.Unlock) ?? false;
         }
 
+        public static bool MeetsCondition(
+           SpellInSkillbook condition,
+           Player player,
+           Event eventInstance,
+           QuestBase questBase
+       )
+        {
+            return player?.TryGetSkillInSkillbook(condition?.SpellId ?? Guid.Empty, out _) ?? false;
+        }
+
         //Variable Comparison Processing
 
         public static bool CheckVariableComparison(
@@ -948,7 +958,6 @@ namespace Intersect.Server.Entities.Events
 
             return false;
         }
-
     }
 
 }
