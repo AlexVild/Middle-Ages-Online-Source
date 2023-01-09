@@ -205,6 +205,7 @@ namespace Intersect.Server.Entities
 
             foreach(var skill in skills)
             {
+                TryForgetSpell(new Spell(skill.SpellId));
                 SkillBook.Remove(skill);
                 DbInterface.Pool.QueueWorkItem(skill.RemoveSkillbookEntryDb);
             }
