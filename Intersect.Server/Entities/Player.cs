@@ -1394,11 +1394,10 @@ namespace Intersect.Server.Entities
             SetLevel(Level + levels, resetExperience);
             foreach (var spell in unlockableSpells)
             {
-                var spellInstance = new Spell(spell.Id);
-                if (TryTeachSpell(spellInstance, true))
+                if (TryAddSkillToBook(spell.Id))
                 {
                     spellTaughtMessages.Add(
-                        Strings.Player.spelltaughtlevelup.ToString(SpellBase.GetName(spellInstance.SpellId))
+                        Strings.Player.spelltaughtlevelup.ToString(SpellBase.GetName(spell.Id))
                     );
                 }
             }
