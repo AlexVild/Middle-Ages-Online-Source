@@ -67,7 +67,7 @@ namespace Intersect.Client.Interface.Game.Spells
             Pnl.HoverLeave += pnl_HoverLeave;
             if (!DisplayOnly)
             {
-                Pnl.RightClicked += pnl_RightClicked;
+                // Alex - Removed after skillbook: Pnl.RightClicked += pnl_RightClicked;
                 Pnl.Clicked += pnl_Clicked;
             }
             mCooldownLabel = new Label(Pnl, "SpellCooldownLabel");
