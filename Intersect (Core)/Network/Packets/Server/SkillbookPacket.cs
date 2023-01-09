@@ -30,13 +30,17 @@ namespace Intersect.Network.Packets.Server
         [Key(0)]
         public Dictionary<Guid, SkillbookInstance> SkillBook { get; set; }
 
+        [Key(1)]
+        public int SkillPointsAvailable { get; set; }
+
         public SkillbookPacket()
         {
         }
 
-        public SkillbookPacket(Dictionary<Guid, SkillbookInstance> skillBook)
+        public SkillbookPacket(Dictionary<Guid, SkillbookInstance> skillBook, int skillPointsAvailable)
         {
             SkillBook = skillBook;
+            SkillPointsAvailable = skillPointsAvailable;
         }
     }
 }

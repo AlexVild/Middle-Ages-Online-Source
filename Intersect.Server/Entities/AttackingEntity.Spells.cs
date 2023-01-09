@@ -563,7 +563,7 @@ namespace Intersect.Server.Entities
                     }
                     break;
                 case SpellTypes.Dash:
-                    PacketSender.SendActionMsg(this, Strings.Combat.dash, CustomColors.Combat.Dash);
+                    // Alex: removed this message, it was too noisy -- PacketSender.SendActionMsg(this, Strings.Combat.dash, CustomColors.Combat.Dash);
                     _ = new Dash(
                         this, spell.Combat.CastRange, (byte)Dir, 
                         Convert.ToBoolean(spell.Dash.IgnoreMapBlocks),

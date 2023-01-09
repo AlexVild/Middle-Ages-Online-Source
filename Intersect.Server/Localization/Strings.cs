@@ -1202,6 +1202,8 @@ namespace Intersect.Server.Localization
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]            public readonly LocalizedString statpoints = @"You have {00} stat points available to be spent!";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)] public readonly LocalizedString SkillPoints = @"You have gained {00} more SP!";
+
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]            public readonly LocalizedString targetoutsiderange = @"Target not in range.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]            public readonly LocalizedString warpedto = @"Warped to {00}.";

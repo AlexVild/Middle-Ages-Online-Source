@@ -27,6 +27,8 @@ namespace Intersect.Client.Interface.Game.Character.Panels
 
         public static bool RefreshDisplay = false;
 
+        public static int SkillPointsAvailable = 0;
+
         public static void RefreshAvailableSkillTypes()
         {
             AvailableSkillTypes.Clear();
@@ -78,6 +80,8 @@ namespace Intersect.Client.Interface.Game.Character.Panels
 
         private List<string> AvailableSkillTypes = new List<string>();
 
+        private Label SkillPointsRemaining;
+
         public SkillsPanel(ImagePanel characterWindow)
         {
             mParentContainer = characterWindow;
@@ -107,6 +111,8 @@ namespace Intersect.Client.Interface.Game.Character.Panels
             SkillsContainer = new ImagePanel(mBackground, "SkillsContainer");
             SkillsScrollContainer = new ScrollControl(SkillsContainer, "SkillsScrollContainer");
 
+            SkillPointsRemaining = new Label(SkillsContainer, "SkillPointsReamining");
+
             mBackground.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
         }
 
@@ -133,6 +139,31 @@ namespace Intersect.Client.Interface.Game.Character.Panels
         private void RefreshSkillbookDisplay()
         {
             ClearSkills();
+
+            var classDescriptor = ClassBase.Get(Globals.Me?.Class ?? Guid.Empty);
+            var totalSkillPoints = 0;
+            if (classDescriptor.SkillPointsPerLevel == 0 || classDescriptor.SkillPointLevelModulo == 0)
+            {
+                SkillPointsRemaining.Hide();
+            }
+            else
+            {
+                var spPerLevel = classDescriptor?.SkillPointsPerLevel ?? 0;
+                var spMod = classDescriptor?.SkillPointLevelModulo ?? 0;
+                totalSkillPoints = (int)Math.Floor((float)(Globals.Me?.Level ?? 0) / spMod) * spPerLevel;
+
+                SkillPointsRemaining.SetText($"Skill Points: {SkillsPanelController.SkillPointsAvailable} / {totalSkillPoints}");
+                if (SkillsPanelController.SkillPointsAvailable == 0)
+                {
+                    SkillPointsRemaining.SetTextColor(new Color(255, 169, 169, 169), Label.ControlState.Normal);
+                }
+                else
+                {
+                    SkillPointsRemaining.SetTextColor(new Color(255, 255, 255, 255), Label.ControlState.Normal);
+                }
+
+                SkillPointsRemaining.Show();
+            }
 
             var idx = 0;
             foreach(var skillKv in Globals.Me?.Skillbook.ToArray().OrderBy(kv => SpellBase.GetName(kv.Key)))
@@ -164,6 +195,7 @@ namespace Intersect.Client.Interface.Game.Character.Panels
                     skillKv.Key,
                     skillKv.Value.Prepared,
                     skillKv.Value.PointsRequired,
+                    SkillsPanelController.SkillPointsAvailable,
                     SkillRows);
 
                 row.Initialize();

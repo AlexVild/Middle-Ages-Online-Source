@@ -13,7 +13,7 @@ using Newtonsoft.Json;
 namespace Intersect.GameObjects
 {
 
-    public class ClassBase : DatabaseObject<ClassBase>, IFolderable
+    public partial class ClassBase : DatabaseObject<ClassBase>, IFolderable
     {
 
         public const long DEFAULT_BASE_EXPERIENCE = 100;
@@ -289,4 +289,9 @@ namespace Intersect.GameObjects
 
     }
 
+    public partial class ClassBase : DatabaseObject<ClassBase>, IFolderable
+    {
+        public int SkillPointsPerLevel { get; set; }
+        public int SkillPointLevelModulo { get; set; }
+    }
 }

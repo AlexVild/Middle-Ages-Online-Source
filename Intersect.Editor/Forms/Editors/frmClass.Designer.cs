@@ -31,15 +31,27 @@ namespace Intersect.Editor.Forms.Editors
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmClass));
             this.grpClasses = new DarkUI.Controls.DarkGroupBox();
             this.btnClearSearch = new DarkUI.Controls.DarkButton();
             this.txtSearch = new DarkUI.Controls.DarkTextBox();
             this.lstGameObjects = new Intersect.Editor.Forms.Controls.GameObjectList();
             this.grpBaseStats = new DarkUI.Controls.DarkGroupBox();
+            this.nudPierceRes = new DarkUI.Controls.DarkNumericUpDown();
+            this.label6 = new System.Windows.Forms.Label();
+            this.nudSlashRes = new DarkUI.Controls.DarkNumericUpDown();
+            this.label5 = new System.Windows.Forms.Label();
+            this.nudEvasion = new DarkUI.Controls.DarkNumericUpDown();
+            this.label4 = new System.Windows.Forms.Label();
+            this.nudAccuracy = new DarkUI.Controls.DarkNumericUpDown();
+            this.label3 = new System.Windows.Forms.Label();
+            this.nudPierceAttack = new DarkUI.Controls.DarkNumericUpDown();
+            this.label2 = new System.Windows.Forms.Label();
+            this.nudSlashAtk = new DarkUI.Controls.DarkNumericUpDown();
+            this.label1 = new System.Windows.Forms.Label();
             this.nudBaseMana = new DarkUI.Controls.DarkNumericUpDown();
             this.nudBaseHP = new DarkUI.Controls.DarkNumericUpDown();
             this.nudPoints = new DarkUI.Controls.DarkNumericUpDown();
@@ -130,10 +142,6 @@ namespace Intersect.Editor.Forms.Editors
             this.lblSpriteOptions = new System.Windows.Forms.Label();
             this.cmbFace = new DarkUI.Controls.DarkComboBox();
             this.grpGender = new DarkUI.Controls.DarkGroupBox();
-            this.grpExpGrid = new DarkUI.Controls.DarkGroupBox();
-            this.btnResetExpGrid = new DarkUI.Controls.DarkButton();
-            this.btnCloseExpGrid = new DarkUI.Controls.DarkButton();
-            this.expGrid = new System.Windows.Forms.DataGridView();
             this.grpLeveling = new DarkUI.Controls.DarkGroupBox();
             this.btnExpGrid = new DarkUI.Controls.DarkButton();
             this.nudBaseExp = new DarkUI.Controls.DarkNumericUpDown();
@@ -141,6 +149,18 @@ namespace Intersect.Editor.Forms.Editors
             this.lblExpIncrease = new System.Windows.Forms.Label();
             this.lblBaseExp = new System.Windows.Forms.Label();
             this.grpLevelBoosts = new DarkUI.Controls.DarkGroupBox();
+            this.nudEvasionIncrease = new DarkUI.Controls.DarkNumericUpDown();
+            this.label12 = new System.Windows.Forms.Label();
+            this.nudAccuracyIncrease = new DarkUI.Controls.DarkNumericUpDown();
+            this.label11 = new System.Windows.Forms.Label();
+            this.nudPierceResIncrease = new DarkUI.Controls.DarkNumericUpDown();
+            this.label10 = new System.Windows.Forms.Label();
+            this.nudPierceAtkIncrease = new DarkUI.Controls.DarkNumericUpDown();
+            this.label9 = new System.Windows.Forms.Label();
+            this.nudSlashResIncrease = new DarkUI.Controls.DarkNumericUpDown();
+            this.label8 = new System.Windows.Forms.Label();
+            this.nudSlashAtkIncrease = new DarkUI.Controls.DarkNumericUpDown();
+            this.label7 = new System.Windows.Forms.Label();
             this.nudHpIncrease = new DarkUI.Controls.DarkNumericUpDown();
             this.nudMpIncrease = new DarkUI.Controls.DarkNumericUpDown();
             this.nudPointsIncrease = new DarkUI.Controls.DarkNumericUpDown();
@@ -159,6 +179,10 @@ namespace Intersect.Editor.Forms.Editors
             this.lblMagicResistIncrease = new System.Windows.Forms.Label();
             this.lblArmorIncrease = new System.Windows.Forms.Label();
             this.lblMagicIncrease = new System.Windows.Forms.Label();
+            this.grpExpGrid = new DarkUI.Controls.DarkGroupBox();
+            this.btnResetExpGrid = new DarkUI.Controls.DarkButton();
+            this.btnCloseExpGrid = new DarkUI.Controls.DarkButton();
+            this.expGrid = new System.Windows.Forms.DataGridView();
             this.btnCancel = new DarkUI.Controls.DarkButton();
             this.btnSave = new DarkUI.Controls.DarkButton();
             this.toolStrip = new DarkUI.Controls.DarkToolStrip();
@@ -174,32 +198,18 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
             this.mnuExpGrid = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.btnExpPaste = new System.Windows.Forms.ToolStripMenuItem();
-            this.nudSlashAtk = new DarkUI.Controls.DarkNumericUpDown();
-            this.label1 = new System.Windows.Forms.Label();
-            this.nudPierceAttack = new DarkUI.Controls.DarkNumericUpDown();
-            this.label2 = new System.Windows.Forms.Label();
-            this.nudAccuracy = new DarkUI.Controls.DarkNumericUpDown();
-            this.label3 = new System.Windows.Forms.Label();
-            this.nudEvasion = new DarkUI.Controls.DarkNumericUpDown();
-            this.label4 = new System.Windows.Forms.Label();
-            this.nudSlashRes = new DarkUI.Controls.DarkNumericUpDown();
-            this.label5 = new System.Windows.Forms.Label();
-            this.nudPierceRes = new DarkUI.Controls.DarkNumericUpDown();
-            this.label6 = new System.Windows.Forms.Label();
-            this.nudSlashAtkIncrease = new DarkUI.Controls.DarkNumericUpDown();
-            this.label7 = new System.Windows.Forms.Label();
-            this.nudSlashResIncrease = new DarkUI.Controls.DarkNumericUpDown();
-            this.label8 = new System.Windows.Forms.Label();
-            this.nudPierceAtkIncrease = new DarkUI.Controls.DarkNumericUpDown();
-            this.label9 = new System.Windows.Forms.Label();
-            this.nudPierceResIncrease = new DarkUI.Controls.DarkNumericUpDown();
-            this.label10 = new System.Windows.Forms.Label();
-            this.nudAccuracyIncrease = new DarkUI.Controls.DarkNumericUpDown();
-            this.label11 = new System.Windows.Forms.Label();
-            this.nudEvasionIncrease = new DarkUI.Controls.DarkNumericUpDown();
-            this.label12 = new System.Windows.Forms.Label();
+            this.lblSpModulo = new System.Windows.Forms.Label();
+            this.nudSpLvlMod = new DarkUI.Controls.DarkNumericUpDown();
+            this.nudSpPerLevel = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblSpPer = new System.Windows.Forms.Label();
             this.grpClasses.SuspendLayout();
             this.grpBaseStats.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPierceRes)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSlashRes)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudEvasion)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudAccuracy)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPierceAttack)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSlashAtk)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudBaseMana)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudBaseHP)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudPoints)).BeginInit();
@@ -231,12 +241,16 @@ namespace Intersect.Editor.Forms.Editors
             this.grpSprite.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picFace)).BeginInit();
             this.grpGender.SuspendLayout();
-            this.grpExpGrid.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.expGrid)).BeginInit();
             this.grpLeveling.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudBaseExp)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudExpIncrease)).BeginInit();
             this.grpLevelBoosts.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudEvasionIncrease)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudAccuracyIncrease)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPierceResIncrease)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPierceAtkIncrease)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSlashResIncrease)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSlashAtkIncrease)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudHpIncrease)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMpIncrease)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudPointsIncrease)).BeginInit();
@@ -245,20 +259,12 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudMagicIncrease)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudBluntResIncrease)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudBluntAtkIncrease)).BeginInit();
+            this.grpExpGrid.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.expGrid)).BeginInit();
             this.toolStrip.SuspendLayout();
             this.mnuExpGrid.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSlashAtk)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudPierceAttack)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudAccuracy)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudEvasion)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSlashRes)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudPierceRes)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSlashAtkIncrease)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSlashResIncrease)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudPierceAtkIncrease)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudPierceResIncrease)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudAccuracyIncrease)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudEvasionIncrease)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSpLvlMod)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSpPerLevel)).BeginInit();
             this.SuspendLayout();
             // 
             // grpClasses
@@ -359,6 +365,186 @@ namespace Intersect.Editor.Forms.Editors
             this.grpBaseStats.TabIndex = 17;
             this.grpBaseStats.TabStop = false;
             this.grpBaseStats.Text = "Base Stats:";
+            // 
+            // nudPierceRes
+            // 
+            this.nudPierceRes.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudPierceRes.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudPierceRes.Location = new System.Drawing.Point(177, 105);
+            this.nudPierceRes.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.nudPierceRes.Name = "nudPierceRes";
+            this.nudPierceRes.Size = new System.Drawing.Size(70, 20);
+            this.nudPierceRes.TabIndex = 47;
+            this.nudPierceRes.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudPierceRes.ValueChanged += new System.EventHandler(this.nudPierceRes_ValueChanged);
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(174, 89);
+            this.label6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(62, 13);
+            this.label6.TabIndex = 46;
+            this.label6.Text = "Pierce Res.";
+            // 
+            // nudSlashRes
+            // 
+            this.nudSlashRes.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudSlashRes.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudSlashRes.Location = new System.Drawing.Point(97, 105);
+            this.nudSlashRes.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.nudSlashRes.Name = "nudSlashRes";
+            this.nudSlashRes.Size = new System.Drawing.Size(70, 20);
+            this.nudSlashRes.TabIndex = 45;
+            this.nudSlashRes.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudSlashRes.ValueChanged += new System.EventHandler(this.nudSlashRes_ValueChanged);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(94, 89);
+            this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(58, 13);
+            this.label5.TabIndex = 44;
+            this.label5.Text = "Slash Res.";
+            // 
+            // nudEvasion
+            // 
+            this.nudEvasion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudEvasion.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudEvasion.Location = new System.Drawing.Point(179, 144);
+            this.nudEvasion.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.nudEvasion.Name = "nudEvasion";
+            this.nudEvasion.Size = new System.Drawing.Size(70, 20);
+            this.nudEvasion.TabIndex = 43;
+            this.nudEvasion.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudEvasion.ValueChanged += new System.EventHandler(this.nudEvasion_ValueChanged);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(176, 130);
+            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(45, 13);
+            this.label4.TabIndex = 42;
+            this.label4.Text = "Evasion";
+            // 
+            // nudAccuracy
+            // 
+            this.nudAccuracy.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudAccuracy.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudAccuracy.Location = new System.Drawing.Point(97, 144);
+            this.nudAccuracy.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.nudAccuracy.Name = "nudAccuracy";
+            this.nudAccuracy.Size = new System.Drawing.Size(70, 20);
+            this.nudAccuracy.TabIndex = 41;
+            this.nudAccuracy.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudAccuracy.ValueChanged += new System.EventHandler(this.nudAccuracy_ValueChanged);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(94, 130);
+            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(52, 13);
+            this.label3.TabIndex = 40;
+            this.label3.Text = "Accuracy";
+            // 
+            // nudPierceAttack
+            // 
+            this.nudPierceAttack.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudPierceAttack.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudPierceAttack.Location = new System.Drawing.Point(176, 66);
+            this.nudPierceAttack.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.nudPierceAttack.Name = "nudPierceAttack";
+            this.nudPierceAttack.Size = new System.Drawing.Size(70, 20);
+            this.nudPierceAttack.TabIndex = 39;
+            this.nudPierceAttack.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudPierceAttack.ValueChanged += new System.EventHandler(this.nudPierceAttack_ValueChanged);
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(173, 52);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(71, 13);
+            this.label2.TabIndex = 38;
+            this.label2.Text = "Pierce Attack";
+            // 
+            // nudSlashAtk
+            // 
+            this.nudSlashAtk.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudSlashAtk.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudSlashAtk.Location = new System.Drawing.Point(97, 66);
+            this.nudSlashAtk.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.nudSlashAtk.Name = "nudSlashAtk";
+            this.nudSlashAtk.Size = new System.Drawing.Size(70, 20);
+            this.nudSlashAtk.TabIndex = 37;
+            this.nudSlashAtk.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudSlashAtk.ValueChanged += new System.EventHandler(this.nudSlashAtk_ValueChanged);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(94, 52);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(67, 13);
+            this.label1.TabIndex = 36;
+            this.label1.Text = "Slash Attack";
             // 
             // nudBaseMana
             // 
@@ -1670,87 +1856,14 @@ namespace Intersect.Editor.Forms.Editors
             this.grpGender.TabStop = false;
             this.grpGender.Text = "Gender";
             // 
-            // grpExpGrid
-            // 
-            this.grpExpGrid.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.grpExpGrid.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpExpGrid.Controls.Add(this.btnResetExpGrid);
-            this.grpExpGrid.Controls.Add(this.btnCloseExpGrid);
-            this.grpExpGrid.Controls.Add(this.expGrid);
-            this.grpExpGrid.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpExpGrid.Location = new System.Drawing.Point(2, 348);
-            this.grpExpGrid.Margin = new System.Windows.Forms.Padding(2);
-            this.grpExpGrid.Name = "grpExpGrid";
-            this.grpExpGrid.Padding = new System.Windows.Forms.Padding(2);
-            this.grpExpGrid.Size = new System.Drawing.Size(530, 175);
-            this.grpExpGrid.TabIndex = 37;
-            this.grpExpGrid.TabStop = false;
-            this.grpExpGrid.Text = "Experience Overrides";
-            // 
-            // btnResetExpGrid
-            // 
-            this.btnResetExpGrid.Location = new System.Drawing.Point(7, 148);
-            this.btnResetExpGrid.Margin = new System.Windows.Forms.Padding(2);
-            this.btnResetExpGrid.Name = "btnResetExpGrid";
-            this.btnResetExpGrid.Padding = new System.Windows.Forms.Padding(5);
-            this.btnResetExpGrid.Size = new System.Drawing.Size(83, 21);
-            this.btnResetExpGrid.TabIndex = 39;
-            this.btnResetExpGrid.Text = "Reset Grid";
-            this.btnResetExpGrid.Click += new System.EventHandler(this.btnResetExpGrid_Click);
-            // 
-            // btnCloseExpGrid
-            // 
-            this.btnCloseExpGrid.Location = new System.Drawing.Point(411, 148);
-            this.btnCloseExpGrid.Margin = new System.Windows.Forms.Padding(2);
-            this.btnCloseExpGrid.Name = "btnCloseExpGrid";
-            this.btnCloseExpGrid.Padding = new System.Windows.Forms.Padding(5);
-            this.btnCloseExpGrid.Size = new System.Drawing.Size(111, 21);
-            this.btnCloseExpGrid.TabIndex = 38;
-            this.btnCloseExpGrid.Text = "Close";
-            this.btnCloseExpGrid.Click += new System.EventHandler(this.btnCloseExpGrid_Click);
-            // 
-            // expGrid
-            // 
-            this.expGrid.AllowUserToAddRows = false;
-            this.expGrid.AllowUserToDeleteRows = false;
-            this.expGrid.AllowUserToResizeColumns = false;
-            this.expGrid.AllowUserToResizeRows = false;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(53)))), ((int)(((byte)(55)))));
-            this.expGrid.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
-            this.expGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.expGrid.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.expGrid.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
-            this.expGrid.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
-            this.expGrid.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.Gainsboro;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.expGrid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
-            this.expGrid.ColumnHeadersHeight = 24;
-            this.expGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            this.expGrid.EnableHeadersVisualStyles = false;
-            this.expGrid.Location = new System.Drawing.Point(7, 18);
-            this.expGrid.MultiSelect = false;
-            this.expGrid.Name = "expGrid";
-            this.expGrid.RowHeadersVisible = false;
-            dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.expGrid.RowsDefaultCellStyle = dataGridViewCellStyle3;
-            this.expGrid.Size = new System.Drawing.Size(515, 125);
-            this.expGrid.TabIndex = 0;
-            this.expGrid.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.expGrid_CellEndEdit);
-            this.expGrid.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.expGrid_CellMouseDown);
-            this.expGrid.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.expGrid_EditingControlShowing);
-            this.expGrid.SelectionChanged += new System.EventHandler(this.expGrid_SelectionChanged);
-            this.expGrid.KeyDown += new System.Windows.Forms.KeyEventHandler(this.expGrid_KeyDown);
-            // 
             // grpLeveling
             // 
             this.grpLeveling.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpLeveling.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpLeveling.Controls.Add(this.lblSpPer);
+            this.grpLeveling.Controls.Add(this.nudSpPerLevel);
+            this.grpLeveling.Controls.Add(this.nudSpLvlMod);
+            this.grpLeveling.Controls.Add(this.lblSpModulo);
             this.grpLeveling.Controls.Add(this.btnExpGrid);
             this.grpLeveling.Controls.Add(this.nudBaseExp);
             this.grpLeveling.Controls.Add(this.nudExpIncrease);
@@ -1769,7 +1882,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             // btnExpGrid
             // 
-            this.btnExpGrid.Location = new System.Drawing.Point(263, 30);
+            this.btnExpGrid.Location = new System.Drawing.Point(411, 29);
             this.btnExpGrid.Margin = new System.Windows.Forms.Padding(2);
             this.btnExpGrid.Name = "btnExpGrid";
             this.btnExpGrid.Padding = new System.Windows.Forms.Padding(5);
@@ -1809,7 +1922,7 @@ namespace Intersect.Editor.Forms.Editors
             this.nudExpIncrease.ForeColor = System.Drawing.Color.Gainsboro;
             this.nudExpIncrease.Location = new System.Drawing.Point(115, 31);
             this.nudExpIncrease.Name = "nudExpIncrease";
-            this.nudExpIncrease.Size = new System.Drawing.Size(122, 20);
+            this.nudExpIncrease.Size = new System.Drawing.Size(64, 20);
             this.nudExpIncrease.TabIndex = 31;
             this.nudExpIncrease.Value = new decimal(new int[] {
             0,
@@ -1823,9 +1936,9 @@ namespace Intersect.Editor.Forms.Editors
             this.lblExpIncrease.AutoSize = true;
             this.lblExpIncrease.Location = new System.Drawing.Point(112, 15);
             this.lblExpIncrease.Name = "lblExpIncrease";
-            this.lblExpIncrease.Size = new System.Drawing.Size(125, 13);
+            this.lblExpIncrease.Size = new System.Drawing.Size(80, 13);
             this.lblExpIncrease.TabIndex = 21;
-            this.lblExpIncrease.Text = "Exp Increase (Per Lvl %):";
+            this.lblExpIncrease.Text = "Exp Increase %";
             // 
             // lblBaseExp
             // 
@@ -1877,6 +1990,186 @@ namespace Intersect.Editor.Forms.Editors
             this.grpLevelBoosts.TabIndex = 23;
             this.grpLevelBoosts.TabStop = false;
             this.grpLevelBoosts.Text = "Level Up Boosts";
+            // 
+            // nudEvasionIncrease
+            // 
+            this.nudEvasionIncrease.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudEvasionIncrease.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudEvasionIncrease.Location = new System.Drawing.Point(15, 90);
+            this.nudEvasionIncrease.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.nudEvasionIncrease.Name = "nudEvasionIncrease";
+            this.nudEvasionIncrease.Size = new System.Drawing.Size(70, 20);
+            this.nudEvasionIncrease.TabIndex = 48;
+            this.nudEvasionIncrease.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudEvasionIncrease.ValueChanged += new System.EventHandler(this.nudEvasionIncrease_ValueChanged);
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(12, 74);
+            this.label12.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(45, 13);
+            this.label12.TabIndex = 47;
+            this.label12.Text = "Evasion";
+            // 
+            // nudAccuracyIncrease
+            // 
+            this.nudAccuracyIncrease.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudAccuracyIncrease.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudAccuracyIncrease.Location = new System.Drawing.Point(91, 90);
+            this.nudAccuracyIncrease.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.nudAccuracyIncrease.Name = "nudAccuracyIncrease";
+            this.nudAccuracyIncrease.Size = new System.Drawing.Size(70, 20);
+            this.nudAccuracyIncrease.TabIndex = 46;
+            this.nudAccuracyIncrease.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudAccuracyIncrease.ValueChanged += new System.EventHandler(this.nudAccuracyIncrease_ValueChanged);
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(88, 74);
+            this.label11.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(52, 13);
+            this.label11.TabIndex = 45;
+            this.label11.Text = "Accuracy";
+            // 
+            // nudPierceResIncrease
+            // 
+            this.nudPierceResIncrease.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudPierceResIncrease.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudPierceResIncrease.Location = new System.Drawing.Point(298, 90);
+            this.nudPierceResIncrease.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.nudPierceResIncrease.Name = "nudPierceResIncrease";
+            this.nudPierceResIncrease.Size = new System.Drawing.Size(51, 20);
+            this.nudPierceResIncrease.TabIndex = 44;
+            this.nudPierceResIncrease.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudPierceResIncrease.ValueChanged += new System.EventHandler(this.nudPierceResIncrease_ValueChanged);
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(295, 77);
+            this.label10.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(51, 13);
+            this.label10.TabIndex = 43;
+            this.label10.Text = "Prc. Res.";
+            // 
+            // nudPierceAtkIncrease
+            // 
+            this.nudPierceAtkIncrease.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudPierceAtkIncrease.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudPierceAtkIncrease.Location = new System.Drawing.Point(298, 47);
+            this.nudPierceAtkIncrease.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.nudPierceAtkIncrease.Name = "nudPierceAtkIncrease";
+            this.nudPierceAtkIncrease.Size = new System.Drawing.Size(51, 20);
+            this.nudPierceAtkIncrease.TabIndex = 42;
+            this.nudPierceAtkIncrease.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudPierceAtkIncrease.ValueChanged += new System.EventHandler(this.nudPierceAtkIncrease_ValueChanged);
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(295, 34);
+            this.label9.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(56, 13);
+            this.label9.TabIndex = 41;
+            this.label9.Text = "Pierce Atk";
+            // 
+            // nudSlashResIncrease
+            // 
+            this.nudSlashResIncrease.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudSlashResIncrease.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudSlashResIncrease.Location = new System.Drawing.Point(245, 90);
+            this.nudSlashResIncrease.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.nudSlashResIncrease.Name = "nudSlashResIncrease";
+            this.nudSlashResIncrease.Size = new System.Drawing.Size(47, 20);
+            this.nudSlashResIncrease.TabIndex = 40;
+            this.nudSlashResIncrease.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudSlashResIncrease.ValueChanged += new System.EventHandler(this.nudSlashResIncrease_ValueChanged);
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(242, 77);
+            this.label8.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(52, 13);
+            this.label8.TabIndex = 39;
+            this.label8.Text = "Slsh. Res";
+            // 
+            // nudSlashAtkIncrease
+            // 
+            this.nudSlashAtkIncrease.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudSlashAtkIncrease.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudSlashAtkIncrease.Location = new System.Drawing.Point(241, 47);
+            this.nudSlashAtkIncrease.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.nudSlashAtkIncrease.Name = "nudSlashAtkIncrease";
+            this.nudSlashAtkIncrease.Size = new System.Drawing.Size(51, 20);
+            this.nudSlashAtkIncrease.TabIndex = 38;
+            this.nudSlashAtkIncrease.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudSlashAtkIncrease.ValueChanged += new System.EventHandler(this.darkNumericUpDown1_ValueChanged);
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(238, 34);
+            this.label7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(52, 13);
+            this.label7.TabIndex = 37;
+            this.label7.Text = "Slash Atk";
             // 
             // nudHpIncrease
             // 
@@ -2140,6 +2433,83 @@ namespace Intersect.Editor.Forms.Editors
             this.lblMagicIncrease.TabIndex = 6;
             this.lblMagicIncrease.Text = "Magic Atk";
             // 
+            // grpExpGrid
+            // 
+            this.grpExpGrid.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpExpGrid.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpExpGrid.Controls.Add(this.btnResetExpGrid);
+            this.grpExpGrid.Controls.Add(this.btnCloseExpGrid);
+            this.grpExpGrid.Controls.Add(this.expGrid);
+            this.grpExpGrid.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpExpGrid.Location = new System.Drawing.Point(2, 348);
+            this.grpExpGrid.Margin = new System.Windows.Forms.Padding(2);
+            this.grpExpGrid.Name = "grpExpGrid";
+            this.grpExpGrid.Padding = new System.Windows.Forms.Padding(2);
+            this.grpExpGrid.Size = new System.Drawing.Size(530, 175);
+            this.grpExpGrid.TabIndex = 37;
+            this.grpExpGrid.TabStop = false;
+            this.grpExpGrid.Text = "Experience Overrides";
+            // 
+            // btnResetExpGrid
+            // 
+            this.btnResetExpGrid.Location = new System.Drawing.Point(7, 148);
+            this.btnResetExpGrid.Margin = new System.Windows.Forms.Padding(2);
+            this.btnResetExpGrid.Name = "btnResetExpGrid";
+            this.btnResetExpGrid.Padding = new System.Windows.Forms.Padding(5);
+            this.btnResetExpGrid.Size = new System.Drawing.Size(83, 21);
+            this.btnResetExpGrid.TabIndex = 39;
+            this.btnResetExpGrid.Text = "Reset Grid";
+            this.btnResetExpGrid.Click += new System.EventHandler(this.btnResetExpGrid_Click);
+            // 
+            // btnCloseExpGrid
+            // 
+            this.btnCloseExpGrid.Location = new System.Drawing.Point(411, 148);
+            this.btnCloseExpGrid.Margin = new System.Windows.Forms.Padding(2);
+            this.btnCloseExpGrid.Name = "btnCloseExpGrid";
+            this.btnCloseExpGrid.Padding = new System.Windows.Forms.Padding(5);
+            this.btnCloseExpGrid.Size = new System.Drawing.Size(111, 21);
+            this.btnCloseExpGrid.TabIndex = 38;
+            this.btnCloseExpGrid.Text = "Close";
+            this.btnCloseExpGrid.Click += new System.EventHandler(this.btnCloseExpGrid_Click);
+            // 
+            // expGrid
+            // 
+            this.expGrid.AllowUserToAddRows = false;
+            this.expGrid.AllowUserToDeleteRows = false;
+            this.expGrid.AllowUserToResizeColumns = false;
+            this.expGrid.AllowUserToResizeRows = false;
+            dataGridViewCellStyle10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(53)))), ((int)(((byte)(55)))));
+            this.expGrid.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle10;
+            this.expGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.expGrid.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.expGrid.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
+            this.expGrid.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
+            this.expGrid.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
+            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle11.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            dataGridViewCellStyle11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle11.ForeColor = System.Drawing.Color.Gainsboro;
+            dataGridViewCellStyle11.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle11.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.expGrid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle11;
+            this.expGrid.ColumnHeadersHeight = 24;
+            this.expGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
+            this.expGrid.EnableHeadersVisualStyles = false;
+            this.expGrid.Location = new System.Drawing.Point(7, 18);
+            this.expGrid.MultiSelect = false;
+            this.expGrid.Name = "expGrid";
+            this.expGrid.RowHeadersVisible = false;
+            dataGridViewCellStyle12.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.expGrid.RowsDefaultCellStyle = dataGridViewCellStyle12;
+            this.expGrid.Size = new System.Drawing.Size(515, 125);
+            this.expGrid.TabIndex = 0;
+            this.expGrid.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.expGrid_CellEndEdit);
+            this.expGrid.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.expGrid_CellMouseDown);
+            this.expGrid.EditingControlShowing += new System.Windows.Forms.DataGridViewEditingControlShowingEventHandler(this.expGrid_EditingControlShowing);
+            this.expGrid.SelectionChanged += new System.EventHandler(this.expGrid_SelectionChanged);
+            this.expGrid.KeyDown += new System.Windows.Forms.KeyEventHandler(this.expGrid_KeyDown);
+            // 
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
@@ -2303,365 +2673,63 @@ namespace Intersect.Editor.Forms.Editors
             this.btnExpPaste.Text = "Paste";
             this.btnExpPaste.Click += new System.EventHandler(this.btnPaste_Click);
             // 
-            // nudSlashAtk
+            // lblSpModulo
             // 
-            this.nudSlashAtk.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudSlashAtk.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudSlashAtk.Location = new System.Drawing.Point(97, 66);
-            this.nudSlashAtk.Maximum = new decimal(new int[] {
-            255,
+            this.lblSpModulo.AutoSize = true;
+            this.lblSpModulo.Location = new System.Drawing.Point(199, 16);
+            this.lblSpModulo.Name = "lblSpModulo";
+            this.lblSpModulo.Size = new System.Drawing.Size(76, 13);
+            this.lblSpModulo.TabIndex = 38;
+            this.lblSpModulo.Text = "SP Lvl Modulo";
+            // 
+            // nudSpLvlMod
+            // 
+            this.nudSpLvlMod.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudSpLvlMod.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudSpLvlMod.Location = new System.Drawing.Point(200, 31);
+            this.nudSpLvlMod.Minimum = new decimal(new int[] {
+            1,
             0,
             0,
             0});
-            this.nudSlashAtk.Name = "nudSlashAtk";
-            this.nudSlashAtk.Size = new System.Drawing.Size(70, 20);
-            this.nudSlashAtk.TabIndex = 37;
-            this.nudSlashAtk.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudSlashAtk.ValueChanged += new System.EventHandler(this.nudSlashAtk_ValueChanged);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(94, 52);
-            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(67, 13);
-            this.label1.TabIndex = 36;
-            this.label1.Text = "Slash Attack";
-            // 
-            // nudPierceAttack
-            // 
-            this.nudPierceAttack.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudPierceAttack.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudPierceAttack.Location = new System.Drawing.Point(176, 66);
-            this.nudPierceAttack.Maximum = new decimal(new int[] {
-            255,
+            this.nudSpLvlMod.Name = "nudSpLvlMod";
+            this.nudSpLvlMod.Size = new System.Drawing.Size(67, 20);
+            this.nudSpLvlMod.TabIndex = 39;
+            this.nudSpLvlMod.Value = new decimal(new int[] {
+            2,
             0,
             0,
             0});
-            this.nudPierceAttack.Name = "nudPierceAttack";
-            this.nudPierceAttack.Size = new System.Drawing.Size(70, 20);
-            this.nudPierceAttack.TabIndex = 39;
-            this.nudPierceAttack.Value = new decimal(new int[] {
-            0,
+            this.nudSpLvlMod.ValueChanged += new System.EventHandler(this.nudSpLvlMod_ValueChanged);
+            // 
+            // nudSpPerLevel
+            // 
+            this.nudSpPerLevel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudSpPerLevel.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudSpPerLevel.Location = new System.Drawing.Point(288, 31);
+            this.nudSpPerLevel.Maximum = new decimal(new int[] {
+            100000,
             0,
             0,
             0});
-            this.nudPierceAttack.ValueChanged += new System.EventHandler(this.nudPierceAttack_ValueChanged);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(173, 52);
-            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(71, 13);
-            this.label2.TabIndex = 38;
-            this.label2.Text = "Pierce Attack";
-            // 
-            // nudAccuracy
-            // 
-            this.nudAccuracy.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudAccuracy.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudAccuracy.Location = new System.Drawing.Point(97, 144);
-            this.nudAccuracy.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.nudAccuracy.Name = "nudAccuracy";
-            this.nudAccuracy.Size = new System.Drawing.Size(70, 20);
-            this.nudAccuracy.TabIndex = 41;
-            this.nudAccuracy.Value = new decimal(new int[] {
+            this.nudSpPerLevel.Name = "nudSpPerLevel";
+            this.nudSpPerLevel.Size = new System.Drawing.Size(67, 20);
+            this.nudSpPerLevel.TabIndex = 40;
+            this.nudSpPerLevel.Value = new decimal(new int[] {
             0,
             0,
             0,
             0});
-            this.nudAccuracy.ValueChanged += new System.EventHandler(this.nudAccuracy_ValueChanged);
+            this.nudSpPerLevel.ValueChanged += new System.EventHandler(this.nudSpPerLevel_ValueChanged);
             // 
-            // label3
+            // lblSpPer
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(94, 130);
-            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(52, 13);
-            this.label3.TabIndex = 40;
-            this.label3.Text = "Accuracy";
-            // 
-            // nudEvasion
-            // 
-            this.nudEvasion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudEvasion.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudEvasion.Location = new System.Drawing.Point(179, 144);
-            this.nudEvasion.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.nudEvasion.Name = "nudEvasion";
-            this.nudEvasion.Size = new System.Drawing.Size(70, 20);
-            this.nudEvasion.TabIndex = 43;
-            this.nudEvasion.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudEvasion.ValueChanged += new System.EventHandler(this.nudEvasion_ValueChanged);
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(176, 130);
-            this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(45, 13);
-            this.label4.TabIndex = 42;
-            this.label4.Text = "Evasion";
-            // 
-            // nudSlashRes
-            // 
-            this.nudSlashRes.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudSlashRes.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudSlashRes.Location = new System.Drawing.Point(97, 105);
-            this.nudSlashRes.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.nudSlashRes.Name = "nudSlashRes";
-            this.nudSlashRes.Size = new System.Drawing.Size(70, 20);
-            this.nudSlashRes.TabIndex = 45;
-            this.nudSlashRes.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudSlashRes.ValueChanged += new System.EventHandler(this.nudSlashRes_ValueChanged);
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(94, 89);
-            this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(58, 13);
-            this.label5.TabIndex = 44;
-            this.label5.Text = "Slash Res.";
-            // 
-            // nudPierceRes
-            // 
-            this.nudPierceRes.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudPierceRes.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudPierceRes.Location = new System.Drawing.Point(177, 105);
-            this.nudPierceRes.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.nudPierceRes.Name = "nudPierceRes";
-            this.nudPierceRes.Size = new System.Drawing.Size(70, 20);
-            this.nudPierceRes.TabIndex = 47;
-            this.nudPierceRes.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudPierceRes.ValueChanged += new System.EventHandler(this.nudPierceRes_ValueChanged);
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(174, 89);
-            this.label6.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(62, 13);
-            this.label6.TabIndex = 46;
-            this.label6.Text = "Pierce Res.";
-            // 
-            // nudSlashAtkIncrease
-            // 
-            this.nudSlashAtkIncrease.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudSlashAtkIncrease.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudSlashAtkIncrease.Location = new System.Drawing.Point(241, 47);
-            this.nudSlashAtkIncrease.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.nudSlashAtkIncrease.Name = "nudSlashAtkIncrease";
-            this.nudSlashAtkIncrease.Size = new System.Drawing.Size(51, 20);
-            this.nudSlashAtkIncrease.TabIndex = 38;
-            this.nudSlashAtkIncrease.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudSlashAtkIncrease.ValueChanged += new System.EventHandler(this.darkNumericUpDown1_ValueChanged);
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(238, 34);
-            this.label7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(52, 13);
-            this.label7.TabIndex = 37;
-            this.label7.Text = "Slash Atk";
-            // 
-            // nudSlashResIncrease
-            // 
-            this.nudSlashResIncrease.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudSlashResIncrease.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudSlashResIncrease.Location = new System.Drawing.Point(245, 90);
-            this.nudSlashResIncrease.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.nudSlashResIncrease.Name = "nudSlashResIncrease";
-            this.nudSlashResIncrease.Size = new System.Drawing.Size(47, 20);
-            this.nudSlashResIncrease.TabIndex = 40;
-            this.nudSlashResIncrease.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudSlashResIncrease.ValueChanged += new System.EventHandler(this.nudSlashResIncrease_ValueChanged);
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(242, 77);
-            this.label8.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(52, 13);
-            this.label8.TabIndex = 39;
-            this.label8.Text = "Slsh. Res";
-            // 
-            // nudPierceAtkIncrease
-            // 
-            this.nudPierceAtkIncrease.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudPierceAtkIncrease.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudPierceAtkIncrease.Location = new System.Drawing.Point(298, 47);
-            this.nudPierceAtkIncrease.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.nudPierceAtkIncrease.Name = "nudPierceAtkIncrease";
-            this.nudPierceAtkIncrease.Size = new System.Drawing.Size(51, 20);
-            this.nudPierceAtkIncrease.TabIndex = 42;
-            this.nudPierceAtkIncrease.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudPierceAtkIncrease.ValueChanged += new System.EventHandler(this.nudPierceAtkIncrease_ValueChanged);
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(295, 34);
-            this.label9.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(56, 13);
-            this.label9.TabIndex = 41;
-            this.label9.Text = "Pierce Atk";
-            // 
-            // nudPierceResIncrease
-            // 
-            this.nudPierceResIncrease.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudPierceResIncrease.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudPierceResIncrease.Location = new System.Drawing.Point(298, 90);
-            this.nudPierceResIncrease.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.nudPierceResIncrease.Name = "nudPierceResIncrease";
-            this.nudPierceResIncrease.Size = new System.Drawing.Size(51, 20);
-            this.nudPierceResIncrease.TabIndex = 44;
-            this.nudPierceResIncrease.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudPierceResIncrease.ValueChanged += new System.EventHandler(this.nudPierceResIncrease_ValueChanged);
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(295, 77);
-            this.label10.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(51, 13);
-            this.label10.TabIndex = 43;
-            this.label10.Text = "Prc. Res.";
-            // 
-            // nudAccuracyIncrease
-            // 
-            this.nudAccuracyIncrease.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudAccuracyIncrease.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudAccuracyIncrease.Location = new System.Drawing.Point(91, 90);
-            this.nudAccuracyIncrease.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.nudAccuracyIncrease.Name = "nudAccuracyIncrease";
-            this.nudAccuracyIncrease.Size = new System.Drawing.Size(70, 20);
-            this.nudAccuracyIncrease.TabIndex = 46;
-            this.nudAccuracyIncrease.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudAccuracyIncrease.ValueChanged += new System.EventHandler(this.nudAccuracyIncrease_ValueChanged);
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(88, 74);
-            this.label11.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(52, 13);
-            this.label11.TabIndex = 45;
-            this.label11.Text = "Accuracy";
-            // 
-            // nudEvasionIncrease
-            // 
-            this.nudEvasionIncrease.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudEvasionIncrease.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudEvasionIncrease.Location = new System.Drawing.Point(15, 90);
-            this.nudEvasionIncrease.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.nudEvasionIncrease.Name = "nudEvasionIncrease";
-            this.nudEvasionIncrease.Size = new System.Drawing.Size(70, 20);
-            this.nudEvasionIncrease.TabIndex = 48;
-            this.nudEvasionIncrease.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudEvasionIncrease.ValueChanged += new System.EventHandler(this.nudEvasionIncrease_ValueChanged);
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(12, 74);
-            this.label12.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(45, 13);
-            this.label12.TabIndex = 47;
-            this.label12.Text = "Evasion";
+            this.lblSpPer.AutoSize = true;
+            this.lblSpPer.Location = new System.Drawing.Point(285, 15);
+            this.lblSpPer.Name = "lblSpPer";
+            this.lblSpPer.Size = new System.Drawing.Size(69, 13);
+            this.lblSpPer.TabIndex = 41;
+            this.lblSpPer.Text = "SP Per Level";
             // 
             // FrmClass
             // 
@@ -2689,6 +2757,12 @@ namespace Intersect.Editor.Forms.Editors
             this.grpClasses.PerformLayout();
             this.grpBaseStats.ResumeLayout(false);
             this.grpBaseStats.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPierceRes)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSlashRes)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudEvasion)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudAccuracy)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPierceAttack)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSlashAtk)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudBaseMana)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudBaseHP)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudPoints)).EndInit();
@@ -2729,14 +2803,18 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.picFace)).EndInit();
             this.grpGender.ResumeLayout(false);
             this.grpGender.PerformLayout();
-            this.grpExpGrid.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.expGrid)).EndInit();
             this.grpLeveling.ResumeLayout(false);
             this.grpLeveling.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudBaseExp)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudExpIncrease)).EndInit();
             this.grpLevelBoosts.ResumeLayout(false);
             this.grpLevelBoosts.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudEvasionIncrease)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudAccuracyIncrease)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPierceResIncrease)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPierceAtkIncrease)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSlashResIncrease)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSlashAtkIncrease)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudHpIncrease)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMpIncrease)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudPointsIncrease)).EndInit();
@@ -2745,21 +2823,13 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudMagicIncrease)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudBluntResIncrease)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudBluntAtkIncrease)).EndInit();
+            this.grpExpGrid.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.expGrid)).EndInit();
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
             this.mnuExpGrid.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.nudSlashAtk)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudPierceAttack)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudAccuracy)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudEvasion)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSlashRes)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudPierceRes)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSlashAtkIncrease)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSlashResIncrease)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudPierceAtkIncrease)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudPierceResIncrease)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudAccuracyIncrease)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudEvasionIncrease)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSpLvlMod)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSpPerLevel)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -2929,5 +2999,9 @@ namespace Intersect.Editor.Forms.Editors
         private System.Windows.Forms.Label label8;
         private DarkNumericUpDown nudSlashAtkIncrease;
         private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label lblSpPer;
+        private DarkNumericUpDown nudSpPerLevel;
+        private DarkNumericUpDown nudSpLvlMod;
+        private System.Windows.Forms.Label lblSpModulo;
     }
 }

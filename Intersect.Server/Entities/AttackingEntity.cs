@@ -298,7 +298,7 @@ namespace Intersect.Server.Entities
             // Otherwise, we're dealing non-true damage and need to do some calcs
             else
             {
-                DealDamageTo(enemy, attackTypes, dmgScaling, critMultiplier, weapon, false, out damage);
+                DealDamageTo(enemy, attackTypes, dmgScaling, critMultiplier, weapon, false, spell?.Combat?.Friendly ?? false, out damage);
             }
             return damage != 0 || manaDamage != 0;
         }
@@ -325,7 +325,8 @@ namespace Intersect.Server.Entities
             int scaling,
             double critMultiplier,
             ItemBase weaponMetadata,
-            bool secondaryDamage, 
+            bool secondaryDamage,
+            bool friendly,
             out int damage)
         {
             damage = 0;
@@ -336,7 +337,7 @@ namespace Intersect.Server.Entities
 
             UpdateCombatTimers(this, enemy);
 
-            damage = CombatUtilities.CalculateDamage(damageTypes, critMultiplier, scaling, StatVals, enemy.StatVals, out _);
+            damage = CombatUtilities.CalculateDamage(damageTypes, critMultiplier, scaling, StatVals, enemy.StatVals, out var maxHit);
 
             if (damage != 0)
             {
@@ -349,7 +350,7 @@ namespace Intersect.Server.Entities
                 PacketSender.SendCombatNumber(DetermineCombatNumberType(damage, secondaryDamage, enemy is Resource, critMultiplier), enemy, damage);
                 enemy.TakeDamage(this, damage, secondaryDamage ? Vitals.Mana : Vitals.Health);
             }
-            else
+            else if (!friendly && maxHit > 0)
             {
                 SendBlockedAttackMessage(enemy);
             }

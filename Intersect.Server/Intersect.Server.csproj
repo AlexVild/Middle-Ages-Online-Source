@@ -1001,6 +1001,10 @@
     <Compile Include="Migrations\Game\20230104222431_SkillPointSpellMigration.designer.cs">
       <DependentUpon>20230104222431_SkillPointSpellMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20230108234041_SkillPointLevelUpMigration.cs" />
+    <Compile Include="Migrations\Game\20230108234041_SkillPointLevelUpMigration.designer.cs">
+      <DependentUpon>20230108234041_SkillPointLevelUpMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

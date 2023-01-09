@@ -40,18 +40,21 @@ namespace Intersect.Client.Interface.Game.Components
         bool Initializing = true;
 
         public int PointVal { get; set; }
+        public int RemainingPoints { get; set; }
 
         public SkillRowComponent(Base parent,
             string containerName,
             Guid spellId,
             bool prepared,
             int points,
+            int remainingPoints,
             ComponentList<GwenComponent> referenceList = null
             ) : base(parent, containerName, "SkillRowComponent", referenceList)
         {
             SpellId = spellId;
             Prepared = prepared;
             PointVal = points;
+            RemainingPoints = remainingPoints;
 
             Spell = SpellBase.Get(SpellId);
         }
@@ -74,13 +77,22 @@ namespace Intersect.Client.Interface.Game.Components
             UseCheckbox = new CheckBox(SelfContainer, "UseCheckbox");
             UseCheckbox.CheckChanged += UseCheckbox_CheckChanged;
 
-            UseCheckbox.IsChecked = Prepared;
-
             base.Initialize();
             FitParentToComponent();
-            
+
+            UseCheckbox.IsChecked = Prepared;
+            if (!Prepared && RemainingPoints < Spell.RequiredSkillPoints)
+            {
+                UseCheckbox.Disable();
+            }
+
             Title.SetTextColor(TitleColor, Label.ControlState.Normal);
+            
             Image.Initialize();
+            if (!Prepared)
+            {
+                Image.SetImageRenderColor(new Color(100, 255, 255, 255));
+            }
 
             Initializing = false;
         }

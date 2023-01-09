@@ -1356,49 +1356,8 @@ namespace Intersect.Server.Entities
             RecalculateStatsAndPoints();
             UnequipInvalidItems();
             PacketSender.SendEntityDataToProximity(this);
+            PacketSender.SendPointsTo(this);
             PacketSender.SendExperience(this);
-        }
-
-        public void LevelUp(bool resetExperience = true, int levels = 1)
-        {
-            var messages = new List<string>();
-            if (Level < Options.MaxLevel)
-            {
-                for (var i = 0; i < levels; i++)
-                {
-                    SetLevel(Level + 1, resetExperience);
-
-                    //Let's pull up class - leveling info
-                    var classDescriptor = ClassBase.Get(ClassId);
-                    if (classDescriptor?.Spells == null)
-                    {
-                        continue;
-                    }
-
-                    foreach (var spell in classDescriptor.Spells)
-                    {
-                        if (spell.Level != Level)
-                        {
-                            continue;
-                        }
-
-                        var spellInstance = new Spell(spell.Id);
-                        if (TryTeachSpell(spellInstance, true))
-                        {
-                            messages.Add(
-                                Strings.Player.spelltaughtlevelup.ToString(SpellBase.GetName(spellInstance.SpellId))
-                            );
-                        }
-                    }
-                }
-            }
-
-            PacketSender.SendChatMsg(this, Strings.Player.levelup.ToString(Level), ChatMessageType.Experience, CustomColors.Combat.LevelUp, Name);
-            PacketSender.SendActionMsg(this, Strings.Combat.levelup, CustomColors.Combat.LevelUp);
-            foreach (var message in messages)
-            {
-                PacketSender.SendChatMsg(this, message, ChatMessageType.Experience, CustomColors.Alerts.Info, Name);
-            }
 
             if (StatPoints > 0)
             {
@@ -1406,14 +1365,49 @@ namespace Intersect.Server.Entities
                     this, Strings.Player.statpoints.ToString(StatPoints), ChatMessageType.Experience, CustomColors.Combat.StatPoints, Name
                 );
             }
+            
+            var clsDescriptor = ClassBase.Get(ClassId);
+            if (Level % clsDescriptor.SkillPointLevelModulo == 0)
+            {
+                PacketSender.SendChatMsg(
+                    this, Strings.Player.SkillPoints.ToString(clsDescriptor.SkillPointsPerLevel), ChatMessageType.Experience, CustomColors.Combat.StatPoints, Name
+                );
+            }
+            
+            PacketSender.SendChatMsg(this, Strings.Player.levelup.ToString(Level), ChatMessageType.Experience, CustomColors.Combat.LevelUp, Name);
+            PacketSender.SendActionMsg(this, Strings.Combat.levelup, CustomColors.Combat.LevelUp);
+        }
 
-            RecalculateStatsAndPoints();
+        public void LevelUp(bool resetExperience = true, int levels = 1)
+        {
+            if (Level >= Options.MaxLevel)
+            {
+                return;
+            }
+
+            var spellTaughtMessages = new List<string>();
+            var unlockableSpells = ClassBase.Get(ClassId)?.Spells?.Where((spell) =>
+            {
+                return spell.Level > Level && spell.Level <= Level + levels;
+            });
+
+            SetLevel(Level + levels, resetExperience);
+            foreach (var spell in unlockableSpells)
+            {
+                var spellInstance = new Spell(spell.Id);
+                if (TryTeachSpell(spellInstance, true))
+                {
+                    spellTaughtMessages.Add(
+                        Strings.Player.spelltaughtlevelup.ToString(SpellBase.GetName(spellInstance.SpellId))
+                    );
+                }
+            }
+            foreach (var message in spellTaughtMessages)
+            {
+                PacketSender.SendChatMsg(this, message, ChatMessageType.Experience, CustomColors.Alerts.Info, Name);
+            }
+
             UnequipInvalidItems();
-            PacketSender.SendExperience(this);
-            PacketSender.SendPointsTo(this);
-            PacketSender.SendEntityDataToProximity(this);
-
-            //Search for level up activated events and run them
             StartCommonEventsWithTrigger(CommonEventTrigger.LevelUp);
         }
 
@@ -1447,7 +1441,6 @@ namespace Intersect.Server.Entities
             {
                 Exp = 0;
             }
-
 
             if (!CheckLevelUp())
             {
@@ -1853,56 +1846,69 @@ namespace Intersect.Server.Entities
         {
             var playerClass = ClassBase.Get(ClassId);
 
-            if (playerClass != null)
+            if (playerClass == null)
             {
-                for (var i = 0; i < (int) Stats.StatCount; i++)
+                return;
+            }
+
+            RecalculateSkillPoints();
+            // Don't give stat points on odd levels
+            if (playerClass.SkillPointLevelModulo > 0 && Level % playerClass.SkillPointLevelModulo == 0)
+            {
+                return;
+            }
+
+            var levelsWithoutStatBoosts = (int)Math.Floor((float)Level / playerClass.SkillPointLevelModulo);
+            var levelsWithStatBoosts = Level - 1 - levelsWithoutStatBoosts;
+            // Calculate stats changes
+            for (var i = 0; i < (int)Stats.StatCount; i++)
+            {
+                var s = playerClass.BaseStat[i];
+
+                //Add class stat scaling
+                if (playerClass.IncreasePercentage) //% increase per level
                 {
-                    var s = playerClass.BaseStat[i];
-
-                    //Add class stat scaling
-                    if (playerClass.IncreasePercentage) //% increase per level
-                    {
-                        s = (int) (s * Math.Pow(1 + (double) playerClass.StatIncrease[i] / 100, Level - 1));
-                    }
-                    else //Static value increase per level
-                    {
-                        s += playerClass.StatIncrease[i] * (Level - 1);
-                    }
-
-                    BaseStats[i] = s;
+                    s = (int)(s * Math.Pow(1 + (double)playerClass.StatIncrease[i] / 100, levelsWithStatBoosts));
+                }
+                else //Static value increase per level
+                {
+                    s += playerClass.StatIncrease[i] * levelsWithStatBoosts;
                 }
 
-                //Handle Changes in Points
-                var currentPoints = StatPoints + StatPointAllocations.Sum();
-                var expectedPoints = playerClass.BasePoints + playerClass.PointIncrease * (Level - 1);
-                if (expectedPoints > currentPoints)
+                BaseStats[i] = s;
+            }
+
+            //Handle Changes in Points
+            var currentPoints = StatPoints + StatPointAllocations.Sum();
+
+            var expectedPoints = playerClass.BasePoints + playerClass.PointIncrease * levelsWithStatBoosts;
+            if (expectedPoints > currentPoints)
+            {
+                StatPoints += expectedPoints - currentPoints;
+            }
+            else if (expectedPoints < currentPoints)
+            {
+                var removePoints = currentPoints - expectedPoints;
+                StatPoints -= removePoints;
+                if (StatPoints < 0)
                 {
-                    StatPoints += expectedPoints - currentPoints;
+                    removePoints = Math.Abs(StatPoints);
+                    StatPoints = 0;
                 }
-                else if (expectedPoints < currentPoints)
+
+                var i = 0;
+                while (removePoints > 0 && StatPointAllocations.Sum() > 0)
                 {
-                    var removePoints = currentPoints - expectedPoints;
-                    StatPoints -= removePoints;
-                    if (StatPoints < 0)
+                    if (StatPointAllocations[i] > 0)
                     {
-                        removePoints = Math.Abs(StatPoints);
-                        StatPoints = 0;
+                        StatPointAllocations[i]--;
+                        removePoints--;
                     }
 
-                    var i = 0;
-                    while (removePoints > 0 && StatPointAllocations.Sum() > 0)
+                    i++;
+                    if (i >= (int)Stats.StatCount)
                     {
-                        if (StatPointAllocations[i] > 0)
-                        {
-                            StatPointAllocations[i]--;
-                            removePoints--;
-                        }
-
-                        i++;
-                        if (i >= (int) Stats.StatCount)
-                        {
-                            i = 0;
-                        }
+                        i = 0;
                     }
                 }
             }

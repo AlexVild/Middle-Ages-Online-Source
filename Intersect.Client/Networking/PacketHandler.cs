@@ -2833,6 +2833,7 @@ namespace Intersect.Client.Networking
             Globals.Me.Skillbook = packet.SkillBook;
             SkillsPanelController.RefreshAvailableSkillTypes();
             SkillsPanelController.RefreshDisplay = true;
+            SkillsPanelController.SkillPointsAvailable = packet.SkillPointsAvailable;
         }
     }
 }

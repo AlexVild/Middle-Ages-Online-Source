@@ -2735,7 +2735,7 @@ namespace Intersect.Server.Networking
                 skillBook[skill.SpellId] = new SkillbookInstance(skill.Equipped, skill.RequiredSkillPoints);
             }
 
-            player?.SendPacket(new SkillbookPacket(skillBook));
+            player?.SendPacket(new SkillbookPacket(skillBook, player?.SkillPointsAvailable ?? 0));
         }
     }
 }

@@ -85,6 +85,11 @@ namespace Intersect.Client.Interface.Game.Components
             FitParentToComponent();
         }
 
+        public void SetImageRenderColor(Color color)
+        {
+            Image.RenderColor = color;
+        }
+
         public void SetTooltipText(string text)
         {
             Frame.SetToolTipText(text);

@@ -192,6 +192,9 @@ namespace Intersect.Editor.Forms.Editors
                 nudBaseExp.Value = mEditorItem.BaseExp;
                 nudExpIncrease.Value = mEditorItem.ExpIncrease;
 
+                nudSpLvlMod.Value = mEditorItem.SkillPointLevelModulo;
+                nudSpPerLevel.Value = mEditorItem.SkillPointsPerLevel;
+
                 //Stat Increases
                 if (!mEditorItem.IncreasePercentage)
                 {
@@ -1633,6 +1636,16 @@ namespace Intersect.Editor.Forms.Editors
         {
             mEditorItem.StatIncrease[(int)Stats.Evasion] = (int)nudEvasionIncrease.Value;
             UpdateIncreases();
+        }
+
+        private void nudSpLvlMod_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.SkillPointLevelModulo = (int)nudSpLvlMod.Value;
+        }
+
+        private void nudSpPerLevel_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.SkillPointsPerLevel = (int)nudSpPerLevel.Value;
         }
     }
 

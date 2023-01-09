@@ -9,7 +9,6 @@ using Intersect.Server.Entities.PlayerData;
 using Intersect.Utilities;
 using Intersect.Server.Networking;
 using Intersect.GameObjects;
-using Intersect.Network.Packets.Server;
 using Intersect.Server.Database;
 using Intersect.Server.Localization;
 
@@ -23,7 +22,7 @@ namespace Intersect.Server.Entities
         public int SkillPointsAvailable => SkillBook
             .ToArray()
             .Where(spell => spell.Equipped)
-            .Aggregate(0, (acc, spell) => acc += spell.RequiredSkillPoints);
+            .Aggregate(SkillPointTotal, (acc, spell) => acc -= spell.RequiredSkillPoints);
 
         public int SkillPointTotal { get; set; }
 
@@ -213,6 +212,18 @@ namespace Intersect.Server.Entities
             PacketSender.SendSkillbookToClient(this);
 
             return true;
+        }
+
+        public void RecalculateSkillPoints()
+        {
+            var clsDescriptor = ClassBase.Get(ClassId);
+            if (clsDescriptor.SkillPointLevelModulo == 0 || clsDescriptor.SkillPointsPerLevel == 0)
+            {
+                return;
+            }
+
+            var spGainingLevels = (int)Math.Floor((float)Level / clsDescriptor.SkillPointLevelModulo);
+            SkillPointTotal = spGainingLevels * clsDescriptor.SkillPointsPerLevel;
         }
     }
 }
