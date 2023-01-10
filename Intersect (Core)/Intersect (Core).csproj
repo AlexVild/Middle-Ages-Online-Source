@@ -299,6 +299,7 @@
     <Compile Include="GameObjects\QuestListBase.cs" />
     <Compile Include="GameObjects\RecipeDescriptor.cs" />
     <Compile Include="GameObjects\RecipeRequirement.cs" />
+    <Compile Include="GameObjects\SpellBase.BonusEffects.cs" />
     <Compile Include="GameObjects\Switches and Variables\InstanceVariableBase.cs" />
     <Compile Include="GameObjects\Switches and Variables\VariableValue.cs" />
     <Compile Include="GameObjects\Timers\TimerDescriptor.cs" />

@@ -466,74 +466,7 @@ namespace Intersect.Server.Entities
 
         #endregion
 
-        #region Player Records
-        [Obsolete("Updated to use compiled queries")]
-        public void LoadRecords()
-        {
-            try
-            {
-                using (var context = DbInterface.CreatePlayerContext())
-                {
-                    PlayerRecords = context.Player_Record
-                        .Where(f => f.Player.Id == Id)
-                        .ToList();
-                    foreach (var record in PlayerRecords)
-                    {
-                        record.Teammates = context.Record_Teammate
-                            .Where(tm => tm.RecordInstanceId == record.Id)
-                            .ToList();
-                    }
-                    Log.Info($"Successfully loaded player records for {Name}. Count of records is {PlayerRecords.Count}");
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, $"Failed to load player records for {Name}.");
-            }
-        }
-        #endregion
-
-        #region Loot rolls
-        [Obsolete("Updated to use compiled queries")]
-        public void LoadLootRolls()
-        {
-            try
-            {
-                using (var context = DbInterface.CreatePlayerContext())
-                {
-                    LootRolls = context.Loot_Rolls
-                        .Where(f => f.PlayerId == Id)
-                        .ToList();
-                    Log.Info($"Successfully loaded loot rolls for {Name}. Count of rolls is {LootRolls.Count}");
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, $"Failed to load loot rolls for {Name}.");
-            }
-        }
-        #endregion
-
         #region Labels
-        [Obsolete("Updated to use compiled queries")]
-        public void LoadLabels()
-        {
-            try
-            {
-                using (var context = DbInterface.CreatePlayerContext())
-                {
-                    UnlockedLabels.AddRange(context.Player_Labels
-                        .Where(f => f.PlayerId == Id)
-                        .ToList());
-                    Log.Info($"Successfully loaded unlocked labels for {Name}. Count is {UnlockedLabels.Count}");
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, $"Failed to load labels for {Name}.");
-            }
-        }
-
         public static void DbRemoveLabel(Guid playerId, Guid labelId)
         {
             if (playerId == default || labelId == default)

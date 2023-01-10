@@ -182,9 +182,6 @@ namespace Intersect.GameObjects
 
         public bool TwoHanded { get; set; }
 
-        [Obsolete("Use Effects (List<EffectData>) instead")]
-        public EffectData Effect { get; set; }
-
         public int SlotCount { get; set; }
 
         [Column("Spell")]
@@ -454,6 +451,7 @@ namespace Intersect.GameObjects
             Consumable = new ConsumableData();
             Effects = new List<EffectData>();
             Color = new Color(255, 255, 255, 255);
+            SpecialAttack = new SpecialAttackData();
         }
 
     }
@@ -478,6 +476,12 @@ namespace Intersect.GameObjects
         public long ChargeTime { get; set; }
 
         public SpellBase SpecialAttack { get => SpellBase.Get(SpellId) ?? null; }
+
+        public SpecialAttackData()
+        {
+            SpellId = Guid.Empty;
+            ChargeTime = default;
+        }
     }
 
     [Owned]
@@ -515,7 +519,7 @@ namespace Intersect.GameObjects
         public SpecialAttackData SpecialAttack { get; set; }
 
         [NotMapped]
-        public List<EffectData> Effects { get; set; }
+        public List<EffectData> Effects { get; set; } = new List<EffectData>();
 
         [Column("Effects")]
         [JsonIgnore]
@@ -526,7 +530,7 @@ namespace Intersect.GameObjects
         }
 
         [NotMapped]
-        public List<AttackTypes> AttackTypes { get; set; }
+        public List<AttackTypes> AttackTypes { get; set; } = new List<AttackTypes>();
 
         [Column("AttackTypes")]
         [JsonIgnore]

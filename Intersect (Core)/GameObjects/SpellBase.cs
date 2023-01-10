@@ -214,7 +214,7 @@ namespace Intersect.GameObjects
         public int DamageType { get; set; } = 1;
 
         [NotMapped]
-        public List<AttackTypes> DamageTypes { get; set; }
+        public List<AttackTypes> DamageTypes { get; set; } = new List<AttackTypes>();
 
         [Column("AttackTypes")]
         [JsonIgnore]
@@ -351,7 +351,7 @@ namespace Intersect.GameObjects
         /// A mapping of some <see cref="ItemBase"/> ID mapped to its quantity
         /// </summary>
         [NotMapped]
-        public List<SpellCastingComponent> CastingComponents { get; set; }
+        public List<SpellCastingComponent> CastingComponents { get; set; } = new List<SpellCastingComponent>();
 
         public string[] GetComponentDisplay()
         {
@@ -389,8 +389,8 @@ namespace Intersect.GameObjects
             }
             CastingComponents.Add(new SpellCastingComponent(itemId, quantity));
         }
-        
-        public string SpellGroup { get; set; }
+
+        public string SpellGroup { get; set; } = string.Empty;
 
         public int RequiredSkillPoints { get; set; }
     }

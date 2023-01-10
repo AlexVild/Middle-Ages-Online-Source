@@ -11,7 +11,7 @@ namespace Intersect.Server.Database.GameData.Migrations
         }
 
         public static void MigrateItemBonusEffectsToList(GameContext context)
-        {
+        {/*
             if (context == null)
             {
                 throw new ArgumentNullException(nameof(context));
@@ -36,7 +36,7 @@ namespace Intersect.Server.Database.GameData.Migrations
 
             // Track our changes and save them or the work we've just done is lost.
             context.ChangeTracker.DetectChanges();
-            context.SaveChanges();
+            context.SaveChanges();*/
         }
     }
 }

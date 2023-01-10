@@ -3,14 +3,16 @@ using System;
 using Intersect.Server.Database.GameData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Intersect.Server.Migrations.Game
 {
     [DbContext(typeof(GameContext))]
-    partial class GameContextModelSnapshot : ModelSnapshot
+    [Migration("20230110154749_PassiveSpellMigration")]
+    partial class PassiveSpellMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1301,6 +1303,22 @@ namespace Intersect.Server.Migrations.Game
                             b1.HasOne("Intersect.GameObjects.ItemBase")
                                 .WithOne("Consumable")
                                 .HasForeignKey("Intersect.GameObjects.ConsumableData", "ItemBaseId")
+                                .OnDelete(DeleteBehavior.Cascade);
+                        });
+
+                    b.OwnsOne("Intersect.GameObjects.EffectData", "Effect", b1 =>
+                        {
+                            b1.Property<Guid>("ItemBaseId");
+
+                            b1.Property<int>("Percentage");
+
+                            b1.Property<byte>("Type");
+
+                            b1.ToTable("Items");
+
+                            b1.HasOne("Intersect.GameObjects.ItemBase")
+                                .WithOne("Effect")
+                                .HasForeignKey("Intersect.GameObjects.EffectData", "ItemBaseId")
                                 .OnDelete(DeleteBehavior.Cascade);
                         });
 

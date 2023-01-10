@@ -493,6 +493,7 @@
     <Compile Include="Database\PlayerData\Players\LabelInstance.cs" />
     <Compile Include="Database\PlayerData\Players\LootRollInstance.cs" />
     <Compile Include="Database\PlayerData\Players\MapExploredInstance.cs" />
+    <Compile Include="Database\PlayerData\Players\PassiveSpell.cs" />
     <Compile Include="Database\PlayerData\Players\Quest.cs" />
     <Compile Include="Database\PlayerData\Players\PlayerRecord.cs" />
     <Compile Include="Database\PlayerData\Players\RecipeInstance.cs" />
@@ -526,6 +527,7 @@
     <Compile Include="Database\PlayerData\PlayerContext.cs" />
     <Compile Include="Entities\Events\Event.cs" />
     <Compile Include="Entities\Player.Harvesting.cs" />
+    <Compile Include="Entities\Player.Passives.cs" />
     <Compile Include="Entities\Player.Recipes.cs" />
     <Compile Include="Entities\Player.SkillBook.cs" />
     <Compile Include="Entities\PlayerData\PlayerClassStats.cs" />
@@ -670,6 +672,10 @@
     <Compile Include="Migrations\20230104222457_SkillUnlocksMigration.cs" />
     <Compile Include="Migrations\20230104222457_SkillUnlocksMigration.designer.cs">
       <DependentUpon>20230104222457_SkillUnlocksMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20230110154913_PlayerPassiveSpellMigration.cs" />
+    <Compile Include="Migrations\20230110154913_PlayerPassiveSpellMigration.designer.cs">
+      <DependentUpon>20230110154913_PlayerPassiveSpellMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.cs" />
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.Designer.cs">
@@ -1004,6 +1010,18 @@
     <Compile Include="Migrations\Game\20230108234041_SkillPointLevelUpMigration.cs" />
     <Compile Include="Migrations\Game\20230108234041_SkillPointLevelUpMigration.designer.cs">
       <DependentUpon>20230108234041_SkillPointLevelUpMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20230110154749_PassiveSpellMigration.cs" />
+    <Compile Include="Migrations\Game\20230110154749_PassiveSpellMigration.designer.cs">
+      <DependentUpon>20230110154749_PassiveSpellMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20230110203951_PandaBonusEffectMigration.cs" />
+    <Compile Include="Migrations\Game\20230110203951_PandaBonusEffectMigration.designer.cs">
+      <DependentUpon>20230110203951_PandaBonusEffectMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20230110212822_DropItemColumnsMigration.cs" />
+    <Compile Include="Migrations\Game\20230110212822_DropItemColumnsMigration.designer.cs">
+      <DependentUpon>20230110212822_DropItemColumnsMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">

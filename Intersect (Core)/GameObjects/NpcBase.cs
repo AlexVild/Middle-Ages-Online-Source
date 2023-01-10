@@ -391,7 +391,7 @@ namespace Intersect.GameObjects
         public double TertiaryChance { get; set; } = 0.0;
 
         [NotMapped]
-        public List<AttackTypes> AttackTypes { get; set; }
+        public List<AttackTypes> AttackTypes { get; set; } = new List<AttackTypes>();
 
         [Column("AttackTypes")]
         [JsonIgnore]
@@ -419,7 +419,7 @@ namespace Intersect.GameObjects
             }
         }
 
-        public string Description { get; set; }
+        public string Description { get; set; } = string.Empty;
 
         public bool NotInBestiary { get; set; }
     }

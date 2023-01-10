@@ -75,9 +75,19 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
+            if (spell == null)
+            {
+                return false;
+            }
+
             if (!ignoreVitals && !MeetsSpellVitalReqs(spell))
             {
                 // Not enough vitals!
+                return false;
+            }
+
+            if (spell.SpellType == SpellTypes.Passive)
+            {
                 return false;
             }
 
@@ -129,6 +139,11 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
+            if (spell.SpellType == SpellTypes.Passive)
+            {
+                return false;
+            }
+
             if (CastTime != 0)
             {
                 // Currently casting!
@@ -176,6 +191,11 @@ namespace Intersect.Server.Entities
         public void StartCast(SpellBase spell, Entity target, bool instant = false)
         {
             if (spell == null)
+            {
+                return;
+            }
+
+            if (spell.SpellType == SpellTypes.Passive) 
             {
                 return;
             }
@@ -231,6 +251,11 @@ namespace Intersect.Server.Entities
         protected virtual bool ValidateCast(SpellBase spell, Entity target, bool ignoreVitals)
         {
             if (spell == null)
+            {
+                return false;
+            }
+
+            if (spell.SpellType == SpellTypes.Passive)
             {
                 return false;
             }
@@ -434,6 +459,11 @@ namespace Intersect.Server.Entities
         /// <param name="prayerTarget">The prayer's target</param>
         public virtual void UseSpell(SpellBase spell, int spellSlot, bool ignoreVitals = false, bool prayerSpell = false, byte prayerSpellDir = 0, Entity prayerTarget = null, bool instantCast = false)
         {
+            if (spell?.SpellType == SpellTypes.Passive)
+            {
+                return;
+            }
+
             CastTarget = Target;
             // We're actually doing the spell now - use our mats and if we fail, end
             if (!prayerSpell && !instantCast && !ValidateCast(spell, CastTarget, ignoreVitals))

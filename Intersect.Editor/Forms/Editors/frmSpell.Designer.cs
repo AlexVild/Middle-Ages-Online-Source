@@ -254,6 +254,7 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudDuration)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudHitRadius)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudCastRange)).BeginInit();
+            this.grpEvent.SuspendLayout();
             this.grpCombat.SuspendLayout();
             this.grpDamageTypes.SuspendLayout();
             this.grpStats.SuspendLayout();
@@ -308,8 +309,8 @@ namespace Intersect.Editor.Forms.Editors
             this.pnlContainer.Controls.Add(this.grpSpellCost);
             this.pnlContainer.Controls.Add(this.grpRequirements);
             this.pnlContainer.Controls.Add(this.grpTargetInfo);
-            this.pnlContainer.Controls.Add(this.grpEvent);
             this.pnlContainer.Controls.Add(this.grpCombat);
+            this.pnlContainer.Controls.Add(this.grpEvent);
             this.pnlContainer.Controls.Add(this.grpWarp);
             this.pnlContainer.Location = new System.Drawing.Point(221, 40);
             this.pnlContainer.Name = "pnlContainer";
@@ -1373,8 +1374,9 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpEvent.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpEvent.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpEvent.Controls.Add(this.cmbEvent);
             this.grpEvent.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpEvent.Location = new System.Drawing.Point(0, 500);
+            this.grpEvent.Location = new System.Drawing.Point(3, 494);
             this.grpEvent.Name = "grpEvent";
             this.grpEvent.Size = new System.Drawing.Size(441, 48);
             this.grpEvent.TabIndex = 40;
@@ -1386,7 +1388,6 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpCombat.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpCombat.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpCombat.Controls.Add(this.cmbEvent);
             this.grpCombat.Controls.Add(this.grpDamageTypes);
             this.grpCombat.Controls.Add(this.grpStats);
             this.grpCombat.Controls.Add(this.grpHotDot);
@@ -1415,7 +1416,7 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbEvent.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbEvent.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbEvent.FormattingEnabled = true;
-            this.cmbEvent.Location = new System.Drawing.Point(0, 0);
+            this.cmbEvent.Location = new System.Drawing.Point(6, 18);
             this.cmbEvent.Name = "cmbEvent";
             this.cmbEvent.Size = new System.Drawing.Size(425, 21);
             this.cmbEvent.TabIndex = 17;
@@ -3369,6 +3370,7 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudDuration)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudHitRadius)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudCastRange)).EndInit();
+            this.grpEvent.ResumeLayout(false);
             this.grpCombat.ResumeLayout(false);
             this.grpDamageTypes.ResumeLayout(false);
             this.grpDamageTypes.PerformLayout();

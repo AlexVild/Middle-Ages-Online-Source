@@ -1982,6 +1982,8 @@ namespace Intersect.Server.Database
                     MigrateDbSet(context.Player_Recipes, newPlayerContext.Player_Recipes);
                     MigrateDbSet(context.Player_Bestiary_Unlocks, newPlayerContext.Player_Bestiary_Unlocks);
                     MigrateDbSet(context.Player_Unlocked_Skills, newPlayerContext.Player_Unlocked_Skills);
+                    MigrateDbSet(context.Player_Passive_Spells, newPlayerContext.Player_Passive_Spells);
+                    MigrateDbSet(context.Player_Cosmetics, newPlayerContext.Player_Cosmetics);
 
                     newPlayerContext.ChangeTracker.DetectChanges();
                     newPlayerContext.SaveChanges();

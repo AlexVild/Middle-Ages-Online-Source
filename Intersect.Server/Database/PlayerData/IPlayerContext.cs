@@ -59,5 +59,7 @@ namespace Intersect.Server.Database.PlayerData
         DbSet<BestiaryUnlockInstance> Player_Bestiary_Unlocks { get; set; }
         
         DbSet<PlayerSkillInstance> Player_Unlocked_Skills { get; set; }
+
+        DbSet<PassiveSpell> Player_Passive_Spells { get; set; }
     }
 }

@@ -637,8 +637,6 @@ namespace Intersect.Editor.Forms.Editors
 
                 mEditorItem.TwoHanded = false;
                 mEditorItem.EquipmentSlot = 0;
-                mEditorItem.Effect.Type = EffectType.None;
-                mEditorItem.Effect.Percentage = 0;
 
                 mEditorItem.SlotCount = 0;
 
@@ -678,7 +676,6 @@ namespace Intersect.Editor.Forms.Editors
                 }
 
                 cmbEquipmentSlot.SelectedIndex = mEditorItem.EquipmentSlot;
-                cmbEquipmentBonus.SelectedIndex = (int) mEditorItem.Effect.Type;
 
                 // Whether this item type is stackable is not up for debate.
                 chkStackable.Checked = false;
@@ -1864,7 +1861,7 @@ namespace Intersect.Editor.Forms.Editors
             chkDamageSlash.Checked = false;
             chkDamageMagic.Checked = false;
 
-            foreach(var type in mEditorItem.AttackTypes)
+            foreach(var type in mEditorItem?.AttackTypes)
             {
                 switch(type)
                 {

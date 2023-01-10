@@ -117,20 +117,25 @@ namespace Intersect.Server.Entities
 
         public void PrepareSkill(Guid spellId)
         {
+            var descriptor = SpellBase.Get(spellId);
             if (!TryToggleSkillPrepare(spellId, true, out string failureReason))
             {
                 PacketSender.SendChatMsg(this, failureReason, Enums.ChatMessageType.Error, CustomColors.General.GeneralDisabled);
                 return;
             }
 
-            if (!TryTeachSpell(new Spell(spellId)))
-            {
-                PacketSender.SendChatMsg(this, "You already have this skill prepared!", Enums.ChatMessageType.Error, CustomColors.General.GeneralDisabled);
-            }
-            
             if (!TryGetSkillInSkillbook(spellId, out var skill))
             {
                 PacketSender.SendChatMsg(this, "This skill isn't in your skill book!", Enums.ChatMessageType.Error, CustomColors.General.GeneralDisabled);
+            }
+
+            if (descriptor?.SpellType == Enums.SpellTypes.Passive)
+            {
+                ActivatePassive(spellId);
+            }
+            else if (!TryTeachSpell(new Spell(spellId)))
+            {
+                PacketSender.SendChatMsg(this, "You already have this skill prepared!", Enums.ChatMessageType.Error, CustomColors.General.GeneralDisabled);
             }
 
             skill.Equipped = true;
@@ -144,14 +149,19 @@ namespace Intersect.Server.Entities
                 return;
             }
 
-            if (!TryForgetSpell(new Spell(spellId)))
-            {
-                PacketSender.SendChatMsg(this, "You never had this skill prepared!", Enums.ChatMessageType.Error, CustomColors.General.GeneralDisabled);
-            }
-
             if (!TryGetSkillInSkillbook(spellId, out var skill))
             {
                 PacketSender.SendChatMsg(this, "This skill isn't in your skill book!", Enums.ChatMessageType.Error, CustomColors.General.GeneralDisabled);
+            }
+
+            var descriptor = SpellBase.Get(spellId);
+            if (descriptor.SpellType == Enums.SpellTypes.Passive)
+            {
+                DeactivatePassive(spellId);
+            } 
+            else if (!TryForgetSpell(new Spell(spellId)))
+            {
+                PacketSender.SendChatMsg(this, "You never had this skill prepared!", Enums.ChatMessageType.Error, CustomColors.General.GeneralDisabled);
             }
 
             skill.Equipped = false;
@@ -208,6 +218,10 @@ namespace Intersect.Server.Entities
                 TryForgetSpell(new Spell(skill.SpellId));
                 SkillBook.Remove(skill);
                 DbInterface.Pool.QueueWorkItem(skill.RemoveSkillbookEntryDb);
+                if (SpellBase.Get(skill.SpellId)?.SpellType == Enums.SpellTypes.Passive)
+                {
+                    RemovePassive(skill.SpellId);
+                }
             }
 
             PacketSender.SendSkillbookToClient(this);

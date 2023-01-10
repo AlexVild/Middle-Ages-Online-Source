@@ -3321,7 +3321,7 @@ namespace Intersect.Server.Entities
                             Target = target;
                             UseSpell(itemBase.Spell, -1, true, instantCast: true);
                         }
-                        else if (!TryTeachSpell(new Spell(itemBase.SpellId)))
+                        else if (!TryAddSkillToBook(itemBase.SpellId))
                         {
                             return;
                         }
@@ -5272,9 +5272,17 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
-            if (SpellBase.Get(spell.SpellId) == null)
+            var descriptor = SpellBase.Get(spell.SpellId);
+
+            if (descriptor == null)
             {
                 return false;
+            }
+
+            if (descriptor.SpellType == SpellTypes.Passive)
+            {
+                ActivatePassive(spell.SpellId);
+                return true;
             }
 
             for (var i = 0; i < Options.MaxPlayerSkills; i++)
@@ -5296,6 +5304,13 @@ namespace Intersect.Server.Entities
 
         public bool KnowsSpell(Guid spellId)
         {
+            var descriptor = SpellBase.Get(spellId);
+
+            if (descriptor.SpellType == SpellTypes.Passive)
+            {
+                return TryGetPassive(spellId, out var passive) && passive.IsActive;
+            }
+
             for (var i = 0; i < Options.MaxPlayerSkills; i++)
             {
                 if (Spells[i].SpellId == spellId)
@@ -5338,15 +5353,20 @@ namespace Intersect.Server.Entities
 
         public void ForgetSpell(int spellSlot)
         {
-            if (!SpellBase.Get(Spells[spellSlot].SpellId).Bound)
-            {
-                Spells[spellSlot].Set(Spell.None);
-                PacketSender.SendPlayerSpellUpdate(this, spellSlot);
-            }
-            else
+            var spell = SpellBase.Get(Spells[spellSlot].SpellId);
+            if (spell.Bound)
             {
                 PacketSender.SendChatMsg(this, Strings.Combat.tryforgetboundspell, ChatMessageType.Spells);
+                return;
             }
+            if (spell.SpellType == SpellTypes.Passive)
+            {
+                DeactivatePassive(spell.Id);
+                return;
+            }
+
+            Spells[spellSlot].Set(Spell.None);
+            PacketSender.SendPlayerSpellUpdate(this, spellSlot);
         }
 
         public bool TryForgetSpell(Spell spell, bool sendUpdate = true)

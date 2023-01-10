@@ -745,6 +745,8 @@ namespace Intersect.Server.Database.PlayerData
                     .ThenInclude(p => p.BestiaryUnlocks)
                     .Include(p => p.Players)
                     .ThenInclude(p => p.SkillBook)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.PassiveSpells)
                     .FirstOrDefault()
             ) ??
             throw new InvalidOperationException();
@@ -787,6 +789,8 @@ namespace Intersect.Server.Database.PlayerData
                     .ThenInclude(p => p.BestiaryUnlocks)
                     .Include(p => p.Players)
                     .ThenInclude(p => p.SkillBook)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.PassiveSpells)
                     .FirstOrDefault()
             ) ??
             throw new InvalidOperationException();
@@ -828,6 +832,8 @@ namespace Intersect.Server.Database.PlayerData
                     .ThenInclude(p => p.BestiaryUnlocks)
                     .Include(p => p.Players)
                     .ThenInclude(p => p.SkillBook)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.PassiveSpells)
                     .FirstOrDefault()
             ) ??
             throw new InvalidOperationException();
@@ -869,6 +875,8 @@ namespace Intersect.Server.Database.PlayerData
                     .ThenInclude(p => p.BestiaryUnlocks)
                     .Include(p => p.Players)
                     .ThenInclude(p => p.SkillBook)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.PassiveSpells)
                     .FirstOrDefault()
                 ) ?? throw new InvalidOperationException();
 
@@ -919,6 +927,8 @@ namespace Intersect.Server.Database.PlayerData
                     .ThenInclude(p => p.BestiaryUnlocks)
                     .Include(p => p.Players)
                     .ThenInclude(p => p.SkillBook)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.PassiveSpells)
                     .FirstOrDefault()
                 ) ?? throw new InvalidOperationException();
 

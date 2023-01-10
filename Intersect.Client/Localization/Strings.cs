@@ -1115,11 +1115,11 @@ namespace Intersect.Client.Localization
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static Dictionary<int, LocalizedString> Stats = new Dictionary<int, LocalizedString>
             {
-                {0, @"Attack"},
-                {1, @"Ability Power"},
-                {2, @"Physical Defense"},
+                {0, @"Blunt Attack"},
+                {1, @"Magic Attack"},
+                {2, @"Blunt Defense"},
                 {3, @"Magic Defense"},
-                {4, @"Agility"},
+                {4, @"Speed"},
                 {5, @"Slash Attack"},
                 {6, @"Slash Resistance"},
                 {7, @"Pierce Attack"},
@@ -1131,15 +1131,15 @@ namespace Intersect.Client.Localization
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static Dictionary<int, LocalizedString> StatCounts = new Dictionary<int, LocalizedString>
             {
-                {0, @"Attack:"},
-                {1, @"Ability Power:"},
-                {2, @"Physical Defense:"},
-                {3, @"Magic Defense:"},
-                {4, @"Agility:"},
-                {5, @"Slash Attack:"},
-                {6, @"Slash Resistance:"},
-                {7, @"Pierce Attack:"},
-                {8, @"Pierce Resistance:"},
+                {0, @"Blunt Atk:"},
+                {1, @"Magic Atk:"},
+                {2, @"Blunt Def:"},
+                {3, @"Magic Def:"},
+                {4, @"Speed:"},
+                {5, @"Slash Atk:"},
+                {6, @"Slash Def:"},
+                {7, @"Pierce Atk:"},
+                {8, @"Pierce Def:"},
                 {9, @"Evasion:"},
                 {10, @"Accuracy:"},
             };
@@ -2017,11 +2017,11 @@ namespace Intersect.Client.Localization
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static Dictionary<int, LocalizedString> Stats = new Dictionary<int, LocalizedString>
             {
-                {0, @"Attack"},
-                {1, @"Ability Power"},
-                {2, @"Physical Defense"},
+                {0, @"Blunt Attack"},
+                {1, @"Magic Attack"},
+                {2, @"Blunt Defense"},
                 {3, @"Magic Defense"},
-                {4, @"Agility"},
+                {4, @"Speed"},
                 {5, @"Slash Attack"},
                 {6, @"Slash Resistance"},
                 {7, @"Pierce Attack"},
@@ -2084,17 +2084,17 @@ namespace Intersect.Client.Localization
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static Dictionary<int, LocalizedString> StatCounts = new Dictionary<int, LocalizedString>
             {
-                {0, @"Attack:"},
-                {1, @"Ability Power:"},
-                {2, @"Physical Defense:"},
-                {3, @"Magic Defense:"},
-                {4, @"Agility:"},
-                {5, @"Slash Attack"},
-                {6, @"Slash Resistance"},
-                {7, @"Pierce Attack"},
-                {8, @"Pierce Resistance"},
-                {9, @"Evasion"},
-                {10, @"Accuracy"},
+                {0, @"Blunt Atk:"},
+                {1, @"Magic Atk:"},
+                {2, @"Blunt Def:"},
+                {3, @"Magic Def:"},
+                {4, @"Speed:"},
+                {5, @"Slash Atk:"},
+                {6, @"Slash Def:"},
+                {7, @"Pierce Atk:"},
+                {8, @"Pierce Def:"},
+                {9, @"Evasion:"},
+                {10, @"Accuracy:"},
             };
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]

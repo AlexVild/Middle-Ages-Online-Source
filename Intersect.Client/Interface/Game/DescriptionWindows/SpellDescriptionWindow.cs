@@ -5,12 +5,15 @@ using Intersect.GameObjects;
 using Intersect.Client.General;
 using Intersect.Client.Localization;
 using System.Collections.Generic;
+using Intersect.Utilities;
 
 namespace Intersect.Client.Interface.Game.DescriptionWindows
 {
     public class SpellDescriptionWindow : DescriptionWindowBase
     {
         protected SpellBase mSpell;
+
+        bool IsPassive => mSpell != null && mSpell.SpellType == SpellTypes.Passive;
 
         public SpellDescriptionWindow(Guid spellId, int x, int y) : base(Interface.GameUi.GameCanvas, "DescriptionWindow")
         {
@@ -56,6 +59,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             {
                 case SpellTypes.CombatSpell:
                 case SpellTypes.WarpTo:
+                case SpellTypes.Passive:
                     SetupCombatInfo();
                     break;
                 case SpellTypes.Dash:
@@ -87,8 +91,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             header.SetTitle(mSpell.Name, Color.White);
 
             // Set up the spell type description.
-            Strings.SpellDescription.SpellTypes.TryGetValue((int) mSpell.SpellType, out var spellType);
-            header.SetSubtitle(spellType, Color.White);
+            header.SetSubtitle(mSpell.SpellType.GetDescription(), Color.White);
 
             // Set up the spelldescription based on what kind of spell it is.
             if (mSpell.SpellType == (int)SpellTypes.CombatSpell)
@@ -109,6 +112,11 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
 
         protected void SetupSpellInfo()
         {
+            if (IsPassive)
+            {
+                return;
+            }
+
             // Add a divider.
             AddDivider();
             
@@ -128,7 +136,6 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 }
             }
 
-            // Add cast time
             var castTime = Strings.SpellDescription.Instant;
             if (mSpell.CastDuration > 0)
             {
@@ -203,44 +210,46 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
 
             // Add a row component.
             var rows = AddRowContainer();
-
-            // Vital Damage, if 0 don't display!
-            // This bit is a bit iffy.. since in 
+ 
             var isHeal = false;
             var isDamage = false;
-            for (var i = 0; i < (int)Vitals.VitalCount; i++)
-            {
-                if (spell.Combat.VitalDiff[i] < 0)
-                {
-                    rows.AddKeyValueRow(Strings.SpellDescription.VitalRecovery[i], Math.Abs(spell.Combat.VitalDiff[i]).ToString());
-                    isHeal = true;
-                }
-                else if (spell.Combat.VitalDiff[i] > 0)
-                {
-                    rows.AddKeyValueRow(Strings.SpellDescription.VitalDamage[i], spell.Combat.VitalDiff[i].ToString());
-                    isDamage = true;
-                }
-            }
-
-            // Damage Type:
-            Strings.SpellDescription.DamageTypes.TryGetValue(spell.Combat.DamageType, out var damageType);
-            rows.AddKeyValueRow(Strings.SpellDescription.DamageType, damageType);
-
-            if (spell.Combat.Scaling > 0)
-            {
-                Strings.SpellDescription.Stats.TryGetValue(spell.Combat.ScalingStat, out var stat);
-                rows.AddKeyValueRow(Strings.SpellDescription.ScalingStat, stat);
-                rows.AddKeyValueRow(Strings.SpellDescription.ScalingPercentage, Strings.SpellDescription.Percentage.ToString(spell.Combat.Scaling));
-            }
-
-            // Crit Chance
-            if (spell.Combat.CritChance > 0)
-            {
-                rows.AddKeyValueRow(Strings.SpellDescription.CritChance, Strings.SpellDescription.Percentage.ToString(spell.Combat.CritChance));
-                rows.AddKeyValueRow(Strings.SpellDescription.CritMultiplier, Strings.SpellDescription.Multiplier.ToString(spell.Combat.CritMultiplier));
-            }
-
             var showDuration = false;
+            if (!IsPassive)
+            {
+                // Vital Damage, if 0 don't display!
+                for (var i = 0; i < (int)Vitals.VitalCount; i++)
+                {
+                    if (spell.Combat.VitalDiff[i] < 0)
+                    {
+                        rows.AddKeyValueRow(Strings.SpellDescription.VitalRecovery[i], Math.Abs(spell.Combat.VitalDiff[i]).ToString());
+                        isHeal = true;
+                    }
+                    else if (spell.Combat.VitalDiff[i] > 0)
+                    {
+                        rows.AddKeyValueRow(Strings.SpellDescription.VitalDamage[i], spell.Combat.VitalDiff[i].ToString());
+                        isDamage = true;
+                    }
+                }
+
+                // Damage Type:
+                Strings.SpellDescription.DamageTypes.TryGetValue(spell.Combat.DamageType, out var damageType);
+                rows.AddKeyValueRow(Strings.SpellDescription.DamageType, damageType);
+
+                if (spell.Combat.Scaling > 0)
+                {
+                    Strings.SpellDescription.Stats.TryGetValue(spell.Combat.ScalingStat, out var stat);
+                    rows.AddKeyValueRow(Strings.SpellDescription.ScalingStat, stat);
+                    rows.AddKeyValueRow(Strings.SpellDescription.ScalingPercentage, Strings.SpellDescription.Percentage.ToString(spell.Combat.Scaling));
+                }
+
+                // Crit Chance
+                if (spell.Combat.CritChance > 0)
+                {
+                    rows.AddKeyValueRow(Strings.SpellDescription.CritChance, Strings.SpellDescription.Percentage.ToString(spell.Combat.CritChance));
+                    rows.AddKeyValueRow(Strings.SpellDescription.CritMultiplier, Strings.SpellDescription.Multiplier.ToString(spell.Combat.CritMultiplier));
+                }
+            }
+            
             // Handle Stat Buffs
             var blankAdded = false;
             for (var i = 0; i < (int)Stats.StatCount; i++)
@@ -275,7 +284,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             }
 
             // Handle HoT and DoT displays.
-            if (spell.Combat.HoTDoT)
+            if (!IsPassive && spell.Combat.HoTDoT)
             {
                 showDuration = true;
                 rows.AddKeyValueRow(string.Empty, string.Empty);
@@ -299,7 +308,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             }
 
             // Show Stat Buff / Effect / HoT / DoT duration.
-            if (showDuration)
+            if (showDuration && !IsPassive)
             {
                 rows.AddKeyValueRow(Strings.SpellDescription.Duration, Strings.SpellDescription.Seconds.ToString(spell.Combat.Duration / 1000f));
             }

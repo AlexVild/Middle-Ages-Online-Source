@@ -165,10 +165,7 @@ namespace Intersect.Editor.Forms.Editors
             lblName.Text = Strings.SpellEditor.name;
             lblType.Text = Strings.SpellEditor.type;
             cmbType.Items.Clear();
-            for (var i = 0; i < Strings.SpellEditor.types.Count; i++)
-            {
-                cmbType.Items.Add(Strings.SpellEditor.types[i]);
-            }
+            cmbType.Items.AddRange(EnumExtensions.GetDescriptions(typeof(SpellTypes)));
 
             lblIcon.Text = Strings.SpellEditor.icon;
             lblDesc.Text = Strings.SpellEditor.description;
@@ -359,10 +356,25 @@ namespace Intersect.Editor.Forms.Editors
 
             if (cmbType.SelectedIndex == (int) SpellTypes.CombatSpell ||
                 cmbType.SelectedIndex == (int) SpellTypes.WarpTo ||
-                cmbType.SelectedIndex == (int) SpellTypes.Event)
+                cmbType.SelectedIndex == (int) SpellTypes.Event ||
+                cmbType.SelectedIndex == (int) SpellTypes.Passive)
             {
+                nudHPCost.Enabled = true;
+                nudMpCost.Enabled = true;
+                nudCooldownDuration.Enabled = true;
+                nudCastDuration.Enabled = true;
+                cmbCooldownGroup.Enabled = true;
+                chkIgnoreGlobalCooldown.Enabled = true;
+                chkIgnoreCdr.Enabled = true;
+
+                lblCastAnimation.Text = Strings.SpellEditor.castanimation;
+                lblHitAnimation.Text = Strings.SpellEditor.hitanimation;
+
                 grpTargetInfo.Show();
                 grpCombat.Show();
+                grpDamage.Show();
+                grpHotDot.Show();
+                grpEffect.Show();
                 cmbTargetType.SelectedIndex = (int) mEditorItem.Combat.TargetType;
                 UpdateTargetTypePanel();
 
@@ -408,6 +420,23 @@ namespace Intersect.Editor.Forms.Editors
                 cmbExtraEffect_SelectedIndexChanged(null, null);
 
                 PopulateDamageTypes();
+
+                if (cmbType.SelectedIndex == (int)SpellTypes.Passive) 
+                {
+                    lblCastAnimation.Text = "Prep. Anim:";
+                    lblHitAnimation.Text = "Active Anim.:";
+                    nudHPCost.Enabled = false;
+                    nudMpCost.Enabled = false;
+                    nudCooldownDuration.Enabled = false;
+                    nudCastDuration.Enabled = false;
+                    cmbCooldownGroup.Enabled = false;
+                    chkIgnoreGlobalCooldown.Enabled = false;
+                    chkIgnoreCdr.Enabled = false;
+
+                    grpDamage.Hide();
+                    grpHotDot.Hide();
+                    grpEffect.Hide();
+                }
             }
             else if (cmbType.SelectedIndex == (int) SpellTypes.Warp)
             {
@@ -1242,7 +1271,7 @@ namespace Intersect.Editor.Forms.Editors
             chkDamageSlash.Checked = false;
             chkDamageMagic.Checked = false;
 
-            foreach (var type in mEditorItem.Combat.DamageTypes)
+            foreach (var type in mEditorItem?.Combat?.DamageTypes)
             {
                 switch (type)
                 {

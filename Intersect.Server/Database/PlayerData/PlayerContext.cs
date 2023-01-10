@@ -91,6 +91,8 @@ namespace Intersect.Server.Database.PlayerData
         public DbSet<BestiaryUnlockInstance> Player_Bestiary_Unlocks { get; set; }
         
         public DbSet<PlayerSkillInstance> Player_Unlocked_Skills { get; set; }
+        
+        public DbSet<PassiveSpell> Player_Passive_Spells { get; set; }
 
         internal async ValueTask Commit(
             bool commit = false,
@@ -177,6 +179,10 @@ namespace Intersect.Server.Database.PlayerData
             modelBuilder.Entity<Player>()
                 .HasMany(player => player.SkillBook)
                 .WithOne(spellUnlock => spellUnlock.Player);
+
+            modelBuilder.Entity<Player>()
+                .HasMany(player => player.PassiveSpells)
+                .WithOne(passive => passive.Player);
         }
 
         public void Seed()
@@ -283,6 +289,9 @@ namespace Intersect.Server.Database.PlayerData
                 Entry(itm).State = EntityState.Detached;
 
             foreach (var itm in player.SkillBook)
+                Entry(itm).State = EntityState.Detached;
+
+            foreach (var itm in player.PassiveSpells)
                 Entry(itm).State = EntityState.Detached;
         }
 

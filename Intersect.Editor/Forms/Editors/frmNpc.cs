@@ -1408,7 +1408,7 @@ namespace Intersect.Editor.Forms.Editors
             chkDamageSlash.Checked = false;
             chkDamageMagic.Checked = false;
 
-            foreach (var type in mEditorItem.AttackTypes)
+            foreach (var type in mEditorItem?.AttackTypes)
             {
                 switch (type)
                 {
