@@ -138,7 +138,10 @@ namespace Intersect.Client.Interface.Game.Components
 
         public void HoverEnter()
         {
-            SelfContainer.Texture = RowHoverTexture;
+            if (!UseCheckbox.IsDisabled)
+            {
+                SelfContainer.Texture = RowHoverTexture;
+            }
         }
 
         private void SelfContainer_HoverEnter(Base sender, EventArgs arguments)
