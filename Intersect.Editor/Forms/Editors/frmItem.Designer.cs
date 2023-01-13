@@ -1664,6 +1664,11 @@ namespace Intersect.Editor.Forms.Editors
             this.nudEffectPercent.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.nudEffectPercent.ForeColor = System.Drawing.Color.Gainsboro;
             this.nudEffectPercent.Location = new System.Drawing.Point(9, 177);
+            this.nudEffectPercent.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
             this.nudEffectPercent.Name = "nudEffectPercent";
             this.nudEffectPercent.Size = new System.Drawing.Size(177, 20);
             this.nudEffectPercent.TabIndex = 55;

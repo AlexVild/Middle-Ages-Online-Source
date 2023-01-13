@@ -282,6 +282,15 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                     showDuration = true;
                 }
             }
+            if (spell.BonusEffects.Count > 0)
+            {
+                rows.AddKeyValueRow(string.Empty, string.Empty);
+                foreach (var effect in spell.ActiveEffects)
+                {
+                    rows.AddKeyValueRow($"{effect.Type.GetDescription()}", $"{(effect.Percentage > 0 ? "" : "-")}{effect.Percentage}%");
+                }
+                showDuration = true;
+            }
 
             // Handle HoT and DoT displays.
             if (!IsPassive && spell.Combat.HoTDoT)
@@ -304,7 +313,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             {
                 showDuration = true;
                 rows.AddKeyValueRow(string.Empty, string.Empty);
-                rows.AddKeyValueRow(Strings.SpellDescription.Effect, Strings.SpellDescription.Effects[(int) spell.Combat.Effect]);
+                rows.AddKeyValueRow($"{Strings.SpellDescription.Effect} {Strings.SpellDescription.Effects[(int)spell.Combat.Effect]}", null);
             }
 
             // Show Stat Buff / Effect / HoT / DoT duration.

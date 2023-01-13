@@ -981,7 +981,7 @@ namespace Intersect.Client.Networking
             }
 
             player.Stat = packet.Stats;
-            player.TrueStats = packet.TrueStats;
+            player.ActivePassives = packet.ActivePassives?.ToList() ?? new List<Guid>();
         }
 
         //EntityDirectionPacket

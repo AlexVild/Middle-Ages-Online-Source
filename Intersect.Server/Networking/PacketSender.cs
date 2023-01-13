@@ -1022,9 +1022,9 @@ namespace Intersect.Server.Networking
                 }
             }
 
-            if (en.GetEntityType() == EntityTypes.Player)
+            if (en is Player ply)
             {
-                return new PlayerStatsPacket(en.Id, en.GetEntityType(), en.MapId, stats, trueStats);
+                return new PlayerStatsPacket(ply.Id, ply.GetEntityType(), ply.MapId, stats, trueStats, ply.ActivePassives.Select(s => s.Id).ToArray());
             }
             else
             {

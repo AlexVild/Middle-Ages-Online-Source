@@ -3034,6 +3034,17 @@ namespace Intersect.Client.Entities
                 value += item.GetEffectPercentage(effect);
             }
 
+            foreach (var spellId in ActivePassives)
+            {
+                var descriptor = SpellBase.Get(spellId);
+                if (descriptor == default || !descriptor.BonusEffectsEnabled.Contains(effect))
+                {
+                    continue;
+                }
+                
+                value += descriptor.GetBonusEffectPercentage(effect);
+            }
+
             return value;
         }
 
@@ -3053,6 +3064,26 @@ namespace Intersect.Client.Entities
                 foreach (var effect in item.EffectsEnabled)
                 {
                     var amt = item.GetEffectPercentage(effect);
+                    if (!effectValues.ContainsKey(effect))
+                    {
+                        effectValues[effect] = amt;
+                        continue;
+                    }
+                    effectValues[effect] += amt;
+                }
+            }
+
+            foreach (var spellId in ActivePassives)
+            {
+                var descriptor = SpellBase.Get(spellId);
+                if (descriptor == default)
+                {
+                    continue;
+                }
+
+                foreach (var effect in descriptor.BonusEffectsEnabled)
+                {
+                    var amt = descriptor.GetBonusEffectPercentage(effect);
                     if (!effectValues.ContainsKey(effect))
                     {
                         effectValues[effect] = amt;

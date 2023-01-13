@@ -12,6 +12,9 @@ namespace Intersect.GameObjects
         [NotMapped]
         public List<EffectData> BonusEffects { get; set; }
 
+        [NotMapped]
+        public List<EffectData> ActiveEffects => BonusEffects?.Where(effect => effect.Percentage != 0)?.ToList() ?? new List<EffectData>();
+
         [Column("BonusEffects")]
         [JsonIgnore]
         public string BonusEffectsJson
@@ -30,7 +33,7 @@ namespace Intersect.GameObjects
         [NotMapped, JsonIgnore]
         public EffectType[] BonusEffectsEnabled
         {
-            get => BonusEffects.Select(effect => effect.Type).ToArray();
+            get => BonusEffects.Where(effect => effect.Percentage != 0).Select(effect => effect.Type).ToArray();
         }
 
         public void SetBonusEffectOfType(EffectType type, int value)

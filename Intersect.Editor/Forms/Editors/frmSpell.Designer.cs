@@ -1428,6 +1428,11 @@ namespace Intersect.Editor.Forms.Editors
             this.nudBonusAmt.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.nudBonusAmt.ForeColor = System.Drawing.Color.Gainsboro;
             this.nudBonusAmt.Location = new System.Drawing.Point(111, 138);
+            this.nudBonusAmt.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
             this.nudBonusAmt.Name = "nudBonusAmt";
             this.nudBonusAmt.Size = new System.Drawing.Size(104, 20);
             this.nudBonusAmt.TabIndex = 40;

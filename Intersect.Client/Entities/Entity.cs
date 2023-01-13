@@ -157,6 +157,8 @@ namespace Intersect.Client.Entities
         public int[] Stat = new int[(int) Stats.StatCount];
 
         public int[] TrueStats = new int[(int)Stats.StatCount];
+        
+        public List<Guid> ActivePassives = new List<Guid>();
 
         public int Target = -1;
 
