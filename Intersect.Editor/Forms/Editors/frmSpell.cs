@@ -323,6 +323,8 @@ namespace Intersect.Editor.Forms.Editors
 
                 UpdateSpellTypePanels();
 
+                RefreshBonusEffects(true);
+
                 if (mChanged.IndexOf(mEditorItem) == -1)
                 {
                     mChanged.Add(mEditorItem);
@@ -339,6 +341,30 @@ namespace Intersect.Editor.Forms.Editors
             UpdateToolStripItems();
         }
 
+        private void RefreshBonusEffects(bool clear)
+        {
+            var selectedIndex = lstBonusEffects.SelectedIndex;
+            lstBonusEffects.Items.Clear();
+            foreach (EffectType effect in Enum.GetValues(typeof(EffectType)))
+            {
+                if (effect == EffectType.None)
+                {
+                    continue;
+                }
+                var description = effect.GetDescription();
+                var amount = mEditorItem.GetBonusEffectPercentage(effect);
+                lstBonusEffects.Items.Add($"{description}: {amount}%");
+            }
+            if (clear)
+            {
+                lstBonusEffects.SelectedIndex = -1;
+            }
+            else if (selectedIndex < lstBonusEffects.Items.Count)
+            {
+                lstBonusEffects.SelectedIndex = selectedIndex;
+            }
+        }
+
         private void RefreshComponentsList()
         {
             lstComponents.Items.Clear();
@@ -352,6 +378,7 @@ namespace Intersect.Editor.Forms.Editors
             grpWarp.Hide();
             grpDash.Hide();
             grpEvent.Hide();
+            grpBonusEffects.Hide();
             cmbTargetType.Enabled = true;
 
             if (cmbType.SelectedIndex == (int) SpellTypes.CombatSpell ||
@@ -374,6 +401,7 @@ namespace Intersect.Editor.Forms.Editors
                 grpCombat.Show();
                 grpDamage.Show();
                 grpHotDot.Show();
+                grpDamageTypes.Show();
                 grpEffect.Show();
                 cmbTargetType.SelectedIndex = (int) mEditorItem.Combat.TargetType;
                 UpdateTargetTypePanel();
@@ -436,6 +464,8 @@ namespace Intersect.Editor.Forms.Editors
                     grpDamage.Hide();
                     grpHotDot.Hide();
                     grpEffect.Hide();
+                    grpBonusEffects.Show();
+                    grpDamageTypes.Hide();
                 }
             }
             else if (cmbType.SelectedIndex == (int) SpellTypes.Warp)
@@ -1450,6 +1480,20 @@ namespace Intersect.Editor.Forms.Editors
         private void nudSkillPoints_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.RequiredSkillPoints = (int)nudSkillPoints.Value;
+        }
+
+        private void nudBonusAmt_ValueChanged(object sender, EventArgs e)
+        {
+            if (lstBonusEffects.SelectedIndex == -1)
+            {
+                return;
+            }
+
+            // Compensate for excluded "None" type
+            EffectType selectedEffect = (EffectType)(lstBonusEffects.SelectedIndex + 1);
+
+            mEditorItem.SetBonusEffectOfType(selectedEffect, (int)nudBonusAmt.Value);
+            RefreshBonusEffects(false);
         }
     }
 }

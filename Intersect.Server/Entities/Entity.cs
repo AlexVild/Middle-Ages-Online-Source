@@ -2052,7 +2052,7 @@ namespace Intersect.Server.Entities
 
                 //Calculate the killers luck (If they are a player)
                 var playerKiller = killer as Player;
-                var luck = 1 + playerKiller?.GetEquipmentBonusEffect(EffectType.Luck) / 100f;
+                var luck = 1 + playerKiller?.GetBonusEffectTotal(EffectType.Luck) / 100f;
 
                 Guid lootOwner = Guid.Empty;
 

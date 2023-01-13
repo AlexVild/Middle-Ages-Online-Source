@@ -35,7 +35,14 @@ namespace Intersect.GameObjects
 
         public void SetBonusEffectOfType(EffectType type, int value)
         {
-            BonusEffects.FindAll(effect => effect.Type == type).Select(effect => effect.Percentage = value);
+            var effects = BonusEffects.FindAll(effect => effect.Type == type);
+            if (effects.Count == 0)
+            {
+                BonusEffects.Add(new EffectData(type, value));
+                return;
+            }
+
+            BonusEffects.FindAll(effect => effect.Type == type).ForEach(effect => effect.Percentage = value);
         }
     }
 }

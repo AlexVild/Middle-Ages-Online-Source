@@ -1428,7 +1428,7 @@ namespace Intersect.Server.Entities
                 ComboExp += CalculateComboExperience(amount, partyCombo);
             }
 
-            expToGive += (int)(amount * GetEquipmentBonusEffect(EffectType.EXP, 0) / 100);
+            expToGive += (int)(amount * GetBonusEffectTotal(EffectType.EXP, 0) / 100);
 
             if (expToGive > 0)
             {
@@ -1810,7 +1810,7 @@ namespace Intersect.Server.Entities
                 attackTime = (int)Math.Floor(attackTime * Options.Instance.CombatOpts.SwiftAttackSpeedMod);
             }
 
-            attackTime = CalculateEffectBonus(attackTime, EffectType.Swiftness, true);
+            attackTime = ApplyEffectBonusToValue(attackTime, EffectType.Swiftness, true);
 
             return
                 attackTime -
@@ -3757,20 +3757,16 @@ namespace Intersect.Server.Entities
         /// <param name="effect">The <see cref="EffectType"/> to retrieve the amount for.</param>
         /// <param name="startValue">The starting value to which we're adding our gear amount.</param>
         /// <returns></returns>
-        public int GetEquipmentBonusEffect(EffectType effect, int startValue = 0)
+        public int GetBonusEffectTotal(EffectType effect, int startValue = 0)
         {
             var value = startValue;
 
             foreach(var item in EquippedItems)
             {
-                if (!item.Descriptor.EffectsEnabled.Contains(effect))
-                {
-                    continue;
-                }
                 value += item.Descriptor.GetEffectPercentage(effect);
             }
 
-            return value;
+            return value + PassiveEffectTotal(effect);
         }
 
         public int GetEquipmentVitalRegen(Vitals vital)
@@ -7462,7 +7458,7 @@ namespace Intersect.Server.Entities
             {
                 // No, handle singular cooldown as normal.
 
-                var cooldownReduction = 1 - (item.IgnoreCooldownReduction ? 0 : GetEquipmentBonusEffect(EffectType.CooldownReduction) / 100f);
+                var cooldownReduction = 1 - (item.IgnoreCooldownReduction ? 0 : GetBonusEffectTotal(EffectType.CooldownReduction) / 100f);
                 AssignItemCooldown(item.Id, Timing.Global.MillisecondsUtc + (long)(item.Cooldown * cooldownReduction));
                 PacketSender.SendItemCooldown(this, item.Id);
             }
@@ -7488,7 +7484,7 @@ namespace Intersect.Server.Entities
             else
             {
                 // No, handle singular cooldown as normal.
-                var cooldownReduction = 1 - (spell.IgnoreCooldownReduction ? 0 : GetEquipmentBonusEffect(EffectType.CooldownReduction) / 100f);
+                var cooldownReduction = 1 - (spell.IgnoreCooldownReduction ? 0 : GetBonusEffectTotal(EffectType.CooldownReduction) / 100f);
                 AssignSpellCooldown(spell.Id, Timing.Global.MillisecondsUtc + (long)(spell.CooldownDuration * cooldownReduction));
                 PacketSender.SendSpellCooldown(this, spell.Id);
             }
@@ -7507,7 +7503,7 @@ namespace Intersect.Server.Entities
             }
 
             // Calculate our global cooldown.
-            var cooldownReduction = 1 - GetEquipmentBonusEffect(EffectType.CooldownReduction) / 100f;
+            var cooldownReduction = 1 - GetBonusEffectTotal(EffectType.CooldownReduction) / 100f;
             var cooldown = Timing.Global.MillisecondsUtc + (long)(Options.Combat.GlobalCooldownDuration * cooldownReduction);
 
             // Go through each item and spell to assign this cooldown.
@@ -7560,7 +7556,7 @@ namespace Intersect.Server.Entities
                 return;
             }
 
-            var cooldownReduction = 1 - (ignoreCdr ? 0 : GetEquipmentBonusEffect(EffectType.CooldownReduction) / 100f);
+            var cooldownReduction = 1 - (ignoreCdr ? 0 : GetBonusEffectTotal(EffectType.CooldownReduction) / 100f);
 
             // Retrieve a list of all items and/or spells depending on our settings to set the cooldown for.
             var matchingItems = Array.Empty<ItemBase>();
@@ -7724,9 +7720,9 @@ namespace Intersect.Server.Entities
         /// <param name="amount"></param>
         /// <param name="effect"></param>
         /// <returns></returns>
-        public int CalculateEffectBonus(int amount, EffectType effect, bool subtractive = false)
+        public int ApplyEffectBonusToValue(int amount, EffectType effect, bool subtractive = false)
         {
-            int effectAmt = GetEquipmentBonusEffect(effect, 0);
+            int effectAmt = GetBonusEffectTotal(effect, 0);
 
             if (effectAmt <= 0) return amount;
 
@@ -7749,16 +7745,16 @@ namespace Intersect.Server.Entities
         /// <param name="amount"></param>
         /// <param name="effect"></param>
         /// <returns></returns>
-        public double CalculateEffectBonus(double amount, EffectType effect)
+        public double ApplyEffectBonusToValue(double amount, EffectType effect)
         {
-            int effectAmt = GetEquipmentBonusEffect(effect, 0);
+            int effectAmt = GetBonusEffectTotal(effect, 0);
 
             if (effectAmt <= 0) return amount;
 
             float effectMod = effectAmt / 100f;
             amount *= (1 + effectMod);
 
-            return amount;
+            return amount + PassiveEffectTotal(effect);
         }
 
         //TODO: Clean all of this stuff up
@@ -8422,7 +8418,7 @@ namespace Intersect.Server.Entities
 
                 //Calculate the killers luck (If they are a player)
                 var playerKiller = killer as Player;
-                var luck = 1 + playerKiller?.GetEquipmentBonusEffect(EffectType.Luck) / 100f;
+                var luck = 1 + playerKiller?.GetBonusEffectTotal(EffectType.Luck) / 100f;
 
                 Guid lootOwner = Guid.Empty;
                 //Player drop rates
@@ -8466,7 +8462,7 @@ namespace Intersect.Server.Entities
 
         public double GetLuckModifier()
         {
-            return 1 + GetEquipmentBonusEffect(EffectType.Luck) / 100f;
+            return 1 + GetBonusEffectTotal(EffectType.Luck) / 100f;
         }
 
         #region Labels

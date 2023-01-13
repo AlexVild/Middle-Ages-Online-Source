@@ -83,7 +83,7 @@ namespace Intersect.Server.Entities
             {
                 if (owner != null)
                 {
-                    var ownerLuck = 1 + owner.GetEquipmentBonusEffect(EffectType.Luck) / 100f;
+                    var ownerLuck = 1 + owner.GetBonusEffectTotal(EffectType.Luck) / 100f;
                     var randomChance = Randomization.Next(1, 100001);
                     if (randomChance < (Options.AmmoRetrieveChance * 1000) * ownerLuck)
                     {

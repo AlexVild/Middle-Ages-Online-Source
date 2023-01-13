@@ -51,9 +51,13 @@ namespace Intersect.Utilities
             return string.Empty;
         }
 
-        public static string[] GetDescriptions(Type enumType)
+        public static string[] GetDescriptions(Type enumType, string except = null)
         {
-            return Enum.GetValues(enumType).Cast<Enum>().Select(value => value.GetDescription()).ToArray();
+            return Enum.GetValues(enumType)
+                .Cast<Enum>()
+                .Select(value => value.GetDescription())
+                .Where(value => string.IsNullOrEmpty(except) || value != except)
+                .ToArray();
         }
 
         public static T GetValueFromDescription<T>(string description) where T : Enum

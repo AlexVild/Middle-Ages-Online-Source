@@ -53,7 +53,7 @@ namespace Intersect.Server.Entities
 
         public override bool IsCriticalHit(int critChance)
         {
-            critChance = CalculateEffectBonus(critChance, EffectType.Affinity);
+            critChance = ApplyEffectBonusToValue(critChance, EffectType.Affinity);
 
             return base.IsCriticalHit(critChance);
         }
@@ -81,13 +81,13 @@ namespace Intersect.Server.Entities
                 if (IsCriticalHit(cls.CritChance))
                 {
                     critMultiplier = cls.CritChance;
-                    critMultiplier = CalculateEffectBonus(critMultiplier, EffectType.CritBonus);
+                    critMultiplier = ApplyEffectBonusToValue(critMultiplier, EffectType.CritBonus);
                 }
             }
             else if (weapon != null && spell == null && IsCriticalHit(weapon.CritChance))
             {
                 critMultiplier = weapon.CritMultiplier;
-                critMultiplier = CalculateEffectBonus(critMultiplier, EffectType.CritBonus);
+                critMultiplier = ApplyEffectBonusToValue(critMultiplier, EffectType.CritBonus);
             } else if (spell != null && spell.Combat != null)
             {
                 var spellCrit = false;
@@ -103,7 +103,7 @@ namespace Intersect.Server.Entities
                 if (spellCrit)
                 {
                     critMultiplier += spell.Combat.CritMultiplier;
-                    critMultiplier = CalculateEffectBonus(critMultiplier, EffectType.CritBonus);
+                    critMultiplier = ApplyEffectBonusToValue(critMultiplier, EffectType.CritBonus);
                 }
             }
 
@@ -412,7 +412,7 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
-            var lifesteal = GetEquipmentBonusEffect(EffectType.Lifesteal) / 100f;
+            var lifesteal = GetBonusEffectTotal(EffectType.Lifesteal) / 100f;
             var healthRecovered = lifesteal * damage;
             if (healthRecovered <= 0)
             {

@@ -80,5 +80,17 @@ namespace Intersect.Server.Entities
 
             return new Tuple<int, int>(flatStats, percentageStats);
         }
+
+        public int PassiveEffectTotal(EffectType effect)
+        {
+            var total = 0;
+
+            foreach(var passive in ActivePassives.ToArray())
+            {
+                total += passive.GetBonusEffectPercentage(effect);
+            }
+
+            return total;
+        }
     }
 }
