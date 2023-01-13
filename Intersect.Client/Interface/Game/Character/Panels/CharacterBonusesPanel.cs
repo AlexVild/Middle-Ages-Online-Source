@@ -59,6 +59,12 @@ namespace Intersect.Client.Interface.Game.Character.Panels
 
         private bool Refresh => CharacterBonusesPanelController.Refresh;
 
+        protected ImagePanel PassivesContainer { get; set; }
+        protected Label PassivesLabel { get; set; }
+        protected Label NoPassivesLabel { get; set; }
+        protected ScrollControl PassivesScrollContainer { get; set; }
+        protected ComponentList<GwenComponent> Passives { get; set; } = new ComponentList<GwenComponent>();
+
         public CharacterBonusesPanel(ImagePanel panelBackground)
         {
             mParentContainer = panelBackground;
@@ -69,8 +75,18 @@ namespace Intersect.Client.Interface.Game.Character.Panels
             {
                 Text = NoBonusesText
             };
-
             BonusContainer = new ScrollControl(BonusBackground, "BonusContainer");
+
+            PassivesContainer = new ImagePanel(mBackground, "PassivesContainer");
+            PassivesLabel = new Label(mBackground, "PassivesLabel")
+            {
+                Text = "PASSIVE SKILLS"
+            };
+            NoPassivesLabel = new Label(PassivesContainer, "NoPassivesLabel")
+            {
+                Text = "No passive skills are currently active."
+            };
+            PassivesScrollContainer = new ScrollControl(PassivesContainer, "PassivesScrollContainer");
 
             mBackground.LoadJsonUi(Framework.File_Management.GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
         }
@@ -84,6 +100,7 @@ namespace Intersect.Client.Interface.Game.Character.Panels
         public override void Hide()
         {
             ClearBonusRows();
+            ClearPassiveRows();
             base.Hide();
         }
 
@@ -91,6 +108,12 @@ namespace Intersect.Client.Interface.Game.Character.Panels
         {
             BonusRows?.DisposeAll();
             BonusContainer?.ClearCreatedChildren();
+        }
+
+        private void ClearPassiveRows()
+        {
+            Passives?.DisposeAll();
+            PassivesScrollContainer?.ClearCreatedChildren();
         }
 
         private Tuple<float, double> GetCritInfo()
@@ -162,17 +185,52 @@ namespace Intersect.Client.Interface.Game.Character.Panels
             if (critInfo == null && bonusEffects == null)
             {
                 NoBonusesLabel.Show();
+            }
+            else
+            {
+                NoBonusesLabel.Hide();
+                var yStart = 0;
+                AddCritInfo(critInfo, yStart, out var y);
+                AddAttackSpeed(attackSpeed, y, out y);
+                AddBonusEffectInfo(bonusEffects, y, out _);
+
+                BonusRows.InitializeAll();
+            }
+
+            RefreshPassiveSkillsDisplay();
+        }
+
+        public void RefreshPassiveSkillsDisplay()
+        {
+            if (Globals.Me?.ActivePassives?.Count <= 0)
+            {
+                NoPassivesLabel.Show();
                 return;
             }
 
-            NoBonusesLabel.Hide();
+            NoPassivesLabel.Hide();
 
-            var yStart = 0;
-            AddCritInfo(critInfo, yStart, out var y);
-            AddAttackSpeed(attackSpeed, y, out y);
-            AddBonusEffectInfo(bonusEffects, y, out _);
+            ClearPassiveRows();
 
-            BonusRows.InitializeAll();
+            var idx = 0;
+            foreach (var passive in Globals.Me?.ActivePassives.OrderBy(id => SpellBase.GetName(id)).ToArray())
+            {
+                var row = new PassiveRowComponent(
+                    PassivesScrollContainer,
+                    $"Passive_{idx}",
+                    passive,
+                    Passives);
+
+                row.Initialize();
+                row.SetPosition(row.X, row.Height * idx);
+
+                if (idx % 2 == 1)
+                {
+                    row.SetBanding();
+                }
+
+                idx++;
+            }
         }
 
         private void AddCritInfo(Tuple<float, double> critInfo, int yStart, out int yEnd)

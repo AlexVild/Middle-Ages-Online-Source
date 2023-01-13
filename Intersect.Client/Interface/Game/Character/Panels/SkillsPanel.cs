@@ -78,8 +78,6 @@ namespace Intersect.Client.Interface.Game.Character.Panels
         private ScrollControl SkillsScrollContainer { get; set; }
         private ComponentList<GwenComponent> SkillRows { get; set; } = new ComponentList<GwenComponent>();
 
-        private List<string> AvailableSkillTypes = new List<string>();
-
         private Label SkillPointsRemaining;
 
         public SkillsPanel(ImagePanel characterWindow)
@@ -166,7 +164,7 @@ namespace Intersect.Client.Interface.Game.Character.Panels
             }
 
             var idx = 0;
-            foreach(var skillKv in Globals.Me?.Skillbook.ToArray().OrderBy(kv => SpellBase.GetName(kv.Key)))
+            foreach(var skillKv in Globals.Me?.Skillbook.OrderBy(kv => SpellBase.GetName(kv.Key)).ToArray())
             {
                 var descriptor = SpellBase.Get(skillKv.Key);
 

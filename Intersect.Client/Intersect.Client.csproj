@@ -156,6 +156,7 @@
     <Compile Include="Interface\Game\Components\ImageLabelComponent.cs" />
     <Compile Include="Interface\Game\Components\LabelRowComponent.cs" />
     <Compile Include="Interface\Game\Components\NumberContainerComponent.cs" />
+    <Compile Include="Interface\Game\Components\PassiveRowComponent.cs" />
     <Compile Include="Interface\Game\Components\ProgressBarComponent.cs" />
     <Compile Include="Interface\Game\Components\RecipeRequirementComponent.cs" />
     <Compile Include="Interface\Game\Components\RecipeRequirementProgressBarComponent.cs" />

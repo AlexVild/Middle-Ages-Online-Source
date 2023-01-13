@@ -70,7 +70,7 @@ namespace Intersect.Client.Interface.Game.Components
         public override void Initialize()
         {
             SelfContainer = new ImagePanel(ParentContainer, ComponentName);
-            Image = new SpellImageFrameComponent(SelfContainer, "SpellImage", Frame, Spell.Icon, TextureType.Spell, 1, 8, SpellId);
+            Image = new SpellImageFrameComponent(SelfContainer, "SpellImage", Frame, Spell?.Icon, TextureType.Spell, 1, 8, SpellId);
 
             Title = new Label(SelfContainer, "SkillName")
             {
