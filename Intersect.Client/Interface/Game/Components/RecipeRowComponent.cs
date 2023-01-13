@@ -17,7 +17,7 @@ namespace Intersect.Client.Interface.Game.Components
 {
     public class RecipeRowComponent : GwenComponent
     {
-        string Frame => Unlocked ? "character_resource_unlocked_bg.png" : "character_resource_locked_bg.png";
+        string Frame => Unlocked ? "character_resource_unlocked_bg.png" : "character_resource_disabled_bg.png";
         private ImageFrameComponent Image { get; set; }
         private ImagePanel RequirementsPanel { get; set; }
 
@@ -106,6 +106,10 @@ namespace Intersect.Client.Interface.Game.Components
             HintTemplate.SetTextColor(HintColor, Label.ControlState.Normal);
 
             Image.Initialize();
+            if (!Unlocked)
+            {
+                Image.SetImageRenderColor(new Color(160, 255, 255, 255));
+            }
             FormatHint();
         }
 

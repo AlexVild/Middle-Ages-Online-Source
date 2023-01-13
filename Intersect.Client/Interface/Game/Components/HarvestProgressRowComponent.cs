@@ -9,7 +9,7 @@ namespace Intersect.Client.Interface.Game.Components
 {
     public class HarvestProgressRowComponent : GwenComponent
     {
-        string ResourceFrame => Harvestable ? "character_resource_unlocked_bg.png" : "character_resource_locked_bg.png";
+        string ResourceFrame => Harvestable ? "character_resource_unlocked_bg.png" : "character_resource_disabled_bg.png";
         TextureType ResourceTextureType => TextureType.Resource;
         private string ResourceTextureString { get; set; }
         private ImageFrameComponent ResourceImage { get; set; }
@@ -114,6 +114,10 @@ namespace Intersect.Client.Interface.Game.Components
             ResourceName.SetText(truncatedName);
             
             ResourceImage.Initialize();
+            if (!Harvestable)
+            {
+                ResourceImage.SetImageRenderColor(new Color(160, 255, 255, 255));
+            }
             ResourceImage.SetTooltipText(ResourceText);
 
             if (Harvestable)

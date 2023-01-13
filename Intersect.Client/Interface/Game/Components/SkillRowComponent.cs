@@ -12,12 +12,15 @@ namespace Intersect.Client.Interface.Game.Components
 {
     public class SkillRowComponent : GwenComponent
     {
-        string Frame => Prepared ? "character_resource_unlocked_bg.png" : "character_resource_locked_bg.png";
+        string Frame => Prepared ? "character_resource_selected_bg.png" : 
+            RemainingPoints >= Spell.RequiredSkillPoints ? "character_resource_unlocked_bg.png" : "character_resource_disabled_bg.png";
         private SpellImageFrameComponent Image { get; set; }
 
-        private Color SecondaryColor => new Color(255, 169, 169, 169);
+        private Color LockedColor => new Color(255, 100, 100, 100);
+        private Color SecondaryColor => new Color(255, 180, 180, 180);
         private Color PrimaryColor => new Color(255, 255, 255, 255);
-        private Color TitleColor => Prepared ? PrimaryColor : SecondaryColor;
+        private Color TitleColor => Prepared ? PrimaryColor : RemainingPoints >= Spell.RequiredSkillPoints ?
+            SecondaryColor : LockedColor;
 
         private Label Title { get; set; }
         private Label Points { get; set; }
@@ -103,7 +106,14 @@ namespace Intersect.Client.Interface.Game.Components
             Image.SetHoverEnterAction(HoverEnter);
             if (!Prepared)
             {
-                Image.SetImageRenderColor(new Color(100, 255, 255, 255));
+                if (UseCheckbox.IsDisabled)
+                {
+                    Image.SetImageRenderColor(new Color(90, 255, 255, 255));
+                }
+                else
+                {
+                    Image.SetImageRenderColor(new Color(160, 255, 255, 255));
+                }
             }
 
             Initializing = false;
