@@ -47,5 +47,9 @@ namespace Intersect.Server.Database.GameData
         DbSet<TimeBase> Time { get; set; }
         
         DbSet<RecipeDescriptor> Recipes { get; set; }
+        
+        DbSet<WeaponTypeDescriptor> WeaponTypes { get; set; }
+        
+        DbSet<ChallengeDescriptor> Challenges { get; set; }
     }
 }

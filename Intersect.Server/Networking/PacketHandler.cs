@@ -3727,6 +3727,14 @@ namespace Intersect.Server.Networking
                     obj = RecipeDescriptor.Get(id);
 
                     break;
+                case GameObjectType.WeaponType:
+                    obj = WeaponTypeDescriptor.Get(id);
+
+                    break;
+                case GameObjectType.Challenge:
+                    obj = ChallengeDescriptor.Get(id);
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -3892,6 +3900,14 @@ namespace Intersect.Server.Networking
                     break;
                 case GameObjectType.Recipe:
                     obj = DatabaseObject<RecipeDescriptor>.Lookup.Get(id);
+
+                    break;
+                case GameObjectType.WeaponType:
+                    obj = DatabaseObject<WeaponTypeDescriptor>.Lookup.Get(id);
+
+                    break;
+                case GameObjectType.Challenge:
+                    obj = DatabaseObject<ChallengeDescriptor>.Lookup.Get(id);
 
                     break;
                 default:

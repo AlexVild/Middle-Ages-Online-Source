@@ -84,6 +84,12 @@ namespace Intersect.Enums
 
         [GameObjectInfo(typeof(RecipeDescriptor), "recipes")]
         Recipe,
+
+        [GameObjectInfo(typeof(WeaponTypeDescriptor), "weapon_types")]
+        WeaponType,
+
+        [GameObjectInfo(typeof(ChallengeDescriptor), "challenge")]
+        Challenge,
     }
 
 }

@@ -113,6 +113,10 @@ namespace Intersect.Server.Database.GameData
         
         public DbSet<RecipeRequirement> RecipeRequirements { get; set; }
 
+        public DbSet<WeaponTypeDescriptor> WeaponTypes { get; set; }
+        
+        public DbSet<ChallengeDescriptor> Challenges { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<RecipeDescriptor>()

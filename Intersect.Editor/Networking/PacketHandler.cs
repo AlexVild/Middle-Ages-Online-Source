@@ -737,6 +737,32 @@ namespace Intersect.Editor.Networking
                         RecipeDescriptor.Lookup.Set(id, recipe);
                     }
                     break;
+                case GameObjectType.WeaponType:
+                    if (deleted)
+                    {
+                        var weaponType = WeaponTypeDescriptor.Get(id);
+                        weaponType.Delete();
+                    }
+                    else
+                    {
+                        var weaponType = new WeaponTypeDescriptor(id);
+                        weaponType.Load(json);
+                        WeaponTypeDescriptor.Lookup.Set(id, weaponType);
+                    }
+                    break;
+                case GameObjectType.Challenge:
+                    if (deleted)
+                    {
+                        var challenge = ChallengeDescriptor.Get(id);
+                        challenge.Delete();
+                    }
+                    else
+                    {
+                        var challenge = new ChallengeDescriptor(id);
+                        challenge.Load(json);
+                        ChallengeDescriptor.Lookup.Set(id, challenge);
+                    }
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }

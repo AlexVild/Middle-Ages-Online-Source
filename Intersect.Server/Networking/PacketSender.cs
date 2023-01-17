@@ -1902,6 +1902,18 @@ namespace Intersect.Server.Networking
                         SendGameObject(client, obj.Value, false, false, packetList);
                     }
                     break;
+                case GameObjectType.WeaponType:
+                    foreach (var obj in WeaponTypeDescriptor.Lookup)
+                    {
+                        SendGameObject(client, obj.Value, false, false, packetList);
+                    }
+                    break;
+                case GameObjectType.Challenge:
+                    foreach (var obj in ChallengeDescriptor.Lookup)
+                    {
+                        SendGameObject(client, obj.Value, false, false, packetList);
+                    }
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }

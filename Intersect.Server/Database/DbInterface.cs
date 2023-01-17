@@ -593,6 +593,14 @@ namespace Intersect.Server.Database
                     RecipeDescriptor.Lookup.Clear();
 
                     break;
+                case GameObjectType.WeaponType:
+                    WeaponTypeDescriptor.Lookup.Clear();
+
+                    break;
+                case GameObjectType.Challenge:
+                    ChallengeDescriptor.Lookup.Clear();
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }
@@ -776,6 +784,20 @@ namespace Intersect.Server.Database
                             }
 
                             break;
+                        case GameObjectType.WeaponType:
+                            foreach (var weaponType in context.WeaponTypes)
+                            {
+                                WeaponTypeDescriptor.Lookup.Set(weaponType.Id, weaponType);
+                            }
+
+                            break;
+                        case GameObjectType.Challenge:
+                            foreach (var challenge in context.Challenges)
+                            {
+                                ChallengeDescriptor.Lookup.Set(challenge.Id, challenge);
+                            }
+
+                            break;
                         default:
                             throw new ArgumentOutOfRangeException(nameof(gameObjectType), gameObjectType, null);
                     }
@@ -900,6 +922,14 @@ namespace Intersect.Server.Database
                     break;
                 case GameObjectType.Recipe:
                     dbObj = new RecipeDescriptor(predefinedid);
+
+                    break;
+                case GameObjectType.WeaponType:
+                    dbObj = new WeaponTypeDescriptor(predefinedid);
+
+                    break;
+                case GameObjectType.Challenge:
+                    dbObj = new ChallengeDescriptor(predefinedid);
 
                     break;
                 default:
@@ -1060,6 +1090,16 @@ namespace Intersect.Server.Database
                             RecipeDescriptor.Lookup.Set(dbObj.Id, dbObj);
 
                             break;
+                        case GameObjectType.WeaponType:
+                            context.WeaponTypes.Add((WeaponTypeDescriptor)dbObj);
+                            WeaponTypeDescriptor.Lookup.Set(dbObj.Id, dbObj);
+
+                            break;
+                        case GameObjectType.Challenge:
+                            context.Challenges.Add((ChallengeDescriptor)dbObj);
+                            ChallengeDescriptor.Lookup.Set(dbObj.Id, dbObj);
+
+                            break;
                         default:
                             throw new ArgumentOutOfRangeException(nameof(gameObjectType), gameObjectType, null);
                     }
@@ -1206,6 +1246,14 @@ namespace Intersect.Server.Database
                             var id = gameObject.Id;
                             context.Recipes.Remove((RecipeDescriptor)gameObject);
                             context.RecipeRequirements.RemoveRange(GameContext.Queries.RecipeRequirementsByDescriptorId(id));
+
+                            break;
+                        case GameObjectType.WeaponType:
+                            context.WeaponTypes.Remove((WeaponTypeDescriptor)gameObject);
+
+                            break;
+                        case GameObjectType.Challenge:
+                            context.Challenges.Remove((ChallengeDescriptor)gameObject);
 
                             break;
                     }
@@ -1355,6 +1403,14 @@ namespace Intersect.Server.Database
                             context.RecipeRequirements.RemoveRange(removedRequirements);
 
                             context.Recipes.Update((RecipeDescriptor)gameObject);
+
+                            break;
+                        case GameObjectType.WeaponType:
+                            context.WeaponTypes.Update((WeaponTypeDescriptor)gameObject);
+
+                            break;
+                        case GameObjectType.Challenge:
+                            context.Challenges.Update((ChallengeDescriptor)gameObject);
 
                             break;
                     }
@@ -1948,6 +2004,8 @@ namespace Intersect.Server.Database
                     MigrateDbSet(context.LootTables, newGameContext.LootTables);
                     MigrateDbSet(context.Recipes, newGameContext.Recipes);
                     MigrateDbSet(context.RecipeRequirements, newGameContext.RecipeRequirements);
+                    MigrateDbSet(context.WeaponTypes, newGameContext.WeaponTypes);
+                    MigrateDbSet(context.Challenges, newGameContext.Challenges);
                     newGameContext.ChangeTracker.DetectChanges();
                     newGameContext.SaveChanges();
                     newGameContext.Dispose();
