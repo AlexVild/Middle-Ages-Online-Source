@@ -559,6 +559,16 @@ namespace Intersect.GameObjects
         }
 
         public string CosmeticDisplayName { get; set; }
+
+        [NotMapped, JsonIgnore]
+        public List<Guid> WeaponTypes { get; set; } = new List<Guid>();
+
+        [Column("WeaponTypes")]
+        public string WeaponTypesJson
+        {
+            get => JsonConvert.SerializeObject(WeaponTypes);
+            set => WeaponTypes = JsonConvert.DeserializeObject<List<Guid>>(value ?? "") ?? new List<Guid>();
+        }
     }
 
 }

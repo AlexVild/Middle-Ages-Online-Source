@@ -1,4 +1,5 @@
 ﻿using Intersect.Editor.Forms.Helpers;
+using Intersect.Editor.Localization;
 using Intersect.Enums;
 using Intersect.GameObjects;
 using System;
@@ -25,6 +26,8 @@ namespace Intersect.Editor.Forms.Editors
 
         private List<string> mKnownFolders = new List<string>();
 
+        private WeaponTypeUnlock SelectedLevel => mEditorItem?.Unlocks?.ContainsKey(lstLevels.SelectedIndex + 1) ?? false ? mEditorItem.Unlocks[lstLevels.SelectedIndex + 1] : default;
+
         public frmWeaponType()
         {
             ApplyHooks();
@@ -34,6 +37,10 @@ namespace Intersect.Editor.Forms.Editors
             {
                 grpEditor.Hide();
             }
+
+            cmbChallenges.Items.Clear();
+            cmbChallenges.Items.Add(Strings.General.none);
+            cmbChallenges.Items.AddRange(ChallengeDescriptor.Names);
 
             lstGameObjects.Init(UpdateToolStripItems, AssignEditorItem, toolStripItemNew_Click, toolStripItemCopy_Click, toolStripItemUndo_Click, toolStripItemPaste_Click, toolStripItemDelete_Click);
         }
@@ -57,7 +64,20 @@ namespace Intersect.Editor.Forms.Editors
 
         private void UpdateFields()
         {
+            mPopulating = true;
 
+            txtName.Text = mEditorItem.Name;
+            cmbFolder.Text = mEditorItem?.Folder ?? string.Empty;
+
+            nudMaxLevel.Value = mEditorItem.MaxLevel;
+
+            lstLevels.Items.Clear();
+            nudReqExp.Value = 0;
+            cmbChallenges.SelectedIndex = 0;
+
+            UpdateLevelList();
+            
+            mPopulating = false;
         }
 
         private void UpdateEditor()
@@ -80,6 +100,44 @@ namespace Intersect.Editor.Forms.Editors
         private void UpdateToolStripItems()
         {
             FormHelpers.UpdateToolstripItems(ref toolStripItemCopy, ref toolStripItemPaste, ref toolStripItemUndo, ref toolStripItemDelete, mCopiedItem, mEditorItem, lstGameObjects);
+        }
+
+        private void UpdateLevelList(bool savePosition = false)
+        {
+            var oldPosition = 0;
+            if (savePosition)
+            {
+                oldPosition = lstLevels.SelectedIndex;
+            }
+
+            lstLevels.Items.Clear();
+            foreach (var unlock in mEditorItem.Unlocks)
+            {
+                var level = unlock.Key;
+                var info = unlock.Value;
+                lstLevels.Items.Add($"Lvl {level} -- { info }");
+            }
+            
+            if (lstLevels.Items.Count > oldPosition)
+            {
+                lstLevels.SelectedIndex = oldPosition;
+            }
+
+            UpdateChallengeList();
+        }
+
+        private void UpdateChallengeList()
+        {
+            lstChallenges.Items.Clear();
+            if (SelectedLevel == default)
+            {
+                return;
+            }
+
+            foreach (var challenge in SelectedLevel.ChallengeIds)
+            {
+                lstChallenges.Items.Add(ChallengeDescriptor.GetName(challenge));
+            }
         }
 
         private void toolStripItemNew_Click(object sender, EventArgs e)
@@ -145,6 +203,80 @@ namespace Intersect.Editor.Forms.Editors
         private void txtName_TextChanged(object sender, EventArgs e)
         {
             FormHelpers.EditorItemNameChange(ref mEditorItem, txtName, lstGameObjects);
+        }
+
+        private void nudMaxLevel_ValueChanged(object sender, EventArgs e)
+        {
+            if (mPopulating)
+            {
+                return;
+            }
+
+            var currentMax = mEditorItem.MaxLevel;
+            var newMaxLevel = (int)nudMaxLevel.Value;
+
+            mEditorItem.MaxLevel = newMaxLevel;
+            if (currentMax < newMaxLevel && !mEditorItem.Unlocks.TryGetValue(newMaxLevel, out var unlock))
+            {
+                mEditorItem.Unlocks[newMaxLevel] = new WeaponTypeUnlock((int)nudReqExp.Value);
+            }
+            else if (currentMax > newMaxLevel)
+            {
+                mEditorItem.Unlocks.Remove(currentMax);
+            }
+
+            UpdateLevelList(true);
+        }
+
+        private void nudReqExp_ValueChanged(object sender, EventArgs e)
+        {
+            if (SelectedLevel == default)
+            {
+                return;
+            }
+
+            SelectedLevel.RequiredExp = (int)nudReqExp.Value;
+            UpdateLevelList(true);
+        }
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            if (cmbChallenges.SelectedIndex <= 0 || SelectedLevel == default)
+            {
+                return;
+            }
+
+            var challengeId = ChallengeDescriptor.IdFromList(cmbChallenges.SelectedIndex - 1);
+            if (SelectedLevel.ChallengeIds.Contains(challengeId))
+            {
+                return;
+            }
+
+            SelectedLevel.ChallengeIds.Add(challengeId);
+            UpdateLevelList(true);
+        }
+
+        private void btnRemove_Click(object sender, EventArgs e)
+        {
+            if (SelectedLevel == default || lstChallenges.SelectedIndex < 0)
+            {
+                return;
+            }
+
+            SelectedLevel.ChallengeIds.RemoveAt(lstChallenges.SelectedIndex);
+            UpdateLevelList(true);
+        }
+
+        private void lstLevels_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (SelectedLevel == default)
+            {
+                return;
+            }
+            
+            nudReqExp.Value = SelectedLevel.RequiredExp;
+            UpdateChallengeList();
+            lstChallenges.SelectedIndex = -1;
         }
     }
 }

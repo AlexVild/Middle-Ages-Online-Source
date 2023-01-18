@@ -49,6 +49,17 @@ namespace Intersect.Editor.Forms.Editors
             this.btnSave = new DarkUI.Controls.DarkButton();
             this.btnCancel = new DarkUI.Controls.DarkButton();
             this.grpEditor = new DarkUI.Controls.DarkGroupBox();
+            this.lstChallenges = new System.Windows.Forms.ListBox();
+            this.grpLevels = new DarkUI.Controls.DarkGroupBox();
+            this.btnRemove = new DarkUI.Controls.DarkButton();
+            this.btnAdd = new DarkUI.Controls.DarkButton();
+            this.nudReqExp = new DarkUI.Controls.DarkNumericUpDown();
+            this.cmbChallenges = new DarkUI.Controls.DarkComboBox();
+            this.lblChallenge = new System.Windows.Forms.Label();
+            this.lblRequiredExp = new System.Windows.Forms.Label();
+            this.lblMaxLevel = new System.Windows.Forms.Label();
+            this.nudMaxLevel = new DarkUI.Controls.DarkNumericUpDown();
+            this.lstLevels = new System.Windows.Forms.ListBox();
             this.btnAddFolder = new DarkUI.Controls.DarkButton();
             this.cmbFolder = new DarkUI.Controls.DarkComboBox();
             this.lblFolder = new System.Windows.Forms.Label();
@@ -57,6 +68,9 @@ namespace Intersect.Editor.Forms.Editors
             this.grpWeaponTypes.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.grpEditor.SuspendLayout();
+            this.grpLevels.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudReqExp)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMaxLevel)).BeginInit();
             this.SuspendLayout();
             // 
             // grpWeaponTypes
@@ -69,7 +83,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpWeaponTypes.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpWeaponTypes.Location = new System.Drawing.Point(12, 30);
             this.grpWeaponTypes.Name = "grpWeaponTypes";
-            this.grpWeaponTypes.Size = new System.Drawing.Size(203, 372);
+            this.grpWeaponTypes.Size = new System.Drawing.Size(203, 315);
             this.grpWeaponTypes.TabIndex = 50;
             this.grpWeaponTypes.TabStop = false;
             this.grpWeaponTypes.Text = "Weapon Types";
@@ -108,7 +122,7 @@ namespace Intersect.Editor.Forms.Editors
             this.lstGameObjects.Location = new System.Drawing.Point(6, 44);
             this.lstGameObjects.Name = "lstGameObjects";
             this.lstGameObjects.SelectedImageIndex = 0;
-            this.lstGameObjects.Size = new System.Drawing.Size(191, 322);
+            this.lstGameObjects.Size = new System.Drawing.Size(191, 260);
             this.lstGameObjects.TabIndex = 32;
             // 
             // toolStrip
@@ -130,7 +144,7 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Padding = new System.Windows.Forms.Padding(5, 0, 1, 0);
-            this.toolStrip.Size = new System.Drawing.Size(800, 25);
+            this.toolStrip.Size = new System.Drawing.Size(697, 25);
             this.toolStrip.TabIndex = 51;
             this.toolStrip.Text = "toolStrip1";
             // 
@@ -234,7 +248,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(492, 408);
+            this.btnSave.Location = new System.Drawing.Point(387, 462);
             this.btnSave.Name = "btnSave";
             this.btnSave.Padding = new System.Windows.Forms.Padding(5);
             this.btnSave.Size = new System.Drawing.Size(135, 27);
@@ -245,7 +259,7 @@ namespace Intersect.Editor.Forms.Editors
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(633, 408);
+            this.btnCancel.Location = new System.Drawing.Point(545, 462);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Padding = new System.Windows.Forms.Padding(5);
             this.btnCancel.Size = new System.Drawing.Size(139, 27);
@@ -257,6 +271,8 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpEditor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpEditor.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpEditor.Controls.Add(this.lstChallenges);
+            this.grpEditor.Controls.Add(this.grpLevels);
             this.grpEditor.Controls.Add(this.btnAddFolder);
             this.grpEditor.Controls.Add(this.cmbFolder);
             this.grpEditor.Controls.Add(this.lblFolder);
@@ -265,10 +281,168 @@ namespace Intersect.Editor.Forms.Editors
             this.grpEditor.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpEditor.Location = new System.Drawing.Point(221, 30);
             this.grpEditor.Name = "grpEditor";
-            this.grpEditor.Size = new System.Drawing.Size(567, 372);
+            this.grpEditor.Size = new System.Drawing.Size(463, 383);
             this.grpEditor.TabIndex = 54;
             this.grpEditor.TabStop = false;
             this.grpEditor.Text = "Weapon Type";
+            // 
+            // lstChallenges
+            // 
+            this.lstChallenges.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.lstChallenges.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lstChallenges.Cursor = System.Windows.Forms.Cursors.Default;
+            this.lstChallenges.ForeColor = System.Drawing.Color.Gainsboro;
+            this.lstChallenges.FormattingEnabled = true;
+            this.lstChallenges.Location = new System.Drawing.Point(25, 277);
+            this.lstChallenges.Name = "lstChallenges";
+            this.lstChallenges.Size = new System.Drawing.Size(224, 67);
+            this.lstChallenges.TabIndex = 119;
+            // 
+            // grpLevels
+            // 
+            this.grpLevels.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpLevels.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpLevels.Controls.Add(this.btnRemove);
+            this.grpLevels.Controls.Add(this.btnAdd);
+            this.grpLevels.Controls.Add(this.nudReqExp);
+            this.grpLevels.Controls.Add(this.cmbChallenges);
+            this.grpLevels.Controls.Add(this.lblChallenge);
+            this.grpLevels.Controls.Add(this.lblRequiredExp);
+            this.grpLevels.Controls.Add(this.lblMaxLevel);
+            this.grpLevels.Controls.Add(this.nudMaxLevel);
+            this.grpLevels.Controls.Add(this.lstLevels);
+            this.grpLevels.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpLevels.Location = new System.Drawing.Point(19, 81);
+            this.grpLevels.Name = "grpLevels";
+            this.grpLevels.Size = new System.Drawing.Size(435, 272);
+            this.grpLevels.TabIndex = 113;
+            this.grpLevels.TabStop = false;
+            this.grpLevels.Text = "Weapon Levels";
+            // 
+            // btnRemove
+            // 
+            this.btnRemove.Location = new System.Drawing.Point(344, 223);
+            this.btnRemove.Name = "btnRemove";
+            this.btnRemove.Padding = new System.Windows.Forms.Padding(5);
+            this.btnRemove.Size = new System.Drawing.Size(84, 27);
+            this.btnRemove.TabIndex = 120;
+            this.btnRemove.Text = "Remove";
+            this.btnRemove.Click += new System.EventHandler(this.btnRemove_Click);
+            // 
+            // btnAdd
+            // 
+            this.btnAdd.Location = new System.Drawing.Point(236, 223);
+            this.btnAdd.Name = "btnAdd";
+            this.btnAdd.Padding = new System.Windows.Forms.Padding(5);
+            this.btnAdd.Size = new System.Drawing.Size(84, 27);
+            this.btnAdd.TabIndex = 119;
+            this.btnAdd.Text = "Add";
+            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
+            // 
+            // nudReqExp
+            // 
+            this.nudReqExp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudReqExp.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudReqExp.Location = new System.Drawing.Point(240, 61);
+            this.nudReqExp.Maximum = new decimal(new int[] {
+            1410065408,
+            2,
+            0,
+            0});
+            this.nudReqExp.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudReqExp.Name = "nudReqExp";
+            this.nudReqExp.Size = new System.Drawing.Size(189, 20);
+            this.nudReqExp.TabIndex = 118;
+            this.nudReqExp.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudReqExp.ValueChanged += new System.EventHandler(this.nudReqExp_ValueChanged);
+            // 
+            // cmbChallenges
+            // 
+            this.cmbChallenges.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbChallenges.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbChallenges.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbChallenges.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbChallenges.DrawDropdownHoverOutline = false;
+            this.cmbChallenges.DrawFocusRectangle = false;
+            this.cmbChallenges.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbChallenges.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbChallenges.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbChallenges.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbChallenges.FormattingEnabled = true;
+            this.cmbChallenges.Location = new System.Drawing.Point(236, 196);
+            this.cmbChallenges.Name = "cmbChallenges";
+            this.cmbChallenges.Size = new System.Drawing.Size(192, 21);
+            this.cmbChallenges.TabIndex = 117;
+            this.cmbChallenges.Text = null;
+            this.cmbChallenges.TextPadding = new System.Windows.Forms.Padding(2);
+            // 
+            // lblChallenge
+            // 
+            this.lblChallenge.AutoSize = true;
+            this.lblChallenge.Location = new System.Drawing.Point(6, 180);
+            this.lblChallenge.Name = "lblChallenge";
+            this.lblChallenge.Size = new System.Drawing.Size(128, 13);
+            this.lblChallenge.TabIndex = 116;
+            this.lblChallenge.Text = "Advancement Challenges";
+            // 
+            // lblRequiredExp
+            // 
+            this.lblRequiredExp.AutoSize = true;
+            this.lblRequiredExp.Location = new System.Drawing.Point(237, 45);
+            this.lblRequiredExp.Name = "lblRequiredExp";
+            this.lblRequiredExp.Size = new System.Drawing.Size(71, 13);
+            this.lblRequiredExp.TabIndex = 115;
+            this.lblRequiredExp.Text = "Required Exp";
+            // 
+            // lblMaxLevel
+            // 
+            this.lblMaxLevel.AutoSize = true;
+            this.lblMaxLevel.Location = new System.Drawing.Point(6, 21);
+            this.lblMaxLevel.Name = "lblMaxLevel";
+            this.lblMaxLevel.Size = new System.Drawing.Size(56, 13);
+            this.lblMaxLevel.TabIndex = 114;
+            this.lblMaxLevel.Text = "Max Level";
+            // 
+            // nudMaxLevel
+            // 
+            this.nudMaxLevel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudMaxLevel.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudMaxLevel.Location = new System.Drawing.Point(75, 19);
+            this.nudMaxLevel.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.nudMaxLevel.Name = "nudMaxLevel";
+            this.nudMaxLevel.Size = new System.Drawing.Size(102, 20);
+            this.nudMaxLevel.TabIndex = 113;
+            this.nudMaxLevel.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudMaxLevel.ValueChanged += new System.EventHandler(this.nudMaxLevel_ValueChanged);
+            // 
+            // lstLevels
+            // 
+            this.lstLevels.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.lstLevels.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lstLevels.Cursor = System.Windows.Forms.Cursors.Default;
+            this.lstLevels.ForeColor = System.Drawing.Color.Gainsboro;
+            this.lstLevels.FormattingEnabled = true;
+            this.lstLevels.Location = new System.Drawing.Point(6, 45);
+            this.lstLevels.Name = "lstLevels";
+            this.lstLevels.Size = new System.Drawing.Size(225, 132);
+            this.lstLevels.TabIndex = 112;
+            this.lstLevels.SelectedIndexChanged += new System.EventHandler(this.lstLevels_SelectedIndexChanged);
             // 
             // btnAddFolder
             // 
@@ -335,7 +509,7 @@ namespace Intersect.Editor.Forms.Editors
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.ClientSize = new System.Drawing.Size(800, 445);
+            this.ClientSize = new System.Drawing.Size(697, 501);
             this.Controls.Add(this.grpEditor);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnSave);
@@ -351,6 +525,10 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStrip.PerformLayout();
             this.grpEditor.ResumeLayout(false);
             this.grpEditor.PerformLayout();
+            this.grpLevels.ResumeLayout(false);
+            this.grpLevels.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudReqExp)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMaxLevel)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -380,5 +558,16 @@ namespace Intersect.Editor.Forms.Editors
         private System.Windows.Forms.Label lblFolder;
         private DarkUI.Controls.DarkComboBox cmbFolder;
         private DarkUI.Controls.DarkButton btnAddFolder;
+        private DarkUI.Controls.DarkGroupBox grpLevels;
+        private System.Windows.Forms.ListBox lstLevels;
+        private System.Windows.Forms.Label lblMaxLevel;
+        private DarkUI.Controls.DarkNumericUpDown nudMaxLevel;
+        private System.Windows.Forms.Label lblRequiredExp;
+        private DarkUI.Controls.DarkNumericUpDown nudReqExp;
+        private DarkUI.Controls.DarkComboBox cmbChallenges;
+        private System.Windows.Forms.Label lblChallenge;
+        private System.Windows.Forms.ListBox lstChallenges;
+        private DarkUI.Controls.DarkButton btnRemove;
+        private DarkUI.Controls.DarkButton btnAdd;
     }
 }

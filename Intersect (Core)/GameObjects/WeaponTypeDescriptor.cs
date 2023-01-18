@@ -24,7 +24,7 @@ namespace Intersect.GameObjects
         [Column("ExpRequirements")]
         public string ExpRequirementsJson {
             get => JsonConvert.SerializeObject(Unlocks);
-            set => Unlocks = JsonConvert.DeserializeObject<Dictionary<int, WeaponTypeUnlock>>(value);
+            set => Unlocks = JsonConvert.DeserializeObject<Dictionary<int, WeaponTypeUnlock>>(value ?? string.Empty) ?? new Dictionary<int, WeaponTypeUnlock>();
         }
 
 
@@ -41,8 +41,31 @@ namespace Intersect.GameObjects
 
     public class WeaponTypeUnlock
     {
-        // challenge descriptor list here
+        public List<Guid> ChallengeIds { get; set; }
 
         public int RequiredExp { get; set; }
+
+        public WeaponTypeUnlock(int requiredExp)
+        {
+            RequiredExp = requiredExp;
+            ChallengeIds = new List<Guid>();
+        }
+
+        public override string ToString()
+        {
+            var challenges = new List<string>();
+            foreach(var challengeId in ChallengeIds)
+            {
+                var challenge = ChallengeDescriptor.Get(challengeId);
+                if (challenge == default)
+                {
+                    continue;
+                }
+
+                challenges.Add(challenge.Name);
+            }
+
+            return $"EXP: {RequiredExp}, Challenges: [{string.Join(", ", challenges.ToArray())}]";
+        }
     }
 }

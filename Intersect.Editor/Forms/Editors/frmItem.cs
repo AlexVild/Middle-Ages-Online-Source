@@ -93,6 +93,9 @@ namespace Intersect.Editor.Forms.Editors
                 mCrafts.Add(CraftBase.Get(CraftBase.IdFromList(i)));
             }
 
+            cmbWeaponTypes.Items.Clear();
+            cmbWeaponTypes.Items.AddRange(WeaponTypeDescriptor.Names);
+
             lstGameObjects.Init(UpdateToolStripItems, AssignEditorItem, toolStripItemNew_Click, toolStripItemCopy_Click, toolStripItemUndo_Click, toolStripItemPaste_Click, toolStripItemDelete_Click);
         }
         private void AssignEditorItem(Guid id)
@@ -597,6 +600,8 @@ namespace Intersect.Editor.Forms.Editors
 
                 nudStrafeBoost.Value = mEditorItem.StrafeBonus;
                 nudBackBoost.Value = mEditorItem.BackstepBonus;
+
+                RefreshWeaponTypeTree(false);
 
                 if (cmbTypeDisplayOverride.Items.Contains(mEditorItem.TypeDisplayOverride ?? string.Empty))
                 {
@@ -1967,6 +1972,64 @@ namespace Intersect.Editor.Forms.Editors
         private void txtCosmeticDisplayName_TextChanged(object sender, EventArgs e)
         {
             mEditorItem.CosmeticDisplayName = txtCosmeticDisplayName.Text;
+        }
+
+        private void btnAddWeaponType_Click(object sender, EventArgs e)
+        {
+            if (cmbWeaponTypes.SelectedIndex < 0)
+            {
+                return;
+            }
+
+            var selection = WeaponTypeDescriptor.IdFromList(cmbWeaponTypes.SelectedIndex);
+
+            if (selection == Guid.Empty || mEditorItem.WeaponTypes.Contains(selection))
+            {
+                return;
+            }
+
+            mEditorItem.WeaponTypes.Add(selection);
+            RefreshWeaponTypeTree(true);
+        }
+
+        private void RefreshWeaponTypeTree(bool savePos = false)
+        {
+            var pos = 0;
+            if (savePos)
+            {
+                pos = lstWeaponTypes.SelectedIndex;
+            }
+
+            lstWeaponTypes.Items.Clear();
+
+            foreach(var weaponType in mEditorItem.WeaponTypes)
+            {
+                lstWeaponTypes.Items.Add(WeaponTypeDescriptor.GetName(weaponType));
+            }
+
+            if (savePos && pos < lstWeaponTypes.Items.Count)
+            {
+                lstWeaponTypes.SelectedIndex = pos;
+            }
+        }
+
+        private void btnRemoveWeaponType_Click(object sender, EventArgs e)
+        {
+            if (lstWeaponTypes.SelectedIndex < 0)
+            {
+                return;
+            }
+
+            try
+            {
+                mEditorItem.WeaponTypes.RemoveAt(lstWeaponTypes.SelectedIndex);
+            }
+            catch
+            {
+                // blank
+            }
+
+            RefreshWeaponTypeTree(true);
         }
     }
 }
