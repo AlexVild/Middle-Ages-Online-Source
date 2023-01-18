@@ -106,6 +106,7 @@ namespace Intersect.Editor.Forms
             this.classEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.commonEventEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.craftsEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.recipeEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.craftingTableEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.itemEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.npcEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -121,6 +122,7 @@ namespace Intersect.Editor.Forms
             this.timeEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lootTableEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.labelEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.weaponTypeEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.postQuestionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.reportBugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -128,7 +130,7 @@ namespace Intersect.Editor.Forms
             this.menuStrip = new DarkUI.Controls.DarkMenuStrip();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.packageUpdateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.recipeEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.challengeEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.menuStrip.SuspendLayout();
@@ -831,7 +833,9 @@ namespace Intersect.Editor.Forms
             this.timerEditorToolStripMenuItem,
             this.timeEditorToolStripMenuItem,
             this.lootTableEditorToolStripMenuItem,
-            this.labelEditorToolStripMenuItem});
+            this.labelEditorToolStripMenuItem,
+            this.weaponTypeEditorToolStripMenuItem,
+            this.challengeEditorToolStripMenuItem});
             this.contentEditorsToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             this.contentEditorsToolStripMenuItem.Name = "contentEditorsToolStripMenuItem";
             this.contentEditorsToolStripMenuItem.Size = new System.Drawing.Size(101, 20);
@@ -868,6 +872,14 @@ namespace Intersect.Editor.Forms
             this.craftsEditorToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
             this.craftsEditorToolStripMenuItem.Text = "Crafts Editor";
             this.craftsEditorToolStripMenuItem.Click += new System.EventHandler(this.craftsEditorToolStripMenuItem_Click);
+            // 
+            // recipeEditorToolStripMenuItem
+            // 
+            this.recipeEditorToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.recipeEditorToolStripMenuItem.Name = "recipeEditorToolStripMenuItem";
+            this.recipeEditorToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+            this.recipeEditorToolStripMenuItem.Text = "Recipe Editor";
+            this.recipeEditorToolStripMenuItem.Click += new System.EventHandler(this.recipeEditorToolStripMenuItem_Click);
             // 
             // craftingTableEditorToolStripMenuItem
             // 
@@ -989,6 +1001,14 @@ namespace Intersect.Editor.Forms
             this.labelEditorToolStripMenuItem.Text = "Label Editor";
             this.labelEditorToolStripMenuItem.Click += new System.EventHandler(this.labelEditorToolStripMenuItem_Click);
             // 
+            // weaponTypeEditorToolStripMenuItem
+            // 
+            this.weaponTypeEditorToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.weaponTypeEditorToolStripMenuItem.Name = "weaponTypeEditorToolStripMenuItem";
+            this.weaponTypeEditorToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+            this.weaponTypeEditorToolStripMenuItem.Text = "Weapon Type Editor";
+            this.weaponTypeEditorToolStripMenuItem.Click += new System.EventHandler(this.weaponTypeEditorToolStripMenuItem_Click);
+            // 
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -1059,13 +1079,13 @@ namespace Intersect.Editor.Forms
             this.packageUpdateToolStripMenuItem.Text = "Package Update";
             this.packageUpdateToolStripMenuItem.Click += new System.EventHandler(this.packageUpdateToolStripMenuItem_Click);
             // 
-            // recipeEditorToolStripMenuItem
+            // challengeEditorToolStripMenuItem
             // 
-            this.recipeEditorToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.recipeEditorToolStripMenuItem.Name = "recipeEditorToolStripMenuItem";
-            this.recipeEditorToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
-            this.recipeEditorToolStripMenuItem.Text = "Recipe Editor";
-            this.recipeEditorToolStripMenuItem.Click += new System.EventHandler(this.recipeEditorToolStripMenuItem_Click);
+            this.challengeEditorToolStripMenuItem.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.challengeEditorToolStripMenuItem.Name = "challengeEditorToolStripMenuItem";
+            this.challengeEditorToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+            this.challengeEditorToolStripMenuItem.Text = "Challenge Editor";
+            this.challengeEditorToolStripMenuItem.Click += new System.EventHandler(this.challengeEditorToolStripMenuItem_Click);
             // 
             // FrmMain
             // 
@@ -1192,5 +1212,7 @@ namespace Intersect.Editor.Forms
         private ToolStripMenuItem lootTableEditorToolStripMenuItem;
         private ToolStripMenuItem labelEditorToolStripMenuItem;
         private ToolStripMenuItem recipeEditorToolStripMenuItem;
+        private ToolStripMenuItem weaponTypeEditorToolStripMenuItem;
+        private ToolStripMenuItem challengeEditorToolStripMenuItem;
     }
 }

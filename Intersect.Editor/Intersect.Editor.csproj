@@ -244,6 +244,12 @@
       <DependentUpon>EventCommand_ShakeScreen.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Editors\Events\Event Commands\TimerCommandHelpers.cs" />
+    <Compile Include="Forms\Editors\frmChallenge.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\frmChallenge.Designer.cs">
+      <DependentUpon>frmChallenge.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Editors\frmLabel.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -279,6 +285,12 @@
     </Compile>
     <Compile Include="Forms\Editors\frmTimers.Designer.cs">
       <DependentUpon>frmTimers.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Editors\frmWeaponType.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\frmWeaponType.Designer.cs">
+      <DependentUpon>frmWeaponType.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\frmUpdate.cs">
       <SubType>Form</SubType>
@@ -912,6 +924,9 @@
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_ShakeScreen.resx">
       <DependentUpon>EventCommand_ShakeScreen.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\frmChallenge.resx">
+      <DependentUpon>frmChallenge.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\frmLabel.resx">
       <DependentUpon>frmLabel.cs</DependentUpon>
     </EmbeddedResource>
@@ -935,6 +950,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\frmTimers.resx">
       <DependentUpon>frmTimers.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\frmWeaponType.resx">
+      <DependentUpon>frmWeaponType.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Shaders\radialgradient_editor.xnb" />
   </ItemGroup>

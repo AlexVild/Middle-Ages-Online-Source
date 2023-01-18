@@ -250,7 +250,7 @@ namespace Intersect.Editor.Forms.Editors
 
         private void txtName_TextChanged(object sender, EventArgs e)
         {
-            mEditorItem.Name = txtName.Text;
+            FormHelpers.EditorItemNameChange(ref mEditorItem, txtName, lstGameObjects);
         }
 
         private void txtLabel_TextChanged(object sender, EventArgs e)

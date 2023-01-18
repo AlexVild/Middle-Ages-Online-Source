@@ -1,4 +1,6 @@
-﻿using Intersect.Enums;
+﻿using Intersect.Attributes;
+using Intersect.Enums;
+using Intersect.GameObjects.Events;
 using Intersect.Models;
 using Newtonsoft.Json;
 using System;
@@ -42,6 +44,14 @@ namespace Intersect.GameObjects
 
         [Description("X damage healed at Z% health, Y times")]
         DamageHealedAtHealth,
+    }
+
+    public enum ChallengeParamType
+    {
+        None,
+
+        [RelatedTable(GameObjectType.Npc)]
+        BeastsKilled,
     }
 
     public class ChallengeDescriptor : DatabaseObject<ChallengeDescriptor>, IFolderable
@@ -111,6 +121,22 @@ namespace Intersect.GameObjects
             }
 
             BonusEffects.FindAll(effect => effect.Type == type).ForEach(effect => effect.Percentage = value);
+        }
+
+        public string EventDescription { get; set; }
+
+        public Guid CompletionEventId { get; set; }
+        
+        public int ChallengeParamType { get; set; }
+
+        public Guid ChallengeParamId { get; set; }
+
+        [JsonIgnore]
+        [NotMapped]
+        public EventBase CompletionEvent
+        {
+            get => EventBase.Get(CompletionEventId);
+            set => CompletionEventId = value?.Id ?? Guid.Empty;
         }
 
         public ChallengeDescriptor() : this(default)

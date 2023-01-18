@@ -89,6 +89,10 @@ namespace Intersect.Editor.Forms
         private frmLabel mLabelEditor;
         
         private frmRecipe mRecipeEditor;
+        
+        private frmWeaponType mWeaponTypeEditor;
+        
+        private frmChallenge mChallengeEditor;
 
         //General Editting Variables
         bool mTMouseDown;
@@ -1704,6 +1708,24 @@ namespace Intersect.Editor.Forms
                         }
                         
                         break;
+                    case GameObjectType.WeaponType:
+                        if (mWeaponTypeEditor == null || mWeaponTypeEditor.Visible == false)
+                        {
+                            mWeaponTypeEditor = new frmWeaponType();
+                            mWeaponTypeEditor.InitEditor();
+                            mWeaponTypeEditor.Show();
+                        }
+
+                        break;
+                    case GameObjectType.Challenge:
+                        if (mChallengeEditor == null || mChallengeEditor.Visible == false)
+                        {
+                            mChallengeEditor = new frmChallenge();
+                            mChallengeEditor.InitEditor();
+                            mChallengeEditor.Show();
+                        }
+
+                        break;
                     default:
                         return;
                 }
@@ -2125,6 +2147,16 @@ namespace Intersect.Editor.Forms
         private void recipeEditorToolStripMenuItem_Click(object sender, EventArgs e)
         {
             PacketSender.SendOpenEditor(GameObjectType.Recipe);
+        }
+
+        private void weaponTypeEditorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PacketSender.SendOpenEditor(GameObjectType.WeaponType);
+        }
+
+        private void challengeEditorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PacketSender.SendOpenEditor(GameObjectType.Challenge);
         }
     }
 

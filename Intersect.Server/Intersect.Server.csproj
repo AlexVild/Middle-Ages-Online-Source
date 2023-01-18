@@ -1027,6 +1027,10 @@
     <Compile Include="Migrations\Game\20230117154806_SkillOverhaulGameMigration.designer.cs">
       <DependentUpon>20230117154806_SkillOverhaulGameMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20230118210112_NewChallengePropertiesMigration.cs" />
+    <Compile Include="Migrations\Game\20230118210112_NewChallengePropertiesMigration.designer.cs">
+      <DependentUpon>20230118210112_NewChallengePropertiesMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

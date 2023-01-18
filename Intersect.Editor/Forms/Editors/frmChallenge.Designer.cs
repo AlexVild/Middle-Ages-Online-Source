@@ -1,0 +1,692 @@
+﻿
+namespace Intersect.Editor.Forms.Editors
+{
+    partial class frmChallenge
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmChallenge));
+            this.toolStrip = new DarkUI.Controls.DarkToolStrip();
+            this.toolStripItemNew = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripItemDelete = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.btnAlphabetical = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripItemCopy = new System.Windows.Forms.ToolStripButton();
+            this.toolStripItemPaste = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
+            this.grpWeaponTypes = new DarkUI.Controls.DarkGroupBox();
+            this.btnClearSearch = new DarkUI.Controls.DarkButton();
+            this.txtSearch = new DarkUI.Controls.DarkTextBox();
+            this.lstGameObjects = new Intersect.Editor.Forms.Controls.GameObjectList();
+            this.grpEditor = new DarkUI.Controls.DarkGroupBox();
+            this.btnAddFolder = new DarkUI.Controls.DarkButton();
+            this.cmbFolder = new DarkUI.Controls.DarkComboBox();
+            this.lblFolder = new System.Windows.Forms.Label();
+            this.txtName = new DarkUI.Controls.DarkTextBox();
+            this.lblName = new System.Windows.Forms.Label();
+            this.btnSave = new DarkUI.Controls.DarkButton();
+            this.btnCancel = new DarkUI.Controls.DarkButton();
+            this.grpUnlocks = new DarkUI.Controls.DarkGroupBox();
+            this.grpDetails = new DarkUI.Controls.DarkGroupBox();
+            this.lblChallengeType = new System.Windows.Forms.Label();
+            this.cmbChallengeType = new DarkUI.Controls.DarkComboBox();
+            this.lblReps = new System.Windows.Forms.Label();
+            this.lblSets = new System.Windows.Forms.Label();
+            this.lblParam = new System.Windows.Forms.Label();
+            this.nudReps = new DarkUI.Controls.DarkNumericUpDown();
+            this.nudSets = new DarkUI.Controls.DarkNumericUpDown();
+            this.nudParam = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblSpell = new System.Windows.Forms.Label();
+            this.cmbSpell = new DarkUI.Controls.DarkComboBox();
+            this.lblEvent = new System.Windows.Forms.Label();
+            this.cmbEvent = new DarkUI.Controls.DarkComboBox();
+            this.txtStartDesc = new DarkUI.Controls.DarkTextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.cmbParamSelector = new DarkUI.Controls.DarkComboBox();
+            this.toolStrip.SuspendLayout();
+            this.grpWeaponTypes.SuspendLayout();
+            this.grpEditor.SuspendLayout();
+            this.grpUnlocks.SuspendLayout();
+            this.grpDetails.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudReps)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSets)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudParam)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // toolStrip
+            // 
+            this.toolStrip.AutoSize = false;
+            this.toolStrip.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.toolStrip.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripItemNew,
+            this.toolStripSeparator1,
+            this.toolStripItemDelete,
+            this.toolStripSeparator2,
+            this.btnAlphabetical,
+            this.toolStripSeparator4,
+            this.toolStripItemCopy,
+            this.toolStripItemPaste,
+            this.toolStripSeparator3,
+            this.toolStripItemUndo});
+            this.toolStrip.Location = new System.Drawing.Point(0, 0);
+            this.toolStrip.Name = "toolStrip";
+            this.toolStrip.Padding = new System.Windows.Forms.Padding(5, 0, 1, 0);
+            this.toolStrip.Size = new System.Drawing.Size(780, 25);
+            this.toolStrip.TabIndex = 52;
+            this.toolStrip.Text = "toolStrip1";
+            // 
+            // toolStripItemNew
+            // 
+            this.toolStripItemNew.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripItemNew.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.toolStripItemNew.Image = ((System.Drawing.Image)(resources.GetObject("toolStripItemNew.Image")));
+            this.toolStripItemNew.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripItemNew.Name = "toolStripItemNew";
+            this.toolStripItemNew.Size = new System.Drawing.Size(23, 22);
+            this.toolStripItemNew.Text = "New";
+            this.toolStripItemNew.Click += new System.EventHandler(this.toolStripItemNew_Click_1);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.toolStripSeparator1.Margin = new System.Windows.Forms.Padding(0, 0, 2, 0);
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripItemDelete
+            // 
+            this.toolStripItemDelete.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripItemDelete.Enabled = false;
+            this.toolStripItemDelete.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.toolStripItemDelete.Image = ((System.Drawing.Image)(resources.GetObject("toolStripItemDelete.Image")));
+            this.toolStripItemDelete.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripItemDelete.Name = "toolStripItemDelete";
+            this.toolStripItemDelete.Size = new System.Drawing.Size(23, 22);
+            this.toolStripItemDelete.Text = "Delete";
+            this.toolStripItemDelete.Click += new System.EventHandler(this.toolStripItemDelete_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.toolStripSeparator2.Margin = new System.Windows.Forms.Padding(0, 0, 2, 0);
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            // 
+            // btnAlphabetical
+            // 
+            this.btnAlphabetical.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.btnAlphabetical.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.btnAlphabetical.Image = ((System.Drawing.Image)(resources.GetObject("btnAlphabetical.Image")));
+            this.btnAlphabetical.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.btnAlphabetical.Name = "btnAlphabetical";
+            this.btnAlphabetical.Size = new System.Drawing.Size(23, 22);
+            this.btnAlphabetical.Text = "Order Chronologically";
+            this.btnAlphabetical.Click += new System.EventHandler(this.btnAlphabetical_Click);
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.toolStripSeparator4.Margin = new System.Windows.Forms.Padding(0, 0, 2, 0);
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripItemCopy
+            // 
+            this.toolStripItemCopy.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripItemCopy.Enabled = false;
+            this.toolStripItemCopy.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.toolStripItemCopy.Image = ((System.Drawing.Image)(resources.GetObject("toolStripItemCopy.Image")));
+            this.toolStripItemCopy.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripItemCopy.Name = "toolStripItemCopy";
+            this.toolStripItemCopy.Size = new System.Drawing.Size(23, 22);
+            this.toolStripItemCopy.Text = "Copy";
+            this.toolStripItemCopy.Click += new System.EventHandler(this.toolStripItemCopy_Click);
+            // 
+            // toolStripItemPaste
+            // 
+            this.toolStripItemPaste.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripItemPaste.Enabled = false;
+            this.toolStripItemPaste.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.toolStripItemPaste.Image = ((System.Drawing.Image)(resources.GetObject("toolStripItemPaste.Image")));
+            this.toolStripItemPaste.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripItemPaste.Name = "toolStripItemPaste";
+            this.toolStripItemPaste.Size = new System.Drawing.Size(23, 22);
+            this.toolStripItemPaste.Text = "Paste";
+            this.toolStripItemPaste.Click += new System.EventHandler(this.toolStripItemPaste_Click);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.toolStripSeparator3.Margin = new System.Windows.Forms.Padding(0, 0, 2, 0);
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripItemUndo
+            // 
+            this.toolStripItemUndo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripItemUndo.Enabled = false;
+            this.toolStripItemUndo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.toolStripItemUndo.Image = ((System.Drawing.Image)(resources.GetObject("toolStripItemUndo.Image")));
+            this.toolStripItemUndo.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripItemUndo.Name = "toolStripItemUndo";
+            this.toolStripItemUndo.Size = new System.Drawing.Size(23, 22);
+            this.toolStripItemUndo.Text = "Undo";
+            this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
+            // 
+            // grpWeaponTypes
+            // 
+            this.grpWeaponTypes.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpWeaponTypes.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpWeaponTypes.Controls.Add(this.btnClearSearch);
+            this.grpWeaponTypes.Controls.Add(this.txtSearch);
+            this.grpWeaponTypes.Controls.Add(this.lstGameObjects);
+            this.grpWeaponTypes.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpWeaponTypes.Location = new System.Drawing.Point(12, 28);
+            this.grpWeaponTypes.Name = "grpWeaponTypes";
+            this.grpWeaponTypes.Size = new System.Drawing.Size(203, 366);
+            this.grpWeaponTypes.TabIndex = 53;
+            this.grpWeaponTypes.TabStop = false;
+            this.grpWeaponTypes.Text = "Challenges";
+            // 
+            // btnClearSearch
+            // 
+            this.btnClearSearch.Location = new System.Drawing.Point(179, 18);
+            this.btnClearSearch.Name = "btnClearSearch";
+            this.btnClearSearch.Padding = new System.Windows.Forms.Padding(5);
+            this.btnClearSearch.Size = new System.Drawing.Size(18, 20);
+            this.btnClearSearch.TabIndex = 34;
+            this.btnClearSearch.Text = "X";
+            this.btnClearSearch.Click += new System.EventHandler(this.btnClearSearch_Click);
+            // 
+            // txtSearch
+            // 
+            this.txtSearch.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.txtSearch.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtSearch.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.txtSearch.Location = new System.Drawing.Point(6, 18);
+            this.txtSearch.Name = "txtSearch";
+            this.txtSearch.Size = new System.Drawing.Size(167, 20);
+            this.txtSearch.TabIndex = 33;
+            this.txtSearch.Text = "Search...";
+            this.txtSearch.TextChanged += new System.EventHandler(this.txtSearch_TextChanged);
+            // 
+            // lstGameObjects
+            // 
+            this.lstGameObjects.AllowDrop = true;
+            this.lstGameObjects.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.lstGameObjects.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.lstGameObjects.ForeColor = System.Drawing.Color.Gainsboro;
+            this.lstGameObjects.HideSelection = false;
+            this.lstGameObjects.ImageIndex = 0;
+            this.lstGameObjects.LineColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(150)))), ((int)(((byte)(150)))));
+            this.lstGameObjects.Location = new System.Drawing.Point(6, 44);
+            this.lstGameObjects.Name = "lstGameObjects";
+            this.lstGameObjects.SelectedImageIndex = 0;
+            this.lstGameObjects.Size = new System.Drawing.Size(191, 312);
+            this.lstGameObjects.TabIndex = 32;
+            // 
+            // grpEditor
+            // 
+            this.grpEditor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpEditor.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpEditor.Controls.Add(this.grpDetails);
+            this.grpEditor.Controls.Add(this.grpUnlocks);
+            this.grpEditor.Controls.Add(this.btnAddFolder);
+            this.grpEditor.Controls.Add(this.cmbFolder);
+            this.grpEditor.Controls.Add(this.lblFolder);
+            this.grpEditor.Controls.Add(this.txtName);
+            this.grpEditor.Controls.Add(this.lblName);
+            this.grpEditor.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpEditor.Location = new System.Drawing.Point(221, 28);
+            this.grpEditor.Name = "grpEditor";
+            this.grpEditor.Size = new System.Drawing.Size(547, 366);
+            this.grpEditor.TabIndex = 55;
+            this.grpEditor.TabStop = false;
+            this.grpEditor.Text = "Weapon Type";
+            // 
+            // btnAddFolder
+            // 
+            this.btnAddFolder.Location = new System.Drawing.Point(519, 17);
+            this.btnAddFolder.Name = "btnAddFolder";
+            this.btnAddFolder.Padding = new System.Windows.Forms.Padding(5);
+            this.btnAddFolder.Size = new System.Drawing.Size(18, 21);
+            this.btnAddFolder.TabIndex = 54;
+            this.btnAddFolder.Text = "+";
+            this.btnAddFolder.Click += new System.EventHandler(this.btnAddFolder_Click);
+            // 
+            // cmbFolder
+            // 
+            this.cmbFolder.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbFolder.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbFolder.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbFolder.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbFolder.DrawDropdownHoverOutline = false;
+            this.cmbFolder.DrawFocusRectangle = false;
+            this.cmbFolder.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbFolder.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbFolder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbFolder.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbFolder.FormattingEnabled = true;
+            this.cmbFolder.Location = new System.Drawing.Point(321, 17);
+            this.cmbFolder.Name = "cmbFolder";
+            this.cmbFolder.Size = new System.Drawing.Size(192, 21);
+            this.cmbFolder.TabIndex = 53;
+            this.cmbFolder.Text = null;
+            this.cmbFolder.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbFolder.SelectedIndexChanged += new System.EventHandler(this.cmbFolder_SelectedIndexChanged);
+            // 
+            // lblFolder
+            // 
+            this.lblFolder.AutoSize = true;
+            this.lblFolder.Location = new System.Drawing.Point(279, 22);
+            this.lblFolder.Name = "lblFolder";
+            this.lblFolder.Size = new System.Drawing.Size(36, 13);
+            this.lblFolder.TabIndex = 52;
+            this.lblFolder.Text = "Folder";
+            // 
+            // txtName
+            // 
+            this.txtName.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.txtName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtName.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.txtName.Location = new System.Drawing.Point(57, 18);
+            this.txtName.Name = "txtName";
+            this.txtName.Size = new System.Drawing.Size(216, 20);
+            this.txtName.TabIndex = 21;
+            this.txtName.TextChanged += new System.EventHandler(this.txtName_TextChanged);
+            // 
+            // lblName
+            // 
+            this.lblName.AutoSize = true;
+            this.lblName.Location = new System.Drawing.Point(16, 20);
+            this.lblName.Name = "lblName";
+            this.lblName.Size = new System.Drawing.Size(35, 13);
+            this.lblName.TabIndex = 20;
+            this.lblName.Text = "Name";
+            // 
+            // btnSave
+            // 
+            this.btnSave.Location = new System.Drawing.Point(488, 400);
+            this.btnSave.Name = "btnSave";
+            this.btnSave.Padding = new System.Windows.Forms.Padding(5);
+            this.btnSave.Size = new System.Drawing.Size(135, 27);
+            this.btnSave.TabIndex = 56;
+            this.btnSave.Text = "Save";
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            // 
+            // btnCancel
+            // 
+            this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btnCancel.Location = new System.Drawing.Point(629, 400);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Padding = new System.Windows.Forms.Padding(5);
+            this.btnCancel.Size = new System.Drawing.Size(139, 27);
+            this.btnCancel.TabIndex = 57;
+            this.btnCancel.Text = "Cancel";
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            // 
+            // grpUnlocks
+            // 
+            this.grpUnlocks.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpUnlocks.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpUnlocks.Controls.Add(this.label1);
+            this.grpUnlocks.Controls.Add(this.txtStartDesc);
+            this.grpUnlocks.Controls.Add(this.cmbEvent);
+            this.grpUnlocks.Controls.Add(this.lblEvent);
+            this.grpUnlocks.Controls.Add(this.cmbSpell);
+            this.grpUnlocks.Controls.Add(this.lblSpell);
+            this.grpUnlocks.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpUnlocks.Location = new System.Drawing.Point(19, 172);
+            this.grpUnlocks.Name = "grpUnlocks";
+            this.grpUnlocks.Size = new System.Drawing.Size(518, 184);
+            this.grpUnlocks.TabIndex = 56;
+            this.grpUnlocks.TabStop = false;
+            this.grpUnlocks.Text = "Unlocks";
+            // 
+            // grpDetails
+            // 
+            this.grpDetails.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpDetails.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpDetails.Controls.Add(this.nudParam);
+            this.grpDetails.Controls.Add(this.cmbParamSelector);
+            this.grpDetails.Controls.Add(this.nudSets);
+            this.grpDetails.Controls.Add(this.nudReps);
+            this.grpDetails.Controls.Add(this.lblParam);
+            this.grpDetails.Controls.Add(this.lblSets);
+            this.grpDetails.Controls.Add(this.lblReps);
+            this.grpDetails.Controls.Add(this.cmbChallengeType);
+            this.grpDetails.Controls.Add(this.lblChallengeType);
+            this.grpDetails.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpDetails.Location = new System.Drawing.Point(19, 44);
+            this.grpDetails.Name = "grpDetails";
+            this.grpDetails.Size = new System.Drawing.Size(518, 122);
+            this.grpDetails.TabIndex = 57;
+            this.grpDetails.TabStop = false;
+            this.grpDetails.Text = "Challenge Details";
+            // 
+            // lblChallengeType
+            // 
+            this.lblChallengeType.AutoSize = true;
+            this.lblChallengeType.Location = new System.Drawing.Point(6, 25);
+            this.lblChallengeType.Name = "lblChallengeType";
+            this.lblChallengeType.Size = new System.Drawing.Size(81, 13);
+            this.lblChallengeType.TabIndex = 53;
+            this.lblChallengeType.Text = "Challenge Type";
+            // 
+            // cmbChallengeType
+            // 
+            this.cmbChallengeType.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbChallengeType.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbChallengeType.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbChallengeType.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbChallengeType.DrawDropdownHoverOutline = false;
+            this.cmbChallengeType.DrawFocusRectangle = false;
+            this.cmbChallengeType.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbChallengeType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbChallengeType.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbChallengeType.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbChallengeType.FormattingEnabled = true;
+            this.cmbChallengeType.Location = new System.Drawing.Point(9, 41);
+            this.cmbChallengeType.Name = "cmbChallengeType";
+            this.cmbChallengeType.Size = new System.Drawing.Size(503, 21);
+            this.cmbChallengeType.TabIndex = 54;
+            this.cmbChallengeType.Text = null;
+            this.cmbChallengeType.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbChallengeType.SelectedIndexChanged += new System.EventHandler(this.cmbChallengeType_SelectedIndexChanged);
+            // 
+            // lblReps
+            // 
+            this.lblReps.AutoSize = true;
+            this.lblReps.Location = new System.Drawing.Point(6, 75);
+            this.lblReps.Name = "lblReps";
+            this.lblReps.Size = new System.Drawing.Size(60, 13);
+            this.lblReps.TabIndex = 55;
+            this.lblReps.Text = "Repetitions";
+            // 
+            // lblSets
+            // 
+            this.lblSets.AutoSize = true;
+            this.lblSets.Location = new System.Drawing.Point(162, 75);
+            this.lblSets.Name = "lblSets";
+            this.lblSets.Size = new System.Drawing.Size(28, 13);
+            this.lblSets.TabIndex = 56;
+            this.lblSets.Text = "Sets";
+            // 
+            // lblParam
+            // 
+            this.lblParam.AutoSize = true;
+            this.lblParam.Location = new System.Drawing.Point(310, 75);
+            this.lblParam.Name = "lblParam";
+            this.lblParam.Size = new System.Drawing.Size(37, 13);
+            this.lblParam.TabIndex = 57;
+            this.lblParam.Text = "Param";
+            // 
+            // nudReps
+            // 
+            this.nudReps.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudReps.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudReps.Location = new System.Drawing.Point(9, 91);
+            this.nudReps.Maximum = new decimal(new int[] {
+            10000000,
+            0,
+            0,
+            0});
+            this.nudReps.Name = "nudReps";
+            this.nudReps.Size = new System.Drawing.Size(89, 20);
+            this.nudReps.TabIndex = 80;
+            this.nudReps.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudReps.ValueChanged += new System.EventHandler(this.nudReps_ValueChanged);
+            // 
+            // nudSets
+            // 
+            this.nudSets.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudSets.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudSets.Location = new System.Drawing.Point(165, 91);
+            this.nudSets.Maximum = new decimal(new int[] {
+            10000000,
+            0,
+            0,
+            0});
+            this.nudSets.Name = "nudSets";
+            this.nudSets.Size = new System.Drawing.Size(89, 20);
+            this.nudSets.TabIndex = 81;
+            this.nudSets.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudSets.ValueChanged += new System.EventHandler(this.nudSets_ValueChanged);
+            // 
+            // nudParam
+            // 
+            this.nudParam.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudParam.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudParam.Location = new System.Drawing.Point(313, 91);
+            this.nudParam.Maximum = new decimal(new int[] {
+            10000000,
+            0,
+            0,
+            0});
+            this.nudParam.Name = "nudParam";
+            this.nudParam.Size = new System.Drawing.Size(89, 20);
+            this.nudParam.TabIndex = 82;
+            this.nudParam.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudParam.ValueChanged += new System.EventHandler(this.nudParam_ValueChanged);
+            // 
+            // lblSpell
+            // 
+            this.lblSpell.AutoSize = true;
+            this.lblSpell.Location = new System.Drawing.Point(6, 26);
+            this.lblSpell.Name = "lblSpell";
+            this.lblSpell.Size = new System.Drawing.Size(30, 13);
+            this.lblSpell.TabIndex = 112;
+            this.lblSpell.Text = "Spell";
+            // 
+            // cmbSpell
+            // 
+            this.cmbSpell.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbSpell.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbSpell.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbSpell.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbSpell.DrawDropdownHoverOutline = false;
+            this.cmbSpell.DrawFocusRectangle = false;
+            this.cmbSpell.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbSpell.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbSpell.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbSpell.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbSpell.FormattingEnabled = true;
+            this.cmbSpell.Location = new System.Drawing.Point(9, 42);
+            this.cmbSpell.Name = "cmbSpell";
+            this.cmbSpell.Size = new System.Drawing.Size(229, 21);
+            this.cmbSpell.TabIndex = 115;
+            this.cmbSpell.Text = null;
+            this.cmbSpell.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbSpell.SelectedIndexChanged += new System.EventHandler(this.cmbSpell_SelectedIndexChanged);
+            // 
+            // lblEvent
+            // 
+            this.lblEvent.AutoSize = true;
+            this.lblEvent.Location = new System.Drawing.Point(260, 26);
+            this.lblEvent.Name = "lblEvent";
+            this.lblEvent.Size = new System.Drawing.Size(90, 13);
+            this.lblEvent.TabIndex = 116;
+            this.lblEvent.Text = "Completion Event";
+            // 
+            // cmbEvent
+            // 
+            this.cmbEvent.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbEvent.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbEvent.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbEvent.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbEvent.DrawDropdownHoverOutline = false;
+            this.cmbEvent.DrawFocusRectangle = false;
+            this.cmbEvent.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbEvent.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbEvent.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbEvent.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbEvent.FormattingEnabled = true;
+            this.cmbEvent.Location = new System.Drawing.Point(263, 42);
+            this.cmbEvent.Name = "cmbEvent";
+            this.cmbEvent.Size = new System.Drawing.Size(239, 21);
+            this.cmbEvent.TabIndex = 117;
+            this.cmbEvent.Text = null;
+            this.cmbEvent.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbEvent.SelectedIndexChanged += new System.EventHandler(this.cmbEvent_SelectedIndexChanged);
+            // 
+            // txtStartDesc
+            // 
+            this.txtStartDesc.AcceptsReturn = true;
+            this.txtStartDesc.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.txtStartDesc.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtStartDesc.ForeColor = System.Drawing.Color.Gainsboro;
+            this.txtStartDesc.Location = new System.Drawing.Point(263, 94);
+            this.txtStartDesc.Multiline = true;
+            this.txtStartDesc.Name = "txtStartDesc";
+            this.txtStartDesc.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtStartDesc.Size = new System.Drawing.Size(239, 75);
+            this.txtStartDesc.TabIndex = 118;
+            this.txtStartDesc.TextChanged += new System.EventHandler(this.txtStartDesc_TextChanged);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(260, 78);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(91, 13);
+            this.label1.TabIndex = 119;
+            this.label1.Text = "Event Description";
+            // 
+            // cmbParamSelector
+            // 
+            this.cmbParamSelector.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbParamSelector.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbParamSelector.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbParamSelector.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbParamSelector.DrawDropdownHoverOutline = false;
+            this.cmbParamSelector.DrawFocusRectangle = false;
+            this.cmbParamSelector.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbParamSelector.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbParamSelector.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbParamSelector.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbParamSelector.FormattingEnabled = true;
+            this.cmbParamSelector.Location = new System.Drawing.Point(313, 91);
+            this.cmbParamSelector.Name = "cmbParamSelector";
+            this.cmbParamSelector.Size = new System.Drawing.Size(199, 21);
+            this.cmbParamSelector.TabIndex = 83;
+            this.cmbParamSelector.Text = null;
+            this.cmbParamSelector.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbParamSelector.SelectedIndexChanged += new System.EventHandler(this.cmbParamSelector_SelectedIndexChanged);
+            // 
+            // frmChallenge
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.ClientSize = new System.Drawing.Size(780, 438);
+            this.Controls.Add(this.btnCancel);
+            this.Controls.Add(this.btnSave);
+            this.Controls.Add(this.grpEditor);
+            this.Controls.Add(this.grpWeaponTypes);
+            this.Controls.Add(this.toolStrip);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Name = "frmChallenge";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Challenge Editor";
+            this.toolStrip.ResumeLayout(false);
+            this.toolStrip.PerformLayout();
+            this.grpWeaponTypes.ResumeLayout(false);
+            this.grpWeaponTypes.PerformLayout();
+            this.grpEditor.ResumeLayout(false);
+            this.grpEditor.PerformLayout();
+            this.grpUnlocks.ResumeLayout(false);
+            this.grpUnlocks.PerformLayout();
+            this.grpDetails.ResumeLayout(false);
+            this.grpDetails.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudReps)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSets)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudParam)).EndInit();
+            this.ResumeLayout(false);
+
+        }
+
+        #endregion
+
+        private DarkUI.Controls.DarkToolStrip toolStrip;
+        private System.Windows.Forms.ToolStripButton toolStripItemNew;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripButton toolStripItemDelete;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripButton btnAlphabetical;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        public System.Windows.Forms.ToolStripButton toolStripItemCopy;
+        public System.Windows.Forms.ToolStripButton toolStripItemPaste;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        public System.Windows.Forms.ToolStripButton toolStripItemUndo;
+        private DarkUI.Controls.DarkGroupBox grpWeaponTypes;
+        private DarkUI.Controls.DarkButton btnClearSearch;
+        private DarkUI.Controls.DarkTextBox txtSearch;
+        private Controls.GameObjectList lstGameObjects;
+        private DarkUI.Controls.DarkGroupBox grpEditor;
+        private DarkUI.Controls.DarkButton btnAddFolder;
+        private DarkUI.Controls.DarkComboBox cmbFolder;
+        private System.Windows.Forms.Label lblFolder;
+        private DarkUI.Controls.DarkTextBox txtName;
+        private System.Windows.Forms.Label lblName;
+        private DarkUI.Controls.DarkButton btnSave;
+        private DarkUI.Controls.DarkButton btnCancel;
+        private DarkUI.Controls.DarkGroupBox grpUnlocks;
+        private DarkUI.Controls.DarkGroupBox grpDetails;
+        private System.Windows.Forms.Label lblParam;
+        private System.Windows.Forms.Label lblSets;
+        private System.Windows.Forms.Label lblReps;
+        private DarkUI.Controls.DarkComboBox cmbChallengeType;
+        private System.Windows.Forms.Label lblChallengeType;
+        private DarkUI.Controls.DarkNumericUpDown nudParam;
+        private DarkUI.Controls.DarkNumericUpDown nudSets;
+        private DarkUI.Controls.DarkNumericUpDown nudReps;
+        private System.Windows.Forms.Label lblSpell;
+        private DarkUI.Controls.DarkComboBox cmbSpell;
+        private DarkUI.Controls.DarkComboBox cmbEvent;
+        private System.Windows.Forms.Label lblEvent;
+        private System.Windows.Forms.Label label1;
+        private DarkUI.Controls.DarkTextBox txtStartDesc;
+        private DarkUI.Controls.DarkComboBox cmbParamSelector;
+    }
+}

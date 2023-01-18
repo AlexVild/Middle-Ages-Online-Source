@@ -1,6 +1,6 @@
 using System;
 using System.Windows.Forms;
-
+using Intersect.Editor.Forms.Helpers;
 using Intersect.Editor.Networking;
 using Intersect.Enums;
 using Intersect.Logging;
