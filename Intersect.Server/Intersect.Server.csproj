@@ -480,6 +480,7 @@
     <Compile Include="Database\PlayerData\Players\Bag.cs" />
     <Compile Include="Database\PlayerData\Players\BagSlot.cs" />
     <Compile Include="Database\PlayerData\Players\BestiaryUnlockInstance.cs" />
+    <Compile Include="Database\PlayerData\Players\ChallengeInstance.cs" />
     <Compile Include="Database\PlayerData\Players\CosmeticInstance.cs" />
     <Compile Include="Database\PlayerData\Players\GuildBankSlot.cs" />
     <Compile Include="Database\PlayerData\Players\BankSlot.cs" />
@@ -499,6 +500,7 @@
     <Compile Include="Database\PlayerData\Players\RecipeInstance.cs" />
     <Compile Include="Database\PlayerData\Players\SlotHelper.cs" />
     <Compile Include="Database\PlayerData\Players\SpellSlot.cs" />
+    <Compile Include="Database\PlayerData\Players\WeaponMasteryInstance.cs" />
     <Compile Include="Database\PlayerData\RecordTeammateInstance.cs" />
     <Compile Include="Database\PlayerData\TimerInstance.cs" />
     <Compile Include="DTOs\PlayerHarvestDTO.cs" />
@@ -516,6 +518,8 @@
     <Compile Include="Entities\Label.cs" />
     <Compile Include="Entities\Npc.Combat.cs" />
     <Compile Include="Entities\Player.Bestiary.cs" />
+    <Compile Include="Entities\Player.Chalenges.Messaging.cs" />
+    <Compile Include="Entities\Player.Challenges.cs" />
     <Compile Include="Entities\Player.Combat.cs" />
     <Compile Include="Entities\Player.Cosmetics.cs" />
     <Compile Include="Entities\Player.Database.cs" />
@@ -676,6 +680,10 @@
     <Compile Include="Migrations\20230110154913_PlayerPassiveSpellMigration.cs" />
     <Compile Include="Migrations\20230110154913_PlayerPassiveSpellMigration.designer.cs">
       <DependentUpon>20230110154913_PlayerPassiveSpellMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20230120190134_InitialChallengeMigration.cs" />
+    <Compile Include="Migrations\20230120190134_InitialChallengeMigration.designer.cs">
+      <DependentUpon>20230120190134_InitialChallengeMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.cs" />
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.Designer.cs">
@@ -1034,6 +1042,10 @@
     <Compile Include="Migrations\Game\20230118225322_WeaponTypesToItemsMigration.cs" />
     <Compile Include="Migrations\Game\20230118225322_WeaponTypesToItemsMigration.designer.cs">
       <DependentUpon>20230118225322_WeaponTypesToItemsMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20230120185643_ItemMaxLevelMigration.cs" />
+    <Compile Include="Migrations\Game\20230120185643_ItemMaxLevelMigration.designer.cs">
+      <DependentUpon>20230120185643_ItemMaxLevelMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">

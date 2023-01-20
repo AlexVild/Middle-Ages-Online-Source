@@ -2042,6 +2042,8 @@ namespace Intersect.Server.Database
                     MigrateDbSet(context.Player_Unlocked_Skills, newPlayerContext.Player_Unlocked_Skills);
                     MigrateDbSet(context.Player_Passive_Spells, newPlayerContext.Player_Passive_Spells);
                     MigrateDbSet(context.Player_Cosmetics, newPlayerContext.Player_Cosmetics);
+                    MigrateDbSet(context.Player_Challenges, newPlayerContext.Player_Challenges);
+                    MigrateDbSet(context.Player_Weapon_Masteries, newPlayerContext.Player_Weapon_Masteries);
 
                     newPlayerContext.ChangeTracker.DetectChanges();
                     newPlayerContext.SaveChanges();

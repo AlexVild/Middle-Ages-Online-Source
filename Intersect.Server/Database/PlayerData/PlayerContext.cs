@@ -93,6 +93,10 @@ namespace Intersect.Server.Database.PlayerData
         public DbSet<PlayerSkillInstance> Player_Unlocked_Skills { get; set; }
         
         public DbSet<PassiveSpell> Player_Passive_Spells { get; set; }
+        
+        public DbSet<ChallengeInstance> Player_Challenges { get; set; }
+
+        public DbSet<WeaponMasteryInstance> Player_Weapon_Masteries { get; set; }
 
         internal async ValueTask Commit(
             bool commit = false,
@@ -183,6 +187,14 @@ namespace Intersect.Server.Database.PlayerData
             modelBuilder.Entity<Player>()
                 .HasMany(player => player.PassiveSpells)
                 .WithOne(passive => passive.Player);
+
+            modelBuilder.Entity<Player>()
+                .HasMany(player => player.Challenges)
+                .WithOne(challenge => challenge.Player);
+
+            modelBuilder.Entity<Player>()
+               .HasMany(player => player.WeaponMasteries)
+               .WithOne(mastery => mastery.Player);
         }
 
         public void Seed()
@@ -292,6 +304,12 @@ namespace Intersect.Server.Database.PlayerData
                 Entry(itm).State = EntityState.Detached;
 
             foreach (var itm in player.PassiveSpells)
+                Entry(itm).State = EntityState.Detached;
+
+            foreach (var itm in player.Challenges)
+                Entry(itm).State = EntityState.Detached;
+            
+            foreach (var itm in player.WeaponMasteries)
                 Entry(itm).State = EntityState.Detached;
         }
 

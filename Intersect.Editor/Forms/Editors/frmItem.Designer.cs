@@ -111,6 +111,8 @@ namespace Intersect.Editor.Forms.Editors
             this.lstDrops = new System.Windows.Forms.ListBox();
             this.grpEquipment = new DarkUI.Controls.DarkGroupBox();
             this.grpWeaponTypes = new DarkUI.Controls.DarkGroupBox();
+            this.nudMaxWeaponLvl = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblMaxWeaponLvl = new System.Windows.Forms.Label();
             this.btnRemoveWeaponType = new DarkUI.Controls.DarkButton();
             this.btnAddWeaponType = new DarkUI.Controls.DarkButton();
             this.lstWeaponTypes = new System.Windows.Forms.ListBox();
@@ -339,6 +341,7 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.picItem)).BeginInit();
             this.grpEquipment.SuspendLayout();
             this.grpWeaponTypes.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMaxWeaponLvl)).BeginInit();
             this.grpCosmetic.SuspendLayout();
             this.grpSpecialAttack.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudSpecialAttackChargeTime)).BeginInit();
@@ -1456,7 +1459,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpEquipment.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpEquipment.Location = new System.Drawing.Point(2, 700);
             this.grpEquipment.Name = "grpEquipment";
-            this.grpEquipment.Size = new System.Drawing.Size(732, 1022);
+            this.grpEquipment.Size = new System.Drawing.Size(732, 1063);
             this.grpEquipment.TabIndex = 12;
             this.grpEquipment.TabStop = false;
             this.grpEquipment.Text = "Equipment";
@@ -1466,6 +1469,8 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpWeaponTypes.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpWeaponTypes.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpWeaponTypes.Controls.Add(this.nudMaxWeaponLvl);
+            this.grpWeaponTypes.Controls.Add(this.lblMaxWeaponLvl);
             this.grpWeaponTypes.Controls.Add(this.btnRemoveWeaponType);
             this.grpWeaponTypes.Controls.Add(this.btnAddWeaponType);
             this.grpWeaponTypes.Controls.Add(this.lstWeaponTypes);
@@ -1476,10 +1481,34 @@ namespace Intersect.Editor.Forms.Editors
             this.grpWeaponTypes.Margin = new System.Windows.Forms.Padding(2);
             this.grpWeaponTypes.Name = "grpWeaponTypes";
             this.grpWeaponTypes.Padding = new System.Windows.Forms.Padding(2);
-            this.grpWeaponTypes.Size = new System.Drawing.Size(198, 175);
+            this.grpWeaponTypes.Size = new System.Drawing.Size(198, 223);
             this.grpWeaponTypes.TabIndex = 120;
             this.grpWeaponTypes.TabStop = false;
             this.grpWeaponTypes.Text = "Weapon Type Trees";
+            // 
+            // nudMaxWeaponLvl
+            // 
+            this.nudMaxWeaponLvl.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudMaxWeaponLvl.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudMaxWeaponLvl.Location = new System.Drawing.Point(7, 185);
+            this.nudMaxWeaponLvl.Name = "nudMaxWeaponLvl";
+            this.nudMaxWeaponLvl.Size = new System.Drawing.Size(177, 20);
+            this.nudMaxWeaponLvl.TabIndex = 120;
+            this.nudMaxWeaponLvl.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudMaxWeaponLvl.ValueChanged += new System.EventHandler(this.nudMaxWeaponLvl_ValueChanged);
+            // 
+            // lblMaxWeaponLvl
+            // 
+            this.lblMaxWeaponLvl.AutoSize = true;
+            this.lblMaxWeaponLvl.Location = new System.Drawing.Point(4, 169);
+            this.lblMaxWeaponLvl.Name = "lblMaxWeaponLvl";
+            this.lblMaxWeaponLvl.Size = new System.Drawing.Size(56, 13);
+            this.lblMaxWeaponLvl.TabIndex = 119;
+            this.lblMaxWeaponLvl.Text = "Max Level";
             // 
             // btnRemoveWeaponType
             // 
@@ -1512,6 +1541,7 @@ namespace Intersect.Editor.Forms.Editors
             this.lstWeaponTypes.Name = "lstWeaponTypes";
             this.lstWeaponTypes.Size = new System.Drawing.Size(176, 67);
             this.lstWeaponTypes.TabIndex = 116;
+            this.lstWeaponTypes.SelectedIndexChanged += new System.EventHandler(this.lstWeaponTypes_SelectedIndexChanged);
             // 
             // lblWeaponTypes
             // 
@@ -4496,6 +4526,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpEquipment.PerformLayout();
             this.grpWeaponTypes.ResumeLayout(false);
             this.grpWeaponTypes.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMaxWeaponLvl)).EndInit();
             this.grpCosmetic.ResumeLayout(false);
             this.grpCosmetic.PerformLayout();
             this.grpSpecialAttack.ResumeLayout(false);
@@ -4872,5 +4903,7 @@ namespace Intersect.Editor.Forms.Editors
         private ListBox lstWeaponTypes;
         private Label lblWeaponTypes;
         private DarkComboBox cmbWeaponTypes;
+        private DarkNumericUpDown nudMaxWeaponLvl;
+        private Label lblMaxWeaponLvl;
     }
 }

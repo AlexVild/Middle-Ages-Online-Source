@@ -454,6 +454,8 @@ namespace Intersect.Server.Entities
             // Initialize Class Rank info for any new classes that have been added/underlying updates to CR stuff in Options
             InitClassRanks();
 
+            SetMasteryProgress();
+
             // Refresh recipe unlock statuses in the event they've changed since the player last logged in
             RecipeUnlockWatcher.RefreshPlayer(this);
 
@@ -1412,18 +1414,18 @@ namespace Intersect.Server.Entities
 
         public void GiveExperience(long amount, bool partyCombo = false, Entity opponent = null, bool fromComboEnd = false)
         {
-            if (Level >= Options.MaxLevel || amount == 0)
+            if (amount == 0)
             {
                 return;
             }
 
             var threatLevelExpMod = GetThreatLevelExpMod(opponent);
             amount = (int)Math.Ceiling(threatLevelExpMod * amount);
-            
+
             var expToGive = amount;
 
             // Award combo EXP if opponent was NPC or player; do not reward if threat level is trivial
-            if (CurrentCombo > 0 && (opponent is Npc || opponent is Player) && threatLevelExpMod != Options.Instance.CombatOpts.ThreatLevelExpRates[ThreatLevel.Trivial])
+            if (Level < Options.MaxLevel && CurrentCombo > 0 && (opponent is Npc || opponent is Player) && threatLevelExpMod != Options.Instance.CombatOpts.ThreatLevelExpRates[ThreatLevel.Trivial])
             {
                 ComboExp += CalculateComboExperience(amount, partyCombo);
             }
@@ -1435,15 +1437,27 @@ namespace Intersect.Server.Entities
                 PacketSender.SendExpToast(this, expToGive, fromComboEnd);
             }
 
-            Exp += expToGive;
-            if (Exp < 0)
+            if (Level < Options.MaxLevel)
             {
-                Exp = 0;
+                Exp += expToGive;
+                if (Exp < 0)
+                {
+                    Exp = 0;
+                }
+
+                if (!CheckLevelUp())
+                {
+                    PacketSender.SendExperience(this, ComboExp);
+                }
             }
 
-            if (!CheckLevelUp())
+            if ((opponent is Npc || opponent is Player) || fromComboEnd)
             {
-                PacketSender.SendExperience(this, ComboExp);
+                var weapon = GetEquippedWeapon();
+                foreach (var type in weapon?.WeaponTypes ?? new List<Guid>())
+                {
+                    ProgressMastery(expToGive, type);
+                }
             }
         }
 
@@ -5638,6 +5652,8 @@ namespace Intersect.Server.Entities
                 PacketSender.SendPlayerEquipmentToProximity(this);
                 PacketSender.SendEntityStats(this);
             }
+
+            SetMasteryProgress();
         }
 
         public void EquipmentProcessItemSwap(int item1, int item2)

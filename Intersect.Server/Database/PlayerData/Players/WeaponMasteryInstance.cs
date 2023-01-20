@@ -1,0 +1,64 @@
+﻿using Intersect.GameObjects;
+using Intersect.Server.Entities;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Text;
+using System.Text.Json.Serialization;
+using System.Threading.Tasks;
+
+namespace Intersect.Server.Database.PlayerData.Players
+{
+    public class WeaponMasteryInstance : IPlayerOwned
+    {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public Guid Id { get; private set; }
+
+        [JsonIgnore, NotMapped]
+        public Player Player { get; set; }
+
+        [ForeignKey(nameof(Player))]
+        public Guid PlayerId { get; set; }
+
+        [Column("WeaponType")]
+        public Guid WeaponTypeId { get; set; }
+
+        [NotMapped, JsonIgnore]
+        public WeaponTypeDescriptor WeaponType => WeaponTypeDescriptor.Get(WeaponTypeId);
+
+        public int Level { get; set; }
+
+        public long ExpRemaining { get; set; }
+
+        public bool IsActive { get; set; }
+
+        public bool TryGetCurrentUnlock(out WeaponTypeUnlock unlock)
+        {
+            unlock = default;
+            if (WeaponType == default)
+            {
+                return false;
+            }
+
+            if (!WeaponType.Unlocks?.TryGetValue(Level + 1, out unlock) ?? true)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool TryGetCurrentChallenges(out List<Guid> challengeIds)
+        {
+            challengeIds = new List<Guid>();
+            if (!TryGetCurrentUnlock(out var unlock))
+            {
+                return false;
+            }
+
+            challengeIds = unlock.ChallengeIds;
+            return true;
+        }
+    }
+}

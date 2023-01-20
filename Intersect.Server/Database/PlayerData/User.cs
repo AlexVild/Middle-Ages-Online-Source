@@ -747,6 +747,10 @@ namespace Intersect.Server.Database.PlayerData
                     .ThenInclude(p => p.SkillBook)
                     .Include(p => p.Players)
                     .ThenInclude(p => p.PassiveSpells)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.Challenges)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.WeaponMasteries)
                     .FirstOrDefault()
             ) ??
             throw new InvalidOperationException();
@@ -791,6 +795,10 @@ namespace Intersect.Server.Database.PlayerData
                     .ThenInclude(p => p.SkillBook)
                     .Include(p => p.Players)
                     .ThenInclude(p => p.PassiveSpells)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.Challenges)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.WeaponMasteries)
                     .FirstOrDefault()
             ) ??
             throw new InvalidOperationException();
@@ -834,6 +842,10 @@ namespace Intersect.Server.Database.PlayerData
                     .ThenInclude(p => p.SkillBook)
                     .Include(p => p.Players)
                     .ThenInclude(p => p.PassiveSpells)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.Challenges)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.WeaponMasteries)
                     .FirstOrDefault()
             ) ??
             throw new InvalidOperationException();
@@ -877,6 +889,10 @@ namespace Intersect.Server.Database.PlayerData
                     .ThenInclude(p => p.SkillBook)
                     .Include(p => p.Players)
                     .ThenInclude(p => p.PassiveSpells)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.Challenges)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.WeaponMasteries)
                     .FirstOrDefault()
                 ) ?? throw new InvalidOperationException();
 
@@ -929,6 +945,10 @@ namespace Intersect.Server.Database.PlayerData
                     .ThenInclude(p => p.SkillBook)
                     .Include(p => p.Players)
                     .ThenInclude(p => p.PassiveSpells)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.Challenges)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.WeaponMasteries)
                     .FirstOrDefault()
                 ) ?? throw new InvalidOperationException();
 

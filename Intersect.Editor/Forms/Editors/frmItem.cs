@@ -602,6 +602,7 @@ namespace Intersect.Editor.Forms.Editors
                 nudBackBoost.Value = mEditorItem.BackstepBonus;
 
                 RefreshWeaponTypeTree(false);
+                nudMaxWeaponLvl.Value = 0;
 
                 if (cmbTypeDisplayOverride.Items.Contains(mEditorItem.TypeDisplayOverride ?? string.Empty))
                 {
@@ -1989,6 +1990,7 @@ namespace Intersect.Editor.Forms.Editors
             }
 
             mEditorItem.WeaponTypes.Add(selection);
+            mEditorItem.MaxWeaponLevels[selection] = (int)nudMaxWeaponLvl.Value;
             RefreshWeaponTypeTree(true);
         }
 
@@ -2002,9 +2004,18 @@ namespace Intersect.Editor.Forms.Editors
 
             lstWeaponTypes.Items.Clear();
 
+            var idx = 0;
             foreach(var weaponType in mEditorItem.WeaponTypes)
             {
-                lstWeaponTypes.Items.Add(WeaponTypeDescriptor.GetName(weaponType));
+                var name = WeaponTypeDescriptor.GetName(weaponType);
+                var maxLevel = 0;
+                if (!mEditorItem.MaxWeaponLevels.TryGetValue(weaponType, out maxLevel))
+                {
+                    mEditorItem.MaxWeaponLevels[weaponType] = 0;
+                }
+
+                lstWeaponTypes.Items.Add($"{name} Level {maxLevel}");
+                idx++;
             }
 
             if (savePos && pos < lstWeaponTypes.Items.Count)
@@ -2015,19 +2026,51 @@ namespace Intersect.Editor.Forms.Editors
 
         private void btnRemoveWeaponType_Click(object sender, EventArgs e)
         {
-            if (lstWeaponTypes.SelectedIndex < 0)
+            if (lstWeaponTypes.SelectedIndex < 0 || lstWeaponTypes.SelectedIndex >= mEditorItem.WeaponTypes.Count)
             {
                 return;
             }
 
-            try
+            var type = mEditorItem.WeaponTypes[lstWeaponTypes.SelectedIndex];
+            mEditorItem.WeaponTypes.RemoveAt(lstWeaponTypes.SelectedIndex);
+            mEditorItem.MaxWeaponLevels.Remove(type);
+
+            RefreshWeaponTypeTree(true);
+        }
+
+        private bool SettingWeaponType = false;
+        private void lstWeaponTypes_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SettingWeaponType = true;
+
+            var idx = lstWeaponTypes.SelectedIndex;
+            if (idx < 0 || idx >= mEditorItem.MaxWeaponLevels.Count)
             {
-                mEditorItem.WeaponTypes.RemoveAt(lstWeaponTypes.SelectedIndex);
+                SettingWeaponType = false;
+                return;
             }
-            catch
+
+            var type = mEditorItem.WeaponTypes[idx];
+            nudMaxWeaponLvl.Value = mEditorItem.MaxWeaponLevels[type];
+
+            SettingWeaponType = false;
+        }
+
+        private void nudMaxWeaponLvl_ValueChanged(object sender, EventArgs e)
+        {
+            if (SettingWeaponType)
             {
-                // blank
+                return;
             }
+
+            var idx = lstWeaponTypes.SelectedIndex;
+            if (idx < 0 || idx >= mEditorItem.WeaponTypes.Count)
+            {
+                return;
+            }
+
+            var type = mEditorItem.WeaponTypes[idx];
+            mEditorItem.MaxWeaponLevels[type] = (int)nudMaxWeaponLvl.Value;
 
             RefreshWeaponTypeTree(true);
         }

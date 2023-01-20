@@ -1763,6 +1763,30 @@ namespace Intersect.Server.Localization
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString CosmeticLost = @"You've lost a cosmetic: {00}.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString NewChallenge = @"You've unlocked a new challenge: {00}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString NewChallenges = @"You've unlocked new challenges: {00}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString ChallengeComplete = @"You've completed a challenge: {00}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString ChallengesComplete = @"You've completed multiple challenges: {00}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString WeaponProgression = @"You've gained a proficiency in {00} weapons.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString WeaponProgressions = @"You've gained a profciency levels in: {00}.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString WeaponCompletion = @"Congratulations, you've reached max proficiency in {00} weapons!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString WeaponCompletions = @"Congratulations, you've reached max proficiency in: {00}!";
         }
 
         public sealed partial class TradingNamespace : LocaleNamespace
