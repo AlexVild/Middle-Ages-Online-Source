@@ -29,13 +29,13 @@ namespace Intersect.Server.Entities
 
         public bool TryGetChallenge(Guid id, out ChallengeInstance challenge)
         {
-            challenge = Challenges.Find(c => c.Id == id);
+            challenge = Challenges.Find(c => c.ChallengeId == id);
             return challenge != default;
         }
 
-        public bool TryGetMastery(Guid id, out WeaponMasteryInstance mastery)
+        public bool TryGetMastery(Guid weaponTypeId, out WeaponMasteryInstance mastery)
         {
-            mastery = WeaponMasteries.Find(c => c.Id == id);
+            mastery = WeaponMasteries.Find(c => c.WeaponTypeId == weaponTypeId);
             return mastery != default;
         }
 
@@ -48,15 +48,41 @@ namespace Intersect.Server.Entities
             }
 
             DeactivateAllMasteries();
-            foreach(var weaponType in weapon.WeaponTypes)
+
+            // Instantiate new mastery tracks/challenges in response to this change
+            List<string> newChallenges = new List<string>();
+            foreach (var weaponType in weapon.WeaponTypes)
             {
                 if (!TryGetMastery(weaponType, out var mastery))
+                {
+                    WeaponMasteries.Add(new WeaponMasteryInstance(Id, weaponType, 0, true));
+                }
+
+                mastery.IsActive = true;
+
+                if (!mastery.TryGetCurrentUnlock(out var unlock))
+                {
+                    continue;
+                }
+                
+                if (mastery.ExpRemaining < unlock.RequiredExp)
                 {
                     continue;
                 }
 
-                mastery.IsActive = true;
+                // The rest of this is done in case of the event the underlying WeaponTypeDescriptor changes - we want
+                // the players mastery progress to update if need be
+                if (!mastery.TryGetCurrentChallenges(out var currentChallenges))
+                {
+                    LevelUpMastery(mastery);
+                    continue;
+                }
+                if (ChallengesComplete(currentChallenges))
+                {
+                    LevelUpMastery(mastery);
+                }
             }
+            SendChallengeUpdate(false, newChallenges);
         }
 
         public void ProgressMastery(long exp, Guid weaponType)
@@ -88,10 +114,11 @@ namespace Intersect.Server.Entities
             // Otherwise, do we have any challenges that need completing?
             if (!mastery.TryGetCurrentChallenges(out var currentChallenges))
             {
+                // No challenges? Well, level up!
                 LevelUpMastery(mastery);
             }
 
-            // Make sure our active challenges are up to date
+            // Make sure our active challenges are up to date and, if not, alert the player
             List<string> newChallenges = new List<string>();
             foreach (var challengeId in currentChallenges)
             {
@@ -149,28 +176,34 @@ namespace Intersect.Server.Entities
 
             if (!mastery.TryGetCurrentUnlock(out var unlock))
             {
-                mastery.ExpRemaining = 0;
+                mastery.ExpRemaining = -1;
             }
 
-            mastery.ExpRemaining = unlock.RequiredExp;
+            mastery.ExpRemaining = 0;
         }
 
         public bool TryGainMasteryExp(long exp, WeaponMasteryInstance mastery)
         {
-            if (mastery == null || mastery.ExpRemaining > 0)
+            var requiredExp = 0;
+            if (mastery.TryGetCurrentUnlock(out var unlock))
             {
+                requiredExp = unlock.RequiredExp;
+            }
+            if (mastery == null || mastery.ExpRemaining >= requiredExp)
+            {
+                mastery.ExpRemaining = requiredExp;
                 return false;
             }
 
-            var remaining = mastery.ExpRemaining - exp;
-            mastery.ExpRemaining = MathHelper.Clamp(remaining, 0, long.MaxValue);
+            mastery.ExpRemaining += exp;
 
-            if (remaining > 0)
+            if (mastery.ExpRemaining < requiredExp)
             {
                 return true;
             }
 
             // We have reached our EXP threshold, and should continue progress processing
+            mastery.ExpRemaining = unlock.RequiredExp;
             return false;
         }
 

@@ -33,6 +33,27 @@ namespace Intersect.Server.Database.PlayerData.Players
 
         public bool IsActive { get; set; }
 
+        public WeaponMasteryInstance()
+        {
+        }
+
+        public WeaponMasteryInstance(Guid playerId, Guid weaponTypeId, int level, bool isActive)
+        {
+            PlayerId = playerId;
+            var descriptor = WeaponTypeDescriptor.Get(weaponTypeId);
+
+            if (descriptor == null)
+            {
+                return;
+            }
+            
+            WeaponTypeId = weaponTypeId;
+            Level = level;
+            IsActive = isActive;
+
+            ExpRemaining = 0;
+        }
+
         public bool TryGetCurrentUnlock(out WeaponTypeUnlock unlock)
         {
             unlock = default;
