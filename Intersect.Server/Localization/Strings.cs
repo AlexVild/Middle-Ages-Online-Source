@@ -1787,6 +1787,15 @@ namespace Intersect.Server.Localization
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString WeaponCompletions = @"Congratulations, you've reached max proficiency in: {00}!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString ChallengeProgress = @"Challenge update: {00} ({01}/{02})!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString WeaponFinished = @"You've learned all you can from this weapon for the {00} weapon track.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString MasterySkillUnlock = @"Completing a mastery challenge has unlocked a new skill: {00}!";
         }
 
         public sealed partial class TradingNamespace : LocaleNamespace

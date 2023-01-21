@@ -26,14 +26,14 @@ namespace Intersect.Server.Entities
             {
                 PacketSender.SendChatMsg(this,
                     Strings.Player.ChallengeComplete.ToString(challenge),
-                    ChatMessageType.Combat,
+                    ChatMessageType.Experience,
                     sendToast: true);
             }
             else
             {
                 PacketSender.SendChatMsg(this,
                     Strings.Player.NewChallenge.ToString(challenge),
-                    ChatMessageType.Combat,
+                    ChatMessageType.Experience,
                     sendToast: true);
             }
         }
@@ -56,14 +56,14 @@ namespace Intersect.Server.Entities
             {
                 PacketSender.SendChatMsg(this,
                     Strings.Player.ChallengesComplete.ToString(challenges),
-                    ChatMessageType.Combat,
+                    ChatMessageType.Experience,
                     sendToast: true);
             }
             else
             {
                 PacketSender.SendChatMsg(this,
                     Strings.Player.NewChallenges.ToString(challenges),
-                    ChatMessageType.Combat,
+                    ChatMessageType.Experience,
                     sendToast: true);
             }
         }
@@ -74,14 +74,14 @@ namespace Intersect.Server.Entities
             {
                 PacketSender.SendChatMsg(this,
                     Strings.Player.WeaponCompletion.ToString(mastery),
-                    ChatMessageType.Combat,
+                    ChatMessageType.Experience,
                     sendToast: true);
             }
             else
             {
                 PacketSender.SendChatMsg(this,
                     Strings.Player.WeaponProgression.ToString(mastery),
-                    ChatMessageType.Combat,
+                    ChatMessageType.Experience,
                     sendToast: true);
             }
         }
@@ -104,14 +104,14 @@ namespace Intersect.Server.Entities
             {
                 PacketSender.SendChatMsg(this,
                     Strings.Player.WeaponCompletions.ToString(masteryString),
-                    ChatMessageType.Combat,
+                    ChatMessageType.Experience,
                     sendToast: true);
             }
             else
             {
                 PacketSender.SendChatMsg(this,
                     Strings.Player.WeaponProgressions.ToString(masteryString),
-                    ChatMessageType.Combat,
+                    ChatMessageType.Experience,
                     sendToast: true);
             }
         }

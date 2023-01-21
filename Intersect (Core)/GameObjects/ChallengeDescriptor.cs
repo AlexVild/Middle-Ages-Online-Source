@@ -36,7 +36,7 @@ namespace Intersect.GameObjects
         [Description("X beasts killed over Z time, Y times")]
         BeastsKilledOverTime,
 
-        [Description("X beasts killed Y times")]
+        [Description("Beasts of Z type killed Y times")]
         BeastsKilled,
 
         [Description("X damage done at Z range, Y times")]

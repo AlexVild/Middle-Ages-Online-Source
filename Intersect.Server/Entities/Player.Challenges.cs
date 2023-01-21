@@ -1,16 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using System.Text;
-using Intersect.Enums;
 using Intersect.GameObjects;
-using Intersect.GameObjects.Crafting;
-using Intersect.Network.Packets.Server;
-using Intersect.Server.Core;
 using Intersect.Server.Database.PlayerData.Players;
-using Intersect.Server.Entities.Events;
-using Intersect.Server.General;
 using Intersect.Server.Localization;
 using Intersect.Server.Networking;
 using Intersect.Utilities;
@@ -18,8 +12,119 @@ using Newtonsoft.Json;
 
 namespace Intersect.Server.Entities
 {
+    public class ChallengeProgress
+    {
+        public Guid ChallengeId { get; set; }
+        public ChallengeDescriptor Descriptor { get; set; }
+        public ChallengeInstance Instance { get; set; }
+        public ChallengeType Type => Descriptor.Type;
+        
+        private int _reps { get; set; }
+        public int Reps
+        {
+            get => _reps;
+            set
+            {
+                _reps = value;
+                if (RepsChanged != null) RepsChanged(value, Descriptor.Reps);
+            }
+        }
+
+        private int _sets { get; set; }
+        public int Sets 
+        {
+            get => _sets;
+            set
+            {
+                _sets = value;
+                if (SetsChanged != null) SetsChanged(value, Descriptor.Sets);
+            }
+        }
+
+        int NumParam { get; set; }
+        Guid IdParam { get; set; }
+        Player Player { get; set; }
+
+        public delegate void ChallengeProgressUpdate(int updateVal, int requiredVal);
+        public event ChallengeProgressUpdate SetsChanged;
+        public event ChallengeProgressUpdate RepsChanged;
+
+        public ChallengeProgress(ChallengeInstance instance, Player player)
+        {
+            Instance = instance;
+            ChallengeId = instance.ChallengeId;
+            Descriptor = ChallengeDescriptor.Get(ChallengeId);
+            Player = player;
+
+            if (Descriptor == null)
+            {
+#if DEBUG
+                throw new ArgumentNullException(nameof(Descriptor));
+#else
+                return;
+#endif
+            }
+
+            Reps = 0;
+            NumParam = Descriptor.Param;
+            IdParam = Descriptor.ChallengeParamId;
+            
+            Sets = Instance.Progress;
+
+            if (Sets == Descriptor.Sets)
+            {
+                Instance.Complete = true;
+            }
+
+            RepsChanged += ChallengeProgress_RepsChanged;
+            SetsChanged += ChallengeProgress_SetsChanged;
+        }
+
+        private void ChallengeProgress_RepsChanged(int reps, int required)
+        {
+            if (Instance.Complete || reps < Descriptor.Reps)
+            {
+                return;
+            }
+
+            Sets++;
+        }
+
+        private void ChallengeProgress_SetsChanged(int sets, int required)
+        {
+            if (Instance.Complete)
+            {
+                return;
+            }
+
+            Instance.Progress++;
+
+            RepsChanged -= ChallengeProgress_RepsChanged;
+            Reps = 0;
+            RepsChanged += ChallengeProgress_RepsChanged;
+
+            // If we're not done yet, inform the player of their new progress
+            if (Sets < Descriptor.Sets)
+            {
+                PacketSender.SendChatMsg(Player,
+                    Strings.Player.ChallengeProgress.ToString(Descriptor?.Name ?? "NOT FOUND", sets, required),
+                    Enums.ChatMessageType.Experience,
+                    sendToast: true);
+                return;
+            }
+
+            // Otherwise, mark this challenge as complete, which will allow the weapon mastery track to progress on the next
+            // ProgressMastery() call
+            Instance.Progress = Descriptor.Sets;
+            Instance.Complete = true;
+        }
+    }
+
     public partial class Player : AttackingEntity
     {
+        [NotMapped, JsonIgnore]
+        public List<ChallengeProgress> ChallengesInProgress { get; set; } = new List<ChallengeProgress>();
+
         public List<ChallengeInstance> Challenges { get; set; } = new List<ChallengeInstance>();
 
         public List<WeaponMasteryInstance> WeaponMasteries { get; set; } = new List<WeaponMasteryInstance>();
@@ -27,10 +132,31 @@ namespace Intersect.Server.Entities
         [NotMapped, JsonIgnore]
         public List<WeaponMasteryInstance> ActiveMasteries => WeaponMasteries.Where(mastery => mastery.IsActive).ToList();
 
+        [NotMapped, JsonIgnore]
+        public bool WeaponMaxedReminder = false;
+
         public bool TryGetChallenge(Guid id, out ChallengeInstance challenge)
         {
             challenge = Challenges.Find(c => c.ChallengeId == id);
             return challenge != default;
+        }
+
+        public void TrackChallenges(List<Guid> challengeIds)
+        {
+            var challenges = Challenges.Where(c => challengeIds.Contains(c.ChallengeId));
+
+            ChallengesInProgress.Clear();
+            foreach (var instance in challenges) 
+            {
+                // If the challenge is already complete, don't track it
+                if (instance.Complete)
+                {
+                    continue;
+                }
+                
+                var progress = new ChallengeProgress(instance, this);
+                ChallengesInProgress.Add(progress);
+            }
         }
 
         public bool TryGetMastery(Guid weaponTypeId, out WeaponMasteryInstance mastery)
@@ -47,10 +173,13 @@ namespace Intersect.Server.Entities
                 return;
             }
 
+            WeaponMaxedReminder = false;
+
             DeactivateAllMasteries();
 
             // Instantiate new mastery tracks/challenges in response to this change
             List<string> newChallenges = new List<string>();
+            List<Guid> challengeInstanceIds = new List<Guid>();
             foreach (var weaponType in weapon.WeaponTypes)
             {
                 if (!TryGetMastery(weaponType, out var mastery))
@@ -70,19 +199,20 @@ namespace Intersect.Server.Entities
                     continue;
                 }
 
-                // The rest of this is done in case of the event the underlying WeaponTypeDescriptor changes - we want
-                // the players mastery progress to update if need be
-                if (!mastery.TryGetCurrentChallenges(out var currentChallenges))
+                // Otherwise, initialize challenges
+                if (!mastery.TryGetCurrentChallenges(out var masteryChallenges))
                 {
                     LevelUpMastery(mastery);
                     continue;
                 }
-                if (ChallengesComplete(currentChallenges))
+                if (ChallengesComplete(masteryChallenges))
                 {
                     LevelUpMastery(mastery);
                 }
+                challengeInstanceIds.AddRange(masteryChallenges);
             }
             SendChallengeUpdate(false, newChallenges);
+            TrackChallenges(challengeInstanceIds);
         }
 
         public void ProgressMastery(long exp, Guid weaponType)
@@ -163,23 +293,41 @@ namespace Intersect.Server.Entities
                 return;
             }
 
+            if (mastery.TryGetCurrentUnlock(out var currentUnlock))
+            {
+                foreach (var challengeId in currentUnlock.ChallengeIds)
+                {
+                    var challenge = ChallengeDescriptor.Get(challengeId);
+                    if (challenge.SpellUnlockId != Guid.Empty)
+                    {
+                        TryAddSkillToBook(challenge.SpellUnlockId);
+                        PacketSender.SendChatMsg(this,
+                            Strings.Player.MasterySkillUnlock.ToString(SpellBase.GetName(challenge.SpellUnlockId)),
+                            Enums.ChatMessageType.Spells,
+                            CustomColors.General.GeneralCompleted);
+                    }
+                }
+            }
+
             mastery.Level = MathHelper.Clamp(mastery.Level + 1, 0, mastery.WeaponType?.MaxLevel ?? 0);
             if (mastery.Level == weaponType.MaxLevel)
             {
+                mastery.ExpRemaining = -1;
                 SendMasteryUpdate(true, weaponType.Name);
                 return;
             }
             else
             {
+                mastery.ExpRemaining = 0;
                 SendMasteryUpdate(false, weaponType.Name);
-            }
 
-            if (!mastery.TryGetCurrentUnlock(out var unlock))
-            {
-                mastery.ExpRemaining = -1;
+                // Is this weapon at the end of its progress cycle?
+                var weapon = GetEquippedWeapon();
+                if (weapon.MaxWeaponLevels.TryGetValue(weaponType.Id, out var maxWeaponLevel) && maxWeaponLevel == mastery.Level)
+                {
+                    SendWeaponMaxedMessage(weaponType);
+                }
             }
-
-            mastery.ExpRemaining = 0;
         }
 
         public bool TryGainMasteryExp(long exp, WeaponMasteryInstance mastery)
@@ -193,6 +341,19 @@ namespace Intersect.Server.Entities
             {
                 mastery.ExpRemaining = requiredExp;
                 return false;
+            }
+
+            // Is the current weapon at the end of its progress cycle?
+            var equippedWeapon = GetEquippedWeapon();
+            if (equippedWeapon != null &&
+                equippedWeapon.MaxWeaponLevels != null &&
+                equippedWeapon.MaxWeaponLevels.TryGetValue(mastery.WeaponTypeId, out var maxWeaponLevel))
+            {
+                if (maxWeaponLevel <= mastery.Level)
+                {
+                    SendWeaponMaxedMessage(mastery.WeaponType);
+                    return false;
+                }
             }
 
             mastery.ExpRemaining += exp;
@@ -243,6 +404,20 @@ namespace Intersect.Server.Entities
             {
                 mastery.IsActive = false;
             }
+        }
+
+        void SendWeaponMaxedMessage(WeaponTypeDescriptor weaponType)
+        {
+            if (WeaponMaxedReminder)
+            {
+                return;
+            }
+            PacketSender.SendChatMsg(this,
+                Strings.Player.WeaponFinished.ToString(weaponType.Name ?? "NOT FOUND"),
+                Enums.ChatMessageType.Experience,
+                CustomColors.General.GeneralWarning);
+
+            WeaponMaxedReminder = true;
         }
     }
 }

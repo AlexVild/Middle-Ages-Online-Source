@@ -202,7 +202,8 @@ namespace Intersect.Editor.Forms.Editors
             lblReps.Text = "Repetitions";
             lblSets.Text = "Sets";
             lblParam.Text = "Addtl. Param";
-            nudSets.Enabled = false;
+            nudReps.Enabled = true;
+            nudSets.Visible = true;
             nudParam.Enabled = false;
             nudParam.Visible = true;
             cmbParamSelector.Visible = false;
@@ -212,54 +213,47 @@ namespace Intersect.Editor.Forms.Editors
             {
                 case ChallengeType.ComboEarned:
                     lblReps.Text = "Combo";
-                    nudSets.Enabled = true;
                     break;
                 case ChallengeType.BeastsKilled:
-                    lblReps.Text = "# Beasts";
+                    lblSets.Text = "# Beasts";
+                    lblParam.Text = "Of type";
+                    nudReps.Enabled = false;
                     nudParam.Visible = false;
                     mEditorItem.ChallengeParamType = (int)ChallengeParamType.BeastsKilled;
                     break;
                 case ChallengeType.BeastsKilledOverTime:
                     lblReps.Text = "# Beasts";
-                    nudSets.Enabled = true;
                     nudParam.Enabled = true;
                     lblParam.Text = "Time (ms)";
                     break;
                 case ChallengeType.DamageAtRange:
                     lblReps.Text = "Damage";
-                    nudSets.Enabled = true;
                     nudParam.Enabled = true;
                     lblParam.Text = "Range (tiles)";
                     break;
                 case ChallengeType.DamageHealedAtHealth:
                     lblReps.Text = "Damage"; 
-                    nudSets.Enabled = true;
                     nudParam.Enabled = true;
                     lblParam.Text = "Health %";
                     break;
                 case ChallengeType.DamageOverTime:
                     lblReps.Text = "Damage";
-                    nudSets.Enabled = true;
                     nudParam.Enabled = true;
                     lblParam.Text = "Time (ms)";
                     break;
                 case ChallengeType.DamageTakenOverTime:
                     lblReps.Text = "Damage";
-                    nudSets.Enabled = true;
                     nudParam.Enabled = true;
                     lblParam.Text = "Time (ms)";
                     break;
                 case ChallengeType.HitFreeStreak:
                     lblReps.Text = "Hits w/o receiving";
-                    nudSets.Enabled = true;
                     break;
                 case ChallengeType.MaxHit:
                     lblReps.Text = "Dmg Threshold";
-                    nudSets.Enabled = true;
                     break;
                 case ChallengeType.MissFreeStreak:
                     lblReps.Text = "Successful Hits";
-                    nudSets.Enabled = true;
                     break;
                 default:
                     throw new NotImplementedException();

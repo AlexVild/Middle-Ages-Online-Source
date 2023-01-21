@@ -1613,6 +1613,7 @@ namespace Intersect.Server.Entities
                 CurrentCombo++;
                 StartCommonEventsWithTrigger(CommonEventTrigger.ComboUp);
                 StartCommonEventsWithTrigger(CommonEventTrigger.ComboReached, "", "", CurrentCombo);
+                ChallengeUpdateProcesser.UpdateChallenges(new ComboEarnedUpdate(this, CurrentCombo));
             }
             PacketSender.SendComboPacket(this, CurrentCombo, ComboWindow, ComboExp, MaxComboWindow);
         }
@@ -8270,7 +8271,7 @@ namespace Intersect.Server.Entities
 
         public void SendRecordUpdate(string message)
         {
-            PacketSender.SendChatMsg(this, message, ChatMessageType.Experience, sendToast: true);
+            PacketSender.SendChatMsg(this, message, ChatMessageType.Experience);
         }
 
         public void DeleteRecord(RecordType type, Guid recordId)

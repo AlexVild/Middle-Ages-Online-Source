@@ -518,7 +518,7 @@
     <Compile Include="Entities\Label.cs" />
     <Compile Include="Entities\Npc.Combat.cs" />
     <Compile Include="Entities\Player.Bestiary.cs" />
-    <Compile Include="Entities\Player.Chalenges.Messaging.cs" />
+    <Compile Include="Entities\Player.Challenges.Messaging.cs" />
     <Compile Include="Entities\Player.Challenges.cs" />
     <Compile Include="Entities\Player.Combat.cs" />
     <Compile Include="Entities\Player.Cosmetics.cs" />
@@ -534,6 +534,7 @@
     <Compile Include="Entities\Player.Passives.cs" />
     <Compile Include="Entities\Player.Recipes.cs" />
     <Compile Include="Entities\Player.SkillBook.cs" />
+    <Compile Include="Entities\PlayerData\ChallengeUpdateProcesser.cs" />
     <Compile Include="Entities\PlayerData\PlayerClassStats.cs" />
     <Compile Include="Entities\PlayerData\PlayerSkillInstance.cs" />
     <Compile Include="Entities\Projectile.cs" />

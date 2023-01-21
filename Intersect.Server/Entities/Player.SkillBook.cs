@@ -97,20 +97,6 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
-            if (!Conditions.MeetsConditionLists(spell.Spell.CastingRequirements, this, null))
-            {
-                if (!string.IsNullOrEmpty(spell.Spell.CannotCastMessage))
-                {
-                    failureReason = spell.Spell.CannotCastMessage;
-                }
-                else
-                {
-                    failureReason = "You lack some requirement(s) to equip this skill!";
-                }
-                
-                return false;
-            }
-
             // Player can go ahead
             return true;
         }
