@@ -1,4 +1,5 @@
 ﻿using Intersect.GameObjects;
+using Intersect.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -17,12 +18,31 @@ namespace Intersect.Server.Entities.PlayerData
 
     public abstract class ChallengeUpdate
     {
+        /// <summary>
+        /// Determines _when_ we should go out and update the player's challenge progress. Sometimes we might care
+        /// for every set, every rep, or both.
+        /// </summary>
         public abstract ChallengeUpdateWatcherType WatcherType { get; }
         
+        /// <summary>
+        /// The challenge type associated with this update
+        /// </summary>
         public virtual ChallengeType Type { get; set; }
+
+        /// <summary>
+        /// The player who's challenges are being updated
+        /// </summary>
         public Player Player { get; set; }
+        
+        /// <summary>
+        /// A list of the player's challenge progression
+        /// </summary>
         List<ChallengeProgress> ChallengeProgress { get; set; }
-        public bool ProgressMade = false;
+
+        /// <summary>
+        /// Whether or not the challenge update proc'd an update to the player's progression.
+        /// </summary>
+        public bool ProgressMade { get; private set; } = false;
 
         public ChallengeUpdate(Player player)
         {
@@ -59,6 +79,8 @@ namespace Intersect.Server.Entities.PlayerData
         }
 
         public IEnumerable<ChallengeProgress> Challenges => ChallengeProgress.Where(c => c.Type == Type);
+
+        public bool NoUpdate => Player == null || Challenges.ToArray().Length == 0;
     }
 
     public class ComboEarnedUpdate : ChallengeUpdate
@@ -66,23 +88,128 @@ namespace Intersect.Server.Entities.PlayerData
         public override ChallengeType Type { get; set; } = ChallengeType.ComboEarned;
         public override ChallengeUpdateWatcherType WatcherType => ChallengeUpdateWatcherType.Sets;
 
-        public int ComboAmt { get; set; }
-
-        public ComboEarnedUpdate(Player player, int combo) : base(player) 
+        public ComboEarnedUpdate(Player player) : base(player) 
         {
-            ComboAmt = combo;
+        }
+    }
+
+    public class DamageOverTimeUpdate : ChallengeUpdate
+    {
+        public override ChallengeType Type { get; set; } = ChallengeType.DamageOverTime;
+        public override ChallengeUpdateWatcherType WatcherType => ChallengeUpdateWatcherType.Sets;
+
+        public int DamageDone { get; set; }
+
+        public DamageOverTimeUpdate(Player player, int damage) : base(player)
+        {
+            DamageDone = damage;
+        }
+    }
+
+    public class MaxHitUpdate : ChallengeUpdate
+    {
+        public override ChallengeType Type { get; set; } = ChallengeType.MaxHit;
+        public override ChallengeUpdateWatcherType WatcherType => ChallengeUpdateWatcherType.Sets;
+
+        public int LastHit { get; set; }
+
+        public MaxHitUpdate(Player player, int damage) : base(player)
+        {
+            LastHit = damage;
+        }
+    }
+
+    public class MissFreeUpdate : ChallengeUpdate
+    {
+        public override ChallengeType Type { get; set; } = ChallengeType.MissFreeStreak;
+        public override ChallengeUpdateWatcherType WatcherType => ChallengeUpdateWatcherType.Sets;
+
+        public int CurrentStreak { get; set; }
+
+        public MissFreeUpdate(Player player, int streak) : base(player)
+        {
+            CurrentStreak = streak;
+        }
+    }
+
+    public class HitFreeUpdate : ChallengeUpdate
+    {
+        public override ChallengeType Type { get; set; } = ChallengeType.HitFreeStreak;
+        public override ChallengeUpdateWatcherType WatcherType => ChallengeUpdateWatcherType.Sets;
+
+        public int CurrentStreak { get; set; }
+
+        public HitFreeUpdate(Player player, int streak) : base(player)
+        {
+            CurrentStreak = streak;
+        }
+    }
+
+    public class DamageTakenOverTimeUpdate : ChallengeUpdate
+    {
+        public override ChallengeType Type { get; set; } = ChallengeType.DamageTakenOverTime;
+        public override ChallengeUpdateWatcherType WatcherType => ChallengeUpdateWatcherType.Sets;
+
+        public int DamageDone { get; set; }
+
+        public DamageTakenOverTimeUpdate(Player player, int damage) : base(player)
+        {
+            DamageDone = damage;
+        }
+    }
+
+    public class BeastsKilledOverTime : ChallengeUpdate
+    {
+        public override ChallengeType Type { get; set; } = ChallengeType.BeastsKilledOverTime;
+        public override ChallengeUpdateWatcherType WatcherType => ChallengeUpdateWatcherType.Sets;
+
+        public Guid BeastId { get; set; }
+
+        public BeastsKilledOverTime(Player player, Guid beastId) : base(player)
+        {
+            BeastId = beastId;
+        }
+    }
+
+    public class DamageAtRangeUpdate : ChallengeUpdate
+    {
+        public override ChallengeType Type { get; set; } = ChallengeType.DamageAtRange;
+        public override ChallengeUpdateWatcherType WatcherType => ChallengeUpdateWatcherType.Sets;
+
+        public int LastHit { get; set; }
+        public int Range { get; set; }
+
+        public DamageAtRangeUpdate(Player player, int damage, int range) : base(player)
+        {
+            LastHit = damage;
+            Range = range;
+        }
+    }
+
+    public class DamageHealedAtHealthUpdate : ChallengeUpdate
+    {
+        public override ChallengeType Type { get; set; } = ChallengeType.DamageAtRange;
+        public override ChallengeUpdateWatcherType WatcherType => ChallengeUpdateWatcherType.Sets;
+
+        public int HealAmt { get; set; }
+        public int Percent { get; set; }
+
+        public DamageHealedAtHealthUpdate(Player player, int heal, int percent) : base(player)
+        {
+            HealAmt = heal;
+            Percent = percent;
         }
     }
 
     public static class ChallengeUpdateProcesser
     {
-        public static void UpdateChallenges(ChallengeUpdate update)
+        public static void UpdateChallengesOf(ChallengeUpdate update)
         {
-            var player = update?.Player;
-            if (update == null || player == null)
+            if (update?.NoUpdate ?? true)
             {
                 return;
             }
+            var player = update.Player;
 
             UpdateChallenge((dynamic)update);
 
@@ -101,16 +228,159 @@ namespace Intersect.Server.Entities.PlayerData
             }
         }
 
-        public static void UpdateChallenge(ComboEarnedUpdate update)
+        private static void UpdateChallenge(ComboEarnedUpdate update)
         {
-            if (update == null)
+            var player = update.Player;
+            foreach (var challenge in update.Challenges)
             {
-                return;
+                if (player.WeaponCombo > 0 && player.WeaponCombo % challenge.Descriptor.Reps == 0)
+                {
+                    challenge.Sets++;
+                }
+            }
+        }
+
+        private static void UpdateChallenge(DamageOverTimeUpdate update)
+        {
+            var player = update.Player;
+
+            // First, prune stale data
+            var now = Timing.Global.MillisecondsUtc;
+            foreach (var map in player.DoTChallengeMap.Values)
+            {
+                while (map.Count > 0 && map.Peek().Key < now)
+                {
+                    map.Dequeue();
+                }
+            }
+
+            // Now, go through the player's active challenges...
+            foreach (var challenge in update.Challenges)
+            {
+                // Then, add our new damage with its challenge-appropriate time stamp
+                var expiryTime = now + challenge.Descriptor.Param;
+                var data = new KeyValuePair<long, int>(expiryTime, update.DamageDone);
+
+                // .. add our latest damage to the player's in-memory DoT tracker...
+                var challengeDoT = player.DoTChallengeMap[challenge.ChallengeId];
+                challengeDoT.Enqueue(data);
+
+                // And add up the DoTs for each challenge. If they meet the challenges desires...
+                if (challengeDoT.Sum(dot => dot.Value) >= challenge.Descriptor.Reps)
+                {
+                    // Then that's a set!
+                    challenge.Sets++;
+                }
+            }
+        }
+
+        private static void UpdateChallenge(MaxHitUpdate update)
+        {
+            foreach (var challenge in update.Challenges)
+            {
+                if (challenge.Descriptor.Reps <= update.LastHit)
+                {
+                    challenge.Sets++;
+                }
+            }
+        }
+
+        private static void UpdateChallenge(MissFreeUpdate update)
+        {
+            foreach (var challenge in update.Challenges)
+            {
+                if (challenge.Descriptor.Reps <= update.CurrentStreak)
+                {
+                    challenge.Sets++;
+                }
+            }
+        }
+
+        private static void UpdateChallenge(HitFreeUpdate update)
+        {
+            foreach (var challenge in update.Challenges)
+            {
+                if (challenge.Descriptor.Reps <= update.CurrentStreak)
+                {
+                    challenge.Sets++;
+                }
+            }
+        }
+
+        private static void UpdateChallenge(DamageTakenOverTimeUpdate update)
+        {
+            var player = update.Player;
+
+            var now = Timing.Global.MillisecondsUtc;
+            foreach (var map in player.DamageTakenMap.Values)
+            {
+                while (map.Count > 0 && map.Peek().Key < now)
+                {
+                    map.Dequeue();
+                }
             }
 
             foreach (var challenge in update.Challenges)
             {
-                if (update.ComboAmt > 0 && update.ComboAmt % challenge.Descriptor.Reps == 0)
+                var expiryTime = now + challenge.Descriptor.Param;
+                var data = new KeyValuePair<long, int>(expiryTime, update.DamageDone);
+
+                var damageTaken = player.DamageTakenMap[challenge.ChallengeId];
+                damageTaken.Enqueue(data);
+
+                if (damageTaken.Sum(dot => dot.Value) >= challenge.Descriptor.Reps)
+                {
+                    challenge.Sets++;
+                }
+            }
+        }
+
+        private static void UpdateChallenge(BeastsKilledOverTime update)
+        {
+            var player = update.Player;
+
+            var now = Timing.Global.MillisecondsUtc;
+            foreach (var map in player.BeastsKilledOverTime.Values)
+            {
+                while (map.Count > 0 && map.Peek().Key < now)
+                {
+                    map.Dequeue();
+                }
+            }
+
+            foreach (var challenge in update.Challenges)
+            {
+                var expiryTime = now + challenge.Descriptor.Param;
+                var data = new KeyValuePair<long, Guid>(expiryTime, update.BeastId);
+
+                var beastsKilled = player.BeastsKilledOverTime[challenge.ChallengeId];
+                beastsKilled.Enqueue(data);
+
+                if (beastsKilled.Count >= challenge.Descriptor.Reps)
+                {
+                    challenge.Sets++;
+                }
+            }
+        }
+
+        private static void UpdateChallenge(DamageAtRangeUpdate update)
+        {
+            foreach (var challenge in update.Challenges)
+            {
+                var descriptor = challenge.Descriptor;
+                if (descriptor.Reps <= update.LastHit && descriptor.Param <= update.Range)
+                {
+                    challenge.Sets++;
+                }
+            }
+        }
+
+        private static void UpdateChallenge(DamageHealedAtHealthUpdate update)
+        {
+            foreach (var challenge in update.Challenges)
+            {
+                var descriptor = challenge.Descriptor;
+                if (descriptor.Reps <= update.HealAmt && descriptor.Param >= update.Percent)
                 {
                     challenge.Sets++;
                 }

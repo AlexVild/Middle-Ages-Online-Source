@@ -16,6 +16,7 @@ using Intersect.Server.Database.PlayerData.Players;
 using Intersect.Server.Entities.Combat;
 using Intersect.Server.Entities.Events;
 using Intersect.Server.Entities.Pathfinding;
+using Intersect.Server.Entities.PlayerData;
 using Intersect.Server.General;
 using Intersect.Server.Localization;
 using Intersect.Server.Maps;
@@ -214,6 +215,8 @@ namespace Intersect.Server.Entities
                     {
                         playerKiller.SendRecordUpdate(Strings.Records.enemykilled.ToString(recordKilled, Name));
                     }
+
+                    ChallengeUpdateProcesser.UpdateChallengesOf(new BeastsKilledOverTime(playerKiller, Base.Id));
                 }
             }
         }

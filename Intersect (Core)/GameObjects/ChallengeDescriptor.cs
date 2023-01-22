@@ -18,7 +18,7 @@ namespace Intersect.GameObjects
         [Description("X combo earned Y times")]
         ComboEarned,
 
-        [Description("X damage dealt over Y time")]
+        [Description("X damage dealt over Z time, Y times")]
         DamageOverTime,
 
         [Description("X max hit, Y times")]
@@ -35,9 +35,6 @@ namespace Intersect.GameObjects
 
         [Description("X beasts killed over Z time, Y times")]
         BeastsKilledOverTime,
-
-        [Description("Beasts of Z type killed Y times")]
-        BeastsKilled,
 
         [Description("X damage done at Z range, Y times")]
         DamageAtRange,

@@ -11,14 +11,37 @@ using Intersect.Server.Networking;
 using Intersect.Utilities;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Intersect.Server.Entities
 {
     public abstract partial class AttackingEntity : Entity
     {
+        public AttackingEntity() : this(Guid.NewGuid(), Guid.Empty)
+        {
+        }
+
+        //Initialization
+        public AttackingEntity(Guid instanceId, Guid mapInstanceId) : base(instanceId, mapInstanceId)
+        {
+            AttackMissed += AttackingEntity_AttackMissed;
+            DamageTaken += AttackingEntity_DamageTaken;
+        }
+
+        protected virtual void AttackingEntity_DamageTaken(Entity aggressor, int damage)
+        {
+            // blank
+        }
+
+        protected virtual void AttackingEntity_AttackMissed(Entity target)
+        {
+            // Blank
+        }
+
         protected bool IsStunnedOrSleeping => CachedStatuses.Any(PredicateStunnedOrSleeping);
 
         protected bool IsImmobile => CachedStatuses.Any(PredicateCantMove);
@@ -268,6 +291,7 @@ namespace Intersect.Server.Entities
             if (!ignoreEvasion && CombatUtilities.AttackMisses(Accuracy, enemy.Evasion))
             {
                 SendMissedAttackMessage(enemy, DamageType.Physical);
+                AttackMissed.Invoke(enemy);
                 enemy?.ReactToCombat(this);
                 return false;
             }
@@ -401,5 +425,23 @@ namespace Intersect.Server.Entities
                 defender.CombatTimer = Timing.Global.Milliseconds + Options.CombatTime;
             }
         }
+
+        /// <summary>
+        /// Things that should happen TO some entity when being attacked FROM some entity
+        /// </summary>
+        /// <param name="attacker">The attacking entity dealing damage to this entity</param>
+        /// <param name="damage">The amount of damage to take</param>
+        /// <param name="vital">The affected vital</param>
+        public virtual void TakeDamage(Entity attacker, int damage, Vitals vital = Vitals.Health)
+        {
+            DamageTaken.Invoke(attacker, damage);
+            base.TakeDamage(attacker, damage, vital);
+        }
+
+        protected delegate void AttackMissedEvent(Entity target);
+        protected event AttackMissedEvent AttackMissed;
+
+        protected delegate void DamageTakenEvent(Entity aggressor, int damage);
+        protected event DamageTakenEvent DamageTaken;
     }
 }

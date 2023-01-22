@@ -214,13 +214,6 @@ namespace Intersect.Editor.Forms.Editors
                 case ChallengeType.ComboEarned:
                     lblReps.Text = "Combo";
                     break;
-                case ChallengeType.BeastsKilled:
-                    lblSets.Text = "# Beasts";
-                    lblParam.Text = "Of type";
-                    nudReps.Enabled = false;
-                    nudParam.Visible = false;
-                    mEditorItem.ChallengeParamType = (int)ChallengeParamType.BeastsKilled;
-                    break;
                 case ChallengeType.BeastsKilledOverTime:
                     lblReps.Text = "# Beasts";
                     nudParam.Enabled = true;

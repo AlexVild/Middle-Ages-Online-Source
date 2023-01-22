@@ -4,6 +4,7 @@ using Intersect.GameObjects.Events;
 using Intersect.Server.Database;
 using Intersect.Server.Entities.Combat;
 using Intersect.Server.Entities.Events;
+using Intersect.Server.Entities.PlayerData;
 using Intersect.Server.Localization;
 using Intersect.Server.Maps;
 using Intersect.Server.Networking;
@@ -107,10 +108,31 @@ namespace Intersect.Server.Entities
                 }
             }
 
-            // TODO evasion
-            // if (!ignoreInvasion)...
+            var range = GetDistanceTo(enemy);
 
-            return base.TryDealDamageTo(enemy, attackTypes, dmgScaling, critMultiplier, weapon, spell, ignoreEvasion, out damage);
+            var damageWasDealt = base.TryDealDamageTo(enemy, attackTypes, dmgScaling, critMultiplier, weapon, spell, ignoreEvasion, out damage);
+
+            if (damageWasDealt && damage > 0)
+            {
+                ChallengeUpdateProcesser.UpdateChallengesOf(new DamageOverTimeUpdate(this, damage));
+                ChallengeUpdateProcesser.UpdateChallengesOf(new MissFreeUpdate(this, MissFreeStreak));
+
+                // For challenges where we don't want DoT values fudging the challenge - cheap fix
+                if (LastWeaponSwitch <= Timing.Global.Milliseconds)
+                {
+                    HitFreeStreak++;
+                    ChallengeUpdateProcesser.UpdateChallengesOf(new MaxHitUpdate(this, damage));
+                    ChallengeUpdateProcesser.UpdateChallengesOf(new DamageAtRangeUpdate(this, damage, range));
+                    ChallengeUpdateProcesser.UpdateChallengesOf(new HitFreeUpdate(this, HitFreeStreak));
+                }
+            }
+            if (damage < 0)
+            {
+                var currentHealthRatio = (int)Math.Floor((float)MaxVitals[(int)Vitals.Health] / GetVital((int)Vitals.Health));
+                ChallengeUpdateProcesser.UpdateChallengesOf(new DamageHealedAtHealthUpdate(this, damage, currentHealthRatio));
+            }
+
+            return damageWasDealt;
         }
 
         public override void MeleeAttack(Entity enemy, bool ignoreEvasion)
@@ -601,6 +623,17 @@ namespace Intersect.Server.Entities
             }
 
             return weapon.AttackTypes;
+        }
+
+        protected override void AttackingEntity_AttackMissed(Entity target)
+        {
+            MissFreeStreak = 0;
+        }
+
+        protected override void AttackingEntity_DamageTaken(Entity aggressor, int damage)
+        {
+            HitFreeStreak = 0;
+            ChallengeUpdateProcesser.UpdateChallengesOf(new DamageTakenOverTimeUpdate(this, damage));
         }
     }
 }

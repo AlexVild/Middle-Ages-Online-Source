@@ -1611,9 +1611,10 @@ namespace Intersect.Server.Entities
                 ComboWindow = MaxComboWindow;
                 ComboTimestamp = Timing.Global.Milliseconds + ComboWindow;
                 CurrentCombo++;
+                WeaponCombo++;
                 StartCommonEventsWithTrigger(CommonEventTrigger.ComboUp);
                 StartCommonEventsWithTrigger(CommonEventTrigger.ComboReached, "", "", CurrentCombo);
-                ChallengeUpdateProcesser.UpdateChallenges(new ComboEarnedUpdate(this, CurrentCombo));
+                ChallengeUpdateProcesser.UpdateChallengesOf(new ComboEarnedUpdate(this));
             }
             PacketSender.SendComboPacket(this, CurrentCombo, ComboWindow, ComboExp, MaxComboWindow);
         }
@@ -1621,6 +1622,7 @@ namespace Intersect.Server.Entities
         public void EndCombo()
         {
             // prevents flooding the client with useless combo packets
+            WeaponCombo = 0;
             if (CurrentCombo <= 0)
             {
                 return;
@@ -5588,6 +5590,7 @@ namespace Intersect.Server.Entities
                     {
                         UnequipItem(Options.ShieldIndex, false);
                     }
+                    ResetChallengeTracking();
                 }
                 else if (itemBase.EquipmentSlot == Options.ShieldIndex)
                 {
@@ -5653,7 +5656,6 @@ namespace Intersect.Server.Entities
                 PacketSender.SendPlayerEquipmentToProximity(this);
                 PacketSender.SendEntityStats(this);
             }
-
             SetMasteryProgress();
         }
 
