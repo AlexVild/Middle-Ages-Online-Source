@@ -93,6 +93,7 @@ namespace Intersect.Server.Entities
 
             if (!ignoreEvasion && CombatUtilities.AttackMisses(Accuracy, enemy?.Evasion ?? 0))
             {
+                AttackMissed.Invoke(enemy);
                 SendMissedAttackMessage(enemy, DamageType.Physical);
                 enemy?.ReactToCombat(this);
                 return;
@@ -317,7 +318,7 @@ namespace Intersect.Server.Entities
                         trueDamage = spell.Combat?.VitalDiff[(int)Vitals.Health] ?? 0;
                     }
                 }
-                DealTrueDamageTo(enemy, dmgScaling, trueDamage, false, false);
+                damage = DealTrueDamageTo(enemy, dmgScaling, trueDamage, false, false);
             }
             // Otherwise, we're dealing non-true damage and need to do some calcs
             else
@@ -327,11 +328,11 @@ namespace Intersect.Server.Entities
             return damage != 0 || manaDamage != 0;
         }
 
-        public void DealTrueDamageTo(Entity enemy, int scaling, int damage, bool isSecondary, bool isNeutral)
+        public int DealTrueDamageTo(Entity enemy, int scaling, int damage, bool isSecondary, bool isNeutral)
         {
             if (enemy == null)
             {
-                return;
+                return 0;
             }
 
             UpdateCombatTimers(this, enemy);
@@ -342,6 +343,8 @@ namespace Intersect.Server.Entities
             
             SendCombatEffects(enemy, false, damage);
             PacketSender.SendCombatNumber(DetermineCombatNumberType(damage, isSecondary, isNeutral, 1.0), enemy, dmg);
+
+            return dmg;
         }
 
         private void DealDamageTo(Entity enemy,
@@ -432,7 +435,7 @@ namespace Intersect.Server.Entities
         /// <param name="attacker">The attacking entity dealing damage to this entity</param>
         /// <param name="damage">The amount of damage to take</param>
         /// <param name="vital">The affected vital</param>
-        public virtual void TakeDamage(Entity attacker, int damage, Vitals vital = Vitals.Health)
+        public override void TakeDamage(Entity attacker, int damage, Vitals vital = Vitals.Health)
         {
             DamageTaken.Invoke(attacker, damage);
             base.TakeDamage(attacker, damage, vital);
@@ -443,5 +446,11 @@ namespace Intersect.Server.Entities
 
         protected delegate void DamageTakenEvent(Entity aggressor, int damage);
         protected event DamageTakenEvent DamageTaken;
+
+        public virtual void OnAttackMissed(Entity target)
+        {
+            // Safely raise the event for all subscribers
+            AttackMissed?.Invoke(target);
+        }
     }
 }

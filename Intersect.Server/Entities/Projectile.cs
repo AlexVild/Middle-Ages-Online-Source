@@ -320,6 +320,10 @@ namespace Intersect.Server.Entities
                                 lock(EntityLock)
                                 {
                                     spawn.AmmoDrop();
+                                    if (spawn.EntitiesHit == 0)
+                                    {
+                                        Owner.OnAttackMissed(null);
+                                    }
                                 }
                                 Spawns[i] = null;
                                 mSpawnCount--;

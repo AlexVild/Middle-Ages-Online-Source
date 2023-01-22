@@ -215,10 +215,6 @@ namespace Intersect.Server.Entities
         public void SetMasteryProgress()
         {
             var weapon = GetEquippedWeapon();
-            if (weapon == default)
-            {
-                return;
-            }
 
             WeaponMaxedReminder = false;
 
@@ -227,11 +223,12 @@ namespace Intersect.Server.Entities
             // Instantiate new mastery tracks/challenges in response to this change
             List<string> newChallenges = new List<string>();
             List<Guid> challengeInstanceIds = new List<Guid>();
-            foreach (var weaponType in weapon.WeaponTypes)
+            foreach (var weaponType in weapon?.WeaponTypes ?? new List<Guid>())
             {
                 if (!TryGetMastery(weaponType, out var mastery))
                 {
                     WeaponMasteries.Add(new WeaponMasteryInstance(Id, weaponType, 0, true));
+                    TryGetMastery(weaponType, out mastery);
                 }
 
                 mastery.IsActive = true;
@@ -255,6 +252,7 @@ namespace Intersect.Server.Entities
                 if (ChallengesComplete(masteryChallenges))
                 {
                     LevelUpMastery(mastery);
+                    continue;
                 }
                 challengeInstanceIds.AddRange(masteryChallenges);
             }
@@ -293,6 +291,7 @@ namespace Intersect.Server.Entities
             {
                 // No challenges? Well, level up!
                 LevelUpMastery(mastery);
+                return;
             }
 
             // Make sure our active challenges are up to date and, if not, alert the player

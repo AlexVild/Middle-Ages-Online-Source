@@ -1269,7 +1269,7 @@ namespace Intersect.Server.Entities
                     if (en.GetType() == typeof(Npc))
                     {
                         var npc = (Npc)en;
-                        if (npc.Target == null & npc.Base.Swarm && npc.Base == Base)
+                        if (npc.Target == null & npc.Base.Swarm && IsAllyOf(npc))
                         {
                             if (npc.InRangeOf(attacker, npc.Base.SightRange))
                             {

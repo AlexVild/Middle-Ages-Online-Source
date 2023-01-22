@@ -188,7 +188,7 @@ namespace Intersect.Server.Entities.PlayerData
 
     public class DamageHealedAtHealthUpdate : ChallengeUpdate
     {
-        public override ChallengeType Type { get; set; } = ChallengeType.DamageAtRange;
+        public override ChallengeType Type { get; set; } = ChallengeType.DamageHealedAtHealth;
         public override ChallengeUpdateWatcherType WatcherType => ChallengeUpdateWatcherType.Sets;
 
         public int HealAmt { get; set; }
@@ -262,7 +262,11 @@ namespace Intersect.Server.Entities.PlayerData
                 var data = new KeyValuePair<long, int>(expiryTime, update.DamageDone);
 
                 // .. add our latest damage to the player's in-memory DoT tracker...
-                var challengeDoT = player.DoTChallengeMap[challenge.ChallengeId];
+                if (!player.DoTChallengeMap.TryGetValue(challenge.ChallengeId, out var challengeDoT))
+                {
+                    player.DoTChallengeMap[challenge.ChallengeId] = new Queue<KeyValuePair<long, int>>();
+                    challengeDoT = player.DoTChallengeMap[challenge.ChallengeId];
+                }
                 challengeDoT.Enqueue(data);
 
                 // And add up the DoTs for each challenge. If they meet the challenges desires...
@@ -270,6 +274,7 @@ namespace Intersect.Server.Entities.PlayerData
                 {
                     // Then that's a set!
                     challenge.Sets++;
+                    challengeDoT.Clear();
                 }
             }
         }
@@ -289,7 +294,7 @@ namespace Intersect.Server.Entities.PlayerData
         {
             foreach (var challenge in update.Challenges)
             {
-                if (challenge.Descriptor.Reps <= update.CurrentStreak)
+                if (update.CurrentStreak > 0 && update.CurrentStreak % challenge.Descriptor.Reps == 0)
                 {
                     challenge.Sets++;
                 }
@@ -300,7 +305,7 @@ namespace Intersect.Server.Entities.PlayerData
         {
             foreach (var challenge in update.Challenges)
             {
-                if (challenge.Descriptor.Reps <= update.CurrentStreak)
+                if (update.CurrentStreak > 0 && update.CurrentStreak % challenge.Descriptor.Reps == 0)
                 {
                     challenge.Sets++;
                 }
@@ -325,12 +330,17 @@ namespace Intersect.Server.Entities.PlayerData
                 var expiryTime = now + challenge.Descriptor.Param;
                 var data = new KeyValuePair<long, int>(expiryTime, update.DamageDone);
 
-                var damageTaken = player.DamageTakenMap[challenge.ChallengeId];
+                if (!player.DamageTakenMap.TryGetValue(challenge.ChallengeId, out var damageTaken))
+                {
+                    player.DamageTakenMap[challenge.ChallengeId] = new Queue<KeyValuePair<long, int>>();
+                    damageTaken = player.DamageTakenMap[challenge.ChallengeId];
+                }
                 damageTaken.Enqueue(data);
 
                 if (damageTaken.Sum(dot => dot.Value) >= challenge.Descriptor.Reps)
                 {
                     challenge.Sets++;
+                    damageTaken.Clear();
                 }
             }
         }
@@ -353,12 +363,17 @@ namespace Intersect.Server.Entities.PlayerData
                 var expiryTime = now + challenge.Descriptor.Param;
                 var data = new KeyValuePair<long, Guid>(expiryTime, update.BeastId);
 
-                var beastsKilled = player.BeastsKilledOverTime[challenge.ChallengeId];
+                if (!player.BeastsKilledOverTime.TryGetValue(challenge.ChallengeId, out var beastsKilled))
+                {
+                    player.BeastsKilledOverTime[challenge.ChallengeId] = new Queue<KeyValuePair<long, Guid>>();
+                    beastsKilled = player.BeastsKilledOverTime[challenge.ChallengeId];
+                }
                 beastsKilled.Enqueue(data);
 
                 if (beastsKilled.Count >= challenge.Descriptor.Reps)
                 {
                     challenge.Sets++;
+                    beastsKilled.Clear();
                 }
             }
         }
@@ -380,7 +395,7 @@ namespace Intersect.Server.Entities.PlayerData
             foreach (var challenge in update.Challenges)
             {
                 var descriptor = challenge.Descriptor;
-                if (descriptor.Reps <= update.HealAmt && descriptor.Param >= update.Percent)
+                if (descriptor.Reps <= (update.HealAmt * -1) && descriptor.Param >= update.Percent)
                 {
                     challenge.Sets++;
                 }

@@ -3749,7 +3749,6 @@ namespace Intersect.Server.Networking
                 else if (type == GameObjectType.Resource)
                 {
                     Globals.KillResourcesOf((ResourceBase) obj);
-                    Globals.RefreshGameObjectCache(GameObjectType.Resource, Globals.CachedResources);
                 }
                 else if (type == GameObjectType.Npc)
                 {
@@ -3767,17 +3766,31 @@ namespace Intersect.Server.Networking
                     // Update a player's Class Rank info to remove this class
                     Globals.OnlineList.ForEach(player => player.ClassInfo.Remove(obj.Id));
                 }
-                else if (type == GameObjectType.Recipe)
-                {
-                    Globals.RefreshGameObjectCache(GameObjectType.Recipe, Globals.CachedRecipes);
-                    RecipeUnlockWatcher.QueueRefresh();
-                }
 
                 DbInterface.DeleteGameObject(obj);
 
                 PacketSender.CacheGameDataPacket();
 
                 PacketSender.SendGameObjectToAll(obj, true);
+
+                // Refresh challenges/weapon mastery progression if an update has been made
+                if (type == GameObjectType.Challenge || type == GameObjectType.WeaponType)
+                {
+                    Globals.OnlineList.ForEach(player =>
+                    {
+                        player.ResetChallengeTracking();
+                        player.SetMasteryProgress();
+                    });
+                }
+                else if (type == GameObjectType.Recipe)
+                {
+                    Globals.RefreshGameObjectCache(GameObjectType.Recipe, Globals.CachedRecipes);
+                    RecipeUnlockWatcher.QueueRefresh();
+                }
+                if (type == GameObjectType.Resource)
+                {
+                    Globals.RefreshGameObjectCache(GameObjectType.Resource, Globals.CachedResources);
+                }
             }
         }
 
@@ -3942,12 +3955,6 @@ namespace Intersect.Server.Networking
                     else if (type == GameObjectType.Resource)
                     {
                         Globals.KillResourcesOf((ResourceBase)obj);
-                        Globals.RefreshGameObjectCache(GameObjectType.Resource, Globals.CachedResources);
-                    }
-                    else if (type == GameObjectType.Recipe)
-                    {
-                        Globals.RefreshGameObjectCache(GameObjectType.Recipe, Globals.CachedRecipes);
-                        RecipeUnlockWatcher.QueueRefresh();
                     }
 
                     obj.Load(packet.Data);
@@ -4013,6 +4020,19 @@ namespace Intersect.Server.Networking
                         {
                             PacketSender.SendKillCount(player, obj.Id);
                         }
+                    }
+                    else if (type == GameObjectType.Challenge || type == GameObjectType.WeaponType)
+                    {
+                        Globals.OnlineList.ForEach(player => player.SetMasteryProgress());
+                    }
+                    else if (type == GameObjectType.Resource)
+                    {
+                        Globals.RefreshGameObjectCache(GameObjectType.Resource, Globals.CachedResources);
+                    }
+                    else if (type == GameObjectType.Recipe)
+                    {
+                        Globals.RefreshGameObjectCache(GameObjectType.Recipe, Globals.CachedRecipes);
+                        RecipeUnlockWatcher.QueueRefresh();
                     }
                 }
             }

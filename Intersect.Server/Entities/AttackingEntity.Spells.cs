@@ -407,6 +407,7 @@ namespace Intersect.Server.Entities
                 {
                     SendMissedAttackMessage(target, DamageType.Physical);
                 }
+                AttackMissed.Invoke(target);
                 target?.ReactToCombat(this);
                 return;
             }
@@ -710,6 +711,7 @@ namespace Intersect.Server.Entities
                         PacketSender.SendChatMsg((Player)this, "There weren't any targets in your spell's AoE range.", ChatMessageType.Spells, CustomColors.General.GeneralWarning);
                     }
                     SendMissedAttackMessage(this, DamageType.True);
+                    AttackMissed.Invoke(null);
                 }
             }
         }

@@ -110,6 +110,9 @@ namespace Intersect.Server.Entities
 
             var range = GetDistanceTo(enemy);
 
+            var targetHealthBefore = enemy.GetVital(Vitals.Health);
+            var targetMaxHealth = enemy.GetMaxVital(Vitals.Health);
+
             var damageWasDealt = base.TryDealDamageTo(enemy, attackTypes, dmgScaling, critMultiplier, weapon, spell, ignoreEvasion, out damage);
 
             if (damageWasDealt && damage > 0)
@@ -121,6 +124,7 @@ namespace Intersect.Server.Entities
                 if (LastWeaponSwitch <= Timing.Global.Milliseconds)
                 {
                     HitFreeStreak++;
+                    MissFreeStreak++;
                     ChallengeUpdateProcesser.UpdateChallengesOf(new MaxHitUpdate(this, damage));
                     ChallengeUpdateProcesser.UpdateChallengesOf(new DamageAtRangeUpdate(this, damage, range));
                     ChallengeUpdateProcesser.UpdateChallengesOf(new HitFreeUpdate(this, HitFreeStreak));
@@ -128,8 +132,8 @@ namespace Intersect.Server.Entities
             }
             if (damage < 0)
             {
-                var currentHealthRatio = (int)Math.Floor((float)MaxVitals[(int)Vitals.Health] / GetVital((int)Vitals.Health));
-                ChallengeUpdateProcesser.UpdateChallengesOf(new DamageHealedAtHealthUpdate(this, damage, currentHealthRatio));
+                var healingRatio = (int)Math.Floor(((float)targetHealthBefore / targetMaxHealth) * 100);
+                ChallengeUpdateProcesser.UpdateChallengesOf(new DamageHealedAtHealthUpdate(this, damage, healingRatio));
             }
 
             return damageWasDealt;
@@ -145,6 +149,7 @@ namespace Intersect.Server.Entities
             // Attack literally missing
             if (!CanMeleeTarget(enemy))
             {
+                OnAttackMissed(enemy);
                 return;
             }
             
@@ -632,7 +637,10 @@ namespace Intersect.Server.Entities
 
         protected override void AttackingEntity_DamageTaken(Entity aggressor, int damage)
         {
-            HitFreeStreak = 0;
+            if (damage > 0)
+            {
+                HitFreeStreak = 0;
+            }
             ChallengeUpdateProcesser.UpdateChallengesOf(new DamageTakenOverTimeUpdate(this, damage));
         }
     }

@@ -35,6 +35,7 @@ namespace Intersect.Server.Entities
         public override void TakeDamage(Entity attacker, int damage, Vitals vital = Vitals.Health)
         {
             AddToDamageAndLootMaps(attacker, damage);
+            NotifySwarm(attacker);
             base.TakeDamage(attacker, damage, vital);
         }
 

@@ -45,6 +45,8 @@ namespace Intersect.Server.Entities
 
         private List<Guid> mEntitiesCollided = new List<Guid>();
 
+        public int EntitiesHit => mEntitiesCollided.Count;
+
         public ProjectileSpawn(
             byte dir,
             byte x,
