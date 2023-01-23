@@ -1827,7 +1827,8 @@ namespace Intersect.Server.Entities
                 attackTime = (int)Math.Floor(attackTime * Options.Instance.CombatOpts.SwiftAttackSpeedMod);
             }
 
-            attackTime = ApplyEffectBonusToValue(attackTime, EffectType.Swiftness, true);
+            var swiftBonus = (100 - GetBonusEffectTotal(EffectType.Swiftness)) / 100f;
+            attackTime = (int)Math.Floor(attackTime * swiftBonus);
 
             return
                 attackTime -

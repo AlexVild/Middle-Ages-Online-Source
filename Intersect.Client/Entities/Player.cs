@@ -2246,7 +2246,9 @@ namespace Intersect.Client.Entities
             {
                 attackTime = (int) Math.Floor(attackTime * Options.Instance.CombatOpts.SwiftAttackSpeedMod);
             }
-            attackTime = CalculateEffectBonus(attackTime, EffectType.Swiftness, true);
+            
+            var swiftBonus = (100 - GetEquipmentBonusEffect(EffectType.Swiftness)) / 100f;
+            attackTime = (int) Math.Floor(attackTime * swiftBonus);
 
             return attackTime;
         }

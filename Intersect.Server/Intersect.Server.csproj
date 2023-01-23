@@ -534,6 +534,7 @@
     <Compile Include="Entities\Player.Passives.cs" />
     <Compile Include="Entities\Player.Recipes.cs" />
     <Compile Include="Entities\Player.SkillBook.cs" />
+    <Compile Include="Entities\PlayerData\ChallengeProgress.cs" />
     <Compile Include="Entities\PlayerData\ChallengeUpdateProcesser.cs" />
     <Compile Include="Entities\PlayerData\PlayerClassStats.cs" />
     <Compile Include="Entities\PlayerData\PlayerSkillInstance.cs" />

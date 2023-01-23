@@ -347,19 +347,5 @@ namespace Intersect.Server.Entities
                 mastery.IsActive = false;
             }
         }
-
-        void SendWeaponMaxedMessage(WeaponTypeDescriptor weaponType)
-        {
-            if (WeaponMaxedReminder)
-            {
-                return;
-            }
-            PacketSender.SendChatMsg(this,
-                Strings.Player.WeaponFinished.ToString(weaponType.Name ?? "NOT FOUND"),
-                Enums.ChatMessageType.Experience,
-                CustomColors.General.GeneralWarning);
-
-            WeaponMaxedReminder = true;
-        }
     }
 }
