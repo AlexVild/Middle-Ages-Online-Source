@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using Intersect.GameObjects;
 using Intersect.Server.Database.PlayerData.Players;
+using Intersect.Server.Entities.PlayerData;
 using Intersect.Server.Localization;
 using Intersect.Server.Networking;
 using Intersect.Utilities;
@@ -12,114 +12,6 @@ using Newtonsoft.Json;
 
 namespace Intersect.Server.Entities
 {
-    public class ChallengeProgress
-    {
-        public Guid ChallengeId { get; set; }
-        public ChallengeDescriptor Descriptor { get; set; }
-        public ChallengeInstance Instance { get; set; }
-        public ChallengeType Type => Descriptor.Type;
-        
-        private int _reps { get; set; }
-        public int Reps
-        {
-            get => _reps;
-            set
-            {
-                _reps = value;
-                if (RepsChanged != null) RepsChanged(value, Descriptor.Reps);
-            }
-        }
-
-        private int _sets { get; set; }
-        public int Sets 
-        {
-            get => _sets;
-            set
-            {
-                _sets = value;
-                if (SetsChanged != null) SetsChanged(value, Descriptor.Sets);
-            }
-        }
-
-        int NumParam { get; set; }
-        Guid IdParam { get; set; }
-        Player Player { get; set; }
-
-        public delegate void ChallengeProgressUpdate(int updateVal, int requiredVal);
-        public event ChallengeProgressUpdate SetsChanged;
-        public event ChallengeProgressUpdate RepsChanged;
-
-        public ChallengeProgress(ChallengeInstance instance, Player player)
-        {
-            Instance = instance;
-            ChallengeId = instance.ChallengeId;
-            Descriptor = ChallengeDescriptor.Get(ChallengeId);
-            Player = player;
-
-            if (Descriptor == null)
-            {
-#if DEBUG
-                throw new ArgumentNullException(nameof(Descriptor));
-#else
-                return;
-#endif
-            }
-
-            Reps = 0;
-            NumParam = Descriptor.Param;
-            IdParam = Descriptor.ChallengeParamId;
-            
-            Sets = Instance.Progress;
-
-            if (Sets == Descriptor.Sets)
-            {
-                Instance.Complete = true;
-            }
-
-            RepsChanged += ChallengeProgress_RepsChanged;
-            SetsChanged += ChallengeProgress_SetsChanged;
-        }
-
-        private void ChallengeProgress_RepsChanged(int reps, int required)
-        {
-            if (Instance.Complete || reps < Descriptor.Reps)
-            {
-                return;
-            }
-
-            Sets++;
-        }
-
-        private void ChallengeProgress_SetsChanged(int sets, int required)
-        {
-            if (Instance.Complete)
-            {
-                return;
-            }
-
-            Instance.Progress++;
-
-            RepsChanged -= ChallengeProgress_RepsChanged;
-            Reps = 0;
-            RepsChanged += ChallengeProgress_RepsChanged;
-
-            // If we're not done yet, inform the player of their new progress
-            if (Sets < Descriptor.Sets)
-            {
-                PacketSender.SendChatMsg(Player,
-                    Strings.Player.ChallengeProgress.ToString(Descriptor?.Name ?? "NOT FOUND", sets, required),
-                    Enums.ChatMessageType.Experience,
-                    sendToast: true);
-                return;
-            }
-
-            // Otherwise, mark this challenge as complete, which will allow the weapon mastery track to progress on the next
-            // ProgressMastery() call
-            Instance.Progress = Descriptor.Sets;
-            Instance.Complete = true;
-        }
-    }
-
     public partial class Player : AttackingEntity
     {
         [NotMapped, JsonIgnore]

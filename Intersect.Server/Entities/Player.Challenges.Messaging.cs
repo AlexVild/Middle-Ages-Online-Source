@@ -48,6 +48,7 @@ namespace Intersect.Server.Entities
             if (weaponChallenges.Count == 1)
             {
                 SendChallengeUpdate(isComplete, weaponChallenges.First());
+                return;
             }
 
             var challenges = string.Join(", ", weaponChallenges);
@@ -96,6 +97,7 @@ namespace Intersect.Server.Entities
             if (masteries.Count == 1)
             {
                 SendMasteryUpdate(isComplete, masteries.First());
+                return;
             }
 
             var masteryString = string.Join(", ", masteries);
@@ -114,6 +116,20 @@ namespace Intersect.Server.Entities
                     ChatMessageType.Experience,
                     sendToast: true);
             }
+        }
+
+        void SendWeaponMaxedMessage(WeaponTypeDescriptor weaponType)
+        {
+            if (WeaponMaxedReminder)
+            {
+                return;
+            }
+            PacketSender.SendChatMsg(this,
+                Strings.Player.WeaponFinished.ToString(weaponType.Name ?? "NOT FOUND"),
+                Enums.ChatMessageType.Experience,
+                CustomColors.General.GeneralWarning);
+
+            WeaponMaxedReminder = true;
         }
     }
 }
