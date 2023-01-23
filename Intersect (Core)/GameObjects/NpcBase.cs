@@ -427,6 +427,12 @@ namespace Intersect.GameObjects
         /// Determines whether or not the NPC can be passed through via Dash or other means
         /// </summary>
         public bool Impassable { get; set; }
+
+        /// <summary>
+        /// Controls whether or not an NPC can be backstabbed
+        /// </summary>
+        public bool NoBackstab { get; set; }
+        public bool NoStealthBonus { get; set; }
     }
 
 }

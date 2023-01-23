@@ -114,6 +114,8 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbDeathAnimation = new DarkUI.Controls.DarkComboBox();
             this.lblDeathAnimation = new System.Windows.Forms.Label();
             this.grpImmunities = new DarkUI.Controls.DarkGroupBox();
+            this.chkNoBack = new DarkUI.Controls.DarkCheckBox();
+            this.chkImpassable = new DarkUI.Controls.DarkCheckBox();
             this.chkConfused = new DarkUI.Controls.DarkCheckBox();
             this.chkSlowed = new DarkUI.Controls.DarkCheckBox();
             this.nudTenacity = new DarkUI.Controls.DarkNumericUpDown();
@@ -228,7 +230,7 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemPaste = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
-            this.chkImpassable = new DarkUI.Controls.DarkCheckBox();
+            this.chkStealth = new DarkUI.Controls.DarkCheckBox();
             this.grpNpcs.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudRgbaA)).BeginInit();
@@ -1476,6 +1478,8 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpImmunities.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpImmunities.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpImmunities.Controls.Add(this.chkStealth);
+            this.grpImmunities.Controls.Add(this.chkNoBack);
             this.grpImmunities.Controls.Add(this.chkImpassable);
             this.grpImmunities.Controls.Add(this.chkConfused);
             this.grpImmunities.Controls.Add(this.chkSlowed);
@@ -1498,6 +1502,26 @@ namespace Intersect.Editor.Forms.Editors
             this.grpImmunities.TabIndex = 33;
             this.grpImmunities.TabStop = false;
             this.grpImmunities.Text = "Immunities";
+            // 
+            // chkNoBack
+            // 
+            this.chkNoBack.AutoSize = true;
+            this.chkNoBack.Location = new System.Drawing.Point(116, 141);
+            this.chkNoBack.Name = "chkNoBack";
+            this.chkNoBack.Size = new System.Drawing.Size(71, 17);
+            this.chkNoBack.TabIndex = 90;
+            this.chkNoBack.Text = "Backstab";
+            this.chkNoBack.CheckedChanged += new System.EventHandler(this.chkNoBack_CheckedChanged);
+            // 
+            // chkImpassable
+            // 
+            this.chkImpassable.AutoSize = true;
+            this.chkImpassable.Location = new System.Drawing.Point(10, 202);
+            this.chkImpassable.Name = "chkImpassable";
+            this.chkImpassable.Size = new System.Drawing.Size(79, 17);
+            this.chkImpassable.TabIndex = 89;
+            this.chkImpassable.Text = "Impassable";
+            this.chkImpassable.CheckedChanged += new System.EventHandler(this.chkImpassable_CheckedChanged);
             // 
             // chkConfused
             // 
@@ -1529,7 +1553,7 @@ namespace Intersect.Editor.Forms.Editors
             0,
             0,
             131072});
-            this.nudTenacity.Location = new System.Drawing.Point(11, 171);
+            this.nudTenacity.Location = new System.Drawing.Point(11, 178);
             this.nudTenacity.Name = "nudTenacity";
             this.nudTenacity.Size = new System.Drawing.Size(195, 20);
             this.nudTenacity.TabIndex = 79;
@@ -1543,7 +1567,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblTenacity
             // 
             this.lblTenacity.AutoSize = true;
-            this.lblTenacity.Location = new System.Drawing.Point(11, 155);
+            this.lblTenacity.Location = new System.Drawing.Point(11, 161);
             this.lblTenacity.Name = "lblTenacity";
             this.lblTenacity.Size = new System.Drawing.Size(68, 13);
             this.lblTenacity.TabIndex = 79;
@@ -3019,15 +3043,15 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
             // 
-            // chkImpassable
+            // chkStealth
             // 
-            this.chkImpassable.AutoSize = true;
-            this.chkImpassable.Location = new System.Drawing.Point(11, 197);
-            this.chkImpassable.Name = "chkImpassable";
-            this.chkImpassable.Size = new System.Drawing.Size(79, 17);
-            this.chkImpassable.TabIndex = 89;
-            this.chkImpassable.Text = "Impassable";
-            this.chkImpassable.CheckedChanged += new System.EventHandler(this.chkImpassable_CheckedChanged);
+            this.chkStealth.AutoSize = true;
+            this.chkStealth.Location = new System.Drawing.Point(11, 141);
+            this.chkStealth.Name = "chkStealth";
+            this.chkStealth.Size = new System.Drawing.Size(93, 17);
+            this.chkStealth.TabIndex = 91;
+            this.chkStealth.Text = "Stealth Attack";
+            this.chkStealth.CheckedChanged += new System.EventHandler(this.chkStealth_CheckedChanged);
             // 
             // FrmNpc
             // 
@@ -3331,5 +3355,7 @@ namespace Intersect.Editor.Forms.Editors
         private System.Windows.Forms.Label lblCalcExpVal;
         private System.Windows.Forms.Label lblCalcExp;
         private DarkCheckBox chkImpassable;
+        private DarkCheckBox chkNoBack;
+        private DarkCheckBox chkStealth;
     }
 }

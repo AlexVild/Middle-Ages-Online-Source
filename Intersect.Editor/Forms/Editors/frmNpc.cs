@@ -403,6 +403,8 @@ namespace Intersect.Editor.Forms.Editors
 
                 UpdateImmunities();
                 chkImpassable.Checked = mEditorItem.Impassable;
+                chkNoBack.Checked = mEditorItem.NoBackstab;
+                chkStealth.Checked = mEditorItem.NoStealthBonus;
 
                 cmbDeathAnimation.SelectedIndex = AnimationBase.ListIndex(mEditorItem.DeathAnimationId) + 1;
                 cmbTransformIntoNpc.SelectedIndex = NpcBase.ListIndex(mEditorItem.DeathTransformId) + 1;
@@ -1573,6 +1575,16 @@ namespace Intersect.Editor.Forms.Editors
         private void chkImpassable_CheckedChanged(object sender, EventArgs e)
         {
             mEditorItem.Impassable = chkImpassable.Checked;
+        }
+
+        private void chkNoBack_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.NoBackstab = chkNoBack.Checked;
+        }
+
+        private void chkStealth_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.NoStealthBonus = chkStealth.Checked;
         }
     }
 
