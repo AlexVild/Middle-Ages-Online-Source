@@ -60,6 +60,8 @@ namespace Intersect.Editor.Forms.Editors
             this.nudSightRange = new DarkUI.Controls.DarkNumericUpDown();
             this.lblSightRange = new System.Windows.Forms.Label();
             this.grpStats = new DarkUI.Controls.DarkGroupBox();
+            this.lblCalcExpVal = new System.Windows.Forms.Label();
+            this.lblCalcExp = new System.Windows.Forms.Label();
             this.nudEvasion = new DarkUI.Controls.DarkNumericUpDown();
             this.nudAccuracy = new DarkUI.Controls.DarkNumericUpDown();
             this.label5 = new System.Windows.Forms.Label();
@@ -226,8 +228,7 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemPaste = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
-            this.lblCalcExp = new System.Windows.Forms.Label();
-            this.lblCalcExpVal = new System.Windows.Forms.Label();
+            this.chkImpassable = new DarkUI.Controls.DarkCheckBox();
             this.grpNpcs.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudRgbaA)).BeginInit();
@@ -723,6 +724,24 @@ namespace Intersect.Editor.Forms.Editors
             this.grpStats.TabIndex = 15;
             this.grpStats.TabStop = false;
             this.grpStats.Text = "Stats:";
+            // 
+            // lblCalcExpVal
+            // 
+            this.lblCalcExpVal.AutoSize = true;
+            this.lblCalcExpVal.Location = new System.Drawing.Point(103, 357);
+            this.lblCalcExpVal.Name = "lblCalcExpVal";
+            this.lblCalcExpVal.Size = new System.Drawing.Size(37, 13);
+            this.lblCalcExpVal.TabIndex = 59;
+            this.lblCalcExpVal.Text = "0 EXP";
+            // 
+            // lblCalcExp
+            // 
+            this.lblCalcExp.AutoSize = true;
+            this.lblCalcExp.Location = new System.Drawing.Point(102, 339);
+            this.lblCalcExp.Name = "lblCalcExp";
+            this.lblCalcExp.Size = new System.Drawing.Size(81, 13);
+            this.lblCalcExp.TabIndex = 58;
+            this.lblCalcExp.Text = "Calculated Exp:";
             // 
             // nudEvasion
             // 
@@ -1457,6 +1476,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpImmunities.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpImmunities.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpImmunities.Controls.Add(this.chkImpassable);
             this.grpImmunities.Controls.Add(this.chkConfused);
             this.grpImmunities.Controls.Add(this.chkSlowed);
             this.grpImmunities.Controls.Add(this.nudTenacity);
@@ -2999,23 +3019,15 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
             // 
-            // lblCalcExp
+            // chkImpassable
             // 
-            this.lblCalcExp.AutoSize = true;
-            this.lblCalcExp.Location = new System.Drawing.Point(102, 339);
-            this.lblCalcExp.Name = "lblCalcExp";
-            this.lblCalcExp.Size = new System.Drawing.Size(81, 13);
-            this.lblCalcExp.TabIndex = 58;
-            this.lblCalcExp.Text = "Calculated Exp:";
-            // 
-            // lblCalcExpVal
-            // 
-            this.lblCalcExpVal.AutoSize = true;
-            this.lblCalcExpVal.Location = new System.Drawing.Point(103, 357);
-            this.lblCalcExpVal.Name = "lblCalcExpVal";
-            this.lblCalcExpVal.Size = new System.Drawing.Size(37, 13);
-            this.lblCalcExpVal.TabIndex = 59;
-            this.lblCalcExpVal.Text = "0 EXP";
+            this.chkImpassable.AutoSize = true;
+            this.chkImpassable.Location = new System.Drawing.Point(11, 197);
+            this.chkImpassable.Name = "chkImpassable";
+            this.chkImpassable.Size = new System.Drawing.Size(79, 17);
+            this.chkImpassable.TabIndex = 89;
+            this.chkImpassable.Text = "Impassable";
+            this.chkImpassable.CheckedChanged += new System.EventHandler(this.chkImpassable_CheckedChanged);
             // 
             // FrmNpc
             // 
@@ -3318,5 +3330,6 @@ namespace Intersect.Editor.Forms.Editors
         private DarkCheckBox chkBestiary;
         private System.Windows.Forms.Label lblCalcExpVal;
         private System.Windows.Forms.Label lblCalcExp;
+        private DarkCheckBox chkImpassable;
     }
 }

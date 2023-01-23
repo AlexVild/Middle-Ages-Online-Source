@@ -422,6 +422,11 @@ namespace Intersect.GameObjects
         public string Description { get; set; } = string.Empty;
 
         public bool NotInBestiary { get; set; }
+
+        /// <summary>
+        /// Determines whether or not the NPC can be passed through via Dash or other means
+        /// </summary>
+        public bool Impassable { get; set; }
     }
 
 }

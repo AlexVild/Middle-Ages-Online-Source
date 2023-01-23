@@ -543,8 +543,13 @@ namespace Intersect.Server.Entities
                                 return (int)EntityTypes.Player;
                             }
                         }
-                        else if (en is Npc)
+                        else if (en is Npc n)
                         {
+                            if (n.Base.Impassable)
+                            {
+                                return (int)EntityTypes.Event;
+                            }
+
                             return (int)EntityTypes.Player;
                         }
                         else if (en is Resource resource)

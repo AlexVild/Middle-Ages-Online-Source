@@ -1048,6 +1048,10 @@
     <Compile Include="Migrations\Game\20230120185643_ItemMaxLevelMigration.designer.cs">
       <DependentUpon>20230120185643_ItemMaxLevelMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20230123212441_ImpassableBeastsMigration.cs" />
+    <Compile Include="Migrations\Game\20230123212441_ImpassableBeastsMigration.designer.cs">
+      <DependentUpon>20230123212441_ImpassableBeastsMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

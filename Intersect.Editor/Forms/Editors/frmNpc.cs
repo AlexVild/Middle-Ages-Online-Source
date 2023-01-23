@@ -402,6 +402,7 @@ namespace Intersect.Editor.Forms.Editors
                 nudTenacity.Value = (decimal) mEditorItem.Tenacity;
 
                 UpdateImmunities();
+                chkImpassable.Checked = mEditorItem.Impassable;
 
                 cmbDeathAnimation.SelectedIndex = AnimationBase.ListIndex(mEditorItem.DeathAnimationId) + 1;
                 cmbTransformIntoNpc.SelectedIndex = NpcBase.ListIndex(mEditorItem.DeathTransformId) + 1;
@@ -1567,6 +1568,11 @@ namespace Intersect.Editor.Forms.Editors
         private void chkBestiary_CheckedChanged(object sender, EventArgs e)
         {
             mEditorItem.NotInBestiary = chkBestiary.Checked;
+        }
+
+        private void chkImpassable_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Impassable = chkImpassable.Checked;
         }
     }
 
