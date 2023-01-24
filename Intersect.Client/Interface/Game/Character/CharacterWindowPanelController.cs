@@ -45,6 +45,7 @@ namespace Intersect.Client.Interface.Game.Character
         private CharacterCosmeticsPanel CosmeticsPanel { get; set; }
         private CharacterRecipePanel RecipesPanel { get; set; }
         private SkillsPanel SkillsPanel { get; set; }
+        private CharacterChallengesPanel ChallengesPanel { get; set; }
 
         public CharacterWindowPanelController(Canvas gameCanvas, CharacterWindowMAO parent)
         {
@@ -80,6 +81,9 @@ namespace Intersect.Client.Interface.Game.Character
 
             SkillsPanel = new SkillsPanel(PanelContainer);
             SkillsPanel.Hide();
+
+            ChallengesPanel = new CharacterChallengesPanel(PanelContainer);
+            ChallengesPanel.Hide();
 
             PositionToParent();
             Hide();
@@ -237,7 +241,7 @@ namespace Intersect.Client.Interface.Game.Character
                     break;
                 case CharacterPanelType.Challenges:
                     ChallengesButton.Disable();
-                    CurrentPanel = SkillsPanel;
+                    CurrentPanel = ChallengesPanel;
                     break;
                 default:
                     throw new ArgumentException($"Invalid enum for {nameof(type)}");

@@ -2835,5 +2835,15 @@ namespace Intersect.Client.Networking
             SkillsPanelController.RefreshDisplay = true;
             SkillsPanelController.SkillPointsAvailable = packet.SkillPointsAvailable;
         }
+
+        public void HandlePacket(IPacketSender packetSender, ChallengeProgressPacket packet)
+        {
+            if (Globals.Me == null)
+            {
+                return;
+            }
+
+            CharacterChallengesController.WeaponTypeProgresses = packet.WeaponTypes;
+        }
     }
 }

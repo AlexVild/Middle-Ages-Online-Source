@@ -4495,7 +4495,6 @@ namespace Intersect.Server.Networking
             }
 
             player.SendPacket(new Network.Packets.Server.UnlockedRecipesPacket(player.UnlockedRecipeIds.ToList()));
-
         }
 
         public void HandlePacket(Client client, RequestKillCountsPacket packet)
@@ -4535,6 +4534,18 @@ namespace Intersect.Server.Networking
             }
 
             PacketSender.SendSkillbookToClient(player);
+        }
+
+        public void HandlePacket(Client client, RequestChallengeProgressPacket packet)
+        {
+            var player = client?.Entity;
+
+            if (player == null)
+            {
+                return;
+            }
+
+            player.SendPacket(player.GenerateChallengeProgressPacket());
         }
     }
 }

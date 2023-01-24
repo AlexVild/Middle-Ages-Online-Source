@@ -118,6 +118,35 @@ namespace Intersect.Server.Entities
             }
         }
 
+        public void SendNewTrack(string mastery)
+        {
+            PacketSender.SendChatMsg(this,
+                Strings.Player.NewWeaponType.ToString(mastery),
+                ChatMessageType.Experience,
+                sendToast: true);
+        }
+
+        public void SendNewTrack(List<string> masteries)
+        {
+            if (masteries == null || masteries.Count == 0)
+            {
+                return;
+            }
+
+            if (masteries.Count == 1)
+            {
+                SendNewTrack(masteries.First());
+                return;
+            }
+
+            var masteryString = string.Join(", ", masteries);
+
+            PacketSender.SendChatMsg(this,
+                Strings.Player.NewWeaponTypes.ToString(masteryString),
+                ChatMessageType.Experience,
+                sendToast: true);
+        }
+
         void SendWeaponMaxedMessage(WeaponTypeDescriptor weaponType)
         {
             if (WeaponMaxedReminder)

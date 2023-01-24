@@ -139,6 +139,7 @@
     <Compile Include="Interface\Game\Character\CharacterWindowMAO.cs" />
     <Compile Include="Interface\Game\Character\CosmeticItem.cs" />
     <Compile Include="Interface\Game\Character\Panels\CharacterBonusesPanel.cs" />
+    <Compile Include="Interface\Game\Character\Panels\CharacterChallengesPanel.cs" />
     <Compile Include="Interface\Game\Character\Panels\CharacterCosmeticsPanel.cs" />
     <Compile Include="Interface\Game\Character\Panels\CharacterNameTagPanel.cs" />
     <Compile Include="Interface\Game\Character\Panels\CharacterEquipmentWindow.cs" />

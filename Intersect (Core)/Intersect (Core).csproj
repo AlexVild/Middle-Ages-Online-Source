@@ -405,6 +405,7 @@
     <Compile Include="Network\Packets\Client\CraftItemPacket.cs" />
     <Compile Include="Network\Packets\Client\FinishedFadePacket.cs" />
     <Compile Include="Network\Packets\Client\PartyInviteNamePacket.cs" />
+    <Compile Include="Network\Packets\Client\RequestChallengeProgressPacket.cs" />
     <Compile Include="Network\Packets\Client\RequestCosmeticsPacket.cs" />
     <Compile Include="Network\Packets\Client\RequestInstanceLeavePacket.cs" />
     <Compile Include="Network\Packets\Client\RequestKillCountPacket.cs" />
@@ -420,6 +421,7 @@
     <Compile Include="Network\Packets\Client\ResourceInfoRequestPacket.cs" />
     <Compile Include="Network\Packets\Client\SetLabelPacket.cs" />
     <Compile Include="Network\Packets\Client\SkillPreparationPacket.cs" />
+    <Compile Include="Network\Packets\Server\ChallengeProgressPacket.cs" />
     <Compile Include="Network\Packets\Server\CombatNumberPacket.cs" />
     <Compile Include="Network\Packets\Server\CombatNumberPackets.cs" />
     <Compile Include="Network\Packets\Server\CosmeticUnlocksPacket.cs" />

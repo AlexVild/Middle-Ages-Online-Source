@@ -1777,6 +1777,12 @@ namespace Intersect.Server.Localization
             public readonly LocalizedString ChallengesComplete = @"You've completed multiple challenges: {00}";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString NewWeaponType = @"You've unlocked a new weapon proficiency track: {00}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString NewWeaponTypes = @"You've unlocked multiple new weapon proficiency tracks: {00}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString WeaponProgression = @"You've gained a proficiency in {00} weapons.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]

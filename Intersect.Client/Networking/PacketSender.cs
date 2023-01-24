@@ -635,5 +635,10 @@ namespace Intersect.Client.Networking
         {
             Network.SendPacket(new RequestSkillbookPacket());
         }
+
+        public static void SendRequestChallenges()
+        {
+            Network.SendPacket(new RequestChallengeProgressPacket());
+        }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using Intersect.GameObjects;
+using Intersect.Network.Packets.Server;
 using Intersect.Server.Database.PlayerData.Players;
 using Intersect.Server.Entities.PlayerData;
 using Intersect.Server.Localization;
@@ -113,6 +114,7 @@ namespace Intersect.Server.Entities
             DeactivateAllMasteries();
 
             // Instantiate new mastery tracks/challenges in response to this change
+            List<string> newTracks = new List<string>();
             List<string> newChallenges = new List<string>();
             List<Guid> challengeInstanceIds = new List<Guid>();
             foreach (var weaponType in weapon?.WeaponTypes ?? new List<Guid>())
@@ -121,6 +123,7 @@ namespace Intersect.Server.Entities
                 {
                     WeaponMasteries.Add(new WeaponMasteryInstance(Id, weaponType, 0, true));
                     TryGetMastery(weaponType, out mastery);
+                    newTracks.Add(WeaponTypeDescriptor.GetName(weaponType));
                 }
 
                 mastery.IsActive = true;
@@ -148,6 +151,7 @@ namespace Intersect.Server.Entities
                 }
                 challengeInstanceIds.AddRange(masteryChallenges);
             }
+            SendNewTrack(newTracks);
             SendChallengeUpdate(false, newChallenges);
             TrackChallenges(challengeInstanceIds);
         }
@@ -196,7 +200,11 @@ namespace Intersect.Server.Entities
                 }
                 newChallenges.Add(ChallengeDescriptor.GetName(challengeId));
             }
-            SendChallengeUpdate(false, newChallenges);
+            if (newChallenges.Count > 0)
+            {
+                SendChallengeUpdate(false, newChallenges);
+                TrackChallenges(currentChallenges);
+            }
 
             // If we're not done yet, then we can't level up yet!
             if (!ChallengesComplete(currentChallenges))
@@ -346,6 +354,35 @@ namespace Intersect.Server.Entities
             {
                 mastery.IsActive = false;
             }
+        }
+
+        public ChallengeProgressPacket GenerateChallengeProgressPacket()
+        {
+            List<WeaponTypeProgress> weaponTypeProgresses = new List<WeaponTypeProgress>();
+
+            foreach (var weaponType in WeaponMasteries)
+            {
+                if (!weaponType.TryGetCurrentChallenges(out var challenges))
+                {
+                    continue;
+                }
+
+                List<ChallengeProgression> challengeProgressions = new List<ChallengeProgression>();
+                foreach (var challenge in challenges)
+                {
+                    var playerProgress = Challenges.Find(c => c.ChallengeId == challenge);
+                    if (playerProgress == default)
+                    {
+                        continue;
+                    }
+                    challengeProgressions.Add(new ChallengeProgression(challenge, playerProgress.Progress, playerProgress.Complete));
+                }
+
+                var progress = new WeaponTypeProgress(weaponType.WeaponTypeId, weaponType.Level, weaponType.ExpRemaining, challengeProgressions);
+                weaponTypeProgresses.Add(progress);
+            }
+
+            return new ChallengeProgressPacket(weaponTypeProgresses);
         }
     }
 }
