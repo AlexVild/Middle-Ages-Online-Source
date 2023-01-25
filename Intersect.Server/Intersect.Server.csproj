@@ -1057,6 +1057,10 @@
     <Compile Include="Migrations\Game\20230123215839_BackstabOptionNPCMigration.designer.cs">
       <DependentUpon>20230123215839_BackstabOptionNPCMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20230125200843_ChallengeIconMigration.cs" />
+    <Compile Include="Migrations\Game\20230125200843_ChallengeIconMigration.designer.cs">
+      <DependentUpon>20230125200843_ChallengeIconMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

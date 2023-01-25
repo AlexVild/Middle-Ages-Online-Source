@@ -71,6 +71,8 @@ namespace Intersect.GameObjects
 
         public int Param { get; set; }
 
+        public string Icon { get; set; } = string.Empty;
+
         [NotMapped]
         public Dictionary<Stats, int> StatBoosts { get; set; }
 

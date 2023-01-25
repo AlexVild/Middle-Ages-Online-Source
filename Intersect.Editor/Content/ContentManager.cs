@@ -49,6 +49,8 @@ namespace Intersect.Editor.Content
 
             Misc,
 
+            Challenges
+
         }
 
         //Game Content
@@ -90,6 +92,8 @@ namespace Intersect.Editor.Content
         static IDictionary<string, Texture> sSpellDict = new Dictionary<string, Texture>();
 
         static IDictionary<string, Texture> sTilesetDict = new Dictionary<string, Texture>();
+        
+        static IDictionary<string, Texture> sChallengeDict = new Dictionary<string, Texture>();
 
         public static List<Texture> TilesetTextures = new List<Texture>();
 
@@ -139,6 +143,7 @@ namespace Intersect.Editor.Content
             LoadShaders();
             LoadSounds();
             LoadMusic();
+            LoadChallenges();
         }
 
         public static void Update()
@@ -324,6 +329,11 @@ namespace Intersect.Editor.Content
             LoadTextureGroup("misc", sMiscDict);
         }
 
+        private static void LoadChallenges()
+        {
+            LoadTextureGroup("challenges", sChallengeDict);
+        }
+
         public static void LoadShaders()
         {
             sShaderDict.Clear();
@@ -453,6 +463,10 @@ namespace Intersect.Editor.Content
                     textureDict = sMiscDict;
 
                     break;
+                case TextureType.Challenges:
+                    textureDict = sChallengeDict;
+
+                    break;
                 default:
                     return null;
             }
@@ -579,6 +593,10 @@ namespace Intersect.Editor.Content
                     break;
                 case TextureType.Misc:
                     textureDict = sMiscDict;
+
+                    break;
+                case TextureType.Challenges:
+                    textureDict = sChallengeDict;
 
                     break;
                 default:

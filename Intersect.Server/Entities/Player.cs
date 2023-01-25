@@ -455,6 +455,7 @@ namespace Intersect.Server.Entities
             InitClassRanks();
 
             SetMasteryProgress();
+            SendPacket(GenerateChallengeProgressPacket());
 
             // Refresh recipe unlock statuses in the event they've changed since the player last logged in
             RecipeUnlockWatcher.RefreshPlayer(this);

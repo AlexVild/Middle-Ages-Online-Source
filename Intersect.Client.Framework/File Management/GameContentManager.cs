@@ -44,7 +44,9 @@ namespace Intersect.Client.Framework.File_Management
 
             Misc,
 
-            Decor
+            Decor,
+
+            Challenge,
 
         }
 
@@ -84,6 +86,8 @@ namespace Intersect.Client.Framework.File_Management
         protected Dictionary<string, IAsset> mResourceDict = new Dictionary<string, IAsset>();
 
         protected Dictionary<string, IAsset> mDecorDict = new Dictionary<string, IAsset>();
+        
+        protected Dictionary<string, IAsset> mChallengeDict = new Dictionary<string, IAsset>();
 
         protected Dictionary<string, GameShader> mShaderDict = new Dictionary<string, GameShader>();
         
@@ -133,6 +137,7 @@ namespace Intersect.Client.Framework.File_Management
             LoadFonts();
             LoadShaders();
             LoadDecor();
+            LoadChallenges();
         }
 
         public abstract void LoadTexturePacks();
@@ -166,6 +171,8 @@ namespace Intersect.Client.Framework.File_Management
         public abstract void LoadShaders();
 
         public abstract void LoadDecor();
+        
+        public abstract void LoadChallenges();
 
         //Audio Loading
         public void LoadAudio()
@@ -231,6 +238,9 @@ namespace Intersect.Client.Framework.File_Management
 
                 case TextureType.Decor:
                     return mDecorDict.Keys.ToArray();
+                
+                case TextureType.Challenge:
+                    return mChallengeDict.Keys.ToArray();
             }
 
             return null;
@@ -309,6 +319,11 @@ namespace Intersect.Client.Framework.File_Management
 
                 case TextureType.Decor:
                     textureDict = mDecorDict;
+
+                    break;
+
+                case TextureType.Challenge:
+                    textureDict = mChallengeDict;
 
                     break;
                 default:
@@ -557,6 +572,10 @@ namespace Intersect.Client.Framework.File_Management
 
                 case ContentTypes.Decor:
                     return mDecorDict;
+                    break;
+
+                case ContentTypes.Challenges:
+                    return mChallengeDict;
                     break;
 
                 case ContentTypes.Font:

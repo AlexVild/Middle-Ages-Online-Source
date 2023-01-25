@@ -1,4 +1,5 @@
-﻿using Intersect.Editor.Forms.Helpers;
+﻿using Intersect.Editor.Content;
+using Intersect.Editor.Forms.Helpers;
 using Intersect.Editor.Localization;
 using Intersect.Enums;
 using Intersect.GameObjects;
@@ -39,6 +40,12 @@ namespace Intersect.Editor.Forms.Editors
             {
                 grpEditor.Hide();
             }
+
+            cmbPic.Items.Clear();
+            cmbPic.Items.Add(Strings.General.none);
+            
+            var itemnames = GameContentManager.GetSmartSortedTextureNames(GameContentManager.TextureType.Challenges);
+            cmbPic.Items.AddRange(itemnames);
 
             cmbChallengeType.Items.Clear();
             cmbChallengeType.Items.AddRange(EnumExtensions.GetDescriptions(typeof(ChallengeType)));
@@ -90,6 +97,14 @@ namespace Intersect.Editor.Forms.Editors
             nudSets.Value = mEditorItem.Sets;
             nudReps.Value = mEditorItem.Reps;
             nudParam.Value = mEditorItem.Param;
+
+            cmbPic.SelectedIndex = cmbPic.FindString(TextUtils.NullToNone(mEditorItem.Icon));
+            picItem.BackgroundImage?.Dispose();
+            picItem.BackgroundImage = null;
+            if (cmbPic.SelectedIndex > 0)
+            {
+                DrawIcon();
+            }
 
             if ((ChallengeParamType)mEditorItem.ChallengeParamType != ChallengeParamType.None)
             {
@@ -296,6 +311,38 @@ namespace Intersect.Editor.Forms.Editors
         private void nudParam_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.Param = (int)nudParam.Value;
+        }
+
+        private void DrawIcon()
+        {
+            var picItemBmp = new Bitmap(picItem.Width, picItem.Height);
+            var gfx = Graphics.FromImage(picItemBmp);
+            gfx.FillRectangle(Brushes.Black, new Rectangle(0, 0, picItem.Width, picItem.Height));
+            if (cmbPic.SelectedIndex > 0)
+            {
+                var img = Image.FromFile("resources/challenges/" + cmbPic.Text);
+
+                gfx.DrawImage(
+                    img, new Rectangle(0, 0, img.Width, img.Height),
+                    0, 0, img.Width, img.Height, GraphicsUnit.Pixel
+                );
+
+                img.Dispose();
+            }
+
+            gfx.Dispose();
+
+            picItem.BackgroundImage = picItemBmp;
+        }
+
+        private void cmbPic_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Icon = TextUtils.NullToNone(cmbPic.Text);
+            if (mEditorItem.Icon == null)
+            {
+                mEditorItem.Icon = string.Empty;
+            }
+            DrawIcon();
         }
     }
 }

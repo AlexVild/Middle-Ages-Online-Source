@@ -47,6 +47,23 @@ namespace Intersect.Editor.Forms.Editors
             this.txtSearch = new DarkUI.Controls.DarkTextBox();
             this.lstGameObjects = new Intersect.Editor.Forms.Controls.GameObjectList();
             this.grpEditor = new DarkUI.Controls.DarkGroupBox();
+            this.grpDetails = new DarkUI.Controls.DarkGroupBox();
+            this.nudParam = new DarkUI.Controls.DarkNumericUpDown();
+            this.cmbParamSelector = new DarkUI.Controls.DarkComboBox();
+            this.nudSets = new DarkUI.Controls.DarkNumericUpDown();
+            this.nudReps = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblParam = new System.Windows.Forms.Label();
+            this.lblSets = new System.Windows.Forms.Label();
+            this.lblReps = new System.Windows.Forms.Label();
+            this.cmbChallengeType = new DarkUI.Controls.DarkComboBox();
+            this.lblChallengeType = new System.Windows.Forms.Label();
+            this.grpUnlocks = new DarkUI.Controls.DarkGroupBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.txtStartDesc = new DarkUI.Controls.DarkTextBox();
+            this.cmbEvent = new DarkUI.Controls.DarkComboBox();
+            this.lblEvent = new System.Windows.Forms.Label();
+            this.cmbSpell = new DarkUI.Controls.DarkComboBox();
+            this.lblSpell = new System.Windows.Forms.Label();
             this.btnAddFolder = new DarkUI.Controls.DarkButton();
             this.cmbFolder = new DarkUI.Controls.DarkComboBox();
             this.lblFolder = new System.Windows.Forms.Label();
@@ -54,31 +71,18 @@ namespace Intersect.Editor.Forms.Editors
             this.lblName = new System.Windows.Forms.Label();
             this.btnSave = new DarkUI.Controls.DarkButton();
             this.btnCancel = new DarkUI.Controls.DarkButton();
-            this.grpUnlocks = new DarkUI.Controls.DarkGroupBox();
-            this.grpDetails = new DarkUI.Controls.DarkGroupBox();
-            this.lblChallengeType = new System.Windows.Forms.Label();
-            this.cmbChallengeType = new DarkUI.Controls.DarkComboBox();
-            this.lblReps = new System.Windows.Forms.Label();
-            this.lblSets = new System.Windows.Forms.Label();
-            this.lblParam = new System.Windows.Forms.Label();
-            this.nudReps = new DarkUI.Controls.DarkNumericUpDown();
-            this.nudSets = new DarkUI.Controls.DarkNumericUpDown();
-            this.nudParam = new DarkUI.Controls.DarkNumericUpDown();
-            this.lblSpell = new System.Windows.Forms.Label();
-            this.cmbSpell = new DarkUI.Controls.DarkComboBox();
-            this.lblEvent = new System.Windows.Forms.Label();
-            this.cmbEvent = new DarkUI.Controls.DarkComboBox();
-            this.txtStartDesc = new DarkUI.Controls.DarkTextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.cmbParamSelector = new DarkUI.Controls.DarkComboBox();
+            this.picItem = new System.Windows.Forms.PictureBox();
+            this.cmbPic = new DarkUI.Controls.DarkComboBox();
+            this.lblIcon = new System.Windows.Forms.Label();
             this.toolStrip.SuspendLayout();
             this.grpWeaponTypes.SuspendLayout();
             this.grpEditor.SuspendLayout();
-            this.grpUnlocks.SuspendLayout();
             this.grpDetails.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudReps)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSets)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudParam)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSets)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudReps)).BeginInit();
+            this.grpUnlocks.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picItem)).BeginInit();
             this.SuspendLayout();
             // 
             // toolStrip
@@ -212,7 +216,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpWeaponTypes.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpWeaponTypes.Location = new System.Drawing.Point(12, 28);
             this.grpWeaponTypes.Name = "grpWeaponTypes";
-            this.grpWeaponTypes.Size = new System.Drawing.Size(203, 366);
+            this.grpWeaponTypes.Size = new System.Drawing.Size(203, 405);
             this.grpWeaponTypes.TabIndex = 53;
             this.grpWeaponTypes.TabStop = false;
             this.grpWeaponTypes.Text = "Challenges";
@@ -251,13 +255,16 @@ namespace Intersect.Editor.Forms.Editors
             this.lstGameObjects.Location = new System.Drawing.Point(6, 44);
             this.lstGameObjects.Name = "lstGameObjects";
             this.lstGameObjects.SelectedImageIndex = 0;
-            this.lstGameObjects.Size = new System.Drawing.Size(191, 312);
+            this.lstGameObjects.Size = new System.Drawing.Size(191, 355);
             this.lstGameObjects.TabIndex = 32;
             // 
             // grpEditor
             // 
             this.grpEditor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpEditor.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpEditor.Controls.Add(this.lblIcon);
+            this.grpEditor.Controls.Add(this.cmbPic);
+            this.grpEditor.Controls.Add(this.picItem);
             this.grpEditor.Controls.Add(this.grpDetails);
             this.grpEditor.Controls.Add(this.grpUnlocks);
             this.grpEditor.Controls.Add(this.btnAddFolder);
@@ -268,10 +275,270 @@ namespace Intersect.Editor.Forms.Editors
             this.grpEditor.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpEditor.Location = new System.Drawing.Point(221, 28);
             this.grpEditor.Name = "grpEditor";
-            this.grpEditor.Size = new System.Drawing.Size(547, 366);
+            this.grpEditor.Size = new System.Drawing.Size(547, 405);
             this.grpEditor.TabIndex = 55;
             this.grpEditor.TabStop = false;
             this.grpEditor.Text = "Weapon Type";
+            // 
+            // grpDetails
+            // 
+            this.grpDetails.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpDetails.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpDetails.Controls.Add(this.nudParam);
+            this.grpDetails.Controls.Add(this.cmbParamSelector);
+            this.grpDetails.Controls.Add(this.nudSets);
+            this.grpDetails.Controls.Add(this.nudReps);
+            this.grpDetails.Controls.Add(this.lblParam);
+            this.grpDetails.Controls.Add(this.lblSets);
+            this.grpDetails.Controls.Add(this.lblReps);
+            this.grpDetails.Controls.Add(this.cmbChallengeType);
+            this.grpDetails.Controls.Add(this.lblChallengeType);
+            this.grpDetails.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpDetails.Location = new System.Drawing.Point(19, 87);
+            this.grpDetails.Name = "grpDetails";
+            this.grpDetails.Size = new System.Drawing.Size(518, 122);
+            this.grpDetails.TabIndex = 57;
+            this.grpDetails.TabStop = false;
+            this.grpDetails.Text = "Challenge Details";
+            // 
+            // nudParam
+            // 
+            this.nudParam.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudParam.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudParam.Location = new System.Drawing.Point(313, 91);
+            this.nudParam.Maximum = new decimal(new int[] {
+            10000000,
+            0,
+            0,
+            0});
+            this.nudParam.Name = "nudParam";
+            this.nudParam.Size = new System.Drawing.Size(89, 20);
+            this.nudParam.TabIndex = 82;
+            this.nudParam.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudParam.ValueChanged += new System.EventHandler(this.nudParam_ValueChanged);
+            // 
+            // cmbParamSelector
+            // 
+            this.cmbParamSelector.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbParamSelector.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbParamSelector.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbParamSelector.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbParamSelector.DrawDropdownHoverOutline = false;
+            this.cmbParamSelector.DrawFocusRectangle = false;
+            this.cmbParamSelector.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbParamSelector.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbParamSelector.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbParamSelector.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbParamSelector.FormattingEnabled = true;
+            this.cmbParamSelector.Location = new System.Drawing.Point(313, 91);
+            this.cmbParamSelector.Name = "cmbParamSelector";
+            this.cmbParamSelector.Size = new System.Drawing.Size(199, 21);
+            this.cmbParamSelector.TabIndex = 83;
+            this.cmbParamSelector.Text = null;
+            this.cmbParamSelector.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbParamSelector.SelectedIndexChanged += new System.EventHandler(this.cmbParamSelector_SelectedIndexChanged);
+            // 
+            // nudSets
+            // 
+            this.nudSets.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudSets.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudSets.Location = new System.Drawing.Point(165, 91);
+            this.nudSets.Maximum = new decimal(new int[] {
+            10000000,
+            0,
+            0,
+            0});
+            this.nudSets.Name = "nudSets";
+            this.nudSets.Size = new System.Drawing.Size(89, 20);
+            this.nudSets.TabIndex = 81;
+            this.nudSets.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudSets.ValueChanged += new System.EventHandler(this.nudSets_ValueChanged);
+            // 
+            // nudReps
+            // 
+            this.nudReps.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudReps.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudReps.Location = new System.Drawing.Point(9, 91);
+            this.nudReps.Maximum = new decimal(new int[] {
+            10000000,
+            0,
+            0,
+            0});
+            this.nudReps.Name = "nudReps";
+            this.nudReps.Size = new System.Drawing.Size(89, 20);
+            this.nudReps.TabIndex = 80;
+            this.nudReps.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudReps.ValueChanged += new System.EventHandler(this.nudReps_ValueChanged);
+            // 
+            // lblParam
+            // 
+            this.lblParam.AutoSize = true;
+            this.lblParam.Location = new System.Drawing.Point(310, 75);
+            this.lblParam.Name = "lblParam";
+            this.lblParam.Size = new System.Drawing.Size(37, 13);
+            this.lblParam.TabIndex = 57;
+            this.lblParam.Text = "Param";
+            // 
+            // lblSets
+            // 
+            this.lblSets.AutoSize = true;
+            this.lblSets.Location = new System.Drawing.Point(162, 75);
+            this.lblSets.Name = "lblSets";
+            this.lblSets.Size = new System.Drawing.Size(28, 13);
+            this.lblSets.TabIndex = 56;
+            this.lblSets.Text = "Sets";
+            // 
+            // lblReps
+            // 
+            this.lblReps.AutoSize = true;
+            this.lblReps.Location = new System.Drawing.Point(6, 75);
+            this.lblReps.Name = "lblReps";
+            this.lblReps.Size = new System.Drawing.Size(60, 13);
+            this.lblReps.TabIndex = 55;
+            this.lblReps.Text = "Repetitions";
+            // 
+            // cmbChallengeType
+            // 
+            this.cmbChallengeType.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbChallengeType.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbChallengeType.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbChallengeType.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbChallengeType.DrawDropdownHoverOutline = false;
+            this.cmbChallengeType.DrawFocusRectangle = false;
+            this.cmbChallengeType.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbChallengeType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbChallengeType.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbChallengeType.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbChallengeType.FormattingEnabled = true;
+            this.cmbChallengeType.Location = new System.Drawing.Point(9, 41);
+            this.cmbChallengeType.Name = "cmbChallengeType";
+            this.cmbChallengeType.Size = new System.Drawing.Size(503, 21);
+            this.cmbChallengeType.TabIndex = 54;
+            this.cmbChallengeType.Text = null;
+            this.cmbChallengeType.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbChallengeType.SelectedIndexChanged += new System.EventHandler(this.cmbChallengeType_SelectedIndexChanged);
+            // 
+            // lblChallengeType
+            // 
+            this.lblChallengeType.AutoSize = true;
+            this.lblChallengeType.Location = new System.Drawing.Point(6, 25);
+            this.lblChallengeType.Name = "lblChallengeType";
+            this.lblChallengeType.Size = new System.Drawing.Size(81, 13);
+            this.lblChallengeType.TabIndex = 53;
+            this.lblChallengeType.Text = "Challenge Type";
+            // 
+            // grpUnlocks
+            // 
+            this.grpUnlocks.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpUnlocks.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpUnlocks.Controls.Add(this.label1);
+            this.grpUnlocks.Controls.Add(this.txtStartDesc);
+            this.grpUnlocks.Controls.Add(this.cmbEvent);
+            this.grpUnlocks.Controls.Add(this.lblEvent);
+            this.grpUnlocks.Controls.Add(this.cmbSpell);
+            this.grpUnlocks.Controls.Add(this.lblSpell);
+            this.grpUnlocks.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpUnlocks.Location = new System.Drawing.Point(19, 215);
+            this.grpUnlocks.Name = "grpUnlocks";
+            this.grpUnlocks.Size = new System.Drawing.Size(518, 184);
+            this.grpUnlocks.TabIndex = 56;
+            this.grpUnlocks.TabStop = false;
+            this.grpUnlocks.Text = "Unlocks";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(260, 78);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(91, 13);
+            this.label1.TabIndex = 119;
+            this.label1.Text = "Event Description";
+            // 
+            // txtStartDesc
+            // 
+            this.txtStartDesc.AcceptsReturn = true;
+            this.txtStartDesc.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.txtStartDesc.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtStartDesc.ForeColor = System.Drawing.Color.Gainsboro;
+            this.txtStartDesc.Location = new System.Drawing.Point(263, 94);
+            this.txtStartDesc.Multiline = true;
+            this.txtStartDesc.Name = "txtStartDesc";
+            this.txtStartDesc.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtStartDesc.Size = new System.Drawing.Size(239, 75);
+            this.txtStartDesc.TabIndex = 118;
+            this.txtStartDesc.TextChanged += new System.EventHandler(this.txtStartDesc_TextChanged);
+            // 
+            // cmbEvent
+            // 
+            this.cmbEvent.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbEvent.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbEvent.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbEvent.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbEvent.DrawDropdownHoverOutline = false;
+            this.cmbEvent.DrawFocusRectangle = false;
+            this.cmbEvent.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbEvent.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbEvent.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbEvent.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbEvent.FormattingEnabled = true;
+            this.cmbEvent.Location = new System.Drawing.Point(263, 42);
+            this.cmbEvent.Name = "cmbEvent";
+            this.cmbEvent.Size = new System.Drawing.Size(239, 21);
+            this.cmbEvent.TabIndex = 117;
+            this.cmbEvent.Text = null;
+            this.cmbEvent.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbEvent.SelectedIndexChanged += new System.EventHandler(this.cmbEvent_SelectedIndexChanged);
+            // 
+            // lblEvent
+            // 
+            this.lblEvent.AutoSize = true;
+            this.lblEvent.Location = new System.Drawing.Point(260, 26);
+            this.lblEvent.Name = "lblEvent";
+            this.lblEvent.Size = new System.Drawing.Size(90, 13);
+            this.lblEvent.TabIndex = 116;
+            this.lblEvent.Text = "Completion Event";
+            // 
+            // cmbSpell
+            // 
+            this.cmbSpell.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbSpell.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbSpell.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbSpell.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbSpell.DrawDropdownHoverOutline = false;
+            this.cmbSpell.DrawFocusRectangle = false;
+            this.cmbSpell.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbSpell.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbSpell.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbSpell.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbSpell.FormattingEnabled = true;
+            this.cmbSpell.Location = new System.Drawing.Point(9, 42);
+            this.cmbSpell.Name = "cmbSpell";
+            this.cmbSpell.Size = new System.Drawing.Size(229, 21);
+            this.cmbSpell.TabIndex = 115;
+            this.cmbSpell.Text = null;
+            this.cmbSpell.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbSpell.SelectedIndexChanged += new System.EventHandler(this.cmbSpell_SelectedIndexChanged);
+            // 
+            // lblSpell
+            // 
+            this.lblSpell.AutoSize = true;
+            this.lblSpell.Location = new System.Drawing.Point(6, 26);
+            this.lblSpell.Name = "lblSpell";
+            this.lblSpell.Size = new System.Drawing.Size(30, 13);
+            this.lblSpell.TabIndex = 112;
+            this.lblSpell.Text = "Spell";
             // 
             // btnAddFolder
             // 
@@ -335,7 +602,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(488, 400);
+            this.btnSave.Location = new System.Drawing.Point(482, 439);
             this.btnSave.Name = "btnSave";
             this.btnSave.Padding = new System.Windows.Forms.Padding(5);
             this.btnSave.Size = new System.Drawing.Size(135, 27);
@@ -346,7 +613,7 @@ namespace Intersect.Editor.Forms.Editors
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(629, 400);
+            this.btnCancel.Location = new System.Drawing.Point(629, 439);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Padding = new System.Windows.Forms.Padding(5);
             this.btnCancel.Size = new System.Drawing.Size(139, 27);
@@ -354,272 +621,53 @@ namespace Intersect.Editor.Forms.Editors
             this.btnCancel.Text = "Cancel";
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
-            // grpUnlocks
+            // picItem
             // 
-            this.grpUnlocks.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.grpUnlocks.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpUnlocks.Controls.Add(this.label1);
-            this.grpUnlocks.Controls.Add(this.txtStartDesc);
-            this.grpUnlocks.Controls.Add(this.cmbEvent);
-            this.grpUnlocks.Controls.Add(this.lblEvent);
-            this.grpUnlocks.Controls.Add(this.cmbSpell);
-            this.grpUnlocks.Controls.Add(this.lblSpell);
-            this.grpUnlocks.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpUnlocks.Location = new System.Drawing.Point(19, 172);
-            this.grpUnlocks.Name = "grpUnlocks";
-            this.grpUnlocks.Size = new System.Drawing.Size(518, 184);
-            this.grpUnlocks.TabIndex = 56;
-            this.grpUnlocks.TabStop = false;
-            this.grpUnlocks.Text = "Unlocks";
+            this.picItem.BackColor = System.Drawing.Color.Black;
+            this.picItem.Location = new System.Drawing.Point(19, 49);
+            this.picItem.Name = "picItem";
+            this.picItem.Size = new System.Drawing.Size(32, 32);
+            this.picItem.TabIndex = 58;
+            this.picItem.TabStop = false;
             // 
-            // grpDetails
+            // cmbPic
             // 
-            this.grpDetails.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.grpDetails.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpDetails.Controls.Add(this.nudParam);
-            this.grpDetails.Controls.Add(this.cmbParamSelector);
-            this.grpDetails.Controls.Add(this.nudSets);
-            this.grpDetails.Controls.Add(this.nudReps);
-            this.grpDetails.Controls.Add(this.lblParam);
-            this.grpDetails.Controls.Add(this.lblSets);
-            this.grpDetails.Controls.Add(this.lblReps);
-            this.grpDetails.Controls.Add(this.cmbChallengeType);
-            this.grpDetails.Controls.Add(this.lblChallengeType);
-            this.grpDetails.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpDetails.Location = new System.Drawing.Point(19, 44);
-            this.grpDetails.Name = "grpDetails";
-            this.grpDetails.Size = new System.Drawing.Size(518, 122);
-            this.grpDetails.TabIndex = 57;
-            this.grpDetails.TabStop = false;
-            this.grpDetails.Text = "Challenge Details";
+            this.cmbPic.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbPic.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbPic.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbPic.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbPic.DrawDropdownHoverOutline = false;
+            this.cmbPic.DrawFocusRectangle = false;
+            this.cmbPic.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbPic.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbPic.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbPic.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbPic.FormattingEnabled = true;
+            this.cmbPic.Items.AddRange(new object[] {
+            "None"});
+            this.cmbPic.Location = new System.Drawing.Point(57, 60);
+            this.cmbPic.Name = "cmbPic";
+            this.cmbPic.Size = new System.Drawing.Size(216, 21);
+            this.cmbPic.TabIndex = 59;
+            this.cmbPic.Text = "None";
+            this.cmbPic.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbPic.SelectedIndexChanged += new System.EventHandler(this.cmbPic_SelectedIndexChanged);
             // 
-            // lblChallengeType
+            // lblIcon
             // 
-            this.lblChallengeType.AutoSize = true;
-            this.lblChallengeType.Location = new System.Drawing.Point(6, 25);
-            this.lblChallengeType.Name = "lblChallengeType";
-            this.lblChallengeType.Size = new System.Drawing.Size(81, 13);
-            this.lblChallengeType.TabIndex = 53;
-            this.lblChallengeType.Text = "Challenge Type";
-            // 
-            // cmbChallengeType
-            // 
-            this.cmbChallengeType.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbChallengeType.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbChallengeType.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbChallengeType.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbChallengeType.DrawDropdownHoverOutline = false;
-            this.cmbChallengeType.DrawFocusRectangle = false;
-            this.cmbChallengeType.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbChallengeType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbChallengeType.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbChallengeType.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbChallengeType.FormattingEnabled = true;
-            this.cmbChallengeType.Location = new System.Drawing.Point(9, 41);
-            this.cmbChallengeType.Name = "cmbChallengeType";
-            this.cmbChallengeType.Size = new System.Drawing.Size(503, 21);
-            this.cmbChallengeType.TabIndex = 54;
-            this.cmbChallengeType.Text = null;
-            this.cmbChallengeType.TextPadding = new System.Windows.Forms.Padding(2);
-            this.cmbChallengeType.SelectedIndexChanged += new System.EventHandler(this.cmbChallengeType_SelectedIndexChanged);
-            // 
-            // lblReps
-            // 
-            this.lblReps.AutoSize = true;
-            this.lblReps.Location = new System.Drawing.Point(6, 75);
-            this.lblReps.Name = "lblReps";
-            this.lblReps.Size = new System.Drawing.Size(60, 13);
-            this.lblReps.TabIndex = 55;
-            this.lblReps.Text = "Repetitions";
-            // 
-            // lblSets
-            // 
-            this.lblSets.AutoSize = true;
-            this.lblSets.Location = new System.Drawing.Point(162, 75);
-            this.lblSets.Name = "lblSets";
-            this.lblSets.Size = new System.Drawing.Size(28, 13);
-            this.lblSets.TabIndex = 56;
-            this.lblSets.Text = "Sets";
-            // 
-            // lblParam
-            // 
-            this.lblParam.AutoSize = true;
-            this.lblParam.Location = new System.Drawing.Point(310, 75);
-            this.lblParam.Name = "lblParam";
-            this.lblParam.Size = new System.Drawing.Size(37, 13);
-            this.lblParam.TabIndex = 57;
-            this.lblParam.Text = "Param";
-            // 
-            // nudReps
-            // 
-            this.nudReps.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudReps.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudReps.Location = new System.Drawing.Point(9, 91);
-            this.nudReps.Maximum = new decimal(new int[] {
-            10000000,
-            0,
-            0,
-            0});
-            this.nudReps.Name = "nudReps";
-            this.nudReps.Size = new System.Drawing.Size(89, 20);
-            this.nudReps.TabIndex = 80;
-            this.nudReps.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudReps.ValueChanged += new System.EventHandler(this.nudReps_ValueChanged);
-            // 
-            // nudSets
-            // 
-            this.nudSets.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudSets.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudSets.Location = new System.Drawing.Point(165, 91);
-            this.nudSets.Maximum = new decimal(new int[] {
-            10000000,
-            0,
-            0,
-            0});
-            this.nudSets.Name = "nudSets";
-            this.nudSets.Size = new System.Drawing.Size(89, 20);
-            this.nudSets.TabIndex = 81;
-            this.nudSets.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudSets.ValueChanged += new System.EventHandler(this.nudSets_ValueChanged);
-            // 
-            // nudParam
-            // 
-            this.nudParam.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudParam.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudParam.Location = new System.Drawing.Point(313, 91);
-            this.nudParam.Maximum = new decimal(new int[] {
-            10000000,
-            0,
-            0,
-            0});
-            this.nudParam.Name = "nudParam";
-            this.nudParam.Size = new System.Drawing.Size(89, 20);
-            this.nudParam.TabIndex = 82;
-            this.nudParam.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudParam.ValueChanged += new System.EventHandler(this.nudParam_ValueChanged);
-            // 
-            // lblSpell
-            // 
-            this.lblSpell.AutoSize = true;
-            this.lblSpell.Location = new System.Drawing.Point(6, 26);
-            this.lblSpell.Name = "lblSpell";
-            this.lblSpell.Size = new System.Drawing.Size(30, 13);
-            this.lblSpell.TabIndex = 112;
-            this.lblSpell.Text = "Spell";
-            // 
-            // cmbSpell
-            // 
-            this.cmbSpell.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbSpell.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbSpell.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbSpell.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbSpell.DrawDropdownHoverOutline = false;
-            this.cmbSpell.DrawFocusRectangle = false;
-            this.cmbSpell.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbSpell.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbSpell.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbSpell.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbSpell.FormattingEnabled = true;
-            this.cmbSpell.Location = new System.Drawing.Point(9, 42);
-            this.cmbSpell.Name = "cmbSpell";
-            this.cmbSpell.Size = new System.Drawing.Size(229, 21);
-            this.cmbSpell.TabIndex = 115;
-            this.cmbSpell.Text = null;
-            this.cmbSpell.TextPadding = new System.Windows.Forms.Padding(2);
-            this.cmbSpell.SelectedIndexChanged += new System.EventHandler(this.cmbSpell_SelectedIndexChanged);
-            // 
-            // lblEvent
-            // 
-            this.lblEvent.AutoSize = true;
-            this.lblEvent.Location = new System.Drawing.Point(260, 26);
-            this.lblEvent.Name = "lblEvent";
-            this.lblEvent.Size = new System.Drawing.Size(90, 13);
-            this.lblEvent.TabIndex = 116;
-            this.lblEvent.Text = "Completion Event";
-            // 
-            // cmbEvent
-            // 
-            this.cmbEvent.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbEvent.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbEvent.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbEvent.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbEvent.DrawDropdownHoverOutline = false;
-            this.cmbEvent.DrawFocusRectangle = false;
-            this.cmbEvent.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbEvent.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbEvent.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbEvent.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbEvent.FormattingEnabled = true;
-            this.cmbEvent.Location = new System.Drawing.Point(263, 42);
-            this.cmbEvent.Name = "cmbEvent";
-            this.cmbEvent.Size = new System.Drawing.Size(239, 21);
-            this.cmbEvent.TabIndex = 117;
-            this.cmbEvent.Text = null;
-            this.cmbEvent.TextPadding = new System.Windows.Forms.Padding(2);
-            this.cmbEvent.SelectedIndexChanged += new System.EventHandler(this.cmbEvent_SelectedIndexChanged);
-            // 
-            // txtStartDesc
-            // 
-            this.txtStartDesc.AcceptsReturn = true;
-            this.txtStartDesc.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.txtStartDesc.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtStartDesc.ForeColor = System.Drawing.Color.Gainsboro;
-            this.txtStartDesc.Location = new System.Drawing.Point(263, 94);
-            this.txtStartDesc.Multiline = true;
-            this.txtStartDesc.Name = "txtStartDesc";
-            this.txtStartDesc.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtStartDesc.Size = new System.Drawing.Size(239, 75);
-            this.txtStartDesc.TabIndex = 118;
-            this.txtStartDesc.TextChanged += new System.EventHandler(this.txtStartDesc_TextChanged);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(260, 78);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(91, 13);
-            this.label1.TabIndex = 119;
-            this.label1.Text = "Event Description";
-            // 
-            // cmbParamSelector
-            // 
-            this.cmbParamSelector.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbParamSelector.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbParamSelector.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbParamSelector.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbParamSelector.DrawDropdownHoverOutline = false;
-            this.cmbParamSelector.DrawFocusRectangle = false;
-            this.cmbParamSelector.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbParamSelector.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbParamSelector.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbParamSelector.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbParamSelector.FormattingEnabled = true;
-            this.cmbParamSelector.Location = new System.Drawing.Point(313, 91);
-            this.cmbParamSelector.Name = "cmbParamSelector";
-            this.cmbParamSelector.Size = new System.Drawing.Size(199, 21);
-            this.cmbParamSelector.TabIndex = 83;
-            this.cmbParamSelector.Text = null;
-            this.cmbParamSelector.TextPadding = new System.Windows.Forms.Padding(2);
-            this.cmbParamSelector.SelectedIndexChanged += new System.EventHandler(this.cmbParamSelector_SelectedIndexChanged);
+            this.lblIcon.AutoSize = true;
+            this.lblIcon.Location = new System.Drawing.Point(57, 41);
+            this.lblIcon.Name = "lblIcon";
+            this.lblIcon.Size = new System.Drawing.Size(28, 13);
+            this.lblIcon.TabIndex = 60;
+            this.lblIcon.Text = "Icon";
             // 
             // frmChallenge
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.ClientSize = new System.Drawing.Size(780, 438);
+            this.ClientSize = new System.Drawing.Size(780, 478);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.grpEditor);
@@ -635,13 +683,14 @@ namespace Intersect.Editor.Forms.Editors
             this.grpWeaponTypes.PerformLayout();
             this.grpEditor.ResumeLayout(false);
             this.grpEditor.PerformLayout();
-            this.grpUnlocks.ResumeLayout(false);
-            this.grpUnlocks.PerformLayout();
             this.grpDetails.ResumeLayout(false);
             this.grpDetails.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudReps)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSets)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudParam)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSets)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudReps)).EndInit();
+            this.grpUnlocks.ResumeLayout(false);
+            this.grpUnlocks.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picItem)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -688,5 +737,8 @@ namespace Intersect.Editor.Forms.Editors
         private System.Windows.Forms.Label label1;
         private DarkUI.Controls.DarkTextBox txtStartDesc;
         private DarkUI.Controls.DarkComboBox cmbParamSelector;
+        private System.Windows.Forms.PictureBox picItem;
+        private DarkUI.Controls.DarkComboBox cmbPic;
+        private System.Windows.Forms.Label lblIcon;
     }
 }
