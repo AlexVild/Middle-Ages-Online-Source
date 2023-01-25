@@ -2844,6 +2844,7 @@ namespace Intersect.Client.Networking
             }
 
             CharacterChallengesController.WeaponTypeProgresses = packet.WeaponTypes;
+            CharacterBonusesPanelController.Refresh = true;
         }
     }
 }

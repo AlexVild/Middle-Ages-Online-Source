@@ -64,6 +64,7 @@ namespace Intersect.Client.Interface.Game.Components
         private Label LeftLabel { get; set; }
         private Label RightLabel { get; set; }
 
+        public int FullFgWidth { get; set; }
         public int Width => ParentContainer.Width;
 
         public float Percent { get; set; }
@@ -82,7 +83,7 @@ namespace Intersect.Client.Interface.Game.Components
             Color leftLabelColor = null,
             string rightLabel = "",
             Color rightLabelColor = null,
-            ComponentList<ProgressBarComponent> referenceList = null
+            ComponentList<IGwenComponent> referenceList = null
         )
         {
             ComponentName = componentName;
@@ -133,6 +134,9 @@ namespace Intersect.Client.Interface.Game.Components
             };
 
             SelfContainer.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
+            
+            FullFgWidth = BarFg.Width;
+            
             ParentContainer.SetSize(SelfContainer.Width, SelfContainer.Height);
             ParentContainer.ProcessAlignments();
 
@@ -171,10 +175,10 @@ namespace Intersect.Client.Interface.Game.Components
         public void SetBarWidth()
         {
             //var barWidth = Intersect.Utilities.MathHelper.RoundNearestMultiple((int)(Percent * BarFg.Width), 4);
-            var barWidth = (int)Math.Floor(Percent * BarFg.Width);
+            var barWidth = (int)Math.Floor(Percent * FullFgWidth);
 
-            BarFg.SetBounds(BarFg.X, BarFg.Y, barWidth, BarFg.Height);
-            BarFg.SetTextureRect(BarFg.X, BarFg.Y, barWidth, BarFg.Height);
+            BarFg.SetTextureRect(0, 0, barWidth, BarFg.Height);
+            BarFg.Width = barWidth;
         }
 
         public void Update()

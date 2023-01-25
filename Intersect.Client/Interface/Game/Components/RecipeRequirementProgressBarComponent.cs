@@ -21,7 +21,7 @@ namespace Intersect.Client.Interface.Game.Components
             Color leftLabelColor = null,
             string rightLabel = "",
             Color rightLabelColor = null,
-            ComponentList<ProgressBarComponent> referenceList = null
+            ComponentList<IGwenComponent> referenceList = null
         ) : base(parent,
             "RecipeRequirementProgressBarComponent",
             containerName,
