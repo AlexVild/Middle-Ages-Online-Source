@@ -110,6 +110,11 @@ namespace Intersect.Server.Entities
         {
             var unlocks = new Dictionary<Guid, Dictionary<BestiaryUnlock, bool>>();
 
+            if (BestiaryUnlocks == default || BestiaryUnlocks.Count == 0)
+            {
+                return unlocks;
+            }
+
             foreach(var instance in BestiaryUnlocks)
             {
                 var npcId = instance.NpcId;

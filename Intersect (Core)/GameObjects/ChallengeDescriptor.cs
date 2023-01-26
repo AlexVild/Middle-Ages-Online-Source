@@ -147,5 +147,122 @@ namespace Intersect.GameObjects
         {
             Name = "New Challenge";
         }
+
+        /// <summary>
+        /// Used when we want to display the param as seconds
+        /// </summary>
+        [NotMapped, JsonIgnore]
+        public string SecondsParam
+        {
+            get
+            {
+                var seconds = (Param / 1000).ToString("N1");
+                if (Param % 1000 == 0)
+                {
+                    seconds = (Param / 1000).ToString("N0");
+                }
+
+                return seconds;
+            }
+        }
+
+        public string GetDescription()
+        {
+            switch (Type)
+            {
+                case ChallengeType.ComboEarned:
+                    if (Reps > 1)
+                    {
+                        return $"Earn a combo of {Sets}, {Reps} times, using this weapon type.";
+                    }
+                    else
+                    {
+                        return $"Earn a combo of {Sets} using this weapon type.";
+                    }
+
+                case ChallengeType.BeastsKilledOverTime:
+                    if (Reps > 1)
+                    {
+                        return $"Kill {Sets} beasts over a period of {SecondsParam} seconds or less, {Reps} times.";
+                    }
+                    else
+                    {
+                        return $"Kill {Sets} beasts over a period of {SecondsParam} seconds or less.";
+                    }
+
+                case ChallengeType.DamageAtRange:
+                    if (Reps > 1)
+                    {
+                        return $"Deal {Sets} damage at a range of {Param}, {Reps} times.";
+                    }
+                    else
+                    {
+                        return $"Deal {Sets} damage at a range of {Param}.";
+                    }
+
+                case ChallengeType.DamageHealedAtHealth:
+                    if (Reps > 1)
+                    {
+                        return $"Heal {Sets} health when your target is at {Param}% HP or lower, {Reps} times.";
+                    }
+                    else
+                    {
+                        return $"Heal {Sets} health when your target is at {Param}% HP or lower.";
+                    }
+
+                case ChallengeType.DamageOverTime:
+                    if (Reps > 1)
+                    {
+                        return $"Deal {Sets} damage over a period of {SecondsParam} seconds, {Reps} times.";
+                    }
+                    else
+                    {
+                        return $"Deal {Sets} damage over a period of {SecondsParam} seconds.";
+                    }
+
+                case ChallengeType.DamageTakenOverTime:
+                    if (Reps > 1)
+                    {
+                        return $"Receive {Sets} damage over a period of {SecondsParam}, {Reps} times.";
+                    }
+                    else
+                    {
+                        return $"Receive {Sets} damage over a period of {SecondsParam}.";
+                    }
+
+                case ChallengeType.HitFreeStreak:
+                    if (Reps > 1)
+                    {
+                        return $"Land {Sets} successful attacks without receiving any damage, {Reps} times.";
+                    }
+                    else
+                    {
+                        return $"Land {Sets} successful attacks without receiving any damage.";
+                    }
+
+                case ChallengeType.MaxHit:
+                    if (Reps > 1)
+                    {
+                        return $"Deal {Sets} damage, {Reps} times.";
+                    }
+                    else
+                    {
+                        return $"Deal {Sets} damage.";
+                    }
+
+                case ChallengeType.MissFreeStreak:
+                    if (Reps > 1)
+                    {
+                        return $"Land {Sets} successful attacks without missing, {Reps} times.";
+                    }
+                    else
+                    {
+                        return $"Land {Sets} successful attacks without missing.";
+                    }
+
+                default:
+                    return "No description";
+            }
+        }
     }
 }

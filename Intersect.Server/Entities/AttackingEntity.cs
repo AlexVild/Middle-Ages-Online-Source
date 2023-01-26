@@ -374,6 +374,10 @@ namespace Intersect.Server.Entities
                 }
                 SendCombatEffects(enemy, critMultiplier > 1, damage);
 
+                if (damage > enemy.GetVital((int)Vitals.Health))
+                {
+                    damage = enemy.GetVital((int)Vitals.Health);
+                }
                 PacketSender.SendCombatNumber(DetermineCombatNumberType(damage, secondaryDamage, enemy is Resource, critMultiplier), enemy, damage);
                 enemy.TakeDamage(this, damage, secondaryDamage ? Vitals.Mana : Vitals.Health);
             }

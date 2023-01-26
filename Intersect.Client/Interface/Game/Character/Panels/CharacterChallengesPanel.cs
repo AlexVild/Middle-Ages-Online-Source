@@ -43,7 +43,10 @@ namespace Intersect.Client.Interface.Game.Character.Panels
         private ImagePanel ChallengesBackground { get; set; }
         private ScrollControl ChallengesContainer { get; set; }
 
+        private Label HelpLabel { get; set; }
+
         private ComponentList<IGwenComponent> Components { get; set; } = new ComponentList<IGwenComponent>();
+        private ComponentList<GwenComponent> ChallengeRows { get; set; } = new ComponentList<GwenComponent>();
 
         public CharacterChallengesPanel(ImagePanel panelBackground)
         {
@@ -75,6 +78,11 @@ namespace Intersect.Client.Interface.Game.Character.Panels
             ChallengesBackground = new ImagePanel(mBackground, "ChallengesBackground");
             ChallengesContainer = new ScrollControl(ChallengesBackground, "ChallengesContainer");
 
+            HelpLabel = new Label(mBackground, "HelpText")
+            {
+                Text = "Hover over icon to view details"
+            };
+
             mBackground.LoadJsonUi(Framework.File_Management.GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
 
             TrackProgressBar.Initialize();
@@ -88,6 +96,7 @@ namespace Intersect.Client.Interface.Game.Character.Panels
 
         public override void Hide()
         {
+            ClearChallenges();
             base.Hide();
         }
 
@@ -97,6 +106,7 @@ namespace Intersect.Client.Interface.Game.Character.Panels
             SkillTypeBackground.IsHidden = Progress.Count <= 0;
             TrackProgressBackground.IsHidden = Progress.Count <= 0;
             ChallengesBackground.IsHidden = Progress.Count <= 0;
+            HelpLabel.IsHidden = Progress.Count <= 0;
 
             if (!Refresh)
             {
@@ -106,8 +116,51 @@ namespace Intersect.Client.Interface.Game.Character.Panels
             //do stuff
             RefreshTrackOptions();
             RefreshTrackProgression();
+            RefreshChallenges();
 
             Refresh = false;
+        }
+
+        private void ClearChallenges()
+        {
+            ChallengesContainer?.ClearCreatedChildren();
+            ChallengeRows?.DisposeAll();
+        }
+
+        void RefreshChallenges()
+        {
+            ClearChallenges();
+
+            var weaponTypeDescriptor = WeaponTypeDescriptor.Get(SelectedProgress?.WeaponTypeId ?? Guid.Empty);
+            if (weaponTypeDescriptor == default)
+            {
+                return;
+            }
+
+            var idx = 0;
+            foreach (var unlock in weaponTypeDescriptor.Unlocks)
+            {
+                var level = unlock.Key;
+                foreach(var challenge in unlock.Value.ChallengeIds)
+                {
+                    var progress = SelectedProgress.Challenges
+                        .Find(c => c.ChallengeId == challenge);
+
+                    var row = new ChallengeRowComponent(
+                        ChallengesContainer,
+                        $"Challenge_{idx}",
+                        challenge,
+                        progress,
+                        level,
+                        weaponTypeDescriptor.Name ?? "NOT FOUND",
+                        ChallengeRows);
+
+                    row.Initialize();
+                    row.SetPosition(row.X, row.Height * idx);
+
+                    idx++;
+                }
+            }
         }
 
         void RefreshTrackOptions()

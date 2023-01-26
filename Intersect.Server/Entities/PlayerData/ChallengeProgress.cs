@@ -55,6 +55,7 @@ namespace Intersect.Server.Entities.PlayerData
 #if DEBUG
                 throw new ArgumentNullException(nameof(Descriptor));
 #else
+                Logging.Log.Error($"Null challenge descriptor for {player.Name} with ID {ChallengeId}");
                 return;
 #endif
             }

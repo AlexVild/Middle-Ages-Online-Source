@@ -496,6 +496,11 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
 
         private void DrawBeastImage(string sprite, Color color)
         {
+            if (string.IsNullOrEmpty(sprite) || sprite == Strings.General.none)
+            {
+                sprite = "8bit_unknown.png";
+            }
+
             var beastImageTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Entity, sprite);
             BeastImage.Texture = beastImageTexture;
             BeastImage.SetTextureRect(0, 0, beastImageTexture.Width / 4, beastImageTexture.Height / 4);

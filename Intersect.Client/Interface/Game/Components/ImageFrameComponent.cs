@@ -91,6 +91,7 @@ namespace Intersect.Client.Interface.Game.Components
         public void SetTooltipText(string text)
         {
             Frame.SetToolTipText(text);
+            Image.SetToolTipText(text);
         }
     }
 }

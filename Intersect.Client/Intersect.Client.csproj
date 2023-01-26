@@ -149,6 +149,9 @@
     <Compile Include="Interface\Game\Character\Panels\CharacterStatsWindow.cs" />
     <Compile Include="Interface\Game\Character\Panels\SkillsPanel.cs" />
     <Compile Include="Interface\Game\ComboText.cs" />
+    <Compile Include="Interface\Game\Components\ChallengeImageFrameComponent.cs" />
+    <Compile Include="Interface\Game\Components\ChallengeProgressBarComponent.cs" />
+    <Compile Include="Interface\Game\Components\ChallengeRowComponent.cs" />
     <Compile Include="Interface\Game\Components\CosmeticSelectionComponent.cs" />
     <Compile Include="Interface\Game\Components\GwenComponent.cs" />
     <Compile Include="Interface\Game\Components\HarvestProgressBarComponent.cs" />
@@ -165,6 +168,7 @@
     <Compile Include="Interface\Game\Components\SkillRowComponent.cs" />
     <Compile Include="Interface\Game\Components\SpellImageFrameComponent.cs" />
     <Compile Include="Interface\Game\Components\WeaponTrackProgressBarComponent.cs" />
+    <Compile Include="Interface\Game\DescriptionWindows\ChallengeDescriptionWindow.cs" />
     <Compile Include="Interface\Game\DescriptionWindows\Components\ComponentBase.cs" />
     <Compile Include="Interface\Game\DescriptionWindows\Components\DescriptionComponent.cs" />
     <Compile Include="Interface\Game\DescriptionWindows\Components\DividerComponent.cs" />

@@ -41,7 +41,8 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows.Components
         {
             mIcon.Texture = texture;
             mIcon.RenderColor = color;
-            mIcon.SizeToContents();
+            mIcon.Width = 32;
+            mIcon.Height = 32;
             Align.Center(mIcon);
         }
 
