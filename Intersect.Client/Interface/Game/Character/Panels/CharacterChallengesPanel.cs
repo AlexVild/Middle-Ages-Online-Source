@@ -86,6 +86,11 @@ namespace Intersect.Client.Interface.Game.Character.Panels
             mBackground.LoadJsonUi(Framework.File_Management.GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
 
             TrackProgressBar.Initialize();
+
+            Globals.Me.ChallengeUpdateDelegate = () =>
+            {
+                PacketSender.SendRequestChallenges();
+            };
         }
 
         public override void Show()
@@ -152,6 +157,8 @@ namespace Intersect.Client.Interface.Game.Character.Panels
                         challenge,
                         progress,
                         level,
+                        SelectedProgress.Level,
+                        unlock.Value.RequiredExp - SelectedProgress.Exp,
                         weaponTypeDescriptor.Name ?? "NOT FOUND",
                         ChallengeRows);
 
@@ -182,6 +189,8 @@ namespace Intersect.Client.Interface.Game.Character.Panels
             var descriptor = WeaponTypeDescriptor.Get(SelectedProgress.WeaponTypeId);
             if (descriptor == default)
             {
+                TrackProgressBar.SetBarBg("weapon_track_progress_bg_locked.png");
+                TrackProgressBar.SetBarFg("weapon_track_progress_bar_fg_locked.png");
                 return;
             }
 
@@ -189,31 +198,73 @@ namespace Intersect.Client.Interface.Game.Character.Panels
             var hasUnlock = descriptor.Unlocks.TryGetValue(SelectedProgress.Level + 1, out var nextUnlock);
 
             TrackProgressBar.SetLabelText(ProgressBarLabel.Top, $"{WeaponTypeDescriptor.GetName(SelectedProgress.WeaponTypeId)} Level: {SelectedProgress.Level}");
-            
+
             // Max level?
             if (!hasUnlock)
             {
                 TrackProgressBar.SetLabelText(ProgressBarLabel.Bottom, "MAX");
                 TrackProgressBar.Percent = 100;
                 TrackProgressBackground.SetToolTipText("You've completed this weapon track!");
+                TrackProgressBar.SetBarRenderColor(new Color(100, 255, 255, 255));
                 return;
             }
 
             // Still have progress to make?
+            var correctWeaponType = Globals.Me.TryGetEquippedWeaponDescriptor(out var weapon)
+                && weapon.WeaponTypes.Contains(descriptor.Id);
+
+            var correctWeaponLvl = weapon != default 
+                && weapon.MaxWeaponLevels.TryGetValue(descriptor.Id, out var maxWeaponLvl)
+                && maxWeaponLvl > SelectedProgress.Level;
+
+            var canProgress = correctWeaponLvl && correctWeaponType;
+
             var progressPercent = SelectedProgress.Exp / (float)nextUnlock.RequiredExp;
             var remaining = nextUnlock.RequiredExp - SelectedProgress.Exp;
             TrackProgressBar.Percent = progressPercent;
 
+            TrackProgressBar.SetBarBg(canProgress ? "weapon_track_progress_bar_bg.png" : "weapon_track_progress_bg_locked.png");
+            TrackProgressBar.SetBarFg(canProgress ? "weapon_track_progress_bar_fg.png" : "weapon_track_progress_bar_fg_locked.png");
             if (progressPercent < 1)
             {
                 TrackProgressBar.SetLabelText(ProgressBarLabel.Bottom, $"EXP remaining: {remaining}");
-                TrackProgressBackground.SetToolTipText("Earn EXP using this weapon type to advance");
+                if (canProgress)
+                {
+                    TrackProgressBackground.SetToolTipText("Earn EXP using this weapon type to advance");
+                }
+                else
+                {
+                    if (!correctWeaponType)
+                    {
+                        TrackProgressBackground.SetToolTipText("Your current weapon is not of this weapon type!");
+                    }
+                    else if (!correctWeaponLvl)
+                    {
+                        TrackProgressBackground.SetToolTipText("Your current weapon is not high enough level to progress this track!");
+                    }
+                }
+                TrackProgressBar.SetBarRenderColor(new Color(255, 255, 255, 255));
             }
             else
             {
                 var challenges = nextUnlock.ChallengeIds.Select(id => ChallengeDescriptor.GetName(id)).ToArray();
                 TrackProgressBar.SetLabelText(ProgressBarLabel.Bottom, $"Awaiting challenges: {string.Join(", ", challenges)}");
-                TrackProgressBackground.SetToolTipText("You have an uncompleted challenge preventing track advancement");
+                if (canProgress)
+                {
+                    TrackProgressBackground.SetToolTipText("You have an uncompleted challenge preventing track advancement");
+                }
+                else
+                {
+                    if (!correctWeaponType)
+                    {
+                        TrackProgressBackground.SetToolTipText("Your current weapon is not of this weapon type!");
+                    }
+                    else if (!correctWeaponLvl)
+                    {
+                        TrackProgressBackground.SetToolTipText("Your current weapon is not high enough level to progress this track!");
+                    }
+                }
+                TrackProgressBar.SetBarRenderColor(new Color(100, 255, 255, 255));
             }
 
             TrackProgressBar.Update();

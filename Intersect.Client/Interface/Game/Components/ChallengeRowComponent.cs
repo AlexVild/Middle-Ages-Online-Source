@@ -66,12 +66,16 @@ namespace Intersect.Client.Interface.Game.Components
 
         public int RequiredLevel { get; set; }
         public string WeaponType { get; set; }
+        public int CurrentLevel { get; set; }
+        public long RequiredExp { get; set; }
 
         public ChallengeRowComponent(Base parent,
             string containerName,
             Guid challengeId,
             ChallengeProgression progression,
             int level,
+            int currentLevel,
+            long requiredExp,
             string weaponTypeName,
             ComponentList<GwenComponent> referenceList = null
             ) : base(parent, containerName, "ChallengeRowComponent", referenceList)
@@ -85,6 +89,8 @@ namespace Intersect.Client.Interface.Game.Components
             Completed = ProgressionDetails?.Completed ?? false;
             RequiredLevel = level;
             WeaponType = weaponTypeName;
+            RequiredExp = requiredExp;
+            CurrentLevel = currentLevel;
 
             PercentComplete = (float)Progress / (Descriptor?.Reps ?? 1);
         }
@@ -127,6 +133,10 @@ namespace Intersect.Client.Interface.Game.Components
             Title.SetTextColor(TitleColor, Label.ControlState.Normal);
 
             var requirementText = $"Requires {WeaponType} level {RequiredLevel}";
+            if (RequiredLevel - 1 == CurrentLevel)
+            {
+                requirementText = $"Requires {RequiredExp} more EXP";
+            }
             if (Unlocked)
             {
                 Description.SetText(Descriptor.GetDescription(), DescriptionTemplate, 240);
@@ -157,6 +167,7 @@ namespace Intersect.Client.Interface.Game.Components
 
         public override void Dispose()
         {
+            ChallengeImage.Dispose();
             base.Dispose();
         }
     }

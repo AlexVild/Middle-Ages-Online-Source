@@ -1329,6 +1329,10 @@ namespace Intersect.Client.Networking
             {
                 Globals.Me?.CosmeticsUpdateDelegate?.Invoke();
             }
+            if (entityId == Globals.Me?.Id && Interface.Interface.GameUi?.CurrentCharacterPanel == Interface.Game.Character.CharacterPanelType.Challenges)
+            {
+                Globals.Me?.ChallengeUpdateDelegate?.Invoke();
+            }
         }
 
         //StatPointsPacket
@@ -1435,6 +1439,11 @@ namespace Intersect.Client.Networking
                 if (packet.AccumulatedComboExp > 0)
                 {
                     Globals.Me.ComboExp = packet.AccumulatedComboExp;
+                }
+
+                if (Interface.Interface.GameUi?.CurrentCharacterPanel == Interface.Game.Character.CharacterPanelType.Challenges)
+                {
+                    Globals.Me?.ChallengeUpdateDelegate?.Invoke();
                 }
             }
         }

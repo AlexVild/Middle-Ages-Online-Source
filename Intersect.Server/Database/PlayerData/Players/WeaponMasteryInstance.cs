@@ -81,5 +81,21 @@ namespace Intersect.Server.Database.PlayerData.Players
             challengeIds = unlock.ChallengeIds;
             return true;
         }
+
+        public List<Guid> GetAllChallengeIds()
+        {
+            List<Guid> challengeIds = new List<Guid>();
+            if (WeaponType == default)
+            {
+                return challengeIds;
+            }
+
+            foreach (var unlock in WeaponType.Unlocks)
+            {
+                challengeIds.AddRange(unlock.Value.ChallengeIds);
+            }
+
+            return challengeIds;
+        }
     }
 }

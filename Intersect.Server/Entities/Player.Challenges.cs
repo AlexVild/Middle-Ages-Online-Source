@@ -182,6 +182,11 @@ namespace Intersect.Server.Entities
                 return;
             }
 
+            if (!WeaponCanProgressMastery(mastery))
+            {
+                return;
+            }
+
             // Otherwise, do we have any challenges that need completing?
             if (!mastery.TryGetCurrentChallenges(out var currentChallenges))
             {
@@ -280,6 +285,15 @@ namespace Intersect.Server.Entities
             }
         }
 
+        public bool WeaponCanProgressMastery(WeaponMasteryInstance mastery)
+        {
+            var equippedWeapon = GetEquippedWeapon();
+            return equippedWeapon != null 
+                && equippedWeapon.MaxWeaponLevels != null 
+                && equippedWeapon.MaxWeaponLevels.TryGetValue(mastery.WeaponTypeId, out var maxWeaponLevel)
+                && maxWeaponLevel > mastery.Level;
+        }
+
         public bool TryGainMasteryExp(long exp, WeaponMasteryInstance mastery)
         {
             var requiredExp = 0;
@@ -294,16 +308,10 @@ namespace Intersect.Server.Entities
             }
 
             // Is the current weapon at the end of its progress cycle?
-            var equippedWeapon = GetEquippedWeapon();
-            if (equippedWeapon != null &&
-                equippedWeapon.MaxWeaponLevels != null &&
-                equippedWeapon.MaxWeaponLevels.TryGetValue(mastery.WeaponTypeId, out var maxWeaponLevel))
+            if (!WeaponCanProgressMastery(mastery))
             {
-                if (maxWeaponLevel <= mastery.Level)
-                {
-                    SendWeaponMaxedMessage(mastery.WeaponType);
-                    return false;
-                }
+                SendWeaponMaxedMessage(mastery.WeaponType);
+                return false;
             }
 
             mastery.ExpRemaining += exp;
@@ -362,7 +370,8 @@ namespace Intersect.Server.Entities
 
             foreach (var weaponType in WeaponMasteries)
             {
-                if (!weaponType.TryGetCurrentChallenges(out var challenges))
+                var challenges = weaponType.GetAllChallengeIds();
+                if (challenges.Count == 0)
                 {
                     continue;
                 }

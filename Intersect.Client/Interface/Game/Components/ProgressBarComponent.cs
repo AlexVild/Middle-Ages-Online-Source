@@ -201,5 +201,20 @@ namespace Intersect.Client.Interface.Game.Components
         {
             ParentContainer.Hide();
         }
+
+        public void SetBarRenderColor(Color color)
+        {
+            BarFg.RenderColor = color;
+        }
+
+        public void SetBarBg(string texture)
+        {
+            BarBg.Texture = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Gui, texture);
+        }
+
+        public void SetBarFg(string texture)
+        {
+            BarFg.Texture = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Gui, texture);
+        }
     }
 }

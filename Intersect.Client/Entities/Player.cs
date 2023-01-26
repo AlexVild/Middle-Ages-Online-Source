@@ -3104,9 +3104,10 @@ namespace Intersect.Client.Entities
         public Guid[] Cosmetics = new Guid[Options.CosmeticSlots.Count];
         public Guid LabelDescriptorId { get; set; }
 
-        public delegate void CosmeticsUpdate();
+        public delegate void CharacterWindowUpdate();
 
-        public CosmeticsUpdate CosmeticsUpdateDelegate;
+        public CharacterWindowUpdate CosmeticsUpdateDelegate;
+        public CharacterWindowUpdate ChallengeUpdateDelegate;
 
         public List<Guid> UnlockedRecipes { get; set; } = new List<Guid>();
     }
