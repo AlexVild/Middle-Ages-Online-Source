@@ -1403,4 +1403,15 @@ namespace Intersect.GameObjects.Events.Commands
 
         public bool UnlockStatus { get; set; } = true;
     }
+
+    public partial class ChangeWeaponTrackCommand : EventCommand
+    {
+        public override EventCommandType Type { get; } = EventCommandType.ChangeWeaponTrack;
+
+        public Guid WeaponTypeId { get; set; }
+
+        public WeaponTrackUpdate ChangeType { get; set; } = WeaponTrackUpdate.SetLevel;
+
+        public long Amount { get; set; } = 0L;
+    }
 }

@@ -2257,6 +2257,7 @@ Tick timer saved in server config.json.";
                 {"changespawn", @"Change Respawn Point"},
                 {"changerecipeunlock", @"Change Recipes"},
                 {"changebestiary", @"Change Bestiary"},
+                {"changeweapontrack", @"Change Weapon Track Progress"},
             };
 
         }
@@ -6157,6 +6158,12 @@ Negative values for time to flow backwards.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString ChangeArenaSpawn = @"Change Arena Spawn Point [Map: {00}, X: {01}, Y: {02}, Dir: {03}]";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ChangeWeaponTrack = @"{00} weapon track update: {01}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString UnlearnWeaponTrack = @"Unlearn {00} weapon track";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString ClearRecord = @"Clear Records for {00}, clear all: {01}";

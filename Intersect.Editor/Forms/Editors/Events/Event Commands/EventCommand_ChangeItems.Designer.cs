@@ -31,6 +31,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private void InitializeComponent()
         {
             this.grpChangeItems = new DarkUI.Controls.DarkGroupBox();
+            this.chkStacks = new DarkUI.Controls.DarkCheckBox();
             this.grpVariableAmount = new DarkUI.Controls.DarkGroupBox();
             this.rdoInstanceVariable = new DarkUI.Controls.DarkRadioButton();
             this.cmbVariable = new DarkUI.Controls.DarkComboBox();
@@ -51,7 +52,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.lblAction = new System.Windows.Forms.Label();
             this.btnCancel = new DarkUI.Controls.DarkButton();
             this.btnSave = new DarkUI.Controls.DarkButton();
-            this.chkStacks = new DarkUI.Controls.DarkCheckBox();
             this.grpChangeItems.SuspendLayout();
             this.grpVariableAmount.SuspendLayout();
             this.grpManualAmount.SuspendLayout();
@@ -82,6 +82,14 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpChangeItems.TabIndex = 17;
             this.grpChangeItems.TabStop = false;
             this.grpChangeItems.Text = "Change Player Items:";
+            // 
+            // chkStacks
+            // 
+            this.chkStacks.Location = new System.Drawing.Point(8, 241);
+            this.chkStacks.Name = "chkStacks";
+            this.chkStacks.Size = new System.Drawing.Size(98, 17);
+            this.chkStacks.TabIndex = 60;
+            this.chkStacks.Text = "Stacks?";
             // 
             // grpVariableAmount
             // 
@@ -358,14 +366,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.btnSave.TabIndex = 19;
             this.btnSave.Text = "Ok";
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
-            // 
-            // chkStacks
-            // 
-            this.chkStacks.Location = new System.Drawing.Point(8, 241);
-            this.chkStacks.Name = "chkStacks";
-            this.chkStacks.Size = new System.Drawing.Size(98, 17);
-            this.chkStacks.TabIndex = 60;
-            this.chkStacks.Text = "Stacks?";
             // 
             // EventCommandChangeItems
             // 

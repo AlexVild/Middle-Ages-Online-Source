@@ -1974,5 +1974,16 @@ namespace Intersect.Editor.Forms.Editors.Events
         {
             return Strings.EventCommandList.ChangeBestiary.ToString(command.UnlockType.GetDescription(), command.UnlockStatus, NpcBase.GetName(command.NpcId));
         }
+
+        private static string GetCommandText(ChangeWeaponTrackCommand command, MapInstance map)
+        {
+            if (command.ChangeType == WeaponTrackUpdate.Unlearn)
+            {
+                return Strings.EventCommandList.UnlearnWeaponTrack.ToString(WeaponTypeDescriptor.GetName(command.WeaponTypeId));
+            }
+
+            string changeString = command.ChangeType.GetDescription();
+            return Strings.EventCommandList.ChangeWeaponTrack.ToString(WeaponTypeDescriptor.GetName(command.WeaponTypeId), $"{changeString} {command.Amount}");
+        }
     }
 }

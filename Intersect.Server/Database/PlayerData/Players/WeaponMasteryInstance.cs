@@ -97,5 +97,16 @@ namespace Intersect.Server.Database.PlayerData.Players
 
             return challengeIds;
         }
+
+        public void RemoveFromDb()
+        {
+            using (var context = DbInterface.CreatePlayerContext(readOnly: false))
+            {
+                context.Player_Weapon_Masteries.Remove(this);
+
+                context.ChangeTracker.DetectChanges();
+                context.SaveChanges();
+            }
+        }
     }
 }

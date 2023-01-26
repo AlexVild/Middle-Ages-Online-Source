@@ -129,6 +129,12 @@
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_ChangeSpawn.Designer.cs">
       <DependentUpon>EventCommand_ChangeSpawn.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_ChangeWeaponTrack.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_ChangeWeaponTrack.Designer.cs">
+      <DependentUpon>EventCommand_ChangeWeaponTrack.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_ClearRecord.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -851,6 +857,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_ChangeSpawn.resx">
       <DependentUpon>EventCommand_ChangeSpawn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_ChangeWeaponTrack.resx">
+      <DependentUpon>EventCommand_ChangeWeaponTrack.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_ChatboxText.resx">
       <DependentUpon>EventCommand_ChatboxText.cs</DependentUpon>

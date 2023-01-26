@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using Intersect.GameObjects;
 using Intersect.Network.Packets.Server;
+using Intersect.Server.Database;
 using Intersect.Server.Database.PlayerData.Players;
 using Intersect.Server.Entities.PlayerData;
 using Intersect.Server.Localization;
@@ -273,7 +274,7 @@ namespace Intersect.Server.Entities
             }
             else
             {
-                mastery.ExpRemaining = 0;
+                mastery.ExpRemaining = 0L;
                 SendMasteryUpdate(false, weaponType.Name);
 
                 // Is this weapon at the end of its progress cycle?
@@ -283,6 +284,62 @@ namespace Intersect.Server.Entities
                     SendWeaponMaxedMessage(weaponType);
                 }
             }
+        }
+
+        public void CompleteMasteryChallenges(WeaponMasteryInstance mastery)
+        {
+            if (!mastery.TryGetCurrentChallenges(out var challenges))
+            {
+                return;
+            }
+
+            foreach (var challengeId in challenges)
+            {
+                if (!TryGetChallenge(challengeId, out var challenge))
+                {
+                    if (!TryAddNewChallenge(challengeId))
+                    {
+                        continue;
+                    }
+                    TryGetChallenge(challengeId, out challenge);
+
+                    if (challenge == default)
+                    {
+                        continue;
+                    }
+                }
+
+                challenge.Complete = true;
+            }
+        }
+
+        public void RescendMasteryLevel(WeaponMasteryInstance mastery)
+        {
+            if (mastery == null || mastery.Level == 0)
+            {
+                return;
+            }
+
+            var weaponType = mastery.WeaponType;
+            if (weaponType == default)
+            {
+#if DEBUG
+                throw new InvalidOperationException($"No valid weapon type found for mastery attempting level up: {mastery.WeaponTypeId}");
+#else
+                return;
+#endif
+            }
+
+            if (weaponType.Unlocks.TryGetValue(mastery.Level, out var lastUnlock))
+            {
+                foreach(var challenge in lastUnlock.ChallengeIds)
+                {
+                    RemoveChallenge(challenge);
+                }
+            }
+
+            mastery.Level = MathHelper.Clamp(mastery.Level - 1, 0, int.MaxValue);
+            mastery.ExpRemaining = 0L;
         }
 
         public bool WeaponCanProgressMastery(WeaponMasteryInstance mastery)
@@ -361,6 +418,17 @@ namespace Intersect.Server.Entities
             foreach (var mastery in WeaponMasteries.Where(m => m.IsActive))
             {
                 mastery.IsActive = false;
+            }
+        }
+
+        public void RemoveChallenge(Guid challengeId)
+        {
+            var challengesToRemove = Challenges.FindAll(p => p.ChallengeId == challengeId);
+            Challenges.RemoveAll(p => p.ChallengeId == challengeId);
+
+            foreach (var challenge in challengesToRemove)
+            {
+                DbInterface.Pool.QueueWorkItem(challenge.RemoveFromDb);
             }
         }
 

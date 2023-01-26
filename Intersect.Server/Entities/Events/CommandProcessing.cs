@@ -3084,5 +3084,159 @@ namespace Intersect.Server.Entities.Events
         {
             player?.ChangeBeastUnlockStatus(command.NpcId, command.UnlockType, command.UnlockStatus);
         }
+
+        private static void ProcessCommand(
+            ChangeWeaponTrackCommand command,
+            Player player,
+            Event instance,
+            CommandInstance stackInfo,
+            Stack<CommandInstance> callStack
+        )
+        {
+            if (player == null || command == null)
+            {
+                return;
+            }
+
+            if (!player.TryGetMastery(command.WeaponTypeId, out var mastery))
+            {
+                // No need adding the challenge if we're doing a subtractive update
+                if (command.ChangeType == WeaponTrackUpdate.Unlearn || command.ChangeType == WeaponTrackUpdate.LoseLevel)
+                {
+                    return;
+                }
+
+                player.WeaponMasteries.Add(new WeaponMasteryInstance(player.Id, command.WeaponTypeId, 0, true));
+                player.TryGetMastery(command.WeaponTypeId, out mastery);
+            }
+
+            if (mastery == null)
+            {
+                return;
+            }
+
+            var maxLevel = 0;
+            if (mastery.WeaponType != default)
+            {
+                maxLevel = mastery.WeaponType.Unlocks.Keys.OrderByDescending(k => k).FirstOrDefault();
+            }
+
+            var prevLevel = mastery.Level;
+            
+            switch (command.ChangeType)
+            {
+                case WeaponTrackUpdate.SetLevel:
+                    var newLevel = MathHelper.Clamp((int)command.Amount, 0, maxLevel);
+                    mastery.ExpRemaining = 0L;
+
+                    var count = Math.Abs(newLevel - prevLevel);
+                    if (prevLevel < newLevel)
+                    {
+                        while (count > 0)
+                        {
+                            player.CompleteMasteryChallenges(mastery);
+                            player.LevelUpMastery(mastery);
+                            count--;
+                        }
+                    }
+                    else if (prevLevel > newLevel)
+                    {
+                        while (count > 0)
+                        {
+                            player.RescendMasteryLevel(mastery);
+                            count--;
+                        }
+                    }
+
+                    if (mastery.Level != prevLevel)
+                    {
+                        PacketSender.SendChatMsg(player,
+                            $"Your {mastery.WeaponType.Name} level has changed to {mastery.Level}",
+                            ChatMessageType.Experience,
+                            sendToast: true);
+                    }
+                    break;
+
+                case WeaponTrackUpdate.ChangeExp:
+                    if (command.Amount > 0)
+                    {
+                        PacketSender.SendChatMsg(player,
+                            $"You've gained {mastery.WeaponType.Name} EXP",
+                            ChatMessageType.Experience);
+                    }
+                    else if (command.Amount < 0)
+                    {
+                        PacketSender.SendChatMsg(player,
+                            $"You've lost {mastery.WeaponType.Name} EXP",
+                            ChatMessageType.Experience);
+                    }
+
+                    player.TryGainMasteryExp(command.Amount, mastery);
+                    break;
+
+                case WeaponTrackUpdate.GainLevel:
+                    var x = command.Amount;
+                    while (x > 0)
+                    {
+                        player.CompleteMasteryChallenges(mastery);
+                        player.LevelUpMastery(mastery);
+                        x--;
+                    }
+
+                    if (mastery.Level != prevLevel)
+                    {
+                        PacketSender.SendChatMsg(player,
+                            $"Your {mastery.WeaponType.Name} level has changed to {mastery.Level}",
+                            ChatMessageType.Experience,
+                            sendToast: true);
+                    }
+                    break;
+
+                case WeaponTrackUpdate.LoseLevel:
+                    var y = command.Amount;
+                    while (y > 0)
+                    {
+                        player.RescendMasteryLevel(mastery);
+                        y--;
+                    }
+                    if (mastery.Level != prevLevel)
+                    {
+                        PacketSender.SendChatMsg(player,
+                            $"Your {mastery.WeaponType.Name} level has changed to {mastery.Level}",
+                            ChatMessageType.Experience,
+                            sendToast: true);
+                    }
+                    break;
+
+                case WeaponTrackUpdate.Unlearn:
+                    player.WeaponMasteries.Remove(mastery);
+
+                    // Reset all associated challenges
+                    var descriptor = mastery.WeaponType;
+                    if (descriptor != null)
+                    {
+                        foreach (var challengeList in descriptor.Unlocks.Values.Select(unlock => unlock.ChallengeIds).ToArray())
+                        {
+                            foreach (var challenge in challengeList)
+                            {
+                                player.RemoveChallenge(challenge);
+                            }
+                        }
+                    }
+
+                    // And remove the mastery all together
+                    DbInterface.Pool.QueueWorkItem(mastery.RemoveFromDb);
+
+                    PacketSender.SendChatMsg(player,
+                            $"Your progress toward {mastery.WeaponType.Name} mastery has been reset",
+                            ChatMessageType.Experience,
+                            sendToast: true);
+                    break;
+
+            }
+
+            // Get a fresh update of current mastery status
+            player.SetMasteryProgress();
+        }
     }
 }

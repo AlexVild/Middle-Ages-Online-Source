@@ -125,7 +125,7 @@ namespace Intersect.Client.Interface.Game.Components
                 bottomLabel: Completed ? "COMPLETE!" : $"{completionString}%",
                 bottomLabelColor: TitleColor
                 );
-            ProgressBar.Percent = PercentComplete;
+            ProgressBar.Percent = Completed ? 1.0f : PercentComplete;
 
             base.Initialize();
             FitParentToComponent();

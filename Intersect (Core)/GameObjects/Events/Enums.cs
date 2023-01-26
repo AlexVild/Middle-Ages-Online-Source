@@ -269,6 +269,7 @@ namespace Intersect.GameObjects.Events
         ChangeSpawn, // 77
         ChangeRecipeStatus, // 78
         ChangeBestiary, // 79
+        ChangeWeaponTrack, // 80
     }
 
     public enum NPCGuildManagementSelection
@@ -378,5 +379,23 @@ namespace Intersect.GameObjects.Events
 
         [Description("TRIVIAL")]
         Trivial,
+    }
+
+    public enum WeaponTrackUpdate
+    {
+        [Description("Set Level to")]
+        SetLevel,
+
+        [Description("Gain Levels: ")]
+        GainLevel,
+
+        [Description("Change Exp: ")]
+        ChangeExp,
+
+        [Description("Lose Levels: ")]
+        LoseLevel,
+
+        [Description("Unlearn")]
+        Unlearn,
     }
 }

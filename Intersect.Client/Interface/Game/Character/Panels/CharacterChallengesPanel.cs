@@ -203,9 +203,11 @@ namespace Intersect.Client.Interface.Game.Character.Panels
             if (!hasUnlock)
             {
                 TrackProgressBar.SetLabelText(ProgressBarLabel.Bottom, "MAX");
-                TrackProgressBar.Percent = 100;
+                TrackProgressBar.Percent = 1.0f;
                 TrackProgressBackground.SetToolTipText("You've completed this weapon track!");
-                TrackProgressBar.SetBarRenderColor(new Color(100, 255, 255, 255));
+                TrackProgressBar.SetBarRenderColor(new Color(255, 255, 255, 255));
+                TrackProgressBar.SetBarFg("weapon_track_progress_bar_fg_complete.png");
+                TrackProgressBar.Update();
                 return;
             }
 
@@ -221,7 +223,7 @@ namespace Intersect.Client.Interface.Game.Character.Panels
 
             var progressPercent = SelectedProgress.Exp / (float)nextUnlock.RequiredExp;
             var remaining = nextUnlock.RequiredExp - SelectedProgress.Exp;
-            TrackProgressBar.Percent = progressPercent;
+            TrackProgressBar.Percent = !hasUnlock ? 1.0f : progressPercent;
 
             TrackProgressBar.SetBarBg(canProgress ? "weapon_track_progress_bar_bg.png" : "weapon_track_progress_bg_locked.png");
             TrackProgressBar.SetBarFg(canProgress ? "weapon_track_progress_bar_fg.png" : "weapon_track_progress_bar_fg_locked.png");
