@@ -79,6 +79,10 @@ namespace Intersect.GameObjects.Events
 
         SpellInSkillbook,
 
+        ChallengeCompleted,
+
+        WeaponMasteryOf,
+
     }
 
     public class Condition
@@ -556,6 +560,22 @@ namespace Intersect.GameObjects.Events
         public override ConditionTypes Type { get; } = ConditionTypes.SpellInSkillbook;
 
         public Guid SpellId { get; set; }
+    }
+
+    public class ChallengeCompleted : Condition
+    {
+        public override ConditionTypes Type { get; } = ConditionTypes.ChallengeCompleted;
+
+        public Guid ChallengeId { get; set; }
+    }
+
+    public class WeaponTypeIs : Condition
+    {
+        public override ConditionTypes Type { get; } = ConditionTypes.WeaponMasteryOf;
+
+        public Guid WeaponTypeId { get; set; }
+
+        public int Level { get; set; }
     }
 
     public enum TimerActiveConditions

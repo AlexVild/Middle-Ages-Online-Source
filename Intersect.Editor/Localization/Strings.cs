@@ -425,6 +425,16 @@ namespace Intersect.Editor.Localization
             return EventConditionDesc.HasUnlockForBeast.ToString(condition.Unlock.GetDescription(), beast);
         }
 
+        public static string GetEventConditionalDesc(ChallengeCompleted condition)
+        {
+            return EventConditionDesc.HasChallengeComplete.ToString(ChallengeDescriptor.GetName(condition.ChallengeId));
+        }
+
+        public static string GetEventConditionalDesc(WeaponTypeIs condition)
+        {
+            return EventConditionDesc.HasWeaponLevel.ToString(WeaponTypeDescriptor.GetName(condition.WeaponTypeId), condition.Level);
+        }
+
         public static string GetVariableComparisonString(VariableCompaison comparison)
         {
             return "";
@@ -2390,6 +2400,8 @@ Tick timer saved in server config.json.";
                 {35, @"Has at least X beasts completed..."},
                 {36, @"Has X unlocked for beast Y..."},
                 {37, @"Has spell X in spellbook..."},
+                {38, @"Has challenge completed..."},
+                {39, @"Has weapon X level Y or higher..."},
             };
 
             public static LocalizedString endrange = @"End Range:";
@@ -2672,6 +2684,12 @@ Tick timer saved in server config.json.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString HasUnlockForBeast = @"Has {00} unlocked for {01}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString HasChallengeComplete = @"Has {00} challenge completed";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString HasWeaponLevel = @"Has {00} level {01} or higher";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString HasBeastsUnlocked = @"Has at least {00} beasts completed";

@@ -769,9 +769,53 @@ namespace Intersect.Server.Entities.Events
            Player player,
            Event eventInstance,
            QuestBase questBase
-       )
+        )
         {
             return player?.TryGetSkillInSkillbook(condition?.SpellId ?? Guid.Empty, out _) ?? false;
+        }
+
+        public static bool MeetsCondition(
+           ChallengeCompleted condition,
+           Player player,
+           Event eventInstance,
+           QuestBase questBase
+        )
+        {
+            if (player == null)
+            {
+                return false;
+            }
+
+            var challenge = player.Challenges.Find(c => c.ChallengeId == condition.ChallengeId);
+
+            if (challenge == default)
+            {
+                return false;
+            }
+
+            return challenge.Complete;
+        }
+
+        public static bool MeetsCondition(
+           WeaponTypeIs condition,
+           Player player,
+           Event eventInstance,
+           QuestBase questBase
+        )
+        {
+            if (player == null)
+            {
+                return false;
+            }
+
+            var weaponType = player.WeaponMasteries.Find(c => c.WeaponTypeId == condition.WeaponTypeId);
+
+            if (weaponType == default)
+            {
+                return false;
+            }
+
+            return weaponType.Level >= condition.Level;
         }
 
         //Variable Comparison Processing
@@ -958,6 +1002,7 @@ namespace Intersect.Server.Entities.Events
 
             return false;
         }
+
     }
 
 }

@@ -510,6 +510,14 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     Condition = new SpellInSkillbook();
 
                     break;
+                case ConditionTypes.WeaponMasteryOf:
+                    Condition = new WeaponTypeIs();
+
+                    break;
+                case ConditionTypes.ChallengeCompleted:
+                    Condition = new ChallengeCompleted();
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -544,6 +552,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             grpRecipes.Hide();
             grpBeastsCompleted.Hide();
             grpBeastHasUnlock.Hide();
+            grpChallenge.Hide();
+            grpWeaponMastery.Hide();
             switch (type)
             {
                 case ConditionTypes.VariableIs:
@@ -768,6 +778,27 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     cmbSpell.Items.AddRange(SpellBase.Names);
 
                     break;
+                case ConditionTypes.WeaponMasteryOf:
+                    grpWeaponMastery.Show();
+                    cmbWeaponType.Items.Clear();
+                    cmbWeaponType.Items.AddRange(WeaponTypeDescriptor.Names);
+                    if (cmbWeaponType.Items.Count > 0)
+                    {
+                        cmbWeaponType.SelectedIndex = 0;
+                    }
+
+                    break;
+
+                case ConditionTypes.ChallengeCompleted:
+                    grpChallenge.Show();
+                    cmbChallenges.Items.Clear();
+                    cmbChallenges.Items.AddRange(ChallengeDescriptor.Names);
+                    if (cmbChallenges.Items.Count > 0)
+                    {
+                        cmbChallenges.SelectedIndex = 0;
+                    }
+                    break;
+
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -1649,6 +1680,17 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             cmbSpell.SelectedIndex = SpellBase.ListIndex(condition.SpellId);
         }
 
+        private void SetupFormValues(ChallengeCompleted condition)
+        {
+            cmbChallenges.SelectedIndex = ChallengeDescriptor.ListIndex(condition.ChallengeId);
+        }
+
+        private void SetupFormValues(WeaponTypeIs condition)
+        {
+            cmbWeaponType.SelectedIndex = WeaponTypeDescriptor.ListIndex(condition.WeaponTypeId);
+            nudWeaponTypeLvl.Value = condition.Level;
+        }
+
         #endregion
 
         #region "SaveFormValues"
@@ -1947,6 +1989,17 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private void SaveFormValues(SpellInSkillbook condition)
         {
             condition.SpellId = SpellBase.IdFromList(cmbSpell.SelectedIndex);
+        }
+
+        private void SaveFormValues(ChallengeCompleted condition)
+        {
+            condition.ChallengeId = ChallengeDescriptor.IdFromList(cmbChallenges.SelectedIndex);
+        }
+
+        private void SaveFormValues(WeaponTypeIs condition)
+        {
+            condition.WeaponTypeId = WeaponTypeDescriptor.IdFromList(cmbWeaponType.SelectedIndex);
+            condition.Level = (int)nudWeaponTypeLvl.Value;
         }
         #endregion
 
