@@ -3238,5 +3238,58 @@ namespace Intersect.Server.Entities.Events
             // Get a fresh update of current mastery status
             player.SetMasteryProgress();
         }
+
+        private static void ProcessCommand(
+           ChangeChallengeCommand command,
+           Player player,
+           Event instance,
+           CommandInstance stackInfo,
+           Stack<CommandInstance> callStack
+        )
+        {
+            var descriptor = ChallengeDescriptor.Get(command.ChallengeId);
+
+            if (descriptor == null || player == null)
+            {
+                return;
+            }
+
+            if (!player.TryGetChallenge(command.ChallengeId, out var challenge))
+            {
+                return;
+            }
+
+            switch (command.ChangeType)
+            {
+                case ChallengeUpdate.ChangeReps:
+                    challenge.Progress = MathHelper.Clamp(challenge.Progress + command.Amount, 0, descriptor.Reps);
+                    challenge.Complete = challenge.Progress >= descriptor.Reps;
+                    PacketSender.SendChatMsg(player,
+                            $"Challenge update: {descriptor.Name} ({challenge.Progress} / {descriptor.Reps})",
+                            ChatMessageType.Experience,
+                            sendToast: true);
+                    break;
+
+                case ChallengeUpdate.Complete:
+                    challenge.Complete = true;
+                    PacketSender.SendChatMsg(player,
+                            $"Challenge completed: {descriptor.Name}!",
+                            ChatMessageType.Experience,
+                            sendToast: true);
+                    break;
+
+                case ChallengeUpdate.Reset:
+                    challenge.Complete = false;
+                    challenge.Progress = 0;
+                    PacketSender.SendChatMsg(player,
+                            $"Challenge reset: {descriptor.Name}!",
+                            ChatMessageType.Experience,
+                            sendToast: true);
+                    break;
+            }
+
+            // Refresh mastery progression
+            player.SetMasteryProgress();
+        }
     }
 }

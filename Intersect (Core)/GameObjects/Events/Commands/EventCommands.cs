@@ -1414,4 +1414,15 @@ namespace Intersect.GameObjects.Events.Commands
 
         public long Amount { get; set; } = 0L;
     }
+
+    public partial class ChangeChallengeCommand : EventCommand
+    {
+        public override EventCommandType Type { get; } = EventCommandType.ChangeChallenge;
+
+        public Guid ChallengeId { get; set; }
+
+        public ChallengeUpdate ChangeType { get; set; } = ChallengeUpdate.ChangeReps;
+
+        public int Amount { get; set; } = 0;
+    }
 }

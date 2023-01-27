@@ -847,6 +847,10 @@ namespace Intersect.Editor.Forms.Editors.Events
                     tmpCommand = new ChangeWeaponTrackCommand();
 
                     break;
+                case EventCommandType.ChangeChallenge:
+                    tmpCommand = new ChangeChallengeCommand();
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -1552,6 +1556,10 @@ namespace Intersect.Editor.Forms.Editors.Events
                     break;
                 case EventCommandType.ChangeWeaponTrack:
                     cmdWindow = new EventCommand_ChangeWeaponTrack((ChangeWeaponTrackCommand)command, this);
+
+                    break;
+                case EventCommandType.ChangeChallenge:
+                    cmdWindow = new EventCommand_ChangeChallenge((ChangeChallengeCommand)command, this);
 
                     break;
                 default:

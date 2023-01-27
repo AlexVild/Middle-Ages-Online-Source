@@ -270,6 +270,7 @@ namespace Intersect.GameObjects.Events
         ChangeRecipeStatus, // 78
         ChangeBestiary, // 79
         ChangeWeaponTrack, // 80
+        ChangeChallenge, // 81
     }
 
     public enum NPCGuildManagementSelection
@@ -397,5 +398,17 @@ namespace Intersect.GameObjects.Events
 
         [Description("Unlearn")]
         Unlearn,
+    }
+
+    public enum ChallengeUpdate
+    {
+        [Description("Change Reps")]
+        ChangeReps,
+
+        [Description("Reset")]
+        Reset,
+
+        [Description("Complete")]
+        Complete,
     }
 }

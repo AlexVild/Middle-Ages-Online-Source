@@ -2,13 +2,6 @@
 using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Events.Commands;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Intersect.Editor.Forms.Editors.Events.Event_Commands

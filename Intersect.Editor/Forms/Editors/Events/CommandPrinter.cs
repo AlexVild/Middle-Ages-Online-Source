@@ -1985,5 +1985,15 @@ namespace Intersect.Editor.Forms.Editors.Events
             string changeString = command.ChangeType.GetDescription();
             return Strings.EventCommandList.ChangeWeaponTrack.ToString(WeaponTypeDescriptor.GetName(command.WeaponTypeId), $"{changeString} {command.Amount}");
         }
+
+        private static string GetCommandText(ChangeChallengeCommand command, MapInstance map)
+        {
+            if (command.ChangeType == ChallengeUpdate.ChangeReps)
+            {
+                return Strings.EventCommandList.UpdateChallenge.ToString(command.Amount, ChallengeDescriptor.GetName(command.ChallengeId));
+            }
+
+            return Strings.EventCommandList.ChangeWeaponTrack.ToString(command.ChangeType.GetDescription(), ChallengeDescriptor.GetName(command.ChallengeId));
+        }
     }
 }

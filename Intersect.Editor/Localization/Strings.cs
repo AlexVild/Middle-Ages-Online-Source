@@ -2258,6 +2258,7 @@ Tick timer saved in server config.json.";
                 {"changerecipeunlock", @"Change Recipes"},
                 {"changebestiary", @"Change Bestiary"},
                 {"changeweapontrack", @"Change Weapon Track Progress"},
+                {"changechallenges", @"Change Challenge Progress"},
             };
 
         }
@@ -6164,6 +6165,12 @@ Negative values for time to flow backwards.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString UnlearnWeaponTrack = @"Unlearn {00} weapon track";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString UpdateChallenge = @"{00} reps to challenge: {01}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ChangeChallengeStatus = @"{00} challenge: {01}";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString ClearRecord = @"Clear Records for {00}, clear all: {01}";

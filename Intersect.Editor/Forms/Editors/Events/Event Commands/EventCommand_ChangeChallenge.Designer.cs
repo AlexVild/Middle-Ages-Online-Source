@@ -1,7 +1,7 @@
 ﻿
 namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
 {
-    partial class EventCommand_ChangeWeaponTrack
+    partial class EventCommand_ChangeChallenge
     {
         /// <summary> 
         /// Required designer variable.
@@ -33,13 +33,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpAction = new DarkUI.Controls.DarkGroupBox();
             this.lblAmt = new System.Windows.Forms.Label();
             this.nudAmt = new DarkUI.Controls.DarkNumericUpDown();
-            this.rdoUnlearn = new DarkUI.Controls.DarkRadioButton();
-            this.rdoGainExp = new DarkUI.Controls.DarkRadioButton();
-            this.rdoGainLevel = new DarkUI.Controls.DarkRadioButton();
-            this.rdoLoseLevel = new DarkUI.Controls.DarkRadioButton();
-            this.rdoSetLevel = new DarkUI.Controls.DarkRadioButton();
+            this.rdoComplete = new DarkUI.Controls.DarkRadioButton();
+            this.rdoReset = new DarkUI.Controls.DarkRadioButton();
+            this.rdoChangeReps = new DarkUI.Controls.DarkRadioButton();
             this.cmbWeaponType = new DarkUI.Controls.DarkComboBox();
-            this.lblType = new System.Windows.Forms.Label();
+            this.lblChallenge = new System.Windows.Forms.Label();
             this.btnCancel = new DarkUI.Controls.DarkButton();
             this.btnSave = new DarkUI.Controls.DarkButton();
             this.grpChangeItems.SuspendLayout();
@@ -53,16 +51,16 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpChangeItems.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.grpChangeItems.Controls.Add(this.grpAction);
             this.grpChangeItems.Controls.Add(this.cmbWeaponType);
-            this.grpChangeItems.Controls.Add(this.lblType);
+            this.grpChangeItems.Controls.Add(this.lblChallenge);
             this.grpChangeItems.Controls.Add(this.btnCancel);
             this.grpChangeItems.Controls.Add(this.btnSave);
             this.grpChangeItems.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpChangeItems.Location = new System.Drawing.Point(3, 3);
+            this.grpChangeItems.Location = new System.Drawing.Point(3, 2);
             this.grpChangeItems.Name = "grpChangeItems";
-            this.grpChangeItems.Size = new System.Drawing.Size(217, 258);
-            this.grpChangeItems.TabIndex = 18;
+            this.grpChangeItems.Size = new System.Drawing.Size(214, 214);
+            this.grpChangeItems.TabIndex = 19;
             this.grpChangeItems.TabStop = false;
-            this.grpChangeItems.Text = "Change Player Weapon Track";
+            this.grpChangeItems.Text = "Change Player Challenges";
             // 
             // grpAction
             // 
@@ -70,15 +68,13 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpAction.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.grpAction.Controls.Add(this.lblAmt);
             this.grpAction.Controls.Add(this.nudAmt);
-            this.grpAction.Controls.Add(this.rdoUnlearn);
-            this.grpAction.Controls.Add(this.rdoGainExp);
-            this.grpAction.Controls.Add(this.rdoGainLevel);
-            this.grpAction.Controls.Add(this.rdoLoseLevel);
-            this.grpAction.Controls.Add(this.rdoSetLevel);
+            this.grpAction.Controls.Add(this.rdoComplete);
+            this.grpAction.Controls.Add(this.rdoReset);
+            this.grpAction.Controls.Add(this.rdoChangeReps);
             this.grpAction.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpAction.Location = new System.Drawing.Point(8, 64);
             this.grpAction.Name = "grpAction";
-            this.grpAction.Size = new System.Drawing.Size(195, 161);
+            this.grpAction.Size = new System.Drawing.Size(200, 116);
             this.grpAction.TabIndex = 37;
             this.grpAction.TabStop = false;
             this.grpAction.Text = "Amount Type:";
@@ -86,7 +82,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // lblAmt
             // 
             this.lblAmt.AutoSize = true;
-            this.lblAmt.Location = new System.Drawing.Point(4, 137);
+            this.lblAmt.Location = new System.Drawing.Point(15, 39);
             this.lblAmt.Name = "lblAmt";
             this.lblAmt.Size = new System.Drawing.Size(43, 13);
             this.lblAmt.TabIndex = 41;
@@ -96,7 +92,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             this.nudAmt.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.nudAmt.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudAmt.Location = new System.Drawing.Point(65, 135);
+            this.nudAmt.Location = new System.Drawing.Point(64, 37);
             this.nudAmt.Maximum = new decimal(new int[] {
             10000000,
             0,
@@ -116,52 +112,34 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             0,
             0});
             // 
-            // rdoUnlearn
+            // rdoComplete
             // 
-            this.rdoUnlearn.AutoSize = true;
-            this.rdoUnlearn.Location = new System.Drawing.Point(10, 112);
-            this.rdoUnlearn.Name = "rdoUnlearn";
-            this.rdoUnlearn.Size = new System.Drawing.Size(62, 17);
-            this.rdoUnlearn.TabIndex = 39;
-            this.rdoUnlearn.Text = "Unlearn";
+            this.rdoComplete.AutoSize = true;
+            this.rdoComplete.Location = new System.Drawing.Point(9, 92);
+            this.rdoComplete.Name = "rdoComplete";
+            this.rdoComplete.Size = new System.Drawing.Size(110, 17);
+            this.rdoComplete.TabIndex = 38;
+            this.rdoComplete.Text = "Mark as Complete";
             // 
-            // rdoGainExp
+            // rdoReset
             // 
-            this.rdoGainExp.AutoSize = true;
-            this.rdoGainExp.Location = new System.Drawing.Point(9, 65);
-            this.rdoGainExp.Name = "rdoGainExp";
-            this.rdoGainExp.Size = new System.Drawing.Size(86, 17);
-            this.rdoGainExp.TabIndex = 38;
-            this.rdoGainExp.Text = "Change EXP";
+            this.rdoReset.AutoSize = true;
+            this.rdoReset.Location = new System.Drawing.Point(9, 69);
+            this.rdoReset.Name = "rdoReset";
+            this.rdoReset.Size = new System.Drawing.Size(53, 17);
+            this.rdoReset.TabIndex = 37;
+            this.rdoReset.Text = "Reset";
             // 
-            // rdoGainLevel
+            // rdoChangeReps
             // 
-            this.rdoGainLevel.AutoSize = true;
-            this.rdoGainLevel.Location = new System.Drawing.Point(9, 42);
-            this.rdoGainLevel.Name = "rdoGainLevel";
-            this.rdoGainLevel.Size = new System.Drawing.Size(87, 17);
-            this.rdoGainLevel.TabIndex = 37;
-            this.rdoGainLevel.Text = "Gain Level(s)";
-            // 
-            // rdoLoseLevel
-            // 
-            this.rdoLoseLevel.AutoSize = true;
-            this.rdoLoseLevel.Location = new System.Drawing.Point(9, 89);
-            this.rdoLoseLevel.Name = "rdoLoseLevel";
-            this.rdoLoseLevel.Size = new System.Drawing.Size(77, 17);
-            this.rdoLoseLevel.TabIndex = 36;
-            this.rdoLoseLevel.Text = "Lose Level";
-            // 
-            // rdoSetLevel
-            // 
-            this.rdoSetLevel.AutoSize = true;
-            this.rdoSetLevel.Checked = true;
-            this.rdoSetLevel.Location = new System.Drawing.Point(9, 19);
-            this.rdoSetLevel.Name = "rdoSetLevel";
-            this.rdoSetLevel.Size = new System.Drawing.Size(70, 17);
-            this.rdoSetLevel.TabIndex = 35;
-            this.rdoSetLevel.TabStop = true;
-            this.rdoSetLevel.Text = "Set Level";
+            this.rdoChangeReps.AutoSize = true;
+            this.rdoChangeReps.Checked = true;
+            this.rdoChangeReps.Location = new System.Drawing.Point(9, 19);
+            this.rdoChangeReps.Name = "rdoChangeReps";
+            this.rdoChangeReps.Size = new System.Drawing.Size(90, 17);
+            this.rdoChangeReps.TabIndex = 35;
+            this.rdoChangeReps.TabStop = true;
+            this.rdoChangeReps.Text = "Change Reps";
             // 
             // cmbWeaponType
             // 
@@ -178,23 +156,23 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbWeaponType.FormattingEnabled = true;
             this.cmbWeaponType.Location = new System.Drawing.Point(8, 37);
             this.cmbWeaponType.Name = "cmbWeaponType";
-            this.cmbWeaponType.Size = new System.Drawing.Size(195, 21);
+            this.cmbWeaponType.Size = new System.Drawing.Size(194, 21);
             this.cmbWeaponType.TabIndex = 22;
             this.cmbWeaponType.Text = null;
             this.cmbWeaponType.TextPadding = new System.Windows.Forms.Padding(2);
             // 
-            // lblType
+            // lblChallenge
             // 
-            this.lblType.AutoSize = true;
-            this.lblType.Location = new System.Drawing.Point(5, 21);
-            this.lblType.Name = "lblType";
-            this.lblType.Size = new System.Drawing.Size(75, 13);
-            this.lblType.TabIndex = 21;
-            this.lblType.Text = "Weapon Type";
+            this.lblChallenge.AutoSize = true;
+            this.lblChallenge.Location = new System.Drawing.Point(5, 21);
+            this.lblChallenge.Name = "lblChallenge";
+            this.lblChallenge.Size = new System.Drawing.Size(54, 13);
+            this.lblChallenge.TabIndex = 21;
+            this.lblChallenge.Text = "Challenge";
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(128, 231);
+            this.btnCancel.Location = new System.Drawing.Point(127, 186);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Padding = new System.Windows.Forms.Padding(5);
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
@@ -204,7 +182,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(26, 231);
+            this.btnSave.Location = new System.Drawing.Point(26, 186);
             this.btnSave.Name = "btnSave";
             this.btnSave.Padding = new System.Windows.Forms.Padding(5);
             this.btnSave.Size = new System.Drawing.Size(75, 23);
@@ -212,14 +190,14 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.btnSave.Text = "Ok";
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
-            // EventCommand_ChangeWeaponTrack
+            // EventCommand_ChangeChallenge
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.Controls.Add(this.grpChangeItems);
-            this.Name = "EventCommand_ChangeWeaponTrack";
-            this.Size = new System.Drawing.Size(228, 264);
+            this.Name = "EventCommand_ChangeChallenge";
+            this.Size = new System.Drawing.Size(220, 221);
             this.grpChangeItems.ResumeLayout(false);
             this.grpChangeItems.PerformLayout();
             this.grpAction.ResumeLayout(false);
@@ -232,17 +210,15 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         #endregion
 
         private DarkUI.Controls.DarkGroupBox grpChangeItems;
-        private DarkUI.Controls.DarkComboBox cmbWeaponType;
-        private System.Windows.Forms.Label lblType;
-        private DarkUI.Controls.DarkButton btnCancel;
-        private DarkUI.Controls.DarkButton btnSave;
         private DarkUI.Controls.DarkGroupBox grpAction;
-        private DarkUI.Controls.DarkRadioButton rdoUnlearn;
-        private DarkUI.Controls.DarkRadioButton rdoGainExp;
-        private DarkUI.Controls.DarkRadioButton rdoGainLevel;
-        private DarkUI.Controls.DarkRadioButton rdoLoseLevel;
-        private DarkUI.Controls.DarkRadioButton rdoSetLevel;
         private System.Windows.Forms.Label lblAmt;
         private DarkUI.Controls.DarkNumericUpDown nudAmt;
+        private DarkUI.Controls.DarkRadioButton rdoComplete;
+        private DarkUI.Controls.DarkRadioButton rdoReset;
+        private DarkUI.Controls.DarkRadioButton rdoChangeReps;
+        private DarkUI.Controls.DarkComboBox cmbWeaponType;
+        private System.Windows.Forms.Label lblChallenge;
+        private DarkUI.Controls.DarkButton btnCancel;
+        private DarkUI.Controls.DarkButton btnSave;
     }
 }
