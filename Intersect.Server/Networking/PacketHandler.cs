@@ -4547,5 +4547,18 @@ namespace Intersect.Server.Networking
 
             player.SendPacket(player.GenerateChallengeProgressPacket());
         }
+
+        public void HandlePacket(Client client, TrackWeaponTypePacket packet)
+        {
+            var player = client?.Entity;
+
+            if (player == null)
+            {
+                return;
+            }
+
+            player.TrackWeaponTypeProgress(packet.WeaponTypeId);
+            PacketSender.SendExperience(player);
+        }
     }
 }

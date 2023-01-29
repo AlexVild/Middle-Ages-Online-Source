@@ -1329,7 +1329,7 @@ namespace Intersect.Client.Networking
             {
                 Globals.Me?.CosmeticsUpdateDelegate?.Invoke();
             }
-            if (entityId == Globals.Me?.Id && Interface.Interface.GameUi?.CurrentCharacterPanel == Interface.Game.Character.CharacterPanelType.Challenges)
+            if (entityId == Globals.Me?.Id)
             {
                 Globals.Me?.ChallengeUpdateDelegate?.Invoke();
             }
@@ -1436,15 +1436,16 @@ namespace Intersect.Client.Networking
             {
                 Globals.Me.Experience = packet.Experience;
                 Globals.Me.ExperienceToNextLevel = packet.ExperienceToNextLevel;
+                Globals.Me.WeaponExp = packet.WeaponExp;
+                Globals.Me.WeaponExpTnl = packet.WeaponExpTnl;
+                Globals.Me.TrackedWeaponLevel = packet.WeaponLevel;
+                Globals.Me.TrackedWeaponTypeId = packet.TrackedWeaponId;
                 if (packet.AccumulatedComboExp > 0)
                 {
                     Globals.Me.ComboExp = packet.AccumulatedComboExp;
                 }
 
-                if (Interface.Interface.GameUi?.CurrentCharacterPanel == Interface.Game.Character.CharacterPanelType.Challenges)
-                {
-                    Globals.Me?.ChallengeUpdateDelegate?.Invoke();
-                }
+                Globals.Me?.ChallengeUpdateDelegate?.Invoke();
             }
         }
 

@@ -640,5 +640,10 @@ namespace Intersect.Client.Networking
         {
             Network.SendPacket(new RequestChallengeProgressPacket());
         }
+
+        public static void SendTrackWeaponProgress(Guid weaponTypeId)
+        {
+            Network.SendPacket(new TrackWeaponTypePacket(weaponTypeId));
+        }
     }
 }

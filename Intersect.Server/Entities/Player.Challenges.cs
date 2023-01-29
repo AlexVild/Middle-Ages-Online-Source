@@ -24,6 +24,15 @@ namespace Intersect.Server.Entities
         public List<WeaponMasteryInstance> WeaponMasteries { get; set; } = new List<WeaponMasteryInstance>();
 
         [NotMapped, JsonIgnore]
+        public long CurrWeaponExp { get; set; }
+
+        [NotMapped, JsonIgnore]
+        public int CurrWeaponLvl { get; set; }
+
+        [NotMapped, JsonIgnore]
+        public long WeaponExpTnl { get; set; }
+
+        [NotMapped, JsonIgnore]
         public int WeaponCombo { get; set; }
         
         [NotMapped, JsonIgnore]
@@ -56,6 +65,8 @@ namespace Intersect.Server.Entities
 
         [NotMapped, JsonIgnore]
         private bool WeaponMaxedReminder { get; set; } = false;
+
+        public Guid TrackedWeaponType { get; set; }
 
         public bool TryGetChallenge(Guid id, out ChallengeInstance challenge)
         {
@@ -104,6 +115,26 @@ namespace Intersect.Server.Entities
             MissFreeStreak = 0;
 
             LastWeaponSwitch = Timing.Global.Milliseconds + ChallengeWeaponSwitchTimer;
+        }
+
+        public void TrackWeaponTypeProgress(Guid weaponTypeId)
+        {
+            TrackedWeaponType = weaponTypeId;
+            CurrWeaponExp = 0;
+            WeaponExpTnl = 0;
+            CurrWeaponLvl = 0;
+
+            if (weaponTypeId == Guid.Empty || !TryGetMastery(weaponTypeId, out var mastery))
+            {
+                return;
+            }
+
+            if (mastery.WeaponType != default && mastery.WeaponType.Unlocks.TryGetValue(mastery.Level + 1, out var nextUnlock))
+            {
+                WeaponExpTnl = nextUnlock.RequiredExp - mastery.ExpRemaining;
+                CurrWeaponExp = mastery.ExpRemaining;
+                CurrWeaponLvl = mastery.Level;
+            }
         }
 
         public void SetMasteryProgress()
@@ -155,6 +186,9 @@ namespace Intersect.Server.Entities
             SendNewTrack(newTracks);
             SendChallengeUpdate(false, newChallenges);
             TrackChallenges(challengeInstanceIds);
+
+            // Send weapon EXP update
+            PacketSender.SendExperience(this);
         }
 
         public void ProgressMastery(long exp, Guid weaponType)
@@ -459,7 +493,7 @@ namespace Intersect.Server.Entities
                 weaponTypeProgresses.Add(progress);
             }
 
-            return new ChallengeProgressPacket(weaponTypeProgresses);
+            return new ChallengeProgressPacket(weaponTypeProgresses, TrackedWeaponType);
         }
     }
 }

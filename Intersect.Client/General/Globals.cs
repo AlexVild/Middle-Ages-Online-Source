@@ -220,5 +220,7 @@ namespace Intersect.Client.General
         public static bool StartMenuMusic { get; set; }
         public static long IntroBlackDelay { get; set; } = 2700;
         public static bool JinglePlayed { get; set; }
+
+        public static bool CanEarnWeaponExp { get; set; } = false;
     }
 }

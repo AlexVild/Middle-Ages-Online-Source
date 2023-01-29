@@ -1619,7 +1619,7 @@ namespace Intersect.Server.Networking
         //ExperiencePacket
         public static void SendExperience(Player player, int ComboExp = 0)
         {
-            player.SendPacket(new ExperiencePacket(player.Exp, player.ExperienceToNextLevel, ComboExp), TransmissionMode.Any);
+            player.SendPacket(new ExperiencePacket(player.Exp, player.ExperienceToNextLevel, ComboExp, player.CurrWeaponExp, player.WeaponExpTnl, player.CurrWeaponLvl, player.TrackedWeaponType), TransmissionMode.Any);
         }
 
         //PlayAnimationPacket

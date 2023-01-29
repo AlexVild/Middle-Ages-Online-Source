@@ -42,6 +42,14 @@ namespace Intersect.Client.Entities
 
         public long ExperienceToNextLevel = 0;
 
+        public long WeaponExp = 0;
+
+        public long WeaponExpTnl = 0;
+
+        public int TrackedWeaponLevel = 0;
+
+        public Guid TrackedWeaponTypeId = Guid.Empty;
+
         public List<FriendInstance> Friends = new List<FriendInstance>();
 
         public HotbarInstance[] Hotbar = new HotbarInstance[Options.MaxHotbar];
@@ -3115,5 +3123,20 @@ namespace Intersect.Client.Entities
     public partial class Player : Entity
     {
         public Dictionary<Guid, SkillbookInstance> Skillbook = new Dictionary<Guid, SkillbookInstance>();
+    }
+
+    public partial class Player : Entity
+    {
+        public bool CanEarnWeaponExp(Guid weaponId, int weaponLvl)
+        {
+            var correctWeaponType = Globals.Me.TryGetEquippedWeaponDescriptor(out var weapon)
+                && weapon.WeaponTypes.Contains(weaponId);
+
+            var correctWeaponLvl = weapon != default
+                && weapon.MaxWeaponLevels.TryGetValue(weaponId, out var maxWeaponLvl)
+                && maxWeaponLvl > weaponLvl;
+
+            return correctWeaponLvl && correctWeaponType;
+        }
     }
 }

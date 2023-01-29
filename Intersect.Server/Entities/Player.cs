@@ -455,6 +455,7 @@ namespace Intersect.Server.Entities
             InitClassRanks();
 
             SetMasteryProgress();
+            TrackWeaponTypeProgress(TrackedWeaponType);
             SendPacket(GenerateChallengeProgressPacket());
 
             // Refresh recipe unlock statuses in the event they've changed since the player last logged in
@@ -1445,11 +1446,6 @@ namespace Intersect.Server.Entities
                 {
                     Exp = 0;
                 }
-
-                if (!CheckLevelUp())
-                {
-                    PacketSender.SendExperience(this, ComboExp);
-                }
             }
 
             if ((opponent is Npc || opponent is Player) || fromComboEnd)
@@ -1458,8 +1454,15 @@ namespace Intersect.Server.Entities
                 foreach (var type in weapon?.WeaponTypes ?? new List<Guid>())
                 {
                     ProgressMastery(expToGive, type);
+                    if (type == TrackedWeaponType && type != Guid.Empty)
+                    {
+                        TrackWeaponTypeProgress(type);
+                    }
                 }
             }
+
+            CheckLevelUp();
+            PacketSender.SendExperience(this, ComboExp);
         }
 
         private bool ShouldAwardExp(int opponentLevel)

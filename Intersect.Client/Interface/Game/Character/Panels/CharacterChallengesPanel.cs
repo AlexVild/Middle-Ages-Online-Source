@@ -29,13 +29,15 @@ namespace Intersect.Client.Interface.Game.Character.Panels
             set => CharacterChallengesController.WeaponTypeProgresses = value;
         }
 
-        public WeaponTypeProgress SelectedProgress => Progress?.Find(progress => WeaponTypeDescriptor.GetName(progress.WeaponTypeId) == SkillTypeSelection.SelectedItem.Text) ?? default;
+        public WeaponTypeProgress SelectedProgress => Progress?.Find(progress => WeaponTypeDescriptor.GetName(progress.WeaponTypeId) == (SkillTypeSelection?.SelectedItem?.Text ?? string.Empty)) ?? default;
 
         private Label NoTrackLabel { get; set; }
 
         private ImagePanel SkillTypeBackground { get; set; }
         private Label SkillTypeLabel { get; set; }
         private ComboBox SkillTypeSelection { get; set; }
+
+        private Button TrackSkillButton { get; set; }
 
         private ImagePanel TrackProgressBackground { get; set; }
         private WeaponTrackProgressBarComponent TrackProgressBar { get; set; }
@@ -64,6 +66,13 @@ namespace Intersect.Client.Interface.Game.Character.Panels
             SkillTypeSelection = new ComboBox(SkillTypeBackground, "SkillTypeComboBox");
             SkillTypeSelection.ItemSelected += SkillTypeSelection_ItemSelected;
 
+            TrackSkillButton = new Button(mBackground, "TrackButton")
+            {
+                Text = "Track"
+            };
+            TrackSkillButton.SetToolTipText("Track/Untrack EXP progress in your UI");
+            TrackSkillButton.Clicked += TrackSkillButton_Clicked;
+
             TrackProgressBackground = new ImagePanel(mBackground, "TrackProgress");
             TrackProgressBar = new WeaponTrackProgressBarComponent(TrackProgressBackground,
                 "WeaponTrackProgressBar",
@@ -89,8 +98,29 @@ namespace Intersect.Client.Interface.Game.Character.Panels
 
             Globals.Me.ChallengeUpdateDelegate = () =>
             {
-                PacketSender.SendRequestChallenges();
+                if (Interface.GameUi?.CurrentCharacterPanel == CharacterPanelType.Challenges)
+                {
+                    PacketSender.SendRequestChallenges();
+                }
+                Globals.CanEarnWeaponExp = Globals.Me?.CanEarnWeaponExp(Globals.Me.TrackedWeaponTypeId, Globals.Me.TrackedWeaponLevel) ?? false;
+                CharacterChallengesController.AwaitingTrackChange = false;
             };
+        }
+
+        private void TrackSkillButton_Clicked(Base sender, Framework.Gwen.Control.EventArguments.ClickedEventArgs arguments)
+        {
+            if (CharacterChallengesController.AwaitingTrackChange)
+            {
+                return;
+            }
+            if (Globals.Me.TrackedWeaponTypeId == (SelectedProgress?.WeaponTypeId ?? Guid.Empty))
+            {
+                PacketSender.SendTrackWeaponProgress(Guid.Empty);
+            }
+            else
+            {
+                PacketSender.SendTrackWeaponProgress(SelectedProgress?.WeaponTypeId ?? Guid.Empty);
+            }
         }
 
         public override void Show()
@@ -112,6 +142,9 @@ namespace Intersect.Client.Interface.Game.Character.Panels
             TrackProgressBackground.IsHidden = Progress.Count <= 0;
             ChallengesBackground.IsHidden = Progress.Count <= 0;
             HelpLabel.IsHidden = Progress.Count <= 0;
+            TrackSkillButton.IsHidden = Progress.Count <= 0;
+            TrackSkillButton.Text = Globals.Me.TrackedWeaponTypeId == (SelectedProgress?.WeaponTypeId ?? Guid.Empty) ? "UNTRACK" : "TRACK";
+            TrackSkillButton.IsDisabled = CharacterChallengesController.AwaitingTrackChange;
 
             if (!Refresh)
             {
@@ -122,6 +155,7 @@ namespace Intersect.Client.Interface.Game.Character.Panels
             RefreshTrackOptions();
             RefreshTrackProgression();
             RefreshChallenges();
+            TrackSkillButton.IsHidden = (SelectedProgress?.WeaponTypeId ?? Guid.Empty) != Guid.Empty;
 
             Refresh = false;
         }
@@ -215,7 +249,7 @@ namespace Intersect.Client.Interface.Game.Character.Panels
             var correctWeaponType = Globals.Me.TryGetEquippedWeaponDescriptor(out var weapon)
                 && weapon.WeaponTypes.Contains(descriptor.Id);
 
-            var correctWeaponLvl = weapon != default 
+            var correctWeaponLvl = weapon != default
                 && weapon.MaxWeaponLevels.TryGetValue(descriptor.Id, out var maxWeaponLvl)
                 && maxWeaponLvl > SelectedProgress.Level;
 
@@ -292,5 +326,7 @@ namespace Intersect.Client.Interface.Game.Character.Panels
         }
 
         public static bool Refresh { get; set; }
+
+        public static bool AwaitingTrackChange { get; set; } = false;
     }
 }

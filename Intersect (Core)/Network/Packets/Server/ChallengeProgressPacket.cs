@@ -57,14 +57,18 @@ namespace Intersect.Network.Packets.Server
         [Key(0)]
         public List<WeaponTypeProgress> WeaponTypes { get; set; }
 
+        [Key(1)]
+        public Guid TrackedWeaponTypeId { get; set; }
+
         // EF
         public ChallengeProgressPacket()
         {
         }
 
-        public ChallengeProgressPacket(List<WeaponTypeProgress> weaponTypes)
+        public ChallengeProgressPacket(List<WeaponTypeProgress> weaponTypes, Guid trackedWeaponTypeId)
         {
             WeaponTypes = weaponTypes;
+            TrackedWeaponTypeId = trackedWeaponTypeId;
         }
     }
 }

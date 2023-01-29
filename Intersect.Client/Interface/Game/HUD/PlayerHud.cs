@@ -28,8 +28,25 @@ namespace Intersect.Client.Interface.Game.HUD
         private int BarPadding => UseLargeBars ? LargeBarPadding : SmallBarPadding;
 
         private GameTexture BarBackground;
+        private GameTexture BarBackgroundTransparent;
         private GameTexture HpTexture;
         private GameTexture ManaTexture;
+
+        private GameTexture _weaponExpTexture;
+        private GameTexture WeaponExpTexture
+        {
+            get
+            {
+                if (!Globals.CanEarnWeaponExp)
+                {
+                    return WeaponExpLockedTexture;
+                }
+                return FlashExp ? WeaponExpGainTexture : _weaponExpTexture;
+            }
+            set => _weaponExpTexture = value;
+        }
+        private GameTexture WeaponExpGainTexture;
+        private GameTexture WeaponExpLockedTexture;
         private GameTexture _expTexture;
         private bool FlashExp = false;
         private GameTexture ExpTexture
@@ -83,6 +100,7 @@ namespace Intersect.Client.Interface.Game.HUD
         private void InitTextures() 
         {
             BarBackground = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar.png");
+            BarBackgroundTransparent = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_transparent.png");
             HpTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_health.png");
             ManaTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_magic.png");
             ExpTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_exp.png");
@@ -91,6 +109,9 @@ namespace Intersect.Client.Interface.Game.HUD
             ShieldTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_shield.png");
             PvpTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hud_pvp.png");
             ArenaTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hud_arena.png");
+            WeaponExpTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_weapon_exp.png");
+            WeaponExpGainTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_weapon_exp_gain.png");
+            WeaponExpLockedTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_weapon_exp_disabled.png");
         }
 
         private void DetermineTextureScaling()
@@ -98,20 +119,28 @@ namespace Intersect.Client.Interface.Game.HUD
             if (UseLargeBars && !BarBackground.Name.Contains("_lg"))
             {
                 BarBackground = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_lg.png");
+                BarBackgroundTransparent = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_lg_transparent.png");
                 HpTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_health_lg.png");
                 ManaTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_magic_lg.png");
                 ExpTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_exp_lg.png");
                 ExpGainTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_exp_gain_lg.png");
                 ShieldTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_shield_lg.png");
+                WeaponExpTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_weapon_exp_lg.png");
+                WeaponExpGainTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_weapon_exp_gain_lg.png");
+                WeaponExpLockedTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_weapon_exp_lg_disabled.png");
             }
             else if (BarBackground.Name.Contains("_lg") && !UseLargeBars)
             {
                 BarBackground = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar.png");
+                BarBackgroundTransparent = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_transparent.png");
                 HpTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_health.png");
                 ManaTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_magic.png");
                 ExpTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_exp.png");
                 ExpGainTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_exp_gain.png");
                 ShieldTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_shield.png");
+                WeaponExpTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_weapon_exp.png");
+                WeaponExpGainTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_weapon_exp_gain.png");
+                WeaponExpLockedTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_weapon_exp_disabled.png");
             }
         }
 
@@ -255,6 +284,11 @@ namespace Intersect.Client.Interface.Game.HUD
             else
             {
                 DrawBar(BarBackground, ExpTexture, x, y, width, height, "EXP", $"{currentExp} / {tnlExp}", currentExp, tnlExp);
+            }
+
+            if (Globals.Me.WeaponExpTnl > 0)
+            {
+                DrawBar(BarBackgroundTransparent, WeaponExpTexture, x, y + 45, width, height, string.Empty, string.Empty, Globals.Me.WeaponExp, Globals.Me.WeaponExpTnl);
             }
         }
 
