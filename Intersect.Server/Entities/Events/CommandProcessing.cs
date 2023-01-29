@@ -3237,6 +3237,7 @@ namespace Intersect.Server.Entities.Events
 
             // Get a fresh update of current mastery status
             player.SetMasteryProgress();
+            PacketSender.SendExperience(player);
         }
 
         private static void ProcessCommand(

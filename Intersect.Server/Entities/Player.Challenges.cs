@@ -131,7 +131,7 @@ namespace Intersect.Server.Entities
 
             if (mastery.WeaponType != default && mastery.WeaponType.Unlocks.TryGetValue(mastery.Level + 1, out var nextUnlock))
             {
-                WeaponExpTnl = nextUnlock.RequiredExp - mastery.ExpRemaining;
+                WeaponExpTnl = nextUnlock.RequiredExp;
                 CurrWeaponExp = mastery.ExpRemaining;
                 CurrWeaponLvl = mastery.Level;
             }
@@ -304,7 +304,6 @@ namespace Intersect.Server.Entities
             {
                 mastery.ExpRemaining = -1;
                 SendMasteryUpdate(true, weaponType.Name);
-                return;
             }
             else
             {
@@ -318,6 +317,7 @@ namespace Intersect.Server.Entities
                     SendWeaponMaxedMessage(weaponType);
                 }
             }
+            PacketSender.SendExperience(this);
         }
 
         public void CompleteMasteryChallenges(WeaponMasteryInstance mastery)
