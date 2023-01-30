@@ -28,6 +28,8 @@ namespace Intersect.Client.Interface.Game.Character.StatPanel
 
         public CharacterPanelType Type { get; } = CharacterPanelType.Stats;
 
+        private Button LevelUpButton { get; set; }
+
         NumberContainerComponent mHpCurrent { get; set; }
         NumberContainerComponent mHpTotal { get; set; }
 
@@ -53,6 +55,10 @@ namespace Intersect.Client.Interface.Game.Character.StatPanel
         {
             mParentContainer = panelBackground;
             mBackground = new ImagePanel(mParentContainer, "CharacterWindowMAO_Stats");
+            LevelUpButton = new Button(mBackground, "LevelUpButton") 
+            {
+                Text = "LEVEL UP!"
+            };
 
             InitializeStatContainers();
 
@@ -68,6 +74,7 @@ namespace Intersect.Client.Interface.Game.Character.StatPanel
                 return;
             }
 
+            LevelUpButton.IsHidden = Globals.Me.StatPoints == 0;
             PopulateStats();
         }
 
