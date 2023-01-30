@@ -1,6 +1,7 @@
 ﻿using Intersect.Client.Core;
 using Intersect.Client.Framework.Graphics;
 using Intersect.Client.Framework.Gwen.Control;
+using Intersect.Client.Framework.Gwen.Input;
 using Intersect.Client.General;
 using Intersect.Client.Interface.Components;
 using Intersect.Client.Networking;
@@ -146,6 +147,11 @@ namespace Intersect.Client.Interface.Game.Components
 
         private void SelfContainer_HoverEnter(Base sender, EventArgs arguments)
         {
+            if (InputHandler.MouseFocus != null)
+            {
+                return;
+            }
+
             HoverEnter();
         }
 

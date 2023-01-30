@@ -1,5 +1,6 @@
 ﻿using Intersect.Client.Framework.Graphics;
 using Intersect.Client.Framework.Gwen.Control;
+using Intersect.Client.Framework.Gwen.Input;
 using Intersect.Client.General;
 using Intersect.Client.Interface.Components;
 using Intersect.Client.Interface.Game.DescriptionWindows;
@@ -39,11 +40,16 @@ namespace Intersect.Client.Interface.Game.Components
 
         private void Image_HoverLeave(Base sender, EventArgs arguments)
         {
-            HoverPanel.Dispose();
+            HoverPanel?.Dispose();
         }
 
         private void Image_HoverEnter(Base sender, EventArgs arguments)
         {
+            if (InputHandler.MouseFocus != null)
+            {
+                return;
+            }
+
             var mousePos = Globals.InputManager.GetMousePosition();
             HoverPanel = new ChallengeDescriptionWindow(ChallengeId, (int)mousePos.X, (int)mousePos.Y);
         }

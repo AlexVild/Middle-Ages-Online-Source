@@ -57,6 +57,11 @@ namespace Intersect.Client.Framework.Gwen
                 return;
             }
 
+            if (Input.InputHandler.MouseFocus != null)
+            {
+                return;
+            }
+
             var render = skin.Renderer;
 
             var oldRenderOffset = render.RenderOffset;
