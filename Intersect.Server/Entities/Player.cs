@@ -1351,10 +1351,17 @@ namespace Intersect.Server.Entities
                 return;
             }
 
+            var prevLevel = Level;
             Level = Math.Min(Options.MaxLevel, level);
             if (resetExperience)
             {
                 Exp = 0;
+            }
+
+            if (prevLevel < Level)
+            {
+                // Unequip all skills, make the player re-assign them as their skill points have maybe gone down.
+                UnprepareAllSkills();
             }
 
             RecalculateStatsAndPoints();
@@ -1463,15 +1470,6 @@ namespace Intersect.Server.Entities
 
             CheckLevelUp();
             PacketSender.SendExperience(this, ComboExp);
-        }
-
-        private bool ShouldAwardExp(int opponentLevel)
-        {
-            if (opponentLevel < 0) // not awarded via enemy
-            {
-                return true;
-            }
-            return opponentLevel >= (Level - Options.Combat.MinComboExpLvlDiff);
         }
 
         public void TakeExperience(long amount)
@@ -1865,6 +1863,7 @@ namespace Intersect.Server.Entities
 
         public void RecalculateStatsAndPoints()
         {
+            var oldTotal = SkillPointTotal;
             var playerClass = ClassBase.Get(ClassId);
 
             if (playerClass == null)
@@ -1872,12 +1871,18 @@ namespace Intersect.Server.Entities
                 return;
             }
 
-            RecalculateSkillPoints();
-            // Don't give stat points on odd levels
-            if (playerClass.SkillPointLevelModulo > 0 && Level % playerClass.SkillPointLevelModulo == 0)
+            SkillPointTotal = playerClass.GetTotalSkillPointsAt(Level);
+
+            if (oldTotal < SkillPointTotal)
             {
-                return;
+                PacketSender.SendSkillStatusUpdate(this, "Gained skill points!");
             }
+            else if (oldTotal > SkillPointTotal)
+            {
+                // The player should have less skills - reset them
+                UnprepareAllSkills();
+            }
+            PacketSender.SendSkillbookToClient(this);
 
             var levelsWithoutStatBoosts = (int)Math.Floor((float)Level / playerClass.SkillPointLevelModulo);
             var levelsWithStatBoosts = Level - 1 - levelsWithoutStatBoosts;

@@ -194,6 +194,7 @@ namespace Intersect.Editor.Forms.Editors
 
                 nudSpLvlMod.Value = mEditorItem.SkillPointLevelModulo;
                 nudSpPerLevel.Value = mEditorItem.SkillPointsPerLevel;
+                nudSkillPoints.Value = mEditorItem.InitialSkillPoints;
 
                 //Stat Increases
                 if (!mEditorItem.IncreasePercentage)
@@ -1646,6 +1647,11 @@ namespace Intersect.Editor.Forms.Editors
         private void nudSpPerLevel_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.SkillPointsPerLevel = (int)nudSpPerLevel.Value;
+        }
+
+        private void nudSkillPoints_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.InitialSkillPoints = (int)nudSkillPoints.Value;
         }
     }
 

@@ -293,5 +293,18 @@ namespace Intersect.GameObjects
     {
         public int SkillPointsPerLevel { get; set; }
         public int SkillPointLevelModulo { get; set; }
+
+        public int InitialSkillPoints { get; set; } = 0;
+
+        public int GetTotalSkillPointsAt(int level)
+        {
+            if (SkillPointLevelModulo == 0 || SkillPointsPerLevel == 0)
+            {
+                return 0;
+            }
+
+            var spGainingLevels = (int)Math.Floor((float)level / SkillPointLevelModulo);
+            return (spGainingLevels * SkillPointsPerLevel) + InitialSkillPoints;
+        }
     }
 }

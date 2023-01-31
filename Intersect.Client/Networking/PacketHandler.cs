@@ -2856,5 +2856,16 @@ namespace Intersect.Client.Networking
             CharacterChallengesController.WeaponTypeProgresses = packet.WeaponTypes;
             CharacterBonusesPanelController.Refresh = true;
         }
+
+        public void HandlePacket(IPacketSender packetSender, SkillUpdatePacket packet)
+        {
+            if (Globals.Me == null)
+            {
+                return;
+            }
+
+            Globals.SkillUpdateString = packet.UpdateText;
+            Globals.SkillPointUpdate = true;
+        }
     }
 }

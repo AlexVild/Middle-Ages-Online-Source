@@ -164,7 +164,7 @@ namespace Intersect.Client.Interface.Game
             }
             
             var time = Timing.Global.Milliseconds;
-            if (Globals.Me.StatPoints > 0 && !mCharacterWindow.IsVisible())
+            if (Globals.CharacterUpdateAvailable && !mCharacterWindow.IsVisible())
             {
                 if (!mNotificationFlash)
                 {

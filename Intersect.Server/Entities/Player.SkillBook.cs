@@ -127,9 +127,9 @@ namespace Intersect.Server.Entities
             skill.Equipped = true;
         }
 
-        public void UnprepareSkill(Guid spellId)
+        public void UnprepareSkill(Guid spellId, bool force = false)
         {
-            if (!TryToggleSkillPrepare(spellId, false, out string failureReason))
+            if (!force && !TryToggleSkillPrepare(spellId, false, out string failureReason))
             {
                 PacketSender.SendChatMsg(this, failureReason, Enums.ChatMessageType.Error, CustomColors.General.GeneralDisabled);
                 return;
@@ -164,6 +164,7 @@ namespace Intersect.Server.Entities
             SkillBook.Add(newSkill);
 
             PacketSender.SendSkillbookToClient(this);
+            PacketSender.SendSkillStatusUpdate(this, "New skill(s)!");
 
             return true;
         }
@@ -215,16 +216,26 @@ namespace Intersect.Server.Entities
             return true;
         }
 
-        public void RecalculateSkillPoints()
+        public void UnprepareAllSkills()
         {
-            var clsDescriptor = ClassBase.Get(ClassId);
-            if (clsDescriptor.SkillPointLevelModulo == 0 || clsDescriptor.SkillPointsPerLevel == 0)
+            var prevSpAvailable = SkillPointsAvailable;
+
+            var change = false;
+            foreach (var skill in SkillBook)
             {
-                return;
+                if (!skill.Equipped)
+                {
+                    continue;
+                }
+
+                change = true;
+                UnprepareSkill(skill.SpellId, true);
             }
 
-            var spGainingLevels = (int)Math.Floor((float)Level / clsDescriptor.SkillPointLevelModulo);
-            SkillPointTotal = spGainingLevels * clsDescriptor.SkillPointsPerLevel;
+            if (change)
+            {
+                PacketSender.SendChatMsg(this, "You need to re-assign your skill points.", Enums.ChatMessageType.Experience, sendToast: true);
+            }
         }
     }
 }

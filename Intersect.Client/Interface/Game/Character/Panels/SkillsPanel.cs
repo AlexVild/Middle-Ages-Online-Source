@@ -118,6 +118,7 @@ namespace Intersect.Client.Interface.Game.Character.Panels
         {
             RefreshSkillTypeFilters();
             Interface.InputBlockingElements.Add(SearchBar);
+            Globals.SkillPointUpdate = false;
             SearchTerm = string.Empty;
 
             RefreshSkillbookDisplay();
@@ -146,9 +147,7 @@ namespace Intersect.Client.Interface.Game.Character.Panels
             }
             else
             {
-                var spPerLevel = classDescriptor?.SkillPointsPerLevel ?? 0;
-                var spMod = classDescriptor?.SkillPointLevelModulo ?? 0;
-                totalSkillPoints = (int)Math.Floor((float)(Globals.Me?.Level ?? 0) / spMod) * spPerLevel;
+                totalSkillPoints = classDescriptor?.GetTotalSkillPointsAt(Globals.Me?.Level ?? 0) ?? 0;
 
                 SkillPointsRemaining.SetText($"Skill Points: {SkillsPanelController.SkillPointsAvailable} / {totalSkillPoints}");
                 if (SkillsPanelController.SkillPointsAvailable == 0)

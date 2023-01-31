@@ -53,7 +53,7 @@ namespace Intersect.Client.Interface.Game.Character
             PlayerContainer = new ImagePanel(mCharacterWindow, "Container");
             mCharacterWindow.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
             PanelContainer = new CharacterWindowPanelController(gameCanvas, this);
-            NotificationContainer = new CharacterWindowNotifications(gameCanvas, this);
+            NotificationContainer = new CharacterWindowNotifications(gameCanvas, this, PanelContainer);
 
             mEquipmentPanel = new CharacterEquipmentWindow(this, PlayerContainer);
             mEquipmentPanel.Show();
@@ -82,7 +82,6 @@ namespace Intersect.Client.Interface.Game.Character
             }
 
             PanelContainer.Show();
-            NotificationContainer.Show();
         }
 
         public void Update()
@@ -100,7 +99,12 @@ namespace Intersect.Client.Interface.Game.Character
 
             mEquipmentPanel.Update();
             PanelContainer.Update();
-            NotificationContainer.Update();
+
+            NotificationContainer.IsHidden = !Globals.CharacterUpdateAvailable;
+            if (NotificationContainer.IsVisible)
+            {
+                NotificationContainer.Update();
+            }
         }
     }
 }

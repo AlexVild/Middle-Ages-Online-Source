@@ -222,5 +222,11 @@ namespace Intersect.Client.General
         public static bool JinglePlayed { get; set; }
 
         public static bool CanEarnWeaponExp { get; set; } = false;
+
+        public static bool SkillPointUpdate { get; set; }
+
+        public static bool CharacterUpdateAvailable => SkillPointUpdate || (Me?.StatPoints ?? 0) > 0;
+
+        public static string SkillUpdateString;
     }
 }

@@ -20,18 +20,63 @@ namespace Intersect.Client.Interface.Game.Character
     {
         private ImagePanel mNotificationContainer;
 
+        private ImagePanel LevelUpContainer;
+        private Label LevelUpLabel;
+        private Button LevelUpButton;
+        
+        private ImagePanel SkillUpContainer;
+        private Label SkillUpLabel;
+        private Button SkillUpButton;
+
+        private CharacterWindowPanelController PanelController;
+
         private CharacterWindowMAO Parent { get; set; }
 
-        public CharacterWindowNotifications(Canvas gameCanvas, CharacterWindowMAO parent)
+        public bool IsVisible => mNotificationContainer.IsVisible;
+
+        public bool IsHidden 
+        {
+            get => mNotificationContainer.IsHidden;
+            set => mNotificationContainer.IsHidden = value;
+        }
+
+        public CharacterWindowNotifications(Canvas gameCanvas, CharacterWindowMAO parent, CharacterWindowPanelController controller)
         {
             Parent = parent;
+            PanelController = controller;
 
             mNotificationContainer = new ImagePanel(gameCanvas, "CharacterWindowNotificationWindow");
+            LevelUpContainer = new ImagePanel(mNotificationContainer, "LevelUpContainer");
+            LevelUpLabel = new Label(LevelUpContainer, "LevelUpLabel")
+            {
+                Text = "Unspent stat points!"
+            };
+            LevelUpButton = new Button(LevelUpContainer, "LevelUpButton")
+            {
+                Text = "Spend"
+            };
+
+            SkillUpContainer = new ImagePanel(mNotificationContainer, "SkillUpContainer");
+            SkillUpLabel = new Label(SkillUpContainer, "SkillUpLabel")
+            {
+                Text = "New skill points!"
+            };
+            SkillUpButton = new Button(SkillUpContainer, "SkillUpButton")
+            {
+                Text = "Assign"
+            };
+            SkillUpButton.Clicked += SkillUpButton_Clicked;
 
             mNotificationContainer.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
 
             Hide();
             PositionToParent();
+        }
+
+        private void SkillUpButton_Clicked(Base sender, ClickedEventArgs arguments)
+        {
+            PanelController?.Show();
+            PanelController?.ChangePanel(CharacterPanelType.Skills);
         }
 
         public void Show()
@@ -57,9 +102,18 @@ namespace Intersect.Client.Interface.Game.Character
                 Hide();
             }
 
-            if (mNotificationContainer.IsHidden)
+            if (IsHidden)
             {
                 return;
+            }
+
+
+            LevelUpContainer.IsHidden = (Globals.Me?.StatPoints ?? 0) <= 0;
+            SkillUpContainer.IsHidden = !Globals.SkillPointUpdate;
+
+            if (SkillUpContainer.IsVisible)
+            {
+                SkillUpLabel.Text = string.IsNullOrEmpty(Globals.SkillUpdateString) ? "Skill update!" : Globals.SkillUpdateString;
             }
 
             PositionToParent();

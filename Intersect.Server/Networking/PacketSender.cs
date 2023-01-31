@@ -2749,5 +2749,10 @@ namespace Intersect.Server.Networking
 
             player?.SendPacket(new SkillbookPacket(skillBook, player?.SkillPointsAvailable ?? 0));
         }
+
+        public static void SendSkillStatusUpdate(Player player, string updateText)
+        {
+            player?.SendPacket(new SkillUpdatePacket(updateText));
+        }
     }
 }

@@ -31,9 +31,9 @@ namespace Intersect.Editor.Forms.Editors
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FrmClass));
             this.grpClasses = new DarkUI.Controls.DarkGroupBox();
             this.btnClearSearch = new DarkUI.Controls.DarkButton();
@@ -143,6 +143,10 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbFace = new DarkUI.Controls.DarkComboBox();
             this.grpGender = new DarkUI.Controls.DarkGroupBox();
             this.grpLeveling = new DarkUI.Controls.DarkGroupBox();
+            this.lblSpPer = new System.Windows.Forms.Label();
+            this.nudSpPerLevel = new DarkUI.Controls.DarkNumericUpDown();
+            this.nudSpLvlMod = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblSpModulo = new System.Windows.Forms.Label();
             this.btnExpGrid = new DarkUI.Controls.DarkButton();
             this.nudBaseExp = new DarkUI.Controls.DarkNumericUpDown();
             this.nudExpIncrease = new DarkUI.Controls.DarkNumericUpDown();
@@ -198,10 +202,8 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
             this.mnuExpGrid = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.btnExpPaste = new System.Windows.Forms.ToolStripMenuItem();
-            this.lblSpModulo = new System.Windows.Forms.Label();
-            this.nudSpLvlMod = new DarkUI.Controls.DarkNumericUpDown();
-            this.nudSpPerLevel = new DarkUI.Controls.DarkNumericUpDown();
-            this.lblSpPer = new System.Windows.Forms.Label();
+            this.nudSkillPoints = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblSklPts = new System.Windows.Forms.Label();
             this.grpClasses.SuspendLayout();
             this.grpBaseStats.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudPierceRes)).BeginInit();
@@ -242,6 +244,8 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.picFace)).BeginInit();
             this.grpGender.SuspendLayout();
             this.grpLeveling.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSpPerLevel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSpLvlMod)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudBaseExp)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudExpIncrease)).BeginInit();
             this.grpLevelBoosts.SuspendLayout();
@@ -263,8 +267,7 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.expGrid)).BeginInit();
             this.toolStrip.SuspendLayout();
             this.mnuExpGrid.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSpLvlMod)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSpPerLevel)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSkillPoints)).BeginInit();
             this.SuspendLayout();
             // 
             // grpClasses
@@ -328,6 +331,8 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpBaseStats.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpBaseStats.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpBaseStats.Controls.Add(this.lblSklPts);
+            this.grpBaseStats.Controls.Add(this.nudSkillPoints);
             this.grpBaseStats.Controls.Add(this.nudPierceRes);
             this.grpBaseStats.Controls.Add(this.label6);
             this.grpBaseStats.Controls.Add(this.nudSlashRes);
@@ -1880,6 +1885,64 @@ namespace Intersect.Editor.Forms.Editors
             this.grpLeveling.TabStop = false;
             this.grpLeveling.Text = "Leveling Up";
             // 
+            // lblSpPer
+            // 
+            this.lblSpPer.AutoSize = true;
+            this.lblSpPer.Location = new System.Drawing.Point(285, 15);
+            this.lblSpPer.Name = "lblSpPer";
+            this.lblSpPer.Size = new System.Drawing.Size(69, 13);
+            this.lblSpPer.TabIndex = 41;
+            this.lblSpPer.Text = "SP Per Level";
+            // 
+            // nudSpPerLevel
+            // 
+            this.nudSpPerLevel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudSpPerLevel.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudSpPerLevel.Location = new System.Drawing.Point(288, 31);
+            this.nudSpPerLevel.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.nudSpPerLevel.Name = "nudSpPerLevel";
+            this.nudSpPerLevel.Size = new System.Drawing.Size(67, 20);
+            this.nudSpPerLevel.TabIndex = 40;
+            this.nudSpPerLevel.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudSpPerLevel.ValueChanged += new System.EventHandler(this.nudSpPerLevel_ValueChanged);
+            // 
+            // nudSpLvlMod
+            // 
+            this.nudSpLvlMod.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudSpLvlMod.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudSpLvlMod.Location = new System.Drawing.Point(200, 31);
+            this.nudSpLvlMod.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudSpLvlMod.Name = "nudSpLvlMod";
+            this.nudSpLvlMod.Size = new System.Drawing.Size(67, 20);
+            this.nudSpLvlMod.TabIndex = 39;
+            this.nudSpLvlMod.Value = new decimal(new int[] {
+            2,
+            0,
+            0,
+            0});
+            this.nudSpLvlMod.ValueChanged += new System.EventHandler(this.nudSpLvlMod_ValueChanged);
+            // 
+            // lblSpModulo
+            // 
+            this.lblSpModulo.AutoSize = true;
+            this.lblSpModulo.Location = new System.Drawing.Point(199, 16);
+            this.lblSpModulo.Name = "lblSpModulo";
+            this.lblSpModulo.Size = new System.Drawing.Size(76, 13);
+            this.lblSpModulo.TabIndex = 38;
+            this.lblSpModulo.Text = "SP Lvl Modulo";
+            // 
             // btnExpGrid
             // 
             this.btnExpGrid.Location = new System.Drawing.Point(411, 29);
@@ -2478,21 +2541,21 @@ namespace Intersect.Editor.Forms.Editors
             this.expGrid.AllowUserToDeleteRows = false;
             this.expGrid.AllowUserToResizeColumns = false;
             this.expGrid.AllowUserToResizeRows = false;
-            dataGridViewCellStyle10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(53)))), ((int)(((byte)(55)))));
-            this.expGrid.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle10;
+            dataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(53)))), ((int)(((byte)(55)))));
+            this.expGrid.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle4;
             this.expGrid.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.expGrid.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.expGrid.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
             this.expGrid.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
             this.expGrid.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.None;
-            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle11.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            dataGridViewCellStyle11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle11.ForeColor = System.Drawing.Color.Gainsboro;
-            dataGridViewCellStyle11.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle11.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.expGrid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle11;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle5.ForeColor = System.Drawing.Color.Gainsboro;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.expGrid.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
             this.expGrid.ColumnHeadersHeight = 24;
             this.expGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.expGrid.EnableHeadersVisualStyles = false;
@@ -2500,8 +2563,8 @@ namespace Intersect.Editor.Forms.Editors
             this.expGrid.MultiSelect = false;
             this.expGrid.Name = "expGrid";
             this.expGrid.RowHeadersVisible = false;
-            dataGridViewCellStyle12.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.expGrid.RowsDefaultCellStyle = dataGridViewCellStyle12;
+            dataGridViewCellStyle6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.expGrid.RowsDefaultCellStyle = dataGridViewCellStyle6;
             this.expGrid.Size = new System.Drawing.Size(515, 125);
             this.expGrid.TabIndex = 0;
             this.expGrid.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.expGrid_CellEndEdit);
@@ -2673,63 +2736,35 @@ namespace Intersect.Editor.Forms.Editors
             this.btnExpPaste.Text = "Paste";
             this.btnExpPaste.Click += new System.EventHandler(this.btnPaste_Click);
             // 
-            // lblSpModulo
+            // nudSkillPoints
             // 
-            this.lblSpModulo.AutoSize = true;
-            this.lblSpModulo.Location = new System.Drawing.Point(199, 16);
-            this.lblSpModulo.Name = "lblSpModulo";
-            this.lblSpModulo.Size = new System.Drawing.Size(76, 13);
-            this.lblSpModulo.TabIndex = 38;
-            this.lblSpModulo.Text = "SP Lvl Modulo";
-            // 
-            // nudSpLvlMod
-            // 
-            this.nudSpLvlMod.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudSpLvlMod.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudSpLvlMod.Location = new System.Drawing.Point(200, 31);
-            this.nudSpLvlMod.Minimum = new decimal(new int[] {
-            1,
+            this.nudSkillPoints.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudSkillPoints.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudSkillPoints.Location = new System.Drawing.Point(254, 28);
+            this.nudSkillPoints.Maximum = new decimal(new int[] {
+            255,
             0,
             0,
             0});
-            this.nudSpLvlMod.Name = "nudSpLvlMod";
-            this.nudSpLvlMod.Size = new System.Drawing.Size(67, 20);
-            this.nudSpLvlMod.TabIndex = 39;
-            this.nudSpLvlMod.Value = new decimal(new int[] {
-            2,
-            0,
-            0,
-            0});
-            this.nudSpLvlMod.ValueChanged += new System.EventHandler(this.nudSpLvlMod_ValueChanged);
-            // 
-            // nudSpPerLevel
-            // 
-            this.nudSpPerLevel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudSpPerLevel.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudSpPerLevel.Location = new System.Drawing.Point(288, 31);
-            this.nudSpPerLevel.Maximum = new decimal(new int[] {
-            100000,
-            0,
-            0,
-            0});
-            this.nudSpPerLevel.Name = "nudSpPerLevel";
-            this.nudSpPerLevel.Size = new System.Drawing.Size(67, 20);
-            this.nudSpPerLevel.TabIndex = 40;
-            this.nudSpPerLevel.Value = new decimal(new int[] {
+            this.nudSkillPoints.Name = "nudSkillPoints";
+            this.nudSkillPoints.Size = new System.Drawing.Size(70, 20);
+            this.nudSkillPoints.TabIndex = 48;
+            this.nudSkillPoints.Value = new decimal(new int[] {
             0,
             0,
             0,
             0});
-            this.nudSpPerLevel.ValueChanged += new System.EventHandler(this.nudSpPerLevel_ValueChanged);
+            this.nudSkillPoints.ValueChanged += new System.EventHandler(this.nudSkillPoints_ValueChanged);
             // 
-            // lblSpPer
+            // lblSklPts
             // 
-            this.lblSpPer.AutoSize = true;
-            this.lblSpPer.Location = new System.Drawing.Point(285, 15);
-            this.lblSpPer.Name = "lblSpPer";
-            this.lblSpPer.Size = new System.Drawing.Size(69, 13);
-            this.lblSpPer.TabIndex = 41;
-            this.lblSpPer.Text = "SP Per Level";
+            this.lblSklPts.AutoSize = true;
+            this.lblSklPts.Location = new System.Drawing.Point(260, 12);
+            this.lblSklPts.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblSklPts.Name = "lblSklPts";
+            this.lblSklPts.Size = new System.Drawing.Size(58, 13);
+            this.lblSklPts.TabIndex = 49;
+            this.lblSklPts.Text = "Skill Points";
             // 
             // FrmClass
             // 
@@ -2805,6 +2840,8 @@ namespace Intersect.Editor.Forms.Editors
             this.grpGender.PerformLayout();
             this.grpLeveling.ResumeLayout(false);
             this.grpLeveling.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSpPerLevel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSpLvlMod)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudBaseExp)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudExpIncrease)).EndInit();
             this.grpLevelBoosts.ResumeLayout(false);
@@ -2828,8 +2865,7 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
             this.mnuExpGrid.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.nudSpLvlMod)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSpPerLevel)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSkillPoints)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -3003,5 +3039,7 @@ namespace Intersect.Editor.Forms.Editors
         private DarkNumericUpDown nudSpPerLevel;
         private DarkNumericUpDown nudSpLvlMod;
         private System.Windows.Forms.Label lblSpModulo;
+        private System.Windows.Forms.Label lblSklPts;
+        private DarkNumericUpDown nudSkillPoints;
     }
 }

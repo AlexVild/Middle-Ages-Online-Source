@@ -1065,6 +1065,10 @@
     <Compile Include="Migrations\Game\20230125200843_ChallengeIconMigration.designer.cs">
       <DependentUpon>20230125200843_ChallengeIconMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20230131151206_AddInitialSkillpointMigration.cs" />
+    <Compile Include="Migrations\Game\20230131151206_AddInitialSkillpointMigration.designer.cs">
+      <DependentUpon>20230131151206_AddInitialSkillpointMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>
