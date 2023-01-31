@@ -228,5 +228,7 @@ namespace Intersect.Client.General
         public static bool CharacterUpdateAvailable => SkillPointUpdate || (Me?.StatPoints ?? 0) > 0;
 
         public static string SkillUpdateString;
+
+        public static long LastLevelJinglePlayed { get; set; } = 0L;
     }
 }

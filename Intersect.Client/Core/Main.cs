@@ -408,6 +408,7 @@ namespace Intersect.Client.Core
         public static void Logout(bool characterSelect)
         {
             Globals.StartMenuMusic = false;
+            Globals.LastLevelJinglePlayed = 0L;
             FadeService.FadeOut(callback: () =>
             {
                 ForceLogout(characterSelect);

@@ -13,6 +13,7 @@ using Intersect.Client.Localization;
 using Intersect.Client.Networking;
 using Intersect.Enums;
 using Intersect.GameObjects;
+using Intersect.Utilities;
 
 namespace Intersect.Client.Interface.Game.Character
 {
@@ -94,6 +95,11 @@ namespace Intersect.Client.Interface.Game.Character
         public void Show()
         {
             PointsRemaining = Globals.Me?.StatPoints ?? 0;
+            if (Globals.LastLevelJinglePlayed < Timing.Global.Milliseconds && PointsRemaining > 0)
+            {
+                Globals.LastLevelJinglePlayed = Timing.Global.Milliseconds + 60000;
+                Audio.AddGameSound("al_level_up_jingle.wav", false);
+            }
             CurrentAssignments.Clear();
             Background.Show();
             Background.BringToFront();
