@@ -253,7 +253,7 @@ namespace Intersect.Client.Entities
                      Globals.InQuestBoard == false &&
                      Globals.InTrade == false &&
                      Globals.InMapTransition == false &&
-                     !Interface.Interface.GameUi.Map.IsOpen &&
+                     (!Interface.Interface.GameUi?.Map?.IsOpen ?? false) &&
                      (!Globals.Me.Leaderboard?.IsOpen ?? true) &&
                      !Interface.Interface.HasInputFocus());
         }

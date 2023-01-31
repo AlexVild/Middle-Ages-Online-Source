@@ -37,6 +37,7 @@ namespace Intersect.Client.Interface.Game.Character
         private ImagePanel PlayerContainer;
         private CharacterWindowPanelController PanelContainer;
         private CharacterWindowNotifications NotificationContainer;
+        public CharacterLevelUpWindow LevelUpWindow;
 
         public WindowControl CharacterWindow => mCharacterWindow;
 
@@ -52,8 +53,10 @@ namespace Intersect.Client.Interface.Game.Character
             mCharacterWindow.DisableResizing();
             PlayerContainer = new ImagePanel(mCharacterWindow, "Container");
             mCharacterWindow.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
+            
             PanelContainer = new CharacterWindowPanelController(gameCanvas, this);
             NotificationContainer = new CharacterWindowNotifications(gameCanvas, this, PanelContainer);
+            LevelUpWindow = new CharacterLevelUpWindow(this, gameCanvas);
 
             mEquipmentPanel = new CharacterEquipmentWindow(this, PlayerContainer);
             mEquipmentPanel.Show();
@@ -69,6 +72,7 @@ namespace Intersect.Client.Interface.Game.Character
             PanelContainer.Hide();
             NotificationContainer.Hide();
             mCharacterWindow.Hide();
+            LevelUpWindow.Hide();
         }
 
         public void Show()
@@ -104,6 +108,11 @@ namespace Intersect.Client.Interface.Game.Character
             if (NotificationContainer.IsVisible)
             {
                 NotificationContainer.Update();
+            }
+
+            if (LevelUpWindow.IsVisible)
+            {
+                LevelUpWindow.Update();
             }
         }
     }

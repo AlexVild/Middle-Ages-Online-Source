@@ -55,6 +55,7 @@ namespace Intersect.Client.Interface.Game.Character
             {
                 Text = "Spend"
             };
+            LevelUpButton.Clicked += LevelUpButton_Clicked;
 
             SkillUpContainer = new ImagePanel(mNotificationContainer, "SkillUpContainer");
             SkillUpLabel = new Label(SkillUpContainer, "SkillUpLabel")
@@ -71,6 +72,11 @@ namespace Intersect.Client.Interface.Game.Character
 
             Hide();
             PositionToParent();
+        }
+
+        private void LevelUpButton_Clicked(Base sender, ClickedEventArgs arguments)
+        {
+            Parent.LevelUpWindow?.Show();
         }
 
         private void SkillUpButton_Clicked(Base sender, ClickedEventArgs arguments)

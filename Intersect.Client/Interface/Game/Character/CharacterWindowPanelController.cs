@@ -61,7 +61,7 @@ namespace Intersect.Client.Interface.Game.Character
 
             Container.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
 
-            StatsPanel = new CharacterStatsWindow(PanelContainer);
+            StatsPanel = new CharacterStatsWindow(PanelContainer, Parent);
             StatsPanel.Hide();
             
             HarvestingPanel = new CharacterHarvestingWindow(PanelContainer);

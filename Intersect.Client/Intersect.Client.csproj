@@ -135,6 +135,7 @@
     <Compile Include="Interface\Game\BestiaryUi\BestiaryStatsComponent.cs" />
     <Compile Include="Interface\Game\BestiaryUi\BestiaryVitalComponent.cs" />
     <Compile Include="Interface\Game\BestiaryUi\BestiaryWindow.cs" />
+    <Compile Include="Interface\Game\Character\CharacterLevelUpWindow.cs" />
     <Compile Include="Interface\Game\Character\CharacterWindowNotifications.cs" />
     <Compile Include="Interface\Game\Character\CharacterWindowPanelController.cs" />
     <Compile Include="Interface\Game\Character\CharacterWindowMAO.cs" />

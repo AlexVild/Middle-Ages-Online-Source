@@ -51,20 +51,29 @@ namespace Intersect.Client.Interface.Game.Character.StatPanel
         private ComponentList<IGwenComponent> ContainerComponents { get; set; }
         private ComponentList<IGwenComponent> ImageLabelComponents { get; set; }
 
-        public CharacterStatsWindow(ImagePanel panelBackground)
+        private CharacterWindowMAO CharacterWindow;
+
+        public CharacterStatsWindow(ImagePanel panelBackground, CharacterWindowMAO characterWindow)
         {
+            CharacterWindow = characterWindow;
             mParentContainer = panelBackground;
             mBackground = new ImagePanel(mParentContainer, "CharacterWindowMAO_Stats");
             LevelUpButton = new Button(mBackground, "LevelUpButton") 
             {
                 Text = "LEVEL UP!"
             };
+            LevelUpButton.Clicked += LevelUpButton_Clicked;
 
             InitializeStatContainers();
 
             mBackground.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
 
             InitializeStats();
+        }
+
+        private void LevelUpButton_Clicked(Base sender, ClickedEventArgs arguments)
+        {
+            CharacterWindow?.LevelUpWindow?.Show();
         }
 
         public override void Update()
