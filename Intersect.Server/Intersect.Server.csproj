@@ -691,6 +691,10 @@
     <Compile Include="Migrations\20230128162608_AddTrackedWeaponTypeMigration.designer.cs">
       <DependentUpon>20230128162608_AddTrackedWeaponTypeMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\20230201204000_AddVitalAllocationsMigration.cs" />
+    <Compile Include="Migrations\20230201204000_AddVitalAllocationsMigration.designer.cs">
+      <DependentUpon>20230201204000_AddVitalAllocationsMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.cs" />
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.Designer.cs">
       <DependentUpon>20201222164741_NpcResetRadius.cs</DependentUpon>

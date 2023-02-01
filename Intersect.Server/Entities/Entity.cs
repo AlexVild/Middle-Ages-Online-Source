@@ -144,18 +144,17 @@ namespace Intersect.Server.Entities
 
         [NotMapped]
         public int[] BaseStats { get; set; } =
-            new int[(int) Enums.Stats
-                .StatCount]; // TODO: Why can this be BaseStats while Vitals is _vital and MaxVitals is _maxVital?
+            new int[(int) Stats.StatCount]; // TODO: Why can this be BaseStats while Vitals is _vital and MaxVitals is _maxVital?
 
         [JsonIgnore, Column(nameof(StatPointAllocations))]
         public string StatPointsJson
         {
-            get => DatabaseUtils.SaveIntArray(StatPointAllocations, (int) Enums.Stats.StatCount);
-            set => StatPointAllocations = DatabaseUtils.LoadIntArray(value, (int) Enums.Stats.StatCount);
+            get => DatabaseUtils.SaveIntArray(StatPointAllocations, (int) Stats.StatCount);
+            set => StatPointAllocations = DatabaseUtils.LoadIntArray(value, (int) Stats.StatCount);
         }
 
         [NotMapped]
-        public int[] StatPointAllocations { get; set; } = new int[(int) Enums.Stats.StatCount];
+        public int[] StatPointAllocations { get; set; } = new int[(int) Stats.StatCount];
 
         //Inventory
         [JsonIgnore]

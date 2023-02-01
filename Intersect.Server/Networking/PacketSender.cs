@@ -998,6 +998,16 @@ namespace Intersect.Server.Networking
         }
 
         //EntityVitalsPacket
+        public static void SendEntityVitals(Entity en)
+        {
+            if (en == null || en is EventPageInstance || en is Projectile)
+            {
+                return;
+            }
+
+            SendDataToProximityOnMapInstance(en.MapId, en.MapInstanceId, GenerateEntityVitalsPacket(en), null, TransmissionMode.Any);
+        }
+
         public static void SendEntityVitalsTo(Client client, Entity en)
         {
             if (en == null || en is EventPageInstance || en is Projectile)

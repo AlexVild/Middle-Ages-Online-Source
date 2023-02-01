@@ -54,6 +54,10 @@ namespace Intersect.Config
         /// </summary>
         public int MaxVital = 200;
 
+        public int BaseVitalPointIncrease = 2;
+
+        public int BaseStatSkillIncrease = 1;
+
         /// <summary>
         /// The highest amount of SP a player can have
         /// </summary>

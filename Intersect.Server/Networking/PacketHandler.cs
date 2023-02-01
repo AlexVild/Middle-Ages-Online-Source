@@ -4560,5 +4560,17 @@ namespace Intersect.Server.Networking
             player.TrackWeaponTypeProgress(packet.WeaponTypeId);
             PacketSender.SendExperience(player);
         }
+
+        public void HandlePacket(Client client, UpgradeStatsPacket packet)
+        {
+            var player = client?.Entity;
+
+            if (player == null)
+            {
+                return;
+            }
+
+            player.ReceiveStatChange(packet.VitalAssignments, packet.StatAssignments);
+        }
     }
 }

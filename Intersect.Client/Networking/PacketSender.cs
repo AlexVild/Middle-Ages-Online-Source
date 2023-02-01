@@ -12,6 +12,8 @@ using Intersect.Client.Entities;
 using Intersect.Client.General.Leaderboards;
 using Intersect.Client.Interface.Game.Character.Panels;
 using Intersect.GameObjects;
+using Intersect.GameObjects.Events;
+using System.Collections.Generic;
 
 namespace Intersect.Client.Networking
 {
@@ -644,6 +646,11 @@ namespace Intersect.Client.Networking
         public static void SendTrackWeaponProgress(Guid weaponTypeId)
         {
             Network.SendPacket(new TrackWeaponTypePacket(weaponTypeId));
+        }
+
+        public static void SendUpdgradeStatsPacket(Dictionary<LevelUpAssignments, int> assignments)
+        {
+            Network.SendPacket(new UpgradeStatsPacket(assignments));
         }
     }
 }

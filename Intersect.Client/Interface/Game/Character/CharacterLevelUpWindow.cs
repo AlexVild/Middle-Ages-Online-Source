@@ -14,19 +14,11 @@ using Intersect.Client.Localization;
 using Intersect.Client.Networking;
 using Intersect.Enums;
 using Intersect.GameObjects;
+using Intersect.GameObjects.Events;
 using Intersect.Utilities;
 
 namespace Intersect.Client.Interface.Game.Character
 {
-    public enum LevelUpAssignments
-    {
-        Health,
-        Mana,
-        Evasion,
-        Accuracy,
-        Speed
-    }
-
     public class CharacterLevelUpWindow
     {
         CharacterWindowMAO Parent { get; set; }
@@ -76,11 +68,11 @@ namespace Intersect.Client.Interface.Game.Character
             ResetButton.Clicked += ResetButton_Clicked;
 
             RefreshAssignments();
-            StatRows[LevelUpAssignments.Health] = new LevelUpRow(StatRowContainer, "HEALTH", StatValues[LevelUpAssignments.Health], 2, new Color(222, 124, 112), new Color(241, 199, 194), "Your health pool.", this, LevelUpAssignments.Health);
-            StatRows[LevelUpAssignments.Mana] = new LevelUpRow(StatRowContainer, "MANA", Globals.Me.MaxVital[(int)Vitals.Mana], 2, new Color(137, 135, 255), new Color(204, 204, 255), "Your mana pool.", this, LevelUpAssignments.Mana);
-            StatRows[LevelUpAssignments.Evasion] = new LevelUpRow(StatRowContainer, "EVASION", Globals.Me.Stat[(int)Stats.Evasion], 1, new Color(86, 179, 192), new Color(181, 223, 228), "Dodge chance vs. opponent's accuracy.", this, LevelUpAssignments.Evasion);
-            StatRows[LevelUpAssignments.Accuracy] = new LevelUpRow(StatRowContainer, "ACCURACY", Globals.Me.Stat[(int)Stats.Accuracy], 1, new Color(99, 196, 70), new Color(188, 230, 174), "Hit chance vs. opponent's evasion.", this, LevelUpAssignments.Accuracy);
-            StatRows[LevelUpAssignments.Speed] = new LevelUpRow(StatRowContainer, "SPEED", Globals.Me.Stat[(int)Stats.Speed], 1, new Color(200, 145, 62), new Color(232, 208, 170), "Determines movement speed.", this, LevelUpAssignments.Speed);
+            StatRows[LevelUpAssignments.Health] = new LevelUpRow(StatRowContainer, "HEALTH", StatValues[LevelUpAssignments.Health], Options.Instance.PlayerOpts.BaseVitalPointIncrease, new Color(222, 124, 112), new Color(241, 199, 194), "Your health pool.", this, LevelUpAssignments.Health);
+            StatRows[LevelUpAssignments.Mana] = new LevelUpRow(StatRowContainer, "MANA", Globals.Me.MaxVital[(int)Vitals.Mana], Options.Instance.PlayerOpts.BaseVitalPointIncrease, new Color(137, 135, 255), new Color(204, 204, 255), "Your mana pool.", this, LevelUpAssignments.Mana);
+            StatRows[LevelUpAssignments.Evasion] = new LevelUpRow(StatRowContainer, "EVASION", Globals.Me.Stat[(int)Stats.Evasion], Options.Instance.PlayerOpts.BaseStatSkillIncrease, new Color(86, 179, 192), new Color(181, 223, 228), "Dodge chance vs. opponent's accuracy.", this, LevelUpAssignments.Evasion);
+            StatRows[LevelUpAssignments.Accuracy] = new LevelUpRow(StatRowContainer, "ACCURACY", Globals.Me.Stat[(int)Stats.Accuracy], Options.Instance.PlayerOpts.BaseStatSkillIncrease, new Color(99, 196, 70), new Color(188, 230, 174), "Hit chance vs. opponent's evasion.", this, LevelUpAssignments.Accuracy);
+            StatRows[LevelUpAssignments.Speed] = new LevelUpRow(StatRowContainer, "SPEED", Globals.Me.Stat[(int)Stats.Speed], Options.Instance.PlayerOpts.BaseStatSkillIncrease, new Color(200, 145, 62), new Color(232, 208, 170), "Determines movement speed.", this, LevelUpAssignments.Speed);
 
             Background.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
 
@@ -129,7 +121,8 @@ namespace Intersect.Client.Interface.Game.Character
 
         private void ApplyButton_Clicked(Base sender, ClickedEventArgs arguments)
         {
-            // TODO this
+            PacketSender.SendUpdgradeStatsPacket(Assignments);
+            Hide();
         }
 
         private void CancelButton_Clicked(Base sender, ClickedEventArgs arguments)

@@ -411,4 +411,14 @@ namespace Intersect.GameObjects.Events
         [Description("Complete")]
         Complete,
     }
+
+
+    public enum LevelUpAssignments
+    {
+        Health,
+        Mana,
+        Evasion,
+        Accuracy,
+        Speed
+    }
 }

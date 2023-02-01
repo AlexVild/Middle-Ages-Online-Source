@@ -1271,16 +1271,7 @@ namespace Intersect.Server.Entities
                 }
             }
 
-            classVital += CalculateVitalStatBonus(vital);
             var baseVital = classVital;
-
-            // TODO: Alternate implementation for the loop
-            //            classVital += Equipment?.Select(equipment => ItemBase.Get(Items.ElementAt(equipment)?.ItemId ?? Guid.Empty))
-            //                .Sum(
-            //                    itemDescriptor => itemDescriptor.VitalsGiven[vital] +
-            //                                      (itemDescriptor.PercentageVitalsGiven[vital] * baseVital) / 100
-            //                ) ?? 0;
-            // Loop through equipment and see if any items grant vital buffs
 
             foreach(var item in EquippedItems)
             {
@@ -1298,21 +1289,7 @@ namespace Intersect.Server.Entities
                 classVital = Math.Max(classVital, 0);
             }
 
-            return classVital;
-        }
-
-        public int CalculateVitalStatBonus(int vital)
-        {
-            int bonus = 0;
-            if (vital == (int)Vitals.Health)
-            {
-                bonus = GetStatValue(Stats.Attack) / Options.AttackHealthDivider;
-            }
-            if (vital == (int)Vitals.Mana)
-            {
-                bonus = GetStatValue(Stats.AbilityPower) / Options.AbilityPowerManaDivider;
-            }
-            return bonus;
+            return classVital + VitalPointAllocations[vital];
         }
 
         public int GetStatValue(Stats stat)
@@ -5768,15 +5745,64 @@ namespace Intersect.Server.Entities
         }
 
         //Stats
-        public void UpgradeStat(int statIndex)
+        public void UpgradeStat(int statIndex, int amt = 1)
         {
-            if (Stat[statIndex].BaseStat + StatPointAllocations[statIndex] < Options.MaxStatValue && StatPoints > 0)
+            if (Stat[statIndex].BaseStat + StatPointAllocations[statIndex] >= Options.MaxStatValue || StatPoints <= 0)
             {
-                StatPointAllocations[statIndex]++;
-                StatPoints--;
-                PacketSender.SendEntityStats(this);
-                PacketSender.SendPointsTo(this);
+                return;
             }
+
+            StatPointAllocations[statIndex] += amt;
+            StatPoints -= amt / Options.Instance.PlayerOpts.BaseStatSkillIncrease;
+        }
+
+        public void UpgradeVital(int vitalIndex, int amt = 1)
+        {
+            if (GetMaxVital(vitalIndex) >= Options.Instance.PlayerOpts.MaxVital || StatPoints <= 0)
+            {
+                return;
+            }
+
+            VitalPointAllocations[vitalIndex] += amt;
+            StatPoints -= amt / Options.Instance.PlayerOpts.BaseVitalPointIncrease;
+        }
+
+        public void ReceiveStatChange(int[] vitalsChange, int[] statsChange)
+        {
+            if (vitalsChange.Length < (int)Vitals.VitalCount || statsChange.Length < (int)Stats.StatCount)
+            {
+                return;
+            }
+
+            var idx = 0;
+            foreach (var points in vitalsChange)
+            {
+                if (points <= 0)
+                {
+                    idx++;
+                    continue;
+                }
+                UpgradeVital(idx, points * Options.Instance.PlayerOpts.BaseVitalPointIncrease);
+
+                idx++;
+            }
+
+            idx = 0;
+            foreach (var points in statsChange)
+            {
+                if (points <= 0)
+                {
+                    idx++;
+                    continue;
+                }
+                UpgradeStat(idx, points * Options.Instance.PlayerOpts.BaseStatSkillIncrease);
+
+                idx++;
+            }
+
+            PacketSender.SendEntityStats(this);
+            PacketSender.SendEntityVitals(this);
+            PacketSender.SendPointsTo(this);
         }
 
         //HotbarSlot
@@ -8766,5 +8792,16 @@ namespace Intersect.Server.Entities
 
         [JsonIgnore, NotMapped]
         public Dictionary<int, ResourceInfoPackets> CachedHarvestInfo = new Dictionary<int, ResourceInfoPackets>();
+
+
+        [NotMapped]
+        public int[] VitalPointAllocations { get; set; } = new int[(int)Vitals.VitalCount];
+
+        [JsonIgnore, Column(nameof(VitalPointAllocations))]
+        public string VitalPointsJson
+        {
+            get => DatabaseUtils.SaveIntArray(VitalPointAllocations, (int)Vitals.VitalCount);
+            set => VitalPointAllocations = DatabaseUtils.LoadIntArray(value, (int)Vitals.VitalCount);
+        }
     }
 }

@@ -200,7 +200,7 @@ namespace Intersect.GameObjects
             set => StatIncrease = DatabaseUtils.LoadIntArray(value, (int) Stats.StatCount);
         }
 
-        //Vital Increases (per level0
+        //Vital Increases (per level)
         [JsonIgnore]
         [Column("VitalIncreases")]
         public string VitalIncreaseJson
