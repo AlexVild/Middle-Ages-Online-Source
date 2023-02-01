@@ -1888,7 +1888,7 @@ namespace Intersect.Server.Entities
             }
 
             //Handle Changes in Points
-            var currentPoints = StatPoints + StatPointAllocations.Sum();
+            var currentPoints = StatPoints + StatPointAllocations.Sum() + VitalPointAllocations.Sum();
 
             var expectedPoints = playerClass.BasePoints + playerClass.PointIncrease * levelsWithStatBoosts;
             if (expectedPoints > currentPoints)
@@ -1906,7 +1906,7 @@ namespace Intersect.Server.Entities
                 }
 
                 var i = 0;
-                while (removePoints > 0 && StatPointAllocations.Sum() > 0)
+                while (removePoints > 0 && StatPointAllocations.Sum() > 0 && i < (int)Stats.StatCount)
                 {
                     if (StatPointAllocations[i] > 0)
                     {
@@ -1915,10 +1915,31 @@ namespace Intersect.Server.Entities
                     }
 
                     i++;
-                    if (i >= (int)Stats.StatCount)
+                }
+
+                i = 0;
+                while (removePoints > 0 && VitalPointAllocations.Sum() > 0 && i < (int)Vitals.VitalCount)
+                {
+                    if (VitalPointAllocations[i] > 0)
                     {
-                        i = 0;
+                        VitalPointAllocations[i]--;
+                        removePoints--;
                     }
+
+                    i++;
+                }
+            }
+
+            // Reset vitals if they are now over their max
+            foreach (Vitals vital in Enum.GetValues(typeof(Vitals)))
+            {
+                if (vital == Vitals.VitalCount)
+                {
+                    continue;
+                }
+                if (GetVital(vital) > GetMaxVital(vital))
+                {
+                    RestoreVital(vital);
                 }
             }
         }

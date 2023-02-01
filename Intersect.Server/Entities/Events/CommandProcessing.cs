@@ -1654,6 +1654,10 @@ namespace Intersect.Server.Entities.Events
             {
                 player.StatPointAllocations[i] = 0;
             }
+            for (var i = 0; i < (int)Vitals.VitalCount; i++)
+            {
+                player.VitalPointAllocations[i] = 0;
+            }
             player.RecalculateStatsAndPoints();
             player.UnequipInvalidItems();
             PacketSender.SendEntityDataToProximity(player);
