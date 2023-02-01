@@ -304,7 +304,7 @@ namespace Intersect.GameObjects
             }
 
             var spGainingLevels = (int)Math.Floor((float)level / SkillPointLevelModulo);
-            return (spGainingLevels * SkillPointsPerLevel) + InitialSkillPoints;
+            return MathHelper.Clamp((spGainingLevels * SkillPointsPerLevel) + InitialSkillPoints, 0, Options.Instance.PlayerOpts.MaxSkillPoint);
         }
     }
 }

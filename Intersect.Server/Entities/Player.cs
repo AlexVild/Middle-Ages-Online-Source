@@ -1882,6 +1882,12 @@ namespace Intersect.Server.Entities
                 // The player should have less skills - reset them
                 UnprepareAllSkills();
             }
+            else if (oldTotal == Options.Instance.PlayerOpts.MaxSkillPoint)
+            {
+                PacketSender.SendChatMsg(this, "You can not earn any more skill points.", ChatMessageType.Experience);
+            }
+
+            // Send skill point update to client
             PacketSender.SendSkillbookToClient(this);
 
             var levelsWithoutStatBoosts = (int)Math.Floor((float)Level / playerClass.SkillPointLevelModulo);

@@ -4,6 +4,7 @@ using System.Linq;
 using Intersect.Client.Framework.File_Management;
 using Intersect.Client.Framework.Graphics;
 using Intersect.Client.General;
+using Intersect.Client.Interface.Game.Toasts;
 using Intersect.Client.Localization;
 using Intersect.Client.Maps;
 using Intersect.Client.Networking;
@@ -409,6 +410,7 @@ namespace Intersect.Client.Core
         {
             Globals.StartMenuMusic = false;
             Globals.LastLevelJinglePlayed = 0L;
+            ToastService.CurrentToast = null;
             FadeService.FadeOut(callback: () =>
             {
                 ForceLogout(characterSelect);

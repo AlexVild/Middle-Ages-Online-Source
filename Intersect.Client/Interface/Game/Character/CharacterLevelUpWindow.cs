@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Intersect.Client.Core;
 using Intersect.Client.Framework.File_Management;
@@ -17,6 +18,15 @@ using Intersect.Utilities;
 
 namespace Intersect.Client.Interface.Game.Character
 {
+    public enum LevelUpAssignments
+    {
+        Health,
+        Mana,
+        Evasion,
+        Accuracy,
+        Speed
+    }
+
     public class CharacterLevelUpWindow
     {
         CharacterWindowMAO Parent { get; set; }
@@ -26,13 +36,15 @@ namespace Intersect.Client.Interface.Game.Character
         ImagePanel Background { get; set; }
         Label PointsRemainingLabel { get; set; }
         ImagePanel StatRowContainer { get; set; }
-        Dictionary<int, LevelUpRow> StatRows { get; set; } = new Dictionary<int, LevelUpRow>();
+        Dictionary<LevelUpAssignments, LevelUpRow> StatRows { get; set; } = new Dictionary<LevelUpAssignments, LevelUpRow>();
         Button ApplyButton { get; set; }
         Button CancelButton { get; set; }
+        Button ResetButton { get; set; }
 
-        int PointsRemaining { get; set; }
+        public Dictionary<LevelUpAssignments, int> Assignments { get; set; } = new Dictionary<LevelUpAssignments, int>();
+        public Dictionary<LevelUpAssignments, int> StatValues { get; set; } = new Dictionary<LevelUpAssignments, int>();
 
-        List<int> CurrentAssignments { get; set; } = new List<int>();
+        public int PointsRemaining => MathHelper.Clamp((Globals.Me?.StatPoints ?? 0) - (Assignments?.Values.Sum() ?? 0), 0, byte.MaxValue);
 
         public bool IsVisible => Background.IsVisible;
 
@@ -57,12 +69,18 @@ namespace Intersect.Client.Interface.Game.Character
             };
             CancelButton.Clicked += CancelButton_Clicked;
 
-            // Getting away with these two separate enums for now
-            StatRows[(int)Vitals.Health] = new LevelUpRow(StatRowContainer, "HEALTH", Globals.Me.MaxVital[(int)Vitals.Health], 3, new Color(222, 124, 112), new Color(241, 199, 194), "Your health pool.");
-            StatRows[(int)Vitals.Mana] = new LevelUpRow(StatRowContainer, "MANA", Globals.Me.MaxVital[(int)Vitals.Mana], 3, new Color(137, 135, 255), new Color(204, 204, 255), "Your mana pool.");
-            StatRows[(int)Stats.Evasion] = new LevelUpRow(StatRowContainer, "EVASION", Globals.Me.Stat[(int)Stats.Evasion], 1, new Color(86, 179, 192), new Color(181, 223, 228), "Dodge chance vs. opponent's accuracy.");
-            StatRows[(int)Stats.Accuracy] = new LevelUpRow(StatRowContainer, "ACCURACY", Globals.Me.Stat[(int)Stats.Accuracy], 1, new Color(99, 196, 70), new Color(188, 230, 174), "Hit chance vs. opponent's evasion.");
-            StatRows[(int)Stats.Speed] = new LevelUpRow(StatRowContainer, "SPEED", Globals.Me.Stat[(int)Stats.Speed], 1, new Color(200, 145, 62), new Color(232, 208, 170), "Determines movement speed.");
+            ResetButton = new Button(Background, "ResetButton")
+            {
+                Text = "RESET"
+            };
+            ResetButton.Clicked += ResetButton_Clicked;
+
+            RefreshAssignments();
+            StatRows[LevelUpAssignments.Health] = new LevelUpRow(StatRowContainer, "HEALTH", StatValues[LevelUpAssignments.Health], 2, new Color(222, 124, 112), new Color(241, 199, 194), "Your health pool.", this, LevelUpAssignments.Health);
+            StatRows[LevelUpAssignments.Mana] = new LevelUpRow(StatRowContainer, "MANA", Globals.Me.MaxVital[(int)Vitals.Mana], 2, new Color(137, 135, 255), new Color(204, 204, 255), "Your mana pool.", this, LevelUpAssignments.Mana);
+            StatRows[LevelUpAssignments.Evasion] = new LevelUpRow(StatRowContainer, "EVASION", Globals.Me.Stat[(int)Stats.Evasion], 1, new Color(86, 179, 192), new Color(181, 223, 228), "Dodge chance vs. opponent's accuracy.", this, LevelUpAssignments.Evasion);
+            StatRows[LevelUpAssignments.Accuracy] = new LevelUpRow(StatRowContainer, "ACCURACY", Globals.Me.Stat[(int)Stats.Accuracy], 1, new Color(99, 196, 70), new Color(188, 230, 174), "Hit chance vs. opponent's evasion.", this, LevelUpAssignments.Accuracy);
+            StatRows[LevelUpAssignments.Speed] = new LevelUpRow(StatRowContainer, "SPEED", Globals.Me.Stat[(int)Stats.Speed], 1, new Color(200, 145, 62), new Color(232, 208, 170), "Determines movement speed.", this, LevelUpAssignments.Speed);
 
             Background.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
 
@@ -75,6 +93,38 @@ namespace Intersect.Client.Interface.Game.Character
             }
 
             Hide();
+        }
+
+        private void ResetButton_Clicked(Base sender, ClickedEventArgs arguments)
+        {
+            RefreshAssignments();
+        }
+
+        public void RefreshAssignments()
+        {
+            foreach (LevelUpAssignments val in Enum.GetValues(typeof(LevelUpAssignments)))
+            {
+                Assignments[val] = 0;
+                
+                switch (val)
+                {
+                    case LevelUpAssignments.Health:
+                        StatValues[val] = Globals.Me.MaxVital[(int)Vitals.Health];
+                        break;
+                    case LevelUpAssignments.Mana:
+                        StatValues[val] = Globals.Me.MaxVital[(int)Vitals.Mana];
+                        break;
+                    case LevelUpAssignments.Evasion:
+                        StatValues[val] = Globals.Me.TrueStats[(int)Stats.Evasion];
+                        break;
+                    case LevelUpAssignments.Accuracy:
+                        StatValues[val] = Globals.Me.TrueStats[(int)Stats.Accuracy];
+                        break;
+                    case LevelUpAssignments.Speed:
+                        StatValues[val] = Globals.Me.TrueStats[(int)Stats.Speed];
+                        break;
+                }
+            }
         }
 
         private void ApplyButton_Clicked(Base sender, ClickedEventArgs arguments)
@@ -94,13 +144,12 @@ namespace Intersect.Client.Interface.Game.Character
 
         public void Show()
         {
-            PointsRemaining = Globals.Me?.StatPoints ?? 0;
+            RefreshAssignments();
             if (Globals.LastLevelJinglePlayed < Timing.Global.Milliseconds && PointsRemaining > 0)
             {
                 Globals.LastLevelJinglePlayed = Timing.Global.Milliseconds + 60000;
                 Audio.AddGameSound("al_level_up_jingle.wav", false);
             }
-            CurrentAssignments.Clear();
             Background.Show();
             Background.BringToFront();
         }
@@ -117,18 +166,11 @@ namespace Intersect.Client.Interface.Game.Character
             {
                 var stat = row.Key;
 
-                // Disgusting, lol
-                if (stat <= (int)Vitals.Mana)
-                {
-                    row.Value.SetStatValue(Globals.Me.MaxVital[stat]);
-                }
-                else
-                {
-                    row.Value.SetStatValue(Globals.Me.TrueStats[stat]);
-                }
-
-                row.Value.SetChanges(Globals.Me.StatPoints > 0, CurrentAssignments.Contains(stat));
+                row.Value.Update(StatValues[stat]);
             }
+
+            ResetButton.IsHidden = PointsRemaining >= Globals.Me.StatPoints;
+            ApplyButton.IsDisabled = PointsRemaining >= Globals.Me.StatPoints;
         }
     }
 
@@ -158,7 +200,14 @@ namespace Intersect.Client.Interface.Game.Character
 
         private Base Parent { get; set; }
 
-        public LevelUpRow(Base parent, string statName, int statValue, int increaseValue, Color statColor, Color statHoverColor, string tooltip)
+        public CharacterLevelUpWindow LevelUpWindow;
+
+        LevelUpAssignments Stat { get; set; }
+
+        public bool IsVitalStat => Stat == LevelUpAssignments.Health || Stat == LevelUpAssignments.Mana;
+        public int MaxStat => IsVitalStat ? Options.Instance.PlayerOpts.MaxVital : Options.Player.MaxStat;
+
+        public LevelUpRow(Base parent, string statName, int statValue, int increaseValue, Color statColor, Color statHoverColor, string tooltip, CharacterLevelUpWindow levelUpWindow, LevelUpAssignments stat)
         {
             Parent = parent;
             StatName = statName;
@@ -167,6 +216,8 @@ namespace Intersect.Client.Interface.Game.Character
             StatColor = statColor;
             StatHoverColor = statHoverColor;
             Tooltip = tooltip;
+            LevelUpWindow = levelUpWindow;
+            Stat = stat;
         }
 
         public void Initialize()
@@ -192,7 +243,7 @@ namespace Intersect.Client.Interface.Game.Character
 
             IncreaseValueLabel = new Label(Background, "IncreaseValue")
             {
-                Text = $"+{IncreaseValue}"
+                Text = $"{IncreaseValue}"
             };
 
             Background.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
@@ -204,30 +255,49 @@ namespace Intersect.Client.Interface.Game.Character
 
         private void DecreasePointButton_Clicked(Base sender, ClickedEventArgs arguments)
         {
-            throw new NotImplementedException();
+            if (LevelUpWindow.Assignments[Stat] <= 0)
+            {
+                return;
+            }
+            LevelUpWindow.Assignments[Stat]--;
+            LevelUpWindow.StatValues[Stat] = MathHelper.Clamp(LevelUpWindow.StatValues[Stat] - IncreaseValue, 0, MaxStat);
         }
 
         private void IncreasePointButton_Clicked(Base sender, ClickedEventArgs arguments)
         {
-            throw new NotImplementedException();
+            if (LevelUpWindow.Assignments[Stat] >= Globals.Me.StatPoints)
+            {
+                return;
+            }
+            LevelUpWindow.Assignments[Stat]++;
+            LevelUpWindow.StatValues[Stat] = MathHelper.Clamp(LevelUpWindow.StatValues[Stat] + IncreaseValue, 0, MaxStat);
         }
 
-        public void SetStatValue(int value)
+        public void Update(int statValue)
         {
-            StatValueLabel.Text = value.ToString();
-
             IncreasePointButton.Enable();
             DecreasePointButton.Enable();
             StatValueLabel.SetTextColor(new Color(232, 208, 170), Label.ControlState.Normal);
-            if (value >= Options.Player.MaxStat)
+            if (!IsVitalStat && statValue >= MaxStat)
             {
                 StatValueLabel.SetTextColor(new Color(200, 145, 62), Label.ControlState.Normal);
                 IncreasePointButton.Disable();
             }
-            else if (value <= 0)
+            else if (statValue <= 0)
             {
                 DecreasePointButton.Disable();
             }
+
+            if (LevelUpWindow.Assignments[Stat] <= 0)
+            {
+                StatValueLabel.Text = statValue.ToString();
+            }
+            else
+            {
+                StatValueLabel.SetText($"{statValue} (+{LevelUpWindow.Assignments[Stat] * IncreaseValue})");
+            }
+
+            SetChangeButtonAvailability(LevelUpWindow.PointsRemaining > 0, LevelUpWindow.Assignments[Stat] > 0);
         }
 
         public void SetPosition(int x, int y)
@@ -235,7 +305,7 @@ namespace Intersect.Client.Interface.Game.Character
             Background.SetPosition(x, y);
         }
 
-        public void SetChanges(bool increase, bool decrease)
+        void SetChangeButtonAvailability(bool increase, bool decrease)
         {
             IncreasePointButton.IsHidden = !increase;
             DecreasePointButton.IsHidden = !decrease;

@@ -50,6 +50,16 @@ namespace Intersect.Config
         public int MaxStat = 255;
 
         /// <summary>
+        /// The highest value a single vital can be for a player.
+        /// </summary>
+        public int MaxVital = 200;
+
+        /// <summary>
+        /// The highest amount of SP a player can have
+        /// </summary>
+        public int MaxSkillPoint = 50;
+
+        /// <summary>
         /// How long a player must wait before sending a trade/party/friend request after the first as been denied.
         /// </summary>
         public int RequestTimeout = 300000;
