@@ -442,10 +442,16 @@
     <Compile Include="Core\Commands\MetricsCommand.cs" />
     <Compile Include="Core\Commands\PanicCommand.cs" />
     <Compile Include="Core\Commands\SetVarCommand.cs" />
+    <Compile Include="Core\Instancing\Controller\Components\Dungeon.cs" />
+    <Compile Include="Core\Instancing\Controller\Components\SpawnInfo.cs" />
+    <Compile Include="Core\Instancing\Controller\InstanceController.cs" />
+    <Compile Include="Core\Instancing\Controller\InstanceController.Dungeons.cs" />
+    <Compile Include="Core\Instancing\Controller\InstanceController.Npcs.cs" />
+    <Compile Include="Core\Instancing\Controller\InstanceController.Variables.cs" />
     <Compile Include="Core\IServerContext.cs" />
     <Compile Include="Core\LogicService.cs" />
     <Compile Include="Core\LogicService.LogicThread.cs" />
-    <Compile Include="Core\InstanceProcessor.cs" />
+    <Compile Include="Core\Instancing\InstanceProcessor.cs" />
     <Compile Include="Core\RecipeUnlockWatcher.cs" />
     <Compile Include="Core\Services\IConsoleService.cs" />
     <Compile Include="Core\Services\ILogicService.cs" />
@@ -1076,6 +1082,10 @@
     <Compile Include="Migrations\Game\20230202023829_DungeonDescriptorMigration.cs" />
     <Compile Include="Migrations\Game\20230202023829_DungeonDescriptorMigration.designer.cs">
       <DependentUpon>20230202023829_DungeonDescriptorMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20230202200339_DungeonGnomeTreasureMigration.cs" />
+    <Compile Include="Migrations\Game\20230202200339_DungeonGnomeTreasureMigration.designer.cs">
+      <DependentUpon>20230202200339_DungeonGnomeTreasureMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">

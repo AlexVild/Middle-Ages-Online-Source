@@ -50,6 +50,10 @@ namespace Intersect.Server.Core
                 instance.PlayerCount = map.GetPlayers().Count;
 
                 instance.CleanupSpawnGroups();
+                if (instance.PlayerCount == 0)
+                {
+                    instance.RemoveDungeon();
+                }
             }
         }
 

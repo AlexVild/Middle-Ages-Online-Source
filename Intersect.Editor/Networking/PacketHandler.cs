@@ -766,14 +766,14 @@ namespace Intersect.Editor.Networking
                 case GameObjectType.Dungeon:
                     if (deleted)
                     {
-                        var challenge = DungeonDescriptor.Get(id);
-                        challenge.Delete();
+                        var dungeon = DungeonDescriptor.Get(id);
+                        dungeon.Delete();
                     }
                     else
                     {
-                        var challenge = new DungeonDescriptor(id);
-                        challenge.Load(json);
-                        DungeonDescriptor.Lookup.Set(id, challenge);
+                        var dungeon = new DungeonDescriptor(id);
+                        dungeon.Load(json);
+                        DungeonDescriptor.Lookup.Set(id, dungeon);
                     }
                     break;
                 default:

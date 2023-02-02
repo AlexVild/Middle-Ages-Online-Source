@@ -1,5 +1,7 @@
 ﻿using Intersect.GameObjects.Events;
 using Intersect.Server.Entities;
+using Intersect.Server.Localization;
+using Intersect.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Intersect.Server.Core.Instancing.Controller.Components
 {
-    public class Dungeon
+    sealed class Dungeon
     {
         public Dungeon(Guid dungeonId)
         {
@@ -25,8 +27,14 @@ namespace Intersect.Server.Core.Instancing.Controller.Components
 
         public List<Player> Participants { get; set; } = new List<Player>();
 
-        public bool IsSolo => Participants.Count <= 0;
+        public bool IsSolo => Participants.Count == 1 && (Participants[0].Party == null || Participants[0].Party.Count < 2);
 
         public int TreasureLevel = 0;
+
+        public long CompletionTime { get; set; }
+
+        public string CompletionTimeString => CompletionTime <= 0 ?
+            string.Empty : 
+            TextUtils.GetTimeElapsedString(CompletionTime, Strings.Events.ElapsedMinutes, Strings.Events.ElapsedHours, Strings.Events.ElapsedDays);
     }
 }

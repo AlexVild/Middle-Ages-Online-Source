@@ -93,6 +93,8 @@ namespace Intersect.Editor.Forms
         private frmWeaponType mWeaponTypeEditor;
         
         private frmChallenge mChallengeEditor;
+        
+        private frmDungeon mDungeonEditor;
 
         //General Editting Variables
         bool mTMouseDown;
@@ -1726,6 +1728,15 @@ namespace Intersect.Editor.Forms
                         }
 
                         break;
+                    case GameObjectType.Dungeon:
+                        if (mDungeonEditor == null || mDungeonEditor.Visible == false)
+                        {
+                            mDungeonEditor = new frmDungeon();
+                            mDungeonEditor.InitEditor();
+                            mDungeonEditor.Show();
+                        }
+
+                        break;
                     default:
                         return;
                 }
@@ -2157,6 +2168,11 @@ namespace Intersect.Editor.Forms
         private void challengeEditorToolStripMenuItem_Click(object sender, EventArgs e)
         {
             PacketSender.SendOpenEditor(GameObjectType.Challenge);
+        }
+
+        private void dungeonEditorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PacketSender.SendOpenEditor(GameObjectType.Dungeon);
         }
     }
 

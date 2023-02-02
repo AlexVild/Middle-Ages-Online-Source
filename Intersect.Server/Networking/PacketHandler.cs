@@ -3735,6 +3735,10 @@ namespace Intersect.Server.Networking
                     obj = ChallengeDescriptor.Get(id);
 
                     break;
+                case GameObjectType.Dungeon:
+                    obj = DungeonDescriptor.Get(id);
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -3921,6 +3925,10 @@ namespace Intersect.Server.Networking
                     break;
                 case GameObjectType.Challenge:
                     obj = DatabaseObject<ChallengeDescriptor>.Lookup.Get(id);
+
+                    break;
+                case GameObjectType.Dungeon:
+                    obj = DatabaseObject<DungeonDescriptor>.Lookup.Get(id);
 
                     break;
                 default:

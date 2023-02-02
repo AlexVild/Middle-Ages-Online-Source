@@ -54,6 +54,12 @@
 
         ComboReached,
 
+        DungeonStart,
+
+        DungeonComplete,
+
+        GnomeCaptured,
+
     }
 
 }

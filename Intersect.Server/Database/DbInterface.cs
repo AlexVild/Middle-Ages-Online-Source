@@ -943,6 +943,12 @@ namespace Intersect.Server.Database
                     dbObj = new ChallengeDescriptor(predefinedid);
 
                     break;
+                
+                case GameObjectType.Dungeon:
+                    dbObj = new DungeonDescriptor(predefinedid);
+
+                    break;
+
                 default:
                     throw new ArgumentOutOfRangeException(nameof(gameObjectType), gameObjectType, null);
             }
