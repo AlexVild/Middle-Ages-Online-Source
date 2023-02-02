@@ -90,6 +90,9 @@ namespace Intersect.Enums
 
         [GameObjectInfo(typeof(ChallengeDescriptor), "challenge")]
         Challenge,
+
+        [GameObjectInfo(typeof(DungeonDescriptor), "dungeon")]
+        Dungeon,
     }
 
 }

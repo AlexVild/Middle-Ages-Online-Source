@@ -421,4 +421,12 @@ namespace Intersect.GameObjects.Events
         Accuracy,
         Speed
     }
+
+    public enum DungeonState
+    {
+        Null,
+        Inactive,
+        Active,
+        Complete,
+    }
 }

@@ -946,6 +946,13 @@ namespace Intersect.Editor.Forms.Editors.Events
 
             if (command.ChangeInstance)
             {
+                if (command.DungeonId != Guid.Empty)
+                {
+                    var dungeon = DungeonDescriptor.GetName(command.DungeonId);
+                    return Strings.EventCommandList.InstancedDungeonWarp.ToString(
+                        mapName, command.X, command.Y, Strings.Directions.dir[(int)command.Direction - 1], command.FadeOnWarp.ToString(), Enum.GetName(typeof(MapInstanceType), command.InstanceType), dungeon
+                    );
+                }
                 return Strings.EventCommandList.instancedwarp.ToString(
                     mapName, command.X, command.Y, Strings.Directions.dir[(int)command.Direction - 1], command.FadeOnWarp.ToString(), Enum.GetName(typeof(MapInstanceType), command.InstanceType)
                 );

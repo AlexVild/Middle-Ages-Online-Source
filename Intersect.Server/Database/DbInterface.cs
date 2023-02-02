@@ -601,6 +601,10 @@ namespace Intersect.Server.Database
                     ChallengeDescriptor.Lookup.Clear();
 
                     break;
+                case GameObjectType.Dungeon:
+                    DungeonDescriptor.Lookup.Clear();
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }
@@ -795,6 +799,13 @@ namespace Intersect.Server.Database
                             foreach (var challenge in context.Challenges)
                             {
                                 ChallengeDescriptor.Lookup.Set(challenge.Id, challenge);
+                            }
+
+                            break;
+                        case GameObjectType.Dungeon:
+                            foreach (var dungeon in context.Dungeons)
+                            {
+                                DungeonDescriptor.Lookup.Set(dungeon.Id, dungeon);
                             }
 
                             break;
@@ -1100,6 +1111,11 @@ namespace Intersect.Server.Database
                             ChallengeDescriptor.Lookup.Set(dbObj.Id, dbObj);
 
                             break;
+                        case GameObjectType.Dungeon:
+                            context.Dungeons.Add((DungeonDescriptor)dbObj);
+                            DungeonDescriptor.Lookup.Set(dbObj.Id, dbObj);
+
+                            break;
                         default:
                             throw new ArgumentOutOfRangeException(nameof(gameObjectType), gameObjectType, null);
                     }
@@ -1254,6 +1270,10 @@ namespace Intersect.Server.Database
                             break;
                         case GameObjectType.Challenge:
                             context.Challenges.Remove((ChallengeDescriptor)gameObject);
+
+                            break;
+                        case GameObjectType.Dungeon:
+                            context.Dungeons.Remove((DungeonDescriptor)gameObject);
 
                             break;
                     }
@@ -1411,6 +1431,10 @@ namespace Intersect.Server.Database
                             break;
                         case GameObjectType.Challenge:
                             context.Challenges.Update((ChallengeDescriptor)gameObject);
+
+                            break;
+                        case GameObjectType.Dungeon:
+                            context.Dungeons.Update((DungeonDescriptor)gameObject);
 
                             break;
                     }
@@ -2006,6 +2030,7 @@ namespace Intersect.Server.Database
                     MigrateDbSet(context.RecipeRequirements, newGameContext.RecipeRequirements);
                     MigrateDbSet(context.WeaponTypes, newGameContext.WeaponTypes);
                     MigrateDbSet(context.Challenges, newGameContext.Challenges);
+                    MigrateDbSet(context.Dungeons, newGameContext.Dungeons);
                     newGameContext.ChangeTracker.DetectChanges();
                     newGameContext.SaveChanges();
                     newGameContext.Dispose();

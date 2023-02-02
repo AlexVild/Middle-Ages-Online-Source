@@ -51,5 +51,7 @@ namespace Intersect.Server.Database.GameData
         DbSet<WeaponTypeDescriptor> WeaponTypes { get; set; }
         
         DbSet<ChallengeDescriptor> Challenges { get; set; }
+        
+        DbSet<DungeonDescriptor> Dungeons { get; set; }
     }
 }

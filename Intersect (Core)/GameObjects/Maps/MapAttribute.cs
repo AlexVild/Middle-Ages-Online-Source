@@ -149,6 +149,8 @@ namespace Intersect.GameObjects.Maps
 
         public string WarpSound { get; set; }
 
+        public Guid DungeonId { get; set; }
+
         public override MapAttribute Clone()
         {
             var att = (MapWarpAttribute) base.Clone();
@@ -160,6 +162,7 @@ namespace Intersect.GameObjects.Maps
             att.ChangeInstance = ChangeInstance;
             att.InstanceType = InstanceType;
             att.WarpSound = WarpSound;
+            att.DungeonId = DungeonId;
             return att;
         }
 

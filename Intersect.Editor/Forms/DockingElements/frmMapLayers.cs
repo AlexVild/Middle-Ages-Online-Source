@@ -125,6 +125,10 @@ namespace Intersect.Editor.Forms.DockingElements
                 cmbInstanceType.Items.Add(Enum.GetName(typeof(MapInstanceType), i));
             }
 
+            cmbDungeon.Items.Clear();
+            cmbDungeon.Items.Add(Strings.General.none);
+            cmbDungeon.Items.AddRange(DungeonDescriptor.Names);
+
             cmbWarpSound.Items.Clear();
             RefreshMapWarpSounds();
         }
@@ -745,6 +749,7 @@ namespace Intersect.Editor.Forms.DockingElements
                     warpAttribute.ChangeInstance = chkChangeInstance.Checked;
                     warpAttribute.InstanceType = (MapInstanceType)cmbInstanceType.SelectedIndex;
                     warpAttribute.WarpSound = TextUtils.SanitizeNone(cmbWarpSound.Text);
+                    warpAttribute.DungeonId = DungeonDescriptor.IdFromList(cmbDungeon.SelectedIndex - 1);
                     break;
 
                 case MapAttributes.Sound:

@@ -54,9 +54,6 @@ namespace Intersect.Editor.Forms.DockingElements
             this.cmbResourceAttribute = new DarkUI.Controls.DarkComboBox();
             this.lblResource = new System.Windows.Forms.Label();
             this.grpItem = new DarkUI.Controls.DarkGroupBox();
-            this.grpFootstep = new DarkUI.Controls.DarkGroupBox();
-            this.cmbFootstepSound = new DarkUI.Controls.DarkComboBox();
-            this.lblFootstep = new System.Windows.Forms.Label();
             this.grpCustomSpawnTime = new DarkUI.Controls.DarkGroupBox();
             this.nudItemSpawnTime = new DarkUI.Controls.DarkNumericUpDown();
             this.lblSpawnTime = new System.Windows.Forms.Label();
@@ -65,10 +62,15 @@ namespace Intersect.Editor.Forms.DockingElements
             this.cmbItemAttribute = new DarkUI.Controls.DarkComboBox();
             this.lblMaxItemAmount = new System.Windows.Forms.Label();
             this.lblMapItem = new System.Windows.Forms.Label();
+            this.grpFootstep = new DarkUI.Controls.DarkGroupBox();
+            this.cmbFootstepSound = new DarkUI.Controls.DarkComboBox();
+            this.lblFootstep = new System.Windows.Forms.Label();
             this.grpWarp = new DarkUI.Controls.DarkGroupBox();
             this.cmbWarpSound = new DarkUI.Controls.DarkComboBox();
             this.lblWarpSound = new System.Windows.Forms.Label();
             this.grpInstanceSettings = new DarkUI.Controls.DarkGroupBox();
+            this.lblDungeon = new System.Windows.Forms.Label();
+            this.cmbDungeon = new DarkUI.Controls.DarkComboBox();
             this.lblInstance = new System.Windows.Forms.Label();
             this.cmbInstanceType = new DarkUI.Controls.DarkComboBox();
             this.chkChangeInstance = new System.Windows.Forms.CheckBox();
@@ -163,18 +165,18 @@ namespace Intersect.Editor.Forms.DockingElements
             this.picLayer3 = new System.Windows.Forms.PictureBox();
             this.picLayer2 = new System.Windows.Forms.PictureBox();
             this.picLayer1 = new System.Windows.Forms.PictureBox();
-            this.pnlEvents = new System.Windows.Forms.Panel();
-            this.pnlLights = new System.Windows.Forms.Panel();
             this.pnlTilesetContainer = new Intersect.Editor.Forms.Controls.AutoDragPanel();
             this.picTileset = new System.Windows.Forms.PictureBox();
+            this.pnlEvents = new System.Windows.Forms.Panel();
+            this.pnlLights = new System.Windows.Forms.Panel();
             this.lightEditor = new Intersect.Editor.Forms.Controls.LightEditorCtrl();
             this.grpResource.SuspendLayout();
             this.grpZResource.SuspendLayout();
             this.grpItem.SuspendLayout();
-            this.grpFootstep.SuspendLayout();
             this.grpCustomSpawnTime.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudItemSpawnTime)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudItemQuantity)).BeginInit();
+            this.grpFootstep.SuspendLayout();
             this.grpWarp.SuspendLayout();
             this.grpInstanceSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudWarpY)).BeginInit();
@@ -207,10 +209,10 @@ namespace Intersect.Editor.Forms.DockingElements
             ((System.ComponentModel.ISupportInitialize)(this.picLayer3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picLayer2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picLayer1)).BeginInit();
-            this.pnlEvents.SuspendLayout();
-            this.pnlLights.SuspendLayout();
             this.pnlTilesetContainer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picTileset)).BeginInit();
+            this.pnlEvents.SuspendLayout();
+            this.pnlLights.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblLayer
@@ -403,6 +405,7 @@ namespace Intersect.Editor.Forms.DockingElements
             this.rbBlocked.Name = "rbBlocked";
             this.rbBlocked.Size = new System.Drawing.Size(64, 17);
             this.rbBlocked.TabIndex = 20;
+            this.rbBlocked.TabStop = true;
             this.rbBlocked.Text = "Blocked";
             this.rbBlocked.CheckedChanged += new System.EventHandler(this.rbBlocked_CheckedChanged);
             // 
@@ -505,51 +508,6 @@ namespace Intersect.Editor.Forms.DockingElements
             this.grpItem.TabStop = false;
             this.grpItem.Text = "Map Item";
             this.grpItem.Visible = false;
-            // 
-            // grpFootstep
-            // 
-            this.grpFootstep.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.grpFootstep.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpFootstep.Controls.Add(this.cmbFootstepSound);
-            this.grpFootstep.Controls.Add(this.lblFootstep);
-            this.grpFootstep.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpFootstep.Location = new System.Drawing.Point(8, 181);
-            this.grpFootstep.Name = "grpFootstep";
-            this.grpFootstep.Size = new System.Drawing.Size(246, 65);
-            this.grpFootstep.TabIndex = 31;
-            this.grpFootstep.TabStop = false;
-            this.grpFootstep.Text = "Footstep";
-            this.grpFootstep.Visible = false;
-            // 
-            // cmbFootstepSound
-            // 
-            this.cmbFootstepSound.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbFootstepSound.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbFootstepSound.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbFootstepSound.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbFootstepSound.DrawDropdownHoverOutline = false;
-            this.cmbFootstepSound.DrawFocusRectangle = false;
-            this.cmbFootstepSound.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbFootstepSound.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbFootstepSound.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbFootstepSound.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbFootstepSound.FormattingEnabled = true;
-            this.cmbFootstepSound.Location = new System.Drawing.Point(16, 32);
-            this.cmbFootstepSound.Name = "cmbFootstepSound";
-            this.cmbFootstepSound.Size = new System.Drawing.Size(219, 21);
-            this.cmbFootstepSound.TabIndex = 9;
-            this.cmbFootstepSound.Text = null;
-            this.cmbFootstepSound.TextPadding = new System.Windows.Forms.Padding(2);
-            this.cmbFootstepSound.SelectedIndexChanged += new System.EventHandler(this.cmbFootstepSound_SelectedIndexChanged);
-            // 
-            // lblFootstep
-            // 
-            this.lblFootstep.AutoSize = true;
-            this.lblFootstep.Location = new System.Drawing.Point(13, 16);
-            this.lblFootstep.Name = "lblFootstep";
-            this.lblFootstep.Size = new System.Drawing.Size(82, 13);
-            this.lblFootstep.TabIndex = 7;
-            this.lblFootstep.Text = "Footstep Sound";
             // 
             // grpCustomSpawnTime
             // 
@@ -668,6 +626,51 @@ namespace Intersect.Editor.Forms.DockingElements
             this.lblMapItem.TabIndex = 7;
             this.lblMapItem.Text = "Item:";
             // 
+            // grpFootstep
+            // 
+            this.grpFootstep.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpFootstep.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpFootstep.Controls.Add(this.cmbFootstepSound);
+            this.grpFootstep.Controls.Add(this.lblFootstep);
+            this.grpFootstep.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpFootstep.Location = new System.Drawing.Point(8, 181);
+            this.grpFootstep.Name = "grpFootstep";
+            this.grpFootstep.Size = new System.Drawing.Size(246, 65);
+            this.grpFootstep.TabIndex = 31;
+            this.grpFootstep.TabStop = false;
+            this.grpFootstep.Text = "Footstep";
+            this.grpFootstep.Visible = false;
+            // 
+            // cmbFootstepSound
+            // 
+            this.cmbFootstepSound.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbFootstepSound.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbFootstepSound.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbFootstepSound.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbFootstepSound.DrawDropdownHoverOutline = false;
+            this.cmbFootstepSound.DrawFocusRectangle = false;
+            this.cmbFootstepSound.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbFootstepSound.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbFootstepSound.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbFootstepSound.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbFootstepSound.FormattingEnabled = true;
+            this.cmbFootstepSound.Location = new System.Drawing.Point(16, 32);
+            this.cmbFootstepSound.Name = "cmbFootstepSound";
+            this.cmbFootstepSound.Size = new System.Drawing.Size(219, 21);
+            this.cmbFootstepSound.TabIndex = 9;
+            this.cmbFootstepSound.Text = null;
+            this.cmbFootstepSound.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbFootstepSound.SelectedIndexChanged += new System.EventHandler(this.cmbFootstepSound_SelectedIndexChanged);
+            // 
+            // lblFootstep
+            // 
+            this.lblFootstep.AutoSize = true;
+            this.lblFootstep.Location = new System.Drawing.Point(13, 16);
+            this.lblFootstep.Name = "lblFootstep";
+            this.lblFootstep.Size = new System.Drawing.Size(82, 13);
+            this.lblFootstep.TabIndex = 7;
+            this.lblFootstep.Text = "Footstep Sound";
+            // 
             // grpWarp
             // 
             this.grpWarp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
@@ -689,7 +692,7 @@ namespace Intersect.Editor.Forms.DockingElements
             this.grpWarp.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpWarp.Location = new System.Drawing.Point(6, 179);
             this.grpWarp.Name = "grpWarp";
-            this.grpWarp.Size = new System.Drawing.Size(255, 384);
+            this.grpWarp.Size = new System.Drawing.Size(255, 421);
             this.grpWarp.TabIndex = 26;
             this.grpWarp.TabStop = false;
             this.grpWarp.Text = "Warp";
@@ -728,16 +731,46 @@ namespace Intersect.Editor.Forms.DockingElements
             // 
             this.grpInstanceSettings.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpInstanceSettings.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpInstanceSettings.Controls.Add(this.lblDungeon);
+            this.grpInstanceSettings.Controls.Add(this.cmbDungeon);
             this.grpInstanceSettings.Controls.Add(this.lblInstance);
             this.grpInstanceSettings.Controls.Add(this.cmbInstanceType);
             this.grpInstanceSettings.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpInstanceSettings.Location = new System.Drawing.Point(7, 292);
             this.grpInstanceSettings.Name = "grpInstanceSettings";
-            this.grpInstanceSettings.Size = new System.Drawing.Size(242, 84);
+            this.grpInstanceSettings.Size = new System.Drawing.Size(242, 123);
             this.grpInstanceSettings.TabIndex = 31;
             this.grpInstanceSettings.TabStop = false;
             this.grpInstanceSettings.Text = "Instance Settings";
             this.grpInstanceSettings.Visible = false;
+            // 
+            // lblDungeon
+            // 
+            this.lblDungeon.AutoSize = true;
+            this.lblDungeon.Location = new System.Drawing.Point(11, 75);
+            this.lblDungeon.Name = "lblDungeon";
+            this.lblDungeon.Size = new System.Drawing.Size(54, 13);
+            this.lblDungeon.TabIndex = 32;
+            this.lblDungeon.Text = "Dungeon:";
+            // 
+            // cmbDungeon
+            // 
+            this.cmbDungeon.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbDungeon.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbDungeon.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbDungeon.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbDungeon.DrawDropdownHoverOutline = false;
+            this.cmbDungeon.DrawFocusRectangle = false;
+            this.cmbDungeon.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbDungeon.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbDungeon.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbDungeon.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbDungeon.FormattingEnabled = true;
+            this.cmbDungeon.Location = new System.Drawing.Point(11, 96);
+            this.cmbDungeon.Name = "cmbDungeon";
+            this.cmbDungeon.Size = new System.Drawing.Size(225, 21);
+            this.cmbDungeon.TabIndex = 31;
+            this.cmbDungeon.TextPadding = new System.Windows.Forms.Padding(2);
             // 
             // lblInstance
             // 
@@ -1543,7 +1576,7 @@ namespace Intersect.Editor.Forms.DockingElements
             this.panel1.Controls.Add(this.pnlLights);
             this.panel1.Location = new System.Drawing.Point(8, 34);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(278, 568);
+            this.panel1.Size = new System.Drawing.Size(278, 633);
             this.panel1.TabIndex = 23;
             // 
             // pnlAttributes
@@ -1573,7 +1606,7 @@ namespace Intersect.Editor.Forms.DockingElements
             this.pnlAttributes.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlAttributes.Location = new System.Drawing.Point(0, 0);
             this.pnlAttributes.Name = "pnlAttributes";
-            this.pnlAttributes.Size = new System.Drawing.Size(276, 566);
+            this.pnlAttributes.Size = new System.Drawing.Size(276, 631);
             this.pnlAttributes.TabIndex = 1;
             // 
             // rdoFootstep
@@ -1876,7 +1909,7 @@ namespace Intersect.Editor.Forms.DockingElements
             this.pnlNpcs.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlNpcs.Location = new System.Drawing.Point(0, 0);
             this.pnlNpcs.Name = "pnlNpcs";
-            this.pnlNpcs.Size = new System.Drawing.Size(276, 566);
+            this.pnlNpcs.Size = new System.Drawing.Size(276, 631);
             this.pnlNpcs.TabIndex = 1;
             // 
             // grpSpawnGroup
@@ -1939,7 +1972,7 @@ namespace Intersect.Editor.Forms.DockingElements
             this.pnlTiles.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlTiles.Location = new System.Drawing.Point(0, 0);
             this.pnlTiles.Name = "pnlTiles";
-            this.pnlTiles.Size = new System.Drawing.Size(276, 566);
+            this.pnlTiles.Size = new System.Drawing.Size(276, 631);
             this.pnlTiles.TabIndex = 0;
             // 
             // cmbMapLayer
@@ -2013,25 +2046,6 @@ namespace Intersect.Editor.Forms.DockingElements
             this.picLayer1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.picMapLayer_MouseClick);
             this.picLayer1.MouseHover += new System.EventHandler(this.picMapLayer_MouseHover);
             // 
-            // pnlEvents
-            // 
-            this.pnlEvents.Controls.Add(this.lblEventInstructions);
-            this.pnlEvents.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlEvents.Location = new System.Drawing.Point(0, 0);
-            this.pnlEvents.Name = "pnlEvents";
-            this.pnlEvents.Size = new System.Drawing.Size(276, 566);
-            this.pnlEvents.TabIndex = 1;
-            // 
-            // pnlLights
-            // 
-            this.pnlLights.Controls.Add(this.lightEditor);
-            this.pnlLights.Controls.Add(this.lblLightInstructions);
-            this.pnlLights.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlLights.Location = new System.Drawing.Point(0, 0);
-            this.pnlLights.Name = "pnlLights";
-            this.pnlLights.Size = new System.Drawing.Size(276, 566);
-            this.pnlLights.TabIndex = 1;
-            // 
             // pnlTilesetContainer
             // 
             this.pnlTilesetContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -2042,7 +2056,7 @@ namespace Intersect.Editor.Forms.DockingElements
             this.pnlTilesetContainer.Controls.Add(this.picTileset);
             this.pnlTilesetContainer.Location = new System.Drawing.Point(9, 96);
             this.pnlTilesetContainer.Name = "pnlTilesetContainer";
-            this.pnlTilesetContainer.Size = new System.Drawing.Size(264, 462);
+            this.pnlTilesetContainer.Size = new System.Drawing.Size(264, 527);
             this.pnlTilesetContainer.TabIndex = 19;
             // 
             // picTileset
@@ -2055,6 +2069,25 @@ namespace Intersect.Editor.Forms.DockingElements
             this.picTileset.MouseDown += new System.Windows.Forms.MouseEventHandler(this.picTileset_MouseDown);
             this.picTileset.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picTileset_MouseMove);
             this.picTileset.MouseUp += new System.Windows.Forms.MouseEventHandler(this.picTileset_MouseUp);
+            // 
+            // pnlEvents
+            // 
+            this.pnlEvents.Controls.Add(this.lblEventInstructions);
+            this.pnlEvents.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlEvents.Location = new System.Drawing.Point(0, 0);
+            this.pnlEvents.Name = "pnlEvents";
+            this.pnlEvents.Size = new System.Drawing.Size(276, 631);
+            this.pnlEvents.TabIndex = 1;
+            // 
+            // pnlLights
+            // 
+            this.pnlLights.Controls.Add(this.lightEditor);
+            this.pnlLights.Controls.Add(this.lblLightInstructions);
+            this.pnlLights.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlLights.Location = new System.Drawing.Point(0, 0);
+            this.pnlLights.Name = "pnlLights";
+            this.pnlLights.Size = new System.Drawing.Size(276, 631);
+            this.pnlLights.TabIndex = 1;
             // 
             // lightEditor
             // 
@@ -2072,7 +2105,7 @@ namespace Intersect.Editor.Forms.DockingElements
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.ClientSize = new System.Drawing.Size(312, 605);
+            this.ClientSize = new System.Drawing.Size(312, 670);
             this.CloseButton = false;
             this.CloseButtonVisible = false;
             this.ControlBox = false;
@@ -2097,12 +2130,12 @@ namespace Intersect.Editor.Forms.DockingElements
             this.grpZResource.PerformLayout();
             this.grpItem.ResumeLayout(false);
             this.grpItem.PerformLayout();
-            this.grpFootstep.ResumeLayout(false);
-            this.grpFootstep.PerformLayout();
             this.grpCustomSpawnTime.ResumeLayout(false);
             this.grpCustomSpawnTime.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudItemSpawnTime)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudItemQuantity)).EndInit();
+            this.grpFootstep.ResumeLayout(false);
+            this.grpFootstep.PerformLayout();
             this.grpWarp.ResumeLayout(false);
             this.grpWarp.PerformLayout();
             this.grpInstanceSettings.ResumeLayout(false);
@@ -2149,11 +2182,11 @@ namespace Intersect.Editor.Forms.DockingElements
             ((System.ComponentModel.ISupportInitialize)(this.picLayer3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picLayer2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.picLayer1)).EndInit();
+            this.pnlTilesetContainer.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.picTileset)).EndInit();
             this.pnlEvents.ResumeLayout(false);
             this.pnlEvents.PerformLayout();
             this.pnlLights.ResumeLayout(false);
-            this.pnlTilesetContainer.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.picTileset)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -2295,5 +2328,7 @@ namespace Intersect.Editor.Forms.DockingElements
         private DarkGroupBox grpFootstep;
         private DarkComboBox cmbFootstepSound;
         private Label lblFootstep;
+        private Label lblDungeon;
+        private DarkComboBox cmbDungeon;
     }
 }

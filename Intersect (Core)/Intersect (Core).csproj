@@ -292,6 +292,7 @@
     <Compile Include="Factories\IFactory.cs" />
     <Compile Include="GameObjects\BaseDrop.cs" />
     <Compile Include="GameObjects\ChallengeDescriptor.cs" />
+    <Compile Include="GameObjects\DungeonDescriptor.cs" />
     <Compile Include="GameObjects\Events\VariableMod.cs" />
     <Compile Include="Enums\Timers.cs" />
     <Compile Include="GameObjects\LabelDescriptor.cs" />

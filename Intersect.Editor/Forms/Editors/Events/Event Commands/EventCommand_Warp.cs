@@ -5,6 +5,7 @@ using DarkUI.Controls;
 
 using Intersect.Editor.Localization;
 using Intersect.Enums;
+using Intersect.GameObjects;
 using Intersect.GameObjects.Events.Commands;
 using Intersect.GameObjects.Maps.MapList;
 
@@ -57,6 +58,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                 cmbInstanceType.Items.Add(Enum.GetName(typeof(MapInstanceType), i));
             }
             cmbInstanceType.SelectedIndex = (int) mMyCommand.InstanceType;
+
+            cmbDungeon.Items.Clear();
+            cmbDungeon.Items.Add(Strings.General.none);
+            cmbDungeon.Items.AddRange(DungeonDescriptor.Names);
+            cmbDungeon.SelectedIndex = DungeonDescriptor.ListIndex(mMyCommand.DungeonId) + 1;
         }
 
         private void InitLocalization()
@@ -91,6 +97,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             mMyCommand.FadeOnWarp = chkMapFade.Checked;
             mMyCommand.ChangeInstance = chkChangeInstance.Checked;
             mMyCommand.InstanceType = (MapInstanceType) cmbInstanceType.SelectedIndex;
+            mMyCommand.DungeonId = DungeonDescriptor.IdFromList(cmbDungeon.SelectedIndex - 1);
             mEventEditor.FinishCommandEdit();
         }
 

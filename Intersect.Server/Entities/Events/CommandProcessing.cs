@@ -822,6 +822,11 @@ namespace Intersect.Server.Entities.Events
                     false, 0, false, command.FadeOnWarp
                 );
             }
+
+            if (command.DungeonId != Guid.Empty && command.InstanceType != MapInstanceType.Overworld && InstanceProcessor.TryGetInstanceController(player.MapInstanceId, out var instanceController))
+            {
+                _ = instanceController.TryInitializeOrJoinDungeon(command.DungeonId, player);
+            }
         }
 
         //Set Move Route Command

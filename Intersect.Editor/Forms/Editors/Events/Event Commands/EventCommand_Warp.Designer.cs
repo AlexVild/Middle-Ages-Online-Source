@@ -47,6 +47,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.lblY = new System.Windows.Forms.Label();
             this.lblMap = new System.Windows.Forms.Label();
             this.lblX = new System.Windows.Forms.Label();
+            this.cmbDungeon = new DarkUI.Controls.DarkComboBox();
+            this.lblDungeon = new System.Windows.Forms.Label();
             this.grpWarp.SuspendLayout();
             this.grpInstanceSettings.SuspendLayout();
             this.SuspendLayout();
@@ -92,6 +94,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             this.grpInstanceSettings.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.grpInstanceSettings.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpInstanceSettings.Controls.Add(this.lblDungeon);
+            this.grpInstanceSettings.Controls.Add(this.cmbDungeon);
             this.grpInstanceSettings.Controls.Add(this.cmbInstanceType);
             this.grpInstanceSettings.Controls.Add(this.lblInstanceType);
             this.grpInstanceSettings.ForeColor = System.Drawing.Color.Gainsboro;
@@ -116,7 +120,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbInstanceType.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbInstanceType.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbInstanceType.FormattingEnabled = true;
-            this.cmbInstanceType.Location = new System.Drawing.Point(9, 47);
+            this.cmbInstanceType.Location = new System.Drawing.Point(8, 32);
             this.cmbInstanceType.Name = "cmbInstanceType";
             this.cmbInstanceType.Size = new System.Drawing.Size(169, 21);
             this.cmbInstanceType.TabIndex = 64;
@@ -127,7 +131,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // lblInstanceType
             // 
             this.lblInstanceType.AutoSize = true;
-            this.lblInstanceType.Location = new System.Drawing.Point(6, 31);
+            this.lblInstanceType.Location = new System.Drawing.Point(6, 16);
             this.lblInstanceType.Name = "lblInstanceType";
             this.lblInstanceType.Size = new System.Drawing.Size(78, 13);
             this.lblInstanceType.TabIndex = 64;
@@ -274,6 +278,35 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.lblX.Text = "X: 0";
             this.lblX.Click += new System.EventHandler(this.lblX_Click);
             // 
+            // cmbDungeon
+            // 
+            this.cmbDungeon.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbDungeon.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbDungeon.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbDungeon.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbDungeon.DrawDropdownHoverOutline = false;
+            this.cmbDungeon.DrawFocusRectangle = false;
+            this.cmbDungeon.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbDungeon.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbDungeon.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbDungeon.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbDungeon.FormattingEnabled = true;
+            this.cmbDungeon.Location = new System.Drawing.Point(8, 75);
+            this.cmbDungeon.Name = "cmbDungeon";
+            this.cmbDungeon.Size = new System.Drawing.Size(169, 21);
+            this.cmbDungeon.TabIndex = 65;
+            this.cmbDungeon.Text = null;
+            this.cmbDungeon.TextPadding = new System.Windows.Forms.Padding(2);
+            // 
+            // lblDungeon
+            // 
+            this.lblDungeon.AutoSize = true;
+            this.lblDungeon.Location = new System.Drawing.Point(6, 59);
+            this.lblDungeon.Name = "lblDungeon";
+            this.lblDungeon.Size = new System.Drawing.Size(54, 13);
+            this.lblDungeon.TabIndex = 66;
+            this.lblDungeon.Text = "Dungeon:";
+            // 
             // EventCommandWarp
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -310,5 +343,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private DarkGroupBox grpInstanceSettings;
         private DarkComboBox cmbInstanceType;
         private System.Windows.Forms.Label lblInstanceType;
+        private System.Windows.Forms.Label lblDungeon;
+        private DarkComboBox cmbDungeon;
     }
 }

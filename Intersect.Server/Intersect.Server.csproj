@@ -445,7 +445,7 @@
     <Compile Include="Core\IServerContext.cs" />
     <Compile Include="Core\LogicService.cs" />
     <Compile Include="Core\LogicService.LogicThread.cs" />
-    <Compile Include="Core\ProcessingInfo.cs" />
+    <Compile Include="Core\InstanceProcessor.cs" />
     <Compile Include="Core\RecipeUnlockWatcher.cs" />
     <Compile Include="Core\Services\IConsoleService.cs" />
     <Compile Include="Core\Services\ILogicService.cs" />
@@ -1072,6 +1072,10 @@
     <Compile Include="Migrations\Game\20230131151206_AddInitialSkillpointMigration.cs" />
     <Compile Include="Migrations\Game\20230131151206_AddInitialSkillpointMigration.designer.cs">
       <DependentUpon>20230131151206_AddInitialSkillpointMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20230202023829_DungeonDescriptorMigration.cs" />
+    <Compile Include="Migrations\Game\20230202023829_DungeonDescriptorMigration.designer.cs">
+      <DependentUpon>20230202023829_DungeonDescriptorMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">

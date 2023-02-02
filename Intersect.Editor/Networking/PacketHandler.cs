@@ -763,6 +763,19 @@ namespace Intersect.Editor.Networking
                         ChallengeDescriptor.Lookup.Set(id, challenge);
                     }
                     break;
+                case GameObjectType.Dungeon:
+                    if (deleted)
+                    {
+                        var challenge = DungeonDescriptor.Get(id);
+                        challenge.Delete();
+                    }
+                    else
+                    {
+                        var challenge = new DungeonDescriptor(id);
+                        challenge.Load(json);
+                        DungeonDescriptor.Lookup.Set(id, challenge);
+                    }
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }

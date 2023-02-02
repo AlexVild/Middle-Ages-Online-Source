@@ -7429,6 +7429,11 @@ namespace Intersect.Server.Entities
                     }
 
                     Warp(warpAtt.MapId, warpAtt.X, warpAtt.Y, dir, false, 0, false, warpAtt.FadeOnWarp, instanceType);
+
+                    if (warpAtt.DungeonId != Guid.Empty && warpAtt.InstanceType != MapInstanceType.Overworld && InstanceProcessor.TryGetInstanceController(MapInstanceId, out var instanceController))
+                    {
+                        _ = instanceController.TryInitializeOrJoinDungeon(warpAtt.DungeonId, this);
+                    }
                 }
 
                 foreach (var evt in EventLookup)

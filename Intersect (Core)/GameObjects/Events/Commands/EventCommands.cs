@@ -607,6 +607,8 @@ namespace Intersect.GameObjects.Events.Commands
         /// The <see cref="MapInstanceType"/> we are going to be warping to
         /// </summary>
         public MapInstanceType InstanceType { get; set; } = MapInstanceType.Overworld;
+
+        public Guid DungeonId { get; set; } = Guid.Empty;
     }
 
     public class SetMoveRouteCommand : EventCommand
