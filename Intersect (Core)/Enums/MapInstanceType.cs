@@ -23,9 +23,14 @@ namespace Intersect.Enums
         Guild,
 
         /// <summary>
-        /// The instance that is shared amongst members of a party
+        /// The instance that is shared amongst members of a party and used for dungeoneering
         /// </summary>
         Shared,
+
+        /// <summary>
+        /// Same as personal, but allows players to warp to the party leader's instance
+        /// </summary>
+        Party,
 
         /// <summary>
         /// ALWAYS PLACE AT END OF ENUM. This value is used for logical reference and should never appear to the user in the editor.

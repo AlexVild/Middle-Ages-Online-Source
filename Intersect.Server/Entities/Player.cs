@@ -2498,6 +2498,7 @@ namespace Intersect.Server.Entities
                     ResetSavedInstanceIds();
                     newMapLayerId = Guid.Empty;
                     break;
+
                 case MapInstanceType.Personal:
                     if (!fromLogin) // If we're logging into a personal instance, we want to login to the SAME instance.
                     {
@@ -2505,6 +2506,7 @@ namespace Intersect.Server.Entities
                     }
                     newMapLayerId = PersonalMapInstanceId;
                     break;
+
                 case MapInstanceType.Guild:
                     if (Guild != null)
                     {
@@ -2515,6 +2517,7 @@ namespace Intersect.Server.Entities
                         newMapLayerId = Guid.Empty;
                     }
                     break;
+
                 case MapInstanceType.Shared:
                     bool isSolo = Party == null || Party.Count < 2;
                     bool isPartyLeader = Party != null && Party.Count > 0 && Party[0].Id == Id;
@@ -2570,6 +2573,18 @@ namespace Intersect.Server.Entities
                     newMapLayerId = SharedMapInstanceId;
 
                     break;
+
+                case MapInstanceType.Party:
+                    if (Party == null || Party.Count < 2)
+                    {
+                        newMapLayerId = Id;
+                    }
+                    else
+                    {
+                        newMapLayerId = Party[0].Id;
+                    }
+                    break;
+
                 default:
                     Log.Error($"Player {Name} requested an instance type that is not supported. Their map instance settings will not change.");
                     break;
