@@ -118,9 +118,9 @@ namespace Intersect.Server.Maps
         {
             get
             {
-                if (ProcessingInfo.MapSpawnGroups.TryGetValue(MapInstanceId, out var spawnGroups))
+                if (InstanceProcessor.TryGetInstanceController(MapInstanceId, out var instanceController))
                 {
-                    return spawnGroups.TryGetValue(mMapController.Id, out var spawnGroup) ? spawnGroup.Group : 0;
+                    return instanceController.MapSpawnGroups.TryGetValue(mMapController.Id, out var spawnGroup) ? spawnGroup.Group : 0;
                 }
                 else
                 {
@@ -481,8 +481,8 @@ namespace Intersect.Server.Maps
                 // Unique identifier tying the spawning NPC to its map spawner
                 string npcKey = $"{mMapController.Id}_{i}";
                 if (spawns[i].PreventRespawn &&
-                    ProcessingInfo.PermadeadNpcs.TryGetValue(MapInstanceId, out var permadeadNpcs) &&
-                    permadeadNpcs.Contains(npcKey))
+                    InstanceProcessor.TryGetInstanceController(MapInstanceId, out var instanceController) &&
+                    instanceController.PermadeadNpcs.Contains(npcKey))
                 {
                     return;
                 }
@@ -1415,9 +1415,13 @@ namespace Intersect.Server.Maps
         private bool NpcHasEnoughPlayersToSpawn(int spawnIndex)
         {
             int playersOnInstanceId;
-            if (!ProcessingInfo.PlayersInInstance.TryGetValue(MapInstanceId, out playersOnInstanceId))
+            if (!InstanceProcessor.TryGetInstanceController(MapInstanceId, out var instanceController))
             {
                 playersOnInstanceId = GetPlayers().Count; // Guaranteed to at LEAST have this map's count
+            }
+            else
+            {
+                playersOnInstanceId = instanceController.PlayerCount;
             }
             var spawns = mMapController.Spawns;
 
@@ -1446,7 +1450,11 @@ namespace Intersect.Server.Maps
             }
             // This will initialize spawn groups for the instance/map if needed. Saves processing time if we only keep track of
             // spawn groups that are actually ever being modified and assume 0 for all others.
-            ProcessingInfo.ChangeSpawnGroup(MapInstanceId, mMapController.Id, group, persistCleanup);
+            if (InstanceProcessor.TryGetInstanceController(MapInstanceId, out var instanceController))
+            {
+                instanceController.ChangeSpawnGroup(mMapController.Id, group, persistCleanup);
+            }
+
             // Spawn the NPCs that belong to the new group
             SpawnMapNpcs();
         }
@@ -1599,7 +1607,7 @@ namespace Intersect.Server.Maps
         #region Instance Variables
         public VariableValue GetInstanceVariable(Guid variableId)
         {
-            if (ProcessingInfo.InstanceVariables.TryGetValue(MapInstanceId, out var instanceVariables) && instanceVariables.TryGetValue(variableId, out var instanceVariable))
+            if (InstanceProcessor.TryGetInstanceController(MapInstanceId, out var instanceController) && instanceController.InstanceVariables.TryGetValue(variableId, out var instanceVariable))
             {
                 return instanceVariable;
             } else
@@ -1610,9 +1618,9 @@ namespace Intersect.Server.Maps
 
         public static void SetInstanceVariable(Guid variableId, VariableValue value, Guid mapInstanceId)
         {
-            if (ProcessingInfo.InstanceVariables.TryGetValue(mapInstanceId, out var instanceVariables) && instanceVariables.ContainsKey(variableId))
+            if (InstanceProcessor.TryGetInstanceController(mapInstanceId, out var instanceController))
             {
-                instanceVariables[variableId] = value;
+                instanceController.InstanceVariables[variableId] = value;
             }
             else
             {

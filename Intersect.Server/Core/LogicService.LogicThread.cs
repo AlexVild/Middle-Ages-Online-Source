@@ -182,7 +182,7 @@ namespace Intersect.Server.Core
                             }
 
                             // Update our global list of unique instances that are being processed
-                            ProcessingInfo.UpdateInstances(ActiveMapInstances.Values.ToList());
+                            InstanceProcessor.UpdateInstanceControllers(ActiveMapInstances.Values.ToList());
 
                             if (Options.Instance.Metrics.Enable)
                             {

@@ -4001,7 +4001,8 @@ namespace Intersect.Server.Networking
                     }
                     else if (type == GameObjectType.InstanceVariable)
                     {
-                        ProcessingInfo.AddInstanceVariable(obj.Id);
+
+                        InstanceProcessor.AddNewInstanceVariable(obj.Id);
                         // Don't trigger a instance change common event, because the editor can not change instance variable values - only their defaults
                         DbInterface.CacheInstanceVariableEventTextLookups();
                     }

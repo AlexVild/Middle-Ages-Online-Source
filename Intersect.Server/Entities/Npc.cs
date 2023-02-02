@@ -191,13 +191,9 @@ namespace Intersect.Server.Entities
                 // Do not process permadeaths on the overworld or if the entity was not killed by some other entity
                 if (MapInstanceId != Guid.Empty && killer != null)
                 {
-                    if (!String.IsNullOrEmpty(PermadeathKey) && ProcessingInfo.PermadeadNpcs.TryGetValue(MapInstanceId, out var permadeadNpcs))
+                    if (!string.IsNullOrEmpty(PermadeathKey) && InstanceProcessor.TryGetInstanceController(MapInstanceId, out var instanceController))
                     {
-                        permadeadNpcs.Add(PermadeathKey);
-                    }
-                    else if (!String.IsNullOrEmpty(PermadeathKey))
-                    {
-                        ProcessingInfo.PermadeadNpcs.Add(MapInstanceId, new HashSet<string>() { PermadeathKey });
+                        instanceController.PermadeadNpcs.Add(PermadeathKey);
                     }
                 }
 

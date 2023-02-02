@@ -2774,10 +2774,10 @@ namespace Intersect.Server.Entities.Events
                 mapInstance.ChangeSpawnGroup(mapSpawnGroup, command.ResetNpcs, command.PersistCleanup);
             }
             // if we want this spawn group to continue even after the map is swept up (default 3 mins not on overworld)
-            else if (command.PersistCleanup)
+            else if (command.PersistCleanup && InstanceProcessor.TryGetInstanceController(player.MapInstanceId, out var instanceController))
             {
                 // If it's not, then simply _prepare_ that instance for what its spawn group _should_ be, when it gets instantiated
-                ProcessingInfo.ChangeSpawnGroup(player.MapInstanceId, mapId, spawnGroup, command.PersistCleanup);
+                instanceController.ChangeSpawnGroup(mapId, spawnGroup, command.PersistCleanup);
             }
 
             return;
@@ -2972,7 +2972,12 @@ namespace Intersect.Server.Entities.Events
                 return;
             }
 
-            ProcessingInfo.ClearPermadeadNpcs(player.MapInstanceId, mapId, command.RefreshSpawns);
+            if (!InstanceProcessor.TryGetInstanceController(player.MapInstanceId, out var instanceController))
+            {
+                return;
+            }
+
+            instanceController.ClearPermadeadNpcs(mapId, command.RefreshSpawns);
         }
 
         private static void ProcessCommand(
