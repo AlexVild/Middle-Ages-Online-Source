@@ -2270,6 +2270,10 @@ Tick timer saved in server config.json.";
                 {"changebestiary", @"Change Bestiary"},
                 {"changeweapontrack", @"Change Weapon Track Progress"},
                 {"changechallenges", @"Change Challenge Progress"},
+                {"changedungeon", @"Change Dungeon"},
+                {"obtaintreasuregnome", @"Obtain Treasure Gnome"},
+                {"rolldungeonloot", @"Roll Dungeon Loot"},
+                {"dungeons", @"Dungeons"}
             };
 
         }
@@ -6192,6 +6196,9 @@ Negative values for time to flow backwards.";
             public static LocalizedString ChangeChallengeStatus = @"{00} challenge: {01}";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ChangeDungeon = @"Change dungeon state: {00}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString ClearRecord = @"Clear Records for {00}, clear all: {01}";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -6201,6 +6208,9 @@ Negative values for time to flow backwards.";
             public static LocalizedString FadeOut = @"Fade Out";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ObtainTreasureGnome = @"Obtain dungeon gnome";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString OpenLeaderboard = @"Open leaderboard '{00}' for {01} (sort: {02}, display type: {03})";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -6208,6 +6218,9 @@ Negative values for time to flow backwards.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString ResetVariableGroup = @"Reset all Player Variables in Group: {00} [Force Refres: {01}]";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString RollDungeonLoot = @"Roll Dungeon Loot";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString RollLoot = @"Roll Loot ({00})";

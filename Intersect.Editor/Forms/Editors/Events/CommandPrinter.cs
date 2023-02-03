@@ -2002,5 +2002,20 @@ namespace Intersect.Editor.Forms.Editors.Events
 
             return Strings.EventCommandList.ChangeWeaponTrack.ToString(command.ChangeType.GetDescription(), ChallengeDescriptor.GetName(command.ChallengeId));
         }
+
+        private static string GetCommandText(ChangeDungeonCommand command, MapInstance map)
+        {
+            return Strings.EventCommandList.ChangeDungeon.ToString(Enum.GetName(typeof(DungeonState), command.State));
+        }
+
+        private static string GetCommandText(ObtainTreasureGnomeCommand command, MapInstance map)
+        {
+            return Strings.EventCommandList.ObtainTreasureGnome.ToString();
+        }
+
+        private static string GetCommandText(RollDungeonLoot command, MapInstance map)
+        {
+            return Strings.EventCommandList.RollDungeonLoot.ToString();
+        }
     }
 }

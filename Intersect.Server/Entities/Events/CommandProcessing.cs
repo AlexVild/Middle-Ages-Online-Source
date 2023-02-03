@@ -3306,5 +3306,73 @@ namespace Intersect.Server.Entities.Events
             // Refresh mastery progression
             player.SetMasteryProgress();
         }
+
+        private static void ProcessCommand(
+           ChangeDungeonCommand command,
+           Player player,
+           Event instance,
+           CommandInstance stackInfo,
+           Stack<CommandInstance> callStack
+        )
+        {
+            if (player == null || !InstanceProcessor.TryGetInstanceController(player.MapInstanceId, out var instanceController))
+            {
+                return;
+            }
+
+            switch(command.State)
+            {
+                case DungeonState.Null:
+                    instanceController.RemoveDungeon();
+                    break;
+
+                case DungeonState.Inactive:
+                    instanceController.ResetDungeon();
+                    break;
+
+                case DungeonState.Active:
+                    instanceController.StartDungeon(player);
+                    break;
+
+                case DungeonState.Complete:
+                    instanceController.CompleteDungeon(player);
+                    break;
+
+                default:
+                    throw new ArgumentException(nameof(command.State));
+            }
+        }
+
+        private static void ProcessCommand(
+           ObtainTreasureGnomeCommand command,
+           Player player,
+           Event instance,
+           CommandInstance stackInfo,
+           Stack<CommandInstance> callStack
+        )
+        {
+            if (player == null || !InstanceProcessor.TryGetInstanceController(player.MapInstanceId, out var instanceController))
+            {
+                return;
+            }
+
+            instanceController.GetGnome();
+        }
+
+        private static void ProcessCommand(
+           RollDungeonLoot command,
+           Player player,
+           Event instance,
+           CommandInstance stackInfo,
+           Stack<CommandInstance> callStack
+        )
+        {
+            if (player == null || !InstanceProcessor.TryGetInstanceController(player.MapInstanceId, out var instanceController))
+            {
+                return;
+            }
+
+            player.OpenLootRoll(instance.BaseEvent.Id, instanceController.GetDungeonLoot());
+        }
     }
 }

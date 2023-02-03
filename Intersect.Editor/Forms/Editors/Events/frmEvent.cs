@@ -851,6 +851,18 @@ namespace Intersect.Editor.Forms.Editors.Events
                     tmpCommand = new ChangeChallengeCommand();
 
                     break;
+                case EventCommandType.ChangeDungeon:
+                    tmpCommand = new ChangeDungeonCommand();
+
+                    break;
+                case EventCommandType.ObtainGnome:
+                    tmpCommand = new ObtainTreasureGnomeCommand();
+
+                    break;
+                case EventCommandType.RollDungeonLoot:
+                    tmpCommand = new RollDungeonLoot();
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -1561,6 +1573,16 @@ namespace Intersect.Editor.Forms.Editors.Events
                 case EventCommandType.ChangeChallenge:
                     cmdWindow = new EventCommand_ChangeChallenge((ChangeChallengeCommand)command, this);
 
+                    break;
+                case EventCommandType.ChangeDungeon:
+                    cmdWindow = new EventCommand_ChangeDungeon((ChangeDungeonCommand)command, this);
+
+                    break;
+                case EventCommandType.ObtainGnome:
+                    //No editor
+                    break;
+                case EventCommandType.RollDungeonLoot:
+                    //No editor
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

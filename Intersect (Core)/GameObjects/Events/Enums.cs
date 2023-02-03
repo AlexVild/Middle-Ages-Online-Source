@@ -271,6 +271,9 @@ namespace Intersect.GameObjects.Events
         ChangeBestiary, // 79
         ChangeWeaponTrack, // 80
         ChangeChallenge, // 81
+        ChangeDungeon, // 82
+        ObtainGnome, // 83
+        RollDungeonLoot, // 84
     }
 
     public enum NPCGuildManagementSelection

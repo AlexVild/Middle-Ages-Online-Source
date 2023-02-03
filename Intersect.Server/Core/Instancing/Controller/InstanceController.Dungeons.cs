@@ -70,12 +70,15 @@ namespace Intersect.Server.Core.Instancing.Controller
                 participant.StartCommonEventsWithTrigger(CommonEventTrigger.DungeonStart);
                 PacketSender.SendChatMsg(participant, $"{player.Name} has started {DungeonDescriptor.DisplayName}!", ChatMessageType.Party, CustomColors.General.GeneralWarning);
             }
+
+            Dungeon.State = DungeonState.Active;
         }
 
         bool TryAddPlayerToDungeon(Player player)
         {
             if (!DungeonJoinable)
             {
+                PacketSender.SendChatMsg(player, $"This dungeon has already been completed.", ChatMessageType.Notice, CustomColors.General.GeneralWarning);
                 return false;
             }
 
@@ -94,26 +97,28 @@ namespace Intersect.Server.Core.Instancing.Controller
 
             // Complete the dungeon timer & fire its events
             var timer = DungeonDescriptor.Timer;
-            if (timer != default
-                && TimerProcessor.TryGetOwnerId(timer.OwnerType, timer.Id, player, out var ownerId)
-                && !TimerProcessor.TryGetActiveTimer(timer.Id, ownerId, out var activeTimer))
+            if (timer == default
+                || !TimerProcessor.TryGetOwnerId(timer.OwnerType, timer.Id, player, out var ownerId)
+                || !TimerProcessor.TryGetActiveTimer(timer.Id, ownerId, out var activeTimer))
             {
-                Dungeon.CompletionTime = activeTimer.ElapsedTime;
-                GiveDungeonRewards();
+                return;
+            }
+            
+            Dungeon.CompletionTime = activeTimer.ElapsedTime;
+            GiveDungeonRewards();
                 
-                TimerProcessor.RemoveTimer(activeTimer);
-                foreach (var pl in Dungeon.Participants)
-                {
-                    pl.StartCommonEventsWithTrigger(CommonEventTrigger.DungeonComplete);
-                    pl.EnqueueStartCommonEvent(timer.CompletionEvent);
+            TimerProcessor.RemoveTimer(activeTimer);
+            foreach (var pl in Dungeon.Participants)
+            {
+                pl.StartCommonEventsWithTrigger(CommonEventTrigger.DungeonComplete);
+                pl.EnqueueStartCommonEvent(timer.CompletionEvent);
 
-                    // Mark a completion
-                    if (DungeonDescriptor.CompletionCounter != default)
-                    {
-                        var completions = pl.GetVariableValue(DungeonDescriptor.CompletionCounterId);
-                        pl.SetVariableValue(DungeonDescriptor.CompletionCounterId, completions + 1, DungeonDescriptor.CompletionCounter.Recordable);
-                        PacketSender.SendChatMsg(pl, $"You've completed {DungeonDescriptor.DisplayName} {completions + 1} times!", ChatMessageType.Experience, CustomColors.General.GeneralCompleted);
-                    }
+                // Mark a completion
+                if (DungeonDescriptor.CompletionCounter != default)
+                {
+                    var completions = pl.GetVariableValue(DungeonDescriptor.CompletionCounterId);
+                    pl.SetVariableValue(DungeonDescriptor.CompletionCounterId, completions + 1, DungeonDescriptor.CompletionCounter.Recordable);
+                    PacketSender.SendChatMsg(pl, $"You've completed {DungeonDescriptor.DisplayName} {completions + 1} times!", ChatMessageType.Experience, CustomColors.General.GeneralCompleted);
                 }
             }
         }
@@ -131,15 +136,23 @@ namespace Intersect.Server.Core.Instancing.Controller
 
         public List<LootRoll> GetDungeonLoot()
         {
+            var loot = new List<LootRoll>();
             if (Dungeon?.State != DungeonState.Complete || DungeonDescriptor == default)
             {
-                return new List<LootRoll>();
+                return loot;
+            }
+
+            if (Dungeon.GnomeObtained)
+            {
+                loot.AddRange(DungeonDescriptor.GnomeTreasure);
             }
 
             if (!DungeonDescriptor.Treasure.TryGetValue(Dungeon.TreasureLevel, out var treasure))
             {
-                return new List<LootRoll>();
+                return loot;
             }
+
+            treasure.AddRange(loot);
 
             return treasure;
         }
@@ -175,9 +188,22 @@ namespace Intersect.Server.Core.Instancing.Controller
             Logging.Log.Debug($"Removing dungeon on instance {InstanceId}");
         }
 
+        public void ResetDungeon()
+        {
+            var participants = Dungeon.Participants.ToArray();
+            var dungeonId = Dungeon.DescriptorId;
+            
+            InitializeDungeon(dungeonId);
+            
+            foreach(var participant in participants)
+            {
+                _ = TryAddPlayerToDungeon(participant);
+            }
+        }
+
         public void GetGnome()
         {
-            if (!DungeonActive && !Dungeon.GnomeObtained)
+            if (!DungeonActive || !Dungeon.GnomeObtained)
             {
                 return;
             }

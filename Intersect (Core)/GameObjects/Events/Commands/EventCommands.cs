@@ -1427,4 +1427,21 @@ namespace Intersect.GameObjects.Events.Commands
 
         public int Amount { get; set; } = 0;
     }
+
+    public partial class ChangeDungeonCommand : EventCommand
+    {
+        public override EventCommandType Type { get; } = EventCommandType.ChangeDungeon;
+
+        public DungeonState State { get; set; } = DungeonState.Inactive;
+    }
+
+    public partial class ObtainTreasureGnomeCommand : EventCommand
+    {
+        public override EventCommandType Type { get; } = EventCommandType.ObtainGnome;
+    }
+
+    public partial class RollDungeonLoot : EventCommand
+    {
+        public override EventCommandType Type { get; } = EventCommandType.RollDungeonLoot;
+    }
 }
