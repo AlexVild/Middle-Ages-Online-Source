@@ -98,6 +98,10 @@ namespace Intersect.Server.Database.PlayerData
 
         public DbSet<WeaponMasteryInstance> Player_Weapon_Masteries { get; set; }
 
+        public DbSet<ItemDiscoveryInstance> Player_Items_Discovered { get; set; }
+
+        public DbSet<DungeonTrackerInstance> Player_Dungeons_Tracked { get; set; }
+
         internal async ValueTask Commit(
             bool commit = false,
             CancellationToken cancellationToken = default(CancellationToken)
@@ -195,6 +199,14 @@ namespace Intersect.Server.Database.PlayerData
             modelBuilder.Entity<Player>()
                .HasMany(player => player.WeaponMasteries)
                .WithOne(mastery => mastery.Player);
+
+            modelBuilder.Entity<Player>()
+               .HasMany(player => player.ItemsDiscovered)
+               .WithOne(item => item.Player);
+            
+            modelBuilder.Entity<Player>()
+               .HasMany(player => player.DungeonsTracked)
+               .WithOne(dungeon => dungeon.Player);
         }
 
         public void Seed()
@@ -310,6 +322,12 @@ namespace Intersect.Server.Database.PlayerData
                 Entry(itm).State = EntityState.Detached;
             
             foreach (var itm in player.WeaponMasteries)
+                Entry(itm).State = EntityState.Detached;
+            
+            foreach (var itm in player.ItemsDiscovered)
+                Entry(itm).State = EntityState.Detached;
+            
+            foreach (var itm in player.DungeonsTracked)
                 Entry(itm).State = EntityState.Detached;
         }
 

@@ -2738,7 +2738,7 @@ namespace Intersect.Server.Networking
                 return;
             }
 
-            player.Warp(packet.NewMapId, packet.X, packet.Y, packet.Dir, false, 0, false, false, packet.InstanceType);
+            player.Warp(packet.NewMapId, packet.X, packet.Y, packet.Dir, false, 0, false, false, packet.InstanceType, dungeonId: packet.DungeonId);
         }
 
         // BankSortPacket

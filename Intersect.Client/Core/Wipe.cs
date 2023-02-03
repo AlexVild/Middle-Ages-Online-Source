@@ -155,7 +155,7 @@ namespace Intersect.Client.Core
                     }
                     if (sAlertServerWhenFaded)
                     {
-                        Networking.PacketSender.SendMapTransitionReady(Globals.futureWarpMapId, Globals.futureWarpX, Globals.futureWarpY, Globals.futureWarpDir, Globals.futureWarpInstanceType);
+                        Networking.PacketSender.SendMapTransitionReady(Globals.futureWarpMapId, Globals.futureWarpX, Globals.futureWarpY, Globals.futureWarpDir, Globals.futureWarpInstanceType, Globals.futureDungeonId);
                     }
 
                     sAlertServerWhenFaded = false;

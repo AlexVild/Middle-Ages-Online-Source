@@ -1982,11 +1982,12 @@ namespace Intersect.Server.Entities
             bool fromWarpEvent = false,
             MapInstanceType mapInstanceType = MapInstanceType.NoChange,
             bool fromLogin = false,
-            bool forceInstanceChange = false
+            bool forceInstanceChange = false,
+            Guid? dungeonId = null
         )
         {
             #region shortcircuit exits
-            // First, deny the warp entirely if we CAN'T, for some reason, warp to the requested instance type. ONly do this if we're not forcing a change
+            // First, deny the warp entirely if we CAN'T, for some reason, warp to the requested instance type. Only do this if we're not forcing a change
             if (!forceInstanceChange && !CanChangeToInstanceType(mapInstanceType, fromLogin, newMapId))
             {
                 return;
@@ -1994,7 +1995,9 @@ namespace Intersect.Server.Entities
             if (fromWarpEvent && Options.DebugAllowMapFades)
             {
                 PacketSender.SendFadePacket(Client, false);
-                PacketSender.SendUpdateFutureWarpPacket(Client, newMapId, newX, newY, newDir, mapInstanceType);
+
+                // TODO it's weird that the client cares where you're going? Store that in the server instead
+                PacketSender.SendUpdateFutureWarpPacket(Client, newMapId, newX, newY, newDir, mapInstanceType, dungeonId);
                 return;
             }
             #endregion
@@ -2114,6 +2117,12 @@ namespace Intersect.Server.Entities
                 PacketSender.SendEntityPositionToAll(this);
             }
 
+            if (dungeonId != null && dungeonId != Guid.Empty && InstanceProcessor.TryGetInstanceController(MapInstanceId, out var instanceController))
+            {
+                var dId = dungeonId.GetValueOrDefault();
+                instanceController.TryInitializeOrJoinDungeon(dId, this);
+            }
+
             if (Options.DebugAllowMapFades)
             {
                 PacketSender.SendFadePacket(Client, true); // fade in by default - either the player was faded out or was not
@@ -2152,6 +2161,13 @@ namespace Intersect.Server.Entities
         /// <param name="fromLogin">Whether or not we're coming to this method via the player login/join game flow</param>
         public void WarpToLastOverworldLocation(bool fromLogin)
         {
+            if (!fromLogin 
+                && InstanceProcessor.TryGetInstanceController(MapInstanceId, out var instanceController)
+                && instanceController.InstanceIsDungeon)
+            {
+                TrackDungeonFailure(instanceController.DungeonId);
+            }
+
             Warp(
                 LastOverworldMapId, (byte)LastOverworldX, (byte)LastOverworldY, (byte)Dir, false, (byte)Z, false, false, MapInstanceType.Overworld, fromLogin
             );
@@ -3030,6 +3046,8 @@ namespace Intersect.Server.Entities
                 }
 
             }
+
+            ItemsDiscovered.Add(new ItemDiscoveryInstance(Id, item.ItemId));
 
             // Do we need to update the player's inventory?
             if (sendUpdate)
@@ -7428,12 +7446,7 @@ namespace Intersect.Server.Entities
                         PacketSender.SendPlaySound(this, warpAtt.WarpSound);
                     }
 
-                    Warp(warpAtt.MapId, warpAtt.X, warpAtt.Y, dir, false, 0, false, warpAtt.FadeOnWarp, instanceType);
-
-                    if (warpAtt.DungeonId != Guid.Empty && warpAtt.InstanceType != MapInstanceType.Overworld && InstanceProcessor.TryGetInstanceController(MapInstanceId, out var instanceController))
-                    {
-                        _ = instanceController.TryInitializeOrJoinDungeon(warpAtt.DungeonId, this);
-                    }
+                    Warp(warpAtt.MapId, warpAtt.X, warpAtt.Y, dir, false, 0, false, warpAtt.FadeOnWarp, instanceType, dungeonId: warpAtt.DungeonId);
                 }
 
                 foreach (var evt in EventLookup)

@@ -468,6 +468,8 @@
     <Compile Include="Database\GameData\Migrations\BoundItemExtensionMigration.cs" />
     <Compile Include="Database\GameData\Migrations\CerasVersionToleranceMigration.cs" />
     <Compile Include="Database\ContextInterface.cs" />
+    <Compile Include="Database\PlayerData\Players\DungeonTrackerInstance.cs" />
+    <Compile Include="Database\PlayerData\Players\ItemDiscoveryInstance.cs" />
     <Compile Include="Database\PlayerData\Migrations\GuildBankMaxSlotMigration.cs" />
     <Compile Include="Database\IDbContext.cs" />
     <Compile Include="Database\IntersectDbContext.cs" />
@@ -536,7 +538,9 @@
     <Compile Include="Database\PlayerData\User.cs" />
     <Compile Include="Database\PlayerData\PlayerContext.cs" />
     <Compile Include="Entities\Events\Event.cs" />
+    <Compile Include="Entities\Player.DungeonTracking.cs" />
     <Compile Include="Entities\Player.Harvesting.cs" />
+    <Compile Include="Entities\Player.ItemDiscovery.cs" />
     <Compile Include="Entities\Player.Passives.cs" />
     <Compile Include="Entities\Player.Recipes.cs" />
     <Compile Include="Entities\Player.SkillBook.cs" />
@@ -700,6 +704,14 @@
     <Compile Include="Migrations\20230201204000_AddVitalAllocationsMigration.cs" />
     <Compile Include="Migrations\20230201204000_AddVitalAllocationsMigration.designer.cs">
       <DependentUpon>20230201204000_AddVitalAllocationsMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20230203163021_AddItemDiscoveredCollectionMigration.cs" />
+    <Compile Include="Migrations\20230203163021_AddItemDiscoveredCollectionMigration.designer.cs">
+      <DependentUpon>20230203163021_AddItemDiscoveredCollectionMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20230203173920_DungeonTrackingMigration.cs" />
+    <Compile Include="Migrations\20230203173920_DungeonTrackingMigration.designer.cs">
+      <DependentUpon>20230203173920_DungeonTrackingMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.cs" />
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.Designer.cs">

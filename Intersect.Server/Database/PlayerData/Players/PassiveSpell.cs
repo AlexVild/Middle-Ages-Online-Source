@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Intersect.Server.Database.PlayerData.Players
 {
-    public class PassiveSpell
+    public class PassiveSpell : IPlayerOwned
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }

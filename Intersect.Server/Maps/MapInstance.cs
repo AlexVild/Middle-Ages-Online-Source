@@ -165,6 +165,10 @@ namespace Intersect.Server.Maps
             mMapController = map;
             MapInstanceId = mapInstanceId;
             Id = Guid.NewGuid();
+            if (!InstanceProcessor.CurrentControllers.Contains(MapInstanceId)) 
+            {
+                InstanceProcessor.AddInstanceController(MapInstanceId);
+            }
         }
 
         public bool IsDisposed { get; protected set; }

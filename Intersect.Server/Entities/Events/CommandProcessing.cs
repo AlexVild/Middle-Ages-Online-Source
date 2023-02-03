@@ -812,20 +812,15 @@ namespace Intersect.Server.Entities.Events
                 player.Warp(
                     command.MapId, command.X, command.Y,
                     command.Direction == WarpDirection.Retain ? (byte)player.Dir : (byte)(command.Direction - 1),
-                    false, 0, false, command.FadeOnWarp, command.InstanceType
+                    false, 0, false, command.FadeOnWarp, command.InstanceType, dungeonId: command.DungeonId
                 );
             } else
             {
                 player.Warp(
                     command.MapId, command.X, command.Y,
                     command.Direction == WarpDirection.Retain ? (byte)player.Dir : (byte)(command.Direction - 1),
-                    false, 0, false, command.FadeOnWarp
+                    false, 0, false, command.FadeOnWarp, dungeonId: command.DungeonId
                 );
-            }
-
-            if (command.DungeonId != Guid.Empty && command.InstanceType != MapInstanceType.Overworld && InstanceProcessor.TryGetInstanceController(player.MapInstanceId, out var instanceController))
-            {
-                _ = instanceController.TryInitializeOrJoinDungeon(command.DungeonId, player);
             }
         }
 

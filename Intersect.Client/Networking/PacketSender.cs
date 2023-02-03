@@ -472,9 +472,9 @@ namespace Intersect.Client.Networking
             }
         }
 
-        public static void SendMapTransitionReady(Guid newMapId, float x, float y, byte dir, MapInstanceType instanceType)
+        public static void SendMapTransitionReady(Guid newMapId, float x, float y, byte dir, MapInstanceType instanceType, Guid dungeonId)
         {
-            Network.SendPacket(new MapTransitionReadyPacket(newMapId, x, y, dir, instanceType));
+            Network.SendPacket(new MapTransitionReadyPacket(newMapId, x, y, dir, instanceType, dungeonId));
         }
 
         public static void SendCraftingInfoPacket()

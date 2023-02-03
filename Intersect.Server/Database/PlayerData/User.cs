@@ -751,6 +751,10 @@ namespace Intersect.Server.Database.PlayerData
                     .ThenInclude(p => p.Challenges)
                     .Include(p => p.Players)
                     .ThenInclude(p => p.WeaponMasteries)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.ItemsDiscovered)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.DungeonsTracked)
                     .FirstOrDefault()
             ) ??
             throw new InvalidOperationException();
@@ -799,6 +803,10 @@ namespace Intersect.Server.Database.PlayerData
                     .ThenInclude(p => p.Challenges)
                     .Include(p => p.Players)
                     .ThenInclude(p => p.WeaponMasteries)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.ItemsDiscovered)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.DungeonsTracked)
                     .FirstOrDefault()
             ) ??
             throw new InvalidOperationException();
@@ -846,6 +854,10 @@ namespace Intersect.Server.Database.PlayerData
                     .ThenInclude(p => p.Challenges)
                     .Include(p => p.Players)
                     .ThenInclude(p => p.WeaponMasteries)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.ItemsDiscovered)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.DungeonsTracked)
                     .FirstOrDefault()
             ) ??
             throw new InvalidOperationException();
@@ -893,6 +905,10 @@ namespace Intersect.Server.Database.PlayerData
                     .ThenInclude(p => p.Challenges)
                     .Include(p => p.Players)
                     .ThenInclude(p => p.WeaponMasteries)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.ItemsDiscovered)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.DungeonsTracked)
                     .FirstOrDefault()
                 ) ?? throw new InvalidOperationException();
 
@@ -949,6 +965,10 @@ namespace Intersect.Server.Database.PlayerData
                     .ThenInclude(p => p.Challenges)
                     .Include(p => p.Players)
                     .ThenInclude(p => p.WeaponMasteries)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.ItemsDiscovered)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.DungeonsTracked)
                     .FirstOrDefault()
                 ) ?? throw new InvalidOperationException();
 

@@ -2297,6 +2297,7 @@ namespace Intersect.Client.Networking
             Globals.futureWarpY = packet.Y;
             Globals.futureWarpDir = packet.Dir;
             Globals.futureWarpInstanceType = packet.InstanceType;
+            Globals.futureDungeonId = packet.DungeonId;
         }
 
         // Combo handling packet

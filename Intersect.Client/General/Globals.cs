@@ -188,6 +188,8 @@ namespace Intersect.Client.General
         public static byte futureWarpDir;
 
         public static MapInstanceType futureWarpInstanceType = MapInstanceType.NoChange;
+        
+        public static Guid futureDungeonId = Guid.Empty;
 
         public static Entity GetEntity(Guid id, EntityTypes type)
         {

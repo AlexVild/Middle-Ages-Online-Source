@@ -65,5 +65,9 @@ namespace Intersect.Server.Database.PlayerData
         DbSet<ChallengeInstance> Player_Challenges { get; set; }
         
         DbSet<WeaponMasteryInstance> Player_Weapon_Masteries { get; set; }
+        
+        DbSet<ItemDiscoveryInstance> Player_Items_Discovered { get; set; }
+        
+        DbSet<DungeonTrackerInstance> Player_Dungeons_Tracked { get; set; }
     }
 }

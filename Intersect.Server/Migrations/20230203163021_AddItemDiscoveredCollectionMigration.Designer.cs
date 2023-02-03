@@ -3,14 +3,16 @@ using System;
 using Intersect.Server.Database.PlayerData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Intersect.Server.Migrations
 {
     [DbContext(typeof(PlayerContext))]
-    partial class PlayerContextModelSnapshot : ModelSnapshot
+    [Migration("20230203163021_AddItemDiscoveredCollectionMigration")]
+    partial class AddItemDiscoveredCollectionMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -237,32 +239,6 @@ namespace Intersect.Server.Migrations
                     b.HasIndex("PlayerId");
 
                     b.ToTable("Player_Cosmetics");
-                });
-
-            modelBuilder.Entity("Intersect.Server.Database.PlayerData.Players.DungeonTrackerInstance", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<long>("BestGroupTime");
-
-                    b.Property<long>("BestSoloTime");
-
-                    b.Property<Guid>("DungeonId");
-
-                    b.Property<int>("Failures");
-
-                    b.Property<int>("GroupCompletions");
-
-                    b.Property<Guid>("PlayerId");
-
-                    b.Property<int>("SoloCompletions");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PlayerId");
-
-                    b.ToTable("Player_Dungeons_Tracked");
                 });
 
             modelBuilder.Entity("Intersect.Server.Database.PlayerData.Players.Friend", b =>
@@ -892,14 +868,6 @@ namespace Intersect.Server.Migrations
                 {
                     b.HasOne("Intersect.Server.Entities.Player", "Player")
                         .WithMany("UnlockedCosmetics")
-                        .HasForeignKey("PlayerId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Intersect.Server.Database.PlayerData.Players.DungeonTrackerInstance", b =>
-                {
-                    b.HasOne("Intersect.Server.Entities.Player", "Player")
-                        .WithMany("DungeonsTracked")
                         .HasForeignKey("PlayerId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

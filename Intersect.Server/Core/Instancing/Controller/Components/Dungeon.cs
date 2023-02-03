@@ -15,6 +15,7 @@ namespace Intersect.Server.Core.Instancing.Controller.Components
         public Dungeon(Guid dungeonId)
         {
             DescriptorId = dungeonId;
+            State = DungeonState.Null;
         }
 
         public Guid DescriptorId { get; set; }
@@ -23,7 +24,7 @@ namespace Intersect.Server.Core.Instancing.Controller.Components
 
         public bool GnomeObtained { get; set; }
 
-        public DungeonState State { get; set; } = DungeonState.Null;
+        public DungeonState State { get; set; }
 
         public List<Player> Participants { get; set; } = new List<Player>();
 

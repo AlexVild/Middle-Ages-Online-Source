@@ -1558,7 +1558,8 @@ namespace Intersect.Server.Entities
             bool fromWarpEvent = false,
             MapInstanceType mapInstanceType = MapInstanceType.NoChange,
             bool fromLogin = false,
-            bool forceInstanceChange = false
+            bool forceInstanceChange = false, 
+            Guid? dungeonId = null
         )
         {
             if (!MapController.TryGetInstanceFromMap(newMapId, MapInstanceId, out var map))

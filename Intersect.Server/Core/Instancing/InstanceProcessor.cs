@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using Intersect.Server.Maps;
 using Intersect.Server.Core.Instancing.Controller;
+using Intersect.GameObjects.Events;
 
 namespace Intersect.Server.Core
 {
     public static class InstanceProcessor
     {
         private static Dictionary<Guid, InstanceController> InstanceControllers = new Dictionary<Guid, InstanceController>();
+
+        public static Guid[] CurrentControllers => InstanceControllers.Keys.ToArray();
 
         public static bool TryGetInstanceController(Guid instanceId, out InstanceController controller)
         {
@@ -27,6 +30,14 @@ namespace Intersect.Server.Core
             }
         }
 
+        public static void AddInstanceController(Guid mapInstanceId)
+        {
+            if (!InstanceControllers.ContainsKey(mapInstanceId))
+            {
+                InstanceControllers[mapInstanceId] = new InstanceController(mapInstanceId);
+            }
+        }
+
         public static void UpdateInstanceControllers(List<MapInstance> activeMaps)
         {
             if (activeMaps == null || activeMaps.Count == 0)
@@ -38,21 +49,34 @@ namespace Intersect.Server.Core
             // Cleanup inactive instances
             CleanupOrphanedControllers(activeMaps);
 
-            foreach (var map in activeMaps)
+            Dictionary<Guid, List<MapInstance>> mapsAndInstances = activeMaps
+                .GroupBy(m => m.MapInstanceId)
+                .ToDictionary(m => m.Key, m => m.ToList());
+
+            // For each instance...
+            foreach (var mapInstanceGroup in mapsAndInstances)
             {
-                var instanceId = map.MapInstanceId;
-                if (!InstanceControllers.TryGetValue(instanceId, out var instance))
+                // Fetch our instance controller
+                var instanceId = mapInstanceGroup.Key;
+                if (!InstanceControllers.ContainsKey(instanceId))
                 {
-                    InstanceControllers[instanceId] = new InstanceController(instanceId);
-                    instance = InstanceControllers[instanceId];
+                    return;
+                }
+                var instanceController = InstanceControllers[instanceId];
+
+                // Cleanup map spawn groups/permadead NPCs; accumulate total player count
+                instanceController.PlayerCount = 0;
+                // Do things that need to occur for _each map_ here
+                foreach (var map in mapInstanceGroup.Value)
+                {
+                    instanceController.PlayerCount += map.GetPlayers().Count;
+                    instanceController.CleanupSpawnGroups();
                 }
 
-                instance.PlayerCount = map.GetPlayers().Count;
-
-                instance.CleanupSpawnGroups();
-                if (instance.PlayerCount == 0)
+                // If instance was a dungeon but no one is around to hear it, remove the dungeon
+                if (instanceController.InstanceIsDungeon && instanceController.PlayerCount == 0)
                 {
-                    instance.RemoveDungeon();
+                    instanceController.RemoveDungeon();
                 }
             }
         }

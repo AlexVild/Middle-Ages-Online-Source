@@ -2,6 +2,7 @@
 using Intersect.GameObjects;
 using Intersect.Network.Packets.Server;
 using Intersect.Server.Database;
+using Intersect.Server.Database.PlayerData;
 using Intersect.Server.Database.PlayerData.Players;
 using Intersect.Server.Localization;
 using Intersect.Server.Networking;
@@ -509,6 +510,11 @@ namespace Intersect.Server.Entities
                     }
                 }
 
+            }
+
+            if (mPlayer?.ItemsDiscovered.Add(new ItemDiscoveryInstance(mPlayer.Id, item.ItemId)) ?? false)
+            {
+                Logging.Log.Debug($"Added item to {mPlayer.Name}'s discovered list");
             }
 
             // Do we need to update the bank display?

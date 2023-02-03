@@ -18,11 +18,13 @@ namespace Intersect.Server.Core.Instancing.Controller
         Dungeon Dungeon { get; set; } = new Dungeon(Guid.Empty);
 
         DungeonDescriptor DungeonDescriptor { get; set; }
-        
+
+        public Guid DungeonId => Dungeon?.DescriptorId ?? Guid.Empty;
+
         bool DungeonActive => Dungeon?.State == DungeonState.Active;
         bool DungeonReady => Dungeon?.State == DungeonState.Inactive;
-        bool InstanceIsDungeon => Dungeon?.State != DungeonState.Null;
-        bool DungeonJoinable => Dungeon?.State == DungeonState.Null || Dungeon?.State == DungeonState.Complete;
+        public bool InstanceIsDungeon => Dungeon?.State != DungeonState.Null;
+        bool DungeonJoinable => !(Dungeon?.State == DungeonState.Null || Dungeon?.State == DungeonState.Complete);
 
         public int DungeonParticipants => Dungeon?.Participants?.Count ?? 0;
 
@@ -112,6 +114,7 @@ namespace Intersect.Server.Core.Instancing.Controller
             {
                 pl.StartCommonEventsWithTrigger(CommonEventTrigger.DungeonComplete);
                 pl.EnqueueStartCommonEvent(timer.CompletionEvent);
+                pl.TrackDungeonCompletion(Dungeon.DescriptorId, DungeonParticipants, Dungeon.CompletionTime);
 
                 // Mark a completion
                 if (DungeonDescriptor.CompletionCounter != default)
