@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Intersect.Server.Core.Instancing.Controller.Components
 {
-    sealed class Dungeon
+    public sealed class Dungeon
     {
         public Dungeon(Guid dungeonId)
         {
@@ -28,7 +28,7 @@ namespace Intersect.Server.Core.Instancing.Controller.Components
 
         public List<Player> Participants { get; set; } = new List<Player>();
 
-        public bool IsSolo => Participants.Count == 1 && (Participants[0].Party == null || Participants[0].Party.Count < 2);
+        public bool IsSolo { get; set; }
 
         public int TreasureLevel = 0;
 

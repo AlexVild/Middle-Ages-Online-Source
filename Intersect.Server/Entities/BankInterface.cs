@@ -379,6 +379,11 @@ namespace Intersect.Server.Entities
                 }
             }
 
+            if (item == null)
+            {
+                return true;
+            }
+
             var itemBase = item.Descriptor;
 
             if (itemBase == null)

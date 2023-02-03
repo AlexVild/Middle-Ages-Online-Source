@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using Intersect.GameObjects.Switches_and_Variables;
 using Intersect.GameObjects;
-using Intersect.Server.Maps;
 using Intersect.GameObjects.Events;
 using Intersect.Server.Entities;
 using Intersect.Server.Core.Instancing.Controller.Components;
@@ -15,13 +12,15 @@ namespace Intersect.Server.Core.Instancing.Controller
 {
     public sealed partial class InstanceController
     {
-        Dungeon Dungeon { get; set; } = new Dungeon(Guid.Empty);
+        public Dungeon Dungeon { get; set; } = new Dungeon(Guid.Empty);
 
+        public string DungeonName => DungeonDescriptor == null ? string.Empty : DungeonDescriptor?.DisplayName ?? DungeonDescriptor.GetName(DungeonId);
         DungeonDescriptor DungeonDescriptor { get; set; }
 
         public Guid DungeonId => Dungeon?.DescriptorId ?? Guid.Empty;
 
-        bool DungeonActive => Dungeon?.State == DungeonState.Active;
+        public DungeonState DungeonState => Dungeon?.State ?? DungeonState.Null;
+        public bool DungeonActive => Dungeon?.State == DungeonState.Active;
         bool DungeonReady => Dungeon?.State == DungeonState.Inactive;
         public bool InstanceIsDungeon => Dungeon?.State != DungeonState.Null;
         bool DungeonJoinable => !(Dungeon?.State == DungeonState.Null || Dungeon?.State == DungeonState.Complete);
@@ -49,7 +48,7 @@ namespace Intersect.Server.Core.Instancing.Controller
             }
 
             Dungeon.State = DungeonState.Inactive;
-            Dungeon.GnomeLocation = Randomization.Next(DungeonDescriptor.GnomeLocations + 1);
+            Dungeon.GnomeLocation = Randomization.Next(DungeonDescriptor.GnomeLocations);
         }
 
         public void StartDungeon(Player player)
@@ -70,7 +69,14 @@ namespace Intersect.Server.Core.Instancing.Controller
             foreach (var participant in Dungeon.Participants)
             {
                 participant.StartCommonEventsWithTrigger(CommonEventTrigger.DungeonStart);
-                PacketSender.SendChatMsg(participant, $"{player.Name} has started {DungeonDescriptor.DisplayName}!", ChatMessageType.Party, CustomColors.General.GeneralWarning);
+                if (Dungeon.IsSolo)
+                {
+                    PacketSender.SendChatMsg(participant, $"You've started a solo run of {DungeonDescriptor.DisplayName}!", ChatMessageType.Party, CustomColors.General.GeneralWarning);
+                }
+                else
+                {
+                    PacketSender.SendChatMsg(participant, $"{player.Name} has started {DungeonDescriptor.DisplayName}!", ChatMessageType.Party, CustomColors.General.GeneralWarning);
+                }
             }
 
             Dungeon.State = DungeonState.Active;
@@ -85,6 +91,10 @@ namespace Intersect.Server.Core.Instancing.Controller
             }
 
             Dungeon.Participants.Add(player);
+            if (DungeonParticipants == 1 && (Dungeon.Participants[0].Party == null || Dungeon.Participants[0].Party.Count < 2))
+            {
+                Dungeon.IsSolo = true;
+            }
             return true;
         }
 
@@ -206,7 +216,7 @@ namespace Intersect.Server.Core.Instancing.Controller
 
         public void GetGnome()
         {
-            if (!DungeonActive || !Dungeon.GnomeObtained)
+            if (!DungeonActive || Dungeon.GnomeObtained)
             {
                 return;
             }

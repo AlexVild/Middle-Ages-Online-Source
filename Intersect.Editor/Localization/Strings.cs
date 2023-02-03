@@ -430,6 +430,31 @@ namespace Intersect.Editor.Localization
             return EventConditionDesc.HasChallengeComplete.ToString(ChallengeDescriptor.GetName(condition.ChallengeId));
         }
 
+        public static string GetEventConditionalDesc(DungeonIs condition)
+        {
+            return $"Dungeon state is {Enum.GetName(typeof(DungeonState), condition.State)}";
+        }
+
+        public static string GetEventConditionalDesc(DungeonTreasureLevelIs condition)
+        {
+            return $"Dungeon treasure lvl is {condition.TreasureLevel} or higher";
+        }
+
+        public static string GetEventConditionalDesc(GnomeLocationIs condition)
+        {
+            return $"Dungeon gnome is in location {condition.GnomeLocation}";
+        }
+
+        public static string GetEventConditionalDesc(SoloDungeon condition)
+        {
+            return $"Dungeon is solo";
+        }
+
+        public static string GetEventConditionalDesc(GnomeIs condition)
+        {
+            return $"Dungeon treasure gnome obtained";
+        }
+
         public static string GetEventConditionalDesc(WeaponTypeIs condition)
         {
             return EventConditionDesc.HasWeaponLevel.ToString(WeaponTypeDescriptor.GetName(condition.WeaponTypeId), condition.Level);
@@ -2407,6 +2432,11 @@ Tick timer saved in server config.json.";
                 {37, @"Has spell X in spellbook..."},
                 {38, @"Has challenge completed..."},
                 {39, @"Has weapon X level Y or higher..."},
+                {40, @"Dungeon state is..."},
+                {41, @"In solo dungeon"},
+                {42, @"Treasure gnome obtained"},
+                {43, @"Dungeon treasure level is X or higher"},
+                {44, @"Treasure gnome in location..."},
             };
 
             public static LocalizedString endrange = @"End Range:";
@@ -2857,6 +2887,9 @@ Tick timer saved in server config.json.";
                 {22, @"Gathered X Resources of Type"},
                 {23, @"Crafted X of Item"},
                 {24, @"Combo Reached"},
+                {25, @"Dungeon Start"},
+                {26, @"Dungeon Complete"},
+                {27, @"Gnome Obtained"},
             };
 
             public static LocalizedString conditions = @"Conditions";

@@ -1,4 +1,6 @@
-﻿using Intersect.Server.Database.PlayerData.Players;
+﻿using Intersect.GameObjects;
+using Intersect.Server.Database.PlayerData.Players;
+using Intersect.Server.Networking;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -15,33 +17,37 @@ namespace Intersect.Server.Entities
         public void TrackDungeonCompletion(Guid dungeonId, int partySize, long completionTime)
         {
             var dungeonTrack = new DungeonTrackerInstance(Id, dungeonId);
-            var idx = DungeonsTracked.FindIndex(dt => dt == dungeonTrack);
+            var dungeonName = DungeonDescriptor.GetName(dungeonId);
+            var idx = DungeonsTracked.FindIndex(dt => dt.DungeonId == dungeonTrack.DungeonId);
 
+            var completions = 1;
             if (idx == -1)
             {
-                dungeonTrack.IncrementCompletion(partySize);
-                dungeonTrack.TryUpdateTimeRecord(completionTime, partySize);
+                dungeonTrack.IncrementCompletion(partySize, this);
+                dungeonTrack.TryUpdateTimeRecord(completionTime, partySize, this);
                 DungeonsTracked.Add(dungeonTrack);
-                return;
             }
-
-            DungeonsTracked[idx].IncrementCompletion(partySize);
-            DungeonsTracked[idx].TryUpdateTimeRecord(completionTime, partySize);
+            else
+            {
+                DungeonsTracked[idx].IncrementCompletion(partySize, this);
+                DungeonsTracked[idx].TryUpdateTimeRecord(completionTime, partySize, this);
+            }
         }
 
         public void TrackDungeonFailure(Guid dungeonId)
         {
             var dungeonTrack = new DungeonTrackerInstance(Id, dungeonId);
-            var idx = DungeonsTracked.FindIndex(dt => dt == dungeonTrack);
+            var idx = DungeonsTracked.FindIndex(dt => dt.DungeonId == dungeonTrack.DungeonId);
 
             if (idx == -1)
             {
                 dungeonTrack.Failures++;
                 DungeonsTracked.Add(dungeonTrack);
-                return;
             }
-
-            DungeonsTracked[idx].Failures++;
+            else
+            {
+                DungeonsTracked[idx].Failures++;
+            }
         }
     }
 }

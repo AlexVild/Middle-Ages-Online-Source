@@ -2604,6 +2604,10 @@ namespace Intersect.Server.Networking
             var lootObjs = new List<Loot>();
             foreach(var item in player.CurrentLoot)
             {
+                if (item == null)
+                {
+                    continue;
+                }
                 var lootObj = new Loot();
                 lootObj.ItemId = item.ItemId;
                 lootObj.Quantity = item.Quantity;

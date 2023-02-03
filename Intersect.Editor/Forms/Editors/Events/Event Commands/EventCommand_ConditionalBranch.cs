@@ -518,6 +518,27 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     Condition = new ChallengeCompleted();
 
                     break;
+                case ConditionTypes.DungeonIs:
+                    Condition = new DungeonIs();
+
+                    break;
+                case ConditionTypes.GnomeIs:
+                    Condition = new GnomeIs();
+
+                    break;
+
+                case ConditionTypes.SoloDungeon:
+                    Condition = new SoloDungeon();
+
+                    break;
+                case ConditionTypes.DungeonTreasureIs:
+                    Condition = new DungeonTreasureLevelIs();
+
+                    break;
+                case ConditionTypes.GnomeLocationIs:
+                    Condition = new GnomeLocationIs();
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -554,6 +575,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             grpBeastHasUnlock.Hide();
             grpChallenge.Hide();
             grpWeaponMastery.Hide();
+            grpTreasureLevel.Hide();
+            grpDungeonState.Hide();
             switch (type)
             {
                 case ConditionTypes.VariableIs:
@@ -797,6 +820,25 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     {
                         cmbChallenges.SelectedIndex = 0;
                     }
+                    break;
+
+                case ConditionTypes.DungeonIs:
+                    grpDungeonState.Show();
+                    darkComboBox1.Items.Clear();
+                    darkComboBox1.Items.AddRange(Enum.GetNames(typeof(DungeonState)));
+                    break;
+
+                case ConditionTypes.SoloDungeon:
+                case ConditionTypes.GnomeIs:
+                    break;
+
+                case ConditionTypes.DungeonTreasureIs:
+                    grpTreasureLevel.Show();
+                    lblTreasureLevel.Text = "Treasure Lvl";
+                    break;
+                case ConditionTypes.GnomeLocationIs:
+                    grpTreasureLevel.Show();
+                    lblTreasureLevel.Text = "Gnome Idx";
                     break;
 
                 default:
@@ -1691,6 +1733,29 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             nudWeaponTypeLvl.Value = condition.Level;
         }
 
+        private void SetupFormValues(DungeonIs condition)
+        {
+            darkComboBox1.SelectedIndex = (int)condition.State;
+        }
+
+        private void SetupFormValues(DungeonTreasureLevelIs condition)
+        {
+            darkNumericUpDown1.Value = (int)condition.TreasureLevel;
+        }
+
+        private void SetupFormValues(GnomeLocationIs condition)
+        {
+            darkNumericUpDown1.Value = (int)condition.GnomeLocation;
+        }
+
+        private void SetupFormValues(GnomeIs condition)
+        {
+        }
+
+        private void SetupFormValues(SoloDungeon condition)
+        {
+        }
+
         #endregion
 
         #region "SaveFormValues"
@@ -2000,6 +2065,29 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         {
             condition.WeaponTypeId = WeaponTypeDescriptor.IdFromList(cmbWeaponType.SelectedIndex);
             condition.Level = (int)nudWeaponTypeLvl.Value;
+        }
+
+        private void SaveFormValues(DungeonIs condition)
+        {
+            condition.State = (DungeonState)darkComboBox1.SelectedIndex;
+        }
+
+        private void SaveFormValues(DungeonTreasureLevelIs condition)
+        {
+            condition.TreasureLevel = (int)darkNumericUpDown1.Value;
+        }
+        
+        private void SaveFormValues(GnomeIs condition)
+        {
+        }
+
+        private void SaveFormValues(SoloDungeon condition)
+        {
+        }
+
+        private void SaveFormValues(GnomeLocationIs condition)
+        {
+            condition.GnomeLocation = (int)darkNumericUpDown1.Value;
         }
         #endregion
 

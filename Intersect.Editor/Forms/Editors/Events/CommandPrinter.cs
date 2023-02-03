@@ -1826,6 +1826,11 @@ namespace Intersect.Editor.Forms.Editors.Events
                 case RecordType.Combo:
                     recordValue = "Combo";
                     break;
+                case RecordType.GroupDungeonTimes:
+                case RecordType.SoloDungeonTimes:
+                case RecordType.TotalDungeonCompletions:
+                    recordValue = DungeonDescriptor.GetName(command.RecordId);
+                    break;
                 default:
                     recordValue = Strings.EventCommandList.mapnotfound;
                     break;

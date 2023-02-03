@@ -63,6 +63,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                 case RecordType.PlayerVariable:
                     cmbValue.Items.AddRange(PlayerVariableBase.GetNamesByType(VariableDataTypes.Integer));
                     break;
+                case RecordType.GroupDungeonTimes:
+                case RecordType.SoloDungeonTimes:
+                case RecordType.TotalDungeonCompletions:
+                    cmbValue.Items.AddRange(DungeonDescriptor.Names);
+                    break;
                 case RecordType.Combo:
                     cmbValue.Enabled = false;
                     break;
@@ -98,6 +103,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                 case RecordType.PlayerVariable:
                     cmbValue.SelectedIndex = PlayerVariableBase.ListIndex(mMyCommand.RecordId, VariableDataTypes.Integer);
                     break;
+                case RecordType.GroupDungeonTimes:
+                case RecordType.SoloDungeonTimes:
+                case RecordType.TotalDungeonCompletions:
+                    cmbValue.SelectedIndex = DungeonDescriptor.ListIndex(mMyCommand.RecordId);
+                    break;
                 case RecordType.Combo:
                     cmbValue.Enabled = false;
                     break;
@@ -122,6 +132,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     break;
                 case RecordType.PlayerVariable:
                     mMyCommand.RecordId = PlayerVariableBase.IdFromList(cmbValue.SelectedIndex, VariableDataTypes.Integer);
+                    break;
+                case RecordType.GroupDungeonTimes:
+                case RecordType.SoloDungeonTimes:
+                case RecordType.TotalDungeonCompletions:
+                    mMyCommand.RecordId = DungeonDescriptor.IdFromList(cmbValue.SelectedIndex);
                     break;
                 case RecordType.Combo:
                     mMyCommand.RecordId = Guid.Empty;

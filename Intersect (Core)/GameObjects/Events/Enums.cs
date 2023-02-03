@@ -310,7 +310,16 @@ namespace Intersect.GameObjects.Events
         PlayerVariable,
         
         [Description("Highest Combo")]
-        Combo
+        Combo,
+
+        [Description("TotalDungeonCompletions")]
+        TotalDungeonCompletions,
+
+        [Description("Group Dungeon Times")]
+        GroupDungeonTimes,
+
+        [Description("Solo Dungeon Times")]
+        SoloDungeonTimes
     }
 
     public enum RespawnChangeType

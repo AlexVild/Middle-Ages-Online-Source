@@ -3351,7 +3351,14 @@ namespace Intersect.Server.Entities.Events
                 return;
             }
 
-            instanceController.GetGnome();
+            if (instanceController.InstanceIsDungeon && instanceController.Dungeon.Participants.Contains(player))
+            {
+                instanceController.GetGnome();
+            }
+            else
+            {
+                PacketSender.SendChatMsg(player, "You are not a participant of this dungeon!", ChatMessageType.Notice, CustomColors.General.GeneralWarning);
+            }
         }
 
         private static void ProcessCommand(
@@ -3367,7 +3374,18 @@ namespace Intersect.Server.Entities.Events
                 return;
             }
 
-            player.OpenLootRoll(instance.BaseEvent.Id, instanceController.GetDungeonLoot());
+            if (instanceController.InstanceIsDungeon && instanceController.Dungeon.Participants.Contains(player))
+            {
+                player.OpenLootRoll(instance.BaseEvent.Id, instanceController.GetDungeonLoot());
+                
+                PacketSender.SendOpenLootPacketTo(player, instanceController.DungeonName);
+
+                callStack.Peek().WaitingForResponse = CommandInstance.EventResponse.LootRoll;
+            }
+            else
+            {
+                PacketSender.SendChatMsg(player, "You did not participate in this dungeon, and are not worthy of its spoils!", ChatMessageType.Notice, CustomColors.General.GeneralWarning);
+            }
         }
     }
 }

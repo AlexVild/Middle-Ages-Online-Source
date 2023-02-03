@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using System.Text.Json.Serialization;
 using JsonIgnoreAttribute = Newtonsoft.Json.JsonIgnoreAttribute;
 
@@ -34,7 +35,7 @@ namespace Intersect.Server.Database.PlayerData.Players
             PlayerId = player?.Id ?? Guid.Empty;
             EventId = eventId;
 
-            Loot = new List<Item>(GenerateLootFor(player, lootRolls));
+            Loot = new List<Item>(GenerateLootFor(player, lootRolls).Where(loot => loot != null));
         }
 
         public static List<Item> GenerateLootFor(Player player, List<LootRoll> lootRolls)
@@ -59,7 +60,7 @@ namespace Intersect.Server.Database.PlayerData.Players
                 }
             }
 
-            return loot;
+            return loot.Where(item => item != null).ToList();
         }
 
         [ForeignKey(nameof(Player))]

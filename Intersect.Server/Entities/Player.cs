@@ -1142,7 +1142,7 @@ namespace Intersect.Server.Entities
             EndCombo();
 
             // Subtract from instance lives if in a shared instance
-            if (InstanceType == MapInstanceType.Shared && Options.MaxSharedInstanceLives >= 0)
+            if (InstanceType == MapInstanceType.Shared && Options.MaxSharedInstanceLives >= 0 && InstanceProcessor.TryGetInstanceController(MapInstanceId, out var instanceController) && instanceController.DungeonActive)
             {
                 InstanceLives--;
                 SendLivesRemainingMessage();
@@ -8257,10 +8257,9 @@ namespace Intersect.Server.Entities
         /// <param name="amount">The number we're trying to update to</param>
         /// <param name="teammates">Any teammates involved with setting of the record</param>
         /// <returns></returns>
-        public bool TrySetRecord(RecordType type, Guid recordId, long amount, List<Player> teammates = null, bool instantSave = false)
+        public bool TrySetRecord(RecordType type, Guid recordId, long amount, List<Player> teammates = null, bool instantSave = false, RecordScoring scoreType = RecordScoring.High)
         {
             PlayerRecord matchingRecord;
-            var scoreType = RecordScoring.High;
             var soloOnly = false;
             lock (EntityLock)
             {

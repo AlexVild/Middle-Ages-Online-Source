@@ -83,6 +83,16 @@ namespace Intersect.GameObjects.Events
 
         WeaponMasteryOf,
 
+        DungeonIs,
+        
+        SoloDungeon,
+
+        GnomeIs,
+        
+        DungeonTreasureIs,
+        
+        GnomeLocationIs,
+
     }
 
     public class Condition
@@ -576,6 +586,37 @@ namespace Intersect.GameObjects.Events
         public Guid WeaponTypeId { get; set; }
 
         public int Level { get; set; }
+    }
+
+    public class DungeonIs : Condition
+    {
+        public override ConditionTypes Type { get; } = ConditionTypes.DungeonIs;
+
+        public DungeonState State { get; set; }
+    }
+
+    public class SoloDungeon : Condition
+    {
+        public override ConditionTypes Type { get; } = ConditionTypes.SoloDungeon;
+    }
+
+    public class GnomeIs : Condition
+    {
+        public override ConditionTypes Type { get; } = ConditionTypes.GnomeIs;
+    }
+
+    public class DungeonTreasureLevelIs : Condition
+    {
+        public override ConditionTypes Type { get; } = ConditionTypes.DungeonTreasureIs;
+
+        public int TreasureLevel { get; set; }
+    }
+
+    public class GnomeLocationIs : Condition
+    {
+        public override ConditionTypes Type { get; } = ConditionTypes.GnomeLocationIs;
+
+        public int GnomeLocation { get; set; }
     }
 
     public enum TimerActiveConditions

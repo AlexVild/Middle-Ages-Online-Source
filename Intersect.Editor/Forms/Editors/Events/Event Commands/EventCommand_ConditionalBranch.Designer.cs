@@ -31,6 +31,14 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private void InitializeComponent()
         {
             this.grpConditional = new DarkUI.Controls.DarkGroupBox();
+            this.grpWeaponMastery = new DarkUI.Controls.DarkGroupBox();
+            this.lblWeaponTypeLvl = new System.Windows.Forms.Label();
+            this.nudWeaponTypeLvl = new DarkUI.Controls.DarkNumericUpDown();
+            this.cmbWeaponType = new DarkUI.Controls.DarkComboBox();
+            this.lblWeaponType = new System.Windows.Forms.Label();
+            this.grpChallenge = new DarkUI.Controls.DarkGroupBox();
+            this.cmbChallenges = new DarkUI.Controls.DarkComboBox();
+            this.lblChallenge = new System.Windows.Forms.Label();
             this.grpSpell = new DarkUI.Controls.DarkGroupBox();
             this.cmbSpell = new DarkUI.Controls.DarkComboBox();
             this.lblSpell = new System.Windows.Forms.Label();
@@ -186,15 +194,16 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpEquippedItem = new DarkUI.Controls.DarkGroupBox();
             this.cmbEquippedItem = new DarkUI.Controls.DarkComboBox();
             this.lblEquippedItem = new System.Windows.Forms.Label();
-            this.grpChallenge = new DarkUI.Controls.DarkGroupBox();
-            this.cmbChallenges = new DarkUI.Controls.DarkComboBox();
-            this.lblChallenge = new System.Windows.Forms.Label();
-            this.grpWeaponMastery = new DarkUI.Controls.DarkGroupBox();
-            this.cmbWeaponType = new DarkUI.Controls.DarkComboBox();
-            this.lblWeaponType = new System.Windows.Forms.Label();
-            this.nudWeaponTypeLvl = new DarkUI.Controls.DarkNumericUpDown();
-            this.lblWeaponTypeLvl = new System.Windows.Forms.Label();
+            this.grpDungeonState = new DarkUI.Controls.DarkGroupBox();
+            this.darkComboBox1 = new DarkUI.Controls.DarkComboBox();
+            this.lblState = new System.Windows.Forms.Label();
+            this.grpTreasureLevel = new DarkUI.Controls.DarkGroupBox();
+            this.lblTreasureLevel = new System.Windows.Forms.Label();
+            this.darkNumericUpDown1 = new DarkUI.Controls.DarkNumericUpDown();
             this.grpConditional.SuspendLayout();
+            this.grpWeaponMastery.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudWeaponTypeLvl)).BeginInit();
+            this.grpChallenge.SuspendLayout();
             this.grpSpell.SuspendLayout();
             this.grpBeastHasUnlock.SuspendLayout();
             this.grpBeastsCompleted.SuspendLayout();
@@ -236,15 +245,17 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpMapIs.SuspendLayout();
             this.grpGender.SuspendLayout();
             this.grpEquippedItem.SuspendLayout();
-            this.grpChallenge.SuspendLayout();
-            this.grpWeaponMastery.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudWeaponTypeLvl)).BeginInit();
+            this.grpDungeonState.SuspendLayout();
+            this.grpTreasureLevel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.darkNumericUpDown1)).BeginInit();
             this.SuspendLayout();
             // 
             // grpConditional
             // 
             this.grpConditional.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.grpConditional.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpConditional.Controls.Add(this.grpTreasureLevel);
+            this.grpConditional.Controls.Add(this.grpDungeonState);
             this.grpConditional.Controls.Add(this.grpWeaponMastery);
             this.grpConditional.Controls.Add(this.grpChallenge);
             this.grpConditional.Controls.Add(this.grpSpell);
@@ -285,6 +296,122 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpConditional.TabIndex = 17;
             this.grpConditional.TabStop = false;
             this.grpConditional.Text = "Conditional";
+            // 
+            // grpWeaponMastery
+            // 
+            this.grpWeaponMastery.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.grpWeaponMastery.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpWeaponMastery.Controls.Add(this.lblWeaponTypeLvl);
+            this.grpWeaponMastery.Controls.Add(this.nudWeaponTypeLvl);
+            this.grpWeaponMastery.Controls.Add(this.cmbWeaponType);
+            this.grpWeaponMastery.Controls.Add(this.lblWeaponType);
+            this.grpWeaponMastery.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpWeaponMastery.Location = new System.Drawing.Point(10, 41);
+            this.grpWeaponMastery.Name = "grpWeaponMastery";
+            this.grpWeaponMastery.Size = new System.Drawing.Size(262, 91);
+            this.grpWeaponMastery.TabIndex = 28;
+            this.grpWeaponMastery.TabStop = false;
+            this.grpWeaponMastery.Text = "Mastery Level";
+            // 
+            // lblWeaponTypeLvl
+            // 
+            this.lblWeaponTypeLvl.AutoSize = true;
+            this.lblWeaponTypeLvl.Location = new System.Drawing.Point(7, 50);
+            this.lblWeaponTypeLvl.Name = "lblWeaponTypeLvl";
+            this.lblWeaponTypeLvl.Size = new System.Drawing.Size(55, 13);
+            this.lblWeaponTypeLvl.TabIndex = 57;
+            this.lblWeaponTypeLvl.Text = "At least lvl";
+            // 
+            // nudWeaponTypeLvl
+            // 
+            this.nudWeaponTypeLvl.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudWeaponTypeLvl.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudWeaponTypeLvl.Location = new System.Drawing.Point(85, 47);
+            this.nudWeaponTypeLvl.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.nudWeaponTypeLvl.Name = "nudWeaponTypeLvl";
+            this.nudWeaponTypeLvl.Size = new System.Drawing.Size(169, 20);
+            this.nudWeaponTypeLvl.TabIndex = 56;
+            this.nudWeaponTypeLvl.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            // 
+            // cmbWeaponType
+            // 
+            this.cmbWeaponType.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbWeaponType.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbWeaponType.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbWeaponType.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbWeaponType.DrawDropdownHoverOutline = false;
+            this.cmbWeaponType.DrawFocusRectangle = false;
+            this.cmbWeaponType.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbWeaponType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbWeaponType.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbWeaponType.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbWeaponType.FormattingEnabled = true;
+            this.cmbWeaponType.Location = new System.Drawing.Point(88, 18);
+            this.cmbWeaponType.Name = "cmbWeaponType";
+            this.cmbWeaponType.Size = new System.Drawing.Size(166, 21);
+            this.cmbWeaponType.TabIndex = 3;
+            this.cmbWeaponType.Text = null;
+            this.cmbWeaponType.TextPadding = new System.Windows.Forms.Padding(2);
+            // 
+            // lblWeaponType
+            // 
+            this.lblWeaponType.AutoSize = true;
+            this.lblWeaponType.Location = new System.Drawing.Point(7, 20);
+            this.lblWeaponType.Name = "lblWeaponType";
+            this.lblWeaponType.Size = new System.Drawing.Size(75, 13);
+            this.lblWeaponType.TabIndex = 2;
+            this.lblWeaponType.Text = "Weapon Type";
+            // 
+            // grpChallenge
+            // 
+            this.grpChallenge.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.grpChallenge.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpChallenge.Controls.Add(this.cmbChallenges);
+            this.grpChallenge.Controls.Add(this.lblChallenge);
+            this.grpChallenge.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpChallenge.Location = new System.Drawing.Point(9, 41);
+            this.grpChallenge.Name = "grpChallenge";
+            this.grpChallenge.Size = new System.Drawing.Size(262, 52);
+            this.grpChallenge.TabIndex = 27;
+            this.grpChallenge.TabStop = false;
+            this.grpChallenge.Text = "Challenge Complete";
+            // 
+            // cmbChallenges
+            // 
+            this.cmbChallenges.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbChallenges.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbChallenges.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbChallenges.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbChallenges.DrawDropdownHoverOutline = false;
+            this.cmbChallenges.DrawFocusRectangle = false;
+            this.cmbChallenges.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbChallenges.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbChallenges.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbChallenges.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbChallenges.FormattingEnabled = true;
+            this.cmbChallenges.Location = new System.Drawing.Point(79, 18);
+            this.cmbChallenges.Name = "cmbChallenges";
+            this.cmbChallenges.Size = new System.Drawing.Size(175, 21);
+            this.cmbChallenges.TabIndex = 3;
+            this.cmbChallenges.Text = null;
+            this.cmbChallenges.TextPadding = new System.Windows.Forms.Padding(2);
+            // 
+            // lblChallenge
+            // 
+            this.lblChallenge.AutoSize = true;
+            this.lblChallenge.Location = new System.Drawing.Point(7, 20);
+            this.lblChallenge.Name = "lblChallenge";
+            this.lblChallenge.Size = new System.Drawing.Size(54, 13);
+            this.lblChallenge.TabIndex = 2;
+            this.lblChallenge.Text = "Challenge";
             // 
             // grpSpell
             // 
@@ -2531,121 +2658,90 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.lblEquippedItem.TabIndex = 2;
             this.lblEquippedItem.Text = "Item:";
             // 
-            // grpChallenge
+            // grpDungeonState
             // 
-            this.grpChallenge.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.grpChallenge.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpChallenge.Controls.Add(this.cmbChallenges);
-            this.grpChallenge.Controls.Add(this.lblChallenge);
-            this.grpChallenge.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpChallenge.Location = new System.Drawing.Point(9, 41);
-            this.grpChallenge.Name = "grpChallenge";
-            this.grpChallenge.Size = new System.Drawing.Size(262, 52);
-            this.grpChallenge.TabIndex = 27;
-            this.grpChallenge.TabStop = false;
-            this.grpChallenge.Text = "Challenge Complete";
+            this.grpDungeonState.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.grpDungeonState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpDungeonState.Controls.Add(this.darkComboBox1);
+            this.grpDungeonState.Controls.Add(this.lblState);
+            this.grpDungeonState.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpDungeonState.Location = new System.Drawing.Point(8, 39);
+            this.grpDungeonState.Name = "grpDungeonState";
+            this.grpDungeonState.Size = new System.Drawing.Size(262, 50);
+            this.grpDungeonState.TabIndex = 66;
+            this.grpDungeonState.TabStop = false;
+            this.grpDungeonState.Text = "Dungeon State";
             // 
-            // cmbChallenges
+            // darkComboBox1
             // 
-            this.cmbChallenges.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbChallenges.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbChallenges.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbChallenges.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbChallenges.DrawDropdownHoverOutline = false;
-            this.cmbChallenges.DrawFocusRectangle = false;
-            this.cmbChallenges.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbChallenges.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbChallenges.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbChallenges.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbChallenges.FormattingEnabled = true;
-            this.cmbChallenges.Location = new System.Drawing.Point(79, 18);
-            this.cmbChallenges.Name = "cmbChallenges";
-            this.cmbChallenges.Size = new System.Drawing.Size(175, 21);
-            this.cmbChallenges.TabIndex = 3;
-            this.cmbChallenges.Text = null;
-            this.cmbChallenges.TextPadding = new System.Windows.Forms.Padding(2);
+            this.darkComboBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.darkComboBox1.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.darkComboBox1.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.darkComboBox1.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.darkComboBox1.DrawDropdownHoverOutline = false;
+            this.darkComboBox1.DrawFocusRectangle = false;
+            this.darkComboBox1.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.darkComboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.darkComboBox1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.darkComboBox1.ForeColor = System.Drawing.Color.Gainsboro;
+            this.darkComboBox1.FormattingEnabled = true;
+            this.darkComboBox1.Location = new System.Drawing.Point(88, 18);
+            this.darkComboBox1.Name = "darkComboBox1";
+            this.darkComboBox1.Size = new System.Drawing.Size(166, 21);
+            this.darkComboBox1.TabIndex = 3;
+            this.darkComboBox1.Text = null;
+            this.darkComboBox1.TextPadding = new System.Windows.Forms.Padding(2);
             // 
-            // lblChallenge
+            // lblState
             // 
-            this.lblChallenge.AutoSize = true;
-            this.lblChallenge.Location = new System.Drawing.Point(7, 20);
-            this.lblChallenge.Name = "lblChallenge";
-            this.lblChallenge.Size = new System.Drawing.Size(54, 13);
-            this.lblChallenge.TabIndex = 2;
-            this.lblChallenge.Text = "Challenge";
+            this.lblState.AutoSize = true;
+            this.lblState.Location = new System.Drawing.Point(7, 20);
+            this.lblState.Name = "lblState";
+            this.lblState.Size = new System.Drawing.Size(42, 13);
+            this.lblState.TabIndex = 2;
+            this.lblState.Text = "State is";
             // 
-            // grpWeaponMastery
+            // grpTreasureLevel
             // 
-            this.grpWeaponMastery.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.grpWeaponMastery.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpWeaponMastery.Controls.Add(this.lblWeaponTypeLvl);
-            this.grpWeaponMastery.Controls.Add(this.nudWeaponTypeLvl);
-            this.grpWeaponMastery.Controls.Add(this.cmbWeaponType);
-            this.grpWeaponMastery.Controls.Add(this.lblWeaponType);
-            this.grpWeaponMastery.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpWeaponMastery.Location = new System.Drawing.Point(10, 41);
-            this.grpWeaponMastery.Name = "grpWeaponMastery";
-            this.grpWeaponMastery.Size = new System.Drawing.Size(262, 91);
-            this.grpWeaponMastery.TabIndex = 28;
-            this.grpWeaponMastery.TabStop = false;
-            this.grpWeaponMastery.Text = "Mastery Level";
+            this.grpTreasureLevel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.grpTreasureLevel.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpTreasureLevel.Controls.Add(this.darkNumericUpDown1);
+            this.grpTreasureLevel.Controls.Add(this.lblTreasureLevel);
+            this.grpTreasureLevel.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpTreasureLevel.Location = new System.Drawing.Point(8, 38);
+            this.grpTreasureLevel.Name = "grpTreasureLevel";
+            this.grpTreasureLevel.Size = new System.Drawing.Size(262, 50);
+            this.grpTreasureLevel.TabIndex = 67;
+            this.grpTreasureLevel.TabStop = false;
+            this.grpTreasureLevel.Text = "Treasure Level";
             // 
-            // cmbWeaponType
+            // lblTreasureLevel
             // 
-            this.cmbWeaponType.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbWeaponType.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbWeaponType.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbWeaponType.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbWeaponType.DrawDropdownHoverOutline = false;
-            this.cmbWeaponType.DrawFocusRectangle = false;
-            this.cmbWeaponType.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbWeaponType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbWeaponType.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbWeaponType.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbWeaponType.FormattingEnabled = true;
-            this.cmbWeaponType.Location = new System.Drawing.Point(88, 18);
-            this.cmbWeaponType.Name = "cmbWeaponType";
-            this.cmbWeaponType.Size = new System.Drawing.Size(166, 21);
-            this.cmbWeaponType.TabIndex = 3;
-            this.cmbWeaponType.Text = null;
-            this.cmbWeaponType.TextPadding = new System.Windows.Forms.Padding(2);
+            this.lblTreasureLevel.AutoSize = true;
+            this.lblTreasureLevel.Location = new System.Drawing.Point(7, 20);
+            this.lblTreasureLevel.Name = "lblTreasureLevel";
+            this.lblTreasureLevel.Size = new System.Drawing.Size(68, 13);
+            this.lblTreasureLevel.TabIndex = 2;
+            this.lblTreasureLevel.Text = "Lvl is at least";
             // 
-            // lblWeaponType
+            // darkNumericUpDown1
             // 
-            this.lblWeaponType.AutoSize = true;
-            this.lblWeaponType.Location = new System.Drawing.Point(7, 20);
-            this.lblWeaponType.Name = "lblWeaponType";
-            this.lblWeaponType.Size = new System.Drawing.Size(75, 13);
-            this.lblWeaponType.TabIndex = 2;
-            this.lblWeaponType.Text = "Weapon Type";
-            // 
-            // nudWeaponTypeLvl
-            // 
-            this.nudWeaponTypeLvl.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudWeaponTypeLvl.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudWeaponTypeLvl.Location = new System.Drawing.Point(85, 47);
-            this.nudWeaponTypeLvl.Maximum = new decimal(new int[] {
+            this.darkNumericUpDown1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.darkNumericUpDown1.ForeColor = System.Drawing.Color.Gainsboro;
+            this.darkNumericUpDown1.Location = new System.Drawing.Point(82, 18);
+            this.darkNumericUpDown1.Maximum = new decimal(new int[] {
             100000,
             0,
             0,
             0});
-            this.nudWeaponTypeLvl.Name = "nudWeaponTypeLvl";
-            this.nudWeaponTypeLvl.Size = new System.Drawing.Size(169, 20);
-            this.nudWeaponTypeLvl.TabIndex = 56;
-            this.nudWeaponTypeLvl.Value = new decimal(new int[] {
+            this.darkNumericUpDown1.Name = "darkNumericUpDown1";
+            this.darkNumericUpDown1.Size = new System.Drawing.Size(169, 20);
+            this.darkNumericUpDown1.TabIndex = 57;
+            this.darkNumericUpDown1.Value = new decimal(new int[] {
             0,
             0,
             0,
             0});
-            // 
-            // lblWeaponTypeLvl
-            // 
-            this.lblWeaponTypeLvl.AutoSize = true;
-            this.lblWeaponTypeLvl.Location = new System.Drawing.Point(7, 50);
-            this.lblWeaponTypeLvl.Name = "lblWeaponTypeLvl";
-            this.lblWeaponTypeLvl.Size = new System.Drawing.Size(55, 13);
-            this.lblWeaponTypeLvl.TabIndex = 57;
-            this.lblWeaponTypeLvl.Text = "At least lvl";
             // 
             // EventCommandConditionalBranch
             // 
@@ -2658,6 +2754,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.Size = new System.Drawing.Size(285, 471);
             this.grpConditional.ResumeLayout(false);
             this.grpConditional.PerformLayout();
+            this.grpWeaponMastery.ResumeLayout(false);
+            this.grpWeaponMastery.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudWeaponTypeLvl)).EndInit();
+            this.grpChallenge.ResumeLayout(false);
+            this.grpChallenge.PerformLayout();
             this.grpSpell.ResumeLayout(false);
             this.grpSpell.PerformLayout();
             this.grpBeastHasUnlock.ResumeLayout(false);
@@ -2729,11 +2830,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpGender.PerformLayout();
             this.grpEquippedItem.ResumeLayout(false);
             this.grpEquippedItem.PerformLayout();
-            this.grpChallenge.ResumeLayout(false);
-            this.grpChallenge.PerformLayout();
-            this.grpWeaponMastery.ResumeLayout(false);
-            this.grpWeaponMastery.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudWeaponTypeLvl)).EndInit();
+            this.grpDungeonState.ResumeLayout(false);
+            this.grpDungeonState.PerformLayout();
+            this.grpTreasureLevel.ResumeLayout(false);
+            this.grpTreasureLevel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.darkNumericUpDown1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -2904,5 +3005,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private DarkNumericUpDown nudWeaponTypeLvl;
         private DarkComboBox cmbWeaponType;
         private System.Windows.Forms.Label lblWeaponType;
+        private DarkGroupBox grpDungeonState;
+        private DarkComboBox darkComboBox1;
+        private System.Windows.Forms.Label lblState;
+        private DarkGroupBox grpTreasureLevel;
+        private DarkNumericUpDown darkNumericUpDown1;
+        private System.Windows.Forms.Label lblTreasureLevel;
     }
 }

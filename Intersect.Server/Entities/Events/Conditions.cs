@@ -818,6 +818,82 @@ namespace Intersect.Server.Entities.Events
             return weaponType.Level >= condition.Level;
         }
 
+        public static bool MeetsCondition(
+          DungeonIs condition,
+          Player player,
+          Event eventInstance,
+          QuestBase questBase
+        )
+        {
+            if (player == null || condition == null || !InstanceProcessor.TryGetInstanceController(player.MapInstanceId, out var instanceController))
+            {
+                return false;
+            }
+
+            return instanceController.DungeonState == condition.State;
+        }
+
+        public static bool MeetsCondition(
+          SoloDungeon condition,
+          Player player,
+          Event eventInstance,
+          QuestBase questBase
+        )
+        {
+            if (player == null || condition == null || !InstanceProcessor.TryGetInstanceController(player.MapInstanceId, out var instanceController))
+            {
+                return false;
+            }
+
+            return instanceController.Dungeon?.IsSolo ?? false;
+        }
+
+        public static bool MeetsCondition(
+          GnomeIs condition,
+          Player player,
+          Event eventInstance,
+          QuestBase questBase
+        )
+        {
+            if (player == null || condition == null || !InstanceProcessor.TryGetInstanceController(player.MapInstanceId, out var instanceController))
+            {
+                return false;
+            }
+
+            return instanceController.Dungeon.GnomeObtained;
+        }
+
+        public static bool MeetsCondition(
+         DungeonTreasureLevelIs condition,
+         Player player,
+         Event eventInstance,
+         QuestBase questBase
+       )
+        {
+            if (player == null || condition == null || !InstanceProcessor.TryGetInstanceController(player.MapInstanceId, out var instanceController))
+            {
+                return false;
+            }
+
+            return instanceController.Dungeon.TreasureLevel >= condition.TreasureLevel;
+        }
+
+        public static bool MeetsCondition(
+         GnomeLocationIs condition,
+         Player player,
+         Event eventInstance,
+         QuestBase questBase
+        )
+        {
+            if (player == null || condition == null || !InstanceProcessor.TryGetInstanceController(player.MapInstanceId, out var instanceController))
+            {
+                return false;
+            }
+
+            return instanceController.Dungeon.GnomeLocation == condition.GnomeLocation;
+        }
+
+
         //Variable Comparison Processing
 
         public static bool CheckVariableComparison(

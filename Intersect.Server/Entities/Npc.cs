@@ -1715,14 +1715,9 @@ namespace Intersect.Server.Entities
         public bool IsDungeonAggroToward(Player player)
         {
             if (player.MapInstanceId == MapInstanceId && player.InstanceType != MapInstanceType.Overworld
-                && Map.TryGetInstance(MapInstanceId, out var instance))
+                && InstanceProcessor.TryGetInstanceController(MapInstanceId, out var instanceController))
             {
-                var dungeonVar = instance.GetInstanceVariable(Guid.Parse(Options.Combat.DungeonInstanceVarGuid ?? Guid.Empty.ToString()));
-                if (dungeonVar == null || dungeonVar.Type != VariableDataTypes.Boolean)
-                {
-                    return false;
-                }
-                return dungeonVar.Boolean;
+                return instanceController.DungeonActive;
             }
             return false;
         }

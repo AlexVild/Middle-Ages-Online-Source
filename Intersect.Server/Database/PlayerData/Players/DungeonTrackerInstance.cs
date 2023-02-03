@@ -1,5 +1,8 @@
 ﻿using Intersect.GameObjects;
 using Intersect.Server.Entities;
+using Intersect.Server.Localization;
+using Intersect.Server.Networking;
+using Intersect.Utilities;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
@@ -33,6 +36,10 @@ namespace Intersect.Server.Database.PlayerData.Players
         
         public long BestSoloTime { get; set; } = -1L;
 
+        public string ElapsedSoloTime => TextUtils.GetTimeElapsedString(BestSoloTime, Strings.Events.ElapsedMinutes, Strings.Events.ElapsedHours, Strings.Events.ElapsedDays);
+        
+        public string ElapsedGroupTime => TextUtils.GetTimeElapsedString(BestGroupTime, Strings.Events.ElapsedMinutes, Strings.Events.ElapsedHours, Strings.Events.ElapsedDays);
+
         public DungeonTrackerInstance(Guid playerId, Guid dungeonId)
         {
             PlayerId = playerId;
@@ -49,25 +56,35 @@ namespace Intersect.Server.Database.PlayerData.Players
             return PlayerId == other.PlayerId && DungeonId == other.DungeonId;
         }
 
-        public void IncrementCompletion(int partySize)
+        public void IncrementCompletion(int partySize, Player player)
         {
             if (partySize > 1)
             {
-                GroupCompletions = 1;
+                GroupCompletions++;
             }
             else
             {
-                SoloCompletions = 1;
+                SoloCompletions++;
+            }
+            if (player?.TrySetRecord(GameObjects.Events.RecordType.TotalDungeonCompletions, DungeonId, TotalCompletions) ?? false)
+            {
+                var dungeonName = Dungeon?.DisplayName ?? "NOT FOUND";
+                PacketSender.SendChatMsg(player, $"You've completed {dungeonName} {TotalCompletions} time(s)!", Enums.ChatMessageType.Experience, CustomColors.General.GeneralCompleted);
             }
         }
 
-        public bool TryUpdateTimeRecord(long completionTime, int partySize)
+        public bool TryUpdateTimeRecord(long completionTime, int partySize, Player player)
         {
+            var dungeonName = Dungeon?.DisplayName ?? "NOT FOUND";
             if (partySize > 1)
             {
                 if (BestGroupTime < 0)
                 {
                     BestGroupTime = completionTime;
+                    if (player?.TrySetRecord(GameObjects.Events.RecordType.GroupDungeonTimes, DungeonId, BestGroupTime, player.Party, scoreType: GameObjects.Events.RecordScoring.Low) ?? false) 
+                    {
+                        PacketSender.SendChatMsg(player, $"This is your fastest {dungeonName} completion time with these party members! Your time was: {ElapsedGroupTime}.", Enums.ChatMessageType.Experience, CustomColors.General.GeneralCompleted);
+                    }
                     return true;
                 }
 
@@ -77,7 +94,10 @@ namespace Intersect.Server.Database.PlayerData.Players
                 }
 
                 BestGroupTime = completionTime;
-
+                if (player?.TrySetRecord(GameObjects.Events.RecordType.GroupDungeonTimes, DungeonId, BestGroupTime, player.Party, scoreType: GameObjects.Events.RecordScoring.Low) ?? false)
+                {
+                    PacketSender.SendChatMsg(player, $"This is your fastest {dungeonName} completion time with these party members! Your time was: {ElapsedGroupTime}.", Enums.ChatMessageType.Experience, CustomColors.General.GeneralCompleted);
+                }
                 return true;
             }
             else
@@ -85,6 +105,10 @@ namespace Intersect.Server.Database.PlayerData.Players
                 if (BestSoloTime < 0)
                 {
                     BestSoloTime = completionTime;
+                    if (player?.TrySetRecord(GameObjects.Events.RecordType.SoloDungeonTimes, DungeonId, BestSoloTime, scoreType: GameObjects.Events.RecordScoring.Low) ?? false)
+                    {
+                        PacketSender.SendChatMsg(player, $"Your {dungeonName} fastest solo time is now {ElapsedSoloTime}!", Enums.ChatMessageType.Experience, CustomColors.General.GeneralCompleted);
+                    }
                     return true;
                 }
 
@@ -94,7 +118,10 @@ namespace Intersect.Server.Database.PlayerData.Players
                 }
 
                 BestSoloTime = completionTime;
-
+                if (player?.TrySetRecord(GameObjects.Events.RecordType.SoloDungeonTimes, DungeonId, BestSoloTime, scoreType: GameObjects.Events.RecordScoring.Low) ?? false)
+                {
+                    PacketSender.SendChatMsg(player, $"Your {dungeonName} fastest solo time is now {ElapsedSoloTime}!", Enums.ChatMessageType.Experience, CustomColors.General.GeneralCompleted);
+                }
                 return true;
             }
         }
