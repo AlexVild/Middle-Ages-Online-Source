@@ -443,6 +443,9 @@ namespace Intersect.Editor.Forms.Editors
                 nudDeathDropChance.Value = mEditorItem.DropChanceOnDeath;
                 cmbToolType.SelectedIndex = mEditorItem.Tool + 1;
                 cmbAttackAnimation.SelectedIndex = AnimationBase.ListIndex(mEditorItem.AttackAnimationId) + 1;
+
+                chkRareDrop.Checked = mEditorItem.RareDrop;
+
                 RefreshExtendedData();
                 if (mEditorItem.ItemType == ItemTypes.Equipment && cmbEquipmentBonus.Items.Count > 0)
                 {
@@ -2073,6 +2076,11 @@ namespace Intersect.Editor.Forms.Editors
             mEditorItem.MaxWeaponLevels[type] = (int)nudMaxWeaponLvl.Value;
 
             RefreshWeaponTypeTree(true);
+        }
+
+        private void chkRareDrop_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.RareDrop = chkRareDrop.Checked;
         }
     }
 }

@@ -579,6 +579,8 @@ namespace Intersect.GameObjects
             get => JsonConvert.SerializeObject(MaxWeaponLevels);
             set => MaxWeaponLevels = JsonConvert.DeserializeObject<Dictionary<Guid, int>>(value ?? "") ?? new Dictionary<Guid, int>();
         }
+
+        public bool RareDrop { get; set; }
     }
 
 }

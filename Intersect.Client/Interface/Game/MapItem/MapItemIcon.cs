@@ -2,6 +2,7 @@
 
 using Intersect.Client.Framework.File_Management;
 using Intersect.Client.Framework.GenericClasses;
+using Intersect.Client.Framework.Graphics;
 using Intersect.Client.Framework.Gwen.Control;
 using Intersect.Client.Framework.Gwen.Control.EventArguments;
 using Intersect.Client.Framework.Gwen.Input;
@@ -10,12 +11,23 @@ using Intersect.Client.General;
 using Intersect.Client.Interface.Game.DescriptionWindows;
 using Intersect.Client.Items;
 using Intersect.GameObjects;
+using Intersect.Utilities;
 
 namespace Intersect.Client.Interface.Game.Inventory
 {
 
     public class MapItemIcon
     {
+
+        public GameTexture StandardFrameBg { get; set; }
+        private GameTexture _rareFrameBg;
+        private GameTexture _rareFrameBgFlash { get; set; }
+
+        readonly long FlashRate = 300;
+        long LastUpdate = 0;
+        public bool IsFlashing = false;
+
+        public GameTexture RareFrameBg => IsFlashing ? _rareFrameBgFlash : _rareFrameBg;
 
         public ImagePanel Container;
 
@@ -34,6 +46,9 @@ namespace Intersect.Client.Interface.Game.Inventory
         public MapItemIcon(Base window)
         {
             mMapItemWindow = window;
+            StandardFrameBg = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Gui, "inventoryitem.png");
+            _rareFrameBg = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Gui, "mapicon_rare.png");
+            _rareFrameBgFlash = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Gui, "mapicon_rare_flash.png");
         }
 
         public void Setup()
@@ -42,6 +57,8 @@ namespace Intersect.Client.Interface.Game.Inventory
             Pnl.HoverEnter += pnl_HoverEnter;
             Pnl.HoverLeave += pnl_HoverLeave;
             Pnl.Clicked += pnl_Clicked;
+            
+            LastUpdate = Timing.Global.Milliseconds + FlashRate;
         }
 
         void pnl_Clicked(Base sender, ClickedEventArgs arguments)
@@ -126,6 +143,20 @@ namespace Intersect.Client.Interface.Game.Inventory
                     {
                         Pnl.Texture = null;
                     }
+                }
+
+                if (item.RareDrop)
+                {
+                    Container.Texture = RareFrameBg;
+                    if (LastUpdate < Timing.Global.Milliseconds)
+                    {
+                        IsFlashing = !IsFlashing;
+                        LastUpdate = Timing.Global.Milliseconds + FlashRate;
+                    }
+                }
+                else
+                {
+                    Container.Texture = StandardFrameBg;
                 }
             }
             else

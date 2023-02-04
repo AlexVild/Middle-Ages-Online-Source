@@ -1099,6 +1099,10 @@
     <Compile Include="Migrations\Game\20230202200339_DungeonGnomeTreasureMigration.designer.cs">
       <DependentUpon>20230202200339_DungeonGnomeTreasureMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20230204180724_RareDropMigration.cs" />
+    <Compile Include="Migrations\Game\20230204180724_RareDropMigration.designer.cs">
+      <DependentUpon>20230204180724_RareDropMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

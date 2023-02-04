@@ -9,6 +9,7 @@ namespace Intersect.Client.Interface.Game.LootRoll
     using System;
     using global::Intersect.Client.Framework.File_Management;
     using global::Intersect.Client.Framework.GenericClasses;
+    using global::Intersect.Client.Framework.Graphics;
     using global::Intersect.Client.Framework.Gwen.Control;
     using global::Intersect.Client.Framework.Gwen.Control.EventArguments;
     using global::Intersect.Client.Framework.Gwen.Input;
@@ -19,12 +20,23 @@ namespace Intersect.Client.Interface.Game.LootRoll
     using global::Intersect.Client.Networking;
     using global::Intersect.GameObjects;
     using global::Intersect.Network.Packets.Client;
+    using global::Intersect.Utilities;
 
     namespace Intersect.Client.Interface.Game.Inventory
     {
 
         public class LootRollIcon
         {
+
+            public GameTexture StandardFrameBg { get; set; }
+            private GameTexture _rareFrameBg;
+            private GameTexture _rareFrameBgFlash { get; set; }
+            
+            readonly long FlashRate = 300;
+            long LastUpdate = 0;
+            public bool IsFlashing = false;
+            
+            public GameTexture RareFrameBg => IsFlashing ? _rareFrameBgFlash : _rareFrameBg;
 
             public ImagePanel Container;
 
@@ -41,6 +53,8 @@ namespace Intersect.Client.Interface.Game.LootRoll
             public LootRollIcon(Base window)
             {
                 mBackground = window;
+                _rareFrameBg = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Gui, "loot_item_rare.png");
+                _rareFrameBgFlash = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Gui, "loot_item_rare_flash.png");
             }
 
             public void Setup(int idx)
@@ -50,6 +64,7 @@ namespace Intersect.Client.Interface.Game.LootRoll
                 Pnl.HoverLeave += pnl_HoverLeave;
                 Pnl.Clicked += pnl_Clicked;
                 LootIndex = idx;
+                LastUpdate = Timing.Global.Milliseconds + FlashRate;
             }
 
             void pnl_Clicked(Base sender, ClickedEventArgs arguments)
@@ -133,6 +148,16 @@ namespace Intersect.Client.Interface.Game.LootRoll
                         if (Pnl.Texture != null)
                         {
                             Pnl.Texture = null;
+                        }
+                    }
+
+                    if (item.RareDrop)
+                    {
+                        Container.Texture = RareFrameBg;
+                        if (LastUpdate < Timing.Global.Milliseconds)
+                        {
+                            IsFlashing = !IsFlashing;
+                            LastUpdate = Timing.Global.Milliseconds + FlashRate;
                         }
                     }
                 }

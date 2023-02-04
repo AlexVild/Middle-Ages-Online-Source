@@ -324,6 +324,7 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
             this.vS2015DarkTheme1 = new WeifenLuo.WinFormsUI.Docking.VS2015DarkTheme();
+            this.chkRareDrop = new DarkUI.Controls.DarkCheckBox();
             this.grpItems.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             this.grpDestroy.SuspendLayout();
@@ -489,6 +490,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpGeneral.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpGeneral.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpGeneral.Controls.Add(this.chkRareDrop);
             this.grpGeneral.Controls.Add(this.btnClearOverride);
             this.grpGeneral.Controls.Add(this.cmbTypeDisplayOverride);
             this.grpGeneral.Controls.Add(this.lblOverride);
@@ -4481,6 +4483,16 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
             // 
+            // chkRareDrop
+            // 
+            this.chkRareDrop.AutoSize = true;
+            this.chkRareDrop.Location = new System.Drawing.Point(12, 193);
+            this.chkRareDrop.Name = "chkRareDrop";
+            this.chkRareDrop.Size = new System.Drawing.Size(79, 17);
+            this.chkRareDrop.TabIndex = 104;
+            this.chkRareDrop.Text = "Rare drop?";
+            this.chkRareDrop.CheckedChanged += new System.EventHandler(this.chkRareDrop_CheckedChanged);
+            // 
             // FrmItem
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -4905,5 +4917,6 @@ namespace Intersect.Editor.Forms.Editors
         private DarkComboBox cmbWeaponTypes;
         private DarkNumericUpDown nudMaxWeaponLvl;
         private Label lblMaxWeaponLvl;
+        private DarkCheckBox chkRareDrop;
     }
 }
