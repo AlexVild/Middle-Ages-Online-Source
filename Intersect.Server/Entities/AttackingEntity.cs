@@ -368,6 +368,13 @@ namespace Intersect.Server.Entities
 
             if (damage != 0)
             {
+                // Invulnerable?
+                if (!friendly && CachedStatuses.Any(status => status.Type == StatusTypes.Invulnerable))
+                {
+                    PacketSender.SendActionMsg(this, Strings.Combat.invulnerable, CustomColors.Combat.Invulnerable, Options.BlockSound);
+                    return;
+                }
+
                 if (weaponMetadata != null && weaponMetadata != null)
                 {
                     damage = CalculateSpecialDamage(damage, weaponMetadata, enemy);

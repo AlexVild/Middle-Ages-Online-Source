@@ -40,14 +40,6 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
-            // Invulnerable?
-            if (CachedStatuses.Any(status => status.Type == StatusTypes.Invulnerable))
-            {
-                // TODO message
-                PacketSender.SendActionMsg(this, Strings.Combat.invulnerable, CustomColors.Combat.Invulnerable, Options.BlockSound);
-                return false;
-            }
-
             // Enemy doesn't have any health
             if (!HasVital(vital))
             {
