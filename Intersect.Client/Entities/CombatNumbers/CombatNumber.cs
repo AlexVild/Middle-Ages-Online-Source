@@ -121,6 +121,8 @@ namespace Intersect.Client.Entities.CombatNumbers
 
         protected bool TargetInvalid => Target == null || !Globals.Entities.ContainsKey(Target.Id);
 
+        protected bool Resized = false;
+
         private string GenerateKey(Guid targetId, CombatNumberType type)
         {
             return $"{targetId}_{type}";
@@ -188,6 +190,11 @@ namespace Intersect.Client.Entities.CombatNumbers
             if (NeedsCleaned)
             {
                 return;
+            }
+
+            if (Value > 100 && !Resized)
+            {
+                ResizeBackground();
             }
 
             if (Timing.Global.Milliseconds > CleanupTime && !FadeOut)
@@ -262,6 +269,44 @@ namespace Intersect.Client.Entities.CombatNumbers
         protected void DrawText()
         {
             Graphics.Renderer.DrawString(Value.ToString(), Graphics.DamageFont, FontX, FontY, 1.0f, CurrentFontColor);
+        }
+
+        public void ResizeBackground()
+        {
+            switch (Type)
+            {
+                case CombatNumberType.DamageHealth:
+                    BackgroundTexture = CombatNumberManager.DamageHealthTextureLg;
+                    BackgroundTextureFlash = CombatNumberManager.DamageHealthFlashTextureLg;
+                    break;
+
+                case CombatNumberType.DamageMana:
+                    BackgroundTexture = CombatNumberManager.DamageManaTextureLg;
+                    BackgroundTextureFlash = CombatNumberManager.DamageManaFlashTextureLg;
+                    break;
+
+                case CombatNumberType.DamageCritical:
+                    BackgroundTexture = CombatNumberManager.DamageCriticalTextureLg;
+                    BackgroundTextureFlash = CombatNumberManager.DamageCriticalFlashTextureLg;
+                    break;
+
+                case CombatNumberType.Neutral:
+                    BackgroundTexture = CombatNumberManager.DamageNeutralTextureLg;
+                    BackgroundTextureFlash = CombatNumberManager.DamageNeutralFlashTextureLg;
+                    break;
+
+                case CombatNumberType.HealHealth:
+                    BackgroundTexture = CombatNumberManager.AddHealthTextureLg;
+                    BackgroundTextureFlash = CombatNumberManager.AddHealthTextureLg;
+                    break;
+
+                case CombatNumberType.HealMana:
+                    BackgroundTexture = CombatNumberManager.AddManaTextureLg;
+                    BackgroundTextureFlash = CombatNumberManager.AddManaTextureLg;
+                    break;
+            }
+
+            Resized = true;
         }
     }
 }

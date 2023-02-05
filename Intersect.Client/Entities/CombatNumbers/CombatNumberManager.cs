@@ -14,14 +14,24 @@ namespace Intersect.Client.Entities.CombatNumbers
     {
         public static GameTexture DamageHealthTexture { get; set; }
         public static GameTexture DamageHealthFlashTexture { get; set; }
+        public static GameTexture DamageHealthTextureLg { get; set; }
+        public static GameTexture DamageHealthFlashTextureLg { get; set; }
         public static GameTexture AddHealthTexture { get; set; }
+        public static GameTexture AddHealthTextureLg { get; set; }
         public static GameTexture AddManaTexture { get; set; }
+        public static GameTexture AddManaTextureLg { get; set; }
         public static GameTexture DamageNeutralTexture { get; set; }
         public static GameTexture DamageNeutralFlashTexture { get; set; }
+        public static GameTexture DamageNeutralTextureLg { get; set; }
+        public static GameTexture DamageNeutralFlashTextureLg { get; set; }
         public static GameTexture DamageManaTexture { get; set; }
         public static GameTexture DamageManaFlashTexture { get; set; }
+        public static GameTexture DamageManaTextureLg { get; set; }
+        public static GameTexture DamageManaFlashTextureLg { get; set; }
         public static GameTexture DamageCriticalTexture { get; set; }
         public static GameTexture DamageCriticalFlashTexture { get; set; }
+        public static GameTexture DamageCriticalTextureLg { get; set; }
+        public static GameTexture DamageCriticalFlashTextureLg { get; set; }
 
         public static void CacheTextureRefs()
         {
@@ -31,6 +41,16 @@ namespace Intersect.Client.Entities.CombatNumbers
             );
 
             DamageHealthFlashTexture = Globals.ContentManager.GetTexture(
+                GameContentManager.TextureType.Gui,
+                "combat_damagehealth_flash.png"
+            );
+
+            DamageHealthTextureLg = Globals.ContentManager.GetTexture(
+                GameContentManager.TextureType.Gui,
+                "combat_damagehealth_lg.png"
+            );
+
+            DamageHealthFlashTextureLg = Globals.ContentManager.GetTexture(
                 GameContentManager.TextureType.Gui,
                 "combat_damagehealth_flash.png"
             );
@@ -45,6 +65,16 @@ namespace Intersect.Client.Entities.CombatNumbers
                 "combat_damageneutral_flash.png"
             );
 
+            DamageNeutralTextureLg = Globals.ContentManager.GetTexture(
+               GameContentManager.TextureType.Gui,
+               "combat_damageneutral_lg.png"
+           );
+
+            DamageNeutralFlashTextureLg = Globals.ContentManager.GetTexture(
+                GameContentManager.TextureType.Gui,
+                "combat_damageneutral_flash_lg.png"
+            );
+
             DamageManaTexture = Globals.ContentManager.GetTexture(
                 GameContentManager.TextureType.Gui,
                 "combat_damagemana.png"
@@ -53,6 +83,16 @@ namespace Intersect.Client.Entities.CombatNumbers
             DamageManaFlashTexture = Globals.ContentManager.GetTexture(
                 GameContentManager.TextureType.Gui,
                 "combat_damagemana_flash.png"
+            );
+
+            DamageManaTextureLg = Globals.ContentManager.GetTexture(
+                GameContentManager.TextureType.Gui,
+                "combat_damagemana_lg.png"
+            );
+
+            DamageManaFlashTextureLg = Globals.ContentManager.GetTexture(
+                GameContentManager.TextureType.Gui,
+                "combat_damagemana_flash_lg.png"
             );
 
             DamageCriticalTexture = Globals.ContentManager.GetTexture(
@@ -65,6 +105,16 @@ namespace Intersect.Client.Entities.CombatNumbers
                 "combat_damagecrit_flash.png"
             );
 
+            DamageCriticalTextureLg = Globals.ContentManager.GetTexture(
+                GameContentManager.TextureType.Gui,
+                "combat_damagecrit_lg.png"
+            );
+
+            DamageCriticalFlashTextureLg = Globals.ContentManager.GetTexture(
+                GameContentManager.TextureType.Gui,
+                "combat_damagecrit_flash_lg.png"
+            );
+
             AddHealthTexture = Globals.ContentManager.GetTexture(
                 GameContentManager.TextureType.Gui,
                 "combat_addhealth.png"
@@ -73,6 +123,16 @@ namespace Intersect.Client.Entities.CombatNumbers
             AddManaTexture = Globals.ContentManager.GetTexture(
                 GameContentManager.TextureType.Gui,
                 "combat_addmana.png"
+            );
+
+            AddHealthTextureLg = Globals.ContentManager.GetTexture(
+                GameContentManager.TextureType.Gui,
+                "combat_addhealth_lg.png"
+            );
+
+            AddManaTextureLg = Globals.ContentManager.GetTexture(
+                GameContentManager.TextureType.Gui,
+                "combat_addmana_lg.png"
             );
         }
 
