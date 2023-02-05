@@ -433,7 +433,19 @@ namespace Intersect.Editor.Forms.Editors
             btnRemoveTable.Enabled = false;
             if (lstTreasureLevels.SelectedIndex < 0 || lstTreasureLevels.SelectedIndex >= mEditorItem.Treasure.Count)
             {
+                mPopulating = true;
+                nudExp.Value = 0;
+                mPopulating = false;
                 return;
+            }
+
+            if (!mEditorItem.ExpRewards.ContainsKey(lstTreasureLevels.SelectedIndex))
+            {
+                nudExp.Value = 0L;
+            }
+            else
+            {
+                nudExp.Value = mEditorItem.ExpRewards[lstTreasureLevels.SelectedIndex];
             }
 
             RefreshLoot();
@@ -550,6 +562,15 @@ namespace Intersect.Editor.Forms.Editors
 
             mEditorItem.GnomeTreasure.RemoveAt(lstGnomeLoot.SelectedIndex);
             RefreshGnomeLoot(true);
+        }
+
+        private void nudExp_ValueChanged(object sender, EventArgs e)
+        {
+            if (mPopulating)
+            {
+                return;
+            }
+            mEditorItem.ExpRewards[lstTreasureLevels.SelectedIndex] = (long)nudExp.Value;
         }
     }
 }

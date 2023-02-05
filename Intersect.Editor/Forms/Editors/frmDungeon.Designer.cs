@@ -50,7 +50,11 @@ namespace Intersect.Editor.Forms.Editors
             this.btnCancel = new DarkUI.Controls.DarkButton();
             this.grpEditor = new DarkUI.Controls.DarkGroupBox();
             this.grpRewards = new DarkUI.Controls.DarkGroupBox();
+            this.nudExp = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblExp = new System.Windows.Forms.Label();
             this.grpGnome = new DarkUI.Controls.DarkGroupBox();
+            this.nudGnomeRolls = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblRolls = new System.Windows.Forms.Label();
             this.btnRemoveGnomeLoot = new DarkUI.Controls.DarkButton();
             this.btnAddGnomeLoot = new DarkUI.Controls.DarkButton();
             this.cmbGnomeLootTable = new DarkUI.Controls.DarkComboBox();
@@ -60,6 +64,8 @@ namespace Intersect.Editor.Forms.Editors
             this.nudGnomeLocations = new DarkUI.Controls.DarkNumericUpDown();
             this.lblGnomeLocations = new System.Windows.Forms.Label();
             this.grpTreasure = new DarkUI.Controls.DarkGroupBox();
+            this.nudTreasureRolls = new DarkUI.Controls.DarkNumericUpDown();
+            this.label2 = new System.Windows.Forms.Label();
             this.lblLoot = new System.Windows.Forms.Label();
             this.btnRemoveTreasureLevel = new DarkUI.Controls.DarkButton();
             this.btnAddTreasureLevel = new DarkUI.Controls.DarkButton();
@@ -100,17 +106,16 @@ namespace Intersect.Editor.Forms.Editors
             this.lblFolder = new System.Windows.Forms.Label();
             this.txtName = new DarkUI.Controls.DarkTextBox();
             this.lblName = new System.Windows.Forms.Label();
-            this.lblRolls = new System.Windows.Forms.Label();
-            this.nudGnomeRolls = new DarkUI.Controls.DarkNumericUpDown();
-            this.label2 = new System.Windows.Forms.Label();
-            this.nudTreasureRolls = new DarkUI.Controls.DarkNumericUpDown();
             this.toolStrip.SuspendLayout();
             this.grpDungeons.SuspendLayout();
             this.grpEditor.SuspendLayout();
             this.grpRewards.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudExp)).BeginInit();
             this.grpGnome.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudGnomeRolls)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudGnomeLocations)).BeginInit();
             this.grpTreasure.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudTreasureRolls)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudTreasureLevels)).BeginInit();
             this.grpTime.SuspendLayout();
             this.grpTimeReqs.SuspendLayout();
@@ -119,8 +124,6 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudMinutes)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudHours)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudTimerPlayers)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudGnomeRolls)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudTreasureRolls)).BeginInit();
             this.SuspendLayout();
             // 
             // toolStrip
@@ -298,7 +301,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(644, 643);
+            this.btnSave.Location = new System.Drawing.Point(635, 683);
             this.btnSave.Name = "btnSave";
             this.btnSave.Padding = new System.Windows.Forms.Padding(5);
             this.btnSave.Size = new System.Drawing.Size(135, 27);
@@ -309,7 +312,7 @@ namespace Intersect.Editor.Forms.Editors
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(785, 643);
+            this.btnCancel.Location = new System.Drawing.Point(785, 683);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Padding = new System.Windows.Forms.Padding(5);
             this.btnCancel.Size = new System.Drawing.Size(139, 27);
@@ -333,7 +336,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpEditor.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpEditor.Location = new System.Drawing.Point(221, 28);
             this.grpEditor.Name = "grpEditor";
-            this.grpEditor.Size = new System.Drawing.Size(703, 609);
+            this.grpEditor.Size = new System.Drawing.Size(703, 649);
             this.grpEditor.TabIndex = 55;
             this.grpEditor.TabStop = false;
             this.grpEditor.Text = "Dungeon";
@@ -347,10 +350,39 @@ namespace Intersect.Editor.Forms.Editors
             this.grpRewards.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpRewards.Location = new System.Drawing.Point(408, 70);
             this.grpRewards.Name = "grpRewards";
-            this.grpRewards.Size = new System.Drawing.Size(289, 533);
+            this.grpRewards.Size = new System.Drawing.Size(289, 573);
             this.grpRewards.TabIndex = 122;
             this.grpRewards.TabStop = false;
             this.grpRewards.Text = "Rewards";
+            // 
+            // nudExp
+            // 
+            this.nudExp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudExp.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudExp.Location = new System.Drawing.Point(87, 290);
+            this.nudExp.Maximum = new decimal(new int[] {
+            100000000,
+            0,
+            0,
+            0});
+            this.nudExp.Name = "nudExp";
+            this.nudExp.Size = new System.Drawing.Size(184, 20);
+            this.nudExp.TabIndex = 142;
+            this.nudExp.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudExp.ValueChanged += new System.EventHandler(this.nudExp_ValueChanged);
+            // 
+            // lblExp
+            // 
+            this.lblExp.AutoSize = true;
+            this.lblExp.Location = new System.Drawing.Point(15, 292);
+            this.lblExp.Name = "lblExp";
+            this.lblExp.Size = new System.Drawing.Size(60, 13);
+            this.lblExp.TabIndex = 141;
+            this.lblExp.Text = "Experience";
             // 
             // grpGnome
             // 
@@ -367,12 +399,40 @@ namespace Intersect.Editor.Forms.Editors
             this.grpGnome.Controls.Add(this.nudGnomeLocations);
             this.grpGnome.Controls.Add(this.lblGnomeLocations);
             this.grpGnome.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpGnome.Location = new System.Drawing.Point(6, 301);
+            this.grpGnome.Location = new System.Drawing.Point(6, 341);
             this.grpGnome.Name = "grpGnome";
             this.grpGnome.Size = new System.Drawing.Size(277, 226);
             this.grpGnome.TabIndex = 124;
             this.grpGnome.TabStop = false;
             this.grpGnome.Text = "Gnome";
+            // 
+            // nudGnomeRolls
+            // 
+            this.nudGnomeRolls.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudGnomeRolls.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudGnomeRolls.Location = new System.Drawing.Point(51, 185);
+            this.nudGnomeRolls.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudGnomeRolls.Name = "nudGnomeRolls";
+            this.nudGnomeRolls.Size = new System.Drawing.Size(95, 20);
+            this.nudGnomeRolls.TabIndex = 140;
+            this.nudGnomeRolls.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // lblRolls
+            // 
+            this.lblRolls.AutoSize = true;
+            this.lblRolls.Location = new System.Drawing.Point(15, 187);
+            this.lblRolls.Name = "lblRolls";
+            this.lblRolls.Size = new System.Drawing.Size(30, 13);
+            this.lblRolls.TabIndex = 139;
+            this.lblRolls.Text = "Rolls";
             // 
             // btnRemoveGnomeLoot
             // 
@@ -472,6 +532,8 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpTreasure.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpTreasure.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpTreasure.Controls.Add(this.lblExp);
+            this.grpTreasure.Controls.Add(this.nudExp);
             this.grpTreasure.Controls.Add(this.nudTreasureRolls);
             this.grpTreasure.Controls.Add(this.label2);
             this.grpTreasure.Controls.Add(this.lblLoot);
@@ -488,10 +550,38 @@ namespace Intersect.Editor.Forms.Editors
             this.grpTreasure.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpTreasure.Location = new System.Drawing.Point(6, 19);
             this.grpTreasure.Name = "grpTreasure";
-            this.grpTreasure.Size = new System.Drawing.Size(277, 276);
+            this.grpTreasure.Size = new System.Drawing.Size(277, 316);
             this.grpTreasure.TabIndex = 123;
             this.grpTreasure.TabStop = false;
             this.grpTreasure.Text = "Treasure";
+            // 
+            // nudTreasureRolls
+            // 
+            this.nudTreasureRolls.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudTreasureRolls.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudTreasureRolls.Location = new System.Drawing.Point(51, 248);
+            this.nudTreasureRolls.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudTreasureRolls.Name = "nudTreasureRolls";
+            this.nudTreasureRolls.Size = new System.Drawing.Size(95, 20);
+            this.nudTreasureRolls.TabIndex = 141;
+            this.nudTreasureRolls.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(15, 253);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(30, 13);
+            this.label2.TabIndex = 140;
+            this.label2.Text = "Rolls";
             // 
             // lblLoot
             // 
@@ -998,68 +1088,12 @@ namespace Intersect.Editor.Forms.Editors
             this.lblName.TabIndex = 20;
             this.lblName.Text = "Name";
             // 
-            // lblRolls
-            // 
-            this.lblRolls.AutoSize = true;
-            this.lblRolls.Location = new System.Drawing.Point(15, 187);
-            this.lblRolls.Name = "lblRolls";
-            this.lblRolls.Size = new System.Drawing.Size(30, 13);
-            this.lblRolls.TabIndex = 139;
-            this.lblRolls.Text = "Rolls";
-            // 
-            // nudGnomeRolls
-            // 
-            this.nudGnomeRolls.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudGnomeRolls.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudGnomeRolls.Location = new System.Drawing.Point(51, 185);
-            this.nudGnomeRolls.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nudGnomeRolls.Name = "nudGnomeRolls";
-            this.nudGnomeRolls.Size = new System.Drawing.Size(95, 20);
-            this.nudGnomeRolls.TabIndex = 140;
-            this.nudGnomeRolls.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(15, 253);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(30, 13);
-            this.label2.TabIndex = 140;
-            this.label2.Text = "Rolls";
-            // 
-            // nudTreasureRolls
-            // 
-            this.nudTreasureRolls.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudTreasureRolls.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudTreasureRolls.Location = new System.Drawing.Point(51, 248);
-            this.nudTreasureRolls.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nudTreasureRolls.Name = "nudTreasureRolls";
-            this.nudTreasureRolls.Size = new System.Drawing.Size(95, 20);
-            this.nudTreasureRolls.TabIndex = 141;
-            this.nudTreasureRolls.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
             // frmDungeon
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.ClientSize = new System.Drawing.Size(936, 682);
+            this.ClientSize = new System.Drawing.Size(936, 722);
             this.Controls.Add(this.grpEditor);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnSave);
@@ -1076,11 +1110,14 @@ namespace Intersect.Editor.Forms.Editors
             this.grpEditor.ResumeLayout(false);
             this.grpEditor.PerformLayout();
             this.grpRewards.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.nudExp)).EndInit();
             this.grpGnome.ResumeLayout(false);
             this.grpGnome.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudGnomeRolls)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudGnomeLocations)).EndInit();
             this.grpTreasure.ResumeLayout(false);
             this.grpTreasure.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudTreasureRolls)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudTreasureLevels)).EndInit();
             this.grpTime.ResumeLayout(false);
             this.grpTime.PerformLayout();
@@ -1092,8 +1129,6 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudMinutes)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudHours)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudTimerPlayers)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudGnomeRolls)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.nudTreasureRolls)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1173,5 +1208,7 @@ namespace Intersect.Editor.Forms.Editors
         private DarkUI.Controls.DarkNumericUpDown nudGnomeRolls;
         private System.Windows.Forms.Label label2;
         private DarkUI.Controls.DarkNumericUpDown nudTreasureRolls;
+        private System.Windows.Forms.Label lblExp;
+        private DarkUI.Controls.DarkNumericUpDown nudExp;
     }
 }
