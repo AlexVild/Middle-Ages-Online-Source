@@ -179,7 +179,7 @@ namespace Intersect.Client.Interface
                 MenuUi.Draw();
             }
             else if (Globals.GameState == GameStates.InGame &&
-                     ((!Interface.GameUi?.EscapeMenu?.IsHidden ?? true) || !HideUi))
+                     ((!GameUi?.EscapeMenu?.IsHidden ?? true) || !HideUi))
             {
                 GameUi.Draw();
                 ToastService.Draw();

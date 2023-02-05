@@ -2,17 +2,15 @@
 using Intersect.Client.Framework.GenericClasses;
 using Intersect.Client.Framework.Graphics;
 using Intersect.Client.Framework.Gwen;
-using Intersect.Client.General;
 using Intersect.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Intersect.Client.Interface.Game.Toasts
 {
-    public static class ToastWindow
+    public class ToastWindow
     {
         const float SmallWidth = 1280;
         const float BorderWidth = 4;
@@ -20,126 +18,71 @@ namespace Intersect.Client.Interface.Game.Toasts
         const int SlideInTime = 150;
         const long DisplayTime = 8000;
 
-        private static long FlashEndTime;
+        private long FlashEndTime;
         const long FlashTime = 35;
-        private static bool HasFlashed;
-        private static bool Flashing;
+        private bool HasFlashed;
+        private bool Flashing;
 
         const string Sound = "al_new_toast.wav";
 
-        static readonly Color BorderColor = Color.White;
-        static readonly Color FlashingBackgroundColor = Color.White;
-        static readonly Color StaticBackgroundColor = Color.Black;
+        readonly Color BorderColor = Color.White;
+        readonly Color FlashingBackgroundColor = Color.White;
+        readonly Color StaticBackgroundColor = Color.Black;
 
-        static Color BackgroundColor => Flashing ? FlashingBackgroundColor : StaticBackgroundColor;
+        Color BackgroundColor => Flashing ? FlashingBackgroundColor : StaticBackgroundColor;
 
-        public static bool IsVisible;
-
-        private static float _x;
-        public static float X
+        private float _x;
+        public float X
         {
             get => ViewX + _x;
             set => _x = value;
         }
-        private static float _y;
-        public static float Y
+        private float _y;
+        public float Y
         {
             get => _y + (int)ViewTop;
             set => _y = value;
         }
-        public static int Width { get; set; }
-        public static int Height { get; set; }
-        public static float Right => X + Width;
-        public static float Bottom => Y + Height;
+        public int Width { get; set; }
+        public int Height { get; set; }
+        public float Right => X + Width;
+        public float Bottom => Y + Height;
 
-        private static bool IsSmall => ViewWidth < SmallWidth;
+        private bool IsSmall => ViewWidth < SmallWidth;
 
-        private static float ViewX => Graphics.CurrentView.X;
-        private static float ViewCenterY => Graphics.CurrentView.CenterY;
-        private static float ViewTop => Graphics.CurrentView.Top;
-        private static float ViewBottom => Graphics.CurrentView.Bottom;
-        private static float ViewWidth => Graphics.CurrentView.Width;
+        private float ViewX => Graphics.CurrentView.X;
+        private float ViewCenterY => Graphics.CurrentView.CenterY;
+        private float ViewTop => Graphics.CurrentView.Top;
+        private float ViewBottom => Graphics.CurrentView.Bottom;
+        private float ViewWidth => Graphics.CurrentView.Width;
 
-        private static float ResX => Graphics.Renderer.ActiveResolution.X;
-        private static float ResY => Graphics.Renderer.ActiveResolution.Y;
+        private float ResX => Graphics.Renderer.ActiveResolution.X;
+        private float ResY => Graphics.Renderer.ActiveResolution.Y;
 
-        private static int MaxWidth => IsSmall ? 480 : 640;
-        private static GameTexture WhiteTexture = Graphics.Renderer.GetWhiteTexture();
-        private static FloatRect SrcRect = new FloatRect(0, 0, 1, 1);
+        private int MaxWidth => IsSmall ? 480 : 640;
+        private GameTexture WhiteTexture = Graphics.Renderer.GetWhiteTexture();
+        private FloatRect SrcRect = new FloatRect(0, 0, 1, 1);
 
-        private static GameFont Font => IsSmall ? Graphics.ToastFontSmall : Graphics.ToastFont;
+        private GameFont Font => IsSmall ? Graphics.ToastFontSmall : Graphics.ToastFont;
 
-        private static Padding TextPadding = new Padding(20, 8, 20, 8);
-        private static Padding TextInnerPadding = new Padding(0, 4, 0, 0);
-        private static int TextMaxWidth => MaxWidth - TextPadding.Left - TextPadding.Right;
+        private Padding TextPadding = new Padding(20, 8, 20, 8);
+        private Padding TextInnerPadding = new Padding(0, 4, 0, 0);
+        private int TextMaxWidth => MaxWidth - TextPadding.Left - TextPadding.Right;
 
-        private static List<string> Lines { get; set; } = new List<string>();
+        private List<string> Lines { get; set; } = new List<string>();
 
-        private static int EndingY => ContainerPadding;
+        private int EndingY => ContainerPadding;
 
-        public static void Draw()
+        private long CreatedAt { get; set; }
+        public bool Initialized = false;
+
+        private Toast Toast { get; set; }
+
+        public ToastWindow(Toast toast)
         {
-            if (ToastService.CurrentToast.CreatedAt + DisplayTime < Timing.Global.Milliseconds)
-            {
-                IsVisible = false;
-            }
-
-            if (!IsVisible)
-            {
-                return;
-            }
-
-            Animate();
-
-            DrawTextContainer();
-            DrawText();
+            Toast = toast;
         }
-
-        private static void Animate()
-        {
-            var toast = ToastService.CurrentToast;
-            var now = Timing.Global.Milliseconds;
-
-            if (now > toast.CreatedAt + SlideInTime)
-            {
-                Y = EndingY;
-
-                if (Y == EndingY + ViewTop && !HasFlashed)
-                {
-                    FlashEndTime = Timing.Global.Milliseconds + FlashTime;
-                    Flashing = true;
-                    HasFlashed = true;
-                    Audio.AddGameSound(Sound, false);
-                }
-                if (HasFlashed && FlashEndTime < now)
-                {
-                    Flashing = false;
-                }
-
-                return;
-            }
-            
-            SlideIn(toast, now);
-        }
-
-        private static void SlideIn(Toast toast, long now)
-        {
-            var elapsed = now - toast.CreatedAt;
-
-            var distanceRatio = (float)elapsed / SlideInTime;
-
-            Y = EndingY * distanceRatio;
-        }
-
-        public static void ResetAnimation()
-        {
-            Y = 0;
-            HasFlashed = false;
-            FlashEndTime = 0L;
-            Flashing = false;
-        }
-
-        public static void RecalculateContainer()
+        public void Initialize()
         {
             GetLines();
 
@@ -161,15 +104,73 @@ namespace Intersect.Client.Interface.Game.Toasts
             Width = Math.Min(MaxWidth, maxLine + TextPadding.Left + TextPadding.Right);
 
             X = ResX / 2 - (Width / 2);
+
+            CreatedAt = Timing.Global.Milliseconds;
+
+            Initialized = true;
         }
 
-        private static void DrawTextContainer()
+        public void Draw()
+        {
+            if (!Initialized)
+            {
+                Initialize();
+            }
+
+            if (CreatedAt + DisplayTime < Timing.Global.Milliseconds)
+            {
+                _ = ToastService.TryDequeueToast();
+                return;
+            }
+
+            Animate();
+
+            DrawTextContainer();
+            DrawText();
+        }
+
+        private void Animate()
+        {
+            var now = Timing.Global.Milliseconds;
+
+            if (now > CreatedAt + SlideInTime)
+            {
+                Y = EndingY;
+
+                if (Y == EndingY + ViewTop && !HasFlashed)
+                {
+                    FlashEndTime = Timing.Global.Milliseconds + FlashTime;
+                    Flashing = true;
+                    HasFlashed = true;
+                    Audio.AddGameSound(Sound, false);
+                }
+                if (HasFlashed && FlashEndTime < now)
+                {
+                    Flashing = false;
+                }
+
+                return;
+            }
+            
+            SlideIn(Toast, now);
+        }
+        
+        private void SlideIn(Toast toast, long now)
+        {
+            var elapsed = now - CreatedAt;
+
+            var distanceRatio = (float)elapsed / SlideInTime;
+
+            Y = EndingY * distanceRatio;
+        }
+
+        private void DrawTextContainer()
         {
             DrawBackground();
             DrawForeground();
         }
 
-        private static void DrawBackground()
+        private void DrawBackground()
         {
             var x = X - BorderWidth;
             var y = Y;
@@ -186,7 +187,7 @@ namespace Intersect.Client.Interface.Game.Toasts
             Graphics.DrawGameTexture(WhiteTexture, SrcRect, verticalRect, BorderColor);
         }
 
-        private static void DrawForeground()
+        private void DrawForeground()
         {
             var x = X;
             var y = Y;
@@ -195,12 +196,11 @@ namespace Intersect.Client.Interface.Game.Toasts
             Graphics.DrawGameTexture(WhiteTexture, SrcRect, destRect, BackgroundColor);
         }
 
-        private static void GetLines()
+        private void GetLines()
         {
             Lines.Clear();
 
-            var toast = ToastService.CurrentToast;
-            var message = toast.Message;
+            var message = Toast.Message;
 
             // Word wrap
             var messageSplit = message.Split(' ');
@@ -245,7 +245,7 @@ namespace Intersect.Client.Interface.Game.Toasts
             }
         }
 
-        private static void DrawText()
+        private void DrawText()
         {
             if (Flashing)
             {
@@ -255,13 +255,11 @@ namespace Intersect.Client.Interface.Game.Toasts
             var textX = X + TextPadding.Left;
             var textY = Y + TextPadding.Top;
 
-            var toast = ToastService.CurrentToast;
-
             foreach(var line in Lines)
             {
                 var textLen = Graphics.Renderer.MeasureText(line, Font, 1.0f);
                 Graphics.Renderer.DrawString(
-                    line, Font, textX, textY, 1.0f, toast.TextColor
+                    line, Font, textX, textY, 1.0f, Toast.TextColor
                 );
                 textY += textLen.Y + TextInnerPadding.Top + TextInnerPadding.Bottom;
             }

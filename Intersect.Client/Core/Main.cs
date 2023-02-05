@@ -410,7 +410,7 @@ namespace Intersect.Client.Core
         {
             Globals.StartMenuMusic = false;
             Globals.LastLevelJinglePlayed = 0L;
-            ToastService.CurrentToast = null;
+            ToastService.EmptyToastQueue();
             FadeService.FadeOut(callback: () =>
             {
                 ForceLogout(characterSelect);

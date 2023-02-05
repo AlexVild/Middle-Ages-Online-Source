@@ -1,46 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Intersect.Client.Interface.Game.Toasts
 {
     public static class ToastService
     {
-        public static Toast CurrentToast { get; set; }
+        static Queue<Toast> ToastQueue = new Queue<Toast>();
+
+        public static ToastWindow CurrentWindow => ToastQueue.FirstOrDefault()?.Window;
 
         public static void SetToast(Toast toast)
         {
-            CurrentToast = toast;
-            ToastWindow.RecalculateContainer();
+            if (toast == default)
+            {
+                return;
+            }
+
+            ToastQueue.Enqueue(toast);
         }
 
         public static void Draw()
         {
-            if (CurrentToast != null)
-            {
-                if (!ToastWindow.IsVisible)
-                {
-                    Show();
-                    ToastWindow.ResetAnimation();
-                }
-                ToastWindow.Draw();
-            }
-            else if (ToastWindow.IsVisible)
-            {
-                Hide();
-            }
+            CurrentWindow?.Draw();
         }
 
-        public static void Show()
+        public static bool TryDequeueToast()
         {
-            ToastWindow.IsVisible = true;
+            if (ToastQueue.Count == 0)
+            {
+                return false;
+            }
+
+            ToastQueue.FirstOrDefault()?.Dispose();
+            ToastQueue.Dequeue();
+            return true;
         }
 
-        public static void Hide()
+        public static void EmptyToastQueue()
         {
-            ToastWindow.IsVisible = false;
+            ToastQueue.Clear();
         }
     }
 }
