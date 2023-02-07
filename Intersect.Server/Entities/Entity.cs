@@ -2202,7 +2202,7 @@ namespace Intersect.Server.Entities
             return statusPackets;
         }
 
-        protected Immunities StatusToImmunity(StatusTypes status)
+        public Immunities StatusToImmunity(StatusTypes status)
         {
             switch (status)
             {

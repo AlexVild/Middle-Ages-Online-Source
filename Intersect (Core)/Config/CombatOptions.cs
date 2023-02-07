@@ -212,6 +212,16 @@ namespace Intersect.Config
         /// </summary>
         public int MaxPlayerAutoTargetRadius = 15;
 
+        /// <summary>
+        /// Configures the amount of time a previously-applied CC is considered stale for.
+        /// </summary>
+        public int CCStalenessTimer = 15000;
+
+        /// <summary>
+        /// Configures the maximum amount of tenacity awarded for stale CC
+        /// </summary>
+        public int MaxStaleTenacityBonus = 85;
+
         [OnDeserializing]
         internal void OnDeserializingMethod(StreamingContext context)
         {

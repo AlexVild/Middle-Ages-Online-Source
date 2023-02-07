@@ -15,14 +15,73 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Intersect.Server.Entities
 {
     public abstract partial class AttackingEntity : Entity
     {
+        /// <summary>
+        /// Contains a mapping of offensive status -> timestamp, so that we can have a staleness applied to
+        /// negative status types
+        /// </summary>
+        [NotMapped, JsonIgnore]
+        public Dictionary<StatusTypes, Queue<long>> EffectStaleness { get; set; }
+
         public AttackingEntity() : this(Guid.NewGuid(), Guid.Empty)
         {
+            EffectStaleness = new Dictionary<StatusTypes, Queue<long>>();
+            foreach (StatusTypes status in Enum.GetValues(typeof(StatusTypes)))
+            {
+                if (StatusHelpers.TenacityExcluded.Contains(status))
+                {
+                    continue;
+                }
+
+                EffectStaleness[status] = new Queue<long>();
+            }
+        }
+
+        public void CCApplied(StatusTypes status)
+        {
+            if (StatusHelpers.TenacityExcluded.Contains(status))
+            {
+                return;
+            }
+
+            EffectStaleness[status].Enqueue(Timing.Global.Milliseconds + Options.Instance.CombatOpts.CCStalenessTimer);
+        }
+
+        public void UpdateStatusStaleness()
+        {
+            var now = Timing.Global.Milliseconds;
+            foreach (var timeQueue in EffectStaleness.Values)
+            {
+                while (timeQueue.Count > 0 && timeQueue.Peek() < now)
+                {
+                    timeQueue.Dequeue();
+                }
+            }
+        }
+
+        public int GetStaleTenacityMod(StatusTypes status)
+        {
+            if (StatusHelpers.TenacityExcluded.Contains(status) || !EffectStaleness.ContainsKey(status))
+            {
+                return 0;
+            }
+            
+            // -1 because we always allow at least 1 status without staleness applied
+            var recentApplications = EffectStaleness[status].Count - 1;
+
+            return MathHelper.Clamp(recentApplications * 16, 0, Options.Instance.CombatOpts.MaxStaleTenacityBonus);
+        }
+
+        public override void Update(long timeMs)
+        {
+            UpdateStatusStaleness();
+            base.Update(timeMs);
         }
 
         //Initialization
@@ -369,9 +428,9 @@ namespace Intersect.Server.Entities
             if (damage != 0)
             {
                 // Invulnerable?
-                if (!friendly && CachedStatuses.Any(status => status.Type == StatusTypes.Invulnerable))
+                if (!friendly && enemy.CachedStatuses.Any(status => status.Type == StatusTypes.Invulnerable))
                 {
-                    PacketSender.SendActionMsg(this, Strings.Combat.invulnerable, CustomColors.Combat.Invulnerable, Options.BlockSound);
+                    PacketSender.SendActionMsg(enemy, Strings.Combat.invulnerable, CustomColors.Combat.Invulnerable, Options.BlockSound);
                     return;
                 }
 

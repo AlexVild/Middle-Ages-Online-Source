@@ -66,7 +66,7 @@ namespace Intersect.Server.Entities.Combat
                 // Get our player's Tenacity stat!
                 if (!TenacityExcluded.Contains(type))
                 {
-                    tenacity = player.GetBonusEffectTotal(EffectType.Tenacity);
+                    tenacity = player.GetBonusEffectTotal(EffectType.Tenacity) + player.GetStaleTenacityMod(type);
                 } 
             }
 
@@ -79,6 +79,8 @@ namespace Intersect.Server.Entities.Combat
                     npc.LootMap.TryAdd(Attacker.Id, true);
                     npc.LootMapCache = npc.LootMap.Keys.ToArray();
                 }
+
+                tenacity = npc.Base.Tenacity + npc.GetStaleTenacityMod(type);
             }
 
             // Interrupt their spellcast if we are running a Silence, Sleep or Stun!
@@ -140,7 +142,9 @@ namespace Intersect.Server.Entities.Combat
             }
 
             // Calculate our final duration and pass it on!
+            tenacity = MathHelper.Clamp(tenacity, -100, 100);
             var finalDuration = duration - (duration * (tenacity / 100f));
+            Logging.Log.Debug($"Status applied with tenacity {tenacity}%, duration is {((float)finalDuration / 1000).ToString("N2")}");
             if (en.Statuses.ContainsKey(spell))
             {
                 en.Statuses[spell].StartTime = Timing.Global.Milliseconds;
@@ -154,6 +158,11 @@ namespace Intersect.Server.Entities.Combat
                 Duration = Timing.Global.Milliseconds + (long) finalDuration;
                 en.Statuses.TryAdd(Spell, this);
                 en.CachedStatuses = en.Statuses.Values.ToArray();
+            }
+
+            if (en is AttackingEntity attEn)
+            {
+                attEn.CCApplied(type);
             }
 
             // If this is a taunt, force the target properly for players and NPCs
