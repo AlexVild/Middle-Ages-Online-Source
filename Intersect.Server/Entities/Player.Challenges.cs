@@ -34,10 +34,22 @@ namespace Intersect.Server.Entities
 
         [NotMapped, JsonIgnore]
         public int WeaponCombo { get; set; }
-        
+
+        [NotMapped, JsonIgnore]
+        public int WeaponComboExp { get; set; }
+
+        [NotMapped, JsonIgnore]
+        public bool InvalidateChallenge { get; set; } = false;
+
         [NotMapped, JsonIgnore]
         public int MissFreeStreak { get; set; }
-        
+
+        /// <summary>
+        /// A dictionary who's job is to track when a miss free streak is started at a specific range. The range is the key, the streak is the value
+        /// </summary>
+        [NotMapped, JsonIgnore]
+        public Dictionary<int, int> MissFreeRangeDict { get; set; } = new Dictionary<int, int>();
+
         [NotMapped, JsonIgnore]
         public int HitFreeStreak { get; set; }
 
@@ -87,6 +99,11 @@ namespace Intersect.Server.Entities
                     continue;
                 }
                 
+                if (instance.Challenge?.Type == ChallengeType.MissFreeAtRange)
+                {
+                    MissFreeRangeDict[instance.Challenge.Param] = 0;
+                }
+
                 var progress = new ChallengeProgress(instance, this);
                 ChallengesInProgress.Add(progress);
             }
@@ -107,12 +124,20 @@ namespace Intersect.Server.Entities
         {
             WeaponCombo = 0;
             
+            if (CurrentCombo > 0)
+            {
+                InvalidateChallenge = true;
+            }
+            WeaponComboExp = 0;
+
             DoTChallengeMap.Clear();
             DamageTakenMap.Clear();
             BeastsKilledOverTime.Clear();
 
             HitFreeStreak = 0;
             MissFreeStreak = 0;
+
+            MissFreeRangeDict.Clear();
 
             LastWeaponSwitch = Timing.Global.Milliseconds + ChallengeWeaponSwitchTimer;
         }
@@ -268,6 +293,7 @@ namespace Intersect.Server.Entities
 #if DEBUG
                 throw new InvalidOperationException($"No valid weapon type found for mastery attempting level up: {mastery.WeaponTypeId}");
 #else
+                Logging.Log.Debug($"No valid weapon type found for mastery attempting level up: {mastery.WeaponTypeId}");
                 return;
 #endif
             }

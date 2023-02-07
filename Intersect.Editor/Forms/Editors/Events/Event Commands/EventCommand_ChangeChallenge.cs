@@ -37,9 +37,9 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
 
         void SetRadioValues()
         {
-            var changeType = mMyCommand?.ChangeType ?? ChallengeUpdate.ChangeReps;
+            var changeType = mMyCommand?.ChangeType ?? ChallengeUpdate.ChangeSets;
 
-            rdoChangeReps.Checked = changeType == ChallengeUpdate.ChangeReps;
+            rdoChangeReps.Checked = changeType == ChallengeUpdate.ChangeSets;
             rdoComplete.Checked = changeType == ChallengeUpdate.Complete;
             rdoReset.Checked = changeType == ChallengeUpdate.Reset;
         }
@@ -48,7 +48,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         {
             if (rdoChangeReps.Checked)
             {
-                return ChallengeUpdate.ChangeReps;
+                return ChallengeUpdate.ChangeSets;
             }
 
             if (rdoComplete.Checked)
@@ -61,7 +61,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                 return ChallengeUpdate.Reset;
             }
 
-            return ChallengeUpdate.ChangeReps;
+            return ChallengeUpdate.ChangeSets;
         }
 
         private void btnSave_Click(object sender, EventArgs e)

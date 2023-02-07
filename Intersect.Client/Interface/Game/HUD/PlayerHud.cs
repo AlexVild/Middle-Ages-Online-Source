@@ -94,6 +94,8 @@ namespace Intersect.Client.Interface.Game.HUD
         public PlayerHud()
         {
             IsVisible = true;
+            FlashExp = false;
+            LastExpFlash = Timing.Global.Milliseconds;
             InitTextures();
         }
 

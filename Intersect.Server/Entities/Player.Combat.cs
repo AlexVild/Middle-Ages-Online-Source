@@ -127,6 +127,16 @@ namespace Intersect.Server.Entities
                     MissFreeStreak++;
                     ChallengeUpdateProcesser.UpdateChallengesOf(new MaxHitUpdate(this, damage));
                     ChallengeUpdateProcesser.UpdateChallengesOf(new DamageAtRangeUpdate(this, damage, range));
+
+                    foreach (var rangeReq in MissFreeRangeDict.Keys.ToArray())
+                    {
+                        if (rangeReq <= range)
+                        {
+                            MissFreeRangeDict[rangeReq]++;
+                            ChallengeUpdateProcesser.UpdateChallengesOf(new MissFreeAtRangeUpdate(this, MissFreeRangeDict[rangeReq], range));
+                        }
+                    }
+
                     ChallengeUpdateProcesser.UpdateChallengesOf(new HitFreeUpdate(this, HitFreeStreak));
                 }
             }
@@ -633,6 +643,7 @@ namespace Intersect.Server.Entities
         protected override void AttackingEntity_AttackMissed(Entity target)
         {
             MissFreeStreak = 0;
+            MissFreeRangeDict.Clear();
         }
 
         protected override void AttackingEntity_DamageTaken(Entity aggressor, int damage)

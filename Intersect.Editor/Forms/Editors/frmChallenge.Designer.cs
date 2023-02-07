@@ -47,6 +47,9 @@ namespace Intersect.Editor.Forms.Editors
             this.txtSearch = new DarkUI.Controls.DarkTextBox();
             this.lstGameObjects = new Intersect.Editor.Forms.Controls.GameObjectList();
             this.grpEditor = new DarkUI.Controls.DarkGroupBox();
+            this.lblIcon = new System.Windows.Forms.Label();
+            this.cmbPic = new DarkUI.Controls.DarkComboBox();
+            this.picItem = new System.Windows.Forms.PictureBox();
             this.grpDetails = new DarkUI.Controls.DarkGroupBox();
             this.nudParam = new DarkUI.Controls.DarkNumericUpDown();
             this.cmbParamSelector = new DarkUI.Controls.DarkComboBox();
@@ -71,18 +74,17 @@ namespace Intersect.Editor.Forms.Editors
             this.lblName = new System.Windows.Forms.Label();
             this.btnSave = new DarkUI.Controls.DarkButton();
             this.btnCancel = new DarkUI.Controls.DarkButton();
-            this.picItem = new System.Windows.Forms.PictureBox();
-            this.cmbPic = new DarkUI.Controls.DarkComboBox();
-            this.lblIcon = new System.Windows.Forms.Label();
+            this.lblChallengeDescription = new System.Windows.Forms.Label();
+            this.txtDescription = new DarkUI.Controls.DarkTextBox();
             this.toolStrip.SuspendLayout();
             this.grpWeaponTypes.SuspendLayout();
             this.grpEditor.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picItem)).BeginInit();
             this.grpDetails.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudParam)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudSets)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudReps)).BeginInit();
             this.grpUnlocks.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picItem)).BeginInit();
             this.SuspendLayout();
             // 
             // toolStrip
@@ -262,6 +264,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpEditor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpEditor.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpEditor.Controls.Add(this.txtDescription);
             this.grpEditor.Controls.Add(this.lblIcon);
             this.grpEditor.Controls.Add(this.cmbPic);
             this.grpEditor.Controls.Add(this.picItem);
@@ -280,10 +283,52 @@ namespace Intersect.Editor.Forms.Editors
             this.grpEditor.TabStop = false;
             this.grpEditor.Text = "Weapon Type";
             // 
+            // lblIcon
+            // 
+            this.lblIcon.AutoSize = true;
+            this.lblIcon.Location = new System.Drawing.Point(57, 41);
+            this.lblIcon.Name = "lblIcon";
+            this.lblIcon.Size = new System.Drawing.Size(28, 13);
+            this.lblIcon.TabIndex = 60;
+            this.lblIcon.Text = "Icon";
+            // 
+            // cmbPic
+            // 
+            this.cmbPic.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbPic.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbPic.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbPic.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbPic.DrawDropdownHoverOutline = false;
+            this.cmbPic.DrawFocusRectangle = false;
+            this.cmbPic.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbPic.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbPic.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbPic.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbPic.FormattingEnabled = true;
+            this.cmbPic.Items.AddRange(new object[] {
+            "None"});
+            this.cmbPic.Location = new System.Drawing.Point(57, 60);
+            this.cmbPic.Name = "cmbPic";
+            this.cmbPic.Size = new System.Drawing.Size(216, 21);
+            this.cmbPic.TabIndex = 59;
+            this.cmbPic.Text = "None";
+            this.cmbPic.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbPic.SelectedIndexChanged += new System.EventHandler(this.cmbPic_SelectedIndexChanged);
+            // 
+            // picItem
+            // 
+            this.picItem.BackColor = System.Drawing.Color.Black;
+            this.picItem.Location = new System.Drawing.Point(19, 49);
+            this.picItem.Name = "picItem";
+            this.picItem.Size = new System.Drawing.Size(32, 32);
+            this.picItem.TabIndex = 58;
+            this.picItem.TabStop = false;
+            // 
             // grpDetails
             // 
             this.grpDetails.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpDetails.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpDetails.Controls.Add(this.lblChallengeDescription);
             this.grpDetails.Controls.Add(this.nudParam);
             this.grpDetails.Controls.Add(this.cmbParamSelector);
             this.grpDetails.Controls.Add(this.nudSets);
@@ -621,46 +666,28 @@ namespace Intersect.Editor.Forms.Editors
             this.btnCancel.Text = "Cancel";
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
-            // picItem
+            // lblChallengeDescription
             // 
-            this.picItem.BackColor = System.Drawing.Color.Black;
-            this.picItem.Location = new System.Drawing.Point(19, 49);
-            this.picItem.Name = "picItem";
-            this.picItem.Size = new System.Drawing.Size(32, 32);
-            this.picItem.TabIndex = 58;
-            this.picItem.TabStop = false;
+            this.lblChallengeDescription.AutoSize = true;
+            this.lblChallengeDescription.Location = new System.Drawing.Point(6, 75);
+            this.lblChallengeDescription.Name = "lblChallengeDescription";
+            this.lblChallengeDescription.Size = new System.Drawing.Size(60, 13);
+            this.lblChallengeDescription.TabIndex = 84;
+            this.lblChallengeDescription.Text = "Description";
             // 
-            // cmbPic
+            // txtDescription
             // 
-            this.cmbPic.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbPic.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbPic.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbPic.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbPic.DrawDropdownHoverOutline = false;
-            this.cmbPic.DrawFocusRectangle = false;
-            this.cmbPic.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbPic.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbPic.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbPic.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbPic.FormattingEnabled = true;
-            this.cmbPic.Items.AddRange(new object[] {
-            "None"});
-            this.cmbPic.Location = new System.Drawing.Point(57, 60);
-            this.cmbPic.Name = "cmbPic";
-            this.cmbPic.Size = new System.Drawing.Size(216, 21);
-            this.cmbPic.TabIndex = 59;
-            this.cmbPic.Text = "None";
-            this.cmbPic.TextPadding = new System.Windows.Forms.Padding(2);
-            this.cmbPic.SelectedIndexChanged += new System.EventHandler(this.cmbPic_SelectedIndexChanged);
-            // 
-            // lblIcon
-            // 
-            this.lblIcon.AutoSize = true;
-            this.lblIcon.Location = new System.Drawing.Point(57, 41);
-            this.lblIcon.Name = "lblIcon";
-            this.lblIcon.Size = new System.Drawing.Size(28, 13);
-            this.lblIcon.TabIndex = 60;
-            this.lblIcon.Text = "Icon";
+            this.txtDescription.AcceptsReturn = true;
+            this.txtDescription.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.txtDescription.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtDescription.ForeColor = System.Drawing.Color.Gainsboro;
+            this.txtDescription.Location = new System.Drawing.Point(25, 176);
+            this.txtDescription.Multiline = true;
+            this.txtDescription.Name = "txtDescription";
+            this.txtDescription.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtDescription.Size = new System.Drawing.Size(506, 27);
+            this.txtDescription.TabIndex = 119;
+            this.txtDescription.TextChanged += new System.EventHandler(this.txtDescription_TextChanged);
             // 
             // frmChallenge
             // 
@@ -683,6 +710,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpWeaponTypes.PerformLayout();
             this.grpEditor.ResumeLayout(false);
             this.grpEditor.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picItem)).EndInit();
             this.grpDetails.ResumeLayout(false);
             this.grpDetails.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudParam)).EndInit();
@@ -690,7 +718,6 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudReps)).EndInit();
             this.grpUnlocks.ResumeLayout(false);
             this.grpUnlocks.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picItem)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -740,5 +767,7 @@ namespace Intersect.Editor.Forms.Editors
         private System.Windows.Forms.PictureBox picItem;
         private DarkUI.Controls.DarkComboBox cmbPic;
         private System.Windows.Forms.Label lblIcon;
+        private DarkUI.Controls.DarkTextBox txtDescription;
+        private System.Windows.Forms.Label lblChallengeDescription;
     }
 }

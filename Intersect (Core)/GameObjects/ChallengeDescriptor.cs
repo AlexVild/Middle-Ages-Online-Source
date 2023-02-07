@@ -41,6 +41,18 @@ namespace Intersect.GameObjects
 
         [Description("X damage healed at Z% health, Y times")]
         DamageHealedAtHealth,
+
+        [Description("X combo exp earned, Y times")]
+        ComboExpEarned,
+
+        [Description("X enemies hit with AoE, Y times")]
+        AoEHits,
+
+        [Description("X miss-free streak at Z range, Y times")]
+        MissFreeAtRange,
+
+        [Description("Event Controlled, Y times")]
+        EventControlled,
     }
 
     public enum ChallengeParamType
@@ -72,6 +84,8 @@ namespace Intersect.GameObjects
         public int Param { get; set; }
 
         public string Icon { get; set; } = string.Empty;
+
+        public string Description { get; set; } = string.Empty;
 
         [NotMapped]
         public Dictionary<Stats, int> StatBoosts { get; set; }
@@ -183,83 +197,120 @@ namespace Intersect.GameObjects
                 case ChallengeType.BeastsKilledOverTime:
                     if (Reps > 1)
                     {
-                        return $"Kill {Sets} beasts over a period of {SecondsParam} seconds or less, {Reps} times.";
+                        return $"Kill {Reps} beasts over a period of {SecondsParam} seconds or less, {Sets} times.";
                     }
                     else
                     {
-                        return $"Kill {Sets} beasts over a period of {SecondsParam} seconds or less.";
+                        return $"Kill {Reps} beasts over a period of {SecondsParam} seconds or less.";
                     }
 
                 case ChallengeType.DamageAtRange:
                     if (Reps > 1)
                     {
-                        return $"Deal {Sets} damage at a range of {Param}, {Reps} times.";
+                        return $"Deal {Reps} damage at a range of {Param}, {Sets} times.";
                     }
                     else
                     {
-                        return $"Deal {Sets} damage at a range of {Param}.";
+                        return $"Deal {Reps} damage at a range of {Param}.";
                     }
 
                 case ChallengeType.DamageHealedAtHealth:
                     if (Reps > 1)
                     {
-                        return $"Heal {Sets} health when your target is at {Param}% HP or lower, {Reps} times.";
+                        return $"Heal {Reps} health when your target is at {Param}% HP or lower, {Sets} times.";
                     }
                     else
                     {
-                        return $"Heal {Sets} health when your target is at {Param}% HP or lower.";
+                        return $"Heal {Reps} health when your target is at {Param}% HP or lower.";
                     }
 
                 case ChallengeType.DamageOverTime:
                     if (Reps > 1)
                     {
-                        return $"Deal {Sets} damage over a period of {SecondsParam} seconds, {Reps} times.";
+                        return $"Deal {Reps} damage over a period of {SecondsParam} seconds, {Sets} times.";
                     }
                     else
                     {
-                        return $"Deal {Sets} damage over a period of {SecondsParam} seconds.";
+                        return $"Deal {Reps} damage over a period of {SecondsParam} seconds.";
                     }
 
                 case ChallengeType.DamageTakenOverTime:
                     if (Reps > 1)
                     {
-                        return $"Receive {Sets} damage over a period of {SecondsParam}, {Reps} times.";
+                        return $"Receive {Reps} damage over a period of {SecondsParam}, {Sets} times.";
                     }
                     else
                     {
-                        return $"Receive {Sets} damage over a period of {SecondsParam}.";
+                        return $"Receive {Reps} damage over a period of {SecondsParam}.";
                     }
 
                 case ChallengeType.HitFreeStreak:
                     if (Reps > 1)
                     {
-                        return $"Land {Sets} successful attacks without receiving any damage, {Reps} times.";
+                        return $"Land {Reps} successful attacks without receiving any damage, {Sets} times.";
                     }
                     else
                     {
-                        return $"Land {Sets} successful attacks without receiving any damage.";
+                        return $"Land {Reps} successful attacks without receiving any damage.";
                     }
 
                 case ChallengeType.MaxHit:
                     if (Reps > 1)
                     {
-                        return $"Deal {Sets} damage, {Reps} times.";
+                        return $"Deal {Reps} damage, {Sets} times.";
                     }
                     else
                     {
-                        return $"Deal {Sets} damage.";
+                        return $"Deal {Reps} damage.";
                     }
 
                 case ChallengeType.MissFreeStreak:
                     if (Reps > 1)
                     {
-                        return $"Land {Sets} successful attacks without missing, {Reps} times.";
+                        return $"Land {Reps} successful attacks without missing, {Sets} times.";
                     }
                     else
                     {
-                        return $"Land {Sets} successful attacks without missing.";
+                        return $"Land {Reps} successful attacks without missing.";
                     }
 
+                case ChallengeType.AoEHits:
+                    if (Reps > 1)
+                    {
+                        return $"Hit {Reps} enemies with an area-of-effect attack, {Sets} times.";
+                    }
+                    else
+                    {
+                        return $"Hit {Reps} enemies with an area-of-effect attack.";
+                    }
+                
+                case ChallengeType.ComboExpEarned:
+                    if (Reps > 1)
+                    {
+                        return $"Earn {Reps} EXP through a combo chain, {Sets} times.";
+                    }
+                    else
+                    {
+                        return $"Earn {Reps} EXP through a combo chain.";
+                    }
+                
+                case ChallengeType.MissFreeAtRange:
+                    if (Reps > 1)
+                    {
+                        return $"Deal damage {Reps} times without missing, at a range of {Param} or more, {Sets} times.";
+                    }
+                    else
+                    {
+                        return $"Deal damage {Reps} times without missing, at a range of {Param} or more.";
+                    }
+                
+                case ChallengeType.EventControlled:
+                    if (Reps > 1)
+                    {
+                        return $"{Description}, {Sets} times.";
+                    }
+                    return Description;
+                
                 default:
                     return "No description";
             }

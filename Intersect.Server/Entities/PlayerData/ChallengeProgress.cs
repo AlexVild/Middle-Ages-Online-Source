@@ -19,8 +19,9 @@ namespace Intersect.Server.Entities.PlayerData
             get => _reps;
             set
             {
+                var prevVal = _reps;
                 _reps = value;
-                if (RepsChanged != null) RepsChanged(value, Descriptor.Reps);
+                if (RepsChanged != null && _reps != prevVal) RepsChanged(value, Descriptor.Reps);
             }
         }
 
@@ -30,8 +31,9 @@ namespace Intersect.Server.Entities.PlayerData
             get => _sets;
             set
             {
+                var prevVal = _sets;
                 _sets = value;
-                if (SetsChanged != null) SetsChanged(value, Descriptor.Sets);
+                if (SetsChanged != null && prevVal != _sets) SetsChanged(value, Descriptor.Sets);
             }
         }
 

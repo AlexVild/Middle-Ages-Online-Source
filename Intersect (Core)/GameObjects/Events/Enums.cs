@@ -414,8 +414,8 @@ namespace Intersect.GameObjects.Events
 
     public enum ChallengeUpdate
     {
-        [Description("Change Reps")]
-        ChangeReps,
+        [Description("Change Sets")]
+        ChangeSets,
 
         [Description("Reset")]
         Reset,

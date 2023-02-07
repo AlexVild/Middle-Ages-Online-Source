@@ -2000,7 +2000,7 @@ namespace Intersect.Editor.Forms.Editors.Events
 
         private static string GetCommandText(ChangeChallengeCommand command, MapInstance map)
         {
-            if (command.ChangeType == ChallengeUpdate.ChangeReps)
+            if (command.ChangeType == ChallengeUpdate.ChangeSets)
             {
                 return Strings.EventCommandList.UpdateChallenge.ToString(command.Amount, ChallengeDescriptor.GetName(command.ChallengeId));
             }

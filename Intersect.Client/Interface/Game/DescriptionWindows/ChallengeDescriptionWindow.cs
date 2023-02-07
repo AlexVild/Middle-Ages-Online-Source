@@ -72,11 +72,11 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
         protected void SetupExtraInfo()
         {
             // Display only if this spell is bound.
-            var evt = Challenge.CompletionEvent;
+            var evt = Challenge.CompletionEventId;
             var spell = Challenge.SpellUnlock;
             
             // no unlocks
-            if (spell == default && evt == default)
+            if (spell == default && evt == Guid.Empty)
             {
                 return;
             }
@@ -100,7 +100,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
 
             rows.SizeToChildren(true, true);
 
-            if (evt != default && !string.IsNullOrWhiteSpace(Challenge.EventDescription))
+            if (evt != Guid.Empty && !string.IsNullOrWhiteSpace(Challenge.EventDescription))
             {
                 // Add a divider.
                 AddDivider();

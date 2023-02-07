@@ -1423,7 +1423,7 @@ namespace Intersect.GameObjects.Events.Commands
 
         public Guid ChallengeId { get; set; }
 
-        public ChallengeUpdate ChangeType { get; set; } = ChallengeUpdate.ChangeReps;
+        public ChallengeUpdate ChangeType { get; set; } = ChallengeUpdate.ChangeSets;
 
         public int Amount { get; set; } = 0;
     }

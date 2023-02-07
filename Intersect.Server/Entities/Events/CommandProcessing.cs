@@ -3271,13 +3271,23 @@ namespace Intersect.Server.Entities.Events
 
             switch (command.ChangeType)
             {
-                case ChallengeUpdate.ChangeReps:
-                    challenge.Progress = MathHelper.Clamp(challenge.Progress + command.Amount, 0, descriptor.Reps);
-                    challenge.Complete = challenge.Progress >= descriptor.Reps;
-                    PacketSender.SendChatMsg(player,
-                            $"Challenge update: {descriptor.Name} ({challenge.Progress} / {descriptor.Reps})",
+                case ChallengeUpdate.ChangeSets:
+                    challenge.Progress = MathHelper.Clamp(challenge.Progress + command.Amount, 0, descriptor.Sets);
+                    challenge.Complete = challenge.Progress >= descriptor.Sets;
+                    if (challenge.Complete)
+                    {
+                        PacketSender.SendChatMsg(player,
+                            $"Challenge completed: {descriptor.Name}!",
                             ChatMessageType.Experience,
                             sendToast: true);
+                    }
+                    else
+                    {
+                        PacketSender.SendChatMsg(player,
+                            $"Challenge update: {descriptor.Name} ({challenge.Progress} / {descriptor.Sets})",
+                            ChatMessageType.Experience,
+                            sendToast: true);
+                    }
                     break;
 
                 case ChallengeUpdate.Complete:

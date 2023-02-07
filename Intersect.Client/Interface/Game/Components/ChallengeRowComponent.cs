@@ -92,7 +92,7 @@ namespace Intersect.Client.Interface.Game.Components
             RequiredExp = requiredExp;
             CurrentLevel = currentLevel;
 
-            PercentComplete = (float)Progress / (Descriptor?.Reps ?? 1);
+            PercentComplete = (float)Progress / (Descriptor?.Sets ?? 1);
         }
 
         public override void Initialize()

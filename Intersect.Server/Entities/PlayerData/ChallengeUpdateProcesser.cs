@@ -201,6 +201,47 @@ namespace Intersect.Server.Entities.PlayerData
         }
     }
 
+    public class MissFreeAtRangeUpdate : ChallengeUpdate
+    {
+        public override ChallengeType Type { get; set; } = ChallengeType.MissFreeAtRange;
+        public override ChallengeUpdateWatcherType WatcherType => ChallengeUpdateWatcherType.Sets;
+
+        public int CurrentStreak { get; set; }
+        public int Range { get; set; }
+
+        public MissFreeAtRangeUpdate(Player player, int streak, int range) : base(player)
+        {
+            CurrentStreak = streak;
+            Range = range;
+        }
+    }
+
+    public class ComboExpEarned : ChallengeUpdate
+    {
+        public override ChallengeType Type { get; set; } = ChallengeType.ComboExpEarned;
+        public override ChallengeUpdateWatcherType WatcherType => ChallengeUpdateWatcherType.Sets;
+
+        public int ComboExp { get; set; }
+
+        public ComboExpEarned(Player player, int comboExp) : base(player)
+        {
+            ComboExp = comboExp;
+        }
+    }
+
+    public class AoEHitsUpdate : ChallengeUpdate
+    {
+        public override ChallengeType Type { get; set; } = ChallengeType.AoEHits;
+        public override ChallengeUpdateWatcherType WatcherType => ChallengeUpdateWatcherType.Sets;
+
+        public int EnemiesHit { get; set; }
+
+        public AoEHitsUpdate(Player player, int enemiesHit) : base(player)
+        {
+            EnemiesHit = enemiesHit;
+        }
+    }
+
     public static class ChallengeUpdateProcesser
     {
         public static void UpdateChallengesOf(ChallengeUpdate update)
@@ -396,6 +437,42 @@ namespace Intersect.Server.Entities.PlayerData
             {
                 var descriptor = challenge.Descriptor;
                 if (descriptor.Reps <= (update.HealAmt * -1) && descriptor.Param >= update.Percent)
+                {
+                    challenge.Sets++;
+                }
+            }
+        }
+
+        private static void UpdateChallenge(MissFreeAtRangeUpdate update)
+        {
+            foreach (var challenge in update.Challenges)
+            {
+                var desc = challenge.Descriptor;
+                if (update.CurrentStreak > 0 && 
+                    update.CurrentStreak % desc.Reps == 0
+                    && update.Range >= desc.Param)
+                {
+                    challenge.Sets++;
+                }
+            }
+        }
+
+        private static void UpdateChallenge(ComboExpEarned update)
+        {
+            foreach (var challenge in update.Challenges)
+            {
+                var desc = challenge.Descriptor;
+                var timesComplete = (int)Math.Floor((float)update.ComboExp / desc.Reps);
+                challenge.Sets += timesComplete;
+            }
+        }
+
+        private static void UpdateChallenge(AoEHitsUpdate update)
+        {
+            foreach (var challenge in update.Challenges)
+            {
+                var desc = challenge.Descriptor;
+                if (update.EnemiesHit > 0 && update.EnemiesHit % desc.Reps == 0)
                 {
                     challenge.Sets++;
                 }

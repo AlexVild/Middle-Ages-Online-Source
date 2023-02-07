@@ -98,6 +98,8 @@ namespace Intersect.Editor.Forms.Editors
             nudReps.Value = mEditorItem.Reps;
             nudParam.Value = mEditorItem.Param;
 
+            txtDescription.Text = mEditorItem.Description;
+
             cmbPic.SelectedIndex = cmbPic.FindString(TextUtils.NullToNone(mEditorItem.Icon));
             picItem.BackgroundImage?.Dispose();
             picItem.BackgroundImage = null;
@@ -218,6 +220,8 @@ namespace Intersect.Editor.Forms.Editors
             lblSets.Text = "Sets";
             lblParam.Text = "Addtl. Param";
             nudReps.Enabled = true;
+            txtDescription.Visible = false;
+            lblChallengeDescription.Visible = false;
             nudSets.Visible = true;
             nudParam.Enabled = false;
             nudParam.Visible = true;
@@ -229,40 +233,70 @@ namespace Intersect.Editor.Forms.Editors
                 case ChallengeType.ComboEarned:
                     lblReps.Text = "Combo";
                     break;
+
                 case ChallengeType.BeastsKilledOverTime:
                     lblReps.Text = "# Beasts";
                     nudParam.Enabled = true;
                     lblParam.Text = "Time (ms)";
                     break;
+
                 case ChallengeType.DamageAtRange:
                     lblReps.Text = "Damage";
                     nudParam.Enabled = true;
                     lblParam.Text = "Range (tiles)";
                     break;
+
                 case ChallengeType.DamageHealedAtHealth:
                     lblReps.Text = "Damage"; 
                     nudParam.Enabled = true;
                     lblParam.Text = "Health %";
                     break;
+
                 case ChallengeType.DamageOverTime:
                     lblReps.Text = "Damage";
                     nudParam.Enabled = true;
                     lblParam.Text = "Time (ms)";
                     break;
+
                 case ChallengeType.DamageTakenOverTime:
                     lblReps.Text = "Damage";
                     nudParam.Enabled = true;
                     lblParam.Text = "Time (ms)";
                     break;
+
                 case ChallengeType.HitFreeStreak:
                     lblReps.Text = "Hits w/o receiving";
                     break;
+
                 case ChallengeType.MaxHit:
                     lblReps.Text = "Dmg Threshold";
                     break;
+
                 case ChallengeType.MissFreeStreak:
                     lblReps.Text = "Successful Hits";
                     break;
+
+                case ChallengeType.ComboExpEarned:
+                    lblReps.Text = "Combo Exp";
+                    break;
+
+                case ChallengeType.AoEHits:
+                    lblReps.Text = "Enemies Hit";
+                    break;
+
+                case ChallengeType.MissFreeAtRange:
+                    lblReps.Text = "Successful Hits";
+                    nudParam.Enabled = true;
+                    lblParam.Text = "Range (tiles)";
+                    break;
+
+                case ChallengeType.EventControlled:
+                    nudReps.Visible = false;
+                    nudSets.Visible = false;
+                    lblChallengeDescription.Visible = true;
+                    txtDescription.Visible = true;
+                    break;
+
                 default:
                     throw new NotImplementedException();
             }
@@ -343,6 +377,11 @@ namespace Intersect.Editor.Forms.Editors
                 mEditorItem.Icon = string.Empty;
             }
             DrawIcon();
+        }
+
+        private void txtDescription_TextChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Description = txtDescription.Text;
         }
     }
 }

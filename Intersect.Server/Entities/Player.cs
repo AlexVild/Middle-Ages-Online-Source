@@ -1411,9 +1411,19 @@ namespace Intersect.Server.Entities
             var expToGive = amount;
 
             // Award combo EXP if opponent was NPC or player; do not reward if threat level is trivial
-            if (Level < Options.MaxLevel && CurrentCombo > 0 && (opponent is Npc || opponent is Player) && threatLevelExpMod != Options.Instance.CombatOpts.ThreatLevelExpRates[ThreatLevel.Trivial])
+            if (CurrentCombo > 0 && (opponent is Npc || opponent is Player) && threatLevelExpMod != Options.Instance.CombatOpts.ThreatLevelExpRates[ThreatLevel.Trivial])
             {
                 ComboExp += CalculateComboExperience(amount, partyCombo);
+
+                // For ensuring that combo EXP challenge tracking remains truthful - avoids weapon switch exploit
+                if (!InvalidateChallenge)
+                {
+                    WeaponComboExp += CalculateComboExperience(amount, partyCombo);
+                }
+                else
+                {
+                    WeaponComboExp = 0;
+                }
             }
 
             expToGive += (int)(amount * GetBonusEffectTotal(EffectType.EXP, 0) / 100);
@@ -1430,6 +1440,13 @@ namespace Intersect.Server.Entities
                 {
                     Exp = 0;
                 }
+            }
+
+            if (fromComboEnd)
+            {
+                ChallengeUpdateProcesser.UpdateChallengesOf(new ComboExpEarned(this, WeaponComboExp));
+                WeaponComboExp = 0;
+                InvalidateChallenge = false;
             }
 
             if ((opponent is Npc || opponent is Player) || fromComboEnd)
