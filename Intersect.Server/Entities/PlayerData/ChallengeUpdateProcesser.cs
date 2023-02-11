@@ -265,7 +265,7 @@ namespace Intersect.Server.Entities.PlayerData
             }
             foreach (var weaponType in equipped.Descriptor?.WeaponTypes ?? new List<Guid>())
             {
-                player.ProgressMastery(0, weaponType);
+                player.TryProgressMastery(0, weaponType);
             }
         }
 

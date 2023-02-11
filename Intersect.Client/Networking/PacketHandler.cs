@@ -2827,11 +2827,11 @@ namespace Intersect.Client.Networking
             if (packet.ComboEnder)
             {
                 Audio.AddGameSound("al_combo_end.wav", false);
-                ExpToastService.CreateExpToast(packet.Exp, "COMBO!");
+                ExpToastService.CreateExpToast(packet.Exp, "COMBO!", packet.IsWeapon && !packet.IsExp);
             }
             else
             {
-                ExpToastService.CreateExpToast(packet.Exp);
+                ExpToastService.CreateExpToast(packet.Exp, weaponExp: packet.IsWeapon && !packet.IsExp);
             }
         }
 

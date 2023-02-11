@@ -1,11 +1,7 @@
 ﻿using Intersect.Client.Core;
 using Intersect.Client.Framework.Graphics;
 using Intersect.Utilities;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Intersect.Client.Interface.Game
 {
@@ -15,9 +11,14 @@ namespace Intersect.Client.Interface.Game
 
         public static Queue<ExpToast> Toasts { get; set; } = new Queue<ExpToast>();
 
-        public static void CreateExpToast(long exp, string extra = "")
+        public static bool WeaponExpLastFlash { get; set; }
+
+        public static bool ExpFlash { get; set; }
+
+        public static void CreateExpToast(long exp, string extra = "", bool weaponExp = false)
         {
-            Toasts.Enqueue(new ExpToast(exp, extra));
+            Toasts.Enqueue(new ExpToast(exp, extra, weaponExp));
+            WeaponExpLastFlash = weaponExp;
         }
 
         public static void Draw()
@@ -49,12 +50,16 @@ namespace Intersect.Client.Interface.Game
 
     public class ExpToast
     {
-        readonly Color TextColor = new Color(255, 242, 193, 223);
-        const long IdleDuration = 2000;
-        const int Speed = -4;
+        readonly Color ExpTextColor = new Color(255, 242, 193, 223);
+        readonly Color WeaponExpTextColor = new Color(255, 200, 145, 62);
+        const long IdleDuration = 1000;
+        const float Speed = -0.5f;
         const long DisappearingFramerate = 16;
 
-        private Color Color => new Color(Alpha, TextColor.R, TextColor.G, TextColor.B);
+        private Color Color => WeaponExpOnly ? 
+            new Color(Alpha, WeaponExpTextColor.R, WeaponExpTextColor.G, WeaponExpTextColor.B) :
+            new Color(Alpha, ExpTextColor.R, ExpTextColor.G, ExpTextColor.B);
+
         private Color OutlineColor => new Color(Alpha, 0, 0, 0);
 
         private long LastUpdate { get; set; }
@@ -65,10 +70,7 @@ namespace Intersect.Client.Interface.Game
         public long EndTime { get; set; }
 
         private float ViewX => Graphics.CurrentView.X;
-        private float ViewCenterY => Graphics.CurrentView.CenterY;
         private float ViewTop => Graphics.CurrentView.Top;
-        private float ViewBottom => Graphics.CurrentView.Bottom;
-        private float ViewWidth => Graphics.CurrentView.Width;
 
         private static GameFont Font => Graphics.ToastFont;
 
@@ -91,9 +93,11 @@ namespace Intersect.Client.Interface.Game
 
         public string ExpText { get; set; }
 
+        private bool WeaponExpOnly { get; set; }
+
         ExpToastStates State { get; set; }
 
-        public ExpToast(long exp, string extra)
+        public ExpToast(long exp, string extra, bool weaponExp)
         {
             if (!string.IsNullOrEmpty(extra))
             {
@@ -113,7 +117,10 @@ namespace Intersect.Client.Interface.Game
             var spawnX = Randomization.Next((int)hud.ExpX + 12, (int)hud.ExpX + (int)hud.ExpWidth - 12);
 
             X = spawnX;
-            _y = hud.ExpY + 72;
+            _y = hud.ExpY + 78;
+            _y += Randomization.Next((int)_y - 8, (int)_y + 8);
+
+            WeaponExpOnly = weaponExp;
         }
 
         public void Update()
@@ -133,8 +140,8 @@ namespace Intersect.Client.Interface.Game
                     {
                         LastUpdate = now;
 
-                        _y -= 1;
-                        Alpha = MathHelper.Clamp(Alpha - 20, 0, 255);
+                        _y -= Speed;
+                        Alpha = MathHelper.Clamp(Alpha - 10, 0, 255);
                     }
                     break;
             }

@@ -216,11 +216,11 @@ namespace Intersect.Server.Entities
             PacketSender.SendExperience(this);
         }
 
-        public void ProgressMastery(long exp, Guid weaponType)
+        public bool TryProgressMastery(long exp, Guid weaponType)
         {
             if (!TryGetMastery(weaponType, out var mastery))
             {
-                return;
+                return false;
             }
             mastery.IsActive = true;
 
@@ -233,18 +233,18 @@ namespace Intersect.Server.Entities
                     mastery.Level = maxLevel;
                 }
                 
-                return;
+                return false;
             }
 
             // First, attempt to give EXP to the specified mastery
             if (TryGainMasteryExp(exp, mastery))
             {
-                return;
+                return true;
             }
 
             if (!WeaponCanProgressMastery(mastery))
             {
-                return;
+                return false;
             }
 
             // Otherwise, do we have any challenges that need completing?
@@ -252,7 +252,7 @@ namespace Intersect.Server.Entities
             {
                 // No challenges? Well, level up!
                 LevelUpMastery(mastery);
-                return;
+                return true;
             }
 
             // Make sure our active challenges are up to date and, if not, alert the player
@@ -274,10 +274,11 @@ namespace Intersect.Server.Entities
             // If we're not done yet, then we can't level up yet!
             if (!ChallengesComplete(currentChallenges))
             {
-                return;
+                return false;
             }
 
             LevelUpMastery(mastery);
+            return true;
         }
 
         public void LevelUpMastery(WeaponMasteryInstance mastery)

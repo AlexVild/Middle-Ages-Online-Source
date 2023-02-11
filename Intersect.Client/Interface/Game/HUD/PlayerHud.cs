@@ -41,7 +41,7 @@ namespace Intersect.Client.Interface.Game.HUD
                 {
                     return WeaponExpLockedTexture;
                 }
-                return FlashExp ? WeaponExpGainTexture : _weaponExpTexture;
+                return FlashWeaponExp ? WeaponExpGainTexture : _weaponExpTexture;
             }
             set => _weaponExpTexture = value;
         }
@@ -49,6 +49,7 @@ namespace Intersect.Client.Interface.Game.HUD
         private GameTexture WeaponExpLockedTexture;
         private GameTexture _expTexture;
         private bool FlashExp = false;
+        private bool FlashWeaponExp = false;
         private GameTexture ExpTexture
         {
             get => FlashExp ? ExpGainTexture : _expTexture;
@@ -95,6 +96,7 @@ namespace Intersect.Client.Interface.Game.HUD
         {
             IsVisible = true;
             FlashExp = false;
+            FlashWeaponExp = false;
             LastExpFlash = Timing.Global.Milliseconds;
             InitTextures();
         }
@@ -269,12 +271,21 @@ namespace Intersect.Client.Interface.Game.HUD
             {
                 LastExpFlash = Timing.Global.Milliseconds;
                 FlashExp = false;
+                FlashWeaponExp = false;
             }
             else
             {
                 if (Timing.Global.Milliseconds > LastExpFlash)
                 {
-                    FlashExp = !FlashExp;
+                    if (ExpToastService.WeaponExpLastFlash)
+                    {
+                        FlashExp = false;
+                    }
+                    else
+                    {
+                        FlashExp = !FlashExp;
+                    }
+                    FlashWeaponExp = !FlashWeaponExp;
                     LastExpFlash = Timing.Global.Milliseconds + ExpFlashDuration;
                 }
             }

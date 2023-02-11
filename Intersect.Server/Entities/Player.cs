@@ -1428,11 +1428,6 @@ namespace Intersect.Server.Entities
 
             expToGive += (int)(amount * GetBonusEffectTotal(EffectType.EXP, 0) / 100);
 
-            if (expToGive > 0)
-            {
-                PacketSender.SendExpToast(this, expToGive, fromComboEnd);
-            }
-
             if (Level < Options.MaxLevel)
             {
                 Exp += expToGive;
@@ -1449,17 +1444,22 @@ namespace Intersect.Server.Entities
                 InvalidateChallenge = false;
             }
 
+            var weaponProgressed = false;
             if ((opponent is Npc || opponent is Player) || fromComboEnd)
             {
                 var weapon = GetEquippedWeapon();
                 foreach (var type in weapon?.WeaponTypes ?? new List<Guid>())
                 {
-                    ProgressMastery(expToGive, type);
+                    weaponProgressed = TryProgressMastery(expToGive, type) || weaponProgressed;
                     if (type == TrackedWeaponType && type != Guid.Empty)
                     {
                         TrackWeaponTypeProgress(type);
                     }
                 }
+            }
+            if (expToGive > 0)
+            {
+                PacketSender.SendExpToast(this, expToGive, fromComboEnd, expToGive > 0, weaponProgressed);
             }
 
             CheckLevelUp();
