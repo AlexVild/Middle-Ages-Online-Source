@@ -96,6 +96,9 @@ namespace Intersect.Editor.Forms.Editors
             cmbWeaponTypes.Items.Clear();
             cmbWeaponTypes.Items.AddRange(WeaponTypeDescriptor.Names);
 
+            cmbDeconTables.Items.Clear();
+            cmbDeconTables.Items.AddRange(LootTableDescriptor.Names);
+
             lstGameObjects.Init(UpdateToolStripItems, AssignEditorItem, toolStripItemNew_Click, toolStripItemCopy_Click, toolStripItemUndo_Click, toolStripItemPaste_Click, toolStripItemDelete_Click);
         }
         private void AssignEditorItem(Guid id)
@@ -607,6 +610,11 @@ namespace Intersect.Editor.Forms.Editors
                 RefreshWeaponTypeTree(false);
                 nudMaxWeaponLvl.Value = 0;
 
+                nudFuel.Value = mEditorItem.Fuel;
+                nudReqFuel.Value = mEditorItem.FuelRequired;
+                nudWeaponCraftExp.Value = mEditorItem.CraftWeaponExp;
+                RefreshDeconLoot(false);
+
                 if (cmbTypeDisplayOverride.Items.Contains(mEditorItem.TypeDisplayOverride ?? string.Empty))
                 {
                     cmbTypeDisplayOverride.SelectedItem = mEditorItem.TypeDisplayOverride;
@@ -792,29 +800,29 @@ namespace Intersect.Editor.Forms.Editors
             }
 
             grpCosmetic.Hide();
+            grpWeaponProperties.Hide();
+            grpWeaponEnhancement.Hide();
             if (cmbEquipmentSlot.SelectedIndex == Options.WeaponIndex)
             {
                 grpWeaponProperties.Show();
+                grpWeaponEnhancement.Show();
                 grpHelmetPaperdollProps.Hide();
                 grpPrayerProperties.Hide();
                 grpAdditionalWeaponProps.Show();
             } else if (cmbEquipmentSlot.SelectedIndex == Options.PrayerIndex)
-            {
-                grpWeaponProperties.Hide();
+            {   
                 grpHelmetPaperdollProps.Hide();
                 grpPrayerProperties.Show();
                 grpAdditionalWeaponProps.Hide();
             }
             else if (cmbEquipmentSlot.SelectedIndex == Options.HelmetIndex)
             {
-                grpWeaponProperties.Hide();
                 grpHelmetPaperdollProps.Show();
                 grpPrayerProperties.Hide();
                 grpAdditionalWeaponProps.Hide();
             }
             else
             {
-                grpWeaponProperties.Hide();
                 grpHelmetPaperdollProps.Hide();
                 grpPrayerProperties.Hide();
                 grpAdditionalWeaponProps.Hide();
@@ -2081,6 +2089,76 @@ namespace Intersect.Editor.Forms.Editors
         private void chkRareDrop_CheckedChanged(object sender, EventArgs e)
         {
             mEditorItem.RareDrop = chkRareDrop.Checked;
+        }
+
+        private void nudReqFuel_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.FuelRequired = (int)nudReqFuel.Value;
+        }
+
+        private void nudWeaponCraftExp_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.CraftWeaponExp = (long)nudWeaponCraftExp.Value;
+        }
+
+        private void nudFuel_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Fuel = (int)nudFuel.Value;
+        }
+
+        private void btnAddDeconTable_Click(object sender, EventArgs e)
+        {
+            var id = LootTableDescriptor.IdFromList(cmbDeconTables.SelectedIndex);
+            if (id == Guid.Empty)
+            {
+                return;
+            }
+
+            var roll = new LootRoll(id, (int)nudDeconTableRolls.Value);
+            if (mEditorItem.DeconstructRolls.Contains(roll))
+            {
+                return;
+            }
+
+            mEditorItem.DeconstructRolls.Add(roll);
+            RefreshDeconLoot();
+        }
+
+        private void RefreshDeconLoot(bool savePos = false)
+        {
+            var pos = -1;
+            if (savePos)
+            {
+                pos = lstDeconstructionTables.SelectedIndex;
+            }
+
+            lstDeconstructionTables.Items.Clear();
+            foreach (var loot in mEditorItem.DeconstructRolls)
+            {
+                var tableName = LootTableDescriptor.GetName(loot.DescriptorId);
+                lstDeconstructionTables.Items.Add($"{tableName} x{loot.Rolls}");
+            }
+
+            if (pos < lstDeconstructionTables.Items.Count)
+            {
+                lstDeconstructionTables.SelectedIndex = pos;
+            }
+        }
+
+        private void btnRemoveDeconTable_Click(object sender, EventArgs e)
+        {
+            if (lstDeconstructionTables.SelectedIndex < 0 || lstDeconstructionTables.SelectedIndex >= mEditorItem.DeconstructRolls.Count)
+            {
+                return;
+            }
+
+            mEditorItem.DeconstructRolls.RemoveAt(lstDeconstructionTables.SelectedIndex);
+            RefreshDeconLoot(true);
+        }
+
+        private void nudEnhanceThresh_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.EnhancementThreshold = (int)nudEnhanceThresh.Value;
         }
     }
 }

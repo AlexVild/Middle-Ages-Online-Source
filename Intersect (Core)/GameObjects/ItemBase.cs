@@ -581,6 +581,8 @@ namespace Intersect.GameObjects
         }
 
         public bool RareDrop { get; set; }
+
+
     }
 
 }
