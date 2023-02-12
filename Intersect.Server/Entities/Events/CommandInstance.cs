@@ -37,7 +37,9 @@ namespace Intersect.Server.Entities.Events
 
             LootRoll,
 
-            Fade
+            Fade,
+
+            Deconstruction
 
         }
 

@@ -400,6 +400,7 @@
     <Compile Include="Network\Packets\Client\CloseBagPacket.cs" />
     <Compile Include="Network\Packets\Client\CloseBankPacket.cs" />
     <Compile Include="Network\Packets\Client\CloseCraftingPacket.cs" />
+    <Compile Include="Network\Packets\Client\CloseDeconstructorPacket.cs" />
     <Compile Include="Network\Packets\Client\CloseLeaderboardPacket.cs" />
     <Compile Include="Network\Packets\Client\CloseQuestBoardPacket.cs" />
     <Compile Include="Network\Packets\Client\CloseShopPacket.cs" />
@@ -499,6 +500,7 @@
     <Compile Include="Network\Packets\Server\ResourceInfoPacket.cs" />
     <Compile Include="Network\Packets\Server\ResourceLockPacket.cs" />
     <Compile Include="Network\Packets\Server\RespawnFinishedPacket.cs" />
+    <Compile Include="Network\Packets\Server\SendOpenDeconstructorPacket.cs" />
     <Compile Include="Network\Packets\Server\ServerDisposedPacket.cs" />
     <Compile Include="Network\Packets\Server\ShakeScreenPacket.cs" />
     <Compile Include="Network\Packets\Server\SkillbookPacket.cs" />

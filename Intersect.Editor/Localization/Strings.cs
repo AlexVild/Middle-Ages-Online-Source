@@ -2298,7 +2298,8 @@ Tick timer saved in server config.json.";
                 {"changedungeon", @"Change Dungeon"},
                 {"obtaintreasuregnome", @"Obtain Treasure Gnome"},
                 {"rolldungeonloot", @"Roll Dungeon Loot"},
-                {"dungeons", @"Dungeons"}
+                {"dungeons", @"Dungeons"},
+                {"opendeconstructor", @"Open Deconstructor"}
             };
 
         }
@@ -6245,6 +6246,9 @@ Negative values for time to flow backwards.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString OpenLeaderboard = @"Open leaderboard '{00}' for {01} (sort: {02}, display type: {03})";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString OpenDeconstructor = @"Open Deconstructor [Fuel Cost Multiplier: {00}x]";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString ResetPermadeads = @"Reset Permadead NPCs in Map: {00}";

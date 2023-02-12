@@ -3397,5 +3397,22 @@ namespace Intersect.Server.Entities.Events
                 PacketSender.SendChatMsg(player, "You did not participate in this dungeon, and are not worthy of its spoils!", ChatMessageType.Notice, CustomColors.General.GeneralWarning);
             }
         }
+
+        private static void ProcessCommand(
+           OpenDeconstructorCommand command,
+           Player player,
+           Event instance,
+           CommandInstance stackInfo,
+           Stack<CommandInstance> callStack
+        )
+        {
+            if (player == null)
+            {
+                return;
+            }
+
+            player.OpenDeconstructor(command.FuelCostMultiplier);
+            callStack.Peek().WaitingForResponse = CommandInstance.EventResponse.Deconstruction;
+        }
     }
 }

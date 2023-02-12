@@ -767,6 +767,7 @@ namespace Intersect.Client.Interface.Game
         public LeaderboardWindow LeaderboardWindow;
         public LootRollWindow LootRollWindow;
         public PlayerRespawnWindow RespawnWindow;
+        public DeconstructorWindow DeconstructorWindow;
         private CharacterPanelType _CurrentCharPanel;
 
         public CharacterPanelType CurrentCharacterPanel
@@ -782,6 +783,7 @@ namespace Intersect.Client.Interface.Game
             LeaderboardWindow = new LeaderboardWindow(gameCanvas);
             LootRollWindow = new LootRollWindow(gameCanvas);
             RespawnWindow = new PlayerRespawnWindow(gameCanvas);
+            DeconstructorWindow = new DeconstructorWindow(gameCanvas);
         }
 
         private void _Draw()
@@ -794,6 +796,7 @@ namespace Intersect.Client.Interface.Game
             LeaderboardWindow.Update();
             LootRollWindow.Update();
             RespawnWindow.Update();
+            DeconstructorWindow.Update();
         }
 
         public PlayerHud GetHud()

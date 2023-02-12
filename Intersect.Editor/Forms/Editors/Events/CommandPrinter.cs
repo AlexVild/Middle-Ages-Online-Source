@@ -2022,5 +2022,11 @@ namespace Intersect.Editor.Forms.Editors.Events
         {
             return Strings.EventCommandList.RollDungeonLoot.ToString();
         }
+
+        private static string GetCommandText(OpenDeconstructorCommand command, MapInstance map)
+        {
+            var multiplierStr = command.FuelCostMultiplier.ToString("N2");
+            return Strings.EventCommandList.OpenDeconstructor.ToString(multiplierStr);
+        }
     }
 }

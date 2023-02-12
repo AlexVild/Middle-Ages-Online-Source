@@ -178,6 +178,11 @@ namespace Intersect.Server.Entities.Events
                             Player.ClientAwaitingFadeCompletion = false;
                         }
 
+                        if (curStack.WaitingForResponse == CommandInstance.EventResponse.Deconstruction && Player.Deconstructor == null)
+                        {
+                            curStack.WaitingForResponse = CommandInstance.EventResponse.None;
+                        }
+
                         if (curStack.WaitingForResponse == CommandInstance.EventResponse.RandomQuest)
                         {
                             var randomQuestList = ((RandomQuestCommand)curStack.WaitingOnCommand).QuestListId;

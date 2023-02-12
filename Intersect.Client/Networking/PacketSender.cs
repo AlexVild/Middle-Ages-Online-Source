@@ -652,5 +652,10 @@ namespace Intersect.Client.Networking
         {
             Network.SendPacket(new UpgradeStatsPacket(assignments));
         }
+
+        public static void SendCloseDeconstructorPacket()
+        {
+            Network.SendPacket(new CloseDeconstructorPacket());
+        }
     }
 }

@@ -1444,4 +1444,11 @@ namespace Intersect.GameObjects.Events.Commands
     {
         public override EventCommandType Type { get; } = EventCommandType.RollDungeonLoot;
     }
+
+    public partial class OpenDeconstructorCommand : EventCommand
+    {
+        public override EventCommandType Type { get; } = EventCommandType.OpenDeconstructor;
+
+        public float FuelCostMultiplier { get; set; } = 1.00f;
+    }
 }

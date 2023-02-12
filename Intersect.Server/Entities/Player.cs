@@ -4315,7 +4315,8 @@ namespace Intersect.Server.Entities
                 Trading.Counterparty != null ||
                 Trading.Requester != null ||
                 PartyRequester != null ||
-                FriendRequester != null;
+                FriendRequester != null ||
+                Deconstructor != null;
         }
 
         //Bank

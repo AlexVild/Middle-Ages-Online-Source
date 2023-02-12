@@ -2869,5 +2869,15 @@ namespace Intersect.Client.Networking
             Globals.SkillUpdateString = packet.UpdateText;
             Globals.SkillPointUpdate = true;
         }
+
+        public void HandlePacket(IPacketSender packetSender, SendOpenDeconstructorPacket packet)
+        {
+            if (Globals.Me == null)
+            {
+                return;
+            }
+
+            Globals.Me.Deconstructor?.Open();
+        }
     }
 }

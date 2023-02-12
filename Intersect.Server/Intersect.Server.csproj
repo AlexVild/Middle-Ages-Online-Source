@@ -518,6 +518,7 @@
     <Compile Include="Entities\Combat\Buff.cs" />
     <Compile Include="Entities\Combat\Dash.cs" />
     <Compile Include="Entities\Combat\DoT.cs" />
+    <Compile Include="Entities\Deconstructor.cs" />
     <Compile Include="Entities\Entity.Combat.cs" />
     <Compile Include="Entities\Events\ConditionHandlerRegistry.cs" />
     <Compile Include="Entities\Events\Conditions.cs" />
@@ -538,6 +539,7 @@
     <Compile Include="Database\PlayerData\User.cs" />
     <Compile Include="Database\PlayerData\PlayerContext.cs" />
     <Compile Include="Entities\Events\Event.cs" />
+    <Compile Include="Entities\Player.Deconstruction.cs" />
     <Compile Include="Entities\Player.DungeonTracking.cs" />
     <Compile Include="Entities\Player.Harvesting.cs" />
     <Compile Include="Entities\Player.ItemDiscovery.cs" />
@@ -712,6 +714,10 @@
     <Compile Include="Migrations\20230203173920_DungeonTrackingMigration.cs" />
     <Compile Include="Migrations\20230203173920_DungeonTrackingMigration.designer.cs">
       <DependentUpon>20230203173920_DungeonTrackingMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20230212170016_AddPlayerFuelMigration.cs" />
+    <Compile Include="Migrations\20230212170016_AddPlayerFuelMigration.designer.cs">
+      <DependentUpon>20230212170016_AddPlayerFuelMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.cs" />
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.Designer.cs">

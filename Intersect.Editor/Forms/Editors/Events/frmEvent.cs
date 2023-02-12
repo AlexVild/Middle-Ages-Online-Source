@@ -863,6 +863,12 @@ namespace Intersect.Editor.Forms.Editors.Events
                     tmpCommand = new RollDungeonLoot();
 
                     break;
+
+                case EventCommandType.OpenDeconstructor:
+                    tmpCommand = new OpenDeconstructorCommand();
+
+                    break;
+
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -1584,6 +1590,11 @@ namespace Intersect.Editor.Forms.Editors.Events
                 case EventCommandType.RollDungeonLoot:
                     //No editor
                     break;
+
+                case EventCommandType.OpenDeconstructor:
+                    cmdWindow = new EventCommand_OpenDeconstructor((OpenDeconstructorCommand)command, this);
+                    break;
+
                 default:
                     throw new ArgumentOutOfRangeException();
             }

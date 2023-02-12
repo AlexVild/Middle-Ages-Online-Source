@@ -4581,5 +4581,10 @@ namespace Intersect.Server.Networking
 
             player.ReceiveStatChange(packet.VitalAssignments, packet.StatAssignments);
         }
+
+        public void HandlePacket(Client client, CloseDeconstructorPacket packet)
+        {
+            client?.Entity?.CloseDeconstructor();
+        }
     }
 }
