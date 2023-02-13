@@ -8,9 +8,6 @@ using Intersect.Client.Interface.Game.Components;
 using Intersect.Client.Networking;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Intersect.Client.Interface.Game.Character.Panels
 {

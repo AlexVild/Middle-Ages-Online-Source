@@ -90,6 +90,10 @@ namespace Intersect.Client.Interface.Game.Inventory
 
         void pnl_Clicked(Base sender, ClickedEventArgs arguments)
         {
+            if (Globals.Me.Deconstructor.IsOpen)
+            {
+                return;
+            }
             mClickTime = Timing.Global.Milliseconds + 500;
         }
 
@@ -110,6 +114,13 @@ namespace Intersect.Client.Interface.Game.Inventory
             else if (Globals.InTrade)
             {
                 Globals.Me.TryTradeItem(mMySlot);
+            }
+            else if (Globals.Me.Deconstructor.IsOpen)
+            {
+                if (!Globals.Me.Deconstructor.TryAddItem(mMySlot))
+                {
+                    Globals.Me.Deconstructor.TryRemoveItem(mMySlot);
+                }
             }
             else
             {
@@ -146,6 +157,11 @@ namespace Intersect.Client.Interface.Game.Inventory
                 mCanDrag = false;
 
                 return;
+            }
+
+            if (Globals.Me.Deconstructor.IsOpen)
+            {
+                mCanDrag = false;
             }
 
             if (mDescWindow != null)
@@ -242,6 +258,7 @@ namespace Intersect.Client.Interface.Game.Inventory
                 item == null && mTexLoaded != "" ||
                 item != null && mTexLoaded != item.Icon ||
                 mIconCd != Globals.Me.ItemOnCd(mMySlot) ||
+                Globals.Me.Deconstructor.Refresh ||
                 Globals.Me.ItemOnCd(mMySlot))
             {
                 mCurrentItemId = Globals.Me.Inventory[mMySlot].ItemId;
@@ -272,7 +289,7 @@ namespace Intersect.Client.Interface.Game.Inventory
                     if (itemTex != null)
                     {
                         Pnl.Texture = itemTex;
-                        if (Globals.Me.ItemOnCd(mMySlot))
+                        if (Globals.Me.ItemOnCd(mMySlot) || Globals.Me.Deconstructor.Items.Contains(mMySlot))
                         {
                             Pnl.RenderColor = new Color(100, item.Color.R, item.Color.G, item.Color.B);
                         }
@@ -329,7 +346,7 @@ namespace Intersect.Client.Interface.Game.Inventory
             {
                 if (mMouseOver)
                 {
-                    if (!Globals.InputManager.MouseButtonDown(GameInput.MouseButtons.Left))
+                    if (!Globals.InputManager.MouseButtonDown(GameInput.MouseButtons.Left) && !Globals.Me.Deconstructor.IsOpen)
                     {
                         mCanDrag = true;
                         mMouseX = -1;

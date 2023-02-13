@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Intersect.Client.Core;
 using Intersect.Client.Framework.File_Management;
 using Intersect.Client.Framework.GenericClasses;
 using Intersect.Client.Framework.Gwen.Control;
@@ -8,56 +7,60 @@ using Intersect.Client.Framework.Gwen.Input;
 using Intersect.Client.Framework.Input;
 using Intersect.Client.General;
 using Intersect.Client.Interface.Game.DescriptionWindows;
-using Intersect.Client.Networking;
 using Intersect.GameObjects;
+using System;
 
-namespace Intersect.Client.Interface.Game.Character
+namespace Intersect.Client.Interface.Game
 {
-
-    public class EquipmentItem
+    public abstract class ItemContainer
     {
-
         public ImagePanel ContentPanel;
 
-        private Base mCharacterWindow;
+        public Base Container;
 
         private Guid mCurrentItemId;
 
         private ItemDescriptionWindow mDescWindow;
 
-        private int[] mStatBoost = new int[(int) Enums.Stats.StatCount];
+        private int[] mStatBoost = new int[(int)Enums.Stats.StatCount];
 
         private bool mTexLoaded;
 
-        private int mYindex;
+        protected int mIndex;
 
         public ImagePanel Pnl;
 
-        public EquipmentItem(int index, WindowControl characterWindow)
+        public abstract string Filename { get; }
+        public abstract string ContentName { get; }
+
+        public ItemContainer(int index, Base container)
         {
-            mYindex = index;
-            mCharacterWindow = characterWindow;
+            mIndex = index;
+            Container = container;
         }
 
-        public void Setup()
+        public virtual void Setup()
         {
+            Pnl = new ImagePanel(Container, Filename);
             Pnl.HoverEnter += pnl_HoverEnter;
             Pnl.HoverLeave += pnl_HoverLeave;
             Pnl.RightClicked += pnl_RightClicked;
+            Pnl.Clicked += Pnl_Clicked;
+            Pnl.DoubleClicked += Pnl_DoubleClicked;
 
-            ContentPanel = new ImagePanel(Pnl, "EquipmentIcon");
-            ContentPanel.Width = 32;
-            ContentPanel.Height = 32;
+            ContentPanel = new ImagePanel(Pnl, ContentName);
             ContentPanel.MouseInputEnabled = false;
-            Pnl.SetToolTipText(Options.EquipmentSlots[mYindex]);
+
+            Pnl.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
         }
 
-        void pnl_RightClicked(Base sender, ClickedEventArgs arguments)
-        {
-            PacketSender.SendUnequipItem(mYindex);
-        }
+        protected virtual void Pnl_DoubleClicked(Base sender, ClickedEventArgs arguments) { }
 
-        void pnl_HoverLeave(Base sender, EventArgs arguments)
+        protected virtual void Pnl_Clicked(Base sender, ClickedEventArgs arguments) { }
+
+        protected virtual void pnl_RightClicked(Base sender, ClickedEventArgs arguments) { }
+
+        protected virtual void pnl_HoverLeave(Base sender, EventArgs arguments)
         {
             if (mDescWindow != null)
             {
@@ -66,7 +69,7 @@ namespace Intersect.Client.Interface.Game.Character
             }
         }
 
-        void pnl_HoverEnter(Base sender, EventArgs arguments)
+        protected virtual void pnl_HoverEnter(Base sender, EventArgs arguments)
         {
             if (InputHandler.MouseFocus != null)
             {
@@ -90,7 +93,7 @@ namespace Intersect.Client.Interface.Game.Character
                 return;
             }
 
-            mDescWindow = new ItemDescriptionWindow(item, 1, mCharacterWindow.X, mCharacterWindow.Y, mStatBoost, item.Name);
+            mDescWindow = new ItemDescriptionWindow(item, 1, Container.X, Container.Y, mStatBoost, item.Name);
         }
 
         public FloatRect RenderBounds()
@@ -131,10 +134,14 @@ namespace Intersect.Client.Interface.Game.Character
                 {
                     ContentPanel.Hide();
                 }
+
                 mTexLoaded = true;
             }
         }
 
+        public void SetPosition(int x, int y)
+        {
+            Pnl.SetPosition(x, y);
+        }
     }
-
 }

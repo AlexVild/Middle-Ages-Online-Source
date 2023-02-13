@@ -26,6 +26,7 @@ using Intersect.Client.Interface.Game.Character;
 using Intersect.Client.Interface.Game.Toasts;
 using Intersect.Utilities;
 using Intersect.Client.Interface.Game.BestiaryUi;
+using Intersect.Client.Interface.Game.DeconstructorUi;
 
 namespace Intersect.Client.Interface.Game
 {

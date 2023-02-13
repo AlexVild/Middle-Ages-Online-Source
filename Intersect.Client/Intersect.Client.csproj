@@ -172,7 +172,8 @@
     <Compile Include="Interface\Game\Components\SkillRowComponent.cs" />
     <Compile Include="Interface\Game\Components\SpellImageFrameComponent.cs" />
     <Compile Include="Interface\Game\Components\WeaponTrackProgressBarComponent.cs" />
-    <Compile Include="Interface\Game\DeconstructorWindow.cs" />
+    <Compile Include="Interface\Game\DeconstructorUi\DeconstructorItem.cs" />
+    <Compile Include="Interface\Game\DeconstructorUi\DeconstructorWindow.cs" />
     <Compile Include="Interface\Game\DescriptionWindows\ChallengeDescriptionWindow.cs" />
     <Compile Include="Interface\Game\DescriptionWindows\Components\ComponentBase.cs" />
     <Compile Include="Interface\Game\DescriptionWindows\Components\DescriptionComponent.cs" />
@@ -186,6 +187,7 @@
     <Compile Include="Interface\Game\GameWindow.cs" />
     <Compile Include="Interface\Game\GuildWindow.cs" />
     <Compile Include="Interface\Game\HarvestBonusWindow.cs" />
+    <Compile Include="Interface\Game\ItemContainer.cs" />
     <Compile Include="Interface\Game\Toasts\Toast.cs" />
     <Compile Include="Interface\Game\Toasts\ToastService.cs" />
     <Compile Include="Interface\Game\Toasts\ToastWindow.cs" />
