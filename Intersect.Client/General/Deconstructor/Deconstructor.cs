@@ -79,6 +79,7 @@ namespace Intersect.Client.General.Deconstructor
             IsOpen = true;
             Refresh = true;
             Interface.Interface.GameUi?.DeconstructorWindow?.Show();
+            Interface.Interface.GameUi?.GameMenu.OpenInventory();
         }
 
         public void Close()

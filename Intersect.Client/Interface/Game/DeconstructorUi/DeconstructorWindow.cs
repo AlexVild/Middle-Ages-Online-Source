@@ -16,10 +16,12 @@ namespace Intersect.Client.Interface.Game.DeconstructorUi
     public sealed class DeconstructorWindow : GameWindow
     {
         ImagePanel ItemsBg { get; set; }
-
         ScrollControl ItemsContainer { get; set; }
 
-        Label ItemsLabel { get; set; }
+        ImagePanel FuelBg { get; set; }
+
+        Label NoItemsLabelTemplate { get; set; }
+        RichLabel NoItemsLabel { get; set; }
         Label FuelLabel { get; set; }
         Label RemainingFuelLabel { get; set; }
         Label RequiredFuelLabel { get; set; }
@@ -40,21 +42,32 @@ namespace Intersect.Client.Interface.Game.DeconstructorUi
             ItemsBg = new ImagePanel(Background, "ItemsBg");
             ItemsContainer = new ScrollControl(ItemsBg, "ItemsContainer");
 
-            CancelButton = new Button(Background, "CancelButton")
+            NoItemsLabelTemplate = new Label(ItemsBg, "NoItemsLabel");
+            NoItemsLabel = new RichLabel(ItemsBg);
+
+            FuelBg = new ImagePanel(Background, "FuelBg");
+
+            CancelButton = new Button(ItemsBg, "CancelButton")
             {
                 Text = "CANCEL"
             };
             CancelButton.Clicked += CancelButton_Clicked;
 
-            DeconstructButton = new Button(Background, "DeconstructButton")
+            DeconstructButton = new Button(ItemsBg, "DeconstructButton")
             {
                 Text = "DECONSTRUCT"
             };
 
-            AddFuelButton = new Button(Background, "AddFuelButton")
+            AddFuelButton = new Button(FuelBg, "AddFuelButton")
             {
                 Text = "ADD FUEL"
             };
+        }
+        protected override void PostInitialization()
+        {
+            NoItemsLabel.SetText("Right-click on equipment in your inventory to add to the deconstructor. You will need the appropriate amount of fuel to deconstruct items.",
+                NoItemsLabelTemplate, ItemsContainer.Width - 64);
+            NoItemsLabel.ProcessAlignments();
         }
 
         public override void UpdateShown()
@@ -63,9 +76,19 @@ namespace Intersect.Client.Interface.Game.DeconstructorUi
             {
                 return;
             }
-            
+
             ClearItems();
             var itemIndices = Deconstructor.Items.ToArray();
+
+            if (itemIndices.Length <= 0)
+            {
+                NoItemsLabel.Show();
+                return;
+            }
+            else
+            {
+                NoItemsLabel.Hide();
+            }
 
             var idx = 0;
             foreach (var invIdx in itemIndices)
@@ -106,10 +129,6 @@ namespace Intersect.Client.Interface.Game.DeconstructorUi
             Close();
         }
 
-        protected override void PostInitialization()
-        {
-            // empty
-        }
 
         protected override void Close()
         {
