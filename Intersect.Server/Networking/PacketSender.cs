@@ -2780,5 +2780,10 @@ namespace Intersect.Server.Networking
         {
             player?.SendPacket(new SendOpenDeconstructorPacket(player.Fuel, multiplier));
         }
+
+        public static void SendFuelPacket(Player player)
+        {
+            player?.SendPacket(new PlayerFuelPacket(player.Fuel));
+        }
     }
 }

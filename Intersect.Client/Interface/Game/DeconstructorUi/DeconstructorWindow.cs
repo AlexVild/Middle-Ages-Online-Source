@@ -1,16 +1,9 @@
-﻿using Intersect.Client.Core;
-using Intersect.Client.Framework.File_Management;
-using Intersect.Client.Framework.Gwen.Control;
+﻿using Intersect.Client.Framework.Gwen.Control;
 using Intersect.Client.General;
 using Intersect.Client.General.Deconstructor;
-using Intersect.Client.Networking;
-using Intersect.Enums;
 using Intersect.GameObjects;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Intersect.Client.Interface.Game.DeconstructorUi
 {
@@ -29,8 +22,21 @@ namespace Intersect.Client.Interface.Game.DeconstructorUi
         Label NoItemsLabelTemplate { get; set; }
         RichLabel NoItemsLabel { get; set; }
         Label FuelLabel { get; set; }
-        Label RemainingFuelLabel { get; set; }
+
+        Label FuelCostLabel { get; set; }
+
+        readonly Color FuelColorGood = new Color(255, 200, 200, 200);
+        readonly Color FuelColorGoodHl = new Color(255, 169, 169, 169);
+        readonly Color FuelColorBad = new Color(255, 222, 124, 112);
+        readonly Color FuelColorBadHl = new Color(255, 130, 46, 36);
+
+        Color FuelColor => RequiredFuel > Globals.Me.Fuel ? FuelColorBad : FuelColorGood;
+        Color FuelColorHl => RequiredFuel > Globals.Me.Fuel ? FuelColorBadHl : FuelColorGoodHl;
+
         Label RequiredFuelLabel { get; set; }
+
+        readonly Color RequiredFuelColor = new Color(166, 167, 37);
+        readonly Color RequiredFuelColorHl = new Color(81, 82, 0);
 
         Button CancelButton { get; set; }
         Button DeconstructButton { get; set; }
@@ -46,6 +52,8 @@ namespace Intersect.Client.Interface.Game.DeconstructorUi
 
         Deconstructor Deconstructor => Globals.Me?.Deconstructor;
 
+        public int RequiredFuel = 0;
+
         public DeconstructorWindow(Base gameCanvas) : base(gameCanvas) { }
 
         protected override void PreInitialization()
@@ -57,6 +65,10 @@ namespace Intersect.Client.Interface.Game.DeconstructorUi
             NoItemsLabel = new RichLabel(ItemsBg);
 
             FuelBg = new ImagePanel(Background, "FuelBg");
+            RequiredFuelLabel = new Label(FuelBg, "RequiredFuel");
+            FuelLabel = new Label(FuelBg, "CurrentFuel");
+
+            FuelCostLabel = new Label(FuelBg, "FuelCostLabel");
 
             CancelButton = new Button(ItemsBg, "CancelButton")
             {
@@ -117,11 +129,20 @@ namespace Intersect.Client.Interface.Game.DeconstructorUi
             AddFuelExplanation.SetText("Right-click on fuel sources in your inventory to select them. Pressing 'submit' will consume those items in return for deconstruction fuel.",
                 AddFuelExplanationTemplate, AddFuelContainer.Width - 32);
             AddFuelExplanation.ProcessAlignments();
+
+            RequiredFuelLabel.SetTextColor(RequiredFuelColor, Label.ControlState.Normal);
+            RequiredFuelLabel.SetTextColor(RequiredFuelColorHl, Label.ControlState.Hovered);
+
+            FuelLabel.SetTextColor(FuelColor, Label.ControlState.Normal);
+            FuelLabel.SetTextColor(FuelColorHl, Label.ControlState.Hovered);
+
+            RequiredFuelLabel.SetToolTipText("The fuel required to deconstruct the given items.");
+            FuelLabel.SetToolTipText("The amount of fuel currently owned.");
         }
 
         public override void UpdateShown()
         {
-            if (Deconstructor == default || !Deconstructor.Refresh)
+            if (Globals.Me == null || Deconstructor == default || !Deconstructor.Refresh)
             {
                 return;
             }
@@ -129,6 +150,18 @@ namespace Intersect.Client.Interface.Game.DeconstructorUi
             var itemIndices = Deconstructor.Items.ToArray();
 
             AddFuelBg.IsHidden = !Deconstructor?.AddingFuel ?? true;
+            
+            RequiredFuel = Deconstructor.RequiredFuel;
+            
+            RequiredFuelLabel.IsHidden = RequiredFuel <= 0;
+            FuelCostLabel.IsHidden = RequiredFuelLabel.IsHidden;
+
+            RequiredFuelLabel.SetText($"Required: {RequiredFuel}");
+            
+            FuelLabel.SetTextColor(FuelColor, Label.ControlState.Normal);
+            FuelLabel.SetTextColor(FuelColorHl, Label.ControlState.Hovered);
+            FuelLabel.SetText($"Fuel: {Globals.Me.Fuel}");
+            FuelCostLabel.SetText($"(Fuel cost multiplier: {Deconstructor.FuelCostMod.ToString("N2")}x)");
 
             ClearItems();
             ClearFuel();
@@ -161,7 +194,7 @@ namespace Intersect.Client.Interface.Game.DeconstructorUi
                     .Aggregate(0, (int fuel, KeyValuePair<int, int> kv) => fuel + ItemBase.Get(Globals.Me.Inventory[kv.Key].ItemId).Fuel * kv.Value);
                 PotentialFuel.SetText($"Potential Fuel: {potentialFuel}");
                 PotentialFuel.IsHidden = potentialFuel <= 0;
-                CurrentFuel.SetText($"Total Fuel: 100");
+                CurrentFuel.SetText($"Current Fuel: {Globals.Me.Fuel}");
 
                 if (Deconstructor.FuelItems.Count <= 0)
                 {
@@ -260,7 +293,7 @@ namespace Intersect.Client.Interface.Game.DeconstructorUi
         protected override void Close()
         {
             base.Close();
-
+            RequiredFuel = 0;
             Deconstructor.Close();
         }
     }

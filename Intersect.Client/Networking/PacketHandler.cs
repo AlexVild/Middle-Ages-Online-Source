@@ -2877,7 +2877,8 @@ namespace Intersect.Client.Networking
                 return;
             }
 
-            Globals.Me.Deconstructor?.Open();
+            Globals.Me.Fuel = packet.CurrentFuel;
+            Globals.Me.Deconstructor?.Open(packet.FuelCostMultiplier);
         }
     }
 }

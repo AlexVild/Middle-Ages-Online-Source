@@ -5,6 +5,7 @@ using Intersect.Enums;
 using Intersect.GameObjects;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace Intersect.Client.General.Deconstructor
 {
@@ -26,6 +27,10 @@ namespace Intersect.Client.General.Deconstructor
         public bool Refresh { get; set; } = false;
 
         public bool AddingFuel { get; set; } = false;
+
+        public float FuelCostMod { get; set; } = 1.0f;
+
+        public int RequiredFuel => Items.Aggregate(0, (reqFuel, invSlot) => reqFuel + ItemBase.Get((Globals.Me?.Inventory[invSlot]?.ItemId) ?? System.Guid.Empty).FuelRequired);
 
         public Deconstructor()
         {
@@ -120,8 +125,9 @@ namespace Intersect.Client.General.Deconstructor
             Refresh = true;
         }
 
-        public void Open()
+        public void Open(float costMod)
         {
+            FuelCostMod = costMod;
             IsOpen = true;
             Refresh = true;
             Interface.Interface.GameUi?.DeconstructorWindow?.Show();

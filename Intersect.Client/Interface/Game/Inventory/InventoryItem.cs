@@ -128,8 +128,8 @@ namespace Intersect.Client.Interface.Game.Inventory
                     if (invItem.Quantity > 1)
                     {
                         var iBox = new InputBox(
-                            Strings.Inventory.destroyitem,
-                            Strings.Inventory.destroyitemprompt.ToString(ItemBase.Get(invItem.ItemId).Name), true,
+                            Strings.Inventory.AddFuel,
+                            Strings.Inventory.AddFuelPrompt.ToString(ItemBase.Get(invItem.ItemId).Name), true,
                             InputBox.InputType.NumericInput, UseItemForFuel, null, mMySlot, invItem.Quantity
                         );
                     }
