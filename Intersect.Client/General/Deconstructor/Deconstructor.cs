@@ -3,6 +3,7 @@ using Intersect.Client.Interface.Game.Chat;
 using Intersect.Client.Networking;
 using Intersect.Enums;
 using Intersect.GameObjects;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace Intersect.Client.General.Deconstructor
@@ -16,7 +17,7 @@ namespace Intersect.Client.General.Deconstructor
         /// </summary>
         public ObservableCollection<int> Items { get; set; }
         
-        public ObservableCollection<int> FuelItems { get; set; }
+        public Dictionary<int, int> FuelItems { get; set; }
 
         public bool AddFuel { get; set; }
 
@@ -28,11 +29,10 @@ namespace Intersect.Client.General.Deconstructor
 
         public Deconstructor()
         {
+            FuelItems = new Dictionary<int, int>();
+
             Items = new ObservableCollection<int>();
             Items.CollectionChanged += Items_CollectionChanged;
-
-            FuelItems = new ObservableCollection<int>();
-            FuelItems.CollectionChanged += Items_CollectionChanged;
         }
 
         public bool TryAddItem(int invIdx)
@@ -76,7 +76,7 @@ namespace Intersect.Client.General.Deconstructor
             return true;
         }
 
-        public bool TryAddFuel(int invIdx)
+        public bool TryAddFuel(int invIdx, int quantity)
         {
             if (Globals.Me == default)
             {
@@ -96,24 +96,22 @@ namespace Intersect.Client.General.Deconstructor
                 return false;
             }
 
-            if (FuelItems.Contains(invIdx))
-            {
-                return false;
-            }
-
+            FuelItems[invIdx] = quantity;
             Audio.AddGameSound("al_cloth-heavy.wav", false);
-            FuelItems.Add(invIdx);
+            Refresh = true;
             return true;
         }
 
         public bool TryRemoveFuel(int invIdx)
         {
-            if (!FuelItems.Remove(invIdx))
+            if (!FuelItems.ContainsKey(invIdx))
             {
                 return false;
             }
 
+            FuelItems.Remove(invIdx);
             Audio.AddGameSound("al_cloth-heavy.wav", false);
+            Refresh = true;
             return true;
         }
 

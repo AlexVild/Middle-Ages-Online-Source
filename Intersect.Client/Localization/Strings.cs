@@ -1053,6 +1053,10 @@ namespace Intersect.Client.Localization
 
             public static LocalizedString destroyitem = @"Destroy Item";
 
+            public static LocalizedString AddFuel = @"Add as Fuel";
+
+            public static LocalizedString AddFuelPrompt = @"How many/much {00} do you want to use as fuel?";
+
             public static LocalizedString destroyitemprompt = @"How many/much {00} do you want to DESTROY? (Note: Item destruction is permanent)";
 
             public static LocalizedString destroyprompt = @"Do you wish to DESTROY the item: {00}? (Note: Item destruction is permanent)";

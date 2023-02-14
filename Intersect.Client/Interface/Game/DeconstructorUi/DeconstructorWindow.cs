@@ -158,7 +158,7 @@ namespace Intersect.Client.Interface.Game.DeconstructorUi
                 AddFuelButton.Disable();
 
                 var potentialFuel = Deconstructor.FuelItems
-                    .Aggregate(0, (int fuel, int invSlot) => fuel + ItemBase.Get(Globals.Me.Inventory[invSlot].ItemId).Fuel);
+                    .Aggregate(0, (int fuel, KeyValuePair<int, int> kv) => fuel + ItemBase.Get(Globals.Me.Inventory[kv.Key].ItemId).Fuel * kv.Value);
                 PotentialFuel.SetText($"Potential Fuel: {potentialFuel}");
                 PotentialFuel.IsHidden = potentialFuel <= 0;
                 CurrentFuel.SetText($"Total Fuel: 100");
@@ -214,12 +214,15 @@ namespace Intersect.Client.Interface.Game.DeconstructorUi
             var itemIndices = Deconstructor.FuelItems.ToArray();
 
             var idx = 0;
-            foreach (var invIdx in itemIndices)
+            foreach (var kv in itemIndices)
             {
+                var invIdx = kv.Key;
+                var quantity = kv.Value;
+
                 var fuelItem = new FuelItem(idx, AddFuelContainer, Deconstructor, invIdx, Background.X + 202, Background.Y + 114);
                 fuelItem.Setup();
                 var item = Globals.Me.Inventory[invIdx];
-                fuelItem.Update(item.ItemId, item.StatBuffs);
+                fuelItem.Update(item.ItemId, item.StatBuffs, quantity);
 
                 var xPadding = fuelItem.Pnl.Margin.Left + fuelItem.Pnl.Margin.Right;
                 var yPadding = fuelItem.Pnl.Margin.Top + fuelItem.Pnl.Margin.Bottom;

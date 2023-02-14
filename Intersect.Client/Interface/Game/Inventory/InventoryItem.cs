@@ -121,15 +121,34 @@ namespace Intersect.Client.Interface.Game.Inventory
                 {
                     Globals.Me.Deconstructor.TryRemoveItem(mMySlot);
                 }
-                else if (Globals.Me.Deconstructor.AddingFuel && !Globals.Me.Deconstructor.TryAddFuel(mMySlot))
+                else if (Globals.Me.Deconstructor.AddingFuel)
                 {
-                    Globals.Me.Deconstructor.TryRemoveFuel(mMySlot);
+                    var inv = Globals.Me.Inventory;
+                    var invItem = inv[mMySlot];
+                    if (invItem.Quantity > 1)
+                    {
+                        var iBox = new InputBox(
+                            Strings.Inventory.destroyitem,
+                            Strings.Inventory.destroyitemprompt.ToString(ItemBase.Get(invItem.ItemId).Name), true,
+                            InputBox.InputType.NumericInput, UseItemForFuel, null, mMySlot, invItem.Quantity
+                        );
+                    }
+                    else if (!Globals.Me.Deconstructor.TryAddFuel(mMySlot, 1))
+                    {
+                        Globals.Me.Deconstructor.TryRemoveItem(mMySlot);
+                    }
                 }
             }
             else
             {
                 Globals.Me.TryDropItem(mMySlot);
             }
+        }
+
+        void UseItemForFuel(object sender, EventArgs e)
+        {
+            var value = (int)((InputBox)sender).Value;
+            Globals.Me.Deconstructor.TryAddFuel(mMySlot, value);
         }
 
         void pnl_HoverLeave(Base sender, EventArgs arguments)
@@ -306,7 +325,9 @@ namespace Intersect.Client.Interface.Game.Inventory
                     if (itemTex != null)
                     {
                         Pnl.Texture = itemTex;
-                        if (Globals.Me.ItemOnCd(mMySlot) || Globals.Me.Deconstructor.Items.Contains(mMySlot) || 
+                        if (Globals.Me.ItemOnCd(mMySlot) || 
+                            (!Globals.Me.Deconstructor.AddingFuel && Globals.Me.Deconstructor.Items.Contains(mMySlot)) || 
+                            (Globals.Me.Deconstructor.AddingFuel && Globals.Me.Deconstructor.FuelItems.ContainsKey(mMySlot)) ||
                             (Globals.Me.Deconstructor.IsOpen && !Globals.Me.Deconstructor.AddingFuel && (item?.FuelRequired ?? 0) <= 0) || 
                             (Globals.Me.Deconstructor.IsOpen && Globals.Me.Deconstructor.AddingFuel && (item?.Fuel ?? 0) <= 0))
                         {

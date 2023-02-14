@@ -30,6 +30,7 @@ namespace Intersect.Client.Interface.Game
 
         public ImagePanel Pnl;
 
+        private Label StackLabel;
         public abstract string Filename { get; }
         public abstract string ContentName { get; }
 
@@ -55,6 +56,8 @@ namespace Intersect.Client.Interface.Game
 
             ContentPanel = new ImagePanel(Pnl, ContentName);
             ContentPanel.MouseInputEnabled = false;
+
+            StackLabel = new Label(Pnl, "StackLabel");
 
             Pnl.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
         }
@@ -114,12 +117,14 @@ namespace Intersect.Client.Interface.Game
             return rect;
         }
 
-        public void Update(Guid currentItemId, int[] statBoost)
+        public void Update(Guid currentItemId, int[] statBoost, int quantity = 1)
         {
             if (currentItemId != mCurrentItemId || !mTexLoaded)
             {
                 mCurrentItemId = currentItemId;
                 mStatBoost = statBoost;
+                StackLabel.IsHidden = quantity <= 1;
+                StackLabel.SetText(quantity.ToString());
                 var item = ItemBase.Get(mCurrentItemId);
                 if (item != null)
                 {
