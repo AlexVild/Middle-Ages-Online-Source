@@ -3,6 +3,7 @@ using Intersect.Client.Interface.Game.Chat;
 using Intersect.Client.Networking;
 using Intersect.Enums;
 using Intersect.GameObjects;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -30,7 +31,7 @@ namespace Intersect.Client.General.Deconstructor
 
         public float FuelCostMod { get; set; } = 1.0f;
 
-        public int RequiredFuel => Items.Aggregate(0, (reqFuel, invSlot) => reqFuel + ItemBase.Get((Globals.Me?.Inventory[invSlot]?.ItemId) ?? System.Guid.Empty).FuelRequired);
+        public int RequiredFuel => (int)Math.Floor(FuelCostMod * Items.Aggregate(0, (reqFuel, invSlot) => reqFuel + ItemBase.Get((Globals.Me?.Inventory[invSlot]?.ItemId) ?? Guid.Empty)?.FuelRequired ?? 0));
 
         public Deconstructor()
         {

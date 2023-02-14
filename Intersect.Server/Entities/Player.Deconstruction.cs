@@ -53,7 +53,7 @@ namespace Intersect.Server.Entities
 
         public void OpenDeconstructor(float multiplier) 
         {
-            Deconstructor = new Deconstructor(multiplier);
+            Deconstructor = new Deconstructor(multiplier, this);
             PacketSender.SendOpenDeconstructor(this, multiplier);
         }
 

@@ -2880,5 +2880,11 @@ namespace Intersect.Client.Networking
             Globals.Me.Fuel = packet.CurrentFuel;
             Globals.Me.Deconstructor?.Open(packet.FuelCostMultiplier);
         }
+
+        public void HandlePacket(IPacketSender packetSender, PlayerFuelPacket packet)
+        {
+            Globals.Me.Fuel = packet.Fuel;
+            Globals.Me.Deconstructor?.CloseFuelAddition();
+        }
     }
 }

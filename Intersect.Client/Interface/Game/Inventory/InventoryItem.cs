@@ -127,11 +127,21 @@ namespace Intersect.Client.Interface.Game.Inventory
                     var invItem = inv[mMySlot];
                     if (invItem.Quantity > 1)
                     {
-                        var iBox = new InputBox(
-                            Strings.Inventory.AddFuel,
-                            Strings.Inventory.AddFuelPrompt.ToString(ItemBase.Get(invItem.ItemId).Name), true,
-                            InputBox.InputType.NumericInput, UseItemForFuel, null, mMySlot, invItem.Quantity
-                        );
+                        if (Input.QuickModifierActive())
+                        {
+                            if (!Globals.Me.Deconstructor.TryAddFuel(mMySlot, invItem.Quantity))
+                            {
+                                Globals.Me.Deconstructor.TryRemoveItem(mMySlot);
+                            }
+                        }
+                        else
+                        {
+                            var iBox = new InputBox(
+                                Strings.Inventory.AddFuel,
+                                Strings.Inventory.AddFuelPrompt.ToString(ItemBase.Get(invItem.ItemId).Name), true,
+                                InputBox.InputType.NumericInput, UseItemForFuel, null, mMySlot, invItem.Quantity
+                            );
+                        }
                     }
                     else if (!Globals.Me.Deconstructor.TryAddFuel(mMySlot, 1))
                     {

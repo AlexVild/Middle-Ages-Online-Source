@@ -1,6 +1,7 @@
 ﻿using Intersect.Client.Framework.Gwen.Control;
 using Intersect.Client.General;
 using Intersect.Client.General.Deconstructor;
+using Intersect.Client.Networking;
 using Intersect.GameObjects;
 using System.Collections.Generic;
 using System.Linq;
@@ -103,8 +104,19 @@ namespace Intersect.Client.Interface.Game.DeconstructorUi
             AddFuelExplanation = new RichLabel(AddFuelBg);
 
             CancelFuelButton.Clicked += CancelFuelButton_Clicked;
+            SubmitFuelButton.Clicked += SubmitFuelButton_Clicked;
 
             AddFuelBg.IsHidden = true;
+        }
+
+        private void SubmitFuelButton_Clicked(Base sender, Framework.Gwen.Control.EventArguments.ClickedEventArgs arguments)
+        {
+            if (Deconstructor.FuelItems.Count <= 0)
+            {
+                return;
+            }
+
+            PacketSender.SendRequestCreateFuelPacket(Deconstructor.FuelItems);
         }
 
         private void CancelFuelButton_Clicked(Base sender, Framework.Gwen.Control.EventArguments.ClickedEventArgs arguments)

@@ -657,5 +657,10 @@ namespace Intersect.Client.Networking
         {
             Network.SendPacket(new CloseDeconstructorPacket());
         }
+
+        public static void SendRequestCreateFuelPacket(Dictionary<int, int> invQuantities)
+        {
+            Network.SendPacket(new AddFuelPacket(invQuantities));
+        }
     }
 }
