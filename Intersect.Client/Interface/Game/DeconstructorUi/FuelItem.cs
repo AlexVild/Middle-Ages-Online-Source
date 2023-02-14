@@ -4,17 +4,17 @@ using Intersect.Client.General.Deconstructor;
 
 namespace Intersect.Client.Interface.Game.DeconstructorUi
 {
-    public class DeconstructorItem : ItemContainer
+    public class FuelItem : ItemContainer
     {
         public Deconstructor Deconstructor;
 
-        public override string Filename => "DeconstructorItem";
+        public override string Filename => "FuelItem";
 
-        public override string ContentName => "DeconstructorIcon";
+        public override string ContentName => "FuelIcon";
 
         public int InventoryIdx { get; set; }
 
-        public DeconstructorItem(int index, Base container, Deconstructor deconstructor, int invIdx, int hoverPanelX, int hoverPanelY) : base(index, container, hoverPanelX, hoverPanelY)
+        public FuelItem(int index, Base container, Deconstructor deconstructor, int invIdx, int hoverPanelX, int hoverPanelY) : base(index, container, hoverPanelX, hoverPanelY)
         {
             InventoryIdx = invIdx;
             Deconstructor = deconstructor;
@@ -22,7 +22,7 @@ namespace Intersect.Client.Interface.Game.DeconstructorUi
 
         protected override void pnl_RightClicked(Base sender, ClickedEventArgs arguments)
         {
-            Deconstructor.TryRemoveItem(InventoryIdx);
+            Deconstructor.TryRemoveFuel(InventoryIdx);
         }
     }
 }

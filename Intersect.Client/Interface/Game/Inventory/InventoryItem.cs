@@ -117,9 +117,13 @@ namespace Intersect.Client.Interface.Game.Inventory
             }
             else if (Globals.Me.Deconstructor.IsOpen)
             {
-                if (!Globals.Me.Deconstructor.TryAddItem(mMySlot))
+                if (!Globals.Me.Deconstructor.AddingFuel && !Globals.Me.Deconstructor.TryAddItem(mMySlot))
                 {
                     Globals.Me.Deconstructor.TryRemoveItem(mMySlot);
+                }
+                else if (Globals.Me.Deconstructor.AddingFuel && !Globals.Me.Deconstructor.TryAddFuel(mMySlot))
+                {
+                    Globals.Me.Deconstructor.TryRemoveFuel(mMySlot);
                 }
             }
             else
@@ -279,6 +283,19 @@ namespace Intersect.Client.Interface.Game.Inventory
                 {
                     Container.Texture = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Gui, "inventoryitem.png");
                 }
+
+                if (Globals.Me.Deconstructor.IsOpen)
+                {
+                    if (!Globals.Me.Deconstructor.AddingFuel && (item?.FuelRequired ?? 0) <= 0)
+                    {
+                        Container.Texture = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Gui, "character_resource_disabled_bg.png");
+                    }
+                    else if (Globals.Me.Deconstructor.AddingFuel && (item?.Fuel ?? 0) <= 0)
+                    {
+                        Container.Texture = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Gui, "character_resource_disabled_bg.png");
+                    }
+                }
+
                 EquipPanel.IsHidden = true; // Alex: Don't want, at the moment
                 EquipLabel.IsHidden = true;
 
@@ -289,7 +306,9 @@ namespace Intersect.Client.Interface.Game.Inventory
                     if (itemTex != null)
                     {
                         Pnl.Texture = itemTex;
-                        if (Globals.Me.ItemOnCd(mMySlot) || Globals.Me.Deconstructor.Items.Contains(mMySlot))
+                        if (Globals.Me.ItemOnCd(mMySlot) || Globals.Me.Deconstructor.Items.Contains(mMySlot) || 
+                            (Globals.Me.Deconstructor.IsOpen && !Globals.Me.Deconstructor.AddingFuel && (item?.FuelRequired ?? 0) <= 0) || 
+                            (Globals.Me.Deconstructor.IsOpen && Globals.Me.Deconstructor.AddingFuel && (item?.Fuel ?? 0) <= 0))
                         {
                             Pnl.RenderColor = new Color(100, item.Color.R, item.Color.G, item.Color.B);
                         }

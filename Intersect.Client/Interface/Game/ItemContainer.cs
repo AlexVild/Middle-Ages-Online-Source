@@ -33,10 +33,15 @@ namespace Intersect.Client.Interface.Game
         public abstract string Filename { get; }
         public abstract string ContentName { get; }
 
-        public ItemContainer(int index, Base container)
+        protected int HoverPanelX { get; set; }
+        protected int HoverPanelY { get; set; }
+
+        public ItemContainer(int index, Base container, int hoverPanelX, int hoverPanelY)
         {
             mIndex = index;
             Container = container;
+            HoverPanelX = hoverPanelX;
+            HoverPanelY = hoverPanelY;
         }
 
         public virtual void Setup()
@@ -93,7 +98,7 @@ namespace Intersect.Client.Interface.Game
                 return;
             }
 
-            mDescWindow = new ItemDescriptionWindow(item, 1, Container.X, Container.Y, mStatBoost, item.Name);
+            mDescWindow = new ItemDescriptionWindow(item, 1, HoverPanelX, HoverPanelY, mStatBoost, item.Name);
         }
 
         public FloatRect RenderBounds()
