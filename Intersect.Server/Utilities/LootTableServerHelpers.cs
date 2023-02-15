@@ -118,7 +118,7 @@ namespace Intersect.Server.Utilities
                     continue;
                 }
                 // Set the attributes for this item.
-                rolledItem.Set(new Item(rolledItem.ItemId, rolledItem.Quantity, rolledItem.Properties));
+                rolledItem.Set(new Item(rolledItem.ItemId, rolledItem.Quantity, rolledItem.ItemProperties));
 
                 // Spawn the actual item!
                 if (MapController.TryGetInstanceFromMap(mapId, mapInstanceId, out var instance))

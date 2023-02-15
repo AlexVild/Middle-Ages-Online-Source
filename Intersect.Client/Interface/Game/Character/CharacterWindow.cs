@@ -11,6 +11,7 @@ using Intersect.Client.Localization;
 using Intersect.Client.Networking;
 using Intersect.Enums;
 using Intersect.GameObjects;
+using Intersect.Network.Packets.Server;
 
 namespace Intersect.Client.Interface.Game.Character
 {
@@ -402,17 +403,17 @@ namespace Intersect.Client.Interface.Game.Character
                         Items[i]
                             .Update(
                                 Globals.Me.Inventory[Globals.Me.MyEquipment[i]].ItemId,
-                                Globals.Me.Inventory[Globals.Me.MyEquipment[i]].StatBuffs
+                                Globals.Me.Inventory[Globals.Me.MyEquipment[i]].ItemProperties
                             );
                     }
                     else
                     {
-                        Items[i].Update(Guid.Empty, mEmptyStatBoost);
+                        Items[i].Update(Guid.Empty, new ItemProperties());
                     }
                 }
                 else
                 {
-                    Items[i].Update(Guid.Empty, mEmptyStatBoost);
+                    Items[i].Update(Guid.Empty, new ItemProperties());
                 }
             }
         }

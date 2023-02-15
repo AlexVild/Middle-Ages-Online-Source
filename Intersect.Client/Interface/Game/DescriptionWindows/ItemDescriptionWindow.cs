@@ -9,6 +9,7 @@ using Intersect.Client.Framework.File_Management;
 using Intersect.Client.Items;
 using Intersect.Localization;
 using System.Linq;
+using Intersect.Network.Packets.Server;
 
 namespace Intersect.Client.Interface.Game.DescriptionWindows
 {
@@ -18,7 +19,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
 
         protected int mAmount;
 
-        protected int[] mStatBuffs;
+        protected ItemProperties mItemProperties;
 
         protected string mTitleOverride;
 
@@ -35,7 +36,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             int amount,
             int x,
             int y,
-            int[] statBuffs,
+            ItemProperties itemProperties,
             string titleOverride = "",
             string valueLabel = "",
             string dropChance = "",
@@ -44,7 +45,12 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
         {
             mItem = item;
             mAmount = amount;
-            mStatBuffs = statBuffs;
+            mItemProperties = itemProperties;
+            if (mItemProperties == null)
+            {
+                mItemProperties = new ItemProperties();
+            }
+
             mTitleOverride = titleOverride;
             mValueLabel = valueLabel;
             mDropChance = dropChance;
@@ -253,9 +259,9 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
         {
             var slot = mItem.EquipmentSlot;
             var flatStat = mItem.StatsGiven[statIndex];
-            if (mStatBuffs != null) 
+            if (mItemProperties?.StatModifiers != null) 
             {
-                flatStat += mStatBuffs[statIndex];
+                flatStat += mItemProperties.StatModifiers[statIndex];
             }
             
             if (Globals.Me.MyEquipment[slot] != -1)
@@ -265,9 +271,9 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 if (equippedItem != null && equippedItem.Base != null)
                 {
                     var equippedStat = equippedItem.Base.StatsGiven[statIndex];
-                    if (equippedItem.StatBuffs != null)
+                    if (equippedItem.ItemProperties?.StatModifiers != null)
                     {
-                        equippedStat += equippedItem.StatBuffs[statIndex];
+                        equippedStat += equippedItem.ItemProperties.StatModifiers[statIndex];
                     }
 
                     return flatStat - equippedStat;
@@ -309,9 +315,9 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
         {
             var slot = mItem.EquipmentSlot;
             var flatStat = mItem.StatsGiven[statIndex];
-            if (mStatBuffs != null)
+            if (mItemProperties?.StatModifiers != null)
             {
-                flatStat += mStatBuffs[statIndex];
+                flatStat += mItemProperties.StatModifiers[statIndex];
             }
 
             if (Globals.Me.MyEquipment[slot] != -1)
@@ -321,9 +327,9 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 if (equippedItem != null && equippedItem.Base != null)
                 {
                     var equippedStat = equippedItem.Base.StatsGiven[statIndex];
-                    if (equippedItem.StatBuffs != null)
+                    if (equippedItem.ItemProperties?.StatModifiers != null)
                     {
-                        equippedStat += equippedItem.StatBuffs[statIndex];
+                        equippedStat += equippedItem.ItemProperties.StatModifiers[statIndex];
                     }
                     var statDiff = flatStat - equippedStat;
                     var percentDiff = mItem.PercentageStatsGiven[statIndex] - equippedItem.Base.PercentageStatsGiven[statIndex];
@@ -713,7 +719,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                     var weaponSlot = Globals.Me.MyEquipment[Options.WeaponIndex];
                     if (weaponSlot != -1)
                     {
-                        var statBuffs = Globals.Me.Inventory[weaponSlot].StatBuffs;
+                        var statBuffs = Globals.Me.Inventory[weaponSlot].ItemProperties.StatModifiers;
                         var weapon = ItemBase.Get(Globals.Me.Inventory[weaponSlot].ItemId);
                         if (weapon != null && statBuffs != null)
                         {
@@ -724,10 +730,10 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                     }
 
                     // Add current item's speed stats!
-                    if (mStatBuffs != null)
+                    if (mItemProperties?.StatModifiers != null)
                     {
                         speed += mItem.StatsGiven[(int) Stats.Speed];
-                        speed += mStatBuffs[(int) Stats.Speed];
+                        speed += mItemProperties.StatModifiers[(int) Stats.Speed];
                         speed += (int) Math.Floor(speed * (mItem.PercentageStatsGiven[(int)Stats.Speed] / 100f));
                     }
 
@@ -775,7 +781,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             }
 
             // Stats
-            if (mStatBuffs != null)
+            if (mItemProperties?.StatModifiers != null)
             {
                 for (var i = 0; i < (int)Stats.StatCount; i++)
                 {
@@ -783,31 +789,31 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                     var stat = mItem.StatsGiven[i];
                     var statString = stat.ToString();
 
-                    if (Math.Sign(mStatBuffs[i]) == -1)
+                    if (Math.Sign(mItemProperties.StatModifiers[i]) == -1)
                     {
                         if (stat == 0)
                         {
-                            statString = Strings.ItemDescription.StatAndBuff.ToString("", "", mStatBuffs[i]);
+                            statString = Strings.ItemDescription.StatAndBuff.ToString("", "", mItemProperties.StatModifiers[i]);
                         }
                         else
                         {
-                            statString = Strings.ItemDescription.StatAndBuff.ToString(stat, "", mStatBuffs[i]);
+                            statString = Strings.ItemDescription.StatAndBuff.ToString(stat, "", mItemProperties.StatModifiers[i]);
                         }
                         
                     }
-                    else if (Math.Sign(mStatBuffs[i]) == 1)
+                    else if (Math.Sign(mItemProperties.StatModifiers[i]) == 1)
                     {
                         if (stat == 0)
                         {
-                            statString = Strings.ItemDescription.StatAndBuff.ToString("", "+", mStatBuffs[i]);
+                            statString = Strings.ItemDescription.StatAndBuff.ToString("", "+", mItemProperties.StatModifiers[i]);
                         }
                         else
                         {
-                            statString = Strings.ItemDescription.StatAndBuff.ToString(stat, "+", mStatBuffs[i]);
+                            statString = Strings.ItemDescription.StatAndBuff.ToString(stat, "+", mItemProperties.StatModifiers[i]);
                         }
                     }
 
-                    var calculatedStat = stat + mStatBuffs[i];
+                    var calculatedStat = stat + mItemProperties.StatModifiers[i];
 
                     if (calculatedStat != 0 && mItem.PercentageStatsGiven[i] != 0)
                     {
@@ -826,7 +832,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                     else if (equippedItem != null && equippedItem.Base != null)
                     {
                         var equippedStat = equippedItem.Base.StatsGiven[i];
-                        var calcualtedEquippedStat = equippedStat + equippedItem.StatBuffs[i];
+                        var calcualtedEquippedStat = equippedStat + equippedItem.ItemProperties.StatModifiers[i];
                         var equippedStatString = "0";
 
                         var equippedPerecentage = equippedItem.Base.PercentageStatsGiven[i];

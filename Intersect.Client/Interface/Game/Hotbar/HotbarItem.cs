@@ -189,7 +189,7 @@ namespace Intersect.Client.Interface.Game.Hotbar
 
                 mItemDescWindow = new ItemDescriptionWindow(
                     mCurrentItem, 1, mHotbarWindow.X + Pnl.X + 16, mHotbarWindow.Y + mHotbarWindow.Height + 2,
-                    mInventoryItem?.StatBuffs, mCurrentItem.Name, ""
+                    mInventoryItem?.ItemProperties, mCurrentItem.Name, ""
                 );
             }
             else if (mCurrentSpell != null)

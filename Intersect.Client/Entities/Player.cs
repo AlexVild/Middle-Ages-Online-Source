@@ -590,7 +590,7 @@ namespace Intersect.Client.Entities
                                     var statMatch = true;
                                     for (var s = 0; s < hotbarInstance.PreferredStatBuffs.Length; s++)
                                     {
-                                        if (itm.StatBuffs[s] != hotbarInstance.PreferredStatBuffs[s])
+                                        if (itm.ItemProperties.StatModifiers[s] != hotbarInstance.PreferredStatBuffs[s])
                                         {
                                             statMatch = false;
                                         }
@@ -1103,7 +1103,7 @@ namespace Intersect.Client.Entities
                 if (item != null)
                 {
                     Hotbar[hotbarSlot].ItemOrSpellId = item.ItemId;
-                    Hotbar[hotbarSlot].PreferredStatBuffs = item.StatBuffs;
+                    Hotbar[hotbarSlot].PreferredStatBuffs = item.ItemProperties.StatModifiers;
                 }
             }
             else if (itemType == 1)
@@ -2983,7 +2983,7 @@ namespace Intersect.Client.Entities
             foreach(var drop in loot)
             {
                 var item = new Item();
-                item.Load(drop.ItemId, drop.Quantity, null, drop.StatBuffs);
+                item.Load(drop.ItemId, drop.Quantity, null, drop.ItemProperties);
                 RolledLoot.Add(item);
             }
         }

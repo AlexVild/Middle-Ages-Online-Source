@@ -124,7 +124,7 @@ namespace Intersect.Client.Interface.Game.Bank
             {
                 mDescWindow = new ItemDescriptionWindow(
                     SortedBank[mMySlot].Item.Base, SortedBank[mMySlot].Item.Quantity, mBankWindow.X, mBankWindow.Y,
-                    SortedBank[mMySlot].Item.StatBuffs
+                    SortedBank[mMySlot].Item.ItemProperties
                 );
             }
         }

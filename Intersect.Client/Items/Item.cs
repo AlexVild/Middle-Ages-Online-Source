@@ -2,6 +2,7 @@
 
 using Intersect.Enums;
 using Intersect.GameObjects;
+using Intersect.Network.Packets.Server;
 
 namespace Intersect.Client.Items
 {
@@ -15,16 +16,16 @@ namespace Intersect.Client.Items
 
         public int Quantity;
 
-        public int[] StatBuffs = new int[(int) Stats.StatCount];
+        public ItemProperties ItemProperties;
 
         public ItemBase Base => ItemBase.Get(ItemId);
 
-        public void Load(Guid id, int quantity, Guid? bagId, int[] statBuffs)
+        public void Load(Guid id, int quantity, Guid? bagId, ItemProperties itemProperties)
         {
             ItemId = id;
             Quantity = quantity;
             BagId = bagId;
-            StatBuffs = statBuffs;
+            ItemProperties = itemProperties;
         }
 
         public Item Clone()
@@ -33,13 +34,9 @@ namespace Intersect.Client.Items
             {
                 ItemId = ItemId,
                 Quantity = Quantity,
-                BagId = BagId
+                BagId = BagId,
+                ItemProperties = ItemProperties
             };
-
-            for (var i = 0; i < (int) Stats.StatCount; i++)
-            {
-                newItem.StatBuffs[i] = StatBuffs[i];
-            }
 
             return newItem;
         }

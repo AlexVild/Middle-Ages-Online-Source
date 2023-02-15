@@ -19,7 +19,7 @@ namespace Intersect.Server.Database
 
         public Item()
         {
-            Properties = new ItemProperties();
+            ItemProperties = new ItemProperties();
         }
 
         public Item(Guid itemId, int quantity, ItemProperties properties = null) : this(
@@ -34,7 +34,7 @@ namespace Intersect.Server.Database
             Quantity = quantity;
             BagId = bagId;
             Bag = bag;
-            Properties = properties ?? new ItemProperties();
+            ItemProperties = properties ?? new ItemProperties();
 
             var descriptor = ItemBase.Get(ItemId);
             if (descriptor == null)
@@ -54,26 +54,26 @@ namespace Intersect.Server.Database
             {
                 if (!descriptor.StatLocks[(Stats)i])
                 {
-                    Properties.StatModifiers[i] = Randomization.Next(-descriptor.StatGrowth, descriptor.StatGrowth + 1);
+                    ItemProperties.StatModifiers[i] = Randomization.Next(-descriptor.StatGrowth, descriptor.StatGrowth + 1);
                 }
             }
         }
 
         public Item(Item item) : this(item.ItemId, item.Quantity, item.BagId, item.Bag)
         {
-            Properties = new ItemProperties(item.Properties);
+            ItemProperties = new ItemProperties(item.ItemProperties);
             DropChance = item.DropChance;
         }
 
         [NotMapped]
-        public ItemProperties Properties { get; set; }
+        public ItemProperties ItemProperties { get; set; }
 
         [Column("ItemProperties")]
         [JsonIgnore]
         public string ItemPropertiesJson
         {
-            get => JsonConvert.SerializeObject(Properties);
-            set => Properties = JsonConvert.DeserializeObject<ItemProperties>(value ?? string.Empty) ?? new ItemProperties();
+            get => JsonConvert.SerializeObject(ItemProperties);
+            set => ItemProperties = JsonConvert.DeserializeObject<ItemProperties>(value ?? string.Empty) ?? new ItemProperties();
         }
 
         // TODO: THIS SHOULD NOT BE A NULLABLE. This needs to be fixed.
@@ -89,17 +89,6 @@ namespace Intersect.Server.Database
 
         public int Quantity { get; set; }
 
-        [Column("StatBuffs")]
-        [JsonIgnore]
-        public string StatBuffsJson
-        {
-            get => DatabaseUtils.SaveIntArray(StatBuffs, (int) Stats.StatCount);
-            set => StatBuffs = DatabaseUtils.LoadIntArray(value, (int) Stats.StatCount);
-        }
-
-        [NotMapped]
-        public int[] StatBuffs { get; set; } = new int[(int) Stats.StatCount];
-
         [JsonIgnore]
         [NotMapped]
         public ItemBase Descriptor => ItemBase.Get(ItemId);
@@ -112,7 +101,7 @@ namespace Intersect.Server.Database
             Quantity = item.Quantity;
             BagId = item.BagId;
             Bag = item.Bag;
-            Properties = new ItemProperties(item.Properties);
+            ItemProperties = new ItemProperties(item.ItemProperties);
         }
 
         public string Data()

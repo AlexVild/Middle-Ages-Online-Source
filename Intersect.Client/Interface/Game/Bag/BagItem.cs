@@ -118,7 +118,7 @@ namespace Intersect.Client.Interface.Game.Bag
             {
                 mDescWindow = new ItemDescriptionWindow(
                     Globals.Bag[mMySlot].Base, Globals.Bag[mMySlot].Quantity, mBagWindow.X, mBagWindow.Y,
-                    Globals.Bag[mMySlot].StatBuffs
+                    Globals.Bag[mMySlot].ItemProperties
                 );
             }
         }

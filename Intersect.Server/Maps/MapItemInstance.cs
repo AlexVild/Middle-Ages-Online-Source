@@ -64,11 +64,12 @@ namespace Intersect.Server.Maps
         /// <param name="item">The item to take the Stat Buffs from and apply them to this MapItem.</param>
         public void SetupStatBuffs(Item item)
         {
-            if (StatBuffs != null && item.StatBuffs != null)
+            var statMods = ItemProperties.StatModifiers;
+            if (statMods != null && item.ItemProperties.StatModifiers != null)
             {
-                for (var i = 0; i < StatBuffs.Length; ++i)
+                for (var i = 0; i < statMods.Length; ++i)
                 {
-                    StatBuffs[i] = item.StatBuffs.Length > i ? item.StatBuffs[i] : 0;
+                    statMods[i] = item.ItemProperties.StatModifiers.Length > i ? item.ItemProperties.StatModifiers[i] : 0;
                 }
             }
         }

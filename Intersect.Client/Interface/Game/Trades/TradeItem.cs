@@ -120,7 +120,7 @@ namespace Intersect.Client.Interface.Game.Trades
             {
                 mDescWindow = new ItemDescriptionWindow(
                     Globals.Trade[mMySide, mMySlot].Base, Globals.Trade[mMySide, mMySlot].Quantity, mTradeWindow.X,
-                    mTradeWindow.Y, Globals.Trade[mMySide, mMySlot].StatBuffs
+                    mTradeWindow.Y, Globals.Trade[mMySide, mMySlot].ItemProperties
                 );
             }
         }

@@ -8,6 +8,7 @@ using Intersect.Client.Framework.Input;
 using Intersect.Client.General;
 using Intersect.Client.Interface.Game.DescriptionWindows;
 using Intersect.GameObjects;
+using Intersect.Network.Packets.Server;
 using System;
 
 namespace Intersect.Client.Interface.Game
@@ -22,7 +23,7 @@ namespace Intersect.Client.Interface.Game
 
         private ItemDescriptionWindow mDescWindow;
 
-        private int[] mStatBoost = new int[(int)Enums.Stats.StatCount];
+        private ItemProperties mProperties;
 
         private bool mTexLoaded;
 
@@ -101,7 +102,7 @@ namespace Intersect.Client.Interface.Game
                 return;
             }
 
-            mDescWindow = new ItemDescriptionWindow(item, 1, HoverPanelX, HoverPanelY, mStatBoost, item.Name);
+            mDescWindow = new ItemDescriptionWindow(item, 1, HoverPanelX, HoverPanelY, mProperties, item.Name);
         }
 
         public FloatRect RenderBounds()
@@ -117,12 +118,12 @@ namespace Intersect.Client.Interface.Game
             return rect;
         }
 
-        public void Update(Guid currentItemId, int[] statBoost, int quantity = 1)
+        public void Update(Guid currentItemId, ItemProperties itemProperties, int quantity = 1)
         {
             if (currentItemId != mCurrentItemId || !mTexLoaded)
             {
                 mCurrentItemId = currentItemId;
-                mStatBoost = statBoost;
+                mProperties = itemProperties;
                 StackLabel.IsHidden = quantity <= 1;
                 StackLabel.SetText(quantity.ToString());
                 var item = ItemBase.Get(mCurrentItemId);

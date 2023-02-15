@@ -76,7 +76,7 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
                 1, 
                 (int)mousePos.X, 
                 (int)mousePos.Y, 
-                new int[(int)Stats.StatCount],
+                null,
                 dropChance: DropChance,
                 tableChance: TableChance);
         }

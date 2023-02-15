@@ -261,7 +261,7 @@ namespace Intersect.Client.Interface.Game.DeconstructorUi
                 var deconstructorItem = new DeconstructorItem(idx, ItemsContainer, Deconstructor, invIdx, Background.X + 48, Background.Y + 39);
                 deconstructorItem.Setup();
                 var item = Globals.Me.Inventory[invIdx];
-                deconstructorItem.Update(item.ItemId, item.StatBuffs);
+                deconstructorItem.Update(item.ItemId, item.ItemProperties);
 
                 var xPadding = deconstructorItem.Pnl.Margin.Left + deconstructorItem.Pnl.Margin.Right;
                 var yPadding = deconstructorItem.Pnl.Margin.Top + deconstructorItem.Pnl.Margin.Bottom;
@@ -294,7 +294,7 @@ namespace Intersect.Client.Interface.Game.DeconstructorUi
                 var fuelItem = new FuelItem(idx, AddFuelContainer, Deconstructor, invIdx, Background.X + 202, Background.Y + 114);
                 fuelItem.Setup();
                 var item = Globals.Me.Inventory[invIdx];
-                fuelItem.Update(item.ItemId, item.StatBuffs, quantity);
+                fuelItem.Update(item.ItemId, item.ItemProperties, quantity);
 
                 var xPadding = fuelItem.Pnl.Margin.Left + fuelItem.Pnl.Margin.Right;
                 var yPadding = fuelItem.Pnl.Margin.Top + fuelItem.Pnl.Margin.Bottom;

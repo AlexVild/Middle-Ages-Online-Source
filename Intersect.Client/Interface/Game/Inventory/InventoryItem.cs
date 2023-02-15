@@ -209,7 +209,7 @@ namespace Intersect.Client.Interface.Game.Inventory
                 {
                     mDescWindow = new ItemDescriptionWindow(
                         Globals.Me.Inventory[mMySlot].Base, Globals.Me.Inventory[mMySlot].Quantity, mInventoryWindow.X,
-                        mInventoryWindow.Y, Globals.Me.Inventory[mMySlot].StatBuffs
+                        mInventoryWindow.Y, Globals.Me.Inventory[mMySlot].ItemProperties
                     );
                 }
             }
@@ -229,7 +229,7 @@ namespace Intersect.Client.Interface.Game.Inventory
                         {
                             mDescWindow = new ItemDescriptionWindow(
                                 Globals.Me.Inventory[mMySlot].Base, Globals.Me.Inventory[mMySlot].Quantity,
-                                mInventoryWindow.X, mInventoryWindow.Y, Globals.Me.Inventory[mMySlot].StatBuffs, "",
+                                mInventoryWindow.X, mInventoryWindow.Y, Globals.Me.Inventory[mMySlot].ItemProperties, "",
                                 Strings.Shop.sellsfor.ToString(buysFor.CostItemQuantity, hoveredItem.Name)
                             );
                         }
@@ -241,7 +241,7 @@ namespace Intersect.Client.Interface.Game.Inventory
                         {
                             mDescWindow = new ItemDescriptionWindow(
                                 Globals.Me.Inventory[mMySlot].Base, Globals.Me.Inventory[mMySlot].Quantity,
-                                mInventoryWindow.X, mInventoryWindow.Y, Globals.Me.Inventory[mMySlot].StatBuffs, "",
+                                mInventoryWindow.X, mInventoryWindow.Y, Globals.Me.Inventory[mMySlot].ItemProperties, "",
                                 Strings.Shop.sellsfor.ToString((int) Math.Floor(invItem.Base.Price * Globals.GameShop.BuyMultiplier), costItem.Name)
                             );
                         }
@@ -250,7 +250,7 @@ namespace Intersect.Client.Interface.Game.Inventory
                 else if(invItem?.Base != null)
                 {
                     mDescWindow = new ItemDescriptionWindow(
-                        invItem.Base, invItem.Quantity, mInventoryWindow.X, mInventoryWindow.Y, invItem.StatBuffs,
+                        invItem.Base, invItem.Quantity, mInventoryWindow.X, mInventoryWindow.Y, invItem.ItemProperties,
                         "", Strings.Shop.wontbuy
                     );
                 }

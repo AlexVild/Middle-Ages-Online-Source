@@ -18,7 +18,7 @@ namespace Intersect.Network.Packets.Server
         public int Quantity { get; set; }
 
         [Key(2)]
-        public int[] StatBuffs { get; set; }
+        public ItemProperties ItemProperties { get; set; }
     }
 
     [MessagePackObject]

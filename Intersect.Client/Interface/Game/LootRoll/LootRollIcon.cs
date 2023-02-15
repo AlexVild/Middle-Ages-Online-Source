@@ -110,7 +110,7 @@ namespace Intersect.Client.Interface.Game.LootRoll
                 }
                 mDescWindow = new ItemDescriptionWindow(
                     ItemBase.Get(MyItem.ItemId), MyItem.Quantity, mBackground.X,
-                    mBackground.Y, MyItem.StatBuffs
+                    mBackground.Y, MyItem.ItemProperties
                );
             }
 
