@@ -454,8 +454,8 @@ namespace Intersect.Server.Entities
             // Initialize Class Rank info for any new classes that have been added/underlying updates to CR stuff in Options
             InitClassRanks();
 
-            SetMasteryProgress();
             TrackWeaponTypeProgress(TrackedWeaponType);
+            SetMasteryProgress();
             SendPacket(GenerateChallengeProgressPacket());
 
             // Refresh recipe unlock statuses in the event they've changed since the player last logged in
@@ -1451,7 +1451,7 @@ namespace Intersect.Server.Entities
                 foreach (var type in weapon?.WeaponTypes ?? new List<Guid>())
                 {
                     weaponProgressed = TryProgressMastery(expToGive, type) || weaponProgressed;
-                    if (type == TrackedWeaponType && type != Guid.Empty)
+                    if (type == TrackedWeaponType)
                     {
                         TrackWeaponTypeProgress(type);
                     }
@@ -1459,7 +1459,14 @@ namespace Intersect.Server.Entities
             }
             if (expToGive > 0)
             {
-                PacketSender.SendExpToast(this, expToGive, fromComboEnd, expToGive > 0, weaponProgressed);
+                if (!fromComboEnd)
+                {
+                    PacketSender.SendExpToast(this, $"{expToGive} EXP", fromComboEnd, expToGive > 0, weaponProgressed);
+                }
+                else
+                {
+                    PacketSender.SendExpToast(this, $"COMBO! {expToGive} EXP", fromComboEnd, expToGive > 0, weaponProgressed);
+                }
             }
 
             CheckLevelUp();

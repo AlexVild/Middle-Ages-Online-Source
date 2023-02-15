@@ -6,7 +6,7 @@ namespace Intersect.Network.Packets.Server
     public class ExpToastPacket : IntersectPacket
     {
         [Key(0)]
-        public long Exp { get; set; }
+        public string ExpStr { get; set; }
 
         [Key(1)]
         public bool ComboEnder { get; set; }
@@ -21,9 +21,9 @@ namespace Intersect.Network.Packets.Server
         {
         }
 
-        public ExpToastPacket(long exp, bool comboEnder, bool isExp, bool isWeapon)
+        public ExpToastPacket(string exp, bool comboEnder, bool isExp, bool isWeapon)
         {
-            Exp = exp;
+            ExpStr = exp;
             ComboEnder = comboEnder;
             IsExp = isExp;
             IsWeapon = isWeapon;

@@ -3245,8 +3245,12 @@ namespace Intersect.Server.Entities.Events
             }
 
             // Get a fresh update of current mastery status
+            if (player.TrackedWeaponType == command.WeaponTypeId)
+            {
+                player.TrackWeaponTypeProgress(command.WeaponTypeId);
+                PacketSender.SendExperience(player);
+            }
             player.SetMasteryProgress();
-            PacketSender.SendExperience(player);
         }
 
         private static void ProcessCommand(

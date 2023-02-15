@@ -475,12 +475,20 @@ namespace Intersect.Server.Entities
             return true;
         }
 
-        public void AddCraftWeaponExp(ItemBase item, float expMultiplier)
+        /// <summary>
+        /// Adds weapon EXP when a weapon is crafted/deconstructed
+        /// </summary>
+        /// <param name="item">The item that is being crafted/deconstructed</param>
+        /// <param name="expMultiplier">The multiplier applied to EXP received</param>
+        /// <param name="sendPackets">Whether or not we will send messaging/exp packets during this. Useful to turn to false if this is part of an iteration</param>
+        /// <returns>A dictionary of weaponType -> exp received</returns>
+        public Dictionary<Guid, long> AddCraftWeaponExp(ItemBase item, float expMultiplier, bool sendPackets = true)
         {
+            var expEarned = new Dictionary<Guid, long>();
             var exp = (long)Math.Floor(item.CraftWeaponExp * expMultiplier);
             if (exp <= 0)
             {
-                return;
+                return expEarned;
             }
 
             var equippedWeapon = GetEquippedWeapon();
@@ -505,15 +513,30 @@ namespace Intersect.Server.Entities
                 if (TryProgressMastery(exp, weaponType, item, (equippedWeapon?.Id ?? Guid.Empty) == item.Id) && (weaponType == TrackedWeaponType))
                 {
                     sendExpNotification = true;
+                    if (!expEarned.ContainsKey(weaponType))
+                    {
+                        expEarned[weaponType] = exp;
+                    }
+                    else
+                    {
+                        expEarned[weaponType] += exp;
+                    }
+
+                    if (sendPackets)
+                    {
+                        var name = WeaponTypeDescriptor.Get(weaponType)?.DisplayName ?? WeaponTypeDescriptor.GetName(weaponType);
+                        PacketSender.SendExpToast(this, $"{exp} {name} EXP", false, false, true);
+                    }
                 }
             }
 
-            if (sendExpNotification)
+            if (sendExpNotification && sendPackets)
             {
                 TrackWeaponTypeProgress(TrackedWeaponType);
-                PacketSender.SendExpToast(this, exp, false, false, true);
                 PacketSender.SendExperience(this);
             }
+
+            return expEarned;
         }
 
         public bool ChallengesComplete(List<Guid> challengeIds)

@@ -142,6 +142,7 @@ namespace Intersect.Client.General.Deconstructor
             Refresh = true;
             Interface.Interface.GameUi?.DeconstructorWindow?.Show();
             Interface.Interface.GameUi?.GameMenu.OpenInventory();
+            WaitingOnServer = false; // just force this
         }
 
         public void Close(bool sendPacket = true)

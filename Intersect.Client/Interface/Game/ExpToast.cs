@@ -15,7 +15,7 @@ namespace Intersect.Client.Interface.Game
 
         public static bool ExpFlash { get; set; }
 
-        public static void CreateExpToast(long exp, string extra = "", bool weaponExp = false)
+        public static void CreateExpToast(string exp, string extra = "", bool weaponExp = false)
         {
             Toasts.Enqueue(new ExpToast(exp, extra, weaponExp));
             WeaponExpLastFlash = weaponExp;
@@ -53,7 +53,7 @@ namespace Intersect.Client.Interface.Game
         readonly Color ExpTextColor = new Color(255, 242, 193, 223);
         readonly Color WeaponExpTextColor = new Color(255, 200, 145, 62);
         const long IdleDuration = 1000;
-        const float Speed = -0.5f;
+        const float Speed = 0.5f;
         const long DisappearingFramerate = 16;
 
         private Color Color => WeaponExpOnly ? 
@@ -97,16 +97,9 @@ namespace Intersect.Client.Interface.Game
 
         ExpToastStates State { get; set; }
 
-        public ExpToast(long exp, string extra, bool weaponExp)
+        public ExpToast(string expStr, string extra, bool weaponExp)
         {
-            if (!string.IsNullOrEmpty(extra))
-            {
-                ExpText = $"{extra} {exp} EXP";
-            }
-            else
-            {
-                ExpText = $"{exp} EXP";
-            }
+            ExpText = expStr;
             
             StartTime = Timing.Global.Milliseconds;
             EndTime = StartTime + ExpToastService.ToastDuration;
@@ -117,8 +110,7 @@ namespace Intersect.Client.Interface.Game
             var spawnX = Randomization.Next((int)hud.ExpX + 12, (int)hud.ExpX + (int)hud.ExpWidth - 12);
 
             X = spawnX;
-            _y = hud.ExpY + 78;
-            _y += Randomization.Next((int)_y - 8, (int)_y + 8);
+            _y = hud.ExpY + 82 + Randomization.Next(-8, 9);
 
             WeaponExpOnly = weaponExp;
         }

@@ -2751,9 +2751,9 @@ namespace Intersect.Server.Networking
             player?.SendPacket(new UnlockedBestiaryEntriesPacket(unlocks, refresh));
         }
 
-        public static void SendExpToast(Player player, long exp, bool comboEnder, bool isExp, bool isWeapon)
+        public static void SendExpToast(Player player, string expString, bool comboEnder, bool isExp, bool isWeapon)
         {
-            player?.SendPacket(new ExpToastPacket(exp, comboEnder, isExp, isWeapon));
+            player?.SendPacket(new ExpToastPacket(expString, comboEnder, isExp, isWeapon));
         }
 
         public static void SendSkillbookToClient(Player player)
