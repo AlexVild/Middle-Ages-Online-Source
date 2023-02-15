@@ -52,7 +52,7 @@ namespace Intersect.Server.Database
         {
             for (var i = 0; i < (int)Stats.StatCount; i++)
             {
-                if (!descriptor.StatLocks[(Stats)i])
+                if (descriptor.StatGrowth > 0 && (!descriptor.StatLocks.ContainsKey((Stats)i) || !descriptor.StatLocks[(Stats) i]))
                 {
                     ItemProperties.StatModifiers[i] = Randomization.Next(-descriptor.StatGrowth, descriptor.StatGrowth + 1);
                 }
