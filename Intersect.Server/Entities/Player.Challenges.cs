@@ -216,13 +216,13 @@ namespace Intersect.Server.Entities
             PacketSender.SendExperience(this);
         }
 
-        public bool TryProgressMastery(long exp, Guid weaponType)
+        public bool TryProgressMastery(long exp, Guid weaponType, ItemBase weapon = default, bool isActive = true)
         {
             if (!TryGetMastery(weaponType, out var mastery))
             {
                 return false;
             }
-            mastery.IsActive = true;
+            mastery.IsActive = isActive;
 
             // Are we done with this mastery track?
             var maxLevel = mastery.WeaponType.MaxLevel;
@@ -412,7 +412,15 @@ namespace Intersect.Server.Entities
                 && maxWeaponLevel > mastery.Level;
         }
 
-        public bool TryGainMasteryExp(long exp, WeaponMasteryInstance mastery)
+        public bool WeaponCanProgressMastery(WeaponMasteryInstance mastery, ItemBase weapon)
+        {
+            return weapon != null
+                && weapon.MaxWeaponLevels != null
+                && weapon.MaxWeaponLevels.TryGetValue(mastery.WeaponTypeId, out var maxWeaponLevel)
+                && maxWeaponLevel > mastery.Level;
+        }
+
+        public bool TryGainMasteryExp(long exp, WeaponMasteryInstance mastery, ItemBase weapon = default)
         {
             var requiredExp = 0;
             if (mastery.TryGetCurrentUnlock(out var unlock))
@@ -425,11 +433,22 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
-            // Is the current weapon at the end of its progress cycle?
-            if (!WeaponCanProgressMastery(mastery))
+            if (weapon == default)
             {
-                SendWeaponMaxedMessage(mastery.WeaponType);
-                return false;
+                // Is the current weapon at the end of its progress cycle?
+                if (!WeaponCanProgressMastery(mastery))
+                {
+                    SendWeaponMaxedMessage(mastery.WeaponType);
+                    return false;
+                }
+            }
+            else
+            {
+                if (!WeaponCanProgressMastery(mastery, weapon))
+                {
+                    SendWeaponMaxedMessage(mastery.WeaponType);
+                    return false;
+                }
             }
 
             mastery.ExpRemaining += exp;
@@ -444,16 +463,57 @@ namespace Intersect.Server.Entities
             return false;
         }
 
-        public bool TryAddNewChallenge(Guid challengeId)
+        public bool TryAddNewChallenge(Guid challengeId, bool isActive = true)
         {
             if (TryGetChallenge(challengeId, out _))
             {
                 return false;
             }
 
-            var challenge = new ChallengeInstance(Id, challengeId, false, 0, true);
+            var challenge = new ChallengeInstance(Id, challengeId, false, 0, isActive);
             Challenges.Add(challenge);
             return true;
+        }
+
+        public void AddCraftWeaponExp(ItemBase item, float expMultiplier)
+        {
+            var exp = (long)Math.Floor(item.CraftWeaponExp * expMultiplier);
+            if (exp <= 0)
+            {
+                return;
+            }
+
+            var equippedWeapon = GetEquippedWeapon();
+            var sendExpNotification = false;
+            foreach (var weaponType in item.WeaponTypes)
+            {
+                if (!item.MaxWeaponLevels.TryGetValue(weaponType, out var maxLevel) || !TryGetMastery(weaponType, out var mastery))
+                {
+                    continue;
+                }
+
+                if (mastery.Level >= maxLevel)
+                {
+                    continue;
+                }
+
+                if (mastery.Level == mastery.WeaponType?.MaxLevel)
+                {
+                    continue;
+                }
+
+                if (TryProgressMastery(exp, weaponType, item, (equippedWeapon?.Id ?? Guid.Empty) == item.Id) && (weaponType == TrackedWeaponType))
+                {
+                    sendExpNotification = true;
+                }
+            }
+
+            if (sendExpNotification)
+            {
+                TrackWeaponTypeProgress(TrackedWeaponType);
+                PacketSender.SendExpToast(this, exp, false, false, true);
+                PacketSender.SendExperience(this);
+            }
         }
 
         public bool ChallengesComplete(List<Guid> challengeIds)

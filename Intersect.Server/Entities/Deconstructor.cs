@@ -109,6 +109,13 @@ namespace Intersect.Server.Entities
                 {
                     continue;
                 }
+
+
+                if (item.EquipmentSlot == Options.WeaponIndex)
+                {
+                    Owner.AddCraftWeaponExp(item, Options.Instance.DeconstructionOpts.DeconstructionExpMod);
+                }
+
                 deconstructedLoot.AddRange(item.DeconstructRolls);
             }
 

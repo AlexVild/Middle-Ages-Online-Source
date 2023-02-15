@@ -9,5 +9,7 @@ namespace Intersect.Config
     public class DeconstructionOptions
     {
         public string AddFuelSound { get; set; } = "al_forging.wav";
+
+        public float DeconstructionExpMod { get; set; } = 0.75f;
     }
 }

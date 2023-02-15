@@ -4245,6 +4245,10 @@ namespace Intersect.Server.Entities
 
                 // Give inspiration exp
                 GiveInspiredExperience(craft.Experience);
+                if (itm.EquipmentSlot == Options.WeaponIndex && itm.WeaponTypes.Count > 0)
+                {
+                    AddCraftWeaponExp(itm, 1.0f);
+                }
 
                 // Start any related common events
                 if (CraftBase.Get(id).Event != null)
