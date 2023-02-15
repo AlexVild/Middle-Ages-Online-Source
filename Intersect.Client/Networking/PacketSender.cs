@@ -662,5 +662,10 @@ namespace Intersect.Client.Networking
         {
             Network.SendPacket(new AddFuelPacket(invQuantities));
         }
+
+        public static void SendDeconstructItems(int[] slots)
+        {
+            Network.SendPacket(new DeconstructItemsPacket(slots));
+        }
     }
 }

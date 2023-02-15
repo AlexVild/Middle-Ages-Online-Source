@@ -4591,5 +4591,10 @@ namespace Intersect.Server.Networking
         {
             client?.Entity?.Deconstructor?.CreateFuel(packet.SlotsAndQuantities);
         }
+
+        public void HandlePacket(Client client, DeconstructItemsPacket packet)
+        {
+            client?.Entity?.Deconstructor?.DeconstructItemsInSlots(packet.Slots);
+        }
     }
 }

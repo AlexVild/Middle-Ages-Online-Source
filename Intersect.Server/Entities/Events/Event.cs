@@ -178,7 +178,8 @@ namespace Intersect.Server.Entities.Events
                             Player.ClientAwaitingFadeCompletion = false;
                         }
 
-                        if (curStack.WaitingForResponse == CommandInstance.EventResponse.Deconstruction && Player.Deconstructor == null)
+                        // Deconstruct event is over when the deconstructor is closed _and_ the potential loot roll is finished
+                        if (curStack.WaitingForResponse == CommandInstance.EventResponse.Deconstruction && (Player.Deconstructor == null && (Player.CurrentLoot == null || Player.CurrentLoot?.Count <= 0)))
                         {
                             curStack.WaitingForResponse = CommandInstance.EventResponse.None;
                         }

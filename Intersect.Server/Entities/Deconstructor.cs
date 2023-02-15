@@ -1,5 +1,7 @@
 ﻿using Intersect.GameObjects;
+using Intersect.Network.Packets.Server;
 using Intersect.Server.Database;
+using Intersect.Server.Database.PlayerData.Players;
 using Intersect.Server.Networking;
 using System;
 using System.Collections.Generic;
@@ -61,6 +63,61 @@ namespace Intersect.Server.Entities
             PacketSender.SendFuelPacket(Owner);
 
             return fuelCreated;
+        }
+
+        public void DeconstructItemsInSlots(int[] slots)
+        {
+            int fuelRequired = 0;
+            List<InventorySlot> slotsToRemoveFrom = new List<InventorySlot>();
+
+            if (slots?.Length <= 0)
+            {
+                return;
+            }
+
+            // First, calculate fuel cost and assemble the list of InventorySlots
+            foreach (var slot in slots)
+            {   
+                var invSlot = Owner.Items.ElementAtOrDefault(slot);
+                if (invSlot == default || invSlot.ItemId == Guid.Empty)
+                {
+                    continue;
+                }
+
+                var item = ItemBase.Get(invSlot.ItemId);
+                if (item.FuelRequired <= 0)
+                {
+                    continue;
+                }
+
+                fuelRequired += item.FuelRequired;
+                slotsToRemoveFrom.Add(invSlot);
+            }
+
+            if (fuelRequired > Owner.Fuel)
+            {
+                PacketSender.SendChatMsg(Owner, "You don't have enough fuel to deconstruct these items!", Enums.ChatMessageType.Notice, CustomColors.General.GeneralDisabled);
+            }
+
+            Owner.Fuel -= fuelRequired;
+            // Now, for each item we successfully deconstruct (remove), add to our loot table/weapon progress
+            List<LootRoll> deconstructedLoot = new List<LootRoll>();
+            foreach (var slot in slotsToRemoveFrom)
+            {
+                var item = ItemBase.Get(slot.ItemId);
+                if (!Owner.TryTakeItem(slot, 1, Enums.ItemHandling.Normal, sendUpdate: false))
+                {
+                    continue;
+                }
+                deconstructedLoot.AddRange(item.DeconstructRolls);
+            }
+
+            // We are now waiting on the loot roll instead of the deconstructor being closed
+            PacketSender.SendInventory(Owner);
+            Owner.SendPacket(new CloseDeconstructorPacket());
+            Owner.OpenLootRoll(Owner.DeconstructorEventId, deconstructedLoot);
+            Owner.CloseDeconstructor();
+            PacketSender.SendOpenLootPacketTo(Owner, "Deconstruction");
         }
     }
 }

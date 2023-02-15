@@ -88,6 +88,7 @@ namespace Intersect.Client.Interface.Game.DeconstructorUi
             {
                 Text = "DECONSTRUCT"
             };
+            DeconstructButton.Clicked += DeconstructButton_Clicked;
 
             AddFuelButton = new Button(FuelBg, "AddFuelButton")
             {
@@ -114,6 +115,18 @@ namespace Intersect.Client.Interface.Game.DeconstructorUi
             SubmitFuelButton.Clicked += SubmitFuelButton_Clicked;
 
             AddFuelBg.IsHidden = true;
+        }
+
+        private void DeconstructButton_Clicked(Base sender, Framework.Gwen.Control.EventArguments.ClickedEventArgs arguments)
+        {
+            if (Deconstructor.Items.Count <= 0)
+            {
+                Close();
+                return;
+            }
+
+            PacketSender.SendDeconstructItems(Deconstructor.Items.ToArray());
+            Deconstructor.WaitingOnServer = true;
         }
 
         private void SubmitFuelButton_Clicked(Base sender, Framework.Gwen.Control.EventArguments.ClickedEventArgs arguments)
@@ -321,6 +334,13 @@ namespace Intersect.Client.Interface.Game.DeconstructorUi
             base.Close();
             RequiredFuel = 0;
             Deconstructor.Close();
+        }
+
+        public void ForceClose()
+        {
+            base.Close();
+            RequiredFuel = 0;
+            Deconstructor.Close(false);
         }
     }
 }

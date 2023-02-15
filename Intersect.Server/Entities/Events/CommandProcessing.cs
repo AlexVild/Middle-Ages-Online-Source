@@ -3411,7 +3411,17 @@ namespace Intersect.Server.Entities.Events
                 return;
             }
 
-            player.OpenDeconstructor(command.FuelCostMultiplier);
+            var existingDeconRoll = player.LootRolls.Find(roll => roll.EventId == instance.BaseEvent.Id);
+            if (existingDeconRoll != default && existingDeconRoll.Loot.Count > 0)
+            {
+                player.OpenLootRoll(instance.BaseEvent.Id, new List<LootRoll>());
+                PacketSender.SendOpenLootPacketTo(player, "Deconstruction");
+
+                callStack.Peek().WaitingForResponse = CommandInstance.EventResponse.LootRoll;
+                return;
+            }
+
+            player.OpenDeconstructor(command.FuelCostMultiplier, instance.BaseEvent.Id);
             callStack.Peek().WaitingForResponse = CommandInstance.EventResponse.Deconstruction;
         }
     }

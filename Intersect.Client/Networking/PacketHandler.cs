@@ -2884,8 +2884,24 @@ namespace Intersect.Client.Networking
         public void HandlePacket(IPacketSender packetSender, PlayerFuelPacket packet)
         {
             Globals.Me.Fuel = packet.Fuel;
+            if (Globals.Me.Deconstructor == default)
+            {
+                return;
+            }
+
             Globals.Me.Deconstructor?.CloseFuelAddition();
             Globals.Me.Deconstructor?.PlayFuelAddEffect();
+            Globals.Me.Deconstructor.WaitingOnServer = false;
+        }
+
+        public void HandlePacket(IPacketSender packetSender, CloseDeconstructorPacket packet)
+        {
+            Interface.Interface.GameUi?.DeconstructorWindow?.ForceClose();
+
+            if (Globals.Me.Deconstructor == default)
+            {
+                return;
+            }
             Globals.Me.Deconstructor.WaitingOnServer = false;
         }
     }

@@ -144,13 +144,16 @@ namespace Intersect.Client.General.Deconstructor
             Interface.Interface.GameUi?.GameMenu.OpenInventory();
         }
 
-        public void Close()
+        public void Close(bool sendPacket = true)
         {
             AddingFuel = false;
             IsOpen = false;
             Items.Clear();
             FuelItems.Clear();
-            PacketSender.SendCloseDeconstructorPacket();
+            if (sendPacket)
+            {
+                PacketSender.SendCloseDeconstructorPacket();
+            }
         }
 
         public void OpenFuelAddition()

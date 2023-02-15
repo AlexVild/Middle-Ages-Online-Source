@@ -408,6 +408,7 @@
     <Compile Include="Network\Packets\Client\CloseShopPacket.cs" />
     <Compile Include="Network\Packets\Client\CosmeticChangePacket.cs" />
     <Compile Include="Network\Packets\Client\CraftItemPacket.cs" />
+    <Compile Include="Network\Packets\Client\DeconstructItemsPacket.cs" />
     <Compile Include="Network\Packets\Client\FinishedFadePacket.cs" />
     <Compile Include="Network\Packets\Client\PartyInviteNamePacket.cs" />
     <Compile Include="Network\Packets\Client\RequestChallengeProgressPacket.cs" />
@@ -428,6 +429,7 @@
     <Compile Include="Network\Packets\Client\SkillPreparationPacket.cs" />
     <Compile Include="Network\Packets\Client\TrackWeaponTypePacket.cs" />
     <Compile Include="Network\Packets\Server\ChallengeProgressPacket.cs" />
+    <Compile Include="Network\Packets\Server\CloseDeconstructorPacket.cs" />
     <Compile Include="Network\Packets\Server\CombatNumberPacket.cs" />
     <Compile Include="Network\Packets\Server\CombatNumberPackets.cs" />
     <Compile Include="Network\Packets\Server\CosmeticUnlocksPacket.cs" />
