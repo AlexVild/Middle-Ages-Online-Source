@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 using Intersect.Enums;
 using Intersect.GameObjects;
+using Intersect.Network.Packets.Server;
 using Intersect.Server.Database.PlayerData.Players;
 using Intersect.Utilities;
 
@@ -18,52 +19,63 @@ namespace Intersect.Server.Database
 
         public Item()
         {
+            Properties = new ItemProperties();
         }
 
-        public Item(Guid itemId, int quantity, bool incStatBuffs = true) : this(
-            itemId, quantity, null, null, incStatBuffs
+        public Item(Guid itemId, int quantity, ItemProperties properties = null) : this(
+            itemId, quantity, null, null, properties
         )
         {
         }
 
-        public Item(Guid itemId, int quantity, Guid? bagId, Bag bag, bool includeStatBuffs = true)
+        public Item(Guid itemId, int quantity, Guid? bagId, Bag bag, ItemProperties properties = null)
         {
             ItemId = itemId;
             Quantity = quantity;
             BagId = bagId;
             Bag = bag;
+            Properties = properties ?? new ItemProperties();
 
             var descriptor = ItemBase.Get(ItemId);
-            if (descriptor == null || !includeStatBuffs)
+            if (descriptor == null)
             {
                 return;
             }
 
-            if (descriptor.ItemType != ItemTypes.Equipment)
+            if (descriptor.ItemType == ItemTypes.Equipment)
             {
-                return;
+                GenerateStatMods(descriptor);
             }
+        }
 
-            for (var i = 0; i < (int) Stats.StatCount; i++)
+        void GenerateStatMods(ItemBase descriptor)
+        {
+            for (var i = 0; i < (int)Stats.StatCount; i++)
             {
-                // TODO: What the fuck?
-                if (!descriptor.StatLocks.ContainsKey((Stats) i) || !descriptor.StatLocks[(Stats) i])
+                if (!descriptor.StatLocks[(Stats)i])
                 {
-                    StatBuffs[i] = Randomization.Next(-descriptor.StatGrowth, descriptor.StatGrowth + 1);
-                } 
+                    Properties.StatModifiers[i] = Randomization.Next(-descriptor.StatGrowth, descriptor.StatGrowth + 1);
+                }
             }
         }
 
         public Item(Item item) : this(item.ItemId, item.Quantity, item.BagId, item.Bag)
         {
-            for (var i = 0; i < (int) Stats.StatCount; i++)
-            {
-                StatBuffs[i] = item.StatBuffs[i];
-            }
-
+            Properties = new ItemProperties(item.Properties);
             DropChance = item.DropChance;
         }
-        
+
+        [NotMapped]
+        public ItemProperties Properties { get; set; }
+
+        [Column("ItemProperties")]
+        [JsonIgnore]
+        public string ItemPropertiesJson
+        {
+            get => JsonConvert.SerializeObject(Properties);
+            set => Properties = JsonConvert.DeserializeObject<ItemProperties>(value ?? string.Empty) ?? new ItemProperties();
+        }
+
         // TODO: THIS SHOULD NOT BE A NULLABLE. This needs to be fixed.
         public Guid? BagId { get; set; }
 
@@ -100,10 +112,7 @@ namespace Intersect.Server.Database
             Quantity = item.Quantity;
             BagId = item.BagId;
             Bag = item.Bag;
-            for (var i = 0; i < (int) Stats.StatCount; i++)
-            {
-                StatBuffs[i] = item.StatBuffs[i];
-            }
+            Properties = new ItemProperties(item.Properties);
         }
 
         public string Data()
@@ -154,5 +163,4 @@ namespace Intersect.Server.Database
         }
 
     }
-
 }

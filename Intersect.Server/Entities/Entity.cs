@@ -2075,7 +2075,7 @@ namespace Intersect.Server.Entities
                 }
 
                 // Set the attributes for this item.
-                item.Set(new Item(item.ItemId, item.Quantity, true));
+                item.Set(new Item(item.ItemId, item.Quantity, item.Properties));
 
                 // Spawn the actual item!
                 if (MapController.TryGetInstanceFromMap(MapId, MapInstanceId, out var instance))
