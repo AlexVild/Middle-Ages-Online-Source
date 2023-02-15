@@ -3,6 +3,7 @@ using Intersect.Client.Interface.Game.Chat;
 using Intersect.Client.Networking;
 using Intersect.Enums;
 using Intersect.GameObjects;
+using Intersect.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -21,6 +22,8 @@ namespace Intersect.Client.General.Deconstructor
         
         public Dictionary<int, int> FuelItems { get; set; }
 
+        public bool WaitingOnServer { get; set; }
+
         public bool AddFuel { get; set; }
 
         public bool IsOpen { get; set; } = false;
@@ -30,6 +33,12 @@ namespace Intersect.Client.General.Deconstructor
         public bool AddingFuel { get; set; } = false;
 
         public float FuelCostMod { get; set; } = 1.0f;
+
+        public long FuelAddedFlashStamp { get; set; } = 0L;
+        readonly long FuelAddFlashTime = 2000;
+        long FuelAddLastFlash { get; set; } = 0L;
+        public bool FuelFlashing { get; set; } = false;
+        readonly long FuelFlashRate = 200;
 
         public int RequiredFuel => (int)Math.Floor(FuelCostMod * Items.Aggregate(0, (reqFuel, invSlot) => reqFuel + ItemBase.Get((Globals.Me?.Inventory[invSlot]?.ItemId) ?? Guid.Empty)?.FuelRequired ?? 0));
 
@@ -148,6 +157,32 @@ namespace Intersect.Client.General.Deconstructor
         {
             AddingFuel = true;
             Refresh = true;
+        }
+
+        public void PlayFuelAddEffect()
+        {
+            Flash.FlashScreen(1000, new Color(200, 145, 62), 180);
+            Audio.AddGameSound(Options.Instance.DeconstructionOpts.AddFuelSound, false);
+
+            FuelFlashing = true;
+            FuelAddedFlashStamp = Timing.Global.Milliseconds + FuelAddFlashTime;
+            FuelAddLastFlash = Timing.Global.Milliseconds;
+        }
+
+        public void HandleFuelFlash()
+        {
+            var now = Timing.Global.Milliseconds;
+            if (FuelAddedFlashStamp < now)
+            {
+                FuelFlashing = false;
+                return;
+            }
+
+            if (now - FuelAddLastFlash > FuelFlashRate)
+            {
+                FuelAddLastFlash = now;
+                FuelFlashing = !FuelFlashing;
+            }
         }
 
         public void CloseFuelAddition()

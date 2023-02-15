@@ -2885,6 +2885,8 @@ namespace Intersect.Client.Networking
         {
             Globals.Me.Fuel = packet.Fuel;
             Globals.Me.Deconstructor?.CloseFuelAddition();
+            Globals.Me.Deconstructor?.PlayFuelAddEffect();
+            Globals.Me.Deconstructor.WaitingOnServer = false;
         }
     }
 }

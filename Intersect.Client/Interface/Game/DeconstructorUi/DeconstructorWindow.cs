@@ -1,4 +1,5 @@
-﻿using Intersect.Client.Framework.Gwen.Control;
+﻿using Intersect.Client.Framework.Graphics;
+using Intersect.Client.Framework.Gwen.Control;
 using Intersect.Client.General;
 using Intersect.Client.General.Deconstructor;
 using Intersect.Client.Networking;
@@ -31,6 +32,9 @@ namespace Intersect.Client.Interface.Game.DeconstructorUi
         readonly Color FuelColorBad = new Color(255, 222, 124, 112);
         readonly Color FuelColorBadHl = new Color(255, 130, 46, 36);
 
+        GameTexture FuelBgTexture { get; set; }
+        GameTexture FuelBgFlashTexture { get; set; }
+
         Color FuelColor => RequiredFuel > Globals.Me.Fuel ? FuelColorBad : FuelColorGood;
         Color FuelColorHl => RequiredFuel > Globals.Me.Fuel ? FuelColorBadHl : FuelColorGoodHl;
 
@@ -59,6 +63,9 @@ namespace Intersect.Client.Interface.Game.DeconstructorUi
 
         protected override void PreInitialization()
         {
+            FuelBgTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "deconstructor_fuel.png");
+            FuelBgFlashTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "deconstructor_fuel_flash.png");
+
             ItemsBg = new ImagePanel(Background, "ItemsBg");
             ItemsContainer = new ScrollControl(ItemsBg, "ItemsContainer");
 
@@ -116,6 +123,7 @@ namespace Intersect.Client.Interface.Game.DeconstructorUi
                 return;
             }
 
+            Deconstructor.WaitingOnServer = true;
             PacketSender.SendRequestCreateFuelPacket(Deconstructor.FuelItems);
         }
 
@@ -154,12 +162,14 @@ namespace Intersect.Client.Interface.Game.DeconstructorUi
 
         public override void UpdateShown()
         {
+            // Runs every frame to handle decon. effects
+            Deconstructor?.HandleFuelFlash();
+            FuelBg.Texture = (Deconstructor?.FuelFlashing ?? false) ? FuelBgFlashTexture : FuelBgTexture;
+
             if (Globals.Me == null || Deconstructor == default || !Deconstructor.Refresh)
             {
                 return;
             }
-
-            var itemIndices = Deconstructor.Items.ToArray();
 
             AddFuelBg.IsHidden = !Deconstructor?.AddingFuel ?? true;
             
@@ -175,53 +185,57 @@ namespace Intersect.Client.Interface.Game.DeconstructorUi
             FuelLabel.SetText($"Fuel: {Globals.Me.Fuel}");
             FuelCostLabel.SetText($"(Fuel cost multiplier: {Deconstructor.FuelCostMod.ToString("N2")}x)");
 
+            DeconstructButton.IsDisabled = Deconstructor.WaitingOnServer || !AddFuelBg.IsHidden;
+            CancelButton.IsDisabled = Deconstructor.WaitingOnServer || !AddFuelBg.IsHidden;
+            AddFuelButton.IsDisabled = Deconstructor.WaitingOnServer || !AddFuelBg.IsHidden;
+            SubmitFuelButton.IsDisabled = Deconstructor.WaitingOnServer;
+            CancelFuelButton.IsDisabled = Deconstructor.WaitingOnServer;
+
+            UpdateItemsDisplay();
+            UpdateAddFuelDisplay();
+
+            Deconstructor.Refresh = false;
+        }
+
+        private void UpdateItemsDisplay()
+        {
             ClearItems();
-            ClearFuel();
 
-            if (AddFuelBg.IsHidden)
+            var itemIndices = Deconstructor.Items.ToArray();
+            if (itemIndices.Length <= 0)
             {
-                DeconstructButton.Enable();
-                CancelButton.Enable();
-                AddFuelButton.Enable();
-
-                if (itemIndices.Length <= 0)
-                {
-                    NoItemsLabel.Show();
-                    return;
-                }
-                else
-                {
-                    NoItemsLabel.Hide();
-                }
-
-                UpdateItemsToDeconstruct();
+                NoItemsLabel.Show();
+                return;
             }
             else
             {
-                DeconstructButton.Disable();
-                CancelButton.Disable();
-                AddFuelButton.Disable();
-
-                var potentialFuel = Deconstructor.FuelItems
-                    .Aggregate(0, (int fuel, KeyValuePair<int, int> kv) => fuel + ItemBase.Get(Globals.Me.Inventory[kv.Key].ItemId).Fuel * kv.Value);
-                PotentialFuel.SetText($"Potential Fuel: {potentialFuel}");
-                PotentialFuel.IsHidden = potentialFuel <= 0;
-                CurrentFuel.SetText($"Current Fuel: {Globals.Me.Fuel}");
-
-                if (Deconstructor.FuelItems.Count <= 0)
-                {
-                    AddFuelExplanation.Show();
-                    return;
-                }
-                else
-                {
-                    AddFuelExplanation.Hide();
-                }
-
-                UpdateFuelItems();
+                NoItemsLabel.Hide();
             }
 
-            Deconstructor.Refresh = false;
+            UpdateItemsToDeconstruct();
+        }
+
+        private void UpdateAddFuelDisplay()
+        {
+            ClearFuel();
+
+            var potentialFuel = Deconstructor.FuelItems
+                   .Aggregate(0, (int fuel, KeyValuePair<int, int> kv) => fuel + ItemBase.Get(Globals.Me.Inventory[kv.Key].ItemId).Fuel * kv.Value);
+            PotentialFuel.SetText($"Potential Fuel: {potentialFuel}");
+            PotentialFuel.IsHidden = potentialFuel <= 0;
+            CurrentFuel.SetText($"Current Fuel: {Globals.Me.Fuel}");
+
+            if (Deconstructor.FuelItems.Count <= 0)
+            {
+                AddFuelExplanation.Show();
+                return;
+            }
+            else
+            {
+                AddFuelExplanation.Hide();
+            }
+
+            UpdateFuelItems();
         }
 
         private void UpdateItemsToDeconstruct()

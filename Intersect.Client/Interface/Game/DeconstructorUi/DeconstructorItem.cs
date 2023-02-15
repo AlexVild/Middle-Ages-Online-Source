@@ -22,6 +22,10 @@ namespace Intersect.Client.Interface.Game.DeconstructorUi
 
         protected override void pnl_RightClicked(Base sender, ClickedEventArgs arguments)
         {
+            if (Deconstructor.AddingFuel)
+            {
+                return;
+            }
             Deconstructor.TryRemoveItem(InventoryIdx);
         }
     }
