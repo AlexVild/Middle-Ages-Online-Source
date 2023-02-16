@@ -28,6 +28,19 @@ namespace Intersect.GameObjects
 
         public int RequiredEnhancementPoints { get; set; }
 
+        public int MinimumWeaponLevel { get; set; }
+
+        [NotMapped]
+        public List<Guid> ValidWeaponTypes { get; set; }
+        
+        [Column("ValidWeaponTypes")]
+        [JsonIgnore]
+        public string ValidWeaponTypesJson
+        {
+            get => JsonConvert.SerializeObject(ValidWeaponTypes);
+            set => ValidWeaponTypes = JsonConvert.DeserializeObject<List<Guid>>(value ?? string.Empty) ?? new List<Guid>();
+        }
+
         [NotMapped]
         public List<Enhancement<Stats>> StatMods { get; set; } = new List<Enhancement<Stats>>();
         

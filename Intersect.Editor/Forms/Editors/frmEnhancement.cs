@@ -82,6 +82,9 @@ namespace Intersect.Editor.Forms.Editors
                 pnlContainer.Hide();
             }
 
+            cmbWeaponTypes.Items.Clear();
+            cmbWeaponTypes.Items.AddRange(WeaponTypeDescriptor.Names);
+
             cmbStats.Items.Clear();
             cmbStats.Items.AddRange(EnumExtensions.GetDescriptions(typeof(Stats), Stats.StatCount.GetDescription()));
 
@@ -98,14 +101,19 @@ namespace Intersect.Editor.Forms.Editors
         {
             mPopulating = true;
 
+            txtName.Text = mEditorItem.Name;
+            cmbFolder.Text = mEditorItem.Folder;
+
             nudReqEp.Value = mEditorItem.RequiredEnhancementPoints;
             cmbEffect.SelectedIndex = 0;
             cmbStats.SelectedIndex = 0;
             cmbVitals.SelectedIndex = 0;
+            nudMinWeaponLevel.Value = mEditorItem.MinimumWeaponLevel;
 
             RefreshList(ref lstStatBuffs, mEditorItem.StatMods, false, false);
             RefreshList(ref lstVitalMods, mEditorItem.VitalMods, false, false);
-            RefreshList(ref lstBonuses, mEditorItem.EffectMods, false, false);
+            RefreshList(ref lstBonuses, mEditorItem.EffectMods, true, false);
+            RefreshWeaponTypes(false);
 
             mPopulating = false;
         }
@@ -127,6 +135,26 @@ namespace Intersect.Editor.Forms.Editors
             if (savePos && list.Items.Count > 0 && list.Items.Count > prevPos)
             {
                 list.SelectedIndex = prevPos;
+            }
+        }
+
+        private void RefreshWeaponTypes(bool savePos)
+        {
+            var prevPos = -1;
+            if (savePos)
+            {
+                prevPos = lstWeaponTypes.SelectedIndex;
+            }
+
+            lstWeaponTypes.Items.Clear();
+            foreach (var weaponTypeId in mEditorItem.ValidWeaponTypes)
+            {
+                lstWeaponTypes.Items.Add(WeaponTypeDescriptor.GetName(weaponTypeId));
+            }
+
+            if (savePos && lstWeaponTypes.Items.Count > 0 && lstWeaponTypes.Items.Count > prevPos)
+            {
+                lstWeaponTypes.SelectedIndex = prevPos;
             }
         }
 
@@ -304,7 +332,36 @@ namespace Intersect.Editor.Forms.Editors
         private void btnAddBonus_Click(object sender, EventArgs e)
         {
             AddOrReplaceEnhancement(cmbEffect, mEditorItem.EffectMods, SelectedEffect, (int)nudBonusMin.Value, (int)nudBonusMax.Value);
-            RefreshList(ref lstBonuses, mEditorItem.EffectMods, false, false);
+            RefreshList(ref lstBonuses, mEditorItem.EffectMods, true, false);
+        }
+
+        private void btnAddWeaponType_Click(object sender, EventArgs e)
+        {
+            var selectedType = WeaponTypeDescriptor.IdFromList(cmbWeaponTypes.SelectedIndex);
+            if (mEditorItem.ValidWeaponTypes.Contains(selectedType))
+            {
+                return;
+            }
+
+            mEditorItem.ValidWeaponTypes.Add(selectedType);
+            RefreshWeaponTypes(false);
+        }
+
+        private void btnRemoveWeaponType_Click(object sender, EventArgs e)
+        {
+            var selectedIdx = lstWeaponTypes.SelectedIndex;
+            if (selectedIdx < 0 || selectedIdx >= lstWeaponTypes.Items.Count)
+            {
+                return;
+            }
+
+            mEditorItem.ValidWeaponTypes.RemoveAt(selectedIdx);
+            RefreshWeaponTypes(true);
+        }
+
+        private void nudMinWeaponLevel_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.MinimumWeaponLevel = (int)nudMinWeaponLevel.Value;
         }
     }
 }
