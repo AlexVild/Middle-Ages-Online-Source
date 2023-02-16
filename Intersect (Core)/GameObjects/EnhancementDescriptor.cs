@@ -31,7 +31,7 @@ namespace Intersect.GameObjects
         public int MinimumWeaponLevel { get; set; }
 
         [NotMapped]
-        public List<Guid> ValidWeaponTypes { get; set; }
+        public List<Guid> ValidWeaponTypes { get; set; } = new List<Guid>();
         
         [Column("ValidWeaponTypes")]
         [JsonIgnore]
@@ -105,7 +105,7 @@ namespace Intersect.GameObjects
                 }
                 else
                 {
-                    range = $"{MinValue}% - {MaxValue}%";
+                    range = $"{MinValue}% to {MaxValue}%";
                 }
             }
             else
@@ -116,7 +116,7 @@ namespace Intersect.GameObjects
                 }
                 else
                 {
-                    range = $"{MinValue} - {MaxValue}";
+                    range = $"{MinValue} to {MaxValue}";
                 }
             }
 

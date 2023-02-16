@@ -549,6 +549,7 @@ namespace Intersect.Editor.Forms.Editors
             this.lstBonuses.Name = "lstBonuses";
             this.lstBonuses.Size = new System.Drawing.Size(255, 54);
             this.lstBonuses.TabIndex = 56;
+            this.lstBonuses.SelectedIndexChanged += new System.EventHandler(this.lstBonuses_SelectedIndexChanged);
             // 
             // cmbEffect
             // 
@@ -687,6 +688,7 @@ namespace Intersect.Editor.Forms.Editors
             this.lstVitalMods.Name = "lstVitalMods";
             this.lstVitalMods.Size = new System.Drawing.Size(255, 54);
             this.lstVitalMods.TabIndex = 56;
+            this.lstVitalMods.SelectedIndexChanged += new System.EventHandler(this.lstVitalMods_SelectedIndexChanged);
             // 
             // cmbVitals
             // 
@@ -835,6 +837,7 @@ namespace Intersect.Editor.Forms.Editors
             this.lstStatBuffs.Name = "lstStatBuffs";
             this.lstStatBuffs.Size = new System.Drawing.Size(255, 54);
             this.lstStatBuffs.TabIndex = 56;
+            this.lstStatBuffs.SelectedIndexChanged += new System.EventHandler(this.lstStatBuffs_SelectedIndexChanged);
             // 
             // cmbStats
             // 

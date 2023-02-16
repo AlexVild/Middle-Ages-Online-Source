@@ -51,6 +51,8 @@ namespace Intersect.Editor.Forms.Editors
             this.grpEditor = new DarkUI.Controls.DarkGroupBox();
             this.lstChallenges = new System.Windows.Forms.ListBox();
             this.grpLevels = new DarkUI.Controls.DarkGroupBox();
+            this.lblEnhancementCost = new System.Windows.Forms.Label();
+            this.nudEpCost = new DarkUI.Controls.DarkNumericUpDown();
             this.btnRemove = new DarkUI.Controls.DarkButton();
             this.btnAdd = new DarkUI.Controls.DarkButton();
             this.nudReqExp = new DarkUI.Controls.DarkNumericUpDown();
@@ -69,6 +71,7 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStrip.SuspendLayout();
             this.grpEditor.SuspendLayout();
             this.grpLevels.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudEpCost)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudReqExp)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMaxLevel)).BeginInit();
             this.SuspendLayout();
@@ -302,6 +305,8 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpLevels.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpLevels.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpLevels.Controls.Add(this.lblEnhancementCost);
+            this.grpLevels.Controls.Add(this.nudEpCost);
             this.grpLevels.Controls.Add(this.btnRemove);
             this.grpLevels.Controls.Add(this.btnAdd);
             this.grpLevels.Controls.Add(this.nudReqExp);
@@ -318,6 +323,35 @@ namespace Intersect.Editor.Forms.Editors
             this.grpLevels.TabIndex = 113;
             this.grpLevels.TabStop = false;
             this.grpLevels.Text = "Weapon Levels";
+            // 
+            // lblEnhancementCost
+            // 
+            this.lblEnhancementCost.AutoSize = true;
+            this.lblEnhancementCost.Location = new System.Drawing.Point(237, 95);
+            this.lblEnhancementCost.Name = "lblEnhancementCost";
+            this.lblEnhancementCost.Size = new System.Drawing.Size(133, 13);
+            this.lblEnhancementCost.TabIndex = 122;
+            this.lblEnhancementCost.Text = "Enhancement Cost Per-EP";
+            // 
+            // nudEpCost
+            // 
+            this.nudEpCost.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudEpCost.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudEpCost.Location = new System.Drawing.Point(240, 111);
+            this.nudEpCost.Maximum = new decimal(new int[] {
+            1410065408,
+            2,
+            0,
+            0});
+            this.nudEpCost.Name = "nudEpCost";
+            this.nudEpCost.Size = new System.Drawing.Size(189, 20);
+            this.nudEpCost.TabIndex = 121;
+            this.nudEpCost.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudEpCost.ValueChanged += new System.EventHandler(this.nudEpCost_ValueChanged);
             // 
             // btnRemove
             // 
@@ -438,6 +472,7 @@ namespace Intersect.Editor.Forms.Editors
             this.lstLevels.Cursor = System.Windows.Forms.Cursors.Default;
             this.lstLevels.ForeColor = System.Drawing.Color.Gainsboro;
             this.lstLevels.FormattingEnabled = true;
+            this.lstLevels.HorizontalScrollbar = true;
             this.lstLevels.Location = new System.Drawing.Point(6, 45);
             this.lstLevels.Name = "lstLevels";
             this.lstLevels.Size = new System.Drawing.Size(225, 132);
@@ -527,6 +562,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpEditor.PerformLayout();
             this.grpLevels.ResumeLayout(false);
             this.grpLevels.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudEpCost)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudReqExp)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMaxLevel)).EndInit();
             this.ResumeLayout(false);
@@ -569,5 +605,7 @@ namespace Intersect.Editor.Forms.Editors
         private System.Windows.Forms.ListBox lstChallenges;
         private DarkUI.Controls.DarkButton btnRemove;
         private DarkUI.Controls.DarkButton btnAdd;
+        private System.Windows.Forms.Label lblEnhancementCost;
+        private DarkUI.Controls.DarkNumericUpDown nudEpCost;
     }
 }

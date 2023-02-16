@@ -54,7 +54,7 @@ namespace Intersect.Server.Database.PlayerData.Players
             ExpRemaining = 0;
         }
 
-        public bool TryGetCurrentUnlock(out WeaponTypeUnlock unlock)
+        public bool TryGetCurrentUnlock(out WeaponLevel unlock)
         {
             unlock = default;
             if (WeaponType == default)

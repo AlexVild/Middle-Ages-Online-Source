@@ -19,12 +19,12 @@ namespace Intersect.GameObjects
         public int MaxLevel { get; set; }
 
         [NotMapped]
-        public Dictionary<int, WeaponTypeUnlock> Unlocks { get; set; }
+        public Dictionary<int, WeaponLevel> Unlocks { get; set; }
 
         [Column("ExpRequirements")]
         public string ExpRequirementsJson {
             get => JsonConvert.SerializeObject(Unlocks);
-            set => Unlocks = JsonConvert.DeserializeObject<Dictionary<int, WeaponTypeUnlock>>(value ?? string.Empty) ?? new Dictionary<int, WeaponTypeUnlock>();
+            set => Unlocks = JsonConvert.DeserializeObject<Dictionary<int, WeaponLevel>>(value ?? string.Empty) ?? new Dictionary<int, WeaponLevel>();
         }
 
 
@@ -35,20 +35,23 @@ namespace Intersect.GameObjects
         public WeaponTypeDescriptor(Guid id) : base(id)
         {
             Name = "New Weapon Type";
-            Unlocks = new Dictionary<int, WeaponTypeUnlock>();
+            Unlocks = new Dictionary<int, WeaponLevel>();
         }
     }
 
-    public class WeaponTypeUnlock
+    public class WeaponLevel
     {
         public List<Guid> ChallengeIds { get; set; }
 
         public int RequiredExp { get; set; }
 
-        public WeaponTypeUnlock(int requiredExp)
+        public int EnhancementCostPerPoint { get; set; }
+
+        public WeaponLevel(int requiredExp, int enhancementCost)
         {
             RequiredExp = requiredExp;
             ChallengeIds = new List<Guid>();
+            EnhancementCostPerPoint = enhancementCost;
         }
 
         public override string ToString()
@@ -65,7 +68,7 @@ namespace Intersect.GameObjects
                 challenges.Add(challenge.Name);
             }
 
-            return $"EXP: {RequiredExp}, Challenges: [{string.Join(", ", challenges.ToArray())}]";
+            return $"EXP: {RequiredExp}, Challenges: [{string.Join(", ", challenges.ToArray())}], EP Cost: {EnhancementCostPerPoint}";
         }
     }
 }

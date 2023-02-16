@@ -534,6 +534,8 @@ namespace Intersect.Editor.Forms.Editors
 
                 txtCosmeticDisplayName.Text = mEditorItem.CosmeticDisplayName;
 
+                nudEnhanceThresh.Value = mEditorItem.EnhancementThreshold;
+
                 lstDrops.Items.Clear();
                 lstCrafts.Items.Clear();
                 lstShops.Items.Clear();

@@ -26,7 +26,7 @@ namespace Intersect.Editor.Forms.Editors
 
         private List<string> mKnownFolders = new List<string>();
 
-        private WeaponTypeUnlock SelectedLevel => mEditorItem?.Unlocks?.ContainsKey(lstLevels.SelectedIndex + 1) ?? false ? mEditorItem.Unlocks[lstLevels.SelectedIndex + 1] : default;
+        private WeaponLevel SelectedLevel => mEditorItem?.Unlocks?.ContainsKey(lstLevels.SelectedIndex + 1) ?? false ? mEditorItem.Unlocks[lstLevels.SelectedIndex + 1] : default;
 
         public frmWeaponType()
         {
@@ -73,6 +73,7 @@ namespace Intersect.Editor.Forms.Editors
 
             lstLevels.Items.Clear();
             nudReqExp.Value = 0;
+            nudEpCost.Value = 0;
             cmbChallenges.SelectedIndex = 0;
 
             UpdateLevelList();
@@ -216,9 +217,9 @@ namespace Intersect.Editor.Forms.Editors
             var newMaxLevel = (int)nudMaxLevel.Value;
 
             mEditorItem.MaxLevel = newMaxLevel;
-            if (currentMax < newMaxLevel && !mEditorItem.Unlocks.TryGetValue(newMaxLevel, out var unlock))
+            if (currentMax < newMaxLevel && !mEditorItem.Unlocks.TryGetValue(newMaxLevel, out _))
             {
-                mEditorItem.Unlocks[newMaxLevel] = new WeaponTypeUnlock((int)nudReqExp.Value);
+                mEditorItem.Unlocks[newMaxLevel] = new WeaponLevel((int)nudReqExp.Value, (int)nudEpCost.Value);
             }
             else if (currentMax > newMaxLevel)
             {
@@ -275,8 +276,20 @@ namespace Intersect.Editor.Forms.Editors
             }
             
             nudReqExp.Value = SelectedLevel.RequiredExp;
+            nudEpCost.Value = SelectedLevel.EnhancementCostPerPoint;
             UpdateChallengeList();
             lstChallenges.SelectedIndex = -1;
+        }
+
+        private void nudEpCost_ValueChanged(object sender, EventArgs e)
+        {
+            if (SelectedLevel == default)
+            {
+                return;
+            }
+
+            SelectedLevel.EnhancementCostPerPoint = (int)nudEpCost.Value;
+            UpdateLevelList(true);
         }
     }
 }

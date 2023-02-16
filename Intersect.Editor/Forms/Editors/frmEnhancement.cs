@@ -363,5 +363,47 @@ namespace Intersect.Editor.Forms.Editors
         {
             mEditorItem.MinimumWeaponLevel = (int)nudMinWeaponLevel.Value;
         }
+
+        private void lstStatBuffs_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var selectedIdx = lstStatBuffs.SelectedIndex;
+            if (selectedIdx < 0 || selectedIdx >= mEditorItem.StatMods.Count)
+            {
+                return;
+            }
+
+            var effect = mEditorItem.StatMods[selectedIdx];
+            cmbEffect.SelectedIndex = (int)effect.EnhancementType;
+            nudMinStat.Value = effect.MinValue;
+            nudMaxStat.Value = effect.MaxValue;
+        }
+
+        private void lstVitalMods_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var selectedIdx = lstVitalMods.SelectedIndex;
+            if (selectedIdx < 0 || selectedIdx >= mEditorItem.VitalMods.Count)
+            {
+                return;
+            }
+
+            var effect = mEditorItem.VitalMods[selectedIdx];
+            cmbVitals.SelectedIndex = (int)effect.EnhancementType;
+            nudMinVital.Value = effect.MinValue;
+            nudMaxStat.Value = effect.MaxValue;
+        }
+
+        private void lstBonuses_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var selectedIdx = lstBonuses.SelectedIndex;
+            if (selectedIdx < 0 || selectedIdx >= mEditorItem.EffectMods.Count)
+            {
+                return;
+            }
+
+            var effect = mEditorItem.EffectMods[selectedIdx];
+            cmbEffect.SelectedIndex = (int)effect.EnhancementType;
+            nudBonusMin.Value = effect.MinValue;
+            nudBonusMax.Value = effect.MaxValue;
+        }
     }
 }
