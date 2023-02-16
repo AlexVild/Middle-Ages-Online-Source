@@ -93,6 +93,9 @@ namespace Intersect.Enums
 
         [GameObjectInfo(typeof(DungeonDescriptor), "dungeon")]
         Dungeon,
+        
+        [GameObjectInfo(typeof(EnhancementDescriptor), "enhancement")]
+        Enhancement,
     }
 
 }

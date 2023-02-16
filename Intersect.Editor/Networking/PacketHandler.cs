@@ -776,6 +776,20 @@ namespace Intersect.Editor.Networking
                         DungeonDescriptor.Lookup.Set(id, dungeon);
                     }
                     break;
+
+                case GameObjectType.Enhancement:
+                    if (deleted)
+                    {
+                        var dungeon = EnhancementDescriptor.Get(id);
+                        dungeon.Delete();
+                    }
+                    else
+                    {
+                        var dungeon = new EnhancementDescriptor(id);
+                        dungeon.Load(json);
+                        EnhancementDescriptor.Lookup.Set(id, dungeon);
+                    }
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }

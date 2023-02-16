@@ -280,6 +280,12 @@
     <Compile Include="Forms\Editors\frmDungeon.Designer.cs">
       <DependentUpon>frmDungeon.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Editors\frmEnhancement.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\frmEnhancement.Designer.cs">
+      <DependentUpon>frmEnhancement.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Editors\frmLabel.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -971,6 +977,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\frmDungeon.resx">
       <DependentUpon>frmDungeon.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\frmEnhancement.resx">
+      <DependentUpon>frmEnhancement.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\frmLabel.resx">
       <DependentUpon>frmLabel.cs</DependentUpon>

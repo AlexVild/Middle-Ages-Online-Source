@@ -53,5 +53,7 @@ namespace Intersect.Server.Database.GameData
         DbSet<ChallengeDescriptor> Challenges { get; set; }
         
         DbSet<DungeonDescriptor> Dungeons { get; set; }
+        
+        DbSet<EnhancementDescriptor> Enhancements { get; set; }
     }
 }

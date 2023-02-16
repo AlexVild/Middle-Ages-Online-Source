@@ -96,6 +96,28 @@ namespace Intersect.Editor.Forms.Helpers
             updateToolStripItems();
         }
 
+        public static void UpdateEditor<T>(ref T editorItem, ref List<T> changedItems, ref Panel propertiesPanel, Action updateToolStripItems, Action populateFields) where T : DatabaseObject<T>
+        {
+            if (editorItem != null)
+            {
+                propertiesPanel.Show();
+
+                populateFields();
+
+                if (changedItems.IndexOf(editorItem) == -1)
+                {
+                    changedItems.Add(editorItem);
+                    editorItem.MakeBackup();
+                }
+            }
+            else
+            {
+                propertiesPanel.Hide();
+            }
+
+            updateToolStripItems();
+        }
+
         public static void ToolStripNewClicked(GameObjectType objType)
         {
             PacketSender.SendCreateObject(objType);

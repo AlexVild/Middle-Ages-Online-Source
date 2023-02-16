@@ -95,6 +95,8 @@ namespace Intersect.Editor.Forms
         private frmChallenge mChallengeEditor;
         
         private frmDungeon mDungeonEditor;
+        
+        private frmEnhancement mEnhancementEditor;
 
         //General Editting Variables
         bool mTMouseDown;
@@ -1737,6 +1739,16 @@ namespace Intersect.Editor.Forms
                         }
 
                         break;
+
+                    case GameObjectType.Enhancement:
+                        if (mEnhancementEditor == null || mEnhancementEditor.Visible == false)
+                        {
+                            mEnhancementEditor = new frmEnhancement();
+                            mEnhancementEditor.InitEditor();
+                            mEnhancementEditor.Show();
+                        }
+
+                        break;
                     default:
                         return;
                 }
@@ -2173,6 +2185,11 @@ namespace Intersect.Editor.Forms
         private void dungeonEditorToolStripMenuItem_Click(object sender, EventArgs e)
         {
             PacketSender.SendOpenEditor(GameObjectType.Dungeon);
+        }
+
+        private void enhancementEditorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PacketSender.SendOpenEditor(GameObjectType.Enhancement);
         }
     }
 

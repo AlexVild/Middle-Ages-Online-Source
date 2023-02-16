@@ -118,6 +118,8 @@ namespace Intersect.Server.Database.GameData
         public DbSet<ChallengeDescriptor> Challenges { get; set; }
         
         public DbSet<DungeonDescriptor> Dungeons { get; set; }
+        
+        public DbSet<EnhancementDescriptor> Enhancements { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

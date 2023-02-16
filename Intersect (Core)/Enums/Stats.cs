@@ -1,33 +1,45 @@
 using System;
+using System.ComponentModel;
 
 namespace Intersect.Enums
 {
 
     public enum Stats
     {
-
+        [Description("Blunt Attack")]
         Attack = 0, // Blunt Attack
 
+        [Description("Magic Attack")]
         AbilityPower, // Magic Attack
-        
+
+        [Description("Blunt Resistance")]
         Defense, // Blunt Resistance
 
+        [Description("Magic Resistance")]
         MagicResist,
 
+        [Description("Speed")]
         Speed,
 
+        [Description("Slash Attack")]
         SlashAttack,
 
+        [Description("Slash Resistance")]
         SlashResistance,
 
+        [Description("Pierce Attack")]
         PierceAttack,
 
+        [Description("Pierce Resistance")]
         PierceResistance,
 
+        [Description("Evasion")]
         Evasion,
 
+        [Description("Accuracy")]
         Accuracy,
 
+        [Description("Stat Count")]
         StatCount
 
     }
