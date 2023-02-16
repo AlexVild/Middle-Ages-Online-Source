@@ -755,6 +755,8 @@ namespace Intersect.Server.Database.PlayerData
                     .ThenInclude(p => p.ItemsDiscovered)
                     .Include(p => p.Players)
                     .ThenInclude(p => p.DungeonsTracked)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.Enhancements)
                     .FirstOrDefault()
             ) ??
             throw new InvalidOperationException();
@@ -807,6 +809,8 @@ namespace Intersect.Server.Database.PlayerData
                     .ThenInclude(p => p.ItemsDiscovered)
                     .Include(p => p.Players)
                     .ThenInclude(p => p.DungeonsTracked)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.Enhancements)
                     .FirstOrDefault()
             ) ??
             throw new InvalidOperationException();
@@ -858,6 +862,8 @@ namespace Intersect.Server.Database.PlayerData
                     .ThenInclude(p => p.ItemsDiscovered)
                     .Include(p => p.Players)
                     .ThenInclude(p => p.DungeonsTracked)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.Enhancements)
                     .FirstOrDefault()
             ) ??
             throw new InvalidOperationException();
@@ -909,6 +915,8 @@ namespace Intersect.Server.Database.PlayerData
                     .ThenInclude(p => p.ItemsDiscovered)
                     .Include(p => p.Players)
                     .ThenInclude(p => p.DungeonsTracked)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.Enhancements)
                     .FirstOrDefault()
                 ) ?? throw new InvalidOperationException();
 
@@ -969,6 +977,8 @@ namespace Intersect.Server.Database.PlayerData
                     .ThenInclude(p => p.ItemsDiscovered)
                     .Include(p => p.Players)
                     .ThenInclude(p => p.DungeonsTracked)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.Enhancements)
                     .FirstOrDefault()
                 ) ?? throw new InvalidOperationException();
 

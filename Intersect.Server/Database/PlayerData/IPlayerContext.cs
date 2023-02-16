@@ -69,5 +69,7 @@ namespace Intersect.Server.Database.PlayerData
         DbSet<ItemDiscoveryInstance> Player_Items_Discovered { get; set; }
         
         DbSet<DungeonTrackerInstance> Player_Dungeons_Tracked { get; set; }
+        
+        DbSet<PlayerEnhancementInstance> Player_Enhancements { get; set; }
     }
 }

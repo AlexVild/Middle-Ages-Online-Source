@@ -503,6 +503,7 @@
     <Compile Include="Database\PlayerData\Players\LootRollInstance.cs" />
     <Compile Include="Database\PlayerData\Players\MapExploredInstance.cs" />
     <Compile Include="Database\PlayerData\Players\PassiveSpell.cs" />
+    <Compile Include="Database\PlayerData\Players\PlayerEnhancementInstance.cs" />
     <Compile Include="Database\PlayerData\Players\Quest.cs" />
     <Compile Include="Database\PlayerData\Players\PlayerRecord.cs" />
     <Compile Include="Database\PlayerData\Players\RecipeInstance.cs" />
@@ -541,6 +542,7 @@
     <Compile Include="Entities\Events\Event.cs" />
     <Compile Include="Entities\Player.Deconstruction.cs" />
     <Compile Include="Entities\Player.DungeonTracking.cs" />
+    <Compile Include="Entities\Player.Enhancements.cs" />
     <Compile Include="Entities\Player.Harvesting.cs" />
     <Compile Include="Entities\Player.ItemDiscovery.cs" />
     <Compile Include="Entities\Player.Passives.cs" />
@@ -722,6 +724,10 @@
     <Compile Include="Migrations\20230215215510_ItemPropertiesMigration.cs" />
     <Compile Include="Migrations\20230215215510_ItemPropertiesMigration.designer.cs">
       <DependentUpon>20230215215510_ItemPropertiesMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20230216210832_AddPlayerEnhancementsMigration.cs" />
+    <Compile Include="Migrations\20230216210832_AddPlayerEnhancementsMigration.designer.cs">
+      <DependentUpon>20230216210832_AddPlayerEnhancementsMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.cs" />
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.Designer.cs">
