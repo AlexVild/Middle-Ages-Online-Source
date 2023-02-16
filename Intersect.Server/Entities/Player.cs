@@ -1398,7 +1398,7 @@ namespace Intersect.Server.Entities
             StartCommonEventsWithTrigger(CommonEventTrigger.LevelUp);
         }
 
-        public void GiveExperience(long amount, bool partyCombo = false, Entity opponent = null, bool fromComboEnd = false)
+        public void GiveExperience(long amount, bool partyCombo = false, Entity opponent = null, bool fromComboEnd = false, bool sendToast = true)
         {
             if (amount == 0)
             {
@@ -1457,7 +1457,7 @@ namespace Intersect.Server.Entities
                     }
                 }
             }
-            if (expToGive > 0)
+            if (expToGive > 0 && sendToast)
             {
                 if (!fromComboEnd)
                 {

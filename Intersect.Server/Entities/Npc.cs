@@ -203,9 +203,21 @@ namespace Intersect.Server.Entities
 
                     // If we've just unlocked some bestiary item, send a KC update, which will force a bestiary update on the client
                     var bestiaryThresholds = Base.BestiaryUnlocks.Values.Where(val => val > 0).ToList();
-                    if (bestiaryThresholds.Contains((int)recordKilled))
+                    if (!Base.NotInBestiary && bestiaryThresholds.Contains((int)recordKilled))
                     {
                         PacketSender.SendKillCount(playerKiller, Base.Id);
+                        var lastUnlock = bestiaryThresholds.LastOrDefault();
+                        
+                        // Did we just finish the bestiary entry for this mob?
+                        if (lastUnlock != default && lastUnlock == (int)recordKilled)
+                        {
+
+                            // Give experience based on completing a bestiary entry
+                            var bestiaryCompletionExp = Base.Experience * Options.Combat.BestiaryCompletionExpMultiplier;
+                            playerKiller.GiveExperience(bestiaryCompletionExp);
+                            PacketSender.SendExpToast(playerKiller, $"BESTIARY COMPLETE! {bestiaryCompletionExp} EXP", false, true, false);
+                        }
+
                     }
                     else if (Options.SendNpcRecordUpdates && recordKilled % Options.NpcRecordUpdateInterval == 0)
                     {

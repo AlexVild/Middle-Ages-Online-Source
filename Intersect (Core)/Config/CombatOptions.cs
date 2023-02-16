@@ -136,6 +136,8 @@ namespace Intersect.Config
 
         public long NpcDirChangeSpeedMult { get; set; } = 5;
 
+        public int BestiaryCompletionExpMultiplier { get; set; } = 10;
+
         public List<int> HarvestBonusIntervals = new List<int>()
         {
             30, 90, 250, 500, 1000
