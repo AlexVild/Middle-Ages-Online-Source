@@ -40,5 +40,16 @@ namespace Intersect.Server.Database.PlayerData.Players
             EnhancementId = enhancementId;
             Unlocked = true;
         }
+
+        public void RemoveFromDb()
+        {
+            using (var context = DbInterface.CreatePlayerContext(readOnly: false))
+            {
+                context.Player_Enhancements.Remove(this);
+
+                context.ChangeTracker.DetectChanges();
+                context.SaveChanges();
+            }
+        }
     }
 }

@@ -234,6 +234,18 @@ namespace Intersect.GameObjects
             set => EventId = value?.Id ?? Guid.Empty;
         }
 
+        [Column("Enhancement")]
+        [JsonProperty]
+        public Guid EnhancementId { get; set; }
+
+        [NotMapped]
+        [JsonIgnore]
+        public EnhancementDescriptor Enhancement
+        {
+            get => EnhancementDescriptor.Get(EnhancementId);
+            set => EnhancementId = value?.Id ?? Guid.Empty;
+        }
+
         public string Description { get; set; } = "";
 
         public string FemalePaperdoll { get; set; } = "";

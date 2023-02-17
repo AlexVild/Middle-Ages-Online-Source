@@ -1135,6 +1135,14 @@
     <Compile Include="Migrations\Game\20230216165536_EnhancementWeaponTypesMigration.designer.cs">
       <DependentUpon>20230216165536_EnhancementWeaponTypesMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20230217153441_AddEnhancementsToChallengesMigration.cs" />
+    <Compile Include="Migrations\Game\20230217153441_AddEnhancementsToChallengesMigration.designer.cs">
+      <DependentUpon>20230217153441_AddEnhancementsToChallengesMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20230217161232_AddEnhancementItemMigration.cs" />
+    <Compile Include="Migrations\Game\20230217161232_AddEnhancementItemMigration.designer.cs">
+      <DependentUpon>20230217161232_AddEnhancementItemMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

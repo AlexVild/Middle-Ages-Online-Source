@@ -343,6 +343,8 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
             this.vS2015DarkTheme1 = new WeifenLuo.WinFormsUI.Docking.VS2015DarkTheme();
+            this.grpEnhancement = new DarkUI.Controls.DarkGroupBox();
+            this.cmbEnhancement = new DarkUI.Controls.DarkComboBox();
             this.grpItems.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudFuel)).BeginInit();
@@ -433,6 +435,7 @@ namespace Intersect.Editor.Forms.Editors
             this.pnlContainer.SuspendLayout();
             this.grpAuxInfo.SuspendLayout();
             this.toolStrip.SuspendLayout();
+            this.grpEnhancement.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpItems
@@ -4565,11 +4568,12 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.pnlContainer.AutoScroll = true;
             this.pnlContainer.Controls.Add(this.grpAuxInfo);
+            this.pnlContainer.Controls.Add(this.grpEnhancement);
+            this.pnlContainer.Controls.Add(this.grpEvent);
             this.pnlContainer.Controls.Add(this.grpEquipment);
             this.pnlContainer.Controls.Add(this.grpGeneral);
             this.pnlContainer.Controls.Add(this.grpConsumable);
             this.pnlContainer.Controls.Add(this.grpBags);
-            this.pnlContainer.Controls.Add(this.grpEvent);
             this.pnlContainer.Controls.Add(this.grpSpell);
             this.pnlContainer.Location = new System.Drawing.Point(221, 34);
             this.pnlContainer.Name = "pnlContainer";
@@ -4783,6 +4787,41 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
             // 
+            // grpEnhancement
+            // 
+            this.grpEnhancement.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpEnhancement.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpEnhancement.Controls.Add(this.cmbEnhancement);
+            this.grpEnhancement.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpEnhancement.Location = new System.Drawing.Point(2, 698);
+            this.grpEnhancement.Name = "grpEnhancement";
+            this.grpEnhancement.Size = new System.Drawing.Size(200, 47);
+            this.grpEnhancement.TabIndex = 43;
+            this.grpEnhancement.TabStop = false;
+            this.grpEnhancement.Text = "Enhancement";
+            this.grpEnhancement.Visible = false;
+            // 
+            // cmbEnhancement
+            // 
+            this.cmbEnhancement.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbEnhancement.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbEnhancement.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbEnhancement.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbEnhancement.DrawDropdownHoverOutline = false;
+            this.cmbEnhancement.DrawFocusRectangle = false;
+            this.cmbEnhancement.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbEnhancement.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbEnhancement.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbEnhancement.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbEnhancement.FormattingEnabled = true;
+            this.cmbEnhancement.Location = new System.Drawing.Point(9, 15);
+            this.cmbEnhancement.Name = "cmbEnhancement";
+            this.cmbEnhancement.Size = new System.Drawing.Size(185, 21);
+            this.cmbEnhancement.TabIndex = 17;
+            this.cmbEnhancement.Text = null;
+            this.cmbEnhancement.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbEnhancement.SelectedIndexChanged += new System.EventHandler(this.cmbEnhancement_SelectedIndexChanged);
+            // 
             // FrmItem
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -4921,6 +4960,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpAuxInfo.PerformLayout();
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
+            this.grpEnhancement.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -5235,5 +5275,7 @@ namespace Intersect.Editor.Forms.Editors
         private DarkGroupBox grpWeaponEnhancement;
         private DarkNumericUpDown nudEnhanceThresh;
         private Label lblEnhancementThres;
+        private DarkGroupBox grpEnhancement;
+        private DarkComboBox cmbEnhancement;
     }
 }

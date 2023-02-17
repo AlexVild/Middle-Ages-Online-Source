@@ -74,6 +74,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             // Display only if this spell is bound.
             var evt = Challenge.CompletionEventId;
             var spell = Challenge.SpellUnlock;
+            var enhancement = Challenge.UnlockedEnhancement;
             
             // no unlocks
             if (spell == default && evt == Guid.Empty)
@@ -96,6 +97,15 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
 
                 // Display shop value.
                 rows.AddKeyValueRow("Skill:", spell.Name);
+            }
+
+            if (enhancement != default)
+            {
+                // Add a divider.
+                AddDivider();
+
+                // Display shop value.
+                rows.AddKeyValueRow("Wep. Enhancement:", enhancement.Name);
             }
 
             rows.SizeToChildren(true, true);

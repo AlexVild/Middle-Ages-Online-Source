@@ -58,6 +58,10 @@ namespace Intersect.Editor.Forms.Editors
             cmbSpell.Items.Add(Strings.General.none);
             cmbSpell.Items.AddRange(SpellBase.Names);
 
+            cmbEnhancement.Items.Clear();
+            cmbEnhancement.Items.Add(Strings.General.none);
+            cmbEnhancement.Items.Add(EnhancementDescriptor.Names);
+
             lstGameObjects.Init(UpdateToolStripItems, 
                 AssignEditorItem, 
                 toolStripItemNew_Click_1, 
@@ -91,6 +95,7 @@ namespace Intersect.Editor.Forms.Editors
 
             cmbChallengeType.SelectedIndex = (int)mEditorItem.Type;
             cmbSpell.SelectedIndex = SpellBase.ListIndex(mEditorItem.SpellUnlockId) + 1;
+            cmbEnhancement.SelectedIndex = EnhancementDescriptor.ListIndex(mEditorItem.EnhancementUnlockId) + 1;
             cmbEvent.SelectedIndex = EventBase.ListIndex(mEditorItem.CompletionEventId) + 1;
 
             txtStartDesc.Text = mEditorItem.EventDescription;
@@ -382,6 +387,11 @@ namespace Intersect.Editor.Forms.Editors
         private void txtDescription_TextChanged(object sender, EventArgs e)
         {
             mEditorItem.Description = txtDescription.Text;
+        }
+
+        private void cmbEnhancement_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mEditorItem.EnhancementUnlockId = EnhancementDescriptor.IdFromList(cmbEnhancement.SelectedIndex - 1);
         }
     }
 }

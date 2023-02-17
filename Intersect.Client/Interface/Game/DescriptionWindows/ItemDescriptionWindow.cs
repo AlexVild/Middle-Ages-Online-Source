@@ -135,6 +135,10 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 case ItemTypes.Cosmetic:
                     SetupCosmeticInfo();
                     break;
+
+                case ItemTypes.Enhancement:
+                    SetupEnhancementInfo();
+                    break;
             }
 
             // Set up additional information such as amounts and shop values.
@@ -1157,6 +1161,17 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             var rows = AddRowContainer();
 
             rows.AddKeyValueRow(Strings.ItemDescription.CosmeticDesc, string.Empty);
+
+            rows.SizeToChildren(true, true);
+        }
+
+        protected void SetupEnhancementInfo()
+        {
+            AddDivider();
+
+            var rows = AddRowContainer();
+
+            rows.AddKeyValueRow(Strings.ItemDescription.EnhancementDesc, string.Empty);
 
             rows.SizeToChildren(true, true);
         }

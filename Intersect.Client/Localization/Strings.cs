@@ -1096,6 +1096,9 @@ namespace Intersect.Client.Localization
             public static LocalizedString CosmeticDesc = @"Use to unlock a new cosmetic.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString EnhancementDesc = @"Use to unlock a new weapon enhancement.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString CritChance = @"Critical Chance:";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -1205,6 +1208,7 @@ namespace Intersect.Client.Localization
                 {5, @"Special"},
                 {6, @"Bag"},
                 {7, @"Cosmetic"},
+                {8, @"Weapon Enhancement"},
             };
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]

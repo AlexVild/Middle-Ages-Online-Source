@@ -28,17 +28,21 @@ namespace Intersect.GameObjects
 
         public int RequiredEnhancementPoints { get; set; }
 
+        [Obsolete("Tucked away in req. weapon types instead")]
         public int MinimumWeaponLevel { get; set; }
 
+        /// <summary>
+        /// A mapping of weapon type ID => minimum level for that type
+        /// </summary>
         [NotMapped]
-        public List<Guid> ValidWeaponTypes { get; set; } = new List<Guid>();
+        public Dictionary<Guid, int> ValidWeaponTypes { get; set; } = new Dictionary<Guid, int>();
         
         [Column("ValidWeaponTypes")]
         [JsonIgnore]
         public string ValidWeaponTypesJson
         {
             get => JsonConvert.SerializeObject(ValidWeaponTypes);
-            set => ValidWeaponTypes = JsonConvert.DeserializeObject<List<Guid>>(value ?? string.Empty) ?? new List<Guid>();
+            set => ValidWeaponTypes = JsonConvert.DeserializeObject<Dictionary<Guid, int>>(value ?? string.Empty) ?? new Dictionary<Guid, int>();
         }
 
         [NotMapped]

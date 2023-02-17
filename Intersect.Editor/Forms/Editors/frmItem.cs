@@ -188,6 +188,11 @@ namespace Intersect.Editor.Forms.Editors
             cmbEvent.Items.Clear();
             cmbEvent.Items.Add(Strings.General.none);
             cmbEvent.Items.AddRange(EventBase.Names);
+
+            cmbEnhancement.Items.Clear();
+            cmbEnhancement.Items.Add(Strings.General.none);
+            cmbEnhancement.Items.AddRange(EnhancementDescriptor.Names);
+
             cmbMalePaperdoll.Items.Clear();
             cmbMalePaperdoll.Items.Add(Strings.General.none);
             cmbFemalePaperdoll.Items.Clear();
@@ -648,6 +653,7 @@ namespace Intersect.Editor.Forms.Editors
             grpEvent.Visible = false;
             grpBags.Visible = false;
             chkStackable.Enabled = true;
+            grpEnhancement.Visible = false;
 
             if ((int) mEditorItem.ItemType != cmbType.SelectedIndex)
             {
@@ -685,6 +691,12 @@ namespace Intersect.Editor.Forms.Editors
                 cmbEvent.SelectedIndex = EventBase.ListIndex(mEditorItem.EventId) + 1;
                 chkSingleUseEvent.Checked = mEditorItem.SingleUse;
                 grpEvent.Visible = true;
+            }
+            else if (cmbType.SelectedIndex == (int)ItemTypes.Enhancement)
+            {
+                chkStackable.Enabled = false;
+                cmbEnhancement.SelectedIndex = EnhancementDescriptor.ListIndex(mEditorItem.EnhancementId) + 1;
+                grpEnhancement.Visible = true;
             }
             else if (cmbType.SelectedIndex == (int) ItemTypes.Equipment || cmbType.SelectedIndex == (int) ItemTypes.Cosmetic)
             {
@@ -2161,6 +2173,11 @@ namespace Intersect.Editor.Forms.Editors
         private void nudEnhanceThresh_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.EnhancementThreshold = (int)nudEnhanceThresh.Value;
+        }
+
+        private void cmbEnhancement_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mEditorItem.EnhancementId = EnhancementDescriptor.IdFromList(cmbEnhancement.SelectedIndex - 1);
         }
     }
 }

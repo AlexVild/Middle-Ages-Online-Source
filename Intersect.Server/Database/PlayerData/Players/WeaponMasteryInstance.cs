@@ -54,7 +54,7 @@ namespace Intersect.Server.Database.PlayerData.Players
             ExpRemaining = 0;
         }
 
-        public bool TryGetCurrentUnlock(out WeaponLevel unlock)
+        public bool TryGetCurrentWeaponLevelProperties(out WeaponLevel unlock)
         {
             unlock = default;
             if (WeaponType == default)
@@ -73,7 +73,7 @@ namespace Intersect.Server.Database.PlayerData.Players
         public bool TryGetCurrentChallenges(out List<Guid> challengeIds)
         {
             challengeIds = new List<Guid>();
-            if (!TryGetCurrentUnlock(out var unlock))
+            if (!TryGetCurrentWeaponLevelProperties(out var unlock))
             {
                 return false;
             }

@@ -28,6 +28,8 @@ namespace Intersect.Editor.Forms.Editors
 
         private List<string> mKnownFolders = new List<string>();
 
+        private List<Guid> WeaponTypes = new List<Guid>();
+
         private Stats SelectedStat 
         {
             get
@@ -140,6 +142,7 @@ namespace Intersect.Editor.Forms.Editors
 
         private void RefreshWeaponTypes(bool savePos)
         {
+            WeaponTypes.Clear();
             var prevPos = -1;
             if (savePos)
             {
@@ -147,9 +150,12 @@ namespace Intersect.Editor.Forms.Editors
             }
 
             lstWeaponTypes.Items.Clear();
-            foreach (var weaponTypeId in mEditorItem.ValidWeaponTypes)
+            foreach (var kv in mEditorItem.ValidWeaponTypes)
             {
-                lstWeaponTypes.Items.Add(WeaponTypeDescriptor.GetName(weaponTypeId));
+                WeaponTypes.Add(kv.Key);
+                var weaponTypeId = kv.Key;
+                var minLevel = kv.Value;
+                lstWeaponTypes.Items.Add($"{WeaponTypeDescriptor.GetName(weaponTypeId)} Lv. {minLevel}");
             }
 
             if (savePos && lstWeaponTypes.Items.Count > 0 && lstWeaponTypes.Items.Count > prevPos)
@@ -338,12 +344,12 @@ namespace Intersect.Editor.Forms.Editors
         private void btnAddWeaponType_Click(object sender, EventArgs e)
         {
             var selectedType = WeaponTypeDescriptor.IdFromList(cmbWeaponTypes.SelectedIndex);
-            if (mEditorItem.ValidWeaponTypes.Contains(selectedType))
+            if (mEditorItem.ValidWeaponTypes.ContainsKey(selectedType))
             {
                 return;
             }
 
-            mEditorItem.ValidWeaponTypes.Add(selectedType);
+            mEditorItem.ValidWeaponTypes[selectedType] = (int)nudMinWeaponLevel.Value;
             RefreshWeaponTypes(false);
         }
 
@@ -355,7 +361,7 @@ namespace Intersect.Editor.Forms.Editors
                 return;
             }
 
-            mEditorItem.ValidWeaponTypes.RemoveAt(selectedIdx);
+            mEditorItem.ValidWeaponTypes.Remove(WeaponTypes[selectedIdx]);
             RefreshWeaponTypes(true);
         }
 

@@ -47,9 +47,9 @@ namespace Intersect.Editor.Forms.Editors
             this.btnClearSearch = new DarkUI.Controls.DarkButton();
             this.grpEnhancements = new DarkUI.Controls.DarkGroupBox();
             this.grpProps = new DarkUI.Controls.DarkGroupBox();
-            this.nudMinWeaponLevel = new DarkUI.Controls.DarkNumericUpDown();
-            this.lblMinLvl = new System.Windows.Forms.Label();
             this.grpWeaponTypes = new DarkUI.Controls.DarkGroupBox();
+            this.lblMinLvl = new System.Windows.Forms.Label();
+            this.nudMinWeaponLevel = new DarkUI.Controls.DarkNumericUpDown();
             this.btnAddWeaponType = new DarkUI.Controls.DarkButton();
             this.btnRemoveWeaponType = new DarkUI.Controls.DarkButton();
             this.lstWeaponTypes = new System.Windows.Forms.ListBox();
@@ -98,8 +98,8 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStrip.SuspendLayout();
             this.grpEnhancements.SuspendLayout();
             this.grpProps.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudMinWeaponLevel)).BeginInit();
             this.grpWeaponTypes.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMinWeaponLevel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudReqEp)).BeginInit();
             this.pnlContainer.SuspendLayout();
             this.grpBonuses.SuspendLayout();
@@ -290,8 +290,6 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpProps.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpProps.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpProps.Controls.Add(this.nudMinWeaponLevel);
-            this.grpProps.Controls.Add(this.lblMinLvl);
             this.grpProps.Controls.Add(this.grpWeaponTypes);
             this.grpProps.Controls.Add(this.nudReqEp);
             this.grpProps.Controls.Add(this.lblCost);
@@ -308,18 +306,46 @@ namespace Intersect.Editor.Forms.Editors
             this.grpProps.TabStop = false;
             this.grpProps.Text = "Properties";
             // 
+            // grpWeaponTypes
+            // 
+            this.grpWeaponTypes.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpWeaponTypes.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpWeaponTypes.Controls.Add(this.lblMinLvl);
+            this.grpWeaponTypes.Controls.Add(this.nudMinWeaponLevel);
+            this.grpWeaponTypes.Controls.Add(this.btnAddWeaponType);
+            this.grpWeaponTypes.Controls.Add(this.btnRemoveWeaponType);
+            this.grpWeaponTypes.Controls.Add(this.lstWeaponTypes);
+            this.grpWeaponTypes.Controls.Add(this.cmbWeaponTypes);
+            this.grpWeaponTypes.Controls.Add(this.lblWeaponType);
+            this.grpWeaponTypes.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpWeaponTypes.Location = new System.Drawing.Point(11, 99);
+            this.grpWeaponTypes.Name = "grpWeaponTypes";
+            this.grpWeaponTypes.Size = new System.Drawing.Size(342, 128);
+            this.grpWeaponTypes.TabIndex = 51;
+            this.grpWeaponTypes.TabStop = false;
+            this.grpWeaponTypes.Text = "Applicable Weapon Types";
+            // 
+            // lblMinLvl
+            // 
+            this.lblMinLvl.AutoSize = true;
+            this.lblMinLvl.Location = new System.Drawing.Point(6, 102);
+            this.lblMinLvl.Name = "lblMinLvl";
+            this.lblMinLvl.Size = new System.Drawing.Size(73, 13);
+            this.lblMinLvl.TabIndex = 52;
+            this.lblMinLvl.Text = "Min. Wep. Lvl";
+            // 
             // nudMinWeaponLevel
             // 
             this.nudMinWeaponLevel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.nudMinWeaponLevel.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudMinWeaponLevel.Location = new System.Drawing.Point(87, 207);
+            this.nudMinWeaponLevel.Location = new System.Drawing.Point(85, 100);
             this.nudMinWeaponLevel.Maximum = new decimal(new int[] {
             2147483647,
             0,
             0,
             0});
             this.nudMinWeaponLevel.Name = "nudMinWeaponLevel";
-            this.nudMinWeaponLevel.Size = new System.Drawing.Size(80, 20);
+            this.nudMinWeaponLevel.Size = new System.Drawing.Size(72, 20);
             this.nudMinWeaponLevel.TabIndex = 53;
             this.nudMinWeaponLevel.Value = new decimal(new int[] {
             0,
@@ -328,35 +354,9 @@ namespace Intersect.Editor.Forms.Editors
             0});
             this.nudMinWeaponLevel.ValueChanged += new System.EventHandler(this.nudMinWeaponLevel_ValueChanged);
             // 
-            // lblMinLvl
-            // 
-            this.lblMinLvl.AutoSize = true;
-            this.lblMinLvl.Location = new System.Drawing.Point(8, 209);
-            this.lblMinLvl.Name = "lblMinLvl";
-            this.lblMinLvl.Size = new System.Drawing.Size(73, 13);
-            this.lblMinLvl.TabIndex = 52;
-            this.lblMinLvl.Text = "Min. Wep. Lvl";
-            // 
-            // grpWeaponTypes
-            // 
-            this.grpWeaponTypes.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.grpWeaponTypes.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpWeaponTypes.Controls.Add(this.btnAddWeaponType);
-            this.grpWeaponTypes.Controls.Add(this.btnRemoveWeaponType);
-            this.grpWeaponTypes.Controls.Add(this.lstWeaponTypes);
-            this.grpWeaponTypes.Controls.Add(this.cmbWeaponTypes);
-            this.grpWeaponTypes.Controls.Add(this.lblWeaponType);
-            this.grpWeaponTypes.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpWeaponTypes.Location = new System.Drawing.Point(11, 73);
-            this.grpWeaponTypes.Name = "grpWeaponTypes";
-            this.grpWeaponTypes.Size = new System.Drawing.Size(342, 128);
-            this.grpWeaponTypes.TabIndex = 51;
-            this.grpWeaponTypes.TabStop = false;
-            this.grpWeaponTypes.Text = "Applicable Weapon Types";
-            // 
             // btnAddWeaponType
             // 
-            this.btnAddWeaponType.Location = new System.Drawing.Point(128, 99);
+            this.btnAddWeaponType.Location = new System.Drawing.Point(163, 100);
             this.btnAddWeaponType.Name = "btnAddWeaponType";
             this.btnAddWeaponType.Padding = new System.Windows.Forms.Padding(5);
             this.btnAddWeaponType.Size = new System.Drawing.Size(79, 23);
@@ -366,7 +366,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             // btnRemoveWeaponType
             // 
-            this.btnRemoveWeaponType.Location = new System.Drawing.Point(220, 100);
+            this.btnRemoveWeaponType.Location = new System.Drawing.Point(249, 100);
             this.btnRemoveWeaponType.Name = "btnRemoveWeaponType";
             this.btnRemoveWeaponType.Padding = new System.Windows.Forms.Padding(5);
             this.btnRemoveWeaponType.Size = new System.Drawing.Size(79, 23);
@@ -381,9 +381,9 @@ namespace Intersect.Editor.Forms.Editors
             this.lstWeaponTypes.Cursor = System.Windows.Forms.Cursors.Default;
             this.lstWeaponTypes.ForeColor = System.Drawing.Color.Gainsboro;
             this.lstWeaponTypes.FormattingEnabled = true;
-            this.lstWeaponTypes.Location = new System.Drawing.Point(9, 40);
+            this.lstWeaponTypes.Location = new System.Drawing.Point(9, 42);
             this.lstWeaponTypes.Name = "lstWeaponTypes";
-            this.lstWeaponTypes.Size = new System.Drawing.Size(290, 54);
+            this.lstWeaponTypes.Size = new System.Drawing.Size(319, 54);
             this.lstWeaponTypes.TabIndex = 57;
             // 
             // cmbWeaponTypes
@@ -399,7 +399,7 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbWeaponTypes.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbWeaponTypes.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbWeaponTypes.FormattingEnabled = true;
-            this.cmbWeaponTypes.Location = new System.Drawing.Point(82, 13);
+            this.cmbWeaponTypes.Location = new System.Drawing.Point(109, 15);
             this.cmbWeaponTypes.Name = "cmbWeaponTypes";
             this.cmbWeaponTypes.Size = new System.Drawing.Size(217, 21);
             this.cmbWeaponTypes.TabIndex = 56;
@@ -409,7 +409,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblWeaponType
             // 
             this.lblWeaponType.AutoSize = true;
-            this.lblWeaponType.Location = new System.Drawing.Point(6, 16);
+            this.lblWeaponType.Location = new System.Drawing.Point(6, 18);
             this.lblWeaponType.Name = "lblWeaponType";
             this.lblWeaponType.Size = new System.Drawing.Size(75, 13);
             this.lblWeaponType.TabIndex = 21;
@@ -419,7 +419,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.nudReqEp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.nudReqEp.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudReqEp.Location = new System.Drawing.Point(224, 207);
+            this.nudReqEp.Location = new System.Drawing.Point(157, 74);
             this.nudReqEp.Maximum = new decimal(new int[] {
             2147483647,
             0,
@@ -438,7 +438,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblCost
             // 
             this.lblCost.AutoSize = true;
-            this.lblCost.Location = new System.Drawing.Point(171, 209);
+            this.lblCost.Location = new System.Drawing.Point(93, 76);
             this.lblCost.Name = "lblCost";
             this.lblCost.Size = new System.Drawing.Size(47, 13);
             this.lblCost.TabIndex = 49;
@@ -446,7 +446,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             // btnAddFolder
             // 
-            this.btnAddFolder.Location = new System.Drawing.Point(292, 44);
+            this.btnAddFolder.Location = new System.Drawing.Point(292, 42);
             this.btnAddFolder.Name = "btnAddFolder";
             this.btnAddFolder.Padding = new System.Windows.Forms.Padding(5);
             this.btnAddFolder.Size = new System.Drawing.Size(18, 21);
@@ -467,7 +467,7 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbFolder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbFolder.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbFolder.FormattingEnabled = true;
-            this.cmbFolder.Location = new System.Drawing.Point(60, 45);
+            this.cmbFolder.Location = new System.Drawing.Point(60, 43);
             this.cmbFolder.Name = "cmbFolder";
             this.cmbFolder.Size = new System.Drawing.Size(226, 21);
             this.cmbFolder.TabIndex = 47;
@@ -478,7 +478,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblFolder
             // 
             this.lblFolder.AutoSize = true;
-            this.lblFolder.Location = new System.Drawing.Point(6, 48);
+            this.lblFolder.Location = new System.Drawing.Point(6, 46);
             this.lblFolder.Name = "lblFolder";
             this.lblFolder.Size = new System.Drawing.Size(36, 13);
             this.lblFolder.TabIndex = 46;
@@ -996,9 +996,9 @@ namespace Intersect.Editor.Forms.Editors
             this.grpEnhancements.PerformLayout();
             this.grpProps.ResumeLayout(false);
             this.grpProps.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudMinWeaponLevel)).EndInit();
             this.grpWeaponTypes.ResumeLayout(false);
             this.grpWeaponTypes.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMinWeaponLevel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudReqEp)).EndInit();
             this.pnlContainer.ResumeLayout(false);
             this.grpBonuses.ResumeLayout(false);

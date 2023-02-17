@@ -3442,6 +3442,17 @@ namespace Intersect.Server.Entities
                         TryTakeItem(Items[slot], 1);
 
                         break;
+                    case ItemTypes.Enhancement:
+                        if (TryUnlockEnhancement(itemBase.EnhancementId))
+                        {
+                            TryTakeItem(Items[slot], 1);
+                        }
+                        else
+                        {
+                            PacketSender.SendChatMsg(this, Strings.Enhancements.AlreadyLearned, ChatMessageType.Error, CustomColors.General.GeneralDisabled);
+                        }
+
+                        break;
                     default:
                         PacketSender.SendChatMsg(this, Strings.Items.notimplemented, ChatMessageType.Error);
 

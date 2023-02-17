@@ -70,6 +70,11 @@ namespace Intersect.GameObjects
 
         public string DisplayName { get; set; }
 
+        public Guid EnhancementUnlockId { get; set; }
+
+        [NotMapped]
+        public EnhancementDescriptor UnlockedEnhancement => EnhancementDescriptor.Get(EnhancementUnlockId);
+
         public Guid SpellUnlockId { get; set; }
 
         public ChallengeType Type { get; set; }

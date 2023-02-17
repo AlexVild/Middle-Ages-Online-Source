@@ -1554,6 +1554,8 @@ namespace Intersect.Server.Localization
 
             public readonly PartiesNamespace Parties = new PartiesNamespace();
 
+            public readonly EnhancementsNamespace Enhancements = new EnhancementsNamespace();
+
             public readonly PasswordResetNotificationNamespace PasswordResetNotificationNamespace =
                 new PasswordResetNotificationNamespace();
 
@@ -1638,6 +1640,8 @@ namespace Intersect.Server.Localization
         public static NotificationsNamespace Notifications => Root.NotificationsNamespace;
 
         public static PartiesNamespace Parties => Root.Parties;
+
+        public static EnhancementsNamespace Enhancements => Root.Enhancements;
 
         public static PasswordResetNotificationNamespace PasswordResetNotification =>
             Root.PasswordResetNotificationNamespace;
@@ -1820,6 +1824,18 @@ namespace Intersect.Server.Localization
         {
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString PartyEnemy = @"You can't send party requests to a player that you can currently harm!";
+        }
+
+        public sealed partial class EnhancementsNamespace : LocaleNamespace
+        {
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString AlreadyLearned = @"You've already learned this enhancement!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString ForgetEnhancemnet = @"You've forgotten an enhancement: {00}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString LearnEnhancement = @"You've learned a new enhancement: {00}!";
         }
     }
 }

@@ -185,12 +185,12 @@ namespace Intersect.Server.Entities
 
                 mastery.IsActive = true;
 
-                if (!mastery.TryGetCurrentUnlock(out var unlock))
+                if (!mastery.TryGetCurrentWeaponLevelProperties(out var levelProps))
                 {
                     continue;
                 }
                 
-                if (mastery.ExpRemaining < unlock.RequiredExp)
+                if (mastery.ExpRemaining < levelProps.RequiredExp)
                 {
                     continue;
                 }
@@ -306,23 +306,11 @@ namespace Intersect.Server.Entities
                 return;
             }
 
-            if (mastery.TryGetCurrentUnlock(out var currentUnlock))
+            if (mastery.TryGetCurrentWeaponLevelProperties(out var currentUnlock))
             {
                 foreach (var challengeId in currentUnlock.ChallengeIds)
                 {
-                    var challenge = ChallengeDescriptor.Get(challengeId);
-                    if (challenge.SpellUnlockId != Guid.Empty)
-                    {
-                        TryAddSkillToBook(challenge.SpellUnlockId);
-                        PacketSender.SendChatMsg(this,
-                            Strings.Player.MasterySkillUnlock.ToString(SpellBase.GetName(challenge.SpellUnlockId)),
-                            Enums.ChatMessageType.Spells,
-                            CustomColors.General.GeneralCompleted);
-                    }
-                    if (challenge.CompletionEventId != Guid.Empty)
-                    {
-                        EnqueueStartCommonEvent(challenge.CompletionEvent);
-                    }
+                    ObtainChallengeUnlocks(challengeId);
                 }
             }
 
@@ -345,6 +333,27 @@ namespace Intersect.Server.Entities
                 }
             }
             PacketSender.SendExperience(this);
+        }
+
+        public void ObtainChallengeUnlocks(Guid challengeId)
+        {
+            var challenge = ChallengeDescriptor.Get(challengeId);
+            if (challenge.SpellUnlockId != Guid.Empty)
+            {
+                _ = TryAddSkillToBook(challenge.SpellUnlockId);
+                PacketSender.SendChatMsg(this,
+                    Strings.Player.MasterySkillUnlock.ToString(SpellBase.GetName(challenge.SpellUnlockId)),
+                    Enums.ChatMessageType.Spells,
+                    CustomColors.General.GeneralCompleted);
+            }
+            if (challenge.CompletionEventId != Guid.Empty)
+            {
+                EnqueueStartCommonEvent(challenge.CompletionEvent);
+            }
+            if (challenge.EnhancementUnlockId != Guid.Empty)
+            {
+                _ = TryUnlockEnhancement(challenge.EnhancementUnlockId);
+            }
         }
 
         public void CompleteMasteryChallenges(WeaponMasteryInstance mastery)
@@ -423,7 +432,7 @@ namespace Intersect.Server.Entities
         public bool TryGainMasteryExp(long exp, WeaponMasteryInstance mastery, ItemBase weapon = default)
         {
             var requiredExp = 0;
-            if (mastery.TryGetCurrentUnlock(out var unlock))
+            if (mastery.TryGetCurrentWeaponLevelProperties(out var unlock))
             {
                 requiredExp = unlock.RequiredExp;
             }

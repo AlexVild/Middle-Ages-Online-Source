@@ -47,10 +47,12 @@ namespace Intersect.Editor.Forms.Editors
             this.txtSearch = new DarkUI.Controls.DarkTextBox();
             this.lstGameObjects = new Intersect.Editor.Forms.Controls.GameObjectList();
             this.grpEditor = new DarkUI.Controls.DarkGroupBox();
+            this.txtDescription = new DarkUI.Controls.DarkTextBox();
             this.lblIcon = new System.Windows.Forms.Label();
             this.cmbPic = new DarkUI.Controls.DarkComboBox();
             this.picItem = new System.Windows.Forms.PictureBox();
             this.grpDetails = new DarkUI.Controls.DarkGroupBox();
+            this.lblChallengeDescription = new System.Windows.Forms.Label();
             this.nudParam = new DarkUI.Controls.DarkNumericUpDown();
             this.cmbParamSelector = new DarkUI.Controls.DarkComboBox();
             this.nudSets = new DarkUI.Controls.DarkNumericUpDown();
@@ -74,8 +76,8 @@ namespace Intersect.Editor.Forms.Editors
             this.lblName = new System.Windows.Forms.Label();
             this.btnSave = new DarkUI.Controls.DarkButton();
             this.btnCancel = new DarkUI.Controls.DarkButton();
-            this.lblChallengeDescription = new System.Windows.Forms.Label();
-            this.txtDescription = new DarkUI.Controls.DarkTextBox();
+            this.lblEnhancement = new System.Windows.Forms.Label();
+            this.cmbEnhancement = new DarkUI.Controls.DarkComboBox();
             this.toolStrip.SuspendLayout();
             this.grpWeaponTypes.SuspendLayout();
             this.grpEditor.SuspendLayout();
@@ -283,6 +285,20 @@ namespace Intersect.Editor.Forms.Editors
             this.grpEditor.TabStop = false;
             this.grpEditor.Text = "Weapon Type";
             // 
+            // txtDescription
+            // 
+            this.txtDescription.AcceptsReturn = true;
+            this.txtDescription.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.txtDescription.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtDescription.ForeColor = System.Drawing.Color.Gainsboro;
+            this.txtDescription.Location = new System.Drawing.Point(25, 176);
+            this.txtDescription.Multiline = true;
+            this.txtDescription.Name = "txtDescription";
+            this.txtDescription.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtDescription.Size = new System.Drawing.Size(506, 27);
+            this.txtDescription.TabIndex = 119;
+            this.txtDescription.TextChanged += new System.EventHandler(this.txtDescription_TextChanged);
+            // 
             // lblIcon
             // 
             this.lblIcon.AutoSize = true;
@@ -345,6 +361,15 @@ namespace Intersect.Editor.Forms.Editors
             this.grpDetails.TabIndex = 57;
             this.grpDetails.TabStop = false;
             this.grpDetails.Text = "Challenge Details";
+            // 
+            // lblChallengeDescription
+            // 
+            this.lblChallengeDescription.AutoSize = true;
+            this.lblChallengeDescription.Location = new System.Drawing.Point(6, 75);
+            this.lblChallengeDescription.Name = "lblChallengeDescription";
+            this.lblChallengeDescription.Size = new System.Drawing.Size(60, 13);
+            this.lblChallengeDescription.TabIndex = 84;
+            this.lblChallengeDescription.Text = "Description";
             // 
             // nudParam
             // 
@@ -488,6 +513,8 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpUnlocks.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpUnlocks.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpUnlocks.Controls.Add(this.cmbEnhancement);
+            this.grpUnlocks.Controls.Add(this.lblEnhancement);
             this.grpUnlocks.Controls.Add(this.label1);
             this.grpUnlocks.Controls.Add(this.txtStartDesc);
             this.grpUnlocks.Controls.Add(this.cmbEvent);
@@ -666,28 +693,35 @@ namespace Intersect.Editor.Forms.Editors
             this.btnCancel.Text = "Cancel";
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
-            // lblChallengeDescription
+            // lblEnhancement
             // 
-            this.lblChallengeDescription.AutoSize = true;
-            this.lblChallengeDescription.Location = new System.Drawing.Point(6, 75);
-            this.lblChallengeDescription.Name = "lblChallengeDescription";
-            this.lblChallengeDescription.Size = new System.Drawing.Size(60, 13);
-            this.lblChallengeDescription.TabIndex = 84;
-            this.lblChallengeDescription.Text = "Description";
+            this.lblEnhancement.AutoSize = true;
+            this.lblEnhancement.Location = new System.Drawing.Point(6, 78);
+            this.lblEnhancement.Name = "lblEnhancement";
+            this.lblEnhancement.Size = new System.Drawing.Size(73, 13);
+            this.lblEnhancement.TabIndex = 120;
+            this.lblEnhancement.Text = "Enhancement";
             // 
-            // txtDescription
+            // cmbEnhancement
             // 
-            this.txtDescription.AcceptsReturn = true;
-            this.txtDescription.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.txtDescription.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtDescription.ForeColor = System.Drawing.Color.Gainsboro;
-            this.txtDescription.Location = new System.Drawing.Point(25, 176);
-            this.txtDescription.Multiline = true;
-            this.txtDescription.Name = "txtDescription";
-            this.txtDescription.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtDescription.Size = new System.Drawing.Size(506, 27);
-            this.txtDescription.TabIndex = 119;
-            this.txtDescription.TextChanged += new System.EventHandler(this.txtDescription_TextChanged);
+            this.cmbEnhancement.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbEnhancement.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbEnhancement.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbEnhancement.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbEnhancement.DrawDropdownHoverOutline = false;
+            this.cmbEnhancement.DrawFocusRectangle = false;
+            this.cmbEnhancement.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbEnhancement.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbEnhancement.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbEnhancement.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbEnhancement.FormattingEnabled = true;
+            this.cmbEnhancement.Location = new System.Drawing.Point(9, 94);
+            this.cmbEnhancement.Name = "cmbEnhancement";
+            this.cmbEnhancement.Size = new System.Drawing.Size(229, 21);
+            this.cmbEnhancement.TabIndex = 121;
+            this.cmbEnhancement.Text = null;
+            this.cmbEnhancement.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbEnhancement.SelectedIndexChanged += new System.EventHandler(this.cmbEnhancement_SelectedIndexChanged);
             // 
             // frmChallenge
             // 
@@ -769,5 +803,7 @@ namespace Intersect.Editor.Forms.Editors
         private System.Windows.Forms.Label lblIcon;
         private DarkUI.Controls.DarkTextBox txtDescription;
         private System.Windows.Forms.Label lblChallengeDescription;
+        private System.Windows.Forms.Label lblEnhancement;
+        private DarkUI.Controls.DarkComboBox cmbEnhancement;
     }
 }
