@@ -23,6 +23,8 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
 
         private ScrollControl LootContainer { get; set; }
 
+        List<BeastLootItem> LootItems { get; set; } = new List<BeastLootItem>();
+
         public BestiaryLootComponent(Base parent, string containerName, ComponentList<GwenComponent> referenceList = null) : base(parent, containerName, "BestiaryLootComponent", referenceList)
         {
         }
@@ -47,6 +49,20 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
         private void ClearLoot()
         {
             LootContainer.ClearCreatedChildren();
+            LootItems.Clear();
+        }
+
+        public void Update()
+        {
+            if (IsHidden)
+            {
+                return;
+            }
+
+            foreach (var lootItem in LootItems)
+            {
+                lootItem.Update();
+            }
         }
 
         public void SetBeast(NpcBase beast, int requiredKc)
@@ -56,6 +72,7 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
                 return;
             }
 
+            LootItems.Clear();
             // setup
             Beast = beast;
             RequiredKillCount = requiredKc;
@@ -73,6 +90,11 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
             var primaryDrops = LootTableHelpers.UnfoldDrops(Beast.Drops);
             foreach (var drop in primaryDrops)
             {
+                if (drop.ItemId == Guid.Empty)
+                {
+                    continue;
+                }
+
                 var chance = LootTableHelpers.GetPrettyChance(drop.Chance, totalWeight);
 
                 var lootItem = new BeastLootItem(idx, LootContainer, drop.ItemId, chance);
@@ -92,6 +114,8 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
                     yPadding
                 );
 
+                LootItems.Add(lootItem);
+
                 idx++;
             }
 
@@ -103,6 +127,11 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
                 var secondaryDrops = LootTableHelpers.UnfoldDrops(Beast.SecondaryDrops);
                 foreach (var drop in secondaryDrops)
                 {
+                    if (drop.ItemId == Guid.Empty)
+                    {
+                        continue;
+                    }
+
                     var chance = LootTableHelpers.GetPrettyChance(drop.Chance, totalWeight);
 
                     var lootItem = new BeastLootItem(idx, LootContainer, drop.ItemId, chance, beast.SecondaryChance);
@@ -122,6 +151,7 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
                         yPadding
                     );
 
+                    LootItems.Add(lootItem);
                     idx++;
                 }
             }
@@ -134,6 +164,11 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
                 var tertiaryDrops = LootTableHelpers.UnfoldDrops(Beast.TertiaryDrops);
                 foreach (var drop in tertiaryDrops)
                 {
+                    if (drop.ItemId == Guid.Empty)
+                    {
+                        continue;
+                    }
+
                     var chance = LootTableHelpers.GetPrettyChance(drop.Chance, totalWeight);
 
                     var lootItem = new BeastLootItem(idx, LootContainer, drop.ItemId, chance, beast.TertiaryChance);
@@ -153,6 +188,7 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
                         yPadding
                     );
 
+                    LootItems.Add(lootItem);
                     idx++;
                 }
             }

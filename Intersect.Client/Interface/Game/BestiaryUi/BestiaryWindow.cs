@@ -202,6 +202,8 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
             {
                 AnimateImage(timeMs);
             }
+
+            LootComponent.Update();
         }
 
         private void LoadBeasts()

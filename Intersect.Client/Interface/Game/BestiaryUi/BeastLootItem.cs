@@ -1,16 +1,27 @@
 ﻿using System;
 using Intersect.Client.Core;
 using Intersect.Client.Framework.File_Management;
+using Intersect.Client.Framework.Graphics;
 using Intersect.Client.Framework.Gwen.Control;
 using Intersect.Client.General;
 using Intersect.Client.Interface.Game.DescriptionWindows;
 using Intersect.Enums;
 using Intersect.GameObjects;
+using Intersect.Utilities;
 
 namespace Intersect.Client.Interface.Game.BestiaryUi
 {
     public class BeastLootItem
     {
+        public GameTexture StandardFrameBg { get; set; }
+        private GameTexture _rareFrameBg;
+        private GameTexture _rareFrameBgFlash { get; set; }
+
+        public GameTexture RareFrameBg => IsFlashing ? _rareFrameBgFlash : _rareFrameBg;
+
+        readonly long FlashRate = 300;
+        long LastUpdate = 0;
+        public bool IsFlashing = false;
 
         public ImagePanel ContentPanel;
 
@@ -37,6 +48,10 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
             ItemId = spellId;
             DropChance = dropChance;
             TableChance = tableChance;
+
+            StandardFrameBg = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Gui, "inventoryitem.png");
+            _rareFrameBg = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Gui, "mapicon_rare.png");
+            _rareFrameBgFlash = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Gui, "mapicon_rare_flash.png");
         }
 
         public void Setup()
@@ -50,6 +65,8 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
 
             Pnl.HoverEnter += Pnl_HoverEnter;
             Pnl.HoverLeave += Pnl_HoverLeave;
+
+            LastUpdate = Timing.Global.Milliseconds + FlashRate;
 
             Update();
         }
@@ -101,6 +118,20 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
                 else
                 {
                     ContentPanel.Hide();
+                }
+
+                if (item.RareDrop)
+                {
+                    Pnl.Texture = RareFrameBg;
+                    if (LastUpdate < Timing.Global.Milliseconds)
+                    {
+                        IsFlashing = !IsFlashing;
+                        LastUpdate = Timing.Global.Milliseconds + FlashRate;
+                    }
+                }
+                else
+                {
+                    Pnl.Texture = StandardFrameBg;
                 }
             }
             else
