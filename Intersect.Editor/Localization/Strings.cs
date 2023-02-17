@@ -445,6 +445,11 @@ namespace Intersect.Editor.Localization
             return $"Dungeon gnome is in location {condition.GnomeLocation}";
         }
 
+        public static string GetEventConditionalDesc(EnhancementKnown condition)
+        {
+            return $"Enhancement known: {EnhancementDescriptor.GetName(condition.EnhancementId)}";
+        }
+
         public static string GetEventConditionalDesc(SoloDungeon condition)
         {
             return $"Dungeon is solo";
@@ -2299,7 +2304,8 @@ Tick timer saved in server config.json.";
                 {"obtaintreasuregnome", @"Obtain Treasure Gnome"},
                 {"rolldungeonloot", @"Roll Dungeon Loot"},
                 {"dungeons", @"Dungeons"},
-                {"opendeconstructor", @"Open Deconstructor"}
+                {"opendeconstructor", @"Open Deconstructor"},
+                {"changeenhancement", @"Change Enhancement"}
             };
 
         }
@@ -2438,6 +2444,7 @@ Tick timer saved in server config.json.";
                 {42, @"Treasure gnome obtained"},
                 {43, @"Dungeon treasure level is X or higher"},
                 {44, @"Treasure gnome in location..."},
+                {45, @"Enhancement known..."},
             };
 
             public static LocalizedString endrange = @"End Range:";
@@ -6249,6 +6256,9 @@ Negative values for time to flow backwards.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString OpenDeconstructor = @"Open Deconstructor [Fuel Cost Multiplier: {00}x]";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ChangeEnhancement = @"Change Enhancement: {00} {01}";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString ResetPermadeads = @"Reset Permadead NPCs in Map: {00}";

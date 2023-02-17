@@ -2028,5 +2028,11 @@ namespace Intersect.Editor.Forms.Editors.Events
             var multiplierStr = command.FuelCostMultiplier.ToString("N2");
             return Strings.EventCommandList.OpenDeconstructor.ToString(multiplierStr);
         }
+
+        private static string GetCommandText(ChangeEnhancementsCommand command, MapInstance map)
+        {
+            var status = command.Forget ? "Forget" : "Learn";
+            return Strings.EventCommandList.ChangeEnhancement.ToString(status, EnhancementDescriptor.GetName(command.EnhancementId));
+        }
     }
 }

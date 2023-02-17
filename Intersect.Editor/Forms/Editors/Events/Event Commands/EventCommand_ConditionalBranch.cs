@@ -276,6 +276,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             rdoSecondsElapsed.Text = Strings.EventConditional.TimerSecondsElapsed;
             rdoRepsMade.Text = Strings.EventConditional.TimerRepetitions;
 
+            // Enhancement Known
+            cmbEnhancements.Items.Clear();
+            cmbEnhancements.Items.AddRange(EnhancementDescriptor.Names);
+
             btnSave.Text = Strings.EventConditional.okay;
             btnCancel.Text = Strings.EventConditional.cancel;
         }
@@ -539,6 +543,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     Condition = new GnomeLocationIs();
 
                     break;
+                
+                case ConditionTypes.EnhancementKnown:
+                    Condition = new EnhancementKnown();
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -577,6 +586,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             grpWeaponMastery.Hide();
             grpTreasureLevel.Hide();
             grpDungeonState.Hide();
+            grpEnhancements.Hide();
             switch (type)
             {
                 case ConditionTypes.VariableIs:
@@ -839,6 +849,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                 case ConditionTypes.GnomeLocationIs:
                     grpTreasureLevel.Show();
                     lblTreasureLevel.Text = "Gnome Idx";
+                    break;
+
+                case ConditionTypes.EnhancementKnown:
+                    grpEnhancements.Show();
                     break;
 
                 default:
@@ -1756,6 +1770,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         {
         }
 
+        private void SetupFormValues(EnhancementKnown condition)
+        {
+            cmbEnhancements.SelectedIndex = EnhancementDescriptor.ListIndex(condition.EnhancementId);
+        }
+
         #endregion
 
         #region "SaveFormValues"
@@ -2088,6 +2107,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private void SaveFormValues(GnomeLocationIs condition)
         {
             condition.GnomeLocation = (int)darkNumericUpDown1.Value;
+        }
+
+        private void SaveFormValues(EnhancementKnown condition)
+        {
+            condition.EnhancementId = EnhancementDescriptor.IdFromList(cmbEnhancements.SelectedIndex);
         }
         #endregion
 

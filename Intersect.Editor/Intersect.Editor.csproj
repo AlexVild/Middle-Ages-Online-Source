@@ -123,6 +123,12 @@
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_ChangeDungeon.Designer.cs">
       <DependentUpon>EventCommand_ChangeDungeon.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_ChangeEnhancements.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_ChangeEnhancements.Designer.cs">
+      <DependentUpon>EventCommand_ChangeEnhancements.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_ChangeMapSpawnGroup.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -881,6 +887,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_ChangeDungeon.resx">
       <DependentUpon>EventCommand_ChangeDungeon.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_ChangeEnhancements.resx">
+      <DependentUpon>EventCommand_ChangeEnhancements.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_ChangeItems.resx">
       <DependentUpon>EventCommand_ChangeItems.cs</DependentUpon>

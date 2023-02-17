@@ -1451,4 +1451,13 @@ namespace Intersect.GameObjects.Events.Commands
 
         public float FuelCostMultiplier { get; set; } = 1.00f;
     }
+
+    public partial class ChangeEnhancementsCommand : EventCommand
+    {
+        public override EventCommandType Type { get; } = EventCommandType.ChangeEnhancements;
+
+        public Guid EnhancementId { get; set; } = Guid.Empty;
+
+        public bool Forget { get; set; } = false;
+    }
 }

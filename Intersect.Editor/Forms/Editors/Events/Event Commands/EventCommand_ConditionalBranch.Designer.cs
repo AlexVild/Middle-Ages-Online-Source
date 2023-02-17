@@ -31,6 +31,12 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private void InitializeComponent()
         {
             this.grpConditional = new DarkUI.Controls.DarkGroupBox();
+            this.grpTreasureLevel = new DarkUI.Controls.DarkGroupBox();
+            this.darkNumericUpDown1 = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblTreasureLevel = new System.Windows.Forms.Label();
+            this.grpDungeonState = new DarkUI.Controls.DarkGroupBox();
+            this.darkComboBox1 = new DarkUI.Controls.DarkComboBox();
+            this.lblState = new System.Windows.Forms.Label();
             this.grpWeaponMastery = new DarkUI.Controls.DarkGroupBox();
             this.lblWeaponTypeLvl = new System.Windows.Forms.Label();
             this.nudWeaponTypeLvl = new DarkUI.Controls.DarkNumericUpDown();
@@ -194,13 +200,13 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpEquippedItem = new DarkUI.Controls.DarkGroupBox();
             this.cmbEquippedItem = new DarkUI.Controls.DarkComboBox();
             this.lblEquippedItem = new System.Windows.Forms.Label();
-            this.grpDungeonState = new DarkUI.Controls.DarkGroupBox();
-            this.darkComboBox1 = new DarkUI.Controls.DarkComboBox();
-            this.lblState = new System.Windows.Forms.Label();
-            this.grpTreasureLevel = new DarkUI.Controls.DarkGroupBox();
-            this.lblTreasureLevel = new System.Windows.Forms.Label();
-            this.darkNumericUpDown1 = new DarkUI.Controls.DarkNumericUpDown();
+            this.grpEnhancements = new DarkUI.Controls.DarkGroupBox();
+            this.lblEnhancements = new System.Windows.Forms.Label();
+            this.cmbEnhancements = new DarkUI.Controls.DarkComboBox();
             this.grpConditional.SuspendLayout();
+            this.grpTreasureLevel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.darkNumericUpDown1)).BeginInit();
+            this.grpDungeonState.SuspendLayout();
             this.grpWeaponMastery.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudWeaponTypeLvl)).BeginInit();
             this.grpChallenge.SuspendLayout();
@@ -245,15 +251,14 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpMapIs.SuspendLayout();
             this.grpGender.SuspendLayout();
             this.grpEquippedItem.SuspendLayout();
-            this.grpDungeonState.SuspendLayout();
-            this.grpTreasureLevel.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.darkNumericUpDown1)).BeginInit();
+            this.grpEnhancements.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpConditional
             // 
             this.grpConditional.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.grpConditional.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpConditional.Controls.Add(this.grpEnhancements);
             this.grpConditional.Controls.Add(this.grpTreasureLevel);
             this.grpConditional.Controls.Add(this.grpDungeonState);
             this.grpConditional.Controls.Add(this.grpWeaponMastery);
@@ -296,6 +301,91 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpConditional.TabIndex = 17;
             this.grpConditional.TabStop = false;
             this.grpConditional.Text = "Conditional";
+            // 
+            // grpTreasureLevel
+            // 
+            this.grpTreasureLevel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.grpTreasureLevel.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpTreasureLevel.Controls.Add(this.darkNumericUpDown1);
+            this.grpTreasureLevel.Controls.Add(this.lblTreasureLevel);
+            this.grpTreasureLevel.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpTreasureLevel.Location = new System.Drawing.Point(8, 38);
+            this.grpTreasureLevel.Name = "grpTreasureLevel";
+            this.grpTreasureLevel.Size = new System.Drawing.Size(262, 50);
+            this.grpTreasureLevel.TabIndex = 67;
+            this.grpTreasureLevel.TabStop = false;
+            this.grpTreasureLevel.Text = "Treasure Level";
+            // 
+            // darkNumericUpDown1
+            // 
+            this.darkNumericUpDown1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.darkNumericUpDown1.ForeColor = System.Drawing.Color.Gainsboro;
+            this.darkNumericUpDown1.Location = new System.Drawing.Point(82, 18);
+            this.darkNumericUpDown1.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.darkNumericUpDown1.Name = "darkNumericUpDown1";
+            this.darkNumericUpDown1.Size = new System.Drawing.Size(169, 20);
+            this.darkNumericUpDown1.TabIndex = 57;
+            this.darkNumericUpDown1.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            // 
+            // lblTreasureLevel
+            // 
+            this.lblTreasureLevel.AutoSize = true;
+            this.lblTreasureLevel.Location = new System.Drawing.Point(7, 20);
+            this.lblTreasureLevel.Name = "lblTreasureLevel";
+            this.lblTreasureLevel.Size = new System.Drawing.Size(68, 13);
+            this.lblTreasureLevel.TabIndex = 2;
+            this.lblTreasureLevel.Text = "Lvl is at least";
+            // 
+            // grpDungeonState
+            // 
+            this.grpDungeonState.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.grpDungeonState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpDungeonState.Controls.Add(this.darkComboBox1);
+            this.grpDungeonState.Controls.Add(this.lblState);
+            this.grpDungeonState.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpDungeonState.Location = new System.Drawing.Point(8, 39);
+            this.grpDungeonState.Name = "grpDungeonState";
+            this.grpDungeonState.Size = new System.Drawing.Size(262, 50);
+            this.grpDungeonState.TabIndex = 66;
+            this.grpDungeonState.TabStop = false;
+            this.grpDungeonState.Text = "Dungeon State";
+            // 
+            // darkComboBox1
+            // 
+            this.darkComboBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.darkComboBox1.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.darkComboBox1.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.darkComboBox1.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.darkComboBox1.DrawDropdownHoverOutline = false;
+            this.darkComboBox1.DrawFocusRectangle = false;
+            this.darkComboBox1.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.darkComboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.darkComboBox1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.darkComboBox1.ForeColor = System.Drawing.Color.Gainsboro;
+            this.darkComboBox1.FormattingEnabled = true;
+            this.darkComboBox1.Location = new System.Drawing.Point(88, 18);
+            this.darkComboBox1.Name = "darkComboBox1";
+            this.darkComboBox1.Size = new System.Drawing.Size(166, 21);
+            this.darkComboBox1.TabIndex = 3;
+            this.darkComboBox1.Text = null;
+            this.darkComboBox1.TextPadding = new System.Windows.Forms.Padding(2);
+            // 
+            // lblState
+            // 
+            this.lblState.AutoSize = true;
+            this.lblState.Location = new System.Drawing.Point(7, 20);
+            this.lblState.Name = "lblState";
+            this.lblState.Size = new System.Drawing.Size(42, 13);
+            this.lblState.TabIndex = 2;
+            this.lblState.Text = "State is";
             // 
             // grpWeaponMastery
             // 
@@ -2658,90 +2748,48 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.lblEquippedItem.TabIndex = 2;
             this.lblEquippedItem.Text = "Item:";
             // 
-            // grpDungeonState
+            // grpEnhancements
             // 
-            this.grpDungeonState.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.grpDungeonState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpDungeonState.Controls.Add(this.darkComboBox1);
-            this.grpDungeonState.Controls.Add(this.lblState);
-            this.grpDungeonState.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpDungeonState.Location = new System.Drawing.Point(8, 39);
-            this.grpDungeonState.Name = "grpDungeonState";
-            this.grpDungeonState.Size = new System.Drawing.Size(262, 50);
-            this.grpDungeonState.TabIndex = 66;
-            this.grpDungeonState.TabStop = false;
-            this.grpDungeonState.Text = "Dungeon State";
+            this.grpEnhancements.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.grpEnhancements.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpEnhancements.Controls.Add(this.cmbEnhancements);
+            this.grpEnhancements.Controls.Add(this.lblEnhancements);
+            this.grpEnhancements.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpEnhancements.Location = new System.Drawing.Point(8, 39);
+            this.grpEnhancements.Name = "grpEnhancements";
+            this.grpEnhancements.Size = new System.Drawing.Size(262, 74);
+            this.grpEnhancements.TabIndex = 68;
+            this.grpEnhancements.TabStop = false;
+            this.grpEnhancements.Text = "Enhancements";
             // 
-            // darkComboBox1
+            // lblEnhancements
             // 
-            this.darkComboBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.darkComboBox1.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.darkComboBox1.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.darkComboBox1.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.darkComboBox1.DrawDropdownHoverOutline = false;
-            this.darkComboBox1.DrawFocusRectangle = false;
-            this.darkComboBox1.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.darkComboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.darkComboBox1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.darkComboBox1.ForeColor = System.Drawing.Color.Gainsboro;
-            this.darkComboBox1.FormattingEnabled = true;
-            this.darkComboBox1.Location = new System.Drawing.Point(88, 18);
-            this.darkComboBox1.Name = "darkComboBox1";
-            this.darkComboBox1.Size = new System.Drawing.Size(166, 21);
-            this.darkComboBox1.TabIndex = 3;
-            this.darkComboBox1.Text = null;
-            this.darkComboBox1.TextPadding = new System.Windows.Forms.Padding(2);
+            this.lblEnhancements.AutoSize = true;
+            this.lblEnhancements.Location = new System.Drawing.Point(7, 20);
+            this.lblEnhancements.Name = "lblEnhancements";
+            this.lblEnhancements.Size = new System.Drawing.Size(73, 13);
+            this.lblEnhancements.TabIndex = 2;
+            this.lblEnhancements.Text = "Enhancement";
             // 
-            // lblState
+            // cmbEnhancements
             // 
-            this.lblState.AutoSize = true;
-            this.lblState.Location = new System.Drawing.Point(7, 20);
-            this.lblState.Name = "lblState";
-            this.lblState.Size = new System.Drawing.Size(42, 13);
-            this.lblState.TabIndex = 2;
-            this.lblState.Text = "State is";
-            // 
-            // grpTreasureLevel
-            // 
-            this.grpTreasureLevel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.grpTreasureLevel.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpTreasureLevel.Controls.Add(this.darkNumericUpDown1);
-            this.grpTreasureLevel.Controls.Add(this.lblTreasureLevel);
-            this.grpTreasureLevel.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpTreasureLevel.Location = new System.Drawing.Point(8, 38);
-            this.grpTreasureLevel.Name = "grpTreasureLevel";
-            this.grpTreasureLevel.Size = new System.Drawing.Size(262, 50);
-            this.grpTreasureLevel.TabIndex = 67;
-            this.grpTreasureLevel.TabStop = false;
-            this.grpTreasureLevel.Text = "Treasure Level";
-            // 
-            // lblTreasureLevel
-            // 
-            this.lblTreasureLevel.AutoSize = true;
-            this.lblTreasureLevel.Location = new System.Drawing.Point(7, 20);
-            this.lblTreasureLevel.Name = "lblTreasureLevel";
-            this.lblTreasureLevel.Size = new System.Drawing.Size(68, 13);
-            this.lblTreasureLevel.TabIndex = 2;
-            this.lblTreasureLevel.Text = "Lvl is at least";
-            // 
-            // darkNumericUpDown1
-            // 
-            this.darkNumericUpDown1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.darkNumericUpDown1.ForeColor = System.Drawing.Color.Gainsboro;
-            this.darkNumericUpDown1.Location = new System.Drawing.Point(82, 18);
-            this.darkNumericUpDown1.Maximum = new decimal(new int[] {
-            100000,
-            0,
-            0,
-            0});
-            this.darkNumericUpDown1.Name = "darkNumericUpDown1";
-            this.darkNumericUpDown1.Size = new System.Drawing.Size(169, 20);
-            this.darkNumericUpDown1.TabIndex = 57;
-            this.darkNumericUpDown1.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
+            this.cmbEnhancements.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbEnhancements.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbEnhancements.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbEnhancements.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbEnhancements.DrawDropdownHoverOutline = false;
+            this.cmbEnhancements.DrawFocusRectangle = false;
+            this.cmbEnhancements.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbEnhancements.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbEnhancements.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbEnhancements.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbEnhancements.FormattingEnabled = true;
+            this.cmbEnhancements.Location = new System.Drawing.Point(7, 41);
+            this.cmbEnhancements.Name = "cmbEnhancements";
+            this.cmbEnhancements.Size = new System.Drawing.Size(248, 21);
+            this.cmbEnhancements.TabIndex = 54;
+            this.cmbEnhancements.Text = null;
+            this.cmbEnhancements.TextPadding = new System.Windows.Forms.Padding(2);
             // 
             // EventCommandConditionalBranch
             // 
@@ -2754,6 +2802,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.Size = new System.Drawing.Size(285, 471);
             this.grpConditional.ResumeLayout(false);
             this.grpConditional.PerformLayout();
+            this.grpTreasureLevel.ResumeLayout(false);
+            this.grpTreasureLevel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.darkNumericUpDown1)).EndInit();
+            this.grpDungeonState.ResumeLayout(false);
+            this.grpDungeonState.PerformLayout();
             this.grpWeaponMastery.ResumeLayout(false);
             this.grpWeaponMastery.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudWeaponTypeLvl)).EndInit();
@@ -2830,11 +2883,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpGender.PerformLayout();
             this.grpEquippedItem.ResumeLayout(false);
             this.grpEquippedItem.PerformLayout();
-            this.grpDungeonState.ResumeLayout(false);
-            this.grpDungeonState.PerformLayout();
-            this.grpTreasureLevel.ResumeLayout(false);
-            this.grpTreasureLevel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.darkNumericUpDown1)).EndInit();
+            this.grpEnhancements.ResumeLayout(false);
+            this.grpEnhancements.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -3011,5 +3061,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private DarkGroupBox grpTreasureLevel;
         private DarkNumericUpDown darkNumericUpDown1;
         private System.Windows.Forms.Label lblTreasureLevel;
+        private DarkGroupBox grpEnhancements;
+        internal DarkComboBox cmbEnhancements;
+        private System.Windows.Forms.Label lblEnhancements;
     }
 }

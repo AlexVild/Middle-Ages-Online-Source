@@ -275,6 +275,7 @@ namespace Intersect.GameObjects.Events
         ObtainGnome, // 83
         RollDungeonLoot, // 84
         OpenDeconstructor, // 85
+        ChangeEnhancements, // 86
     }
 
     public enum NPCGuildManagementSelection

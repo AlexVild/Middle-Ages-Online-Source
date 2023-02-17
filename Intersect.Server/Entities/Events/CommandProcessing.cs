@@ -3428,5 +3428,28 @@ namespace Intersect.Server.Entities.Events
             player.OpenDeconstructor(command.FuelCostMultiplier, instance.BaseEvent.Id);
             callStack.Peek().WaitingForResponse = CommandInstance.EventResponse.Deconstruction;
         }
+
+        private static void ProcessCommand(
+          ChangeEnhancementsCommand command,
+          Player player,
+          Event instance,
+          CommandInstance stackInfo,
+          Stack<CommandInstance> callStack
+       )
+        {
+            if (command == default)
+            {
+                return;
+            }
+
+            if (command.Forget)
+            {
+                player?.TryForgetEnhancement(command.EnhancementId, true);
+            }
+            else
+            {
+                player?.TryUnlockEnhancement(command.EnhancementId);
+            }
+        }
     }
 }

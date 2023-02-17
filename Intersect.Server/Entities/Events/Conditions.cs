@@ -893,6 +893,21 @@ namespace Intersect.Server.Entities.Events
             return instanceController.Dungeon.GnomeLocation == condition.GnomeLocation;
         }
 
+        public static bool MeetsCondition(
+         EnhancementKnown condition,
+         Player player,
+         Event eventInstance,
+         QuestBase questBase
+        )
+        {
+            if (player == null || condition == null)
+            {
+                return false;
+            }
+
+            return player.KnownEnhancements.ToArray().Contains(condition.EnhancementId);
+        }
+
 
         //Variable Comparison Processing
 

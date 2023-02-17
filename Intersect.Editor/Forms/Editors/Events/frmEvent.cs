@@ -869,6 +869,11 @@ namespace Intersect.Editor.Forms.Editors.Events
 
                     break;
 
+                case EventCommandType.ChangeEnhancements:
+                    tmpCommand = new ChangeEnhancementsCommand();
+
+                    break;
+
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -1593,6 +1598,10 @@ namespace Intersect.Editor.Forms.Editors.Events
 
                 case EventCommandType.OpenDeconstructor:
                     cmdWindow = new EventCommand_OpenDeconstructor((OpenDeconstructorCommand)command, this);
+                    break;
+
+                case EventCommandType.ChangeEnhancements:
+                    cmdWindow = new EventCommand_ChangeEnhancements((ChangeEnhancementsCommand)command, this);
                     break;
 
                 default:
