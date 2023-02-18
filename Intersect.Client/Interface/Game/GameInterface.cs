@@ -27,6 +27,7 @@ using Intersect.Client.Interface.Game.Toasts;
 using Intersect.Utilities;
 using Intersect.Client.Interface.Game.BestiaryUi;
 using Intersect.Client.Interface.Game.DeconstructorUi;
+using Intersect.Client.Interface.Game.Enhancement;
 
 namespace Intersect.Client.Interface.Game
 {
@@ -769,6 +770,7 @@ namespace Intersect.Client.Interface.Game
         public LootRollWindow LootRollWindow;
         public PlayerRespawnWindow RespawnWindow;
         public DeconstructorWindow DeconstructorWindow;
+        public EnhancementWindow EnhancementWindow;
         private CharacterPanelType _CurrentCharPanel;
 
         public CharacterPanelType CurrentCharacterPanel
@@ -785,6 +787,7 @@ namespace Intersect.Client.Interface.Game
             LootRollWindow = new LootRollWindow(gameCanvas);
             RespawnWindow = new PlayerRespawnWindow(gameCanvas);
             DeconstructorWindow = new DeconstructorWindow(gameCanvas);
+            EnhancementWindow = new EnhancementWindow(gameCanvas);
         }
 
         private void _Draw()
@@ -798,6 +801,7 @@ namespace Intersect.Client.Interface.Game
             LootRollWindow.Update();
             RespawnWindow.Update();
             DeconstructorWindow.Update();
+            EnhancementWindow.Update();
         }
 
         public PlayerHud GetHud()

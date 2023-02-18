@@ -33,12 +33,12 @@ namespace Intersect.Client.Interface.Game
 
         protected abstract void PostInitialization();
 
-        public void Show()
+        public virtual void Show()
         {
             Background.Show();
         }
 
-        public void Hide()
+        public virtual void Hide()
         {
             Background.Hide();
         }

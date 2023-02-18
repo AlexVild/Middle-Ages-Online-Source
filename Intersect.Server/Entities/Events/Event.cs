@@ -184,6 +184,11 @@ namespace Intersect.Server.Entities.Events
                             curStack.WaitingForResponse = CommandInstance.EventResponse.None;
                         }
 
+                        if (curStack.WaitingForResponse == CommandInstance.EventResponse.Enhancement && !Player.EnhancementOpen)
+                        {
+                            curStack.WaitingForResponse = CommandInstance.EventResponse.None;
+                        }
+
                         if (curStack.WaitingForResponse == CommandInstance.EventResponse.RandomQuest)
                         {
                             var randomQuestList = ((RandomQuestCommand)curStack.WaitingOnCommand).QuestListId;

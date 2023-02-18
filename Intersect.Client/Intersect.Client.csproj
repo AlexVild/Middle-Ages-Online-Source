@@ -113,6 +113,7 @@
     <Compile Include="Entities\PartyMember.cs" />
     <Compile Include="Entities\Player.cs" />
     <Compile Include="Entities\Player.Deconstructor.cs" />
+    <Compile Include="Entities\Player.Enhancement.cs" />
     <Compile Include="Entities\Projectiles\Projectile.cs" />
     <Compile Include="Entities\Projectiles\ProjectileSpawns.cs" />
     <Compile Include="Entities\Resource.cs" />
@@ -121,6 +122,7 @@
     <Compile Include="Entities\Timer.cs" />
     <Compile Include="General\Bestiary\BestiaryController.cs" />
     <Compile Include="General\Deconstructor\Deconstructor.cs" />
+    <Compile Include="General\Enhancement\Enhancement.cs" />
     <Compile Include="General\Leaderboards\Leaderboard.cs" />
     <Compile Include="General\Leaderboards\Record.cs" />
     <Compile Include="General\Time.cs" />
@@ -184,6 +186,8 @@
     <Compile Include="Interface\Game\DescriptionWindows\DescriptionWindowBase.cs" />
     <Compile Include="Interface\Game\DescriptionWindows\SpellDescriptionWindow.cs" />
     <Compile Include="Interface\Game\DescriptionWindows\ItemDescriptionWindow.cs" />
+    <Compile Include="Interface\Game\Enhancement\EnhancementItem.cs" />
+    <Compile Include="Interface\Game\Enhancement\EnhancementWindow.cs" />
     <Compile Include="Interface\Game\ExpToast.cs" />
     <Compile Include="Interface\Game\GameWindow.cs" />
     <Compile Include="Interface\Game\GuildWindow.cs" />

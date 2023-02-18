@@ -667,5 +667,10 @@ namespace Intersect.Client.Networking
         {
             Network.SendPacket(new DeconstructItemsPacket(slots));
         }
+
+        public static void SendCloseEnhancementPacket()
+        {
+            Network.SendPacket(new CloseEnhancementPacket());
+        }
     }
 }

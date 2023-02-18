@@ -2461,5 +2461,26 @@ namespace Intersect.Client.Localization
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString BeastLocked = @"You haven't slain this beast, or haven't yet found any information about them.";
         }
+
+        public partial struct EnhancementWindow
+        {
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Enhancements = "Enhancements";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString EP = "EP";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString AppliedEnhancemnets = "Applied Enhancements";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Title = "WEAPON ENHANCEMENT";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString NoWeaponEquipped = "NO EQUIPPED WEAPON";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString NoWeaponEquippedPrompt = "You must have a weapon equipped to use the weapon enhancement station.";
+        }
     }
 }

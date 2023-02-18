@@ -3451,5 +3451,22 @@ namespace Intersect.Server.Entities.Events
                 player?.TryUnlockEnhancement(command.EnhancementId);
             }
         }
+
+        private static void ProcessCommand(
+          OpenEnhancementWindow command,
+          Player player,
+          Event instance,
+          CommandInstance stackInfo,
+          Stack<CommandInstance> callStack
+       )
+        {
+            if (player == null)
+            {
+                return;
+            }
+
+            player.OpenEnhancement(command.CurrencyItemId, command.CostMultiplier);
+            callStack.Peek().WaitingForResponse = CommandInstance.EventResponse.Enhancement;
+        }
     }
 }

@@ -414,6 +414,7 @@
     <Compile Include="Network\Packets\Client\PartyInviteNamePacket.cs" />
     <Compile Include="Network\Packets\Client\RequestChallengeProgressPacket.cs" />
     <Compile Include="Network\Packets\Client\RequestCosmeticsPacket.cs" />
+    <Compile Include="Network\Packets\Client\CloseEnhancementPacket.cs" />
     <Compile Include="Network\Packets\Client\RequestInstanceLeavePacket.cs" />
     <Compile Include="Network\Packets\Client\RequestKillCountPacket.cs" />
     <Compile Include="Network\Packets\Client\RequestKillCountsPacket.cs" />
@@ -471,6 +472,7 @@
     <Compile Include="Network\Packets\Server\ItemProperties.cs" />
     <Compile Include="Network\Packets\Server\KillCountPacket.cs" />
     <Compile Include="Network\Packets\Server\KillCountsPacket.cs" />
+    <Compile Include="Network\Packets\Server\OpenEnhancementPacket.cs" />
     <Compile Include="Network\Packets\Server\PlayerDeathTypePacket.cs" />
     <Compile Include="Network\Packets\Server\EntityMovementPackets.cs" />
     <Compile Include="Network\Packets\Server\FadePacket.cs" />

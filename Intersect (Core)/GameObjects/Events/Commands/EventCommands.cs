@@ -1460,4 +1460,13 @@ namespace Intersect.GameObjects.Events.Commands
 
         public bool Forget { get; set; } = false;
     }
+
+    public partial class OpenEnhancementWindow : EventCommand
+    {
+        public override EventCommandType Type { get; } = EventCommandType.OpenEnhancementWindow;
+
+        public Guid CurrencyItemId { get; set; } = Guid.Empty;
+
+        public float CostMultiplier { get; set; } = 1.0f;
+    }
 }

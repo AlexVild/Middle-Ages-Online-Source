@@ -2904,5 +2904,15 @@ namespace Intersect.Client.Networking
             }
             Globals.Me.Deconstructor.WaitingOnServer = false;
         }
+
+        public void HandlePacket(IPacketSender packetSender, OpenEnhancementPacket packet)
+        {
+            if (Globals.Me == null)
+            {
+                return;
+            }
+
+            Globals.Me.Enhancement?.Open(packet.CurrencyId, packet.CostMultiplier);
+        }
     }
 }

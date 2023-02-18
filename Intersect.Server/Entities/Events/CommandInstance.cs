@@ -39,7 +39,9 @@ namespace Intersect.Server.Entities.Events
 
             Fade,
 
-            Deconstruction
+            Deconstruction,
+
+            Enhancement
 
         }
 

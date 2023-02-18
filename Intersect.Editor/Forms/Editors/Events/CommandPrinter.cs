@@ -2034,5 +2034,10 @@ namespace Intersect.Editor.Forms.Editors.Events
             var status = command.Forget ? "Forget" : "Learn";
             return Strings.EventCommandList.ChangeEnhancement.ToString(status, EnhancementDescriptor.GetName(command.EnhancementId));
         }
+
+        private static string GetCommandText(OpenEnhancementWindow command, MapInstance map)
+        {
+            return Strings.EventCommandList.OpenEnhancementWindow.ToString(ItemBase.GetName(command.CurrencyItemId), command.CostMultiplier.ToString("N2");
+        }
     }
 }

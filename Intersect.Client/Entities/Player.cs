@@ -2171,17 +2171,28 @@ namespace Intersect.Client.Entities
             return ExperienceToNextLevel;
         }
 
-        public bool TryGetEquippedWeaponDescriptor(out ItemBase weapon)
+        public bool TryGetEquippedWeapon(out Item equippedWeapon)
         {
-            weapon = null;
+            equippedWeapon = null;
             if (this == Globals.Me)
             {
                 if (Options.WeaponIndex > -1 &&
                     Options.WeaponIndex < Equipment.Length &&
                     MyEquipment[Options.WeaponIndex] >= 0)
                 {
-                    weapon = ItemBase.Get(Inventory[MyEquipment[Options.WeaponIndex]].ItemId);
+                    equippedWeapon = Inventory[MyEquipment[Options.WeaponIndex]];
                 }
+            }
+
+            return equippedWeapon != null;
+        }
+
+        public bool TryGetEquippedWeaponDescriptor(out ItemBase weapon)
+        {
+            weapon = null;
+            if (this == Globals.Me && TryGetEquippedWeapon(out var equippedWeapon))
+            {
+                weapon = ItemBase.Get(equippedWeapon.ItemId);
             }
             else
             {

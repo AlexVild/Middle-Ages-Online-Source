@@ -183,6 +183,12 @@
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_OpenDeconstructor.Designer.cs">
       <DependentUpon>EventCommand_OpenDeconstructor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_OpenEnhancementWindow.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_OpenEnhancementWindow.Designer.cs">
+      <DependentUpon>EventCommand_OpenEnhancementWindow.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_OpenLeaderboard.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -935,6 +941,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_OpenDeconstructor.resx">
       <DependentUpon>EventCommand_OpenDeconstructor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_OpenEnhancementWindow.resx">
+      <DependentUpon>EventCommand_OpenEnhancementWindow.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_OpenLeaderboard.resx">
       <DependentUpon>EventCommand_OpenLeaderboard.cs</DependentUpon>

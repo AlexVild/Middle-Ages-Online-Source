@@ -4606,5 +4606,10 @@ namespace Intersect.Server.Networking
         {
             client?.Entity?.Deconstructor?.DeconstructItemsInSlots(packet.Slots);
         }
+
+        public void HandlePacket(Client client, CloseEnhancementPacket packet)
+        {
+            client?.Entity?.CloseEnhancement();
+        }
     }
 }

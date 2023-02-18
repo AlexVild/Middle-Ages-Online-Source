@@ -2792,5 +2792,10 @@ namespace Intersect.Server.Networking
         {
             player?.SendPacket(new PlayerFuelPacket(player.Fuel));
         }
+
+        public static void SendOpenEnhancementWindow(Player player, Guid currencyId, float costMulti)
+        {
+            player?.SendPacket(new OpenEnhancementPacket(currencyId, costMulti));
+        }
     }
 }
