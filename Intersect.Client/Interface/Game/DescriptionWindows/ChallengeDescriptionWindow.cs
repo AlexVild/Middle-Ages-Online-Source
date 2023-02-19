@@ -13,6 +13,10 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
         public ChallengeDescriptionWindow(Guid challengeId, int x, int y) : base(Interface.GameUi.GameCanvas, "DescriptionWindow")
         {
             Challenge = ChallengeDescriptor.Get(challengeId);
+            if (Challenge == null)
+            {
+                return;
+            }
 
             GenerateComponents();
             SetupDescriptionWindow();

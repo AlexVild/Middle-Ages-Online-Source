@@ -2912,6 +2912,7 @@ namespace Intersect.Client.Networking
                 return;
             }
 
+            Globals.Me.SetKnownEnhancements(packet.KnownEnhancements);
             Globals.Me.Enhancement?.Open(packet.CurrencyId, packet.CostMultiplier);
         }
     }

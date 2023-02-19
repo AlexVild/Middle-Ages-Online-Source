@@ -94,7 +94,7 @@ namespace Intersect.GameObjects
 
         public int MaxValue { get; set; }
 
-        public string GetRangeDisplay(bool percent)
+        public string GetRangeDisplay(bool percent, bool noEffectName = false)
         {
             string effectName = string.IsNullOrEmpty(EnhancementType.GetDescription()) ? 
                 Enum.GetName(typeof(T), EnhancementType) : 
@@ -122,6 +122,11 @@ namespace Intersect.GameObjects
                 {
                     range = $"{MinValue} to {MaxValue}";
                 }
+            }
+
+            if (noEffectName)
+            {
+                return range;
             }
 
             return $"{effectName}: {range}";

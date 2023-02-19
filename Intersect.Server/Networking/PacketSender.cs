@@ -2795,7 +2795,7 @@ namespace Intersect.Server.Networking
 
         public static void SendOpenEnhancementWindow(Player player, Guid currencyId, float costMulti)
         {
-            player?.SendPacket(new OpenEnhancementPacket(currencyId, costMulti));
+            player?.SendPacket(new OpenEnhancementPacket(currencyId, costMulti, player.KnownEnhancements.ToArray()));
         }
     }
 }

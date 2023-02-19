@@ -2465,7 +2465,10 @@ namespace Intersect.Client.Localization
         public partial struct EnhancementWindow
         {
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public static LocalizedString Enhancements = "Enhancements";
+            public static LocalizedString Enhancements = "Enhancement";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString EPRemaining = "Enhancement Points Remaining: {00}";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString EP = "EP";

@@ -12,14 +12,18 @@ namespace Intersect.Network.Packets.Server
         [Key(1)]
         public float CostMultiplier { get; set; }
 
+        [Key(2)]
+        public Guid[] KnownEnhancements { get; set; }
+
         public OpenEnhancementPacket()
         {
         }
 
-        public OpenEnhancementPacket(Guid currencyId, float costMultiplier)
+        public OpenEnhancementPacket(Guid currencyId, float costMultiplier, Guid[] knownEhancements)
         {
             CurrencyId = currencyId;
             CostMultiplier = costMultiplier;
+            KnownEnhancements = knownEhancements;
         }
     }
 }

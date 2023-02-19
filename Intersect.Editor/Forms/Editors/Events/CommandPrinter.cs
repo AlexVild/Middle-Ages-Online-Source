@@ -2037,7 +2037,7 @@ namespace Intersect.Editor.Forms.Editors.Events
 
         private static string GetCommandText(OpenEnhancementWindow command, MapInstance map)
         {
-            return Strings.EventCommandList.OpenEnhancementWindow.ToString(ItemBase.GetName(command.CurrencyItemId), command.CostMultiplier.ToString("N2");
+            return Strings.EventCommandList.OpenEnhancementWindow.ToString(ItemBase.GetName(command.CurrencyItemId), command.CostMultiplier.ToString("N2"));
         }
     }
 }

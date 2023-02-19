@@ -11,6 +11,8 @@ namespace Intersect.Client.General.Enhancement
     {
         public Guid CurrencyId { get; set; }
         public ItemBase Currency => ItemBase.Get(CurrencyId);
+        public bool RefreshUi { get; set; }
+        public bool IsOpen { get; set; }
 
         public float CostMultiplier { get; set; }
 
@@ -19,12 +21,14 @@ namespace Intersect.Client.General.Enhancement
             CurrencyId = currencyId;
             CostMultiplier = costMulti;
 
+            IsOpen = true;
             Interface.Interface.GameUi?.EnhancementWindow?.Show();
+            RefreshUi = true;
         }
 
         public void Close()
         {
-
+            IsOpen = false;
         }
     }
 }

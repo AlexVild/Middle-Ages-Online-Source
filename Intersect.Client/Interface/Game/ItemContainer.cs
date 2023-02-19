@@ -46,6 +46,12 @@ namespace Intersect.Client.Interface.Game
             HoverPanelY = hoverPanelY;
         }
 
+        public void SetHoverPanelLocation(int hoverX, int hoverY)
+        {
+            HoverPanelX = hoverX;
+            HoverPanelY = hoverY;
+        }
+
         public virtual void Setup()
         {
             Pnl = new ImagePanel(Container, Filename);
