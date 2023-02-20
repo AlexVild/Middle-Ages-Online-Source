@@ -670,6 +670,17 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             // Is this a weapon?
             if (mItem.EquipmentSlot == Options.WeaponIndex)
             {
+                // Display weapon type levels
+                foreach (var kv in mItem.MaxWeaponLevels)
+                {
+                    var weaponTypeId = kv.Key;
+                    var level = kv.Value;
+
+                    var wepTypeName = WeaponTypeDescriptor.Get(weaponTypeId)?.VisibleName ?? "NOT FOUND";
+
+                    rows.AddKeyValueRow($"Lvl. {level} {wepTypeName} type", string.Empty, CustomColors.ItemDesc.Special, Color.White);
+                }
+
                 // Special attack
                 if (mItem.SpecialAttack.SpellId != default)
                 {

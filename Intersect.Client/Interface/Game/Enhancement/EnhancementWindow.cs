@@ -2,11 +2,13 @@
 using Intersect.Client.Framework.Graphics;
 using Intersect.Client.Framework.Gwen.Control;
 using Intersect.Client.General;
+using Intersect.Client.General.Enhancement;
 using Intersect.Client.Interface.Game.DescriptionWindows;
 using Intersect.Client.Items;
 using Intersect.Client.Localization;
 using Intersect.Client.Networking;
 using Intersect.GameObjects;
+using Intersect.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -70,10 +72,13 @@ namespace Intersect.Client.Interface.Game.Enhancement
         Button CancelButton { get; set; }
 
         bool IsFlashing {get; set;}
+        readonly long FlashTime = 250;
+        long LastFlash { get; set; }
+
         bool ThresholdPassed {get; set;}
         
         Item EquippedItem;
-        General.Enhancement.Enhancement Enhancement => Globals.Me?.Enhancement;
+        EnhancementInterface EnhancementInterface => Globals.Me?.Enhancement;
         List<Guid> KnownEhancements => Globals.Me?.KnownEnhancements ?? new List<Guid>();
 
         private Guid SelectedEnhancementId { get; set; }
@@ -87,6 +92,7 @@ namespace Intersect.Client.Interface.Game.Enhancement
             _epBarNewFlashTxt = Globals.ContentManager.GetTexture(txtType, "weapon_enhancement_ep_bar_new_flash.png");
             _epBarFullTxt = Globals.ContentManager.GetTexture(txtType, "weapon_enhancement_ep_bar_expended.png");
             _epBarFullFlashTxt = Globals.ContentManager.GetTexture(txtType, "weapon_enhancement_ep_bar_expended_flash.png");
+            LastFlash = Timing.Global.Milliseconds;
         }
 
         public override void Show()
@@ -114,12 +120,14 @@ namespace Intersect.Client.Interface.Game.Enhancement
             EnhancementItem.Update(EquippedItem.ItemId, EquippedItem.ItemProperties);
             WeaponLabel.SetText($"{ItemBase.GetName(EquippedItem.ItemId)} Enhancement");
 
-            // TODO make this real
-            EPBarLabel.SetText(
-                Strings.EnhancementWindow.EPRemaining.ToString(EnhancementItemDescriptor.EnhancementThreshold)
-            );
-
             base.Show();
+        }
+
+        public override void Hide()
+        {
+            EnhancementContainer.Clear();
+            AppliedEnhancementsContainer.Clear();
+            base.Hide();
         }
 
         void UpdateKnownEnhancements()
@@ -138,11 +146,101 @@ namespace Intersect.Client.Interface.Game.Enhancement
                 tmpRow.UserData = new EnhancementRow(
                     new EnhancementDescriptionWindow(enhancementId, EnhancementItemDescriptor.Icon, Background.X, Background.Y), 
                     enhancementId);
-                tmpRow.SetTextColor(new Color(50, 19, 0));
+
+                if (EnhancementInterface.CanAddEnhancement(enhancement, out _))
+                {
+                    tmpRow.SetTextColor(new Color(50, 19, 0));
+                }
+                else
+                {
+                    tmpRow.SetTextColor(new Color(255, 100, 100, 100));
+                }
+
                 tmpRow.RenderColor = new Color(100, 232, 208, 170);
-                tmpRow.Clicked += Enhancement_Clicked;
+                tmpRow.Selected += Enhancement_Selected;
                 tmpRow.HoverEnter += Enhancement_Hover;
                 tmpRow.HoverLeave += Enhancement_Leave;
+            }
+        }
+
+        readonly int EP_XPAD = 4;
+        readonly int EP_YPAD = 4;
+
+        void UpdateEpBar()
+        {
+            // Update flash
+            if (LastFlash < Timing.Global.Milliseconds)
+            {
+                LastFlash = Timing.Global.Milliseconds + FlashTime;
+                IsFlashing = !IsFlashing;
+            }
+
+            // First, update the "applied" bar
+            EPBarPrevious.Texture = _epBarPrevTxt;
+            EPBarPrevious.X = EP_XPAD;
+            EPBarPrevious.Y = EP_YPAD;
+            EPBarPrevious.Height = EPBarBg.Height - ((EP_YPAD * 2) + 4); // extra 4 pixels at bottom
+            var maxWidth = EPBarBg.Width - (EP_XPAD * 2);
+
+            var existingProportion = (int)Math.Floor((float)EnhancementInterface.EPSpent / EnhancementItemDescriptor.EnhancementThreshold * maxWidth);
+            EPBarPrevious.Width = Math.Min(existingProportion, maxWidth);
+
+            var selectedEnhancement = EnhancementDescriptor.Get(SelectedEnhancementId);
+            if (selectedEnhancement == default)
+            {
+                EPBarNew.Texture = EPBarNewTxt;
+                EPBarNew.Width = 0;
+                EPBarNew.Height = EPBarBg.Height - ((EP_YPAD * 2) + 4); // extra 4 pixels at bottom
+                return;
+            }
+
+            var newProportion = (int)Math.Floor((float)selectedEnhancement.RequiredEnhancementPoints / EnhancementItemDescriptor.EnhancementThreshold * maxWidth);
+
+            maxWidth -= EPBarPrevious.Width;
+
+            EPBarNew.X = EP_XPAD + EPBarPrevious.Width;
+            EPBarNew.Y = EP_YPAD;
+
+            ThresholdPassed = selectedEnhancement.RequiredEnhancementPoints > EnhancementInterface.EPFree;
+
+            EPBarNew.Texture = EPBarNewTxt;
+            EPBarNew.Width = Math.Min(newProportion, maxWidth);
+            EPBarNew.Height = EPBarBg.Height - ((EP_YPAD * 2) + 4); // extra 4 pixels at bottom
+        }
+
+        void UpdateAppliedEnhancements()
+        {
+            AppliedEnhancementsContainer.Clear();
+            foreach (var enhancementItem in EnhancementInterface.EnhancementsApplied.ToArray())
+            {
+                var enhancementId = enhancementItem.EnhancementId;
+                var enhancement = EnhancementDescriptor.Get(enhancementId);
+                var removable = enhancementItem.Removable;
+
+                if (enhancement == default)
+                {
+                    continue;
+                }
+
+                var tmpRow = AppliedEnhancementsContainer.AddRow($"{EnhancementDescriptor.GetName(enhancementId)}");
+
+                tmpRow.UserData = new EnhancementRow(
+                    new EnhancementDescriptionWindow(enhancementId, EnhancementItemDescriptor.Icon, Background.X, Background.Y),
+                    enhancementId);
+                
+                if (enhancementItem.Removable)
+                {
+                    tmpRow.SetTextColor(new Color(50, 19, 0));
+                } else
+                {
+                    tmpRow.SetTextColor(new Color(255, 100, 100, 100));
+                }
+
+                tmpRow.SetTextColor(new Color(50, 19, 0));
+                tmpRow.RenderColor = new Color(100, 232, 208, 170);
+                tmpRow.Selected += AddedEnhancement_Selected;
+                tmpRow.HoverEnter += AppliedEnhancement_Hover;
+                tmpRow.HoverLeave += AppliedEnhancement_Leave;
             }
         }
 
@@ -159,15 +257,44 @@ namespace Intersect.Client.Interface.Game.Enhancement
             row.DescriptionWindow.Show();
         }
 
-        private void Enhancement_Clicked(Base sender, Framework.Gwen.Control.EventArguments.ClickedEventArgs arguments)
+        private void AppliedEnhancement_Leave(Base sender, EventArgs arguments)
+        {
+            var row = (EnhancementRow)((ListBoxRow)sender).UserData;
+            row.DescriptionWindow.Hide();
+        }
+
+        private void AppliedEnhancement_Hover(Base sender, EventArgs arguments)
+        {
+            var row = (EnhancementRow)((ListBoxRow)sender).UserData;
+            row.DescriptionWindow.SetPositionRight(Background.X + Background.Width, Background.Y + EnhancementBackground.Y + 40);
+            row.DescriptionWindow.Show();
+        }
+
+        private void Enhancement_Selected(Base sender, Framework.Gwen.Control.EventArguments.ItemSelectedEventArgs arguments)
         {
             var row = (EnhancementRow)((ListBoxRow)sender).UserData;
             SelectedEnhancementId = row.EnhancementId;
+
+            AppliedEnhancementsContainer.UnselectAll();
+            SelectedAppliedEnhancementId = Guid.Empty;
+            
+            UpdateAddEnhancementAvailability();
+        }
+
+        private void AddedEnhancement_Selected(Base sender, Framework.Gwen.Control.EventArguments.ItemSelectedEventArgs arguments)
+        {
+            var row = (EnhancementRow)((ListBoxRow)sender).UserData;
+            SelectedAppliedEnhancementId = row.EnhancementId;
+
+            EnhancementContainer.UnselectAll();
+            SelectedEnhancementId = Guid.Empty;
+            
+            UpdateRemoveEnhancementAvailability();
         }
 
         public override void UpdateShown()
         {
-            if (Enhancement == null || !Enhancement.IsOpen)
+            if (EnhancementInterface == null || !EnhancementInterface.IsOpen)
             {
                 Close();
                 return;
@@ -176,14 +303,51 @@ namespace Intersect.Client.Interface.Game.Enhancement
             // Update location of item hover to wherever the window is being drawn
             EnhancementItem.SetHoverPanelLocation(Background.X + 6, Background.Y);
 
-            if (!Enhancement.RefreshUi)
+            UpdateEpBar();
+
+            if (!EnhancementInterface.RefreshUi)
             {
                 return;
             }
 
-            UpdateKnownEnhancements();
+            EPBarLabel.SetText(
+                Strings.EnhancementWindow.EPRemaining.ToString(EnhancementInterface.EPFree)
+            );
 
-            Enhancement.RefreshUi = false;
+            UpdateKnownEnhancements();
+            UpdateAppliedEnhancements();
+
+            UpdateAddEnhancementAvailability();
+            UpdateRemoveEnhancementAvailability();
+
+            EnhancementInterface.RefreshUi = false;
+        }
+
+        void UpdateAddEnhancementAvailability()
+        {
+            if (EnhancementContainer.SelectedRowIndex == -1)
+            {
+                AddEnhancementButton.Disable();
+            }
+            else
+            {
+                AddEnhancementButton.IsDisabled = !EnhancementInterface.CanAddEnhancement(EnhancementDescriptor.Get(SelectedEnhancementId), out var addFailure);
+                AddEnhancementButton.SetToolTipText(addFailure);
+            }
+        }
+
+        void UpdateRemoveEnhancementAvailability()
+        {
+            var idx = AppliedEnhancementsContainer.SelectedRowIndex;
+            if (idx == -1)
+            {
+                RemoveEnhancementButton.Disable();
+            }
+            else
+            {
+                RemoveEnhancementButton.IsDisabled = !EnhancementInterface.CanRemoveEnhancementAt(idx, out var removeFailure);
+                RemoveEnhancementButton.SetToolTipText(removeFailure);
+            }
         }
 
         protected override void PostInitialization()
@@ -245,6 +409,33 @@ namespace Intersect.Client.Interface.Game.Enhancement
             };
 
             CancelButton.Clicked += CancelButton_Clicked;
+            AddEnhancementButton.Clicked += AddEnhancementButton_Clicked;
+            RemoveEnhancementButton.Clicked += RemoveEnhancementButton_Clicked;
+        }
+
+        private void RemoveEnhancementButton_Clicked(Base sender, Framework.Gwen.Control.EventArguments.ClickedEventArgs arguments)
+        {
+            var idx = AppliedEnhancementsContainer.SelectedRowIndex;
+            if (idx < 0)
+            {
+                return;
+            }
+
+            EnhancementInterface.TryRemoveEnhancementAt(idx);
+            AppliedEnhancementsContainer.UnselectAll();
+            SelectedAppliedEnhancementId = Guid.Empty;
+        }
+
+        private void AddEnhancementButton_Clicked(Base sender, Framework.Gwen.Control.EventArguments.ClickedEventArgs arguments)
+        {
+            if (SelectedEnhancementId == default || SelectedEnhancementId == Guid.Empty)
+            {
+                return;
+            }
+
+            EnhancementInterface.TryAddEnhancement(EnhancementDescriptor.Get(SelectedEnhancementId));
+            EnhancementContainer.UnselectAll();
+            SelectedEnhancementId = Guid.Empty;
         }
 
         private void CancelButton_Clicked(Base sender, Framework.Gwen.Control.EventArguments.ClickedEventArgs arguments)
@@ -259,7 +450,7 @@ namespace Intersect.Client.Interface.Game.Enhancement
 
         protected override void Close()
         {
-            Enhancement?.Close();
+            EnhancementInterface?.Close();
             PacketSender.SendCloseEnhancementPacket();
             base.Close();
         }

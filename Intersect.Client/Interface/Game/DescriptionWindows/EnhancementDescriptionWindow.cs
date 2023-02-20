@@ -36,6 +36,11 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             SetupHeader();
 
             AddDivider();
+
+            SetupRequirements();
+
+            AddDivider();
+
             if (Enhancement.StatMods.Count > 0)
             {
                 SetupMods(Enhancement.StatMods, "Stats:", Strings.ItemDescription.Stats, false);
@@ -52,6 +57,22 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             }
 
             FinalizeWindow();
+        }
+
+        protected void SetupRequirements()
+        {
+            var rows = AddRowContainer();
+            rows.AddKeyValueRow("Can be applied to...", string.Empty, CustomColors.ItemDesc.Notice, Color.White);
+            foreach (var kv in Enhancement.ValidWeaponTypes)
+            {
+                var weaponTypeId = kv.Key;
+                var minLevel = kv.Value;
+                var name = WeaponTypeDescriptor.Get(weaponTypeId)?.VisibleName ?? "NOT FOUND";
+
+                rows.AddKeyValueRow($"{name}:", $"Lvl. {minLevel}+", CustomColors.ItemDesc.Notice, CustomColors.ItemDesc.Notice);
+            }
+
+            rows.SizeToChildren(true, true);
         }
 
         protected void SetupMods<T>(List<Enhancement<T>> enhancements, string title, Dictionary<int, LocalizedString> valueLookup, bool percentView) where T : Enum

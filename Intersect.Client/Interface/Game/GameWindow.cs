@@ -66,5 +66,10 @@ namespace Intersect.Client.Interface.Game
         {
             Background.Hide();
         }
+
+        public bool IsVisible()
+        {
+            return !Background.IsHidden;
+        }
     }
 }

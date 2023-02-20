@@ -4338,7 +4338,8 @@ namespace Intersect.Server.Entities
                 Trading.Requester != null ||
                 PartyRequester != null ||
                 FriendRequester != null ||
-                Deconstructor != null;
+                Deconstructor != null ||
+                Enhancement != null;
         }
 
         //Bank

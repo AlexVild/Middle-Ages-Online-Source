@@ -8,7 +8,7 @@ namespace Intersect.Client.Entities
 {
     public partial class Player : Entity
     {
-        public Enhancement Enhancement { get; set; } = new Enhancement();
+        public EnhancementInterface Enhancement { get; set; } = new EnhancementInterface();
 
         public List<Guid> KnownEnhancements { get; set; } = new List<Guid>();
 

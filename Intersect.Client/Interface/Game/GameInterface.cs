@@ -745,6 +745,30 @@ namespace Intersect.Client.Interface.Game
                 closedWindows = true;
             }
 
+            if (DeconstructorWindow != null && !DeconstructorWindow.IsVisible())
+            {
+                Globals.Me.Deconstructor.Close();
+                closedWindows = true;
+            }
+
+            if (EnhancementWindow != null && EnhancementWindow.IsVisible())
+            {
+                Globals.Me.Enhancement.Close();
+                closedWindows = true;
+            }
+
+            if (LeaderboardWindow != null && LeaderboardWindow.IsVisible())
+            {
+                LeaderboardWindow.Close();
+                closedWindows = true;
+            }
+
+            if (LootRollWindow != null && LootRollWindow.IsVisible())
+            {
+                LootRollWindow.Close();
+                closedWindows = true;
+            }
+
             return closedWindows;
         }
 

@@ -237,6 +237,11 @@ namespace Intersect.Client.Interface.Game.LootRoll
             PacketSender.SendLootUpdateRequest(LootUpdateType.DismissAt, mSelectedItemIdx);
         }
         
+        public bool IsVisible()
+        {
+            return mBackground.IsVisible;
+        }
+
         #region handlers
         public void DismissAll(object sender, EventArgs e)
         {

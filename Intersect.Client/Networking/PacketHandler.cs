@@ -2913,7 +2913,9 @@ namespace Intersect.Client.Networking
             }
 
             Globals.Me.SetKnownEnhancements(packet.KnownEnhancements);
-            Globals.Me.Enhancement?.Open(packet.CurrencyId, packet.CostMultiplier);
+
+            Globals.Me.TryGetEquippedWeapon(out var weapon);
+            Globals.Me.Enhancement?.Open(packet.CurrencyId, packet.CostMultiplier, weapon?.Base);
         }
     }
 }

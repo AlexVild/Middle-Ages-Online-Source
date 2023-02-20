@@ -90,7 +90,7 @@ namespace Intersect.Client.Interface.Game.Inventory
 
         void pnl_Clicked(Base sender, ClickedEventArgs arguments)
         {
-            if (Globals.Me.Deconstructor.IsOpen)
+            if (Globals.Me.Deconstructor.IsOpen || Globals.Me.Enhancement.IsOpen)
             {
                 return;
             }
@@ -192,7 +192,7 @@ namespace Intersect.Client.Interface.Game.Inventory
                 return;
             }
 
-            if (Globals.Me.Deconstructor.IsOpen)
+            if (Globals.Me.Deconstructor.IsOpen || Globals.Me.Enhancement.IsOpen)
             {
                 mCanDrag = false;
             }
@@ -396,7 +396,7 @@ namespace Intersect.Client.Interface.Game.Inventory
             {
                 if (mMouseOver)
                 {
-                    if (!Globals.InputManager.MouseButtonDown(GameInput.MouseButtons.Left) && !Globals.Me.Deconstructor.IsOpen)
+                    if (!Globals.InputManager.MouseButtonDown(GameInput.MouseButtons.Left) && !Globals.Me.Deconstructor.IsOpen && !Globals.Me.Enhancement.IsOpen)
                     {
                         mCanDrag = true;
                         mMouseX = -1;

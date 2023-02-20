@@ -45,7 +45,7 @@ namespace Intersect.Client.Interface.Game.Leaderboards
         public LeaderboardWindow(Canvas gameCanvas)
         {
             GameCanvas = gameCanvas;
-            Background = new WindowControl(gameCanvas, string.Empty, false, "LeaderboardWindow", onClose: OnClose);
+            Background = new WindowControl(gameCanvas, string.Empty, false, "LeaderboardWindow", onClose: Close);
             Background.DisableResizing();
 
             SearchBackground = new ImagePanel(Background, "SearchBackground");
@@ -186,7 +186,7 @@ namespace Intersect.Client.Interface.Game.Leaderboards
             }
         }
 
-        private void OnClose()
+        public void Close()
         {
             Search.Text = string.Empty;
             CurrentLeaderboard.IsOpen = false;
@@ -217,6 +217,11 @@ namespace Intersect.Client.Interface.Game.Leaderboards
         {
             ClearRecords();
             Background.Dispose();
+        }
+
+        public bool IsVisible()
+        {
+            return Background.IsVisible;
         }
     }
 }
