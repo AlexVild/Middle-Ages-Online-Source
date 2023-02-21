@@ -149,6 +149,10 @@ namespace Intersect.Client.Interface.Game.Inventory
                     }
                 }
             }
+            if (Globals.Me.Enhancement.IsOpen || Globals.Me.InCutscene())
+            {
+                return;
+            }
             else
             {
                 Globals.Me.TryDropItem(mMySlot);
@@ -292,6 +296,7 @@ namespace Intersect.Client.Interface.Game.Inventory
                 item != null && mTexLoaded != item.Icon ||
                 mIconCd != Globals.Me.ItemOnCd(mMySlot) ||
                 Globals.Me.Deconstructor.Refresh ||
+                Globals.Me.RefreshInventoryItems ||
                 Globals.Me.ItemOnCd(mMySlot))
             {
                 mCurrentItemId = Globals.Me.Inventory[mMySlot].ItemId;

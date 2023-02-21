@@ -53,6 +53,7 @@ namespace Intersect.Client.General.Enhancement
 
         public void Close()
         {
+            RefreshUi = false;
             IsOpen = false;
         }
 

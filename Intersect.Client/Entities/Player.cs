@@ -410,6 +410,11 @@ namespace Intersect.Client.Entities
                 TargetBox = new EntityBox(Interface.Interface.GameUi.GameCanvas, EntityTypes.Player, null);
                 TargetBox.Hide();
             }
+
+            if (this == Globals.Me)
+            {
+                Globals.CanEarnWeaponExp = Globals.Me?.CanEarnWeaponExp(Globals.Me.TrackedWeaponTypeId, Globals.Me.TrackedWeaponLevel) ?? false;
+            }
         }
 
         public override EntityTypes GetEntityType()

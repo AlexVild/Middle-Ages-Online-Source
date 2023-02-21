@@ -6,6 +6,8 @@ namespace Intersect.Client.Entities
     {
         public Deconstructor Deconstructor { get; set; } = new Deconstructor();
 
+        public bool RefreshInventoryItems { get; set; }
+
         public int Fuel { get; set; }
     }
 }

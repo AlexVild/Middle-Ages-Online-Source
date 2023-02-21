@@ -91,6 +91,7 @@ namespace Intersect.Client.Interface.Game.Inventory
                     mValues[i].IsHidden = true;
                 }
             }
+            Globals.Me.RefreshInventoryItems = false;
         }
 
         private void InitItemContainer()

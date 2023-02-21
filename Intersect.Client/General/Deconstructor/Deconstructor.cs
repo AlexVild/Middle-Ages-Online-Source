@@ -148,9 +148,11 @@ namespace Intersect.Client.General.Deconstructor
         public void Close(bool sendPacket = true)
         {
             AddingFuel = false;
-            IsOpen = false;
             Items.Clear();
             FuelItems.Clear();
+            IsOpen = false;
+            Refresh = false;
+            Globals.Me.RefreshInventoryItems = true;
             if (sendPacket)
             {
                 PacketSender.SendCloseDeconstructorPacket();
