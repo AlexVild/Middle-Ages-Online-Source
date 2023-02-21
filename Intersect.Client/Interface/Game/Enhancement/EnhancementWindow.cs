@@ -41,6 +41,8 @@ namespace Intersect.Client.Interface.Game.Enhancement
         EnhancementItem EnhancementItem { get; set; }
         ItemBase EnhancementItemDescriptor { get; set; }
 
+        Button ShowBreakdownButton { get; set; }
+
         ImagePanel EPBarBg { get; set; }
         ImagePanel EPBarPrevious { get; set; }
         ImagePanel EPBarNew { get; set; }
@@ -71,11 +73,18 @@ namespace Intersect.Client.Interface.Game.Enhancement
         Button ApplyButton { get; set; }
         Button CancelButton { get; set; }
 
+        ImagePanel CurrencyIcon { get; set; }
+        Label CurrencyAmount { get; set; }
+
         bool IsFlashing {get; set;}
         readonly long FlashTime = 250;
         long LastFlash { get; set; }
 
         bool ThresholdPassed {get; set;}
+
+        public int Width => Background.Width;
+        public int X => Background.X;
+        public int Y => Background.Y;
         
         Item EquippedItem;
         EnhancementInterface EnhancementInterface => Globals.Me?.Enhancement;
@@ -83,6 +92,10 @@ namespace Intersect.Client.Interface.Game.Enhancement
 
         private Guid SelectedEnhancementId { get; set; }
         private Guid SelectedAppliedEnhancementId { get; set; }
+
+        private readonly Color Transparent = new Color(150, 255, 255, 255);
+
+        EnhancementBreakdown BreakdownWindow;
 
         public EnhancementWindow(Base gameCanvas) : base(gameCanvas) 
         {
@@ -93,6 +106,8 @@ namespace Intersect.Client.Interface.Game.Enhancement
             _epBarFullTxt = Globals.ContentManager.GetTexture(txtType, "weapon_enhancement_ep_bar_expended.png");
             _epBarFullFlashTxt = Globals.ContentManager.GetTexture(txtType, "weapon_enhancement_ep_bar_expended_flash.png");
             LastFlash = Timing.Global.Milliseconds;
+
+            BreakdownWindow = new EnhancementBreakdown(this, gameCanvas);
         }
 
         public override void Show()
@@ -120,6 +135,9 @@ namespace Intersect.Client.Interface.Game.Enhancement
             EnhancementItem.Update(EquippedItem.ItemId, EquippedItem.ItemProperties);
             WeaponLabel.SetText($"{ItemBase.GetName(EquippedItem.ItemId)} Enhancement");
 
+            var currencyIcon = EnhancementInterface.Currency?.Icon ?? string.Empty;
+            CurrencyIcon.Texture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Item, currencyIcon);
+
             base.Show();
         }
 
@@ -127,6 +145,7 @@ namespace Intersect.Client.Interface.Game.Enhancement
         {
             EnhancementContainer.Clear();
             AppliedEnhancementsContainer.Clear();
+            BreakdownWindow.Hide();
             base.Hide();
         }
 
@@ -166,7 +185,7 @@ namespace Intersect.Client.Interface.Game.Enhancement
         readonly int EP_XPAD = 4;
         readonly int EP_YPAD = 4;
 
-        void UpdateEpBar()
+        void UpdateEpBarAdditive()
         {
             // Update flash
             if (LastFlash < Timing.Global.Milliseconds)
@@ -206,6 +225,50 @@ namespace Intersect.Client.Interface.Game.Enhancement
             EPBarNew.Texture = EPBarNewTxt;
             EPBarNew.Width = Math.Min(newProportion, maxWidth);
             EPBarNew.Height = EPBarBg.Height - ((EP_YPAD * 2) + 4); // extra 4 pixels at bottom
+            EPBarNew.RenderColor = Color.White;
+        }
+
+        void UpdateEpBarSubtractive()
+        {
+            // Update flash
+            if (LastFlash < Timing.Global.Milliseconds)
+            {
+                LastFlash = Timing.Global.Milliseconds + FlashTime;
+                IsFlashing = !IsFlashing;
+            }
+
+            // First, update the "applied" bar
+            EPBarPrevious.Texture = _epBarPrevTxt;
+            EPBarPrevious.X = EP_XPAD;
+            EPBarPrevious.Y = EP_YPAD;
+            EPBarPrevious.Height = EPBarBg.Height - ((EP_YPAD * 2) + 4); // extra 4 pixels at bottom
+            var maxWidth = EPBarBg.Width - (EP_XPAD * 2);
+
+            var enhancementToRemove = EnhancementDescriptor.Get(SelectedAppliedEnhancementId);
+            if (enhancementToRemove == default)
+            {
+                EPBarNew.Texture = EPBarNewTxt;
+                EPBarNew.Width = 0;
+                EPBarNew.Height = EPBarBg.Height - ((EP_YPAD * 2) + 4); // extra 4 pixels at bottom
+                return;
+            }
+
+            var existingProportion = (int)Math.Floor((float)(EnhancementInterface.EPSpent - enhancementToRemove.RequiredEnhancementPoints) / EnhancementItemDescriptor.EnhancementThreshold * maxWidth);
+            EPBarPrevious.Width = Math.Max(existingProportion, 0);
+
+            var newProportion = (int)Math.Floor((float)enhancementToRemove.RequiredEnhancementPoints / EnhancementItemDescriptor.EnhancementThreshold * maxWidth);
+
+            maxWidth -= EPBarPrevious.Width;
+
+            EPBarNew.X = EP_XPAD + EPBarPrevious.Width;
+            EPBarNew.Y = EP_YPAD;
+
+            ThresholdPassed = false;
+
+            EPBarNew.Texture = EPBarNewTxt;
+            EPBarNew.Width = Math.Max(newProportion, 0);
+            EPBarNew.Height = EPBarBg.Height - ((EP_YPAD * 2) + 4); // extra 4 pixels at bottom
+            EPBarNew.RenderColor = Transparent;
         }
 
         void UpdateAppliedEnhancements()
@@ -302,13 +365,35 @@ namespace Intersect.Client.Interface.Game.Enhancement
 
             // Update location of item hover to wherever the window is being drawn
             EnhancementItem.SetHoverPanelLocation(Background.X + 6, Background.Y);
+            
+            BreakdownWindow.Update();
 
-            UpdateEpBar();
+            if (AppliedEnhancementsContainer.SelectedRowIndex == -1)
+            {
+                UpdateEpBarAdditive();
+            }
+            else
+            {
+                UpdateEpBarSubtractive();
+            }
+
+            if (!BreakdownWindow.Background.IsHidden)
+            {
+                ShowBreakdownButton.SetText("Hide Breakdown");
+            }
+            else
+            {
+                ShowBreakdownButton.SetText("Show Breakdown");
+            }
 
             if (!EnhancementInterface.RefreshUi)
             {
                 return;
             }
+
+            CurrencyAmount.SetText(EnhancementHelper.GetEnhancementCostOnWeapon(EnhancementItemDescriptor, 
+                EnhancementInterface.NewEnhancements.Select(en => en.EnhancementId).ToArray(), 
+                EnhancementInterface.CostMultiplier).ToString("N0"));
 
             EPBarLabel.SetText(
                 Strings.EnhancementWindow.EPRemaining.ToString(EnhancementInterface.EPFree)
@@ -362,6 +447,9 @@ namespace Intersect.Client.Interface.Game.Enhancement
             ItemBg = new ImagePanel(Background, "ItemIcon");
             EnhancementItem = new EnhancementItem(0, ItemBg, Background.X, Background.Y);
 
+            ShowBreakdownButton = new Button(Background, "ShowBreakdownButton");
+            ShowBreakdownButton.Clicked += ShowBreakdownButton_Clicked;
+
             EPBarBg = new ImagePanel(Background, "EPBar");
             EPBarPrevious = new ImagePanel(EPBarBg);
             EPBarNew = new ImagePanel(EPBarBg);
@@ -408,9 +496,25 @@ namespace Intersect.Client.Interface.Game.Enhancement
                 Text = "Cancel"
             };
 
+            CurrencyIcon = new ImagePanel(Background, "CurrencyIcon");
+            CurrencyAmount = new Label(Background, "CurrencyAmountLabel");
+
             CancelButton.Clicked += CancelButton_Clicked;
             AddEnhancementButton.Clicked += AddEnhancementButton_Clicked;
             RemoveEnhancementButton.Clicked += RemoveEnhancementButton_Clicked;
+        }
+
+        private void ShowBreakdownButton_Clicked(Base sender, Framework.Gwen.Control.EventArguments.ClickedEventArgs arguments)
+        {
+            EnhancementInterface.RefreshUi = true;
+            if (BreakdownWindow.Background.IsHidden)
+            {
+                BreakdownWindow.Show();
+            }
+            else
+            {
+                BreakdownWindow.Hide();
+            }
         }
 
         private void RemoveEnhancementButton_Clicked(Base sender, Framework.Gwen.Control.EventArguments.ClickedEventArgs arguments)
@@ -448,11 +552,16 @@ namespace Intersect.Client.Interface.Game.Enhancement
             Close();
         }
 
+        public void ForceClose()
+        {
+            Close();
+        }
+
         protected override void Close()
         {
             EnhancementInterface?.Close();
             PacketSender.SendCloseEnhancementPacket();
-            base.Close();
+            Hide();
         }
     }
 }

@@ -21,6 +21,8 @@ namespace Intersect.Client.General.Enhancement
 
         public ObservableCollection<EnhancementItem> EnhancementsApplied { get; set; } = new ObservableCollection<EnhancementItem>();
 
+        public EnhancementItem[] NewEnhancements => EnhancementsApplied.Where(en => en.Removable).ToArray();
+
         public int EPFree => ItemDescriptor == default ? 0 : ItemDescriptor.EnhancementThreshold - EPSpent;
 
         public int EPSpent => ItemDescriptor == default ? 0 : EnhancementsApplied

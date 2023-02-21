@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Intersect.GameObjects;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -43,6 +44,38 @@ namespace Intersect.Utilities
 
             failureReason = "This weapon is not high enough of a weapon level to receive this enhancement.";
             return false;
+        }
+
+        public static int GetEnhancementCostOnWeapon(ItemBase weapon, Guid[] enhancements, float multiplier)
+        {
+            if (weapon == null || enhancements.Length <= 0 || multiplier <= 0)
+            {
+                return 0;
+            }
+
+            var epCost = 0;
+            foreach (var en in enhancements.Select(en => EnhancementDescriptor.Get(en)).ToArray())
+            {
+                epCost += en.RequiredEnhancementPoints;
+            }
+
+            // For now, we just use the most expensive EP cost out of the weapon's available weapon types
+            var weaponEpCost = 0;
+            foreach (var kv in weapon.MaxWeaponLevels)
+            {
+                var typeId = kv.Key;
+                var weaponLvl = kv.Value;
+                var weaponTypeDesc = WeaponTypeDescriptor.Get(typeId);
+
+                if(!weaponTypeDesc.Unlocks.TryGetValue(weaponLvl, out var lvlDetails))
+                {
+                    continue;
+                }
+
+                weaponEpCost = Math.Max(weaponEpCost, lvlDetails.EnhancementCostPerPoint * epCost);
+            }
+
+            return (int)Math.Round(weaponEpCost * multiplier);
         }
     }
 }

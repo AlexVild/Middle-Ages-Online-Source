@@ -187,6 +187,7 @@
     <Compile Include="Interface\Game\DescriptionWindows\EnhancementDescriptionWindow.cs" />
     <Compile Include="Interface\Game\DescriptionWindows\SpellDescriptionWindow.cs" />
     <Compile Include="Interface\Game\DescriptionWindows\ItemDescriptionWindow.cs" />
+    <Compile Include="Interface\Game\Enhancement\EnhancementBreakdown.cs" />
     <Compile Include="Interface\Game\Enhancement\EnhancementItem.cs" />
     <Compile Include="Interface\Game\Enhancement\EnhancementWindow.cs" />
     <Compile Include="Interface\Game\ExpToast.cs" />
@@ -253,6 +254,7 @@
     <Compile Include="Plugins\Helpers\ClientLifecycleHelper.cs" />
     <Compile Include="Plugins\Helpers\ClientNetworkHelper.cs" />
     <Compile Include="Plugins\Helpers\PluginPacketSender.cs" />
+    <Compile Include="Utilities\BonusEffectHelper.cs" />
     <Compile Include="Utilities\MathHelper.cs" />
     <Compile Include="MonoGame\Audio\MonoMusicInstance.cs" />
     <Compile Include="MonoGame\Audio\MonoMusicSource.cs" />

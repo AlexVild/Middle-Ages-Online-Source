@@ -4,6 +4,7 @@ using Intersect.Client.General;
 using Intersect.Client.Interface.Components;
 using Intersect.Client.Interface.Game.Components;
 using Intersect.Client.Localization;
+using Intersect.Client.Utilities;
 using Intersect.Enums;
 using Intersect.GameObjects;
 using System;
@@ -33,18 +34,7 @@ namespace Intersect.Client.Interface.Game.Character.Panels
     {
         public CharacterPanelType Type = CharacterPanelType.Bonuses;
 
-        readonly Dictionary<EffectType, CharacterBonusInfo> BonusEffects = new Dictionary<EffectType, CharacterBonusInfo>
-        {
-            {EffectType.None, new CharacterBonusInfo("None", "N/A")},
-            {EffectType.CooldownReduction, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.CooldownReduction], "Reduces length of skill cooldowns.")}, // Cooldown Reduction
-            {EffectType.Lifesteal, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.Lifesteal], "Gives life as a percentage of damage dealt.")}, // Lifesteal
-            {EffectType.Tenacity, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.Tenacity], "Reduces negative status effect duration.")}, // Tenacity
-            {EffectType.Luck, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.Luck], "Increases chances for extra mob loot, ammo recovery.")}, // Luck
-            {EffectType.EXP, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.EXP], "Grants extra EXP when earned.")}, // Bonus Experience
-            {EffectType.Affinity, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.Affinity], "Increases crit chance.")}, // Affinity
-            {EffectType.CritBonus, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.CritBonus], "Increases crit damage bonus.")}, // Critical bonus
-            {EffectType.Swiftness, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.Swiftness], "Increases weapon attack speed.")}, // Swiftness
-        };
+        Dictionary<EffectType, CharacterBonusInfo> BonusEffects => BonusEffectHelper.BonusEffectDescriptions;
 
         private ImagePanel BonusBackground { get; set; }
 
