@@ -149,7 +149,7 @@ namespace Intersect.Client.Interface.Game.Inventory
                     }
                 }
             }
-            if (Globals.Me.Enhancement.IsOpen || Globals.Me.InCutscene())
+            else if (Globals.Me.Enhancement.IsOpen || Globals.Me.InCutscene())
             {
                 return;
             }

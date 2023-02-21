@@ -199,6 +199,7 @@
     <Compile Include="Interface\Game\Toasts\ToastService.cs" />
     <Compile Include="Interface\Game\Toasts\ToastWindow.cs" />
     <Compile Include="Interface\Objects\HarvestInfoRows.cs" />
+    <Compile Include="Interface\ScreenAnimations\DeconstructorAnim.cs" />
     <Compile Include="Interface\ScreenAnimations\Gravestone.cs" />
     <Compile Include="Interface\Game\HUD\PartyHud.cs" />
     <Compile Include="Interface\Game\InstanceLifeWindow.cs" />

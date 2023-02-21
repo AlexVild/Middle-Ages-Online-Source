@@ -2600,6 +2600,7 @@ namespace Intersect.Client.Networking
             }
 
             Interface.Interface.GameUi.LootRollWindow.SetTitle(packet.Title);
+            Globals.CurrentLootAnim = packet.AnimationType;
             Globals.Me.LoadRolledLoot(packet.Loot);
         }
 

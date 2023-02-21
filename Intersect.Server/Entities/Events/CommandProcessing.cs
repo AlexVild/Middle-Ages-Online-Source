@@ -2829,7 +2829,7 @@ namespace Intersect.Server.Entities.Events
             if (player == null) return;
 
             player.OpenLootRoll(instance.BaseEvent.Id, command.LootTables);
-            PacketSender.SendOpenLootPacketTo(player, command.Title);
+            PacketSender.SendOpenLootPacketTo(player, command.Title, GameObjects.Events.LootAnimType.Chest);
 
             callStack.Peek().WaitingForResponse = CommandInstance.EventResponse.LootRoll;
         }
@@ -3392,7 +3392,7 @@ namespace Intersect.Server.Entities.Events
             {
                 player.OpenLootRoll(instance.BaseEvent.Id, instanceController.GetDungeonLoot());
                 
-                PacketSender.SendOpenLootPacketTo(player, instanceController.DungeonName);
+                PacketSender.SendOpenLootPacketTo(player, instanceController.DungeonName, GameObjects.Events.LootAnimType.Chest);
 
                 callStack.Peek().WaitingForResponse = CommandInstance.EventResponse.LootRoll;
             }
@@ -3419,7 +3419,7 @@ namespace Intersect.Server.Entities.Events
             if (existingDeconRoll != default && existingDeconRoll.Loot.Count > 0)
             {
                 player.OpenLootRoll(instance.BaseEvent.Id, new List<LootRoll>());
-                PacketSender.SendOpenLootPacketTo(player, "Deconstruction");
+                PacketSender.SendOpenLootPacketTo(player, "Deconstruction", GameObjects.Events.LootAnimType.Deconstruct);
 
                 callStack.Peek().WaitingForResponse = CommandInstance.EventResponse.LootRoll;
                 return;

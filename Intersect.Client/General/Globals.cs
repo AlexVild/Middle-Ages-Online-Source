@@ -11,6 +11,7 @@ using Intersect.Client.Items;
 using Intersect.Client.Plugins.Interfaces;
 using Intersect.Enums;
 using Intersect.GameObjects;
+using Intersect.GameObjects.Events;
 using Intersect.GameObjects.QuestBoard;
 using Intersect.Network.Packets.Server;
 using Intersect.Utilities;
@@ -232,5 +233,7 @@ namespace Intersect.Client.General
         public static string SkillUpdateString;
 
         public static long LastLevelJinglePlayed { get; set; } = 0L;
+
+        public static LootAnimType CurrentLootAnim { get; set; } = LootAnimType.Chest;
     }
 }

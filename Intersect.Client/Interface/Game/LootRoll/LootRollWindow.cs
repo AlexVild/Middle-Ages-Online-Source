@@ -1,5 +1,6 @@
 ﻿using Intersect.Client.Core;
 using Intersect.Client.Framework.File_Management;
+using Intersect.Client.Framework.Graphics;
 using Intersect.Client.Framework.Gwen.Control;
 using Intersect.Client.Framework.Gwen.Control.EventArguments;
 using Intersect.Client.General;
@@ -44,8 +45,15 @@ namespace Intersect.Client.Interface.Game.LootRoll
         private MenuItem mTakeOption;
 
         private LootChest LootChestAnim;
+        private DeconstructorAnim DeconstructAnim;
+
+        private ScreenAnimation CurrentAnimation;
 
         private int mSelectedItemIdx;
+
+        GameTexture BgTexture { get; set; }
+        private GameTexture _chestTexture { get; set; }
+        private GameTexture _deconstructTexture { get; set; }
 
         public LootRollWindow(Canvas gameCanvas)
         {
@@ -93,11 +101,42 @@ namespace Intersect.Client.Interface.Game.LootRoll
             mBackground.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
             InitLootContainer();
 
+            _chestTexture = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Gui, "loot_roll.png");
+            _deconstructTexture = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Gui, "deconstruct_roll.png");
+
             LootChestAnim = new LootChest(() =>
             {
                 Flash.FlashScreen(1000, new Color(255, 201, 226, 158), 150);
                 mBackground.Show();
             });
+
+            DeconstructAnim = new DeconstructorAnim(() =>
+            {
+                Flash.FlashScreen(1000, new Color(200, 145, 62), 180);
+                mBackground.Show();
+            });
+        }
+
+        public void SetOpenAnimation()
+        {
+            switch(Globals.CurrentLootAnim)
+            {
+                case GameObjects.Events.LootAnimType.Chest:
+                    CurrentAnimation = LootChestAnim;
+                    BgTexture = _chestTexture;
+                    break;
+
+                case GameObjects.Events.LootAnimType.Deconstruct:
+                    CurrentAnimation = DeconstructAnim;
+                    BgTexture = _deconstructTexture;
+                    break;
+
+                default:
+                    CurrentAnimation = LootChestAnim;
+                    break;
+            }
+
+            mBackground.SetImage(BgTexture, BgTexture.Name, WindowControl.ControlState.Active);
         }
 
         public void SetTitle(string title)
@@ -144,7 +183,7 @@ namespace Intersect.Client.Interface.Game.LootRoll
         public void Update()
         {
             HandleInputBlocking();
-
+            SetOpenAnimation();
             if (Loot == null)
             {
                 if (mBackground.IsVisible)
@@ -155,11 +194,11 @@ namespace Intersect.Client.Interface.Game.LootRoll
             }
             else if (mBackground.IsHidden)
             {
-                if (LootChestAnim.Done)
+                if (CurrentAnimation.Done)
                 {
-                    LootChestAnim.ResetAnimation();
+                    CurrentAnimation.ResetAnimation();
                 }
-                LootChestAnim.Draw();
+                CurrentAnimation.Draw();
             }
 
             var idx = 0;

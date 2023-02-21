@@ -444,4 +444,10 @@ namespace Intersect.GameObjects.Events
         Active,
         Complete,
     }
+
+    public enum LootAnimType
+    {
+        Chest,
+        Deconstruct,
+    }
 }

@@ -151,7 +151,7 @@ namespace Intersect.Server.Entities
             Owner.SendPacket(new CloseDeconstructorPacket());
             Owner.OpenLootRoll(Owner.DeconstructorEventId, deconstructedLoot);
             Owner.CloseDeconstructor();
-            PacketSender.SendOpenLootPacketTo(Owner, "Deconstruction");
+            PacketSender.SendOpenLootPacketTo(Owner, "Deconstruction", GameObjects.Events.LootAnimType.Deconstruct);
         }
     }
 }

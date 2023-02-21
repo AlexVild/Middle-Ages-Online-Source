@@ -1,4 +1,5 @@
 ﻿using Intersect.GameObjects;
+using Intersect.GameObjects.Events;
 using MessagePack;
 using System;
 using System.Collections.Generic;
@@ -27,7 +28,7 @@ namespace Intersect.Network.Packets.Server
         // ef
         public OpenLootRollPacket() { }
 
-        public OpenLootRollPacket(List<Loot> loot, string title)
+        public OpenLootRollPacket(List<Loot> loot, string title, LootAnimType animType)
         {
             Loot = new List<Loot>();
 
@@ -37,6 +38,7 @@ namespace Intersect.Network.Packets.Server
             }
 
             Title = title;
+            AnimationType = animType;
         }
 
         [Key(0)]
@@ -44,5 +46,8 @@ namespace Intersect.Network.Packets.Server
         
         [Key(1)]
         public string Title { get; set; }
+
+        [Key(2)]
+        public LootAnimType AnimationType { get; set; }
     }
 }
