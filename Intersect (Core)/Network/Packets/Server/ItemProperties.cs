@@ -50,58 +50,6 @@ namespace Intersect.Network.Packets.Server
 
         [Key(5)]
         public string EnhancedBy { get; set; }
-
-        public override bool Equals(object obj)
-        {
-            try
-            {
-                var props = (ItemProperties)obj;
-
-                if (props == default)
-                {
-                    return false;
-                }
-
-                for (var i = 0; i < StatModifiers.Length; i++)
-                {
-                    if (props.StatModifiers[i] != StatModifiers[i])
-                    {
-                        return false;
-                    }
-                }
-
-                for (var i = 0; i < StatEnhancements.Length; i++)
-                {
-                    if (props.StatEnhancements[i] != StatEnhancements[i])
-                    {
-                        return false;
-                    }
-                }
-
-
-                for (var i = 0; i < VitalEnhancements.Length; i++)
-                {
-                    if (props.VitalEnhancements[i] != VitalEnhancements[i])
-                    {
-                        return false;
-                    }
-                }
-
-                for (var i = 0; i < EffectEnhancements.Length; i++)
-                {
-                    if (props.EffectEnhancements[i] != EffectEnhancements[i])
-                    {
-                        return false;
-                    }
-                }
-
-                return true;
-            }
-            catch (InvalidCastException e)
-            {
-                return false;
-            }
-        }
     }
 
     [MessagePackObject]
