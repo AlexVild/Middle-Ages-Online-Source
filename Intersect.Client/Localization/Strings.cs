@@ -1135,6 +1135,21 @@ namespace Intersect.Client.Localization
                 {10, @"Accuracy"},
             };
 
+            public static Dictionary<int, LocalizedString> StatPercentages = new Dictionary<int, LocalizedString>
+            {
+                {0, @"Blunt Attack (%)"},
+                {1, @"Magic Attack (%)"},
+                {2, @"Blunt Defense (%)"},
+                {3, @"Magic Defense (%)"},
+                {4, @"Speed (%)"},
+                {5, @"Slash Attack (%)"},
+                {6, @"Slash Resistance (%)"},
+                {7, @"Pierce Attack (%)"},
+                {8, @"Pierce Resistance (%)"},
+                {9, @"Evasion (%)"},
+                {10, @"Accuracy (%)"},
+            };
+
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static Dictionary<int, LocalizedString> StatCounts = new Dictionary<int, LocalizedString>
             {
@@ -1160,15 +1175,22 @@ namespace Intersect.Client.Localization
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static Dictionary<int, LocalizedString> Vitals = new Dictionary<int, LocalizedString>
             {
-                {0, @"HP:"},
-                {1, @"MP:"}
+                {0, @"HP"},
+                {1, @"MP"}
+            };
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static Dictionary<int, LocalizedString> VitalPercentages = new Dictionary<int, LocalizedString>
+            {
+                {0, @"HP (%)"},
+                {1, @"MP (%)"}
             };
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static Dictionary<int, LocalizedString> VitalRegens = new Dictionary<int, LocalizedString>
             {
-                {0, @"OoC HP Regen:"},
-                {1, @"OoC MP Regen:"}
+                {0, @"OoC HP Regen"},
+                {1, @"OoC MP Regen"}
             };
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]

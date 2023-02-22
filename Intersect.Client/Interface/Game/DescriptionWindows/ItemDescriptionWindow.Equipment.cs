@@ -18,11 +18,17 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
 {
     public partial class ItemDescriptionWindow : DescriptionWindowBase
     {
-        readonly Color StatLabelColor = CustomColors.ItemDesc.Muted;
+        readonly Color _statLabelColor = CustomColors.ItemDesc.Muted;
+        readonly Color _statLabelColorBanded = CustomColors.ItemDesc.MutedBanded;
+
+        public bool Banded = false;
+
+        Color StatLabelColor => Banded ? _statLabelColorBanded : _statLabelColor;
+        
         readonly Color StatValueColor = CustomColors.ItemDesc.Primary;
         readonly Color StatHeaderColor = Color.White;
 
-        protected void SetupEquipmentInfo2()
+        protected void SetupEquipmentInfo()
         {
             AddDivider();
             if (mItem == default)
@@ -132,6 +138,14 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                     StatValueColor,
                     ItemInstanceHelper.GetStatBoost(mItemProperties, stat),
                     ItemInstanceHelper.GetStatBoost(EquippedItem?.ItemProperties, stat));
+
+                AddEquipmentRow(statRows,
+                    Strings.ItemDescription.StatPercentages[(int)stat],
+                    mItem.PercentageStatsGiven[(int)stat],
+                    EquippedItemDesc?.PercentageStatsGiven[(int)stat],
+                    false,
+                    StatLabelColor,
+                    StatValueColor);
             }
 
             statRows.SizeToChildren(true, true);
@@ -284,6 +298,14 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                     StatValueColor,
                     ItemInstanceHelper.GetVitalBoost(mItemProperties, vital),
                     ItemInstanceHelper.GetVitalBoost(EquippedItem?.ItemProperties, vital));
+                
+                AddEquipmentRow(vitalRows,
+                    Strings.ItemDescription.Vitals[(int)vital],
+                    mItem.PercentageVitalsGiven[(int)vital],
+                    EquippedItemDesc?.PercentageVitalsGiven[(int)vital],
+                    false,
+                    StatLabelColor,
+                    StatValueColor);
             }
             foreach (Vitals vital in Enum.GetValues(typeof(Vitals)))
             {
@@ -348,6 +370,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 }
             }
 
+            statName = statName.Replace(":", "");
             if (Math.Sign(diff) < 0)
             {
                 rows.AddKeyValueRow(statName, $"{statString}{unit} ({diff}{unit})", labelColor, statLowerColor);
@@ -360,6 +383,8 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             {
                 rows.AddKeyValueRow(statName, $"{statString}{unit}", labelColor, defaultStatColor);
             }
+
+            Banded = !Banded;
         }
 
         private void AddEquipmentRow(RowContainerComponent rows,
@@ -405,6 +430,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 }
             }
 
+            statName = statName.Replace(":", "");
             if (Math.Sign(diff) < 0)
             {
                 rows.AddKeyValueRow(statName, $"{statString}{unit} ({diff.ToString("N2")}{unit})", labelColor, statLowerColor);
@@ -417,6 +443,8 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             {
                 rows.AddKeyValueRow(statName, $"{statString}{unit}", labelColor, defaultStatColor);
             }
+
+            Banded = !Banded;
         }
 
         private bool DisplayVitalBonuses()
@@ -476,6 +504,11 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 return true;
             }
 
+            if (mItem.PercentageStatsGiven.Any(v => v != 0))
+            {
+                return true;
+            }
+
             if (EquippedItem == null)
             {
                 return false;
@@ -492,6 +525,11 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             }
 
             if (EquippedItem.ItemProperties.StatEnhancements.Any(v => v != 0))
+            {
+                return true;
+            }
+
+            if (EquippedItemDesc.PercentageStatsGiven.Any(v => v != 0))
             {
                 return true;
             }

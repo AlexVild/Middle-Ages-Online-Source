@@ -237,6 +237,8 @@ namespace Intersect
             public Color Primary = Color.White;
             
             public Color Muted = new Color(255, 160, 160, 160);
+            
+            public Color MutedBanded = new Color(255, 190, 190, 190);
 
             public Color Better = new Color(255, 129, 186, 40);
 
