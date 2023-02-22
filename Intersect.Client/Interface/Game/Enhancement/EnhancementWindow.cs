@@ -299,7 +299,6 @@ namespace Intersect.Client.Interface.Game.Enhancement
                     tmpRow.SetTextColor(new Color(255, 100, 100, 100));
                 }
 
-                tmpRow.SetTextColor(new Color(50, 19, 0));
                 tmpRow.RenderColor = new Color(100, 232, 208, 170);
                 tmpRow.Selected += AddedEnhancement_Selected;
                 tmpRow.HoverEnter += AppliedEnhancement_Hover;
@@ -390,6 +389,8 @@ namespace Intersect.Client.Interface.Game.Enhancement
             {
                 return;
             }
+
+            ApplyButton.IsDisabled = EnhancementInterface.NewEnhancements.Length <= 0;
 
             CurrencyAmount.SetText(EnhancementHelper.GetEnhancementCostOnWeapon(EnhancementItemDescriptor, 
                 EnhancementInterface.NewEnhancements.Select(en => en.EnhancementId).ToArray(), 
@@ -499,9 +500,20 @@ namespace Intersect.Client.Interface.Game.Enhancement
             CurrencyIcon = new ImagePanel(Background, "CurrencyIcon");
             CurrencyAmount = new Label(Background, "CurrencyAmountLabel");
 
+            ApplyButton.Clicked += ApplyButton_Clicked;
             CancelButton.Clicked += CancelButton_Clicked;
             AddEnhancementButton.Clicked += AddEnhancementButton_Clicked;
             RemoveEnhancementButton.Clicked += RemoveEnhancementButton_Clicked;
+        }
+
+        private void ApplyButton_Clicked(Base sender, Framework.Gwen.Control.EventArguments.ClickedEventArgs arguments)
+        {
+            if (EnhancementInterface.NewEnhancements.Length <= 0)
+            {
+                return;
+            }
+
+            PacketSender.SendApplyEnhancementPacket(EnhancementInterface.NewEnhancements.Select(en => en.EnhancementId).ToArray());
         }
 
         private void ShowBreakdownButton_Clicked(Base sender, Framework.Gwen.Control.EventArguments.ClickedEventArgs arguments)

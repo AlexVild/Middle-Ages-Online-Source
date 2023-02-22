@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Intersect.Network.Packets.Server;
 using Intersect.Server.Database;
 using Intersect.Server.Database.PlayerData.Players;
 
@@ -46,7 +47,7 @@ namespace Intersect.Server.Maps
             Y = y;
         }
 
-        public MapItem(Guid itemId, int quantity, int x, int y, Guid? bagId, Bag bag) : base(itemId, quantity, bagId, bag)
+        public MapItem(Guid itemId, int quantity, int x, int y, Guid? bagId, Bag bag, ItemProperties itemProperties) : base(itemId, quantity, bagId, bag, itemProperties)
         {
             UniqueId = Guid.NewGuid();
             X = x;
@@ -56,22 +57,6 @@ namespace Intersect.Server.Maps
         public string Data()
         {
             return JsonConvert.SerializeObject(this);
-        }
-
-        /// <summary>
-        /// Sets up the Stat Buffs on this map item from a supplied item.
-        /// </summary>
-        /// <param name="item">The item to take the Stat Buffs from and apply them to this MapItem.</param>
-        public void SetupStatBuffs(Item item)
-        {
-            var statMods = ItemProperties.StatModifiers;
-            if (statMods != null && item.ItemProperties.StatModifiers != null)
-            {
-                for (var i = 0; i < statMods.Length; ++i)
-                {
-                    statMods[i] = item.ItemProperties.StatModifiers.Length > i ? item.ItemProperties.StatModifiers[i] : 0;
-                }
-            }
         }
 
     }

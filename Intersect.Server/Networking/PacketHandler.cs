@@ -4611,5 +4611,10 @@ namespace Intersect.Server.Networking
         {
             client?.Entity?.CloseEnhancement();
         }
+
+        public void HandlePacket(Client client, ApplyEnhancementsPacket packet)
+        {
+            client?.Entity?.Enhancement?.TryApplyEnhancementsToWeapon(packet.Enhancements);
+        }
     }
 }

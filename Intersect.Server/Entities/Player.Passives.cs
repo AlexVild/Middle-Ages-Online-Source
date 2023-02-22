@@ -38,7 +38,7 @@ namespace Intersect.Server.Entities
                 return;
             }
             passive.IsActive = true;
-            PacketSender.SendEntityStats(this);
+            PacketSender.SendEntityStatsToProximity(this);
         }
 
         public void DeactivatePassive(Guid spellId)
@@ -48,7 +48,7 @@ namespace Intersect.Server.Entities
                 return;
             }
             passive.IsActive = false;
-            PacketSender.SendEntityStats(this);
+            PacketSender.SendEntityStatsToProximity(this);
         }
 
         public void RemovePassive(Guid spellId)
@@ -64,7 +64,7 @@ namespace Intersect.Server.Entities
             {
                 DbInterface.Pool.QueueWorkItem(removedPassive.RemoveFromDb);
             }
-            PacketSender.SendEntityStats(this);
+            PacketSender.SendEntityStatsToProximity(this);
         }
 
         public Tuple<int, int> GetPassiveStatBuffs(Stats statType)

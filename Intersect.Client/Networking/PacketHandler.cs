@@ -2916,7 +2916,17 @@ namespace Intersect.Client.Networking
             Globals.Me.SetKnownEnhancements(packet.KnownEnhancements);
 
             Globals.Me.TryGetEquippedWeapon(out var weapon);
-            Globals.Me.Enhancement?.Open(packet.CurrencyId, packet.CostMultiplier, weapon?.Base);
+            Globals.Me.Enhancement?.Open(packet.CurrencyId, packet.CostMultiplier, weapon);
+        }
+
+        public void HandlePacket(IPacketSender packetSender, EnhancementEndPacket packet)
+        {
+            if (Globals.Me == null)
+            {
+                return;
+            }
+
+            Interface.Interface.GameUi.EnhancementWindow.ForceClose();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Intersect.GameObjects;
+﻿using Intersect.Client.Items;
+using Intersect.GameObjects;
 using Intersect.Utilities;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,8 @@ namespace Intersect.Client.General.Enhancement
 
         public int EPFree => ItemDescriptor == default ? 0 : ItemDescriptor.EnhancementThreshold - EPSpent;
 
+        Item EnhancingItem { get; set; }
+
         public int EPSpent => ItemDescriptor == default ? 0 : EnhancementsApplied
             .Select(e => EnhancementDescriptor.Get(e.EnhancementId))
             .Aggregate(0, (prev, next) => prev + next.RequiredEnhancementPoints);
@@ -39,7 +42,7 @@ namespace Intersect.Client.General.Enhancement
             RefreshUi = true;
         }
 
-        public void Open(Guid currencyId, float costMulti, ItemBase itemDescriptor)
+        public void Open(Guid currencyId, float costMulti, Item item)
         {
             EnhancementsApplied.Clear();
             CurrencyId = currencyId;
@@ -48,7 +51,23 @@ namespace Intersect.Client.General.Enhancement
             IsOpen = true;
             Interface.Interface.GameUi?.EnhancementWindow?.Show();
             RefreshUi = true;
-            ItemDescriptor = itemDescriptor;
+            EnhancingItem = item;
+            ItemDescriptor = item?.Base;
+
+            InitializeEnhancementList();
+        }
+
+        void InitializeEnhancementList()
+        {
+            if (EnhancingItem == default || EnhancingItem.ItemProperties == default)
+            {
+                return;
+            }
+
+            foreach (var enhancementId in EnhancingItem.ItemProperties.AppliedEnhancementIds)
+            {
+                EnhancementsApplied.Add(new EnhancementItem(enhancementId, false));
+            }
         }
 
         public void Close()
@@ -116,7 +135,7 @@ namespace Intersect.Client.General.Enhancement
 
             if (!enhancement.Removable)
             {
-                failureReason = "You can not remove applied enhancements unless you reset this weapon.";
+                failureReason = "You can not remove previously applied enhancements unless you reset this weapon.";
                 return false;
             }
 

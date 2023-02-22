@@ -427,6 +427,7 @@
     <Compile Include="Network\Packets\Client\RequestSkillbookPacket.cs" />
     <Compile Include="Network\Packets\Client\RequestUnlockedRecipesPacket.cs" />
     <Compile Include="Network\Packets\Client\ResourceInfoRequestPacket.cs" />
+    <Compile Include="Network\Packets\Client\ApplyEnhancementsPacket.cs" />
     <Compile Include="Network\Packets\Client\SetLabelPacket.cs" />
     <Compile Include="Network\Packets\Client\SkillPreparationPacket.cs" />
     <Compile Include="Network\Packets\Client\TrackWeaponTypePacket.cs" />
@@ -468,6 +469,7 @@
     <Compile Include="Network\Packets\Server\CombatEffectPacket.cs" />
     <Compile Include="Network\Packets\Server\ComboPacket.cs" />
     <Compile Include="Network\Packets\Server\CraftingInfoPacket.cs" />
+    <Compile Include="Network\Packets\Server\EnhancementEndPacket.cs" />
     <Compile Include="Network\Packets\Server\ExpToastPacket.cs" />
     <Compile Include="Network\Packets\Server\ItemProperties.cs" />
     <Compile Include="Network\Packets\Server\KillCountPacket.cs" />
@@ -806,6 +808,7 @@
     <Compile Include="Utilities\Formula.cs" />
     <Compile Include="Utilities\GameObjectTypeUtils.cs" />
     <Compile Include="Utilities\GuidUtils.cs" />
+    <Compile Include="Utilities\ItemInstanceHelper.cs" />
     <Compile Include="Utilities\LootTableHelpers.cs" />
     <Compile Include="Utilities\MathHelper.cs" />
     <Compile Include="Extensions\RandomExtensions.cs" />

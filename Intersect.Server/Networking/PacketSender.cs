@@ -499,7 +499,7 @@ namespace Intersect.Server.Networking
                 }
             }
 
-            SendEntityStats(en);
+            SendEntityStatsToProximity(en);
 
             //If a player, send equipment to all (for paperdolls)
             if (en.GetType() == typeof(Player))
@@ -537,7 +537,7 @@ namespace Intersect.Server.Networking
                 }
             }
 
-            SendEntityStats(en);
+            SendEntityStatsToProximity(en);
 
             //If a player, send equipment to all (for paperdolls)
             if (en.GetType() == typeof(Player))
@@ -987,7 +987,7 @@ namespace Intersect.Server.Networking
         }
 
         //EntityStatsPacket
-        public static void SendEntityStats(Entity en)
+        public static void SendEntityStatsToProximity(Entity en)
         {
             if (en == null || en is EventPageInstance || en is Projectile || en is Resource)
             {

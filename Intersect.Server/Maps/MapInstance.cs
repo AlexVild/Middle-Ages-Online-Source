@@ -797,7 +797,7 @@ namespace Intersect.Server.Maps
                     }
                 }
 
-                var mapItem = new MapItem(item.ItemId, amount + existingCount, x, y, item.BagId, item.Bag)
+                var mapItem = new MapItem(item.ItemId, amount + existingCount, x, y, item.BagId, item.Bag, item.ItemProperties)
                 {
                     DespawnTime = despawnTime,
                     Owner = owner,
@@ -832,19 +832,13 @@ namespace Intersect.Server.Maps
                 // Oh boy here we go! Set quantity to 1 and drop multiple!
                 for (var i = 0; i < amount; i++)
                 {
-                    var mapItem = new MapItem(item.ItemId, amount, x, y, item.BagId, item.Bag)
+                    var mapItem = new MapItem(item.ItemId, amount, x, y, item.BagId, item.Bag, item.ItemProperties)
                     {
                         DespawnTime = despawnTime,
                         Owner = owner,
                         OwnershipTime = Timing.Global.Milliseconds + Options.Loot.ItemOwnershipTime,
                         VisibleToAll = Options.Loot.ShowUnownedItems || owner == Guid.Empty
                     };
-
-                    // If this is a piece of equipment, set up the stat buffs for it.
-                    if (itemDescriptor.ItemType == ItemTypes.Equipment)
-                    {
-                        mapItem.SetupStatBuffs(item);
-                    }
 
                     if (mapItem.TileIndex > Options.MapHeight * Options.MapWidth || mapItem.TileIndex < 0)
                     {

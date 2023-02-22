@@ -345,7 +345,7 @@ namespace Intersect.Server.Entities
 
                     if (statsUpdated)
                     {
-                        PacketSender.SendEntityStats(this);
+                        PacketSender.SendEntityStatsToProximity(this);
                     }
 
                     //Regen Timers

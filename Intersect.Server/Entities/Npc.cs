@@ -1598,7 +1598,7 @@ namespace Intersect.Server.Entities
             else
             {
                 PacketSender.SendEntityPositionToAll(this);
-                PacketSender.SendEntityStats(this);
+                PacketSender.SendEntityStatsToProximity(this);
             }
         }
 

@@ -1277,6 +1277,7 @@ namespace Intersect.Server.Entities
             {
                 var descriptor = item.Descriptor;
                 classVital += descriptor.VitalsGiven[vital] + descriptor.PercentageVitalsGiven[vital] * baseVital / 100;
+                classVital += item.ItemProperties.VitalEnhancements[vital];
             }
 
             //Must have at least 1 hp and no less than 0 mp
@@ -1854,7 +1855,7 @@ namespace Intersect.Server.Entities
                 var descriptor = equippedItem.Descriptor;
                 if (descriptor != null)
                 {
-                    flatStats += descriptor.StatsGiven[(int)statType] + equippedItem.ItemProperties.StatModifiers[(int)statType];
+                    flatStats += descriptor.StatsGiven[(int)statType] + ItemInstanceHelper.GetStatBoost(equippedItem.ItemProperties, statType);
                     percentageStats += descriptor.PercentageStatsGiven[(int)statType];
                 }
             }
@@ -2136,7 +2137,7 @@ namespace Intersect.Server.Entities
                     newMapInstance.PlayerEnteredMap(this);
                 } else
                 {
-                    PacketSender.SendEntityStats(this);
+                    PacketSender.SendEntityStatsToProximity(this);
                 }
                 PacketSender.SendEntityPositionToAll(this);
             }
@@ -3863,6 +3864,7 @@ namespace Intersect.Server.Entities
             foreach(var item in EquippedItems)
             {
                 value += item.Descriptor.GetEffectPercentage(effect);
+                value += ItemInstanceHelper.GetEffectBoost(item.ItemProperties, effect);
             }
 
             return value + PassiveEffectTotal(effect);
@@ -5742,7 +5744,7 @@ namespace Intersect.Server.Entities
             if (sendPackets)
             {
                 PacketSender.SendPlayerEquipmentToProximity(this);
-                PacketSender.SendEntityStats(this);
+                PacketSender.SendEntityStatsToProximity(this);
             }
             SetMasteryProgress();
         }
@@ -5895,7 +5897,7 @@ namespace Intersect.Server.Entities
                 idx++;
             }
 
-            PacketSender.SendEntityStats(this);
+            PacketSender.SendEntityStatsToProximity(this);
             PacketSender.SendEntityVitals(this);
             PacketSender.SendPointsTo(this);
         }

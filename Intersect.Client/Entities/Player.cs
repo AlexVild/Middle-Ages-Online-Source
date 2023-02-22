@@ -567,6 +567,7 @@ namespace Intersect.Client.Entities
             return 0;
         }
 
+        // TODO this needs re-worked now that items have more going on. See Equals override of ItemProperties class
         public int FindHotbarItem(HotbarInstance hotbarInstance)
         {
             var bestMatch = -1;
@@ -3062,6 +3063,11 @@ namespace Intersect.Client.Entities
                 value += item.GetEffectPercentage(effect);
             }
 
+            if (TryGetEquippedWeapon(out var weapon))
+            {
+                value += ItemInstanceHelper.GetEffectBoost(weapon.ItemProperties, effect);
+            }
+
             foreach (var spellId in ActivePassives)
             {
                 var descriptor = SpellBase.Get(spellId);
@@ -3098,6 +3104,27 @@ namespace Intersect.Client.Entities
                         continue;
                     }
                     effectValues[effect] += amt;
+                }
+            }
+
+            if (TryGetEquippedWeapon(out var weapon))
+            {
+                var idx = 0;
+                foreach (var effect in weapon.ItemProperties.EffectEnhancements)
+                {
+                    if (effect == 0)
+                    {
+                        idx++;
+                        continue;
+                    }
+                    if (!effectValues.ContainsKey((EffectType)effect)) 
+                    {
+                        effectValues[(EffectType)idx] = effect;
+                        idx++;
+                        continue;
+                    }
+                    effectValues[(EffectType)idx] += effect;
+                    idx++;
                 }
             }
 

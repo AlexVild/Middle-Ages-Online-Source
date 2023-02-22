@@ -245,6 +245,8 @@ namespace Intersect
             public Color Notice = new Color(255, 217, 218, 157);
             
             public Color Special = new Color(255, 206, 109, 241);
+
+            public Color WeaponType = new Color(255, 105, 158, 252);
         }
 
         public sealed class ItemsNamespace

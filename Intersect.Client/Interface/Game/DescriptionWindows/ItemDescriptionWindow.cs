@@ -10,6 +10,7 @@ using Intersect.Client.Items;
 using Intersect.Localization;
 using System.Linq;
 using Intersect.Network.Packets.Server;
+using Intersect.Utilities;
 
 namespace Intersect.Client.Interface.Game.DescriptionWindows
 {
@@ -118,6 +119,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             {
                 case ItemTypes.Equipment:
                     SetupEquipmentInfo();
+                    SetupItemEnhancementInfo();
                     break;
 
                 case ItemTypes.Consumable:
@@ -263,11 +265,8 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
         {
             var slot = mItem.EquipmentSlot;
             var flatStat = mItem.StatsGiven[statIndex];
-            if (mItemProperties?.StatModifiers != null) 
-            {
-                flatStat += mItemProperties.StatModifiers[statIndex];
-            }
-            
+            flatStat += ItemInstanceHelper.GetStatBoost(mItemProperties, (Stats)statIndex);
+
             if (Globals.Me.MyEquipment[slot] != -1)
             {
                 var equippedItem = Globals.Me.Inventory[Globals.Me.MyEquipment[slot]];
@@ -275,10 +274,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 if (equippedItem != null && equippedItem.Base != null)
                 {
                     var equippedStat = equippedItem.Base.StatsGiven[statIndex];
-                    if (equippedItem.ItemProperties?.StatModifiers != null)
-                    {
-                        equippedStat += equippedItem.ItemProperties.StatModifiers[statIndex];
-                    }
+                    equippedStat += ItemInstanceHelper.GetStatBoost(equippedItem.ItemProperties, (Stats)statIndex);
 
                     return flatStat - equippedStat;
                 }
@@ -319,10 +315,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
         {
             var slot = mItem.EquipmentSlot;
             var flatStat = mItem.StatsGiven[statIndex];
-            if (mItemProperties?.StatModifiers != null)
-            {
-                flatStat += mItemProperties.StatModifiers[statIndex];
-            }
+            flatStat += ItemInstanceHelper.GetStatBoost(mItemProperties, (Stats)statIndex);
 
             if (Globals.Me.MyEquipment[slot] != -1)
             {
@@ -331,10 +324,8 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 if (equippedItem != null && equippedItem.Base != null)
                 {
                     var equippedStat = equippedItem.Base.StatsGiven[statIndex];
-                    if (equippedItem.ItemProperties?.StatModifiers != null)
-                    {
-                        equippedStat += equippedItem.ItemProperties.StatModifiers[statIndex];
-                    }
+                    flatStat += ItemInstanceHelper.GetStatBoost(equippedItem.ItemProperties, (Stats)statIndex);
+
                     var statDiff = flatStat - equippedStat;
                     var percentDiff = mItem.PercentageStatsGiven[statIndex] - equippedItem.Base.PercentageStatsGiven[statIndex];
                     return (statDiff, percentDiff);
@@ -622,10 +613,10 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             }
         }
 
-        private int GetBonusEffectDifference(ItemBase itm1, ItemBase itm2, EffectType effectType, bool inverse = false)
+        private int GetBonusEffectDifference(ItemBase itm1, ItemBase itm2, EffectType effectType, ItemProperties itm1Props, ItemProperties itm2Props, bool inverse = false)
         {
-            var itm1EffectVals = itm1?.GetEffectPercentage(effectType) ?? 0;
-            var itm2EffectVals = itm2?.GetEffectPercentage(effectType) ?? 0;
+            var itm1EffectVals = (itm1?.GetEffectPercentage(effectType) ?? 0) + ItemInstanceHelper.GetEffectBoost(itm1Props, effectType);
+            var itm2EffectVals = (itm2?.GetEffectPercentage(effectType) ?? 0) + ItemInstanceHelper.GetEffectBoost(itm2Props, effectType);
 
             var multiplier = inverse ? -1 : 1;
 
@@ -645,6 +636,23 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             }
             
             return (itm1EffectVals - itm2EffectVals) * multiplier;
+        }
+
+        protected void SetupItemEnhancementInfo()
+        {
+
+            if (string.IsNullOrEmpty(mItemProperties?.EnhancedBy))
+            {
+                return;
+            }
+
+            AddDivider();
+
+            var rows = AddRowContainer();
+
+            rows.AddKeyValueRow("Enhanced by:", mItemProperties.EnhancedBy, CustomColors.ItemDesc.Notice, CustomColors.ItemDesc.Notice);
+
+            rows.SizeToChildren(true, true);
         }
 
         protected void SetupEquipmentInfo()
@@ -678,7 +686,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
 
                     var wepTypeName = WeaponTypeDescriptor.Get(weaponTypeId)?.VisibleName ?? "NOT FOUND";
 
-                    rows.AddKeyValueRow($"Lvl. {level} {wepTypeName} type", string.Empty, CustomColors.ItemDesc.Special, Color.White);
+                    rows.AddKeyValueRow($"Lvl. {level} {wepTypeName} type", string.Empty, CustomColors.ItemDesc.WeaponType, Color.White);
                 }
 
                 // Special attack
@@ -734,7 +742,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                     var weaponSlot = Globals.Me.MyEquipment[Options.WeaponIndex];
                     if (weaponSlot != -1)
                     {
-                        var statBuffs = Globals.Me.Inventory[weaponSlot].ItemProperties.StatModifiers;
+                        var statBuffs = ItemInstanceHelper.GetStatBoosts(Globals.Me.Inventory[weaponSlot].ItemProperties);
                         var weapon = ItemBase.Get(Globals.Me.Inventory[weaponSlot].ItemId);
                         if (weapon != null && statBuffs != null)
                         {
@@ -745,12 +753,9 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                     }
 
                     // Add current item's speed stats!
-                    if (mItemProperties?.StatModifiers != null)
-                    {
-                        speed += mItem.StatsGiven[(int) Stats.Speed];
-                        speed += mItemProperties.StatModifiers[(int) Stats.Speed];
-                        speed += (int) Math.Floor(speed * (mItem.PercentageStatsGiven[(int)Stats.Speed] / 100f));
-                    }
+                    speed += mItem.StatsGiven[(int) Stats.Speed];
+                    speed += ItemInstanceHelper.GetStatBoost(mItemProperties, Stats.Speed);
+                    speed += (int) Math.Floor(speed * (mItem.PercentageStatsGiven[(int)Stats.Speed] / 100f));
 
                     // Display the actual speed this weapon would have based off of our calculated speed stat.
                     rows.AddKeyValueRow(Strings.ItemDescription.AttackSpeed, Strings.ItemDescription.Seconds.ToString(Globals.Me.CalculateAttackTime(speed) / 1000f));
@@ -796,39 +801,40 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             }
 
             // Stats
-            if (mItemProperties?.StatModifiers != null)
+            if (mItemProperties?.StatModifiers != null || mItemProperties?.StatEnhancements != null)
             {
+                var statBoosts = ItemInstanceHelper.GetStatBoosts(mItemProperties);
                 for (var i = 0; i < (int)Stats.StatCount; i++)
                 {
                     // bcause we want to separate the stat buff from the stat in the display
                     var stat = mItem.StatsGiven[i];
                     var statString = stat.ToString();
 
-                    if (Math.Sign(mItemProperties.StatModifiers[i]) == -1)
+                    if (Math.Sign(statBoosts[i]) == -1)
                     {
                         if (stat == 0)
                         {
-                            statString = Strings.ItemDescription.StatAndBuff.ToString("", "", mItemProperties.StatModifiers[i]);
+                            statString = Strings.ItemDescription.StatAndBuff.ToString("", "", statBoosts[i]);
                         }
                         else
                         {
-                            statString = Strings.ItemDescription.StatAndBuff.ToString(stat, "", mItemProperties.StatModifiers[i]);
+                            statString = Strings.ItemDescription.StatAndBuff.ToString(stat, "", statBoosts[i]);
                         }
                         
                     }
-                    else if (Math.Sign(mItemProperties.StatModifiers[i]) == 1)
+                    else if (Math.Sign(statBoosts[i]) == 1)
                     {
                         if (stat == 0)
                         {
-                            statString = Strings.ItemDescription.StatAndBuff.ToString("", "+", mItemProperties.StatModifiers[i]);
+                            statString = Strings.ItemDescription.StatAndBuff.ToString("", "+", statBoosts[i]);
                         }
                         else
                         {
-                            statString = Strings.ItemDescription.StatAndBuff.ToString(stat, "+", mItemProperties.StatModifiers[i]);
+                            statString = Strings.ItemDescription.StatAndBuff.ToString(stat, "+", statBoosts[i]);
                         }
                     }
 
-                    var calculatedStat = stat + mItemProperties.StatModifiers[i];
+                    var calculatedStat = stat + statBoosts[i];
 
                     if (calculatedStat != 0 && mItem.PercentageStatsGiven[i] != 0)
                     {
@@ -847,7 +853,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                     else if (equippedItem != null && equippedItem.Base != null)
                     {
                         var equippedStat = equippedItem.Base.StatsGiven[i];
-                        var calcualtedEquippedStat = equippedStat + equippedItem.ItemProperties.StatModifiers[i];
+                        var calcualtedEquippedStat = equippedStat + ItemInstanceHelper.GetStatBoost(equippedItem.ItemProperties, (Stats) i);
                         var equippedStatString = "0";
 
                         var equippedPerecentage = equippedItem.Base.PercentageStatsGiven[i];
@@ -875,10 +881,12 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             if (mItem != null)
             {
                 effects.AddRange(mItem.Effects.FindAll(effect => effect.Type != EffectType.None));
+                effects.AddRange(ItemInstanceHelper.GetEnhancementEffectData(mItemProperties));
             }
             if (equippedItemBase != null)
             {
                 effects.AddRange(equippedItemBase.Effects.FindAll(effect => effect.Type != EffectType.None));
+                effects.AddRange(ItemInstanceHelper.GetEnhancementEffectData(equippedItem.ItemProperties));
             }
             if (effects.Count > 0)
             {
@@ -895,16 +903,16 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                     if (mItem.Effects.Find(newEffect => newEffect.Type == effect.Type) != default)
                     {
                         var amt = mItem.GetEffectPercentage(effect.Type);
-                        DisplayKeyValueRowWithDifference(GetBonusEffectDifference(mItem, equippedItemBase, effect.Type), Strings.ItemDescription.BonusEffects[(int)effect.Type], Strings.ItemDescription.Percentage.ToString(amt), rows, "%");
+                        DisplayKeyValueRowWithDifference(GetBonusEffectDifference(mItem, equippedItemBase, effect.Type, mItemProperties, equippedItem?.ItemProperties), Strings.ItemDescription.BonusEffects[(int)effect.Type], Strings.ItemDescription.Percentage.ToString(amt), rows, "%");
                     }
                     else
                     {
                         // If we're _LOSING_ an effect, display it in the inverse
-                        DisplayKeyValueRowWithDifference(GetBonusEffectDifference(equippedItemBase, mItem, effect.Type, true), Strings.ItemDescription.BonusEffects[(int)effect.Type], Strings.ItemDescription.Percentage.ToString(0), rows, "%");
+                        DisplayKeyValueRowWithDifference(GetBonusEffectDifference(equippedItemBase, mItem, effect.Type, equippedItem?.ItemProperties, mItemProperties, true), Strings.ItemDescription.BonusEffects[(int)effect.Type], Strings.ItemDescription.Percentage.ToString(0), rows, "%");
                     }
                 }
             }
-            
+
             // Resize the container.
             rows.SizeToChildren(true, true);
         }

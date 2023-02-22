@@ -672,5 +672,10 @@ namespace Intersect.Client.Networking
         {
             Network.SendPacket(new CloseEnhancementPacket());
         }
+
+        public static void SendApplyEnhancementPacket(Guid[] enhancementIds)
+        {
+            Network.SendPacket(new ApplyEnhancementsPacket(enhancementIds));
+        }
     }
 }

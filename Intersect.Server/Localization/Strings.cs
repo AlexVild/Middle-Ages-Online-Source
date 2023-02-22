@@ -1835,6 +1835,9 @@ namespace Intersect.Server.Localization
             public readonly LocalizedString ForgetEnhancemnet = @"You've forgotten an enhancement: {00}";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString NoWeapon = @"You must have a weapon equipped to enhance it.";
+            
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString LearnEnhancement = @"You've learned a new enhancement: {00}!";
         }
     }
