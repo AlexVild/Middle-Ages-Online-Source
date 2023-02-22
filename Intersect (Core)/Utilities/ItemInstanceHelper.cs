@@ -26,6 +26,11 @@ namespace Intersect.Utilities
 
         public static int GetStatBoost(ItemProperties itemProps, Stats stat)
         {
+            if (itemProps == null)
+            {
+                return 0;
+            }
+
             if (stat >= Stats.StatCount || (int)stat < 0 || itemProps == default)
             {
                 return 0;
@@ -65,6 +70,49 @@ namespace Intersect.Utilities
         public static int GetVitalBoost(ItemProperties itemProps, Vitals vital)
         {
             return itemProps?.VitalEnhancements?.ElementAtOrDefault((int)vital) ?? 0;
+        }
+
+        public static bool SharesPropsWith(ItemProperties srcProps, ItemProperties otherProps)
+        {
+            if (otherProps == default)
+            {
+                return false;
+            }
+
+            for (var i = 0; i < srcProps.StatModifiers.Length; i++)
+            {
+                if (otherProps.StatModifiers[i] != srcProps.StatModifiers[i])
+                {
+                    return false;
+                }
+            }
+
+            for (var i = 0; i < srcProps.StatEnhancements.Length; i++)
+            {
+                if (otherProps.StatEnhancements[i] != srcProps.StatEnhancements[i])
+                {
+                    return false;
+                }
+            }
+
+
+            for (var i = 0; i < srcProps.VitalEnhancements.Length; i++)
+            {
+                if (otherProps.VitalEnhancements[i] != srcProps.VitalEnhancements[i])
+                {
+                    return false;
+                }
+            }
+
+            for (var i = 0; i < srcProps.EffectEnhancements.Length; i++)
+            {
+                if (otherProps.EffectEnhancements[i] != srcProps.EffectEnhancements[i])
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }

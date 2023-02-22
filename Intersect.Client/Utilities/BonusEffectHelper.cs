@@ -23,5 +23,9 @@ namespace Intersect.Client.Utilities
             {EffectType.CritBonus, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.CritBonus], "Increases crit damage bonus.")}, // Critical bonus
             {EffectType.Swiftness, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.Swiftness], "Increases weapon attack speed.")}, // Swiftness
         };
+
+        public static readonly List<EffectType> LowerIsBetterEffects = new List<EffectType>
+        {
+        };
     }
 }

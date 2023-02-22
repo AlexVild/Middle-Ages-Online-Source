@@ -8567,19 +8567,19 @@ namespace Intersect.Server.Entities
                     continue;
                 }
 
-                //Don't lose bound items on death for players.
-                if (itemBase.DropChanceOnDeath == 0)
+                //Don't lose non-droppable or equipment-type items
+                if (!itemBase.CanDrop || itemBase.ItemType == ItemTypes.Equipment)
                 {
                     continue;
                 }
 
                 //Calculate the killers luck (If they are a player)
                 var playerKiller = killer as Player;
-                var luck = 1 + playerKiller?.GetBonusEffectTotal(EffectType.Luck) / 100f;
+                var luck = playerKiller?.GetBonusEffectTotal(EffectType.Luck);
 
                 Guid lootOwner = Guid.Empty;
-                //Player drop rates
-                if (Randomization.Next(1, 101) >= itemBase.DropChanceOnDeath * luck)
+                // If the player has some luck, then there's a chance they keep some items
+                if (Randomization.Next(1, 101) <= luck)
                 {
                     continue;
                 }
@@ -8591,7 +8591,7 @@ namespace Intersect.Server.Entities
                 // Spawn the actual item!
                 if (MapController.TryGetInstanceFromMap(MapId, MapInstanceId, out var instance))
                 {
-                    instance.SpawnItem(X, Y, item, item.Quantity, lootOwner, sendUpdate, MapInstance.ItemSpawnType.PlayerDeath);
+                    instance.SpawnItem(X, Y, item, item.Quantity, lootOwner, sendUpdate, ItemSpawnType.PlayerDeath);
                 }
 
                 // Remove the item from inventory if a player.

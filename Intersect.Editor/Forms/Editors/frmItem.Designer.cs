@@ -331,6 +331,8 @@ namespace Intersect.Editor.Forms.Editors
             this.lstShops = new System.Windows.Forms.ListBox();
             this.lstCrafts = new System.Windows.Forms.ListBox();
             this.lblCraftsUsed = new System.Windows.Forms.Label();
+            this.grpEnhancement = new DarkUI.Controls.DarkGroupBox();
+            this.cmbEnhancement = new DarkUI.Controls.DarkComboBox();
             this.toolStrip = new DarkUI.Controls.DarkToolStrip();
             this.toolStripItemNew = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -343,8 +345,6 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
             this.vS2015DarkTheme1 = new WeifenLuo.WinFormsUI.Docking.VS2015DarkTheme();
-            this.grpEnhancement = new DarkUI.Controls.DarkGroupBox();
-            this.cmbEnhancement = new DarkUI.Controls.DarkComboBox();
             this.grpItems.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudFuel)).BeginInit();
@@ -434,8 +434,8 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudInterval)).BeginInit();
             this.pnlContainer.SuspendLayout();
             this.grpAuxInfo.SuspendLayout();
-            this.toolStrip.SuspendLayout();
             this.grpEnhancement.SuspendLayout();
+            this.toolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpItems
@@ -949,6 +949,7 @@ namespace Intersect.Editor.Forms.Editors
             0,
             0,
             0});
+            this.nudDeathDropChance.Visible = false;
             this.nudDeathDropChance.ValueChanged += new System.EventHandler(this.nudDeathDropChance_ValueChanged);
             // 
             // lblDeathDropChance
@@ -959,6 +960,7 @@ namespace Intersect.Editor.Forms.Editors
             this.lblDeathDropChance.Size = new System.Drawing.Size(136, 13);
             this.lblDeathDropChance.TabIndex = 93;
             this.lblDeathDropChance.Text = "Drop chance on Death (%):";
+            this.lblDeathDropChance.Visible = false;
             // 
             // chkCanSell
             // 
@@ -4666,6 +4668,41 @@ namespace Intersect.Editor.Forms.Editors
             this.lblCraftsUsed.TabIndex = 109;
             this.lblCraftsUsed.Text = "Crafts that Use This";
             // 
+            // grpEnhancement
+            // 
+            this.grpEnhancement.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpEnhancement.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpEnhancement.Controls.Add(this.cmbEnhancement);
+            this.grpEnhancement.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpEnhancement.Location = new System.Drawing.Point(2, 698);
+            this.grpEnhancement.Name = "grpEnhancement";
+            this.grpEnhancement.Size = new System.Drawing.Size(200, 47);
+            this.grpEnhancement.TabIndex = 43;
+            this.grpEnhancement.TabStop = false;
+            this.grpEnhancement.Text = "Enhancement";
+            this.grpEnhancement.Visible = false;
+            // 
+            // cmbEnhancement
+            // 
+            this.cmbEnhancement.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbEnhancement.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbEnhancement.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbEnhancement.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbEnhancement.DrawDropdownHoverOutline = false;
+            this.cmbEnhancement.DrawFocusRectangle = false;
+            this.cmbEnhancement.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbEnhancement.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbEnhancement.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbEnhancement.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbEnhancement.FormattingEnabled = true;
+            this.cmbEnhancement.Location = new System.Drawing.Point(9, 15);
+            this.cmbEnhancement.Name = "cmbEnhancement";
+            this.cmbEnhancement.Size = new System.Drawing.Size(185, 21);
+            this.cmbEnhancement.TabIndex = 17;
+            this.cmbEnhancement.Text = null;
+            this.cmbEnhancement.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbEnhancement.SelectedIndexChanged += new System.EventHandler(this.cmbEnhancement_SelectedIndexChanged);
+            // 
             // toolStrip
             // 
             this.toolStrip.AutoSize = false;
@@ -4786,41 +4823,6 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo.Size = new System.Drawing.Size(23, 22);
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
-            // 
-            // grpEnhancement
-            // 
-            this.grpEnhancement.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.grpEnhancement.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpEnhancement.Controls.Add(this.cmbEnhancement);
-            this.grpEnhancement.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpEnhancement.Location = new System.Drawing.Point(2, 698);
-            this.grpEnhancement.Name = "grpEnhancement";
-            this.grpEnhancement.Size = new System.Drawing.Size(200, 47);
-            this.grpEnhancement.TabIndex = 43;
-            this.grpEnhancement.TabStop = false;
-            this.grpEnhancement.Text = "Enhancement";
-            this.grpEnhancement.Visible = false;
-            // 
-            // cmbEnhancement
-            // 
-            this.cmbEnhancement.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbEnhancement.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbEnhancement.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbEnhancement.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbEnhancement.DrawDropdownHoverOutline = false;
-            this.cmbEnhancement.DrawFocusRectangle = false;
-            this.cmbEnhancement.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbEnhancement.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbEnhancement.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbEnhancement.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbEnhancement.FormattingEnabled = true;
-            this.cmbEnhancement.Location = new System.Drawing.Point(9, 15);
-            this.cmbEnhancement.Name = "cmbEnhancement";
-            this.cmbEnhancement.Size = new System.Drawing.Size(185, 21);
-            this.cmbEnhancement.TabIndex = 17;
-            this.cmbEnhancement.Text = null;
-            this.cmbEnhancement.TextPadding = new System.Windows.Forms.Padding(2);
-            this.cmbEnhancement.SelectedIndexChanged += new System.EventHandler(this.cmbEnhancement_SelectedIndexChanged);
             // 
             // FrmItem
             // 
@@ -4958,9 +4960,9 @@ namespace Intersect.Editor.Forms.Editors
             this.pnlContainer.ResumeLayout(false);
             this.grpAuxInfo.ResumeLayout(false);
             this.grpAuxInfo.PerformLayout();
+            this.grpEnhancement.ResumeLayout(false);
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
-            this.grpEnhancement.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }

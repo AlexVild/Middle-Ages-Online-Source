@@ -14,7 +14,7 @@ using Intersect.Utilities;
 
 namespace Intersect.Client.Interface.Game.DescriptionWindows
 {
-    public class ItemDescriptionWindow : DescriptionWindowBase
+    public partial class ItemDescriptionWindow : DescriptionWindowBase
     {
         protected ItemBase mItem;
 
@@ -31,6 +31,14 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
         protected double mTableChance;
 
         protected SpellDescriptionWindow mSpellDescWindow;
+
+        public Item EquippedItem;
+
+        public ItemBase EquippedItemDesc => EquippedItem?.Base;
+
+        public bool EquipmentComparison => EquippedItem != default;
+
+        public bool ShowEnhancementBreakdown = false;
 
         public ItemDescriptionWindow(
             ItemBase item,
@@ -56,6 +64,12 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             mValueLabel = valueLabel;
             mDropChance = dropChance;
             mTableChance = tableChance;
+
+            if (mItem != null && mItem.ItemType == ItemTypes.Equipment)
+            {
+                var itemSlot = Globals.Me.MyEquipment[mItem.EquipmentSlot];
+                EquippedItem = Globals.Me.Inventory.ElementAtOrDefault(itemSlot);
+            }
 
             GenerateComponents();
             SetupDescriptionWindow();
@@ -118,7 +132,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             switch (mItem.ItemType)
             {
                 case ItemTypes.Equipment:
-                    SetupEquipmentInfo();
+                    SetupEquipmentInfo2();
                     SetupItemEnhancementInfo();
                     break;
 
@@ -1079,12 +1093,6 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             if (mItem.IsStackable && mAmount > 1)
             {
                 data.Add(new Tuple<string, string>(Strings.ItemDescription.Amount, mAmount.ToString("N0").Replace(",", Strings.Numbers.comma)));
-            }
-
-            // Display item drop chance if configured.
-            if (mItem.DropChanceOnDeath > 0 && string.IsNullOrEmpty(mDropChance))
-            {
-                data.Add(new Tuple<string, string>(Strings.ItemDescription.DropOnDeath, Strings.ItemDescription.Percentage.ToString(mItem.DropChanceOnDeath)));
             }
 
             // Bestiary drop chances

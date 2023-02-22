@@ -185,6 +185,7 @@
     <Compile Include="Interface\Game\DescriptionWindows\Components\RowContainerComponent.cs" />
     <Compile Include="Interface\Game\DescriptionWindows\DescriptionWindowBase.cs" />
     <Compile Include="Interface\Game\DescriptionWindows\EnhancementDescriptionWindow.cs" />
+    <Compile Include="Interface\Game\DescriptionWindows\ItemDescriptionWindow.Equipment.cs" />
     <Compile Include="Interface\Game\DescriptionWindows\SpellDescriptionWindow.cs" />
     <Compile Include="Interface\Game\DescriptionWindows\ItemDescriptionWindow.cs" />
     <Compile Include="Interface\Game\Enhancement\EnhancementBreakdown.cs" />
