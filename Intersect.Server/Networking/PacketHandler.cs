@@ -4616,5 +4616,22 @@ namespace Intersect.Server.Networking
         {
             client?.Entity?.Enhancement?.TryApplyEnhancementsToWeapon(packet.Enhancements);
         }
+
+        public void HandlePacket(Client client, RequestWeaponEnhancementRemovalPacket packet)
+        {
+            var player = client?.Entity;
+
+            if (player == null)
+            {
+                return;
+            }
+
+            if (!player.TryGetEquippedItem(Options.WeaponIndex, out var weapon))
+            {
+                return;
+            }
+
+            player.Enhancement?.TryRemoveEnhancementsOnItem(weapon);
+        }
     }
 }

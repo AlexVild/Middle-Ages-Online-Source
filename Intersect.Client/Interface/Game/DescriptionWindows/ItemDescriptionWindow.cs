@@ -290,6 +290,53 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             rows.AddKeyValueRow("Enhanced by:", mItemProperties.EnhancedBy, CustomColors.ItemDesc.Notice, CustomColors.ItemDesc.Notice);
 
             rows.SizeToChildren(true, true);
+
+            if (mItemProperties.AppliedEnhancementIds.Count <= 0)
+            {
+                return;
+            }
+
+            return; // Alex - Remove this to display enhancement info
+
+           /* var description = AddDescription();
+            Dictionary<string, int> enhancementApplications = new Dictionary<string, int>();
+            foreach (var enId in mItemProperties.AppliedEnhancementIds)
+            {
+                var name = EnhancementDescriptor.GetName(enId);
+                if (name == EnhancementDescriptor.Deleted)
+                {
+                    continue;
+                }
+                if (enhancementApplications.ContainsKey(name))
+                {
+                    enhancementApplications[name]++;
+                }
+                else
+                {
+                    enhancementApplications[name] = 1;
+                }
+            }
+
+            List<string> appliedEnhancements = new List<string>();
+            foreach (var kv in enhancementApplications)
+            {
+                var enhancementName = kv.Key;
+                var enhancementAmount = kv.Value;
+
+                if (enhancementAmount > 1)
+                {
+                    appliedEnhancements.Add($"{enhancementName} x{enhancementAmount}");
+                }
+                else
+                {
+                    appliedEnhancements.Add($"{enhancementName}");
+                }
+            }
+
+            if (appliedEnhancements.Count > 0)
+            {
+                description.AddText($"Enhancements: {string.Join(", ", appliedEnhancements)}", CustomColors.ItemDesc.Muted);
+            }*/
         }
 
         protected void SetupConsumableInfo()

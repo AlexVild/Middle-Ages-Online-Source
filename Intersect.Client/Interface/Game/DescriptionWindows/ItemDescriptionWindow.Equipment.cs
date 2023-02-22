@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 
 using Intersect.Enums;
 using Intersect.GameObjects;
 using Intersect.Client.General;
 using Intersect.Client.Localization;
-using Intersect.Client.Framework.File_Management;
-using Intersect.Client.Items;
-using Intersect.Localization;
 using System.Linq;
-using Intersect.Network.Packets.Server;
 using Intersect.Utilities;
 using Intersect.Client.Interface.Game.DescriptionWindows.Components;
 using Intersect.Client.Utilities;

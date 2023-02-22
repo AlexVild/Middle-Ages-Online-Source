@@ -677,5 +677,10 @@ namespace Intersect.Client.Networking
         {
             Network.SendPacket(new ApplyEnhancementsPacket(enhancementIds));
         }
+
+        public static void SendRequestWeaponEnhancementRemoval()
+        {
+            Network.SendPacket(new RequestWeaponEnhancementRemovalPacket());
+        }
     }
 }

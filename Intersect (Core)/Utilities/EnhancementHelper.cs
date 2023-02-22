@@ -1,4 +1,5 @@
 ﻿using Intersect.GameObjects;
+using Intersect.Network.Packets.Server;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -76,6 +77,23 @@ namespace Intersect.Utilities
             }
 
             return (int)Math.Round(weaponEpCost * multiplier);
+        }
+
+        public static int GetEpUsed(Guid[] enhancementIdsApplied)
+        {
+            var epUsed = 0;
+            foreach (var enId in enhancementIdsApplied)
+            {
+                var enhancement = EnhancementDescriptor.Get(enId);
+                if (enhancement == default)
+                {
+                    continue;
+                }
+
+                epUsed += enhancement.RequiredEnhancementPoints;
+            }
+            
+            return epUsed;
         }
     }
 }

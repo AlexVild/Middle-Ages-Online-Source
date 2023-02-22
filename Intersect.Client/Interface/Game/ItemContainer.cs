@@ -126,34 +126,31 @@ namespace Intersect.Client.Interface.Game
 
         public void Update(Guid currentItemId, ItemProperties itemProperties, int quantity = 1)
         {
-            if (currentItemId != mCurrentItemId || !mTexLoaded)
+            mCurrentItemId = currentItemId;
+            mProperties = itemProperties;
+            StackLabel.IsHidden = quantity <= 1;
+            StackLabel.SetText(quantity.ToString());
+            var item = ItemBase.Get(mCurrentItemId);
+            if (item != null)
             {
-                mCurrentItemId = currentItemId;
-                mProperties = itemProperties;
-                StackLabel.IsHidden = quantity <= 1;
-                StackLabel.SetText(quantity.ToString());
-                var item = ItemBase.Get(mCurrentItemId);
-                if (item != null)
+                var itemTex = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Item, item.Icon);
+                if (itemTex != null)
                 {
-                    var itemTex = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Item, item.Icon);
-                    if (itemTex != null)
-                    {
-                        ContentPanel.Show();
-                        ContentPanel.Texture = itemTex;
-                        ContentPanel.RenderColor = item.Color;
-                    }
-                    else
-                    {
-                        ContentPanel.Hide();
-                    }
+                    ContentPanel.Show();
+                    ContentPanel.Texture = itemTex;
+                    ContentPanel.RenderColor = item.Color;
                 }
                 else
                 {
                     ContentPanel.Hide();
                 }
-
-                mTexLoaded = true;
             }
+            else
+            {
+                ContentPanel.Hide();
+            }
+
+            mTexLoaded = true;
         }
 
         public void SetPosition(int x, int y)

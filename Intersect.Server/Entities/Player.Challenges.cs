@@ -330,9 +330,41 @@ namespace Intersect.Server.Entities
                 if (weapon.MaxWeaponLevels.TryGetValue(weaponType.Id, out var maxWeaponLevel) && maxWeaponLevel == mastery.Level)
                 {
                     SendWeaponMaxedMessage(weaponType);
+
+                    // Is this the first mastery of this weapon that we've maxed?
+                    if (FirstMaxLevelFor(weapon, weaponType))
+                    {
+                        PacketSender.SendChatMsg(this, Strings.Enhancements.CanEnhance.ToString(weapon.Name), Enums.ChatMessageType.Experience, sendToast: true);
+                    }
                 }
             }
             PacketSender.SendExperience(this);
+        }
+
+        private bool FirstMaxLevelFor(ItemBase weapon, WeaponTypeDescriptor levelledType)
+        {
+            return weapon.MaxWeaponLevels.All((kv) =>
+            {
+                var wepType = kv.Key;
+                var maxLvl = kv.Value;
+
+                if (wepType == levelledType.Id)
+                {
+                    return true;
+                }
+
+                if (!TryGetMastery(wepType, out var otherMastery))
+                {
+                    return true;
+                }
+
+                if (otherMastery.Level < maxLvl)
+                {
+                    return true;
+                }
+
+                return false;
+            });
         }
 
         public void ObtainChallengeUnlocks(Guid challengeId)

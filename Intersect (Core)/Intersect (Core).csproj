@@ -426,6 +426,7 @@
     <Compile Include="Network\Packets\Client\RequestRespawnPacket.cs" />
     <Compile Include="Network\Packets\Client\RequestSkillbookPacket.cs" />
     <Compile Include="Network\Packets\Client\RequestUnlockedRecipesPacket.cs" />
+    <Compile Include="Network\Packets\Client\RequestWeaponEnhancementRemovalPacket.cs" />
     <Compile Include="Network\Packets\Client\ResourceInfoRequestPacket.cs" />
     <Compile Include="Network\Packets\Client\ApplyEnhancementsPacket.cs" />
     <Compile Include="Network\Packets\Client\SetLabelPacket.cs" />

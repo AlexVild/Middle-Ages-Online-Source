@@ -1839,6 +1839,15 @@ namespace Intersect.Server.Localization
             
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString LearnEnhancement = @"You've learned a new enhancement: {00}!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString CanEnhance = @"You can now enhance: {00}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString InsufficientMastery = @"You must meet or exceed the following mastery level to enhance this weapon: {00}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString InsufficientMasteries = @"You must meet or exceed one of the following mastery levels to enhance this weapon: {00}";
         }
     }
 }

@@ -129,6 +129,12 @@ namespace Intersect.Client.Interface.Game.Enhancement
                 return;
             }
 
+            SelectedAppliedEnhancementId = Guid.Empty;
+            SelectedEnhancementId = Guid.Empty;
+
+            EnhancementContainer.UnselectAll();
+            AppliedEnhancementsContainer.UnselectAll();
+
             EquippedItem = equippedWeapon;
             EnhancementItemDescriptor = ItemBase.Get(equippedWeapon.ItemId);
 
@@ -146,6 +152,8 @@ namespace Intersect.Client.Interface.Game.Enhancement
             EnhancementContainer.Clear();
             AppliedEnhancementsContainer.Clear();
             BreakdownWindow.Hide();
+            SelectedEnhancementId = Guid.Empty;
+            SelectedAppliedEnhancementId = Guid.Empty;
             base.Hide();
         }
 
@@ -391,6 +399,7 @@ namespace Intersect.Client.Interface.Game.Enhancement
             }
 
             ApplyButton.IsDisabled = EnhancementInterface.NewEnhancements.Length <= 0;
+            RemoveAllButton.IsDisabled = EquippedItem.ItemProperties.AppliedEnhancementIds.Count <= 0;
 
             CurrencyAmount.SetText(EnhancementHelper.GetEnhancementCostOnWeapon(EnhancementItemDescriptor, 
                 EnhancementInterface.NewEnhancements.Select(en => en.EnhancementId).ToArray(), 
@@ -500,10 +509,34 @@ namespace Intersect.Client.Interface.Game.Enhancement
             CurrencyIcon = new ImagePanel(Background, "CurrencyIcon");
             CurrencyAmount = new Label(Background, "CurrencyAmountLabel");
 
+            RemoveAllButton.Clicked += RemoveAllButton_Clicked;
             ApplyButton.Clicked += ApplyButton_Clicked;
             CancelButton.Clicked += CancelButton_Clicked;
             AddEnhancementButton.Clicked += AddEnhancementButton_Clicked;
             RemoveEnhancementButton.Clicked += RemoveEnhancementButton_Clicked;
+        }
+
+        private void RemoveAllButton_Clicked(Base sender, Framework.Gwen.Control.EventArguments.ClickedEventArgs arguments)
+        {
+            if (EquippedItem.ItemProperties.AppliedEnhancementIds.Count <= 0)
+            {
+                return;
+            }
+
+            var cost = EnhancementHelper.GetEnhancementCostOnWeapon(EquippedItem.Base, 
+                EquippedItem.ItemProperties.AppliedEnhancementIds.ToArray(), 
+                EnhancementInterface.CostMultiplier);
+
+            _ = new InputBox(
+                Strings.EnhancementWindow.RemoveEnhancements,
+                Strings.EnhancementWindow.RemoveEnhancementsPrompt.ToString(cost, ItemBase.GetName(EnhancementInterface.CurrencyId)), true,
+                InputBox.InputType.YesNo, RemoveAllEnhancements, null, null
+            );
+        }
+
+        private void RemoveAllEnhancements(object sender, EventArgs e)
+        {
+            PacketSender.SendRequestWeaponEnhancementRemoval();
         }
 
         private void ApplyButton_Clicked(Base sender, Framework.Gwen.Control.EventArguments.ClickedEventArgs arguments)
