@@ -908,6 +908,26 @@ namespace Intersect.Server.Entities.Events
             return player.KnownEnhancements.ToArray().Contains(condition.EnhancementId);
         }
 
+        public static bool MeetsCondition(
+         EnhancementApplied condition,
+         Player player,
+         Event eventInstance,
+         QuestBase questBase
+        )
+        {
+            if (player == null || condition == null)
+            {
+                return false;
+            }
+
+            if (!player.TryGetEquippedItem(Options.WeaponIndex, out var weapon))
+            {
+                return false;
+            }
+
+            return weapon.ItemProperties.AppliedEnhancementIds.Contains(condition.EnhancementId);
+        }
+
 
         //Variable Comparison Processing
 

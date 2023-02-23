@@ -548,6 +548,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     Condition = new EnhancementKnown();
 
                     break;
+
+                case ConditionTypes.EnhancementApplied:
+                    Condition = new EnhancementApplied();
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -852,8 +857,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     break;
 
                 case ConditionTypes.EnhancementKnown:
+                case ConditionTypes.EnhancementApplied:
                     grpEnhancements.Show();
                     break;
+
 
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -1775,6 +1782,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             cmbEnhancements.SelectedIndex = EnhancementDescriptor.ListIndex(condition.EnhancementId);
         }
 
+        private void SetupFormValues(EnhancementApplied condition)
+        {
+            cmbEnhancements.SelectedIndex = EnhancementDescriptor.ListIndex(condition.EnhancementId);
+        }
+
         #endregion
 
         #region "SaveFormValues"
@@ -2110,6 +2122,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         }
 
         private void SaveFormValues(EnhancementKnown condition)
+        {
+            condition.EnhancementId = EnhancementDescriptor.IdFromList(cmbEnhancements.SelectedIndex);
+        }
+
+        private void SaveFormValues(EnhancementApplied condition)
         {
             condition.EnhancementId = EnhancementDescriptor.IdFromList(cmbEnhancements.SelectedIndex);
         }

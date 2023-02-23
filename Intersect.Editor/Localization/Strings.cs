@@ -450,6 +450,11 @@ namespace Intersect.Editor.Localization
             return $"Enhancement known: {EnhancementDescriptor.GetName(condition.EnhancementId)}";
         }
 
+        public static string GetEventConditionalDesc(EnhancementApplied condition)
+        {
+            return $"Enhancement applied: {EnhancementDescriptor.GetName(condition.EnhancementId)}";
+        }
+
         public static string GetEventConditionalDesc(SoloDungeon condition)
         {
             return $"Dungeon is solo";
@@ -2446,6 +2451,7 @@ Tick timer saved in server config.json.";
                 {43, @"Dungeon treasure level is X or higher"},
                 {44, @"Treasure gnome in location..."},
                 {45, @"Enhancement known..."},
+                {46, @"Enhancement applied..."},
             };
 
             public static LocalizedString endrange = @"End Range:";

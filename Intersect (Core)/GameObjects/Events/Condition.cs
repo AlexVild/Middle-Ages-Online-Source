@@ -94,6 +94,8 @@ namespace Intersect.GameObjects.Events
         GnomeLocationIs,
 
         EnhancementKnown,
+        
+        EnhancementApplied,
 
     }
 
@@ -624,6 +626,13 @@ namespace Intersect.GameObjects.Events
     public class EnhancementKnown : Condition
     {
         public override ConditionTypes Type { get; } = ConditionTypes.EnhancementKnown;
+
+        public Guid EnhancementId { get; set; }
+    }
+
+    public class EnhancementApplied : Condition
+    {
+        public override ConditionTypes Type { get; } = ConditionTypes.EnhancementApplied;
 
         public Guid EnhancementId { get; set; }
     }
