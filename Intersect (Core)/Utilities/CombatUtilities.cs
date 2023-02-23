@@ -3,6 +3,7 @@ using Intersect.GameObjects;
 using Intersect.GameObjects.Events;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Intersect.Utilities
 {
@@ -137,6 +138,28 @@ namespace Intersect.Utilities
             }
 
             return atkTypes;
+        }
+
+        public static List<AttackTypes> GetSpellAttackTypes(SpellBase spell, ItemBase equippedItem)
+        {
+            if (spell == default)
+            {
+                return new List<AttackTypes>();
+            }
+
+            if (!spell.WeaponSpell)
+            {
+                return spell.Combat.DamageTypes.Count == 0 ? new List<AttackTypes>() { AttackTypes.Blunt } : spell.Combat.DamageTypes;
+            }
+
+            var types = spell.Combat.DamageTypes.Union(equippedItem?.AttackTypes ?? new List<AttackTypes>()).ToList();
+
+            if (types.Count == 0)
+            {
+                return new List<AttackTypes>() { AttackTypes.Blunt };
+            }
+
+            return types;
         }
     }
 }

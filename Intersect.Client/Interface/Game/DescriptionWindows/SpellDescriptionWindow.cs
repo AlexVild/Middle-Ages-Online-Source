@@ -6,6 +6,7 @@ using Intersect.Client.General;
 using Intersect.Client.Localization;
 using System.Collections.Generic;
 using Intersect.Utilities;
+using System.Linq;
 
 namespace Intersect.Client.Interface.Game.DescriptionWindows
 {
@@ -16,8 +17,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
         readonly Color StatLabelColor = CustomColors.ItemDesc.Muted;
         readonly Color StatValueColor = CustomColors.ItemDesc.Primary;
         readonly Color StatHeaderColor = Color.White;
-
-
+        readonly Color WeaponInheritColor = CustomColors.ItemDesc.WeaponType;
 
         bool IsPassive => mSpell != null && mSpell.SpellType == SpellTypes.Passive;
 
@@ -64,6 +64,17 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             switch (mSpell.SpellType)
             {
                 case SpellTypes.CombatSpell:
+                    SetupCombatInfo();
+                    // Add weapon type disclaimer
+                    if (!IsPassive && mSpell.WeaponSpell)
+                    {
+                        AddDivider();
+                        var disclaimer = AddDescription();
+                        disclaimer.AddText(Strings.SpellDescription.WeaponSkill, CustomColors.ItemDesc.WeaponType);
+                        disclaimer.AddLineBreak();
+                    }
+                    break;
+
                 case SpellTypes.WarpTo:
                 case SpellTypes.Passive:
                     SetupCombatInfo();
@@ -130,12 +141,17 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             {
                 if (mSpell.Combat.Friendly)
                 {
-                    rows.AddKeyValueRow(Strings.SpellDescription.Friendly, string.Empty, StatValueColor, StatValueColor);
+                    rows.AddKeyValueRow($"   {Strings.SpellDescription.Friendly}", string.Empty, StatValueColor, StatValueColor);
                 }
                 else
                 {
-                    rows.AddKeyValueRow(Strings.SpellDescription.Unfriendly, string.Empty, StatValueColor, StatValueColor);
+                    rows.AddKeyValueRow($"   {Strings.SpellDescription.Unfriendly}", string.Empty, StatValueColor, StatValueColor);
                 }
+            }
+
+            if (mSpell.SpellType == SpellTypes.Dash)
+            {
+                rows.AddKeyValueRow($"   Spell Info", string.Empty, StatValueColor, StatValueColor);
             }
 
             var castTime = Strings.SpellDescription.Instant;
@@ -212,41 +228,101 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             var isHeal = false;
             var isDamage = false;
             var showDuration = false;
+
+            Globals.Me.TryGetEquippedWeaponDescriptor(out var equippedWeapon);
+
             if (!IsPassive)
             {
+                rows.AddKeyValueRow("   Combat Info", string.Empty, StatValueColor, StatValueColor);
+
                 var damageTypeIdx = 0;
-                foreach (var attackType in mSpell.Combat.DamageTypes)
+
+                var attackTypes = CombatUtilities.GetSpellAttackTypes(spell, equippedWeapon);
+                foreach (var attackType in attackTypes)
                 {
+                    var valueColor = mSpell.WeaponSpell && !mSpell.Combat.DamageTypes.Contains(attackType) ? WeaponInheritColor : StatValueColor;
                     if (damageTypeIdx == 0)
                     {
-                        rows.AddKeyValueRow("Damage Types:", attackType.GetDescription(), StatLabelColor, StatValueColor);
+                        rows.AddKeyValueRow("Damage Types:", attackType.GetDescription(), StatLabelColor, valueColor);
                     }
                     else
                     {
-                        rows.AddKeyValueRow(string.Empty, attackType.GetDescription(), StatLabelColor, StatValueColor);
+                        rows.AddKeyValueRow(string.Empty, attackType.GetDescription(), StatLabelColor, valueColor);
                     }
                     damageTypeIdx++;
                 }
 
-                // Health damage
+                var projectileTimes = 1;
+                var projectile = mSpell.Combat.Projectile;
+                if (mSpell.Combat.Projectile != default)
+                {
+                    projectileTimes = projectile.Quantity;
+                }
+
+                // Health damage if TrueDamage
                 if (spell.Combat.DamageType == (int)DamageType.True)
                 {
-                    var healthDamage = spell.Combat.VitalDiff[(int)Vitals.Health];
-                    if (healthDamage < 0)
+                    if (projectileTimes > 1)
                     {
-                        rows.AddKeyValueRow(Strings.SpellDescription.VitalRecovery[(int)Vitals.Health], Math.Abs(healthDamage).ToString(), StatLabelColor, StatValueColor);
-                        isHeal = true;
+                        var healthDamage = spell.Combat.VitalDiff[(int)Vitals.Health];
+                        if (healthDamage < 0)
+                        {
+                            rows.AddKeyValueRow(Strings.SpellDescription.VitalRecovery[(int)Vitals.Health], $"{Math.Abs(healthDamage)} x {projectileTimes}", StatLabelColor, StatValueColor);
+                            isHeal = true;
+                        }
+                        else if (healthDamage > 0)
+                        {
+                            rows.AddKeyValueRow(Strings.SpellDescription.VitalDamage[(int)Vitals.Health], $"{healthDamage} x {projectileTimes}", StatLabelColor, StatValueColor);
+                            isDamage = true;
+                        }
                     }
-                    else if (healthDamage > 0)
+                    else
                     {
-                        rows.AddKeyValueRow(Strings.SpellDescription.VitalDamage[(int)Vitals.Health], healthDamage.ToString(), StatLabelColor, StatValueColor);
-                        isDamage = true;
+                        var healthDamage = spell.Combat.VitalDiff[(int)Vitals.Health];
+                        if (healthDamage < 0)
+                        {
+                            rows.AddKeyValueRow(Strings.SpellDescription.VitalRecovery[(int)Vitals.Health], Math.Abs(healthDamage).ToString(), StatLabelColor, StatValueColor);
+                            isHeal = true;
+                        }
+                        else if (healthDamage > 0)
+                        {
+                            rows.AddKeyValueRow(Strings.SpellDescription.VitalDamage[(int)Vitals.Health], healthDamage.ToString(), StatLabelColor, StatValueColor);
+                            isDamage = true;
+                        }
                     }
                 }
                 // Otherwise, calculate damage
                 else
                 {
+                    var valueColor = mSpell.WeaponSpell ? WeaponInheritColor : StatValueColor;
+                    CombatUtilities.CalculateDamage(attackTypes, 1.0, mSpell.Combat.Scaling, Globals.Me.Stat, new int[(int)Stats.StatCount], out var healthDamage);
 
+                    if (projectileTimes > 1)
+                    {
+                        if (healthDamage < 0)
+                        {
+                            rows.AddKeyValueRow(Strings.SpellDescription.VitalRecovery[(int)Vitals.Health], $"{Math.Abs(healthDamage)} x {projectileTimes}", StatLabelColor, valueColor);
+                            isHeal = true;
+                        }
+                        else if (healthDamage > 0)
+                        {
+                            rows.AddKeyValueRow(Strings.SpellDescription.VitalDamage[(int)Vitals.Health], $"{healthDamage} x {projectileTimes}", StatLabelColor, valueColor);
+                            isDamage = true;
+                        }
+                    }
+                    else
+                    {
+                        if (healthDamage < 0)
+                        {
+                            rows.AddKeyValueRow(Strings.SpellDescription.VitalRecovery[(int)Vitals.Health], Math.Abs(healthDamage).ToString(), StatLabelColor, valueColor);
+                            isHeal = true;
+                        }
+                        else if (healthDamage > 0)
+                        {
+                            rows.AddKeyValueRow(Strings.SpellDescription.VitalDamage[(int)Vitals.Health], healthDamage.ToString(), StatLabelColor, valueColor);
+                            isDamage = true;
+                        }
+                    }
                 }
 
                 // Mana Damage - always "True"
@@ -256,23 +332,27 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                     isDamage = true;
                     rows.AddKeyValueRow(Strings.SpellDescription.VitalDamage[(int)Vitals.Mana], manaDamage.ToString(), StatLabelColor, StatValueColor);
                 }
-                else
+                else if (manaDamage < 0)
                 {
                     isHeal = true;
                     rows.AddKeyValueRow(Strings.SpellDescription.VitalRecovery[(int)Vitals.Mana], Math.Abs(manaDamage).ToString(), StatLabelColor, StatValueColor);
                 }
 
-                if (spell.Combat.Scaling != 100)
-                {
-                    Strings.SpellDescription.Stats.TryGetValue(spell.Combat.ScalingStat, out var stat);
-                    rows.AddKeyValueRow(Strings.SpellDescription.ScalingPercentage, Strings.SpellDescription.Percentage.ToString(spell.Combat.Scaling), StatLabelColor, StatValueColor);
-                }
-
                 // Crit Chance
                 if (spell.Combat.CritChance > 0)
                 {
-                    rows.AddKeyValueRow(Strings.SpellDescription.CritChance, Strings.SpellDescription.Percentage.ToString(spell.Combat.CritChance), StatLabelColor, StatValueColor);
-                    rows.AddKeyValueRow(Strings.SpellDescription.CritMultiplier, Strings.SpellDescription.Multiplier.ToString(spell.Combat.CritMultiplier), StatLabelColor, StatValueColor);
+                    var valueColor = mSpell.WeaponSpell ? WeaponInheritColor : StatValueColor;
+
+                    var critChance = mSpell.Combat.CritChance;
+                    var critMulti = mSpell.Combat.CritMultiplier;
+                    if (mSpell.WeaponSpell)
+                    {
+                        critChance += equippedWeapon?.CritChance ?? 0;
+                        critMulti += equippedWeapon?.CritMultiplier ?? 0;
+                    }
+
+                    rows.AddKeyValueRow(Strings.SpellDescription.CritChance, Strings.SpellDescription.Percentage.ToString(critChance), StatLabelColor, valueColor);
+                    rows.AddKeyValueRow(Strings.SpellDescription.CritMultiplier, Strings.SpellDescription.Multiplier.ToString(critMulti), StatLabelColor, valueColor);
                 }
             }
             
@@ -300,7 +380,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                     if (!blankAdded)
                     {
                         rows.AddKeyValueRow(string.Empty, string.Empty);
-                        rows.AddKeyValueRow(Strings.SpellDescription.StatBuff, string.Empty, StatLabelColor, StatValueColor);
+                        rows.AddKeyValueRow($"   Stat Mods", string.Empty, StatValueColor, StatValueColor);
                         blankAdded = true;
                     }
 
@@ -347,11 +427,6 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 rows.AddKeyValueRow(Strings.SpellDescription.Duration, Strings.SpellDescription.Seconds.ToString(spell.Combat.Duration / 1000f), StatLabelColor, StatValueColor);
             }
 
-            if (spell.WeaponSpell)
-            {
-                rows.AddKeyValueRow(Strings.SpellDescription.WeaponSkill, string.Empty, CustomColors.ItemDesc.Special, StatValueColor);
-            }
-
             // Resize and position the container.
             rows.SizeToChildren(true, true);
         }
@@ -363,6 +438,8 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
 
             // Add a row component.
             var rows = AddRowContainer();
+
+            rows.AddKeyValueRow("   Dash", string.Empty, StatValueColor, StatValueColor);
 
             // Dash Distance Information.
             rows.AddKeyValueRow(Strings.SpellDescription.Distance, Strings.SpellDescription.Tiles.ToString(mSpell.Combat.CastRange), StatLabelColor, StatValueColor);

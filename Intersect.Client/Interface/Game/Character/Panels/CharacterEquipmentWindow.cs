@@ -63,7 +63,7 @@ namespace Intersect.Client.Interface.Game.Character.Equipment
 
         private ComponentList<IGwenComponent> ContainerComponents;
 
-        public CharacterEquipmentWindow(CharacterWindowMAO parent, ImagePanel characterWindow)
+        public CharacterEquipmentWindow(CharacterWindow parent, ImagePanel characterWindow)
         {
             mParent = parent;
             DayBgTexture = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Gui, "character_equip_bg_day.png");
@@ -389,7 +389,7 @@ namespace Intersect.Client.Interface.Game.Character.Equipment
 
             for (var i = 0; i < Options.EquipmentSlots.Count; i++)
             {
-                Items.Add(new EquipmentItem(i, mParent.CharacterWindow));
+                Items.Add(new EquipmentItem(i, mParent.Window));
                 Items[i].Pnl = new ImagePanel(mBackground, "EquipmentItem" + i);
                 Items[i].Setup();
             }

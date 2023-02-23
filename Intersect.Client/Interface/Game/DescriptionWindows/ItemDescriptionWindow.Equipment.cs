@@ -8,6 +8,7 @@ using System.Linq;
 using Intersect.Utilities;
 using Intersect.Client.Interface.Game.DescriptionWindows.Components;
 using Intersect.Client.Utilities;
+using System.Collections.Generic;
 
 namespace Intersect.Client.Interface.Game.DescriptionWindows
 {
@@ -106,7 +107,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 idx++;
             }
 
-            baseRows.SizeToChildren(true, true);
+            SetupDamageEstimations(baseRows);
 
             if (mItem.Tool >= 0)
             {
@@ -119,6 +120,36 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 AddEquipmentRow(toolRows, "Harvest Power:", mItem.Damage, EquippedItemDesc?.Damage, false, StatLabelColor, StatValueColor);
 
                 toolRows.SizeToChildren(true, true);
+            }
+        }
+
+        private void SetupDamageEstimations(RowContainerComponent estimationRows)
+        {
+            var emptyStats = new int[(int)Stats.StatCount];
+
+            var itemEnhancedStats = new int[(int)Stats.StatCount];
+            var itemBoosts = ItemInstanceHelper.GetStatBoosts(mItemProperties);
+            Array.Copy(Globals.Me.TrueStats, itemEnhancedStats, (int)Stats.StatCount);
+            var statIdx = 0;
+            foreach (var stat in itemEnhancedStats)
+            {
+                itemEnhancedStats[statIdx] = (int)((stat + itemBoosts[statIdx] + mItem.StatsGiven[statIdx]) * (1 + (mItem.PercentageStatsGiven[statIdx] / 100f)));
+                statIdx++;
+            }
+
+            CombatUtilities.CalculateDamage(mItem.AttackTypes, 1.0, 100, itemEnhancedStats, emptyStats, out var maxHit);
+            CombatUtilities.CalculateDamage(EquippedItem?.Base?.AttackTypes ?? new List<AttackTypes>(), 1.0, 100, Globals.Me.Stat, emptyStats, out var compareMaxHit);
+
+            var hits = 1;
+            if (mItem.Projectile != default)
+            {
+                hits = mItem.Projectile.Quantity;
+            }
+
+            AddEquipmentRow(estimationRows, "Damage", maxHit, compareMaxHit, false, StatLabelColor, StatValueColor);
+            if (hits > 1)
+            {
+                estimationRows.AddKeyValueRow("Multi-Attack", hits.ToString(), StatLabelColor, StatValueColor);
             }
         }
 

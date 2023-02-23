@@ -34,7 +34,7 @@ namespace Intersect.Client.Interface.Game.Character
         private Button SkillsButton { get; set; }
         private Button ChallengesButton { get; set; }
 
-        private CharacterWindowMAO Parent { get; set; }
+        private CharacterWindow Parent { get; set; }
 
         private CharacterWindowPanel CurrentPanel { get; set; }
 
@@ -47,7 +47,7 @@ namespace Intersect.Client.Interface.Game.Character
         private SkillsPanel SkillsPanel { get; set; }
         private CharacterChallengesPanel ChallengesPanel { get; set; }
 
-        public CharacterWindowPanelController(Canvas gameCanvas, CharacterWindowMAO parent)
+        public CharacterWindowPanelController(Canvas gameCanvas, CharacterWindow parent)
         {
             Parent = parent;
 

@@ -21,7 +21,7 @@ namespace Intersect.Client.Interface.Game.Character
 {
     public class CharacterLevelUpWindow
     {
-        CharacterWindowMAO Parent { get; set; }
+        CharacterWindow Parent { get; set; }
 
         Canvas GameCanvas { get; set; }
 
@@ -40,7 +40,7 @@ namespace Intersect.Client.Interface.Game.Character
 
         public bool IsVisible => Background.IsVisible;
 
-        public CharacterLevelUpWindow(CharacterWindowMAO parent, Canvas gameCanvas)
+        public CharacterLevelUpWindow(CharacterWindow parent, Canvas gameCanvas)
         {
             Parent = parent;
             GameCanvas = gameCanvas;

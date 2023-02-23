@@ -142,7 +142,7 @@
     <Compile Include="Interface\Game\Character\CharacterLevelUpWindow.cs" />
     <Compile Include="Interface\Game\Character\CharacterWindowNotifications.cs" />
     <Compile Include="Interface\Game\Character\CharacterWindowPanelController.cs" />
-    <Compile Include="Interface\Game\Character\CharacterWindowMAO.cs" />
+    <Compile Include="Interface\Game\Character\CharacterWindow.cs" />
     <Compile Include="Interface\Game\Character\CosmeticItem.cs" />
     <Compile Include="Interface\Game\Character\Panels\CharacterBonusesPanel.cs" />
     <Compile Include="Interface\Game\Character\Panels\CharacterChallengesPanel.cs" />
@@ -281,7 +281,6 @@
     <Compile Include="Interface\Game\Bag\BagWindow.cs" />
     <Compile Include="Interface\Game\Bank\BankWindow.cs" />
     <Compile Include="Interface\Game\BanMuteBox.cs" />
-    <Compile Include="Interface\Game\Character\CharacterWindow.cs" />
     <Compile Include="Interface\Game\Chat\Chatbox.cs" />
     <Compile Include="Interface\Game\Chat\ChatboxMsg.cs" />
     <Compile Include="Interface\Game\Crafting\CraftingWindow.cs" />

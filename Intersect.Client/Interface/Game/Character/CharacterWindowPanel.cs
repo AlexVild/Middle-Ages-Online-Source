@@ -7,7 +7,7 @@ namespace Intersect.Client.Interface.Game.Character
 {
     public abstract class CharacterWindowPanel
     {
-        protected CharacterWindowMAO mParent { get; set; }
+        protected CharacterWindow mParent { get; set; }
 
         protected Player Me => Globals.Me;
 

@@ -30,7 +30,7 @@ namespace Intersect.Client.Interface.Game.Character
 
         private CharacterWindowPanelController PanelController;
 
-        private CharacterWindowMAO Parent { get; set; }
+        private CharacterWindow Parent { get; set; }
 
         public bool IsVisible => mNotificationContainer.IsVisible;
 
@@ -40,7 +40,7 @@ namespace Intersect.Client.Interface.Game.Character
             set => mNotificationContainer.IsHidden = value;
         }
 
-        public CharacterWindowNotifications(Canvas gameCanvas, CharacterWindowMAO parent, CharacterWindowPanelController controller)
+        public CharacterWindowNotifications(Canvas gameCanvas, CharacterWindow parent, CharacterWindowPanelController controller)
         {
             Parent = parent;
             PanelController = controller;

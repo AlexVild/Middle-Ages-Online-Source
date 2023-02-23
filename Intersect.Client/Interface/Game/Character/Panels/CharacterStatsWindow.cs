@@ -51,9 +51,9 @@ namespace Intersect.Client.Interface.Game.Character.StatPanel
         private ComponentList<IGwenComponent> ContainerComponents { get; set; }
         private ComponentList<IGwenComponent> ImageLabelComponents { get; set; }
 
-        private CharacterWindowMAO CharacterWindow;
+        private CharacterWindow CharacterWindow;
 
-        public CharacterStatsWindow(ImagePanel panelBackground, CharacterWindowMAO characterWindow)
+        public CharacterStatsWindow(ImagePanel panelBackground, CharacterWindow characterWindow)
         {
             CharacterWindow = characterWindow;
             mParentContainer = panelBackground;

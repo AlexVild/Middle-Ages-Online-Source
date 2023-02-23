@@ -54,7 +54,8 @@ namespace Intersect.Server.Entities
 
         public override bool IsCriticalHit(int critChance)
         {
-            critChance = ApplyEffectBonusToValue(critChance, EffectType.Affinity);
+            var affinity = GetBonusEffectTotal(EffectType.Affinity);
+            critChance += affinity;
 
             return base.IsCriticalHit(critChance);
         }
@@ -104,6 +105,10 @@ namespace Intersect.Server.Entities
                 if (spellCrit)
                 {
                     critMultiplier += spell.Combat.CritMultiplier;
+                    if (spell.WeaponSpell && weapon != null)
+                    {
+                        critMultiplier += weapon.CritMultiplier;
+                    }
                     critMultiplier = ApplyEffectBonusToValue(critMultiplier, EffectType.CritBonus);
                 }
             }
@@ -113,7 +118,7 @@ namespace Intersect.Server.Entities
             var targetHealthBefore = enemy.GetVital(Vitals.Health);
             var targetMaxHealth = enemy.GetMaxVital(Vitals.Health);
 
-            var damageWasDealt = base.TryDealDamageTo(enemy, attackTypes, dmgScaling, critMultiplier, weapon, spell, ignoreEvasion, out damage);
+            var damageWasDealt = base.TryDealDamageTo(enemy, CombatUtilities.GetSpellAttackTypes(spell, weapon), dmgScaling, critMultiplier, weapon, spell, ignoreEvasion, out damage);
 
             if (damageWasDealt && damage > 0)
             {

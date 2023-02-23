@@ -25,7 +25,7 @@ namespace Intersect.Client.Interface.Game
 
         private readonly Button mCharacterButton;
 
-        private readonly CharacterWindowMAO mCharacterWindow;
+        private readonly CharacterWindow mCharacterWindow;
 
         private readonly ImagePanel mFriendsBackground;
 
@@ -146,7 +146,7 @@ namespace Intersect.Client.Interface.Game
             mFriendsWindow = new FriendsWindow(gameCanvas);
             mInventoryWindow = new InventoryWindow(gameCanvas);
             mSpellsWindow = new SpellsWindow(gameCanvas);
-            mCharacterWindow = new CharacterWindowMAO(gameCanvas);
+            mCharacterWindow = new CharacterWindow(gameCanvas);
             mQuestsWindow = new QuestsWindow(gameCanvas);
             mGuildWindow = new GuildWindow(gameCanvas);
         }
