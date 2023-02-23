@@ -23,8 +23,8 @@ namespace Intersect.Utilities
                 return false;
             }
 
-            var matchingWeaponTypes = maxLevels.Keys.Union(validEnhancements.Keys).ToArray();
-            if (matchingWeaponTypes.Length == 0)
+            var matchingWeaponTypes = maxLevels.Keys.Intersect(validEnhancements.Keys).ToArray();
+            if (!ValidEnhancementForWeaponType(maxLevels, validEnhancements))
             {
                 failureReason = "This enhancement can not be applied to a weapon of this type.";
                 return false;
@@ -45,6 +45,22 @@ namespace Intersect.Utilities
 
             failureReason = "This weapon is not high enough of a weapon level to receive this enhancement.";
             return false;
+        }
+
+        public static bool ValidEnhancementForWeaponType(Dictionary<Guid, int> maxLevels, Dictionary<Guid, int> validEnhancements)
+        {
+            if (maxLevels == default || validEnhancements == default)
+            {
+                return false;
+            }
+
+            var matchingWeaponTypes = maxLevels.Keys.Intersect(validEnhancements.Keys).ToArray();
+            if (matchingWeaponTypes.Length == 0)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         public static int GetEnhancementCostOnWeapon(ItemBase weapon, Guid[] enhancements, float multiplier)

@@ -330,7 +330,8 @@ namespace Intersect.Client.Interface.Game.Character.Panels
             string bonus,
             string value,
             string tooltip,
-            ComponentList<GwenComponent> referenceList = null) : base(parent, containerName, "BonusRowComponent", referenceList)
+            ComponentList<GwenComponent> referenceList = null,
+            string fileName = "BonusRowComponent") : base(parent, containerName, fileName, referenceList)
         {
             BonusText = bonus;
             Value = value;

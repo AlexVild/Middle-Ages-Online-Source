@@ -2508,6 +2508,9 @@ namespace Intersect.Client.Localization
             public static LocalizedString NoWeaponEquippedPrompt = "You must have a weapon equipped to use the weapon enhancement station.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString NoEnhancements = "No enhancements available!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString RemoveEnhancements = "RESET ITEM";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]

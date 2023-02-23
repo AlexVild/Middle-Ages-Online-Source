@@ -67,7 +67,7 @@ namespace Intersect.Server.Entities
 
             PacketSender.SendInventory(Owner);
             Owner.ProcessEquipmentUpdated(true);
-            Owner.SendPacket(new EnhancementEndPacket());
+            Owner.SendPacket(new EnhancementEndPacket(weapon.ItemProperties));
 
             return true;
         }
@@ -191,6 +191,7 @@ namespace Intersect.Server.Entities
             Owner.ProcessEquipmentUpdated(true);
             // Just re-send the open command to refresh the UI
             PacketSender.SendOpenEnhancementWindow(Owner, CurrencyId, CostMultiplier);
+            PacketSender.SendPlaySound(Owner, Options.Instance.DeconstructionOpts.DisenhanceItemSound);
 
             return true;
         }

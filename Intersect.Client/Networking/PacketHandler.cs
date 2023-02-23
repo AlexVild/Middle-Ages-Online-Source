@@ -2926,7 +2926,7 @@ namespace Intersect.Client.Networking
                 return;
             }
 
-            Interface.Interface.GameUi.EnhancementWindow.ForceClose();
+            Interface.Interface.GameUi.EnhancementWindow.ProcessCompletedEnhancement(packet.NewProperties);
         }
     }
 }

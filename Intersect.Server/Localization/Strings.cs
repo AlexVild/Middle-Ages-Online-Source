@@ -360,7 +360,7 @@ namespace Intersect.Server.Localization
                 {
                     {0, @"Blunt Attack"},
                     {1, @"Magic Attack"},
-                    {2, @"Blunt Defense"},
+                    {2, @"Blunt Resistance"},
                     {3, @"Magic Resistance"},
                     {4, @"Speed"},
                     {5, @"Slash Attack"},

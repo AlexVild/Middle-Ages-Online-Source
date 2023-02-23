@@ -159,6 +159,7 @@
     <Compile Include="Interface\Game\Components\ChallengeProgressBarComponent.cs" />
     <Compile Include="Interface\Game\Components\ChallengeRowComponent.cs" />
     <Compile Include="Interface\Game\Components\CosmeticSelectionComponent.cs" />
+    <Compile Include="Interface\Game\Components\EnhancementRowComponent.cs" />
     <Compile Include="Interface\Game\Components\GwenComponent.cs" />
     <Compile Include="Interface\Game\Components\HarvestProgressBarComponent.cs" />
     <Compile Include="Interface\Game\Components\HarvestProgressRowComponent.cs" />
@@ -189,6 +190,7 @@
     <Compile Include="Interface\Game\DescriptionWindows\SpellDescriptionWindow.cs" />
     <Compile Include="Interface\Game\DescriptionWindows\ItemDescriptionWindow.cs" />
     <Compile Include="Interface\Game\Enhancement\EnhancementBreakdown.cs" />
+    <Compile Include="Interface\Game\Enhancement\EnhancementCompleteWindow.cs" />
     <Compile Include="Interface\Game\Enhancement\EnhancementItem.cs" />
     <Compile Include="Interface\Game\Enhancement\EnhancementWindow.cs" />
     <Compile Include="Interface\Game\ExpToast.cs" />

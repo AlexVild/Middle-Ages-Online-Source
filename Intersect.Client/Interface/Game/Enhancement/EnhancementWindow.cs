@@ -1,13 +1,16 @@
-﻿using Intersect.Client.Entities.Events;
+﻿using Intersect.Client.Core;
+using Intersect.Client.Entities.Events;
 using Intersect.Client.Framework.Graphics;
 using Intersect.Client.Framework.Gwen.Control;
 using Intersect.Client.General;
 using Intersect.Client.General.Enhancement;
 using Intersect.Client.Interface.Game.DescriptionWindows;
+using Intersect.Client.Interface.ScreenAnimations;
 using Intersect.Client.Items;
 using Intersect.Client.Localization;
 using Intersect.Client.Networking;
 using Intersect.GameObjects;
+using Intersect.Network.Packets.Server;
 using Intersect.Utilities;
 using System;
 using System.Collections.Generic;
@@ -31,6 +34,14 @@ namespace Intersect.Client.Interface.Game.Enhancement
 
     public class EnhancementWindow : GameWindow
     {
+        enum States
+        {
+            Create,
+            Finished,
+        }
+
+        States CurrentState;
+
         protected override string FileName => "EnhancementWindow";
 
         protected override string Title => Strings.EnhancementWindow.Title;
@@ -96,6 +107,12 @@ namespace Intersect.Client.Interface.Game.Enhancement
         private readonly Color Transparent = new Color(150, 255, 255, 255);
 
         EnhancementBreakdown BreakdownWindow;
+        EnhancementCompleteWindow CompletionWindow;
+
+        private LootChest EnhancementAnimation;
+        private ItemProperties NewProperties { get; set; }
+
+        private Label NoEnhancementsLabel { get; set; }
 
         public EnhancementWindow(Base gameCanvas) : base(gameCanvas) 
         {
@@ -108,10 +125,18 @@ namespace Intersect.Client.Interface.Game.Enhancement
             LastFlash = Timing.Global.Milliseconds;
 
             BreakdownWindow = new EnhancementBreakdown(this, gameCanvas);
+            CompletionWindow = new EnhancementCompleteWindow(this, gameCanvas);
+
+            EnhancementAnimation = new LootChest(() =>
+            {
+                Flash.FlashScreen(1000, new Color(255, 255, 255, 255), 150);
+                CompletionWindow?.Show(NewProperties);
+            });
         }
 
         public override void Show()
         {
+            CurrentState = States.Create;
             if (Globals.Me == null)
             {
                 return;
@@ -160,7 +185,31 @@ namespace Intersect.Client.Interface.Game.Enhancement
         void UpdateKnownEnhancements()
         {
             EnhancementContainer.Clear();
-            foreach (var enhancementId in KnownEhancements)
+
+            var relevantEnhancements = KnownEhancements.Where(enhancementId =>
+            {
+                var enhancement = EnhancementDescriptor.Get(enhancementId);
+                if (enhancement == default)
+                {
+                    return false;
+                }
+
+                if (!EnhancementHelper.ValidEnhancementForWeaponType(EquippedItem.Base.MaxWeaponLevels, enhancement.ValidWeaponTypes))
+                {
+                    return false;
+                }
+
+                return true;
+            }).ToArray();
+
+            if (relevantEnhancements.Length <= 0)
+            {
+                NoEnhancementsLabel.Show();
+                return;
+            }
+
+            NoEnhancementsLabel.Hide();
+            foreach (var enhancementId in relevantEnhancements)
             {
                 var enhancement = EnhancementDescriptor.Get(enhancementId);
                 if (enhancement == default)
@@ -362,6 +411,27 @@ namespace Intersect.Client.Interface.Game.Enhancement
             UpdateRemoveEnhancementAvailability();
         }
 
+        public override void UpdateHidden()
+        {
+            if (EnhancementInterface == null || !EnhancementInterface.IsOpen)
+            {
+                return;
+            }
+
+            if (CurrentState == States.Finished)
+            {
+                if (EnhancementAnimation.Done)
+                {
+                    EnhancementAnimation.ResetAnimation();
+                    CurrentState = States.Create;
+                    return;
+                }
+                EnhancementAnimation.Draw();
+                return;
+            }
+            base.UpdateHidden();
+        }
+
         public override void UpdateShown()
         {
             if (EnhancementInterface == null || !EnhancementInterface.IsOpen)
@@ -467,6 +537,10 @@ namespace Intersect.Client.Interface.Game.Enhancement
             EPBarLabel = new Label(Background, "EPBarLabel");
 
             EnhancementBackground = new ImagePanel(Background, "EnhancementsBg");
+            NoEnhancementsLabel = new Label(EnhancementBackground, "NoEnhancementLabel")
+            {
+                Text = Strings.EnhancementWindow.NoEnhancements
+            };
             EnhancementHeader = new Label(EnhancementBackground, "EnhancementsHeader")
             {
                 Text = Strings.EnhancementWindow.Enhancements
@@ -597,6 +671,13 @@ namespace Intersect.Client.Interface.Game.Enhancement
             Close();
         }
 
+        public void ProcessCompletedEnhancement(ItemProperties newProperties)
+        {
+            Hide();
+            NewProperties = newProperties;
+            CurrentState = States.Finished;
+        }
+
         public void ForceClose()
         {
             Close();
@@ -605,6 +686,7 @@ namespace Intersect.Client.Interface.Game.Enhancement
         protected override void Close()
         {
             EnhancementInterface?.Close();
+            CompletionWindow.Hide();
             PacketSender.SendCloseEnhancementPacket();
             Hide();
         }

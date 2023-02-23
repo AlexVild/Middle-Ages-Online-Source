@@ -11,5 +11,7 @@ namespace Intersect.Config
         public string AddFuelSound { get; set; } = "al_forging.wav";
 
         public float DeconstructionExpMod { get; set; } = 0.75f;
+
+        public string DisenhanceItemSound = "al_buy_item.wav";
     }
 }
