@@ -1984,6 +1984,9 @@ namespace Intersect.Client.Localization
             public static LocalizedString CooldownGroup = @"Cooldown Group:";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString SpellGroup = @"Spell Group:";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString IgnoreGlobalCooldown = @"Ignores Global Cooldown";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]

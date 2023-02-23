@@ -473,41 +473,11 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
 
         protected void SetupRestrictionInfo()
         {
-            // Our list of data to add, should we need to.
-            var data = new List<Tuple<string, string>>();
+            var description = AddDescription();
 
-            // Display each condition list as returned to us by the server
-            data.Add(new Tuple<string, string>(Strings.ItemDescription.Restriction, String.Empty));
-            for (var i = 0; i < mItem.RestrictionStrings.Count; i++)
-            {
-                var restriction = mItem.RestrictionStrings[i];
-                if (i == 0)
-                {
-                    data.Add(new Tuple<string, string>(restriction, String.Empty));
-                }
-                else
-                {
-                    data.Add(new Tuple<string, string>(Strings.ItemDescription.RestrictionOr.ToString(restriction), String.Empty));
-                }
-            }
-
-            // Do we have any data to display? If so, generate the element and add the data to it.
-            if (data.Count > 0)
-            {
-                // Add a divider.
-                AddDivider();
-
-                // Add a row component.
-                var rows = AddRowContainer();
-
-                foreach (var item in data)
-                {
-                    rows.AddKeyValueRow(item.Item1, item.Item2, CustomColors.ItemDesc.Notice, Color.White);
-                }
-
-                // Resize and position the container.
-                rows.SizeToChildren(true, true);
-            }
+            description.AddText(Strings.ItemDescription.Restriction, CustomColors.ItemDesc.Notice);
+            description.AddLineBreak();
+            description.AddText(string.Join(" ", mItem.RestrictionStrings), CustomColors.ItemDesc.Notice);
         }
 
         protected void SetupCosmeticInfo()

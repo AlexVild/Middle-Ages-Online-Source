@@ -92,6 +92,20 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                     Color.White);
             }
 
+            var idx = 0;
+            foreach (var attackType in mItem.AttackTypes)
+            {
+                if (idx == 0)
+                {
+                    baseRows.AddKeyValueRow("Damage Types:", attackType.GetDescription(), StatLabelColor, StatValueColor);
+                }
+                else
+                {
+                    baseRows.AddKeyValueRow(string.Empty, attackType.GetDescription(), StatLabelColor, StatValueColor);
+                }
+                idx++;
+            }
+
             baseRows.SizeToChildren(true, true);
 
             if (mItem.Tool >= 0)

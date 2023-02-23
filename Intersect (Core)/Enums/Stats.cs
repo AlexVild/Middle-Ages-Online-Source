@@ -49,9 +49,13 @@ namespace Intersect.Enums
     /// </summary>
     public enum AttackTypes
     {
+        [Description("Blunt")]
         Blunt = 0,
+        [Description("Magical")]
         Magic = 1,
+        [Description("Slashing")]
         Slashing = 5,
+        [Description("Piercing")]
         Piercing = 7,
     }
 
