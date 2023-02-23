@@ -109,6 +109,8 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
 
             SetupDamageEstimations(baseRows);
 
+            baseRows.SizeToChildren(true, true);
+
             if (mItem.Tool >= 0)
             {
                 AddDivider();
@@ -260,7 +262,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             {
                 comparedAttackSpeed = EquippedItemDesc?.AttackSpeedValue ?? 1000;
             }
-         
+
             var atkSpeedRows = AddRowContainer();
             AddEquipmentRow(atkSpeedRows,
                 Strings.ItemDescription.AttackSpeed,
@@ -270,6 +272,46 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 StatLabelColor,
                 StatValueColor,
                 unit: "ms");
+
+            var itemAtkSpeed = mItem.AttackSpeedValue;
+            var currentSwiftness = Globals.Me.GetEquipmentBonusEffect(EffectType.Swiftness);
+            var itemSwiftness = ItemInstanceHelper.GetEffectBoost(mItemProperties, EffectType.Swiftness) + mItem.GetEffectPercentage(EffectType.Swiftness);
+            if (currentSwiftness != 0 || itemSwiftness != 0)
+            {
+                var equippedSwiftness = 0;
+                if (EquippedItem != null)
+                {
+                    equippedSwiftness = ItemInstanceHelper.GetEffectBoost(EquippedItem.ItemProperties, EffectType.Swiftness) + EquippedItem.Base.GetEffectPercentage(EffectType.Swiftness);
+                }
+
+                var swiftDiff = itemSwiftness - equippedSwiftness;
+
+                if (itemSwiftness == equippedSwiftness)
+                {
+                    var swiftMod = (100 - currentSwiftness) / 100f;
+                    itemAtkSpeed = (int)Math.Floor(itemAtkSpeed * swiftMod);
+                    comparedAttackSpeed = (int)Math.Floor(comparedAttackSpeed * swiftMod);
+                }
+                else
+                {
+                    var newSwiftMod = (100 - currentSwiftness - swiftDiff) / 100f;
+                    var currSwiftMod = (100 - currentSwiftness) / 100f;
+                    itemAtkSpeed = (int)Math.Floor(itemAtkSpeed * newSwiftMod);
+                    comparedAttackSpeed = (int)Math.Floor(comparedAttackSpeed * currSwiftMod);
+                }
+
+                if (itemAtkSpeed != comparedAttackSpeed || itemAtkSpeed != mItem.AttackSpeedValue)
+                {
+                    AddEquipmentRow(atkSpeedRows,
+                        Strings.ItemDescription.AttackSpeedReal,
+                        itemAtkSpeed,
+                        comparedAttackSpeed,
+                        true,
+                        StatLabelColor,
+                        StatValueColor,
+                        unit: "ms");
+                }
+            }
 
             atkSpeedRows.SizeToChildren(true, true);
         }

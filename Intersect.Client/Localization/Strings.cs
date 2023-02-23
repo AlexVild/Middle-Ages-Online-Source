@@ -1105,7 +1105,10 @@ namespace Intersect.Client.Localization
             public static LocalizedString CritMultiplier = @"Critical Multiplier:";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public static LocalizedString AttackSpeed = @"Attack Speed:";
+            public static LocalizedString AttackSpeed = @"Base Atk Speed:";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString AttackSpeedReal = @"Real Atk Speed:";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString Seconds = @"{00}s";
