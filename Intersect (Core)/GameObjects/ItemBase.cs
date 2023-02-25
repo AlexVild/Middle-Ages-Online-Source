@@ -594,7 +594,15 @@ namespace Intersect.GameObjects
 
         public bool RareDrop { get; set; }
 
+        [NotMapped, JsonIgnore]
+        public Dictionary<Guid, int> WeaponUpgrades { get; set; } = new Dictionary<Guid, int>();
 
+        [Column("WeaponUpgrades")]
+        public string WeaponUpgradesJson
+        {
+            get => JsonConvert.SerializeObject(WeaponUpgrades);
+            set => WeaponUpgrades = JsonConvert.DeserializeObject<Dictionary<Guid, int>>(value ?? "") ?? new Dictionary<Guid, int>();
+        }
     }
 
 }

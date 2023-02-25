@@ -99,6 +99,9 @@ namespace Intersect.Editor.Forms.Editors
             cmbDeconTables.Items.Clear();
             cmbDeconTables.Items.AddRange(LootTableDescriptor.Names);
 
+            cmbUpgrade.Items.Clear();
+            cmbUpgrade.Items.AddRange(CraftBase.Names);
+
             lstGameObjects.Init(UpdateToolStripItems, AssignEditorItem, toolStripItemNew_Click, toolStripItemCopy_Click, toolStripItemUndo_Click, toolStripItemPaste_Click, toolStripItemDelete_Click);
         }
         private void AssignEditorItem(Guid id)
@@ -621,6 +624,8 @@ namespace Intersect.Editor.Forms.Editors
                 nudReqFuel.Value = mEditorItem.FuelRequired;
                 nudWeaponCraftExp.Value = mEditorItem.CraftWeaponExp;
                 RefreshDeconLoot(false);
+
+                RefreshUpgradeList(false);
 
                 if (cmbTypeDisplayOverride.Items.Contains(mEditorItem.TypeDisplayOverride ?? string.Empty))
                 {
@@ -2178,6 +2183,57 @@ namespace Intersect.Editor.Forms.Editors
         private void cmbEnhancement_SelectedIndexChanged(object sender, EventArgs e)
         {
             mEditorItem.EnhancementId = EnhancementDescriptor.IdFromList(cmbEnhancement.SelectedIndex - 1);
+        }
+
+        private void btnAddUpgrade_Click(object sender, EventArgs e)
+        {
+            var selectedCraft = CraftBase.IdFromList(cmbUpgrade.SelectedIndex);
+
+            mEditorItem.WeaponUpgrades[selectedCraft] = (int)nudUpgradeCost.Value;
+
+            RefreshUpgradeList(false);
+        }
+
+        private void RefreshUpgradeList(bool savePos)
+        {
+            var last = -1;
+            if (savePos)
+            {
+                last = lstUpgrades.SelectedIndex;
+            }
+
+            lstUpgrades.Items.Clear();
+            var keys = mEditorItem.WeaponUpgrades.Keys.ToList();
+            keys.Sort();
+            foreach (var upgrade in keys)
+            {
+                var craft = ItemBase.GetName(CraftBase.Get(upgrade)?.ItemId ?? Guid.Empty);
+                var cost = mEditorItem.WeaponUpgrades[upgrade];
+
+                lstUpgrades.Items.Add($"{craft} (Cost: {cost})");
+            }
+
+            if(savePos && last > 0 && last < lstUpgrades.Items.Count)
+            {
+                lstUpgrades.SelectedIndex = last;
+            }
+        }
+
+        private void btnRemoveUpgrade_Click(object sender, EventArgs e)
+        {
+            var keys = mEditorItem.WeaponUpgrades.Keys.ToList();
+            keys.Sort();
+            var idx = lstUpgrades.SelectedIndex;
+
+            if (idx < 0)
+            {
+                return;
+            }
+
+            var key = keys.ElementAtOrDefault(idx);
+            mEditorItem.WeaponUpgrades.Remove(key);
+
+            RefreshUpgradeList(true);
         }
     }
 }

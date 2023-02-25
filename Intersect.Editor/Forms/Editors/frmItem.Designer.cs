@@ -113,6 +113,14 @@ namespace Intersect.Editor.Forms.Editors
             this.lblDrops = new System.Windows.Forms.Label();
             this.lstDrops = new System.Windows.Forms.ListBox();
             this.grpEquipment = new DarkUI.Controls.DarkGroupBox();
+            this.grpUpgrades = new DarkUI.Controls.DarkGroupBox();
+            this.lstUpgrades = new System.Windows.Forms.ListBox();
+            this.btnRemoveUpgrade = new DarkUI.Controls.DarkButton();
+            this.btnAddUpgrade = new DarkUI.Controls.DarkButton();
+            this.lblUpgrade = new System.Windows.Forms.Label();
+            this.cmbUpgrade = new DarkUI.Controls.DarkComboBox();
+            this.nudUpgradeCost = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblUpgradeCost = new System.Windows.Forms.Label();
             this.grpWeaponEnhancement = new DarkUI.Controls.DarkGroupBox();
             this.nudEnhanceThresh = new DarkUI.Controls.DarkNumericUpDown();
             this.lblEnhancementThres = new System.Windows.Forms.Label();
@@ -362,6 +370,8 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudPrice)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.picItem)).BeginInit();
             this.grpEquipment.SuspendLayout();
+            this.grpUpgrades.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudUpgradeCost)).BeginInit();
             this.grpWeaponEnhancement.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudEnhanceThresh)).BeginInit();
             this.grpDeconstruction.SuspendLayout();
@@ -1508,6 +1518,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpEquipment.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpEquipment.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpEquipment.Controls.Add(this.grpUpgrades);
             this.grpEquipment.Controls.Add(this.grpWeaponEnhancement);
             this.grpEquipment.Controls.Add(this.grpDeconstruction);
             this.grpEquipment.Controls.Add(this.grpWeaponTypes);
@@ -1539,6 +1550,116 @@ namespace Intersect.Editor.Forms.Editors
             this.grpEquipment.TabStop = false;
             this.grpEquipment.Text = "Equipment";
             this.grpEquipment.Visible = false;
+            // 
+            // grpUpgrades
+            // 
+            this.grpUpgrades.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpUpgrades.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpUpgrades.Controls.Add(this.lstUpgrades);
+            this.grpUpgrades.Controls.Add(this.btnRemoveUpgrade);
+            this.grpUpgrades.Controls.Add(this.btnAddUpgrade);
+            this.grpUpgrades.Controls.Add(this.lblUpgrade);
+            this.grpUpgrades.Controls.Add(this.cmbUpgrade);
+            this.grpUpgrades.Controls.Add(this.nudUpgradeCost);
+            this.grpUpgrades.Controls.Add(this.lblUpgradeCost);
+            this.grpUpgrades.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpUpgrades.Location = new System.Drawing.Point(434, 781);
+            this.grpUpgrades.Margin = new System.Windows.Forms.Padding(2);
+            this.grpUpgrades.Name = "grpUpgrades";
+            this.grpUpgrades.Padding = new System.Windows.Forms.Padding(2);
+            this.grpUpgrades.Size = new System.Drawing.Size(212, 202);
+            this.grpUpgrades.TabIndex = 123;
+            this.grpUpgrades.TabStop = false;
+            this.grpUpgrades.Text = "Upgrading";
+            // 
+            // lstUpgrades
+            // 
+            this.lstUpgrades.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.lstUpgrades.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lstUpgrades.Cursor = System.Windows.Forms.Cursors.Default;
+            this.lstUpgrades.ForeColor = System.Drawing.Color.Gainsboro;
+            this.lstUpgrades.FormattingEnabled = true;
+            this.lstUpgrades.Location = new System.Drawing.Point(8, 16);
+            this.lstUpgrades.Name = "lstUpgrades";
+            this.lstUpgrades.Size = new System.Drawing.Size(199, 67);
+            this.lstUpgrades.TabIndex = 125;
+            // 
+            // btnRemoveUpgrade
+            // 
+            this.btnRemoveUpgrade.Location = new System.Drawing.Point(133, 168);
+            this.btnRemoveUpgrade.Name = "btnRemoveUpgrade";
+            this.btnRemoveUpgrade.Padding = new System.Windows.Forms.Padding(5);
+            this.btnRemoveUpgrade.Size = new System.Drawing.Size(74, 23);
+            this.btnRemoveUpgrade.TabIndex = 124;
+            this.btnRemoveUpgrade.Text = "Remove";
+            this.btnRemoveUpgrade.Click += new System.EventHandler(this.btnRemoveUpgrade_Click);
+            // 
+            // btnAddUpgrade
+            // 
+            this.btnAddUpgrade.Location = new System.Drawing.Point(8, 168);
+            this.btnAddUpgrade.Name = "btnAddUpgrade";
+            this.btnAddUpgrade.Padding = new System.Windows.Forms.Padding(5);
+            this.btnAddUpgrade.Size = new System.Drawing.Size(74, 23);
+            this.btnAddUpgrade.TabIndex = 123;
+            this.btnAddUpgrade.Text = "Add";
+            this.btnAddUpgrade.Click += new System.EventHandler(this.btnAddUpgrade_Click);
+            // 
+            // lblUpgrade
+            // 
+            this.lblUpgrade.AutoSize = true;
+            this.lblUpgrade.Location = new System.Drawing.Point(5, 86);
+            this.lblUpgrade.Name = "lblUpgrade";
+            this.lblUpgrade.Size = new System.Drawing.Size(73, 13);
+            this.lblUpgrade.TabIndex = 122;
+            this.lblUpgrade.Text = "Upgrade Craft";
+            // 
+            // cmbUpgrade
+            // 
+            this.cmbUpgrade.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbUpgrade.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbUpgrade.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbUpgrade.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbUpgrade.DrawDropdownHoverOutline = false;
+            this.cmbUpgrade.DrawFocusRectangle = false;
+            this.cmbUpgrade.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbUpgrade.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbUpgrade.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbUpgrade.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbUpgrade.FormattingEnabled = true;
+            this.cmbUpgrade.Location = new System.Drawing.Point(9, 102);
+            this.cmbUpgrade.Name = "cmbUpgrade";
+            this.cmbUpgrade.Size = new System.Drawing.Size(198, 21);
+            this.cmbUpgrade.TabIndex = 121;
+            this.cmbUpgrade.Text = null;
+            this.cmbUpgrade.TextPadding = new System.Windows.Forms.Padding(2);
+            // 
+            // nudUpgradeCost
+            // 
+            this.nudUpgradeCost.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudUpgradeCost.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudUpgradeCost.Location = new System.Drawing.Point(8, 142);
+            this.nudUpgradeCost.Maximum = new decimal(new int[] {
+            1316134912,
+            2328,
+            0,
+            0});
+            this.nudUpgradeCost.Name = "nudUpgradeCost";
+            this.nudUpgradeCost.Size = new System.Drawing.Size(199, 20);
+            this.nudUpgradeCost.TabIndex = 120;
+            this.nudUpgradeCost.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            // 
+            // lblUpgradeCost
+            // 
+            this.lblUpgradeCost.AutoSize = true;
+            this.lblUpgradeCost.Location = new System.Drawing.Point(6, 126);
+            this.lblUpgradeCost.Name = "lblUpgradeCost";
+            this.lblUpgradeCost.Size = new System.Drawing.Size(28, 13);
+            this.lblUpgradeCost.TabIndex = 119;
+            this.lblUpgradeCost.Text = "Cost";
             // 
             // grpWeaponEnhancement
             // 
@@ -4868,6 +4989,9 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.picItem)).EndInit();
             this.grpEquipment.ResumeLayout(false);
             this.grpEquipment.PerformLayout();
+            this.grpUpgrades.ResumeLayout(false);
+            this.grpUpgrades.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudUpgradeCost)).EndInit();
             this.grpWeaponEnhancement.ResumeLayout(false);
             this.grpWeaponEnhancement.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudEnhanceThresh)).EndInit();
@@ -5279,5 +5403,13 @@ namespace Intersect.Editor.Forms.Editors
         private Label lblEnhancementThres;
         private DarkGroupBox grpEnhancement;
         private DarkComboBox cmbEnhancement;
+        private DarkGroupBox grpUpgrades;
+        private ListBox lstUpgrades;
+        private DarkButton btnRemoveUpgrade;
+        private DarkButton btnAddUpgrade;
+        private Label lblUpgrade;
+        private DarkComboBox cmbUpgrade;
+        private DarkNumericUpDown nudUpgradeCost;
+        private Label lblUpgradeCost;
     }
 }
