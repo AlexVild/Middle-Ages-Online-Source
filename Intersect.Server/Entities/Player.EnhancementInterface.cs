@@ -13,6 +13,12 @@ namespace Intersect.Server.Entities
         [NotMapped, JsonIgnore]
         public EnhancementInterface Enhancement { get; set; }
 
+        [NotMapped, JsonIgnore]
+        public bool UpgradeStationOpen => UpgradeStation != default;
+
+        [NotMapped, JsonIgnore]
+        public ItemUpgradeInterface UpgradeStation { get; set; }
+
         public void OpenEnhancement(Guid currencyId, float multiplier)
         {
             Enhancement = new EnhancementInterface(this, currencyId, multiplier);
@@ -22,6 +28,17 @@ namespace Intersect.Server.Entities
         public void CloseEnhancement()
         {
             Enhancement = null;
+        }
+
+        public void OpenUpgradeStation(Guid currencyId, float multiplier)
+        {
+            UpgradeStation = new ItemUpgradeInterface(currencyId, multiplier, this);
+            // PacketSender.SendOpenEnhancementWindow(this, currencyId, multiplier);
+        }
+
+        public void CloseUpgradeStation()
+        {
+            UpgradeStation = null;
         }
     }
 }

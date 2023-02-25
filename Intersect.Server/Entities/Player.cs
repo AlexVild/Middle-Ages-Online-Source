@@ -4151,7 +4151,7 @@ namespace Intersect.Server.Entities
         /// <param name="items">A <see cref="List{InventorySlot}"/>containing inventory items</param>
         /// <returns>A <see cref="Dictionary{Guid, int}"/> containing item IDs and their quantities within the
         /// given list of inventory slots</returns>
-        private static Dictionary<Guid, int> GetAllItemsAndQuantities(List<InventorySlot> items)
+        public static Dictionary<Guid, int> GetAllItemsAndQuantities(List<InventorySlot> items)
         {
             var itemdict = new Dictionary<Guid, int>();
             foreach (var item in items)
@@ -4172,7 +4172,7 @@ namespace Intersect.Server.Entities
             return itemdict;
         }
 
-        private bool CheckHasCraftIngredients(Guid craftId, Dictionary<Guid, int> itemsAndQuantities)
+        public bool CheckHasCraftIngredients(Guid craftId, Dictionary<Guid, int> itemsAndQuantities)
         {
             var craft = CraftBase.Get(craftId);
             foreach (var ingredient in craft.Ingredients)
