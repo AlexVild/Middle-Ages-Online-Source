@@ -201,6 +201,12 @@
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_OpenQuestBoard.Designer.cs">
       <DependentUpon>EventCommand_OpenQuestBoard.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_OpenUpgradeStation.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_OpenUpgradeStation.Designer.cs">
+      <DependentUpon>EventCommand_OpenUpgradeStation.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_RandomQuest.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -950,6 +956,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_OpenQuestBoard.resx">
       <DependentUpon>EventCommand_OpenQuestBoard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_OpenUpgradeStation.resx">
+      <DependentUpon>EventCommand_OpenUpgradeStation.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_Options.resx">
       <DependentUpon>EventCommand_Options.cs</DependentUpon>

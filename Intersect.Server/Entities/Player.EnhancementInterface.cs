@@ -33,7 +33,7 @@ namespace Intersect.Server.Entities
         public void OpenUpgradeStation(Guid currencyId, float multiplier)
         {
             UpgradeStation = new ItemUpgradeInterface(currencyId, multiplier, this);
-            // PacketSender.SendOpenEnhancementWindow(this, currencyId, multiplier);
+            PacketSender.SendOpenUpgradeStation(this, currencyId, multiplier);
         }
 
         public void CloseUpgradeStation()

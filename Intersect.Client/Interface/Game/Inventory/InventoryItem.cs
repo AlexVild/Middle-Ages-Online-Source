@@ -90,7 +90,7 @@ namespace Intersect.Client.Interface.Game.Inventory
 
         void pnl_Clicked(Base sender, ClickedEventArgs arguments)
         {
-            if (Globals.Me.Deconstructor.IsOpen || Globals.Me.Enhancement.IsOpen)
+            if (Globals.Me.Deconstructor.IsOpen || Globals.Me.Enhancement.IsOpen || Globals.Me.UpgradeStation.IsOpen)
             {
                 return;
             }
@@ -149,7 +149,7 @@ namespace Intersect.Client.Interface.Game.Inventory
                     }
                 }
             }
-            else if (Globals.Me.Enhancement.IsOpen || Globals.Me.InCutscene())
+            else if (Globals.Me.Enhancement.IsOpen || Globals.Me.InCutscene() || Globals.Me.UpgradeStation.IsOpen)
             {
                 return;
             }
@@ -196,7 +196,7 @@ namespace Intersect.Client.Interface.Game.Inventory
                 return;
             }
 
-            if (Globals.Me.Deconstructor.IsOpen || Globals.Me.Enhancement.IsOpen)
+            if (Globals.Me.Deconstructor.IsOpen || Globals.Me.Enhancement.IsOpen || Globals.Me.UpgradeStation.IsOpen)
             {
                 mCanDrag = false;
             }
@@ -401,7 +401,7 @@ namespace Intersect.Client.Interface.Game.Inventory
             {
                 if (mMouseOver)
                 {
-                    if (!Globals.InputManager.MouseButtonDown(GameInput.MouseButtons.Left) && !Globals.Me.Deconstructor.IsOpen && !Globals.Me.Enhancement.IsOpen)
+                    if (!Globals.InputManager.MouseButtonDown(GameInput.MouseButtons.Left) && !Globals.Me.Deconstructor.IsOpen && !Globals.Me.Enhancement.IsOpen && !Globals.Me.UpgradeStation.IsOpen)
                     {
                         mCanDrag = true;
                         mMouseX = -1;

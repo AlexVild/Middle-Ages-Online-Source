@@ -28,6 +28,7 @@ using Intersect.Utilities;
 using Intersect.Client.Interface.Game.BestiaryUi;
 using Intersect.Client.Interface.Game.DeconstructorUi;
 using Intersect.Client.Interface.Game.Enhancement;
+using Intersect.Client.Interface.Game.UpgradeStation;
 
 namespace Intersect.Client.Interface.Game
 {
@@ -758,6 +759,12 @@ namespace Intersect.Client.Interface.Game
                 closedWindows = true;
             }
 
+            if (UpgradeStationWindow != null && UpgradeStationWindow.IsVisible())
+            {
+                UpgradeStationWindow.ForceClose();
+                closedWindows = true;
+            }
+
             if (LeaderboardWindow != null && LeaderboardWindow.IsVisible())
             {
                 LeaderboardWindow.Close();
@@ -790,6 +797,7 @@ namespace Intersect.Client.Interface.Game
         public PlayerRespawnWindow RespawnWindow;
         public DeconstructorWindow DeconstructorWindow;
         public EnhancementWindow EnhancementWindow;
+        public UpgradeStationWindow UpgradeStationWindow;
         private CharacterPanelType _CurrentCharPanel;
 
         public CharacterPanelType CurrentCharacterPanel
@@ -807,6 +815,7 @@ namespace Intersect.Client.Interface.Game
             RespawnWindow = new PlayerRespawnWindow(gameCanvas);
             DeconstructorWindow = new DeconstructorWindow(gameCanvas);
             EnhancementWindow = new EnhancementWindow(gameCanvas);
+            UpgradeStationWindow = new UpgradeStationWindow(gameCanvas);
         }
 
         private void _Draw()
@@ -821,6 +830,7 @@ namespace Intersect.Client.Interface.Game
             RespawnWindow.Update();
             DeconstructorWindow.Update();
             EnhancementWindow.Update();
+            UpgradeStationWindow.Update();
         }
 
         public PlayerHud GetHud()

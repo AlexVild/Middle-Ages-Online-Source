@@ -128,6 +128,7 @@
     <Compile Include="General\Time.cs" />
     <Compile Include="General\Globals.cs" />
     <Compile Include="General\Timers.cs" />
+    <Compile Include="General\UpgradeStation\UpgradeStationInterface.cs" />
     <Compile Include="Interface\Components\GwenComponents.cs" />
     <Compile Include="Interface\Game\AnnouncementWindow.cs" />
     <Compile Include="Interface\Game\BestiaryUi\BeastLootItem.cs" />
@@ -201,6 +202,7 @@
     <Compile Include="Interface\Game\Toasts\Toast.cs" />
     <Compile Include="Interface\Game\Toasts\ToastService.cs" />
     <Compile Include="Interface\Game\Toasts\ToastWindow.cs" />
+    <Compile Include="Interface\Game\UpgradeStation\UpgradeStationWindow.cs" />
     <Compile Include="Interface\Objects\HarvestInfoRows.cs" />
     <Compile Include="Interface\ScreenAnimations\DeconstructorAnim.cs" />
     <Compile Include="Interface\ScreenAnimations\Gravestone.cs" />

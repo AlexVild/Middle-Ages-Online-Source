@@ -407,6 +407,7 @@
     <Compile Include="Network\Packets\Client\CloseLeaderboardPacket.cs" />
     <Compile Include="Network\Packets\Client\CloseQuestBoardPacket.cs" />
     <Compile Include="Network\Packets\Client\CloseShopPacket.cs" />
+    <Compile Include="Network\Packets\Client\CloseUpgradeStationPacket.cs" />
     <Compile Include="Network\Packets\Client\CosmeticChangePacket.cs" />
     <Compile Include="Network\Packets\Client\CraftItemPacket.cs" />
     <Compile Include="Network\Packets\Client\DeconstructItemsPacket.cs" />
@@ -426,6 +427,7 @@
     <Compile Include="Network\Packets\Client\RequestRespawnPacket.cs" />
     <Compile Include="Network\Packets\Client\RequestSkillbookPacket.cs" />
     <Compile Include="Network\Packets\Client\RequestUnlockedRecipesPacket.cs" />
+    <Compile Include="Network\Packets\Client\RequestUpgradePacket.cs" />
     <Compile Include="Network\Packets\Client\RequestWeaponEnhancementRemovalPacket.cs" />
     <Compile Include="Network\Packets\Client\ResourceInfoRequestPacket.cs" />
     <Compile Include="Network\Packets\Client\ApplyEnhancementsPacket.cs" />
@@ -436,6 +438,7 @@
     <Compile Include="Network\Packets\Server\CloseDeconstructorPacket.cs" />
     <Compile Include="Network\Packets\Server\CombatNumberPacket.cs" />
     <Compile Include="Network\Packets\Server\CombatNumberPackets.cs" />
+    <Compile Include="Network\Packets\Server\CompleteUpgradePacket.cs" />
     <Compile Include="Network\Packets\Server\CosmeticUnlocksPacket.cs" />
     <Compile Include="Network\Packets\Server\CraftStatusPacket.cs" />
     <Compile Include="Network\Packets\Client\CreateAccountPacket.cs" />
@@ -476,6 +479,7 @@
     <Compile Include="Network\Packets\Server\KillCountPacket.cs" />
     <Compile Include="Network\Packets\Server\KillCountsPacket.cs" />
     <Compile Include="Network\Packets\Server\OpenEnhancementPacket.cs" />
+    <Compile Include="Network\Packets\Server\OpenUpgradeStationPacket.cs" />
     <Compile Include="Network\Packets\Server\PlayerDeathTypePacket.cs" />
     <Compile Include="Network\Packets\Server\EntityMovementPackets.cs" />
     <Compile Include="Network\Packets\Server\FadePacket.cs" />

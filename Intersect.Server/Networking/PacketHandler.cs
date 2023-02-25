@@ -4633,5 +4633,27 @@ namespace Intersect.Server.Networking
 
             player.Enhancement?.TryRemoveEnhancementsOnItem(weapon);
         }
+
+        public void HandlePacket(Client client, CloseUpgradeStationPacket packet)
+        {
+            client?.Entity?.CloseUpgradeStation();
+        }
+
+        public void HandlePacket(Client client, RequestUpgradePacket packet)
+        {
+            var player = client?.Entity;
+            if (player == default)
+            {
+                return;
+            }
+
+            var equippedItem = player.TryGetEquippedItem(Options.WeaponIndex, out var weapon);
+            var failure = "Failed to upgrade item!";
+            if (!player.UpgradeStation?.TryUpgradeItem(weapon, packet.CraftId, out failure) ?? false)
+            {
+                PacketSender.SendEventDialog(player, failure, string.Empty, Guid.Empty);
+                return;
+            }
+        }
     }
 }

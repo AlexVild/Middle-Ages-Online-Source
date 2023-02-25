@@ -3453,7 +3453,7 @@ namespace Intersect.Server.Entities.Events
         }
 
         private static void ProcessCommand(
-          OpenEnhancementWindow command,
+          OpenUpgradeStation command,
           Player player,
           Event instance,
           CommandInstance stackInfo,
@@ -3465,7 +3465,7 @@ namespace Intersect.Server.Entities.Events
                 return;
             }
 
-            player.OpenEnhancement(command.CurrencyItemId, command.CostMultiplier);
+            player.OpenUpgradeStation(command.CurrencyItemId, command.CostMultiplier);
             callStack.Peek().WaitingForResponse = CommandInstance.EventResponse.Enhancement;
         }
     }

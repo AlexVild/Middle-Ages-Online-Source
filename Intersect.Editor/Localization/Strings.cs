@@ -2311,7 +2311,8 @@ Tick timer saved in server config.json.";
                 {"dungeons", @"Dungeons"},
                 {"opendeconstructor", @"Open Deconstructor"},
                 {"changeenhancement", @"Change Enhancement"},
-                {"openenhancementwindow", @"Open Enhancement Window"}
+                {"openenhancementwindow", @"Open Enhancement Window"},
+                {"openupgradestation", @"Open Upgrade Station"}
             };
 
         }
@@ -6269,6 +6270,9 @@ Negative values for time to flow backwards.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString OpenEnhancementWindow = @"Open Enhancement Window: [Currency: {00} {01}x";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString OpenUpgradeStation = @"Open Upgrade Station: [Currency: {00} {01}x";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString ResetPermadeads = @"Reset Permadead NPCs in Map: {00}";

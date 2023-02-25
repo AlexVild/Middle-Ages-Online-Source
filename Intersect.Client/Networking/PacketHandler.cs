@@ -2928,5 +2928,19 @@ namespace Intersect.Client.Networking
 
             Interface.Interface.GameUi.EnhancementWindow.ProcessCompletedEnhancement(packet.NewProperties);
         }
+
+        public void HandlePacket(IPacketSender packetSender, OpenUpgradeStationPacket packet)
+        {
+            if (Globals.Me == null)
+            {
+                return;
+            }
+
+            Globals.Me.UpgradeStation?.Open(packet.CurrencyId, 
+                packet.CostMultiplier, 
+                packet.AvailableUpgrades, 
+                ItemBase.Get(packet.UpgradingGuid), 
+                packet.UpgradingProperties);
+        }
     }
 }

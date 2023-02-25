@@ -41,7 +41,9 @@ namespace Intersect.Server.Entities.Events
 
             Deconstruction,
 
-            Enhancement
+            Enhancement,
+
+            Upgrade,
 
         }
 

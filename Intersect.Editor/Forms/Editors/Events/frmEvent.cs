@@ -879,6 +879,11 @@ namespace Intersect.Editor.Forms.Editors.Events
 
                     break;
 
+                case EventCommandType.OpenUpgradeStation:
+                    tmpCommand = new OpenUpgradeStation();
+                    break;
+
+
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -1611,6 +1616,10 @@ namespace Intersect.Editor.Forms.Editors.Events
 
                 case EventCommandType.OpenEnhancementWindow:
                     cmdWindow = new EventCommand_OpenEnhancementWindow((OpenEnhancementWindow)command, this);
+                    break;
+
+                case EventCommandType.OpenUpgradeStation:
+                    cmdWindow = new EventCommand_OpenUpgradeStation((OpenUpgradeStation)command, this);
                     break;
 
                 default:

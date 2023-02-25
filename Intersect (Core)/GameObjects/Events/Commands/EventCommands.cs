@@ -1469,4 +1469,13 @@ namespace Intersect.GameObjects.Events.Commands
 
         public float CostMultiplier { get; set; } = 1.0f;
     }
+
+    public partial class OpenUpgradeStation : EventCommand
+    {
+        public override EventCommandType Type { get; } = EventCommandType.OpenUpgradeStation;
+
+        public Guid CurrencyItemId { get; set; } = Guid.Empty;
+
+        public float CostMultiplier { get; set; } = 1.0f;
+    }
 }

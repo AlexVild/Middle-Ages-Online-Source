@@ -187,35 +187,37 @@ namespace Intersect.Editor.Forms.Editors.Events
             System.Windows.Forms.TreeNode treeNode81 = new System.Windows.Forms.TreeNode("Open Crafting Station");
             System.Windows.Forms.TreeNode treeNode82 = new System.Windows.Forms.TreeNode("Open Deconstructor");
             System.Windows.Forms.TreeNode treeNode83 = new System.Windows.Forms.TreeNode("Open Enhancement Window");
-            System.Windows.Forms.TreeNode treeNode84 = new System.Windows.Forms.TreeNode("Shop and Bank", new System.Windows.Forms.TreeNode[] {
+            System.Windows.Forms.TreeNode treeNode84 = new System.Windows.Forms.TreeNode("Open Upgrade Station");
+            System.Windows.Forms.TreeNode treeNode85 = new System.Windows.Forms.TreeNode("Shop and Bank", new System.Windows.Forms.TreeNode[] {
             treeNode79,
             treeNode80,
             treeNode81,
             treeNode82,
-            treeNode83});
-            System.Windows.Forms.TreeNode treeNode85 = new System.Windows.Forms.TreeNode("Create Guild");
-            System.Windows.Forms.TreeNode treeNode86 = new System.Windows.Forms.TreeNode("Disband Guild");
-            System.Windows.Forms.TreeNode treeNode87 = new System.Windows.Forms.TreeNode("Open Guild Bank");
-            System.Windows.Forms.TreeNode treeNode88 = new System.Windows.Forms.TreeNode("Set Guild Bank Slots Count");
-            System.Windows.Forms.TreeNode treeNode89 = new System.Windows.Forms.TreeNode("Guilds", new System.Windows.Forms.TreeNode[] {
-            treeNode85,
+            treeNode83,
+            treeNode84});
+            System.Windows.Forms.TreeNode treeNode86 = new System.Windows.Forms.TreeNode("Create Guild");
+            System.Windows.Forms.TreeNode treeNode87 = new System.Windows.Forms.TreeNode("Disband Guild");
+            System.Windows.Forms.TreeNode treeNode88 = new System.Windows.Forms.TreeNode("Open Guild Bank");
+            System.Windows.Forms.TreeNode treeNode89 = new System.Windows.Forms.TreeNode("Set Guild Bank Slots Count");
+            System.Windows.Forms.TreeNode treeNode90 = new System.Windows.Forms.TreeNode("Guilds", new System.Windows.Forms.TreeNode[] {
             treeNode86,
             treeNode87,
-            treeNode88});
-            System.Windows.Forms.TreeNode treeNode90 = new System.Windows.Forms.TreeNode("Start Timer");
-            System.Windows.Forms.TreeNode treeNode91 = new System.Windows.Forms.TreeNode("Modify Timer");
-            System.Windows.Forms.TreeNode treeNode92 = new System.Windows.Forms.TreeNode("Stop Timer");
-            System.Windows.Forms.TreeNode treeNode93 = new System.Windows.Forms.TreeNode("Timers", new System.Windows.Forms.TreeNode[] {
-            treeNode90,
+            treeNode88,
+            treeNode89});
+            System.Windows.Forms.TreeNode treeNode91 = new System.Windows.Forms.TreeNode("Start Timer");
+            System.Windows.Forms.TreeNode treeNode92 = new System.Windows.Forms.TreeNode("Modify Timer");
+            System.Windows.Forms.TreeNode treeNode93 = new System.Windows.Forms.TreeNode("Stop Timer");
+            System.Windows.Forms.TreeNode treeNode94 = new System.Windows.Forms.TreeNode("Timers", new System.Windows.Forms.TreeNode[] {
             treeNode91,
-            treeNode92});
-            System.Windows.Forms.TreeNode treeNode94 = new System.Windows.Forms.TreeNode("Change Dungeon");
-            System.Windows.Forms.TreeNode treeNode95 = new System.Windows.Forms.TreeNode("Obtain Treasure Gnome");
-            System.Windows.Forms.TreeNode treeNode96 = new System.Windows.Forms.TreeNode("Roll Dungeon Loot");
-            System.Windows.Forms.TreeNode treeNode97 = new System.Windows.Forms.TreeNode("Dungeons", new System.Windows.Forms.TreeNode[] {
-            treeNode94,
+            treeNode92,
+            treeNode93});
+            System.Windows.Forms.TreeNode treeNode95 = new System.Windows.Forms.TreeNode("Change Dungeon");
+            System.Windows.Forms.TreeNode treeNode96 = new System.Windows.Forms.TreeNode("Obtain Treasure Gnome");
+            System.Windows.Forms.TreeNode treeNode97 = new System.Windows.Forms.TreeNode("Roll Dungeon Loot");
+            System.Windows.Forms.TreeNode treeNode98 = new System.Windows.Forms.TreeNode("Dungeons", new System.Windows.Forms.TreeNode[] {
             treeNode95,
-            treeNode96});
+            treeNode96,
+            treeNode97});
             this.lblName = new System.Windows.Forms.Label();
             this.txtEventname = new DarkUI.Controls.DarkTextBox();
             this.grpEntityOptions = new DarkUI.Controls.DarkGroupBox();
@@ -1333,44 +1335,47 @@ namespace Intersect.Editor.Forms.Editors.Events
             treeNode83.Name = "openenhancementwindow";
             treeNode83.Tag = "87";
             treeNode83.Text = "Open Enhancement Window";
-            treeNode84.Name = "shopandbank";
-            treeNode84.Text = "Shop and Bank";
-            treeNode85.Name = "createguild";
-            treeNode85.Tag = "53";
-            treeNode85.Text = "Create Guild";
-            treeNode86.Name = "disbandguild";
-            treeNode86.Tag = "54";
-            treeNode86.Text = "Disband Guild";
-            treeNode87.Name = "openguildbank";
-            treeNode87.Tag = "55";
-            treeNode87.Text = "Open Guild Bank";
-            treeNode88.Name = "setguildbankslots";
-            treeNode88.Tag = "56";
-            treeNode88.Text = "Set Guild Bank Slots Count";
-            treeNode89.Name = "guilds";
-            treeNode89.Text = "Guilds";
-            treeNode90.Name = "starttimer";
-            treeNode90.Tag = "64";
-            treeNode90.Text = "Start Timer";
-            treeNode91.Name = "modifytimer";
-            treeNode91.Tag = "65";
-            treeNode91.Text = "Modify Timer";
-            treeNode92.Name = "stoptimer";
-            treeNode92.Tag = "66";
-            treeNode92.Text = "Stop Timer";
-            treeNode93.Name = "timers";
-            treeNode93.Text = "Timers";
-            treeNode94.Name = "changedungeon";
-            treeNode94.Tag = "82";
-            treeNode94.Text = "Change Dungeon";
-            treeNode95.Name = "obtaintreasuregnome";
-            treeNode95.Tag = "83";
-            treeNode95.Text = "Obtain Treasure Gnome";
-            treeNode96.Name = "rolldungeonloot";
-            treeNode96.Tag = "84";
-            treeNode96.Text = "Roll Dungeon Loot";
-            treeNode97.Name = "dungeons";
-            treeNode97.Text = "Dungeons";
+            treeNode84.Name = "openupgradestation";
+            treeNode84.Tag = "88";
+            treeNode84.Text = "Open Upgrade Station";
+            treeNode85.Name = "shopandbank";
+            treeNode85.Text = "Shop and Bank";
+            treeNode86.Name = "createguild";
+            treeNode86.Tag = "53";
+            treeNode86.Text = "Create Guild";
+            treeNode87.Name = "disbandguild";
+            treeNode87.Tag = "54";
+            treeNode87.Text = "Disband Guild";
+            treeNode88.Name = "openguildbank";
+            treeNode88.Tag = "55";
+            treeNode88.Text = "Open Guild Bank";
+            treeNode89.Name = "setguildbankslots";
+            treeNode89.Tag = "56";
+            treeNode89.Text = "Set Guild Bank Slots Count";
+            treeNode90.Name = "guilds";
+            treeNode90.Text = "Guilds";
+            treeNode91.Name = "starttimer";
+            treeNode91.Tag = "64";
+            treeNode91.Text = "Start Timer";
+            treeNode92.Name = "modifytimer";
+            treeNode92.Tag = "65";
+            treeNode92.Text = "Modify Timer";
+            treeNode93.Name = "stoptimer";
+            treeNode93.Tag = "66";
+            treeNode93.Text = "Stop Timer";
+            treeNode94.Name = "timers";
+            treeNode94.Text = "Timers";
+            treeNode95.Name = "changedungeon";
+            treeNode95.Tag = "82";
+            treeNode95.Text = "Change Dungeon";
+            treeNode96.Name = "obtaintreasuregnome";
+            treeNode96.Tag = "83";
+            treeNode96.Text = "Obtain Treasure Gnome";
+            treeNode97.Name = "rolldungeonloot";
+            treeNode97.Tag = "84";
+            treeNode97.Text = "Roll Dungeon Loot";
+            treeNode98.Name = "dungeons";
+            treeNode98.Text = "Dungeons";
             this.lstCommands.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
             treeNode5,
             treeNode14,
@@ -1379,10 +1384,10 @@ namespace Intersect.Editor.Forms.Editors.Events
             treeNode67,
             treeNode73,
             treeNode78,
-            treeNode84,
-            treeNode89,
-            treeNode93,
-            treeNode97});
+            treeNode85,
+            treeNode90,
+            treeNode94,
+            treeNode98});
             this.lstCommands.Size = new System.Drawing.Size(445, 440);
             this.lstCommands.TabIndex = 2;
             this.lstCommands.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.lstCommands_NodeMouseDoubleClick);

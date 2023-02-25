@@ -4341,7 +4341,8 @@ namespace Intersect.Server.Entities
                 PartyRequester != null ||
                 FriendRequester != null ||
                 Deconstructor != null ||
-                Enhancement != null;
+                EnhancementOpen ||
+                UpgradeStationOpen;
         }
 
         //Bank

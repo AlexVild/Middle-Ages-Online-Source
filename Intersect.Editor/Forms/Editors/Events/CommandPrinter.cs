@@ -2039,5 +2039,10 @@ namespace Intersect.Editor.Forms.Editors.Events
         {
             return Strings.EventCommandList.OpenEnhancementWindow.ToString(ItemBase.GetName(command.CurrencyItemId), command.CostMultiplier.ToString("N2"));
         }
+
+        private static string GetCommandText(OpenUpgradeStation command, MapInstance map)
+        {
+            return Strings.EventCommandList.OpenUpgradeStation.ToString(ItemBase.GetName(command.CurrencyItemId), command.CostMultiplier.ToString("N2"));
+        }
     }
 }

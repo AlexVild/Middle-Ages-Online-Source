@@ -171,6 +171,7 @@ namespace Intersect.Server.Entities
 
             // Send the final inv update so that they can see their new item
             PacketSender.SendInventory(Owner);
+            PacketSender.SendCompleteUpgrade(Owner, craft.ItemId, item.ItemProperties);
             return true;
         }
     }

@@ -277,6 +277,7 @@ namespace Intersect.GameObjects.Events
         OpenDeconstructor, // 85
         ChangeEnhancements, // 86
         OpenEnhancementWindow, // 87
+        OpenUpgradeStation, // 88
     }
 
     public enum NPCGuildManagementSelection

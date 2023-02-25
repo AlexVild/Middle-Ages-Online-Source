@@ -682,5 +682,15 @@ namespace Intersect.Client.Networking
         {
             Network.SendPacket(new RequestWeaponEnhancementRemovalPacket());
         }
+
+        public static void SendCloseUpgradeStation()
+        {
+            Network.SendPacket(new CloseUpgradeStationPacket());
+        }
+
+        public static void SendRequestUpgrade(Guid craftId)
+        {
+            Network.SendPacket(new RequestUpgradePacket(craftId));
+        }
     }
 }

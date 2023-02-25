@@ -257,6 +257,7 @@ namespace Intersect.Client.Entities
                      (!Globals.Me.Leaderboard?.IsOpen ?? true) &&
                      (!Globals.Me.Deconstructor?.IsOpen ?? true) &&
                      (!Globals.Me.Enhancement?.IsOpen ?? true) &&
+                     (!Globals.Me.UpgradeStation?.IsOpen ?? true) &&
                      !Interface.Interface.HasInputFocus());
         }
 

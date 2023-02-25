@@ -2797,5 +2797,26 @@ namespace Intersect.Server.Networking
         {
             player?.SendPacket(new OpenEnhancementPacket(currencyId, costMulti, player.KnownEnhancements.ToArray()));
         }
+
+        public static void SendOpenUpgradeStation(Player player, Guid currencyId, float costMulti)
+        {
+            if (player == default)
+            {
+                return;
+            }
+
+            player.TryGetEquippedItem(Options.WeaponIndex, out var weapon);
+
+            var descriptorId = weapon?.ItemId ?? Guid.Empty;
+            var properties = weapon?.ItemProperties ?? new ItemProperties();
+            var upgrades = weapon?.Descriptor?.WeaponUpgrades.Keys.ToArray() ?? Array.Empty<Guid>();
+
+            player?.SendPacket(new OpenUpgradeStationPacket(currencyId, costMulti, upgrades, descriptorId, properties));
+        }
+
+        public static void SendCompleteUpgrade(Player player, Guid itemId, ItemProperties properties)
+        {
+            player?.SendPacket(new CompleteUpgradePacket(itemId, properties));
+        }
     }
 }
