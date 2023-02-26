@@ -45,6 +45,10 @@ namespace Intersect.Editor.Forms.Editors
 
         private List<CraftBase> mCrafts = new List<CraftBase>();
 
+        private ItemTypes PrevItemType { get; set; }
+
+        private bool mPopulating { get; set; }
+
         private void UpdateOverrides()
         {
             cmbTypeDisplayOverride.Items.Clear();
@@ -168,11 +172,6 @@ namespace Intersect.Editor.Forms.Editors
             cmbAttackAnimation.Items.Clear();
             cmbAttackAnimation.Items.Add(Strings.General.none);
             cmbAttackAnimation.Items.AddRange(AnimationBase.Names);
-            cmbScalingStat.Items.Clear();
-            for (var x = 0; x < (int)Stats.StatCount; x++)
-            {
-                cmbScalingStat.Items.Add(Globals.GetStatName(x));
-            }
 
             cmbAnimation.Items.Clear();
             cmbAnimation.Items.Add(Strings.General.none);
@@ -284,18 +283,8 @@ namespace Intersect.Editor.Forms.Editors
 
             grpWeaponProperties.Text = Strings.ItemEditor.weaponproperties;
             chk2Hand.Text = Strings.ItemEditor.twohanded;
-            lblDamage.Text = Strings.ItemEditor.basedamage;
             lblCritChance.Text = Strings.ItemEditor.critchance;
             lblCritMultiplier.Text = Strings.ItemEditor.critmultiplier;
-            lblDamageType.Text = Strings.ItemEditor.damagetype;
-            cmbDamageType.Items.Clear();
-            for (var i = 0; i < Strings.Combat.damagetypes.Count; i++)
-            {
-                cmbDamageType.Items.Add(Strings.Combat.damagetypes[i]);
-            }
-
-            lblScalingStat.Text = Strings.ItemEditor.scalingstat;
-            lblScalingAmount.Text = Strings.ItemEditor.scalingamount;
             lblAttackAnimation.Text = Strings.ItemEditor.attackanimation;
             lblProjectile.Text = Strings.ItemEditor.projectile;
             lblToolType.Text = Strings.ItemEditor.tooltype;
@@ -376,8 +365,6 @@ namespace Intersect.Editor.Forms.Editors
             btnSave.Text = Strings.ItemEditor.save;
             btnCancel.Text = Strings.ItemEditor.cancel;
 
-            lblStatLock.Text = Strings.ItemEditor.statlocklabel;
-
             grpAdditionalWeaponProps.Text = Strings.ItemEditor.AdditionalWeaponProps;
             chkBackstab.Text = Strings.ItemEditor.CanBackstab;
             lblBackstabMultiplier.Text = Strings.ItemEditor.BackstabMultiplier;
@@ -385,6 +372,7 @@ namespace Intersect.Editor.Forms.Editors
 
         private void UpdateEditor()
         {
+            mPopulating = true;
             if (mEditorItem != null)
             {
                 pnlContainer.Show();
@@ -440,7 +428,6 @@ namespace Intersect.Editor.Forms.Editors
                 nudCritMultiplier.Value = (decimal) mEditorItem.CritMultiplier;
                 cmbAttackSpeedModifier.SelectedIndex = mEditorItem.AttackSpeedModifier;
                 nudAttackSpeedValue.Value = mEditorItem.AttackSpeedValue;
-                nudScaling.Value = mEditorItem.Scaling;
                 nudRange.Value = mEditorItem.StatGrowth;
                 chkCanDrop.Checked = Convert.ToBoolean(mEditorItem.CanDrop);
                 chkCanBank.Checked = Convert.ToBoolean(mEditorItem.CanBank);
@@ -509,9 +496,6 @@ namespace Intersect.Editor.Forms.Editors
                 {
                     DrawItemPaperdoll(Gender.Female);
                 }
-
-                cmbDamageType.SelectedIndex = mEditorItem.DamageType;
-                cmbScalingStat.SelectedIndex = mEditorItem.ScalingStat;
 
                 //External References
                 cmbProjectile.SelectedIndex = ProjectileBase.ListIndex(mEditorItem.ProjectileId) + 1;
@@ -641,17 +625,60 @@ namespace Intersect.Editor.Forms.Editors
                     mChanged.Add(mEditorItem);
                     mEditorItem.MakeBackup();
                 }
+
+                if (mEditorItem.ItemType == ItemTypes.Equipment && mEditorItem.EquipmentSlot == Options.WeaponIndex)
+                {
+                    EstimateDPS();
+                }
+                else
+                {
+                    lblProjectedDps.Hide();
+                }
             }
             else
             {
                 pnlContainer.Hide();
             }
 
+            PrevItemType = mEditorItem?.ItemType ?? ItemTypes.None;
             UpdateToolStripItems();
+            mPopulating = false;
+        }
+
+        private void EstimateDPS()
+        {
+            lblProjectedDps.Show();
+
+            var itemStats = new int[(int)Stats.StatCount];
+            Array.Copy(mEditorItem.StatsGiven, itemStats, itemStats.Length);
+
+            var statIdx = 0;
+            foreach (var percentageBoost in mEditorItem.PercentageStatsGiven)
+            {
+                var boost = percentageBoost / 100f;
+                var baseStat = itemStats[statIdx];
+
+                itemStats[statIdx] += (int)Math.Floor(baseStat * boost);
+
+                statIdx++;
+            }
+
+            CombatUtilities.CalculateDamage(mEditorItem.AttackTypes, 1.0, 100, itemStats, new int[(int)Stats.StatCount], out var maxHit);
+
+            var hitsPerSecond = 1000.0f / mEditorItem.AttackSpeedValue;
+
+            var dps = maxHit * hitsPerSecond;
+
+            lblProjectedDps.Text = $"Projected DPS: {dps}";
         }
 
         private void RefreshExtendedData()
         {
+            if (PrevItemType == mEditorItem.ItemType)
+            {
+                return;
+            }
+
             grpConsumable.Visible = false;
             grpSpell.Visible = false;
             grpEquipment.Visible = false;
@@ -962,16 +989,6 @@ namespace Intersect.Editor.Forms.Editors
                 AnimationBase.Get(AnimationBase.IdFromList(cmbAttackAnimation.SelectedIndex - 1));
         }
 
-        private void cmbDamageType_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            mEditorItem.DamageType = cmbDamageType.SelectedIndex;
-        }
-
-        private void cmbScalingStat_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            mEditorItem.ScalingStat = cmbScalingStat.SelectedIndex;
-        }
-
         private void cmbProjectile_SelectedIndexChanged(object sender, EventArgs e)
         {
             mEditorItem.Projectile = ProjectileBase.Get(ProjectileBase.IdFromList(cmbProjectile.SelectedIndex - 1));
@@ -1003,11 +1020,6 @@ namespace Intersect.Editor.Forms.Editors
             mEditorItem.Price = (int) nudPrice.Value;
         }
 
-        private void nudScaling_ValueChanged(object sender, EventArgs e)
-        {
-            mEditorItem.Scaling = (int) nudScaling.Value;
-        }
-
         private void nudDamage_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.Damage = (int) nudDamage.Value;
@@ -1030,51 +1042,61 @@ namespace Intersect.Editor.Forms.Editors
         private void nudStr_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.StatsGiven[0] = (int) nudStr.Value;
+            EstimateDPS();
         }
 
         private void nudMag_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.StatsGiven[1] = (int) nudMag.Value;
+            EstimateDPS();
         }
 
         private void nudDef_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.StatsGiven[2] = (int) nudDef.Value;
+            EstimateDPS();
         }
 
         private void nudMR_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.StatsGiven[3] = (int) nudMR.Value;
+            EstimateDPS();
         }
 
         private void nudSpd_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.StatsGiven[4] = (int) nudSpd.Value;
+            EstimateDPS();
         }
 
         private void nudStrPercentage_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.PercentageStatsGiven[0] = (int) nudStrPercentage.Value;
+            EstimateDPS();
         }
 
         private void nudMagPercentage_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.PercentageStatsGiven[1] = (int) nudMagPercentage.Value;
+            EstimateDPS();
         }
 
         private void nudDefPercentage_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.PercentageStatsGiven[2] = (int) nudDefPercentage.Value;
+            EstimateDPS();
         }
 
         private void nudMRPercentage_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.PercentageStatsGiven[3] = (int) nudMRPercentage.Value;
+            EstimateDPS();
         }
 
         private void nudSpdPercentage_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.PercentageStatsGiven[4] = (int) nudSpdPercentage.Value;
+            EstimateDPS();
         }
 
         private void nudBag_ValueChanged(object sender, EventArgs e)
@@ -1210,6 +1232,7 @@ namespace Intersect.Editor.Forms.Editors
         private void nudAttackSpeedValue_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.AttackSpeedValue = (int) nudAttackSpeedValue.Value;
+            EstimateDPS();
         }
 
         private void chkQuickCast_CheckedChanged(object sender, EventArgs e)
@@ -1803,11 +1826,13 @@ namespace Intersect.Editor.Forms.Editors
         private void nudSlash_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.StatsGiven[(int)Stats.SlashAttack] = (int)nudSlash.Value;
+            EstimateDPS();
         }
 
         private void nudSlashPercentage_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.PercentageStatsGiven[(int)Stats.SlashAttack] = (int)nudSlashPercentage.Value;
+            EstimateDPS();
         }
 
         private void chkLockSlash_CheckedChanged(object sender, EventArgs e)
@@ -1818,11 +1843,13 @@ namespace Intersect.Editor.Forms.Editors
         private void nudSlashResist_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.StatsGiven[(int)Stats.SlashResistance] = (int)nudSlashResist.Value;
+            EstimateDPS();
         }
 
         private void nudSlashResistPercentage_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.PercentageStatsGiven[(int)Stats.SlashResistance] = (int)nudSlashResistPercentage.Value;
+            EstimateDPS();
         }
 
         private void chkLockSlashResist_CheckedChanged(object sender, EventArgs e)
@@ -1833,11 +1860,13 @@ namespace Intersect.Editor.Forms.Editors
         private void nudPierce_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.StatsGiven[(int)Stats.PierceAttack] = (int)nudPierce.Value;
+            EstimateDPS();
         }
 
         private void nudPiercePercentage_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.PercentageStatsGiven[(int)Stats.PierceAttack] = (int)nudPiercePercentage.Value;
+            EstimateDPS();
         }
 
         private void chkLockPierce_CheckedChanged(object sender, EventArgs e)
@@ -1848,6 +1877,7 @@ namespace Intersect.Editor.Forms.Editors
         private void nudPierceResist_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.StatsGiven[(int)Stats.PierceResistance] = (int)nudPierceResist.Value;
+            EstimateDPS();
         }
 
         private void nudPierceResistPercentage_ValueChanged(object sender, EventArgs e)
@@ -1935,6 +1965,11 @@ namespace Intersect.Editor.Forms.Editors
 
         private void chkBluntDamage_CheckedChanged(object sender, EventArgs e)
         {
+            if (mPopulating)
+            {
+                return;
+            }
+
             if (chkBluntDamage.Checked)
             {
                 AddDamageType(AttackTypes.Blunt);
@@ -1943,10 +1978,16 @@ namespace Intersect.Editor.Forms.Editors
             {
                 RemoveDamageType(AttackTypes.Blunt);
             }
+            EstimateDPS();
         }
 
         private void chkDamageSlash_CheckedChanged(object sender, EventArgs e)
         {
+            if (mPopulating)
+            {
+                return;
+            }
+
             if (chkDamageSlash.Checked)
             {
                 AddDamageType(AttackTypes.Slashing);
@@ -1955,10 +1996,16 @@ namespace Intersect.Editor.Forms.Editors
             {
                 RemoveDamageType(AttackTypes.Slashing);
             }
+            EstimateDPS();
         }
 
         private void chkDamagePierce_CheckedChanged(object sender, EventArgs e)
         {
+            if (mPopulating)
+            {
+                return;
+            }
+
             if (chkDamagePierce.Checked)
             {
                 AddDamageType(AttackTypes.Piercing);
@@ -1967,10 +2014,16 @@ namespace Intersect.Editor.Forms.Editors
             {
                 RemoveDamageType(AttackTypes.Piercing);
             }
+            EstimateDPS();
         }
 
         private void chkDamageMagic_CheckedChanged(object sender, EventArgs e)
         {
+            if (mPopulating)
+            {
+                return;
+            }
+
             if (chkDamageMagic.Checked)
             {
                 AddDamageType(AttackTypes.Magic);
@@ -1979,6 +2032,7 @@ namespace Intersect.Editor.Forms.Editors
             {
                 RemoveDamageType(AttackTypes.Magic);
             }
+            EstimateDPS();
         }
 
         private void btnAddTypeOverride_Click(object sender, EventArgs e)
