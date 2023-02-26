@@ -2522,5 +2522,14 @@ namespace Intersect.Client.Localization
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString RemoveEnhancementsPrompt = "Removing all enhancements from this weapon will cost {00} {01}. Would you like to proceed?";
         }
+
+        public partial struct UpgradeStation
+        {
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString NoWeaponEquipped = "NO EQUIPPED WEAPON";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString NoWeaponEquippedPrompt = "You must have a weapon equipped to use the weapon upgrade station.";
+        }
     }
 }

@@ -4,6 +4,8 @@ using Intersect.Client.General;
 using Intersect.Client.General.UpgradeStation;
 using Intersect.Client.Interface.Game.Crafting;
 using Intersect.Client.Interface.Game.Enhancement;
+using Intersect.Client.Interface.ScreenAnimations;
+using Intersect.Client.Localization;
 using Intersect.Client.Networking;
 using Intersect.GameObjects;
 using Intersect.GameObjects.Crafting;
@@ -20,6 +22,8 @@ namespace Intersect.Client.Interface.Game.UpgradeStation
     {
         protected override string FileName => "UpgradeStationWindow";
         protected override string Title => "UPGRADE STATION";
+
+        private UpgradeCompleteWindow CompletionWindow { get; set; }
 
         private UpgradeStationInterface UpgradeStation => Globals.Me?.UpgradeStation;
 
@@ -48,9 +52,15 @@ namespace Intersect.Client.Interface.Game.UpgradeStation
         private ImagePanel CurrencyIcon { get; set; }
         private Label CostLabel { get; set; }
 
+        private LootChest CraftAnimation { get; set; }
+
         public UpgradeStationWindow(Base gameCanvas) : base(gameCanvas)
         {
+            CompletionWindow = new UpgradeCompleteWindow(this, gameCanvas);
         }
+
+        Guid NewItemId { get; set; }
+        ItemProperties NewProperties { get; set; }
 
         protected override void PreInitialization()
         {
@@ -86,6 +96,8 @@ namespace Intersect.Client.Interface.Game.UpgradeStation
 
             CancelButton.Clicked += CancelButton_Clicked;
             CraftButton.Clicked += CraftButton_Clicked;
+
+            CraftAnimation = new LootChest(ShowCompletionWindow);
         }
 
         private void CraftButton_Clicked(Base sender, Framework.Gwen.Control.EventArguments.ClickedEventArgs arguments)
@@ -106,6 +118,19 @@ namespace Intersect.Client.Interface.Game.UpgradeStation
 
         public override void Show()
         {
+            CraftAnimation.ResetAnimation();
+            if (UpgradeStation.UpgradeItem == default)
+            {
+#pragma warning disable CA2000 // Dispose objects before losing scope
+                _ = new InputBox(
+                    Strings.UpgradeStation.NoWeaponEquipped,
+                    Strings.UpgradeStation.NoWeaponEquippedPrompt, true,
+                    InputBox.InputType.OkayOnly, Close, null, null
+                );
+#pragma warning restore CA2000 // Dispose objects before losing scope
+                return;
+            }
+
             var itemId = UpgradeStation.UpgradeItem?.Id ?? Guid.Empty;
             ItemNameLabel.SetText(ItemBase.GetName(itemId));
             ItemIconComponent.Update(itemId, UpgradeStation.UpgradeItemProperties, 1);
@@ -133,6 +158,7 @@ namespace Intersect.Client.Interface.Game.UpgradeStation
                 return;
             }
 
+            CompletionWindow.Hide();
             ItemIconComponent.SetHoverPanelLocation(Background.X + 6, Background.Y + 40);
             UpgradeItemIconComponent.SetHoverPanelLocation(Background.X + 6, Background.Y + 40);
 
@@ -153,6 +179,23 @@ namespace Intersect.Client.Interface.Game.UpgradeStation
             RefreshCost();
 
             UpgradeStation.RefreshUi = false;
+        }
+
+        public override void UpdateHidden()
+        {
+            if (!UpgradeStation.IsOpen)
+            {
+                return;
+            }
+
+            if (CraftAnimation.Done)
+            {
+                return;
+            }
+            CraftAnimation.Draw();
+            return;
+
+            base.UpdateHidden();
         }
 
         private void RefreshCraftList()
@@ -255,13 +298,27 @@ namespace Intersect.Client.Interface.Game.UpgradeStation
             UpgradeStation.SelectedCraftId = craftId;
         }
 
-        public void ProcessCompletedUpgrade(Guid upgadedItemId, ItemProperties properties)
+        public void ProcessCompletedUpgrade(Guid upgradedItemId, ItemProperties properties)
+        {
+            Hide();
+            NewItemId = upgradedItemId;
+            NewProperties = new ItemProperties(properties);
+        }
+
+        private void ShowCompletionWindow()
+        {
+            Flash.FlashScreen(1000, new Color(255, 255, 255, 255), 150);
+            CompletionWindow.Show(NewItemId, NewProperties);
+        }
+
+        private void Close(object sender, EventArgs e)
         {
             Close();
         }
 
         protected override void Close()
         {
+            CompletionWindow.Hide();
             Globals.Me?.UpgradeStation?.Close();
             PacketSender.SendCloseUpgradeStation();
             base.Close();

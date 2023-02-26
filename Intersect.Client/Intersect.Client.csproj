@@ -202,6 +202,7 @@
     <Compile Include="Interface\Game\Toasts\Toast.cs" />
     <Compile Include="Interface\Game\Toasts\ToastService.cs" />
     <Compile Include="Interface\Game\Toasts\ToastWindow.cs" />
+    <Compile Include="Interface\Game\UpgradeStation\UpgradeCompleteWindow.cs" />
     <Compile Include="Interface\Game\UpgradeStation\UpgradeStationWindow.cs" />
     <Compile Include="Interface\Objects\HarvestInfoRows.cs" />
     <Compile Include="Interface\ScreenAnimations\DeconstructorAnim.cs" />
