@@ -4651,6 +4651,7 @@ namespace Intersect.Server.Networking
             var failure = "Failed to upgrade item!";
             if (!player.UpgradeStation?.TryUpgradeItem(weapon, packet.CraftId, out failure) ?? false)
             {
+                PacketSender.SendPlaySound(player, Options.UIDenySound);
                 PacketSender.SendEventDialog(player, failure, string.Empty, Guid.Empty);
                 return;
             }

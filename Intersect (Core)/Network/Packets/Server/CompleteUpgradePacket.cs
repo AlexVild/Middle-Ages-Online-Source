@@ -7,10 +7,10 @@ namespace Intersect.Network.Packets.Server
     public class CompleteUpgradePacket : IntersectPacket
     {
         [Key(0)]
-        Guid ItemId { get; set; }
+        public Guid ItemId { get; set; }
 
         [Key(1)]
-        ItemProperties Properties { get; set; }
+        public ItemProperties Properties { get; set; }
 
         public CompleteUpgradePacket(Guid itemId, ItemProperties properties)
         {

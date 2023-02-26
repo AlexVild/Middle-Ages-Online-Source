@@ -22,10 +22,18 @@ namespace Intersect.Client.General.UpgradeStation
 
         public Guid[] Crafts { get; set; }
 
-        public Guid SelectedCraftId { get; set; }
+        private Guid _selectedCraftId;
+        public Guid SelectedCraftId { 
+            get => _selectedCraftId;
+            set  {
+                RefreshUi = true;
+                _selectedCraftId = value;
+            } 
+        }
 
         public void Open(Guid currencyId, float costMulti, Guid[] crafts, ItemBase upgradeItem, ItemProperties properties)
         {
+            SelectedCraftId = Guid.Empty;
             UpgradeItem = upgradeItem;
             UpgradeItemProperties = new ItemProperties(properties);
             CostMultiplier = costMulti;

@@ -192,7 +192,7 @@
     <Compile Include="Interface\Game\DescriptionWindows\ItemDescriptionWindow.cs" />
     <Compile Include="Interface\Game\Enhancement\EnhancementBreakdown.cs" />
     <Compile Include="Interface\Game\Enhancement\EnhancementCompleteWindow.cs" />
-    <Compile Include="Interface\Game\Enhancement\EnhancementItem.cs" />
+    <Compile Include="Interface\Game\Enhancement\EnhancementItemIcon.cs" />
     <Compile Include="Interface\Game\Enhancement\EnhancementWindow.cs" />
     <Compile Include="Interface\Game\ExpToast.cs" />
     <Compile Include="Interface\Game\GameWindow.cs" />

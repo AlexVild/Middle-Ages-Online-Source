@@ -2,9 +2,9 @@
 
 namespace Intersect.Client.Interface.Game.Enhancement
 {
-    public class EnhancementItem : ItemContainer
+    public class EnhancementItemIcon : ItemContainer
     {
-        public EnhancementItem(int index, Base container, int hoverPanelX, int hoverPanelY) : base(index, container, hoverPanelX, hoverPanelY)
+        public EnhancementItemIcon(int index, Base container, int hoverPanelX, int hoverPanelY) : base(index, container, hoverPanelX, hoverPanelY)
         {
         }
 

@@ -2942,5 +2942,17 @@ namespace Intersect.Client.Networking
                 ItemBase.Get(packet.UpgradingGuid), 
                 packet.UpgradingProperties);
         }
+        
+        public void HandlePacket(IPacketSender packetSender, CompleteUpgradePacket packet)
+        {
+            if (Globals.Me == null)
+            {
+                return;
+            }
+
+            Interface.Interface.GameUi?.UpgradeStationWindow?.ProcessCompletedUpgrade(packet.ItemId, packet.Properties);
+        }
+
+
     }
 }

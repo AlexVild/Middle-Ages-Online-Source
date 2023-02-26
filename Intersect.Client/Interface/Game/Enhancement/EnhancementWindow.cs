@@ -49,7 +49,7 @@ namespace Intersect.Client.Interface.Game.Enhancement
         Label WeaponLabel { get; set; }
 
         ImagePanel ItemBg { get; set; }
-        EnhancementItem EnhancementItem { get; set; }
+        EnhancementItemIcon EnhancementItem { get; set; }
         ItemBase EnhancementItemDescriptor { get; set; }
 
         Button ShowBreakdownButton { get; set; }
@@ -525,7 +525,7 @@ namespace Intersect.Client.Interface.Game.Enhancement
             WeaponLabel = new Label(Background, "WeaponLabel");
 
             ItemBg = new ImagePanel(Background, "ItemIcon");
-            EnhancementItem = new EnhancementItem(0, ItemBg, Background.X, Background.Y);
+            EnhancementItem = new EnhancementItemIcon(0, ItemBg, Background.X, Background.Y);
 
             ShowBreakdownButton = new Button(Background, "ShowBreakdownButton");
             ShowBreakdownButton.Clicked += ShowBreakdownButton_Clicked;

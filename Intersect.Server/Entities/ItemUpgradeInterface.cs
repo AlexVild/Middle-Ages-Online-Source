@@ -95,7 +95,7 @@ namespace Intersect.Server.Entities
             var moneySlot = Owner.FindInventoryItemSlot(CurrencyId, price);
             if (!Owner.TryTakeItem(moneySlot, price, ItemHandling.Normal, true))
             {
-                PacketSender.SendEventDialog(Owner, $"You don't have enough {ItemBase.GetName(CurrencyId)} to make this upgrade.", string.Empty, Guid.Empty);
+                failureReason = $"You don't have enough {ItemBase.GetName(CurrencyId)} to make this upgrade.";
                 return false;
             }
 

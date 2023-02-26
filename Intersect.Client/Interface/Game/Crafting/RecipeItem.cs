@@ -26,7 +26,7 @@ namespace Intersect.Client.Interface.Game.Crafting
         private bool mCanDrag;
 
         //References
-        private CraftingWindow mCraftingWindow;
+        private Base ParentCanvas;
 
         private Draggable mDragIcon;
 
@@ -42,9 +42,9 @@ namespace Intersect.Client.Interface.Game.Crafting
 
         public ImagePanel Pnl;
 
-        public RecipeItem(CraftingWindow craftingWindow, CraftIngredient ingredient)
+        public RecipeItem(Base canvas, CraftIngredient ingredient)
         {
-            mCraftingWindow = craftingWindow;
+            ParentCanvas = canvas;
             mIngredient = ingredient;
         }
 
@@ -121,7 +121,7 @@ namespace Intersect.Client.Interface.Game.Crafting
             if (mIngredient != null && ItemBase.Get(mIngredient.ItemId) != null)
             {
                 DescWindow = new ItemDescriptionWindow(
-                    ItemBase.Get(mIngredient.ItemId), mIngredient.Quantity, mCraftingWindow.X, mCraftingWindow.Y,
+                    ItemBase.Get(mIngredient.ItemId), mIngredient.Quantity, ParentCanvas.X, ParentCanvas.Y,
                     null
                 );
             }
