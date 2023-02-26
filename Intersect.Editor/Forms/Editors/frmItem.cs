@@ -669,7 +669,7 @@ namespace Intersect.Editor.Forms.Editors
 
             var dps = maxHit * hitsPerSecond;
 
-            lblProjectedDps.Text = $"Projected DPS: {dps}";
+            lblProjectedDps.Text = $"Projected DPS: {dps.ToString("N2")}";
         }
 
         private void RefreshExtendedData()

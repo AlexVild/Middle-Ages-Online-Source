@@ -148,7 +148,13 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 hits = mItem.Projectile.Quantity;
             }
 
-            AddEquipmentRow(estimationRows, "Damage", maxHit, compareMaxHit, false, StatLabelColor, StatValueColor);
+            var atkSpeeds = GetAttackSpeedComparison();
+
+            var thisDps = maxHit * (1000f / atkSpeeds.Item1);
+            var compareDps = compareMaxHit * (1000f / atkSpeeds.Item2);
+
+            AddEquipmentRow(estimationRows, "Damage Per Second", thisDps, compareDps, false, StatLabelColor, StatValueColor);
+
             if (hits > 1)
             {
                 estimationRows.AddKeyValueRow("Multi-Attack", hits.ToString(), StatLabelColor, StatValueColor);
@@ -244,15 +250,9 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             critRows.SizeToChildren(true, true);
         }
 
-        private void SetupAttackSpeedBreakdown()
+        private Tuple<int, int> GetAttackSpeedComparison()
         {
-            // Don't handle non-static, MAO doesn't do that
-            if (mItem.AttackSpeedModifier != 1)
-            {
-                return;
-            }
-
-            var comparedAttackSpeed = 1000;
+            int comparedAttackSpeed;
             if (EquippedItem == null)
             {
                 var cls = ClassBase.Get(Globals.Me.Class);
@@ -262,17 +262,6 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             {
                 comparedAttackSpeed = EquippedItemDesc?.AttackSpeedValue ?? 1000;
             }
-
-            var atkSpeedRows = AddRowContainer();
-            AddEquipmentRow(atkSpeedRows,
-                Strings.ItemDescription.AttackSpeed,
-                mItem.AttackSpeedValue,
-                comparedAttackSpeed,
-                true,
-                StatLabelColor,
-                StatValueColor,
-                unit: "ms");
-
             var itemAtkSpeed = mItem.AttackSpeedValue;
             var currentSwiftness = Globals.Me.GetEquipmentBonusEffect(EffectType.Swiftness);
             var itemSwiftness = ItemInstanceHelper.GetEffectBoost(mItemProperties, EffectType.Swiftness) + mItem.GetEffectPercentage(EffectType.Swiftness);
@@ -299,19 +288,39 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                     itemAtkSpeed = (int)Math.Floor(itemAtkSpeed * newSwiftMod);
                     comparedAttackSpeed = (int)Math.Floor(comparedAttackSpeed * currSwiftMod);
                 }
-
-                if (itemAtkSpeed != comparedAttackSpeed || itemAtkSpeed != mItem.AttackSpeedValue)
-                {
-                    AddEquipmentRow(atkSpeedRows,
-                        Strings.ItemDescription.AttackSpeedReal,
-                        itemAtkSpeed,
-                        comparedAttackSpeed,
-                        true,
-                        StatLabelColor,
-                        StatValueColor,
-                        unit: "ms");
-                }
             }
+
+            return new Tuple<int, int>(itemAtkSpeed, comparedAttackSpeed);
+        }
+
+        private void SetupAttackSpeedBreakdown()
+        {
+            // Don't handle non-static, MAO doesn't do that
+            if (mItem.AttackSpeedModifier != 1)
+            {
+                return;
+            }
+
+            int comparedAttackSpeed;
+            if (EquippedItem == null)
+            {
+                var cls = ClassBase.Get(Globals.Me.Class);
+                comparedAttackSpeed = cls?.AttackSpeedValue ?? 1000;
+            }
+            else
+            {
+                comparedAttackSpeed = EquippedItemDesc?.AttackSpeedValue ?? 1000;
+            }
+
+            var atkSpeedRows = AddRowContainer();
+            AddEquipmentRow(atkSpeedRows,
+                Strings.ItemDescription.AttackSpeed,
+                mItem.AttackSpeedValue,
+                comparedAttackSpeed,
+                true,
+                StatLabelColor,
+                StatValueColor,
+                unit: "ms");
 
             atkSpeedRows.SizeToChildren(true, true);
         }
