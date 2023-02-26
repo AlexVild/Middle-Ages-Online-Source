@@ -49,6 +49,12 @@ namespace Intersect.Editor.Forms.Editors
 
         private bool mPopulating { get; set; }
 
+        private float TierDps { get; set; }
+        
+        private float ArmorRatingHigh { get; set; }
+        private float ArmorRatingMed { get; set; }
+        private float ArmorRatingLow { get; set; }
+
         private void UpdateOverrides()
         {
             cmbTypeDisplayOverride.Items.Clear();
@@ -647,8 +653,6 @@ namespace Intersect.Editor.Forms.Editors
 
         private void EstimateDPS()
         {
-            lblProjectedDps.Show();
-
             var itemStats = new int[(int)Stats.StatCount];
             Array.Copy(mEditorItem.StatsGiven, itemStats, itemStats.Length);
 
@@ -669,23 +673,21 @@ namespace Intersect.Editor.Forms.Editors
 
             var dps = maxHit * hitsPerSecond;
 
-            lblProjectedDps.Text = $"Projected DPS: {dps.ToString("N2")}";
+            lblDpsVal.Text = dps.ToString("N2");
         }
 
         private void RefreshExtendedData()
         {
-            if (PrevItemType == mEditorItem.ItemType)
+            if (PrevItemType != mEditorItem.ItemType)
             {
-                return;
+                grpConsumable.Visible = false;
+                grpSpell.Visible = false;
+                grpEquipment.Visible = false;
+                grpEvent.Visible = false;
+                grpBags.Visible = false;
+                chkStackable.Enabled = true;
+                grpEnhancement.Visible = false;
             }
-
-            grpConsumable.Visible = false;
-            grpSpell.Visible = false;
-            grpEquipment.Visible = false;
-            grpEvent.Visible = false;
-            grpBags.Visible = false;
-            chkStackable.Enabled = true;
-            grpEnhancement.Visible = false;
 
             if ((int) mEditorItem.ItemType != cmbType.SelectedIndex)
             {
@@ -732,6 +734,7 @@ namespace Intersect.Editor.Forms.Editors
             }
             else if (cmbType.SelectedIndex == (int) ItemTypes.Equipment || cmbType.SelectedIndex == (int) ItemTypes.Cosmetic)
             {
+                UpdateBalanceHelper();
                 grpEquipment.Visible = true;
                 if (mEditorItem.EquipmentSlot < -1 || mEditorItem.EquipmentSlot >= cmbEquipmentSlot.Items.Count)
                 {
@@ -753,6 +756,19 @@ namespace Intersect.Editor.Forms.Editors
                     cmbSpecialAttack.SelectedIndex = 0;
                 }
                 nudSpecialAttackChargeTime.Value = mEditorItem.SpecialAttack.ChargeTime;
+
+                if (cmbEquipmentSlot.SelectedIndex == Options.Instance.EquipmentOpts.ArmorSlot ||
+                cmbEquipmentSlot.SelectedIndex == Options.Instance.EquipmentOpts.HelmetSlot ||
+                cmbEquipmentSlot.SelectedIndex == Options.Instance.EquipmentOpts.BootsSlot)
+                {
+                    grpArmorBalanceHelper.Show();
+                    grpWeaponBalance.Hide();
+                }
+                else if (cmbEquipmentSlot.SelectedIndex == Options.WeaponIndex)
+                {
+                    grpWeaponBalance.Show();
+                    grpArmorBalanceHelper.Hide();
+                }
 
                 RefreshBonusList();
             }
@@ -848,9 +864,21 @@ namespace Intersect.Editor.Forms.Editors
             grpCosmetic.Hide();
             grpWeaponProperties.Hide();
             grpWeaponEnhancement.Hide();
+            grpWeaponBalance.Hide();
+            grpArmorBalanceHelper.Hide();
+
+            if (cmbEquipmentSlot.SelectedIndex == Options.Instance.EquipmentOpts.ArmorSlot ||
+                cmbEquipmentSlot.SelectedIndex == Options.Instance.EquipmentOpts.HelmetSlot ||
+                cmbEquipmentSlot.SelectedIndex == Options.Instance.EquipmentOpts.BootsSlot)
+            {
+                grpArmorBalanceHelper.Show();
+            }
+
             if (cmbEquipmentSlot.SelectedIndex == Options.WeaponIndex)
             {
                 grpWeaponProperties.Show();
+                grpArmorBalanceHelper.Hide();
+                grpWeaponBalance.Show();
                 grpWeaponEnhancement.Show();
                 grpHelmetPaperdollProps.Hide();
                 grpPrayerProperties.Hide();
@@ -1256,6 +1284,24 @@ namespace Intersect.Editor.Forms.Editors
         private void cmbRarity_SelectedIndexChanged(object sender, EventArgs e)
         {
             mEditorItem.Rarity = cmbRarity.SelectedIndex;
+
+            if (mEditorItem.ItemType == ItemTypes.Equipment)
+            {
+                UpdateBalanceHelper();
+            }
+        }
+
+        public void UpdateBalanceHelper()
+        {
+            TierDps = CombatUtilities.TierToDamageFormula(mEditorItem.Rarity);
+            ArmorRatingHigh = CombatUtilities.TierAndSlotToArmorRatingFormula(mEditorItem.Rarity, mEditorItem.EquipmentSlot, CombatUtilities.ResistanceLevel.High);
+            ArmorRatingMed = CombatUtilities.TierAndSlotToArmorRatingFormula(mEditorItem.Rarity, mEditorItem.EquipmentSlot, CombatUtilities.ResistanceLevel.Medium);
+            ArmorRatingLow = CombatUtilities.TierAndSlotToArmorRatingFormula(mEditorItem.Rarity, mEditorItem.EquipmentSlot, CombatUtilities.ResistanceLevel.Low);
+
+            lblTierDpsVal.Text = TierDps.ToString("N2");
+            lblHighResVal.Text = ArmorRatingHigh.ToString("N0");
+            lblMediumResVal.Text = ArmorRatingMed.ToString("N0");
+            lblLowResVal.Text = ArmorRatingLow.ToString("N0");
         }
 
         private void cmbCooldownGroup_SelectedIndexChanged(object sender, EventArgs e)

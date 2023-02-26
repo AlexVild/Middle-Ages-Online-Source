@@ -161,5 +161,69 @@ namespace Intersect.Utilities
 
             return types;
         }
+
+        const int DAMAGE_FLOOR = 4;
+        public static float TierToDamageFormula(int equipmentTier)
+        {
+            if (equipmentTier <= 1)
+            {
+                return DAMAGE_FLOOR;
+            }
+
+            return (TierToDamageFormula(equipmentTier - 1) + 1) * 1.1f;
+        }
+
+
+        const float HIGH_ARMOR_RES = 0.6f;
+        const float MED_ARMOR_RES = 0.4f;
+        const float LOW_ARMOR_RES = 0.15f;
+        const float ARMOR_MULT = 0.45f;
+        const float HELMET_MULT = 0.35f;
+        const float BOOTS_MULT = 0.2f;
+
+        public enum ResistanceLevel 
+        {
+            High,
+            Medium,
+            Low 
+        }
+        
+        private static Dictionary<ResistanceLevel, float> ArmorResistanceConstants = new Dictionary<ResistanceLevel, float>()
+        {
+            {  ResistanceLevel.High, HIGH_ARMOR_RES },
+            {  ResistanceLevel.Medium, MED_ARMOR_RES },
+            {  ResistanceLevel.Low, LOW_ARMOR_RES },
+        };
+
+        public static float TierAndSlotToArmorRatingFormula(int equipmentTier, int slot, ResistanceLevel resistanceLevel)
+        {
+            if (!ArmorResistanceConstants.ContainsKey(resistanceLevel))
+            {
+                return 0f;
+            }
+
+            float slotMultiplier;
+            if (slot == Options.Instance.EquipmentOpts.ArmorSlot)
+            { 
+                slotMultiplier = ARMOR_MULT;
+            }
+            else if (slot == Options.Instance.EquipmentOpts.HelmetSlot)
+            {
+                slotMultiplier = HELMET_MULT;
+            }
+            else if (slot == Options.Instance.EquipmentOpts.BootsSlot)
+            {
+                slotMultiplier = BOOTS_MULT;
+            }
+            else
+            {
+                return 0f;
+            }
+
+            var damageAtTier = TierToDamageFormula(equipmentTier);
+            var fullResPoints = damageAtTier + (damageAtTier * 5) * ArmorResistanceConstants[resistanceLevel];
+
+            return slotMultiplier * fullResPoints;
+        }
     }
 }
