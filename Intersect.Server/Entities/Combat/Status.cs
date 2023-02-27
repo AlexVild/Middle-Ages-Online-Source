@@ -96,8 +96,7 @@ namespace Intersect.Server.Entities.Combat
                 {
                     var vitalDiff = spell.Combat.VitalDiff[i];
 
-                    shield[i] = Math.Abs(vitalDiff) +
-                                (int)(spell.Combat.Scaling * en.Stat[spell.Combat.ScalingStat].BaseStat / 100f);
+                    shield[i] = Math.Abs(vitalDiff);
                 }
                 if (en is Player p)
                 {

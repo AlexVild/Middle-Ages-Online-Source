@@ -38,16 +38,14 @@ namespace Intersect.Editor.Forms.Editors
 
         private bool mPopulating = false;
 
+        private int CurrentTier = 0;
+
+        private SpellTypes? PrevSpellType = null;
+
         public FrmSpell()
         {
             ApplyHooks();
             InitializeComponent();
-
-            cmbScalingStat.Items.Clear();
-            for (var i = 0; i < (int)Stats.StatCount; i++)
-            {
-                cmbScalingStat.Items.Add(Globals.GetStatName(i));
-            }
 
             lstGameObjects.Init(UpdateToolStripItems, AssignEditorItem, toolStripItemNew_Click, toolStripItemCopy_Click, toolStripItemUndo_Click, toolStripItemPaste_Click, toolStripItemDelete_Click);
         }
@@ -207,7 +205,6 @@ namespace Intersect.Editor.Forms.Editors
             lblCritChance.Text = Strings.SpellEditor.critchance;
             lblCritMultiplier.Text = Strings.SpellEditor.critmultiplier;
             lblDamageType.Text = Strings.SpellEditor.damagetype;
-            lblHPDamage.Text = Strings.SpellEditor.hpdamage;
             lblManaDamage.Text = Strings.SpellEditor.mpdamage;
             chkFriendly.Text = Strings.SpellEditor.friendly;
             chkInheritStats.Text = Strings.SpellEditor.inherit;
@@ -217,15 +214,15 @@ namespace Intersect.Editor.Forms.Editors
                 cmbDamageType.Items.Add(Strings.Combat.damagetypes[i]);
             }
 
-            lblScalingStat.Text = Strings.SpellEditor.scalingstat;
-            lblScaling.Text = Strings.SpellEditor.scalingamount;
-
             grpHotDot.Text = Strings.SpellEditor.hotdot;
             chkHOTDOT.Text = Strings.SpellEditor.ishotdot;
             lblTick.Text = Strings.SpellEditor.hotdottick;
             lblOTanimationDisclaimer.Text = Strings.SpellEditor.overTimeDisclaimer1 + Strings.General.none + Strings.SpellEditor.overTimeDisclaimer2;
 
             grpStats.Text = Strings.SpellEditor.stats;
+
+            darkComboBox1.Items.Clear();
+            darkComboBox1.Items.AddRange(Strings.ItemEditor.rarity.Values.ToArray());
 
             grpEffectDuration.Text = Strings.SpellEditor.boostduration;
             lblBuffDuration.Text = Strings.SpellEditor.duration;
@@ -335,6 +332,7 @@ namespace Intersect.Editor.Forms.Editors
                 }
 
                 RefreshComponentsList();
+                RefreshBalance();
             }
             else
             {
@@ -343,6 +341,7 @@ namespace Intersect.Editor.Forms.Editors
 
             UpdateToolStripItems();
             mPopulating = false;
+            PrevSpellType = mEditorItem?.SpellType ?? null;
         }
 
         private void RefreshBonusEffects(bool clear)
@@ -377,13 +376,16 @@ namespace Intersect.Editor.Forms.Editors
 
         private void UpdateSpellTypePanels()
         {
-            grpTargetInfo.Hide();
-            grpCombat.Hide();
-            grpWarp.Hide();
-            grpDash.Hide();
-            grpEvent.Hide();
-            grpBonusEffects.Hide();
-            cmbTargetType.Enabled = true;
+            if (PrevSpellType == null || PrevSpellType.GetValueOrDefault() != mEditorItem.SpellType)
+            {
+                grpTargetInfo.Hide();
+                grpCombat.Hide();
+                grpWarp.Hide();
+                grpDash.Hide();
+                grpEvent.Hide();
+                grpBonusEffects.Hide();
+                cmbTargetType.Enabled = true;
+            }
 
             if (cmbType.SelectedIndex == (int) SpellTypes.CombatSpell ||
                 cmbType.SelectedIndex == (int) SpellTypes.WarpTo ||
@@ -440,7 +442,6 @@ namespace Intersect.Editor.Forms.Editors
                 chkFriendly.Checked = Convert.ToBoolean(mEditorItem.Combat.Friendly);
                 chkInheritStats.Checked = Convert.ToBoolean(mEditorItem.WeaponSpell);
                 cmbDamageType.SelectedIndex = mEditorItem.Combat.DamageType;
-                cmbScalingStat.SelectedIndex = mEditorItem.Combat.ScalingStat;
                 nudScaling.Value = mEditorItem.Combat.Scaling;
                 nudCritChance.Value = mEditorItem.Combat.CritChance;
                 nudCritMultiplier.Value = (decimal) mEditorItem.Combat.CritMultiplier;
@@ -829,11 +830,6 @@ namespace Intersect.Editor.Forms.Editors
             mEditorItem.Combat.DamageType = cmbDamageType.SelectedIndex;
         }
 
-        private void cmbScalingStat_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            mEditorItem.Combat.ScalingStat = cmbScalingStat.SelectedIndex;
-        }
-
         private void btnDynamicRequirements_Click(object sender, EventArgs e)
         {
             var frm = new FrmDynamicRequirements(mEditorItem.CastingRequirements, RequirementType.Spell);
@@ -914,11 +910,13 @@ namespace Intersect.Editor.Forms.Editors
         private void nudCastDuration_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.CastDuration = (int) nudCastDuration.Value;
+            RefreshBalance();
         }
 
         private void nudCooldownDuration_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.CooldownDuration = (int) nudCooldownDuration.Value;
+            RefreshBalance();
         }
 
         private void nudHitRadius_ValueChanged(object sender, EventArgs e)
@@ -1341,6 +1339,7 @@ namespace Intersect.Editor.Forms.Editors
 
             mEditorItem.Combat.DamageTypes.Add(type);
             RefreshStaticDamageOptions();
+            RefreshBalance();
         }
 
         private void RemoveDamageType(AttackTypes type)
@@ -1352,6 +1351,7 @@ namespace Intersect.Editor.Forms.Editors
 
             mEditorItem.Combat.DamageTypes.Remove(type);
             RefreshStaticDamageOptions();
+            RefreshBalance();
         }
 
         private void chkDamageBlunt_CheckedChanged(object sender, EventArgs e)
@@ -1574,21 +1574,87 @@ namespace Intersect.Editor.Forms.Editors
         private void nudBluntDam_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.DamageOverrides[(int)Stats.Attack] = (int)nudBluntDam.Value;
+            RefreshBalance();
         }
 
         private void nudPierceDam_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.DamageOverrides[(int)Stats.PierceAttack] = (int)nudPierceDam.Value;
+            RefreshBalance();
         }
 
         private void nudMagicDam_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.DamageOverrides[(int)Stats.AbilityPower] = (int)nudMagicDam.Value;
+            RefreshBalance();
         }
 
         private void nudSlashDam_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.DamageOverrides[(int)Stats.SlashAttack] = (int)nudSlashDam.Value;
+            RefreshBalance();
+        }
+
+        private void darkComboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            CurrentTier = darkComboBox1.SelectedIndex;
+            var tierDamage = (int)Math.Round(CombatUtilities.TierToDamageFormula(CurrentTier));
+
+            nudMockBlunt.Value = tierDamage;
+            nudMockMagic.Value = tierDamage;
+            nudMockPierce.Value = tierDamage;
+            nudMockSlash.Value = tierDamage;
+        }
+
+        private void RefreshBalance()
+        {
+            if (mEditorItem.SpellType != SpellTypes.CombatSpell)
+            {
+                grpBalanceHelp.Hide();
+                return;
+            }
+
+            grpBalanceHelp.Show();
+
+            var mockStats = new int[(int)Stats.StatCount];
+            mockStats[(int)AttackTypes.Blunt] = (int)nudMockBlunt.Value;
+            mockStats[(int)AttackTypes.Slashing] = (int)nudMockSlash.Value;
+            mockStats[(int)AttackTypes.Piercing] = (int)nudMockPierce.Value;
+            mockStats[(int)AttackTypes.Magic] = (int)nudMockMagic.Value;
+
+            var totalCooldown = Math.Max(mEditorItem.CooldownDuration, mEditorItem.IgnoreGlobalCooldown ? 0 : Options.Combat.GlobalCooldownDuration);
+
+            var dps = CombatUtilities.CalculateDps(mEditorItem.Combat.DamageTypes, 
+                1.0, 
+                mEditorItem.Combat.Scaling, 
+                CombatUtilities.GetOverriddenStats(mEditorItem.DamageOverrides, mockStats), 
+                new int[(int)Stats.StatCount], 
+                mEditorItem.CastDuration + totalCooldown);
+
+            lblProjectedDpsVal.Text = dps.ToString("N2");
+
+            var desiredDps = CombatUtilities.TierToDamageFormula(CurrentTier);
+            lblTargetDpsVal.Text = desiredDps.ToString("N2");
+        }
+
+        private void nudMockBlunt_ValueChanged(object sender, EventArgs e)
+        {
+            RefreshBalance();
+        }
+
+        private void nudMockSlash_ValueChanged(object sender, EventArgs e)
+        {
+            RefreshBalance();
+        }
+
+        private void nudMockPierce_ValueChanged(object sender, EventArgs e)
+        {
+            RefreshBalance();
+        }
+
+        private void nudMockMagic_ValueChanged(object sender, EventArgs e)
+        {
+            RefreshBalance();
         }
     }
 }
