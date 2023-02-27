@@ -393,5 +393,16 @@ namespace Intersect.GameObjects
         public string SpellGroup { get; set; } = string.Empty;
 
         public int RequiredSkillPoints { get; set; }
+
+        [NotMapped]
+        public Dictionary<int, int> DamageOverrides { get; set; }
+
+        [Column("DamageOverrides")]
+        [JsonIgnore]
+        public string DamageOverridesJson
+        {
+            get => JsonConvert.SerializeObject(DamageOverrides);
+            set => DamageOverrides = JsonConvert.DeserializeObject<Dictionary<int, int>>(value ?? "") ?? new Dictionary<int, int>();
+        }
     }
 }

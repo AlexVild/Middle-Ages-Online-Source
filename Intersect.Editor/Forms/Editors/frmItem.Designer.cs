@@ -146,7 +146,6 @@ namespace Intersect.Editor.Forms.Editors
             this.lblWeaponTypes = new System.Windows.Forms.Label();
             this.cmbWeaponTypes = new DarkUI.Controls.DarkComboBox();
             this.grpWeaponProperties = new DarkUI.Controls.DarkGroupBox();
-            this.lblProjectedDps = new System.Windows.Forms.Label();
             this.nudCritMultiplier = new DarkUI.Controls.DarkNumericUpDown();
             this.lblCritMultiplier = new System.Windows.Forms.Label();
             this.grpAttackSpeed = new DarkUI.Controls.DarkGroupBox();
@@ -230,6 +229,18 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbEquipmentAnimation = new DarkUI.Controls.DarkComboBox();
             this.lblEquipmentAnimation = new System.Windows.Forms.Label();
             this.grpStatBonuses = new DarkUI.Controls.DarkGroupBox();
+            this.grpArmorBalanceHelper = new DarkUI.Controls.DarkGroupBox();
+            this.lblHighResVal = new System.Windows.Forms.Label();
+            this.lblHighRes = new System.Windows.Forms.Label();
+            this.lblMediumResVal = new System.Windows.Forms.Label();
+            this.lblLowResVal = new System.Windows.Forms.Label();
+            this.lblMedRes = new System.Windows.Forms.Label();
+            this.lblLowRes = new System.Windows.Forms.Label();
+            this.grpWeaponBalance = new DarkUI.Controls.DarkGroupBox();
+            this.lblDpsVal = new System.Windows.Forms.Label();
+            this.lblTierDpsVal = new System.Windows.Forms.Label();
+            this.lblProjectedDps = new System.Windows.Forms.Label();
+            this.lblTierDps = new System.Windows.Forms.Label();
             this.chkLockEvasion = new DarkUI.Controls.DarkCheckBox();
             this.label16 = new System.Windows.Forms.Label();
             this.nudEvasionPercent = new DarkUI.Controls.DarkNumericUpDown();
@@ -336,17 +347,6 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
             this.vS2015DarkTheme1 = new WeifenLuo.WinFormsUI.Docking.VS2015DarkTheme();
-            this.grpWeaponBalance = new DarkUI.Controls.DarkGroupBox();
-            this.lblTierDps = new System.Windows.Forms.Label();
-            this.lblTierDpsVal = new System.Windows.Forms.Label();
-            this.lblDpsVal = new System.Windows.Forms.Label();
-            this.grpArmorBalanceHelper = new DarkUI.Controls.DarkGroupBox();
-            this.lblMediumResVal = new System.Windows.Forms.Label();
-            this.lblLowResVal = new System.Windows.Forms.Label();
-            this.lblMedRes = new System.Windows.Forms.Label();
-            this.lblLowRes = new System.Windows.Forms.Label();
-            this.lblHighRes = new System.Windows.Forms.Label();
-            this.lblHighResVal = new System.Windows.Forms.Label();
             this.grpItems.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudFuel)).BeginInit();
@@ -403,6 +403,8 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudManaBonus)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudHealthBonus)).BeginInit();
             this.grpStatBonuses.SuspendLayout();
+            this.grpArmorBalanceHelper.SuspendLayout();
+            this.grpWeaponBalance.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudEvasionPercent)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudEvasion)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudAccuracyPercent)).BeginInit();
@@ -439,8 +441,6 @@ namespace Intersect.Editor.Forms.Editors
             this.grpAuxInfo.SuspendLayout();
             this.grpEnhancement.SuspendLayout();
             this.toolStrip.SuspendLayout();
-            this.grpWeaponBalance.SuspendLayout();
-            this.grpArmorBalanceHelper.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpItems
@@ -453,7 +453,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpItems.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpItems.Location = new System.Drawing.Point(12, 34);
             this.grpItems.Name = "grpItems";
-            this.grpItems.Size = new System.Drawing.Size(203, 564);
+            this.grpItems.Size = new System.Drawing.Size(203, 582);
             this.grpItems.TabIndex = 1;
             this.grpItems.TabStop = false;
             this.grpItems.Text = "Items";
@@ -495,13 +495,13 @@ namespace Intersect.Editor.Forms.Editors
             this.lstGameObjects.Location = new System.Drawing.Point(6, 43);
             this.lstGameObjects.Name = "lstGameObjects";
             this.lstGameObjects.SelectedImageIndex = 0;
-            this.lstGameObjects.Size = new System.Drawing.Size(191, 515);
+            this.lstGameObjects.Size = new System.Drawing.Size(191, 533);
             this.lstGameObjects.TabIndex = 29;
             // 
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(790, 570);
+            this.btnCancel.Location = new System.Drawing.Point(790, 625);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Padding = new System.Windows.Forms.Padding(5);
             this.btnCancel.Size = new System.Drawing.Size(190, 28);
@@ -511,7 +511,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(594, 570);
+            this.btnSave.Location = new System.Drawing.Point(594, 625);
             this.btnSave.Name = "btnSave";
             this.btnSave.Padding = new System.Windows.Forms.Padding(5);
             this.btnSave.Size = new System.Drawing.Size(190, 28);
@@ -2022,17 +2022,6 @@ namespace Intersect.Editor.Forms.Editors
             this.grpWeaponProperties.Text = "Weapon Properties";
             this.grpWeaponProperties.Visible = false;
             // 
-            // lblProjectedDps
-            // 
-            this.lblProjectedDps.AutoSize = true;
-            this.lblProjectedDps.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblProjectedDps.Location = new System.Drawing.Point(159, 14);
-            this.lblProjectedDps.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblProjectedDps.Name = "lblProjectedDps";
-            this.lblProjectedDps.Size = new System.Drawing.Size(87, 13);
-            this.lblProjectedDps.TabIndex = 134;
-            this.lblProjectedDps.Text = "Projected Dps";
-            // 
             // nudCritMultiplier
             // 
             this.nudCritMultiplier.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
@@ -3280,6 +3269,152 @@ namespace Intersect.Editor.Forms.Editors
             this.grpStatBonuses.TabStop = false;
             this.grpStatBonuses.Text = "Stat Bonuses";
             // 
+            // grpArmorBalanceHelper
+            // 
+            this.grpArmorBalanceHelper.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpArmorBalanceHelper.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpArmorBalanceHelper.Controls.Add(this.lblHighResVal);
+            this.grpArmorBalanceHelper.Controls.Add(this.lblHighRes);
+            this.grpArmorBalanceHelper.Controls.Add(this.lblMediumResVal);
+            this.grpArmorBalanceHelper.Controls.Add(this.lblLowResVal);
+            this.grpArmorBalanceHelper.Controls.Add(this.lblMedRes);
+            this.grpArmorBalanceHelper.Controls.Add(this.lblLowRes);
+            this.grpArmorBalanceHelper.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpArmorBalanceHelper.Location = new System.Drawing.Point(13, 424);
+            this.grpArmorBalanceHelper.Margin = new System.Windows.Forms.Padding(2);
+            this.grpArmorBalanceHelper.Name = "grpArmorBalanceHelper";
+            this.grpArmorBalanceHelper.Padding = new System.Windows.Forms.Padding(2);
+            this.grpArmorBalanceHelper.Size = new System.Drawing.Size(266, 63);
+            this.grpArmorBalanceHelper.TabIndex = 137;
+            this.grpArmorBalanceHelper.TabStop = false;
+            this.grpArmorBalanceHelper.Text = "Armor Balance Helper";
+            // 
+            // lblHighResVal
+            // 
+            this.lblHighResVal.AutoSize = true;
+            this.lblHighResVal.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblHighResVal.Location = new System.Drawing.Point(181, 30);
+            this.lblHighResVal.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblHighResVal.Name = "lblHighResVal";
+            this.lblHighResVal.Size = new System.Drawing.Size(18, 20);
+            this.lblHighResVal.TabIndex = 138;
+            this.lblHighResVal.Text = "0";
+            // 
+            // lblHighRes
+            // 
+            this.lblHighRes.AutoSize = true;
+            this.lblHighRes.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblHighRes.Location = new System.Drawing.Point(182, 14);
+            this.lblHighRes.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblHighRes.Name = "lblHighRes";
+            this.lblHighRes.Size = new System.Drawing.Size(63, 13);
+            this.lblHighRes.TabIndex = 137;
+            this.lblHighRes.Text = "High Res.";
+            // 
+            // lblMediumResVal
+            // 
+            this.lblMediumResVal.AutoSize = true;
+            this.lblMediumResVal.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMediumResVal.Location = new System.Drawing.Point(90, 30);
+            this.lblMediumResVal.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblMediumResVal.Name = "lblMediumResVal";
+            this.lblMediumResVal.Size = new System.Drawing.Size(18, 20);
+            this.lblMediumResVal.TabIndex = 136;
+            this.lblMediumResVal.Text = "0";
+            // 
+            // lblLowResVal
+            // 
+            this.lblLowResVal.AutoSize = true;
+            this.lblLowResVal.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblLowResVal.Location = new System.Drawing.Point(9, 30);
+            this.lblLowResVal.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblLowResVal.Name = "lblLowResVal";
+            this.lblLowResVal.Size = new System.Drawing.Size(18, 20);
+            this.lblLowResVal.TabIndex = 135;
+            this.lblLowResVal.Text = "0";
+            // 
+            // lblMedRes
+            // 
+            this.lblMedRes.AutoSize = true;
+            this.lblMedRes.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMedRes.Location = new System.Drawing.Point(91, 14);
+            this.lblMedRes.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblMedRes.Name = "lblMedRes";
+            this.lblMedRes.Size = new System.Drawing.Size(80, 13);
+            this.lblMedRes.TabIndex = 134;
+            this.lblMedRes.Text = "Medium Res.";
+            // 
+            // lblLowRes
+            // 
+            this.lblLowRes.AutoSize = true;
+            this.lblLowRes.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblLowRes.Location = new System.Drawing.Point(5, 15);
+            this.lblLowRes.Name = "lblLowRes";
+            this.lblLowRes.Size = new System.Drawing.Size(60, 13);
+            this.lblLowRes.TabIndex = 119;
+            this.lblLowRes.Text = "Low Res.";
+            // 
+            // grpWeaponBalance
+            // 
+            this.grpWeaponBalance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpWeaponBalance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpWeaponBalance.Controls.Add(this.lblDpsVal);
+            this.grpWeaponBalance.Controls.Add(this.lblTierDpsVal);
+            this.grpWeaponBalance.Controls.Add(this.lblProjectedDps);
+            this.grpWeaponBalance.Controls.Add(this.lblTierDps);
+            this.grpWeaponBalance.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpWeaponBalance.Location = new System.Drawing.Point(12, 419);
+            this.grpWeaponBalance.Margin = new System.Windows.Forms.Padding(2);
+            this.grpWeaponBalance.Name = "grpWeaponBalance";
+            this.grpWeaponBalance.Padding = new System.Windows.Forms.Padding(2);
+            this.grpWeaponBalance.Size = new System.Drawing.Size(266, 83);
+            this.grpWeaponBalance.TabIndex = 134;
+            this.grpWeaponBalance.TabStop = false;
+            this.grpWeaponBalance.Text = "Weapon Balance Helper";
+            // 
+            // lblDpsVal
+            // 
+            this.lblDpsVal.AutoSize = true;
+            this.lblDpsVal.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDpsVal.Location = new System.Drawing.Point(159, 30);
+            this.lblDpsVal.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblDpsVal.Name = "lblDpsVal";
+            this.lblDpsVal.Size = new System.Drawing.Size(18, 20);
+            this.lblDpsVal.TabIndex = 136;
+            this.lblDpsVal.Text = "0";
+            // 
+            // lblTierDpsVal
+            // 
+            this.lblTierDpsVal.AutoSize = true;
+            this.lblTierDpsVal.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTierDpsVal.Location = new System.Drawing.Point(33, 30);
+            this.lblTierDpsVal.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblTierDpsVal.Name = "lblTierDpsVal";
+            this.lblTierDpsVal.Size = new System.Drawing.Size(18, 20);
+            this.lblTierDpsVal.TabIndex = 135;
+            this.lblTierDpsVal.Text = "0";
+            // 
+            // lblProjectedDps
+            // 
+            this.lblProjectedDps.AutoSize = true;
+            this.lblProjectedDps.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblProjectedDps.Location = new System.Drawing.Point(159, 14);
+            this.lblProjectedDps.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblProjectedDps.Name = "lblProjectedDps";
+            this.lblProjectedDps.Size = new System.Drawing.Size(87, 13);
+            this.lblProjectedDps.TabIndex = 134;
+            this.lblProjectedDps.Text = "Projected Dps";
+            // 
+            // lblTierDps
+            // 
+            this.lblTierDps.AutoSize = true;
+            this.lblTierDps.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTierDps.Location = new System.Drawing.Point(28, 15);
+            this.lblTierDps.Name = "lblTierDps";
+            this.lblTierDps.Size = new System.Drawing.Size(58, 13);
+            this.lblTierDps.TabIndex = 119;
+            this.lblTierDps.Text = "Tier DPS";
+            // 
             // chkLockEvasion
             // 
             this.chkLockEvasion.AutoSize = true;
@@ -4477,7 +4612,7 @@ namespace Intersect.Editor.Forms.Editors
             this.pnlContainer.Controls.Add(this.grpSpell);
             this.pnlContainer.Location = new System.Drawing.Point(221, 34);
             this.pnlContainer.Name = "pnlContainer";
-            this.pnlContainer.Size = new System.Drawing.Size(764, 530);
+            this.pnlContainer.Size = new System.Drawing.Size(764, 582);
             this.pnlContainer.TabIndex = 43;
             this.pnlContainer.Visible = false;
             // 
@@ -4722,148 +4857,13 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
             // 
-            // grpWeaponBalance
-            // 
-            this.grpWeaponBalance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.grpWeaponBalance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpWeaponBalance.Controls.Add(this.lblDpsVal);
-            this.grpWeaponBalance.Controls.Add(this.lblTierDpsVal);
-            this.grpWeaponBalance.Controls.Add(this.lblProjectedDps);
-            this.grpWeaponBalance.Controls.Add(this.lblTierDps);
-            this.grpWeaponBalance.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpWeaponBalance.Location = new System.Drawing.Point(12, 419);
-            this.grpWeaponBalance.Margin = new System.Windows.Forms.Padding(2);
-            this.grpWeaponBalance.Name = "grpWeaponBalance";
-            this.grpWeaponBalance.Padding = new System.Windows.Forms.Padding(2);
-            this.grpWeaponBalance.Size = new System.Drawing.Size(266, 83);
-            this.grpWeaponBalance.TabIndex = 134;
-            this.grpWeaponBalance.TabStop = false;
-            this.grpWeaponBalance.Text = "Weapon Balance Helper";
-            // 
-            // lblTierDps
-            // 
-            this.lblTierDps.AutoSize = true;
-            this.lblTierDps.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTierDps.Location = new System.Drawing.Point(28, 15);
-            this.lblTierDps.Name = "lblTierDps";
-            this.lblTierDps.Size = new System.Drawing.Size(58, 13);
-            this.lblTierDps.TabIndex = 119;
-            this.lblTierDps.Text = "Tier DPS";
-            // 
-            // lblTierDpsVal
-            // 
-            this.lblTierDpsVal.AutoSize = true;
-            this.lblTierDpsVal.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTierDpsVal.Location = new System.Drawing.Point(33, 30);
-            this.lblTierDpsVal.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblTierDpsVal.Name = "lblTierDpsVal";
-            this.lblTierDpsVal.Size = new System.Drawing.Size(18, 20);
-            this.lblTierDpsVal.TabIndex = 135;
-            this.lblTierDpsVal.Text = "0";
-            // 
-            // lblDpsVal
-            // 
-            this.lblDpsVal.AutoSize = true;
-            this.lblDpsVal.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDpsVal.Location = new System.Drawing.Point(159, 30);
-            this.lblDpsVal.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblDpsVal.Name = "lblDpsVal";
-            this.lblDpsVal.Size = new System.Drawing.Size(18, 20);
-            this.lblDpsVal.TabIndex = 136;
-            this.lblDpsVal.Text = "0";
-            // 
-            // grpArmorBalanceHelper
-            // 
-            this.grpArmorBalanceHelper.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.grpArmorBalanceHelper.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpArmorBalanceHelper.Controls.Add(this.lblHighResVal);
-            this.grpArmorBalanceHelper.Controls.Add(this.lblHighRes);
-            this.grpArmorBalanceHelper.Controls.Add(this.lblMediumResVal);
-            this.grpArmorBalanceHelper.Controls.Add(this.lblLowResVal);
-            this.grpArmorBalanceHelper.Controls.Add(this.lblMedRes);
-            this.grpArmorBalanceHelper.Controls.Add(this.lblLowRes);
-            this.grpArmorBalanceHelper.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpArmorBalanceHelper.Location = new System.Drawing.Point(13, 424);
-            this.grpArmorBalanceHelper.Margin = new System.Windows.Forms.Padding(2);
-            this.grpArmorBalanceHelper.Name = "grpArmorBalanceHelper";
-            this.grpArmorBalanceHelper.Padding = new System.Windows.Forms.Padding(2);
-            this.grpArmorBalanceHelper.Size = new System.Drawing.Size(266, 63);
-            this.grpArmorBalanceHelper.TabIndex = 137;
-            this.grpArmorBalanceHelper.TabStop = false;
-            this.grpArmorBalanceHelper.Text = "Armor Balance Helper";
-            // 
-            // lblMediumResVal
-            // 
-            this.lblMediumResVal.AutoSize = true;
-            this.lblMediumResVal.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblMediumResVal.Location = new System.Drawing.Point(90, 30);
-            this.lblMediumResVal.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblMediumResVal.Name = "lblMediumResVal";
-            this.lblMediumResVal.Size = new System.Drawing.Size(18, 20);
-            this.lblMediumResVal.TabIndex = 136;
-            this.lblMediumResVal.Text = "0";
-            // 
-            // lblLowResVal
-            // 
-            this.lblLowResVal.AutoSize = true;
-            this.lblLowResVal.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblLowResVal.Location = new System.Drawing.Point(9, 30);
-            this.lblLowResVal.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblLowResVal.Name = "lblLowResVal";
-            this.lblLowResVal.Size = new System.Drawing.Size(18, 20);
-            this.lblLowResVal.TabIndex = 135;
-            this.lblLowResVal.Text = "0";
-            // 
-            // lblMedRes
-            // 
-            this.lblMedRes.AutoSize = true;
-            this.lblMedRes.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblMedRes.Location = new System.Drawing.Point(91, 14);
-            this.lblMedRes.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblMedRes.Name = "lblMedRes";
-            this.lblMedRes.Size = new System.Drawing.Size(80, 13);
-            this.lblMedRes.TabIndex = 134;
-            this.lblMedRes.Text = "Medium Res.";
-            // 
-            // lblLowRes
-            // 
-            this.lblLowRes.AutoSize = true;
-            this.lblLowRes.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblLowRes.Location = new System.Drawing.Point(5, 15);
-            this.lblLowRes.Name = "lblLowRes";
-            this.lblLowRes.Size = new System.Drawing.Size(60, 13);
-            this.lblLowRes.TabIndex = 119;
-            this.lblLowRes.Text = "Low Res.";
-            // 
-            // lblHighRes
-            // 
-            this.lblHighRes.AutoSize = true;
-            this.lblHighRes.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblHighRes.Location = new System.Drawing.Point(182, 14);
-            this.lblHighRes.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblHighRes.Name = "lblHighRes";
-            this.lblHighRes.Size = new System.Drawing.Size(63, 13);
-            this.lblHighRes.TabIndex = 137;
-            this.lblHighRes.Text = "High Res.";
-            // 
-            // lblHighResVal
-            // 
-            this.lblHighResVal.AutoSize = true;
-            this.lblHighResVal.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblHighResVal.Location = new System.Drawing.Point(181, 30);
-            this.lblHighResVal.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.lblHighResVal.Name = "lblHighResVal";
-            this.lblHighResVal.Size = new System.Drawing.Size(18, 20);
-            this.lblHighResVal.TabIndex = 138;
-            this.lblHighResVal.Text = "0";
-            // 
             // FrmItem
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.ClientSize = new System.Drawing.Size(1009, 620);
+            this.ClientSize = new System.Drawing.Size(1009, 664);
             this.ControlBox = false;
             this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.btnCancel);
@@ -4956,6 +4956,10 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudHealthBonus)).EndInit();
             this.grpStatBonuses.ResumeLayout(false);
             this.grpStatBonuses.PerformLayout();
+            this.grpArmorBalanceHelper.ResumeLayout(false);
+            this.grpArmorBalanceHelper.PerformLayout();
+            this.grpWeaponBalance.ResumeLayout(false);
+            this.grpWeaponBalance.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudEvasionPercent)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudEvasion)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudAccuracyPercent)).EndInit();
@@ -4998,10 +5002,6 @@ namespace Intersect.Editor.Forms.Editors
             this.grpEnhancement.ResumeLayout(false);
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
-            this.grpWeaponBalance.ResumeLayout(false);
-            this.grpWeaponBalance.PerformLayout();
-            this.grpArmorBalanceHelper.ResumeLayout(false);
-            this.grpArmorBalanceHelper.PerformLayout();
             this.ResumeLayout(false);
 
         }

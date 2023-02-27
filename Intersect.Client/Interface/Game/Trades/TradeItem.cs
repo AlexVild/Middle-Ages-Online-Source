@@ -191,7 +191,7 @@ namespace Intersect.Client.Interface.Game.Trades
                 }
                 else
                 {
-                    Container.Texture = StandardFrameBg
+                    Container.Texture = StandardFrameBg;
                     if (Pnl.Texture != null)
                     {
                         Pnl.Texture = null;

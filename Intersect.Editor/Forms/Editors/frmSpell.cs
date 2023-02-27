@@ -36,6 +36,8 @@ namespace Intersect.Editor.Forms.Editors
 
         private List<string> mKnownSpellGroups = new List<string>();
 
+        private bool mPopulating = false;
+
         public FrmSpell()
         {
             ApplyHooks();
@@ -271,6 +273,7 @@ namespace Intersect.Editor.Forms.Editors
 
         private void UpdateEditor()
         {
+            mPopulating = true;
             if (mEditorItem != null)
             {
                 pnlContainer.Show();
@@ -339,6 +342,7 @@ namespace Intersect.Editor.Forms.Editors
             }
 
             UpdateToolStripItems();
+            mPopulating = false;
         }
 
         private void RefreshBonusEffects(bool clear)
@@ -448,6 +452,7 @@ namespace Intersect.Editor.Forms.Editors
                 cmbExtraEffect_SelectedIndexChanged(null, null);
 
                 PopulateDamageTypes();
+                RefreshStaticDamageOptions();
 
                 if (cmbType.SelectedIndex == (int)SpellTypes.Passive) 
                 {
@@ -1324,17 +1329,29 @@ namespace Intersect.Editor.Forms.Editors
 
         private void AddDamageType(AttackTypes type)
         {
+            if (mPopulating)
+            {
+                return;
+            }
+
             if (mEditorItem.Combat.DamageTypes.Contains(type))
             {
                 return;
             }
 
             mEditorItem.Combat.DamageTypes.Add(type);
+            RefreshStaticDamageOptions();
         }
 
         private void RemoveDamageType(AttackTypes type)
         {
+            if (mPopulating)
+            {
+                return;
+            }
+
             mEditorItem.Combat.DamageTypes.Remove(type);
+            RefreshStaticDamageOptions();
         }
 
         private void chkDamageBlunt_CheckedChanged(object sender, EventArgs e)
@@ -1347,6 +1364,64 @@ namespace Intersect.Editor.Forms.Editors
             {
                 RemoveDamageType(AttackTypes.Blunt);
             }
+        }
+
+        private void RefreshStaticDamageOptions() 
+        { 
+            if (mEditorItem.Combat.DamageTypes.Contains(AttackTypes.Blunt))
+            {
+                nudBluntDam.Enabled = true;
+            }
+            else
+            {
+                mEditorItem.DamageOverrides[(int)AttackTypes.Blunt] = 0;
+                nudBluntDam.Enabled = false;
+            }
+
+            if (mEditorItem.Combat.DamageTypes.Contains(AttackTypes.Slashing))
+            {
+                nudSlashDam.Enabled = true;
+            }
+            else
+            {
+                mEditorItem.DamageOverrides[(int)AttackTypes.Slashing] = 0;
+                nudSlashDam.Enabled = false;
+            }
+
+            if (mEditorItem.Combat.DamageTypes.Contains(AttackTypes.Magic))
+            {
+                nudMagicDam.Enabled = true;
+            }
+            else
+            {
+                mEditorItem.DamageOverrides[(int)AttackTypes.Magic] = 0;
+                nudMagicDam.Enabled = false;
+            }
+
+            if (mEditorItem.Combat.DamageTypes.Contains(AttackTypes.Piercing))
+            {
+                nudPierceDam.Enabled = true;
+            }
+            else
+            {
+                mEditorItem.DamageOverrides[(int)AttackTypes.Piercing] = 0;
+                nudPierceDam.Enabled = false;
+            }
+
+            RefreshStaticDamageValues();
+        }
+
+        private void RefreshStaticDamageValues()
+        {
+            mEditorItem.DamageOverrides.TryGetValue((int)AttackTypes.Blunt, out var bluntStatic);
+            mEditorItem.DamageOverrides.TryGetValue((int)AttackTypes.Slashing, out var slashStatic);
+            mEditorItem.DamageOverrides.TryGetValue((int)AttackTypes.Magic, out var magicStatic);
+            mEditorItem.DamageOverrides.TryGetValue((int)AttackTypes.Piercing, out var pierceStatic);
+
+            nudBluntDam.Value = bluntStatic;
+            nudSlashDam.Value = slashStatic;
+            nudMagicDam.Value = magicStatic;
+            nudPierceDam.Value = pierceStatic;
         }
 
         private void chkDamageSlash_CheckedChanged(object sender, EventArgs e)
@@ -1494,6 +1569,26 @@ namespace Intersect.Editor.Forms.Editors
 
             mEditorItem.SetBonusEffectOfType(selectedEffect, (int)nudBonusAmt.Value);
             RefreshBonusEffects(false);
+        }
+
+        private void nudBluntDam_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.DamageOverrides[(int)Stats.Attack] = (int)nudBluntDam.Value;
+        }
+
+        private void nudPierceDam_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.DamageOverrides[(int)Stats.PierceAttack] = (int)nudPierceDam.Value;
+        }
+
+        private void nudMagicDam_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.DamageOverrides[(int)Stats.AbilityPower] = (int)nudMagicDam.Value;
+        }
+
+        private void nudSlashDam_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.DamageOverrides[(int)Stats.SlashAttack] = (int)nudSlashDam.Value;
         }
     }
 }

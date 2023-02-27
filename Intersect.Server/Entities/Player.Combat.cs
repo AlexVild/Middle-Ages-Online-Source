@@ -118,7 +118,15 @@ namespace Intersect.Server.Entities
             var targetHealthBefore = enemy.GetVital(Vitals.Health);
             var targetMaxHealth = enemy.GetMaxVital(Vitals.Health);
 
-            var damageWasDealt = base.TryDealDamageTo(enemy, CombatUtilities.GetSpellAttackTypes(spell, weapon), dmgScaling, critMultiplier, weapon, spell, ignoreEvasion, out damage);
+            bool damageWasDealt;
+            if (spell != default)
+            {
+                damageWasDealt = base.TryDealDamageTo(enemy, CombatUtilities.GetSpellAttackTypes(spell, weapon), dmgScaling, critMultiplier, weapon, spell, ignoreEvasion, out damage);
+            }
+            else
+            {
+                damageWasDealt = base.TryDealDamageTo(enemy, weapon?.AttackTypes ?? new List<AttackTypes>() { AttackTypes.Blunt }, dmgScaling, critMultiplier, weapon, spell, ignoreEvasion, out damage);
+            }
 
             if (damageWasDealt && damage > 0)
             {

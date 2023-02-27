@@ -546,17 +546,17 @@ namespace Intersect.Editor.Forms.Editors
 
                     npc.Drops.FindAll(drop => drop.ItemId == mEditorItem.Id).ForEach(drop =>
                     {
-                        string itemString = $"{npc.Name} LV {npc.Level}: {LootTableHelpers.GetPrettyChance(drop.Chance, totalPrimary)}";
+                        string itemString = $"{npc.Name}: {LootTableHelpers.GetPrettyChance(drop.Chance, totalPrimary)}";
                         lstDrops.Items.Add(itemString);
                     });
                     npc.SecondaryDrops.FindAll(drop => drop.ItemId == mEditorItem.Id).ForEach(drop =>
                     {
-                        string itemString = $"{npc.Name} LV {npc.Level} (secondary, {npc.SecondaryChance}%): {LootTableHelpers.GetPrettyChance(drop.Chance, totalSecondary)}";
+                        string itemString = $"{npc.Name} (secondary, {npc.SecondaryChance}%): {LootTableHelpers.GetPrettyChance(drop.Chance, totalSecondary)}";
                         lstDrops.Items.Add(itemString);
                     });
                     npc.TertiaryDrops.FindAll(drop => drop.ItemId == mEditorItem.Id).ForEach(drop =>
                     {
-                        string itemString = $"{npc.Name} LV {npc.Level} (tertiary, {npc.SecondaryChance}%): {LootTableHelpers.GetPrettyChance(drop.Chance, totalTertiary)}";
+                        string itemString = $"{npc.Name} (tertiary, {npc.SecondaryChance}%): {LootTableHelpers.GetPrettyChance(drop.Chance, totalTertiary)}";
                         lstDrops.Items.Add(itemString);
                     });
                 }

@@ -57,7 +57,6 @@ namespace Intersect.Utilities
                 var resistance = resConst * defenderStats[(int)StatHelpers.GetResistanceStat(element)];
                 var resistanceMod = MathHelper.Clamp(-1.0, resistance / dmg, 1.0);
 
-                // = MEDIAN(0, FLOOR(G6 - (G6 * (0.1 + K6))), 10000)
                 var baseVariance = 0.1;
                 var lowVariance = baseVariance + resistanceMod;
                 var highVariance = baseVariance - resistanceMod;
@@ -74,6 +73,20 @@ namespace Intersect.Utilities
             }
 
             return (int)Math.Round(totalDamage * critMultiplier);
+        }
+
+        public static float CalculateDps(List<AttackTypes> attackTypes,
+            double critMultiplier,
+            int scaling,
+            int[] attackerStats,
+            int[] defenderStats,
+            int attackTimeMs)
+        {
+            CalculateDamage(attackTypes, critMultiplier, scaling, attackerStats, defenderStats, out var maxHit);
+
+            var hitsPerSecond = 1000.0f / attackTimeMs;
+
+            return maxHit * hitsPerSecond;
         }
 
         /// <summary>
@@ -217,7 +230,7 @@ namespace Intersect.Utilities
             }
             else
             {
-                return 0f;
+                slotMultiplier = 1.0f;
             }
 
             var damageAtTier = TierToDamageFormula(equipmentTier);

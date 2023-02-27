@@ -42,6 +42,8 @@ namespace Intersect.Editor.Forms.Editors
 
         private bool mPopulating = false;
 
+        private int CurrentTier = 0;
+
         public FrmNpc()
         {
             ApplyHooks();
@@ -279,7 +281,6 @@ namespace Intersect.Editor.Forms.Editors
                 nudRgbaB.Value = mEditorItem.Color.B;
                 nudRgbaA.Value = mEditorItem.Color.A;
 
-                nudLevel.Value = mEditorItem.Level;
                 nudSpawnDuration.Value = mEditorItem.SpawnDuration;
 
                 //Behavior
@@ -394,7 +395,7 @@ namespace Intersect.Editor.Forms.Editors
                 cmbTransformIntoNpc.SelectedIndex = NpcBase.ListIndex(mEditorItem.DeathTransformId) + 1;
                 cmbSpellAttackOverride.SelectedIndex = SpellBase.ListIndex(mEditorItem.SpellAttackOverrideId) + 1;
 
-                EstimateDPS();
+                RefreshBalancing();
 
                 // Bestiary
                 if (mEditorItem.BestiaryUnlocks?.Count == 0)
@@ -735,23 +736,25 @@ namespace Intersect.Editor.Forms.Editors
         private void nudStr_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.Stats[(int) Stats.Attack] = (int) nudStr.Value;
-            EstimateDPS();
+            RefreshBalancing();
         }
 
         private void nudMag_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.Stats[(int) Stats.AbilityPower] = (int) nudMag.Value;
-            EstimateDPS();
+            RefreshBalancing();
         }
 
         private void nudDef_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.Stats[(int) Stats.Defense] = (int) nudDef.Value;
+            RefreshBalancing();
         }
 
         private void nudMR_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.Stats[(int) Stats.MagicResist] = (int) nudMR.Value;
+            RefreshBalancing();
         }
 
         private void nudSpd_ValueChanged(object sender, EventArgs e)
@@ -768,11 +771,13 @@ namespace Intersect.Editor.Forms.Editors
         private void nudHp_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.MaxVital[(int) Vitals.Health] = (int) nudHp.Value;
+            RefreshBalancing();
         }
 
         private void nudMana_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.MaxVital[(int) Vitals.Mana] = (int) nudMana.Value;
+            RefreshBalancing();
         }
 
         private void nudExp_ValueChanged(object sender, EventArgs e)
@@ -920,11 +925,6 @@ namespace Intersect.Editor.Forms.Editors
             mEditorItem.IndividualizedLoot = chkIndividualLoot.Checked;
         }
 
-        private void nudLevel_ValueChanged(object sender, EventArgs e)
-        {
-            mEditorItem.Level = (int) nudLevel.Value;
-        }
-
         private void nudHpRegen_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.VitalRegen[(int) Vitals.Health] = (int) nudHpRegen.Value;
@@ -1031,6 +1031,7 @@ namespace Intersect.Editor.Forms.Editors
         private void nudAttackSpeedValue_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.AttackSpeedValue = (int) nudAttackSpeedValue.Value;
+            RefreshBalancing();
         }
 
         private void nudRgbaR_ValueChanged(object sender, EventArgs e)
@@ -1088,6 +1089,9 @@ namespace Intersect.Editor.Forms.Editors
             cmbFolder.Items.Clear();
             cmbFolder.Items.Add("");
             cmbFolder.Items.AddRange(mKnownFolders.ToArray());
+
+            cmbTier.Items.Clear();
+            cmbTier.Items.AddRange(Strings.ItemEditor.rarity.Values.ToArray());
 
             PopulateBestiaryList();
 
@@ -1347,23 +1351,25 @@ namespace Intersect.Editor.Forms.Editors
         private void nudSlash_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.Stats[(int)Stats.SlashAttack] = (int)nudSlash.Value;
-            EstimateDPS();
+            RefreshBalancing();
         }
 
         private void nudSlashResist_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.Stats[(int)Stats.SlashResistance] = (int)nudSlashResist.Value;
+            RefreshBalancing();
         }
 
         private void nudPierce_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.Stats[(int)Stats.PierceAttack] = (int)nudPierce.Value;
-            EstimateDPS();
+            RefreshBalancing();
         }
 
         private void nudPierceResist_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.Stats[(int)Stats.PierceResistance] = (int)nudPierceResist.Value;
+            RefreshBalancing();
         }
 
         private void nudAccuracy_ValueChanged(object sender, EventArgs e)
@@ -1435,7 +1441,7 @@ namespace Intersect.Editor.Forms.Editors
                 RemoveDamageType(AttackTypes.Blunt);
             }
 
-            EstimateDPS();
+            RefreshBalancing();
         }
 
         private void chkDamageSlash_CheckedChanged(object sender, EventArgs e)
@@ -1454,7 +1460,7 @@ namespace Intersect.Editor.Forms.Editors
                 RemoveDamageType(AttackTypes.Slashing);
             }
 
-            EstimateDPS();
+            RefreshBalancing();
         }
 
         private void chkDamagePierce_CheckedChanged(object sender, EventArgs e)
@@ -1473,7 +1479,7 @@ namespace Intersect.Editor.Forms.Editors
                 RemoveDamageType(AttackTypes.Piercing);
             }
 
-            EstimateDPS();
+            RefreshBalancing();
         }
 
         private void chkDamageMagic_CheckedChanged(object sender, EventArgs e)
@@ -1492,7 +1498,7 @@ namespace Intersect.Editor.Forms.Editors
                 RemoveDamageType(AttackTypes.Magic);
             }
 
-            EstimateDPS();
+            RefreshBalancing();
         }
         
         private void PopulateBestiaryList()
@@ -1587,17 +1593,32 @@ namespace Intersect.Editor.Forms.Editors
             mEditorItem.NoStealthBonus = chkStealth.Checked;
         }
 
-        private void EstimateDPS()
+        private void cmbTier_SelectedIndexChanged(object sender, EventArgs e)
         {
-            lblProjectedDps.Show();
+            CurrentTier = cmbTier.SelectedIndex;
+            RefreshBalancing();
+        }
 
-            CombatUtilities.CalculateDamage(mEditorItem.AttackTypes, 1.0, 100, mEditorItem.Stats, new int[(int)Stats.StatCount], out var maxHit);
+        private void RefreshBalancing()
+        {
+            var dps = CombatUtilities.CalculateDps(mEditorItem.AttackTypes, 1.0, 100, mEditorItem.Stats, new int[(int)Stats.StatCount], mEditorItem.AttackSpeedValue);
 
-            var hitsPerSecond = 1000.0f / mEditorItem.AttackSpeedValue;
+            var desiredDps = CombatUtilities.TierToDamageFormula(CurrentTier);
+            
+            var highRes = CombatUtilities.TierAndSlotToArmorRatingFormula(CurrentTier, -1, CombatUtilities.ResistanceLevel.High);
+            var mediumRes = CombatUtilities.TierAndSlotToArmorRatingFormula(CurrentTier, -1, CombatUtilities.ResistanceLevel.Medium);
+            var lowRes = CombatUtilities.TierAndSlotToArmorRatingFormula(CurrentTier, -1, CombatUtilities.ResistanceLevel.Low);
 
-            var dps = maxHit * hitsPerSecond;
+            var hitsToKill = Math.Ceiling(mEditorItem.MaxVital[(int)Vitals.Health] / desiredDps);
 
-            lblProjectedDps.Text = $"Projected DPS: {dps.ToString("N2")}";
+            lblTargetDpsVal.Text = desiredDps.ToString("N2");
+            lblProjectedDpsVal.Text = dps.ToString("N2");
+
+            lblHighResVal.Text = highRes.ToString("N0");
+            lblMediumResVal.Text = mediumRes.ToString("N0");
+            lblLowResVal.Text = lowRes.ToString("N0");
+
+            lblHitsToKillVal.Text = hitsToKill.ToString("N0");
         }
     }
 

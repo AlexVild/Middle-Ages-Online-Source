@@ -382,7 +382,7 @@ namespace Intersect.Server.Entities
             // Otherwise, we're dealing non-true damage and need to do some calcs
             else
             {
-                DealDamageTo(enemy, attackTypes, dmgScaling, critMultiplier, weapon, false, spell?.Combat?.Friendly ?? false, out damage);
+                DealDamageTo(enemy, attackTypes, dmgScaling, critMultiplier, weapon, false, spell?.Combat?.Friendly ?? false, spell?.DamageOverrides, out damage);
             }
             return damage != 0 || manaDamage != 0;
         }
@@ -413,6 +413,7 @@ namespace Intersect.Server.Entities
             ItemBase weaponMetadata,
             bool secondaryDamage,
             bool friendly,
+            Dictionary<int, int> damageTypeOverrides,
             out int damage)
         {
             damage = 0;
@@ -421,9 +422,35 @@ namespace Intersect.Server.Entities
                 return;
             }
 
+            var atkStats = new int[(int)Stats.StatCount];
+            var defStats = new int[(int)Stats.StatCount];
+
+            Array.Copy(StatVals, atkStats, atkStats.Length);
+            Array.Copy(enemy.StatVals, defStats, atkStats.Length);
+
+            // Override stat values if necessary
+            if (damageTypeOverrides != default)
+            {
+                foreach (var damOverrideKv in damageTypeOverrides)
+                {
+                    if (damOverrideKv.Value == 0)
+                    {
+                        continue;
+                    }
+
+                    int stat = damOverrideKv.Key;
+                    int amount = damOverrideKv.Value;
+
+                    if (stat >= 0 && stat < atkStats.Length)
+                    {
+                        atkStats[stat] = amount;
+                    }
+                }
+            }
+
             UpdateCombatTimers(this, enemy);
 
-            damage = CombatUtilities.CalculateDamage(damageTypes, critMultiplier, scaling, StatVals, enemy.StatVals, out var maxHit);
+            damage = CombatUtilities.CalculateDamage(damageTypes, critMultiplier, scaling, atkStats, defStats, out var maxHit);
 
             if (damage != 0)
             {
