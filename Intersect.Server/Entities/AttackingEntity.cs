@@ -422,31 +422,10 @@ namespace Intersect.Server.Entities
                 return;
             }
 
-            var atkStats = new int[(int)Stats.StatCount];
+            var atkStats = CombatUtilities.GetOverriddenStats(damageTypeOverrides, StatVals);
+            
             var defStats = new int[(int)Stats.StatCount];
-
-            Array.Copy(StatVals, atkStats, atkStats.Length);
             Array.Copy(enemy.StatVals, defStats, atkStats.Length);
-
-            // Override stat values if necessary
-            if (damageTypeOverrides != default)
-            {
-                foreach (var damOverrideKv in damageTypeOverrides)
-                {
-                    if (damOverrideKv.Value == 0)
-                    {
-                        continue;
-                    }
-
-                    int stat = damOverrideKv.Key;
-                    int amount = damOverrideKv.Value;
-
-                    if (stat >= 0 && stat < atkStats.Length)
-                    {
-                        atkStats[stat] = amount;
-                    }
-                }
-            }
 
             UpdateCombatTimers(this, enemy);
 

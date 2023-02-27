@@ -238,5 +238,31 @@ namespace Intersect.Utilities
 
             return slotMultiplier * fullResPoints;
         }
+
+        public static int[] GetOverriddenStats(Dictionary<int, int> overrides, int[] stats)
+        {
+            var atkStats = new int[(int)Stats.StatCount];
+            Array.Copy(stats, atkStats, atkStats.Length);
+            if (overrides != default)
+            {
+                foreach (var damOverrideKv in overrides)
+                {
+                    if (damOverrideKv.Value == 0)
+                    {
+                        continue;
+                    }
+
+                    int stat = damOverrideKv.Key;
+                    int amount = damOverrideKv.Value;
+
+                    if (stat >= 0 && stat < atkStats.Length)
+                    {
+                        atkStats[stat] = amount;
+                    }
+                }
+            }
+
+            return atkStats;
+        }
     }
 }

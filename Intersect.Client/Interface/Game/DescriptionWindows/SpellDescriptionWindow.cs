@@ -241,13 +241,21 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 foreach (var attackType in attackTypes)
                 {
                     var valueColor = mSpell.WeaponSpell && !mSpell.Combat.DamageTypes.Contains(attackType) ? WeaponInheritColor : StatValueColor;
+
+                    var notice = string.Empty;
+                    if (mSpell.DamageOverrides.TryGetValue((int)attackType, out var ovrride) && ovrride != 0)
+                    {
+                        valueColor = CustomColors.ItemDesc.Notice;
+                        notice = " (static)";
+                    }
+
                     if (damageTypeIdx == 0)
                     {
-                        rows.AddKeyValueRow("Damage Types:", attackType.GetDescription(), StatLabelColor, valueColor);
+                        rows.AddKeyValueRow("Damage Types", $"{attackType.GetDescription()}{notice}", StatLabelColor, valueColor);
                     }
                     else
                     {
-                        rows.AddKeyValueRow(string.Empty, attackType.GetDescription(), StatLabelColor, valueColor);
+                        rows.AddKeyValueRow(string.Empty, $"{attackType.GetDescription()}{notice}", StatLabelColor, valueColor);
                     }
                     damageTypeIdx++;
                 }
@@ -295,7 +303,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 else
                 {
                     var valueColor = mSpell.WeaponSpell ? WeaponInheritColor : StatValueColor;
-                    CombatUtilities.CalculateDamage(attackTypes, 1.0, mSpell.Combat.Scaling, Globals.Me.Stat, new int[(int)Stats.StatCount], out var healthDamage);
+                    CombatUtilities.CalculateDamage(attackTypes, 1.0, mSpell.Combat.Scaling, CombatUtilities.GetOverriddenStats(mSpell.DamageOverrides, Globals.Me.Stat), new int[(int)Stats.StatCount], out var healthDamage);
 
                     if (projectileTimes > 1)
                     {
