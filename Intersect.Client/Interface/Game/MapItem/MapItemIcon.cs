@@ -161,6 +161,7 @@ namespace Intersect.Client.Interface.Game.Inventory
             }
             else
             {
+                Container.Texture = StandardFrameBg
                 if (Pnl.Texture != null)
                 {
                     Pnl.Texture = null;
