@@ -205,6 +205,7 @@
     <Compile Include="Interface\Game\UpgradeStation\UpgradeCompleteWindow.cs" />
     <Compile Include="Interface\Game\UpgradeStation\UpgradeStationWindow.cs" />
     <Compile Include="Interface\Objects\HarvestInfoRows.cs" />
+    <Compile Include="Interface\ScreenAnimations\AnvilAnim.cs" />
     <Compile Include="Interface\ScreenAnimations\DeconstructorAnim.cs" />
     <Compile Include="Interface\ScreenAnimations\Gravestone.cs" />
     <Compile Include="Interface\Game\HUD\PartyHud.cs" />

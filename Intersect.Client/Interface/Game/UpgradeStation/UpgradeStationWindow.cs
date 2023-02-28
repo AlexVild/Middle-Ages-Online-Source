@@ -52,7 +52,7 @@ namespace Intersect.Client.Interface.Game.UpgradeStation
         private ImagePanel CurrencyIcon { get; set; }
         private Label CostLabel { get; set; }
 
-        private LootChest CraftAnimation { get; set; }
+        private AnvilAnim CraftAnimation { get; set; }
 
         public UpgradeStationWindow(Base gameCanvas) : base(gameCanvas)
         {
@@ -97,7 +97,7 @@ namespace Intersect.Client.Interface.Game.UpgradeStation
             CancelButton.Clicked += CancelButton_Clicked;
             CraftButton.Clicked += CraftButton_Clicked;
 
-            CraftAnimation = new LootChest(ShowCompletionWindow);
+            CraftAnimation = new AnvilAnim(ShowCompletionWindow);
         }
 
         private void CraftButton_Clicked(Base sender, Framework.Gwen.Control.EventArguments.ClickedEventArgs arguments)
@@ -128,6 +128,7 @@ namespace Intersect.Client.Interface.Game.UpgradeStation
                     InputBox.InputType.OkayOnly, Close, null, null
                 );
 #pragma warning restore CA2000 // Dispose objects before losing scope
+                UpgradeStation.IsOpen = false;
                 return;
             }
 

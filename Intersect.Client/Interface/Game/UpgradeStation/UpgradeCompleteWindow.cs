@@ -45,6 +45,7 @@ namespace Intersect.Client.Interface.Game.UpgradeStation
         public void Show(Guid itemId, ItemProperties properties)
         {
             Item.Update(itemId, properties);
+            Item.SetHoverPanelLocation(Background.X + 382, Background.Y + 90);
             Background.Show();
         }
 

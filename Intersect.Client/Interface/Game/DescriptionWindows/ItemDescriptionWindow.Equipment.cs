@@ -253,7 +253,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
         private Tuple<int, int> GetAttackSpeedComparison()
         {
             int comparedAttackSpeed;
-            if (EquippedItem == null)
+            if (EquippedItem == null || EquippedItemDesc == null)
             {
                 var cls = ClassBase.Get(Globals.Me.Class);
                 comparedAttackSpeed = cls?.AttackSpeedValue ?? 1000;
@@ -268,7 +268,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             if (currentSwiftness != 0 || itemSwiftness != 0)
             {
                 var equippedSwiftness = 0;
-                if (EquippedItem != null)
+                if (EquippedItem != null && EquippedItemDesc != null)
                 {
                     equippedSwiftness = ItemInstanceHelper.GetEffectBoost(EquippedItem.ItemProperties, EffectType.Swiftness) + EquippedItem.Base.GetEffectPercentage(EffectType.Swiftness);
                 }
@@ -555,7 +555,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 return true;
             }
 
-            if (EquippedItem == null)
+            if (EquippedItem == null || EquippedItemDesc == null)
             {
                 return false;
             }
@@ -600,7 +600,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 return true;
             }
 
-            if (EquippedItem == null)
+            if (EquippedItem == null || EquippedItemDesc == null)
             {
                 return false;
             }
@@ -645,7 +645,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 return true;
             }
 
-            if (EquippedItem == null)
+            if (EquippedItem == null || EquippedItemDesc == null)
             {
                 return false;
             }

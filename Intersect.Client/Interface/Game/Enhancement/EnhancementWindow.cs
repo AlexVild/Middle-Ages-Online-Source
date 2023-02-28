@@ -109,7 +109,7 @@ namespace Intersect.Client.Interface.Game.Enhancement
         EnhancementBreakdown BreakdownWindow;
         EnhancementCompleteWindow CompletionWindow;
 
-        private LootChest EnhancementAnimation;
+        private AnvilAnim EnhancementAnimation;
         private ItemProperties NewProperties { get; set; }
 
         private Label NoEnhancementsLabel { get; set; }
@@ -127,7 +127,7 @@ namespace Intersect.Client.Interface.Game.Enhancement
             BreakdownWindow = new EnhancementBreakdown(this, gameCanvas);
             CompletionWindow = new EnhancementCompleteWindow(this, gameCanvas);
 
-            EnhancementAnimation = new LootChest(() =>
+            EnhancementAnimation = new AnvilAnim(() =>
             {
                 Flash.FlashScreen(1000, new Color(255, 255, 255, 255), 150);
                 CompletionWindow?.Show(NewProperties);
