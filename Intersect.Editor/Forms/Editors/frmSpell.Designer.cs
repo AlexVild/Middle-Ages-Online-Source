@@ -1166,9 +1166,9 @@ namespace Intersect.Editor.Forms.Editors
             this.grpRequirements.Controls.Add(this.txtCannotCast);
             this.grpRequirements.Controls.Add(this.btnDynamicRequirements);
             this.grpRequirements.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpRequirements.Location = new System.Drawing.Point(212, 201);
+            this.grpRequirements.Location = new System.Drawing.Point(446, 374);
             this.grpRequirements.Name = "grpRequirements";
-            this.grpRequirements.Size = new System.Drawing.Size(226, 98);
+            this.grpRequirements.Size = new System.Drawing.Size(220, 98);
             this.grpRequirements.TabIndex = 18;
             this.grpRequirements.TabStop = false;
             this.grpRequirements.Text = "Casting Requirements";
@@ -1189,7 +1189,7 @@ namespace Intersect.Editor.Forms.Editors
             this.txtCannotCast.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
             this.txtCannotCast.Location = new System.Drawing.Point(11, 67);
             this.txtCannotCast.Name = "txtCannotCast";
-            this.txtCannotCast.Size = new System.Drawing.Size(207, 20);
+            this.txtCannotCast.Size = new System.Drawing.Size(202, 20);
             this.txtCannotCast.TabIndex = 55;
             this.txtCannotCast.TextChanged += new System.EventHandler(this.txtCannotCast_TextChanged);
             // 
@@ -1198,7 +1198,7 @@ namespace Intersect.Editor.Forms.Editors
             this.btnDynamicRequirements.Location = new System.Drawing.Point(11, 18);
             this.btnDynamicRequirements.Name = "btnDynamicRequirements";
             this.btnDynamicRequirements.Padding = new System.Windows.Forms.Padding(5);
-            this.btnDynamicRequirements.Size = new System.Drawing.Size(208, 23);
+            this.btnDynamicRequirements.Size = new System.Drawing.Size(202, 23);
             this.btnDynamicRequirements.TabIndex = 20;
             this.btnDynamicRequirements.Text = "Casting Requirements";
             this.btnDynamicRequirements.Click += new System.EventHandler(this.btnDynamicRequirements_Click);
