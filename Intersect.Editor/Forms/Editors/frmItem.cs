@@ -219,12 +219,24 @@ namespace Intersect.Editor.Forms.Editors
             nudDef.Maximum = Options.MaxStatValue;
             nudMR.Maximum = Options.MaxStatValue;
             nudSpd.Maximum = Options.MaxStatValue;
+            nudSlash.Maximum = Options.MaxStatValue;
+            nudSlashResist.Maximum = Options.MaxStatValue;
+            nudPierce.Maximum = Options.MaxStatValue;
+            nudPierceResist.Maximum = Options.MaxStatValue;
+            nudEvasion.Maximum = Options.MaxStatValue;
+            nudAccuracy.Maximum = Options.MaxStatValue;
 
             nudStr.Minimum = -Options.MaxStatValue;
             nudMag.Minimum = -Options.MaxStatValue;
             nudDef.Minimum = -Options.MaxStatValue;
             nudMR.Minimum = -Options.MaxStatValue;
             nudSpd.Minimum = -Options.MaxStatValue;
+            nudSlash.Minimum = -Options.MaxStatValue;
+            nudSlashResist.Minimum = -Options.MaxStatValue;
+            nudPierce.Minimum = -Options.MaxStatValue;
+            nudPierceResist.Minimum = -Options.MaxStatValue;
+            nudEvasion.Minimum = -Options.MaxStatValue;
+            nudAccuracy.Minimum = -Options.MaxStatValue;
 
             InitLocalization();
             UpdateEditor();
