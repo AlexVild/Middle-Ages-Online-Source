@@ -20,8 +20,8 @@ namespace Intersect.Utilities
             List<AttackTypes> attackTypes,
             double critMultiplier,
             int scaling,
-            int[] attackerStats,
-            int[] defenderStats,
+            in int[] attackerStats,
+            in int[] defenderStats,
             out int maxHit)
         {
             maxHit = 0;
@@ -34,17 +34,25 @@ namespace Intersect.Utilities
                 throw new ArgumentException("Invalid defensive stats given", nameof(defenderStats));
             }
 
-            if (attackTypes.Count == 0)
+            var atkTypesCopy = new List<AttackTypes>();
+            atkTypesCopy.AddRange(attackTypes);
+
+            if (atkTypesCopy.Count == 0)
             {
                 // Default to blunt handling if nothing given, backwards compatible with old logic (def/atk used)
-                attackTypes.Add(AttackTypes.Blunt);
+                atkTypesCopy.Add(AttackTypes.Blunt);
             }
 
             // Go through each of the attack types that apply to the damage
             var totalDamage = 0;
             float decScaling = (float)scaling / 100; // scaling comes into this function as a percent number, i.e 110%, so we need that to be 1.1
-            foreach (var element in attackTypes)
+            foreach (var element in atkTypesCopy)
             {
+                if ((int) element <= 0 || (int) element > attackerStats.Length)
+                {
+                    continue;
+                }
+
                 var dmg = (int)Math.Round(attackerStats[(int)element] * decScaling);
                 // If we're not gonna be doing damage, dismiss
                 if (dmg == 0)
@@ -64,9 +72,9 @@ namespace Intersect.Utilities
                 var lowestDmg = dmg - (int)Math.Floor(dmg * lowVariance);
                 var highestDmg = dmg + (int)Math.Ceiling(dmg * highVariance);
 
-                if (highestDmg > maxHit)
+                if ((highestDmg + maxHit) > maxHit)
                 {
-                    maxHit = highestDmg;
+                    maxHit += highestDmg;
                 }
 
                 totalDamage += Randomization.Next(lowestDmg, highestDmg + 1);

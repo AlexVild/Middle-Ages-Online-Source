@@ -1012,6 +1012,7 @@ namespace Intersect.Editor.Forms.Editors
         private void nudScaling_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.Combat.Scaling = (int) nudScaling.Value;
+            RefreshBalance();
         }
 
         private void nudCastRange_ValueChanged(object sender, EventArgs e)
