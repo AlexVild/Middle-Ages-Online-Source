@@ -148,11 +148,6 @@ namespace Intersect.Client.Interface.Game.Components
 
         public void CollapseRequirements()
         {
-            if (!IsExpanded)
-            {
-                return;
-            }
-
             IsExpanded = false;
             ExpandButton.SetImage(DownButtonTexture, DownButtonTexture.Name, Button.ControlState.Normal);
             ExpandButton.SetImage(DownButtonHoverTexture, DownButtonHoverTexture.Name, Button.ControlState.Hovered);

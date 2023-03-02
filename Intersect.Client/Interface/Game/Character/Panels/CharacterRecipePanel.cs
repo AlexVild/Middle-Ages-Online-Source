@@ -139,6 +139,7 @@ namespace Intersect.Client.Interface.Game.Character.Panels
 
         private void ClearRecipes()
         {
+            CharacterRecipePanelController.ExpandedRecipes.Clear();
             RecipeScrollContainer.ClearCreatedChildren();
             RecipeRows?.DisposeAll();
         }
