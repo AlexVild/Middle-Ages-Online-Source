@@ -1954,7 +1954,7 @@ namespace Intersect.Editor.Forms.Editors
 
         private void nudEvasion_ValueChanged(object sender, EventArgs e)
         {
-            mEditorItem.StatsGiven[(int)Stats.Accuracy] = (int)nudEvasion.Value;
+            mEditorItem.StatsGiven[(int)Stats.Evasion] = (int)nudEvasion.Value;
         }
 
         private void nudEvasionPercent_ValueChanged(object sender, EventArgs e)
