@@ -347,6 +347,8 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
             this.vS2015DarkTheme1 = new WeifenLuo.WinFormsUI.Docking.VS2015DarkTheme();
+            this.lblMaxHit = new System.Windows.Forms.Label();
+            this.lblMaxHitVal = new System.Windows.Forms.Label();
             this.grpItems.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudFuel)).BeginInit();
@@ -3202,8 +3204,8 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpStatBonuses.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpStatBonuses.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpStatBonuses.Controls.Add(this.grpArmorBalanceHelper);
             this.grpStatBonuses.Controls.Add(this.grpWeaponBalance);
+            this.grpStatBonuses.Controls.Add(this.grpArmorBalanceHelper);
             this.grpStatBonuses.Controls.Add(this.chkLockEvasion);
             this.grpStatBonuses.Controls.Add(this.label16);
             this.grpStatBonuses.Controls.Add(this.nudEvasionPercent);
@@ -3358,6 +3360,8 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpWeaponBalance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpWeaponBalance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpWeaponBalance.Controls.Add(this.lblMaxHitVal);
+            this.grpWeaponBalance.Controls.Add(this.lblMaxHit);
             this.grpWeaponBalance.Controls.Add(this.lblDpsVal);
             this.grpWeaponBalance.Controls.Add(this.lblTierDpsVal);
             this.grpWeaponBalance.Controls.Add(this.lblProjectedDps);
@@ -3376,7 +3380,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.lblDpsVal.AutoSize = true;
             this.lblDpsVal.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDpsVal.Location = new System.Drawing.Point(159, 30);
+            this.lblDpsVal.Location = new System.Drawing.Point(78, 32);
             this.lblDpsVal.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblDpsVal.Name = "lblDpsVal";
             this.lblDpsVal.Size = new System.Drawing.Size(18, 20);
@@ -3387,7 +3391,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.lblTierDpsVal.AutoSize = true;
             this.lblTierDpsVal.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTierDpsVal.Location = new System.Drawing.Point(33, 30);
+            this.lblTierDpsVal.Location = new System.Drawing.Point(10, 30);
             this.lblTierDpsVal.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblTierDpsVal.Name = "lblTierDpsVal";
             this.lblTierDpsVal.Size = new System.Drawing.Size(18, 20);
@@ -3398,7 +3402,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.lblProjectedDps.AutoSize = true;
             this.lblProjectedDps.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblProjectedDps.Location = new System.Drawing.Point(159, 14);
+            this.lblProjectedDps.Location = new System.Drawing.Point(79, 15);
             this.lblProjectedDps.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblProjectedDps.Name = "lblProjectedDps";
             this.lblProjectedDps.Size = new System.Drawing.Size(87, 13);
@@ -3409,7 +3413,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.lblTierDps.AutoSize = true;
             this.lblTierDps.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTierDps.Location = new System.Drawing.Point(28, 15);
+            this.lblTierDps.Location = new System.Drawing.Point(11, 14);
             this.lblTierDps.Name = "lblTierDps";
             this.lblTierDps.Size = new System.Drawing.Size(58, 13);
             this.lblTierDps.TabIndex = 119;
@@ -4857,6 +4861,28 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
             // 
+            // lblMaxHit
+            // 
+            this.lblMaxHit.AutoSize = true;
+            this.lblMaxHit.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMaxHit.Location = new System.Drawing.Point(178, 15);
+            this.lblMaxHit.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblMaxHit.Name = "lblMaxHit";
+            this.lblMaxHit.Size = new System.Drawing.Size(50, 13);
+            this.lblMaxHit.TabIndex = 137;
+            this.lblMaxHit.Text = "Max Hit";
+            // 
+            // lblMaxHitVal
+            // 
+            this.lblMaxHitVal.AutoSize = true;
+            this.lblMaxHitVal.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMaxHitVal.Location = new System.Drawing.Point(177, 32);
+            this.lblMaxHitVal.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblMaxHitVal.Name = "lblMaxHitVal";
+            this.lblMaxHitVal.Size = new System.Drawing.Size(18, 20);
+            this.lblMaxHitVal.TabIndex = 138;
+            this.lblMaxHitVal.Text = "0";
+            // 
             // FrmItem
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -5320,5 +5346,7 @@ namespace Intersect.Editor.Forms.Editors
         private Label lblLowRes;
         private Label lblHighResVal;
         private Label lblHighRes;
+        private Label lblMaxHit;
+        private Label lblMaxHitVal;
     }
 }

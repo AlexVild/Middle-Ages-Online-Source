@@ -93,6 +93,21 @@ namespace Intersect.Editor.Forms.Editors
             this.chkDamageSlash = new DarkUI.Controls.DarkCheckBox();
             this.chkDamageBlunt = new DarkUI.Controls.DarkCheckBox();
             this.pnlContainer = new System.Windows.Forms.Panel();
+            this.grpBalanceHelp = new DarkUI.Controls.DarkGroupBox();
+            this.lblLowResVal = new System.Windows.Forms.Label();
+            this.lblMediumResVal = new System.Windows.Forms.Label();
+            this.lblHighResVal = new System.Windows.Forms.Label();
+            this.lblLowRes = new System.Windows.Forms.Label();
+            this.lblMediumRes = new System.Windows.Forms.Label();
+            this.lblHighRes = new System.Windows.Forms.Label();
+            this.lblHitsToKillVal = new System.Windows.Forms.Label();
+            this.lblTierDeathHits = new System.Windows.Forms.Label();
+            this.lblProjectedDpsVal = new System.Windows.Forms.Label();
+            this.lblTargetDpsVal = new System.Windows.Forms.Label();
+            this.cmbTier = new DarkUI.Controls.DarkComboBox();
+            this.lblTierView = new System.Windows.Forms.Label();
+            this.lblTargetDps = new System.Windows.Forms.Label();
+            this.lblProjectedDps = new System.Windows.Forms.Label();
             this.grpBestiary = new DarkUI.Controls.DarkGroupBox();
             this.chkBestiary = new DarkUI.Controls.DarkCheckBox();
             this.btnBestiaryDefaults = new DarkUI.Controls.DarkButton();
@@ -128,7 +143,6 @@ namespace Intersect.Editor.Forms.Editors
             this.chkSilence = new DarkUI.Controls.DarkCheckBox();
             this.chkKnockback = new DarkUI.Controls.DarkCheckBox();
             this.grpCombat = new DarkUI.Controls.DarkGroupBox();
-            this.lblProjectedDps = new System.Windows.Forms.Label();
             this.grpDamageTypes = new DarkUI.Controls.DarkGroupBox();
             this.label14 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
@@ -222,20 +236,8 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemPaste = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
-            this.grpBalanceHelp = new DarkUI.Controls.DarkGroupBox();
-            this.lblTargetDps = new System.Windows.Forms.Label();
-            this.lblTierView = new System.Windows.Forms.Label();
-            this.cmbTier = new DarkUI.Controls.DarkComboBox();
-            this.lblTargetDpsVal = new System.Windows.Forms.Label();
-            this.lblProjectedDpsVal = new System.Windows.Forms.Label();
-            this.lblTierDeathHits = new System.Windows.Forms.Label();
-            this.lblHitsToKillVal = new System.Windows.Forms.Label();
-            this.lblHighRes = new System.Windows.Forms.Label();
-            this.lblMediumRes = new System.Windows.Forms.Label();
-            this.lblLowRes = new System.Windows.Forms.Label();
-            this.lblHighResVal = new System.Windows.Forms.Label();
-            this.lblMediumResVal = new System.Windows.Forms.Label();
-            this.lblLowResVal = new System.Windows.Forms.Label();
+            this.lblMaxHit = new System.Windows.Forms.Label();
+            this.lblMaxHitVal = new System.Windows.Forms.Label();
             this.grpNpcs.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudRgbaA)).BeginInit();
@@ -261,6 +263,7 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudMag)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudStr)).BeginInit();
             this.pnlContainer.SuspendLayout();
+            this.grpBalanceHelp.SuspendLayout();
             this.grpBestiary.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudKillCount)).BeginInit();
             this.grpAttackOverrides.SuspendLayout();
@@ -291,7 +294,6 @@ namespace Intersect.Editor.Forms.Editors
             this.grpNpcVsNpc.SuspendLayout();
             this.grpSpells.SuspendLayout();
             this.toolStrip.SuspendLayout();
-            this.grpBalanceHelp.SuspendLayout();
             this.SuspendLayout();
             // 
             // grpNpcs
@@ -1189,6 +1191,185 @@ namespace Intersect.Editor.Forms.Editors
             this.pnlContainer.Size = new System.Drawing.Size(699, 529);
             this.pnlContainer.TabIndex = 17;
             // 
+            // grpBalanceHelp
+            // 
+            this.grpBalanceHelp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpBalanceHelp.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpBalanceHelp.Controls.Add(this.lblMaxHitVal);
+            this.grpBalanceHelp.Controls.Add(this.lblMaxHit);
+            this.grpBalanceHelp.Controls.Add(this.lblLowResVal);
+            this.grpBalanceHelp.Controls.Add(this.lblMediumResVal);
+            this.grpBalanceHelp.Controls.Add(this.lblHighResVal);
+            this.grpBalanceHelp.Controls.Add(this.lblLowRes);
+            this.grpBalanceHelp.Controls.Add(this.lblMediumRes);
+            this.grpBalanceHelp.Controls.Add(this.lblHighRes);
+            this.grpBalanceHelp.Controls.Add(this.lblHitsToKillVal);
+            this.grpBalanceHelp.Controls.Add(this.lblTierDeathHits);
+            this.grpBalanceHelp.Controls.Add(this.lblProjectedDpsVal);
+            this.grpBalanceHelp.Controls.Add(this.lblTargetDpsVal);
+            this.grpBalanceHelp.Controls.Add(this.cmbTier);
+            this.grpBalanceHelp.Controls.Add(this.lblTierView);
+            this.grpBalanceHelp.Controls.Add(this.lblTargetDps);
+            this.grpBalanceHelp.Controls.Add(this.lblProjectedDps);
+            this.grpBalanceHelp.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpBalanceHelp.Location = new System.Drawing.Point(213, 623);
+            this.grpBalanceHelp.Margin = new System.Windows.Forms.Padding(2);
+            this.grpBalanceHelp.Name = "grpBalanceHelp";
+            this.grpBalanceHelp.Padding = new System.Windows.Forms.Padding(2);
+            this.grpBalanceHelp.Size = new System.Drawing.Size(228, 156);
+            this.grpBalanceHelp.TabIndex = 32;
+            this.grpBalanceHelp.TabStop = false;
+            this.grpBalanceHelp.Text = "Balance Notes";
+            // 
+            // lblLowResVal
+            // 
+            this.lblLowResVal.AutoSize = true;
+            this.lblLowResVal.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblLowResVal.Location = new System.Drawing.Point(161, 101);
+            this.lblLowResVal.Name = "lblLowResVal";
+            this.lblLowResVal.Size = new System.Drawing.Size(18, 20);
+            this.lblLowResVal.TabIndex = 134;
+            this.lblLowResVal.Text = "0";
+            // 
+            // lblMediumResVal
+            // 
+            this.lblMediumResVal.AutoSize = true;
+            this.lblMediumResVal.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMediumResVal.Location = new System.Drawing.Point(74, 101);
+            this.lblMediumResVal.Name = "lblMediumResVal";
+            this.lblMediumResVal.Size = new System.Drawing.Size(18, 20);
+            this.lblMediumResVal.TabIndex = 133;
+            this.lblMediumResVal.Text = "0";
+            // 
+            // lblHighResVal
+            // 
+            this.lblHighResVal.AutoSize = true;
+            this.lblHighResVal.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblHighResVal.Location = new System.Drawing.Point(10, 101);
+            this.lblHighResVal.Name = "lblHighResVal";
+            this.lblHighResVal.Size = new System.Drawing.Size(18, 20);
+            this.lblHighResVal.TabIndex = 132;
+            this.lblHighResVal.Text = "0";
+            // 
+            // lblLowRes
+            // 
+            this.lblLowRes.AutoSize = true;
+            this.lblLowRes.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblLowRes.Location = new System.Drawing.Point(162, 85);
+            this.lblLowRes.Name = "lblLowRes";
+            this.lblLowRes.Size = new System.Drawing.Size(60, 13);
+            this.lblLowRes.TabIndex = 131;
+            this.lblLowRes.Text = "Low Res.";
+            // 
+            // lblMediumRes
+            // 
+            this.lblMediumRes.AutoSize = true;
+            this.lblMediumRes.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMediumRes.Location = new System.Drawing.Point(76, 85);
+            this.lblMediumRes.Name = "lblMediumRes";
+            this.lblMediumRes.Size = new System.Drawing.Size(80, 13);
+            this.lblMediumRes.TabIndex = 130;
+            this.lblMediumRes.Text = "Medium Res.";
+            // 
+            // lblHighRes
+            // 
+            this.lblHighRes.AutoSize = true;
+            this.lblHighRes.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblHighRes.Location = new System.Drawing.Point(9, 85);
+            this.lblHighRes.Name = "lblHighRes";
+            this.lblHighRes.Size = new System.Drawing.Size(63, 13);
+            this.lblHighRes.TabIndex = 129;
+            this.lblHighRes.Text = "High Res.";
+            // 
+            // lblHitsToKillVal
+            // 
+            this.lblHitsToKillVal.AutoSize = true;
+            this.lblHitsToKillVal.Location = new System.Drawing.Point(124, 131);
+            this.lblHitsToKillVal.Name = "lblHitsToKillVal";
+            this.lblHitsToKillVal.Size = new System.Drawing.Size(13, 13);
+            this.lblHitsToKillVal.TabIndex = 128;
+            this.lblHitsToKillVal.Text = "0";
+            // 
+            // lblTierDeathHits
+            // 
+            this.lblTierDeathHits.AutoSize = true;
+            this.lblTierDeathHits.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTierDeathHits.Location = new System.Drawing.Point(9, 131);
+            this.lblTierDeathHits.Name = "lblTierDeathHits";
+            this.lblTierDeathHits.Size = new System.Drawing.Size(109, 13);
+            this.lblTierDeathHits.TabIndex = 127;
+            this.lblTierDeathHits.Text = "Hits to Kill in Tier:";
+            // 
+            // lblProjectedDpsVal
+            // 
+            this.lblProjectedDpsVal.AutoSize = true;
+            this.lblProjectedDpsVal.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblProjectedDpsVal.Location = new System.Drawing.Point(89, 61);
+            this.lblProjectedDpsVal.Name = "lblProjectedDpsVal";
+            this.lblProjectedDpsVal.Size = new System.Drawing.Size(18, 20);
+            this.lblProjectedDpsVal.TabIndex = 126;
+            this.lblProjectedDpsVal.Text = "0";
+            // 
+            // lblTargetDpsVal
+            // 
+            this.lblTargetDpsVal.AutoSize = true;
+            this.lblTargetDpsVal.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTargetDpsVal.Location = new System.Drawing.Point(12, 62);
+            this.lblTargetDpsVal.Name = "lblTargetDpsVal";
+            this.lblTargetDpsVal.Size = new System.Drawing.Size(18, 20);
+            this.lblTargetDpsVal.TabIndex = 125;
+            this.lblTargetDpsVal.Text = "0";
+            // 
+            // cmbTier
+            // 
+            this.cmbTier.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbTier.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbTier.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbTier.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbTier.DrawDropdownHoverOutline = false;
+            this.cmbTier.DrawFocusRectangle = false;
+            this.cmbTier.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbTier.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbTier.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbTier.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbTier.FormattingEnabled = true;
+            this.cmbTier.Location = new System.Drawing.Point(74, 18);
+            this.cmbTier.Name = "cmbTier";
+            this.cmbTier.Size = new System.Drawing.Size(142, 21);
+            this.cmbTier.TabIndex = 124;
+            this.cmbTier.Text = null;
+            this.cmbTier.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbTier.SelectedIndexChanged += new System.EventHandler(this.cmbTier_SelectedIndexChanged);
+            // 
+            // lblTierView
+            // 
+            this.lblTierView.AutoSize = true;
+            this.lblTierView.Location = new System.Drawing.Point(11, 21);
+            this.lblTierView.Name = "lblTierView";
+            this.lblTierView.Size = new System.Drawing.Size(46, 13);
+            this.lblTierView.TabIndex = 123;
+            this.lblTierView.Text = "For Tier:";
+            // 
+            // lblTargetDps
+            // 
+            this.lblTargetDps.AutoSize = true;
+            this.lblTargetDps.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblTargetDps.Location = new System.Drawing.Point(9, 45);
+            this.lblTargetDps.Name = "lblTargetDps";
+            this.lblTargetDps.Size = new System.Drawing.Size(73, 13);
+            this.lblTargetDps.TabIndex = 122;
+            this.lblTargetDps.Text = "Target DPS";
+            // 
+            // lblProjectedDps
+            // 
+            this.lblProjectedDps.AutoSize = true;
+            this.lblProjectedDps.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblProjectedDps.Location = new System.Drawing.Point(90, 45);
+            this.lblProjectedDps.Name = "lblProjectedDps";
+            this.lblProjectedDps.Size = new System.Drawing.Size(58, 13);
+            this.lblProjectedDps.TabIndex = 121;
+            this.lblProjectedDps.Text = "Est. DPS";
+            // 
             // grpBestiary
             // 
             this.grpBestiary.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
@@ -1650,16 +1831,6 @@ namespace Intersect.Editor.Forms.Editors
             this.grpCombat.TabIndex = 17;
             this.grpCombat.TabStop = false;
             this.grpCombat.Text = "Combat";
-            // 
-            // lblProjectedDps
-            // 
-            this.lblProjectedDps.AutoSize = true;
-            this.lblProjectedDps.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblProjectedDps.Location = new System.Drawing.Point(133, 45);
-            this.lblProjectedDps.Name = "lblProjectedDps";
-            this.lblProjectedDps.Size = new System.Drawing.Size(90, 13);
-            this.lblProjectedDps.TabIndex = 121;
-            this.lblProjectedDps.Text = "Projected DPS";
             // 
             // grpDamageTypes
             // 
@@ -2901,172 +3072,25 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
             // 
-            // grpBalanceHelp
+            // lblMaxHit
             // 
-            this.grpBalanceHelp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.grpBalanceHelp.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpBalanceHelp.Controls.Add(this.lblLowResVal);
-            this.grpBalanceHelp.Controls.Add(this.lblMediumResVal);
-            this.grpBalanceHelp.Controls.Add(this.lblHighResVal);
-            this.grpBalanceHelp.Controls.Add(this.lblLowRes);
-            this.grpBalanceHelp.Controls.Add(this.lblMediumRes);
-            this.grpBalanceHelp.Controls.Add(this.lblHighRes);
-            this.grpBalanceHelp.Controls.Add(this.lblHitsToKillVal);
-            this.grpBalanceHelp.Controls.Add(this.lblTierDeathHits);
-            this.grpBalanceHelp.Controls.Add(this.lblProjectedDpsVal);
-            this.grpBalanceHelp.Controls.Add(this.lblTargetDpsVal);
-            this.grpBalanceHelp.Controls.Add(this.cmbTier);
-            this.grpBalanceHelp.Controls.Add(this.lblTierView);
-            this.grpBalanceHelp.Controls.Add(this.lblTargetDps);
-            this.grpBalanceHelp.Controls.Add(this.lblProjectedDps);
-            this.grpBalanceHelp.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpBalanceHelp.Location = new System.Drawing.Point(213, 623);
-            this.grpBalanceHelp.Margin = new System.Windows.Forms.Padding(2);
-            this.grpBalanceHelp.Name = "grpBalanceHelp";
-            this.grpBalanceHelp.Padding = new System.Windows.Forms.Padding(2);
-            this.grpBalanceHelp.Size = new System.Drawing.Size(228, 156);
-            this.grpBalanceHelp.TabIndex = 32;
-            this.grpBalanceHelp.TabStop = false;
-            this.grpBalanceHelp.Text = "Balance Notes";
+            this.lblMaxHit.AutoSize = true;
+            this.lblMaxHit.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMaxHit.Location = new System.Drawing.Point(166, 45);
+            this.lblMaxHit.Name = "lblMaxHit";
+            this.lblMaxHit.Size = new System.Drawing.Size(50, 13);
+            this.lblMaxHit.TabIndex = 135;
+            this.lblMaxHit.Text = "Max Hit";
             // 
-            // lblTargetDps
+            // lblMaxHitVal
             // 
-            this.lblTargetDps.AutoSize = true;
-            this.lblTargetDps.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTargetDps.Location = new System.Drawing.Point(9, 45);
-            this.lblTargetDps.Name = "lblTargetDps";
-            this.lblTargetDps.Size = new System.Drawing.Size(73, 13);
-            this.lblTargetDps.TabIndex = 122;
-            this.lblTargetDps.Text = "Target DPS";
-            // 
-            // lblTierView
-            // 
-            this.lblTierView.AutoSize = true;
-            this.lblTierView.Location = new System.Drawing.Point(11, 21);
-            this.lblTierView.Name = "lblTierView";
-            this.lblTierView.Size = new System.Drawing.Size(46, 13);
-            this.lblTierView.TabIndex = 123;
-            this.lblTierView.Text = "For Tier:";
-            // 
-            // cmbTier
-            // 
-            this.cmbTier.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbTier.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbTier.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbTier.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbTier.DrawDropdownHoverOutline = false;
-            this.cmbTier.DrawFocusRectangle = false;
-            this.cmbTier.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbTier.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbTier.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbTier.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbTier.FormattingEnabled = true;
-            this.cmbTier.Location = new System.Drawing.Point(74, 18);
-            this.cmbTier.Name = "cmbTier";
-            this.cmbTier.Size = new System.Drawing.Size(142, 21);
-            this.cmbTier.TabIndex = 124;
-            this.cmbTier.Text = null;
-            this.cmbTier.TextPadding = new System.Windows.Forms.Padding(2);
-            this.cmbTier.SelectedIndexChanged += new System.EventHandler(this.cmbTier_SelectedIndexChanged);
-            // 
-            // lblTargetDpsVal
-            // 
-            this.lblTargetDpsVal.AutoSize = true;
-            this.lblTargetDpsVal.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTargetDpsVal.Location = new System.Drawing.Point(12, 62);
-            this.lblTargetDpsVal.Name = "lblTargetDpsVal";
-            this.lblTargetDpsVal.Size = new System.Drawing.Size(18, 20);
-            this.lblTargetDpsVal.TabIndex = 125;
-            this.lblTargetDpsVal.Text = "0";
-            // 
-            // lblProjectedDpsVal
-            // 
-            this.lblProjectedDpsVal.AutoSize = true;
-            this.lblProjectedDpsVal.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblProjectedDpsVal.Location = new System.Drawing.Point(135, 61);
-            this.lblProjectedDpsVal.Name = "lblProjectedDpsVal";
-            this.lblProjectedDpsVal.Size = new System.Drawing.Size(18, 20);
-            this.lblProjectedDpsVal.TabIndex = 126;
-            this.lblProjectedDpsVal.Text = "0";
-            // 
-            // lblTierDeathHits
-            // 
-            this.lblTierDeathHits.AutoSize = true;
-            this.lblTierDeathHits.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTierDeathHits.Location = new System.Drawing.Point(9, 131);
-            this.lblTierDeathHits.Name = "lblTierDeathHits";
-            this.lblTierDeathHits.Size = new System.Drawing.Size(109, 13);
-            this.lblTierDeathHits.TabIndex = 127;
-            this.lblTierDeathHits.Text = "Hits to Kill in Tier:";
-            // 
-            // lblHitsToKillVal
-            // 
-            this.lblHitsToKillVal.AutoSize = true;
-            this.lblHitsToKillVal.Location = new System.Drawing.Point(124, 131);
-            this.lblHitsToKillVal.Name = "lblHitsToKillVal";
-            this.lblHitsToKillVal.Size = new System.Drawing.Size(13, 13);
-            this.lblHitsToKillVal.TabIndex = 128;
-            this.lblHitsToKillVal.Text = "0";
-            // 
-            // lblHighRes
-            // 
-            this.lblHighRes.AutoSize = true;
-            this.lblHighRes.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblHighRes.Location = new System.Drawing.Point(9, 85);
-            this.lblHighRes.Name = "lblHighRes";
-            this.lblHighRes.Size = new System.Drawing.Size(63, 13);
-            this.lblHighRes.TabIndex = 129;
-            this.lblHighRes.Text = "High Res.";
-            // 
-            // lblMediumRes
-            // 
-            this.lblMediumRes.AutoSize = true;
-            this.lblMediumRes.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblMediumRes.Location = new System.Drawing.Point(76, 85);
-            this.lblMediumRes.Name = "lblMediumRes";
-            this.lblMediumRes.Size = new System.Drawing.Size(80, 13);
-            this.lblMediumRes.TabIndex = 130;
-            this.lblMediumRes.Text = "Medium Res.";
-            // 
-            // lblLowRes
-            // 
-            this.lblLowRes.AutoSize = true;
-            this.lblLowRes.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblLowRes.Location = new System.Drawing.Point(162, 85);
-            this.lblLowRes.Name = "lblLowRes";
-            this.lblLowRes.Size = new System.Drawing.Size(60, 13);
-            this.lblLowRes.TabIndex = 131;
-            this.lblLowRes.Text = "Low Res.";
-            // 
-            // lblHighResVal
-            // 
-            this.lblHighResVal.AutoSize = true;
-            this.lblHighResVal.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblHighResVal.Location = new System.Drawing.Point(10, 101);
-            this.lblHighResVal.Name = "lblHighResVal";
-            this.lblHighResVal.Size = new System.Drawing.Size(18, 20);
-            this.lblHighResVal.TabIndex = 132;
-            this.lblHighResVal.Text = "0";
-            // 
-            // lblMediumResVal
-            // 
-            this.lblMediumResVal.AutoSize = true;
-            this.lblMediumResVal.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblMediumResVal.Location = new System.Drawing.Point(74, 101);
-            this.lblMediumResVal.Name = "lblMediumResVal";
-            this.lblMediumResVal.Size = new System.Drawing.Size(18, 20);
-            this.lblMediumResVal.TabIndex = 133;
-            this.lblMediumResVal.Text = "0";
-            // 
-            // lblLowResVal
-            // 
-            this.lblLowResVal.AutoSize = true;
-            this.lblLowResVal.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblLowResVal.Location = new System.Drawing.Point(161, 101);
-            this.lblLowResVal.Name = "lblLowResVal";
-            this.lblLowResVal.Size = new System.Drawing.Size(18, 20);
-            this.lblLowResVal.TabIndex = 134;
-            this.lblLowResVal.Text = "0";
+            this.lblMaxHitVal.AutoSize = true;
+            this.lblMaxHitVal.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMaxHitVal.Location = new System.Drawing.Point(167, 61);
+            this.lblMaxHitVal.Name = "lblMaxHitVal";
+            this.lblMaxHitVal.Size = new System.Drawing.Size(18, 20);
+            this.lblMaxHitVal.TabIndex = 136;
+            this.lblMaxHitVal.Text = "0";
             // 
             // FrmNpc
             // 
@@ -3118,6 +3142,8 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudMag)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudStr)).EndInit();
             this.pnlContainer.ResumeLayout(false);
+            this.grpBalanceHelp.ResumeLayout(false);
+            this.grpBalanceHelp.PerformLayout();
             this.grpBestiary.ResumeLayout(false);
             this.grpBestiary.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudKillCount)).EndInit();
@@ -3165,8 +3191,6 @@ namespace Intersect.Editor.Forms.Editors
             this.grpSpells.PerformLayout();
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
-            this.grpBalanceHelp.ResumeLayout(false);
-            this.grpBalanceHelp.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -3376,5 +3400,7 @@ namespace Intersect.Editor.Forms.Editors
         private System.Windows.Forms.Label lblHighResVal;
         private System.Windows.Forms.Label lblMediumResVal;
         private System.Windows.Forms.Label lblLowResVal;
+        private System.Windows.Forms.Label lblMaxHitVal;
+        private System.Windows.Forms.Label lblMaxHit;
     }
 }

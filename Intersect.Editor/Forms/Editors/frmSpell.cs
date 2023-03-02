@@ -1624,6 +1624,13 @@ namespace Intersect.Editor.Forms.Editors
 
             var totalCooldown = Math.Max(mEditorItem.CooldownDuration, mEditorItem.IgnoreGlobalCooldown ? 0 : Options.Combat.GlobalCooldownDuration);
 
+            CombatUtilities.CalculateDamage(mEditorItem.Combat.DamageTypes,
+                1.0,
+                mEditorItem.Combat.Scaling,
+                CombatUtilities.GetOverriddenStats(mEditorItem.DamageOverrides, mockStats),
+                new int[(int)Stats.StatCount],
+                out int maxHit);
+            
             var dps = CombatUtilities.CalculateDps(mEditorItem.Combat.DamageTypes, 
                 1.0, 
                 mEditorItem.Combat.Scaling, 
@@ -1635,6 +1642,7 @@ namespace Intersect.Editor.Forms.Editors
 
             var desiredDps = CombatUtilities.TierToDamageFormula(CurrentTier);
             lblTargetDpsVal.Text = desiredDps.ToString("N2");
+            lblMaxHitVal.Text = maxHit.ToString("N0");
         }
 
         private void nudMockBlunt_ValueChanged(object sender, EventArgs e)

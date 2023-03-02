@@ -1108,6 +1108,9 @@ namespace Intersect.Client.Localization
             public static LocalizedString AttackSpeed = @"Base Atk Speed:";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString EnhancementThreshold = @"Enhancement Threshold";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString AttackSpeedReal = @"Real Atk Speed:";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]

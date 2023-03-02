@@ -171,7 +171,7 @@ namespace Intersect.Utilities
             var ratio = timeToKill / timeToDie;
 
             // Find the first threat level that is an appropriate match for our ratio
-            foreach (var threatVal in Options.Instance.CombatOpts.ThreatLevelThresholds.OrderByDescending(v => v.Value).ToArray())
+            foreach (var threatVal in Options.Instance.CombatOpts.ThreatLevelPartyThresholds.OrderByDescending(v => v.Value).ToArray())
             {
                 if (ratio >= threatVal.Value)
                 {

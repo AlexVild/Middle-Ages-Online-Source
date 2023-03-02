@@ -261,6 +261,8 @@ namespace Intersect.Editor.Forms.Editors
             this.btnClearSearch = new DarkUI.Controls.DarkButton();
             this.txtSearch = new DarkUI.Controls.DarkTextBox();
             this.lstGameObjects = new Intersect.Editor.Forms.Controls.GameObjectList();
+            this.lblMaxHit = new System.Windows.Forms.Label();
+            this.lblMaxHitVal = new System.Windows.Forms.Label();
             this.pnlContainer.SuspendLayout();
             this.grpSpellGroup.SuspendLayout();
             this.grpComponents.SuspendLayout();
@@ -1433,6 +1435,8 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpBalanceHelp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpBalanceHelp.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpBalanceHelp.Controls.Add(this.lblMaxHitVal);
+            this.grpBalanceHelp.Controls.Add(this.lblMaxHit);
             this.grpBalanceHelp.Controls.Add(this.nudMockMagic);
             this.grpBalanceHelp.Controls.Add(this.nudMockPierce);
             this.grpBalanceHelp.Controls.Add(this.mockMagic);
@@ -1633,9 +1637,9 @@ namespace Intersect.Editor.Forms.Editors
             this.lblProejctedDps.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblProejctedDps.Location = new System.Drawing.Point(12, 106);
             this.lblProejctedDps.Name = "lblProejctedDps";
-            this.lblProejctedDps.Size = new System.Drawing.Size(90, 13);
+            this.lblProejctedDps.Size = new System.Drawing.Size(58, 13);
             this.lblProejctedDps.TabIndex = 53;
-            this.lblProejctedDps.Text = "Projected DPS";
+            this.lblProejctedDps.Text = "Est. DPS";
             // 
             // lblTier
             // 
@@ -3789,6 +3793,26 @@ namespace Intersect.Editor.Forms.Editors
             this.lstGameObjects.Size = new System.Drawing.Size(191, 601);
             this.lstGameObjects.TabIndex = 32;
             // 
+            // lblMaxHit
+            // 
+            this.lblMaxHit.AutoSize = true;
+            this.lblMaxHit.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMaxHit.Location = new System.Drawing.Point(103, 106);
+            this.lblMaxHit.Name = "lblMaxHit";
+            this.lblMaxHit.Size = new System.Drawing.Size(50, 13);
+            this.lblMaxHit.TabIndex = 123;
+            this.lblMaxHit.Text = "Max Hit";
+            // 
+            // lblMaxHitVal
+            // 
+            this.lblMaxHitVal.AutoSize = true;
+            this.lblMaxHitVal.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblMaxHitVal.Location = new System.Drawing.Point(104, 121);
+            this.lblMaxHitVal.Name = "lblMaxHitVal";
+            this.lblMaxHitVal.Size = new System.Drawing.Size(18, 20);
+            this.lblMaxHitVal.TabIndex = 124;
+            this.lblMaxHitVal.Text = "0";
+            // 
             // FrmSpell
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -4139,5 +4163,7 @@ namespace Intersect.Editor.Forms.Editors
         private System.Windows.Forms.Label lblMockSlash;
         private DarkNumericUpDown nudMockBlunt;
         private System.Windows.Forms.Label lblMockBlunt;
+        private System.Windows.Forms.Label lblMaxHitVal;
+        private System.Windows.Forms.Label lblMaxHit;
     }
 }

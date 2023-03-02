@@ -1601,6 +1601,7 @@ namespace Intersect.Editor.Forms.Editors
 
         private void RefreshBalancing()
         {
+            CombatUtilities.CalculateDamage(mEditorItem.AttackTypes, 1.0, 100, mEditorItem.Stats, new int[(int)Stats.StatCount], out var maxHit);
             var dps = CombatUtilities.CalculateDps(mEditorItem.AttackTypes, 1.0, 100, mEditorItem.Stats, new int[(int)Stats.StatCount], mEditorItem.AttackSpeedValue);
 
             var desiredDps = CombatUtilities.TierToDamageFormula(CurrentTier);
@@ -1617,6 +1618,8 @@ namespace Intersect.Editor.Forms.Editors
             lblHighResVal.Text = highRes.ToString("N0");
             lblMediumResVal.Text = mediumRes.ToString("N0");
             lblLowResVal.Text = lowRes.ToString("N0");
+
+            lblMaxHitVal.Text = maxHit.ToString("N0");
 
             lblHitsToKillVal.Text = hitsToKill.ToString("N0");
         }

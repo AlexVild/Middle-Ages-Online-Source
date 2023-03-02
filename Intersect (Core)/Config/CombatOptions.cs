@@ -161,6 +161,17 @@ namespace Intersect.Config
             { ThreatLevel.Trivial, 0 },
         };
 
+        public Dictionary<ThreatLevel, double> ThreatLevelPartyThresholds = new Dictionary<ThreatLevel, double>()
+        {
+            { ThreatLevel.Midnight, 16 },
+            { ThreatLevel.Extreme, 8 },
+            { ThreatLevel.Deadly, 3 },
+            { ThreatLevel.Threatening, 0.35 },
+            { ThreatLevel.Fair, 0.15 },
+            { ThreatLevel.Wimpy, 0.05 },
+            { ThreatLevel.Trivial, 0 },
+        };
+
         public Dictionary<ThreatLevel, double> ThreatLevelExpRates = new Dictionary<ThreatLevel, double>()
         {
             { ThreatLevel.Midnight, 2.0 },

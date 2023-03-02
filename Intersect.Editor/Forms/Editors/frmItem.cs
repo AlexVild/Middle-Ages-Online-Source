@@ -673,6 +673,7 @@ namespace Intersect.Editor.Forms.Editors
 
             var dps = maxHit * hitsPerSecond;
 
+            lblMaxHitVal.Text = maxHit.ToString("N0");
             lblDpsVal.Text = dps.ToString("N2");
         }
 

@@ -938,7 +938,7 @@ namespace Intersect.Server.Entities
                     }
 
                     // Check to see if combos expired
-                    if (ComboWindow > 0)
+                    if (ComboWindow >= 0)
                     {
                         // Detract from the window
                         ComboWindow = (int)(ComboTimestamp - Timing.Global.Milliseconds);

@@ -56,6 +56,8 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 AddDivider();
                 SetupAttackSpeedBreakdown();
                 AddDivider();
+                SetupEnhancementThresholdBreakdown();
+                AddDivider();
             }
 
             if (DisplayEffectBonuses())
@@ -363,6 +365,23 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                   unit: "%");
 
             effectRows.SizeToChildren(true, true);
+        }
+
+        private void SetupEnhancementThresholdBreakdown()
+        {
+            int comparedThresh = EquippedItemDesc?.EnhancementThreshold ?? 0;
+            
+            var enhancementRows = AddRowContainer();
+            AddEquipmentRow(enhancementRows,
+                Strings.ItemDescription.EnhancementThreshold,
+                mItem.EnhancementThreshold,
+                comparedThresh,
+                true,
+                StatLabelColor,
+                StatValueColor,
+                unit: "EP");
+
+            enhancementRows.SizeToChildren(true, true);
         }
 
         private void SetupVitalBreakdown()
