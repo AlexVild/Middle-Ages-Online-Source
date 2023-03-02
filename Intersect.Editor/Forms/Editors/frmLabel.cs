@@ -75,6 +75,7 @@ namespace Intersect.Editor.Forms.Editors
                         ToggleColorAvailability();
                         rdoHeader.Checked = mEditorItem.Position == LabelPosition.Header;
                         rdoFooter.Checked = mEditorItem.Position == LabelPosition.Footer;
+                        chkOnlyShowUnlocked.Checked = mEditorItem.ShowOnlyUnlocked;
 
                         mPopulating = false;
                     }
@@ -211,6 +212,11 @@ namespace Intersect.Editor.Forms.Editors
                 return;
             }
             mEditorItem.Position = LabelPosition.Footer;
+        }
+
+        private void chkOnlyShowUnlocked_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.ShowOnlyUnlocked = chkOnlyShowUnlocked.Checked;
         }
     }
 }

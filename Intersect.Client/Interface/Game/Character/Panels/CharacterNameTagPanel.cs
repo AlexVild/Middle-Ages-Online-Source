@@ -121,6 +121,11 @@ namespace Intersect.Client.Interface.Game.Character.Panels
             var yPadding = 0;
             foreach (var label in labels)
             {
+                if (label.ShowOnlyUnlocked && (!CharacterNameTagPanelController.UnlockedLabels.TryGetValue(label.Id, out var unlockedLabel) || !unlockedLabel))
+                {
+                    continue;
+                }
+
                 var row = new LabelRowComponent(LabelContainer, this, "LabelRow", label.Id, idx, LabelRows);
                 row.Initialize();
 

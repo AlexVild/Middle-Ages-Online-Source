@@ -52,5 +52,7 @@ namespace Intersect.GameObjects
         /// </summary>
         [NotMapped]
         public Color Color { get; set; } = new Color(255, 255, 255, 255);
+
+        public bool ShowOnlyUnlocked { get; set; } = false;
     }
 }

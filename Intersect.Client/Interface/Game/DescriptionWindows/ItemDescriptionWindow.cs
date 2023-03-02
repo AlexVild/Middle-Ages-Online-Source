@@ -452,6 +452,11 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 }
             }
 
+            if (mItem.Fuel > 0)
+            {
+                data.Add(new Tuple<string, string>("Fuel Stored", mItem.Fuel.ToString("N0")));
+            }
+
             // Do we have any data to display? If so, generate the element and add the data to it.
             if (data.Count > 0)
             {

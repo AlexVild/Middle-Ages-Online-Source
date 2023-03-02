@@ -125,7 +125,7 @@ namespace Intersect.Server.Entities
                 var packet = new RecipeRequirementPacket();
                 packet.RecipeId = recipe.Id;
 
-                packet.Completed = RecipeUnlockWatcher.RequirementComplete(this, req);
+                packet.Completed = UnlockedRecipeIds.Contains(recipe.Id) || RecipeUnlockWatcher.RequirementComplete(this, req);
 
                 packet.Hint = req.Hint;
                 packet.TriggerType = req.Trigger;

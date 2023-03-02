@@ -1154,6 +1154,10 @@
     <Compile Include="Migrations\Game\20230227162642_AddSpellDamageOverridesMigration.designer.cs">
       <DependentUpon>20230227162642_AddSpellDamageOverridesMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20230302002248_LabelHiddenMigration.cs" />
+    <Compile Include="Migrations\Game\20230302002248_LabelHiddenMigration.designer.cs">
+      <DependentUpon>20230302002248_LabelHiddenMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>
