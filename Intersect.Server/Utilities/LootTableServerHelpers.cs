@@ -17,11 +17,11 @@ namespace Intersect.Server.Utilities
         /// </summary>
         /// <param name="drops"></param>
         /// <returns></returns>
-        public static Dictionary<double, Item> GenerateDropTable(List<BaseDrop> drops, Player forPlayer = null)
+        public static Dictionary<int, Item> GenerateDropTable(List<BaseDrop> drops, Player forPlayer = null)
         {
             List<BaseDrop> items = FlattenDropTable(drops, forPlayer);
             // Stores drop tables by their maximum roll
-            var dropTable = new Dictionary<double, Item>();
+            var dropTable = new Dictionary<int, Item>();
             items.Sort((a, b) =>
             {
                 return a.Chance.CompareTo(b.Chance);
@@ -46,25 +46,25 @@ namespace Intersect.Server.Utilities
                 // Build the weighted drop table
                 if (item.ItemId == Guid.Empty) // "none" item, put it on the table
                 {
-                    dropTable.Add(lastWeight + item.Chance, null);
+                    dropTable.Add((int)(lastWeight + item.Chance * 100), null);
                 }
                 else
                 {
-                    dropTable.Add(lastWeight + item.Chance, new Item(item.ItemId, item.Quantity));
+                    dropTable.Add((int)(lastWeight + item.Chance * 100), new Item(item.ItemId, item.Quantity));
                 }
             }
 
             return dropTable;
         }
 
-        public static Item GetItemFromTable(Dictionary<double, Item> dropTable)
+        public static Item GetItemFromTable(Dictionary<int, Item> dropTable)
         {
             if (dropTable == null)
             {
                 return null;
             }
 
-            var maxRoll = (int)Math.Ceiling(dropTable.Keys.LastOrDefault());
+            var maxRoll = dropTable.Keys.LastOrDefault();
             if (maxRoll <= 0)
             {
                 return null;
