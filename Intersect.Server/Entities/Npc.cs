@@ -1745,7 +1745,7 @@ namespace Intersect.Server.Entities
             dmgMap.TryGetValue(attacker, out var damage);
             dmgMap[attacker] = damage + newDamage;
 
-            LootMap.TryAdd(Id, true);
+            LootMap.TryAdd(attacker?.Id ?? Guid.Empty, true);
             LootMapCache = LootMap.Keys.ToArray();
             TryFindNewTarget(Timing.Global.Milliseconds, default, false, attacker);
         }

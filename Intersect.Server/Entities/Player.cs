@@ -1336,12 +1336,6 @@ namespace Intersect.Server.Entities
                 Exp = 0;
             }
 
-            if (prevLevel < Level)
-            {
-                // Unequip all skills, make the player re-assign them as their skill points have maybe gone down.
-                UnprepareAllSkills();
-            }
-
             RecalculateStatsAndPoints();
             UnequipInvalidItems();
             PacketSender.SendEntityDataToProximity(this);

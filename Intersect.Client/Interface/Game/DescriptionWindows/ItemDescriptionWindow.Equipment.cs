@@ -376,10 +376,9 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 Strings.ItemDescription.EnhancementThreshold,
                 mItem.EnhancementThreshold,
                 comparedThresh,
-                true,
+                false,
                 StatLabelColor,
-                StatValueColor,
-                unit: "EP");
+                StatValueColor);
 
             enhancementRows.SizeToChildren(true, true);
         }

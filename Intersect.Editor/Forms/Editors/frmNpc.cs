@@ -1622,6 +1622,8 @@ namespace Intersect.Editor.Forms.Editors
             lblMaxHitVal.Text = maxHit.ToString("N0");
 
             lblHitsToKillVal.Text = hitsToKill.ToString("N0");
+
+            lblCalcExpVal.Text = $"{NpcExperienceCalculator.Calculate(mEditorItem)} EXP";
         }
     }
 

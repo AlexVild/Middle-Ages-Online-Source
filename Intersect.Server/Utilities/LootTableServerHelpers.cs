@@ -98,7 +98,7 @@ namespace Intersect.Server.Utilities
                 {
                     continue;
                 }
-                // If the player doesn't meet the drop conditions, don't add the table to the condition list
+                // If the player doesn't meet the drop conditions, don't add the table to the flattened list
                 if (forPlayer != null && !Conditions.MeetsConditionLists(table.DropConditions, forPlayer, null))
                 {
                     continue;

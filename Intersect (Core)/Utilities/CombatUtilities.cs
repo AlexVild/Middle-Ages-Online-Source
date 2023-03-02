@@ -48,7 +48,7 @@ namespace Intersect.Utilities
             float decScaling = (float)scaling / 100; // scaling comes into this function as a percent number, i.e 110%, so we need that to be 1.1
             foreach (var element in atkTypesCopy)
             {
-                if ((int) element <= 0 || (int) element > attackerStats.Length)
+                if ((int) element < 0 || (int) element > attackerStats.Length)
                 {
                     continue;
                 }
