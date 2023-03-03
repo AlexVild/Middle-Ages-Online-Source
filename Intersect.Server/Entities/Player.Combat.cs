@@ -235,7 +235,7 @@ namespace Intersect.Server.Entities
             return base.ValidateCast(spell, target, ignoreVitals);
         }
 
-        public override void UseSpell(SpellBase spell, int spellSlot, bool ignoreVitals = false, bool prayerSpell = false, byte prayerSpellDir = 0, Entity prayerTarget = null, bool instantCast = false)
+        public override void UseSpell(SpellBase spell, int spellSlot, Entity target, bool ignoreVitals = false, bool prayerSpell = false, byte prayerSpellDir = 0, Entity prayerTarget = null, bool instantCast = false)
         {
             if (PlayerDead)
             {
@@ -258,11 +258,11 @@ namespace Intersect.Server.Entities
                         EnqueueStartCommonEvent(evt);
                     }
 
-                    base.UseSpell(spell, spellSlot, ignoreVitals, prayerSpell, prayerSpellDir, prayerTarget, instantCast);
+                    base.UseSpell(spell, spellSlot, target, ignoreVitals, prayerSpell, prayerSpellDir, prayerTarget, instantCast);
                     break;
 
                 default:
-                    base.UseSpell(spell, spellSlot, ignoreVitals, prayerSpell, prayerSpellDir, prayerTarget, instantCast);
+                    base.UseSpell(spell, spellSlot, target, ignoreVitals, prayerSpell, prayerSpellDir, prayerTarget, instantCast);
                     break;
             }
         }

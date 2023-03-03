@@ -295,12 +295,16 @@ namespace Intersect.Client.Core
                                 entity.DrawAoe(castSpell, map, entity.X, entity.Y, entity.IsAllyOf(Globals.Me), castSpell.Combat.HitRadius);
                                 break;
                             case SpellTargetTypes.Single:
-                                entity.DrawAoe(castSpell, map, entity.X, entity.Y, entity.IsAllyOf(Globals.Me), castSpell.Combat.CastRange, true);
-                                if (castSpell.Combat.HitRadius <= 0)
+                                if (!Globals.Entities.TryGetValue(entity.EntityTarget, out var target) || target.CurrentMap == default)
                                 {
                                     break;
                                 }
-                                if (!Globals.Entities.TryGetValue(entity.EntityTarget, out var target) || target.CurrentMap == default)
+
+                                if (target.Id == Globals.Me.Id)
+                                {
+                                    entity.DrawAoe(castSpell, map, entity.X, entity.Y, entity.IsAllyOf(Globals.Me), castSpell.Combat.CastRange, true);
+                                }
+                                if (castSpell.Combat.HitRadius <= 0)
                                 {
                                     break;
                                 }

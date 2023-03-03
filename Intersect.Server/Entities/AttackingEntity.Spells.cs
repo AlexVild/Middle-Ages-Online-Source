@@ -213,7 +213,7 @@ namespace Intersect.Server.Entities
 
             if (instant)
             {
-                UseSpell(spell, SpellCastSlot);
+                UseSpell(spell, SpellCastSlot, Target);
             }
             else
             {
@@ -389,13 +389,14 @@ namespace Intersect.Server.Entities
         /// <param name="spell">The spell that's being used</param>
         /// <param name="attackAnimDir">The direction of animation</param>
         /// <param name="projectile">A projectile attacked to the spell, if there is one</param>
-        public void SpellAttack(Entity target, SpellBase spell, sbyte attackAnimDir, Projectile projectile, bool ignoreEvasion = false)
+        /// <returns>If attack landed</returns>
+        public bool SpellAttack(Entity target, SpellBase spell, sbyte attackAnimDir, Projectile projectile, bool ignoreEvasion = false)
         {
             if ((spell.Combat?.TargetType == SpellTargetTypes.AoE ||
                 spell.Combat?.TargetType == SpellTargetTypes.Single) &&
                 IsInvalidTauntTarget(target))
             {
-                return;
+                return false;
             }
 
             if (!ignoreEvasion && !spell.Combat.Friendly && target.Id != Id && spell.Combat.DamageType != (int)DamageType.True && CombatUtilities.AttackMisses(Accuracy, target.Evasion))
@@ -410,7 +411,7 @@ namespace Intersect.Server.Entities
                 }
                 AttackMissed.Invoke(target);
                 target?.ReactToCombat(this);
-                return;
+                return false;
             }
 
             ApplySpellBuffsTo(spell, target);
@@ -421,11 +422,11 @@ namespace Intersect.Server.Entities
             {
                 if (spell.Combat.IsDamaging)
                 {
-                    return;
+                    return false;
                 }
                 else if (!Options.Instance.CombatOpts.InvulnerableNpcsAffectedByNonDamaging)
                 {
-                    return;
+                    return false;
                 }
             }
 
@@ -441,13 +442,15 @@ namespace Intersect.Server.Entities
             {
                 if (!TryDealDamageTo(target, attackTypes, scaling, critMultiplier, player.CastingWeapon, spell, true, out damage))
                 {
-                    return;
+                    return true;
                 }
             }
             else if (!TryDealDamageTo(target, attackTypes, scaling, critMultiplier, null, spell, true, out damage))
             {
-                return;
+                return true;
             }
+
+            return false;
         }
 
         /// <summary>
@@ -459,14 +462,14 @@ namespace Intersect.Server.Entities
         /// <param name="prayerSpell">Whether this spell is from a prayer</param>
         /// <param name="prayerSpellDir">What direction the prayer was</param>
         /// <param name="prayerTarget">The prayer's target</param>
-        public virtual void UseSpell(SpellBase spell, int spellSlot, bool ignoreVitals = false, bool prayerSpell = false, byte prayerSpellDir = 0, Entity prayerTarget = null, bool instantCast = false)
+        public virtual void UseSpell(SpellBase spell, int spellSlot, Entity target, bool ignoreVitals = false, bool prayerSpell = false, byte prayerSpellDir = 0, Entity prayerTarget = null, bool instantCast = false)
         {
             if (spell?.SpellType == SpellTypes.Passive)
             {
                 return;
             }
 
-            CastTarget = Target;
+            CastTarget = target;
             // We're actually doing the spell now - use our mats and if we fail, end
             if (!prayerSpell && !instantCast && !ValidateCast(spell, CastTarget, ignoreVitals))
             {
@@ -497,17 +500,26 @@ namespace Intersect.Server.Entities
 
                             break;
                         case SpellTargetTypes.Single:
-                            if (spell.Combat.HitRadius > 0) //Single target spells with AoE hit radius'
+                            if (!InRangeOf(CastTarget, spell.Combat.CastRange))
                             {
-                                HandleAoESpell(
-                                    spell.Id, spell.Combat.HitRadius, CastTarget.MapId, CastTarget.X, CastTarget.Y,
-                                    null, false, false, true
-                                );
+                                SendMissedAttackMessage(CastTarget, DamageType.Physical);
                             }
                             else
                             {
-                                SpellAttack(CastTarget, spell, (sbyte)Dir, null);
-                                SendSpellHitAnimation(spell, CastTarget, Target.Id);
+                                if (spell.Combat.HitRadius > 0) //Single target spells with AoE hit radius'
+                                {
+                                    HandleAoESpell(
+                                        spell.Id, spell.Combat.HitRadius, CastTarget.MapId, CastTarget.X, CastTarget.Y,
+                                        null, false, false, true
+                                    );
+                                }
+                                else
+                                {
+                                    if (SpellAttack(CastTarget, spell, (sbyte)Dir, null))
+                                    {
+                                        SendSpellHitAnimation(spell, CastTarget, Target.Id);
+                                    }
+                                }
                             }
 
                             break;
@@ -634,7 +646,7 @@ namespace Intersect.Server.Entities
             if (CastTime != 0 && CastTime < timeMs && SpellCastSlot < Spells.Count && SpellCastSlot >= 0)
             {
                 var spell = SpellBase.Get(Spells[SpellCastSlot].SpellId);
-                UseSpell(spell, SpellCastSlot);
+                UseSpell(spell, SpellCastSlot, Target);
             }
         }
 

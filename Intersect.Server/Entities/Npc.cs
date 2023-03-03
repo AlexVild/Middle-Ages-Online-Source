@@ -671,24 +671,6 @@ namespace Intersect.Server.Entities
 
             CastTime = Timing.Global.Milliseconds + spellBase.CastDuration;
 
-            if (spellBase.VitalCost[(int) Vitals.Mana] > 0)
-            {
-                SubVital(Vitals.Mana, spellBase.VitalCost[(int) Vitals.Mana]);
-            }
-            else
-            {
-                AddVital(Vitals.Mana, -spellBase.VitalCost[(int) Vitals.Mana]);
-            }
-
-            if (spellBase.VitalCost[(int) Vitals.Health] > 0)
-            {
-                SubVital(Vitals.Health, spellBase.VitalCost[(int) Vitals.Health]);
-            }
-            else
-            {
-                AddVital(Vitals.Health, -spellBase.VitalCost[(int) Vitals.Health]);
-            }
-
             if ((spellBase.Combat?.Friendly ?? false) && spellBase.SpellType != SpellTypes.WarpTo)
             {
                 CastTarget = this;

@@ -164,7 +164,7 @@ namespace Intersect.Server.Entities.Combat
                         {
                             if (en.CanAttack(collidedEntity, Spell) && en is AttackingEntity attacker)
                             {
-                                attacker.UseSpell(Spell, -1, true);
+                                attacker.UseSpell(Spell, -1, attacker.Target, true);
                             }
                         }
                     }

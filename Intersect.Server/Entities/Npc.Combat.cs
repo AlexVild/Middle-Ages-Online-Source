@@ -32,6 +32,15 @@ namespace Intersect.Server.Entities
             base.ProjectileAttack(enemy, projectile, parentSpell, parentWeapon, false, projectileDir);
         }
 
+        public override void CheckForSpellCast(long timeMs)
+        {
+            if (CastTime != 0 && CastTime < timeMs && SpellCastSlot < Spells.Count && SpellCastSlot >= 0)
+            {
+                var spell = SpellBase.Get(Spells[SpellCastSlot].SpellId);
+                UseSpell(spell, SpellCastSlot, CastTarget);
+            }
+        }
+
         public override void TakeDamage(Entity attacker, int damage, Vitals vital = Vitals.Health)
         {
             AddToDamageAndLootMaps(attacker, damage);
@@ -144,7 +153,7 @@ namespace Intersect.Server.Entities
                 var spell = SpellBase.Get(spellOverride);
                 if (Timing.Global.MillisecondsUtc > mLastOverrideAttack)
                 {
-                    UseSpell(spell, -1);
+                    UseSpell(spell, -1, CastTarget);
                     mLastOverrideAttack = Timing.Global.MillisecondsUtc + CalculateAttackTime();
                 }
 

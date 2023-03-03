@@ -1562,7 +1562,7 @@ namespace Intersect.Server.Entities
                                 && prayer.ComboInterval > 0 
                                 && CurrentCombo % prayer.ComboInterval == 0)
                             {
-                                UseSpell(prayerSpell, -1, true, true, (byte)Dir, npc);
+                                UseSpell(prayerSpell, -1, npc, true, true, (byte)Dir, npc);
                             }
                         }
 
@@ -3402,7 +3402,7 @@ namespace Intersect.Server.Entities
                                 return;
                             }
                             Target = target;
-                            UseSpell(itemBase.Spell, -1, true, instantCast: true);
+                            UseSpell(itemBase.Spell, -1, target, true, instantCast: true);
                         }
                         else if (!TryAddSkillToBook(itemBase.SpellId))
                         {
