@@ -631,11 +631,13 @@ namespace Intersect.Server.Entities.Events
                         case MoveRouteEnum.DirectionFixOn:
                             mDirectionFix = true;
                             moved = true;
+                            shouldSendUpdate = true;
 
                             break;
                         case MoveRouteEnum.DirectionFixOff:
                             mDirectionFix = false;
                             moved = true;
+                            shouldSendUpdate = true;
 
                             break;
                         case MoveRouteEnum.WalkthroughOn:

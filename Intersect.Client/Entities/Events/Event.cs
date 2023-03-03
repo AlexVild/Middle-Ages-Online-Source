@@ -110,7 +110,7 @@ namespace Intersect.Client.Entities.Events
                         height = srcTexture.GetHeight() / Options.Instance.Sprites.Directions;
                         width = srcTexture.GetWidth() / Options.Instance.Sprites.NormalFrames;
                         d = Graphic.Y;
-                        if (!DirectionFix)
+                        if (!DirectionFix && !IsMoving)
                         {
                             switch (Dir)
                             {
