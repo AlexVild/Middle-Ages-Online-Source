@@ -430,7 +430,7 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
             }
             SpellCombatComponent.Show();
 
-            if (!beast.BestiaryUnlocks.TryGetValue((int)BestiaryUnlock.Spells, out var reqKc))
+            if (!beast.BestiaryUnlocks.TryGetValue((int)BestiaryUnlock.SpellCombatInfo, out var reqKc))
             {
                 reqKc = 0;
             }
