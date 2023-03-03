@@ -93,10 +93,45 @@ namespace Intersect.Editor.Forms.Editors
             txtName.Text = mEditorItem.Name;
             cmbFolder.Text = mEditorItem?.Folder ?? string.Empty;
 
-            cmbChallengeType.SelectedIndex = (int)mEditorItem.Type;
-            cmbSpell.SelectedIndex = SpellBase.ListIndex(mEditorItem.SpellUnlockId) + 1;
-            cmbEnhancement.SelectedIndex = EnhancementDescriptor.ListIndex(mEditorItem.EnhancementUnlockId) + 1;
-            cmbEvent.SelectedIndex = EventBase.ListIndex(mEditorItem.CompletionEventId) + 1;
+            var challengeTypeIdx = (int)mEditorItem.Type;
+            if (challengeTypeIdx >= 0 && challengeTypeIdx < cmbChallengeType.Items.Count)
+            {
+                cmbChallengeType.SelectedIndex = challengeTypeIdx;
+            }
+            else
+            {
+                cmbChallengeType.SelectedIndex = -1;
+            }
+
+            var spellIdx = SpellBase.ListIndex(mEditorItem.SpellUnlockId) + 1;
+            if (spellIdx >= 0 && spellIdx < cmbSpell.Items.Count)
+            {
+                cmbSpell.SelectedIndex = spellIdx;
+            }
+            else
+            {
+                cmbSpell.SelectedIndex = -1;
+            }
+            
+            var enhanceIdx = EnhancementDescriptor.ListIndex(mEditorItem.EnhancementUnlockId) + 1;
+            if (enhanceIdx >= 0 && enhanceIdx < cmbEnhancement.Items.Count) 
+            {
+                cmbEnhancement.SelectedIndex = enhanceIdx;
+            }
+            else
+            {
+                cmbEnhancement.SelectedIndex = -1;
+            }
+
+            var eventIdx = EventBase.ListIndex(mEditorItem.CompletionEventId) + 1;
+            if (eventIdx >= 0 && eventIdx < cmbEvent.Items.Count)
+            {
+                cmbEvent.SelectedIndex = eventIdx;
+            }
+            else
+            {
+                cmbEvent.SelectedIndex = -1;
+            }
 
             txtStartDesc.Text = mEditorItem.EventDescription;
             nudSets.Value = mEditorItem.Sets;

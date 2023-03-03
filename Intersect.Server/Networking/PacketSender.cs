@@ -567,6 +567,21 @@ namespace Intersect.Server.Networking
             );
         }
 
+        public static void SendEntityPositionTo(Client client, Player en)
+        {
+            if (en == null)
+            {
+                return;
+            }
+
+            client.Send(
+                new EntityPositionPacket(
+                    en.Id, en.GetEntityType(), en.MapId, (byte)en.X, (byte)en.Y, (byte)en.GetRealDir(), en.Passable,
+                    en.HideName, en.FaceDirection
+                )
+            );
+        }
+
         //EntityPositionPacket
         public static void SendEntityPositionToAll(Entity en)
         {
@@ -580,6 +595,22 @@ namespace Intersect.Server.Networking
                 new EntityPositionPacket(
                     en.Id, en.GetEntityType(), en.MapId, (byte) en.X, (byte) en.Y, (byte) en.Dir, en.Passable,
                     en.HideName
+                )
+            );
+        }
+
+        public static void SendEntityPositionToAll(Player en)
+        {
+            if (en == null)
+            {
+                return;
+            }
+
+            SendDataToProximityOnMapInstance(
+                en.MapId, en.MapInstanceId,
+                new EntityPositionPacket(
+                    en.Id, en.GetEntityType(), en.MapId, (byte)en.X, (byte)en.Y, (byte)en.GetRealDir(), en.Passable,
+                    en.HideName, en.FaceDirection
                 )
             );
         }
