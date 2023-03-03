@@ -24,7 +24,7 @@ namespace Intersect.Server.Entities
                 return;
             }
 
-            if (!(enemy is Player) || !(enemy is Npc))
+            if (!(enemy is Player) && !(enemy is Npc))
             {
                 return;
             }
