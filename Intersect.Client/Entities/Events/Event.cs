@@ -89,7 +89,6 @@ namespace Intersect.Client.Entities.Events
                 return;
             }
             
-
             var map = MapInstance.Get(CurrentMap);
             var srcRectangle = new FloatRect();
             var destRectangle = new FloatRect();
@@ -110,7 +109,7 @@ namespace Intersect.Client.Entities.Events
                         height = srcTexture.GetHeight() / Options.Instance.Sprites.Directions;
                         width = srcTexture.GetWidth() / Options.Instance.Sprites.NormalFrames;
                         d = Graphic.Y;
-                        if (!DirectionFix && !IsMoving)
+                        if (!DirectionFix)
                         {
                             switch (Dir)
                             {
