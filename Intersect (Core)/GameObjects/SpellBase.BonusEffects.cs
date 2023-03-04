@@ -10,7 +10,7 @@ namespace Intersect.GameObjects
     public partial class SpellBase : DatabaseObject<SpellBase>, IFolderable
     {
         [NotMapped]
-        public List<EffectData> BonusEffects { get; set; }
+        public List<EffectData> BonusEffects { get; set; } = new List<EffectData>();
 
         [NotMapped]
         public List<EffectData> ActiveEffects => BonusEffects?.Where(effect => effect.Percentage != 0)?.ToList() ?? new List<EffectData>();

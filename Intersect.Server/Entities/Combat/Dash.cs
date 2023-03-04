@@ -100,6 +100,63 @@ namespace Intersect.Server.Entities.Combat
 
                 if (n == (int) EntityTypes.Player && (entityPass == false || i == range))
                 {
+                    var xOffset = 0;
+                    var yOffset = 0;
+
+                    var tile = new TileHelper(en.MapId, en.X, en.Y);
+                    switch (Direction)
+                    {
+                        case 0: //Up
+                            yOffset--;
+
+                            break;
+                        case 1: //Down
+                            yOffset++;
+
+                            break;
+                        case 2: //Left
+                            xOffset--;
+
+                            break;
+                        case 3: //Right
+                            xOffset++;
+
+                            break;
+                        case 4: //NW
+                            yOffset--;
+                            xOffset--;
+
+                            break;
+                        case 5: //NE
+                            yOffset--;
+                            xOffset++;
+
+                            break;
+                        case 6: //SW
+                            yOffset++;
+                            xOffset--;
+
+                            break;
+                        case 7: //SE
+                            yOffset++;
+                            xOffset++;
+
+                            break;
+                    }
+
+                    if (tile.Translate(xOffset, yOffset))
+                    {
+                        var tileX = tile.GetX();
+                        var tileY = tile.GetY();
+                        var entities = en.GetEntitiesOnTile(tileX, tileY);
+                        foreach (var collidedEntity in entities)
+                        {
+                            if (en.CanAttack(collidedEntity, Spell) && en is AttackingEntity attacker)
+                            {
+                                attacker.UseSpell(Spell, -1, attacker.Target, true, instantCast: true);
+                            }
+                        }
+                    }
                     return;
                 }
                 // Proc dash spell if an enemy
@@ -164,7 +221,7 @@ namespace Intersect.Server.Entities.Combat
                         {
                             if (en.CanAttack(collidedEntity, Spell) && en is AttackingEntity attacker)
                             {
-                                attacker.UseSpell(Spell, -1, attacker.Target, true);
+                                attacker.UseSpell(Spell, -1, attacker.Target, true, instantCast: true);
                             }
                         }
                     }

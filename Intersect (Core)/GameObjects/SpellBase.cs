@@ -395,7 +395,7 @@ namespace Intersect.GameObjects
         public int RequiredSkillPoints { get; set; }
 
         [NotMapped]
-        public Dictionary<int, int> DamageOverrides { get; set; }
+        public Dictionary<int, int> DamageOverrides { get; set; } = new Dictionary<int, int>();
 
         [Column("DamageOverrides")]
         [JsonIgnore]
