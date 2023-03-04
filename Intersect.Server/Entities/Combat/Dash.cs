@@ -100,130 +100,18 @@ namespace Intersect.Server.Entities.Combat
 
                 if (n == (int) EntityTypes.Player && (entityPass == false || i == range))
                 {
-                    var xOffset = 0;
-                    var yOffset = 0;
-
-                    var tile = new TileHelper(en.MapId, en.X, en.Y);
-                    switch (Direction)
+                    if (Spell != default)
                     {
-                        case 0: //Up
-                            yOffset--;
-
-                            break;
-                        case 1: //Down
-                            yOffset++;
-
-                            break;
-                        case 2: //Left
-                            xOffset--;
-
-                            break;
-                        case 3: //Right
-                            xOffset++;
-
-                            break;
-                        case 4: //NW
-                            yOffset--;
-                            xOffset--;
-
-                            break;
-                        case 5: //NE
-                            yOffset--;
-                            xOffset++;
-
-                            break;
-                        case 6: //SW
-                            yOffset++;
-                            xOffset--;
-
-                            break;
-                        case 7: //SE
-                            yOffset++;
-                            xOffset++;
-
-                            break;
-                    }
-
-                    if (tile.Translate(xOffset, yOffset))
-                    {
-                        var tileX = tile.GetX();
-                        var tileY = tile.GetY();
-                        var entities = en.GetEntitiesOnTile(tileX, tileY);
-                        foreach (var collidedEntity in entities)
-                        {
-                            if (en.CanAttack(collidedEntity, Spell) && en is AttackingEntity attacker)
-                            {
-                                attacker.UseSpell(Spell, -1, attacker.Target, true, instantCast: true);
-                            }
-                        }
+                        CastDashSpell(en);
                     }
                     return;
                 }
                 // Proc dash spell if an enemy
                 else if (n == (int) EntityTypes.Player && Spell != null)
                 {
-                    var xOffset = 0;
-                    var yOffset = 0;
-
-                    var tile = new TileHelper(en.MapId, en.X, en.Y);
-                    switch (Direction)
+                    if (Spell != default)
                     {
-                        case 0: //Up
-                            yOffset--;
-
-                            break;
-                        case 1: //Down
-                            yOffset++;
-
-                            break;
-                        case 2: //Left
-                            xOffset--;
-
-                            break;
-                        case 3: //Right
-                            xOffset++;
-
-                            break;
-                        case 4: //NW
-                            yOffset--;
-                            xOffset--;
-
-                            break;
-                        case 5: //NE
-                            yOffset--;
-                            xOffset++;
-
-                            break;
-                        case 6: //SW
-                            yOffset++;
-                            xOffset--;
-
-                            break;
-                        case 7: //SE
-                            yOffset++;
-                            xOffset++;
-
-                            break;
-                    }
-
-                    MapController mapController = null;
-                    int tileX = 0;
-                    int tileY = 0;
-
-                    if (tile.Translate(xOffset, yOffset))
-                    {
-                        mapController = MapController.Get(tile.GetMapId());
-                        tileX = tile.GetX();
-                        tileY = tile.GetY();
-
-                        var entities = en.GetEntitiesOnTile(tileX, tileY);
-                        foreach(var collidedEntity in entities)
-                        {
-                            if (en.CanAttack(collidedEntity, Spell) && en is AttackingEntity attacker)
-                            {
-                                attacker.UseSpell(Spell, -1, attacker.Target, true, instantCast: true);
-                            }
-                        }
+                        CastDashSpell(en);
                     }
                 }
 
@@ -239,6 +127,73 @@ namespace Intersect.Server.Entities.Combat
             }
         }
 
+
+        public void CastDashSpell(Entity en)
+        {
+            var xOffset = 0;
+            var yOffset = 0;
+
+            var tile = new TileHelper(en.MapId, en.X, en.Y);
+            switch (Direction)
+            {
+                case 0: //Up
+                    yOffset--;
+
+                    break;
+                case 1: //Down
+                    yOffset++;
+
+                    break;
+                case 2: //Left
+                    xOffset--;
+
+                    break;
+                case 3: //Right
+                    xOffset++;
+
+                    break;
+                case 4: //NW
+                    yOffset--;
+                    xOffset--;
+
+                    break;
+                case 5: //NE
+                    yOffset--;
+                    xOffset++;
+
+                    break;
+                case 6: //SW
+                    yOffset++;
+                    xOffset--;
+
+                    break;
+                case 7: //SE
+                    yOffset++;
+                    xOffset++;
+
+                    break;
+            }
+
+            if (tile.Translate(xOffset, yOffset))
+            {
+                var tileX = tile.GetX();
+                var tileY = tile.GetY();
+
+                if (!tile.TryGetMapInstance(en.MapInstanceId, out var mapInstance))
+                {
+                    return;
+                }
+
+                var entities = mapInstance.GetEntitiesAt(tileX, tileY, en.Z);
+                foreach (var collidedEntity in entities)
+                {
+                    if (en.CanAttack(collidedEntity, Spell) && en is AttackingEntity attacker)
+                    {
+                        attacker.UseSpell(Spell, -1, collidedEntity, true, instantCast: true);
+                    }
+                }
+            }
+        }
     }
 
 }

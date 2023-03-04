@@ -184,6 +184,11 @@ namespace Intersect.Server.Maps
             return MapController.Get(mMapId);
         }
 
+        public bool TryGetMapInstance(Guid instanceId, out MapInstance instance)
+        {
+            return MapController.TryGetInstanceFromMap(mMapId, instanceId, out instance);
+        }
+
         public byte GetX()
         {
             return (byte) mTileX;

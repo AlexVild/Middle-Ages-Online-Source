@@ -407,6 +407,29 @@ namespace Intersect.Server.Maps
             }
         }
 
+        /// <summary>
+        /// Returns a list of all passable entities at some location
+        /// </summary>
+        /// <param name="x">The desired X coordinate</param>
+        /// <param name="y">The desired Y coordinate</param>
+        /// <param name="z">The desired Z coordinate</param>
+        /// <returns>An array of entities existing at the point</returns>
+        public Entity[] GetEntitiesAt(int x, int y, int z)
+        {
+            var tileEntities = new List<Entity>();
+            foreach (var en in GetCachedEntities())
+            {
+                if (en.Id == Id) continue;
+                if (en != null && en.X == x && en.Y == y && en.Z == z && !en.Passable)
+                {
+                    tileEntities.Add(en);
+                }
+            }
+
+            return tileEntities.ToArray();
+        }
+
+
         #region Players
         /// <summary>
         /// Gets all the players on a map instance

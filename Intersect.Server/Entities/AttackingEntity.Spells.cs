@@ -442,15 +442,15 @@ namespace Intersect.Server.Entities
             {
                 if (!TryDealDamageTo(target, attackTypes, scaling, critMultiplier, player.CastingWeapon, spell, true, out damage))
                 {
-                    return true;
+                    return false;
                 }
             }
             else if (!TryDealDamageTo(target, attackTypes, scaling, critMultiplier, null, spell, true, out damage))
             {
-                return true;
+                return false;
             }
 
-            return false;
+            return true;
         }
 
         /// <summary>
@@ -517,7 +517,7 @@ namespace Intersect.Server.Entities
                                 {
                                     if (SpellAttack(CastTarget, spell, (sbyte)Dir, null))
                                     {
-                                        SendSpellHitAnimation(spell, CastTarget, Target.Id);
+                                        SendSpellHitAnimation(spell, CastTarget, CastTarget.Id);
                                     }
                                 }
                             }
