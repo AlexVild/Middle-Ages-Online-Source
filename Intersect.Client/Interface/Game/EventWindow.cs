@@ -324,7 +324,7 @@ namespace Intersect.Client.Interface.Game
             if (Typewriting)
             {
                 // Do this _after_ sizing so we have lines broken up
-                Writer.Initialize(mEventDialogLabelNoFace.Labels);
+                Writer.Initialize(label.Labels);
                 mEventResponse1.Hide();
                 mEventResponse2.Hide();
                 mEventResponse3.Hide();
