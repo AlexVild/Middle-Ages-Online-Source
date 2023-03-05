@@ -495,7 +495,8 @@ namespace Intersect.Server.Entities
 
         public static void UpdateCombatTimers(Entity attacker, Entity defender)
         {
-            if (attacker != null)
+            // Resource combat ain't combat
+            if (attacker != null && !(defender is Resource))
             {
                 attacker.CombatTimer = Timing.Global.Milliseconds + Options.CombatTime;
             }
