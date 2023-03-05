@@ -1562,6 +1562,10 @@ namespace Intersect.Client.Networking
                 if (!Globals.EventHolds.ContainsKey(eventId))
                 {
                     Globals.EventHolds.Add(eventId, mapId);
+                    if (Globals.EventHolds.Count == 1)
+                    {
+                        Globals.EventHoldWidescreenTime = Timing.Global.Milliseconds + 60;
+                    }
                 }
             }
             else

@@ -240,7 +240,7 @@ namespace Intersect.Client.Entities
 
         public bool InCutscene()
         {
-            return Globals.EventHolds.Count > 0 || Globals.MoveRouteActive || IsDead;
+            return (Globals.EventHolds.Count > 0 && Globals.EventHoldWidescreenTime < Timing.Global.Milliseconds) || Globals.MoveRouteActive || IsDead;
         }
 
         public bool IsBusy()

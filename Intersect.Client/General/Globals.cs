@@ -55,6 +55,7 @@ namespace Intersect.Client.General
         public static List<Dialog> EventDialogs = new List<Dialog>();
 
         public static Dictionary<Guid, Guid> EventHolds = new Dictionary<Guid, Guid>();
+        public static long EventHoldWidescreenTime = 0;
 
         //Game Lock
         public static object GameLock = new object();
