@@ -1,4 +1,5 @@
 ﻿using Intersect.Client.Core;
+using Intersect.Client.Core.Controls;
 using Intersect.Client.Framework.File_Management;
 using Intersect.Client.Framework.Gwen;
 using Intersect.Client.Framework.Gwen.Control;
@@ -23,6 +24,7 @@ namespace Intersect.Client.Interface.Game
 
     public class EventWindow : Base
     {
+        private readonly long TypewriterSkipInteractDelay = ClientConfiguration.Instance.TypewriterResponseDelay;
 
         private ScrollControl mEventDialogArea;
 
@@ -65,6 +67,7 @@ namespace Intersect.Client.Interface.Game
             //Event Dialog Window
             mEventDialogWindow = new ImagePanel(gameCanvas, "EventDialogueWindow");
             mEventDialogWindow.Hide();
+            mEventDialogWindow.Clicked += Window_Clicked;
             Interface.InputBlockingElements.Add(mEventDialogWindow);
 
             mEventFace = new ImagePanel(mEventDialogWindow, "EventFacePanel");
@@ -94,13 +97,11 @@ namespace Intersect.Client.Interface.Game
             Responses = new List<EventResponse>();
 
             Writer = new Typewriter();
-
-            mEventDialogWindow.Clicked += DialogWindow_Clicked;
         }
 
-        private void DialogWindow_Clicked(Base sender, ClickedEventArgs arguments)
+        private void Window_Clicked(Base sender, ClickedEventArgs arguments)
         {
-            Writer?.End();
+            SkipTypewriting();
         }
 
         public void SetResponses(string response1, string response2, string response3, string response4)
@@ -308,6 +309,15 @@ namespace Intersect.Client.Interface.Game
                         ShowHideResponse(mEventResponse2, 1);
                         ShowHideResponse(mEventResponse3, 2);
                         ShowHideResponse(mEventResponse4, 3);
+
+                        mEventResponse1.IsDisabled = Timing.Global.Milliseconds - Writer.DoneAt < TypewriterSkipInteractDelay;
+                        mEventResponse2.IsDisabled = Timing.Global.Milliseconds - Writer.DoneAt < TypewriterSkipInteractDelay;
+                        mEventResponse3.IsDisabled = Timing.Global.Milliseconds - Writer.DoneAt < TypewriterSkipInteractDelay;
+                        mEventResponse4.IsDisabled = Timing.Global.Milliseconds - Writer.DoneAt < TypewriterSkipInteractDelay;
+                    }
+                    else if (Controls.KeyDown(Control.AttackInteract))
+                    {
+                        SkipTypewriting();
                     }
                 }
             }
@@ -414,6 +424,16 @@ namespace Intersect.Client.Interface.Game
             ed.ResponseSent = 1;
             base.Hide();
         }
+
+        public void SkipTypewriting()
+        {
+            if (Writer?.Done ?? true)
+            {
+                return;
+            }
+
+            Writer.End();
+        }
     }
 
     sealed class Typewriter
@@ -434,12 +454,14 @@ namespace Intersect.Client.Interface.Game
 
         public bool Done { get; private set; }
 
+        public long DoneAt { get; set; }
+
         public void CarriageReturn()
         {
             LineIdx++;
             if (LineIdx >= Lines.Length)
             {
-                Done = true;
+                End();
                 return;
             }
             CharIdx = 0;
@@ -467,7 +489,7 @@ namespace Intersect.Client.Interface.Game
 
             if (CurrentLine == default || CurrentLabel == default)
             {
-                Done = true;
+                End();
             }
 
             if (Timing.Global.Milliseconds < LastUpdateTime)
@@ -520,7 +542,7 @@ namespace Intersect.Client.Interface.Game
 
         public void End()
         {
-            if (Done)
+            if (Done || (Lines?.Length ?? 0) == 0)
             {
                 return;
             }
@@ -536,6 +558,7 @@ namespace Intersect.Client.Interface.Game
             }
 
             Done = true;
+            DoneAt = Timing.Global.Milliseconds;
         }
     }
 }

@@ -183,7 +183,6 @@ namespace Intersect.Client.Core
                                         break;
 
                                     case Control.AttackInteract:
-                                        break;
 
                                     case Control.Block:
                                         Globals.Me?.TryBlock();

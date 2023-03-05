@@ -188,6 +188,8 @@ namespace Intersect.Configuration
         public long TypewriterPartialstopSpeed { get; set; } = 80;
 
         public bool EnableTypewriting { get; set; } = true;
+        
+        public long TypewriterResponseDelay { get; set; } = 600;
 
         #endregion
 
