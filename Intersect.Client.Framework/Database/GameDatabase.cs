@@ -68,6 +68,8 @@ namespace Intersect.Client.Framework.Database
         public bool DisplaySelfStatusMarkers;
         
         public bool DisplayPartyInfo;
+        
+        public bool TypewriterText;
 
         //Saving password, other stuff we don't want in the games directory
         public abstract void SavePreference(string key, object value);
@@ -119,6 +121,7 @@ namespace Intersect.Client.Framework.Database
             DisplayStatusMarkers = LoadPreference("DisplayStatusMarkers", true);
             DisplaySelfStatusMarkers = LoadPreference("DisplaySelfStatusMarkers", true);
             DisplayPartyInfo = LoadPreference("DisplayPartyInfo", true);
+            TypewriterText = LoadPreference("TypewriterText", true);
         }
 
         public virtual void SavePreferences()
@@ -153,6 +156,7 @@ namespace Intersect.Client.Framework.Database
             SavePreference("DisplayStatusMarkers", DisplayStatusMarkers.ToString());
             SavePreference("DisplaySelfStatusMarkers", DisplaySelfStatusMarkers.ToString());
             SavePreference("DisplayPartyInfo", DisplayPartyInfo.ToString());
+            SavePreference("TypewriterText", TypewriterText.ToString());
         }
 
         public abstract bool LoadConfig();

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Linq;
 using Intersect.Client.Framework.File_Management;
 using Intersect.Client.Framework.GenericClasses;
 using Intersect.Client.Framework.Graphics;
@@ -26,14 +26,19 @@ namespace Intersect.Client.Framework.Gwen.Control
 
         private bool mNeedsRebuild;
 
+        public List<Label> Labels { get; set; } = new List<Label>();
+
+        private bool HideLabels { get; set; }
+
         /// <summary>
         ///     Initializes a new instance of the <see cref="RichLabel" /> class.
         /// </summary>
         /// <param name="parent">Parent control.</param>
-        public RichLabel(Base parent, string name = "") : base(parent, name)
+        public RichLabel(Base parent, string name = "", bool hideLabels = false) : base(parent, name)
         {
             mNewline = new string[] {Environment.NewLine, "\n"};
             mTextBlocks = new List<TextBlock>();
+            HideLabels = hideLabels;
         }
 
         /// <summary>
@@ -106,6 +111,12 @@ namespace Intersect.Client.Framework.Gwen.Control
                 mNeedsRebuild = true;
                 Invalidate();
             }
+        }
+
+        public bool SizeToChildren(bool width, bool height, bool hideLabels)
+        {
+            HideLabels = hideLabels;
+            return SizeToChildren(width, height);
         }
 
         /// <summary>
@@ -228,6 +239,13 @@ namespace Intersect.Client.Framework.Gwen.Control
             label.AddAlignment(block.Alignment);
             label.ProcessAlignments();
 
+            if (HideLabels)
+            {
+                label.Hide();
+            }
+
+            Labels.Add(label);
+
             //lineheight = (lineheight + pLabel.Height()) / 2;
 
             x += label.Width;
@@ -253,6 +271,7 @@ namespace Intersect.Client.Framework.Gwen.Control
         protected void Rebuild()
         {
             DeleteAllChildren();
+            Labels.Clear();
 
             var x = 0;
             var y = 0;

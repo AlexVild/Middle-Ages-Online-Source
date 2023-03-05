@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Linq;
 using Intersect.Client.Core.Sounds;
 using Intersect.Client.Entities;
 using Intersect.Client.Framework.Audio;
@@ -271,6 +271,15 @@ namespace Intersect.Client.Core
             sGameSounds?.Add(sound);
 
             return sound;
+        }
+
+        public static void StopAllGameSoundsOf(string filename)
+        {
+            var validSounds = sGameSounds.Where(s => s.Filename == filename).ToArray();
+            foreach (var sound in validSounds)
+            {
+                sound.Stop();
+            }
         }
 
         public static void StopSound(MapSound sound)

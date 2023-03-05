@@ -15,6 +15,8 @@ namespace Intersect.Client.Core.Sounds
 
         protected string mFilename;
 
+        public string Filename { get; }
+
         protected bool mLoop;
 
         protected int mLoopInterval;
@@ -31,6 +33,8 @@ namespace Intersect.Client.Core.Sounds
             {
                 return;
             }
+
+            Filename = filename;
 
             mFilename = GameContentManager.RemoveExtension(filename).ToLower();
             mLoop = loop;

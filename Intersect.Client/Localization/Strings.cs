@@ -1704,6 +1704,9 @@ namespace Intersect.Client.Localization
             
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString PartyInfo = @"Show Party Info";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString TypewriterText = @"Typewriter Text";
         }
 
         public struct Parties

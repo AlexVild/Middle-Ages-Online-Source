@@ -6,6 +6,8 @@ using Intersect.Client.Framework.Gwen.Control.EventArguments;
 using Intersect.Client.General;
 using Intersect.Client.Localization;
 using Intersect.Client.Networking;
+using Intersect.Configuration;
+using Intersect.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -51,6 +53,12 @@ namespace Intersect.Client.Interface.Game
 
         private List<EventResponse> Responses;
 
+        private bool Typewriting = false;
+
+        private Typewriter Writer;
+
+        private bool HasSpeaker { get; set; } = false;
+
         //Init
         public EventWindow(Canvas gameCanvas)
         {
@@ -84,6 +92,15 @@ namespace Intersect.Client.Interface.Game
             mEventResponse4.Clicked += EventResponse4_Clicked;
 
             Responses = new List<EventResponse>();
+
+            Writer = new Typewriter();
+
+            mEventDialogWindow.Clicked += DialogWindow_Clicked;
+        }
+
+        private void DialogWindow_Clicked(Base sender, ClickedEventArgs arguments)
+        {
+            Writer?.End();
         }
 
         public void SetResponses(string response1, string response2, string response3, string response4)
@@ -153,13 +170,15 @@ namespace Intersect.Client.Interface.Game
                     mEventResponse3.Name = "";
                     mEventResponse4.Name = "";
 
+                    Typewriting = ClientConfiguration.Instance.EnableTypewriting && Globals.Database.TypewriterText;
+
                     // Determine whether or not this event is a "dialog", with a speaker, to display the event differently.
-                    bool hasSpeaker = false;
+                    HasSpeaker = false;
                     var prompt = Globals.EventDialogs[0].Prompt;
                     var splitPrompt = prompt.Split(new string[] { ":\r\n" }, StringSplitOptions.None).ToList();
                     if (splitPrompt.Count > 1 && splitPrompt[0].Split(' ').Length <= 4 && splitPrompt[0][0] != '"')
                     {
-                        hasSpeaker = true;
+                        HasSpeaker = true;
                         mSpeakerLabel.Show();
                         mSpeakerLabel.Text = $"{splitPrompt[0].ToUpper()}:";
                         prompt = string.Concat(splitPrompt.Skip(1));
@@ -172,7 +191,7 @@ namespace Intersect.Client.Interface.Game
                     switch (maxResponse)
                     {
                         case 1:
-                            if (hasSpeaker)
+                            if (HasSpeaker)
                             {
                                 mEventDialogWindow.Name = "EventDialogWindow_1ResponseSpeaker";
                             }
@@ -185,7 +204,7 @@ namespace Intersect.Client.Interface.Game
 
                             break;
                         case 2:
-                            if (hasSpeaker)
+                            if (HasSpeaker)
                             {
                                 mEventDialogWindow.Name = "EventDialogWindow_2ResponsesSpeaker";
                             }
@@ -199,7 +218,7 @@ namespace Intersect.Client.Interface.Game
 
                             break;
                         case 3:
-                            if (hasSpeaker)
+                            if (HasSpeaker)
                             {
                                 mEventDialogWindow.Name = "EventDialogWindow_3ResponsesSpeaker";
                             }
@@ -214,7 +233,7 @@ namespace Intersect.Client.Interface.Game
 
                             break;
                         case 4:
-                            if (hasSpeaker)
+                            if (HasSpeaker)
                             {
                                 mEventDialogWindow.Name = "EventDialogWindow_4ResponsesSpeaker";
                             }
@@ -259,49 +278,10 @@ namespace Intersect.Client.Interface.Game
                     }
                     else
                     {
-                        if (Responses.Count >= 1 && !string.IsNullOrEmpty(Responses[0].Response))
-                        {
-                            mEventResponse1.Show();
-                            mEventResponse1.SetText(Responses[0].Response);
-                            mEventResponse1.UserData = Responses[0].Index;
-                        }
-                        else
-                        {
-                            mEventResponse1.Hide();
-                        }
-
-                        if (Responses.Count >= 2 && !string.IsNullOrEmpty(Responses[1].Response))
-                        {
-                            mEventResponse2.Show();
-                            mEventResponse2.SetText(Responses[1].Response);
-                            mEventResponse2.UserData = Responses[1].Index;
-                        }
-                        else
-                        {
-                            mEventResponse2.Hide();
-                        }
-
-                        if (Responses.Count >= 3 && !string.IsNullOrEmpty(Responses[2].Response))
-                        {
-                            mEventResponse3.Show();
-                            mEventResponse3.SetText(Responses[2].Response);
-                            mEventResponse3.UserData = Responses[2].Index;
-                        }
-                        else
-                        {
-                            mEventResponse3.Hide();
-                        }
-
-                        if (Responses.Count >= 4 && !string.IsNullOrEmpty(Responses[3].Response))
-                        {
-                            mEventResponse4.Show();
-                            mEventResponse4.SetText(Responses[3].Response);
-                            mEventResponse4.UserData = Responses[3].Index;
-                        }
-                        else
-                        {
-                            mEventResponse4.Hide();
-                        }
+                        ShowHideResponse(mEventResponse1, 0);
+                        ShowHideResponse(mEventResponse2, 1);
+                        ShowHideResponse(mEventResponse3, 2);
+                        ShowHideResponse(mEventResponse4, 3);
                     }
 
                     mEventDialogWindow.SetSize(
@@ -310,37 +290,60 @@ namespace Intersect.Client.Interface.Game
 
                     if (faceTex != null)
                     {
-                        mEventDialogLabel.ClearText();
-                        mEventDialogLabel.Width = mEventDialogArea.Width -
-                                                  mEventDialogArea.GetVerticalScrollBar().Width;
-
-                        mEventDialogLabel.AddText(
-                            prompt, mEventDialogLabelTemplate.TextColor,
-                            mEventDialogLabelTemplate.CurAlignments.Count > 0
-                                ? mEventDialogLabelTemplate.CurAlignments[0]
-                                : Alignments.Left, mEventDialogLabelTemplate.Font
-                        );
-
-                        mEventDialogLabel.SizeToChildren(false, true);
-                        mEventDialogArea.ScrollToTop();
+                        ShowText(mEventDialogArea, mEventDialogLabel, mEventDialogLabelTemplate, prompt);
                     }
                     else
                     {
-                        mEventDialogLabelNoFace.ClearText();
-                        mEventDialogLabelNoFace.Width = mEventDialogAreaNoFace.Width -
-                                                        mEventDialogAreaNoFace.GetVerticalScrollBar().Width;
-
-                        mEventDialogLabelNoFace.AddText(
-                            prompt, mEventDialogLabelNoFaceTemplate.TextColor,
-                            mEventDialogLabelNoFaceTemplate.CurAlignments.Count > 0
-                                ? mEventDialogLabelNoFaceTemplate.CurAlignments[0]
-                                : Alignments.Left, mEventDialogLabelNoFaceTemplate.Font
-                        );
-
-                        mEventDialogLabelNoFace.SizeToChildren(false, true);
-                        mEventDialogAreaNoFace.ScrollToTop();
+                        ShowText(mEventDialogAreaNoFace, mEventDialogLabelNoFace, mEventDialogLabelNoFaceTemplate, prompt);
                     }
                 }
+                else if (Typewriting)
+                {
+                    var voiceIdx = Randomization.Next(0, ClientConfiguration.Instance.TypewriterSounds.Count);
+
+                    Writer.Write(ClientConfiguration.Instance.TypewriterSounds.ElementAtOrDefault(voiceIdx));
+                    if (Writer.Done)
+                    {
+                        mEventResponse1.Show();
+                        ShowHideResponse(mEventResponse2, 1);
+                        ShowHideResponse(mEventResponse3, 2);
+                        ShowHideResponse(mEventResponse4, 3);
+                    }
+                }
+            }
+        }
+
+        public void ShowText(ScrollControl dialogArea, RichLabel label, Label labelTemplate, string prompt)
+        {
+            label.ClearText();
+            label.Width = dialogArea.Width - dialogArea.GetVerticalScrollBar().Width;
+
+            label.AddText(prompt, labelTemplate);
+
+            label.SizeToChildren(false, true);
+            if (Typewriting)
+            {
+                // Do this _after_ sizing so we have lines broken up
+                Writer.Initialize(mEventDialogLabelNoFace.Labels);
+                mEventResponse1.Hide();
+                mEventResponse2.Hide();
+                mEventResponse3.Hide();
+                mEventResponse4.Hide();
+            }
+            mEventDialogAreaNoFace.ScrollToTop();
+        }
+
+        public void ShowHideResponse(Button responseButton, int idx)
+        {
+            if (Responses.Count >= idx + 1 && !string.IsNullOrEmpty(Responses[idx].Response))
+            {
+                responseButton.Show();
+                responseButton.SetText(Responses[idx].Response);
+                responseButton.UserData = Responses[idx].Index;
+            }
+            else
+            {
+                responseButton.Hide();
             }
         }
 
@@ -410,6 +413,129 @@ namespace Intersect.Client.Interface.Game
             mEventDialogWindow.IsHidden = true;
             ed.ResponseSent = 1;
             base.Hide();
+        }
+    }
+
+    sealed class Typewriter
+    {
+        readonly long TypingSpeed = ClientConfiguration.Instance.TypewriterLetterSpeed;
+        readonly long FullStopSpeed = ClientConfiguration.Instance.TypewriterFullstopSpeed;
+        readonly long PartialStopSpeed = ClientConfiguration.Instance.TypewriterPartialstopSpeed;
+
+        private List<Label> Labels { get; set; }
+        private string[] Lines { get; set; }
+        private Label CurrentLabel => Labels.ElementAtOrDefault(LineIdx);
+        private string CurrentLine => Lines.ElementAtOrDefault(LineIdx);
+        private int LineIdx { get; set; }
+        private int CharIdx { get; set; }
+        private char? LastChar { get; set; }
+        private long LastUpdateTime;
+        private long LastPauseTime { get; set; }
+
+        public bool Done { get; private set; }
+
+        public void CarriageReturn()
+        {
+            LineIdx++;
+            if (LineIdx >= Lines.Length)
+            {
+                Done = true;
+                return;
+            }
+            CharIdx = 0;
+            LastChar = null;
+        }
+
+        public void Initialize(List<Label> labels)
+        {
+            LastUpdateTime = Timing.Global.Milliseconds;
+            Labels = labels;
+            Lines = Labels.Select(l => l.Text).ToArray();
+            Labels.ForEach(l => l.SetText("")); // Clear the text from the labels. The writer is the captain now
+            LineIdx = 0;
+            CharIdx = 0;
+            LastChar = null;
+            Done = false;
+        }
+
+        public void Write(string voice)
+        {
+            if (Done)
+            {
+                return;
+            }
+
+            if (CurrentLine == default || CurrentLabel == default)
+            {
+                Done = true;
+            }
+
+            if (Timing.Global.Milliseconds < LastUpdateTime)
+            {
+                return;
+            }
+
+            if (!string.IsNullOrEmpty(voice) && CharIdx % ClientConfiguration.Instance.TypewriterSoundFrequency == 0)
+            {
+                Audio.StopAllGameSoundsOf("typewriter.wav");
+                Audio.StopAllGameSoundsOf("typewriter_high.wav");
+                Audio.AddGameSound(voice ?? string.Empty, false);
+            }
+
+            CharIdx++;
+            if (CharIdx >= CurrentLine.Length)
+            {
+                CurrentLabel?.SetText(CurrentLine);
+                CarriageReturn();
+                return;
+            }
+
+            LastChar = CurrentLine[CharIdx - 1];
+
+            var written = CurrentLine?.Substring(0, CharIdx) ?? string.Empty;
+            CurrentLabel?.SetText(written);
+
+            LastUpdateTime = Timing.Global.Milliseconds + GetTypingSpeed();
+        }
+
+        private long GetTypingSpeed()
+        {
+            if (LastChar == null)
+            {
+                return TypingSpeed;
+            }
+
+            var currentChar = CurrentLine.ElementAtOrDefault(CharIdx);
+            if ((LastChar == '.' || LastChar == '?' || LastChar == '!' || LastChar == ':') && currentChar != LastChar)
+            {
+                return FullStopSpeed;
+            }
+            if ((LastChar == '-' || LastChar == ',' || LastChar == '-') && currentChar != LastChar)
+            {
+                return PartialStopSpeed;
+            }
+
+            return TypingSpeed;
+        }
+
+        public void End()
+        {
+            if (Done)
+            {
+                return;
+            }
+
+            for (var i = 0; i < Lines.Length; i++)
+            {
+                if (i >= Labels.Count)
+                {
+                    continue;
+                }
+
+                Labels[i].SetText(Lines[i]);
+            }
+
+            Done = true;
         }
     }
 }

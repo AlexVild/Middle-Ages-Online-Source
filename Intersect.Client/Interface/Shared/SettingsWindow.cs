@@ -14,6 +14,7 @@ using Intersect.Client.Interface.Game;
 using Intersect.Client.Interface.Game.Toasts;
 using Intersect.Client.Interface.Menu;
 using Intersect.Client.Localization;
+using Intersect.Configuration;
 using Intersect.Utilities;
 
 namespace Intersect.Client.Interface.Shared
@@ -150,6 +151,8 @@ namespace Intersect.Client.Interface.Shared
         private readonly LabeledCheckBox mSelfStatusMarkers;
         
         private readonly LabeledCheckBox mDisplayPartyInfo;
+        
+        private readonly LabeledCheckBox mTypewriterText;
 
         // Open settings
         private bool mReturnToMenu;
@@ -294,6 +297,13 @@ namespace Intersect.Client.Interface.Shared
             {
                 Text = Strings.Settings.PartyInfo
             };
+
+            mTypewriterText = new LabeledCheckBox(mGameSettingsContainer, "TypewriterText")
+            {
+                Text = Strings.Settings.TypewriterText
+            };
+
+            mTypewriterText.IsHidden = !ClientConfiguration.Instance.EnableTypewriting;
 
             // TODO: Place our configurable gameplay related settings into their respective container for initialization here!
 
@@ -767,6 +777,7 @@ namespace Intersect.Client.Interface.Shared
             mStatusMarkers.IsChecked = Globals.Database.DisplayStatusMarkers;
             mSelfStatusMarkers.IsChecked = Globals.Database.DisplaySelfStatusMarkers;
             mDisplayPartyInfo.IsChecked = Globals.Database.DisplayPartyInfo;
+            mTypewriterText.IsChecked = Globals.Database.TypewriterText;
 
             // Video Settings.
             mAutoCloseWindowsCheckbox.IsChecked = Globals.Database.HideOthersOnWindowOpen;
@@ -957,6 +968,7 @@ namespace Intersect.Client.Interface.Shared
             Globals.Database.DisplayStatusMarkers = mStatusMarkers.IsChecked;
             Globals.Database.DisplaySelfStatusMarkers = mSelfStatusMarkers.IsChecked;
             Globals.Database.DisplayPartyInfo = mDisplayPartyInfo.IsChecked;
+            Globals.Database.TypewriterText = mTypewriterText.IsChecked;
 
             // Save keybinding settings
             Globals.Database.ClassicMode = mClassicModeCheckbox.IsChecked;

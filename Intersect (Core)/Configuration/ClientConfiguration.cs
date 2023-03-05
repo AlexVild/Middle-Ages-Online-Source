@@ -74,6 +74,7 @@ namespace Intersect.Configuration
             UIFont = string.IsNullOrWhiteSpace(UIFont) ? DEFAULT_UI_FONT : UIFont.Trim();
             ChatLines = Math.Min(Math.Max(ChatLines, 10), 500);
             IntroImages = new List<string>(IntroImages?.Distinct() ?? new List<string>());
+            TypewriterSounds = new List<string>(TypewriterSounds?.Distinct() ?? new List<string>());
         }
 
         #endregion
@@ -171,6 +172,22 @@ namespace Intersect.Configuration
         public string TargetSound { get; set; } = TARGET_SOUND;
         
         public bool FadeTransition { get; set; } = FADE_TRANSITION;
+
+        public List<string> TypewriterSounds { get; set; } = new List<string>()
+        {
+            "typewriter.wav",
+            "typewriter_high.wav"
+        };
+
+        public int TypewriterSoundFrequency { get; set; } = 5;
+
+        public long TypewriterLetterSpeed { get; set; } = 6;
+
+        public long TypewriterFullstopSpeed { get; set; } = 400;
+
+        public long TypewriterPartialstopSpeed { get; set; } = 80;
+
+        public bool EnableTypewriting { get; set; } = true;
 
         #endregion
 
