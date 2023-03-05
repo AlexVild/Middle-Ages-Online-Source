@@ -32,6 +32,7 @@ namespace Intersect.Client.Core
                 if (sCurrentAction == FadeType.None && CompleteCallback != null)
                 {
                     CompleteCallback();
+                    CompleteCallback = null;
                 }
             }
         }
@@ -49,7 +50,7 @@ namespace Intersect.Client.Core
 
         private static bool sAlertServerWhenFaded;
 
-        private static Action CompleteCallback;
+        public static Action CompleteCallback;
 
         public static void FadeIn(bool fast = false, Action callback = null)
         {
