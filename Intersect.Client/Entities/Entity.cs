@@ -1223,7 +1223,6 @@ namespace Intersect.Client.Entities
                             var hideHair = false;
                             var hideBeard = false;
                             var hideExtra = false;
-                            var shouldDraw = true;
                             var shortHair = false;
 
                             if (Equipment[Options.HelmetIndex] != Guid.Empty)
@@ -1238,7 +1237,7 @@ namespace Intersect.Client.Entities
                                     || decorSlot == Options.BeardSlot && hideBeard
                                     || decorSlot == Options.ExtraSlot && hideExtra)
                                 {
-                                    shouldDraw = false;
+                                    continue;
                                 }
                             }
                             else if (this is Player cosmeticOvr && cosmeticOvr.Cosmetics[Options.HelmetIndex] != Guid.Empty)
@@ -1253,11 +1252,11 @@ namespace Intersect.Client.Entities
                                     || decorSlot == Options.BeardSlot && hideBeard
                                     || decorSlot == Options.ExtraSlot && hideExtra)
                                 {
-                                    shouldDraw = false;
+                                    continue;
                                 }
                             }
 
-                            if (MyDecors[decorSlot] != null && shouldDraw)
+                            if (MyDecors[decorSlot] != null)
                             {
                                 // Do mappings for short hair if needed
                                 if (decorSlot == Options.HairSlot && shortHair && Options.Instance.PlayerOpts.ShortHairMappings.TryGetValue(MyDecors[decorSlot], out var hairText))
