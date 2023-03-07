@@ -71,14 +71,14 @@ namespace Intersect.GameObjects
 
     public partial class PlayerVariableBase : DatabaseObject<PlayerVariableBase>, IFolderable
     {
-        public bool Recordable { get; set; }
-        
-        public bool RecordLow { get; set; }
+        public bool Recordable { get; set; } = false;
 
-        public bool RecordSilently { get; set; }
-        
-        public bool SoloRecordOnly { get; set; }
+        public bool RecordLow { get; set; } = false;
 
-        public string VariableGroup { get; set; }
+        public bool RecordSilently { get; set; } = false;
+
+        public bool SoloRecordOnly { get; set; } = false;
+
+        public string VariableGroup { get; set; } = string.Empty;
     }
 }

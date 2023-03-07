@@ -992,7 +992,7 @@ namespace Intersect.Server.Maps
         private void SpawnAttributeItem(int x, int y)
         {
             var itemAttr = (MapItemAttribute)mMapController.Attributes[x, y];
-            var item = ItemBase.Get(itemAttr.ItemId);
+            var item = ItemBase.Get(itemAttr?.ItemId ?? Guid.Empty);
             if (item != null)
             {
                 var mapItem = new MapItem(item.Id, itemAttr.Quantity, x, y);
