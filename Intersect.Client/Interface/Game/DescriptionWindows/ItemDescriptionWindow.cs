@@ -29,6 +29,8 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
 
         protected double mTableChance;
 
+        protected int mTableQuantity;
+
         protected SpellDescriptionWindow mSpellDescWindow;
 
         public Item EquippedItem;
@@ -48,7 +50,8 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             string titleOverride = "",
             string valueLabel = "",
             string dropChance = "",
-            double tableChance = 0d
+            double tableChance = 0d,
+            int tableQuantity = 0
         ) : base(Interface.GameUi.GameCanvas, "DescriptionWindow")
         {
             mItem = item;
@@ -63,6 +66,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             mValueLabel = valueLabel;
             mDropChance = dropChance;
             mTableChance = tableChance;
+            mTableQuantity = tableQuantity;
 
             if (mItem != null && mItem.ItemType == ItemTypes.Equipment)
             {
@@ -433,6 +437,11 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             else if (!string.IsNullOrEmpty(mDropChance))
             {
                 data.Add(new Tuple<string, string>(Strings.ItemDescription.BestiaryDropChance, mDropChance));
+            }
+
+            if (mTableQuantity > 0)
+            {
+                data.Add(new Tuple<string, string>(Strings.ItemDescription.BestiaryDropQuantity, mTableQuantity.ToString()));
             }
 
             // Display shop value if we have one.

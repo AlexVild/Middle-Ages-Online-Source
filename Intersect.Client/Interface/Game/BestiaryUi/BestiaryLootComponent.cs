@@ -97,7 +97,7 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
 
                 var chance = LootTableHelpers.GetPrettyChance(drop.Chance, totalWeight);
 
-                var lootItem = new BeastLootItem(idx, LootContainer, drop.ItemId, chance);
+                var lootItem = new BeastLootItem(idx, LootContainer, drop.ItemId, chance, drop.Quantity);
                 lootItem.Setup();
 
                 var xPadding = lootItem.Pnl.Margin.Left + lootItem.Pnl.Margin.Right;

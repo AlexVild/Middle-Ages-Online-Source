@@ -41,13 +41,16 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
 
         public double TableChance;
 
-        public BeastLootItem(int index, Base container, Guid spellId, string dropChance, double tableChance = 0)
+        public int Quantity;
+
+        public BeastLootItem(int index, Base container, Guid spellId, string dropChance, double tableChance = 0, int quantity = 1)
         {
             Index = index;
             Container = container;
             ItemId = spellId;
             DropChance = dropChance;
             TableChance = tableChance;
+            Quantity = quantity;
 
             StandardFrameBg = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Gui, "inventoryitem.png");
             _rareFrameBg = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Gui, "mapicon_rare.png");
@@ -95,7 +98,8 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
                 (int)mousePos.Y, 
                 null,
                 dropChance: DropChance,
-                tableChance: TableChance);
+                tableChance: TableChance,
+                tableQuantity: Quantity);
         }
 
         public void SetPosition(float x, float y)

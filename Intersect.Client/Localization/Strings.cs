@@ -1303,6 +1303,9 @@ namespace Intersect.Client.Localization
             public static LocalizedString BestiaryDropChance = @"Drop chance:";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString BestiaryDropQuantity = @"Drop quantity:";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString BestiaryDropChanceTable = @"Drop Chance:";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
