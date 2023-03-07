@@ -93,6 +93,7 @@ namespace Intersect.Client.Entities
         public double CurrentHarvestBonus = 0.0f;
         
         public int HarvestsRemaining = 0;
+        public Guid HarvestingResource = Guid.Empty;
 
         public long CombatTimer { get; set; }
 
@@ -2256,7 +2257,14 @@ namespace Intersect.Client.Entities
                     // Calculating resource harvest bonus
                     if (ResourceLocked)
                     {
-                        var harvestBonus = (int)Math.Floor(weapon.AttackSpeedValue * CurrentHarvestBonus);
+                        var harvestBonusValue = CurrentHarvestBonus;
+                        var harvestBonusEffect = HarvestBonusHelper.GetBonusEffectForResource(Globals.Me.HarvestingResource);
+                        if (harvestBonusEffect != EffectType.None)
+                        {
+                            harvestBonusValue += GetEquipmentBonusEffect(harvestBonusEffect) * 0.01;
+                        }
+
+                        var harvestBonus = (int)Math.Floor(weapon.AttackSpeedValue * harvestBonusValue);
                         attackTime = weapon.AttackSpeedValue - harvestBonus;
                     }
                     else

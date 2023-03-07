@@ -75,10 +75,7 @@ namespace Intersect.Editor.Forms.Editors
             cmbToolType.Items.Add(Strings.General.none);
             cmbToolType.Items.AddRange(Options.ToolTypes.ToArray());
             cmbEquipmentBonus.Items.Clear();
-            for (var i = 0; i < Strings.ItemEditor.bonuseffects.Count; i++)
-            {
-                cmbEquipmentBonus.Items.Add(Strings.ItemEditor.bonuseffects[i]);
-            }
+            cmbEquipmentBonus.Items.AddRange(EnumExtensions.GetDescriptions(typeof(EffectType)));
 
             UpdateOverrides();
 
@@ -293,11 +290,6 @@ namespace Intersect.Editor.Forms.Editors
             lblBonusEffect.Text = Strings.ItemEditor.bonuseffect;
             lblEffectPercent.Text = Strings.ItemEditor.bonusamount;
             lblEquipmentAnimation.Text = Strings.ItemEditor.equipmentanimation;
-            cmbEquipmentBonus.Items.Clear();
-            for (var i = 0; i < Strings.ItemEditor.bonuseffects.Count; i++)
-            {
-                cmbEquipmentBonus.Items.Add(Strings.ItemEditor.bonuseffects[i]);
-            }
 
             grpWeaponProperties.Text = Strings.ItemEditor.weaponproperties;
             chk2Hand.Text = Strings.ItemEditor.twohanded;
@@ -1829,7 +1821,7 @@ namespace Intersect.Editor.Forms.Editors
             lstBonusEffects.Items.Clear();
             foreach (var effect in mEditorItem.Effects)
             {
-                var effectName = Strings.ItemEditor.bonuseffects[(int)effect.Type];
+                var effectName = effect.Type.GetDescription();
                 var effectAmt = mEditorItem.GetEffectPercentage(effect.Type);
                 var editorString = Strings.ItemEditor.BonusEffectItem.ToString(effectName, effectAmt);
                 lstBonusEffects.Items.Add(editorString);

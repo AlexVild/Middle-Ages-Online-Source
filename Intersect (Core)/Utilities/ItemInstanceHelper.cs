@@ -114,5 +114,16 @@ namespace Intersect.Utilities
 
             return true;
         }
+
+        public static int[] PopulateNewFields(int[] fields, int fieldCount)
+        {
+            var newFields = fields.ToList();
+            while(newFields.Count < fieldCount)
+            {
+                newFields.Add(0);
+            }
+
+            return newFields.ToArray();
+        }
     }
 }

@@ -35,7 +35,7 @@ namespace Intersect.Server.Entities
                     progressUntilNextBonus = HarvestBonusHelper.GetHarvestsUntilNextBonus(this, resource.Base?.Id ?? Guid.Empty);
                 }
 
-                PacketSender.SendResourceLockPacket(this, val, harvestBonus, progressUntilNextBonus);
+                PacketSender.SendResourceLockPacket(this, val, harvestBonus, progressUntilNextBonus, resource?.Base?.Id ?? Guid.Empty);
             }
         }
 

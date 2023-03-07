@@ -429,6 +429,9 @@ namespace Intersect.Client.Localization
                 {6, @"Affinity:"}, // Affinity
                 {7, @"Critical Bonus:"}, // Critical bonus
                 {8, @"Swiftness:"}, // Swiftness
+                {9, @"Prospector:"},
+                {10, @"Angler:"},
+                {11, @"Lumberjack:"},
             };
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -443,6 +446,9 @@ namespace Intersect.Client.Localization
                 {6, @"Affinity:"}, // Affinity
                 {7, @"Critical Bonus:"}, // Critical bonus
                 {8, @"Swiftness:"}, // Swiftness
+                {9, @"Prospector:"},
+                {10, @"Angler:"},
+                {11, @"Lumberjack:"},
             };
         }
 
@@ -1220,6 +1226,9 @@ namespace Intersect.Client.Localization
                 {6, @"Affinity:"},
                 {7, @"Critical Bonus:"},
                 {8, @"Swiftness:"},
+                {9, @"Prospector:"},
+                {10, @"Angler:"},
+                {11, @"Lumberjack:"},
             };
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]

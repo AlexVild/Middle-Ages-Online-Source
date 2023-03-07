@@ -33,6 +33,14 @@ namespace Intersect.Enums
         [Description("Swiftness")]
         Swiftness = 8,
 
+        [Description("Prospector")]
+        Prospector = 9,
+
+        [Description("Angler")]
+        Angler = 10,
+
+        [Description("Lumberjack")]
+        Lumberjack = 11,
     }
 
 }

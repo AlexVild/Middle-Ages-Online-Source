@@ -1805,7 +1805,15 @@ namespace Intersect.Server.Entities
                 {
                     if (resourceLock != null)
                     {
-                        var speedMod = (int) Math.Floor(weapon.AttackSpeedValue * HarvestBonusHelper.CalculateHarvestBonus(this, resourceLock.Base?.Id ?? Guid.Empty));
+                        var resourceId = resourceLock.Base?.Id ?? Guid.Empty;
+                        var harvestBonus = Intersect.Server.Utilities.HarvestBonusHelper.CalculateHarvestBonus(this, resourceId);
+                        var effectType = Intersect.Utilities.HarvestBonusHelper.GetBonusEffectForResource(resourceId);
+                        if (effectType != EffectType.None)
+                        {
+                            harvestBonus += GetBonusEffectTotal(effectType) * 0.01;
+                        }
+                        harvestBonus = Math.Min(harvestBonus, 0.8);
+                        var speedMod = (int) Math.Floor(weapon.AttackSpeedValue * harvestBonus);
 
                         attackTime = weapon.AttackSpeedValue - speedMod;
                     }

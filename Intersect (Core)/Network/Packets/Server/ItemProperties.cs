@@ -1,4 +1,5 @@
 ﻿using Intersect.Enums;
+using Intersect.Utilities;
 using MessagePack;
 using System;
 using System.Collections.Generic;
@@ -22,17 +23,17 @@ namespace Intersect.Network.Packets.Server
                 throw new ArgumentNullException(nameof(other));
             }
 
-            Array.Copy(other.StatModifiers, StatModifiers, (int)Stats.StatCount);
-            Array.Copy(other.StatEnhancements, StatEnhancements, (int)Stats.StatCount);
-            Array.Copy(other.VitalEnhancements, VitalEnhancements, (int)Vitals.VitalCount);
-            Array.Copy(other.EffectEnhancements, EffectEnhancements, Enum.GetNames(typeof(EffectType)).Length);
+            Array.Copy(ItemInstanceHelper.PopulateNewFields(other.StatModifiers, (int)Stats.StatCount), StatModifiers, (int)Stats.StatCount);
+            Array.Copy(ItemInstanceHelper.PopulateNewFields(other.StatEnhancements, (int)Stats.StatCount), StatEnhancements, (int)Stats.StatCount);
+            Array.Copy(ItemInstanceHelper.PopulateNewFields(other.VitalEnhancements, (int)Vitals.VitalCount), VitalEnhancements, (int)Vitals.VitalCount);
+            Array.Copy(ItemInstanceHelper.PopulateNewFields(other.EffectEnhancements, Enum.GetNames(typeof(EffectType)).Length), EffectEnhancements, Enum.GetNames(typeof(EffectType)).Length);
 
             EnhancedBy = other.EnhancedBy;
 
             AppliedEnhancementIds.Clear();
             AppliedEnhancementIds.AddRange(other.AppliedEnhancementIds);
         }
-
+        
         [Key(0)]
         public int[] StatModifiers { get; set; } = new int[(int)Stats.StatCount];
 

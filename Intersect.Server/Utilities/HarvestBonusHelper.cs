@@ -1,4 +1,5 @@
-﻿using Intersect.GameObjects;
+﻿using Intersect.Enums;
+using Intersect.GameObjects;
 using Intersect.GameObjects.Events;
 using Intersect.Server.Entities;
 using Intersect.Server.General;
@@ -108,6 +109,7 @@ namespace Intersect.Server.Utilities
 
         public static double CalculateHarvestBonus(Player attacker, Guid resourceId)
         {
+            var harvestBonus = 0.0;
             if (attacker == null)
             {
                 return 0.0;
@@ -118,18 +120,20 @@ namespace Intersect.Server.Utilities
             if (bonuses.Count != intervals.Count)
             {
                 Logging.Log.Error($"You fucked up the server config for harvest bonuses. Count is {bonuses.Count}, must be {intervals.Count}");
-                return 0.0f;
+                harvestBonus = 0.0f;
             }
 
             var bonusLevel = GetHarvestBonusLevel(attacker, resourceId);
             if (bonusLevel < 0)
             {
-                return 0;
+                harvestBonus = 0;
             }
             else
             {
-                return bonuses[bonusLevel];
+                harvestBonus = bonuses[bonusLevel];
             }
+
+            return Math.Min(harvestBonus, 0.8d);
         }
     }
 }

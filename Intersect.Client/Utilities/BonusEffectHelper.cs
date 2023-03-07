@@ -22,6 +22,9 @@ namespace Intersect.Client.Utilities
             {EffectType.Affinity, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.Affinity], "Increases crit chance.")}, // Affinity
             {EffectType.CritBonus, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.CritBonus], "Increases crit damage bonus.")}, // Critical bonus
             {EffectType.Swiftness, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.Swiftness], "Increases weapon attack speed.")}, // Swiftness
+            {EffectType.Prospector, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.Prospector], "Increases harvest speed when mining.")}, // Prospector
+            {EffectType.Angler, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.Angler], "Increases harvest speed when fishing.")}, // Angler
+            {EffectType.Lumberjack, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.Lumberjack], "Increases harvest speed when woodcutting.")}, // Lumberjack
         };
 
         public static readonly List<EffectType> LowerIsBetterEffects = new List<EffectType>
