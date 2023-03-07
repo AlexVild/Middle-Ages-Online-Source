@@ -487,9 +487,10 @@ namespace Intersect.Client.Interface.Game
                 return;
             }
 
-            if (CurrentLine == default || CurrentLabel == default)
+            if (string.IsNullOrEmpty(CurrentLine) || CurrentLabel == default)
             {
                 End();
+                return;
             }
 
             if (Timing.Global.Milliseconds < LastUpdateTime)

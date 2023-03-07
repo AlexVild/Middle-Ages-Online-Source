@@ -378,10 +378,10 @@ namespace Intersect.Editor.Forms.Editors
                 return;
             }
 
-            var effect = mEditorItem.StatMods[selectedIdx];
-            cmbEffect.SelectedIndex = (int)effect.EnhancementType;
-            nudMinStat.Value = effect.MinValue;
-            nudMaxStat.Value = effect.MaxValue;
+            var stat = mEditorItem.StatMods[selectedIdx];
+            cmbStats.SelectedIndex = (int)stat.EnhancementType;
+            nudMinStat.Value = stat.MinValue;
+            nudMaxStat.Value = stat.MaxValue;
         }
 
         private void lstVitalMods_SelectedIndexChanged(object sender, EventArgs e)
@@ -392,10 +392,10 @@ namespace Intersect.Editor.Forms.Editors
                 return;
             }
 
-            var effect = mEditorItem.VitalMods[selectedIdx];
-            cmbVitals.SelectedIndex = (int)effect.EnhancementType;
-            nudMinVital.Value = effect.MinValue;
-            nudMaxStat.Value = effect.MaxValue;
+            var vital = mEditorItem.VitalMods[selectedIdx];
+            cmbVitals.SelectedIndex = (int)vital.EnhancementType;
+            nudMinVital.Value = vital.MinValue;
+            nudMaxStat.Value = vital.MaxValue;
         }
 
         private void lstBonuses_SelectedIndexChanged(object sender, EventArgs e)

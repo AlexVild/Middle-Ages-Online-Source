@@ -4119,6 +4119,17 @@ namespace Intersect.Server.Entities
                 if (!Conditions.MeetsConditionLists(craft.Requirements, this, null))
                 {
                     table.HiddenCrafts.Add(craftId);
+                    continue;
+                }
+
+                // If the player doesn't have the recipe even _visible_ as an unlock, then don't show the craft, either
+                var recipe = RecipeDescriptor.Get(craft.Recipe);
+                if (recipe != default)
+                {
+                    if (!UnlockedRecipeIds.Contains(recipe.Id) && !Conditions.MeetsConditionLists(recipe.Requirements, this, null))
+                    {
+                        table.HiddenCrafts.Add(craftId);
+                    }
                 }
             }
 

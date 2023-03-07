@@ -361,16 +361,16 @@ namespace Intersect.GameObjects.Events
         [Description("MP"), DefaultKillCount(10)]
         MP,
 
-        [Description("Stats"), DefaultKillCount(25)]
+        [Description("Stats"), DefaultKillCount(15)]
         Stats,
 
-        [Description("Spells"), DefaultKillCount(30)]
+        [Description("Spells"), DefaultKillCount(25)]
         Spells,
 
         [Description("Loot"), DefaultKillCount(100)]
         Loot,
 
-        [Description("Spell Combat Info"), DefaultKillCount(60)]
+        [Description("Spell Combat Info"), DefaultKillCount(45)]
         SpellCombatInfo,
     }
 
