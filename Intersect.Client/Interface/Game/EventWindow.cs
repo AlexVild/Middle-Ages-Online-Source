@@ -315,10 +315,6 @@ namespace Intersect.Client.Interface.Game
                         mEventResponse3.IsDisabled = Timing.Global.Milliseconds - Writer.DoneAt < TypewriterSkipInteractDelay;
                         mEventResponse4.IsDisabled = Timing.Global.Milliseconds - Writer.DoneAt < TypewriterSkipInteractDelay;
                     }
-                    else if (Controls.KeyDown(Control.AttackInteract))
-                    {
-                        SkipTypewriting();
-                    }
                 }
             }
         }
