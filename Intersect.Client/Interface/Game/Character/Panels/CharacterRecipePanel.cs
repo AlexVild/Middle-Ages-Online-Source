@@ -52,6 +52,7 @@ namespace Intersect.Client.Interface.Game.Character.Panels
         private Button SearchClearButton { get; set; }
 
         private ImagePanel RecipeContainer { get; set; }
+        private Label NoRecipesLabel { get; set; }
         private ScrollControl RecipeScrollContainer { get; set; }
 
         private int LastExpandedRowCount { get; set; }
@@ -95,6 +96,7 @@ namespace Intersect.Client.Interface.Game.Character.Panels
             SearchClearButton.Clicked += SearchClearButton_Clicked;
 
             RecipeContainer = new ImagePanel(mBackground, "RecipeContainer");
+            NoRecipesLabel = new Label(RecipeContainer, "NoRecipesLabel");
             RecipeScrollContainer = new ScrollControl(RecipeContainer, "Recipes");
 
             CraftTypeBackground = new ImagePanel(mBackground, "CraftTypeBackground");
@@ -170,6 +172,9 @@ namespace Intersect.Client.Interface.Game.Character.Panels
             {
                 return;
             }
+
+            NoRecipesLabel.IsHidden = (Recipes?.Count ?? 0) > 0;
+            NoRecipesLabel.SetText($"No {SelectedCraftType.GetDescription()} recipes yet!");
 
             ClearRecipes();
 
