@@ -887,7 +887,14 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                 {
                     EntityFace.Texture = entityTex;
                     EntityFace.RenderColor = MyEntity.Color ?? new Color(255, 255, 255, 255);
-                    EntityFace.SetTextureRect(0, 0, entityTex.GetWidth() / Options.Instance.Sprites.NormalFrames, entityTex.GetHeight() / Options.Instance.Sprites.Directions);
+                    if (EntityType != EntityTypes.Event)
+                    {
+                        EntityFace.SetTextureRect(0, 0, entityTex.GetWidth() / Options.Instance.Sprites.NormalFrames, entityTex.GetHeight() / Options.Instance.Sprites.Directions);
+                    }
+                    else
+                    {
+                        EntityFace.SetTextureRect(0, 0, entityTex.GetWidth(), entityTex.GetHeight());
+                    }
                     EntityFace.SizeToContents();
                     Align.Center(EntityFace);
                     mCurrentSprite = sprite;
