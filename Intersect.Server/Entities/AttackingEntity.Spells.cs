@@ -289,18 +289,26 @@ namespace Intersect.Server.Entities
         /// <param name="spell">The spell being cast</param>
         private void HandleSpellVitalUpdate(SpellBase spell)
         {
-            if (spell.VitalCost[(int)Vitals.Mana] > 0)
+            var manaCost = spell.VitalCost[(int)Vitals.Mana];
+            var healthCost = spell.VitalCost[(int)Vitals.Health];
+            if (StatusActive(StatusTypes.Attuned))
             {
-                SubVital(Vitals.Mana, spell.VitalCost[(int)Vitals.Mana]);
+                manaCost = (int)Math.Floor(manaCost / Options.Instance.CombatOpts.AttunedStatusDividend);
+                healthCost = (int)Math.Floor(healthCost / Options.Instance.CombatOpts.AttunedStatusDividend);
+            }
+
+            if (manaCost > 0)
+            {
+                SubVital(Vitals.Mana, manaCost);
             }
             else
             {
                 AddVital(Vitals.Mana, -spell.VitalCost[(int)Vitals.Mana]);
             }
 
-            if (spell.VitalCost[(int)Vitals.Health] > 0)
+            if (healthCost > 0)
             {
-                SubVital(Vitals.Health, spell.VitalCost[(int)Vitals.Health]);
+                SubVital(Vitals.Health, healthCost);
             }
             else
             {
