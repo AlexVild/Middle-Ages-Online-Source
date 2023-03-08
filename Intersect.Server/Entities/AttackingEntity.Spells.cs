@@ -485,7 +485,7 @@ namespace Intersect.Server.Entities
             }
 
             // Without this, stealth spells... immediately unstealth you.
-            if (spell.Combat.Effect != StatusTypes.Stealth)
+            if (spell.Combat.Effect != StatusTypes.Stealth && !spell.Combat.Friendly)
             {
                 Unstealth();
             }
