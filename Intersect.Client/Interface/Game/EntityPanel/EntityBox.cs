@@ -875,9 +875,14 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                 return;
             }
 
-            var entityTex = MyEntity.Texture;
+            var sprite = EntityType == EntityTypes.Event ? MyEntity?.Face ?? string.Empty : MyEntity?.MySprite ?? string.Empty;
+
+            var entityTex = EntityType == EntityTypes.Event ? 
+                Globals.ContentManager.GetTexture(GameContentManager.TextureType.Face, sprite) : 
+                MyEntity.Texture;
+
             if (entityTex != null)
-            {
+            {   
                 if (entityTex != EntityFace.Texture)
                 {
                     EntityFace.Texture = entityTex;
@@ -885,7 +890,7 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                     EntityFace.SetTextureRect(0, 0, entityTex.GetWidth() / Options.Instance.Sprites.NormalFrames, entityTex.GetHeight() / Options.Instance.Sprites.Directions);
                     EntityFace.SizeToContents();
                     Align.Center(EntityFace);
-                    mCurrentSprite = MyEntity.MySprite;
+                    mCurrentSprite = sprite;
                     EntityFace.IsHidden = false;
                 }
 
