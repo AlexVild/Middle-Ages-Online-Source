@@ -5354,29 +5354,6 @@ Tick timer saved in server config.json.";
 
             public static LocalizedString duration = @"Duration: (ms)";
 
-            public static Dictionary<int, LocalizedString> effects = new Dictionary<int, LocalizedString>
-            {
-                {0, @"None"},
-                {1, @"Silence"},
-                {2, @"Stun"},
-                {3, @"Snare"},
-                {4, @"Blind"},
-                {5, @"Stealth"},
-                {6, @"Transform"},
-                {7, @"Cleanse"},
-                {8, @"Invulnerable"},
-                {9, @"Shield"},
-                {10, @"Sleep"},
-                {11, @"OnHit"},
-                {12, @"Taunt"},
-                {13, @"Swift"},
-                {14, @"Accurate"},
-                {15, @"Haste"},
-                {16, @"Slowed"},
-                {17, @"Confused"},
-                {18, @"Steady"},
-            };
-
             public static LocalizedString effectgroup = @"Effect";
 
             public static LocalizedString effectlabel = @"Extra Effect:";

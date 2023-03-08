@@ -229,10 +229,7 @@ namespace Intersect.Editor.Forms.Editors
             grpEffect.Text = Strings.SpellEditor.effectgroup;
             lblEffect.Text = Strings.SpellEditor.effectlabel;
             cmbExtraEffect.Items.Clear();
-            for (var i = 0; i < Strings.SpellEditor.effects.Count; i++)
-            {
-                cmbExtraEffect.Items.Add(Strings.SpellEditor.effects[i]);
-            }
+            cmbExtraEffect.Items.AddRange(EnumExtensions.GetDescriptions(typeof(StatusTypes)));
 
             lblSprite.Text = Strings.SpellEditor.transformsprite;
 

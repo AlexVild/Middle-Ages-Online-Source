@@ -138,6 +138,8 @@ namespace Intersect.Config
 
         public int BestiaryCompletionExpMultiplier { get; set; } = 10;
 
+        public float AttunedStatusDividend { get; set; } = 2.0f;
+
         public List<int> HarvestBonusIntervals = new List<int>()
         {
             30, 90, 250, 500, 1000

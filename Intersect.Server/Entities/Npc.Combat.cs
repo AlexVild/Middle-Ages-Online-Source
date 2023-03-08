@@ -106,7 +106,14 @@ namespace Intersect.Server.Entities
 
         public override bool MeetsSpellVitalReqs(SpellBase spell)
         {
-            if (spell.VitalCost[(int)Vitals.Mana] > GetVital(Vitals.Mana))
+            var cost = spell.VitalCost[(int)Vitals.Mana];
+
+            if (StatusActive(StatusTypes.Attuned))
+            {
+                cost = (int)Math.Floor(cost / Options.Instance.CombatOpts.AttunedStatusDividend);
+            }
+
+            if (cost > GetVital(Vitals.Mana))
             {
                 return false;
             }

@@ -290,6 +290,13 @@ namespace Intersect.Server.Entities
                 throw new ArgumentNullException(nameof(spell));
             }
 
+            var cost = spell.VitalCost[(int)Vitals.Mana];
+            
+            if (StatusActive(StatusTypes.Attuned))
+            {
+                cost = (int)Math.Floor(cost / Options.Instance.CombatOpts.AttunedStatusDividend);
+            }
+
             if (spell.VitalCost[(int)Vitals.Mana] > GetVital(Vitals.Mana))
             {
                 if (Options.Combat.EnableCombatChatMessages)

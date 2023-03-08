@@ -1109,7 +1109,7 @@ namespace Intersect.Client.Entities
                     if (SpriteAnimation == SpriteAnimations.Normal)
                     {
                         bool inAction = AttackTimer - CalculateAttackTime() / 2 > Timing.Global.Ticks / TimeSpan.TicksPerMillisecond || Blocking;
-                        if (inAction && !(this is Player play && play.InVehicle))
+                        if (inAction && !(this is Player play && play.InVehicle) && !StatusIsActive(StatusTypes.Stun) && !StatusIsActive(StatusTypes.Sleep))
                         {
                             srcRectangle = new FloatRect(
                                 Options.Instance.Sprites.NormalSheetAttackFrame * (int)texture.GetWidth() / SpriteFrames, dir * (int)texture.GetHeight() / Options.Instance.Sprites.Directions,
