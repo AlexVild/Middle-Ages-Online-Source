@@ -143,25 +143,33 @@ namespace Intersect.Server.Entities.Combat
             // Calculate our final duration and pass it on!
             tenacity = MathHelper.Clamp(tenacity, -100, 100);
             var finalDuration = duration - (duration * (tenacity / 100f));
-            Logging.Log.Debug($"Status applied with tenacity {tenacity}%, duration is {((float)finalDuration / 1000).ToString("N2")}");
-            if (en.Statuses.ContainsKey(spell))
+            
+            // If this spell was already applied, only update the status if the new duration is going to be longer than the existing.
+            if (en.Statuses.ContainsKey(spell) && Timing.Global.Milliseconds + (long)finalDuration > en.Statuses[spell].Duration)
             {
                 en.Statuses[spell].StartTime = Timing.Global.Milliseconds;
-                en.Statuses[spell].Duration = Timing.Global.Milliseconds + (long) finalDuration;
+                en.Statuses[spell].Duration = Timing.Global.Milliseconds + (long)finalDuration;
+                Logging.Log.Debug($"Status applied with tenacity {tenacity}%, duration is {((float)finalDuration / 1000).ToString("N2")}");
                 en.Statuses[spell].StartTime = StartTime;
                 en.CachedStatuses = en.Statuses.Values.ToArray();
+
+                if (en is AttackingEntity attEn)
+                {
+                    attEn.CCApplied(type);
+                }
             }
             else
             { 
                 StartTime = Timing.Global.Milliseconds;
                 Duration = Timing.Global.Milliseconds + (long) finalDuration;
+                Logging.Log.Debug($"Status applied with tenacity {tenacity}%, duration is {((float)finalDuration / 1000).ToString("N2")}");
                 en.Statuses.TryAdd(Spell, this);
                 en.CachedStatuses = en.Statuses.Values.ToArray();
-            }
 
-            if (en is AttackingEntity attEn)
-            {
-                attEn.CCApplied(type);
+                if (en is AttackingEntity attEn)
+                {
+                    attEn.CCApplied(type);
+                }
             }
 
             // If this is a taunt, force the target properly for players and NPCs

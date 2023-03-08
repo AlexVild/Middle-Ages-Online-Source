@@ -286,7 +286,7 @@ namespace Intersect.Client.Entities
             if (!IsBusy())
             {
                 // Combat mode direction processing
-                if (this == Globals.Me && CombatMode)
+                if (this == Globals.Me && CombatMode && !IsStunned())
                 {
                     var prevFace = FaceDirection;
                     FaceDirection = GetDirectionFromMouse(WorldPos);
@@ -1628,6 +1628,13 @@ namespace Intersect.Client.Entities
                 return false;
             }
 
+            if (StatusIsActive(StatusTypes.Sleep) || StatusIsActive(StatusTypes.Stun))
+            {
+                SendAttackStatusAlerts();
+                return false;
+            }
+
+            // Can attack when confused/blinded, but at a disadvantage/miss
             if (StatusIsActive(StatusTypes.Blind) || StatusIsActive(StatusTypes.Confused))
             {
                 SendAttackStatusAlerts();
