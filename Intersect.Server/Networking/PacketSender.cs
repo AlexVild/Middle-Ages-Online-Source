@@ -2747,6 +2747,10 @@ namespace Intersect.Server.Networking
 
         public static void SendCombatNumber(CombatNumberType type, Entity target, int value, Entity visibleTo = null)
         {
+            if (value == 0)
+            {
+                return;
+            }
             if (!MapController.TryGetInstanceFromMap(target.Map.Id, target.MapInstanceId, out var mapInstance))
             {
                 return;
