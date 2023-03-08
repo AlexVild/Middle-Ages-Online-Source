@@ -123,6 +123,8 @@ namespace Intersect.Client.Interface.Game
 
         public MapScreen.MapScreen Map;
 
+        public EntityBox PlayerBox;
+
         public GameInterface(Canvas canvas) : base(canvas)
         {
             GameCanvas = canvas;
@@ -145,6 +147,8 @@ namespace Intersect.Client.Interface.Game
             mChatBox = new Chatbox(GameCanvas, this);
             GameMenu = new Menu(GameCanvas);
             Hotbar = new HotBarWindow(GameCanvas);
+            PlayerBox = new EntityBox(GameCanvas, EntityTypes.Player, Globals.Me, true);
+            PlayerBox.SetEntity(Globals.Me);
             if (mPictureWindow == null)
             {
                 mPictureWindow = new PictureWindow(GameCanvas);
@@ -430,11 +434,16 @@ namespace Intersect.Client.Interface.Game
 
         public void Draw()
         {
+            if (Globals.Me != null && PlayerBox?.MyEntity != Globals.Me)
+            {
+                PlayerBox?.SetEntity(Globals.Me);
+            }
             mChatBox?.Update();
             GameMenu?.Update(mShouldUpdateQuestLog);
             mShouldUpdateQuestLog = false;
             _Draw();
             Hotbar?.Update();
+            PlayerBox?.Update();
             mDebugMenu?.Update();
             mHarvestBonusWindow?.Update();
             mWarnings?.Update();
