@@ -423,7 +423,7 @@ namespace Intersect.Editor.Forms.Editors
                 nudSlash.Value = mEditorItem.Combat.StatDiff[(int)Stats.SlashAttack];
                 nudSlashResist.Value = mEditorItem.Combat.StatDiff[(int)Stats.SlashResistance];
                 nudPierce.Value = mEditorItem.Combat.StatDiff[(int)Stats.PierceAttack];
-                nudPiercePercentage.Value = mEditorItem.Combat.StatDiff[(int)Stats.PierceResistance];
+                nudPierceResist.Value = mEditorItem.Combat.StatDiff[(int)Stats.PierceResistance];
                 nudAccuracy.Value = mEditorItem.Combat.StatDiff[(int)Stats.Accuracy];
                 nudEvasion.Value = mEditorItem.Combat.StatDiff[(int)Stats.Evasion];
 
