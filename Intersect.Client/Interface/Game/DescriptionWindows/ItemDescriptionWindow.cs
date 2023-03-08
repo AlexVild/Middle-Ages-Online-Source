@@ -78,7 +78,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             SetupDescriptionWindow();
 
             // If a spell, also display the spell description!
-            if (mItem.ItemType == ItemTypes.Spell && !mItem.QuickCast)
+            if (mItem.ItemType == ItemTypes.Spell)
             {
                 mSpellDescWindow = new SpellDescriptionWindow(mItem.SpellId, x, y);
             }
