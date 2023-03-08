@@ -400,7 +400,7 @@ namespace Intersect.Server.Entities
             var dmg = (int)Math.Round(damage * decScaling);
             enemy.TakeDamage(this, dmg, isSecondary ? Vitals.Mana : Vitals.Health);
             
-            SendCombatEffects(enemy, false, damage);
+            SendCombatEffects(enemy, false, dmg);
             PacketSender.SendCombatNumber(DetermineCombatNumberType(damage, isSecondary, isNeutral, 1.0), enemy, dmg);
 
             return dmg;
