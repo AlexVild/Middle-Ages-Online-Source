@@ -91,7 +91,15 @@ namespace Intersect.Client.Core
 
         public static GameFont UIFont;
 
-        public static float CurrentShake = 0.0f;
+        private static float _currentShake;
+        public static float CurrentShake
+        {
+            get => _currentShake;
+            set
+            {
+                _currentShake = value;
+            }
+        }
 
         private static float mShakeDecrement = 0.12f;
 
@@ -1037,7 +1045,7 @@ namespace Intersect.Client.Core
                 return;
             }
 
-            var shakeReduction = (Timing.Global.Milliseconds - sLastUpdate) / Options.ShakeDeltaDurationDivider;
+            var shakeReduction = Math.Max((Timing.Global.Milliseconds - sLastUpdate) / Options.ShakeDeltaDurationDivider, 0);
             
             CurrentShake = Utilities.MathHelper.Clamp(CurrentShake - shakeReduction, 0.0f, 100.0f);
             var yShake = CurrentShake;
