@@ -303,13 +303,21 @@ namespace Intersect.Client.Entities
 
                 if (Controls.KeyDown(Control.AttackInteract) || ResourceLocked)
                 {
-                    if (!Globals.Me.TryAttack())
+                    if (StatusIsActive(StatusTypes.Stun) || StatusIsActive(StatusTypes.Sleep))
+                    {
+                        SendStunAlerts(true);
+                    }
+                    else if (!Globals.Me.TryAttack())
                     {
                         UpdateAttackTimer();
                     }
                 }
             } else if (CanHarvest() && ResourceLocked) // Allow resource locking to persist in more situations than attacking
             {
+                if (StatusIsActive(StatusTypes.Stun) || StatusIsActive(StatusTypes.Sleep))
+                {
+                    SendStunAlerts(true);
+                }
                 if (!Globals.Me.TryAttack())
                 {
                     UpdateAttackTimer();
