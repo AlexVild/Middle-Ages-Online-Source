@@ -849,10 +849,20 @@ namespace Intersect.Client.Entities
 
                 if (animInstance.AutoRotate)
                 {
-                    animInstance.SetPosition(
-                        (int) Math.Ceiling(GetCenterPos().X), (int) Math.Ceiling(GetCenterPos().Y), X, Y, CurrentMap,
-                        Dir, Z
-                    );
+                    if (this is Player pl && pl.CombatMode)
+                    {
+                        animInstance.SetPosition(
+                            (int)Math.Ceiling(GetCenterPos().X), (int)Math.Ceiling(GetCenterPos().Y), X, Y, CurrentMap,
+                            pl.FaceDirection, Z
+                        );
+                    }
+                    else
+                    {
+                        animInstance.SetPosition(
+                            (int)Math.Ceiling(GetCenterPos().X), (int)Math.Ceiling(GetCenterPos().Y), X, Y, CurrentMap,
+                            Dir, Z
+                        );
+                    }
                 }
                 else
                 {
