@@ -65,6 +65,12 @@ namespace Intersect.GameObjects
             }
 
             var triggerItemName = Trigger.GetRelatedTable().GetLookup().Get(TriggerId)?.Name ?? "NOT FOUND";
+            
+            if (Trigger == RecipeTrigger.SpellLearned)
+            {
+                return $"{Trigger.GetDescription()}: {triggerItemName}";
+            }
+
 
             if (IsBool)
             {

@@ -3295,11 +3295,22 @@ namespace Intersect.Server.Entities.Events
                     break;
 
                 case ChallengeUpdate.Complete:
-                    challenge.Complete = true;
-                    PacketSender.SendChatMsg(player,
-                            $"Challenge completed: {descriptor.Name}!",
-                            ChatMessageType.Experience,
-                            sendToast: true);
+                    if (challenge.Challenge.RequiresContract && player.ChallengeContractId == challenge.ChallengeId)
+                    {
+                        challenge.Complete = true;
+                        PacketSender.SendChatMsg(player,
+                                $"Challenge completed: {descriptor.Name}!",
+                                ChatMessageType.Experience,
+                                sendToast: true);
+                    }
+                    else if (!challenge.Challenge.RequiresContract)
+                    {
+                        challenge.Complete = true;
+                        PacketSender.SendChatMsg(player,
+                                $"Challenge completed: {descriptor.Name}!",
+                                ChatMessageType.Experience,
+                                sendToast: true);
+                    }
                     break;
 
                 case ChallengeUpdate.Reset:

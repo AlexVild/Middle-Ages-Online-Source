@@ -6,6 +6,7 @@ using Intersect.GameObjects;
 using Intersect.Network.Packets.Server;
 using Intersect.Server.Database;
 using Intersect.Server.Database.PlayerData.Players;
+using Intersect.Server.Entities.Events;
 using Intersect.Server.Entities.PlayerData;
 using Intersect.Server.Localization;
 using Intersect.Server.Networking;
@@ -16,6 +17,15 @@ namespace Intersect.Server.Entities
 {
     public partial class Player : AttackingEntity
     {
+        public Guid ChallengeContractId { get; set; }
+
+        [NotMapped, JsonIgnore]
+        public ChallengeDescriptor ChallengeContract
+        {
+            get => ChallengeDescriptor.Get(ChallengeContractId);
+            set => ChallengeContractId = value?.Id ?? Guid.Empty;
+        }
+
         [NotMapped, JsonIgnore]
         public List<ChallengeProgress> ChallengesInProgress { get; set; } = new List<ChallengeProgress>();
 
@@ -99,7 +109,18 @@ namespace Intersect.Server.Entities
                     continue;
                 }
                 
-                if (instance.Challenge?.Type == ChallengeType.MissFreeAtRange)
+                if (instance.Challenge == null)
+                {
+                    continue;
+                }
+
+                // Only track contract challenges if we're contracted to them
+                if (instance.Challenge.RequiresContract && ChallengeContractId != instance.ChallengeId)
+                {
+                    continue;
+                }
+
+                if (instance.Challenge.Type == ChallengeType.MissFreeAtRange)
                 {
                     MissFreeRangeDict[instance.Challenge.Param] = 0;
                 }
@@ -645,6 +666,90 @@ namespace Intersect.Server.Entities
             }
 
             return new ChallengeProgressPacket(weaponTypeProgresses, TrackedWeaponType);
+        }
+
+        public bool TryAcceptChallengeContract(Guid contractId)
+        {
+            // Player doesn't know challenge
+            var challengeInstance = Challenges.Find(c => c.ChallengeId == contractId);
+            if (challengeInstance == default)
+            {
+                return false;
+            }
+
+            if (challengeInstance.Complete)
+            {
+                return false;
+            }
+
+            if (ChallengeContractId == contractId && TryVoidCurrentContract(out var cancelledContract))
+            {
+                PacketSender.SendChatMsg(this,
+                    $"You've cancelled the contract: {cancelledContract.Name}",
+                    Enums.ChatMessageType.Experience,
+                    CustomColors.General.GeneralWarning,
+                    sendToast: true);
+                return false;
+            }
+
+            var newContract = ChallengeDescriptor.Get(contractId);
+            if (newContract == null)
+            {
+                PacketSender.SendEventDialog(this, "This challenge no longer exists.", string.Empty, Guid.Empty);
+            }
+
+            if (!Conditions.MeetsConditionLists(newContract.ContractRequirements, this, null))
+            {
+                var reason = string.IsNullOrWhiteSpace(newContract.RequirementsString) ?
+                    "You do not meet the requirements of this challenge contract" :
+                    newContract.RequirementsString;
+                PacketSender.SendEventDialog(this, reason, string.Empty, Guid.Empty);
+                return false;
+            }
+
+            TryVoidCurrentContract(out var oldContract);
+            ChallengeContractId = contractId;
+
+            if (oldContract != null)
+            {
+                PacketSender.SendChatMsg(this,
+                    $"You have accepted a new challenge contract: {ChallengeContract.Name}, voiding your previous contract. Changing equipment will void this new contract.",
+                    Enums.ChatMessageType.Experience,
+                    CustomColors.General.GeneralWarning,
+                    sendToast: true);
+            }
+            else
+            {
+                PacketSender.SendChatMsg(this,
+                    $"You have accepted a new challenge contract: {ChallengeContract.Name}. Changing equipment will void the contract.",
+                    Enums.ChatMessageType.Experience,
+                    CustomColors.General.GeneralWarning,
+                    sendToast: true);
+            }
+
+            // Re-Track current challenges
+            RetrackChallenges();
+            return true;
+        }
+
+        public void RetrackChallenges()
+        {
+            var currentChallenges = ChallengesInProgress.Select(c => c.ChallengeId).ToList();
+            currentChallenges.Add(ChallengeContractId);
+            TrackChallenges(currentChallenges.Distinct().ToList());
+        }
+
+        public bool TryVoidCurrentContract(out ChallengeDescriptor oldContract)
+        {
+            oldContract = ChallengeContract;
+            if (ChallengeContract != null)
+            {
+                ChallengeContract = null;
+                RetrackChallenges();
+                return true;
+            }
+
+            return false;
         }
     }
 }

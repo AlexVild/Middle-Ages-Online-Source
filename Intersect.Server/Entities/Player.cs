@@ -5760,6 +5760,15 @@ namespace Intersect.Server.Entities
                 PacketSender.SendPlayerEquipmentToProximity(this);
                 PacketSender.SendEntityStatsToProximity(this);
             }
+            
+            if (TryVoidCurrentContract(out var currContract))
+            {
+                PacketSender.SendChatMsg(this,
+                    $"You have voided a challenge by changing equipment: {currContract.Name}",
+                    ChatMessageType.Experience,
+                    CustomColors.General.GeneralDisabled,
+                    sendToast: true);
+            }
             SetMasteryProgress();
         }
 

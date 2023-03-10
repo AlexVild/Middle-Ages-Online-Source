@@ -153,6 +153,9 @@ namespace Intersect.Editor.Forms.Editors
                 ParamType = ((ChallengeParamType)mEditorItem.ChallengeParamType).GetRelatedTable();
                 cmbParamSelector.SelectedIndex = ParamType.ListIndex(mEditorItem.ChallengeParamId) + 1;
             }
+
+            chkRequiresContract.Checked = mEditorItem.RequiresContract;
+            txtRequirementDescription.Text = mEditorItem.RequirementsString;
         }
 
         private void UpdateEditor()
@@ -427,6 +430,22 @@ namespace Intersect.Editor.Forms.Editors
         private void cmbEnhancement_SelectedIndexChanged(object sender, EventArgs e)
         {
             mEditorItem.EnhancementUnlockId = EnhancementDescriptor.IdFromList(cmbEnhancement.SelectedIndex - 1);
+        }
+
+        private void chkRequiresContract_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.RequiresContract = chkRequiresContract.Checked;
+        }
+
+        private void btnDynamicRequirements_Click(object sender, EventArgs e)
+        {
+            var frm = new FrmDynamicRequirements(mEditorItem.ContractRequirements, RequirementType.ChallengeContract);
+            frm.ShowDialog();
+        }
+
+        private void txtRequirementDescription_TextChanged(object sender, EventArgs e)
+        {
+            mEditorItem.RequirementsString = txtRequirementDescription.Text;
         }
     }
 }

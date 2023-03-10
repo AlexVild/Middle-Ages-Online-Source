@@ -259,6 +259,8 @@ namespace Intersect.Client.Interface.Game.Components
                         return requirement.Amount > 1 ?
                             $"Harvest {requirement.Amount} {pluralName}s" :
                             $"Harvest one {trigger.Name}";
+                    case RecipeTrigger.SpellLearned:
+                        return $"Learn spell: {trigger.Name}";
                     default:
                         return string.Empty;
                 }

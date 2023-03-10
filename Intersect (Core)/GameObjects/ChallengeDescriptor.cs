@@ -1,5 +1,6 @@
 ﻿using Intersect.Attributes;
 using Intersect.Enums;
+using Intersect.GameObjects.Conditions;
 using Intersect.GameObjects.Events;
 using Intersect.Models;
 using Newtonsoft.Json;
@@ -89,6 +90,21 @@ namespace Intersect.GameObjects
         public int Param { get; set; }
 
         public string Icon { get; set; } = string.Empty;
+
+        [NotMapped]
+        public ConditionLists ContractRequirements { get; set; } = new ConditionLists();
+
+        public string RequirementsString { get; set; } = string.Empty;
+
+        [Column("ContractRequirements")]
+        [JsonIgnore]
+        public string JsonRequirements
+        {
+            get => ContractRequirements.Data();
+            set => ContractRequirements.Load(value);
+        }
+
+        public bool RequiresContract { get; set; }
 
         public string Description { get; set; } = string.Empty;
 

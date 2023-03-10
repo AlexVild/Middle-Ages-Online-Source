@@ -204,6 +204,10 @@ namespace Intersect.Server.Core
             {
                 return player.UnlockedRecipeIds.Contains(requirement.DescriptorId);
             }
+            if (requirement.Trigger == RecipeTrigger.SpellLearned)
+            {
+                return player.TryGetSkillInSkillbook(requirement.TriggerId, out _);
+            }
 
             var progress = GetNumericRequirementProgress(player, requirement);
 
@@ -238,6 +242,11 @@ namespace Intersect.Server.Core
             {
                 switch (requirement.Trigger)
                 {
+                    // These triggers don't allow amounts, they are effectively boolean
+                    case RecipeTrigger.None:
+                    case RecipeTrigger.SpellLearned:
+                        return 0;
+
                     case RecipeTrigger.PlayerVarChange:
                         var variableValue = player.GetVariableValue(requirement.TriggerId);
 
@@ -249,8 +258,10 @@ namespace Intersect.Server.Core
                                 Logging.Log.Error("Invalid variable type when evaluating recipe unlock");
                                 return 0;
                         }
+
                     case RecipeTrigger.ItemObtained:
                         return player.CountItems(requirement.TriggerId, true, true);
+
                     default:
                         Logging.Log.Error("Invalid trigger type when evaluating recipe unlock");
                         return 0;

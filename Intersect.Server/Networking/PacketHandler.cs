@@ -4656,5 +4656,10 @@ namespace Intersect.Server.Networking
                 return;
             }
         }
+
+        public void HandlePacket(Client client, RequestChallengeContractPacket packet)
+        {
+            _ = client?.Entity?.TryAcceptChallengeContract(packet.ChallengeId);
+        }
     }
 }

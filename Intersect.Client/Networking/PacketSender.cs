@@ -692,5 +692,10 @@ namespace Intersect.Client.Networking
         {
             Network.SendPacket(new RequestUpgradePacket(craftId));
         }
+
+        public static void SendChallengeContractRequest(Guid challengeId)
+        {
+            Network.SendPacket(new RequestChallengeContractPacket(challengeId));
+        }
     }
 }

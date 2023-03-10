@@ -6289,6 +6289,9 @@ Negative values for time to flow backwards.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString RecipeUnlock = @"Recipe Unlock";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ChallengeContract = @"What requirements need to be met & maintained to accept this challenge";
         }
 
         public partial struct NpcEditor

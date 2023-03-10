@@ -118,7 +118,9 @@ namespace Intersect.Editor.Forms.Editors
 
         public void UpdateDisabled()
         {
-            cmbTriggerParams.Enabled = cmbTriggerType.SelectedIndex != (int)RecipeTrigger.None;
+            var selectedType = cmbTriggerType.SelectedIndex;
+            cmbTriggerParams.Enabled = selectedType != (int)RecipeTrigger.None;
+            nudAmt.Enabled = selectedType != (int)RecipeTrigger.SpellLearned || selectedType != (int)RecipeTrigger.None;
         }
 
         private void UpdateFields()

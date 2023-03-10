@@ -413,6 +413,7 @@
     <Compile Include="Network\Packets\Client\DeconstructItemsPacket.cs" />
     <Compile Include="Network\Packets\Client\FinishedFadePacket.cs" />
     <Compile Include="Network\Packets\Client\PartyInviteNamePacket.cs" />
+    <Compile Include="Network\Packets\Client\RequestChallengeContractPacket.cs" />
     <Compile Include="Network\Packets\Client\RequestChallengeProgressPacket.cs" />
     <Compile Include="Network\Packets\Client\RequestCosmeticsPacket.cs" />
     <Compile Include="Network\Packets\Client\CloseEnhancementPacket.cs" />

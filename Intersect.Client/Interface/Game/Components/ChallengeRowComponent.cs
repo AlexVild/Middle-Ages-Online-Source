@@ -1,5 +1,6 @@
 ﻿using Intersect.Client.Framework.Gwen.Control;
 using Intersect.Client.Interface.Components;
+using Intersect.Client.Networking;
 using Intersect.GameObjects;
 using Intersect.Network.Packets.Server;
 using System;
@@ -31,6 +32,8 @@ namespace Intersect.Client.Interface.Game.Components
         private Color LockedColor => new Color(255, 100, 100, 100);
         private Color SecondaryColor => new Color(255, 180, 180, 180);
         private Color PrimaryColor => new Color(255, 255, 255, 255);
+
+        private Button ContractButton;
 
         private string BarTexture => Completed ? "challenge_progress_bar_complete.png" : "challenge_progress_bar_fg.png";
 
@@ -127,6 +130,12 @@ namespace Intersect.Client.Interface.Game.Components
                 );
             ProgressBar.Percent = Completed ? 1.0f : PercentComplete;
 
+            ContractButton = new Button(SelfContainer, "Contract Button")
+            {
+                Text = "Accept Contract"
+            };
+            ContractButton.Clicked += ContractButton_Clicked;
+
             base.Initialize();
             FitParentToComponent();
 
@@ -158,6 +167,13 @@ namespace Intersect.Client.Interface.Game.Components
                 ChallengeImage.SetImageRenderColor(new Color(90, 255, 255, 255));
                 ProgressBar.Hide();
             }
+
+            ContractButton.IsHidden = !ChallengeDescriptor.Get(ChallengeId)?.RequiresContract ?? true;
+        }
+
+        private void ContractButton_Clicked(Base sender, Framework.Gwen.Control.EventArguments.ClickedEventArgs arguments)
+        {
+            PacketSender.SendChallengeContractRequest(ChallengeId);
         }
 
         public virtual void SetPosition(float x, float y)

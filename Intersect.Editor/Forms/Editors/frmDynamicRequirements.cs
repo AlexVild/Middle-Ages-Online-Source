@@ -42,6 +42,8 @@ namespace Intersect.Editor.Forms.Editors
         DialogOptions,
 
         RecipeUnlock,
+
+        ChallengeContract,
     }
 
     public partial class FrmDynamicRequirements : Form
@@ -130,6 +132,11 @@ namespace Intersect.Editor.Forms.Editors
                     break;
                 case RequirementType.RecipeUnlock:
                     lblInstructions.Text = Strings.DynamicRequirements.RecipeUnlock;
+
+                    break;
+
+                case RequirementType.ChallengeContract:
+                    lblInstructions.Text = Strings.DynamicRequirements.ChallengeContract;
 
                     break;
                 default:

@@ -11,6 +11,7 @@ using Intersect.Server.Networking;
 using Intersect.GameObjects;
 using Intersect.Server.Database;
 using Intersect.Server.Localization;
+using Intersect.Server.Core;
 
 namespace Intersect.Server.Entities
 {
@@ -165,6 +166,7 @@ namespace Intersect.Server.Entities
 
             PacketSender.SendSkillbookToClient(this);
             PacketSender.SendSkillStatusUpdate(this, "New skill(s)!");
+            RecipeUnlockWatcher.EnqueueNewPlayer(this, spellId, RecipeTrigger.SpellLearned);
 
             return true;
         }
@@ -212,6 +214,7 @@ namespace Intersect.Server.Entities
             }
 
             PacketSender.SendSkillbookToClient(this);
+            RecipeUnlockWatcher.EnqueueNewPlayer(this, spellId, RecipeTrigger.SpellLearned);
 
             return true;
         }
