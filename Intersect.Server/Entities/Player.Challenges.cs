@@ -4,6 +4,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using Intersect.GameObjects;
 using Intersect.Network.Packets.Server;
+using Intersect.Server.Core;
+using Intersect.Server.Core.Instancing.Controller;
 using Intersect.Server.Database;
 using Intersect.Server.Database.PlayerData.Players;
 using Intersect.Server.Entities.Events;
@@ -696,6 +698,12 @@ namespace Intersect.Server.Entities
             if (newContract == null)
             {
                 PacketSender.SendEventDialog(this, "This challenge no longer exists.", string.Empty, Guid.Empty);
+            }
+
+            if (InstanceProcessor.TryGetInstanceController(MapInstanceId, out var instanceController) && instanceController.InstanceIsDungeon)
+            {
+                PacketSender.SendEventDialog(this, "You can not accept contracts while in a dungeon!", string.Empty, Guid.Empty);
+                return false;
             }
 
             if (!Conditions.MeetsConditionLists(newContract.ContractRequirements, this, null))
