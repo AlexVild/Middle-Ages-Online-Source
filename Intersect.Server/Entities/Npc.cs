@@ -1259,7 +1259,8 @@ namespace Intersect.Server.Entities
                     if (en.GetType() == typeof(Npc))
                     {
                         var npc = (Npc)en;
-                        if (npc.Target == null & npc.Base.Swarm && IsAllyOf(npc))
+                        // Swarm if an aggressive enemy, or it's direct relative is being attacked
+                        if (npc.Target == null & npc.Base.Swarm && IsAllyOf(npc) && (npc.Base.Aggressive || npc.Base.Id == Base.Id))
                         {
                             if (npc.InRangeOf(attacker, npc.Base.SightRange))
                             {
