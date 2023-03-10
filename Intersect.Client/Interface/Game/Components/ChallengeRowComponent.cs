@@ -1,5 +1,6 @@
 ﻿using Intersect.Client.Framework.Gwen.Control;
 using Intersect.Client.Interface.Components;
+using Intersect.Client.Interface.Game.Character.Panels;
 using Intersect.Client.Networking;
 using Intersect.GameObjects;
 using Intersect.Network.Packets.Server;
@@ -72,6 +73,10 @@ namespace Intersect.Client.Interface.Game.Components
         public int CurrentLevel { get; set; }
         public long RequiredExp { get; set; }
 
+        public Label TermsLabel { get; set; }
+
+        public bool IsContracted => CharacterChallengesController.CurrentContractId == ChallengeId;
+
         public ChallengeRowComponent(Base parent,
             string containerName,
             Guid challengeId,
@@ -130,11 +135,16 @@ namespace Intersect.Client.Interface.Game.Components
                 );
             ProgressBar.Percent = Completed ? 1.0f : PercentComplete;
 
-            ContractButton = new Button(SelfContainer, "Contract Button")
+            ContractButton = new Button(SelfContainer, "ContractButton")
             {
-                Text = "Accept Contract"
+                Text = IsContracted ? "Cancel Contract" : "View Terms"
             };
             ContractButton.Clicked += ContractButton_Clicked;
+
+            TermsLabel = new Label(SelfContainer, "TermsLabel") 
+            { 
+                Text = (Descriptor?.RequiresContract ?? false) ? "Terms:" : "Terms: None"
+            };
 
             base.Initialize();
             FitParentToComponent();
@@ -168,10 +178,25 @@ namespace Intersect.Client.Interface.Game.Components
                 ProgressBar.Hide();
             }
 
-            ContractButton.IsHidden = !ChallengeDescriptor.Get(ChallengeId)?.RequiresContract ?? true;
+            ContractButton.IsHidden = !Descriptor?.RequiresContract ?? true;
+            ContractButton.IsDisabled = !Unlocked;
         }
 
         private void ContractButton_Clicked(Base sender, Framework.Gwen.Control.EventArguments.ClickedEventArgs arguments)
+        {
+            if (Descriptor == null)
+            {
+                return;
+            }
+
+            var prompt = IsContracted ?
+                $"Would you like to cancel this contract? You will not earn progress toward this challenge while the contract is unaccepted, but you can always try it again later. Progress is saved." :
+                $"\"{Descriptor.RequirementsString}\".\n\nDo you accept? The challenge will be paused if you change equipment, but can be started again.";
+
+            var iBox = new InputBox(Descriptor.Name, prompt, true, InputBox.InputType.YesNo, AcceptOrCancelChallengeContract, null, null);
+        }
+
+        private void AcceptOrCancelChallengeContract(object sender, EventArgs e)
         {
             PacketSender.SendChallengeContractRequest(ChallengeId);
         }

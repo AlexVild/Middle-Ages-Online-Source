@@ -5761,7 +5761,7 @@ namespace Intersect.Server.Entities
                 PacketSender.SendEntityStatsToProximity(this);
             }
             
-            if (TryVoidCurrentContract(out var currContract))
+            if (TryVoidCurrentContract(out var currContract, true))
             {
                 PacketSender.SendChatMsg(this,
                     $"You have voided a challenge by changing equipment: {currContract.Name}",

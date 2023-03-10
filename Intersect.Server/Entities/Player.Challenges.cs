@@ -665,7 +665,7 @@ namespace Intersect.Server.Entities
                 weaponTypeProgresses.Add(progress);
             }
 
-            return new ChallengeProgressPacket(weaponTypeProgresses, TrackedWeaponType);
+            return new ChallengeProgressPacket(weaponTypeProgresses, TrackedWeaponType, ChallengeContractId);
         }
 
         public bool TryAcceptChallengeContract(Guid contractId)
@@ -682,7 +682,7 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
-            if (ChallengeContractId == contractId && TryVoidCurrentContract(out var cancelledContract))
+            if (ChallengeContractId == contractId && TryVoidCurrentContract(out var cancelledContract, true))
             {
                 PacketSender.SendChatMsg(this,
                     $"You've cancelled the contract: {cancelledContract.Name}",
@@ -729,6 +729,7 @@ namespace Intersect.Server.Entities
 
             // Re-Track current challenges
             RetrackChallenges();
+            SendPacket(GenerateChallengeProgressPacket());
             return true;
         }
 
@@ -739,13 +740,19 @@ namespace Intersect.Server.Entities
             TrackChallenges(currentChallenges.Distinct().ToList());
         }
 
-        public bool TryVoidCurrentContract(out ChallengeDescriptor oldContract)
+        public bool TryVoidCurrentContract(out ChallengeDescriptor oldContract, bool sendPacket = false)
         {
             oldContract = ChallengeContract;
             if (ChallengeContract != null)
             {
                 ChallengeContract = null;
                 RetrackChallenges();
+
+                if (sendPacket)
+                {
+                    SendPacket(GenerateChallengeProgressPacket());
+                }
+
                 return true;
             }
 

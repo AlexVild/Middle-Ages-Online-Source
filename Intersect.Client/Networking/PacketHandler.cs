@@ -2861,6 +2861,7 @@ namespace Intersect.Client.Networking
             }
 
             CharacterChallengesController.WeaponTypeProgresses = packet.WeaponTypes;
+            CharacterChallengesController.CurrentContractId = packet.CurrentContractId;
             CharacterBonusesPanelController.Refresh = true;
         }
 

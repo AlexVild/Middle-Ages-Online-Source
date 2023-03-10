@@ -325,6 +325,8 @@ namespace Intersect.Client.Interface.Game.Character.Panels
             } 
         }
 
+        public static Guid CurrentContractId { get; set; }
+
         public static bool Refresh { get; set; }
 
         public static bool AwaitingTrackChange { get; set; } = false;
