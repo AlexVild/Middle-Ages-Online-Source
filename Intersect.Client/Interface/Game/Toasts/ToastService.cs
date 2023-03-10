@@ -9,6 +9,8 @@ namespace Intersect.Client.Interface.Game.Toasts
 
         public static ToastWindow CurrentWindow => ToastQueue.FirstOrDefault()?.Window;
 
+        public static bool HasMouse { get; set; }
+
         public static void SetToast(Toast toast)
         {
             if (toast == default)
@@ -33,12 +35,14 @@ namespace Intersect.Client.Interface.Game.Toasts
 
             ToastQueue.FirstOrDefault()?.Dispose();
             ToastQueue.Dequeue();
+            HasMouse = false;
             return true;
         }
 
         public static void EmptyToastQueue()
         {
             ToastQueue.Clear();
+            HasMouse = false;
         }
     }
 }

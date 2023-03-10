@@ -2,6 +2,8 @@
 using Intersect.Client.Framework.GenericClasses;
 using Intersect.Client.Framework.Graphics;
 using Intersect.Client.Framework.Gwen;
+using Intersect.Client.General;
+using Intersect.Client.Utilities;
 using Intersect.Utilities;
 using System;
 using System.Collections.Generic;
@@ -28,8 +30,15 @@ namespace Intersect.Client.Interface.Game.Toasts
         readonly Color BorderColor = Color.White;
         readonly Color FlashingBackgroundColor = Color.White;
         readonly Color StaticBackgroundColor = Color.Black;
+        readonly Color HoverBackgroundColor = new Color(82, 82, 82);
 
-        Color BackgroundColor => Flashing ? FlashingBackgroundColor : StaticBackgroundColor;
+        private bool _mouseOver;
+        private bool _mouseDown;
+
+        Color BackgroundColor => Flashing ? FlashingBackgroundColor : 
+            _mouseDown ? FlashingBackgroundColor :
+            _mouseOver ? HoverBackgroundColor : 
+            StaticBackgroundColor;
 
         private float _x;
         public float X
@@ -82,6 +91,7 @@ namespace Intersect.Client.Interface.Game.Toasts
         {
             Toast = toast;
         }
+
         public void Initialize()
         {
             GetLines();
@@ -117,6 +127,9 @@ namespace Intersect.Client.Interface.Game.Toasts
                 Initialize();
             }
 
+            var mousePos = UiHelper.GetViewMousePos();
+            _mouseOver = mousePos.X >= X && mousePos.X <= X + Width && mousePos.Y >= Y && mousePos.Y <= Y + Height;
+
             if (CreatedAt + DisplayTime < Timing.Global.Milliseconds)
             {
                 _ = ToastService.TryDequeueToast();
@@ -127,6 +140,30 @@ namespace Intersect.Client.Interface.Game.Toasts
 
             DrawTextContainer();
             DrawText();
+
+            // Click-to-close
+            if (_mouseDown && !Globals.InputManager.MouseButtonDown(Framework.Input.GameInput.MouseButtons.Left))
+            {
+                ToastClicked();
+                return;
+            }
+            if (_mouseOver && Globals.InputManager.MouseButtonDown(Framework.Input.GameInput.MouseButtons.Left))
+            {
+                _mouseDown = true;
+            }
+            if (_mouseDown && !_mouseOver)
+            {
+                _mouseDown = false;
+            }
+
+            ToastService.HasMouse = _mouseOver;
+        }
+
+        private void ToastClicked()
+        {
+            _mouseDown = false;
+            Audio.AddGameSound("ui_close.wav", false);
+            _ = ToastService.TryDequeueToast();
         }
 
         private void Animate()
@@ -247,7 +284,7 @@ namespace Intersect.Client.Interface.Game.Toasts
 
         private void DrawText()
         {
-            if (Flashing)
+            if (Flashing || _mouseDown)
             {
                 return;
             }

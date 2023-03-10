@@ -201,7 +201,8 @@ namespace Intersect.Client.Interface
                 }
             }
 
-            return false;
+            // tee-hee. Used to be "return false" - easy way to prevent attacking when closing a toast. Hacky
+            return ToastService.HasMouse; 
         }
 
         public static bool MouseHitBase(Framework.Gwen.Control.Base obj)
