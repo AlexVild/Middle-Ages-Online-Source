@@ -164,8 +164,6 @@ namespace Intersect.Server.Entities
 
         public override void MeleeAttack(Entity enemy, bool ignoreEvasion)
         {
-            StealthAttack = IsStealthed;
-
             // Send an attack attempt to the client
             PacketSender.SendEntityAttack(this, CalculateAttackTime());
 

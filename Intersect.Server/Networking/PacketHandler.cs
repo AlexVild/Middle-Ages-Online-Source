@@ -1077,6 +1077,7 @@ namespace Intersect.Server.Networking
             // Make the client see the attack, even if it misses!
             PacketSender.SendEntityAttack(player, player.CalculateAttackTime());
             player.SendAttackAnimation(null);
+            player.StealthAttack = player.IsStealthed;
             player.Unstealth();
 
             // Spawn projectiles if can/need be
