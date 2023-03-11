@@ -2517,6 +2517,7 @@ namespace Intersect.Server.Entities.Events
                             Strings.Quests.classrankincreased.ToString(cls.Name, classInfo.Rank.ToString()),
                             ChatMessageType.Quest,
                             CustomColors.Quests.Completed, sendToast: true);
+                        RecipeUnlockWatcher.RefreshPlayer(player);
                     }
                     else if (oldRank > classInfo.Rank)
                     {
@@ -2524,6 +2525,7 @@ namespace Intersect.Server.Entities.Events
                             Strings.Quests.classrankdecreased.ToString(cls.Name, classInfo.Rank.ToString()),
                             ChatMessageType.Quest,
                             CustomColors.Quests.Abandoned, sendToast: true);
+                        RecipeUnlockWatcher.RefreshPlayer(player);
                     }
 
                     classInfo.TasksRemaining = player.TasksRemainingForClassRank(classInfo.Rank);

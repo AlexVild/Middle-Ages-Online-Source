@@ -1391,6 +1391,7 @@ namespace Intersect.Server.Entities
 
             UnequipInvalidItems();
             StartCommonEventsWithTrigger(CommonEventTrigger.LevelUp);
+            RecipeUnlockWatcher.RefreshPlayer(this);
         }
 
         public void GiveExperience(long amount, bool partyCombo = false, Entity opponent = null, bool fromComboEnd = false, bool sendToast = true)
@@ -6646,6 +6647,7 @@ namespace Intersect.Server.Entities
                         assignmentClassInfo.Rank = MathHelper.Clamp(assignmentClassInfo.Rank + 1, 0, Options.MaxClassRank);
                         if (oldRank != assignmentClassInfo.Rank)
                         {
+                            RecipeUnlockWatcher.RefreshPlayer(this);
                             StartCommonEventsWithTrigger(Enums.CommonEventTrigger.ClassRankIncreased, "", quest.RelatedClassId.ToString());
                         }
 
