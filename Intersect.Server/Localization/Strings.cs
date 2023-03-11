@@ -396,6 +396,7 @@ namespace Intersect.Server.Localization
                     {17, @"CONFUSED!"},
                     {18, @"STEADY!"},
                     {19, @"ATTUNED!"},
+                    {20, @"ENFEEBLED!"},
                 }
             );
 

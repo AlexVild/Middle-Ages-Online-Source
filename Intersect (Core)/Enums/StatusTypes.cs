@@ -84,6 +84,8 @@ namespace Intersect.Enums
         [Description("Attuned")]
         Attuned = 19,
 
+        [Description("Enfeebled")]
+        Enfeebled = 20,
     }
 
 }

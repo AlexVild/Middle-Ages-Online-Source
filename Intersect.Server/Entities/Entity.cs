@@ -253,6 +253,9 @@ namespace Intersect.Server.Entities
         public long RegenTimer { get; set; } = Timing.Global.Milliseconds;
 
         [NotMapped, JsonIgnore]
+        public long ManaRegenTimer { get; set; } = Timing.Global.Milliseconds;
+
+        [NotMapped, JsonIgnore]
         public int SpellCastSlot { get; set; } = 0;
 
         //Status effects
@@ -355,6 +358,8 @@ namespace Intersect.Server.Entities
                         RegenTimer = timeMs + Options.RegenTime;
                     }
 
+                    ProcessManaRegen(timeMs);
+
                     //Status timers
                     var statusArray = CachedStatuses;
                     foreach (var status in statusArray)
@@ -370,6 +375,11 @@ namespace Intersect.Server.Entities
                     Monitor.Exit(EntityLock);
                 }
             }
+        }
+
+        // Default implementation in "AttackingEntity"
+        public virtual void ProcessManaRegen(long timeMs)
+        {
         }
 
         //Movement
@@ -1438,6 +1448,12 @@ namespace Intersect.Server.Entities
                         }
                     }
                 }
+            }
+
+            // Reset mana regen each time a spell is cast
+            if (vital == Vitals.Mana)
+            {
+                ManaRegenTimer = Timing.Global.Milliseconds + Options.Instance.CombatOpts.ManaRegenTime;
             }
 
             var vitalId = (int) vital;

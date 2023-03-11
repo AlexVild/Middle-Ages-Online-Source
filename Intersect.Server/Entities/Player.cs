@@ -1233,6 +1233,10 @@ namespace Intersect.Server.Entities
 
             foreach (Vitals vital in Enum.GetValues(typeof(Vitals)))
             {
+                if (vital == Vitals.Mana)
+                {
+                    continue; // We process mana regen differently in MAO, see "ProcessManaRegen"
+                }
                 if (vital >= Vitals.VitalCount)
                 {
                     continue;
@@ -1246,12 +1250,32 @@ namespace Intersect.Server.Entities
                     continue;
                 }
 
-                var vitalRegenRate = (playerClass.VitalRegen[vitalId] + GetEquipmentVitalRegen(vital)) / 100f;
+                var vitalRegenRate = GetVitalRegenRate(vitalId);
                 var regenValue = (int) Math.Max(1, maxVitalValue * vitalRegenRate) *
                                  Math.Abs(Math.Sign(vitalRegenRate));
 
                 AddVital(vital, regenValue);
             }
+        }
+
+        public override void ProcessManaRegen(long timeMs)
+        {
+            if (PlayerDead)
+            {
+                return;
+            }
+            base.ProcessManaRegen(timeMs);
+        }
+
+        public override float GetVitalRegenRate(int vital)
+        {
+            var playerClass = ClassBase.Get(ClassId);
+            if (playerClass?.VitalRegen == null)
+            {
+                return 0f;
+            }
+
+            return (playerClass.VitalRegen[vital] + GetEquipmentVitalRegen((Vitals)vital)) / 100f;
         }
 
         public override int GetMaxVital(int vital)

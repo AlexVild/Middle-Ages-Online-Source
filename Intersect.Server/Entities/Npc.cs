@@ -1534,12 +1534,22 @@ namespace Intersect.Server.Entities
                     continue;
                 }
 
-                var vitalRegenRate = Base.VitalRegen[vitalId] / 100f;
+                var vitalRegenRate = GetVitalRegenRate(vitalId);
                 var regenValue = (int) Math.Max(1, maxVitalValue * vitalRegenRate) *
                                  Math.Abs(Math.Sign(vitalRegenRate));
 
                 AddVital(vital, regenValue);
             }
+        }
+
+        public override float GetVitalRegenRate(int vital)
+        {
+            if (Base == null)
+            {
+                return 0f;
+            }
+
+            return Base.VitalRegen[vital] / 100f;
         }
 
         public override void Warp(

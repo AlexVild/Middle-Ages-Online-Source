@@ -529,5 +529,31 @@ namespace Intersect.Server.Entities
             // Safely raise the event for all subscribers
             AttackMissed?.Invoke(target);
         }
+
+        public override void ProcessManaRegen(long timeMs)
+        {
+            if (IsDead() || ManaRegenTimer > timeMs || StatusActive(StatusTypes.Enfeebled))
+            {
+                return;
+            }
+
+            var manaValue = GetVital((int)Vitals.Mana);
+            var maxMana = GetMaxVital((int)Vitals.Mana);
+            
+            // Don't regen if at max
+            if (manaValue >= maxMana)
+            {
+                return;
+            }
+
+            var manaRegenRate = GetVitalRegenRate((int)Vitals.Mana);
+            var regenValue = (int)Math.Max(1, maxMana * manaRegenRate) *
+                                 Math.Abs(Math.Sign(manaRegenRate));
+
+            AddVital(Vitals.Mana, regenValue);
+            ManaRegenTimer = timeMs + Options.Instance.CombatOpts.ManaRegenTime;
+        }
+
+        public abstract float GetVitalRegenRate(int vital);
     }
 }

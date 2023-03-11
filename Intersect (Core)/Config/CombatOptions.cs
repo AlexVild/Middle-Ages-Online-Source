@@ -107,6 +107,8 @@ namespace Intersect.Config
         public bool TurnWhileCasting = true;
         //Combat
         public int RegenTime = 5000; //5 seconds
+        
+        public int ManaRegenTime = 2000;
 
         public bool EnableCombatChatMessages = false; // Enables or disables combat chat messages.
 

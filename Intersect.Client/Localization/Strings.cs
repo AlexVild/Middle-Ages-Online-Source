@@ -2125,6 +2125,7 @@ namespace Intersect.Client.Localization
                 {17, @"Confused"},
                 {18, @"Steady"},
                 {19, @"Attuned"},
+                {20, @"Enfeebled"},
             };
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -2183,6 +2184,9 @@ namespace Intersect.Client.Localization
                 {15, @"Increases target movement speed"},
                 {16, @"Decreases target movement speed"},
                 {17, @"Confuses target"},
+                {18, @"Nullifies knockback"},
+                {19, @"Decreases mana consumption"},
+                {20, @"Removes mana regen"},
             };
 
         }
