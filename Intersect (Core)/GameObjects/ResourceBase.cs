@@ -134,7 +134,7 @@ namespace Intersect.GameObjects
 
         public int RP { get; set; } = 0;
 
-        public string DisplayName { get; set; }
+        public string DisplayName { get; set; } = string.Empty;
     }
 
 }
