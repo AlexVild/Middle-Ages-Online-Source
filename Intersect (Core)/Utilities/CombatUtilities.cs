@@ -149,7 +149,7 @@ namespace Intersect.Utilities
             var playerMeleePwr = playerBluntDmg + playerPierceDmg + playerSlashDmg;
 
             // Chooses magic as attack type if player's magic is superior to other offensive stats
-            if (playerMagicPwr > playerMeleePwr)
+            if (playerMagicPwr >= playerMeleePwr)
             {
                 atkTypes.Add(AttackTypes.Magic);
             }

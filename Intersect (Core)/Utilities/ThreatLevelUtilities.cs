@@ -42,7 +42,22 @@ namespace Intersect.Utilities
             List<AttackTypes> playerMelee, 
             List<AttackTypes> npcMelee, 
             long playerAttackSpeed, 
-            long npcAttackSpeed)
+            long npcAttackSpeed,
+            bool playerIsRanged)
+        {
+            var ratio = GetThreatLevelRatio(playerVitals, playerStats, npcVitals, npcStats, playerMelee, npcMelee, playerAttackSpeed, npcAttackSpeed, playerIsRanged);
+            return GetThreatLevelFromRatio(ratio);
+        }
+
+        private static double GetThreatLevelRatio(int[] playerVitals,
+            int[] playerStats,
+            int[] npcVitals,
+            int[] npcStats,
+            List<AttackTypes> playerMelee,
+            List<AttackTypes> npcMelee,
+            long playerAttackSpeed,
+            long npcAttackSpeed,
+            bool playerIsRanged)
         {
             var maxEnemyHp = npcVitals[(int)Vitals.Health];
             var maxHp = playerVitals[(int)Vitals.Health];
@@ -58,6 +73,8 @@ namespace Intersect.Utilities
                 playerAttackSpeed = Options.Combat.GlobalCooldownDuration;
             }
 
+            playerIsRanged = playerIsRanged || (playerAttackTypes.Count == 1 && playerAttackTypes.Contains(AttackTypes.Magic));
+
             CombatUtilities.CalculateDamage(playerAttackTypes, 1, 100, playerStats, npcStats, out var playerMax);
             CombatUtilities.CalculateDamage(npcAttackTypes, 1, 100, npcStats, playerStats, out var npcMax);
 
@@ -69,6 +86,10 @@ namespace Intersect.Utilities
             var npcMissChance = CombatUtilities.MissChance(CombatUtilities.CalculateMissFactor(npcStats[(int)Stats.Accuracy], playerStats[(int)Stats.Evasion]));
             var attacksMissed = Math.Floor(attacksToKill * playerMissChance);
             var attacksDodged = Math.Floor(attacksToDie * npcMissChance);
+            if (playerIsRanged)
+            {
+                attacksDodged += attacksToDie / 4;
+            }
 
             var timeToKill = (attacksToKill + attacksMissed) * playerAttackSpeed;
             var timeToDie = (attacksToDie + attacksDodged) * npcAttackSpeed;
@@ -77,18 +98,7 @@ namespace Intersect.Utilities
              * then a player could kill that mob X# of times before the player would die. If X > 0,
              * then the mob could kill the player Floor(X) times over.
              */
-            var ratio = timeToKill / timeToDie;
-
-            // Find the first threat level that is an appropriate match for our ratio
-            foreach (var threatVal in Options.Instance.CombatOpts.ThreatLevelThresholds.OrderByDescending(v => v.Value).ToArray())
-            {
-                if (ratio >= threatVal.Value)
-                {
-                    return threatVal.Key;
-                }
-            }
-
-            return ThreatLevel.Trivial;
+            return timeToKill / timeToDie;
         }
 
         /// <summary>
@@ -111,69 +121,33 @@ namespace Intersect.Utilities
             List<AttackTypes>[] playerMelee,
             List<AttackTypes> npcMelee,
             long[] playerAttackSpeed,
-            long npcAttackSpeed)
+            long npcAttackSpeed,
+            bool[] rangedAttackers)
         {
-            var partyHpPool = 0;
-            var totalMembers = playerStats.Length;
-
-            foreach(var memberVital in playerVitals)
+            var partyMembers = playerVitals.Length;
+            var ratios = new double[partyMembers];
+            for (var i = 0; i < partyMembers; i++)
             {
-                partyHpPool += memberVital[(int)Vitals.Health];
+                var ratio = GetThreatLevelRatio(playerVitals[i],
+                    playerStats[i],
+                    npcVitals,
+                    npcStats,
+                    playerMelee[i],
+                    npcMelee,
+                    playerAttackSpeed[i],
+                    npcAttackSpeed,
+                    rangedAttackers[i]) - (Options.Instance.CombatOpts.ThreatLevelDeductionPerPartyMember * partyMembers);
+                ratios[i] = Math.Max(ratio, 0d);
             }
-            var maxEnemyHp = npcVitals[(int)Vitals.Health];
 
-            var npcAttackTypes = CombatUtilities.EstimateEntityAttackTypes(npcStats, npcMelee);
+            return GetThreatLevelFromRatio(ratios.Min());
+        }
 
-            var totalDamage = 0;
-            var totalAttackSpeeds = 0L;
-            var totalNpcDamage = 0;
-            var totalMissChance = 0D;
-            var totalNpcMissChance = 0D;
-
-            // Calculate total values for every member of the party to use for average calculations later
-            for (var i = 0; i < totalMembers; i++)
+        private static ThreatLevel GetThreatLevelFromRatio(double threatRatio)
+        {
+            foreach (var threatVal in Options.Instance.CombatOpts.ThreatLevelThresholds.OrderByDescending(v => v.Value).ToArray())
             {
-                var memberAttackSpeed = playerAttackSpeed[i];
-                var memberStats = playerStats[i];
-                var memberMelee = CombatUtilities.EstimateEntityAttackTypes(memberStats, playerMelee[i]);
-                if (memberMelee.Count == 1 && memberMelee[0] == AttackTypes.Magic)
-                {
-                    memberAttackSpeed = Options.Combat.GlobalCooldownDuration;
-                }
-
-                totalAttackSpeeds += memberAttackSpeed;
-                CombatUtilities.CalculateDamage(memberMelee, 1, 100, memberStats, npcStats, out var memberMax);
-                CombatUtilities.CalculateDamage(npcAttackTypes, 1, 100, npcStats, memberStats, out var npcMax);
-                // Make a best guess at how missed attacks might come in to play by elongating the amount of total attacks needed for death based on miss percentages
-                totalMissChance += CombatUtilities.MissChance(CombatUtilities.CalculateMissFactor(memberStats[(int)Stats.Accuracy], npcStats[(int)Stats.Evasion]));
-                totalNpcMissChance += CombatUtilities.MissChance(CombatUtilities.CalculateMissFactor(npcStats[(int)Stats.Accuracy], memberStats[(int)Stats.Evasion]));
-                totalDamage += memberMax;
-                totalNpcDamage += npcMax;
-            }
-            
-            // Create averages to use for remainder of calculation
-            var partyAttackSpeed = (long)Math.Floor((float)totalAttackSpeeds / totalMembers);
-            var partyDamage = (int)Math.Floor((float)totalDamage / totalMembers);
-            var partyMissChance = totalMissChance / totalMembers;
-
-            var npcDamage = (int)Math.Floor((float)totalNpcDamage / totalMembers);
-            var npcMissChance = totalNpcMissChance / totalMembers;
-
-            var attacksToKill = Math.Ceiling((float)maxEnemyHp / partyDamage);
-            var attacksToDie = Math.Ceiling((float)partyHpPool / npcDamage);
-
-            var attacksMissed = Math.Floor(attacksToKill * partyMissChance);
-            var attacksDodged = Math.Floor(attacksToDie * npcMissChance);
-
-            var timeToKill = (attacksToKill + attacksMissed) * partyAttackSpeed;
-            var timeToDie = (attacksToDie + attacksDodged) * npcAttackSpeed;
-
-            var ratio = timeToKill / timeToDie;
-
-            // Find the first threat level that is an appropriate match for our ratio
-            foreach (var threatVal in Options.Instance.CombatOpts.ThreatLevelPartyThresholds.OrderByDescending(v => v.Value).ToArray())
-            {
-                if (ratio >= threatVal.Value)
+                if (threatRatio >= threatVal.Value)
                 {
                     return threatVal.Key;
                 }

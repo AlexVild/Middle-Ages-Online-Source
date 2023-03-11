@@ -82,6 +82,8 @@ namespace Intersect.Config
 
         public long ActionMessageTime = 1500;
 
+        public double ThreatLevelDeductionPerPartyMember = 0.015;
+
         public string PlayerDeathAnimationId = "a306ad8b-c58c-4d27-b94b-86dd7173dfd8";
 
         public bool HideResourceHealthBars = true;

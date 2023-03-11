@@ -562,6 +562,16 @@ namespace Intersect.Client.Interface.Game.EntityPanel
 
                     var attackSpeeds = validMembers.Select(member => (long)member.AttackSpeed()).ToArray();
 
+                    var rangedPartyMembers = validMembers.Select(member =>
+                    {
+                        if (!member.TryGetEquippedWeaponDescriptor(out var eqpPartyMemWeapon))
+                        {
+                            return false;
+                        }
+
+                        return eqpPartyMemWeapon.ProjectileId != Guid.Empty;
+                    }).ToArray();
+
                     threatLevel = ThreatLevelUtilities.DetermineNpcThreatLevelParty(vitals,
                         stats,
                         npc.MaxVital,
@@ -569,7 +579,8 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                         meleeTypes,
                         npc.AttackTypes,
                         attackSpeeds,
-                        npc.AttackSpeedValue);
+                        npc.AttackSpeedValue,
+                        rangedPartyMembers);
                 }
                 // Are we alone? use a single-person calc
                 else
@@ -581,7 +592,8 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                         playerMelee,
                         npc.AttackTypes,
                         Globals.Me.AttackSpeed(),
-                        npc.AttackSpeedValue);
+                        npc.AttackSpeedValue,
+                        Globals.Me.TryGetEquippedWeaponDescriptor(out weapon) ? weapon.ProjectileId != Guid.Empty : false);
                 }
 
                 ThreatLevelText.SetText(threatLevel.GetDescription());

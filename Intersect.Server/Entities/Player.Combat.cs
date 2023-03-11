@@ -589,6 +589,10 @@ namespace Intersect.Server.Entities
                 var partyStats = Party.Select(member => member.StatVals).ToArray();
                 var partyAttackTypes = Party.Select(member => member.GetMeleeAttackTypes()).ToArray();
                 var partyAttackSpeeds = Party.Select(member => GetRawAttackSpeed()).ToArray();
+                var rangedPartyMembers = Party.Select(member =>
+                {
+                    return (member.GetEquippedWeapon()?.ProjectileId ?? Guid.Empty) != Guid.Empty;
+                }).ToArray();
 
                 threatLevel = ThreatLevelUtilities.DetermineNpcThreatLevelParty(partyVitals,
                    partyStats,
@@ -597,18 +601,26 @@ namespace Intersect.Server.Entities
                    partyAttackTypes,
                    npc.Base.AttackTypes,
                    partyAttackSpeeds,
-                   npc.Base.AttackSpeedValue);
+                   npc.Base.AttackSpeedValue,
+                   rangedPartyMembers);
             }
             else
             {
-               threatLevel = ThreatLevelUtilities.DetermineNpcThreatLevel(MaxVitals,
+                var playerProjectile = Guid.Empty;
+                if (TryGetEquippedItem(Options.WeaponIndex, out var playerWeapon))
+                {
+                    playerProjectile = playerWeapon.Descriptor?.ProjectileId ?? Guid.Empty;
+                }
+
+                threatLevel = ThreatLevelUtilities.DetermineNpcThreatLevel(MaxVitals,
                    StatVals,
                    npc.Base.MaxVital,
                    npc.Base.Stats,
                    attackTypes,
                    npc.Base.AttackTypes,
                    GetRawAttackSpeed(),
-                   npc.Base.AttackSpeedValue);
+                   npc.Base.AttackSpeedValue,
+                   playerProjectile != Guid.Empty);
             }
 
             if (!Options.Combat.ThreatLevelExpRates.TryGetValue(threatLevel, out var expRate))

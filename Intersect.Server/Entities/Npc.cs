@@ -1705,6 +1705,12 @@ namespace Intersect.Server.Entities
 
         public ThreatLevel SetThreatLevelFor(Player player)
         {
+            var playerProjectile = Guid.Empty;
+            if (player.TryGetEquippedItem(Options.WeaponIndex, out var playerWeapon)) 
+            {
+                playerProjectile = playerWeapon.Descriptor?.ProjectileId ?? Guid.Empty;
+            }
+
             PlayerThreatLevels[player.Id] = ThreatLevelUtilities.DetermineNpcThreatLevel(player.MaxVitals,
                 player.StatVals,
                 Base.MaxVital,
@@ -1712,7 +1718,8 @@ namespace Intersect.Server.Entities
                 player.GetMeleeAttackTypes(),
                 Base.AttackTypes,
                 player.GetRawAttackSpeed(),
-                Base.AttackSpeedValue);
+                Base.AttackSpeedValue,
+                playerProjectile != Guid.Empty);
 
             return PlayerThreatLevels[player.Id];
         }
