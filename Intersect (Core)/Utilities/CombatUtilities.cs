@@ -37,18 +37,12 @@ namespace Intersect.Utilities
             var atkTypesCopy = new List<AttackTypes>();
             atkTypesCopy.AddRange(attackTypes);
 
-            if (atkTypesCopy.Count == 0)
-            {
-                // Default to blunt handling if nothing given, backwards compatible with old logic (def/atk used)
-                atkTypesCopy.Add(AttackTypes.Blunt);
-            }
-
             // Go through each of the attack types that apply to the damage
             var totalDamage = 0;
-            float decScaling = (float)scaling / 100; // scaling comes into this function as a percent number, i.e 110%, so we need that to be 1.1
+            float decScaling = (float)scaling / 100; // scaling comes into this function as a percent number, i.e 110% needs to be 1.1
             foreach (var element in atkTypesCopy)
             {
-                if ((int) element < 0 || (int) element > attackerStats.Length)
+                if ((int)element < 0 || (int)element > attackerStats.Length)
                 {
                     continue;
                 }
@@ -194,13 +188,13 @@ namespace Intersect.Utilities
                 return DAMAGE_FLOOR;
             }
 
-            return (TierToDamageFormula(equipmentTier - 1) + 1) * 1.1f;
+            return (TierToDamageFormula(equipmentTier - 1) + 2) * 1.1f;
         }
 
 
         const float HIGH_ARMOR_RES = 0.6f;
-        const float MED_ARMOR_RES = 0.4f;
-        const float LOW_ARMOR_RES = 0.15f;
+        const float MED_ARMOR_RES = 0.45f;
+        const float LOW_ARMOR_RES = 0.20f;
         const float ARMOR_MULT = 0.45f;
         const float HELMET_MULT = 0.35f;
         const float BOOTS_MULT = 0.2f;
@@ -245,7 +239,7 @@ namespace Intersect.Utilities
             }
 
             var damageAtTier = TierToDamageFormula(equipmentTier);
-            var fullResPoints = damageAtTier + (damageAtTier * 5) * ArmorResistanceConstants[resistanceLevel];
+            var fullResPoints = damageAtTier * 5 * ArmorResistanceConstants[resistanceLevel];
 
             return slotMultiplier * fullResPoints;
         }

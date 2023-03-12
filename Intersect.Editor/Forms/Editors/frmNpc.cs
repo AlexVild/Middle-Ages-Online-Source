@@ -1599,31 +1599,174 @@ namespace Intersect.Editor.Forms.Editors
             RefreshBalancing();
         }
 
+        float DesiredDps { get; set; }
+        float HighRes { get; set; }
+        float MedRes { get; set; }
+        float LowRes { get; set; }
+        long ReccExp { get; set; }
+
         private void RefreshBalancing()
         {
+            if (mEditorItem == null)
+            {
+                return;
+            }
+
             CombatUtilities.CalculateDamage(mEditorItem.AttackTypes, 1.0, 100, mEditorItem.Stats, new int[(int)Stats.StatCount], out var maxHit);
             var dps = CombatUtilities.CalculateDps(mEditorItem.AttackTypes, 1.0, 100, mEditorItem.Stats, new int[(int)Stats.StatCount], mEditorItem.AttackSpeedValue);
 
-            var desiredDps = CombatUtilities.TierToDamageFormula(CurrentTier);
+            DesiredDps = CombatUtilities.TierToDamageFormula(CurrentTier);
             
             var highRes = CombatUtilities.TierAndSlotToArmorRatingFormula(CurrentTier, -1, CombatUtilities.ResistanceLevel.High);
             var mediumRes = CombatUtilities.TierAndSlotToArmorRatingFormula(CurrentTier, -1, CombatUtilities.ResistanceLevel.Medium);
             var lowRes = CombatUtilities.TierAndSlotToArmorRatingFormula(CurrentTier, -1, CombatUtilities.ResistanceLevel.Low);
 
-            var hitsToKill = Math.Ceiling(mEditorItem.MaxVital[(int)Vitals.Health] / desiredDps);
+            var hitsToKill = Math.Ceiling(mEditorItem.MaxVital[(int)Vitals.Health] / DesiredDps);
 
-            lblTargetDpsVal.Text = desiredDps.ToString("N2");
+            lblTargetDpsVal.Text = DesiredDps.ToString("N2");
             lblProjectedDpsVal.Text = dps.ToString("N2");
-
-            lblHighResVal.Text = highRes.ToString("N0");
-            lblMediumResVal.Text = mediumRes.ToString("N0");
-            lblLowResVal.Text = lowRes.ToString("N0");
-
             lblMaxHitVal.Text = maxHit.ToString("N0");
 
-            lblHitsToKillVal.Text = hitsToKill.ToString("N0");
+            HighRes = highRes;
+            MedRes = mediumRes;
+            LowRes = lowRes;
 
-            lblCalcExpVal.Text = $"{NpcExperienceCalculator.Calculate(mEditorItem)} EXP";
+            ReccExp = NpcExperienceCalculator.Calculate(mEditorItem);
+            lblCalcExpVal.Text = $"{ReccExp} EXP";
+        }
+
+        private void btnBluntLo_Click(object sender, EventArgs e)
+        {
+            nudDef.Value = (int)Math.Floor(LowRes);
+        }
+
+        private void btnSlashLo_Click(object sender, EventArgs e)
+        {
+            nudSlashResist.Value = (int)Math.Floor(LowRes);
+        }
+
+        private void btnPierceLo_Click(object sender, EventArgs e)
+        {
+            nudPierceResist.Value = (int)Math.Floor(LowRes);
+        }
+
+        private void btnMagLo_Click(object sender, EventArgs e)
+        {
+            nudMR.Value = (int)Math.Floor(LowRes);
+        }
+
+        private void btnBluntMed_Click(object sender, EventArgs e)
+        {
+            nudDef.Value = (int)Math.Floor(MedRes);
+        }
+
+        private void btnSlashMed_Click(object sender, EventArgs e)
+        {
+            nudSlashResist.Value = (int)Math.Floor(MedRes);
+        }
+
+        private void btnPierceMed_Click(object sender, EventArgs e)
+        {
+            nudPierceResist.Value = (int)Math.Floor(MedRes);
+        }
+
+        private void btnMagMed_Click(object sender, EventArgs e)
+        {
+            nudMR.Value = (int)Math.Floor(MedRes);
+        }
+
+        private void btnBluntHigh_Click(object sender, EventArgs e)
+        {
+            nudDef.Value = (int)Math.Floor(HighRes);
+        }
+
+        private void btnSlashHi_Click(object sender, EventArgs e)
+        {
+            nudSlashResist.Value = (int)Math.Floor(HighRes);
+        }
+
+        private void btnPierceHi_Click(object sender, EventArgs e)
+        {
+            nudPierceResist.Value = (int)Math.Floor(HighRes);
+        }
+
+        private void btnMagHi_Click(object sender, EventArgs e)
+        {
+            nudMR.Value = (int)Math.Floor(HighRes);
+        }
+
+        private void btnUseCalcExp_Click(object sender, EventArgs e)
+        {
+            nudExp.Value = ReccExp;
+        }
+
+
+        const int LO_HP_MULT = 2;
+        const int MED_HP_MULT = 5;
+        const int HI_HP_MULT = 10;
+        const int BOSS_HP_MULT = 30;
+        private Stats GetWeakestRes()
+        {
+            var minStat = int.MaxValue;
+            Stats minimumStat = Stats.Defense;
+            for (var i = 0; i < (int)Stats.StatCount; i++)
+            {
+                if (i != (int)Stats.Defense ||
+                    i != (int)Stats.SlashResistance ||
+                    i != (int)Stats.PierceResistance ||
+                    i != (int)Stats.MagicResist)
+                {
+                    continue;
+                }
+
+                if (mEditorItem.Stats[i] < minStat)
+                {
+                    minStat = mEditorItem.Stats[i];
+                    minimumStat = (Stats)i;
+                }
+            }
+
+            return minimumStat;
+        }
+
+        private int GetPotentialMaxHitOnNpc()
+        {
+            var weakestTo = GetWeakestRes();
+            var strongestAttackType = StatHelpers.GetResistedStat(weakestTo);
+
+            var attackerStats = new int[(int)Stats.StatCount];
+            for (var i = 0; i < (int)Stats.StatCount; i++)
+            {
+                attackerStats[i] = (int)Math.Floor(DesiredDps);
+            }
+
+            CombatUtilities.CalculateDamage(new List<AttackTypes>() { strongestAttackType }, 1.0, 100, attackerStats, mEditorItem.Stats, out var maxHit);
+
+            return maxHit;
+        }
+
+        private void btnHpLo_Click(object sender, EventArgs e)
+        {
+            var desiredHp = GetPotentialMaxHitOnNpc() * LO_HP_MULT;
+            nudHp.Value = desiredHp;
+        }
+
+        private void btnHpMed_Click(object sender, EventArgs e)
+        {
+            var desiredHp = GetPotentialMaxHitOnNpc() * MED_HP_MULT;
+            nudHp.Value = desiredHp;
+        }
+
+        private void btnHpHi_Click(object sender, EventArgs e)
+        {
+            var desiredHp = GetPotentialMaxHitOnNpc() * HI_HP_MULT;
+            nudHp.Value = desiredHp;
+        }
+
+        private void btnHpXl_Click(object sender, EventArgs e)
+        {
+            var desiredHp = GetPotentialMaxHitOnNpc() * BOSS_HP_MULT;
+            nudHp.Value = desiredHp;
         }
     }
 

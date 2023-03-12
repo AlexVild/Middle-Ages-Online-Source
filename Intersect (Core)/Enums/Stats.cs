@@ -77,6 +77,23 @@ namespace Intersect.Enums
                     throw new NotImplementedException($"Invalid attack type given: {attackType}");
             }
         }
+
+        public static AttackTypes GetResistedStat(Stats resistanceStat)
+        {
+            switch (resistanceStat)
+            {
+                case Stats.Defense:
+                    return AttackTypes.Blunt;
+                case Stats.MagicResist:
+                    return AttackTypes.Magic;
+                case Stats.PierceAttack:
+                    return AttackTypes.Piercing;
+                case Stats.SlashAttack:
+                    return AttackTypes.Slashing;
+                default:
+                    throw new NotImplementedException($"Invalid attack type given: {resistanceStat}");
+            }
+        }
     }
 
 }
