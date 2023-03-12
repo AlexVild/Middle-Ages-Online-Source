@@ -150,7 +150,7 @@ namespace Intersect.Server.Entities
                 return;
             }
 
-            if (!ignoreEvasion && CombatUtilities.AttackMisses(Accuracy, enemy?.Evasion ?? 0))
+            if (!ignoreEvasion && CombatUtilities.AttackMisses(Accuracy, enemy?.Evasion ?? 0, parentSpell != null && this is Player))
             {
                 AttackMissed.Invoke(enemy);
                 SendMissedAttackMessage(enemy, DamageType.Physical);
@@ -348,7 +348,7 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
-            if (!ignoreEvasion && CombatUtilities.AttackMisses(Accuracy, enemy.Evasion))
+            if (!ignoreEvasion && CombatUtilities.AttackMisses(Accuracy, enemy.Evasion, spell != null && this is Player))
             {
                 SendMissedAttackMessage(enemy, DamageType.Physical);
                 AttackMissed.Invoke(enemy);

@@ -103,7 +103,7 @@ namespace Intersect.Utilities
         /// <param name="accuracy">The attacker's accuracy stat</param>
         /// <param name="evasion">The defender's evasion stat</param>
         /// <returns>True if the attack misses the defender.</returns>
-        public static bool AttackMisses(int accuracy, int evasion)
+        public static bool AttackMisses(int accuracy, int evasion, bool advantage)
         {
             var missFactor = CalculateMissFactor(accuracy, evasion);
             var missChance = MissChance(missFactor);
@@ -112,7 +112,10 @@ namespace Intersect.Utilities
             {
                 return false;
             }
-            return Randomization.NextDouble() <= missChance;
+            var roll1 = Randomization.NextDouble() <= missChance;
+            var roll2 = Randomization.NextDouble() <= missChance;
+
+            return advantage ? roll1 || roll2 : roll1;
         }
 
         /// <summary>

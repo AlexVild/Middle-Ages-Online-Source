@@ -407,7 +407,7 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
-            if (!ignoreEvasion && !spell.Combat.Friendly && target.Id != Id && spell.Combat.DamageType != (int)DamageType.True && CombatUtilities.AttackMisses(Accuracy, target.Evasion))
+            if (!ignoreEvasion && !spell.Combat.Friendly && target.Id != Id && spell.Combat.DamageType != (int)DamageType.True && CombatUtilities.AttackMisses(Accuracy, target.Evasion, this is Player))
             {
                 if (spell?.Combat?.HotDotInterval > 0)
                 {
