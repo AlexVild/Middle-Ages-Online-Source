@@ -1114,7 +1114,7 @@ namespace Intersect.Client.Localization
             public static LocalizedString AttackSpeed = @"Base Atk Speed:";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public static LocalizedString EnhancementThreshold = @"Enhancement Threshold";
+            public static LocalizedString EnhancementThreshold = @"Enhance. Pts.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString AttackSpeedReal = @"Real Atk Speed:";
@@ -1136,8 +1136,8 @@ namespace Intersect.Client.Localization
             {
                 {0, @"Blunt Attack"},
                 {1, @"Magic Attack"},
-                {2, @"Blunt Defense"},
-                {3, @"Magic Defense"},
+                {2, @"Blunt Resistance"},
+                {3, @"Magic Resistance"},
                 {4, @"Speed"},
                 {5, @"Slash Attack"},
                 {6, @"Slash Resistance"},
@@ -1151,8 +1151,8 @@ namespace Intersect.Client.Localization
             {
                 {0, @"Blunt Attack (%)"},
                 {1, @"Magic Attack (%)"},
-                {2, @"Blunt Defense (%)"},
-                {3, @"Magic Defense (%)"},
+                {2, @"Blunt Resistance (%)"},
+                {3, @"Magic Resistance (%)"},
                 {4, @"Speed (%)"},
                 {5, @"Slash Attack (%)"},
                 {6, @"Slash Resistance (%)"},
@@ -2073,8 +2073,8 @@ namespace Intersect.Client.Localization
             {
                 {0, @"Blunt Attack"},
                 {1, @"Magic Attack"},
-                {2, @"Blunt Defense"},
-                {3, @"Magic Defense"},
+                {2, @"Blunt Resistance"},
+                {3, @"Magic Resistance"},
                 {4, @"Speed"},
                 {5, @"Slash Attack"},
                 {6, @"Slash Resistance"},
