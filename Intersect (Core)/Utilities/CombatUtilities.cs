@@ -71,7 +71,71 @@ namespace Intersect.Utilities
                     maxHit += highestDmg;
                 }
 
-                totalDamage += Randomization.Next(lowestDmg, highestDmg + 1);
+                var low = Math.Min(lowestDmg, highestDmg);
+                var high = Math.Max(lowestDmg, highestDmg);
+
+                totalDamage += Randomization.Next(low, high + 1);
+            }
+
+            return (int)Math.Round(totalDamage * critMultiplier);
+        }
+
+        /// <summary>
+        /// Does not take into account defense stats for friendly attacks
+        /// </summary>
+        /// <param name="attackTypes"></param>
+        /// <param name="critMultiplier"></param>
+        /// <param name="scaling"></param>
+        /// <param name="attackerStats"></param>
+        /// <param name="maxHit"></param>
+        /// <returns></returns>
+        public static int CalculateFriendlyDamage(List<AttackTypes> attackTypes,
+            double critMultiplier,
+            int scaling,
+            in int[] attackerStats,
+            out int maxHit)
+        {
+            maxHit = 0;
+            if (attackerStats.Length != (int)Stats.StatCount)
+            {
+                throw new ArgumentException("Invalid attacker stats given", nameof(attackerStats));
+            }
+
+            var atkTypesCopy = new List<AttackTypes>();
+            atkTypesCopy.AddRange(attackTypes);
+
+            // Go through each of the attack types that apply to the damage
+            var totalDamage = 0;
+            float decScaling = (float)scaling / 100; // scaling comes into this function as a percent number, i.e 110% needs to be 1.1
+            foreach (var element in atkTypesCopy)
+            {
+                if ((int)element < 0 || (int)element > attackerStats.Length)
+                {
+                    continue;
+                }
+
+                var dmg = (int)Math.Round(attackerStats[(int)element] * decScaling);
+                // If we're not gonna be doing damage, dismiss
+                if (dmg == 0)
+                {
+                    continue;
+                }
+
+                // Otherwise, 
+                var baseVariance = 0.1;
+
+                var lowestDmg = dmg - (int)Math.Floor(dmg * baseVariance);
+                var highestDmg = dmg + (int)Math.Ceiling(dmg * baseVariance);
+
+                if ((highestDmg + maxHit) > maxHit)
+                {
+                    maxHit += highestDmg;
+                }
+
+                var low = Math.Min(lowestDmg, highestDmg);
+                var high = Math.Max(lowestDmg, highestDmg);
+
+                totalDamage += Randomization.Next(low, high + 1);
             }
 
             return (int)Math.Round(totalDamage * critMultiplier);

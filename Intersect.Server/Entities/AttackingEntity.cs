@@ -429,7 +429,15 @@ namespace Intersect.Server.Entities
 
             UpdateCombatTimers(this, enemy);
 
-            damage = CombatUtilities.CalculateDamage(damageTypes, critMultiplier, scaling, atkStats, defStats, out var maxHit);
+            var maxHit = 0;
+            if (friendly)
+            {
+                damage = CombatUtilities.CalculateFriendlyDamage(damageTypes, critMultiplier, scaling, atkStats, out maxHit);
+            }
+            else
+            {
+                damage = CombatUtilities.CalculateDamage(damageTypes, critMultiplier, scaling, atkStats, defStats, out maxHit);
+            }
 
             if (damage != 0)
             {
