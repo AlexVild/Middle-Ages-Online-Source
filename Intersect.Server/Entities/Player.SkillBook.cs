@@ -164,6 +164,7 @@ namespace Intersect.Server.Entities
             var newSkill = new PlayerSkillInstance(spellId, this);
             SkillBook.Add(newSkill);
 
+            PacketSender.SendAnimationToProximity(new Guid(Options.Instance.CombatOpts.SpellLearnedAnimGuid), 1, Id, MapId, (byte)X, (byte)Y, (sbyte)Dir, MapInstanceId);
             PacketSender.SendSkillbookToClient(this);
             PacketSender.SendSkillStatusUpdate(this, "New skill(s)!");
             RecipeUnlockWatcher.EnqueueNewPlayer(this, spellId, RecipeTrigger.SpellLearned);
