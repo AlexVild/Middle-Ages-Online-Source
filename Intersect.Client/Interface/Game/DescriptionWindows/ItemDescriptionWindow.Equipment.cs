@@ -152,7 +152,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
 
             var atkSpeeds = GetAttackSpeedComparison();
 
-            var thisDps = maxHit * (1000f / (atkSpeeds.Item1);
+            var thisDps = maxHit * (1000f / (atkSpeeds.Item1));
             var compareDps = compareMaxHit * (1000f / atkSpeeds.Item2);
 
             AddEquipmentRow(estimationRows, "Max Hit", maxHit, compareMaxHit, false, StatLabelColor, StatValueColor);

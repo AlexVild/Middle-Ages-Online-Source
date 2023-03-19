@@ -517,7 +517,7 @@ namespace Intersect.Server.Entities
                                 if (spell.Combat.HitRadius > 0) //Single target spells with AoE hit radius'
                                 {
                                     HandleAoESpell(
-                                        spell.Id, spell.Combat.HitRadius, CastTarget.MapId, CastTarget.X, CastTarget.Y,
+                                        spell.Id, spell.Combat.HitRadius, CastTarget?.MapId ?? Guid.Empty, CastTarget?.X ?? 0, CastTarget?.Y ?? 0,
                                         null, false, false, true
                                     );
                                 }
@@ -525,7 +525,7 @@ namespace Intersect.Server.Entities
                                 {
                                     if (SpellAttack(CastTarget, spell, (sbyte)Dir, null))
                                     {
-                                        SendSpellHitAnimation(spell, CastTarget, CastTarget.Id);
+                                        SendSpellHitAnimation(spell, CastTarget, CastTarget?.Id ?? Guid.Empty);
                                     }
                                 }
                             }

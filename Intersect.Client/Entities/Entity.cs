@@ -1857,13 +1857,19 @@ namespace Intersect.Client.Entities
                     new FloatRect(centerX, y, width, hpBackground.GetHeight()), Color.White
                 );
             }
+            
+            var color = Color.White;
+            if (this != Globals.Me && Globals.Me.TargetIndex != Id)
+            {
+                color.A = 150;
+            }
 
             if (hpForeground != null)
             {
                 Graphics.DrawGameTexture(
                     hpForeground, 
                     new FloatRect(0, 0, hpForeground.GetWidth(), hpForeground.GetHeight()),
-                    new FloatRect(centerX + 4, y + 4, hpfillWidth, hpForeground.GetHeight()), Color.White
+                    new FloatRect(centerX + 4, y + 4, hpfillWidth, hpForeground.GetHeight()), color
                 );
             }
 
@@ -1872,7 +1878,7 @@ namespace Intersect.Client.Entities
                 Graphics.DrawGameTexture(
                     shieldForeground,
                     new FloatRect(0, 0, shieldForeground.GetWidth(), shieldForeground.GetHeight()),
-                    new FloatRect(centerX + hpfillWidth + 4, y + 4, shieldfillWidth, shieldForeground.GetHeight()), Color.White
+                    new FloatRect(centerX + hpfillWidth + 4, y + 4, shieldfillWidth, shieldForeground.GetHeight()), color
                 );
             }
         }
@@ -1922,11 +1928,20 @@ namespace Intersect.Client.Entities
 
                 var centerX = x - width / 2;
                 y -= 1;
-                if (castBackground != null && drawBars)
+
+                var color = Color.White;
+                if (this != Globals.Me && Globals.Me.TargetIndex != Id)
                 {
+                    color.A = 150;
+                }
+
+                if (castBackground != null)
+                {
+                    if (this == Globals.Me)
+
                     Graphics.DrawGameTexture(
                         castBackground, new FloatRect(0, 0, castBackground.GetWidth(), castBackground.GetHeight()),
-                        new FloatRect(centerX, y, width, castBackground.GetHeight()), Color.White
+                        new FloatRect(centerX, y, width, castBackground.GetHeight()), color
                     );
                 }
 
@@ -1935,7 +1950,7 @@ namespace Intersect.Client.Entities
                     Graphics.DrawGameTexture(
                         castForeground,
                         new FloatRect(0, 0, castForeground.GetWidth(), castForeground.GetHeight()),
-                        new FloatRect(centerX + 4, y + 4, castFillWidth, castForeground.GetHeight()), Color.White
+                        new FloatRect(centerX + 4, y + 4, castFillWidth, castForeground.GetHeight()), color
                     );
                 }
 
