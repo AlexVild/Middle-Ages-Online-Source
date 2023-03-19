@@ -171,8 +171,6 @@ namespace Intersect.Client.Interface.Game
                     mEventResponse3.Name = "";
                     mEventResponse4.Name = "";
 
-                    Typewriting = ClientConfiguration.Instance.EnableTypewriting && Globals.Database.TypewriterText;
-
                     // Determine whether or not this event is a "dialog", with a speaker, to display the event differently.
                     HasSpeaker = false;
                     var prompt = Globals.EventDialogs[0].Prompt;
@@ -188,6 +186,8 @@ namespace Intersect.Client.Interface.Game
                     {
                         mSpeakerLabel.Hide();
                     }
+
+                    Typewriting = HasSpeaker && ClientConfiguration.Instance.EnableTypewriting && Globals.Database.TypewriterText;
 
                     switch (maxResponse)
                     {
