@@ -8497,15 +8497,15 @@ namespace Intersect.Server.Entities
             if (seconds >= 60)
             {
                 var minutes = seconds / 60;
-                PacketSender.SendChatMsg(this, Strings.Combat.inspirationgainedminutes.ToString(minutes, endTimeStamp), ChatMessageType.Combat, CustomColors.Combat.LevelUp);
+                PacketSender.SendChatMsg(this, Strings.Combat.inspirationgainedminutes.ToString(minutes, endTimeStamp), ChatMessageType.Combat, CustomColors.Combat.LevelUp, sendToast: true);
             }
             else if (seconds > 0)
             {
-                PacketSender.SendChatMsg(this, Strings.Combat.inspirationgained.ToString(seconds, endTimeStamp), ChatMessageType.Combat, CustomColors.Combat.LevelUp);
+                PacketSender.SendChatMsg(this, Strings.Combat.inspirationgained.ToString(seconds, endTimeStamp), ChatMessageType.Combat, CustomColors.Combat.LevelUp, sendToast: true);
             }
             else
             {
-                PacketSender.SendChatMsg(this, Strings.Combat.stillinspired.ToString(endTimeStamp), ChatMessageType.Combat, CustomColors.Combat.LevelUp);
+                PacketSender.SendChatMsg(this, Strings.Combat.stillinspired.ToString(endTimeStamp), ChatMessageType.Combat, CustomColors.Combat.LevelUp, sendToast: true);
             }
         }
         #endregion
