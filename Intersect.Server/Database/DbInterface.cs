@@ -1140,6 +1140,12 @@ namespace Intersect.Server.Database
                             EnhancementDescriptor.Lookup.Set(dbObj.Id, dbObj);
 
                             break;
+
+                        case GameObjectType.Dungeon:
+                            context.Dungeons.Add((DungeonDescriptor)dbObj);
+                            DungeonDescriptor.Lookup.Set(dbObj.Id, dbObj);
+
+                            break;
                         default:
                             throw new ArgumentOutOfRangeException(nameof(gameObjectType), gameObjectType, null);
                     }

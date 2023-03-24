@@ -541,17 +541,21 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             }
 
             statName = statName.Replace(":", "");
-            if (Math.Sign(diff) < 0)
+
+            if (!double.IsNaN(diff))
             {
-                rows.AddKeyValueRow(statName, $"{statString}{unit} ({diff.ToString("N2")}{unit})", labelColor, statLowerColor);
-            }
-            else if (Math.Sign(diff) > 0)
-            {
-                rows.AddKeyValueRow(statName, $"{statString}{unit} (+{diff.ToString("N2")}{unit})", labelColor, statHigherColor);
-            }
-            else
-            {
-                rows.AddKeyValueRow(statName, $"{statString}{unit}", labelColor, defaultStatColor);
+                if (Math.Sign(diff) < 0)
+                {
+                    rows.AddKeyValueRow(statName, $"{statString}{unit} ({diff.ToString("N2")}{unit})", labelColor, statLowerColor);
+                }
+                else if (Math.Sign(diff) > 0)
+                {
+                    rows.AddKeyValueRow(statName, $"{statString}{unit} (+{diff.ToString("N2")}{unit})", labelColor, statHigherColor);
+                }
+                else
+                {
+                    rows.AddKeyValueRow(statName, $"{statString}{unit}", labelColor, defaultStatColor);
+                }
             }
 
             Banded = !Banded;
