@@ -1755,7 +1755,7 @@ namespace Intersect.Server.Entities
 
         public override bool IsNonTrivialTo(Player player)
         {
-            return SetThreatLevelFor(player) > ThreatLevel.Trivial;
+            return SetThreatLevelFor(player) < ThreatLevel.Trivial;
         }
     }
 }
