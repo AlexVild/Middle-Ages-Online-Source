@@ -231,14 +231,14 @@ namespace Intersect.Utilities
 
             if (!spell.WeaponSpell)
             {
-                return spell.Combat.DamageTypes.Count == 0 ? new List<AttackTypes>() { AttackTypes.Blunt } : spell.Combat.DamageTypes;
+                return spell.Combat.DamageTypes.Count == 0 ? new List<AttackTypes>() : spell.Combat.DamageTypes;
             }
 
             var types = spell.Combat.DamageTypes.Union(equippedItem?.AttackTypes ?? new List<AttackTypes>()).ToList();
 
             if (types.Count == 0)
             {
-                return new List<AttackTypes>() { AttackTypes.Blunt };
+                return new List<AttackTypes>();
             }
 
             return types;
