@@ -1166,6 +1166,10 @@
     <Compile Include="Migrations\Game\20230310025855_ChallengeContractMigration.designer.cs">
       <DependentUpon>20230310025855_ChallengeContractMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20230327151638_ComponentOverrideMigration.cs" />
+    <Compile Include="Migrations\Game\20230327151638_ComponentOverrideMigration.designer.cs">
+      <DependentUpon>20230327151638_ComponentOverrideMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>
