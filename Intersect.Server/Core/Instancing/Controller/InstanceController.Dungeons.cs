@@ -118,22 +118,33 @@ namespace Intersect.Server.Core.Instancing.Controller
             
             Dungeon.CompletionTime = activeTimer.ElapsedTime;
             GiveDungeonRewards();
-                
+
             TimerProcessor.RemoveTimer(activeTimer);
             foreach (var pl in Dungeon.Participants)
             {
                 pl.StartCommonEventsWithTrigger(CommonEventTrigger.DungeonComplete);
                 pl.EnqueueStartCommonEvent(timer.CompletionEvent);
-                pl.TrackDungeonCompletion(Dungeon.DescriptorId, DungeonParticipants, Dungeon.CompletionTime);
+                PacketSender.SendChatMsg(pl, $"You completed {DungeonDescriptor.DisplayName} in {Dungeon.CompletionTimeString}", ChatMessageType.Experience, CustomColors.General.GeneralCompleted);
 
-                // Mark a completion
+                if (!Dungeon.RecordsVoid)
+                {
+                    pl.TrackDungeonCompletion(Dungeon.DescriptorId, DungeonParticipants, Dungeon.CompletionTime);
+                }
+                else
+                {
+                    PacketSender.SendChatMsg(pl, $"Your ability to set records for this run has been voided due to admin warping.", ChatMessageType.Experience, CustomColors.General.GeneralCompleted);
+                }
+
+                /* Deprecated - now tracked via player table
                 if (DungeonDescriptor.CompletionCounter != default)
                 {
                     var completions = pl.GetVariableValue(DungeonDescriptor.CompletionCounterId);
                     pl.SetVariableValue(DungeonDescriptor.CompletionCounterId, completions + 1, DungeonDescriptor.CompletionCounter.Recordable);
                     PacketSender.SendChatMsg(pl, $"You've completed {DungeonDescriptor.DisplayName} {completions + 1} times!", ChatMessageType.Experience, CustomColors.General.GeneralCompleted);
-                }
+                }*/
             }
+
+            Dungeon.RecordsVoid = false; // reset void
         }
 
         void GiveDungeonRewards()
@@ -235,7 +246,5 @@ namespace Intersect.Server.Core.Instancing.Controller
                 PacketSender.SendChatMsg(player, "The treasure gnome awards your party with an additional life!", Enums.ChatMessageType.Party, CustomColors.General.GeneralPrimary);
             }
         }
-
-        public DungeonState CurrentDungeonState => Dungeon?.State ?? DungeonState.Null;
     }
 }

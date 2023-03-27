@@ -1,4 +1,5 @@
 ﻿using Intersect.GameObjects;
+using Intersect.Server.Core;
 using Intersect.Server.Database.PlayerData.Players;
 using Intersect.Server.Networking;
 using System;
@@ -47,6 +48,14 @@ namespace Intersect.Server.Entities
             else
             {
                 DungeonsTracked[idx].Failures++;
+            }
+        }
+
+        public void VoidCurrentDungeon()
+        {
+            if (InstanceProcessor.TryGetInstanceController(MapInstanceId, out var controller) && controller.Dungeon != null && controller.DungeonActive)
+            {
+                controller.Dungeon.RecordsVoid = true;
             }
         }
     }

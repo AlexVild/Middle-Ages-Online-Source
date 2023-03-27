@@ -34,6 +34,8 @@ namespace Intersect.Server.Core.Instancing.Controller.Components
 
         public long CompletionTime { get; set; }
 
+        public bool RecordsVoid { get; set; }
+
         public string CompletionTimeString => CompletionTime <= 0 ?
             string.Empty : 
             TextUtils.GetTimeElapsedString(CompletionTime, Strings.Events.ElapsedMinutes, Strings.Events.ElapsedHours, Strings.Events.ElapsedDays);

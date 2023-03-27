@@ -2015,6 +2015,7 @@ namespace Intersect.Server.Entities
             MapInstanceId = newMapInstanceId;
             InstanceType = instanceType;
             EndCombo();
+            VoidCurrentDungeon();
             // If we've warped the player out of their overworld, keep a reference to their overworld just in case.
             if (PreviousMapInstanceType == MapInstanceType.Overworld)
             {
@@ -2182,6 +2183,11 @@ namespace Intersect.Server.Entities
             if (Options.DebugAllowMapFades)
             {
                 PacketSender.SendFadePacket(Client, true); // fade in by default - either the player was faded out or was not
+            }
+
+            if (adminWarp)
+            {
+                VoidCurrentDungeon();
             }
         }
 
