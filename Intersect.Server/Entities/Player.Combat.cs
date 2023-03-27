@@ -128,7 +128,7 @@ namespace Intersect.Server.Entities
                 damageWasDealt = base.TryDealDamageTo(enemy, weapon?.AttackTypes ?? new List<AttackTypes>() { AttackTypes.Blunt }, dmgScaling, critMultiplier, weapon, spell, ignoreEvasion, out damage);
             }
 
-            if (damageWasDealt && damage > 0)
+            if (damageWasDealt && damage > 0 && enemy is Player || (enemy is Npc npc && npc.SetThreatLevelFor(this) > ThreatLevel.Trivial))
             {
                 ChallengeUpdateProcesser.UpdateChallengesOf(new DamageOverTimeUpdate(this, damage));
                 ChallengeUpdateProcesser.UpdateChallengesOf(new MissFreeUpdate(this, MissFreeStreak));
