@@ -1550,7 +1550,7 @@ namespace Intersect.Server.Entities
                                 }
                                 partyMember.GiveExperience(partyExperience, true, entity);
                                 partyMember.UpdateQuestKillTasks(entity);
-                                partyMember.UpdateComboTime();
+                                partyMember.UpdateComboTime(entity.IsNonTrivialTo(partyMember));
                             }
 
                             if (partyEvent != null)
@@ -1569,7 +1569,7 @@ namespace Intersect.Server.Entities
                             var mobExp = Options.Instance.CombatOpts.UseGeneratedMobExp ? NpcExperienceService.GetExp(descriptor.Id) : descriptor.Experience;
 
                             GiveExperience(mobExp, false, entity);
-                            UpdateComboTime();
+                            UpdateComboTime(entity.IsNonTrivialTo(this));
                             UpdateQuestKillTasks(entity);
                         }
 
@@ -1627,14 +1627,18 @@ namespace Intersect.Server.Entities
             return bonusExp;
         }
 
-        public void UpdateComboTime()
+        public void UpdateComboTime(bool nonTrivial)
         {
             lock (EntityLock)
             {
                 ComboWindow = MaxComboWindow;
                 ComboTimestamp = Timing.Global.Milliseconds + ComboWindow;
                 CurrentCombo++;
-                WeaponCombo++;
+
+                if (nonTrivial)
+                {
+                    WeaponCombo++;
+                }
                 StartCommonEventsWithTrigger(CommonEventTrigger.ComboUp);
                 StartCommonEventsWithTrigger(CommonEventTrigger.ComboReached, "", "", CurrentCombo);
                 ChallengeUpdateProcesser.UpdateChallengesOf(new ComboEarnedUpdate(this));

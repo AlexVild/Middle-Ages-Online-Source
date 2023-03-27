@@ -128,7 +128,7 @@ namespace Intersect.Server.Entities
                 damageWasDealt = base.TryDealDamageTo(enemy, weapon?.AttackTypes ?? new List<AttackTypes>() { AttackTypes.Blunt }, dmgScaling, critMultiplier, weapon, spell, ignoreEvasion, out damage);
             }
 
-            if (damageWasDealt && damage > 0 && enemy is Player || (enemy is Npc npc && npc.SetThreatLevelFor(this) > ThreatLevel.Trivial))
+            if (damageWasDealt && damage > 0 && enemy.IsNonTrivialTo(this))
             {
                 ChallengeUpdateProcesser.UpdateChallengesOf(new DamageOverTimeUpdate(this, damage));
                 ChallengeUpdateProcesser.UpdateChallengesOf(new MissFreeUpdate(this, MissFreeStreak));
@@ -683,6 +683,11 @@ namespace Intersect.Server.Entities
                 HitFreeStreak = 0;
             }
             ChallengeUpdateProcesser.UpdateChallengesOf(new DamageTakenOverTimeUpdate(this, damage));
+        }
+
+        public override bool IsNonTrivialTo(Player player)
+        {
+            return true;
         }
     }
 }

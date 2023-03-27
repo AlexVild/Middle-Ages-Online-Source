@@ -224,7 +224,7 @@ namespace Intersect.Server.Entities
                         playerKiller.SendRecordUpdate(Strings.Records.enemykilled.ToString(recordKilled, Name));
                     }
 
-                    if (SetThreatLevelFor(playerKiller) > ThreatLevel.Trivial)
+                    if (IsNonTrivialTo(playerKiller))
                     {
                         ChallengeUpdateProcesser.UpdateChallengesOf(new BeastsKilledOverTime(playerKiller, Base.Id));
                     }
@@ -1751,6 +1751,11 @@ namespace Intersect.Server.Entities
             LootMap.TryAdd(attacker?.Id ?? Guid.Empty, true);
             LootMapCache = LootMap.Keys.ToArray();
             TryFindNewTarget(Timing.Global.Milliseconds, default, false, attacker);
+        }
+
+        public override bool IsNonTrivialTo(Player player)
+        {
+            return SetThreatLevelFor(player) > ThreatLevel.Trivial;
         }
     }
 }

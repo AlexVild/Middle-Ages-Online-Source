@@ -2311,5 +2311,10 @@ namespace Intersect.Server.Entities
     {
         [NotMapped, JsonIgnore]
         public long DashTransmissionTimer { get; set; }
+
+        public virtual bool IsNonTrivialTo(Player player)
+        {
+            return false;
+        }
     }
 }

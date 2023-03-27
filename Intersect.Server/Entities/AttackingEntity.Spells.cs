@@ -721,12 +721,9 @@ namespace Intersect.Server.Entities
                             }
                         }
 
-                        if (this is Player player)
+                        if (this is Player player && entity.IsNonTrivialTo(player))
                         {
-                            if (entity is Player || (entity is Npc npc && npc.SetThreatLevelFor(player) > ThreatLevel.Trivial))
-                            {
-                                nonTrivialEntitiesHit++;
-                            }
+                            nonTrivialEntitiesHit++;
                         }
 
                         SpellAttack(entity, spellBase, (sbyte)Directions.Up, null); //Handle damage
