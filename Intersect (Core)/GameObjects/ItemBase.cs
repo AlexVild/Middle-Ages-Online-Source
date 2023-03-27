@@ -603,6 +603,8 @@ namespace Intersect.GameObjects
             get => JsonConvert.SerializeObject(WeaponUpgrades);
             set => WeaponUpgrades = JsonConvert.DeserializeObject<Dictionary<Guid, int>>(value ?? "") ?? new Dictionary<Guid, int>();
         }
+
+        public bool ReplaceCastingComponents { get; set; }
     }
 
 }

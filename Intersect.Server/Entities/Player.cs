@@ -8817,6 +8817,12 @@ namespace Intersect.Server.Entities
 
         private bool HasCastingComponents(List<SpellCastingComponent> castingComponents)
         {
+            var equippedWeapon = GetEquippedWeapon();
+            if (equippedWeapon != null && equippedWeapon.ReplaceCastingComponents)
+            {
+                return true;
+            }
+
             if (castingComponents.Count <= 0)
             {
                 return true;

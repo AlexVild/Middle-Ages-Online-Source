@@ -538,6 +538,8 @@ namespace Intersect.Editor.Forms.Editors
 
                 nudEnhanceThresh.Value = mEditorItem.EnhancementThreshold;
 
+                chkIsFocus.Checked = mEditorItem.ReplaceCastingComponents;
+
                 lstDrops.Items.Clear();
                 lstCrafts.Items.Clear();
                 lstShops.Items.Clear();
@@ -2339,6 +2341,11 @@ namespace Intersect.Editor.Forms.Editors
             mEditorItem.WeaponUpgrades.Remove(key);
 
             RefreshUpgradeList(true);
+        }
+
+        private void chkIsFocus_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.ReplaceCastingComponents = chkIsFocus.Checked;
         }
     }
 }

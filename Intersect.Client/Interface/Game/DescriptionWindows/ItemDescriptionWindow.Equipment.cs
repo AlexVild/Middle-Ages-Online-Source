@@ -125,6 +125,13 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
 
                 toolRows.SizeToChildren(true, true);
             }
+
+            if (mItem.ReplaceCastingComponents)
+            {
+                AddDivider();
+                var castingComponentRow = AddRowContainer();
+                castingComponentRow.AddKeyValueRow("Spellcast Focus", "", CustomColors.ItemDesc.Special, StatValueColor);
+            }
         }
 
         private void SetupDamageEstimations(RowContainerComponent estimationRows)
