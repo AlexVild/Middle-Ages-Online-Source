@@ -3,6 +3,7 @@ using Intersect.Network.Packets.Server;
 using Intersect.Server.Database;
 using Intersect.Server.Database.PlayerData.Players;
 using Intersect.Server.Networking;
+using Intersect.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -104,6 +105,7 @@ namespace Intersect.Server.Entities
             // Now, for each item we successfully deconstruct (remove), add to our loot table/weapon progress
             List<LootRoll> deconstructedLoot = new List<LootRoll>();
             Dictionary<Guid, long> expEarned = new Dictionary<Guid, long>();
+            List<Guid> enhancementsLearned = new List<Guid>();
             foreach (var slot in slotsToRemoveFrom)
             {
                 var item = ItemBase.Get(slot.ItemId);
@@ -129,6 +131,11 @@ namespace Intersect.Server.Entities
                     }
                 }
                 deconstructedLoot.AddRange(item.DeconstructRolls);
+
+                if (item.StudySuccessful(Owner.GetLuckModifier()))
+                {
+                    enhancementsLearned.Add(item.StudyEnhancement);
+                }
             }
 
             foreach (var kv in expEarned)
@@ -144,6 +151,21 @@ namespace Intersect.Server.Entities
                 var name = WeaponTypeDescriptor.Get(weaponType)?.DisplayName ?? WeaponTypeDescriptor.GetName(weaponType);
 
                 PacketSender.SendExpToast(Owner, $"{exp} {name} EXP", false, false, true);
+            }
+
+            var newEnhancement = false;
+            foreach (var enhancement in enhancementsLearned.Distinct())
+            {
+                if (Owner.TryUnlockEnhancement(enhancement))
+                {
+                    newEnhancement = true;
+                }
+            }
+
+            // If the client needs to know we've learned a new enhancement
+            if (newEnhancement)
+            {
+                PacketSender.SendKnownEnhancementUpdate(Owner);
             }
 
             // We are now waiting on the loot roll instead of the deconstructor being closed

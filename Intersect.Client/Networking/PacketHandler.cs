@@ -2958,6 +2958,14 @@ namespace Intersect.Client.Networking
             Interface.Interface.GameUi?.UpgradeStationWindow?.ProcessCompletedUpgrade(packet.ItemId, packet.Properties);
         }
 
+        public void HandlePacket(IPacketSender packetSender, KnownEnhancementsPacket packet)
+        {
+            if (Globals.Me == null)
+            {
+                return;
+            }
 
+            Globals.Me.SetKnownEnhancements(packet.KnownEnhancements);
+        }
     }
 }

@@ -1117,6 +1117,15 @@ namespace Intersect.Client.Localization
             public static LocalizedString EnhancementThreshold = @"Enhance. Pts.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString StudyOpportunity = @"Study Opportunity";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Studied = @"Studied!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString StudyOpportunityText = @"{00} ({01}%)";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString AttackSpeedReal = @"Real Atk Speed:";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]

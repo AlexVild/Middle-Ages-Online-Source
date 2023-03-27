@@ -32,6 +32,8 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 return;
             }
 
+            SetupStudyInfo();
+
             if (mItem.EquipmentSlot == Options.WeaponIndex)
             {
                 SetupWeaponInfo();
@@ -131,7 +133,11 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 AddDivider();
                 var castingComponentRow = AddRowContainer();
                 castingComponentRow.AddKeyValueRow("Spellcast Focus", "", CustomColors.ItemDesc.Special, StatValueColor);
+
+                castingComponentRow.SizeToChildren(true, true);
             }
+
+            
         }
 
         private void SetupDamageEstimations(RowContainerComponent estimationRows)
@@ -566,6 +572,34 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             }
 
             Banded = !Banded;
+        }
+
+        private void SetupStudyInfo()
+        {
+            if ((Interface.GameUi.CraftingWindowOpen() || Interface.GameUi.DeconstructorWindow.IsVisible()) && mItem.StudyEnhancement != Guid.Empty)
+            {
+                var studyRow = AddRowContainer();
+                var enhancement = EnhancementDescriptor.GetName(mItem.StudyEnhancement);
+
+                if (!Globals.Me.KnownEnhancements.Contains(mItem.StudyEnhancement))
+                {
+                    studyRow.AddKeyValueRow(Strings.ItemDescription.StudyOpportunity,
+                        Strings.ItemDescription.StudyOpportunityText.ToString(enhancement, mItem.StudyChance.ToString("N2")),
+                        CustomColors.ItemDesc.Special,
+                        CustomColors.ItemDesc.Special);
+                }
+                else
+                {
+                    studyRow.AddKeyValueRow(Strings.ItemDescription.Studied,
+                        "",
+                        CustomColors.ItemDesc.Special,
+                        CustomColors.ItemDesc.Special);
+                }
+
+                studyRow.SizeToChildren(true, true);
+                
+                AddDivider();
+            }
         }
 
         private bool DisplayVitalBonuses()

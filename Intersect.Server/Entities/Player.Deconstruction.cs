@@ -20,6 +20,7 @@ namespace Intersect.Server.Entities
         {
             Deconstructor = new Deconstructor(multiplier, this);
             DeconstructorEventId = eventId;
+            PacketSender.SendKnownEnhancementUpdate(this);
             PacketSender.SendOpenDeconstructor(this, multiplier);
         }
 

@@ -605,6 +605,22 @@ namespace Intersect.GameObjects
         }
 
         public bool ReplaceCastingComponents { get; set; }
+
+        public bool StudySuccessful(double luckModifier)
+        {
+            if (StudyEnhancement == Guid.Empty)
+            {
+                return false;
+            }
+
+            //Npc drop rates
+            var randomChance = Randomization.Next(1, 100001);
+            if (randomChance >= (StudyChance * 1000) * luckModifier)
+            {
+                return false;
+            }
+            return true;
+        }
     }
 
 }

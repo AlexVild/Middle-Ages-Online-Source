@@ -23,6 +23,11 @@ namespace Intersect.Server.Entities
 
         public bool TryUnlockEnhancement(Guid enhancementId)
         {
+            if (enhancementId == Guid.Empty)
+            {
+                return false;
+            }
+
             if (KnownEnhancements.ToList().Contains(enhancementId))
             {
                 return false;

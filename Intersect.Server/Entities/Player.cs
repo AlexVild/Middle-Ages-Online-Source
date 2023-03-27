@@ -4139,6 +4139,7 @@ namespace Intersect.Server.Entities
                 UpdateCraftingTable(tableId);
             }
 
+            PacketSender.SendKnownEnhancementUpdate(this);
             return true;
         }
 
@@ -4147,6 +4148,7 @@ namespace Intersect.Server.Entities
             if (CraftingTableId != Guid.Empty && CraftId == Guid.Empty)
             {
                 CraftingTableId = Guid.Empty;
+                StopCrafting();
                 PacketSender.SendCloseCraftingTable(this);
             }
         }
@@ -4316,6 +4318,11 @@ namespace Intersect.Server.Entities
                 if (itm.EquipmentSlot == Options.WeaponIndex && itm.WeaponTypes.Count > 0)
                 {
                     AddCraftWeaponExp(itm, 1.0f);
+                }
+
+                if (itm.StudySuccessful(GetLuckModifier()) && TryUnlockEnhancement(itm.StudyEnhancement))
+                {
+                    PacketSender.SendKnownEnhancementUpdate(this);
                 }
 
                 // Start any related common events

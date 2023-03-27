@@ -2833,6 +2833,11 @@ namespace Intersect.Server.Networking
             player?.SendPacket(new OpenEnhancementPacket(currencyId, costMulti, player.KnownEnhancements.ToArray()));
         }
 
+        public static void SendKnownEnhancementUpdate(Player player)
+        {
+            player?.SendPacket(new KnownEnhancementsPacket(player.KnownEnhancements.ToArray()));
+        }
+
         public static void SendOpenUpgradeStation(Player player, Guid currencyId, float costMulti)
         {
             if (player == default)

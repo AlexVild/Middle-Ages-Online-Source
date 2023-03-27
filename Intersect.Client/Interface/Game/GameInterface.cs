@@ -318,6 +318,11 @@ namespace Intersect.Client.Interface.Game
             Globals.InCraft = true;
         }
 
+        public bool CraftingWindowOpen()
+        {
+            return mCraftingWindow != null && mCraftingWindow.IsVisible();
+        }
+
         // Chat
         public void NotifyChat()
         {

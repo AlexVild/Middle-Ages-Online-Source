@@ -378,6 +378,10 @@ namespace Intersect.Editor.Forms.Editors
             grpAdditionalWeaponProps.Text = Strings.ItemEditor.AdditionalWeaponProps;
             chkBackstab.Text = Strings.ItemEditor.CanBackstab;
             lblBackstabMultiplier.Text = Strings.ItemEditor.BackstabMultiplier;
+
+            cmbStudyEnhancement.Items.Clear();
+            cmbStudyEnhancement.Items.Add(Strings.General.none);
+            cmbStudyEnhancement.Items.AddRange(EnhancementDescriptor.Names);
         }
 
         private void UpdateEditor()
@@ -622,6 +626,9 @@ namespace Intersect.Editor.Forms.Editors
                 RefreshDeconLoot(false);
 
                 RefreshUpgradeList(false);
+
+                cmbStudyEnhancement.SelectedIndex = EnhancementDescriptor.ListIndex(mEditorItem.StudyEnhancement) + 1;
+                nudStudyChance.Value = (decimal)mEditorItem.StudyChance;
 
                 if (cmbTypeDisplayOverride.Items.Contains(mEditorItem.TypeDisplayOverride ?? string.Empty))
                 {
@@ -2346,6 +2353,16 @@ namespace Intersect.Editor.Forms.Editors
         private void chkIsFocus_CheckedChanged(object sender, EventArgs e)
         {
             mEditorItem.ReplaceCastingComponents = chkIsFocus.Checked;
+        }
+
+        private void cmbStudyEnhancement_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mEditorItem.StudyEnhancement = EnhancementDescriptor.IdFromList(cmbStudyEnhancement.SelectedIndex - 1);
+        }
+
+        private void nudStudyChance_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.StudyChance = (double)nudStudyChance.Value;
         }
     }
 }

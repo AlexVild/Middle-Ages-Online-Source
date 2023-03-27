@@ -33,5 +33,9 @@ namespace Intersect.GameObjects
         }
 
         public int EnhancementThreshold { get; set; }
+
+        public Guid StudyEnhancement { get; set; }
+
+        public double StudyChance { get; set; }
     }
 }
