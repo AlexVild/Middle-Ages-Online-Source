@@ -224,7 +224,10 @@ namespace Intersect.Server.Entities
                         playerKiller.SendRecordUpdate(Strings.Records.enemykilled.ToString(recordKilled, Name));
                     }
 
-                    ChallengeUpdateProcesser.UpdateChallengesOf(new BeastsKilledOverTime(playerKiller, Base.Id));
+                    if (SetThreatLevelFor(playerKiller) > ThreatLevel.Trivial)
+                    {
+                        ChallengeUpdateProcesser.UpdateChallengesOf(new BeastsKilledOverTime(playerKiller, Base.Id));
+                    }
                 }
             }
         }
