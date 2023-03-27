@@ -2364,5 +2364,15 @@ namespace Intersect.Editor.Forms.Editors
         {
             mEditorItem.StudyChance = (double)nudStudyChance.Value;
         }
+
+        private void btnFuelReqRecc_Click(object sender, EventArgs e)
+        {
+            nudReqFuel.Value = DeconstructionUtils.AverageFuelCostAtTier(mEditorItem.Rarity);
+        }
+
+        private void btnFuelRecc_Click(object sender, EventArgs e)
+        {
+            nudFuel.Value = DeconstructionUtils.FuelGivenAtTier(mEditorItem.Rarity);
+        }
     }
 }

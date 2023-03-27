@@ -354,6 +354,8 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
             this.vS2015DarkTheme1 = new WeifenLuo.WinFormsUI.Docking.VS2015DarkTheme();
+            this.btnFuelRecc = new DarkUI.Controls.DarkButton();
+            this.btnFuelReqRecc = new DarkUI.Controls.DarkButton();
             this.grpItems.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudFuel)).BeginInit();
@@ -531,6 +533,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpGeneral.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpGeneral.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpGeneral.Controls.Add(this.btnFuelRecc);
             this.grpGeneral.Controls.Add(this.nudFuel);
             this.grpGeneral.Controls.Add(this.lblFuel);
             this.grpGeneral.Controls.Add(this.chkRareDrop);
@@ -605,7 +608,7 @@ namespace Intersect.Editor.Forms.Editors
             0,
             0});
             this.nudFuel.Name = "nudFuel";
-            this.nudFuel.Size = new System.Drawing.Size(171, 20);
+            this.nudFuel.Size = new System.Drawing.Size(121, 20);
             this.nudFuel.TabIndex = 106;
             this.nudFuel.Value = new decimal(new int[] {
             0,
@@ -1713,6 +1716,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpDeconstruction.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpDeconstruction.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpDeconstruction.Controls.Add(this.btnFuelReqRecc);
             this.grpDeconstruction.Controls.Add(this.nudStudyChance);
             this.grpDeconstruction.Controls.Add(this.lblStudyChance);
             this.grpDeconstruction.Controls.Add(this.cmbStudyEnhancement);
@@ -4959,6 +4963,26 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
             // 
+            // btnFuelRecc
+            // 
+            this.btnFuelRecc.Location = new System.Drawing.Point(389, 168);
+            this.btnFuelRecc.Name = "btnFuelRecc";
+            this.btnFuelRecc.Padding = new System.Windows.Forms.Padding(5);
+            this.btnFuelRecc.Size = new System.Drawing.Size(45, 21);
+            this.btnFuelRecc.TabIndex = 107;
+            this.btnFuelRecc.Text = "Recc.";
+            this.btnFuelRecc.Click += new System.EventHandler(this.btnFuelRecc_Click);
+            // 
+            // btnFuelReqRecc
+            // 
+            this.btnFuelReqRecc.Location = new System.Drawing.Point(116, 31);
+            this.btnFuelReqRecc.Name = "btnFuelReqRecc";
+            this.btnFuelReqRecc.Padding = new System.Windows.Forms.Padding(5);
+            this.btnFuelReqRecc.Size = new System.Drawing.Size(45, 21);
+            this.btnFuelReqRecc.TabIndex = 124;
+            this.btnFuelReqRecc.Text = "Recc.";
+            this.btnFuelReqRecc.Click += new System.EventHandler(this.btnFuelReqRecc_Click);
+            // 
             // FrmItem
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -5430,5 +5454,7 @@ namespace Intersect.Editor.Forms.Editors
         private Label lblStudyChance;
         private DarkComboBox cmbStudyEnhancement;
         private Label lblStudy;
+        private DarkButton btnFuelRecc;
+        private DarkButton btnFuelReqRecc;
     }
 }
