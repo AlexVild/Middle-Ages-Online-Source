@@ -10,7 +10,7 @@ namespace Intersect.Utilities
 
         public static int AverageFuelCostAtTier(int tier)
         {
-            if (tier <= 0)
+            if (tier <= 1)
             {
                 return BASE_FUEL_COST;
             }

@@ -13,6 +13,7 @@ using Intersect.GameObjects;
 using Intersect.GameObjects.Crafting;
 using Intersect.GameObjects.Events;
 using Intersect.Models;
+using Intersect.Utilities;
 
 namespace Intersect.Editor.Forms.Editors
 {
@@ -48,6 +49,7 @@ namespace Intersect.Editor.Forms.Editors
             cmbRecipe.Items.Clear();
             cmbRecipe.Items.Add(Strings.General.none);
             cmbRecipe.Items.AddRange(RecipeDescriptor.Names);
+            cmbNpcs.Items.AddRange(NpcBase.Names);
             btnDynamicRequirements.Click += buttonRequirements_clicked;
 
             lstGameObjects.Init(UpdateToolStripItems, AssignEditorItem, toolStripItemNew_Click, toolStripItemCopy_Click, toolStripItemUndo_Click, toolStripItemPaste_Click, toolStripItemDelete_Click);
@@ -94,12 +96,11 @@ namespace Intersect.Editor.Forms.Editors
                 lblIngredient.Hide();
                 for (var i = 0; i < mEditorItem.Ingredients.Count; i++)
                 {
-                    if (mEditorItem.Ingredients[i].ItemId != Guid.Empty)
+                    var ingredient = ItemBase.Get(mEditorItem.Ingredients[i].ItemId);
+                    if (ingredient != null)
                     {
                         lstIngredients.Items.Add(
-                            Strings.CraftsEditor.ingredientlistitem.ToString(
-                                ItemBase.GetName(mEditorItem.Ingredients[i].ItemId), mEditorItem.Ingredients[i].Quantity
-                            )
+                            $"Ingredient: {ItemBase.GetName(ingredient.Id)} (Tier {ingredient.Rarity}) x{mEditorItem.Ingredients[i].Quantity}"
                         );
                     }
                     else
@@ -602,6 +603,18 @@ namespace Intersect.Editor.Forms.Editors
         private void cmbRecipe_SelectedIndexChanged(object sender, EventArgs e)
         {
             mEditorItem.Recipe = RecipeDescriptor.IdFromList(cmbRecipe.SelectedIndex - 1);
+        }
+
+        private void btnUseBase_Click(object sender, EventArgs e)
+        {
+            var npc = NpcBase.FromList(cmbNpcs.SelectedIndex);
+            if (npc == null)
+            {
+                return;
+            }
+
+            var exp = NpcExperienceCalculator.Calculate(npc);
+            nudExp.Value = exp;
         }
     }
 
