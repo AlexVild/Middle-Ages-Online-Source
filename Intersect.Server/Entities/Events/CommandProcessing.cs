@@ -3297,6 +3297,11 @@ namespace Intersect.Server.Entities.Events
                     break;
 
                 case ChallengeUpdate.Complete:
+                    if (challenge.Complete)
+                    {
+                        break;
+                    }
+
                     if (challenge.Challenge.RequiresContract && player.ChallengeContractId == challenge.ChallengeId)
                     {
                         challenge.Complete = true;
