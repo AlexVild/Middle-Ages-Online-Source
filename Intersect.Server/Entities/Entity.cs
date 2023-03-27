@@ -1297,7 +1297,7 @@ namespace Intersect.Server.Entities
 
         public virtual bool CanAttack(Entity entity, SpellBase spell)
         {
-            return entity != null && !entity.IsDisposed &&!entity.IsStealthed;
+            return entity != null && !entity.IsDisposed && !entity.IsStealthed;
         }
 
         public virtual void ProcessRegen()

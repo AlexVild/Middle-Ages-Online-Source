@@ -117,6 +117,10 @@ namespace Intersect.Server.Entities.Combat
 
                 if (n == (int) EntityTypes.Event)
                 {
+                    if (Spell != default)
+                    {
+                        CastDashSpell(en);
+                    }
                     return;
                 }
 
