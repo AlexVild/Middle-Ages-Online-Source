@@ -481,6 +481,8 @@ namespace Intersect.Server.Entities
             // We're actually doing the spell now - use our mats and if we fail, end
             if (!prayerSpell && !instantCast && !ValidateCast(spell, CastTarget, ignoreVitals))
             {
+                CastTime = 0;
+                CastingFinished();
                 return;
             }
 

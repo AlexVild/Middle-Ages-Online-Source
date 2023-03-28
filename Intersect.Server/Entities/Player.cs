@@ -8832,10 +8832,16 @@ namespace Intersect.Server.Entities
             return base.IsPassable() || PlayerDead;
         }
 
+        private bool WeaponIsSpellcastFocus()
+        {
+            var equippedWeapon = GetEquippedWeapon();
+            return equippedWeapon != null && equippedWeapon.ReplaceCastingComponents;
+        }
+
         private bool HasCastingComponents(List<SpellCastingComponent> castingComponents)
         {
             var equippedWeapon = GetEquippedWeapon();
-            if (equippedWeapon != null && equippedWeapon.ReplaceCastingComponents)
+            if (WeaponIsSpellcastFocus())
             {
                 return true;
             }
@@ -8924,6 +8930,11 @@ namespace Intersect.Server.Entities
 
         public bool TryConsumeCastingComponents(SpellBase spell)
         {
+            if (WeaponIsSpellcastFocus())
+            {
+                return true;
+            }
+
             // Don't take if don't have
             if (!HasCastingComponents(spell.CastingComponents))
             {
