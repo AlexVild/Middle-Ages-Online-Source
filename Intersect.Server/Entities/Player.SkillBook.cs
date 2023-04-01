@@ -241,5 +241,27 @@ namespace Intersect.Server.Entities
                 PacketSender.SendChatMsg(this, "You need to re-assign your skill points.", Enums.ChatMessageType.Experience, sendToast: true);
             }
         }
+
+        public void UnlearnSpecialAttack(Item equippedItem)
+        {
+            var specialAttack = equippedItem.Descriptor?.SpecialAttack?.SpellId ?? Guid.Empty;
+            if (specialAttack != Guid.Empty && !TryGetSkillInSkillbook(specialAttack, out _))
+            {
+                var spellSlot = FindSpell(equippedItem.Descriptor.SpecialAttack.SpellId);
+                if (spellSlot > -1)
+                {
+                    ForgetSpell(spellSlot);
+                }
+            }
+        }
+
+        public void LearnSpecialAttack(ItemBase item)
+        {
+            var specialAttack = item?.SpecialAttack?.SpellId ?? Guid.Empty;
+            if (specialAttack != Guid.Empty && !TryGetSkillInSkillbook(specialAttack, out _))
+            {
+                TryTeachSpell(new Spell(specialAttack), true);
+            }
+        }
     }
 }

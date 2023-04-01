@@ -3308,15 +3308,10 @@ namespace Intersect.Server.Entities
                 // (Need this for silly devs who give people items and then later add restrictions...)
                 if (itemBase.ItemType == ItemTypes.Equipment && SlotIsEquipped(slot, out var equippedSlot))
                 {
-                    if (TryGetEquippedItem(equippedSlot, out var equippedItem) && equippedItem.Descriptor?.SpecialAttack?.SpellId != Guid.Empty)
+                    if (TryGetEquippedItem(equippedSlot, out var equippedItem))
                     {
-                        var spellSlot = FindSpell(equippedItem.Descriptor.SpecialAttack.SpellId);
-                        if (spellSlot > -1)
-                        {
-                            ForgetSpell(spellSlot);
-                        }
+                        UnlearnSpecialAttack(equippedItem);
                     }
-
                     UnequipItem(equippedSlot, true);
                     return;
                 }
@@ -5750,11 +5745,7 @@ namespace Intersect.Server.Entities
             }
 
 
-            if (itemBase.SpecialAttack.SpellId != default)
-            {
-                TryTeachSpell(new Spell(itemBase.SpecialAttack.SpellId), true);
-            }
-
+            LearnSpecialAttack(itemBase);
             ProcessEquipmentUpdated(true);
         }
 

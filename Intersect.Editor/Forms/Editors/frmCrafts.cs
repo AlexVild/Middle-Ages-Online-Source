@@ -96,11 +96,12 @@ namespace Intersect.Editor.Forms.Editors
                 lblIngredient.Hide();
                 for (var i = 0; i < mEditorItem.Ingredients.Count; i++)
                 {
-                    var ingredient = ItemBase.Get(mEditorItem.Ingredients[i].ItemId);
-                    if (ingredient != null)
+                    if (mEditorItem.Ingredients[i].ItemId != Guid.Empty)
                     {
                         lstIngredients.Items.Add(
-                            $"Ingredient: {ItemBase.GetName(ingredient.Id)} (Tier {ingredient.Rarity}) x{mEditorItem.Ingredients[i].Quantity}"
+                            Strings.CraftsEditor.ingredientlistitem.ToString(
+                                ItemBase.GetName(mEditorItem.Ingredients[i].ItemId), mEditorItem.Ingredients[i].Quantity
+                            )
                         );
                     }
                     else
@@ -141,11 +142,11 @@ namespace Intersect.Editor.Forms.Editors
                     {
                         if (ing != null && ing.ItemId != Guid.Empty)
                         {
-                            craftCost += ItemBase.Get(ing.ItemId).Price * ing.Quantity;
+                            craftCost += (ItemBase.Get(ing.ItemId)?.Price ?? 0) * ing.Quantity;
                         }
                     });
 
-                    lblCost.Text = $"Item Cost: {ItemBase.Get(mEditorItem.ItemId).Price * mEditorItem.Quantity }; Craft Cost: {craftCost}";
+                    lblCost.Text = $"Item Cost: {(ItemBase.Get(mEditorItem.ItemId)?.Price ?? 0) * mEditorItem.Quantity }; Craft Cost: {craftCost}";
                     lblCost.Show();
                 }
                 else
