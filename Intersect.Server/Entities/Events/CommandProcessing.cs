@@ -3501,7 +3501,7 @@ namespace Intersect.Server.Entities.Events
             }
 
             player.OpenUpgradeStation(command.CurrencyItemId, command.CostMultiplier);
-            callStack.Peek().WaitingForResponse = CommandInstance.EventResponse.Enhancement;
+            callStack.Peek().WaitingForResponse = CommandInstance.EventResponse.Upgrade;
         }
     }
 }
