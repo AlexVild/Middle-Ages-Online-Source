@@ -222,7 +222,7 @@ namespace Intersect.Client.Interface.Game.UpgradeStation
                 return;
             }
 
-            CostLabel.SetText($"{cost}");
+            CostLabel.SetText($"{(int)Math.Floor(cost * UpgradeStation.CostMultiplier)}");
         }
 
         private void RefreshCraftInfo() 
