@@ -47,6 +47,11 @@ namespace Intersect.Editor.Forms.Editors
             this.txtSearch = new DarkUI.Controls.DarkTextBox();
             this.lstGameObjects = new Intersect.Editor.Forms.Controls.GameObjectList();
             this.grpEditor = new DarkUI.Controls.DarkGroupBox();
+            this.grpContractInfo = new DarkUI.Controls.DarkGroupBox();
+            this.txtRequirementDescription = new DarkUI.Controls.DarkTextBox();
+            this.lblRequirementDescription = new System.Windows.Forms.Label();
+            this.btnDynamicRequirements = new DarkUI.Controls.DarkButton();
+            this.chkRequiresContract = new DarkUI.Controls.DarkCheckBox();
             this.txtDescription = new DarkUI.Controls.DarkTextBox();
             this.lblIcon = new System.Windows.Forms.Label();
             this.cmbPic = new DarkUI.Controls.DarkComboBox();
@@ -78,21 +83,16 @@ namespace Intersect.Editor.Forms.Editors
             this.lblName = new System.Windows.Forms.Label();
             this.btnSave = new DarkUI.Controls.DarkButton();
             this.btnCancel = new DarkUI.Controls.DarkButton();
-            this.grpContractInfo = new DarkUI.Controls.DarkGroupBox();
-            this.chkRequiresContract = new DarkUI.Controls.DarkCheckBox();
-            this.btnDynamicRequirements = new DarkUI.Controls.DarkButton();
-            this.lblRequirementDescription = new System.Windows.Forms.Label();
-            this.txtRequirementDescription = new DarkUI.Controls.DarkTextBox();
             this.toolStrip.SuspendLayout();
             this.grpWeaponTypes.SuspendLayout();
             this.grpEditor.SuspendLayout();
+            this.grpContractInfo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picItem)).BeginInit();
             this.grpDetails.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudParam)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudSets)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudReps)).BeginInit();
             this.grpUnlocks.SuspendLayout();
-            this.grpContractInfo.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolStrip
@@ -273,7 +273,6 @@ namespace Intersect.Editor.Forms.Editors
             this.grpEditor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpEditor.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.grpEditor.Controls.Add(this.grpContractInfo);
-            this.grpEditor.Controls.Add(this.txtDescription);
             this.grpEditor.Controls.Add(this.lblIcon);
             this.grpEditor.Controls.Add(this.cmbPic);
             this.grpEditor.Controls.Add(this.picItem);
@@ -292,13 +291,72 @@ namespace Intersect.Editor.Forms.Editors
             this.grpEditor.TabStop = false;
             this.grpEditor.Text = "Weapon Type";
             // 
+            // grpContractInfo
+            // 
+            this.grpContractInfo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpContractInfo.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpContractInfo.Controls.Add(this.txtRequirementDescription);
+            this.grpContractInfo.Controls.Add(this.lblRequirementDescription);
+            this.grpContractInfo.Controls.Add(this.btnDynamicRequirements);
+            this.grpContractInfo.Controls.Add(this.chkRequiresContract);
+            this.grpContractInfo.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpContractInfo.Location = new System.Drawing.Point(19, 405);
+            this.grpContractInfo.Name = "grpContractInfo";
+            this.grpContractInfo.Size = new System.Drawing.Size(518, 75);
+            this.grpContractInfo.TabIndex = 122;
+            this.grpContractInfo.TabStop = false;
+            this.grpContractInfo.Text = "Contract";
+            // 
+            // txtRequirementDescription
+            // 
+            this.txtRequirementDescription.AcceptsReturn = true;
+            this.txtRequirementDescription.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.txtRequirementDescription.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtRequirementDescription.ForeColor = System.Drawing.Color.Gainsboro;
+            this.txtRequirementDescription.Location = new System.Drawing.Point(248, 32);
+            this.txtRequirementDescription.Multiline = true;
+            this.txtRequirementDescription.Name = "txtRequirementDescription";
+            this.txtRequirementDescription.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtRequirementDescription.Size = new System.Drawing.Size(254, 37);
+            this.txtRequirementDescription.TabIndex = 122;
+            this.txtRequirementDescription.TextChanged += new System.EventHandler(this.txtRequirementDescription_TextChanged);
+            // 
+            // lblRequirementDescription
+            // 
+            this.lblRequirementDescription.AutoSize = true;
+            this.lblRequirementDescription.Location = new System.Drawing.Point(245, 16);
+            this.lblRequirementDescription.Name = "lblRequirementDescription";
+            this.lblRequirementDescription.Size = new System.Drawing.Size(123, 13);
+            this.lblRequirementDescription.TabIndex = 120;
+            this.lblRequirementDescription.Text = "Requirement Description";
+            // 
+            // btnDynamicRequirements
+            // 
+            this.btnDynamicRequirements.Location = new System.Drawing.Point(18, 42);
+            this.btnDynamicRequirements.Name = "btnDynamicRequirements";
+            this.btnDynamicRequirements.Padding = new System.Windows.Forms.Padding(5);
+            this.btnDynamicRequirements.Size = new System.Drawing.Size(153, 23);
+            this.btnDynamicRequirements.TabIndex = 62;
+            this.btnDynamicRequirements.Text = "Contract Requirements";
+            this.btnDynamicRequirements.Click += new System.EventHandler(this.btnDynamicRequirements_Click);
+            // 
+            // chkRequiresContract
+            // 
+            this.chkRequiresContract.AutoSize = true;
+            this.chkRequiresContract.Location = new System.Drawing.Point(18, 19);
+            this.chkRequiresContract.Name = "chkRequiresContract";
+            this.chkRequiresContract.Size = new System.Drawing.Size(117, 17);
+            this.chkRequiresContract.TabIndex = 61;
+            this.chkRequiresContract.Text = "Requires Contract?";
+            this.chkRequiresContract.CheckedChanged += new System.EventHandler(this.chkRequiresContract_CheckedChanged);
+            // 
             // txtDescription
             // 
             this.txtDescription.AcceptsReturn = true;
             this.txtDescription.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.txtDescription.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtDescription.ForeColor = System.Drawing.Color.Gainsboro;
-            this.txtDescription.Location = new System.Drawing.Point(25, 176);
+            this.txtDescription.Location = new System.Drawing.Point(6, 135);
             this.txtDescription.Multiline = true;
             this.txtDescription.Name = "txtDescription";
             this.txtDescription.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -352,6 +410,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpDetails.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpDetails.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.grpDetails.Controls.Add(this.lblChallengeDescription);
+            this.grpDetails.Controls.Add(this.txtDescription);
             this.grpDetails.Controls.Add(this.nudParam);
             this.grpDetails.Controls.Add(this.cmbParamSelector);
             this.grpDetails.Controls.Add(this.nudSets);
@@ -364,7 +423,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpDetails.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpDetails.Location = new System.Drawing.Point(19, 87);
             this.grpDetails.Name = "grpDetails";
-            this.grpDetails.Size = new System.Drawing.Size(518, 122);
+            this.grpDetails.Size = new System.Drawing.Size(518, 168);
             this.grpDetails.TabIndex = 57;
             this.grpDetails.TabStop = false;
             this.grpDetails.Text = "Challenge Details";
@@ -372,7 +431,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblChallengeDescription
             // 
             this.lblChallengeDescription.AutoSize = true;
-            this.lblChallengeDescription.Location = new System.Drawing.Point(6, 75);
+            this.lblChallengeDescription.Location = new System.Drawing.Point(6, 119);
             this.lblChallengeDescription.Name = "lblChallengeDescription";
             this.lblChallengeDescription.Size = new System.Drawing.Size(60, 13);
             this.lblChallengeDescription.TabIndex = 84;
@@ -529,9 +588,9 @@ namespace Intersect.Editor.Forms.Editors
             this.grpUnlocks.Controls.Add(this.cmbSpell);
             this.grpUnlocks.Controls.Add(this.lblSpell);
             this.grpUnlocks.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpUnlocks.Location = new System.Drawing.Point(19, 215);
+            this.grpUnlocks.Location = new System.Drawing.Point(19, 261);
             this.grpUnlocks.Name = "grpUnlocks";
-            this.grpUnlocks.Size = new System.Drawing.Size(518, 184);
+            this.grpUnlocks.Size = new System.Drawing.Size(518, 138);
             this.grpUnlocks.TabIndex = 56;
             this.grpUnlocks.TabStop = false;
             this.grpUnlocks.Text = "Unlocks";
@@ -549,7 +608,7 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbEnhancement.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbEnhancement.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbEnhancement.FormattingEnabled = true;
-            this.cmbEnhancement.Location = new System.Drawing.Point(9, 94);
+            this.cmbEnhancement.Location = new System.Drawing.Point(9, 72);
             this.cmbEnhancement.Name = "cmbEnhancement";
             this.cmbEnhancement.Size = new System.Drawing.Size(229, 21);
             this.cmbEnhancement.TabIndex = 121;
@@ -560,7 +619,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblEnhancement
             // 
             this.lblEnhancement.AutoSize = true;
-            this.lblEnhancement.Location = new System.Drawing.Point(6, 78);
+            this.lblEnhancement.Location = new System.Drawing.Point(6, 56);
             this.lblEnhancement.Name = "lblEnhancement";
             this.lblEnhancement.Size = new System.Drawing.Size(73, 13);
             this.lblEnhancement.TabIndex = 120;
@@ -569,7 +628,7 @@ namespace Intersect.Editor.Forms.Editors
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(260, 78);
+            this.label1.Location = new System.Drawing.Point(260, 56);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(91, 13);
             this.label1.TabIndex = 119;
@@ -581,11 +640,11 @@ namespace Intersect.Editor.Forms.Editors
             this.txtStartDesc.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.txtStartDesc.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtStartDesc.ForeColor = System.Drawing.Color.Gainsboro;
-            this.txtStartDesc.Location = new System.Drawing.Point(263, 94);
+            this.txtStartDesc.Location = new System.Drawing.Point(263, 72);
             this.txtStartDesc.Multiline = true;
             this.txtStartDesc.Name = "txtStartDesc";
             this.txtStartDesc.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtStartDesc.Size = new System.Drawing.Size(239, 75);
+            this.txtStartDesc.Size = new System.Drawing.Size(239, 56);
             this.txtStartDesc.TabIndex = 118;
             this.txtStartDesc.TextChanged += new System.EventHandler(this.txtStartDesc_TextChanged);
             // 
@@ -602,7 +661,7 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbEvent.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbEvent.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbEvent.FormattingEnabled = true;
-            this.cmbEvent.Location = new System.Drawing.Point(263, 42);
+            this.cmbEvent.Location = new System.Drawing.Point(263, 32);
             this.cmbEvent.Name = "cmbEvent";
             this.cmbEvent.Size = new System.Drawing.Size(239, 21);
             this.cmbEvent.TabIndex = 117;
@@ -613,7 +672,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblEvent
             // 
             this.lblEvent.AutoSize = true;
-            this.lblEvent.Location = new System.Drawing.Point(260, 26);
+            this.lblEvent.Location = new System.Drawing.Point(260, 16);
             this.lblEvent.Name = "lblEvent";
             this.lblEvent.Size = new System.Drawing.Size(90, 13);
             this.lblEvent.TabIndex = 116;
@@ -632,7 +691,7 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbSpell.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbSpell.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbSpell.FormattingEnabled = true;
-            this.cmbSpell.Location = new System.Drawing.Point(9, 42);
+            this.cmbSpell.Location = new System.Drawing.Point(9, 32);
             this.cmbSpell.Name = "cmbSpell";
             this.cmbSpell.Size = new System.Drawing.Size(229, 21);
             this.cmbSpell.TabIndex = 115;
@@ -643,7 +702,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblSpell
             // 
             this.lblSpell.AutoSize = true;
-            this.lblSpell.Location = new System.Drawing.Point(6, 26);
+            this.lblSpell.Location = new System.Drawing.Point(6, 16);
             this.lblSpell.Name = "lblSpell";
             this.lblSpell.Size = new System.Drawing.Size(30, 13);
             this.lblSpell.TabIndex = 112;
@@ -730,65 +789,6 @@ namespace Intersect.Editor.Forms.Editors
             this.btnCancel.Text = "Cancel";
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
-            // grpContractInfo
-            // 
-            this.grpContractInfo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.grpContractInfo.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpContractInfo.Controls.Add(this.txtRequirementDescription);
-            this.grpContractInfo.Controls.Add(this.lblRequirementDescription);
-            this.grpContractInfo.Controls.Add(this.btnDynamicRequirements);
-            this.grpContractInfo.Controls.Add(this.chkRequiresContract);
-            this.grpContractInfo.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpContractInfo.Location = new System.Drawing.Point(19, 405);
-            this.grpContractInfo.Name = "grpContractInfo";
-            this.grpContractInfo.Size = new System.Drawing.Size(518, 75);
-            this.grpContractInfo.TabIndex = 122;
-            this.grpContractInfo.TabStop = false;
-            this.grpContractInfo.Text = "Contract";
-            // 
-            // chkRequiresContract
-            // 
-            this.chkRequiresContract.AutoSize = true;
-            this.chkRequiresContract.Location = new System.Drawing.Point(18, 19);
-            this.chkRequiresContract.Name = "chkRequiresContract";
-            this.chkRequiresContract.Size = new System.Drawing.Size(117, 17);
-            this.chkRequiresContract.TabIndex = 61;
-            this.chkRequiresContract.Text = "Requires Contract?";
-            this.chkRequiresContract.CheckedChanged += new System.EventHandler(this.chkRequiresContract_CheckedChanged);
-            // 
-            // btnDynamicRequirements
-            // 
-            this.btnDynamicRequirements.Location = new System.Drawing.Point(18, 42);
-            this.btnDynamicRequirements.Name = "btnDynamicRequirements";
-            this.btnDynamicRequirements.Padding = new System.Windows.Forms.Padding(5);
-            this.btnDynamicRequirements.Size = new System.Drawing.Size(153, 23);
-            this.btnDynamicRequirements.TabIndex = 62;
-            this.btnDynamicRequirements.Text = "Contract Requirements";
-            this.btnDynamicRequirements.Click += new System.EventHandler(this.btnDynamicRequirements_Click);
-            // 
-            // lblRequirementDescription
-            // 
-            this.lblRequirementDescription.AutoSize = true;
-            this.lblRequirementDescription.Location = new System.Drawing.Point(245, 16);
-            this.lblRequirementDescription.Name = "lblRequirementDescription";
-            this.lblRequirementDescription.Size = new System.Drawing.Size(123, 13);
-            this.lblRequirementDescription.TabIndex = 120;
-            this.lblRequirementDescription.Text = "Requirement Description";
-            // 
-            // txtRequirementDescription
-            // 
-            this.txtRequirementDescription.AcceptsReturn = true;
-            this.txtRequirementDescription.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.txtRequirementDescription.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtRequirementDescription.ForeColor = System.Drawing.Color.Gainsboro;
-            this.txtRequirementDescription.Location = new System.Drawing.Point(248, 32);
-            this.txtRequirementDescription.Multiline = true;
-            this.txtRequirementDescription.Name = "txtRequirementDescription";
-            this.txtRequirementDescription.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtRequirementDescription.Size = new System.Drawing.Size(254, 37);
-            this.txtRequirementDescription.TabIndex = 122;
-            this.txtRequirementDescription.TextChanged += new System.EventHandler(this.txtRequirementDescription_TextChanged);
-            // 
             // frmChallenge
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -810,6 +810,8 @@ namespace Intersect.Editor.Forms.Editors
             this.grpWeaponTypes.PerformLayout();
             this.grpEditor.ResumeLayout(false);
             this.grpEditor.PerformLayout();
+            this.grpContractInfo.ResumeLayout(false);
+            this.grpContractInfo.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picItem)).EndInit();
             this.grpDetails.ResumeLayout(false);
             this.grpDetails.PerformLayout();
@@ -818,8 +820,6 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudReps)).EndInit();
             this.grpUnlocks.ResumeLayout(false);
             this.grpUnlocks.PerformLayout();
-            this.grpContractInfo.ResumeLayout(false);
-            this.grpContractInfo.PerformLayout();
             this.ResumeLayout(false);
 
         }

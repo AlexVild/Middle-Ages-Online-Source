@@ -60,7 +60,7 @@ namespace Intersect.Editor.Forms.Editors
 
             cmbEnhancement.Items.Clear();
             cmbEnhancement.Items.Add(Strings.General.none);
-            cmbEnhancement.Items.Add(EnhancementDescriptor.Names);
+            cmbEnhancement.Items.AddRange(EnhancementDescriptor.Names);
 
             lstGameObjects.Init(UpdateToolStripItems, 
                 AssignEditorItem, 

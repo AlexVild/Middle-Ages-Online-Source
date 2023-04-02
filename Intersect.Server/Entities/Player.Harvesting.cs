@@ -4,6 +4,7 @@ using Intersect.Server.Entities.Events;
 using Intersect.Server.Localization;
 using Intersect.Server.Networking;
 using Intersect.Server.Utilities;
+using Intersect.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,8 +32,8 @@ namespace Intersect.Server.Entities
                 long progressUntilNextBonus = 0;
                 if (resource != null)
                 {
-                    harvestBonus = HarvestBonusHelper.CalculateHarvestBonus(this, resource.Base?.Id ?? Guid.Empty);
-                    progressUntilNextBonus = HarvestBonusHelper.GetHarvestsUntilNextBonus(this, resource.Base?.Id ?? Guid.Empty);
+                    harvestBonus = Utilities.HarvestBonusHelper.CalculateHarvestBonus(this, resource.Base?.Id ?? Guid.Empty);
+                    progressUntilNextBonus = Utilities.HarvestBonusHelper.GetHarvestsUntilNextBonus(this, resource.Base?.Id ?? Guid.Empty);
                 }
 
                 PacketSender.SendResourceLockPacket(this, val, harvestBonus, progressUntilNextBonus, resource?.Base?.Id ?? Guid.Empty);
@@ -89,7 +90,7 @@ namespace Intersect.Server.Entities
             }
 
             var descriptor = target.Base;
-            if (descriptor.Tool != tool)
+            if (descriptor.Tool != tool && descriptor.Tool != -1)
             {
                 PacketSender.SendChatMsg(
                     this, Strings.Combat.toolrequired.ToString(Options.ToolTypes[descriptor.Tool]), ChatMessageType.Error
@@ -116,11 +117,25 @@ namespace Intersect.Server.Entities
             var dmg = ClassBase.Get(ClassId)?.Damage ?? 1;
             if (projectile.Item != null)
             {
-                dmg = projectile.Item.Damage;
+                // Item is a specified tool?
+                if (projectile.Item.Tool != -1)
+                {
+                    dmg = projectile.Item.Damage;
+                }
+                // Item is normally just a weapon?
+                else
+                {
+                    CombatUtilities.CalculateDamage(projectile.Item.AttackTypes, 1.0, 100, StatVals, new int[(int)Stats.StatCount], out dmg);
+                }
+
+                if (projectile.Spell == null)
+                {
+                    PacketSender.SendAnimationToProximity(projectile.Item.AttackAnimationId, 1, target.Id, target.MapId, (byte)target.X, (byte)target.Y, (sbyte)target.Dir, target.MapInstanceId, true);
+                }
             }
 
             projectile.HandleProjectileSpell(target, true);
-            DealTrueDamageTo(target, 0, dmg, false, true);
+            DealTrueDamageTo(target, 100, dmg, false, true);
 
             return true;
         }
