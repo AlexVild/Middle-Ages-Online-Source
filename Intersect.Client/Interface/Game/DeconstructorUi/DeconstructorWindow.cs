@@ -126,7 +126,6 @@ namespace Intersect.Client.Interface.Game.DeconstructorUi
             }
 
             PacketSender.SendDeconstructItems(Deconstructor.Items.ToArray());
-            Deconstructor.WaitingOnServer = true;
         }
 
         private void SubmitFuelButton_Clicked(Base sender, Framework.Gwen.Control.EventArguments.ClickedEventArgs arguments)
