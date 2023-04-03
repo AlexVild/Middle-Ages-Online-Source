@@ -1689,10 +1689,7 @@ namespace Intersect.Client.Entities
                             en.Value.CanBeAttacked())
                         {
                             //ATTACKKKKK!!!
-                            if (!InVehicle)
-                            {
-                                PacketSender.SendAttack(en.Key);
-                            } else if (en.Value is Resource)
+                            if (!InVehicle || en.Value is Resource)
                             {
                                 PacketSender.SendAttack(en.Key);
                             }

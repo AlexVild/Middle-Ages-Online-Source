@@ -1,10 +1,8 @@
 ﻿using Intersect.Enums;
 using Intersect.GameObjects;
 using Intersect.GameObjects.Events;
-using Intersect.Server.Database;
 using Intersect.Server.Entities.Combat;
 using Intersect.Server.Entities.Events;
-using Intersect.Server.General;
 using Intersect.Server.Localization;
 using Intersect.Server.Maps;
 using Intersect.Server.Networking;
@@ -13,10 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using System.Text;
 using System.Text.Json.Serialization;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Intersect.Server.Entities
 {
@@ -250,7 +245,7 @@ namespace Intersect.Server.Entities
             }
 
             // "attempt" an attack if status active that prevents it, but miss 100% of the time
-            if (IsOneBlockAway(target) && StatusPreventsAttack())
+            if (TargetInMeleeRange(target) && StatusPreventsAttack())
             {
                 PacketSender.SendActionMsg(this, Strings.Combat.miss, CustomColors.Combat.Missed);
                 PacketSender.SendEntityAttack(this, CalculateAttackTime());

@@ -1759,35 +1759,37 @@ namespace Intersect.Server.Entities
         }
 
         //Check if the target is either up, down, left or right of the target on the correct Z dimension.
-        protected bool IsOneBlockAway(Entity target)
+        protected bool TargetInMeleeRange(Entity target)
         {
             var myTile = new TileHelper(MapId, X, Y);
             var enemyTile = new TileHelper(target.MapId, target.X, target.Y);
-            if (Z == target.Z)
+            if (Z != target.Z)
             {
-                myTile.Translate(0, -1); // Target Up
-                if (myTile.Matches(enemyTile))
-                {
-                    return true;
-                }
+                return false;
+            }
 
-                myTile.Translate(0, 2); // Target Down
-                if (myTile.Matches(enemyTile))
-                {
-                    return true;
-                }
+            myTile.Translate(0, -1); // Target Up
+            if (myTile.Matches(enemyTile))
+            {
+                return true;
+            }
 
-                myTile.Translate(-1, -1); // Target Left
-                if (myTile.Matches(enemyTile))
-                {
-                    return true;
-                }
+            myTile.Translate(0, 2); // Target Down
+            if (myTile.Matches(enemyTile))
+            {
+                return true;
+            }
 
-                myTile.Translate(2, 0); // Target Right 
-                if (myTile.Matches(enemyTile))
-                {
-                    return true;
-                }
+            myTile.Translate(-1, -1); // Target Left
+            if (myTile.Matches(enemyTile))
+            {
+                return true;
+            }
+
+            myTile.Translate(2, 0); // Target Right 
+            if (myTile.Matches(enemyTile))
+            {
+                return true;
             }
 
             return false;
@@ -1796,33 +1798,35 @@ namespace Intersect.Server.Entities
         //These functions only work when one block away.
         protected bool IsFacingTarget(Entity target)
         {
-            if (IsOneBlockAway(target))
+            if (!TargetInMeleeRange(target))
             {
-                var myTile = new TileHelper(MapId, X, Y);
-                var enemyTile = new TileHelper(target.MapId, target.X, target.Y);
-                myTile.Translate(0, -1);
-                if (myTile.Matches(enemyTile) && Dir == (int) Directions.Up)
-                {
-                    return true;
-                }
+                return false;
+            }
 
-                myTile.Translate(0, 2);
-                if (myTile.Matches(enemyTile) && Dir == (int) Directions.Down)
-                {
-                    return true;
-                }
+            var myTile = new TileHelper(MapId, X, Y);
+            var enemyTile = new TileHelper(target.MapId, target.X, target.Y);
+            myTile.Translate(0, -1);
+            if (myTile.Matches(enemyTile) && Dir == (int)Directions.Up)
+            {
+                return true;
+            }
 
-                myTile.Translate(-1, -1);
-                if (myTile.Matches(enemyTile) && Dir == (int) Directions.Left)
-                {
-                    return true;
-                }
+            myTile.Translate(0, 2);
+            if (myTile.Matches(enemyTile) && Dir == (int)Directions.Down)
+            {
+                return true;
+            }
 
-                myTile.Translate(2, 0);
-                if (myTile.Matches(enemyTile) && Dir == (int) Directions.Right)
-                {
-                    return true;
-                }
+            myTile.Translate(-1, -1);
+            if (myTile.Matches(enemyTile) && Dir == (int)Directions.Left)
+            {
+                return true;
+            }
+
+            myTile.Translate(2, 0);
+            if (myTile.Matches(enemyTile) && Dir == (int)Directions.Right)
+            {
+                return true;
             }
 
             return false;

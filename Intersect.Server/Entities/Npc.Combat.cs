@@ -57,7 +57,7 @@ namespace Intersect.Server.Entities
 
         public override bool CanMeleeTarget(Entity target)
         {
-            if (!IsOneBlockAway(target) ||
+            if (!TargetInMeleeRange(target) ||
                 !IsFacingTarget(target))
             {
                 return false;
@@ -160,7 +160,7 @@ namespace Intersect.Server.Entities
                 var spell = SpellBase.Get(spellOverride);
                 if (Timing.Global.MillisecondsUtc > mLastOverrideAttack)
                 {
-                    UseSpell(spell, -1, CastTarget);
+                    UseSpell(spell, -1, enemy);
                     mLastOverrideAttack = Timing.Global.MillisecondsUtc + CalculateAttackTime();
                 }
 
