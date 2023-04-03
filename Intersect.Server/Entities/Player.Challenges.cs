@@ -399,7 +399,8 @@ namespace Intersect.Server.Entities
                 PacketSender.SendChatMsg(this,
                     Strings.Player.MasterySkillUnlock.ToString(SpellBase.GetName(challenge.SpellUnlockId)),
                     Enums.ChatMessageType.Spells,
-                    CustomColors.General.GeneralCompleted);
+                    CustomColors.General.GeneralCompleted,
+                    sendToast: true);
             }
             if (challenge.CompletionEventId != Guid.Empty)
             {
