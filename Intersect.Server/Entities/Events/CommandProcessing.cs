@@ -3278,6 +3278,11 @@ namespace Intersect.Server.Entities.Events
             switch (command.ChangeType)
             {
                 case ChallengeUpdate.ChangeSets:
+                    if (challenge.Complete && command.Amount > 0)
+                    {
+                        break;
+                    }
+
                     challenge.Progress = MathHelper.Clamp(challenge.Progress + command.Amount, 0, descriptor.Sets);
                     challenge.Complete = challenge.Progress >= descriptor.Sets;
                     if (challenge.Complete)
