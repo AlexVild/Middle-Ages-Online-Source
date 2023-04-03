@@ -208,11 +208,11 @@ namespace Intersect.GameObjects
                 case ChallengeType.ComboEarned:
                     if (Reps > 1)
                     {
-                        return $"Earn a combo of {Sets}, {Reps} times, using this weapon type.";
+                        return $"Earn a combo of {Reps}, {Sets} times, using this weapon type.";
                     }
                     else
                     {
-                        return $"Earn a combo of {Sets} using this weapon type.";
+                        return $"Earn a combo of {Reps} using this weapon type.";
                     }
 
                 case ChallengeType.BeastsKilledOverTime:
