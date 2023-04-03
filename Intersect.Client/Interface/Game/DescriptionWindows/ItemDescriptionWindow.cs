@@ -32,6 +32,8 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
         protected int mTableQuantity;
 
         protected SpellDescriptionWindow mSpellDescWindow;
+        
+        protected EnhancementDescriptionWindow mEnhancementDescWindow;
 
         public Item EquippedItem;
 
@@ -90,10 +92,19 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             {
                 mSpellDescWindow = new SpellDescriptionWindow(mItem.SpecialAttack.SpellId, x, y);
             }
+            if (mItem.ItemType == ItemTypes.Enhancement)
+            {
+                mEnhancementDescWindow = new EnhancementDescriptionWindow(mItem.EnhancementId, mItem.Icon, x, y);
+                mEnhancementDescWindow.Show();
+            }
 
             if (mSpellDescWindow != default)
             {
                 x -= mSpellDescWindow.Container.Width + 4;
+            }
+            if (mEnhancementDescWindow != default)
+            {
+                x -= mEnhancementDescWindow.Container.Width + 4;
             }
 
             SetPosition(x, y);
@@ -300,9 +311,9 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 return;
             }
 
-            return; // Alex - Remove this to display enhancement info
+            //return; // Alex - Remove this to display enhancement info
 
-           /* var description = AddDescription();
+            var description = AddDescription();
             Dictionary<string, int> enhancementApplications = new Dictionary<string, int>();
             foreach (var enId in mItemProperties.AppliedEnhancementIds)
             {
@@ -340,7 +351,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             if (appliedEnhancements.Count > 0)
             {
                 description.AddText($"Enhancements: {string.Join(", ", appliedEnhancements)}", CustomColors.ItemDesc.Muted);
-            }*/
+            }
         }
 
         protected void SetupConsumableInfo()
@@ -521,6 +532,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
         {
             base.Dispose();
             mSpellDescWindow?.Dispose();
+            mEnhancementDescWindow?.Dispose();
         }
     }
 }
