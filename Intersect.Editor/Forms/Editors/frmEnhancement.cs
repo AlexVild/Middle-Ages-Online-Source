@@ -185,7 +185,7 @@ namespace Intersect.Editor.Forms.Editors
 
         private void RemoveEnhancement<E>(ListBox listBox, List<Enhancement<E>> enhancements) where E : Enum
         {
-            if (listBox.SelectedIndex < 0 || listBox.SelectedIndex >= lstStatBuffs.Items.Count)
+            if (listBox.SelectedIndex < 0 || listBox.SelectedIndex >= listBox.Items.Count)
             {
                 return;
             }
