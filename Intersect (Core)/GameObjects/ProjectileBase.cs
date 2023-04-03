@@ -21,7 +21,7 @@ namespace Intersect.GameObjects
         /// <summary>
         /// Overrides the animation that plays to just pretend to be a melee attack
         /// </summary>
-        public bool FakeMelee { get; set; }
+        public bool FakeMelee { get; set; } = false;
 
         [NotMapped] public List<ProjectileAnimation> Animations = new List<ProjectileAnimation>();
 

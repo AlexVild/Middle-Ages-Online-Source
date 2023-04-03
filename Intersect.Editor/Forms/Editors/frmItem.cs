@@ -456,6 +456,8 @@ namespace Intersect.Editor.Forms.Editors
                 cmbToolType.SelectedIndex = mEditorItem.Tool + 1;
                 cmbAttackAnimation.SelectedIndex = AnimationBase.ListIndex(mEditorItem.AttackAnimationId) + 1;
 
+                txtSortName.Text = mEditorItem.SortName;
+
                 chkRareDrop.Checked = mEditorItem.RareDrop;
 
                 RefreshExtendedData();
@@ -2373,6 +2375,11 @@ namespace Intersect.Editor.Forms.Editors
         private void btnFuelRecc_Click(object sender, EventArgs e)
         {
             nudFuel.Value = DeconstructionUtils.FuelGivenAtTier(mEditorItem.Rarity);
+        }
+
+        private void txtSortName_TextChanged(object sender, EventArgs e)
+        {
+            mEditorItem.SortName = txtSortName.Text;
         }
     }
 }

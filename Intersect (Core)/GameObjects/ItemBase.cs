@@ -621,6 +621,13 @@ namespace Intersect.GameObjects
             }
             return true;
         }
+
+        public string SortName { get; set; } = string.Empty;
+
+        public string GetSortName()
+        {
+            return string.IsNullOrWhiteSpace(SortName) ? Name : SortName;
+        }
     }
 
 }

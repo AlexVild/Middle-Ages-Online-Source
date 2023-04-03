@@ -734,12 +734,12 @@ namespace Intersect.Server.Entities
 
         private static int CompareBankItems(Item currentItem, Item comparedItem)
         {
-            var x = ItemBase.Get(currentItem.ItemId);
-            var y = ItemBase.Get(comparedItem.ItemId);
+            var item1 = ItemBase.Get(currentItem.ItemId);
+            var item2 = ItemBase.Get(comparedItem.ItemId);
 
-            if (x == null)
+            if (item1 == null)
             {
-                if (y == null)
+                if (item2 == null)
                 {
                     return 0;
                 } else
@@ -748,22 +748,29 @@ namespace Intersect.Server.Entities
                 }
             } else
             {
-                if (y == null)
+                if (item2 == null)
                 {
                     return 1;
                 } else
                 {
-                    if (x.ItemType == y.ItemType)
+                    if (item1.ItemType == item2.ItemType)
                     {
-                        return x.Name.CompareTo(y.Name) * -1;
+                        if (item1.GetSortName().Equals(item2.GetSortName()))
+                        {
+                            return Math.Sign(item1.Rarity == item2.Rarity ? 
+                                (item1.Name.CompareTo(item2.Name) * -1) : 
+                                item1.Rarity - item2.Rarity);
+                        }
+
+                        return item1.GetSortName().CompareTo(item2.GetSortName()) * -1;
                     } else
                     {
-                        switch (x.ItemType)
+                        switch (item1.ItemType)
                         {
                             case ItemTypes.Currency:
                                 return 1;
                             case ItemTypes.Equipment:
-                                if (y.ItemType == ItemTypes.Currency)
+                                if (item2.ItemType == ItemTypes.Currency)
                                 {
                                     return -1;
                                 } else
@@ -771,7 +778,7 @@ namespace Intersect.Server.Entities
                                     return 1;
                                 }
                             case ItemTypes.Bag:
-                                if (y.ItemType == ItemTypes.Currency || y.ItemType == ItemTypes.Equipment)
+                                if (item2.ItemType == ItemTypes.Currency || item2.ItemType == ItemTypes.Equipment)
                                 {
                                     return -1;
                                 }
@@ -780,9 +787,9 @@ namespace Intersect.Server.Entities
                                     return 1;
                                 }
                             case ItemTypes.Event:
-                                if (y.ItemType == ItemTypes.Currency 
-                                    || y.ItemType == ItemTypes.Equipment
-                                    || y.ItemType == ItemTypes.Bag)
+                                if (item2.ItemType == ItemTypes.Currency 
+                                    || item2.ItemType == ItemTypes.Equipment
+                                    || item2.ItemType == ItemTypes.Bag)
                                 {
                                     return -1;
                                 }
@@ -791,10 +798,10 @@ namespace Intersect.Server.Entities
                                     return 1;
                                 }
                             case ItemTypes.Spell:
-                                if (y.ItemType == ItemTypes.Currency
-                                    || y.ItemType == ItemTypes.Equipment
-                                    || y.ItemType == ItemTypes.Bag
-                                    || y.ItemType == ItemTypes.Event)
+                                if (item2.ItemType == ItemTypes.Currency
+                                    || item2.ItemType == ItemTypes.Equipment
+                                    || item2.ItemType == ItemTypes.Bag
+                                    || item2.ItemType == ItemTypes.Event)
                                 {
                                     return -1;
                                 }
@@ -803,7 +810,7 @@ namespace Intersect.Server.Entities
                                     return 1;
                                 }
                             case ItemTypes.None:
-                                if (y.ItemType != ItemTypes.Consumable)
+                                if (item2.ItemType != ItemTypes.Consumable)
                                 {
                                     return -1;
                                 }
@@ -812,7 +819,24 @@ namespace Intersect.Server.Entities
                                     return 1;
                                 }
                             case ItemTypes.Consumable:
+                                if (item2.ItemType == ItemTypes.Enhancement ||
+                                    item2.ItemType == ItemTypes.Cosmetic)
+                                {
+                                    return 1;
+                                }
+                                else
+                                {
+                                    return -1;
+                                }
                             case ItemTypes.Enhancement:
+                                if (item2.ItemType == ItemTypes.Cosmetic)
+                                {
+                                    return 1;
+                                }
+                                else
+                                {
+                                    return -1;
+                                }
                             case ItemTypes.Cosmetic:
                             default:
                                 return -1;
