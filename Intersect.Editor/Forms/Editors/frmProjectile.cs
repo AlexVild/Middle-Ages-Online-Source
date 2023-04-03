@@ -179,6 +179,7 @@ namespace Intersect.Editor.Forms.Editors
                 chkPierce.Checked = mEditorItem.PierceTarget;
                 cmbItem.SelectedIndex = ItemBase.ListIndex(mEditorItem.AmmoItemId) + 1;
                 nudConsume.Value = mEditorItem.AmmoRequired;
+                chkFakeMelee.Checked = mEditorItem.FakeMelee;
 
                 if (lstAnimations.SelectedIndex < 0)
                 {
@@ -783,6 +784,11 @@ namespace Intersect.Editor.Forms.Editors
         private void chkGrappleEntities_CheckedChanged(object sender, EventArgs e)
         {
             mEditorItem.AttachToEntities = chkGrappleEntities.Checked;
+        }
+
+        private void chkFakeMelee_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.FakeMelee = chkFakeMelee.Checked;
         }
     }
 

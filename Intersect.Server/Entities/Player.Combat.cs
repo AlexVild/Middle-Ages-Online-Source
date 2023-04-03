@@ -514,7 +514,10 @@ namespace Intersect.Server.Entities
         {
             var attackAnim = weaponItem.AttackAnimation;
             var attackingTile = GetMeleeAttackTile();
-            if (attackAnim != null && attackingTile.TryFix() && weaponItem.ProjectileId == Guid.Empty)
+
+            var projectile = weaponItem.Projectile;
+
+            if (attackAnim != null && attackingTile.TryFix() && (projectile == null || (projectile?.FakeMelee ?? false)))
             {
                 PacketSender.SendAnimationToProximity(
                     attackAnim.Id, -1, Id, attackingTile.GetMapId(), attackingTile.GetX(),

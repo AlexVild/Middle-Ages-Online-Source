@@ -172,6 +172,11 @@ namespace Intersect.Server.Entities
             }
 
             var animation = parentWeapon?.AttackAnimationId ?? parentSpell?.HitAnimationId ?? Guid.Empty;
+            // If we're faking a melee attack as a player, we already played the attacking animation, so don't send anything now
+            if (this is Player && projectile.Base.FakeMelee)
+            {
+                animation = Guid.Empty;
+            }
 
             var targetType = (enemy.IsDead() || enemy.IsDisposed) ? -1 : 1;
             PacketSender.SendAnimationToProximity(

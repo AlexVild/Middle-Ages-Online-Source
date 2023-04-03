@@ -18,6 +18,11 @@ namespace Intersect.GameObjects
 
         public const int SPAWN_LOCATIONS_WIDTH = 5;
 
+        /// <summary>
+        /// Overrides the animation that plays to just pretend to be a melee attack
+        /// </summary>
+        public bool FakeMelee { get; set; }
+
         [NotMapped] public List<ProjectileAnimation> Animations = new List<ProjectileAnimation>();
 
         [NotMapped] public Location[,] SpawnLocations = new Location[SPAWN_LOCATIONS_WIDTH, SPAWN_LOCATIONS_HEIGHT];

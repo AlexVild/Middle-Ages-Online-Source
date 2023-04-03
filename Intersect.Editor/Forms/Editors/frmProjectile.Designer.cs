@@ -96,6 +96,7 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemPaste = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
+            this.chkFakeMelee = new DarkUI.Controls.DarkCheckBox();
             this.grpProjectiles.SuspendLayout();
             this.grpSpawns.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picSpawns)).BeginInit();
@@ -508,6 +509,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpAnimations.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpAnimations.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpAnimations.Controls.Add(this.chkFakeMelee);
             this.grpAnimations.Controls.Add(this.cmbAnimation);
             this.grpAnimations.Controls.Add(this.btnRemove);
             this.grpAnimations.Controls.Add(this.btnAdd);
@@ -519,7 +521,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpAnimations.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpAnimations.Location = new System.Drawing.Point(193, 1);
             this.grpAnimations.Name = "grpAnimations";
-            this.grpAnimations.Size = new System.Drawing.Size(273, 252);
+            this.grpAnimations.Size = new System.Drawing.Size(273, 274);
             this.grpAnimations.TabIndex = 27;
             this.grpAnimations.TabStop = false;
             this.grpAnimations.Text = "Animations";
@@ -547,7 +549,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             // btnRemove
             // 
-            this.btnRemove.Location = new System.Drawing.Point(188, 219);
+            this.btnRemove.Location = new System.Drawing.Point(187, 244);
             this.btnRemove.Name = "btnRemove";
             this.btnRemove.Padding = new System.Windows.Forms.Padding(5);
             this.btnRemove.Size = new System.Drawing.Size(75, 23);
@@ -557,7 +559,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             // btnAdd
             // 
-            this.btnAdd.Location = new System.Drawing.Point(12, 219);
+            this.btnAdd.Location = new System.Drawing.Point(9, 244);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Padding = new System.Windows.Forms.Padding(5);
             this.btnAdd.Size = new System.Drawing.Size(75, 23);
@@ -629,9 +631,9 @@ namespace Intersect.Editor.Forms.Editors
             this.grpCollisions.Controls.Add(this.chkIgnoreMapBlocks);
             this.grpCollisions.Controls.Add(this.chkIgnoreActiveResources);
             this.grpCollisions.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpCollisions.Location = new System.Drawing.Point(192, 259);
+            this.grpCollisions.Location = new System.Drawing.Point(192, 281);
             this.grpCollisions.Name = "grpCollisions";
-            this.grpCollisions.Size = new System.Drawing.Size(273, 107);
+            this.grpCollisions.Size = new System.Drawing.Size(273, 85);
             this.grpCollisions.TabIndex = 29;
             this.grpCollisions.TabStop = false;
             this.grpCollisions.Text = "Ignore Collision:";
@@ -639,7 +641,7 @@ namespace Intersect.Editor.Forms.Editors
             // chkGrounded
             // 
             this.chkGrounded.AutoSize = true;
-            this.chkGrounded.Location = new System.Drawing.Point(168, 39);
+            this.chkGrounded.Location = new System.Drawing.Point(143, 65);
             this.chkGrounded.Name = "chkGrounded";
             this.chkGrounded.Size = new System.Drawing.Size(79, 17);
             this.chkGrounded.TabIndex = 40;
@@ -649,7 +651,7 @@ namespace Intersect.Editor.Forms.Editors
             // chkPierce
             // 
             this.chkPierce.AutoSize = true;
-            this.chkPierce.Location = new System.Drawing.Point(168, 16);
+            this.chkPierce.Location = new System.Drawing.Point(143, 42);
             this.chkPierce.Name = "chkPierce";
             this.chkPierce.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.chkPierce.Size = new System.Drawing.Size(96, 17);
@@ -660,7 +662,7 @@ namespace Intersect.Editor.Forms.Editors
             // chkIgnoreInactiveResources
             // 
             this.chkIgnoreInactiveResources.AutoSize = true;
-            this.chkIgnoreInactiveResources.Location = new System.Drawing.Point(6, 62);
+            this.chkIgnoreInactiveResources.Location = new System.Drawing.Point(3, 65);
             this.chkIgnoreInactiveResources.Name = "chkIgnoreInactiveResources";
             this.chkIgnoreInactiveResources.Size = new System.Drawing.Size(118, 17);
             this.chkIgnoreInactiveResources.TabIndex = 38;
@@ -670,7 +672,7 @@ namespace Intersect.Editor.Forms.Editors
             // chkIgnoreZDimensionBlocks
             // 
             this.chkIgnoreZDimensionBlocks.AutoSize = true;
-            this.chkIgnoreZDimensionBlocks.Location = new System.Drawing.Point(6, 85);
+            this.chkIgnoreZDimensionBlocks.Location = new System.Drawing.Point(143, 19);
             this.chkIgnoreZDimensionBlocks.Name = "chkIgnoreZDimensionBlocks";
             this.chkIgnoreZDimensionBlocks.Size = new System.Drawing.Size(120, 17);
             this.chkIgnoreZDimensionBlocks.TabIndex = 37;
@@ -680,7 +682,7 @@ namespace Intersect.Editor.Forms.Editors
             // chkIgnoreMapBlocks
             // 
             this.chkIgnoreMapBlocks.AutoSize = true;
-            this.chkIgnoreMapBlocks.Location = new System.Drawing.Point(6, 16);
+            this.chkIgnoreMapBlocks.Location = new System.Drawing.Point(3, 19);
             this.chkIgnoreMapBlocks.Name = "chkIgnoreMapBlocks";
             this.chkIgnoreMapBlocks.Size = new System.Drawing.Size(82, 17);
             this.chkIgnoreMapBlocks.TabIndex = 33;
@@ -690,7 +692,7 @@ namespace Intersect.Editor.Forms.Editors
             // chkIgnoreActiveResources
             // 
             this.chkIgnoreActiveResources.AutoSize = true;
-            this.chkIgnoreActiveResources.Location = new System.Drawing.Point(6, 39);
+            this.chkIgnoreActiveResources.Location = new System.Drawing.Point(3, 42);
             this.chkIgnoreActiveResources.Name = "chkIgnoreActiveResources";
             this.chkIgnoreActiveResources.Size = new System.Drawing.Size(110, 17);
             this.chkIgnoreActiveResources.TabIndex = 36;
@@ -951,6 +953,16 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
             // 
+            // chkFakeMelee
+            // 
+            this.chkFakeMelee.AutoSize = true;
+            this.chkFakeMelee.Location = new System.Drawing.Point(12, 216);
+            this.chkFakeMelee.Name = "chkFakeMelee";
+            this.chkFakeMelee.Size = new System.Drawing.Size(120, 17);
+            this.chkFakeMelee.TabIndex = 40;
+            this.chkFakeMelee.Text = "Fake melee attack?";
+            this.chkFakeMelee.CheckedChanged += new System.EventHandler(this.chkFakeMelee_CheckedChanged);
+            // 
             // FrmProjectile
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1064,5 +1076,6 @@ namespace Intersect.Editor.Forms.Editors
         private DarkComboBox cmbToolType;
         private DarkGroupBox grpGrappleOptions;
         private DarkCheckBox chkGrappleEntities;
+        private DarkCheckBox chkFakeMelee;
     }
 }
