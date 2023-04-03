@@ -450,12 +450,14 @@ namespace Intersect.Server.Entities
             {
                 if (!TryDealDamageTo(target, attackTypes, scaling, critMultiplier, player.CastingWeapon, spell, true, out damage))
                 {
-                    return false;
+                    // Only return false if the spell is _supposed_ to do damage, but didn't
+                    return !spell.Combat.IsDamaging;
                 }
             }
             else if (!TryDealDamageTo(target, attackTypes, scaling, critMultiplier, null, spell, true, out damage))
             {
-                return false;
+                // Only return false if the spell is _supposed_ to do damage, but didn't
+                return !spell.Combat.IsDamaging;
             }
 
             return true;
