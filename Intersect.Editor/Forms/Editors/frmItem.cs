@@ -2321,7 +2321,7 @@ namespace Intersect.Editor.Forms.Editors
             keys.Sort();
             foreach (var upgrade in keys)
             {
-                var craft = ItemBase.GetName(CraftBase.Get(upgrade)?.ItemId ?? Guid.Empty);
+                var craft = CraftBase.GetName(upgrade);
                 var cost = mEditorItem.WeaponUpgrades[upgrade];
 
                 lstUpgrades.Items.Add($"{craft} (Cost: {cost})");
