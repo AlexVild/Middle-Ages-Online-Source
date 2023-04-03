@@ -97,7 +97,7 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
 
                 var chance = LootTableHelpers.GetPrettyChance(drop.Chance, totalWeight);
 
-                var lootItem = new BeastLootItem(idx, LootContainer, drop.ItemId, chance, drop.Quantity);
+                var lootItem = new BeastLootItem(idx, LootContainer, drop.ItemId, chance, quantity: drop.Quantity);
                 lootItem.Setup();
 
                 var xPadding = lootItem.Pnl.Margin.Left + lootItem.Pnl.Margin.Right;
@@ -134,7 +134,7 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
 
                     var chance = LootTableHelpers.GetPrettyChance(drop.Chance, totalWeight);
 
-                    var lootItem = new BeastLootItem(idx, LootContainer, drop.ItemId, chance, beast.SecondaryChance);
+                    var lootItem = new BeastLootItem(idx, LootContainer, drop.ItemId, chance, beast.SecondaryChance, drop.Quantity);
                     lootItem.Setup();
 
                     var xPadding = lootItem.Pnl.Margin.Left + lootItem.Pnl.Margin.Right;
@@ -171,7 +171,7 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
 
                     var chance = LootTableHelpers.GetPrettyChance(drop.Chance, totalWeight);
 
-                    var lootItem = new BeastLootItem(idx, LootContainer, drop.ItemId, chance, beast.TertiaryChance);
+                    var lootItem = new BeastLootItem(idx, LootContainer, drop.ItemId, chance, beast.TertiaryChance, drop.Quantity);
                     lootItem.Setup();
 
                     var xPadding = lootItem.Pnl.Margin.Left + lootItem.Pnl.Margin.Right;
