@@ -44,7 +44,7 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
-            if (target is Npc npcTarget && IsAllyOf(npcTarget))
+            if (target is Npc npcTarget && !CanAttackNpc(npcTarget))
             {
                 return false;
             }
@@ -164,6 +164,8 @@ namespace Intersect.Server.Entities
 
         public override void MeleeAttack(Entity enemy, bool ignoreEvasion)
         {
+            enemy?.ReactToCombat(this);
+
             // Send an attack attempt to the client
             PacketSender.SendEntityAttack(this, CalculateAttackTime());
 
@@ -430,6 +432,10 @@ namespace Intersect.Server.Entities
                 return;
             }
             if (!CanRangeTarget(enemy))
+            {
+                return;
+            }
+            if (enemy is Npc npcTarget && !CanAttackNpc(npcTarget))
             {
                 return;
             }

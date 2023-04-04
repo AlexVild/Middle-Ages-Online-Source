@@ -43,6 +43,8 @@ namespace Intersect.Server.Entities
 
         public Entity Target;
 
+        public Dictionary<int, HashSet<Guid>> EntitiesCollidedPerWave = new Dictionary<int, HashSet<Guid>>();
+
         public Projectile(
             AttackingEntity owner,
             SpellBase parentSpell,
@@ -90,7 +92,7 @@ namespace Intersect.Server.Entities
             Spawns = new ProjectileSpawn[mTotalSpawns];
         }
 
-        private void AddProjectileSpawns(List<KeyValuePair<Guid, int>> spawnDeaths)
+        private void AddProjectileSpawns()
         {
             for (byte x = 0; x < ProjectileBase.SPAWN_LOCATIONS_WIDTH; x++)
             {
@@ -103,7 +105,8 @@ namespace Intersect.Server.Entities
                             var s = new ProjectileSpawn(
                                 FindProjectileRotationDir(Dir, d),
                                 (byte) (X + FindProjectileRotationX(Dir, x - 2, y - 2)),
-                                (byte) (Y + FindProjectileRotationY(Dir, x - 2, y - 2)), (byte) Z, MapId, MapInstanceId, Base, this
+                                (byte) (Y + FindProjectileRotationY(Dir, x - 2, y - 2)), (byte) Z, MapId, MapInstanceId, Base, this,
+                                mQuantity
                             );
 
                             Spawns[mSpawnedAmount] = s;
@@ -237,7 +240,7 @@ namespace Intersect.Server.Entities
         {
             if (mQuantity < Base.Quantity && Timing.Global.Milliseconds > mSpawnTime)
             {
-                AddProjectileSpawns(spawnDeaths);
+                AddProjectileSpawns();
             }
 
             ProcessFragments(projDeaths, spawnDeaths);
@@ -564,6 +567,27 @@ namespace Intersect.Server.Entities
                         null,
                         true,
                         isProjectileTool);
+        }
+
+        public bool ProjectileCollidedOnQuantity(int quantity, Guid entityId)
+        {
+            if (!EntitiesCollidedPerWave.TryGetValue(quantity, out var collidedEntities))
+            {
+                return false;
+            }
+
+            return collidedEntities.Contains(entityId);
+        }
+
+        public void AddEntityHitOnQuantity(int quantity, Guid entityId)
+        {
+            if (!EntitiesCollidedPerWave.TryGetValue(quantity, out var entitiesHit))
+            {
+                EntitiesCollidedPerWave[quantity] = new HashSet<Guid>();
+                EntitiesCollidedPerWave[quantity].Add(entityId);
+                return;
+            }
+            entitiesHit.Add(entityId);
         }
     }
 

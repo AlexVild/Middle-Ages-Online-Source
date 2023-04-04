@@ -400,6 +400,7 @@ namespace Intersect.Server.Entities
         /// <returns>If attack landed</returns>
         public bool SpellAttack(Entity target, SpellBase spell, sbyte attackAnimDir, Projectile projectile, bool ignoreEvasion = false)
         {
+            target?.ReactToCombat(this);
             if ((spell.Combat?.TargetType == SpellTargetTypes.AoE ||
                 spell.Combat?.TargetType == SpellTargetTypes.Single) &&
                 IsInvalidTauntTarget(target))
@@ -418,7 +419,6 @@ namespace Intersect.Server.Entities
                     SendMissedAttackMessage(target, DamageType.Physical);
                 }
                 AttackMissed.Invoke(target);
-                target?.ReactToCombat(this);
                 return false;
             }
 

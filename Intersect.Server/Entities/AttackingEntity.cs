@@ -136,6 +136,7 @@ namespace Intersect.Server.Entities
             bool ignoreEvasion,
             byte projectileDir)
         {
+            enemy?.ReactToCombat(this);
             if (projectile == null || projectile.Base == null)
             {
                 return;
@@ -352,7 +353,6 @@ namespace Intersect.Server.Entities
             {
                 SendMissedAttackMessage(enemy, DamageType.Physical);
                 AttackMissed.Invoke(enemy);
-                enemy?.ReactToCombat(this);
                 return false;
             }
 

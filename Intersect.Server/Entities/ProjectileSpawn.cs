@@ -8,6 +8,7 @@ using Intersect.Server.Maps;
 using Intersect.Server.Database;
 using Intersect.Enums;
 using Intersect.Utilities;
+using System.Linq;
 
 namespace Intersect.Server.Entities
 {
@@ -47,6 +48,8 @@ namespace Intersect.Server.Entities
 
         public int EntitiesHit => mEntitiesCollided.Count;
 
+        public int SpawnNumber { get; set; }
+
         public ProjectileSpawn(
             byte dir,
             byte x,
@@ -55,7 +58,8 @@ namespace Intersect.Server.Entities
             Guid mapId,
             Guid mapInstanceId,
             ProjectileBase projectileBase,
-            Projectile parent
+            Projectile parent,
+            int spawnNumber // Refers to the projectile's quantity attribute this spawn was spawned on
         )
         {
             MapId = mapId;
@@ -71,6 +75,7 @@ namespace Intersect.Server.Entities
             TransmittionTimer = Timing.Global.Milliseconds +
                                 (long) ((float) ProjectileBase.Speed / (float) ProjectileBase.Range);
             ProjectileActiveTime = Timing.Global.Milliseconds + (Options.Instance.Processing.ProjectileUpdateInterval * Options.Instance.Processing.ProjectileTicksUntilDamageInSpawn);
+            SpawnNumber = spawnNumber;
         }
 
         public bool IsAtLocation(Guid mapId, int x, int y, int z)
@@ -118,7 +123,7 @@ namespace Intersect.Server.Entities
             }
 
             // Have we collided with this entity before? If so, cancel out.
-            if (mEntitiesCollided.Contains(targetEntity.Id))
+            if (mEntitiesCollided.Contains(targetEntity.Id) || Parent.ProjectileCollidedOnQuantity(SpawnNumber, targetEntity.Id))
             {
                 if (!Piercing)
                 {
@@ -137,7 +142,9 @@ namespace Intersect.Server.Entities
                     return false;
                 }
             }
+            
             mEntitiesCollided.Add(targetEntity.Id);
+            Parent.AddEntityHitOnQuantity(SpawnNumber, targetEntity.Id);
 
             if (targetEntity is Player player)
             {
