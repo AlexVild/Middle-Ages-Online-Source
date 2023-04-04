@@ -209,7 +209,7 @@ namespace Intersect.GameObjects
 
         public int CritChance { get; set; }
 
-        public double CritMultiplier { get; set; } = 1.5;
+        public double CritMultiplier { get; set; } = 1.0;
 
         public int DamageType { get; set; } = 1;
 
