@@ -1756,6 +1756,15 @@ namespace Intersect.Server.Entities
 
         public override bool IsNonTrivialTo(Player player)
         {
+            if (player == null)
+            {
+                return false;
+            }
+
+            if (player.Party != null && player.Party.Count > 2)
+            {
+                return player.GetThreatLevelInPartyFor(this) < ThreatLevel.Trivial;
+            }
             return SetThreatLevelFor(player) < ThreatLevel.Trivial;
         }
     }

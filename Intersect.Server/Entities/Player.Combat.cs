@@ -581,6 +581,29 @@ namespace Intersect.Server.Entities
             return true;
         }
 
+        public ThreatLevel GetThreatLevelInPartyFor(Npc npc)
+        {
+            var partyVitals = Party.Select(member => member.MaxVitals).ToArray();
+            var partyStats = Party.Select(member => member.StatVals).ToArray();
+            var partyAttackTypes = Party.Select(member => member.GetMeleeAttackTypes()).ToArray();
+            var partyAttackSpeeds = Party.Select(member => GetRawAttackSpeed()).ToArray();
+            var rangedPartyMembers = Party.Select(member =>
+            {
+                return (member.GetEquippedWeapon()?.ProjectileId ?? Guid.Empty) != Guid.Empty;
+            }).ToArray();
+
+            return ThreatLevelUtilities.DetermineNpcThreatLevelParty(partyVitals,
+               partyStats,
+               npc.Base.MaxVital,
+               npc.Base.Stats,
+               partyAttackTypes,
+               npc.Base.AttackTypes,
+               partyAttackSpeeds,
+               npc.Base.AttackSpeedValue,
+               rangedPartyMembers,
+               npc.Base.IsSpellcaster());
+        }
+
         public double GetThreatLevelExpMod(Entity opponent)
         {
             if (opponent == null || !(opponent is Npc npc) || npc.Base == default)
@@ -594,25 +617,7 @@ namespace Intersect.Server.Entities
 
             if (Party?.Count > 1)
             {
-                var partyVitals = Party.Select(member => member.MaxVitals).ToArray();
-                var partyStats = Party.Select(member => member.StatVals).ToArray();
-                var partyAttackTypes = Party.Select(member => member.GetMeleeAttackTypes()).ToArray();
-                var partyAttackSpeeds = Party.Select(member => GetRawAttackSpeed()).ToArray();
-                var rangedPartyMembers = Party.Select(member =>
-                {
-                    return (member.GetEquippedWeapon()?.ProjectileId ?? Guid.Empty) != Guid.Empty;
-                }).ToArray();
-
-                threatLevel = ThreatLevelUtilities.DetermineNpcThreatLevelParty(partyVitals,
-                   partyStats,
-                   npc.Base.MaxVital,
-                   npc.Base.Stats,
-                   partyAttackTypes,
-                   npc.Base.AttackTypes,
-                   partyAttackSpeeds,
-                   npc.Base.AttackSpeedValue,
-                   rangedPartyMembers,
-                   npc.Base.IsSpellcaster());
+                threatLevel = GetThreatLevelInPartyFor(npc);
             }
             else
             {

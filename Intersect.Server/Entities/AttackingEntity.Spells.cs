@@ -454,7 +454,7 @@ namespace Intersect.Server.Entities
                     return !spell.Combat.IsDamaging;
                 }
             }
-            else if (!TryDealDamageTo(target, attackTypes, scaling, critMultiplier, null, spell, true, out damage))
+            else if (!TryDealDamageTo(target, attackTypes, scaling, IsCriticalHit(critChance) ? critMultiplier : 1.0, null, spell, true, out damage))
             {
                 // Only return false if the spell is _supposed_ to do damage, but didn't
                 return !spell.Combat.IsDamaging;

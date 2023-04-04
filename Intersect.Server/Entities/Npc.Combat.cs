@@ -91,7 +91,7 @@ namespace Intersect.Server.Entities
             {
                 critMultiplier = Base.CritMultiplier;
             }
-            else if (spell != null && spell.Combat != null)
+            else if (spell != null && spell.Combat != null && IsCriticalHit(spell.Combat.CritChance))
             {
                 critMultiplier = spell.Combat.CritMultiplier;
             }
