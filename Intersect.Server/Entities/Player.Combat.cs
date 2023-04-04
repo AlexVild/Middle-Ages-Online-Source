@@ -611,7 +611,8 @@ namespace Intersect.Server.Entities
                    npc.Base.AttackTypes,
                    partyAttackSpeeds,
                    npc.Base.AttackSpeedValue,
-                   rangedPartyMembers);
+                   rangedPartyMembers,
+                   npc.Base.IsSpellcaster());
             }
             else
             {
@@ -629,7 +630,8 @@ namespace Intersect.Server.Entities
                    npc.Base.AttackTypes,
                    GetRawAttackSpeed(),
                    npc.Base.AttackSpeedValue,
-                   playerProjectile != Guid.Empty);
+                   playerProjectile != Guid.Empty, 
+                   npc.Base.IsSpellcaster());
             }
 
             if (!Options.Combat.ThreatLevelExpRates.TryGetValue(threatLevel, out var expRate))

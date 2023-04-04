@@ -43,9 +43,10 @@ namespace Intersect.Utilities
             List<AttackTypes> npcMelee, 
             long playerAttackSpeed, 
             long npcAttackSpeed,
-            bool playerIsRanged)
+            bool playerIsRanged,
+            bool npcSpellCaster)
         {
-            var ratio = GetThreatLevelRatio(playerVitals, playerStats, npcVitals, npcStats, playerMelee, npcMelee, playerAttackSpeed, npcAttackSpeed, playerIsRanged);
+            var ratio = GetThreatLevelRatio(playerVitals, playerStats, npcVitals, npcStats, playerMelee, npcMelee, playerAttackSpeed, npcAttackSpeed, playerIsRanged, npcSpellCaster);
             return GetThreatLevelFromRatio(ratio);
         }
 
@@ -57,7 +58,8 @@ namespace Intersect.Utilities
             List<AttackTypes> npcMelee,
             long playerAttackSpeed,
             long npcAttackSpeed,
-            bool playerIsRanged)
+            bool playerIsRanged,
+            bool npcSpellCaster)
         {
             var maxEnemyHp = npcVitals[(int)Vitals.Health];
             var maxHp = playerVitals[(int)Vitals.Health];
@@ -65,6 +67,7 @@ namespace Intersect.Utilities
             // This will make a guess at whether or not the NPC or player is a spell caster and override their attack types if so (since we don't
             // wan't to use their melee attack types in those cases)
             var playerAttackTypes = CombatUtilities.EstimateEntityAttackTypes(playerStats, playerMelee);
+            
             var npcAttackTypes = CombatUtilities.EstimateEntityAttackTypes(npcStats, npcMelee);
 
             // If we've determined the player to be a spell caster, use global cool down instead of attack time
@@ -98,7 +101,10 @@ namespace Intersect.Utilities
              * then a player could kill that mob X# of times before the player would die. If X > 0,
              * then the mob could kill the player Floor(X) times over.
              */
-            return timeToKill / timeToDie;
+            var timeRatio = timeToKill / timeToDie;
+            var timeDifference = Math.Abs(timeToDie - timeToKill);
+
+            return timeRatio / (timeDifference / 3000);
         }
 
         /// <summary>
@@ -122,7 +128,8 @@ namespace Intersect.Utilities
             List<AttackTypes> npcMelee,
             long[] playerAttackSpeed,
             long npcAttackSpeed,
-            bool[] rangedAttackers)
+            bool[] rangedAttackers,
+            bool npcSpellCaster)
         {
             var partyMembers = playerVitals.Length;
             var ratios = new double[partyMembers];
@@ -136,7 +143,8 @@ namespace Intersect.Utilities
                     npcMelee,
                     playerAttackSpeed[i],
                     npcAttackSpeed,
-                    rangedAttackers[i]) - (Options.Instance.CombatOpts.ThreatLevelDeductionPerPartyMember * partyMembers);
+                    rangedAttackers[i], 
+                    npcSpellCaster) - (Options.Instance.CombatOpts.ThreatLevelDeductionPerPartyMember * partyMembers);
                 ratios[i] = Math.Max(ratio, 0d);
             }
 

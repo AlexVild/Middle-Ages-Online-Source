@@ -2518,6 +2518,7 @@ namespace Intersect.Server.Entities.Events
                             ChatMessageType.Quest,
                             CustomColors.Quests.Completed, sendToast: true);
                         RecipeUnlockWatcher.RefreshPlayer(player);
+                        classInfo.TasksRemaining = player.TasksRemainingForClassRank(classInfo.Rank);
                     }
                     else if (oldRank > classInfo.Rank)
                     {
@@ -2526,9 +2527,8 @@ namespace Intersect.Server.Entities.Events
                             ChatMessageType.Quest,
                             CustomColors.Quests.Abandoned, sendToast: true);
                         RecipeUnlockWatcher.RefreshPlayer(player);
+                        classInfo.TasksRemaining = classInfo.Rank == Options.MaxClassRank ? -1 : 0;
                     }
-
-                    classInfo.TasksRemaining = player.TasksRemainingForClassRank(classInfo.Rank);
                     break;
                 case NPCGuildManagementSelection.ChangeSpecialAssignment:
                     classInfo.AssignmentAvailable = command.SelectionValue;
