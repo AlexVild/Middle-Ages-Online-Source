@@ -2604,6 +2604,7 @@ namespace Intersect.Client.Networking
             }
 
             Interface.Interface.GameUi.LootRollWindow.SetTitle(packet.Title);
+            Interface.Interface.GameUi.LootRollWindow.SetBanking(packet.DisableBanking);
             Globals.CurrentLootAnim = packet.AnimationType;
             Globals.Me.LoadRolledLoot(packet.Loot);
         }

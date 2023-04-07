@@ -30,10 +30,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private void InitializeComponent()
         {
             this.grpOpenDecon = new DarkUI.Controls.DarkGroupBox();
+            this.nudMultiplier = new DarkUI.Controls.DarkNumericUpDown();
             this.lblFuelMultiplier = new System.Windows.Forms.Label();
             this.btnCancel = new DarkUI.Controls.DarkButton();
             this.btnSave = new DarkUI.Controls.DarkButton();
-            this.nudMultiplier = new DarkUI.Controls.DarkNumericUpDown();
+            this.chkDisableBank = new DarkUI.Controls.DarkCheckBox();
             this.grpOpenDecon.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudMultiplier)).BeginInit();
             this.SuspendLayout();
@@ -42,6 +43,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             this.grpOpenDecon.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.grpOpenDecon.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpOpenDecon.Controls.Add(this.chkDisableBank);
             this.grpOpenDecon.Controls.Add(this.nudMultiplier);
             this.grpOpenDecon.Controls.Add(this.lblFuelMultiplier);
             this.grpOpenDecon.Controls.Add(this.btnCancel);
@@ -49,39 +51,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpOpenDecon.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpOpenDecon.Location = new System.Drawing.Point(3, 3);
             this.grpOpenDecon.Name = "grpOpenDecon";
-            this.grpOpenDecon.Size = new System.Drawing.Size(169, 117);
+            this.grpOpenDecon.Size = new System.Drawing.Size(169, 137);
             this.grpOpenDecon.TabIndex = 19;
             this.grpOpenDecon.TabStop = false;
             this.grpOpenDecon.Text = "Deconstructor";
-            // 
-            // lblFuelMultiplier
-            // 
-            this.lblFuelMultiplier.AutoSize = true;
-            this.lblFuelMultiplier.Location = new System.Drawing.Point(4, 22);
-            this.lblFuelMultiplier.Name = "lblFuelMultiplier";
-            this.lblFuelMultiplier.Size = new System.Drawing.Size(95, 13);
-            this.lblFuelMultiplier.TabIndex = 21;
-            this.lblFuelMultiplier.Text = "Fuel Cost Multiplier";
-            // 
-            // btnCancel
-            // 
-            this.btnCancel.Location = new System.Drawing.Point(87, 84);
-            this.btnCancel.Name = "btnCancel";
-            this.btnCancel.Padding = new System.Windows.Forms.Padding(5);
-            this.btnCancel.Size = new System.Drawing.Size(75, 23);
-            this.btnCancel.TabIndex = 20;
-            this.btnCancel.Text = "Cancel";
-            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
-            // 
-            // btnSave
-            // 
-            this.btnSave.Location = new System.Drawing.Point(6, 84);
-            this.btnSave.Name = "btnSave";
-            this.btnSave.Padding = new System.Windows.Forms.Padding(5);
-            this.btnSave.Size = new System.Drawing.Size(75, 23);
-            this.btnSave.TabIndex = 19;
-            this.btnSave.Text = "Ok";
-            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
             // nudMultiplier
             // 
@@ -98,6 +71,43 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             0,
             131072});
             // 
+            // lblFuelMultiplier
+            // 
+            this.lblFuelMultiplier.AutoSize = true;
+            this.lblFuelMultiplier.Location = new System.Drawing.Point(4, 22);
+            this.lblFuelMultiplier.Name = "lblFuelMultiplier";
+            this.lblFuelMultiplier.Size = new System.Drawing.Size(95, 13);
+            this.lblFuelMultiplier.TabIndex = 21;
+            this.lblFuelMultiplier.Text = "Fuel Cost Multiplier";
+            // 
+            // btnCancel
+            // 
+            this.btnCancel.Location = new System.Drawing.Point(87, 108);
+            this.btnCancel.Name = "btnCancel";
+            this.btnCancel.Padding = new System.Windows.Forms.Padding(5);
+            this.btnCancel.Size = new System.Drawing.Size(75, 23);
+            this.btnCancel.TabIndex = 20;
+            this.btnCancel.Text = "Cancel";
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
+            // 
+            // btnSave
+            // 
+            this.btnSave.Location = new System.Drawing.Point(7, 108);
+            this.btnSave.Name = "btnSave";
+            this.btnSave.Padding = new System.Windows.Forms.Padding(5);
+            this.btnSave.Size = new System.Drawing.Size(75, 23);
+            this.btnSave.TabIndex = 19;
+            this.btnSave.Text = "Ok";
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            // 
+            // chkDisableBank
+            // 
+            this.chkDisableBank.Location = new System.Drawing.Point(7, 72);
+            this.chkDisableBank.Name = "chkDisableBank";
+            this.chkDisableBank.Size = new System.Drawing.Size(98, 17);
+            this.chkDisableBank.TabIndex = 61;
+            this.chkDisableBank.Text = "Disable Bank?";
+            // 
             // EventCommand_OpenDeconstructor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -105,7 +115,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.Controls.Add(this.grpOpenDecon);
             this.Name = "EventCommand_OpenDeconstructor";
-            this.Size = new System.Drawing.Size(175, 125);
+            this.Size = new System.Drawing.Size(175, 143);
             this.grpOpenDecon.ResumeLayout(false);
             this.grpOpenDecon.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudMultiplier)).EndInit();
@@ -120,5 +130,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private DarkUI.Controls.DarkButton btnCancel;
         private DarkUI.Controls.DarkButton btnSave;
         private DarkUI.Controls.DarkNumericUpDown nudMultiplier;
+        private DarkUI.Controls.DarkCheckBox chkDisableBank;
     }
 }

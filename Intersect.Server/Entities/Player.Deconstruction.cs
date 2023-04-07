@@ -16,9 +16,9 @@ namespace Intersect.Server.Entities
         [NotMapped, JsonIgnore]
         public Guid DeconstructorEventId { get; set; }
 
-        public void OpenDeconstructor(float multiplier, Guid eventId) 
+        public void OpenDeconstructor(float multiplier, Guid eventId, bool bankingDisabled) 
         {
-            Deconstructor = new Deconstructor(multiplier, this);
+            Deconstructor = new Deconstructor(multiplier, this, bankingDisabled);
             DeconstructorEventId = eventId;
             PacketSender.SendKnownEnhancementUpdate(this);
             PacketSender.SendOpenDeconstructor(this, multiplier);

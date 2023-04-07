@@ -403,6 +403,7 @@ namespace Intersect.Client.Core
         public static void JoinGame()
         {
             Globals.LoggedIn = true;
+            Globals.LastDialogClosed = Timing.Global.Milliseconds;
             Audio.StopMusic(6f);
         }
 

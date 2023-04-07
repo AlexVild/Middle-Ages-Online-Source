@@ -127,7 +127,7 @@ namespace Intersect.Server.Entities
                 PacketSender.SendChatMsg(this, "You already have this skill prepared!", Enums.ChatMessageType.Error, CustomColors.General.GeneralDisabled);
             }
 
-            PacketSender.SendFlashScreenPacket(Client, 400, Color.White, 100, descriptor.CastAnimation?.Sound);
+            PacketSender.SendFlashScreenPacket(Client, 400, Color.Blue, 60, descriptor.CastAnimation?.Sound);
             skill.Equipped = true;
 
             if (!SpellTutorialDone)

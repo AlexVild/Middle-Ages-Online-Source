@@ -4,12 +4,14 @@ using Intersect.Client.Framework.Graphics;
 using Intersect.Client.Framework.Gwen.Control;
 using Intersect.Client.Framework.Gwen.Control.EventArguments;
 using Intersect.Client.General;
+using Intersect.Client.Interface.Game.Chat;
 using Intersect.Client.Interface.Game.Inventory;
 using Intersect.Client.Interface.Game.LootRoll.Intersect.Client.Interface.Game.Inventory;
 using Intersect.Client.Interface.ScreenAnimations;
 using Intersect.Client.Items;
 using Intersect.Client.Localization;
 using Intersect.Client.Networking;
+using Intersect.Enums;
 using Intersect.Network.Packets.Client;
 using System;
 using System.Collections.Generic;
@@ -54,6 +56,8 @@ namespace Intersect.Client.Interface.Game.LootRoll
         GameTexture BgTexture { get; set; }
         private GameTexture _chestTexture { get; set; }
         private GameTexture _deconstructTexture { get; set; }
+
+        public bool DisableBank { get; set; }
 
         public LootRollWindow(Canvas gameCanvas)
         {
@@ -142,6 +146,12 @@ namespace Intersect.Client.Interface.Game.LootRoll
         public void SetTitle(string title)
         {
             mBackground.Title = title;
+        }
+
+        public void SetBanking(bool disabled)
+        {
+            DisableBank = disabled;
+            mBankAllButton.IsDisabled = DisableBank;
         }
 
         private void InitLootContainer()
@@ -319,6 +329,12 @@ namespace Intersect.Client.Interface.Game.LootRoll
 
         private void BankItem_Clicked(Base sender, ClickedEventArgs arguments)
         {
+            if (DisableBank)
+            {
+                Audio.AddGameSound(Options.UIDenySound, false);
+                ChatboxMsg.AddMessage(new ChatboxMsg("You cannot bank items yet.", CustomColors.Alerts.Error, ChatMessageType.Notice));
+                return;
+            }
             if (mSelectedItemIdx >= 0 && mSelectedItemIdx < Loot.Count)
             {
                 PacketSender.SendLootUpdateRequest(LootUpdateType.BankAt, mSelectedItemIdx);

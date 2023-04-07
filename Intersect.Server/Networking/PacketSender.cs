@@ -2632,7 +2632,7 @@ namespace Intersect.Server.Networking
             player?.SendPacket(new LeaderboardPagePacket(records, currentPage, highlightedPlayer));
         }
 
-        public static void SendOpenLootPacketTo(Player player, string title, LootAnimType animationType)
+        public static void SendOpenLootPacketTo(Player player, string title, LootAnimType animationType, bool disableBanking = false)
         {
             if (player == null)
             {
@@ -2653,7 +2653,7 @@ namespace Intersect.Server.Networking
                 lootObjs.Add(lootObj);
             }
 
-            player?.SendPacket(new OpenLootRollPacket(lootObjs, title, animationType));
+            player?.SendPacket(new OpenLootRollPacket(lootObjs, title, animationType, disableBanking));
         }
 
         public static void SendLootUpdatePacketTo(Player player)

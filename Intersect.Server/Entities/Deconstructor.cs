@@ -20,10 +20,13 @@ namespace Intersect.Server.Entities
 
         public Player Owner { get; set; }
 
-        public Deconstructor(float multiplier, Player owner)
+        public bool BankingDisabled { get; set; }
+
+        public Deconstructor(float multiplier, Player owner, bool bankingDisabled)
         {
             FuelMultiplier = multiplier;
             Owner = owner;
+            BankingDisabled = bankingDisabled;
         }
 
         /// <summary>
@@ -173,7 +176,7 @@ namespace Intersect.Server.Entities
             Owner.SendPacket(new CloseDeconstructorPacket());
             Owner.OpenLootRoll(Owner.DeconstructorEventId, deconstructedLoot);
             Owner.CloseDeconstructor();
-            PacketSender.SendOpenLootPacketTo(Owner, "Deconstruction", GameObjects.Events.LootAnimType.Deconstruct);
+            PacketSender.SendOpenLootPacketTo(Owner, "Deconstruction", GameObjects.Events.LootAnimType.Deconstruct, BankingDisabled);
         }
     }
 }

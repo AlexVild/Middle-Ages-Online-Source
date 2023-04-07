@@ -551,15 +551,15 @@ namespace Intersect.Server.Entities
                     projectile.AmmoItemId, projectile.AmmoRequired
                 );
 
-                if (itemSlot == null || TryTakeItem(itemSlot, projectile.AmmoRequired))
+                if (itemSlot == null || !TryTakeItem(itemSlot, projectile.AmmoRequired))
                 {
                     PacketSender.SendChatMsg(
                         this,
                         Strings.Items.notenough.ToString(ItemBase.GetName(projectile.AmmoItemId)),
                         ChatMessageType.Inventory,
-                        CustomColors.Combat.NoAmmo
+                        CustomColors.General.GeneralWarning
                     );
-
+                    PacketSender.SendPlaySound(this, Options.UIDenySound);
                     return false;
                 }
             }

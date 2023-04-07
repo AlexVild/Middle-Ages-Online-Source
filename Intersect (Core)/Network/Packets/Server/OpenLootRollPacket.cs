@@ -28,7 +28,7 @@ namespace Intersect.Network.Packets.Server
         // ef
         public OpenLootRollPacket() { }
 
-        public OpenLootRollPacket(List<Loot> loot, string title, LootAnimType animType)
+        public OpenLootRollPacket(List<Loot> loot, string title, LootAnimType animType, bool disableBanking)
         {
             Loot = new List<Loot>();
 
@@ -39,6 +39,7 @@ namespace Intersect.Network.Packets.Server
 
             Title = title;
             AnimationType = animType;
+            DisableBanking = disableBanking;
         }
 
         [Key(0)]
@@ -49,5 +50,8 @@ namespace Intersect.Network.Packets.Server
 
         [Key(2)]
         public LootAnimType AnimationType { get; set; }
+
+        [Key(3)]
+        public bool DisableBanking { get; set; }
     }
 }

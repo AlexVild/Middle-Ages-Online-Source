@@ -18,11 +18,13 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             InitializeComponent();
             
             nudMultiplier.Value = (decimal)(mMyCommand?.FuelCostMultiplier ?? 1.00);
+            chkDisableBank.Checked = mMyCommand.DisableBank;
         }
 
         private void btnSave_Click(object sender, EventArgs e)
         {
             mMyCommand.FuelCostMultiplier = (float)nudMultiplier.Value;
+            mMyCommand.DisableBank = chkDisableBank.Checked;
 
             mEventEditor.FinishCommandEdit();
         }

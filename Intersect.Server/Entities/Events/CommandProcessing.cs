@@ -3442,13 +3442,13 @@ namespace Intersect.Server.Entities.Events
             if (existingDeconRoll != default && existingDeconRoll.Loot.Count > 0)
             {
                 player.OpenLootRoll(instance.BaseEvent.Id, new List<LootRoll>());
-                PacketSender.SendOpenLootPacketTo(player, "Deconstruction", GameObjects.Events.LootAnimType.Deconstruct);
+                PacketSender.SendOpenLootPacketTo(player, "Deconstruction", LootAnimType.Deconstruct, command.DisableBank);
 
                 callStack.Peek().WaitingForResponse = CommandInstance.EventResponse.LootRoll;
                 return;
             }
 
-            player.OpenDeconstructor(command.FuelCostMultiplier, instance.BaseEvent.Id);
+            player.OpenDeconstructor(command.FuelCostMultiplier, instance.BaseEvent.Id, command.DisableBank);
             callStack.Peek().WaitingForResponse = CommandInstance.EventResponse.Deconstruction;
         }
 
