@@ -1176,6 +1176,8 @@ namespace Intersect.Client.Core
             }
             else
             {
+                // ALEX - Added this set so that darkness levels could easily be calculated when rendering animations
+                BrightnessLevel = 255 - Time.GetTintColor().A;
                 DrawGameTexture(
                     Renderer.GetWhiteTexture(), new FloatRect(0, 0, 1, 1),
                     new FloatRect(0, 0, sDarknessTexture.GetWidth(), sDarknessTexture.GetHeight()),
