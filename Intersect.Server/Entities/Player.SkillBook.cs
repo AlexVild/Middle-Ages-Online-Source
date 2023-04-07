@@ -27,6 +27,8 @@ namespace Intersect.Server.Entities
 
         public int SkillPointTotal { get; set; }
 
+        public bool SpellTutorialDone { get; set; } = false;
+
         public bool TryGetSkillInSkillbook(Guid spellId, out PlayerSkillInstance skill)
         {
             skill = SkillBook.ToList().Find(s => s.SpellId == spellId);
@@ -125,7 +127,16 @@ namespace Intersect.Server.Entities
                 PacketSender.SendChatMsg(this, "You already have this skill prepared!", Enums.ChatMessageType.Error, CustomColors.General.GeneralDisabled);
             }
 
+            PacketSender.SendFlashScreenPacket(Client, 400, Color.White, 100, descriptor.CastAnimation?.Sound);
             skill.Equipped = true;
+
+            if (!SpellTutorialDone)
+            {
+                PacketSender.SendEventDialog(this, Strings.Combat.SpellTutorial1, string.Empty, Guid.Empty);
+                PacketSender.SendEventDialog(this, Strings.Combat.SpellTutorial2, string.Empty, Guid.Empty);
+                PacketSender.SendEventDialog(this, Strings.Combat.SpellTutorial3, string.Empty, Guid.Empty);
+                SpellTutorialDone = true;
+            }
         }
 
         public void UnprepareSkill(Guid spellId, bool force = false)

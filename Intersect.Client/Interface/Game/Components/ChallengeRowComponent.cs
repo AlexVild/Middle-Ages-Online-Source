@@ -151,9 +151,11 @@ namespace Intersect.Client.Interface.Game.Components
 
             Title.SetTextColor(TitleColor, Label.ControlState.Normal);
 
+            var onStep = false;
             var requirementText = $"Requires {WeaponType} level {RequiredLevel}";
             if (RequiredLevel - 1 == CurrentLevel)
             {
+                onStep = true;
                 requirementText = $"Requires {RequiredExp} more EXP";
             }
             if (Unlocked)
@@ -162,7 +164,11 @@ namespace Intersect.Client.Interface.Game.Components
             }
             else
             {
-                Description.SetText(requirementText, DescriptionTemplate, 240);
+                
+                if (onStep)
+                {
+                    Description.SetText(requirementText, DescriptionTemplate, 240, onStep ? Color.White : DescriptionTemplate.TextColor);
+                }
             }
 
             ChallengeImage.Initialize();

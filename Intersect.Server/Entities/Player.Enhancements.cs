@@ -16,7 +16,7 @@ namespace Intersect.Server.Entities
     public partial class Player : AttackingEntity
     {
         [NotMapped, JsonIgnore]
-        public List<PlayerEnhancementInstance> Enhancements { get; set; }
+        public List<PlayerEnhancementInstance> Enhancements { get; set; } = new List<PlayerEnhancementInstance>();
 
         [NotMapped, JsonIgnore]
         public IEnumerable<Guid> KnownEnhancements => Enhancements.Where(en => en.Unlocked).Select(en => en.EnhancementId);

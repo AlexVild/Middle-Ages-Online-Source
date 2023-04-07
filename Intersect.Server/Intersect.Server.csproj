@@ -736,6 +736,10 @@
     <Compile Include="Migrations\20230310030245_ChallengeContractMigration.designer.cs">
       <DependentUpon>20230310030245_ChallengeContractMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\20230407153336_TutorialMigration1.cs" />
+    <Compile Include="Migrations\20230407153336_TutorialMigration1.designer.cs">
+      <DependentUpon>20230407153336_TutorialMigration1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.cs" />
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.Designer.cs">
       <DependentUpon>20201222164741_NpcResetRadius.cs</DependentUpon>

@@ -249,6 +249,18 @@ namespace Intersect.Server.Localization
                 @"You don't have this spell prepared!";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString SpellTutorial1 =
+                @"You have successfully equipped a spell! This spell will now appear in your spells menu, located in the bottom-right of your screen.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString SpellTutorial2 =
+                @"You can click and drag spells and items to your hotbar in the top-right of your screen, allowing you to cast, use, or equip whatever occupies that slot at the press of a button.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString SpellTutorial3 =
+                @"Spell selections are not permanent and can be changed at anytime when not in combat or in a dungeon instance.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString SpellLearned =
                 @"A new {00} skill has been added to your skill book: {01}";
 
