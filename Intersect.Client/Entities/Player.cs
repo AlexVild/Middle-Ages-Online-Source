@@ -2386,6 +2386,11 @@ namespace Intersect.Client.Entities
                 return;
             }
 
+            if (Timing.Global.Milliseconds > Globals.LastDialogClosed)
+            {
+                return;
+            }
+
             var tmpX = (sbyte) X;
             var tmpY = (sbyte) Y;
             Entity blockedBy = null;

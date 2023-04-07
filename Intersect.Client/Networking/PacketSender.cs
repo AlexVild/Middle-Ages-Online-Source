@@ -116,6 +116,7 @@ namespace Intersect.Client.Networking
         public static void SendEventResponse(byte response, Dialog ed)
         {
             Globals.EventDialogs.Remove(ed);
+            Globals.LastDialogClosed = Timing.Global.Milliseconds + 100;
             Network.SendPacket(new EventResponsePacket(ed.EventId, response));
         }
 

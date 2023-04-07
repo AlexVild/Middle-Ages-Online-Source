@@ -53,6 +53,7 @@ namespace Intersect.Client.General
 
         //Control Objects
         public static List<Dialog> EventDialogs = new List<Dialog>();
+        public static long LastDialogClosed = 0;
 
         public static Dictionary<Guid, Guid> EventHolds = new Dictionary<Guid, Guid>();
         public static long EventHoldWidescreenTime = 0;
