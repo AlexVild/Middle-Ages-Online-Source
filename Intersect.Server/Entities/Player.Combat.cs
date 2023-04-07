@@ -551,7 +551,7 @@ namespace Intersect.Server.Entities
                     projectile.AmmoItemId, projectile.AmmoRequired
                 );
 
-                if (itemSlot == null)
+                if (itemSlot == null || TryTakeItem(itemSlot, projectile.AmmoRequired))
                 {
                     PacketSender.SendChatMsg(
                         this,

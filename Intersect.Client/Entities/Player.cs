@@ -2386,7 +2386,7 @@ namespace Intersect.Client.Entities
                 return;
             }
 
-            if (Timing.Global.Milliseconds > Globals.LastDialogClosed)
+            if (Timing.Global.Milliseconds < Globals.LastDialogClosed)
             {
                 return;
             }
