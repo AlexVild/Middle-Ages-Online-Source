@@ -2,11 +2,36 @@
 using Intersect.Models;
 using Newtonsoft.Json;
 using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 
 namespace Intersect.GameObjects.Timers
 {
+    public enum VarActionModType
+    {
+        [Description("Add")]
+        ADD = 0,
+
+        [Description("Subtract")]
+        SUB,
+
+        [Description("Divide")]
+        DIV,
+
+        [Description("Multiply")]
+        MULT,
+
+        [Description("Modulo")]
+        MOD,
+    }
+
+    public enum TimerInstanceActionType
+    {
+        ONCE = 0,
+        EVERY = 1,
+    }
+
     public class TimerDescriptor : DatabaseObject<TimerDescriptor>, IFolderable
     {
         // EF
@@ -140,6 +165,20 @@ namespace Intersect.GameObjects.Timers
 
         /// <inheritdoc />
         public string Folder { get; set; } = "";
+
+        public bool ActionsEnabled { get; set; }
+
+        public int ActionType { get; set; }
+
+        public int NValue { get; set; }
+
+        public Guid ActionVariableId { get; set; }
+
+        public InstanceVariableBase ActionVariable => InstanceVariableBase.Get(ActionVariableId);
+
+        public int InstanceVariableActionType { get; set; }
+
+        public int ActionVariableChangeValue { get; set; }
 
         #region Access Helpers
         public static Guid IdFromList(int listIndex, TimerOwnerType ownerType)

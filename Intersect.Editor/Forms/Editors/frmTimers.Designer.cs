@@ -47,7 +47,22 @@ namespace Intersect.Editor.Forms.Editors
             this.txtSearch = new DarkUI.Controls.DarkTextBox();
             this.lstGameObjects = new Intersect.Editor.Forms.Controls.GameObjectList();
             this.pnlTimerSettings = new System.Windows.Forms.Panel();
+            this.chkActionsEnabled = new DarkUI.Controls.DarkCheckBox();
+            this.grpInstanceControl = new DarkUI.Controls.DarkGroupBox();
+            this.rdoOnNth = new DarkUI.Controls.DarkRadioButton();
+            this.rdoEveryNth = new DarkUI.Controls.DarkRadioButton();
+            this.lblActionVal = new System.Windows.Forms.Label();
+            this.lblActions = new System.Windows.Forms.Label();
+            this.nudN = new DarkUI.Controls.DarkNumericUpDown();
+            this.grpInstanceVarMod = new DarkUI.Controls.DarkGroupBox();
+            this.lblVarVal = new System.Windows.Forms.Label();
+            this.nudVarVal = new DarkUI.Controls.DarkNumericUpDown();
+            this.cmbVarAction = new DarkUI.Controls.DarkComboBox();
+            this.lblInstanceVarAction = new System.Windows.Forms.Label();
+            this.cmbInstanceVar = new DarkUI.Controls.DarkComboBox();
+            this.lblInstanceVar = new System.Windows.Forms.Label();
             this.grpTimerOptions = new DarkUI.Controls.DarkGroupBox();
+            this.chkContinueOnInstanceChange = new DarkUI.Controls.DarkCheckBox();
             this.chkContinueOnDeath = new DarkUI.Controls.DarkCheckBox();
             this.chkStartWithServer = new DarkUI.Controls.DarkCheckBox();
             this.cmbVariable = new DarkUI.Controls.DarkComboBox();
@@ -88,10 +103,13 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbOwnerType = new DarkUI.Controls.DarkComboBox();
             this.btnSave = new DarkUI.Controls.DarkButton();
             this.btnCancel = new DarkUI.Controls.DarkButton();
-            this.chkContinueOnInstanceChange = new DarkUI.Controls.DarkCheckBox();
             this.toolStrip.SuspendLayout();
             this.grpTimers.SuspendLayout();
             this.pnlTimerSettings.SuspendLayout();
+            this.grpInstanceControl.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudN)).BeginInit();
+            this.grpInstanceVarMod.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudVarVal)).BeginInit();
             this.grpTimerOptions.SuspendLayout();
             this.grpEvents.SuspendLayout();
             this.grpSettings.SuspendLayout();
@@ -233,7 +251,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpTimers.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpTimers.Location = new System.Drawing.Point(18, 79);
             this.grpTimers.Name = "grpTimers";
-            this.grpTimers.Size = new System.Drawing.Size(202, 338);
+            this.grpTimers.Size = new System.Drawing.Size(202, 464);
             this.grpTimers.TabIndex = 46;
             this.grpTimers.TabStop = false;
             this.grpTimers.Text = "Timers";
@@ -274,11 +292,13 @@ namespace Intersect.Editor.Forms.Editors
             this.lstGameObjects.Location = new System.Drawing.Point(6, 46);
             this.lstGameObjects.Name = "lstGameObjects";
             this.lstGameObjects.SelectedImageIndex = 0;
-            this.lstGameObjects.Size = new System.Drawing.Size(190, 286);
+            this.lstGameObjects.Size = new System.Drawing.Size(190, 412);
             this.lstGameObjects.TabIndex = 2;
             // 
             // pnlTimerSettings
             // 
+            this.pnlTimerSettings.Controls.Add(this.chkActionsEnabled);
+            this.pnlTimerSettings.Controls.Add(this.grpInstanceControl);
             this.pnlTimerSettings.Controls.Add(this.grpTimerOptions);
             this.pnlTimerSettings.Controls.Add(this.grpEvents);
             this.pnlTimerSettings.Controls.Add(this.grpSettings);
@@ -286,9 +306,212 @@ namespace Intersect.Editor.Forms.Editors
             this.pnlTimerSettings.Controls.Add(this.grpGeneral);
             this.pnlTimerSettings.Location = new System.Drawing.Point(229, 23);
             this.pnlTimerSettings.Name = "pnlTimerSettings";
-            this.pnlTimerSettings.Size = new System.Drawing.Size(586, 394);
+            this.pnlTimerSettings.Size = new System.Drawing.Size(586, 572);
             this.pnlTimerSettings.TabIndex = 47;
             this.pnlTimerSettings.Visible = false;
+            // 
+            // chkActionsEnabled
+            // 
+            this.chkActionsEnabled.AutoSize = true;
+            this.chkActionsEnabled.Location = new System.Drawing.Point(10, 366);
+            this.chkActionsEnabled.Name = "chkActionsEnabled";
+            this.chkActionsEnabled.Size = new System.Drawing.Size(186, 17);
+            this.chkActionsEnabled.TabIndex = 107;
+            this.chkActionsEnabled.Text = "Enable instance controller action?";
+            this.chkActionsEnabled.CheckedChanged += new System.EventHandler(this.chkActionsEnabled_CheckedChanged);
+            // 
+            // grpInstanceControl
+            // 
+            this.grpInstanceControl.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpInstanceControl.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpInstanceControl.Controls.Add(this.rdoOnNth);
+            this.grpInstanceControl.Controls.Add(this.rdoEveryNth);
+            this.grpInstanceControl.Controls.Add(this.lblActionVal);
+            this.grpInstanceControl.Controls.Add(this.lblActions);
+            this.grpInstanceControl.Controls.Add(this.nudN);
+            this.grpInstanceControl.Controls.Add(this.grpInstanceVarMod);
+            this.grpInstanceControl.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpInstanceControl.Location = new System.Drawing.Point(10, 386);
+            this.grpInstanceControl.Name = "grpInstanceControl";
+            this.grpInstanceControl.Size = new System.Drawing.Size(563, 174);
+            this.grpInstanceControl.TabIndex = 101;
+            this.grpInstanceControl.TabStop = false;
+            this.grpInstanceControl.Text = "Instance Control";
+            // 
+            // rdoOnNth
+            // 
+            this.rdoOnNth.AutoSize = true;
+            this.rdoOnNth.Location = new System.Drawing.Point(7, 58);
+            this.rdoOnNth.Name = "rdoOnNth";
+            this.rdoOnNth.Size = new System.Drawing.Size(77, 17);
+            this.rdoOnNth.TabIndex = 130;
+            this.rdoOnNth.Text = "On the Nth";
+            this.rdoOnNth.CheckedChanged += new System.EventHandler(this.rdoOnNth_CheckedChanged);
+            // 
+            // rdoEveryNth
+            // 
+            this.rdoEveryNth.AutoSize = true;
+            this.rdoEveryNth.Location = new System.Drawing.Point(7, 35);
+            this.rdoEveryNth.Name = "rdoEveryNth";
+            this.rdoEveryNth.Size = new System.Drawing.Size(72, 17);
+            this.rdoEveryNth.TabIndex = 129;
+            this.rdoEveryNth.Text = "Every Nth";
+            this.rdoEveryNth.CheckedChanged += new System.EventHandler(this.rdoEveryNth_CheckedChanged);
+            // 
+            // lblActionVal
+            // 
+            this.lblActionVal.AutoSize = true;
+            this.lblActionVal.Location = new System.Drawing.Point(4, 91);
+            this.lblActionVal.Name = "lblActionVal";
+            this.lblActionVal.Size = new System.Drawing.Size(57, 13);
+            this.lblActionVal.TabIndex = 128;
+            this.lblActionVal.Text = "Where n =";
+            // 
+            // lblActions
+            // 
+            this.lblActions.AutoSize = true;
+            this.lblActions.Location = new System.Drawing.Point(6, 19);
+            this.lblActions.Name = "lblActions";
+            this.lblActions.Size = new System.Drawing.Size(89, 13);
+            this.lblActions.TabIndex = 125;
+            this.lblActions.Text = "Perform actions...";
+            // 
+            // nudN
+            // 
+            this.nudN.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudN.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudN.Location = new System.Drawing.Point(67, 89);
+            this.nudN.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.nudN.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudN.Name = "nudN";
+            this.nudN.Size = new System.Drawing.Size(80, 20);
+            this.nudN.TabIndex = 124;
+            this.nudN.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudN.ValueChanged += new System.EventHandler(this.nudN_ValueChanged);
+            // 
+            // grpInstanceVarMod
+            // 
+            this.grpInstanceVarMod.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpInstanceVarMod.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpInstanceVarMod.Controls.Add(this.lblVarVal);
+            this.grpInstanceVarMod.Controls.Add(this.nudVarVal);
+            this.grpInstanceVarMod.Controls.Add(this.cmbVarAction);
+            this.grpInstanceVarMod.Controls.Add(this.lblInstanceVarAction);
+            this.grpInstanceVarMod.Controls.Add(this.cmbInstanceVar);
+            this.grpInstanceVarMod.Controls.Add(this.lblInstanceVar);
+            this.grpInstanceVarMod.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpInstanceVarMod.Location = new System.Drawing.Point(156, 19);
+            this.grpInstanceVarMod.Name = "grpInstanceVarMod";
+            this.grpInstanceVarMod.Size = new System.Drawing.Size(214, 136);
+            this.grpInstanceVarMod.TabIndex = 123;
+            this.grpInstanceVarMod.TabStop = false;
+            this.grpInstanceVarMod.Text = "Instance Variable Mod";
+            // 
+            // lblVarVal
+            // 
+            this.lblVarVal.AutoSize = true;
+            this.lblVarVal.Location = new System.Drawing.Point(7, 110);
+            this.lblVarVal.Name = "lblVarVal";
+            this.lblVarVal.Size = new System.Drawing.Size(34, 13);
+            this.lblVarVal.TabIndex = 122;
+            this.lblVarVal.Text = "Value";
+            // 
+            // nudVarVal
+            // 
+            this.nudVarVal.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudVarVal.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudVarVal.Location = new System.Drawing.Point(68, 108);
+            this.nudVarVal.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.nudVarVal.Minimum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            -2147483648});
+            this.nudVarVal.Name = "nudVarVal";
+            this.nudVarVal.Size = new System.Drawing.Size(136, 20);
+            this.nudVarVal.TabIndex = 121;
+            this.nudVarVal.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudVarVal.ValueChanged += new System.EventHandler(this.nudVarVal_ValueChanged);
+            // 
+            // cmbVarAction
+            // 
+            this.cmbVarAction.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbVarAction.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbVarAction.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbVarAction.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbVarAction.DrawDropdownHoverOutline = false;
+            this.cmbVarAction.DrawFocusRectangle = false;
+            this.cmbVarAction.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbVarAction.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbVarAction.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbVarAction.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbVarAction.FormattingEnabled = true;
+            this.cmbVarAction.Location = new System.Drawing.Point(7, 72);
+            this.cmbVarAction.Name = "cmbVarAction";
+            this.cmbVarAction.Size = new System.Drawing.Size(197, 21);
+            this.cmbVarAction.TabIndex = 120;
+            this.cmbVarAction.Text = null;
+            this.cmbVarAction.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbVarAction.SelectedIndexChanged += new System.EventHandler(this.cmbVarAction_SelectedIndexChanged);
+            // 
+            // lblInstanceVarAction
+            // 
+            this.lblInstanceVarAction.AutoSize = true;
+            this.lblInstanceVarAction.Location = new System.Drawing.Point(7, 56);
+            this.lblInstanceVarAction.Name = "lblInstanceVarAction";
+            this.lblInstanceVarAction.Size = new System.Drawing.Size(37, 13);
+            this.lblInstanceVarAction.TabIndex = 119;
+            this.lblInstanceVarAction.Text = "Action";
+            // 
+            // cmbInstanceVar
+            // 
+            this.cmbInstanceVar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbInstanceVar.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbInstanceVar.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbInstanceVar.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbInstanceVar.DrawDropdownHoverOutline = false;
+            this.cmbInstanceVar.DrawFocusRectangle = false;
+            this.cmbInstanceVar.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbInstanceVar.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbInstanceVar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbInstanceVar.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbInstanceVar.FormattingEnabled = true;
+            this.cmbInstanceVar.Location = new System.Drawing.Point(7, 32);
+            this.cmbInstanceVar.Name = "cmbInstanceVar";
+            this.cmbInstanceVar.Size = new System.Drawing.Size(197, 21);
+            this.cmbInstanceVar.TabIndex = 118;
+            this.cmbInstanceVar.Text = null;
+            this.cmbInstanceVar.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbInstanceVar.SelectedIndexChanged += new System.EventHandler(this.cmbInstanceVar_SelectedIndexChanged);
+            // 
+            // lblInstanceVar
+            // 
+            this.lblInstanceVar.AutoSize = true;
+            this.lblInstanceVar.Location = new System.Drawing.Point(7, 16);
+            this.lblInstanceVar.Name = "lblInstanceVar";
+            this.lblInstanceVar.Size = new System.Drawing.Size(89, 13);
+            this.lblInstanceVar.TabIndex = 117;
+            this.lblInstanceVar.Text = "Instance Variable";
             // 
             // grpTimerOptions
             // 
@@ -311,6 +534,16 @@ namespace Intersect.Editor.Forms.Editors
             this.grpTimerOptions.TabIndex = 106;
             this.grpTimerOptions.TabStop = false;
             this.grpTimerOptions.Text = "Timer Options";
+            // 
+            // chkContinueOnInstanceChange
+            // 
+            this.chkContinueOnInstanceChange.AutoSize = true;
+            this.chkContinueOnInstanceChange.Location = new System.Drawing.Point(6, 88);
+            this.chkContinueOnInstanceChange.Name = "chkContinueOnInstanceChange";
+            this.chkContinueOnInstanceChange.Size = new System.Drawing.Size(171, 17);
+            this.chkContinueOnInstanceChange.TabIndex = 116;
+            this.chkContinueOnInstanceChange.Text = "Continue on instance change?";
+            this.chkContinueOnInstanceChange.CheckedChanged += new System.EventHandler(this.chkContinueOnInstanceChange_CheckedChanged);
             // 
             // chkContinueOnDeath
             // 
@@ -853,7 +1086,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(521, 433);
+            this.btnSave.Location = new System.Drawing.Point(548, 601);
             this.btnSave.Name = "btnSave";
             this.btnSave.Padding = new System.Windows.Forms.Padding(5);
             this.btnSave.Size = new System.Drawing.Size(132, 27);
@@ -864,7 +1097,7 @@ namespace Intersect.Editor.Forms.Editors
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(670, 433);
+            this.btnCancel.Location = new System.Drawing.Point(683, 601);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Padding = new System.Windows.Forms.Padding(5);
             this.btnCancel.Size = new System.Drawing.Size(132, 27);
@@ -872,22 +1105,12 @@ namespace Intersect.Editor.Forms.Editors
             this.btnCancel.Text = "Cancel";
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
-            // chkContinueOnInstanceChange
-            // 
-            this.chkContinueOnInstanceChange.AutoSize = true;
-            this.chkContinueOnInstanceChange.Location = new System.Drawing.Point(6, 88);
-            this.chkContinueOnInstanceChange.Name = "chkContinueOnInstanceChange";
-            this.chkContinueOnInstanceChange.Size = new System.Drawing.Size(171, 17);
-            this.chkContinueOnInstanceChange.TabIndex = 116;
-            this.chkContinueOnInstanceChange.Text = "Continue on instance change?";
-            this.chkContinueOnInstanceChange.CheckedChanged += new System.EventHandler(this.chkContinueOnInstanceChange_CheckedChanged);
-            // 
             // frmTimers
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.ClientSize = new System.Drawing.Size(834, 472);
+            this.ClientSize = new System.Drawing.Size(834, 640);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.grpTypes);
@@ -904,6 +1127,13 @@ namespace Intersect.Editor.Forms.Editors
             this.grpTimers.ResumeLayout(false);
             this.grpTimers.PerformLayout();
             this.pnlTimerSettings.ResumeLayout(false);
+            this.pnlTimerSettings.PerformLayout();
+            this.grpInstanceControl.ResumeLayout(false);
+            this.grpInstanceControl.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudN)).EndInit();
+            this.grpInstanceVarMod.ResumeLayout(false);
+            this.grpInstanceVarMod.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudVarVal)).EndInit();
             this.grpTimerOptions.ResumeLayout(false);
             this.grpTimerOptions.PerformLayout();
             this.grpEvents.ResumeLayout(false);
@@ -981,5 +1211,19 @@ namespace Intersect.Editor.Forms.Editors
         private DarkUI.Controls.DarkCheckBox chkStartWithServer;
         private DarkUI.Controls.DarkCheckBox chkContinueOnDeath;
         private DarkUI.Controls.DarkCheckBox chkContinueOnInstanceChange;
+        private DarkUI.Controls.DarkGroupBox grpInstanceControl;
+        private DarkUI.Controls.DarkGroupBox grpInstanceVarMod;
+        private System.Windows.Forms.Label lblVarVal;
+        private DarkUI.Controls.DarkNumericUpDown nudVarVal;
+        private DarkUI.Controls.DarkComboBox cmbVarAction;
+        private System.Windows.Forms.Label lblInstanceVarAction;
+        private DarkUI.Controls.DarkComboBox cmbInstanceVar;
+        private System.Windows.Forms.Label lblInstanceVar;
+        private System.Windows.Forms.Label lblActionVal;
+        private System.Windows.Forms.Label lblActions;
+        private DarkUI.Controls.DarkNumericUpDown nudN;
+        internal DarkUI.Controls.DarkRadioButton rdoOnNth;
+        internal DarkUI.Controls.DarkRadioButton rdoEveryNth;
+        private DarkUI.Controls.DarkCheckBox chkActionsEnabled;
     }
 }

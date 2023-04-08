@@ -1186,6 +1186,10 @@
     <Compile Include="Migrations\Game\20230403185723_SortableItemsMigration.designer.cs">
       <DependentUpon>20230403185723_SortableItemsMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20230408153611_TimerActionMigration1.cs" />
+    <Compile Include="Migrations\Game\20230408153611_TimerActionMigration1.designer.cs">
+      <DependentUpon>20230408153611_TimerActionMigration1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

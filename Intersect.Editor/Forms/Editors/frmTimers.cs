@@ -7,6 +7,7 @@ using Intersect.GameObjects;
 using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Timers;
 using Intersect.Models;
+using Intersect.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -178,6 +179,18 @@ namespace Intersect.Editor.Forms.Editors
 
             btnCancel.Text = Strings.TimerEditor.Cancel;
             btnSave.Text = Strings.TimerEditor.Save;
+
+            _InitLocalization();
+        }
+
+        private void _InitLocalization()
+        {
+            cmbInstanceVar.Items.Clear();
+            cmbInstanceVar.Items.Add(Strings.EditorGenerics.None);
+            cmbInstanceVar.Items.AddRange(InstanceVariableBase.GetNamesByType(VariableDataTypes.Integer));
+
+            cmbVarAction.Items.Clear();
+            cmbVarAction.Items.AddRange(EnumExtensions.GetDescriptions(typeof(VarActionModType)));
         }
         #endregion
 
@@ -325,6 +338,22 @@ namespace Intersect.Editor.Forms.Editors
             chkStartWithServer.Checked = mEditorItem.StartWithServer;
             chkContinueOnDeath.Checked = mEditorItem.ContinueOnDeath;
             chkContinueOnInstanceChange.Checked = mEditorItem.ContinueOnInstanceChange;
+
+            _PopulateEditorItemValues();
+        }
+
+        private void _PopulateEditorItemValues()
+        {
+            chkActionsEnabled.Checked = mEditorItem.ActionsEnabled;
+            grpInstanceControl.Enabled = mEditorItem.ActionsEnabled;
+
+            rdoEveryNth.Checked = mEditorItem.ActionType == (int)TimerInstanceActionType.EVERY;
+            rdoOnNth.Checked = mEditorItem.ActionType == (int)TimerInstanceActionType.ONCE;
+            nudN.Value = (int)mEditorItem.NValue;
+
+            cmbInstanceVar.SelectedIndex = InstanceVariableBase.ListIndex(mEditorItem.ActionVariableId, VariableDataTypes.Integer) + 1;
+            cmbVarAction.SelectedIndex = mEditorItem.InstanceVariableActionType;
+            nudVarVal.Value = mEditorItem.ActionVariableChangeValue;
         }
 
         private static TimerRepetitionTypes SelectRepetitionType(int repetitions)
@@ -705,6 +734,47 @@ namespace Intersect.Editor.Forms.Editors
         private void chkContinueOnInstanceChange_CheckedChanged(object sender, EventArgs e)
         {
             mEditorItem.ContinueOnInstanceChange = chkContinueOnInstanceChange.Checked;
+        }
+
+        private void chkActionsEnabled_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.ActionsEnabled = chkActionsEnabled.Checked;
+            if (mEditorItem.NValue == 0)
+            {
+                mEditorItem.NValue = 1;
+                nudN.Value = mEditorItem.NValue;
+            }
+            grpInstanceControl.Enabled = mEditorItem.ActionsEnabled;
+        }
+
+        private void rdoEveryNth_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.ActionType = (int)TimerInstanceActionType.EVERY;
+        }
+
+        private void rdoOnNth_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.ActionType = (int)TimerInstanceActionType.ONCE;
+        }
+
+        private void nudN_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.NValue = (int)nudN.Value;
+        }
+
+        private void cmbInstanceVar_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mEditorItem.ActionVariableId = InstanceVariableBase.IdFromList(cmbInstanceVar.SelectedIndex - 1, VariableDataTypes.Integer);
+        }
+
+        private void cmbVarAction_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mEditorItem.InstanceVariableActionType = cmbVarAction.SelectedIndex;
+        }
+
+        private void nudVarVal_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.ActionVariableChangeValue = (int)nudVarVal.Value;
         }
     }
 }

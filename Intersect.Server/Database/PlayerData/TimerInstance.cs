@@ -1,6 +1,8 @@
 ﻿using Intersect.GameObjects;
 using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Timers;
+using Intersect.Server.Core;
+using Intersect.Server.Core.Instancing.Controller;
 using Intersect.Server.Entities;
 using Intersect.Server.General;
 using Intersect.Server.Maps;
@@ -93,6 +95,8 @@ namespace Intersect.Server.Database.PlayerData
                 }
 
                 var descriptor = Descriptor;
+                ProcessInstanceControllerActions(descriptor);
+
                 if (!IsCompleted)
                 {
                     TimeRemaining = now + (descriptor.TimeLimit * 1000); // Extend timer for next repetition
@@ -109,6 +113,57 @@ namespace Intersect.Server.Database.PlayerData
             {
                 SendTimerPackets();
             }
+        }
+
+        /// <summary>
+        /// Processes actions on the instance controller level
+        /// </summary>
+        public void ProcessInstanceControllerActions(TimerDescriptor descriptor)
+        {
+            if (!descriptor.ActionsEnabled || !InstanceProcessor.TryGetInstanceController(OwnerId, out var instanceController))
+            {
+                return;
+            }
+
+            ProcessInstanceControllerVariableActions(descriptor, instanceController);
+        }
+
+        private void ProcessInstanceControllerVariableActions(TimerDescriptor descriptor, InstanceController instanceController)
+        {
+            if (descriptor.ActionVariable == default || !instanceController.InstanceVariables.TryGetValue(descriptor.ActionVariableId, out var instanceVar))
+            {
+                return;
+            }
+
+            if (instanceVar.Type != Enums.VariableDataTypes.Integer)
+            {
+                return;
+            }
+
+            bool iterate = false;
+            if (descriptor.ActionType == (int)TimerInstanceActionType.EVERY)
+            {
+                try
+                {
+                    iterate = CompletionCount % descriptor.NValue == 0;
+                }
+                catch
+                {
+                    Console.WriteLine("Attempted to divide by zero when processing instance controller timer mod");
+                    iterate = false;
+                }
+            }
+            else if (descriptor.ActionType == (int)TimerInstanceActionType.ONCE)
+            {
+                iterate = CompletionCount == descriptor.NValue;
+            }
+
+            if (!iterate)
+            {
+                return;
+            }
+
+            instanceVar.Value += descriptor.ActionVariableChangeValue;
         }
 
         /// <summary>
