@@ -7623,9 +7623,9 @@ namespace Intersect.Server.Entities
                 eventInstance = null;
                 foreach (var e in EventLookup)
                 {
-                    if (e.Value.BaseEvent.Id == evt.BaseEvent.Id)
+                    if (e.Value?.BaseEvent?.Id == evt?.BaseEvent?.Id)
                     {
-                        if (e.Value.PageInstance.MyPage == e.Value.BaseEvent.Pages[pageNum])
+                        if (e.Value?.PageInstance?.MyPage == e.Value?.BaseEvent?.Pages[pageNum])
                         {
                             eventInstance = e.Value;
 

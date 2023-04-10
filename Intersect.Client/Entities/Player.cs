@@ -1046,6 +1046,12 @@ namespace Intersect.Client.Entities
                     }
                 }
 
+                if (!HasCastingComponentsFor(spellBase))
+                {
+                    SendAlert(Strings.Spells.norunes, Strings.Combat.needsrunes);
+                    return;
+                }
+
                 var timeWindow = GetCastStart() + Options.Instance.CombatOpts.CancelCastLeeway;
                 if (IsCasting && SpellCast == spell.SpellId 
                     && Globals.Database.AttackCancelsCast 
@@ -1058,6 +1064,26 @@ namespace Intersect.Client.Entities
                     PacketSender.SendUseSpell(index, TargetIndex);
                 }
             }
+        }
+
+        private bool HasCastingComponentsFor(SpellBase spell)
+        {
+            if (spell.CastingComponents.Count <= 0 || 
+                (TryGetEquippedWeapon(out var equippedWeapon) && equippedWeapon.Base.ReplaceCastingComponents))
+            {
+                return true;
+            }
+
+            var components = spell.CastingComponents;
+            foreach (var component in components)
+            {
+                if (FindItem(component.ItemId, component.Quantity) == -1)
+                {
+                    return false;
+                }
+            }
+            
+            return true;
         }
 
         public long GetSpellCooldown(Guid id)

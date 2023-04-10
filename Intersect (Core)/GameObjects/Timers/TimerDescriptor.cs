@@ -24,6 +24,9 @@ namespace Intersect.GameObjects.Timers
 
         [Description("Modulo")]
         MOD,
+
+        [Description("Toggle")]
+        TOGGLE,
     }
 
     public enum TimerInstanceActionType

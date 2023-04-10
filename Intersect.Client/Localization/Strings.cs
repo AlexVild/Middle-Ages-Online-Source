@@ -604,6 +604,8 @@ namespace Intersect.Client.Localization
             public static LocalizedString vital1 = @"Mana";
 
             public static LocalizedString targetneeded = @"Needs Target!";
+            
+            public static LocalizedString needsrunes = @"Needs Runes!";
 
             public static LocalizedString warningtitle = @"Combat Warning!";
 
@@ -2212,7 +2214,9 @@ namespace Intersect.Client.Localization
             public static LocalizedString title = @"Spells";
             
             public static LocalizedString targetneeded = @"You must have a target selected to cast this spell.";
-            
+
+            public static LocalizedString norunes = @"You don't have the casting components necessary to cast this spell!";
+
             public static LocalizedString silenced = @"You're silenced and can't cast spells!";
             
             public static LocalizedString stunned = @"You're stunned and can not move or attack!";

@@ -163,7 +163,40 @@ namespace Intersect.Server.Database.PlayerData
                 return;
             }
 
-            instanceVar.Value += descriptor.ActionVariableChangeValue;
+            try
+            {
+                switch ((VarActionModType)descriptor.InstanceVariableActionType)
+                {
+                    case VarActionModType.ADD:
+                        instanceVar.Value += descriptor.ActionVariableChangeValue;
+                        break;
+                    case VarActionModType.DIV:
+                        instanceVar.Value = instanceVar.Value / descriptor.ActionVariableChangeValue;
+                        break;
+                    case VarActionModType.MOD:
+                        instanceVar.Value = instanceVar.Value % descriptor.ActionVariableChangeValue;
+                        break;
+                    case VarActionModType.MULT:
+                        instanceVar.Value *= descriptor.ActionVariableChangeValue;
+                        break;
+                    case VarActionModType.SUB:
+                        instanceVar.Value -= descriptor.ActionVariableChangeValue;
+                        break;
+                    case VarActionModType.TOGGLE:
+                        if (instanceVar.Value == 0)
+                        {
+                            instanceVar.Value = 1;
+                        }
+                        else
+                        {
+                            instanceVar.Value = 0;
+                        }
+                        break;
+                }
+            } catch (DivideByZeroException e)
+            {
+                Console.WriteLine("Attempted to divide by zero when changing instance var value in timer action");
+            }
         }
 
         /// <summary>
