@@ -96,11 +96,11 @@ namespace Intersect.Client.Interface.Game.Character.Equipment
             }
 
             // Refreshes the character background if the menu is open during a map transition :>. How cute.
-            if (Me.MapInstance.Id != PreviousMap)
+            if ((Me.MapInstance?.Id ?? Guid.Empty) != PreviousMap)
             {
                 SetCharacterBackground();
             }
-            PreviousMap = Me.MapInstance.Id;
+            PreviousMap = Me.MapInstance?.Id ?? Guid.Empty;
 
             PopulateCharacterInfo();
             PopulateEquipStats();
