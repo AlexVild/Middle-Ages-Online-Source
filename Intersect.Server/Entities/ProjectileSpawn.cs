@@ -96,7 +96,7 @@ namespace Intersect.Server.Entities
                     {
                         if (MapController.TryGetInstanceFromMap(MapId, MapInstanceId, out var mapInstance))
                         {
-                            mapInstance.SpawnItem((int)X, (int)Y, new Item(Parent.Base.AmmoItemId, 1), 1, Parent.Owner.Id);
+                            mapInstance.SpawnItem((int)X, (int)Y, new Item(Parent.Base.AmmoItemId, 1), 1, Parent.Owner.Id, spawnType: MapInstance.ItemSpawnType.PlayerDeath, ownershipTimeOverride: Options.Instance.LootOpts.PlayerDeathItemDespawnTime);
                         }
                     }
                 }

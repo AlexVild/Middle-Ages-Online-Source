@@ -782,7 +782,7 @@ namespace Intersect.Server.Maps
         /// <param name="item">The <see cref="Item"/> to spawn on the map.</param>
         /// <param name="amount">The amount of times to spawn this item to the map. Set to the <see cref="Item"/> quantity, overwrites quantity if stackable!</param>
         /// <param name="owner">The player Id that will be the temporary owner of this item.</param>
-        public void SpawnItem(int x, int y, Item item, int amount, Guid owner, bool sendUpdate = true, ItemSpawnType spawnType = ItemSpawnType.Normal)
+        public void SpawnItem(int x, int y, Item item, int amount, Guid owner, bool sendUpdate = true, ItemSpawnType spawnType = ItemSpawnType.Normal, long ownershipTimeOverride = -1)
         {
             if (item == null)
             {
@@ -791,6 +791,7 @@ namespace Intersect.Server.Maps
                 return;
             }
 
+            var ownershipTime = ownershipTimeOverride >= 0 ? ownershipTimeOverride : Options.Loot.ItemOwnershipTime;
             var itemDescriptor = ItemBase.Get(item.ItemId);
             if (itemDescriptor == null)
             {
@@ -824,7 +825,7 @@ namespace Intersect.Server.Maps
                 {
                     DespawnTime = despawnTime,
                     Owner = owner,
-                    OwnershipTime = Timing.Global.Milliseconds + Options.Loot.ItemOwnershipTime,
+                    OwnershipTime = Timing.Global.Milliseconds + ownershipTime,
                     VisibleToAll = Options.Loot.ShowUnownedItems || owner == Guid.Empty
                 };
 
@@ -859,7 +860,7 @@ namespace Intersect.Server.Maps
                     {
                         DespawnTime = despawnTime,
                         Owner = owner,
-                        OwnershipTime = Timing.Global.Milliseconds + Options.Loot.ItemOwnershipTime,
+                        OwnershipTime = Timing.Global.Milliseconds + ownershipTime,
                         VisibleToAll = Options.Loot.ShowUnownedItems || owner == Guid.Empty
                     };
 
