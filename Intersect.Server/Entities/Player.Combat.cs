@@ -137,6 +137,7 @@ namespace Intersect.Server.Entities
                 if (LastWeaponSwitch <= Timing.Global.Milliseconds)
                 {
                     HitFreeStreak++;
+                    Console.WriteLine(HitFreeStreak);
                     MissFreeStreak++;
                     ChallengeUpdateProcesser.UpdateChallengesOf(new MaxHitUpdate(this, damage));
                     ChallengeUpdateProcesser.UpdateChallengesOf(new DamageAtRangeUpdate(this, damage, range));
@@ -697,6 +698,7 @@ namespace Intersect.Server.Entities
             if (damage > 0)
             {
                 HitFreeStreak = 0;
+                Console.WriteLine(HitFreeStreak);
             }
             ChallengeUpdateProcesser.UpdateChallengesOf(new DamageTakenOverTimeUpdate(this, damage));
         }
