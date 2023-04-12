@@ -4347,6 +4347,12 @@ namespace Intersect.Server.Networking
             var player = client?.Entity;
 
             player?.SendPacket(new Network.Packets.Server.PlayerLabelPackets(player.GetUnlockedLabels()));
+            if (!player?.LabelTutorialDone ?? true)
+            {
+                PacketSender.SendEventDialog(player, Strings.Player.NametagTutorial1, default, default);
+                PacketSender.SendEventDialog(player, Strings.Player.NametagTutorial2, default, default);
+                player.LabelTutorialDone = true;
+            }
         }
 
         public void HandlePacket(Client client, SetLabelPacket packet)
@@ -4367,7 +4373,13 @@ namespace Intersect.Server.Networking
             var cosmetics = new List<Guid>();
             cosmetics.AddRange(player.UnlockedCosmetics.ToArray().Select(c => c.ItemId));
 
-            player?.SendPacket(new Network.Packets.Server.CosmeticUnlocksPacket(cosmetics));
+            player.SendPacket(new Network.Packets.Server.CosmeticUnlocksPacket(cosmetics));
+            if (!player.CosmeticsTutorialDone)
+            {
+                PacketSender.SendEventDialog(player, Strings.Player.CosmeticsTutorial1, default, default);
+                PacketSender.SendEventDialog(player, Strings.Player.CosmeticsTutorial2, default, default);
+                player.CosmeticsTutorialDone = true;
+            }
         }
 
         public void HandlePacket(Client client, CosmeticChangePacket packet)
@@ -4391,6 +4403,14 @@ namespace Intersect.Server.Networking
             }
 
             player.SendPacket(player.GetRecipes(packet.CraftType));
+
+            if (!player.RecipeTutorialDone)
+            {
+                PacketSender.SendEventDialog(player, Strings.Crafting.RecipeTutorial1, default, default);
+                PacketSender.SendEventDialog(player, Strings.Crafting.RecipeTutorial2, default, default);
+                PacketSender.SendEventDialog(player, Strings.Crafting.RecipeTutorial3, default, default);
+                player.RecipeTutorialDone = true;
+            }
         }
 
         public void HandlePacket(Client client, RequestRecipeRequirementsPacket packet)

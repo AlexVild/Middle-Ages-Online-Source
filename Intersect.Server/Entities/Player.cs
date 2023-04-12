@@ -8269,6 +8269,8 @@ namespace Intersect.Server.Entities
         [JsonIgnore]
         public virtual List<LabelInstance> UnlockedLabels { get; set; } = new List<LabelInstance>();
 
+        public bool LabelTutorialDone { get; set; }
+
         public void MarkMapExplored(Guid mapId)
         {
             lock (EntityLock)

@@ -9,9 +9,13 @@ namespace Intersect.Network.Packets.Client
         [Key(0)]
         public RecipeCraftType CraftType { get; set; }
 
-        public RequestRecipesPacket(RecipeCraftType craftType)
+        [Key(1)]
+        public bool WithTutorial { get; set; }
+
+        public RequestRecipesPacket(RecipeCraftType craftType, bool withTutorial = false)
         {
             CraftType = craftType;
+            WithTutorial = withTutorial;
         }
     }
 }

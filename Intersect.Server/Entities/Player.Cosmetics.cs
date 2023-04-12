@@ -25,6 +25,8 @@ namespace Intersect.Server.Entities
         [NotMapped]
         public Guid[] Cosmetics { get; set; } = new Guid[Options.CosmeticSlots.Count];
 
+        public bool CosmeticsTutorialDone { get; set; }
+
         public void ChangeCosmeticUnlockStatus(Guid itemId, bool unlocked = true)
         {
             var cosmetic = UnlockedCosmetics.Find(csm => csm.ItemId == itemId && csm.Unlocked);

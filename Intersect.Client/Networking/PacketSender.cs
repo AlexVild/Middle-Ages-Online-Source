@@ -604,9 +604,9 @@ namespace Intersect.Client.Networking
             Network.SendPacket(new CosmeticChangePacket(itemId, Options.CosmeticSlots[slot]));
         }
 
-        public static void SendRequestRecipes(RecipeCraftType craftType)
+        public static void SendRequestRecipes(RecipeCraftType craftType, bool withTutorial = false)
         {
-            Network.SendPacket(new RequestRecipesPacket(craftType));
+            Network.SendPacket(new RequestRecipesPacket(craftType, withTutorial));
         }
 
         public static void SendRequestUnlockedRecipes()

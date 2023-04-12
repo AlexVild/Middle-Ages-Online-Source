@@ -537,6 +537,17 @@ namespace Intersect.Server.Localization
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString nospace = @"You do not have enough inventory space to craft {00}!";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString RecipeTutorial1 =
+                @"This is your recipes panel. Recipes that you've unlocked, and recipes that you CAN unlock, will display here.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString RecipeTutorial2 =
+                @"To change the type of recipes you want to view, use the dropdown at the top. To view the steps to unlocking a given recipe, click the arrow beneath the recipe you're interested in.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString RecipeTutorial3 =
+                @"As you level up your class rank and complete quests, you will have access to a wider range of recipes to unlock, so check back here frequently!";
         }
 
         public sealed class DatabaseNamespace : LocaleNamespace
@@ -1225,6 +1236,20 @@ namespace Intersect.Server.Localization
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]            public readonly LocalizedString warpedtoyou = @"{00} warped to you.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)] public readonly LocalizedString noviablecrafts = @"You can not craft any of the crafts on this table!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)] public readonly LocalizedString NametagTutorial1 = 
+                @"Name tags are additional names you can put above your character name to show off your various achievements.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)] public readonly LocalizedString NametagTutorial2 =
+                @"Each nametag has a hint associated with it to give you an idea of how to unlock them. You can change your name tag at will from this menu.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString CosmeticsTutorial1 =
+                @"Cosmetics are pieces of armor or clothing that you can select to display instead of whatever armor you have equipped.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString CosmeticsTutorial2 =
+                @"They're given as rewards for various tasks and special events in Asgodia, and can be equipped and unequipped at will.";
         }
 
         public sealed class PortcheckingNamespace : LocaleNamespace

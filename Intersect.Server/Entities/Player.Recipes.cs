@@ -24,6 +24,8 @@ namespace Intersect.Server.Entities
         public Guid[] UnlockedRecipeIds => UnlockedRecipes.Where(recipe => recipe.Unlocked).Select(recipe => recipe.DescriptorId).ToArray();
         public List<Guid> LockedRecipeIds => UnlockedRecipes.Where(recipe => !recipe.Unlocked).Select(recipe => recipe.DescriptorId).ToList();
 
+        public bool RecipeTutorialDone { get; set; } = false;
+
         public void UnlockRecipe(Guid descriptorId, bool suppressMsg = false)
         {
             if (UnlockedRecipeIds.Contains(descriptorId))
