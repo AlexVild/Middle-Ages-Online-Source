@@ -70,7 +70,7 @@ namespace Intersect.Client.Interface.Game.Character.Panels
             {
                 Text = "Track"
             };
-            TrackSkillButton.SetToolTipText("Track/Untrack EXP progress in your UI");
+            TrackSkillButton.SetToolTipText("Track/Untrack EXP progress in your EXP bar");
             TrackSkillButton.Clicked += TrackSkillButton_Clicked;
 
             TrackProgressBackground = new ImagePanel(mBackground, "TrackProgress");
@@ -89,7 +89,7 @@ namespace Intersect.Client.Interface.Game.Character.Panels
 
             HelpLabel = new Label(mBackground, "HelpText")
             {
-                Text = "Hover over icon to view details"
+                Text = "Hover over icons to see what each challenge unlocks"
             };
 
             mBackground.LoadJsonUi(Framework.File_Management.GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
@@ -194,6 +194,7 @@ namespace Intersect.Client.Interface.Game.Character.Panels
                         SelectedProgress.Level,
                         unlock.Value.RequiredExp - SelectedProgress.Exp,
                         weaponTypeDescriptor.Name ?? "NOT FOUND",
+                        weaponTypeDescriptor.Id,
                         ChallengeRows);
 
                     row.Initialize();
@@ -263,7 +264,7 @@ namespace Intersect.Client.Interface.Game.Character.Panels
             TrackProgressBar.SetBarFg(canProgress ? "weapon_track_progress_bar_fg.png" : "weapon_track_progress_bar_fg_locked.png");
             if (progressPercent < 1)
             {
-                TrackProgressBar.SetLabelText(ProgressBarLabel.Bottom, $"EXP remaining: {remaining}");
+                TrackProgressBar.SetLabelText(ProgressBarLabel.Bottom, $"EXP until next challenge: {remaining.ToString("N0")}");
                 if (canProgress)
                 {
                     TrackProgressBackground.SetToolTipText("Earn EXP using this weapon type to advance");
@@ -276,7 +277,7 @@ namespace Intersect.Client.Interface.Game.Character.Panels
                     }
                     else if (!correctWeaponLvl)
                     {
-                        TrackProgressBackground.SetToolTipText("Your current weapon is not high enough level to progress this track!");
+                        TrackProgressBackground.SetToolTipText($"Your current weapon's {descriptor.VisibleName} level is too low to progress this track!");
                     }
                 }
                 TrackProgressBar.SetBarRenderColor(new Color(255, 255, 255, 255));

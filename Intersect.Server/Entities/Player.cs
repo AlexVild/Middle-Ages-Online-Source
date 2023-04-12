@@ -7551,7 +7551,7 @@ namespace Intersect.Server.Entities
 
                 // Auto-pickup ammo
                 var currentProjectile = GetEquippedWeapon()?.Projectile;
-                if (currentProjectile?.AmmoItemId != Guid.Empty)
+                if (currentProjectile != default && currentProjectile?.AmmoItemId != Guid.Empty)
                 {
                     AutoPickupAmmo(currentProjectile.AmmoItemId);
                 }

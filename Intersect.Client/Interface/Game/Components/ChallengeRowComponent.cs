@@ -1,4 +1,5 @@
 ﻿using Intersect.Client.Framework.Gwen.Control;
+using Intersect.Client.General;
 using Intersect.Client.Interface.Components;
 using Intersect.Client.Interface.Game.Character.Panels;
 using Intersect.Client.Networking;
@@ -75,6 +76,8 @@ namespace Intersect.Client.Interface.Game.Components
 
         public Label TermsLabel { get; set; }
 
+        public Guid WeaponTypeId { get; set; }
+
         public bool IsContracted => CharacterChallengesController.CurrentContractId == ChallengeId;
 
         public ChallengeRowComponent(Base parent,
@@ -85,6 +88,7 @@ namespace Intersect.Client.Interface.Game.Components
             int currentLevel,
             long requiredExp,
             string weaponTypeName,
+            Guid weaponTypeId,
             ComponentList<GwenComponent> referenceList = null
             ) : base(parent, containerName, "ChallengeRowComponent", referenceList)
         {
@@ -99,6 +103,7 @@ namespace Intersect.Client.Interface.Game.Components
             WeaponType = weaponTypeName;
             RequiredExp = requiredExp;
             CurrentLevel = currentLevel;
+            WeaponTypeId = weaponTypeId;
 
             PercentComplete = (float)Progress / (Descriptor?.Sets ?? 1);
         }
@@ -156,19 +161,33 @@ namespace Intersect.Client.Interface.Game.Components
             if (RequiredLevel - 1 == CurrentLevel)
             {
                 onStep = true;
-                requirementText = $"Requires {RequiredExp} more EXP";
+
+                // Check to see if the current weapon is invalid
+                Globals.Me.TryGetEquippedWeaponDescriptor(out var equippedWeapon);
+                if (equippedWeapon == null || !equippedWeapon.MaxWeaponLevels.TryGetValue(WeaponTypeId, out var maxWeaponLevel))
+                {
+                    requirementText = $"Equip weapon of Lvl. {RequiredLevel} {WeaponType} type or higher to progress!";
+                }
+                else
+                {
+                    if (maxWeaponLevel >= RequiredLevel)
+                    {
+                        requirementText = $"{RequiredExp.ToString("N0")} EXP required until challenge unlock";
+                    }
+                    else
+                    {
+                        requirementText = $"Equipped weapon insufficient - Lvl. {RequiredLevel} {WeaponType} type or higher required for track progression.";
+                    }
+                }
             }
+            
             if (Unlocked)
             {
                 Description.SetText(Descriptor.GetDescription(), DescriptionTemplate, 240);
             }
             else
             {
-                
-                if (onStep)
-                {
-                    Description.SetText(requirementText, DescriptionTemplate, 240, onStep ? Color.White : DescriptionTemplate.TextColor);
-                }
+                Description.SetText(requirementText, DescriptionTemplate, 240, onStep ? Color.White : DescriptionTemplate.TextColor);
             }
 
             ChallengeImage.Initialize();
