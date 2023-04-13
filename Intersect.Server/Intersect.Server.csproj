@@ -1194,6 +1194,10 @@
     <Compile Include="Migrations\Game\20230408153611_TimerActionMigration1.designer.cs">
       <DependentUpon>20230408153611_TimerActionMigration1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20230413145908_NpcTierMigration.cs" />
+    <Compile Include="Migrations\Game\20230413145908_NpcTierMigration.designer.cs">
+      <DependentUpon>20230413145908_NpcTierMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>
