@@ -312,6 +312,8 @@ namespace Intersect.Client.Interface.Menu
             UpdateDisplay();
         }
 
+        private int mTotalSprites => mMaleChk.IsChecked ? mMaleSprites.Count : mFemaleSprites.Count;
+
         public void Update()
         {
             if (!Networking.Network.Connected)
@@ -328,6 +330,13 @@ namespace Intersect.Client.Interface.Menu
             {
                 mCreateButton.Enable();
             }
+
+            mSkinLabel.SetText($"{Strings.CharacterCreation.skincolor} ({mDisplaySpriteIndex + 1} / {mTotalSprites})");
+            mEyeLabel.SetText($"{Strings.CharacterCreation.eyes} ({mEyeIndex + 1 } / { mAvailableEyes.Count})");
+            mExtraLabel.SetText($"{Strings.CharacterCreation.extra} ({mExtrasIndex + 1 } / { mAvailableExtras.Count})");
+            mHairLabel.SetText($"{Strings.CharacterCreation.hair} ({mHairIndex + 1 } / { mAvailableHairs.Count})");
+            mBeardLabel.SetText($"{Strings.CharacterCreation.beard} ({mBeardIndex + 1} / { mAvailableBeards.Count})");
+            mClothesLabel.SetText($"{Strings.CharacterCreation.clothes} ({mClothesIndex + 1} / { mAvailableClothes.Count})");
         }
 
         //Methods
