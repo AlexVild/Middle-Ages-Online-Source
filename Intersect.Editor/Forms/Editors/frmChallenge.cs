@@ -263,6 +263,9 @@ namespace Intersect.Editor.Forms.Editors
             lblSets.Text = "Sets";
             lblParam.Text = "Addtl. Param";
             nudReps.Enabled = true;
+            nudReps.Visible = true;
+            nudMinTier.Visible = true;
+            lblMinEnemyTier.Visible = true;
             txtDescription.Visible = false;
             lblChallengeDescription.Visible = false;
             nudSets.Visible = true;
@@ -293,6 +296,8 @@ namespace Intersect.Editor.Forms.Editors
                     lblReps.Text = "Damage"; 
                     nudParam.Enabled = true;
                     lblParam.Text = "Health %";
+                    nudMinTier.Visible = false;
+                    lblMinEnemyTier.Visible = false;
                     break;
 
                 case ChallengeType.DamageOverTime:
@@ -305,6 +310,8 @@ namespace Intersect.Editor.Forms.Editors
                     lblReps.Text = "Damage";
                     nudParam.Enabled = true;
                     lblParam.Text = "Time (ms)";
+                    nudMinTier.Visible = false;
+                    lblMinEnemyTier.Visible = false;
                     break;
 
                 case ChallengeType.HitFreeStreak:
@@ -321,10 +328,14 @@ namespace Intersect.Editor.Forms.Editors
 
                 case ChallengeType.ComboExpEarned:
                     lblReps.Text = "Combo Exp";
+                    nudMinTier.Visible = false;
+                    lblMinEnemyTier.Visible = false;
                     break;
 
                 case ChallengeType.AoEHits:
                     lblReps.Text = "Enemies Hit";
+                    nudMinTier.Visible = false;
+                    lblMinEnemyTier.Visible = false;
                     break;
 
                 case ChallengeType.MissFreeAtRange:
@@ -338,6 +349,8 @@ namespace Intersect.Editor.Forms.Editors
                     nudSets.Visible = false;
                     lblChallengeDescription.Visible = true;
                     txtDescription.Visible = true;
+                    nudMinTier.Visible = false;
+                    lblMinEnemyTier.Visible = false;
                     break;
 
                 default:

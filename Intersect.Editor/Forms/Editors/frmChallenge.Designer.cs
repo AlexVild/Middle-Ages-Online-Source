@@ -52,12 +52,12 @@ namespace Intersect.Editor.Forms.Editors
             this.lblRequirementDescription = new System.Windows.Forms.Label();
             this.btnDynamicRequirements = new DarkUI.Controls.DarkButton();
             this.chkRequiresContract = new DarkUI.Controls.DarkCheckBox();
-            this.txtDescription = new DarkUI.Controls.DarkTextBox();
             this.lblIcon = new System.Windows.Forms.Label();
             this.cmbPic = new DarkUI.Controls.DarkComboBox();
             this.picItem = new System.Windows.Forms.PictureBox();
             this.grpDetails = new DarkUI.Controls.DarkGroupBox();
             this.lblChallengeDescription = new System.Windows.Forms.Label();
+            this.txtDescription = new DarkUI.Controls.DarkTextBox();
             this.nudParam = new DarkUI.Controls.DarkNumericUpDown();
             this.cmbParamSelector = new DarkUI.Controls.DarkComboBox();
             this.nudSets = new DarkUI.Controls.DarkNumericUpDown();
@@ -83,6 +83,8 @@ namespace Intersect.Editor.Forms.Editors
             this.lblName = new System.Windows.Forms.Label();
             this.btnSave = new DarkUI.Controls.DarkButton();
             this.btnCancel = new DarkUI.Controls.DarkButton();
+            this.lblMinEnemyTier = new System.Windows.Forms.Label();
+            this.nudMinTier = new DarkUI.Controls.DarkNumericUpDown();
             this.toolStrip.SuspendLayout();
             this.grpWeaponTypes.SuspendLayout();
             this.grpEditor.SuspendLayout();
@@ -93,6 +95,7 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudSets)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudReps)).BeginInit();
             this.grpUnlocks.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMinTier)).BeginInit();
             this.SuspendLayout();
             // 
             // toolStrip
@@ -350,20 +353,6 @@ namespace Intersect.Editor.Forms.Editors
             this.chkRequiresContract.Text = "Requires Contract?";
             this.chkRequiresContract.CheckedChanged += new System.EventHandler(this.chkRequiresContract_CheckedChanged);
             // 
-            // txtDescription
-            // 
-            this.txtDescription.AcceptsReturn = true;
-            this.txtDescription.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.txtDescription.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtDescription.ForeColor = System.Drawing.Color.Gainsboro;
-            this.txtDescription.Location = new System.Drawing.Point(6, 135);
-            this.txtDescription.Multiline = true;
-            this.txtDescription.Name = "txtDescription";
-            this.txtDescription.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtDescription.Size = new System.Drawing.Size(506, 27);
-            this.txtDescription.TabIndex = 119;
-            this.txtDescription.TextChanged += new System.EventHandler(this.txtDescription_TextChanged);
-            // 
             // lblIcon
             // 
             this.lblIcon.AutoSize = true;
@@ -409,6 +398,8 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpDetails.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpDetails.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpDetails.Controls.Add(this.nudMinTier);
+            this.grpDetails.Controls.Add(this.lblMinEnemyTier);
             this.grpDetails.Controls.Add(this.lblChallengeDescription);
             this.grpDetails.Controls.Add(this.txtDescription);
             this.grpDetails.Controls.Add(this.nudParam);
@@ -436,6 +427,20 @@ namespace Intersect.Editor.Forms.Editors
             this.lblChallengeDescription.Size = new System.Drawing.Size(60, 13);
             this.lblChallengeDescription.TabIndex = 84;
             this.lblChallengeDescription.Text = "Description";
+            // 
+            // txtDescription
+            // 
+            this.txtDescription.AcceptsReturn = true;
+            this.txtDescription.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.txtDescription.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtDescription.ForeColor = System.Drawing.Color.Gainsboro;
+            this.txtDescription.Location = new System.Drawing.Point(6, 135);
+            this.txtDescription.Multiline = true;
+            this.txtDescription.Name = "txtDescription";
+            this.txtDescription.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.txtDescription.Size = new System.Drawing.Size(506, 27);
+            this.txtDescription.TabIndex = 119;
+            this.txtDescription.TextChanged += new System.EventHandler(this.txtDescription_TextChanged);
             // 
             // nudParam
             // 
@@ -789,6 +794,34 @@ namespace Intersect.Editor.Forms.Editors
             this.btnCancel.Text = "Cancel";
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
+            // lblMinEnemyTier
+            // 
+            this.lblMinEnemyTier.AutoSize = true;
+            this.lblMinEnemyTier.Location = new System.Drawing.Point(6, 119);
+            this.lblMinEnemyTier.Name = "lblMinEnemyTier";
+            this.lblMinEnemyTier.Size = new System.Drawing.Size(104, 13);
+            this.lblMinEnemyTier.TabIndex = 120;
+            this.lblMinEnemyTier.Text = "Minimum Enemy Tier";
+            // 
+            // nudMinTier
+            // 
+            this.nudMinTier.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudMinTier.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudMinTier.Location = new System.Drawing.Point(9, 135);
+            this.nudMinTier.Maximum = new decimal(new int[] {
+            10000000,
+            0,
+            0,
+            0});
+            this.nudMinTier.Name = "nudMinTier";
+            this.nudMinTier.Size = new System.Drawing.Size(89, 20);
+            this.nudMinTier.TabIndex = 121;
+            this.nudMinTier.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            // 
             // frmChallenge
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -820,6 +853,7 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudReps)).EndInit();
             this.grpUnlocks.ResumeLayout(false);
             this.grpUnlocks.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMinTier)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -878,5 +912,7 @@ namespace Intersect.Editor.Forms.Editors
         private DarkUI.Controls.DarkTextBox txtRequirementDescription;
         private System.Windows.Forms.Label lblRequirementDescription;
         private DarkUI.Controls.DarkButton btnDynamicRequirements;
+        private DarkUI.Controls.DarkNumericUpDown nudMinTier;
+        private System.Windows.Forms.Label lblMinEnemyTier;
     }
 }

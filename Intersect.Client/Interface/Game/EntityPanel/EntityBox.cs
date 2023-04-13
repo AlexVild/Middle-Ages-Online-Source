@@ -581,7 +581,7 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                         attackSpeeds,
                         npc.AttackSpeedValue,
                         rangedPartyMembers,
-                        npc.IsSpellcaster(),
+                        npc.IsSpellcaster,
                         totalMembers);
                 }
                 // Are we alone? use a single-person calc
@@ -596,7 +596,7 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                         Globals.Me.AttackSpeed(),
                         npc.AttackSpeedValue,
                         Globals.Me.TryGetEquippedWeaponDescriptor(out weapon) ? weapon.ProjectileId != Guid.Empty : false,
-                        npc.IsSpellcaster());
+                        npc.IsSpellcaster);
                 }
 
                 ThreatLevelText.SetText(threatLevel.GetDescription());

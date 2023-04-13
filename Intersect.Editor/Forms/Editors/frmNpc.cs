@@ -280,6 +280,7 @@ namespace Intersect.Editor.Forms.Editors
                 nudRgbaG.Value = mEditorItem.Color.G;
                 nudRgbaB.Value = mEditorItem.Color.B;
                 nudRgbaA.Value = mEditorItem.Color.A;
+                nudTier.Value = mEditorItem.Level;
 
                 nudSpawnDuration.Value = mEditorItem.SpawnDuration;
 
@@ -325,6 +326,7 @@ namespace Intersect.Editor.Forms.Editors
                 chkEnabled.Checked = mEditorItem.NpcVsNpcEnabled;
 
                 PopulateDamageTypes();
+                chkSpellCast.Checked = mEditorItem.IsSpellcaster;
 
                 //Combat
                 nudCritChance.Value = mEditorItem.CritChance;
@@ -1767,6 +1769,16 @@ namespace Intersect.Editor.Forms.Editors
         {
             var desiredHp = GetPotentialMaxHitOnNpc() * BOSS_HP_MULT;
             nudHp.Value = desiredHp;
+        }
+
+        private void nudTier_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Level = (int)nudTier.Value;
+        }
+
+        private void chkSpellCast_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.IsSpellcaster = chkSpellCast.Checked;
         }
     }
 

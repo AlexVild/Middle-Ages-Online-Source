@@ -369,24 +369,6 @@ namespace Intersect.GameObjects
             }
         }
 
-        public bool IsSpellcaster()
-        {
-            // Casts > normal frequency
-            if (SpellFrequency > 2 && Spells.Count >= 1 && CombatUtilities.EstimateEntityAttackTypes(Stats, AttackTypes).Contains(Enums.AttackTypes.Magic))
-            {
-                return true;
-            }
-
-            // Uses an overridden, magic-type spell
-            var overriddenSpell = SpellBase.Get(SpellAttackOverrideId);
-            if (overriddenSpell != null && overriddenSpell.Combat.DamageTypes.Contains(Enums.AttackTypes.Magic))
-            {
-                return true;
-            }
-
-            return false;
-        }
-
         public double SecondaryChance { get; set; } = 0.0;
 
         [NotMapped] public List<BaseDrop> TertiaryDrops = new List<BaseDrop>();
@@ -451,6 +433,8 @@ namespace Intersect.GameObjects
         /// </summary>
         public bool NoBackstab { get; set; }
         public bool NoStealthBonus { get; set; }
+
+        public bool IsSpellcaster { get; set; }
     }
 
 }

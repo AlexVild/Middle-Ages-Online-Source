@@ -91,6 +91,8 @@ namespace Intersect.GameObjects
 
         public string Icon { get; set; } = string.Empty;
 
+        public int MinTier { get; set; }
+
         [NotMapped]
         public ConditionLists ContractRequirements { get; set; } = new ConditionLists();
 

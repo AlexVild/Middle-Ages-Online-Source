@@ -1723,7 +1723,7 @@ namespace Intersect.Server.Entities
                 player.GetRawAttackSpeed(),
                 Base.AttackSpeedValue,
                 playerProjectile != Guid.Empty,
-                Base.IsSpellcaster());
+                Base.IsSpellcaster);
 
             return PlayerThreatLevels[player.Id];
         }
