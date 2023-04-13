@@ -25,6 +25,8 @@ namespace Intersect.Server.Entities.PlayerData
             }
         }
 
+        public int Streak { get; set; }
+
         private int _sets { get; set; }
         public int Sets
         {

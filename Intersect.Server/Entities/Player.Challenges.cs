@@ -53,9 +53,6 @@ namespace Intersect.Server.Entities
         [NotMapped, JsonIgnore]
         public bool InvalidateChallenge { get; set; } = false;
 
-        [NotMapped, JsonIgnore]
-        public int MissFreeStreak { get; set; }
-
         /// <summary>
         /// A dictionary who's job is to track when a miss free streak is started at a specific range. The range is the key, the streak is the value
         /// </summary>
@@ -145,6 +142,11 @@ namespace Intersect.Server.Entities
         /// </summary>
         public void ResetChallengeTracking()
         {
+            foreach (var challengeProgress in ChallengesInProgress)
+            {
+                challengeProgress.Streak = 0;
+            }
+
             WeaponCombo = 0;
             
             if (CurrentCombo > 0)
@@ -156,9 +158,6 @@ namespace Intersect.Server.Entities
             DoTChallengeMap.Clear();
             DamageTakenMap.Clear();
             BeastsKilledOverTime.Clear();
-
-            HitFreeStreak = 0;
-            MissFreeStreak = 0;
 
             MissFreeRangeDict.Clear();
 

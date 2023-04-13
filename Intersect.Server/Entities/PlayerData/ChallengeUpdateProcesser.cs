@@ -124,11 +124,8 @@ namespace Intersect.Server.Entities.PlayerData
         public override ChallengeType Type { get; set; } = ChallengeType.MissFreeStreak;
         public override ChallengeUpdateWatcherType WatcherType => ChallengeUpdateWatcherType.Sets;
 
-        public int CurrentStreak { get; set; }
-
-        public MissFreeUpdate(Player player, int streak) : base(player)
+        public MissFreeUpdate(Player player) : base(player)
         {
-            CurrentStreak = streak;
         }
     }
 
@@ -139,9 +136,8 @@ namespace Intersect.Server.Entities.PlayerData
 
         public int CurrentStreak { get; set; }
 
-        public HitFreeUpdate(Player player, int streak) : base(player)
+        public HitFreeUpdate(Player player) : base(player)
         {
-            CurrentStreak = streak;
         }
     }
 
@@ -269,6 +265,31 @@ namespace Intersect.Server.Entities.PlayerData
             }
         }
 
+        public static void UpdateChallengesOf(ChallengeUpdate update, int enemyTier)
+        {
+            if (update?.NoUpdate ?? true)
+            {
+                return;
+            }
+            var player = update.Player;
+
+            UpdateChallenge((dynamic)update, enemyTier);
+
+            if (!update.ProgressMade)
+            {
+                return;
+            }
+
+            if (!player.TryGetEquippedItem(Options.WeaponIndex, out var equipped))
+            {
+                return;
+            }
+            foreach (var weaponType in equipped.Descriptor?.WeaponTypes ?? new List<Guid>())
+            {
+                player.TryProgressMastery(0, weaponType);
+            }
+        }
+
         private static void UpdateChallenge(ComboEarnedUpdate update)
         {
             var player = update.Player;
@@ -331,22 +352,34 @@ namespace Intersect.Server.Entities.PlayerData
             }
         }
 
-        private static void UpdateChallenge(MissFreeUpdate update)
+        private static void UpdateChallenge(MissFreeUpdate update, int enemyTier)
         {
             foreach (var challenge in update.Challenges)
             {
-                if (update.CurrentStreak > 0 && update.CurrentStreak % challenge.Descriptor.Reps == 0)
+                if (challenge.Descriptor.MinTier > enemyTier)
+                {
+                    continue;
+                }
+
+                challenge.Streak++;
+                if (challenge.Streak > 0 && challenge.Streak % challenge.Descriptor.Reps == 0)
                 {
                     challenge.Sets++;
                 }
             }
         }
 
-        private static void UpdateChallenge(HitFreeUpdate update)
+        private static void UpdateChallenge(HitFreeUpdate update, int enemyTier)
         {
             foreach (var challenge in update.Challenges)
             {
-                if (update.CurrentStreak > 0 && update.CurrentStreak % challenge.Descriptor.Reps == 0)
+                if (challenge.Descriptor.MinTier > enemyTier)
+                {
+                    continue;
+                }
+
+                challenge.Streak++;
+                if (challenge.Streak > 0 && challenge.Streak % challenge.Descriptor.Reps == 0)
                 {
                     challenge.Sets++;
                 }

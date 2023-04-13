@@ -128,16 +128,14 @@ namespace Intersect.Server.Entities
                 damageWasDealt = base.TryDealDamageTo(enemy, weapon?.AttackTypes ?? new List<AttackTypes>() { AttackTypes.Blunt }, dmgScaling, critMultiplier, weapon, spell, ignoreEvasion, out damage);
             }
 
-            if (damageWasDealt && damage > 0 && enemy.IsNonTrivialTo(this))
+            if (damageWasDealt && damage > 0 && enemy is Npc)
             {
                 ChallengeUpdateProcesser.UpdateChallengesOf(new DamageOverTimeUpdate(this, damage));
-                ChallengeUpdateProcesser.UpdateChallengesOf(new MissFreeUpdate(this, MissFreeStreak));
+                ChallengeUpdateProcesser.UpdateChallengesOf(new MissFreeUpdate(this), enemy.Level);
 
                 // For challenges where we don't want DoT values fudging the challenge - cheap fix
                 if (LastWeaponSwitch <= Timing.Global.Milliseconds)
                 {
-                    HitFreeStreak++;
-                    MissFreeStreak++;
                     ChallengeUpdateProcesser.UpdateChallengesOf(new MaxHitUpdate(this, damage));
                     ChallengeUpdateProcesser.UpdateChallengesOf(new DamageAtRangeUpdate(this, damage, range));
 
@@ -150,7 +148,7 @@ namespace Intersect.Server.Entities
                         }
                     }
 
-                    ChallengeUpdateProcesser.UpdateChallengesOf(new HitFreeUpdate(this, HitFreeStreak));
+                    ChallengeUpdateProcesser.UpdateChallengesOf(new HitFreeUpdate(this), enemy.Level);
                 }
             }
             if (damage < 0)
@@ -689,16 +687,31 @@ namespace Intersect.Server.Entities
 
         protected override void AttackingEntity_AttackMissed(Entity target)
         {
-            MissFreeStreak = 0;
+            MissFreeStreakEnd();
             MissFreeRangeDict.Clear();
+        }
+
+        private void MissFreeStreakEnd()
+        {
+            foreach (var challenge in ChallengesInProgress.Where(c => c.Type == ChallengeType.MissFreeStreak))
+            {
+                challenge.Streak = 0;
+            }
+        }
+
+        private void HitFreeStreakEnd()
+        {
+            foreach (var challenge in ChallengesInProgress.Where(c => c.Type == ChallengeType.HitFreeStreak))
+            {
+                challenge.Streak = 0;
+            }
         }
 
         protected override void AttackingEntity_DamageTaken(Entity aggressor, int damage)
         {
             if (damage > 0)
             {
-                HitFreeStreak = 0;
-                Console.WriteLine(HitFreeStreak);
+                HitFreeStreakEnd();
             }
             ChallengeUpdateProcesser.UpdateChallengesOf(new DamageTakenOverTimeUpdate(this, damage));
         }
