@@ -675,8 +675,8 @@ namespace Intersect.Server.Entities
             Entity spellTarget,
             bool ignoreEvasion = false,
             bool isProjectileTool = false,
-            bool ignoreMissMessage = false
-        )
+            bool ignoreMissMessage = false,
+            int tool = -1)
         {
             var spellBase = SpellBase.Get(spellId);
             if (spellBase != null)
@@ -687,9 +687,19 @@ namespace Intersect.Server.Entities
                 {
                     foreach (var entity in instance.GetCachedEntities())
                     {
-                        if (entity == null || (!(entity is Player) && !(entity is Npc)))
+                        if (!isProjectileTool)
                         {
-                            continue;
+                            if (entity == null || (!(entity is Player) && !(entity is Npc)))
+                            {
+                                continue;
+                            }
+                        }
+                        else if (entity is Resource resource)
+                        {
+                            if (resource.Base.Tool != tool)
+                            {
+                                continue;
+                            }
                         }
 
                         if (spellTarget != null && spellTarget != entity)
@@ -702,7 +712,7 @@ namespace Intersect.Server.Entities
                             continue;
                         }
 
-                        if (entity.Id == Id)
+                        if (entity.Id == Id && !spellBase.Combat.Friendly)
                         {
                             continue;
                         }

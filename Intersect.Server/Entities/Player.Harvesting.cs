@@ -109,7 +109,8 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
-            if (!CanHarvestWithTool(target, projectile.Base.Tool))
+            var tool = projectile.Base.Tool;
+            if (!CanHarvestWithTool(target, tool))
             {
                 return false;
             }
@@ -134,7 +135,7 @@ namespace Intersect.Server.Entities
                 }
             }
 
-            projectile.HandleProjectileSpell(target, true);
+            projectile.HandleProjectileSpell(target, true, tool);
             DealTrueDamageTo(target, 100, dmg, false, true);
 
             return true;

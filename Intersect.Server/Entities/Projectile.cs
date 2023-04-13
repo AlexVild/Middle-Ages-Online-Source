@@ -552,7 +552,7 @@ namespace Intersect.Server.Entities
             return EntityTypes.Projectile;
         }
 
-        public void HandleProjectileSpell(Entity enemy, bool isProjectileTool = false)
+        public void HandleProjectileSpell(Entity enemy, bool isProjectileTool = false, int tool = -1)
         {
             if (enemy == null || Spell == null || Spell.Combat == null)
             {
@@ -566,7 +566,8 @@ namespace Intersect.Server.Entities
                         enemy.Y,
                         null,
                         true,
-                        isProjectileTool);
+                        isProjectileTool,
+                        tool: tool);
         }
 
         public bool ProjectileCollidedOnQuantity(int quantity, Guid entityId)
