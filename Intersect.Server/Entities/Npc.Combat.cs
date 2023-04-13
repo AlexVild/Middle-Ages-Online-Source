@@ -172,14 +172,13 @@ namespace Intersect.Server.Entities
             {
                 return;
             }
-            
+
+            IncrementAttackTimer();
             // Attack literally misses
             if (!CanMeleeTarget(enemy))
             {
                 return;
             }
-
-            IncrementAttackTimer();
             List<AttackTypes> attackTypes = new List<AttackTypes>(Base.AttackTypes);
 
             SendAttackAnimation(enemy);
