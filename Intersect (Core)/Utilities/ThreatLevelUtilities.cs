@@ -129,11 +129,11 @@ namespace Intersect.Utilities
             long[] playerAttackSpeed,
             long npcAttackSpeed,
             bool[] rangedAttackers,
-            bool npcSpellCaster)
+            bool npcSpellCaster,
+            int partySize)
         {
-            var partyMembers = playerVitals.Length;
-            var ratios = new double[partyMembers];
-            for (var i = 0; i < partyMembers; i++)
+            var ratios = new double[partySize];
+            for (var i = 0; i < partySize; i++)
             {
                 var ratio = GetThreatLevelRatio(playerVitals[i],
                     playerStats[i],
@@ -144,7 +144,7 @@ namespace Intersect.Utilities
                     playerAttackSpeed[i],
                     npcAttackSpeed,
                     rangedAttackers[i], 
-                    npcSpellCaster) - (Options.Instance.CombatOpts.ThreatLevelDeductionPerPartyMember * partyMembers);
+                    npcSpellCaster) - (Options.Instance.CombatOpts.ThreatLevelDeductionPerPartyMember * partySize);
                 ratios[i] = Math.Max(ratio, 0d);
             }
 

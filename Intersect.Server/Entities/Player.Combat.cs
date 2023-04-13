@@ -602,7 +602,8 @@ namespace Intersect.Server.Entities
                partyAttackSpeeds,
                npc.Base.AttackSpeedValue,
                rangedPartyMembers,
-               npc.Base.IsSpellcaster());
+               npc.Base.IsSpellcaster(),
+               Party.Count);
         }
 
         public double GetThreatLevelExpMod(Entity opponent)

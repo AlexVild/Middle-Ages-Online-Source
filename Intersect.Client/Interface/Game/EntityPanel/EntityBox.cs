@@ -581,7 +581,8 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                         attackSpeeds,
                         npc.AttackSpeedValue,
                         rangedPartyMembers,
-                        npc.IsSpellcaster());
+                        npc.IsSpellcaster(),
+                        totalMembers);
                 }
                 // Are we alone? use a single-person calc
                 else
