@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -224,7 +226,7 @@ namespace Intersect.Server.Entities
                         playerKiller.SendRecordUpdate(Strings.Records.enemykilled.ToString(recordKilled, Name));
                     }
 
-                    ChallengeUpdateProcesser.UpdateChallengesOf(new BeastsKilledOverTime(playerKiller, Base.Id), Base.Level);
+                    ChallengeUpdateProcesser.UpdateChallengesOf(new BeastsKilledOverTime(playerKiller, Base.Id), TierLevel);
                 }
             }
         }
@@ -1705,10 +1707,21 @@ namespace Intersect.Server.Entities
 
         public ThreatLevel SetThreatLevelFor(Player player)
         {
+            if (Base == null)
+            {
+                return ThreatLevel.Trivial;
+            }
+
             var playerProjectile = Guid.Empty;
             if (player.TryGetEquippedItem(Options.WeaponIndex, out var playerWeapon)) 
             {
                 playerProjectile = playerWeapon.Descriptor?.ProjectileId ?? Guid.Empty;
+            }
+
+            var damageScalar = 100;
+            if (Base.IsSpellcaster)
+            {
+                Globals.CachedNpcSpellScalar.TryGetValue(Base.Id, out damageScalar);
             }
 
             PlayerThreatLevels[player.Id] = ThreatLevelUtilities.DetermineNpcThreatLevel(player.MaxVitals,
@@ -1720,7 +1733,8 @@ namespace Intersect.Server.Entities
                 player.GetRawAttackSpeed(),
                 Base.AttackSpeedValue,
                 playerProjectile != Guid.Empty,
-                Base.IsSpellcaster);
+                Base.IsSpellcaster,
+                damageScalar);
 
             return PlayerThreatLevels[player.Id];
         }
@@ -1764,5 +1778,11 @@ namespace Intersect.Server.Entities
             }
             return SetThreatLevelFor(player) < ThreatLevel.Trivial;
         }
+
+        [NotMapped, JsonIgnore]
+        public override int TierLevel => Base?.Level ?? 0;
+
+        [NotMapped, JsonIgnore]
+        public int MaxSpellScalar => Base.IsSpellcaster ? Globals.CachedNpcSpellScalar[Base.Id] : 100;
     }
 }

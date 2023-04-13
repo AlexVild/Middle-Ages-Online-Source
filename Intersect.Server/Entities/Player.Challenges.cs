@@ -759,5 +759,29 @@ namespace Intersect.Server.Entities
 
             return false;
         }
+
+        private void ComboStreakEnd()
+        {
+            foreach (var challenge in ChallengesInProgress.Where(c => c.Type == ChallengeType.ComboEarned))
+            {
+                challenge.Streak = 0;
+            }
+        }
+
+        private void MissFreeStreakEnd()
+        {
+            foreach (var challenge in ChallengesInProgress.Where(c => c.Type == ChallengeType.MissFreeStreak || c.Type == ChallengeType.MissFreeAtRange))
+            {
+                challenge.Streak = 0;
+            }
+        }
+
+        private void HitFreeStreakEnd()
+        {
+            foreach (var challenge in ChallengesInProgress.Where(c => c.Type == ChallengeType.HitFreeStreak))
+            {
+                challenge.Streak = 0;
+            }
+        }
     }
 }

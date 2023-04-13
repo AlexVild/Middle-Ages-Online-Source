@@ -68,6 +68,8 @@ namespace Intersect.Server.General
 
         public static List<RecipeDescriptor> CachedRecipes = new List<RecipeDescriptor>();
 
+        public static Dictionary<Guid, int> CachedNpcSpellScalar = new Dictionary<Guid, int>();
+
         public static void RefreshGameObjectCache<T>(GameObjectType type, List<T> cacheList)
         {
             cacheList.Clear();
@@ -78,6 +80,14 @@ namespace Intersect.Server.General
                 cacheList.Add((T)v.Value);
             }
             Logging.Log.Debug($"{objectName} objects cached");
+        }
+
+        public static void RefreshNpcSpellScalars()
+        {
+            Logging.Log.Debug($"Caching NPC spell scalars...");
+            CachedNpcSpellScalar.Clear();
+            CachedNpcSpellScalar = NpcBase.GenerateNpcSpellScalarDictionary();
+            Logging.Log.Debug($"NPC scalars cached!");
         }
     }
 

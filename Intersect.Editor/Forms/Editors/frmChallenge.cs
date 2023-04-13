@@ -293,6 +293,8 @@ namespace Intersect.Editor.Forms.Editors
                     lblReps.Text = "Damage";
                     nudParam.Enabled = true;
                     lblParam.Text = "Range (tiles)";
+                    nudMinTier.Visible = false;
+                    lblMinEnemyTier.Visible = false;
                     break;
 
                 case ChallengeType.DamageHealedAtHealth:

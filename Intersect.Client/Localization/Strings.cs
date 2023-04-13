@@ -2335,6 +2335,9 @@ namespace Intersect.Client.Localization
         {
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString EntityNameAndLevel = @"{00} [Lv. {01}]";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString NpcNameAndLevel = @"{00} [Tr. {01}]";
         }
 
     }

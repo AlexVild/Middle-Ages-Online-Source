@@ -5,6 +5,7 @@ using Intersect.Server.Database;
 using Intersect.Server.Entities.Combat;
 using Intersect.Server.Entities.Events;
 using Intersect.Server.Entities.PlayerData;
+using Intersect.Server.General;
 using Intersect.Server.Localization;
 using Intersect.Server.Maps;
 using Intersect.Server.Networking;
@@ -128,19 +129,18 @@ namespace Intersect.Server.Entities
                 damageWasDealt = base.TryDealDamageTo(enemy, weapon?.AttackTypes ?? new List<AttackTypes>() { AttackTypes.Blunt }, dmgScaling, critMultiplier, weapon, spell, ignoreEvasion, out damage);
             }
 
-            if (damageWasDealt && damage > 0 && enemy is Npc)
+            if (damageWasDealt && damage > 0)
             {
-                ChallengeUpdateProcesser.UpdateChallengesOf(new DamageOverTimeUpdate(this, damage), enemy.Level);
-                ChallengeUpdateProcesser.UpdateChallengesOf(new MissFreeUpdate(this), enemy.Level);
+                ChallengeUpdateProcesser.UpdateChallengesOf(new DamageOverTimeUpdate(this, damage), enemy.TierLevel);
+                ChallengeUpdateProcesser.UpdateChallengesOf(new MissFreeUpdate(this), enemy.TierLevel);
 
                 // For challenges where we don't want DoT values fudging the challenge - cheap fix
                 if (LastWeaponSwitch <= Timing.Global.Milliseconds)
                 {
                     ChallengeUpdateProcesser.UpdateChallengesOf(new MaxHitUpdate(this, damage));
                     ChallengeUpdateProcesser.UpdateChallengesOf(new DamageAtRangeUpdate(this, damage, range));
-                    ChallengeUpdateProcesser.UpdateChallengesOf(new MissFreeAtRangeUpdate(this, range), enemy.Level);
-
-                    ChallengeUpdateProcesser.UpdateChallengesOf(new HitFreeUpdate(this), enemy.Level);
+                    ChallengeUpdateProcesser.UpdateChallengesOf(new MissFreeAtRangeUpdate(this, range), enemy.TierLevel);
+                    ChallengeUpdateProcesser.UpdateChallengesOf(new HitFreeUpdate(this), enemy.TierLevel);
                 }
             }
             if (damage < 0)
@@ -582,6 +582,12 @@ namespace Intersect.Server.Entities
                 return (member.GetEquippedWeapon()?.ProjectileId ?? Guid.Empty) != Guid.Empty;
             }).ToArray();
 
+            var damageScalar = 100;
+            if (npc.Base.IsSpellcaster)
+            {
+                Globals.CachedNpcSpellScalar.TryGetValue(npc.Base.Id, out damageScalar);
+            }
+
             return ThreatLevelUtilities.DetermineNpcThreatLevelParty(partyVitals,
                partyStats,
                npc.Base.MaxVital,
@@ -592,6 +598,7 @@ namespace Intersect.Server.Entities
                npc.Base.AttackSpeedValue,
                rangedPartyMembers,
                npc.Base.IsSpellcaster,
+               damageScalar,
                Party.Count);
         }
 
@@ -618,6 +625,12 @@ namespace Intersect.Server.Entities
                     playerProjectile = playerWeapon.Descriptor?.ProjectileId ?? Guid.Empty;
                 }
 
+                var damageScalar = 100;
+                if (npc.Base.IsSpellcaster)
+                {
+                    Globals.CachedNpcSpellScalar.TryGetValue(npc.Base.Id, out damageScalar);
+                }
+
                 threatLevel = ThreatLevelUtilities.DetermineNpcThreatLevel(MaxVitals,
                    StatVals,
                    npc.Base.MaxVital,
@@ -627,7 +640,8 @@ namespace Intersect.Server.Entities
                    GetRawAttackSpeed(),
                    npc.Base.AttackSpeedValue,
                    playerProjectile != Guid.Empty, 
-                   npc.Base.IsSpellcaster);
+                   npc.Base.IsSpellcaster,
+                   damageScalar);
             }
 
             if (!Options.Combat.ThreatLevelExpRates.TryGetValue(threatLevel, out var expRate))
@@ -680,22 +694,6 @@ namespace Intersect.Server.Entities
         protected override void AttackingEntity_AttackMissed(Entity target)
         {
             MissFreeStreakEnd();
-        }
-
-        private void MissFreeStreakEnd()
-        {
-            foreach (var challenge in ChallengesInProgress.Where(c => c.Type == ChallengeType.MissFreeStreak || c.Type == ChallengeType.MissFreeAtRange))
-            {
-                challenge.Streak = 0;
-            }
-        }
-
-        private void HitFreeStreakEnd()
-        {
-            foreach (var challenge in ChallengesInProgress.Where(c => c.Type == ChallengeType.HitFreeStreak))
-            {
-                challenge.Streak = 0;
-            }
         }
 
         protected override void AttackingEntity_DamageTaken(Entity aggressor, int damage)

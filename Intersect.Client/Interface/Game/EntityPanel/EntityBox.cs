@@ -541,6 +541,12 @@ namespace Intersect.Client.Interface.Game.EntityPanel
 
                 var threatLevel = ThreatLevel.Trivial;
 
+                var npcDamageScalar = 100;
+                if (npc.IsSpellcaster)
+                {
+                    Globals.CachedNpcSpellScalar.TryGetValue(npc.Id, out npcDamageScalar);
+                }
+                
                 // Are we in a party? Use party calculations
                 if (Globals.Me.Party?.Count > 1)
                 {
@@ -582,6 +588,7 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                         npc.AttackSpeedValue,
                         rangedPartyMembers,
                         npc.IsSpellcaster,
+                        npcDamageScalar,
                         totalMembers);
                 }
                 // Are we alone? use a single-person calc
@@ -596,7 +603,8 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                         Globals.Me.AttackSpeed(),
                         npc.AttackSpeedValue,
                         Globals.Me.TryGetEquippedWeaponDescriptor(out weapon) ? weapon.ProjectileId != Guid.Empty : false,
-                        npc.IsSpellcaster);
+                        npc.IsSpellcaster,
+                        npcDamageScalar);
                 }
 
                 ThreatLevelText.SetText(threatLevel.GetDescription());

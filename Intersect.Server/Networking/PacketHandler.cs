@@ -3663,6 +3663,7 @@ namespace Intersect.Server.Networking
                 else if (type == GameObjectType.Npc)
                 {
                     Globals.KillNpcsOf((NpcBase) obj);
+                    Globals.RefreshNpcSpellScalars();
                     if (Options.Instance.CombatOpts.UseGeneratedMobExp)
                     {
                         NpcExperienceService.Initialize();
@@ -3859,6 +3860,7 @@ namespace Intersect.Server.Networking
                     else if (type == GameObjectType.Npc)
                     {
                         Globals.KillNpcsOf((NpcBase) obj);
+                        Globals.RefreshNpcSpellScalars();
                         if (Options.Instance.CombatOpts.UseGeneratedMobExp)
                         {
                             NpcExperienceService.Initialize();

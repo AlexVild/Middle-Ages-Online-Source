@@ -1550,7 +1550,7 @@ namespace Intersect.Server.Entities
                                 }
                                 partyMember.GiveExperience(partyExperience, true, entity);
                                 partyMember.UpdateQuestKillTasks(entity);
-                                partyMember.UpdateComboTime(entity.IsNonTrivialTo(partyMember));
+                                partyMember.UpdateComboTime(entity.TierLevel);
                             }
 
                             if (partyEvent != null)
@@ -1569,7 +1569,7 @@ namespace Intersect.Server.Entities
                             var mobExp = Options.Instance.CombatOpts.UseGeneratedMobExp ? NpcExperienceService.GetExp(descriptor.Id) : descriptor.Experience;
 
                             GiveExperience(mobExp, false, entity);
-                            UpdateComboTime(entity.IsNonTrivialTo(this));
+                            UpdateComboTime(entity.TierLevel);
                             UpdateQuestKillTasks(entity);
                         }
 
@@ -1627,7 +1627,7 @@ namespace Intersect.Server.Entities
             return bonusExp;
         }
 
-        public void UpdateComboTime(bool nonTrivial)
+        public void UpdateComboTime(int enemyTier = -1)
         {
             lock (EntityLock)
             {
@@ -1635,13 +1635,13 @@ namespace Intersect.Server.Entities
                 ComboTimestamp = Timing.Global.Milliseconds + ComboWindow;
                 CurrentCombo++;
 
-                if (nonTrivial)
-                {
-                    WeaponCombo++;
-                }
                 StartCommonEventsWithTrigger(CommonEventTrigger.ComboUp);
                 StartCommonEventsWithTrigger(CommonEventTrigger.ComboReached, "", "", CurrentCombo);
-                ChallengeUpdateProcesser.UpdateChallengesOf(new ComboEarnedUpdate(this));
+
+                if (enemyTier > -1)
+                {
+                    ChallengeUpdateProcesser.UpdateChallengesOf(new ComboEarnedUpdate(this), enemyTier);
+                }
             }
             PacketSender.SendComboPacket(this, CurrentCombo, ComboWindow, ComboExp, MaxComboWindow);
         }
@@ -1649,7 +1649,7 @@ namespace Intersect.Server.Entities
         public void EndCombo()
         {
             // prevents flooding the client with useless combo packets
-            WeaponCombo = 0;
+            ComboStreakEnd();
             if (CurrentCombo <= 0)
             {
                 return;
@@ -9116,5 +9116,12 @@ namespace Intersect.Server.Entities
 
             return true;
         }
+
+        [NotMapped, JsonIgnore]
+        public override int TierLevel => (ClassInfo?.Count ?? 0) > 0 ? 
+            ClassInfo?.Values.ToArray()
+                    .OrderByDescending(info => info.Rank)
+                    .First().Rank ?? 0 :
+            0;
     }
 }

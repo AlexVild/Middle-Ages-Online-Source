@@ -210,31 +210,31 @@ namespace Intersect.GameObjects
                 case ChallengeType.ComboEarned:
                     if (Reps > 1)
                     {
-                        return $"Earn a combo of {Reps}, {Sets} times on non-trivial enemies, using this weapon type.";
+                        return $"While killing Tier {MinTier}+ enemies, earn a combo of {Reps}, {Sets} times.";
                     }
                     else
                     {
-                        return $"Earn a combo of {Reps} on non-trivial enemies using this weapon type.";
+                        return $"While killing Tier {MinTier}+ enemies, earn a combo of {Reps}.";
                     }
 
                 case ChallengeType.BeastsKilledOverTime:
                     if (Reps > 1)
                     {
-                        return $"Kill {Reps} non-trivial enemies over a period of {SecondsParam} seconds or less, {Sets} times.";
+                        return $"Kill {Reps} Tier {MinTier}+ enemies over a period of {SecondsParam} seconds or less, {Sets} times.";
                     }
                     else
                     {
-                        return $"Kill {Reps} non-trivial enemies over a period of {SecondsParam} seconds or less.";
+                        return $"Kill {Reps} Tier {MinTier}+ enemies over a period of {SecondsParam} seconds or less.";
                     }
 
                 case ChallengeType.DamageAtRange:
                     if (Reps > 1)
                     {
-                        return $"Deal {Reps} damage to non-trivial enemies at a range of {Param} tiles, {Sets} times.";
+                        return $"Deal {Reps} damage in one hit to an enemy at a range of {Param} tiles, {Sets} times.";
                     }
                     else
                     {
-                        return $"Deal {Reps} damage to non-trivial enemies at a range of {Param} tiles.";
+                        return $"Deal {Reps} damage in one hit to an enemy at a range of {Param} tiles.";
                     }
 
                 case ChallengeType.DamageHealedAtHealth:
@@ -250,11 +250,11 @@ namespace Intersect.GameObjects
                 case ChallengeType.DamageOverTime:
                     if (Reps > 1)
                     {
-                        return $"Deal {Reps} damage to non-trivial enemies over a period of {SecondsParam} seconds, {Sets} times.";
+                        return $"Deal {Reps} damage to Tier {MinTier}+ enemies over a period of {SecondsParam} seconds, {Sets} times.";
                     }
                     else
                     {
-                        return $"Deal {Reps} damage to non-trivial enemies over a period of {SecondsParam} seconds.";
+                        return $"Deal {Reps} damage to Tier {MinTier}+ enemies over a period of {SecondsParam} seconds.";
                     }
 
                 case ChallengeType.DamageTakenOverTime:
@@ -270,41 +270,41 @@ namespace Intersect.GameObjects
                 case ChallengeType.HitFreeStreak:
                     if (Reps > 1)
                     {
-                        return $"Land {Reps} successful attacks on non-trivial enemies without receiving any damage, {Sets} times.";
+                        return $"Land {Reps} successful attacks on Tier {MinTier}+ enemies without receiving any damage, {Sets} times.";
                     }
                     else
                     {
-                        return $"Land {Reps} successful attacks on non-trivial enemies without receiving any damage.";
+                        return $"Land {Reps} successful attacks on Tier {MinTier}+ enemies without receiving any damage.";
                     }
 
                 case ChallengeType.MaxHit:
                     if (Reps > 1)
                     {
-                        return $"Deal {Reps} damage on a non-trivial enemy, {Sets} times.";
+                        return $"Deal {Reps} damage on an enemy, {Sets} times.";
                     }
                     else
                     {
-                        return $"Deal {Reps} damage on a non-trivial enemy.";
+                        return $"Deal {Reps} damage on an enemy.";
                     }
 
                 case ChallengeType.MissFreeStreak:
                     if (Reps > 1)
                     {
-                        return $"Land {Reps} successful attacks on non-trivial enemies without missing, {Sets} times.";
+                        return $"Land {Reps} successful attacks on Tier {MinTier}+ enemies without missing, {Sets} times.";
                     }
                     else
                     {
-                        return $"Land {Reps} successful attacks on non-trivial enemies without missing.";
+                        return $"Land {Reps} successful attacks on Tier {MinTier}+ enemies without missing.";
                     }
 
                 case ChallengeType.AoEHits:
                     if (Reps > 1)
                     {
-                        return $"Hit {Reps} non-trivial enemies with an area-of-effect attack, {Sets} times.";
+                        return $"Hit {Reps} enemies with an area-of-effect attack, {Sets} times.";
                     }
                     else
                     {
-                        return $"Hit {Reps} non-trivial enemies with an area-of-effect attack.";
+                        return $"Hit {Reps} enemies with an area-of-effect attack.";
                     }
                 
                 case ChallengeType.ComboExpEarned:
@@ -320,11 +320,11 @@ namespace Intersect.GameObjects
                 case ChallengeType.MissFreeAtRange:
                     if (Reps > 1)
                     {
-                        return $"Deal damage to non-trivial enemies {Reps} times without missing, at a range of {Param} tiles or more, {Sets} times.";
+                        return $"Deal damage to Tier {MinTier}+ enemies {Reps} times without missing, at a range of {Param} tiles or more, {Sets} times.";
                     }
                     else
                     {
-                        return $"Deal damage to non-trivial enemies {Reps} times without missing, at a range of {Param} tiles or more.";
+                        return $"Deal damage to Tier {MinTier}+ enemies {Reps} times without missing, at a range of {Param} tiles or more.";
                     }
                 
                 case ChallengeType.EventControlled:

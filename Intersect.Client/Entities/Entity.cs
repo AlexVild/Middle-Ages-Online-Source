@@ -1641,7 +1641,14 @@ namespace Intersect.Client.Entities
             var name = Name;
             if ((this is Player && Options.Player.ShowLevelByName) || (!(this is Player) && Options.Npc.ShowLevelByName))
             {
-                name = Strings.GameWindow.EntityNameAndLevel.ToString(Name, Level);
+                if (this is Player)
+                {
+                    name = Strings.GameWindow.EntityNameAndLevel.ToString(Name, Level);
+                }
+                else
+                {
+                    name = Strings.GameWindow.NpcNameAndLevel.ToString(Name, Level);
+                }
             }
 
             if (NpcId != default && !BestiaryController.MyBestiary.HasUnlock(NpcId, BestiaryUnlock.NameAndDescription))

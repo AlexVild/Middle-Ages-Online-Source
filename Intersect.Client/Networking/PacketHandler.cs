@@ -583,6 +583,7 @@ namespace Intersect.Client.Networking
 
             // After we've loaded NPC data, request their kill counts to popualte the bestiary
             PacketSender.SendRequestKillCounts();
+            Globals.RefreshNpcSpellScalars();
 
             CustomColors.Load(packet.ColorsJson);
             Globals.HasGameData = true;

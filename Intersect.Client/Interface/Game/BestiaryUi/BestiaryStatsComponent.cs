@@ -209,6 +209,15 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
                 {
                     AddBonusRow($"Immune: {resistance.GetDescription()}", string.Empty, string.Empty, ref y);
                 }
+
+                foreach (var attackType in beast.AttackTypes)
+                {
+                    AddBonusRow($"{attackType.GetDescription()} damage", string.Empty, string.Empty, ref y);
+                }
+                if (beast.IsSpellcaster && !beast.AttackTypes.Contains(AttackTypes.Magic))
+                {
+                    AddBonusRow($"{AttackTypes.Magic.GetDescription()} damage", string.Empty, string.Empty, ref y);
+                }
             }
         }
 

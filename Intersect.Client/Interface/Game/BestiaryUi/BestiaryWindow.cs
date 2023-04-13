@@ -305,7 +305,7 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
 
                 var name = nameUnlocked ? beast.Name : Strings.Bestiary.Unknown.ToString();
 
-                NameLabel.SetText(name);
+                NameLabel.SetText($"{name} - Tier {beast.Level}");
 
                 ResetImage();
 

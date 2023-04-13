@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
-
+using System.Linq;
 using Intersect.Enums;
 using Intersect.GameObjects.Conditions;
 using Intersect.GameObjects.Events;
@@ -435,6 +435,39 @@ namespace Intersect.GameObjects
         public bool NoStealthBonus { get; set; }
 
         public bool IsSpellcaster { get; set; }
+
+        // Used to have a cached reference to max spell damage when generating threat level
+        public static Dictionary<Guid, int> GenerateNpcSpellScalarDictionary()
+        {
+            var cachedNpcSpellScalar = new Dictionary<Guid, int>();
+            foreach (var kv in Lookup)
+            {
+                var npc = (NpcBase)kv.Value;
+
+                if (!npc.IsSpellcaster)
+                {
+                    continue;
+                }
+
+                var magicTypeSpells = npc?.Spells?
+                    .ToList()
+                    .Select(id => SpellBase.Get(id))
+                    .Where(s => s.Combat?.DamageTypes.Contains(Enums.AttackTypes.Magic) ?? false)
+                    .OrderByDescending(s => s.Combat?.Scaling ?? 0)
+                    .ToArray();
+
+                if (magicTypeSpells.Length > 0)
+                {
+                    cachedNpcSpellScalar[npc.Id] = magicTypeSpells.First()?.Combat?.Scaling ?? 100;
+                }
+                else
+                {
+                    cachedNpcSpellScalar[npc.Id] = 100;
+                }
+            }
+
+            return cachedNpcSpellScalar;
+        }
     }
 
 }

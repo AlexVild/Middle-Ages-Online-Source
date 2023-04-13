@@ -289,12 +289,17 @@ namespace Intersect.Server.Entities.PlayerData
             }
         }
 
-        private static void UpdateChallenge(ComboEarnedUpdate update)
+        private static void UpdateChallenge(ComboEarnedUpdate update, int enemyTier)
         {
-            var player = update.Player;
             foreach (var challenge in update.Challenges)
             {
-                if (player.WeaponCombo > 0 && player.WeaponCombo % challenge.Descriptor.Reps == 0)
+                if (challenge.Descriptor.MinTier > enemyTier)
+                {
+                    continue;
+                }
+
+                challenge.Streak++;
+                if (challenge.Streak > 0 && challenge.Streak % challenge.Descriptor.Reps == 0)
                 {
                     challenge.Sets++;
                 }

@@ -2320,5 +2320,8 @@ namespace Intersect.Server.Entities
         {
             return false;
         }
+
+        [NotMapped, JsonIgnore]
+        public virtual int TierLevel => -1;
     }
 }

@@ -237,5 +237,13 @@ namespace Intersect.Client.General
         public static long LastLevelJinglePlayed { get; set; } = 0L;
 
         public static LootAnimType CurrentLootAnim { get; set; } = LootAnimType.Chest;
+
+        public static Dictionary<Guid, int> CachedNpcSpellScalar = new Dictionary<Guid, int>();
+
+        public static void RefreshNpcSpellScalars()
+        {
+            CachedNpcSpellScalar.Clear();
+            CachedNpcSpellScalar = NpcBase.GenerateNpcSpellScalarDictionary();
+        }
     }
 }

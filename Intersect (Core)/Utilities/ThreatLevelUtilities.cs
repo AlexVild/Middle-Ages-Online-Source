@@ -44,7 +44,8 @@ namespace Intersect.Utilities
             long playerAttackSpeed, 
             long npcAttackSpeed,
             bool playerIsRanged,
-            bool npcSpellCaster)
+            bool npcSpellCaster,
+            int maxNpcScalar)
         {
             var ratio = GetThreatLevelRatio(playerVitals, playerStats, npcVitals, npcStats, playerMelee, npcMelee, playerAttackSpeed, npcAttackSpeed, playerIsRanged, npcSpellCaster);
             return GetThreatLevelFromRatio(ratio);
@@ -59,7 +60,8 @@ namespace Intersect.Utilities
             long playerAttackSpeed,
             long npcAttackSpeed,
             bool playerIsRanged,
-            bool npcSpellCaster)
+            bool npcSpellCaster,
+            int maxNpcScalar = 100)
         {
             var maxEnemyHp = npcVitals[(int)Vitals.Health];
             var maxHp = playerVitals[(int)Vitals.Health];
@@ -68,7 +70,11 @@ namespace Intersect.Utilities
             // wan't to use their melee attack types in those cases)
             var playerAttackTypes = CombatUtilities.EstimateEntityAttackTypes(playerStats, playerMelee);
             
-            var npcAttackTypes = CombatUtilities.EstimateEntityAttackTypes(npcStats, npcMelee);
+            var npcAttackTypes = npcMelee;
+            if (npcSpellCaster)
+            {
+                npcAttackTypes = new List<AttackTypes>() { AttackTypes.Magic };
+            }
 
             // If we've determined the player to be a spell caster, use global cool down instead of attack time
             if (playerAttackTypes.Count == 1 && playerAttackTypes[0] == AttackTypes.Magic)
@@ -81,13 +87,15 @@ namespace Intersect.Utilities
             CombatUtilities.CalculateDamage(playerAttackTypes, 1, 100, playerStats, npcStats, out var playerMax);
             CombatUtilities.CalculateDamage(npcAttackTypes, 1, 100, npcStats, playerStats, out var npcMax);
 
+            npcMax = (int)Math.Ceiling(maxNpcScalar / 100f * npcMax);
+
             var attacksToKill = Math.Ceiling((float)maxEnemyHp / playerMax);
             var attacksToDie = Math.Ceiling((float)maxHp / npcMax);
 
             // Make a best guess at how missed attacks might come in to play by elongating the amount of total attacks needed for death based on miss percentages
             if (playerIsRanged)
             {
-                playerStats[(int)Stats.Evasion] += 40; // Evasion boost in calculations for ranged attackers
+                playerStats[(int)Stats.Evasion] += 10; // Evasion boost in calculations for ranged attackers
             }
             var playerMissChance = CombatUtilities.MissChance(CombatUtilities.CalculateMissFactor(playerStats[(int)Stats.Accuracy], npcStats[(int)Stats.Evasion]));
             var npcMissChance = CombatUtilities.MissChance(CombatUtilities.CalculateMissFactor(npcStats[(int)Stats.Accuracy], playerStats[(int)Stats.Evasion]));
@@ -101,10 +109,13 @@ namespace Intersect.Utilities
              * then a player could kill that mob X# of times before the player would die. If X > 0,
              * then the mob could kill the player Floor(X) times over.
              */
-            var timeRatio = timeToKill / timeToDie;
+            return timeToKill / timeToDie;
+
+            // Deprecated attempt at factoring in time to the equation
+            /*var timeRatio = timeToKill / timeToDie;
             var timeDifference = Math.Abs(timeToDie - timeToKill);
 
-            return timeRatio / (timeDifference / 3000);
+            return timeRatio / (timeDifference / 3000);*/
         }
 
         /// <summary>
@@ -130,6 +141,7 @@ namespace Intersect.Utilities
             long npcAttackSpeed,
             bool[] rangedAttackers,
             bool npcSpellCaster,
+            int maxNpcScalar,
             int partySize)
         {
             var ratios = new double[partySize];
