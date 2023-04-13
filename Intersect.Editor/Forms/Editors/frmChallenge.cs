@@ -143,6 +143,9 @@ namespace Intersect.Editor.Forms.Editors
             cmbPic.SelectedIndex = cmbPic.FindString(TextUtils.NullToNone(mEditorItem.Icon));
             picItem.BackgroundImage?.Dispose();
             picItem.BackgroundImage = null;
+
+            nudMinTier.Value = mEditorItem.MinTier;
+
             if (cmbPic.SelectedIndex > 0)
             {
                 DrawIcon();
@@ -459,6 +462,11 @@ namespace Intersect.Editor.Forms.Editors
         private void txtRequirementDescription_TextChanged(object sender, EventArgs e)
         {
             mEditorItem.RequirementsString = txtRequirementDescription.Text;
+        }
+
+        private void nudMinTier_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.MinTier = (int)nudMinTier.Value;
         }
     }
 }

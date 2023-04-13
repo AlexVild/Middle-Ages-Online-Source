@@ -176,7 +176,7 @@ namespace Intersect.Client.Interface.Game.Components
                     }
                     else
                     {
-                        requirementText = $"Equipped weapon insufficient - Lvl. {RequiredLevel} {WeaponType} type or higher required for track progression.";
+                        requirementText = $"Equipped weapon insufficient - Lvl. {RequiredLevel} {WeaponType} type or higher required to progress.";
                     }
                 }
             }

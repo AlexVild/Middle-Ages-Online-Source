@@ -56,6 +56,8 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbPic = new DarkUI.Controls.DarkComboBox();
             this.picItem = new System.Windows.Forms.PictureBox();
             this.grpDetails = new DarkUI.Controls.DarkGroupBox();
+            this.nudMinTier = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblMinEnemyTier = new System.Windows.Forms.Label();
             this.lblChallengeDescription = new System.Windows.Forms.Label();
             this.txtDescription = new DarkUI.Controls.DarkTextBox();
             this.nudParam = new DarkUI.Controls.DarkNumericUpDown();
@@ -83,19 +85,17 @@ namespace Intersect.Editor.Forms.Editors
             this.lblName = new System.Windows.Forms.Label();
             this.btnSave = new DarkUI.Controls.DarkButton();
             this.btnCancel = new DarkUI.Controls.DarkButton();
-            this.lblMinEnemyTier = new System.Windows.Forms.Label();
-            this.nudMinTier = new DarkUI.Controls.DarkNumericUpDown();
             this.toolStrip.SuspendLayout();
             this.grpWeaponTypes.SuspendLayout();
             this.grpEditor.SuspendLayout();
             this.grpContractInfo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picItem)).BeginInit();
             this.grpDetails.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMinTier)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudParam)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudSets)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudReps)).BeginInit();
             this.grpUnlocks.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudMinTier)).BeginInit();
             this.SuspendLayout();
             // 
             // toolStrip
@@ -418,6 +418,35 @@ namespace Intersect.Editor.Forms.Editors
             this.grpDetails.TabIndex = 57;
             this.grpDetails.TabStop = false;
             this.grpDetails.Text = "Challenge Details";
+            // 
+            // nudMinTier
+            // 
+            this.nudMinTier.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudMinTier.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudMinTier.Location = new System.Drawing.Point(9, 135);
+            this.nudMinTier.Maximum = new decimal(new int[] {
+            10000000,
+            0,
+            0,
+            0});
+            this.nudMinTier.Name = "nudMinTier";
+            this.nudMinTier.Size = new System.Drawing.Size(89, 20);
+            this.nudMinTier.TabIndex = 121;
+            this.nudMinTier.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudMinTier.ValueChanged += new System.EventHandler(this.nudMinTier_ValueChanged);
+            // 
+            // lblMinEnemyTier
+            // 
+            this.lblMinEnemyTier.AutoSize = true;
+            this.lblMinEnemyTier.Location = new System.Drawing.Point(6, 119);
+            this.lblMinEnemyTier.Name = "lblMinEnemyTier";
+            this.lblMinEnemyTier.Size = new System.Drawing.Size(104, 13);
+            this.lblMinEnemyTier.TabIndex = 120;
+            this.lblMinEnemyTier.Text = "Minimum Enemy Tier";
             // 
             // lblChallengeDescription
             // 
@@ -794,34 +823,6 @@ namespace Intersect.Editor.Forms.Editors
             this.btnCancel.Text = "Cancel";
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
-            // lblMinEnemyTier
-            // 
-            this.lblMinEnemyTier.AutoSize = true;
-            this.lblMinEnemyTier.Location = new System.Drawing.Point(6, 119);
-            this.lblMinEnemyTier.Name = "lblMinEnemyTier";
-            this.lblMinEnemyTier.Size = new System.Drawing.Size(104, 13);
-            this.lblMinEnemyTier.TabIndex = 120;
-            this.lblMinEnemyTier.Text = "Minimum Enemy Tier";
-            // 
-            // nudMinTier
-            // 
-            this.nudMinTier.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudMinTier.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudMinTier.Location = new System.Drawing.Point(9, 135);
-            this.nudMinTier.Maximum = new decimal(new int[] {
-            10000000,
-            0,
-            0,
-            0});
-            this.nudMinTier.Name = "nudMinTier";
-            this.nudMinTier.Size = new System.Drawing.Size(89, 20);
-            this.nudMinTier.TabIndex = 121;
-            this.nudMinTier.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            // 
             // frmChallenge
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -848,12 +849,12 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.picItem)).EndInit();
             this.grpDetails.ResumeLayout(false);
             this.grpDetails.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMinTier)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudParam)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudSets)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudReps)).EndInit();
             this.grpUnlocks.ResumeLayout(false);
             this.grpUnlocks.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudMinTier)).EndInit();
             this.ResumeLayout(false);
 
         }
