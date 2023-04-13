@@ -119,11 +119,6 @@ namespace Intersect.Server.Entities
                     continue;
                 }
 
-                if (instance.Challenge.Type == ChallengeType.MissFreeAtRange)
-                {
-                    MissFreeRangeDict[instance.Challenge.Param] = 0;
-                }
-
                 var progress = new ChallengeProgress(instance, this);
                 ChallengesInProgress.Add(progress);
             }
@@ -158,8 +153,6 @@ namespace Intersect.Server.Entities
             DoTChallengeMap.Clear();
             DamageTakenMap.Clear();
             BeastsKilledOverTime.Clear();
-
-            MissFreeRangeDict.Clear();
 
             LastWeaponSwitch = Timing.Global.Milliseconds + ChallengeWeaponSwitchTimer;
         }

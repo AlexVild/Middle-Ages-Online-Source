@@ -682,7 +682,6 @@ namespace Intersect.Server.Entities
             if (spellBase != null)
             {
                 int entitiesHit = 0;
-                int nonTrivialEntitiesHit = 0;
                 var startMap = MapController.Get(startMapId);
                 foreach (var instance in MapController.GetSurroundingMapInstances(startMapId, MapInstanceId, true))
                 {
@@ -725,11 +724,6 @@ namespace Intersect.Server.Entities
                             }
                         }
 
-                        if (this is Player player && entity.IsNonTrivialTo(player))
-                        {
-                            nonTrivialEntitiesHit++;
-                        }
-
                         SpellAttack(entity, spellBase, (sbyte)Directions.Up, null); //Handle damage
                         SendSpellHitAnimation(spellBase, entity, entity.Id);
                         entitiesHit++;
@@ -744,9 +738,9 @@ namespace Intersect.Server.Entities
                     SendMissedAttackMessage(this, DamageType.True);
                     AttackMissed.Invoke(null);
                 }
-                if (this is Player && nonTrivialEntitiesHit > 1)
+                if (this is Player && entitiesHit > 1)
                 {
-                    ChallengeUpdateProcesser.UpdateChallengesOf(new AoEHitsUpdate((Player)this, nonTrivialEntitiesHit));
+                    ChallengeUpdateProcesser.UpdateChallengesOf(new AoEHitsUpdate((Player)this, entitiesHit));
                 }
             }
         }

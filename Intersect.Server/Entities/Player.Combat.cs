@@ -130,7 +130,7 @@ namespace Intersect.Server.Entities
 
             if (damageWasDealt && damage > 0 && enemy is Npc)
             {
-                ChallengeUpdateProcesser.UpdateChallengesOf(new DamageOverTimeUpdate(this, damage));
+                ChallengeUpdateProcesser.UpdateChallengesOf(new DamageOverTimeUpdate(this, damage), enemy.Level);
                 ChallengeUpdateProcesser.UpdateChallengesOf(new MissFreeUpdate(this), enemy.Level);
 
                 // For challenges where we don't want DoT values fudging the challenge - cheap fix
@@ -138,15 +138,7 @@ namespace Intersect.Server.Entities
                 {
                     ChallengeUpdateProcesser.UpdateChallengesOf(new MaxHitUpdate(this, damage));
                     ChallengeUpdateProcesser.UpdateChallengesOf(new DamageAtRangeUpdate(this, damage, range));
-
-                    foreach (var rangeReq in MissFreeRangeDict.Keys.ToArray())
-                    {
-                        if (rangeReq <= range)
-                        {
-                            MissFreeRangeDict[rangeReq]++;
-                            ChallengeUpdateProcesser.UpdateChallengesOf(new MissFreeAtRangeUpdate(this, MissFreeRangeDict[rangeReq], range));
-                        }
-                    }
+                    ChallengeUpdateProcesser.UpdateChallengesOf(new MissFreeAtRangeUpdate(this, range), enemy.Level);
 
                     ChallengeUpdateProcesser.UpdateChallengesOf(new HitFreeUpdate(this), enemy.Level);
                 }
@@ -688,12 +680,11 @@ namespace Intersect.Server.Entities
         protected override void AttackingEntity_AttackMissed(Entity target)
         {
             MissFreeStreakEnd();
-            MissFreeRangeDict.Clear();
         }
 
         private void MissFreeStreakEnd()
         {
-            foreach (var challenge in ChallengesInProgress.Where(c => c.Type == ChallengeType.MissFreeStreak))
+            foreach (var challenge in ChallengesInProgress.Where(c => c.Type == ChallengeType.MissFreeStreak || c.Type == ChallengeType.MissFreeAtRange))
             {
                 challenge.Streak = 0;
             }

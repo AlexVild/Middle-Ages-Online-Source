@@ -205,9 +205,8 @@ namespace Intersect.Server.Entities.PlayerData
         public int CurrentStreak { get; set; }
         public int Range { get; set; }
 
-        public MissFreeAtRangeUpdate(Player player, int streak, int range) : base(player)
+        public MissFreeAtRangeUpdate(Player player, int range) : base(player)
         {
-            CurrentStreak = streak;
             Range = range;
         }
     }
@@ -302,7 +301,7 @@ namespace Intersect.Server.Entities.PlayerData
             }
         }
 
-        private static void UpdateChallenge(DamageOverTimeUpdate update)
+        private static void UpdateChallenge(DamageOverTimeUpdate update, int enemyTier)
         {
             var player = update.Player;
 
@@ -319,6 +318,11 @@ namespace Intersect.Server.Entities.PlayerData
             // Now, go through the player's active challenges...
             foreach (var challenge in update.Challenges)
             {
+                if (challenge.Descriptor.MinTier > enemyTier)
+                {
+                    continue;
+                }
+
                 // Then, add our new damage with its challenge-appropriate time stamp
                 var expiryTime = now + challenge.Descriptor.Param;
                 var data = new KeyValuePair<long, int>(expiryTime, update.DamageDone);
@@ -419,7 +423,7 @@ namespace Intersect.Server.Entities.PlayerData
             }
         }
 
-        private static void UpdateChallenge(BeastsKilledOverTime update)
+        private static void UpdateChallenge(BeastsKilledOverTime update, int enemyTier)
         {
             var player = update.Player;
 
@@ -434,6 +438,11 @@ namespace Intersect.Server.Entities.PlayerData
 
             foreach (var challenge in update.Challenges)
             {
+                if (challenge.Descriptor.MinTier > enemyTier)
+                {
+                    continue;
+                }
+
                 var expiryTime = now + challenge.Descriptor.Param;
                 var data = new KeyValuePair<long, Guid>(expiryTime, update.BeastId);
 
@@ -476,13 +485,19 @@ namespace Intersect.Server.Entities.PlayerData
             }
         }
 
-        private static void UpdateChallenge(MissFreeAtRangeUpdate update)
+        private static void UpdateChallenge(MissFreeAtRangeUpdate update, int enemyTier)
         {
             foreach (var challenge in update.Challenges)
             {
                 var desc = challenge.Descriptor;
-                if (update.CurrentStreak > 0 && 
-                    update.CurrentStreak % desc.Reps == 0
+                if (desc.MinTier > enemyTier || update.Range < desc.Param)
+                {
+                    continue;
+                }
+
+                challenge.Streak++;
+                if (challenge.Streak > 0 &&
+                    challenge.Streak % desc.Reps == 0
                     && update.Range >= desc.Param)
                 {
                     challenge.Sets++;
