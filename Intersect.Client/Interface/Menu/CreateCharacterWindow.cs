@@ -845,7 +845,6 @@ namespace Intersect.Client.Interface.Menu
             mAvailableEyes.Clear();
             mAvailableEyes.Add("");
             mAvailableClothes.Clear();
-            mAvailableClothes.Add("");
             mAvailableExtras.Clear();
             mAvailableExtras.Add("");
             mAvailableBeards.Clear();
@@ -927,8 +926,33 @@ namespace Intersect.Client.Interface.Menu
                     }
                 }
             }
+
+            // Sort clothing so that default is first, as these always need selected
+            clothes.Sort(new DefaultComparer());
+            // Set defaults
+            if (clearSelection)
+            {
+                mSelectedDecors[(int)Options.Instance.PlayerOpts.ShirtSlot] = clothes[0];
+            }
         }
 
+    }
+
+    class DefaultComparer : IComparer<string>
+    {
+        public int Compare(string x, string y)
+        {
+            if (x.Contains("default"))
+            {
+                return -1;
+            }
+            if (y.Contains("default"))
+            {
+                return 1;
+            }
+
+            return 0;
+        }
     }
 
     public partial class CreateCharacterWindow

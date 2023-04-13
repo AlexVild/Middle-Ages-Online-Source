@@ -131,6 +131,10 @@ namespace Intersect.Config
         };
 
         public int HairSlot = 0;
+        
+        public int EyeSlot = 1;
+        
+        public int ShirtSlot = 2;
 
         public int BeardSlot = 4;
 
