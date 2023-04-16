@@ -546,66 +546,18 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                 {
                     Globals.CachedNpcSpellScalar.TryGetValue(npc.Id, out npcDamageScalar);
                 }
-                
-                // Are we in a party? Use party calculations
-                if (Globals.Me.Party?.Count > 1)
-                {
-                    var party = Globals.Me.Party;
-                    var totalMembers = Globals.Me.Party.Count;
-                    var vitals = party.Select(member => member.MaxVital).ToArray();
 
-                    var validMembers = party.Where(member => Globals.Entities.TryGetValue(member.Id, out _)).Select(member => Globals.Entities[member.Id] as Player);
-
-                    var stats = validMembers.Select(member => member.Stat).ToArray();
-                    var meleeTypes = validMembers.Select(member =>
-                    {
-                        if (member.TryGetEquippedWeaponDescriptor(out var partyWeapon))
-                        {
-                            return partyWeapon.AttackTypes;
-                        }
-                        return new List<AttackTypes>() { AttackTypes.Blunt };
-                    }).ToArray();
-
-                    var attackSpeeds = validMembers.Select(member => (long)member.AttackSpeed()).ToArray();
-
-                    var rangedPartyMembers = validMembers.Select(member =>
-                    {
-                        if (!member.TryGetEquippedWeaponDescriptor(out var eqpPartyMemWeapon))
-                        {
-                            return false;
-                        }
-
-                        return eqpPartyMemWeapon.ProjectileId != Guid.Empty;
-                    }).ToArray();
-
-                    threatLevel = ThreatLevelUtilities.DetermineNpcThreatLevelParty(vitals,
-                        stats,
-                        npc.MaxVital,
-                        npc.Stats,
-                        meleeTypes,
-                        npc.AttackTypes,
-                        attackSpeeds,
-                        npc.AttackSpeedValue,
-                        rangedPartyMembers,
-                        npc.IsSpellcaster,
-                        npcDamageScalar,
-                        totalMembers);
-                }
-                // Are we alone? use a single-person calc
-                else
-                {
-                    threatLevel = ThreatLevelUtilities.DetermineNpcThreatLevel(Globals.Me.MaxVital,
-                        Globals.Me.Stat,
-                        npc.MaxVital,
-                        npc.Stats,
-                        playerMelee,
-                        npc.AttackTypes,
-                        Globals.Me.AttackSpeed(),
-                        npc.AttackSpeedValue,
-                        Globals.Me.TryGetEquippedWeaponDescriptor(out weapon) ? weapon.ProjectileId != Guid.Empty : false,
-                        npc.IsSpellcaster,
-                        npcDamageScalar);
-                }
+                threatLevel = ThreatLevelUtilities.DetermineNpcThreatLevel(Globals.Me.MaxVital,
+                       Globals.Me.Stat,
+                       npc.MaxVital,
+                       npc.Stats,
+                       playerMelee,
+                       npc.AttackTypes,
+                       Globals.Me.AttackSpeed(),
+                       npc.AttackSpeedValue,
+                       Globals.Me.TryGetEquippedWeaponDescriptor(out weapon) ? weapon.ProjectileId != Guid.Empty : false,
+                       npc.IsSpellcaster,
+                       npcDamageScalar);
 
                 ThreatLevelText.SetText(threatLevel.GetDescription());
                 if (!ThreatLevelUtilities.ColorMapping.TryGetValue(threatLevel, out var color))

@@ -3103,7 +3103,7 @@ namespace Intersect.Client.Entities
 
         public void DrawStatuses()
         {
-            if (Texture == null)
+            if (Texture == null || (IsStealthed() && !IsAllyOf(Globals.Me)))
             {
                 return;
             }

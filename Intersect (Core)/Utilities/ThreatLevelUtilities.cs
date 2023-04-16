@@ -147,7 +147,9 @@ namespace Intersect.Utilities
             var ratios = new double[partySize];
             for (var i = 0; i < partySize; i++)
             {
-                var ratio = GetThreatLevelRatio(playerVitals[i],
+                try
+                {
+                    var ratio = GetThreatLevelRatio(playerVitals[i],
                     playerStats[i],
                     npcVitals,
                     npcStats,
@@ -155,9 +157,15 @@ namespace Intersect.Utilities
                     npcMelee,
                     playerAttackSpeed[i],
                     npcAttackSpeed,
-                    rangedAttackers[i], 
+                    rangedAttackers[i],
                     npcSpellCaster) - (Options.Instance.CombatOpts.ThreatLevelDeductionPerPartyMember * partySize);
-                ratios[i] = Math.Max(ratio, 0d);
+                    ratios[i] = Math.Max(ratio, 0d);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Here");
+                    throw (e);
+                }
             }
 
             return GetThreatLevelFromRatio(ratios.Min());

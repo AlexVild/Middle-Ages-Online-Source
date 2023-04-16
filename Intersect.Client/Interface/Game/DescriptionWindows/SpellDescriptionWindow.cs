@@ -80,6 +80,10 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                     SetupCombatInfo();
                     break;
                 case SpellTypes.Dash:
+                    if (mSpell.Dash.Spell != default)
+                    {
+                        SetupCombatInfo(mSpell.Dash.Spell);
+                    }
                     SetupDashInfo();
                     break;
             }
@@ -240,10 +244,10 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 var attackTypes = CombatUtilities.GetSpellAttackTypes(spell, equippedWeapon);
                 foreach (var attackType in attackTypes)
                 {
-                    var valueColor = mSpell.WeaponSpell && !mSpell.Combat.DamageTypes.Contains(attackType) ? WeaponInheritColor : StatValueColor;
+                    var valueColor = spell.WeaponSpell && !spell.Combat.DamageTypes.Contains(attackType) ? WeaponInheritColor : StatValueColor;
 
                     var notice = string.Empty;
-                    if (mSpell.DamageOverrides.TryGetValue((int)attackType, out var ovrride) && ovrride != 0)
+                    if (spell.DamageOverrides.TryGetValue((int)attackType, out var ovrride) && ovrride != 0)
                     {
                         valueColor = CustomColors.ItemDesc.Notice;
                         notice = " (static)";
@@ -261,8 +265,8 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 }
 
                 var projectileTimes = 1;
-                var projectile = mSpell.Combat.Projectile;
-                if (mSpell.Combat.Projectile != default)
+                var projectile = spell.Combat.Projectile;
+                if (spell.Combat.Projectile != default)
                 {
                     projectileTimes = projectile.Quantity;
                 }
@@ -302,8 +306,8 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 // Otherwise, calculate damage
                 else
                 {
-                    var valueColor = mSpell.WeaponSpell ? WeaponInheritColor : StatValueColor;
-                    CombatUtilities.CalculateDamage(attackTypes, 1.0, mSpell.Combat.Scaling, CombatUtilities.GetOverriddenStats(mSpell.DamageOverrides, Globals.Me.Stat), new int[(int)Stats.StatCount], out var healthDamage);
+                    var valueColor = spell.WeaponSpell ? WeaponInheritColor : StatValueColor;
+                    CombatUtilities.CalculateDamage(attackTypes, 1.0, spell.Combat.Scaling, CombatUtilities.GetOverriddenStats(spell.DamageOverrides, Globals.Me.Stat), new int[(int)Stats.StatCount], out var healthDamage);
 
                     if (projectileTimes > 1)
                     {
@@ -349,11 +353,11 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 // Crit Chance
                 if (spell.Combat.CritChance > 0)
                 {
-                    var valueColor = mSpell.WeaponSpell ? WeaponInheritColor : StatValueColor;
+                    var valueColor = spell.WeaponSpell ? WeaponInheritColor : StatValueColor;
 
-                    var critChance = mSpell.Combat.CritChance;
-                    var critMulti = mSpell.Combat.CritMultiplier;
-                    if (mSpell.WeaponSpell)
+                    var critChance = spell.Combat.CritChance;
+                    var critMulti = spell.Combat.CritMultiplier;
+                    if (spell.WeaponSpell)
                     {
                         critChance += equippedWeapon?.CritChance ?? 0;
                         critMulti += equippedWeapon?.CritMultiplier ?? 0;
@@ -475,11 +479,6 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             {
                 rows.AddKeyValueRow(Strings.SpellDescription.IgnoreZDimension, String.Empty);
             }*/
-
-            if (mSpell.Dash.Spell != null)
-            {
-                SetupCombatInfo();
-            }
 
             // Resize and position the container.
             rows.SizeToChildren(true, true);

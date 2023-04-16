@@ -1772,6 +1772,7 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
+            
             if (player.Party != null && player.Party.Count > 2)
             {
                 return player.GetThreatLevelInPartyFor(this) < ThreatLevel.Trivial;
