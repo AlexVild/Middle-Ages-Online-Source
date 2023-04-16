@@ -138,6 +138,11 @@ namespace Intersect.Utilities
                 totalDamage += Randomization.Next(low, high + 1);
             }
 
+            if (totalDamage > 0)
+            {
+                totalDamage *= -1;
+            }
+
             return (int)Math.Round(totalDamage * critMultiplier);
         }
 
