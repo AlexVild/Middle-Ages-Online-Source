@@ -523,6 +523,8 @@ namespace Intersect.Server.Entities
             // End combo
             EndCombo();
 
+            StopCrafting();
+
             //Update trade
             CancelTrade();
 
