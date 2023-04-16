@@ -2249,10 +2249,10 @@ namespace Intersect.Server.Entities
             PacketSender.SendInstanceLivesPacket(this, (byte)InstanceLives, false);
             if (InstanceLives > 0)
             {
-                PacketSender.SendChatMsg(this, Strings.Parties.instancelivesremaining.ToString(InstanceLives), ChatMessageType.Party, CustomColors.Chat.PartyChat);
+                PacketSender.SendChatMsg(this, Strings.Parties.instancelivesremaining.ToString(InstanceLives + 1), ChatMessageType.Party, CustomColors.Chat.PartyChat);
             } else
             {
-                PacketSender.SendChatMsg(this, Strings.Parties.nomorelivesremaining.ToString(InstanceLives), ChatMessageType.Party, CustomColors.Chat.PartyChat);
+                PacketSender.SendChatMsg(this, Strings.Parties.nomorelivesremaining.ToString(InstanceLives + 1), ChatMessageType.Party, CustomColors.Chat.PartyChat);
             }
         }
 
