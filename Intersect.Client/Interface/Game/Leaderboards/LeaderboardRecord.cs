@@ -18,7 +18,8 @@ namespace Intersect.Client.Interface.Game.Leaderboards
         public ImagePanel RecordBackground { get; set; }
         private Label RecordIndex { get; set; }
         private Label RecordValue { get; set; }
-        private Label RecordHolder { get; set; }
+        private Label RecordHolderTemplate { get; set; }
+        private RichLabel RecordHolder { get; set; }
 
         public LeaderboardRecord(Base container, Record record)
         {
@@ -27,25 +28,19 @@ namespace Intersect.Client.Interface.Game.Leaderboards
             
             RecordBackground = new ImagePanel(Container, "LeaderboardRecord");
 
-            RecordIndex = new Label(RecordBackground, "RecordIndex")
-            {
-                Text = (record.Index + 1).ToString()
-            };
+            RecordIndex = new Label(RecordBackground, "RecordIndex");
 
-            RecordValue = new Label(RecordBackground, "RecordValue")
-            {
-                Text = record.Value
-            };
+            RecordValue = new Label(RecordBackground, "RecordValue");
 
-            RecordHolder = new Label(RecordBackground, "RecordHolder")
-            {
-                Text = record.Holder
-            };
+            RecordHolderTemplate = new Label(RecordBackground, "RecordHolder");
+            RecordHolder = new RichLabel(RecordBackground);
         }
 
-        public void Initialize()
+        public void Initialize(Record record)
         {
             RecordBackground.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
+            SetRecord(record);
+            ResizeBackground();
         }
 
         public void Dispose()
@@ -56,9 +51,28 @@ namespace Intersect.Client.Interface.Game.Leaderboards
         public void SetRecord(Record record)
         {
             CurrentRecord = record;
-            RecordIndex.Text = record.Index.ToString();
+            RecordIndex.Text = (record.Index + 1).ToString();
             RecordValue.Text = record.Value;
-            RecordHolder.Text = record.Holder;
+            RecordHolder.SetText(record.Holder, RecordHolderTemplate, 196);
+            RecordHolder.Y += RecordHolderTemplate.Padding.Top;
+        }
+
+        /// <summary>
+        /// Resizes the background based on how many lines the holder label has generated
+        /// </summary>
+        public void ResizeBackground()
+        {
+            var lines = RecordHolder.Labels.Count;
+            if (lines > 1)
+            {
+                for (var i = 1; i < lines; i++)
+                {
+                    var line = RecordHolder.Labels[i];
+
+                    var lineHeight = line.TextHeight;
+                    RecordBackground.Height += lineHeight;
+                }
+            }
         }
     }
 }

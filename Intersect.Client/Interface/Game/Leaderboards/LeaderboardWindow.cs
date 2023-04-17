@@ -159,11 +159,12 @@ namespace Intersect.Client.Interface.Game.Leaderboards
         {
             ClearRecords();
             var idx = 0;
+            var lastY = 0;
             foreach (var record in CurrentLeaderboard.Records)
             {
                 var row = new LeaderboardRecord(RecordContainer, record);
                 Records.Add(row);
-                row.Initialize();
+                row.Initialize(record);
                 
                 if (idx % 2 == 1)
                 {
@@ -181,7 +182,8 @@ namespace Intersect.Client.Interface.Game.Leaderboards
                     }
                 }
 
-                row.RecordBackground.Y += idx * row.RecordBackground.Height;
+                row.RecordBackground.Y = lastY;
+                lastY += row.RecordBackground.Height;
                 idx++;
             }
         }
