@@ -196,9 +196,9 @@ namespace Intersect.Client.Interface.Game.Character.Equipment
             var hideBeard = false;
             var hideExtra = false;
             var shortHair = false;
-            if (Globals.Me.MyEquipment[Options.HelmetIndex] > -1)
+            if (Globals.Me.Cosmetics[Options.HelmetIndex] != Guid.Empty)
             {
-                var helmet = ItemBase.Get(Globals.Me.Inventory[Globals.Me.MyEquipment[Options.HelmetIndex]].ItemId);
+                var helmet = ItemBase.Get(Globals.Me.Cosmetics[Options.HelmetIndex]);
                 if (helmet != null)
                 {
                     hideHair = helmet.HideHair;
@@ -207,9 +207,9 @@ namespace Intersect.Client.Interface.Game.Character.Equipment
                     shortHair = helmet.ShortHair;
                 }
             }
-            else if (Globals.Me.Cosmetics[Options.HelmetIndex] != Guid.Empty)
+            else if (Globals.Me.MyEquipment[Options.HelmetIndex] > -1)
             {
-                var helmet = ItemBase.Get(Globals.Me.Cosmetics[Options.HelmetIndex]);
+                var helmet = ItemBase.Get(Globals.Me.Inventory[Globals.Me.MyEquipment[Options.HelmetIndex]].ItemId);
                 if (helmet != null)
                 {
                     hideHair = helmet.HideHair;
@@ -278,7 +278,7 @@ namespace Intersect.Client.Interface.Game.Character.Equipment
                 else if (Options.DecorSlots.IndexOf(Options.PaperdollOrder[1][z]) > -1)
                 {
                     var slotToDraw = Options.DecorSlots.IndexOf(Options.PaperdollOrder[1][z]);
-                    if (slotToDraw == Options.HairSlot && hideHair
+                    if ((slotToDraw == Options.HairSlot && hideHair && !shortHair)
                         || slotToDraw == Options.BeardSlot && hideBeard
                         || slotToDraw == Options.ExtraSlot && hideExtra)
                     {

@@ -532,6 +532,7 @@ namespace Intersect.Editor.Forms.Editors
                 chkHelmHideBeard.Checked = Convert.ToBoolean(mEditorItem.HideBeard);
                 chkHelmHideExtra.Checked = Convert.ToBoolean(mEditorItem.HideExtra);
                 chkShortHair.Checked = mEditorItem.ShortHair;
+                chkShortHair.Enabled = chkHelmHideHair.Checked;
 
                 lstTags.Items.Clear();
                 foreach (string tag in mEditorItem.Tags)

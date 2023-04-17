@@ -911,9 +911,9 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                 var hideBeard = false;
                 var hideExtra = false;
                 var shortHair = false;
-                if (equipment[Options.HelmetIndex] != Guid.Empty)
+                if (MyEntity is Player cosmeticOvr && cosmeticOvr.Cosmetics[Options.HelmetIndex] != Guid.Empty)
                 {
-                    var helmet = ItemBase.Get(equipment[Options.HelmetIndex]);
+                    var helmet = ItemBase.Get(cosmeticOvr.Cosmetics[Options.HelmetIndex]);
                     if (helmet != null)
                     {
                         hideHair = helmet.HideHair;
@@ -922,9 +922,9 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                         shortHair = helmet.ShortHair;
                     }
                 }
-                else if (MyEntity is Player cosmeticOvr && cosmeticOvr.Cosmetics[Options.HelmetIndex] != Guid.Empty)
+                else if (equipment[Options.HelmetIndex] != Guid.Empty)
                 {
-                    var helmet = ItemBase.Get(cosmeticOvr.Cosmetics[Options.HelmetIndex]);
+                    var helmet = ItemBase.Get(equipment[Options.HelmetIndex]);
                     if (helmet != null)
                     {
                         hideHair = helmet.HideHair;
@@ -991,7 +991,7 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                     {
                         var slotToDraw = Options.DecorSlots.IndexOf(paperdollSlot);
 
-                        if (slotToDraw == Options.HairSlot && hideHair
+                        if ((slotToDraw == Options.HairSlot && hideHair && !shortHair)
                             || slotToDraw == Options.BeardSlot && hideBeard
                             || slotToDraw == Options.ExtraSlot && hideExtra)
                         {

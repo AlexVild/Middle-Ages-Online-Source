@@ -1235,24 +1235,24 @@ namespace Intersect.Client.Entities
                             var hideExtra = false;
                             var shortHair = false;
 
-                            if (Equipment[Options.HelmetIndex] != Guid.Empty)
+                            if (this is Player cosmeticOvr && cosmeticOvr.Cosmetics[Options.HelmetIndex] != Guid.Empty)
                             {
-                                var helmet = ItemBase.Get(Equipment[Options.HelmetIndex]);
+                                var helmet = ItemBase.Get(cosmeticOvr.Cosmetics[Options.HelmetIndex]);
                                 hideHair = helmet.HideHair;
                                 hideBeard = helmet.HideBeard;
                                 hideExtra = helmet.HideExtra;
                                 shortHair = helmet.ShortHair;
 
-                                if (decorSlot == Options.HairSlot && hideHair
+                                if ((decorSlot == Options.HairSlot && hideHair && !shortHair)
                                     || decorSlot == Options.BeardSlot && hideBeard
                                     || decorSlot == Options.ExtraSlot && hideExtra)
                                 {
                                     continue;
                                 }
                             }
-                            else if (this is Player cosmeticOvr && cosmeticOvr.Cosmetics[Options.HelmetIndex] != Guid.Empty)
+                            else if (Equipment[Options.HelmetIndex] != Guid.Empty)
                             {
-                                var helmet = ItemBase.Get(cosmeticOvr.Cosmetics[Options.HelmetIndex]);
+                                var helmet = ItemBase.Get(Equipment[Options.HelmetIndex]);
                                 hideHair = helmet.HideHair;
                                 hideBeard = helmet.HideBeard;
                                 hideExtra = helmet.HideExtra;

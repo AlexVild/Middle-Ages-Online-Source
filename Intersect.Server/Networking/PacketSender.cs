@@ -1508,7 +1508,7 @@ namespace Intersect.Server.Networking
                     characters.Add(
                         new CharacterPacket(
                             character.Id, character.Name, character.Sprite, character.Face, character.Level,
-                            ClassBase.GetName(character.ClassId), equipment, decor, hideHair, hideBeard, hideExtra
+                            ClassBase.GetName(character.ClassId), equipment, decor, hideHair && !shortHair, hideBeard, hideExtra
                         )
                     );
                 }
