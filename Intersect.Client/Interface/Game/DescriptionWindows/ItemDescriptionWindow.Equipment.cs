@@ -209,7 +209,8 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                     EquippedItemDesc?.PercentageStatsGiven[(int)stat],
                     false,
                     StatLabelColor,
-                    StatValueColor);
+                    StatValueColor,
+                    unit: "%");
             }
 
             statRows.SizeToChildren(true, true);
@@ -423,12 +424,13 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                     ItemInstanceHelper.GetVitalBoost(EquippedItem?.ItemProperties, vital));
                 
                 AddEquipmentRow(vitalRows,
-                    Strings.ItemDescription.Vitals[(int)vital],
+                    Strings.ItemDescription.VitalPercentages[(int)vital],
                     mItem.PercentageVitalsGiven[(int)vital],
                     EquippedItemDesc?.PercentageVitalsGiven[(int)vital],
                     false,
                     StatLabelColor,
-                    StatValueColor);
+                    StatValueColor,
+                    unit: "%");
             }
             foreach (Vitals vital in Enum.GetValues(typeof(Vitals)))
             {
@@ -609,6 +611,11 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 return true;
             }
 
+            if (mItem.PercentageVitalsGiven.Any(v => v != 0))
+            {
+                return true;
+            }
+
             if (mItem.VitalsRegen.Any(v => v != 0))
             {
                 return true;
@@ -625,6 +632,11 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             }
 
             if (EquippedItemDesc.VitalsGiven.Any(v => v != 0))
+            {
+                return true;
+            }
+
+            if (EquippedItemDesc.PercentageVitalsGiven.Any(v => v != 0))
             {
                 return true;
             }
