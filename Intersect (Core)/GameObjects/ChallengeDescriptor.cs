@@ -260,11 +260,11 @@ namespace Intersect.GameObjects
                 case ChallengeType.DamageTakenOverTime:
                     if (Reps > 1)
                     {
-                        return $"Receive {Reps} damage over a period of {SecondsParam}, {Sets} times.";
+                        return $"Receive {Reps} damage over a period of {SecondsParam} seconds, {Sets} times.";
                     }
                     else
                     {
-                        return $"Receive {Reps} damage over a period of {SecondsParam}.";
+                        return $"Receive {Reps} damage over a period of {SecondsParam} seconds.";
                     }
 
                 case ChallengeType.HitFreeStreak:

@@ -158,10 +158,14 @@ namespace Intersect.Server.Entities
             var spellOverride = Base?.SpellAttackOverrideId ?? default;
             if (spellOverride != default)
             {
+                if (!MeleeAvailable())
+                {
+                    return;
+                }
                 var spell = SpellBase.Get(spellOverride);
                 if (Timing.Global.MillisecondsUtc > mLastOverrideAttack)
                 {
-                    UseSpell(spell, -1, enemy);
+                    UseSpell(spell, -1, enemy, instantCast: true);
                     mLastOverrideAttack = Timing.Global.MillisecondsUtc + CalculateAttackTime();
                 }
 
