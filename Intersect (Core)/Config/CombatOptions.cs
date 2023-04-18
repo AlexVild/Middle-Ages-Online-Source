@@ -86,6 +86,8 @@ namespace Intersect.Config
 
         public string PlayerDeathAnimationId = "a306ad8b-c58c-4d27-b94b-86dd7173dfd8";
 
+        public string BloodshedItemId = "c4b9e542-9ce2-43a0-bcbd-f2e007058823";
+
         public bool HideResourceHealthBars = true;
 
         public float DefaultBackstabMultiplier = 1.25f;

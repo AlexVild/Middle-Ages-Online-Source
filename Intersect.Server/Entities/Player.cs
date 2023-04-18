@@ -8645,6 +8645,9 @@ namespace Intersect.Server.Entities
 
             var itemsLostString = new List<string>();
             ItemsLost = new List<Item>();
+
+            // Store our luck before dropping items!
+            var luck = GetBonusEffectTotal(EffectType.Luck);
             for (var n = 0; n < Items.Count; n++)
             {
                 if (Items[n] == null)
@@ -8661,19 +8664,17 @@ namespace Intersect.Server.Entities
                     continue;
                 }
 
-                //Don't lose non-droppable or equipment-type items
-                if (!itemBase.CanDrop || itemBase.ItemType == ItemTypes.Equipment)
+                //Don't lose non-droppable or equipped items
+                if (!itemBase.CanDrop || (itemBase.ItemType == ItemTypes.Equipment && EquippedItems[itemBase.EquipmentSlot] == Items[n]))
                 {
                     continue;
                 }
 
-                //Calculate the killers luck (If they are a player)
                 var playerKiller = killer as Player;
-                var luck = playerKiller?.GetBonusEffectTotal(EffectType.Luck);
 
                 Guid lootOwner = Guid.Empty;
                 // If the player has some luck, then there's a chance they keep some items
-                if (Randomization.Next(1, 101) <= luck)
+                if (Randomization.Next(1, 101) <= luck && itemBase.Id.ToString() != Options.Combat.BloodshedItemId)
                 {
                     continue;
                 }
