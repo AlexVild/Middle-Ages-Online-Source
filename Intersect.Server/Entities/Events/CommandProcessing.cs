@@ -126,8 +126,9 @@ namespace Intersect.Server.Entities.Events
 #if DEBUG
                         throw new NotImplementedException(errMsg);
 #else
-                        Logging.Log.Error(errMsg)
+                        Logging.Log.Error(errMsg);
 #endif
+                        break;
                 }
             }
             else

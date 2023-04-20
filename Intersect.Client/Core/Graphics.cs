@@ -177,9 +177,16 @@ namespace Intersect.Client.Core
                 return;
             }
 
+            var introImages = ClientConfiguration.Instance.IntroImages;
+
+            if (Globals.IntroIndex < 0 || Globals.IntroIndex >= introImages.Count)
+            {
+                return;
+            }
+
             var imageTex = sContentManager.GetTexture(
-                GameContentManager.TextureType.Image, ClientConfiguration.Instance.IntroImages[Globals.IntroIndex]
-            );
+                    GameContentManager.TextureType.Image, introImages[Globals.IntroIndex]
+                );
             if (Globals.AnimatedIntro)
             {
                 AnimateIntro();

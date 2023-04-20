@@ -3532,8 +3532,9 @@ namespace Intersect.Server.Entities
         /// <param name="amount">The amount of this item we intend to take away from the player.</param>
         /// <param name="handler">The method in which we intend to handle taking away the item from our player.</param>
         /// <param name="sendUpdate">Do we need to send an inventory update after taking away the item.</param>
+        /// <param name="forceTake">Do we force take and ignore destruction reqs?</param>
         /// <returns></returns>
-        public bool TryTakeItem(InventorySlot slot, int amount, ItemHandling handler = ItemHandling.Normal, bool sendUpdate = true)
+        public bool TryTakeItem(InventorySlot slot, int amount, ItemHandling handler = ItemHandling.Normal, bool sendUpdate = true, bool forceTake = false)
         {
             if (Items == null || slot == Item.None || slot == null)
             {
@@ -3574,7 +3575,7 @@ namespace Intersect.Server.Entities
 
             // Figure out what we're dealing with here.
             var itemDescriptor = slot.Descriptor;
-            if (itemDescriptor.CanDestroy && !(Conditions.MeetsConditionLists(itemDescriptor.DestroyRequirements, this, null)))
+            if (itemDescriptor.CanDestroy && !(Conditions.MeetsConditionLists(itemDescriptor.DestroyRequirements, this, null)) && !forceTake)
             {
                 if (!string.IsNullOrEmpty(itemDescriptor.CannotDestroyMessage))
                 {
@@ -8665,7 +8666,8 @@ namespace Intersect.Server.Entities
                 }
 
                 //Don't lose non-droppable or equipped items
-                if (!itemBase.CanDrop || (itemBase.ItemType == ItemTypes.Equipment && EquippedItems[itemBase.EquipmentSlot] == Items[n]))
+                if (!itemBase.CanDrop || // Can't be dropped?
+                    (itemBase.ItemType == ItemTypes.Equipment && TryGetEquippedItem(itemBase.EquipmentSlot, out var equippedItem) && equippedItem == Items[n])) // Is equipped?
                 {
                     continue;
                 }
@@ -8690,7 +8692,8 @@ namespace Intersect.Server.Entities
                 }
 
                 // Remove the item from inventory if a player.
-                var taken = TryTakeItem(Items[n], item.Quantity);
+                // Additional conditional here to ensure we always drop bloodshed regardless of destruction reqs
+                var taken = TryTakeItem(Items[n], item.Quantity, forceTake: itemBase.Id.ToString() == Options.Combat.BloodshedItemId);
                 if (taken)
                 {
                     ItemsLost.Add(item);
