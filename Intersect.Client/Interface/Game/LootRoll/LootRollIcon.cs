@@ -53,6 +53,7 @@ namespace Intersect.Client.Interface.Game.LootRoll
             public LootRollIcon(Base window)
             {
                 mBackground = window;
+                StandardFrameBg = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Gui, "loot_item.png");
                 _rareFrameBg = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Gui, "loot_item_rare.png");
                 _rareFrameBgFlash = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Gui, "loot_item_rare_flash.png");
             }
@@ -151,6 +152,7 @@ namespace Intersect.Client.Interface.Game.LootRoll
                         }
                     }
 
+                    Container.Texture = StandardFrameBg;
                     if (item.RareDrop)
                     {
                         Container.Texture = RareFrameBg;

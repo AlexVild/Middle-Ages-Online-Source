@@ -124,6 +124,7 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
                     ContentPanel.Hide();
                 }
 
+                Pnl.Texture = StandardFrameBg;
                 if (item.RareDrop)
                 {
                     Pnl.Texture = RareFrameBg;
@@ -132,10 +133,6 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
                         IsFlashing = !IsFlashing;
                         LastUpdate = Timing.Global.Milliseconds + FlashRate;
                     }
-                }
-                else
-                {
-                    Pnl.Texture = StandardFrameBg;
                 }
             }
             else
