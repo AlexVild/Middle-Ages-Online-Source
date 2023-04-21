@@ -191,7 +191,11 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             }
 
             // Set up the header as the item name.
-            CustomColors.Items.Rarities.TryGetValue(mItem.Rarity, out var rarityColor);
+            var rarityColor = Color.White;
+            if (mItem.Rarity > 0)
+            {
+                CustomColors.Items.Rarities.TryGetValue(mItem.Rarity, out rarityColor);
+            }
 
             var itemName = mItem.ItemType == ItemTypes.Cosmetic ? 
                 string.IsNullOrEmpty(mItem.CosmeticDisplayName) ? 
@@ -230,8 +234,11 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             }
 
             // Set up the item rarity label.
-            Strings.ItemDescription.Rarity.TryGetValue(mItem.Rarity, out var rarityDesc);
-            header.SetDescription(rarityDesc, rarityColor ?? Color.White);
+            if (mItem.Rarity > 0)
+            {
+                Strings.ItemDescription.Rarity.TryGetValue(mItem.Rarity, out var rarityDesc);
+                header.SetDescription(rarityDesc, rarityColor ?? Color.White);
+            }
 
             header.SizeToChildren(true, false);
         }
