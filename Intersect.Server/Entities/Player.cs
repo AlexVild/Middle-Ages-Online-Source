@@ -7052,16 +7052,16 @@ namespace Intersect.Server.Entities
                             return;
                         }
 
-                        // Alex - Try this to fix Zelp crash on event dialog? Perhaps the client was sending a response before the server knew the options?
-                        if (stackInfo.BranchIds.Length <= 0 || responseId - 1 > stackInfo.BranchIds.Length)
-                        {
-                            return;
-                        }
-
                         stackInfo.WaitingForResponse = CommandInstance.EventResponse.None;
                         if (stackInfo.WaitingOnCommand != null &&
                             stackInfo.WaitingOnCommand.Type == EventCommandType.ShowOptions)
                         {
+                            // Alex - Try this to fix Zelp crash on event dialog? Perhaps the client was sending a response before the server knew the options?
+                            if (stackInfo.BranchIds.Length <= 0 || responseId - 1 > stackInfo.BranchIds.Length)
+                            {
+                                return;
+                            }
+
                             var tmpStack = new CommandInstance(stackInfo.Page, stackInfo.BranchIds[responseId - 1]);
                             evt.Value.CallStack.Push(tmpStack);
                         }

@@ -127,6 +127,12 @@ namespace Intersect.Client.Interface.Game
                 return;
             }
 
+            if (string.IsNullOrWhiteSpace(Globals.Me.Guild))
+            {
+                Hide();
+                return;
+            }
+
             // Force our window title to co-operate, might be empty after creating/joining a guild.
             if (mGuildWindow.Title != Globals.Me.Guild)
             {

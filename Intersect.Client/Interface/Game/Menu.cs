@@ -443,10 +443,11 @@ namespace Intersect.Client.Interface.Game
             else
             {
                 ChatboxMsg.AddMessage(new ChatboxMsg(Strings.Guilds.NotInGuild, CustomColors.Alerts.Error, ChatMessageType.Guild));
-                var dialog = new Dialog();
-                dialog.Prompt = Strings.Guilds.NotInGuildInstructions;
-
-                Globals.EventDialogs.Add(dialog);
+                _ = new InputBox(
+                    Strings.Guilds.NotInGuild,
+                    Strings.Guilds.NotInGuildInstructions, true,
+                    InputBox.InputType.OkayOnly, null, null, null
+                );
             }
         }
 
