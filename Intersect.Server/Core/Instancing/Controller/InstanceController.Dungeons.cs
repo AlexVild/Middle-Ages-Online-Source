@@ -176,9 +176,9 @@ namespace Intersect.Server.Core.Instancing.Controller
                 return loot;
             }
 
-            treasure.AddRange(loot);
+            loot.AddRange(treasure);
 
-            return treasure;
+            return loot;
         }
 
         void SetTreasureLevel()

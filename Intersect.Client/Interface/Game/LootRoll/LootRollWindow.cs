@@ -111,13 +111,13 @@ namespace Intersect.Client.Interface.Game.LootRoll
             LootChestAnim = new LootChest(() =>
             {
                 Flash.FlashScreen(1000, new Color(255, 201, 226, 158), 150);
-                mBackground.Show();
+                Show();
             });
 
             DeconstructAnim = new DeconstructorAnim(() =>
             {
                 Flash.FlashScreen(1000, new Color(200, 145, 62), 180);
-                mBackground.Show();
+                Show();
             });
         }
 
@@ -152,6 +152,12 @@ namespace Intersect.Client.Interface.Game.LootRoll
         {
             DisableBank = disabled;
             mBankAllButton.IsDisabled = DisableBank;
+        }
+
+        public void Show()
+        {
+            mBackground.Show();
+            mLootContainer.ScrollToTop();
         }
 
         private void InitLootContainer()
