@@ -149,7 +149,6 @@ namespace Intersect.Server.Entities.Combat
             {
                 en.Statuses[spell].StartTime = Timing.Global.Milliseconds;
                 en.Statuses[spell].Duration = Timing.Global.Milliseconds + (long)finalDuration;
-                Logging.Log.Debug($"Status applied with tenacity {tenacity}%, duration is {((float)finalDuration / 1000).ToString("N2")}");
                 en.Statuses[spell].StartTime = StartTime;
                 en.CachedStatuses = en.Statuses.Values.ToArray();
 
@@ -162,7 +161,6 @@ namespace Intersect.Server.Entities.Combat
             { 
                 StartTime = Timing.Global.Milliseconds;
                 Duration = Timing.Global.Milliseconds + (long) finalDuration;
-                Logging.Log.Debug($"Status applied with tenacity {tenacity}%, duration is {((float)finalDuration / 1000).ToString("N2")}");
                 en.Statuses.TryAdd(Spell, this);
                 en.CachedStatuses = en.Statuses.Values.ToArray();
 

@@ -134,14 +134,6 @@ namespace Intersect.Server.Core.Instancing.Controller
                 {
                     PacketSender.SendChatMsg(pl, $"Your ability to set records for this run has been voided due to admin warping.", ChatMessageType.Experience, CustomColors.General.GeneralCompleted);
                 }
-
-                /* Deprecated - now tracked via player table
-                if (DungeonDescriptor.CompletionCounter != default)
-                {
-                    var completions = pl.GetVariableValue(DungeonDescriptor.CompletionCounterId);
-                    pl.SetVariableValue(DungeonDescriptor.CompletionCounterId, completions + 1, DungeonDescriptor.CompletionCounter.Recordable);
-                    PacketSender.SendChatMsg(pl, $"You've completed {DungeonDescriptor.DisplayName} {completions + 1} times!", ChatMessageType.Experience, CustomColors.General.GeneralCompleted);
-                }*/
             }
 
             Dungeon.RecordsVoid = false; // reset void

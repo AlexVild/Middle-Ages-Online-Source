@@ -25,6 +25,7 @@ using Intersect.Server.Core;
 using Intersect.Network.Packets.Server;
 using Intersect.Server.Utilities;
 using static Intersect.GameObjects.Events.Commands.ShowTextCommand;
+using Intersect.Server.Entities.Combat;
 
 namespace Intersect.Server.Entities.Events
 {
@@ -2568,6 +2569,19 @@ namespace Intersect.Server.Entities.Events
                 player.InspirationTime += (command.Seconds * 1000);
             }
 
+            // Below is a silly hack for utilizing statuses to display Inspiration info, tee-hee
+            try
+            {
+                var inspiredSpellId = Guid.Parse(Options.Combat.InspiredSpellId);
+                var inspiredSpell = SpellBase.Get(inspiredSpellId);
+                if (inspiredSpell != default)
+                {
+                    _ = new Status(player, player, inspiredSpell, StatusTypes.None, (int)(player.InspirationTime - now), string.Empty);
+                }
+            } catch (FormatException e)
+            {
+                Console.Write(e.Message);
+            }
             player.SendInspirationUpdateText(command.Seconds);
         }
 

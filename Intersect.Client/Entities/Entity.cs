@@ -3138,7 +3138,7 @@ namespace Intersect.Client.Entities
             // Fetch DoT/HoT and the like
             foreach(Status status in Status)
             {
-                if (status.Type != StatusTypes.None || status.SpellId == default)
+                if (status.Type != StatusTypes.None || status.SpellId == default || status.SpellId.ToString() == Options.Combat.InspiredSpellId)
                 {
                     continue;
                 }

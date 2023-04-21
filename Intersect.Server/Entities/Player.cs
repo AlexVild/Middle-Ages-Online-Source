@@ -1078,6 +1078,9 @@ namespace Intersect.Server.Entities
                 return;
             }
 
+            // End inspiration
+            InspirationTime = Timing.Global.MillisecondsUtc;
+
             if (killer is Player playerKiller)
             {
                 playerKiller.StartCommonEventsWithTrigger(CommonEventTrigger.PVPKill, "", Name);
