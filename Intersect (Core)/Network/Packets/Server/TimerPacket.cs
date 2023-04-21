@@ -5,24 +5,24 @@ using System;
 namespace Intersect.Network.Packets.Server
 {
     [MessagePackObject]
-    public class TimerPacket : IntersectPacket
+    public class TimerPacket : AbstractTimedPacket
     {
-        [Key(0)]
+        [Key(3)]
         public Guid DescriptorId;
 
-        [Key(1)]
+        [Key(4)]
         public long Timestamp;
 
-        [Key(2)]
+        [Key(5)]
         public long StartTime;
 
-        [Key(3)]
+        [Key(6)]
         public TimerType Type;
 
-        [Key(4)]
+        [Key(7)]
         public string DisplayName;
 
-        [Key(5)]
+        [Key(8)]
         public bool ContinueAfterExpiration;
 
         // EF
