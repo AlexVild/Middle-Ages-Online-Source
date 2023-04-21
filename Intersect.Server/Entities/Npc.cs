@@ -1323,6 +1323,11 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
+            if (InstanceProcessor.TryGetInstanceController(player.MapInstanceId, out var instanceController) && instanceController.DungeonState == DungeonState.Complete)
+            {
+                return false;
+            }
+
             var aggroConditions = Base.AttackOnSightConditions.Lists.Count > 0 && Conditions.MeetsConditionLists(Base.AttackOnSightConditions, player, null);
 
             if (Base.Aggressive)

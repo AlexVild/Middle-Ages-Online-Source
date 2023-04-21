@@ -1543,7 +1543,7 @@ namespace Intersect.Server.Entities
                             var partyMembersInXpRange = Party.Where(partyMember => partyMember.InRangeOf(this, Options.Party.SharedXpRange)).ToArray();
                             float bonusExp = Options.Instance.PartyOpts.BonusExperiencePercentPerMember / 100;
                             var multiplier = 1.0f + (partyMembersInXpRange.Length * bonusExp);
-                            var partyExperience = (int)(descriptor.Experience * multiplier) / (Math.Min(1, partyMembersInXpRange.Length));
+                            var partyExperience = (int)(descriptor.Experience * multiplier) / (Math.Max(1, partyMembersInXpRange.Length));
                             foreach (var partyMember in partyMembersInXpRange)
                             {
                                 if (partyMember.PlayerDead)
