@@ -365,5 +365,16 @@ namespace Intersect.Server.Database.PlayerData
                 PacketSender.SendTimerStopPacket(player, this);
             }
         }
+
+        public void RemoveFromDb()
+        {
+            using (var context = DbInterface.CreatePlayerContext(readOnly: false))
+            {
+                context.Timers.Remove(this);
+
+                context.ChangeTracker.DetectChanges();
+                context.SaveChanges();
+            }
+        }
     }
 }

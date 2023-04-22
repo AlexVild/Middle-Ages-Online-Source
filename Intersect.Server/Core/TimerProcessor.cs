@@ -141,13 +141,12 @@ namespace Intersect.Server.Core
 
                 using (var context = DbInterface.CreatePlayerContext(readOnly: false))
                 {
-                    ActiveTimers.Add(timer);
-
                     context.Timers.Add(timer);
                     context.ChangeTracker.DetectChanges();
                     context.SaveChanges();
                 }
-
+                
+                ActiveTimers.Add(timer);
                 timer?.SendTimerPackets();
             }
         }
@@ -167,14 +166,9 @@ namespace Intersect.Server.Core
                 }
                 timer?.SendTimerStopPackets();
 
-                using (var context = DbInterface.CreatePlayerContext(readOnly: false))
-                {
-                    ActiveTimers.Remove(timer);
-                    context.Timers.Remove(timer);
+                DbInterface.Pool.QueueWorkItem(timer.RemoveFromDb);
 
-                    context.ChangeTracker.DetectChanges();
-                    context.SaveChanges();
-                }
+                ActiveTimers.Remove(timer);
             }
         }
 
