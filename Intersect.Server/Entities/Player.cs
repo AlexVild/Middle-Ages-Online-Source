@@ -1070,6 +1070,29 @@ namespace Intersect.Server.Entities
             StartCommonEventsWithTrigger(CommonEventTrigger.OnRespawn);
         }
 
+        public void SetInspirationStatus()
+        {
+            if (InspirationTime < Timing.Global.MillisecondsUtc)
+            {
+                return;
+            }
+
+            // Below is a silly hack for utilizing statuses to display Inspiration info, tee-hee
+            try
+            {
+                var inspiredSpellId = Guid.Parse(Options.Combat.InspiredSpellId);
+                var inspiredSpell = SpellBase.Get(inspiredSpellId);
+                if (inspiredSpell != default)
+                {
+                    _ = new Status(this, this, inspiredSpell, StatusTypes.None, (int)(InspirationTime - Timing.Global.MillisecondsUtc), string.Empty);
+                }
+            }
+            catch (FormatException e)
+            {
+                Console.Write(e.Message);
+            }
+        }
+
         public override void Die(bool dropItems = true, Entity killer = null)
         {
             // Can't die twice
@@ -8562,6 +8585,8 @@ namespace Intersect.Server.Entities
             {
                 PacketSender.SendChatMsg(this, Strings.Combat.stillinspired.ToString(endTimeStamp), ChatMessageType.Combat, CustomColors.Combat.LevelUp, sendToast: true);
             }
+
+            SetInspirationStatus();
         }
         #endregion
 

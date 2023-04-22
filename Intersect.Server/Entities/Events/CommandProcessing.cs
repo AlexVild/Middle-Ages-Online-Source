@@ -165,6 +165,11 @@ namespace Intersect.Server.Entities.Events
         )
         {
             var txt = ParseEventText(command.Text, player, instance);
+            
+            stackInfo.WaitingForResponse = CommandInstance.EventResponse.Dialogue;
+            stackInfo.WaitingOnCommand = command;
+            stackInfo.BranchIds = command.BranchIds;
+
             if (string.IsNullOrEmpty(command.Options[0]))
             {
                 PacketSender.SendEventDialog(player, txt, string.Empty, string.Empty, string.Empty, string.Empty, command.Face, instance.PageInstance.Id);
@@ -177,9 +182,6 @@ namespace Intersect.Server.Entities.Events
                 var opt4 = command.Opt4Conditions == null || Conditions.MeetsConditionLists(command.Opt4Conditions, player, instance) ? ParseEventText(command.Options[3], player, instance) : string.Empty;
                 PacketSender.SendEventDialog(player, txt, opt1, opt2, opt3, opt4, command.Face, instance.PageInstance.Id);
             }
-            stackInfo.WaitingForResponse = CommandInstance.EventResponse.Dialogue;
-            stackInfo.WaitingOnCommand = command;
-            stackInfo.BranchIds = command.BranchIds;
         }
 
         //Input Variable Command
@@ -2569,19 +2571,6 @@ namespace Intersect.Server.Entities.Events
                 player.InspirationTime += (command.Seconds * 1000);
             }
 
-            // Below is a silly hack for utilizing statuses to display Inspiration info, tee-hee
-            try
-            {
-                var inspiredSpellId = Guid.Parse(Options.Combat.InspiredSpellId);
-                var inspiredSpell = SpellBase.Get(inspiredSpellId);
-                if (inspiredSpell != default)
-                {
-                    _ = new Status(player, player, inspiredSpell, StatusTypes.None, (int)(player.InspirationTime - now), string.Empty);
-                }
-            } catch (FormatException e)
-            {
-                Console.Write(e.Message);
-            }
             player.SendInspirationUpdateText(command.Seconds);
         }
 

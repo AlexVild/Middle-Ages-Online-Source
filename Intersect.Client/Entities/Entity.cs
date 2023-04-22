@@ -3109,7 +3109,7 @@ namespace Intersect.Client.Entities
             }
 
             // Don't show if non-ally in PvP
-            if (Globals.Me.MapInstance.ZoneType != MapZones.Safe)
+            if (Globals.Me.MapInstance.ZoneType != MapZones.Safe || !(this is Player player))
             {
                 if (IsStealthed() && !IsAllyOf(Globals.Me))
                 {
@@ -3119,12 +3119,11 @@ namespace Intersect.Client.Entities
             else
             {
                 // Don't show if not in party in PvE
-                if (IsStealthed() && Id != Globals.Me.Id && !Globals.Me.IsInMyParty(this))
+                if (IsStealthed() && Id != Globals.Me.Id && !Globals.Me.IsInMyParty(player))
                 {
                     return;
                 }
             }
-
 
             if (!Globals.Database.DisplaySelfStatusMarkers && Id == Globals.Me.Id)
             {
