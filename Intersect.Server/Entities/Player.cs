@@ -1326,7 +1326,8 @@ namespace Intersect.Server.Entities
                 }
             }
 
-            var baseVital = maxVital + VitalPointAllocations[vital];
+            maxVital += VitalPointAllocations[vital];
+            var baseVital = maxVital;
 
             foreach(var item in EquippedItems)
             {
