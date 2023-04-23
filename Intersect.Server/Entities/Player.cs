@@ -5840,7 +5840,7 @@ namespace Intersect.Server.Entities
                 var tmpInterface = new EnhancementInterface(this, Guid.Empty, 0.0f);
 
                 // Remove and re-add enhancements, without the UI
-                tmpInterface.TryRemoveEnhancementsOnItem(weapon, false);
+                tmpInterface.TryRemoveEnhancementsOnItem(weapon, false, true);
                 tmpInterface.TryApplyEnhancementsToWeapon(appliedEnhancementIds.ToArray(), false);
 
                 PacketSender.SendChatMsg(this, Strings.Enhancements.ServerReset, ChatMessageType.Notice, sendToast: true);

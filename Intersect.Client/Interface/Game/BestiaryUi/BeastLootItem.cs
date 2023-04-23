@@ -117,6 +117,7 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
                 {
                     ContentPanel.Show();
                     ContentPanel.Texture = itemTex;
+                    ContentPanel.RenderColor = item.Color;
                     Name = item.Name;
                 }
                 else

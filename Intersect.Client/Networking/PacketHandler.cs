@@ -2504,8 +2504,6 @@ namespace Intersect.Client.Networking
 
             var displayType = packet.Type == TimerType.Countdown ? TimerDisplayType.Descending : TimerDisplayType.Ascending;
 
-            var time = Timing.Global.MillisecondsOffset - Timing.Global.MillisecondsUtc;
-
             var timer = new Timer(packet.DescriptorId, packet.Timestamp, packet.StartTime, displayType, packet.DisplayName, packet.ContinueAfterExpiration);
             Timers.ActiveTimers.Add(timer);
 

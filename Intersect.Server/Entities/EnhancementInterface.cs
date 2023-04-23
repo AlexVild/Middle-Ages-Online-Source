@@ -159,19 +159,22 @@ namespace Intersect.Server.Entities
             }
         }
 
-        public bool TryRemoveEnhancementsOnItem(Item item, bool sendUiPackets = true)
+        public bool TryRemoveEnhancementsOnItem(Item item, bool sendUiPackets = true, bool ignoreCurrency = false)
         {
             if (item == null)
             {
                 return false;
             }
 
-            var price = EnhancementHelper.GetEnhancementCostOnWeapon(item.Descriptor, item.ItemProperties.AppliedEnhancementIds.ToArray(), CostMultiplier);
-            var moneySlot = Owner.FindInventoryItemSlot(CurrencyId, price);
-            if (!Owner.TryTakeItem(moneySlot, price, Enums.ItemHandling.Normal, true))
+            if (!ignoreCurrency)
             {
-                PacketSender.SendEventDialog(Owner, $"You don't have enough {ItemBase.GetName(CurrencyId)} to remove this item's enhancements.", string.Empty, Guid.Empty);
-                return false;
+                var price = EnhancementHelper.GetEnhancementCostOnWeapon(item.Descriptor, item.ItemProperties.AppliedEnhancementIds.ToArray(), CostMultiplier);
+                var moneySlot = Owner.FindInventoryItemSlot(CurrencyId, price);
+                if (!Owner.TryTakeItem(moneySlot, price, Enums.ItemHandling.Normal, true))
+                {
+                    PacketSender.SendEventDialog(Owner, $"You don't have enough {ItemBase.GetName(CurrencyId)} to remove this item's enhancements.", string.Empty, Guid.Empty);
+                    return false;
+                }
             }
 
             var removalItem = item.Clone();
