@@ -7083,7 +7083,7 @@ namespace Intersect.Server.Entities
                             stackInfo.WaitingOnCommand.Type == EventCommandType.ShowOptions)
                         {
                             // Alex - Try this to fix Zelp crash on event dialog? Perhaps the client was sending a response before the server knew the options?
-                            if (stackInfo.BranchIds.Length <= 0 || responseId - 1 > stackInfo.BranchIds.Length)
+                            if (responseId <= 0 || responseId - 1 > stackInfo.BranchIds.Length)
                             {
                                 return;
                             }
