@@ -1118,6 +1118,9 @@ namespace Intersect.Server.Entities
             DestroyVehicle();
             PlayDeathAnimation();
             EndDeathTimers();
+
+            // Force a fade in in case the player died during fade out
+            PacketSender.SendFadePacket(Client, true);
             PacketSender.SendPlayerDeath(this);
 
             //Event trigger
