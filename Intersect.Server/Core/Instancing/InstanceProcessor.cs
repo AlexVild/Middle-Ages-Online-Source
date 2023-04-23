@@ -70,14 +70,18 @@ namespace Intersect.Server.Core
                 foreach (var map in mapInstanceGroup.Value)
                 {
                     instanceController.PlayerCount += map.GetPlayers().Count;
-                    instanceController.CleanupSpawnGroups();
                 }
 
+                instanceController.CleanupSpawnGroups();
+
                 // If instance was a dungeon but no one is around to hear it, remove the dungeon
+                // TODO Alex : Gonna try commenting this out and see if it fixes dungeon bug
+                /*
                 if (instanceController.InstanceIsDungeon && instanceController.PlayerCount == 0)
                 {
                     instanceController.RemoveDungeon();
                 }
+                */
             }
         }
 

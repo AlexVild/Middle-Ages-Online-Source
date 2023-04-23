@@ -29,6 +29,7 @@ namespace Intersect.Server.Core.Instancing.Controller
 
         public bool TryInitializeOrJoinDungeon(Guid dungeonId, Player player)
         {
+            Logging.Log.Error($"Initializing dungeon for {player.Name}...");
             InitializeDungeon(dungeonId);
             return TryAddPlayerToDungeon(player);
         }
@@ -110,7 +111,7 @@ namespace Intersect.Server.Core.Instancing.Controller
             if (Dungeon?.State != DungeonState.Active)
             {
                 Logging.Log.Error($"--- Dungeon issue for {player.Name}!");
-                Logging.Log.Error($"--- Tried to complete a dungeon, but the dungeon was never active!");
+                Logging.Log.Error($"--- Tried to complete a dungeon, but the dungeon was never active! Dungeon state was {Dungeon.State}");
                 return;
             }
 
