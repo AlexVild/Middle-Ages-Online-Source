@@ -1328,8 +1328,15 @@ namespace Intersect.Server.Entities
             foreach(var item in EquippedItems)
             {
                 var descriptor = item.Descriptor;
-                classVital += descriptor.VitalsGiven[vital] + descriptor.PercentageVitalsGiven[vital] * baseVital / 100;
-                classVital += item.ItemProperties.VitalEnhancements[vital];
+                if (descriptor != null)
+                {
+                    classVital += descriptor.VitalsGiven[vital] + descriptor.PercentageVitalsGiven[vital] * baseVital / 100;
+                }
+
+                if (item.ItemProperties != null)
+                {
+                    classVital += item.ItemProperties.VitalEnhancements[vital];
+                }
             }
 
             //Must have at least 1 hp and no less than 0 mp
