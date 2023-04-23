@@ -3509,8 +3509,17 @@ namespace Intersect.Server.Entities
 
                         break;
                     case ItemTypes.Cosmetic:
-                        ChangeCosmeticUnlockStatus(Item.ItemId, true);
-                        TryTakeItem(Items[slot], 1);
+                        if (TryChangeCosmeticUnlockStatus(Item.ItemId, true))
+                        {
+                            TryTakeItem(Items[slot], 1);
+                        }
+                        else
+                        {
+                            PacketSender.SendChatMsg(this,
+                                Strings.Player.CosmeticAlready,
+                                Enums.ChatMessageType.Experience,
+                                sound: true);
+                        }
 
                         break;
                     case ItemTypes.Enhancement:

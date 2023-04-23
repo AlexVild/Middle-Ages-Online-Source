@@ -1808,6 +1808,9 @@ namespace Intersect.Server.Localization
             public readonly LocalizedString CosmeticLost = @"You've lost a cosmetic: {00}.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString CosmeticAlready = @"You already have this cosmetic!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString NewChallenge = @"You've unlocked a new challenge: {00}";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]

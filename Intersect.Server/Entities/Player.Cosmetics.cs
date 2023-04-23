@@ -27,7 +27,7 @@ namespace Intersect.Server.Entities
 
         public bool CosmeticsTutorialDone { get; set; }
 
-        public void ChangeCosmeticUnlockStatus(Guid itemId, bool unlocked = true)
+        public bool TryChangeCosmeticUnlockStatus(Guid itemId, bool unlocked = true)
         {
             var cosmetic = UnlockedCosmetics.Find(csm => csm.ItemId == itemId && csm.Unlocked);
             var descriptor = ItemBase.Get(itemId);
@@ -37,8 +37,7 @@ namespace Intersect.Server.Entities
             {
                 if (cosmetic.Unlocked)
                 {
-                    // Do nothing
-                    return;
+                    return false;
                 }
             }
 
@@ -54,7 +53,7 @@ namespace Intersect.Server.Entities
                     Strings.Player.CosmeticLost.ToString(name),
                     Enums.ChatMessageType.Experience,
                     CustomColors.General.GeneralWarning);
-                return;
+                return true;
             }
 
             // The cosmetic has NOT been unlocked, and we wish to change that
@@ -66,6 +65,8 @@ namespace Intersect.Server.Entities
                 Enums.ChatMessageType.Experience, 
                 CustomColors.General.GeneralCompleted, 
                 sendToast: true);
+
+            return true;
         }
 
         public void SetCosmetic(Guid itemId, string slot)
