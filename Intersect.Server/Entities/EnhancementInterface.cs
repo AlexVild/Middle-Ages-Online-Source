@@ -26,7 +26,7 @@ namespace Intersect.Server.Entities
             CostMultiplier = costMultiplier;
         }
 
-        public bool TryApplyEnhancementsToWeapon(Guid[] enhancementIds)
+        public bool TryApplyEnhancementsToWeapon(Guid[] enhancementIds, bool sendUiPacket = true)
         {
             if (enhancementIds == null || enhancementIds.Length == 0 || Owner == null || !Owner.Online)
             {
@@ -39,7 +39,7 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
-            if (!ValidateEnhancements(enhancementIds, weapon))
+            if (!ValidateEnhancements(enhancementIds, weapon, !sendUiPacket))
             {
                 PacketSender.SendPlaySound(Owner, Options.UIDenySound);
                 return false;
@@ -67,12 +67,16 @@ namespace Intersect.Server.Entities
 
             PacketSender.SendInventory(Owner);
             Owner.ProcessEquipmentUpdated(true);
-            Owner.SendPacket(new EnhancementEndPacket(weapon.ItemProperties));
+
+            if (sendUiPacket)
+            {
+                Owner.SendPacket(new EnhancementEndPacket(weapon.ItemProperties));
+            }
 
             return true;
         }
 
-        private bool ValidateEnhancements(Guid[] enhancementIds, Item weapon)
+        private bool ValidateEnhancements(Guid[] enhancementIds, Item weapon, bool ignoreCurrencyCost)
         {
             // Do we have enough EP?
             var epAvailable = weapon.Descriptor.EnhancementThreshold - EnhancementHelper.GetEpUsed(weapon.ItemProperties.AppliedEnhancementIds.ToArray());
@@ -121,12 +125,16 @@ namespace Intersect.Server.Entities
             }
 
             // Do we have enough guap?
-            var price = EnhancementHelper.GetEnhancementCostOnWeapon(weapon.Descriptor, enhancementIds, CostMultiplier);
-            var moneySlot = Owner.FindInventoryItemSlot(CurrencyId, price);
-            if (!Owner.TryTakeItem(moneySlot, price, Enums.ItemHandling.Normal, true))
+
+            if (!ignoreCurrencyCost)
             {
-                PacketSender.SendEventDialog(Owner, $"You don't have enough {ItemBase.GetName(CurrencyId)} to make the selected enhancements.", string.Empty, Guid.Empty);
-                return false;
+                var price = EnhancementHelper.GetEnhancementCostOnWeapon(weapon.Descriptor, enhancementIds, CostMultiplier);
+                var moneySlot = Owner.FindInventoryItemSlot(CurrencyId, price);
+                if (!Owner.TryTakeItem(moneySlot, price, Enums.ItemHandling.Normal, true))
+                {
+                    PacketSender.SendEventDialog(Owner, $"You don't have enough {ItemBase.GetName(CurrencyId)} to make the selected enhancements.", string.Empty, Guid.Empty);
+                    return false;
+                }
             }
 
             return true;
@@ -151,7 +159,7 @@ namespace Intersect.Server.Entities
             }
         }
 
-        public bool TryRemoveEnhancementsOnItem(Item item)
+        public bool TryRemoveEnhancementsOnItem(Item item, bool sendUiPackets = true)
         {
             if (item == null)
             {
@@ -190,8 +198,12 @@ namespace Intersect.Server.Entities
             PacketSender.SendInventory(Owner);
             Owner.ProcessEquipmentUpdated(true);
             // Just re-send the open command to refresh the UI
-            PacketSender.SendOpenEnhancementWindow(Owner, CurrencyId, CostMultiplier);
-            PacketSender.SendPlaySound(Owner, Options.Instance.DeconstructionOpts.DisenhanceItemSound);
+
+            if (sendUiPackets)
+            {
+                PacketSender.SendOpenEnhancementWindow(Owner, CurrencyId, CostMultiplier);
+                PacketSender.SendPlaySound(Owner, Options.Instance.DeconstructionOpts.DisenhanceItemSound);
+            }
 
             return true;
         }

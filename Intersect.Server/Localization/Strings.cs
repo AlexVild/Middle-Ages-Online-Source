@@ -1890,6 +1890,9 @@ namespace Intersect.Server.Localization
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString InsufficientMasteries = @"You must meet or exceed one of the following mastery levels to enhance this weapon: {00}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString ServerReset = @"The enhancements on this weapon had to be rerolled due to a game change.";
         }
     }
 }

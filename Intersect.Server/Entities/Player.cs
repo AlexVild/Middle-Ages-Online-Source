@@ -5792,9 +5792,59 @@ namespace Intersect.Server.Entities
                 SetEquipmentSlot(itemBase.EquipmentSlot, slot);
             }
 
+            // Void any enhancements that have been rendered invalid
+            if (itemBase.EquipmentSlot == Options.WeaponIndex)
+            {
+                ReprocessEnhancements();
+            }
 
             LearnSpecialAttack(itemBase);
             ProcessEquipmentUpdated(true);
+        }
+
+        public void ReprocessEnhancements()
+        {
+            if (!TryGetEquippedItem(Options.WeaponIndex, out var weapon))
+            {
+                return;
+            }
+
+            var appliedEnhancementIds = weapon.ItemProperties.AppliedEnhancementIds.ToList();
+            if (appliedEnhancementIds.Count == 0)
+            {
+                return;
+            }
+
+            var appliedEnhancements = appliedEnhancementIds.Select(id => EnhancementDescriptor.Get(id)).ToArray();
+
+            var enhanceThreshold = weapon.Descriptor.EnhancementThreshold;
+            var usedEnhancementPts = 0;
+
+            var reRoll = false;
+
+            foreach (var enhancement in appliedEnhancements.ToArray())
+            {
+                usedEnhancementPts += enhancement.RequiredEnhancementPoints;
+                if (usedEnhancementPts > enhanceThreshold)
+                {
+                    appliedEnhancementIds.Remove(enhancement.Id);
+                    reRoll = true;
+                }
+            }
+
+            // TODO extend this method to also look to see if the underlying stat changes on an enhancement have been changed/exceeded
+
+            if (reRoll)
+            {
+                // Create a temporary interface
+                var tmpInterface = new EnhancementInterface(this, Guid.Empty, 0.0f);
+
+                // Remove and re-add enhancements, without the UI
+                tmpInterface.TryRemoveEnhancementsOnItem(weapon, false);
+                tmpInterface.TryApplyEnhancementsToWeapon(appliedEnhancementIds.ToArray(), false);
+
+                PacketSender.SendChatMsg(this, Strings.Enhancements.ServerReset, ChatMessageType.Notice, sendToast: true);
+            }
         }
 
         public void UnequipItem(Guid itemId, bool sendUpdate = true)
