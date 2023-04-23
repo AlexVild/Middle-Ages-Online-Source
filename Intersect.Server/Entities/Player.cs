@@ -1311,48 +1311,48 @@ namespace Intersect.Server.Entities
 
         public override int GetMaxVital(int vital)
         {
-            var classDescriptor = ClassBase.Get(this.ClassId);
-            var classVital = 20;
+            var classDescriptor = ClassBase.Get(ClassId);
+            var maxVital = 20;
             if (classDescriptor != null)
             {
                 if (classDescriptor.IncreasePercentage)
                 {
-                    classVital = (int) (classDescriptor.BaseVital[vital] *
+                    maxVital = (int) (classDescriptor.BaseVital[vital] *
                                         Math.Pow(1 + (double) classDescriptor.VitalIncrease[vital] / 100, Level - 1));
                 }
                 else
                 {
-                    classVital = classDescriptor.BaseVital[vital] + classDescriptor.VitalIncrease[vital] * (Level - 1);
+                    maxVital = classDescriptor.BaseVital[vital] + classDescriptor.VitalIncrease[vital] * (Level - 1);
                 }
             }
 
-            var baseVital = classVital;
+            var baseVital = maxVital + VitalPointAllocations[vital];
 
             foreach(var item in EquippedItems)
             {
                 var descriptor = item.Descriptor;
                 if (descriptor != null)
                 {
-                    classVital += descriptor.VitalsGiven[vital] + descriptor.PercentageVitalsGiven[vital] * baseVital / 100;
+                    maxVital += descriptor.VitalsGiven[vital] + (int)Math.Ceiling(descriptor.PercentageVitalsGiven[vital] * baseVital / 100f);
                 }
 
                 if (item.ItemProperties != null)
                 {
-                    classVital += item.ItemProperties.VitalEnhancements[vital];
+                    maxVital += item.ItemProperties.VitalEnhancements[vital];
                 }
             }
 
             //Must have at least 1 hp and no less than 0 mp
             if (vital == (int) Vitals.Health)
             {
-                classVital = Math.Max(classVital, 1);
+                maxVital = Math.Max(maxVital, 1);
             }
             else if (vital == (int) Vitals.Mana)
             {
-                classVital = Math.Max(classVital, 0);
+                maxVital = Math.Max(maxVital, 0);
             }
 
-            return classVital + VitalPointAllocations[vital];
+            return maxVital;
         }
 
         public int GetStatValue(Stats stat)
