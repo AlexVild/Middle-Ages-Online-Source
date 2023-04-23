@@ -642,7 +642,7 @@ namespace Intersect.Server.Entities
 
             if (GetVital(Vitals.Health) <= 0) // if the spell has killed the entity
             {
-                Die();
+                Die(killer: this);
             }
             
             // Clear casting target info
