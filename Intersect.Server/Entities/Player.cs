@@ -3056,6 +3056,11 @@ namespace Intersect.Server.Entities
             {
                 return;
             }
+            if (item.Quantity == 0)
+            {
+                return;
+            }
+
             // Decide how we're going to handle this item.
             var existingSlots = FindInventoryItemSlots(item.Descriptor.Id);
             var updateSlots = new List<int>();
@@ -8831,17 +8836,21 @@ namespace Intersect.Server.Entities
         [NotMapped, JsonIgnore]
         private bool UseLabelCache { get; set; }
 
-        public void SetLabelTo(Guid labelDescriptor)
+        public void SetLabelTo(Guid labelDescriptorId)
         {
+            var prevLabelId = SelectedLabelId;
+            SelectedLabelId = labelDescriptorId;
+            UseLabelCache = SelectedLabelId == prevLabelId;
+
             // Process a "remove label" request
-            if (labelDescriptor == Guid.Empty)
+            if (labelDescriptorId == Guid.Empty)
             {
                 HeaderLabel = new Label(string.Empty, Color.White);
                 FooterLabel = new Label(string.Empty, Color.White);
                 return;
             }
 
-            var label = UnlockedLabels.Find(lbl => lbl.DescriptorId == labelDescriptor);
+            var label = UnlockedLabels.Find(lbl => lbl.DescriptorId == labelDescriptorId);
             if (label == default)
             {
                 return;
@@ -8850,7 +8859,10 @@ namespace Intersect.Server.Entities
             var descriptor = label.Descriptor;
             if (descriptor == default)
             {
-                Log.Debug($"Could not get descriptor for {labelDescriptor} and thus could not set label properties for player {Name}");
+                Log.Debug($"Could not get descriptor for {labelDescriptorId} and thus could not set label properties for player {Name}");
+                HeaderLabel = new Label(string.Empty, Color.White);
+                FooterLabel = new Label(string.Empty, Color.White);
+                return;
             }
 
             var color = descriptor.Color;
@@ -8922,7 +8934,7 @@ namespace Intersect.Server.Entities
                 return CachedLabelPackets;
             }
 
-            CachedLabelPackets = UnlockedLabels.Select(lbl => lbl.Packetize()).ToList();
+            CachedLabelPackets = UnlockedLabels.Select(lbl => lbl.Packetize(SelectedLabelId)).ToList();
             UseLabelCache = true;
             return CachedLabelPackets;
         }

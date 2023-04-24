@@ -198,6 +198,8 @@ namespace Intersect.Server.Entities
             set => FooterLabel = value != null ? JsonConvert.DeserializeObject<Label>(value) : new Label();
         }
 
+        public Guid SelectedLabelId { get; set; }
+
         [NotMapped]
         public bool Dead { get; set; }
 

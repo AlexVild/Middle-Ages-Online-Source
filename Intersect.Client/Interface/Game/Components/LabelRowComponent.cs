@@ -99,7 +99,7 @@ namespace Intersect.Client.Interface.Game.Components
                 ShowMore.SetPosition(ShowMore.X, LabelHint.Y + LabelHint.Height);
             }
 
-            if (CharacterNameTagPanelController.UnlockedLabels.TryGetValue(Label.Id, out var isNew))
+            if (CharacterNameTagPanelController.UnlockedLabels.TryGetValue(LabelId, out var isNew))
             {
                 SetUnlocked(isNew);
             }
@@ -108,7 +108,7 @@ namespace Intersect.Client.Interface.Game.Components
                 SetLocked();
             }
 
-            if (Globals.Me?.LabelDescriptorId == Label.Id)
+            if (Globals.Me?.LabelDescriptorId == LabelId)
             {
                 Select();
             }

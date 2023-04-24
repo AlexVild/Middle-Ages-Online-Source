@@ -154,8 +154,8 @@ namespace Intersect.Client.Interface.Game.Components
             ExpandButton.SetImage(DownButtonClickedTexture, DownButtonClickedTexture.Name, Button.ControlState.Clicked);
 
             CharacterRecipePanelController.ExpandedRecipes.Remove(RecipeId);
-            SelfContainer.SetSize(SelfContainer.Width, SelfContainer.Height - RequirementsPanel.Height);
-            RequirementsPanel.Dispose();
+            SelfContainer.SetSize(SelfContainer.Width, SelfContainer.Height - RequirementsPanel?.Height ?? 0);
+            RequirementsPanel?.Dispose();
             RequirementsPanel = null;
             FitParentToComponent();
         }

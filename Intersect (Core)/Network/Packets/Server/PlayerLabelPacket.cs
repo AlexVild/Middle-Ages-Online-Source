@@ -13,10 +13,14 @@ namespace Intersect.Network.Packets.Server
         [Key(1)]
         public bool IsNew { get; set; }
 
-        public PlayerLabelPacket(Guid descriptorId, bool isNew)
+        [Key(2)]
+        public bool IsSelected { get; set; }
+
+        public PlayerLabelPacket(Guid descriptorId, bool isNew, bool isSelected)
         {
             DescriptorId = descriptorId;
             IsNew = isNew;
+            IsSelected = isSelected;
         }
     }
 

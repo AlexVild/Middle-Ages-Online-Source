@@ -2717,9 +2717,14 @@ namespace Intersect.Client.Networking
         public void HandlePacket(IPacketSender packetSender, PlayerLabelPackets packet)
         {
             CharacterNameTagPanelController.UnlockedLabels.Clear();
+            Globals.Me.LabelDescriptorId = Guid.Empty;
             foreach (var pkt in packet.Packets)
             {
                 CharacterNameTagPanelController.UnlockedLabels[pkt.DescriptorId] = pkt.IsNew;
+                if (pkt.IsSelected)
+                {
+                    Globals.Me.LabelDescriptorId = pkt.DescriptorId;
+                }
             }
             CharacterNameTagPanelController.RefreshLabels = true;
         }

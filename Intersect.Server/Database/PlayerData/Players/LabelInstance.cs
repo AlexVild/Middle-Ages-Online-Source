@@ -38,9 +38,9 @@ namespace Intersect.Server.Database.PlayerData.Players
 
         public bool IsNew { get; set; }
 
-        public PlayerLabelPacket Packetize()
+        public PlayerLabelPacket Packetize(Guid selectedId)
         {
-            return new PlayerLabelPacket(DescriptorId, IsNew);
+            return new PlayerLabelPacket(DescriptorId, IsNew, DescriptorId == selectedId);
         }
     }
 }
