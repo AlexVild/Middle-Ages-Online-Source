@@ -59,6 +59,12 @@ namespace Intersect.Server.Entities.Combat
             Type = type;
             Data = data;
 
+            if (en.CachedStatuses.Any(AttackingEntity.PredicateCleansed))
+            {
+                PacketSender.SendActionMsg(en, Strings.Combat.immunetoeffect, CustomColors.Combat.Status);
+                return;
+            }
+
             // Handle Player specific stuff such as retrieving their tenacity.
             var tenacity = 0.0;
             if (en is Player player)

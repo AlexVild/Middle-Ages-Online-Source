@@ -125,6 +125,17 @@ namespace Intersect.Server.Entities
             }
         }
 
+        public static bool PredicateCleansed(Status status)
+        {
+            switch (status?.Type)
+            {
+                case StatusTypes.Cleanse:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
         public abstract void MeleeAttack(Entity enemy, bool ignoreEvasion);
 
         public abstract void SendAttackAnimation(Entity enemy);
