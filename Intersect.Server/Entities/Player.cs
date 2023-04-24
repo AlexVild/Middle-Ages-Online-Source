@@ -3056,10 +3056,6 @@ namespace Intersect.Server.Entities
             {
                 return;
             }
-            if (item.Quantity == 0)
-            {
-                return;
-            }
 
             // Decide how we're going to handle this item.
             var existingSlots = FindInventoryItemSlots(item.Descriptor.Id);
@@ -3237,6 +3233,8 @@ namespace Intersect.Server.Entities
             if (amount < 1)
             {
                 // Abort if the amount we are trying to drop is below 1.
+                itemInSlot.Set(Item.None);
+                PacketSender.SendInventoryItemUpdate(this, slotIndex);
                 return false;
             }
 
