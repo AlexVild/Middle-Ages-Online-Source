@@ -1686,12 +1686,12 @@ namespace Intersect.Server.Entities
             rolledItems.Add(LootTableServerHelpers.GetItemFromTable(baseDropTable));
 
             // Check for secondary/tertiary tables
-            if (Randomization.Next(1, 101) < Base.SecondaryChance * luck)
+            if (Randomization.Next(1, 100001) < (Base.SecondaryChance * luck * 1000))
             {
                 var secondaryDropTable = LootTableServerHelpers.GenerateDropTable(Base.SecondaryDrops, playerKiller);
                 rolledItems.Add(LootTableServerHelpers.GetItemFromTable(secondaryDropTable));
             }
-            if (Randomization.Next(1, 101) < Base.TertiaryChance * luck)
+            if (Randomization.Next(1, 100001) < (Base.TertiaryChance * luck * 1000))
             {
                 var tertiaryDropTable = LootTableServerHelpers.GenerateDropTable(Base.TertiaryDrops, playerKiller);
                 rolledItems.Add(LootTableServerHelpers.GetItemFromTable(tertiaryDropTable));
