@@ -117,6 +117,10 @@ namespace Intersect.Config
         public bool EnableCombatChatMessages = false; // Enables or disables combat chat messages.
 
         public long ProjectileSpellMovementDelay = 250;
+        
+        public long BaseSpeed = 130;
+
+        public float SpeedExp = 0.003f;
 
         public bool InvulnerableNpcsAffectedByNonDamaging = true;
 

@@ -89,7 +89,8 @@ namespace Intersect.Server.Database.PlayerData
             {
                 CompletionCount++;
 
-                foreach (var player in GetAffectedPlayers())
+                var affectedPlayers = GetAffectedPlayers();
+                foreach (var player in affectedPlayers)
                 {
                     FireExpireEvent(player);
                 }

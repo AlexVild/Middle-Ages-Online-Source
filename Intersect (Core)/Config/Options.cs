@@ -225,6 +225,8 @@ namespace Intersect
         public static int BlockingSlow => Instance.CombatOpts.BlockingSlow;
 
         public static float AgilityMovementSpeedModifier => Instance.CombatOpts.AgilityMovementSpeedModifier;
+        
+        public static float BaseSpeed => Instance.CombatOpts.BaseSpeed;
 
         public static float SpeedModifier => Instance.CombatOpts.SpeedModifier;
 

@@ -500,7 +500,10 @@ namespace Intersect.Client.Entities
                 speed = (int) player.VehicleSpeed;
             }
 
-            var time = 1000f / (float) (1 + Math.Log(speed * Options.AgilityMovementSpeedModifier));
+            // Old calc
+            //var time = 1000f / (float)(1 + Math.Log(speed * Options.AgilityMovementSpeedModifier));
+            var time = Options.BaseSpeed * Math.Exp(-1 * Options.Instance.CombatOpts.SpeedExp * speed);
+
             if (Blocking)
             {
                 time += time * (float) Options.BlockingSlow;
@@ -588,7 +591,7 @@ namespace Intersect.Client.Entities
                 time /= Options.Instance.CombatOpts.HasteModifier;
             }
 
-            return Math.Min(1000f, time);
+            return Math.Min(1000f, (float)time);
         }
         
         //Movement Processing

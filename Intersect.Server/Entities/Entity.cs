@@ -847,7 +847,10 @@ namespace Intersect.Server.Entities
                 speed = (int) player.VehicleSpeed;
             }
 
-            var time = 1000f / (float)(1 + Math.Log(speed * Options.AgilityMovementSpeedModifier));
+            // Old calc
+            //var time = 1000f / (float)(1 + Math.Log(speed * Options.AgilityMovementSpeedModifier));
+            var time = Options.BaseSpeed * Math.Exp(-1 * Options.Instance.CombatOpts.SpeedExp * speed);
+
             if (Blocking)
             {
                 time += time * (float)Options.BlockingSlow;
@@ -937,7 +940,7 @@ namespace Intersect.Server.Entities
                 time /= Options.Instance.CombatOpts.HasteModifier;
             }
 
-            return Math.Min(1000f, time);
+            return Math.Min(1000f, (float)time);
         }
 
         public virtual EntityTypes GetEntityType()
