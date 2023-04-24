@@ -110,6 +110,12 @@ namespace Intersect.Server.Entities
             }
 
             var tool = projectile.Base.Tool;
+            // Don't bother with messaging if we're not using a tool
+            if (tool == -1 && target.Base.Tool > -1)
+            {
+                return false;
+            }
+
             if (!CanHarvestWithTool(target, tool))
             {
                 return false;
