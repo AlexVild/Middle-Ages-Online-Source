@@ -2325,5 +2325,32 @@ namespace Intersect.Server.Entities
 
         [NotMapped, JsonIgnore]
         public virtual int TierLevel => -1;
+
+        public void FullHeal()
+        {
+            SetVital((int)Vitals.Health, GetMaxVital((int)Vitals.Health));
+            SetVital((int)Vitals.Mana, GetMaxVital((int)Vitals.Mana));
+        }
+
+        public void ClearHostileDoTs()
+        {
+            foreach (var dot in CachedDots)
+            {
+                if (!dot.SpellBase.Combat.Friendly)
+                {
+                    dot.Expire();
+                }
+            }
+
+            foreach (var status in CachedStatuses)
+            {
+                if (!StatusHelpers.TenacityExcluded.Contains(status.Type))
+                {
+                    status.RemoveStatus();
+                }
+            }
+
+            PacketSender.SendMapEntityStatusUpdate(Map, this, MapInstanceId);
+        }
     }
 }

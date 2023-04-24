@@ -38,7 +38,6 @@ namespace Intersect.Server.Core.Instancing.Controller
         {
             if (Dungeon.State != DungeonState.Null)
             {
-                Logging.Log.Error($"Failed to initialize dungeon {dungeonId}, dungeon state was {DungeonState}");
                 return;
             }
             Dungeon = new Dungeon(dungeonId);
@@ -57,7 +56,6 @@ namespace Intersect.Server.Core.Instancing.Controller
         {
             if (!DungeonReady && DungeonDescriptor != default)
             {
-                Logging.Log.Error($"Failed to start dungeon for {player.Name}, dungeon state is {DungeonState}");
                 return;
             }
 
@@ -66,12 +64,7 @@ namespace Intersect.Server.Core.Instancing.Controller
                 && TimerProcessor.TryGetOwnerId(timer.OwnerType, timer.Id, player, out var ownerId) 
                 && !TimerProcessor.TryGetActiveTimer(timer.Id, ownerId, out _))
             {
-                Logging.Log.Error($"Starting dungeon timer for {player.Name} on instance {ownerId}...");
                 TimerProcessor.AddTimer(timer.Id, ownerId, Timing.Global.MillisecondsUtc);
-            }
-            else
-            {
-                Logging.Log.Error($"Failed to start dungeon timer for {player.Name}...");
             }
 
             foreach (var participant in Dungeon.Participants)
@@ -123,8 +116,6 @@ namespace Intersect.Server.Core.Instancing.Controller
                 || !TimerProcessor.TryGetOwnerId(timer.OwnerType, timer.Id, player, out var ownerId)
                 || !TimerProcessor.TryGetActiveTimer(timer.Id, ownerId, out var activeTimer))
             {
-                Logging.Log.Error($"--- Dungeon issue for {player.Name}!");
-                Logging.Log.Error($"--- Tried to complete a dungeon, but failed to get timer owner information! ");
                 return;
             }
             
@@ -134,6 +125,9 @@ namespace Intersect.Server.Core.Instancing.Controller
             TimerProcessor.RemoveTimer(activeTimer);
             foreach (var pl in Dungeon.Participants)
             {
+                pl.FullHeal();
+                pl.ClearHostileDoTs();
+
                 pl.StartCommonEventsWithTrigger(CommonEventTrigger.DungeonComplete);
                 pl.EnqueueStartCommonEvent(timer.CompletionEvent);
                 PacketSender.SendChatMsg(pl, $"You completed {DungeonDescriptor.DisplayName} in {Dungeon.CompletionTimeString}", ChatMessageType.Experience, CustomColors.General.GeneralCompleted);
