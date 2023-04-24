@@ -1983,7 +1983,9 @@ namespace Intersect.Server.Entities
             }
 
             //Handle Changes in Points
-            var currentPoints = StatPoints + StatPointAllocations.Sum() + VitalPointAllocations.Sum();
+            var currentPoints = StatPoints + 
+                (StatPointAllocations.Sum() / Options.Instance.PlayerOpts.BaseStatSkillIncrease) + 
+                (VitalPointAllocations.Sum() / Options.Instance.PlayerOpts.BaseVitalPointIncrease);
 
             var expectedPoints = playerClass.BasePoints + playerClass.PointIncrease * levelsWithStatBoosts;
             if (expectedPoints > currentPoints)
