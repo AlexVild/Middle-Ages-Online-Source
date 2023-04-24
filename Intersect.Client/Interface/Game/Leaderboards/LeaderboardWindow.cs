@@ -186,6 +186,7 @@ namespace Intersect.Client.Interface.Game.Leaderboards
                 lastY += row.RecordBackground.Height;
                 idx++;
             }
+            RecordContainer.ScrollToTop();
         }
 
         public void Close()

@@ -3169,7 +3169,7 @@ namespace Intersect.Client.Entities
                         idx++;
                         continue;
                     }
-                    if (!effectValues.ContainsKey((EffectType)effect)) 
+                    if (!effectValues.ContainsKey((EffectType)idx)) 
                     {
                         effectValues[(EffectType)idx] = effect;
                         idx++;
