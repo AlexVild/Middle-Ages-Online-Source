@@ -5,6 +5,7 @@ using System.Linq;
 using Intersect.Enums;
 using Intersect.GameObjects;
 using Intersect.Server.General;
+using Intersect.Server.Localization;
 using Intersect.Server.Networking;
 using Intersect.Utilities;
 
@@ -106,6 +107,12 @@ namespace Intersect.Server.Entities.Combat
 
             if (Attacker is Player playerAttacker)
             {
+                if (Target is Npc npc && !npc.CanPlayerAttack(playerAttacker))
+                {
+                    PacketSender.SendActionMsg(npc, Strings.Combat.invulnerable, CustomColors.Combat.Invulnerable, Options.BlockSound);
+                    return;
+                }
+
                 playerAttacker.TryGetEquippedItem(Options.WeaponIndex, out var weapon);
                 Attacker.TryDealDamageTo(Target, attackTypes, scaling, 1.0, weapon?.Descriptor, SpellBase, true, out _);
             }
