@@ -114,11 +114,11 @@ namespace Intersect.Server.Entities.Combat
                 }
 
                 playerAttacker.TryGetEquippedItem(Options.WeaponIndex, out var weapon);
-                Attacker.TryDealDamageTo(Target, attackTypes, scaling, 1.0, weapon?.Descriptor, SpellBase, true, out _);
+                Attacker.TryDealDamageTo(Target, attackTypes, scaling, 1.0, weapon?.Descriptor, SpellBase, true, 1, out _);
             }
             else
             {
-                Attacker.TryDealDamageTo(Target, attackTypes, scaling, 1.0, null, SpellBase, true, out _);
+                Attacker.TryDealDamageTo(Target, attackTypes, scaling, 1.0, null, SpellBase, true, 1, out _);
             }
         }
 

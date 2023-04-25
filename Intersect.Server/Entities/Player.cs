@@ -1431,27 +1431,8 @@ namespace Intersect.Server.Entities
                 return;
             }
 
-            var spellTaughtMessages = new List<string>();
-            var unlockableSpells = ClassBase.Get(ClassId)?.Spells?.Where((spell) =>
-            {
-                return spell.Level > Level && spell.Level <= Level + levels;
-            });
-
             SetLevel(Level + levels, resetExperience);
-            foreach (var spell in unlockableSpells)
-            {
-                if (TryAddSkillToBook(spell.Id))
-                {
-                    spellTaughtMessages.Add(
-                        Strings.Player.spelltaughtlevelup.ToString(SpellBase.GetName(spell.Id))
-                    );
-                }
-            }
-            foreach (var message in spellTaughtMessages)
-            {
-                PacketSender.SendChatMsg(this, message, ChatMessageType.Experience, CustomColors.Alerts.Info, Name);
-            }
-
+            LearnLevelledClassSpells(ClassBase.Get(ClassId));
             UnequipInvalidItems();
             StartCommonEventsWithTrigger(CommonEventTrigger.LevelUp);
             RecipeUnlockWatcher.RefreshPlayer(this);
@@ -1933,6 +1914,38 @@ namespace Intersect.Server.Entities
             return new Tuple<int, int>(flatStats, percentageStats);
         }
 
+        public void LearnLevelledClassSpells(ClassBase playerClass)
+        {
+            if (playerClass?.Spells?.Count == 0)
+            {
+                return;
+            }
+
+            var spells = playerClass.Spells.Where(clsSpell => clsSpell.Level <= Level).ToArray();
+            if (spells.Length == 0)
+            {
+                return;
+            }
+
+            var spellsLearned = new List<string>();
+            foreach(var spell in spells)
+            {
+                if (!TryAddSkillToBook(spell.Id))
+                {
+                    continue;
+                }
+                spellsLearned.Add(SpellBase.GetName(spell.Id));
+            }
+
+            if (spellsLearned.Count == 0)
+            {
+                return;
+            }
+
+            var spellsLearnedStr = Strings.Player.SpellsLearnedLevel.ToString(Level.ToString(), string.Join(", ", spellsLearned));
+            PacketSender.SendChatMsg(this, spellsLearnedStr, ChatMessageType.Experience, CustomColors.General.GeneralCompleted, sendToast: true);
+        }
+
         public void RecalculateStatsAndPoints()
         {
             var oldTotal = SkillPointTotal;
@@ -1942,6 +1955,8 @@ namespace Intersect.Server.Entities
             {
                 return;
             }
+
+            LearnLevelledClassSpells(playerClass);
 
             SkillPointTotal = playerClass.GetTotalSkillPointsAt(Level);
 

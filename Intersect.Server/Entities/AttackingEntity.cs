@@ -190,7 +190,7 @@ namespace Intersect.Server.Entities
             // Otherwise, handle the weapon
             else if (parentWeapon != null)
             {
-                if (!TryDealDamageTo(enemy, parentWeapon.AttackTypes, 100, 1.0, parentWeapon, null, true, out int weaponDamage))
+                if (!TryDealDamageTo(enemy, parentWeapon.AttackTypes, 100, 1.0, parentWeapon, null, true, GetDistanceTo(enemy), out int weaponDamage))
                 {
                     return;
                 }
@@ -374,6 +374,7 @@ namespace Intersect.Server.Entities
             ItemBase weapon,
             SpellBase spell,
             bool ignoreEvasion,
+            int range,
             out int damage)
         {
             damage = 0;
@@ -415,7 +416,7 @@ namespace Intersect.Server.Entities
             // Otherwise, we're dealing non-true damage and need to do some calcs
             else
             {
-                DealDamageTo(enemy, attackTypes, dmgScaling, critMultiplier, weapon, false, spell?.Combat?.Friendly ?? false, spell?.DamageOverrides, out damage);
+                DealDamageTo(enemy, attackTypes, dmgScaling, critMultiplier, weapon, false, spell?.Combat?.Friendly ?? false, spell?.DamageOverrides, range, out damage);
             }
             return damage != 0 || manaDamage != 0;
         }
@@ -447,6 +448,7 @@ namespace Intersect.Server.Entities
             bool secondaryDamage,
             bool friendly,
             Dictionary<int, int> damageTypeOverrides,
+            int range,
             out int damage)
         {
             damage = 0;
@@ -481,10 +483,7 @@ namespace Intersect.Server.Entities
                     return;
                 }
 
-                if (weaponMetadata != null && weaponMetadata != null)
-                {
-                    damage = CalculateSpecialDamage(damage, weaponMetadata, enemy);
-                }
+                damage = CalculateSpecialDamage(damage, range, weaponMetadata, enemy);
 
                 if (damage > enemy.GetVital((int)Vitals.Health))
                 {

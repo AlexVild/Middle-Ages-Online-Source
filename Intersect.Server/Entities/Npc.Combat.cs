@@ -71,13 +71,14 @@ namespace Intersect.Server.Entities
             return base.CanMeleeTarget(target);
         }
 
-        public virtual bool TryDealDamageTo(Entity enemy,
+        public override bool TryDealDamageTo(Entity enemy,
                     List<AttackTypes> attackTypes,
                     int dmgScaling,
                     double critMultiplier,
                     ItemBase weapon,
                     SpellBase spell,
                     bool ignoreEvasion,
+                    int range,
                     out int damage)
         {
             damage = 0;
@@ -96,7 +97,7 @@ namespace Intersect.Server.Entities
                 critMultiplier = spell.Combat.CritMultiplier;
             }
 
-            return base.TryDealDamageTo(enemy, attackTypes, dmgScaling, critMultiplier, weapon, null, ignoreEvasion, out damage);
+            return base.TryDealDamageTo(enemy, attackTypes, dmgScaling, critMultiplier, weapon, null, ignoreEvasion, range, out damage);
         }
 
         // An NPC always has casting materials
@@ -186,7 +187,7 @@ namespace Intersect.Server.Entities
             List<AttackTypes> attackTypes = new List<AttackTypes>(Base.AttackTypes);
 
             SendAttackAnimation(enemy);
-            if (!TryDealDamageTo(enemy, attackTypes, 100, 1.0, null, null, false, out int damage))
+            if (!TryDealDamageTo(enemy, attackTypes, 100, 1.0, null, null, false, 1, out int damage))
             {
                 return;
             }

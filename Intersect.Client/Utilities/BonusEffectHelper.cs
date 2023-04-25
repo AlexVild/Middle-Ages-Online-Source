@@ -25,6 +25,9 @@ namespace Intersect.Client.Utilities
             {EffectType.Prospector, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.Prospector], "Increases harvest speed when mining.")}, // Prospector
             {EffectType.Angler, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.Angler], "Increases harvest speed when fishing.")}, // Angler
             {EffectType.Lumberjack, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.Lumberjack], "Increases harvest speed when woodcutting.")}, // Lumberjack
+            {EffectType.Assassin, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.Assassin], "Increases backstab/stealth attack modifier on weapons with backstab.")}, // Assassin
+            {EffectType.Sniper, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.Sniper], "Does more damage if attacks are at a longer range.")}, // Sniper
+            {EffectType.Berzerk, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.Berzerk], "Increases damage based on how many enemies are aggressive toward you.")}, // Berzerk
         };
 
         public static readonly List<EffectType> LowerIsBetterEffects = new List<EffectType>

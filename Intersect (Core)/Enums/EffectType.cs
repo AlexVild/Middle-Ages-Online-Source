@@ -41,6 +41,15 @@ namespace Intersect.Enums
 
         [Description("Lumberjack")]
         Lumberjack = 11,
+
+        [Description("Assassin")]
+        Assassin = 12,
+
+        [Description("Sniper")]
+        Sniper = 13,
+
+        [Description("Berzerk")]
+        Berzerk = 14,
     }
 
 }

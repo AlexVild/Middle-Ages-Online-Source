@@ -416,40 +416,6 @@ namespace Intersect.Client.Localization
             public static LocalizedString classranktip = @"Your Class Rank(s). This can be increased at a Class Guild Hall.";
             
             public static LocalizedString calculatestats = @"Calculate Stats?";
-
-            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public static Dictionary<int, LocalizedString> BonusEffects = new Dictionary<int, LocalizedString>
-            {
-                {0, @""},
-                {1, @"Cooldown Reduction:"}, // Cooldown Reduction
-                {2, @"Lifesteal:"}, // Lifesteal
-                {3, @"Tenacity:"}, // Tenacity
-                {4, @"Luck:"}, // Luck
-                {5, @"Bonus Experience:"}, // Bonus Experience
-                {6, @"Affinity:"}, // Affinity
-                {7, @"Critical Bonus:"}, // Critical bonus
-                {8, @"Swiftness:"}, // Swiftness
-                {9, @"Prospector:"},
-                {10, @"Angler:"},
-                {11, @"Lumberjack:"},
-            };
-
-            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public static Dictionary<int, LocalizedString> BonusEffectDescriptions = new Dictionary<int, LocalizedString>
-            {
-                {0, @""},
-                {1, @"Cooldown Reduction:"}, // Cooldown Reduction
-                {2, @"Lifesteal:"}, // Lifesteal
-                {3, @"Tenacity:"}, // Tenacity
-                {4, @"Luck:"}, // Luck
-                {5, @"Bonus Experience:"}, // Bonus Experience
-                {6, @"Affinity:"}, // Affinity
-                {7, @"Critical Bonus:"}, // Critical bonus
-                {8, @"Swiftness:"}, // Swiftness
-                {9, @"Prospector:"},
-                {10, @"Angler:"},
-                {11, @"Lumberjack:"},
-            };
         }
 
         public partial struct CharacterCreation
@@ -1240,6 +1206,9 @@ namespace Intersect.Client.Localization
                 {9, @"Prospector:"},
                 {10, @"Angler:"},
                 {11, @"Lumberjack:"},
+                {12, @"Assassin:"},
+                {13, @"Sniper:"},
+                {14, @"Berzerk:"},
             };
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]

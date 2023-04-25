@@ -164,6 +164,10 @@ namespace Intersect.Config
             0.05f, 0.1f, 0.25f, 0.33f, 0.5f
         };
 
+        public float SniperDamageDivider = 2.0f;
+
+        public float BerzerkDamageDivider = 2.0f;
+
         // Threat levels
 
         public Dictionary<ThreatLevel, double> ThreatLevelThresholds = new Dictionary<ThreatLevel, double>()

@@ -68,6 +68,7 @@ namespace Intersect.Server.Entities
             ItemBase weapon,
             SpellBase spell,
             bool ignoreEvasion,
+            int range,
             out int damage)
         {
             damage = 0;
@@ -114,19 +115,17 @@ namespace Intersect.Server.Entities
                 }
             }
 
-            var range = GetDistanceTo(enemy);
-
             var targetHealthBefore = enemy.GetVital(Vitals.Health);
             var targetMaxHealth = enemy.GetMaxVital(Vitals.Health);
 
             bool damageWasDealt;
             if (spell != default)
             {
-                damageWasDealt = base.TryDealDamageTo(enemy, CombatUtilities.GetSpellAttackTypes(spell, weapon), dmgScaling, critMultiplier, weapon, spell, ignoreEvasion, out damage);
+                damageWasDealt = base.TryDealDamageTo(enemy, CombatUtilities.GetSpellAttackTypes(spell, weapon), dmgScaling, critMultiplier, weapon, spell, ignoreEvasion, range, out damage);
             }
             else
             {
-                damageWasDealt = base.TryDealDamageTo(enemy, weapon?.AttackTypes ?? new List<AttackTypes>() { AttackTypes.Blunt }, dmgScaling, critMultiplier, weapon, spell, ignoreEvasion, out damage);
+                damageWasDealt = base.TryDealDamageTo(enemy, weapon?.AttackTypes ?? new List<AttackTypes>() { AttackTypes.Blunt }, dmgScaling, critMultiplier, weapon, spell, ignoreEvasion, range, out damage);
             }
 
             if (damageWasDealt && damage > 0)
@@ -165,7 +164,7 @@ namespace Intersect.Server.Entities
                 OnAttackMissed(enemy);
                 return;
             }
-            
+
             // Short-circuit out if resource and let resource harvesting logic go
             if (enemy is Resource targetResource && targetResource.Base.Tool >= 0)
             {
@@ -188,7 +187,7 @@ namespace Intersect.Server.Entities
                 attackTypes.AddRange(weapon.Descriptor.AttackTypes);
             }
 
-            if (!TryDealDamageTo(enemy, attackTypes, 100, 1.0, weapon?.Descriptor, null, false, out int damage))
+            if (!TryDealDamageTo(enemy, attackTypes, 100, 1.0, weapon?.Descriptor, null, false, 1, out int damage))
             {
                 return;
             }
@@ -257,7 +256,7 @@ namespace Intersect.Server.Entities
             }
         }
 
-        protected override void PopulateExtraSpellDamage(ref int scaling, 
+        protected override void PopulateExtraSpellDamage(ref int scaling,
             ref List<AttackTypes> attackTypes,
             ref int critChance,
             ref double critMultiplier)
@@ -281,7 +280,7 @@ namespace Intersect.Server.Entities
             }
 
             var cost = spell.VitalCost[(int)Vitals.Mana];
-            
+
             if (StatusActive(StatusTypes.Attuned))
             {
                 cost = (int)Math.Floor(cost / Options.Instance.CombatOpts.AttunedStatusDividend);
@@ -458,7 +457,7 @@ namespace Intersect.Server.Entities
         private bool TryLifesteal(int damage, Entity target, out float recovered)
         {
             recovered = 0;
-            if (damage <= 0 || target == null || target is Resource) 
+            if (damage <= 0 || target == null || target is Resource)
             {
                 return false;
             }
@@ -639,7 +638,7 @@ namespace Intersect.Server.Entities
                    npc.Base.AttackTypes,
                    GetRawAttackSpeed(),
                    npc.Base.AttackSpeedValue,
-                   playerProjectile != Guid.Empty, 
+                   playerProjectile != Guid.Empty,
                    npc.Base.IsSpellcaster,
                    damageScalar);
             }
@@ -708,6 +707,81 @@ namespace Intersect.Server.Entities
         public override bool IsNonTrivialTo(Player player)
         {
             return true;
+        }
+
+        public override int CalculateSpecialDamage(int baseDamage, int range, ItemBase item, Entity target)
+        {
+            var originalDamage = baseDamage;
+
+            if (target is Resource) return baseDamage;
+
+            var berzerk = GetBonusEffectTotal(EffectType.Berzerk);
+            if (berzerk > 0 && Map.TryGetInstance(MapInstanceId, out var mapInstance))
+            {
+                var entities = mapInstance.GetCachedEntities();
+                var currentAggrod = 0;
+                foreach (var entity in entities)
+                {
+                    if (!(entity is Npc n))
+                    {
+                        continue;
+                    }
+
+                    if (n.Target == this)
+                    {
+                        currentAggrod++;
+                    }
+                }
+
+                var berzerkDamageMultiplier = (int)Math.Round(originalDamage / Options.Instance.CombatOpts.BerzerkDamageDivider);
+                if (currentAggrod > 1)
+                {
+                    baseDamage += (int)Math.Round(berzerkDamageMultiplier * (currentAggrod - 1) * (berzerk / 100f));
+                }
+            }
+
+            var sniper = GetBonusEffectTotal(EffectType.Sniper);
+            if (range > 1 && sniper > 0)
+            {
+                var sniperDamageMultiplier = (int)Math.Round(originalDamage / Options.Instance.CombatOpts.SniperDamageDivider);
+                baseDamage += (int)Math.Round(sniperDamageMultiplier * range * (sniper / 100f));
+            }
+
+            if (item == null || target == null) return baseDamage;
+
+            var canBackstab = true;
+            var canStealth = true;
+            if (target is Npc npc)
+            {
+                canBackstab = !npc?.Base?.NoBackstab ?? true;
+                canStealth = !npc?.Base?.NoStealthBonus ?? true;
+            }
+
+            var damageBonus = DamageBonus.None;
+            if (target.Dir == Dir) // Player is hitting something from behind
+            {
+                if (item.CanBackstab && canBackstab)
+                {
+                    baseDamage = (int)Math.Floor(baseDamage * ApplyEffectBonusToValue(item.BackstabMultiplier, EffectType.Assassin));
+                    damageBonus = DamageBonus.Backstab;
+                }
+                if (StealthAttack && item.ProjectileId == Guid.Empty && canStealth) // Melee weapons only for stealth attacks
+                {
+                    baseDamage += CalculateStealthDamage(baseDamage, item);
+                    damageBonus = DamageBonus.Stealth;
+                }
+
+                if (damageBonus == DamageBonus.Backstab)
+                {
+                    PacketSender.SendActionMsg(target, Strings.Combat.backstab, CustomColors.Combat.Backstab);
+                }
+                else if (damageBonus == DamageBonus.Stealth)
+                {
+                    PacketSender.SendActionMsg(target, Strings.Combat.stealthattack, CustomColors.Combat.Backstab);
+                }
+            }
+
+            return baseDamage;
         }
     }
 }

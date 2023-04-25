@@ -248,13 +248,11 @@ namespace Intersect.Server.Entities
             {
                 if (en == null)
                 {
-                                    return;
-
+                    return;
                 }
                 else
                 {
                     return;
-
                 }
             }
 

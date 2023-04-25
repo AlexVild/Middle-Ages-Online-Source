@@ -132,50 +132,15 @@ namespace Intersect.Server.Entities
             return false;
         }
 
-        private enum DamageBonus
+        protected enum DamageBonus
         {
             None = 0,
             Backstab,
             Stealth
         };
 
-        public int CalculateSpecialDamage(int baseDamage, ItemBase item, Entity target)
+        public virtual int CalculateSpecialDamage(int baseDamage, int range, ItemBase item, Entity target)
         {
-            if (target is Resource) return baseDamage;
-            if (item == null || target == null) return baseDamage;
-
-            var canBackstab = true;
-            var canStealth = true;
-            if (target is Npc npc)
-            {
-                canBackstab = !npc?.Base?.NoBackstab ?? true;
-                canStealth = !npc?.Base?.NoStealthBonus ?? true;
-            }
-
-            var damageBonus = DamageBonus.None;
-            if (target.Dir == Dir) // Player is hitting something from behind
-            {
-                if (item.CanBackstab && canBackstab)
-                {
-                    baseDamage = (int)Math.Floor(baseDamage * item.BackstabMultiplier);
-                    damageBonus = DamageBonus.Backstab;
-                }
-                if (this is Player player && player.StealthAttack && item.ProjectileId == Guid.Empty && canStealth) // Melee weapons only for stealth attacks
-                {
-                    baseDamage += player.CalculateStealthDamage(baseDamage, item);
-                    damageBonus = DamageBonus.Stealth;
-                }
-
-                if (damageBonus == DamageBonus.Backstab)
-                {
-                    PacketSender.SendActionMsg(target, Strings.Combat.backstab, CustomColors.Combat.Backstab);
-                }
-                else if (damageBonus == DamageBonus.Stealth)
-                {
-                    PacketSender.SendActionMsg(target, Strings.Combat.stealthattack, CustomColors.Combat.Backstab);
-                }
-            }
-
             return baseDamage;
         }
     }
