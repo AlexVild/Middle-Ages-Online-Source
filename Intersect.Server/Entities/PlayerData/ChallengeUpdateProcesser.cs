@@ -525,9 +525,10 @@ namespace Intersect.Server.Entities.PlayerData
             foreach (var challenge in update.Challenges)
             {
                 var desc = challenge.Descriptor;
-                if (update.EnemiesHit > 0 && update.EnemiesHit % desc.Reps == 0)
+                if (update.EnemiesHit > 0 && update.EnemiesHit >= desc.Reps)
                 {
-                    challenge.Sets++;
+                    var timesComplete = (int)Math.Floor((float)update.EnemiesHit / desc.Reps);
+                    challenge.Sets += timesComplete;
                 }
             }
         }
