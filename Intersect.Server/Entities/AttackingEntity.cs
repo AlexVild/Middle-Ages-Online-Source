@@ -190,7 +190,7 @@ namespace Intersect.Server.Entities
             // Otherwise, handle the weapon
             else if (parentWeapon != null)
             {
-                if (!TryDealDamageTo(enemy, parentWeapon.AttackTypes, 100, 1.0, parentWeapon, null, true, GetDistanceTo(enemy), out int weaponDamage))
+                if (enemy.IsAllyOf(this) || !TryDealDamageTo(enemy, parentWeapon.AttackTypes, 100, 1.0, parentWeapon, null, true, GetDistanceTo(enemy), out int weaponDamage))
                 {
                     return;
                 }

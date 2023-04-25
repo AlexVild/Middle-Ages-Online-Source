@@ -734,9 +734,10 @@ namespace Intersect.Server.Entities
                 }
 
                 var berzerkDamageMultiplier = (int)Math.Round(originalDamage / Options.Instance.CombatOpts.BerzerkDamageDivider);
+                var berzerkDamage = (int)Math.Round(berzerkDamageMultiplier * (currentAggrod - 1) * (berzerk / 100f));
                 if (currentAggrod > 1)
                 {
-                    baseDamage += (int)Math.Round(berzerkDamageMultiplier * (currentAggrod - 1) * (berzerk / 100f));
+                    baseDamage += Math.Max(0, berzerkDamage);
                 }
             }
 
@@ -744,7 +745,8 @@ namespace Intersect.Server.Entities
             if (range > 1 && sniper > 0)
             {
                 var sniperDamageMultiplier = (int)Math.Round(originalDamage / Options.Instance.CombatOpts.SniperDamageDivider);
-                baseDamage += (int)Math.Round(sniperDamageMultiplier * range * (sniper / 100f));
+                var sniperDamage = (int)Math.Round(sniperDamageMultiplier * range * (sniper / 100f));
+                baseDamage += Math.Max(0, sniperDamage);
             }
 
             if (item == null || target == null) return baseDamage;
@@ -762,12 +764,15 @@ namespace Intersect.Server.Entities
             {
                 if (item.CanBackstab && canBackstab)
                 {
-                    baseDamage = (int)Math.Floor(baseDamage * ApplyEffectBonusToValue(item.BackstabMultiplier, EffectType.Assassin));
+                    var assassin = GetBonusEffectTotal(EffectType.Assassin);
+                    var backstabDamage = (int)Math.Floor(originalDamage * ApplyEffectBonusToValue(item.BackstabMultiplier, EffectType.Assassin)) - originalDamage;
+                    baseDamage += Math.Max(0, backstabDamage);
                     damageBonus = DamageBonus.Backstab;
                 }
                 if (StealthAttack && item.ProjectileId == Guid.Empty && canStealth) // Melee weapons only for stealth attacks
                 {
-                    baseDamage += CalculateStealthDamage(baseDamage, item);
+                    var stealthDamage = CalculateStealthDamage(originalDamage, item) - originalDamage;
+                    baseDamage += Math.Max(0, stealthDamage);
                     damageBonus = DamageBonus.Stealth;
                 }
 

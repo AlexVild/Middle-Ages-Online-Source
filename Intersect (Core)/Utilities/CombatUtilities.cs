@@ -77,7 +77,8 @@ namespace Intersect.Utilities
                 totalDamage += Randomization.Next(low, high + 1);
             }
 
-            return (int)Math.Round(totalDamage * critMultiplier);
+            // Cap critmult at 2.5x
+            return (int)Math.Round(totalDamage * Math.Min(critMultiplier, 2.5f));
         }
 
         /// <summary>

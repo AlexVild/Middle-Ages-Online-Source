@@ -1855,7 +1855,7 @@ namespace Intersect.Server.Entities
                     if (resourceLock != null)
                     {
                         var resourceId = resourceLock.Base?.Id ?? Guid.Empty;
-                        var harvestBonus = Intersect.Server.Utilities.HarvestBonusHelper.CalculateHarvestBonus(this, resourceId);
+                        var harvestBonus = Utilities.HarvestBonusHelper.CalculateHarvestBonus(this, resourceId);
                         var effectType = Intersect.Utilities.HarvestBonusHelper.GetBonusEffectForResource(resourceId);
                         if (effectType != EffectType.None)
                         {
@@ -8129,7 +8129,7 @@ namespace Intersect.Server.Entities
             float effectMod = effectAmt / 100f;
             amount *= (1 + effectMod);
 
-            return amount + PassiveEffectTotal(effect);
+            return amount;
         }
 
         //TODO: Clean all of this stuff up
