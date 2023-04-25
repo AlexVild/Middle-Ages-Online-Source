@@ -559,6 +559,12 @@ namespace Intersect.Server.Entities
                 return;
             }
 
+            if ((Base.Spell.Combat.Friendly && !enemy.IsAllyOf(this)) ||
+                (!Base.Spell.Combat.Friendly && enemy.IsAllyOf(this)))
+            {
+                return;
+            }
+
             Owner.HandleAoESpell(Base.SpellId,
                         Base.Spell.Combat?.HitRadius ?? 0,
                         enemy.MapId,

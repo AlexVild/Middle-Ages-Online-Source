@@ -433,7 +433,7 @@ namespace Intersect.Server.Entities
             if (enemy is Player pvpTarget)
             {
                 pvpTarget.StartCommonEventsWithTrigger(CommonEventTrigger.PlayerInteract, "", Name);
-                if (!CanPvpPlayer(pvpTarget))
+                if (!parentSpell?.Combat?.Friendly ?? false && !CanPvpPlayer(pvpTarget))
                 {
                     return;
                 }

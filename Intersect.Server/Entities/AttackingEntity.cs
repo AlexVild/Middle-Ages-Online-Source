@@ -169,10 +169,23 @@ namespace Intersect.Server.Entities
             // Handle the _projectile's_ spell
             projectile.HandleProjectileSpell(enemy, false);
 
+            var willDamage = false;
+            if (parentSpell != null)
+            {
+                if ((parentSpell.Combat.Friendly && enemy.IsAllyOf(this)) ||
+                (!parentSpell.Combat.Friendly && !enemy.IsAllyOf(this)))
+                {
+                    willDamage = true;
+                }
+            }
+
             // Handle the spell cast from the parent
             if (parentSpell != null)
             {
-                SpellAttack(enemy, parentSpell, (sbyte)projectile.Dir, projectile, true);
+                if (willDamage)
+                {
+                    SpellAttack(enemy, parentSpell, (sbyte)projectile.Dir, projectile, true);
+                }
             }
             // Otherwise, handle the weapon
             else if (parentWeapon != null)
@@ -181,6 +194,7 @@ namespace Intersect.Server.Entities
                 {
                     return;
                 }
+                willDamage = true;
             }
 
             var animation = parentWeapon?.AttackAnimationId ?? parentSpell?.HitAnimationId ?? Guid.Empty;
@@ -190,14 +204,22 @@ namespace Intersect.Server.Entities
                 animation = Guid.Empty;
             }
 
-            var targetType = (enemy.IsDead() || enemy.IsDisposed) ? -1 : 1;
-            PacketSender.SendAnimationToProximity(
-                animation, targetType, enemy.Id, enemy.MapId, (byte)enemy.X, (byte)enemy.Y, (sbyte)projectileDir, MapInstanceId, true
-            );
+            if (willDamage)
+            {
+                var targetType = (enemy.IsDead() || enemy.IsDisposed) ? -1 : 1;
+                PacketSender.SendAnimationToProximity(
+                    animation, targetType, enemy.Id, enemy.MapId, (byte)enemy.X, (byte)enemy.Y, (sbyte)projectileDir, MapInstanceId, true
+                );
+            }
 
             if (descriptor.Knockback > 0 && projectileDir < 4 && !enemy.IsImmuneTo(Immunities.Knockback) && !StatusActive(StatusTypes.Steady))
             {
                 if (!(enemy is AttackingEntity) || enemy.IsDead() || enemy.IsDisposed)
+                {
+                    return;
+                }
+
+                if (parentSpell != null && parentSpell.Combat.Friendly && enemy.IsAllyOf(this))
                 {
                     return;
                 }
