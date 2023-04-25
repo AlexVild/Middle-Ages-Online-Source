@@ -1447,6 +1447,11 @@ namespace Intersect.Server.Maps
             }
             var spawns = mMapController.Spawns;
 
+            if (spawnIndex >= spawns.Count || spawnIndex < 0)
+            {
+                return true;
+            }
+
             return spawns[spawnIndex].RequiredPlayersToSpawn <= 1 || playersOnInstanceId >= spawns[spawnIndex].RequiredPlayersToSpawn;
         }
 
