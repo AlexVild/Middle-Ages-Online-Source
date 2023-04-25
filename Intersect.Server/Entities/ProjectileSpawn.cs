@@ -148,7 +148,10 @@ namespace Intersect.Server.Entities
 
             if (targetEntity is Player player)
             {
-                Parent.Owner.ProjectileAttack(player, Parent, Parent.Spell, Parent.Item, false, Dir);
+                if (Parent.Spell?.Combat?.Friendly ?? false || !player.IsAllyOf(Parent.Owner))
+                {
+                    Parent.Owner.ProjectileAttack(player, Parent, Parent.Spell, Parent.Item, false, Dir);
+                }
                 if (GrappleAvailable && Parent.Base.AttachToEntities)
                 {
                     // If the projectile's spell can't affect the target, ignore
