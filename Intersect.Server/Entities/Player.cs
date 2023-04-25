@@ -1453,12 +1453,12 @@ namespace Intersect.Server.Entities
             // Award combo EXP if opponent was NPC or player; do not reward if threat level is trivial
             if (CurrentCombo > 0 && (opponent is Npc || opponent is Player) && threatLevelExpMod != Options.Instance.CombatOpts.ThreatLevelExpRates[ThreatLevel.Trivial])
             {
-                ComboExp += CalculateComboExperience(amount, partyCombo);
+                ComboExp += CalculateComboExperience(amount, partyCombo, opponent.TierLevel);
 
                 // For ensuring that combo EXP challenge tracking remains truthful - avoids weapon switch exploit
                 if (!InvalidateChallenge)
                 {
-                    WeaponComboExp += CalculateComboExperience(amount, partyCombo);
+                    WeaponComboExp += CalculateComboExperience(amount, partyCombo, opponent.TierLevel);
                 }
                 else
                 {
@@ -1628,7 +1628,7 @@ namespace Intersect.Server.Entities
         }
 
         #region Combo Stuff
-        private int CalculateComboExperience(long baseAmount, bool partyCombo)
+        private int CalculateComboExperience(long baseAmount, bool partyCombo, int tierLevel)
         {
             // Check to see if a prayer is equipped that modifies this
             var equipBonus = 0.0f;

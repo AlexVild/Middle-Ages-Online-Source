@@ -16,6 +16,8 @@ namespace Intersect.Utilities
 
         readonly static float DodgeMod = 15.0f;
 
+        readonly static float TierGrowthFactor = 0.2f;
+
         public static long Calculate(NpcBase npc)
         {
             float exp = 0f;
@@ -48,7 +50,7 @@ namespace Intersect.Utilities
             var critBonus = exp * crit;
             exp += (float)critBonus;
 
-            return (long)Math.Ceiling(exp);
+            return (long)Math.Ceiling(exp + (exp * (npc.Level * TierGrowthFactor)));
         }
     }
 }
