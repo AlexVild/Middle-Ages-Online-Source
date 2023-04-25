@@ -2485,6 +2485,8 @@ namespace Intersect.Server.Entities
             UpdateInstanceLivesMessaging();
             // Remove timers that aren't meant to proceed beyond an instance change
             EndInstanceChangeTimers();
+            // Clear common events from the previous instance
+            ClearCommonEvents();
         }
 
         private void UpdateInstanceLivesMessaging()
@@ -9245,5 +9247,10 @@ namespace Intersect.Server.Entities
                     .OrderByDescending(info => info.Rank)
                     .First().Rank ?? 0 :
             0;
+
+        private void ClearCommonEvents()
+        {
+            while (_queueStartCommonEvent.TryDequeue(out _)) ;
+        }
     }
 }
