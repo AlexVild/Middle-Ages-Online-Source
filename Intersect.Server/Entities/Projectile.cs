@@ -554,13 +554,13 @@ namespace Intersect.Server.Entities
 
         public void HandleProjectileSpell(Entity enemy, bool isProjectileTool = false, int tool = -1)
         {
-            if (enemy == null || Spell == null || Spell.Combat == null)
+            if (enemy == null || Base.Spell == null || Base.Spell.Combat == null)
             {
                 return;
             }
 
             Owner.HandleAoESpell(Base.SpellId,
-                        Spell.Combat?.HitRadius ?? 0,
+                        Base.Spell.Combat?.HitRadius ?? 0,
                         enemy.MapId,
                         enemy.X,
                         enemy.Y,

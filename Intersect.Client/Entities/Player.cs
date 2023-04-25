@@ -50,6 +50,8 @@ namespace Intersect.Client.Entities
 
         public Guid TrackedWeaponTypeId = Guid.Empty;
 
+        public long LastAttemptedCast = 0L;
+
         public List<FriendInstance> Friends = new List<FriendInstance>();
 
         public HotbarInstance[] Hotbar = new HotbarInstance[Options.MaxHotbar];

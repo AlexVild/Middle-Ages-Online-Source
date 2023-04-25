@@ -186,6 +186,13 @@ namespace Intersect.Client.Networking
 
         public static void SendUseSpell(int slot, Guid targetId)
         {
+            // TODO Alex: Trying this to avoid multi-casting problems? I think they're due to latency but I really don't know
+            if (Globals.Me.LastAttemptedCast > Timing.Global.Milliseconds)
+            {
+                return;
+            }
+
+            Globals.Me.LastAttemptedCast = Timing.Global.Milliseconds + 100;
             Network.SendPacket(new UseSpellPacket(slot, targetId));
         }
 
