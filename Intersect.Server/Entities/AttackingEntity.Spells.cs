@@ -12,14 +12,19 @@ using Intersect.Server.Networking;
 using Intersect.Utilities;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 namespace Intersect.Server.Entities
 {
     public abstract partial class AttackingEntity : Entity
     {
         protected bool IsUnableToCastSpells => CachedStatuses.Any(PredicateUnableToCastSpells);
+
+        [NotMapped, JsonIgnore]
+        public bool IsCasting => CastTime > Timing.Global.Milliseconds;
 
         /// <summary>
         /// Whether an entity meets casting requirements (ammo & conditions) of some spell
@@ -145,7 +150,7 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
-            if (CastTime != 0)
+            if (IsCasting)
             {
                 // Currently casting!
                 return false;
@@ -201,7 +206,14 @@ namespace Intersect.Server.Entities
                 return;
             }
 
-            CastTime = Timing.Global.Milliseconds + spell.CastDuration;
+            if (spell.CastDuration > 0 && !instant)
+            {
+                CastTime = Timing.Global.Milliseconds + spell.CastDuration;
+            }
+            else
+            {
+                CastTime = 0;
+            }
             Target = target;
 
             if (spell.CastAnimationId != Guid.Empty)
@@ -211,7 +223,7 @@ namespace Intersect.Server.Entities
                 );
             }
 
-            if (instant)
+            if (instant || CastTime == 0)
             {
                 UseSpell(spell, SpellCastSlot, Target);
             }
@@ -230,15 +242,6 @@ namespace Intersect.Server.Entities
             CastTarget = null;
             SpellCastSlot = -1;
             PacketSender.SendEntityCancelCast(this);
-        }
-
-        /// <summary>
-        /// Resets casting variables to defaults
-        /// </summary>
-        public virtual void CastingFinished()
-        {
-            CastTarget = null;
-            SpellCastSlot = -1;
         }
 
         /// <summary>
@@ -483,8 +486,7 @@ namespace Intersect.Server.Entities
             // We're actually doing the spell now - use our mats and if we fail, end
             if (!prayerSpell && !instantCast && !ValidateCast(spell, CastTarget, ignoreVitals))
             {
-                CastTime = 0;
-                CastingFinished();
+                CancelCast();
                 return;
             }
 
@@ -493,8 +495,6 @@ namespace Intersect.Server.Entities
             {
                 Unstealth();
             }
-
-            CastTime = 0;
 
             switch (spell.SpellType)
             {
@@ -644,9 +644,9 @@ namespace Intersect.Server.Entities
             {
                 Die(killer: this);
             }
-            
+
             // Clear casting target info
-            CastingFinished();
+            CancelCast();
         }
 
         /// <summary>
@@ -655,7 +655,7 @@ namespace Intersect.Server.Entities
         /// <param name="timeMs"></param>
         public override void CheckForSpellCast(long timeMs)
         {
-            if (CastTime != 0 && CastTime < timeMs && SpellCastSlot < Spells.Count && SpellCastSlot >= 0)
+            if (CastTime != 0 && !IsCasting && SpellCastSlot < Spells.Count && SpellCastSlot >= 0)
             {
                 var spell = SpellBase.Get(Spells[SpellCastSlot].SpellId);
                 UseSpell(spell, SpellCastSlot, Target);

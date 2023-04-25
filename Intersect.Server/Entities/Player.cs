@@ -1111,7 +1111,7 @@ namespace Intersect.Server.Entities
             }
 
             var currentMapZoneType = MapController.Get(Map.Id).ZoneType;
-            CastTime = 0;
+            CancelCast();
             CastTarget = null;
 
             //Flag death to the client
@@ -3481,7 +3481,7 @@ namespace Intersect.Server.Entities
 
                         if (itemBase.QuickCast)
                         {
-                            if (!CanCastSpell(itemBase.Spell, target, true, true))
+                            if (!CanCastSpell(itemBase.Spell, target, true, true) || IsCasting)
                             {
                                 return;
                             }

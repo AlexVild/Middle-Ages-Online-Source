@@ -661,11 +661,6 @@ namespace Intersect.Client.Networking
                 return;
             }
 
-            if (en is Player pl && Options.Combat.MovementCancelsCast)
-            {
-                en.CastTime = 0;
-            }
-
             if (en.Dashing != null || en.DashQueue.Count > 0)
             {
                 return;
@@ -827,12 +822,8 @@ namespace Intersect.Client.Networking
                     );
 
                     entity.Status.Add(instance);
-
-                    if (instance.Type == StatusTypes.Stun || instance.Type == StatusTypes.Silence)
-                    {
-                        entity.CastTime = 0;
-                    }
-                    else if (instance.Type == StatusTypes.Shield)
+                    
+                    if (instance.Type == StatusTypes.Shield)
                     {
                         instance.Shield = status.VitalShields;
                     }
@@ -905,11 +896,7 @@ namespace Intersect.Client.Networking
 
                 en.Status.Add(instance);
 
-                if (instance.Type == StatusTypes.Stun || instance.Type == StatusTypes.Silence)
-                {
-                    en.CastTime = 0;
-                }
-                else if (instance.Type == StatusTypes.Shield)
+                if (instance.Type == StatusTypes.Shield)
                 {
                     instance.Shield = status.VitalShields;
                 }
@@ -1389,9 +1376,14 @@ namespace Intersect.Client.Networking
         {
             var entityId = packet.EntityId;
             var spellId = packet.SpellId;
-            if (SpellBase.Get(spellId) != null && Globals.Entities.ContainsKey(entityId))
+            var spell = SpellBase.Get(spellId);
+            if (spell != null && Globals.Entities.ContainsKey(entityId))
             {
-                Globals.Entities[entityId].CastTime = Timing.Global.Milliseconds + SpellBase.Get(spellId).CastDuration;
+                if (spell.CastDuration == 0)
+                {
+                    return;
+                }
+                Globals.Entities[entityId].CastTime = Timing.Global.Milliseconds + spell.CastDuration;
                 Globals.Entities[entityId].SpellCast = spellId;
             }
         }

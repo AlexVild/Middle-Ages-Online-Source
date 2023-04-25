@@ -64,6 +64,8 @@ namespace Intersect.Client.Entities
         //Combat Status
         public long CastTime = 0;
 
+        public bool IsCasting => CastTime != 0;
+
         //Dashing instance
         public Dash Dashing;
 
@@ -1895,7 +1897,7 @@ namespace Intersect.Client.Entities
 
         public void DrawCastingBar()
         {
-            if (CastTime < Timing.Global.Milliseconds)
+            if (!IsCasting)
             {
                 SpellCast = default;
                 return;
@@ -2150,7 +2152,7 @@ namespace Intersect.Client.Entities
                     SpriteFrame = (int)Math.Floor((timeIn / (CalculateAttackTime() / (float)SpriteFrames)));
                 }
             }
-            else if (CastTime > Timing.Global.Milliseconds)
+            else if (IsCasting)
             {
                 var spell = SpellBase.Get(SpellCast);
                 if (spell != null)

@@ -34,7 +34,7 @@ namespace Intersect.Server.Entities
 
         public override void CheckForSpellCast(long timeMs)
         {
-            if (CastTime != 0 && CastTime < timeMs && SpellCastSlot < Spells.Count && SpellCastSlot >= 0)
+            if (CastTime != 0 && !IsCasting && SpellCastSlot < Spells.Count && SpellCastSlot >= 0)
             {
                 var spell = SpellBase.Get(Spells[SpellCastSlot].SpellId);
                 UseSpell(spell, SpellCastSlot, CastTarget);

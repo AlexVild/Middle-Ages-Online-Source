@@ -239,7 +239,7 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
-            if (CastTime > Timing.Global.Milliseconds)
+            if (IsCasting)
             {
                 return false;
             }
