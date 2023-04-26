@@ -97,6 +97,15 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 mEnhancementDescWindow = new EnhancementDescriptionWindow(mItem.EnhancementId, mItem.Icon, x, y);
                 mEnhancementDescWindow.Show();
             }
+            else if ((Interface.GameUi.CraftingWindowOpen() || Interface.GameUi.DeconstructorWindow.IsVisible()) && mItem.StudyEnhancement != Guid.Empty)
+            {
+                if (!Globals.Me.KnownEnhancements.Contains(mItem.StudyEnhancement))
+                {
+                    mSpellDescWindow = null;
+                    mEnhancementDescWindow = new EnhancementDescriptionWindow(mItem.StudyEnhancement, mItem.Icon, x, y, (float)mItem.StudyChance);
+                    mEnhancementDescWindow.Show();
+                }
+            }
 
             if (mSpellDescWindow != default)
             {

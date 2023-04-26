@@ -13,10 +13,13 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
 
         protected string Icon { get; set; }
 
-        public EnhancementDescriptionWindow(Guid enhancementId, string icon, int x, int y) : base(Interface.GameUi.GameCanvas, "DescriptionWindow")
+        protected float StudyChance { get; set; }
+
+        public EnhancementDescriptionWindow(Guid enhancementId, string icon, int x, int y, float studyChance = 0.0f) : base(Interface.GameUi.GameCanvas, "DescriptionWindow")
         {
             Enhancement = EnhancementDescriptor.Get(enhancementId);
             Icon = icon;
+            StudyChance = studyChance;
 
             GenerateComponents();
             SetupDescriptionWindow();
@@ -62,6 +65,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
         protected void SetupRequirements()
         {
             var rows = AddRowContainer();
+
             rows.AddKeyValueRow("Can be applied to...", string.Empty, CustomColors.ItemDesc.Notice, Color.White);
             foreach (var kv in Enhancement.ValidWeaponTypes)
             {
@@ -116,6 +120,23 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             rows.AddKeyValueRow("Enhancement Points:", Enhancement.RequiredEnhancementPoints.ToString("N0"), CustomColors.ItemDesc.Muted, CustomColors.ItemDesc.Primary);
 
             rows.SizeToChildren(true, true);
+
+            if (StudyChance > 0f)
+            {
+                AddDivider();
+                var description = AddDescription();
+                if (!Globals.Me.KnownEnhancements.Contains(Enhancement.Id))
+                {
+                    if (Interface.GameUi.CraftingWindowOpen())
+                    {
+                        description.AddText($"You have a {StudyChance.ToString("N2")}% chance of learning this enhancement when you craft this item.", CustomColors.ItemDesc.Muted);
+                    }
+                    else if (Interface.GameUi.DeconstructorWindow.IsVisible())
+                    {
+                        description.AddText($"You have a {StudyChance.ToString("N2")}% chance of learning this enhancement when you deconstruct this item.", CustomColors.ItemDesc.Muted);
+                    }
+                }
+            }
         }
     }
 }
