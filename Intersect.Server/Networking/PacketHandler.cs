@@ -4143,6 +4143,11 @@ namespace Intersect.Server.Networking
                     }
                     break;
                 case LootUpdateType.TakeAll:
+                    if (player.CurrentLoot == default)
+                    {
+                        break;
+                    }
+
                     var preTakeCount = player.CurrentLoot.Count;
                     player.CurrentLoot.RemoveAll(item => player.TryGiveItem(item, ItemHandling.Overflow, false, true, -1, -1, true)); 
 
@@ -4168,6 +4173,11 @@ namespace Intersect.Server.Networking
                     PacketSender.SendPlaySound(player, Options.Instance.LootRollOpts.BankSound);
                     break;
                 case LootUpdateType.BankAll:
+                    if (player.CurrentLoot == default)
+                    {
+                        break;
+                    }
+
                     var preBankCount = player.CurrentLoot.Count;
                     player.CurrentLoot.RemoveAll(item => bankInterface.TryDepositItem(item, false));
 
@@ -4188,7 +4198,7 @@ namespace Intersect.Server.Networking
                     PacketSender.SendPlaySound(player, Options.Instance.LootRollOpts.DismissSound);
                     break;
                 case LootUpdateType.DismissAll:
-                    if (player.CurrentLoot.Count > 1)
+                    if (player.CurrentLoot?.Count > 1)
                     {
                         PacketSender.SendPlaySound(player, Options.Instance.LootRollOpts.DismissAllSound);
                     }

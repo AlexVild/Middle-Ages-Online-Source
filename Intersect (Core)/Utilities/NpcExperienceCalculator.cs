@@ -16,7 +16,7 @@ namespace Intersect.Utilities
 
         readonly static float DodgeMod = 15.0f;
 
-        readonly static float TierGrowthFactor = 0.2f;
+        readonly static float TierGrowthFactor = 0.125f;
 
         public static long Calculate(NpcBase npc)
         {
