@@ -1038,11 +1038,21 @@ namespace Intersect.Client.Entities
                     return;
                 }
 
-                if (spellBase.Combat.TargetType == SpellTargetTypes.Single && TargetIndex == Guid.Empty)
+                if (spellBase.Combat.TargetType == SpellTargetTypes.Single)
                 {
                     if (TargetIndex == Guid.Empty)
                     {
                         SendAlert(Strings.Spells.targetneeded, Strings.Combat.targetneeded);
+                        return;
+                    }
+                    else if (Globals.Entities.TryGetValue(TargetIndex, out var target))
+                    {
+                        var distanceToTarget = (int)Math.Round(CalculateDistanceTo(target) / Options.TileHeight);
+                        if (distanceToTarget > spellBase.Combat.CastRange)
+                        {
+                            SendAlert("The target is too far away to cast this spell!", "Too far!");
+                            return;
+                        }
                     }
                 }
 
