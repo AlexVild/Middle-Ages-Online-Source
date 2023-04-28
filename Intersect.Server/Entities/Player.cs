@@ -3334,6 +3334,7 @@ namespace Intersect.Server.Entities
             // Can not use items while sleeping
             if (StatusActive(StatusTypes.Sleep))
             {
+                PacketSender.SendChatMsg(this, Strings.Items.sleep, ChatMessageType.Error);
                 return;
             }
 
@@ -3346,25 +3347,6 @@ namespace Intersect.Server.Entities
             var itemBase = ItemBase.Get(Item.ItemId);
             if (itemBase != null && Item.Quantity > 0)
             {
-
-                //Check if the user is silenced or stunned
-                foreach (var status in CachedStatuses)
-                {
-                    if (Options.Instance.CombatOpts.StunPreventsItems && status.Type == StatusTypes.Stun)
-                    {
-                        PacketSender.SendChatMsg(this, Strings.Items.stunned, ChatMessageType.Error);
-
-                        return;
-                    }
-
-                    if (status.Type == StatusTypes.Sleep)
-                    {
-                        PacketSender.SendChatMsg(this, Strings.Items.sleep, ChatMessageType.Error);
-
-                        return;
-                    }
-                }
-
                 // Unequip items even if you do not meet the requirements.
                 // (Need this for silly devs who give people items and then later add restrictions...)
                 if (itemBase.ItemType == ItemTypes.Equipment && SlotIsEquipped(slot, out var equippedSlot))

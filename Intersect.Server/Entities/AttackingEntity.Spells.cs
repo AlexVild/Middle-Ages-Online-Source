@@ -75,26 +75,28 @@ namespace Intersect.Server.Entities
         /// <returns>True if we can cast the spell</returns>
         public bool CanCastSpell(SpellBase spell, Entity target, bool ignoreVitals = false, bool instantCast = false)
         {
-            // Status affliction!
-            if (IsUnableToCastSpells)
-            {
-                return false;
-            }
-
             if (spell == null)
             {
-                return false;
-            }
-
-            if (!ignoreVitals && !MeetsSpellVitalReqs(spell))
-            {
-                // Not enough vitals!
                 return false;
             }
 
             if (spell.SpellType == SpellTypes.Passive)
             {
                 return false;
+            }
+
+            if (!instantCast)
+            {
+                if (IsUnableToCastSpells)
+                {
+                    return false;
+                }
+
+                if (!ignoreVitals && !MeetsSpellVitalReqs(spell))
+                {
+                    // Not enough vitals!
+                    return false;
+                }
             }
 
             if (spell.Combat != null &&

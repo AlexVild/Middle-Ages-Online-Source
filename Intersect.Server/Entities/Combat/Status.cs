@@ -59,7 +59,7 @@ namespace Intersect.Server.Entities.Combat
             Type = type;
             Data = data;
 
-            if (en.CachedStatuses.Any(AttackingEntity.PredicateCleansed))
+            if (!spell.Combat.Friendly && en.CachedStatuses.Any(AttackingEntity.PredicateCleansed) && spell.Combat.Effect != StatusTypes.Cleanse)
             {
                 PacketSender.SendActionMsg(en, Strings.Combat.immunetoeffect, CustomColors.Combat.Status);
                 return;

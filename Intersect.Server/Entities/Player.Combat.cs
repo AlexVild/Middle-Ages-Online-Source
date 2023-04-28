@@ -50,6 +50,13 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
+            // Ranged weapon
+            var equippedWeapon = GetEquippedWeapon();
+            if (equippedWeapon?.ProjectileId != Guid.Empty)
+            {
+                return false;
+            }
+
             return base.CanMeleeTarget(target);
         }
 
