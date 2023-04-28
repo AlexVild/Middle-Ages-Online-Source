@@ -1292,7 +1292,7 @@ namespace Intersect.Client.Maps
                         ActionMsgs[n].Y * Options.TileHeight -
                         Options.TileHeight *
                         2 *
-                        (Options.ActionMessageTime - (ActionMsgs[n].TransmittionTimer - Timing.Global.MillisecondsUtc)) /
+                        (Options.ActionMessageTime - (ActionMsgs[n].TransmittionTimer - Timing.Global.Milliseconds)) /
                         Options.ActionMessageTime + ActionMsgs[n].YOffset
                     );
                 }
@@ -1306,7 +1306,7 @@ namespace Intersect.Client.Maps
                 var textWidth = Graphics.Renderer.MeasureText(ActionMsgs[n].Msg, Graphics.ActionMsgFont, 1).X;
 
                 Color fadingColor = ActionMsgs[n].Clr;
-                double alphaRatio = Math.Abs((float) (Timing.Global.MillisecondsUtc - ActionMsgs[n].TransmittionTimer) / (float) Options.ActionMessageTime);
+                double alphaRatio = Math.Abs((float) (Timing.Global.Milliseconds - ActionMsgs[n].TransmittionTimer) / (float) Options.ActionMessageTime);
                 alphaRatio = MathHelper.Clamp(alphaRatio, 0.0f, 1.0f);
                 fadingColor.A = (byte) (255 * alphaRatio);
 
