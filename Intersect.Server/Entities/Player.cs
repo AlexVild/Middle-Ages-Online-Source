@@ -1877,13 +1877,13 @@ namespace Intersect.Server.Entities
                 }
             }
 
+            var swiftBonus = (100 - GetBonusEffectTotal(EffectType.Swiftness)) / 100f;
+            attackTime = (int)Math.Floor(attackTime * swiftBonus);
+            
             if (StatusActive(StatusTypes.Swift))
             {
                 attackTime = (int)Math.Floor(attackTime * Options.Instance.CombatOpts.SwiftAttackSpeedMod);
             }
-
-            var swiftBonus = (100 - GetBonusEffectTotal(EffectType.Swiftness)) / 100f;
-            attackTime = (int)Math.Floor(attackTime * swiftBonus);
 
             return
                 attackTime -

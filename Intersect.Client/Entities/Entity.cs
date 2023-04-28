@@ -1987,13 +1987,16 @@ namespace Intersect.Client.Entities
             {
                 return;
             }
-            
+
             if (IsDead)
             {
                 return;
             }
+            
+            var targetTex = Globals.Me.StatusIsActive(StatusTypes.Taunt) ?
+                Globals.ContentManager.GetTexture(TextureType.Misc, "taunt_target.png") :
+                Globals.ContentManager.GetTexture(TextureType.Misc, "target.png");
 
-            var targetTex = Globals.ContentManager.GetTexture(TextureType.Misc, "target.png");
             if (targetTex != null)
             {
                 var srcRectangle = new FloatRect(

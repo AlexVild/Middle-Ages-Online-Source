@@ -1833,6 +1833,7 @@ namespace Intersect.Client.Entities
             {
                 if (Status[i].Type == StatusTypes.Taunt)
                 {
+                    SendAlert("You are taunted and can't change targets!", "Taunted!");
                     return false;
                 }
             }
@@ -1952,6 +1953,7 @@ namespace Intersect.Client.Entities
             {
                 if (Status[i].Type == StatusTypes.Taunt && !force)
                 {
+                    SendAlert("You are taunted and can't target another player!", "Taunted!");
                     return false;
                 }
             }
@@ -2326,13 +2328,13 @@ namespace Intersect.Client.Entities
                 }
             }
 
-            if (StatusIsActive(StatusTypes.Swift))
-            {
-                attackTime = (int) Math.Floor(attackTime * Options.Instance.CombatOpts.SwiftAttackSpeedMod);
-            }
-            
             var swiftBonus = (100 - GetEquipmentBonusEffect(EffectType.Swiftness)) / 100f;
             attackTime = (int) Math.Floor(attackTime * swiftBonus);
+
+            if (StatusIsActive(StatusTypes.Swift))
+            {
+                attackTime = (int)Math.Floor(attackTime * Options.Instance.CombatOpts.SwiftAttackSpeedMod);
+            }
 
             return attackTime;
         }
