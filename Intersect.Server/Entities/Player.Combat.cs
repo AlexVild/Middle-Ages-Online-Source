@@ -432,7 +432,7 @@ namespace Intersect.Server.Entities
             if (enemy is Player pvpTarget)
             {
                 pvpTarget.StartCommonEventsWithTrigger(CommonEventTrigger.PlayerInteract, "", Name);
-                if (!parentSpell?.Combat?.Friendly ?? false && !CanPvpPlayer(pvpTarget))
+                if ((!parentSpell?.Combat?.Friendly ?? false) && !CanPvpPlayer(pvpTarget))
                 {
                     return;
                 }
@@ -463,13 +463,19 @@ namespace Intersect.Server.Entities
             }
 
             var lifesteal = GetBonusEffectTotal(EffectType.Lifesteal) / 100f;
-            var healthRecovered = lifesteal * damage;
+            if (lifesteal <= 0)
+            {
+                return false;
+            }
+
+            var healthRecovered = Math.Max(1, lifesteal * damage);
             if (healthRecovered <= 0)
             {
                 return false;
             }
 
             AddVital(Vitals.Health, (int)healthRecovered);
+            PacketSender.SendCombatNumber(CombatNumberType.HealHealth, this, (int)healthRecovered);
             recovered = healthRecovered;
             return true;
         }

@@ -148,7 +148,7 @@ namespace Intersect.Server.Entities
 
             if (targetEntity is Player player)
             {
-                if (Parent.Spell?.Combat?.Friendly ?? false || !player.IsAllyOf(Parent.Owner))
+                if ((Parent.Spell?.Combat?.Friendly ?? false) || !player.IsAllyOf(Parent.Owner))
                 {
                     Parent.Owner.ProjectileAttack(player, Parent, Parent.Spell, Parent.Item, false, Dir);
                 }
