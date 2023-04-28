@@ -92,10 +92,15 @@ namespace Intersect.Utilities
             var attacksToKill = Math.Ceiling((float)maxEnemyHp / playerMax);
             var attacksToDie = Math.Ceiling((float)maxHp / npcMax);
 
+            if (attacksToKill <= 1)
+            {
+                return 0.0;
+            }
+
             // Make a best guess at how missed attacks might come in to play by elongating the amount of total attacks needed for death based on miss percentages
             if (playerIsRanged)
             {
-                playerStats[(int)Stats.Evasion] += 10; // Evasion boost in calculations for ranged attackers
+                playerStats[(int)Stats.Evasion] += 12; // Evasion boost in calculations for ranged attackers
             }
             var playerMissChance = CombatUtilities.MissChance(CombatUtilities.CalculateMissFactor(playerStats[(int)Stats.Accuracy], npcStats[(int)Stats.Evasion]));
             var npcMissChance = CombatUtilities.MissChance(CombatUtilities.CalculateMissFactor(npcStats[(int)Stats.Accuracy], playerStats[(int)Stats.Evasion]));
