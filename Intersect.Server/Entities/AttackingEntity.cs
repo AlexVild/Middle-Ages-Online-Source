@@ -265,6 +265,11 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
+            if (StatusActive(StatusTypes.Blind))
+            {
+                return false;
+            }
+
             return true;
         }
 
