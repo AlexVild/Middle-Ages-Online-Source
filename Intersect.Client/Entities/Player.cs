@@ -2819,25 +2819,35 @@ namespace Intersect.Client.Entities
 
             foreach (var en in Globals.Entities)
             {
-                if (en.Value == null)
+                var entity = en.Value;
+                if (entity == null)
                 {
                     continue;
                 }
 
-                if (!en.Value.HideEntity && (!en.Value.IsStealthed() || en.Value is Player player && Globals.Me.IsInMyParty(player)))
+                if (entity.IsStealthed() && !entity.IsAllyOf(Globals.Me))
                 {
-                    if (en.Value.GetType() != typeof(Projectile) && en.Value.GetType() != typeof(Resource))
+                    if (TargetIndex == en.Key)
                     {
-                        if (TargetType == 0 && TargetIndex == en.Value.Id)
-                        {
-                            en.Value.DrawTarget((int) TargetTypes.Selected);
-                        }
+                        ClearTarget();
                     }
+                    continue;
                 }
-                else
+
+                if (entity.HideEntity && TargetIndex == en.Key)
                 {
-                    //TODO: Completely wipe the stealthed player from memory and have server re-send once stealth ends.
                     ClearTarget();
+                    continue;
+                }
+
+                if (entity.GetType() == typeof(Projectile) || entity.GetType() == typeof(Resource))
+                {
+                    continue;
+                }
+
+                if (TargetType == 0 && TargetIndex == en.Value.Id)
+                {
+                    entity.DrawTarget((int)TargetTypes.Selected);
                 }
             }
 
