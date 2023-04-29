@@ -20,7 +20,7 @@ using System.Threading.Tasks;
 
 namespace Intersect.Client.Interface.Game.Enhancement
 {
-    struct EnhancementRow
+    class EnhancementRow
     {
         public EnhancementDescriptionWindow DescriptionWindow;
         public Guid EnhancementId;
@@ -29,6 +29,11 @@ namespace Intersect.Client.Interface.Game.Enhancement
         {
             DescriptionWindow = descriptionWindow;
             EnhancementId = enhancementId;
+        }
+
+        public void Dispose()
+        {
+            DescriptionWindow.Dispose();
         }
     }
 
@@ -51,6 +56,8 @@ namespace Intersect.Client.Interface.Game.Enhancement
         ImagePanel ItemBg { get; set; }
         EnhancementItemIcon EnhancementItem { get; set; }
         ItemBase EnhancementItemDescriptor { get; set; }
+
+        private EnhancementRow mSelectedRow { get; set; }
 
         Button ShowBreakdownButton { get; set; }
 
@@ -365,28 +372,30 @@ namespace Intersect.Client.Interface.Game.Enhancement
 
         private void Enhancement_Leave(Base sender, EventArgs arguments)
         {
-            var row = (EnhancementRow)((ListBoxRow)sender).UserData;
-            row.DescriptionWindow.Hide();
+            mSelectedRow = (EnhancementRow)((ListBoxRow)sender).UserData;
+            mSelectedRow.DescriptionWindow.Hide();
+            mSelectedRow = null;
         }
 
         private void Enhancement_Hover(Base sender, EventArgs arguments)
         {
-            var row = (EnhancementRow)((ListBoxRow)sender).UserData;
-            row.DescriptionWindow.SetPosition(Background.X + 6, Background.Y + EnhancementBackground.Y + 40);
-            row.DescriptionWindow.Show();
+            mSelectedRow = (EnhancementRow)((ListBoxRow)sender).UserData;
+            mSelectedRow.DescriptionWindow.SetPosition(Background.X + 6, Background.Y + EnhancementBackground.Y + 40);
+            mSelectedRow.DescriptionWindow.Show();
         }
 
         private void AppliedEnhancement_Leave(Base sender, EventArgs arguments)
         {
-            var row = (EnhancementRow)((ListBoxRow)sender).UserData;
-            row.DescriptionWindow.Hide();
+            mSelectedRow = (EnhancementRow)((ListBoxRow)sender).UserData;
+            mSelectedRow.DescriptionWindow.Hide();
+            mSelectedRow = null;
         }
 
         private void AppliedEnhancement_Hover(Base sender, EventArgs arguments)
         {
-            var row = (EnhancementRow)((ListBoxRow)sender).UserData;
-            row.DescriptionWindow.SetPositionRight(Background.X + Background.Width, Background.Y + EnhancementBackground.Y + 40);
-            row.DescriptionWindow.Show();
+            mSelectedRow = (EnhancementRow)((ListBoxRow)sender).UserData;
+            mSelectedRow.DescriptionWindow.SetPositionRight(Background.X + Background.Width, Background.Y + EnhancementBackground.Y + 40);
+            mSelectedRow.DescriptionWindow.Show();
         }
 
         private void Enhancement_Selected(Base sender, Framework.Gwen.Control.EventArguments.ItemSelectedEventArgs arguments)
@@ -688,6 +697,7 @@ namespace Intersect.Client.Interface.Game.Enhancement
             EnhancementInterface?.Close();
             CompletionWindow.Hide();
             PacketSender.SendCloseEnhancementPacket();
+            mSelectedRow?.Dispose();
             Hide();
         }
     }

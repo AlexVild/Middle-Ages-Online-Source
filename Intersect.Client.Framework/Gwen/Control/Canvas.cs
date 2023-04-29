@@ -277,7 +277,7 @@ namespace Intersect.Client.Framework.Gwen.Control
 #if DEBUG
             else
             {
-                throw new InvalidOperationException("Control deleted twice");
+                Logging.Log.Error("Control deleted twice");
             }
 #endif
         }

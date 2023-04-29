@@ -10,7 +10,7 @@ using static Intersect.Client.Framework.File_Management.GameContentManager;
 
 namespace Intersect.Client.Interface.Game.Components
 {
-    public class PassiveRowComponent : GwenComponent
+    public class PassiveRowComponent : GwenComponent, IDisposable
     {
         string FrameTexture => "character_resource_unlocked_bg.png";
         private SpellImageFrameComponent Image { get; set; }
@@ -64,6 +64,11 @@ namespace Intersect.Client.Interface.Game.Components
         public void SetBanding()
         {
             SelfContainer.Texture = BandingTexture;
+        }
+
+        public override void Dispose()
+        {
+            Image?.Dispose();
         }
     }
 }

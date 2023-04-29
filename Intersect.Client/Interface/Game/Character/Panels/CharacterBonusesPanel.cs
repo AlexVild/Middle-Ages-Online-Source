@@ -219,6 +219,8 @@ namespace Intersect.Client.Interface.Game.Character.Panels
                     row.SetBanding();
                 }
 
+                Passives.Add(row);
+
                 idx++;
             }
         }
