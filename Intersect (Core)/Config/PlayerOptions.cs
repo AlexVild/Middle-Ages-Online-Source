@@ -156,6 +156,8 @@ namespace Intersect.Config
         
         public string TaskCompletedVarGuid = "546e9490-f152-4318-9cc6-2c26555fea78";
 
+        public string GoldGuid = "22d762f3-a3e0-4314-8c89-2e54d781b509";
+
         /// <summary>
         /// How often, in ms, a player will send a dir change packet
         /// </summary>

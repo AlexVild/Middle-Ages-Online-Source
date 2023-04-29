@@ -7658,12 +7658,13 @@ namespace Intersect.Server.Entities
                     Warp(warpAtt.MapId, warpAtt.X, warpAtt.Y, dir, false, 0, false, warpAtt.FadeOnWarp, instanceType, dungeonId: warpAtt.DungeonId);
                 }
 
-                // Auto-pickup ammo
+                // Auto-pickup ammo & gold
                 var currentProjectile = GetEquippedWeapon()?.Projectile;
                 if (currentProjectile != default && currentProjectile?.AmmoItemId != Guid.Empty)
                 {
-                    AutoPickupAmmo(currentProjectile.AmmoItemId);
+                    AutoPickupItem(currentProjectile.AmmoItemId, false);
                 }
+                AutoPickupItem(Guid.Parse(Options.Player.GoldGuid), true);
 
                 foreach (var evt in EventLookup)
                 {
@@ -7690,8 +7691,13 @@ namespace Intersect.Server.Entities
             }
         }
 
-        public void AutoPickupAmmo(Guid ammoItemId)
+        public void AutoPickupItem(Guid itemId, bool onlyIfInInventory)
         {
+            if (onlyIfInInventory && CountItems(itemId, true, false) <= 0)
+            {
+                return;
+            }
+
             if (!MapController.TryGetInstanceFromMap(MapId, MapInstanceId, out var mapInstance))
             {
                 return;
@@ -7699,12 +7705,12 @@ namespace Intersect.Server.Entities
 
             var tileId = Y * Options.MapWidth + X;
             var mapItems = mapInstance.FindItemsAt(tileId);
-            if (mapItems.Count == 0 || !mapInstance.FindItemsAt(tileId).Select(items => items.ItemId).Contains(ammoItemId))
+            if (mapItems.Count == 0 || !mapInstance.FindItemsAt(tileId).Select(items => items.ItemId).Contains(itemId))
             {
                 return;
             }
 
-            var ammoMapItems = mapInstance.FindItemsAt(tileId).Where(mapItem => mapItem.ItemId == ammoItemId).ToArray();
+            var ammoMapItems = mapInstance.FindItemsAt(tileId).Where(mapItem => mapItem.ItemId == itemId).ToArray();
             if (ammoMapItems.Length == 0)
             {
                 return;
