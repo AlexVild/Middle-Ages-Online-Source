@@ -1630,7 +1630,7 @@ namespace Intersect.Client.Entities
                 //If unit is stealthed, don't render unless the entity is the player.
                 if (Status[n].Type == StatusTypes.Stealth)
                 {
-                    if (this != Globals.Me && !(this is Player player && Globals.Me.IsInMyParty(player)))
+                    if (this != Globals.Me && !IsAllyOf(Globals.Me))
                     {
                         return;
                     }
@@ -1949,8 +1949,6 @@ namespace Intersect.Client.Entities
 
                 if (castBackground != null)
                 {
-                    if (this == Globals.Me)
-
                     Graphics.DrawGameTexture(
                         castBackground, new FloatRect(0, 0, castBackground.GetWidth(), castBackground.GetHeight()),
                         new FloatRect(centerX, y, width, castBackground.GetHeight()), color
@@ -1968,7 +1966,7 @@ namespace Intersect.Client.Entities
 
                 if (!string.IsNullOrEmpty(castSpell.Icon) && castSpell.Icon != Strings.General.none && drawSpell)
                 {
-                    DrawSpellIcon(x, y, castSpell.Icon);
+                    DrawSpellIcon(x, y, castSpell.Icon, color);
                 }
             }
         }
@@ -3087,7 +3085,7 @@ namespace Intersect.Client.Entities
             );
         }
 
-        private static void DrawSpellIcon(int x, int y, string icon)
+        private static void DrawSpellIcon(int x, int y, string icon, Color color)
         {
             var backgroundTex = Globals.ContentManager.GetTexture(TextureType.Misc, "spellcast.png");
             var texture = Globals.ContentManager.GetTexture(TextureType.Spell, icon);
@@ -3100,12 +3098,12 @@ namespace Intersect.Client.Entities
             // Draw BG
             Graphics.DrawGameTexture(
                 backgroundTex, new FloatRect(0, 0, backgroundTex.GetWidth(), backgroundTex.GetHeight()),
-                new FloatRect(iconX, iconY, iconWidth, iconHeight), Color.White
+                new FloatRect(iconX, iconY, iconWidth, iconHeight), color
             );
 
             Graphics.DrawGameTexture(
                 texture, new FloatRect(0, 0, texture.GetWidth(), texture.GetHeight()),
-                new FloatRect(iconX + 4, iconY + 4, 32, 32), Color.White
+                new FloatRect(iconX + 4, iconY + 4, 32, 32), color
             );
         }
 
