@@ -2725,11 +2725,27 @@ namespace Intersect.Client.Entities
                 }
             }
 
+            // Party member names
             if (Globals.Me.Id != Id && Globals.Me.IsInMyParty(this) && CustomColors.Names.Players.ContainsKey("Party") && Globals.Database.DisplayPartyMembers)
             {
                 textColor = CustomColors.Names.Players["Party"].Name;
                 borderColor = CustomColors.Names.Players["Party"].Outline;
                 backgroundColor = CustomColors.Names.Players["Party"].Background;
+            }
+            // Guildies in PvP
+            else if (Globals.Me.Id != Id && Guild == Globals.Me.Guild && Globals.Me.MapInstance.ZoneType != MapZones.Safe && MapInstance.ZoneType != MapZones.Safe)
+            {
+                textColor = CustomColors.Names.Players["Party"].Name;
+                borderColor = CustomColors.Names.Players["Party"].Outline;
+                backgroundColor = CustomColors.Names.Players["Party"].Background;
+            }
+
+            // Enemies in PvP
+            if (!IsAllyOf(Globals.Me) && Globals.Me.MapInstance.ZoneType != MapZones.Safe)
+            {
+                textColor = CustomColors.Names.Npcs["PlayerAggro"].Name;
+                borderColor = CustomColors.Names.Npcs["PlayerAggro"].Outline;
+                backgroundColor = CustomColors.Names.Npcs["PlayerAggro"].Background;
             }
 
             DrawNameAndLabels(textColor, borderColor, backgroundColor);
@@ -2742,8 +2758,19 @@ namespace Intersect.Client.Entities
                 return;
             }
             base.DrawName(textColor, borderColor, backgroundColor);
-            DrawLabels(HeaderLabel.Text, 0, HeaderLabel.Color, textColor, borderColor, backgroundColor);
-            DrawLabels(FooterLabel.Text, 1, FooterLabel.Color, textColor, borderColor, backgroundColor);
+
+            // If in PvP, draw all colors the same (red)
+            if (!IsAllyOf(Globals.Me) && Globals.Me.MapInstance.ZoneType != MapZones.Safe)
+            {
+                DrawLabels(HeaderLabel.Text, 0, textColor, textColor, borderColor, backgroundColor);
+                DrawLabels(FooterLabel.Text, 1, textColor, textColor, borderColor, backgroundColor);
+            }
+            // Otherwise, draw whatever the label color is supposed to be
+            else
+            {
+                DrawLabels(HeaderLabel.Text, 0, HeaderLabel.Color, textColor, borderColor, backgroundColor);
+                DrawLabels(FooterLabel.Text, 1, FooterLabel.Color, textColor, borderColor, backgroundColor);
+            }
             DrawGuildName(textColor, borderColor, backgroundColor);
         }
 

@@ -194,6 +194,10 @@ namespace Intersect.Server.Entities
                 {
                     return;
                 }
+                if (TryLifesteal(weaponDamage, enemy, out var healthRecovered))
+                {
+                    PacketSender.SendCombatNumber(CombatNumberType.HealHealth, this, (int)healthRecovered);
+                }
                 willDamage = true;
             }
 
@@ -595,5 +599,11 @@ namespace Intersect.Server.Entities
         }
 
         public abstract float GetVitalRegenRate(int vital);
+
+        protected virtual bool TryLifesteal(int damage, Entity target, out float recovered)
+        {
+            recovered = 0f;
+            return false;
+        }
     }
 }

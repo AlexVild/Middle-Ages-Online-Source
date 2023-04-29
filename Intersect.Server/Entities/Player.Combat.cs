@@ -201,9 +201,7 @@ namespace Intersect.Server.Entities
 
             if (TryLifesteal(damage, enemy, out var healthRecovered))
             {
-                PacketSender.SendActionMsg(
-                    this, Strings.Combat.addsymbol + (int)healthRecovered, CustomColors.Combat.Heal
-                );
+                PacketSender.SendCombatNumber(CombatNumberType.HealHealth, this, (int)healthRecovered);
             }
         }
 
@@ -461,7 +459,7 @@ namespace Intersect.Server.Entities
                 || target.Map?.ZoneType == MapZones.Safe);
         }
 
-        private bool TryLifesteal(int damage, Entity target, out float recovered)
+        protected override bool TryLifesteal(int damage, Entity target, out float recovered)
         {
             recovered = 0;
             if (damage <= 0 || target == null || target is Resource)
@@ -482,7 +480,6 @@ namespace Intersect.Server.Entities
             }
 
             AddVital(Vitals.Health, (int)healthRecovered);
-            PacketSender.SendCombatNumber(CombatNumberType.HealHealth, this, (int)healthRecovered);
             recovered = healthRecovered;
             return true;
         }

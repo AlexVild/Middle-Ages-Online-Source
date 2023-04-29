@@ -287,7 +287,7 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
                 if (BestiaryController.KnownKillCounts.TryGetValue(npcId, out var playerKc))
                 {
                     KillCountLabel.Show();
-                    KillCountLabel.SetText($"Kill count: {playerKc}");
+                    KillCountLabel.SetText($"Kill count: {playerKc.ToString("N0")}");
                 }
                 else
                 {

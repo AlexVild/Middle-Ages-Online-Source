@@ -1052,7 +1052,7 @@ namespace Intersect.Client.Entities
                 //If unit is stealthed, don't render unless the entity is the player.
                 if (Status[n].Type == StatusTypes.Stealth)
                 {
-                    if (this != Globals.Me && !(this is Player player && Globals.Me.IsInMyParty(player)))
+                    if (this != Globals.Me && !IsAllyOf(Globals.Me))
                     {
                         return;
                     }
