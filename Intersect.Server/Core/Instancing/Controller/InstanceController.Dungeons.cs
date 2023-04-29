@@ -29,7 +29,6 @@ namespace Intersect.Server.Core.Instancing.Controller
 
         public bool TryInitializeOrJoinDungeon(Guid dungeonId, Player player)
         {
-            Logging.Log.Error($"Initializing dungeon for {player.Name}...");
             InitializeDungeon(dungeonId);
             return TryAddPlayerToDungeon(player);
         }

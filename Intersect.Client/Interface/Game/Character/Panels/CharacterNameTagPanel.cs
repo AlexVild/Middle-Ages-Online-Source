@@ -121,7 +121,7 @@ namespace Intersect.Client.Interface.Game.Character.Panels
             var yPadding = 0;
             foreach (var label in labels)
             {
-                if (label.ShowOnlyUnlocked && (!CharacterNameTagPanelController.UnlockedLabels.TryGetValue(label.Id, out var unlockedLabel) || !unlockedLabel))
+                if (label.ShowOnlyUnlocked && (!CharacterNameTagPanelController.UnlockedLabels.TryGetValue(label.Id, out var unlockedLabel)))
                 {
                     continue;
                 }
