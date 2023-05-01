@@ -1947,21 +1947,24 @@ namespace Intersect.Client.Entities
                     color.A = 150;
                 }
 
-                if (castBackground != null)
+                if (drawBars)
                 {
-                    Graphics.DrawGameTexture(
-                        castBackground, new FloatRect(0, 0, castBackground.GetWidth(), castBackground.GetHeight()),
-                        new FloatRect(centerX, y, width, castBackground.GetHeight()), color
-                    );
-                }
+                    if (castBackground != null)
+                    {
+                        Graphics.DrawGameTexture(
+                            castBackground, new FloatRect(0, 0, castBackground.GetWidth(), castBackground.GetHeight()),
+                            new FloatRect(centerX, y, width, castBackground.GetHeight()), color
+                        );
+                    }
 
-                if (castForeground != null && drawBars)
-                {
-                    Graphics.DrawGameTexture(
-                        castForeground,
-                        new FloatRect(0, 0, castForeground.GetWidth(), castForeground.GetHeight()),
-                        new FloatRect(centerX + 4, y + 4, castFillWidth, castForeground.GetHeight()), color
-                    );
+                    if (castForeground != null && drawBars)
+                    {
+                        Graphics.DrawGameTexture(
+                            castForeground,
+                            new FloatRect(0, 0, castForeground.GetWidth(), castForeground.GetHeight()),
+                            new FloatRect(centerX + 4, y + 4, castFillWidth, castForeground.GetHeight()), color
+                        );
+                    }
                 }
 
                 if (!string.IsNullOrEmpty(castSpell.Icon) && castSpell.Icon != Strings.General.none && drawSpell)
