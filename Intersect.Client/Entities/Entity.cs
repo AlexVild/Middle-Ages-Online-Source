@@ -3257,6 +3257,11 @@ namespace Intersect.Client.Entities
             }
 
             var map = MapInstance.Get(CurrentMap);
+            if (map == default)
+            {
+                return;
+            }
+
             map.ActionMsgs.Add(new ActionMessage(map, X, Y, text, color, stationary));
         }
     }
