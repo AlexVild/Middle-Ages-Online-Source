@@ -66,6 +66,9 @@ namespace Intersect.GameObjects.Conditions
                 var equip = new List<string>();
                 var highestCrs = new List<string>();
                 var questsComplete = new List<string>();
+                var bestiaryEntries = new List<string>();
+                var npcKilled = new List<string>();
+                var records = new List<string>();
                 foreach (var condition in conditionList.Conditions)
                 {
                     if (condition.Type == ConditionTypes.ClassIs && condition is ClassIsCondition classIs)
@@ -134,6 +137,58 @@ namespace Intersect.GameObjects.Conditions
                             questsComplete.Add(questCompleteCond.GetPrettyString());
                         }
                     }
+                    if (condition.Type == ConditionTypes.BeastsCompleted && condition is BeastsCompleted beastsCompleted)
+                    {
+                        if (condition.Negated)
+                        {
+                            bestiaryEntries.Add($"NOT {beastsCompleted.Amount} bestiary entries completed");
+                        }
+                        else
+                        {
+                            bestiaryEntries.Add($"{beastsCompleted.Amount} bestiary entries completed");
+                        }
+                    }
+                    if (condition.Type == ConditionTypes.RecordIs && condition is RecordIs recordIs)
+                    {
+                        if (condition.Negated)
+                        {
+                            if (recordIs.RecordType == RecordType.NpcKilled)
+                            {
+                                records.Add($"NOT {recordIs.Value} {NpcBase.GetName(recordIs.RecordId)}s killed");
+                            }
+                            if (recordIs.RecordType == RecordType.Combo)
+                            {
+                                records.Add($"NOT record combo of {recordIs.Value}");
+                            }
+                            if (recordIs.RecordType == RecordType.ItemCrafted)
+                            {
+                                records.Add($"NOT {recordIs.Value} {ItemBase.GetName(recordIs.RecordId)}s crafted");
+                            }
+                            if (recordIs.RecordType == RecordType.ResourceGathered)
+                            {
+                                records.Add($"NOT {recordIs.Value} {ResourceBase.GetName(recordIs.RecordId)}s harvested");
+                            }
+                        }
+                        else
+                        {
+                            if (recordIs.RecordType == RecordType.NpcKilled)
+                            {
+                                records.Add($"{recordIs.Value} {NpcBase.GetName(recordIs.RecordId)}s killed");
+                            }
+                            if (recordIs.RecordType == RecordType.Combo)
+                            {
+                                records.Add($"Record combo of {recordIs.Value}");
+                            }
+                            if (recordIs.RecordType == RecordType.ItemCrafted)
+                            {
+                                records.Add($"{recordIs.Value} {ItemBase.GetName(recordIs.RecordId)}s crafted");
+                            }
+                            if (recordIs.RecordType == RecordType.ResourceGathered)
+                            {
+                                records.Add($"{recordIs.Value} {ResourceBase.GetName(recordIs.RecordId)}s harvested");
+                            }
+                        }
+                    }
                 }
 
                 if (classes.Count > 0)
@@ -165,7 +220,17 @@ namespace Intersect.GameObjects.Conditions
                 {
                     requirements.Add(string.Join(", ", questsComplete));
                 }
-                
+
+                if (bestiaryEntries.Count > 0)
+                {
+                    requirements.Add(string.Join(", ", bestiaryEntries));
+                }
+
+                if (records.Count > 0)
+                {
+                    requirements.Add(string.Join(", ", records));
+                }
+
 
                 requirementLists.Add(string.Join("; ", requirements));
             }

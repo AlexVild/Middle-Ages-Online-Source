@@ -98,6 +98,7 @@ namespace Intersect.Server.Entities
                 slotsToRemoveFrom.Add(invSlot);
             }
 
+            fuelRequired = (int)Math.Round(fuelRequired * FuelMultiplier);
             if (fuelRequired > Owner.Fuel)
             {
                 PacketSender.SendChatMsg(Owner, "You don't have enough fuel to deconstruct these items!", Enums.ChatMessageType.Error, CustomColors.General.GeneralDisabled);
