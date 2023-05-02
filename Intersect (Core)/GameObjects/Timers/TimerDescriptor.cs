@@ -119,6 +119,9 @@ namespace Intersect.GameObjects.Timers
         /// </summary>
         public long TimeLimit { get; set; } = 1L;
 
+        [NotMapped, JsonIgnore]
+        public long TimeLimitSeconds => TimeLimit * 1000;
+
         /// <summary>
         /// Whether or not this timer starts with server startup
         /// </summary>

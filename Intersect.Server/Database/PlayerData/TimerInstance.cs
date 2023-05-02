@@ -53,6 +53,11 @@ namespace Intersect.Server.Database.PlayerData
         public long TimeRemaining { get; set; }
 
         /// <summary>
+        /// An amount of milliseconds that the timer was at when last paused. Used for repopulating a paused timer with correct values
+        /// </summary>
+        public long PausedTime { get; set; }
+
+        /// <summary>
         /// How many times this timer has completed an interval
         /// </summary>
         public int CompletionCount { get; set; }

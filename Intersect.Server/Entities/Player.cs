@@ -8694,7 +8694,7 @@ namespace Intersect.Server.Entities
 
                     if (descriptor.LogoutBehavior == TimerLogoutBehavior.Pause)
                     {
-                        timer.TimeRemaining += now;
+                        timer.TimeRemaining = now + (descriptor.TimeLimitSeconds - timer.PausedTime);
                     }
 
                     // Add the timer back to the processing list
@@ -8733,11 +8733,11 @@ namespace Intersect.Server.Entities
                     {
                         case TimerLogoutBehavior.Pause:
                             // Store how much time the timer has until its next expiry, so we can re-populate it on login
-                            timer.TimeRemaining -= now;
+                            timer.PausedTime = timer.ElapsedTime;
 
                             break;
                         case TimerLogoutBehavior.Continue:
-                            // Intentinoally blank - leave as is, and it'll be processed when the player returns
+                            // Intentionally blank - leave as is, and it'll be processed when the player returns
                             break;
                         case TimerLogoutBehavior.CancelOnLogin:
                             timer.TimeRemaining = TimerConstants.TimerAborted; // Flags timer as aborted, so we know how to handle it when next processed
