@@ -249,7 +249,7 @@ namespace Intersect.Server.Entities
 
             if (change)
             {
-                PacketSender.SendChatMsg(this, "You need to re-assign your skill points.", Enums.ChatMessageType.Experience, sendToast: true);
+                PacketSender.SendChatMsg(this, "You need to re-assign your skill points, as SP values have changed.", Enums.ChatMessageType.Experience, sendToast: true);
             }
         }
 

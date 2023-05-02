@@ -1448,25 +1448,23 @@ namespace Intersect.Server.Entities
             var threatLevelExpMod = GetThreatLevelExpMod(opponent);
             amount = (int)Math.Ceiling(threatLevelExpMod * amount);
 
-            var expToGive = amount;
+            var expToGive = amount + (int)(amount * GetBonusEffectTotal(EffectType.EXP, 0) / 100);
 
             // Award combo EXP if opponent was NPC or player; do not reward if threat level is trivial
             if (CurrentCombo > 0 && (opponent is Npc || opponent is Player) && threatLevelExpMod != Options.Instance.CombatOpts.ThreatLevelExpRates[ThreatLevel.Trivial])
             {
-                ComboExp += CalculateComboExperience(amount, partyCombo, opponent.TierLevel);
+                ComboExp += CalculateComboExperience(expToGive, partyCombo, opponent.TierLevel);
 
                 // For ensuring that combo EXP challenge tracking remains truthful - avoids weapon switch exploit
                 if (!InvalidateChallenge)
                 {
-                    WeaponComboExp += CalculateComboExperience(amount, partyCombo, opponent.TierLevel);
+                    WeaponComboExp += CalculateComboExperience(expToGive, partyCombo, opponent.TierLevel);
                 }
                 else
                 {
                     WeaponComboExp = 0;
                 }
             }
-
-            expToGive += (int)(amount * GetBonusEffectTotal(EffectType.EXP, 0) / 100);
 
             if (Level < Options.MaxLevel)
             {
@@ -1477,19 +1475,16 @@ namespace Intersect.Server.Entities
                 }
             }
 
-            if (fromComboEnd)
-            {
-                ChallengeUpdateProcesser.UpdateChallengesOf(new ComboExpEarned(this, WeaponComboExp));
-                WeaponComboExp = 0;
-                InvalidateChallenge = false;
-            }
-
             var weaponProgressed = false;
             if ((opponent is Npc || opponent is Player) || fromComboEnd)
             {
                 var weapon = GetEquippedWeapon();
                 foreach (var type in weapon?.WeaponTypes ?? new List<Guid>())
                 {
+                    if (InvalidateChallenge)
+                    {
+                        continue;
+                    }
                     weaponProgressed = TryProgressMastery(expToGive, type) || weaponProgressed;
                     if (type == TrackedWeaponType)
                     {
@@ -1497,6 +1492,14 @@ namespace Intersect.Server.Entities
                     }
                 }
             }
+
+            if (fromComboEnd)
+            {
+                ChallengeUpdateProcesser.UpdateChallengesOf(new ComboExpEarned(this, WeaponComboExp));
+                WeaponComboExp = 0;
+                InvalidateChallenge = false;
+            }
+
             if (expToGive > 0 && sendToast)
             {
                 if (!fromComboEnd)
@@ -1964,7 +1967,7 @@ namespace Intersect.Server.Entities
             {
                 PacketSender.SendSkillStatusUpdate(this, "Gained skill points!");
             }
-            else if (oldTotal > SkillPointTotal)
+            else if (oldTotal > SkillPointTotal || SkillPointsAvailable < 0)
             {
                 // The player should have less skills - reset them
                 UnprepareAllSkills();
