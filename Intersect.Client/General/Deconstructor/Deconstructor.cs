@@ -98,7 +98,13 @@ namespace Intersect.Client.General.Deconstructor
                 return false;
             }
 
-            var item = ItemBase.Get(Globals.Me.Inventory[invIdx].ItemId);
+            var invItem = Globals.Me.Inventory.ElementAtOrDefault(invIdx);
+            if (invItem == default)
+            {
+                return false;
+            }
+
+            var item = ItemBase.Get(invItem.ItemId);
             if (item == default)
             {
                 return false;
@@ -108,6 +114,13 @@ namespace Intersect.Client.General.Deconstructor
             {
                 Audio.AddGameSound(Options.UIDenySound, false);
                 ChatboxMsg.AddMessage(new ChatboxMsg("This item can not be used as fuel.", CustomColors.Alerts.Error, ChatMessageType.Notice));
+                return false;
+            }
+
+            if (invItem.Quantity < quantity)
+            {
+                Audio.AddGameSound(Options.UIDenySound, false);
+                ChatboxMsg.AddMessage(new ChatboxMsg($"You don't have that much {item.Name}!", CustomColors.Alerts.Error, ChatMessageType.Notice));
                 return false;
             }
 
