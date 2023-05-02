@@ -2312,7 +2312,8 @@ Tick timer saved in server config.json.";
                 {"opendeconstructor", @"Open Deconstructor"},
                 {"changeenhancement", @"Change Enhancement"},
                 {"openenhancementwindow", @"Open Enhancement Window"},
-                {"openupgradestation", @"Open Upgrade Station"}
+                {"openupgradestation", @"Open Upgrade Station"},
+                {"removepermabuff", @"Remove Permabuff"},
             };
 
         }
@@ -3999,6 +4000,8 @@ Tick timer saved in server config.json.";
                 {5, @"Event"},
                 {6, @"Bag"},
                 {7, @"Cosmetics"},
+                {8, @"Enhancement"},
+                {9, @"Permabuff"},
             };
 
             public static LocalizedString undo = @"Undo Changes";
@@ -6250,6 +6253,9 @@ Negative values for time to flow backwards.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString OpenUpgradeStation = @"Open Upgrade Station: [Currency: {00} {01}x";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString RemovePermabuff = @"Remove permabuff given by {00}";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString ResetPermadeads = @"Reset Permadead NPCs in Map: {00}";

@@ -458,6 +458,9 @@ namespace Intersect.Server.Entities
             SetMasteryProgress();
             SendPacket(GenerateChallengeProgressPacket());
 
+            // Make sure they can tell which permabuffs they've used before
+            PacketSender.SendUsedPermabuffs(this);
+
             // Refresh recipe unlock statuses in the event they've changed since the player last logged in
             RecipeUnlockWatcher.RefreshPlayer(this);
 
@@ -1951,7 +1954,7 @@ namespace Intersect.Server.Entities
 
         public void RecalculateStatsAndPoints()
         {
-            var oldTotal = SkillPointTotal;
+            var oldTotal = LevelSkillPoints;
             var playerClass = ClassBase.Get(ClassId);
 
             if (playerClass == null)
@@ -1961,13 +1964,22 @@ namespace Intersect.Server.Entities
 
             LearnLevelledClassSpells(playerClass);
 
-            SkillPointTotal = playerClass.GetTotalSkillPointsAt(Level);
+            LevelSkillPoints = playerClass.GetTotalSkillPointsAt(Level);
 
-            if (oldTotal < SkillPointTotal)
+            // Validate permabuff'd skillpoints in case their items changed
+            var oldItemSkillpoints = ItemSkillPoints;
+            var newItemSkillPoints = 0;
+            foreach(var permabuff in Permabuffs.Where(pb => pb.Used && pb.Item?.SkillPoints > 0).ToArray())
+            {
+                newItemSkillPoints += permabuff.Item?.SkillPoints ?? 0;
+            }
+            ItemSkillPoints = newItemSkillPoints;
+
+            if (oldTotal < LevelSkillPoints)
             {
                 PacketSender.SendSkillStatusUpdate(this, "Gained skill points!");
             }
-            else if (oldTotal > SkillPointTotal || SkillPointsAvailable < 0)
+            else if (oldTotal > LevelSkillPoints || SkillPointsAvailable < 0)
             {
                 // The player should have less skills - reset them
                 UnprepareAllSkills();
@@ -3540,6 +3552,29 @@ namespace Intersect.Server.Entities
                             PacketSender.SendChatMsg(this, Strings.Enhancements.AlreadyLearned, ChatMessageType.Error, CustomColors.General.GeneralDisabled);
                         }
 
+                        break;
+
+                    case ItemTypes.Permabuff:
+                        if (!TryUnlockPermabuff(itemBase.Id))
+                        {
+                            break;
+                        }
+
+                        if(!TryTakeItem(Items[slot], 1))
+                        {
+                            break;
+                        }
+                        
+                        if (itemBase.SkillPoints > 0)
+                        {
+                            ItemSkillPoints += itemBase.SkillPoints;
+                            PacketSender.SendChatMsg(this, Strings.Player.PermabuffSkillpoint.ToString(itemBase.SkillPoints), ChatMessageType.Experience, CustomColors.General.GeneralCompleted, sendToast: true);
+                            // Send skill point update to client
+                            PacketSender.SendSkillbookToClient(this);
+                        }
+
+                        PacketSender.SendAnimationToProximity(new Guid(Options.Instance.CombatOpts.SpellLearnedAnimGuid), 1, Id, MapId, (byte)X, (byte)Y, (sbyte)Dir, MapInstanceId);
+                        PacketSender.SendUsedPermabuffs(this);
                         break;
                     default:
                         PacketSender.SendChatMsg(this, Strings.Items.notimplemented, ChatMessageType.Error);

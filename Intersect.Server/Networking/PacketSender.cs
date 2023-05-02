@@ -2810,7 +2810,7 @@ namespace Intersect.Server.Networking
                 skillBook[skill.SpellId] = new SkillbookInstance(skill.Equipped, skill.RequiredSkillPoints);
             }
 
-            player?.SendPacket(new SkillbookPacket(skillBook, player?.SkillPointsAvailable ?? 0));
+            player?.SendPacket(new SkillbookPacket(skillBook, player?.SkillPointsAvailable ?? 0, player?.TotalSkillPoints ?? 0));
         }
 
         public static void SendSkillStatusUpdate(Player player, string updateText)
@@ -2857,6 +2857,17 @@ namespace Intersect.Server.Networking
         public static void SendCompleteUpgrade(Player player, Guid itemId, ItemProperties properties)
         {
             player?.SendPacket(new CompleteUpgradePacket(itemId, properties));
+        }
+
+        public static void SendUsedPermabuffs(Player player)
+        {
+            if (player == default)
+            {
+                return;
+            }
+
+            var usedPermabuffs = player.Permabuffs.Where(p => p.Used).Select(p => p.ItemId).Distinct().ToArray();
+            player?.SendPacket(new UsedPermabuffsPacket(usedPermabuffs));
         }
     }
 }

@@ -278,6 +278,7 @@ namespace Intersect.GameObjects.Events
         ChangeEnhancements, // 86
         OpenEnhancementWindow, // 87
         OpenUpgradeStation, // 88
+        RemovePermabuff, // 89
     }
 
     public enum NPCGuildManagementSelection

@@ -240,6 +240,8 @@ namespace Intersect.Client.General
 
         public static Dictionary<Guid, int> CachedNpcSpellScalar = new Dictionary<Guid, int>();
 
+        public static HashSet<Guid> UsedPermabuffs = new HashSet<Guid>();
+
         public static void RefreshNpcSpellScalars()
         {
             CachedNpcSpellScalar.Clear();

@@ -54,6 +54,8 @@ namespace Intersect.Server.Database.PlayerData
         
         DbSet<CosmeticInstance> Player_Cosmetics { get; set; }
         
+        DbSet<PermabuffInstance> Player_Permabuffs { get; set; }
+        
         DbSet<RecipeInstance> Player_Recipes { get; set; }
         
         DbSet<BestiaryUnlockInstance> Player_Bestiary_Unlocks { get; set; }

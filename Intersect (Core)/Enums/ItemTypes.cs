@@ -20,7 +20,9 @@ namespace Intersect.Enums
 
         Cosmetic = 7,
 
-        Enhancement,
+        Enhancement = 8,
+
+        Permabuff = 9,
     }
 
 }

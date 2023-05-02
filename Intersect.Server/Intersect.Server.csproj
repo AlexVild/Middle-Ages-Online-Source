@@ -503,6 +503,7 @@
     <Compile Include="Database\PlayerData\Players\LootRollInstance.cs" />
     <Compile Include="Database\PlayerData\Players\MapExploredInstance.cs" />
     <Compile Include="Database\PlayerData\Players\PassiveSpell.cs" />
+    <Compile Include="Database\PlayerData\Players\PermabuffInstance.cs" />
     <Compile Include="Database\PlayerData\Players\PlayerEnhancementInstance.cs" />
     <Compile Include="Database\PlayerData\Players\Quest.cs" />
     <Compile Include="Database\PlayerData\Players\PlayerRecord.cs" />
@@ -751,6 +752,10 @@
     <Compile Include="Migrations\20230502164609_TimerPauseMigration.cs" />
     <Compile Include="Migrations\20230502164609_TimerPauseMigration.designer.cs">
       <DependentUpon>20230502164609_TimerPauseMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20230502193643_PlayerPermabuffsMigration.cs" />
+    <Compile Include="Migrations\20230502193643_PlayerPermabuffsMigration.designer.cs">
+      <DependentUpon>20230502193643_PlayerPermabuffsMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.cs" />
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.Designer.cs">
@@ -1205,6 +1210,10 @@
     <Compile Include="Migrations\Game\20230413145908_NpcTierMigration.cs" />
     <Compile Include="Migrations\Game\20230413145908_NpcTierMigration.designer.cs">
       <DependentUpon>20230413145908_NpcTierMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20230502193706_ItemPermabuffMigration.cs" />
+    <Compile Include="Migrations\Game\20230502193706_ItemPermabuffMigration.designer.cs">
+      <DependentUpon>20230502193706_ItemPermabuffMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">

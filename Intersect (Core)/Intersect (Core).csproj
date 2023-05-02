@@ -530,6 +530,7 @@
     <Compile Include="Network\Packets\Server\UnlockedBestiaryEntriesPacket.cs" />
     <Compile Include="Network\Packets\Server\UnlockedRecipesPacket.cs" />
     <Compile Include="Network\Packets\Server\UpdateFutureWarpPacket.cs" />
+    <Compile Include="Network\Packets\Server\UsedPermabuffsPacket.cs" />
     <Compile Include="Network\Packets\SlotQuantityPacket.cs" />
     <Compile Include="Network\Packets\Client\SwapBankItemsPacket.cs" />
     <Compile Include="Network\Packets\Client\MovePacket.cs" />

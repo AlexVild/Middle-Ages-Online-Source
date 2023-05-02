@@ -466,6 +466,8 @@ namespace Intersect.Editor.Forms.Editors
                     cmbEquipmentBonus.SelectedIndex = 0;
                 }
 
+                ShowPermabuffOptions();
+
                 chk2Hand.Checked = mEditorItem.TwoHanded;
                 
                 chkBackstab.Checked = Convert.ToBoolean(mEditorItem.CanBackstab);
@@ -546,6 +548,8 @@ namespace Intersect.Editor.Forms.Editors
                 nudEnhanceThresh.Value = mEditorItem.EnhancementThreshold;
 
                 chkIsFocus.Checked = mEditorItem.ReplaceCastingComponents;
+
+                nudSkillPoints.Value = mEditorItem.SkillPoints;
 
                 lstDrops.Items.Clear();
                 lstCrafts.Items.Clear();
@@ -749,7 +753,7 @@ namespace Intersect.Editor.Forms.Editors
                 cmbEnhancement.SelectedIndex = EnhancementDescriptor.ListIndex(mEditorItem.EnhancementId) + 1;
                 grpEnhancement.Visible = true;
             }
-            else if (cmbType.SelectedIndex == (int) ItemTypes.Equipment || cmbType.SelectedIndex == (int) ItemTypes.Cosmetic)
+            else if (cmbType.SelectedIndex == (int) ItemTypes.Equipment || cmbType.SelectedIndex == (int) ItemTypes.Cosmetic || cmbType.SelectedIndex == (int) ItemTypes.Permabuff)
             {
                 UpdateBalanceHelper();
                 grpEquipment.Visible = true;
@@ -786,6 +790,8 @@ namespace Intersect.Editor.Forms.Editors
                     grpWeaponBalance.Show();
                     grpArmorBalanceHelper.Hide();
                 }
+
+                ShowPermabuffOptions();
 
                 RefreshBonusList();
             }
@@ -2381,6 +2387,26 @@ namespace Intersect.Editor.Forms.Editors
         private void txtSortName_TextChanged(object sender, EventArgs e)
         {
             mEditorItem.SortName = txtSortName.Text;
+        }
+
+        private void nudSkillPoints_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.SkillPoints = (int)nudSkillPoints.Value;
+        }
+
+        private void ShowPermabuffOptions()
+        {
+            lblSkillPoints.Hide();
+            nudSkillPoints.Hide();
+            lblRange.Show();
+            nudRange.Show();
+            if (mEditorItem.ItemType == ItemTypes.Permabuff)
+            {
+                lblSkillPoints.Show();
+                nudSkillPoints.Show();
+                lblRange.Hide();
+                nudRange.Hide();
+            }
         }
     }
 }

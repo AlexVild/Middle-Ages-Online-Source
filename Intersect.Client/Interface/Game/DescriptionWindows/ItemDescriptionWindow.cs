@@ -178,6 +178,10 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 case ItemTypes.Enhancement:
                     SetupEnhancementInfo();
                     break;
+                
+                case ItemTypes.Permabuff:
+                    SetupPermabuffInfo();
+                    break;
             }
 
             // Set up additional information such as amounts and shop values.
@@ -539,6 +543,23 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             var rows = AddRowContainer();
 
             rows.AddKeyValueRow(Strings.ItemDescription.EnhancementDesc, string.Empty);
+
+            rows.SizeToChildren(true, true);
+        }
+
+        protected void SetupPermabuffInfo()
+        {
+            AddDivider();
+
+            var rows = AddRowContainer();
+
+            rows.AddKeyValueRow(Strings.ItemDescription.PermabuffDesc, string.Empty);
+            rows.AddKeyValueRow(Strings.ItemDescription.PermabuffSkillPoints, mItem.SkillPoints.ToString());
+
+            if (Globals.UsedPermabuffs.Contains(mItem.Id))
+            {
+                rows.AddKeyValueRow(Strings.ItemDescription.PermabuffUsed, null, CustomColors.ItemDesc.Notice, Color.White);
+            }
 
             rows.SizeToChildren(true, true);
         }

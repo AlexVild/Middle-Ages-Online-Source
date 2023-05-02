@@ -1073,6 +1073,15 @@ namespace Intersect.Client.Localization
             public static LocalizedString EnhancementDesc = @"Use to unlock a new weapon enhancement.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString PermabuffDesc = @"Permanently adds:";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString PermabuffSkillPoints = @"Skill Point(s):";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString PermabuffUsed = @"Already used!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString CritChance = @"Critical Chance:";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -1226,6 +1235,7 @@ namespace Intersect.Client.Localization
                 {6, @"Bag"},
                 {7, @"Cosmetic"},
                 {8, @"Weapon Enhancement"},
+                {9, @"Permabuff"},
             };
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]

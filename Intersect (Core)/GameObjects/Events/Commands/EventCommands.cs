@@ -1480,4 +1480,11 @@ namespace Intersect.GameObjects.Events.Commands
 
         public float CostMultiplier { get; set; } = 1.0f;
     }
+
+    public partial class RemovePermabuffCommand : EventCommand
+    {
+        public override EventCommandType Type { get; } = EventCommandType.RemovePermabuff;
+
+        public Guid ItemId { get; set; } = Guid.Empty;
+    }
 }

@@ -1850,6 +1850,12 @@ namespace Intersect.Server.Localization
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString MasterySkillUnlock = @"Completing a mastery challenge has unlocked a new skill: {00}!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString PermabuffAlreadyUsed = @"You've already used this permabuff!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString PermabuffSkillpoint = @"You've gained {00} skill point(s)!";
         }
 
         public sealed partial class TradingNamespace : LocaleNamespace

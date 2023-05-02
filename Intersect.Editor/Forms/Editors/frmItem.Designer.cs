@@ -41,6 +41,8 @@ namespace Intersect.Editor.Forms.Editors
             this.btnCancel = new DarkUI.Controls.DarkButton();
             this.btnSave = new DarkUI.Controls.DarkButton();
             this.grpGeneral = new DarkUI.Controls.DarkGroupBox();
+            this.lblSortName = new System.Windows.Forms.Label();
+            this.txtSortName = new DarkUI.Controls.DarkTextBox();
             this.btnFuelRecc = new DarkUI.Controls.DarkButton();
             this.nudFuel = new DarkUI.Controls.DarkNumericUpDown();
             this.lblFuel = new System.Windows.Forms.Label();
@@ -356,8 +358,8 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
             this.vS2015DarkTheme1 = new WeifenLuo.WinFormsUI.Docking.VS2015DarkTheme();
-            this.txtSortName = new DarkUI.Controls.DarkTextBox();
-            this.lblSortName = new System.Windows.Forms.Label();
+            this.nudSkillPoints = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblSkillPoints = new System.Windows.Forms.Label();
             this.grpItems.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudFuel)).BeginInit();
@@ -453,6 +455,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpAuxInfo.SuspendLayout();
             this.grpEnhancement.SuspendLayout();
             this.toolStrip.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSkillPoints)).BeginInit();
             this.SuspendLayout();
             // 
             // grpItems
@@ -600,6 +603,26 @@ namespace Intersect.Editor.Forms.Editors
             this.grpGeneral.TabIndex = 2;
             this.grpGeneral.TabStop = false;
             this.grpGeneral.Text = "General";
+            // 
+            // lblSortName
+            // 
+            this.lblSortName.AutoSize = true;
+            this.lblSortName.Location = new System.Drawing.Point(8, 55);
+            this.lblSortName.Name = "lblSortName";
+            this.lblSortName.Size = new System.Drawing.Size(60, 13);
+            this.lblSortName.TabIndex = 109;
+            this.lblSortName.Text = "Sort Name:";
+            // 
+            // txtSortName
+            // 
+            this.txtSortName.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.txtSortName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtSortName.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.txtSortName.Location = new System.Drawing.Point(68, 53);
+            this.txtSortName.Name = "txtSortName";
+            this.txtSortName.Size = new System.Drawing.Size(130, 20);
+            this.txtSortName.TabIndex = 108;
+            this.txtSortName.TextChanged += new System.EventHandler(this.txtSortName_TextChanged);
             // 
             // btnFuelRecc
             // 
@@ -3308,6 +3331,8 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpStatBonuses.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpStatBonuses.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpStatBonuses.Controls.Add(this.lblSkillPoints);
+            this.grpStatBonuses.Controls.Add(this.nudSkillPoints);
             this.grpStatBonuses.Controls.Add(this.grpWeaponBalance);
             this.grpStatBonuses.Controls.Add(this.grpArmorBalanceHelper);
             this.grpStatBonuses.Controls.Add(this.chkLockEvasion);
@@ -4987,25 +5012,34 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
             // 
-            // txtSortName
+            // nudSkillPoints
             // 
-            this.txtSortName.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.txtSortName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtSortName.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.txtSortName.Location = new System.Drawing.Point(68, 53);
-            this.txtSortName.Name = "txtSortName";
-            this.txtSortName.Size = new System.Drawing.Size(130, 20);
-            this.txtSortName.TabIndex = 108;
-            this.txtSortName.TextChanged += new System.EventHandler(this.txtSortName_TextChanged);
+            this.nudSkillPoints.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudSkillPoints.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudSkillPoints.Location = new System.Drawing.Point(144, 399);
+            this.nudSkillPoints.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.nudSkillPoints.Name = "nudSkillPoints";
+            this.nudSkillPoints.Size = new System.Drawing.Size(89, 20);
+            this.nudSkillPoints.TabIndex = 138;
+            this.nudSkillPoints.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudSkillPoints.ValueChanged += new System.EventHandler(this.nudSkillPoints_ValueChanged);
             // 
-            // lblSortName
+            // lblSkillPoints
             // 
-            this.lblSortName.AutoSize = true;
-            this.lblSortName.Location = new System.Drawing.Point(8, 55);
-            this.lblSortName.Name = "lblSortName";
-            this.lblSortName.Size = new System.Drawing.Size(60, 13);
-            this.lblSortName.TabIndex = 109;
-            this.lblSortName.Text = "Sort Name:";
+            this.lblSkillPoints.AutoSize = true;
+            this.lblSkillPoints.Location = new System.Drawing.Point(140, 382);
+            this.lblSkillPoints.Name = "lblSkillPoints";
+            this.lblSkillPoints.Size = new System.Drawing.Size(58, 13);
+            this.lblSkillPoints.TabIndex = 139;
+            this.lblSkillPoints.Text = "Skill Points";
             // 
             // FrmItem
             // 
@@ -5153,6 +5187,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpEnhancement.ResumeLayout(false);
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSkillPoints)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -5482,5 +5517,7 @@ namespace Intersect.Editor.Forms.Editors
         private DarkButton btnFuelReqRecc;
         private Label lblSortName;
         private DarkTextBox txtSortName;
+        private Label lblSkillPoints;
+        private DarkNumericUpDown nudSkillPoints;
     }
 }

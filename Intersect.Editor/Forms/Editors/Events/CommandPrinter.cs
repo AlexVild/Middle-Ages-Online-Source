@@ -2044,5 +2044,10 @@ namespace Intersect.Editor.Forms.Editors.Events
         {
             return Strings.EventCommandList.OpenUpgradeStation.ToString(ItemBase.GetName(command.CurrencyItemId), command.CostMultiplier.ToString("N2"));
         }
+
+        private static string GetCommandText(RemovePermabuffCommand command, MapInstance map)
+        {
+            return Strings.EventCommandList.RemovePermabuff.ToString(ItemBase.GetName(command.ItemId));
+        }
     }
 }

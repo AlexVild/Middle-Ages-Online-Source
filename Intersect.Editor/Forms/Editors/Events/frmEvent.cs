@@ -883,6 +883,9 @@ namespace Intersect.Editor.Forms.Editors.Events
                     tmpCommand = new OpenUpgradeStation();
                     break;
 
+                case EventCommandType.RemovePermabuff:
+                    tmpCommand = new RemovePermabuffCommand();
+                    break;
 
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -1620,6 +1623,10 @@ namespace Intersect.Editor.Forms.Editors.Events
 
                 case EventCommandType.OpenUpgradeStation:
                     cmdWindow = new EventCommand_OpenUpgradeStation((OpenUpgradeStation)command, this);
+                    break;
+
+                case EventCommandType.RemovePermabuff:
+                    cmdWindow = new EventCommand_RemovePermabuff((RemovePermabuffCommand)command, this);
                     break;
 
                 default:

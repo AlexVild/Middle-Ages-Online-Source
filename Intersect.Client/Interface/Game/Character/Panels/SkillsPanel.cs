@@ -28,6 +28,8 @@ namespace Intersect.Client.Interface.Game.Character.Panels
         public static bool RefreshDisplay = false;
 
         public static int SkillPointsAvailable = 0;
+        
+        public static int SkillPointTotal = 0;
 
         public static void RefreshAvailableSkillTypes()
         {
@@ -139,17 +141,13 @@ namespace Intersect.Client.Interface.Game.Character.Panels
         {
             ClearSkills();
 
-            var classDescriptor = ClassBase.Get(Globals.Me?.Class ?? Guid.Empty);
-            var totalSkillPoints = 0;
-            if (classDescriptor.SkillPointsPerLevel == 0 || classDescriptor.SkillPointLevelModulo == 0)
+            if (SkillsPanelController.SkillPointTotal == 0)
             {
                 SkillPointsRemaining.Hide();
             }
             else
             {
-                totalSkillPoints = classDescriptor?.GetTotalSkillPointsAt(Globals.Me?.Level ?? 0) ?? 0;
-
-                SkillPointsRemaining.SetText($"Skill Points: {SkillsPanelController.SkillPointsAvailable} / {totalSkillPoints}");
+                SkillPointsRemaining.SetText($"Skill Points: {SkillsPanelController.SkillPointsAvailable} / {SkillsPanelController.SkillPointTotal}");
                 if (SkillsPanelController.SkillPointsAvailable == 0)
                 {
                     SkillPointsRemaining.SetTextColor(new Color(255, 169, 169, 169), Label.ControlState.Normal);

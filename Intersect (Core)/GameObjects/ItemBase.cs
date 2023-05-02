@@ -628,6 +628,8 @@ namespace Intersect.GameObjects
         {
             return string.IsNullOrWhiteSpace(SortName) ? Name : SortName;
         }
+
+        public int SkillPoints { get; set; } = 0;
     }
 
 }

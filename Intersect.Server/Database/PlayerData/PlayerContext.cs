@@ -86,6 +86,8 @@ namespace Intersect.Server.Database.PlayerData
         
         public DbSet<CosmeticInstance> Player_Cosmetics { get; set; }
         
+        public DbSet<PermabuffInstance> Player_Permabuffs { get; set; }
+        
         public DbSet<RecipeInstance> Player_Recipes { get; set; }
         
         public DbSet<BestiaryUnlockInstance> Player_Bestiary_Unlocks { get; set; }
@@ -213,6 +215,10 @@ namespace Intersect.Server.Database.PlayerData
             modelBuilder.Entity<Player>()
                .HasMany(player => player.Enhancements)
                .WithOne(enhancement => enhancement.Player);
+
+            modelBuilder.Entity<Player>()
+               .HasMany(player => player.Permabuffs)
+               .WithOne(permabuffs => permabuffs.Player);
         }
 
         public void Seed()
@@ -337,6 +343,9 @@ namespace Intersect.Server.Database.PlayerData
                 Entry(itm).State = EntityState.Detached;
 
             foreach (var itm in player.Enhancements)
+                Entry(itm).State = EntityState.Detached;
+
+            foreach (var itm in player.Permabuffs)
                 Entry(itm).State = EntityState.Detached;
         }
 

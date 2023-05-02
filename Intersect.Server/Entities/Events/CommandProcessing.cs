@@ -3512,5 +3512,25 @@ namespace Intersect.Server.Entities.Events
             player.OpenUpgradeStation(command.CurrencyItemId, command.CostMultiplier);
             callStack.Peek().WaitingForResponse = CommandInstance.EventResponse.Upgrade;
         }
+
+        private static void ProcessCommand(
+          RemovePermabuffCommand command,
+          Player player,
+          Event instance,
+          CommandInstance stackInfo,
+          Stack<CommandInstance> callStack
+       )
+        {
+            if (player == null)
+            {
+                return;
+            }
+
+            if (player.TryRemovePermabuff(command.ItemId, false))
+            {
+                player.RecalculateStatsAndPoints();
+                PacketSender.SendUsedPermabuffs(player);
+            }
+        }
     }
 }

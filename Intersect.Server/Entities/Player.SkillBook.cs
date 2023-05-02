@@ -12,6 +12,7 @@ using Intersect.GameObjects;
 using Intersect.Server.Database;
 using Intersect.Server.Localization;
 using Intersect.Server.Core;
+using Intersect.Server.Database.PlayerData.Players;
 
 namespace Intersect.Server.Entities
 {
@@ -23,11 +24,25 @@ namespace Intersect.Server.Entities
         public int SkillPointsAvailable => SkillBook
             .ToArray()
             .Where(spell => spell.Equipped)
-            .Aggregate(SkillPointTotal, (acc, spell) => acc -= spell.RequiredSkillPoints);
+            .Aggregate(TotalSkillPoints, (acc, spell) => acc -= spell.RequiredSkillPoints);
 
-        public int SkillPointTotal { get; set; }
+        /// <summary>
+        /// The amount of skillpoints learned thru levelling
+        /// </summary>
+        [Column("SkillPointTotal")]
+        public int LevelSkillPoints { get; set; }
+
+        /// <summary>
+        /// Getter for accumulating the amount of total skillpoints a player should have
+        /// </summary>
+        [NotMapped, JsonIgnore]
+        public int TotalSkillPoints => LevelSkillPoints + ItemSkillPoints;
+
+        public int ItemSkillPoints { get; set; }
 
         public bool SpellTutorialDone { get; set; } = false;
+
+        public List<PermabuffInstance> Permabuffs { get; set; } = new List<PermabuffInstance>();
 
         public bool TryGetSkillInSkillbook(Guid spellId, out PlayerSkillInstance skill)
         {
@@ -273,6 +288,56 @@ namespace Intersect.Server.Entities
             {
                 TryTeachSpell(new Spell(specialAttack), true);
             }
+        }
+
+        public bool TryUnlockPermabuff(Guid itemId)
+        {
+            var existingPermabuff = Permabuffs.Find(buff => buff.ItemId == itemId);
+            if (existingPermabuff != default && existingPermabuff.Used)
+            {
+                PacketSender.SendPlaySound(this, Options.UIDenySound);
+                PacketSender.SendChatMsg(this, Strings.Player.PermabuffAlreadyUsed, Enums.ChatMessageType.Experience, CustomColors.General.GeneralDisabled);
+                return false;
+            }
+
+            if (existingPermabuff != default)
+            {
+                existingPermabuff.Used = true;
+            }
+            else
+            {
+                Permabuffs.Add(new PermabuffInstance(Id, itemId));
+            }
+            return true;
+        }
+
+        public bool TryRemovePermabuff(Guid itemId, bool removeDb)
+        {
+            var existingPermabuff = Permabuffs.Find(buff => buff.ItemId == itemId);
+            if (existingPermabuff == default)
+            {
+                return false;
+            }
+
+            existingPermabuff.Used = false;
+
+            if (removeDb)
+            {
+                DbInterface.Pool.QueueWorkItem(existingPermabuff.RemoveFromDb);
+            }
+
+            var permabuffItem = ItemBase.Get(itemId);
+            if (permabuffItem == default)
+            {
+                return true;
+            }
+
+            if (permabuffItem.SkillPoints > 0)
+            {
+                ItemSkillPoints = Math.Max(0, ItemSkillPoints - permabuffItem.SkillPoints);
+            }
+
+            return true;
         }
     }
 }

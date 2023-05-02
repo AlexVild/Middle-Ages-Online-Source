@@ -2850,6 +2850,7 @@ namespace Intersect.Client.Networking
             SkillsPanelController.RefreshAvailableSkillTypes();
             SkillsPanelController.RefreshDisplay = true;
             SkillsPanelController.SkillPointsAvailable = packet.SkillPointsAvailable;
+            SkillsPanelController.SkillPointTotal = packet.SkillPointTotal;
         }
 
         public void HandlePacket(IPacketSender packetSender, ChallengeProgressPacket packet)
@@ -2966,5 +2967,21 @@ namespace Intersect.Client.Networking
 
             Globals.Me.SetKnownEnhancements(packet.KnownEnhancements);
         }
+        
+        public void HandlePacket(IPacketSender packetSender, UsedPermabuffsPacket packet)
+        {
+            if (Globals.Me == null)
+            {
+                return;
+            }
+
+            Globals.UsedPermabuffs.Clear();
+            foreach(var pb in packet.UsedPermabuffs)
+            {
+                Globals.UsedPermabuffs.Add(pb);
+            }
+        }
+
+
     }
 }
