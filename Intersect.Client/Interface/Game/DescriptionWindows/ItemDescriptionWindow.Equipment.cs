@@ -148,6 +148,31 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             var itemBoosts = ItemInstanceHelper.GetStatBoosts(mItemProperties);
             Array.Copy(Globals.Me.TrueStats, itemEnhancedStats, (int)Stats.StatCount);
             var statIdx = 0;
+            foreach (var passiveId in Globals.Me.ActivePassives)
+            {
+                var passive = SpellBase.Get(passiveId);
+                if (passive == default)
+                {
+                    continue;
+                }
+
+                statIdx = 0;
+                foreach (var stat in passive.Combat.StatDiff)
+                {
+                    itemEnhancedStats[statIdx] += stat;
+                    statIdx++;
+                }
+
+                statIdx = 0;
+                foreach (var stat in passive.Combat.PercentageStatDiff)
+                {
+                    itemEnhancedStats[statIdx] += (int)Math.Ceiling(Globals.Me.TrueStats[statIdx] * (stat / 100f));
+                    statIdx++;
+                }
+            }
+
+            // reset iterator
+            statIdx = 0;
             foreach (var stat in itemEnhancedStats)
             {
                 itemEnhancedStats[statIdx] = (int)((stat + itemBoosts[statIdx] + mItem.StatsGiven[statIdx]) * (1 + (mItem.PercentageStatsGiven[statIdx] / 100f)));
