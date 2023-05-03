@@ -13,6 +13,7 @@ using Intersect.Server.Database;
 using Intersect.Server.Localization;
 using Intersect.Server.Core;
 using Intersect.Server.Database.PlayerData.Players;
+using Intersect.Enums;
 
 namespace Intersect.Server.Entities
 {
@@ -43,6 +44,26 @@ namespace Intersect.Server.Entities
         public bool SpellTutorialDone { get; set; } = false;
 
         public List<PermabuffInstance> Permabuffs { get; set; } = new List<PermabuffInstance>();
+
+        [JsonIgnore, Column("PermabuffedStats")]
+        public string PermabuffedStatsJson
+        {
+            get => DatabaseUtils.SaveIntArray(PermabuffedStats, (int)Stats.StatCount);
+            set => PermabuffedStats = DatabaseUtils.LoadIntArray(value, (int)Stats.StatCount);
+        }
+
+        [NotMapped]
+        public int[] PermabuffedStats { get; set; } = new int[(int)Stats.StatCount];
+
+        [JsonIgnore, Column("PermabuffedVitals")]
+        public string PermabuffedVitalsJson
+        {
+            get => DatabaseUtils.SaveIntArray(PermabuffedVitals, (int)Vitals.VitalCount);
+            set => PermabuffedVitals = DatabaseUtils.LoadIntArray(value, (int)Vitals.VitalCount);
+        }
+
+        [NotMapped]
+        public int[] PermabuffedVitals { get; set; } = new int[(int)Vitals.VitalCount];
 
         public bool TryGetSkillInSkillbook(Guid spellId, out PlayerSkillInstance skill)
         {
@@ -314,17 +335,12 @@ namespace Intersect.Server.Entities
         public bool TryRemovePermabuff(Guid itemId, bool removeDb)
         {
             var existingPermabuff = Permabuffs.Find(buff => buff.ItemId == itemId);
-            if (existingPermabuff == default)
+            if (existingPermabuff == default || !existingPermabuff.Used)
             {
                 return false;
             }
 
             existingPermabuff.Used = false;
-
-            if (removeDb)
-            {
-                DbInterface.Pool.QueueWorkItem(existingPermabuff.RemoveFromDb);
-            }
 
             var permabuffItem = ItemBase.Get(itemId);
             if (permabuffItem == default)
@@ -337,7 +353,55 @@ namespace Intersect.Server.Entities
                 ItemSkillPoints = Math.Max(0, ItemSkillPoints - permabuffItem.SkillPoints);
             }
 
+            ApplyPermabuffsToStats(permabuffItem, true);
+
+            if (removeDb)
+            {
+                DbInterface.Pool.QueueWorkItem(existingPermabuff.RemoveFromDb);
+            }
+
             return true;
+        }
+
+        public Tuple<int, int> GetPermabuffStat(Stats statType)
+        {
+            var percentageStats = 0;
+
+            return new Tuple<int, int>(PermabuffedStats[(int)statType], percentageStats);
+        }
+
+        private void ApplyPermabuffsToStats(ItemBase itemBase, bool remove = false, bool sendUpdate = true)
+        {
+            var statIdx = 0;
+            foreach (var stat in itemBase.StatsGiven)
+            {
+                if (stat == 0)
+                {
+                    statIdx++;
+                    continue;
+                }
+
+                PermabuffedStats[statIdx] += remove ? -stat : stat;
+                statIdx++;
+            }
+
+            var vitalIdx = 0;
+            foreach (var vital in itemBase.VitalsGiven)
+            {
+                if (vital == 0)
+                {
+                    vitalIdx++;
+                    continue;
+                }
+
+                PermabuffedVitals[vitalIdx] += remove ? -vital : vital;
+                vitalIdx++;
+            }
+
+            if (sendUpdate)
+            {
+                PacketSender.SendEntityStatsToProximity(this);
+            }
         }
     }
 }

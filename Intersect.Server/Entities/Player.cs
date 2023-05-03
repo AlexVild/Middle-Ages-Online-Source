@@ -1045,7 +1045,7 @@ namespace Intersect.Server.Entities
 
         public int GetNonBuffedStat(Stats stat)
         {
-            return Stat[(int)stat].BaseStat + StatPointAllocations[(int)stat];
+            return Stat[(int)stat].BaseStat + StatPointAllocations[(int)stat] + PermabuffedStats[(int)stat];
         }
 
         public override EntityTypes GetEntityType()
@@ -1345,6 +1345,8 @@ namespace Intersect.Server.Entities
                     maxVital += item.ItemProperties.VitalEnhancements[vital];
                 }
             }
+
+            maxVital += PermabuffedVitals[vital];
 
             //Must have at least 1 hp and no less than 0 mp
             if (vital == (int) Vitals.Health)
@@ -1969,10 +1971,19 @@ namespace Intersect.Server.Entities
             // Validate permabuff'd skillpoints in case their items changed
             var oldItemSkillpoints = ItemSkillPoints;
             var newItemSkillPoints = 0;
-            foreach(var permabuff in Permabuffs.Where(pb => pb.Used && pb.Item?.SkillPoints > 0).ToArray())
+            PermabuffedStats = new int[(int)Stats.StatCount];
+            PermabuffedVitals = new int[(int)Vitals.VitalCount];
+            foreach(var permabuff in Permabuffs.Where(pb => pb.Used).ToArray())
             {
-                newItemSkillPoints += permabuff.Item?.SkillPoints ?? 0;
+                if (permabuff.Item == default)
+                {
+                    continue;
+                }
+
+                ApplyPermabuffsToStats(permabuff.Item, false, true);
             }
+            PacketSender.SendEntityStatsTo(Client, this);
+
             ItemSkillPoints = newItemSkillPoints;
 
             if (oldTotal < LevelSkillPoints)
@@ -1988,6 +1999,9 @@ namespace Intersect.Server.Entities
             {
                 PacketSender.SendChatMsg(this, "You can not earn any more skill points.", ChatMessageType.Experience);
             }
+
+            // Check permabuff stats to make sure they're kosher
+
 
             // Send skill point update to client
             PacketSender.SendSkillbookToClient(this);
@@ -3573,6 +3587,7 @@ namespace Intersect.Server.Entities
                             PacketSender.SendSkillbookToClient(this);
                         }
 
+                        ApplyPermabuffsToStats(itemBase);
                         PacketSender.SendAnimationToProximity(new Guid(Options.Instance.CombatOpts.SpellLearnedAnimGuid), 1, Id, MapId, (byte)X, (byte)Y, (sbyte)Dir, MapInstanceId);
                         PacketSender.SendUsedPermabuffs(this);
                         break;

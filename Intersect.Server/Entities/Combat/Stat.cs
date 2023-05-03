@@ -46,8 +46,10 @@ namespace Intersect.Server.Entities.Combat
             {
                 var statBuffs = player.GetItemStatBuffs(mStatType);
                 var passiveBuffs = player.GetPassiveStatBuffs(mStatType);
-                flatStats += statBuffs.Item1 + passiveBuffs.Item1;
-                percentageStats += statBuffs.Item2 + passiveBuffs.Item2;
+                var permaBuffs = player.GetPermabuffStat(mStatType);
+
+                flatStats += statBuffs.Item1 + passiveBuffs.Item1 + permaBuffs.Item1;
+                percentageStats += statBuffs.Item2 + passiveBuffs.Item2 + permaBuffs.Item2;
             }
 
             //Add spell buffs
