@@ -122,6 +122,9 @@ namespace Intersect.Server.Networking
                 {
                     player.EnqueueStartCommonEvent(player.Map.LoginEvent);
                 }
+
+                // Make sure they can tell which permabuffs they've used before
+                SendUsedPermabuffs(player);
             }
         }
 

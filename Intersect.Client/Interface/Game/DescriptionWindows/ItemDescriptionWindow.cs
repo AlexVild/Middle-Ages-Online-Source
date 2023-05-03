@@ -554,11 +554,51 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             var rows = AddRowContainer();
 
             rows.AddKeyValueRow(Strings.ItemDescription.PermabuffDesc, string.Empty);
-            rows.AddKeyValueRow(Strings.ItemDescription.PermabuffSkillPoints, mItem.SkillPoints.ToString());
+
+            if (mItem.SkillPoints > 0)
+            {
+                rows.AddKeyValueRow(Strings.ItemDescription.PermabuffSkillPoints, mItem.SkillPoints.ToString());
+            }
+
+            var statIdx = 0;
+            foreach (var stat in mItem.StatsGiven)
+            {
+                if (stat == 0)
+                {
+                    statIdx++;
+                    continue;
+                }
+
+                rows.AddKeyValueRow(Strings.ItemDescription.Stats[statIdx], stat.ToString("N0"));
+                statIdx++;
+            }
+
+            var vitalIdx = 0;
+            foreach (var vital in mItem.VitalsGiven)
+            {
+                if (vital == 0)
+                {
+                    vitalIdx++;
+                    continue;
+                }
+
+                rows.AddKeyValueRow(Strings.ItemDescription.Vitals[vitalIdx], vital.ToString("N0"));
+                vitalIdx++;
+            }
+
+            rows.SizeToChildren(true, true);
+
+            AddDivider();
+
+            rows = AddRowContainer();
 
             if (Globals.UsedPermabuffs.Contains(mItem.Id))
             {
                 rows.AddKeyValueRow(Strings.ItemDescription.PermabuffUsed, null, CustomColors.ItemDesc.Notice, Color.White);
+            }
+            else
+            {
+                rows.AddKeyValueRow(Strings.ItemDescription.PermabuffUnused, null, CustomColors.ItemDesc.Muted, Color.White);
             }
 
             rows.SizeToChildren(true, true);

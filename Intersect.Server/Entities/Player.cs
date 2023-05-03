@@ -458,9 +458,6 @@ namespace Intersect.Server.Entities
             SetMasteryProgress();
             SendPacket(GenerateChallengeProgressPacket());
 
-            // Make sure they can tell which permabuffs they've used before
-            PacketSender.SendUsedPermabuffs(this);
-
             // Refresh recipe unlock statuses in the event they've changed since the player last logged in
             RecipeUnlockWatcher.RefreshPlayer(this);
 
