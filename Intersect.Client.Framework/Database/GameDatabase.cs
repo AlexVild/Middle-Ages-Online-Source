@@ -70,6 +70,12 @@ namespace Intersect.Client.Framework.Database
         public bool DisplayPartyInfo;
         
         public bool TypewriterText;
+        
+        public bool DisplayLighting;
+        
+        public bool DisplayFog;
+        
+        public bool DisplayWeather;
 
         //Saving password, other stuff we don't want in the games directory
         public abstract void SavePreference(string key, object value);
@@ -122,6 +128,9 @@ namespace Intersect.Client.Framework.Database
             DisplaySelfStatusMarkers = LoadPreference("DisplaySelfStatusMarkers", true);
             DisplayPartyInfo = LoadPreference("DisplayPartyInfo", true);
             TypewriterText = LoadPreference("TypewriterText", true);
+            DisplayLighting = LoadPreference("DisplayLighting", true);
+            DisplayWeather = LoadPreference("DisplayWeather", true);
+            DisplayFog = LoadPreference("DisplayFog", true);
         }
 
         public virtual void SavePreferences()
@@ -157,6 +166,9 @@ namespace Intersect.Client.Framework.Database
             SavePreference("DisplaySelfStatusMarkers", DisplaySelfStatusMarkers.ToString());
             SavePreference("DisplayPartyInfo", DisplayPartyInfo.ToString());
             SavePreference("TypewriterText", TypewriterText.ToString());
+            SavePreference("DisplayLighting", DisplayLighting.ToString());
+            SavePreference("DisplayWeather", DisplayWeather.ToString());
+            SavePreference("DisplayFog", DisplayFog.ToString());
         }
 
         public abstract bool LoadConfig();

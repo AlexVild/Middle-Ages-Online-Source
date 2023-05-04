@@ -1162,6 +1162,11 @@ namespace Intersect.Client.Core
 
         private static void GenerateLightMap()
         {
+            if (!Globals.Database.DisplayLighting)
+            {
+                return;
+            }
+
             var map = MapInstance.Get(Globals.Me.CurrentMap);
             if (map == null)
             {
@@ -1216,6 +1221,11 @@ namespace Intersect.Client.Core
 
         public static void DrawDarkness()
         {
+            if (!Globals.Database.DisplayLighting)
+            {
+                return;
+            }
+
             var radialShader = Globals.ContentManager.GetShader("radialgradient");
             if (radialShader != null)
             {
@@ -1225,6 +1235,11 @@ namespace Intersect.Client.Core
 
         public static void AddLight(int x, int y, int size, byte intensity, float expand, Color color)
         {
+            if (!Globals.Database.DisplayLighting)
+            {
+                return;
+            }
+
             if (size == 0)
             {
                 return;
@@ -1236,6 +1251,11 @@ namespace Intersect.Client.Core
 
         private static void DrawLights()
         {
+            if (!Globals.Database.DisplayLighting)
+            {
+                return;
+            }
+
             var radialShader = Globals.ContentManager.GetShader("radialgradient");
             if (radialShader != null)
             {
@@ -1263,6 +1283,11 @@ namespace Intersect.Client.Core
 
         public static void UpdatePlayerLight()
         {
+            if (!Globals.Database.DisplayLighting)
+            {
+                return;
+            }
+
             //Draw Light Around Player
             var map = MapInstance.Get(Globals.Me.CurrentMap);
             if (map != null)

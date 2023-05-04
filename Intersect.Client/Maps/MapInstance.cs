@@ -16,6 +16,7 @@ using Intersect.Client.General;
 using Intersect.Client.Items;
 using Intersect.Client.Localization;
 using Intersect.Compression;
+using Intersect.Configuration;
 using Intersect.Enums;
 using Intersect.GameObjects;
 using Intersect.GameObjects.Events;
@@ -760,6 +761,11 @@ namespace Intersect.Client.Maps
             }
 
             //Add lights to our darkness texture
+            if (!Globals.Database.DisplayLighting)
+            {
+                return;
+            }
+
             foreach (var light in Lights)
             {
                 double w = light.Size;
@@ -1015,6 +1021,11 @@ namespace Intersect.Client.Maps
         //Fogs/Panorama/Overlay
         public void DrawFog()
         {
+            if (!Globals.Database.DisplayFog)
+            {
+                return;
+            }
+
             if (Globals.Me == null || Get(Globals.Me.CurrentMap) == null)
             {
                 return;
@@ -1100,6 +1111,11 @@ namespace Intersect.Client.Maps
         //Weather
         public void DrawWeather()
         {
+            if (!Globals.Database.DisplayWeather)
+            {
+                return;
+            }
+
             if (Globals.Me == null || Lookup.Get(Globals.Me.CurrentMap) == null)
             {
                 return;

@@ -5,6 +5,7 @@ using System.Drawing.Imaging;
 using System.Linq;
 using System.Windows.Forms;
 using Intersect.Config;
+using Intersect.Configuration;
 using Intersect.Editor.Content;
 using Intersect.Editor.Entities;
 using Intersect.Editor.Forms.DockingElements;

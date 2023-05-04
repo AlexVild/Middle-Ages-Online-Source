@@ -154,6 +154,12 @@ namespace Intersect.Client.Interface.Shared
         
         private readonly LabeledCheckBox mTypewriterText;
 
+        private readonly LabeledCheckBox mShowLighting;
+        
+        private readonly LabeledCheckBox mShowFog;
+        
+        private readonly LabeledCheckBox mShowWeather;
+
         // Open settings
         private bool mReturnToMenu;
 
@@ -364,6 +370,19 @@ namespace Intersect.Client.Interface.Shared
             mAutoCloseWindowsCheckbox = new LabeledCheckBox(mVideoSettingsContainer, "AutoCloseWindowsCheckbox")
             {
                 Text = Strings.Settings.AutoCloseWindows
+            };
+
+            mShowWeather = new LabeledCheckBox(mVideoSettingsContainer, "DrawWeatherCheckbox")
+            {
+                Text = "Show Weather"
+            };
+            mShowLighting = new LabeledCheckBox(mVideoSettingsContainer, "DrawLightingCheckbox")
+            {
+                Text = "Lighting Effects"
+            };
+            mShowFog = new LabeledCheckBox(mVideoSettingsContainer, "DrawFogCheckbox")
+            {
+                Text = "Show Fog"
             };
 
             #endregion
@@ -782,6 +801,9 @@ namespace Intersect.Client.Interface.Shared
             // Video Settings.
             mAutoCloseWindowsCheckbox.IsChecked = Globals.Database.HideOthersOnWindowOpen;
             mFullscreenCheckbox.IsChecked = Globals.Database.FullScreen;
+            mShowWeather.IsChecked = Globals.Database.DisplayWeather;
+            mShowLighting.IsChecked = Globals.Database.DisplayLighting;
+            mShowFog.IsChecked = Globals.Database.DisplayFog;
 
             // Audio Settings.
             mPreviousMusicVolume = Globals.Database.MusicVolume;
@@ -969,6 +991,11 @@ namespace Intersect.Client.Interface.Shared
             Globals.Database.DisplaySelfStatusMarkers = mSelfStatusMarkers.IsChecked;
             Globals.Database.DisplayPartyInfo = mDisplayPartyInfo.IsChecked;
             Globals.Database.TypewriterText = mTypewriterText.IsChecked;
+            
+            // Save graphics settings
+            Globals.Database.DisplayFog = mShowFog.IsChecked;
+            Globals.Database.DisplayWeather = mShowWeather.IsChecked;
+            Globals.Database.DisplayLighting = mShowLighting.IsChecked;
 
             // Save keybinding settings
             Globals.Database.ClassicMode = mClassicModeCheckbox.IsChecked;
