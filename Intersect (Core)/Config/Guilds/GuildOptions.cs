@@ -41,6 +41,8 @@ namespace Intersect.Config.Guilds
 
         public string GuildWarsGUID { get; set; } = "";
 
+        public int MaxMembers { get; set; } = 20;
+
         /// <summary>
         /// Array of guild ranks that are available in this game
         /// </summary>

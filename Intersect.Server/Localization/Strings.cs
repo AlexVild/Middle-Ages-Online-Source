@@ -845,6 +845,9 @@ namespace Intersect.Server.Localization
             public readonly LocalizedString guildchat = @"[{00}] {01}: {02}";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString GuildFull = @"You clan is full! You cannot have more than {00} players in a clan.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString Transferred = @"Guild ownership of {00} has been transferred from {01} to {02}!";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]

@@ -222,6 +222,12 @@ namespace Intersect.Server.Database.PlayerData.Players
         /// <param name="initiator">The player who initiated this change (null if done by the api or some other method).</param>
         public void AddMember(Player player, int rank, Player initiator = null)
         {
+            if (GuildFull)
+            {
+                SendGuildFullMessageTo(player);
+                return;
+            }
+
             if (player != null && !Members.Any(m => m.Key == player.Id))
             {
                 using (var context = DbInterface.CreatePlayerContext(readOnly: false))
@@ -256,6 +262,18 @@ namespace Intersect.Server.Database.PlayerData.Players
                     }
                 }
             }
+        }
+
+        public bool GuildFull => Members.Count >= Options.Instance.Guild.MaxMembers;
+
+        public void SendGuildFullMessageTo(Player player)
+        {
+            if (player == null)
+            {
+                return;
+            }
+
+            PacketSender.SendChatMsg(player, Strings.Guilds.GuildFull.ToString(Options.Instance.Guild.MaxMembers.ToString("N0")), ChatMessageType.Notice, CustomColors.General.GeneralDisabled);
         }
 
         /// <summary>

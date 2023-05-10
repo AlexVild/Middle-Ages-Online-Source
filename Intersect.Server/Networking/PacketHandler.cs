@@ -2349,7 +2349,7 @@ namespace Intersect.Server.Networking
 
             var isOwner = player.GuildRank == 0;
             var rank = Options.Instance.Guild.Ranks[Math.Max(0, Math.Min(player.GuildRank, Options.Instance.Guild.Ranks.Length - 1))];
-            Intersect.Network.Packets.Server.GuildMember member = null;
+            Network.Packets.Server.GuildMember member = null;
 
             // Handle our desired action, assuming we're allowed to of course.
             switch (packet.Action)
@@ -2367,6 +2367,12 @@ namespace Intersect.Server.Networking
                     if (inviteRank.Limit > -1 && guild.Members.Where(m => m.Value.Rank == inviteRankIndex).Count() >= inviteRank.Limit)
                     {
                         PacketSender.SendChatMsg(player, Strings.Guilds.RankLimitResponse.ToString(inviteRank.Title, player.Name), ChatMessageType.Guild, CustomColors.Alerts.Error);
+                        return;
+                    }
+
+                    if (guild.GuildFull)
+                    {
+                        guild.SendGuildFullMessageTo(player);
                         return;
                     }
 
@@ -2529,6 +2535,16 @@ namespace Intersect.Server.Networking
 
                 player.GuildInvite = null;
 
+                return;
+            }
+
+            // If guild is at max capacity
+            if (guild.GuildFull && player != null)
+            {
+                var onlinePlayer = Player.FindOnline(player.GuildInvite.Item1.Id);
+                guild.SendGuildFullMessageTo(onlinePlayer);
+                player.GuildInvite = null;
+                
                 return;
             }
 
