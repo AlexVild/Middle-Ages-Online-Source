@@ -175,6 +175,8 @@ namespace Intersect.Client.Interface.Game.Trades
                         }
                     }
 
+                    Pnl.RenderColor = item.Color;
+
                     if (item.RareDrop)
                     {
                         Container.Texture = RareFrameBg;
@@ -191,6 +193,7 @@ namespace Intersect.Client.Interface.Game.Trades
                 }
                 else
                 {
+                    Pnl.RenderColor = Color.White;
                     Container.Texture = StandardFrameBg;
                     if (Pnl.Texture != null)
                     {
