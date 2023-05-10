@@ -4382,16 +4382,7 @@ namespace Intersect.Server.Networking
                 return;
             }
 
-            var cosmetics = new List<Guid>();
-            cosmetics.AddRange(player.UnlockedCosmetics.ToArray().Select(c => c.ItemId));
-
-            player.SendPacket(new Network.Packets.Server.CosmeticUnlocksPacket(cosmetics));
-            if (!player.CosmeticsTutorialDone)
-            {
-                PacketSender.SendEventDialog(player, Strings.Player.CosmeticsTutorial1, default, default);
-                PacketSender.SendEventDialog(player, Strings.Player.CosmeticsTutorial2, default, default);
-                player.CosmeticsTutorialDone = true;
-            }
+            PacketSender.SendUnlockedCosmeticsPacket(player);
         }
 
         public void HandlePacket(Client client, CosmeticChangePacket packet)

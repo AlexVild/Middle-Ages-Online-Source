@@ -21,6 +21,7 @@ namespace Intersect.Server.Entities
             Deconstructor = new Deconstructor(multiplier, this, bankingDisabled);
             DeconstructorEventId = eventId;
             PacketSender.SendKnownEnhancementUpdate(this);
+            PacketSender.SendUnlockedCosmeticsPacket(this);
             PacketSender.SendOpenDeconstructor(this, multiplier);
         }
 

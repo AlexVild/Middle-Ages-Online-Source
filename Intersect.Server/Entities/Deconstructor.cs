@@ -110,6 +110,7 @@ namespace Intersect.Server.Entities
             List<LootRoll> deconstructedLoot = new List<LootRoll>();
             Dictionary<Guid, long> expEarned = new Dictionary<Guid, long>();
             List<Guid> enhancementsLearned = new List<Guid>();
+            List<Guid> cosmeticsEarned = new List<Guid>();
             foreach (var slot in slotsToRemoveFrom)
             {
                 var item = ItemBase.Get(slot.ItemId);
@@ -136,9 +137,14 @@ namespace Intersect.Server.Entities
                 }
                 deconstructedLoot.AddRange(item.DeconstructRolls);
 
-                if (item.StudySuccessful(Owner.GetLuckModifier()))
+                if (item.StudySuccessful(Owner.GetLuckModifier()) && !enhancementsLearned.Contains(item.StudyEnhancement))
                 {
                     enhancementsLearned.Add(item.StudyEnhancement);
+                }
+                
+                if (item.ArmorCosmeticUnlocked(Owner.GetLuckModifier()) && !cosmeticsEarned.Contains(item.Id))
+                {
+                    cosmeticsEarned.Add(item.Id);
                 }
             }
 
@@ -165,11 +171,26 @@ namespace Intersect.Server.Entities
                     newEnhancement = true;
                 }
             }
+            
+            var newCosmetic = false;
+            foreach (var cosmetic in cosmeticsEarned.Distinct())
+            {
+                // This function will alert the client
+                if (Owner.TryChangeCosmeticUnlockStatus(cosmetic, true))
+                {
+                    newCosmetic = true;
+                }
+            }
 
             // If the client needs to know we've learned a new enhancement
             if (newEnhancement)
             {
                 PacketSender.SendKnownEnhancementUpdate(Owner);
+            }
+
+            if (newCosmetic)
+            {
+                PacketSender.SendUnlockedCosmeticsPacket(Owner);
             }
 
             // We are now waiting on the loot roll instead of the deconstructor being closed

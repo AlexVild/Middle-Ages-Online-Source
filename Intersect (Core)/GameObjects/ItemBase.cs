@@ -608,12 +608,37 @@ namespace Intersect.GameObjects
 
         public bool StudySuccessful(double luckModifier)
         {
+            if (StudyChance <= 0)
+            {
+                return false;
+            }
+
             if (StudyEnhancement == Guid.Empty)
             {
                 return false;
             }
 
             //Npc drop rates
+            var randomChance = Randomization.Next(1, 100001);
+            if (randomChance >= (StudyChance * 1000) * luckModifier)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public bool ArmorCosmeticUnlocked(double luckModifier)
+        {
+            if (StudyChance <= 0)
+            {
+                return false;
+            }
+
+            if (ItemType != ItemTypes.Equipment || (string.IsNullOrWhiteSpace(MalePaperdoll) && string.IsNullOrWhiteSpace(FemalePaperdoll))) 
+            {
+                return false;
+            }
+
             var randomChance = Randomization.Next(1, 100001);
             if (randomChance >= (StudyChance * 1000) * luckModifier)
             {

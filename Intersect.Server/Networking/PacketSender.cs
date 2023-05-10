@@ -2872,5 +2872,19 @@ namespace Intersect.Server.Networking
             var usedPermabuffs = player.Permabuffs.Where(p => p.Used).Select(p => p.ItemId).Distinct().ToArray();
             player?.SendPacket(new UsedPermabuffsPacket(usedPermabuffs));
         }
+
+        public static void SendUnlockedCosmeticsPacket(Player player)
+        {
+            var cosmetics = new List<Guid>();
+            cosmetics.AddRange(player.UnlockedCosmetics.ToArray().Select(c => c.ItemId));
+
+            player.SendPacket(new Network.Packets.Server.CosmeticUnlocksPacket(cosmetics));
+            if (!player.CosmeticsTutorialDone)
+            {
+                SendEventDialog(player, Strings.Player.CosmeticsTutorial1, default, default);
+                SendEventDialog(player, Strings.Player.CosmeticsTutorial2, default, default);
+                player.CosmeticsTutorialDone = true;
+            }
+        }
     }
 }

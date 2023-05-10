@@ -1100,10 +1100,19 @@ namespace Intersect.Client.Localization
             public static LocalizedString StudyOpportunity = @"Study Opportunity";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString CosmeticOpportunity = @"Cosmetic Unlock %";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString Studied = @"Studied!";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString CosmeticKnown = @"Cosmetic unlocked!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString StudyOpportunityText = @"{00} ({01}%)";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString CosmeticChance = @"{00}%";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString AttackSpeedReal = @"Real Atk Speed:";

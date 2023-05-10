@@ -4238,6 +4238,7 @@ namespace Intersect.Server.Entities
             }
 
             PacketSender.SendKnownEnhancementUpdate(this);
+            PacketSender.SendUnlockedCosmeticsPacket(this);
             return true;
         }
 
@@ -4421,6 +4422,11 @@ namespace Intersect.Server.Entities
                 if (itm.StudySuccessful(GetLuckModifier()) && TryUnlockEnhancement(itm.StudyEnhancement))
                 {
                     PacketSender.SendKnownEnhancementUpdate(this);
+                }
+
+                if (itm.ArmorCosmeticUnlocked(GetLuckModifier()) && TryChangeCosmeticUnlockStatus(itm.Id, true))
+                {
+                    PacketSender.SendUnlockedCosmeticsPacket(this);
                 }
 
                 // Start any related common events

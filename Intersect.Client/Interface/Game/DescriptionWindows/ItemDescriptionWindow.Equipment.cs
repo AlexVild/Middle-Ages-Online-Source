@@ -9,6 +9,7 @@ using Intersect.Utilities;
 using Intersect.Client.Interface.Game.DescriptionWindows.Components;
 using Intersect.Client.Utilities;
 using System.Collections.Generic;
+using Intersect.Client.Interface.Game.Character.Panels;
 
 namespace Intersect.Client.Interface.Game.DescriptionWindows
 {
@@ -603,24 +604,34 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
 
         private void SetupStudyInfo()
         {
-            if ((Interface.GameUi.CraftingWindowOpen() || Interface.GameUi.DeconstructorWindow.IsVisible()) && mItem.StudyEnhancement != Guid.Empty)
+            if ((Interface.GameUi.CraftingWindowOpen() || Interface.GameUi.DeconstructorWindow.IsVisible()) && mItem.StudyChance > 0)
             {
-                var studyRow = AddRowContainer();
                 var enhancement = EnhancementDescriptor.GetName(mItem.StudyEnhancement);
 
-                if (!Globals.Me.KnownEnhancements.Contains(mItem.StudyEnhancement))
+                var leftText = mItem.StudyEnhancement != Guid.Empty ? Strings.ItemDescription.StudyOpportunity : Strings.ItemDescription.CosmeticOpportunity;
+                var rightText = mItem.StudyEnhancement != Guid.Empty ? Strings.ItemDescription.StudyOpportunityText.ToString(enhancement, mItem.StudyChance.ToString("N2")) : 
+                    Strings.ItemDescription.CosmeticChance.ToString(mItem.StudyChance.ToString("N2"));
+
+                var unlockedText = mItem.StudyEnhancement != Guid.Empty ? Strings.ItemDescription.Studied : Strings.ItemDescription.CosmeticKnown;
+
+                var studyRow = AddRowContainer();
+
+                // Enhancement study text
+                if (mItem.StudyEnhancement != Guid.Empty && !Globals.Me.KnownEnhancements.Contains(mItem.StudyEnhancement))
                 {
-                    studyRow.AddKeyValueRow(Strings.ItemDescription.StudyOpportunity,
-                        Strings.ItemDescription.StudyOpportunityText.ToString(enhancement, mItem.StudyChance.ToString("N2")),
-                        CustomColors.ItemDesc.Special,
-                        CustomColors.ItemDesc.Special);
+                    studyRow.AddKeyValueRow(leftText, rightText, CustomColors.ItemDesc.Special, CustomColors.ItemDesc.Special);
                 }
-                else
+                // Cosmetic unlock text
+                else if (mItem.StudyChance > 0)
                 {
-                    studyRow.AddKeyValueRow(Strings.ItemDescription.Studied,
-                        "",
-                        CustomColors.ItemDesc.Special,
-                        CustomColors.ItemDesc.Special);
+                    if (!CharacterCosmeticsPanelController.UnlockedCosmetics.TryGetValue(mItem.EquipmentSlot, out var cosmeticsInSlot) || !cosmeticsInSlot.Contains(mItem.Id))
+                    {
+                        studyRow.AddKeyValueRow(leftText, rightText, CustomColors.ItemDesc.Special, CustomColors.ItemDesc.Special);
+                    }
+                    else
+                    {
+                        studyRow.AddKeyValueRow(unlockedText, "", CustomColors.ItemDesc.Special, CustomColors.ItemDesc.Special);
+                    }
                 }
 
                 studyRow.SizeToChildren(true, true);
