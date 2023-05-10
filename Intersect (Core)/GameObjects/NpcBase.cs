@@ -404,6 +404,11 @@ namespace Intersect.GameObjects
         [NotMapped]
         public Dictionary<int, int> BestiaryUnlocks { get; set; } = new Dictionary<int, int>();
 
+        public bool BeastCompleted(long kc)
+        {
+            return BestiaryUnlocks.Values.All(reqKc => kc >= reqKc);
+        } 
+
         [Column("BestiaryUnlocks")]
         [JsonIgnore]
         public string BestiaryUnlocksJson

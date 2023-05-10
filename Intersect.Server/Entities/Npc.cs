@@ -213,7 +213,7 @@ namespace Intersect.Server.Entities
                         // Did we just finish the bestiary entry for this mob?
                         if (lastUnlock != default && lastUnlock == (int)recordKilled)
                         {
-
+                            PacketSender.SendChatMsg(playerKiller, $"You've completed the bestiary entry for {Base.Name}!", ChatMessageType.Experience, CustomColors.General.GeneralCompleted, sendToast: true);
                             // Give experience based on completing a bestiary entry
                             var bestiaryCompletionExp = Base.Experience * Options.Combat.BestiaryCompletionExpMultiplier;
                             playerKiller.GiveExperience(bestiaryCompletionExp);

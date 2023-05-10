@@ -57,8 +57,7 @@ namespace Intersect.Server.Entities
                     continue;
                 }
 
-                var isComplete = beast.BestiaryUnlocks.Values.All(reqKc => kc >= reqKc);
-                if (isComplete)
+                if (beast.BeastCompleted(kc))
                 {
                     completed++;
                 }
@@ -94,7 +93,7 @@ namespace Intersect.Server.Entities
             {
                 BestiaryUnlocks.Add(new BestiaryUnlockInstance(Id, npcId, unlock, status));
             }
-            else // Otherwise, change the status for any found mathces
+            else // Otherwise, change the status for any found matches
             {
                 foreach (var beast in beasts)
                 {
