@@ -234,7 +234,7 @@ namespace Intersect.Server.Entities
             var baseDropTable = LootTableServerHelpers.GenerateDropTable(Base.Drops, playerKiller);
             rolledItems.Add(LootTableServerHelpers.GetItemFromTable(baseDropTable));
 
-            LootTableServerHelpers.SpawnItemsOnMap(rolledItems, MapId, MapInstanceId, killer.X, killer.Y, lootOwner, sendUpdate);
+            LootTableServerHelpers.SpawnItemsOnMap(rolledItems, killer.MapId, killer.MapInstanceId, killer.X, killer.Y, lootOwner, sendUpdate);
         }
     }
 
