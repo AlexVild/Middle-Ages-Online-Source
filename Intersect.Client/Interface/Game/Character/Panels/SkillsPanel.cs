@@ -40,6 +40,11 @@ namespace Intersect.Client.Interface.Game.Character.Panels
             List<string> skillTypes = new List<string>();
             foreach (var spell in Globals.Me?.Skillbook.Select(kv => SpellBase.Get(kv.Key)))
             {
+                if (spell == default)
+                {
+                    continue;
+                }
+
                 if (string.IsNullOrEmpty(spell.SpellGroup))
                 {
                     continue;
@@ -164,6 +169,10 @@ namespace Intersect.Client.Interface.Game.Character.Panels
             foreach(var skillKv in Globals.Me?.Skillbook.OrderBy(kv => SpellBase.GetName(kv.Key)).ToArray())
             {
                 var descriptor = SpellBase.Get(skillKv.Key);
+                if (descriptor == default)
+                {
+                    continue;
+                }
 
                 // Filter by spell group
                 if (SkillTypeSelection.SelectedItem.Text != SkillsPanelController.AllSkillsText)
