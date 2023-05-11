@@ -230,6 +230,8 @@ namespace Intersect.Server.Entities
 
                 ((AttackingEntity)enemy).Knockback(projectileDir, descriptor.Knockback);
             }
+
+            CheckForOnhitAttack(enemy);
         }
 
         /// <summary>

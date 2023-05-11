@@ -203,6 +203,8 @@ namespace Intersect.Server.Entities
             {
                 PacketSender.SendCombatNumber(CombatNumberType.HealHealth, this, (int)healthRecovered);
             }
+
+            CheckForOnhitAttack(enemy);
         }
 
         /// <summary>

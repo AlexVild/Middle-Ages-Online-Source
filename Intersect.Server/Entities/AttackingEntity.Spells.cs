@@ -576,19 +576,15 @@ namespace Intersect.Server.Entities
 
                             break;
                         case SpellTargetTypes.OnHit:
-                            if (spell.Combat.Effect == StatusTypes.OnHit)
-                            {
-                                new Status(
+                            new Status(
                                     this, this, spell, StatusTypes.OnHit, spell.Combat.OnHitDuration,
                                     spell.Combat.TransformSprite
                                 );
 
-                                PacketSender.SendActionMsg(
-                                    this, Strings.Combat.status[(int)spell.Combat.Effect],
-                                    CustomColors.Combat.Status
-                                );
-                                SendSpellHitAnimation(spell, this, Id);
-                            }
+                            PacketSender.SendActionMsg(
+                                this, Strings.Combat.status[(int)StatusTypes.OnHit],
+                                CustomColors.Combat.Status
+                            );
 
                             break;
                         case SpellTargetTypes.Trap:
@@ -806,6 +802,27 @@ namespace Intersect.Server.Entities
                     return true;
                 default:
                     return false;
+            }
+        }
+
+        public virtual void CheckForOnhitAttack(Entity enemy)
+        {
+            foreach (var status in CachedStatuses)
+            {
+                if (status.Type != StatusTypes.OnHit)
+                {
+                    continue;
+                }
+
+                var spellFriendly = status.Spell?.Combat?.Friendly ?? false;
+                if ((IsAllyOf(enemy) && spellFriendly) || (!IsAllyOf(enemy) && !spellFriendly))
+                {
+                    if (SpellAttack(enemy, status.Spell, (sbyte)Dir, null))
+                    {
+                        SendSpellHitAnimation(status.Spell, enemy, enemy?.Id ?? Guid.Empty);
+                    }
+                    status.RemoveStatus();
+                }
             }
         }
     }

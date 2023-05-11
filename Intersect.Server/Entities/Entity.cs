@@ -1530,21 +1530,6 @@ namespace Intersect.Server.Entities
             PacketSender.SendActionMsg(en, Strings.Combat.blocked, CustomColors.Combat.Blocked, Options.BlockSound);
         }
 
-        void CheckForOnhitAttack(Entity enemy, bool isAutoAttack)
-        {
-            /*if (isAutoAttack) //Ignore spell damage.
-            {
-                foreach (var status in CachedStatuses)
-                {
-                    if (status.Type == StatusTypes.OnHit)
-                    {
-                        TryAttackSpell(enemy, status.Spell, out bool miss, out bool blocked, (sbyte) Directions.Up);
-                        status.RemoveStatus();
-                    }
-                }
-            }*/
-        }
-
         protected void SendCombatEffects(Entity enemy, bool isCrit, int damage)
         {
             if (damage == 0)

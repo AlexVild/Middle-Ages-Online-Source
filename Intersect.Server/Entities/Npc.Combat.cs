@@ -191,6 +191,7 @@ namespace Intersect.Server.Entities
             {
                 return;
             }
+            CheckForOnhitAttack(enemy);
         }
 
         public override void SendAttackAnimation(Entity enemy)
