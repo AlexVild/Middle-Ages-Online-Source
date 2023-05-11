@@ -1085,8 +1085,9 @@ namespace Intersect.Server.Networking
             {
                 return;
             }
-            
+
             // Else, melee attack the target
+            var targetHit = false;
             foreach (var mapInstance in MapController.GetSurroundingMapInstances(player.Map.Id, player.MapInstanceId, true))
             {
                 foreach (var entity in mapInstance.GetEntities())
@@ -1094,10 +1095,16 @@ namespace Intersect.Server.Networking
                     if (entity.Id == target)
                     {
                         player.MeleeAttack(entity, false);
+                        targetHit = true;
 
                         break;
                     }
                 }
+            }
+
+            if (!targetHit)
+            {
+                player.OnAttackMissed(null);
             }
 
             // lag compensation

@@ -439,6 +439,18 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 rows.AddKeyValueRow(Strings.SpellDescription.Duration, Strings.SpellDescription.Seconds.ToString(spell.Combat.Duration / 1000f), StatLabelColor, StatValueColor);
             }
 
+            if (spell.Combat.TargetType == SpellTargetTypes.OnHit)
+            {
+                if (spell.Combat.PersistMissedAttack)
+                {
+                    rows.AddKeyValueRow("Persist missed attacks", string.Empty, CustomColors.ItemDesc.Notice, Color.White);
+                }
+                if (spell.Combat.PersistWeaponSwap)
+                {
+                    rows.AddKeyValueRow("Persist weapon change", string.Empty, CustomColors.ItemDesc.Notice, Color.White);
+                }
+            }
+
             // Resize and position the container.
             rows.SizeToChildren(true, true);
         }

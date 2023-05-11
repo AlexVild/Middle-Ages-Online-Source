@@ -1219,6 +1219,10 @@
     <Compile Include="Migrations\Game\20230502193706_ItemPermabuffMigration.designer.cs">
       <DependentUpon>20230502193706_ItemPermabuffMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20230511141249_OnHitReduxMigration.cs" />
+    <Compile Include="Migrations\Game\20230511141249_OnHitReduxMigration.designer.cs">
+      <DependentUpon>20230511141249_OnHitReduxMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

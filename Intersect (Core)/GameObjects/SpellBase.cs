@@ -294,6 +294,10 @@ namespace Intersect.GameObjects
         [Column("OnHit")]
         public int OnHitDuration { get; set; }
 
+        public bool PersistWeaponSwap { get; set; }
+
+        public bool PersistMissedAttack { get; set; }
+
         [Column("Trap")]
         public int TrapDuration { get; set; }
 

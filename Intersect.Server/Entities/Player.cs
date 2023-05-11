@@ -5841,6 +5841,7 @@ namespace Intersect.Server.Entities
                         UnequipItem(Options.ShieldIndex, false);
                     }
                     ResetChallengeTracking();
+                    RemoveWeaponSwapOnHits();
                 }
                 else if (itemBase.EquipmentSlot == Options.ShieldIndex)
                 {

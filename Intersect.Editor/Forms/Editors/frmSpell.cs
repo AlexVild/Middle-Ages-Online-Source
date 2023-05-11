@@ -545,6 +545,8 @@ namespace Intersect.Editor.Forms.Editors
             cmbProjectile.Hide();
             lblDuration.Hide();
             nudDuration.Hide();
+            chkPersistMissedAttack.Hide();
+            chkPersistSwap.Hide();
             lblTrapAnimation.Hide();
             cmbTrapAnimation.Hide();
 
@@ -591,6 +593,10 @@ namespace Intersect.Editor.Forms.Editors
                 lblDuration.Show();
                 nudDuration.Show();
                 nudDuration.Value = mEditorItem.Combat.OnHitDuration;
+                chkPersistMissedAttack.Show();
+                chkPersistSwap.Show();
+                chkPersistMissedAttack.Checked = mEditorItem.Combat.PersistMissedAttack;
+                chkPersistSwap.Checked = mEditorItem.Combat.PersistWeaponSwap;
             }
 
             if (cmbTargetType.SelectedIndex == (int) SpellTargetTypes.Trap)
@@ -1661,6 +1667,16 @@ namespace Intersect.Editor.Forms.Editors
         private void nudMockMagic_ValueChanged(object sender, EventArgs e)
         {
             RefreshBalance();
+        }
+
+        private void chkPersistMissedAttack_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.PersistMissedAttack = chkPersistMissedAttack.Checked;
+        }
+
+        private void chkPersistSwap_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.PersistWeaponSwap = chkPersistSwap.Checked;
         }
     }
 }

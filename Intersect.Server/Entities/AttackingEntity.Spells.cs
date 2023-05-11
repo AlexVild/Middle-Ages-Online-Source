@@ -825,5 +825,37 @@ namespace Intersect.Server.Entities
                 }
             }
         }
+
+        protected void RemoveMissedOnHits()
+        {
+            foreach (var status in CachedStatuses)
+            {
+                if (status.Type != StatusTypes.OnHit)
+                {
+                    continue;
+                }
+
+                if (!status.Spell?.Combat?.PersistMissedAttack ?? false)
+                {
+                    status.RemoveStatus();
+                }
+            }
+        }
+
+        protected void RemoveWeaponSwapOnHits()
+        {
+            foreach (var status in CachedStatuses)
+            {
+                if (status.Type != StatusTypes.OnHit)
+                {
+                    continue;
+                }
+
+                if (!status.Spell?.Combat?.PersistWeaponSwap ?? false)
+                {
+                    status.RemoveStatus();
+                }
+            }
+        }
     }
 }

@@ -705,6 +705,7 @@ namespace Intersect.Server.Entities
         protected override void AttackingEntity_AttackMissed(Entity target)
         {
             MissFreeStreakEnd();
+            RemoveMissedOnHits();
         }
 
         protected override void AttackingEntity_DamageTaken(Entity aggressor, int damage)
