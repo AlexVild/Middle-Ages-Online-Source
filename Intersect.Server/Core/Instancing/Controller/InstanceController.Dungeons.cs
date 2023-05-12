@@ -68,7 +68,10 @@ namespace Intersect.Server.Core.Instancing.Controller
 
             foreach (var participant in Dungeon.Participants)
             {
-                participant.StartCommonEventsWithTrigger(CommonEventTrigger.DungeonStart);
+                if (!DungeonDescriptor.IgnoreStartEvents)
+                {
+                    participant.StartCommonEventsWithTrigger(CommonEventTrigger.DungeonStart);
+                }
                 if (Dungeon.IsSolo)
                 {
                     PacketSender.SendChatMsg(participant, $"You've started a solo run of {DungeonDescriptor.DisplayName}!", ChatMessageType.Party, CustomColors.General.GeneralWarning);
@@ -127,7 +130,10 @@ namespace Intersect.Server.Core.Instancing.Controller
                 pl.FullHeal();
                 pl.ClearHostileDoTs();
 
-                pl.StartCommonEventsWithTrigger(CommonEventTrigger.DungeonComplete);
+                if (!DungeonDescriptor.IgnoreCompletionEvents)
+                {
+                    pl.StartCommonEventsWithTrigger(CommonEventTrigger.DungeonComplete);
+                }
                 pl.EnqueueStartCommonEvent(timer.CompletionEvent);
                 PacketSender.SendChatMsg(pl, $"You completed {DungeonDescriptor.DisplayName} in {Dungeon.CompletionTimeString}", ChatMessageType.Experience, CustomColors.General.GeneralCompleted);
 

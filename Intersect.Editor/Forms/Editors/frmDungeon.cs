@@ -123,6 +123,10 @@ namespace Intersect.Editor.Forms.Editors
             RefreshTreasureLevels(false);
             RefreshGnomeLoot(false);
 
+            chkIgnoreStart.Checked = mEditorItem.IgnoreStartEvents;
+            chkIgnoreCompletion.Checked = mEditorItem.IgnoreCompletionEvents;
+            chkStoreLongest.Checked = mEditorItem.StoreLongestTime;
+
             mPopulating = false;
         }
 
@@ -571,6 +575,21 @@ namespace Intersect.Editor.Forms.Editors
                 return;
             }
             mEditorItem.ExpRewards[lstTreasureLevels.SelectedIndex] = (long)nudExp.Value;
+        }
+
+        private void chkIgnoreStart_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.IgnoreStartEvents = chkIgnoreStart.Checked;
+        }
+
+        private void darkCheckBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.IgnoreCompletionEvents = chkIgnoreCompletion.Checked;
+        }
+
+        private void chkStoreLongest_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.StoreLongestTime = chkStoreLongest.Checked;
         }
     }
 }

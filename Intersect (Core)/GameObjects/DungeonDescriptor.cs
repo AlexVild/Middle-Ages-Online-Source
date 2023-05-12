@@ -96,6 +96,12 @@ namespace Intersect.GameObjects
 
         /// <inheritdoc />
         public string Folder { get; set; } = "";
+
+        public bool IgnoreCompletionEvents { get; set; }
+        
+        public bool IgnoreStartEvents { get; set; }
+
+        public bool StoreLongestTime { get; set; }
     }
 
     public class TimeRequirement
