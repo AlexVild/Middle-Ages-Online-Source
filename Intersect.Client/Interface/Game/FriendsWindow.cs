@@ -97,15 +97,18 @@ namespace Intersect.Client.Interface.Game
             {
                 var mapName = f.Map;
                 var mapSplit = f.Map?.Split('-');
-                if ((mapSplit?.Length ?? 0) > 1)
-                {
-                    mapName = mapSplit[1].Trim();
-                }
 
                 var friendNameWidth = (int)Graphics.Renderer.MeasureText(f.Name, Graphics.HUDFontSmall, 1).X;
+
+                // Display map name:
+                /*var row = f.Online ?
+                    mFriends.AddRow($"{f.Name} ({UiHelper.TruncateString(mapName, Graphics.HUDFontSmall, 190 - friendNameWidth)})") :
+                    mFriends.AddRow($"{UiHelper.TruncateString(f.Name, Graphics.HUDFontSmall, 204)}");*/
+                // Else
                 var row = f.Online ? 
-                    mFriends.AddRow($"{f.Name} ({UiHelper.TruncateString(mapName, Graphics.HUDFontSmall, 190 - friendNameWidth)})") : 
+                    mFriends.AddRow($"{f.Name}") : 
                     mFriends.AddRow($"{UiHelper.TruncateString(f.Name, Graphics.HUDFontSmall, 204)}");
+                
                 row.UserData = f;
                 row.Clicked += friends_Clicked;
                 row.RightClicked += friend_RightClicked;
