@@ -444,7 +444,12 @@ namespace Intersect.Server.Entities
             float decScaling = (float)scaling / 100; // scaling comes into this function as a percent number, i.e 110%, so we need that to be 1.1
             var dmg = (int)Math.Round(damage * decScaling);
             enemy.TakeDamage(this, dmg, isSecondary ? Vitals.Mana : Vitals.Health);
-            
+
+            if (enemy is Npc npc && npc.Base.CannotBeHealed && damage < 0)
+            {
+                return dmg;
+            }
+
             SendCombatEffects(enemy, false, dmg);
             PacketSender.SendCombatNumber(DetermineCombatNumberType(damage, isSecondary, isNeutral, 1.0), enemy, dmg);
 
@@ -500,9 +505,14 @@ namespace Intersect.Server.Entities
                 {
                     damage = enemy.GetVital((int)Vitals.Health);
                 }
+                enemy.TakeDamage(this, damage, secondaryDamage ? Vitals.Mana : Vitals.Health);
+
+                if (enemy is Npc npc && npc.Base.CannotBeHealed && damage < 0)
+                {
+                    return;
+                }
                 SendCombatEffects(enemy, critMultiplier > 1, damage);
                 PacketSender.SendCombatNumber(DetermineCombatNumberType(damage, secondaryDamage, enemy is Resource, critMultiplier), enemy, damage);
-                enemy.TakeDamage(this, damage, secondaryDamage ? Vitals.Mana : Vitals.Health);
             }
             else if (!friendly && maxHit > 0)
             {
