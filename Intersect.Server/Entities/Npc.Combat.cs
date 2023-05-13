@@ -97,7 +97,7 @@ namespace Intersect.Server.Entities
                 critMultiplier = spell.Combat.CritMultiplier;
             }
 
-            return base.TryDealDamageTo(enemy, attackTypes, dmgScaling, critMultiplier, weapon, null, ignoreEvasion, range, out damage);
+            return base.TryDealDamageTo(enemy, attackTypes, dmgScaling, critMultiplier, weapon, spell, ignoreEvasion, range, out damage);
         }
 
         // An NPC always has casting materials
