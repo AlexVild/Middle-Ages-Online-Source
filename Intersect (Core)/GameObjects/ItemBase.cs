@@ -629,7 +629,7 @@ namespace Intersect.GameObjects
 
         public bool ArmorCosmeticUnlocked(double luckModifier)
         {
-            if (StudyChance <= 0)
+            if (StudyChance <= 0 || EnhancementId != Guid.Empty)
             {
                 return false;
             }

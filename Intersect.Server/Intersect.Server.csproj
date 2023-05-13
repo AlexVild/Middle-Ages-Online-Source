@@ -1227,6 +1227,10 @@
     <Compile Include="Migrations\Game\20230512141145_NewDungeonPropsMigration.designer.cs">
       <DependentUpon>20230512141145_NewDungeonPropsMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20230513130907_NoHealNpcMigration.cs" />
+    <Compile Include="Migrations\Game\20230513130907_NoHealNpcMigration.designer.cs">
+      <DependentUpon>20230513130907_NoHealNpcMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>
