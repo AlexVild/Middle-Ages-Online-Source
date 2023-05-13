@@ -644,7 +644,10 @@ namespace Intersect.Server.Entities
             }
 
             // Clear casting target info
-            CancelCast();
+            if (!instantCast && !prayerSpell)
+            {
+                CancelCast();
+            }
         }
 
         /// <summary>
