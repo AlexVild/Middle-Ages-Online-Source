@@ -1966,8 +1966,7 @@ namespace Intersect.Server.Entities
             LevelSkillPoints = playerClass.GetTotalSkillPointsAt(Level);
 
             // Validate permabuff'd skillpoints in case their items changed
-            var oldItemSkillpoints = ItemSkillPoints;
-            var newItemSkillPoints = 0;
+            ItemSkillPoints = 0;
             PermabuffedStats = new int[(int)Stats.StatCount];
             PermabuffedVitals = new int[(int)Vitals.VitalCount];
             foreach(var permabuff in Permabuffs.Where(pb => pb.Used).ToArray())
@@ -1977,11 +1976,9 @@ namespace Intersect.Server.Entities
                     continue;
                 }
 
-                ApplyPermabuffsToStats(permabuff.Item, false, true);
+                ApplyPermabuffsToStats(permabuff.Item, false, false);
             }
             PacketSender.SendEntityStatsTo(Client, this);
-
-            ItemSkillPoints = newItemSkillPoints;
 
             if (oldTotal < LevelSkillPoints)
             {

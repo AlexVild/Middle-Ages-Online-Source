@@ -398,6 +398,8 @@ namespace Intersect.Server.Entities
                 vitalIdx++;
             }
 
+            ItemSkillPoints += itemBase.SkillPoints;
+
             if (sendUpdate)
             {
                 PacketSender.SendEntityStatsToProximity(this);
