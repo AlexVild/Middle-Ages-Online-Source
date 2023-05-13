@@ -68,7 +68,7 @@ namespace Intersect.Server.Entities
             }
             else if (!IsFullVital(vital))
             {
-                AddVital(vital, damage * -1);
+                HealVital(vital, damage * -1);
             }
 
             // You dead?
@@ -84,6 +84,11 @@ namespace Intersect.Server.Entities
         public virtual void ReactToCombat(Entity attacker)
         {
 
+        }
+
+        public virtual void HealVital(Vitals vital, int amount)
+        {
+            AddVital(vital, amount);
         }
 
         private void RemoveStatusesOnDamage()

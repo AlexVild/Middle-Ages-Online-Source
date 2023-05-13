@@ -207,5 +207,15 @@ namespace Intersect.Server.Entities
                 (sbyte)Dir, enemy.MapInstanceId
             );
         }
+
+        public override void HealVital(Vitals vital, int amount)
+        {
+            if (Base.CannotBeHealed)
+            {
+                return;
+            }
+
+            base.HealVital(vital, amount);
+        }
     }
 }

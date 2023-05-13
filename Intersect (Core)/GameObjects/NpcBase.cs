@@ -473,6 +473,8 @@ namespace Intersect.GameObjects
 
             return cachedNpcSpellScalar;
         }
+
+        public bool CannotBeHealed { get; set; }
     }
 
 }

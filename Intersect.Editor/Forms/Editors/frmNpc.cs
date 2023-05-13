@@ -409,6 +409,7 @@ namespace Intersect.Editor.Forms.Editors
                 chkBestiary.Checked = mEditorItem.NotInBestiary;
 
                 lblCalcExpVal.Text = $"{NpcExperienceCalculator.Calculate(mEditorItem)} EXP";
+                chkCannotHeal.Checked = mEditorItem.CannotBeHealed;
             }
             else
             {
@@ -1774,11 +1775,17 @@ namespace Intersect.Editor.Forms.Editors
         private void nudTier_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.Level = (int)nudTier.Value;
+            lblCalcExpVal.Text = $"{NpcExperienceCalculator.Calculate(mEditorItem)} EXP";
         }
 
         private void chkSpellCast_CheckedChanged(object sender, EventArgs e)
         {
             mEditorItem.IsSpellcaster = chkSpellCast.Checked;
+        }
+
+        private void chkCannotHeal_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.CannotBeHealed = chkCannotHeal.Checked;
         }
     }
 
