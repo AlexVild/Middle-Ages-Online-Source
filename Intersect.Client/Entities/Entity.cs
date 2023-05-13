@@ -843,7 +843,7 @@ namespace Intersect.Client.Entities
                     continue;
                 }
 
-                if (IsStealthed())
+                if (IsStealthed() || HideEntity)
                 {
                     animInstance.Hide();
                 }
