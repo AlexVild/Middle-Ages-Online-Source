@@ -2561,5 +2561,17 @@ namespace Intersect.Client.Localization
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString NoWeaponEquippedPrompt = "You must have a weapon equipped to use the weapon upgrade station.";
         }
+
+        public partial struct Loadouts
+        {
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString OverwriteLoadoutTitle = "OVERWRITE LOADOUT";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString OverwriteLoadoutPrompt = "Are you sure you want to overwrite the loadout: {00}?";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString OverwriteLoadoutPromptAlreadyExists = "A loadout with the name {00} already exists. Would you like to overwrite it?";
+        }
     }
 }

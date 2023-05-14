@@ -705,5 +705,30 @@ namespace Intersect.Client.Networking
         {
             Network.SendPacket(new RequestChallengeContractPacket(challengeId));
         }
+
+        public static void SendRequestLoadouts()
+        {
+            Network.SendPacket(new RequestLoadoutsPacket());
+        }
+
+        public static void SendSelectLoadout(Guid loadoutId)
+        {
+            Network.SendPacket(new SelectLoadoutPacket(loadoutId));
+        }
+
+        public static void SendSaveLoadout(string loadoutName)
+        {
+            Network.SendPacket(new SaveNewLoadoutPacket(loadoutName));
+        }
+
+        public static void SendRemoveLoadout(Guid loadoutId)
+        {
+            Network.SendPacket(new RemoveLoadoutPacket(loadoutId));
+        }
+
+        public static void SendOverwriteLoadout(Guid loadoutId)
+        {
+            Network.SendPacket(new OverwriteLoadoutPacket(loadoutId));
+        }
     }
 }

@@ -2982,6 +2982,27 @@ namespace Intersect.Client.Networking
             }
         }
 
+        public void HandlePacket(IPacketSender packetSender, LoadoutsPacket packet)
+        {
+            if (Globals.Me == null)
+            {
+                return;
+            }
 
+            CharacterLoadoutsController.LoadLoadouts(packet.Loadouts);
+        }
+
+        public void HandlePacket(IPacketSender packetSender, ConfirmLoadoutOverwritePacket packet)
+        {
+            if (Globals.Me == null || !CharacterLoadoutsController.TryGetLoadout(packet.LoadoutId, out Loadout loadout))
+            {
+                return;
+            }
+
+            var iBox = new InputBox(
+                Strings.Loadouts.OverwriteLoadoutTitle, Strings.Loadouts.OverwriteLoadoutPrompt.ToString(loadout.Name), true, InputBox.InputType.YesNo,
+                CharacterLoadoutsController.RequestLoadoutOverwritePrompt, null, packet.LoadoutId
+            );
+        }
     }
 }

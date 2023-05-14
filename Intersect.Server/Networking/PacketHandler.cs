@@ -4608,5 +4608,54 @@ namespace Intersect.Server.Networking
         {
             _ = client?.Entity?.TryAcceptChallengeContract(packet.ChallengeId);
         }
+
+        public void HandlePacket(Client client, RequestLoadoutsPacket packet)
+        {
+            PacketSender.SendLoadouts(client?.Entity);
+        }
+
+        public void HandlePacket(Client client, SaveNewLoadoutPacket packet)
+        {
+            var player = client?.Entity;
+            if (player == default)
+            {
+                return;
+            }
+
+            player.SaveNewLoadout(packet.LoadoutName);
+        }
+
+        public void HandlePacket(Client client, OverwriteLoadoutPacket packet)
+        {
+            var player = client?.Entity;
+            if (player == default)
+            {
+                return;
+            }
+
+            player.OverwriteLoadout(packet.LoadoutId);
+        }
+
+        public void HandlePacket(Client client, SelectLoadoutPacket packet)
+        {
+            var player = client?.Entity;
+            if (player == default)
+            {
+                return;
+            }
+
+            player.SelectLoadout(packet.LoadoutId);
+        }
+
+        public void HandlePacket(Client client, RemoveLoadoutPacket packet)
+        {
+            var player = client?.Entity;
+            if (player == default)
+            {
+                return;
+            }
+
+            player.RemoveLoadout(packet.LoadoutId);
+        }
     }
 }

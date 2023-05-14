@@ -14,6 +14,7 @@ using Intersect.Server.Localization;
 using Intersect.Server.Core;
 using Intersect.Server.Database.PlayerData.Players;
 using Intersect.Enums;
+using Intersect.Network.Packets.Server;
 
 namespace Intersect.Server.Entities
 {
@@ -446,41 +447,58 @@ namespace Intersect.Server.Entities
             return loadout != default;
         }
 
-        private void SaveNewLoadout(string loadoutName, List<Guid> spells)
+        private bool TryGetLoadout(Guid loadoutId, out PlayerLoadout loadout)
         {
-            if (TryGetLoadout(loadoutName, out _))
+            loadout = Loadouts.Find(l => l.Id == loadoutId);
+
+            return loadout != default;
+        }
+
+        public void SaveNewLoadout(string loadoutName)
+        {
+            if (TryGetLoadout(loadoutName, out var loadout))
             {
-                // TODO ask for overwrite
+                PacketSender.SendLoadoutOverwriteConfirmation(this, loadout.Id);
                 return;
             }
 
-            var newLoadout = new PlayerLoadout(Id, loadoutName, spells, Hotbar);
+            var newLoadout = new PlayerLoadout(Id, loadoutName, EquippedSkills, Hotbar);
+            Loadouts.Add(newLoadout);
+
+            PacketSender.SendLoadouts(this);
         }
 
-        private void RemoveLoadoutWithName(string loadoutName)
+        private List<Guid> EquippedSkills => SkillBook
+                .Where(s => s.Equipped)
+                .Select(s => s.SpellId)
+                .ToList();
+
+        public void RemoveLoadout(Guid loadoutId)
         {
-            if (!TryGetLoadout(loadoutName, out var loadout))
+            if (!TryGetLoadout(loadoutId, out var loadout))
             {
-                PacketSender.SendEventDialog(this, $"Could not find loadout with name {loadoutName} to remove!", string.Empty, Guid.Empty);
+                PacketSender.SendEventDialog(this, $"Could not find loadout to remove!", string.Empty, Guid.Empty);
                 return;
             }
 
             Loadouts.Remove(loadout);
             DbInterface.Pool.QueueWorkItem(loadout.RemoveFromDb);
+
+            PacketSender.SendLoadouts(this);
         }
 
-        private void OverwriteLoadout(string loadoutName, List<Guid> spells)
+        public void OverwriteLoadout(Guid loadoutId)
         {
-            if (!TryGetLoadout(loadoutName, out var loadout))
+            if (!TryGetLoadout(loadoutId, out var loadout))
             {
-                PacketSender.SendEventDialog(this, $"Could not find loadout with name {loadoutName} to overwrite!", string.Empty, Guid.Empty);
+                PacketSender.SendEventDialog(this, $"Could not find loadout to overwrite!", string.Empty, Guid.Empty);
                 return;
             }
 
-            loadout.Spells = spells;
+            loadout.Spells = EquippedSkills;
         }
 
-        private void SelectLoadout(string loadoutName)
+        public void SelectLoadout(Guid loadoutId)
         {
             if (!CanChangeSkills(out var failureToChange))
             {
@@ -488,9 +506,9 @@ namespace Intersect.Server.Entities
                 return;
             }
 
-            if (!TryGetLoadout(loadoutName, out var loadout))
+            if (!TryGetLoadout(loadoutId, out var loadout))
             {
-                SendDialogNotice($"Could not find loadout with name {loadoutName} to select!");
+                SendDialogNotice($"Could not find loadout to select!");
                 return;
             }
 
@@ -511,6 +529,11 @@ namespace Intersect.Server.Entities
             }
 
             // TODO: hotbar
+        }
+
+        public Loadout[] PacketizeLoadouts()
+        {
+            return Loadouts.Select(l => l.Packetize()).ToArray();
         }
     }
 }

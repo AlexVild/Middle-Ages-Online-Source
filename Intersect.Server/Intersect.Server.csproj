@@ -762,6 +762,10 @@
     <Compile Include="Migrations\20230503125632_PermabuffStatsAndVitalsMigation.designer.cs">
       <DependentUpon>20230503125632_PermabuffStatsAndVitalsMigation.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\20230514165450_PlayerLoadoutMigration.cs" />
+    <Compile Include="Migrations\20230514165450_PlayerLoadoutMigration.designer.cs">
+      <DependentUpon>20230514165450_PlayerLoadoutMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.cs" />
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.Designer.cs">
       <DependentUpon>20201222164741_NpcResetRadius.cs</DependentUpon>

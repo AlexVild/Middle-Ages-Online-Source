@@ -2878,13 +2878,23 @@ namespace Intersect.Server.Networking
             var cosmetics = new List<Guid>();
             cosmetics.AddRange(player.UnlockedCosmetics.ToArray().Select(c => c.ItemId));
 
-            player.SendPacket(new Network.Packets.Server.CosmeticUnlocksPacket(cosmetics));
+            player.SendPacket(new CosmeticUnlocksPacket(cosmetics));
             if (!player.CosmeticsTutorialDone)
             {
                 SendEventDialog(player, Strings.Player.CosmeticsTutorial1, default, default);
                 SendEventDialog(player, Strings.Player.CosmeticsTutorial2, default, default);
                 player.CosmeticsTutorialDone = true;
             }
+        }
+
+        public static void SendLoadouts(Player player)
+        {
+            player?.SendPacket(new LoadoutsPacket(player.PacketizeLoadouts()));
+        }
+
+        public static void SendLoadoutOverwriteConfirmation(Player player, Guid loadoutId)
+        {
+            player?.SendPacket(new ConfirmLoadoutOverwritePacket(loadoutId));
         }
     }
 }

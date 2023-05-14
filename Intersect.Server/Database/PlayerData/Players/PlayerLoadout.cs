@@ -1,4 +1,5 @@
-﻿using Intersect.Server.Entities;
+﻿using Intersect.Network.Packets.Server;
+using Intersect.Server.Entities;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -65,6 +66,11 @@ namespace Intersect.Server.Database.PlayerData.Players
         {
             get => JsonConvert.SerializeObject(HotbarSlots);
             set => HotbarSlots = JsonConvert.DeserializeObject<List<HotbarSlot>>(value ?? string.Empty);
+        }
+
+        public Loadout Packetize()
+        {
+            return new Loadout(Id, Name);
         }
     }
 }
