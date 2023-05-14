@@ -97,6 +97,8 @@ namespace Intersect.GameObjects.Events
         
         EnhancementApplied,
 
+        IsPartyLeader,
+
     }
 
     public class Condition
@@ -635,6 +637,11 @@ namespace Intersect.GameObjects.Events
         public override ConditionTypes Type { get; } = ConditionTypes.EnhancementApplied;
 
         public Guid EnhancementId { get; set; }
+    }
+
+    public class IsPartyLeader : Condition
+    {
+        public override ConditionTypes Type { get; } = ConditionTypes.IsPartyLeader;
     }
 
     public enum TimerActiveConditions

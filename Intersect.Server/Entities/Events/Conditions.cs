@@ -928,6 +928,25 @@ namespace Intersect.Server.Entities.Events
             return weapon.ItemProperties.AppliedEnhancementIds.Contains(condition.EnhancementId);
         }
 
+        public static bool MeetsCondition(
+            IsPartyLeader condition,
+            Player player,
+            Event eventInstance,
+            QuestBase questBase
+            )
+        {
+            if (player == null || condition == null)
+            {
+                return false;
+            }
+
+            if (player.Party == null || player.Party.Count < 2)
+            {
+                return true;
+            }
+
+            return player.Party[0].Id == player.Id;
+        }
 
         //Variable Comparison Processing
 

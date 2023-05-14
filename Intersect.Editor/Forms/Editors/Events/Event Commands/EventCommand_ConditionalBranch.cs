@@ -553,6 +553,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     Condition = new EnhancementApplied();
 
                     break;
+
+                case ConditionTypes.IsPartyLeader:
+                    Condition = new IsPartyLeader();
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -861,6 +866,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     grpEnhancements.Show();
                     break;
 
+                case ConditionTypes.IsPartyLeader:
+                    break;
 
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -1787,6 +1794,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             cmbEnhancements.SelectedIndex = EnhancementDescriptor.ListIndex(condition.EnhancementId);
         }
 
+        private void SetupFormValues(IsPartyLeader condition)
+        {
+        }
+
         #endregion
 
         #region "SaveFormValues"
@@ -2129,6 +2140,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private void SaveFormValues(EnhancementApplied condition)
         {
             condition.EnhancementId = EnhancementDescriptor.IdFromList(cmbEnhancements.SelectedIndex);
+        }
+
+        private void SaveFormValues(IsPartyLeader condition)
+        {
         }
         #endregion
 
