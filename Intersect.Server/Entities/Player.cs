@@ -7719,6 +7719,8 @@ namespace Intersect.Server.Entities
                     AutoPickupItem(currentProjectile.AmmoItemId, false);
                 }
                 AutoPickupItem(Guid.Parse(Options.Player.GoldGuid), true);
+                // Angry nuts
+                AutoPickupItem(Guid.Parse("30a323c0-211d-4fae-bf53-6f045fc726ed"), false); // This SHOULD be a property on ItemBase at this point, but currently lazy
 
                 foreach (var evt in EventLookup)
                 {
@@ -7764,13 +7766,13 @@ namespace Intersect.Server.Entities
                 return;
             }
 
-            var ammoMapItems = mapInstance.FindItemsAt(tileId).Where(mapItem => mapItem.ItemId == itemId).ToArray();
-            if (ammoMapItems.Length == 0)
+            var pickupItems = mapInstance.FindItemsAt(tileId).Where(mapItem => mapItem.ItemId == itemId).ToArray();
+            if (pickupItems.Length == 0)
             {
                 return;
             }
 
-            foreach (var mapItem in ammoMapItems)
+            foreach (var mapItem in pickupItems)
             {
                 TryPickupMapItem(mapItem.UniqueId, MapId, tileId);
             }
