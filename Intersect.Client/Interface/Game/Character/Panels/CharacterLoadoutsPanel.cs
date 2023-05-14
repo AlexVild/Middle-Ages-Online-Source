@@ -92,7 +92,9 @@ namespace Intersect.Client.Interface.Game.Character.Panels
         private void RefreshLoadouts()
         {
             var idx = 0;
-            
+
+            LoadoutsContainer?.ScrollToTop();
+            ClearLoadouts();
             foreach (var loadout in Loadouts)
             {
                 var row = new LoadoutRowComponent(

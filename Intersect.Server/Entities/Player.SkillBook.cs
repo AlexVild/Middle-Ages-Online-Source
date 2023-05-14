@@ -462,8 +462,11 @@ namespace Intersect.Server.Entities
                 return;
             }
 
-            var newLoadout = new PlayerLoadout(Id, loadoutName, EquippedSkills, Hotbar);
-            Loadouts.Add(newLoadout);
+            using (var context = DbInterface.CreatePlayerContext(readOnly: false))
+            {
+                var newLoadout = new PlayerLoadout(Id, loadoutName, EquippedSkills, Hotbar);
+                Loadouts.Add(newLoadout);
+            }
 
             PacketSender.SendLoadouts(this);
         }
