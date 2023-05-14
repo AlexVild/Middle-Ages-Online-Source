@@ -2,6 +2,7 @@
 using Intersect.GameObjects;
 using Intersect.GameObjects.Events;
 using Intersect.Server.Database;
+using Intersect.Server.Entities.Combat;
 using Intersect.Server.Entities.Events;
 using Intersect.Server.General;
 using Intersect.Server.Localization;
@@ -147,6 +148,40 @@ namespace Intersect.Server.Entities
         public virtual int CalculateSpecialDamage(int baseDamage, int range, ItemBase item, Entity target)
         {
             return baseDamage;
+        }
+
+        public virtual void ApplyStatus(SpellBase spell, Entity caster, int statBuffTime)
+        {
+            if (spell.Combat.Effect > 0) //Handle status effects
+            {
+                // If the entity is immune to some status, then just inform the client of such
+                if (IsImmuneTo(StatusToImmunity(spell.Combat.Effect)))
+                {
+                    PacketSender.SendActionMsg(this, Strings.Combat.immunetoeffect, CustomColors.Combat.Status);
+                }
+                else
+                {
+                    // Else, apply the status
+                    _ = new Status(
+                        this, caster, spell, spell.Combat.Effect, spell.Combat.Duration,
+                        spell.Combat.TransformSprite
+                    );
+
+                    PacketSender.SendActionMsg(
+                        this, Strings.Combat.status[(int)spell.Combat.Effect], CustomColors.Combat.Status
+                    );
+                }
+            }
+            // Otherwise, add a status for the stat boost
+            else
+            {
+                new Status(this, caster, spell, spell.Combat.Effect, statBuffTime, "");
+            }
+
+            if (!spell.Combat.Friendly)
+            {
+                ReactToCombat(caster);
+            }
         }
     }
 }

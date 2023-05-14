@@ -148,7 +148,7 @@ namespace Intersect.Server.Entities
             ref List<AttackTypes> attackTypes,
             ref int critChance,
             ref double critMultiplier)
-        { 
+        {
             // intentionally blank
         }
 
@@ -201,11 +201,26 @@ namespace Intersect.Server.Entities
             {
                 return;
             }
-            
+
             PacketSender.SendAnimationToProximity(
                 Base.AttackAnimationId, -1, Guid.Empty, enemy.MapId, (byte)enemy.X, (byte)enemy.Y,
                 (sbyte)Dir, enemy.MapInstanceId
             );
+        }
+
+        public override void ApplyStatus(SpellBase spell, Entity caster, int statBuffTime)
+        {
+            if (spell == default || spell.Combat == default)
+            {
+                return;
+            }
+
+            if (spell.Combat.Friendly && Base.CannotBeHealed)
+            {
+                return;
+            }
+
+            base.ApplyStatus(spell, caster, statBuffTime);
         }
 
         public override void HealVital(Vitals vital, int amount)

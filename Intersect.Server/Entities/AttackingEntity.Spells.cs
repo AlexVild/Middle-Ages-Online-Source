@@ -358,41 +358,7 @@ namespace Intersect.Server.Entities
             }
 
             // Is there an effect? If so, apply its status
-            if (spell.Combat.Effect > 0) //Handle status effects
-            {
-                // If the entity is immune to some status, then just inform the client of such
-                if (target.IsImmuneTo(StatusToImmunity(spell.Combat.Effect)))
-                {
-                    PacketSender.SendActionMsg(target, Strings.Combat.immunetoeffect, CustomColors.Combat.Status);
-                }
-                else
-                {
-                    // Else, apply the status
-                    _ = new Status(
-                        target, this, spell, spell.Combat.Effect, spell.Combat.Duration,
-                        spell.Combat.TransformSprite
-                    );
-
-                    PacketSender.SendActionMsg(
-                        target, Strings.Combat.status[(int)spell.Combat.Effect], CustomColors.Combat.Status
-                    );
-                }
-
-                if (target is Npc npc)
-                {
-                    npc.AssignTarget(this);
-                }
-            }
-            // Otherwise, add a status for the stat boost
-            else
-            {
-                new Status(target, this, spell, spell.Combat.Effect, statBuffTime, "");
-
-                if (target is Npc npc)
-                {
-                    npc.AssignTarget(this);
-                }
-            }
+            target.ApplyStatus(spell, this, statBuffTime);
         }
 
         /// <summary>
