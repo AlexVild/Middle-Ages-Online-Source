@@ -127,7 +127,7 @@ namespace Intersect.Server.Entities
         {
             failureReason = string.Empty;
             
-            if (CanChangeSkills(out failureReason))
+            if (!CanChangeSkills(out failureReason))
             {
                 return false;
             }
@@ -301,7 +301,7 @@ namespace Intersect.Server.Entities
             return true;
         }
 
-        public void UnprepareAllSkills()
+        public void UnprepareAllSkills(bool ignoreChange)
         {
             var prevSpAvailable = SkillPointsAvailable;
 
@@ -317,7 +317,7 @@ namespace Intersect.Server.Entities
                 TryUnprepareSkill(skill.SpellId, true);
             }
 
-            if (change)
+            if (change && !ignoreChange)
             {
                 PacketSender.SendChatMsg(this, "You need to re-assign your skill points, as SP values have changed.", Enums.ChatMessageType.Experience, sendToast: true);
             }
@@ -481,7 +481,8 @@ namespace Intersect.Server.Entities
                 return;
             }
 
-            Loadouts.Remove(loadout);
+            Loadouts.RemoveAll(l => l.Id == loadoutId);
+
             DbInterface.Pool.QueueWorkItem(loadout.RemoveFromDb);
 
             PacketSender.SendLoadouts(this);
@@ -512,7 +513,7 @@ namespace Intersect.Server.Entities
                 return;
             }
 
-            UnprepareAllSkills();
+            UnprepareAllSkills(true);
             
             SpellBase firstSkillPrepared = null;
             foreach (var spellId in loadout.Spells)
@@ -528,6 +529,8 @@ namespace Intersect.Server.Entities
                 SendSkillPreparedEffect(firstSkillPrepared);
             }
 
+            // Update the skillbook to reflect new skill selections
+            PacketSender.SendSkillbookToClient(this);
             // TODO: hotbar
         }
 

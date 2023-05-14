@@ -27,7 +27,8 @@ namespace Intersect.Client.Interface.Game.Character
         NameTag,
         Cosmetics,
         Skills,
-        Challenges
+        Challenges,
+        Loadouts
     }
 
     public partial class CharacterWindow

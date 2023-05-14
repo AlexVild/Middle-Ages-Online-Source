@@ -1987,7 +1987,7 @@ namespace Intersect.Server.Entities
             else if (oldTotal > LevelSkillPoints || SkillPointsAvailable < 0)
             {
                 // The player should have less skills - reset them
-                UnprepareAllSkills();
+                UnprepareAllSkills(false);
             }
             else if (oldTotal == Options.Instance.PlayerOpts.MaxSkillPoint)
             {

@@ -3000,9 +3000,10 @@ namespace Intersect.Client.Networking
             }
 
             var iBox = new InputBox(
-                Strings.Loadouts.OverwriteLoadoutTitle, Strings.Loadouts.OverwriteLoadoutPrompt.ToString(loadout.Name), true, InputBox.InputType.YesNo,
+                Strings.Loadouts.OverwriteLoadoutTitle, Strings.Loadouts.OverwriteLoadoutPromptAlreadyExists.ToString(loadout.Name), true, InputBox.InputType.YesNo,
                 CharacterLoadoutsController.RequestLoadoutOverwritePrompt, null, packet.LoadoutId
             );
         }
     }
 }
+ 

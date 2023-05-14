@@ -412,7 +412,9 @@
     <Compile Include="Network\Packets\Client\CraftItemPacket.cs" />
     <Compile Include="Network\Packets\Client\DeconstructItemsPacket.cs" />
     <Compile Include="Network\Packets\Client\FinishedFadePacket.cs" />
+    <Compile Include="Network\Packets\Client\OverwriteLoadoutPacket.cs" />
     <Compile Include="Network\Packets\Client\PartyInviteNamePacket.cs" />
+    <Compile Include="Network\Packets\Client\RemoveLoadoutPacket.cs" />
     <Compile Include="Network\Packets\Client\RequestChallengeContractPacket.cs" />
     <Compile Include="Network\Packets\Client\RequestChallengeProgressPacket.cs" />
     <Compile Include="Network\Packets\Client\RequestCosmeticsPacket.cs" />
@@ -422,6 +424,7 @@
     <Compile Include="Network\Packets\Client\RequestKillCountsPacket.cs" />
     <Compile Include="Network\Packets\Client\RequestLabelsPacket.cs" />
     <Compile Include="Network\Packets\Client\RequestLeaderboardPacket.cs" />
+    <Compile Include="Network\Packets\Client\RequestLoadoutsPacket.cs" />
     <Compile Include="Network\Packets\Client\RequestLootUpdatePacket.cs" />
     <Compile Include="Network\Packets\Client\RequestRecipeRequirementsPacket.cs" />
     <Compile Include="Network\Packets\Client\RequestRecipesPacket.cs" />
@@ -432,6 +435,8 @@
     <Compile Include="Network\Packets\Client\RequestWeaponEnhancementRemovalPacket.cs" />
     <Compile Include="Network\Packets\Client\ResourceInfoRequestPacket.cs" />
     <Compile Include="Network\Packets\Client\ApplyEnhancementsPacket.cs" />
+    <Compile Include="Network\Packets\Client\SaveNewLoadoutPacket.cs" />
+    <Compile Include="Network\Packets\Client\SelectLoadoutPacket.cs" />
     <Compile Include="Network\Packets\Client\SetLabelPacket.cs" />
     <Compile Include="Network\Packets\Client\SkillPreparationPacket.cs" />
     <Compile Include="Network\Packets\Client\TrackWeaponTypePacket.cs" />
@@ -440,6 +445,7 @@
     <Compile Include="Network\Packets\Server\CombatNumberPacket.cs" />
     <Compile Include="Network\Packets\Server\CombatNumberPackets.cs" />
     <Compile Include="Network\Packets\Server\CompleteUpgradePacket.cs" />
+    <Compile Include="Network\Packets\Server\ConfirmLoadoutOverwritePacket.cs" />
     <Compile Include="Network\Packets\Server\CosmeticUnlocksPacket.cs" />
     <Compile Include="Network\Packets\Server\CraftStatusPacket.cs" />
     <Compile Include="Network\Packets\Client\CreateAccountPacket.cs" />
@@ -518,6 +524,7 @@
     <Compile Include="Network\Packets\Server\ResourceInfoPacket.cs" />
     <Compile Include="Network\Packets\Server\ResourceLockPacket.cs" />
     <Compile Include="Network\Packets\Server\RespawnFinishedPacket.cs" />
+    <Compile Include="Network\Packets\Server\LoadoutsPacket.cs" />
     <Compile Include="Network\Packets\Server\SendOpenDeconstructorPacket.cs" />
     <Compile Include="Network\Packets\Server\ServerDisposedPacket.cs" />
     <Compile Include="Network\Packets\Server\ShakeScreenPacket.cs" />

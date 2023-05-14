@@ -2565,6 +2565,12 @@ namespace Intersect.Client.Localization
         public partial struct Loadouts
         {
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString NewLoadoutTitle = "NEW LOADOUT";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString NewLoadoutPrompt = "What name would you like to give your current assignment of skills?";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString OverwriteLoadoutTitle = "OVERWRITE LOADOUT";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -2572,6 +2578,12 @@ namespace Intersect.Client.Localization
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString OverwriteLoadoutPromptAlreadyExists = "A loadout with the name {00} already exists. Would you like to overwrite it?";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString RemoveLoadout = "REMOVE LOADOUT";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString RemoveLoadoutPrompt = "Are you sure you want to remove the loadout: {00}?";
         }
     }
 }
