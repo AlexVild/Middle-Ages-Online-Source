@@ -9311,5 +9311,15 @@ namespace Intersect.Server.Entities
         {
             while (_queueStartCommonEvent.TryDequeue(out _)) ;
         }
+
+        public void SendFailureChatMsg(string message)
+        {
+            PacketSender.SendChatMsg(this, message, Enums.ChatMessageType.Error, CustomColors.General.GeneralDisabled);
+        }
+
+        public void SendDialogNotice(string message)
+        {
+            PacketSender.SendEventDialog(this, message, string.Empty, Guid.Empty);
+        }
     }
 }

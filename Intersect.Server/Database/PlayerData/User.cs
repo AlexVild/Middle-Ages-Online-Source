@@ -759,6 +759,8 @@ namespace Intersect.Server.Database.PlayerData
                     .ThenInclude(p => p.Enhancements)
                     .Include(p => p.Players)
                     .ThenInclude(p => p.Permabuffs)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.Loadouts)
                     .FirstOrDefault()
             ) ??
             throw new InvalidOperationException();
@@ -815,6 +817,8 @@ namespace Intersect.Server.Database.PlayerData
                     .ThenInclude(p => p.Enhancements)
                     .Include(p => p.Players)
                     .ThenInclude(p => p.Permabuffs)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.Loadouts)
                     .FirstOrDefault()
             ) ??
             throw new InvalidOperationException();
@@ -870,6 +874,8 @@ namespace Intersect.Server.Database.PlayerData
                     .ThenInclude(p => p.Enhancements)
                     .Include(p => p.Players)
                     .ThenInclude(p => p.Permabuffs)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.Loadouts)
                     .FirstOrDefault()
             ) ??
             throw new InvalidOperationException();
@@ -925,6 +931,8 @@ namespace Intersect.Server.Database.PlayerData
                     .ThenInclude(p => p.Enhancements)
                     .Include(p => p.Players)
                     .ThenInclude(p => p.Permabuffs)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.Loadouts)
                     .FirstOrDefault()
                 ) ?? throw new InvalidOperationException();
 
@@ -989,6 +997,8 @@ namespace Intersect.Server.Database.PlayerData
                     .ThenInclude(p => p.Enhancements)
                     .Include(p => p.Players)
                     .ThenInclude(p => p.Permabuffs)
+                    .Include(p => p.Players)
+                    .ThenInclude(p => p.Loadouts)
                     .FirstOrDefault()
                 ) ?? throw new InvalidOperationException();
 

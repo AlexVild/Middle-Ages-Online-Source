@@ -505,6 +505,7 @@
     <Compile Include="Database\PlayerData\Players\PassiveSpell.cs" />
     <Compile Include="Database\PlayerData\Players\PermabuffInstance.cs" />
     <Compile Include="Database\PlayerData\Players\PlayerEnhancementInstance.cs" />
+    <Compile Include="Database\PlayerData\Players\PlayerLoadout.cs" />
     <Compile Include="Database\PlayerData\Players\Quest.cs" />
     <Compile Include="Database\PlayerData\Players\PlayerRecord.cs" />
     <Compile Include="Database\PlayerData\Players\RecipeInstance.cs" />

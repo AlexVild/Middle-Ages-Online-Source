@@ -73,5 +73,7 @@ namespace Intersect.Server.Database.PlayerData
         DbSet<DungeonTrackerInstance> Player_Dungeons_Tracked { get; set; }
         
         DbSet<PlayerEnhancementInstance> Player_Enhancements { get; set; }
+        
+        DbSet<PlayerLoadout> Player_Loadouts { get; set; }
     }
 }

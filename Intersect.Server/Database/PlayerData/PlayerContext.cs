@@ -105,6 +105,8 @@ namespace Intersect.Server.Database.PlayerData
         public DbSet<DungeonTrackerInstance> Player_Dungeons_Tracked { get; set; }
 
         public DbSet<PlayerEnhancementInstance> Player_Enhancements { get; set; }
+        
+        public DbSet<PlayerLoadout> Player_Loadouts { get; set; }
 
         internal async ValueTask Commit(
             bool commit = false,
@@ -219,6 +221,10 @@ namespace Intersect.Server.Database.PlayerData
             modelBuilder.Entity<Player>()
                .HasMany(player => player.Permabuffs)
                .WithOne(permabuffs => permabuffs.Player);
+
+            modelBuilder.Entity<Player>()
+               .HasMany(player => player.Loadouts)
+               .WithOne(loadout => loadout.Player);
         }
 
         public void Seed()
@@ -346,6 +352,9 @@ namespace Intersect.Server.Database.PlayerData
                 Entry(itm).State = EntityState.Detached;
 
             foreach (var itm in player.Permabuffs)
+                Entry(itm).State = EntityState.Detached;
+
+            foreach (var itm in player.Loadouts)
                 Entry(itm).State = EntityState.Detached;
         }
 

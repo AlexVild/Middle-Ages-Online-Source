@@ -2114,6 +2114,7 @@ namespace Intersect.Server.Database
                     MigrateDbSet(context.Player_Items_Discovered, newPlayerContext.Player_Items_Discovered);
                     MigrateDbSet(context.Player_Dungeons_Tracked, newPlayerContext.Player_Dungeons_Tracked);
                     MigrateDbSet(context.Player_Enhancements, newPlayerContext.Player_Enhancements);
+                    MigrateDbSet(context.Player_Loadouts, newPlayerContext.Player_Loadouts);
 
                     newPlayerContext.ChangeTracker.DetectChanges();
                     newPlayerContext.SaveChanges();

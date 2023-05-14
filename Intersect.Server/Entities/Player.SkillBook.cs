@@ -45,6 +45,8 @@ namespace Intersect.Server.Entities
 
         public List<PermabuffInstance> Permabuffs { get; set; } = new List<PermabuffInstance>();
 
+        public List<PlayerLoadout> Loadouts { get; set; } = new List<PlayerLoadout>();
+
         [JsonIgnore, Column("PermabuffedStats")]
         public string PermabuffedStatsJson
         {
@@ -89,10 +91,10 @@ namespace Intersect.Server.Entities
             return skill.Equipped;
         }
 
-        public bool TryToggleSkillPrepare(Guid spellId, bool isPrepare, out string failureReason)
+        public bool CanChangeSkills(out string failureReason)
         {
             failureReason = string.Empty;
-            
+
             if (CastTime > Timing.Global.Milliseconds)
             {
                 failureReason = "You can't prepare/unprepare skills while casting!";
@@ -114,6 +116,18 @@ namespace Intersect.Server.Entities
             if (Map.ZoneType != Enums.MapZones.Safe)
             {
                 failureReason = "You can't prepare/unprepare skills while in a PvP zone!";
+                return false;
+            }
+
+            return true;
+        }
+
+        public bool TryToggleSkillPrepare(Guid spellId, bool isPrepare, out string failureReason)
+        {
+            failureReason = string.Empty;
+            
+            if (CanChangeSkills(out failureReason))
+            {
                 return false;
             }
 
@@ -140,18 +154,21 @@ namespace Intersect.Server.Entities
             return true;
         }
 
-        public void PrepareSkill(Guid spellId)
+        public bool TryPrepareSkill(Guid spellId, bool quiet = false)
         {
             var descriptor = SpellBase.Get(spellId);
+            var succeeded = true;
+
             if (!TryToggleSkillPrepare(spellId, true, out string failureReason))
             {
                 PacketSender.SendChatMsg(this, failureReason, Enums.ChatMessageType.Error, CustomColors.General.GeneralDisabled);
-                return;
+                return false;
             }
 
             if (!TryGetSkillInSkillbook(spellId, out var skill))
             {
                 PacketSender.SendChatMsg(this, "This skill isn't in your skill book!", Enums.ChatMessageType.Error, CustomColors.General.GeneralDisabled);
+                succeeded = false;
             }
 
             if (descriptor?.SpellType == Enums.SpellTypes.Passive)
@@ -161,9 +178,14 @@ namespace Intersect.Server.Entities
             else if (!TryTeachSpell(new Spell(spellId)))
             {
                 PacketSender.SendChatMsg(this, "You already have this skill prepared!", Enums.ChatMessageType.Error, CustomColors.General.GeneralDisabled);
+                succeeded = false;
             }
 
-            PacketSender.SendFlashScreenPacket(Client, 400, Color.Blue, 60, descriptor.CastAnimation?.Sound);
+            if (!quiet)
+            {
+                SendSkillPreparedEffect(descriptor);
+            }
+
             skill.Equipped = true;
 
             if (!SpellTutorialDone)
@@ -173,19 +195,28 @@ namespace Intersect.Server.Entities
                 PacketSender.SendEventDialog(this, Strings.Combat.SpellTutorial3, string.Empty, Guid.Empty);
                 SpellTutorialDone = true;
             }
+
+            return succeeded;
         }
 
-        public void UnprepareSkill(Guid spellId, bool force = false)
+        private void SendSkillPreparedEffect(SpellBase descriptor)
         {
+            PacketSender.SendFlashScreenPacket(Client, 400, Color.Blue, 60, descriptor.CastAnimation?.Sound);
+        }
+
+        public bool TryUnprepareSkill(Guid spellId, bool force = false)
+        {
+            var succeeded = true;
             if (!force && !TryToggleSkillPrepare(spellId, false, out string failureReason))
             {
                 PacketSender.SendChatMsg(this, failureReason, Enums.ChatMessageType.Error, CustomColors.General.GeneralDisabled);
-                return;
+                return false;
             }
 
             if (!TryGetSkillInSkillbook(spellId, out var skill))
             {
                 PacketSender.SendChatMsg(this, "This skill isn't in your skill book!", Enums.ChatMessageType.Error, CustomColors.General.GeneralDisabled);
+                succeeded = false;
             }
 
             var descriptor = SpellBase.Get(spellId);
@@ -196,9 +227,11 @@ namespace Intersect.Server.Entities
             else if (!TryForgetSpell(new Spell(spellId)))
             {
                 PacketSender.SendChatMsg(this, "You never had this skill prepared!", Enums.ChatMessageType.Error, CustomColors.General.GeneralDisabled);
+                succeeded = false;
             }
 
             skill.Equipped = false;
+            return succeeded;
         }
 
         public bool TryAddSkillToBook(Guid spellId)
@@ -280,7 +313,7 @@ namespace Intersect.Server.Entities
                 }
 
                 change = true;
-                UnprepareSkill(skill.SpellId, true);
+                TryUnprepareSkill(skill.SpellId, true);
             }
 
             if (change)
@@ -404,6 +437,80 @@ namespace Intersect.Server.Entities
             {
                 PacketSender.SendEntityStatsToProximity(this);
             }
+        }
+
+        private bool TryGetLoadout(string loadoutName, out PlayerLoadout loadout)
+        {
+            loadout = Loadouts.Find(l => l.Name.ToUpperInvariant() == loadoutName.ToUpperInvariant());
+
+            return loadout != default;
+        }
+
+        private void SaveNewLoadout(string loadoutName, List<Guid> spells)
+        {
+            if (TryGetLoadout(loadoutName, out _))
+            {
+                // TODO ask for overwrite
+                return;
+            }
+
+            var newLoadout = new PlayerLoadout(Id, loadoutName, spells, Hotbar);
+        }
+
+        private void RemoveLoadoutWithName(string loadoutName)
+        {
+            if (!TryGetLoadout(loadoutName, out var loadout))
+            {
+                PacketSender.SendEventDialog(this, $"Could not find loadout with name {loadoutName} to remove!", string.Empty, Guid.Empty);
+                return;
+            }
+
+            Loadouts.Remove(loadout);
+            DbInterface.Pool.QueueWorkItem(loadout.RemoveFromDb);
+        }
+
+        private void OverwriteLoadout(string loadoutName, List<Guid> spells)
+        {
+            if (!TryGetLoadout(loadoutName, out var loadout))
+            {
+                PacketSender.SendEventDialog(this, $"Could not find loadout with name {loadoutName} to overwrite!", string.Empty, Guid.Empty);
+                return;
+            }
+
+            loadout.Spells = spells;
+        }
+
+        private void SelectLoadout(string loadoutName)
+        {
+            if (!CanChangeSkills(out var failureToChange))
+            {
+                SendFailureChatMsg(failureToChange);
+                return;
+            }
+
+            if (!TryGetLoadout(loadoutName, out var loadout))
+            {
+                SendDialogNotice($"Could not find loadout with name {loadoutName} to select!");
+                return;
+            }
+
+            UnprepareAllSkills();
+            
+            SpellBase firstSkillPrepared = null;
+            foreach (var spellId in loadout.Spells)
+            {
+                if (TryPrepareSkill(spellId, true) && firstSkillPrepared == null)
+                {
+                    firstSkillPrepared = SpellBase.Get(spellId);
+                }
+            }
+
+            if (firstSkillPrepared != default)
+            {
+                SendSkillPreparedEffect(firstSkillPrepared);
+            }
+
+            // TODO: hotbar
         }
     }
 }

@@ -4480,11 +4480,11 @@ namespace Intersect.Server.Networking
 
             if (packet.Prepared)
             {
-                player?.PrepareSkill(packet.SpellId);
+                player?.TryPrepareSkill(packet.SpellId);
             }
             else
             {
-                player?.UnprepareSkill(packet.SpellId);
+                player?.TryUnprepareSkill(packet.SpellId);
             }
 
             // Resend the skillbook so the client can reset the skill back to its actual prepared value
