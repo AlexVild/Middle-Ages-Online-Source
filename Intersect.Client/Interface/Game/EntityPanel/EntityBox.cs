@@ -120,6 +120,10 @@ namespace Intersect.Client.Interface.Game.EntityPanel
 
         private static Bestiary MyBestiary => BestiaryController.MyBestiary;
 
+        private Framework.Gwen.Control.Label ChanceToHitLabel;
+
+        private ImagePanel ChanceToHitIcon { get; set; }
+
         //Init
         public EntityBox(Canvas gameCanvas, EntityTypes entityType, Entity myEntity, bool playerBox = false)
         {
@@ -211,6 +215,9 @@ namespace Intersect.Client.Interface.Game.EntityPanel
             GuildLabel.SetToolTipText(Strings.Guilds.guildtip.ToString(MyEntity?.Name));
             GuildLabel.Clicked += guildRequest_Clicked;
             GuildLabel.IsHidden = true;
+
+            ChanceToHitLabel = new Framework.Gwen.Control.Label(EntityWindow, "ChanceToHitLabel");
+            ChanceToHitIcon = new ImagePanel(EntityWindow, "ChanceToHitIcon");
 
             EntityStatusPanel = new ImagePanel(EntityWindow, "StatusArea");
 
@@ -497,14 +504,14 @@ namespace Intersect.Client.Interface.Game.EntityPanel
 
             if (MyEntity.GetEntityType() == EntityTypes.Player && MyEntity != Globals.Me)
             {
-                if (MyEntity.Vital[(int)Vitals.Health] <= 0)
+                if (MyEntity.Vital[(int)Vitals.Health] <= 0 || !MyEntity.IsAllyOf(Globals.Me))
                 {
                     TradeLabel.Hide();
                     PartyLabel.Hide();
                     FriendLabel.Hide();
                     GuildLabel.Hide();
                 }
-                else if (TradeLabel.IsHidden || PartyLabel.IsHidden || FriendLabel.IsHidden)
+                else if (MyEntity.IsAllyOf(Globals.Me))
                 {
                     TradeLabel.Show();
                     TryShowPartyButton();
@@ -523,8 +530,53 @@ namespace Intersect.Client.Interface.Game.EntityPanel
             {
                 itm.Value.Update();
             }
+            RefreshAccuracy();
 
             mLastUpdateTime = Timing.Global.Milliseconds;
+        }
+
+        private void ShowAccuracy()
+        {
+            ChanceToHitLabel.Show();
+            ChanceToHitIcon.Show();
+        }
+
+        private void HideAccuracy()
+        {
+            ChanceToHitLabel.Hide();
+            ChanceToHitIcon.Hide();
+        }
+
+        private void RefreshAccuracy()
+        {
+            var show = false;
+
+            if (BestiaryController.MyBestiary.HasUnlock(MyEntity.NpcId, BestiaryUnlock.Stats) && MyEntity.GetEntityType() != EntityTypes.Player)
+            {
+                show = true;
+            }
+
+            if (MyEntity.GetEntityType() == EntityTypes.Player && !TradeLabel.IsVisible)
+            {
+                show = true;
+            }
+
+            if (MyEntity.GetEntityType() == EntityTypes.Event)
+            {
+                show = false;
+            }
+
+            if (show)
+            {
+                ShowAccuracy();
+                var missChance = CombatUtilities.MissChance(CombatUtilities.CalculateMissFactor(Globals.Me.Stat[(int)Stats.Accuracy], MyEntity.Stat[(int)Stats.Evasion]));
+                var hitChance = MathHelper.Clamp(100 - (missChance * 100), 0, 100);
+                ChanceToHitLabel.SetText($"{hitChance.ToString("N1")}%");
+            }
+            else
+            {
+                HideAccuracy();
+            }
         }
 
         private void UpdateThreatLevel()
@@ -734,10 +786,10 @@ namespace Intersect.Client.Interface.Game.EntityPanel
             
             HpBar.SetTextureRect(0, 0, (int)targetHpWidth, HpBar.Height);
             HpBar.Width = (int)targetHpWidth;
-            HpBar.IsHidden = targetHpWidth == 0 || !BestiaryController.MyBestiary.HasUnlock(MyEntity.NpcId, GameObjects.Events.BestiaryUnlock.HP);
-            HpBackground.IsHidden = !BestiaryController.MyBestiary.HasUnlock(MyEntity.NpcId, GameObjects.Events.BestiaryUnlock.HP);
-            HpLbl.IsHidden = !BestiaryController.MyBestiary.HasUnlock(MyEntity.NpcId, GameObjects.Events.BestiaryUnlock.HP);
-            HpTitle.IsHidden = !BestiaryController.MyBestiary.HasUnlock(MyEntity.NpcId, GameObjects.Events.BestiaryUnlock.HP);
+            HpBar.IsHidden = targetHpWidth == 0 || !BestiaryController.MyBestiary.HasUnlock(MyEntity.NpcId, BestiaryUnlock.HP);
+            HpBackground.IsHidden = !BestiaryController.MyBestiary.HasUnlock(MyEntity.NpcId, BestiaryUnlock.HP);
+            HpLbl.IsHidden = !BestiaryController.MyBestiary.HasUnlock(MyEntity.NpcId, BestiaryUnlock.HP);
+            HpTitle.IsHidden = !BestiaryController.MyBestiary.HasUnlock(MyEntity.NpcId, BestiaryUnlock.HP);
 
             ShieldBar.IsHidden = (int)targetShieldWidth == 0 || HpBackground.IsHidden;
             ShieldBar.Width = (int)targetShieldWidth;
@@ -1181,6 +1233,7 @@ namespace Intersect.Client.Interface.Game.EntityPanel
         public void Show()
         {
             EntityWindow.Show();
+            RefreshEntity();
         }
 
     }
