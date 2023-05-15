@@ -187,6 +187,7 @@ namespace Intersect.Server.Entities
                         instance.SpawnNpc((byte)X, (byte)Y, (byte)Dir, Base.DeathTransformId);
                     }
                 }
+
                 PacketSender.SendEntityDie(this);
                 PacketSender.SendEntityLeave(this);
 

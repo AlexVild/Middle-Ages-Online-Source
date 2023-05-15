@@ -856,11 +856,6 @@ namespace Intersect.Server.Entities
 
                                             EventLookup.AddOrUpdate(tmpEvent.Id, tmpEvent, (key, oldValue) => tmpEvent);
                                             EventBaseIdLookup.AddOrUpdate(mapEvent.Id, tmpEvent, (key, oldvalue) => tmpEvent);
-                                            //var newTileLookup = new Dictionary<MapTileLoc, Event>(EventTileLookup);
-                                            ////If we get a collision here we need to rethink the MapTileLoc struct..
-                                            ////We want a fast lookup through this dictionary and this is hopefully a solution over using a slow Tuple.
-                                            //newTileLookup.Add(loc, tmpEvent);
-                                            //EventTileLookup = newTileLookup;
 
                                             EventTileLookup.AddOrUpdate(loc, tmpEvent, (key, oldvalue) => tmpEvent);
                                         }
@@ -876,16 +871,7 @@ namespace Intersect.Server.Entities
                                 }
                                 MapAutorunEvents = autorunEvents;
 
-                                while (_queueStartCommonEvent.TryDequeue(out var startCommonEventMetadata))
-                                {
-                                    _ = UnsafeStartCommonEvent(
-                                        startCommonEventMetadata.EventDescriptor,
-                                        startCommonEventMetadata.Trigger,
-                                        startCommonEventMetadata.Command,
-                                        startCommonEventMetadata.Parameter,
-                                        startCommonEventMetadata.Value
-                                    );
-                                }
+                                ProcessEvents();
                             }
                         }
                     }
@@ -956,6 +942,31 @@ namespace Intersect.Server.Entities
                 if (lockObtained)
                 {
                     Monitor.Exit(EntityLock);
+                }
+            }
+        }
+
+        private void ProcessEvents()
+        {
+            lock (mEventLock)
+            {
+                // Deferred events are fired once-a-tick. They are for events that we don't care too much about being fired
+                // at EXACTLY the right moment
+                if (DeferredEventQueue.TryDequeue(out DeferredEvent evt))
+                {
+                    StartCommonEventsWithTrigger(evt.Trigger, evt.Command, evt.Param, evt.Value);
+                }
+
+                // Any common events that have been queued up will finally fire here
+                while (_queueStartCommonEvent.TryDequeue(out var startCommonEventMetadata))
+                {
+                    _ = UnsafeStartCommonEvent(
+                        startCommonEventMetadata.EventDescriptor,
+                        startCommonEventMetadata.Trigger,
+                        startCommonEventMetadata.Command,
+                        startCommonEventMetadata.Parameter,
+                        startCommonEventMetadata.Value
+                    );
                 }
             }
         }
@@ -1106,8 +1117,8 @@ namespace Intersect.Server.Entities
 
             if (killer is Player playerKiller)
             {
-                playerKiller.StartCommonEventsWithTrigger(CommonEventTrigger.PVPKill, "", Name);
-                StartCommonEventsWithTrigger(CommonEventTrigger.PVPDeath, "", killer?.Name);
+                playerKiller.AddDeferredEvent(CommonEventTrigger.PVPKill, "", Name);
+                AddDeferredEvent(CommonEventTrigger.PVPDeath, "", killer?.Name);
             }
 
             var currentMapZoneType = MapController.Get(Map.Id).ZoneType;
@@ -1652,6 +1663,8 @@ namespace Intersect.Server.Entities
             return bonusExp;
         }
 
+        ConcurrentQueue<int> ComboEventQueue = new ConcurrentQueue<int>();
+
         public void UpdateComboTime(int enemyTier = -1)
         {
             lock (EntityLock)
@@ -1660,15 +1673,15 @@ namespace Intersect.Server.Entities
                 ComboTimestamp = Timing.Global.Milliseconds + ComboWindow;
                 CurrentCombo++;
 
-                StartCommonEventsWithTrigger(CommonEventTrigger.ComboUp);
-                StartCommonEventsWithTrigger(CommonEventTrigger.ComboReached, "", "", CurrentCombo);
+                AddDeferredEvent(CommonEventTrigger.ComboUp, value: CurrentCombo);
+                AddDeferredEvent(CommonEventTrigger.ComboReached, value: CurrentCombo);
 
                 if (enemyTier > -1)
                 {
                     ChallengeUpdateProcesser.UpdateChallengesOf(new ComboEarnedUpdate(this), enemyTier);
                 }
+                PacketSender.SendComboPacket(this, CurrentCombo, ComboWindow, ComboExp, MaxComboWindow);
             }
-            PacketSender.SendComboPacket(this, CurrentCombo, ComboWindow, ComboExp, MaxComboWindow);
         }
 
         public void EndCombo()
@@ -1693,7 +1706,7 @@ namespace Intersect.Server.Entities
             ComboExp = 0;
 
             PacketSender.SendComboPacket(this, CurrentCombo, ComboWindow, ComboExp, MaxComboWindow); // sends the final packet of the combo
-            StartCommonEventsWithTrigger(CommonEventTrigger.ComboEnd);
+            AddDeferredEvent(CommonEventTrigger.ComboEnd);
             
             GiveExperience(totalComboExp, fromComboEnd: true);
         }
@@ -2238,7 +2251,7 @@ namespace Intersect.Server.Entities
 
                 mSentMap = true;
 
-                StartCommonEventsWithTrigger(CommonEventTrigger.MapChanged);
+                AddDeferredEvent(CommonEventTrigger.MapChanged);
             }
             else // Player moved on same map?
             {
@@ -3071,7 +3084,7 @@ namespace Intersect.Server.Entities
             if (success)
             {
                 RecipeUnlockWatcher.EnqueueNewPlayer(this, item.Descriptor.Id, RecipeTrigger.ItemObtained);
-                StartCommonEventsWithTrigger(CommonEventTrigger.InventoryChanged);
+                AddDeferredEvent(CommonEventTrigger.InventoryChanged);
                 if (CraftingTableId != Guid.Empty) // Update our crafting table if we have one
                 {
                     UpdateCraftingTable(CraftingTableId);
@@ -3320,7 +3333,7 @@ namespace Intersect.Server.Entities
 
                 if (CraftingTableId != Guid.Empty) // Update our crafting table if we have one
                 {
-                    StartCommonEventsWithTrigger(CommonEventTrigger.InventoryChanged);
+                    AddDeferredEvent(CommonEventTrigger.InventoryChanged);
                     UpdateCraftingTable(CraftingTableId);
                 }
                 return true;
@@ -3708,7 +3721,7 @@ namespace Intersect.Server.Entities
             UpdateGatherItemQuests(slot.ItemId);
 
             // Start common events related to inventory changes.
-            StartCommonEventsWithTrigger(CommonEventTrigger.InventoryChanged);
+            AddDeferredEvent(CommonEventTrigger.InventoryChanged);
 
             return true;
 
@@ -3799,7 +3812,7 @@ namespace Intersect.Server.Entities
             UpdateGatherItemQuests(itemId);
 
             // Start common events related to inventory changes.
-            StartCommonEventsWithTrigger(CommonEventTrigger.InventoryChanged);
+            AddDeferredEvent(CommonEventTrigger.InventoryChanged);
 
             return true;
         }
@@ -5941,7 +5954,7 @@ namespace Intersect.Server.Entities
             FixVitals();
             if (!ignoreEvents)
             {
-                StartCommonEventsWithTrigger(CommonEventTrigger.EquipChange);
+                AddDeferredEvent(CommonEventTrigger.EquipChange);
             }
 
             if (sendPackets)
@@ -6836,7 +6849,7 @@ namespace Intersect.Server.Entities
                         if (oldRank != assignmentClassInfo.Rank)
                         {
                             RecipeUnlockWatcher.RefreshPlayer(this);
-                            StartCommonEventsWithTrigger(Enums.CommonEventTrigger.ClassRankIncreased, "", quest.RelatedClassId.ToString());
+                            AddDeferredEvent(CommonEventTrigger.ClassRankIncreased, "", quest.RelatedClassId.ToString());
                         }
 
                         // Assign the new amount of tasks remaining
@@ -7741,7 +7754,7 @@ namespace Intersect.Server.Entities
                 // If we've changed maps, start relevant events!
                 if (oldMap != MapId)
                 {
-                    StartCommonEventsWithTrigger(CommonEventTrigger.MapChanged);
+                    AddDeferredEvent(CommonEventTrigger.MapChanged);
                 }
             }
         }
@@ -8502,6 +8515,21 @@ namespace Intersect.Server.Entities
         #endregion
 
         #region Player Records
+        struct RecordEvent
+        {
+            public CommonEventTrigger Trigger;
+            public long Amount;
+            public Guid RecordId;
+
+            public RecordEvent(CommonEventTrigger trigger, long amount, Guid recordId)
+            {
+                Trigger = trigger;
+                Amount = amount;
+                RecordId = recordId;
+            }
+        }
+
+        private ConcurrentQueue<RecordEvent> RecordEventQueue = new System.Collections.Concurrent.ConcurrentQueue<RecordEvent>();
         public long IncrementRecord(RecordType type, Guid recordId, bool instantSave = false)
         {
             PlayerRecord matchingRecord;
@@ -8544,7 +8572,7 @@ namespace Intersect.Server.Entities
                         evtTrigger = CommonEventTrigger.NpcsDefeated;
                         break;
                 }
-                StartCommonEventsWithTrigger(evtTrigger, "", recordId.ToString(), recordAmt);
+                AddDeferredEvent(evtTrigger, param: recordId.ToString(), value: recordAmt);
             }
             if (matchingRecord != null && instantSave)
             {
@@ -8662,7 +8690,7 @@ namespace Intersect.Server.Entities
                         evtTrigger = CommonEventTrigger.NpcsDefeated;
                         break;
                 }
-                StartCommonEventsWithTrigger(evtTrigger, "", recordId.ToString(), recordAmt);
+                AddDeferredEvent(evtTrigger, "", recordId.ToString(), recordAmt);
             }
             if (matchingRecord != null && instantSave)
             {
@@ -9320,5 +9348,28 @@ namespace Intersect.Server.Entities
         {
             PacketSender.SendEventDialog(this, message, string.Empty, Guid.Empty);
         }
+
+        public struct DeferredEvent
+        {
+            public CommonEventTrigger Trigger;
+            public string Command;
+            public string Param;
+            public long Value;
+
+            public DeferredEvent(CommonEventTrigger trigger, string command, string param, long value)
+            {
+                Trigger = trigger;
+                Command = command;
+                Param = param;
+                Value = value;
+            }
+        }
+
+        public void AddDeferredEvent(CommonEventTrigger trigger, string command = "", string param = "", long value = -1)
+        {
+            DeferredEventQueue.Enqueue(new DeferredEvent(trigger, command, param, value));
+        }
+
+        public ConcurrentQueue<DeferredEvent> DeferredEventQueue = new ConcurrentQueue<DeferredEvent>();
     }
 }

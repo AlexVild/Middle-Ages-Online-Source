@@ -167,7 +167,7 @@ namespace Intersect.Server.Entities
                 item.Set(newItem);
             }
 
-            Owner.StartCommonEventsWithTrigger(CommonEventTrigger.InventoryChanged);
+            Owner.AddDeferredEvent(CommonEventTrigger.InventoryChanged);
 
             // Send the final inv update so that they can see their new item
             PacketSender.SendInventory(Owner);
