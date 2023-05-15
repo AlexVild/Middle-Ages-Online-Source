@@ -624,7 +624,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 // Cosmetic unlock text
                 else if (mItem.StudyChance > 0)
                 {
-                    if (mItem.EnhancementId == Guid.Empty && (!CharacterCosmeticsPanelController.UnlockedCosmetics.TryGetValue(mItem.EquipmentSlot, out var cosmeticsInSlot) || !cosmeticsInSlot.Contains(mItem.Id)))
+                    if (mItem.StudyEnhancement == Guid.Empty && (!CharacterCosmeticsPanelController.UnlockedCosmetics.TryGetValue(mItem.EquipmentSlot, out var cosmeticsInSlot) || !cosmeticsInSlot.Contains(mItem.Id)))
                     {
                         studyRow.AddKeyValueRow(leftText, rightText, CustomColors.ItemDesc.Special, CustomColors.ItemDesc.Special);
                     }
