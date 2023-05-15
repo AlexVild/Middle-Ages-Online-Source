@@ -2518,7 +2518,11 @@ namespace Intersect.Client.Entities
             }
 
             var myMap = MapInstance.Get(CurrentMap);
-            var targetMap = MapInstance.Get(en.CurrentMap);
+
+            if (myMap == null)
+            {
+                return false;
+            }
 
             var entityType = en.GetEntityType();
             if (entityType == EntityTypes.Resource || entityType == EntityTypes.Event)
