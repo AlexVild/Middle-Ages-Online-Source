@@ -2374,11 +2374,10 @@ namespace Intersect.Server.Entities
             else if (Map?.ZoneType == MapZones.Arena && ArenaRespawnMap != null)
             {
                 Warp(ArenaRespawnMapId, ArenaRespawnX, ArenaRespawnY, (byte)ArenaRespawnDir);
-
             }
             else if (RespawnOverrideMap != null)
             {
-                Warp(RespawnOverrideMapId, RespawnOverrideX, RespawnOverrideY, (byte)RespawnOverrideDir);
+                Warp(RespawnOverrideMapId, RespawnOverrideX, RespawnOverrideY, (byte)RespawnOverrideDir, mapInstanceType: MapInstanceType.Overworld);
                 return;
             }
             ClassRespawn();
