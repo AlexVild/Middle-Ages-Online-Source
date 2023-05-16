@@ -157,7 +157,7 @@ namespace Intersect.Server.Entities
                 return;
             }
 
-            if (!ignoreEvasion && CombatUtilities.AttackMisses(Accuracy, enemy?.Evasion ?? 0, parentSpell != null && this is Player))
+            if (!ignoreEvasion && CombatUtilities.AttackMisses(Accuracy, enemy?.Evasion ?? 0, parentSpell != null && enemy is Npc))
             {
                 AttackMissed.Invoke(enemy);
                 SendMissedAttackMessage(enemy, DamageType.Physical);

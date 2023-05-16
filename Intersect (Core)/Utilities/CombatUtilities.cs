@@ -176,10 +176,9 @@ namespace Intersect.Utilities
             {
                 return false;
             }
-            var roll1 = Randomization.NextDouble() <= missChance;
-            var roll2 = Randomization.NextDouble() <= missChance;
 
-            return advantage ? roll1 || roll2 : roll1;
+            // Got rid of evasion, just this now
+            return Randomization.NextDouble() <= missChance;
         }
 
         /// <summary>
