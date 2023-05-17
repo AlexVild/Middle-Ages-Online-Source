@@ -120,7 +120,11 @@ namespace Intersect.Server.Maps
             {
                 if (InstanceProcessor.TryGetInstanceController(MapInstanceId, out var instanceController))
                 {
-                    return instanceController.MapSpawnGroups.TryGetValue(mMapController.Id, out var spawnGroup) ? spawnGroup.Group : 0;
+                    if (instanceController.MapSpawnGroups == null)
+                    {
+                        return 0;
+                    }
+                    return instanceController.MapSpawnGroups.TryGetValue(mMapController?.Id ?? Guid.Empty, out var spawnGroup) ? spawnGroup.Group : 0;
                 }
                 else
                 {
