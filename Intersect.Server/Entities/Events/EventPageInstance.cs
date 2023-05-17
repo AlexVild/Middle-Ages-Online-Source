@@ -56,6 +56,8 @@ namespace Intersect.Server.Entities.Events
 
         public int SpawnY { get; set; }
 
+        public int SpawnDir { get; set; }
+
         public EventPageInstance(
             EventBase myEvent,
             EventPage myPage,
@@ -128,6 +130,7 @@ namespace Intersect.Server.Entities.Events
             Face = MyPage.FaceGraphic;
             mPageNum = BaseEvent.Pages.IndexOf(MyPage);
             Player = player;
+            SpawnDir = Dir;
             SendToPlayer();
         }
 
@@ -914,6 +917,9 @@ namespace Intersect.Server.Entities.Events
         {
             X = SpawnX;
             Y = SpawnY;
+            Dir = SpawnDir;
+            MoveTimer = Timing.Global.Milliseconds + (long)GetMovementTime();
+            PacketSender.SendEntityPositionToAll(this);
         }
     }
 
