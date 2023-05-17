@@ -2049,5 +2049,19 @@ namespace Intersect.Editor.Forms.Editors.Events
         {
             return Strings.EventCommandList.RemovePermabuff.ToString(ItemBase.GetName(command.ItemId));
         }
+
+        private static string GetCommandText(ResetGlobalEventPositions command, MapInstance map)
+        {
+            var mapName = Strings.EventCommandList.mapnotfound;
+            for (var i = 0; i < MapList.OrderedMaps.Count; i++)
+            {
+                if (MapList.OrderedMaps[i].MapId == command.MapId)
+                {
+                    mapName = MapList.OrderedMaps[i].Name;
+                }
+            }
+
+            return Strings.EventCommandList.ResetGlobalEventPositions.ToString(mapName);
+        }
     }
 }

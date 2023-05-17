@@ -34,6 +34,8 @@ namespace Intersect.GameObjects.Events
 
         public Guid QuestAnimationId { get; set; }
 
+        public Guid DisableMovementVar { get; set; } = Guid.Empty;
+
         public string Description { get; set; } = "";
 
         public bool DirectionFix { get; set; }

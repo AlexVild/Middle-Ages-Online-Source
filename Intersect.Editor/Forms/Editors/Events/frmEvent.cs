@@ -455,6 +455,7 @@ namespace Intersect.Editor.Forms.Editors.Events
         private void chkIsGlobal_CheckedChanged(object sender, EventArgs e)
         {
             MyEvent.Global = chkIsGlobal.Checked;
+            RefreshMovementFreezeView();
         }
 
         private void lblCloseCommands_Click(object sender, EventArgs e)
@@ -887,6 +888,10 @@ namespace Intersect.Editor.Forms.Editors.Events
                     tmpCommand = new RemovePermabuffCommand();
                     break;
 
+                case EventCommandType.ResetGlobalEventPositions:
+                    tmpCommand = new ResetGlobalEventPositions();
+                    break;
+
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -1125,6 +1130,12 @@ namespace Intersect.Editor.Forms.Editors.Events
                 cmbQuestAnimation.Items.Clear();
                 cmbQuestAnimation.Items.Add(Strings.General.none);
                 cmbQuestAnimation.Items.AddRange(AnimationBase.Names);
+
+                cmbEnableMoveVar.Items.Clear();
+                cmbEnableMoveVar.Items.Add(Strings.General.none);
+                cmbEnableMoveVar.Items.AddRange(InstanceVariableBase.GetNamesByType(VariableDataTypes.Boolean));
+
+                RefreshMovementFreezeView();
             }
 
             chkIsGlobal.Checked = Convert.ToBoolean(MyEvent.Global);
@@ -1135,6 +1146,20 @@ namespace Intersect.Editor.Forms.Editors.Events
 
             UpdateTabControl();
             LoadPage(0);
+        }
+
+        private void RefreshMovementFreezeView()
+        {
+            if (chkIsGlobal.Checked)
+            {
+                lblEnableMoveVar.Show();
+                cmbEnableMoveVar.Show();
+            }
+            else
+            {
+                lblEnableMoveVar.Hide();
+                cmbEnableMoveVar.Hide();
+            }
         }
 
         /// <summary>
@@ -1208,6 +1233,8 @@ namespace Intersect.Editor.Forms.Editors.Events
             {
                 cmbQuestAnimation.SelectedIndex = AnimationBase.ListIndex(CurrentPage.QuestAnimationId) + 1;
                 cmbQuest.SelectedIndex = QuestBase.ListIndex(CurrentPage.GivesQuestId) + 1;
+                
+                cmbEnableMoveVar.SelectedIndex = InstanceVariableBase.ListIndex(CurrentPage.DisableMovementVar, VariableDataTypes.Boolean) + 1;
             }
             
             ListPageCommands();
@@ -1627,6 +1654,11 @@ namespace Intersect.Editor.Forms.Editors.Events
 
                 case EventCommandType.RemovePermabuff:
                     cmdWindow = new EventCommand_RemovePermabuff((RemovePermabuffCommand)command, this);
+                    break;
+
+                case EventCommandType.ResetGlobalEventPositions:
+                    cmdWindow = new EventCommand_ResetGlobalEvents((ResetGlobalEventPositions)command, this);
+
                     break;
 
                 default:
@@ -2298,6 +2330,11 @@ namespace Intersect.Editor.Forms.Editors.Events
         private void chkKillAfterOne_CheckedChanged(object sender, EventArgs e)
         {
             CurrentPage.OnePlayer = chkKillAfterOne.Checked;
+        }
+
+        private void cmbDisableMoveVar_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            CurrentPage.DisableMovementVar = InstanceVariableBase.IdFromList(cmbEnableMoveVar.SelectedIndex - 1, VariableDataTypes.Boolean);
         }
     }
 

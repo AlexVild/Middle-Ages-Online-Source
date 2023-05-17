@@ -2319,6 +2319,7 @@ Tick timer saved in server config.json.";
                 {"openenhancementwindow", @"Open Enhancement Window"},
                 {"openupgradestation", @"Open Upgrade Station"},
                 {"removepermabuff", @"Remove Permabuff"},
+                {"resetglobalevents", @"Reset Global Event Positions"},
             };
 
         }
@@ -6262,6 +6263,9 @@ Negative values for time to flow backwards.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString RemovePermabuff = @"Remove permabuff given by {00}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ResetGlobalEventPositions = @"Reset Global Event Positions on map {00}";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString ResetPermadeads = @"Reset Permadead NPCs in Map: {00}";

@@ -1634,12 +1634,15 @@ namespace Intersect.Server.Maps
         #region Instance Variables
         public VariableValue GetInstanceVariable(Guid variableId)
         {
+            var defaultVal = new VariableValue();
+            defaultVal.SetValue(false);
+
             if (InstanceProcessor.TryGetInstanceController(MapInstanceId, out var instanceController) && instanceController.InstanceVariables.TryGetValue(variableId, out var instanceVariable))
             {
                 return instanceVariable;
             } else
             {
-                return null;
+                return defaultVal;
             }
         }
 

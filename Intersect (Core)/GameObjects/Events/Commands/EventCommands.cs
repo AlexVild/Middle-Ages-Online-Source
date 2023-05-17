@@ -1487,4 +1487,11 @@ namespace Intersect.GameObjects.Events.Commands
 
         public Guid ItemId { get; set; } = Guid.Empty;
     }
+
+    public partial class ResetGlobalEventPositions : EventCommand
+    {
+        public override EventCommandType Type { get; } = EventCommandType.ResetGlobalEventPositions;
+
+        public Guid MapId { get; set; } = Guid.Empty;
+    }
 }

@@ -179,47 +179,49 @@ namespace Intersect.Editor.Forms.Editors.Events
             System.Windows.Forms.TreeNode treeNode76 = new System.Windows.Forms.TreeNode("Open Leaderboard...");
             System.Windows.Forms.TreeNode treeNode77 = new System.Windows.Forms.TreeNode("Clear Record...");
             System.Windows.Forms.TreeNode treeNode78 = new System.Windows.Forms.TreeNode("Reset Permadead NPCs");
-            System.Windows.Forms.TreeNode treeNode79 = new System.Windows.Forms.TreeNode("Etc", new System.Windows.Forms.TreeNode[] {
+            System.Windows.Forms.TreeNode treeNode79 = new System.Windows.Forms.TreeNode("Reset Global Event Positions");
+            System.Windows.Forms.TreeNode treeNode80 = new System.Windows.Forms.TreeNode("Etc", new System.Windows.Forms.TreeNode[] {
             treeNode75,
             treeNode76,
             treeNode77,
-            treeNode78});
-            System.Windows.Forms.TreeNode treeNode80 = new System.Windows.Forms.TreeNode("Open Bank");
-            System.Windows.Forms.TreeNode treeNode81 = new System.Windows.Forms.TreeNode("Open Shop");
-            System.Windows.Forms.TreeNode treeNode82 = new System.Windows.Forms.TreeNode("Open Crafting Station");
-            System.Windows.Forms.TreeNode treeNode83 = new System.Windows.Forms.TreeNode("Open Deconstructor");
-            System.Windows.Forms.TreeNode treeNode84 = new System.Windows.Forms.TreeNode("Open Enhancement Window");
-            System.Windows.Forms.TreeNode treeNode85 = new System.Windows.Forms.TreeNode("Open Upgrade Station");
-            System.Windows.Forms.TreeNode treeNode86 = new System.Windows.Forms.TreeNode("Shop and Bank", new System.Windows.Forms.TreeNode[] {
-            treeNode80,
+            treeNode78,
+            treeNode79});
+            System.Windows.Forms.TreeNode treeNode81 = new System.Windows.Forms.TreeNode("Open Bank");
+            System.Windows.Forms.TreeNode treeNode82 = new System.Windows.Forms.TreeNode("Open Shop");
+            System.Windows.Forms.TreeNode treeNode83 = new System.Windows.Forms.TreeNode("Open Crafting Station");
+            System.Windows.Forms.TreeNode treeNode84 = new System.Windows.Forms.TreeNode("Open Deconstructor");
+            System.Windows.Forms.TreeNode treeNode85 = new System.Windows.Forms.TreeNode("Open Enhancement Window");
+            System.Windows.Forms.TreeNode treeNode86 = new System.Windows.Forms.TreeNode("Open Upgrade Station");
+            System.Windows.Forms.TreeNode treeNode87 = new System.Windows.Forms.TreeNode("Shop and Bank", new System.Windows.Forms.TreeNode[] {
             treeNode81,
             treeNode82,
             treeNode83,
             treeNode84,
-            treeNode85});
-            System.Windows.Forms.TreeNode treeNode87 = new System.Windows.Forms.TreeNode("Create Guild");
-            System.Windows.Forms.TreeNode treeNode88 = new System.Windows.Forms.TreeNode("Disband Guild");
-            System.Windows.Forms.TreeNode treeNode89 = new System.Windows.Forms.TreeNode("Open Guild Bank");
-            System.Windows.Forms.TreeNode treeNode90 = new System.Windows.Forms.TreeNode("Set Guild Bank Slots Count");
-            System.Windows.Forms.TreeNode treeNode91 = new System.Windows.Forms.TreeNode("Guilds", new System.Windows.Forms.TreeNode[] {
-            treeNode87,
+            treeNode85,
+            treeNode86});
+            System.Windows.Forms.TreeNode treeNode88 = new System.Windows.Forms.TreeNode("Create Guild");
+            System.Windows.Forms.TreeNode treeNode89 = new System.Windows.Forms.TreeNode("Disband Guild");
+            System.Windows.Forms.TreeNode treeNode90 = new System.Windows.Forms.TreeNode("Open Guild Bank");
+            System.Windows.Forms.TreeNode treeNode91 = new System.Windows.Forms.TreeNode("Set Guild Bank Slots Count");
+            System.Windows.Forms.TreeNode treeNode92 = new System.Windows.Forms.TreeNode("Guilds", new System.Windows.Forms.TreeNode[] {
             treeNode88,
             treeNode89,
-            treeNode90});
-            System.Windows.Forms.TreeNode treeNode92 = new System.Windows.Forms.TreeNode("Start Timer");
-            System.Windows.Forms.TreeNode treeNode93 = new System.Windows.Forms.TreeNode("Modify Timer");
-            System.Windows.Forms.TreeNode treeNode94 = new System.Windows.Forms.TreeNode("Stop Timer");
-            System.Windows.Forms.TreeNode treeNode95 = new System.Windows.Forms.TreeNode("Timers", new System.Windows.Forms.TreeNode[] {
-            treeNode92,
+            treeNode90,
+            treeNode91});
+            System.Windows.Forms.TreeNode treeNode93 = new System.Windows.Forms.TreeNode("Start Timer");
+            System.Windows.Forms.TreeNode treeNode94 = new System.Windows.Forms.TreeNode("Modify Timer");
+            System.Windows.Forms.TreeNode treeNode95 = new System.Windows.Forms.TreeNode("Stop Timer");
+            System.Windows.Forms.TreeNode treeNode96 = new System.Windows.Forms.TreeNode("Timers", new System.Windows.Forms.TreeNode[] {
             treeNode93,
-            treeNode94});
-            System.Windows.Forms.TreeNode treeNode96 = new System.Windows.Forms.TreeNode("Change Dungeon");
-            System.Windows.Forms.TreeNode treeNode97 = new System.Windows.Forms.TreeNode("Obtain Treasure Gnome");
-            System.Windows.Forms.TreeNode treeNode98 = new System.Windows.Forms.TreeNode("Roll Dungeon Loot");
-            System.Windows.Forms.TreeNode treeNode99 = new System.Windows.Forms.TreeNode("Dungeons", new System.Windows.Forms.TreeNode[] {
-            treeNode96,
+            treeNode94,
+            treeNode95});
+            System.Windows.Forms.TreeNode treeNode97 = new System.Windows.Forms.TreeNode("Change Dungeon");
+            System.Windows.Forms.TreeNode treeNode98 = new System.Windows.Forms.TreeNode("Obtain Treasure Gnome");
+            System.Windows.Forms.TreeNode treeNode99 = new System.Windows.Forms.TreeNode("Roll Dungeon Loot");
+            System.Windows.Forms.TreeNode treeNode100 = new System.Windows.Forms.TreeNode("Dungeons", new System.Windows.Forms.TreeNode[] {
             treeNode97,
-            treeNode98});
+            treeNode98,
+            treeNode99});
             this.lblName = new System.Windows.Forms.Label();
             this.txtEventname = new DarkUI.Controls.DarkTextBox();
             this.grpEntityOptions = new DarkUI.Controls.DarkGroupBox();
@@ -246,6 +248,8 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.cmbAnimation = new DarkUI.Controls.DarkComboBox();
             this.pnlPreview = new System.Windows.Forms.Panel();
             this.grpMovement = new DarkUI.Controls.DarkGroupBox();
+            this.cmbEnableMoveVar = new DarkUI.Controls.DarkComboBox();
+            this.lblEnableMoveVar = new System.Windows.Forms.Label();
             this.lblLayer = new System.Windows.Forms.Label();
             this.cmbLayering = new DarkUI.Controls.DarkComboBox();
             this.cmbEventFreq = new DarkUI.Controls.DarkComboBox();
@@ -349,7 +353,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.grpEntityOptions.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpEntityOptions.Location = new System.Drawing.Point(21, 150);
             this.grpEntityOptions.Name = "grpEntityOptions";
-            this.grpEntityOptions.Size = new System.Drawing.Size(326, 423);
+            this.grpEntityOptions.Size = new System.Drawing.Size(326, 472);
             this.grpEntityOptions.TabIndex = 12;
             this.grpEntityOptions.TabStop = false;
             this.grpEntityOptions.Text = "Entity Options";
@@ -362,7 +366,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.grpQuestAnimation.Controls.Add(this.lblQuestAnimation);
             this.grpQuestAnimation.Controls.Add(this.cmbQuest);
             this.grpQuestAnimation.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpQuestAnimation.Location = new System.Drawing.Point(6, 372);
+            this.grpQuestAnimation.Location = new System.Drawing.Point(7, 422);
             this.grpQuestAnimation.Name = "grpQuestAnimation";
             this.grpQuestAnimation.Size = new System.Drawing.Size(317, 44);
             this.grpQuestAnimation.TabIndex = 22;
@@ -434,7 +438,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.grpExtra.Controls.Add(this.chkHideName);
             this.grpExtra.Controls.Add(this.chkWalkThrough);
             this.grpExtra.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpExtra.Location = new System.Drawing.Point(6, 297);
+            this.grpExtra.Location = new System.Drawing.Point(9, 351);
             this.grpExtra.Name = "grpExtra";
             this.grpExtra.Size = new System.Drawing.Size(315, 64);
             this.grpExtra.TabIndex = 9;
@@ -512,7 +516,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.grpInspector.Controls.Add(this.cmbPreviewFace);
             this.grpInspector.Controls.Add(this.lblFace);
             this.grpInspector.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpInspector.Location = new System.Drawing.Point(6, 179);
+            this.grpInspector.Location = new System.Drawing.Point(6, 228);
             this.grpInspector.Name = "grpInspector";
             this.grpInspector.Size = new System.Drawing.Size(316, 117);
             this.grpInspector.TabIndex = 7;
@@ -645,6 +649,8 @@ namespace Intersect.Editor.Forms.Editors.Events
             // 
             this.grpMovement.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpMovement.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpMovement.Controls.Add(this.cmbEnableMoveVar);
+            this.grpMovement.Controls.Add(this.lblEnableMoveVar);
             this.grpMovement.Controls.Add(this.lblLayer);
             this.grpMovement.Controls.Add(this.cmbLayering);
             this.grpMovement.Controls.Add(this.cmbEventFreq);
@@ -657,10 +663,42 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.grpMovement.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpMovement.Location = new System.Drawing.Point(169, 13);
             this.grpMovement.Name = "grpMovement";
-            this.grpMovement.Size = new System.Drawing.Size(154, 163);
+            this.grpMovement.Size = new System.Drawing.Size(154, 209);
             this.grpMovement.TabIndex = 8;
             this.grpMovement.TabStop = false;
             this.grpMovement.Text = "Movement";
+            // 
+            // cmbEnableMoveVar
+            // 
+            this.cmbEnableMoveVar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbEnableMoveVar.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbEnableMoveVar.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbEnableMoveVar.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbEnableMoveVar.DrawDropdownHoverOutline = false;
+            this.cmbEnableMoveVar.DrawFocusRectangle = false;
+            this.cmbEnableMoveVar.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbEnableMoveVar.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbEnableMoveVar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbEnableMoveVar.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbEnableMoveVar.FormattingEnabled = true;
+            this.cmbEnableMoveVar.Items.AddRange(new object[] {
+            "None"});
+            this.cmbEnableMoveVar.Location = new System.Drawing.Point(6, 182);
+            this.cmbEnableMoveVar.Name = "cmbEnableMoveVar";
+            this.cmbEnableMoveVar.Size = new System.Drawing.Size(144, 21);
+            this.cmbEnableMoveVar.TabIndex = 9;
+            this.cmbEnableMoveVar.Text = "None";
+            this.cmbEnableMoveVar.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbEnableMoveVar.SelectedIndexChanged += new System.EventHandler(this.cmbDisableMoveVar_SelectedIndexChanged);
+            // 
+            // lblEnableMoveVar
+            // 
+            this.lblEnableMoveVar.AutoSize = true;
+            this.lblEnableMoveVar.Location = new System.Drawing.Point(7, 161);
+            this.lblEnableMoveVar.Name = "lblEnableMoveVar";
+            this.lblEnableMoveVar.Size = new System.Drawing.Size(92, 13);
+            this.lblEnableMoveVar.TabIndex = 8;
+            this.lblEnableMoveVar.Text = "Enable Move Var:";
             // 
             // lblLayer
             // 
@@ -831,7 +869,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.grpTriggers.Controls.Add(this.cmbTriggerVal);
             this.grpTriggers.Controls.Add(this.cmbTrigger);
             this.grpTriggers.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpTriggers.Location = new System.Drawing.Point(12, 488);
+            this.grpTriggers.Location = new System.Drawing.Point(15, 544);
             this.grpTriggers.Name = "grpTriggers";
             this.grpTriggers.Size = new System.Drawing.Size(317, 81);
             this.grpTriggers.TabIndex = 21;
@@ -1071,7 +1109,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.grpNewCommands.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpNewCommands.Location = new System.Drawing.Point(353, 89);
             this.grpNewCommands.Name = "grpNewCommands";
-            this.grpNewCommands.Size = new System.Drawing.Size(457, 484);
+            this.grpNewCommands.Size = new System.Drawing.Size(457, 620);
             this.grpNewCommands.TabIndex = 7;
             this.grpNewCommands.TabStop = false;
             this.grpNewCommands.Text = "Add Commands";
@@ -1323,64 +1361,67 @@ namespace Intersect.Editor.Forms.Editors.Events
             treeNode78.Name = "resetpermadeadnpcs";
             treeNode78.Tag = "73";
             treeNode78.Text = "Reset Permadead NPCs";
-            treeNode79.Name = "etc";
-            treeNode79.Text = "Etc";
-            treeNode80.Name = "openbank";
-            treeNode80.Tag = "35";
-            treeNode80.Text = "Open Bank";
-            treeNode81.Name = "openshop";
-            treeNode81.Tag = "36";
-            treeNode81.Text = "Open Shop";
-            treeNode82.Name = "opencraftingstation";
-            treeNode82.Tag = "37";
-            treeNode82.Text = "Open Crafting Station";
-            treeNode83.Name = "opendeconstructor";
-            treeNode83.Tag = "85";
-            treeNode83.Text = "Open Deconstructor";
-            treeNode84.Name = "openenhancementwindow";
-            treeNode84.Tag = "87";
-            treeNode84.Text = "Open Enhancement Window";
-            treeNode85.Name = "openupgradestation";
-            treeNode85.Tag = "88";
-            treeNode85.Text = "Open Upgrade Station";
-            treeNode86.Name = "shopandbank";
-            treeNode86.Text = "Shop and Bank";
-            treeNode87.Name = "createguild";
-            treeNode87.Tag = "53";
-            treeNode87.Text = "Create Guild";
-            treeNode88.Name = "disbandguild";
-            treeNode88.Tag = "54";
-            treeNode88.Text = "Disband Guild";
-            treeNode89.Name = "openguildbank";
-            treeNode89.Tag = "55";
-            treeNode89.Text = "Open Guild Bank";
-            treeNode90.Name = "setguildbankslots";
-            treeNode90.Tag = "56";
-            treeNode90.Text = "Set Guild Bank Slots Count";
-            treeNode91.Name = "guilds";
-            treeNode91.Text = "Guilds";
-            treeNode92.Name = "starttimer";
-            treeNode92.Tag = "64";
-            treeNode92.Text = "Start Timer";
-            treeNode93.Name = "modifytimer";
-            treeNode93.Tag = "65";
-            treeNode93.Text = "Modify Timer";
-            treeNode94.Name = "stoptimer";
-            treeNode94.Tag = "66";
-            treeNode94.Text = "Stop Timer";
-            treeNode95.Name = "timers";
-            treeNode95.Text = "Timers";
-            treeNode96.Name = "changedungeon";
-            treeNode96.Tag = "82";
-            treeNode96.Text = "Change Dungeon";
-            treeNode97.Name = "obtaintreasuregnome";
-            treeNode97.Tag = "83";
-            treeNode97.Text = "Obtain Treasure Gnome";
-            treeNode98.Name = "rolldungeonloot";
-            treeNode98.Tag = "84";
-            treeNode98.Text = "Roll Dungeon Loot";
-            treeNode99.Name = "dungeons";
-            treeNode99.Text = "Dungeons";
+            treeNode79.Name = "resetglobalevents";
+            treeNode79.Tag = "90";
+            treeNode79.Text = "Reset Global Event Positions";
+            treeNode80.Name = "etc";
+            treeNode80.Text = "Etc";
+            treeNode81.Name = "openbank";
+            treeNode81.Tag = "35";
+            treeNode81.Text = "Open Bank";
+            treeNode82.Name = "openshop";
+            treeNode82.Tag = "36";
+            treeNode82.Text = "Open Shop";
+            treeNode83.Name = "opencraftingstation";
+            treeNode83.Tag = "37";
+            treeNode83.Text = "Open Crafting Station";
+            treeNode84.Name = "opendeconstructor";
+            treeNode84.Tag = "85";
+            treeNode84.Text = "Open Deconstructor";
+            treeNode85.Name = "openenhancementwindow";
+            treeNode85.Tag = "87";
+            treeNode85.Text = "Open Enhancement Window";
+            treeNode86.Name = "openupgradestation";
+            treeNode86.Tag = "88";
+            treeNode86.Text = "Open Upgrade Station";
+            treeNode87.Name = "shopandbank";
+            treeNode87.Text = "Shop and Bank";
+            treeNode88.Name = "createguild";
+            treeNode88.Tag = "53";
+            treeNode88.Text = "Create Guild";
+            treeNode89.Name = "disbandguild";
+            treeNode89.Tag = "54";
+            treeNode89.Text = "Disband Guild";
+            treeNode90.Name = "openguildbank";
+            treeNode90.Tag = "55";
+            treeNode90.Text = "Open Guild Bank";
+            treeNode91.Name = "setguildbankslots";
+            treeNode91.Tag = "56";
+            treeNode91.Text = "Set Guild Bank Slots Count";
+            treeNode92.Name = "guilds";
+            treeNode92.Text = "Guilds";
+            treeNode93.Name = "starttimer";
+            treeNode93.Tag = "64";
+            treeNode93.Text = "Start Timer";
+            treeNode94.Name = "modifytimer";
+            treeNode94.Tag = "65";
+            treeNode94.Text = "Modify Timer";
+            treeNode95.Name = "stoptimer";
+            treeNode95.Tag = "66";
+            treeNode95.Text = "Stop Timer";
+            treeNode96.Name = "timers";
+            treeNode96.Text = "Timers";
+            treeNode97.Name = "changedungeon";
+            treeNode97.Tag = "82";
+            treeNode97.Text = "Change Dungeon";
+            treeNode98.Name = "obtaintreasuregnome";
+            treeNode98.Tag = "83";
+            treeNode98.Text = "Obtain Treasure Gnome";
+            treeNode99.Name = "rolldungeonloot";
+            treeNode99.Tag = "84";
+            treeNode99.Text = "Roll Dungeon Loot";
+            treeNode100.Name = "dungeons";
+            treeNode100.Text = "Dungeons";
             this.lstCommands.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
             treeNode5,
             treeNode14,
@@ -1388,12 +1429,12 @@ namespace Intersect.Editor.Forms.Editors.Events
             treeNode56,
             treeNode68,
             treeNode74,
-            treeNode79,
-            treeNode86,
-            treeNode91,
-            treeNode95,
-            treeNode99});
-            this.lstCommands.Size = new System.Drawing.Size(445, 440);
+            treeNode80,
+            treeNode87,
+            treeNode92,
+            treeNode96,
+            treeNode100});
+            this.lstCommands.Size = new System.Drawing.Size(445, 582);
             this.lstCommands.TabIndex = 2;
             this.lstCommands.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.lstCommands_NodeMouseDoubleClick);
             // 
@@ -1442,7 +1483,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(631, 663);
+            this.btnSave.Location = new System.Drawing.Point(631, 719);
             this.btnSave.Name = "btnSave";
             this.btnSave.Padding = new System.Windows.Forms.Padding(5);
             this.btnSave.Size = new System.Drawing.Size(93, 30);
@@ -1452,7 +1493,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(730, 663);
+            this.btnCancel.Location = new System.Drawing.Point(730, 719);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Padding = new System.Windows.Forms.Padding(5);
             this.btnCancel.Size = new System.Drawing.Size(93, 30);
@@ -1659,7 +1700,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.panel1.Controls.Add(this.grpTriggers);
             this.panel1.Location = new System.Drawing.Point(12, 83);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(811, 574);
+            this.panel1.Size = new System.Drawing.Size(811, 630);
             this.panel1.TabIndex = 23;
             // 
             // FrmEvent
@@ -1668,7 +1709,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.ClientSize = new System.Drawing.Size(835, 705);
+            this.ClientSize = new System.Drawing.Size(835, 761);
             this.Controls.Add(this.grpNewCommands);
             this.Controls.Add(this.btnTabsRight);
             this.Controls.Add(this.btnTabsLeft);
@@ -1803,5 +1844,7 @@ namespace Intersect.Editor.Forms.Editors.Events
         private Label lblRecordItem;
         private DarkComboBox cmbRecordItem;
         private DarkCheckBox chkKillAfterOne;
+        private DarkComboBox cmbEnableMoveVar;
+        private Label lblEnableMoveVar;
     }
 }

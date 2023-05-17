@@ -52,6 +52,10 @@ namespace Intersect.Server.Entities.Events
 
         public int Speed = 20;
 
+        public int SpawnX { get; set; }
+
+        public int SpawnY { get; set; }
+
         public EventPageInstance(
             EventBase myEvent,
             EventPage myPage,
@@ -68,6 +72,8 @@ namespace Intersect.Server.Entities.Events
             MapInstanceId = mapInstanceId;
             X = eventIndex.X;
             Y = eventIndex.Y;
+            SpawnX = X;
+            SpawnY = Y;
             Name = myEvent.Name;
             MovementType = MyPage.Movement.Type;
             MovementFreq = MyPage.Movement.Frequency;
@@ -323,33 +329,44 @@ namespace Intersect.Server.Entities.Events
             {
                 return;
             }
-            
-            if (Trigger == EventTrigger.EventCollide && MapController.TryGetInstanceFromMap(Map.Id, MapInstanceId, out var instance))
+
+            MapInstance mapInstance = null;
+            if (MapController.TryGetInstanceFromMap(Map?.Id ?? Guid.Empty, MapInstanceId, out mapInstance) && Trigger == EventTrigger.EventCollide)
             {
-                HandleEventCollision(instance);
+                HandleEventCollision(mapInstance);
             }
 
-            if (MovementType == EventMovementType.MoveRoute && MoveRoute != null)
+            if (MyPage.DisableMovementVar != Guid.Empty)
             {
-                ProcessMoveRoute(Player, timeMs);
+                var x = 2;
             }
-            else
+
+            // Don't process movement stuff if the disable movement var is currently active on this instance
+            if (!BaseEvent.Global || (MyPage.DisableMovementVar == Guid.Empty || (mapInstance?.GetInstanceVariable(MyPage.DisableMovementVar) ?? false)))
             {
-                if (MovementType == EventMovementType.Random) //Random
+                if (MovementType == EventMovementType.MoveRoute && MoveRoute != null)
                 {
-                    if (Randomization.Next(0, 2) != 0)
+                    ProcessMoveRoute(Player, timeMs);
+                }
+                else
+                {
+                    if (MovementType == EventMovementType.Random) //Random
                     {
-                        return;
-                    }
+                        if (Randomization.Next(0, 2) != 0)
+                        {
+                            return;
+                        }
 
-                    var dir = (byte)Randomization.Next(0, 4);
-                    if (CanMove(dir) == -1)
-                    {
-                        Move(dir, Player);
+                        var dir = (byte)Randomization.Next(0, 4);
+                        if (CanMove(dir) == -1)
+                        {
+                            Move(dir, Player);
+                        }
+                        MoveTimer = Timing.Global.Milliseconds + (long)GetMovementTime();
                     }
-                    MoveTimer = Timing.Global.Milliseconds + (long)GetMovementTime();
                 }
             }
+
             if (ShouldDisplayQuestAnimation())
             {
                 if (!Animations.Contains(MyPage.QuestAnimationId))
@@ -891,6 +908,12 @@ namespace Intersect.Server.Entities.Events
                 questAvailable = repeatableQuestReady || neverStartedQuest;
             }
             return questAvailable;
+        }
+
+        public void ResetPosition()
+        {
+            X = SpawnX;
+            Y = SpawnY;
         }
     }
 

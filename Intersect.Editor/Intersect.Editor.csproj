@@ -219,6 +219,12 @@
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_RemovePermabuff.Designer.cs">
       <DependentUpon>EventCommand_RemovePermabuff.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_ResetGlobalEvents.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_ResetGlobalEvents.Designer.cs">
+      <DependentUpon>EventCommand_ResetGlobalEvents.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_ResetPermadeadNpcs.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -974,6 +980,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_RemovePermabuff.resx">
       <DependentUpon>EventCommand_RemovePermabuff.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_ResetGlobalEvents.resx">
+      <DependentUpon>EventCommand_ResetGlobalEvents.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_ResetPermadeadNpcs.resx">
       <DependentUpon>EventCommand_ResetPermadeadNpcs.cs</DependentUpon>

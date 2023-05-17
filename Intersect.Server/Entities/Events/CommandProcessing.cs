@@ -3532,5 +3532,30 @@ namespace Intersect.Server.Entities.Events
                 PacketSender.SendUsedPermabuffs(player);
             }
         }
+
+        private static void ProcessCommand(
+          ResetGlobalEventPositions command,
+          Player player,
+          Event instance,
+          CommandInstance stackInfo,
+          Stack<CommandInstance> callStack
+       )
+        {
+            if (player == null)
+            {
+                return;
+            }
+
+            // Currently only works for overworld
+            if (!MapController.TryGetInstanceFromMap(command.MapId, Guid.Empty, out var mapInstance))
+            {
+                return;
+            }
+
+            foreach(var evt in mapInstance.GetGlobalEventInstances())
+            {
+                evt.GlobalPageInstance[evt.PageIndex].ResetPosition();
+            }
+        }
     }
 }
