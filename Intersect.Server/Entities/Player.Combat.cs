@@ -63,7 +63,11 @@ namespace Intersect.Server.Entities
         public override bool IsCriticalHit(int critChance)
         {
             var affinity = GetBonusEffectTotal(EffectType.Affinity);
-            critChance += affinity;
+            
+            if (critChance > 0)
+            {
+                critChance += affinity;
+            }
 
             return base.IsCriticalHit(critChance);
         }
