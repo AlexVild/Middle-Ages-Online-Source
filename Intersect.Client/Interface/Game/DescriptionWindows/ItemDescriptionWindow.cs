@@ -101,8 +101,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             {
                 if (!Globals.Me.KnownEnhancements.Contains(mItem.StudyEnhancement))
                 {
-                    mSpellDescWindow = null;
-                    mEnhancementDescWindow = new EnhancementDescriptionWindow(mItem.StudyEnhancement, mItem.Icon, x, y, (float)mItem.StudyChance);
+                    mEnhancementDescWindow = new EnhancementDescriptionWindow(mItem.StudyEnhancement, mItem.Icon, x - (mSpellDescWindow?.Width ?? 0), y, (float)mItem.StudyChance);
                     mEnhancementDescWindow.Show();
                 }
             }
