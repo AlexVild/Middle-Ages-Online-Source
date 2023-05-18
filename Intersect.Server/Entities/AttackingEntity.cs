@@ -481,13 +481,14 @@ namespace Intersect.Server.Entities
             UpdateCombatTimers(this, enemy);
 
             var maxHit = 0;
+            // Use 1.0 for crit mults here so we can apply special damage mods AFTER calculating the hit
             if (friendly)
             {
-                damage = CombatUtilities.CalculateFriendlyDamage(damageTypes, critMultiplier, scaling, atkStats, out maxHit);
+                damage = CombatUtilities.CalculateFriendlyDamage(damageTypes, 1.0, scaling, atkStats, out maxHit);
             }
             else
             {
-                damage = CombatUtilities.CalculateDamage(damageTypes, critMultiplier, scaling, atkStats, defStats, out maxHit);
+                damage = CombatUtilities.CalculateDamage(damageTypes, 1.0, scaling, atkStats, defStats, out maxHit);
             }
 
             if (damage != 0)
@@ -500,6 +501,7 @@ namespace Intersect.Server.Entities
                 }
 
                 damage = CalculateSpecialDamage(damage, range, weaponMetadata, enemy);
+                damage = (int)Math.Round(critMultiplier * damage); // apply crit AFTER special damage
 
                 if (damage > enemy.GetVital((int)Vitals.Health))
                 {

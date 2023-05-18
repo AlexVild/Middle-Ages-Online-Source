@@ -113,7 +113,7 @@ namespace Intersect.Server.Entities
 
                 if (spellCrit)
                 {
-                    critMultiplier += spell.Combat.CritMultiplier;
+                    critMultiplier = spell.Combat.CritMultiplier;
                     if (spell.WeaponSpell && weapon != null)
                     {
                         critMultiplier += weapon.CritMultiplier;
