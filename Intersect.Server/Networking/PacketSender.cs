@@ -2873,13 +2873,13 @@ namespace Intersect.Server.Networking
             player?.SendPacket(new UsedPermabuffsPacket(usedPermabuffs));
         }
 
-        public static void SendUnlockedCosmeticsPacket(Player player)
+        public static void SendUnlockedCosmeticsPacket(Player player, bool sendTutorial = false)
         {
             var cosmetics = new List<Guid>();
             cosmetics.AddRange(player.UnlockedCosmetics.ToArray().Select(c => c.ItemId));
 
             player.SendPacket(new CosmeticUnlocksPacket(cosmetics));
-            if (!player.CosmeticsTutorialDone)
+            if (!player.CosmeticsTutorialDone && sendTutorial)
             {
                 SendEventDialog(player, Strings.Player.CosmeticsTutorial1, default, default);
                 SendEventDialog(player, Strings.Player.CosmeticsTutorial2, default, default);

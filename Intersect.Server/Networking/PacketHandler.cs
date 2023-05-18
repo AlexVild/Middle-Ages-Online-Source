@@ -4405,7 +4405,7 @@ namespace Intersect.Server.Networking
                 return;
             }
 
-            PacketSender.SendUnlockedCosmeticsPacket(player);
+            PacketSender.SendUnlockedCosmeticsPacket(player, true);
         }
 
         public void HandlePacket(Client client, CosmeticChangePacket packet)
