@@ -177,12 +177,24 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             // Add Cooldown time
             if (mSpell.CooldownDuration > 0)
             {
-                rows.AddKeyValueRow(Strings.SpellDescription.Cooldown, Strings.SpellDescription.Seconds.ToString(mSpell.CooldownDuration / 1000f), StatLabelColor, StatValueColor);
-            }
+                var cdr = (Globals.Me.GetBonusEffect(EffectType.CooldownReduction) / 100f);
 
-            if (!string.IsNullOrWhiteSpace(mSpell.SpellGroup))
-            {
-                rows.AddKeyValueRow(Strings.SpellDescription.SpellGroup, mSpell.SpellGroup, StatLabelColor, StatValueColor);
+                if (!mSpell.IgnoreCooldownReduction)
+                {
+                    var cooldown = (int)Math.Round(mSpell.CooldownDuration - mSpell.CooldownDuration * cdr);
+
+                    var valueColor = StatValueColor;
+                    if (cooldown != mSpell.CooldownDuration)
+                    {
+                        valueColor = WeaponInheritColor;
+                    }
+
+                    rows.AddKeyValueRow(Strings.SpellDescription.Cooldown, Strings.SpellDescription.Seconds.ToString(cooldown / 1000f), StatLabelColor, valueColor);
+                }
+                else
+                {
+                    rows.AddKeyValueRow(Strings.SpellDescription.Cooldown, Strings.SpellDescription.Seconds.ToString(mSpell.CooldownDuration / 1000f), StatLabelColor, StatValueColor);
+                }
             }
 
             // Ignores global cooldown if enabled?
@@ -195,6 +207,11 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             if (mSpell.IgnoreCooldownReduction)
             {
                 rows.AddKeyValueRow(Strings.SpellDescription.IgnoreCooldownReduction, string.Empty, CustomColors.ItemDesc.Notice, StatValueColor);
+            }
+
+            if (!string.IsNullOrWhiteSpace(mSpell.SpellGroup))
+            {
+                rows.AddKeyValueRow(Strings.SpellDescription.SpellGroup, mSpell.SpellGroup, StatLabelColor, StatValueColor);
             }
 
             // Resize the container.

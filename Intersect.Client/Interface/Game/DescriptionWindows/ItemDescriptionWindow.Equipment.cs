@@ -306,7 +306,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 comparedAttackSpeed = EquippedItemDesc?.AttackSpeedValue ?? 1000;
             }
             var itemAtkSpeed = mItem.AttackSpeedValue;
-            var currentSwiftness = Globals.Me.GetEquipmentBonusEffect(EffectType.Swiftness);
+            var currentSwiftness = Globals.Me.GetBonusEffect(EffectType.Swiftness);
             var itemSwiftness = ItemInstanceHelper.GetEffectBoost(mItemProperties, EffectType.Swiftness) + mItem.GetEffectPercentage(EffectType.Swiftness);
             if (currentSwiftness != 0 || itemSwiftness != 0)
             {

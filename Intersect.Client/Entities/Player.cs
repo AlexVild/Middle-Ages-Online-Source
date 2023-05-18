@@ -2311,7 +2311,7 @@ namespace Intersect.Client.Entities
                         var harvestBonusEffect = HarvestBonusHelper.GetBonusEffectForResource(Globals.Me.HarvestingResource);
                         if (harvestBonusEffect != EffectType.None)
                         {
-                            harvestBonusValue += GetEquipmentBonusEffect(harvestBonusEffect) * 0.01;
+                            harvestBonusValue += GetBonusEffect(harvestBonusEffect) * 0.01;
                         }
 
                         var harvestBonus = (int)Math.Floor(weapon.AttackSpeedValue * harvestBonusValue);
@@ -2328,7 +2328,7 @@ namespace Intersect.Client.Entities
                 }
             }
 
-            var swiftBonus = (100 - GetEquipmentBonusEffect(EffectType.Swiftness)) / 100f;
+            var swiftBonus = (100 - GetBonusEffect(EffectType.Swiftness)) / 100f;
             attackTime = (int) Math.Floor(attackTime * swiftBonus);
 
             if (StatusIsActive(StatusTypes.Swift))
@@ -3106,7 +3106,7 @@ namespace Intersect.Client.Entities
         /// <returns></returns>
         public int CalculateEffectBonus(int amount, EffectType effect, bool subtractive = false)
         {
-            int effectAmt = GetEquipmentBonusEffect(effect, 0);
+            int effectAmt = GetBonusEffect(effect, 0);
 
             if (effectAmt <= 0) return amount;
 
@@ -3129,7 +3129,7 @@ namespace Intersect.Client.Entities
         /// <param name="effect">The <see cref="EffectType"/> to retrieve the amount for.</param>
         /// <param name="startValue">The starting value to which we're adding our gear amount.</param>
         /// <returns></returns>
-        public int GetEquipmentBonusEffect(EffectType effect, int startValue = 0)
+        public int GetBonusEffect(EffectType effect, int startValue = 0)
         {
             var value = startValue;
 
