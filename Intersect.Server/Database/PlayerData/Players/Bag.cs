@@ -5,6 +5,7 @@ using System.Linq;
 
 using Intersect.GameObjects;
 using Intersect.Logging;
+using Intersect.Server.Networking;
 using Microsoft.EntityFrameworkCore;
 
 using Newtonsoft.Json;
@@ -192,6 +193,21 @@ namespace Intersect.Server.Database.PlayerData.Players
         public int FindSlotIndex(BagSlot slot)
         {
             return Slots.FindIndex(sl => sl.Id == slot.Id);
+        }
+
+        public bool TryTakeItemFromSlot(int slot, int amount)
+        {
+            if (slot < 0 || slot >= Slots.Count)
+            {
+                return false;
+            }
+
+            Slots[slot].Quantity -= amount;
+            if (Slots[slot].Quantity <= 0)
+            {
+                Slots[slot].Set(Item.None);
+            }
+            return true;
         }
 
     }

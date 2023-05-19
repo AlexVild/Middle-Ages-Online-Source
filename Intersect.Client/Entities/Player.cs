@@ -1085,13 +1085,6 @@ namespace Intersect.Client.Entities
             }
 
             var components = spell.CastingComponents;
-            foreach (var component in components)
-            {
-                if (FindItem(component.ItemId, component.Quantity) == -1)
-                {
-                    return false;
-                }
-            }
             
             return true;
         }

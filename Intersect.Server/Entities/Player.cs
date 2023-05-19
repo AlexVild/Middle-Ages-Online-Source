@@ -3808,6 +3808,52 @@ namespace Intersect.Server.Entities
                 }
             }
 
+            // Get any remaining items from bags
+            foreach (var slot in FindBagSlotsInItemSlots(itemId))
+            {
+                if(!slot.Key.TryGetBag(out var bag))
+                {
+                    continue;
+                }
+                var bagIdx = 0;
+                foreach (var bagSlot in slot.Value)
+                {
+                    var sendBagUpdate = false;
+                    // Do we still have items to take? If not leave the loop!
+                    if (toTake == 0)
+                    {
+                        break;
+                    }
+
+                    // is this stackable? if so try to take as many as we can each time.
+                    if (itemDescriptor.Stackable)
+                    {
+                        if (bagSlot.Quantity >= toTake)
+                        {
+                            sendBagUpdate = bag.TryTakeItemFromSlot(bagIdx, toTake) || sendBagUpdate;
+                            toTake = 0;
+                        }
+                        else // Take away the entire quantity of the item and lower our items that we still need to take!
+                        {
+                            toTake -= bagSlot.Quantity;
+                            sendBagUpdate = bag.TryTakeItemFromSlot(bagIdx, toTake) || sendBagUpdate;
+                        }
+                    }
+                    else // Not stackable, so just take one item away.
+                    {
+                        toTake -= 1;
+                        sendBagUpdate = bag.TryTakeItemFromSlot(bagIdx, toTake) || sendBagUpdate;
+                    }
+
+                    if (sendBagUpdate && InBag != null && InBag.Id == bag.Id)
+                    {
+                        PacketSender.SendBagUpdate(this, bagIdx, bagSlot);
+                    }
+
+                    bagIdx++;
+                }
+            }
+
             // Update quest progress and we're done!
             UpdateGatherItemQuests(itemId);
 
@@ -3862,6 +3908,16 @@ namespace Intersect.Server.Entities
                 {
                     itemCount = item.Descriptor.Stackable ? itemCount += item.Quantity : itemCount += 1;
                 }
+                else if (item.TryGetBag(out var bag))
+                {
+                    foreach (var slot in bag.Slots)
+                    {
+                        if (slot.ItemId == itemId)
+                        {
+                            itemCount = slot.Descriptor.Stackable ? itemCount += slot.Quantity : itemCount += 1;
+                        }
+                    }
+                }
             }
 
             // TODO: Stop using Int32 for item quantities
@@ -3912,6 +3968,35 @@ namespace Intersect.Server.Entities
                 {
                     slots.Add(Items[i]);
                 }
+            }
+
+            return slots;
+        }
+
+        public List<KeyValuePair<InventorySlot, List<BagSlot>>> FindBagSlotsInItemSlots(Guid itemId, int quantity = 1)
+        {
+            var slots = new List<KeyValuePair<InventorySlot, List<BagSlot>>>();
+            if (Items == null)
+            {
+                return slots;
+            }
+
+            for (var i = 0; i < Options.MaxInvItems; i++)
+            {
+                var item = Items[i];
+                if (!item.TryGetBag(out var bag))
+                {
+                    continue;
+                }
+
+                var bagItems = bag.FindBagItemSlots(itemId, quantity);
+
+                if (bagItems.Count == 0)
+                {
+                    continue;
+                }
+
+                slots.Add(new KeyValuePair<InventorySlot, List<BagSlot>>(item, bagItems));
             }
 
             return slots;
@@ -5577,6 +5662,11 @@ namespace Intersect.Server.Entities
         public bool KnowsSpell(Guid spellId)
         {
             var descriptor = SpellBase.Get(spellId);
+
+            if (descriptor == null)
+            {
+                return false;
+            }
 
             if (descriptor.SpellType == SpellTypes.Passive)
             {
@@ -9090,7 +9180,7 @@ namespace Intersect.Server.Entities
             List<string> missingComponents = new List<string>();
             foreach (var component in castingComponents)
             {
-                if (FindInventoryItemSlot(component.ItemId, component.Quantity) == null)
+                if (HasEnoughOfItem(component.ItemId, component.Quantity))
                 {
                     missingComponents.Add(ItemBase.GetName(component.ItemId));
                 }
@@ -9139,9 +9229,14 @@ namespace Intersect.Server.Entities
             return true;
         }
 
+        public bool HasEnoughOfItem(Guid itemId, int quantity)
+        {
+            return FindInventoryItemSlot(itemId, quantity) == null && FindBagSlotsInItemSlots(itemId, quantity).Count == 0;
+        }
+
         public bool HasProjectileAmmo(ProjectileBase projectile)
         {
-            if (FindInventoryItemSlot(projectile.AmmoItemId, projectile.AmmoRequired) == default)
+            if (HasEnoughOfItem(projectile.AmmoItemId, projectile.AmmoRequired))
             {
                 PacketSender.SendChatMsg(
                     this, Strings.Items.notenough.ToString(ItemBase.GetName(projectile.AmmoItemId)),

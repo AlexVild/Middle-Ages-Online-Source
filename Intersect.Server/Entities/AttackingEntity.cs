@@ -610,7 +610,7 @@ namespace Intersect.Server.Entities
             }
 
             var manaRegenRate = GetVitalRegenRate((int)Vitals.Mana);
-            var regenValue = (int)Math.Max(1, maxMana * manaRegenRate) *
+            var regenValue = (int)Math.Max(1, Math.Ceiling(maxMana * manaRegenRate)) *
                                  Math.Abs(Math.Sign(manaRegenRate));
 
             AddVital(Vitals.Mana, regenValue);

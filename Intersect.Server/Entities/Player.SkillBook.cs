@@ -221,6 +221,11 @@ namespace Intersect.Server.Entities
             }
 
             var descriptor = SpellBase.Get(spellId);
+            if (descriptor == null)
+            {
+                skill.Equipped = false;
+                return true;
+            }
             if (descriptor.SpellType == Enums.SpellTypes.Passive)
             {
                 DeactivatePassive(spellId);

@@ -550,23 +550,16 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
-            if (projectile.Ammo != default)
+            if (!TryConsumeProjectileAmmo(projectile))
             {
-                var itemSlot = FindInventoryItemSlot(
-                    projectile.AmmoItemId, projectile.AmmoRequired
-                );
-
-                if (itemSlot == null || !TryTakeItem(itemSlot, projectile.AmmoRequired))
-                {
-                    PacketSender.SendChatMsg(
-                        this,
-                        Strings.Items.notenough.ToString(ItemBase.GetName(projectile.AmmoItemId)),
-                        ChatMessageType.Inventory,
-                        CustomColors.General.GeneralWarning
-                    );
-                    PacketSender.SendPlaySound(this, Options.UIDenySound);
-                    return false;
-                }
+                PacketSender.SendChatMsg(
+                           this,
+                           Strings.Items.notenough.ToString(ItemBase.GetName(projectile.AmmoItemId)),
+                           ChatMessageType.Inventory,
+                           CustomColors.General.GeneralWarning
+                       );
+                PacketSender.SendPlaySound(this, Options.UIDenySound);
+                return false;
             }
 
             if (MapController.TryGetInstanceFromMap(MapId, MapInstanceId, out var mapInstance))
