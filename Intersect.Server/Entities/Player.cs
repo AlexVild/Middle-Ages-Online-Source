@@ -3820,7 +3820,6 @@ namespace Intersect.Server.Entities
                 {
                     continue;
                 }
-                var bagIdx = 0;
                 foreach (var bagSlot in slot.Value)
                 {
                     var sendBagUpdate = false;
@@ -3835,27 +3834,25 @@ namespace Intersect.Server.Entities
                     {
                         if (bagSlot.Quantity >= toTake)
                         {
-                            sendBagUpdate = bag.TryTakeItemFromSlot(bagIdx, toTake) || sendBagUpdate;
+                            sendBagUpdate = bag.TryTakeItemFromSlot(bagSlot.Slot, toTake) || sendBagUpdate;
                             toTake = 0;
                         }
                         else // Take away the entire quantity of the item and lower our items that we still need to take!
                         {
                             toTake -= bagSlot.Quantity;
-                            sendBagUpdate = bag.TryTakeItemFromSlot(bagIdx, toTake) || sendBagUpdate;
+                            sendBagUpdate = bag.TryTakeItemFromSlot(bagSlot.Slot, toTake) || sendBagUpdate;
                         }
                     }
                     else // Not stackable, so just take one item away.
                     {
                         toTake -= 1;
-                        sendBagUpdate = bag.TryTakeItemFromSlot(bagIdx, toTake) || sendBagUpdate;
+                        sendBagUpdate = bag.TryTakeItemFromSlot(bagSlot.Slot, toTake) || sendBagUpdate;
                     }
 
                     if (sendBagUpdate && InBag != null && InBag.Id == bag.Id)
                     {
-                        PacketSender.SendBagUpdate(this, bagIdx, bagSlot);
+                        PacketSender.SendBagUpdate(this, bagSlot.Slot, bagSlot);
                     }
-
-                    bagIdx++;
                 }
             }
 

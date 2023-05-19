@@ -1055,12 +1055,13 @@ namespace Intersect.Client.Entities
                         }
                     }
                 }
-
+                
+                /* Done on the server now
                 if (!HasCastingComponentsFor(spellBase))
                 {
                     SendAlert(Strings.Spells.norunes, Strings.Combat.needsrunes);
                     return;
-                }
+                }*/
 
                 var timeWindow = GetCastStart() + Options.Instance.CombatOpts.CancelCastLeeway;
                 if (IsCasting && SpellCast == spell.SpellId 
@@ -1084,6 +1085,7 @@ namespace Intersect.Client.Entities
                 return true;
             }
 
+            // Got rid of this -- now done on the server
             var components = spell.CastingComponents;
             
             return true;
