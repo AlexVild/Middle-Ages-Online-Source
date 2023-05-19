@@ -3737,6 +3737,11 @@ namespace Intersect.Server.Entities
         /// <returns>Whether the item was taken away successfully or not.</returns>
         public bool TryTakeItem(Guid itemId, int amount, ItemHandling handler = ItemHandling.Normal, bool sendUpdate = true)
         {
+            if (itemId == Guid.Empty)
+            {
+                return true;
+            }
+
             if (Items == null)
             {
                 return false;
@@ -3895,6 +3900,11 @@ namespace Intersect.Server.Entities
         /// <returns>The amount of the requested item the player has on them.</returns>
         public int FindInventoryItemQuantity(Guid itemId)
         {
+            if (itemId == Guid.Empty)
+            {
+                return 0;
+            }
+
             if (Items == null)
             {
                 return 0;
@@ -9180,7 +9190,7 @@ namespace Intersect.Server.Entities
             List<string> missingComponents = new List<string>();
             foreach (var component in castingComponents)
             {
-                if (HasEnoughOfItem(component.ItemId, component.Quantity))
+                if (ItemNotInInventory(component.ItemId, component.Quantity))
                 {
                     missingComponents.Add(ItemBase.GetName(component.ItemId));
                 }
@@ -9229,14 +9239,18 @@ namespace Intersect.Server.Entities
             return true;
         }
 
-        public bool HasEnoughOfItem(Guid itemId, int quantity)
+        public bool ItemNotInInventory(Guid itemId, int quantity)
         {
+            if (itemId == Guid.Empty)
+            {
+                return false;
+            }
             return FindInventoryItemSlot(itemId, quantity) == null && FindBagSlotsInItemSlots(itemId, quantity).Count == 0;
         }
 
         public bool HasProjectileAmmo(ProjectileBase projectile)
         {
-            if (HasEnoughOfItem(projectile.AmmoItemId, projectile.AmmoRequired))
+            if (ItemNotInInventory(projectile.AmmoItemId, projectile.AmmoRequired))
             {
                 PacketSender.SendChatMsg(
                     this, Strings.Items.notenough.ToString(ItemBase.GetName(projectile.AmmoItemId)),
@@ -9251,6 +9265,11 @@ namespace Intersect.Server.Entities
 
         public bool TryConsumeProjectileAmmo(ProjectileBase projectile)
         {
+            if (projectile.AmmoItemId == Guid.Empty || projectile.AmmoRequired <= 0)
+            {
+                return true;
+            }
+
             // Don't take if don't have
             if (!HasProjectileAmmo(projectile))
             {
