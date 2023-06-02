@@ -206,6 +206,7 @@ namespace Intersect.Server.Entities
 
                     // If we've just unlocked some bestiary item, send a KC update, which will force a bestiary update on the client
                     var bestiaryThresholds = Base.BestiaryUnlocks.Values.Where(val => val > 0).ToList();
+                    bestiaryThresholds.Sort();
                     if (!Base.NotInBestiary && bestiaryThresholds.Contains((int)recordKilled))
                     {
                         PacketSender.SendKillCount(playerKiller, Base.Id);
