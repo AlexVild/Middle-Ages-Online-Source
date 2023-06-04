@@ -1263,7 +1263,7 @@ namespace Intersect.Client.Entities
                                 hideExtra = helmet.HideExtra;
                                 shortHair = helmet.ShortHair;
 
-                                if (decorSlot == Options.HairSlot && hideHair
+                                if ((decorSlot == Options.HairSlot && hideHair && !shortHair)
                                     || decorSlot == Options.BeardSlot && hideBeard
                                     || decorSlot == Options.ExtraSlot && hideExtra)
                                 {
@@ -1276,11 +1276,11 @@ namespace Intersect.Client.Entities
                                 // Do mappings for short hair if needed
                                 if (decorSlot == Options.HairSlot && shortHair && Options.Instance.PlayerOpts.ShortHairMappings.TryGetValue(MyDecors[decorSlot], out var hairText))
                                 {
-                                    DrawEquipment(hairText, renderColor.A, dir, GameContentManager.TextureType.Decor);
+                                    DrawEquipment(hairText, renderColor.A, dir, TextureType.Decor);
                                 }
                                 else
                                 {
-                                    DrawEquipment(MyDecors[decorSlot], renderColor.A, dir, GameContentManager.TextureType.Decor);
+                                    DrawEquipment(MyDecors[decorSlot], renderColor.A, dir, TextureType.Decor);
                                 }
                             }
                         }

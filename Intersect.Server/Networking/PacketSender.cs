@@ -111,11 +111,6 @@ namespace Intersect.Server.Networking
                 SendEntityDataTo(client.Entity, player);
                 SendMapsExploredPacketTo(player);
 
-                if (player.PlayerDead)
-                {
-                    //player.AcceptRespawn();
-                }
-
                 //Search for login activated events and run them
                 player.StartCommonEventsWithTrigger(CommonEventTrigger.Login);
                 if (player.Map != null && player.Map.LoginEvent != default)
@@ -125,6 +120,8 @@ namespace Intersect.Server.Networking
 
                 // Make sure they can tell which permabuffs they've used before
                 SendUsedPermabuffs(player);
+                // And same for enhancements
+                SendKnownEnhancementUpdate(player);
             }
         }
 

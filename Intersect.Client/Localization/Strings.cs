@@ -1082,6 +1082,9 @@ namespace Intersect.Client.Localization
             public static LocalizedString PermabuffUsed = @"Already used!";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString EnhancementKnown = @"Already learned!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString PermabuffUnused = @"Can be used once";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]

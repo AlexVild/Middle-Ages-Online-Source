@@ -543,6 +543,11 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
 
             rows.AddKeyValueRow(Strings.ItemDescription.EnhancementDesc, string.Empty);
 
+            if (Globals.Me.KnownEnhancements.Contains(mItem.EnhancementId))
+            {
+                rows.AddKeyValueRow(Strings.ItemDescription.EnhancementKnown, null, CustomColors.ItemDesc.Notice, Color.White);
+            }
+
             rows.SizeToChildren(true, true);
         }
 
