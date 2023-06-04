@@ -608,6 +608,8 @@ namespace Intersect.Editor.Forms.Editors
                 lblDuration.Show();
                 nudDuration.Show();
                 nudDuration.Value = mEditorItem.Combat.TrapDuration;
+                nudHitRadius.Show();
+                lblHitRadius.Show();
                 lblTrapAnimation.Show();
                 cmbTrapAnimation.Show();
                 cmbTrapAnimation.SelectedIndex = AnimationBase.ListIndex(mEditorItem.TrapAnimationId) + 1;

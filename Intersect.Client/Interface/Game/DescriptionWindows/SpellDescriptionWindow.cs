@@ -381,6 +381,11 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                     rows.AddKeyValueRow("Pierces Targets", string.Empty, StatLabelColor, Color.White);
                 }
 
+                if (spell.Combat.HitRadius > 0)
+                {
+                    rows.AddKeyValueRow("AoE Radius", spell.Combat.HitRadius.ToString(), StatLabelColor, StatValueColor);
+                }
+
                 // Mana Damage - always "True"
                 var manaDamage = (int)Math.Round(spell.Combat.VitalDiff[(int)Vitals.Mana] * (spell.Combat.Scaling / 100f));
                 if (manaDamage > 0)

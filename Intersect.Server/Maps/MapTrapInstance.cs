@@ -60,15 +60,20 @@ namespace Intersect.Server.Classes.Maps
                         }
                     }
 
-                    if (entity is EventPageInstance || entity is Resource)
-                    {
-                        return;
-                    }
-
-                    Owner.SpellAttack(entity, ParentSpell, (sbyte) Directions.Up, null);
-                    Triggered = true;
+                    Detonate(entity);
                 }
             }
+        }
+
+        protected void Detonate(Entity target)
+        {
+            if (target == null || target is EventPageInstance || target is Resource)
+            {
+                return;
+            }
+
+            Owner.HandleAoESpell(ParentSpell.Id, ParentSpell.Combat.HitRadius, target.MapId, target.X, target.Y, null);
+            Triggered = true;
         }
 
         public void Update()
