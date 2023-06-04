@@ -13,6 +13,10 @@ namespace Intersect.Utilities
     {
         public static int[] GetStatBoosts(ItemProperties itemProperties)
         {
+            if (itemProperties == null)
+            {
+                return new int[(int)Stats.StatCount];
+            }
             return itemProperties.StatModifiers.Select((modVal, idx) =>
             {
                 if (idx < 0 || idx >= itemProperties.StatModifiers.Length)

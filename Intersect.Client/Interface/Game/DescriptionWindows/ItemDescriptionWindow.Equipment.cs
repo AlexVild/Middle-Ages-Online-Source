@@ -10,6 +10,7 @@ using Intersect.Client.Interface.Game.DescriptionWindows.Components;
 using Intersect.Client.Utilities;
 using System.Collections.Generic;
 using Intersect.Client.Interface.Game.Character.Panels;
+using Intersect.Network.Packets.Server;
 
 namespace Intersect.Client.Interface.Game.DescriptionWindows
 {
@@ -141,52 +142,62 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             
         }
 
+        private void ApplyStats(ItemBase descriptor, ItemProperties itemProperties, int[] baseStats, ref int[] stats)
+        {
+            Array.Copy(baseStats, stats, (int)Stats.StatCount);
+            if (descriptor == null || itemProperties == null)
+            {
+                return;
+            }
+
+            var statIdx = 0;
+            var enhancementBoosts = ItemInstanceHelper.GetStatBoosts(itemProperties);
+            foreach (var stat in stats)
+            {
+                var percentBoost = 0;
+                if (descriptor.PercentageStatsGiven[statIdx] != 0)
+                {
+                    percentBoost = (int)Math.Ceiling(stat * (descriptor.PercentageStatsGiven[statIdx] / 100f));
+                }
+                stats[statIdx] += descriptor.StatsGiven[statIdx] + percentBoost + enhancementBoosts[statIdx];
+                statIdx++;
+            }
+        }
+
         private void SetupDamageEstimations(RowContainerComponent estimationRows)
         {
             var emptyStats = new int[(int)Stats.StatCount];
 
-            var itemEnhancedStats = new int[(int)Stats.StatCount];
-            var itemBoosts = ItemInstanceHelper.GetStatBoosts(mItemProperties);
-            Array.Copy(Globals.Me.TrueStats, itemEnhancedStats, (int)Stats.StatCount);
+            var currentItemStats = new int[(int)Stats.StatCount];
+            var newItemStats = new int[(int)Stats.StatCount];
+            var unarmedStats = new int[(int)Stats.StatCount];
+            Array.Copy(Globals.Me.Stat, unarmedStats, (int)Stats.StatCount);
             var statIdx = 0;
-            foreach (var passiveId in Globals.Me.ActivePassives)
+
+            // Calculate stats without a weapon equipped
+            if (EquippedItem != default)
             {
-                var passive = SpellBase.Get(passiveId);
-                if (passive == default)
+                var statBoosts = ItemInstanceHelper.GetStatBoosts(EquippedItem.ItemProperties);
+                foreach (var stat in unarmedStats)
                 {
-                    continue;
-                }
-
-                statIdx = 0;
-                foreach (var stat in passive.Combat.StatDiff)
-                {
-                    itemEnhancedStats[statIdx] += stat;
-                    statIdx++;
-                }
-
-                statIdx = 0;
-                foreach (var stat in passive.Combat.PercentageStatDiff)
-                {
-                    itemEnhancedStats[statIdx] += (int)Math.Ceiling(Globals.Me.TrueStats[statIdx] * (stat / 100f));
+                    unarmedStats[statIdx] -= EquippedItemDesc.StatsGiven[statIdx] + statBoosts[statIdx];
                     statIdx++;
                 }
             }
 
-            // reset iterator
-            statIdx = 0;
-            foreach (var stat in itemEnhancedStats)
-            {
-                itemEnhancedStats[statIdx] = (int)((stat + itemBoosts[statIdx] + mItem.StatsGiven[statIdx]) * (1 + (mItem.PercentageStatsGiven[statIdx] / 100f)));
-                statIdx++;
-            }
+            // Now, apply the comparing weapon's stats to the unarmed stats so we can compare the two
+            ApplyStats(EquippedItemDesc, EquippedItem?.ItemProperties, unarmedStats, ref currentItemStats);
+            ApplyStats(mItem, mItemProperties, unarmedStats, ref newItemStats);
 
-            CombatUtilities.CalculateDamage(mItem.AttackTypes, 1.0, 100, itemEnhancedStats, emptyStats, out var maxHit);
-            CombatUtilities.CalculateDamage(EquippedItem?.Base?.AttackTypes ?? new List<AttackTypes>(), 1.0, 100, Globals.Me.Stat, emptyStats, out var compareMaxHit);
+            CombatUtilities.CalculateDamage(mItem.AttackTypes, 1.0, 100, newItemStats, emptyStats, out var maxHit);
+            CombatUtilities.CalculateDamage(EquippedItem?.Base?.AttackTypes ?? new List<AttackTypes>(), 1.0, 100, currentItemStats, emptyStats, out var compareMaxHit);
 
             var hits = 1;
+            var piercesTargets = false;
             if (mItem.Projectile != default)
             {
                 hits = mItem.Projectile.Quantity;
+                piercesTargets = mItem.Projectile.PierceTarget;
             }
 
             var atkSpeeds = GetAttackSpeedComparison();
@@ -199,7 +210,12 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
 
             if (hits > 1)
             {
-                estimationRows.AddKeyValueRow("Multi-Attack", hits.ToString(), StatLabelColor, StatValueColor);
+                estimationRows.AddKeyValueRow("Multi-Attack", hits.ToString(), CustomColors.ItemDesc.Special, StatValueColor);
+            }
+
+            if (piercesTargets)
+            {
+                estimationRows.AddKeyValueRow("Pierces Targets", string.Empty, CustomColors.ItemDesc.Special, StatValueColor);
             }
         }
 
