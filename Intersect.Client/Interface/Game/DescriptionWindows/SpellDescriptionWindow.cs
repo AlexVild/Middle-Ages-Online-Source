@@ -64,7 +64,16 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             switch (mSpell.SpellType)
             {
                 case SpellTypes.CombatSpell:
-                    SetupCombatInfo();
+                    if (mSpell.Combat?.Projectile?.Spell != default)
+                    {
+                        SetupCombatInfo(title: "Impact Info");
+                        SetupCombatInfo(mSpell.Combat.Projectile.Spell, "AoE Info");
+                    }
+                    else
+                    {
+                        SetupCombatInfo();
+                    }
+
                     // Add weapon type disclaimer
                     if (!IsPassive && mSpell.WeaponSpell)
                     {
@@ -228,7 +237,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             description.AddText(Strings.ItemDescription.Description.ToString(mSpell.Description), Color.White);
         }
 
-        protected void SetupCombatInfo(SpellBase spellOverride = null)
+        protected void SetupCombatInfo(SpellBase spellOverride = null, string title = "Combat Info")
         {
             var spell = mSpell;
             if (spellOverride != null)
@@ -238,6 +247,12 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             if (spell == null)
             {
                 return;
+            }
+
+            SpellBase projectileSpell = null;
+            if (spell.Combat.TargetType == SpellTargetTypes.Projectile)
+            {
+                projectileSpell = spell.Combat.Projectile.Spell;
             }
 
             // Add a divider.
@@ -254,7 +269,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
 
             if (!IsPassive)
             {
-                rows.AddKeyValueRow("   Combat Info", string.Empty, StatValueColor, StatValueColor);
+                rows.AddKeyValueRow($"   {title}", string.Empty, StatValueColor, StatValueColor);
 
                 var damageTypeIdx = 0;
 
@@ -282,10 +297,12 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 }
 
                 var projectileTimes = 1;
+                var projectilePierce = false;
                 var projectile = spell.Combat.Projectile;
                 if (spell.Combat.Projectile != default)
                 {
                     projectileTimes = projectile.Quantity;
+                    projectilePierce = projectile.PierceTarget;
                 }
 
                 // Health damage if TrueDamage
@@ -352,6 +369,11 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                             isDamage = true;
                         }
                     }
+                }
+
+                if (projectilePierce)
+                {
+                    rows.AddKeyValueRow("Pierces Targets", string.Empty, StatLabelColor, Color.White);
                 }
 
                 // Mana Damage - always "True"

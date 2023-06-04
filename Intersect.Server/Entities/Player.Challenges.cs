@@ -428,6 +428,10 @@ namespace Intersect.Server.Entities
                 }
 
                 challenge.Complete = true;
+                if (challenge.Challenge?.RequiresContract ?? false)
+                {
+                    TryVoidCurrentContract(out _, true);
+                }
             }
         }
 
