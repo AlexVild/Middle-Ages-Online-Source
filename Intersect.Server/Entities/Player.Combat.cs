@@ -277,7 +277,6 @@ namespace Intersect.Server.Entities
                 return;
             }
 
-            scaling += CastingWeapon.Scaling;
             attackTypes.AddRange(CastingWeapon.AttackTypes);
             critChance += CastingWeapon.CritChance;
             critMultiplier += CastingWeapon.CritMultiplier;
