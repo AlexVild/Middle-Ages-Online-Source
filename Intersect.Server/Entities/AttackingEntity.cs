@@ -364,6 +364,7 @@ namespace Intersect.Server.Entities
             int dmg,
             int dmgScaling,
             double critMultiplier,
+            bool vampire,
             out int damage)
         {
             damage = 0;
@@ -373,7 +374,14 @@ namespace Intersect.Server.Entities
             }
 
             damage = dmg;
-            DealTrueDamageTo(enemy, dmgScaling, dmg, true, false);
+            var damageDealt = DealTrueDamageTo(enemy, dmgScaling, dmg, true, false);
+
+            // Manasteal
+            if (vampire)
+            {
+                HealVital(Vitals.Mana, damageDealt);
+                PacketSender.SendCombatNumber(CombatNumberType.HealMana, this, damageDealt);
+            }
 
             return true;
         }
@@ -404,7 +412,7 @@ namespace Intersect.Server.Entities
             var manaDamage = 0;
             if (spell != null && spell.Combat != null && spell.Combat.VitalDiff[(int)Vitals.Mana] != 0)
             {
-                _ = TryDealManaDamageTo(enemy, spell.Combat.VitalDiff[(int)Vitals.Mana], dmgScaling, critMultiplier, out manaDamage);
+                _ = TryDealManaDamageTo(enemy, spell.Combat.VitalDiff[(int)Vitals.Mana], dmgScaling, critMultiplier, spell?.Combat?.ManaSteal ?? false, out manaDamage);
             }
 
             // If we have a true damage override in our attack somewhere...

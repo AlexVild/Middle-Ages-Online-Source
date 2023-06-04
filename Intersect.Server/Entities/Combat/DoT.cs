@@ -105,6 +105,7 @@ namespace Intersect.Server.Entities.Combat
 
             SendDoTAnimation(SpellBase, Target, (sbyte)Directions.Up);
 
+            var damageDealt = 0;
             if (Attacker is Player playerAttacker)
             {
                 if (Target is Npc npc && !npc.CanPlayerAttack(playerAttacker))
@@ -114,11 +115,16 @@ namespace Intersect.Server.Entities.Combat
                 }
 
                 playerAttacker.TryGetEquippedItem(Options.WeaponIndex, out var weapon);
-                Attacker.TryDealDamageTo(Target, attackTypes, scaling, 1.0, weapon?.Descriptor, SpellBase, true, 1, out _);
+                Attacker.TryDealDamageTo(Target, attackTypes, scaling, 1.0, weapon?.Descriptor, SpellBase, true, 1, out damageDealt);
             }
             else
             {
-                Attacker.TryDealDamageTo(Target, attackTypes, scaling, 1.0, null, SpellBase, true, 1, out _);
+                Attacker.TryDealDamageTo(Target, attackTypes, scaling, 1.0, null, SpellBase, true, 1, out damageDealt);
+            }
+
+            if (SpellBase.Combat?.LifeSteal ?? false && Math.Abs(damageDealt) > 0)
+            {
+                Attacker.SpellLifesteal(damageDealt);
             }
         }
 

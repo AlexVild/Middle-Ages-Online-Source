@@ -447,6 +447,10 @@ namespace Intersect.Editor.Forms.Editors
                 nudBuffDuration.Value = mEditorItem.Combat.Duration;
                 nudTick.Value = mEditorItem.Combat.HotDotInterval;
                 cmbExtraEffect.SelectedIndex = (int) mEditorItem.Combat.Effect;
+
+                chkLifesteal.Checked = mEditorItem.Combat.LifeSteal;
+                chkManaSteal.Checked = mEditorItem.Combat.ManaSteal;
+
                 cmbExtraEffect_SelectedIndexChanged(null, null);
 
                 PopulateDamageTypes();
@@ -1677,6 +1681,16 @@ namespace Intersect.Editor.Forms.Editors
         private void chkPersistSwap_CheckedChanged(object sender, EventArgs e)
         {
             mEditorItem.Combat.PersistWeaponSwap = chkPersistSwap.Checked;
+        }
+
+        private void chkLifesteal_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.LifeSteal = chkLifesteal.Checked;
+        }
+
+        private void chkManaSteal_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Combat.ManaSteal = chkManaSteal.Checked;
         }
     }
 }

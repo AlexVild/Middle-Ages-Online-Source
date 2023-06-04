@@ -1236,6 +1236,10 @@
     <Compile Include="Migrations\Game\20230513130907_NoHealNpcMigration.designer.cs">
       <DependentUpon>20230513130907_NoHealNpcMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20230604160033_SpellStealMigration.cs" />
+    <Compile Include="Migrations\Game\20230604160033_SpellStealMigration.designer.cs">
+      <DependentUpon>20230604160033_SpellStealMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

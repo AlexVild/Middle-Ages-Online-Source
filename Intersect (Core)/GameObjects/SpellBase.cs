@@ -301,6 +301,9 @@ namespace Intersect.GameObjects
         [Column("Trap")]
         public int TrapDuration { get; set; }
 
+        public bool ManaSteal { get; set; }
+        public bool LifeSteal { get; set; }
+
     }
 
     [Owned]

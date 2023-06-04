@@ -310,7 +310,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 {
                     if (projectileTimes > 1)
                     {
-                        var healthDamage = spell.Combat.VitalDiff[(int)Vitals.Health];
+                        var healthDamage = (int)Math.Round(spell.Combat.VitalDiff[(int)Vitals.Health] * (spell.Combat.Scaling / 100f));
                         if (healthDamage < 0)
                         {
                             rows.AddKeyValueRow(Strings.SpellDescription.VitalRecovery[(int)Vitals.Health], $"{Math.Abs(healthDamage)} x {projectileTimes}", StatLabelColor, StatValueColor);
@@ -371,13 +371,18 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                     }
                 }
 
+                if (mSpell.Combat.LifeSteal)
+                {
+                    rows.AddKeyValueRow("Lifesteal", string.Empty, CustomColors.ItemDesc.Special, StatValueColor);
+                }
+
                 if (projectilePierce)
                 {
                     rows.AddKeyValueRow("Pierces Targets", string.Empty, StatLabelColor, Color.White);
                 }
 
                 // Mana Damage - always "True"
-                var manaDamage = spell.Combat.VitalDiff[(int)Vitals.Mana];
+                var manaDamage = (int)Math.Round(spell.Combat.VitalDiff[(int)Vitals.Mana] * (spell.Combat.Scaling / 100f));
                 if (manaDamage > 0)
                 {
                     isDamage = true;
@@ -387,6 +392,11 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 {
                     isHeal = true;
                     rows.AddKeyValueRow(Strings.SpellDescription.VitalRecovery[(int)Vitals.Mana], Math.Abs(manaDamage).ToString(), StatLabelColor, StatValueColor);
+                }
+                
+                if (mSpell.Combat.ManaSteal)
+                {
+                    rows.AddKeyValueRow("Manasteal", string.Empty, CustomColors.ItemDesc.Special, StatValueColor);
                 }
 
                 // Crit Chance

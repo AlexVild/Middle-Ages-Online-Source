@@ -431,7 +431,18 @@ namespace Intersect.Server.Entities
                 return !spell.Combat.IsDamaging;
             }
 
+            if (spell.Combat.LifeSteal)
+            {
+                SpellLifesteal(damage);
+            }
+
             return true;
+        }
+
+        public void SpellLifesteal(int amount)
+        {
+            HealVital(Vitals.Health, amount);
+            PacketSender.SendCombatNumber(CombatNumberType.HealHealth, this, amount);
         }
 
         /// <summary>

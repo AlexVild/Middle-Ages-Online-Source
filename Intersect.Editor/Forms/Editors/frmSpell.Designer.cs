@@ -223,6 +223,8 @@ namespace Intersect.Editor.Forms.Editors
             this.nudBuffDuration = new DarkUI.Controls.DarkNumericUpDown();
             this.lblBuffDuration = new System.Windows.Forms.Label();
             this.grpDamage = new DarkUI.Controls.DarkGroupBox();
+            this.chkLifesteal = new DarkUI.Controls.DarkCheckBox();
+            this.chkManaSteal = new DarkUI.Controls.DarkCheckBox();
             this.nudCritMultiplier = new DarkUI.Controls.DarkNumericUpDown();
             this.lblCritMultiplier = new System.Windows.Forms.Label();
             this.nudCritChance = new DarkUI.Controls.DarkNumericUpDown();
@@ -3238,6 +3240,8 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpDamage.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpDamage.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpDamage.Controls.Add(this.chkLifesteal);
+            this.grpDamage.Controls.Add(this.chkManaSteal);
             this.grpDamage.Controls.Add(this.nudCritMultiplier);
             this.grpDamage.Controls.Add(this.lblCritMultiplier);
             this.grpDamage.Controls.Add(this.nudCritChance);
@@ -3258,6 +3262,26 @@ namespace Intersect.Editor.Forms.Editors
             this.grpDamage.TabIndex = 49;
             this.grpDamage.TabStop = false;
             this.grpDamage.Text = "Damage";
+            // 
+            // chkLifesteal
+            // 
+            this.chkLifesteal.AutoSize = true;
+            this.chkLifesteal.Location = new System.Drawing.Point(10, 286);
+            this.chkLifesteal.Name = "chkLifesteal";
+            this.chkLifesteal.Size = new System.Drawing.Size(65, 17);
+            this.chkLifesteal.TabIndex = 66;
+            this.chkLifesteal.Text = "Lifesteal";
+            this.chkLifesteal.CheckedChanged += new System.EventHandler(this.chkLifesteal_CheckedChanged);
+            // 
+            // chkManaSteal
+            // 
+            this.chkManaSteal.AutoSize = true;
+            this.chkManaSteal.Location = new System.Drawing.Point(86, 286);
+            this.chkManaSteal.Name = "chkManaSteal";
+            this.chkManaSteal.Size = new System.Drawing.Size(75, 17);
+            this.chkManaSteal.TabIndex = 65;
+            this.chkManaSteal.Text = "Manasteal";
+            this.chkManaSteal.CheckedChanged += new System.EventHandler(this.chkManaSteal_CheckedChanged);
             // 
             // nudCritMultiplier
             // 
@@ -4191,5 +4215,7 @@ namespace Intersect.Editor.Forms.Editors
         private System.Windows.Forms.Label lblMaxHit;
         private DarkCheckBox chkPersistMissedAttack;
         private DarkCheckBox chkPersistSwap;
+        private DarkCheckBox chkManaSteal;
+        private DarkCheckBox chkLifesteal;
     }
 }
