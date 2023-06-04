@@ -124,12 +124,21 @@ namespace Intersect.Server.Entities.Combat
 
         private void SendDoTAnimation(SpellBase spell, Entity target, sbyte dir)
         {
-            if (target == null)
+            if (target == null || spell == null)
             {
                 return;
             }
 
-            var animation = spell?.OverTimeAnimationId ?? spell?.HitAnimationId ?? Guid.Empty;
+            var animation = Guid.Empty;
+            if (spell.OverTimeAnimationId != Guid.Empty)
+            {
+                animation = spell.OverTimeAnimationId;
+            }
+            else
+            {
+                animation = spell.HitAnimationId;
+            }
+
             var targetType = (target.IsDead() || target.IsDisposed) ? -1 : 1;
 
             PacketSender.SendAnimationToProximity(
