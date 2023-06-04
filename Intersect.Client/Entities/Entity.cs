@@ -2833,7 +2833,7 @@ namespace Intersect.Client.Entities
 
             // Get our information
             var projectile = spell.Combat.Projectile;
-            var range = projectile.Range;
+            var range = projectile.Range + 1;
 
             // Get the possible bounds for the projectile spawner
             int left = spawnX - (ProjectileBase.SPAWN_LOCATIONS_WIDTH / 2);
@@ -2956,10 +2956,10 @@ namespace Intersect.Client.Entities
                                 DrawProjectileTile(map.Id, right, y, ref tilesDrawn, friendly, combatFriendly);
                                 break;
                             case 2:
-                                DrawProjectileTile(map.Id, x, up, ref tilesDrawn, friendly, combatFriendly);
+                                DrawProjectileTile(map.Id, x, down, ref tilesDrawn, friendly, combatFriendly);
                                 break;
                             case 3:
-                                DrawProjectileTile(map.Id, x, down, ref tilesDrawn, friendly, combatFriendly);
+                                DrawProjectileTile(map.Id, x, up, ref tilesDrawn, friendly, combatFriendly);
                                 break;
                         }
                         break;
@@ -2974,10 +2974,10 @@ namespace Intersect.Client.Entities
                                 DrawProjectileTile(map.Id, left, y, ref tilesDrawn, friendly, combatFriendly);
                                 break;
                             case 2:
-                                DrawProjectileTile(map.Id, x, down, ref tilesDrawn, friendly, combatFriendly);
+                                DrawProjectileTile(map.Id, x, up, ref tilesDrawn, friendly, combatFriendly);
                                 break;
                             case 3:
-                                DrawProjectileTile(map.Id, x, up, ref tilesDrawn, friendly, combatFriendly);
+                                DrawProjectileTile(map.Id, x, down, ref tilesDrawn, friendly, combatFriendly);
                                 break;
                         }
                         break;
@@ -2992,10 +2992,10 @@ namespace Intersect.Client.Entities
                                 DrawProjectileTile(map.Id, right, down, ref tilesDrawn, friendly, combatFriendly);
                                 break;
                             case 2:
-                                DrawProjectileTile(map.Id, left, up, ref tilesDrawn, friendly, combatFriendly);
+                                DrawProjectileTile(map.Id, left, down, ref tilesDrawn, friendly, combatFriendly);
                                 break;
                             case 3:
-                                DrawProjectileTile(map.Id, right, down, ref tilesDrawn, friendly, combatFriendly);
+                                DrawProjectileTile(map.Id, right, up, ref tilesDrawn, friendly, combatFriendly);
                                 break;
                         }
                         break;
@@ -3010,10 +3010,10 @@ namespace Intersect.Client.Entities
                                 DrawProjectileTile(map.Id, left, down, ref tilesDrawn, friendly, combatFriendly);
                                 break;
                             case 2:
-                                DrawProjectileTile(map.Id, left, down, ref tilesDrawn, friendly, combatFriendly);
+                                DrawProjectileTile(map.Id, left, up, ref tilesDrawn, friendly, combatFriendly);
                                 break;
                             case 3:
-                                DrawProjectileTile(map.Id, right, up, ref tilesDrawn, friendly, combatFriendly);
+                                DrawProjectileTile(map.Id, right, down, ref tilesDrawn, friendly, combatFriendly);
                                 break;
                         }
                         break;
@@ -3028,10 +3028,10 @@ namespace Intersect.Client.Entities
                                 DrawProjectileTile(map.Id, right, up, ref tilesDrawn, friendly, combatFriendly);
                                 break;
                             case 2:
-                                DrawProjectileTile(map.Id, right, up, ref tilesDrawn, friendly, combatFriendly);
+                                DrawProjectileTile(map.Id, right, down, ref tilesDrawn, friendly, combatFriendly);
                                 break;
                             case 3:
-                                DrawProjectileTile(map.Id, left, down, ref tilesDrawn, friendly, combatFriendly);
+                                DrawProjectileTile(map.Id, left, up, ref tilesDrawn, friendly, combatFriendly);
                                 break;
                         }
                         break;
@@ -3046,10 +3046,10 @@ namespace Intersect.Client.Entities
                                 DrawProjectileTile(map.Id, left, up, ref tilesDrawn, friendly, combatFriendly);
                                 break;
                             case 2:
-                                DrawProjectileTile(map.Id, right, down, ref tilesDrawn, friendly, combatFriendly);
+                                DrawProjectileTile(map.Id, right, up, ref tilesDrawn, friendly, combatFriendly);
                                 break;
                             case 3:
-                                DrawProjectileTile(map.Id, left, up, ref tilesDrawn, friendly, combatFriendly);
+                                DrawProjectileTile(map.Id, left, down, ref tilesDrawn, friendly, combatFriendly);
                                 break;
                         }
                         break;
