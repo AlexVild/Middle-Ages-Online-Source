@@ -29,6 +29,10 @@ namespace Intersect.Client.Framework.Graphics
 
         public abstract int GetHeight();
 
+        public abstract int GetHeightMAO();
+
+        public abstract int GetWidthMAO();
+
         public abstract object GetTexture();
 
         public abstract Color GetPixel(int x1, int y1);

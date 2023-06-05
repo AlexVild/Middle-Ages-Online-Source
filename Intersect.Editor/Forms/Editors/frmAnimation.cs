@@ -391,20 +391,22 @@ namespace Intersect.Editor.Forms.Editors
 
             if (animTexture != null)
             {
-                long w = animTexture.Width / (int) nudLowerHorizontalFrames.Value;
-                long h = animTexture.Height / (int) nudLowerVerticalFrames.Value;
+                long width = animTexture.Width / (int) nudLowerHorizontalFrames.Value;
+                long height = animTexture.Height / (int) nudLowerVerticalFrames.Value;
+                long scaledWidth = width * 4;
+                long scaledHeight = height * 4;
                 long x = 0;
                 if (mLowerFrame > 0)
                 {
-                    x = mLowerFrame % (int) nudLowerHorizontalFrames.Value * w;
+                    x = mLowerFrame % (int) nudLowerHorizontalFrames.Value * width;
                 }
 
-                var y = (int) Math.Floor(mLowerFrame / nudLowerHorizontalFrames.Value) * h;
+                var y = (int) Math.Floor(mLowerFrame / nudLowerHorizontalFrames.Value) * height;
                 Core.Graphics.DrawTexture(
-                    animTexture, new RectangleF(x, y, w, h),
+                    animTexture, new RectangleF(x, y, width, height),
                     new RectangleF(
-                        picLowerAnimation.Width / 2 - (int) w / 2, (int) picLowerAnimation.Height / 2 - (int) h / 2, w,
-                        h
+                        picLowerAnimation.Width / 2 - (int) scaledWidth / 2, (int) picLowerAnimation.Height / 2 - (int) scaledHeight / 2, scaledWidth,
+                        scaledHeight
                     ), mLowerWindow
                 );
             }
@@ -455,20 +457,23 @@ namespace Intersect.Editor.Forms.Editors
 
             if (animTexture != null)
             {
-                long w = animTexture.Width / (int) nudUpperHorizontalFrames.Value;
-                long h = animTexture.Height / (int) nudUpperVerticalFrames.Value;
+                long width = animTexture.Width / (int) nudUpperHorizontalFrames.Value;
+                long height = animTexture.Height / (int) nudUpperVerticalFrames.Value;
+                long scaledWidth = width * 4;
+                long scaledHeight = height * 4;
+
                 long x = 0;
                 if (mUpperFrame > 0)
                 {
-                    x = mUpperFrame % (int) nudUpperHorizontalFrames.Value * w;
+                    x = mUpperFrame % (int) nudUpperHorizontalFrames.Value * width;
                 }
 
-                var y = (int) Math.Floor(mUpperFrame / nudUpperHorizontalFrames.Value) * h;
+                var y = (int) Math.Floor(mUpperFrame / nudUpperHorizontalFrames.Value) * height;
                 Core.Graphics.DrawTexture(
-                    animTexture, new RectangleF(x, y, w, h),
+                    animTexture, new RectangleF(x, y, width, height),
                     new RectangleF(
-                        picUpperAnimation.Width / 2 - (int) w / 2, (int) picUpperAnimation.Height / 2 - (int) h / 2, w,
-                        h
+                        picUpperAnimation.Width / 2 - (int)scaledWidth / 2, (int) picUpperAnimation.Height / 2 - (int)scaledHeight / 2, scaledWidth,
+                        scaledHeight
                     ), mUpperWindow
                 );
             }

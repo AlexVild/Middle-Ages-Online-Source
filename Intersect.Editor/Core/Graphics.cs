@@ -2252,11 +2252,11 @@ namespace Intersect.Editor.Core
 
                 if (shader != null)
                 {
-                    sSpriteBatch.Begin(SpriteSortMode.Immediate, mode, null, null, rs, shader);
+                    sSpriteBatch.Begin(SpriteSortMode.Immediate, mode, SamplerState.PointClamp, null, rs, shader);
                 }
                 else
                 {
-                    sSpriteBatch.Begin(SpriteSortMode.Deferred, mode, null, null, rs, shader);
+                    sSpriteBatch.Begin(SpriteSortMode.Deferred, mode, SamplerState.PointClamp, null, rs, shader);
                 }
 
                 sCurrentBlendmode = mode;

@@ -14,6 +14,7 @@ namespace Intersect.Client.Entities
 
     public partial class Animation
     {
+        public readonly int SCALE = 4;
 
         public bool AutoRotate;
 
@@ -162,6 +163,8 @@ namespace Intersect.Client.Entities
                     {
                         var frameWidth = tex.GetWidth() / MyBase.Lower.XFrames;
                         var frameHeight = tex.GetHeight() / MyBase.Lower.YFrames;
+                        var scaledWidth = frameWidth * SCALE;
+                        var scaledHeight = frameHeight * SCALE;
                         Graphics.DrawGameTexture(
                             tex,
                             new FloatRect(
@@ -170,7 +173,7 @@ namespace Intersect.Client.Entities
                                 frameWidth, frameHeight
                             ),
                             new FloatRect(
-                                mRenderX - frameWidth / 2, mRenderY - frameHeight / 2, frameWidth, frameHeight
+                                mRenderX - scaledWidth / 2, mRenderY - scaledHeight / 2, scaledWidth, scaledHeight
                             ), Intersect.Color.White, null, GameBlendModes.None, null, rotationDegrees
                         );
                     }
@@ -202,6 +205,8 @@ namespace Intersect.Client.Entities
                     {
                         var frameWidth = tex.GetWidth() / MyBase.Upper.XFrames;
                         var frameHeight = tex.GetHeight() / MyBase.Upper.YFrames;
+                        var scaledWidth = frameWidth * SCALE;
+                        var scaledHeight = frameHeight * SCALE;
 
                         Graphics.DrawGameTexture(
                             tex,
@@ -211,7 +216,7 @@ namespace Intersect.Client.Entities
                                 frameWidth, frameHeight
                             ),
                             new FloatRect(
-                                mRenderX - frameWidth / 2, mRenderY - frameHeight / 2, frameWidth, frameHeight
+                                mRenderX - scaledWidth / 2, mRenderY - scaledHeight / 2, scaledWidth, scaledHeight
                             ), Intersect.Color.White, null, GameBlendModes.None, null, rotationDegrees
                         );
                     }

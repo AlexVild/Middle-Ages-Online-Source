@@ -12,6 +12,7 @@ namespace Intersect.Editor.Entities
 
     public class Animation
     {
+        private readonly int SCALE = 4;
 
         private bool mInfiniteLoop;
 
@@ -78,6 +79,8 @@ namespace Intersect.Editor.Entities
                         {
                             var frameWidth = (int) tex.Width / MyBase.Lower.XFrames;
                             var frameHeight = (int) tex.Height / MyBase.Lower.YFrames;
+                            var scaledWidth = frameWidth * 4;
+                            var scaledHeight = frameHeight * 4;
                             Core.Graphics.DrawTexture(
                                 tex,
                                 new RectangleF(
@@ -86,7 +89,7 @@ namespace Intersect.Editor.Entities
                                     frameWidth, frameHeight
                                 ),
                                 new RectangleF(
-                                    mRenderX - frameWidth / 2, mRenderY - frameHeight / 2, frameWidth, frameHeight
+                                    mRenderX - scaledWidth / 2, mRenderY - scaledHeight / 2, scaledWidth, scaledHeight
                                 ), System.Drawing.Color.White, target, BlendState.NonPremultiplied
                             );
                         }
@@ -121,6 +124,8 @@ namespace Intersect.Editor.Entities
                         {
                             var frameWidth = (int) tex.Width / MyBase.Upper.XFrames;
                             var frameHeight = (int) tex.Height / MyBase.Upper.YFrames;
+                            var scaledWidth = frameWidth * 4;
+                            var scaledHeight = frameHeight * 4;
                             Core.Graphics.DrawTexture(
                                 tex,
                                 new RectangleF(
@@ -129,7 +134,7 @@ namespace Intersect.Editor.Entities
                                     frameWidth, frameHeight
                                 ),
                                 new RectangleF(
-                                    mRenderX - frameWidth / 2, mRenderY - frameHeight / 2, frameWidth, frameHeight
+                                    mRenderX - scaledWidth / 2, mRenderY - scaledHeight / 2, scaledWidth, scaledHeight
                                 ), System.Drawing.Color.White, target, BlendState.NonPremultiplied
                             );
                         }

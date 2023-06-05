@@ -46,6 +46,16 @@ namespace Intersect.Client.MonoGame.Graphics
             return mHeight;
         }
 
+        public override int GetHeightMAO()
+        {
+            return GetHeight() * 4;
+        }
+
+        public override int GetWidthMAO()
+        {
+            return GetWidth() * 4;
+        }
+
         public override object GetTexture()
         {
             return mRenderTexture;
