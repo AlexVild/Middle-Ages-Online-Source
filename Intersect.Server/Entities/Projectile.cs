@@ -516,7 +516,7 @@ namespace Intersect.Server.Entities
             return killSpawn;
         }
 
-        public override void Die(bool dropItems = true, Entity killer = null)
+        public override void Die(bool dropItems = true, Entity killer = null, bool transform = false)
         {
             for (var i = 0; i < Spawns.Length; i++)
             {

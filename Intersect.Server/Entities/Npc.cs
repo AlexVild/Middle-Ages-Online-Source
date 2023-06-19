@@ -121,18 +121,28 @@ namespace Intersect.Server.Entities
 
         public Npc(NpcBase myBase, bool despawnable = false) : base()
         {
+            SetToBase(myBase);
+            Despawnable = despawnable;
+        }
+
+        private void SetToBase(NpcBase myBase)
+        {
+            if (myBase == default)
+            {
+                return;
+            }
+
             Name = myBase.Name;
             Sprite = myBase.Sprite;
             Color = myBase.Color;
             Level = myBase.Level;
             ImmuneTo = myBase.Immunities;
             Base = myBase;
-            Despawnable = despawnable;
 
-            for (var i = 0; i < (int) Stats.StatCount; i++)
+            for (var i = 0; i < (int)Stats.StatCount; i++)
             {
                 BaseStats[i] = myBase.Stats[i];
-                Stat[i] = new Stat((Stats) i, this);
+                Stat[i] = new Stat((Stats)i, this);
             }
 
             var spellSlot = 0;
@@ -144,13 +154,13 @@ namespace Intersect.Server.Entities
                 spellSlot++;
             }
 
-            for (var i = 0; i < (int) Vitals.VitalCount; i++)
+            for (var i = 0; i < (int)Vitals.VitalCount; i++)
             {
                 SetMaxVital(i, myBase.MaxVital[i]);
                 SetVital(i, myBase.MaxVital[i]);
             }
 
-            Range = (byte) myBase.SightRange;
+            Range = (byte)myBase.SightRange;
             mPathFinder = new Pathfinder(this);
             if (myBase.DeathAnimation != null)
             {
@@ -169,35 +179,63 @@ namespace Intersect.Server.Entities
             return EntityTypes.GlobalEntity;
         }
 
-        public override void Die(bool generateLoot = true, Entity killer = null)
+        public void TransformNpc(NpcBase newBase)
+        {
+            if (newBase == null)
+            {
+                return;
+            }
+            SetToBase(newBase);
+            PacketSender.SendEntityDataToProximity(this);
+        }
+
+        public void RemoveFromMap(Entity killer)
+        {
+            if (MapController.TryGetInstanceFromMap(MapId, MapInstanceId, out var instance))
+            {
+                instance.RemoveEntity(this);
+            }
+
+            PacketSender.SendEntityDie(this);
+            PacketSender.SendEntityLeave(this);
+            // Do not process permadeaths on the overworld or if the entity was not killed by some other entity
+            if (MapInstanceId != Guid.Empty && killer != null)
+            {
+                if (!string.IsNullOrEmpty(PermadeathKey) && InstanceProcessor.TryGetInstanceController(MapInstanceId, out var instanceController))
+                {
+                    instanceController.PermadeadNpcs.Add(PermadeathKey);
+                }
+            }
+        }
+
+        public override void Die(bool generateLoot = true, Entity killer = null, bool transform = false)
         {
             lock (EntityLock) {
-                base.Die(generateLoot, killer);
 
-                AggroCenterMap = null;
-                AggroCenterX = 0;
-                AggroCenterY = 0;
-                AggroCenterZ = 0;
+                var validTransform = Base.DeathTransform != default && killer != null;
 
-                if (MapController.TryGetInstanceFromMap(MapId, MapInstanceId, out var instance))
+                if (validTransform)
                 {
-                    instance.RemoveEntity(this);
-                    if (Base.DeathTransformId != Guid.Empty)
-                    {
-                        instance.SpawnNpc((byte)X, (byte)Y, (byte)Dir, Base.DeathTransformId);
-                    }
+                    // Set some vars for the parent Die() method to transform properly
+                    generateLoot = false;
+                    transform = true;
+                }
+                else
+                {
+                    RemoveFromMap(killer);
                 }
 
-                PacketSender.SendEntityDie(this);
-                PacketSender.SendEntityLeave(this);
-
-                // Do not process permadeaths on the overworld or if the entity was not killed by some other entity
-                if (MapInstanceId != Guid.Empty && killer != null)
+                base.Die(generateLoot, killer, transform);
+                if (validTransform)
                 {
-                    if (!string.IsNullOrEmpty(PermadeathKey) && InstanceProcessor.TryGetInstanceController(MapInstanceId, out var instanceController))
-                    {
-                        instanceController.PermadeadNpcs.Add(PermadeathKey);
-                    }
+                    TransformNpc(Base.DeathTransform); // doesn't do anything if no transform available
+                }
+                else
+                {
+                    AggroCenterMap = null;
+                    AggroCenterX = 0;
+                    AggroCenterY = 0;
+                    AggroCenterZ = 0;
                 }
 
                 if (killer is Player playerKiller)

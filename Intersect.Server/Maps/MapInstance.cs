@@ -307,22 +307,24 @@ namespace Intersect.Server.Maps
         {
             var isDead = en.IsDead();
             // It's okay if a player is dead - we want to add them anyway since they're still 'there'
-            if (en is Player player)
+            if (en is Player)
             {
                 isDead = false;
             }
 
             if (en != null && !isDead && en.MapInstanceId == MapInstanceId)
             {
-                if (!mEntities.ContainsKey(en.Id))
+                if (mEntities.ContainsKey(en.Id))
                 {
-                    mEntities.TryAdd(en.Id, en);
-                    if (en is Player plyr)
-                    {
-                        mPlayers.TryAdd(plyr.Id, plyr);
-                    }
-                    mCachedEntities = mEntities.Values.ToArray();
+                    return;
                 }
+
+                mEntities.TryAdd(en.Id, en);
+                if (en is Player pl)
+                {
+                    mPlayers.TryAdd(pl.Id, pl);
+                }
+                mCachedEntities = mEntities.Values.ToArray();
             }
         }
 

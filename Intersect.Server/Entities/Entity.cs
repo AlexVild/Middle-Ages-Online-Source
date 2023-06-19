@@ -1970,20 +1970,23 @@ namespace Intersect.Server.Entities
         }
 
         //Spawning/Dying
-        public virtual void Die(bool dropItems = true, Entity killer = null)
+        public virtual void Die(bool dropItems = true, Entity killer = null, bool transform = false)
         {
             if (IsDead() || Items == null)
             {
                 return;
             }
 
-            if (dropItems)
+            if (dropItems || transform)
             {
                 PlayDeathAnimation();
             }
 
             // Run events and other things.
-            killer?.KilledEntity(this);
+            if (!transform)
+            {
+                killer?.KilledEntity(this);
+            }
 
             if (dropItems)
             {
@@ -2046,7 +2049,10 @@ namespace Intersect.Server.Entities
             CachedStatuses = new Status[0];
             Stat?.ToList().ForEach(stat => stat?.Reset());
 
-            Dead = true;
+            if (!transform)
+            {
+                Dead = true;
+            }
         }
 
         public virtual void DropItems(Entity killer, bool sendUpdate = true)

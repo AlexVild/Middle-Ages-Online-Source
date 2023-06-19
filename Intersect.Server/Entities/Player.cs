@@ -1104,7 +1104,7 @@ namespace Intersect.Server.Entities
             }
         }
 
-        public override void Die(bool dropItems = true, Entity killer = null)
+        public override void Die(bool dropItems = true, Entity killer = null, bool transform = false)
         {
             // Can't die twice
             if (PlayerDead)

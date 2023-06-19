@@ -55,7 +55,7 @@ namespace Intersect.Server.Entities
             PacketSender.SendEntityLeave(this);
         }
 
-        public override void Die(bool dropItems = true, Entity killer = null)
+        public override void Die(bool dropItems = true, Entity killer = null, bool transform = false)
         {
             lock (EntityLock)
             {
