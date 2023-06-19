@@ -4,6 +4,7 @@ using Intersect.Server.General;
 using Intersect.Server.Maps;
 using Intersect.Server.Networking;
 using Intersect.Utilities;
+using System;
 
 namespace Intersect.Server.Entities.Combat
 {
@@ -33,7 +34,8 @@ namespace Intersect.Server.Entities.Combat
             bool zdimensionPass = false,
             bool entityPass = false,
             SpellBase spell = null,
-            long stunMs = 0
+            AnimationBase dashAnimation = null,
+            long stunMs = 0 // used to "fix" knockback on NPCs, reduce chance of rollback
         )
         {
             DistanceTraveled = 0;
@@ -53,6 +55,11 @@ namespace Intersect.Server.Entities.Combat
                 en, en.MapId, (byte) en.X, (byte) en.Y, (int) (Options.MaxDashSpeed * (Range / 10f)),
                 Direction == Facing ? (sbyte) Direction : (sbyte) -1
             );
+
+            if (dashAnimation != default)
+            {
+                PacketSender.SendAnimationToProximity(dashAnimation.Id, 1, en.Id, en.MapId, 0, 0, (sbyte)en.Dir, en.MapInstanceId);
+            }
 
             en.MoveTimer = Timing.Global.Milliseconds + Options.MaxDashSpeed;
         }

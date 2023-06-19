@@ -267,6 +267,8 @@ namespace Intersect.Editor.Forms.Editors
             this.btnClearSearch = new DarkUI.Controls.DarkButton();
             this.txtSearch = new DarkUI.Controls.DarkTextBox();
             this.lstGameObjects = new Intersect.Editor.Forms.Controls.GameObjectList();
+            this.lblDashAnimation = new System.Windows.Forms.Label();
+            this.cmbDashAnimation = new DarkUI.Controls.DarkComboBox();
             this.pnlContainer.SuspendLayout();
             this.grpSpellGroup.SuspendLayout();
             this.grpComponents.SuspendLayout();
@@ -348,8 +350,8 @@ namespace Intersect.Editor.Forms.Editors
             this.pnlContainer.AutoScroll = true;
             this.pnlContainer.Controls.Add(this.grpSpellGroup);
             this.pnlContainer.Controls.Add(this.grpComponents);
-            this.pnlContainer.Controls.Add(this.grpTargetInfo);
             this.pnlContainer.Controls.Add(this.grpDash);
+            this.pnlContainer.Controls.Add(this.grpTargetInfo);
             this.pnlContainer.Controls.Add(this.grpGeneral);
             this.pnlContainer.Controls.Add(this.grpSpellCost);
             this.pnlContainer.Controls.Add(this.grpRequirements);
@@ -765,6 +767,8 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpDash.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpDash.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpDash.Controls.Add(this.cmbDashAnimation);
+            this.grpDash.Controls.Add(this.lblDashAnimation);
             this.grpDash.Controls.Add(this.cmbDashSpell);
             this.grpDash.Controls.Add(this.lblDashSpell);
             this.grpDash.Controls.Add(this.grpDashCollisions);
@@ -773,7 +777,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpDash.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpDash.Location = new System.Drawing.Point(215, 2);
             this.grpDash.Name = "grpDash";
-            this.grpDash.Size = new System.Drawing.Size(220, 251);
+            this.grpDash.Size = new System.Drawing.Size(220, 297);
             this.grpDash.TabIndex = 38;
             this.grpDash.TabStop = false;
             this.grpDash.Text = "Dash";
@@ -3861,6 +3865,36 @@ namespace Intersect.Editor.Forms.Editors
             this.lstGameObjects.Size = new System.Drawing.Size(191, 601);
             this.lstGameObjects.TabIndex = 32;
             // 
+            // lblDashAnimation
+            // 
+            this.lblDashAnimation.AutoSize = true;
+            this.lblDashAnimation.Location = new System.Drawing.Point(11, 248);
+            this.lblDashAnimation.Name = "lblDashAnimation";
+            this.lblDashAnimation.Size = new System.Drawing.Size(81, 13);
+            this.lblDashAnimation.TabIndex = 58;
+            this.lblDashAnimation.Text = "Dash Animation";
+            // 
+            // cmbDashAnimation
+            // 
+            this.cmbDashAnimation.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbDashAnimation.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbDashAnimation.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbDashAnimation.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbDashAnimation.DrawDropdownHoverOutline = false;
+            this.cmbDashAnimation.DrawFocusRectangle = false;
+            this.cmbDashAnimation.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbDashAnimation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbDashAnimation.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbDashAnimation.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbDashAnimation.FormattingEnabled = true;
+            this.cmbDashAnimation.Location = new System.Drawing.Point(12, 266);
+            this.cmbDashAnimation.Name = "cmbDashAnimation";
+            this.cmbDashAnimation.Size = new System.Drawing.Size(200, 21);
+            this.cmbDashAnimation.TabIndex = 59;
+            this.cmbDashAnimation.Text = null;
+            this.cmbDashAnimation.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbDashAnimation.SelectedIndexChanged += new System.EventHandler(this.cmbDashAnimation_SelectedIndexChanged);
+            // 
             // FrmSpell
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -4217,5 +4251,7 @@ namespace Intersect.Editor.Forms.Editors
         private DarkCheckBox chkPersistSwap;
         private DarkCheckBox chkManaSteal;
         private DarkCheckBox chkLifesteal;
+        private DarkComboBox cmbDashAnimation;
+        private System.Windows.Forms.Label lblDashAnimation;
     }
 }

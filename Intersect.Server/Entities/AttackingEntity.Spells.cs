@@ -475,6 +475,8 @@ namespace Intersect.Server.Entities
                 Unstealth();
             }
 
+            // Used because we don't want to dash until _after_ we've cancelled spell casting - otherwise, the dash won't move us since we're spellcasting
+            var queueDashAfterSpellCancel = false;
             switch (spell.SpellType)
             {
                 case SpellTypes.CombatSpell:
@@ -594,16 +596,8 @@ namespace Intersect.Server.Entities
                     }
                     break;
                 case SpellTypes.Dash:
+                    queueDashAfterSpellCancel = true;
                     // Alex: removed this message, it was too noisy -- PacketSender.SendActionMsg(this, Strings.Combat.dash, CustomColors.Combat.Dash);
-                    _ = new Dash(
-                        this, spell.Combat.CastRange, (byte)Dir, 
-                        Convert.ToBoolean(spell.Dash.IgnoreMapBlocks),
-                        Convert.ToBoolean(spell.Dash.IgnoreActiveResources),
-                        Convert.ToBoolean(spell.Dash.IgnoreInactiveResources),
-                        Convert.ToBoolean(spell.Dash.IgnoreZDimensionAttributes),
-                        Convert.ToBoolean(spell.Dash.IgnoreEntites),
-                        spell.Dash.Spell
-                    );
 
                     break;
                 default:
@@ -624,6 +618,20 @@ namespace Intersect.Server.Entities
             if (!instantCast && !prayerSpell)
             {
                 CancelCast();
+            }
+
+            if (queueDashAfterSpellCancel)
+            {
+                _ = new Dash(
+                        this, spell.Combat.CastRange, (byte)Dir,
+                        Convert.ToBoolean(spell.Dash.IgnoreMapBlocks),
+                        Convert.ToBoolean(spell.Dash.IgnoreActiveResources),
+                        Convert.ToBoolean(spell.Dash.IgnoreInactiveResources),
+                        Convert.ToBoolean(spell.Dash.IgnoreZDimensionAttributes),
+                        Convert.ToBoolean(spell.Dash.IgnoreEntites),
+                        spell.Dash.Spell,
+                        spell.Dash.DashAnimation
+                    );
             }
         }
 

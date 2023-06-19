@@ -115,6 +115,10 @@ namespace Intersect.Editor.Forms.Editors
             cmbOverTimeAnimation.Items.Add(Strings.General.none);
             cmbOverTimeAnimation.Items.AddRange(AnimationBase.Names);
 
+            cmbDashAnimation.Items.Clear();
+            cmbDashAnimation.Items.Add(Strings.General.none);
+            cmbDashAnimation.Items.AddRange(AnimationBase.Names);
+
             cmbSprite.Items.Clear();
             cmbSprite.Items.Add(Strings.General.none);
             var spellNames = GameContentManager.GetSmartSortedTextureNames(GameContentManager.TextureType.Spell);
@@ -289,6 +293,7 @@ namespace Intersect.Editor.Forms.Editors
                 cmbHitAnimation.SelectedIndex = AnimationBase.ListIndex(mEditorItem.HitAnimationId) + 1;
                 cmbOverTimeAnimation.SelectedIndex = AnimationBase.ListIndex(mEditorItem.OverTimeAnimationId) + 1;
                 cmbTrapAnimation.SelectedIndex = AnimationBase.ListIndex(mEditorItem.TrapAnimationId) + 1;
+                cmbDashAnimation.SelectedIndex = AnimationBase.ListIndex(mEditorItem.Dash.DashAnimationId) + 1;
 
                 chkBound.Checked = mEditorItem.Bound;
 
@@ -1693,6 +1698,11 @@ namespace Intersect.Editor.Forms.Editors
         private void chkManaSteal_CheckedChanged(object sender, EventArgs e)
         {
             mEditorItem.Combat.ManaSteal = chkManaSteal.Checked;
+        }
+
+        private void cmbDashAnimation_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Dash.DashAnimation = AnimationBase.Get(AnimationBase.IdFromList(cmbDashAnimation.SelectedIndex - 1));
         }
     }
 }

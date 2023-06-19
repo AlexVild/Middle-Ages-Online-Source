@@ -343,6 +343,17 @@ namespace Intersect.GameObjects
             set => SpellId = value?.Id ?? Guid.Empty;
         }
 
+
+        [Column("DashAnimation")]
+        public Guid DashAnimationId { get; set; }
+
+        [NotMapped]
+        [JsonIgnore]
+        public AnimationBase DashAnimation
+        {
+            get => AnimationBase.Get(DashAnimationId);
+            set => DashAnimationId = value?.Id ?? Guid.Empty;
+        }
     }
 
     public partial class SpellBase : DatabaseObject<SpellBase>, IFolderable
