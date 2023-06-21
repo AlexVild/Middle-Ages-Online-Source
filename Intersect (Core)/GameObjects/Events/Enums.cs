@@ -453,4 +453,16 @@ namespace Intersect.GameObjects.Events
         Chest,
         Deconstruct,
     }
+
+    public enum NpcScaleType
+    {
+        [Description("None")]
+        None = 0,
+
+        [Description("Active Aggressors")]
+        AggroNumber = 1,
+
+        [Description("Players in Instance")]
+        PlayersInInstance = 2,
+    }
 }

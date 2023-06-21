@@ -137,6 +137,9 @@ namespace Intersect.Editor.Forms.Editors
             cmbSpellAttackOverride.Items.Add(Strings.General.none);
             cmbSpellAttackOverride.Items.AddRange(SpellBase.Names);
 
+            cmbScalingType.Items.Clear();
+            cmbScalingType.Items.AddRange(EnumExtensions.GetDescriptions(typeof(NpcScaleType)));
+
             InitLocalization();
             UpdateEditor();
         }
@@ -410,6 +413,11 @@ namespace Intersect.Editor.Forms.Editors
 
                 lblCalcExpVal.Text = $"{NpcExperienceCalculator.Calculate(mEditorItem)} EXP";
                 chkCannotHeal.Checked = mEditorItem.CannotBeHealed;
+
+                cmbScalingType.SelectedIndex = (int)mEditorItem.ScaleType;
+                nudScaledTo.Value = mEditorItem.ScaledTo;
+                nudMaxScaledTo.Value = mEditorItem.MaxScaledTo;
+                nudScaleFactor.Value = (decimal)mEditorItem.VitalScaleModifier;
             }
             else
             {
@@ -1786,6 +1794,26 @@ namespace Intersect.Editor.Forms.Editors
         private void chkCannotHeal_CheckedChanged(object sender, EventArgs e)
         {
             mEditorItem.CannotBeHealed = chkCannotHeal.Checked;
+        }
+
+        private void cmbScalingType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mEditorItem.ScaleType = (NpcScaleType)cmbScalingType.SelectedIndex;
+        }
+
+        private void nudScaledTo_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.ScaledTo = (int)nudScaledTo.Value;
+        }
+
+        private void nudScaleFactor_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.VitalScaleModifier = (float)nudScaleFactor.Value;
+        }
+
+        private void darkNumericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.MaxScaledTo = (int)nudMaxScaledTo.Value;
         }
     }
 

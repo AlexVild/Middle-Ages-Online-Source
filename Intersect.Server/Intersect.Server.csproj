@@ -1244,6 +1244,10 @@
     <Compile Include="Migrations\Game\20230619211223_AddDashMigration.designer.cs">
       <DependentUpon>20230619211223_AddDashMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20230621152722_NpcScalingVitalsMigration.cs" />
+    <Compile Include="Migrations\Game\20230621152722_NpcScalingVitalsMigration.designer.cs">
+      <DependentUpon>20230621152722_NpcScalingVitalsMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

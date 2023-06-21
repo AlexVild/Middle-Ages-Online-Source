@@ -461,6 +461,11 @@ namespace Intersect.Server.Entities
             SendCombatEffects(enemy, false, dmg);
             PacketSender.SendCombatNumber(DetermineCombatNumberType(damage, isSecondary, isNeutral, 1.0), enemy, dmg);
 
+            if (dmg < 0)
+            {
+                enemy.AddRecentAlly(this);
+            }
+
             return dmg;
         }
 
@@ -527,6 +532,11 @@ namespace Intersect.Server.Entities
             else if (!friendly && maxHit > 0)
             {
                 SendBlockedAttackMessage(enemy);
+            }
+
+            if (friendly) 
+            {
+                enemy.AddRecentAlly(this);
             }
         }
 
@@ -631,6 +641,43 @@ namespace Intersect.Server.Entities
         {
             recovered = 0f;
             return false;
+        }
+
+        public override void AddRecentAlly(AttackingEntity en)
+        {
+            // Don't add yourself as an ally
+            if (en == null || en.Id == Id)
+            {
+                return;
+            }
+
+            RecentAllies[en.Id] = Timing.Global.Milliseconds + Options.Instance.CombatOpts.AllyTimer;
+        }
+
+        public override void PruneAllies()
+        {
+            if (RecentAllies.Count <= 0 || Timing.Global.Milliseconds < NextAllyPruneTimestamp)
+            {
+                return;
+            }
+
+            // Prune every second
+            NextAllyPruneTimestamp = Timing.Global.Milliseconds + 1000;
+
+            foreach (var ally in RecentAllies.Keys.ToArray())
+            {
+                if (!RecentAllies.TryGetValue(ally, out var allyTimestamp))
+                {
+                    continue;
+                }
+
+                if (Timing.Global.Milliseconds < allyTimestamp)
+                {
+                    continue;
+                }
+
+                RecentAllies.Remove(ally);
+            }
         }
     }
 }

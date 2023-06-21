@@ -475,6 +475,14 @@ namespace Intersect.GameObjects
         }
 
         public bool CannotBeHealed { get; set; }
+
+        public float VitalScaleModifier { get; set; } = 0.2f;
+
+        public NpcScaleType ScaleType = NpcScaleType.None;
+
+        public int ScaledTo { get; set; } = 1;
+
+        public int MaxScaledTo { get; set; } = 50;
     }
 
 }

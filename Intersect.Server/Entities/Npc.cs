@@ -97,6 +97,9 @@ namespace Intersect.Server.Entities
         private long LastThreatLevelReset = 0L;
         private long DirChangeTime = 0L;
 
+        private int AggressorCount { get; set; }
+        private int LastAggressorCount { get; set; }
+
         /// <summary>
         /// The map on which this NPC was "aggro'd" and started chasing a target.
         /// </summary>
@@ -802,6 +805,19 @@ namespace Intersect.Server.Entities
                     }
 
                     var fleeing = IsFleeing();
+
+                    if (DamageMap.Count > 0)
+                    {
+                        LastAggressorCount = AggressorCount;
+                        AggressorCount = GetAggressorCount();
+
+                        // Has the amount of aggressors changed?
+                        if (AggressorCount != LastAggressorCount)
+                        {
+                            // Scale us - this function will check if scaling is truly necessary
+                            ScaleToAggressors();
+                        }
+                    }
 
                     if (MoveTimer < Timing.Global.Milliseconds)
                     {
@@ -1828,5 +1844,65 @@ namespace Intersect.Server.Entities
 
         [NotMapped, JsonIgnore]
         public int MaxSpellScalar => Base.IsSpellcaster ? Globals.CachedNpcSpellScalar[Base.Id] : 100;
+
+        /// <summary>
+        /// Gets the total number of players considered to be aggressors, for difficulty scaling purposes.
+        /// </summary>
+        /// <returns>The number of combined unique combatants/healers</returns>
+        private int GetAggressorCount()
+        {
+            if (Base.ScaleType == NpcScaleType.PlayersInInstance && InstanceProcessor.TryGetInstanceController(MapInstanceId, out var instanceController))
+            {
+                // Never take _away_ from the initial max amount of aggressors. This prevents people from leaving the instance to cheese scaling after the mob has spawned
+                return Math.Max(instanceController.PlayerCount, AggressorCount);
+            }
+
+            var aggressorMap = DamageMap.Keys.Select(en => en.Id).ToList();
+
+            foreach (var entity in DamageMap.Keys)
+            {
+                aggressorMap.AddRange(entity.RecentAllies.Keys);
+            }
+
+            return aggressorMap.Distinct().ToArray().Length;
+        }
+
+        /// <summary>
+        /// Takes care of scaling NPC's stats/vitals that have scaling enabled
+        /// </summary>
+        private void ScaleToAggressors()
+        {
+            LastAggressorCount = AggressorCount;
+            if (Base.ScaleType == NpcScaleType.None || Base.ScaledTo <= 0)
+            {
+                return;
+            }
+
+            // Reset to default values if we're not currently in need of scaling
+            if (AggressorCount <= Base.ScaledTo)
+            {
+                ScaleVitals(1.0f);
+            }
+            // Scale values according to aggressor count (attackers & attacker allies - the amount of players the content is scaled to)
+            else
+            {
+                var scalingAggressors = Math.Min(AggressorCount - Base.ScaledTo, Base.MaxScaledTo);
+
+                ScaleVitals(1.0f + (scalingAggressors * Base.VitalScaleModifier));
+            }
+        }
+
+        private void ScaleVitals(float factor)
+        {
+            for (var vital = 0; vital < (int)Vitals.VitalCount; vital++)
+            {
+                float vitalRatio = GetVital(vital) / (float)GetMaxVital(vital);
+                
+                SetMaxVital(vital, (int)Math.Round(Base.MaxVital[vital] * factor));
+                
+                int newVital = (int)Math.Round(GetMaxVital(vital) * vitalRatio);
+                SetVital(vital, newVital);
+            }
+        }
     }
 }

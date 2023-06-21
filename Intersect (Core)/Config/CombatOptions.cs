@@ -168,6 +168,11 @@ namespace Intersect.Config
 
         public float BerzerkDamageDivider = 2.0f;
 
+        // How long after a heal/buff some entity can be considered an ally
+        public long AllyTimer = 10000;
+
+        public float NpcScalePerAggressor = 0.1f;
+
         // Threat levels
 
         public Dictionary<ThreatLevel, double> ThreatLevelThresholds = new Dictionary<ThreatLevel, double>()

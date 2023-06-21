@@ -50,6 +50,15 @@ namespace Intersect.Editor.Forms.Editors
             this.btnClearSearch = new DarkUI.Controls.DarkButton();
             this.txtSearch = new DarkUI.Controls.DarkTextBox();
             this.pnlContainer = new System.Windows.Forms.Panel();
+            this.grpDynamicScaling = new DarkUI.Controls.DarkGroupBox();
+            this.nudMaxScaledTo = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblMaxScaleTo = new System.Windows.Forms.Label();
+            this.nudScaleFactor = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblScaleFactor = new System.Windows.Forms.Label();
+            this.nudScaledTo = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblScaledTo = new System.Windows.Forms.Label();
+            this.cmbScalingType = new DarkUI.Controls.DarkComboBox();
+            this.lblScalingType = new System.Windows.Forms.Label();
             this.grpBestiary = new DarkUI.Controls.DarkGroupBox();
             this.chkBestiary = new DarkUI.Controls.DarkCheckBox();
             this.btnBestiaryDefaults = new DarkUI.Controls.DarkButton();
@@ -160,6 +169,7 @@ namespace Intersect.Editor.Forms.Editors
             this.lblDropChance = new System.Windows.Forms.Label();
             this.lblDropItem = new System.Windows.Forms.Label();
             this.grpNpcVsNpc = new DarkUI.Controls.DarkGroupBox();
+            this.chkCannotHeal = new DarkUI.Controls.DarkCheckBox();
             this.cmbHostileNPC = new DarkUI.Controls.DarkComboBox();
             this.lblNPC = new System.Windows.Forms.Label();
             this.btnRemoveAggro = new DarkUI.Controls.DarkButton();
@@ -256,10 +266,13 @@ namespace Intersect.Editor.Forms.Editors
             this.lblTierView = new System.Windows.Forms.Label();
             this.lblTargetDps = new System.Windows.Forms.Label();
             this.lblProjectedDps = new System.Windows.Forms.Label();
-            this.chkCannotHeal = new DarkUI.Controls.DarkCheckBox();
             this.toolStrip.SuspendLayout();
             this.grpNpcs.SuspendLayout();
             this.pnlContainer.SuspendLayout();
+            this.grpDynamicScaling.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMaxScaledTo)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudScaleFactor)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudScaledTo)).BeginInit();
             this.grpBestiary.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudKillCount)).BeginInit();
             this.grpAttackOverrides.SuspendLayout();
@@ -516,6 +529,7 @@ namespace Intersect.Editor.Forms.Editors
             // pnlContainer
             // 
             this.pnlContainer.AutoScroll = true;
+            this.pnlContainer.Controls.Add(this.grpDynamicScaling);
             this.pnlContainer.Controls.Add(this.grpBestiary);
             this.pnlContainer.Controls.Add(this.grpAttackOverrides);
             this.pnlContainer.Controls.Add(this.grpDeathTransform);
@@ -534,6 +548,156 @@ namespace Intersect.Editor.Forms.Editors
             this.pnlContainer.Name = "pnlContainer";
             this.pnlContainer.Size = new System.Drawing.Size(699, 529);
             this.pnlContainer.TabIndex = 17;
+            // 
+            // grpDynamicScaling
+            // 
+            this.grpDynamicScaling.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpDynamicScaling.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpDynamicScaling.Controls.Add(this.nudMaxScaledTo);
+            this.grpDynamicScaling.Controls.Add(this.lblMaxScaleTo);
+            this.grpDynamicScaling.Controls.Add(this.nudScaleFactor);
+            this.grpDynamicScaling.Controls.Add(this.lblScaleFactor);
+            this.grpDynamicScaling.Controls.Add(this.nudScaledTo);
+            this.grpDynamicScaling.Controls.Add(this.lblScaledTo);
+            this.grpDynamicScaling.Controls.Add(this.cmbScalingType);
+            this.grpDynamicScaling.Controls.Add(this.lblScalingType);
+            this.grpDynamicScaling.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpDynamicScaling.Location = new System.Drawing.Point(212, 975);
+            this.grpDynamicScaling.Margin = new System.Windows.Forms.Padding(2);
+            this.grpDynamicScaling.Name = "grpDynamicScaling";
+            this.grpDynamicScaling.Padding = new System.Windows.Forms.Padding(2);
+            this.grpDynamicScaling.Size = new System.Drawing.Size(229, 147);
+            this.grpDynamicScaling.TabIndex = 35;
+            this.grpDynamicScaling.TabStop = false;
+            this.grpDynamicScaling.Text = "Dynamic Scaling";
+            // 
+            // nudMaxScaledTo
+            // 
+            this.nudMaxScaledTo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudMaxScaledTo.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudMaxScaledTo.Location = new System.Drawing.Point(156, 76);
+            this.nudMaxScaledTo.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.nudMaxScaledTo.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudMaxScaledTo.Name = "nudMaxScaledTo";
+            this.nudMaxScaledTo.Size = new System.Drawing.Size(67, 20);
+            this.nudMaxScaledTo.TabIndex = 35;
+            this.nudMaxScaledTo.Value = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+            this.nudMaxScaledTo.ValueChanged += new System.EventHandler(this.darkNumericUpDown1_ValueChanged);
+            // 
+            // lblMaxScaleTo
+            // 
+            this.lblMaxScaleTo.AutoSize = true;
+            this.lblMaxScaleTo.Location = new System.Drawing.Point(176, 60);
+            this.lblMaxScaleTo.Name = "lblMaxScaleTo";
+            this.lblMaxScaleTo.Size = new System.Drawing.Size(27, 13);
+            this.lblMaxScaleTo.TabIndex = 34;
+            this.lblMaxScaleTo.Text = "Max";
+            // 
+            // nudScaleFactor
+            // 
+            this.nudScaleFactor.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudScaleFactor.DecimalPlaces = 2;
+            this.nudScaleFactor.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudScaleFactor.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            this.nudScaleFactor.Location = new System.Drawing.Point(12, 117);
+            this.nudScaleFactor.Name = "nudScaleFactor";
+            this.nudScaleFactor.Size = new System.Drawing.Size(86, 20);
+            this.nudScaleFactor.TabIndex = 33;
+            this.nudScaleFactor.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudScaleFactor.ValueChanged += new System.EventHandler(this.nudScaleFactor_ValueChanged);
+            // 
+            // lblScaleFactor
+            // 
+            this.lblScaleFactor.AutoSize = true;
+            this.lblScaleFactor.Location = new System.Drawing.Point(10, 101);
+            this.lblScaleFactor.Name = "lblScaleFactor";
+            this.lblScaleFactor.Size = new System.Drawing.Size(67, 13);
+            this.lblScaleFactor.TabIndex = 32;
+            this.lblScaleFactor.Text = "Scale Factor";
+            // 
+            // nudScaledTo
+            // 
+            this.nudScaledTo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudScaledTo.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudScaledTo.Location = new System.Drawing.Point(12, 76);
+            this.nudScaledTo.Maximum = new decimal(new int[] {
+            100000,
+            0,
+            0,
+            0});
+            this.nudScaledTo.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudScaledTo.Name = "nudScaledTo";
+            this.nudScaledTo.Size = new System.Drawing.Size(86, 20);
+            this.nudScaledTo.TabIndex = 31;
+            this.nudScaledTo.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudScaledTo.ValueChanged += new System.EventHandler(this.nudScaledTo_ValueChanged);
+            // 
+            // lblScaledTo
+            // 
+            this.lblScaledTo.AutoSize = true;
+            this.lblScaledTo.Location = new System.Drawing.Point(9, 60);
+            this.lblScaledTo.Name = "lblScaledTo";
+            this.lblScaledTo.Size = new System.Drawing.Size(138, 13);
+            this.lblScaledTo.TabIndex = 20;
+            this.lblScaledTo.Text = "Scaled To (# of aggressors)";
+            // 
+            // cmbScalingType
+            // 
+            this.cmbScalingType.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbScalingType.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbScalingType.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbScalingType.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbScalingType.DrawDropdownHoverOutline = false;
+            this.cmbScalingType.DrawFocusRectangle = false;
+            this.cmbScalingType.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbScalingType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbScalingType.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbScalingType.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbScalingType.FormattingEnabled = true;
+            this.cmbScalingType.Location = new System.Drawing.Point(12, 36);
+            this.cmbScalingType.Name = "cmbScalingType";
+            this.cmbScalingType.Size = new System.Drawing.Size(211, 21);
+            this.cmbScalingType.TabIndex = 19;
+            this.cmbScalingType.Text = null;
+            this.cmbScalingType.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbScalingType.SelectedIndexChanged += new System.EventHandler(this.cmbScalingType_SelectedIndexChanged);
+            // 
+            // lblScalingType
+            // 
+            this.lblScalingType.AutoSize = true;
+            this.lblScalingType.Location = new System.Drawing.Point(9, 20);
+            this.lblScalingType.Name = "lblScalingType";
+            this.lblScalingType.Size = new System.Drawing.Size(69, 13);
+            this.lblScalingType.TabIndex = 18;
+            this.lblScalingType.Text = "Scaling Type";
             // 
             // grpBestiary
             // 
@@ -727,7 +891,7 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbTransformIntoNpc.FormattingEnabled = true;
             this.cmbTransformIntoNpc.Location = new System.Drawing.Point(12, 36);
             this.cmbTransformIntoNpc.Name = "cmbTransformIntoNpc";
-            this.cmbTransformIntoNpc.Size = new System.Drawing.Size(182, 21);
+            this.cmbTransformIntoNpc.Size = new System.Drawing.Size(211, 21);
             this.cmbTransformIntoNpc.TabIndex = 19;
             this.cmbTransformIntoNpc.Text = null;
             this.cmbTransformIntoNpc.TextPadding = new System.Windows.Forms.Padding(2);
@@ -773,7 +937,7 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbDeathAnimation.FormattingEnabled = true;
             this.cmbDeathAnimation.Location = new System.Drawing.Point(12, 36);
             this.cmbDeathAnimation.Name = "cmbDeathAnimation";
-            this.cmbDeathAnimation.Size = new System.Drawing.Size(182, 21);
+            this.cmbDeathAnimation.Size = new System.Drawing.Size(211, 21);
             this.cmbDeathAnimation.TabIndex = 19;
             this.cmbDeathAnimation.Text = null;
             this.cmbDeathAnimation.TextPadding = new System.Windows.Forms.Padding(2);
@@ -1318,7 +1482,7 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbOnDeathEventParty.FormattingEnabled = true;
             this.cmbOnDeathEventParty.Location = new System.Drawing.Point(12, 80);
             this.cmbOnDeathEventParty.Name = "cmbOnDeathEventParty";
-            this.cmbOnDeathEventParty.Size = new System.Drawing.Size(182, 21);
+            this.cmbOnDeathEventParty.Size = new System.Drawing.Size(211, 21);
             this.cmbOnDeathEventParty.TabIndex = 21;
             this.cmbOnDeathEventParty.Text = null;
             this.cmbOnDeathEventParty.TextPadding = new System.Windows.Forms.Padding(2);
@@ -1348,7 +1512,7 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbOnDeathEventKiller.FormattingEnabled = true;
             this.cmbOnDeathEventKiller.Location = new System.Drawing.Point(12, 36);
             this.cmbOnDeathEventKiller.Name = "cmbOnDeathEventKiller";
-            this.cmbOnDeathEventKiller.Size = new System.Drawing.Size(182, 21);
+            this.cmbOnDeathEventKiller.Size = new System.Drawing.Size(211, 21);
             this.cmbOnDeathEventKiller.TabIndex = 19;
             this.cmbOnDeathEventKiller.Text = null;
             this.cmbOnDeathEventKiller.TextPadding = new System.Windows.Forms.Padding(2);
@@ -2011,6 +2175,16 @@ namespace Intersect.Editor.Forms.Editors
             this.grpNpcVsNpc.TabIndex = 29;
             this.grpNpcVsNpc.TabStop = false;
             this.grpNpcVsNpc.Text = "NPC vs NPC Combat/Hostility ";
+            // 
+            // chkCannotHeal
+            // 
+            this.chkCannotHeal.AutoSize = true;
+            this.chkCannotHeal.Location = new System.Drawing.Point(9, 270);
+            this.chkCannotHeal.Name = "chkCannotHeal";
+            this.chkCannotHeal.Size = new System.Drawing.Size(116, 17);
+            this.chkCannotHeal.TabIndex = 79;
+            this.chkCannotHeal.Text = "Cannot be healed?";
+            this.chkCannotHeal.CheckedChanged += new System.EventHandler(this.chkCannotHeal_CheckedChanged);
             // 
             // cmbHostileNPC
             // 
@@ -3314,16 +3488,6 @@ namespace Intersect.Editor.Forms.Editors
             this.lblProjectedDps.TabIndex = 121;
             this.lblProjectedDps.Text = "Est. DPS";
             // 
-            // chkCannotHeal
-            // 
-            this.chkCannotHeal.AutoSize = true;
-            this.chkCannotHeal.Location = new System.Drawing.Point(9, 270);
-            this.chkCannotHeal.Name = "chkCannotHeal";
-            this.chkCannotHeal.Size = new System.Drawing.Size(116, 17);
-            this.chkCannotHeal.TabIndex = 79;
-            this.chkCannotHeal.Text = "Cannot be healed?";
-            this.chkCannotHeal.CheckedChanged += new System.EventHandler(this.chkCannotHeal_CheckedChanged);
-            // 
             // FrmNpc
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3352,6 +3516,11 @@ namespace Intersect.Editor.Forms.Editors
             this.grpNpcs.ResumeLayout(false);
             this.grpNpcs.PerformLayout();
             this.pnlContainer.ResumeLayout(false);
+            this.grpDynamicScaling.ResumeLayout(false);
+            this.grpDynamicScaling.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudMaxScaledTo)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudScaleFactor)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudScaledTo)).EndInit();
             this.grpBestiary.ResumeLayout(false);
             this.grpBestiary.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudKillCount)).EndInit();
@@ -3655,5 +3824,14 @@ namespace Intersect.Editor.Forms.Editors
         private DarkCheckBox chkSpellCast;
         private System.Windows.Forms.Label lblSpellcaster;
         private DarkCheckBox chkCannotHeal;
+        private DarkGroupBox grpDynamicScaling;
+        private DarkComboBox cmbScalingType;
+        private System.Windows.Forms.Label lblScalingType;
+        private DarkNumericUpDown nudScaleFactor;
+        private System.Windows.Forms.Label lblScaleFactor;
+        private DarkNumericUpDown nudScaledTo;
+        private System.Windows.Forms.Label lblScaledTo;
+        private DarkNumericUpDown nudMaxScaledTo;
+        private System.Windows.Forms.Label lblMaxScaleTo;
     }
 }

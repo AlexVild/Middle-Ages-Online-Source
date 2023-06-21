@@ -371,6 +371,8 @@ namespace Intersect.Server.Entities
                     {
                         status.TryRemoveStatus();
                     }
+
+                    PruneAllies();
                 }
             }
             finally
@@ -2348,6 +2350,32 @@ namespace Intersect.Server.Entities
             }
 
             PacketSender.SendMapEntityStatusUpdate(Map, this, MapInstanceId);
+        }
+    }
+
+    public partial class Entity : IDisposable
+    {
+        [NotMapped]
+        public Dictionary<Guid, long> RecentAllies { get; set; } = new Dictionary<Guid, long>();
+
+        [NotMapped]
+        public long NextAllyPruneTimestamp { get; set; } = 0L;
+
+        /// <summary>
+        /// Adds an entity as an ally of this entity. Allies are pruned after a configurable amount of seconds since last heal
+        /// </summary>
+        /// <param name="en">The entity to add as ally</param>
+        public virtual void AddRecentAlly(AttackingEntity en)
+        {
+            // Blank
+        }
+
+        /// <summary>
+        /// Keeps the ally list up to date
+        /// </summary>
+        public virtual void PruneAllies()
+        {
+            // Blank
         }
     }
 }
