@@ -180,7 +180,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 var statBoosts = ItemInstanceHelper.GetStatBoosts(EquippedItem.ItemProperties);
                 foreach (var stat in unarmedStats)
                 {
-                    unarmedStats[statIdx] -= EquippedItemDesc.StatsGiven[statIdx] + statBoosts[statIdx];
+                    unarmedStats[statIdx] -= (EquippedItemDesc?.StatsGiven[statIdx] ?? 0 ) + statBoosts[statIdx];
                     statIdx++;
                 }
             }
