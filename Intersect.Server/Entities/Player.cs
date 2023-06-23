@@ -531,8 +531,8 @@ namespace Intersect.Server.Entities
             //Update trade
             CancelTrade();
 
-            // Forfeit duel
-            ForfeitDuel();
+            // Forfeit duel and withdraw from matchmaking
+            ForfeitDuel(true);
 
             mSentMap = false;
             ChatTarget = null;
@@ -1073,7 +1073,7 @@ namespace Intersect.Server.Entities
             var cls = ClassBase.Get(ClassId);
             if (InDuel)
             {
-                WarpToDuelEnd();
+                LeaveDuel(true);
             }
             else if (cls != null)
             {
@@ -2325,7 +2325,7 @@ namespace Intersect.Server.Entities
                 {
                     if (InDuel)
                     {
-                        WarpToDuelEnd();
+                        LeaveDuel(true);
                     }
                     else
                     {

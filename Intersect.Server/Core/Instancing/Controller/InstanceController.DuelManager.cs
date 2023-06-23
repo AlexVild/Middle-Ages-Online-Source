@@ -15,11 +15,16 @@ namespace Intersect.Server.Core.Instancing.Controller
 
         public const int MatchmakeRetryCount = 2;
 
-        public const long DuelCooldown = 10000;
+        public const long InstanceDuelCooldown = 15000;
+
+        public const long PlayerDuelCooldown = 60000;
+
+        private const long MatchMakeEveryMs = 5000;
+        private long LastMatchMakeAttemptTimestamp = 0L;
 
         public Queue<Duel> MatchQueue { get; set; } = new Queue<Duel>();
 
-        public List<Player> DuelPool { get; set; } = new List<Player>();
+        public DuelQueue DuelPool { get; set; } = new DuelQueue();
 
         public bool DuelIsActive { get; set; }
 
@@ -53,11 +58,19 @@ namespace Intersect.Server.Core.Instancing.Controller
 
         public void MatchMake()
         {
+            // Poll for new matchmake attempt every X seconds
+            var now = Timing.Global.MillisecondsUtc;
+            if (now < LastMatchMakeAttemptTimestamp)
+            {
+                return;
+            }
+            LastMatchMakeAttemptTimestamp = now + MatchMakeEveryMs;
+
             // Prune duel pool
-            DuelPool = DuelPool.Where(pl => pl.CanDuel).ToList();
+            var duelPool = DuelPool.Where(pl => pl.CanDuel).ToList();
 
             // Not enough people to do random dueling
-            if (DuelPool.Count < MinimumParticipants)
+            if (duelPool.Count < MinimumParticipants)
             {
                 return;
             }
@@ -68,11 +81,36 @@ namespace Intersect.Server.Core.Instancing.Controller
                 return;
             }
 
-            var contestent1 = DuelPool.ElementAtOrDefault(0);
-            var contestent2 = DuelPool.ElementAtOrDefault(Randomization.Next(1, DuelPool.Count));
+            // first, attempt to get a list of players in the pool who have NOT recently dueled
+            var pool = duelPool.Where(duelist => duelist.LastDuelTimestamp + PlayerDuelCooldown < now).ToArray();
+            if (pool.Length < MinimumParticipants)
+            {
+                // If that failed, then just include all potential fighters
+                pool = duelPool.ToArray();
+            }
 
+            // Prioritize the front of the pool - they've effectively been waiting the longest
+            var contestent1 = duelPool.FirstOrDefault();
+            if (contestent1 == default)
+            {
+                // Something went wrong, abort and try again next cycle
+                return;
+            }
+
+            var contestent2 = duelPool.ElementAtOrDefault(Randomization.Next(1, DuelPool.Count));
+            if (contestent2 == default)
+            {
+                // Something went wrong, abort and try again next cycle
+                return;
+            }
+
+            // We have a match! Create it and put it in the queue so that we can watch it
             var newDuel = new Duel(new List<Player> { contestent1, contestent2 });
+
             MatchQueue.Enqueue(newDuel);
+
+            // Move the two combatants to the back of the list to make room for other players to be priority
+            DuelPool.SendToBack(contestent1, contestent2);
         }
 
         private void MatchUpdate()
@@ -86,7 +124,7 @@ namespace Intersect.Server.Core.Instancing.Controller
             if (currentMatch.Status == DuelStatus.Finished)
             {
                 // The match has ended naturally, clean up and prepare for the next match after cooldown
-                NextDuelTimestamp = currentMatch.MatchEndedTimestamp + DuelCooldown;
+                IncrementCooldown(currentMatch.MatchEndedTimestamp);
                 MatchQueue.Dequeue();
             }
             else if (currentMatch.Duelers.Count < 2)
@@ -96,9 +134,14 @@ namespace Intersect.Server.Core.Instancing.Controller
             }
             else if (currentMatch.Status == DuelStatus.Paused)
             {
-                // The match has warped its combatants, start!
+                // The match has been created, let's warp the combatants and get going!
                 currentMatch.Start();
             }
+        }
+
+        public void IncrementCooldown(long now)
+        {
+            NextDuelTimestamp = now + InstanceDuelCooldown;
         }
 
         public void LeaveDuelPool(Player player)

@@ -36,6 +36,9 @@ namespace Intersect.Server.Entities
         [NotMapped] // false
         public bool InDuel { get; set; }
 
+        [NotMapped] // false
+        public long LastDuelTimestamp { get; set; } = 0L;
+
         [NotMapped]
         public bool OpenForDuel { get; set; }
 
@@ -97,7 +100,7 @@ namespace Intersect.Server.Entities
             }
         }
 
-        public void ForfeitDuel()
+        public void ForfeitDuel(bool withdrawFromPool)
         {
             if (CurrentDuel == default)
             {
@@ -106,12 +109,21 @@ namespace Intersect.Server.Entities
 
             CurrentDuel.Leave(this, false);
             CurrentDuel = default;
+            if (withdrawFromPool && InstanceProcessor.TryGetInstanceController(MapInstanceId, out var instanceController))
+            {
+                instanceController.LeaveDuelPool(this);
+            }
         }
 
-        public void WarpToDuelEnd()
+        public void LeaveDuel(bool warp)
         {
-            Warp(DuelEndMapId, DuelEndX, DuelEndY);
-            InDuel = false;
+            FullHeal();
+            if (warp)
+            {
+                Warp(DuelEndMapId, DuelEndX, DuelEndY);
+                InDuel = false;
+            }
+            LastDuelTimestamp = Timing.Global.MillisecondsUtc; // use this to make matchmaking pool smaller and avoid duplicates
         }
     }
 }

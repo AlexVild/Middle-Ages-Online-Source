@@ -49,6 +49,10 @@ namespace Intersect.Server.Core.Instancing.Controller.Components
             Status = DuelStatus.Ongoing;
         }
 
+        /// <summary>
+        /// This method exists because we don't want to warp the loser - they will be at the respawn menu and will respawn themselves. We want to warp OTHER combatants at match-end, though
+        /// </summary>
+        /// <param name="loser">The player who lost the duel</param>
         public void Lost(Player loser)
         {
             foreach (var dueler in Duelers.ToArray())
@@ -58,6 +62,9 @@ namespace Intersect.Server.Core.Instancing.Controller.Components
             End();
         }
 
+        /// <summary>
+        /// If a match is forfeit, either due to time constraints or due to a disconnect, this method will kick everyone out and end their duels
+        /// </summary>
         public void Forfeit()
         {
             foreach (var dueler in Duelers.ToArray())
@@ -81,11 +88,8 @@ namespace Intersect.Server.Core.Instancing.Controller.Components
             }
 
             Duelers.Remove(player);
-            
-            if (warp)
-            {
-                player.WarpToDuelEnd();
-            }
+
+            player.LeaveDuel(warp);
         }
     }
 }
