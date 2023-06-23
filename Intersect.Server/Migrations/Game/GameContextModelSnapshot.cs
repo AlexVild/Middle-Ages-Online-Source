@@ -746,6 +746,8 @@ namespace Intersect.Server.Migrations.Game
 
                     b.Property<bool>("NotInBestiary");
 
+                    b.Property<int>("NpcScaleType");
+
                     b.Property<bool>("NpcVsNpcEnabled");
 
                     b.Property<Guid>("OnDeathEventId")

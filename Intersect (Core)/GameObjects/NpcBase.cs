@@ -478,7 +478,7 @@ namespace Intersect.GameObjects
 
         public float VitalScaleModifier { get; set; } = 0.2f;
 
-        public NpcScaleType ScaleType = NpcScaleType.None;
+        public int NpcScaleType { get; set; } = (int)Events.NpcScaleType.None;
 
         public int ScaledTo { get; set; } = 1;
 

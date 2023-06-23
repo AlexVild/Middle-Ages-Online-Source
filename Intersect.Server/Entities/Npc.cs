@@ -1851,7 +1851,7 @@ namespace Intersect.Server.Entities
         /// <returns>The number of combined unique combatants/healers</returns>
         private int GetAggressorCount()
         {
-            if (Base.ScaleType == NpcScaleType.PlayersInInstance && InstanceProcessor.TryGetInstanceController(MapInstanceId, out var instanceController))
+            if (Base.NpcScaleType == (int)NpcScaleType.PlayersInInstance && InstanceProcessor.TryGetInstanceController(MapInstanceId, out var instanceController))
             {
                 // Never take _away_ from the initial max amount of aggressors. This prevents people from leaving the instance to cheese scaling after the mob has spawned
                 return Math.Max(instanceController.PlayerCount, AggressorCount);
@@ -1873,7 +1873,7 @@ namespace Intersect.Server.Entities
         private void ScaleToAggressors()
         {
             LastAggressorCount = AggressorCount;
-            if (Base.ScaleType == NpcScaleType.None || Base.ScaledTo <= 0)
+            if (Base.NpcScaleType == (int)NpcScaleType.None || Base.ScaledTo <= 0)
             {
                 return;
             }

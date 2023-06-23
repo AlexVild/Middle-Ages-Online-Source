@@ -1248,6 +1248,18 @@
     <Compile Include="Migrations\Game\20230621152722_NpcScalingVitalsMigration.designer.cs">
       <DependentUpon>20230621152722_NpcScalingVitalsMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20230623020556_ScaleTypeMigration.cs" />
+    <Compile Include="Migrations\Game\20230623020556_ScaleTypeMigration.designer.cs">
+      <DependentUpon>20230623020556_ScaleTypeMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20230623021154_ScaleTypeMigration2.cs" />
+    <Compile Include="Migrations\Game\20230623021154_ScaleTypeMigration2.designer.cs">
+      <DependentUpon>20230623021154_ScaleTypeMigration2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20230623021914_ScaleTypeMigration3.cs" />
+    <Compile Include="Migrations\Game\20230623021914_ScaleTypeMigration3.designer.cs">
+      <DependentUpon>20230623021914_ScaleTypeMigration3.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

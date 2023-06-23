@@ -2715,6 +2715,12 @@ namespace Intersect.Server.Entities
                                 {
                                     member.InstanceLives = Options.MaxSharedInstanceLives;
                                 }
+                                
+                                // Alert party members that the leader has started the dungeon
+                                if (member.Id != Id)
+                                {
+                                    PacketSender.SendChatMsg(member, $"{Name} has started a shared instance.", ChatMessageType.Party, sendToast: true);
+                                }
                             }
                         }
                     } else if (Party != null && Party.Count > 0 && Options.RejoinableSharedInstances) // Joinable instance initialization
@@ -2736,6 +2742,12 @@ namespace Intersect.Server.Entities
                                 foreach (Player member in Party)
                                 {
                                     member.InstanceLives = Options.MaxSharedInstanceLives;
+
+                                    // Alert party members that the leader has started the dungeon
+                                    if (member.Id != Id)
+                                    {
+                                        PacketSender.SendChatMsg(member, $"{Name} has started a shared instance.", ChatMessageType.Party, sendToast: true);
+                                    }
                                 }
                             }
                         }

@@ -414,7 +414,7 @@ namespace Intersect.Editor.Forms.Editors
                 lblCalcExpVal.Text = $"{NpcExperienceCalculator.Calculate(mEditorItem)} EXP";
                 chkCannotHeal.Checked = mEditorItem.CannotBeHealed;
 
-                cmbScalingType.SelectedIndex = (int)mEditorItem.ScaleType;
+                cmbScalingType.SelectedIndex = (int)mEditorItem.NpcScaleType;
                 nudScaledTo.Value = mEditorItem.ScaledTo;
                 nudMaxScaledTo.Value = mEditorItem.MaxScaledTo;
                 nudScaleFactor.Value = (decimal)mEditorItem.VitalScaleModifier;
@@ -1798,7 +1798,7 @@ namespace Intersect.Editor.Forms.Editors
 
         private void cmbScalingType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            mEditorItem.ScaleType = (NpcScaleType)cmbScalingType.SelectedIndex;
+            mEditorItem.NpcScaleType = cmbScalingType.SelectedIndex;
         }
 
         private void nudScaledTo_ValueChanged(object sender, EventArgs e)
