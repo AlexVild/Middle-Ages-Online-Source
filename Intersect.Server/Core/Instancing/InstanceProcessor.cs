@@ -74,6 +74,9 @@ namespace Intersect.Server.Core
 
                 instanceController.CleanupSpawnGroups();
 
+                // Process the melee pit random matchmake logic
+                instanceController.ProcessOpenMelee();
+
                 // If instance was a dungeon but no one is around to hear it, remove the dungeon
                 // TODO Alex : Gonna try commenting this out and see if it fixes dungeon bug
                 /*

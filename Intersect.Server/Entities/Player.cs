@@ -470,6 +470,9 @@ namespace Intersect.Server.Entities
             {
                 PacketSender.SendPlayerDeathType(this, DeathType.Safe);
             }
+
+            // TODO get rid of this, this is just for testing
+            EnterInstanceDuelPool();
         }
 
         public void SendPacket(IPacket packet, TransmissionMode mode = TransmissionMode.All)
@@ -527,6 +530,9 @@ namespace Intersect.Server.Entities
 
             //Update trade
             CancelTrade();
+
+            // Forfeit duel
+            ForfeitDuel();
 
             mSentMap = false;
             ChatTarget = null;
@@ -1065,7 +1071,11 @@ namespace Intersect.Server.Entities
         private void Respawn()
         {
             var cls = ClassBase.Get(ClassId);
-            if (cls != null)
+            if (InDuel)
+            {
+                WarpToDuelEnd();
+            }
+            else if (cls != null)
             {
                 WarpToSpawn();
             }
@@ -1121,6 +1131,12 @@ namespace Intersect.Server.Entities
                 AddDeferredEvent(CommonEventTrigger.PVPDeath, "", killer?.Name);
             }
 
+            if (InDuel)
+            {
+                CurrentDuel.Lost(this);
+                dropItems = false;
+            }
+
             var currentMapZoneType = MapController.Get(Map.Id).ZoneType;
             CancelCast();
             CastTarget = null;
@@ -1160,7 +1176,7 @@ namespace Intersect.Server.Entities
 
             // EXP Loss - don't lose in shared instance, or in an Arena zone
             double expLoss = -1;
-            if ((InstanceType != MapInstanceType.Shared || Options.Instance.Instancing.LoseExpOnInstanceDeath) && currentMapZoneType != MapZones.Arena)
+            if ((InstanceType != MapInstanceType.Shared || Options.Instance.Instancing.LoseExpOnInstanceDeath) && currentMapZoneType != MapZones.Arena && !InDuel)
             {
                 if (Options.Instance.PlayerOpts.ExpLossOnDeathPercent > 0)
                 {
@@ -1184,7 +1200,7 @@ namespace Intersect.Server.Entities
             EndCombo();
 
             // Subtract from instance lives if in a shared instance
-            if (InstanceType == MapInstanceType.Shared && Options.MaxSharedInstanceLives >= 0 && InstanceProcessor.TryGetInstanceController(MapInstanceId, out var instanceController) && instanceController.DungeonActive)
+            if (InstanceType == MapInstanceType.Shared && Options.MaxSharedInstanceLives >= 0 && InstanceProcessor.TryGetInstanceController(MapInstanceId, out var instCtrl) && instCtrl.DungeonActive)
             {
                 InstanceLives--;
                 SendLivesRemainingMessage();
@@ -1219,7 +1235,14 @@ namespace Intersect.Server.Entities
             Statuses.Clear();
             CachedStatuses = new Status[0];
 
-            PacketSender.SendPlayerDeathType(this, GetDeathType((long)expLoss), (long)expLoss, ItemsLost);
+            if (InDuel)
+            {
+                PacketSender.SendPlayerDeathType(this, DeathType.Duel);
+            }
+            else
+            {
+                PacketSender.SendPlayerDeathType(this, GetDeathType((long)expLoss), (long)expLoss, ItemsLost);
+            }
             PacketSender.SendEntityDie(this);
             PacketSender.SendInventory(this);
         }
@@ -2300,10 +2323,17 @@ namespace Intersect.Server.Entities
                     WarpToLastOverworldLocation(true);
                 } else
                 {
-                    // Will warp to spawn if we fail to create an instance for the relevant map
-                    Warp(
-                        MapId, (byte)X, (byte)Y, (byte)Dir, false, (byte)Z, false, false, InstanceType, true
-                    );
+                    if (InDuel)
+                    {
+                        WarpToDuelEnd();
+                    }
+                    else
+                    {
+                        // Will warp to spawn if we fail to create an instance for the relevant map
+                        Warp(
+                            MapId, (byte)X, (byte)Y, (byte)Dir, false, (byte)Z, false, false, InstanceType, true
+                        );
+                    }
                 }
             }
         }
@@ -5814,15 +5844,17 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
-            var allies = false;
-            if (Guild != null)
+            if (otherPlayer == this)
             {
-                allies = InParty(otherPlayer) || Guild.IsMember(otherPlayer.Id) || this == otherPlayer;
+                return true;
             }
-            else
+
+            if (Dueling.Contains(otherPlayer))
             {
-                allies = InParty(otherPlayer) || this == otherPlayer;
+                return false;
             }
+
+            var allies = InParty(otherPlayer) || (Guild?.IsMember(otherPlayer.Id) ?? false);
 
             if (allies)
             {

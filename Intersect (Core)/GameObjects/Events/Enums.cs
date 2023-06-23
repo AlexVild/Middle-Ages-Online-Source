@@ -340,6 +340,7 @@ namespace Intersect.GameObjects.Events
         PvP,
         Dungeon,
         Safe,
+        Duel,
     }
 
     public enum CombatNumberType

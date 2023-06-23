@@ -461,7 +461,7 @@ namespace Intersect.Server.Entities
             return !(target == null
                 || IsAllyOf(target)
                 || Map.ZoneType == MapZones.Safe
-                || target.Map?.ZoneType == MapZones.Safe);
+                || target.Map?.ZoneType == MapZones.Safe) || Dueling.Contains(target);
         }
 
         protected override bool TryLifesteal(int damage, Entity target, out float recovered)

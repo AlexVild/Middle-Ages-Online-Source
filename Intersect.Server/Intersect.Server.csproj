@@ -442,9 +442,11 @@
     <Compile Include="Core\Commands\MetricsCommand.cs" />
     <Compile Include="Core\Commands\PanicCommand.cs" />
     <Compile Include="Core\Commands\SetVarCommand.cs" />
+    <Compile Include="Core\Instancing\Controller\Components\Duel.cs" />
     <Compile Include="Core\Instancing\Controller\Components\Dungeon.cs" />
     <Compile Include="Core\Instancing\Controller\Components\SpawnInfo.cs" />
     <Compile Include="Core\Instancing\Controller\InstanceController.cs" />
+    <Compile Include="Core\Instancing\Controller\InstanceController.DuelManager.cs" />
     <Compile Include="Core\Instancing\Controller\InstanceController.Dungeons.cs" />
     <Compile Include="Core\Instancing\Controller\InstanceController.Npcs.cs" />
     <Compile Include="Core\Instancing\Controller\InstanceController.Variables.cs" />
@@ -545,6 +547,7 @@
     <Compile Include="Database\PlayerData\PlayerContext.cs" />
     <Compile Include="Entities\Events\Event.cs" />
     <Compile Include="Entities\Player.Deconstruction.cs" />
+    <Compile Include="Entities\Player.Dueling.cs" />
     <Compile Include="Entities\Player.DungeonTracking.cs" />
     <Compile Include="Entities\Player.EnhancementInterface.cs" />
     <Compile Include="Entities\Player.Enhancements.cs" />

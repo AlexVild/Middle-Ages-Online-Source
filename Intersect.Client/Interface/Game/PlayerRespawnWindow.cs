@@ -94,6 +94,11 @@ namespace Intersect.Client.Interface.Game
                 DeathText.AddText(Strings.RespawnWindow.DeathPvE.ToString(expLost), DeathTextTemplate);
                 NormalRespawnButton.Show();
             }
+            if (deathType == DeathType.Duel)
+            {
+                DeathText.AddText(Strings.RespawnWindow.DeathDuel, DeathTextTemplate);
+                NormalRespawnButton.Show();
+            }
             if (deathType == DeathType.PvP)
             {
                 DeathText.AddText(Strings.RespawnWindow.DeathItems.ToString(expLost), DeathTextTemplate);

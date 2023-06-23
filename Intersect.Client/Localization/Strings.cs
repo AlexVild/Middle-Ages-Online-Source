@@ -2492,6 +2492,9 @@ namespace Intersect.Client.Localization
             public static LocalizedString DeathPvE = @"You've died! You've lost {00} experience points...";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString DeathDuel = @"You have lost your duel!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString DeathSafe = @"You've died!";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
