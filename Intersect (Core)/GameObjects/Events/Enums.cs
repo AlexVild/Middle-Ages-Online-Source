@@ -280,6 +280,8 @@ namespace Intersect.GameObjects.Events
         OpenUpgradeStation, // 88
         RemovePermabuff, // 89
         ResetGlobalEventPositions, // 90
+        MeleeSignup, // 91
+        MeleeWithdraw, // 92
     }
 
     public enum NPCGuildManagementSelection

@@ -1494,4 +1494,37 @@ namespace Intersect.GameObjects.Events.Commands
 
         public Guid MapId { get; set; } = Guid.Empty;
     }
+
+    public class MeleeSignupCommand : EventCommand
+    {
+
+        public override EventCommandType Type { get; } = EventCommandType.MeleeSignup;
+
+        public Guid DuelMapId { get; set; }
+        
+        public Guid RespawnMapId { get; set; }
+
+        public byte Duelist1X { get; set; }
+
+        public byte Duelist1Y { get; set; }
+        
+        public byte Duelist2X { get; set; }
+
+        public byte Duelist2Y { get; set; }
+
+        public byte RespawnX { get; set; }
+
+        public byte RespawnY { get; set; }
+
+        public byte Duelist1Dir { get; set; }
+        
+        public byte Duelist2Dir { get; set; }
+
+        public byte RespawnDir { get; set; }
+    }
+
+    public class MeleeWithdrawCommand : EventCommand
+    {
+        public override EventCommandType Type { get; } = EventCommandType.MeleeWithdraw;
+    }
 }

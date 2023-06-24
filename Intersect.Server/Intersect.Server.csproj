@@ -443,6 +443,7 @@
     <Compile Include="Core\Commands\PanicCommand.cs" />
     <Compile Include="Core\Commands\SetVarCommand.cs" />
     <Compile Include="Core\Instancing\Controller\Components\Duel.cs" />
+    <Compile Include="Core\Instancing\Controller\Components\DuelQueue.cs" />
     <Compile Include="Core\Instancing\Controller\Components\Dungeon.cs" />
     <Compile Include="Core\Instancing\Controller\Components\SpawnInfo.cs" />
     <Compile Include="Core\Instancing\Controller\InstanceController.cs" />

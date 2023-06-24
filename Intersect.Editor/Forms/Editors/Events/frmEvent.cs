@@ -892,6 +892,14 @@ namespace Intersect.Editor.Forms.Editors.Events
                     tmpCommand = new ResetGlobalEventPositions();
                     break;
 
+                case EventCommandType.MeleeSignup:
+                    tmpCommand = new MeleeSignupCommand();
+                    break;
+
+                case EventCommandType.MeleeWithdraw:
+                    tmpCommand = new MeleeWithdrawCommand();
+                    break;
+
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -1659,6 +1667,15 @@ namespace Intersect.Editor.Forms.Editors.Events
                 case EventCommandType.ResetGlobalEventPositions:
                     cmdWindow = new EventCommand_ResetGlobalEvents((ResetGlobalEventPositions)command, this);
 
+                    break;
+
+                case EventCommandType.MeleeSignup:
+                    cmdWindow = new EventCommand_MeleeSignup((MeleeSignupCommand)command, this);
+
+                    break;
+
+                case EventCommandType.MeleeWithdraw:
+                    // No editor
                     break;
 
                 default:

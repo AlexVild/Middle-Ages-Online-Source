@@ -2320,6 +2320,8 @@ Tick timer saved in server config.json.";
                 {"openupgradestation", @"Open Upgrade Station"},
                 {"removepermabuff", @"Remove Permabuff"},
                 {"resetglobalevents", @"Reset Global Event Positions"},
+                {"meleesignup", @"Signup for Open Melee"},
+                {"meleewithdraw", @"Withdraw from Open Melee"},
             };
 
         }
@@ -6242,6 +6244,12 @@ Negative values for time to flow backwards.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString FadeOut = @"Fade Out";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString MeleeSignup = @"Signup for Open Melee on {00}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString MeleeWithdraw = @"Withdraw from Open Melee";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString ObtainTreasureGnome = @"Obtain dungeon gnome";
