@@ -99,6 +99,8 @@ namespace Intersect.GameObjects.Events
 
         IsPartyLeader,
 
+        InOpenMelee,
+
     }
 
     public class Condition
@@ -642,6 +644,11 @@ namespace Intersect.GameObjects.Events
     public class IsPartyLeader : Condition
     {
         public override ConditionTypes Type { get; } = ConditionTypes.IsPartyLeader;
+    }
+
+    public class IsInOpenMelee : Condition
+    {
+        public override ConditionTypes Type { get; } = ConditionTypes.InOpenMelee;
     }
 
     public enum TimerActiveConditions

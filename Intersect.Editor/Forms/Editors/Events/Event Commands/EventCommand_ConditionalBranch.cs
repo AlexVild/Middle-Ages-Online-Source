@@ -554,8 +554,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
 
                     break;
 
-                case ConditionTypes.IsPartyLeader:
-                    Condition = new IsPartyLeader();
+                case ConditionTypes.InOpenMelee:
+                    Condition = new IsInOpenMelee();
 
                     break;
                 default:
@@ -867,6 +867,9 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     break;
 
                 case ConditionTypes.IsPartyLeader:
+                    break;
+
+                case ConditionTypes.InOpenMelee:
                     break;
 
                 default:
@@ -1798,6 +1801,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         {
         }
 
+        private void SetupFormValues(IsInOpenMelee condition)
+        {
+        }
+
         #endregion
 
         #region "SaveFormValues"
@@ -2143,6 +2150,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         }
 
         private void SaveFormValues(IsPartyLeader condition)
+        {
+        }
+
+        private void SaveFormValues(IsInOpenMelee condition)
         {
         }
         #endregion

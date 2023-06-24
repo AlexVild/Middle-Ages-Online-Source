@@ -470,6 +470,11 @@ namespace Intersect.Editor.Localization
             return $"Player is party leader";
         }
 
+        public static string GetEventConditionalDesc(IsInOpenMelee condition)
+        {
+            return $"Player is signed up for open melee";
+        }
+
         public static string GetEventConditionalDesc(WeaponTypeIs condition)
         {
             return EventConditionDesc.HasWeaponLevel.ToString(WeaponTypeDescriptor.GetName(condition.WeaponTypeId), condition.Level);
@@ -2463,6 +2468,7 @@ Tick timer saved in server config.json.";
                 {45, @"Enhancement known..."},
                 {46, @"Enhancement applied..."},
                 {47, @"Is party leader..."},
+                {48, @"Is signed up for open melee"},
             };
 
             public static LocalizedString endrange = @"End Range:";
