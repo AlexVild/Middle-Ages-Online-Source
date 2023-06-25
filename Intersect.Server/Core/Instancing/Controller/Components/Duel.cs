@@ -1,4 +1,5 @@
 ﻿using Intersect.Server.Entities;
+using Intersect.Server.Networking;
 using Intersect.Utilities;
 using System;
 using System.Collections.Generic;
@@ -34,6 +35,7 @@ namespace Intersect.Server.Core.Instancing.Controller.Components
             foreach (var dueler in Duelers.ToArray())
             {
                 dueler.EnterDuel(this, i);
+                PacketSender.SendSetDuelOpponent(dueler, Duelers.ToArray());
                 i++;
             }
             Status = DuelStatus.Ongoing;

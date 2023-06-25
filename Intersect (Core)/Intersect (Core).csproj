@@ -528,6 +528,7 @@
     <Compile Include="Network\Packets\Server\LoadoutsPacket.cs" />
     <Compile Include="Network\Packets\Server\SendOpenDeconstructorPacket.cs" />
     <Compile Include="Network\Packets\Server\ServerDisposedPacket.cs" />
+    <Compile Include="Network\Packets\Server\SetDuelOpponentPacket.cs" />
     <Compile Include="Network\Packets\Server\ShakeScreenPacket.cs" />
     <Compile Include="Network\Packets\Server\SkillbookPacket.cs" />
     <Compile Include="Network\Packets\Server\SkillUpdatePacket.cs" />

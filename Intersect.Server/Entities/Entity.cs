@@ -549,7 +549,7 @@ namespace Intersect.Server.Entities
                             if (this is Player)
                             {
                                 //Check if this target player is passable....
-                                if (!Options.Instance.Passability.Passable[(int)targetMap.ZoneType] && !ply.PlayerDead)
+                                if ((!Options.Instance.Passability.Passable[(int)targetMap.ZoneType] || ply.InDuel) && !ply.PlayerDead)
                                 {
                                     return (int)EntityTypes.Player;
                                 }

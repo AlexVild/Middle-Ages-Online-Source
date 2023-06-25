@@ -128,6 +128,12 @@ namespace Intersect.Server.Entities
                 if (!Piercing)
                 {
                     var mapPassable = Options.Instance.Passability.Passable[(int)en.Map.ZoneType];
+                    if (en is Player collidingPlayer)
+                    {
+                        // Collision rules for duels
+                        mapPassable = mapPassable || collidingPlayer.InDuel;
+                    }
+
                     var friendlySpell = Parent.Spell?.Combat?.Friendly ?? false;
                     if (mapPassable && !friendlySpell)
                     {
@@ -167,7 +173,7 @@ namespace Intersect.Server.Entities
                     if (Parent.Spell != null)
                     {
                         // Friendly projectiles should never pass through, as they need to take effect.
-                        if (Options.Instance.Passability.Passable[(int)targetEntity.Map.ZoneType] && !Parent.Spell.Combat.Friendly)
+                        if (Options.Instance.Passability.Passable[(int)targetEntity.Map.ZoneType] && !player.InDuel && !Parent.Spell.Combat.Friendly)
                         {
                             return false;
                         }

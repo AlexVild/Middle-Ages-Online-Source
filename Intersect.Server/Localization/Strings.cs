@@ -870,6 +870,9 @@ namespace Intersect.Server.Localization
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString NoLongerAllowedInInstance = @"You are no longer in the guild who's instance you were logged into. You have been warped back to the overworld.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString PvpGuild = @"You can't invite a hostile player to your clan!";
         }
 
         public sealed class IntroNamespace : LocaleNamespace
@@ -1865,18 +1868,30 @@ namespace Intersect.Server.Localization
         {
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString PvPTrade = @"You can't trade an enemy!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString TradeDuel = @"You can't trade a player currently in a duel!";
         }
 
         public sealed partial class FriendsNamespace : LocaleNamespace
         {
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString FriendEnemy = @"You can't send friend requests to a player that you can currently harm!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString FriendDuel = @"You can't send a friend request to a player currently in a duel!";
         }
 
         public sealed partial class PartiesNamespace : LocaleNamespace
         {
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString PartyEnemy = @"You can't send party requests to a player that you can currently harm!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString PartyDuel = @"You can't send party requests to a player currently in a duel!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString GuildDuel = @"You can't send clan requests to a player currently in a duel!";
         }
 
         public sealed partial class EnhancementsNamespace : LocaleNamespace

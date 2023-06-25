@@ -634,6 +634,8 @@ namespace Intersect.Editor.Forms.Editors
 
                 RefreshUpgradeList(false);
 
+                mEditorItem.MeleeConsumable = chkMeleeConsumable.Checked;
+
                 cmbStudyEnhancement.SelectedIndex = EnhancementDescriptor.ListIndex(mEditorItem.StudyEnhancement) + 1;
                 nudStudyChance.Value = (decimal)mEditorItem.StudyChance;
 
@@ -2407,6 +2409,11 @@ namespace Intersect.Editor.Forms.Editors
                 lblRange.Hide();
                 nudRange.Hide();
             }
+        }
+
+        private void chkMeleeConsumable_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.MeleeConsumable = chkMeleeConsumable.Checked;
         }
     }
 }

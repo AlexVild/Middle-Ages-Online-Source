@@ -1126,13 +1126,15 @@ namespace Intersect.Server.Entities
             {
                 playerKiller.AddDeferredEvent(CommonEventTrigger.PVPKill, "", Name);
                 AddDeferredEvent(CommonEventTrigger.PVPDeath, "", killer?.Name);
-            }
 
-            if (InDuel)
-            {
-                SendDuelFinishMessage(Name, killer?.Name ?? "Literally Nobody");
-                CurrentDuel.Lost(this);
-                dropItems = false;
+                if (InDuel)
+                {
+                    // Declare a victor
+                    playerKiller?.WinMeleeOver(this);
+
+                    CurrentDuel.Lost(this);
+                    dropItems = false;
+                }
             }
 
             var currentMapZoneType = MapController.Get(Map.Id).ZoneType;
@@ -3468,6 +3470,18 @@ namespace Intersect.Server.Entities
                         var color = CustomColors.Items.ConsumeHp;
                         var die = false;
 
+                        if (itemBase.MeleeConsumable && !InDuel)
+                        {
+                            PacketSender.SendChatMsg(this, "You can't use this item while not in a duel!", ChatMessageType.Notice, sound: true);
+                            return;
+                        }
+
+                        if (!itemBase.MeleeConsumable && InDuel)
+                        {
+                            PacketSender.SendChatMsg(this, "You can't use this item while in a duel!", ChatMessageType.Notice, sound: true);
+                            return;
+                        }
+
                         switch (itemBase.Consumable.Type)
                         {
                             case ConsumableType.Health:
@@ -5107,6 +5121,12 @@ namespace Intersect.Server.Entities
                 return;
             }
 
+            if (InDuel)
+            {
+                PacketSender.SendChatMsg(fromPlayer, Strings.Friends.FriendDuel, ChatMessageType.Friend, CustomColors.Alerts.Error);
+                return;
+            }
+
             if (fromPlayer.FriendRequests.ContainsKey(this))
             {
                 fromPlayer.FriendRequests.Remove(this);
@@ -5155,6 +5175,12 @@ namespace Intersect.Server.Entities
             if (Map?.ZoneType != MapZones.Safe && !fromPlayer.IsAllyOf(this))
             {
                 PacketSender.SendChatMsg(fromPlayer, Strings.Trading.PvPTrade, ChatMessageType.Trading, CustomColors.Alerts.Error);
+                return;
+            }
+
+            if (InDuel)
+            {
+                PacketSender.SendChatMsg(fromPlayer, Strings.Trading.TradeDuel, ChatMessageType.Friend, CustomColors.Alerts.Error);
                 return;
             }
 
@@ -5425,6 +5451,12 @@ namespace Intersect.Server.Entities
             if (Map?.ZoneType == MapZones.Safe && !fromPlayer.IsAllyOf(this))
             {
                 PacketSender.SendChatMsg(fromPlayer, Strings.Parties.PartyEnemy, ChatMessageType.Friend, CustomColors.Alerts.Error);
+                return;
+            }
+
+            if (InDuel)
+            {
+                PacketSender.SendChatMsg(fromPlayer, Strings.Parties.PartyDuel, ChatMessageType.Friend, CustomColors.Alerts.Error);
                 return;
             }
 

@@ -655,6 +655,8 @@ namespace Intersect.GameObjects
         }
 
         public int SkillPoints { get; set; } = 0;
+
+        public bool MeleeConsumable { get; set; }
     }
 
 }

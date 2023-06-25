@@ -3004,6 +3004,17 @@ namespace Intersect.Client.Networking
                 CharacterLoadoutsController.RequestLoadoutOverwritePrompt, null, packet.LoadoutId
             );
         }
+
+        public void HandlePacket(IPacketSender packetSender, SetDuelOpponentPacket packet)
+        {
+            if (Globals.Me == null)
+            {
+                return;
+            }
+
+            Globals.Me.DuelingIds.Clear();
+            Globals.Me.DuelingIds.AddRange(packet.Opponents.Where(id => id != Globals.Me.Id));
+        }
     }
 }
  

@@ -2893,5 +2893,15 @@ namespace Intersect.Server.Networking
         {
             player?.SendPacket(new ConfirmLoadoutOverwritePacket(loadoutId));
         }
+
+        public static void SendSetDuelOpponent(Player player, Player[] opponents)
+        {
+            if (player == null)
+            {
+                return;
+            }
+
+            player?.SendPacket(new SetDuelOpponentPacket(opponents.Select(opp => opp.Id).ToArray() ?? Array.Empty<Guid>()));
+        }
     }
 }

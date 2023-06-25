@@ -1831,6 +1831,9 @@ namespace Intersect.Editor.Forms.Editors.Events
                 case RecordType.TotalDungeonCompletions:
                     recordValue = DungeonDescriptor.GetName(command.RecordId);
                     break;
+                case RecordType.MeleeVictories:
+                    recordValue = "Open Melee Victories";
+                    break;
                 default:
                     recordValue = Strings.EventCommandList.mapnotfound;
                     break;

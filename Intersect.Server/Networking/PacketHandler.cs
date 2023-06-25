@@ -2387,6 +2387,18 @@ namespace Intersect.Server.Networking
                     var target = Player.FindOnline(packet.Name);
                     if (target != null)
                     {
+                        if (!player.IsAllyOf(target))
+                        {
+                            PacketSender.SendChatMsg(player, Strings.Guilds.PvpGuild, ChatMessageType.Guild, CustomColors.Alerts.Error);
+                            return;
+                        }
+
+                        if (target.InDuel)
+                        {
+                            PacketSender.SendChatMsg(player, Strings.Parties.GuildDuel, ChatMessageType.Guild, CustomColors.Alerts.Error);
+                            return;
+                        }
+
                         // Are we already in a guild? or have a pending invite?
                         if (target.Guild == null && target.GuildInvite == null)
                         {

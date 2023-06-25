@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using Intersect.GameObjects;
+using Intersect.GameObjects.Events;
 using Intersect.Network.Packets.Server;
 using Intersect.Server.Core;
 using Intersect.Server.Core.Instancing.Controller;
@@ -112,7 +113,8 @@ namespace Intersect.Server.Entities
             {
                 Warp(MeleeMapId, MeleeSpawn2X, MeleeSpawn2Y);
             }
-            
+
+            GiveMeleeItems();
             FullHeal();
         }
 
@@ -130,6 +132,7 @@ namespace Intersect.Server.Entities
                 var exPoolSize = instanceController.DuelPool.Count;
 
                 instanceController.LeaveMeleePool(this);
+                PacketSender.SendProximityMsgToLayer($"{Name} forfeited their melee duel.", Enums.ChatMessageType.Notice, MapId, MapInstanceId, Color.FromName("Blue", Strings.Colors.presets));
 
                 if (exPoolSize >= Options.Instance.DuelOpts.OpenMeleeMinParticipants && instanceController.DuelPool.Count < Options.Instance.DuelOpts.OpenMeleeMinParticipants)
                 {
@@ -140,13 +143,55 @@ namespace Intersect.Server.Entities
 
         public void LeaveDuel(bool warp)
         {
+            TakeMeleeItems();
             FullHeal();
             if (warp)
             {
                 Warp(MeleeEndMapId, MeleeEndX, MeleeEndY);
                 InDuel = false;
             }
+            PacketSender.SendSetDuelOpponent(this, Array.Empty<Player>());
             LastDuelTimestamp = Timing.Global.MillisecondsUtc; // use this to make matchmaking pool smaller and avoid duplicates
+        }
+
+        public void TakeMeleeItems()
+        {
+            var healSlots = FindInventoryItemSlots(Guid.Parse(Options.Instance.DuelOpts.MeleeHealItemId));
+            var manaSlots = FindInventoryItemSlots(Guid.Parse(Options.Instance.DuelOpts.MeleeManaItemId));
+            foreach (var heal in healSlots)
+            {
+                TakeItem(heal, int.MaxValue);
+            }
+            foreach (var mana in manaSlots)
+            {
+                TakeItem(mana, int.MaxValue);
+            }
+        }
+
+        public void GiveMeleeItems()
+        {
+            var healSlots = FindInventoryItemSlots(Guid.Parse(Options.Instance.DuelOpts.MeleeHealItemId));
+            var manaSlots = FindInventoryItemSlots(Guid.Parse(Options.Instance.DuelOpts.MeleeManaItemId));
+
+            var healItemId = Guid.Parse(Options.Instance.DuelOpts.MeleeHealItemId);
+            var manaItemId = Guid.Parse(Options.Instance.DuelOpts.MeleeManaItemId);
+
+            if (healSlots.Count <= 0)
+            {
+                var healItemQuantity = ItemBase.Get(healItemId)?.MaxInventoryStack ?? 1;
+                if (!TryGiveItem(healItemId, healItemQuantity))
+                {
+                    PacketSender.SendChatMsg(this, "You did not have enough inventory space to receive your melee healing items!", Enums.ChatMessageType.Notice, CustomColors.General.GeneralDisabled);
+                }
+            }
+            if (manaSlots.Count <= 0)
+            {
+                var manaItemQuantity = ItemBase.Get(manaItemId)?.MaxInventoryStack ?? 1;
+                if (!TryGiveItem(manaItemId, manaItemQuantity))
+                {
+                    PacketSender.SendChatMsg(this, "You did not have enough inventory space to receive your melee mana items!", Enums.ChatMessageType.Notice, CustomColors.General.GeneralDisabled);
+                }
+            }
         }
 
         public void MeleeSignup(Guid mapId, Guid respawnMapId, int spawn1X, int spawn1Y, int spawn2X, int spawn2Y, int respawnX, int respawnY)
@@ -259,6 +304,14 @@ namespace Intersect.Server.Entities
             }
 
             PacketSender.SendProximityMsgToLayer(msg, Enums.ChatMessageType.Notice, MapId, MapInstanceId, Color.FromName("Blue", Strings.Colors.presets));
+        }
+
+        public void WinMeleeOver(Player defeated)
+        {
+            // Tell the proximity who won
+            SendDuelFinishMessage(defeated?.Name ?? "NOT FOUND", Name);
+            IncrementRecord(RecordType.MeleeVictories, Guid.Empty);
+            TryGiveItem(Guid.Parse(Options.Instance.DuelOpts.MeleeMedalId), 1);
         }
     }
 }

@@ -3266,4 +3266,19 @@ namespace Intersect.Client.Entities
             return correctWeaponLvl && correctWeaponType;
         }
     }
+
+    public partial class Player : Entity
+    {
+        public List<Guid> DuelingIds { get; set; } = new List<Guid>();
+
+        public override bool IsAllyOf(Entity en)
+        {
+            if (en is Player ply && ply.DuelingIds.Contains(Id))
+            {
+                return false;
+            }
+
+            return base.IsAllyOf(en);
+        }
+    }
 }

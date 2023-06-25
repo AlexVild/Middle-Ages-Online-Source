@@ -238,6 +238,8 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbEquipmentAnimation = new DarkUI.Controls.DarkComboBox();
             this.lblEquipmentAnimation = new System.Windows.Forms.Label();
             this.grpStatBonuses = new DarkUI.Controls.DarkGroupBox();
+            this.lblSkillPoints = new System.Windows.Forms.Label();
+            this.nudSkillPoints = new DarkUI.Controls.DarkNumericUpDown();
             this.grpWeaponBalance = new DarkUI.Controls.DarkGroupBox();
             this.lblMaxHitVal = new System.Windows.Forms.Label();
             this.lblMaxHit = new System.Windows.Forms.Label();
@@ -358,8 +360,7 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
             this.vS2015DarkTheme1 = new WeifenLuo.WinFormsUI.Docking.VS2015DarkTheme();
-            this.nudSkillPoints = new DarkUI.Controls.DarkNumericUpDown();
-            this.lblSkillPoints = new System.Windows.Forms.Label();
+            this.chkMeleeConsumable = new DarkUI.Controls.DarkCheckBox();
             this.grpItems.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudFuel)).BeginInit();
@@ -417,6 +418,7 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudManaBonus)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudHealthBonus)).BeginInit();
             this.grpStatBonuses.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSkillPoints)).BeginInit();
             this.grpWeaponBalance.SuspendLayout();
             this.grpArmorBalanceHelper.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudEvasionPercent)).BeginInit();
@@ -455,7 +457,6 @@ namespace Intersect.Editor.Forms.Editors
             this.grpAuxInfo.SuspendLayout();
             this.grpEnhancement.SuspendLayout();
             this.toolStrip.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSkillPoints)).BeginInit();
             this.SuspendLayout();
             // 
             // grpItems
@@ -3400,6 +3401,35 @@ namespace Intersect.Editor.Forms.Editors
             this.grpStatBonuses.TabStop = false;
             this.grpStatBonuses.Text = "Stat Bonuses";
             // 
+            // lblSkillPoints
+            // 
+            this.lblSkillPoints.AutoSize = true;
+            this.lblSkillPoints.Location = new System.Drawing.Point(140, 382);
+            this.lblSkillPoints.Name = "lblSkillPoints";
+            this.lblSkillPoints.Size = new System.Drawing.Size(58, 13);
+            this.lblSkillPoints.TabIndex = 139;
+            this.lblSkillPoints.Text = "Skill Points";
+            // 
+            // nudSkillPoints
+            // 
+            this.nudSkillPoints.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudSkillPoints.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudSkillPoints.Location = new System.Drawing.Point(144, 399);
+            this.nudSkillPoints.Maximum = new decimal(new int[] {
+            255,
+            0,
+            0,
+            0});
+            this.nudSkillPoints.Name = "nudSkillPoints";
+            this.nudSkillPoints.Size = new System.Drawing.Size(89, 20);
+            this.nudSkillPoints.TabIndex = 138;
+            this.nudSkillPoints.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudSkillPoints.ValueChanged += new System.EventHandler(this.nudSkillPoints_ValueChanged);
+            // 
             // grpWeaponBalance
             // 
             this.grpWeaponBalance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
@@ -4635,6 +4665,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpConsumable.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpConsumable.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpConsumable.Controls.Add(this.chkMeleeConsumable);
             this.grpConsumable.Controls.Add(this.lblPercentage3);
             this.grpConsumable.Controls.Add(this.nudIntervalPercentage);
             this.grpConsumable.Controls.Add(this.lblPlus3);
@@ -4645,7 +4676,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpConsumable.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpConsumable.Location = new System.Drawing.Point(2, 698);
             this.grpConsumable.Name = "grpConsumable";
-            this.grpConsumable.Size = new System.Drawing.Size(217, 125);
+            this.grpConsumable.Size = new System.Drawing.Size(217, 154);
             this.grpConsumable.TabIndex = 12;
             this.grpConsumable.TabStop = false;
             this.grpConsumable.Text = "Consumable";
@@ -4758,11 +4789,11 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.pnlContainer.AutoScroll = true;
             this.pnlContainer.Controls.Add(this.grpAuxInfo);
+            this.pnlContainer.Controls.Add(this.grpConsumable);
             this.pnlContainer.Controls.Add(this.grpEnhancement);
             this.pnlContainer.Controls.Add(this.grpEvent);
             this.pnlContainer.Controls.Add(this.grpEquipment);
             this.pnlContainer.Controls.Add(this.grpGeneral);
-            this.pnlContainer.Controls.Add(this.grpConsumable);
             this.pnlContainer.Controls.Add(this.grpBags);
             this.pnlContainer.Controls.Add(this.grpSpell);
             this.pnlContainer.Location = new System.Drawing.Point(221, 34);
@@ -5012,34 +5043,15 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
             // 
-            // nudSkillPoints
+            // chkMeleeConsumable
             // 
-            this.nudSkillPoints.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudSkillPoints.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudSkillPoints.Location = new System.Drawing.Point(144, 399);
-            this.nudSkillPoints.Maximum = new decimal(new int[] {
-            255,
-            0,
-            0,
-            0});
-            this.nudSkillPoints.Name = "nudSkillPoints";
-            this.nudSkillPoints.Size = new System.Drawing.Size(89, 20);
-            this.nudSkillPoints.TabIndex = 138;
-            this.nudSkillPoints.Value = new decimal(new int[] {
-            0,
-            0,
-            0,
-            0});
-            this.nudSkillPoints.ValueChanged += new System.EventHandler(this.nudSkillPoints_ValueChanged);
-            // 
-            // lblSkillPoints
-            // 
-            this.lblSkillPoints.AutoSize = true;
-            this.lblSkillPoints.Location = new System.Drawing.Point(140, 382);
-            this.lblSkillPoints.Name = "lblSkillPoints";
-            this.lblSkillPoints.Size = new System.Drawing.Size(58, 13);
-            this.lblSkillPoints.TabIndex = 139;
-            this.lblSkillPoints.Text = "Skill Points";
+            this.chkMeleeConsumable.AutoSize = true;
+            this.chkMeleeConsumable.Location = new System.Drawing.Point(19, 122);
+            this.chkMeleeConsumable.Name = "chkMeleeConsumable";
+            this.chkMeleeConsumable.Size = new System.Drawing.Size(114, 17);
+            this.chkMeleeConsumable.TabIndex = 74;
+            this.chkMeleeConsumable.Text = "Only Open Melee?";
+            this.chkMeleeConsumable.CheckedChanged += new System.EventHandler(this.chkMeleeConsumable_CheckedChanged);
             // 
             // FrmItem
             // 
@@ -5141,6 +5153,7 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudHealthBonus)).EndInit();
             this.grpStatBonuses.ResumeLayout(false);
             this.grpStatBonuses.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSkillPoints)).EndInit();
             this.grpWeaponBalance.ResumeLayout(false);
             this.grpWeaponBalance.PerformLayout();
             this.grpArmorBalanceHelper.ResumeLayout(false);
@@ -5187,7 +5200,6 @@ namespace Intersect.Editor.Forms.Editors
             this.grpEnhancement.ResumeLayout(false);
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSkillPoints)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -5519,5 +5531,6 @@ namespace Intersect.Editor.Forms.Editors
         private DarkTextBox txtSortName;
         private Label lblSkillPoints;
         private DarkNumericUpDown nudSkillPoints;
+        private DarkCheckBox chkMeleeConsumable;
     }
 }

@@ -2394,7 +2394,11 @@ namespace Intersect.Client.Entities
                                     var entityMap = MapInstance.Get(en.Value.CurrentMap);
                                     if (Options.Instance.Passability.Passable[(int)entityMap.ZoneType] || ((Player)en.Value).IsDead)
                                     {
-                                        continue;
+                                        // AND if the entity isn't currently a dueler!
+                                        if (!Globals.Me.DuelingIds.Contains(en.Key))
+                                        {
+                                            continue;
+                                        }
                                     }
                                 }
 
@@ -2510,7 +2514,7 @@ namespace Intersect.Client.Entities
 
     public partial class Entity
     {
-        public bool IsAllyOf(Entity en)
+        public virtual bool IsAllyOf(Entity en)
         {
             if (en == null || CurrentMap == default || en.CurrentMap == default)
             {

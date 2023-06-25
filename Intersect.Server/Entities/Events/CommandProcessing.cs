@@ -3566,7 +3566,12 @@ namespace Intersect.Server.Entities.Events
           Stack<CommandInstance> callStack
        )
         {
-            if (player == null)
+            if (player == null || !InstanceProcessor.TryGetInstanceController(player.MapInstanceId, out var instanceController))
+            {
+                return;
+            }
+
+            if (instanceController.DuelPool.Contains(player))
             {
                 return;
             }

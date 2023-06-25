@@ -69,6 +69,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     cmbValue.Items.AddRange(DungeonDescriptor.Names);
                     break;
                 case RecordType.Combo:
+                case RecordType.MeleeVictories:
                     cmbValue.Enabled = false;
                     break;
                 default:
@@ -109,6 +110,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     cmbValue.SelectedIndex = DungeonDescriptor.ListIndex(mMyCommand.RecordId);
                     break;
                 case RecordType.Combo:
+                case RecordType.MeleeVictories:
                     cmbValue.Enabled = false;
                     break;
                 default:
@@ -139,6 +141,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     mMyCommand.RecordId = DungeonDescriptor.IdFromList(cmbValue.SelectedIndex);
                     break;
                 case RecordType.Combo:
+                case RecordType.MeleeVictories:
                     mMyCommand.RecordId = Guid.Empty;
                     break;
                 default:

@@ -320,14 +320,17 @@ namespace Intersect.GameObjects.Events
         [Description("Highest Combo")]
         Combo,
 
-        [Description("TotalDungeonCompletions")]
+        [Description("Dungeon Completions")]
         TotalDungeonCompletions,
 
         [Description("Group Dungeon Times")]
         GroupDungeonTimes,
 
         [Description("Solo Dungeon Times")]
-        SoloDungeonTimes
+        SoloDungeonTimes,
+
+        [Description("Melee Victories")]
+        MeleeVictories
     }
 
     public enum RespawnChangeType
