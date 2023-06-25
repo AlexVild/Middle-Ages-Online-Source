@@ -458,6 +458,7 @@ namespace Intersect.Server.Entities
         {
             if (spell?.SpellType == SpellTypes.Passive)
             {
+                CancelCast();
                 return;
             }
 
@@ -704,6 +705,11 @@ namespace Intersect.Server.Entities
                         }
 
                         if ((spellBase.Combat.Friendly && !IsAllyOf(entity)) || (!spellBase.Combat.Friendly && IsAllyOf(entity)))
+                        {
+                            continue;
+                        }
+
+                        if (spellBase.Combat.Friendly && entity.Id != Id && entity is Player dueler && dueler.InDuel)
                         {
                             continue;
                         }

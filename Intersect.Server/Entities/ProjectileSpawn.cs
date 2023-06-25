@@ -131,7 +131,7 @@ namespace Intersect.Server.Entities
                     if (en is Player collidingPlayer)
                     {
                         // Collision rules for duels
-                        mapPassable = mapPassable || collidingPlayer.InDuel;
+                        mapPassable = mapPassable && !collidingPlayer.InDuel;
                     }
 
                     var friendlySpell = Parent.Spell?.Combat?.Friendly ?? false;
@@ -185,7 +185,7 @@ namespace Intersect.Server.Entities
                     else
                     {
                         // If on a passable map, allow passthrough
-                        return !Options.Instance.Passability.Passable[(int)targetEntity.Map.ZoneType];
+                        return !Options.Instance.Passability.Passable[(int)targetEntity.Map.ZoneType] && !player.InDuel;
                     }
                 }
 

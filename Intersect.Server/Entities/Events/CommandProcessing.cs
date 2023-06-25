@@ -1766,7 +1766,7 @@ namespace Intersect.Server.Entities.Events
                 input = "";
             }
 
-            if (player != null && input.Contains("\\"))
+            if (player != null && input.Contains("\\") && InstanceProcessor.TryGetInstanceController(player.MapInstanceId, out var instanceController))
             {
                 var sb = new StringBuilder(input);
                 var time = Time.GetTime();
@@ -1784,7 +1784,8 @@ namespace Intersect.Server.Entities.Events
                     { Strings.Events.eventnamecapscommand, instance?.PageInstance?.Name.ToUpper() ?? "" },
                     { Strings.Events.eventnamecommand, instance?.PageInstance?.Name ?? "" },
                     { Strings.Events.commandparameter, instance?.PageInstance?.Param ?? "" },
-                    { Strings.Events.eventparams, (instance != null && input.Contains(Strings.Events.eventparams)) ? instance.FormatParameters(player) : "" }
+                    { Strings.Events.eventparams, (instance != null && input.Contains(Strings.Events.eventparams)) ? instance.FormatParameters(player) : "" },
+                    { Strings.Events.MeleePool, instanceController.DuelPool.Count > 0 ? string.Join(", ", instanceController.DuelPool.Select(pl => pl?.Name ?? "").ToArray()) : "No players are currently in the open melee pool" },
                 };
                 
                 if (player.Party?.Count > 1)
@@ -3588,7 +3589,12 @@ namespace Intersect.Server.Entities.Events
           Stack<CommandInstance> callStack
        )
         {
-            if (player == null)
+            if (player == null || !InstanceProcessor.TryGetInstanceController(player.MapInstanceId, out var instanceController))
+            {
+                return;
+            }
+
+            if (!instanceController.DuelPool.Contains(player))
             {
                 return;
             }
