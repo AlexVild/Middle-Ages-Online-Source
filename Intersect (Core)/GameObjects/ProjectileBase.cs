@@ -153,6 +153,8 @@ namespace Intersect.GameObjects
     public partial class ProjectileBase : DatabaseObject<ProjectileBase>, IFolderable
     {
         public bool AttachToEntities { get; set; } = false;
+
+        public Guid ProjectileDeathAnimation { get; set; }
     }
 
 }

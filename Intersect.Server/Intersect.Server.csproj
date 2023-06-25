@@ -1272,6 +1272,10 @@
     <Compile Include="Migrations\Game\20230625151921_MeleeConsumableMigration.designer.cs">
       <DependentUpon>20230625151921_MeleeConsumableMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20230625215154_ProjectileDeathAnimationMigration.cs" />
+    <Compile Include="Migrations\Game\20230625215154_ProjectileDeathAnimationMigration.designer.cs">
+      <DependentUpon>20230625215154_ProjectileDeathAnimationMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

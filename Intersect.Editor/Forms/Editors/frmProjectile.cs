@@ -101,6 +101,10 @@ namespace Intersect.Editor.Forms.Editors
             cmbToolType.Items.Add(Strings.General.none);
             cmbToolType.Items.AddRange(Options.ToolTypes.ToArray());
 
+            cmbDeathAnimation.Items.Clear();
+            cmbDeathAnimation.Items.Add(Strings.General.none);
+            cmbDeathAnimation.Items.AddRange(AnimationBase.Names);
+
             InitLocalization();
             UpdateEditor();
         }
@@ -212,6 +216,7 @@ namespace Intersect.Editor.Forms.Editors
             cmbAnimation.SelectedIndex = AnimationBase.ListIndex(mEditorItem.Animations[index].AnimationId) + 1;
             scrlSpawnRange.Value = Math.Min(mEditorItem.Animations[index].SpawnRange, scrlSpawnRange.Maximum);
             chkRotation.Checked = mEditorItem.Animations[index].AutoRotate;
+            cmbDeathAnimation.SelectedIndex = AnimationBase.ListIndex(mEditorItem.ProjectileDeathAnimation) + 1;
             UpdateAnimations(true);
         }
 
@@ -789,6 +794,11 @@ namespace Intersect.Editor.Forms.Editors
         private void chkFakeMelee_CheckedChanged(object sender, EventArgs e)
         {
             mEditorItem.FakeMelee = chkFakeMelee.Checked;
+        }
+
+        private void cmbDeathAnimation_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mEditorItem.ProjectileDeathAnimation = AnimationBase.IdFromList(cmbDeathAnimation.SelectedIndex - 1);
         }
     }
 

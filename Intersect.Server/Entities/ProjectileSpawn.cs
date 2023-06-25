@@ -9,6 +9,7 @@ using Intersect.Server.Database;
 using Intersect.Enums;
 using Intersect.Utilities;
 using System.Linq;
+using Intersect.Server.Networking;
 
 namespace Intersect.Server.Entities
 {
@@ -103,6 +104,16 @@ namespace Intersect.Server.Entities
             }
         }
 
+        public void PlayDeathAnimation()
+        {
+            if (Parent == null || Parent.Base == null || Parent.Base.ProjectileDeathAnimation == Guid.Empty)
+            {
+                return;
+            }
+
+            PacketSender.SendAnimationToProximity(Parent.Base.ProjectileDeathAnimation, -1, Guid.Empty, MapId, (byte)Math.Ceiling(X), (byte)Math.Ceiling(Y), (sbyte)Dir, MapInstanceId);
+        }
+
         public bool HitEntity(Entity en)
         {
             bool projectileCantDamageYet = Timing.Global.Milliseconds < ProjectileActiveTime && InitX == X && InitY == Y;
@@ -184,8 +195,12 @@ namespace Intersect.Server.Entities
                     }
                     else
                     {
+                        if (player.InDuel)
+                        {
+                            return true;
+                        }
                         // If on a passable map, allow passthrough
-                        return !Options.Instance.Passability.Passable[(int)targetEntity.Map.ZoneType] && !player.InDuel;
+                        return !Options.Instance.Passability.Passable[(int)targetEntity.Map.ZoneType];
                     }
                 }
 
