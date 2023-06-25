@@ -1,5 +1,6 @@
 ﻿using Intersect.Server.Core.Instancing.Controller.Components;
 using Intersect.Server.Entities;
+using Intersect.Server.Networking;
 using Intersect.Utilities;
 using System;
 using System.Collections.Generic;
@@ -11,15 +12,6 @@ namespace Intersect.Server.Core.Instancing.Controller
 {
     public sealed partial class InstanceController
     {
-        public const int MinimumParticipants = 3;
-
-        public const int MatchmakeRetryCount = 2;
-
-        public const long InstanceDuelCooldown = 15000;
-
-        public const long PlayerDuelCooldown = 60000;
-
-        private const long MatchMakeEveryMs = 5000;
         private long LastMatchMakeAttemptTimestamp = 0L;
 
         public Queue<Duel> MatchQueue { get; set; } = new Queue<Duel>();
@@ -30,7 +22,7 @@ namespace Intersect.Server.Core.Instancing.Controller
 
         public long NextDuelTimestamp { get; set; }
 
-        public void JoinDuelPool(Player player)
+        public void JoinMeleePool(Player player)
         {
             if (DuelPool.Contains(player))
             {
@@ -39,7 +31,7 @@ namespace Intersect.Server.Core.Instancing.Controller
             DuelPool.Add(player);
         }
 
-        public void WithdrawDuelPool(Player player)
+        public void WithdrawFromMeleePool(Player player)
         {
             DuelPool.Remove(player);
         }
@@ -48,15 +40,15 @@ namespace Intersect.Server.Core.Instancing.Controller
         {
             if (MatchQueue.Count == 0)
             {
-                MatchMake();
+                OpenMeleeMatchmaking();
             }
             else
             {
-                MatchUpdate();
+                ProcessCurrentMeleeDuel();
             }
         }
 
-        public void MatchMake()
+        public void OpenMeleeMatchmaking()
         {
             // Poll for new matchmake attempt every X seconds
             var now = Timing.Global.MillisecondsUtc;
@@ -64,13 +56,13 @@ namespace Intersect.Server.Core.Instancing.Controller
             {
                 return;
             }
-            LastMatchMakeAttemptTimestamp = now + MatchMakeEveryMs;
+            LastMatchMakeAttemptTimestamp = now + Options.Instance.DuelOpts.MatchMakeEveryMs;
 
             // Prune duel pool
             var duelPool = DuelPool.Where(pl => pl.CanDuel).ToList();
 
             // Not enough people to do random dueling
-            if (duelPool.Count < MinimumParticipants)
+            if (duelPool.Count < Options.Instance.DuelOpts.OpenMeleeMinParticipants)
             {
                 return;
             }
@@ -82,8 +74,8 @@ namespace Intersect.Server.Core.Instancing.Controller
             }
 
             // first, attempt to get a list of players in the pool who have NOT recently dueled
-            var pool = duelPool.Where(duelist => duelist.LastDuelTimestamp + PlayerDuelCooldown < now).ToArray();
-            if (pool.Length < MinimumParticipants)
+            var pool = duelPool.Where(duelist => duelist.LastDuelTimestamp + Options.Instance.DuelOpts.PlayerDuelCooldown < now).ToArray();
+            if (pool.Length < Options.Instance.DuelOpts.OpenMeleeMinParticipants)
             {
                 // If that failed, then just include all potential fighters
                 pool = duelPool.ToArray();
@@ -113,7 +105,7 @@ namespace Intersect.Server.Core.Instancing.Controller
             DuelPool.SendToBack(contestent1, contestent2);
         }
 
-        private void MatchUpdate()
+        private void ProcessCurrentMeleeDuel()
         {
             var currentMatch = MatchQueue.Peek();
             if (currentMatch == default)
@@ -124,7 +116,7 @@ namespace Intersect.Server.Core.Instancing.Controller
             if (currentMatch.Status == DuelStatus.Finished)
             {
                 // The match has ended naturally, clean up and prepare for the next match after cooldown
-                IncrementCooldown(currentMatch.MatchEndedTimestamp);
+                IncrementMatchmakeCooldown(currentMatch.MatchEndedTimestamp);
                 MatchQueue.Dequeue();
             }
             else if (currentMatch.Duelers.Count < 2)
@@ -139,12 +131,12 @@ namespace Intersect.Server.Core.Instancing.Controller
             }
         }
 
-        public void IncrementCooldown(long now)
+        public void IncrementMatchmakeCooldown(long now)
         {
-            NextDuelTimestamp = now + InstanceDuelCooldown;
+            NextDuelTimestamp = now + Options.Instance.DuelOpts.MatchmakingCooldown;
         }
 
-        public void LeaveDuelPool(Player player)
+        public void LeaveMeleePool(Player player)
         {
             DuelPool.Remove(player);
         }

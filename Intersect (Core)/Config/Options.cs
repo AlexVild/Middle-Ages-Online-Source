@@ -469,5 +469,7 @@ namespace Intersect
         [JsonProperty("LootRolling")] public LootRollOptions LootRollOpts = new LootRollOptions();
         
         [JsonProperty("DeconstructionOptions")] public DeconstructionOptions DeconstructionOpts = new DeconstructionOptions();
+
+        [JsonProperty("DuelOptions")] public DuelOptions DuelOpts = new DuelOptions();
     }
 }

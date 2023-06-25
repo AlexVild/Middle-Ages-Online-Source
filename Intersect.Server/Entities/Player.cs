@@ -470,9 +470,6 @@ namespace Intersect.Server.Entities
             {
                 PacketSender.SendPlayerDeathType(this, DeathType.Safe);
             }
-
-            // TODO get rid of this, this is just for testing
-            EnterInstanceDuelPool();
         }
 
         public void SendPacket(IPacket packet, TransmissionMode mode = TransmissionMode.All)

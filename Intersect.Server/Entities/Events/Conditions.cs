@@ -948,6 +948,28 @@ namespace Intersect.Server.Entities.Events
             return player.Party[0].Id == player.Id;
         }
 
+        public static bool MeetsCondition(
+            IsInOpenMelee condition,
+            Player player,
+            Event eventInstance,
+            QuestBase questBase
+            )
+        {
+            if (player == null || condition == null)
+            {
+                return false;
+            }
+
+            if (InstanceProcessor.TryGetInstanceController(player.MapInstanceId, out var controller))
+            {
+                return controller.DuelPool.Contains(player);
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         //Variable Comparison Processing
 
         public static bool CheckVariableComparison(

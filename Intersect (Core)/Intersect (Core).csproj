@@ -218,6 +218,7 @@
     <Compile Include="Config\BankOptions.cs" />
     <Compile Include="Config\ChatOptions.cs" />
     <Compile Include="Config\DeconstructionOptions.cs" />
+    <Compile Include="Config\DuelOptions.cs" />
     <Compile Include="Config\Guilds\GuildOptions.cs" />
     <Compile Include="Config\Guilds\GuildPermissions.cs" />
     <Compile Include="Config\Guilds\GuildRank.cs" />

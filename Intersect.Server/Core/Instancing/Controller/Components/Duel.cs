@@ -19,16 +19,6 @@ namespace Intersect.Server.Core.Instancing.Controller.Components
     {
         public List<Player> Duelers { get; set; } = new List<Player>();
 
-        public readonly string DuelMapId = "f79bfde0-5909-45f0-8e78-7510ddc5f6a1";
-        public readonly string DuelEndMapId = "f79bfde0-5909-45f0-8e78-7510ddc5f6a1";
-
-        public readonly int DuelMapX1 = 27;
-        public readonly int DuelMapX2 = 27;
-        public readonly int DuelMapY1 = 3;
-        public readonly int DuelMapY2 = 7;
-        public readonly int DuelEndX = 24;
-        public readonly int DuelEndY = 3;
-
         public long MatchEndedTimestamp { get; set; }
 
         public DuelStatus Status { get; set; }

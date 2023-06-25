@@ -3557,5 +3557,38 @@ namespace Intersect.Server.Entities.Events
                 evt.GlobalPageInstance[evt.PageIndex].ResetPosition();
             }
         }
+
+        private static void ProcessCommand(
+          MeleeSignupCommand command,
+          Player player,
+          Event instance,
+          CommandInstance stackInfo,
+          Stack<CommandInstance> callStack
+       )
+        {
+            if (player == null)
+            {
+                return;
+            }
+
+            player.MeleeSignup(command.DuelMapId, command.RespawnMapId, command.Duelist1X, command.Duelist1Y, command.Duelist2X, command.Duelist2Y, command.RespawnX, command.RespawnY);
+            player.EnterInstanceMeleePool();
+        }
+
+        private static void ProcessCommand(
+          MeleeWithdrawCommand command,
+          Player player,
+          Event instance,
+          CommandInstance stackInfo,
+          Stack<CommandInstance> callStack
+       )
+        {
+            if (player == null)
+            {
+                return;
+            }
+
+            player.WithdrawFromMelee();
+        }
     }
 }
