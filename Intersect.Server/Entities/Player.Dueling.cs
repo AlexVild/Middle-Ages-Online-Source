@@ -188,5 +188,77 @@ namespace Intersect.Server.Entities
             PacketSender.SendChatMsg(this, "You have been withdrawn from the open melee pool.", Enums.ChatMessageType.Local, sendToast: true);
             PacketSender.SendProximityMsgToLayer($"{Name} has withdrawn from the open melee!", Enums.ChatMessageType.Notice, MapId, MapInstanceId, Color.FromName("Yellow", Strings.Colors.presets));
         }
+
+        public void SendDuelFinishMessage(string loserName, string winnerName)
+        {
+            var choice = Randomization.Next(0, 20);
+
+            var msg = $"{winnerName} was victorious over {loserName} in their open duel!";
+            switch (choice)
+            {
+                case 0:
+                    msg = $"{winnerName} smoked {loserName} like a salmon.";
+                    break;
+                case 1:
+                    msg = $"{winnerName} humiliated {loserName}.";
+                    break;
+                case 2:
+                    msg = $"{winnerName} made a club sandwich out of {loserName}.";
+                    break;
+                case 3:
+                    msg = $"{winnerName} made {loserName} say uncle.";
+                    break;
+                case 4:
+                    msg = $"{winnerName} gave {loserName} the Brooklyn.";
+                    break;
+                case 5:
+                    msg = $"{winnerName} hit {loserName} with the ol' \"Right there, Fred\".";
+                    break;
+                case 6:
+                    msg = $"{winnerName} whacked {loserName}.";
+                    break;
+                case 7:
+                    msg = $"{winnerName} eviscerated {loserName}.";
+                    break;
+                case 8:
+                    msg = $"{winnerName} publically lashed {loserName}.";
+                    break;
+                case 9:
+                    msg = $"{winnerName} gave {loserName} a soft kiss on the cheek.";
+                    break;
+                case 10:
+                    msg = $"{winnerName} made {loserName} into mustard.";
+                    break;
+                case 11:
+                    msg = $"{winnerName} poked a hole in {loserName}.";
+                    break;
+                case 12:
+                    msg = $"{winnerName} spanked {loserName}.";
+                    break;
+                case 13:
+                    msg = $"{winnerName} made a fool out of {loserName}.";
+                    break;
+                case 14:
+                    msg = $"{winnerName} cancelled {loserName}.";
+                    break;
+                case 15:
+                    msg = $"{winnerName} hyzer-flipped {loserName}.";
+                    break;
+                case 16:
+                    msg = $"{winnerName} patted down {loserName} before they got on the plane.";
+                    break;
+                case 17:
+                    msg = $"{winnerName} $&%#'d {loserName}.";
+                    break;
+                case 18:
+                    msg = $"{winnerName} passed the unplugged controller to {loserName}.";
+                    break;
+                case 19:
+                    msg = $"{winnerName} turned off {loserName}'s router.";
+                    break;
+            }
+
+            PacketSender.SendProximityMsgToLayer(msg, Enums.ChatMessageType.Notice, MapId, MapInstanceId, Color.FromName("Blue", Strings.Colors.presets));
+        }
     }
 }

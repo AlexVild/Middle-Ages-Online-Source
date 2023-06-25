@@ -1130,6 +1130,7 @@ namespace Intersect.Server.Entities
 
             if (InDuel)
             {
+                SendDuelFinishMessage(Name, killer?.Name ?? "Literally Nobody");
                 CurrentDuel.Lost(this);
                 dropItems = false;
             }
