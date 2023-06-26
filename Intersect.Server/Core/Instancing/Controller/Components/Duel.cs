@@ -1,4 +1,5 @@
-﻿using Intersect.Server.Entities;
+﻿using Intersect.GameObjects.Maps;
+using Intersect.Server.Entities;
 using Intersect.Server.Networking;
 using Intersect.Utilities;
 using System;
@@ -82,6 +83,7 @@ namespace Intersect.Server.Core.Instancing.Controller.Components
             Duelers.Remove(player);
 
             player.LeaveDuel(warp);
+            PacketSender.SendPlayMusic(player, MapBase.Get(player.MapId)?.Music ?? string.Empty);
         }
     }
 }

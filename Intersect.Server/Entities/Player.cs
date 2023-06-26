@@ -1124,9 +1124,6 @@ namespace Intersect.Server.Entities
 
             if (killer is Player playerKiller)
             {
-                playerKiller.AddDeferredEvent(CommonEventTrigger.PVPKill, "", Name);
-                AddDeferredEvent(CommonEventTrigger.PVPDeath, "", killer?.Name);
-
                 if (InDuel)
                 {
                     // Declare a victor
@@ -1134,6 +1131,11 @@ namespace Intersect.Server.Entities
 
                     CurrentDuel.Lost(this);
                     dropItems = false;
+                }
+                else
+                {
+                    playerKiller.AddDeferredEvent(CommonEventTrigger.PVPKill, "", Name);
+                    AddDeferredEvent(CommonEventTrigger.PVPDeath, "", killer?.Name);
                 }
             }
 

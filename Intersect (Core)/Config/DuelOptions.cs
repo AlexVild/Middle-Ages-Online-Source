@@ -21,5 +21,11 @@ namespace Intersect.Config
         public string MeleeHealItemId { get; set; } = "8a7a2f42-8bb7-4b2d-b9f0-29035cf3d69f";
         
         public string MeleeManaItemId { get; set; } = "f7c483a8-3ff4-4dac-a4ff-9ec52e89f7b9";
+        
+        public string WinAnimId { get; set; } = "c2a1dde4-d068-4f5c-8ef8-4f03afaa658c";
+        
+        public string EntranceAnimId{ get; set; } = "5fe83f3e-6f28-4ae9-9da2-c39405875490";
+        
+        public string MeleeMusic { get; set; } = "mini boss.ogg";
     }
 }

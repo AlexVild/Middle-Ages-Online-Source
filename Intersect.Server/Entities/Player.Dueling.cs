@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using Intersect.GameObjects;
 using Intersect.GameObjects.Events;
+using Intersect.GameObjects.Maps;
 using Intersect.Network.Packets.Server;
 using Intersect.Server.Core;
 using Intersect.Server.Core.Instancing.Controller;
@@ -114,6 +115,8 @@ namespace Intersect.Server.Entities
                 Warp(MeleeMapId, MeleeSpawn2X, MeleeSpawn2Y);
             }
 
+            PacketSender.SendPlayMusic(this, Options.Instance.DuelOpts.MeleeMusic ?? string.Empty);
+            PacketSender.SendAnimationToProximity(Guid.Parse(Options.Instance.DuelOpts.EntranceAnimId), 1, Id, MapId, (byte)X, (byte)Y, (sbyte)Dir, MapInstanceId);
             GiveMeleeItems();
             FullHeal();
         }
@@ -151,6 +154,7 @@ namespace Intersect.Server.Entities
                 InDuel = false;
             }
             PacketSender.SendSetDuelOpponent(this, Array.Empty<Player>());
+            PacketSender.SendPlayMusic(this, MapBase.Get(MapId)?.Music ?? string.Empty);
             LastDuelTimestamp = Timing.Global.MillisecondsUtc; // use this to make matchmaking pool smaller and avoid duplicates
         }
 
@@ -312,6 +316,7 @@ namespace Intersect.Server.Entities
             SendDuelFinishMessage(defeated?.Name ?? "NOT FOUND", Name);
             IncrementRecord(RecordType.MeleeVictories, Guid.Empty);
             TryGiveItem(Guid.Parse(Options.Instance.DuelOpts.MeleeMedalId), 1);
+            PacketSender.SendAnimationToProximity(Guid.Parse(Options.Instance.DuelOpts.WinAnimId), 1, Id, MapId, (byte)X, (byte)Y, (sbyte)Dir, MapInstanceId);
         }
     }
 }
