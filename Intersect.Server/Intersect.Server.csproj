@@ -774,6 +774,10 @@
     <Compile Include="Migrations\20230625133326_OpenMeleeMigration.designer.cs">
       <DependentUpon>20230625133326_OpenMeleeMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\20230626023856_MeleeDirMigration.cs" />
+    <Compile Include="Migrations\20230626023856_MeleeDirMigration.designer.cs">
+      <DependentUpon>20230626023856_MeleeDirMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.cs" />
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.Designer.cs">
       <DependentUpon>20201222164741_NpcResetRadius.cs</DependentUpon>

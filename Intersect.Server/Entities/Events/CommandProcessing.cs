@@ -3577,7 +3577,7 @@ namespace Intersect.Server.Entities.Events
                 return;
             }
 
-            player.MeleeSignup(command.DuelMapId, command.RespawnMapId, command.Duelist1X, command.Duelist1Y, command.Duelist2X, command.Duelist2Y, command.RespawnX, command.RespawnY);
+            player.MeleeSignup(command.DuelMapId, command.RespawnMapId, command.Duelist1X, command.Duelist1Y, command.Duelist1Dir, command.Duelist2X, command.Duelist2Y, command.Duelist2Dir, command.RespawnX, command.RespawnY, command.RespawnDir);
             player.EnterInstanceMeleePool();
         }
 

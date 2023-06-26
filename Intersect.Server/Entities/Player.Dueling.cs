@@ -49,6 +49,8 @@ namespace Intersect.Server.Entities
 
         public int MeleeEndY { get; set; }
 
+        public byte MeleeEndDir { get; set; }
+
         [NotMapped]
         public Guid MeleeMapId { get; set; }
 
@@ -59,10 +61,16 @@ namespace Intersect.Server.Entities
         public int MeleeSpawn1Y { get; set; }
 
         [NotMapped]
+        public byte MeleeSpawn1Dir { get; set; }
+
+        [NotMapped]
         public int MeleeSpawn2X { get; set; }
 
         [NotMapped]
         public int MeleeSpawn2Y { get; set; }
+
+        [NotMapped]
+        public byte MeleeSpawn2Dir { get; set; }
 
         [NotMapped]
         public long DuelRequestSentAt { get; set; }
@@ -108,11 +116,11 @@ namespace Intersect.Server.Entities
             // This only supports 1-on-1 duels atm
             if (spawnIdx == 0)
             {
-                Warp(MeleeMapId, MeleeSpawn1X, MeleeSpawn1Y);
+                Warp(MeleeMapId, MeleeSpawn1X, MeleeSpawn1Y, MeleeSpawn1Dir);
             }
             else
             {
-                Warp(MeleeMapId, MeleeSpawn2X, MeleeSpawn2Y);
+                Warp(MeleeMapId, MeleeSpawn2X, MeleeSpawn2Y, MeleeSpawn2Dir);
             }
 
             PacketSender.SendPlayMusic(this, Options.Instance.DuelOpts.MeleeMusic ?? string.Empty);
@@ -147,7 +155,7 @@ namespace Intersect.Server.Entities
             FullHeal();
             if (warp)
             {
-                Warp(MeleeEndMapId, MeleeEndX, MeleeEndY);
+                Warp(MeleeEndMapId, MeleeEndX, MeleeEndY, MeleeEndDir);
                 InDuel = false;
             }
             CurrentDuel = null;
@@ -196,7 +204,7 @@ namespace Intersect.Server.Entities
             }
         }
 
-        public void MeleeSignup(Guid mapId, Guid respawnMapId, int spawn1X, int spawn1Y, int spawn2X, int spawn2Y, int respawnX, int respawnY)
+        public void MeleeSignup(Guid mapId, Guid respawnMapId, int spawn1X, int spawn1Y, int spawn1Dir, int spawn2X, int spawn2Y, int spawn2Dir, int respawnX, int respawnY, int respawnDir)
         {
             // In-memory
             MeleeMapId = mapId;
@@ -204,11 +212,14 @@ namespace Intersect.Server.Entities
             MeleeSpawn1Y = spawn1Y;
             MeleeSpawn2X = spawn2X;
             MeleeSpawn2Y = spawn2Y;
+            MeleeSpawn1Dir = (byte)spawn1Dir;
+            MeleeSpawn2Dir = (byte)spawn2Dir;
 
             // Persistent so we can spawn here on D/C
             MeleeEndMapId = respawnMapId;
             MeleeEndX = respawnX;
             MeleeEndY = respawnY;
+            MeleeEndDir = (byte)respawnDir;
 
             PacketSender.SendToast(this, "You have signed up for the open melee.");
             PacketSender.SendProximityMsgToLayer($"{Name} has signed up for the open melee!", Enums.ChatMessageType.Notice, MapId, MapInstanceId, Color.FromName("Yellow", Strings.Colors.presets));
