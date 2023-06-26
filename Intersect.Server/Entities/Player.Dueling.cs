@@ -124,13 +124,6 @@ namespace Intersect.Server.Entities
 
         public void ForfeitDuel(bool withdrawFromPool)
         {
-            if (CurrentDuel == default)
-            {
-                return;
-            }
-
-            CurrentDuel.Leave(this, false);
-            CurrentDuel = null;
             if (withdrawFromPool && InstanceProcessor.TryGetInstanceController(MapInstanceId, out var instanceController))
             {
                 var exPoolSize = instanceController.DuelPool.Count;
@@ -143,6 +136,9 @@ namespace Intersect.Server.Entities
                     PacketSender.SendProximityMsgToLayer($"There are too few players signed up for the open melee to take place. At least {Options.Instance.DuelOpts.OpenMeleeMinParticipants} players must be signed up.", Enums.ChatMessageType.Notice, MapId, MapInstanceId, Color.FromName("Orange", Strings.Colors.presets));
                 }
             }
+
+            CurrentDuel?.Leave(this, false);
+            CurrentDuel = null;
         }
 
         public void LeaveDuel(bool warp)
