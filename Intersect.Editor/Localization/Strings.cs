@@ -2922,6 +2922,7 @@ Tick timer saved in server config.json.";
                 {25, @"Dungeon Start"},
                 {26, @"Dungeon Complete"},
                 {27, @"Gnome Obtained"},
+                {28, @"Duel Started"},
             };
 
             public static LocalizedString conditions = @"Conditions";

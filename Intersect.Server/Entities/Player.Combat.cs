@@ -243,7 +243,7 @@ namespace Intersect.Server.Entities
                 return;
             }
 
-            if (target is Player spellTarget && spell.Combat.Friendly && spellTarget != this && spellTarget.InDuel)
+            if (target is Player spellTarget && spell.Combat.Friendly && spellTarget.Id != Id && spellTarget.InDuel)
             {
                 PacketSender.SendChatMsg(this, "You can not cast friendly spells on a dueling player.", ChatMessageType.Notice, CustomColors.General.GeneralDisabled);
                 CancelCast();

@@ -60,6 +60,8 @@
 
         GnomeCaptured,
 
+        DuelStarted,
+
     }
 
 }

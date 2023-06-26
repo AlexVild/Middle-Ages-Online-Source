@@ -117,6 +117,7 @@ namespace Intersect.Server.Entities
 
             PacketSender.SendPlayMusic(this, Options.Instance.DuelOpts.MeleeMusic ?? string.Empty);
             PacketSender.SendAnimationToProximity(Guid.Parse(Options.Instance.DuelOpts.EntranceAnimId), 1, Id, MapId, (byte)X, (byte)Y, (sbyte)Dir, MapInstanceId);
+            AddDeferredEvent(Enums.CommonEventTrigger.DuelStarted);
             GiveMeleeItems();
             FullHeal();
         }
