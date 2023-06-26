@@ -130,7 +130,7 @@ namespace Intersect.Server.Entities
             }
 
             CurrentDuel.Leave(this, false);
-            CurrentDuel = default;
+            CurrentDuel = null;
             if (withdrawFromPool && InstanceProcessor.TryGetInstanceController(MapInstanceId, out var instanceController))
             {
                 var exPoolSize = instanceController.DuelPool.Count;
@@ -154,6 +154,7 @@ namespace Intersect.Server.Entities
                 Warp(MeleeEndMapId, MeleeEndX, MeleeEndY);
                 InDuel = false;
             }
+            CurrentDuel = null;
             PacketSender.SendSetDuelOpponent(this, Array.Empty<Player>());
             PacketSender.SendPlayMusic(this, MapBase.Get(MapId)?.Music ?? string.Empty);
             LastDuelTimestamp = Timing.Global.MillisecondsUtc; // use this to make matchmaking pool smaller and avoid duplicates

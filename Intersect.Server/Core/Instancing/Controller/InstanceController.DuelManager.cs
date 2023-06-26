@@ -24,16 +24,16 @@ namespace Intersect.Server.Core.Instancing.Controller
 
         public void JoinMeleePool(Player player)
         {
-            if (DuelPool.Contains(player))
+            if (player == null)
+            {
+                return;
+            }
+
+            if (DuelPool.Select(pl => pl.Id).Contains(player.Id))
             {
                 return;
             }
             DuelPool.Add(player);
-        }
-
-        public void WithdrawFromMeleePool(Player player)
-        {
-            DuelPool.Remove(player);
         }
 
         public void ProcessOpenMelee()
@@ -138,7 +138,7 @@ namespace Intersect.Server.Core.Instancing.Controller
 
         public void LeaveMeleePool(Player player)
         {
-            DuelPool.Remove(player);
+            DuelPool.RemoveAll(pl => pl.Id == player.Id);
         }
     }
 }
