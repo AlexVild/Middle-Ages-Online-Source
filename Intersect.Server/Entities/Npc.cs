@@ -220,7 +220,6 @@ namespace Intersect.Server.Entities
                 if (validTransform)
                 {
                     // Set some vars for the parent Die() method to transform properly
-                    generateLoot = false;
                     transform = true;
                 }
                 else
