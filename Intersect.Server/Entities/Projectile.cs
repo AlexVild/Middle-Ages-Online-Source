@@ -425,17 +425,12 @@ namespace Intersect.Server.Entities
                             return killSpawn;
                         }
                     }
-                    else
-                    {
-                        if (z == entities.Count - 1)
-                        {       
-                            if (spawn.Distance >= Base.Range)
-                            {
-                                killSpawn = true;
-                            }
-                        }
-                    }
                 }
+            }
+
+            if (spawn.Distance >= Base.Range)
+            {
+                killSpawn = true;
             }
 
             return killSpawn;
