@@ -1410,7 +1410,7 @@ namespace Intersect.Client.Entities
             {
                 return false;
             }
-            var canTargetPlayers = Globals.Me.MapInstance.ZoneType == MapZones.Safe ? false : true;
+            var canTargetPlayers = Globals.Me.MapInstance.ZoneType == MapZones.Safe && Globals.Me.DuelingIds.Count == 0 ? false : true;
 
             // Build a list of Entities to select from with positions if our list is either old, we've moved or changed maps somehow.
             if (
@@ -1449,7 +1449,7 @@ namespace Intersect.Client.Entities
                     else if (canTargetPlayers && en.Value.GetEntityType() == EntityTypes.Player)
                     {
                         var player = en.Value as Player;
-                        if (IsInMyParty(player))
+                        if (player.IsAllyOf(Globals.Me))
                         {
                             continue;
                         }
