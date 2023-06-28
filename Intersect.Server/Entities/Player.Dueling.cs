@@ -10,11 +10,13 @@ using Intersect.Server.Core;
 using Intersect.Server.Core.Instancing.Controller;
 using Intersect.Server.Core.Instancing.Controller.Components;
 using Intersect.Server.Database;
+using Intersect.Server.Database.GameData;
 using Intersect.Server.Database.PlayerData.Players;
 using Intersect.Server.Entities.Events;
 using Intersect.Server.Entities.PlayerData;
 using Intersect.Server.Localization;
 using Intersect.Server.Networking;
+using Intersect.Server.Utilities;
 using Intersect.Utilities;
 using Newtonsoft.Json;
 
@@ -99,7 +101,7 @@ namespace Intersect.Server.Entities
 
             if (exPoolSize < Options.Instance.DuelOpts.OpenMeleeMinParticipants && instanceController.DuelPool.Count >= Options.Instance.DuelOpts.OpenMeleeMinParticipants)
             {
-                PacketSender.SendProximityMsgToLayer($"Enough players have signed up for the open melee! Duels will commence shortly.", Enums.ChatMessageType.Notice, MapId, MapInstanceId, Color.FromName("Pink", Strings.Colors.presets));
+                PacketSender.SendProximityMsgToLayer($"Enough players have signed up for the open melee to start earning medals! Duels will commence shortly.", Enums.ChatMessageType.Notice, MapId, MapInstanceId, Color.FromName("Pink", Strings.Colors.presets));
             }
         }
 
@@ -139,9 +141,9 @@ namespace Intersect.Server.Entities
                 instanceController.LeaveMeleePool(this);
                 PacketSender.SendProximityMsgToLayer($"{Name} forfeited their melee duel.", Enums.ChatMessageType.Notice, MapId, MapInstanceId, Color.FromName("Blue", Strings.Colors.presets));
 
-                if (exPoolSize >= Options.Instance.DuelOpts.OpenMeleeMinParticipants && instanceController.DuelPool.Count < Options.Instance.DuelOpts.OpenMeleeMinParticipants)
+                if (exPoolSize >= Options.Instance.DuelOpts.OpenMeleeMinMedalParticipants && instanceController.DuelPool.Count < Options.Instance.DuelOpts.OpenMeleeMinMedalParticipants)
                 {
-                    PacketSender.SendProximityMsgToLayer($"There are too few players signed up for the open melee to take place. At least {Options.Instance.DuelOpts.OpenMeleeMinParticipants} players must be signed up.", Enums.ChatMessageType.Notice, MapId, MapInstanceId, Color.FromName("Orange", Strings.Colors.presets));
+                    PacketSender.SendProximityMsgToLayer($"There are too few players signed up for the open melee to give out champion medals. At least {Options.Instance.DuelOpts.OpenMeleeMinMedalParticipants} players must be signed up.", Enums.ChatMessageType.Notice, MapId, MapInstanceId, Color.FromName("Orange", Strings.Colors.presets));
                 }
             }
 
@@ -153,6 +155,8 @@ namespace Intersect.Server.Entities
         {
             TakeMeleeItems();
             FullHeal();
+            ClearHostileDoTs();
+            ResetCooldowns();
             if (warp)
             {
                 Warp(MeleeEndMapId, MeleeEndX, MeleeEndY, MeleeEndDir);
@@ -237,9 +241,9 @@ namespace Intersect.Server.Entities
 
                 instanceController.LeaveMeleePool(this);
 
-                if (exPoolSize >= Options.Instance.DuelOpts.OpenMeleeMinParticipants && instanceController.DuelPool.Count < Options.Instance.DuelOpts.OpenMeleeMinParticipants)
+                if (exPoolSize >= Options.Instance.DuelOpts.OpenMeleeMinMedalParticipants && instanceController.DuelPool.Count < Options.Instance.DuelOpts.OpenMeleeMinMedalParticipants)
                 {
-                    PacketSender.SendProximityMsgToLayer($"There are too few players signed up for the open melee to take place. At least {Options.Instance.DuelOpts.OpenMeleeMinParticipants} players must be signed up.", Enums.ChatMessageType.Notice, MapId, MapInstanceId, Color.FromName("Orange", Strings.Colors.presets));
+                    PacketSender.SendProximityMsgToLayer($"There are too few players signed up for the open melee to give out champion medals. At least {Options.Instance.DuelOpts.OpenMeleeMinMedalParticipants} players must be signed up.", Enums.ChatMessageType.Notice, MapId, MapInstanceId, Color.FromName("Orange", Strings.Colors.presets));
                 }
             }
 
@@ -324,7 +328,19 @@ namespace Intersect.Server.Entities
             // Tell the proximity who won
             SendDuelFinishMessage(defeated?.Name ?? "NOT FOUND", Name);
             IncrementRecord(RecordType.MeleeVictories, Guid.Empty);
-            TryGiveItem(Guid.Parse(Options.Instance.DuelOpts.MeleeMedalId), 1);
+            if (InstanceProcessor.TryGetInstanceController(MapInstanceId, out var instanceController))
+            {
+                if (instanceController.DuelPool.Count >= Options.Instance.DuelOpts.OpenMeleeMinMedalParticipants)
+                {
+                    TryGiveItem(
+                        Guid.Parse(Options.Instance.DuelOpts.MeleeMedalId), 
+                        (int)DayOfWeekUtils.GetDayOfWeek() == Options.Instance.DuelOpts.DoubleMedalDayOfWeek ? 2 : 1);
+                }
+                else
+                {
+                    PacketSender.SendProximityMsgToLayer($"There are too few players signed up for the open melee to give out champion medals. At least {Options.Instance.DuelOpts.OpenMeleeMinMedalParticipants} players must be signed up.", Enums.ChatMessageType.Notice, MapId, MapInstanceId, Color.FromName("Orange", Strings.Colors.presets));
+                }
+            }
             PacketSender.SendAnimationToProximity(Guid.Parse(Options.Instance.DuelOpts.WinAnimId), 1, Id, MapId, (byte)X, (byte)Y, (sbyte)Dir, MapInstanceId);
         }
     }

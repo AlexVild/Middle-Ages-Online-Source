@@ -164,7 +164,6 @@ namespace Intersect.Utilities
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("Here");
                     throw (e);
                 }
             }

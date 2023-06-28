@@ -8,9 +8,13 @@ namespace Intersect.Config
 {
     public class DuelOptions
     {
-        public int OpenMeleeMinParticipants { get; set; } = 3;
+        public int OpenMeleeMinParticipants { get; set; } = 2;
+        
+        public int OpenMeleeMinMedalParticipants { get; set; } = 3;
 
         public long MatchmakingCooldown { get; set; } = 15000;
+        
+        public long MatchmakingMinCooldown { get; set; } = 5000;
 
         public long PlayerDuelCooldown { get; set; } = 60000;
 
@@ -27,5 +31,11 @@ namespace Intersect.Config
         public string EntranceAnimId{ get; set; } = "5fe83f3e-6f28-4ae9-9da2-c39405875490";
         
         public string MeleeMusic { get; set; } = "mini boss.ogg";
+
+        public string DayOfWeekServerVarId { get; set; } = "4e78f9eb-4ead-4163-adf9-a07643da8091";
+
+        public int DoubleMedalDayOfWeek { get; set; } = 1;
+
+        public long MatchCooldownModifier { get; set; } = 3000;
     }
 }

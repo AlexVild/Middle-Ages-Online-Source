@@ -634,7 +634,7 @@ namespace Intersect.Editor.Forms.Editors
 
                 RefreshUpgradeList(false);
 
-                mEditorItem.MeleeConsumable = chkMeleeConsumable.Checked;
+                chkMeleeConsumable.Checked = mEditorItem.MeleeConsumable;
 
                 cmbStudyEnhancement.SelectedIndex = EnhancementDescriptor.ListIndex(mEditorItem.StudyEnhancement) + 1;
                 nudStudyChance.Value = (decimal)mEditorItem.StudyChance;

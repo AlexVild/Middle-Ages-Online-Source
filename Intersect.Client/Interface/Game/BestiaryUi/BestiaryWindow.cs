@@ -222,11 +222,6 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
                 var nameUnlocked = NameUnlocked(beast.Id);
                 var name = nameUnlocked ? beast.Name : UnknownString;
 
-                if (name == UnknownString)
-                {
-                    Console.WriteLine("Here");
-                }
-
                 if (!nameUnlocked && HideUnknown)
                 {
                     continue;

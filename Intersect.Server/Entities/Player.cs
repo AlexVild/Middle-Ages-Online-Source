@@ -9558,5 +9558,11 @@ namespace Intersect.Server.Entities
         }
 
         public ConcurrentQueue<DeferredEvent> DeferredEventQueue = new ConcurrentQueue<DeferredEvent>();
+
+        public override void ResetCooldowns()
+        {
+            base.ResetCooldowns();
+            PacketSender.SendSpellCooldowns(this);
+        }
     }
 }

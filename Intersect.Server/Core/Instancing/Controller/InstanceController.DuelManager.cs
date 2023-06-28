@@ -74,12 +74,13 @@ namespace Intersect.Server.Core.Instancing.Controller
             }
 
             // first, attempt to get a list of players in the pool who have NOT recently dueled
-            var pool = duelPool.Where(duelist => duelist.LastDuelTimestamp + Options.Instance.DuelOpts.PlayerDuelCooldown < now).ToArray();
-            if (pool.Length < Options.Instance.DuelOpts.OpenMeleeMinParticipants)
-            {
-                // If that failed, then just include all potential fighters
-                pool = duelPool.ToArray();
-            }
+            //var pool = duelPool.Where(duelist => duelist.LastDuelTimestamp + Options.Instance.DuelOpts.PlayerDuelCooldown < now).ToArray(); Commenting this out, it's not really creating desired behavior
+            //if (pool.Length < Options.Instance.DuelOpts.OpenMeleeMinParticipants)
+            //{
+            // If that failed, then just include all potential fighters
+            //pool = duelPool.ToArray();
+            //}
+            var pool = duelPool.ToArray();
 
             // Prioritize the front of the pool - they've effectively been waiting the longest
             var contestent1 = duelPool.FirstOrDefault();
@@ -89,7 +90,7 @@ namespace Intersect.Server.Core.Instancing.Controller
                 return;
             }
 
-            var contestent2 = duelPool.ElementAtOrDefault(Randomization.Next(1, DuelPool.Count));
+            var contestent2 = duelPool.ElementAtOrDefault(Randomization.Next(1, duelPool.Count));
             if (contestent2 == default)
             {
                 // Something went wrong, abort and try again next cycle
@@ -133,7 +134,15 @@ namespace Intersect.Server.Core.Instancing.Controller
 
         public void IncrementMatchmakeCooldown(long now)
         {
-            NextDuelTimestamp = now + Options.Instance.DuelOpts.MatchmakingCooldown;
+            var maxCooldown = now + Options.Instance.DuelOpts.MatchmakingCooldown;
+            var minCooldown = Options.Instance.DuelOpts.MatchmakingMinCooldown;
+
+            var participants = DuelPool.Where(d => d.CanDuel).ToArray().Length;
+
+            // Allows us to decrease match cooldown based on number of participants. Linear naive approach for now
+            var modifier = Math.Max(participants - Options.Instance.DuelOpts.OpenMeleeMinMedalParticipants, 0) * Options.Instance.DuelOpts.MatchCooldownModifier;
+
+            NextDuelTimestamp = Math.Max(maxCooldown - modifier, minCooldown);
         }
 
         public void LeaveMeleePool(Player player)

@@ -2377,5 +2377,10 @@ namespace Intersect.Server.Entities
         {
             // Blank
         }
+
+        public virtual void ResetCooldowns()
+        {
+            SpellCooldowns.Clear();
+        }
     }
 }
