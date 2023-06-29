@@ -1593,7 +1593,8 @@ namespace Intersect.Server.Networking
         //SpellCastPacket
         public static void SendEntityCastTime(Entity en, Guid spellId)
         {
-            SendDataToProximityOnMapInstance(en.MapId, en.MapInstanceId, new SpellCastPacket(en.Id, spellId), null, TransmissionMode.Any);
+            SendDataToProximityOnMapInstance(en.MapId, en.MapInstanceId, 
+                new SpellCastPacket(en.Id, spellId, en.Target?.Id ?? Guid.Empty), null, TransmissionMode.Any);
         }
 
         //CancelCastPacket

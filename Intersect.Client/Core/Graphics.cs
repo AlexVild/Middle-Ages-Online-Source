@@ -307,7 +307,7 @@ namespace Intersect.Client.Core
                         switch (castSpell.Combat.TargetType)
                         {
                             case SpellTargetTypes.AoE:
-                                entity.DrawAoe(castSpell, map, entity.X, entity.Y, entity.IsAllyOf(Globals.Me), castSpell.Combat.HitRadius);
+                                entity.DrawAoe(castSpell, SpellTargetTypes.AoE, map, entity.X, entity.Y, entity.IsAllyOf(Globals.Me), castSpell.Combat.HitRadius);
                                 break;
                             case SpellTargetTypes.Single:
                                 if (!Globals.Entities.TryGetValue(entity.EntityTarget, out var target) || target.CurrentMap == default)
@@ -315,9 +315,10 @@ namespace Intersect.Client.Core
                                     break;
                                 }
 
-                                if (target.Id == Globals.Me.Id)
+                                // Either you're the target or you're the caster
+                                if (target.Id == Globals.Me.Id || entity.Id == Globals.Me.Id)
                                 {
-                                    entity.DrawAoe(castSpell, map, entity.X, entity.Y, entity.IsAllyOf(Globals.Me), castSpell.Combat.CastRange, true);
+                                    entity.DrawAoe(castSpell, SpellTargetTypes.Single, map, entity.X, entity.Y, entity.IsAllyOf(Globals.Me), castSpell.Combat.CastRange, entity.Id != Globals.Me.Id);
                                 }
                                 if (castSpell.Combat.HitRadius <= 0)
                                 {
@@ -336,7 +337,7 @@ namespace Intersect.Client.Core
                                 }
 
                                 var targetMap = MapInstance.Get(target.CurrentMap);
-                                target.DrawAoe(castSpell, targetMap, target.X, target.Y, entity.IsAllyOf(Globals.Me), castSpell.Combat.HitRadius);
+                                target.DrawAoe(castSpell, SpellTargetTypes.AoE, targetMap, target.X, target.Y, entity.IsAllyOf(Globals.Me), castSpell.Combat.HitRadius);
                                 break;
                             case SpellTargetTypes.Projectile:
                                 entity.DrawProjectileSpawns(castSpell, map, entity.X, entity.Y, entity.IsAllyOf(Globals.Me));

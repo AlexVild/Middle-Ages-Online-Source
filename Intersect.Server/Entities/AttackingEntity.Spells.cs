@@ -393,8 +393,11 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
-            ApplySpellBuffsTo(spell, target);
-            Combat.DoT.AddSpellDoTsTo(spell, this, target);
+            if (spell.Combat.Friendly || target.CachedStatuses.All(status => status.Type != StatusTypes.Invulnerable)) 
+            {
+                ApplySpellBuffsTo(spell, target);
+                Combat.DoT.AddSpellDoTsTo(spell, this, target);
+            }
 
             // Determine if we want to apply effects to otherwise invulnerable NPCs
             if (this is Player pl && target is Npc np && !pl.CanAttackNpc(np))

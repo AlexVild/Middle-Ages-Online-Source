@@ -1377,14 +1377,9 @@ namespace Intersect.Client.Networking
             var entityId = packet.EntityId;
             var spellId = packet.SpellId;
             var spell = SpellBase.Get(spellId);
-            if (spell != null && Globals.Entities.ContainsKey(entityId))
+            if (spell != null && Globals.Entities.TryGetValue(entityId, out var entity))
             {
-                if (spell.CastDuration == 0)
-                {
-                    return;
-                }
-                Globals.Entities[entityId].CastTime = Timing.Global.Milliseconds + spell.CastDuration;
-                Globals.Entities[entityId].SpellCast = spellId;
+                entity.SetSpellCast(spell, packet.TargetId);
             }
         }
 

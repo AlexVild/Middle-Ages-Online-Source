@@ -159,7 +159,7 @@ namespace Intersect.Server.Entities
                 {
                     PacketSender.SendActionMsg(this, Strings.Combat.immunetoeffect, CustomColors.Combat.Status);
                 }
-                else
+                else if (spell.Combat.Friendly || CachedStatuses.All(status => status.Type != StatusTypes.Invulnerable))
                 {
                     // Else, apply the status
                     _ = new Status(

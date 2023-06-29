@@ -2623,9 +2623,15 @@ namespace Intersect.Client.Entities
         private int AoeAlpha = MAX_AOE_ALPHA;
         private int AoeAlphaDir = -1;
         private long AoeAlphaUpdate;
-        private GameTexture COMBAT_TILE = Globals.ContentManager.GetTexture(TextureType.Misc, "aoe.png");
+        private GameTexture COMBAT_TILE_AOE = Globals.ContentManager.GetTexture(TextureType.Misc, "aoe.png");
         private GameTexture COMBAT_TILE_NEUTRAL = Globals.ContentManager.GetTexture(TextureType.Misc, "aoe_neutral.png");
         private GameTexture COMBAT_TILE_FRIENDLY = Globals.ContentManager.GetTexture(TextureType.Misc, "aoe_heal.png");
+        private GameTexture SINGLE_TARGET = Globals.ContentManager.GetTexture(TextureType.Misc, "single-target_hostile.png");
+        private GameTexture SINGLE_TARGET_NEUTRAL = Globals.ContentManager.GetTexture(TextureType.Misc, "single-target_neutral.png");
+        private GameTexture SINGLE_TARGET_FRIENDLY = Globals.ContentManager.GetTexture(TextureType.Misc, "single-target_friendly.png");
+        private GameTexture SINGLE_TARGET_FRIENDLY_OUTLINE = Globals.ContentManager.GetTexture(TextureType.Misc, "single-target-ol_friendly.png");
+        private GameTexture SINGLE_TARGET_OUTLINE = Globals.ContentManager.GetTexture(TextureType.Misc, "single-target-ol_hostile.png");
+        private GameTexture SINGLE_TARGET_NEUTRAL_OUTLINE = Globals.ContentManager.GetTexture(TextureType.Misc, "single-target-ol_neutral.png");
         public bool IsDead;
 
         public void DrawAggroIndicator(int maxRange, bool friendly)
@@ -2735,9 +2741,13 @@ namespace Intersect.Client.Entities
         private const int MIN_AOE_ALPHA = 125;
         private const int AOE_UPDATE_MS = 100;
         private const int AOE_UPDATE_AMT = 15;
-        public void DrawAoe(SpellBase spell, MapInstance spawnMap, byte spawnX, byte spawnY, bool friendlyAoe, int size, bool onlyMe = false)
+        public void DrawAoe(SpellBase spell, SpellTargetTypes targetType, MapInstance spawnMap, byte spawnX, byte spawnY, bool friendly, int size, bool onlyMe = false)
         {
-            if (!ShouldRenderMarkers(friendlyAoe))
+            if (spell == null)
+            {
+                return;
+            }
+            if (!ShouldRenderMarkers(friendly))
             {
                 return;
             }
@@ -2767,44 +2777,180 @@ namespace Intersect.Client.Entities
             int top = spawnY - size;
             int bottom = spawnY + size;
 
-            // Determine texture
-            GameTexture texture;
-            if (friendlyAoe)
-            {
-                texture = spell.Combat.Friendly ? COMBAT_TILE_FRIENDLY : COMBAT_TILE_NEUTRAL;   
-            }
-            else
-            {
-                texture = spell.Combat.Friendly ? COMBAT_TILE_NEUTRAL : COMBAT_TILE;
-            }
+            GameTexture texture = null;
 
-            for (int y = top; y <= bottom; y++)
+            Func<double, bool> inRange = new Func<double, bool>((double distance) =>
             {
-                for (int x = left; x <= right; x++)
+                return Math.Floor(distance) <= size;
+            });
+
+            if (targetType == SpellTargetTypes.AoE || targetType == SpellTargetTypes.Single)
+            {
+                if (targetType == SpellTargetTypes.AoE)
                 {
-                    var distanceFromCaster = CalculateDistanceToPoint(spawnX, spawnY, x, y);
-                    if (Math.Floor(distanceFromCaster) > size)
+                    if (friendly)
                     {
-                        continue;
+                        texture = spell.Combat.Friendly ? COMBAT_TILE_FRIENDLY : COMBAT_TILE_NEUTRAL;
                     }
-
-                    if (!MapInstance.TryGetMapInstanceFromCoords(CurrentMap, x, y, out var currMap, out var mapX, out var mapY))
+                    else
                     {
-                        continue;
+                        texture = spell.Combat.Friendly ? COMBAT_TILE_NEUTRAL : COMBAT_TILE_AOE;
                     }
-
-                    var tile = GetTileRectangle(currMap, (byte)mapX, (byte)mapY);
-
-                    if (texture == COMBAT_TILE) // If we're drawing the "DANGER" texture, give it a light so we can see it in darkness
+                }
+                else
+                {
+                    if (friendly)
                     {
-                        Graphics.AddLight((int)tile.CenterX, (int)tile.CenterY, 100, 200, 1.0f, new Color(255, 222, 124, 112));
+                        texture = spell.Combat.Friendly ? SINGLE_TARGET_FRIENDLY : SINGLE_TARGET_NEUTRAL;
                     }
-                    Graphics.DrawGameTexture(
-                        texture, new FloatRect(0, 0, texture.Width, texture.Height),
-                        tile, new Color(AoeAlpha, 255, 255, 255)
-                    );
+                    else
+                    {
+                        texture = spell.Combat.Friendly ? SINGLE_TARGET_NEUTRAL : SINGLE_TARGET;
+                    }
+                }
+
+                for (int y = top; y <= bottom; y++)
+                {
+                    for (int x = left; x <= right; x++)
+                    {
+                        var distanceFromCaster = CalculateDistanceToPoint(spawnX, spawnY, x, y);
+                        if (!inRange(distanceFromCaster))
+                        {
+                            continue;
+                        }
+
+                        if (!MapInstance.TryGetMapInstanceFromCoords(CurrentMap, x, y, out var currMap, out var mapX, out var mapY))
+                        {
+                            continue;
+                        }
+
+                        var tile = GetTileRectangle(currMap, (byte)mapX, (byte)mapY);
+
+                        if (texture == COMBAT_TILE_AOE) // If we're drawing the "DANGER" texture, give it a light so we can see it in darkness
+                        {
+                            Graphics.AddLight((int)tile.CenterX, (int)tile.CenterY, 100, 200, 1.0f, new Color(255, 222, 124, 112));
+                        }
+                        Graphics.DrawGameTexture(
+                            texture, new FloatRect(0, 0, texture.Width, texture.Height),
+                            tile, new Color(AoeAlpha, 255, 255, 255)
+                        );
+                    }
                 }
             }
+            // Draw outlines
+            if (spell.Combat.TargetType == SpellTargetTypes.Single)
+            {
+                if (friendly)
+                {
+                    texture = spell.Combat.Friendly ? SINGLE_TARGET_FRIENDLY_OUTLINE : SINGLE_TARGET_NEUTRAL_OUTLINE;
+                }
+                else
+                {
+                    texture = spell.Combat.Friendly ? SINGLE_TARGET_NEUTRAL_OUTLINE : SINGLE_TARGET_OUTLINE;
+                }
+
+                Edge[,] edges = new Edge[right - left + 1, bottom - top + 1];
+                for (int y = top; y <= bottom; y++)
+                {
+                    for (int x = left; x <= right; x++)
+                    {
+                        var edgeX = x - left;
+                        var edgeY = y - top;
+                        edges[edgeX, edgeY] = new Edge();
+
+                        var distanceFromCaster = CalculateDistanceToPoint(spawnX, spawnY, x, y);
+                        if (!inRange(distanceFromCaster))
+                        {
+                            continue;
+                        }
+
+                        if (!MapInstance.TryGetMapInstanceFromCoords(CurrentMap, x, y, out var currMap, out var mapX, out var mapY))
+                        {
+                            continue;
+                        }
+
+                        var tile = GetTileRectangle(currMap, (byte)mapX, (byte)mapY);
+                        edges[edgeX, edgeY].Tile = tile;
+
+                        if (texture == SINGLE_TARGET) // If we're drawing the "DANGER" texture, give it a light so we can see it in darkness
+                        {
+                            Graphics.AddLight((int)tile.CenterX, (int)tile.CenterY, 100, 200, 1.0f, new Color(255, 222, 124, 112));
+                        }
+
+                        
+
+                        var distLeft = CalculateDistanceToPoint(spawnX, spawnY, x - 1, y);
+                        var distRight = CalculateDistanceToPoint(spawnX, spawnY, x + 1, y);
+                        var distUp = CalculateDistanceToPoint(spawnX, spawnY, x, y - 1);
+                        var distDown = CalculateDistanceToPoint(spawnX, spawnY, x, y + 1);
+
+                        edges[edgeX, edgeY].Left = x == left || !inRange(distLeft);
+                        edges[edgeX, edgeY].Right = x == right || !inRange(distRight);
+                        edges[edgeX, edgeY].Top = y == top || !inRange(distUp);
+                        edges[edgeX, edgeY].Bottom = y == bottom || !inRange(distDown);
+                    }
+                }
+
+                var segmentSize = 8;
+                var tileSize = 16;
+                for (int y = 0; y < edges.GetLength(1); y++)
+                {
+                    for (int x = 0; x < edges.GetLength(0); x++)
+                    {
+                        var edge = edges[x, y];
+                        if (edge.Empty || edge.Tile == null)
+                        {
+                            continue;
+                        }
+
+                        if (edge.Left)
+                        {
+                            Graphics.DrawGameTexture(
+                                texture, new FloatRect(0, segmentSize * 3, tileSize, tileSize),
+                                edge.Tile.Value, new Color(AoeAlpha, 255, 255, 255)
+                            );
+                        }
+                        if (edge.Right)
+                        {
+                            Graphics.DrawGameTexture(
+                                texture, new FloatRect(segmentSize * 2, segmentSize * 3, tileSize, tileSize),
+                                edge.Tile.Value, new Color(AoeAlpha, 255, 255, 255)
+                            );
+                        }
+                        if (edge.Top)
+                        {
+                            Graphics.DrawGameTexture(
+                                texture, new FloatRect(segmentSize * 1, segmentSize * 2, tileSize, tileSize),
+                                edge.Tile.Value, new Color(AoeAlpha, 255, 255, 255)
+                            );
+                        }
+                        if (edge.Bottom)
+                        {
+                            Graphics.DrawGameTexture(
+                                texture, new FloatRect(segmentSize * 1, segmentSize * 4, tileSize, tileSize),
+                                edge.Tile.Value, new Color(AoeAlpha, 255, 255, 255)
+                            );
+                        }
+
+                        var tile = edge.Tile.Value;
+                    }
+                }
+            }
+        }
+
+        struct Edge
+        {
+            public bool Left { get; set; }
+            public bool Right { get; set; }
+            public bool Top { get; set; }
+            public bool Bottom { get; set; }
+            public bool NW { get; set; }
+            public bool NE { get; set; }
+            public bool SW { get; set; }
+            public bool SE { get; set; }
+            public FloatRect? Tile { get; set; }
+
+            public bool Empty => !Left && !Right && !Top && !Bottom;
         }
 
         public void DrawProjectileSpawns(SpellBase spell, MapInstance spawnMap, byte spawnX, byte spawnY, bool friendly)
@@ -3082,10 +3228,10 @@ namespace Intersect.Client.Entities
             }
             else
             {
-                texture = combatFriendly ? COMBAT_TILE_NEUTRAL : COMBAT_TILE;
+                texture = combatFriendly ? COMBAT_TILE_NEUTRAL : COMBAT_TILE_AOE;
             }
 
-            if (texture == COMBAT_TILE) // If we're drawing the "DANGER" texture, give it a light so we can see it in darkness
+            if (texture == COMBAT_TILE_AOE) // If we're drawing the "DANGER" texture, give it a light so we can see it in darkness
             {
                 Graphics.AddLight((int)tile.CenterX, (int)tile.CenterY, 100, 200, 1.0f, new Color(255, 222, 124, 112));
             }
@@ -3288,5 +3434,25 @@ namespace Intersect.Client.Entities
         }
 
         public Guid NpcId;
+
+        public virtual void SetSpellCast(SpellBase spell, Guid targetId)
+        {
+            if (spell == null)
+            {
+                return;
+            }
+
+            if (spell.CastDuration == 0)
+            {
+                return;
+            }
+            CastTime = Timing.Global.Milliseconds + spell.CastDuration;
+            SpellCast = spell.Id;
+            
+            if (spell.Combat.TargetType == SpellTargetTypes.Single)
+            {
+                EntityTarget = targetId;
+            }
+        }
     }
 }

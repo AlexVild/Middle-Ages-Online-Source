@@ -11,10 +11,11 @@ namespace Intersect.Network.Packets.Server
         {
         }
 
-        public SpellCastPacket(Guid entityId, Guid spellId)
+        public SpellCastPacket(Guid entityId, Guid spellId, Guid targetId)
         {
             EntityId = entityId;
             SpellId = spellId;
+            TargetId = targetId;
         }
 
         [Key(0)]
@@ -22,6 +23,9 @@ namespace Intersect.Network.Packets.Server
 
         [Key(1)]
         public Guid SpellId { get; set; }
+
+        [Key(2)]
+        public Guid TargetId { get; set; }
 
     }
 
