@@ -755,6 +755,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     break;
                 case ConditionTypes.InNpcGuildWithRank:
                     grpClass.Show();
+                    cmbClass.Show();
                     cmbClass.Items.Clear();
                     cmbClass.Items.AddRange(ClassBase.Names);
                     if (cmbClass.Items.Count > 0)
@@ -763,7 +764,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     }
 
                     nudClassRank.Show();
-                    nudClassRank.Maximum = Options.MaxClassRank;
                     break;
                 case ConditionTypes.HighestClassRankIs:
                     grpClass.Show();
