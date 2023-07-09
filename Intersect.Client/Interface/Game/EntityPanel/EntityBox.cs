@@ -922,7 +922,7 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                     {
                         EntityFace.SetTextureRect(0, 0, entityTex.GetWidth(), entityTex.GetHeight());
                     }
-                    EntityFace.SizeToContents();
+                    EntityFace.SizeToContentsScaled();
                     Align.Center(EntityFace);
                     mCurrentSprite = sprite;
                     EntityFace.IsHidden = false;
@@ -932,7 +932,7 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                 var decor = MyEntity.MyDecors;
 
                 bool inVehicle = false;
-                if (MyEntity is Entities.Player player)
+                if (MyEntity is Player player)
                 {
                     inVehicle = player.InVehicle;
                 }
@@ -1092,8 +1092,8 @@ namespace Intersect.Client.Interface.Game.EntityPanel
 
                             PaperdollPanels[n]
                                 .SetSize(
-                                    PaperdollPanels[n].Texture.GetWidth() / Options.Instance.Sprites.NormalFrames,
-                                    PaperdollPanels[n].Texture.GetHeight() / Options.Instance.Sprites.Directions
+                                    PaperdollPanels[n].Texture.ScaledWidth / Options.Instance.Sprites.NormalFrames,
+                                    PaperdollPanels[n].Texture.ScaledHeight / Options.Instance.Sprites.Directions
                                 );
 
                             PaperdollPanels[n]

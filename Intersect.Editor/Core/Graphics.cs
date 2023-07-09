@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
 using System.Windows.Forms;
+using Intersect.Client.Framework.GenericClasses;
 using Intersect.Config;
 using Intersect.Configuration;
 using Intersect.Editor.Content;
@@ -1547,6 +1548,8 @@ namespace Intersect.Editor.Core
                     var sourceY = 0;
                     var width = 0;
                     var height = 0;
+                    var srcWidth = 0;
+                    var srcHeight = 0;
 
                     switch (tmpGraphic.Type)
                     {
@@ -1561,8 +1564,11 @@ namespace Intersect.Editor.Core
 
                             sourceX = (int)tmpGraphic.X * (eventTex.Width / Options.Instance.Sprites.NormalFrames);
                             sourceY = (int)tmpGraphic.Y * (eventTex.Height / Options.Instance.Sprites.Directions);
-                            width = (eventTex.Width / Options.Instance.Sprites.NormalFrames);
-                            height = (eventTex.Height / Options.Instance.Sprites.Directions);
+                            srcWidth = eventTex.Width / Options.Instance.Sprites.NormalFrames;
+                            srcHeight = eventTex.Height / Options.Instance.Sprites.Directions;
+
+                            width = srcWidth * Options.Scale;
+                            height = srcHeight * Options.Scale;
 
                             break;
                         case EventGraphicType.Tileset: //Tile
@@ -1576,6 +1582,8 @@ namespace Intersect.Editor.Core
 
                             sourceX = (int)tmpGraphic.X * Options.TileWidth;
                             sourceY = (int)tmpGraphic.Y * Options.TileHeight;
+                            srcHeight = Options.TileHeight;
+                            srcWidth = Options.TileWidth;
                             width = (tmpGraphic.Width + 1) * Options.TileWidth;
                             height = (tmpGraphic.Height + 1) * Options.TileHeight;
 
@@ -1592,7 +1600,8 @@ namespace Intersect.Editor.Core
                         destinationX -= (width  - Options.TileWidth) / 2;
                     }
 
-                    DrawTexture(eventTex, destinationX, destinationY, sourceX, sourceY, width, height, renderTarget);
+                    DrawTexture(eventTex, new RectangleF(sourceX, sourceY, srcWidth, srcHeight),
+                        new RectangleF(destinationX, destinationY, width, height), renderTarget);
                 }
             }
         }

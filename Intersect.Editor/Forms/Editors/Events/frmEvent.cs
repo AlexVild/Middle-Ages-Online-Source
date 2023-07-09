@@ -195,6 +195,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             destBitmap = new Bitmap(pnlPreview.Width, pnlPreview.Height);
             graphics = Graphics.FromImage(destBitmap);
             graphics.Clear(System.Drawing.Color.FromArgb(60, 63, 65));
+            graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
 
             if (CurrentPage.Graphic.Type == EventGraphicType.Sprite)
             {
@@ -218,9 +219,9 @@ namespace Intersect.Editor.Forms.Editors.Events
                     graphics.DrawImage(
                         sourceBitmap,
                         new Rectangle(
-                            pnlPreview.Width / 2 - sourceBitmap.Width / Options.Instance.Sprites.NormalFrames / 2,
-                            pnlPreview.Height / 2 - sourceBitmap.Height / Options.Instance.Sprites .Directions / 2, sourceBitmap.Width / Options.Instance.Sprites.NormalFrames,
-                            sourceBitmap.Height / Options.Instance.Sprites.Directions
+                            pnlPreview.Width / 2 - (sourceBitmap.Width * Options.Scale) / Options.Instance.Sprites.NormalFrames / 2,
+                            pnlPreview.Height / 2 - (sourceBitmap.Height * Options.Scale) / Options.Instance.Sprites .Directions / 2, (sourceBitmap.Width * Options.Scale) / Options.Instance.Sprites.NormalFrames,
+                            (sourceBitmap.Height * Options.Scale) / Options.Instance.Sprites.Directions
                         ),
                         new Rectangle(
                             CurrentPage.Graphic.X * sourceBitmap.Width / Options.Instance.Sprites.NormalFrames,

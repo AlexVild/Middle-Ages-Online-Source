@@ -14,7 +14,7 @@ namespace Intersect.Client.Entities
 
     public partial class Animation
     {
-        public readonly int SCALE = 4;
+        public readonly int DRAW_SCALE = 4;
 
         public bool AutoRotate;
 
@@ -163,8 +163,8 @@ namespace Intersect.Client.Entities
                     {
                         var frameWidth = tex.GetWidth() / MyBase.Lower.XFrames;
                         var frameHeight = tex.GetHeight() / MyBase.Lower.YFrames;
-                        var scaledWidth = frameWidth * SCALE;
-                        var scaledHeight = frameHeight * SCALE;
+                        var scaledWidth = frameWidth * DRAW_SCALE;
+                        var scaledHeight = frameHeight * DRAW_SCALE;
                         Graphics.DrawGameTexture(
                             tex,
                             new FloatRect(
@@ -205,8 +205,8 @@ namespace Intersect.Client.Entities
                     {
                         var frameWidth = tex.GetWidth() / MyBase.Upper.XFrames;
                         var frameHeight = tex.GetHeight() / MyBase.Upper.YFrames;
-                        var scaledWidth = frameWidth * SCALE;
-                        var scaledHeight = frameHeight * SCALE;
+                        var scaledWidth = frameWidth * DRAW_SCALE;
+                        var scaledHeight = frameHeight * DRAW_SCALE;
 
                         Graphics.DrawGameTexture(
                             tex,

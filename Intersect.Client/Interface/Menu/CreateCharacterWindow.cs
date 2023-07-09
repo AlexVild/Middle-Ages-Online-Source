@@ -415,7 +415,7 @@ namespace Intersect.Client.Interface.Menu
                             );
 
                             mCharacterPortrait.SetSize(
-                                mCharacterPortrait.Texture.GetWidth() / Options.Instance.Sprites.NormalFrames, mCharacterPortrait.Texture.GetHeight() / Options.Instance.Sprites.Directions
+                                mCharacterPortrait.Texture.ScaledWidth / Options.Instance.Sprites.NormalFrames, mCharacterPortrait.Texture.ScaledHeight / Options.Instance.Sprites.Directions
                             );
 
                             mCharacterPortrait.SetPosition(
@@ -461,8 +461,8 @@ namespace Intersect.Client.Interface.Menu
 
                                 mPaperdollPanels[z]
                                     .SetSize(
-                                        mPaperdollPanels[z].Texture.GetWidth() / Options.Instance.Sprites.NormalFrames,
-                                        mPaperdollPanels[z].Texture.GetHeight() / Options.Instance.Sprites.Directions
+                                        mPaperdollPanels[z].Texture.ScaledWidth / Options.Instance.Sprites.NormalFrames,
+                                        mPaperdollPanels[z].Texture.ScaledHeight / Options.Instance.Sprites.Directions
                                     );
 
                                 mPaperdollPanels[z]

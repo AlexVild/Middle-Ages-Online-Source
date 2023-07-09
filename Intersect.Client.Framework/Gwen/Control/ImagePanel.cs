@@ -218,6 +218,16 @@ namespace Intersect.Client.Framework.Gwen.Control
             SetSize((int) (mTexture.GetWidth() * (mUv[2] - mUv[0])), (int) (mTexture.GetHeight() * (mUv[3] - mUv[1])));
         }
 
+        public virtual void SizeToContentsScaled()
+        {
+            if (mTexture == null)
+            {
+                return;
+            }
+
+            SetSize((int)(mTexture.ScaledWidth * (mUv[2] - mUv[0])), (int)(mTexture.ScaledHeight * (mUv[3] - mUv[1])));
+        }
+
         /// <summary>
         ///     Control has been clicked - invoked by input system. Windows use it to propagate activation.
         /// </summary>

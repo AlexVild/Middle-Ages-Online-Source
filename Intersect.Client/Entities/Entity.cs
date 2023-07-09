@@ -1084,143 +1084,136 @@ namespace Intersect.Client.Entities
             AnimatedTextures.TryGetValue(SpriteAnimation, out var texture);
             texture = texture ?? Texture;
 
-            if (texture != null)
+            if (texture == null)
             {
-                if (texture.GetHeight() / Options.Instance.Sprites.Directions > Options.TileHeight)
-                {
-                    destRectangle.X = map.GetX() + X * Options.TileWidth + OffsetX + Options.TileWidth / 2;
-                    destRectangle.Y = GetCenterPos().Y - texture.GetHeight() / (Options.Instance.Sprites.Directions * 2);
-                }
-                else
-                {
-                    destRectangle.X = map.GetX() + X * Options.TileWidth + OffsetX + Options.TileWidth / 2;
-                    destRectangle.Y = map.GetY() + Y * Options.TileHeight + OffsetY;
-                }
+                // We don't have a texture to render, but we still want this to be targetable.
+                WorldPos = new FloatRect(
+                    map.GetX() + X * Options.TileWidth + OffsetX,
+                    map.GetY() + Y * Options.TileHeight + OffsetY,
+                    Options.TileWidth,
+                    Options.TileHeight);
 
-                destRectangle.X -= texture.GetWidth() / (SpriteFrames * 2);
+                return;
+            }
 
-                var paperdollDir = Dir;
-                if (this is Player player && player.CombatMode)
-                {
-                    dir = DetermineRenderDirection(player.FaceDirection);
-                    paperdollDir = player.FaceDirection;
-                }
-                else
-                {
-                    dir = DetermineRenderDirection(Dir);
-                }
+            if (texture.ScaledHeight / Options.Instance.Sprites.Directions > Options.TileHeight)
+            {
+                destRectangle.X = map.GetX() + X * Options.TileWidth + OffsetX + Options.TileWidth / 2;
+                destRectangle.Y = GetCenterPos().Y - texture.ScaledHeight / (Options.Instance.Sprites.Directions * 2);
+            }
+            else
+            {
+                destRectangle.X = map.GetX() + X * Options.TileWidth + OffsetX + Options.TileWidth / 2;
+                destRectangle.Y = map.GetY() + Y * Options.TileHeight + OffsetY;
+            }
 
-                destRectangle.X = (int)Math.Ceiling(destRectangle.X);
-                destRectangle.Y = (int)Math.Ceiling(destRectangle.Y);
-                if (Options.AnimatedSprites.Contains(sprite.ToLower()))
+            destRectangle.X -= texture.ScaledWidth / (SpriteFrames * 2);
+
+            var paperdollDir = Dir;
+            if (this is Player player && player.CombatMode)
+            {
+                dir = DetermineRenderDirection(player.FaceDirection);
+                paperdollDir = player.FaceDirection;
+            }
+            else
+            {
+                dir = DetermineRenderDirection(Dir);
+            }
+
+            destRectangle.X = (int)Math.Ceiling(destRectangle.X);
+            destRectangle.Y = (int)Math.Ceiling(destRectangle.Y);
+            if (Options.AnimatedSprites.Contains(sprite.ToLower()))
+            {
+                srcRectangle = new FloatRect(
+                    AnimationFrame * (int)texture.GetWidth() / SpriteFrames, dir * (int)texture.GetHeight() / Options.Instance.Sprites.Directions,
+                    (int)texture.GetWidth() / SpriteFrames, (int)texture.GetHeight() / Options.Instance.Sprites.Directions
+                );
+            }
+            else
+            {
+                if (SpriteAnimation == SpriteAnimations.Normal)
                 {
-                    srcRectangle = new FloatRect(
-                        AnimationFrame * (int)texture.GetWidth() / SpriteFrames, dir * (int)texture.GetHeight() / Options.Instance.Sprites.Directions,
-                        (int)texture.GetWidth() / SpriteFrames, (int)texture.GetHeight() / Options.Instance.Sprites.Directions
-                    );
-                }
-                else
-                {
-                    if (SpriteAnimation == SpriteAnimations.Normal)
+                    bool inAction = AttackTimer - CalculateAttackTime() / 2 > Timing.Global.Ticks / TimeSpan.TicksPerMillisecond || Blocking;
+                    if (inAction && !(this is Player play && play.InVehicle) && !StatusIsActive(StatusTypes.Stun) && !StatusIsActive(StatusTypes.Sleep))
                     {
-                        bool inAction = AttackTimer - CalculateAttackTime() / 2 > Timing.Global.Ticks / TimeSpan.TicksPerMillisecond || Blocking;
-                        if (inAction && !(this is Player play && play.InVehicle) && !StatusIsActive(StatusTypes.Stun) && !StatusIsActive(StatusTypes.Sleep))
-                        {
-                            srcRectangle = new FloatRect(
-                                Options.Instance.Sprites.NormalSheetAttackFrame * (int)texture.GetWidth() / SpriteFrames, dir * (int)texture.GetHeight() / Options.Instance.Sprites.Directions,
-                                (int)texture.GetWidth() / SpriteFrames, (int)texture.GetHeight() / Options.Instance.Sprites.Directions
-                            );
-                        }
-                        else
-                        {
-                            //Restore Original Attacking/Blocking Code
-                            srcRectangle = new FloatRect(
-                                WalkFrame * (int) texture.GetWidth() / SpriteFrames, dir * (int) texture.GetHeight() / Options.Instance.Sprites.Directions,
-                                (int) texture.GetWidth() / SpriteFrames, (int) texture.GetHeight() / Options.Instance.Sprites.Directions
-                            );
-                        }
+                        srcRectangle = new FloatRect(
+                            Options.Instance.Sprites.NormalSheetAttackFrame * (int)texture.GetWidth() / SpriteFrames, dir * (int)texture.GetHeight() / Options.Instance.Sprites.Directions,
+                            (int)texture.GetWidth() / SpriteFrames, (int)texture.GetHeight() / Options.Instance.Sprites.Directions
+                        );
                     }
                     else
                     {
+                        //Restore Original Attacking/Blocking Code
                         srcRectangle = new FloatRect(
-                            SpriteFrame * (int)texture.GetWidth() / SpriteFrames, dir * (int)texture.GetHeight() / Options.Instance.Sprites.Directions,
+                            WalkFrame * (int)texture.GetWidth() / SpriteFrames, dir * (int)texture.GetHeight() / Options.Instance.Sprites.Directions,
                             (int)texture.GetWidth() / SpriteFrames, (int)texture.GetHeight() / Options.Instance.Sprites.Directions
                         );
                     }
                 }
-
-                destRectangle.Width = srcRectangle.Width;
-                destRectangle.Height = srcRectangle.Height;
-
-                WorldPos = destRectangle;
-
-                //Order the layers of paperdolls and sprites
-                for (var z = 0; z < Options.PaperdollOrder[paperdollDir].Count; z++)
+                else
                 {
-                    var stuff = Options.PaperdollOrder;
-                    var paperdoll = Options.PaperdollOrder[paperdollDir][z];
-                    var equipSlot = Options.EquipmentSlots.IndexOf(paperdoll);
-                    var decorSlot = Options.DecorSlots.IndexOf(paperdoll);
+                    srcRectangle = new FloatRect(
+                        SpriteFrame * (int)texture.GetWidth() / SpriteFrames, dir * (int)texture.GetHeight() / Options.Instance.Sprites.Directions,
+                        (int)texture.GetWidth() / SpriteFrames, (int)texture.GetHeight() / Options.Instance.Sprites.Directions
+                    );
+                }
+            }
 
-                    //Don't render the paperdolls if they have transformed.
-                    var notTransformed = sprite == MySprite && Equipment.Length == Options.EquipmentSlots.Count;
+            destRectangle.Width = srcRectangle.Width * Options.Scale;
+            destRectangle.Height = srcRectangle.Height * Options.Scale;
 
-                    if (this is Player pl && pl.InVehicle)
-                    {
-                        notTransformed = false;
-                    }
+            WorldPos = destRectangle;
 
-                    //Check for player
-                    if (paperdoll == "Player")
+            //Order the layers of paperdolls and sprites
+            for (var z = 0; z < Options.PaperdollOrder[paperdollDir].Count; z++)
+            {
+                var paperdoll = Options.PaperdollOrder[paperdollDir][z];
+                var equipSlot = Options.EquipmentSlots.IndexOf(paperdoll);
+                var decorSlot = Options.DecorSlots.IndexOf(paperdoll);
+
+                //Don't render the paperdolls if they have transformed.
+                var notTransformed = sprite == MySprite && Equipment.Length == Options.EquipmentSlots.Count;
+
+                if (this is Player pl && pl.InVehicle)
+                {
+                    notTransformed = false;
+                }
+
+                //Check for player
+                if (paperdoll == "Player")
+                {
+                    Graphics.DrawGameTexture(
+                        texture, srcRectangle, destRectangle, renderColor
+                    );
+                }
+                else if (notTransformed)
+                {
+                    if (equipSlot > -1)
                     {
-                        Graphics.DrawGameTexture(
-                            texture, srcRectangle, destRectangle, renderColor
-                        );
-                    }
-                    else if (notTransformed)
-                    {
-                        if (equipSlot > -1)
+                        if (Equipment[equipSlot] != Guid.Empty && this != Globals.Me ||
+                            MyEquipment[equipSlot] < Options.MaxInvItems)
                         {
-                            if (Equipment[equipSlot] != Guid.Empty && this != Globals.Me ||
-                                MyEquipment[equipSlot] < Options.MaxInvItems)
+                            var itemId = Guid.Empty;
+                            if (this == Globals.Me)
                             {
-                                var itemId = Guid.Empty;
-                                if (this == Globals.Me)
+                                var slot = MyEquipment[equipSlot];
+                                if (slot > -1)
                                 {
-                                    var slot = MyEquipment[equipSlot];
-                                    if (slot > -1)
-                                    {
-                                        itemId = Inventory[slot].ItemId;
-                                    }
-                                }
-                                else
-                                {
-                                    itemId = Equipment[equipSlot];
-                                }
-
-                                // Cosmetic override
-                                if (this is Player cosmeticOverride && cosmeticOverride.Cosmetics.ElementAtOrDefault(equipSlot) != default)
-                                {
-                                    itemId = cosmeticOverride.Cosmetics[equipSlot];
-                                }
-
-                                var item = ItemBase.Get(itemId);
-                                if (item != null)
-                                {
-                                    if (Gender == 0)
-                                    {
-                                        DrawEquipment(item.MalePaperdoll, renderColor.A, dir);
-                                    }
-                                    else
-                                    {
-                                        DrawEquipment(item.FemalePaperdoll, renderColor.A, dir);
-                                    }
+                                    itemId = Inventory[slot].ItemId;
                                 }
                             }
-                        } 
-                        else if (this is Player cosmetic && cosmetic.Cosmetics.ElementAtOrDefault(equipSlot) != default)
-                        {
-                            var item = ItemBase.Get(cosmetic.Cosmetics[equipSlot]);
+                            else
+                            {
+                                itemId = Equipment[equipSlot];
+                            }
+
+                            // Cosmetic override
+                            if (this is Player cosmeticOverride && cosmeticOverride.Cosmetics.ElementAtOrDefault(equipSlot) != default)
+                            {
+                                itemId = cosmeticOverride.Cosmetics[equipSlot];
+                            }
+
+                            var item = ItemBase.Get(itemId);
                             if (item != null)
                             {
                                 if (Gender == 0)
@@ -1233,68 +1226,74 @@ namespace Intersect.Client.Entities
                                 }
                             }
                         }
-                        else if (decorSlot > -1 && decorSlot < Options.Player.DecorSlots.Count)
+                    }
+                    else if (this is Player cosmetic && cosmetic.Cosmetics.ElementAtOrDefault(equipSlot) != default)
+                    {
+                        var item = ItemBase.Get(cosmetic.Cosmetics[equipSlot]);
+                        if (item != null)
                         {
-                            var hideHair = false;
-                            var hideBeard = false;
-                            var hideExtra = false;
-                            var shortHair = false;
-
-                            if (this is Player cosmeticOvr && cosmeticOvr.Cosmetics[Options.HelmetIndex] != Guid.Empty)
+                            if (Gender == 0)
                             {
-                                var helmet = ItemBase.Get(cosmeticOvr.Cosmetics[Options.HelmetIndex]);
-                                hideHair = helmet.HideHair;
-                                hideBeard = helmet.HideBeard;
-                                hideExtra = helmet.HideExtra;
-                                shortHair = helmet.ShortHair;
-
-                                if ((decorSlot == Options.HairSlot && hideHair && !shortHair)
-                                    || decorSlot == Options.BeardSlot && hideBeard
-                                    || decorSlot == Options.ExtraSlot && hideExtra)
-                                {
-                                    continue;
-                                }
+                                DrawEquipment(item.MalePaperdoll, renderColor.A, dir);
                             }
-                            else if (Equipment[Options.HelmetIndex] != Guid.Empty)
+                            else
                             {
-                                var helmet = ItemBase.Get(Equipment[Options.HelmetIndex]);
-                                hideHair = helmet.HideHair;
-                                hideBeard = helmet.HideBeard;
-                                hideExtra = helmet.HideExtra;
-                                shortHair = helmet.ShortHair;
-
-                                if ((decorSlot == Options.HairSlot && hideHair && !shortHair)
-                                    || decorSlot == Options.BeardSlot && hideBeard
-                                    || decorSlot == Options.ExtraSlot && hideExtra)
-                                {
-                                    continue;
-                                }
+                                DrawEquipment(item.FemalePaperdoll, renderColor.A, dir);
                             }
+                        }
+                    }
+                    else if (decorSlot > -1 && decorSlot < Options.Player.DecorSlots.Count)
+                    {
+                        var hideHair = false;
+                        var hideBeard = false;
+                        var hideExtra = false;
+                        var shortHair = false;
 
-                            if (MyDecors[decorSlot] != null)
+                        if (this is Player cosmeticOvr && cosmeticOvr.Cosmetics[Options.HelmetIndex] != Guid.Empty)
+                        {
+                            var helmet = ItemBase.Get(cosmeticOvr.Cosmetics[Options.HelmetIndex]);
+                            hideHair = helmet.HideHair;
+                            hideBeard = helmet.HideBeard;
+                            hideExtra = helmet.HideExtra;
+                            shortHair = helmet.ShortHair;
+
+                            if ((decorSlot == Options.HairSlot && hideHair && !shortHair)
+                                || decorSlot == Options.BeardSlot && hideBeard
+                                || decorSlot == Options.ExtraSlot && hideExtra)
                             {
-                                // Do mappings for short hair if needed
-                                if (decorSlot == Options.HairSlot && shortHair && Options.Instance.PlayerOpts.ShortHairMappings.TryGetValue(MyDecors[decorSlot], out var hairText))
-                                {
-                                    DrawEquipment(hairText, renderColor.A, dir, TextureType.Decor);
-                                }
-                                else
-                                {
-                                    DrawEquipment(MyDecors[decorSlot], renderColor.A, dir, TextureType.Decor);
-                                }
+                                continue;
+                            }
+                        }
+                        else if (Equipment[Options.HelmetIndex] != Guid.Empty)
+                        {
+                            var helmet = ItemBase.Get(Equipment[Options.HelmetIndex]);
+                            hideHair = helmet.HideHair;
+                            hideBeard = helmet.HideBeard;
+                            hideExtra = helmet.HideExtra;
+                            shortHair = helmet.ShortHair;
+
+                            if ((decorSlot == Options.HairSlot && hideHair && !shortHair)
+                                || decorSlot == Options.BeardSlot && hideBeard
+                                || decorSlot == Options.ExtraSlot && hideExtra)
+                            {
+                                continue;
+                            }
+                        }
+
+                        if (MyDecors[decorSlot] != null)
+                        {
+                            // Do mappings for short hair if needed
+                            if (decorSlot == Options.HairSlot && shortHair && Options.Instance.PlayerOpts.ShortHairMappings.TryGetValue(MyDecors[decorSlot], out var hairText))
+                            {
+                                DrawEquipment(hairText, renderColor.A, dir, TextureType.Decor);
+                            }
+                            else
+                            {
+                                DrawEquipment(MyDecors[decorSlot], renderColor.A, dir, TextureType.Decor);
                             }
                         }
                     }
                 }
-            }
-            else
-            {
-                // We don't have a texture to render, but we still want this to be targetable.
-                WorldPos = new FloatRect(
-                    map.GetX() + X * Options.TileWidth + OffsetX,
-                    map.GetY() + Y * Options.TileHeight + OffsetY,
-                    Options.TileWidth,
-                    Options.TileHeight);
             }
         }
 
@@ -1353,10 +1352,10 @@ namespace Intersect.Client.Entities
 
             if (paperdollTex != null)
             {
-                if (paperdollTex.GetHeight() / Options.Instance.Sprites.Directions > Options.TileHeight)
+                if (paperdollTex.ScaledHeight / Options.Instance.Sprites.Directions > Options.TileHeight)
                 {
                     destRectangle.X = map.GetX() + X * Options.TileWidth + OffsetX;
-                    destRectangle.Y = GetCenterPos().Y - paperdollTex.GetHeight() / (Options.Instance.Sprites.Directions * 2);
+                    destRectangle.Y = GetCenterPos().Y - paperdollTex.ScaledHeight / (Options.Instance.Sprites.Directions * 2);
                 }
                 else
                 {
@@ -1364,9 +1363,9 @@ namespace Intersect.Client.Entities
                     destRectangle.Y = map.GetY() + Y * Options.TileHeight + OffsetY;
                 }
 
-                if (paperdollTex.GetWidth() / spriteFrames > Options.TileWidth)
+                if (paperdollTex.ScaledWidth / spriteFrames > Options.TileWidth)
                 {
-                    destRectangle.X -= (paperdollTex.GetWidth() / spriteFrames - Options.TileWidth) / 2;
+                    destRectangle.X -= (paperdollTex.ScaledWidth / spriteFrames - Options.TileWidth) / 2;
                 }
 
                 destRectangle.X = (int) Math.Ceiling(destRectangle.X);
@@ -1396,8 +1395,8 @@ namespace Intersect.Client.Entities
                     );
                 }
 
-                destRectangle.Width = srcRectangle.Width;
-                destRectangle.Height = srcRectangle.Height;
+                destRectangle.Width = srcRectangle.Width * Options.Scale;
+                destRectangle.Height = srcRectangle.Height * Options.Scale;
                 var renderColor = new Color(alpha, 255, 255, 255);
                 if (Flash)
                 {
@@ -1421,7 +1420,7 @@ namespace Intersect.Client.Entities
             if (Texture != null)
             {
                 pos.Y += Options.TileHeight / 2;
-                pos.Y -= Texture.GetHeight() / (Options.Instance.Sprites.Directions * 2);
+                pos.Y -= Texture.ScaledHeight / (Options.Instance.Sprites.Directions * 2);
             }
 
             mCenterPos = pos;
@@ -1456,7 +1455,7 @@ namespace Intersect.Client.Entities
             {
                 if (Texture != null)
                 {
-                    y = y - (int) (Texture.GetHeight() / (Options.Instance.Sprites.Directions * 2));
+                    y = y - (int) (Texture.ScaledHeight / (Options.Instance.Sprites.Directions * 2));
                     y -= 12;
                 }
             }
@@ -1856,7 +1855,7 @@ namespace Intersect.Client.Entities
             var entityTex = Globals.ContentManager.GetTexture(TextureType.Entity, MySprite);
             if (entityTex != null)
             {
-                y = y - (int) (entityTex.GetHeight() / (Options.Instance.Sprites.Directions * 2));
+                y = y - (int) (entityTex.ScaledHeight / (Options.Instance.Sprites.Directions * 2));
                 y -= 8;
             }
 
@@ -1934,7 +1933,7 @@ namespace Intersect.Client.Entities
                 var entityTex = Globals.ContentManager.GetTexture(TextureType.Entity, MySprite);
                 if (entityTex != null)
                 {
-                    y = y + (int) (entityTex.GetHeight() / (Options.Instance.Sprites.Directions * 2));
+                    y = y + (int) (entityTex.ScaledHeight / (Options.Instance.Sprites.Directions * 2));
                     y += 19;
                 }
 

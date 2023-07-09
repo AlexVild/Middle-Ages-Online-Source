@@ -1483,8 +1483,9 @@ namespace Intersect.Editor.Forms.Editors
                     )
                 );
 
+                gfx.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
                 gfx.DrawImage(
-                    img, new Rectangle(0, 0, img.Width / Options.Instance.Sprites.NormalFrames, img.Height / Options.Instance.Sprites.Directions),
+                    img, new Rectangle(0, 0, img.Width * Options.Scale / Options.Instance.Sprites.NormalFrames, img.Height * Options.Scale / Options.Instance.Sprites.Directions),
                     0, 0, img.Width / Options.Instance.Sprites.NormalFrames, img.Height / Options.Instance.Sprites.Directions, GraphicsUnit.Pixel, imgAttributes
                 );
 

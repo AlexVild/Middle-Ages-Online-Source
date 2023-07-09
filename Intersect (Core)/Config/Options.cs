@@ -148,6 +148,8 @@ namespace Intersect
         
         public static string TaskCompletedVarGuid => Instance.PlayerOpts.TaskCompletedVarGuid;
 
+        public static int Scale => Instance.Sprites.ScaleSize;
+
         public static int WeaponIndex => Instance.EquipmentOpts.WeaponSlot;
 
         public static int PrayerIndex => Instance.EquipmentOpts.PrayerSlot;

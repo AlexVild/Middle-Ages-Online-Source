@@ -179,8 +179,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             if (cmbGraphicType.SelectedIndex == 1) //Sprite
             {
                 sourceBitmap = new Bitmap("resources/entities/" + cmbGraphic.Text);
-                mSpriteWidth = sourceBitmap.Width / Options.Instance.Sprites.NormalFrames;
-                mSpriteHeight = sourceBitmap.Height / Options.Instance.Sprites.Directions;
+                mSpriteWidth = sourceBitmap.Width * Options.Scale / Options.Instance.Sprites.NormalFrames;
+                mSpriteHeight = sourceBitmap.Height * Options.Scale / Options.Instance.Sprites.Directions;
             }
             else if (cmbGraphicType.SelectedIndex == 2) //Tileset
             {
@@ -189,20 +189,29 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
 
             if (sourceBitmap != null)
             {
+                var width = sourceBitmap.Width;
+                var height = sourceBitmap.Height;
+                if (cmbGraphicType.SelectedIndex == 1)
+                {
+                    width *= Options.Scale;
+                    height *= Options.Scale;
+                }
+
                 pnlGraphic.Show();
-                destBitmap = new Bitmap(sourceBitmap.Width, sourceBitmap.Height);
-                pnlGraphic.Width = sourceBitmap.Width;
-                pnlGraphic.Height = sourceBitmap.Height;
+                destBitmap = new Bitmap(width, height);
+                pnlGraphic.Width = width;
+                pnlGraphic.Height = height;
                 graphics = Graphics.FromImage(destBitmap);
+                graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
                 graphics.Clear(System.Drawing.Color.FromArgb(60, 63, 65));
-                graphics.DrawImage(sourceBitmap, new Rectangle(0, 0, sourceBitmap.Width, sourceBitmap.Height));
+                graphics.DrawImage(sourceBitmap, new Rectangle(0, 0, width, height));
                 if (cmbGraphicType.SelectedIndex == 1)
                 {
                     graphics.DrawRectangle(
                         new Pen(System.Drawing.Color.White, 2f),
                         new Rectangle(
-                            mTmpGraphic.X * sourceBitmap.Width / Options.Instance.Sprites.NormalFrames, mTmpGraphic.Y * sourceBitmap.Height / Options.Instance.Sprites.Directions,
-                            sourceBitmap.Width / Options.Instance.Sprites.NormalFrames, sourceBitmap.Height / Options.Instance.Sprites.Directions
+                            mTmpGraphic.X * width / Options.Instance.Sprites.NormalFrames, mTmpGraphic.Y * height / Options.Instance.Sprites.Directions,
+                            width / Options.Instance.Sprites.NormalFrames, height / Options.Instance.Sprites.Directions
                         )
                     );
                 }

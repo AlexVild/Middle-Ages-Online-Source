@@ -500,8 +500,10 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
 
             var beastImageTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Entity, sprite);
             BeastImage.Texture = beastImageTexture;
-            BeastImage.SetTextureRect(0, 0, beastImageTexture.Width / 4, beastImageTexture.Height / 4);
-            BeastImage.SetSize(beastImageTexture.Width / 4, beastImageTexture.Height / 4);
+            var directions = Options.Instance.Sprites.NormalFrames;
+
+            BeastImage.SetTextureRect(0, 0, beastImageTexture.Width / directions, beastImageTexture.Height / directions);
+            BeastImage.SetSize(beastImageTexture.ScaledWidth / directions, beastImageTexture.ScaledHeight / directions);
             BeastImage.RenderColor = color;
             BeastImage.ProcessAlignments();
         }

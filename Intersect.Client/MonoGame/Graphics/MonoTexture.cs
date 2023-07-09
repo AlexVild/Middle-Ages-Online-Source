@@ -181,16 +181,6 @@ namespace Intersect.Client.MonoGame.Graphics
             return mWidth;
         }
 
-        public override int GetWidthMAO()
-        {
-            return GetWidth() * 4;
-        }
-
-        public override int GetHeightMAO()
-        {
-            return GetHeight() * 4;
-        }
-
         public override int GetHeight()
         {
             ResetAccessTime();

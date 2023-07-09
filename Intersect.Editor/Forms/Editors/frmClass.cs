@@ -655,6 +655,7 @@ namespace Intersect.Editor.Forms.Editors
         {
             var picSpriteBmp = new Bitmap(picSprite.Width, picSprite.Height);
             var gfx = Graphics.FromImage(picSpriteBmp);
+            gfx.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
             gfx.FillRectangle(Brushes.Black, new Rectangle(0, 0, picSprite.Width, picSprite.Height));
             if (cmbSprite.SelectedIndex > 0)
             {
@@ -662,7 +663,7 @@ namespace Intersect.Editor.Forms.Editors
                 {
                     var img = Image.FromFile("resources/entities/" + cmbSprite.Text);
                     gfx.DrawImage(
-                        img, new Rectangle(0, 0, img.Width / Options.Instance.Sprites.NormalFrames, img.Height / Options.Instance.Sprites.Directions),
+                        img, new Rectangle(0, 0, img.Width * 2 / Options.Instance.Sprites.NormalFrames, img.Height * 2 / Options.Instance.Sprites.Directions),
                         new Rectangle(0, 0, img.Width / Options.Instance.Sprites.NormalFrames, img.Height / Options.Instance.Sprites.Directions), GraphicsUnit.Pixel
                     );
 
