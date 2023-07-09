@@ -272,18 +272,18 @@ namespace Intersect.Client.Entities
                     mSrcRectangle.Height = Texture.GetHeight();
                 }
 
-                mDestRectangle.Width = mSrcRectangle.Width;
-                mDestRectangle.Height = mSrcRectangle.Height;
+                mDestRectangle.Width = mSrcRectangle.Width * Options.Scale;
+                mDestRectangle.Height = mSrcRectangle.Height * Options.Scale;
                 mDestRectangle.Y = (int) (map.GetY() + Y * Options.TileHeight + OffsetY);
                 mDestRectangle.X = (int) (map.GetX() + X * Options.TileWidth + OffsetX);
-                if (mSrcRectangle.Height > Options.TileHeight)
+                if (mDestRectangle.Height > Options.TileHeight)
                 {
-                    mDestRectangle.Y -= mSrcRectangle.Height - Options.TileHeight;
+                    mDestRectangle.Y -= mDestRectangle.Height - Options.TileHeight;
                 }
 
-                if (mSrcRectangle.Width > Options.TileWidth)
+                if (mDestRectangle.Width > Options.TileWidth)
                 {
-                    mDestRectangle.X -= (mSrcRectangle.Width - Options.TileWidth) / 2;
+                    mDestRectangle.X -= (mDestRectangle.Width - Options.TileWidth) / 2;
                 }
 
                 mHasRenderBounds = true;
@@ -303,7 +303,7 @@ namespace Intersect.Client.Entities
 
             if (Texture != null)
             {
-                Graphics.DrawGameTexture(Texture, mSrcRectangle, mDestRectangle, Intersect.Color.White);
+                Graphics.DrawGameTexture(Texture, mSrcRectangle, mDestRectangle, Color.White);
             }
         }
 

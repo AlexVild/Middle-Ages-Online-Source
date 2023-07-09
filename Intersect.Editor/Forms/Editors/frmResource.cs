@@ -362,8 +362,8 @@ namespace Intersect.Editor.Forms.Editors
                 if (File.Exists(graphic))
                 {
                     mInitialGraphic = (Bitmap) Image.FromFile(graphic);
-                    picInitialResource.Width = mInitialGraphic.Width;
-                    picInitialResource.Height = mInitialGraphic.Height;
+                    picInitialResource.Width = mInitialGraphic.Width * Options.Scale;
+                    picInitialResource.Height = mInitialGraphic.Height * Options.Scale;
                     mInitialBitmap = new Bitmap(picInitialResource.Width, picInitialResource.Height);
                 }
             }
@@ -390,8 +390,8 @@ namespace Intersect.Editor.Forms.Editors
                 if (File.Exists(graphic))
                 {
                     mEndGraphic = (Bitmap) Image.FromFile(graphic);
-                    picEndResource.Width = mEndGraphic.Width;
-                    picEndResource.Height = mEndGraphic.Height;
+                    picEndResource.Width = mEndGraphic.Width * Options.Scale;
+                    picEndResource.Height = mEndGraphic.Height * Options.Scale;
                     mEndBitmap = new Bitmap(picEndResource.Width, picEndResource.Height);
                 }
             }
@@ -413,11 +413,12 @@ namespace Intersect.Editor.Forms.Editors
 
             // Initial Sprite
             var gfx = Graphics.FromImage(mInitialBitmap);
+            gfx.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
             gfx.FillRectangle(Brushes.Black, new Rectangle(0, 0, picInitialResource.Width, picInitialResource.Height));
             if (cmbInitialSprite.SelectedIndex > 0 && mInitialGraphic != null)
             {
                 gfx.DrawImage(
-                    mInitialGraphic, new Rectangle(0, 0, mInitialGraphic.Width, mInitialGraphic.Height),
+                    mInitialGraphic, new Rectangle(0, 0, mInitialGraphic.Width * Options.Scale, mInitialGraphic.Height * Options.Scale),
                     new Rectangle(0, 0, mInitialGraphic.Width, mInitialGraphic.Height), GraphicsUnit.Pixel
                 );
             }
@@ -457,11 +458,12 @@ namespace Intersect.Editor.Forms.Editors
 
             // End Sprite
             gfx = Graphics.FromImage(mEndBitmap);
+            gfx.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
             gfx.FillRectangle(Brushes.Black, new Rectangle(0, 0, picEndResource.Width, picEndResource.Height));
             if (cmbEndSprite.SelectedIndex > 0 && mEndGraphic != null)
             {
                 gfx.DrawImage(
-                    mEndGraphic, new Rectangle(0, 0, mEndGraphic.Width, mEndGraphic.Height),
+                    mEndGraphic, new Rectangle(0, 0, mEndGraphic.Width * Options.Scale, mEndGraphic.Height * Options.Scale),
                     new Rectangle(0, 0, mEndGraphic.Width, mEndGraphic.Height), GraphicsUnit.Pixel
                 );
             }

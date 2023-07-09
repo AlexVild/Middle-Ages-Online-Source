@@ -1420,17 +1420,20 @@ namespace Intersect.Editor.Core
 
                             float xpos = x * Options.TileWidth + xoffset;
                             float ypos = y * Options.TileHeight + yoffset;
-                            if (res.Height > Options.TileHeight)
+                            if (res.Height * Options.Scale > Options.TileHeight)
                             {
-                                ypos -= (int) res.Height - Options.TileHeight;
+                                ypos -= (int) res.Height * Options.Scale - Options.TileHeight;
                             }
 
-                            if (res.Width > Options.TileWidth)
+                            if (res.Width * Options.Scale > Options.TileWidth)
                             {
-                                xpos -= (res.Width - Options.TileWidth) / 2;
+                                xpos -= (res.Width * Options.Scale - Options.TileWidth) / 2;
                             }
 
-                            DrawTexture(res, xpos, ypos, 0, 0, (int) res.Width, (int) res.Height, renderTarget);
+                            DrawTexture(res,
+                                new RectangleF(0, 0, res.Width, res.Height),
+                                new RectangleF(xpos, ypos, res.Width * Options.Scale, res.Height * Options.Scale),
+                                renderTarget);
                         }
                     }
                     else if (tmpMap.Attributes[x, y].Type == MapAttributes.Animation)
