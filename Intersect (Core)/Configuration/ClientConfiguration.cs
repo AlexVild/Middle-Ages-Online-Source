@@ -191,6 +191,10 @@ namespace Intersect.Configuration
         
         public long TypewriterResponseDelay { get; set; } = 600;
 
+        public int ProximityNameDistance { get; set; } = 5;
+
+        public int MinimumNameOpacity { get; set; } = 80;
+
         #endregion
 
         #region Serialization Hooks

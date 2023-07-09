@@ -12,6 +12,8 @@ namespace Intersect.Utilities
         private static DateTime lastDateTime = DateTime.MinValue;
         public static long Hits = 0;
         public static long Misses = 0;
+        public static long Now = 0;
+        private static DateTime JanFirst1970 = new DateTime(1970, 1, 1);
 
         /// <summary>
         /// The global <see cref="Timing"/> instance.
@@ -97,6 +99,12 @@ namespace Intersect.Utilities
         public long MillisecondsUtc
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)] get => TicksUTC / TimeSpan.TicksPerMillisecond;
+        }
+
+        public long MillisecondsUtcUnsynced
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get => (long) ((DateTime.Now.ToUniversalTime() - JanFirst1970).TotalMilliseconds + 0.5);
         }
     }
 

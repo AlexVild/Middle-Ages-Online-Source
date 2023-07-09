@@ -159,6 +159,8 @@ namespace Intersect.Client.Interface.Shared
         private readonly LabeledCheckBox mShowFog;
         
         private readonly LabeledCheckBox mShowWeather;
+        
+        private readonly LabeledCheckBox mNameFading;
 
         // Open settings
         private bool mReturnToMenu;
@@ -310,6 +312,11 @@ namespace Intersect.Client.Interface.Shared
             };
 
             mTypewriterText.IsHidden = !ClientConfiguration.Instance.EnableTypewriting;
+
+            mNameFading = new LabeledCheckBox(mGameSettingsContainer, "NameFading")
+            {
+                Text = Strings.Settings.NameFading
+            };
 
             // TODO: Place our configurable gameplay related settings into their respective container for initialization here!
 
@@ -797,6 +804,7 @@ namespace Intersect.Client.Interface.Shared
             mSelfStatusMarkers.IsChecked = Globals.Database.DisplaySelfStatusMarkers;
             mDisplayPartyInfo.IsChecked = Globals.Database.DisplayPartyInfo;
             mTypewriterText.IsChecked = Globals.Database.TypewriterText;
+            mNameFading.IsChecked = Globals.Database.NameFading;
 
             // Video Settings.
             mAutoCloseWindowsCheckbox.IsChecked = Globals.Database.HideOthersOnWindowOpen;
@@ -991,6 +999,7 @@ namespace Intersect.Client.Interface.Shared
             Globals.Database.DisplaySelfStatusMarkers = mSelfStatusMarkers.IsChecked;
             Globals.Database.DisplayPartyInfo = mDisplayPartyInfo.IsChecked;
             Globals.Database.TypewriterText = mTypewriterText.IsChecked;
+            Globals.Database.NameFading = mNameFading.IsChecked;
             
             // Save graphics settings
             Globals.Database.DisplayFog = mShowFog.IsChecked;

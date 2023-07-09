@@ -391,8 +391,6 @@ namespace Intersect.Client.Interface.Game.EntityPanel
 
                     break;
             }
-
-            EntityName.SetText(MyEntity.Name.ToUpper());
             ShieldBar.Hide();
         }
 
@@ -474,8 +472,17 @@ namespace Intersect.Client.Interface.Game.EntityPanel
             {
                 if (MyEntity.NpcId != default)
                 {
-                    var text = MyBestiary.HasUnlock(MyEntity.NpcId, GameObjects.Events.BestiaryUnlock.NameAndDescription) ? MyEntity.Name : "???";
-                    EntityName.SetText(text.ToUpper());
+                    var text = MyBestiary.HasUnlock(MyEntity.NpcId, BestiaryUnlock.NameAndDescription) ? MyEntity.Name : "???";
+                    var npcBase = NpcBase.Get(MyEntity.NpcId);
+                    if (npcBase == default)
+                    {
+                        EntityName.SetText(text.ToUpper());
+                    }
+                    else
+                    {
+                        EntityName.SetText($"{text.ToUpper()} [Tr. {npcBase.Level}]");
+                    }
+                    
                 }
                 else
                 {

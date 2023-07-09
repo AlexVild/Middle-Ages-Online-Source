@@ -77,6 +77,8 @@ namespace Intersect.Client.Framework.Database
         
         public bool DisplayWeather;
 
+        public bool NameFading;
+
         //Saving password, other stuff we don't want in the games directory
         public abstract void SavePreference(string key, object value);
 
@@ -131,6 +133,7 @@ namespace Intersect.Client.Framework.Database
             DisplayLighting = LoadPreference("DisplayLighting", true);
             DisplayWeather = LoadPreference("DisplayWeather", true);
             DisplayFog = LoadPreference("DisplayFog", true);
+            NameFading = LoadPreference("NameFading", true);
         }
 
         public virtual void SavePreferences()
@@ -169,6 +172,7 @@ namespace Intersect.Client.Framework.Database
             SavePreference("DisplayLighting", DisplayLighting.ToString());
             SavePreference("DisplayWeather", DisplayWeather.ToString());
             SavePreference("DisplayFog", DisplayFog.ToString());
+            SavePreference("NameFading", NameFading.ToString());
         }
 
         public abstract bool LoadConfig();

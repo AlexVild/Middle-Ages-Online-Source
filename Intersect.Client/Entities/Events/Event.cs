@@ -7,9 +7,11 @@ using Intersect.Client.Framework.GenericClasses;
 using Intersect.Client.Framework.Graphics;
 using Intersect.Client.General;
 using Intersect.Client.Maps;
+using Intersect.Configuration;
 using Intersect.Enums;
 using Intersect.GameObjects.Events;
 using Intersect.Network.Packets.Server;
+using Intersect.Utilities;
 
 namespace Intersect.Client.Entities.Events
 {
@@ -106,8 +108,8 @@ namespace Intersect.Client.Entities.Events
                     if (entityTex != null)
                     {
                         srcTexture = entityTex;
-                        height = srcTexture.GetHeight() / Options.Instance.Sprites.Directions;
-                        width = srcTexture.GetWidth() / Options.Instance.Sprites.NormalFrames;
+                        height = srcTexture.ScaledHeight / Options.Instance.Sprites.Directions;
+                        width = srcTexture.ScaledWidth / Options.Instance.Sprites.NormalFrames;
                         d = Graphic.Y;
                         if (!DirectionFix)
                         {
@@ -196,18 +198,18 @@ namespace Intersect.Client.Entities.Events
 
             destRectangle.X = (int) Math.Ceiling(destRectangle.X);
             destRectangle.Y = (int) Math.Ceiling(destRectangle.Y);
-            destRectangle.Width = srcRectangle.Width;
-            destRectangle.Height = srcRectangle.Height;
+            destRectangle.Width = width;
+            destRectangle.Height = height;
 
             // Set up our targetting rectangle.
             // If we're smaller than a tile, force the target size to a tile.
             WorldPos = destRectangle;
-            WorldPos.Width = Math.Max(Options.TileWidth, srcRectangle.Width);
-            WorldPos.Height = Math.Max(Options.TileHeight, srcRectangle.Height);
+            WorldPos.Width = Math.Max(Options.TileWidth, width);
+            WorldPos.Height = Math.Max(Options.TileHeight, height);
 
             if (srcTexture != null)
             {
-                Graphics.DrawGameTexture(srcTexture, srcRectangle, destRectangle, Intersect.Color.White);
+                Graphics.DrawGameTexture(srcTexture, srcRectangle, destRectangle, Color.White);
             }
         }
 
@@ -306,6 +308,8 @@ namespace Intersect.Client.Entities.Events
                 return;
             }
 
+            NameOpacityUpdate();
+
             var y = (int) Math.Ceiling(GetCenterPos().Y);
             var x = (int) Math.Ceiling(GetCenterPos().X);
             var height = Options.TileHeight;
@@ -318,7 +322,7 @@ namespace Intersect.Client.Entities.Events
 
                     if (entityTex != null)
                     {
-                        height = entityTex.GetHeight();
+                        height = entityTex.ScaledHeight;
                     }
 
                     break;
@@ -358,10 +362,14 @@ namespace Intersect.Client.Entities.Events
                 );
             }
 
+            var nameColor = Color.FromArgb(CustomColors.Names.Events.Name.ToArgb());
+            var outlineColor = Color.FromArgb(CustomColors.Names.Events.Outline.ToArgb());
+            nameColor.A = (byte)NameOpacity;
+            outlineColor.A = NameOpacity < byte.MaxValue ? (byte)0 : (byte)NameOpacity;
+
             Graphics.Renderer.DrawString(
                 Name, Graphics.EntityNameFont, (int) (x - (int) Math.Ceiling(textSize.X / 2f)), (int) y, 1,
-                Color.FromArgb(CustomColors.Names.Events.Name.ToArgb()), true, null,
-                Color.FromArgb(CustomColors.Names.Events.Outline.ToArgb())
+                nameColor, true, null, outlineColor
             );
         }
 
@@ -387,7 +395,7 @@ namespace Intersect.Client.Entities.Events
                     if (entityTex != null)
                     {
                         pos.Y += Options.TileHeight / 2;
-                        pos.Y -= entityTex.GetHeight() / Options.Instance.Sprites.Directions / 2;
+                        pos.Y -= entityTex.ScaledHeight / Options.Instance.Sprites.Directions / 2;
                     }
 
                     break;

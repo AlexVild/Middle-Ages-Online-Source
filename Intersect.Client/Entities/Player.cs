@@ -2826,9 +2826,14 @@ namespace Intersect.Client.Entities
                 backgroundColor = CustomColors.Names.Players["Guild"].Background;
             }
 
+            var nameColor = Color.FromArgb(textColor.ToArgb());
+            var outlineColor = Color.FromArgb(borderColor.ToArgb());
+            nameColor.A = (byte)NameOpacity;
+            outlineColor.A = NameOpacity < byte.MaxValue ? (byte)0 : (byte)NameOpacity;
+
             Graphics.Renderer.DrawString(
                 Guild, Graphics.EntityNameFont, (int)(x - (int)Math.Ceiling(textSize.X / 2f)), (int)y, 1,
-                Color.FromArgb(textColor.ToArgb()), true, null, Color.FromArgb(borderColor.ToArgb())
+                nameColor, true, null, outlineColor
             );
         }
 

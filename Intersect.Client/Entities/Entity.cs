@@ -17,6 +17,7 @@ using Intersect.Client.Items;
 using Intersect.Client.Localization;
 using Intersect.Client.Maps;
 using Intersect.Client.Spells;
+using Intersect.Configuration;
 using Intersect.Enums;
 using Intersect.GameObjects;
 using Intersect.GameObjects.Events;
@@ -242,6 +243,10 @@ namespace Intersect.Client.Entities
             }
 
             Load(packet);
+
+            var inProximity = InNameProximity();
+            NameOpacity = inProximity ? byte.MaxValue : ClientConfiguration.Instance.MinimumNameOpacity;
+            FadeName = !inProximity;
         }
 
         //Status effects
@@ -1539,10 +1544,15 @@ namespace Intersect.Client.Entities
                     new FloatRect(x - textSize.X / 2f - 4, y, textSize.X + 8, textSize.Y), backgroundColor
                 );
             }
+            
+            var nameColor = Color.FromArgb(textColor.ToArgb());
+            var outlineColor = Color.FromArgb(borderColor.ToArgb());
+            nameColor.A = (byte)NameOpacity;
+            outlineColor.A = NameOpacity < byte.MaxValue ? (byte)0 : (byte)NameOpacity;
 
             Graphics.Renderer.DrawString(
                 label, Graphics.EntityNameFont, (int) (x - (int) Math.Ceiling(textSize.X / 2f)), (int) y, 1,
-                Color.FromArgb(textColor.ToArgb()), true, null, Color.FromArgb(borderColor.ToArgb())
+                nameColor, true, null, outlineColor
             );
         }
 
@@ -1553,8 +1563,8 @@ namespace Intersect.Client.Entities
                 return;
             }
 
-            // Always draw name if event, player, is targeted, or is aggressive.
-            if (!(this is Event) && !(this is Player) && !IsTargeted && Type != -1)
+            // Don't draw if non-aggressive NPC, IF namefading is off
+            if (!Globals.Database.NameFading && !(this is Event) && !(this is Player) && !IsTargeted && Type != -1)
             {
                 return;
             }
@@ -1673,9 +1683,15 @@ namespace Intersect.Client.Entities
                 );
             }
 
+            var nameColor = Color.FromArgb(textColor.ToArgb());
+            var outlineColor = Color.FromArgb(borderColor.ToArgb());
+            NameOpacityUpdate();
+            nameColor.A = (byte)NameOpacity;
+            outlineColor.A = NameOpacity < byte.MaxValue ? (byte)0 : (byte)NameOpacity;
+
             Graphics.Renderer.DrawString(
                 name, Graphics.EntityNameFont, (int) (x - (int) Math.Ceiling(textSize.X / 2f)), (int) y, 1,
-                Color.FromArgb(textColor.ToArgb()), true, null, Color.FromArgb(borderColor.ToArgb())
+                nameColor, true, null, outlineColor
             );
 
             IsTargeted = false; // allow resetting of target-only name display
@@ -2601,6 +2617,17 @@ namespace Intersect.Client.Entities
             return CalculateDistanceToPoint(selfX, selfY, otherX, otherY);
         }
 
+        public int CalculateTileDistanceTo(Entity en)
+        {
+            if (en == null)
+            {
+                return 0;
+            }
+
+            var distance = CalculateDistanceTo(en);
+            return (int)Math.Ceiling(distance / Math.Max(Options.TileHeight, Options.TileWidth));
+        }
+
         public static double CalculateDistanceToPoint(float selfX, float selfY, float otherX, float otherY)
         {
             var a = Math.Pow(otherX - selfX, 2);
@@ -3421,6 +3448,12 @@ namespace Intersect.Client.Entities
 
     public partial class Entity
     {
+        public bool FadeName = false;
+
+        public int NameOpacity = 0;
+
+        public long LastNameUpdate = 0L;
+
         public long GetCastStart() 
         {
             var now = Timing.Global.Milliseconds;
@@ -3451,6 +3484,52 @@ namespace Intersect.Client.Entities
             if (spell.Combat.TargetType == SpellTargetTypes.Single)
             {
                 EntityTarget = targetId;
+            }
+        }
+
+        public bool InNameProximity()
+        {
+            if (!Globals.Database.NameFading)
+            {
+                return true;
+            }
+
+            var mousePos = Graphics.ConvertToWorldPoint(Globals.InputManager.GetMousePosition());
+            return CalculateTileDistanceTo(Globals.Me) <= ClientConfiguration.Instance.ProximityNameDistance 
+                || WorldPos.Contains(mousePos.X, mousePos.Y) 
+                || IsTargeted 
+                || !IsAllyOf(Globals.Me) 
+                || this is Player && (Globals.Me.MapInstance?.ZoneType != MapZones.Safe);
+        }
+
+        protected void NameOpacityUpdate()
+        {
+            if (!InNameProximity())
+            {
+                FadeName = true;
+            }
+            else
+            {
+                FadeName = false;
+            }
+
+            if (NameOpacity == ClientConfiguration.Instance.MinimumNameOpacity && FadeName)
+            {
+                return;
+            }
+
+            if (Timing.Global.MillisecondsUtcUnsynced - LastNameUpdate > 80)
+            {
+                if (FadeName)
+                {
+                    NameOpacity -= 50;
+                }
+                else
+                {
+                    NameOpacity += 50;
+                }
+                NameOpacity = MathHelper.Clamp(NameOpacity, ClientConfiguration.Instance.MinimumNameOpacity, byte.MaxValue);
+                LastNameUpdate = Timing.Global.MillisecondsUtcUnsynced;
             }
         }
     }

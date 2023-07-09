@@ -1724,6 +1724,9 @@ namespace Intersect.Client.Localization
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString TypewriterText = @"Typewriter Text";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString NameFading = @"Name Fading";
         }
 
         public struct Parties
