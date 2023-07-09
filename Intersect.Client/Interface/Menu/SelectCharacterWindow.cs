@@ -378,14 +378,17 @@ namespace Intersect.Client.Interface.Menu
                 return;
             }
 
-            ChatboxMsg.ClearMessages();
-            PacketSender.SendSelectCharacter(Characters[mSelectedChar].Id);
-
             Globals.WaitingOnServer = true;
             mPlayButton.Disable();
             mNewButton.Disable();
             mDeleteButton.Disable();
             mLogoutButton.Disable();
+
+            FadeService.FadeOut(callback: () =>
+            {
+                ChatboxMsg.ClearMessages();
+                PacketSender.SendSelectCharacter(Characters[mSelectedChar].Id);
+            });
         }
 
         private void _deleteButton_Clicked(Base sender, ClickedEventArgs arguments)

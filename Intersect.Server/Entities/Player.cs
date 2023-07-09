@@ -2297,7 +2297,7 @@ namespace Intersect.Server.Entities
                 instanceController.TryInitializeOrJoinDungeon(dId, this);
             }
 
-            if (Options.DebugAllowMapFades)
+            if (Options.DebugAllowMapFades && !adminWarp)
             {
                 PacketSender.SendFadePacket(Client, true); // fade in by default - either the player was faded out or was not
             }

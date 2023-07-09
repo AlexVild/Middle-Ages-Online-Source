@@ -58,7 +58,7 @@ namespace Intersect.Client.Core
 
             CurrentAction = FadeType.In;
             sFadeAmt = 255f;
-            sLastUpdate = Timing.Global.Milliseconds;
+            sLastUpdate = Timing.Global.MillisecondsUtcUnsynced;
 
             CompleteCallback = callback;
         }
@@ -69,7 +69,7 @@ namespace Intersect.Client.Core
             
             CurrentAction = FadeType.Out;
             sFadeAmt = 0f;
-            sLastUpdate = Timing.Global.Milliseconds;
+            sLastUpdate = Timing.Global.MillisecondsUtcUnsynced;
             sAlertServerWhenFaded = alertServerWhenFaded;
 
             CompleteCallback = callback;
@@ -89,7 +89,7 @@ namespace Intersect.Client.Core
         {
             if (CurrentAction == FadeType.In)
             {
-                sFadeAmt = (float)MathHelper.Clamp(sFadeAmt - (Timing.Global.Milliseconds - sLastUpdate) / sFadeRate * 255f, 0f, 255f);
+                sFadeAmt = (float)MathHelper.Clamp(sFadeAmt - (Timing.Global.MillisecondsUtcUnsynced - sLastUpdate) / sFadeRate * 255f, 0f, 255f);
                 if (sFadeAmt <= 0f)
                 {
                     if (Globals.WaitFade)
@@ -102,7 +102,7 @@ namespace Intersect.Client.Core
             }
             else if (CurrentAction == FadeType.Out)
             {
-                sFadeAmt = (float)MathHelper.Clamp(sFadeAmt + (Timing.Global.Milliseconds - sLastUpdate) / sFadeRate * 255f, 0f, 255f);
+                sFadeAmt = (float)MathHelper.Clamp(sFadeAmt + (Timing.Global.MillisecondsUtcUnsynced - sLastUpdate) / sFadeRate * 255f, 0f, 255f);
                 if (sFadeAmt >= 255f)
                 {
                     CurrentAction = FadeType.None;
@@ -119,7 +119,7 @@ namespace Intersect.Client.Core
                 }
             }
 
-            sLastUpdate = Timing.Global.Milliseconds;
+            sLastUpdate = Timing.Global.MillisecondsUtcUnsynced;
         }
 
     }

@@ -83,7 +83,7 @@ namespace Intersect.Client.Maps
         protected GameTexture mFogTex;
 
         //Fog Variables
-        protected long mFogUpdateTime = Timing.Global.MillisecondsUtc;
+        protected long mFogUpdateTime = Timing.Global.MillisecondsUtcUnsynced;
 
         //Update Timer
         private long mLastUpdateTime;
@@ -91,12 +91,12 @@ namespace Intersect.Client.Maps
         protected float mOverlayIntensity;
 
         //Overlay Image Variables
-        protected long mOverlayUpdateTime = Timing.Global.MillisecondsUtc;
+        protected long mOverlayUpdateTime = Timing.Global.MillisecondsUtcUnsynced;
 
         protected float mPanoramaIntensity;
 
         //Panorama Variables
-        protected long mPanoramaUpdateTime = Timing.Global.MillisecondsUtc;
+        protected long mPanoramaUpdateTime = Timing.Global.MillisecondsUtcUnsynced;
 
         private bool mTexturesFound = false;
 
@@ -193,7 +193,7 @@ namespace Intersect.Client.Maps
         {
             if (isLocal)
             {
-                mLastUpdateTime = Timing.Global.MillisecondsUtc + 10000;
+                mLastUpdateTime = Timing.Global.MillisecondsUtcUnsynced + 10000;
                 UpdateMapAttributes();
                 if (BackgroundSound == null && !TextUtils.IsNone(Sound))
                 {
@@ -262,7 +262,7 @@ namespace Intersect.Client.Maps
             }
             else
             {
-                if (Timing.Global.MillisecondsUtc > mLastUpdateTime)
+                if (Timing.Global.MillisecondsUtcUnsynced > mLastUpdateTime)
                 {
                     Dispose();
                 }
@@ -1031,9 +1031,9 @@ namespace Intersect.Client.Maps
                 return;
             }
 
-            float ecTime = Timing.Global.MillisecondsUtc - mFogUpdateTime;
+            float ecTime = Timing.Global.MillisecondsUtcUnsynced - mFogUpdateTime;
             var intensityChange = ecTime / 2000f;
-            mFogUpdateTime = Timing.Global.MillisecondsUtc;
+            mFogUpdateTime = Timing.Global.MillisecondsUtcUnsynced;
 
             if (Id == Globals.Me.CurrentMap)
             {
@@ -1132,7 +1132,7 @@ namespace Intersect.Client.Maps
 
             if ((WeatherXSpeed != 0 || WeatherYSpeed != 0) && Globals.Me.MapInstance == this)
             {
-                if (Timing.Global.MillisecondsUtc > _weatherParticleSpawnTime)
+                if (Timing.Global.MillisecondsUtcUnsynced > _weatherParticleSpawnTime)
                 {
                     _weatherParticles.Add(new WeatherParticle(_removeParticles, WeatherXSpeed, WeatherYSpeed, anim));
                     var spawnTime = 25 + (int) (475 * (float) (1f - (float) (WeatherIntensity / 100f)));
@@ -1140,7 +1140,7 @@ namespace Intersect.Client.Maps
                                        (480000f /
                                         (Graphics.Renderer.GetScreenWidth() * Graphics.Renderer.GetScreenHeight())));
 
-                    _weatherParticleSpawnTime = Timing.Global.MillisecondsUtc + spawnTime;
+                    _weatherParticleSpawnTime = Timing.Global.MillisecondsUtcUnsynced + spawnTime;
                 }
             }
 
@@ -1176,8 +1176,8 @@ namespace Intersect.Client.Maps
 
         public void DrawPanorama()
         {
-            float ecTime = Timing.Global.MillisecondsUtc - mPanoramaUpdateTime;
-            mPanoramaUpdateTime = Timing.Global.MillisecondsUtc;
+            float ecTime = Timing.Global.MillisecondsUtcUnsynced - mPanoramaUpdateTime;
+            mPanoramaUpdateTime = Timing.Global.MillisecondsUtcUnsynced;
             if (Id == Globals.Me.CurrentMap)
             {
                 if (mPanoramaIntensity != 1)
@@ -1210,8 +1210,8 @@ namespace Intersect.Client.Maps
 
         public void DrawOverlayGraphic()
         {
-            float ecTime = Timing.Global.MillisecondsUtc - mOverlayUpdateTime;
-            mOverlayUpdateTime = Timing.Global.MillisecondsUtc;
+            float ecTime = Timing.Global.MillisecondsUtcUnsynced - mOverlayUpdateTime;
+            mOverlayUpdateTime = Timing.Global.MillisecondsUtcUnsynced;
             if (Id == Globals.Me.CurrentMap)
             {
                 if (mOverlayIntensity != 1)
@@ -1308,7 +1308,7 @@ namespace Intersect.Client.Maps
                         ActionMsgs[n].Y * Options.TileHeight -
                         Options.TileHeight *
                         2 *
-                        (Options.ActionMessageTime - (ActionMsgs[n].TransmittionTimer - Timing.Global.Milliseconds)) /
+                        (Options.ActionMessageTime - (ActionMsgs[n].TransmittionTimer - Timing.Global.MillisecondsUtcUnsynced)) /
                         Options.ActionMessageTime + ActionMsgs[n].YOffset
                     );
                 }
@@ -1322,7 +1322,7 @@ namespace Intersect.Client.Maps
                 var textWidth = Graphics.Renderer.MeasureText(ActionMsgs[n].Msg, Graphics.ActionMsgFont, 1).X;
 
                 Color fadingColor = ActionMsgs[n].Clr;
-                double alphaRatio = Math.Abs((float) (Timing.Global.Milliseconds - ActionMsgs[n].TransmittionTimer) / (float) Options.ActionMessageTime);
+                double alphaRatio = Math.Abs((float) (Timing.Global.MillisecondsUtcUnsynced - ActionMsgs[n].TransmittionTimer) / (float) Options.ActionMessageTime);
                 alphaRatio = MathHelper.Clamp(alphaRatio, 0.0f, 1.0f);
                 fadingColor.A = (byte) (255 * alphaRatio);
 
@@ -1565,16 +1565,16 @@ namespace Intersect.Client.Maps
             Delete();
         }
 
-        public static bool MapNotRequested(Guid mapId) => !MapRequests.ContainsKey(mapId) || MapRequests[mapId] < Timing.Global.Milliseconds;
+        public static bool MapNotRequested(Guid mapId) => !MapRequests.ContainsKey(mapId) || MapRequests[mapId] < Timing.Global.MillisecondsUtcUnsynced;
 
         public static void UpdateMapRequestTime(Guid mapId)
         {
             if (MapRequests.ContainsKey(mapId))
             {
-                MapRequests[mapId] = Timing.Global.Milliseconds + 2000;
+                MapRequests[mapId] = Timing.Global.MillisecondsUtcUnsynced + 2000;
                 return;
             }
-            MapRequests.Add(mapId, Timing.Global.Milliseconds + 2000);
+            MapRequests.Add(mapId, Timing.Global.MillisecondsUtcUnsynced + 2000);
         }
     }
 }

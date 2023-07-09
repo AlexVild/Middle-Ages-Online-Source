@@ -145,7 +145,7 @@ namespace Intersect.Client.Entities.CombatNumbers
             VisibleTo = visibleTo;
             Alpha = 255;
             CurrentFrame = 0;
-            CreatedAt = Timing.Global.Milliseconds;
+            CreatedAt = Timing.Global.MillisecondsUtcUnsynced;
             CleanupTime = CreatedAt + DisplayLengthMs;
 
             FallbackX = fallbackX;
@@ -197,9 +197,9 @@ namespace Intersect.Client.Entities.CombatNumbers
                 ResizeBackground();
             }
 
-            if (Timing.Global.Milliseconds > CleanupTime && !FadeOut)
+            if (Timing.Global.MillisecondsUtcUnsynced > CleanupTime && !FadeOut)
             {
-                NextFadeUpdate = Timing.Global.Milliseconds + FadeFrames;
+                NextFadeUpdate = Timing.Global.MillisecondsUtcUnsynced + FadeFrames;
                 FadeOut = true;
             }
 
@@ -222,17 +222,17 @@ namespace Intersect.Client.Entities.CombatNumbers
         {
             Value += newValue;
             Alpha = 255;
-            CreatedAt = Timing.Global.Milliseconds;
+            CreatedAt = Timing.Global.MillisecondsUtcUnsynced;
             CleanupTime = CreatedAt + DisplayLengthMs;
             FadeOut = false;
         }
 
         private void UpdateFade()
         {
-            if (Timing.Global.Milliseconds > NextFadeUpdate)
+            if (Timing.Global.MillisecondsUtcUnsynced > NextFadeUpdate)
             {
                 Alpha -= FadeRate;
-                NextFadeUpdate = Timing.Global.Milliseconds + FadeFrames;
+                NextFadeUpdate = Timing.Global.MillisecondsUtcUnsynced + FadeFrames;
             }
 
             Alpha = MathHelper.Clamp(Alpha, 0, 255);
@@ -244,7 +244,7 @@ namespace Intersect.Client.Entities.CombatNumbers
 
         public bool ShouldRefresh()
         {
-            return Timing.Global.Milliseconds - RefreshWindow < CreatedAt;
+            return Timing.Global.MillisecondsUtcUnsynced - RefreshWindow < CreatedAt;
         }
 
         public bool Cleanup()

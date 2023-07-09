@@ -347,6 +347,7 @@ namespace Intersect.Client.Interface.Menu
 
         void ExitButton_Clicked(Base sender, ClickedEventArgs arguments)
         {
+            Audio.StopMusic(6f);
             FadeService.FadeOut(callback: () => Globals.IsRunning = false);
         }
 

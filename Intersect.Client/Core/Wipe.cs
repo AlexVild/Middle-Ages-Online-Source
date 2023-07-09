@@ -63,7 +63,7 @@ namespace Intersect.Client.Core
             CurrentAction = FadeType.In;
             sFadeAmt = Graphics.CurrentView.Width / 2;
             sInvertFadeAmt = 0f;
-            sLastUpdate = Timing.Global.Milliseconds;
+            sLastUpdate = Timing.Global.MillisecondsUtcUnsynced;
             CompleteCallback = callback;
         }
 
@@ -75,7 +75,7 @@ namespace Intersect.Client.Core
             CurrentAction = FadeType.Out;
             sFadeAmt = 0f;
             sInvertFadeAmt = Graphics.CurrentView.Width / 2;
-            sLastUpdate = Timing.Global.Milliseconds;
+            sLastUpdate = Timing.Global.MillisecondsUtcUnsynced;
             sAlertServerWhenFaded = alertServerWhenFaded;
             CompleteCallback = callback;
         }
@@ -106,7 +106,7 @@ namespace Intersect.Client.Core
         public static void Update()
         {
             float maxWidth = Graphics.CurrentView.Width / 2;
-            var amountChange = (Timing.Global.Milliseconds - sLastUpdate) / sFadeRate * maxWidth;
+            var amountChange = (Timing.Global.MillisecondsUtcUnsynced - sLastUpdate) / sFadeRate * maxWidth;
 
             // If we're supposed to be done, but there's remnants remaining
             if (CurrentAction == FadeType.None 
@@ -143,9 +143,9 @@ namespace Intersect.Client.Core
                     if (!sIsFaded)
                     {
                         sIsFaded = true;
-                        sTimeFadedOut = Timing.Global.Milliseconds + OUT_EXTRA_TIME;
+                        sTimeFadedOut = Timing.Global.MillisecondsUtcUnsynced + OUT_EXTRA_TIME;
                     }
-                    if (Timing.Global.Milliseconds < sTimeFadedOut)
+                    if (Timing.Global.MillisecondsUtcUnsynced < sTimeFadedOut)
                     {
                         return;
                     }
@@ -166,7 +166,7 @@ namespace Intersect.Client.Core
                 }
             }
             
-            sLastUpdate = Timing.Global.Milliseconds;
+            sLastUpdate = Timing.Global.MillisecondsUtcUnsynced;
         }
 
     }

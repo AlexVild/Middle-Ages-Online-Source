@@ -125,10 +125,10 @@ namespace Intersect.Client.Core
             }
 
             // Forces a delay before showing intro, just to give everything a second.
-            if (Timing.Global.Milliseconds < Globals.IntroBlackDelay)
+            if (Timing.Global.MillisecondsUtcUnsynced < Globals.IntroBlackDelay)
             {
                 // Prevents our first image from being done displaying immediately.
-                Globals.IntroStartTime = Timing.Global.Milliseconds;
+                Globals.IntroStartTime = Timing.Global.MillisecondsUtcUnsynced;
                 return;
             }
 
@@ -142,10 +142,10 @@ namespace Intersect.Client.Core
                 {
                     FadeService.FadeIn(callback: () =>
                     {
-                        Globals.IntroStartTime = Timing.Global.Milliseconds;
+                        Globals.IntroStartTime = Timing.Global.MillisecondsUtcUnsynced;
                     });
                 }
-                else if(Timing.Global.Milliseconds > Globals.IntroStartTime + Globals.IntroDelay && FadeService.DoneFading())
+                else if(Timing.Global.MillisecondsUtcUnsynced > Globals.IntroStartTime + Globals.IntroDelay && FadeService.DoneFading())
                 {
                     //If we have shown an image long enough, fade to black -- keep track that the image is going
                     FadeService.FadeOut(callback: () =>
@@ -201,7 +201,7 @@ namespace Intersect.Client.Core
                 return; // just swallow, we won't animate
             }
 
-            Globals.IntroStartTime = Timing.Global.Milliseconds + Globals.IntroFps;
+            Globals.IntroStartTime = Timing.Global.MillisecondsUtcUnsynced + Globals.IntroFps;
         }
 
         private static void InitializeAnimatedIntro()
@@ -209,7 +209,7 @@ namespace Intersect.Client.Core
             Graphics.IntroHFrame = 0;
             Graphics.IntroVFrame = 0;
             Globals.AnimatedIntro = true;
-            Graphics.IntroUpdateTime = Timing.Global.Milliseconds + (Globals.IntroFps * 10);
+            Graphics.IntroUpdateTime = Timing.Global.MillisecondsUtcUnsynced + (Globals.IntroFps * 10);
         }
 
         private static void ProcessMenu()

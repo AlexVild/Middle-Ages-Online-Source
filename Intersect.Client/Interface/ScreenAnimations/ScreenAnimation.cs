@@ -66,7 +66,7 @@ namespace Intersect.Client.Interface.ScreenAnimations
         public ScreenAnimation(Action animationEndCallback = null)
         {
             AnimationEnd = animationEndCallback;
-            LastUpdateTime = Timing.Global.Milliseconds;
+            LastUpdateTime = Timing.Global.MillisecondsUtcUnsynced;
         }
 
         /// <summary>
@@ -76,7 +76,7 @@ namespace Intersect.Client.Interface.ScreenAnimations
         {
             CurrentHFrame = 0;
             CurrentVFrame = 0;
-            LastUpdateTime = Timing.Global.Milliseconds;
+            LastUpdateTime = Timing.Global.MillisecondsUtcUnsynced;
             Done = false;
             SoundPlayed = false;
         }
@@ -93,7 +93,7 @@ namespace Intersect.Client.Interface.ScreenAnimations
                     // Don't draw if we're finished - image needs reset
                     return;
                 }
-                if (LoopAnimation && Timing.Global.Milliseconds - LastUpdateTime >= ResetTime)
+                if (LoopAnimation && Timing.Global.MillisecondsUtcUnsynced - LastUpdateTime >= ResetTime)
                 {
                     ResetAnimation();
                 }
@@ -137,7 +137,7 @@ namespace Intersect.Client.Interface.ScreenAnimations
         /// </summary>
         private void Animate()
         {
-            var now = Timing.Global.Milliseconds;
+            var now = Timing.Global.MillisecondsUtcUnsynced;
             var frameTime = 1000 / FPS;
 
             if (now - LastUpdateTime > frameTime)
@@ -163,7 +163,7 @@ namespace Intersect.Client.Interface.ScreenAnimations
                         }
                     }
                 }
-                LastUpdateTime = Timing.Global.Milliseconds;
+                LastUpdateTime = Timing.Global.MillisecondsUtcUnsynced;
             }
         }
     }

@@ -103,7 +103,7 @@ namespace Intersect.Client.Core
 
         private static float mShakeDecrement = 0.12f;
 
-        private static long sLastUpdate = Timing.Global.Milliseconds;
+        private static long sLastUpdate = Timing.Global.MillisecondsUtcUnsynced;
 
         private static long sCurrentCombatWidth = 0;
 
@@ -172,7 +172,7 @@ namespace Intersect.Client.Core
         public static void DrawIntro()
         {
             // Forces a delay before showing intro, just to give everything a second.
-            if (Timing.Global.Milliseconds < Globals.IntroBlackDelay)
+            if (Timing.Global.MillisecondsUtcUnsynced < Globals.IntroBlackDelay)
             {
                 return;
             }
@@ -727,12 +727,12 @@ namespace Intersect.Client.Core
                     break;
                 // reset
                 case 1:
-                    lastUpdate = Timing.Global.Milliseconds;
+                    lastUpdate = Timing.Global.MillisecondsUtcUnsynced;
                     state = flag ? (byte)2 : (byte)4;
                     break;
                 // fade in
                 case 2:
-                    size = MathHelper.Clamp((int)Math.Round(((Timing.Global.Milliseconds - lastUpdate) / 250f) * 64f), 0, 64);
+                    size = MathHelper.Clamp((int)Math.Round(((Timing.Global.MillisecondsUtcUnsynced - lastUpdate) / 250f) * 64f), 0, 64);
                     for(var i = 0; i < CurrentView.Width / textureWidth; i++)
                     {
                         top = new FloatRect(CurrentView.Left + (i * textureWidth), currTop, textureWidth, size);
@@ -744,8 +744,8 @@ namespace Intersect.Client.Core
 
                     if (!flag)
                     {
-                        var now = Timing.Global.Milliseconds;
-                        var remainingTransition = 250 - (Timing.Global.Milliseconds - lastUpdate);
+                        var now = Timing.Global.MillisecondsUtcUnsynced;
+                        var remainingTransition = 250 - (Timing.Global.MillisecondsUtcUnsynced - lastUpdate);
                         lastUpdate = now - remainingTransition;
                         state = 4;
                     }
@@ -767,13 +767,13 @@ namespace Intersect.Client.Core
 
                     if (!flag)
                     {
-                        lastUpdate = Timing.Global.Milliseconds;
+                        lastUpdate = Timing.Global.MillisecondsUtcUnsynced;
                         state = 4;
                     }
                     break;
                 // Fade out
                 case 4:
-                    size = MathHelper.Clamp(64 - ((int)Math.Round(((Timing.Global.Milliseconds - lastUpdate) / 250f) * 64f)), 0, 64);
+                    size = MathHelper.Clamp(64 - ((int)Math.Round(((Timing.Global.MillisecondsUtcUnsynced - lastUpdate) / 250f) * 64f)), 0, 64);
                     for (var i = 0; i < CurrentView.Width / textureWidth; i++)
                     {
                         top = new FloatRect(CurrentView.Left + (i * textureWidth), currTop, textureWidth, size);
@@ -784,8 +784,8 @@ namespace Intersect.Client.Core
                     }
                     if (flag)
                     {
-                        var now = Timing.Global.Milliseconds;
-                        var remainingTransition = 250 - (Timing.Global.Milliseconds - lastUpdate);
+                        var now = Timing.Global.MillisecondsUtcUnsynced;
+                        var remainingTransition = 250 - (Timing.Global.MillisecondsUtcUnsynced - lastUpdate);
                         lastUpdate = now - remainingTransition;
                         state = 2;
                     }
@@ -805,7 +805,7 @@ namespace Intersect.Client.Core
             var map = MapInstance.Get(Globals.Me.CurrentMap);
             if (map != null)
             {
-                float ecTime = Timing.Global.Milliseconds - sOverlayUpdate;
+                float ecTime = Timing.Global.MillisecondsUtcUnsynced - sOverlayUpdate;
 
                 if (OverlayColor.A != map.AHue ||
                     OverlayColor.R != map.RHue ||
@@ -911,7 +911,7 @@ namespace Intersect.Client.Core
             }
 
             DrawGameTexture(Renderer.GetWhiteTexture(), new FloatRect(0, 0, 1, 1), CurrentView, OverlayColor, null);
-            sOverlayUpdate = Timing.Global.Milliseconds;
+            sOverlayUpdate = Timing.Global.MillisecondsUtcUnsynced;
         }
 
         public static FloatRect GetSourceRect(GameTexture gameTexture, int hFrames = 1, int vFrames = 1, int currHframe = 0, int currVframe = 0)
@@ -1044,16 +1044,16 @@ namespace Intersect.Client.Core
                     Globals.InitialFade = true;
                     FadeService.FadeIn(callback: () =>
                     {
-                        Globals.IntroStartTime = Timing.Global.Milliseconds;
+                        Globals.IntroStartTime = Timing.Global.MillisecondsUtcUnsynced;
                     });
                 }
                 Renderer.SetView(CurrentView);
 
-                sLastUpdate = Timing.Global.Milliseconds;
+                sLastUpdate = Timing.Global.MillisecondsUtcUnsynced;
                 return;
             }
 
-            var shakeReduction = Math.Max((Timing.Global.Milliseconds - sLastUpdate) / Options.ShakeDeltaDurationDivider, 0);
+            var shakeReduction = Math.Max((Timing.Global.MillisecondsUtcUnsynced - sLastUpdate) / Options.ShakeDeltaDurationDivider, 0);
             
             CurrentShake = Utilities.MathHelper.Clamp(CurrentShake - shakeReduction, 0.0f, 100.0f);
             var yShake = CurrentShake;
@@ -1142,12 +1142,12 @@ namespace Intersect.Client.Core
             }
 
             Renderer.SetView(CurrentView);
-            sLastUpdate = Timing.Global.Milliseconds;
+            sLastUpdate = Timing.Global.MillisecondsUtcUnsynced;
         }
 
         public static void SetLastUpdate()
         {
-            sLastUpdate = Timing.Global.Milliseconds;
+            sLastUpdate = Timing.Global.MillisecondsUtcUnsynced;
         }
 
         //Lighting
@@ -1293,7 +1293,7 @@ namespace Intersect.Client.Core
             var map = MapInstance.Get(Globals.Me.CurrentMap);
             if (map != null)
             {
-                float ecTime = Timing.Global.Milliseconds - sLightUpdate;
+                float ecTime = Timing.Global.MillisecondsUtcUnsynced - sLightUpdate;
                 var valChange = 255 * ecTime / 2000f;
                 var brightnessTarget = (byte) (map.Brightness / 100f * 255);
                 if (BrightnessLevel < brightnessTarget)
@@ -1474,7 +1474,7 @@ namespace Intersect.Client.Core
 
                 // Cap instensity between 0 and 255 so as not to overflow (as it is an alpha value)
                 sPlayerLightIntensity = (float) MathHelper.Clamp(sPlayerLightIntensity, 0f, 255f);
-                sLightUpdate = Timing.Global.Milliseconds;
+                sLightUpdate = Timing.Global.MillisecondsUtcUnsynced;
             }
         }
 
@@ -1665,7 +1665,7 @@ namespace Intersect.Client.Core
         {
             MenuHFrame = 0;
             MenuVFrame = 0;
-            LastMenuFrameUpdate = Timing.Global.Milliseconds + (MenuFrameRate * 10);
+            LastMenuFrameUpdate = Timing.Global.MillisecondsUtcUnsynced + (MenuFrameRate * 10);
         }
 
         public static void AnimateMainMenu()
@@ -1683,7 +1683,7 @@ namespace Intersect.Client.Core
                 DrawFullScreenTexture(Renderer.GetWhiteTexture(), new Color((int)currAlpha, 0, 0, 0));
             }
 
-            if ((LogoAlpha < 255 && Timing.Global.Milliseconds < LogoDelayTime) || HideLogo)
+            if ((LogoAlpha < 255 && Timing.Global.MillisecondsUtcUnsynced < LogoDelayTime) || HideLogo)
             {
                 return;
             }
@@ -1710,7 +1710,7 @@ namespace Intersect.Client.Core
         public static bool TryAnimate(ref long lastUpdate, ref int hFrame, int totalH, ref int vFrame, int totalV, long frameRate, bool loop)
         {
             // If the animation shouldn't progress yet - either not enough time has passed or a non-looping animation has finished
-            if (lastUpdate >= Timing.Global.Milliseconds || (!loop && hFrame == totalH - 1 && vFrame == totalV - 1))
+            if (lastUpdate >= Timing.Global.MillisecondsUtcUnsynced || (!loop && hFrame == totalH - 1 && vFrame == totalV - 1))
             {
                 return false;
             }
@@ -1735,26 +1735,26 @@ namespace Intersect.Client.Core
             }
             
             var fpsMillis = frameRate * 10;
-            lastUpdate = Timing.Global.Milliseconds + fpsMillis;
+            lastUpdate = Timing.Global.MillisecondsUtcUnsynced + fpsMillis;
             
             return true;
         }
 
         public static void ResetMenu()
         {
-            LogoDelayTime = Timing.Global.Milliseconds + LogoDelayInterval;
+            LogoDelayTime = Timing.Global.MillisecondsUtcUnsynced + LogoDelayInterval;
             ResetMainMenuAnimation();
         }
 
         public static void ResetLogoFade()
         {
             LogoAlpha = 0;
-            LogoAlphaUpdateTime = Timing.Global.Milliseconds + LogoAlphaUpdateInterval;
+            LogoAlphaUpdateTime = Timing.Global.MillisecondsUtcUnsynced + LogoAlphaUpdateInterval;
         }
 
         public static bool TryFadeIn(ref long lastFade, ref int alpha, long fadeRate, int fadeAmount)
         {
-            if (Timing.Global.Milliseconds < lastFade || alpha >= 255)
+            if (Timing.Global.MillisecondsUtcUnsynced < lastFade || alpha >= 255)
             {
                 // Alpha beyond this causes overflow behavior
                 if (alpha > 255)
@@ -1767,13 +1767,13 @@ namespace Intersect.Client.Core
             alpha += fadeAmount;
             alpha = MathHelper.Clamp(alpha, 0, 255);
 
-            lastFade = Timing.Global.Milliseconds + fadeRate;
+            lastFade = Timing.Global.MillisecondsUtcUnsynced + fadeRate;
             return true;
         }
 
         public static void EndLogoFade()
         {
-            LogoDelayTime = Timing.Global.Milliseconds;
+            LogoDelayTime = Timing.Global.MillisecondsUtcUnsynced;
             LogoAlpha = 255;
         }
     }

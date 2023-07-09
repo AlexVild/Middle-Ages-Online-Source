@@ -43,14 +43,14 @@ namespace Intersect.Client.Entities
 
             mOwner = owner;
             mSourceText = text;
-            mRenderTimer = Timing.Global.Milliseconds + 5000;
+            mRenderTimer = Timing.Global.MillisecondsUtcUnsynced + 5000;
             mBubbleTex = Globals.ContentManager.GetTexture(TextureType.Misc, "chatbubble.png");
             mBubbleType = type;
         }
 
         public bool Update()
         {
-            if (mRenderTimer < Timing.Global.Milliseconds)
+            if (mRenderTimer < Timing.Global.MillisecondsUtcUnsynced)
             {
                 return false;
             }

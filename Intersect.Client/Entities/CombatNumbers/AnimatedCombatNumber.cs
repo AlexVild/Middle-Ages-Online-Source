@@ -23,7 +23,7 @@ namespace Intersect.Client.Entities.CombatNumbers
 
         protected override void AdvanceAnimation()
         {
-            var framesSinceStart = (int)Math.Floor((double)(Timing.Global.Milliseconds - CreatedAt) / FrameRate);
+            var framesSinceStart = (int)Math.Floor((double)(Timing.Global.MillisecondsUtcUnsynced - CreatedAt) / FrameRate);
             if (Looping)
             {
                 CurrentFrame = framesSinceStart % FramesInAnimaton;
