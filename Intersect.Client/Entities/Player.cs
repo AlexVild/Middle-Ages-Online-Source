@@ -1038,7 +1038,7 @@ namespace Intersect.Client.Entities
                     return;
                 }
 
-                if (spellBase.Combat.TargetType == SpellTargetTypes.Single)
+                if (spellBase.Combat.TargetType == SpellTargetTypes.Single && spellBase.SpellType == SpellTypes.CombatSpell)
                 {
                     if (TargetIndex == Guid.Empty)
                     {

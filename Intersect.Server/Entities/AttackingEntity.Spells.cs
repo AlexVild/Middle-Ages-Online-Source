@@ -99,7 +99,7 @@ namespace Intersect.Server.Entities
                 }
             }
 
-            if (spell.Combat != null &&
+            if (spell.Combat != null && spell.SpellType == SpellTypes.CombatSpell &&
                 SpellTypeHelpers.SpellTypeRequiresTarget(spell.Combat.TargetType) &&
                 !CanAttack(target, spell))
             {
@@ -266,7 +266,7 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
-            if (!CanAttack(target, spell))
+            if (spell.SpellType == SpellTypes.CombatSpell && !CanAttack(target, spell))
             {
                 return false;
             }
