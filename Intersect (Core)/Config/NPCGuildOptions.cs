@@ -12,7 +12,7 @@ namespace Intersect.Config
         /// <summary>
         /// A players max class rank in some class
         /// </summary>
-        public int MaxClassRank { get; } = 3;
+        public int MaxClassRank { get; set; } = 3;
 
         /// <summary>
         /// There should always be MaxClassRank - 1 of these At max rank, you will no longer need to check for SAs
@@ -27,17 +27,17 @@ namespace Intersect.Config
         /// <summary>
         /// Whether or not we want to have a special assignment count toward task cooldowns
         /// </summary>
-        public bool SpecialAssignmentCountsTowardCooldown { get; } = false;
+        public bool SpecialAssignmentCountsTowardCooldown { get; set; } = false;
 
         /// <summary>
         /// Whether or not we want to have hooks into paying out a special assignment on completion
         /// </summary>
-        public bool PayoutSpecialAssignments { get; } = false;
+        public bool PayoutSpecialAssignments { get; set; } = false;
 
         /// <summary>
         /// How long until a new task can be picked up
         /// </summary>
-        public long TaskCooldownMs { get; } = 600000L;
+        public long TaskCooldownMs { get; set; } = 600000L;
 
         [OnDeserializing]
         internal void OnDeserializingMethod(StreamingContext context)

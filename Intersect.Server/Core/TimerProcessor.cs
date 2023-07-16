@@ -116,12 +116,15 @@ namespace Intersect.Server.Core
                 }
 
                 // Otherwise, process the timer, as it has reached an expiry time
-                timer.ExpireTimer(now);
-
-                // If the timer has completed its required amount of repetitions, remove the timer from processing
-                if (timer.IsCompleted && !descriptor.ContinueAfterExpiration)
+                lock(mLock)
                 {
-                    RemoveTimer(timer);
+                    timer.ExpireTimer(now);
+
+                    // If the timer has completed its required amount of repetitions, remove the timer from processing
+                    if (timer.IsCompleted && !descriptor.ContinueAfterExpiration)
+                    {
+                        RemoveTimer(timer);
+                    }
                 }
             }
         }
