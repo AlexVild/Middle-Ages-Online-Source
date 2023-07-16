@@ -3513,7 +3513,13 @@ namespace Intersect.Client.Entities
                 FadeName = false;
             }
 
-            if (NameOpacity == ClientConfiguration.Instance.MinimumNameOpacity && FadeName)
+            var minOpacity = ClientConfiguration.Instance.MinimumNameOpacity;
+            if (Graphics.BrightnessLevel == 0)
+            {
+                minOpacity = 0;
+            }
+
+            if (NameOpacity == minOpacity && FadeName)
             {
                 return;
             }
@@ -3528,7 +3534,7 @@ namespace Intersect.Client.Entities
                 {
                     NameOpacity += 50;
                 }
-                NameOpacity = MathHelper.Clamp(NameOpacity, ClientConfiguration.Instance.MinimumNameOpacity, byte.MaxValue);
+                NameOpacity = MathHelper.Clamp(NameOpacity, minOpacity, byte.MaxValue);
                 LastNameUpdate = Timing.Global.MillisecondsUtcUnsynced;
             }
         }
