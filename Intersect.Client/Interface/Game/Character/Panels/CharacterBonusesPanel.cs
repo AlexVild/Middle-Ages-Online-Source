@@ -180,7 +180,8 @@ namespace Intersect.Client.Interface.Game.Character.Panels
             {
                 NoBonusesLabel.Hide();
                 var yStart = 0;
-                AddCritInfo(critInfo, yStart, out var y);
+                AddVitalRegenInfo(yStart, out var y);
+                AddCritInfo(critInfo, y, out y);
                 AddAttackSpeed(attackSpeed, y, out y);
                 AddBonusEffectInfo(bonusEffects, y, out _);
 
@@ -225,6 +226,36 @@ namespace Intersect.Client.Interface.Game.Character.Panels
             }
         }
 
+        private void AddVitalRegenInfo(int yStart, out int yEnd)
+        {
+            yEnd = yStart;
+
+            var regens = Globals.Me.GetVitalRegens();
+
+            foreach (var vital in regens.Keys)
+            {
+                if (regens[vital] == 0)
+                {
+                    continue;
+                }
+
+                var label = "OoC HP Regen";
+                var time = Options.Combat.RegenTime / 1000f;
+                var helper = $"The percent of health regenerated every {time.ToString("N0")}s out of combat";
+                if (vital == Vitals.Mana)
+                {
+                    label = "MP Regen";
+                    time = Options.Combat.ManaRegenTime / 1000f;
+                    helper = $"The percent of mana regenerated every {time.ToString("N0")}s";
+                }
+
+                var regenRow = new CharacterBonusRow(BonusContainer, "VitalRegenRow", label, $"{regens[vital]}%", helper, BonusRows);
+                regenRow.SetPosition(regenRow.X, regenRow.Y + yEnd);
+
+                yEnd = regenRow.Y + YPadding;
+            }
+        }
+
         private void AddCritInfo(Tuple<float, double> critInfo, int yStart, out int yEnd)
         {
             yEnd = yStart;
@@ -240,9 +271,9 @@ namespace Intersect.Client.Interface.Game.Character.Panels
             critChanceRow.SetPosition(critChanceRow.X, critChanceRow.Y + yStart);
 
             var critMultiRow = new CharacterBonusRow(BonusContainer, "CritMultiRow", "Base Crit Multi.", critMulti, "Base damage multiplier for critical hits.", BonusRows);
-            critChanceRow.SetPosition(critChanceRow.X, critChanceRow.Y + yStart + YPadding);
+            critMultiRow.SetPosition(critMultiRow.X, critMultiRow.Y + yStart + YPadding);
 
-            yEnd = critChanceRow.Y + YPadding;
+            yEnd = critMultiRow.Y + YPadding;
         }
 
         private void AddBonusEffectInfo(Dictionary<EffectType, int> bonusEffects, int yStart, out int yEnd)

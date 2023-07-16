@@ -1203,7 +1203,7 @@ namespace Intersect.Client.Localization
             public static Dictionary<int, LocalizedString> VitalRegens = new Dictionary<int, LocalizedString>
             {
                 {0, @"OoC HP Regen"},
-                {1, @"OoC MP Regen"}
+                {1, @"MP Regen"}
             };
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]

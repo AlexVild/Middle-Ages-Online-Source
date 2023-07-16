@@ -3285,5 +3285,92 @@ namespace Intersect.Client.Entities
 
             return base.IsAllyOf(en);
         }
+
+        public Dictionary<Vitals, int> GetVitalRegens()
+        {
+            var regens = new Dictionary<Vitals, int>();
+            foreach(var eqp in Equipment)
+            {
+                if (eqp == Guid.Empty)
+                {
+                    continue;
+                }
+
+                var item = ItemBase.Get(eqp);
+                if (item == default)
+                {
+                    continue;
+                }
+
+                var health = item.VitalsRegen[(int)Vitals.Health];
+                var mana = item.VitalsRegen[(int)Vitals.Mana];
+
+                if (regens.ContainsKey(Vitals.Health))
+                {
+                    regens[Vitals.Health] += health;
+                }
+                else
+                {
+                    regens[Vitals.Health] = health;
+                }
+
+                if (regens.ContainsKey(Vitals.Mana))
+                {
+                    regens[Vitals.Mana] += mana;
+                }
+                else
+                {
+                    regens[Vitals.Mana] = mana;
+                }
+            }
+
+            return regens;
+        }
+
+        public Dictionary<Vitals, int> GetVitalBuffs()
+        {
+            var regens = new Dictionary<Vitals, int>();
+            foreach (var eqp in Equipment)
+            {
+                if (eqp == Guid.Empty)
+                {
+                    continue;
+                }
+
+                var item = ItemBase.Get(eqp);
+                if (item == default)
+                {
+                    continue;
+                }
+
+                regens[Vitals.Health] += item.VitalsGiven[(int)Vitals.Health];
+                regens[Vitals.Mana] += item.VitalsGiven[(int)Vitals.Mana];
+            }
+
+            return regens;
+        }
+
+        public Dictionary<Vitals, int> GetVitalPercentageBuffs()
+        {
+            var regens = new Dictionary<Vitals, int>();
+            foreach (var eqp in Equipment)
+            {
+                if (eqp == Guid.Empty)
+                {
+                    continue;
+                }
+
+                var item = ItemBase.Get(eqp);
+                if (item == default)
+                {
+                    continue;
+                }
+
+                regens[Vitals.Health] += item.PercentageVitalsGiven[(int)Vitals.Health];
+                regens[Vitals.Mana] += item.PercentageVitalsGiven[(int)Vitals.Mana];
+            }
+
+            return regens;
+        }
     }
 }
