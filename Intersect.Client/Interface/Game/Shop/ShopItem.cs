@@ -137,10 +137,7 @@ namespace Intersect.Client.Interface.Game.Shop
             var item = ItemBase.Get(Globals.GameShop.SellingItems[mMySlot].CostItemId);
             if (item != null && Globals.GameShop.SellingItems[mMySlot].Item != null)
             {
-                ItemProperties itemProperty = new ItemProperties()
-                {
-                    StatModifiers = item.StatsGiven,
-                };
+                ItemProperties itemProperty = new ItemProperties();
 
                 mDescWindow = new ItemDescriptionWindow(
                     Globals.GameShop.SellingItems[mMySlot].Item, 1, mShopWindow.X, mShopWindow.Y, itemProperty, "",
