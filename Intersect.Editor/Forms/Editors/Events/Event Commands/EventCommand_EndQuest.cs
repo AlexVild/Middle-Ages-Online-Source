@@ -26,6 +26,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             cmbQuests.SelectedIndex = QuestBase.ListIndex(refCommand.QuestId);
             chkSkipCompletionEvent.Checked = refCommand.SkipCompletionEvent;
             chkReset.Checked = refCommand.ResetQuest;
+            chkAgnosticStop.Checked = refCommand.AgnosticStop;
         }
 
         private void InitLocalization()
@@ -51,6 +52,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             mEventEditor.CancelCommandEdit();
         }
 
+        private void chkAgnosticStop_CheckedChanged(object sender, EventArgs e)
+        {
+            mMyCommand.AgnosticStop = chkAgnosticStop.Checked;
+        }
     }
 
 }

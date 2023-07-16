@@ -1406,7 +1406,7 @@ namespace Intersect.Server.Entities.Events
         {
             if (command.ResetQuest)
             {
-                player.ResetQuest(command.QuestId);
+                player.ResetQuest(command.QuestId, command.AgnosticStop);
             }
             else
             {

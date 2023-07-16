@@ -6857,7 +6857,7 @@ namespace Intersect.Server.Entities
             questProgress.TaskProgress = -1;
         }
 
-        public void ResetQuest(Guid questId)
+        public void ResetQuest(Guid questId, bool agnosticCompletion)
         {
             var quest = QuestBase.Get(questId);
             if (quest != null)
@@ -6865,14 +6865,14 @@ namespace Intersect.Server.Entities
                 var questProgress = FindQuest(questId);
                 if (questProgress != null)
                 {
-                    MarkQuestReset(quest, questProgress);
+                    MarkQuestReset(quest, questProgress, agnosticCompletion);
 
                     PacketSender.SendQuestsProgress(this);
                 }
             }
         }
 
-        private void MarkQuestReset(QuestBase quest, Quest questProgress)
+        private void MarkQuestReset(QuestBase quest, Quest questProgress, bool agnosticCompletion)
         {
             // Handle quests that aren't "normal" and should do some management on completion
             if (quest.QuestType != QuestType.Normal)
@@ -6881,7 +6881,10 @@ namespace Intersect.Server.Entities
             }
 
             //Complete Quest
-            questProgress.Completed = false;
+            if (!agnosticCompletion)
+            {
+                questProgress.Completed = false;
+            }
             questProgress.TaskId = Guid.Empty;
             questProgress.TaskProgress = -1;
         }

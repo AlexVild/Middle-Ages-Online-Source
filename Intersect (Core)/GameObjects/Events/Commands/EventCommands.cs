@@ -920,6 +920,8 @@ namespace Intersect.GameObjects.Events.Commands
         public bool SkipCompletionEvent { get; set; }
         
         public bool ResetQuest { get; set; }
+        
+        public bool AgnosticStop { get; set; }
 
     }
 

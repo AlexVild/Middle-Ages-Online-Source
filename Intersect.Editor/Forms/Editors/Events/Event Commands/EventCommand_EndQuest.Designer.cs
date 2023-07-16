@@ -37,6 +37,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.lblQuest = new System.Windows.Forms.Label();
             this.btnCancel = new DarkUI.Controls.DarkButton();
             this.btnSave = new DarkUI.Controls.DarkButton();
+            this.chkAgnosticStop = new DarkUI.Controls.DarkCheckBox();
             this.grpEndQuest.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -44,6 +45,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             this.grpEndQuest.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.grpEndQuest.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpEndQuest.Controls.Add(this.chkAgnosticStop);
             this.grpEndQuest.Controls.Add(this.chkReset);
             this.grpEndQuest.Controls.Add(this.chkSkipCompletionEvent);
             this.grpEndQuest.Controls.Add(this.cmbQuests);
@@ -53,7 +55,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpEndQuest.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpEndQuest.Location = new System.Drawing.Point(3, 3);
             this.grpEndQuest.Name = "grpEndQuest";
-            this.grpEndQuest.Size = new System.Drawing.Size(337, 126);
+            this.grpEndQuest.Size = new System.Drawing.Size(337, 156);
             this.grpEndQuest.TabIndex = 17;
             this.grpEndQuest.TabStop = false;
             this.grpEndQuest.Text = "End Quest";
@@ -109,7 +111,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(89, 97);
+            this.btnCancel.Location = new System.Drawing.Point(256, 127);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Padding = new System.Windows.Forms.Padding(5);
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
@@ -119,13 +121,24 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(7, 97);
+            this.btnSave.Location = new System.Drawing.Point(175, 127);
             this.btnSave.Name = "btnSave";
             this.btnSave.Padding = new System.Windows.Forms.Padding(5);
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 19;
             this.btnSave.Text = "Ok";
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            // 
+            // chkAgnosticStop
+            // 
+            this.chkAgnosticStop.AutoSize = true;
+            this.chkAgnosticStop.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.chkAgnosticStop.Location = new System.Drawing.Point(7, 92);
+            this.chkAgnosticStop.Name = "chkAgnosticStop";
+            this.chkAgnosticStop.Size = new System.Drawing.Size(92, 17);
+            this.chkAgnosticStop.TabIndex = 25;
+            this.chkAgnosticStop.Text = "Agnostic Stop";
+            this.chkAgnosticStop.CheckedChanged += new System.EventHandler(this.chkAgnosticStop_CheckedChanged);
             // 
             // EventCommandEndQuest
             // 
@@ -135,7 +148,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.Controls.Add(this.grpEndQuest);
             this.Name = "EventCommandEndQuest";
-            this.Size = new System.Drawing.Size(348, 132);
+            this.Size = new System.Drawing.Size(348, 167);
             this.grpEndQuest.ResumeLayout(false);
             this.grpEndQuest.PerformLayout();
             this.ResumeLayout(false);
@@ -151,5 +164,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private DarkComboBox cmbQuests;
         private DarkCheckBox chkSkipCompletionEvent;
         private DarkCheckBox chkReset;
+        private DarkCheckBox chkAgnosticStop;
     }
 }
