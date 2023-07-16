@@ -2382,5 +2382,10 @@ namespace Intersect.Server.Entities
         {
             SpellCooldowns.Clear();
         }
+
+        public virtual bool IsInvincibleTo(Entity entity)
+        {
+            return false;
+        }
     }
 }

@@ -507,7 +507,7 @@ namespace Intersect.Server.Entities
             if (damage != 0)
             {
                 // Invulnerable?
-                if (!friendly && enemy.CachedStatuses.Any(status => status.Type == StatusTypes.Invulnerable))
+                if (!friendly && enemy.IsInvincibleTo(this))
                 {
                     PacketSender.SendActionMsg(enemy, Strings.Combat.invulnerable, CustomColors.Combat.Invulnerable, Options.BlockSound);
                     return;
@@ -678,6 +678,11 @@ namespace Intersect.Server.Entities
 
                 RecentAllies.Remove(ally);
             }
+        }
+
+        public override bool IsInvincibleTo(Entity entity)
+        {
+            return CachedStatuses.Any(status => status.Type == StatusTypes.Invulnerable);
         }
     }
 }

@@ -1903,5 +1903,17 @@ namespace Intersect.Server.Entities
                 SetVital(vital, newVital);
             }
         }
+
+        public override bool IsInvincibleTo(Entity entity)
+        {
+            if (entity is Player player)
+            {
+                return base.IsInvincibleTo(player) || !CanPlayerAttack(player);
+            }
+            else
+            {
+                return base.IsInvincibleTo(entity);
+            }
+        }
     }
 }

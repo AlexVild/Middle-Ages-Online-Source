@@ -31,14 +31,14 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private void InitializeComponent()
         {
             this.grpCompleteTask = new DarkUI.Controls.DarkGroupBox();
+            this.chkNoNotify = new DarkUI.Controls.DarkCheckBox();
+            this.chkSkipCompletionEvent = new DarkUI.Controls.DarkCheckBox();
             this.cmbQuestTask = new DarkUI.Controls.DarkComboBox();
             this.lblTask = new System.Windows.Forms.Label();
             this.cmbQuests = new DarkUI.Controls.DarkComboBox();
             this.lblQuest = new System.Windows.Forms.Label();
             this.btnCancel = new DarkUI.Controls.DarkButton();
             this.btnSave = new DarkUI.Controls.DarkButton();
-            this.chkSkipCompletionEvent = new DarkUI.Controls.DarkCheckBox();
-            this.chkNoNotify = new DarkUI.Controls.DarkCheckBox();
             this.grpCompleteTask.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -57,10 +57,30 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpCompleteTask.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpCompleteTask.Location = new System.Drawing.Point(3, 3);
             this.grpCompleteTask.Name = "grpCompleteTask";
-            this.grpCompleteTask.Size = new System.Drawing.Size(176, 146);
+            this.grpCompleteTask.Size = new System.Drawing.Size(404, 146);
             this.grpCompleteTask.TabIndex = 17;
             this.grpCompleteTask.TabStop = false;
             this.grpCompleteTask.Text = "Complete Quest Task";
+            // 
+            // chkNoNotify
+            // 
+            this.chkNoNotify.AutoSize = true;
+            this.chkNoNotify.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.chkNoNotify.Location = new System.Drawing.Point(4, 94);
+            this.chkNoNotify.Name = "chkNoNotify";
+            this.chkNoNotify.Size = new System.Drawing.Size(168, 17);
+            this.chkNoNotify.TabIndex = 25;
+            this.chkNoNotify.Text = "Do not send chat notification?";
+            // 
+            // chkSkipCompletionEvent
+            // 
+            this.chkSkipCompletionEvent.AutoSize = true;
+            this.chkSkipCompletionEvent.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.chkSkipCompletionEvent.Location = new System.Drawing.Point(4, 74);
+            this.chkSkipCompletionEvent.Name = "chkSkipCompletionEvent";
+            this.chkSkipCompletionEvent.Size = new System.Drawing.Size(166, 17);
+            this.chkSkipCompletionEvent.TabIndex = 24;
+            this.chkSkipCompletionEvent.Text = "Do not run completion event?";
             // 
             // cmbQuestTask
             // 
@@ -77,7 +97,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbQuestTask.FormattingEnabled = true;
             this.cmbQuestTask.Location = new System.Drawing.Point(47, 47);
             this.cmbQuestTask.Name = "cmbQuestTask";
-            this.cmbQuestTask.Size = new System.Drawing.Size(117, 21);
+            this.cmbQuestTask.Size = new System.Drawing.Size(351, 21);
             this.cmbQuestTask.TabIndex = 24;
             this.cmbQuestTask.Text = null;
             this.cmbQuestTask.TextPadding = new System.Windows.Forms.Padding(2);
@@ -108,7 +128,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbQuests.FormattingEnabled = true;
             this.cmbQuests.Location = new System.Drawing.Point(47, 19);
             this.cmbQuests.Name = "cmbQuests";
-            this.cmbQuests.Size = new System.Drawing.Size(117, 21);
+            this.cmbQuests.Size = new System.Drawing.Size(351, 21);
             this.cmbQuests.TabIndex = 22;
             this.cmbQuests.Text = null;
             this.cmbQuests.TextPadding = new System.Windows.Forms.Padding(2);
@@ -143,26 +163,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.btnSave.Text = "Ok";
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
-            // chkSkipCompletionEvent
-            // 
-            this.chkSkipCompletionEvent.AutoSize = true;
-            this.chkSkipCompletionEvent.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.chkSkipCompletionEvent.Location = new System.Drawing.Point(4, 74);
-            this.chkSkipCompletionEvent.Name = "chkSkipCompletionEvent";
-            this.chkSkipCompletionEvent.Size = new System.Drawing.Size(166, 17);
-            this.chkSkipCompletionEvent.TabIndex = 24;
-            this.chkSkipCompletionEvent.Text = "Do not run completion event?";
-            // 
-            // chkNoNotify
-            // 
-            this.chkNoNotify.AutoSize = true;
-            this.chkNoNotify.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.chkNoNotify.Location = new System.Drawing.Point(4, 94);
-            this.chkNoNotify.Name = "chkNoNotify";
-            this.chkNoNotify.Size = new System.Drawing.Size(168, 17);
-            this.chkNoNotify.TabIndex = 25;
-            this.chkNoNotify.Text = "Do not send chat notification?";
-            // 
             // EventCommandCompleteQuestTask
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -171,7 +171,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.Controls.Add(this.grpCompleteTask);
             this.Name = "EventCommandCompleteQuestTask";
-            this.Size = new System.Drawing.Size(182, 155);
+            this.Size = new System.Drawing.Size(415, 155);
             this.grpCompleteTask.ResumeLayout(false);
             this.grpCompleteTask.PerformLayout();
             this.ResumeLayout(false);

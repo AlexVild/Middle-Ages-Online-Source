@@ -393,7 +393,7 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
-            if (spell.Combat.Friendly || target.CachedStatuses.All(status => status.Type != StatusTypes.Invulnerable)) 
+            if (spell.Combat.Friendly || !target.IsInvincibleTo(this)) 
             {
                 ApplySpellBuffsTo(spell, target);
                 Combat.DoT.AddSpellDoTsTo(spell, this, target);
@@ -714,6 +714,13 @@ namespace Intersect.Server.Entities
 
                         if (spellBase.Combat.Friendly && entity.Id != Id && entity is Player dueler && dueler.InDuel)
                         {
+                            continue;
+                        }
+
+                        if (!spellBase.Combat.Friendly && entity.IsInvincibleTo(this))
+                        {
+                            entity.ReactToCombat(this);
+                            SendBlockedAttackMessage(this);
                             continue;
                         }
 

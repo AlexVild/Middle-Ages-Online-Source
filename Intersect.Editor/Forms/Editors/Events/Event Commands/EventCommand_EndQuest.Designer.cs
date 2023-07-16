@@ -31,12 +31,12 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private void InitializeComponent()
         {
             this.grpEndQuest = new DarkUI.Controls.DarkGroupBox();
+            this.chkReset = new DarkUI.Controls.DarkCheckBox();
             this.chkSkipCompletionEvent = new DarkUI.Controls.DarkCheckBox();
             this.cmbQuests = new DarkUI.Controls.DarkComboBox();
             this.lblQuest = new System.Windows.Forms.Label();
             this.btnCancel = new DarkUI.Controls.DarkButton();
             this.btnSave = new DarkUI.Controls.DarkButton();
-            this.chkReset = new DarkUI.Controls.DarkCheckBox();
             this.grpEndQuest.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -53,10 +53,20 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpEndQuest.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpEndQuest.Location = new System.Drawing.Point(3, 3);
             this.grpEndQuest.Name = "grpEndQuest";
-            this.grpEndQuest.Size = new System.Drawing.Size(176, 126);
+            this.grpEndQuest.Size = new System.Drawing.Size(337, 126);
             this.grpEndQuest.TabIndex = 17;
             this.grpEndQuest.TabStop = false;
             this.grpEndQuest.Text = "End Quest";
+            // 
+            // chkReset
+            // 
+            this.chkReset.AutoSize = true;
+            this.chkReset.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.chkReset.Location = new System.Drawing.Point(7, 69);
+            this.chkReset.Name = "chkReset";
+            this.chkReset.Size = new System.Drawing.Size(129, 17);
+            this.chkReset.TabIndex = 24;
+            this.chkReset.Text = "Reset to Not Started?";
             // 
             // chkSkipCompletionEvent
             // 
@@ -83,7 +93,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbQuests.FormattingEnabled = true;
             this.cmbQuests.Location = new System.Drawing.Point(47, 19);
             this.cmbQuests.Name = "cmbQuests";
-            this.cmbQuests.Size = new System.Drawing.Size(117, 21);
+            this.cmbQuests.Size = new System.Drawing.Size(284, 21);
             this.cmbQuests.TabIndex = 22;
             this.cmbQuests.Text = null;
             this.cmbQuests.TextPadding = new System.Windows.Forms.Padding(2);
@@ -117,16 +127,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.btnSave.Text = "Ok";
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
-            // chkReset
-            // 
-            this.chkReset.AutoSize = true;
-            this.chkReset.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
-            this.chkReset.Location = new System.Drawing.Point(7, 69);
-            this.chkReset.Name = "chkReset";
-            this.chkReset.Size = new System.Drawing.Size(129, 17);
-            this.chkReset.TabIndex = 24;
-            this.chkReset.Text = "Reset to Not Started?";
-            // 
             // EventCommandEndQuest
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -135,7 +135,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.Controls.Add(this.grpEndQuest);
             this.Name = "EventCommandEndQuest";
-            this.Size = new System.Drawing.Size(182, 132);
+            this.Size = new System.Drawing.Size(348, 132);
             this.grpEndQuest.ResumeLayout(false);
             this.grpEndQuest.PerformLayout();
             this.ResumeLayout(false);

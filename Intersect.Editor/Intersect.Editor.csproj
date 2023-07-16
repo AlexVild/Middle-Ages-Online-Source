@@ -1005,6 +1005,9 @@
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_SetVehicle.resx">
       <DependentUpon>EventCommand_SetVehicle.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_StartQuest.resx">
+      <DependentUpon>EventCommand_StartQuest.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_StartTimer.resx">
       <DependentUpon>EventCommand_StartTimer.cs</DependentUpon>
     </EmbeddedResource>
