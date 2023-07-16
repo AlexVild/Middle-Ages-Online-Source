@@ -57,7 +57,6 @@ namespace Intersect.Client.Core
             sFadeRate = fast ? FAST_FADE_RATE : STANDARD_FADE_RATE;
 
             CurrentAction = FadeType.In;
-            sFadeAmt = 255f;
             sLastUpdate = Timing.Global.MillisecondsUtcUnsynced;
 
             CompleteCallback = callback;

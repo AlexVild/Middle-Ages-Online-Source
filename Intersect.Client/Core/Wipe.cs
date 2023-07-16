@@ -61,8 +61,6 @@ namespace Intersect.Client.Core
             sFadeRate = fast ? FAST_FADE_RATE : STANDARD_FADE_RATE;
 
             CurrentAction = FadeType.In;
-            sFadeAmt = Graphics.CurrentView.Width / 2;
-            sInvertFadeAmt = 0f;
             sLastUpdate = Timing.Global.MillisecondsUtcUnsynced;
             CompleteCallback = callback;
         }
