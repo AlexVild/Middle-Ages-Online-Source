@@ -2419,6 +2419,7 @@ namespace Intersect.Server.Entities
             else if (Map?.ZoneType == MapZones.Arena && ArenaRespawnMap != null)
             {
                 Warp(ArenaRespawnMapId, ArenaRespawnX, ArenaRespawnY, (byte)ArenaRespawnDir);
+                return;
             }
             else if (RespawnOverrideMap != null)
             {
