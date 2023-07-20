@@ -17,6 +17,7 @@ using Intersect.Server.Entities;
 using Intersect.Server.Classes.Maps;
 using Intersect.GameObjects.Switches_and_Variables;
 using Intersect.Server.Core;
+using Intersect.Server.Localization;
 
 namespace Intersect.Server.Maps
 {
@@ -1788,9 +1789,21 @@ namespace Intersect.Server.Maps
             return true;
         }
 
-        public void RemoveActiveChampion(Guid npcId)
+        public void RemoveActiveChampion(Guid npcId, bool killedByPlayer)
         {
             ActiveChampions.Remove(npcId);
+
+            if (killedByPlayer)
+            {
+                if (ActiveChampions.Count > 0)
+                {
+                    PacketSender.SendGlobalMsg($"A champion has been slain! ({mMapController.Name})", Color.FromName("Purple", Strings.Colors.presets));
+                }
+                else
+                {
+                    PacketSender.SendGlobalMsg($"One of the champions on {mMapController.Name} has been slain!", Color.FromName("Purple", Strings.Colors.presets));
+                }
+            }
         }
 
         public void SpawnChampion(Guid baseId, Guid championId, long cooldown)

@@ -1689,10 +1689,13 @@ namespace Intersect.Client.Entities
             nameColor.A = (byte)NameOpacity;
             outlineColor.A = NameOpacity < byte.MaxValue ? (byte)0 : (byte)NameOpacity;
 
+            var finalX = (int)(x - (int)Math.Ceiling(textSize.X / 2f));
             Graphics.Renderer.DrawString(
-                name, Graphics.EntityNameFont, (int) (x - (int) Math.Ceiling(textSize.X / 2f)), (int) y, 1,
+                name, Graphics.EntityNameFont, finalX, (int) y, 1,
                 nameColor, true, null, outlineColor
             );
+
+            DrawFlair(finalX - 24 - (1 * Options.Scale), (int)y - (1 * Options.Scale));
 
             IsTargeted = false; // allow resetting of target-only name display
         }
@@ -3537,6 +3540,26 @@ namespace Intersect.Client.Entities
                 NameOpacity = MathHelper.Clamp(NameOpacity, minOpacity, byte.MaxValue);
                 LastNameUpdate = Timing.Global.MillisecondsUtcUnsynced;
             }
+        }
+
+
+        protected virtual void DrawFlair(int x, int y)
+        {
+            var npc = NpcBase.Get(NpcId);
+            if (npc == default || !npc.IsChampion)
+            {
+                return;
+            }
+
+            var championTexture = Globals.ContentManager.GetTexture(TextureType.Misc, "champion_medal.png");
+            if (championTexture == default)
+            {
+                return;
+            }
+            Graphics.DrawGameTexture(championTexture,
+                new FloatRect(0, 0, championTexture.Width, championTexture.Height),
+                new FloatRect(x, y, championTexture.Width * Options.Scale, championTexture.Width * Options.Scale),
+                Color.White);
         }
     }
 }

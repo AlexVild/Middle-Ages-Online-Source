@@ -246,8 +246,10 @@ namespace Intersect.Server.Entities
                     AggroCenterZ = 0;
                 }
 
+                var killedByPlayer = false;
                 if (killer is Player playerKiller)
                 {
+                    killedByPlayer = true;
                     long recordKilled = playerKiller.IncrementRecord(RecordType.NpcKilled, Base.Id);
 
                     // If we've just unlocked some bestiary item, send a KC update, which will force a bestiary update on the client
@@ -283,6 +285,7 @@ namespace Intersect.Server.Entities
                             // A champ is prepped - tell the server!
                             PacketSender.SendGlobalMsg($"A champion {Base.Name} is stirring... ({MapController.GetName(SpawnMapId)})",
                                 Color.FromName("Purple", Strings.Colors.presets));
+                            PacketSender.SendToast(playerKiller, "A champion approaches...");
                         }
                     }
 
@@ -292,7 +295,7 @@ namespace Intersect.Server.Entities
                 // If this was a champion, remove it
                 if (Base.IsChampion && MapController.TryGetInstanceFromMap(SpawnMapId, MapInstanceId, out var instance))
                 {
-                    instance.RemoveActiveChampion(Base.Id);
+                    instance.RemoveActiveChampion(Base.Id, killedByPlayer);
                 }
             }
         }
