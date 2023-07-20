@@ -115,7 +115,7 @@ namespace Intersect.Client.Interface.Game.Toasts
 
             X = ResX / 2 - (Width / 2);
 
-            CreatedAt = Timing.Global.Milliseconds;
+            CreatedAt = Timing.Global.MillisecondsUtcUnsynced;
 
             Initialized = true;
         }
@@ -130,7 +130,7 @@ namespace Intersect.Client.Interface.Game.Toasts
             var mousePos = UiHelper.GetViewMousePos();
             _mouseOver = mousePos.X >= X && mousePos.X <= X + Width && mousePos.Y >= Y && mousePos.Y <= Y + Height;
 
-            if (CreatedAt + DisplayTime < Timing.Global.Milliseconds)
+            if (CreatedAt + DisplayTime < Timing.Global.MillisecondsUtcUnsynced)
             {
                 _ = ToastService.TryDequeueToast();
                 return;
@@ -168,7 +168,7 @@ namespace Intersect.Client.Interface.Game.Toasts
 
         private void Animate()
         {
-            var now = Timing.Global.Milliseconds;
+            var now = Timing.Global.MillisecondsUtcUnsynced;
 
             if (now > CreatedAt + SlideInTime)
             {
@@ -176,7 +176,7 @@ namespace Intersect.Client.Interface.Game.Toasts
 
                 if (Y == EndingY + ViewTop && !HasFlashed)
                 {
-                    FlashEndTime = Timing.Global.Milliseconds + FlashTime;
+                    FlashEndTime = Timing.Global.MillisecondsUtcUnsynced + FlashTime;
                     Flashing = true;
                     HasFlashed = true;
                     Audio.AddGameSound(Sound, false);
