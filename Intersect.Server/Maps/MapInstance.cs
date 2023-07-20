@@ -1748,6 +1748,12 @@ namespace Intersect.Server.Maps
 
         public bool TryAddChampionOf(Guid npcId, Guid championId, Player killer)
         {
+            // Only allow champions on the overworld
+            if (MapInstanceId != Guid.Empty)
+            {
+                return false;
+            }
+
             var descriptor = NpcBase.Get(npcId);
             if (descriptor == default)
             {
