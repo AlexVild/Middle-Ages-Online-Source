@@ -173,6 +173,8 @@ namespace Intersect.Config
 
         public float NpcScalePerAggressor = 0.1f;
 
+        public long ChampionDespawnTimeSeconds { get; set; } = 600;
+
         // Threat levels
 
         public Dictionary<ThreatLevel, double> ThreatLevelThresholds = new Dictionary<ThreatLevel, double>()

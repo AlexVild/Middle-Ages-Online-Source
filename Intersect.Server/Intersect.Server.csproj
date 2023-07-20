@@ -1284,6 +1284,14 @@
     <Compile Include="Migrations\Game\20230720145117_PlayerLockedLootMigration.designer.cs">
       <DependentUpon>20230720145117_PlayerLockedLootMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20230720152054_NpcChampionMigration.cs" />
+    <Compile Include="Migrations\Game\20230720152054_NpcChampionMigration.designer.cs">
+      <DependentUpon>20230720152054_NpcChampionMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20230720180222_IsChampionMigration.cs" />
+    <Compile Include="Migrations\Game\20230720180222_IsChampionMigration.designer.cs">
+      <DependentUpon>20230720180222_IsChampionMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

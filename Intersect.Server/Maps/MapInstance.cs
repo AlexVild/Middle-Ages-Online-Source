@@ -496,65 +496,89 @@ namespace Intersect.Server.Maps
             byte y = 0;
             byte dir = 0;
             var spawns = mMapController.Spawns;
-            var npcBase = NpcBase.Get(spawns[i].NpcId);
-            if (npcBase != null)
+            
+            var spawn = spawns[i];
+            var spawnId = spawn.NpcId;
+            var npcBase = NpcBase.Get(spawnId);
+            
+            if (npcBase == null)
             {
-                MapNpcSpawn npcSpawnInstance;
-                if (NpcSpawnInstances.ContainsKey(spawns[i]))
-                {
-                    npcSpawnInstance = NpcSpawnInstances[spawns[i]];
-                }
-                else
-                {
-                    npcSpawnInstance = new MapNpcSpawn();
-                    NpcSpawnInstances.TryAdd(spawns[i], npcSpawnInstance);
-                }
+                return;
+            }
 
-                // Check to see if this NPC is on the permadeath list for this instance and, if so, do not spawn it
-                // Unique identifier tying the spawning NPC to its map spawner
-                string npcKey = $"{mMapController.Id}_{i}";
-                if (spawns[i].PreventRespawn &&
-                    InstanceProcessor.TryGetInstanceController(MapInstanceId, out var instanceController) &&
-                    instanceController.PermadeadNpcs.Contains(npcKey))
+            // Should a champion spawn instead?
+            var baseId = spawnId;
+            if (AwaitingChampions.Contains(baseId) && !ActiveChampions.Contains(npcBase.ChampionId))
+            {
+                // This will now spawn the champion!
+                lock (GetLock())
                 {
-                    return;
+                    spawnId = npcBase.ChampionId;
+                    SpawnChampion(baseId, npcBase.ChampionId, npcBase.ChampionCooldownSeconds);
                 }
+            }
 
-                if (spawns[i].Direction != NpcSpawnDirection.Random)
-                {
-                    dir = (byte)(spawns[i].Direction - 1);
-                }
-                else
-                {
-                    dir = (byte)Randomization.Next(0, 4);
-                }
+            MapNpcSpawn npcSpawnInstance;
+            if (NpcSpawnInstances.ContainsKey(spawn))
+            {
+                npcSpawnInstance = NpcSpawnInstances[spawn];
+            }
+            else
+            {
+                npcSpawnInstance = new MapNpcSpawn();
+                NpcSpawnInstances.TryAdd(spawn, npcSpawnInstance);
+            }
 
-                // Declared spawn
-                if (spawns[i].X >= 0 && spawns[i].Y >= 0)
+            // Check to see if this NPC is on the permadeath list for this instance and, if so, do not spawn it
+            // Unique identifier tying the spawning NPC to its map spawner
+            string npcKey = $"{mMapController.Id}_{i}";
+            if (spawn.PreventRespawn &&
+                InstanceProcessor.TryGetInstanceController(MapInstanceId, out var instanceController) &&
+                instanceController.PermadeadNpcs.Contains(npcKey))
+            {
+                return;
+            }
+
+            if (spawn.Direction != NpcSpawnDirection.Random)
+            {
+                dir = (byte)(spawn.Direction - 1);
+            }
+            else
+            {
+                dir = (byte)Randomization.Next(0, 4);
+            }
+
+            // Declared spawn
+            if (spawns[i].X >= 0 && spawns[i].Y >= 0)
+            {
+                npcSpawnInstance.Entity = SpawnNpc((byte)spawn.X, (byte)spawn.Y, dir, spawnId);
+            }
+            // Random spawn
+            else
+            {
+                for (var n = 0; n < 100; n++)
                 {
-                    npcSpawnInstance.Entity = SpawnNpc((byte)spawns[i].X, (byte)spawns[i].Y, dir, spawns[i].NpcId);
-                }
-                // Random spawn
-                else
-                {
-                    for (var n = 0; n < 100; n++)
+                    x = (byte)Randomization.Next(0, Options.MapWidth);
+                    y = (byte)Randomization.Next(0, Options.MapHeight);
+                    if (mMapController.Attributes[x, y] == null || mMapController.Attributes[x, y].Type == (int)MapAttributes.Walkable)
                     {
-                        x = (byte)Randomization.Next(0, Options.MapWidth);
-                        y = (byte)Randomization.Next(0, Options.MapHeight);
-                        if (mMapController.Attributes[x, y] == null || mMapController.Attributes[x, y].Type == (int)MapAttributes.Walkable)
-                        {
-                            break;
-                        }
-
-                        x = 0;
-                        y = 0;
+                        break;
                     }
 
-                    npcSpawnInstance.Entity = SpawnNpc(x, y, dir, spawns[i].NpcId);
+                    x = 0;
+                    y = 0;
                 }
 
+                npcSpawnInstance.Entity = SpawnNpc(x, y, dir, spawnId);
+            }
+
+            // Final setup of the spawned entity
+            if (npcSpawnInstance.Entity is Npc npc)
+            {
+                npc.SpawnMapId = mMapController.Id;
+                
                 // If this NPC is not meant to respawn, set up the NPC to talk back to ProcessingInfo
-                if (spawns[i].PreventRespawn && npcSpawnInstance.Entity is Npc npc)
+                if (spawn.PreventRespawn)
                 {
                     // A key - the spawn map, and the spawn index on the map
                     npc.PermadeathKey = npcKey;
@@ -603,6 +627,8 @@ namespace Intersect.Server.Maps
             //Kill all npcs spawned from this map
             lock (GetLock())
             {
+                ResetChampions();
+
                 foreach (var npcSpawn in NpcSpawnInstances)
                 {
                     if (npcSpawn.Value.Entity == null) continue;
@@ -1703,4 +1729,77 @@ namespace Intersect.Server.Maps
             SpawnMapNpcs();
         }
     }
+
+    #region Champions
+    public partial class MapInstance : IDisposable
+    {
+        HashSet<Guid> AwaitingChampions { get; set; } = new HashSet<Guid>();
+        HashSet<Guid> ActiveChampions { get; set; } = new HashSet<Guid>();
+
+        Dictionary<Guid, long> ChampionCooldowns { get; set; } = new Dictionary<Guid, long>();
+
+        public void ResetChampions()
+        {
+            AwaitingChampions.Clear();
+            ActiveChampions.Clear();
+            ChampionCooldowns.Clear();
+        }
+
+        public bool TryAddChampionOf(Guid npcId, Guid championId, Player killer)
+        {
+            var descriptor = NpcBase.Get(npcId);
+            if (descriptor == default)
+            {
+                return false;
+            }
+
+            var champ = NpcBase.Get(descriptor.ChampionId);
+            if (champ == default)
+            {
+                return false;
+            }
+
+            if (AwaitingChampions.Contains(npcId))
+            {
+                return false;
+            }
+
+            if (ChampionCooldowns.TryGetValue(npcId, out var cooldown) && cooldown > Timing.Global.Milliseconds)
+            {
+                return false;
+            }
+
+            if (ActiveChampions.Contains(championId))
+            {
+                return false;
+            }
+
+            var luck = 1 + killer?.GetBonusEffectTotal(EffectType.Luck) / 100f;
+
+            // Lucky enough for a champ spawn?
+            var randomChance = Randomization.Next(1, 100001);
+            if (randomChance >= (descriptor.ChampionSpawnChance * 1000) * luck)
+            {
+                return false;
+            }
+            
+            AwaitingChampions.Add(npcId);
+
+            return true;
+        }
+
+        public void RemoveActiveChampion(Guid npcId)
+        {
+            ActiveChampions.Remove(npcId);
+        }
+
+        public void SpawnChampion(Guid baseId, Guid championId, long cooldown)
+        {
+            AwaitingChampions.Remove(baseId); // allow respawning of this enemy without champion
+            ChampionCooldowns[baseId] = Timing.Global.Milliseconds + (cooldown * 1000); // Trigger cooldown
+            
+            ActiveChampions.Add(championId); // don't allow another champion to spawn
+        }
+    }
+    #endregion
 }

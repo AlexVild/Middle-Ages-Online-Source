@@ -137,6 +137,10 @@ namespace Intersect.Editor.Forms.Editors
             cmbSpellAttackOverride.Items.Add(Strings.General.none);
             cmbSpellAttackOverride.Items.AddRange(SpellBase.Names);
 
+            cmbChampion.Items.Clear();
+            cmbChampion.Items.Add(Strings.General.none);
+            cmbChampion.Items.AddRange(NpcBase.Names);
+
             cmbScalingType.Items.Clear();
             cmbScalingType.Items.AddRange(EnumExtensions.GetDescriptions(typeof(NpcScaleType)));
 
@@ -399,6 +403,11 @@ namespace Intersect.Editor.Forms.Editors
                 cmbDeathAnimation.SelectedIndex = AnimationBase.ListIndex(mEditorItem.DeathAnimationId) + 1;
                 cmbTransformIntoNpc.SelectedIndex = NpcBase.ListIndex(mEditorItem.DeathTransformId) + 1;
                 cmbSpellAttackOverride.SelectedIndex = SpellBase.ListIndex(mEditorItem.SpellAttackOverrideId) + 1;
+
+                cmbChampion.SelectedIndex = NpcBase.ListIndex(mEditorItem.ChampionId) + 1;
+                nudChampCooldown.Value = mEditorItem.ChampionCooldownSeconds;
+                nudChampSpawnChance.Value = (decimal)mEditorItem.ChampionSpawnChance;
+                chkIsChampion.Checked = mEditorItem.IsChampion;
 
                 RefreshBalancing();
 
@@ -1822,6 +1831,27 @@ namespace Intersect.Editor.Forms.Editors
         private void chkPlayerLockLoot_CheckedChanged(object sender, EventArgs e)
         {
             mEditorItem.PlayerLockedLoot = chkPlayerLockLoot.Checked;
+        }
+
+        private void cmbChampion_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mEditorItem.ChampionId =
+                NpcBase.IdFromList(cmbChampion.SelectedIndex - 1);
+        }
+
+        private void nudChampSpawnChance_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.ChampionSpawnChance = (float)nudChampSpawnChance.Value;
+        }
+
+        private void nudChampCooldown_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.ChampionCooldownSeconds = (long)nudChampCooldown.Value;
+        }
+
+        private void chkIsChampion_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.IsChampion = chkIsChampion.Checked;
         }
     }
 

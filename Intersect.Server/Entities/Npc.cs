@@ -100,6 +100,10 @@ namespace Intersect.Server.Entities
         private int AggressorCount { get; set; }
         private int LastAggressorCount { get; set; }
 
+        public Guid SpawnMapId { get; set; }
+
+        public long SpawnedAt { get; set; }
+
         /// <summary>
         /// The map on which this NPC was "aggro'd" and started chasing a target.
         /// </summary>
@@ -169,6 +173,8 @@ namespace Intersect.Server.Entities
             {
                 DeathAnimation = myBase.DeathAnimation.Id;
             }
+
+            SpawnedAt = Timing.Global.MillisecondsUtc;
         }
 
         public NpcBase Base { get; private set; }
@@ -247,11 +253,11 @@ namespace Intersect.Server.Entities
                     // If we've just unlocked some bestiary item, send a KC update, which will force a bestiary update on the client
                     var bestiaryThresholds = Base.BestiaryUnlocks.Values.Where(val => val > 0).ToList();
                     bestiaryThresholds.Sort();
+                    var lastUnlock = bestiaryThresholds.LastOrDefault();
+                    
                     if (!Base.NotInBestiary && bestiaryThresholds.Contains((int)recordKilled))
                     {
-                        PacketSender.SendKillCount(playerKiller, Base.Id);
-                        var lastUnlock = bestiaryThresholds.LastOrDefault();
-                        
+                        PacketSender.SendKillCount(playerKiller, Base.Id);    
                         // Did we just finish the bestiary entry for this mob?
                         if (lastUnlock != default && lastUnlock == (int)recordKilled)
                         {
@@ -268,7 +274,25 @@ namespace Intersect.Server.Entities
                         playerKiller.SendRecordUpdate(Strings.Records.enemykilled.ToString(recordKilled, Name));
                     }
 
+                    // Does this mob have a champion?
+                    if (MapController.TryGetInstanceFromMap(SpawnMapId, MapInstanceId, out var beastInstance) && Base.ChampionId != Guid.Empty && Base.ChampionSpawnChance > 0f)
+                    {
+                        var bestiaryComplete = lastUnlock < recordKilled;
+                        if ((Base.NotInBestiary || bestiaryComplete) && beastInstance.TryAddChampionOf(Base.Id, Base.ChampionId, playerKiller))
+                        {
+                            // A champ is prepped - tell the server!
+                            PacketSender.SendGlobalMsg($"A champion {Base.Name} is stirring... ({MapController.GetName(SpawnMapId)})",
+                                Color.FromName("Purple", Strings.Colors.presets));
+                        }
+                    }
+
                     ChallengeUpdateProcesser.UpdateChallengesOf(new BeastsKilledOverTime(playerKiller, Base.Id), TierLevel);
+                }
+
+                // If this was a champion, remove it
+                if (Base.IsChampion && MapController.TryGetInstanceFromMap(SpawnMapId, MapInstanceId, out var instance))
+                {
+                    instance.RemoveActiveChampion(Base.Id);
                 }
             }
         }
@@ -788,6 +812,12 @@ namespace Intersect.Server.Entities
                     var curMapLink = MapId;
                     base.Update(timeMs);
                     var tempTarget = Target;
+
+                    // If this NPC is a champion, but has been around too long, remove it.
+                    if (Base.IsChampion && Timing.Global.MillisecondsUtc - SpawnedAt >= Options.Combat.ChampionDespawnTimeSeconds * 1000)
+                    {
+                        Die(false);
+                    }
 
                     foreach (var status in CachedStatuses)
                     {

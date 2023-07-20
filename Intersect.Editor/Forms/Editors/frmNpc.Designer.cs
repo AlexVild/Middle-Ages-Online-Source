@@ -50,6 +50,13 @@ namespace Intersect.Editor.Forms.Editors
             this.btnClearSearch = new DarkUI.Controls.DarkButton();
             this.txtSearch = new DarkUI.Controls.DarkTextBox();
             this.pnlContainer = new System.Windows.Forms.Panel();
+            this.grpChampionSettings = new DarkUI.Controls.DarkGroupBox();
+            this.nudChampSpawnChance = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblChampSpawnChance = new System.Windows.Forms.Label();
+            this.nudChampCooldown = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblChampSpawnCooldown = new System.Windows.Forms.Label();
+            this.cmbChampion = new DarkUI.Controls.DarkComboBox();
+            this.label12 = new System.Windows.Forms.Label();
             this.grpDynamicScaling = new DarkUI.Controls.DarkGroupBox();
             this.nudMaxScaledTo = new DarkUI.Controls.DarkNumericUpDown();
             this.lblMaxScaleTo = new System.Windows.Forms.Label();
@@ -148,6 +155,7 @@ namespace Intersect.Editor.Forms.Editors
             this.lblManaRegen = new System.Windows.Forms.Label();
             this.lblRegenHint = new System.Windows.Forms.Label();
             this.grpDrops = new DarkUI.Controls.DarkGroupBox();
+            this.chkPlayerLockLoot = new DarkUI.Controls.DarkCheckBox();
             this.grpTableSelection = new DarkUI.Controls.DarkGroupBox();
             this.nudTableChance = new DarkUI.Controls.DarkNumericUpDown();
             this.lblTableChance = new System.Windows.Forms.Label();
@@ -266,10 +274,13 @@ namespace Intersect.Editor.Forms.Editors
             this.lblTierView = new System.Windows.Forms.Label();
             this.lblTargetDps = new System.Windows.Forms.Label();
             this.lblProjectedDps = new System.Windows.Forms.Label();
-            this.chkPlayerLockLoot = new DarkUI.Controls.DarkCheckBox();
+            this.chkIsChampion = new DarkUI.Controls.DarkCheckBox();
             this.toolStrip.SuspendLayout();
             this.grpNpcs.SuspendLayout();
             this.pnlContainer.SuspendLayout();
+            this.grpChampionSettings.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudChampSpawnChance)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudChampCooldown)).BeginInit();
             this.grpDynamicScaling.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudMaxScaledTo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudScaleFactor)).BeginInit();
@@ -530,6 +541,7 @@ namespace Intersect.Editor.Forms.Editors
             // pnlContainer
             // 
             this.pnlContainer.AutoScroll = true;
+            this.pnlContainer.Controls.Add(this.grpChampionSettings);
             this.pnlContainer.Controls.Add(this.grpDynamicScaling);
             this.pnlContainer.Controls.Add(this.grpBestiary);
             this.pnlContainer.Controls.Add(this.grpAttackOverrides);
@@ -549,6 +561,116 @@ namespace Intersect.Editor.Forms.Editors
             this.pnlContainer.Name = "pnlContainer";
             this.pnlContainer.Size = new System.Drawing.Size(699, 529);
             this.pnlContainer.TabIndex = 17;
+            // 
+            // grpChampionSettings
+            // 
+            this.grpChampionSettings.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpChampionSettings.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpChampionSettings.Controls.Add(this.chkIsChampion);
+            this.grpChampionSettings.Controls.Add(this.nudChampSpawnChance);
+            this.grpChampionSettings.Controls.Add(this.lblChampSpawnChance);
+            this.grpChampionSettings.Controls.Add(this.nudChampCooldown);
+            this.grpChampionSettings.Controls.Add(this.lblChampSpawnCooldown);
+            this.grpChampionSettings.Controls.Add(this.cmbChampion);
+            this.grpChampionSettings.Controls.Add(this.label12);
+            this.grpChampionSettings.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpChampionSettings.Location = new System.Drawing.Point(212, 1126);
+            this.grpChampionSettings.Margin = new System.Windows.Forms.Padding(2);
+            this.grpChampionSettings.Name = "grpChampionSettings";
+            this.grpChampionSettings.Padding = new System.Windows.Forms.Padding(2);
+            this.grpChampionSettings.Size = new System.Drawing.Size(229, 173);
+            this.grpChampionSettings.TabIndex = 90;
+            this.grpChampionSettings.TabStop = false;
+            this.grpChampionSettings.Text = "Champion Spawning";
+            // 
+            // nudChampSpawnChance
+            // 
+            this.nudChampSpawnChance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudChampSpawnChance.DecimalPlaces = 2;
+            this.nudChampSpawnChance.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudChampSpawnChance.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            this.nudChampSpawnChance.Location = new System.Drawing.Point(12, 76);
+            this.nudChampSpawnChance.Name = "nudChampSpawnChance";
+            this.nudChampSpawnChance.Size = new System.Drawing.Size(86, 20);
+            this.nudChampSpawnChance.TabIndex = 33;
+            this.nudChampSpawnChance.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudChampSpawnChance.ValueChanged += new System.EventHandler(this.nudChampSpawnChance_ValueChanged);
+            // 
+            // lblChampSpawnChance
+            // 
+            this.lblChampSpawnChance.AutoSize = true;
+            this.lblChampSpawnChance.Location = new System.Drawing.Point(9, 60);
+            this.lblChampSpawnChance.Name = "lblChampSpawnChance";
+            this.lblChampSpawnChance.Size = new System.Drawing.Size(80, 13);
+            this.lblChampSpawnChance.TabIndex = 32;
+            this.lblChampSpawnChance.Text = "Spawn Chance";
+            // 
+            // nudChampCooldown
+            // 
+            this.nudChampCooldown.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudChampCooldown.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudChampCooldown.Location = new System.Drawing.Point(13, 115);
+            this.nudChampCooldown.Maximum = new decimal(new int[] {
+            1000000,
+            0,
+            0,
+            0});
+            this.nudChampCooldown.Name = "nudChampCooldown";
+            this.nudChampCooldown.Size = new System.Drawing.Size(86, 20);
+            this.nudChampCooldown.TabIndex = 31;
+            this.nudChampCooldown.Value = new decimal(new int[] {
+            600,
+            0,
+            0,
+            0});
+            this.nudChampCooldown.ValueChanged += new System.EventHandler(this.nudChampCooldown_ValueChanged);
+            // 
+            // lblChampSpawnCooldown
+            // 
+            this.lblChampSpawnCooldown.AutoSize = true;
+            this.lblChampSpawnCooldown.Location = new System.Drawing.Point(9, 99);
+            this.lblChampSpawnCooldown.Name = "lblChampSpawnCooldown";
+            this.lblChampSpawnCooldown.Size = new System.Drawing.Size(137, 13);
+            this.lblChampSpawnCooldown.TabIndex = 20;
+            this.lblChampSpawnCooldown.Text = "Death Cooldown (Seconds)";
+            // 
+            // cmbChampion
+            // 
+            this.cmbChampion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbChampion.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbChampion.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbChampion.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbChampion.DrawDropdownHoverOutline = false;
+            this.cmbChampion.DrawFocusRectangle = false;
+            this.cmbChampion.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbChampion.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbChampion.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbChampion.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbChampion.FormattingEnabled = true;
+            this.cmbChampion.Location = new System.Drawing.Point(12, 36);
+            this.cmbChampion.Name = "cmbChampion";
+            this.cmbChampion.Size = new System.Drawing.Size(211, 21);
+            this.cmbChampion.TabIndex = 19;
+            this.cmbChampion.Text = null;
+            this.cmbChampion.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbChampion.SelectedIndexChanged += new System.EventHandler(this.cmbChampion_SelectedIndexChanged);
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(9, 20);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(90, 13);
+            this.label12.TabIndex = 18;
+            this.label12.Text = "Champion Variant";
             // 
             // grpDynamicScaling
             // 
@@ -1896,6 +2018,16 @@ namespace Intersect.Editor.Forms.Editors
             this.grpDrops.TabIndex = 30;
             this.grpDrops.TabStop = false;
             this.grpDrops.Text = "Drops";
+            // 
+            // chkPlayerLockLoot
+            // 
+            this.chkPlayerLockLoot.AutoSize = true;
+            this.chkPlayerLockLoot.Location = new System.Drawing.Point(14, 469);
+            this.chkPlayerLockLoot.Name = "chkPlayerLockLoot";
+            this.chkPlayerLockLoot.Size = new System.Drawing.Size(116, 17);
+            this.chkPlayerLockLoot.TabIndex = 79;
+            this.chkPlayerLockLoot.Text = "Player-locked loot?";
+            this.chkPlayerLockLoot.CheckedChanged += new System.EventHandler(this.chkPlayerLockLoot_CheckedChanged);
             // 
             // grpTableSelection
             // 
@@ -3490,15 +3622,15 @@ namespace Intersect.Editor.Forms.Editors
             this.lblProjectedDps.TabIndex = 121;
             this.lblProjectedDps.Text = "Est. DPS";
             // 
-            // chkPlayerLockLoot
+            // chkIsChampion
             // 
-            this.chkPlayerLockLoot.AutoSize = true;
-            this.chkPlayerLockLoot.Location = new System.Drawing.Point(14, 469);
-            this.chkPlayerLockLoot.Name = "chkPlayerLockLoot";
-            this.chkPlayerLockLoot.Size = new System.Drawing.Size(116, 17);
-            this.chkPlayerLockLoot.TabIndex = 79;
-            this.chkPlayerLockLoot.Text = "Player-locked loot?";
-            this.chkPlayerLockLoot.CheckedChanged += new System.EventHandler(this.chkPlayerLockLoot_CheckedChanged);
+            this.chkIsChampion.AutoSize = true;
+            this.chkIsChampion.Location = new System.Drawing.Point(12, 141);
+            this.chkIsChampion.Name = "chkIsChampion";
+            this.chkIsChampion.Size = new System.Drawing.Size(90, 17);
+            this.chkIsChampion.TabIndex = 80;
+            this.chkIsChampion.Text = "Is Champion?";
+            this.chkIsChampion.CheckedChanged += new System.EventHandler(this.chkIsChampion_CheckedChanged);
             // 
             // FrmNpc
             // 
@@ -3528,6 +3660,10 @@ namespace Intersect.Editor.Forms.Editors
             this.grpNpcs.ResumeLayout(false);
             this.grpNpcs.PerformLayout();
             this.pnlContainer.ResumeLayout(false);
+            this.grpChampionSettings.ResumeLayout(false);
+            this.grpChampionSettings.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudChampSpawnChance)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudChampCooldown)).EndInit();
             this.grpDynamicScaling.ResumeLayout(false);
             this.grpDynamicScaling.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudMaxScaledTo)).EndInit();
@@ -3846,5 +3982,13 @@ namespace Intersect.Editor.Forms.Editors
         private DarkNumericUpDown nudMaxScaledTo;
         private System.Windows.Forms.Label lblMaxScaleTo;
         private DarkCheckBox chkPlayerLockLoot;
+        private DarkGroupBox grpChampionSettings;
+        private DarkNumericUpDown nudChampSpawnChance;
+        private System.Windows.Forms.Label lblChampSpawnChance;
+        private DarkNumericUpDown nudChampCooldown;
+        private System.Windows.Forms.Label lblChampSpawnCooldown;
+        private DarkComboBox cmbChampion;
+        private System.Windows.Forms.Label label12;
+        private DarkCheckBox chkIsChampion;
     }
 }
