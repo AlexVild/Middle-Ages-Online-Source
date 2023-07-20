@@ -418,6 +418,8 @@ namespace Intersect.Editor.Forms.Editors
                 nudScaledTo.Value = mEditorItem.ScaledTo;
                 nudMaxScaledTo.Value = mEditorItem.MaxScaledTo;
                 nudScaleFactor.Value = (decimal)mEditorItem.VitalScaleModifier;
+
+                chkPlayerLockLoot.Checked = mEditorItem.PlayerLockedLoot;
             }
             else
             {
@@ -1815,6 +1817,11 @@ namespace Intersect.Editor.Forms.Editors
         private void darkNumericUpDown1_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.MaxScaledTo = (int)nudMaxScaledTo.Value;
+        }
+
+        private void chkPlayerLockLoot_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.PlayerLockedLoot = chkPlayerLockLoot.Checked;
         }
     }
 

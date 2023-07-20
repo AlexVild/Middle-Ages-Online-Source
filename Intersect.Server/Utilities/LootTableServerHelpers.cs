@@ -109,7 +109,7 @@ namespace Intersect.Server.Utilities
             return flattenedDrops;
         }
 
-        public static void SpawnItemsOnMap(List<Item> rolledItems, Guid mapId, Guid mapInstanceId, int X, int Y, Guid lootOwner, bool sendUpdate = true)
+        public static void SpawnItemsOnMap(List<Item> rolledItems, Guid mapId, Guid mapInstanceId, int X, int Y, Guid lootOwner, bool sendUpdate = true, long ownershipTime = -1)
         {
             foreach (var rolledItem in rolledItems)
             {
@@ -123,7 +123,7 @@ namespace Intersect.Server.Utilities
                 // Spawn the actual item!
                 if (MapController.TryGetInstanceFromMap(mapId, mapInstanceId, out var instance))
                 {
-                    instance.SpawnItem(X, Y, rolledItem, rolledItem.Quantity, lootOwner, sendUpdate);
+                    instance.SpawnItem(X, Y, rolledItem, rolledItem.Quantity, lootOwner, sendUpdate, ownershipTimeOverride: ownershipTime);
                 }
             }
         }

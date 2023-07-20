@@ -1715,6 +1715,47 @@ namespace Intersect.Server.Entities
 
     public partial class Npc : AttackingEntity
     {
+        public void DropIndividualizedLoot()
+        {
+            var lootGeneratedFor = new List<Player>();
+            // Generate loot for every player that has helped damage this monster, as well as their party members.
+            // Keep track of who already got loot generated for them though, or this gets messy!
+            foreach (var entityEntry in LootMapCache)
+            {
+                var player = Player.FindOnline(entityEntry);
+                if (player != null)
+                {
+                    // is this player in a party?
+                    if (player.Party.Count > 0 && Options.Instance.LootOpts.IndividualizedLootAutoIncludePartyMembers)
+                    {
+                        // They are, so check for all party members and drop if still eligible!
+                        foreach (var partyMember in player.Party)
+                        {
+                            if (!lootGeneratedFor.Contains(partyMember))
+                            {
+                                DropItems(partyMember);
+                                lootGeneratedFor.Add(partyMember);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // They're not in a party, so drop the item if still eligible!
+                        if (!lootGeneratedFor.Contains(player))
+                        {
+                            DropItems(player);
+                            lootGeneratedFor.Add(player);
+                        }
+                    }
+                }
+            }
+
+            // Clear their loot table and threat table.
+            DamageMap.Clear();
+            LootMap.Clear();
+            LootMapCache = Array.Empty<Guid>();
+        }
+
         public override void DropItems(Entity killer, bool sendUpdate = true)
         {
             if (!(killer is Player))
@@ -1722,7 +1763,7 @@ namespace Intersect.Server.Entities
                 return;
             }
             var playerKiller = killer as Player;
-            
+
             // Check to see if we hit the secondary or tertiary tables
             var luck = playerKiller?.GetLuckModifier();
 
@@ -1750,7 +1791,9 @@ namespace Intersect.Server.Entities
                 rolledItems.Add(LootTableServerHelpers.GetItemFromTable(tertiaryDropTable));
             }
 
-            LootTableServerHelpers.SpawnItemsOnMap(rolledItems, MapId, MapInstanceId, X, Y, lootOwner, sendUpdate);
+            var ownershipTime = Base.PlayerLockedLoot ? long.MaxValue : -1;
+
+            LootTableServerHelpers.SpawnItemsOnMap(rolledItems, MapId, MapInstanceId, X, Y, lootOwner, sendUpdate, ownershipTime: ownershipTime);
         }
 
         public bool IsOverworldDefaultAggroToward(Player player)

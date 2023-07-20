@@ -1992,46 +1992,10 @@ namespace Intersect.Server.Entities
 
             if (dropItems)
             {
-                var lootGenerated = new List<Player>();
                 // If this is an NPC, drop loot for every single player that participated in the fight.
                 if (this is Npc npc && npc.Base.IndividualizedLoot)
                 {
-                    // Generate loot for every player that has helped damage this monster, as well as their party members.
-                    // Keep track of who already got loot generated for them though, or this gets messy!
-                    foreach (var entityEntry in npc.LootMapCache)
-                    {
-                        var player = Player.FindOnline(entityEntry);
-                        if (player != null)
-                        {
-                            // is this player in a party?
-                            if (player.Party.Count > 0 && Options.Instance.LootOpts.IndividualizedLootAutoIncludePartyMembers)
-                            {
-                                // They are, so check for all party members and drop if still eligible!
-                                foreach (var partyMember in player.Party)
-                                {
-                                    if (!lootGenerated.Contains(partyMember))
-                                    {
-                                        DropItems(partyMember);
-                                        lootGenerated.Add(partyMember);
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                // They're not in a party, so drop the item if still eligible!
-                                if (!lootGenerated.Contains(player))
-                                {
-                                    DropItems(player);
-                                    lootGenerated.Add(player);
-                                }
-                            }
-                        }
-                    }
-
-                    // Clear their loot table and threat table.
-                    npc.DamageMap.Clear();
-                    npc.LootMap.Clear();
-                    npc.LootMapCache = Array.Empty<Guid>();
+                    npc.DropIndividualizedLoot();
                 }
                 else
                 {

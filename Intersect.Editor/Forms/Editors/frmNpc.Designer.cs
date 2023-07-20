@@ -266,6 +266,7 @@ namespace Intersect.Editor.Forms.Editors
             this.lblTierView = new System.Windows.Forms.Label();
             this.lblTargetDps = new System.Windows.Forms.Label();
             this.lblProjectedDps = new System.Windows.Forms.Label();
+            this.chkPlayerLockLoot = new DarkUI.Controls.DarkCheckBox();
             this.toolStrip.SuspendLayout();
             this.grpNpcs.SuspendLayout();
             this.pnlContainer.SuspendLayout();
@@ -712,7 +713,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpBestiary.Controls.Add(this.lstBestiaryUnlocks);
             this.grpBestiary.Controls.Add(this.lblBestiary);
             this.grpBestiary.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpBestiary.Location = new System.Drawing.Point(447, 709);
+            this.grpBestiary.Location = new System.Drawing.Point(447, 767);
             this.grpBestiary.Margin = new System.Windows.Forms.Padding(2);
             this.grpBestiary.Name = "grpBestiary";
             this.grpBestiary.Padding = new System.Windows.Forms.Padding(2);
@@ -972,7 +973,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpImmunities.Controls.Add(this.chkSilence);
             this.grpImmunities.Controls.Add(this.chkKnockback);
             this.grpImmunities.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpImmunities.Location = new System.Drawing.Point(446, 483);
+            this.grpImmunities.Location = new System.Drawing.Point(446, 534);
             this.grpImmunities.Margin = new System.Windows.Forms.Padding(2);
             this.grpImmunities.Name = "grpImmunities";
             this.grpImmunities.Padding = new System.Windows.Forms.Padding(2);
@@ -1874,6 +1875,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpDrops.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpDrops.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpDrops.Controls.Add(this.chkPlayerLockLoot);
             this.grpDrops.Controls.Add(this.grpTableSelection);
             this.grpDrops.Controls.Add(this.btnUnselectItem);
             this.grpDrops.Controls.Add(this.grpTypes);
@@ -1890,7 +1892,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpDrops.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpDrops.Location = new System.Drawing.Point(447, 3);
             this.grpDrops.Name = "grpDrops";
-            this.grpDrops.Size = new System.Drawing.Size(226, 475);
+            this.grpDrops.Size = new System.Drawing.Size(226, 523);
             this.grpDrops.TabIndex = 30;
             this.grpDrops.TabStop = false;
             this.grpDrops.Text = "Drops";
@@ -3488,6 +3490,16 @@ namespace Intersect.Editor.Forms.Editors
             this.lblProjectedDps.TabIndex = 121;
             this.lblProjectedDps.Text = "Est. DPS";
             // 
+            // chkPlayerLockLoot
+            // 
+            this.chkPlayerLockLoot.AutoSize = true;
+            this.chkPlayerLockLoot.Location = new System.Drawing.Point(14, 469);
+            this.chkPlayerLockLoot.Name = "chkPlayerLockLoot";
+            this.chkPlayerLockLoot.Size = new System.Drawing.Size(116, 17);
+            this.chkPlayerLockLoot.TabIndex = 79;
+            this.chkPlayerLockLoot.Text = "Player-locked loot?";
+            this.chkPlayerLockLoot.CheckedChanged += new System.EventHandler(this.chkPlayerLockLoot_CheckedChanged);
+            // 
             // FrmNpc
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -3833,5 +3845,6 @@ namespace Intersect.Editor.Forms.Editors
         private System.Windows.Forms.Label lblScaledTo;
         private DarkNumericUpDown nudMaxScaledTo;
         private System.Windows.Forms.Label lblMaxScaleTo;
+        private DarkCheckBox chkPlayerLockLoot;
     }
 }

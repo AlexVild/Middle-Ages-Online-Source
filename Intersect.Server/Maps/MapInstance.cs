@@ -807,6 +807,20 @@ namespace Intersect.Server.Maps
             }
 
             var despawnTime = DetermineItemDespawnTime(spawnType);
+            
+            // Prevents overflow
+            long checkedOwnershipTime;
+            try
+            {
+                checked
+                {
+                    checkedOwnershipTime = Timing.Global.Milliseconds + ownershipTime;
+                }
+            }
+            catch (OverflowException e)
+            {
+                checkedOwnershipTime = long.MaxValue;
+            }
 
             // if we can stack this item or the user configured to drop items consolidated, simply spawn a single stack of it.
             // Does not count for Equipment and bags, these are ALWAYS their own separate item spawn. We don't want to lose data on that!
@@ -831,7 +845,7 @@ namespace Intersect.Server.Maps
                 {
                     DespawnTime = despawnTime,
                     Owner = owner,
-                    OwnershipTime = Timing.Global.Milliseconds + ownershipTime,
+                    OwnershipTime = checkedOwnershipTime,
                     VisibleToAll = Options.Loot.ShowUnownedItems || owner == Guid.Empty
                 };
 
@@ -866,7 +880,7 @@ namespace Intersect.Server.Maps
                     {
                         DespawnTime = despawnTime,
                         Owner = owner,
-                        OwnershipTime = Timing.Global.Milliseconds + ownershipTime,
+                        OwnershipTime = checkedOwnershipTime,
                         VisibleToAll = Options.Loot.ShowUnownedItems || owner == Guid.Empty
                     };
 
