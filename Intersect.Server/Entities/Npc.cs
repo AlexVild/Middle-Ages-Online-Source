@@ -268,6 +268,10 @@ namespace Intersect.Server.Entities
                             var bestiaryCompletionExp = Base.Experience * Options.Combat.BestiaryCompletionExpMultiplier;
                             playerKiller.GiveExperience(bestiaryCompletionExp);
                             PacketSender.SendExpToast(playerKiller, $"BESTIARY COMPLETE! {bestiaryCompletionExp} EXP", false, true, false);
+                            if (NpcBase.Get(Base.ChampionId) != default)
+                            {
+                                PacketSender.SendChatMsg(playerKiller, $"Killing {Base.Name} will now have a chance to spawn their champion.", ChatMessageType.Experience, CustomColors.General.GeneralCompleted, sendToast: true);
+                            }
                         }
 
                     }

@@ -1801,7 +1801,7 @@ namespace Intersect.Server.Maps
 
             if (killedByPlayer)
             {
-                if (ActiveChampions.Count > 0)
+                if (ActiveChampions.Count <= 0)
                 {
                     PacketSender.SendGlobalMsg($"A champion has been slain! ({mMapController.Name})", Color.FromName("Purple", Strings.Colors.presets));
                 }

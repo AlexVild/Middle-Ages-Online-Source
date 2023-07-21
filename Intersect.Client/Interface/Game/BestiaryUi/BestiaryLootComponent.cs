@@ -25,6 +25,9 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
 
         List<BeastLootItem> LootItems { get; set; } = new List<BeastLootItem>();
 
+        private Label8Bit ChampionLabel { get; set; }
+        private Label8Bit ChampionInfo { get; set; }
+
         public BestiaryLootComponent(Base parent, string containerName, ComponentList<GwenComponent> referenceList = null) : base(parent, containerName, "BestiaryLootComponent", referenceList)
         {
         }
@@ -35,6 +38,8 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
             LootImage = new ImagePanel(SelfContainer, "LootImage");
             LootBg = new ImagePanel(SelfContainer, "LootBg");
             LootContainer = new ScrollControl(LootBg, "LootContainer");
+            ChampionLabel = new Label8Bit(LootBg, 12, "ChampionLabel", interactive: true, tooltip: "A special version of this monster can spawn after being killed at a % chance");
+            ChampionInfo = new Label8Bit(LootBg, 12, "ChampionInfoLabel");
 
             base.Initialize();
             FitParentToComponent();
@@ -81,8 +86,15 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
 
             if (!Unlocked)
             {
+                LootContainer.Hide();
+                ChampionLabel.Hide();
+                ChampionInfo.Hide();
                 return;
             }
+
+            LootContainer.Show();
+            ChampionLabel.Show();
+            ChampionInfo.Show();
 
             var idx = 0;
             var totalWeight = LootTableHelpers.GetTotalWeight(Beast.Drops, true);
@@ -192,6 +204,23 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
                     idx++;
                 }
             }
+
+            var champion = NpcBase.Get(beast.ChampionId);
+            if (champion == default)
+            {
+                ChampionLabel.SetText("This beast does not have a champion variant.");
+                ChampionLabel.SetToolTipText("");
+                ChampionInfo.Hide();
+            }
+            else
+            {
+                ChampionLabel.SetText($"CHAMPION: {champion.Name}");
+                ChampionLabel.SetToolTipText("A special version of this monster can spawn after being killed at a % chance");
+                ChampionInfo.Show();
+                ChampionInfo.SetText($"{beast.ChampionSpawnChance.ToString("N1")}% chance, {beast.ChampionCooldownSeconds} second cooldown");
+            }
+            ChampionLabel.PlaceBelow(LootContainer);
+            ChampionInfo.PlaceBelow(ChampionLabel);
         }
 
         public override void SetUnlockStatus(bool unlocked)
@@ -218,8 +247,8 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
             }
         }
 
-        public override GameTexture UnlockedBg => Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "bestiary_magic_bg.png");
+        public override GameTexture UnlockedBg => Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "bestiary_loot_bg.png");
 
-        public override GameTexture LockedBg => Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "bestiary_magic_bg_locked.png");
+        public override GameTexture LockedBg => Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "bestiary_loot_bg_locked.png");
     }
 }

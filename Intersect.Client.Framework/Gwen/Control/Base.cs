@@ -1031,6 +1031,28 @@ namespace Intersect.Client.Framework.Gwen.Control
             }
         }
 
+        public virtual void SetTooltipGraphics(string bgTexture, string fontName, int fontSize, Color fontColor)
+        {
+            GameTexture texture = null;
+            if (!string.IsNullOrWhiteSpace(bgTexture))
+            {
+                texture = GameContentManager.Current?.GetTexture(GameContentManager.TextureType.Gui, bgTexture);
+            }
+
+            mToolTipBackgroundFilename = bgTexture;
+            mToolTipBackgroundImage = texture;
+
+            mToolTipFont = GameContentManager.Current.GetFont(fontName, fontSize);
+            mToolTipFontColor = fontColor;
+
+            UpdateToolTipProperties();
+        }
+
+        public virtual void SetTooltipGraphicsMAO()
+        {
+            SetTooltipGraphics(Label8BitSettings.TooltipBg, Label8BitSettings.FontName, Label8BitSettings.TooltipFontSize, Label8BitSettings.TooltipFontColor);
+        }
+
         public virtual void ProcessAlignments()
         {
             mAlignments?.ForEach(
