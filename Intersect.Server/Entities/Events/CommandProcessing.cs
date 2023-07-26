@@ -3594,12 +3594,36 @@ namespace Intersect.Server.Entities.Events
                 return;
             }
 
-            if (!instanceController.DuelPool.Contains(player))
+            if (!instanceController.PlayerInPool(player))
             {
                 return;
             }
 
             player.WithdrawFromMelee();
+        }
+        
+        private static void ProcessCommand(
+          ChangeChampSettingsCommand command,
+          Player player,
+          Event instance,
+          CommandInstance stackInfo,
+          Stack<CommandInstance> callStack
+       )
+        {
+            if (player == null)
+            {
+                return;
+            }
+
+            player.DisableChampionSpawns = command.DisableSpawns;
+            if (player.DisableChampionSpawns)
+            {
+                PacketSender.SendToast(player, "Champion spawning has been disabled.");
+            }
+            else
+            {
+                PacketSender.SendToast(player, "Champion spawning has been enabled.");
+            }
         }
     }
 }

@@ -15,6 +15,8 @@ namespace Intersect.Server.Entities
         [NotMapped, JsonIgnore]
         public List<BestiaryUnlockInstance> BestiaryUnlocks { get; set; }
 
+        public bool DisableChampionSpawns { get; set; } = false;
+
         public Dictionary<Guid, long> GetNpcKillCounts()
         {
             var npcRecords = PlayerRecords.Where(record => record.Type == RecordType.NpcKilled).ToArray();

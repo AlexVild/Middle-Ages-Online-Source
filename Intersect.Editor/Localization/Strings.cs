@@ -409,6 +409,11 @@ namespace Intersect.Editor.Localization
             }
         }
 
+        public static string GetEventConditionalDesc(ChampionsDisabled condition)
+        {
+            return EventConditionDesc.ChampionsDisabled;
+        }
+
         public static string GetEventConditionalDesc(RecipeUnlocked condition)
         {
             return EventConditionDesc.HasRecipe.ToString(RecipeDescriptor.GetName(condition.RecipeId));
@@ -2327,6 +2332,7 @@ Tick timer saved in server config.json.";
                 {"resetglobalevents", @"Reset Global Event Positions"},
                 {"meleesignup", @"Signup for Open Melee"},
                 {"meleewithdraw", @"Withdraw from Open Melee"},
+                {"changechampsettings", @"Change Champion Spawn Settings"},
             };
 
         }
@@ -2469,6 +2475,7 @@ Tick timer saved in server config.json.";
                 {46, @"Enhancement applied..."},
                 {47, @"Is party leader..."},
                 {48, @"Is signed up for open melee"},
+                {49, @"Has champions disabled"},
             };
 
             public static LocalizedString endrange = @"End Range:";
@@ -2805,6 +2812,9 @@ Tick timer saved in server config.json.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString RecordIsExtra = @"Record of type {00} for {01} is at least {02}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ChampionsDisabled = @"Champions are disabled";
 
             public static Dictionary<int, LocalizedString> selfswitches = new Dictionary<int, LocalizedString>
             {
@@ -6257,6 +6267,9 @@ Negative values for time to flow backwards.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString MeleeWithdraw = @"Withdraw from Open Melee";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ChangeChampSettings = @"Change Champion Spawn Settings: {00}";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString ObtainTreasureGnome = @"Obtain dungeon gnome";

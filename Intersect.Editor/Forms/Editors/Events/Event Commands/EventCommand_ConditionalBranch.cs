@@ -558,6 +558,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     Condition = new IsInOpenMelee();
 
                     break;
+                
+                case ConditionTypes.ChampionsDisabled:
+                    Condition = new ChampionsDisabled();
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -870,6 +875,9 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     break;
 
                 case ConditionTypes.InOpenMelee:
+                    break;
+
+                case ConditionTypes.ChampionsDisabled:
                     break;
 
                 default:
@@ -1805,6 +1813,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         {
         }
 
+        private void SetupFormValues(ChampionsDisabled condition)
+        {
+        }
+
         #endregion
 
         #region "SaveFormValues"
@@ -2154,6 +2166,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         }
 
         private void SaveFormValues(IsInOpenMelee condition)
+        {
+        }
+
+        private void SaveFormValues(ChampionsDisabled condition)
         {
         }
         #endregion

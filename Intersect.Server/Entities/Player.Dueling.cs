@@ -235,16 +235,28 @@ namespace Intersect.Server.Entities
             {
                 ForfeitDuel(true);
             }
-            else if (InstanceProcessor.TryGetInstanceController(MapInstanceId, out var instanceController))
+            if (!InstanceProcessor.TryGetInstanceController(MapInstanceId, out var instanceController))
             {
-                var exPoolSize = instanceController.DuelPool.Count;
+                return;
+            }
+            
+            if (CurrentDuel != default)
+            {
+                ForfeitDuel(true);
+            }
 
-                instanceController.LeaveMeleePool(this);
+            if (!instanceController.PlayerInPool(this))
+            {
+                return;
+            }
 
-                if (exPoolSize >= Options.Instance.DuelOpts.OpenMeleeMinMedalParticipants && instanceController.DuelPool.Count < Options.Instance.DuelOpts.OpenMeleeMinMedalParticipants)
-                {
-                    PacketSender.SendProximityMsgToLayer($"There are too few players signed up for the open melee to give out champion medals. At least {Options.Instance.DuelOpts.OpenMeleeMinMedalParticipants} players must be signed up.", Enums.ChatMessageType.Notice, MapId, MapInstanceId, Color.FromName("Orange", Strings.Colors.presets));
-                }
+            var exPoolSize = instanceController.DuelPool.Count;
+
+            instanceController.LeaveMeleePool(this);
+
+            if (exPoolSize >= Options.Instance.DuelOpts.OpenMeleeMinMedalParticipants && instanceController.DuelPool.Count < Options.Instance.DuelOpts.OpenMeleeMinMedalParticipants)
+            {
+                PacketSender.SendProximityMsgToLayer($"There are too few players signed up for the open melee to give out champion medals. At least {Options.Instance.DuelOpts.OpenMeleeMinMedalParticipants} players must be signed up.", Enums.ChatMessageType.Notice, MapId, MapInstanceId, Color.FromName("Orange", Strings.Colors.presets));
             }
 
             PacketSender.SendChatMsg(this, "You have been withdrawn from the open melee pool.", Enums.ChatMessageType.Local, sendToast: true);

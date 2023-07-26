@@ -149,5 +149,10 @@ namespace Intersect.Server.Core.Instancing.Controller
         {
             DuelPool.RemoveAll(pl => pl.Id == player.Id);
         }
+
+        public bool PlayerInPool(Player player)
+        {
+            return DuelPool.Any(pl => pl.Id == player.Id);
+        }
     }
 }

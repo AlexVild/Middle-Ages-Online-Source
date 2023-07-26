@@ -100,6 +100,8 @@ namespace Intersect.GameObjects.Events
         IsPartyLeader,
 
         InOpenMelee,
+        
+        ChampionsDisabled,
 
     }
 
@@ -680,6 +682,11 @@ namespace Intersect.GameObjects.Events
         public Guid RecordId { get; set; }
 
         public int Value { get; set; }
+    }
+
+    public class ChampionsDisabled : Condition
+    {
+        public override ConditionTypes Type { get; } = ConditionTypes.ChampionsDisabled;
     }
 
     public class VariableCompaison

@@ -1155,6 +1155,16 @@ namespace Intersect.Server.Entities.Events
             return false;
         }
 
+        public static bool MeetsCondition(
+           ChampionsDisabled condition,
+           Player player,
+           Event eventInstance,
+           QuestBase questBase
+       )
+        {
+            return player?.DisableChampionSpawns ?? false;
+        }
+
     }
 
 }

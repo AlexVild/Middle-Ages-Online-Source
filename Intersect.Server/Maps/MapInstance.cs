@@ -1755,8 +1755,19 @@ namespace Intersect.Server.Maps
             }
 
             var descriptor = NpcBase.Get(npcId);
-            if (descriptor == default)
+            if (descriptor == default || killer == default)
             {
+                return false;
+            }
+
+            if (killer.DisableChampionSpawns)
+            {
+                var notificationChance = Randomization.Next(0, 4);
+                if (notificationChance == 0)
+                {
+                    PacketSender.SendChatMsg(killer, "Reminder: You currently have champion spawns disabled. If you wish to re-enable them, speak to Slayer Syd at the Vennerwood Slayers Mansion.",
+                        ChatMessageType.Notice, Color.FromName("Purple", Strings.Colors.presets));
+                }
                 return false;
             }
 

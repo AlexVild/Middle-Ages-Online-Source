@@ -282,6 +282,7 @@ namespace Intersect.GameObjects.Events
         ResetGlobalEventPositions, // 90
         MeleeSignup, // 91
         MeleeWithdraw, // 92
+        ChangeChampSettings, // 93
     }
 
     public enum NPCGuildManagementSelection

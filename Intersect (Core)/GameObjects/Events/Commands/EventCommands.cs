@@ -1529,4 +1529,11 @@ namespace Intersect.GameObjects.Events.Commands
     {
         public override EventCommandType Type { get; } = EventCommandType.MeleeWithdraw;
     }
+    
+    public class ChangeChampSettingsCommand : EventCommand
+    {
+        public override EventCommandType Type { get; } = EventCommandType.ChangeChampSettings;
+
+        public bool DisableSpawns { get; set; }
+    }
 }

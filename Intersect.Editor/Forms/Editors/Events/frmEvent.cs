@@ -901,6 +901,10 @@ namespace Intersect.Editor.Forms.Editors.Events
                     tmpCommand = new MeleeWithdrawCommand();
                     break;
 
+                case EventCommandType.ChangeChampSettings:
+                    tmpCommand = new ChangeChampSettingsCommand();
+                    break;
+
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -1677,6 +1681,10 @@ namespace Intersect.Editor.Forms.Editors.Events
 
                 case EventCommandType.MeleeWithdraw:
                     // No editor
+                    break;
+
+                case EventCommandType.ChangeChampSettings:
+                    cmdWindow = new EventCommand_ChangeChampionSettings((ChangeChampSettingsCommand)command, this);
                     break;
 
                 default:
