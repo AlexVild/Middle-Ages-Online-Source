@@ -92,6 +92,10 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             {
                 mSpellDescWindow = new SpellDescriptionWindow(mItem.SpecialAttack.SpellId, x, y);
             }
+            if (mItem.ProcSpellId != default)
+            {
+                mSpellDescWindow = new SpellDescriptionWindow(mItem.ProcSpellId, x, y);
+            }
             if (mItem.ItemType == ItemTypes.Enhancement)
             {
                 mEnhancementDescWindow = new EnhancementDescriptionWindow(mItem.EnhancementId, mItem.Icon, x, y);

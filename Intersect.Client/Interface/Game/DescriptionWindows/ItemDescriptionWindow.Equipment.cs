@@ -62,6 +62,8 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 AddDivider();
                 SetupEnhancementThresholdBreakdown();
                 AddDivider();
+                SetupProcSpellInfo();
+                AddDivider();
             }
 
             if (DisplayEffectBonuses())
@@ -437,6 +439,27 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 StatValueColor);
 
             enhancementRows.SizeToChildren(true, true);
+        }
+
+        private void SetupProcSpellInfo()
+        {
+            if (mItem.ProcSpellId == default)
+            {
+                return;
+            }
+
+            var spell = SpellBase.Get(mItem.ProcSpellId);
+            if (mItem.ProcChance > 0 && spell != default)
+            {
+                var procRow = AddRowContainer();
+
+                procRow.AddKeyValueRow("   Spell on Hit", "", StatHeaderColor, Color.White);
+
+                procRow.AddKeyValueRow("Spell:", spell.Name, StatLabelColor, StatValueColor);
+                procRow.AddKeyValueRow("Chance:", $"{mItem.ProcChance.ToString("N2")}%", StatLabelColor, StatValueColor);
+                
+                procRow.SizeToChildren();
+            }
         }
 
         private void SetupVitalBreakdown()

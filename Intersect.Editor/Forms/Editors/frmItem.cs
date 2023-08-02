@@ -780,6 +780,17 @@ namespace Intersect.Editor.Forms.Editors
                 }
                 nudSpecialAttackChargeTime.Value = mEditorItem.SpecialAttack.ChargeTime;
 
+                if (mEditorItem.ProcSpellId != default)
+                {
+                    cmbProcSpell.SelectedIndex = SpellBase.ListIndex(mEditorItem.ProcSpellId) + 1; // +1 for none
+                }
+                else
+                {
+                    cmbProcSpell.SelectedIndex = 0;
+                }
+                nudProcChance.Value = (decimal)mEditorItem.ProcChance;
+                nudProcChance.Enabled = cmbProcSpell.SelectedIndex > 0;
+
                 if (cmbEquipmentSlot.SelectedIndex == Options.Instance.EquipmentOpts.ArmorSlot ||
                 cmbEquipmentSlot.SelectedIndex == Options.Instance.EquipmentOpts.HelmetSlot ||
                 cmbEquipmentSlot.SelectedIndex == Options.Instance.EquipmentOpts.BootsSlot)
@@ -1580,6 +1591,10 @@ namespace Intersect.Editor.Forms.Editors
             cmbSpecialAttack.Items.Clear();
             cmbSpecialAttack.Items.Add(Strings.General.none);
             cmbSpecialAttack.Items.AddRange(SpellBase.Names);
+
+            cmbProcSpell.Items.Clear();
+            cmbProcSpell.Items.Add(Strings.General.none);
+            cmbProcSpell.Items.AddRange(SpellBase.Names);
         }
 
         private void btnAddFolder_Click(object sender, EventArgs e)
@@ -2415,6 +2430,24 @@ namespace Intersect.Editor.Forms.Editors
         private void chkMeleeConsumable_CheckedChanged(object sender, EventArgs e)
         {
             mEditorItem.MeleeConsumable = chkMeleeConsumable.Checked;
+        }
+
+        private void cmbProcSpell_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmbProcSpell.SelectedIndex == 0)
+            {
+                mEditorItem.SpecialAttack.SpellId = Guid.Empty;
+                nudProcChance.Enabled = false;
+                return;
+            }
+
+            nudProcChance.Enabled = true;
+            mEditorItem.ProcSpellId = SpellBase.IdFromList(cmbProcSpell.SelectedIndex - 1); // -1 for None
+        }
+
+        private void nudProcChance_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.ProcChance = (float)nudProcChance.Value;
         }
     }
 }

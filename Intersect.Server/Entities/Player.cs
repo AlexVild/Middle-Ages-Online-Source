@@ -4150,7 +4150,7 @@ namespace Intersect.Server.Entities
         /// <param name="effect">The <see cref="EffectType"/> to retrieve the amount for.</param>
         /// <param name="startValue">The starting value to which we're adding our gear amount.</param>
         /// <returns></returns>
-        public int GetBonusEffectTotal(EffectType effect, int startValue = 0)
+        public override int GetBonusEffectTotal(EffectType effect, int startValue = 0)
         {
             var value = startValue;
 

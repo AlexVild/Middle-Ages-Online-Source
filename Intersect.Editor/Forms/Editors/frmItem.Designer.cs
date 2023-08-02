@@ -331,6 +331,7 @@ namespace Intersect.Editor.Forms.Editors
             this.nudBag = new DarkUI.Controls.DarkNumericUpDown();
             this.lblBag = new System.Windows.Forms.Label();
             this.grpConsumable = new DarkUI.Controls.DarkGroupBox();
+            this.chkMeleeConsumable = new DarkUI.Controls.DarkCheckBox();
             this.lblPercentage3 = new System.Windows.Forms.Label();
             this.nudIntervalPercentage = new DarkUI.Controls.DarkNumericUpDown();
             this.lblPlus3 = new System.Windows.Forms.Label();
@@ -360,7 +361,11 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
             this.vS2015DarkTheme1 = new WeifenLuo.WinFormsUI.Docking.VS2015DarkTheme();
-            this.chkMeleeConsumable = new DarkUI.Controls.DarkCheckBox();
+            this.grpProc = new DarkUI.Controls.DarkGroupBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.lblProcChance = new System.Windows.Forms.Label();
+            this.cmbProcSpell = new DarkUI.Controls.DarkComboBox();
+            this.nudProcChance = new DarkUI.Controls.DarkNumericUpDown();
             this.grpItems.SuspendLayout();
             this.grpGeneral.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudFuel)).BeginInit();
@@ -457,6 +462,8 @@ namespace Intersect.Editor.Forms.Editors
             this.grpAuxInfo.SuspendLayout();
             this.grpEnhancement.SuspendLayout();
             this.toolStrip.SuspendLayout();
+            this.grpProc.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudProcChance)).BeginInit();
             this.SuspendLayout();
             // 
             // grpItems
@@ -1562,6 +1569,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpEquipment.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpEquipment.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpEquipment.Controls.Add(this.grpProc);
             this.grpEquipment.Controls.Add(this.grpUpgrades);
             this.grpEquipment.Controls.Add(this.grpWeaponEnhancement);
             this.grpEquipment.Controls.Add(this.grpDeconstruction);
@@ -4682,6 +4690,16 @@ namespace Intersect.Editor.Forms.Editors
             this.grpConsumable.Text = "Consumable";
             this.grpConsumable.Visible = false;
             // 
+            // chkMeleeConsumable
+            // 
+            this.chkMeleeConsumable.AutoSize = true;
+            this.chkMeleeConsumable.Location = new System.Drawing.Point(19, 122);
+            this.chkMeleeConsumable.Name = "chkMeleeConsumable";
+            this.chkMeleeConsumable.Size = new System.Drawing.Size(114, 17);
+            this.chkMeleeConsumable.TabIndex = 74;
+            this.chkMeleeConsumable.Text = "Only Open Melee?";
+            this.chkMeleeConsumable.CheckedChanged += new System.EventHandler(this.chkMeleeConsumable_CheckedChanged);
+            // 
             // lblPercentage3
             // 
             this.lblPercentage3.AutoSize = true;
@@ -5043,15 +5061,78 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
             // 
-            // chkMeleeConsumable
+            // grpProc
             // 
-            this.chkMeleeConsumable.AutoSize = true;
-            this.chkMeleeConsumable.Location = new System.Drawing.Point(19, 122);
-            this.chkMeleeConsumable.Name = "chkMeleeConsumable";
-            this.chkMeleeConsumable.Size = new System.Drawing.Size(114, 17);
-            this.chkMeleeConsumable.TabIndex = 74;
-            this.chkMeleeConsumable.Text = "Only Open Melee?";
-            this.chkMeleeConsumable.CheckedChanged += new System.EventHandler(this.chkMeleeConsumable_CheckedChanged);
+            this.grpProc.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpProc.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpProc.Controls.Add(this.nudProcChance);
+            this.grpProc.Controls.Add(this.label3);
+            this.grpProc.Controls.Add(this.lblProcChance);
+            this.grpProc.Controls.Add(this.cmbProcSpell);
+            this.grpProc.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpProc.Location = new System.Drawing.Point(221, 985);
+            this.grpProc.Margin = new System.Windows.Forms.Padding(2);
+            this.grpProc.Name = "grpProc";
+            this.grpProc.Padding = new System.Windows.Forms.Padding(2);
+            this.grpProc.Size = new System.Drawing.Size(198, 97);
+            this.grpProc.TabIndex = 124;
+            this.grpProc.TabStop = false;
+            this.grpProc.Text = "Spell Proccing";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(13, 22);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(55, 13);
+            this.label3.TabIndex = 28;
+            this.label3.Text = "Proc Spell";
+            // 
+            // lblProcChance
+            // 
+            this.lblProcChance.AutoSize = true;
+            this.lblProcChance.Location = new System.Drawing.Point(13, 67);
+            this.lblProcChance.Name = "lblProcChance";
+            this.lblProcChance.Size = new System.Drawing.Size(61, 13);
+            this.lblProcChance.TabIndex = 31;
+            this.lblProcChance.Text = "Chance (%)";
+            // 
+            // cmbProcSpell
+            // 
+            this.cmbProcSpell.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbProcSpell.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbProcSpell.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbProcSpell.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbProcSpell.DrawDropdownHoverOutline = false;
+            this.cmbProcSpell.DrawFocusRectangle = false;
+            this.cmbProcSpell.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbProcSpell.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbProcSpell.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbProcSpell.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbProcSpell.FormattingEnabled = true;
+            this.cmbProcSpell.Location = new System.Drawing.Point(11, 38);
+            this.cmbProcSpell.Name = "cmbProcSpell";
+            this.cmbProcSpell.Size = new System.Drawing.Size(177, 21);
+            this.cmbProcSpell.TabIndex = 29;
+            this.cmbProcSpell.Text = null;
+            this.cmbProcSpell.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbProcSpell.SelectedIndexChanged += new System.EventHandler(this.cmbProcSpell_SelectedIndexChanged);
+            // 
+            // nudProcChance
+            // 
+            this.nudProcChance.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudProcChance.DecimalPlaces = 2;
+            this.nudProcChance.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudProcChance.Location = new System.Drawing.Point(88, 65);
+            this.nudProcChance.Name = "nudProcChance";
+            this.nudProcChance.Size = new System.Drawing.Size(100, 20);
+            this.nudProcChance.TabIndex = 124;
+            this.nudProcChance.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudProcChance.ValueChanged += new System.EventHandler(this.nudProcChance_ValueChanged);
             // 
             // FrmItem
             // 
@@ -5200,6 +5281,9 @@ namespace Intersect.Editor.Forms.Editors
             this.grpEnhancement.ResumeLayout(false);
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
+            this.grpProc.ResumeLayout(false);
+            this.grpProc.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudProcChance)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -5532,5 +5616,10 @@ namespace Intersect.Editor.Forms.Editors
         private Label lblSkillPoints;
         private DarkNumericUpDown nudSkillPoints;
         private DarkCheckBox chkMeleeConsumable;
+        private DarkGroupBox grpProc;
+        private DarkNumericUpDown nudProcChance;
+        private Label label3;
+        private Label lblProcChance;
+        private DarkComboBox cmbProcSpell;
     }
 }
