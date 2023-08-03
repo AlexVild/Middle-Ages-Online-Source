@@ -215,9 +215,12 @@ namespace Intersect.Server.Core
                 case TimerOwnerType.Party:
                     if (player.Party == null || player.Party.Count < 1)
                     {
-                        return false; // This timer requires the player to be in a party
+                        ownerId = player.Id; // use as a solo timer if not in a party
                     }
-                    ownerId = player.Party[0].Id; // party leader
+                    else
+                    {
+                        ownerId = player.Party[0].Id; // party leader
+                    }
 
                     break;
                 case TimerOwnerType.Guild:
