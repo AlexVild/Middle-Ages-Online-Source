@@ -676,11 +676,11 @@ namespace Intersect.Server.Maps
 
                     var spawn = npcSpawn.Key;
 
-                    if (spawn.CumulativeSpawning && spawn.SpawnGroup < desiredGroup)
+                    if (spawn.CumulativeSpawning && spawn.SpawnGroup > desiredGroup)
                     {
                         remove = true;
                     }
-                    else if (spawn.SpawnGroup != desiredGroup)
+                    else if (spawn.SpawnGroup != desiredGroup && !spawn.CumulativeSpawning)
                     {
                         remove = true;
                     }
@@ -1550,7 +1550,7 @@ namespace Intersect.Server.Maps
         /// <param name="reset">Whether or not to despawn current NPCs on change</param>
         /// <param name="onlyInvalid">Whether we're only removing newly-invalid (based on spawn group) NPCs</param>
         /// <param name="instancePermanent">Whether or not this change should persist map cleanup so long as there are players on the instance</param>
-        public void ChangeSpawnGroup(int group, bool reset, bool onlyInvalid, bool persistCleanup)
+        public void ChangeSpawnGroup(int group, bool reset, bool onlyInvalid, bool persistCleanup, bool surroundingMaps)
         {
             // Shit bad way of making it so two players don't request a spawn group change too close to one another
             if (Timing.Global.MillisecondsUtc < mSpawnGroupLastChangedAt + Options.Instance.Instancing.NpcSpawnGroupChangeMinimum)
@@ -1575,11 +1575,20 @@ namespace Intersect.Server.Maps
             // spawn groups that are actually ever being modified and assume 0 for all others.
             if (InstanceProcessor.TryGetInstanceController(MapInstanceId, out var instanceController))
             {
-                instanceController.ChangeSpawnGroup(mMapController.Id, group, persistCleanup);
+                instanceController.ChangeSpawnGroup(mMapController.Id, group, persistCleanup, surroundingMaps);
             }
 
             // Spawn the NPCs that belong to the new group
             SpawnMapNpcs();
+
+            // Do the same thing for surrounding maps if necessary
+            if (surroundingMaps)
+            {
+                foreach (var mapInstance in MapController.GetSurroundingMapInstances(mMapController.Id, MapInstanceId, false))
+                {
+                    mapInstance.ChangeSpawnGroup(group, reset, onlyInvalid, persistCleanup, false);
+                }
+            }
         }
         
         private void ProcessResourceRespawns()

@@ -24,7 +24,7 @@ namespace Intersect.Server.Core.Instancing.Controller
             }
         }
 
-        public void ChangeSpawnGroup(Guid controllerId, int spawnGroup, bool persistCleanup)
+        public void ChangeSpawnGroup(Guid controllerId, int spawnGroup, bool persistCleanup, bool surroundingMaps)
         {
             if (MapSpawnGroups.ContainsKey(controllerId))
             {
@@ -34,6 +34,15 @@ namespace Intersect.Server.Core.Instancing.Controller
             else
             {
                 MapSpawnGroups.Add(controllerId, new SpawnInfo(spawnGroup, persistCleanup));
+            }
+
+            if (surroundingMaps)
+            {
+                var map = MapController.Get(controllerId);
+                foreach (var surroundingMap in map.GetSurroundingMapIds(false))
+                {
+                    ChangeSpawnGroup(surroundingMap, spawnGroup, persistCleanup, false);
+                }
             }
         }
 
