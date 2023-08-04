@@ -2778,7 +2778,7 @@ namespace Intersect.Server.Entities.Events
                     default:
                         throw new NotImplementedException($"Invalid change spawn operator for change spawn group command for player {player?.Name}");
                 }
-                mapInstance.ChangeSpawnGroup(mapSpawnGroup, command.ResetNpcs, command.PersistCleanup);
+                mapInstance.ChangeSpawnGroup(mapSpawnGroup, command.ResetNpcs, command.ResetInvalidNpcsOnly, command.PersistCleanup);
             }
             // if we want this spawn group to continue even after the map is swept up (default 3 mins not on overworld)
             else if (command.PersistCleanup && InstanceProcessor.TryGetInstanceController(player.MapInstanceId, out var instanceController))

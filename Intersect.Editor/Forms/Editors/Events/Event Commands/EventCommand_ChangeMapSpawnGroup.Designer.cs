@@ -30,6 +30,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private void InitializeComponent()
         {
             this.grpChangeSpawnGroup = new DarkUI.Controls.DarkGroupBox();
+            this.chkPersist = new System.Windows.Forms.CheckBox();
             this.chkPlayerMap = new System.Windows.Forms.CheckBox();
             this.lblBalue = new System.Windows.Forms.Label();
             this.grpOperators = new DarkUI.Controls.DarkGroupBox();
@@ -43,7 +44,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbMap = new DarkUI.Controls.DarkComboBox();
             this.btnCancel = new DarkUI.Controls.DarkButton();
             this.btnSave = new DarkUI.Controls.DarkButton();
-            this.chkPersist = new System.Windows.Forms.CheckBox();
+            this.chkInvalidOnly = new System.Windows.Forms.CheckBox();
             this.grpChangeSpawnGroup.SuspendLayout();
             this.grpOperators.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudSpawnGroup)).BeginInit();
@@ -53,6 +54,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             this.grpChangeSpawnGroup.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.grpChangeSpawnGroup.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpChangeSpawnGroup.Controls.Add(this.chkInvalidOnly);
             this.grpChangeSpawnGroup.Controls.Add(this.chkPersist);
             this.grpChangeSpawnGroup.Controls.Add(this.chkPlayerMap);
             this.grpChangeSpawnGroup.Controls.Add(this.lblBalue);
@@ -67,10 +69,20 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpChangeSpawnGroup.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpChangeSpawnGroup.Location = new System.Drawing.Point(3, 3);
             this.grpChangeSpawnGroup.Name = "grpChangeSpawnGroup";
-            this.grpChangeSpawnGroup.Size = new System.Drawing.Size(319, 202);
+            this.grpChangeSpawnGroup.Size = new System.Drawing.Size(319, 220);
             this.grpChangeSpawnGroup.TabIndex = 21;
             this.grpChangeSpawnGroup.TabStop = false;
             this.grpChangeSpawnGroup.Text = "Change Spawn Group";
+            // 
+            // chkPersist
+            // 
+            this.chkPersist.AutoSize = true;
+            this.chkPersist.Location = new System.Drawing.Point(131, 144);
+            this.chkPersist.Name = "chkPersist";
+            this.chkPersist.Size = new System.Drawing.Size(127, 17);
+            this.chkPersist.TabIndex = 72;
+            this.chkPersist.Text = "Persist map cleanup?";
+            this.chkPersist.UseVisualStyleBackColor = true;
             // 
             // chkPlayerMap
             // 
@@ -209,7 +221,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(238, 169);
+            this.btnCancel.Location = new System.Drawing.Point(238, 191);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Padding = new System.Windows.Forms.Padding(5);
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
@@ -219,7 +231,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(131, 169);
+            this.btnSave.Location = new System.Drawing.Point(157, 191);
             this.btnSave.Name = "btnSave";
             this.btnSave.Padding = new System.Windows.Forms.Padding(5);
             this.btnSave.Size = new System.Drawing.Size(75, 23);
@@ -227,15 +239,16 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.btnSave.Text = "Ok";
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
-            // chkPersist
+            // chkInvalidOnly
             // 
-            this.chkPersist.AutoSize = true;
-            this.chkPersist.Location = new System.Drawing.Point(131, 144);
-            this.chkPersist.Name = "chkPersist";
-            this.chkPersist.Size = new System.Drawing.Size(127, 17);
-            this.chkPersist.TabIndex = 72;
-            this.chkPersist.Text = "Persist map cleanup?";
-            this.chkPersist.UseVisualStyleBackColor = true;
+            this.chkInvalidOnly.AutoSize = true;
+            this.chkInvalidOnly.Enabled = false;
+            this.chkInvalidOnly.Location = new System.Drawing.Point(9, 167);
+            this.chkInvalidOnly.Name = "chkInvalidOnly";
+            this.chkInvalidOnly.Size = new System.Drawing.Size(142, 17);
+            this.chkInvalidOnly.TabIndex = 73;
+            this.chkInvalidOnly.Text = "Only reset invalid NPCs?";
+            this.chkInvalidOnly.UseVisualStyleBackColor = true;
             // 
             // EventCommand_ChangeMapSpawnGroup
             // 
@@ -244,7 +257,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.Controls.Add(this.grpChangeSpawnGroup);
             this.Name = "EventCommand_ChangeMapSpawnGroup";
-            this.Size = new System.Drawing.Size(331, 211);
+            this.Size = new System.Drawing.Size(331, 226);
             this.grpChangeSpawnGroup.ResumeLayout(false);
             this.grpChangeSpawnGroup.PerformLayout();
             this.grpOperators.ResumeLayout(false);
@@ -271,5 +284,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private System.Windows.Forms.Label lblBalue;
         private System.Windows.Forms.CheckBox chkPlayerMap;
         private System.Windows.Forms.CheckBox chkPersist;
+        private System.Windows.Forms.CheckBox chkInvalidOnly;
     }
 }

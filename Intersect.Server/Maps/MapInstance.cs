@@ -657,6 +657,43 @@ namespace Intersect.Server.Maps
         }
 
         /// <summary>
+        /// This method removes all NPCs whos spawn group is not valid
+        /// </summary>
+        private void RemoveInvalidSpawnGroups()
+        {
+            //Kill all npcs spawned from this map
+            lock (GetLock())
+            {
+                foreach (var npcSpawn in NpcSpawnInstances.ToArray())
+                {
+                    var remove = false;
+                    if (npcSpawn.Value.Entity == null) continue;
+
+                    var spawn = npcSpawn.Key;
+                    var currentSpawnGroup = NpcSpawnGroup;
+
+                    if (spawn.CumulativeSpawning && spawn.SpawnGroup < currentSpawnGroup)
+                    {
+                        remove = true;
+                    }
+                    else if (spawn.SpawnGroup != currentSpawnGroup)
+                    {
+                        remove = true;
+                    }
+
+                    if (remove)
+                    {
+                        lock (npcSpawn.Value.Entity.EntityLock)
+                        {
+                            npcSpawn.Value.Entity.Die(false);
+                            NpcSpawnInstances.TryRemove(npcSpawn.Key, out _);
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// Clears the given entity of any targets that an NPC has on them. For AI purposes.
         /// </summary>
         /// <param name="en">The entitiy to clear targets of.</param>
@@ -1507,8 +1544,9 @@ namespace Intersect.Server.Maps
         /// </summary>
         /// <param name="group">The group to change to</param>
         /// <param name="reset">Whether or not to despawn current NPCs on change</param>
+        /// <param name="onlyInvalid">Whether we're only removing newly-invalid (based on spawn group) NPCs</param>
         /// <param name="instancePermanent">Whether or not this change should persist map cleanup so long as there are players on the instance</param>
-        public void ChangeSpawnGroup(int group, bool reset, bool persistCleanup)
+        public void ChangeSpawnGroup(int group, bool reset, bool onlyInvalid, bool persistCleanup)
         {
             // Shit bad way of making it so two players don't request a spawn group change too close to one another
             if (Timing.Global.MillisecondsUtc < mSpawnGroupLastChangedAt + Options.Instance.Instancing.NpcSpawnGroupChangeMinimum)
@@ -1520,7 +1558,14 @@ namespace Intersect.Server.Maps
             // Can optionally get rid of all NPCs not belonging to this new group
             if (reset)
             {
-                DespawnNpcs();
+                if (onlyInvalid)
+                {
+                    RemoveInvalidSpawnGroups();
+                }
+                else
+                {
+                    DespawnNpcs();
+                }
             }
             // This will initialize spawn groups for the instance/map if needed. Saves processing time if we only keep track of
             // spawn groups that are actually ever being modified and assume 0 for all others.
