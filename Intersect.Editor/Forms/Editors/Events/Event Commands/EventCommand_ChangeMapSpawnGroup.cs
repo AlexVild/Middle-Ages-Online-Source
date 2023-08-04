@@ -112,5 +112,14 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         {
             cmbMap.Enabled = !chkPlayerMap.Checked;
         }
+
+        private void chkResetNpcs_CheckedChanged(object sender, EventArgs e)
+        {
+            chkInvalidOnly.Enabled = chkResetNpcs.Checked;
+            if (!chkResetNpcs.Checked)
+            {
+                chkInvalidOnly.Checked = false;
+            }
+        }
     }
 }

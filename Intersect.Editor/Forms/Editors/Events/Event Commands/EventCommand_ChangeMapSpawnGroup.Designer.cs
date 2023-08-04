@@ -170,6 +170,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.chkResetNpcs.TabIndex = 64;
             this.chkResetNpcs.Text = "Force NPC Reset?";
             this.chkResetNpcs.UseVisualStyleBackColor = true;
+            this.chkResetNpcs.CheckedChanged += new System.EventHandler(this.chkResetNpcs_CheckedChanged);
             // 
             // nudSpawnGroup
             // 
