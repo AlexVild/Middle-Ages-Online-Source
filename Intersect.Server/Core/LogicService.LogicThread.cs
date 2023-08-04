@@ -175,7 +175,7 @@ namespace Intersect.Server.Core
                                     {
                                         ActiveMapInstances[mapInstanceId].RemoveInstanceFromController();
                                         ActiveMapInstances.Remove(mapInstanceId);
-                                    } else if (ActiveMapInstances[mapInstanceId] == null)
+                                    } else if (ActiveMapInstances[mapInstanceId] == null || !ActiveMapInstances[mapInstanceId].ShouldBeActive())
                                     {
                                         ActiveMapInstances.Remove(mapInstanceId);
                                     }
