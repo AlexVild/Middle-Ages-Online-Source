@@ -664,7 +664,7 @@ namespace Intersect.Server.Maps
         /// <summary>
         /// This method removes all NPCs whos spawn group is not valid
         /// </summary>
-        private void RemoveInvalidSpawnGroups()
+        private void RemoveInvalidSpawnGroups(int desiredGroup)
         {
             //Kill all npcs spawned from this map
             lock (GetLock())
@@ -675,13 +675,12 @@ namespace Intersect.Server.Maps
                     if (npcSpawn.Value.Entity == null) continue;
 
                     var spawn = npcSpawn.Key;
-                    var currentSpawnGroup = NpcSpawnGroup;
 
-                    if (spawn.CumulativeSpawning && spawn.SpawnGroup < currentSpawnGroup)
+                    if (spawn.CumulativeSpawning && spawn.SpawnGroup < desiredGroup)
                     {
                         remove = true;
                     }
-                    else if (spawn.SpawnGroup != currentSpawnGroup)
+                    else if (spawn.SpawnGroup != desiredGroup)
                     {
                         remove = true;
                     }
@@ -1565,7 +1564,7 @@ namespace Intersect.Server.Maps
             {
                 if (onlyInvalid)
                 {
-                    RemoveInvalidSpawnGroups();
+                    RemoveInvalidSpawnGroups(group);
                 }
                 else
                 {
