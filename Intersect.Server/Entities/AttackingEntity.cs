@@ -525,6 +525,9 @@ namespace Intersect.Server.Entities
             else
             {
                 damage = CombatUtilities.CalculateDamage(damageTypes, 1.0, scaling, atkStats, defStats, out maxHit);
+                
+                // Don't allow healing damage if not healing
+                damage = Math.Max(damage, 0);
             }
 
             if (damage != 0)
