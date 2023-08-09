@@ -249,7 +249,7 @@ namespace Intersect.Client.Entities
             return renderList;
         }
 
-        public override float GetMovementTime()
+        public override float GetMovementTime(int fromSpeed = -1)
         {
             return mAttribute.Speed;
         }

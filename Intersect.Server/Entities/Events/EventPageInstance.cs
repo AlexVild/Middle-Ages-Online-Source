@@ -783,7 +783,7 @@ namespace Intersect.Server.Entities.Events
             return true;
         }
 
-        public override float GetMovementTime()
+        public override float GetMovementTime(int fromSpeed = -1)
         {
             switch (MovementFreq)
             {

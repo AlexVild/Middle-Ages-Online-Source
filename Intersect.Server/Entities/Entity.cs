@@ -844,9 +844,13 @@ namespace Intersect.Server.Entities
         }
 
         //Returns the amount of time required to traverse 1 tile
-        public virtual float GetMovementTime()
+        public virtual float GetMovementTime(int fromSpeed = -1)
         {
-            var speed = Stat[(int)Stats.Speed].Value();
+            var speed = fromSpeed;
+            if (speed < 0)
+            {
+                speed = Stat[(int)Stats.Speed].Value();
+            }
             if (this is Player player && player.InVehicle && player.VehicleSpeed > 0L)
             {
                 speed = (int) player.VehicleSpeed;

@@ -499,9 +499,13 @@ namespace Intersect.Client.Entities
         }
 
         //Returns the amount of time required to traverse 1 tile
-        public virtual float GetMovementTime()
+        public virtual float GetMovementTime(int fromSpeed = -1)
         {
-            var speed = Stat[(int)Stats.Speed];
+            var speed = fromSpeed;
+            if (speed < 0)
+            {
+                speed = Stat[(int)Stats.Speed];
+            }
             if (this is Player player && player.InVehicle)
             {
                 speed = (int) player.VehicleSpeed;
@@ -674,7 +678,8 @@ namespace Intersect.Client.Entities
                         }
                     }
 
-                    mWalkTimer = Timing.Global.Milliseconds + Options.Instance.Sprites.MovingFrameDuration;
+                    var speedRatio = GetMovementTime() / GetMovementTime(5); // 5 is the default speed to base walking animations off of
+                    mWalkTimer = Timing.Global.Milliseconds + (int)(190 * speedRatio); // 190 hardcoded replacement for Options.Instance.Sprites.MovingFrameDuration because I'm lazy
                 }
             }
 
