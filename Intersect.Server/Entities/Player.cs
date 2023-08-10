@@ -347,6 +347,8 @@ namespace Intersect.Server.Entities
             }
         }
 
+        public bool InOpenInstance => InstanceType != MapInstanceType.Personal && InstanceType != MapInstanceType.Shared && InstanceType != MapInstanceType.Party;
+
         public static Player FindOnline(Guid id)
         {
             return OnlinePlayers.ContainsKey(id) ? OnlinePlayers[id] : null;
@@ -5470,7 +5472,7 @@ namespace Intersect.Server.Entities
                 return;
             }
 
-            if (InstanceType == MapInstanceType.Shared || InstanceType == MapInstanceType.Personal || fromPlayer.InstanceType == MapInstanceType.Shared || fromPlayer.InstanceType == MapInstanceType.Personal)
+            if (!InOpenInstance || !fromPlayer.InOpenInstance)
             {
                 PacketSender.SendChatMsg(fromPlayer, Strings.Parties.ininstance, ChatMessageType.Party, CustomColors.Alerts.Error);
 
