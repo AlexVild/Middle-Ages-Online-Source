@@ -2706,6 +2706,7 @@ namespace Intersect.Server.Entities
                     break;
 
                 case MapInstanceType.Personal:
+                case MapInstanceType.PersonalDungeon:
                     if (!fromLogin) // If we're logging into a personal instance, we want to login to the SAME instance.
                     {
                         PersonalMapInstanceId = Guid.NewGuid();
@@ -2793,6 +2794,7 @@ namespace Intersect.Server.Entities
                     break;
 
                 case MapInstanceType.Party:
+                case MapInstanceType.PartyDungeon:
                     if (Party == null || Party.Count < 2)
                     {
                         newMapLayerId = Id;

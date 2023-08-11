@@ -33,6 +33,16 @@ namespace Intersect.Enums
         Party,
 
         /// <summary>
+        /// A personal instance where everything is aggro
+        /// </summary>
+        PersonalDungeon,
+
+        /// <summary>
+        /// Same as personalDungeon, but allows party members to join
+        /// </summary>
+        PartyDungeon,
+
+        /// <summary>
         /// ALWAYS PLACE AT END OF ENUM. This value is used for logical reference and should never appear to the user in the editor.
         /// </summary>
         NoChange,

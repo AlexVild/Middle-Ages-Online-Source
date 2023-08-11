@@ -1879,6 +1879,17 @@ namespace Intersect.Server.Entities
 
         public bool IsDungeonAggroToward(Player player)
         {
+            if (player == null)
+            {
+                return false;
+            }
+            
+            // These instance types are used when we ALWAYS want aggro NPCs within
+            if (player.InstanceType == MapInstanceType.PersonalDungeon || player.InstanceType == MapInstanceType.PartyDungeon)
+            {
+                return true;
+            }
+            
             if (player.MapInstanceId == MapInstanceId && player.InstanceType != MapInstanceType.Overworld
                 && InstanceProcessor.TryGetInstanceController(MapInstanceId, out var instanceController))
             {
