@@ -58,6 +58,20 @@ namespace Intersect.Client.Core.Controls
                     }
 
                     break;
+                case Keys.XButton1:
+                    if (Globals.InputManager.MouseButtonDown(GameInput.MouseButtons.X1))
+                    {
+                        return true;
+                    }
+
+                    break;
+                case Keys.XButton2:
+                    if (Globals.InputManager.MouseButtonDown(GameInput.MouseButtons.X2))
+                    {
+                        return true;
+                    }
+
+                    break;
             }
 
             switch (Key2)
@@ -78,6 +92,20 @@ namespace Intersect.Client.Core.Controls
                     break;
                 case Keys.MButton:
                     if (Globals.InputManager.MouseButtonDown(GameInput.MouseButtons.Middle))
+                    {
+                        return true;
+                    }
+
+                    break;
+                case Keys.XButton1:
+                    if (Globals.InputManager.MouseButtonDown(GameInput.MouseButtons.X1))
+                    {
+                        return true;
+                    }
+
+                    break;
+                case Keys.XButton2:
+                    if (Globals.InputManager.MouseButtonDown(GameInput.MouseButtons.X2))
                     {
                         return true;
                     }

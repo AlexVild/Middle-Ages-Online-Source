@@ -367,6 +367,14 @@ namespace Intersect.Client.Core
                     key = Keys.MButton;
 
                     break;
+                case GameInput.MouseButtons.X1:
+                    key = Keys.XButton1;
+
+                    break;
+                case GameInput.MouseButtons.X2:
+                    key = Keys.XButton2;
+
+                    break;
             }
 
             MouseDown?.Invoke(key);
@@ -455,6 +463,14 @@ namespace Intersect.Client.Core
 
                 case GameInput.MouseButtons.Middle:
                     key = Keys.MButton;
+
+                    break;
+                case GameInput.MouseButtons.X1:
+                    key = Keys.XButton1;
+
+                    break;
+                case GameInput.MouseButtons.X2:
+                    key = Keys.XButton2;
 
                     break;
             }

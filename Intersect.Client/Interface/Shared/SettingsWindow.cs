@@ -712,7 +712,7 @@ namespace Intersect.Client.Interface.Shared
         {
             if (mSettingsPanel.IsVisible &&
                 mKeybindingEditBtn != null &&
-                mKeybindingListeningTimer < Timing.Global.Milliseconds)
+                mKeybindingListeningTimer < Timing.Global.MillisecondsUtcUnsynced)
             {
                 OnKeyDown(Keys.None);
             }
@@ -893,7 +893,7 @@ namespace Intersect.Client.Interface.Shared
                 mKeybindingEditControl = ((KeyValuePair<Control, int>) sender.UserData).Key;
                 mKeybindingEditBtn = sender;
                 Interface.GwenInput.HandleInput = false;
-                mKeybindingListeningTimer = Timing.Global.Milliseconds + 3000;
+                mKeybindingListeningTimer = Timing.Global.MillisecondsUtcUnsynced + 3000;
             }
         }
 

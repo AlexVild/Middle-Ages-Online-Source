@@ -30,7 +30,11 @@ namespace Intersect.Client.Framework.Input
 
             Right,
 
-            Middle
+            Middle,
+
+            X1,
+
+            X2
 
         }
 
