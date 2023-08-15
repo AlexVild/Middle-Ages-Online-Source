@@ -25,6 +25,11 @@ namespace Intersect.Server.Core
 
             foreach (var id in processingInstances.ToArray().Except(processingMaps))
             {
+                // Never cleanup the overworld controller
+                if (id == Guid.Empty)
+                {
+                    continue;
+                }
                 InstanceControllers.Remove(id);
                 Logging.Log.Debug($"Removing instance controller {id}");
             }
@@ -42,7 +47,6 @@ namespace Intersect.Server.Core
         {
             if (activeMaps == null || activeMaps.Count == 0)
             {
-                InstanceControllers.Clear();
                 return;
             }
 

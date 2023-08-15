@@ -21,6 +21,11 @@ namespace Intersect.Config
 
         public long NpcSpawnGroupChangeMinimum = 1000;
 
+        /// <summary>
+        /// The longer this is, the more the map will have time to get back to a "true" state, but it affects efficiency
+        /// </summary>
+        public long EmptyMapProcessingTime = 20000;
+
         [OnDeserialized]
         internal void OnDeserializedMethod(StreamingContext context)
         {

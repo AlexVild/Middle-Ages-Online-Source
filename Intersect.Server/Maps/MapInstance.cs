@@ -74,6 +74,11 @@ namespace Intersect.Server.Maps
         /// </summary>
         private bool mIsProcessing;
 
+        /// <summary>
+        /// Used as a timestamp for the last time a player was seen on this or a neighboring map
+        /// </summary>
+        private long mLastPlayerTime { get; set; }
+
         //SyncLock
         protected object mMapProcessLock = new object();
 
@@ -300,7 +305,16 @@ namespace Intersect.Server.Maps
                 }
 
                 // If there are no players on this or surrounding instances, stop processing updates.
-                mIsProcessing = GetPlayers(true).Any();
+                if (GetPlayers(true).Any())
+                {
+                    mLastPlayerTime = Timing.Global.Milliseconds + Options.Instance.Instancing.EmptyMapProcessingTime;
+                    mIsProcessing = true;
+                }
+                else
+                {
+                    mIsProcessing = mLastPlayerTime >= Timing.Global.Milliseconds;
+                }
+
                 LastRequestedUpdateTime = timeMs;
             }
         }
