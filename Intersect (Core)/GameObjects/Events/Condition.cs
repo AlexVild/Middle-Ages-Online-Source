@@ -103,6 +103,8 @@ namespace Intersect.GameObjects.Events
         
         ChampionsDisabled,
 
+        SpawnGroup,
+
     }
 
     public class Condition
@@ -651,6 +653,17 @@ namespace Intersect.GameObjects.Events
     public class IsInOpenMelee : Condition
     {
         public override ConditionTypes Type { get; } = ConditionTypes.InOpenMelee;
+    }
+
+    public class MapSpawnGroupIs : Condition
+    {
+        public override ConditionTypes Type { get; } = ConditionTypes.SpawnGroup;
+
+        public int SpawnGroup { get; set; }
+
+        public bool OrGreater { get; set; }
+
+        public bool OrLess { get; set; }
     }
 
     public enum TimerActiveConditions

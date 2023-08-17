@@ -970,6 +970,43 @@ namespace Intersect.Server.Entities.Events
             }
         }
 
+        public static bool MeetsCondition(
+           MapSpawnGroupIs condition,
+           Player player,
+           Event eventInstance,
+           QuestBase questBase
+           )
+        {
+            if (player == null || condition == null)
+            {
+                return false;
+            }
+
+            if (InstanceProcessor.TryGetInstanceController(player.MapInstanceId, out var controller) && controller.MapSpawnGroups.TryGetValue(player.MapId, out var spawnInfo))
+            {
+                var group = spawnInfo.Group;
+                
+                if (condition.OrGreater && condition.OrLess)
+                {
+                    return true;
+                }
+                else if (condition.OrLess)
+                {
+                    return group <= condition.SpawnGroup;
+                }
+                else if (condition.OrGreater)
+                {
+                    return group >= condition.SpawnGroup;
+                }
+
+                return condition.SpawnGroup == group;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         //Variable Comparison Processing
 
         public static bool CheckVariableComparison(

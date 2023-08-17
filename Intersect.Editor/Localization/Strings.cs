@@ -414,6 +414,24 @@ namespace Intersect.Editor.Localization
             return EventConditionDesc.ChampionsDisabled;
         }
 
+        public static string GetEventConditionalDesc(MapSpawnGroupIs condition)
+        {
+            if (condition.OrGreater && condition.OrLess)
+            {
+                return EventConditionDesc.MapSpawnGroupAnything.ToString(condition.SpawnGroup);
+            }
+            else if (condition.OrLess)
+            {
+                return EventConditionDesc.MapSpawnGroupIsOrLess.ToString(condition.SpawnGroup);
+            }
+            else if (condition.OrGreater)
+            {
+                return EventConditionDesc.MapSpawnGroupIsOrGreater.ToString(condition.SpawnGroup);
+            }
+
+            return EventConditionDesc.MapSpawnGroupIs.ToString(condition.SpawnGroup);
+        }
+
         public static string GetEventConditionalDesc(RecipeUnlocked condition)
         {
             return EventConditionDesc.HasRecipe.ToString(RecipeDescriptor.GetName(condition.RecipeId));
@@ -2476,6 +2494,7 @@ Tick timer saved in server config.json.";
                 {47, @"Is party leader..."},
                 {48, @"Is signed up for open melee"},
                 {49, @"Has champions disabled"},
+                {50, @"Map Spawn Group is..."},
             };
 
             public static LocalizedString endrange = @"End Range:";
@@ -2815,6 +2834,18 @@ Tick timer saved in server config.json.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString ChampionsDisabled = @"Champions are disabled";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString MapSpawnGroupIs = @"Map Spawn Group is {00}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString MapSpawnGroupIsOrLess = @"Map Spawn Group is at most {00}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString MapSpawnGroupIsOrGreater = @"Map Spawn Group is at least {00}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString MapSpawnGroupAnything = @"Map Spawn Group is anything";
 
             public static Dictionary<int, LocalizedString> selfswitches = new Dictionary<int, LocalizedString>
             {

@@ -563,6 +563,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     Condition = new ChampionsDisabled();
 
                     break;
+                
+                case ConditionTypes.SpawnGroup:
+                    Condition = new MapSpawnGroupIs();
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -602,6 +607,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             grpTreasureLevel.Hide();
             grpDungeonState.Hide();
             grpEnhancements.Hide();
+            grpSpawnGroup.Hide();
+
             switch (type)
             {
                 case ConditionTypes.VariableIs:
@@ -878,6 +885,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     break;
 
                 case ConditionTypes.ChampionsDisabled:
+                    break;
+
+                case ConditionTypes.SpawnGroup:
+                    grpSpawnGroup.Show();
                     break;
 
                 default:
@@ -1817,6 +1828,14 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         {
         }
 
+        private void SetupFormValues(MapSpawnGroupIs condition)
+        {
+            nudSpawnGroup.Value = (int)condition.SpawnGroup;
+
+            chkSpawnGroupGreater.Checked = condition.OrGreater;
+            chkSpawnGroupLess.Checked = condition.OrLess;
+        }
+
         #endregion
 
         #region "SaveFormValues"
@@ -2171,6 +2190,13 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
 
         private void SaveFormValues(ChampionsDisabled condition)
         {
+        }
+
+        private void SaveFormValues(MapSpawnGroupIs condition)
+        {
+            condition.SpawnGroup = (int)nudSpawnGroup.Value;
+            condition.OrGreater = chkSpawnGroupGreater.Checked;
+            condition.OrLess = chkSpawnGroupLess.Checked;
         }
         #endregion
 
