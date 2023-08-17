@@ -391,7 +391,6 @@ namespace Intersect.Editor.Forms.Editors
 
             if (cmbType.SelectedIndex == (int) SpellTypes.CombatSpell ||
                 cmbType.SelectedIndex == (int) SpellTypes.WarpTo ||
-                cmbType.SelectedIndex == (int) SpellTypes.Event ||
                 cmbType.SelectedIndex == (int) SpellTypes.Passive)
             {
                 nudHPCost.Enabled = true;
