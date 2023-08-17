@@ -6,6 +6,7 @@ using Intersect.Client.Maps;
 using Intersect.Client.Utilities;
 using Intersect.Enums;
 using Intersect.GameObjects;
+using Intersect.GameObjects.Events;
 using Intersect.Utilities;
 using System;
 using System.Linq;
@@ -29,8 +30,11 @@ namespace Intersect.Client.Interface.Game.HUD
 
         private GameTexture BarBackground;
         private GameTexture BarBackgroundTransparent;
+        private GameTexture BarBackgroundNoRegen;
         private GameTexture HpTexture;
+        private GameTexture HpTextureNoRegen;
         private GameTexture ManaTexture;
+        private GameTexture ManaTextureNoRegen;
 
         private GameTexture _weaponExpTexture;
         private GameTexture WeaponExpTexture
@@ -92,6 +96,8 @@ namespace Intersect.Client.Interface.Game.HUD
 
         private const long ExpFlashDuration = 250;
 
+        private RegenType CurrentRegenType => Globals.Me?.MapInstance?.RegenType ?? RegenType.Normal;
+
         public PlayerHud()
         {
             IsVisible = true;
@@ -104,9 +110,12 @@ namespace Intersect.Client.Interface.Game.HUD
         private void InitTextures() 
         {
             BarBackground = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar.png");
+            BarBackgroundNoRegen = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_noregen.png");
             BarBackgroundTransparent = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_transparent.png");
             HpTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_health.png");
+            HpTextureNoRegen = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_health_noregen.png");
             ManaTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_magic.png");
+            ManaTextureNoRegen = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_magic_noregen.png");
             ExpTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_exp.png");
             ExpGainTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_exp_gain.png");
             MapNameTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hud_map.png");
@@ -123,9 +132,12 @@ namespace Intersect.Client.Interface.Game.HUD
             if (UseLargeBars && !BarBackground.Name.Contains("_lg"))
             {
                 BarBackground = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_lg.png");
+                BarBackgroundNoRegen = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_lg_noregen.png");
                 BarBackgroundTransparent = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_lg_transparent.png");
                 HpTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_health_lg.png");
+                HpTextureNoRegen = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_health_lg_noregen.png");
                 ManaTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_magic_lg.png");
+                ManaTextureNoRegen = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_magic_lg_noregen.png");
                 ExpTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_exp_lg.png");
                 ExpGainTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_exp_gain_lg.png");
                 ShieldTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_shield_lg.png");
@@ -136,9 +148,12 @@ namespace Intersect.Client.Interface.Game.HUD
             else if (BarBackground.Name.Contains("_lg") && !UseLargeBars)
             {
                 BarBackground = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar.png");
+                BarBackgroundNoRegen = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_noregen.png");
                 BarBackgroundTransparent = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_transparent.png");
                 HpTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_health.png");
+                HpTextureNoRegen = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_health_noregen.png");
                 ManaTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_magic.png");
+                ManaTextureNoRegen = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_magic_noregen.png");
                 ExpTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_exp.png");
                 ExpGainTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_exp_gain.png");
                 ShieldTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_shield.png");
@@ -236,7 +251,7 @@ namespace Intersect.Client.Interface.Game.HUD
         }
 
         private void DrawBarContainer(float x, float y)
-        {   
+        {
             var numberOfBars = 3;
 
             // because 8 is our padding between bars and 3 is t
@@ -251,13 +266,29 @@ namespace Intersect.Client.Interface.Game.HUD
             {
                 maxHp = currentHp + currentShield;
             }
-            DrawBar(BarBackground, HpTexture, x ,y, width, height, "HP", $"{currentHp + currentShield} / {maxHp}", currentHp, maxHp, true);
+
+            var hpTexture = HpTexture;
+            var hpBackground = BarBackground;
+            if (CurrentRegenType == RegenType.NoHP || CurrentRegenType == RegenType.NoRegen)
+            {
+                hpTexture = HpTextureNoRegen;
+                hpBackground = BarBackgroundNoRegen;
+            }
+            DrawBar(hpBackground, hpTexture, x ,y, width, height, "HP", $"{currentHp + currentShield} / {maxHp}", currentHp, maxHp, true);
             DrawShield(ShieldTexture, currentHp, maxHp, Globals.Me.GetShieldSize());
 
             var currentMana = Globals.Me.Vital[(int)Vitals.Mana];
             var maxMana = Globals.Me.MaxVital[(int)Vitals.Mana];
             x += BarBackground.GetWidth() + BarPadding;
-            DrawBar(BarBackground, ManaTexture, x, y, width, height, "MP", $"{currentMana} / {maxMana}", currentMana, maxMana);
+
+            var manaTexture = ManaTexture;
+            var manaBackground = BarBackground;
+            if (CurrentRegenType == RegenType.NoMana || CurrentRegenType == RegenType.NoRegen || (Globals.Me != null && Globals.Me.StatusIsActive(StatusTypes.Enfeebled)))
+            {
+                manaTexture = ManaTextureNoRegen;
+                manaBackground = BarBackgroundNoRegen;
+            }
+            DrawBar(manaBackground, manaTexture, x, y, width, height, "MP", $"{currentMana} / {maxMana}", currentMana, maxMana);
 
             var currentExp = Globals.Me.Experience;
             var tnlExp = Globals.Me.ExperienceToNextLevel;

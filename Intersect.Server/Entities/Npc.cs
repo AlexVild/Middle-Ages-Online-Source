@@ -1609,36 +1609,6 @@ namespace Intersect.Server.Entities
             FindTargetWaitTime = timeMs + FindTargetDelay;
         }
 
-        public override void ProcessRegen()
-        {
-            if (Base == null)
-            {
-                return;
-            }
-
-            foreach (Vitals vital in Enum.GetValues(typeof(Vitals)))
-            {
-                if (vital >= Vitals.VitalCount)
-                {
-                    continue;
-                }
-
-                var vitalId = (int) vital;
-                var vitalValue = GetVital(vital);
-                var maxVitalValue = GetMaxVital(vital);
-                if (vitalValue >= maxVitalValue)
-                {
-                    continue;
-                }
-
-                var vitalRegenRate = GetVitalRegenRate(vitalId);
-                var regenValue = (int) Math.Max(1, maxVitalValue * vitalRegenRate) *
-                                 Math.Abs(Math.Sign(vitalRegenRate));
-
-                AddVital(vital, regenValue);
-            }
-        }
-
         public override float GetVitalRegenRate(int vital)
         {
             if (Base == null)

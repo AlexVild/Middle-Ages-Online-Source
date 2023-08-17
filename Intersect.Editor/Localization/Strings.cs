@@ -4482,6 +4482,7 @@ Tick timer saved in server config.json.";
                 {"weatheryspeed", @"Weather Y Speed"},
                 {"weatherintensity", @"Weather Intensity"},
                 {"loginevent", @"Login Event"},
+                {"regentype", @"Vital Regen Type"},
             };
 
             public static Dictionary<string, string> descriptions = new Dictionary<string, string>()
@@ -4523,6 +4524,7 @@ Tick timer saved in server config.json.";
                 {"weatheryspeeddesc", @"How fast vertically weather particles move across the screen. (Range -5 to 5)"},
                 {"weatherintensitydesc", @"How intence the weather is (number of particles). (Range 0 to 100)"},
                 {"logineventdesc", @"An event to run if the player logs in to this map."},
+                {"regendesc", @"What vital regen type this map has."},
             };
 
             public static LocalizedString title = @"Map Properties";
@@ -4532,6 +4534,15 @@ Tick timer saved in server config.json.";
                 {0, @"Normal"},
                 {1, @"Safe"},
                 {2, @"Arena"},
+            };
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static Dictionary<int, LocalizedString> RegenTypes = new Dictionary<int, LocalizedString>
+            {
+                {0, @"Normal"},
+                {1, @"No Mana Regen"},
+                {2, @"No Health Regen"},
+                {3, @"No Vital Regen"},
             };
 
         }

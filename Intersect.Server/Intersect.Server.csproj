@@ -1300,6 +1300,10 @@
     <Compile Include="Migrations\Game\20230802154522_WeaponProcMigration.designer.cs">
       <DependentUpon>20230802154522_WeaponProcMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20230817144615_RegenTypeMigration.cs" />
+    <Compile Include="Migrations\Game\20230817144615_RegenTypeMigration.designer.cs">
+      <DependentUpon>20230817144615_RegenTypeMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

@@ -1316,6 +1316,44 @@ namespace Intersect.Server.Entities
 
         public virtual void ProcessRegen()
         {
+            if (IsDead())
+            {
+                return;
+            }
+
+            foreach (Vitals vital in Enum.GetValues(typeof(Vitals)))
+            {
+                if (vital == Vitals.Mana)
+                {
+                    continue; // We process mana regen differently in MAO, see "ProcessManaRegen"
+                }
+                if (vital >= Vitals.VitalCount)
+                {
+                    continue;
+                }
+
+                if (vital == Vitals.Health)
+                {
+                    if (MapRegenType == RegenType.NoHP || MapRegenType == RegenType.NoRegen)
+                    {
+                        continue;
+                    }
+                }
+
+                var vitalId = (int)vital;
+                var vitalValue = GetVital(vital);
+                var maxVitalValue = GetMaxVital(vital);
+                if (vitalValue >= maxVitalValue)
+                {
+                    continue;
+                }
+
+                var vitalRegenRate = GetVitalRegenRate(vitalId);
+                var regenValue = (int)Math.Max(1, maxVitalValue * vitalRegenRate) *
+                                 Math.Abs(Math.Sign(vitalRegenRate));
+
+                AddVital(vital, regenValue);
+            }
         }
 
         public int GetVital(int vital)
@@ -2354,6 +2392,19 @@ namespace Intersect.Server.Entities
         public virtual bool IsInvincibleTo(Entity entity)
         {
             return false;
+        }
+
+        [NotMapped, JsonIgnore]
+        public RegenType MapRegenType => Map?.RegenType ?? RegenType.Normal;
+
+        /// <summary>
+        /// Returns a vital regen rate for a given vital based on the entity's definitions
+        /// </summary>
+        /// <param name="vital">The <see cref="Vitals"/>, typecasted to int</param>
+        /// <returns>The regen rate, as a decimal</returns>
+        public virtual float GetVitalRegenRate(int vital) 
+        {
+            return 0f;
         }
     }
 }

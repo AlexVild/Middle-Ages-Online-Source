@@ -150,30 +150,14 @@ namespace Intersect.Server.Entities
             PacketSender.SendEntityPositionToAll(this);
         }
 
-        public override void ProcessRegen()
+        public override float GetVitalRegenRate(int vital)
         {
-            //For now give npcs/resources 10% health back every regen tick... in the future we should put per-npc and per-resource regen settings into their respective editors.
-            if (!IsDead())
+            if (Base == null)
             {
-                if (Base == null)
-                {
-                    return;
-                }
-                
-                var vital = Vitals.Health;
-
-                var vitalId = (int) vital;
-                var vitalValue = GetVital(vital);
-                var maxVitalValue = GetMaxVital(vital);
-                if (vitalValue < maxVitalValue)
-                {
-                    var vitalRegenRate = Base.VitalRegen / 100f;
-                    var regenValue = (int) Math.Max(1, maxVitalValue * vitalRegenRate) *
-                                     Math.Abs(Math.Sign(vitalRegenRate));
-
-                    AddVital(vital, regenValue);
-                }
+                return 0f;
             }
+
+            return Base.VitalRegen / 100f;
         }
 
         public override bool IsPassable()

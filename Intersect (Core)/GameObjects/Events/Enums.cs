@@ -472,4 +472,12 @@ namespace Intersect.GameObjects.Events
         [Description("Players in Instance")]
         PlayersInInstance = 2,
     }
+
+    public enum RegenType
+    {
+        Normal,
+        NoMana,
+        NoHP,
+        NoRegen,
+    }
 }

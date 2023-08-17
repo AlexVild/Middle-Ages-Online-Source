@@ -99,6 +99,26 @@ namespace Intersect.Editor.Maps
             }
         }
 
+        [CustomCategory("general"), CustomDescription("regendesc"), CustomDisplayName("regentype"),
+        DefaultValue("Normal"), TypeConverter(typeof(RegenTypeProperty)), Browsable(true)]
+        public string RegenType
+        {
+            get => Strings.MapProperties.RegenTypes[(int)mMyMap.RegenType];
+            set
+            {
+                Globals.MapEditorWindow.PrepUndoState();
+                for (byte i = 0; i < Enum.GetNames(typeof(RegenType)).Length; i++)
+                {
+                    if (Strings.MapProperties.RegenTypes[i] == value)
+                    {
+                        mMyMap.RegenType = (RegenType)i;
+                    }
+                }
+
+                Globals.MapEditorWindow.AddUndoState();
+            }
+        }
+
         [CustomCategory("audio"), CustomDescription("musicdesc"), CustomDisplayName("music"), DefaultValue("None"),
          TypeConverter(typeof(MapMusicProperty)), Browsable(true)]
         public string Music
@@ -738,6 +758,35 @@ namespace Intersect.Editor.Maps
             for (byte i = 0; i < Enum.GetNames(typeof(MapZones)).Length; i++)
             {
                 values.Add(Strings.MapProperties.zones[i]);
+            }
+
+            return new StandardValuesCollection(values);
+        }
+
+    }
+
+    public class RegenTypeProperty : StringConverter
+    {
+
+        public override bool GetStandardValuesSupported(ITypeDescriptorContext context)
+        {
+            //true means show a combobox
+            return true;
+        }
+
+        public override bool GetStandardValuesExclusive(ITypeDescriptorContext context)
+        {
+            //true will limit to list. false will show the list, 
+            //but allow free-form entry
+            return false;
+        }
+
+        public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
+        {
+            var values = new List<string>();
+            for (byte i = 0; i < Enum.GetNames(typeof(RegenType)).Length; i++)
+            {
+                values.Add(Strings.MapProperties.RegenTypes[i]);
             }
 
             return new StandardValuesCollection(values);

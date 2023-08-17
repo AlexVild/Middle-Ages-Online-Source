@@ -52,6 +52,8 @@ namespace Intersect.GameObjects.Maps
             set => LoginEventId = value?.Id ?? Guid.Empty;
         }
 
+        public RegenType RegenType { get; set; }
+
         //SyncLock
         [JsonIgnore] [NotMapped] protected object mMapLock = new object();
 

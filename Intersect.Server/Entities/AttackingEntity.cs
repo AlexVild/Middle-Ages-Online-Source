@@ -644,6 +644,11 @@ namespace Intersect.Server.Entities
                 return;
             }
 
+            if (MapRegenType == RegenType.NoMana || MapRegenType == RegenType.NoRegen)
+            {
+                return;
+            }
+
             var manaValue = GetVital((int)Vitals.Mana);
             var maxMana = GetMaxVital((int)Vitals.Mana);
             
@@ -660,8 +665,6 @@ namespace Intersect.Server.Entities
             AddVital(Vitals.Mana, regenValue);
             ManaRegenTimer = timeMs + Options.Instance.CombatOpts.ManaRegenTime;
         }
-
-        public abstract float GetVitalRegenRate(int vital);
 
         protected virtual bool TryLifesteal(int damage, Entity target, out float recovered)
         {
