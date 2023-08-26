@@ -1488,7 +1488,18 @@ namespace Intersect.Server.Entities
             var threatLevelExpMod = GetThreatLevelExpMod(opponent);
             amount = (int)Math.Ceiling(threatLevelExpMod * amount);
 
-            var expToGive = amount + (int)(amount * GetBonusEffectTotal(EffectType.EXP, 0) / 100);
+            var bonusAmount = 0;
+
+            if (opponent != null)
+            {
+                bonusAmount = GetBonusEffectTotal(EffectType.EXP, 0);
+                if (StatusActive(StatusTypes.ExpBoost))
+                {
+                    bonusAmount += Options.Instance.CombatOpts.ExpBoostStatusPercent;
+                }
+            }
+
+            var expToGive = amount + (int)(amount * bonusAmount / 100);
 
             // Award combo EXP if opponent was NPC or player; do not reward if threat level is trivial
             if (CurrentCombo > 0 && (opponent is Npc || opponent is Player) && threatLevelExpMod != Options.Instance.CombatOpts.ThreatLevelExpRates[ThreatLevel.Trivial])
@@ -1906,6 +1917,11 @@ namespace Intersect.Server.Entities
                         {
                             harvestBonus += GetBonusEffectTotal(effectType) * 0.01;
                         }
+                        if (StatusActive(Intersect.Utilities.HarvestBonusHelper.GetStatusTypeForResource(resourceId, out int bonus)))
+                        {
+                            harvestBonus += bonus * 0.01;
+                        };
+
                         harvestBonus = Math.Min(harvestBonus, 0.8);
                         var speedMod = (int) Math.Floor(weapon.AttackSpeedValue * harvestBonus);
 

@@ -409,6 +409,10 @@ namespace Intersect.Server.Localization
                     {18, @"STEADY!"},
                     {19, @"ATTUNED!"},
                     {20, @"ENFEEBLED!"},
+                    {21, @"EXP BOOST!"},
+                    {22, @"ANGLER!"},
+                    {23, @"LUMBERJACK!"},
+                    {24, @"PROSPECTOR!"},
                 }
             );
 

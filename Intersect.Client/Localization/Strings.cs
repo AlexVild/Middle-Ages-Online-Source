@@ -2134,6 +2134,10 @@ namespace Intersect.Client.Localization
                 {18, @"Steady"},
                 {19, @"Attuned"},
                 {20, @"Enfeebled"},
+                {21, @"EXP Boost"},
+                {22, @"Temporary Angler"},
+                {23, @"Temporary Lumberjack"},
+                {24, @"Temporary Prospector"},
             };
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -2195,6 +2199,10 @@ namespace Intersect.Client.Localization
                 {18, @"Nullifies knockback"},
                 {19, @"Decreases mana consumption"},
                 {20, @"Removes mana regen"},
+                {21, @"Increases EXP given from killing enemies"},
+                {22, @"Increases harvest speed when using a fishing rod"},
+                {23, @"Increases harvest speed when using an axe"},
+                {24, @"Increases harvest speed when using a pickaxe"},
             };
 
         }

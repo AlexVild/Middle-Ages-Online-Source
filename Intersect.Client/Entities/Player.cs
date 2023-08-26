@@ -2309,6 +2309,11 @@ namespace Intersect.Client.Entities
                             harvestBonusValue += GetBonusEffect(harvestBonusEffect) * 0.01;
                         }
 
+                        if (StatusIsActive(HarvestBonusHelper.GetStatusTypeForResource(Globals.Me.HarvestingResource, out int bonus)))
+                        {
+                            harvestBonusValue += bonus * 0.01;
+                        };
+
                         var harvestBonus = (int)Math.Floor(weapon.AttackSpeedValue * harvestBonusValue);
                         attackTime = weapon.AttackSpeedValue - harvestBonus;
                     }

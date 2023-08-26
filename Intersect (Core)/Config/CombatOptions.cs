@@ -152,6 +152,12 @@ namespace Intersect.Config
 
         public float AttunedStatusDividend { get; set; } = 2.0f;
 
+        public int ExpBoostStatusPercent { get; set; } = 10;
+        
+        public int LumberjackStatusPercent { get; set; } = 10;
+        public int ProspectorStatusPercent { get; set; } = 10;
+        public int AnglerStatusPercent { get; set; } = 10;
+
         public string SpellLearnedAnimGuid { get; set; } = "1a2a103a-8d39-4ecb-a323-ed8882a0a057";
 
         public List<int> HarvestBonusIntervals = new List<int>()

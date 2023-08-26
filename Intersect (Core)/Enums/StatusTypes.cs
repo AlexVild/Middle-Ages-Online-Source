@@ -19,6 +19,10 @@ namespace Intersect.Enums
             StatusTypes.Haste,
             StatusTypes.Steady,
             StatusTypes.Attuned,
+            StatusTypes.ExpBoost,
+            StatusTypes.TemporaryAngler,
+            StatusTypes.TemporaryLumberjack,
+            StatusTypes.TemporaryProspector,
         };
     }
 
@@ -86,6 +90,18 @@ namespace Intersect.Enums
 
         [Description("Enfeebled")]
         Enfeebled = 20,
+
+        [Description("EXP Boost")]
+        ExpBoost = 21,
+
+        [Description("Temporary Angler")]
+        TemporaryAngler = 22,
+
+        [Description("Temporary Lumberjack")]
+        TemporaryLumberjack = 23,
+
+        [Description("Temporary Prospector")]
+        TemporaryProspector = 24,
     }
 
 }
