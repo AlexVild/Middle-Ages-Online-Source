@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Runtime.Serialization;
 
 namespace Intersect.Config
@@ -27,6 +28,9 @@ namespace Intersect.Config
         public bool DebugAllowMapFades = true;
 
         public LayerOptions Layers = new LayerOptions();
+
+        [JsonIgnore]
+        public float TileScale => 32f / Math.Min(TileWidth, TileHeight);
 
         [OnDeserialized]
         internal void OnDeserializedMethod(StreamingContext context)

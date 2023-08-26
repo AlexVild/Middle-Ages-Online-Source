@@ -85,6 +85,10 @@
         OpenOverworldMap,
 
         OpenBestiary,
+
+        ToggleZoomOut,
+
+        ToggleZoomIn,
     }
 
 }

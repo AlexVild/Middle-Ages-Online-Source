@@ -28,6 +28,24 @@ namespace Intersect.Client.Core
 
         public static HandleKeyEvent MouseUp;
 
+        private static void HandleZoomOut()
+        {
+            Globals.Database.WorldZoom /= 2;
+            if (Globals.Database.WorldZoom < Graphics.BaseWorldScale)
+            {
+                Globals.Database.WorldZoom = Graphics.BaseWorldScale * 4;
+            }
+        }
+
+        private static void HandleZoomIn()
+        {
+            Globals.Database.WorldZoom *= 2;
+            if (Globals.Database.WorldZoom > Graphics.BaseWorldScale * 4)
+            {
+                Globals.Database.WorldZoom = Graphics.BaseWorldScale;
+            }
+        }
+
         public static void OnKeyPressed(Keys key)
         {
             if (key == Keys.None)
@@ -257,6 +275,16 @@ namespace Intersect.Client.Core
 
                                     case Control.OpenSettings:
                                         Interface.Interface.GameUi?.EscapeMenu?.OpenSettingsWindow();
+
+                                        break;
+
+                                    case Control.ToggleZoomIn:
+                                        HandleZoomIn();
+
+                                        break;
+
+                                    case Control.ToggleZoomOut:
+                                        HandleZoomOut();
 
                                         break;
 

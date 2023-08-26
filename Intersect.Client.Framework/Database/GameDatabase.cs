@@ -79,8 +79,12 @@ namespace Intersect.Client.Framework.Database
 
         public bool NameFading;
 
+        public float UIScale { get; set; } = 1.0f;
+
+        public float WorldZoom { get; set; } = 1.0f;
+
         //Saving password, other stuff we don't want in the games directory
-        public abstract void SavePreference(string key, object value);
+        public abstract void SavePreference<TValue>(string key, TValue value);
 
         public abstract string LoadPreference(string key);
 
@@ -134,6 +138,8 @@ namespace Intersect.Client.Framework.Database
             DisplayWeather = LoadPreference("DisplayWeather", true);
             DisplayFog = LoadPreference("DisplayFog", true);
             NameFading = LoadPreference("NameFading", true);
+            UIScale = LoadPreference(nameof(UIScale), 1.0f);
+            WorldZoom = LoadPreference(nameof(WorldZoom), 1.0f);
         }
 
         public virtual void SavePreferences()
@@ -173,6 +179,8 @@ namespace Intersect.Client.Framework.Database
             SavePreference("DisplayWeather", DisplayWeather.ToString());
             SavePreference("DisplayFog", DisplayFog.ToString());
             SavePreference("NameFading", NameFading.ToString());
+            SavePreference(nameof(UIScale), UIScale);
+            SavePreference(nameof(WorldZoom), WorldZoom);
         }
 
         public abstract bool LoadConfig();

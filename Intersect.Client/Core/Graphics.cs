@@ -30,7 +30,17 @@ namespace Intersect.Client.Core
 
         public static GameFont ChatBubbleFont;
 
-        public static FloatRect CurrentView;
+        private static FloatRect _currentView;
+
+        public static FloatRect CurrentView
+        {
+            get => _currentView;
+            set
+            {
+                _currentView = value;
+                Renderer.SetView(_currentView);
+            }
+        }
 
         public static GameShader DefaultShader;
 
@@ -90,6 +100,8 @@ namespace Intersect.Client.Core
         private static float sPlayerLightSize;
 
         public static GameFont UIFont;
+
+        public static float BaseWorldScale => Options.Instance?.MapOpts?.TileScale ?? 1;
 
         private static float _currentShake;
         public static float CurrentShake
@@ -533,6 +545,8 @@ namespace Intersect.Client.Core
                 animInstance.EndDraw();
             }
 
+            // UI things in the game draw loop - use UI scale
+            Renderer.Scale = Globals.Database.UIScale;
             DrawScanlines();
             
             // Because we want to render widescreen textures with different colors depending on the estimated background color of the map
@@ -551,10 +565,12 @@ namespace Intersect.Client.Core
                 DrawWideScreen(Renderer.GetWhiteTexture(), Globals.Me.InCutscene(), Color.Black,
                     ref sCutsceneState, ref sCutsceneUpdate, ref sCutsceneWidth, false);
             }
+            Renderer.Scale = Globals.Database.WorldZoom;
         }
 
         public static void DrawScanlines()
         {
+            Renderer.Scale = Globals.Database.UIScale;
             if (Globals.Database.EnableScanlines)
             {
                 var imageTex = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Image, "scanlines.png");
@@ -563,18 +579,26 @@ namespace Intersect.Client.Core
                     DrawFullScreenTexture(imageTex, 1f);
                 }
             }
+            Renderer.Scale = Globals.Database.WorldZoom;
         }
 
         //Game Rendering
-        public static void Render()
+        public static void Render(TimeSpan deltaTime, TimeSpan totalTime)
         {
             var takingScreenshot = false;
             if (Renderer?.ScreenshotRequests.Count > 0)
             {
                 takingScreenshot = Renderer.BeginScreenshot();
             }
+            
+            if (Renderer == default)
+            {
+                return;
+            }
 
-            if (!(Renderer?.Begin() ?? false))
+            Renderer.Scale = Globals.GameState == GameStates.InGame ? Globals.Database.WorldZoom : 1.0f;
+
+            if (!Renderer.Begin())
             {
                 return;
             }
@@ -620,6 +644,7 @@ namespace Intersect.Client.Core
                     throw new ArgumentOutOfRangeException();
             }
 
+            Renderer.Scale = Globals.Database.UIScale;
             Interface.Interface.DrawGui();
 
             if (FadeService.FadeInstead)
@@ -1035,114 +1060,105 @@ namespace Intersect.Client.Core
 
         private static void UpdateView()
         {
-            if (Globals.Me == null)
-            {
-                CurrentShake = 0.0f;
-                CurrentView = new FloatRect(0, 0, Renderer.GetScreenWidth(), Renderer.GetScreenHeight());
-                if (!Globals.InitialFade)
-                {
-                    Globals.InitialFade = true;
-                    FadeService.FadeIn(callback: () =>
-                    {
-                        Globals.IntroStartTime = Timing.Global.MillisecondsUtcUnsynced;
-                    });
-                }
-                Renderer.SetView(CurrentView);
+            var scale = Renderer.Scale;
 
-                sLastUpdate = Timing.Global.MillisecondsUtcUnsynced;
+            if (Globals.GameState != GameStates.InGame || !MapInstance.TryGet(Globals.Me?.MapInstance?.Id ?? Guid.Empty, out _))
+            {
+                var sw = Renderer.GetScreenWidth();
+                var sh = Renderer.GetScreenHeight();
+                var sx = 0;//sw - (sw / scale);
+                var sy = 0;//sh - (sh / scale);
+                CurrentView = new FloatRect(sx, sy, sw / scale, sh / scale);
                 return;
             }
 
-            var shakeReduction = Math.Max((Timing.Global.MillisecondsUtcUnsynced - sLastUpdate) / Options.ShakeDeltaDurationDivider, 0);
-            
-            CurrentShake = Utilities.MathHelper.Clamp(CurrentShake - shakeReduction, 0.0f, 100.0f);
-            var yShake = CurrentShake;
-            var xShake = CurrentShake;
-            if (CurrentShake > 0.0f)
+            var map = Globals.Me.MapInstance;
+            if (map == default)
             {
-                // Randomize which directions we're shaking in
-                if (Randomization.Next(0, 2) == 1)
+                return;
+            }
+
+            var mapWidth = Options.MapWidth * Options.TileWidth;
+            var mapHeight = Options.MapHeight * Options.TileHeight;
+
+            var en = Globals.Me;
+            float x = mapWidth;
+            float y = mapHeight;
+            float x1 = mapWidth * 2;
+            float y1 = mapHeight * 2;
+
+            if (map.CameraHolds[(int)Directions.Left])
+            {
+                x -= mapWidth;
+            }
+
+            if (map.CameraHolds[(int)Directions.Up])
+            {
+                y -= mapHeight;
+            }
+
+            if (map.CameraHolds[(int)Directions.Right])
+            {
+                x1 -= mapWidth;
+            }
+
+            if (map.CameraHolds[(int)Directions.Down])
+            {
+                y1 -= mapHeight;
+            }
+
+            x = map.GetX() - x;
+            y = map.GetY() - y;
+            x1 = map.GetX() + x1;
+            y1 = map.GetY() + y1;
+
+            var w = x1 - x;
+            var h = y1 - y;
+            var restrictView = new FloatRect(
+                x,
+                y,
+                w,
+                h
+            );
+            var newView = new FloatRect(
+                (int)Math.Ceiling(en.GetCenterPos().X - Renderer.GetScreenWidth() / scale / 2f),
+                (int)Math.Ceiling(en.GetCenterPos().Y - Renderer.GetScreenHeight() / scale / 2f),
+                Renderer.GetScreenWidth() / scale,
+                Renderer.GetScreenHeight() / scale
+            );
+
+            if (restrictView.Width >= newView.Width)
+            {
+                if (newView.Left < restrictView.Left)
                 {
-                    yShake *= -1;
+                    newView.X = restrictView.Left;
                 }
-                if (Randomization.Next(0, 2) == 1)
+
+                if (newView.Right > restrictView.Right)
                 {
-                    xShake *= -1;
+                    newView.X = restrictView.Right - newView.Width;
                 }
             }
 
-            var map = MapInstance.Get(Globals.Me.CurrentMap);
-            if (Globals.GameState == GameStates.InGame && map != null)
+            if (restrictView.Height >= newView.Height)
             {
-                var en = Globals.Me;
-                var x = map.GetX() - Options.MapWidth * Options.TileWidth;
-                var y = map.GetY() - Options.MapHeight * Options.TileHeight;
-                var x1 = map.GetX() + Options.MapWidth * Options.TileWidth * 2;
-                var y1 = map.GetY() + Options.MapHeight * Options.TileHeight * 2;
-                if (map.CameraHolds[(int) Directions.Up])
+                if (newView.Top < restrictView.Top)
                 {
-                    y += Options.MapHeight * Options.TileHeight;
+                    newView.Y = restrictView.Top;
                 }
 
-                if (map.CameraHolds[(int) Directions.Left])
+                if (newView.Bottom > restrictView.Bottom)
                 {
-                    x += Options.MapWidth * Options.TileWidth;
-                }
-
-                if (map.CameraHolds[(int) Directions.Right])
-                {
-                    x1 -= Options.MapWidth * Options.TileWidth;
-                }
-
-                if (map.CameraHolds[(int) Directions.Down])
-                {
-                    y1 -= Options.MapHeight * Options.TileHeight;
-                }
-
-                var w = x1 - x;
-                var h = y1 - y;
-                var restrictView = new FloatRect(x, y, w, h);
-                CurrentView = new FloatRect(
-                    (int) Math.Ceiling(en.GetCenterPos().X - Renderer.GetScreenWidth() / 2f) + (int) xShake,
-                    (int) Math.Ceiling(en.GetCenterPos().Y - Renderer.GetScreenHeight() / 2f) + (int) yShake,
-                    Renderer.GetScreenWidth(), Renderer.GetScreenHeight()
-                );
-
-                if (restrictView.Width >= CurrentView.Width)
-                {
-                    if (CurrentView.Left < restrictView.Left)
-                    {
-                        CurrentView.X = restrictView.Left;
-                    }
-
-                    if (CurrentView.Left + CurrentView.Width > restrictView.Left + restrictView.Width)
-                    {
-                        CurrentView.X -=
-                            CurrentView.Left + CurrentView.Width - (restrictView.Left + restrictView.Width);
-                    }
-                }
-
-                if (restrictView.Height >= CurrentView.Height)
-                {
-                    if (CurrentView.Top < restrictView.Top)
-                    {
-                        CurrentView.Y = restrictView.Top;
-                    }
-
-                    if (CurrentView.Top + CurrentView.Height > restrictView.Top + restrictView.Height)
-                    {
-                        CurrentView.Y -=
-                            CurrentView.Top + CurrentView.Height - (restrictView.Top + restrictView.Height);
-                    }
+                    newView.Y = restrictView.Bottom - newView.Height;
                 }
             }
-            else
-            {
-                CurrentView = new FloatRect(0, 0, Renderer.GetScreenWidth(), Renderer.GetScreenHeight());
-            }
 
-            Renderer.SetView(CurrentView);
-            sLastUpdate = Timing.Global.MillisecondsUtcUnsynced;
+            CurrentView = new FloatRect(
+                newView.X,
+                newView.Y,
+                newView.Width * scale,
+                newView.Height * scale
+            );
         }
 
         public static void SetLastUpdate()

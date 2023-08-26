@@ -11,7 +11,7 @@ namespace Intersect.Client.MonoGame.Database
     public class MonoDatabase : GameDatabase
     {
 
-        public override void SavePreference(string key, object value)
+        public override void SavePreference<TValue>(string key, TValue value)
         {
             var regkey = Registry.CurrentUser?.OpenSubKey("Software", true);
 

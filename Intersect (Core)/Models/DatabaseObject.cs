@@ -140,6 +140,12 @@ namespace Intersect.Models
             return Lookup.Get<TObject>(id);
         }
 
+        public static bool TryGet(Guid id, out TObject databaseObject)
+        {
+            databaseObject = Get(id);
+            return databaseObject != default;
+        }
+
         public static string GetName(Guid id)
         {
             return Lookup.Get(id)?.Name ?? Deleted;

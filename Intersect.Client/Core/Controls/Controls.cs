@@ -95,6 +95,8 @@ namespace Intersect.Client.Core.Controls
             CreateControlMap(Control.TargetParty4, Keys.NumPad4, Keys.None);
             CreateControlMap(Control.OpenOverworldMap, Keys.M, Keys.None);
             CreateControlMap(Control.OpenBestiary, Keys.B, Keys.None);
+            CreateControlMap(Control.ToggleZoomOut, Keys.OemOpenBrackets, Keys.None);
+            CreateControlMap(Control.ToggleZoomIn, Keys.OemCloseBrackets, Keys.None);
         }
 
         public void Save()
