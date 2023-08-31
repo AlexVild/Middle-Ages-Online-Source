@@ -531,8 +531,9 @@ namespace Intersect.Client.Core
                 return;
             }
 
-            var x = (int) Math.Floor(Globals.InputManager.GetMousePosition().X + Graphics.CurrentView.Left);
-            var y = (int) Math.Floor(Globals.InputManager.GetMousePosition().Y + Graphics.CurrentView.Top);
+            var mouseInWorld = Graphics.ConvertToWorldPoint(Globals.InputManager.GetMousePosition());
+            var x = (int)mouseInWorld.X;
+            var y = (int)mouseInWorld.Y;
 
             foreach (MapInstance map in MapInstance.Lookup.Values)
             {
