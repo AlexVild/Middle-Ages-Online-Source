@@ -1077,12 +1077,15 @@ namespace Intersect.Client.Core
                 var sx = 0;//sw - (sw / scale);
                 var sy = 0;//sh - (sh / scale);
                 CurrentView = new FloatRect(sx, sy, sw / scale, sh / scale);
+                CurrentShake = 0.0f;
+                SetLastUpdate();
                 return;
             }
 
             var map = Globals.Me.MapInstance;
             if (map == default)
             {
+                SetLastUpdate();
                 return;
             }
 
@@ -1129,11 +1132,29 @@ namespace Intersect.Client.Core
                 h
             );
 
-            var centeredX = (int)Math.Ceiling(en.GetCenterPos().X - Renderer.GetScreenWidth() / scale / 2f);
-            var centeredY = (int)Math.Ceiling(en.GetCenterPos().Y - Renderer.GetScreenHeight() / scale / 2f);
 
             // Screen Shake
+            var shakeReduction = Math.Max((Timing.Global.MillisecondsUtcUnsynced - sLastUpdate) / Options.ShakeDeltaDurationDivider, 0);
+            CurrentShake = Utilities.MathHelper.Clamp(CurrentShake - shakeReduction, 0.0f, 100.0f);
 
+            var yShake = CurrentShake;
+            var xShake = CurrentShake;
+            if (CurrentShake > 0.0f)
+            {
+                // Randomize which directions we're shaking in
+                if (Randomization.Next(0, 2) == 1)
+                {
+                    yShake *= -1;
+                }
+                if (Randomization.Next(0, 2) == 1)
+                {
+                    xShake *= -1;
+                }
+            }
+            SetLastUpdate();
+
+            var centeredX = (int)Math.Ceiling(en.GetCenterPos().X - Renderer.GetScreenWidth() / scale / 2f) + xShake;
+            var centeredY = (int)Math.Ceiling(en.GetCenterPos().Y - Renderer.GetScreenHeight() / scale / 2f) + yShake;
 
             var newView = new FloatRect(
                 centeredX,
