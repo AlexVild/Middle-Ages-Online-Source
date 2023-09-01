@@ -167,7 +167,8 @@ namespace Intersect.Client.Core
             // Start the menu music if we've made it past the Grimhaus logo
             if (Globals.IntroIndex > 0)
             {
-                TryStartMenuMusic();
+                Globals.IntroDelay = Globals.DefaultIntroDelay;
+                StartMenuMusic();
             }
             CheckForAnimatedIntro();
         }
@@ -201,6 +202,7 @@ namespace Intersect.Client.Core
                 return; // just swallow, we won't animate
             }
 
+            Globals.IntroDelay = Globals.IntroFps * (Globals.IntroHFrames * Globals.IntroVFrames) * 10;
             Globals.IntroStartTime = Timing.Global.MillisecondsUtcUnsynced + Globals.IntroFps;
         }
 
@@ -214,7 +216,7 @@ namespace Intersect.Client.Core
 
         private static void ProcessMenu()
         {
-            TryStartMenuMusic();
+            StartMenuMusic();
             if (!Globals.JoiningGame)
                 return;
 
@@ -223,7 +225,7 @@ namespace Intersect.Client.Core
             Interface.Interface.DestroyGwen();
         }
 
-        private static void TryStartMenuMusic()
+        private static void StartMenuMusic()
         {
             if (!Globals.StartMenuMusic)
             {

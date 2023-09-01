@@ -28,22 +28,38 @@ namespace Intersect.Client.Core
 
         public static HandleKeyEvent MouseUp;
 
-        private static void HandleZoomOut()
+        public static void HandleZoomOut(bool wrap = true)
         {
-            Globals.Database.WorldZoom /= 2;
-            if (Globals.Database.WorldZoom < Graphics.BaseWorldScale)
+            var nextZoom = Globals.Database.WorldZoom / 2;
+            if (nextZoom < Graphics.BaseWorldScale)
             {
-                Globals.Database.WorldZoom = Graphics.BaseWorldScale * 4;
+                if (wrap)
+                {
+                    Audio.AddGameSound("ui_click.wav", false);
+                    Globals.Database.WorldZoom = Graphics.BaseWorldScale * 4;
+                }
+                return;
             }
+
+            Audio.AddGameSound("ui_release.wav", false);
+            Globals.Database.WorldZoom = nextZoom;
         }
 
-        private static void HandleZoomIn()
+        public static void HandleZoomIn(bool wrap = true)
         {
-            Globals.Database.WorldZoom *= 2;
-            if (Globals.Database.WorldZoom > Graphics.BaseWorldScale * 4)
+            var nextZoom = Globals.Database.WorldZoom * 2;
+            if (nextZoom > Graphics.BaseWorldScale * 4)
             {
-                Globals.Database.WorldZoom = Graphics.BaseWorldScale;
+                if (wrap)
+                {
+                    Audio.AddGameSound("ui_release.wav", false);
+                    Globals.Database.WorldZoom = Graphics.BaseWorldScale;
+                }
+                return;
             }
+            
+            Audio.AddGameSound("ui_click.wav", false);
+            Globals.Database.WorldZoom = nextZoom;
         }
 
         public static void OnKeyPressed(Keys key)

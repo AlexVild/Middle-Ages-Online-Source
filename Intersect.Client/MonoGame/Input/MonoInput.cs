@@ -191,6 +191,23 @@ namespace Intersect.Client.MonoGame.Input
                     new GwenInputMessage(IntersectInput.InputEvent.MouseScroll, p, (int)MouseButtons.Middle, Keys.Alt)
                 );
 
+                var deltaV = Math.Sign(mMouseVScroll - scrlVValue);
+                
+                if ((InputHandler.HoveredControl == null 
+                    || !InputHandler.HoveredControl.IsVisible 
+                    || InputHandler.HoveredControl.IsBaseCanvas)
+                    && !Globals.Me.IsBusy())
+                {
+                    if (deltaV < 0)
+                    {
+                        Core.Input.HandleZoomIn(false);
+                    }
+                    else
+                    {
+                        Core.Input.HandleZoomOut(false);
+                    }
+                }
+
                 mMouseVScroll = scrlVValue;
                 mMouseHScroll = scrlHValue;
             }

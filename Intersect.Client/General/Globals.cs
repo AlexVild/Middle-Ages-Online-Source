@@ -126,7 +126,9 @@ namespace Intersect.Client.General
 
         public static bool IntroComing = true;
 
-        public static long IntroDelay = 3200;
+        public static long IntroDelay = DefaultIntroDelay;
+        
+        public const long DefaultIntroDelay = 3200;
 
         //Engine Progression
         public static int IntroIndex = 0;

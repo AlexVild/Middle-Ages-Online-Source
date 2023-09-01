@@ -17,6 +17,8 @@ namespace Intersect.Client.Framework.Graphics
 
         public Pointf Dimensions => new Pointf(Width, Height);
 
+        public FloatRect Bounds => new FloatRect(0, 0, Width, Height);
+
         public Pointf Center => Dimensions / 2;
 
         public object PlatformTextureObject => GetTexture();

@@ -130,7 +130,7 @@ namespace Intersect.Client.Entities
                 CalculateRenderBounds();
             }
 
-            if (!Graphics.CurrentView.IntersectsWith(mDestRectangle))
+            if (!Graphics.Viewport.IntersectsWith(mDestRectangle))
             {
                 if (RenderList != null)
                 {

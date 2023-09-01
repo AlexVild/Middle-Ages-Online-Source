@@ -298,7 +298,7 @@ namespace Intersect.Client.Entities.Events
                 return;
             }
 
-            if (!WorldPos.IntersectsWith(Graphics.Renderer.GetView()))
+            if (!WorldPos.IntersectsWith(Graphics.Viewport))
             {
                 return;
             }

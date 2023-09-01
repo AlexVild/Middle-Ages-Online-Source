@@ -647,6 +647,8 @@ namespace Intersect.Client.Localization
                 {"targetparty4", @"Target Party 4:"},
                 {"openoverworldmap", @"Overworld Map:"},
                 {"openbestiary", @"Open Bestiary:"},
+                {"togglezoomin", @"Zoom In:"},
+                {"togglezoomout", @"Zoom Out:"},
             };
 
             public static LocalizedString CombatMode = @"Enter Combat Mode";

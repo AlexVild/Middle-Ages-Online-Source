@@ -42,6 +42,8 @@ namespace Intersect.Client.Core
             }
         }
 
+        public static FloatRect Viewport => new FloatRect(CurrentView.Position, CurrentView.Size / (Globals.Database?.WorldZoom ?? 1));
+
         public static GameShader DefaultShader;
 
         //Rendering Variables
@@ -151,7 +153,6 @@ namespace Intersect.Client.Core
             LogoTexture = sContentManager.GetTexture(
                 GameContentManager.TextureType.Gui, ClientConfiguration.Instance.Logo
             );
-            FadeService.SetFade(255f, true);
             CombatNumberManager.CacheTextureRefs();
         }
 
@@ -197,8 +198,8 @@ namespace Intersect.Client.Core
             }
 
             var imageTex = sContentManager.GetTexture(
-                    GameContentManager.TextureType.Image, introImages[Globals.IntroIndex]
-                );
+                GameContentManager.TextureType.Image, introImages[Globals.IntroIndex]
+            );
             if (Globals.AnimatedIntro)
             {
                 AnimateIntro();
@@ -545,8 +546,6 @@ namespace Intersect.Client.Core
                 animInstance.EndDraw();
             }
 
-            // UI things in the game draw loop - use UI scale
-            Renderer.Scale = Globals.Database.UIScale;
             DrawScanlines();
             
             // Because we want to render widescreen textures with different colors depending on the estimated background color of the map
@@ -565,12 +564,10 @@ namespace Intersect.Client.Core
                 DrawWideScreen(Renderer.GetWhiteTexture(), Globals.Me.InCutscene(), Color.Black,
                     ref sCutsceneState, ref sCutsceneUpdate, ref sCutsceneWidth, false);
             }
-            Renderer.Scale = Globals.Database.WorldZoom;
         }
 
         public static void DrawScanlines()
         {
-            Renderer.Scale = Globals.Database.UIScale;
             if (Globals.Database.EnableScanlines)
             {
                 var imageTex = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Image, "scanlines.png");
@@ -579,7 +576,6 @@ namespace Intersect.Client.Core
                     DrawFullScreenTexture(imageTex, 1f);
                 }
             }
-            Renderer.Scale = Globals.Database.WorldZoom;
         }
 
         //Game Rendering
@@ -703,7 +699,7 @@ namespace Intersect.Client.Core
 
             if (!new FloatRect(
                 map.GetX(), map.GetY(), Options.TileWidth * Options.MapWidth, Options.TileHeight * Options.MapHeight
-            ).IntersectsWith(CurrentView))
+            ).IntersectsWith(Viewport))
             {
                 return;
             }
@@ -722,7 +718,7 @@ namespace Intersect.Client.Core
             {
                 if (!new FloatRect(
                     map.GetX(), map.GetY(), Options.TileWidth * Options.MapWidth, Options.TileHeight * Options.MapHeight
-                ).IntersectsWith(CurrentView))
+                ).IntersectsWith(Viewport))
                 {
                     return;
                 }
@@ -733,6 +729,10 @@ namespace Intersect.Client.Core
 
         public static void DrawWideScreen(GameTexture texture, bool flag, Color drawColor, ref byte state, ref long lastUpdate, ref long size, bool regardHud = true)
         {
+            // Zoom-independant
+            var prevScale = Renderer.Scale;
+            Renderer.Scale = 1;
+
             FloatRect top;
             FloatRect left;
             FloatRect right;
@@ -823,6 +823,8 @@ namespace Intersect.Client.Core
                     state = 0;
                     break;
             }
+
+            Renderer.Scale = prevScale;
         }
 
         public static void DrawOverlay()
@@ -958,6 +960,10 @@ namespace Intersect.Client.Core
 
         public static void DrawFullScreenTexture(GameTexture tex, Color color)
         {
+            // Always a scale of 1 if we're drawing something fullscreen
+            var prevScale = Renderer.Scale;
+            Renderer.Scale = 1;
+
             var bgx = Renderer.GetScreenWidth() / 2 - tex.GetWidth() / 2;
             var bgy = Renderer.GetScreenHeight() / 2 - tex.GetHeight() / 2;
             var bgw = tex.GetWidth();
@@ -982,6 +988,8 @@ namespace Intersect.Client.Core
                 new FloatRect(bgx + Renderer.GetView().X, bgy + Renderer.GetView().Y, bgw, bgh),
                 color
             );
+
+            Renderer.Scale = prevScale;
         }
 
         public static void DrawFullScreenTextureCutoff(GameTexture tex, float alpha = 1f)
@@ -1120,9 +1128,16 @@ namespace Intersect.Client.Core
                 w,
                 h
             );
+
+            var centeredX = (int)Math.Ceiling(en.GetCenterPos().X - Renderer.GetScreenWidth() / scale / 2f);
+            var centeredY = (int)Math.Ceiling(en.GetCenterPos().Y - Renderer.GetScreenHeight() / scale / 2f);
+
+            // Screen Shake
+
+
             var newView = new FloatRect(
-                (int)Math.Ceiling(en.GetCenterPos().X - Renderer.GetScreenWidth() / scale / 2f),
-                (int)Math.Ceiling(en.GetCenterPos().Y - Renderer.GetScreenHeight() / scale / 2f),
+                centeredX,
+                centeredY,
                 Renderer.GetScreenWidth() / scale,
                 Renderer.GetScreenHeight() / scale
             );
@@ -1195,11 +1210,12 @@ namespace Intersect.Client.Core
                 return;
             }
 
+            var destRect = new FloatRect(new Pointf(), new Pointf(sDarknessTexture.GetWidth() / Globals.Database.WorldZoom, sDarknessTexture.GetHeight() / Globals.Database.WorldZoom));
             if (map.IsIndoors)
             {
                 DrawGameTexture(
                     Renderer.GetWhiteTexture(), new FloatRect(0, 0, 1, 1),
-                    new FloatRect(0, 0, sDarknessTexture.GetWidth(), sDarknessTexture.GetHeight()),
+                    destRect,
                     new Color((byte) BrightnessLevel, 255, 255, 255), sDarknessTexture, GameBlendModes.Add
                 );
             }
@@ -1209,13 +1225,13 @@ namespace Intersect.Client.Core
                 BrightnessLevel = 255 - Time.GetTintColor().A;
                 DrawGameTexture(
                     Renderer.GetWhiteTexture(), new FloatRect(0, 0, 1, 1),
-                    new FloatRect(0, 0, sDarknessTexture.GetWidth(), sDarknessTexture.GetHeight()),
+                    destRect,
                     new Color(255, 255, 255, 255), sDarknessTexture, GameBlendModes.Add
                 );
 
                 DrawGameTexture(
                     Renderer.GetWhiteTexture(), new FloatRect(0, 0, 1, 1),
-                    new FloatRect(0, 0, sDarknessTexture.GetWidth(), sDarknessTexture.GetHeight()),
+                    destRect,
                     new Color(
                         (int) Time.GetTintColor().A, (int) Time.GetTintColor().R, (int) Time.GetTintColor().G,
                         (int) Time.GetTintColor().B
@@ -1246,7 +1262,13 @@ namespace Intersect.Client.Core
             var radialShader = Globals.ContentManager.GetShader("radialgradient");
             if (radialShader != null)
             {
-                DrawGameTexture(sDarknessTexture, CurrentView.Left, CurrentView.Top, null, GameBlendModes.Multiply);
+                DrawGameTexture(
+                   sDarknessTexture,
+                   sDarknessTexture.Bounds,
+                   Viewport,
+                   Color.White,
+                   blendMode: GameBlendModes.Multiply
+               );
             }
         }
 
@@ -1766,6 +1788,8 @@ namespace Intersect.Client.Core
         public static void ResetMenu()
         {
             LogoDelayTime = Timing.Global.MillisecondsUtcUnsynced + LogoDelayInterval;
+            // We need to reset the wipe, as it may have wonky values due to the nature of forcing Fades for the intro processing
+            Wipe.ResetToBlack();
             ResetMainMenuAnimation();
         }
 

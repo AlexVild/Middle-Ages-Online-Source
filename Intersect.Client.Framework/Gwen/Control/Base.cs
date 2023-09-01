@@ -68,6 +68,8 @@ namespace Intersect.Client.Framework.Gwen.Control
 
         private Cursor mCursor;
 
+        public bool IsBaseCanvas => CanonicalName == "InGame";
+
         private bool mDisabled;
 
         private bool mDisposed;

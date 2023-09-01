@@ -34,7 +34,7 @@ namespace Intersect.Client.Core
             float maxWidth = Graphics.CurrentView.Width / 2;
             Wipe.FadeAmt = (maxWidth / 255) * amt;
             Wipe.InvertFadeAmt = maxWidth - Wipe.FadeAmt;
-            Wipe.CurrentAction = FadeType.None;
+            Wipe.CurrentAction = FadeType.In;
         }
 
         public static void FadeOut(bool alertServerWhenFaded = false, bool fast = false, Action callback = null)

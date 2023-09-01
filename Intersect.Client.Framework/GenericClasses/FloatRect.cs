@@ -61,6 +61,8 @@ namespace Intersect.Client.Framework.GenericClasses
             mHeight = h;
         }
 
+        public FloatRect(Pointf position, Pointf size) : this(position.X, position.Y, size.X, size.Y) { }
+
         public static FloatRect Intersect(FloatRect a, FloatRect b)
         {
             // MS.NET returns a non-empty rectangle if the two rectangles
@@ -150,6 +152,28 @@ namespace Intersect.Client.Framework.GenericClasses
         public static FloatRect operator /(float lhs, FloatRect rhs) => rhs / lhs;
 
         public override string ToString() => $"{Left},{Top} + {Width},{Height} -> {Right},{Bottom}";
+
+        public Pointf Position
+        {
+            get => new Pointf(X, Y);
+            set
+            {
+                X = value.X;
+                Y = value.Y;
+            }
+        }
+
+        public Pointf Size
+        {
+            get => new Pointf(Width, Height);
+            set
+            {
+                Width = value.X;
+                Height = value.Y;
+            }
+        }
+
+
     }
 
 }

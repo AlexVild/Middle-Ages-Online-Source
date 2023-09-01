@@ -165,6 +165,8 @@ namespace Intersect.Client.Interface.Shared
         // Open settings
         private bool mReturnToMenu;
 
+        private bool mChangingVideo = false;
+
         // Initialize.
         public SettingsWindow(Canvas parent, MainMenu mainMenu, EscapeMenu escapeMenu)
         {
@@ -342,6 +344,7 @@ namespace Intersect.Client.Interface.Shared
 
             // Video Settings - Resolution List.
             mResolutionList = new ComboBox(mResolutionBackground, "ResolutionCombobox");
+            mResolutionList.ItemSelected += MResolutionList_ItemSelected;
             var myModes = Graphics.Renderer.GetValidVideoModes();
             myModes?.ForEach(
                 t =>
@@ -480,7 +483,7 @@ namespace Intersect.Client.Interface.Shared
                 label.Font = defaultFont;
                 label.SetBounds(8, 8 + offset, 0, 24);
                 label.SetTextColor(new Color(255, 255, 255, 255), Label.ControlState.Normal);
-                
+
                 var key1 = new Button(mKeybindingSettingsContainer, $"Control{Enum.GetName(typeof(Control), control)}Button1");
                 key1.Text = "";
                 key1.AutoSizeToContents = false;
@@ -513,6 +516,26 @@ namespace Intersect.Client.Interface.Shared
                 mainMenu == null ? GameContentManager.UI.InGame : GameContentManager.UI.Menu,
                 Graphics.Renderer.GetResolutionString()
             );
+        }
+
+        private void MResolutionList_ItemSelected(Base sender, ItemSelectedEventArgs arguments)
+        {
+            if (!mChangingVideo)
+            {
+                return;
+            }
+
+            var resolution = mResolutionList.SelectedItem;
+            var validVideoModes = Graphics.Renderer.GetValidVideoModes();
+            var targetResolution = validVideoModes?.FindIndex(videoMode => string.Equals(videoMode, resolution.Text)) ?? -1;
+
+            if (targetResolution > 11)
+            {
+                _ = new InputBox(
+                    "Note", "Zooming out to max at resolutions > 1920 pixels in width will zoom beyond the boundaries of the loaded map cells. This may result in occasional camera hiccups when playing at zoomed-out scale.", true, InputBox.InputType.OkayOnly,
+                    null, null, null, parent: mGameSettingsContainer
+                );
+            }
         }
 
         private void GameSettingsTab_Clicked(Base sender, ClickedEventArgs arguments)
@@ -560,6 +583,7 @@ namespace Intersect.Client.Interface.Shared
 
                 // Restore Default KeybindingSettings Button.
                 mKeybindingRestoreBtn.Hide();
+                mChangingVideo = true;
             }
         }
 
@@ -720,6 +744,7 @@ namespace Intersect.Client.Interface.Shared
 
         public void Show(bool returnToMenu = false)
         {
+            mChangingVideo = false;
             // Take over all input when we're in-game.
             if (Globals.GameState == GameStates.InGame)
             {

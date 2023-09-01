@@ -30,8 +30,9 @@ namespace Intersect.Client.Core
         }
 
         // Used to add some extra time when the wipe is "closed"
-        private const int OUT_EXTRA_TIME = 200;
+        private const int OUT_EXTRA_TIME = 100;
         private static long sTimeFadedOut;
+        private static long sTimeFadedIn;
         private static bool sIsFaded = false;
 
         private static float sFadeAmt;
@@ -63,6 +64,7 @@ namespace Intersect.Client.Core
             CurrentAction = FadeType.In;
             sLastUpdate = Timing.Global.MillisecondsUtcUnsynced;
             CompleteCallback = callback;
+            sTimeFadedIn = Timing.Global.MillisecondsUtcUnsynced + OUT_EXTRA_TIME;
         }
 
         public static void FadeOut(bool alertServerWhenFaded = false, bool fast = false, Action callback = null)
@@ -86,7 +88,7 @@ namespace Intersect.Client.Core
         public static float GetFade(bool inverted = false)
         {
             float maxWidth = Graphics.CurrentView.Width / 2;
-            int transitionNum = 10;
+            int transitionNum = 14;
 
             var fade = sFadeAmt;
             if (inverted) fade = sInvertFadeAmt;
@@ -101,8 +103,25 @@ namespace Intersect.Client.Core
             return 0f;
         }
 
+        /// <summary>
+        /// Used to hard-reset the wipe to its full state
+        /// </summary>
+        public static void ResetToBlack()
+        {
+            sLastUpdate = Timing.Global.MillisecondsUtcUnsynced;
+            float maxWidth = Graphics.CurrentView.Width / 2;
+            sFadeAmt = maxWidth;
+            sInvertFadeAmt = 0;
+        }
+
         public static void Update()
         {
+            if (Timing.Global.MillisecondsUtcUnsynced < sTimeFadedIn && CurrentAction == FadeType.In)
+            {
+                sLastUpdate = Timing.Global.MillisecondsUtcUnsynced;
+                return;
+            }
+
             float maxWidth = Graphics.CurrentView.Width / 2;
             var amountChange = (Timing.Global.MillisecondsUtcUnsynced - sLastUpdate) / sFadeRate * maxWidth;
 
@@ -145,6 +164,7 @@ namespace Intersect.Client.Core
                     }
                     if (Timing.Global.MillisecondsUtcUnsynced < sTimeFadedOut)
                     {
+                        sLastUpdate = Timing.Global.MillisecondsUtcUnsynced;
                         return;
                     }
                     CurrentAction = FadeType.None;
