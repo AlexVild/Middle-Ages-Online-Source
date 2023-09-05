@@ -1,7 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Net;
-using System.Net.Mail;
+using MailKit.Net.Smtp;
+using MailKit.Security;
+using MimeKit;
 
 using Intersect.Logging;
 using Intersect.Server.Localization;
@@ -37,36 +39,32 @@ namespace Intersect.Server.Notifications
                 {
                     try
                     {
-                        //Send the email
-                        var fromAddress = new MailAddress(Options.Smtp.FromAddress, Options.Smtp.FromName);
-                        var toAddress = new MailAddress(ToAddress);
+                        var fromAddress = new MailboxAddress(Options.Smtp.FromName, Options.Smtp.FromAddress);
+                        var toAddress = new MailboxAddress(ToAddress, ToAddress);
 
-                        var securityProtocol = (int)System.Net.ServicePointManager.SecurityProtocol;
+                        using (var client = new SmtpClient())
+                        {
+                            client.Connect(Options.Smtp.Host, Options.Smtp.Port, Options.Smtp.UseSsl ? SecureSocketOptions.StartTls : SecureSocketOptions.Auto);
+                            client.Authenticate(Options.Smtp.Username, Options.Smtp.Password);
 
-                        // 0 = SystemDefault in .NET 4.7+
-                        if (securityProtocol != 0)
-                        {
-                            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-                        }
+                            var message = new MimeMessage();
+                            message.To.Add(toAddress);
+                            message.From.Add(fromAddress);
+                            message.Subject = Subject;
 
-                        var smtp = new SmtpClient
-                        {
-                            Host = Options.Smtp.Host,
-                            Port = Options.Smtp.Port,
-                            EnableSsl = Options.Smtp.UseSsl,
-                            DeliveryMethod = SmtpDeliveryMethod.Network,
-                            UseDefaultCredentials = false,
-                            Credentials = new NetworkCredential(Options.Smtp.Username, Options.Smtp.Password)
-                        };
+                            var bodyBuilder = new BodyBuilder();
+                            if (IsHtml)
+                            {
+                                bodyBuilder.HtmlBody = Body;
+                            }
+                            else
+                            {
+                                bodyBuilder.TextBody = Body;
+                            }
+                            message.Body = bodyBuilder.ToMessageBody();
 
-                        using (var message = new MailMessage(fromAddress, toAddress)
-                        {
-                            Subject = Subject,
-                            Body = Body,
-                            IsBodyHtml = IsHtml
-                        })
-                        {
-                            smtp.Send(message);
+                            client.Send(message);
+                            client.Disconnect(true);
                         }
 
                         return true;
