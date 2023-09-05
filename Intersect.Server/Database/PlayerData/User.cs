@@ -48,6 +48,10 @@ namespace Intersect.Server.Database.PlayerData
 
         public static User FindOnlineFromEmail(string email)
         {
+            foreach(var user in OnlineUsers.Values)
+            {
+                Console.WriteLine(user.Email);
+            }
             return OnlineUsers.Values.FirstOrDefault(s => s.Email.ToLower().Trim() == email.ToLower().Trim());
         }
 
@@ -513,7 +517,7 @@ namespace Intersect.Server.Database.PlayerData
             {
                 using (var context = DbInterface.CreatePlayerContext())
                 {
-                    return User.PostLoad(QueryUserByName(context, nameOrEmail));
+                    return User.PostLoad(QueryUserByNameOrEmail(context, nameOrEmail));
                 }
             }
             catch (Exception ex)
