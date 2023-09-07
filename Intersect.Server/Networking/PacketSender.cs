@@ -1695,6 +1695,30 @@ namespace Intersect.Server.Networking
             }
         }
 
+        public static void SendAnimationTo(
+            Guid animId,
+            int targetType,
+            Guid entityId,
+            Guid mapId,
+            byte x,
+            byte y,
+            sbyte direction,
+            Guid mapInstanceId,
+            Player target,
+            bool projectileHitAnim = false
+        )
+        {
+            if (animId == Guid.Empty)
+            {
+                return;
+            }
+
+            if (MapController.TryGetInstanceFromMap(mapId, mapInstanceId, out var mapInstance))
+            {
+                target.SendPacket(new PlayAnimationPacket(animId, targetType, entityId, mapId, x, y, direction, projectileHitAnim));
+            }
+        }
+
         //HoldPlayerPacket
         public static void SendHoldPlayer(Player player, Guid eventId, Guid mapId)
         {

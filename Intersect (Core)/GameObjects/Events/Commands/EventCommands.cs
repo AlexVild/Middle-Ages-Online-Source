@@ -680,6 +680,8 @@ namespace Intersect.GameObjects.Events.Commands
 
         public sbyte Y { get; set; }
 
+        public bool Instanced { get; set; }
+
     }
 
     public class HoldPlayerCommand : EventCommand

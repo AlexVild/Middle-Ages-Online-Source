@@ -1058,10 +1058,20 @@ namespace Intersect.Server.Entities.Events
                     if (command.X == 0 && command.Y == 0 && command.Dir == 0)
                     {
                         //Attach to entity instead of playing on tile
-                        PacketSender.SendAnimationToProximity(
-                            animId, targetEntity.GetEntityType() == EntityTypes.Event ? 2 : 1, targetEntity.Id,
-                            targetEntity.MapId, 0, 0, 0, targetEntity.MapInstanceId
-                        );
+                        if (command.Instanced)
+                        {
+                            PacketSender.SendAnimationTo(
+                                animId, targetEntity.GetEntityType() == EntityTypes.Event ? 2 : 1, targetEntity.Id,
+                                targetEntity.MapId, 0, 0, 0, targetEntity.MapInstanceId, player
+                            );
+                        }
+                        else
+                        {
+                            PacketSender.SendAnimationToProximity(
+                                animId, targetEntity.GetEntityType() == EntityTypes.Event ? 2 : 1, targetEntity.Id,
+                                targetEntity.MapId, 0, 0, 0, targetEntity.MapInstanceId
+                            );
+                        }
 
                         return;
                     }
@@ -1108,9 +1118,18 @@ namespace Intersect.Server.Entities.Events
             var tile = new TileHelper(mapId, tileX, tileY);
             if (tile.TryFix())
             {
-                PacketSender.SendAnimationToProximity(
-                    animId, -1, Guid.Empty, tile.GetMapId(), tile.GetX(), tile.GetY(), (sbyte) direction, player.MapInstanceId
-                );
+                if (command.Instanced)
+                {
+                    PacketSender.SendAnimationTo(
+                        animId, -1, Guid.Empty, tile.GetMapId(), tile.GetX(), tile.GetY(), (sbyte)direction, player.MapInstanceId,  player
+                    );
+                }
+                else
+                {
+                    PacketSender.SendAnimationToProximity(
+                        animId, -1, Guid.Empty, tile.GetMapId(), tile.GetX(), tile.GetY(), (sbyte)direction, player.MapInstanceId
+                    );
+                }
             }
         }
 

@@ -55,6 +55,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                 cmbConditionType.SelectedIndex = 1;
             }
 
+            chkInstanced.Checked = mMyCommand.Instanced;
+
             nudWarpX.Maximum = Options.MapWidth;
             nudWarpY.Maximum = Options.MapHeight;
             UpdateFormElements();
@@ -204,6 +206,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private void btnSave_Click(object sender, EventArgs e)
         {
             mMyCommand.AnimationId = AnimationBase.IdFromList(cmbAnimation.SelectedIndex);
+            mMyCommand.Instanced = chkInstanced.Checked;
             switch (cmbConditionType.SelectedIndex)
             {
                 case 0: //Tile Spawn
