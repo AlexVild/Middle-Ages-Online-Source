@@ -170,6 +170,8 @@ namespace Intersect.Server.Entities
                     mLastOverrideAttack = Timing.Global.MillisecondsUtc + CalculateAttackTime();
                 }
 
+                IncrementAttackTimer();
+                PacketSender.SendEntityAttack(this, CalculateAttackTime());
                 return;
             }
 
