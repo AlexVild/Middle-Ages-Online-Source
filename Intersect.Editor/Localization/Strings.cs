@@ -401,7 +401,7 @@ namespace Intersect.Editor.Localization
             try
             {
                 var recordOf = condition.RecordType.GetRelatedTable().GetLookup().Get(condition.RecordId);
-                return EventConditionDesc.RecordIsExtra.ToString(name, recordOf.Name, condition.Value);
+                return EventConditionDesc.RecordIsExtra.ToString(name, recordOf?.Name ?? "NOT FOUND", condition.Value);
             }
             catch (ArgumentException)
             {

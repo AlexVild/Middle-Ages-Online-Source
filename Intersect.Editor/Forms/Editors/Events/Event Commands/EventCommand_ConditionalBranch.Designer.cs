@@ -265,6 +265,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             this.grpConditional.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.grpConditional.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpConditional.Controls.Add(this.grpRecordIs);
             this.grpConditional.Controls.Add(this.grpSpawnGroup);
             this.grpConditional.Controls.Add(this.grpEnhancements);
             this.grpConditional.Controls.Add(this.grpTreasureLevel);
@@ -275,7 +276,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpConditional.Controls.Add(this.grpBeastHasUnlock);
             this.grpConditional.Controls.Add(this.grpBeastsCompleted);
             this.grpConditional.Controls.Add(this.grpRecipes);
-            this.grpConditional.Controls.Add(this.grpRecordIs);
             this.grpConditional.Controls.Add(this.grpTimers);
             this.grpConditional.Controls.Add(this.grpNpc);
             this.grpConditional.Controls.Add(this.grpClass);

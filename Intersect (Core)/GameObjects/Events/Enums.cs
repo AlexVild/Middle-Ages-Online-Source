@@ -309,7 +309,7 @@ namespace Intersect.GameObjects.Events
         [Description("NPCs Killed"), RelatedTable(GameObjectType.Npc)]
         NpcKilled = 0,
 
-        [Description("Items Crafted"), RelatedTable(GameObjectType.Item)]
+        [Description("Items Crafted"), RelatedTable(GameObjectType.Crafts)]
         ItemCrafted,
 
         [Description("Resources Gathered"), RelatedTable(GameObjectType.Resource)]
