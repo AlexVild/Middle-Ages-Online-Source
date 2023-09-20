@@ -472,6 +472,11 @@ namespace Intersect.Server.Entities
                         return -2;
                     }
 
+                    if (tileAttribute.Type == MapAttributes.Item || (tileAttribute.Type == MapAttributes.Item && ((MapItemAttribute)tileAttribute).IsBlock))
+                    {
+                        return -2;
+                    }
+
                     if (tileAttribute.Type == MapAttributes.NpcAvoid && this is Npc)
                     {
                         return -2;

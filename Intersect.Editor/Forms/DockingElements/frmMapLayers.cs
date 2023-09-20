@@ -731,6 +731,7 @@ namespace Intersect.Editor.Forms.DockingElements
                     {
                         itemAttribute.CustomSpawnTime = 0;
                     }
+                    itemAttribute.IsBlock = chkItemBlock.Checked;
                     break;
 
                 case MapAttributes.ZDimension:
@@ -1566,6 +1567,11 @@ namespace Intersect.Editor.Forms.DockingElements
         }
 
         private void cmbFootstepSound_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void chkItemBlock_CheckedChanged(object sender, EventArgs e)
         {
 
         }

@@ -1326,8 +1326,10 @@ namespace Intersect.Server.Maps
             }
 
             //Check if tile is a blocked attribute
-            if (mMapController.Attributes[x, y] != null && (mMapController.Attributes[x, y].Type == MapAttributes.Blocked ||
-                mMapController.Attributes[x, y].Type == MapAttributes.Animation && ((MapAnimationAttribute)mMapController.Attributes[x, y]).IsBlock))
+            if (mMapController.Attributes[x, y] != null && 
+                (mMapController.Attributes[x, y].Type == MapAttributes.Blocked ||
+                (mMapController.Attributes[x, y].Type == MapAttributes.Animation && ((MapAnimationAttribute)mMapController.Attributes[x, y]).IsBlock) ||
+                (mMapController.Attributes[x, y].Type == MapAttributes.Item && ((MapItemAttribute)mMapController.Attributes[x, y]).IsBlock)))
             {
                 return true;
             }
@@ -1404,7 +1406,8 @@ namespace Intersect.Server.Maps
                     {
                         if (mMapController.Attributes[x, y].Type == MapAttributes.Blocked ||
                             mMapController.Attributes[x, y].Type == MapAttributes.GrappleStone ||
-                            mMapController.Attributes[x, y].Type == MapAttributes.Animation && ((MapAnimationAttribute)mMapController.Attributes[x, y]).IsBlock)
+                            mMapController.Attributes[x, y].Type == MapAttributes.Animation && ((MapAnimationAttribute)mMapController.Attributes[x, y]).IsBlock ||
+                            mMapController.Attributes[x, y].Type == MapAttributes.Item && ((MapItemAttribute)mMapController.Attributes[x, y]).IsBlock)
                         {
                             blocks.Add(new BytePoint(x, y));
                             npcBlocks.Add(new BytePoint(x, y));

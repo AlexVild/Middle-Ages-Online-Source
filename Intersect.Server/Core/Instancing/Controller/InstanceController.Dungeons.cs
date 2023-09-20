@@ -236,7 +236,7 @@ namespace Intersect.Server.Core.Instancing.Controller
             }
 
             Dungeon.GnomeObtained = true;
-            foreach (var player in Dungeon.Participants)
+            foreach (var player in Dungeon.Participants.ToArray())
             {
                 player.StartCommonEventsWithTrigger(CommonEventTrigger.GnomeCaptured);
                 PacketSender.SendChatMsg(player, "Your party found the treasure gnome! You will receive greater rewards for completion of this dungeon.", Enums.ChatMessageType.Party, CustomColors.General.GeneralPrimary);

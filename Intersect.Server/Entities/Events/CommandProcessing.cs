@@ -1973,7 +1973,7 @@ namespace Intersect.Server.Entities.Events
                 // Set the party member switches too if Sync Party enabled!
                 if (command.SyncParty)
                 {
-                    foreach (var partyMember in player.Party)
+                    foreach (var partyMember in player.Party.ToArray())
                     {
                         if (partyMember != player)
                         {
@@ -2298,7 +2298,7 @@ namespace Intersect.Server.Entities.Events
                 // Set the party member switches too if Sync Party enabled!
                 if (command.SyncParty)
                 {
-                    foreach (var partyMember in player.Party)
+                    foreach (var partyMember in player.Party.ToArray())
                     {
                         if (command.InstanceSync && partyMember.MapInstanceId != player.MapInstanceId)
                         {
@@ -2384,7 +2384,7 @@ namespace Intersect.Server.Entities.Events
                 // Set the party member switches too if Sync Party enabled!
                 if (command.SyncParty)
                 {
-                    foreach (var partyMember in player.Party)
+                    foreach (var partyMember in player.Party.ToArray())
                     {
                         if (partyMember != player)
                         {
@@ -2924,7 +2924,7 @@ namespace Intersect.Server.Entities.Events
             if (player == null) return;
 
             var players = new List<Player> { player };
-            if (command.SyncParty && player.Party?.Count > 1)
+            if (command.SyncParty && player.Party?.ToArray().Length > 1)
             {
                 foreach (var member in player.Party.Where(mem => mem.Id != player.Id).ToArray())
                 {

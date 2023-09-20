@@ -1736,7 +1736,7 @@ namespace Intersect.Server.Entities
                     if (player.Party.Count > 0 && Options.Instance.LootOpts.IndividualizedLootAutoIncludePartyMembers)
                     {
                         // They are, so check for all party members and drop if still eligible!
-                        foreach (var partyMember in player.Party)
+                        foreach (var partyMember in player.Party.ToArray())
                         {
                             if (!lootGeneratedFor.Contains(partyMember))
                             {

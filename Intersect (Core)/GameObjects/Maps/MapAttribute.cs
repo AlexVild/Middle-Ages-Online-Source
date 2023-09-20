@@ -88,6 +88,8 @@ namespace Intersect.GameObjects.Maps
 
         public int CustomSpawnTime { get; set; }
 
+        public bool IsBlock { get; set; }
+
         public override MapAttribute Clone()
         {
             var att = (MapItemAttribute) base.Clone();
@@ -95,6 +97,7 @@ namespace Intersect.GameObjects.Maps
             att.Quantity = Quantity;
             att.UseCustomSpawnTime = UseCustomSpawnTime;
             att.CustomSpawnTime = CustomSpawnTime;
+            att.IsBlock = IsBlock;
 
             return att;
         }

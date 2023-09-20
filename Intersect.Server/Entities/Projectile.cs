@@ -393,7 +393,9 @@ namespace Intersect.Server.Entities
                 }
 
                 if (attribute != null &&
-                    (attribute.Type == MapAttributes.Blocked || attribute.Type == MapAttributes.Animation && ((MapAnimationAttribute)attribute).IsBlock) &&
+                    (attribute.Type == MapAttributes.Blocked 
+                        || attribute.Type == MapAttributes.Animation && ((MapAnimationAttribute)attribute).IsBlock 
+                        || attribute.Type == MapAttributes.Item && ((MapItemAttribute)attribute).IsBlock) &&
                     !spawn.ProjectileBase.IgnoreMapBlocks)
                 {
                     if (attribute is MapBlockedAttribute block)

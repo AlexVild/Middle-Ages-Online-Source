@@ -170,6 +170,7 @@ namespace Intersect.Editor.Forms.DockingElements
             this.pnlEvents = new System.Windows.Forms.Panel();
             this.pnlLights = new System.Windows.Forms.Panel();
             this.lightEditor = new Intersect.Editor.Forms.Controls.LightEditorCtrl();
+            this.chkItemBlock = new System.Windows.Forms.CheckBox();
             this.grpResource.SuspendLayout();
             this.grpZResource.SuspendLayout();
             this.grpItem.SuspendLayout();
@@ -494,6 +495,7 @@ namespace Intersect.Editor.Forms.DockingElements
             // 
             this.grpItem.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpItem.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpItem.Controls.Add(this.chkItemBlock);
             this.grpItem.Controls.Add(this.grpCustomSpawnTime);
             this.grpItem.Controls.Add(this.chkCustomSpawn);
             this.grpItem.Controls.Add(this.nudItemQuantity);
@@ -503,7 +505,7 @@ namespace Intersect.Editor.Forms.DockingElements
             this.grpItem.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpItem.Location = new System.Drawing.Point(6, 179);
             this.grpItem.Name = "grpItem";
-            this.grpItem.Size = new System.Drawing.Size(246, 200);
+            this.grpItem.Size = new System.Drawing.Size(246, 233);
             this.grpItem.TabIndex = 22;
             this.grpItem.TabStop = false;
             this.grpItem.Text = "Map Item";
@@ -770,6 +772,7 @@ namespace Intersect.Editor.Forms.DockingElements
             this.cmbDungeon.Name = "cmbDungeon";
             this.cmbDungeon.Size = new System.Drawing.Size(225, 21);
             this.cmbDungeon.TabIndex = 31;
+            this.cmbDungeon.Text = null;
             this.cmbDungeon.TextPadding = new System.Windows.Forms.Padding(2);
             // 
             // lblInstance
@@ -1581,9 +1584,9 @@ namespace Intersect.Editor.Forms.DockingElements
             // 
             // pnlAttributes
             // 
+            this.pnlAttributes.Controls.Add(this.grpItem);
             this.pnlAttributes.Controls.Add(this.rdoFootstep);
             this.pnlAttributes.Controls.Add(this.grpFootstep);
-            this.pnlAttributes.Controls.Add(this.grpItem);
             this.pnlAttributes.Controls.Add(this.grpWarp);
             this.pnlAttributes.Controls.Add(this.grpBlock);
             this.pnlAttributes.Controls.Add(this.grpCritter);
@@ -2099,6 +2102,17 @@ namespace Intersect.Editor.Forms.DockingElements
             this.lightEditor.Visible = false;
             this.lightEditor.Load += new System.EventHandler(this.lightEditor_Load);
             // 
+            // chkItemBlock
+            // 
+            this.chkItemBlock.AutoSize = true;
+            this.chkItemBlock.Location = new System.Drawing.Point(16, 199);
+            this.chkItemBlock.Name = "chkItemBlock";
+            this.chkItemBlock.Size = new System.Drawing.Size(59, 17);
+            this.chkItemBlock.TabIndex = 31;
+            this.chkItemBlock.Text = "Block?";
+            this.chkItemBlock.UseVisualStyleBackColor = true;
+            this.chkItemBlock.CheckedChanged += new System.EventHandler(this.chkItemBlock_CheckedChanged);
+            // 
             // FrmMapLayers
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2330,5 +2344,6 @@ namespace Intersect.Editor.Forms.DockingElements
         private Label lblFootstep;
         private Label lblDungeon;
         private DarkComboBox cmbDungeon;
+        private CheckBox chkItemBlock;
     }
 }

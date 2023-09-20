@@ -2500,6 +2500,10 @@ namespace Intersect.Client.Entities
                         {
                             return -2;
                         }
+                        if ((gameMap.Attributes[tmpX, tmpY].Type == MapAttributes.Item && ((MapItemAttribute)gameMap.Attributes[tmpX, tmpY]).IsBlock))
+                        {
+                            return -2;
+                        }
                         else if (gameMap.Attributes[tmpX, tmpY].Type == MapAttributes.ZDimension)
                         {
                             if (((MapZDimensionAttribute)gameMap.Attributes[tmpX, tmpY]).BlockedLevel - 1 == z)
