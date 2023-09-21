@@ -482,4 +482,25 @@ namespace Intersect.GameObjects.Events
         NoHP,
         NoRegen,
     }
+
+    public enum CommonSounds
+    {
+        [Description("al_door_open.wav")]
+        Door,
+
+        [Description("al_metal_door_open.wav")]
+        MetalDoor,
+
+        [Description("al_cellar_door_open.wav")]
+        CellarDoor,
+
+        [Description("al_stairs.wav")]
+        Stairs,
+
+        [Description("al_falling_down.wav")]
+        Falling,
+
+        [Description("al_portal_use.wav")]
+        Portal,
+    }
 }

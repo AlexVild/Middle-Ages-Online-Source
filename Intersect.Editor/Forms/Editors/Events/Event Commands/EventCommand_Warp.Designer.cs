@@ -31,8 +31,14 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private void InitializeComponent()
         {
             this.grpWarp = new DarkUI.Controls.DarkGroupBox();
+            this.lblCommonSounds = new System.Windows.Forms.Label();
+            this.cmbCommonSounds = new DarkUI.Controls.DarkComboBox();
+            this.lblSound = new System.Windows.Forms.Label();
+            this.cmbSound = new DarkUI.Controls.DarkComboBox();
             this.chkChangeInstance = new System.Windows.Forms.CheckBox();
             this.grpInstanceSettings = new DarkUI.Controls.DarkGroupBox();
+            this.lblDungeon = new System.Windows.Forms.Label();
+            this.cmbDungeon = new DarkUI.Controls.DarkComboBox();
             this.cmbInstanceType = new DarkUI.Controls.DarkComboBox();
             this.lblInstanceType = new System.Windows.Forms.Label();
             this.chkMapFade = new System.Windows.Forms.CheckBox();
@@ -47,8 +53,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.lblY = new System.Windows.Forms.Label();
             this.lblMap = new System.Windows.Forms.Label();
             this.lblX = new System.Windows.Forms.Label();
-            this.cmbDungeon = new DarkUI.Controls.DarkComboBox();
-            this.lblDungeon = new System.Windows.Forms.Label();
             this.grpWarp.SuspendLayout();
             this.grpInstanceSettings.SuspendLayout();
             this.SuspendLayout();
@@ -57,6 +61,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             this.grpWarp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.grpWarp.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpWarp.Controls.Add(this.lblCommonSounds);
+            this.grpWarp.Controls.Add(this.cmbCommonSounds);
+            this.grpWarp.Controls.Add(this.lblSound);
+            this.grpWarp.Controls.Add(this.cmbSound);
             this.grpWarp.Controls.Add(this.chkChangeInstance);
             this.grpWarp.Controls.Add(this.grpInstanceSettings);
             this.grpWarp.Controls.Add(this.chkMapFade);
@@ -74,10 +82,69 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpWarp.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpWarp.Location = new System.Drawing.Point(3, 3);
             this.grpWarp.Name = "grpWarp";
-            this.grpWarp.Size = new System.Drawing.Size(374, 223);
+            this.grpWarp.Size = new System.Drawing.Size(374, 313);
             this.grpWarp.TabIndex = 17;
             this.grpWarp.TabStop = false;
             this.grpWarp.Text = "saw";
+            // 
+            // lblCommonSounds
+            // 
+            this.lblCommonSounds.AutoSize = true;
+            this.lblCommonSounds.Location = new System.Drawing.Point(95, 224);
+            this.lblCommonSounds.Name = "lblCommonSounds";
+            this.lblCommonSounds.Size = new System.Drawing.Size(90, 13);
+            this.lblCommonSounds.TabIndex = 67;
+            this.lblCommonSounds.Text = "Common Sounds:";
+            // 
+            // cmbCommonSounds
+            // 
+            this.cmbCommonSounds.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbCommonSounds.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbCommonSounds.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbCommonSounds.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbCommonSounds.DrawDropdownHoverOutline = false;
+            this.cmbCommonSounds.DrawFocusRectangle = false;
+            this.cmbCommonSounds.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbCommonSounds.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbCommonSounds.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbCommonSounds.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbCommonSounds.FormattingEnabled = true;
+            this.cmbCommonSounds.Location = new System.Drawing.Point(191, 221);
+            this.cmbCommonSounds.Name = "cmbCommonSounds";
+            this.cmbCommonSounds.Size = new System.Drawing.Size(175, 21);
+            this.cmbCommonSounds.TabIndex = 66;
+            this.cmbCommonSounds.Text = null;
+            this.cmbCommonSounds.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbCommonSounds.SelectedIndexChanged += new System.EventHandler(this.cmbCommonSounds_SelectedIndexChanged);
+            // 
+            // lblSound
+            // 
+            this.lblSound.AutoSize = true;
+            this.lblSound.Location = new System.Drawing.Point(12, 197);
+            this.lblSound.Name = "lblSound";
+            this.lblSound.Size = new System.Drawing.Size(41, 13);
+            this.lblSound.TabIndex = 65;
+            this.lblSound.Text = "Sound:";
+            // 
+            // cmbSound
+            // 
+            this.cmbSound.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbSound.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbSound.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbSound.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbSound.DrawDropdownHoverOutline = false;
+            this.cmbSound.DrawFocusRectangle = false;
+            this.cmbSound.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbSound.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbSound.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbSound.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbSound.FormattingEnabled = true;
+            this.cmbSound.Location = new System.Drawing.Point(59, 194);
+            this.cmbSound.Name = "cmbSound";
+            this.cmbSound.Size = new System.Drawing.Size(307, 21);
+            this.cmbSound.TabIndex = 64;
+            this.cmbSound.Text = null;
+            this.cmbSound.TextPadding = new System.Windows.Forms.Padding(2);
             // 
             // chkChangeInstance
             // 
@@ -106,6 +173,35 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpInstanceSettings.TabStop = false;
             this.grpInstanceSettings.Text = "Instance Settings";
             this.grpInstanceSettings.Visible = false;
+            // 
+            // lblDungeon
+            // 
+            this.lblDungeon.AutoSize = true;
+            this.lblDungeon.Location = new System.Drawing.Point(6, 59);
+            this.lblDungeon.Name = "lblDungeon";
+            this.lblDungeon.Size = new System.Drawing.Size(54, 13);
+            this.lblDungeon.TabIndex = 66;
+            this.lblDungeon.Text = "Dungeon:";
+            // 
+            // cmbDungeon
+            // 
+            this.cmbDungeon.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbDungeon.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbDungeon.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbDungeon.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbDungeon.DrawDropdownHoverOutline = false;
+            this.cmbDungeon.DrawFocusRectangle = false;
+            this.cmbDungeon.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbDungeon.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbDungeon.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbDungeon.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbDungeon.FormattingEnabled = true;
+            this.cmbDungeon.Location = new System.Drawing.Point(8, 75);
+            this.cmbDungeon.Name = "cmbDungeon";
+            this.cmbDungeon.Size = new System.Drawing.Size(169, 21);
+            this.cmbDungeon.TabIndex = 65;
+            this.cmbDungeon.Text = null;
+            this.cmbDungeon.TextPadding = new System.Windows.Forms.Padding(2);
             // 
             // cmbInstanceType
             // 
@@ -160,7 +256,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(286, 194);
+            this.btnCancel.Location = new System.Drawing.Point(291, 284);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Padding = new System.Windows.Forms.Padding(5);
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
@@ -170,7 +266,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(205, 194);
+            this.btnSave.Location = new System.Drawing.Point(210, 284);
             this.btnSave.Name = "btnSave";
             this.btnSave.Padding = new System.Windows.Forms.Padding(5);
             this.btnSave.Size = new System.Drawing.Size(75, 23);
@@ -278,35 +374,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.lblX.Text = "X: 0";
             this.lblX.Click += new System.EventHandler(this.lblX_Click);
             // 
-            // cmbDungeon
-            // 
-            this.cmbDungeon.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbDungeon.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbDungeon.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbDungeon.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbDungeon.DrawDropdownHoverOutline = false;
-            this.cmbDungeon.DrawFocusRectangle = false;
-            this.cmbDungeon.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbDungeon.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbDungeon.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbDungeon.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbDungeon.FormattingEnabled = true;
-            this.cmbDungeon.Location = new System.Drawing.Point(8, 75);
-            this.cmbDungeon.Name = "cmbDungeon";
-            this.cmbDungeon.Size = new System.Drawing.Size(169, 21);
-            this.cmbDungeon.TabIndex = 65;
-            this.cmbDungeon.Text = null;
-            this.cmbDungeon.TextPadding = new System.Windows.Forms.Padding(2);
-            // 
-            // lblDungeon
-            // 
-            this.lblDungeon.AutoSize = true;
-            this.lblDungeon.Location = new System.Drawing.Point(6, 59);
-            this.lblDungeon.Name = "lblDungeon";
-            this.lblDungeon.Size = new System.Drawing.Size(54, 13);
-            this.lblDungeon.TabIndex = 66;
-            this.lblDungeon.Text = "Dungeon:";
-            // 
             // EventCommandWarp
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -315,7 +382,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.Controls.Add(this.grpWarp);
             this.Name = "EventCommandWarp";
-            this.Size = new System.Drawing.Size(383, 229);
+            this.Size = new System.Drawing.Size(383, 324);
             this.grpWarp.ResumeLayout(false);
             this.grpWarp.PerformLayout();
             this.grpInstanceSettings.ResumeLayout(false);
@@ -345,5 +412,9 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private System.Windows.Forms.Label lblInstanceType;
         private System.Windows.Forms.Label lblDungeon;
         private DarkComboBox cmbDungeon;
+        private System.Windows.Forms.Label lblSound;
+        private DarkComboBox cmbSound;
+        private System.Windows.Forms.Label lblCommonSounds;
+        private DarkComboBox cmbCommonSounds;
     }
 }

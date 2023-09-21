@@ -609,6 +609,8 @@ namespace Intersect.GameObjects.Events.Commands
         public MapInstanceType InstanceType { get; set; } = MapInstanceType.Overworld;
 
         public Guid DungeonId { get; set; } = Guid.Empty;
+
+        public string Sound { get; set; }
     }
 
     public class SetMoveRouteCommand : EventCommand

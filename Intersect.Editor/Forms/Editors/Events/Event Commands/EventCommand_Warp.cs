@@ -2,12 +2,14 @@
 using System.Windows.Forms;
 
 using DarkUI.Controls;
-
+using Intersect.Editor.Content;
 using Intersect.Editor.Localization;
 using Intersect.Enums;
 using Intersect.GameObjects;
+using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Events.Commands;
 using Intersect.GameObjects.Maps.MapList;
+using Intersect.Utilities;
 
 namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
 {
@@ -63,6 +65,21 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             cmbDungeon.Items.Add(Strings.General.none);
             cmbDungeon.Items.AddRange(DungeonDescriptor.Names);
             cmbDungeon.SelectedIndex = DungeonDescriptor.ListIndex(mMyCommand.DungeonId) + 1;
+
+            cmbSound.Items.Clear();
+            cmbSound.Items.Add(Strings.General.none);
+            cmbSound.Items.AddRange(GameContentManager.SmartSortedSoundNames);
+            if (cmbSound.Items.IndexOf(TextUtils.NullToNone(mMyCommand.Sound)) > -1)
+            {
+                cmbSound.SelectedIndex = cmbSound.Items.IndexOf(TextUtils.NullToNone(mMyCommand.Sound));
+            }
+            else
+            {
+                cmbSound.SelectedIndex = 0;
+            }
+
+            cmbCommonSounds.Items.Clear();
+            cmbCommonSounds.Items.AddRange(Enum.GetNames(typeof(CommonSounds)));
         }
 
         private void InitLocalization()
@@ -98,6 +115,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             mMyCommand.ChangeInstance = chkChangeInstance.Checked;
             mMyCommand.InstanceType = (MapInstanceType) cmbInstanceType.SelectedIndex;
             mMyCommand.DungeonId = DungeonDescriptor.IdFromList(cmbDungeon.SelectedIndex - 1);
+            mMyCommand.Sound= TextUtils.SanitizeNone(cmbSound?.Text);
+            
             mEventEditor.FinishCommandEdit();
         }
 
@@ -177,6 +196,13 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private void chkCreateInstance_CheckedChanged(object sender, EventArgs e)
         {
             grpInstanceSettings.Visible = chkChangeInstance.Checked;
+        }
+
+        private void cmbCommonSounds_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var sound = (CommonSounds)cmbCommonSounds.SelectedIndex;
+
+            cmbSound.Text = sound.GetDescription();
         }
     }
 

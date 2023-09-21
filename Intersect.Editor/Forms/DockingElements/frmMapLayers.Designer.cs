@@ -54,6 +54,7 @@ namespace Intersect.Editor.Forms.DockingElements
             this.cmbResourceAttribute = new DarkUI.Controls.DarkComboBox();
             this.lblResource = new System.Windows.Forms.Label();
             this.grpItem = new DarkUI.Controls.DarkGroupBox();
+            this.chkItemBlock = new System.Windows.Forms.CheckBox();
             this.grpCustomSpawnTime = new DarkUI.Controls.DarkGroupBox();
             this.nudItemSpawnTime = new DarkUI.Controls.DarkNumericUpDown();
             this.lblSpawnTime = new System.Windows.Forms.Label();
@@ -170,7 +171,8 @@ namespace Intersect.Editor.Forms.DockingElements
             this.pnlEvents = new System.Windows.Forms.Panel();
             this.pnlLights = new System.Windows.Forms.Panel();
             this.lightEditor = new Intersect.Editor.Forms.Controls.LightEditorCtrl();
-            this.chkItemBlock = new System.Windows.Forms.CheckBox();
+            this.lblCommonSounds = new System.Windows.Forms.Label();
+            this.cmbCommonSounds = new DarkUI.Controls.DarkComboBox();
             this.grpResource.SuspendLayout();
             this.grpZResource.SuspendLayout();
             this.grpItem.SuspendLayout();
@@ -511,6 +513,17 @@ namespace Intersect.Editor.Forms.DockingElements
             this.grpItem.Text = "Map Item";
             this.grpItem.Visible = false;
             // 
+            // chkItemBlock
+            // 
+            this.chkItemBlock.AutoSize = true;
+            this.chkItemBlock.Location = new System.Drawing.Point(16, 199);
+            this.chkItemBlock.Name = "chkItemBlock";
+            this.chkItemBlock.Size = new System.Drawing.Size(59, 17);
+            this.chkItemBlock.TabIndex = 31;
+            this.chkItemBlock.Text = "Block?";
+            this.chkItemBlock.UseVisualStyleBackColor = true;
+            this.chkItemBlock.CheckedChanged += new System.EventHandler(this.chkItemBlock_CheckedChanged);
+            // 
             // grpCustomSpawnTime
             // 
             this.grpCustomSpawnTime.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
@@ -677,6 +690,8 @@ namespace Intersect.Editor.Forms.DockingElements
             // 
             this.grpWarp.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpWarp.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpWarp.Controls.Add(this.cmbCommonSounds);
+            this.grpWarp.Controls.Add(this.lblCommonSounds);
             this.grpWarp.Controls.Add(this.cmbWarpSound);
             this.grpWarp.Controls.Add(this.lblWarpSound);
             this.grpWarp.Controls.Add(this.grpInstanceSettings);
@@ -694,7 +709,7 @@ namespace Intersect.Editor.Forms.DockingElements
             this.grpWarp.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpWarp.Location = new System.Drawing.Point(6, 179);
             this.grpWarp.Name = "grpWarp";
-            this.grpWarp.Size = new System.Drawing.Size(255, 421);
+            this.grpWarp.Size = new System.Drawing.Size(255, 444);
             this.grpWarp.TabIndex = 26;
             this.grpWarp.TabStop = false;
             this.grpWarp.Text = "Warp";
@@ -738,7 +753,7 @@ namespace Intersect.Editor.Forms.DockingElements
             this.grpInstanceSettings.Controls.Add(this.lblInstance);
             this.grpInstanceSettings.Controls.Add(this.cmbInstanceType);
             this.grpInstanceSettings.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpInstanceSettings.Location = new System.Drawing.Point(7, 292);
+            this.grpInstanceSettings.Location = new System.Drawing.Point(6, 315);
             this.grpInstanceSettings.Name = "grpInstanceSettings";
             this.grpInstanceSettings.Size = new System.Drawing.Size(242, 123);
             this.grpInstanceSettings.TabIndex = 31;
@@ -812,7 +827,7 @@ namespace Intersect.Editor.Forms.DockingElements
             // chkChangeInstance
             // 
             this.chkChangeInstance.AutoSize = true;
-            this.chkChangeInstance.Location = new System.Drawing.Point(6, 269);
+            this.chkChangeInstance.Location = new System.Drawing.Point(6, 297);
             this.chkChangeInstance.Name = "chkChangeInstance";
             this.chkChangeInstance.Size = new System.Drawing.Size(112, 17);
             this.chkChangeInstance.TabIndex = 28;
@@ -860,7 +875,7 @@ namespace Intersect.Editor.Forms.DockingElements
             // 
             // btnVisualMapSelector
             // 
-            this.btnVisualMapSelector.Location = new System.Drawing.Point(16, 231);
+            this.btnVisualMapSelector.Location = new System.Drawing.Point(15, 268);
             this.btnVisualMapSelector.Name = "btnVisualMapSelector";
             this.btnVisualMapSelector.Padding = new System.Windows.Forms.Padding(5);
             this.btnVisualMapSelector.Size = new System.Drawing.Size(222, 23);
@@ -1584,10 +1599,10 @@ namespace Intersect.Editor.Forms.DockingElements
             // 
             // pnlAttributes
             // 
+            this.pnlAttributes.Controls.Add(this.grpWarp);
             this.pnlAttributes.Controls.Add(this.grpItem);
             this.pnlAttributes.Controls.Add(this.rdoFootstep);
             this.pnlAttributes.Controls.Add(this.grpFootstep);
-            this.pnlAttributes.Controls.Add(this.grpWarp);
             this.pnlAttributes.Controls.Add(this.grpBlock);
             this.pnlAttributes.Controls.Add(this.grpCritter);
             this.pnlAttributes.Controls.Add(this.rbCritter);
@@ -2102,16 +2117,34 @@ namespace Intersect.Editor.Forms.DockingElements
             this.lightEditor.Visible = false;
             this.lightEditor.Load += new System.EventHandler(this.lightEditor_Load);
             // 
-            // chkItemBlock
+            // lblCommonSounds
             // 
-            this.chkItemBlock.AutoSize = true;
-            this.chkItemBlock.Location = new System.Drawing.Point(16, 199);
-            this.chkItemBlock.Name = "chkItemBlock";
-            this.chkItemBlock.Size = new System.Drawing.Size(59, 17);
-            this.chkItemBlock.TabIndex = 31;
-            this.chkItemBlock.Text = "Block?";
-            this.chkItemBlock.UseVisualStyleBackColor = true;
-            this.chkItemBlock.CheckedChanged += new System.EventHandler(this.chkItemBlock_CheckedChanged);
+            this.lblCommonSounds.AutoSize = true;
+            this.lblCommonSounds.Location = new System.Drawing.Point(21, 227);
+            this.lblCommonSounds.Name = "lblCommonSounds";
+            this.lblCommonSounds.Size = new System.Drawing.Size(90, 13);
+            this.lblCommonSounds.TabIndex = 34;
+            this.lblCommonSounds.Text = "Common Sounds:";
+            // 
+            // cmbCommonSounds
+            // 
+            this.cmbCommonSounds.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbCommonSounds.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbCommonSounds.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbCommonSounds.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbCommonSounds.DrawDropdownHoverOutline = false;
+            this.cmbCommonSounds.DrawFocusRectangle = false;
+            this.cmbCommonSounds.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbCommonSounds.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbCommonSounds.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbCommonSounds.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbCommonSounds.FormattingEnabled = true;
+            this.cmbCommonSounds.Location = new System.Drawing.Point(117, 224);
+            this.cmbCommonSounds.Name = "cmbCommonSounds";
+            this.cmbCommonSounds.Size = new System.Drawing.Size(124, 21);
+            this.cmbCommonSounds.TabIndex = 35;
+            this.cmbCommonSounds.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbCommonSounds.SelectedIndexChanged += new System.EventHandler(this.cmbCommonSounds_SelectedIndexChanged);
             // 
             // FrmMapLayers
             // 
@@ -2345,5 +2378,7 @@ namespace Intersect.Editor.Forms.DockingElements
         private Label lblDungeon;
         private DarkComboBox cmbDungeon;
         private CheckBox chkItemBlock;
+        private DarkComboBox cmbCommonSounds;
+        private Label lblCommonSounds;
     }
 }

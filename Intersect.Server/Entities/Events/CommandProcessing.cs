@@ -862,6 +862,11 @@ namespace Intersect.Server.Entities.Events
                     false, 0, false, command.FadeOnWarp, dungeonId: command.DungeonId
                 );
             }
+
+            if (!string.IsNullOrWhiteSpace(command.Sound))
+            {
+                PacketSender.SendPlaySound(player, command.Sound);
+            }
         }
 
         //Set Move Route Command

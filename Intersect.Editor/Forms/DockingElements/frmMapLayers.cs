@@ -10,6 +10,7 @@ using Intersect.Editor.General;
 using Intersect.Editor.Localization;
 using Intersect.Enums;
 using Intersect.GameObjects;
+using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Maps;
 using Intersect.GameObjects.Maps.MapList;
 using Intersect.Localization;
@@ -1338,6 +1339,9 @@ namespace Intersect.Editor.Forms.DockingElements
             cmbWarpSound.Items.Add(Strings.General.none);
             cmbWarpSound.Items.AddRange(GameContentManager.SmartSortedSoundNames);
             cmbWarpSound.SelectedIndex = 0;
+
+            cmbCommonSounds.Items.Clear();
+            cmbCommonSounds.Items.AddRange(Enum.GetNames(typeof(CommonSounds)));
         }
 
         private void btnTileHeader_Click(object sender, EventArgs e)
@@ -1574,6 +1578,13 @@ namespace Intersect.Editor.Forms.DockingElements
         private void chkItemBlock_CheckedChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void cmbCommonSounds_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var sound = (CommonSounds)cmbCommonSounds.SelectedIndex;
+
+            cmbWarpSound.Text = sound.GetDescription();
         }
     }
 
