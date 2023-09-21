@@ -12,6 +12,7 @@ using Intersect.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Intersect.Client.Interface.Game
 {
@@ -174,7 +175,10 @@ namespace Intersect.Client.Interface.Game
                     // Determine whether or not this event is a "dialog", with a speaker, to display the event differently.
                     HasSpeaker = false;
                     var prompt = Globals.EventDialogs[0].Prompt;
-                    var splitPrompt = prompt.Split(new string[] { ":\r\n" }, StringSplitOptions.None).ToList();
+
+                    var promptRegex = new Regex(@":\s+\n");
+
+                    var splitPrompt = promptRegex.Split(prompt).ToList();
                     if (splitPrompt.Count > 1 && splitPrompt[0].Split(' ').Length <= 4 && splitPrompt[0].Length > 0 && splitPrompt[0][0] != '"')
                     {
                         HasSpeaker = true;
