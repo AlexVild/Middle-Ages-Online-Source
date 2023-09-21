@@ -171,6 +171,12 @@
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_FlashScreen.Designer.cs">
       <DependentUpon>EventCommand_FlashScreen.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_HideEvent.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_HideEvent.Designer.cs">
+      <DependentUpon>EventCommand_HideEvent.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_MeleeSignup.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -284,6 +290,12 @@
     </Compile>
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_SetVehicle.Designer.cs">
       <DependentUpon>EventCommand_SetVehicle.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_ShowEvent.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_ShowEvent.Designer.cs">
+      <DependentUpon>EventCommand_ShowEvent.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_StartTimer.cs">
       <SubType>UserControl</SubType>
@@ -966,6 +978,9 @@
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_GiveExperience.resx">
       <DependentUpon>EventCommand_GiveExperience.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_HideEvent.resx">
+      <DependentUpon>EventCommand_HideEvent.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_MeleeSignup.resx">
       <DependentUpon>EventCommand_MeleeSignup.cs</DependentUpon>
     </EmbeddedResource>
@@ -1016,6 +1031,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_SetVehicle.resx">
       <DependentUpon>EventCommand_SetVehicle.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_ShowEvent.resx">
+      <DependentUpon>EventCommand_ShowEvent.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_StartQuest.resx">
       <DependentUpon>EventCommand_StartQuest.cs</DependentUpon>

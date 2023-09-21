@@ -905,6 +905,14 @@ namespace Intersect.Editor.Forms.Editors.Events
                     tmpCommand = new ChangeChampSettingsCommand();
                     break;
 
+                case EventCommandType.HideEvent:
+                    tmpCommand = new HideEventCommand();
+                    break;
+
+                case EventCommandType.ShowEvent:
+                    tmpCommand = new ShowEventCommand();
+                    break;
+
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -1685,6 +1693,14 @@ namespace Intersect.Editor.Forms.Editors.Events
 
                 case EventCommandType.ChangeChampSettings:
                     cmdWindow = new EventCommand_ChangeChampionSettings((ChangeChampSettingsCommand)command, this);
+                    break;
+
+                case EventCommandType.HideEvent:
+                    cmdWindow = new EventCommand_HideEvent((HideEventCommand)command, this, mCurrentMap, MyEvent);
+                    break;
+
+                case EventCommandType.ShowEvent:
+                    cmdWindow = new EventCommand_ShowEvent((ShowEventCommand)command, this, mCurrentMap, MyEvent);
                     break;
 
                 default:

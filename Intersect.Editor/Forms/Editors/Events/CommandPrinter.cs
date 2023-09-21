@@ -2103,5 +2103,29 @@ namespace Intersect.Editor.Forms.Editors.Events
                 return Strings.EventCommandList.ChangeChampSettings.ToString("Enabled");
             }
         }
+
+        private static string GetCommandText(HideEventCommand command, MapInstance map)
+        {
+            if (map.LocalEvents.ContainsKey(command.EventId))
+            {
+                return Strings.EventCommandList.HideEvent.ToString(map.LocalEvents[command.EventId].Name);
+            }
+            else
+            {
+                return Strings.EventCommandList.HideEvent.ToString(Strings.EventCommandList.deletedevent);
+            }
+        }
+
+        private static string GetCommandText(ShowEventCommand command, MapInstance map)
+        {
+            if (map.LocalEvents.ContainsKey(command.EventId))
+            {
+                return Strings.EventCommandList.ShowEvent.ToString(map.LocalEvents[command.EventId].Name);
+            }
+            else
+            {
+                return Strings.EventCommandList.ShowEvent.ToString(Strings.EventCommandList.deletedevent);
+            }
+        }
     }
 }

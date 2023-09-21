@@ -283,6 +283,8 @@ namespace Intersect.GameObjects.Events
         MeleeSignup, // 91
         MeleeWithdraw, // 92
         ChangeChampSettings, // 93
+        HideEvent, // 94
+        ShowEvent, // 95
     }
 
     public enum NPCGuildManagementSelection

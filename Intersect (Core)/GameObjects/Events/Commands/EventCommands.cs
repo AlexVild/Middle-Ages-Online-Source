@@ -1540,4 +1540,18 @@ namespace Intersect.GameObjects.Events.Commands
 
         public bool DisableSpawns { get; set; }
     }
+
+    public class HideEventCommand : EventCommand
+    {
+        public override EventCommandType Type { get; } = EventCommandType.HideEvent;
+
+        public Guid EventId { get; set; }
+    }
+
+    public class ShowEventCommand : EventCommand
+    {
+        public override EventCommandType Type { get; } = EventCommandType.ShowEvent;
+
+        public Guid EventId { get; set; }
+    }
 }

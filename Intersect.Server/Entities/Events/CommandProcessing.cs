@@ -3644,5 +3644,67 @@ namespace Intersect.Server.Entities.Events
                 PacketSender.SendToast(player, "Champion spawning has been enabled.");
             }
         }
+        
+        private static void ProcessCommand(
+          HideEventCommand command,
+          Player player,
+          Event instance,
+          CommandInstance stackInfo,
+          Stack<CommandInstance> callStack
+       )
+        {
+            if (player == null)
+            {
+                return;
+            }
+
+            foreach (var evt in player.EventLookup)
+            {
+                if (evt.Value.BaseEvent.Id != command.EventId || evt.Value.PageInstance == null)
+                {
+                    continue;
+                }
+
+                if (evt.Value.PageInstance.IsGlobal)
+                {
+                    evt.Value.PageInstance.GlobalClone.HideEvent();
+                }
+                else
+                {
+                    evt.Value.PageInstance.HideEvent();
+                }
+            }
+        }
+
+        private static void ProcessCommand(
+          ShowEventCommand command,
+          Player player,
+          Event instance,
+          CommandInstance stackInfo,
+          Stack<CommandInstance> callStack
+       )
+        {
+            if (player == null)
+            {
+                return;
+            }
+
+            foreach (var evt in player.EventLookup)
+            {
+                if (evt.Value.BaseEvent.Id != command.EventId || evt.Value.PageInstance == null)
+                {
+                    continue;
+                }
+
+                if (evt.Value.PageInstance.IsGlobal)
+                {
+                    evt.Value.PageInstance.GlobalClone.ShowEvent();
+                }
+                else
+                {
+                    evt.Value.PageInstance.ShowEvent();
+                }
+            }
+        }
     }
 }

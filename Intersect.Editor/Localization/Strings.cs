@@ -2014,6 +2014,12 @@ Tick timer saved in server config.json.";
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString resetquest = @"Reset to Uncomplete";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString HideEvent = @"Hide Event: {00}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ShowEvent = @"Show Event: {00}";
+
             public static LocalizedString selfswitch = @"Set Self Switch {00} to {01}";
 
             public static LocalizedString showplayer = @"Show Player";
@@ -2351,6 +2357,8 @@ Tick timer saved in server config.json.";
                 {"meleesignup", @"Signup for Open Melee"},
                 {"meleewithdraw", @"Withdraw from Open Melee"},
                 {"changechampsettings", @"Change Champion Spawn Settings"},
+                {"hideevent", @"Hide Event"},
+                {"showevent", @"Show Event"},
             };
 
         }

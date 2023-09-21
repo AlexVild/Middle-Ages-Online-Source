@@ -22,6 +22,8 @@ namespace Intersect.Server.Entities.Events
 
         public EventPageInstance GlobalClone;
 
+        public bool IsGlobal => GlobalClone != null;
+
         private bool mDirectionFix;
 
         private EventMovementSpeed mMovementSpeed;
@@ -57,6 +59,9 @@ namespace Intersect.Server.Entities.Events
         public int SpawnY { get; set; }
 
         public int SpawnDir { get; set; }
+
+        public string LastGraphic { get; set; }
+        public bool LastHideName { get; set; }
 
         public EventPageInstance(
             EventBase myEvent,
@@ -95,6 +100,8 @@ namespace Intersect.Server.Entities.Events
             MyGraphic.Y = MyPage.Graphic.Y;
             MyGraphic.Width = MyPage.Graphic.Width;
             MyGraphic.Height = MyPage.Graphic.Height;
+            LastGraphic = MyGraphic.Filename;
+            LastHideName = HideName;
             Sprite = MyPage.Graphic.Filename;
             mDirectionFix = MyPage.DirectionFix;
             mWalkingAnim = MyPage.WalkingAnimation;
@@ -290,6 +297,25 @@ namespace Intersect.Server.Entities.Events
             pkt.RenderLayer = (byte) mRenderLayer;
 
             return pkt;
+        }
+
+        public void HideEvent()
+        {
+            LastHideName = HideName;
+            LastGraphic = MyGraphic.Filename;
+            
+            HideName = true;
+            MyGraphic.Filename = default;
+
+            SendToPlayer();
+        }
+
+        public void ShowEvent()
+        {
+            HideName = LastHideName;
+            MyGraphic.Filename = LastGraphic;
+
+            SendToPlayer();
         }
 
         public void SetMovementSpeed(EventMovementSpeed speed)
