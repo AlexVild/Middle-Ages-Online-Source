@@ -1308,6 +1308,9 @@ namespace Intersect.GameObjects.Events.Commands
             ItemObtained = 0,
             QuestCompleted,
             NoSpace,
+            Locked,
+            Exp,
+            GiveItem,
         }
 
         public ShowTextTemplate Template;
@@ -1321,6 +1324,14 @@ namespace Intersect.GameObjects.Events.Commands
         public Guid QuestId;
 
         public string Color { get; set; } = "";
+
+        public bool PlaySound { get; set; }
+
+        public string Sound { get; set; }
+
+        public string TemplateParam { get; set; }
+
+        public long TemplateQuantity { get; set; }
 
         public ChatboxChannel Channel { get; set; } = ChatboxChannel.Player;
     }

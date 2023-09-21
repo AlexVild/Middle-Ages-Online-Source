@@ -1799,6 +1799,18 @@ namespace Intersect.Server.Localization
             public readonly LocalizedString NoSpace = @"You don't have enough inventory space to receive an item! Make room and try again.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString Locked = @"It's locked.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString Exp = @"You've been awarded {00} experience points.";
+            
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString GiveItemSingle = @"You {00} a {01}.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString GiveItemQuantity = @"You {00} {01} {02}.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString QuestCompleted = @"You've completed the quest: {00}!";
         }
 

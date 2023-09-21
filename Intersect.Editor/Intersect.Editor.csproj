@@ -1011,6 +1011,9 @@
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_PlayAnimation.resx">
       <DependentUpon>EventCommand_PlayAnimation.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_PlayBgs.resx">
+      <DependentUpon>EventCommand_PlayBgs.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_RandomQuest.resx">
       <DependentUpon>EventCommand_RandomQuest.cs</DependentUpon>
     </EmbeddedResource>
@@ -1052,6 +1055,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_Variable.resx">
       <DependentUpon>EventCommand_Variable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_Wait.resx">
+      <DependentUpon>EventCommand_Wait.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_Warp.resx">
       <DependentUpon>EventCommand_Warp.cs</DependentUpon>

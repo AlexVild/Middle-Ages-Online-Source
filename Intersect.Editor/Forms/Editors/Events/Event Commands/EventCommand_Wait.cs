@@ -47,6 +47,23 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         {
         }
 
+        private void btnShort_Click(object sender, EventArgs e)
+        {
+            mMyCommand.Time = 400;
+            mEventEditor.FinishCommandEdit();
+        }
+
+        private void btnMedium_Click(object sender, EventArgs e)
+        {
+            mMyCommand.Time = 800;
+            mEventEditor.FinishCommandEdit();
+        }
+
+        private void btn1sec_Click(object sender, EventArgs e)
+        {
+            mMyCommand.Time = 1500;
+            mEventEditor.FinishCommandEdit();
+        }
     }
 
 }

@@ -65,10 +65,12 @@ namespace Intersect.Server.Entities.Events
                 switch(command.Template)
                 {
                     case ShowTextTemplate.ItemObtained:
+                        var quantity = command.TemplateQuantity;
                         var item = ItemBase.Get(command.ItemId);
                         if (item == default)
                         {
                             item = instance.LastItem;
+                            quantity = instance.LastItemQuantity;
                             if (item == default)
                             {
                                 return;
@@ -77,7 +79,7 @@ namespace Intersect.Server.Entities.Events
 
                         var name = item.Name.Trim();
 
-                        if (instance.LastItemQuantity <= 1)
+                        if (quantity <= 1)
                         {
                             text = Strings.TextTemplates.ItemObtained.ToString(name);
                         }
@@ -87,7 +89,7 @@ namespace Intersect.Server.Entities.Events
                             {
                                 name = name.Substring(0, name.Length - 1);
                             }
-                            text = Strings.TextTemplates.ItemObtainedMany.ToString(instance.LastItemQuantity, name);
+                            text = Strings.TextTemplates.ItemObtainedMany.ToString(quantity, name);
                         }
 
                         if (!string.IsNullOrEmpty(item.Animation?.Sound))
@@ -122,6 +124,33 @@ namespace Intersect.Server.Entities.Events
                             player, ParseEventText(text, player, instance), string.Empty, instance.PageInstance.Id
                         );
                         break;
+                    case ShowTextTemplate.Locked:
+                        text = Strings.TextTemplates.Locked;
+                        PacketSender.SendPlaySound(player, Options.Instance.ChatOpts.LockedSound);
+                        PacketSender.SendEventDialog(
+                            player, ParseEventText(text, player, instance), string.Empty, instance.PageInstance.Id
+                        );
+                        break;
+                    case ShowTextTemplate.Exp:
+                        text = Strings.TextTemplates.Exp.ToString(instance.LastExp);
+                        PacketSender.SendEventDialog(
+                            player, ParseEventText(text, player, instance), string.Empty, instance.PageInstance.Id
+                        );
+                        break;
+                    case ShowTextTemplate.GiveItem:
+                        var itemName = ItemBase.GetName(instance.LastItemId);
+                        if (instance.LastItemQuantity > 1)
+                        {
+                            text = Strings.TextTemplates.GiveItemQuantity.ToString(command.TemplateParam, instance.LastItemQuantity, itemName);
+                        }
+                        else
+                        {
+                            text = Strings.TextTemplates.GiveItemSingle.ToString(command.TemplateParam, itemName);
+                        }
+                        PacketSender.SendEventDialog(
+                            player, ParseEventText(text, player, instance), string.Empty, instance.PageInstance.Id
+                        );
+                        break;
                     default:
                         var errMsg = $"Invalid template for event text command for {player.Name}: {command.Template}";
 #if DEBUG
@@ -135,6 +164,7 @@ namespace Intersect.Server.Entities.Events
             else
             {
                 text = command.Text;
+
                 PacketSender.SendEventDialog(
                     player, ParseEventText(command.Text, player, instance), command.Face, instance.PageInstance.Id
                 );
@@ -150,6 +180,11 @@ namespace Intersect.Server.Entities.Events
                 {
                     Logging.Log.Error($"Failed to send chatbox message with text event for ${player.Name}");
                 }
+            }
+
+            if (command.PlaySound)
+            {
+                PacketSender.SendPlaySound(player, command.Sound);
             }
 
             stackInfo.WaitingForResponse = CommandInstance.EventResponse.Dialogue;
@@ -493,6 +528,7 @@ namespace Intersect.Server.Entities.Events
                 }
             }
 
+            instance.LastExp = quantity;
             player.GiveExperience(quantity);
         }
 

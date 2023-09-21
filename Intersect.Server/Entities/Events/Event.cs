@@ -510,6 +510,8 @@ namespace Intersect.Server.Entities.Events
         public Guid LastItemId;
 
         public ItemBase LastItem => ItemBase.Get(LastItemId) ?? null;
+
+        public long LastExp = 0;
     }
 
 }

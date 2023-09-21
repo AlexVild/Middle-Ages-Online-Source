@@ -64,8 +64,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpChangeItems.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.grpChangeItems.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.grpChangeItems.Controls.Add(this.chkStacks);
-            this.grpChangeItems.Controls.Add(this.grpVariableAmount);
             this.grpChangeItems.Controls.Add(this.grpManualAmount);
+            this.grpChangeItems.Controls.Add(this.grpVariableAmount);
             this.grpChangeItems.Controls.Add(this.grpAmountType);
             this.grpChangeItems.Controls.Add(this.cmbMethod);
             this.grpChangeItems.Controls.Add(this.lblMethod);
@@ -78,14 +78,14 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpChangeItems.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpChangeItems.Location = new System.Drawing.Point(3, 3);
             this.grpChangeItems.Name = "grpChangeItems";
-            this.grpChangeItems.Size = new System.Drawing.Size(306, 293);
+            this.grpChangeItems.Size = new System.Drawing.Size(306, 372);
             this.grpChangeItems.TabIndex = 17;
             this.grpChangeItems.TabStop = false;
             this.grpChangeItems.Text = "Change Player Items:";
             // 
             // chkStacks
             // 
-            this.chkStacks.Location = new System.Drawing.Point(8, 241);
+            this.chkStacks.Location = new System.Drawing.Point(27, 343);
             this.chkStacks.Name = "chkStacks";
             this.chkStacks.Size = new System.Drawing.Size(98, 17);
             this.chkStacks.TabIndex = 60;
@@ -101,7 +101,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpVariableAmount.Controls.Add(this.rdoGlobalVariable);
             this.grpVariableAmount.Controls.Add(this.rdoPlayerVariable);
             this.grpVariableAmount.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpVariableAmount.Location = new System.Drawing.Point(8, 100);
+            this.grpVariableAmount.Location = new System.Drawing.Point(8, 198);
             this.grpVariableAmount.Name = "grpVariableAmount";
             this.grpVariableAmount.Size = new System.Drawing.Size(292, 130);
             this.grpVariableAmount.TabIndex = 38;
@@ -177,7 +177,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpManualAmount.Controls.Add(this.nudGiveTakeAmount);
             this.grpManualAmount.Controls.Add(this.lblAmount);
             this.grpManualAmount.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpManualAmount.Location = new System.Drawing.Point(8, 100);
+            this.grpManualAmount.Location = new System.Drawing.Point(6, 196);
             this.grpManualAmount.Name = "grpManualAmount";
             this.grpManualAmount.Size = new System.Drawing.Size(292, 71);
             this.grpManualAmount.TabIndex = 37;
@@ -224,7 +224,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpAmountType.Controls.Add(this.rdoVariable);
             this.grpAmountType.Controls.Add(this.rdoManual);
             this.grpAmountType.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpAmountType.Location = new System.Drawing.Point(185, 19);
+            this.grpAmountType.Location = new System.Drawing.Point(10, 115);
             this.grpAmountType.Name = "grpAmountType";
             this.grpAmountType.Size = new System.Drawing.Size(115, 75);
             this.grpAmountType.TabIndex = 36;
@@ -272,7 +272,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             "Up to Amount"});
             this.cmbMethod.Location = new System.Drawing.Point(64, 73);
             this.cmbMethod.Name = "cmbMethod";
-            this.cmbMethod.Size = new System.Drawing.Size(115, 21);
+            this.cmbMethod.Size = new System.Drawing.Size(230, 21);
             this.cmbMethod.TabIndex = 28;
             this.cmbMethod.Text = "Normal";
             this.cmbMethod.TextPadding = new System.Windows.Forms.Padding(2);
@@ -301,7 +301,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbItem.FormattingEnabled = true;
             this.cmbItem.Location = new System.Drawing.Point(64, 46);
             this.cmbItem.Name = "cmbItem";
-            this.cmbItem.Size = new System.Drawing.Size(115, 21);
+            this.cmbItem.Size = new System.Drawing.Size(230, 21);
             this.cmbItem.TabIndex = 24;
             this.cmbItem.Text = null;
             this.cmbItem.TextPadding = new System.Windows.Forms.Padding(2);
@@ -333,7 +333,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             "Take"});
             this.cmbAction.Location = new System.Drawing.Point(64, 19);
             this.cmbAction.Name = "cmbAction";
-            this.cmbAction.Size = new System.Drawing.Size(115, 21);
+            this.cmbAction.Size = new System.Drawing.Size(230, 21);
             this.cmbAction.TabIndex = 22;
             this.cmbAction.Text = "Give";
             this.cmbAction.TextPadding = new System.Windows.Forms.Padding(2);
@@ -349,7 +349,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(225, 264);
+            this.btnCancel.Location = new System.Drawing.Point(219, 343);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Padding = new System.Windows.Forms.Padding(5);
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
@@ -359,7 +359,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(8, 264);
+            this.btnSave.Location = new System.Drawing.Point(138, 343);
             this.btnSave.Name = "btnSave";
             this.btnSave.Padding = new System.Windows.Forms.Padding(5);
             this.btnSave.Size = new System.Drawing.Size(75, 23);
@@ -375,7 +375,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.Controls.Add(this.grpChangeItems);
             this.Name = "EventCommandChangeItems";
-            this.Size = new System.Drawing.Size(314, 306);
+            this.Size = new System.Drawing.Size(314, 384);
             this.grpChangeItems.ResumeLayout(false);
             this.grpChangeItems.PerformLayout();
             this.grpVariableAmount.ResumeLayout(false);

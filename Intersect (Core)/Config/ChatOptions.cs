@@ -28,6 +28,10 @@
         public string ChatSendSound = "al_typing_send.wav";
 
         public string UIDenySound = "al_gui_cancel.wav";
+        
+        public string LockedSound = "al_locked.wav";
+        
+        public string GiveItemSound = "al_cloth_heavy.wav";
 
         public string BankSortSound = "";
     }

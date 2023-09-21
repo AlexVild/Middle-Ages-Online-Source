@@ -66,6 +66,9 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                 rdoItem.Checked = mMyCommand.Template == ShowTextTemplate.ItemObtained;
                 rdoQuest.Checked = mMyCommand.Template == ShowTextTemplate.QuestCompleted;
                 rdoInventorySpace.Checked = mMyCommand.Template == ShowTextTemplate.NoSpace;
+                rdoLocked.Checked = mMyCommand.Template == ShowTextTemplate.Locked;
+                rdoExp.Checked = mMyCommand.Template == ShowTextTemplate.Exp;
+                rdoGiveItem.Checked = mMyCommand.Template == ShowTextTemplate.GiveItem;
             }
 
             chkSendToChatbox.Checked = mMyCommand.SendToChatbox;
@@ -97,6 +100,28 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                 cmbChannel.SelectedIndex = 0;
             }
 
+            chkPlaySound.Checked = mMyCommand.PlaySound;
+            cmbSound.Items.Clear();
+            cmbSound.Items.AddRange(GameContentManager.SmartSortedSoundNames);
+            if (cmbSound.Items.IndexOf(TextUtils.NullToNone(mMyCommand.Sound)) > -1)
+            {
+                cmbSound.SelectedIndex = cmbSound.Items.IndexOf(TextUtils.NullToNone(mMyCommand.Sound));
+            }
+            else
+            {
+                cmbSound.SelectedIndex = 0;
+            }
+
+            if (rdoGiveItem.Checked)
+            {
+                txtVerb.Text = mMyCommand.TemplateParam;
+            }
+
+            if (rdoItem.Checked)
+            {
+                nudTemplateQuantity.Value = mMyCommand.TemplateQuantity;
+            }
+
             ToggleAvailabilities();
 
             UpdateFacePreview();
@@ -112,6 +137,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             cmbItems.Enabled = rdoItem.Checked;
             cmbQuests.Enabled = rdoQuest.Checked;
             grpChatboxSettings.Enabled = chkSendToChatbox.Checked;
+            grpSound.Enabled = chkPlaySound.Checked;
+            txtVerb.Enabled = rdoGiveItem.Checked;
         }
 
         private void InitLocalization()
@@ -155,6 +182,21 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             mMyCommand.Color = cmbColor.Text;
             mMyCommand.Channel = (ChatboxChannel)cmbChannel.SelectedIndex;
 
+            mMyCommand.PlaySound = chkPlaySound.Checked;
+            mMyCommand.Sound = cmbSound.Text;
+
+            mMyCommand.TemplateParam = string.Empty;
+            mMyCommand.TemplateQuantity = 0L;
+            if (mMyCommand.Template == ShowTextTemplate.GiveItem)
+            {
+                mMyCommand.TemplateParam = txtVerb.Text;
+            }
+
+            if (mMyCommand.Template == ShowTextTemplate.ItemObtained)
+            {
+                mMyCommand.TemplateQuantity = (long)nudTemplateQuantity.Value;
+            }
+
             mEventEditor.FinishCommandEdit();
         }
 
@@ -163,6 +205,9 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             if (rdoItem.Checked) return ShowTextTemplate.ItemObtained;
             if (rdoQuest.Checked) return ShowTextTemplate.QuestCompleted;
             if (rdoInventorySpace.Checked) return ShowTextTemplate.NoSpace;
+            if (rdoLocked.Checked) return ShowTextTemplate.Locked;
+            if (rdoExp.Checked) return ShowTextTemplate.Exp;
+            if (rdoGiveItem.Checked) return ShowTextTemplate.GiveItem;
             // default
             return ShowTextTemplate.ItemObtained;
         }
@@ -216,6 +261,41 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
 
         private void chkSendToChatbox_CheckedChanged(object sender, EventArgs e)
         {
+            ToggleAvailabilities();
+        }
+
+        private void rdoLocked_CheckedChanged(object sender, EventArgs e)
+        {
+            if (IsLoading)
+            {
+                return;
+            }
+
+            ToggleAvailabilities();
+        }
+
+        private void rdoExp_CheckedChanged(object sender, EventArgs e)
+        {
+            if (IsLoading)
+            {
+                return;
+            }
+
+            ToggleAvailabilities();
+        }
+
+        private void chkPlaySound_CheckedChanged(object sender, EventArgs e)
+        {
+            ToggleAvailabilities();
+        }
+
+        private void rdoGiveItem_CheckedChanged(object sender, EventArgs e)
+        {
+            if (IsLoading)
+            {
+                return;
+            }
+
             ToggleAvailabilities();
         }
     }
