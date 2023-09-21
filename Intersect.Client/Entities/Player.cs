@@ -2761,6 +2761,11 @@ namespace Intersect.Client.Entities
             }
             base.DrawName(textColor, borderColor, backgroundColor);
 
+            if (InCutscene())
+            {
+                return;
+            }
+
             // If in PvP, draw all colors the same (red)
             if (!IsAllyOf(Globals.Me) && Globals.Me.MapInstance.ZoneType != MapZones.Safe)
             {
