@@ -245,7 +245,8 @@ namespace Intersect.Client.Entities
             Load(packet);
 
             var inProximity = InNameProximity();
-            NameOpacity = inProximity ? byte.MaxValue : ClientConfiguration.Instance.MinimumNameOpacity;
+            //NameOpacity = inProximity ? byte.MaxValue : ClientConfiguration.Instance.MinimumNameOpacity;
+            NameOpacity = inProximity ? byte.MaxValue : 0;
             FadeName = !inProximity;
         }
 
@@ -3507,7 +3508,12 @@ namespace Intersect.Client.Entities
             }
 
             var mousePos = Graphics.ConvertToWorldPoint(Globals.InputManager.GetMousePosition());
-            return CalculateTileDistanceTo(Globals.Me) <= ClientConfiguration.Instance.ProximityNameDistance 
+            /*return CalculateTileDistanceTo(Globals.Me) <= ClientConfiguration.Instance.ProximityNameDistance 
+                || WorldPos.Contains(mousePos.X, mousePos.Y) 
+                || IsTargeted 
+                || !IsAllyOf(Globals.Me) 
+                || this is Player && (Globals.Me.MapInstance?.ZoneType != MapZones.Safe);*/
+            return CalculateTileDistanceTo(Globals.Me) <= 6 
                 || WorldPos.Contains(mousePos.X, mousePos.Y) 
                 || IsTargeted 
                 || !IsAllyOf(Globals.Me) 
