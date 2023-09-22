@@ -32,11 +32,18 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         {
             this.grpShowText = new DarkUI.Controls.DarkGroupBox();
             this.grpSound = new DarkUI.Controls.DarkGroupBox();
+            this.cmbCommonSound = new DarkUI.Controls.DarkComboBox();
+            this.lblCommonSound = new System.Windows.Forms.Label();
             this.lblSound = new System.Windows.Forms.Label();
             this.cmbSound = new DarkUI.Controls.DarkComboBox();
             this.darkCheckBox5 = new DarkUI.Controls.DarkCheckBox();
             this.chkPlaySound = new DarkUI.Controls.DarkCheckBox();
             this.grpTemplates = new DarkUI.Controls.DarkGroupBox();
+            this.lblAmt = new System.Windows.Forms.Label();
+            this.nudTemplateQuantity = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblGiveText = new System.Windows.Forms.Label();
+            this.txtVerb = new DarkUI.Controls.DarkTextBox();
+            this.rdoGiveItem = new DarkUI.Controls.DarkRadioButton();
             this.rdoExp = new DarkUI.Controls.DarkRadioButton();
             this.rdoLocked = new DarkUI.Controls.DarkRadioButton();
             this.rdoInventorySpace = new DarkUI.Controls.DarkRadioButton();
@@ -65,17 +72,12 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.chkTemplate = new DarkUI.Controls.DarkCheckBox();
             this.btnCancel = new DarkUI.Controls.DarkButton();
             this.btnSave = new DarkUI.Controls.DarkButton();
-            this.rdoGiveItem = new DarkUI.Controls.DarkRadioButton();
-            this.txtVerb = new DarkUI.Controls.DarkTextBox();
-            this.lblGiveText = new System.Windows.Forms.Label();
-            this.nudTemplateQuantity = new DarkUI.Controls.DarkNumericUpDown();
-            this.lblAmt = new System.Windows.Forms.Label();
             this.grpShowText.SuspendLayout();
             this.grpSound.SuspendLayout();
             this.grpTemplates.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudTemplateQuantity)).BeginInit();
             this.grpText.SuspendLayout();
             this.grpChatboxSettings.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudTemplateQuantity)).BeginInit();
             this.SuspendLayout();
             // 
             // grpShowText
@@ -94,7 +96,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpShowText.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpShowText.Location = new System.Drawing.Point(3, 0);
             this.grpShowText.Name = "grpShowText";
-            this.grpShowText.Size = new System.Drawing.Size(312, 507);
+            this.grpShowText.Size = new System.Drawing.Size(312, 550);
             this.grpShowText.TabIndex = 17;
             this.grpShowText.TabStop = false;
             this.grpShowText.Text = "Show Text";
@@ -103,16 +105,48 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             this.grpSound.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.grpSound.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpSound.Controls.Add(this.cmbCommonSound);
+            this.grpSound.Controls.Add(this.lblCommonSound);
             this.grpSound.Controls.Add(this.lblSound);
             this.grpSound.Controls.Add(this.cmbSound);
             this.grpSound.Controls.Add(this.darkCheckBox5);
             this.grpSound.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpSound.Location = new System.Drawing.Point(6, 427);
             this.grpSound.Name = "grpSound";
-            this.grpSound.Size = new System.Drawing.Size(294, 45);
+            this.grpSound.Size = new System.Drawing.Size(294, 88);
             this.grpSound.TabIndex = 120;
             this.grpSound.TabStop = false;
             this.grpSound.Text = "Sound";
+            // 
+            // cmbCommonSound
+            // 
+            this.cmbCommonSound.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbCommonSound.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbCommonSound.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbCommonSound.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbCommonSound.DrawDropdownHoverOutline = false;
+            this.cmbCommonSound.DrawFocusRectangle = false;
+            this.cmbCommonSound.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbCommonSound.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbCommonSound.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbCommonSound.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbCommonSound.FormattingEnabled = true;
+            this.cmbCommonSound.Location = new System.Drawing.Point(135, 51);
+            this.cmbCommonSound.Name = "cmbCommonSound";
+            this.cmbCommonSound.Size = new System.Drawing.Size(147, 21);
+            this.cmbCommonSound.TabIndex = 117;
+            this.cmbCommonSound.Text = null;
+            this.cmbCommonSound.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbCommonSound.SelectedIndexChanged += new System.EventHandler(this.cmbCommonSound_SelectedIndexChanged);
+            // 
+            // lblCommonSound
+            // 
+            this.lblCommonSound.AutoSize = true;
+            this.lblCommonSound.Location = new System.Drawing.Point(47, 54);
+            this.lblCommonSound.Name = "lblCommonSound";
+            this.lblCommonSound.Size = new System.Drawing.Size(82, 13);
+            this.lblCommonSound.TabIndex = 116;
+            this.lblCommonSound.Text = "Common Sound";
             // 
             // lblSound
             // 
@@ -187,6 +221,70 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpTemplates.TabIndex = 114;
             this.grpTemplates.TabStop = false;
             this.grpTemplates.Text = "Templates";
+            // 
+            // lblAmt
+            // 
+            this.lblAmt.AutoSize = true;
+            this.lblAmt.Location = new System.Drawing.Point(118, 19);
+            this.lblAmt.Name = "lblAmt";
+            this.lblAmt.Size = new System.Drawing.Size(43, 13);
+            this.lblAmt.TabIndex = 125;
+            this.lblAmt.Text = "Amount";
+            // 
+            // nudTemplateQuantity
+            // 
+            this.nudTemplateQuantity.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudTemplateQuantity.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudTemplateQuantity.Location = new System.Drawing.Point(167, 17);
+            this.nudTemplateQuantity.Maximum = new decimal(new int[] {
+            10000000,
+            0,
+            0,
+            0});
+            this.nudTemplateQuantity.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudTemplateQuantity.Name = "nudTemplateQuantity";
+            this.nudTemplateQuantity.Size = new System.Drawing.Size(115, 20);
+            this.nudTemplateQuantity.TabIndex = 124;
+            this.nudTemplateQuantity.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            // 
+            // lblGiveText
+            // 
+            this.lblGiveText.AutoSize = true;
+            this.lblGiveText.Location = new System.Drawing.Point(193, 215);
+            this.lblGiveText.Name = "lblGiveText";
+            this.lblGiveText.Size = new System.Drawing.Size(29, 13);
+            this.lblGiveText.TabIndex = 123;
+            this.lblGiveText.Text = "Verb";
+            // 
+            // txtVerb
+            // 
+            this.txtVerb.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.txtVerb.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtVerb.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
+            this.txtVerb.Location = new System.Drawing.Point(156, 189);
+            this.txtVerb.Multiline = true;
+            this.txtVerb.Name = "txtVerb";
+            this.txtVerb.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
+            this.txtVerb.Size = new System.Drawing.Size(110, 23);
+            this.txtVerb.TabIndex = 122;
+            // 
+            // rdoGiveItem
+            // 
+            this.rdoGiveItem.AutoSize = true;
+            this.rdoGiveItem.Location = new System.Drawing.Point(6, 195);
+            this.rdoGiveItem.Name = "rdoGiveItem";
+            this.rdoGiveItem.Size = new System.Drawing.Size(140, 17);
+            this.rdoGiveItem.TabIndex = 121;
+            this.rdoGiveItem.Text = "Give Item (Most Recent)";
+            this.rdoGiveItem.CheckedChanged += new System.EventHandler(this.rdoGiveItem_CheckedChanged);
             // 
             // rdoExp
             // 
@@ -509,7 +607,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             // btnCancel
             // 
-            this.btnCancel.Location = new System.Drawing.Point(88, 478);
+            this.btnCancel.Location = new System.Drawing.Point(225, 521);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Padding = new System.Windows.Forms.Padding(5);
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
@@ -519,77 +617,13 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(10, 478);
+            this.btnSave.Location = new System.Drawing.Point(144, 521);
             this.btnSave.Name = "btnSave";
             this.btnSave.Padding = new System.Windows.Forms.Padding(5);
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 19;
             this.btnSave.Text = "Ok";
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
-            // 
-            // rdoGiveItem
-            // 
-            this.rdoGiveItem.AutoSize = true;
-            this.rdoGiveItem.Location = new System.Drawing.Point(6, 195);
-            this.rdoGiveItem.Name = "rdoGiveItem";
-            this.rdoGiveItem.Size = new System.Drawing.Size(140, 17);
-            this.rdoGiveItem.TabIndex = 121;
-            this.rdoGiveItem.Text = "Give Item (Most Recent)";
-            this.rdoGiveItem.CheckedChanged += new System.EventHandler(this.rdoGiveItem_CheckedChanged);
-            // 
-            // txtVerb
-            // 
-            this.txtVerb.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.txtVerb.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtVerb.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(220)))), ((int)(((byte)(220)))));
-            this.txtVerb.Location = new System.Drawing.Point(156, 189);
-            this.txtVerb.Multiline = true;
-            this.txtVerb.Name = "txtVerb";
-            this.txtVerb.ScrollBars = System.Windows.Forms.ScrollBars.Horizontal;
-            this.txtVerb.Size = new System.Drawing.Size(110, 23);
-            this.txtVerb.TabIndex = 122;
-            // 
-            // lblGiveText
-            // 
-            this.lblGiveText.AutoSize = true;
-            this.lblGiveText.Location = new System.Drawing.Point(193, 215);
-            this.lblGiveText.Name = "lblGiveText";
-            this.lblGiveText.Size = new System.Drawing.Size(29, 13);
-            this.lblGiveText.TabIndex = 123;
-            this.lblGiveText.Text = "Verb";
-            // 
-            // nudTemplateQuantity
-            // 
-            this.nudTemplateQuantity.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudTemplateQuantity.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudTemplateQuantity.Location = new System.Drawing.Point(167, 17);
-            this.nudTemplateQuantity.Maximum = new decimal(new int[] {
-            10000000,
-            0,
-            0,
-            0});
-            this.nudTemplateQuantity.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nudTemplateQuantity.Name = "nudTemplateQuantity";
-            this.nudTemplateQuantity.Size = new System.Drawing.Size(115, 20);
-            this.nudTemplateQuantity.TabIndex = 124;
-            this.nudTemplateQuantity.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            // 
-            // lblAmt
-            // 
-            this.lblAmt.AutoSize = true;
-            this.lblAmt.Location = new System.Drawing.Point(118, 19);
-            this.lblAmt.Name = "lblAmt";
-            this.lblAmt.Size = new System.Drawing.Size(43, 13);
-            this.lblAmt.TabIndex = 125;
-            this.lblAmt.Text = "Amount";
             // 
             // EventCommandText
             // 
@@ -599,17 +633,17 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.Controls.Add(this.grpShowText);
             this.Name = "EventCommandText";
-            this.Size = new System.Drawing.Size(320, 517);
+            this.Size = new System.Drawing.Size(320, 559);
             this.grpShowText.ResumeLayout(false);
             this.grpSound.ResumeLayout(false);
             this.grpSound.PerformLayout();
             this.grpTemplates.ResumeLayout(false);
             this.grpTemplates.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudTemplateQuantity)).EndInit();
             this.grpText.ResumeLayout(false);
             this.grpText.PerformLayout();
             this.grpChatboxSettings.ResumeLayout(false);
             this.grpChatboxSettings.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudTemplateQuantity)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -656,5 +690,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private DarkTextBox txtVerb;
         private System.Windows.Forms.Label lblAmt;
         private DarkNumericUpDown nudTemplateQuantity;
+        private DarkComboBox cmbCommonSound;
+        private System.Windows.Forms.Label lblCommonSound;
     }
 }

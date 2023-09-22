@@ -503,4 +503,16 @@ namespace Intersect.GameObjects.Events
         [Description("al_portal_use.wav")]
         Portal,
     }
+
+    public enum CommonTextSounds
+    {
+        [Description("al_cloth-heavy.wav")]
+        ReceiveItem,
+
+        [Description("al_gui_cancel.wav")]
+        FailOrCancel,
+
+        [Description("al_spell_learn.wav")]
+        Learn,
+    }
 }

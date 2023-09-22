@@ -8,6 +8,7 @@ using Intersect.Editor.General;
 using Intersect.Editor.Localization;
 using Intersect.Enums;
 using Intersect.GameObjects;
+using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Events.Commands;
 using Intersect.Models;
 using Intersect.Utilities;
@@ -154,6 +155,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             {
                 cmbChannel.Items.Add(Strings.EventChatboxText.channels[i]);
             }
+            cmbSound.Items.Clear();
+            cmbSound.Items.AddRange(Enum.GetNames(typeof(CommonTextSounds)));
         }
 
         private void UpdateFacePreview()
@@ -297,6 +300,12 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             }
 
             ToggleAvailabilities();
+        }
+
+        private void cmbCommonSound_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var sound = (CommonTextSounds)cmbCommonSound.SelectedIndex;
+            cmbSound.Text = sound.GetDescription();
         }
     }
 
