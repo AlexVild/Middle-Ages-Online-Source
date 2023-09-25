@@ -102,7 +102,7 @@ namespace Intersect.Server.Entities
             return true;
         }
 
-        private bool TryHarvestResourceProjectile(Resource target, Projectile projectile)
+        private bool TryHarvestResourceProjectile(Resource target, Projectile projectile, SpellBase parentSpell)
         {
             if (target == null || target.Base == null || projectile == null || projectile.Base == null)
             {
@@ -139,6 +139,12 @@ namespace Intersect.Server.Entities
                 {
                     PacketSender.SendAnimationToProximity(projectile.Item.AttackAnimationId, 1, target.Id, target.MapId, (byte)target.X, (byte)target.Y, (sbyte)target.Dir, target.MapInstanceId, true);
                 }
+            }
+            
+            // If this is a spell-born projectile attacking a non-tool resource, attack it as normal
+            if (parentSpell != null)
+            {
+                CombatUtilities.CalculateDamage(parentSpell.Combat.DamageTypes, 1.0, 100, StatVals, new int[(int)Stats.StatCount], out dmg);
             }
 
             projectile.HandleProjectileSpell(target, true, tool);

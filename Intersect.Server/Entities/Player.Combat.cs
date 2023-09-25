@@ -457,7 +457,7 @@ namespace Intersect.Server.Entities
             }
             else if (enemy is Resource resource)
             {
-                _ = TryHarvestResourceProjectile(resource, projectile);
+                _ = TryHarvestResourceProjectile(resource, projectile, parentSpell);
                 return;
             }
 
