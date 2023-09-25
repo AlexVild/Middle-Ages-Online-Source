@@ -448,6 +448,12 @@ namespace Intersect.Server.Entities
             PacketSender.SendCombatNumber(CombatNumberType.HealHealth, this, amount);
         }
 
+        public void SpellManasteal(int amount)
+        {
+            HealVital(Vitals.Mana, amount);
+            PacketSender.SendCombatNumber(CombatNumberType.HealMana, this, amount);
+        }
+
         /// <summary>
         /// Validates the final casting of and handles the actions of a spell
         /// </summary>

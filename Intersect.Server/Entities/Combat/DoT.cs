@@ -103,8 +103,6 @@ namespace Intersect.Server.Entities.Combat
             var attackTypes = SpellBase.Combat?.DamageTypes;
             var scaling = SpellBase.Combat?.Scaling ?? 100;
 
-            SendDoTAnimation(SpellBase, Target, (sbyte)Directions.Up);
-
             var damageDealt = 0;
             if (Attacker is Player playerAttacker)
             {
@@ -126,6 +124,12 @@ namespace Intersect.Server.Entities.Combat
             {
                 Attacker.SpellLifesteal(damageDealt);
             }
+            if (SpellBase.Combat?.ManaSteal ?? false && SpellBase.Combat.VitalDiff[(int)Vitals.Mana] > 0)
+            {
+                Attacker.SpellManasteal(damageDealt);
+            }
+
+            SendDoTAnimation(SpellBase, Target, (sbyte)Directions.Up);
         }
 
         private void SendDoTAnimation(SpellBase spell, Entity target, sbyte dir)
