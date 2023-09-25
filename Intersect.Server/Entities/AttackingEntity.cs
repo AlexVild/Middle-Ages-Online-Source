@@ -455,7 +455,7 @@ namespace Intersect.Server.Entities
                     }
                     else
                     {
-                        UseSpell(procSpell, -1, enemy, true, true, (byte)Dir, enemy, true);
+                        HandleAoESpell(weapon.ProcSpellId, procSpell.Combat?.HitRadius ?? 0, enemy.MapId, enemy.X, enemy.Y, enemy, true);
                     }
                 }
             }
