@@ -472,7 +472,7 @@ namespace Intersect.Server.Entities
                         return -2;
                     }
 
-                    if (tileAttribute.Type == MapAttributes.Item || (tileAttribute.Type == MapAttributes.Item && ((MapItemAttribute)tileAttribute).IsBlock))
+                    if (tileAttribute.Type == MapAttributes.Item && ((MapItemAttribute)tileAttribute).IsBlock)
                     {
                         return -2;
                     }
