@@ -139,9 +139,16 @@ namespace Intersect.Client.Interface.Game.Shop
             {
                 ItemProperties itemProperty = new ItemProperties();
 
+                var cost = Globals.GameShop.SellingItems[mMySlot].CostItemQuantity;
+                var costStr = Strings.Shop.costs.ToString(cost, item.Name);
+                if (cost == 0)
+                {
+                    costStr = "Free";
+                }
+
                 mDescWindow = new ItemDescriptionWindow(
                     Globals.GameShop.SellingItems[mMySlot].Item, 1, mShopWindow.X, mShopWindow.Y, itemProperty, "",
-                    Strings.Shop.costs.ToString(Globals.GameShop.SellingItems[mMySlot].CostItemQuantity, item.Name)
+                    costStr
                 );
             }
         }

@@ -5254,6 +5254,9 @@ Tick timer saved in server config.json.";
             public static LocalizedString buydesc = @"Buy Item {00} For ({01}) Item {02}";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString buydescfree = @"Buy Item {00} For ({01}) Free";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString tagbuydesc = @"Buy Items with tag {00}";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -5334,6 +5337,9 @@ Tick timer saved in server config.json.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString selldesc = @"Sell Item {00} For ({01}) Item {02}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString selldescfree = @"Sell Item {00} For Free";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString sellfor = @"Sell for:";

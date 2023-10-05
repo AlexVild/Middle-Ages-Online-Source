@@ -254,11 +254,21 @@ namespace Intersect.Editor.Forms.Editors
             lstSoldItems.Items.Clear();
             for (var i = 0; i < mEditorItem.SellingItems.Count; i++)
             {
+                var free = mEditorItem.SellingItems[i].CostItemQuantity == 0;
+                if (!free)
+                {
+                    lstSoldItems.Items.Add(
+                        Strings.ShopEditor.selldesc.ToString(
+                            ItemBase.GetName(mEditorItem.SellingItems[i].ItemId),
+                            mEditorItem.SellingItems[i].CostItemQuantity,
+                            ItemBase.GetName(mEditorItem.SellingItems[i].CostItemId)
+                        )
+                    );
+                    continue;
+                }
                 lstSoldItems.Items.Add(
-                    Strings.ShopEditor.selldesc.ToString(
-                        ItemBase.GetName(mEditorItem.SellingItems[i].ItemId),
-                        mEditorItem.SellingItems[i].CostItemQuantity,
-                        ItemBase.GetName(mEditorItem.SellingItems[i].CostItemId)
+                    Strings.ShopEditor.selldescfree.ToString(
+                        ItemBase.GetName(mEditorItem.SellingItems[i].ItemId)
                     )
                 );
             }
@@ -268,11 +278,22 @@ namespace Intersect.Editor.Forms.Editors
             {
                 for (var i = 0; i < mEditorItem.BuyingItems.Count; i++)
                 {
+                    var free = mEditorItem.BuyingItems[i].CostItemQuantity == 0;
+
+                    if (!free)
+                    {
+                        lstBoughtItems.Items.Add(
+                            Strings.ShopEditor.buydesc.ToString(
+                                ItemBase.GetName(mEditorItem.BuyingItems[i].ItemId),
+                                mEditorItem.BuyingItems[i].CostItemQuantity,
+                                ItemBase.GetName(mEditorItem.BuyingItems[i].CostItemId)
+                            )
+                        );
+                        continue;
+                    }
                     lstBoughtItems.Items.Add(
-                        Strings.ShopEditor.buydesc.ToString(
-                            ItemBase.GetName(mEditorItem.BuyingItems[i].ItemId),
-                            mEditorItem.BuyingItems[i].CostItemQuantity,
-                            ItemBase.GetName(mEditorItem.BuyingItems[i].CostItemId)
+                        Strings.ShopEditor.buydescfree.ToString(
+                            ItemBase.GetName(mEditorItem.BuyingItems[i].ItemId)
                         )
                     );
                 }
