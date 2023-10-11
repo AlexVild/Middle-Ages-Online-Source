@@ -394,6 +394,6 @@ namespace Intersect.Client.Framework.Gwen.Control
             ProcessAlignments();
         }
 
-        private const int LINE_PADDING = 6;
+        private const int LINE_PADDING = 4;
     }
 }
