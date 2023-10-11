@@ -208,7 +208,7 @@ namespace Intersect.Client.Framework.Gwen.Control
 
             if (lineHeight == -1)
             {
-                lineHeight = p.Y;
+                lineHeight = p.Y + LINE_PADDING;
             }
 
             if (!noSplit)
@@ -393,5 +393,7 @@ namespace Intersect.Client.Framework.Gwen.Control
             SetPosition(template.X, template.Y);
             ProcessAlignments();
         }
+
+        private const int LINE_PADDING = 6;
     }
 }
