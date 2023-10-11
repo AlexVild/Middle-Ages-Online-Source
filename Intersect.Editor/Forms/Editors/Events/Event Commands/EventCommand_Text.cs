@@ -155,8 +155,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             {
                 cmbChannel.Items.Add(Strings.EventChatboxText.channels[i]);
             }
-            cmbSound.Items.Clear();
-            cmbSound.Items.AddRange(Enum.GetNames(typeof(CommonTextSounds)));
+            cmbCommonSound.Items.Clear();
+            cmbCommonSound.Items.AddRange(Enum.GetNames(typeof(CommonTextSounds)));
         }
 
         private void UpdateFacePreview()
