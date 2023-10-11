@@ -58,7 +58,7 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
         private Label KillCountLabel { get; set; }
         private ImagePanel BeastImage { get; set; }
         private ImagePanel DescriptionBg { get; set; }
-        private ImagePanel DescriptionContainer { get; set; }
+        private ScrollControl DescriptionContainer { get; set; }
         private Label DescriptionTemplate { get; set; }
         private RichLabel Description { get; set; }
 
@@ -130,7 +130,7 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
             BeastInfoBelowImage = new ImagePanel(BeastInfo, "BeastInfoContinued");
 
             DescriptionBg = new ImagePanel(BeastInfoBelowImage, "DescriptionBg");
-            DescriptionContainer = new ImagePanel(DescriptionBg, "DescriptionContainer");
+            DescriptionContainer = new ScrollControl(DescriptionBg, "DescriptionContainer");
             DescriptionTemplate = new Label(DescriptionContainer, "Description");
             Description = new RichLabel(DescriptionContainer);
 
@@ -311,7 +311,7 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
                 BeastInfoBelowImage.SetPosition(0, BeastImage.Bottom + ComponentPadding);
 
                 var description = nameUnlocked ? beast.Description : Strings.Bestiary.BeastLocked.ToString();
-                Description.SetText(description, DescriptionTemplate, DescriptionContainer.Width);
+                Description.SetText(description, DescriptionTemplate, DescriptionContainer.Width - 32);
 
                 // If the player hasn't unlocked _anything_ for this beast yet, hide everything else
                 if (!BestiaryController.MyBestiary.Unlocks.TryGetValue(npcId, out var playerUnlocks)) 
