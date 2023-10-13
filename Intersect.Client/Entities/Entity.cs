@@ -3531,7 +3531,8 @@ namespace Intersect.Client.Entities
                 FadeName = false;
             }
 
-            var minOpacity = ClientConfiguration.Instance.MinimumNameOpacity;
+            //var minOpacity = ClientConfiguration.Instance.MinimumNameOpacity; FOR NOW
+            var minOpacity = 0;
             if (Graphics.BrightnessLevel == 0)
             {
                 minOpacity = 0;
