@@ -828,7 +828,7 @@ namespace Intersect.Server.Entities.Events
             }
         }
 
-        public override int CanMove(int moveDir)
+        public override int CanMove(int moveDir, bool moveRouteRequest = false)
         {
             if (Player == null && mPageNum != 0)
             {

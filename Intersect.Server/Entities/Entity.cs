@@ -400,7 +400,7 @@ namespace Intersect.Server.Entities
         /// </summary>
         /// <param name="moveDir"></param>
         /// <returns></returns>
-        public virtual int CanMove(int moveDir)
+        public virtual int CanMove(int moveDir, bool moveRouteRequest = false)
         {
             var xOffset = 0;
             var yOffset = 0;
@@ -619,12 +619,14 @@ namespace Intersect.Server.Entities
         {
             var moved = false;
             byte lookDir = 0, moveDir = 0;
+
             if (MoveRoute.ActionIndex < MoveRoute.Actions.Count)
             {
+                var canMove = CanMove((int)Directions.Up, true) == -1;
                 switch (MoveRoute.Actions[MoveRoute.ActionIndex].Type)
                 {
                     case MoveRouteEnum.MoveUp:
-                        if (CanMove((int) Directions.Up) == -1)
+                        if (canMove)
                         {
                             Move((int) Directions.Up, forPlayer, false, true);
                             moved = true;
@@ -632,7 +634,7 @@ namespace Intersect.Server.Entities
 
                         break;
                     case MoveRouteEnum.MoveDown:
-                        if (CanMove((int) Directions.Down) == -1)
+                        if (canMove)
                         {
                             Move((int) Directions.Down, forPlayer, false, true);
                             moved = true;
@@ -640,7 +642,7 @@ namespace Intersect.Server.Entities
 
                         break;
                     case MoveRouteEnum.MoveLeft:
-                        if (CanMove((int) Directions.Left) == -1)
+                        if (canMove)
                         {
                             Move((int) Directions.Left, forPlayer, false, true);
                             moved = true;
@@ -648,7 +650,7 @@ namespace Intersect.Server.Entities
 
                         break;
                     case MoveRouteEnum.MoveRight:
-                        if (CanMove((int) Directions.Right) == -1)
+                        if (canMove)
                         {
                             Move((int) Directions.Right, forPlayer, false, true);
                             moved = true;
@@ -657,7 +659,7 @@ namespace Intersect.Server.Entities
                         break;
                     case MoveRouteEnum.MoveRandomly:
                         var dir = (byte)Randomization.Next(0, 4);
-                        if (CanMove(dir) == -1)
+                        if (canMove)
                         {
                             Move(dir, forPlayer);
                             moved = true;
@@ -665,7 +667,7 @@ namespace Intersect.Server.Entities
 
                         break;
                     case MoveRouteEnum.StepForward:
-                        if (CanMove(Dir) == -1)
+                        if (canMove)
                         {
                             Move((byte) Dir, forPlayer, false, true);
                             moved = true;
@@ -693,7 +695,7 @@ namespace Intersect.Server.Entities
                                 break;
                         }
 
-                        if (CanMove(moveDir) == -1)
+                        if (canMove)
                         {
                             Move(moveDir, forPlayer, false, true);
                             moved = true;

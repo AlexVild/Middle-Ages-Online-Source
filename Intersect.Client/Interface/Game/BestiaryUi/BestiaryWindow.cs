@@ -311,6 +311,7 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
                 BeastInfoBelowImage.SetPosition(0, BeastImage.Bottom + ComponentPadding);
 
                 var description = nameUnlocked ? beast.Description : Strings.Bestiary.BeastLocked.ToString();
+                DescriptionContainer.ScrollToTop();
                 Description.SetText(description.Trim(), DescriptionTemplate, DescriptionContainer.Width - 32);
 
                 // If the player hasn't unlocked _anything_ for this beast yet, hide everything else

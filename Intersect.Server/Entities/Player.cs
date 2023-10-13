@@ -7832,7 +7832,7 @@ namespace Intersect.Server.Entities
             }
         }
 
-        public override int CanMove(int moveDir)
+        public override int CanMove(int moveDir, bool moveRouteRequest = false)
         {
             //If crafting or locked by event return blocked
             if (CraftingTableId != Guid.Empty && CraftId != Guid.Empty)
@@ -7842,7 +7842,7 @@ namespace Intersect.Server.Entities
 
             foreach (var evt in EventLookup)
             {
-                if (evt.Value.HoldingPlayer)
+                if (evt.Value.HoldingPlayer && !moveRouteRequest)
                 {
                     return -5;
                 }

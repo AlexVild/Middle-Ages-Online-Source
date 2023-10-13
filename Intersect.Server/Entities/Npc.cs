@@ -566,7 +566,7 @@ namespace Intersect.Server.Entities
             }
         }
 
-        public override int CanMove(int moveDir)
+        public override int CanMove(int moveDir, bool moveRouteRequest = false)
         {
             var canMove = base.CanMove(moveDir);
 
