@@ -7840,11 +7840,14 @@ namespace Intersect.Server.Entities
                 return -5;
             }
 
-            foreach (var evt in EventLookup)
+            if (!moveRouteRequest)
             {
-                if (evt.Value.HoldingPlayer && !moveRouteRequest)
+                foreach (var evt in EventLookup)
                 {
-                    return -5;
+                    if (evt.Value.HoldingPlayer)
+                    {
+                        return -5;
+                    }
                 }
             }
 
