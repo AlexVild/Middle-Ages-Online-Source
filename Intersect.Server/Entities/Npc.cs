@@ -2012,6 +2012,12 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
+            healthRecovered = Math.Min(target.GetVital((int)Vitals.Health), healthRecovered);
+            if (healthRecovered == 0)
+            {
+                return false;
+            }
+
             AddVital(Vitals.Health, (int)healthRecovered);
             recovered = healthRecovered;
             return true;
