@@ -218,6 +218,16 @@ namespace Intersect.Client.Interface.Game.BestiaryUi
                 {
                     AddBonusRow($"{AttackTypes.Magic.GetDescription()} damage", string.Empty, string.Empty, ref y);
                 }
+
+                if (beast.MeleeLifesteal != 0)
+                {
+                    AddBonusRow($"Lifesteal: {beast.MeleeLifesteal}%", string.Empty, string.Empty, ref y);
+                }
+
+                if (beast.MeleeManasteal != 0)
+                {
+                    AddBonusRow($"Manasteal: {beast.MeleeManasteal}%", string.Empty, string.Empty, ref y);
+                }
             }
         }
 
