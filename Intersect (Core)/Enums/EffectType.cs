@@ -50,6 +50,9 @@ namespace Intersect.Enums
 
         [Description("Berzerk")]
         Berzerk = 14,
+
+        [Description("Manasteal")]
+        Manasteal = 15,
     }
 
 }

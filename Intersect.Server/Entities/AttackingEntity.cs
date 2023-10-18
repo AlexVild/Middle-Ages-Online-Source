@@ -198,6 +198,10 @@ namespace Intersect.Server.Entities
                 {
                     PacketSender.SendCombatNumber(CombatNumberType.HealHealth, this, (int)healthRecovered);
                 }
+                if (TryManasteal(weaponDamage, enemy, out var manaRecovered))
+                {
+                    PacketSender.SendCombatNumber(CombatNumberType.HealMana, this, (int)manaRecovered);
+                }
                 willDamage = true;
             }
 
@@ -667,6 +671,12 @@ namespace Intersect.Server.Entities
         }
 
         protected virtual bool TryLifesteal(int damage, Entity target, out float recovered)
+        {
+            recovered = 0f;
+            return false;
+        }
+
+        protected virtual bool TryManasteal(int damage, Entity target, out float recovered)
         {
             recovered = 0f;
             return false;

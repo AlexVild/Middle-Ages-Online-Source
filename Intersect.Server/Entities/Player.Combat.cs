@@ -207,6 +207,10 @@ namespace Intersect.Server.Entities
             {
                 PacketSender.SendCombatNumber(CombatNumberType.HealHealth, this, (int)healthRecovered);
             }
+            if (TryManasteal(damage, enemy, out var manaRecovered))
+            {
+                PacketSender.SendCombatNumber(CombatNumberType.HealMana, this, (int)manaRecovered);
+            }
 
             CheckForOnhitAttack(enemy);
         }
@@ -494,6 +498,31 @@ namespace Intersect.Server.Entities
 
             AddVital(Vitals.Health, (int)healthRecovered);
             recovered = healthRecovered;
+            return true;
+        }
+
+        protected override bool TryManasteal(int damage, Entity target, out float recovered)
+        {
+            recovered = 0;
+            if (damage <= 0 || target == null || target is Resource)
+            {
+                return false;
+            }
+
+            var manasteal = GetBonusEffectTotal(EffectType.Manasteal) / 100f;
+            if (manasteal <= 0)
+            {
+                return false;
+            }
+
+            var manaRecovered = Math.Max(1, manasteal * damage);
+            if (manaRecovered <= 0)
+            {
+                return false;
+            }
+
+            AddVital(Vitals.Mana, (int)manaRecovered);
+            recovered = manaRecovered;
             return true;
         }
 
