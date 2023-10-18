@@ -1,5 +1,6 @@
 ﻿using Intersect.Enums;
 using Intersect.GameObjects;
+using Intersect.GameObjects.Events;
 using Intersect.Server.Database;
 using Intersect.Server.Networking;
 using Intersect.Utilities;
@@ -193,6 +194,17 @@ namespace Intersect.Server.Entities
             {
                 return;
             }
+            
+            if (TryLifesteal(damage, enemy, out var healthRecovered))
+            {
+                PacketSender.SendCombatNumber(CombatNumberType.HealHealth, this, (int)healthRecovered);
+            }
+            if (TryManasteal(damage, enemy, out var manaRecovered))
+            {
+                PacketSender.SendCombatNumber(CombatNumberType.HealMana, this, (int)manaRecovered);
+                PacketSender.SendCombatNumber(CombatNumberType.DamageMana, enemy, (int)manaRecovered);
+            }
+            
             CheckForOnhitAttack(enemy);
         }
 

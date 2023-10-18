@@ -2037,7 +2037,14 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
+            manaRecovered = Math.Min(target.GetVital((int)Vitals.Mana), manaRecovered);
+            if (manaRecovered == 0)
+            {
+                return false;
+            }
+
             AddVital(Vitals.Mana, (int)manaRecovered);
+            target.SubVital(Vitals.Mana, (int)manaRecovered);
             recovered = manaRecovered;
             return true;
         }

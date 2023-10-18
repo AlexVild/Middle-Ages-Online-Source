@@ -201,6 +201,7 @@ namespace Intersect.Server.Entities
                 if (TryManasteal(weaponDamage, enemy, out var manaRecovered))
                 {
                     PacketSender.SendCombatNumber(CombatNumberType.HealMana, this, (int)manaRecovered);
+                    PacketSender.SendCombatNumber(CombatNumberType.DamageMana, enemy, (int)manaRecovered);
                 }
                 willDamage = true;
             }

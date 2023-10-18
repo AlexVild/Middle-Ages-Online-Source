@@ -210,6 +210,7 @@ namespace Intersect.Server.Entities
             if (TryManasteal(damage, enemy, out var manaRecovered))
             {
                 PacketSender.SendCombatNumber(CombatNumberType.HealMana, this, (int)manaRecovered);
+                PacketSender.SendCombatNumber(CombatNumberType.DamageMana, enemy, (int)manaRecovered);
             }
 
             CheckForOnhitAttack(enemy);
@@ -521,7 +522,14 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
+            manaRecovered = Math.Min(target.GetVital((int)Vitals.Mana), manaRecovered);
+            if (manaRecovered == 0)
+            {
+                return false;
+            }
+
             AddVital(Vitals.Mana, (int)manaRecovered);
+            target.SubVital(Vitals.Mana, (int)manaRecovered);
             recovered = manaRecovered;
             return true;
         }
