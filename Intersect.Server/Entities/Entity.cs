@@ -348,6 +348,10 @@ namespace Intersect.Server.Entities
                     var statTime = Timing.Global.Milliseconds;
                     for (var i = 0; i < (int)Stats.StatCount; i++)
                     {
+                        if (Stat[i] == default)
+                        {
+                            continue;
+                        }
                         statsUpdated |= Stat[i].Update(statTime);
                     }
 

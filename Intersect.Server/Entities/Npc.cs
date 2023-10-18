@@ -635,6 +635,19 @@ namespace Intersect.Server.Entities
 
         private void TryCastSpells()
         {
+            if (CastFreq >= Timing.Global.Milliseconds)
+            {
+                return;
+            }
+            
+            // Add some randomness to spellcasting - especially at the beginning of combat
+            var upperBound = CastFreq == default ? 3 : 11;
+            if (Randomization.Next(1, upperBound) == 1)
+            {
+                ProgressCastFrequency();
+                return;
+            }
+
             var target = Target;
 
             if (target == null || mPathFinder.GetTarget() == null)
@@ -652,11 +665,6 @@ namespace Intersect.Server.Entities
             if (CastTime > Timing.Global.Milliseconds)
             {
                 return; //can't move while casting
-            }
-
-            if (CastFreq >= Timing.Global.Milliseconds)
-            {
-                return;
             }
 
             // Check if the NPC is able to cast spells
@@ -753,6 +761,23 @@ namespace Intersect.Server.Entities
                 CastTarget = target;
             }
 
+            ProgressCastFrequency();
+
+            SpellCastSlot = spellIndex;
+
+            if (spellBase.CastAnimationId != Guid.Empty)
+            {
+                PacketSender.SendAnimationToProximity(spellBase.CastAnimationId, 1, Id, MapId, 0, 0, (sbyte) Dir, MapInstanceId);
+
+                //Target Type 1 will be global entity
+            }
+
+            PacketSender.SendEntityCastTime(this, spellId);
+        }
+
+        public void ProgressCastFrequency()
+        {
+
             switch (Base.SpellFrequency)
             {
                 case 0:
@@ -780,17 +805,6 @@ namespace Intersect.Server.Entities
 
                     break;
             }
-
-            SpellCastSlot = spellIndex;
-
-            if (spellBase.CastAnimationId != Guid.Empty)
-            {
-                PacketSender.SendAnimationToProximity(spellBase.CastAnimationId, 1, Id, MapId, 0, 0, (sbyte) Dir, MapInstanceId);
-
-                //Target Type 1 will be global entity
-            }
-
-            PacketSender.SendEntityCastTime(this, spellId);
         }
 
         public bool IsFleeing()

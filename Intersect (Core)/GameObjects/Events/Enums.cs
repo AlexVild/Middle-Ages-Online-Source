@@ -514,5 +514,20 @@ namespace Intersect.GameObjects.Events
 
         [Description("al_spell_learn.wav")]
         Learn,
+
+        [Description("al_locked.wav")]
+        Locked,
+
+        [Description("al_lock_pick.wav")]
+        LockPicked,
+
+        [Description("al_buy_item.wav")]
+        BuyItem,
+
+        [Description("al_sell_item.wav")]
+        SellItem,
+
+        [Description("al_book_turn.wav")]
+        PageTurn,
     }
 }
