@@ -51,6 +51,7 @@ namespace Intersect.Editor.Forms.Editors
             this.txtSearch = new DarkUI.Controls.DarkTextBox();
             this.pnlContainer = new System.Windows.Forms.Panel();
             this.grpChampionSettings = new DarkUI.Controls.DarkGroupBox();
+            this.chkIsChampion = new DarkUI.Controls.DarkCheckBox();
             this.nudChampSpawnChance = new DarkUI.Controls.DarkNumericUpDown();
             this.lblChampSpawnChance = new System.Windows.Forms.Label();
             this.nudChampCooldown = new DarkUI.Controls.DarkNumericUpDown();
@@ -274,7 +275,10 @@ namespace Intersect.Editor.Forms.Editors
             this.lblTierView = new System.Windows.Forms.Label();
             this.lblTargetDps = new System.Windows.Forms.Label();
             this.lblProjectedDps = new System.Windows.Forms.Label();
-            this.chkIsChampion = new DarkUI.Controls.DarkCheckBox();
+            this.nudLifesteal = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblLifesteal = new System.Windows.Forms.Label();
+            this.nudManasteal = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblManasteal = new System.Windows.Forms.Label();
             this.toolStrip.SuspendLayout();
             this.grpNpcs.SuspendLayout();
             this.pnlContainer.SuspendLayout();
@@ -339,6 +343,8 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudMag)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudStr)).BeginInit();
             this.grpBalanceHelp.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudLifesteal)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudManasteal)).BeginInit();
             this.SuspendLayout();
             // 
             // toolStrip
@@ -574,7 +580,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpChampionSettings.Controls.Add(this.cmbChampion);
             this.grpChampionSettings.Controls.Add(this.label12);
             this.grpChampionSettings.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpChampionSettings.Location = new System.Drawing.Point(212, 1126);
+            this.grpChampionSettings.Location = new System.Drawing.Point(212, 1207);
             this.grpChampionSettings.Margin = new System.Windows.Forms.Padding(2);
             this.grpChampionSettings.Name = "grpChampionSettings";
             this.grpChampionSettings.Padding = new System.Windows.Forms.Padding(2);
@@ -582,6 +588,16 @@ namespace Intersect.Editor.Forms.Editors
             this.grpChampionSettings.TabIndex = 90;
             this.grpChampionSettings.TabStop = false;
             this.grpChampionSettings.Text = "Champion Spawning";
+            // 
+            // chkIsChampion
+            // 
+            this.chkIsChampion.AutoSize = true;
+            this.chkIsChampion.Location = new System.Drawing.Point(12, 141);
+            this.chkIsChampion.Name = "chkIsChampion";
+            this.chkIsChampion.Size = new System.Drawing.Size(90, 17);
+            this.chkIsChampion.TabIndex = 80;
+            this.chkIsChampion.Text = "Is Champion?";
+            this.chkIsChampion.CheckedChanged += new System.EventHandler(this.chkIsChampion_CheckedChanged);
             // 
             // nudChampSpawnChance
             // 
@@ -685,7 +701,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpDynamicScaling.Controls.Add(this.cmbScalingType);
             this.grpDynamicScaling.Controls.Add(this.lblScalingType);
             this.grpDynamicScaling.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpDynamicScaling.Location = new System.Drawing.Point(212, 975);
+            this.grpDynamicScaling.Location = new System.Drawing.Point(212, 1053);
             this.grpDynamicScaling.Margin = new System.Windows.Forms.Padding(2);
             this.grpDynamicScaling.Name = "grpDynamicScaling";
             this.grpDynamicScaling.Padding = new System.Windows.Forms.Padding(2);
@@ -944,7 +960,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpAttackOverrides.Controls.Add(this.cmbSpellAttackOverride);
             this.grpAttackOverrides.Controls.Add(this.lblAttackOverride);
             this.grpAttackOverrides.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpAttackOverrides.Location = new System.Drawing.Point(215, 644);
+            this.grpAttackOverrides.Location = new System.Drawing.Point(215, 730);
             this.grpAttackOverrides.Margin = new System.Windows.Forms.Padding(2);
             this.grpAttackOverrides.Name = "grpAttackOverrides";
             this.grpAttackOverrides.Padding = new System.Windows.Forms.Padding(2);
@@ -990,7 +1006,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpDeathTransform.Controls.Add(this.cmbTransformIntoNpc);
             this.grpDeathTransform.Controls.Add(this.lblDeathTransform);
             this.grpDeathTransform.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpDeathTransform.Location = new System.Drawing.Point(212, 896);
+            this.grpDeathTransform.Location = new System.Drawing.Point(212, 980);
             this.grpDeathTransform.Margin = new System.Windows.Forms.Padding(2);
             this.grpDeathTransform.Name = "grpDeathTransform";
             this.grpDeathTransform.Padding = new System.Windows.Forms.Padding(2);
@@ -1036,7 +1052,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpAnimation.Controls.Add(this.cmbDeathAnimation);
             this.grpAnimation.Controls.Add(this.lblDeathAnimation);
             this.grpAnimation.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpAnimation.Location = new System.Drawing.Point(212, 821);
+            this.grpAnimation.Location = new System.Drawing.Point(212, 907);
             this.grpAnimation.Margin = new System.Windows.Forms.Padding(2);
             this.grpAnimation.Name = "grpAnimation";
             this.grpAnimation.Padding = new System.Windows.Forms.Padding(2);
@@ -1268,6 +1284,10 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpCombat.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpCombat.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpCombat.Controls.Add(this.lblManasteal);
+            this.grpCombat.Controls.Add(this.nudManasteal);
+            this.grpCombat.Controls.Add(this.lblLifesteal);
+            this.grpCombat.Controls.Add(this.nudLifesteal);
             this.grpCombat.Controls.Add(this.chkSpellCast);
             this.grpCombat.Controls.Add(this.lblSpellcaster);
             this.grpCombat.Controls.Add(this.grpDamageTypes);
@@ -1281,7 +1301,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpCombat.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpCombat.Location = new System.Drawing.Point(215, 309);
             this.grpCombat.Name = "grpCombat";
-            this.grpCombat.Size = new System.Drawing.Size(226, 330);
+            this.grpCombat.Size = new System.Drawing.Size(226, 416);
             this.grpCombat.TabIndex = 17;
             this.grpCombat.TabStop = false;
             this.grpCombat.Text = "Combat";
@@ -1289,7 +1309,7 @@ namespace Intersect.Editor.Forms.Editors
             // chkSpellCast
             // 
             this.chkSpellCast.AutoSize = true;
-            this.chkSpellCast.Location = new System.Drawing.Point(176, 306);
+            this.chkSpellCast.Location = new System.Drawing.Point(171, 386);
             this.chkSpellCast.Name = "chkSpellCast";
             this.chkSpellCast.Size = new System.Drawing.Size(15, 14);
             this.chkSpellCast.TabIndex = 122;
@@ -1298,7 +1318,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblSpellcaster
             // 
             this.lblSpellcaster.AutoSize = true;
-            this.lblSpellcaster.Location = new System.Drawing.Point(20, 306);
+            this.lblSpellcaster.Location = new System.Drawing.Point(20, 386);
             this.lblSpellcaster.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.lblSpellcaster.Name = "lblSpellcaster";
             this.lblSpellcaster.Size = new System.Drawing.Size(151, 13);
@@ -1581,7 +1601,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpCommonEvents.Controls.Add(this.cmbOnDeathEventKiller);
             this.grpCommonEvents.Controls.Add(this.lblOnDeathEventKiller);
             this.grpCommonEvents.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpCommonEvents.Location = new System.Drawing.Point(212, 709);
+            this.grpCommonEvents.Location = new System.Drawing.Point(212, 797);
             this.grpCommonEvents.Margin = new System.Windows.Forms.Padding(2);
             this.grpCommonEvents.Name = "grpCommonEvents";
             this.grpCommonEvents.Padding = new System.Windows.Forms.Padding(2);
@@ -3622,15 +3642,53 @@ namespace Intersect.Editor.Forms.Editors
             this.lblProjectedDps.TabIndex = 121;
             this.lblProjectedDps.Text = "Est. DPS";
             // 
-            // chkIsChampion
+            // nudLifesteal
             // 
-            this.chkIsChampion.AutoSize = true;
-            this.chkIsChampion.Location = new System.Drawing.Point(12, 141);
-            this.chkIsChampion.Name = "chkIsChampion";
-            this.chkIsChampion.Size = new System.Drawing.Size(90, 17);
-            this.chkIsChampion.TabIndex = 80;
-            this.chkIsChampion.Text = "Is Champion?";
-            this.chkIsChampion.CheckedChanged += new System.EventHandler(this.chkIsChampion_CheckedChanged);
+            this.nudLifesteal.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudLifesteal.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudLifesteal.Location = new System.Drawing.Point(13, 320);
+            this.nudLifesteal.Name = "nudLifesteal";
+            this.nudLifesteal.Size = new System.Drawing.Size(191, 20);
+            this.nudLifesteal.TabIndex = 123;
+            this.nudLifesteal.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudLifesteal.ValueChanged += new System.EventHandler(this.nudLifesteal_ValueChanged);
+            // 
+            // lblLifesteal
+            // 
+            this.lblLifesteal.AutoSize = true;
+            this.lblLifesteal.Location = new System.Drawing.Point(10, 301);
+            this.lblLifesteal.Name = "lblLifesteal";
+            this.lblLifesteal.Size = new System.Drawing.Size(57, 13);
+            this.lblLifesteal.TabIndex = 124;
+            this.lblLifesteal.Text = "Lifesteal %";
+            // 
+            // nudManasteal
+            // 
+            this.nudManasteal.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudManasteal.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudManasteal.Location = new System.Drawing.Point(13, 360);
+            this.nudManasteal.Name = "nudManasteal";
+            this.nudManasteal.Size = new System.Drawing.Size(191, 20);
+            this.nudManasteal.TabIndex = 125;
+            this.nudManasteal.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            this.nudManasteal.ValueChanged += new System.EventHandler(this.darkNumericUpDown1_ValueChanged_1);
+            // 
+            // lblManasteal
+            // 
+            this.lblManasteal.AutoSize = true;
+            this.lblManasteal.Location = new System.Drawing.Point(10, 345);
+            this.lblManasteal.Name = "lblManasteal";
+            this.lblManasteal.Size = new System.Drawing.Size(67, 13);
+            this.lblManasteal.TabIndex = 126;
+            this.lblManasteal.Text = "Manasteal %";
             // 
             // FrmNpc
             // 
@@ -3742,6 +3800,8 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudStr)).EndInit();
             this.grpBalanceHelp.ResumeLayout(false);
             this.grpBalanceHelp.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudLifesteal)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudManasteal)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -3990,5 +4050,9 @@ namespace Intersect.Editor.Forms.Editors
         private DarkComboBox cmbChampion;
         private System.Windows.Forms.Label label12;
         private DarkCheckBox chkIsChampion;
+        private System.Windows.Forms.Label lblManasteal;
+        private DarkNumericUpDown nudManasteal;
+        private System.Windows.Forms.Label lblLifesteal;
+        private DarkNumericUpDown nudLifesteal;
     }
 }

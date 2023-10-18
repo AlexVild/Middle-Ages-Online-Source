@@ -1318,6 +1318,10 @@
     <Compile Include="Migrations\Game\20230817144615_RegenTypeMigration.designer.cs">
       <DependentUpon>20230817144615_RegenTypeMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20231018183837_NpcVitalStealMigration.cs" />
+    <Compile Include="Migrations\Game\20231018183837_NpcVitalStealMigration.designer.cs">
+      <DependentUpon>20231018183837_NpcVitalStealMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

@@ -1990,5 +1990,56 @@ namespace Intersect.Server.Entities
                 return base.IsInvincibleTo(entity);
             }
         }
+
+
+        protected override bool TryLifesteal(int damage, Entity target, out float recovered)
+        {
+            recovered = 0;
+            if (damage <= 0 || target == null)
+            {
+                return false;
+            }
+
+            var lifesteal = (Base.MeleeLifesteal / 100f);
+            if (lifesteal <= 0)
+            {
+                return false;
+            }
+
+            var healthRecovered = Math.Max(1, lifesteal * damage);
+            if (healthRecovered <= 0)
+            {
+                return false;
+            }
+
+            AddVital(Vitals.Health, (int)healthRecovered);
+            recovered = healthRecovered;
+            return true;
+        }
+
+        protected override bool TryManasteal(int damage, Entity target, out float recovered)
+        {
+            recovered = 0;
+            if (damage <= 0 || target == null)
+            {
+                return false;
+            }
+
+            var manasteal = (Base.MeleeManasteal / 100f);
+            if (manasteal <= 0)
+            {
+                return false;
+            }
+
+            var manaRecovered = Math.Max(1, manasteal * damage);
+            if (manaRecovered <= 0)
+            {
+                return false;
+            }
+
+            AddVital(Vitals.Mana, (int)manaRecovered);
+            recovered = manaRecovered;
+            return true;
+        }
     }
 }

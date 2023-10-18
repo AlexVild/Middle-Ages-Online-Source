@@ -485,6 +485,10 @@ namespace Intersect.GameObjects
         public int MaxScaledTo { get; set; } = 50;
 
         public bool PlayerLockedLoot { get; set; }
+
+        public int MeleeLifesteal { get; set; }
+
+        public int MeleeManasteal { get; set; }
     }
 
 }

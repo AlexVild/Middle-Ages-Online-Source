@@ -346,6 +346,10 @@ namespace Intersect.Editor.Forms.Editors
                 nudHpRegen.Value = mEditorItem.VitalRegen[(int) Vitals.Health];
                 nudMpRegen.Value = mEditorItem.VitalRegen[(int) Vitals.Mana];
 
+                //Melee vital steasls
+                nudLifesteal.Value = mEditorItem.MeleeLifesteal;
+                nudManasteal.Value = mEditorItem.MeleeManasteal;
+
                 // Add the spells to the list
                 lstSpells.Items.Clear();
                 for (var i = 0; i < mEditorItem.Spells.Count; i++)
@@ -1398,11 +1402,13 @@ namespace Intersect.Editor.Forms.Editors
         private void nudAccuracy_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.Stats[(int)Stats.Accuracy] = (int)nudAccuracy.Value;
+            RefreshBalancing();
         }
 
         private void nudEvasion_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.Stats[(int)Stats.Evasion] = (int)nudEvasion.Value;
+            RefreshBalancing();
         }
 
         private void PopulateDamageTypes()
@@ -1852,6 +1858,16 @@ namespace Intersect.Editor.Forms.Editors
         private void chkIsChampion_CheckedChanged(object sender, EventArgs e)
         {
             mEditorItem.IsChampion = chkIsChampion.Checked;
+        }
+
+        private void nudLifesteal_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.MeleeLifesteal = (int)nudLifesteal.Value;
+        }
+
+        private void darkNumericUpDown1_ValueChanged_1(object sender, EventArgs e)
+        {
+            mEditorItem.MeleeManasteal = (int)nudManasteal.Value;
         }
     }
 
