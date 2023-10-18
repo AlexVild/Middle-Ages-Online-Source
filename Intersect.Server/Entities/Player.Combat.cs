@@ -52,7 +52,7 @@ namespace Intersect.Server.Entities
 
             // Ranged weapon
             var equippedWeapon = GetEquippedWeapon();
-            if (equippedWeapon?.ProjectileId != Guid.Empty)
+            if (equippedWeapon != default && equippedWeapon.ProjectileId != Guid.Empty)
             {
                 return false;
             }
