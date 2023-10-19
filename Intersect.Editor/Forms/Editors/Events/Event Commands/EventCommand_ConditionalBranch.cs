@@ -554,6 +554,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
 
                     break;
 
+                case ConditionTypes.IsPartyLeader:
+                    Condition = new IsPartyLeader();
+
+                    break;
+
                 case ConditionTypes.InOpenMelee:
                     Condition = new IsInOpenMelee();
 
