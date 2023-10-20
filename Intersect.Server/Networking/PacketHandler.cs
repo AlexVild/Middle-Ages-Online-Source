@@ -4678,6 +4678,7 @@ namespace Intersect.Server.Networking
                 return;
             }
 
+            PacketSender.SendKnownEnhancementUpdate(player);
             if (!player.EnhancementTutorialDone)
             {
                 player.SendDialogNotice(Strings.Crafting.EnhancementTutorial1);

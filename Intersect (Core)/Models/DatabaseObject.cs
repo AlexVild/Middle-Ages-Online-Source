@@ -156,6 +156,11 @@ namespace Intersect.Models
             return Lookup.Select(pair => pair.Value?.Name ?? Deleted).ToArray();
         }
 
+        public static TObject[] GetAll()
+        {
+            return Lookup.Select(pair => (TObject) pair.Value).ToArray();
+        }
+
     }
 
 }

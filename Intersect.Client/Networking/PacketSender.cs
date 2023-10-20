@@ -730,5 +730,10 @@ namespace Intersect.Client.Networking
         {
             Network.SendPacket(new OverwriteLoadoutPacket(loadoutId));
         }
+
+        public static void SendRequestKnownEnhancements()
+        {
+            Network.SendPacket(new RequestKnownEnhancementsPacket());
+        }
     }
 }

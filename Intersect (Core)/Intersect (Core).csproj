@@ -424,6 +424,7 @@
     <Compile Include="Network\Packets\Client\RequestInstanceLeavePacket.cs" />
     <Compile Include="Network\Packets\Client\RequestKillCountPacket.cs" />
     <Compile Include="Network\Packets\Client\RequestKillCountsPacket.cs" />
+    <Compile Include="Network\Packets\Client\RequestKnownEnhancementsPacket.cs" />
     <Compile Include="Network\Packets\Client\RequestLabelsPacket.cs" />
     <Compile Include="Network\Packets\Client\RequestLeaderboardPacket.cs" />
     <Compile Include="Network\Packets\Client\RequestLoadoutsPacket.cs" />

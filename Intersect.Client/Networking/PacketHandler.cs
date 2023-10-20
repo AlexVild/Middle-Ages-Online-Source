@@ -2925,6 +2925,10 @@ namespace Intersect.Client.Networking
             }
 
             Globals.Me.SetKnownEnhancements(packet.KnownEnhancements);
+            if (CharacterEnhancementsPanelController.IsOpen)
+            {
+                CharacterEnhancementsPanelController.UpdateEnhancementList();
+            }
         }
         
         public void HandlePacket(IPacketSender packetSender, UsedPermabuffsPacket packet)

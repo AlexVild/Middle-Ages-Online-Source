@@ -20,7 +20,7 @@ namespace Intersect.Network.Packets.Server
         }
 
         public OpenEnhancementPacket(Guid currencyId, float costMultiplier, Guid[] knownEhancements)
-        {
+        { 
             CurrencyId = currencyId;
             CostMultiplier = costMultiplier;
             KnownEnhancements = knownEhancements;

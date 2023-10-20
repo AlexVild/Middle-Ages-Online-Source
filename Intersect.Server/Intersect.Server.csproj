@@ -796,6 +796,10 @@
     <Compile Include="Migrations\20230726144645_AddChampSettingsMigration.designer.cs">
       <DependentUpon>20230726144645_AddChampSettingsMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\20231019235936_TutorialMigrationEnhancement.cs" />
+    <Compile Include="Migrations\20231019235936_TutorialMigrationEnhancement.designer.cs">
+      <DependentUpon>20231019235936_TutorialMigrationEnhancement.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.cs" />
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.Designer.cs">
       <DependentUpon>20201222164741_NpcResetRadius.cs</DependentUpon>
