@@ -4669,5 +4669,23 @@ namespace Intersect.Server.Networking
 
             player.RemoveLoadout(packet.LoadoutId);
         }
+
+        public void HandlePacket(Client client, RequestKnownEnhancementsPacket packet)
+        {
+            var player = client?.Entity;
+            if (player == default)
+            {
+                return;
+            }
+
+            if (!player.EnhancementTutorialDone)
+            {
+                player.SendDialogNotice(Strings.Crafting.EnhancementTutorial1);
+                player.SendDialogNotice(Strings.Crafting.EnhancementTutorial2);
+                player.SendDialogNotice(Strings.Crafting.EnhancementTutorial3);
+                player.SendDialogNotice(Strings.Crafting.EnhancementTutorial4);
+                player.EnhancementTutorialDone = true;
+            }
+        }
     }
 }

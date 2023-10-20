@@ -552,6 +552,22 @@ namespace Intersect.Server.Localization
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString RecipeTutorial3 =
                 @"As you level up your class rank and complete quests, you will have access to a wider range of recipes to unlock, so check back here frequently!";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString EnhancementTutorial1 =
+                @"Enhancements are modifiers that can be applied to weapons, either through the use of an NPC Weaponsmith, or by finding special anvils in the world.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString EnhancementTutorial2 =
+                @"To apply enhancements, you will need Scraps, which are earned for deconstructing equipment at furnaces.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString EnhancementTutorial3 =
+                @"Enhancements can be learned via weapon deconstruction and weapon crafting. The chance to learn any new enhancement is indicated by the craft's 'Study Chance'.";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString EnhancementTutorial4 =
+                @"You can use this menu to see which enhancements you've yet to unlock, or to check up on existing enhancements.";
         }
 
         public sealed class DatabaseNamespace : LocaleNamespace

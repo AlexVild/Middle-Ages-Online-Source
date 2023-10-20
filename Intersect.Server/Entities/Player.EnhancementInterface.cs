@@ -19,6 +19,8 @@ namespace Intersect.Server.Entities
         [NotMapped, JsonIgnore]
         public ItemUpgradeInterface UpgradeStation { get; set; }
 
+        public bool EnhancementTutorialDone { get; set; } = false;
+
         public void OpenEnhancement(Guid currencyId, float multiplier)
         {
             Enhancement = new EnhancementInterface(this, currencyId, multiplier);

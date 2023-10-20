@@ -34,6 +34,7 @@ namespace Intersect.Client.Interface.Game.Character
         private Button SkillsButton { get; set; }
         private Button ChallengesButton { get; set; }
         private Button LoadoutsButton { get; set; }
+        private Button EnhancementsButton { get; set; }
 
         private CharacterWindow Parent { get; set; }
 
@@ -48,6 +49,7 @@ namespace Intersect.Client.Interface.Game.Character
         private SkillsPanel SkillsPanel { get; set; }
         private CharacterChallengesPanel ChallengesPanel { get; set; }
         private CharacterLoadoutsPanel LoadoutsPanel { get; set; }
+        private CharacterEnhancementsPanel EnhancementsPanel { get; set; }
 
         public CharacterWindowPanelController(Canvas gameCanvas, CharacterWindow parent)
         {
@@ -89,6 +91,9 @@ namespace Intersect.Client.Interface.Game.Character
 
             LoadoutsPanel = new CharacterLoadoutsPanel(PanelContainer);
             LoadoutsPanel.Hide();
+
+            EnhancementsPanel = new CharacterEnhancementsPanel(PanelContainer);
+            EnhancementsPanel.Hide();
 
             PositionToParent();
             Hide();
@@ -151,6 +156,12 @@ namespace Intersect.Client.Interface.Game.Character
             };
             ChallengesButton.Clicked += ChallengesButton_Clicked;
 
+            EnhancementsButton = new Button(Container, "EnhancementsSelector")
+            {
+                Text = "ENHANCEMENT"
+            };
+            EnhancementsButton.Clicked += EnhancementsButton_Clicked;
+
             PanelSelectors = new List<Button>
             {
                 StatsButton,
@@ -162,7 +173,13 @@ namespace Intersect.Client.Interface.Game.Character
                 SkillsButton,
                 LoadoutsButton,
                 ChallengesButton,
+                EnhancementsButton,
             };
+        }
+
+        private void EnhancementsButton_Clicked(Base sender, ClickedEventArgs arguments)
+        {
+            ChangePanel(CharacterPanelType.Enhancements);
         }
 
         private void LoadoutsButton_Clicked(Base sender, ClickedEventArgs arguments)
@@ -263,6 +280,10 @@ namespace Intersect.Client.Interface.Game.Character
                 case CharacterPanelType.Loadouts:
                     LoadoutsButton.Disable();
                     CurrentPanel = LoadoutsPanel;
+                    break;
+                case CharacterPanelType.Enhancements:
+                    EnhancementsButton.Disable();
+                    CurrentPanel = EnhancementsPanel;
                     break;
                 default:
                     throw new ArgumentException($"Invalid enum for {nameof(type)}");

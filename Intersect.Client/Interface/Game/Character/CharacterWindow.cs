@@ -28,7 +28,8 @@ namespace Intersect.Client.Interface.Game.Character
         Cosmetics,
         Skills,
         Challenges,
-        Loadouts
+        Loadouts,
+        Enhancements
     }
 
     public partial class CharacterWindow
