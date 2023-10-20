@@ -4,6 +4,7 @@ using Intersect.GameObjects;
 using Intersect.Localization;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Intersect.Client.Interface.Game.DescriptionWindows
 {
@@ -15,11 +16,14 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
 
         protected float StudyChance { get; set; }
 
-        public EnhancementDescriptionWindow(Guid enhancementId, string icon, int x, int y, float studyChance = 0.0f) : base(Interface.GameUi.GameCanvas, "DescriptionWindow")
+        protected bool Learnable { get; set; }
+
+        public EnhancementDescriptionWindow(Guid enhancementId, string icon, int x, int y, float studyChance = 0.0f, bool isLearnable = false) : base(Interface.GameUi.GameCanvas, "DescriptionWindow")
         {
             Enhancement = EnhancementDescriptor.Get(enhancementId);
             Icon = icon;
             StudyChance = studyChance;
+            Learnable = isLearnable;
 
             GenerateComponents();
             SetupDescriptionWindow();
@@ -112,31 +116,61 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             }
 
             // Set up the header as the item name.
-            header.SetTitle(EnhancementDescriptor.GetName(Enhancement.Id), Color.White);
-            
+            if (Learnable)
+            {
+                if (Enhancement.PrerequisitesMet(Globals.Me.KnownEnhancements))
+                {
+                    header.SetTitle($"LEARN: {EnhancementDescriptor.GetName(Enhancement.Id)}", CustomColors.ItemDesc.Notice);
+                }
+                else
+                {
+                    header.SetTitle($"LEARN: {EnhancementDescriptor.GetName(Enhancement.Id)}", CustomColors.ItemDesc.Worse);
+                }
+            }
+            else
+            {
+                header.SetTitle($"{EnhancementDescriptor.GetName(Enhancement.Id)}", Color.White);
+            }
+
+            if (Learnable)
+            {
+                header.SetSubtitle("Unlearned Enhancement", Color.White);
+            }
+            else
+            {
+                header.SetSubtitle("Enhancement", Color.White);
+            }
+
+            if (StudyChance > 0f)
+            {
+                if (Enhancement.PrerequisitesMet(Globals.Me.KnownEnhancements))
+                {
+                    header.SetDescription($"Chance to learn: {StudyChance.ToString("N2")}%", CustomColors.ItemDesc.Notice);
+                }
+                else
+                {
+                    header.SetDescription($"Chance to learn: 0%", CustomColors.ItemDesc.Worse);
+                }
+            }
+
+            if (Enhancement.PrerequisiteEnhancements.Count > 0 && !Enhancement.PrerequisitesMet(Globals.Me.KnownEnhancements))
+            {
+                AddDivider();
+                var enhancementNames = Enhancement.PrerequisiteEnhancements
+                    .Where(enId => !Globals.Me.KnownEnhancements.Contains(enId))
+                    .Select(enId => EnhancementDescriptor.GetName(enId)).ToArray();
+
+                var description = AddDescription();
+                description.AddText($"The following enhancements must be learned before this enhancement can be studied: \n{string.Join(", ", enhancementNames)}\n", CustomColors.ItemDesc.Worse);
+                AddDivider();
+            }
+
             header.SizeToChildren(true, false);
-            
+
             var rows = AddRowContainer();
             rows.AddKeyValueRow("Enhancement Points:", Enhancement.RequiredEnhancementPoints.ToString("N0"), CustomColors.ItemDesc.Muted, CustomColors.ItemDesc.Primary);
 
             rows.SizeToChildren(true, true);
-
-            if (StudyChance > 0f)
-            {
-                AddDivider();
-                var description = AddDescription();
-                if (!Globals.Me.KnownEnhancements.Contains(Enhancement.Id))
-                {
-                    if (Interface.GameUi.CraftingWindowOpen())
-                    {
-                        description.AddText($"You have a {StudyChance.ToString("N2")}% chance of learning this enhancement when you craft this item.", CustomColors.ItemDesc.Muted);
-                    }
-                    else if (Interface.GameUi.DeconstructorWindow.IsVisible())
-                    {
-                        description.AddText($"You have a {StudyChance.ToString("N2")}% chance of learning this enhancement when you deconstruct this item.", CustomColors.ItemDesc.Muted);
-                    }
-                }
-            }
         }
     }
 }

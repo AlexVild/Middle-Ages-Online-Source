@@ -28,7 +28,18 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
+            var enhancement = EnhancementDescriptor.Get(enhancementId);
+            if (enhancement == default)
+            {
+                return false;
+            }
+
             if (KnownEnhancements.ToList().Contains(enhancementId))
+            {
+                return false;
+            }
+
+            if (!enhancement.PrerequisitesMet(KnownEnhancements.ToList()))
             {
                 return false;
             }

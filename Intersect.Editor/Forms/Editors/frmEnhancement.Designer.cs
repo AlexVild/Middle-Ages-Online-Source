@@ -95,6 +95,12 @@ namespace Intersect.Editor.Forms.Editors
             this.lblStat = new System.Windows.Forms.Label();
             this.btnSave = new DarkUI.Controls.DarkButton();
             this.btnCancel = new DarkUI.Controls.DarkButton();
+            this.grpPrereqs = new DarkUI.Controls.DarkGroupBox();
+            this.btnAddPrereq = new DarkUI.Controls.DarkButton();
+            this.btnRemovePrereq = new DarkUI.Controls.DarkButton();
+            this.lstPrereqs = new System.Windows.Forms.ListBox();
+            this.cmbEnhancementPrereq = new DarkUI.Controls.DarkComboBox();
+            this.lblPrereqEnhancement = new System.Windows.Forms.Label();
             this.toolStrip.SuspendLayout();
             this.grpEnhancements.SuspendLayout();
             this.grpProps.SuspendLayout();
@@ -111,6 +117,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpStats.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudMaxStat)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMinStat)).BeginInit();
+            this.grpPrereqs.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolStripItemNew
@@ -230,7 +237,7 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Padding = new System.Windows.Forms.Padding(5, 0, 1, 0);
-            this.toolStrip.Size = new System.Drawing.Size(617, 25);
+            this.toolStrip.Size = new System.Drawing.Size(994, 25);
             this.toolStrip.TabIndex = 44;
             this.toolStrip.Text = "toolStrip1";
             // 
@@ -246,7 +253,7 @@ namespace Intersect.Editor.Forms.Editors
             this.lstGameObjects.Location = new System.Drawing.Point(6, 39);
             this.lstGameObjects.Name = "lstGameObjects";
             this.lstGameObjects.SelectedImageIndex = 0;
-            this.lstGameObjects.Size = new System.Drawing.Size(191, 336);
+            this.lstGameObjects.Size = new System.Drawing.Size(191, 468);
             this.lstGameObjects.TabIndex = 26;
             // 
             // txtSearch
@@ -281,7 +288,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpEnhancements.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpEnhancements.Location = new System.Drawing.Point(12, 28);
             this.grpEnhancements.Name = "grpEnhancements";
-            this.grpEnhancements.Size = new System.Drawing.Size(203, 381);
+            this.grpEnhancements.Size = new System.Drawing.Size(203, 513);
             this.grpEnhancements.TabIndex = 45;
             this.grpEnhancements.TabStop = false;
             this.grpEnhancements.Text = "Enhancements";
@@ -290,6 +297,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpProps.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpProps.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpProps.Controls.Add(this.grpPrereqs);
             this.grpProps.Controls.Add(this.grpWeaponTypes);
             this.grpProps.Controls.Add(this.nudReqEp);
             this.grpProps.Controls.Add(this.lblCost);
@@ -301,7 +309,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpProps.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpProps.Location = new System.Drawing.Point(3, 3);
             this.grpProps.Name = "grpProps";
-            this.grpProps.Size = new System.Drawing.Size(359, 233);
+            this.grpProps.Size = new System.Drawing.Size(359, 371);
             this.grpProps.TabIndex = 46;
             this.grpProps.TabStop = false;
             this.grpProps.Text = "Properties";
@@ -513,7 +521,7 @@ namespace Intersect.Editor.Forms.Editors
             this.pnlContainer.Controls.Add(this.grpProps);
             this.pnlContainer.Location = new System.Drawing.Point(221, 28);
             this.pnlContainer.Name = "pnlContainer";
-            this.pnlContainer.Size = new System.Drawing.Size(385, 381);
+            this.pnlContainer.Size = new System.Drawing.Size(763, 513);
             this.pnlContainer.TabIndex = 47;
             this.pnlContainer.Visible = false;
             // 
@@ -531,7 +539,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpBonuses.Controls.Add(this.label4);
             this.grpBonuses.Controls.Add(this.lblEffect);
             this.grpBonuses.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpBonuses.Location = new System.Drawing.Point(3, 596);
+            this.grpBonuses.Location = new System.Drawing.Point(374, 367);
             this.grpBonuses.Name = "grpBonuses";
             this.grpBonuses.Size = new System.Drawing.Size(359, 171);
             this.grpBonuses.TabIndex = 58;
@@ -670,7 +678,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpVitalMods.Controls.Add(this.label2);
             this.grpVitalMods.Controls.Add(this.lblVital);
             this.grpVitalMods.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpVitalMods.Location = new System.Drawing.Point(3, 419);
+            this.grpVitalMods.Location = new System.Drawing.Point(374, 190);
             this.grpVitalMods.Name = "grpVitalMods";
             this.grpVitalMods.Size = new System.Drawing.Size(359, 171);
             this.grpVitalMods.TabIndex = 57;
@@ -819,7 +827,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpStats.Controls.Add(this.lblMin);
             this.grpStats.Controls.Add(this.lblStat);
             this.grpStats.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpStats.Location = new System.Drawing.Point(3, 242);
+            this.grpStats.Location = new System.Drawing.Point(374, 13);
             this.grpStats.Name = "grpStats";
             this.grpStats.Size = new System.Drawing.Size(359, 171);
             this.grpStats.TabIndex = 51;
@@ -956,7 +964,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(258, 425);
+            this.btnSave.Location = new System.Drawing.Point(630, 547);
             this.btnSave.Name = "btnSave";
             this.btnSave.Padding = new System.Windows.Forms.Padding(5);
             this.btnSave.Size = new System.Drawing.Size(169, 27);
@@ -967,7 +975,7 @@ namespace Intersect.Editor.Forms.Editors
             // btnCancel
             // 
             this.btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnCancel.Location = new System.Drawing.Point(433, 425);
+            this.btnCancel.Location = new System.Drawing.Point(805, 547);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Padding = new System.Windows.Forms.Padding(5);
             this.btnCancel.Size = new System.Drawing.Size(172, 27);
@@ -975,12 +983,90 @@ namespace Intersect.Editor.Forms.Editors
             this.btnCancel.Text = "Cancel";
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
+            // grpPrereqs
+            // 
+            this.grpPrereqs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpPrereqs.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpPrereqs.Controls.Add(this.btnAddPrereq);
+            this.grpPrereqs.Controls.Add(this.btnRemovePrereq);
+            this.grpPrereqs.Controls.Add(this.lstPrereqs);
+            this.grpPrereqs.Controls.Add(this.cmbEnhancementPrereq);
+            this.grpPrereqs.Controls.Add(this.lblPrereqEnhancement);
+            this.grpPrereqs.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpPrereqs.Location = new System.Drawing.Point(11, 233);
+            this.grpPrereqs.Name = "grpPrereqs";
+            this.grpPrereqs.Size = new System.Drawing.Size(342, 128);
+            this.grpPrereqs.TabIndex = 60;
+            this.grpPrereqs.TabStop = false;
+            this.grpPrereqs.Text = "Prerequisite Enhancements";
+            // 
+            // btnAddPrereq
+            // 
+            this.btnAddPrereq.Location = new System.Drawing.Point(163, 89);
+            this.btnAddPrereq.Name = "btnAddPrereq";
+            this.btnAddPrereq.Padding = new System.Windows.Forms.Padding(5);
+            this.btnAddPrereq.Size = new System.Drawing.Size(79, 23);
+            this.btnAddPrereq.TabIndex = 59;
+            this.btnAddPrereq.Text = "Add";
+            this.btnAddPrereq.Click += new System.EventHandler(this.btnAddPrereq_Click);
+            // 
+            // btnRemovePrereq
+            // 
+            this.btnRemovePrereq.Location = new System.Drawing.Point(249, 89);
+            this.btnRemovePrereq.Name = "btnRemovePrereq";
+            this.btnRemovePrereq.Padding = new System.Windows.Forms.Padding(5);
+            this.btnRemovePrereq.Size = new System.Drawing.Size(79, 23);
+            this.btnRemovePrereq.TabIndex = 58;
+            this.btnRemovePrereq.Text = "Remove";
+            this.btnRemovePrereq.Click += new System.EventHandler(this.btnRemovePrereq_Click);
+            // 
+            // lstPrereqs
+            // 
+            this.lstPrereqs.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.lstPrereqs.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lstPrereqs.Cursor = System.Windows.Forms.Cursors.Default;
+            this.lstPrereqs.ForeColor = System.Drawing.Color.Gainsboro;
+            this.lstPrereqs.FormattingEnabled = true;
+            this.lstPrereqs.Location = new System.Drawing.Point(9, 42);
+            this.lstPrereqs.Name = "lstPrereqs";
+            this.lstPrereqs.Size = new System.Drawing.Size(319, 41);
+            this.lstPrereqs.TabIndex = 57;
+            // 
+            // cmbEnhancementPrereq
+            // 
+            this.cmbEnhancementPrereq.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbEnhancementPrereq.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbEnhancementPrereq.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbEnhancementPrereq.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbEnhancementPrereq.DrawDropdownHoverOutline = false;
+            this.cmbEnhancementPrereq.DrawFocusRectangle = false;
+            this.cmbEnhancementPrereq.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbEnhancementPrereq.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbEnhancementPrereq.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbEnhancementPrereq.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbEnhancementPrereq.FormattingEnabled = true;
+            this.cmbEnhancementPrereq.Location = new System.Drawing.Point(109, 15);
+            this.cmbEnhancementPrereq.Name = "cmbEnhancementPrereq";
+            this.cmbEnhancementPrereq.Size = new System.Drawing.Size(217, 21);
+            this.cmbEnhancementPrereq.TabIndex = 56;
+            this.cmbEnhancementPrereq.Text = null;
+            this.cmbEnhancementPrereq.TextPadding = new System.Windows.Forms.Padding(2);
+            // 
+            // lblPrereqEnhancement
+            // 
+            this.lblPrereqEnhancement.AutoSize = true;
+            this.lblPrereqEnhancement.Location = new System.Drawing.Point(6, 18);
+            this.lblPrereqEnhancement.Name = "lblPrereqEnhancement";
+            this.lblPrereqEnhancement.Size = new System.Drawing.Size(73, 13);
+            this.lblPrereqEnhancement.TabIndex = 21;
+            this.lblPrereqEnhancement.Text = "Enhancement";
+            // 
             // frmEnhancement
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.ClientSize = new System.Drawing.Size(617, 464);
+            this.ClientSize = new System.Drawing.Size(994, 586);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.pnlContainer);
@@ -1013,6 +1099,8 @@ namespace Intersect.Editor.Forms.Editors
             this.grpStats.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudMaxStat)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudMinStat)).EndInit();
+            this.grpPrereqs.ResumeLayout(false);
+            this.grpPrereqs.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1083,5 +1171,11 @@ namespace Intersect.Editor.Forms.Editors
         private DarkUI.Controls.DarkButton btnAddWeaponType;
         private DarkUI.Controls.DarkNumericUpDown nudMinWeaponLevel;
         private System.Windows.Forms.Label lblMinLvl;
+        private DarkUI.Controls.DarkGroupBox grpPrereqs;
+        private DarkUI.Controls.DarkButton btnAddPrereq;
+        private DarkUI.Controls.DarkButton btnRemovePrereq;
+        private System.Windows.Forms.ListBox lstPrereqs;
+        private DarkUI.Controls.DarkComboBox cmbEnhancementPrereq;
+        private System.Windows.Forms.Label lblPrereqEnhancement;
     }
 }

@@ -96,6 +96,8 @@ namespace Intersect.Editor.Forms.Editors
             cmbEffect.Items.Clear();
             cmbEffect.Items.AddRange(EnumExtensions.GetDescriptions(typeof(EffectType)));
 
+            cmbEnhancementPrereq.Items.AddRange(EnhancementDescriptor.Names);
+
             lstGameObjects.Init(UpdateToolStripItems, AssignEditorItem, toolStripItemNew_Click, toolStripItemCopy_Click, toolStripItemUndo_Click, toolStripItemPaste_Click, toolStripItemDelete_Click);
         }
 
@@ -116,6 +118,8 @@ namespace Intersect.Editor.Forms.Editors
             RefreshList(ref lstVitalMods, mEditorItem.VitalMods, false, false);
             RefreshList(ref lstBonuses, mEditorItem.EffectMods, true, false);
             RefreshWeaponTypes(false);
+
+            RefreshPrereqList();
 
             mPopulating = false;
         }
@@ -410,6 +414,38 @@ namespace Intersect.Editor.Forms.Editors
             cmbEffect.SelectedIndex = (int)effect.EnhancementType;
             nudBonusMin.Value = effect.MinValue;
             nudBonusMax.Value = effect.MaxValue;
+        }
+
+        private void btnAddPrereq_Click(object sender, EventArgs e)
+        {
+            var selectedPrereq = EnhancementDescriptor.IdFromList(cmbEnhancementPrereq.SelectedIndex);
+            if (mEditorItem.PrerequisiteEnhancements.Contains(selectedPrereq))
+            {
+                return;
+            }
+
+            mEditorItem.PrerequisiteEnhancements.Add(selectedPrereq);
+            RefreshPrereqList();
+        }
+
+        private void btnRemovePrereq_Click(object sender, EventArgs e)
+        {
+            if (lstPrereqs.SelectedIndex < 0 || lstPrereqs.SelectedIndex >= mEditorItem.PrerequisiteEnhancements.Count)
+            {
+                return;
+            }
+
+            mEditorItem.PrerequisiteEnhancements.RemoveAt(lstPrereqs.SelectedIndex);
+            RefreshPrereqList();
+        }
+
+        private void RefreshPrereqList()
+        {
+            lstPrereqs.Items.Clear();
+            foreach(var prereq in mEditorItem.PrerequisiteEnhancements)
+            {
+                lstPrereqs.Items.Add(EnhancementDescriptor.GetName(prereq));
+            }
         }
     }
 }

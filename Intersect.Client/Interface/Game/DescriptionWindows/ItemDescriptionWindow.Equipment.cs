@@ -648,7 +648,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 var enhancement = EnhancementDescriptor.GetName(mItem.StudyEnhancement);
 
                 var leftText = mItem.StudyEnhancement != Guid.Empty ? Strings.ItemDescription.StudyOpportunity : Strings.ItemDescription.CosmeticOpportunity;
-                var rightText = mItem.StudyEnhancement != Guid.Empty ? Strings.ItemDescription.StudyOpportunityText.ToString(enhancement, mItem.StudyChance.ToString("N2")) : 
+                var rightText = mItem.StudyEnhancement != Guid.Empty ? Strings.ItemDescription.StudyOpportunityText.ToString(enhancement, mItem.StudyChance.ToString("N2")) :
                     Strings.ItemDescription.CosmeticChance.ToString(mItem.StudyChance.ToString("N2"));
 
                 var unlockedText = mItem.StudyEnhancement != Guid.Empty ? Strings.ItemDescription.Studied : Strings.ItemDescription.CosmeticKnown;
@@ -658,7 +658,8 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                 // Enhancement study text
                 if (mItem.StudyEnhancement != Guid.Empty && !Globals.Me.KnownEnhancements.Contains(mItem.StudyEnhancement))
                 {
-                    studyRow.AddKeyValueRow(leftText, rightText, CustomColors.ItemDesc.Special, CustomColors.ItemDesc.Special);
+                    // commenting out
+                    //studyRow.AddKeyValueRow(leftText, rightText, CustomColors.ItemDesc.Special, CustomColors.ItemDesc.Special);
                 }
                 // Cosmetic unlock text
                 else if (mItem.StudyChance > 0)

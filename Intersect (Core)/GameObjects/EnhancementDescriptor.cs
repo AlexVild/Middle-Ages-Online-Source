@@ -77,6 +77,26 @@ namespace Intersect.GameObjects
             get => JsonConvert.SerializeObject(EffectMods);
             set => EffectMods = JsonConvert.DeserializeObject<List<Enhancement<EffectType>>>(value ?? string.Empty) ?? new List<Enhancement<EffectType>>();
         }
+
+        [NotMapped]
+        public List<Guid> PrerequisiteEnhancements { get; set; } = new List<Guid>();
+
+        [Column("PrerequisiteEnhancements")]
+        [JsonIgnore]
+        public string PrerequisiteEnhancementsJson
+        {
+            get => JsonConvert.SerializeObject(PrerequisiteEnhancements);
+            set => PrerequisiteEnhancements = JsonConvert.DeserializeObject<List<Guid>>(value ?? string.Empty) ?? new List<Guid>();
+        }
+
+        public bool PrerequisitesMet(List<Guid> knownEnhancements)
+        {
+            if (PrerequisiteEnhancements.Count == 0)
+            {
+                return true;
+            }
+            return PrerequisiteEnhancements.All(enId => knownEnhancements.Contains(enId));
+        }
     }
 
     public class Enhancement<T> where T : Enum

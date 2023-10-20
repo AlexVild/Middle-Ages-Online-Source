@@ -67,7 +67,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows.Components
         /// <summary>
         /// Show the control.
         /// </summary>
-        public void Show() => mContainer.Show();
+        public virtual void Show() => mContainer.Show();
 
         /// <summary>
         /// Sets the control position.

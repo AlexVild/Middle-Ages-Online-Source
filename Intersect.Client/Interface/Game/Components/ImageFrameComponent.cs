@@ -22,10 +22,11 @@ namespace Intersect.Client.Interface.Game.Components
         public int X => ParentContainer.X;
         public int Y => ParentContainer.Y;
         public int Width => ParentContainer.Width;
+        public int Height => ParentContainer.Height;
         
         public int Bottom => ParentContainer.Bottom;
 
-        public ImageFrameComponent(ImagePanel parent, 
+        public ImageFrameComponent(Base parent, 
             string containerName, 
             string frameTexture,
             string imageTexture,

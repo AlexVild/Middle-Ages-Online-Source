@@ -43,6 +43,8 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
 
         public bool ShowEnhancementBreakdown = false;
 
+        public bool FromEnhancementWindow = false;
+
         public ItemDescriptionWindow(
             ItemBase item,
             int amount,
@@ -53,7 +55,8 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             string valueLabel = "",
             string dropChance = "",
             double tableChance = 0d,
-            int tableQuantity = 0
+            int tableQuantity = 0,
+            bool enhancementWindow = false
         ) : base(Interface.GameUi.GameCanvas, "DescriptionWindow")
         {
             mItem = item;
@@ -69,6 +72,7 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             mDropChance = dropChance;
             mTableChance = tableChance;
             mTableQuantity = tableQuantity;
+            FromEnhancementWindow = enhancementWindow;
 
             if (mItem != null && mItem.ItemType == ItemTypes.Equipment)
             {
@@ -79,44 +83,47 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
             GenerateComponents();
             SetupDescriptionWindow();
 
-            // If a spell, also display the spell description!
-            if (mItem.ItemType == ItemTypes.Spell)
+            if (!FromEnhancementWindow)
             {
-                mSpellDescWindow = new SpellDescriptionWindow(mItem.SpellId, x, y);
-            }
-            if (mItem.ItemType == ItemTypes.Equipment && mItem.EquipmentSlot == Options.PrayerIndex)
-            {
-                mSpellDescWindow = new SpellDescriptionWindow(mItem.ComboSpellId, x, y);
-            }
-            if (mItem.SpecialAttack.SpellId != default)
-            {
-                mSpellDescWindow = new SpellDescriptionWindow(mItem.SpecialAttack.SpellId, x, y);
-            }
-            if (mItem.ProcSpellId != default)
-            {
-                mSpellDescWindow = new SpellDescriptionWindow(mItem.ProcSpellId, x, y);
-            }
-            if (mItem.ItemType == ItemTypes.Enhancement)
-            {
-                mEnhancementDescWindow = new EnhancementDescriptionWindow(mItem.EnhancementId, mItem.Icon, x, y);
-                mEnhancementDescWindow.Show();
-            }
-            else if ((Interface.GameUi.CraftingWindowOpen() || Interface.GameUi.DeconstructorWindow.IsVisible()) && mItem.StudyEnhancement != Guid.Empty)
-            {
-                if (!Globals.Me.KnownEnhancements.Contains(mItem.StudyEnhancement))
+                // If a spell, also display the spell description!
+                if (mItem.ItemType == ItemTypes.Spell)
                 {
-                    mEnhancementDescWindow = new EnhancementDescriptionWindow(mItem.StudyEnhancement, mItem.Icon, x - (mSpellDescWindow?.Width ?? 0), y, (float)mItem.StudyChance);
+                    mSpellDescWindow = new SpellDescriptionWindow(mItem.SpellId, x, y);
+                }
+                if (mItem.ItemType == ItemTypes.Equipment && mItem.EquipmentSlot == Options.PrayerIndex)
+                {
+                    mSpellDescWindow = new SpellDescriptionWindow(mItem.ComboSpellId, x, y);
+                }
+                if (mItem.SpecialAttack.SpellId != default)
+                {
+                    mSpellDescWindow = new SpellDescriptionWindow(mItem.SpecialAttack.SpellId, x, y);
+                }
+                if (mItem.ProcSpellId != default)
+                {
+                    mSpellDescWindow = new SpellDescriptionWindow(mItem.ProcSpellId, x, y);
+                }
+                if (mItem.ItemType == ItemTypes.Enhancement)
+                {
+                    mEnhancementDescWindow = new EnhancementDescriptionWindow(mItem.EnhancementId, mItem.Icon, x, y, isLearnable: true);
                     mEnhancementDescWindow.Show();
                 }
-            }
+                else if ((Interface.GameUi.CraftingWindowOpen() || Interface.GameUi.DeconstructorWindow.IsVisible()) && mItem.StudyEnhancement != Guid.Empty)
+                {
+                    if (!Globals.Me.KnownEnhancements.Contains(mItem.StudyEnhancement))
+                    {
+                        mEnhancementDescWindow = new EnhancementDescriptionWindow(mItem.StudyEnhancement, mItem.Icon, x - (mSpellDescWindow?.Width ?? 0), y, (float)mItem.StudyChance, isLearnable: true);
+                        mEnhancementDescWindow.Show();
+                    }
+                }
 
-            if (mSpellDescWindow != default)
-            {
-                x -= mSpellDescWindow.Container.Width + 4;
-            }
-            if (mEnhancementDescWindow != default)
-            {
-                x -= mEnhancementDescWindow.Container.Width + 4;
+                if (mSpellDescWindow != default)
+                {
+                    x -= mSpellDescWindow.Container.Width + 4;
+                }
+                if (mEnhancementDescWindow != default)
+                {
+                    x -= mEnhancementDescWindow.Container.Width + 4;
+                }
             }
 
             SetPosition(x, y);
