@@ -204,7 +204,7 @@ namespace Intersect.Client.Interface.Game.Components
             }
 
             ContractButton.IsHidden = !Descriptor?.RequiresContract ?? true;
-            ContractButton.IsDisabled = !Unlocked;
+            ContractButton.IsDisabled = !Unlocked || Completed;
         }
 
         private void ContractButton_Clicked(Base sender, Framework.Gwen.Control.EventArguments.ClickedEventArgs arguments)

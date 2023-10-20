@@ -34,8 +34,8 @@ namespace Intersect.Client.Interface.Game.Components
         public override void Initialize()
         {
             base.Initialize();
-            Image.HoverEnter += Image_HoverEnter; ;
-            Image.HoverLeave += Image_HoverLeave; ;
+            Image.HoverEnter += Image_HoverEnter;
+            Image.HoverLeave += Image_HoverLeave;
         }
 
         private void Image_HoverLeave(Base sender, EventArgs arguments)

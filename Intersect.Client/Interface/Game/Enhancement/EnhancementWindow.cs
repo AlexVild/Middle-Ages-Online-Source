@@ -2,6 +2,7 @@
 using Intersect.Client.Entities.Events;
 using Intersect.Client.Framework.Graphics;
 using Intersect.Client.Framework.Gwen.Control;
+using Intersect.Client.Framework.Gwen.Input;
 using Intersect.Client.General;
 using Intersect.Client.General.Enhancement;
 using Intersect.Client.Interface.Game.DescriptionWindows;
@@ -379,6 +380,11 @@ namespace Intersect.Client.Interface.Game.Enhancement
 
         private void Enhancement_Hover(Base sender, EventArgs arguments)
         {
+            if (InputHandler.MouseFocus != null)
+            {
+                return;
+            }
+
             mSelectedRow = (EnhancementRow)((ListBoxRow)sender).UserData;
             mSelectedRow.DescriptionWindow.SetPosition(Background.X + 6, Background.Y + EnhancementBackground.Y + 40);
             mSelectedRow.DescriptionWindow.Show();
@@ -393,6 +399,11 @@ namespace Intersect.Client.Interface.Game.Enhancement
 
         private void AppliedEnhancement_Hover(Base sender, EventArgs arguments)
         {
+            if (InputHandler.MouseFocus != null)
+            {
+                return;
+            }
+
             mSelectedRow = (EnhancementRow)((ListBoxRow)sender).UserData;
             mSelectedRow.DescriptionWindow.SetPositionRight(Background.X + Background.Width, Background.Y + EnhancementBackground.Y + 40);
             mSelectedRow.DescriptionWindow.Show();

@@ -1,6 +1,8 @@
 ﻿using Intersect.Client.Core;
 using Intersect.Client.Framework.Gwen.Control;
+using Intersect.Client.Framework.Gwen.Input;
 using Intersect.Client.General;
+using Intersect.Client.Interface.Game.DescriptionWindows;
 using Intersect.Client.Networking;
 using Intersect.Client.Utilities;
 using Intersect.GameObjects;
@@ -59,6 +61,9 @@ namespace Intersect.Client.Interface.Game.Character.Panels
     {
         public CharacterPanelType Type = CharacterPanelType.Enhancements;
 
+        private EnhancementMenuItem mSelectedEnhancement { get; set; }
+        private EnhancementDescriptionWindow EnhancementDescription { get; set; }
+
         List<EnhancementMenuItem> Enhancements => CharacterEnhancementsPanelController.Enhancements;
         List<Guid> KnownEnhancements => CharacterEnhancementsPanelController.KnownEnhancements;
         Guid CurrentFilter => CharacterEnhancementsPanelController.WeaponTypeFilter;
@@ -98,6 +103,7 @@ namespace Intersect.Client.Interface.Game.Character.Panels
 
             EnhancementList.ScrollToTop();
             EnhancementList.UnselectAll();
+            mSelectedEnhancement = null;
 
             base.Show();
         }
@@ -144,11 +150,15 @@ namespace Intersect.Client.Interface.Game.Character.Panels
 
             CharacterEnhancementsPanelController.WeaponTypeFilter = id;
             Refresh();
+            EnhancementList.UnselectAll();
+            mSelectedEnhancement = null;
         }
 
         public override void Hide()
         {
             CharacterEnhancementsPanelController.IsOpen = false;
+            EnhancementList.RemoveAllRows();
+            EnhancementDescription?.Dispose();
             base.Hide();
         }
 
@@ -175,7 +185,6 @@ namespace Intersect.Client.Interface.Game.Character.Panels
                 var tmpRow = EnhancementList.AddRow($"{enhancement?.Descriptor?.Name ?? "NOT FOUND"}");
                 tmpRow.UserData = enhancement;
 
-
                 if (!enhancement.Known)
                 {
                     tmpRow.SetTextColor(new Color(50, 19, 0));
@@ -186,8 +195,38 @@ namespace Intersect.Client.Interface.Game.Character.Panels
                 }
 
                 tmpRow.RenderColor = new Color(100, 232, 208, 170);
+                tmpRow.Selected += TmpRow_Selected;
+                tmpRow.HoverEnter += TmpRow_HoverEnter;
+                tmpRow.HoverLeave += TmpRow_HoverLeave;
             }
             EnhancementList.ScrollToTop();
+        }
+
+        private void TmpRow_Selected(Base sender, Framework.Gwen.Control.EventArguments.ItemSelectedEventArgs arguments)
+        {
+            mSelectedEnhancement = (EnhancementMenuItem)((ListBoxRow)sender).UserData;
+        }
+
+        private void TmpRow_HoverLeave(Base sender, EventArgs arguments)
+        {
+            EnhancementDescription?.Dispose();
+        }
+
+        private void TmpRow_HoverEnter(Base sender, EventArgs arguments)
+        {
+            if (InputHandler.MouseFocus != null)
+            {
+                return;
+            }
+
+            var hoveredEnhancement = (EnhancementMenuItem)((ListBoxRow)sender).UserData;
+            EnhancementDescription?.Dispose();
+
+            var mousePos = Globals.InputManager.GetMousePosition();
+            var x = mBackground?.Parent?.Parent.X ?? 0;
+            var y = (mBackground?.Parent?.Parent?.Y ?? 0) + (mBackground.Y + EnhancementListBg.Y);
+            EnhancementDescription = new EnhancementDescriptionWindow(hoveredEnhancement.Id, string.Empty, x, y);
+            EnhancementDescription.Show();
         }
 
         protected override void SearchTextChanged()

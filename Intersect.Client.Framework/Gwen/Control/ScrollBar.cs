@@ -55,6 +55,8 @@ namespace Intersect.Client.Framework.Gwen.Control
             NudgeAmount = 20;
         }
 
+        public bool IsDepressed => mDepressed;
+
         /// <summary>
         ///     Bar size (in pixels).
         /// </summary>
