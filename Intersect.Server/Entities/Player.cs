@@ -6098,17 +6098,12 @@ namespace Intersect.Server.Entities
             }
 
             // TODO extend this method to also look to see if the underlying stat changes on an enhancement have been changed/exceeded
-
             if (reRoll)
             {
                 // Create a temporary interface
                 var tmpInterface = new EnhancementInterface(this, Guid.Empty, 0.0f);
 
-                // Remove and re-add enhancements, without the UI
-                tmpInterface.TryRemoveEnhancementsOnItem(weapon, false, true);
-                tmpInterface.TryApplyEnhancementsToWeapon(appliedEnhancementIds.ToArray(), false);
-
-                PacketSender.SendChatMsg(this, Strings.Enhancements.ServerReset, ChatMessageType.Notice, sendToast: true);
+                tmpInterface.RerollWeapon(weapon, appliedEnhancementIds.ToArray());
             }
         }
 
@@ -9421,7 +9416,6 @@ namespace Intersect.Server.Entities
 
         [JsonIgnore, NotMapped]
         public Dictionary<int, ResourceInfoPackets> CachedHarvestInfo = new Dictionary<int, ResourceInfoPackets>();
-
 
         [NotMapped]
         public int[] VitalPointAllocations { get; set; } = new int[(int)Vitals.VitalCount];

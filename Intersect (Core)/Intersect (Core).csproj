@@ -443,6 +443,7 @@
     <Compile Include="Network\Packets\Client\SetLabelPacket.cs" />
     <Compile Include="Network\Packets\Client\SkillPreparationPacket.cs" />
     <Compile Include="Network\Packets\Client\TrackWeaponTypePacket.cs" />
+    <Compile Include="Network\Packets\Client\WeaponPickerResponsePacket.cs" />
     <Compile Include="Network\Packets\Server\ChallengeProgressPacket.cs" />
     <Compile Include="Network\Packets\Server\CloseDeconstructorPacket.cs" />
     <Compile Include="Network\Packets\Server\CombatNumberPacket.cs" />
@@ -529,6 +530,7 @@
     <Compile Include="Network\Packets\Server\RespawnFinishedPacket.cs" />
     <Compile Include="Network\Packets\Server\LoadoutsPacket.cs" />
     <Compile Include="Network\Packets\Server\SendOpenDeconstructorPacket.cs" />
+    <Compile Include="Network\Packets\Server\OpenWeaponPickerPacket.cs" />
     <Compile Include="Network\Packets\Server\ServerDisposedPacket.cs" />
     <Compile Include="Network\Packets\Server\SetDuelOpponentPacket.cs" />
     <Compile Include="Network\Packets\Server\ShakeScreenPacket.cs" />

@@ -4590,7 +4590,7 @@ namespace Intersect.Server.Networking
                 return;
             }
 
-            player.Enhancement?.TryRemoveEnhancementsOnItem(weapon);
+            player.Enhancement?.TryRemoveEnhancementsOnItem();
         }
 
         public void HandlePacket(Client client, CloseUpgradeStationPacket packet)
@@ -4606,9 +4606,9 @@ namespace Intersect.Server.Networking
                 return;
             }
 
-            var equippedItem = player.TryGetEquippedItem(Options.WeaponIndex, out var weapon);
-            var failure = "Failed to upgrade item!";
-            if (!player.UpgradeStation?.TryUpgradeItem(weapon, packet.CraftId, out failure) ?? false)
+            var failure = "No item selected to upgrade!";
+            player.TryGetWeaponPicked(out var weapon);
+            if (weapon == default || (!player.UpgradeStation?.TryUpgradeItem(weapon, packet.CraftId, out failure) ?? false))
             {
                 PacketSender.SendPlaySound(player, Options.UIDenySound);
                 PacketSender.SendEventDialog(player, failure, string.Empty, Guid.Empty);
@@ -4687,6 +4687,35 @@ namespace Intersect.Server.Networking
                 player.SendDialogNotice(Strings.Crafting.EnhancementTutorial4);
                 player.EnhancementTutorialDone = true;
             }
+        }
+
+        public void HandlePacket(Client client, WeaponPickerResponsePacket packet)
+        {
+            var player = client?.Entity;
+            if (player == default)
+            {
+                return;
+            }
+
+            // Client sends -1 if the player just cancels the picker
+            if (packet.SelectedSlot < 0)
+            {
+                player.CloseWeaponPicker();
+                return;
+            }
+
+            if (player.WeaponPicker == default)
+            {
+                Log.Error($"No weapon picker existed for player {player.Name} when receiving a selection packet!");
+            }
+
+            if (!player.WeaponPicker.TryChooseWeapon(packet.SelectedSlot))
+            {
+                player.CloseWeaponPicker();
+                return;
+            }
+
+            player.WeaponPicker.OpenNextInterface();
         }
     }
 }

@@ -2870,7 +2870,7 @@ namespace Intersect.Server.Networking
                 return;
             }
 
-            player.TryGetEquippedItem(Options.WeaponIndex, out var weapon);
+            player.TryGetWeaponPicked(out var weapon);
 
             var descriptorId = weapon?.ItemId ?? Guid.Empty;
             var properties = weapon?.ItemProperties ?? new ItemProperties();
@@ -2927,6 +2927,11 @@ namespace Intersect.Server.Networking
             }
 
             player?.SendPacket(new SetDuelOpponentPacket(opponents.Select(opp => opp.Id).ToArray() ?? Array.Empty<Guid>()));
+        }
+
+        public static void SendOpenWeaponPicker(Player player)
+        {
+            player?.SendPacket(new OpenWeaponPickerPacket());
         }
     }
 }

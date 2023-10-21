@@ -26,17 +26,20 @@ namespace Intersect.Server.Entities
             CostMultiplier = costMultiplier;
         }
 
-        public bool TryApplyEnhancementsToWeapon(Guid[] enhancementIds, bool sendUiPacket = true)
+        public bool TryApplyEnhancementsToWeapon(Guid[] enhancementIds, bool sendUiPacket = true, Item weapon = null)
         {
             if (enhancementIds == null || enhancementIds.Length == 0 || Owner == null || !Owner.Online)
             {
                 return false;
             }
 
-            if (!Owner.TryGetEquippedItem(Options.WeaponIndex, out var weapon))
+            if (weapon == null)
             {
-                PacketSender.SendChatMsg(Owner, Strings.Enhancements.NoWeapon, Enums.ChatMessageType.Error, CustomColors.General.GeneralDisabled);
-                return false;
+                if (!Owner.TryGetWeaponPicked(out weapon))
+                {
+                    PacketSender.SendChatMsg(Owner, Strings.Enhancements.NoWeapon, Enums.ChatMessageType.Error, CustomColors.General.GeneralDisabled);
+                    return false;
+                }
             }
 
             if (!ValidateEnhancements(enhancementIds, weapon, !sendUiPacket))
@@ -159,11 +162,14 @@ namespace Intersect.Server.Entities
             }
         }
 
-        public bool TryRemoveEnhancementsOnItem(Item item, bool sendUiPackets = true, bool ignoreCurrency = false)
+        public bool TryRemoveEnhancementsOnItem(bool sendUiPackets = true, bool ignoreCurrency = false, Item item = null)
         {
             if (item == null)
             {
-                return false;
+                if (!Owner?.TryGetWeaponPicked(out item) ?? false)
+                {
+                    return false;
+                }
             }
 
             if (!ignoreCurrency)
@@ -209,6 +215,14 @@ namespace Intersect.Server.Entities
             }
 
             return true;
+        }
+
+        public void RerollWeapon(Item weapon, Guid[] appliedEnhancementIds)
+        {
+            TryRemoveEnhancementsOnItem(false, true, weapon);
+            TryApplyEnhancementsToWeapon(appliedEnhancementIds, false, weapon);
+
+            PacketSender.SendChatMsg(Owner, Strings.Enhancements.ServerReset, ChatMessageType.Notice, sendToast: true);
         }
     }
 }

@@ -3553,7 +3553,7 @@ namespace Intersect.Server.Entities.Events
                 return;
             }
 
-            player.OpenEnhancement(command.CurrencyItemId, command.CostMultiplier);
+            player.OpenWeaponPicker(WeaponPickerResult.Enhancement, command.CurrencyItemId, command.CostMultiplier);
             callStack.Peek().WaitingForResponse = CommandInstance.EventResponse.Enhancement;
         }
 
@@ -3570,7 +3570,7 @@ namespace Intersect.Server.Entities.Events
                 return;
             }
 
-            player.OpenUpgradeStation(command.CurrencyItemId, command.CostMultiplier);
+            player.OpenWeaponPicker(WeaponPickerResult.Upgrade, command.CurrencyItemId, command.CostMultiplier);
             callStack.Peek().WaitingForResponse = CommandInstance.EventResponse.Upgrade;
         }
 

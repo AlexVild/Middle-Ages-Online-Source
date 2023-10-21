@@ -530,4 +530,13 @@ namespace Intersect.GameObjects.Events
         [Description("al_book_turn.wav")]
         PageTurn,
     }
+
+    /// <summary>
+    /// Determines where to send the player after they pick a weapon using the WeaponPicker
+    /// </summary>
+    public enum WeaponPickerResult
+    {
+        Enhancement,
+        Upgrade
+    }
 }
