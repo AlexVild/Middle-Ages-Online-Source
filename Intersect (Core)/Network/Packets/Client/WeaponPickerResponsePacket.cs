@@ -8,6 +8,9 @@ namespace Intersect.Network.Packets.Client
         [Key(0)]
         public int SelectedSlot { get; set; }
 
+        // EF
+        public WeaponPickerResponsePacket() { }
+
         public WeaponPickerResponsePacket(int selectedSlot)
         {
             SelectedSlot = selectedSlot;

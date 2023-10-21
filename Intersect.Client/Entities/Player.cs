@@ -254,11 +254,12 @@ namespace Intersect.Client.Entities
                      Globals.InQuestBoard == false &&
                      Globals.InTrade == false &&
                      Globals.InMapTransition == false &&
-                     (!Interface.Interface.GameUi?.Map?.IsOpen ?? false) &&
+                     (!Interface.Interface.GameUi?.Map?.IsOpen ?? true) &&
                      (!Globals.Me.Leaderboard?.IsOpen ?? true) &&
                      (!Globals.Me.Deconstructor?.IsOpen ?? true) &&
                      (!Globals.Me.Enhancement?.IsOpen ?? true) &&
                      (!Globals.Me.UpgradeStation?.IsOpen ?? true) &&
+                     (!Interface.Interface.GameUi?.WeaponPickerOpen ?? true) &&
                      !Interface.Interface.HasInputFocus());
         }
 

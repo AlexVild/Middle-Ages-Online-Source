@@ -2929,9 +2929,9 @@ namespace Intersect.Server.Networking
             player?.SendPacket(new SetDuelOpponentPacket(opponents.Select(opp => opp.Id).ToArray() ?? Array.Empty<Guid>()));
         }
 
-        public static void SendOpenWeaponPicker(Player player)
+        public static void SendOpenWeaponPicker(Player player, WeaponPickerResult resultType)
         {
-            player?.SendPacket(new OpenWeaponPickerPacket());
+            player?.SendPacket(new OpenWeaponPickerPacket(resultType));
         }
     }
 }

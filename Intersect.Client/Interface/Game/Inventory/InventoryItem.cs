@@ -64,6 +64,10 @@ namespace Intersect.Client.Interface.Game.Inventory
 
         public ImagePanel Pnl;
 
+        bool ItemsBeingModified => Globals.Me.Enhancement.IsOpen || Globals.Me.UpgradeStation.IsOpen || Interface.GameUi.WeaponPickerOpen;
+
+        bool InDeconstructor => Globals.Me.Deconstructor.IsOpen;
+
         public InventoryItem(InventoryWindow inventoryWindow, int index)
         {
             mInventoryWindow = inventoryWindow;
@@ -90,7 +94,7 @@ namespace Intersect.Client.Interface.Game.Inventory
 
         void pnl_Clicked(Base sender, ClickedEventArgs arguments)
         {
-            if (Globals.Me.Deconstructor.IsOpen || Globals.Me.Enhancement.IsOpen || Globals.Me.UpgradeStation.IsOpen)
+            if (InDeconstructor || ItemsBeingModified)
             {
                 return;
             }
@@ -149,7 +153,7 @@ namespace Intersect.Client.Interface.Game.Inventory
                     }
                 }
             }
-            else if (Globals.Me.Enhancement.IsOpen || Globals.Me.InCutscene() || Globals.Me.UpgradeStation.IsOpen)
+            else if (Globals.Me.InCutscene() || ItemsBeingModified)
             {
                 return;
             }
@@ -196,7 +200,7 @@ namespace Intersect.Client.Interface.Game.Inventory
                 return;
             }
 
-            if (Globals.Me.Deconstructor.IsOpen || Globals.Me.Enhancement.IsOpen || Globals.Me.UpgradeStation.IsOpen)
+            if (InDeconstructor || ItemsBeingModified)
             {
                 mCanDrag = false;
             }
@@ -401,7 +405,7 @@ namespace Intersect.Client.Interface.Game.Inventory
             {
                 if (mMouseOver)
                 {
-                    if (!Globals.InputManager.MouseButtonDown(GameInput.MouseButtons.Left) && !Globals.Me.Deconstructor.IsOpen && !Globals.Me.Enhancement.IsOpen && !Globals.Me.UpgradeStation.IsOpen)
+                    if (!Globals.InputManager.MouseButtonDown(GameInput.MouseButtons.Left) && !InDeconstructor && !ItemsBeingModified)
                     {
                         mCanDrag = true;
                         mMouseX = -1;

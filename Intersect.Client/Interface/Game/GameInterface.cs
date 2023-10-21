@@ -29,6 +29,7 @@ using Intersect.Client.Interface.Game.BestiaryUi;
 using Intersect.Client.Interface.Game.DeconstructorUi;
 using Intersect.Client.Interface.Game.Enhancement;
 using Intersect.Client.Interface.Game.UpgradeStation;
+using Intersect.Client.Interface.Game.WeaponPicker;
 
 namespace Intersect.Client.Interface.Game
 {
@@ -785,6 +786,12 @@ namespace Intersect.Client.Interface.Game
                 closedWindows = true;
             }
 
+            if (WeaponPickerOpen)
+            {
+                WeaponPickerWindow.ForceClose();
+                closedWindows = true;
+            }
+
             return closedWindows;
         }
 
@@ -812,6 +819,7 @@ namespace Intersect.Client.Interface.Game
         public DeconstructorWindow DeconstructorWindow;
         public EnhancementWindow EnhancementWindow;
         public UpgradeStationWindow UpgradeStationWindow;
+        public WeaponPickerWindow WeaponPickerWindow;
         private CharacterPanelType _CurrentCharPanel;
 
         public CharacterPanelType CurrentCharacterPanel
@@ -830,21 +838,23 @@ namespace Intersect.Client.Interface.Game
             DeconstructorWindow = new DeconstructorWindow(gameCanvas);
             EnhancementWindow = new EnhancementWindow(gameCanvas);
             UpgradeStationWindow = new UpgradeStationWindow(gameCanvas);
+            WeaponPickerWindow = new WeaponPickerWindow(gameCanvas);
         }
 
         private void _Draw()
         {
             mComboText?.Update();
-            mHUD.Draw();
+            mHUD?.Draw();
             ExpToastService.Draw();
-            mPartyHUD.Draw();
+            mPartyHUD?.Draw();
 
-            LeaderboardWindow.Update();
-            LootRollWindow.Update();
-            RespawnWindow.Update();
-            DeconstructorWindow.Update();
-            EnhancementWindow.Update();
-            UpgradeStationWindow.Update();
+            LeaderboardWindow?.Update();
+            LootRollWindow?.Update();
+            RespawnWindow?.Update();
+            DeconstructorWindow?.Update();
+            EnhancementWindow?.Update();
+            UpgradeStationWindow?.Update();
+            WeaponPickerWindow?.Update();
         }
 
         public PlayerHud GetHud()
@@ -876,5 +886,12 @@ namespace Intersect.Client.Interface.Game
         {
             mEventWindow.SetResponses(response1, response2, response3, response4);
         }
+
+        public void HideWeaponPicker()
+        {
+            WeaponPickerWindow.Hide();
+        }
+
+        public bool WeaponPickerOpen => WeaponPickerWindow?.IsVisible ?? false;
     }
 }

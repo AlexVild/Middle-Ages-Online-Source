@@ -324,10 +324,5 @@ namespace Intersect.Client.Interface.Game.UpgradeStation
             PacketSender.SendCloseUpgradeStation();
             base.Close();
         }
-
-        public void ForceClose()
-        {
-            Close();
-        }
     }
 }

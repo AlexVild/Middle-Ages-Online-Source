@@ -735,5 +735,11 @@ namespace Intersect.Client.Networking
         {
             Network.SendPacket(new RequestKnownEnhancementsPacket());
         }
+
+        public static void SendWeaponPickerResponse(int invSlot)
+        {
+            Network.SendPacket(new WeaponPickerResponsePacket(invSlot));
+            Interface.Interface.GameUi.HideWeaponPicker();
+        }
     }
 }

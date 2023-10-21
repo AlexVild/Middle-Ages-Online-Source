@@ -698,11 +698,6 @@ namespace Intersect.Client.Interface.Game.Enhancement
             CurrentState = States.Finished;
         }
 
-        public void ForceClose()
-        {
-            Close();
-        }
-
         protected override void Close()
         {
             EnhancementInterface?.Close();

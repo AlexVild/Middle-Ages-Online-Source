@@ -443,6 +443,23 @@ namespace Intersect.Client.Framework.Gwen.Control
             return Width - GetVerticalScrollBar().Width - Padding.Left - Padding.Right;
         }
 
+        public void AddContentTo(Base content, int contentIndex, int xPadding, int yPadding)
+        {
+            if (content == null)
+            {
+                return;
+            }
+            content.SetPosition(
+                    contentIndex %
+                    (GetContentWidth() / (content.Width + xPadding)) *
+                    (content.Width + xPadding) +
+                    xPadding,
+                    contentIndex /
+                    (GetContentWidth() / (content.Width + xPadding)) *
+                    (content.Height + yPadding) +
+                    yPadding
+                );
+        }
     }
 
 }

@@ -71,5 +71,10 @@ namespace Intersect.Client.Interface.Game
         {
             return !Background.IsHidden;
         }
+
+        public void ForceClose()
+        {
+            Close();
+        }
     }
 }

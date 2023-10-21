@@ -68,7 +68,7 @@ namespace Intersect.Server.Entities
         public void OpenWeaponPicker(WeaponPickerResult resultType, Guid currencyId, float costMultiplier)
         {
             WeaponPicker = new WeaponPickerInterface(this, resultType, currencyId, costMultiplier);
-            PacketSender.SendOpenWeaponPicker(this);
+            PacketSender.SendOpenWeaponPicker(this, resultType);
         }
 
         public void CloseWeaponPicker()
