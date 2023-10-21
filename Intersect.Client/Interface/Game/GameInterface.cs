@@ -889,9 +889,14 @@ namespace Intersect.Client.Interface.Game
 
         public void HideWeaponPicker()
         {
-            WeaponPickerWindow.Hide();
+            WeaponPickerWindow?.Hide();
         }
 
-        public bool WeaponPickerOpen => WeaponPickerWindow?.IsVisible ?? false;
+        public void ShowWeaponPicker()
+        {
+            WeaponPickerWindow?.Show();
+        }
+
+        public bool WeaponPickerOpen => WeaponPickerWindow?.IsVisible() ?? false;
     }
 }

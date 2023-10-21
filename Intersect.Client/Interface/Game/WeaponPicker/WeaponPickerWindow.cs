@@ -17,6 +17,14 @@ namespace Intersect.Client.Interface.Game.WeaponPicker
     public static class WeaponPickerController
     {
         public static WeaponPickerResult ResultType { get; set; }
+
+        public static int SelectedInventorySlot { get; set; }
+
+        public static bool TryGetSelectedWeapon(out Item selectedWeapon)
+        {
+            selectedWeapon = Globals.Me?.Inventory?.ElementAtOrDefault(SelectedInventorySlot);
+            return selectedWeapon != default;
+        }
     }
 
     public class WeaponPickerWindow : GameWindow
@@ -29,7 +37,7 @@ namespace Intersect.Client.Interface.Game.WeaponPicker
 
         ScrollControl WeaponContainer { get; set; }
 
-        ComponentList<WeaponPickerWeaponComponent> Weapons { get; set; }
+        ComponentList<WeaponPickerWeaponComponent> Weapons { get; set; } = new ComponentList<WeaponPickerWeaponComponent>();
 
         public WeaponPickerWindow(Base gameCanvas) : base(gameCanvas)
         {
@@ -38,6 +46,7 @@ namespace Intersect.Client.Interface.Game.WeaponPicker
         protected override void PreInitialization()
         {
             Prompt = new Label(Background, "Prompt");
+            WeaponContainer = new ScrollControl(Background, "WeaponContainer");
         }
 
         protected override void PostInitialization()
@@ -112,7 +121,7 @@ namespace Intersect.Client.Interface.Game.WeaponPicker
 
         private void ClearWeaponContainer()
         {
-            WeaponContainer.ClearCreatedChildren();
+            WeaponContainer?.ClearCreatedChildren();
             Weapons.DisposeAll();
         }
     }

@@ -33,6 +33,7 @@ using Intersect.Client.Interface.Objects;
 using Intersect.Client.Interface.Game.Character.Panels;
 using Intersect.Client.Interface.Game.Toasts;
 using Intersect.Client.General.Bestiary;
+using Intersect.Client.Interface.Game.WeaponPicker;
 
 namespace Intersect.Client.Networking
 {
@@ -2879,7 +2880,7 @@ namespace Intersect.Client.Networking
 
             Globals.Me.SetKnownEnhancements(packet.KnownEnhancements);
 
-            Globals.Me.TryGetEquippedWeapon(out var weapon);
+            WeaponPickerController.TryGetSelectedWeapon(out var weapon);
             Globals.Me.Enhancement?.Open(packet.CurrencyId, packet.CostMultiplier, weapon);
         }
 
@@ -2977,6 +2978,17 @@ namespace Intersect.Client.Networking
 
             Globals.Me.DuelingIds.Clear();
             Globals.Me.DuelingIds.AddRange(packet.Opponents.Where(id => id != Globals.Me.Id));
+        }
+
+        public void HandlePacket(IPacketSender packetSender, OpenWeaponPickerPacket packet)
+        {
+            if (Globals.Me == null)
+            {
+                return;
+            }
+
+            WeaponPickerController.ResultType = packet.ResultType;
+            Interface.Interface.GameUi.ShowWeaponPicker();
         }
     }
 }

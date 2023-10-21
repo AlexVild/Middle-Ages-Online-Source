@@ -4585,11 +4585,6 @@ namespace Intersect.Server.Networking
                 return;
             }
 
-            if (!player.TryGetEquippedItem(Options.WeaponIndex, out var weapon))
-            {
-                return;
-            }
-
             player.Enhancement?.TryRemoveEnhancementsOnItem();
         }
 

@@ -6,6 +6,7 @@ using Intersect.Client.Framework.Gwen.Input;
 using Intersect.Client.General;
 using Intersect.Client.General.Enhancement;
 using Intersect.Client.Interface.Game.DescriptionWindows;
+using Intersect.Client.Interface.Game.WeaponPicker;
 using Intersect.Client.Interface.ScreenAnimations;
 using Intersect.Client.Items;
 using Intersect.Client.Localization;
@@ -105,7 +106,7 @@ namespace Intersect.Client.Interface.Game.Enhancement
         public int X => Background.X;
         public int Y => Background.Y;
         
-        Item EquippedItem;
+        Item EnhancingItem;
         EnhancementInterface EnhancementInterface => Globals.Me?.Enhancement;
         List<Guid> KnownEhancements => Globals.Me?.KnownEnhancements ?? new List<Guid>();
 
@@ -150,12 +151,12 @@ namespace Intersect.Client.Interface.Game.Enhancement
                 return;
             }
 
-            if (!Globals.Me.TryGetEquippedWeapon(out var equippedWeapon))
+            if (!WeaponPickerController.TryGetSelectedWeapon(out var equippedWeapon))
             {
 #pragma warning disable CA2000 // Dispose objects before losing scope
                 _ = new InputBox(
-                    Strings.EnhancementWindow.NoWeaponEquipped,
-                    Strings.EnhancementWindow.NoWeaponEquippedPrompt, true,
+                    "No valid weapon",
+                    "No valid weapon was selected! Please try again", true,
                     InputBox.InputType.OkayOnly, Close, null, null
                 );
 #pragma warning restore CA2000 // Dispose objects before losing scope
@@ -168,11 +169,11 @@ namespace Intersect.Client.Interface.Game.Enhancement
             EnhancementContainer.UnselectAll();
             AppliedEnhancementsContainer.UnselectAll();
 
-            EquippedItem = equippedWeapon;
+            EnhancingItem = equippedWeapon;
             EnhancementItemDescriptor = ItemBase.Get(equippedWeapon.ItemId);
 
-            EnhancementItem.Update(EquippedItem.ItemId, EquippedItem.ItemProperties);
-            WeaponLabel.SetText($"{ItemBase.GetName(EquippedItem.ItemId)} Enhancement");
+            EnhancementItem.Update(EnhancingItem.ItemId, EnhancingItem.ItemProperties);
+            WeaponLabel.SetText($"{ItemBase.GetName(EnhancingItem.ItemId)} Enhancement");
 
             var currencyIcon = EnhancementInterface.Currency?.Icon ?? string.Empty;
             CurrencyIcon.Texture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Item, currencyIcon);
@@ -202,7 +203,7 @@ namespace Intersect.Client.Interface.Game.Enhancement
                     return false;
                 }
 
-                if (!EnhancementHelper.ValidEnhancementForWeaponType(EquippedItem.Base.MaxWeaponLevels, enhancement.ValidWeaponTypes))
+                if (!EnhancementHelper.ValidEnhancementForWeaponType(EnhancingItem.Base.MaxWeaponLevels, enhancement.ValidWeaponTypes))
                 {
                     return false;
                 }
@@ -489,7 +490,7 @@ namespace Intersect.Client.Interface.Game.Enhancement
             }
 
             ApplyButton.IsDisabled = EnhancementInterface.NewEnhancements.Length <= 0;
-            RemoveAllButton.IsDisabled = EquippedItem.ItemProperties.AppliedEnhancementIds.Count <= 0;
+            RemoveAllButton.IsDisabled = EnhancingItem.ItemProperties.AppliedEnhancementIds.Count <= 0;
 
             CurrencyAmount.SetText(EnhancementHelper.GetEnhancementCostOnWeapon(EnhancementItemDescriptor, 
                 EnhancementInterface.NewEnhancements.Select(en => en.EnhancementId).ToArray(), 
@@ -612,18 +613,18 @@ namespace Intersect.Client.Interface.Game.Enhancement
 
         private void RemoveAllButton_Clicked(Base sender, Framework.Gwen.Control.EventArguments.ClickedEventArgs arguments)
         {
-            if (EquippedItem.ItemProperties.AppliedEnhancementIds.Count <= 0)
+            if (EnhancingItem.ItemProperties.AppliedEnhancementIds.Count <= 0)
             {
                 return;
             }
 
-            var cost = EnhancementHelper.GetEnhancementCostOnWeapon(EquippedItem.Base, 
-                EquippedItem.ItemProperties.AppliedEnhancementIds.ToArray(), 
-                EnhancementInterface.CostMultiplier);
+            var cost = EnhancementHelper.GetEnhancementCostOnWeapon(EnhancingItem.Base, 
+                EnhancingItem.ItemProperties.AppliedEnhancementIds.ToArray(), 
+                EnhancementInterface.CostMultiplier * Options.Instance.DeconstructionOpts.RemoveEnhancementCostMod);
 
             _ = new InputBox(
                 Strings.EnhancementWindow.RemoveEnhancements,
-                Strings.EnhancementWindow.RemoveEnhancementsPrompt.ToString(cost, ItemBase.GetName(EnhancementInterface.CurrencyId)), true,
+                Strings.EnhancementWindow.RemoveEnhancementsPrompt.ToString(cost, ItemBase.GetName(Guid.Parse(Options.Instance.PlayerOpts.GoldGuid))), true,
                 InputBox.InputType.YesNo, RemoveAllEnhancements, null, null
             );
         }

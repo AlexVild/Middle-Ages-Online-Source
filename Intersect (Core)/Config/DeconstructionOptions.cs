@@ -13,5 +13,7 @@ namespace Intersect.Config
         public float DeconstructionExpMod { get; set; } = 0.75f;
 
         public string DisenhanceItemSound = "al_buy_item.wav";
+
+        public float RemoveEnhancementCostMod { get; set; } = 0.75f;
     }
 }

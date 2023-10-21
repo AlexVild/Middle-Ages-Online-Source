@@ -102,6 +102,8 @@ namespace Intersect.Server.Entities
             }
 
             // Does the owner meet at least _one_ of the weapon's max levels?
+            
+            /* Commenting this out -- I don't think I like the functionality, especially since now a player can enhance non-equipped weapons
             var ownerMeetsWeaponLevel = weapon.Descriptor.MaxWeaponLevels.Any((kv) =>
             {
                 return Owner.TryGetMastery(kv.Key, out var mastery) && mastery.Level >= kv.Value;
@@ -125,7 +127,7 @@ namespace Intersect.Server.Entities
                     PacketSender.SendEventDialog(Owner, Strings.Enhancements.InsufficientMastery.ToString(string.Join(", ", validMasteries)), string.Empty, Guid.Empty);
                 }
                 return false;
-            }
+            }*/
 
             // Do we have enough guap?
 
@@ -174,11 +176,11 @@ namespace Intersect.Server.Entities
 
             if (!ignoreCurrency)
             {
-                var price = EnhancementHelper.GetEnhancementCostOnWeapon(item.Descriptor, item.ItemProperties.AppliedEnhancementIds.ToArray(), CostMultiplier);
-                var moneySlot = Owner.FindInventoryItemSlot(CurrencyId, price);
+                var price = EnhancementHelper.GetEnhancementCostOnWeapon(item.Descriptor, item.ItemProperties.AppliedEnhancementIds.ToArray(), (CostMultiplier * Options.Instance.DeconstructionOpts.RemoveEnhancementCostMod));
+                var moneySlot = Owner.FindInventoryItemSlot(Guid.Parse(Options.Instance.PlayerOpts.GoldGuid), price);
                 if (!Owner.TryTakeItem(moneySlot, price, Enums.ItemHandling.Normal, true))
                 {
-                    PacketSender.SendEventDialog(Owner, $"You don't have enough {ItemBase.GetName(CurrencyId)} to remove this item's enhancements.", string.Empty, Guid.Empty);
+                    PacketSender.SendEventDialog(Owner, $"You don't have enough Gold to remove this item's enhancements.", string.Empty, Guid.Empty);
                     return false;
                 }
             }

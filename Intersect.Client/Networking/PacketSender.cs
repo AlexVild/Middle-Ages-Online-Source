@@ -14,6 +14,7 @@ using Intersect.Client.Interface.Game.Character.Panels;
 using Intersect.GameObjects;
 using Intersect.GameObjects.Events;
 using System.Collections.Generic;
+using Intersect.Client.Interface.Game.WeaponPicker;
 
 namespace Intersect.Client.Networking
 {
@@ -738,7 +739,8 @@ namespace Intersect.Client.Networking
 
         public static void SendWeaponPickerResponse(int invSlot)
         {
-            Network.SendPacket(new WeaponPickerResponsePacket(invSlot));
+            WeaponPickerController.SelectedInventorySlot = invSlot;
+            Network.SendPacket(new WeaponPickerResponsePacket(WeaponPickerController.SelectedInventorySlot));
             Interface.Interface.GameUi.HideWeaponPicker();
         }
     }
