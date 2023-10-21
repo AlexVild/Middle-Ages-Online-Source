@@ -1995,6 +1995,12 @@ namespace Intersect.Server.Entities
         protected override bool TryLifesteal(int damage, Entity target, out float recovered)
         {
             recovered = 0;
+
+            if (IsDead())
+            {
+                return false;
+            }
+
             if (damage <= 0 || target == null)
             {
                 return false;
@@ -2026,6 +2032,12 @@ namespace Intersect.Server.Entities
         protected override bool TryManasteal(int damage, Entity target, out float recovered)
         {
             recovered = 0;
+
+            if (IsDead())
+            {
+                return false;
+            }
+
             if (damage <= 0 || target == null)
             {
                 return false;
