@@ -1356,6 +1356,16 @@ namespace Intersect.Server.Entities
             }
         }
 
+        public override void Reset()
+        {
+            if (AggroCenterMap != null)
+            {
+                Warp(AggroCenterMap.Id, AggroCenterX, AggroCenterY);
+            }
+
+            ResetNpc(true, true);
+        }
+
         public override void NotifySwarm(Entity attacker)
         {
             if (MapController.TryGetInstanceFromMap(MapId, MapInstanceId, out var instance))

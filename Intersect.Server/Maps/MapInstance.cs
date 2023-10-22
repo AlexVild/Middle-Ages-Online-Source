@@ -175,7 +175,7 @@ namespace Intersect.Server.Maps
             mMapController = map;
             MapInstanceId = mapInstanceId;
             Id = Guid.NewGuid();
-            if (!InstanceProcessor.CurrentControllers.Contains(MapInstanceId)) 
+            if (!InstanceProcessor.CurrentControllers.Contains(MapInstanceId))
             {
                 InstanceProcessor.AddInstanceController(MapInstanceId);
             }
@@ -512,15 +512,12 @@ namespace Intersect.Server.Maps
         /// <param name="i">Index of the NPC in the Map Instance's Spawns list</param>
         private void SpawnMapNpc(int i)
         {
-            byte x = 0;
-            byte y = 0;
-            byte dir = 0;
             var spawns = mMapController.Spawns;
-            
+
             var spawn = spawns[i];
             var spawnId = spawn.NpcId;
             var npcBase = NpcBase.Get(spawnId);
-            
+
             if (npcBase == null)
             {
                 return;
@@ -559,6 +556,30 @@ namespace Intersect.Server.Maps
                 return;
             }
 
+            // Declared spawn
+            FindNpcSpawnLocation(spawn, out var x, out var y, out var dir);
+            npcSpawnInstance.Entity = SpawnNpc((byte)x, (byte)y, dir, spawn.NpcId);
+
+            // Final setup of the spawned entity
+            if (npcSpawnInstance.Entity is Npc npc)
+            {
+                npc.SpawnMapId = mMapController.Id;
+
+                // If this NPC is not meant to respawn, set up the NPC to talk back to ProcessingInfo
+                if (spawn.PreventRespawn)
+                {
+                    // A key - the spawn map, and the spawn index on the map
+                    npc.PermadeathKey = npcKey;
+                }
+            }
+        }
+
+        private void FindNpcSpawnLocation(NpcSpawn spawn, out int x, out int y, out byte dir)
+        {
+            dir = 0;
+            x = 0;
+            y = 0;
+
             if (spawn.Direction != NpcSpawnDirection.Random)
             {
                 dir = (byte)(spawn.Direction - 1);
@@ -569,9 +590,10 @@ namespace Intersect.Server.Maps
             }
 
             // Declared spawn
-            if (spawns[i].X >= 0 && spawns[i].Y >= 0)
+            if (spawn.X >= 0 && spawn.Y >= 0)
             {
-                npcSpawnInstance.Entity = SpawnNpc((byte)spawn.X, (byte)spawn.Y, dir, spawnId);
+                x = spawn.X;
+                y = spawn.Y;
             }
             // Random spawn
             else
@@ -587,21 +609,6 @@ namespace Intersect.Server.Maps
 
                     x = 0;
                     y = 0;
-                }
-
-                npcSpawnInstance.Entity = SpawnNpc(x, y, dir, spawnId);
-            }
-
-            // Final setup of the spawned entity
-            if (npcSpawnInstance.Entity is Npc npc)
-            {
-                npc.SpawnMapId = mMapController.Id;
-                
-                // If this NPC is not meant to respawn, set up the NPC to talk back to ProcessingInfo
-                if (spawn.PreventRespawn)
-                {
-                    // A key - the spawn map, and the spawn index on the map
-                    npc.PermadeathKey = npcKey;
                 }
             }
         }
@@ -669,6 +676,39 @@ namespace Intersect.Server.Maps
                         lock (npc.EntityLock)
                         {
                             npc.Die(false);
+                        }
+                    }
+                }
+            }
+        }
+
+        public void ResetNpcSpawns()
+        {
+            //Kill all npcs spawned from this map
+            lock (GetLock())
+            {
+                foreach (var npcSpawn in NpcSpawnInstances)
+                {
+                    lock (npcSpawn.Value.Entity.EntityLock)
+                    {
+                        var npc = npcSpawn.Value.Entity as Npc;
+                        if (!npc.Dead)
+                        {
+                            // If we keep track of reset radiuses, just reset it to that value.
+                            if (Options.Npc.AllowResetRadius)
+                            {
+                                npc.Reset();
+                            }
+                            // If we don't.. Kill and respawn the Npc assuming it's in combat.
+                            else
+                            {
+                                if (npc.Target != null || npc.CombatTimer > Timing.Global.Milliseconds)
+                                {
+                                    npc.Die(false);
+                                    FindNpcSpawnLocation(npcSpawn.Key, out var x, out var y, out var dir);
+                                    npcSpawn.Value.Entity = SpawnNpc((byte)x, (byte)y, dir, npcSpawn.Key.NpcId);
+                                }
+                            }
                         }
                     }
                 }

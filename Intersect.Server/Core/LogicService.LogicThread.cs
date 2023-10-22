@@ -177,6 +177,10 @@ namespace Intersect.Server.Core
                                         ActiveMapInstances.Remove(mapInstanceId);
                                     } else if (ActiveMapInstances[mapInstanceId] == null || !ActiveMapInstances[mapInstanceId].ShouldBeActive())
                                     {
+                                        if (ActiveMapInstances.TryGetValue(mapInstanceId, out var instance))
+                                        {
+                                            instance.ResetNpcSpawns();
+                                        }
                                         ActiveMapInstances.Remove(mapInstanceId);
                                     }
                                 }
