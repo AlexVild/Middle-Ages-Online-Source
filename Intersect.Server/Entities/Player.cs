@@ -3055,7 +3055,7 @@ namespace Intersect.Server.Entities
 
             if (item.Quantity <= 0)
             {
-                success = true;
+                return true;
             }
 
             // Get this information so we can use it later.
@@ -4218,95 +4218,136 @@ namespace Intersect.Server.Entities
             }
         }
 
-        public void SellItem(int slot, int amount)
+        public bool TrySellItem(int slot, int amount, out int rewardItemVal, out Guid rewardItemId, bool sendUpdate = true)
         {
             var canSellItem = true;
-            var rewardItemId = Guid.Empty;
-            var rewardItemVal = 0;
+            rewardItemId = Guid.Empty;
+            rewardItemVal = 0;
 
             TryGetSlot(slot, out var itemInSlot, true);
             var sellItemNum = itemInSlot.ItemId;
             var shop = InShop;
-            if (shop != null)
+            if (shop == null)
             {
-                var itemDescriptor = Items[slot].Descriptor;
-                if (itemDescriptor != null)
+                // Player is not in a shop and can't sell items
+                return false;
+            }
+
+            var itemDescriptor = itemInSlot.Descriptor;
+            if (itemDescriptor == null)
+            {
+                // Item doesn't exist
+                return false;
+            }
+
+            if (!itemDescriptor.CanSell)
+            {
+                PacketSender.SendChatMsg(this, Strings.Shops.bound, ChatMessageType.Inventory, CustomColors.Items.Bound);
+
+                return false;
+            }
+
+            //Check if this is a bag with items.. if so don't allow sale
+            if (itemDescriptor.ItemType == ItemTypes.Bag)
+            {
+                if (itemInSlot.TryGetBag(out var bag))
                 {
-                    if (!itemDescriptor.CanSell)
+                    if (!bag.IsEmpty)
                     {
-                        PacketSender.SendChatMsg(this, Strings.Shops.bound, ChatMessageType.Inventory, CustomColors.Items.Bound);
-
-                        return;
+                        PacketSender.SendChatMsg(this, Strings.Bags.onlysellempty, ChatMessageType.Inventory, CustomColors.Alerts.Error);
+                        return false;
                     }
-
-                    //Check if this is a bag with items.. if so don't allow sale
-                    if (itemDescriptor.ItemType == ItemTypes.Bag)
-                    {
-                        if (itemInSlot.TryGetBag(out var bag))
-                        {
-                            if (!bag.IsEmpty)
-                            {
-                                PacketSender.SendChatMsg(this, Strings.Bags.onlysellempty, ChatMessageType.Inventory, CustomColors.Alerts.Error);
-                                return;
-                            }
-                        }
-                    }
-
-                    if (!shop.BuysItem(itemDescriptor))
-                    {
-                        PacketSender.SendChatMsg(this, Strings.Shops.doesnotaccept, ChatMessageType.Inventory, CustomColors.Alerts.Error);
-
-                        return;
-                    }
-
-                    // Always prefer specified sales to non-specified ones (blacklist, tag-whitelist) sales
-                    if (shop.BuyingWhitelist && shop.BuyingItems.Find(item => item.ItemId == itemDescriptor.Id) != null)
-                    {
-                        var itemBuyProps = shop.BuyingItems.Find(item => item.ItemId == itemDescriptor.Id);
-                        rewardItemId = itemBuyProps.CostItemId;
-                        rewardItemVal = itemBuyProps.CostItemQuantity;
-                    }
-                    else
-                    {
-                        // Give the default currency, with the bonus multiplier
-                        rewardItemVal = (int)Math.Floor(itemDescriptor.Price * shop.BuyMultiplier);
-                        rewardItemId = shop.DefaultCurrency.Id;
-                    }
-
-                    amount = Math.Min(itemInSlot.Quantity, amount);
-
-                    if (amount == itemInSlot.Quantity)
-                    {
-                        // Definitely can get reward.
-                        itemInSlot.Set(Item.None);
-                        EquipmentProcessItemLoss(slot);
-                    }
-                    else
-                    {
-                        //check if can get reward
-                        if (!CanGiveItem(rewardItemId, rewardItemVal))
-                        {
-                            canSellItem = false;
-                        }
-                        else
-                        {
-                            itemInSlot.Quantity -= amount;
-                        }
-                    }
-
-                    if (canSellItem)
-                    {
-                        TryGiveItem(rewardItemId, rewardItemVal * amount);
-
-                        if (!TextUtils.IsNone(shop.SellSound))
-                        {
-                            PacketSender.SendPlaySound(this, shop.SellSound);
-                        }
-                    }
-
-                    PacketSender.SendInventoryItemUpdate(this, slot);
                 }
             }
+
+            if (!shop.BuysItem(itemDescriptor))
+            {
+                PacketSender.SendChatMsg(this, Strings.Shops.doesnotaccept, ChatMessageType.Inventory, CustomColors.Alerts.Error);
+
+                return false;
+            }
+
+            // Always prefer specified sales to non-specified ones (blacklist, tag-whitelist) sales
+            if (shop.BuyingWhitelist && shop.BuyingItems.Find(item => item.ItemId == itemDescriptor.Id) != null)
+            {
+                var itemBuyProps = shop.BuyingItems.Find(item => item.ItemId == itemDescriptor.Id);
+                rewardItemId = itemBuyProps.CostItemId;
+                rewardItemVal = itemBuyProps.CostItemQuantity;
+            }
+            else
+            {
+                // Give the default currency, with the bonus multiplier
+                rewardItemVal = (int)Math.Ceiling(itemDescriptor.Price * shop.BuyMultiplier);
+                rewardItemId = shop.DefaultCurrency.Id;
+            }
+
+            amount = Math.Min(itemInSlot.Quantity, amount);
+
+            if (amount == itemInSlot.Quantity)
+            {
+                // Definitely can get reward.
+                itemInSlot.Set(Item.None);
+                EquipmentProcessItemLoss(slot);
+            }
+            else
+            {
+                //check if can get reward
+                if (!CanGiveItem(rewardItemId, rewardItemVal))
+                {
+                    canSellItem = false;
+                }
+                else
+                {
+                    itemInSlot.Quantity -= amount;
+                }
+            }
+
+            rewardItemVal *= amount;
+            if (sendUpdate)
+            {
+                if (canSellItem)
+                {
+                    TryGiveItem(rewardItemId, rewardItemVal);
+
+                    if (!TextUtils.IsNone(shop.SellSound))
+                    {
+                        PacketSender.SendPlaySound(this, shop.SellSound);
+                    }
+                }
+
+                PacketSender.SendInventoryItemUpdate(this, slot);
+            }
+           
+            return true;
+        }
+
+        public void SellManyNonstackable(int[] slots, int quantity)
+        {
+            var shop = InShop;
+            if (shop == null)
+            {
+                return;
+            }
+
+            var totalReward = 0;
+            Guid rewardItemId = Guid.Empty;
+            foreach (var slot in slots.Take(quantity))
+            {
+                if (!TrySellItem(slot, 1, out var newReward, out rewardItemId, false))
+                {
+                    break;
+                }
+
+                totalReward += newReward;
+            }
+
+            TryGiveItem(rewardItemId, totalReward);
+
+            if (!TextUtils.IsNone(shop.SellSound))
+            {
+                PacketSender.SendPlaySound(this, shop.SellSound);
+            }
+            PacketSender.SendInventory(this);
         }
 
         public void BuyItem(int slot, int amount)

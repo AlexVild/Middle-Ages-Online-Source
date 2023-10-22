@@ -688,7 +688,6 @@ namespace Intersect.Client.Entities
                 // OR, the specific item is on the black list, but is valid on that list
                 if (Globals.GameShop.BuysItem(item))
                 {
-                    
                     if (Inventory[index].Quantity > 1)
                     {
                         // Quick sell the whole stack if the gui modifier key is pressed
@@ -700,7 +699,7 @@ namespace Intersect.Client.Entities
                         
                         var iBox = new InputBox(
                             Strings.Shop.sellitem,
-                            Strings.Shop.sellitemprompt.ToString(ItemBase.Get(Inventory[index].ItemId).Name), true,
+                            Strings.Shop.sellitemprompt.ToString(item.Name), true,
                             InputBox.InputType.NumericInput, SellItemInputBoxOkay, null, index, Inventory[index].Quantity
                         );
                     }
@@ -712,12 +711,27 @@ namespace Intersect.Client.Entities
                             PacketSender.SendSellItem(index, 1);
                             return;
                         }
-                        
-                        var iBox = new InputBox(
-                            Strings.Shop.sellitem,
-                            Strings.Shop.sellprompt.ToString(ItemBase.Get(Inventory[index].ItemId).Name), true,
-                            InputBox.InputType.YesNo, SellInputBoxOkay, null, index
-                        );
+
+                        var slots = GetSlotsContainingItem(item.Id);
+
+                        if (slots.Length == 1)
+                        {
+                            // Sell 1
+                            var iBox = new InputBox(
+                                Strings.Shop.sellitem,
+                                Strings.Shop.sellprompt.ToString(item.Name), true,
+                                InputBox.InputType.YesNo, SellInputBoxOkay, null, index
+                            );
+                        } else
+                        {
+                            var ogSlotAndAllSlots = new KeyValuePair<int, int[]>(index, slots);
+                            // Sell many
+                            var iBox = new InputBox(
+                                Strings.Shop.sellitem,
+                                Strings.Shop.sellitemprompt.ToString(item.Name), true,
+                                InputBox.InputType.NumericInput, SellManyNonstackableInputBoxOkay, null, ogSlotAndAllSlots, slots.Length
+                            );
+                        }
                     }
                 }
                 // The item was not valid
@@ -743,6 +757,30 @@ namespace Intersect.Client.Entities
         private void SellInputBoxOkay(object sender, EventArgs e)
         {
             PacketSender.SendSellItem((int) ((InputBox) sender).UserData, 1);
+        }
+
+        private void SellManyNonstackableInputBoxOkay(object sender, EventArgs e)
+        {
+            var value = (int)((InputBox)sender).Value;
+
+            // This is a cheeky way to allow a user to signify selling one item specifically, or selling multiple in bulk
+            // The key of this KV is the original slot they selected that brought up the prompt, the value is ALL slots containing this item
+            // If the user specifies only 1 selling item, we will sell the one they specified. If they wish to sell more, they will lose that specificity and
+            // we will instead sell all items up to their desired amount, in order
+            var ogSlotAndSlots = (KeyValuePair<int, int[]>)((InputBox)sender).UserData;
+            if (value <= 0)
+            {
+                return;
+            }
+
+            if (value == 1)
+            {
+                PacketSender.SendSellItem(ogSlotAndSlots.Key, 1);
+            }
+            else
+            {
+                PacketSender.SendSellManyNonstackable(ogSlotAndSlots.Value, value);
+            }
         }
 
         //bank
@@ -2013,6 +2051,26 @@ namespace Intersect.Client.Entities
             }
 
             return itemsAndQuantities;
+        }
+
+        public int[] GetSlotsContainingItem(Guid itemId)
+        {
+            List<int> slots = new List<int>();
+            for (var idx = 0; idx < Inventory.Length; idx++)
+            {
+                var item = Inventory[idx];
+                if (item == null || item.Base == default)
+                {
+                    continue;
+                }
+                
+                if (item.Base.Id == itemId)
+                {
+                    slots.Add(idx);
+                }
+            }
+
+            return slots.ToArray();
         }
 
         public bool CanCraftItem(Guid craftId)

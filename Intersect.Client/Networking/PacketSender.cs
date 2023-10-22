@@ -234,6 +234,11 @@ namespace Intersect.Client.Networking
             Network.SendPacket(new SellItemPacket(slot, amount));
         }
 
+        public static void SendSellManyNonstackable(int[] slots, int quantity)
+        {
+            Network.SendPacket(new SellManyNonstackablePacket(slots, quantity));
+        }
+
         public static void SendBuyItem(int slot, int amount)
         {
             Network.SendPacket(new BuyItemPacket(slot, amount));

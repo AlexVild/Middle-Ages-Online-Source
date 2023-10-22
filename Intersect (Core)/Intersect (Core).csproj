@@ -440,6 +440,7 @@
     <Compile Include="Network\Packets\Client\ApplyEnhancementsPacket.cs" />
     <Compile Include="Network\Packets\Client\SaveNewLoadoutPacket.cs" />
     <Compile Include="Network\Packets\Client\SelectLoadoutPacket.cs" />
+    <Compile Include="Network\Packets\Client\SellManyNonstackablePacket.cs" />
     <Compile Include="Network\Packets\Client\SetLabelPacket.cs" />
     <Compile Include="Network\Packets\Client\SkillPreparationPacket.cs" />
     <Compile Include="Network\Packets\Client\TrackWeaponTypePacket.cs" />

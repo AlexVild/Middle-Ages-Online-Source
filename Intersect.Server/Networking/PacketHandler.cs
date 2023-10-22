@@ -1585,7 +1585,19 @@ namespace Intersect.Server.Networking
                 return;
             }
 
-            player.SellItem(packet.Slot, packet.Quantity);
+            _ = player.TrySellItem(packet.Slot, packet.Quantity, out _, out _);
+        }
+
+        //SellManyNonstackablePacket
+        public void HandlePacket(Client client, SellManyNonstackablePacket packet)
+        {
+            var player = client?.Entity;
+            if (player == null)
+            {
+                return;
+            }
+
+            player.SellManyNonstackable(packet.Slots, packet.Quantity);
         }
 
         //CloseShopPacket
