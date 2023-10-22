@@ -3336,7 +3336,7 @@ namespace Intersect.Server.Entities
         /// <param name="slotIndex">the slot to drop from</param>
         /// <param name="amount">the amount to drop</param>
         /// <returns>if an item was dropped</returns>
-        public bool TryDropItemFrom(int slotIndex, int amount)
+        public bool TryDropItemFrom(int slotIndex, int amount, bool sendUpdate = true)
         {
             if (PlayerDead)
             {
@@ -3353,7 +3353,10 @@ namespace Intersect.Server.Entities
             {
                 // Abort if the amount we are trying to drop is below 1.
                 itemInSlot.Set(Item.None);
-                PacketSender.SendInventoryItemUpdate(this, slotIndex);
+                if (sendUpdate)
+                {
+                    PacketSender.SendInventoryItemUpdate(this, slotIndex);
+                }
                 return false;
             }
 
@@ -3394,7 +3397,11 @@ namespace Intersect.Server.Entities
                 }
 
                 UpdateGatherItemQuests(itemDescriptor.Id);
-                PacketSender.SendInventoryItemUpdate(this, slotIndex);
+
+                if (sendUpdate)
+                {
+                    PacketSender.SendInventoryItemUpdate(this, slotIndex);
+                }
 
                 if (CraftingTableId != Guid.Empty) // Update our crafting table if we have one
                 {
@@ -4350,6 +4357,20 @@ namespace Intersect.Server.Entities
             PacketSender.SendInventory(this);
         }
 
+        public void DropManyNonstackable(int[] slots, int quantity)
+        {
+            foreach (var slot in slots.Take(quantity))
+            {
+                if (!TryDropItemFrom(slot, 1))
+                {
+                    PacketSender.SendPlaySound(this, Options.UIDenySound);
+                    break;
+                }
+            }
+
+            PacketSender.SendInventory(this);
+        }
+
         public void BuyItem(int slot, int amount)
         {
             var canSellItem = true;
@@ -5278,12 +5299,12 @@ namespace Intersect.Server.Entities
             }
         }
 
-        public void OfferItem(int slot, int amount)
+        public bool TryOfferItem(int slot, int amount)
         {
             // TODO: Accessor cleanup
             if (Trading.Counterparty == null)
             {
-                return;
+                return false;
             }
 
             var itemBase = Items[slot].Descriptor;
@@ -5308,7 +5329,7 @@ namespace Intersect.Server.Entities
                     {
                         PacketSender.SendChatMsg(this, Strings.Bags.tradebound, ChatMessageType.Trading, CustomColors.Items.Bound);
 
-                        return;
+                        return false;
                     }
 
                     //Check if this is a bag with items.. if so don't allow sale
@@ -5319,7 +5340,7 @@ namespace Intersect.Server.Entities
                             if (!bag.IsEmpty)
                             {
                                 PacketSender.SendChatMsg(this, Strings.Bags.onlytradeempty, ChatMessageType.Trading, CustomColors.Alerts.Error);
-                                return;
+                                return false;
                             }
                         }
                     }
@@ -5349,7 +5370,7 @@ namespace Intersect.Server.Entities
                                 PacketSender.SendTradeUpdate(this, this, i);
                                 PacketSender.SendTradeUpdate(Trading.Counterparty, this, i);
 
-                                return;
+                                return false;
                             }
                         }
                     }
@@ -5377,7 +5398,7 @@ namespace Intersect.Server.Entities
                             PacketSender.SendTradeUpdate(this, this, i);
                             PacketSender.SendTradeUpdate(Trading.Counterparty, this, i);
 
-                            return;
+                            return true;
                         }
                     }
 
@@ -5386,6 +5407,20 @@ namespace Intersect.Server.Entities
                 else
                 {
                     PacketSender.SendChatMsg(this, Strings.Trading.offerinvalid, ChatMessageType.Trading, CustomColors.Alerts.Error);
+                }
+            }
+
+            return false;
+        }
+
+        public void OfferUnstackableItems(int[] slots, int amount)
+        {
+            foreach (var slot in slots.Take(amount))
+            {
+                if (!TryOfferItem(slot, 1))
+                {
+                    PacketSender.SendPlaySound(this, Options.UIDenySound);
+                    break;
                 }
             }
         }

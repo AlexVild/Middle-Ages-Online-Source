@@ -15,7 +15,7 @@ namespace Intersect.Network.Packets.Client
             InventorySlot = invSlot;
         }
 
-        [Key(4)]
+        [Key(0)]
         public int InventorySlot { get; set; }
 
     }

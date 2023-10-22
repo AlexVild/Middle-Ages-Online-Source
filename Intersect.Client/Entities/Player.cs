@@ -27,6 +27,7 @@ using Intersect.Config.Guilds;
 using Intersect.Client.Interface.Game.DescriptionWindows;
 using Intersect.GameObjects.Crafting;
 using Intersect.Client.General.Leaderboards;
+using Intersect.Localization;
 
 namespace Intersect.Client.Entities
 {
@@ -444,75 +445,52 @@ namespace Intersect.Client.Entities
         // Alex: The two default values here can be set to FALSE if we want to drop through to "DROP" functionality - but this means we won't ever see the "cannot destroy message"
         public void TryDropItem(int index, bool fromPacket = true, bool canDestroy = true)
         {
-            if (IsDead)
+            var item = Inventory[index];
+            if (item == null || item.Base == null)
             {
                 return;
             }
 
-            if (ItemBase.Get(Inventory[index].ItemId) != null)
+            var destroyable = Inventory[index].Base.CanDestroy;
+
+            if (destroyable)
             {
-                var destroyable = Inventory[index].Base.CanDestroy;
-                if (destroyable && !fromPacket)
+                if (!fromPacket)
                 {
                     PacketSender.SendDestroyItem(index, true);
+                    return;
                 }
-                else if (Inventory[index].Quantity > 1)
+                if (canDestroy)
                 {
-                    if (destroyable && canDestroy)
+                    if (item.Quantity > 1)
                     {
-                        var iBox = new InputBox(
+                        _ = new InputBox(
                             Strings.Inventory.destroyitem,
                             Strings.Inventory.destroyitemprompt.ToString(ItemBase.Get(Inventory[index].ItemId).Name), true,
                             InputBox.InputType.NumericInput, DestroyItemInputBoxOkay, null, index, Inventory[index].Quantity
                         );
-                    } else
-                    {
-                        // Quick drop
-                        if (Input.QuickModifierActive())
-                        {
-                            PacketSender.SendDropItem(index, Inventory[index].Quantity);
-                            return;
-                        }
-                        var iBox = new InputBox(
-                            Strings.Inventory.dropitem,
-                            Strings.Inventory.dropitemprompt.ToString(ItemBase.Get(Inventory[index].ItemId).Name), true,
-                            InputBox.InputType.NumericInput, DropItemInputBoxOkay, null, index, Inventory[index].Quantity
-                        );
+                        return;
                     }
-                }
-                else
-                {
-                    if (destroyable && canDestroy)
-                    {
-                        var iBox = new InputBox(
-                            Strings.Inventory.destroyitem,
-                            Strings.Inventory.destroyprompt.ToString(ItemBase.Get(Inventory[index].ItemId).Name), true,
-                            InputBox.InputType.YesNo, DestroyInputBoxOkay, null, index
-                        );
-                    } else
-                    {
-                        // Quick drop
-                        if (Input.QuickModifierActive())
-                        {
-                            PacketSender.SendDropItem(index, 1);
-                            return;
-                        }
-                        var iBox = new InputBox(
-                            Strings.Inventory.dropitem,
-                            Strings.Inventory.dropprompt.ToString(ItemBase.Get(Inventory[index].ItemId).Name), true,
-                            InputBox.InputType.YesNo, DropInputBoxOkay, null, index
-                        );
-                    }
-                }
-            }
-        }
 
-        private void DropItemInputBoxOkay(object sender, EventArgs e)
-        {
-            var value = (int) ((InputBox) sender).Value;
-            if (value > 0)
+                    _ = new InputBox(
+                        Strings.Inventory.destroyitem,
+                        Strings.Inventory.destroyprompt.ToString(ItemBase.Get(Inventory[index].ItemId).Name), true,
+                        InputBox.InputType.YesNo, DestroyInputBoxOkay, null, index
+                    );
+                };
+            }
+            else
             {
-                PacketSender.SendDropItem((int) ((InputBox) sender).UserData, value);
+                ManageItem(
+                    PacketSender.SendDropItem,
+                    PacketSender.SendDropItems,
+                    index,
+                    Strings.Inventory.dropitem,
+                    Strings.Inventory.dropprompt,
+                    Strings.Inventory.dropitemprompt,
+                    !item.Base.CanDrop,
+                    Strings.Inventory.dropitem, Strings.Inventory.cannotdrop
+                );
             }
         }
 
@@ -523,11 +501,6 @@ namespace Intersect.Client.Entities
             {
                 PacketSender.SendDestroyItem((int)((InputBox)sender).UserData, false, value);
             }
-        }
-
-        private void DropInputBoxOkay(object sender, EventArgs e)
-        {
-            PacketSender.SendDropItem((int) ((InputBox) sender).UserData, 1);
         }
 
         private void DestroyInputBoxOkay(object sender, EventArgs e)
@@ -681,152 +654,211 @@ namespace Intersect.Client.Entities
         
         public void TrySellItem(int index)
         {
-            var item = ItemBase.Get(Inventory[index].ItemId);
-            if (item != null)
+            ManageItem(
+                PacketSender.SendSellItem,
+                PacketSender.SendSellManyNonstackable,
+                index,
+                Strings.Shop.sellitem,
+                Strings.Shop.sellprompt,
+                Strings.Shop.sellitemprompt,
+                !Globals.GameShop.BuysItem(ItemBase.Get(Inventory[index].ItemId)),
+                Strings.Shop.sellitem, Strings.Shop.cannotsell
+            );
+        }
+
+        private EventHandler HandleStackableSlotAction(Action<int, int> slotAction)
+        {
+            return (sender, e) =>
             {
-                // Either the specific list is set to whitelist, and the item is valid on one or both lists
-                // OR, the specific item is on the black list, but is valid on that list
-                if (Globals.GameShop.BuysItem(item))
+                var value = (int)((InputBox)sender).Value;
+                if (value == 0)
                 {
-                    if (Inventory[index].Quantity > 1)
-                    {
-                        // Quick sell the whole stack if the gui modifier key is pressed
-                        if (Input.QuickModifierActive()) 
-                        {
-                            PacketSender.SendSellItem(index, Inventory[index].Quantity);
-                            return;
-                        }
-                        
-                        var iBox = new InputBox(
-                            Strings.Shop.sellitem,
-                            Strings.Shop.sellitemprompt.ToString(item.Name), true,
-                            InputBox.InputType.NumericInput, SellItemInputBoxOkay, null, index, Inventory[index].Quantity
-                        );
-                    }
-                    else
-                    {
-                        // Quick sell the item
-                        if (Input.QuickModifierActive())
-                        {
-                            PacketSender.SendSellItem(index, 1);
-                            return;
-                        }
-
-                        var slots = GetSlotsContainingItem(item.Id);
-
-                        if (slots.Length == 1)
-                        {
-                            // Sell 1
-                            var iBox = new InputBox(
-                                Strings.Shop.sellitem,
-                                Strings.Shop.sellprompt.ToString(item.Name), true,
-                                InputBox.InputType.YesNo, SellInputBoxOkay, null, index
-                            );
-                        } else
-                        {
-                            var ogSlotAndAllSlots = new KeyValuePair<int, int[]>(index, slots);
-                            // Sell many
-                            var iBox = new InputBox(
-                                Strings.Shop.sellitem,
-                                Strings.Shop.sellitemprompt.ToString(item.Name), true,
-                                InputBox.InputType.NumericInput, SellManyNonstackableInputBoxOkay, null, ogSlotAndAllSlots, slots.Length
-                            );
-                        }
-                    }
+                    return;
                 }
-                // The item was not valid
+
+                var slot = (int)((InputBox)sender).UserData;
+                slotAction.Invoke(slot, value);
+            };
+        }
+
+        private EventHandler HandleNonstackableSlotAction(Action<int, int> slotAction)
+        {
+            return (sender, e) =>
+            {
+                var slot = (int)((InputBox)sender).UserData;
+                slotAction.Invoke(slot, 1);
+            };
+        }
+
+        private EventHandler HandleNonstackableMultislotAction(Action<int, int> slotAction, Action<int[], int> multiSlotAction)
+        {
+            return (sender, e) =>
+            {
+                var value = (int)((InputBox)sender).Value;
+
+                var ogSlotAndSlots = (KeyValuePair<int, int[]>)((InputBox)sender).UserData;
+                if (value <= 0)
+                {
+                    return;
+                }
+
+                if (value == 1)
+                {
+                    slotAction.Invoke(ogSlotAndSlots.Key, 1);
+                }
                 else
                 {
-                    var iBox = new InputBox(
-                        Strings.Shop.sellitem, Strings.Shop.cannotsell, true, InputBox.InputType.OkayOnly, null, null,
-                        -1
-                    );
+                    multiSlotAction.Invoke(ogSlotAndSlots.Value, value);
                 }
-            }
+            };
         }
 
-        private void SellItemInputBoxOkay(object sender, EventArgs e)
+        private void ManageItem(Action<int, int> slotAction,
+           Action<int[], int> multiSlotAction,
+           int selectedSlot,
+           LocalizedString promptTitle,
+           LocalizedString singlePromptText,
+           LocalizedString manyPromptText,
+           bool alwaysQuickSingle = false)
         {
-            var value = (int) ((InputBox) sender).Value;
-            if (value > 0)
-            {
-                PacketSender.SendSellItem((int) ((InputBox) sender).UserData, value);
-            }
-        }
-
-        private void SellInputBoxOkay(object sender, EventArgs e)
-        {
-            PacketSender.SendSellItem((int) ((InputBox) sender).UserData, 1);
-        }
-
-        private void SellManyNonstackableInputBoxOkay(object sender, EventArgs e)
-        {
-            var value = (int)((InputBox)sender).Value;
-
-            // This is a cheeky way to allow a user to signify selling one item specifically, or selling multiple in bulk
-            // The key of this KV is the original slot they selected that brought up the prompt, the value is ALL slots containing this item
-            // If the user specifies only 1 selling item, we will sell the one they specified. If they wish to sell more, they will lose that specificity and
-            // we will instead sell all items up to their desired amount, in order
-            var ogSlotAndSlots = (KeyValuePair<int, int[]>)((InputBox)sender).UserData;
-            if (value <= 0)
+            if (IsDead)
             {
                 return;
             }
 
-            if (value == 1)
+            var invItem = Inventory[selectedSlot];
+            if (invItem == null || invItem.Base == null)
             {
-                PacketSender.SendSellItem(ogSlotAndSlots.Key, 1);
+                return;
+            }
+
+            var itemName = invItem.Base.Name;
+
+            var stackable = invItem.Base.Stackable;
+            var selectedQuantity = stackable ? invItem.Quantity : 1;
+
+            // If shift held, do a quick-action (no prompt)
+            if (TryQuickManage(slotAction, selectedSlot, selectedQuantity))
+            {
+                return;
+            }
+
+            // Otherwise, prepare prompts
+            if (stackable)
+            {
+                if (invItem.Quantity > 1)
+                {
+                    _ = new InputBox(
+                        promptTitle,
+                        manyPromptText.ToString(itemName), true,
+                        InputBox.InputType.NumericInput, HandleStackableSlotAction(slotAction), null, selectedSlot, invItem.Quantity
+                    );
+                }
+                else
+                {
+                    if (alwaysQuickSingle)
+                    {
+                        QuickManage(slotAction, selectedSlot, selectedQuantity);
+                        return;
+                    }
+
+                    _ = new InputBox(
+                       promptTitle,
+                       singlePromptText.ToString(itemName), true,
+                       InputBox.InputType.YesNo, HandleNonstackableSlotAction(slotAction), null, selectedSlot
+                    );
+                }
             }
             else
             {
-                PacketSender.SendSellManyNonstackable(ogSlotAndSlots.Value, value);
+                var slots = GetSlotsContainingItem(invItem.Base.Id);
+
+                if (slots.Length == 1)
+                {
+                    if (alwaysQuickSingle)
+                    {
+                        QuickManage(slotAction, selectedSlot, selectedQuantity);
+                        return;
+                    }
+
+                    _ = new InputBox(
+                       promptTitle,
+                       singlePromptText.ToString(itemName), true,
+                       InputBox.InputType.YesNo, HandleNonstackableSlotAction(slotAction), null, selectedSlot
+                    );
+
+                    return;
+                }
+
+                _ = new InputBox(
+                    promptTitle,
+                    manyPromptText.ToString(itemName), true,
+                    InputBox.InputType.NumericInput, HandleNonstackableMultislotAction(slotAction, multiSlotAction), null, new KeyValuePair<int, int[]>(selectedSlot, slots), slots.Length
+                );
             }
+        }
+
+        private void ManageItem(Action<int, int> slotAction, 
+            Action<int[], int> multiSlotAction, 
+            int selectedSlot,
+            LocalizedString promptTitle,
+            LocalizedString singlePromptText,
+            LocalizedString manyPromptText,
+            bool isFailure,
+            LocalizedString failureTitle,
+            LocalizedString failurePrompt)
+        {
+            if (isFailure)
+            {
+                _ = new InputBox(
+                    failureTitle, failurePrompt, true, InputBox.InputType.OkayOnly, null, null,
+                    -1
+                );
+
+                return;
+            }
+
+            ManageItem(slotAction, multiSlotAction, selectedSlot, promptTitle, singlePromptText, manyPromptText);
+        }
+
+        public bool TryQuickManage(Action<int, int> action, int index, int quantity)
+        {
+            if (!Input.QuickModifierActive())
+            {
+                return false;
+            }
+            QuickManage(action, index, quantity);
+            return true;
+        }
+
+        private void QuickManage(Action<int, int> action, int index, int quantity)
+        {
+            action.Invoke(index, quantity);
         }
 
         //bank
         public void TryDepositItem(int index)
         {
-            if (ItemBase.Get(Inventory[index].ItemId) != null)
+            var allowed = true;
+            if (Globals.GuildBank)
             {
-                //Permission Check
-                if (Globals.GuildBank)
+                var rank = Globals.Me.GuildRank;
+                if (string.IsNullOrWhiteSpace(Globals.Me.Guild) || (!rank.Permissions.BankDeposit && Globals.Me.Rank != 0))
                 {
-                    var rank = Globals.Me.GuildRank;
-                    if (string.IsNullOrWhiteSpace(Globals.Me.Guild) || (!rank.Permissions.BankDeposit && Globals.Me.Rank != 0))
-                    {
-                        ChatboxMsg.AddMessage(new ChatboxMsg(Strings.Guilds.NotAllowedDeposit.ToString(Globals.Me.Guild), CustomColors.Alerts.Error, ChatMessageType.Bank));
-                        return;
-                    }
-                }
-
-                if (Inventory[index].Quantity > 1)
-                {
-                    if (Input.QuickModifierActive())
-                    {
-                        PacketSender.SendDepositItem(index, Inventory[index].Quantity);
-                        return;
-                    }
-
-                    var iBox = new InputBox(
-                        Strings.Bank.deposititem,
-                        Strings.Bank.deposititemprompt.ToString(ItemBase.Get(Inventory[index].ItemId).Name), true,
-                        InputBox.InputType.NumericInput, DepositItemInputBoxOkay, null, index, Inventory[index].Quantity
-                    );
-                }
-                else
-                {
-                    PacketSender.SendDepositItem(index, 1);
+                    ChatboxMsg.AddMessage(new ChatboxMsg(Strings.Guilds.NotAllowedDeposit.ToString(Globals.Me.Guild), CustomColors.Alerts.Error, ChatMessageType.Bank));
+                    return;
                 }
             }
-        }
 
-        private void DepositItemInputBoxOkay(object sender, EventArgs e)
-        {
-            var value = (int) ((InputBox) sender).Value;
-            if (value > 0)
-            {
-                PacketSender.SendDepositItem((int) ((InputBox) sender).UserData, value);
-            }
+            ManageItem(
+                PacketSender.SendDepositItem,
+                PacketSender.SendDepositItems,
+                index,
+                Strings.Bank.deposititem,
+                Strings.Bank.deposititem,
+                Strings.Bank.deposititemprompt,
+                alwaysQuickSingle: true
+            );
         }
 
         public void TryWithdrawItem(int index)
@@ -954,37 +986,15 @@ namespace Intersect.Client.Entities
         //Trade
         public void TryTradeItem(int index)
         {
-            var inventoryItem = Inventory[index];
-            var item = ItemBase.Get(inventoryItem.ItemId);
-            if (item != null)
-            {
-                if (Inventory[index].Quantity > 1)
-                {
-                    if (Input.QuickModifierActive())
-                    {
-                        PacketSender.SendOfferTradeItem(index, inventoryItem.Quantity);
-                        return;
-                    }
-                    var iBox = new InputBox(
-                        Strings.Trading.offeritem,
-                        Strings.Trading.offeritemprompt.ToString(item.Name), true,
-                        InputBox.InputType.NumericInput, TradeItemInputBoxOkay, null, index, inventoryItem.Quantity
-                    );
-                }
-                else
-                {
-                    PacketSender.SendOfferTradeItem(index, 1);
-                }
-            }
-        }
-
-        private void TradeItemInputBoxOkay(object sender, EventArgs e)
-        {
-            var value = (int) ((InputBox) sender).Value;
-            if (value > 0)
-            {
-                PacketSender.SendOfferTradeItem((int) ((InputBox) sender).UserData, value);
-            }
+            ManageItem(
+                PacketSender.SendOfferTradeItem,
+                PacketSender.SendOfferTradeItems,
+                index,
+                Strings.Trading.offeritem,
+                Strings.Trading.offeritemprompt,
+                Strings.Trading.offeritemprompt,
+                alwaysQuickSingle: true
+            );
         }
 
         public void TryRevokeItem(int index)

@@ -1026,6 +1026,8 @@ namespace Intersect.Client.Localization
             public static LocalizedString dropitemprompt = @"How many/much {00} do you want to drop?";
 
             public static LocalizedString dropprompt = @"Do you wish to drop the item: {00}?";
+            
+            public static LocalizedString cannotdrop = @"You cannot drop this item!";
 
             public static LocalizedString destroyitem = @"Destroy Item";
 

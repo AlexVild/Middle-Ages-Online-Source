@@ -30,6 +30,13 @@ namespace Intersect.Network.Packets
             Quantity = quantity;
         }
 
+        public SlotQuantityPacket(int[] slots, int quantity)
+        {
+            Slot = 0;
+            Quantity = quantity;
+            Slots = slots;
+        }
+
         [Key(1)]
         public int Slot { get; set; }
 
@@ -38,6 +45,9 @@ namespace Intersect.Network.Packets
 
         [Key(3)]
         public override bool IsValid => Slot >= 0 && Quantity >= 0;
+
+        [Key(4)]
+        public int[] Slots { get; set; }
 
         public override Dictionary<string, SanitizedValue<object>> Sanitize()
         {

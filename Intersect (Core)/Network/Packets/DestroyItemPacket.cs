@@ -20,7 +20,15 @@ namespace Intersect.Network.Packets.Client
             CheckCanDrop = checkCanDrop;
         }
 
-        [Key(4)]
+        public DestroyItemPacket(int[] slots, int quantity, bool checkCanDrop)
+        {
+            Slot = 0;
+            Slots = slots;
+            Quantity = quantity;
+            CheckCanDrop = checkCanDrop;
+        }
+
+        [Key(0)]
         public bool CheckCanDrop;
     }
 

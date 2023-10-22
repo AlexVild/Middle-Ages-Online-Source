@@ -413,6 +413,7 @@
     <Compile Include="Network\Packets\Client\CosmeticChangePacket.cs" />
     <Compile Include="Network\Packets\Client\CraftItemPacket.cs" />
     <Compile Include="Network\Packets\Client\DeconstructItemsPacket.cs" />
+    <Compile Include="Network\Packets\Client\DropItemsPacket.cs" />
     <Compile Include="Network\Packets\Client\FinishedFadePacket.cs" />
     <Compile Include="Network\Packets\Client\OverwriteLoadoutPacket.cs" />
     <Compile Include="Network\Packets\Client\PartyInviteNamePacket.cs" />

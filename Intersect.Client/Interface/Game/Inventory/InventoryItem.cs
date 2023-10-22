@@ -250,7 +250,7 @@ namespace Intersect.Client.Interface.Game.Inventory
                             mDescWindow = new ItemDescriptionWindow(
                                 Globals.Me.Inventory[mMySlot].Base, Globals.Me.Inventory[mMySlot].Quantity,
                                 mInventoryWindow.X, mInventoryWindow.Y, Globals.Me.Inventory[mMySlot].ItemProperties, "",
-                                Strings.Shop.sellsfor.ToString((int) Math.Floor(invItem.Base.Price * Globals.GameShop.BuyMultiplier), costItem.Name)
+                                Strings.Shop.sellsfor.ToString((int) Math.Ceiling(invItem.Base.Price * Globals.GameShop.BuyMultiplier), costItem.Name)
                             );
                         }
                     }

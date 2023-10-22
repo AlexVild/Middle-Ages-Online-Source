@@ -366,6 +366,19 @@ namespace Intersect.Server.Entities
             return false;
         }
 
+        public void DepositItemsNonStackable(int[] slots, int quantity)
+        {
+            foreach (var slot in slots.Take(quantity))
+            {
+                if (!TryDepositItem(slot, 1, false))
+                {
+                    break;
+                }
+            }
+            PacketSender.SendInventory(mPlayer);
+            SendOpenBank();
+        }
+
         public bool TryDepositItem(Item item, bool sendUpdate = true)
         {
             //Permission Check

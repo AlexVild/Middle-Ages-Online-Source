@@ -165,9 +165,19 @@ namespace Intersect.Client.Networking
             Network.SendPacket(new DropItemPacket(slot, amount));
         }
 
+        public static void SendDropItems(int[] slots, int amount)
+        {
+            Network.SendPacket(new DropItemPacket(slots, amount));
+        }
+
         public static void SendDestroyItem(int slot, bool checkCanDrop, int amount = 1)
         {
             Network.SendPacket(new DestroyItemPacket(slot, amount, checkCanDrop));
+        }
+
+        public static void SendDestroyItems(int[] slots, bool checkCanDrop, int amount = 1)
+        {
+            Network.SendPacket(new DestroyItemPacket(slots, amount, checkCanDrop));
         }
 
         public static void SendUseItem(int slot, Guid targetId)
@@ -254,6 +264,11 @@ namespace Intersect.Client.Networking
             Network.SendPacket(new DepositItemPacket(slot, amount));
         }
 
+        public static void SendDepositItems(int[] slots, int amount)
+        {
+            Network.SendPacket(new DepositItemPacket(slots, amount));
+        }
+
         public static void SendWithdrawItem(int slot, int amount)
         {
             Network.SendPacket(new WithdrawItemPacket(slot, amount));
@@ -327,6 +342,11 @@ namespace Intersect.Client.Networking
         public static void SendOfferTradeItem(int slot, int amount)
         {
             Network.SendPacket(new OfferTradeItemPacket(slot, amount));
+        }
+
+        public static void SendOfferTradeItems(int[] slots, int amount)
+        {
+            Network.SendPacket(new OfferTradeItemPacket(slots, amount));
         }
 
         public static void SendRevokeTradeItem(int slot, int amount)

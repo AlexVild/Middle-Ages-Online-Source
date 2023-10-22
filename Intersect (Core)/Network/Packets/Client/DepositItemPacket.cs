@@ -14,6 +14,10 @@ namespace Intersect.Network.Packets.Client
         {
         }
 
+        public DepositItemPacket(int[] slots, int quantity) : base(slots, quantity)
+        {
+        }
+
     }
 
 }

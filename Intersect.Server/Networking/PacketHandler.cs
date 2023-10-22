@@ -1382,7 +1382,27 @@ namespace Intersect.Server.Networking
                 return;
             }
 
-            player?.DropItemFrom(packet.Slot, packet.Quantity);
+            if (packet.Slots == default)
+            {
+                if (!player.TryDropItemFrom(packet.Slot, packet.Quantity))
+                {
+                    PacketSender.SendPlaySound(player, Options.UIDenySound);
+                }
+            }
+            else
+            {
+                if (packet.Slots.Length == 1)
+                {
+                    if (!player.TryDropItemFrom(packet.Slot, packet.Quantity))
+                    {
+                        PacketSender.SendPlaySound(player, Options.UIDenySound);
+                    }
+                }
+                else
+                {
+                    player.DropManyNonstackable(packet.Slots, packet.Quantity);
+                }
+            }
         }
 
         //DestroyItemPacket
@@ -1671,7 +1691,21 @@ namespace Intersect.Server.Networking
                 return;
             }
 
-            player?.BankInterface?.TryDepositItem(packet.Slot, packet.Quantity);
+            if (packet.Slots == default)
+            {
+                player?.BankInterface?.TryDepositItem(packet.Slot, packet.Quantity);
+            }
+            else
+            {
+                if (packet.Slots.Length == 1)
+                {
+                    player?.BankInterface?.TryDepositItem(packet.Slots[0], packet.Quantity);
+                }
+                else
+                {
+                    player?.BankInterface?.DepositItemsNonStackable(packet.Slots, packet.Quantity);
+                }
+            }
         }
 
         //WithdrawItemPacket
@@ -1925,7 +1959,27 @@ namespace Intersect.Server.Networking
                 return;
             }
 
-            player?.OfferItem(packet.Slot, packet.Quantity);
+            if (packet.Slots == default)
+            {
+                if (!player.TryOfferItem(packet.Slot, packet.Quantity))
+                {
+                    PacketSender.SendPlaySound(player, Options.UIDenySound);
+                }
+            }
+            else
+            {
+                if (packet.Slots.Length == 1)
+                {
+                    if (!player.TryOfferItem(packet.Slot, packet.Quantity))
+                    {
+                        PacketSender.SendPlaySound(player, Options.UIDenySound);
+                    }
+                }
+                else
+                {
+                    player.OfferUnstackableItems(packet.Slots, packet.Quantity);
+                }
+            }
         }
 
         //RevokeTradeItemPacket
