@@ -246,7 +246,7 @@ namespace Intersect.Client.Networking
 
         public static void SendSellManyNonstackable(int[] slots, int quantity)
         {
-            Network.SendPacket(new SellManyNonstackablePacket(slots, quantity));
+            Network.SendPacket(new SellItemPacket(slots, quantity));
         }
 
         public static void SendBuyItem(int slot, int amount)

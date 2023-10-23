@@ -1377,32 +1377,29 @@ namespace Intersect.Server.Networking
         public void HandlePacket(Client client, DropItemPacket packet)
         {
             var player = client?.Entity;
-            if (packet == null)
+            if (IsMultislotTransfer(packet, player))
             {
+                player.MultislotTransfer(packet.Slots, packet.Quantity, Player.ItemMovementType.Drop);
                 return;
+            }
+            else if (!player.TryDropItemFrom(packet.Slot, packet.Quantity))
+            {
+                player?.SendAlert();
+            }
+        }
+
+        private bool IsMultislotTransfer(SlotQuantityPacket packet, Player player)
+        {
+            if (player == null || packet == null)
+            {
+                return false;
             }
 
             if (packet.Slots == default)
             {
-                if (!player.TryDropItemFrom(packet.Slot, packet.Quantity))
-                {
-                    PacketSender.SendPlaySound(player, Options.UIDenySound);
-                }
+                return false;
             }
-            else
-            {
-                if (packet.Slots.Length == 1)
-                {
-                    if (!player.TryDropItemFrom(packet.Slot, packet.Quantity))
-                    {
-                        PacketSender.SendPlaySound(player, Options.UIDenySound);
-                    }
-                }
-                else
-                {
-                    player.DropManyNonstackable(packet.Slots, packet.Quantity);
-                }
-            }
+            return true;
         }
 
         //DestroyItemPacket
@@ -1605,19 +1602,15 @@ namespace Intersect.Server.Networking
                 return;
             }
 
-            _ = player.TrySellItem(packet.Slot, packet.Quantity, out _, out _);
-        }
-
-        //SellManyNonstackablePacket
-        public void HandlePacket(Client client, SellManyNonstackablePacket packet)
-        {
-            var player = client?.Entity;
-            if (player == null)
+            if (IsMultislotTransfer(packet, player))
             {
+                player?.MultislotTransfer(packet.Slots, packet.Quantity, Player.ItemMovementType.Sell);
                 return;
             }
-
-            player.SellManyNonstackable(packet.Slots, packet.Quantity);
+            else if (!player.TrySellItem(packet.Slot, packet.Quantity, out _, out _))
+            {
+                player?.SendAlert();
+            }
         }
 
         //CloseShopPacket
@@ -1691,20 +1684,14 @@ namespace Intersect.Server.Networking
                 return;
             }
 
-            if (packet.Slots == default)
+            if (IsMultislotTransfer(packet, player))
             {
-                player?.BankInterface?.TryDepositItem(packet.Slot, packet.Quantity);
+                player?.MultislotTransfer(packet.Slots, packet.Quantity, Player.ItemMovementType.Deposit);
+                return;
             }
-            else
+            else if (!player?.BankInterface?.TryDepositItem(packet.Slot, packet.Quantity) ?? true)
             {
-                if (packet.Slots.Length == 1)
-                {
-                    player?.BankInterface?.TryDepositItem(packet.Slots[0], packet.Quantity);
-                }
-                else
-                {
-                    player?.BankInterface?.DepositItemsNonStackable(packet.Slots, packet.Quantity);
-                }
+                player?.SendAlert();
             }
         }
 
@@ -1959,26 +1946,14 @@ namespace Intersect.Server.Networking
                 return;
             }
 
-            if (packet.Slots == default)
+            if (IsMultislotTransfer(packet, player))
             {
-                if (!player.TryOfferItem(packet.Slot, packet.Quantity))
-                {
-                    PacketSender.SendPlaySound(player, Options.UIDenySound);
-                }
+                player.MultislotTransfer(packet.Slots, packet.Quantity, Player.ItemMovementType.Trade);
+                return;
             }
-            else
+            else if (!player.TryOfferItem(packet.Slot, packet.Quantity))
             {
-                if (packet.Slots.Length == 1)
-                {
-                    if (!player.TryOfferItem(packet.Slot, packet.Quantity))
-                    {
-                        PacketSender.SendPlaySound(player, Options.UIDenySound);
-                    }
-                }
-                else
-                {
-                    player.OfferUnstackableItems(packet.Slots, packet.Quantity);
-                }
+                player?.SendAlert();
             }
         }
 

@@ -4328,47 +4328,94 @@ namespace Intersect.Server.Entities
             return true;
         }
 
-        public void SellManyNonstackable(int[] slots, int quantity)
+        public enum ItemMovementType
         {
-            var shop = InShop;
-            if (shop == null)
-            {
-                return;
-            }
-
-            var totalReward = 0;
-            Guid rewardItemId = Guid.Empty;
-            foreach (var slot in slots.Take(quantity))
-            {
-                if (!TrySellItem(slot, 1, out var newReward, out rewardItemId, false))
-                {
-                    break;
-                }
-
-                totalReward += newReward;
-            }
-
-            TryGiveItem(rewardItemId, totalReward);
-
-            if (!TextUtils.IsNone(shop.SellSound))
-            {
-                PacketSender.SendPlaySound(this, shop.SellSound);
-            }
-            PacketSender.SendInventory(this);
+            Drop,
+            Deposit,
+            Trade,
+            Sell,
         }
 
-        public void DropManyNonstackable(int[] slots, int quantity)
+        /// <summary>
+        /// Used as a general place to transfer items across multiple inventory slots to another place
+        /// </summary>
+        /// <param name="slots">Which inventory slots are going to be moved</param>
+        /// <param name="quantity">The total amount of items to be moved</param>
+        /// <param name="movementType">The type of movement - bank, drop, etc.</param>
+        public void MultislotTransfer(int[] slots, int quantity, ItemMovementType movementType)
         {
-            foreach (var slot in slots.Take(quantity))
+            int amountSold = 0;
+            Guid itemGiven = Guid.Empty;
+
+            foreach (var slot in slots)
             {
-                if (!TryDropItemFrom(slot, 1))
+                if (!TryGetItemAt(slot, out var item))
                 {
-                    PacketSender.SendPlaySound(this, Options.UIDenySound);
+                    continue;
+                }
+
+                if (quantity <= 0 && item.Descriptor.IsStackable)
+                {
                     break;
                 }
+
+                var next = quantity - item.Quantity;
+                var takeAmount = item.Descriptor.IsStackable ?
+                    Math.Min(item.Descriptor.MaxInventoryStack, quantity) :
+                    1;
+
+                switch (movementType)
+                {
+                    case ItemMovementType.Drop:
+                        if (!TryDropItemFrom(slot, takeAmount, false))
+                        {
+                            SendAlert();
+                            break;
+                        }
+                        break;
+                    case ItemMovementType.Trade:
+                        if (!TryOfferItem(slot, takeAmount))
+                        {
+                            SendAlert();
+                            break;
+                        }
+                        break;
+                    case ItemMovementType.Deposit:
+                        if (!BankInterface?.TryDepositItem(slot, takeAmount, false) ?? false)
+                        {
+                            SendAlert();
+                            break;
+                        }
+                        break;
+                    case ItemMovementType.Sell:
+                        if (!TrySellItem(slot, takeAmount, out var newAmountSold, out itemGiven, false))
+                        {
+                            SendAlert();
+                            break;
+                        }
+                        amountSold += newAmountSold;
+                        break;
+                }
+
+                quantity = next;
             }
 
             PacketSender.SendInventory(this);
+
+            if (movementType == ItemMovementType.Sell)
+            {
+                TryGiveItem(itemGiven, amountSold);
+
+                if (!TextUtils.IsNone(InShop?.SellSound))
+                {
+                    PacketSender.SendPlaySound(this, InShop?.SellSound);
+                }
+            }
+
+            if (movementType == ItemMovementType.Deposit)
+            {
+                BankInterface?.SendOpenBank();
+            }
         }
 
         public void BuyItem(int slot, int amount)
@@ -5370,7 +5417,7 @@ namespace Intersect.Server.Entities
                                 PacketSender.SendTradeUpdate(this, this, i);
                                 PacketSender.SendTradeUpdate(Trading.Counterparty, this, i);
 
-                                return false;
+                                return true;
                             }
                         }
                     }
@@ -5411,18 +5458,6 @@ namespace Intersect.Server.Entities
             }
 
             return false;
-        }
-
-        public void OfferUnstackableItems(int[] slots, int amount)
-        {
-            foreach (var slot in slots.Take(amount))
-            {
-                if (!TryOfferItem(slot, 1))
-                {
-                    PacketSender.SendPlaySound(this, Options.UIDenySound);
-                    break;
-                }
-            }
         }
 
         public void RevokeItem(int slot, int amount)
@@ -9660,6 +9695,21 @@ namespace Intersect.Server.Entities
         {
             base.ResetCooldowns();
             PacketSender.SendSpellCooldowns(this);
+        }
+
+        public bool InvItemIsStackable(int slotIndex)
+        {
+            if (!TryGetItemAt(slotIndex, out var item))
+            {
+                return false;
+            }
+
+            return item.Descriptor?.IsStackable ?? false;
+        }
+
+        public void SendAlert()
+        {
+            PacketSender.SendPlaySound(this, Options.UIDenySound);
         }
     }
 }

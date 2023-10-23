@@ -14,6 +14,11 @@ namespace Intersect.Network.Packets.Client
         {
         }
 
+        public SellItemPacket(int[] slots, int quantity) : base(0, quantity)
+        {
+            Slots = slots;
+        }
+
     }
 
 }

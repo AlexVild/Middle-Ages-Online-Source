@@ -666,18 +666,34 @@ namespace Intersect.Client.Entities
             );
         }
 
-        private EventHandler HandleStackableSlotAction(Action<int, int> slotAction)
+        private EventHandler HandleStackableSlotAction(Action<int, int> slotAction, Action<int[], int> multiSlotAction)
         {
             return (sender, e) =>
             {
                 var value = (int)((InputBox)sender).Value;
+                var ogSlotAndSlots = (KeyValuePair<int, int[]>)((InputBox)sender).UserData;
                 if (value == 0)
                 {
                     return;
                 }
 
-                var slot = (int)((InputBox)sender).UserData;
-                slotAction.Invoke(slot, value);
+                var slot = ogSlotAndSlots.Key;
+                var slots = ogSlotAndSlots.Value;
+
+                var item = Inventory[slot];
+                if (item == null)
+                {
+                    return;
+                }
+
+                if (item.Quantity < value)
+                {
+                    multiSlotAction.Invoke(slots, value);
+                }
+                else
+                {
+                    slotAction.Invoke(slot, value);
+                }
             };
         }
 
@@ -743,15 +759,21 @@ namespace Intersect.Client.Entities
                 return;
             }
 
+            var slots = GetSlotsContainingItem(invItem.Base.Id);
+
             // Otherwise, prepare prompts
             if (stackable)
             {
-                if (invItem.Quantity > 1)
+                var totalItems = GetInventoryItemsAndQuantities()
+                    .Where(kv => kv.Key == invItem.Base.Id)
+                    .Aggregate(0, (prev, next) => prev + next.Value);
+
+                if (totalItems > 1)
                 {
                     _ = new InputBox(
                         promptTitle,
                         manyPromptText.ToString(itemName), true,
-                        InputBox.InputType.NumericInput, HandleStackableSlotAction(slotAction), null, selectedSlot, invItem.Quantity
+                        InputBox.InputType.NumericInput, HandleStackableSlotAction(slotAction, multiSlotAction), null, new KeyValuePair<int, int[]>(selectedSlot, slots), totalItems
                     );
                 }
                 else
@@ -771,8 +793,6 @@ namespace Intersect.Client.Entities
             }
             else
             {
-                var slots = GetSlotsContainingItem(invItem.Base.Id);
-
                 if (slots.Length == 1)
                 {
                     if (alwaysQuickSingle)
