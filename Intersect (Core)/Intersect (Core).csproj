@@ -437,6 +437,7 @@
     <Compile Include="Network\Packets\Client\RequestUnlockedRecipesPacket.cs" />
     <Compile Include="Network\Packets\Client\RequestUpgradePacket.cs" />
     <Compile Include="Network\Packets\Client\RequestWeaponEnhancementRemovalPacket.cs" />
+    <Compile Include="Network\Packets\Client\RequestWishlistPacket.cs" />
     <Compile Include="Network\Packets\Client\ResourceInfoRequestPacket.cs" />
     <Compile Include="Network\Packets\Client\ApplyEnhancementsPacket.cs" />
     <Compile Include="Network\Packets\Client\SaveNewLoadoutPacket.cs" />
@@ -446,6 +447,8 @@
     <Compile Include="Network\Packets\Client\SkillPreparationPacket.cs" />
     <Compile Include="Network\Packets\Client\TrackWeaponTypePacket.cs" />
     <Compile Include="Network\Packets\Client\WeaponPickerResponsePacket.cs" />
+    <Compile Include="Network\Packets\Client\WishlistAddPacket.cs" />
+    <Compile Include="Network\Packets\Client\WishlistRemovePacket.cs" />
     <Compile Include="Network\Packets\Server\ChallengeProgressPacket.cs" />
     <Compile Include="Network\Packets\Server\CloseDeconstructorPacket.cs" />
     <Compile Include="Network\Packets\Server\CombatNumberPacket.cs" />
@@ -453,6 +456,7 @@
     <Compile Include="Network\Packets\Server\CompleteUpgradePacket.cs" />
     <Compile Include="Network\Packets\Server\ConfirmLoadoutOverwritePacket.cs" />
     <Compile Include="Network\Packets\Server\CosmeticUnlocksPacket.cs" />
+    <Compile Include="Network\Packets\Server\CraftingWishlistPacket.cs" />
     <Compile Include="Network\Packets\Server\CraftStatusPacket.cs" />
     <Compile Include="Network\Packets\Client\CreateAccountPacket.cs" />
     <Compile Include="Network\Packets\Client\CreateCharacterPacket.cs" />

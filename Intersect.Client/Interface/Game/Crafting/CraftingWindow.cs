@@ -7,6 +7,7 @@ using Intersect.Client.Framework.Graphics;
 using Intersect.Client.Framework.Gwen.Control;
 using Intersect.Client.Framework.Gwen.Control.EventArguments;
 using Intersect.Client.General;
+using Intersect.Client.Interface.Game.Character.Panels;
 using Intersect.Client.Interface.Game.Chat;
 using Intersect.Client.Localization;
 using Intersect.Client.Networking;
@@ -42,6 +43,10 @@ namespace Intersect.Client.Interface.Game.Crafting
 
         private int AmountRemaining;
 
+        private long WishlistCooldown;
+
+        private const long WishlistCooldownTime = 500;
+
         //Controls
         private WindowControl mCraftWindow;
 
@@ -68,6 +73,11 @@ namespace Intersect.Client.Interface.Game.Crafting
 
         private GameTexture CanCraftBg => Globals.ContentManager.GetTexture(GameContentManager.TextureType.Gui, "crafting.png");
         private GameTexture CantCraftBg => Globals.ContentManager.GetTexture(GameContentManager.TextureType.Gui, "crafting_locked_recipe.png");
+
+        private GameTexture InWishlistTexture => Globals.ContentManager.GetTexture(GameContentManager.TextureType.Gui, "craft_favorite_active.png");
+        private GameTexture NotWishlistTexture => Globals.ContentManager.GetTexture(GameContentManager.TextureType.Gui, "craft_favorite_inactive.png");
+
+        private Button WishlishButton;
 
         public CraftingWindow(Canvas gameCanvas)
         {
@@ -105,9 +115,15 @@ namespace Intersect.Client.Interface.Game.Crafting
 
             NeedsRecipeLabel = new Label(mCraftWindow, "NeedsRecipeLabel");
 
+            WishlishButton = new Button(mCraftWindow, "WishlistButton");
+            WishlishButton.Clicked += WishlishButton_Clicked;
+            WishlishButton.SetToolTipText("Add/Remove from Wishlist");
+
             _CraftingWindow();
 
             mCraftWindow.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
+
+            WishlishButton.SetTooltipGraphicsMAO();
 
             Interface.InputBlockingElements.Add(mCraftWindow);
 
@@ -116,6 +132,30 @@ namespace Intersect.Client.Interface.Game.Crafting
                 //Refresh crafting window items
                 LoadCraftItems(mCraftId);
             };
+        }
+
+        private void WishlishButton_Clicked(Base sender, ClickedEventArgs arguments)
+        {
+            if (mCraftId == Guid.Empty)
+            {
+                return;
+            }
+
+            if (WishlistCooldown > Timing.Global.Milliseconds)
+            {
+                return;
+            }
+
+            WishlistCooldown = Timing.Global.Milliseconds + WishlistCooldownTime;
+
+            if (CharacterWishlistController.Wishlist.Contains(mCraftId))
+            {
+                PacketSender.SendRemoveWishlistItem(mCraftId);
+            }
+            else
+            {
+                PacketSender.SendAddWishlistItem(mCraftId);
+            }
         }
 
         //Location
@@ -382,6 +422,20 @@ namespace Intersect.Client.Interface.Game.Crafting
         {
             LoadCrafts();
             var resetSelection = false;
+
+            WishlishButton.IsHidden = mCraftId == Guid.Empty;
+            if (!WishlishButton.IsHidden)
+            {
+                if (CharacterWishlistController.Wishlist.Contains(mCraftId))
+                {
+                    WishlishButton.SetImage(InWishlistTexture, InWishlistTexture.Name, Button.ControlState.Normal);
+                }
+                else
+                {
+                    WishlishButton.SetImage(NotWishlistTexture, NotWishlistTexture.Name, Button.ControlState.Normal);
+                }
+            }
+
             if (Refresh)
             {
                 // Clear things that were already populated

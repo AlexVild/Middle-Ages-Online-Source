@@ -768,5 +768,20 @@ namespace Intersect.Client.Networking
             Network.SendPacket(new WeaponPickerResponsePacket(WeaponPickerController.SelectedInventorySlot));
             Interface.Interface.GameUi.HideWeaponPicker();
         }
+
+        public static void SendRequestCraftingWishlist()
+        {
+            Network.SendPacket(new RequestWishlistPacket());
+        }
+
+        public static void SendAddWishlistItem(Guid craftId)
+        {
+            Network.SendPacket(new WishlistAddPacket(craftId));
+        }
+
+        public static void SendRemoveWishlistItem(Guid craftId)
+        {
+            Network.SendPacket(new WishlistRemovePacket(craftId));
+        }
     }
 }

@@ -1,7 +1,10 @@
 ﻿using Intersect.Client.Core;
+using Intersect.Client.Framework.File_Management;
+using Intersect.Client.Framework.Graphics;
 using Intersect.Client.Framework.Gwen.Control;
 using Intersect.Client.General;
 using Intersect.Client.General.UpgradeStation;
+using Intersect.Client.Interface.Game.Character.Panels;
 using Intersect.Client.Interface.Game.Crafting;
 using Intersect.Client.Interface.Game.Enhancement;
 using Intersect.Client.Interface.ScreenAnimations;
@@ -10,6 +13,7 @@ using Intersect.Client.Networking;
 using Intersect.GameObjects;
 using Intersect.GameObjects.Crafting;
 using Intersect.Network.Packets.Server;
+using Intersect.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -54,6 +58,15 @@ namespace Intersect.Client.Interface.Game.UpgradeStation
 
         private AnvilAnim CraftAnimation { get; set; }
 
+        private Button WishlishButton;
+
+        private long WishlistCooldown;
+
+        private const long WishlistCooldownTime = 500;
+
+        private GameTexture InWishlistTexture => Globals.ContentManager.GetTexture(GameContentManager.TextureType.Gui, "craft_favorite_active.png");
+        private GameTexture NotWishlistTexture => Globals.ContentManager.GetTexture(GameContentManager.TextureType.Gui, "craft_favorite_inactive.png");
+
         public UpgradeStationWindow(Base gameCanvas) : base(gameCanvas)
         {
             CompletionWindow = new UpgradeCompleteWindow(this, gameCanvas);
@@ -82,6 +95,10 @@ namespace Intersect.Client.Interface.Game.UpgradeStation
             RecipeBg = new ImagePanel(UpgradeBg, "RecipeBg");
             RecipeContainer = new ScrollControl(RecipeBg, "Recipes");
 
+            WishlishButton = new Button(Background, "WishlistButton");
+            WishlishButton.Clicked += WishlishButton_Clicked;
+            WishlishButton.SetToolTipText("Add/Remove from Wishlist");
+
             CraftButton = new Button(Background, "CraftButton")
             {
                 Text = "Craft"
@@ -100,6 +117,30 @@ namespace Intersect.Client.Interface.Game.UpgradeStation
             CraftAnimation = new AnvilAnim(ShowCompletionWindow);
         }
 
+        private void WishlishButton_Clicked(Base sender, Framework.Gwen.Control.EventArguments.ClickedEventArgs arguments)
+        {
+            if (UpgradeStation == default || UpgradeStation.SelectedCraftId == Guid.Empty)
+            {
+                return;
+            }
+
+            if (WishlistCooldown > Timing.Global.Milliseconds)
+            {
+                return;
+            }
+
+            WishlistCooldown = Timing.Global.Milliseconds + WishlistCooldownTime;
+
+            if (CharacterWishlistController.Wishlist.Contains(UpgradeStation.SelectedCraftId))
+            {
+                PacketSender.SendRemoveWishlistItem(UpgradeStation.SelectedCraftId);
+            }
+            else
+            {
+                PacketSender.SendAddWishlistItem(UpgradeStation.SelectedCraftId);
+            }
+        }
+
         private void CraftButton_Clicked(Base sender, Framework.Gwen.Control.EventArguments.ClickedEventArgs arguments)
         {
             PacketSender.SendRequestUpgrade(UpgradeStation.SelectedCraftId);
@@ -114,6 +155,7 @@ namespace Intersect.Client.Interface.Game.UpgradeStation
         {
             ItemIconComponent.Setup();
             UpgradeItemIconComponent.Setup();
+            WishlishButton.SetTooltipGraphicsMAO();
         }
 
         public override void Show()
@@ -163,9 +205,22 @@ namespace Intersect.Client.Interface.Game.UpgradeStation
             ItemIconComponent.SetHoverPanelLocation(Background.X + 6, Background.Y + 40);
             UpgradeItemIconComponent.SetHoverPanelLocation(Background.X + 6, Background.Y + 40);
 
+            WishlishButton.IsHidden = UpgradeStation.SelectedCraftId == Guid.Empty;
             UpgradeBg.IsHidden = UpgradeStation.SelectedCraftId == Guid.Empty;
             NoCraftsLabel.IsHidden = UpgradeStation.Crafts.Length > 0;
             UpgradeList.IsHidden = !NoCraftsLabel.IsHidden;
+
+            if (!WishlishButton.IsHidden)
+            {
+                if (CharacterWishlistController.Wishlist.Contains(UpgradeStation.SelectedCraftId))
+                {
+                    WishlishButton.SetImage(InWishlistTexture, InWishlistTexture.Name, Button.ControlState.Normal);
+                }
+                else
+                {
+                    WishlishButton.SetImage(NotWishlistTexture, NotWishlistTexture.Name, Button.ControlState.Normal);
+                }
+            }
 
             if (!UpgradeStation.RefreshUi)
             {
@@ -204,7 +259,7 @@ namespace Intersect.Client.Interface.Game.UpgradeStation
             UpgradeList.RemoveAllRows();
             foreach (var craftId in UpgradeStation.Crafts)
             {
-                var craftName = CraftBase.GetName(craftId);
+                var craftName = CraftBase.GetName(craftId).Replace("(Upgrade)", "").Trim();
                 var row = UpgradeList.AddRow(craftName);
                 row.UserData = craftId;
                 row.Selected += Craft_Selected;

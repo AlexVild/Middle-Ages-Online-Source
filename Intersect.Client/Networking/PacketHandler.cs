@@ -2990,6 +2990,14 @@ namespace Intersect.Client.Networking
             WeaponPickerController.ResultType = packet.ResultType;
             Interface.Interface.GameUi.ShowWeaponPicker();
         }
+
+        public void HandlePacket(IPacketSender packetSender, CraftingWishlistPacket packet)
+        {
+            if (packet.Wishlist != default)
+            {
+                CharacterWishlistController.Wishlist = packet.Wishlist.ToList();
+            }
+        }
     }
 }
  

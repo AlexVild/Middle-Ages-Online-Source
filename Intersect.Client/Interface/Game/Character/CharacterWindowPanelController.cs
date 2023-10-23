@@ -35,6 +35,7 @@ namespace Intersect.Client.Interface.Game.Character
         private Button ChallengesButton { get; set; }
         private Button LoadoutsButton { get; set; }
         private Button EnhancementsButton { get; set; }
+        private Button WishlistButton { get; set; }
 
         private CharacterWindow Parent { get; set; }
 
@@ -50,6 +51,7 @@ namespace Intersect.Client.Interface.Game.Character
         private CharacterChallengesPanel ChallengesPanel { get; set; }
         private CharacterLoadoutsPanel LoadoutsPanel { get; set; }
         private CharacterEnhancementsPanel EnhancementsPanel { get; set; }
+        private CharacterWishlistPanel WishlistPanel { get; set; }
 
         public CharacterWindowPanelController(Canvas gameCanvas, CharacterWindow parent)
         {
@@ -94,6 +96,9 @@ namespace Intersect.Client.Interface.Game.Character
 
             EnhancementsPanel = new CharacterEnhancementsPanel(PanelContainer);
             EnhancementsPanel.Hide();
+
+            WishlistPanel = new CharacterWishlistPanel(PanelContainer);
+            WishlistPanel.Hide();
 
             PositionToParent();
             Hide();
@@ -162,6 +167,12 @@ namespace Intersect.Client.Interface.Game.Character
             };
             EnhancementsButton.Clicked += EnhancementsButton_Clicked;
 
+            WishlistButton = new Button(Container, "WishlistSelector")
+            {
+                Text = "WISHLIST"
+            };
+            WishlistButton.Clicked += WishlistButton_Clicked; ;
+
             PanelSelectors = new List<Button>
             {
                 StatsButton,
@@ -174,7 +185,13 @@ namespace Intersect.Client.Interface.Game.Character
                 LoadoutsButton,
                 ChallengesButton,
                 EnhancementsButton,
+                WishlistButton
             };
+        }
+
+        private void WishlistButton_Clicked(Base sender, ClickedEventArgs arguments)
+        {
+            ChangePanel(CharacterPanelType.Wishlist);
         }
 
         private void EnhancementsButton_Clicked(Base sender, ClickedEventArgs arguments)
@@ -284,6 +301,10 @@ namespace Intersect.Client.Interface.Game.Character
                 case CharacterPanelType.Enhancements:
                     EnhancementsButton.Disable();
                     CurrentPanel = EnhancementsPanel;
+                    break;
+                case CharacterPanelType.Wishlist:
+                    WishlistButton.Disable();
+                    CurrentPanel = WishlistPanel;
                     break;
                 default:
                     throw new ArgumentException($"Invalid enum for {nameof(type)}");

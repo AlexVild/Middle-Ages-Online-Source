@@ -156,6 +156,7 @@
     <Compile Include="Interface\Game\Character\Panels\CharacterHarvestingWindow.cs" />
     <Compile Include="Interface\Game\Character\Panels\CharacterRecipePanel.cs" />
     <Compile Include="Interface\Game\Character\Panels\CharacterStatsWindow.cs" />
+    <Compile Include="Interface\Game\Character\Panels\CharacterWishlistPanel.cs" />
     <Compile Include="Interface\Game\Character\Panels\SkillsPanel.cs" />
     <Compile Include="Interface\Game\Character\SearchableCharacterWindowPanel.cs" />
     <Compile Include="Interface\Game\ComboText.cs" />

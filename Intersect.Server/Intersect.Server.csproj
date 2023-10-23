@@ -571,6 +571,7 @@
     <Compile Include="Entities\Player.Passives.cs" />
     <Compile Include="Entities\Player.Recipes.cs" />
     <Compile Include="Entities\Player.SkillBook.cs" />
+    <Compile Include="Entities\Player.Wishlist.cs" />
     <Compile Include="Entities\PlayerData\ChallengeProgress.cs" />
     <Compile Include="Entities\PlayerData\ChallengeUpdateProcesser.cs" />
     <Compile Include="Entities\PlayerData\PlayerClassStats.cs" />
@@ -800,6 +801,10 @@
     <Compile Include="Migrations\20231019235936_TutorialMigrationEnhancement.cs" />
     <Compile Include="Migrations\20231019235936_TutorialMigrationEnhancement.designer.cs">
       <DependentUpon>20231019235936_TutorialMigrationEnhancement.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20231023163959_CraftingWishlistMigration.cs" />
+    <Compile Include="Migrations\20231023163959_CraftingWishlistMigration.designer.cs">
+      <DependentUpon>20231023163959_CraftingWishlistMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.cs" />
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.Designer.cs">

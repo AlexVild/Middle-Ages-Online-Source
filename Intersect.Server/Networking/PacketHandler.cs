@@ -4753,5 +4753,27 @@ namespace Intersect.Server.Networking
 
             player.WeaponPicker.OpenNextInterface();
         }
+
+        public void HandlePacket(Client client, WishlistAddPacket packet)
+        {
+            var player = client?.Entity;
+            if (player == default)
+            {
+                return;
+            }
+
+            player.AddCraftToWishlist(packet.CraftId);
+        }
+
+        public void HandlePacket(Client client, WishlistRemovePacket packet)
+        {
+            var player = client?.Entity;
+            if (player == default)
+            {
+                return;
+            }
+
+            player.RemoveCraftFromWishlist(packet.CraftId);
+        }
     }
 }

@@ -2933,5 +2933,10 @@ namespace Intersect.Server.Networking
         {
             player?.SendPacket(new OpenWeaponPickerPacket(resultType));
         }
+        
+        public static void SendCraftingWishlist(Player player)
+        {
+            player?.SendPacket(new CraftingWishlistPacket(player?.CraftingWishlist));
+        }
     }
 }

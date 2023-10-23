@@ -1,4 +1,5 @@
-﻿using Intersect.Client.Framework.Gwen.Control;
+﻿using Intersect.Client.Core;
+using Intersect.Client.Framework.Gwen.Control;
 using Intersect.Client.Framework.Gwen.Input;
 using Intersect.Client.Interface.Components;
 using Intersect.Client.Interface.Game.DescriptionWindows;
@@ -55,6 +56,7 @@ namespace Intersect.Client.Interface.Game.Components
 
         private void Image_Clicked(Base sender, Framework.Gwen.Control.EventArguments.ClickedEventArgs arguments)
         {
+            Audio.AddGameSound("ui_press.wav", false);
             PacketSender.SendWeaponPickerResponse(InventorySlot);
         }
 
