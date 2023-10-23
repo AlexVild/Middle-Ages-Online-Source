@@ -4347,6 +4347,11 @@ namespace Intersect.Server.Entities
             int amountSold = 0;
             Guid itemGiven = Guid.Empty;
 
+            if (slots.Length < 0)
+            {
+                return;
+            }
+
             foreach (var slot in slots)
             {
                 if (!TryGetItemAt(slot, out var item))
@@ -4354,13 +4359,14 @@ namespace Intersect.Server.Entities
                     continue;
                 }
 
-                if (quantity <= 0 && item.Descriptor.IsStackable)
+                if (quantity <= 0)
                 {
                     break;
                 }
 
                 var next = quantity - item.Quantity;
-                var takeAmount = item.Descriptor.IsStackable ?
+                var isStackable = item.Descriptor.IsStackable;
+                var takeAmount = isStackable ?
                     Math.Min(item.Descriptor.MaxInventoryStack, quantity) :
                     1;
 
@@ -4397,7 +4403,14 @@ namespace Intersect.Server.Entities
                         break;
                 }
 
-                quantity = next;
+                if (isStackable)
+                {
+                    quantity = next;
+                }
+                else
+                {
+                    quantity--;
+                }
             }
 
             PacketSender.SendInventory(this);
