@@ -360,6 +360,15 @@ namespace Intersect.Client.Framework.Gwen.Control
             return AddRow(label, String.Empty);
         }
 
+        public ListBoxRow AddRowMAO(string label)
+        {
+            var tmpRow = AddRow(label, string.Empty);
+            tmpRow.SetTextColor(new Color(50, 19, 0));
+            tmpRow.RenderColor = new Color(100, 232, 208, 170);
+
+            return tmpRow;
+        }
+
         /// <summary>
         ///     Adds a new row.
         /// </summary>

@@ -36,9 +36,11 @@ namespace Intersect.Client.Interface.Game.Character.Panels
         private Label NoLoadoutsLabel { get; set; }
 
         private ImagePanel LoadoutsBackground { get; set; }
-        private ScrollControl LoadoutsContainer { get; set; }
+        private ListBox LoadoutsList { get; set; }
 
-        private ComponentList<GwenComponent> LoadoutComponents { get; set; }
+        private LoadoutRowComponent LoadoutSelectors { get; set; }
+
+        private Loadout SelectedLoadout { get; set; }
 
         public CharacterLoadoutsPanel(ImagePanel panelBackground)
         {
@@ -61,9 +63,13 @@ namespace Intersect.Client.Interface.Game.Character.Panels
             {
                 Text = "No loadouts have been saved!"
             };
-            LoadoutsContainer = new ScrollControl(LoadoutsBackground, "LoadoutsContainer");
+            LoadoutsList = new ListBox(LoadoutsBackground, "LoadoutsList");
+
+            LoadoutSelectors = new LoadoutRowComponent(mBackground, "LoadoutSelectors");
 
             mBackground.LoadJsonUi(Framework.File_Management.GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
+            
+            LoadoutSelectors.Initialize();
         }
 
         public override void Show()
@@ -86,6 +92,16 @@ namespace Intersect.Client.Interface.Game.Character.Panels
                 RefreshUi = false;
             }
 
+
+            if (SelectedLoadout == null)
+            {
+                LoadoutSelectors.Hide();
+            }
+            else
+            {
+                LoadoutSelectors.Show();
+            }
+
             return;
         }
 
@@ -93,38 +109,46 @@ namespace Intersect.Client.Interface.Game.Character.Panels
         {
             var idx = 0;
 
-            LoadoutsContainer?.ScrollToTop();
+            LoadoutsList?.ScrollToTop();
             ClearLoadouts();
-            foreach (var loadout in Loadouts)
+            foreach (var loadout in Loadouts.OrderBy(l => l.Name).ToArray())
             {
-                var row = new LoadoutRowComponent(
-                    LoadoutsContainer,
-                    loadout,
-                    $"Loadout_{idx}",
-                    LoadoutComponents);
+                var loadoutRow = LoadoutsList.AddRowMAO(loadout.Name.Trim());
+                loadoutRow.UserData = loadout;
 
-                row.Initialize();
-                row.SetPosition(row.X, row.Height * idx);
-
-                idx++;
+                loadoutRow.Clicked += LoadoutRow_Clicked;
             }
 
             if (Loadouts.Count <= 0)
             {
                 NoLoadoutsLabel.Show();
-                LoadoutsContainer.Hide();
+                LoadoutsList.Hide();
             }
             else
             {
                 NoLoadoutsLabel.Hide();
-                LoadoutsContainer.Show();
+                LoadoutsList.Show();
             }
+        }
+
+        private void LoadoutRow_Clicked(Base sender, Framework.Gwen.Control.EventArguments.ClickedEventArgs arguments)
+        {
+            Loadout selectedLoadout = (Loadout)sender.UserData;
+            if (selectedLoadout == default || !Loadouts.Select(l => l.Id).Contains(selectedLoadout.Id))
+            {
+                return;
+            }
+            
+            SelectedLoadout = selectedLoadout;
+
+            LoadoutSelectors.SetSelectedLoadout(SelectedLoadout);
         }
 
         private void ClearLoadouts()
         {
-            LoadoutsContainer?.ClearCreatedChildren();
-            LoadoutComponents?.DisposeAll();
+            LoadoutsList?.Clear();
+            LoadoutsList?.UnselectAll();
+            SelectedLoadout = null;
         }
 
         private void NewLoadoutButton_Clicked(Base sender, Framework.Gwen.Control.EventArguments.ClickedEventArgs arguments)
@@ -156,12 +180,10 @@ namespace Intersect.Client.Interface.Game.Character.Panels
         public int Height => ParentContainer.Height;
         public int Width => ParentContainer.Width;
 
-        public LoadoutRowComponent(Base parent, 
-            Loadout loadout,
+        public LoadoutRowComponent(Base parent,
             string containerName, 
             ComponentList<GwenComponent> referenceList = null) : base(parent, containerName, "LoadoutRowComponent", referenceList)
         {
-            Loadout = loadout;
         }
 
         public override void Initialize()
@@ -191,6 +213,11 @@ namespace Intersect.Client.Interface.Game.Character.Panels
             ApplyButton.Clicked += ApplyButton_Clicked;
             OverwriteButton.Clicked += OverwriteButton_Clicked;
             RemoveButton.Clicked += RemoveButton_Clicked;
+        }
+
+        public void SetSelectedLoadout(Loadout loadout)
+        {
+            Loadout = loadout;
         }
 
         private void RemoveButton_Clicked(Base sender, Framework.Gwen.Control.EventArguments.ClickedEventArgs arguments)
