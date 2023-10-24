@@ -1,9 +1,13 @@
 ﻿using Intersect.Client.Core;
 using Intersect.Client.Framework.File_Management;
 using Intersect.Client.Framework.Gwen.Control;
+using Intersect.Client.Framework.Gwen.Input;
+using Intersect.Client.General;
 using Intersect.Client.Interface.Components;
 using Intersect.Client.Interface.Game.Components;
 using Intersect.Client.Interface.Game.Crafting;
+using Intersect.Client.Interface.Game.DescriptionWindows;
+using Intersect.Client.Networking;
 using Intersect.Client.Utilities;
 using Intersect.GameObjects;
 using Intersect.GameObjects.Crafting;
@@ -12,12 +16,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Intersect.Client.Interface.Game.InputBox;
 
 namespace Intersect.Client.Interface.Game.Character.Panels
 {
     public static class CharacterWishlistController
     {
         public static List<Guid> Wishlist { get; set; } = new List<Guid>();
+
+        public static bool ServerUpdate { get; set; }
     }
 
     public class CharacterWishlistPanel : SearchableCharacterWindowPanel
@@ -40,7 +47,11 @@ namespace Intersect.Client.Interface.Game.Character.Panels
 
         private ScrollControl IngredientContainer { get; set; }
 
-        private List<RecipeItem> IngredientImages { get; set; } = new List<RecipeItem>();
+        private ComponentList<CraftItemComponent> CraftItemComponents { get; set; } = new ComponentList<CraftItemComponent>();
+
+        private ItemDescriptionWindow CraftItemDescription { get; set; }
+
+        private Button RemoveFromWishlistButton { get; set; }
 
         public CharacterWishlistPanel(ImagePanel panelBackground)
         {
@@ -48,7 +59,7 @@ namespace Intersect.Client.Interface.Game.Character.Panels
             mBackground = new ImagePanel(mParentContainer, "CharacterWindowMAO_Wishlist");
 
             Initialize();
-            mBackground.LoadJsonUi(Framework.File_Management.GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
+            mBackground.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
             PostInitialize();
         }
 
@@ -67,11 +78,57 @@ namespace Intersect.Client.Interface.Game.Character.Panels
 
             CraftBg = new ImagePanel(mBackground, "CraftingBg");
             IngredientContainer = new ScrollControl(CraftBg, "IngredientContainer");
+
+            RemoveFromWishlistButton = new Button(mBackground, "RemoveFromWishlistButton")
+            {
+                Text = "REMOVE"
+            };
+            RemoveFromWishlistButton.Clicked += RemoveFromWishlistButton_Clicked;
+
+            CraftImage = new ImageFrameComponent(CraftBg, "CraftImage", "loot_item.png", string.Empty, GameContentManager.TextureType.Item, 1, 32);
+        }
+
+        private void RemoveFromWishlistButton_Clicked(Base sender, Framework.Gwen.Control.EventArguments.ClickedEventArgs arguments)
+        {
+            if (SelectedCraft == default)
+            {
+                return;
+            }
+
+            _ = new InputBox("REMOVE FROM WISHLIST",
+                $"Do you want to remove {SelectedCraft.Name} from your wishlist?",
+                false,
+                InputType.YesNo,
+                (snd, args) =>
+                {
+                    PacketSender.SendRemoveWishlistItem(SelectedCraft.Id);
+                    ResetSelection();
+                },
+                null,
+                null);
+        }
+
+        private void Image_HoverLeave(Base sender, EventArgs arguments)
+        {
+            CraftItemDescription?.Hide();
+        }
+
+        private void Image_HoverEnter(Base sender, EventArgs arguments)
+        {
+            if (InputHandler.MouseFocus != null)
+            {
+                return;
+            }
+
+            CraftItemDescription?.Show();
         }
 
         public void PostInitialize()
         {
-
+            CraftImage.Initialize();
+            
+            CraftImage.Image.HoverEnter += Image_HoverEnter;
+            CraftImage.Image.HoverLeave += Image_HoverLeave;
         }
 
         public override void Show()
@@ -83,9 +140,28 @@ namespace Intersect.Client.Interface.Game.Character.Panels
             Refresh();
         }
 
+        public override void Hide()
+        {
+            base.Hide();
+
+            ClearRecipes();
+        }
+
         public override void Update()
         {
-            return;
+            if (CharacterWishlistController.ServerUpdate)
+            {
+                Refresh();
+            }
+
+            var emptyWishlist = Crafts.Count <= 0;
+
+            EmptyWishlistLabel.IsHidden = !emptyWishlist;
+            WishlistBg.IsHidden = emptyWishlist;
+            CraftBg.IsHidden = SelectedCraft == null;
+            RemoveFromWishlistButton.IsHidden = SelectedCraft == null;
+
+            CharacterWishlistController.ServerUpdate = false;
         }
 
         protected override void ClearSearchClicked()
@@ -104,6 +180,7 @@ namespace Intersect.Client.Interface.Game.Character.Panels
         {
             Wishlist.ScrollToTop();
             Wishlist.UnselectAll();
+            SelectedCraft = null;
         }
 
         private void Refresh()
@@ -126,12 +203,6 @@ namespace Intersect.Client.Interface.Game.Character.Panels
 
                 craftRow.Selected += CraftRow_Selected;
             }
-
-            var emptyWishlist = Crafts.Count <= 0;
-
-            EmptyWishlistLabel.IsHidden = !emptyWishlist;
-            WishlistBg.IsHidden = emptyWishlist;
-            CraftBg.IsHidden = SelectedCraft == null;
         }
 
         private void CraftRow_Selected(Base sender, Framework.Gwen.Control.EventArguments.ItemSelectedEventArgs arguments)
@@ -146,7 +217,8 @@ namespace Intersect.Client.Interface.Game.Character.Panels
         private void ClearRecipes()
         {
             IngredientContainer.ClearCreatedChildren();
-            IngredientImages.Clear();
+            CraftItemComponents.DisposeAll();
+            CraftItemDescription?.Dispose();
         }
 
         private void LoadRecipe()
@@ -163,15 +235,31 @@ namespace Intersect.Client.Interface.Game.Character.Panels
                     continue;
                 }
 
-                var recipeItem = new RecipeItem(IngredientContainer, item);
-                recipeItem.Setup($"ingredient_{idx}");
-                IngredientContainer.AddContentTo(recipeItem.Pnl, idx, 16, 16);
+                var component = new CraftItemComponent(IngredientContainer,
+                    $"CraftItem_{idx}", descriptor,
+                    item.Quantity,
+                    mParentContainer.Parent.X,
+                    mParentContainer.Parent.Y + IngredientContainer.Parent.Y,
+                    CustomColors.General.GeneralCompleted,
+                    CustomColors.General.GeneralDisabled);
 
-                recipeItem.LoadItem();
+                CraftItemComponents.Add(component);
 
-                IngredientImages.Add(recipeItem);
+                component.Initialize();
+
+                IngredientContainer.AddContentTo(component.Background, idx, 4, 8);
+
                 idx++;
             }
+
+            var selectedCraftItem = ItemBase.Get(SelectedCraft.ItemId);
+            CraftImage.SetImageTexture(selectedCraftItem.Icon);
+            CraftItemDescription = new ItemDescriptionWindow(selectedCraftItem,
+                1,
+                mParentContainer.Parent.X,
+                mParentContainer.Parent.Y + IngredientContainer.Parent.Y,
+                null);
+            CraftItemDescription.Hide();
         }
     }
 }

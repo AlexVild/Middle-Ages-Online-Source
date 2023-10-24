@@ -2083,6 +2083,13 @@ namespace Intersect.Client.Entities
             return itemsAndQuantities;
         }
 
+        public int GetTotalOfItem(Guid itemId)
+        {
+            return GetInventoryItemsAndQuantities()
+                .Where(kv => kv.Key == itemId)
+                .Aggregate(0, (total, itemAndQuantity) => total += itemAndQuantity.Value);
+        }
+
         public int[] GetSlotsContainingItem(Guid itemId)
         {
             List<int> slots = new List<int>();

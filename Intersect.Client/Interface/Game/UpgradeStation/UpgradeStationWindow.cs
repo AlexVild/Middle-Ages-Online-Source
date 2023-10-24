@@ -4,7 +4,9 @@ using Intersect.Client.Framework.Graphics;
 using Intersect.Client.Framework.Gwen.Control;
 using Intersect.Client.General;
 using Intersect.Client.General.UpgradeStation;
+using Intersect.Client.Interface.Components;
 using Intersect.Client.Interface.Game.Character.Panels;
+using Intersect.Client.Interface.Game.Components;
 using Intersect.Client.Interface.Game.Crafting;
 using Intersect.Client.Interface.Game.Enhancement;
 using Intersect.Client.Interface.ScreenAnimations;
@@ -47,7 +49,7 @@ namespace Intersect.Client.Interface.Game.UpgradeStation
         private EnhancementItemIcon UpgradeItemIconComponent { get; set; }
         private ImagePanel RecipeBg { get; set; }
         private ScrollControl RecipeContainer { get; set; }
-        private List<RecipeItem> RecipeItems { get; set; } = new List<RecipeItem>();
+        private ComponentList<CraftItemComponent> RecipeItems { get; set; } = new ComponentList<CraftItemComponent>();
         private List<Label> RecipeValues = new List<Label>();
 
         private Button CraftButton { get; set; }
@@ -294,58 +296,35 @@ namespace Intersect.Client.Interface.Game.UpgradeStation
             var itemsAndQuantities = Globals.Me.GetInventoryItemsAndQuantities();
 
             ClearRecipes();
-            var craftableQuantity = -1;
             for (var i = 0; i < craft.Ingredients.Count; i++)
             {
-                var ingredient = craft.Ingredients[i];
-                var recipeItem = new RecipeItem(Background, ingredient);
-                RecipeItems.Add(recipeItem);
-                recipeItem.Container = new ImagePanel(RecipeContainer, "CraftingIngredient");
-                recipeItem.Setup("IngredientItemIcon");
-
-                var lblTemp = new Label(recipeItem.Container, "IngredientItemValue");
-                var onHand = 0;
-                if (itemsAndQuantities.ContainsKey(ingredient.ItemId))
+                var descriptor = ItemBase.Get(craft.Ingredients[i].ItemId);
+                if (descriptor == default)
                 {
-                    onHand = itemsAndQuantities[ingredient.ItemId];
+                    continue;
                 }
 
-                lblTemp.Text = $"{onHand}/{ingredient.Quantity}";
-                var possibleToCraft = (int)Math.Floor(onHand / (float)ingredient.Quantity);
+                var component = new CraftItemComponent(RecipeContainer,
+                    $"CraftItem_{i}", descriptor,
+                    craft.Ingredients[i].Quantity,
+                    Background.X,
+                    Background.Y,
+                    new Color(255, 30, 74, 157),
+                    new Color(50, 19, 0));
 
-                if (craftableQuantity == -1 || possibleToCraft < craftableQuantity)
-                {
-                    craftableQuantity = possibleToCraft;
-                }
+                RecipeItems.Add(component);
 
-                RecipeValues.Add(lblTemp);
+                component.Initialize();
 
-                recipeItem.Container.LoadJsonUi(Framework.File_Management.GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
-                recipeItem.LoadItem();
-
-                var xPadding = RecipeItems[i].Container.Margin.Left + RecipeItems[i].Container.Margin.Right;
-                var yPadding = RecipeItems[i].Container.Margin.Top + RecipeItems[i].Container.Margin.Bottom;
-                RecipeItems[i]
-                    .Container.SetPosition(
-                        i %
-                        ((RecipeContainer.Width - RecipeContainer.GetVerticalScrollBar().Width) /
-                         (RecipeItems[i].Container.Width + xPadding)) *
-                        (RecipeItems[i].Container.Width + xPadding) +
-                        xPadding,
-                        i /
-                        ((RecipeContainer.Width - RecipeContainer.GetVerticalScrollBar().Width) /
-                         (RecipeItems[i].Container.Width + xPadding)) *
-                        (RecipeItems[i].Container.Height + yPadding) +
-                        yPadding
-                    );
+                RecipeContainer.AddContentTo(component.Background, i, 4, 8);
             }
         }
 
         private void ClearRecipes()
         {
             RecipeContainer.ClearCreatedChildren();
-            RecipeItems.Clear();
-            RecipeValues.Clear();
+            RecipeItems?.DisposeAll();
+            RecipeValues?.Clear();
         }
 
         private void Craft_Selected(Base sender, Framework.Gwen.Control.EventArguments.ItemSelectedEventArgs arguments)

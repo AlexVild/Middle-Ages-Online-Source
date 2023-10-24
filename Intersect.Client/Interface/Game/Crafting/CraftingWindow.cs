@@ -7,8 +7,10 @@ using Intersect.Client.Framework.Graphics;
 using Intersect.Client.Framework.Gwen.Control;
 using Intersect.Client.Framework.Gwen.Control.EventArguments;
 using Intersect.Client.General;
+using Intersect.Client.Interface.Components;
 using Intersect.Client.Interface.Game.Character.Panels;
 using Intersect.Client.Interface.Game.Chat;
+using Intersect.Client.Interface.Game.Components;
 using Intersect.Client.Localization;
 using Intersect.Client.Networking;
 using Intersect.Client.Utilities;
@@ -165,18 +167,10 @@ namespace Intersect.Client.Interface.Game.Crafting
 
         private void LoadCraftItems(Guid id)
         {
+            ClearComponents();
+
             //Combined item
             mCraftId = id;
-            if (mCombinedItem != null)
-            {
-                mCraftWindow.Children.Remove(mCombinedItem.Container);
-            }
-
-            //Clear the old item description box
-            if (mCombinedItem != null && mCombinedItem.DescWindow != null)
-            {
-                mCombinedItem.DescWindow.Dispose();
-            }
 
             if (!Globals.ActiveCraftingTable.Crafts.Contains(id))
             {
@@ -230,54 +224,10 @@ namespace Intersect.Client.Interface.Game.Crafting
 
             var craftableQuantity = -1;
 
-            for (var i = 0; i < craft.Ingredients.Count; i++)
-            {
-                mItems.Add(new RecipeItem(mCraftWindow, craft.Ingredients[i]));
-                mItems[i].Container = new ImagePanel(mItemContainer, "CraftingIngredient");
-                mItems[i].Setup("IngredientItemIcon");
-
-                var lblTemp = new Label(mItems[i].Container, "IngredientItemValue");
-
-                var onHand = 0;
-                if (itemsAndQuantities.ContainsKey(craft.Ingredients[i].ItemId))
-                {
-                    onHand = itemsAndQuantities[craft.Ingredients[i].ItemId];
-                }
-
-                lblTemp.Text = onHand + "/" + craft.Ingredients[i].Quantity;
-
-                var possibleToCraft = (int)Math.Floor(onHand / (double)craft.Ingredients[i].Quantity);
-
-                if (craftableQuantity == -1 || possibleToCraft < craftableQuantity)
-                {
-                    craftableQuantity = possibleToCraft;
-                }
-
-                mValues.Add(lblTemp);
-
-                mItems[i].Container.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
-
-                mItems[i].LoadItem();
-
-                var xPadding = mItems[i].Container.Margin.Left + mItems[i].Container.Margin.Right;
-                var yPadding = mItems[i].Container.Margin.Top + mItems[i].Container.Margin.Bottom;
-                mItems[i]
-                    .Container.SetPosition(
-                        i %
-                        ((mItemContainer.Width - mItemContainer.GetVerticalScrollBar().Width) /
-                         (mItems[i].Container.Width + xPadding)) *
-                        (mItems[i].Container.Width + xPadding) +
-                        xPadding,
-                        i /
-                        ((mItemContainer.Width - mItemContainer.GetVerticalScrollBar().Width) /
-                         (mItems[i].Container.Width + xPadding)) *
-                        (mItems[i].Container.Height + yPadding) +
-                        yPadding
-                    );
-            }
-
+            var hasRecipe = true;
             if (craft.Recipe != Guid.Empty && !Globals.Me.UnlockedRecipes.Contains(craft.Recipe))
             {
+                hasRecipe = false;
                 mCraftWindow.SetImage(CantCraftBg, CantCraftBg.Name, WindowControl.ControlState.Active);
                 mCraftWindow.SetImage(CantCraftBg, CantCraftBg.Name, WindowControl.ControlState.Inactive);
                 mCraft.Disable();
@@ -308,6 +258,29 @@ namespace Intersect.Client.Interface.Game.Crafting
                 NeedsRecipeLabel.Hide();
                 mBar.Show();
                 mBarContainer.Show();
+            }
+
+            for (var i = 0; i < craft.Ingredients.Count; i++)
+            {
+                var descriptor = ItemBase.Get(craft.Ingredients[i].ItemId);
+                if (descriptor == default)
+                {
+                    continue;
+                }
+
+                var component = new CraftItemComponent(mItemContainer,
+                    $"CraftItem_{i}", descriptor,
+                    craft.Ingredients[i].Quantity,
+                    mItemContainer.Parent.X,
+                    mItemContainer.Parent.Y + mItemContainer.Parent.Y,
+                    hasRecipe ? CustomColors.General.GeneralCompleted : CustomColors.General.GeneralMuted,
+                    hasRecipe ? CustomColors.General.GeneralDisabled : CustomColors.General.GeneralMuted);
+
+                CraftItemComponents.Add(component);
+
+                component.Initialize();
+
+                mItemContainer.AddContentTo(component.Background, i, 4, 8);
             }
 
             //Update craft buttons!
@@ -368,6 +341,7 @@ namespace Intersect.Client.Interface.Game.Crafting
 
         public void Hide()
         {
+            ClearComponents();
             if (Crafting == false)
             {
                 mCraftWindow.IsHidden = true;
@@ -564,6 +538,8 @@ namespace Intersect.Client.Interface.Game.Crafting
         private Label mSearchLabel;
         private Button mClearButton;
 
+        private ComponentList<CraftItemComponent> CraftItemComponents { get; set; } = new ComponentList<CraftItemComponent>();
+
         private void _CraftingWindow()
         {
             mTextboxBg = new ImagePanel(mCraftWindow, "Textbox");
@@ -605,6 +581,23 @@ namespace Intersect.Client.Interface.Game.Crafting
             LoadCrafts();
             Refresh = true;
             LoadCraftItems(mCraftId);
+        }
+
+        public void ClearComponents()
+        {
+            mItemContainer?.ClearCreatedChildren();
+            CraftItemComponents?.DisposeAll();
+
+            if (mCombinedItem != null)
+            {
+                mCraftWindow.Children.Remove(mCombinedItem.Container);
+            }
+
+            //Clear the old item description box
+            if (mCombinedItem != null && mCombinedItem.DescWindow != null)
+            {
+                mCombinedItem.DescWindow.Dispose();
+            }
         }
     }
 }

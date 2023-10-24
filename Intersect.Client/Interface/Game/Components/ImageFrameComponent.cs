@@ -1,4 +1,5 @@
 ﻿using Intersect.Client.Core;
+using Intersect.Client.Framework.Graphics;
 using Intersect.Client.Framework.Gwen.Control;
 using Intersect.Client.General;
 using Intersect.Client.Interface.Components;
@@ -17,7 +18,7 @@ namespace Intersect.Client.Interface.Game.Components
 
         private string ImageTexture { get; set; }
         private TextureType ImageTextureType { get; set; }
-        protected ImagePanel Image { get; set; }
+        public ImagePanel Image { get; set; }
 
         public int X => ParentContainer.X;
         public int Y => ParentContainer.Y;
@@ -64,12 +65,21 @@ namespace Intersect.Client.Interface.Game.Components
             Frame.SetSize(frameTexture.GetWidth() * Scale, frameTexture.GetHeight() * Scale);
 
             // fit to texture height
+            FitImageToFrame();
+
+            SelfContainer.SetSize(Frame.Width, Frame.Height);
+
+            FitParentToComponent();
+        }
+
+        private void FitImageToFrame()
+        {
             if (Image.Texture != null)
             {
                 var frameWidth = Frame.Width - BorderWidth;
                 var frameHeight = Frame.Height - BorderWidth;
 
-                var maxSize = Math.Min(frameHeight, Image.Texture.Height);
+                var maxSize = Math.Max(frameHeight, Image.Texture.Height);
 
                 var ratio = (float)maxSize / Image.Texture.Height;
                 var height = maxSize;
@@ -77,11 +87,8 @@ namespace Intersect.Client.Interface.Game.Components
 
                 Image.SetSize((int)width, height);
                 Image.AddAlignment(Framework.Gwen.Alignments.Center);
+                Image.ProcessAlignments();
             }
-
-            SelfContainer.SetSize(Frame.Width, Frame.Height);
-
-            FitParentToComponent();
         }
 
         public void SetImageRenderColor(Color color)
@@ -93,6 +100,12 @@ namespace Intersect.Client.Interface.Game.Components
         {
             Frame.SetToolTipText(text);
             Image.SetToolTipText(text);
+        }
+
+        public void SetImageTexture(string texture)
+        {
+            Image.Texture = Globals.ContentManager.GetTexture(ImageTextureType, texture);
+            FitImageToFrame();
         }
     }
 }

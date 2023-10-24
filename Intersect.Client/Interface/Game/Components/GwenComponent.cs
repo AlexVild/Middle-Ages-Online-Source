@@ -25,6 +25,8 @@ namespace Intersect.Client.Interface.Game.Components
         /// </summary>
         protected ImagePanel SelfContainer { get; set; }
 
+        public ImagePanel Background => ParentContainer;
+
         public GwenComponent(
             Base parent,
             string containerName,

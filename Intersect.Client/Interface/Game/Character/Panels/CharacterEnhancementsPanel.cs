@@ -276,6 +276,8 @@ namespace Intersect.Client.Interface.Game.Character.Panels
             mSelectedEnhancement = (EnhancementMenuItem)((ListBoxRow)sender).UserData;
             ClearEnhancementItems();
 
+            EnhancementItemBg.Show();
+
             if (!mSelectedEnhancement.Descriptor.PrerequisitesMet(Globals.Me.KnownEnhancements))
             {
                 EnhancementItemBg.Texture = PrereqNotMetTexture;
@@ -365,8 +367,6 @@ namespace Intersect.Client.Interface.Game.Character.Panels
                 "Enhancement Known!" :
                 ""
                 );
-
-            EnhancementItemBg.Show();
         }
 
         private void ClearEnhancementItems()

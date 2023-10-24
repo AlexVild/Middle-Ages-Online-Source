@@ -2997,6 +2997,8 @@ namespace Intersect.Client.Networking
             {
                 CharacterWishlistController.Wishlist = packet.Wishlist.ToList();
             }
+
+            CharacterWishlistController.ServerUpdate = true;
         }
     }
 }
