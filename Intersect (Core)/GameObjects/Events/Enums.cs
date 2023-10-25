@@ -323,13 +323,13 @@ namespace Intersect.GameObjects.Events
         [Description("Highest Combo")]
         Combo,
 
-        [Description("Dungeon Completions")]
+        [Description("Dungeon Completions"), RelatedTable(GameObjectType.Dungeon)]
         TotalDungeonCompletions,
 
-        [Description("Group Dungeon Times")]
+        [Description("Group Dungeon Times"), RelatedTable(GameObjectType.Dungeon)]
         GroupDungeonTimes,
 
-        [Description("Solo Dungeon Times")]
+        [Description("Solo Dungeon Times"), RelatedTable(GameObjectType.Dungeon)]
         SoloDungeonTimes,
 
         [Description("Melee Victories")]
