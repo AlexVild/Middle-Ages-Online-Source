@@ -752,6 +752,7 @@ namespace Intersect.Editor.Forms.DockingElements
                     warpAttribute.InstanceType = (MapInstanceType)cmbInstanceType.SelectedIndex;
                     warpAttribute.WarpSound = TextUtils.SanitizeNone(cmbWarpSound.Text);
                     warpAttribute.DungeonId = DungeonDescriptor.IdFromList(cmbDungeon.SelectedIndex - 1);
+                    warpAttribute.SharedLives = (int)nudSharedLives.Value;
                     break;
 
                 case MapAttributes.Sound:
@@ -1321,6 +1322,7 @@ namespace Intersect.Editor.Forms.DockingElements
             pnlLights.Hide();
             pnlEvents.Hide();
             pnlNpcs.Hide();
+            nudSharedLives.Enabled = (MapInstanceType)cmbInstanceType.SelectedIndex == MapInstanceType.Shared;
             Globals.SelectedMapNpc = -1;
 
             //Force Game Object Lists to Refresh
@@ -1585,6 +1587,11 @@ namespace Intersect.Editor.Forms.DockingElements
             var sound = (CommonSounds)cmbCommonSounds.SelectedIndex;
 
             cmbWarpSound.Text = sound.GetDescription();
+        }
+
+        private void cmbInstanceType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            nudSharedLives.Enabled = (MapInstanceType)cmbInstanceType.SelectedIndex == MapInstanceType.Shared;
         }
     }
 

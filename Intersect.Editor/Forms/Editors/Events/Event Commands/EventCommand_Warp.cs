@@ -80,6 +80,9 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
 
             cmbCommonSounds.Items.Clear();
             cmbCommonSounds.Items.AddRange(Enum.GetNames(typeof(CommonSounds)));
+
+            nudSharedLives.Value = mMyCommand.SharedLives;
+            nudSharedLives.Enabled = cmbInstanceType.SelectedIndex == (int)MapInstanceType.Shared;
         }
 
         private void InitLocalization()
@@ -116,6 +119,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             mMyCommand.InstanceType = (MapInstanceType) cmbInstanceType.SelectedIndex;
             mMyCommand.DungeonId = DungeonDescriptor.IdFromList(cmbDungeon.SelectedIndex - 1);
             mMyCommand.Sound= TextUtils.SanitizeNone(cmbSound?.Text);
+            mMyCommand.SharedLives = (int)nudSharedLives.Value;
             
             mEventEditor.FinishCommandEdit();
         }
@@ -190,7 +194,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
 
         private void darkComboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-
+            nudSharedLives.Enabled = cmbInstanceType.SelectedIndex == (int)MapInstanceType.Shared;
         }
 
         private void chkCreateInstance_CheckedChanged(object sender, EventArgs e)

@@ -847,6 +847,12 @@ namespace Intersect.Server.Entities.Events
             Stack<CommandInstance> callStack
         )
         {
+            if (player == null)
+            {
+                return;
+            }
+
+            player.NextInstanceLives = command.SharedLives - 1;
             if (command.ChangeInstance)
             {
                 player.Warp(

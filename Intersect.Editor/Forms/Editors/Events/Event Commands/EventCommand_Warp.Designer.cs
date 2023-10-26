@@ -53,8 +53,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.lblY = new System.Windows.Forms.Label();
             this.lblMap = new System.Windows.Forms.Label();
             this.lblX = new System.Windows.Forms.Label();
+            this.lblLives = new System.Windows.Forms.Label();
+            this.nudSharedLives = new DarkUI.Controls.DarkNumericUpDown();
             this.grpWarp.SuspendLayout();
             this.grpInstanceSettings.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSharedLives)).BeginInit();
             this.SuspendLayout();
             // 
             // grpWarp
@@ -90,7 +93,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // lblCommonSounds
             // 
             this.lblCommonSounds.AutoSize = true;
-            this.lblCommonSounds.Location = new System.Drawing.Point(95, 224);
+            this.lblCommonSounds.Location = new System.Drawing.Point(95, 256);
             this.lblCommonSounds.Name = "lblCommonSounds";
             this.lblCommonSounds.Size = new System.Drawing.Size(90, 13);
             this.lblCommonSounds.TabIndex = 67;
@@ -109,7 +112,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbCommonSounds.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbCommonSounds.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbCommonSounds.FormattingEnabled = true;
-            this.cmbCommonSounds.Location = new System.Drawing.Point(191, 221);
+            this.cmbCommonSounds.Location = new System.Drawing.Point(191, 253);
             this.cmbCommonSounds.Name = "cmbCommonSounds";
             this.cmbCommonSounds.Size = new System.Drawing.Size(175, 21);
             this.cmbCommonSounds.TabIndex = 66;
@@ -120,7 +123,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // lblSound
             // 
             this.lblSound.AutoSize = true;
-            this.lblSound.Location = new System.Drawing.Point(12, 197);
+            this.lblSound.Location = new System.Drawing.Point(12, 229);
             this.lblSound.Name = "lblSound";
             this.lblSound.Size = new System.Drawing.Size(41, 13);
             this.lblSound.TabIndex = 65;
@@ -139,7 +142,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbSound.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbSound.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbSound.FormattingEnabled = true;
-            this.cmbSound.Location = new System.Drawing.Point(59, 194);
+            this.cmbSound.Location = new System.Drawing.Point(59, 226);
             this.cmbSound.Name = "cmbSound";
             this.cmbSound.Size = new System.Drawing.Size(307, 21);
             this.cmbSound.TabIndex = 64;
@@ -161,6 +164,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             this.grpInstanceSettings.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.grpInstanceSettings.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpInstanceSettings.Controls.Add(this.nudSharedLives);
+            this.grpInstanceSettings.Controls.Add(this.lblLives);
             this.grpInstanceSettings.Controls.Add(this.lblDungeon);
             this.grpInstanceSettings.Controls.Add(this.cmbDungeon);
             this.grpInstanceSettings.Controls.Add(this.cmbInstanceType);
@@ -168,7 +173,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpInstanceSettings.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpInstanceSettings.Location = new System.Drawing.Point(183, 86);
             this.grpInstanceSettings.Name = "grpInstanceSettings";
-            this.grpInstanceSettings.Size = new System.Drawing.Size(183, 102);
+            this.grpInstanceSettings.Size = new System.Drawing.Size(183, 134);
             this.grpInstanceSettings.TabIndex = 62;
             this.grpInstanceSettings.TabStop = false;
             this.grpInstanceSettings.Text = "Instance Settings";
@@ -177,7 +182,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // lblDungeon
             // 
             this.lblDungeon.AutoSize = true;
-            this.lblDungeon.Location = new System.Drawing.Point(6, 59);
+            this.lblDungeon.Location = new System.Drawing.Point(6, 88);
             this.lblDungeon.Name = "lblDungeon";
             this.lblDungeon.Size = new System.Drawing.Size(54, 13);
             this.lblDungeon.TabIndex = 66;
@@ -196,7 +201,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbDungeon.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.cmbDungeon.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbDungeon.FormattingEnabled = true;
-            this.cmbDungeon.Location = new System.Drawing.Point(8, 75);
+            this.cmbDungeon.Location = new System.Drawing.Point(8, 104);
             this.cmbDungeon.Name = "cmbDungeon";
             this.cmbDungeon.Size = new System.Drawing.Size(169, 21);
             this.cmbDungeon.TabIndex = 65;
@@ -374,6 +379,39 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.lblX.Text = "X: 0";
             this.lblX.Click += new System.EventHandler(this.lblX_Click);
             // 
+            // lblLives
+            // 
+            this.lblLives.AutoSize = true;
+            this.lblLives.Location = new System.Drawing.Point(6, 61);
+            this.lblLives.Name = "lblLives";
+            this.lblLives.Size = new System.Drawing.Size(72, 13);
+            this.lblLives.TabIndex = 67;
+            this.lblLives.Text = "Shared Lives:";
+            // 
+            // nudSharedLives
+            // 
+            this.nudSharedLives.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudSharedLives.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudSharedLives.Location = new System.Drawing.Point(84, 59);
+            this.nudSharedLives.Maximum = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
+            this.nudSharedLives.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudSharedLives.Name = "nudSharedLives";
+            this.nudSharedLives.Size = new System.Drawing.Size(93, 20);
+            this.nudSharedLives.TabIndex = 121;
+            this.nudSharedLives.Value = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
+            // 
             // EventCommandWarp
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -387,6 +425,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.grpWarp.PerformLayout();
             this.grpInstanceSettings.ResumeLayout(false);
             this.grpInstanceSettings.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSharedLives)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -416,5 +455,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private DarkComboBox cmbSound;
         private System.Windows.Forms.Label lblCommonSounds;
         private DarkComboBox cmbCommonSounds;
+        private System.Windows.Forms.Label lblLives;
+        private DarkNumericUpDown nudSharedLives;
     }
 }

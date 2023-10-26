@@ -300,9 +300,6 @@ namespace Intersect.Server.Entities
         public int SharedInstanceRespawnY { get; set; }
         public int SharedInstanceRespawnDir { get; set; }
 
-        [NotMapped, JsonIgnore]
-        public int InstanceLives { get; set; }
-
         public bool InVehicle { get; set; } = false;
 
         public string VehicleSprite { get; set; } = string.Empty;
@@ -509,6 +506,14 @@ namespace Intersect.Server.Entities
                 Logout(softLogout);
             }
         }
+        
+        private void RemoveFromInstanceController(Guid mapInstanceId)
+        {
+            if (InstanceProcessor.TryGetInstanceController(mapInstanceId, out var instanceController))
+            {
+                instanceController.RemovePlayer(Id);
+            }
+        }
 
         private void Logout(bool softLogout = false)
         {
@@ -516,6 +521,8 @@ namespace Intersect.Server.Entities
             {
                 instance.RemoveEntity(this);
             }
+
+            RemoveFromInstanceController(MapInstanceId);
 
             //Update parties
             LeaveParty(true);
@@ -833,7 +840,7 @@ namespace Intersect.Server.Entities
                         {
                             if (!surrMap.TryGetInstance(MapInstanceId, out mapInstance))
                             {
-                                surrMap.TryCreateInstance(MapInstanceId, out mapInstance);
+                                surrMap.TryCreateInstance(MapInstanceId, out mapInstance, this);
                             }
                         }
 
@@ -1204,33 +1211,18 @@ namespace Intersect.Server.Entities
             CombatTimer = 0;
             EndCombo();
 
-            // Subtract from instance lives if in a shared instance
-            if (InstanceType == MapInstanceType.Shared && Options.MaxSharedInstanceLives >= 0 && InstanceProcessor.TryGetInstanceController(MapInstanceId, out var instCtrl) && instCtrl.DungeonActive)
+            // Subtract from instance lives if in a shared instance...
+            if (InstanceType == MapInstanceType.Shared && Options.MaxSharedInstanceLives >= 0 && InstanceProcessor.TryGetInstanceController(MapInstanceId, out var instCtrl))
             {
-                InstanceLives--;
-                SendLivesRemainingMessage();
-                // And the totals from any party members
-                if (Party != null && Party.Count > 1)
+                // .. but only if the dungeon is active, unless...
+                if (instCtrl.Dungeon != null && instCtrl.DungeonActive)
                 {
-                    foreach (Player member in Party)
-                    {
-                        if (member.Id != Id)
-                        {
-                            // Keep party member instance lives in sync
-                            member.InstanceLives--;
-                            if (member.InstanceType == MapInstanceType.Shared && member.MapInstanceId == MapInstanceId)
-                            {
-                                if (member.InstanceLives < 0 && Options.BootAllFromInstanceWhenOutOfLives)
-                                {
-                                    member.Die();
-                                }
-                                else
-                                {
-                                    member.SendLivesRemainingMessage();
-                                }
-                            }
-                        }
-                    }
+                    instCtrl.LoseInstanceLife();
+                }
+                // We aren't in a dungeon but instead leveraging shared instances for a different use
+                else
+                {
+                    instCtrl.LoseInstanceLife();
                 }
             }
 
@@ -2176,7 +2168,8 @@ namespace Intersect.Server.Entities
             MapInstanceType mapInstanceType = MapInstanceType.NoChange,
             bool fromLogin = false,
             bool forceInstanceChange = false,
-            Guid? dungeonId = null
+            Guid? dungeonId = null,
+            int instanceLives = 0
         )
         {
             #region shortcircuit exits
@@ -2233,11 +2226,15 @@ namespace Intersect.Server.Entities
                 if (!newMap.TryGetInstance(MapInstanceId, out newMapInstance))
                 {
                     // Create a new instance for the map we're on
-                    newMap.TryCreateInstance(MapInstanceId, out newMapInstance);
+                    newMap.TryCreateInstance(MapInstanceId, out newMapInstance, this);
                     foreach (var surrMap in newSurroundingMaps)
                     {
-                        MapController.Get(surrMap).TryCreateInstance(MapInstanceId, out var surrMapInstance);
+                        MapController.Get(surrMap).TryCreateInstance(MapInstanceId, out _, this);
                     }
+                }
+                else
+                {
+                    _ = TryAddToInstanceController();
                 }
             }
 
@@ -2253,7 +2250,7 @@ namespace Intersect.Server.Entities
             // If we've changed instances, send data to instance entities/entities to player
             if (onNewInstance || forceInstanceChange)
             {
-                SendToNewMapInstance(newMap);
+                SendToNewMapInstance(newMap, instanceLives);
                 // Clear all events - get fresh ones from the new instance to re-fresh event locations
                 foreach (var evt in EventLookup)
                 {
@@ -2387,22 +2384,15 @@ namespace Intersect.Server.Entities
             VehicleSprite = string.Empty;
         }
 
-        public void SendLivesRemainingMessage()
-        {
-            PacketSender.SendInstanceLivesPacket(this, (byte)InstanceLives, false);
-            if (InstanceLives > 0)
-            {
-                PacketSender.SendChatMsg(this, Strings.Parties.instancelivesremaining.ToString(InstanceLives + 1), ChatMessageType.Party, CustomColors.Chat.PartyChat);
-            } else
-            {
-                PacketSender.SendChatMsg(this, Strings.Parties.nomorelivesremaining.ToString(InstanceLives + 1), ChatMessageType.Party, CustomColors.Chat.PartyChat);
-            }
-        }
-
         public void WarpToSpawn(bool forceClassRespawn = false)
         {
             var mapId = Guid.Empty;
             byte x = 0, y = 0, dir = 0;
+
+            if (!InstanceProcessor.TryGetInstanceController(MapInstanceId, out var instanceController)) 
+            {
+                ClassRespawn();
+            }
 
             if (Options.SharedInstanceRespawnInInstance && InstanceType == MapInstanceType.Shared && !forceClassRespawn)
             {
@@ -2416,7 +2406,7 @@ namespace Intersect.Server.Entities
                     else
                     {
                         // Check if the player/party have enough lives to spawn in-instance
-                        if (InstanceLives >= 0)
+                        if (!instanceController.OutOfLives)
                         {
                             Warp(SharedInstanceRespawnId, SharedInstanceRespawnX, SharedInstanceRespawnY, (Byte)SharedInstanceRespawnDir);
                         } 
@@ -2556,7 +2546,7 @@ namespace Intersect.Server.Entities
         /// In charge of sending the necessary packet information on an instance change
         /// </summary>
         /// <param name="newMap">The <see cref="MapController"/> we are warping to</param>
-        private void SendToNewMapInstance(MapController newMap)
+        private void SendToNewMapInstance(MapController newMap, int lives = 0)
         {
             // Refresh the client's entity list
             var oldMap = MapController.Get(MapId);
@@ -2565,7 +2555,9 @@ namespace Intersect.Server.Entities
             {
                 PacketSender.SendMapLayerChangedPacketTo(this, oldMap, PreviousMapInstanceId);
                 oldMapInstance.ClearEntityTargetsOf(this); // Remove targets of this entity
+                RemoveFromInstanceController(PreviousMapInstanceId);
             }
+            
             // Clear events - we'll get them again from the map instance's event cache
             EventTileLookup.Clear();
             EventLookup.Clear();
@@ -2584,23 +2576,23 @@ namespace Intersect.Server.Entities
             // Remove items that are meant to only exist in an instance
             RemoveInstanceItems();
             // Update instance lives information for the client
-            UpdateInstanceLivesMessaging();
+            UpdateInstanceLives();
             // Remove timers that aren't meant to proceed beyond an instance change
             EndInstanceChangeTimers();
             // Clear common events from the previous instance
             ClearCommonEvents();
         }
 
-        private void UpdateInstanceLivesMessaging()
+        private void UpdateInstanceLives()
         {
-            if (InstanceType == MapInstanceType.Shared)
+            if (InstanceType != MapInstanceType.Shared || !InstanceProcessor.TryGetInstanceController(MapInstanceId, out var controller))
             {
-                PacketSender.SendInstanceLivesPacket(this, (byte)InstanceLives, false);
+                // non-shared instances don't have lives - tell the client to reset the lives display
+                PacketSender.SendInstanceLivesPacket(this, 0, true);
+                return;
             }
-            else
-            {
-                PacketSender.SendInstanceLivesPacket(this, (byte)0, true);
-            }
+
+            controller.TryInitializeLives(NextInstanceLives, this);
         }
 
         private void RemoveInstanceItems()
@@ -2748,10 +2740,6 @@ namespace Intersect.Server.Entities
 
                     if (isSolo) // Solo instance initialization
                     {
-                        if (Options.MaxSharedInstanceLives > 0)
-                        {
-                            InstanceLives = Options.MaxSharedInstanceLives;
-                        }
                         SharedMapInstanceId = Guid.NewGuid();
                         newMapLayerId = SharedMapInstanceId;
                     } else if (!Options.RejoinableSharedInstances && isPartyLeader) // Non-rejoinable instance initialization
@@ -2764,11 +2752,6 @@ namespace Intersect.Server.Entities
                             foreach (Player member in Party)
                             {
                                 member.SharedMapInstanceId = SharedMapInstanceId;
-                                if (Options.MaxSharedInstanceLives > 0)
-                                {
-                                    member.InstanceLives = Options.MaxSharedInstanceLives;
-                                }
-                                
                                 // Alert party members that the leader has started the dungeon
                                 if (member.Id != Id)
                                 {
@@ -2788,19 +2771,12 @@ namespace Intersect.Server.Entities
                             // Otherwise, if no one is on an instance, create a new instance
                             SharedMapInstanceId = Guid.NewGuid();
 
-                            // And give your party members their instance lives - though this can be exploited when instances are rejoinable, so you'd really
-                            // have to be a freak to have both options on
-                            if (Options.MaxSharedInstanceLives > 0)
+                            foreach (Player member in Party)
                             {
-                                foreach (Player member in Party)
+                                // Alert party members that the leader has started the dungeon
+                                if (member.Id != Id)
                                 {
-                                    member.InstanceLives = Options.MaxSharedInstanceLives;
-
-                                    // Alert party members that the leader has started the dungeon
-                                    if (member.Id != Id)
-                                    {
-                                        PacketSender.SendChatMsg(member, $"{Name} has started a shared instance.", ChatMessageType.Party, sendToast: true);
-                                    }
+                                    PacketSender.SendChatMsg(member, $"{Name} has started a shared instance.", ChatMessageType.Party, sendToast: true);
                                 }
                             }
                         }
@@ -5690,7 +5666,6 @@ namespace Intersect.Server.Entities
                         Party[i], Strings.Parties.joined.ToString(target.Name), ChatMessageType.Party, CustomColors.Alerts.Accepted
                     );
                 }
-                target.InstanceLives = InstanceLives;
                 target.SendPartyTimers();
             }
             else
@@ -8041,6 +8016,7 @@ namespace Intersect.Server.Entities
                         PacketSender.SendPlaySound(this, warpAtt.WarpSound);
                     }
 
+                    NextInstanceLives = warpAtt.SharedLives;
                     Warp(warpAtt.MapId, warpAtt.X, warpAtt.Y, dir, false, 0, false, warpAtt.FadeOnWarp, instanceType, dungeonId: warpAtt.DungeonId);
                 }
 
@@ -9725,5 +9701,19 @@ namespace Intersect.Server.Entities
         {
             PacketSender.SendPlaySound(this, Options.UIDenySound);
         }
+
+        public bool TryAddToInstanceController()
+        {
+            if (InstanceProcessor.TryGetInstanceController(MapInstanceId, out var newInstController))
+            {
+                newInstController.AddPlayer(this);
+                return true;
+            }
+
+            return false;
+        }
+
+        [NotMapped, JsonIgnore]
+        public int NextInstanceLives { get; set; }
     }
 }

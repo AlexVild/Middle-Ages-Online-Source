@@ -62,15 +62,17 @@ namespace Intersect.Client.Interface.Game
                 mLife1.Texture = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Gui, "life_depleted.png");
                 mLife2.Texture = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Gui, "life_depleted.png");
                 mLife3.Texture = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Gui, "life_depleted.png");
-                if (Globals.Me.DungeonLives >= 0)
+
+                // The 254 shenanigans is cause I used a Byte and a negative value overflows lmao whatever
+                if (Globals.Me.DungeonLives >= 0 && Globals.Me.DungeonLives < 254)
                 {
                     mLife1.Texture = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Gui, "life.png");
                 }
-                if (Globals.Me.DungeonLives >= 1)
+                if (Globals.Me.DungeonLives >= 1 && Globals.Me.DungeonLives < 254)
                 {
                     mLife2.Texture = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Gui, "life.png");
                 }
-                if (Globals.Me.DungeonLives >= 2)
+                if (Globals.Me.DungeonLives >= 2 && Globals.Me.DungeonLives < 254)
                 {
                     mLife3.Texture = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Gui, "life.png");
                 }

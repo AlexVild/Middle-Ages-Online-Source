@@ -49,6 +49,10 @@ namespace Intersect.Editor.Forms.Editors
             this.btnSave = new DarkUI.Controls.DarkButton();
             this.btnCancel = new DarkUI.Controls.DarkButton();
             this.grpEditor = new DarkUI.Controls.DarkGroupBox();
+            this.grpExtraControl = new DarkUI.Controls.DarkGroupBox();
+            this.chkStoreLongest = new DarkUI.Controls.DarkCheckBox();
+            this.chkIgnoreCompletion = new DarkUI.Controls.DarkCheckBox();
+            this.chkIgnoreStart = new DarkUI.Controls.DarkCheckBox();
             this.grpRewards = new DarkUI.Controls.DarkGroupBox();
             this.grpGnome = new DarkUI.Controls.DarkGroupBox();
             this.nudGnomeRolls = new DarkUI.Controls.DarkNumericUpDown();
@@ -106,13 +110,10 @@ namespace Intersect.Editor.Forms.Editors
             this.lblFolder = new System.Windows.Forms.Label();
             this.txtName = new DarkUI.Controls.DarkTextBox();
             this.lblName = new System.Windows.Forms.Label();
-            this.grpExtraControl = new DarkUI.Controls.DarkGroupBox();
-            this.chkIgnoreStart = new DarkUI.Controls.DarkCheckBox();
-            this.chkIgnoreCompletion = new DarkUI.Controls.DarkCheckBox();
-            this.chkStoreLongest = new DarkUI.Controls.DarkCheckBox();
             this.toolStrip.SuspendLayout();
             this.grpDungeons.SuspendLayout();
             this.grpEditor.SuspendLayout();
+            this.grpExtraControl.SuspendLayout();
             this.grpRewards.SuspendLayout();
             this.grpGnome.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudGnomeRolls)).BeginInit();
@@ -128,7 +129,6 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudMinutes)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudHours)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudTimerPlayers)).BeginInit();
-            this.grpExtraControl.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolStrip
@@ -346,6 +346,51 @@ namespace Intersect.Editor.Forms.Editors
             this.grpEditor.TabIndex = 55;
             this.grpEditor.TabStop = false;
             this.grpEditor.Text = "Dungeon";
+            // 
+            // grpExtraControl
+            // 
+            this.grpExtraControl.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpExtraControl.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpExtraControl.Controls.Add(this.chkStoreLongest);
+            this.grpExtraControl.Controls.Add(this.chkIgnoreCompletion);
+            this.grpExtraControl.Controls.Add(this.chkIgnoreStart);
+            this.grpExtraControl.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpExtraControl.Location = new System.Drawing.Point(19, 476);
+            this.grpExtraControl.Name = "grpExtraControl";
+            this.grpExtraControl.Size = new System.Drawing.Size(383, 102);
+            this.grpExtraControl.TabIndex = 125;
+            this.grpExtraControl.TabStop = false;
+            this.grpExtraControl.Text = "Additional Properties";
+            // 
+            // chkStoreLongest
+            // 
+            this.chkStoreLongest.AutoSize = true;
+            this.chkStoreLongest.Location = new System.Drawing.Point(15, 65);
+            this.chkStoreLongest.Name = "chkStoreLongest";
+            this.chkStoreLongest.Size = new System.Drawing.Size(124, 17);
+            this.chkStoreLongest.TabIndex = 56;
+            this.chkStoreLongest.Text = "Store Longest Time?";
+            this.chkStoreLongest.CheckedChanged += new System.EventHandler(this.chkStoreLongest_CheckedChanged);
+            // 
+            // chkIgnoreCompletion
+            // 
+            this.chkIgnoreCompletion.AutoSize = true;
+            this.chkIgnoreCompletion.Location = new System.Drawing.Point(15, 42);
+            this.chkIgnoreCompletion.Name = "chkIgnoreCompletion";
+            this.chkIgnoreCompletion.Size = new System.Drawing.Size(153, 17);
+            this.chkIgnoreCompletion.TabIndex = 55;
+            this.chkIgnoreCompletion.Text = "Ignore Completion Events?";
+            this.chkIgnoreCompletion.CheckedChanged += new System.EventHandler(this.darkCheckBox1_CheckedChanged);
+            // 
+            // chkIgnoreStart
+            // 
+            this.chkIgnoreStart.AutoSize = true;
+            this.chkIgnoreStart.Location = new System.Drawing.Point(15, 19);
+            this.chkIgnoreStart.Name = "chkIgnoreStart";
+            this.chkIgnoreStart.Size = new System.Drawing.Size(123, 17);
+            this.chkIgnoreStart.TabIndex = 54;
+            this.chkIgnoreStart.Text = "Ignore Start Events?";
+            this.chkIgnoreStart.CheckedChanged += new System.EventHandler(this.chkIgnoreStart_CheckedChanged);
             // 
             // grpRewards
             // 
@@ -1094,51 +1139,6 @@ namespace Intersect.Editor.Forms.Editors
             this.lblName.TabIndex = 20;
             this.lblName.Text = "Name";
             // 
-            // grpExtraControl
-            // 
-            this.grpExtraControl.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.grpExtraControl.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.grpExtraControl.Controls.Add(this.chkStoreLongest);
-            this.grpExtraControl.Controls.Add(this.chkIgnoreCompletion);
-            this.grpExtraControl.Controls.Add(this.chkIgnoreStart);
-            this.grpExtraControl.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpExtraControl.Location = new System.Drawing.Point(19, 476);
-            this.grpExtraControl.Name = "grpExtraControl";
-            this.grpExtraControl.Size = new System.Drawing.Size(383, 90);
-            this.grpExtraControl.TabIndex = 125;
-            this.grpExtraControl.TabStop = false;
-            this.grpExtraControl.Text = "Additional Properties";
-            // 
-            // chkIgnoreStart
-            // 
-            this.chkIgnoreStart.AutoSize = true;
-            this.chkIgnoreStart.Location = new System.Drawing.Point(15, 19);
-            this.chkIgnoreStart.Name = "chkIgnoreStart";
-            this.chkIgnoreStart.Size = new System.Drawing.Size(123, 17);
-            this.chkIgnoreStart.TabIndex = 54;
-            this.chkIgnoreStart.Text = "Ignore Start Events?";
-            this.chkIgnoreStart.CheckedChanged += new System.EventHandler(this.chkIgnoreStart_CheckedChanged);
-            // 
-            // chkIgnoreCompletion
-            // 
-            this.chkIgnoreCompletion.AutoSize = true;
-            this.chkIgnoreCompletion.Location = new System.Drawing.Point(15, 42);
-            this.chkIgnoreCompletion.Name = "chkIgnoreCompletion";
-            this.chkIgnoreCompletion.Size = new System.Drawing.Size(153, 17);
-            this.chkIgnoreCompletion.TabIndex = 55;
-            this.chkIgnoreCompletion.Text = "Ignore Completion Events?";
-            this.chkIgnoreCompletion.CheckedChanged += new System.EventHandler(this.darkCheckBox1_CheckedChanged);
-            // 
-            // chkStoreLongest
-            // 
-            this.chkStoreLongest.AutoSize = true;
-            this.chkStoreLongest.Location = new System.Drawing.Point(15, 65);
-            this.chkStoreLongest.Name = "chkStoreLongest";
-            this.chkStoreLongest.Size = new System.Drawing.Size(124, 17);
-            this.chkStoreLongest.TabIndex = 56;
-            this.chkStoreLongest.Text = "Store Longest Time?";
-            this.chkStoreLongest.CheckedChanged += new System.EventHandler(this.chkStoreLongest_CheckedChanged);
-            // 
             // frmDungeon
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1160,6 +1160,8 @@ namespace Intersect.Editor.Forms.Editors
             this.grpDungeons.PerformLayout();
             this.grpEditor.ResumeLayout(false);
             this.grpEditor.PerformLayout();
+            this.grpExtraControl.ResumeLayout(false);
+            this.grpExtraControl.PerformLayout();
             this.grpRewards.ResumeLayout(false);
             this.grpGnome.ResumeLayout(false);
             this.grpGnome.PerformLayout();
@@ -1180,8 +1182,6 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudMinutes)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudHours)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudTimerPlayers)).EndInit();
-            this.grpExtraControl.ResumeLayout(false);
-            this.grpExtraControl.PerformLayout();
             this.ResumeLayout(false);
 
         }

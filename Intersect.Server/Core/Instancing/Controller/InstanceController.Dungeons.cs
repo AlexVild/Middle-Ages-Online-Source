@@ -240,12 +240,13 @@ namespace Intersect.Server.Core.Instancing.Controller
             {
                 player.StartCommonEventsWithTrigger(CommonEventTrigger.GnomeCaptured);
                 PacketSender.SendChatMsg(player, "Your party found the treasure gnome! You will receive greater rewards for completion of this dungeon.", Enums.ChatMessageType.Party, CustomColors.General.GeneralPrimary);
-                if (player.InstanceLives >= Options.Instance.Instancing.MaxSharedInstanceLives)
+                if (InstanceLives >= Options.Instance.Instancing.MaxSharedInstanceLives)
                 {
                     break;
                 }
-                player.InstanceLives++;
-                PacketSender.SendInstanceLivesPacket(player, (byte)player.InstanceLives);
+                
+                InstanceLives++;
+                PacketSender.SendInstanceLivesPacket(player, (byte)InstanceLives);
                 PacketSender.SendChatMsg(player, "The treasure gnome awards your party with an additional life!", Enums.ChatMessageType.Party, CustomColors.General.GeneralPrimary);
             }
         }

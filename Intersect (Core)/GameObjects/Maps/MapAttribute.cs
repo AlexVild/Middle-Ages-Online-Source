@@ -154,6 +154,8 @@ namespace Intersect.GameObjects.Maps
 
         public Guid DungeonId { get; set; }
 
+        public int SharedLives { get; set; } = 3;
+
         public override MapAttribute Clone()
         {
             var att = (MapWarpAttribute) base.Clone();
@@ -166,6 +168,7 @@ namespace Intersect.GameObjects.Maps
             att.InstanceType = InstanceType;
             att.WarpSound = WarpSound;
             att.DungeonId = DungeonId;
+            att.SharedLives = SharedLives;
             return att;
         }
 

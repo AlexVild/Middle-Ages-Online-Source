@@ -170,14 +170,14 @@ namespace Intersect.Server.Maps
         private MapActionMessages mActionMessages = new MapActionMessages();
         private MapAnimations mMapAnimations = new MapAnimations();
 
-        public MapInstance(MapController map, Guid mapInstanceId)
+        public MapInstance(MapController map, Guid mapInstanceId, Player creator)
         {
             mMapController = map;
             MapInstanceId = mapInstanceId;
             Id = Guid.NewGuid();
             if (!InstanceProcessor.CurrentControllers.Contains(MapInstanceId))
             {
-                InstanceProcessor.AddInstanceController(MapInstanceId);
+                InstanceProcessor.AddInstanceController(MapInstanceId, creator);
             }
         }
 

@@ -4,6 +4,7 @@ using System.Linq;
 using Intersect.Server.Maps;
 using Intersect.Server.Core.Instancing.Controller;
 using Intersect.GameObjects.Events;
+using Intersect.Server.Entities;
 
 namespace Intersect.Server.Core
 {
@@ -16,6 +17,16 @@ namespace Intersect.Server.Core
         public static bool TryGetInstanceController(Guid instanceId, out InstanceController controller)
         {
             return InstanceControllers.TryGetValue(instanceId, out controller);
+        }
+
+        public static int GetInstanceLives(Guid instanceId)
+        {
+            if (!InstanceControllers.TryGetValue(instanceId, out var controller))
+            {
+                return 0;
+            }
+
+            return controller.InstanceLives;
         }
 
         private static void CleanupOrphanedControllers(List<MapInstance> activeMaps)
@@ -35,11 +46,11 @@ namespace Intersect.Server.Core
             }
         }
 
-        public static void AddInstanceController(Guid mapInstanceId)
+        public static void AddInstanceController(Guid mapInstanceId, Player creator)
         {
             if (!InstanceControllers.ContainsKey(mapInstanceId))
             {
-                InstanceControllers[mapInstanceId] = new InstanceController(mapInstanceId);
+                InstanceControllers[mapInstanceId] = new InstanceController(mapInstanceId, creator);
             }
         }
 
@@ -68,14 +79,7 @@ namespace Intersect.Server.Core
                 }
                 var instanceController = InstanceControllers[instanceId];
 
-                // Cleanup map spawn groups/permadead NPCs; accumulate total player count
-                instanceController.PlayerCount = 0;
-                // Do things that need to occur for _each map_ here
-                foreach (var map in mapInstanceGroup.Value)
-                {
-                    instanceController.PlayerCount += map.GetPlayers().Count;
-                }
-
+                // Cleanup map spawn groups/permadead NPCs
                 instanceController.CleanupSpawnGroups();
 
                 // Process the melee pit random matchmake logic
@@ -90,6 +94,26 @@ namespace Intersect.Server.Core
                 }
                 */
             }
+        }
+
+        public static void AddPlayerToInstance(Guid instanceId, Player player)
+        {
+            if (!InstanceControllers.TryGetValue(instanceId, out var controller))
+            {
+                return;
+            }
+
+            controller.Players.Add(player);
+        }
+
+        public static void RemovePlayerFromInstance(Guid instanceId, Player player)
+        {
+            if (!InstanceControllers.TryGetValue(instanceId, out var controller))
+            {
+                return;
+            }
+
+            controller.Players.RemoveAll(pl => pl.Id == player.Id);
         }
 
         public static void AddNewInstanceVariable(Guid instanceVarId)

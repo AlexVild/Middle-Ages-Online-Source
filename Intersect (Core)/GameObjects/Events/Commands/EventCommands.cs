@@ -611,6 +611,8 @@ namespace Intersect.GameObjects.Events.Commands
         public Guid DungeonId { get; set; } = Guid.Empty;
 
         public string Sound { get; set; }
+
+        public int SharedLives { get; set; }
     }
 
     public class SetMoveRouteCommand : EventCommand
