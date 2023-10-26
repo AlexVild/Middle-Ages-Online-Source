@@ -51,6 +51,8 @@ namespace Intersect.Client.Interface.Game.Character.Equipment
         NumberContainerComponent mMagicAtk { get; set; }
         NumberContainerComponent mMagicDef { get; set; }
 
+        ImagePanel ScaleDownImage { get; set; }
+
         private GameTexture DayBgTexture;
         private GameTexture NightBgTexture;
         private GameTexture InteriorBgTexture;
@@ -63,12 +65,25 @@ namespace Intersect.Client.Interface.Game.Character.Equipment
 
         private ComponentList<IGwenComponent> ContainerComponents;
 
+        private List<GameTexture> ScaleDownTextures = new List<GameTexture>();
+
         public CharacterEquipmentWindow(CharacterWindow parent, ImagePanel characterWindow)
         {
             mParent = parent;
             DayBgTexture = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Gui, "character_equip_bg_day.png");
             NightBgTexture = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Gui, "character_equip_bg_night.png");
             InteriorBgTexture = Globals.ContentManager.GetTexture(GameContentManager.TextureType.Gui, "character_equip_bg_interior.png");
+
+            ScaleDownTextures.Clear();
+            ScaleDownTextures.Add(Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Misc, "ceil_t0.png"));
+            ScaleDownTextures.Add(Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Misc, "ceil_t1.png"));
+            ScaleDownTextures.Add(Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Misc, "ceil_t2.png"));
+            ScaleDownTextures.Add(Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Misc, "ceil_t3.png"));
+            ScaleDownTextures.Add(Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Misc, "ceil_t4.png"));
+            ScaleDownTextures.Add(Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Misc, "ceil_t5.png"));
+            ScaleDownTextures.Add(Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Misc, "ceil_t6.png"));
+            ScaleDownTextures.Add(Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Misc, "ceil_t7.png"));
+            ScaleDownTextures.Add(Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Misc, "ceil_t8.png"));
 
             mParentContainer = characterWindow;
             mBackground = new ImagePanel(mParentContainer, "CharacterWindowMAO_Equipment");
@@ -77,7 +92,11 @@ namespace Intersect.Client.Interface.Game.Character.Equipment
             InitializeCharacterInfo();
             InitializeCharacterDisplay();
 
+            ScaleDownImage = new ImagePanel(mBackground, "ScaleDownImage");
+
             mBackground.LoadJsonUi(GameContentManager.UI.InGame, Graphics.Renderer.GetResolutionString());
+
+            ScaleDownImage.SetTooltipGraphicsMAO();
 
             ContainerComponents.InitializeAll();
         }
@@ -101,6 +120,13 @@ namespace Intersect.Client.Interface.Game.Character.Equipment
                 SetCharacterBackground();
             }
             PreviousMap = Me.MapInstance?.Id ?? Guid.Empty;
+
+            ScaleDownImage.IsHidden = !Me.IsScaledDown;
+            if (ScaleDownImage.IsVisible)
+            {
+                ScaleDownImage.Texture = ScaleDownTextures.ElementAtOrDefault(Me.ScaledTo);
+                ScaleDownImage.SetToolTipText($"Equipment Stats currently scaled to Tier ${Me.ScaledTo}.");
+            }
 
             PopulateCharacterInfo();
             PopulateEquipStats();

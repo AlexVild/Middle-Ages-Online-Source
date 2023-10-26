@@ -13,6 +13,15 @@ namespace Intersect.Server.Entities.Combat
 
     public partial class Stat
     {
+        public static List<Stats> OffensiveStats = new List<Stats>()
+        {
+            Stats.Attack, Stats.AbilityPower, Stats.SlashAttack, Stats.PierceAttack
+        };
+
+        public static List<Stats> ResistanceStats = new List<Stats>()
+        {
+            Stats.Defense, Stats.MagicResist, Stats.SlashResistance, Stats.PierceResistance
+        };
 
         private ConcurrentDictionary<SpellBase, Buff> mBuff = new ConcurrentDictionary<SpellBase, Buff>();
 
@@ -35,6 +44,10 @@ namespace Intersect.Server.Entities.Combat
             get => mOwner.BaseStats[(int) mStatType];
             set => mOwner.BaseStats[(int) mStatType] = value;
         }
+
+        public bool IsOffensiveStat => OffensiveStats.Contains(mStatType);
+
+        public bool IsResistanceStat => ResistanceStats.Contains(mStatType);
 
         public int Value()
         {
