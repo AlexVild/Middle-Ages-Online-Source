@@ -345,11 +345,14 @@ namespace Intersect.Server.Entities.Events
             }
         }
 
-        public override int[] GetStatValues()
+        public override int[] StatVals
         {
-            var stats = new int[(int)Stats.StatCount];
-            stats[(int)Stats.Speed] = Speed;
-            return stats;
+            get
+            {
+                var stats = new int[(int)Stats.StatCount];
+                stats[(int)Stats.Speed] = Speed;
+                return stats;
+            }
         }
 
         public void Update(bool isActive, long timeMs)

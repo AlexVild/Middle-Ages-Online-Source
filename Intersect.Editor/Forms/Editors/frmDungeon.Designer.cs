@@ -110,6 +110,10 @@ namespace Intersect.Editor.Forms.Editors
             this.lblFolder = new System.Windows.Forms.Label();
             this.txtName = new DarkUI.Controls.DarkTextBox();
             this.lblName = new System.Windows.Forms.Label();
+            this.grpContentScaling = new DarkUI.Controls.DarkGroupBox();
+            this.chkStatCeiling = new DarkUI.Controls.DarkCheckBox();
+            this.lblTierCeiling = new System.Windows.Forms.Label();
+            this.cmbStatCeiling = new DarkUI.Controls.DarkComboBox();
             this.toolStrip.SuspendLayout();
             this.grpDungeons.SuspendLayout();
             this.grpEditor.SuspendLayout();
@@ -129,6 +133,7 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudMinutes)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudHours)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudTimerPlayers)).BeginInit();
+            this.grpContentScaling.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolStrip
@@ -351,6 +356,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpExtraControl.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpExtraControl.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpExtraControl.Controls.Add(this.grpContentScaling);
             this.grpExtraControl.Controls.Add(this.chkStoreLongest);
             this.grpExtraControl.Controls.Add(this.chkIgnoreCompletion);
             this.grpExtraControl.Controls.Add(this.chkIgnoreStart);
@@ -1139,6 +1145,61 @@ namespace Intersect.Editor.Forms.Editors
             this.lblName.TabIndex = 20;
             this.lblName.Text = "Name";
             // 
+            // grpContentScaling
+            // 
+            this.grpContentScaling.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpContentScaling.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpContentScaling.Controls.Add(this.cmbStatCeiling);
+            this.grpContentScaling.Controls.Add(this.lblTierCeiling);
+            this.grpContentScaling.Controls.Add(this.chkStatCeiling);
+            this.grpContentScaling.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpContentScaling.Location = new System.Drawing.Point(196, 10);
+            this.grpContentScaling.Name = "grpContentScaling";
+            this.grpContentScaling.Size = new System.Drawing.Size(177, 72);
+            this.grpContentScaling.TabIndex = 126;
+            this.grpContentScaling.TabStop = false;
+            this.grpContentScaling.Text = "Content Scaling";
+            // 
+            // chkStatCeiling
+            // 
+            this.chkStatCeiling.AutoSize = true;
+            this.chkStatCeiling.Location = new System.Drawing.Point(7, 19);
+            this.chkStatCeiling.Name = "chkStatCeiling";
+            this.chkStatCeiling.Size = new System.Drawing.Size(117, 17);
+            this.chkStatCeiling.TabIndex = 55;
+            this.chkStatCeiling.Text = "Player Stat Ceiling?";
+            this.chkStatCeiling.CheckedChanged += new System.EventHandler(this.chkStatCeiling_CheckedChanged);
+            // 
+            // lblTierCeiling
+            // 
+            this.lblTierCeiling.AutoSize = true;
+            this.lblTierCeiling.Location = new System.Drawing.Point(4, 45);
+            this.lblTierCeiling.Name = "lblTierCeiling";
+            this.lblTierCeiling.Size = new System.Drawing.Size(38, 13);
+            this.lblTierCeiling.TabIndex = 127;
+            this.lblTierCeiling.Text = "Cap at";
+            // 
+            // cmbStatCeiling
+            // 
+            this.cmbStatCeiling.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbStatCeiling.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbStatCeiling.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbStatCeiling.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbStatCeiling.DrawDropdownHoverOutline = false;
+            this.cmbStatCeiling.DrawFocusRectangle = false;
+            this.cmbStatCeiling.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbStatCeiling.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbStatCeiling.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbStatCeiling.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbStatCeiling.FormattingEnabled = true;
+            this.cmbStatCeiling.Location = new System.Drawing.Point(50, 42);
+            this.cmbStatCeiling.Name = "cmbStatCeiling";
+            this.cmbStatCeiling.Size = new System.Drawing.Size(121, 21);
+            this.cmbStatCeiling.TabIndex = 128;
+            this.cmbStatCeiling.Text = null;
+            this.cmbStatCeiling.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbStatCeiling.SelectedIndexChanged += new System.EventHandler(this.cmbStatCeiling_SelectedIndexChanged);
+            // 
             // frmDungeon
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1182,6 +1243,8 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudMinutes)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudHours)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudTimerPlayers)).EndInit();
+            this.grpContentScaling.ResumeLayout(false);
+            this.grpContentScaling.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1267,5 +1330,9 @@ namespace Intersect.Editor.Forms.Editors
         private DarkUI.Controls.DarkCheckBox chkStoreLongest;
         private DarkUI.Controls.DarkCheckBox chkIgnoreCompletion;
         private DarkUI.Controls.DarkCheckBox chkIgnoreStart;
+        private DarkUI.Controls.DarkGroupBox grpContentScaling;
+        private DarkUI.Controls.DarkComboBox cmbStatCeiling;
+        private System.Windows.Forms.Label lblTierCeiling;
+        private DarkUI.Controls.DarkCheckBox chkStatCeiling;
     }
 }

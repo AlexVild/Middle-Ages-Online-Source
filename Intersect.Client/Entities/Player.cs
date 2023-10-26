@@ -400,21 +400,21 @@ namespace Intersect.Client.Entities
             VehicleSprite = pkt.VehicleSprite;
             VehicleSpeed = pkt.VehicleSpeed;
             TrueStats = pkt.TrueStats;
+            ScaledTo = pkt.ScaledTo;
+            IsScaledDown = pkt.IsScaledDown;
 
-            var playerPacket = (PlayerEntityPacket) packet;
-
-            if (playerPacket.Equipment != null)
+            if (pkt.Equipment != null)
             {
-                MyDecors = playerPacket.Equipment.Decor;
-                if (this == Globals.Me && playerPacket.Equipment.InventorySlots != null)
+                MyDecors = pkt.Equipment.Decor;
+                if (this == Globals.Me && pkt.Equipment.InventorySlots != null)
                 {
-                    MyEquipment = playerPacket.Equipment.InventorySlots;
+                    MyEquipment = pkt.Equipment.InventorySlots;
                 }
-                else if (playerPacket.Equipment.ItemIds != null)
+                else if (pkt.Equipment.ItemIds != null)
                 {
-                    Equipment = playerPacket.Equipment.ItemIds;
+                    Equipment = pkt.Equipment.ItemIds;
                 }
-                Cosmetics = playerPacket.Equipment.CosmeticItemIds;
+                Cosmetics = pkt.Equipment.CosmeticItemIds;
             }
 
             if (this == Globals.Me && TargetBox == null && Interface.Interface.GameUi != null)
@@ -3397,7 +3397,7 @@ namespace Intersect.Client.Entities
         public Dictionary<Vitals, int> GetVitalRegens()
         {
             var regens = new Dictionary<Vitals, int>();
-            foreach(var eqp in Equipment)
+            foreach (var eqp in Equipment)
             {
                 if (eqp == Guid.Empty)
                 {
@@ -3480,5 +3480,9 @@ namespace Intersect.Client.Entities
 
             return regens;
         }
+
+        public bool IsScaledDown { get; set; }
+
+        public int ScaledTo { get; set; }
     }
 }

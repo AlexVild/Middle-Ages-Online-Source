@@ -313,6 +313,70 @@ namespace Intersect.Utilities
             return slotMultiplier * fullResPoints;
         }
 
+        public static int MaxDefenseAtTier(int tier)
+        {
+            var maxHelmet = TierAndSlotToArmorRatingFormula(tier, Options.Equipment.HelmetSlot, ResistanceLevel.High);
+            var maxArmor = TierAndSlotToArmorRatingFormula(tier, Options.Equipment.ArmorSlot, ResistanceLevel.High);
+            var maxBoots = TierAndSlotToArmorRatingFormula(tier, Options.Equipment.BootsSlot, ResistanceLevel.High);
+
+            return (int)Math.Ceiling(maxHelmet + maxArmor + maxBoots);
+        }
+
+        public static bool TryCapStatsToTier(int tier, int[] statVals, out int[] scaledStats)
+        {
+            var clonedStats = CloneStats(statVals);
+            scaledStats = statVals.Select((statVal, statIdx) =>
+            {
+                switch ((Stats)statIdx)
+                {
+                    case Stats.Attack:
+                    case Stats.SlashAttack:
+                    case Stats.PierceAttack:
+                    case Stats.AbilityPower:
+                        return (int)Math.Ceiling(TierToDamageFormula(tier));
+                    case Stats.Defense:
+                    case Stats.SlashResistance:
+                    case Stats.PierceResistance:
+                    case Stats.MagicResist:
+                        return MaxDefenseAtTier(tier);
+                    default:
+                        return statVal;
+                }
+            }).ToArray();
+
+            return !Enumerable.SequenceEqual(clonedStats, scaledStats);
+        }
+
+        public static bool TryCapStatToTier(int tier, Stats stat, ref int scaledStat)
+        {
+            var originalValue = scaledStat;
+            switch (stat)
+            {
+                case Stats.Attack:
+                case Stats.SlashAttack:
+                case Stats.PierceAttack:
+                case Stats.AbilityPower:
+                    scaledStat = (int)Math.Ceiling(TierToDamageFormula(tier));
+                    break;
+                case Stats.Defense:
+                case Stats.SlashResistance:
+                case Stats.PierceResistance:
+                case Stats.MagicResist:
+                    scaledStat =  MaxDefenseAtTier(tier);
+                    break;
+            }
+
+            return originalValue != scaledStat;
+        }
+
+        public static int[] CloneStats(int[] stats)
+        {
+            var clonedStats = new int[(int)Stats.StatCount];
+            Array.Copy(stats, clonedStats, clonedStats.Length);
+
+            return clonedStats;
+        }
+
         public static int[] GetOverriddenStats(Dictionary<int, int> overrides, int[] stats)
         {
             var atkStats = new int[(int)Stats.StatCount];

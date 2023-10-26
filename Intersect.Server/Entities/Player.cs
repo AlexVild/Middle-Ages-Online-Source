@@ -1022,7 +1022,7 @@ namespace Intersect.Server.Entities
             var pkt = (PlayerEntityPacket) packet;
             pkt.Gender = Gender;
             pkt.ClassId = ClassId;
-            pkt.Stats = GetStatValues();
+            pkt.Stats = StatVals;
 
             if (Power.IsAdmin)
             {
@@ -1044,7 +1044,7 @@ namespace Intersect.Server.Entities
 
             if (forPlayer != null && GetType() == typeof(Player))
             {
-                ((PlayerEntityPacket) packet).Equipment =
+                pkt.Equipment =
                     PacketSender.GenerateEquipmentPacket(forPlayer, (Player) this);
             }
 
@@ -1060,6 +1060,9 @@ namespace Intersect.Server.Entities
                 trueStats[i] = GetNonBuffedStat((Stats) i);
             }
             pkt.TrueStats = trueStats;
+
+            pkt.IsScaledDown = IsScaledDown;
+            pkt.ScaledTo = ScaledTo;
 
             return pkt;
         }
@@ -1402,7 +1405,9 @@ namespace Intersect.Server.Entities
                 statIncrease += playerClass.StatIncrease[(int)stat] * (Level - 1);
             }
 
-            return StatPointAllocations[(int)stat] + statIncrease;
+            var cappedStat = Math.Min(StatPointAllocations[(int)stat] + statIncrease, 5); 
+
+            return cappedStat;
         }
 
         public override int GetMaxVital(Vitals vital)
@@ -2270,6 +2275,13 @@ namespace Intersect.Server.Entities
             }
             #endregion
 
+
+            if (dungeonId != null && dungeonId != Guid.Empty && InstanceProcessor.TryGetInstanceController(MapInstanceId, out var instanceController))
+            {
+                var dId = dungeonId.GetValueOrDefault();
+                instanceController.TryInitializeOrJoinDungeon(dId, this);
+            }
+
             if (newMapId != MapId || mSentMap == false) // Player warped to a new map?
             {
                 // Remove the entity from the old map instance
@@ -2305,12 +2317,6 @@ namespace Intersect.Server.Entities
                     PacketSender.SendEntityStatsToProximity(this);
                 }
                 PacketSender.SendEntityPositionToAll(this);
-            }
-
-            if (dungeonId != null && dungeonId != Guid.Empty && InstanceProcessor.TryGetInstanceController(MapInstanceId, out var instanceController))
-            {
-                var dId = dungeonId.GetValueOrDefault();
-                instanceController.TryInitializeOrJoinDungeon(dId, this);
             }
 
             if (Options.DebugAllowMapFades && !adminWarp)
@@ -9637,7 +9643,7 @@ namespace Intersect.Server.Entities
         }
 
         [NotMapped, JsonIgnore]
-        public override int TierLevel => (ClassInfo?.Count ?? 0) > 0 ? 
+        public override int TierLevel => (ClassInfo?.Count ?? 0) > 0 ?
             ClassInfo?.Values.ToArray()
                     .OrderByDescending(info => info.Rank)
                     .First().Rank ?? 0 :
@@ -9715,5 +9721,13 @@ namespace Intersect.Server.Entities
 
         [NotMapped, JsonIgnore]
         public int NextInstanceLives { get; set; }
+
+        [NotMapped, JsonIgnore]
+        public bool StatCapActive => InstanceProcessor.TryGetInstanceController(MapInstanceId, out var instanceController)
+            && instanceController.InstanceIsDungeon 
+            && instanceController.DungeonDescriptor.ApplyStatCeiling;
+
+        [NotMapped, JsonIgnore]
+        public int CurrentTierCap => InstanceProcessor.TryGetInstanceController(MapInstanceId, out var instanceController) ? instanceController.DungeonDescriptor.StatCeilingTier : 0;
     }
 }

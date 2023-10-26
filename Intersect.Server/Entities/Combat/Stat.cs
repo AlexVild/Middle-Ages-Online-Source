@@ -6,6 +6,7 @@ using System.Linq;
 using Intersect.Enums;
 using Intersect.GameObjects;
 using Intersect.Server.General;
+using Intersect.Utilities;
 
 namespace Intersect.Server.Entities.Combat
 {
@@ -45,11 +46,32 @@ namespace Intersect.Server.Entities.Combat
             if (mOwner is Player player)
             {
                 var statBuffs = player.GetItemStatBuffs(mStatType);
-                var passiveBuffs = player.GetPassiveStatBuffs(mStatType);
                 var permaBuffs = player.GetPermabuffStat(mStatType);
 
-                flatStats += statBuffs.Item1 + passiveBuffs.Item1 + permaBuffs.Item1;
-                percentageStats += statBuffs.Item2 + passiveBuffs.Item2 + permaBuffs.Item2;
+                flatStats += statBuffs.Item1 + permaBuffs.Item1;
+                percentageStats += statBuffs.Item2 + permaBuffs.Item2;
+
+                // Apply current buffs - these are the kinds of buffs that will get capped (items and level stats)
+                flatStats = (int)Math.Ceiling(flatStats + (flatStats * (percentageStats / 100f)));
+                
+                if (player.StatCapActive)
+                {
+                    var statIsScaledDown = CombatUtilities.TryCapStatToTier(player.CurrentTierCap, mStatType, ref flatStats);
+                    
+                    player.IsScaledDown = player.IsScaledDown || statIsScaledDown;
+                    player.ScaledTo = player.CurrentTierCap;
+                }
+                else
+                {
+                    player.IsScaledDown = false;
+                }
+
+                // Reset so spell/passives can recalc for final value
+                percentageStats = 0;
+                var passiveBuffs = player.GetPassiveStatBuffs(mStatType);
+
+                flatStats += passiveBuffs.Item1;
+                percentageStats += passiveBuffs.Item2;
             }
 
             //Add spell buffs

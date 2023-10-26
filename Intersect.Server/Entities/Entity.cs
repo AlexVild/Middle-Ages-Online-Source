@@ -32,11 +32,17 @@ namespace Intersect.Server.Entities
 
         public Guid MapInstanceId = Guid.Empty;
 
-        [JsonProperty("MaxVitals"), NotMapped] private int[] _maxVital = new int[(int) Vitals.VitalCount];
+        [JsonProperty("MaxVitals"), NotMapped] private int[] _maxVital = new int[(int)Vitals.VitalCount];
 
-        [NotMapped, JsonIgnore] public Stat[] Stat = new Stat[(int) Stats.StatCount];
+        [NotMapped, JsonIgnore] public Stat[] Stat = new Stat[(int)Stats.StatCount];
 
-        [NotMapped, JsonIgnore] public int[] StatVals => Stat.Select(stat => stat.Value()).ToArray();
+        [NotMapped, JsonIgnore] public virtual int[] StatVals => Stat.Select(stat => stat.Value()).ToArray();
+
+        [NotMapped, JsonIgnore]
+        public bool IsScaledDown { get; set; }
+
+        [NotMapped, JsonIgnore]
+        public int ScaledTo { get; set; }
 
         [NotMapped, JsonIgnore] public Entity Target { get; set; } = null;
 
@@ -2212,7 +2218,7 @@ namespace Intersect.Server.Entities
             packet.Animations = Animations.ToArray();
             packet.Vital = GetVitals();
             packet.MaxVital = GetMaxVitals();
-            packet.Stats = GetStatValues();
+            packet.Stats = StatVals;
             packet.StatusEffects = StatusPackets();
             packet.NameColor = NameColor;
             packet.HeaderLabel = new LabelPacket(HeaderLabel.Text, HeaderLabel.Color);

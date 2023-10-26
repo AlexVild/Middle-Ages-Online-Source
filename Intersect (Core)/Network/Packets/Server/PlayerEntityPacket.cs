@@ -52,6 +52,12 @@ namespace Intersect.Network.Packets.Server
 
         [Key(34)]
         public long VehicleSpeed { get; set; }
+
+        [Key(35)]
+        public bool IsScaledDown { get; set; }
+
+        [Key(36)]
+        public int ScaledTo { get; set; }
     }
 
 }

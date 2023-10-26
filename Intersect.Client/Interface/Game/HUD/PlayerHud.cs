@@ -9,6 +9,7 @@ using Intersect.GameObjects;
 using Intersect.GameObjects.Events;
 using Intersect.Utilities;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -64,6 +65,8 @@ namespace Intersect.Client.Interface.Game.HUD
         private GameTexture ShieldTexture;
         private GameTexture PvpTexture;
         private GameTexture ArenaTexture;
+
+        private List<GameTexture> ScaleDownTextures = new List<GameTexture>();
 
         private bool CenterBarsBetweenElements => Width <= 1280;
 
@@ -125,6 +128,17 @@ namespace Intersect.Client.Interface.Game.HUD
             WeaponExpTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_weapon_exp.png");
             WeaponExpGainTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_weapon_exp_gain.png");
             WeaponExpLockedTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "hudbar_weapon_exp_disabled.png");
+
+            ScaleDownTextures.Clear();
+            ScaleDownTextures.Add(Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Misc, "ceil_t0.png"));
+            ScaleDownTextures.Add(Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Misc, "ceil_t1.png"));
+            ScaleDownTextures.Add(Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Misc, "ceil_t2.png"));
+            ScaleDownTextures.Add(Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Misc, "ceil_t3.png"));
+            ScaleDownTextures.Add(Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Misc, "ceil_t4.png"));
+            ScaleDownTextures.Add(Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Misc, "ceil_t5.png"));
+            ScaleDownTextures.Add(Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Misc, "ceil_t6.png"));
+            ScaleDownTextures.Add(Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Misc, "ceil_t7.png"));
+            ScaleDownTextures.Add(Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Misc, "ceil_t8.png"));
         }
 
         private void DetermineTextureScaling()
@@ -199,6 +213,7 @@ namespace Intersect.Client.Interface.Game.HUD
                 DrawBarContainer(Left + Width / 2, Top + 4);
             }
 
+            DrawScaleDownIndicator((Left + (Width / 2)) + (MapNameTexture.Width / 2) + 4, Top + Height - 3);
             DrawMapLabel(Left + Width / 2, Top + Height - 3, MapName);
         }
 
@@ -439,6 +454,27 @@ namespace Intersect.Client.Interface.Game.HUD
                    new FloatRect(0, 0, zoneTexture.GetWidth(), zoneTexture.GetHeight()),
                    new FloatRect(x + (MapNameTexture.GetWidth() / 2) - zoneTextCenterX - 52, y + zoneTextCenterY - 3, zoneTexture.GetWidth() * 4, zoneTexture.GetHeight() * 4),
                    TextureColor);
+            }
+        }
+
+        private void DrawScaleDownIndicator(float x, float y)
+        {
+            if (!Globals.Me.IsScaledDown)
+            {
+                return;
+            }
+
+            try
+            {
+                var texture = ScaleDownTextures.ElementAtOrDefault(Globals.Me.ScaledTo);
+                Graphics.DrawGameTexture(texture,
+                   new FloatRect(0, 0, texture.GetWidth(), texture.GetHeight()),
+                   new FloatRect(x, y, texture.GetWidth() * 2, texture.GetHeight() * 2),
+                   TextureColor);
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+                return;
             }
         }
     }

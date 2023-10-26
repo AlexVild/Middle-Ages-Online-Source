@@ -102,6 +102,10 @@ namespace Intersect.GameObjects
         public bool IgnoreStartEvents { get; set; }
 
         public bool StoreLongestTime { get; set; }
+
+        public bool ApplyStatCeiling { get; set; }
+
+        public int StatCeilingTier { get; set; }
     }
 
     public class TimeRequirement

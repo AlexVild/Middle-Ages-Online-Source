@@ -15,7 +15,7 @@ namespace Intersect.Server.Core.Instancing.Controller
         public Dungeon Dungeon { get; set; } = new Dungeon(Guid.Empty);
 
         public string DungeonName => DungeonDescriptor == null ? string.Empty : DungeonDescriptor?.DisplayName ?? DungeonDescriptor.GetName(DungeonId);
-        DungeonDescriptor DungeonDescriptor { get; set; }
+        public DungeonDescriptor DungeonDescriptor { get; set; }
 
         public Guid DungeonId => Dungeon?.DescriptorId ?? Guid.Empty;
 

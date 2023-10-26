@@ -1336,6 +1336,10 @@
     <Compile Include="Migrations\Game\20231020192552_EnhancementPrereqMigration.designer.cs">
       <DependentUpon>20231020192552_EnhancementPrereqMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20231026140827_DungeonScalingMigration.cs" />
+    <Compile Include="Migrations\Game\20231026140827_DungeonScalingMigration.designer.cs">
+      <DependentUpon>20231026140827_DungeonScalingMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

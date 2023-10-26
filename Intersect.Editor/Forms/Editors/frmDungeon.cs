@@ -75,6 +75,12 @@ namespace Intersect.Editor.Forms.Editors
             cmbTimer.Items.Clear();
             cmbTimer.Items.AddRange(TimerDescriptor.Names);
 
+            cmbStatCeiling.Items.Clear();
+            for (var i = 0; i < Strings.ItemEditor.rarity.Count; i++)
+            {
+                cmbStatCeiling.Items.Add(Strings.ItemEditor.rarity[i]);
+            }
+
             lstGameObjects.Init(UpdateToolStripItems, AssignEditorItem, toolStripItemNew_Click, toolStripItemCopy_Click, toolStripItemUndo_Click, toolStripItemPaste_Click, toolStripItemDelete_Click);
         }
 
@@ -126,6 +132,11 @@ namespace Intersect.Editor.Forms.Editors
             chkIgnoreStart.Checked = mEditorItem.IgnoreStartEvents;
             chkIgnoreCompletion.Checked = mEditorItem.IgnoreCompletionEvents;
             chkStoreLongest.Checked = mEditorItem.StoreLongestTime;
+
+            chkStatCeiling.Checked = mEditorItem.ApplyStatCeiling;
+            cmbStatCeiling.SelectedIndex = mEditorItem.StatCeilingTier;
+
+            cmbStatCeiling.Enabled = chkStatCeiling.Checked;
 
             mPopulating = false;
         }
@@ -590,6 +601,17 @@ namespace Intersect.Editor.Forms.Editors
         private void chkStoreLongest_CheckedChanged(object sender, EventArgs e)
         {
             mEditorItem.StoreLongestTime = chkStoreLongest.Checked;
+        }
+
+        private void chkStatCeiling_CheckedChanged(object sender, EventArgs e)
+        {
+            cmbStatCeiling.Enabled = chkStatCeiling.Checked;
+            mEditorItem.ApplyStatCeiling = chkStatCeiling.Checked;
+        }
+
+        private void cmbStatCeiling_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            mEditorItem.StatCeilingTier = cmbStatCeiling.SelectedIndex;
         }
     }
 }

@@ -447,7 +447,7 @@ namespace Intersect.Server.Entities.Events
                 }
 
                 //Stats
-                var stats = player.GetStatValues();
+                var stats = player.StatVals;
                 for (var i = 0; i < stats.Length; i++)
                 {
                     prams.Add("plyrStat" + i, stats[i].ToString());
