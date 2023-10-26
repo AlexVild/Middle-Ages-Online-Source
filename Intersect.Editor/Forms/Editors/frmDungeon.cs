@@ -76,7 +76,8 @@ namespace Intersect.Editor.Forms.Editors
             cmbTimer.Items.AddRange(TimerDescriptor.Names);
 
             cmbStatCeiling.Items.Clear();
-            for (var i = 0; i < Strings.ItemEditor.rarity.Count; i++)
+            // start at 1 because in MAO rarity 0 == 'none'
+            for (var i = 1; i < Strings.ItemEditor.rarity.Count; i++)
             {
                 cmbStatCeiling.Items.Add(Strings.ItemEditor.rarity[i]);
             }
