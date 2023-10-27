@@ -69,7 +69,8 @@ namespace Intersect.Server.Entities.Combat
                 
                 if (player.StatCapActive)
                 {
-                    var statIsScaledDown = CombatUtilities.TryCapStatToTier(player.CurrentTierCap, mStatType, ref flatStats);
+                    // +1 to tier because of the "None" rarity type throwing some stuff off
+                    var statIsScaledDown = CombatUtilities.TryCapStatToTier(player.CurrentTierCap + 1, mStatType, ref flatStats);
                     
                     player.IsScaledDown = player.IsScaledDown || statIsScaledDown;
                     player.ScaledTo = player.CurrentTierCap;
