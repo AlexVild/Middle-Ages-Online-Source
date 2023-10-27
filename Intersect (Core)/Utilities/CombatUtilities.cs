@@ -350,21 +350,26 @@ namespace Intersect.Utilities
         public static bool TryCapStatToTier(int tier, Stats stat, ref int scaledStat)
         {
             var originalValue = scaledStat;
+
+            var maxStat = scaledStat;
+
             switch (stat)
             {
                 case Stats.Attack:
                 case Stats.SlashAttack:
                 case Stats.PierceAttack:
                 case Stats.AbilityPower:
-                    scaledStat = (int)Math.Ceiling(TierToDamageFormula(tier));
+                    maxStat = (int)Math.Ceiling(TierToDamageFormula(tier));
                     break;
                 case Stats.Defense:
                 case Stats.SlashResistance:
                 case Stats.PierceResistance:
                 case Stats.MagicResist:
-                    scaledStat =  MaxDefenseAtTier(tier);
+                    maxStat =  MaxDefenseAtTier(tier);
                     break;
             }
+
+            scaledStat = Math.Min(maxStat, scaledStat);
 
             return originalValue != scaledStat;
         }
