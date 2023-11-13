@@ -308,6 +308,8 @@ namespace Intersect.GameObjects.Events.Commands
 
         public Guid EventId { get; set; }
 
+        public bool AllInInstance { get; set; }
+
     }
 
     public class RestoreHpCommand : EventCommand

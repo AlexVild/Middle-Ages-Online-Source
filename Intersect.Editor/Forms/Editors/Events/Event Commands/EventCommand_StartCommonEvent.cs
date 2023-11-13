@@ -24,6 +24,8 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             cmbEvent.Items.Clear();
             cmbEvent.Items.AddRange(EventBase.Names);
             cmbEvent.SelectedIndex = EventBase.ListIndex(refCommand.EventId);
+
+            chkInstanceWide.Checked = refCommand.AllInInstance;
         }
 
         private void InitLocalization()
@@ -37,6 +39,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private void btnSave_Click(object sender, EventArgs e)
         {
             mMyCommand.EventId = EventBase.IdFromList(cmbEvent.SelectedIndex);
+            mMyCommand.AllInInstance = chkInstanceWide.Checked;
             mEventEditor.FinishCommandEdit();
         }
 
@@ -45,6 +48,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             mEventEditor.CancelCommandEdit();
         }
 
+        private void chkInVehicle_CheckedChanged(object sender, EventArgs e) 
+        {
+
+        }
     }
 
 }

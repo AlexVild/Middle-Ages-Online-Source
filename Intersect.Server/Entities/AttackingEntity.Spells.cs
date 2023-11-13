@@ -104,6 +104,11 @@ namespace Intersect.Server.Entities
                 !CanAttack(target, spell))
             {
                 // Spell requires valid target!
+                if (spell.Combat.Friendly && !IsAllyOf(target))
+                {
+                    return CanCastSpell(spell, this, ignoreVitals, instantCast);
+                }
+
                 return false;
             }
 
@@ -186,6 +191,11 @@ namespace Intersect.Server.Entities
             }
             SpellCastSlot = spellSlot;
             var spell = SpellBase.Get(Spells[spellSlot].SpellId);
+
+            if ((spell.Combat?.Friendly ?? false) && !IsAllyOf(target))
+            {
+                target = this;
+            }
 
             StartCast(spell, target, spell.CastDuration <= 0);
         }

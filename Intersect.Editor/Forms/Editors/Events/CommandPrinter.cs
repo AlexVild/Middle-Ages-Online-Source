@@ -788,6 +788,10 @@ namespace Intersect.Editor.Forms.Editors.Events
 
         private static string GetCommandText(StartCommmonEventCommand command, MapInstance map)
         {
+            if (command.AllInInstance) 
+            {
+                return $"{Strings.EventCommandList.commonevent.ToString(EventBase.GetName(command.EventId))} (For all players instance)";
+            }
             return Strings.EventCommandList.commonevent.ToString(EventBase.GetName(command.EventId));
         }
 

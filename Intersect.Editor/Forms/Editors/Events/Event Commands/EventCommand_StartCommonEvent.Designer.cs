@@ -35,6 +35,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.lblCommonEvent = new System.Windows.Forms.Label();
             this.btnCancel = new DarkUI.Controls.DarkButton();
             this.btnSave = new DarkUI.Controls.DarkButton();
+            this.chkInstanceWide = new DarkUI.Controls.DarkCheckBox();
             this.grpCommonEvent.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -42,6 +43,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             // 
             this.grpCommonEvent.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
             this.grpCommonEvent.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpCommonEvent.Controls.Add(this.chkInstanceWide);
             this.grpCommonEvent.Controls.Add(this.cmbEvent);
             this.grpCommonEvent.Controls.Add(this.lblCommonEvent);
             this.grpCommonEvent.Controls.Add(this.btnCancel);
@@ -59,14 +61,20 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.cmbEvent.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.cmbEvent.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.cmbEvent.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbEvent.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbEvent.DrawDropdownHoverOutline = false;
+            this.cmbEvent.DrawFocusRectangle = false;
             this.cmbEvent.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.cmbEvent.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbEvent.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbEvent.ForeColor = System.Drawing.Color.Gainsboro;
             this.cmbEvent.FormattingEnabled = true;
             this.cmbEvent.Location = new System.Drawing.Point(89, 19);
             this.cmbEvent.Name = "cmbEvent";
             this.cmbEvent.Size = new System.Drawing.Size(154, 21);
             this.cmbEvent.TabIndex = 22;
+            this.cmbEvent.Text = null;
+            this.cmbEvent.TextPadding = new System.Windows.Forms.Padding(2);
             // 
             // lblCommonEvent
             // 
@@ -97,7 +105,17 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             this.btnSave.Text = "Ok";
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
-            // EventCommand_StartCommonEvent
+            // chkInstanceWide
+            // 
+            this.chkInstanceWide.AutoSize = true;
+            this.chkInstanceWide.Location = new System.Drawing.Point(7, 46);
+            this.chkInstanceWide.Name = "chkInstanceWide";
+            this.chkInstanceWide.Size = new System.Drawing.Size(98, 17);
+            this.chkInstanceWide.TabIndex = 55;
+            this.chkInstanceWide.Text = "All in Instance?";
+            this.chkInstanceWide.CheckedChanged += new System.EventHandler(this.chkInVehicle_CheckedChanged);
+            // 
+            // EventCommandStartCommonEvent
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -119,5 +137,6 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private DarkButton btnSave;
         private System.Windows.Forms.Label lblCommonEvent;
         private DarkComboBox cmbEvent;
+        private DarkCheckBox chkInstanceWide;
     }
 }

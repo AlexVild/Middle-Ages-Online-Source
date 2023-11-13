@@ -1038,6 +1038,9 @@
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_ShowEvent.resx">
       <DependentUpon>EventCommand_ShowEvent.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_StartCommonEvent.resx">
+      <DependentUpon>EventCommand_StartCommonEvent.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_StartQuest.resx">
       <DependentUpon>EventCommand_StartQuest.cs</DependentUpon>
     </EmbeddedResource>

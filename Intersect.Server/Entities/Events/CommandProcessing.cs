@@ -429,6 +429,14 @@ namespace Intersect.Server.Entities.Events
                     }
                 }
             }
+
+            if (command.AllInInstance && InstanceProcessor.TryGetInstanceController(player.MapInstanceId, out var instanceController)) 
+            {
+                foreach (var instanceMember in instanceController.Players.Where(pl => pl.Id != player.Id)) 
+                {
+                    instanceMember.EnqueueStartCommonEvent(commonEvent);
+                }
+            }
         }
 
         //Restore Hp Command
