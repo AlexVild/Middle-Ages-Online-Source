@@ -15,6 +15,7 @@ using Intersect.Logging;
 using Intersect.GameObjects.Timers;
 using static Intersect.GameObjects.Events.Commands.ShowTextCommand;
 using Intersect.Utilities;
+using System.Text;
 
 namespace Intersect.Editor.Forms.Editors.Events
 {
@@ -1107,6 +1108,7 @@ namespace Intersect.Editor.Forms.Editors.Events
 
         private static string GetCommandText(PlayAnimationCommand command, MapInstance map)
         {
+            StringBuilder commandTextBuilder = new StringBuilder();
             if (command.MapId != Guid.Empty)
             {
                 for (var i = 0; i < MapList.OrderedMaps.Count; i++)
@@ -1123,12 +1125,12 @@ namespace Intersect.Editor.Forms.Editors.Events
                     }
                 }
 
-                return Strings.EventCommandList.playanimation.ToString(
+                commandTextBuilder.Append(Strings.EventCommandList.playanimation.ToString(
                     AnimationBase.GetName(command.AnimationId),
                     Strings.EventCommandList.animationonmap.ToString(
                         Strings.EventCommandList.mapnotfound, command.X, command.Y, Strings.Directions.dir[command.Dir]
                     )
-                );
+                ));
             }
             else
             {
@@ -1152,33 +1154,36 @@ namespace Intersect.Editor.Forms.Editors.Events
 
                 if (command.EntityId == Guid.Empty)
                 {
-                    return Strings.EventCommandList.playanimation.ToString(
+                    commandTextBuilder.Append(Strings.EventCommandList.playanimation.ToString(
                         AnimationBase.GetName(command.AnimationId),
                         Strings.EventCommandList.animationonplayer.ToString(command.X, command.Y, spawnOpt)
-                    );
+                    ));
                 }
                 else
                 {
                     if (map.LocalEvents.ContainsKey(command.EntityId))
                     {
-                        return Strings.EventCommandList.playanimation.ToString(
+                        commandTextBuilder.Append(Strings.EventCommandList.playanimation.ToString(
                             AnimationBase.GetName(command.AnimationId),
                             Strings.EventCommandList.animationonevent.ToString(
                                 map.LocalEvents[command.EntityId].Name, command.X, command.Y, spawnOpt
                             )
-                        );
+                        ));
                     }
                     else
                     {
-                        return Strings.EventCommandList.playanimation.ToString(
+                        commandTextBuilder.Append(Strings.EventCommandList.playanimation.ToString(
                             AnimationBase.GetName(command.AnimationId),
                             Strings.EventCommandList.animationonevent.ToString(
                                 Strings.EventCommandList.deletedevent, command.X, command.Y, spawnOpt
                             )
-                        );
+                        ));
                     }
                 }
             }
+
+            commandTextBuilder.Append(Strings.EventCommandList.PlayAnimationInstanced.ToString(command.Instanced));
+            return commandTextBuilder.ToString();
         }
 
         private static string GetCommandText(PlayBgmCommand command, MapInstance map)
