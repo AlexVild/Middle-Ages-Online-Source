@@ -640,12 +640,15 @@ namespace Intersect.Server.Entities
                 return;
             }
             
-            // Add some randomness to spellcasting - especially at the beginning of combat
-            var upperBound = CastFreq == default ? 3 : 11;
-            if (Randomization.Next(1, upperBound) == 1)
+            // Add some randomness to spellcasting - especially at first cast
+            if (!Base.NeverSkipSpellCasting)
             {
-                ProgressCastFrequency();
-                return;
+                var upperBound = CastFreq == default ? 3 : 11;
+                if (Randomization.Next(1, upperBound) == 1)
+                {
+                    ProgressCastFrequency();
+                    return;
+                }
             }
 
             var target = Target;

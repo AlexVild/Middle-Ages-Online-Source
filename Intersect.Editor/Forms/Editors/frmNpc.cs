@@ -433,6 +433,7 @@ namespace Intersect.Editor.Forms.Editors
                 nudScaleFactor.Value = (decimal)mEditorItem.VitalScaleModifier;
 
                 chkPlayerLockLoot.Checked = mEditorItem.PlayerLockedLoot;
+                chkNeverSkip.Checked = mEditorItem.NeverSkipSpellCasting;
             }
             else
             {
@@ -1868,6 +1869,11 @@ namespace Intersect.Editor.Forms.Editors
         private void darkNumericUpDown1_ValueChanged_1(object sender, EventArgs e)
         {
             mEditorItem.MeleeManasteal = (int)nudManasteal.Value;
+        }
+
+        private void chkNeverSkip_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.NeverSkipSpellCasting = chkNeverSkip.Checked;
         }
     }
 

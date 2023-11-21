@@ -489,6 +489,8 @@ namespace Intersect.GameObjects
         public int MeleeLifesteal { get; set; }
 
         public int MeleeManasteal { get; set; }
+
+        public bool NeverSkipSpellCasting { get; set; }
     }
 
 }
