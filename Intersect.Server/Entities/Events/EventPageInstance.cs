@@ -283,6 +283,7 @@ namespace Intersect.Server.Entities.Events
                 Dir = GlobalClone.Dir;
                 Passable = GlobalClone.Passable;
                 HideName = GlobalClone.HideName;
+                Trigger = GlobalClone.Trigger;
             }
 
             packet = base.EntityPacket(packet, forPlayer);
@@ -295,6 +296,7 @@ namespace Intersect.Server.Entities.Events
             pkt.Description = MyPage.Description;
             pkt.Graphic = MyGraphic;
             pkt.RenderLayer = (byte) mRenderLayer;
+            pkt.Trigger = Trigger;
 
             return pkt;
         }

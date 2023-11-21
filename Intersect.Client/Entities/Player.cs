@@ -1812,7 +1812,7 @@ namespace Intersect.Client.Entities
 
                     if (en.Value.CurrentMap == map && en.Value.X == x && en.Value.Y == y)
                     {
-                        if (en.Value.GetType() == typeof(Event))
+                        if (en.Value is Event evt && evt.Trigger == EventTrigger.ActionButton)
                         {
                             //Talk to Event
                             CombatMode = false;

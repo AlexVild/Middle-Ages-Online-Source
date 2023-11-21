@@ -100,6 +100,10 @@ namespace Intersect.Client.Interface.Game
             {
                 Close();
             }
+            else
+            {
+
+            }
         }
 
         public void Close()

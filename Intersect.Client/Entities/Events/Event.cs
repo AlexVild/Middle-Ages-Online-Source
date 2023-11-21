@@ -45,6 +45,8 @@ namespace Intersect.Client.Entities.Events
 
         public bool WalkingAnim = true;
 
+        public EventTrigger Trigger { get; set; }
+
         public Event(Guid id, EventEntityPacket packet) : base(id, packet, true)
         {
             mRenderPriority = 1;
@@ -65,6 +67,7 @@ namespace Intersect.Client.Entities.Events
             Desc = pkt.Description;
             Graphic = pkt.Graphic;
             RenderLevel = pkt.RenderLayer;
+            Trigger = pkt.Trigger;
         }
 
         public override EntityTypes GetEntityType()
