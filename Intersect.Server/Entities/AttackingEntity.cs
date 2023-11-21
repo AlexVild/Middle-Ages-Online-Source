@@ -265,13 +265,6 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
-            if (IsInvalidTauntTarget(target))
-            {
-                PacketSender.SendActionMsg(this, Strings.Combat.miss, CustomColors.Combat.Missed);
-
-                return false;
-            }
-
             if (StatusActive(StatusTypes.Blind))
             {
                 return false;

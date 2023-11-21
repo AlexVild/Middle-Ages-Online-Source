@@ -73,11 +73,10 @@ namespace Intersect.Server.Core
             {
                 // Fetch our instance controller
                 var instanceId = mapInstanceGroup.Key;
-                if (!InstanceControllers.ContainsKey(instanceId))
+                if (!InstanceControllers.TryGetValue(instanceId, out var instanceController))
                 {
-                    return;
+                    continue;
                 }
-                var instanceController = InstanceControllers[instanceId];
 
                 // Cleanup map spawn groups/permadead NPCs
                 instanceController.CleanupSpawnGroups();

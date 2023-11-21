@@ -382,9 +382,7 @@ namespace Intersect.Server.Entities
         public bool SpellAttack(Entity target, SpellBase spell, sbyte attackAnimDir, Projectile projectile, bool ignoreEvasion = false)
         {
             target?.ReactToCombat(this);
-            if ((spell.Combat?.TargetType == SpellTargetTypes.AoE ||
-                spell.Combat?.TargetType == SpellTargetTypes.Single) &&
-                IsInvalidTauntTarget(target))
+            if (spell?.Combat?.TargetType == SpellTargetTypes.Single && IsInvalidTauntTarget(target))
             {
                 return false;
             }

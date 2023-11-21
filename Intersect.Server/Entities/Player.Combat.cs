@@ -437,6 +437,18 @@ namespace Intersect.Server.Entities
             return true;
         }
 
+        public override bool CanRangeTarget(Entity target)
+        {
+            if (IsInvalidTauntTarget(target))
+            {
+                PacketSender.SendActionMsg(this, Strings.Combat.miss, CustomColors.Combat.Missed);
+
+                return false;
+            }
+
+            return base.CanRangeTarget(target);
+        }
+
         public override void ProjectileAttack(Entity enemy, Projectile projectile, SpellBase parentSpell, ItemBase parentWeapon, bool ignoreEvasion, byte projectileDir)
         {
             if (projectile == null || projectile.Base == null)

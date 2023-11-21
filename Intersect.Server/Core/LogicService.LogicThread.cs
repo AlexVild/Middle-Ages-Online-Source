@@ -166,24 +166,30 @@ namespace Intersect.Server.Core
                             }
 
                             //Refresh list of active maps & their instances
-                            foreach (var mapInstanceId in ActiveMapInstances.Keys.ToArray())
+                            //Refresh list of active maps & their instances
+                            foreach (var kv in ActiveMapInstances.ToArray())
                             {
-                                if (!processedMapInstances.Contains(mapInstanceId))
+                                var instanceId = kv.Key;
+                                var mapInstance = kv.Value;
+
+                                if (processedMapInstances.Contains(instanceId) || mapInstance.ShouldBeActive())
                                 {
-                                    // Remove the map entirely from the update queue
-                                    if (ActiveMapInstances[mapInstanceId] != null && ActiveMapInstances[mapInstanceId].ShouldBeCleaned())
+                                    continue;
+                                }
+
+                                if (mapInstance != default)
+                                {
+                                    if (mapInstance.ShouldBeCleaned())
                                     {
-                                        ActiveMapInstances[mapInstanceId].RemoveInstanceFromController();
-                                        ActiveMapInstances.Remove(mapInstanceId);
-                                    } else if (ActiveMapInstances[mapInstanceId] == null || !ActiveMapInstances[mapInstanceId].ShouldBeActive())
+                                        mapInstance.RemoveInstanceFromController();
+                                    }
+                                    else if (!mapInstance.ShouldBeActive())
                                     {
-                                        if (ActiveMapInstances.TryGetValue(mapInstanceId, out var instance))
-                                        {
-                                            instance.ResetNpcSpawns();
-                                        }
-                                        ActiveMapInstances.Remove(mapInstanceId);
+                                        mapInstance.ResetNpcSpawns();
                                     }
                                 }
+
+                                ActiveMapInstances.Remove(instanceId);
                             }
 
                             // Update our global list of unique instances that are being processed
