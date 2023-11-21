@@ -7,6 +7,8 @@ using System;
 
 using Intersect.Utilities;
 using Intersect.Client.Framework.File_Management;
+using Intersect.Client.Core.Controls;
+using Intersect.Client.Framework.Input;
 
 namespace Intersect.Client.Interface.Game
 {
@@ -100,9 +102,9 @@ namespace Intersect.Client.Interface.Game
             {
                 Close();
             }
-            else
+            else if (Globals.Me != null && Controls.ControlHasKey(Control.AttackInteract, Framework.GenericClasses.Keys.LButton) && Globals.Me.TryAttack())
             {
-
+                Globals.Me.UpdateAttackTimer();
             }
         }
 

@@ -377,7 +377,7 @@ namespace Intersect.Client.Entities
             return returnval;
         }
 
-        private void UpdateAttackTimer()
+        public void UpdateAttackTimer()
         {
             if (Globals.Me.AttackTimer < Timing.Global.Ticks / TimeSpan.TicksPerMillisecond)
             {
