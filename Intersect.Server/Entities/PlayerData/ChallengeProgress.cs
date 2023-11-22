@@ -116,6 +116,10 @@ namespace Intersect.Server.Entities.PlayerData
             // ProgressMastery() call
             Instance.Progress = Descriptor.Sets;
             Instance.Complete = true;
+            if (Descriptor.RequiresContract && Player.ChallengeContractId == Descriptor.Id)
+            {
+                Player.ChallengeContractId = Guid.Empty;
+            }
         }
     }
 }

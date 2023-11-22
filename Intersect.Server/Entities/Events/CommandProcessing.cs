@@ -3362,10 +3362,20 @@ namespace Intersect.Server.Entities.Events
                         break;
                     }
 
+                    if (descriptor.RequiresContract && player.ChallengeContractId != descriptor.Id)
+                    {
+                        break;
+                    }
+
                     challenge.Progress = MathHelper.Clamp(challenge.Progress + command.Amount, 0, descriptor.Sets);
                     challenge.Complete = challenge.Progress >= descriptor.Sets;
                     if (challenge.Complete)
                     {
+                        if (challenge.Challenge.RequiresContract && player.ChallengeContractId == descriptor.Id)
+                        {
+                            player.ChallengeContractId = Guid.Empty;
+                        }
+
                         PacketSender.SendChatMsg(player,
                             $"Challenge completed: {descriptor.Name}!",
                             ChatMessageType.Experience,
@@ -3388,6 +3398,7 @@ namespace Intersect.Server.Entities.Events
 
                     if (challenge.Challenge.RequiresContract && player.ChallengeContractId == challenge.ChallengeId)
                     {
+                        player.ChallengeContractId = Guid.Empty;
                         challenge.Complete = true;
                         PacketSender.SendChatMsg(player,
                                 $"Challenge completed: {descriptor.Name}!",
