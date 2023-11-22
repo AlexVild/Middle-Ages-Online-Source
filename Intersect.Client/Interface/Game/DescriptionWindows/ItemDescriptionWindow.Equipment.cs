@@ -95,10 +95,16 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
 
                 var wepTypeName = WeaponTypeDescriptor.Get(weaponTypeId)?.VisibleName ?? "NOT FOUND";
 
-                baseRows.AddKeyValueRow($"Lvl. {level} {wepTypeName} type",
+                // Level no longer important?
+                baseRows.AddKeyValueRow($"{wepTypeName} type",
                     string.Empty,
                     CustomColors.ItemDesc.WeaponType,
                     Color.White);
+
+                /*baseRows.AddKeyValueRow($"Lvl. {level} {wepTypeName} type",
+                    string.Empty,
+                    CustomColors.ItemDesc.WeaponType,
+                    Color.White);*/
             }
 
             var idx = 0;

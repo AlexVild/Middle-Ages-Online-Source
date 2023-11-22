@@ -69,6 +69,7 @@ namespace Intersect.GameObjects.Conditions
                 var bestiaryEntries = new List<string>();
                 var npcKilled = new List<string>();
                 var records = new List<string>();
+                var weaponTracks = new List<string>();
                 foreach (var condition in conditionList.Conditions)
                 {
                     if (condition.Type == ConditionTypes.ClassIs && condition is ClassIsCondition classIs)
@@ -189,6 +190,17 @@ namespace Intersect.GameObjects.Conditions
                             }
                         }
                     }
+                    if (condition.Type == ConditionTypes.WeaponMasteryOf && condition is WeaponTypeIs weaponTypeIs)
+                    {
+                        if (condition.Negated)
+                        {
+                            weaponTracks.Add($"{WeaponTypeDescriptor.GetName(weaponTypeIs.WeaponTypeId)} track level lower than {weaponTypeIs.Level}");
+                        }
+                        else
+                        {
+                            weaponTracks.Add($"{WeaponTypeDescriptor.GetName(weaponTypeIs.WeaponTypeId)} track level {weaponTypeIs.Level} or higher");
+                        }
+                    }
                 }
 
                 if (classes.Count > 0)
@@ -229,6 +241,11 @@ namespace Intersect.GameObjects.Conditions
                 if (records.Count > 0)
                 {
                     requirements.Add(string.Join(", ", records));
+                }
+
+                if (weaponTracks.Count > 0)
+                {
+                    weaponTracks.Add(string.Join(", ", weaponTracks));
                 }
 
 
