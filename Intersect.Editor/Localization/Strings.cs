@@ -432,6 +432,11 @@ namespace Intersect.Editor.Localization
             return EventConditionDesc.MapSpawnGroupIs.ToString(condition.SpawnGroup);
         }
 
+        public static string GetEventConditionalDesc(ChallengeContractTaken condition)
+        {
+            return EventConditionDesc.ChallengeContractTaken.ToString(ChallengeDescriptor.GetName(condition.ChallengeId));
+        }
+
         public static string GetEventConditionalDesc(RecipeUnlocked condition)
         {
             return EventConditionDesc.HasRecipe.ToString(RecipeDescriptor.GetName(condition.RecipeId));
@@ -2506,6 +2511,7 @@ Tick timer saved in server config.json.";
                 {48, @"Is signed up for open melee"},
                 {49, @"Has champions disabled"},
                 {50, @"Map Spawn Group is..."},
+                {51, @"Challenge contract taken for..."},
             };
 
             public static LocalizedString endrange = @"End Range:";
@@ -2857,6 +2863,9 @@ Tick timer saved in server config.json.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString MapSpawnGroupAnything = @"Map Spawn Group is anything";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ChallengeContractTaken = @"Contract taken for challenge: {00}";
 
             public static Dictionary<int, LocalizedString> selfswitches = new Dictionary<int, LocalizedString>
             {

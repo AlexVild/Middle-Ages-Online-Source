@@ -1007,6 +1007,31 @@ namespace Intersect.Server.Entities.Events
             }
         }
 
+        public static bool MeetsCondition(
+            ChallengeContractTaken condition,
+            Player player,
+            Event eventInstance,
+            QuestBase questBase
+            )
+        {
+            if (player == null || condition == null)
+            {
+                return false;
+            }
+
+            if (!ChallengeDescriptor.TryGet(condition.ChallengeId, out var descriptor)) 
+            {
+                return false;
+            }
+
+            if (!descriptor.RequiresContract)
+            {
+                return true;
+            }
+
+            return player.ChallengeContractId == descriptor.Id;
+        }
+
         //Variable Comparison Processing
 
         public static bool CheckVariableComparison(

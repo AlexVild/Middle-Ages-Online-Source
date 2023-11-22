@@ -573,6 +573,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     Condition = new MapSpawnGroupIs();
 
                     break;
+                case ConditionTypes.ChallengeContractTaken:
+                    Condition = new ChallengeContractTaken();
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -894,6 +898,16 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
 
                 case ConditionTypes.SpawnGroup:
                     grpSpawnGroup.Show();
+                    break;
+
+                case ConditionTypes.ChallengeContractTaken:
+                    grpChallenge.Show();
+                    cmbChallenges.Items.Clear();
+                    cmbChallenges.Items.AddRange(ChallengeDescriptor.Names);
+                    if (cmbChallenges.Items.Count > 0)
+                    {
+                        cmbChallenges.SelectedIndex = 0;
+                    }
                     break;
 
                 default:
@@ -1833,6 +1847,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         {
         }
 
+        private void SetupFormValues(ChallengeContractTaken condition)
+        {
+            cmbChallenges.SelectedIndex = ChallengeDescriptor.ListIndex(condition.ChallengeId);
+        }
+
         private void SetupFormValues(MapSpawnGroupIs condition)
         {
             nudSpawnGroup.Value = (int)condition.SpawnGroup;
@@ -2195,6 +2214,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
 
         private void SaveFormValues(ChampionsDisabled condition)
         {
+        }
+
+        private void SaveFormValues(ChallengeContractTaken condition)
+        {
+            condition.ChallengeId = ChallengeDescriptor.IdFromList(cmbChallenges.SelectedIndex);
         }
 
         private void SaveFormValues(MapSpawnGroupIs condition)

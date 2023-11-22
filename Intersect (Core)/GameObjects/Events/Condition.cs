@@ -105,6 +105,8 @@ namespace Intersect.GameObjects.Events
 
         SpawnGroup,
 
+        ChallengeContractTaken,
+
     }
 
     public class Condition
@@ -700,6 +702,13 @@ namespace Intersect.GameObjects.Events
     public class ChampionsDisabled : Condition
     {
         public override ConditionTypes Type { get; } = ConditionTypes.ChampionsDisabled;
+    }
+
+    public class ChallengeContractTaken : Condition
+    {
+        public override ConditionTypes Type { get; } = ConditionTypes.ChallengeContractTaken;
+
+        public Guid ChallengeId { get; set; }
     }
 
     public class VariableCompaison
