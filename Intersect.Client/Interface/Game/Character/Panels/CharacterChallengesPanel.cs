@@ -250,9 +250,10 @@ namespace Intersect.Client.Interface.Game.Character.Panels
             var correctWeaponType = Globals.Me.TryGetEquippedWeaponDescriptor(out var weapon)
                 && weapon.WeaponTypes.Contains(descriptor.Id);
 
-            var correctWeaponLvl = weapon != default
+            var correctWeaponLvl = true; // disabling this feature for a bit, trying it out
+            /*var correctWeaponLvl = weapon != default
                 && weapon.MaxWeaponLevels.TryGetValue(descriptor.Id, out var maxWeaponLvl)
-                && maxWeaponLvl > SelectedProgress.Level;
+                && maxWeaponLvl > SelectedProgress.Level;*/
 
             var canProgress = correctWeaponLvl && correctWeaponType;
 

@@ -3372,9 +3372,10 @@ namespace Intersect.Client.Entities
             var correctWeaponType = Globals.Me.TryGetEquippedWeaponDescriptor(out var weapon)
                 && weapon.WeaponTypes.Contains(weaponId);
 
-            var correctWeaponLvl = weapon != default
+            var correctWeaponLvl = true; // disbaling below for now
+            /*var correctWeaponLvl = weapon != default
                 && weapon.MaxWeaponLevels.TryGetValue(weaponId, out var maxWeaponLvl)
-                && maxWeaponLvl > weaponLvl;
+                && maxWeaponLvl > weaponLvl;*/
 
             return correctWeaponLvl && correctWeaponType;
         }

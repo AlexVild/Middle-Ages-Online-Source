@@ -466,6 +466,8 @@ namespace Intersect.Server.Entities
 
         public bool WeaponCanProgressMastery(WeaponMasteryInstance mastery)
         {
+            return true;
+
             var equippedWeapon = GetEquippedWeapon();
             return equippedWeapon != null 
                 && equippedWeapon.MaxWeaponLevels != null 
@@ -475,6 +477,8 @@ namespace Intersect.Server.Entities
 
         public bool WeaponCanProgressMastery(WeaponMasteryInstance mastery, ItemBase weapon)
         {
+            return true;
+            
             return weapon != null
                 && weapon.MaxWeaponLevels != null
                 && weapon.MaxWeaponLevels.TryGetValue(mastery.WeaponTypeId, out var maxWeaponLevel)

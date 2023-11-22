@@ -166,18 +166,20 @@ namespace Intersect.Client.Interface.Game.Components
                 Globals.Me.TryGetEquippedWeaponDescriptor(out var equippedWeapon);
                 if (equippedWeapon == null || !equippedWeapon.MaxWeaponLevels.TryGetValue(WeaponTypeId, out var maxWeaponLevel))
                 {
-                    requirementText = $"Equip weapon of Lvl. {RequiredLevel} {WeaponType} type or higher to progress!";
+                    requirementText = $"Equip a {WeaponType}-type weapon to progress!";
+                    //requirementText = $"Equip weapon of Lvl. {RequiredLevel} {WeaponType} type or higher to progress!";
                 }
                 else
                 {
-                    if (maxWeaponLevel >= RequiredLevel)
+                    requirementText = $"{RequiredExp.ToString("N0")} EXP required until challenge unlock";
+                    /*if (maxWeaponLevel >= RequiredLevel)
                     {
                         requirementText = $"{RequiredExp.ToString("N0")} EXP required until challenge unlock";
                     }
                     else
                     {
                         requirementText = $"Equipped weapon insufficient - Lvl. {RequiredLevel} {WeaponType} type or higher required to progress.";
-                    }
+                    }*/
                 }
             }
             
