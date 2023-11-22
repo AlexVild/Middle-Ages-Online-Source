@@ -11,6 +11,7 @@ using Intersect.Client.Utilities;
 using System.Collections.Generic;
 using Intersect.Client.Interface.Game.Character.Panels;
 using Intersect.Network.Packets.Server;
+using Intersect.Client.Items;
 
 namespace Intersect.Client.Interface.Game.DescriptionWindows
 {
@@ -119,6 +120,20 @@ namespace Intersect.Client.Interface.Game.DescriptionWindows
                     baseRows.AddKeyValueRow(string.Empty, attackType.GetDescription(), StatLabelColor, StatValueColor);
                 }
                 idx++;
+            }
+
+            if (Interface.GameUi.CraftingWindowOpen() && mItem.CraftWeaponExp > 0)
+            {
+                AddDivider();
+                var craftExpRow = AddRowContainer();
+                craftExpRow.AddKeyValueRow("Craft Weapon EXP:", mItem.CraftWeaponExp.ToString(), CustomColors.ItemDesc.Notice, CustomColors.ItemDesc.Notice);
+            }
+            else if (Interface.GameUi.DeconstructorWindow.IsVisible() && mItem.CraftWeaponExp > 0)
+            {
+                AddDivider();
+                var craftExpRow = AddRowContainer();
+                var exp = DeconstructionUtils.GetDeconExp(mItem.CraftWeaponExp);
+                craftExpRow.AddKeyValueRow("Decon. Weapon EXP:", exp.ToString(), CustomColors.ItemDesc.Notice, CustomColors.ItemDesc.Notice);
             }
 
             SetupDamageEstimations(baseRows);

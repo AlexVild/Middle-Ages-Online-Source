@@ -21,5 +21,10 @@ namespace Intersect.Utilities
         {
             return (int)Math.Floor(AverageFuelCostAtTier(tier) / BASE_FUEL_DIVISOR);
         }
+
+        public static long GetDeconExp(long craftExp)
+        {
+            return (long)Math.Ceiling(craftExp * Options.Instance.DeconstructionOpts.DeconstructionExpMod);
+        }
     }
 }
