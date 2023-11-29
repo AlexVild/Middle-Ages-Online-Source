@@ -39,7 +39,7 @@ namespace Intersect.Server.Core.Instancing.Controller
         public void RemovePlayer(Guid playerId)
         {
             Logging.Log.Debug($"{playerId} has left instance controller {InstanceId}...");
-            Players.RemoveAll(pl => pl.Id == playerId);
+            Players.RemoveAll(pl => pl?.Id == playerId);
         }
 
         public void AddPlayers(List<Player> players)
@@ -97,8 +97,13 @@ namespace Intersect.Server.Core.Instancing.Controller
 
             InstanceLives = instanceLives;
 
-            foreach (var player in Players)
+            foreach (var player in Players.ToList())
             {
+                if (player == null || !player.Online)
+                {
+                    continue;
+                }
+
                 PacketSender.SendInstanceLivesPacket(player, (byte)InstanceLives, false);
 
                 if (!noChat)
