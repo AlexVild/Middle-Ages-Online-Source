@@ -124,7 +124,7 @@ namespace Intersect.Server.Core.Instancing.Controller
             Dungeon.CompletionTime = activeTimer.ElapsedTime;
             GiveDungeonRewards();
 
-            TimerProcessor.RemoveTimer(activeTimer);
+            TimerProcessor.RemoveTimer(activeTimer, true);
             foreach (var pl in Dungeon.Participants)
             {
                 pl.FullHeal();

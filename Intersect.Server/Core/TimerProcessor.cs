@@ -123,7 +123,7 @@ namespace Intersect.Server.Core
                     // If the timer has completed its required amount of repetitions, remove the timer from processing
                     if (timer.IsCompleted && !descriptor.ContinueAfterExpiration)
                     {
-                        RemoveTimer(timer);
+                        RemoveTimer(timer, true);
                     }
                 }
             }
@@ -159,7 +159,7 @@ namespace Intersect.Server.Core
         /// </summary>
         /// <param name="timer">The <see cref="TimerInstance"/> to remove</param>
         /// /// <param name="storeElapsed">When false, do not store the elapsed time in a variable; default true</param>
-        public static void RemoveTimer(TimerInstance timer, bool storeElapsed = true)
+        public static void RemoveTimer(TimerInstance timer, bool storeElapsed = false)
         {
             lock(mLock)
             {

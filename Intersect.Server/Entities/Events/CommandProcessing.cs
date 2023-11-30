@@ -2720,7 +2720,7 @@ namespace Intersect.Server.Entities.Events
 
                         case TimerStopType.Complete:
                             stopAction((pl) => pl.EnqueueStartCommonEvent(descriptor.CompletionEvent));
-                            TimerProcessor.RemoveTimer(activeTimer);
+                            TimerProcessor.RemoveTimer(activeTimer, true);
                             break;
 
                         case TimerStopType.Expire:

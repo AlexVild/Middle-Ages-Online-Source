@@ -1256,7 +1256,7 @@ namespace Intersect.Server.Entities
                 && t.Descriptor.OwnerType == TimerOwnerType.Player
                 && t.OwnerId == Id))
             {
-                TimerProcessor.RemoveTimer(timer, false);
+                TimerProcessor.RemoveTimer(timer);
             }
         }
 
@@ -1269,7 +1269,7 @@ namespace Intersect.Server.Entities
                 && t.Descriptor.OwnerType == TimerOwnerType.Player
                 && t.OwnerId == Id))
             {
-                TimerProcessor.RemoveTimer(timer, false);
+                TimerProcessor.RemoveTimer(timer);
             }
         }
 

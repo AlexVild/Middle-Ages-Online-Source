@@ -1829,7 +1829,7 @@ namespace Intersect.Server.Maps
         {
             foreach(var timer in TimerProcessor.ActiveTimers.Where(t => t.Descriptor.OwnerType == GameObjects.Timers.TimerOwnerType.Instance && t.OwnerId == Id).ToArray())
             {
-                TimerProcessor.RemoveTimer(timer, false);
+                TimerProcessor.RemoveTimer(timer);
             }
         }
         #endregion
