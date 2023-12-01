@@ -1929,7 +1929,7 @@ namespace Intersect.Server.Entities
 
         public bool InRangeOf(Entity target, int range)
         {
-            if (target is Player player && player.PlayerDead)
+            if (target == null || target is Player player && player.PlayerDead)
             {
                 return false;
             }
@@ -1940,12 +1940,7 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
-            if (dist <= range)
-            {
-                return true;
-            }
-
-            return false;
+            return dist <= range;
         }
 
         public virtual void NotifySwarm(Entity attacker)

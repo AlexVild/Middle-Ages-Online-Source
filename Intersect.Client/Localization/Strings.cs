@@ -1238,6 +1238,8 @@ namespace Intersect.Client.Localization
                 {13, @"Sniper:"},
                 {14, @"Berzerk:"},
                 {15, @"Manasteal:"},
+                {16, @"Phantom:"},
+                {17, @"Vampire:"},
             };
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]

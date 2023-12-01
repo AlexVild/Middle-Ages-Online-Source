@@ -722,5 +722,10 @@ namespace Intersect.Server.Entities
         {
             return 0;
         }
+
+        public virtual float GetBonusEffectPercent(EffectType effect, bool additive, int startValue = 0)
+        {
+            return 1f;
+        }
     }
 }

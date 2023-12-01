@@ -1381,7 +1381,13 @@ namespace Intersect.Server.Entities
                         // Swarm if an aggressive enemy, or it's direct relative is being attacked
                         if (npc.Target == null & npc.Base.Swarm && IsAllyOf(npc) && (npc.Base.Aggressive || npc.Base.Id == Base.Id))
                         {
-                            if (npc.InRangeOf(attacker, npc.Base.SightRange))
+                            var range = npc.Base.SightRange;
+                            if (attacker is Player player)
+                            {
+                                range = (int)Math.Ceiling(range * player.GetBonusEffectPercent(EffectType.Phantom, false));
+                            }
+
+                            if (npc.InRangeOf(attacker, range))
                             {
                                 npc.AssignTarget(attacker);
                             }
@@ -1550,13 +1556,15 @@ namespace Intersect.Server.Entities
                     if (entity != null && !entity.IsDead() && entity != this && entity.Id != avoidId)
                     {
                         //TODO Check if NPC is allowed to attack player with new conditions
-                        if (entity.GetType() == typeof(Player))
+                        if (entity is Player player)
                         {
                             // Are we aggressive towards this player or have they hit us?
                             if (ShouldAttackPlayerOnSight((Player)entity) || (DamageMap.ContainsKey(entity) && entity.MapInstanceId == MapInstanceId))
                             {
                                 var dist = GetDistanceTo(entity);
-                                if (dist <= Range && dist < closestRange)
+                                var playerRange = Math.Ceiling(Range * player.GetBonusEffectPercent(EffectType.Phantom, false));
+
+                                if (dist <= playerRange && dist < closestRange)
                                 {
                                     possibleTargets.Add(entity);
                                     closestIndex = possibleTargets.Count - 1;
@@ -1903,6 +1911,16 @@ namespace Intersect.Server.Entities
         /// <param name="newDamage">The amount of damage to add</param>
         public void AddToDamageAndLootMaps(Entity attacker, int newDamage)
         {
+            if (attacker == null)
+            {
+                return;
+            }
+
+            if (attacker is Player player)
+            {
+                newDamage = (int)Math.Round(newDamage * player.GetBonusEffectPercent(EffectType.Phantom, false));
+            }
+
             var dmgMap = DamageMap;
             dmgMap.TryGetValue(attacker, out var damage);
             dmgMap[attacker] = damage + newDamage;

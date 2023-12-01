@@ -53,6 +53,12 @@ namespace Intersect.Enums
 
         [Description("Manasteal")]
         Manasteal = 15,
+
+        [Description("Phantom")]
+        Phantom = 16,
+
+        [Description("Vampire")]
+        Vampire = 17,
     }
 
 }

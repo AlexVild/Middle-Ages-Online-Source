@@ -1,11 +1,7 @@
 ﻿using Intersect.Client.Interface.Game.Character.Panels;
 using Intersect.Client.Localization;
 using Intersect.Enums;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Intersect.Client.Utilities
 {
@@ -29,6 +25,8 @@ namespace Intersect.Client.Utilities
             {EffectType.Sniper, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.Sniper], "Does more damage if attacks are at a longer range.")}, // Sniper
             {EffectType.Berzerk, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.Berzerk], "Increases damage based on how many enemies are aggressive toward you.")}, // Berzerk
             {EffectType.Manasteal, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.Manasteal], "Gives mana as a percentage of damage dealt.")}, // Manasteal
+            {EffectType.Phantom, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.Phantom], "Reduces sight range of enemies and reduces amount of aggro pulled from damage.")}, // Phantom
+            {EffectType.Vampire, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.Vampire], "Increases effects of manasteal and lifesteal.")}, // Vampire
         };
 
         public static readonly List<EffectType> LowerIsBetterEffects = new List<EffectType>

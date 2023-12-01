@@ -521,7 +521,9 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
-            AddVital(Vitals.Health, (int)healthRecovered);
+            var vampire = GetBonusEffectPercent(EffectType.Vampire, true);
+
+            AddVital(Vitals.Health, (int)Math.Round(healthRecovered * vampire));
             recovered = healthRecovered;
             return true;
         }
@@ -558,7 +560,9 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
-            AddVital(Vitals.Mana, (int)manaRecovered);
+            var vampire = GetBonusEffectPercent(EffectType.Vampire, true);
+
+            AddVital(Vitals.Mana, (int)Math.Round(manaRecovered * vampire));
             target.SubVital(Vitals.Mana, (int)manaRecovered);
             recovered = manaRecovered;
             return true;

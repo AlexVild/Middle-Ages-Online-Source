@@ -4173,6 +4173,18 @@ namespace Intersect.Server.Entities
             return value + PassiveEffectTotal(effect);
         }
 
+        public override float GetBonusEffectPercent(EffectType effect, bool additive, int startValue = 0)
+        {
+            if (!additive)
+            {
+                return 1 - GetBonusEffectTotal(effect, startValue) / 100f;
+            }
+            else
+            {
+                return 1 + GetBonusEffectTotal(effect, startValue) / 100f;
+            }
+        }
+
         public int GetEquipmentVitalRegen(Vitals vital)
         {
             var regen = 0;
