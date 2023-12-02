@@ -2436,7 +2436,7 @@ namespace Intersect.Editor.Forms.Editors
         {
             if (cmbProcSpell.SelectedIndex == 0)
             {
-                mEditorItem.SpecialAttack.SpellId = Guid.Empty;
+                mEditorItem.ProcSpellId = Guid.Empty;
                 nudProcChance.Enabled = false;
                 return;
             }
