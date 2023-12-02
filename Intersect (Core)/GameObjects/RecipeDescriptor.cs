@@ -37,8 +37,11 @@ namespace Intersect.GameObjects
         [Description("Alchemy")]
         Alchemy,
 
-        [Description("Mage Craft")]
+        [Description("Summoning & Spellcraft")]
         MageCraft,
+
+        [Description("Mage Craft")]
+        MageSmithing,
     }
 
     public enum RecipeTrigger
@@ -118,6 +121,31 @@ namespace Intersect.GameObjects
         {
             Name = "New Recipe";
             RecipeRequirements = new List<RecipeRequirement>();
+        }
+
+        public Guid[] ClassesThatCanLearn()
+        {
+            var validClasses = ClassBase.GetAll().Select(cls => cls.Id).ToArray();
+            var includedClasses = new HashSet<Guid>();
+
+            if (Requirements.Count <= 0)
+            {
+                return validClasses;
+            }
+
+            foreach (var requirement in Requirements.Lists.ToArray())
+            {
+                foreach (var condition in requirement.Conditions.OfType<Events.ClassIsCondition>())
+                {
+                    includedClasses.Add(condition.ClassId);
+                }
+                foreach (var condition in requirement.Conditions.OfType<Events.InNpcGuildWithRankCondition>())
+                {
+                    includedClasses.Add(condition.ClassId);
+                }
+            }
+
+            return includedClasses.ToArray();
         }
     }
 }

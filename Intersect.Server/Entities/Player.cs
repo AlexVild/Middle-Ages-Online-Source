@@ -9759,6 +9759,7 @@ namespace Intersect.Server.Entities
             return true;
         }
 
+        [NotMapped, JsonIgnore]
         public int HighestClassRank
         {
             get
@@ -9766,7 +9767,6 @@ namespace Intersect.Server.Entities
                 if (ClassInfo.Count <= 0)
                 {
                     return 0;
-
                 }
                 return ClassInfo?.Values?.ToList()
                     ?.OrderByDescending(info => info.Rank)

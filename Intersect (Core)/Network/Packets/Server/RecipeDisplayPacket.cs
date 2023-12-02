@@ -13,12 +13,16 @@ namespace Intersect.Network.Packets.Server
         [Key(1)]
         public bool IsUnlocked { get; set; }
 
+        [Key(2)]
+        public bool Visible { get; set; }
+
         public RecipeDisplayPacket() {}
 
-        public RecipeDisplayPacket(Guid descriptorId, bool isUnlocked)
+        public RecipeDisplayPacket(Guid descriptorId, bool isUnlocked, bool isHidden)
         {
             DescriptorId = descriptorId;
             IsUnlocked = isUnlocked;
+            Visible = isHidden;
         }
     }
 

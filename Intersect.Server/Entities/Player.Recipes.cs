@@ -13,6 +13,7 @@ using Intersect.Server.General;
 using Intersect.Server.Networking;
 using Intersect.Utilities;
 using Newtonsoft.Json;
+using Org.BouncyCastle.Bcpg;
 
 namespace Intersect.Server.Entities
 {
@@ -89,23 +90,21 @@ namespace Intersect.Server.Entities
             var recipes = new List<RecipeDisplayPacket>();
             foreach (var recipe in Globals.CachedRecipes.ToArray()
                 .Where(r => r.CraftType == craftType)
-                .OrderBy(r => r.DisplayName ?? r.Name))
+                .OrderBy(r => !UnlockedRecipeIds.Contains(r.Id) && r.HiddenUntilUnlocked)
+                .ThenBy(r => r.MinClassRank)
+                .ThenBy(r => r.DisplayName ?? r.Name))
             {
-                // The player hasn't even unlocked the recipe in their diary yet, let alone the actual recipe
-                if (!RecipeIsVisible(recipe))
+                var packet = new RecipeDisplayPacket();
+
+                // For now, multi-classing is not allowed, so don't show class-specific recipes
+                if (!recipe?.ClassesThatCanLearn()?.Contains(ClassId) ?? false)
                 {
                     continue;
                 }
 
-                var packet = new RecipeDisplayPacket();
                 packet.DescriptorId = recipe.Id;
                 packet.IsUnlocked = UnlockedRecipeIds.Contains(recipe.Id);
-
-                // The recipe is only meant to appear after it is unlocked
-                if (!packet.IsUnlocked && recipe.HiddenUntilUnlocked)
-                {
-                    continue;
-                }
+                packet.Visible = RecipeIsVisible(recipe) || packet.IsUnlocked;
 
                 recipes.Add(packet);
             }

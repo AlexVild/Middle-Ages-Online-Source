@@ -11,13 +11,26 @@ using Intersect.Network.Packets.Server;
 using Intersect.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using static Intersect.Client.Framework.File_Management.GameContentManager;
 
 namespace Intersect.Client.Interface.Game.Components
 {
     public class RecipeRowComponent : GwenComponent
     {
-        string Frame => Unlocked ? "character_resource_unlocked_bg.png" : "character_resource_disabled_bg.png";
+        string Frame
+        {
+            get
+            {
+                if (!Visible || Secret)
+                {
+                    return "character_resource_locked_bg.png";
+                }
+
+                return Unlocked ? "character_resource_unlocked_bg.png" : "character_resource_disabled_bg.png";
+            }
+        }
+            
         private ImageFrameComponent Image { get; set; }
         private ImagePanel RequirementsPanel { get; set; }
 
@@ -27,10 +40,14 @@ namespace Intersect.Client.Interface.Game.Components
 
         private Button ExpandButton { get; set; }
 
+        private Color LockedColor => new Color(255, 100, 100, 100);
         private Color SecondaryColor => new Color(255, 169, 169, 169);
         private Color PrimaryColor => new Color(255, 255, 255, 255);
-        private Color TitleColor => Unlocked ? PrimaryColor : SecondaryColor;
-        private Color HintColor => SecondaryColor;
+        private Color TitleColor => (!Visible || Secret) ? 
+            LockedColor 
+            : Unlocked ? 
+                PrimaryColor : SecondaryColor;
+        private Color HintColor => (!Visible || Secret) ? CustomColors.General.GeneralDisabled : SecondaryColor;
 
         public RecipeDescriptor Recipe;
 
@@ -39,6 +56,8 @@ namespace Intersect.Client.Interface.Game.Components
         Guid RecipeId { get; set; }
 
         public bool Unlocked { get; set; }
+        public bool Visible { get; set; }
+        public bool Secret { get; set; }
 
         public int X => ParentContainer.X;
         public int Y => ParentContainer.Y;
@@ -70,23 +89,34 @@ namespace Intersect.Client.Interface.Game.Components
             string containerName,
             Guid recipeId,
             bool unlocked,
+            bool visible,
             ComponentList<GwenComponent> referenceList = null
             ) : base(parent, containerName, "RecipeRowComponent", referenceList)
         {
             RecipeId = recipeId;
             Unlocked = unlocked;
+            Visible = visible;
 
-            Recipe = RecipeDescriptor.Get(RecipeId);
+            if (RecipeDescriptor.TryGet(RecipeId, out Recipe))
+            {
+                Secret = Recipe.HiddenUntilUnlocked && !Unlocked;
+            }
         }
 
         public override void Initialize()
         {
             SelfContainer = new ImagePanel(ParentContainer, ComponentName);
-            Image = new ImageFrameComponent(SelfContainer, "RecipeImage", Frame, Recipe.Image, RecipeRextureType, 1, 8);
+
+            var image = Secret ? "unknown.png" : Recipe.Image;
+            Image = new ImageFrameComponent(SelfContainer, "RecipeImage", Frame, image, RecipeRextureType, 1, 8);
 
             Title = new Label(SelfContainer, "RecipeName")
             {
-                Text = Recipe?.DisplayName ?? Recipe?.Name ?? "NOT FOUND"
+                Text = Secret 
+                ? "???" 
+                : Recipe?.DisplayName 
+                    ?? Recipe?.Name 
+                    ?? "NOT FOUND"
             };
 
             HintTemplate = new Label(SelfContainer, "Hint");
@@ -99,6 +129,8 @@ namespace Intersect.Client.Interface.Game.Components
             base.Initialize();
             FitParentToComponent();
 
+            ExpandButton.IsHidden = Secret || !Visible;
+
             OriginalHeight = SelfContainer.Height;
             OriginalWidth = SelfContainer.Width;
 
@@ -106,10 +138,8 @@ namespace Intersect.Client.Interface.Game.Components
             HintTemplate.SetTextColor(HintColor, Label.ControlState.Normal);
 
             Image.Initialize();
-            if (!Unlocked)
-            {
-                Image.SetImageRenderColor(new Color(160, 255, 255, 255));
-            }
+            Image.SetImageRenderColor(TitleColor);
+
             FormatHint();
         }
 
@@ -277,7 +307,33 @@ namespace Intersect.Client.Interface.Game.Components
             Hint.Width = SelfContainer.Width - Title.X - 30;
             Hint.X = Title.X + 8;
             Hint.Y = Title.Bottom + 4;
-            Hint.AddText(Recipe?.Hint ?? string.Empty, HintTemplate);
+
+            var hint = Recipe?.Hint ?? string.Empty;
+            if (Secret)
+            {
+                hint = "This recipe can be found somewhere in Asgodia!";
+            }
+            else if (!Visible)
+            {
+                var requirements = Recipe?.Requirements.ConditionListsToRequirementsString() ?? new List<string>();
+                if (Recipe.MinClassRank > 0)
+                {
+                    if (requirements.Count == 0)
+                    {
+                        hint = $"You must have a Class Rank of {Recipe.MinClassRank}+ to learn this recipe!";
+                    }
+                    else
+                    {
+                        hint = $"You must have a Class Rank of {Recipe.MinClassRank}+ to learn this recipe, as well as: {string.Join(", ", requirements)}";
+                    }
+                }
+                else
+                {
+                    hint = $"You must meet the following requirements to learn this recipe: {string.Join(", ", requirements)}";
+                }
+            }
+
+            Hint.AddText(hint, HintTemplate);
             Hint.SizeToChildren(false, true);
         }
 
@@ -287,3 +343,4 @@ namespace Intersect.Client.Interface.Game.Components
         }
     }
 }
+ 

@@ -188,7 +188,7 @@ namespace Intersect.Client.Interface.Game.Character.Panels
                     continue;
                 }
 
-                var row = new RecipeRowComponent(RecipeScrollContainer, $"Recipe_{idx}", recipe.DescriptorId, recipe.IsUnlocked, RecipeRows);
+                var row = new RecipeRowComponent(RecipeScrollContainer, $"Recipe_{idx}", recipe.DescriptorId, recipe.IsUnlocked, recipe.Visible, RecipeRows);
 
                 row.Initialize();
                 row.SetPosition(row.X, row.Height * idx);

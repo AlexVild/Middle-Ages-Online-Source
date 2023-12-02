@@ -4358,11 +4358,11 @@ namespace Intersect.Server.Networking
 
             // If the players harvest info hasn't changed (new record or variable change), and
             // we have a cached value for the requested tool type
-            if (player.UseCachedHarvestInfo && player.CachedHarvestInfo.TryGetValue(packet.Tool, out var cachedInfo))
+           /* if (player.UseCachedHarvestInfo && player.CachedHarvestInfo.TryGetValue(packet.Tool, out var cachedInfo))
             {
                 player?.SendPacket(cachedInfo);
                 return;
-            }
+            }*/
 
             var tool = packet.Tool;
 
@@ -4415,10 +4415,51 @@ namespace Intersect.Server.Networking
             validResources = validResources
                 .GroupBy(resource => new { resource.Name })
                 .Select(resourceGroupings => resourceGroupings.First())
-                .OrderBy(resource => resource.Name).ToList();
+                .OrderBy(resource =>
+                {
+                    var requiredTier = 0;
+                    var varName = "";
+                    // Axe
+                    if (resource.Tool == 0)
+                    {
+                        varName = "Woodcut Tier";
+                    }
+                    // Mining
+                    else if (resource.Tool == 1)
+                    {
+                        varName = "Mining Tier";
+                    }
+                    // Fishing
+                    else if (resource.Tool == 3)
+                    {
+                        varName = "Fishing Tier";
+                    }
+
+                    foreach (var requirement in resource.HarvestingRequirements?.Lists.ToArray())
+                    {
+                        if (requirement.Conditions.Count <= 0)
+                        {
+                            continue;
+                        }
+                        foreach (var condition in requirement.Conditions.OfType<VariableIsCondition>().ToArray())
+                        {
+                            var variable = player.GetVariable(condition.VariableId);
+
+                            if (variable.VariableName.Equals(varName) && condition.Comparison is IntegerVariableComparison intComparison)
+                            {
+                                requiredTier = Math.Max(requiredTier, (int)intComparison.Value);
+                            }
+                        }
+                    }
+
+                    return requiredTier;
+                })
+                .ThenBy(resource => resource.DisplayName ?? resource.Name)
+                .ToList();
 
             var allInfo = new Network.Packets.Server.ResourceInfoPackets();
-            foreach(var resource in validResources)
+
+            foreach (var resource in validResources)
             {
                 var dto = new PlayerHarvestDTO(player, resource);
                 
