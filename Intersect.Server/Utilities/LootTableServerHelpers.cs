@@ -17,8 +17,10 @@ namespace Intersect.Server.Utilities
         /// </summary>
         /// <param name="drops"></param>
         /// <returns></returns>
-        public static Dictionary<int, Item> GenerateDropTable(List<BaseDrop> drops, Player forPlayer = null)
+        public static Dictionary<int, Item> GenerateDropTable(List<BaseDrop> drops, Player forPlayer)
         {
+            if (forPlayer == null) {  return null; }
+
             List<BaseDrop> items = FlattenDropTable(drops, forPlayer);
             // Stores drop tables by their maximum roll
             var dropTable = new Dictionary<int, Item>();
@@ -50,7 +52,17 @@ namespace Intersect.Server.Utilities
                 }
                 else
                 {
-                    dropTable.Add((int)(lastWeight + item.Chance * 100), new Item(item.ItemId, item.Quantity));
+                    // Quantity modifiers
+                    var quantity = item.Quantity;
+                    var scraps = item.ItemId == Guid.Parse("a85c1b15-97f5-4f2a-9dcc-070113882190");
+
+                    if (scraps) // SCRAPS
+                    {
+                        var bonus = forPlayer.GetBonusEffectPercent(Enums.EffectType.Junkrat, true);
+                        quantity = (int)Math.Ceiling(quantity * bonus);
+                    }
+
+                    dropTable.Add((int)(lastWeight + item.Chance * 100), new Item(item.ItemId, quantity));
                 }
             }
 
@@ -79,7 +91,7 @@ namespace Intersect.Server.Utilities
             return rolledItem;
         }
 
-        private static List<BaseDrop> FlattenDropTable(List<BaseDrop> drops, Player forPlayer = null)
+        private static List<BaseDrop> FlattenDropTable(List<BaseDrop> drops, Player forPlayer)
         {
             var flattenedDrops = new List<BaseDrop>();
             if (drops == null)
@@ -103,7 +115,7 @@ namespace Intersect.Server.Utilities
                 {
                     continue;
                 }
-                flattenedDrops.AddRange(FlattenDropTable(table.Drops));
+                flattenedDrops.AddRange(FlattenDropTable(table.Drops, forPlayer));
             }
 
             return flattenedDrops;

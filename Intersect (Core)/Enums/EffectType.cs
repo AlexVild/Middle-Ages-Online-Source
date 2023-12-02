@@ -59,6 +59,9 @@ namespace Intersect.Enums
 
         [Description("Vampire")]
         Vampire = 17,
+
+        [Description("Junkrat")]
+        Junkrat = 18,
     }
 
 }

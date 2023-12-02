@@ -55,7 +55,7 @@ namespace Intersect.Server.Database.PlayerData.Players
 
                 for (var i = 0; i < lootRoll.Rolls; i++)
                 {
-                    var dropTable = LootTableServerHelpers.GenerateDropTable(table.Drops);
+                    var dropTable = LootTableServerHelpers.GenerateDropTable(table.Drops, player);
                     loot.Add(LootTableServerHelpers.GetItemFromTable(dropTable));
                 }
             }
