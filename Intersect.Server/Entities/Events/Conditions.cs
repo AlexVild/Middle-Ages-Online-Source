@@ -678,9 +678,7 @@ namespace Intersect.Server.Entities.Events
         {
             if (player != null && player.ClassInfo.Count > 0)
             {
-                return player.ClassInfo.Values.ToList()
-                    .OrderByDescending(info => info.Rank)
-                    .First().Rank >= condition.ClassRank;
+                return player.HighestClassRank >= condition.ClassRank;
             }
             return false;
         }

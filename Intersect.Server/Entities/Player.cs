@@ -9741,5 +9741,37 @@ namespace Intersect.Server.Entities
 
         [NotMapped, JsonIgnore]
         public int CurrentTierCap => InstanceProcessor.TryGetInstanceController(MapInstanceId, out var instanceController) ? instanceController.DungeonDescriptor.StatCeilingTier : 0;
+
+        public bool RecipeIsVisible(RecipeDescriptor recipe)
+        {
+            if (recipe == null) { return false; }
+
+            if (!Conditions.MeetsConditionLists(recipe.Requirements, this, null))
+            {
+                return false;
+            }
+
+            if (recipe.MinClassRank > HighestClassRank)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public int HighestClassRank
+        {
+            get
+            {
+                if (ClassInfo.Count <= 0)
+                {
+                    return 0;
+
+                }
+                return ClassInfo?.Values?.ToList()
+                    ?.OrderByDescending(info => info.Rank)
+                    ?.FirstOrDefault()?.Rank ?? 0;
+            }
+        }
     }
 }

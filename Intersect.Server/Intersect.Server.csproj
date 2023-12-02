@@ -485,6 +485,7 @@
     <Compile Include="Database\GameData\Migrations\BoundItemExtensionMigration.cs" />
     <Compile Include="Database\GameData\Migrations\CerasVersionToleranceMigration.cs" />
     <Compile Include="Database\ContextInterface.cs" />
+    <Compile Include="Database\GameData\Migrations\RecipeCrMigration.cs" />
     <Compile Include="Database\PlayerData\Players\DungeonTrackerInstance.cs" />
     <Compile Include="Database\PlayerData\Players\ItemDiscoveryInstance.cs" />
     <Compile Include="Database\PlayerData\Migrations\GuildBankMaxSlotMigration.cs" />
@@ -1343,6 +1344,10 @@
     <Compile Include="Migrations\Game\20231121201828_NpcSpellRandomMigration1.cs" />
     <Compile Include="Migrations\Game\20231121201828_NpcSpellRandomMigration1.designer.cs">
       <DependentUpon>20231121201828_NpcSpellRandomMigration1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20231202155721_RecipeCRMigration.cs" />
+    <Compile Include="Migrations\Game\20231202155721_RecipeCRMigration.designer.cs">
+      <DependentUpon>20231202155721_RecipeCRMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">

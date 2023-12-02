@@ -88,6 +88,8 @@ namespace Intersect.GameObjects
 
         public string DisplayCraftType => CraftType.GetDescription();
 
+        public int MinClassRank { get; set; }
+
         [NotMapped]
         public ConditionLists Requirements { get; set; } = new ConditionLists();
 

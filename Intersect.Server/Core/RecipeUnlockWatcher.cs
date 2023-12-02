@@ -86,13 +86,13 @@ namespace Intersect.Server.Core
                     continue;
                 }
 
-                if (!Conditions.MeetsConditionLists(recipe.Requirements, player, null))
+                if (!player.RecipeIsVisible(recipe))
                 {
                     player.RemoveRecipes(recipe.Id);
                     continue;
                 }
 
-                // Does the recipe have requirements that aren't satisfied?
+                // Does the recipe have task requirements that aren't satisfied?
                 if (recipe.RecipeRequirements.Count > 0 && !recipe.RecipeRequirements.All(rqr => RequirementComplete(player, rqr)))
                 {
                     player.RemoveRecipes(recipe.Id);
@@ -131,9 +131,8 @@ namespace Intersect.Server.Core
                 return;
             }
 
-            var conditions = recipe?.Requirements;
             // Player does not meet requirements for the recipe - ignore it.
-            if (!Conditions.MeetsConditionLists(conditions, currentPlayer.Player, null))
+            if (currentPlayer.Player.RecipeIsVisible(recipe))
             {
                 Continue();
                 return;

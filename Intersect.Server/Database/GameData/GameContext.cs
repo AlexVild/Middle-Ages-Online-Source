@@ -154,6 +154,11 @@ namespace Intersect.Server.Database.GameData
             {
                 BonusEffectsToListMigration.Run(this);
             }
+            
+            if (migrations.IndexOf("20231202155721_RecipeCRMigration") > -1)
+            {
+                RecipeCrMigration.Run(this);
+            }
 
         }
 

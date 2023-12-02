@@ -92,7 +92,7 @@ namespace Intersect.Server.Entities
                 .OrderBy(r => r.DisplayName ?? r.Name))
             {
                 // The player hasn't even unlocked the recipe in their diary yet, let alone the actual recipe
-                if (!Conditions.MeetsConditionLists(recipe.Requirements, this, null))
+                if (!RecipeIsVisible(recipe))
                 {
                     continue;
                 }

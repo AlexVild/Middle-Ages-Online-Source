@@ -154,6 +154,7 @@ namespace Intersect.Editor.Forms.Editors
             txtRequireHint.Text = string.Empty;
             chkRequireTrue.Checked = false;
             nudAmt.Value = 0;
+            nudMinCr.Value = mEditorItem.MinClassRank;
 
             UpdateBoolRequireDisplay(false);
             UpdateDisabled();
@@ -540,6 +541,11 @@ namespace Intersect.Editor.Forms.Editors
             }
 
             requirement.Hint = txtRequireHint.Text;
+        }
+
+        private void nudMinCr_ValueChanged(object sender, EventArgs e)
+        {
+            mEditorItem.MinClassRank = (int)nudMinCr.Value;
         }
     }
 }
