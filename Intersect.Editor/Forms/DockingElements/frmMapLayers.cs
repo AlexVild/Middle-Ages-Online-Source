@@ -130,6 +130,12 @@ namespace Intersect.Editor.Forms.DockingElements
             cmbDungeon.Items.Add(Strings.General.none);
             cmbDungeon.Items.AddRange(DungeonDescriptor.Names);
 
+            cmbNpcBehaviors.Items.Clear();
+            for (var i = 0; i < Strings.NpcEditor.movements.Count; i++)
+            {
+                cmbNpcBehaviors.Items.Add(Strings.NpcEditor.movements[i]);
+            }
+
             cmbWarpSound.Items.Clear();
             RefreshMapWarpSounds();
         }
@@ -858,6 +864,8 @@ namespace Intersect.Editor.Forms.DockingElements
                     chkDoNotRespawn.Checked = spawn.PreventRespawn;
                     chkSpawnGroupGreater.Checked = spawn.CumulativeSpawning;
                     nudInstanceSpawnLimit.Value = spawn.RequiredPlayersToSpawn;
+                    spawn.OverrideMovement = chkOverrideMovement.Checked;
+                    spawn.OverriddenMovement = (NpcMovement)Math.Max(cmbNpcBehaviors.SelectedIndex, 0);
                     if (spawn.X >= 0)
                     {
                         rbDeclared.Checked = true;
@@ -886,6 +894,8 @@ namespace Intersect.Editor.Forms.DockingElements
                 n.Direction = NpcSpawnDirection.Random;
                 n.RequiredPlayersToSpawn = (int)nudInstanceSpawnLimit.Value;
                 n.PreventRespawn = chkDoNotRespawn.Checked;
+                n.OverrideMovement = chkOverrideMovement.Checked;
+                n.OverriddenMovement = (NpcMovement)Math.Max(cmbNpcBehaviors.SelectedIndex, 0);
                 n.SpawnGroup = (int)nudNpcSpawnGroup.Value;
                 n.CumulativeSpawning = chkSpawnGroupGreater.Checked;
 
@@ -915,6 +925,8 @@ namespace Intersect.Editor.Forms.DockingElements
                     cmbDir.SelectedIndex = (int)spawn.Direction;
                     nudInstanceSpawnLimit.Value = spawn.RequiredPlayersToSpawn;
                     chkDoNotRespawn.Checked = spawn.PreventRespawn;
+                    chkOverrideMovement.Checked = spawn.OverrideMovement;
+                    cmbNpcBehaviors.SelectedIndex = Math.Min((int)spawn.OverriddenMovement, cmbNpcBehaviors.Items.Count - 1);
                     if (Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].X >= 0)
                     {
                         rbDeclared.Checked = true;
@@ -952,6 +964,9 @@ namespace Intersect.Editor.Forms.DockingElements
                 chkDoNotRespawn.Checked = spawn.PreventRespawn;
                 nudNpcSpawnGroup.Value = spawn.SpawnGroup;
                 chkSpawnGroupGreater.Checked = spawn.CumulativeSpawning;
+                chkOverrideMovement.Checked = spawn.OverrideMovement;
+                cmbNpcBehaviors.SelectedIndex = Math.Min((int)spawn.OverriddenMovement, cmbNpcBehaviors.Items.Count - 1);
+
                 if (spawn.X >= 0)
                 {
                     rbDeclared.Checked = true;
@@ -1592,6 +1607,23 @@ namespace Intersect.Editor.Forms.DockingElements
         private void cmbInstanceType_SelectedIndexChanged(object sender, EventArgs e)
         {
             nudSharedLives.Enabled = (MapInstanceType)cmbInstanceType.SelectedIndex == MapInstanceType.Shared;
+        }
+
+        private void chkStandStill_CheckedChanged(object sender, EventArgs e)
+        {
+            if (lstMapNpcs.SelectedIndex >= 0)
+            {
+                Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].OverrideMovement = chkOverrideMovement.Checked;
+            }
+            cmbNpcBehaviors.Enabled = chkOverrideMovement.Checked;
+        }
+
+        private void cmbNpcBehaviors_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lstMapNpcs.SelectedIndex >= 0)
+            {
+                Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].OverriddenMovement = (NpcMovement)Math.Max(cmbNpcBehaviors.SelectedIndex, 0);
+            }
         }
     }
 

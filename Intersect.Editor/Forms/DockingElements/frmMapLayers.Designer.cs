@@ -72,6 +72,8 @@ namespace Intersect.Editor.Forms.DockingElements
             this.cmbWarpSound = new DarkUI.Controls.DarkComboBox();
             this.lblWarpSound = new System.Windows.Forms.Label();
             this.grpInstanceSettings = new DarkUI.Controls.DarkGroupBox();
+            this.nudSharedLives = new DarkUI.Controls.DarkNumericUpDown();
+            this.lblSharedLives = new System.Windows.Forms.Label();
             this.lblDungeon = new System.Windows.Forms.Label();
             this.cmbDungeon = new DarkUI.Controls.DarkComboBox();
             this.lblInstance = new System.Windows.Forms.Label();
@@ -173,8 +175,8 @@ namespace Intersect.Editor.Forms.DockingElements
             this.pnlEvents = new System.Windows.Forms.Panel();
             this.pnlLights = new System.Windows.Forms.Panel();
             this.lightEditor = new Intersect.Editor.Forms.Controls.LightEditorCtrl();
-            this.lblSharedLives = new System.Windows.Forms.Label();
-            this.nudSharedLives = new DarkUI.Controls.DarkNumericUpDown();
+            this.chkOverrideMovement = new DarkUI.Controls.DarkCheckBox();
+            this.cmbNpcBehaviors = new DarkUI.Controls.DarkComboBox();
             this.grpResource.SuspendLayout();
             this.grpZResource.SuspendLayout();
             this.grpItem.SuspendLayout();
@@ -184,6 +186,7 @@ namespace Intersect.Editor.Forms.DockingElements
             this.grpFootstep.SuspendLayout();
             this.grpWarp.SuspendLayout();
             this.grpInstanceSettings.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSharedLives)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudWarpY)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudWarpX)).BeginInit();
             this.grpZDimension.SuspendLayout();
@@ -218,7 +221,6 @@ namespace Intersect.Editor.Forms.DockingElements
             ((System.ComponentModel.ISupportInitialize)(this.picTileset)).BeginInit();
             this.pnlEvents.SuspendLayout();
             this.pnlLights.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudSharedLives)).BeginInit();
             this.SuspendLayout();
             // 
             // lblLayer
@@ -796,6 +798,39 @@ namespace Intersect.Editor.Forms.DockingElements
             this.grpInstanceSettings.Text = "Instance Settings";
             this.grpInstanceSettings.Visible = false;
             // 
+            // nudSharedLives
+            // 
+            this.nudSharedLives.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.nudSharedLives.ForeColor = System.Drawing.Color.Gainsboro;
+            this.nudSharedLives.Location = new System.Drawing.Point(87, 72);
+            this.nudSharedLives.Maximum = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
+            this.nudSharedLives.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudSharedLives.Name = "nudSharedLives";
+            this.nudSharedLives.Size = new System.Drawing.Size(148, 20);
+            this.nudSharedLives.TabIndex = 34;
+            this.nudSharedLives.Value = new decimal(new int[] {
+            3,
+            0,
+            0,
+            0});
+            // 
+            // lblSharedLives
+            // 
+            this.lblSharedLives.AutoSize = true;
+            this.lblSharedLives.Location = new System.Drawing.Point(9, 74);
+            this.lblSharedLives.Name = "lblSharedLives";
+            this.lblSharedLives.Size = new System.Drawing.Size(72, 13);
+            this.lblSharedLives.TabIndex = 33;
+            this.lblSharedLives.Text = "Shared Lives:";
+            // 
             // lblDungeon
             // 
             this.lblDungeon.AutoSize = true;
@@ -1338,7 +1373,7 @@ namespace Intersect.Editor.Forms.DockingElements
             this.grpNpcList.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpNpcList.Location = new System.Drawing.Point(8, 317);
             this.grpNpcList.Name = "grpNpcList";
-            this.grpNpcList.Size = new System.Drawing.Size(259, 232);
+            this.grpNpcList.Size = new System.Drawing.Size(259, 283);
             this.grpNpcList.TabIndex = 12;
             this.grpNpcList.TabStop = false;
             this.grpNpcList.Text = "Add/Remove Map NPCs";
@@ -1347,6 +1382,8 @@ namespace Intersect.Editor.Forms.DockingElements
             // 
             this.grpSpawnOptions.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpSpawnOptions.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpSpawnOptions.Controls.Add(this.cmbNpcBehaviors);
+            this.grpSpawnOptions.Controls.Add(this.chkOverrideMovement);
             this.grpSpawnOptions.Controls.Add(this.chkSpawnGroupGreater);
             this.grpSpawnOptions.Controls.Add(this.nudNpcSpawnGroup);
             this.grpSpawnOptions.Controls.Add(this.lblNpcSpawnGroup);
@@ -1356,7 +1393,7 @@ namespace Intersect.Editor.Forms.DockingElements
             this.grpSpawnOptions.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpSpawnOptions.Location = new System.Drawing.Point(5, 86);
             this.grpSpawnOptions.Name = "grpSpawnOptions";
-            this.grpSpawnOptions.Size = new System.Drawing.Size(248, 140);
+            this.grpSpawnOptions.Size = new System.Drawing.Size(248, 191);
             this.grpSpawnOptions.TabIndex = 12;
             this.grpSpawnOptions.TabStop = false;
             this.grpSpawnOptions.Text = "Spawn Options";
@@ -1623,8 +1660,8 @@ namespace Intersect.Editor.Forms.DockingElements
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel1.Controls.Add(this.pnlAttributes);
             this.panel1.Controls.Add(this.pnlNpcs);
+            this.panel1.Controls.Add(this.pnlAttributes);
             this.panel1.Controls.Add(this.pnlTiles);
             this.panel1.Controls.Add(this.pnlEvents);
             this.panel1.Controls.Add(this.pnlLights);
@@ -2153,38 +2190,36 @@ namespace Intersect.Editor.Forms.DockingElements
             this.lightEditor.Visible = false;
             this.lightEditor.Load += new System.EventHandler(this.lightEditor_Load);
             // 
-            // lblSharedLives
+            // chkOverrideMovement
             // 
-            this.lblSharedLives.AutoSize = true;
-            this.lblSharedLives.Location = new System.Drawing.Point(9, 74);
-            this.lblSharedLives.Name = "lblSharedLives";
-            this.lblSharedLives.Size = new System.Drawing.Size(72, 13);
-            this.lblSharedLives.TabIndex = 33;
-            this.lblSharedLives.Text = "Shared Lives:";
+            this.chkOverrideMovement.AutoSize = true;
+            this.chkOverrideMovement.Location = new System.Drawing.Point(9, 130);
+            this.chkOverrideMovement.Name = "chkOverrideMovement";
+            this.chkOverrideMovement.Size = new System.Drawing.Size(111, 17);
+            this.chkOverrideMovement.TabIndex = 58;
+            this.chkOverrideMovement.Text = "Override Behavior";
+            this.chkOverrideMovement.CheckedChanged += new System.EventHandler(this.chkStandStill_CheckedChanged);
             // 
-            // nudSharedLives
+            // cmbNpcBehaviors
             // 
-            this.nudSharedLives.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.nudSharedLives.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudSharedLives.Location = new System.Drawing.Point(87, 72);
-            this.nudSharedLives.Maximum = new decimal(new int[] {
-            3,
-            0,
-            0,
-            0});
-            this.nudSharedLives.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nudSharedLives.Name = "nudSharedLives";
-            this.nudSharedLives.Size = new System.Drawing.Size(148, 20);
-            this.nudSharedLives.TabIndex = 34;
-            this.nudSharedLives.Value = new decimal(new int[] {
-            3,
-            0,
-            0,
-            0});
+            this.cmbNpcBehaviors.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbNpcBehaviors.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbNpcBehaviors.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbNpcBehaviors.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbNpcBehaviors.DrawDropdownHoverOutline = false;
+            this.cmbNpcBehaviors.DrawFocusRectangle = false;
+            this.cmbNpcBehaviors.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbNpcBehaviors.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbNpcBehaviors.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbNpcBehaviors.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbNpcBehaviors.FormattingEnabled = true;
+            this.cmbNpcBehaviors.Location = new System.Drawing.Point(9, 153);
+            this.cmbNpcBehaviors.Name = "cmbNpcBehaviors";
+            this.cmbNpcBehaviors.Size = new System.Drawing.Size(223, 21);
+            this.cmbNpcBehaviors.TabIndex = 59;
+            this.cmbNpcBehaviors.Text = null;
+            this.cmbNpcBehaviors.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbNpcBehaviors.SelectedIndexChanged += new System.EventHandler(this.cmbNpcBehaviors_SelectedIndexChanged);
             // 
             // FrmMapLayers
             // 
@@ -2227,6 +2262,7 @@ namespace Intersect.Editor.Forms.DockingElements
             this.grpWarp.PerformLayout();
             this.grpInstanceSettings.ResumeLayout(false);
             this.grpInstanceSettings.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.nudSharedLives)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudWarpY)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudWarpX)).EndInit();
             this.grpZDimension.ResumeLayout(false);
@@ -2274,7 +2310,6 @@ namespace Intersect.Editor.Forms.DockingElements
             this.pnlEvents.ResumeLayout(false);
             this.pnlEvents.PerformLayout();
             this.pnlLights.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.nudSharedLives)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -2423,5 +2458,7 @@ namespace Intersect.Editor.Forms.DockingElements
         private Label lblCommonSounds;
         private DarkNumericUpDown nudSharedLives;
         private Label lblSharedLives;
+        private DarkCheckBox chkOverrideMovement;
+        private DarkComboBox cmbNpcBehaviors;
     }
 }

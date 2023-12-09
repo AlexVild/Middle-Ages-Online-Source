@@ -1031,10 +1031,10 @@ namespace Intersect.Server.Entities.Events
             }
 
             var tile = new TileHelper(mapId, tileX, tileY);
-            if (tile.TryFix() && MapController.TryGetInstanceFromMap(mapId, player.MapInstanceId, out var instance))
+            if (tile.TryFix() && MapController.TryGetInstanceFromMap(mapId, player.MapInstanceId, out var instance)
+                && instance.TrySpawnNpc((byte)tileX, (byte)tileY, direction, npcId, out var npc, true))
             {
-                var npc = instance.SpawnNpc((byte)tileX, (byte)tileY, direction, npcId, true);
-                player.SpawnedNpcs.Add((Npc)npc);
+                player.SpawnedNpcs.Add(npc);
             }
         }
 

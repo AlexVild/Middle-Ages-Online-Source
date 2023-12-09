@@ -558,19 +558,9 @@ namespace Intersect.Server.Maps
 
             // Declared spawn
             FindNpcSpawnLocation(spawn, out var x, out var y, out var dir);
-            npcSpawnInstance.Entity = SpawnNpc((byte)x, (byte)y, dir, spawn.NpcId);
-
-            // Final setup of the spawned entity
-            if (npcSpawnInstance.Entity is Npc npc)
+            if (TrySpawnNpc((byte)x, (byte)y, dir, spawn.NpcId, out Npc npc))
             {
-                npc.SpawnMapId = mMapController.Id;
-
-                // If this NPC is not meant to respawn, set up the NPC to talk back to ProcessingInfo
-                if (spawn.PreventRespawn)
-                {
-                    // A key - the spawn map, and the spawn index on the map
-                    npc.PermadeathKey = npcKey;
-                }
+                npc.InitializeToMap(mMapController.Id, spawn, npcSpawnInstance, npcKey);
             }
         }
 
@@ -622,28 +612,29 @@ namespace Intersect.Server.Maps
         /// <param name="npcId">NPC Entity ID to spawn</param>
         /// <param name="despawnable">Whether or not this NPC can be despawned (for example, if spawned via event command)</param>
         /// <returns></returns>
-        public Entity SpawnNpc(byte tileX, byte tileY, byte dir, Guid npcId, bool despawnable = false)
+        public bool TrySpawnNpc(byte tileX, byte tileY, byte dir, Guid npcId, out Npc npc, bool despawnable = false)
         {
+            npc = null;
             var npcBase = NpcBase.Get(npcId);
-            if (npcBase != null)
+            if (npcBase == null)
             {
-                var processLayer = this.MapInstanceId;
-                var npc = new Npc(npcBase, despawnable)
-                {
-                    MapId = mMapController.Id,
-                    X = tileX,
-                    Y = tileY,
-                    Dir = dir,
-                    MapInstanceId = processLayer
-                };
-
-                AddEntity(npc);
-                PacketSender.SendEntityDataToProximity(npc);
-
-                return npc;
+                return false;
             }
 
-            return null;
+            var processLayer = MapInstanceId;
+            npc = new Npc(npcBase, despawnable)
+            {
+                MapId = mMapController.Id,
+                X = tileX,
+                Y = tileY,
+                Dir = dir,
+                MapInstanceId = processLayer
+            };
+
+            AddEntity(npc);
+            PacketSender.SendEntityDataToProximity(npc);
+
+            return true;
         }
 
         /// <summary>
@@ -706,7 +697,10 @@ namespace Intersect.Server.Maps
                                 {
                                     npc.Die(false);
                                     FindNpcSpawnLocation(npcSpawn.Key, out var x, out var y, out var dir);
-                                    npcSpawn.Value.Entity = SpawnNpc((byte)x, (byte)y, dir, npcSpawn.Key.NpcId);
+                                    if (TrySpawnNpc((byte)x, (byte)y, dir, npcSpawn.Key.NpcId, out var newNpc))
+                                    {
+                                        npcSpawn.Value.Entity = newNpc;
+                                    }
                                 }
                             }
                         }

@@ -24,6 +24,10 @@ namespace Intersect.GameObjects.Maps
 
         public bool CumulativeSpawning = false;
 
+        public bool OverrideMovement = false;
+
+        public NpcMovement OverriddenMovement;
+
         public NpcSpawn()
         {
         }
@@ -37,6 +41,9 @@ namespace Intersect.GameObjects.Maps
             RequiredPlayersToSpawn = copy.RequiredPlayersToSpawn;
             PreventRespawn = copy.PreventRespawn;
             SpawnGroup = copy.SpawnGroup;
+            CumulativeSpawning = copy.CumulativeSpawning;
+            OverrideMovement = copy.OverrideMovement;
+            OverriddenMovement = copy.OverriddenMovement;
         }
 
     }

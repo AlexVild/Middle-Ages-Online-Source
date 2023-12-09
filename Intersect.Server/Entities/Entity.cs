@@ -423,7 +423,7 @@ namespace Intersect.Server.Entities
             // If this is an Npc that has the Static behaviour, it can NEVER move.
             if (this is Npc npc)
             {
-                if (npc.Base.Movement == (byte) NpcMovement.Static || npc.Base.StandStill)
+                if (npc.Movement == NpcMovement.Static || npc.Base.StandStill)
                 {
                     return -2;
                 }

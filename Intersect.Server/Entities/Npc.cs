@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Intersect.Enums;
 using Intersect.GameObjects;
 using Intersect.GameObjects.Events;
+using Intersect.GameObjects.Maps;
 using Intersect.Logging;
 using Intersect.Network.Packets.Server;
 using Intersect.Server.Core;
@@ -25,6 +26,7 @@ using Intersect.Server.Maps;
 using Intersect.Server.Networking;
 using Intersect.Server.Utilities;
 using Intersect.Utilities;
+using static Intersect.GameObjects.Maps.MapBase;
 
 namespace Intersect.Server.Entities
 {
@@ -130,6 +132,20 @@ namespace Intersect.Server.Entities
         {
             SetToBase(myBase);
             Despawnable = despawnable;
+        }
+
+        public void InitializeToMap(Guid mapId, NpcSpawn spawnSettings, MapNpcSpawn mapSpawner, string npcKey)
+        {
+            SpawnMapId = mapId;
+            if (spawnSettings.PreventRespawn)
+            {
+                PermadeathKey = npcKey;
+            }
+
+            OverrideMovement = spawnSettings.OverrideMovement;
+            OverriddenMovement = spawnSettings.OverriddenMovement;
+
+            mapSpawner.Entity = this;
         }
 
         private void SetToBase(NpcBase myBase)
@@ -1003,7 +1019,7 @@ namespace Intersect.Server.Entities
 
                         }
 
-                        if (mPathFinder.GetTarget() != null && Base.Movement != (int)NpcMovement.Static)
+                        if (mPathFinder.GetTarget() != null && Movement != NpcMovement.Static)
                         {
                             TryCastSpells();
                             // TODO: Make resetting mobs actually return to their starting location.
@@ -1218,13 +1234,13 @@ namespace Intersect.Server.Entities
                             return;
                         }
 
-                        if (Base.Movement == (int)NpcMovement.StandStill)
+                        if (Movement == NpcMovement.StandStill)
                         {
                             LastRandomMove = Timing.Global.Milliseconds + Randomization.Next(1000, 3000);
 
                             return;
                         }
-                        else if (Base.Movement == (int)NpcMovement.TurnRandomly)
+                        else if (Movement == NpcMovement.TurnRandomly)
                         {
                             ChangeDir((byte)Randomization.Next(0, 4));
                             LastRandomMove = Timing.Global.Milliseconds + Randomization.Next(1000, 3000);
@@ -2098,5 +2114,14 @@ namespace Intersect.Server.Entities
             recovered = manaRecovered;
             return true;
         }
+
+        public bool OverrideMovement = false;
+
+        public NpcMovement OverriddenMovement;
+
+        /// <summary>
+        /// Determines the movement type of the spawned NPC
+        /// </summary>
+        public NpcMovement Movement => OverrideMovement ? OverriddenMovement : (NpcMovement)(Base?.Movement);
     }
 }
