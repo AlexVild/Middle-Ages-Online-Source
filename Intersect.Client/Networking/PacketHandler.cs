@@ -1110,6 +1110,10 @@ namespace Intersect.Client.Networking
             if (Globals.Me.TargetIndex == id)
             {
                 Globals.Me.ClearTarget(true, en.Id);
+                if (Globals.Database.ChangeTargetOnDeath)
+                {
+                    Globals.Me.TryAutoTarget(false);
+                }
             }
         }
 
