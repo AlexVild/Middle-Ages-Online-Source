@@ -1569,6 +1569,11 @@ namespace Intersect.Client.Entities
                 return;
             }
 
+            if (NpcBase.TryGet(NpcId, out var npcBase) && npcBase.HideName)
+            {
+                return;
+            }
+
             // Don't draw if non-aggressive NPC, IF namefading is off
             if (!Globals.Database.NameFading && !(this is Event) && !(this is Player) && !IsTargeted && Type != -1)
             {

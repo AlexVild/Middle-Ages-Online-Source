@@ -180,12 +180,9 @@ namespace Intersect.Server.Entities
             }
 
             // Handle the spell cast from the parent
-            if (parentSpell != null)
+            if (parentSpell != null && willDamage && !enemy.IsImmuneTo(Immunities.Spellcasting))
             {
-                if (willDamage)
-                {
-                    SpellAttack(enemy, parentSpell, (sbyte)projectile.Dir, projectile, true);
-                }
+                SpellAttack(enemy, parentSpell, (sbyte)projectile.Dir, projectile, true);
             }
             // Otherwise, handle the weapon
             else if (parentWeapon != null)

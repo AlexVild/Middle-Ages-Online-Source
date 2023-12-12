@@ -68,6 +68,9 @@ namespace Intersect.GameObjects
 
         [Description("Confusion")]
         Confused,
+
+        [Description("Spellcasting")]
+        Spellcasting,
     }
 
     public partial class NpcBase : DatabaseObject<NpcBase>, IFolderable
@@ -491,6 +494,8 @@ namespace Intersect.GameObjects
         public int MeleeManasteal { get; set; }
 
         public bool NeverSkipSpellCasting { get; set; }
+
+        public bool HideName { get; set; }
     }
 
 }

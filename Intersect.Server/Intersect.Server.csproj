@@ -1349,6 +1349,10 @@
     <Compile Include="Migrations\Game\20231202155721_RecipeCRMigration.designer.cs">
       <DependentUpon>20231202155721_RecipeCRMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20231212194414_HideNpcNamesMigration.cs" />
+    <Compile Include="Migrations\Game\20231212194414_HideNpcNamesMigration.designer.cs">
+      <DependentUpon>20231212194414_HideNpcNamesMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

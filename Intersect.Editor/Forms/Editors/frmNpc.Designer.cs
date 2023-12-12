@@ -191,6 +191,7 @@ namespace Intersect.Editor.Forms.Editors
             this.chkAttackAllies = new DarkUI.Controls.DarkCheckBox();
             this.chkEnabled = new DarkUI.Controls.DarkCheckBox();
             this.grpSpells = new DarkUI.Controls.DarkGroupBox();
+            this.chkNeverSkip = new DarkUI.Controls.DarkCheckBox();
             this.cmbSpell = new DarkUI.Controls.DarkComboBox();
             this.cmbFreq = new DarkUI.Controls.DarkComboBox();
             this.lblFreq = new System.Windows.Forms.Label();
@@ -279,7 +280,8 @@ namespace Intersect.Editor.Forms.Editors
             this.lblTierView = new System.Windows.Forms.Label();
             this.lblTargetDps = new System.Windows.Forms.Label();
             this.lblProjectedDps = new System.Windows.Forms.Label();
-            this.chkNeverSkip = new DarkUI.Controls.DarkCheckBox();
+            this.chkSpellCasting = new DarkUI.Controls.DarkCheckBox();
+            this.chkHideName = new DarkUI.Controls.DarkCheckBox();
             this.toolStrip.SuspendLayout();
             this.grpNpcs.SuspendLayout();
             this.pnlContainer.SuspendLayout();
@@ -852,7 +854,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpBestiary.Controls.Add(this.lstBestiaryUnlocks);
             this.grpBestiary.Controls.Add(this.lblBestiary);
             this.grpBestiary.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpBestiary.Location = new System.Drawing.Point(447, 767);
+            this.grpBestiary.Location = new System.Drawing.Point(447, 818);
             this.grpBestiary.Margin = new System.Windows.Forms.Padding(2);
             this.grpBestiary.Name = "grpBestiary";
             this.grpBestiary.Padding = new System.Windows.Forms.Padding(2);
@@ -1096,6 +1098,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpImmunities.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpImmunities.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpImmunities.Controls.Add(this.chkSpellCasting);
             this.grpImmunities.Controls.Add(this.chkStealth);
             this.grpImmunities.Controls.Add(this.chkNoBack);
             this.grpImmunities.Controls.Add(this.chkImpassable);
@@ -1116,7 +1119,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpImmunities.Margin = new System.Windows.Forms.Padding(2);
             this.grpImmunities.Name = "grpImmunities";
             this.grpImmunities.Padding = new System.Windows.Forms.Padding(2);
-            this.grpImmunities.Size = new System.Drawing.Size(226, 222);
+            this.grpImmunities.Size = new System.Drawing.Size(226, 280);
             this.grpImmunities.TabIndex = 33;
             this.grpImmunities.TabStop = false;
             this.grpImmunities.Text = "Immunities";
@@ -1144,7 +1147,7 @@ namespace Intersect.Editor.Forms.Editors
             // chkImpassable
             // 
             this.chkImpassable.AutoSize = true;
-            this.chkImpassable.Location = new System.Drawing.Point(10, 202);
+            this.chkImpassable.Location = new System.Drawing.Point(10, 255);
             this.chkImpassable.Name = "chkImpassable";
             this.chkImpassable.Size = new System.Drawing.Size(79, 17);
             this.chkImpassable.TabIndex = 89;
@@ -1181,7 +1184,7 @@ namespace Intersect.Editor.Forms.Editors
             0,
             0,
             131072});
-            this.nudTenacity.Location = new System.Drawing.Point(11, 178);
+            this.nudTenacity.Location = new System.Drawing.Point(11, 226);
             this.nudTenacity.Name = "nudTenacity";
             this.nudTenacity.Size = new System.Drawing.Size(195, 20);
             this.nudTenacity.TabIndex = 79;
@@ -1195,7 +1198,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblTenacity
             // 
             this.lblTenacity.AutoSize = true;
-            this.lblTenacity.Location = new System.Drawing.Point(11, 161);
+            this.lblTenacity.Location = new System.Drawing.Point(11, 205);
             this.lblTenacity.Name = "lblTenacity";
             this.lblTenacity.Size = new System.Drawing.Size(68, 13);
             this.lblTenacity.TabIndex = 79;
@@ -2491,6 +2494,16 @@ namespace Intersect.Editor.Forms.Editors
             this.grpSpells.TabStop = false;
             this.grpSpells.Text = "Spells";
             // 
+            // chkNeverSkip
+            // 
+            this.chkNeverSkip.AutoSize = true;
+            this.chkNeverSkip.Location = new System.Drawing.Point(12, 241);
+            this.chkNeverSkip.Name = "chkNeverSkip";
+            this.chkNeverSkip.Size = new System.Drawing.Size(141, 17);
+            this.chkNeverSkip.TabIndex = 96;
+            this.chkNeverSkip.Text = "Never skip spellcasting?";
+            this.chkNeverSkip.CheckedChanged += new System.EventHandler(this.chkNeverSkip_CheckedChanged);
+            // 
             // cmbSpell
             // 
             this.cmbSpell.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
@@ -2593,6 +2606,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpGeneral.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpGeneral.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpGeneral.Controls.Add(this.chkHideName);
             this.grpGeneral.Controls.Add(this.lblTier);
             this.grpGeneral.Controls.Add(this.nudTier);
             this.grpGeneral.Controls.Add(this.lblAlpha);
@@ -2622,7 +2636,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblTier
             // 
             this.lblTier.AutoSize = true;
-            this.lblTier.Location = new System.Drawing.Point(82, 74);
+            this.lblTier.Location = new System.Drawing.Point(56, 76);
             this.lblTier.Name = "lblTier";
             this.lblTier.Size = new System.Drawing.Size(25, 13);
             this.lblTier.TabIndex = 80;
@@ -2632,9 +2646,9 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.nudTier.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
             this.nudTier.ForeColor = System.Drawing.Color.Gainsboro;
-            this.nudTier.Location = new System.Drawing.Point(118, 72);
+            this.nudTier.Location = new System.Drawing.Point(87, 74);
             this.nudTier.Name = "nudTier";
-            this.nudTier.Size = new System.Drawing.Size(77, 20);
+            this.nudTier.Size = new System.Drawing.Size(108, 20);
             this.nudTier.TabIndex = 79;
             this.nudTier.Value = new decimal(new int[] {
             0,
@@ -2814,9 +2828,9 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbSprite.FormattingEnabled = true;
             this.cmbSprite.Items.AddRange(new object[] {
             "None"});
-            this.cmbSprite.Location = new System.Drawing.Point(75, 116);
+            this.cmbSprite.Location = new System.Drawing.Point(6, 116);
             this.cmbSprite.Name = "cmbSprite";
-            this.cmbSprite.Size = new System.Drawing.Size(120, 21);
+            this.cmbSprite.Size = new System.Drawing.Size(189, 21);
             this.cmbSprite.TabIndex = 11;
             this.cmbSprite.Text = "None";
             this.cmbSprite.TextPadding = new System.Windows.Forms.Padding(2);
@@ -2825,7 +2839,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblPic
             // 
             this.lblPic.AutoSize = true;
-            this.lblPic.Location = new System.Drawing.Point(72, 100);
+            this.lblPic.Location = new System.Drawing.Point(7, 99);
             this.lblPic.Name = "lblPic";
             this.lblPic.Size = new System.Drawing.Size(37, 13);
             this.lblPic.TabIndex = 6;
@@ -2834,7 +2848,7 @@ namespace Intersect.Editor.Forms.Editors
             // picNpc
             // 
             this.picNpc.BackColor = System.Drawing.Color.Black;
-            this.picNpc.Location = new System.Drawing.Point(6, 108);
+            this.picNpc.Location = new System.Drawing.Point(6, 147);
             this.picNpc.Name = "picNpc";
             this.picNpc.Size = new System.Drawing.Size(64, 64);
             this.picNpc.TabIndex = 4;
@@ -3692,15 +3706,25 @@ namespace Intersect.Editor.Forms.Editors
             this.lblProjectedDps.TabIndex = 121;
             this.lblProjectedDps.Text = "Est. DPS";
             // 
-            // chkNeverSkip
+            // chkSpellCasting
             // 
-            this.chkNeverSkip.AutoSize = true;
-            this.chkNeverSkip.Location = new System.Drawing.Point(12, 241);
-            this.chkNeverSkip.Name = "chkNeverSkip";
-            this.chkNeverSkip.Size = new System.Drawing.Size(141, 17);
-            this.chkNeverSkip.TabIndex = 96;
-            this.chkNeverSkip.Text = "Never skip spellcasting?";
-            this.chkNeverSkip.CheckedChanged += new System.EventHandler(this.chkNeverSkip_CheckedChanged);
+            this.chkSpellCasting.AutoSize = true;
+            this.chkSpellCasting.Location = new System.Drawing.Point(11, 164);
+            this.chkSpellCasting.Name = "chkSpellCasting";
+            this.chkSpellCasting.Size = new System.Drawing.Size(83, 17);
+            this.chkSpellCasting.TabIndex = 92;
+            this.chkSpellCasting.Text = "Spellcasting";
+            this.chkSpellCasting.CheckedChanged += new System.EventHandler(this.chkSpellCasting_CheckedChanged);
+            // 
+            // chkHideName
+            // 
+            this.chkHideName.AutoSize = true;
+            this.chkHideName.Location = new System.Drawing.Point(110, 96);
+            this.chkHideName.Name = "chkHideName";
+            this.chkHideName.Size = new System.Drawing.Size(85, 17);
+            this.chkHideName.TabIndex = 81;
+            this.chkHideName.Text = "Hide Name?";
+            this.chkHideName.CheckedChanged += new System.EventHandler(this.darkCheckBox1_CheckedChanged);
             // 
             // FrmNpc
             // 
@@ -4067,5 +4091,7 @@ namespace Intersect.Editor.Forms.Editors
         private System.Windows.Forms.Label lblLifesteal;
         private DarkNumericUpDown nudLifesteal;
         private DarkCheckBox chkNeverSkip;
+        private DarkCheckBox chkSpellCasting;
+        private DarkCheckBox chkHideName;
     }
 }

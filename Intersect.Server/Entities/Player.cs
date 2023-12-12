@@ -1602,81 +1602,96 @@ namespace Intersect.Server.Entities
             switch (entity)
             {
                 case Npc npc:
+                {
+                    var descriptor = npc.Base;
+                    var playerEvent = descriptor.OnDeathEvent;
+                    var partyEvent = descriptor.OnDeathPartyEvent;
+
+                    // If in party, split the exp.
+                    if (Party != null && Party.Count > 0)
                     {
-                        var descriptor = npc.Base;
-                        var playerEvent = descriptor.OnDeathEvent;
-                        var partyEvent = descriptor.OnDeathPartyEvent;
-
-                        // If in party, split the exp.
-                        if (Party != null && Party.Count > 0)
+                        var partyMembersInXpRange = Party.Where(partyMember => partyMember.InRangeOf(this, Options.Party.SharedXpRange)).ToArray();
+                        float bonusExp = Options.Instance.PartyOpts.BonusExperiencePercentPerMember / 100;
+                        var multiplier = 1.0f + (partyMembersInXpRange.Length * bonusExp);
+                        var partyExperience = (int)(descriptor.Experience * multiplier) / (Math.Max(1, partyMembersInXpRange.Length));
+                        foreach (var partyMember in partyMembersInXpRange)
                         {
-                            var partyMembersInXpRange = Party.Where(partyMember => partyMember.InRangeOf(this, Options.Party.SharedXpRange)).ToArray();
-                            float bonusExp = Options.Instance.PartyOpts.BonusExperiencePercentPerMember / 100;
-                            var multiplier = 1.0f + (partyMembersInXpRange.Length * bonusExp);
-                            var partyExperience = (int)(descriptor.Experience * multiplier) / (Math.Max(1, partyMembersInXpRange.Length));
-                            foreach (var partyMember in partyMembersInXpRange)
+                            if (partyMember.PlayerDead)
                             {
-                                if (partyMember.PlayerDead)
-                                {
-                                    continue;
-                                }
-                                partyMember.GiveExperience(partyExperience, true, entity);
-                                partyMember.UpdateQuestKillTasks(entity);
-                                partyMember.UpdateComboTime(entity.TierLevel);
+                                continue;
                             }
+                            partyMember.GiveExperience(partyExperience, true, entity);
+                            partyMember.UpdateQuestKillTasks(entity);
+                            partyMember.UpdateComboTime(entity.TierLevel);
+                        }
 
-                            if (partyEvent != null)
+                        if (partyEvent != null)
+                        {
+                            foreach (var partyMember in Party)
                             {
-                                foreach (var partyMember in Party)
+                                if ((Options.Party.NpcDeathCommonEventStartRange <= 0 || partyMember.InRangeOf(this, Options.Party.NpcDeathCommonEventStartRange)) && !(partyMember == this && playerEvent != null))
                                 {
-                                    if ((Options.Party.NpcDeathCommonEventStartRange <= 0 || partyMember.InRangeOf(this, Options.Party.NpcDeathCommonEventStartRange)) && !(partyMember == this && playerEvent != null))
-                                    {
-                                        partyMember.EnqueueStartCommonEvent(partyEvent);
-                                    }
+                                    partyMember.EnqueueStartCommonEvent(partyEvent);
                                 }
                             }
                         }
-                        else
-                        {
-                            var mobExp = Options.Instance.CombatOpts.UseGeneratedMobExp ? NpcExperienceService.GetExp(descriptor.Id) : descriptor.Experience;
-
-                            GiveExperience(mobExp, false, entity);
-                            UpdateComboTime(entity.TierLevel);
-                            UpdateQuestKillTasks(entity);
-                        }
-
-                        if (playerEvent != null)
-                        {
-                            EnqueueStartCommonEvent(playerEvent);
-                        }
-
-                        if (Equipment[Options.PrayerIndex] >= 0)
-                        {
-                            var prayer = ItemBase.Get(Items[Equipment[Options.PrayerIndex]].ItemId);
-                            var prayerSpell = SpellBase.Get(prayer.ComboSpellId);
-                            // If there's a spell and we're on the right combo interval (every 2 kills, etc)
-                            if (prayerSpell != default 
-                                && prayer.ComboInterval > 0 
-                                && CurrentCombo % prayer.ComboInterval == 0)
-                            {
-                                UseSpell(prayerSpell, -1, npc, true, true, (byte)Dir, npc);
-                            }
-                        }
-
-                        break;
                     }
+                    else
+                    {
+                        var mobExp = Options.Instance.CombatOpts.UseGeneratedMobExp ? NpcExperienceService.GetExp(descriptor.Id) : descriptor.Experience;
+
+                        GiveExperience(mobExp, false, entity);
+                        UpdateComboTime(entity.TierLevel);
+                        UpdateQuestKillTasks(entity);
+                    }
+
+                    if (playerEvent != null)
+                    {
+                        EnqueueStartCommonEvent(playerEvent);
+                    }
+
+                    _ = TryUsePrayerSpell(npc);
+
+                    break;
+                }
 
                 case Resource resource:
+                {
+                    var descriptor = resource.Base;
+                    if (descriptor?.Event != null)
                     {
-                        var descriptor = resource.Base;
-                        if (descriptor?.Event != null)
-                        {
-                            EnqueueStartCommonEvent(descriptor.Event);
-                        }
-
-                        break;
+                        EnqueueStartCommonEvent(descriptor.Event);
                     }
+
+                    break;
+                }
             }
+        }
+
+        private bool TryUsePrayerSpell(Entity target)
+        {
+            if (Equipment[Options.PrayerIndex] < 0)
+            {
+                return false;
+            }
+
+            if (target.IsImmuneTo(Immunities.Spellcasting))
+            {
+                return false;
+            }
+
+            var prayer = ItemBase.Get(Items[Equipment[Options.PrayerIndex]].ItemId);
+            var prayerSpell = SpellBase.Get(prayer.ComboSpellId);
+            // If there's a spell and we're on the right combo interval (every 2 kills, etc)
+            if (prayerSpell != default
+                && prayer.ComboInterval > 0
+                && CurrentCombo % prayer.ComboInterval == 0)
+            {
+                UseSpell(prayerSpell, -1, target, true, true, (byte)Dir, target);
+                return true;
+            }
+
+            return false;
         }
 
         #region Combo Stuff
@@ -1859,6 +1874,11 @@ namespace Intersect.Server.Entities
 
         public bool CanAttackNpc(Npc npc, SpellBase spell = null)
         {
+            if (spell != default && npc.IsImmuneTo(Immunities.Spellcasting))
+            {
+                return false;
+            }
+
             var friendly = spell?.Combat != null && spell.Combat.Friendly;
             if (!npc.CanPlayerAttack(this) && !npc.IsAllyOf(this))
             {

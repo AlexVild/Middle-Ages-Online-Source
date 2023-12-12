@@ -434,6 +434,7 @@ namespace Intersect.Editor.Forms.Editors
 
                 chkPlayerLockLoot.Checked = mEditorItem.PlayerLockedLoot;
                 chkNeverSkip.Checked = mEditorItem.NeverSkipSpellCasting;
+                chkHideName.Checked = mEditorItem.HideName;
             }
             else
             {
@@ -696,16 +697,11 @@ namespace Intersect.Editor.Forms.Editors
             chkBlind.Checked = GetImmunityValue(Immunities.Blind);
             chkSlowed.Checked = GetImmunityValue(Immunities.Slowed);
             chkConfused.Checked = GetImmunityValue(Immunities.Confused);
+            chkSpellCasting.Checked = GetImmunityValue(Immunities.Spellcasting);
         }
 
         private bool GetImmunityValue(Immunities immunity)
         {
-            // TODO debugging
-            if (immunity == Immunities.Knockback)
-            {
-                mEditorItem.Immunities.TryGetValue(immunity, out var y);
-                var x = y;
-            }
             return mEditorItem.Immunities.TryGetValue(immunity, out var immunityVal) ? immunityVal : false;
         }
 
@@ -1874,6 +1870,16 @@ namespace Intersect.Editor.Forms.Editors
         private void chkNeverSkip_CheckedChanged(object sender, EventArgs e)
         {
             mEditorItem.NeverSkipSpellCasting = chkNeverSkip.Checked;
+        }
+
+        private void chkSpellCasting_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.Immunities[Immunities.Spellcasting] = chkSpellCasting.Checked;
+        }
+
+        private void darkCheckBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.HideName = chkHideName.Checked;
         }
     }
 

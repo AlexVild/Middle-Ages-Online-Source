@@ -731,6 +731,11 @@ namespace Intersect.Server.Entities
                             continue;
                         }
 
+                        if (entity.IsImmuneTo(Immunities.Spellcasting))
+                        {
+                            continue;
+                        }
+
                         if (!spellBase.Combat.Friendly && entity.IsInvincibleTo(this))
                         {
                             entity.ReactToCombat(this);
