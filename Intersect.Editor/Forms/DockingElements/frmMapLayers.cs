@@ -864,8 +864,9 @@ namespace Intersect.Editor.Forms.DockingElements
                     chkDoNotRespawn.Checked = spawn.PreventRespawn;
                     chkSpawnGroupGreater.Checked = spawn.CumulativeSpawning;
                     nudInstanceSpawnLimit.Value = spawn.RequiredPlayersToSpawn;
-                    spawn.OverrideMovement = chkOverrideMovement.Checked;
-                    spawn.OverriddenMovement = (NpcMovement)Math.Max(cmbNpcBehaviors.SelectedIndex, 0);
+                    chkOverrideMovement.Checked = spawn.OverrideMovement;
+                    cmbNpcBehaviors.SelectedIndex = Math.Min((int)spawn.OverriddenMovement, cmbNpcBehaviors.Items.Count - 1);
+
                     if (spawn.X >= 0)
                     {
                         rbDeclared.Checked = true;
