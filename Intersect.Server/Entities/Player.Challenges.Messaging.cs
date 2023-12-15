@@ -149,6 +149,8 @@ namespace Intersect.Server.Entities
 
         void SendWeaponMaxedMessage(WeaponTypeDescriptor weaponType)
         {
+            return; // Not doing this for now! Change when removed weapon lvl requirement for challenge completion
+
             if (WeaponMaxedReminder)
             {
                 return;

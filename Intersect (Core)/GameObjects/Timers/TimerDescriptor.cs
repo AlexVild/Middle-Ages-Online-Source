@@ -2,6 +2,7 @@
 using Intersect.Models;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -185,6 +186,33 @@ namespace Intersect.GameObjects.Timers
         public int InstanceVariableActionType { get; set; }
 
         public int ActionVariableChangeValue { get; set; }
+
+        [NotMapped]
+        public List<Guid> ExclusiveMaps { get; set; } = new List<Guid>();
+
+        [Column("ExclusiveMaps")]
+        [JsonIgnore]
+        public string ExclusiveMapsJson
+        {
+            get => JsonConvert.SerializeObject(ExclusiveMaps);
+            set => ExclusiveMaps = JsonConvert.DeserializeObject<List<Guid>>(value ?? "") ?? new List<Guid>();
+        }
+
+        public bool ContainsExclusiveMap(Guid mapId)
+        {
+            if (ExclusiveMaps.Count == 0)
+            {
+                return true;
+            }
+
+            return ExclusiveMaps.Contains(mapId);
+        }
+
+        public bool SinglePlayerCancellation { get; set; }
+        public bool SinglePlayerExpire { get; set; }
+        public bool SinglePlayerCompletion { get; set; }
+
+        public bool OnlyDisplayOnExclusiveMaps { get; set; }
 
         #region Access Helpers
         public static Guid IdFromList(int listIndex, TimerOwnerType ownerType)

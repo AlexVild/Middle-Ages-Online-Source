@@ -1353,6 +1353,14 @@
     <Compile Include="Migrations\Game\20231212194414_HideNpcNamesMigration.designer.cs">
       <DependentUpon>20231212194414_HideNpcNamesMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20231215191535_TimerExclusiveMapMigration.cs" />
+    <Compile Include="Migrations\Game\20231215191535_TimerExclusiveMapMigration.designer.cs">
+      <DependentUpon>20231215191535_TimerExclusiveMapMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20231215194802_TimerExclusiveVisibilityMigration.cs" />
+    <Compile Include="Migrations\Game\20231215194802_TimerExclusiveVisibilityMigration.designer.cs">
+      <DependentUpon>20231215194802_TimerExclusiveVisibilityMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

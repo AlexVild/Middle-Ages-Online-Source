@@ -91,7 +91,7 @@ namespace Intersect.Server.Core
                 // Short-circuit out if the newest timer is not yet expired
                 if (timer.TimeRemaining > now)
                 {
-                    return;
+                    break;
                 }
 
                 var descriptor = timer.Descriptor;
@@ -125,6 +125,26 @@ namespace Intersect.Server.Core
                     {
                         RemoveTimer(timer, true);
                     }
+                }
+            }
+
+            // Cleanup any hanging instance timers
+            foreach (var instanceTimer in ActiveTimers.ToArray().Where(t => t.Descriptor?.OwnerType == TimerOwnerType.Instance))
+            {
+                // Does the instance for this timer not even exist anymore? Remove it
+                if (!InstanceProcessor.TryGetInstanceController(instanceTimer.OwnerId, out var controller))
+                {
+                    instanceTimer.CancelTimer();
+                    RemoveTimer(instanceTimer);
+                    continue;
+                }
+
+                // Otherwise, is the timer a) exclusive and b) currently not having any players on it?
+                if (instanceTimer.IsExclusiveToMaps && controller.Players.All(pl => !instanceTimer.ContainsExclusiveMap(pl.MapId))) 
+                {
+                    instanceTimer.CancelTimer();
+                    RemoveTimer(instanceTimer);
+                    continue;
                 }
             }
         }

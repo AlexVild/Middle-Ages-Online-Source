@@ -62,6 +62,12 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbInstanceVar = new DarkUI.Controls.DarkComboBox();
             this.lblInstanceVar = new System.Windows.Forms.Label();
             this.grpTimerOptions = new DarkUI.Controls.DarkGroupBox();
+            this.grpMapExclusivity = new DarkUI.Controls.DarkGroupBox();
+            this.lstExclusiveMaps = new System.Windows.Forms.ListBox();
+            this.btnRemoveMap = new DarkUI.Controls.DarkButton();
+            this.btnAddMap = new DarkUI.Controls.DarkButton();
+            this.lblMap = new System.Windows.Forms.Label();
+            this.cmbMaps = new DarkUI.Controls.DarkComboBox();
             this.chkContinueOnInstanceChange = new DarkUI.Controls.DarkCheckBox();
             this.chkContinueOnDeath = new DarkUI.Controls.DarkCheckBox();
             this.chkStartWithServer = new DarkUI.Controls.DarkCheckBox();
@@ -73,6 +79,9 @@ namespace Intersect.Editor.Forms.Editors
             this.lblCompletionBehavior = new System.Windows.Forms.Label();
             this.cmbCompletionBehavior = new DarkUI.Controls.DarkComboBox();
             this.grpEvents = new DarkUI.Controls.DarkGroupBox();
+            this.chkSinglePlayerCompletion = new DarkUI.Controls.DarkCheckBox();
+            this.chkSinglePlayerExpire = new DarkUI.Controls.DarkCheckBox();
+            this.chkSinglePlayerCancel = new DarkUI.Controls.DarkCheckBox();
             this.cmbCompletionEvent = new DarkUI.Controls.DarkComboBox();
             this.lblOnCompletion = new System.Windows.Forms.Label();
             this.cmbExpirationEvent = new DarkUI.Controls.DarkComboBox();
@@ -103,6 +112,7 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbOwnerType = new DarkUI.Controls.DarkComboBox();
             this.btnSave = new DarkUI.Controls.DarkButton();
             this.btnCancel = new DarkUI.Controls.DarkButton();
+            this.chkOnlyOnExclusiveMaps = new DarkUI.Controls.DarkCheckBox();
             this.toolStrip.SuspendLayout();
             this.grpTimers.SuspendLayout();
             this.pnlTimerSettings.SuspendLayout();
@@ -111,6 +121,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpInstanceVarMod.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudVarVal)).BeginInit();
             this.grpTimerOptions.SuspendLayout();
+            this.grpMapExclusivity.SuspendLayout();
             this.grpEvents.SuspendLayout();
             this.grpSettings.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudRepetitions)).BeginInit();
@@ -139,7 +150,7 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Padding = new System.Windows.Forms.Padding(5, 0, 1, 0);
-            this.toolStrip.Size = new System.Drawing.Size(834, 25);
+            this.toolStrip.Size = new System.Drawing.Size(1021, 25);
             this.toolStrip.TabIndex = 45;
             this.toolStrip.Text = "toolStrip1";
             // 
@@ -306,7 +317,7 @@ namespace Intersect.Editor.Forms.Editors
             this.pnlTimerSettings.Controls.Add(this.grpGeneral);
             this.pnlTimerSettings.Location = new System.Drawing.Point(229, 23);
             this.pnlTimerSettings.Name = "pnlTimerSettings";
-            this.pnlTimerSettings.Size = new System.Drawing.Size(586, 572);
+            this.pnlTimerSettings.Size = new System.Drawing.Size(780, 572);
             this.pnlTimerSettings.TabIndex = 47;
             this.pnlTimerSettings.Visible = false;
             // 
@@ -517,6 +528,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpTimerOptions.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpTimerOptions.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpTimerOptions.Controls.Add(this.grpMapExclusivity);
             this.grpTimerOptions.Controls.Add(this.chkContinueOnInstanceChange);
             this.grpTimerOptions.Controls.Add(this.chkContinueOnDeath);
             this.grpTimerOptions.Controls.Add(this.chkStartWithServer);
@@ -530,10 +542,88 @@ namespace Intersect.Editor.Forms.Editors
             this.grpTimerOptions.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpTimerOptions.Location = new System.Drawing.Point(299, 159);
             this.grpTimerOptions.Name = "grpTimerOptions";
-            this.grpTimerOptions.Size = new System.Drawing.Size(274, 223);
+            this.grpTimerOptions.Size = new System.Drawing.Size(478, 223);
             this.grpTimerOptions.TabIndex = 106;
             this.grpTimerOptions.TabStop = false;
             this.grpTimerOptions.Text = "Timer Options";
+            // 
+            // grpMapExclusivity
+            // 
+            this.grpMapExclusivity.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
+            this.grpMapExclusivity.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpMapExclusivity.Controls.Add(this.lstExclusiveMaps);
+            this.grpMapExclusivity.Controls.Add(this.btnRemoveMap);
+            this.grpMapExclusivity.Controls.Add(this.btnAddMap);
+            this.grpMapExclusivity.Controls.Add(this.lblMap);
+            this.grpMapExclusivity.Controls.Add(this.cmbMaps);
+            this.grpMapExclusivity.ForeColor = System.Drawing.Color.Gainsboro;
+            this.grpMapExclusivity.Location = new System.Drawing.Point(271, 15);
+            this.grpMapExclusivity.Name = "grpMapExclusivity";
+            this.grpMapExclusivity.Size = new System.Drawing.Size(201, 202);
+            this.grpMapExclusivity.TabIndex = 101;
+            this.grpMapExclusivity.TabStop = false;
+            this.grpMapExclusivity.Text = "Exclusive to Maps...";
+            // 
+            // lstExclusiveMaps
+            // 
+            this.lstExclusiveMaps.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(63)))), ((int)(((byte)(65)))));
+            this.lstExclusiveMaps.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lstExclusiveMaps.Cursor = System.Windows.Forms.Cursors.Default;
+            this.lstExclusiveMaps.ForeColor = System.Drawing.Color.Gainsboro;
+            this.lstExclusiveMaps.FormattingEnabled = true;
+            this.lstExclusiveMaps.Location = new System.Drawing.Point(6, 19);
+            this.lstExclusiveMaps.Name = "lstExclusiveMaps";
+            this.lstExclusiveMaps.Size = new System.Drawing.Size(189, 93);
+            this.lstExclusiveMaps.TabIndex = 116;
+            // 
+            // btnRemoveMap
+            // 
+            this.btnRemoveMap.Location = new System.Drawing.Point(111, 124);
+            this.btnRemoveMap.Name = "btnRemoveMap";
+            this.btnRemoveMap.Padding = new System.Windows.Forms.Padding(5);
+            this.btnRemoveMap.Size = new System.Drawing.Size(84, 27);
+            this.btnRemoveMap.TabIndex = 115;
+            this.btnRemoveMap.Text = "Remove";
+            this.btnRemoveMap.Click += new System.EventHandler(this.btnRemoveMap_Click);
+            // 
+            // btnAddMap
+            // 
+            this.btnAddMap.Location = new System.Drawing.Point(6, 124);
+            this.btnAddMap.Name = "btnAddMap";
+            this.btnAddMap.Padding = new System.Windows.Forms.Padding(5);
+            this.btnAddMap.Size = new System.Drawing.Size(85, 27);
+            this.btnAddMap.TabIndex = 114;
+            this.btnAddMap.Text = "Add";
+            this.btnAddMap.Click += new System.EventHandler(this.btnAddMap_Click);
+            // 
+            // lblMap
+            // 
+            this.lblMap.AutoSize = true;
+            this.lblMap.Location = new System.Drawing.Point(6, 155);
+            this.lblMap.Name = "lblMap";
+            this.lblMap.Size = new System.Drawing.Size(28, 13);
+            this.lblMap.TabIndex = 113;
+            this.lblMap.Text = "Map";
+            // 
+            // cmbMaps
+            // 
+            this.cmbMaps.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbMaps.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbMaps.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbMaps.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbMaps.DrawDropdownHoverOutline = false;
+            this.cmbMaps.DrawFocusRectangle = false;
+            this.cmbMaps.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbMaps.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbMaps.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbMaps.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbMaps.FormattingEnabled = true;
+            this.cmbMaps.Location = new System.Drawing.Point(6, 175);
+            this.cmbMaps.Name = "cmbMaps";
+            this.cmbMaps.Size = new System.Drawing.Size(189, 21);
+            this.cmbMaps.TabIndex = 108;
+            this.cmbMaps.Text = null;
+            this.cmbMaps.TextPadding = new System.Windows.Forms.Padding(2);
             // 
             // chkContinueOnInstanceChange
             // 
@@ -669,6 +759,9 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpEvents.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpEvents.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpEvents.Controls.Add(this.chkSinglePlayerCompletion);
+            this.grpEvents.Controls.Add(this.chkSinglePlayerExpire);
+            this.grpEvents.Controls.Add(this.chkSinglePlayerCancel);
             this.grpEvents.Controls.Add(this.cmbCompletionEvent);
             this.grpEvents.Controls.Add(this.lblOnCompletion);
             this.grpEvents.Controls.Add(this.cmbExpirationEvent);
@@ -678,10 +771,40 @@ namespace Intersect.Editor.Forms.Editors
             this.grpEvents.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpEvents.Location = new System.Drawing.Point(299, 7);
             this.grpEvents.Name = "grpEvents";
-            this.grpEvents.Size = new System.Drawing.Size(274, 143);
+            this.grpEvents.Size = new System.Drawing.Size(478, 143);
             this.grpEvents.TabIndex = 101;
             this.grpEvents.TabStop = false;
             this.grpEvents.Text = "Events";
+            // 
+            // chkSinglePlayerCompletion
+            // 
+            this.chkSinglePlayerCompletion.AutoSize = true;
+            this.chkSinglePlayerCompletion.Location = new System.Drawing.Point(269, 113);
+            this.chkSinglePlayerCompletion.Name = "chkSinglePlayerCompletion";
+            this.chkSinglePlayerCompletion.Size = new System.Drawing.Size(134, 17);
+            this.chkSinglePlayerCompletion.TabIndex = 112;
+            this.chkSinglePlayerCompletion.Text = "Fire on a single player?";
+            this.chkSinglePlayerCompletion.CheckedChanged += new System.EventHandler(this.chkSinglePlayerCompletion_CheckedChanged);
+            // 
+            // chkSinglePlayerExpire
+            // 
+            this.chkSinglePlayerExpire.AutoSize = true;
+            this.chkSinglePlayerExpire.Location = new System.Drawing.Point(269, 74);
+            this.chkSinglePlayerExpire.Name = "chkSinglePlayerExpire";
+            this.chkSinglePlayerExpire.Size = new System.Drawing.Size(134, 17);
+            this.chkSinglePlayerExpire.TabIndex = 111;
+            this.chkSinglePlayerExpire.Text = "Fire on a single player?";
+            this.chkSinglePlayerExpire.CheckedChanged += new System.EventHandler(this.chkSinglePlayerExpire_CheckedChanged);
+            // 
+            // chkSinglePlayerCancel
+            // 
+            this.chkSinglePlayerCancel.AutoSize = true;
+            this.chkSinglePlayerCancel.Location = new System.Drawing.Point(269, 36);
+            this.chkSinglePlayerCancel.Name = "chkSinglePlayerCancel";
+            this.chkSinglePlayerCancel.Size = new System.Drawing.Size(134, 17);
+            this.chkSinglePlayerCancel.TabIndex = 110;
+            this.chkSinglePlayerCancel.Text = "Fire on a single player?";
+            this.chkSinglePlayerCancel.CheckedChanged += new System.EventHandler(this.chkSinglePlayerCancel_CheckedChanged);
             // 
             // cmbCompletionEvent
             // 
@@ -931,6 +1054,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpDisplay.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpDisplay.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpDisplay.Controls.Add(this.chkOnlyOnExclusiveMaps);
             this.grpDisplay.Controls.Add(this.chkHidden);
             this.grpDisplay.Controls.Add(this.lblDisplayName);
             this.grpDisplay.Controls.Add(this.txtDisplayName);
@@ -1105,12 +1229,22 @@ namespace Intersect.Editor.Forms.Editors
             this.btnCancel.Text = "Cancel";
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
+            // chkOnlyOnExclusiveMaps
+            // 
+            this.chkOnlyOnExclusiveMaps.AutoSize = true;
+            this.chkOnlyOnExclusiveMaps.Location = new System.Drawing.Point(86, 19);
+            this.chkOnlyOnExclusiveMaps.Name = "chkOnlyOnExclusiveMaps";
+            this.chkOnlyOnExclusiveMaps.Size = new System.Drawing.Size(145, 17);
+            this.chkOnlyOnExclusiveMaps.TabIndex = 101;
+            this.chkOnlyOnExclusiveMaps.Text = "Only on Exclusive Maps?";
+            this.chkOnlyOnExclusiveMaps.CheckedChanged += new System.EventHandler(this.chkOnlyOnExclusiveMaps_CheckedChanged);
+            // 
             // frmTimers
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
-            this.ClientSize = new System.Drawing.Size(834, 640);
+            this.ClientSize = new System.Drawing.Size(1021, 640);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.grpTypes);
@@ -1136,6 +1270,8 @@ namespace Intersect.Editor.Forms.Editors
             ((System.ComponentModel.ISupportInitialize)(this.nudVarVal)).EndInit();
             this.grpTimerOptions.ResumeLayout(false);
             this.grpTimerOptions.PerformLayout();
+            this.grpMapExclusivity.ResumeLayout(false);
+            this.grpMapExclusivity.PerformLayout();
             this.grpEvents.ResumeLayout(false);
             this.grpEvents.PerformLayout();
             this.grpSettings.ResumeLayout(false);
@@ -1225,5 +1361,15 @@ namespace Intersect.Editor.Forms.Editors
         internal DarkUI.Controls.DarkRadioButton rdoOnNth;
         internal DarkUI.Controls.DarkRadioButton rdoEveryNth;
         private DarkUI.Controls.DarkCheckBox chkActionsEnabled;
+        private DarkUI.Controls.DarkCheckBox chkSinglePlayerCompletion;
+        private DarkUI.Controls.DarkCheckBox chkSinglePlayerExpire;
+        private DarkUI.Controls.DarkCheckBox chkSinglePlayerCancel;
+        private DarkUI.Controls.DarkGroupBox grpMapExclusivity;
+        private DarkUI.Controls.DarkButton btnRemoveMap;
+        private DarkUI.Controls.DarkButton btnAddMap;
+        private System.Windows.Forms.Label lblMap;
+        private DarkUI.Controls.DarkComboBox cmbMaps;
+        private System.Windows.Forms.ListBox lstExclusiveMaps;
+        private DarkUI.Controls.DarkCheckBox chkOnlyOnExclusiveMaps;
     }
 }

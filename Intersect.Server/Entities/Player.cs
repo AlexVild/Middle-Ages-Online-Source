@@ -2313,6 +2313,11 @@ namespace Intersect.Server.Entities
 
                 PacketSender.SendEntityLeave(this); // We simply changed maps - leave the old one
                 MapId = newMapId;
+                
+                // Handle map-exclusive instance timers
+                SendInstanceMapExclusiveTimers(newMapId);
+                StopInstanceMapExclusiveTimers(oldMap.Id);
+                
                 newMapInstance.PlayerEnteredMap(this);
                 PacketSender.SendEntityPositionToAll(this);
 
@@ -2651,7 +2656,22 @@ namespace Intersect.Server.Entities
         /// </summary>
         private void SendInstanceTimers()
         {
-            foreach (var timer in TimerProcessor.ActiveTimers.ToArray().Where(t => t.Descriptor.OwnerType == TimerOwnerType.Instance && t.OwnerId == MapInstanceId))
+            foreach (var timer in TimerProcessor.ActiveTimers.ToArray().Where(t => t.Descriptor.OwnerType == TimerOwnerType.Instance 
+                && t.OwnerId == MapInstanceId
+                && t.Descriptor.ContainsExclusiveMap(MapId)
+            ))
+            {
+                timer.SendTimerPacketTo(this);
+            }
+        }
+
+        private void SendInstanceMapExclusiveTimers(Guid newMapId)
+        {
+            foreach (var timer in TimerProcessor.ActiveTimers.ToArray().Where(t => t.Descriptor.OwnerType == TimerOwnerType.Instance
+                && t.OwnerId == MapInstanceId
+                && t.IsExclusiveToMaps
+                && t.ContainsExclusiveMap(newMapId)
+            ))
             {
                 timer.SendTimerPacketTo(this);
             }
@@ -2666,6 +2686,18 @@ namespace Intersect.Server.Entities
             foreach (var timer in TimerProcessor.ActiveTimers.ToArray().Where(t => t.Descriptor.OwnerType == TimerOwnerType.Instance && t.OwnerId == previousInstanceId))
             {
                 timer.SendTimerStopPacketTo(this);
+            }
+        }
+
+        private void StopInstanceMapExclusiveTimers(Guid previousMapId)
+        {
+            foreach (var timer in TimerProcessor.ActiveTimers.ToArray().Where(t => t.Descriptor.OwnerType == TimerOwnerType.Instance
+                && t.OwnerId == MapInstanceId
+                && t.IsExclusiveToMaps
+                && t.ContainsExclusiveMap(previousMapId)
+            ))
+            {
+                timer.SendTimerPacketTo(this);
             }
         }
 

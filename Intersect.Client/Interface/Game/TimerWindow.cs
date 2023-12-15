@@ -47,7 +47,7 @@ namespace Intersect.Client.Interface.Game
 
         private void MPrevButton_Clicked(Base sender, Framework.Gwen.Control.EventArguments.ClickedEventArgs arguments)
         {
-            var timers = Timers.ActiveTimers;
+            var timers = Timers.DisplayableTimers;
             if (DisplayIndex == 0)
             {
                 DisplayIndex = timers.Count - 1;
@@ -59,7 +59,7 @@ namespace Intersect.Client.Interface.Game
 
         private void MNextButton_Clicked(Base sender, Framework.Gwen.Control.EventArguments.ClickedEventArgs arguments)
         {
-            var timers = Timers.ActiveTimers;
+            var timers = Timers.DisplayableTimers;
             if (DisplayIndex == timers.Count - 1)
             {
                 DisplayIndex = 0;
@@ -71,7 +71,7 @@ namespace Intersect.Client.Interface.Game
 
         public void Update()
         {
-            var timers = Timers.ActiveTimers;
+            var timers = Timers.DisplayableTimers;
             var timerCount = timers.Count;
             mBackground.IsHidden = timerCount <= 0;
 
@@ -98,7 +98,7 @@ namespace Intersect.Client.Interface.Game
 
         public void ShowTimer(Guid descriptorId)
         {
-            DisplayIndex = MathHelper.Clamp(Timers.ActiveTimers.FindIndex(t => t.DescriptorId == descriptorId), 0, int.MaxValue);
+            DisplayIndex = MathHelper.Clamp(Timers.DisplayableTimers.FindIndex(t => t.DescriptorId == descriptorId), 0, int.MaxValue);
         }
     }
 }

@@ -5,6 +5,8 @@ using Intersect.Editor.Networking;
 using Intersect.Enums;
 using Intersect.GameObjects;
 using Intersect.GameObjects.Events;
+using Intersect.GameObjects.Maps;
+using Intersect.GameObjects.Maps.MapList;
 using Intersect.GameObjects.Timers;
 using Intersect.Models;
 using Intersect.Utilities;
@@ -191,6 +193,12 @@ namespace Intersect.Editor.Forms.Editors
 
             cmbVarAction.Items.Clear();
             cmbVarAction.Items.AddRange(EnumExtensions.GetDescriptions(typeof(VarActionModType)));
+
+            cmbMaps.Items.Clear();
+            for (var i = 0; i < MapList.OrderedMaps.Count; i++)
+            {
+                cmbMaps.Items.Add(MapList.OrderedMaps[i].Name);
+            }
         }
         #endregion
 
@@ -354,6 +362,14 @@ namespace Intersect.Editor.Forms.Editors
             cmbInstanceVar.SelectedIndex = InstanceVariableBase.ListIndex(mEditorItem.ActionVariableId, VariableDataTypes.Integer) + 1;
             cmbVarAction.SelectedIndex = mEditorItem.InstanceVariableActionType;
             nudVarVal.Value = mEditorItem.ActionVariableChangeValue;
+
+            chkSinglePlayerCancel.Checked = mEditorItem.SinglePlayerCancellation;
+            chkSinglePlayerExpire.Checked = mEditorItem.SinglePlayerExpire;
+            chkSinglePlayerCompletion.Checked = mEditorItem.SinglePlayerCompletion;
+
+            chkOnlyOnExclusiveMaps.Checked = mEditorItem.OnlyDisplayOnExclusiveMaps;
+
+            PopulateExclusiveMapList();
         }
 
         private static TimerRepetitionTypes SelectRepetitionType(int repetitions)
@@ -775,6 +791,73 @@ namespace Intersect.Editor.Forms.Editors
         private void nudVarVal_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.ActionVariableChangeValue = (int)nudVarVal.Value;
+        }
+
+        private void chkSinglePlayerCancel_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.SinglePlayerCancellation = chkSinglePlayerCancel.Checked;
+        }
+
+        private void chkSinglePlayerExpire_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.SinglePlayerExpire = chkSinglePlayerExpire.Checked;
+        }
+
+        private void chkSinglePlayerCompletion_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.SinglePlayerCompletion = chkSinglePlayerCompletion.Checked;
+        }
+
+        private void PopulateExclusiveMapList()
+        {
+            lstExclusiveMaps.Items.Clear();
+            lstExclusiveMaps.Items.AddRange(mEditorItem.ExclusiveMaps.Select(id =>
+            {
+                var map = MapList.OrderedMaps.Find(m => m.MapId == id);
+                if (map == default)
+                {
+                    return "ERR_DELETED";
+                }
+
+                return map.Name;
+            }).ToArray());
+        }
+
+        private void btnAddMap_Click(object sender, EventArgs e)
+        {
+            if (cmbMaps.SelectedIndex < 0 || cmbMaps.SelectedIndex >= MapList.OrderedMaps.Count)
+            {
+                return;
+            }
+
+            var mapId = MapList.OrderedMaps[cmbMaps.SelectedIndex].MapId;
+            if (mEditorItem.ExclusiveMaps.Contains(mapId))
+            {
+                return;
+            }
+
+            mEditorItem.ExclusiveMaps.Add(mapId);
+
+            PopulateExclusiveMapList();
+        }
+
+        private void btnRemoveMap_Click(object sender, EventArgs e)
+        {
+            var selectedIndex = lstExclusiveMaps.SelectedIndex;
+
+            if (selectedIndex < 0 || selectedIndex >= mEditorItem.ExclusiveMaps.Count) 
+            { 
+                return; 
+            }
+
+            mEditorItem.ExclusiveMaps.RemoveAt(selectedIndex);
+
+            PopulateExclusiveMapList();
+        }
+
+        private void chkOnlyOnExclusiveMaps_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.OnlyDisplayOnExclusiveMaps = chkOnlyOnExclusiveMaps.Checked;
         }
     }
 }

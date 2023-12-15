@@ -22,6 +22,8 @@ namespace Intersect.Client.Entities
     {
         public Guid DescriptorId;
 
+        public TimerDescriptor Descriptor;
+
         public long Timestamp;
 
         public long StartTime;
@@ -43,6 +45,7 @@ namespace Intersect.Client.Entities
         public Timer(Guid descriptorId, long timestamp, long startTime, TimerDisplayType displayType, string displayName, bool continueAfterExpiration)
         {
             DescriptorId = descriptorId;
+            Descriptor = TimerDescriptor.Get(DescriptorId);
             Timestamp = timestamp;
             StartTime = startTime;
             DisplayType = displayType;

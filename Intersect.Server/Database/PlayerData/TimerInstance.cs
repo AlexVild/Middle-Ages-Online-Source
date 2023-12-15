@@ -95,9 +95,26 @@ namespace Intersect.Server.Database.PlayerData
                 CompletionCount++;
 
                 var affectedPlayers = GetAffectedPlayers();
+
+                var hasFiredEvent = false;
                 foreach (var player in affectedPlayers)
                 {
-                    FireExpireEvent(player);
+                    if (!IsCompleted)
+                    {
+                        FireExpireEvent(player);
+                        if (Descriptor?.SinglePlayerExpire ?? false)
+                        {
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        FireCompletionEvents(player);
+                        if (Descriptor?.SinglePlayerCompletion ?? false)
+                        {
+                            break;
+                        }
+                    }
                 }
 
                 var descriptor = Descriptor;
@@ -213,6 +230,10 @@ namespace Intersect.Server.Database.PlayerData
             foreach (var player in GetAffectedPlayers())
             {
                 player.EnqueueStartCommonEvent(Descriptor.CancellationEvent);
+                if (Descriptor?.SinglePlayerCancellation ?? false)
+                {
+                    return;
+                }
             }
         }
 
@@ -232,7 +253,9 @@ namespace Intersect.Server.Database.PlayerData
                     return new List<Player> { onlinePlayers.Find(ply => ply.Id == OwnerId) };
 
                 case TimerOwnerType.Instance:
-                    return onlinePlayers.FindAll(ply => ply.MapInstanceId == OwnerId);
+                    return InstanceProcessor.TryGetInstanceController(OwnerId, out var instance) 
+                        ? instance.Players 
+                        : new List<Player>();
 
                 case TimerOwnerType.Party:
                     return onlinePlayers.FindAll(ply => ply.Party != null && ply.Party.Count >= 1 && ply.Party[0].Id == OwnerId);
@@ -285,16 +308,16 @@ namespace Intersect.Server.Database.PlayerData
                 return;
             }
 
-            int reps = Descriptor.Repetitions;
+            player.EnqueueStartCommonEvent(EventBase.Get(Descriptor.ExpirationEventId));
+        }
 
-            // If this timer is set to repeat and we're not done repeating yet, run expire event
-            if (reps >= 0 && CompletionCount != reps + 1)
+        private void FireCompletionEvents(Player player)
+        {
+            if (player == default)
             {
-                player.EnqueueStartCommonEvent(EventBase.Get(Descriptor.ExpirationEventId));
                 return;
             }
-            
-            // Otherwise, the timer is "complete". Fire the necessary events
+
             if (Descriptor.CompletionBehavior == TimerCompletionBehavior.ExpirationThenCompletion)
             {
                 player.EnqueueStartCommonEvent(Descriptor.ExpirationEvent);
@@ -344,6 +367,14 @@ namespace Intersect.Server.Database.PlayerData
                 }
             }
         }
+
+        public bool ContainsExclusiveMap(Guid mapId)
+        {
+            return Descriptor?.ContainsExclusiveMap(mapId) ?? false;
+        }
+
+        [NotMapped]
+        public bool IsExclusiveToMaps => Descriptor?.ExclusiveMaps?.Count > 0;
 
         public void SendTimerPacketTo(Player player)
         {
