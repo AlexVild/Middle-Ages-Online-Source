@@ -11,6 +11,7 @@ using Intersect.Utilities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 using System.Text.Json.Serialization;
 
 namespace Intersect.Server.Database.PlayerData
@@ -94,7 +95,7 @@ namespace Intersect.Server.Database.PlayerData
             {
                 CompletionCount++;
 
-                var affectedPlayers = GetAffectedPlayers();
+                var affectedPlayers = GetAffectedPlayers(true);
 
                 var hasFiredEvent = false;
                 foreach (var player in affectedPlayers)
@@ -241,27 +242,32 @@ namespace Intersect.Server.Database.PlayerData
         /// Gets a list of players that should be affected by this timers completion event
         /// </summary>
         /// <returns>A list of <see cref="Player"/>s to be affected by timer expiration, based on the <see cref="TimerDescriptor.OwnerType"/></returns>
-        public List<Player> GetAffectedPlayers()
+        public List<Player> GetAffectedPlayers(bool checkMapExclusivity = false)
         {
             var onlinePlayers = Globals.OnlineList;
+
+            Func<Player, bool> isValid = (Player pl) => {
+                return checkMapExclusivity ? Descriptor.ContainsExclusiveMap(pl.MapId) : true;
+            };
+
             switch (Descriptor.OwnerType)
             {
                 case TimerOwnerType.Global:
-                    return onlinePlayers;
+                    return onlinePlayers.Where(player => isValid(player)).ToList();
 
                 case TimerOwnerType.Player:
-                    return new List<Player> { onlinePlayers.Find(ply => ply.Id == OwnerId) };
+                    return new List<Player> { onlinePlayers.Find(ply => ply.Id == OwnerId && isValid(ply)) };
 
                 case TimerOwnerType.Instance:
                     return InstanceProcessor.TryGetInstanceController(OwnerId, out var instance) 
-                        ? instance.Players 
+                        ? instance.Players.Where(ply => isValid(ply)).ToList()
                         : new List<Player>();
 
                 case TimerOwnerType.Party:
-                    return onlinePlayers.FindAll(ply => ply.Party != null && ply.Party.Count >= 1 && ply.Party[0].Id == OwnerId);
+                    return onlinePlayers.FindAll(ply => ply.Party != null && ply.Party.Count >= 1 && ply.Party[0].Id == OwnerId && isValid(ply));
 
                 case TimerOwnerType.Guild:
-                    return onlinePlayers.FindAll(ply => ply.Guild != null && ply.Guild.Id == OwnerId);
+                    return onlinePlayers.FindAll(ply => ply.Guild != null && ply.Guild.Id == OwnerId && isValid(ply));
 
                 default:
                     throw new NotImplementedException($"{Enum.GetName(typeof(TimerOwnerType), Descriptor.OwnerType)} not implemented!");

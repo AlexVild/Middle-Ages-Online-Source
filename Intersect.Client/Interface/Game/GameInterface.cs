@@ -30,6 +30,7 @@ using Intersect.Client.Interface.Game.DeconstructorUi;
 using Intersect.Client.Interface.Game.Enhancement;
 using Intersect.Client.Interface.Game.UpgradeStation;
 using Intersect.Client.Interface.Game.WeaponPicker;
+using Intersect.GameObjects.Timers;
 
 namespace Intersect.Client.Interface.Game
 {

@@ -3,6 +3,7 @@ using Intersect.Client.Framework.File_Management;
 using Intersect.Client.Framework.Gwen.Control;
 using Intersect.Client.General;
 using Intersect.Client.Localization;
+using Intersect.GameObjects.Timers;
 using Intersect.Utilities;
 using System;
 
@@ -98,7 +99,15 @@ namespace Intersect.Client.Interface.Game
 
         public void ShowTimer(Guid descriptorId)
         {
-            DisplayIndex = MathHelper.Clamp(Timers.DisplayableTimers.FindIndex(t => t.DescriptorId == descriptorId), 0, int.MaxValue);
+            if (!TimerDescriptor.TryGet(descriptorId, out var timer))
+            {
+                return;
+            }
+
+            if (timer.ContainsExclusiveMap(Globals.Me.MapInstance.Id))
+            {
+                DisplayIndex = MathHelper.Clamp(Timers.DisplayableTimers.FindIndex(t => t.DescriptorId == descriptorId), 0, int.MaxValue);
+            }
         }
     }
 }

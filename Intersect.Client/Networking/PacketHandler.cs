@@ -2473,10 +2473,11 @@ namespace Intersect.Client.Networking
         //TimerStopPacket
         public void HandlePacket(IPacketSender packetSender, TimerStopPacket packet)
         {
-            foreach (var timer in Timers.ActiveTimers.FindAll(t => t.DescriptorId == packet.DescriptorId))
+            foreach (var timer in Timers.ActiveTimers.ToList().FindAll(t => t.DescriptorId == packet.DescriptorId))
             {
                 timer.ElapsedTime = packet.ElapsedTime;
                 timer.EndTimer();
+                Timers.ActiveTimers.Remove(timer);
             }
         }
 
