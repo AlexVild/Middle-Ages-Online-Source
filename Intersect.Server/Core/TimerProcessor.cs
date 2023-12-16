@@ -140,11 +140,16 @@ namespace Intersect.Server.Core
                 }
 
                 // Otherwise, is the timer a) exclusive and b) currently not having any players on it?
-                if (instanceTimer.IsExclusiveToMaps && controller.Players.All(pl => !instanceTimer.ContainsExclusiveMap(pl.MapId))) 
+                if (instanceTimer.IsExclusiveToMaps) 
                 {
+                    var exclusivePlayers = controller.Players.Where(pl => instanceTimer.ContainsExclusiveMap(pl.MapId) && !pl.IsDead()).ToArray();
+                    if (exclusivePlayers.Length > 0)
+                    {
+                        continue;
+                    }
+                    
                     instanceTimer.CancelTimer();
                     RemoveTimer(instanceTimer);
-                    continue;
                 }
             }
         }

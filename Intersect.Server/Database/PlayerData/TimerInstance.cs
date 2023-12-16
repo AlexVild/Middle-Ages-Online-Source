@@ -233,7 +233,7 @@ namespace Intersect.Server.Database.PlayerData
                 player.EnqueueStartCommonEvent(Descriptor.CancellationEvent);
                 if (Descriptor?.SinglePlayerCancellation ?? false)
                 {
-                    return;
+                    break;
                 }
             }
         }
