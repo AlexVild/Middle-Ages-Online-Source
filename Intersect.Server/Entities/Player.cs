@@ -1190,7 +1190,7 @@ namespace Intersect.Server.Entities
             }
 
             // EXP Loss - don't lose in shared instance, or in an Arena zone
-            double expLoss = -1;
+            double expLoss = 0;
             if ((InstanceType != MapInstanceType.Shared || Options.Instance.Instancing.LoseExpOnInstanceDeath) && currentMapZoneType != MapZones.Arena && !InDuel)
             {
                 if (Options.Instance.PlayerOpts.ExpLossOnDeathPercent > 0)
@@ -9202,13 +9202,13 @@ namespace Intersect.Server.Entities
         public override void DropItems(Entity killer, bool sendUpdate = true)
         {
             // Drop items
+            var itemsLostString = new List<string>();
+            ItemsLost = new List<Item>();
+
             if (Map.ZoneType != MapZones.Normal)
             {
                 return; // Only drop items in PVP
             }
-
-            var itemsLostString = new List<string>();
-            ItemsLost = new List<Item>();
 
             // Store our luck before dropping items!
             var luck = GetBonusEffectTotal(EffectType.Luck);
