@@ -1901,7 +1901,7 @@ namespace Intersect.Server.Entities
                         if (entity is Npc npc &&
                             npc.Target == null &&
                             npc.IsAllyOf(this) &&
-                            InRangeOf(npc, npc.Base.SightRange))
+                            InRangeOf(npc, npc.Range))
                         {
                             npc.AssignTarget(attacker);
                         }

@@ -28,6 +28,10 @@ namespace Intersect.GameObjects.Maps
 
         public NpcMovement OverriddenMovement;
 
+        public bool OverrideRange = false;
+
+        public int OverriddenRange;
+
         public NpcSpawn()
         {
         }
@@ -44,6 +48,8 @@ namespace Intersect.GameObjects.Maps
             CumulativeSpawning = copy.CumulativeSpawning;
             OverrideMovement = copy.OverrideMovement;
             OverriddenMovement = copy.OverriddenMovement;
+            OverrideRange = copy.OverrideRange;
+            OverriddenRange = copy.OverriddenRange;
         }
 
     }

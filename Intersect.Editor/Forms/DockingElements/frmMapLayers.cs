@@ -865,6 +865,9 @@ namespace Intersect.Editor.Forms.DockingElements
                     chkSpawnGroupGreater.Checked = spawn.CumulativeSpawning;
                     nudInstanceSpawnLimit.Value = spawn.RequiredPlayersToSpawn;
                     chkOverrideMovement.Checked = spawn.OverrideMovement;
+                    chkOverrideRange.Checked = spawn.OverrideRange;
+                    nudOverriddenRange.Value = spawn.OverriddenRange;
+
                     cmbNpcBehaviors.SelectedIndex = Math.Min((int)spawn.OverriddenMovement, cmbNpcBehaviors.Items.Count - 1);
 
                     if (spawn.X >= 0)
@@ -899,6 +902,8 @@ namespace Intersect.Editor.Forms.DockingElements
                 n.OverriddenMovement = (NpcMovement)Math.Max(cmbNpcBehaviors.SelectedIndex, 0);
                 n.SpawnGroup = (int)nudNpcSpawnGroup.Value;
                 n.CumulativeSpawning = chkSpawnGroupGreater.Checked;
+                n.OverrideRange = chkOverrideRange.Checked;
+                n.OverriddenRange = (int)nudOverriddenRange.Value;
 
                 Globals.CurrentMap.Spawns.Add(n);
                 lstMapNpcs.Items.Add(GenerateNpcSpawnString(n));
@@ -922,12 +927,16 @@ namespace Intersect.Editor.Forms.DockingElements
                 {
                     lstMapNpcs.SelectedIndex = 0;
                     NpcSpawn spawn = Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex];
+                    
                     cmbNpc.SelectedIndex = NpcBase.ListIndex(spawn.NpcId);
                     cmbDir.SelectedIndex = (int)spawn.Direction;
                     nudInstanceSpawnLimit.Value = spawn.RequiredPlayersToSpawn;
                     chkDoNotRespawn.Checked = spawn.PreventRespawn;
                     chkOverrideMovement.Checked = spawn.OverrideMovement;
                     cmbNpcBehaviors.SelectedIndex = Math.Min((int)spawn.OverriddenMovement, cmbNpcBehaviors.Items.Count - 1);
+                    chkOverrideRange.Checked = spawn.OverrideRange;
+                    nudOverriddenRange.Value = spawn.OverriddenRange;
+
                     if (Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].X >= 0)
                     {
                         rbDeclared.Checked = true;
@@ -967,6 +976,8 @@ namespace Intersect.Editor.Forms.DockingElements
                 chkSpawnGroupGreater.Checked = spawn.CumulativeSpawning;
                 chkOverrideMovement.Checked = spawn.OverrideMovement;
                 cmbNpcBehaviors.SelectedIndex = Math.Min((int)spawn.OverriddenMovement, cmbNpcBehaviors.Items.Count - 1);
+                chkOverrideRange.Checked = spawn.OverrideRange;
+                nudOverriddenRange.Value = spawn.OverriddenRange;
 
                 if (spawn.X >= 0)
                 {
@@ -1612,6 +1623,10 @@ namespace Intersect.Editor.Forms.DockingElements
 
         private void chkStandStill_CheckedChanged(object sender, EventArgs e)
         {
+            if (mChanging)
+            {
+                return;
+            }
             if (lstMapNpcs.SelectedIndex >= 0)
             {
                 Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].OverrideMovement = chkOverrideMovement.Checked;
@@ -1621,9 +1636,39 @@ namespace Intersect.Editor.Forms.DockingElements
 
         private void cmbNpcBehaviors_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (mChanging)
+            {
+                return;
+            }
             if (lstMapNpcs.SelectedIndex >= 0)
             {
                 Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex].OverriddenMovement = (NpcMovement)Math.Max(cmbNpcBehaviors.SelectedIndex, 0);
+            }
+        }
+
+        private void nudOverriddenRange_ValueChanged(object sender, EventArgs e)
+        {
+            if (mChanging || !chkOverrideRange.Checked)
+            {
+                return;
+            }
+            if (lstMapNpcs.SelectedIndex >= 0)
+            {
+                var spawn = Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex];
+                spawn.OverriddenRange = (int)nudOverriddenRange.Value;
+            }
+        }
+
+        private void chkOverrideRange_CheckedChanged(object sender, EventArgs e)
+        {
+            if (mChanging)
+            {
+                return;
+            }
+            if (lstMapNpcs.SelectedIndex >= 0)
+            {
+                var spawn = Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex];
+                spawn.OverrideRange = chkOverrideRange.Checked;
             }
         }
     }

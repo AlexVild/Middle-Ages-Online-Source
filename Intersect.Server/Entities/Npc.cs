@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
@@ -26,6 +27,7 @@ using Intersect.Server.Maps;
 using Intersect.Server.Networking;
 using Intersect.Server.Utilities;
 using Intersect.Utilities;
+using Org.BouncyCastle.Asn1.Mozilla;
 using static Intersect.GameObjects.Maps.MapBase;
 
 namespace Intersect.Server.Entities
@@ -75,8 +77,6 @@ namespace Intersect.Server.Entities
         private Pathfinder mPathFinder;
 
         private Task mPathfindingTask;
-
-        public byte Range;
 
         //Respawn/Despawn
         public long RespawnTime;
@@ -144,6 +144,8 @@ namespace Intersect.Server.Entities
 
             OverrideMovement = spawnSettings.OverrideMovement;
             OverriddenMovement = spawnSettings.OverriddenMovement;
+            OverriddeRange = spawnSettings.OverrideRange;
+            OverriddenRange = spawnSettings.OverriddenRange;
 
             mapSpawner.Entity = this;
         }
@@ -183,7 +185,6 @@ namespace Intersect.Server.Entities
                 SetVital(i, myBase.MaxVital[i]);
             }
 
-            Range = (byte)myBase.SightRange;
             mPathFinder = new Pathfinder(this);
             if (myBase.DeathAnimation != null)
             {
@@ -1397,7 +1398,7 @@ namespace Intersect.Server.Entities
                         // Swarm if an aggressive enemy, or it's direct relative is being attacked
                         if (npc.Target == null & npc.Base.Swarm && IsAllyOf(npc) && (npc.Base.Aggressive || npc.Base.Id == Base.Id))
                         {
-                            var range = npc.Base.SightRange;
+                            var range = Range;
                             if (attacker is Player player)
                             {
                                 range = (int)Math.Ceiling(range * player.GetBonusEffectPercent(EffectType.Phantom, false));
@@ -2119,9 +2120,15 @@ namespace Intersect.Server.Entities
 
         public NpcMovement OverriddenMovement;
 
+        private bool OverriddeRange = false;
+
+        private int OverriddenRange;
+
         /// <summary>
         /// Determines the movement type of the spawned NPC
         /// </summary>
         public NpcMovement Movement => OverrideMovement ? OverriddenMovement : (NpcMovement)(Base?.Movement);
+
+        public int Range => OverriddeRange ? OverriddenRange : Base.SightRange;
     }
 }
