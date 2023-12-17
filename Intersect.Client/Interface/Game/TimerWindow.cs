@@ -99,7 +99,7 @@ namespace Intersect.Client.Interface.Game
 
         public void ShowTimer(Guid descriptorId)
         {
-            if (!TimerDescriptor.TryGet(descriptorId, out var timer))
+            if (!TimerDescriptor.TryGet(descriptorId, out var timer) || Globals.Me == null || Globals.Me.MapInstance == null)
             {
                 return;
             }
