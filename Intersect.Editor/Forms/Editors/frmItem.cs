@@ -616,6 +616,12 @@ namespace Intersect.Editor.Forms.Editors
                 chkLockMagic.Checked = GetStatLock(Stats.AbilityPower);
                 chkLockMagicResist.Checked = GetStatLock(Stats.MagicResist);
                 chkLockSpeed.Checked = GetStatLock(Stats.Speed);
+                chkLockSlash.Checked = GetStatLock(Stats.SlashAttack);
+                chkLockPierce.Checked = GetStatLock(Stats.PierceAttack);
+                chkLockSlashResist.Checked = GetStatLock(Stats.SlashResistance);
+                chkLockPierceResist.Checked = GetStatLock(Stats.PierceResistance);
+                chkLockEvasion.Checked = GetStatLock(Stats.Evasion);
+                chkLockAccuracy.Checked = GetStatLock(Stats.Accuracy);
 
                 chkEnableDestroy.Checked = mEditorItem.CanDestroy;
                 txtCannotDestroy.Text = mEditorItem.CannotDestroyMessage;
@@ -1941,7 +1947,7 @@ namespace Intersect.Editor.Forms.Editors
 
         private void chkLockSlashResist_CheckedChanged(object sender, EventArgs e)
         {
-            UpdateStatLock(Stats.SlashResistance, chkLockSlash.Checked);
+            UpdateStatLock(Stats.SlashResistance, chkLockSlashResist.Checked);
         }
 
         private void nudPierce_ValueChanged(object sender, EventArgs e)
