@@ -890,6 +890,8 @@ namespace Intersect.Server.Entities
                 }
             }
 
+            Backstab = false;
+
             return baseDamage;
         }
 
