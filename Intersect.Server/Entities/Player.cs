@@ -314,14 +314,6 @@ namespace Intersect.Server.Entities
         [NotMapped]
         public int FaceDirection = 0;
 
-
-
-        /// <summary>
-        /// Used to determine if the player is performing an attack out of stealth
-        /// </summary>
-        [NotMapped, JsonIgnore]
-        public bool StealthAttack = false;
-
         // Class Rank Vars
         // Contains a mapping of a Class' GUID -> the class info for this player
         [NotMapped, JsonIgnore]

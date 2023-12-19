@@ -12,8 +12,10 @@ using Intersect.Server.Networking;
 using Intersect.Utilities;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Intersect.Server.Entities
@@ -139,6 +141,7 @@ namespace Intersect.Server.Entities
                 damageWasDealt = base.TryDealDamageTo(enemy, weapon?.AttackTypes ?? new List<AttackTypes>() { AttackTypes.Blunt }, dmgScaling, critMultiplier, weapon, spell, ignoreEvasion, range, out damage);
             }
 
+            // Update challenges
             if (damageWasDealt && damage > 0)
             {
                 ChallengeUpdateProcesser.UpdateChallengesOf(new DamageOverTimeUpdate(this, damage), enemy.TierLevel);
@@ -196,6 +199,13 @@ namespace Intersect.Server.Entities
             if (weapon?.Descriptor?.AttackTypes != null)
             {
                 attackTypes.AddRange(weapon.Descriptor.AttackTypes);
+            }
+
+            // Check for backstab
+            Backstab = false;
+            if (weapon?.Descriptor?.CanBackstab ?? false && Dir == Target.Dir)
+            {
+                Backstab = true;
             }
 
             if (!TryDealDamageTo(enemy, attackTypes, 100, 1.0, weapon?.Descriptor, null, false, 1, out int damage))
@@ -850,7 +860,7 @@ namespace Intersect.Server.Entities
             var damageBonus = DamageBonus.None;
             if (target.Dir == Dir) // Player is hitting something from behind
             {
-                if (item.CanBackstab && canBackstab)
+                if (Backstab && canBackstab)
                 {
                     var assassin = GetBonusEffectTotal(EffectType.Assassin);
                     var backstabDamage = (int)Math.Floor(originalDamage * ApplyEffectBonusToValue(item.BackstabMultiplier, EffectType.Assassin)) - originalDamage;
@@ -876,5 +886,11 @@ namespace Intersect.Server.Entities
 
             return baseDamage;
         }
+
+        [NotMapped, JsonIgnore]
+        public bool StealthAttack { get; set; }
+
+        [NotMapped, JsonIgnore]
+        public bool Backstab { get; set; }
     }
 }
