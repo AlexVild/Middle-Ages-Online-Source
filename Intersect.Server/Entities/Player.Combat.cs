@@ -272,6 +272,12 @@ namespace Intersect.Server.Entities
 
             CastingWeapon = GetEquippedWeapon();
 
+            Backstab = false;
+            if (CastingWeapon != null && CastingWeapon.CanBackstab && spell.WeaponSpell && target.Dir == Dir)
+            {
+                Backstab = true;
+            }
+
             switch (spell.SpellType)
             {
                 case SpellTypes.Event:
