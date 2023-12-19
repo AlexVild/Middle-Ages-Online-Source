@@ -251,17 +251,7 @@ namespace Intersect.Server.Entities
                 }
 
                 base.Die(generateLoot, killer, transform);
-                if (validTransform)
-                {
-                    TransformNpc(Base.DeathTransform); // doesn't do anything if no transform available
-                }
-                else
-                {
-                    AggroCenterMap = null;
-                    AggroCenterX = 0;
-                    AggroCenterY = 0;
-                    AggroCenterZ = 0;
-                }
+
 
                 var killedByPlayer = false;
                 if (killer is Player playerKiller)
@@ -273,10 +263,10 @@ namespace Intersect.Server.Entities
                     var bestiaryThresholds = Base.BestiaryUnlocks.Values.Where(val => val > 0).ToList();
                     bestiaryThresholds.Sort();
                     var lastUnlock = bestiaryThresholds.LastOrDefault();
-                    
+
                     if (!Base.NotInBestiary && bestiaryThresholds.Contains((int)recordKilled))
                     {
-                        PacketSender.SendKillCount(playerKiller, Base.Id);    
+                        PacketSender.SendKillCount(playerKiller, Base.Id);
                         // Did we just finish the bestiary entry for this mob?
                         if (lastUnlock != default && lastUnlock == (int)recordKilled)
                         {
@@ -311,6 +301,18 @@ namespace Intersect.Server.Entities
                     }
 
                     ChallengeUpdateProcesser.UpdateChallengesOf(new BeastsKilledOverTime(playerKiller, Base.Id), TierLevel);
+                }
+
+                if (validTransform)
+                {
+                    TransformNpc(Base.DeathTransform); // doesn't do anything if no transform available
+                }
+                else
+                {
+                    AggroCenterMap = null;
+                    AggroCenterX = 0;
+                    AggroCenterY = 0;
+                    AggroCenterZ = 0;
                 }
 
                 // If this was a champion, remove it
