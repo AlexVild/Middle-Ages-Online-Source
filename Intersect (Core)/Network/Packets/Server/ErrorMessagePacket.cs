@@ -10,10 +10,11 @@ namespace Intersect.Network.Packets.Server
         {
         }
 
-        public ErrorMessagePacket(string header, string error)
+        public ErrorMessagePacket(string header, string error, bool resetUi)
         {
             Header = header;
             Error = error;
+            ResetUi = resetUi;
         }
 
         [Key(0)]
@@ -21,6 +22,9 @@ namespace Intersect.Network.Packets.Server
 
         [Key(1)]
         public string Error { get; set; }
+
+        [Key(2)]
+        public bool ResetUi { get; set; }
 
     }
 

@@ -748,22 +748,25 @@ namespace Intersect.Client.Interface.Menu
 
             if (FieldChecking.IsValidUsername(mCharnameTextbox.Text, Strings.Regex.username))
             {
-                if (mMaleChk.IsChecked)
+                FadeService.FadeOut(callback: () =>
                 {
-                    PacketSender.SendCreateCharacter(
-                        mCharnameTextbox.Text, GetClass().Id, mMaleSprites[mDisplaySpriteIndex].Key, mSelectedDecors
-                    );
-                }
-                else
-                {
-                    PacketSender.SendCreateCharacter(
-                        mCharnameTextbox.Text, GetClass().Id, mFemaleSprites[mDisplaySpriteIndex].Key, mSelectedDecors
-                    );
-                }
+                    if (mMaleChk.IsChecked)
+                    {
+                        PacketSender.SendCreateCharacter(
+                            mCharnameTextbox.Text, GetClass().Id, mMaleSprites[mDisplaySpriteIndex].Key, mSelectedDecors
+                        );
+                    }
+                    else
+                    {
+                        PacketSender.SendCreateCharacter(
+                            mCharnameTextbox.Text, GetClass().Id, mFemaleSprites[mDisplaySpriteIndex].Key, mSelectedDecors
+                        );
+                    }
 
-                Globals.WaitingOnServer = true;
-                mCreateButton.Disable();
-                ChatboxMsg.ClearMessages();
+                    Globals.WaitingOnServer = true;
+                    mCreateButton.Disable();
+                    ChatboxMsg.ClearMessages();
+                });
             }
             else
             {

@@ -184,7 +184,6 @@ namespace Intersect.Client.Interface.Game.Toasts
                 if (HasFlashed && FlashEndTime < now)
                 {
                     Flashing = false;
-                    HasFlashed = false;
                 }
 
                 return;

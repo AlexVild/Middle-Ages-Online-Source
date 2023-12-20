@@ -504,7 +504,7 @@ namespace Intersect.Server.Networking
         {
             if (client.AccountAttempts > 3 && client.TimeoutMs > Timing.Global.Milliseconds)
             {
-                PacketSender.SendError(client, Strings.Errors.errortimeout);
+                PacketSender.SendError(client, Strings.Errors.errortimeout, resetUi: false);
                 client.ResetTimeout();
 
                 return;
@@ -515,7 +515,7 @@ namespace Intersect.Server.Networking
             // Are we at capacity yet, or can this user still log in?
             if (Globals.OnlineList.Count >= Options.MaxLoggedinUsers)
             {
-                PacketSender.SendError(client, Strings.Networking.ServerFull);
+                PacketSender.SendError(client, Strings.Networking.ServerFull, resetUi: false);
 
                 return;
             }
@@ -526,7 +526,7 @@ namespace Intersect.Server.Networking
                 UserActivityHistory.LogActivity(Guid.Empty, Guid.Empty, client?.GetIp(), UserActivityHistory.PeerType.Client, UserActivityHistory.UserAction.FailedLogin, packet.Username);
 
                 client.FailedAttempt();
-                PacketSender.SendError(client, Strings.Account.badlogin);
+                PacketSender.SendError(client, Strings.Account.badlogin, resetUi: false);
 
                 return;
             }
@@ -1168,7 +1168,7 @@ namespace Intersect.Server.Networking
         {
             if (client.TimeoutMs > Timing.Global.Milliseconds)
             {
-                PacketSender.SendError(client, Strings.Errors.errortimeout);
+                PacketSender.SendError(client, Strings.Errors.errortimeout, resetUi: false);
                 client.ResetTimeout();
 
                 return;
@@ -1178,21 +1178,21 @@ namespace Intersect.Server.Networking
 
             if (Options.BlockClientRegistrations)
             {
-                PacketSender.SendError(client, Strings.Account.registrationsblocked);
+                PacketSender.SendError(client, Strings.Account.registrationsblocked, resetUi: false);
 
                 return;
             }
 
             if (!FieldChecking.IsValidUsername(packet.Username, Strings.Regex.username))
             {
-                PacketSender.SendError(client, Strings.Account.invalidname);
+                PacketSender.SendError(client, Strings.Account.invalidname, resetUi: false);
 
                 return;
             }
 
             if (!FieldChecking.IsWellformedEmailAddress(packet.Email, Strings.Regex.email))
             {
-                PacketSender.SendError(client, Strings.Account.invalidemail);
+                PacketSender.SendError(client, Strings.Account.invalidemail, resetUi: false);
 
                 return;
             }
@@ -1271,7 +1271,7 @@ namespace Intersect.Server.Networking
 
             if (!FieldChecking.IsValidUsername(packet.Name, Strings.Regex.username))
             {
-                PacketSender.SendError(client, Strings.Account.invalidname);
+                PacketSender.SendError(client, Strings.Account.invalidname, resetUi: false);
 
                 return;
             }
@@ -1280,14 +1280,14 @@ namespace Intersect.Server.Networking
             var classBase = ClassBase.Get(packet.ClassId);
             if (classBase == null || classBase.Locked)
             {
-                PacketSender.SendError(client, Strings.Account.invalidclass);
+                PacketSender.SendError(client, Strings.Account.invalidclass, resetUi: false);
 
                 return;
             }
 
             if (Player.PlayerExists(packet.Name))
             {
-                PacketSender.SendError(client, Strings.Account.characterexists);
+                PacketSender.SendError(client, Strings.Account.characterexists, resetUi: false);
                 return;
             }
 
@@ -2297,7 +2297,7 @@ namespace Intersect.Server.Networking
             }
             else
             {
-                PacketSender.SendError(client, Strings.Account.maxchars);
+                PacketSender.SendError(client, Strings.Account.maxchars, resetUi: false);
             }
         }
 
@@ -2850,7 +2850,7 @@ namespace Intersect.Server.Networking
         {
             if (client.AccountAttempts > 3 && client.TimeoutMs > Timing.Global.Milliseconds)
             {
-                PacketSender.SendError(client, Strings.Errors.errortimeout);
+                PacketSender.SendError(client, Strings.Errors.errortimeout, resetUi: false);
                 client.ResetTimeout();
 
                 return;
@@ -2864,7 +2864,7 @@ namespace Intersect.Server.Networking
                 UserActivityHistory.LogActivity(Guid.Empty, Guid.Empty, client?.GetIp(), UserActivityHistory.PeerType.Editor, UserActivityHistory.UserAction.FailedLogin, packet.Username);
 
                 client.FailedAttempt();
-                PacketSender.SendError(client, Strings.Account.badlogin);
+                PacketSender.SendError(client, Strings.Account.badlogin, resetUi: false);
 
                 return;
             }

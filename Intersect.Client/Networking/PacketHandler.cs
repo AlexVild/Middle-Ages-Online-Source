@@ -1169,7 +1169,11 @@ namespace Intersect.Client.Networking
             FadeService.FadeIn();
             Globals.WaitingOnServer = false;
             Interface.Interface.MsgboxErrors.Add(new KeyValuePair<string, string>(packet.Header, packet.Error));
-            Interface.Interface.MenuUi.Reset();
+
+            if (packet.ResetUi)
+            {
+                Interface.Interface.MenuUi.Reset();
+            }
         }
 
         //MapItemsPacket

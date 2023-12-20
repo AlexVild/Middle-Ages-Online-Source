@@ -10,6 +10,18 @@ namespace Intersect.Client.Core
 
         public static void FadeIn(bool fast = false, Action callback = null)
         {
+            if (GetFade() == 0)
+            {
+                if (Globals.WaitFade)
+                {
+                    Networking.PacketSender.SendFadeFinishPacket();
+                }
+                if (callback != null)
+                {
+                    callback();
+                }
+                return;
+            }
             if (FadeInstead)
             {
                 Fade.FadeIn(fast, callback);
@@ -39,6 +51,23 @@ namespace Intersect.Client.Core
 
         public static void FadeOut(bool alertServerWhenFaded = false, bool fast = false, Action callback = null)
         {
+            if (GetFade() == 255f)
+            {
+                if (Globals.WaitFade)
+                {
+                    Networking.PacketSender.SendFadeFinishPacket();
+                }
+                if (alertServerWhenFaded)
+                {
+                    Networking.PacketSender.SendMapTransitionReady(Globals.futureWarpMapId, Globals.futureWarpX, Globals.futureWarpY, Globals.futureWarpDir, Globals.futureWarpInstanceType, Globals.futureDungeonId);
+                }
+
+                if (callback != null)
+                {
+                    callback();
+                }
+                return;
+            }
             if (FadeInstead)
             {
                 Fade.FadeOut(alertServerWhenFaded, fast, callback);
@@ -73,6 +102,18 @@ namespace Intersect.Client.Core
                 {
                     return Wipe.CurrentAction;
                 }
+            }
+        }
+
+        public static float GetFade()
+        {
+            if (FadeInstead)
+            {
+                return Fade.GetFade();
+            }
+            else
+            {
+                return Wipe.GetFade();
             }
         }
     }

@@ -641,8 +641,51 @@ namespace Intersect.Client.Core
             }
 
             Renderer.Scale = Globals.Database.UIScale;
+
+            // Draw the current Flash under the GUI
+            DrawFlash();
+            var fadeDrawn = false;
+            if (Globals.GameState == GameStates.InGame || Globals.GameState == GameStates.Loading)
+            {
+                DrawFadeOrWipe();
+                fadeDrawn = true;
+            }
+
             Interface.Interface.DrawGui();
 
+            if (!fadeDrawn)
+            {
+                DrawFadeOrWipe();
+            }
+
+            // Draw our mousecursor at the very end, but not when taking screenshots.
+            if (!takingScreenshot && !string.IsNullOrWhiteSpace(ClientConfiguration.Instance.MouseCursor))
+            {
+                var renderLoc = ConvertToWindowPoint(Globals.InputManager.GetMousePosition());
+                DrawGameTexture(
+                    Globals.ContentManager.GetTexture(GameContentManager.TextureType.Misc, ClientConfiguration.Instance.MouseCursor), renderLoc.X, renderLoc.Y
+               );
+            }
+            
+            Renderer.End();
+
+            if (takingScreenshot)
+            {
+                Renderer.EndScreenshot();
+            }
+        }
+
+        private static void DrawFlash()
+        {
+            DrawGameTexture(
+                Renderer.GetWhiteTexture(), new FloatRect(0, 0, 1, 1), CurrentView,
+                new Color((int)Flash.GetFlash(), Flash.GetColor().R, Flash.GetColor().G,
+                Flash.GetColor().B), null, GameBlendModes.None
+            );
+        }
+
+        private static void DrawFadeOrWipe()
+        {
             if (FadeService.FadeInstead)
             {
                 // Draw the current Fade
@@ -663,29 +706,6 @@ namespace Intersect.Client.Core
                     Renderer.GetWhiteTexture(), new FloatRect(0, 0, 1, 1), new FloatRect(CurrentView.X + (CurrentView.Width / 2 + (int)Wipe.GetFade(true)), CurrentView.Y, CurrentView.Width / 2, CurrentView.Height),
                     new Color(255, 0, 0, 0), null, GameBlendModes.None
                 );
-            }
-
-            // Draw the current Flash over top that
-            DrawGameTexture(
-                Renderer.GetWhiteTexture(), new FloatRect(0, 0, 1, 1), CurrentView,
-                new Color((int) Flash.GetFlash(), Flash.GetColor().R, Flash.GetColor().G, 
-                Flash.GetColor().B), null, GameBlendModes.None
-            );
-
-            // Draw our mousecursor at the very end, but not when taking screenshots.
-            if (!takingScreenshot && !string.IsNullOrWhiteSpace(ClientConfiguration.Instance.MouseCursor))
-            {
-                var renderLoc = ConvertToWindowPoint(Globals.InputManager.GetMousePosition());
-                DrawGameTexture(
-                    Globals.ContentManager.GetTexture(GameContentManager.TextureType.Misc, ClientConfiguration.Instance.MouseCursor), renderLoc.X, renderLoc.Y
-               );
-            }
-            
-            Renderer.End();
-
-            if (takingScreenshot)
-            {
-                Renderer.EndScreenshot();
             }
         }
 

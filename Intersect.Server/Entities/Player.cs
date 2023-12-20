@@ -2308,7 +2308,10 @@ namespace Intersect.Server.Entities
                 
                 // Handle map-exclusive instance timers
                 SendInstanceMapExclusiveTimers(newMapId);
-                StopInstanceMapExclusiveTimers(oldMap.Id);
+                if (oldMap != null)
+                {
+                    StopInstanceMapExclusiveTimers(oldMap.Id);
+                }
                 
                 newMapInstance.PlayerEnteredMap(this);
                 PacketSender.SendEntityPositionToAll(this);

@@ -1150,9 +1150,9 @@ namespace Intersect.Server.Networking
         }
 
         //ErrorPacket
-        public static void SendError(Client client, string error, string header = "")
+        public static void SendError(Client client, string error, string header = "", bool resetUi = true)
         {
-            client.Send(new ErrorMessagePacket(header, error));
+            client.Send(new ErrorMessagePacket(header, error, resetUi));
         }
 
         //MapItemsPacket
