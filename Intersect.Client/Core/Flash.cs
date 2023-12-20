@@ -1,4 +1,5 @@
 ﻿using Intersect.Client.General;
+using Intersect.Client.Localization;
 using Intersect.Utilities;
 
 namespace Intersect.Client.Core
@@ -37,7 +38,9 @@ namespace Intersect.Client.Core
             sDone = false;
             sDuration = duration;
             sLastUpdate = Timing.Global.MillisecondsUtcUnsynced;
-            sBaseColor = color;
+
+            sBaseColor = color?.MAOMapped() ?? Color.White;
+
             sIntensity = intensity;
             if (sIntensity <= 0)
             {

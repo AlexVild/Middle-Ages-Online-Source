@@ -2921,8 +2921,6 @@ namespace Intersect.Client.Entities
                             Graphics.AddLight((int)tile.CenterX, (int)tile.CenterY, 100, 200, 1.0f, new Color(255, 222, 124, 112));
                         }
 
-                        
-
                         var distLeft = CalculateDistanceToPoint(spawnX, spawnY, x - 1, y);
                         var distRight = CalculateDistanceToPoint(spawnX, spawnY, x + 1, y);
                         var distUp = CalculateDistanceToPoint(spawnX, spawnY, x, y - 1);

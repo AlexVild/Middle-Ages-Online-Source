@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using Intersect.Localization;
 using MessagePack;
@@ -6,8 +7,31 @@ using MessagePack;
 namespace Intersect
 {
     [MessagePackObject]
-    public class Color
+    public class Color : IEquatable<Color>
     {
+
+        public static bool operator ==(Color left, Color right)
+        {
+            if (ReferenceEquals(left, right))
+                return true;
+            if (ReferenceEquals(left, null))
+                return false;
+            if (ReferenceEquals(right, null))
+                return false;
+
+            return left.Equals(right);
+        }
+        public static bool operator !=(Color obj1, Color obj2) => !(obj1 == obj2);
+
+        public bool Equals(Color other)
+        {
+            if (ReferenceEquals(other, null))
+                return false;
+            if (ReferenceEquals(this, other))
+                return true;
+            return R == other.R && G == other.G && B == other.B && A == other.A;
+        }
+        public override bool Equals(object obj) => Equals(obj as Color);
 
         public enum ChatColor
         {
@@ -139,6 +163,8 @@ namespace Intersect
         public static Color Cyan => new Color(0, 255, 255);
 
         public static Color Pink => new Color(255, 192, 203);
+        
+        public static Color Purple => new Color(255, 192, 203);
 
         public static Color FromName(string name)
         {
@@ -238,6 +264,56 @@ namespace Intersect
             }
 
             return CustomColors.General.GeneralPrimary;
+        }
+
+        public Color MAOMapped()
+        {
+            if (this == Black)
+            {
+                return Black;
+            }
+            if (this == White)
+            {
+                return CustomColors.General.GeneralPrimary;
+            }
+            if (this == Pink)
+            {
+                return new Color(255, 224, 112, 178);
+            }
+            if (this == Blue)
+            {
+                return new Color(255, 105, 158, 252);
+            }
+            if (this == Red)
+            {
+                return CustomColors.General.GeneralDisabled;
+            }
+            if (this == Green)
+            {
+                return CustomColors.General.GeneralCompleted;
+            }
+            if (this == Yellow)
+            {
+                return new Color(255, 166, 167, 37);
+            }
+            if (this == Orange)
+            {
+                return CustomColors.General.GeneralWarning;
+            }
+            if (this == Magenta)
+            {
+                return new Color(255, 174, 118, 255);
+            }
+            if (this == Gray)
+            {
+                return CustomColors.General.GeneralMuted;
+            }
+            if (this == Cyan)
+            {
+                return new Color(255, 86, 179, 192);
+            }
+
+            return White;
         }
 
         public static Color FromArgb(int a, int r, int g, int b)
