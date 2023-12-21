@@ -1569,6 +1569,11 @@ namespace Intersect.Client.Entities
                 return;
             }
 
+            if (Globals.Me?.InCutscene() ?? false)
+            {
+                return;
+            }
+
             if (NpcBase.TryGet(NpcId, out var npcBase) && npcBase.HideName)
             {
                 return;

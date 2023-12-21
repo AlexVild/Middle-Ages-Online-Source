@@ -780,6 +780,11 @@ namespace Intersect.Client.Maps
         /// </summary>
         public void DrawItemNames()
         {
+            if (Globals.Me?.InCutscene() ?? false)
+            {
+                return;
+            }
+
             // Get where our mouse is located and convert it to a tile based location.
             var mousePos = Graphics.ConvertToWorldPoint(
                     Globals.InputManager.GetMousePosition()

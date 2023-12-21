@@ -2198,7 +2198,7 @@ namespace Intersect.Server.Entities
             if (fromWarpEvent && Options.DebugAllowMapFades)
             {
                 PacketSender.SendFadePacket(Client, false);
-
+                FadeWarp = true;
                 // TODO it's weird that the client cares where you're going? Store that in the server instead
                 PacketSender.SendUpdateFutureWarpPacket(Client, newMapId, newX, newY, newDir, mapInstanceType, dungeonId);
                 return;
@@ -8748,6 +8748,9 @@ namespace Intersect.Server.Entities
 
         [NotMapped, JsonIgnore]
         public bool ClientAwaitingFadeCompletion { get; set; }
+
+        [NotMapped, JsonIgnore]
+        public bool FadeWarp { get; set; }
 
         // For changing spawn points
         [Column("RespawnOverride")]

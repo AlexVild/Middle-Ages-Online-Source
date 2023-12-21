@@ -2715,6 +2715,7 @@ namespace Intersect.Server.Networking
                 return;
             }
 
+            player.FadeWarp = false;
             player.Warp(packet.NewMapId, packet.X, packet.Y, packet.Dir, false, 0, false, false, packet.InstanceType, dungeonId: packet.DungeonId);
         }
 

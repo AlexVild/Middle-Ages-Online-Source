@@ -868,7 +868,6 @@ namespace Intersect.Server.Entities
             {
                 if (Backstab && canBackstab)
                 {
-                    var assassin = GetBonusEffectTotal(EffectType.Assassin);
                     var backstabDamage = (int)Math.Floor(originalDamage * ApplyEffectBonusToValue(item.BackstabMultiplier, EffectType.Assassin)) - originalDamage;
                     baseDamage += Math.Max(0, backstabDamage);
                     damageBonus = DamageBonus.Backstab;
@@ -900,5 +899,15 @@ namespace Intersect.Server.Entities
 
         [NotMapped, JsonIgnore]
         public bool Backstab { get; set; }
+
+        public override void TakeDamage(Entity attacker, int damage, Vitals vital = Vitals.Health)
+        {
+            if (FadeWarp)
+            {
+                return;
+            }
+
+            base.TakeDamage(attacker, damage, vital);
+        }
     }
 }

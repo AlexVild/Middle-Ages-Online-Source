@@ -2791,6 +2791,11 @@ namespace Intersect.Client.Entities
                 return;
             }
 
+            if (Globals.Me?.InCutscene() ?? false)
+            {
+                return;
+            }
+
             if (textColor == null)
             {
                 if (Type == 1) //Mod

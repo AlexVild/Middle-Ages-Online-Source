@@ -301,6 +301,11 @@ namespace Intersect.Client.Entities.Events
                 return;
             }
 
+            if (Globals.Me?.InCutscene() ?? false)
+            {
+                return;
+            }
+
             if (!WorldPos.IntersectsWith(Graphics.Viewport))
             {
                 return;

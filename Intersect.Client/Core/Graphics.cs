@@ -642,14 +642,14 @@ namespace Intersect.Client.Core
 
             Renderer.Scale = Globals.Database.UIScale;
 
-            // Draw the current Flash under the GUI
-            DrawFlash();
             var fadeDrawn = false;
             if (Globals.GameState == GameStates.InGame || Globals.GameState == GameStates.Loading)
             {
                 DrawFadeOrWipe();
                 fadeDrawn = true;
             }
+
+            DrawFlash();
 
             Interface.Interface.DrawGui();
 

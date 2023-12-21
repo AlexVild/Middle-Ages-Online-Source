@@ -487,7 +487,7 @@ namespace Intersect.Server.Entities
             else if (entity.GetType() == typeof(Player))
             {
                 var player = (Player) entity;
-                if (player.PlayerDead)
+                if (player.PlayerDead || player.FadeWarp)
                 {
                     return false;
                 }
