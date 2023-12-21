@@ -252,6 +252,11 @@ namespace Intersect.Server.Entities
 
         public override void UseSpell(SpellBase spell, int spellSlot, Entity target, bool ignoreVitals = false, bool prayerSpell = false, byte prayerSpellDir = 0, Entity prayerTarget = null, bool instantCast = false)
         {
+            if (spell == null)
+            {
+                return;
+            }
+
             if (PlayerDead)
             {
                 CancelCast();
