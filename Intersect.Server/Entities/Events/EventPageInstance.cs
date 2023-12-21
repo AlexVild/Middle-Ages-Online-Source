@@ -835,6 +835,11 @@ namespace Intersect.Server.Entities.Events
 
         public override int CanMove(int moveDir, bool moveRouteRequest = false)
         {
+            return CanMove(moveDir);
+        }
+
+        public override int CanMove(int moveDir)
+        {
             if (Player == null && mPageNum != 0)
             {
                 return -5;
@@ -842,28 +847,28 @@ namespace Intersect.Server.Entities.Events
 
             switch (moveDir)
             {
-                case (int) Directions.Up:
+                case (int)Directions.Up:
                     if (Y == 0)
                     {
                         return -5;
                     }
 
                     break;
-                case (int) Directions.Down:
+                case (int)Directions.Down:
                     if (Y == Options.MapHeight - 1)
                     {
                         return -5;
                     }
 
                     break;
-                case (int) Directions.Left:
+                case (int)Directions.Left:
                     if (X == 0)
                     {
                         return -5;
                     }
 
                     break;
-                case (int) Directions.Right:
+                case (int)Directions.Right:
                     if (X == Options.MapWidth - 1)
                     {
                         return -5;
@@ -871,7 +876,6 @@ namespace Intersect.Server.Entities.Events
 
                     break;
             }
-
             return base.CanMove(moveDir);
         }
 
