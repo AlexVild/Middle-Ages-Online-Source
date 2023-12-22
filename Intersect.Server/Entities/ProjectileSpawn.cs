@@ -259,9 +259,10 @@ namespace Intersect.Server.Entities
         public void Grapple(byte dir)
         {
             Parent.HasGrappled = true;
+
             Parent.Owner.Dir = dir;
             new Dash(
-                Parent.Owner, Distance, (byte)Parent.Owner.Dir, Parent.Base.IgnoreMapBlocks,
+                Parent.Owner, Distance, dir, Parent.Base.IgnoreMapBlocks,
                 Parent.Base.IgnoreActiveResources, Parent.Base.IgnoreExhaustedResources,
                 Parent.Base.IgnoreZDimension
             );

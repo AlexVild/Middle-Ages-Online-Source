@@ -383,7 +383,7 @@ namespace Intersect.Server.Entities
                         {
                             Owner.Dir = spawn.Dir;
                             new Dash(
-                                Owner, spawn.Distance, (byte) Owner.Dir, Base.IgnoreMapBlocks,
+                                Owner, spawn.Distance, spawn.Dir, Base.IgnoreMapBlocks,
                                 Base.IgnoreActiveResources, Base.IgnoreExhaustedResources, Base.IgnoreZDimension
                             );
                         }
