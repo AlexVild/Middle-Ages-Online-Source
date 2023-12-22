@@ -178,12 +178,20 @@ namespace Intersect.Server.Entities
                 OnAttackMissed(enemy);
                 return;
             }
-
+            
+            TryGetEquippedItem(Options.WeaponIndex, out var weapon);
             // Short-circuit out if resource and let resource harvesting logic go
-            if (enemy is Resource targetResource && targetResource.Base.Tool >= 0)
+            if (enemy is Resource targetResource)
             {
-                HandleResourceMelee(targetResource);
-                return;
+                if (!CanHarvestWithTool(targetResource, weapon?.Descriptor?.Tool ?? -1))
+                {
+                    return;
+                }
+                if (targetResource.Base.Tool >= 0)
+                {
+                    HandleResourceMelee(targetResource);
+                    return;
+                }
             }
             // We're not attacking a resource - disable resource locking
             SetResourceLock(false);
@@ -194,7 +202,6 @@ namespace Intersect.Server.Entities
                 pvpTarget.StartCommonEventsWithTrigger(CommonEventTrigger.PlayerInteract, "", Name);
             }
 
-            TryGetEquippedItem(Options.WeaponIndex, out var weapon);
             List<AttackTypes> attackTypes = new List<AttackTypes>();
             if (weapon?.Descriptor?.AttackTypes != null)
             {
