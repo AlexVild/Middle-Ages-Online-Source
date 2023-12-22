@@ -276,6 +276,19 @@ namespace Intersect.Client.Interface.Game.Crafting
                     hasRecipe ? CustomColors.General.GeneralCompleted : CustomColors.General.GeneralMuted,
                     hasRecipe ? CustomColors.General.GeneralDisabled : CustomColors.General.GeneralMuted);
 
+                var onHand = 0;
+                if (itemsAndQuantities.ContainsKey(craft.Ingredients[i].ItemId))
+                {
+                    onHand = itemsAndQuantities[craft.Ingredients[i].ItemId];
+                }
+
+                var possibleToCraft = (int)Math.Floor(onHand / (double)craft.Ingredients[i].Quantity);
+
+                if (craftableQuantity == -1 || possibleToCraft < craftableQuantity)
+                {
+                    craftableQuantity = possibleToCraft;
+                }
+
                 CraftItemComponents.Add(component);
 
                 component.Initialize();
