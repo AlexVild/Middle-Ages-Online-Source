@@ -4396,7 +4396,7 @@ namespace Intersect.Server.Entities
 
             foreach (var slot in slots)
             {
-                if (!TryGetItemAt(slot, out var item))
+                if (!TryGetItemAt(slot, out var item) || item.Descriptor == null)
                 {
                     continue;
                 }

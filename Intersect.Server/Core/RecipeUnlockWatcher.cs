@@ -75,6 +75,10 @@ namespace Intersect.Server.Core
         {
             foreach(var recipe in Globals.CachedRecipes.ToArray())
             {
+                if (player == null)
+                {
+                    return;
+                }
                 if (!player.Online || recipe == null)
                 {
                     return;
