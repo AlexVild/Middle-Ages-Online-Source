@@ -136,7 +136,7 @@ namespace Intersect.Server.Core
             }
 
             // Player does not meet requirements for the recipe - ignore it.
-            if (currentPlayer.Player.RecipeIsVisible(recipe))
+            if (!currentPlayer.Player.RecipeIsVisible(recipe))
             {
                 Continue();
                 return;

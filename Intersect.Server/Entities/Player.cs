@@ -9796,12 +9796,12 @@ namespace Intersect.Server.Entities
         {
             if (recipe == null) { return false; }
 
-            if (!Conditions.MeetsConditionLists(recipe.Requirements, this, null))
+            if (recipe.MinClassRank > HighestClassRank)
             {
                 return false;
             }
 
-            if (recipe.MinClassRank > HighestClassRank)
+            if (!Conditions.MeetsConditionLists(recipe.Requirements, this, null))
             {
                 return false;
             }
