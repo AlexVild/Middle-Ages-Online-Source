@@ -155,6 +155,7 @@ namespace Intersect.Client.Framework.Database
             SavePreference("TapToTurn", TapToTurn.ToString());
             SavePreference("FaceOnLock", FaceOnLock.ToString());
             SavePreference("LeftClickTarget", LeftClickTarget.ToString());
+            SavePreference("EnableScanlines", EnableScanlines.ToString());
             SavePreference("CombatShake", CombatShake.ToString());
             SavePreference("CombatFlash", CombatFlash.ToString());
             SavePreference("FadeTransitions", FadeTransitions.ToString());

@@ -2095,6 +2095,10 @@ namespace Intersect.Client.Entities
             List<int> slots = new List<int>();
             for (var idx = 0; idx < Inventory.Length; idx++)
             {
+                if (Globals.Me != null && Globals.Me.MyEquipment.Contains(idx))
+                {
+                    continue;
+                }
                 var item = Inventory[idx];
                 if (item == null || item.Base == default)
                 {
