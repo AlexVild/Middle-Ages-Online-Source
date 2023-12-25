@@ -53,6 +53,10 @@ namespace Intersect.Server.Entities
                         )
                     );
                     var item = ItemBase.Get(mBank[slot].ItemId);
+                    if (item == default)
+                    {
+                        continue;
+                    }
                     mBankValue += item.Price * mBank[slot].Quantity;
                 }
                 else

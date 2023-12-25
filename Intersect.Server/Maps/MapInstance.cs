@@ -558,7 +558,7 @@ namespace Intersect.Server.Maps
 
             // Declared spawn
             FindNpcSpawnLocation(spawn, out var x, out var y, out var dir);
-            if (TrySpawnNpc((byte)x, (byte)y, dir, spawn.NpcId, out Npc npc))
+            if (TrySpawnNpc((byte)x, (byte)y, dir, spawnId, out Npc npc))
             {
                 npc.InitializeToMap(mMapController.Id, spawn, npcSpawnInstance, npcKey);
             }
