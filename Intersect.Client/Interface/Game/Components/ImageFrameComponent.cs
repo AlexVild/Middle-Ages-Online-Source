@@ -79,13 +79,7 @@ namespace Intersect.Client.Interface.Game.Components
                 var frameWidth = Frame.Width - BorderWidth;
                 var frameHeight = Frame.Height - BorderWidth;
 
-                var maxSize = Math.Max(frameHeight, Image.Texture.Height);
-
-                var ratio = (float)maxSize / Image.Texture.Height;
-                var height = maxSize;
-                var width = Image.Texture.Width * ratio;
-
-                Image.SetSize((int)width, height);
+                Image.SetSize(frameWidth, frameHeight);
                 Image.AddAlignment(Framework.Gwen.Alignments.Center);
                 Image.ProcessAlignments();
             }

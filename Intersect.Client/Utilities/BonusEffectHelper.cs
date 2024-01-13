@@ -28,6 +28,7 @@ namespace Intersect.Client.Utilities
             {EffectType.Phantom, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.Phantom], "Reduces sight range of enemies and reduces amount of aggro pulled from damage.")}, // Phantom
             {EffectType.Vampire, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.Vampire], "Increases effects of manasteal and lifesteal.")}, // Vampire
             {EffectType.Junkrat, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.Junkrat], "Increases scrap yield when deconstructing equipment.")}, // Junkrat
+            {EffectType.Block, new CharacterBonusInfo(Strings.ItemDescription.BonusEffects[(int)EffectType.Block], "A flat-chance to nullify incoming physical damage.")}, // Block
         };
 
         public static readonly List<EffectType> LowerIsBetterEffects = new List<EffectType>

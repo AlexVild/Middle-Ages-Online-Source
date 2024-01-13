@@ -62,6 +62,9 @@ namespace Intersect.Enums
 
         [Description("Junkrat")]
         Junkrat = 18,
+
+        [Description("Block")]
+        Block = 19,
     }
 
 }

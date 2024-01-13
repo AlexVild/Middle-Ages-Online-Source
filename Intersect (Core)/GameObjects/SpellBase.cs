@@ -422,5 +422,26 @@ namespace Intersect.GameObjects
             get => JsonConvert.SerializeObject(DamageOverrides);
             set => DamageOverrides = JsonConvert.DeserializeObject<Dictionary<int, int>>(value ?? "") ?? new Dictionary<int, int>();
         }
+
+        [NotMapped]
+        [JsonIgnore]
+        public static List<SpellTargetTypes> BlockableSpellTypes = new List<SpellTargetTypes>() { SpellTargetTypes.Projectile, SpellTargetTypes.OnHit };
+
+        public bool IsBlockable()
+        {
+            // All weapon spells are blockable
+            if (WeaponSpell)
+            {
+                return true;
+            }
+
+            // If magic-only attack
+            if (Combat.DamageTypes.Count == 1 && Combat.DamageTypes.Contains(AttackTypes.Magic))
+            {
+                return false;
+            }
+
+            return BlockableSpellTypes.Contains(Combat.TargetType);
+        }
     }
 }

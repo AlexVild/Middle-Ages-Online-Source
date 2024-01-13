@@ -404,6 +404,17 @@ namespace Intersect.Server.Entities
                 return false;
             }
 
+            var blockChance = enemy.GetBonusEffectTotal(EffectType.Block);
+            if (blockChance > 0)
+            {
+                var blocked = Randomization.Next(1, 101) <= blockChance;
+                if ((spell == null || spell.IsBlockable()) && blocked)
+                {
+                    SendBlockedAttackMessage(enemy);
+                    return false;
+                }
+            }
+
             var manaDamage = 0;
             if (spell != null && spell.Combat != null && spell.Combat.VitalDiff[(int)Vitals.Mana] != 0)
             {
@@ -713,16 +724,6 @@ namespace Intersect.Server.Entities
         public override bool IsInvincibleTo(Entity entity)
         {
             return CachedStatuses.Any(status => status.Type == StatusTypes.Invulnerable);
-        }
-
-        public virtual int GetBonusEffectTotal(EffectType effect, int startValue = 0)
-        {
-            return 0;
-        }
-
-        public virtual float GetBonusEffectPercent(EffectType effect, bool additive, int startValue = 0)
-        {
-            return 1f;
         }
     }
 }

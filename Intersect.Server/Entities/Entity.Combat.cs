@@ -183,5 +183,15 @@ namespace Intersect.Server.Entities
                 ReactToCombat(caster);
             }
         }
+
+        public virtual int GetBonusEffectTotal(EffectType effect, int startValue = 0)
+        {
+            return 0;
+        }
+
+        public virtual float GetBonusEffectPercent(EffectType effect, bool additive, int startValue = 0)
+        {
+            return 1f;
+        }
     }
 }
