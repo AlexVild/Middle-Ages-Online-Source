@@ -496,6 +496,8 @@ namespace Intersect.GameObjects
         public bool NeverSkipSpellCasting { get; set; }
 
         public bool HideName { get; set; }
+
+        public bool AnimatedSprite { get; set; }
     }
 
 }

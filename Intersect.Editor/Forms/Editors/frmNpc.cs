@@ -435,6 +435,7 @@ namespace Intersect.Editor.Forms.Editors
                 chkPlayerLockLoot.Checked = mEditorItem.PlayerLockedLoot;
                 chkNeverSkip.Checked = mEditorItem.NeverSkipSpellCasting;
                 chkHideName.Checked = mEditorItem.HideName;
+                chkAnimated.Checked = mEditorItem.AnimatedSprite;
             }
             else
             {
@@ -1880,6 +1881,11 @@ namespace Intersect.Editor.Forms.Editors
         private void darkCheckBox1_CheckedChanged(object sender, EventArgs e)
         {
             mEditorItem.HideName = chkHideName.Checked;
+        }
+
+        private void chkAnimated_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.AnimatedSprite = chkAnimated.Checked;
         }
     }
 

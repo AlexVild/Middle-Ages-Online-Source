@@ -1133,7 +1133,7 @@ namespace Intersect.Client.Entities
 
             destRectangle.X = (int)Math.Ceiling(destRectangle.X);
             destRectangle.Y = (int)Math.Ceiling(destRectangle.Y);
-            if (Options.AnimatedSprites.Contains(sprite.ToLower()))
+            if (Options.AnimatedSprites.Contains(sprite.ToLower()) || (NpcBase.TryGet(NpcId, out var npc) && npc.AnimatedSprite))
             {
                 srcRectangle = new FloatRect(
                     AnimationFrame * (int)texture.GetWidth() / SpriteFrames, dir * (int)texture.GetHeight() / Options.Instance.Sprites.Directions,

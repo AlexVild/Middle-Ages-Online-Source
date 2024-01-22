@@ -86,6 +86,7 @@ namespace Intersect.Editor.Forms.Editors
             this.cmbDeathAnimation = new DarkUI.Controls.DarkComboBox();
             this.lblDeathAnimation = new System.Windows.Forms.Label();
             this.grpImmunities = new DarkUI.Controls.DarkGroupBox();
+            this.chkSpellCasting = new DarkUI.Controls.DarkCheckBox();
             this.chkStealth = new DarkUI.Controls.DarkCheckBox();
             this.chkNoBack = new DarkUI.Controls.DarkCheckBox();
             this.chkImpassable = new DarkUI.Controls.DarkCheckBox();
@@ -200,6 +201,7 @@ namespace Intersect.Editor.Forms.Editors
             this.btnAdd = new DarkUI.Controls.DarkButton();
             this.lstSpells = new System.Windows.Forms.ListBox();
             this.grpGeneral = new DarkUI.Controls.DarkGroupBox();
+            this.chkHideName = new DarkUI.Controls.DarkCheckBox();
             this.lblTier = new System.Windows.Forms.Label();
             this.nudTier = new DarkUI.Controls.DarkNumericUpDown();
             this.lblAlpha = new System.Windows.Forms.Label();
@@ -280,8 +282,7 @@ namespace Intersect.Editor.Forms.Editors
             this.lblTierView = new System.Windows.Forms.Label();
             this.lblTargetDps = new System.Windows.Forms.Label();
             this.lblProjectedDps = new System.Windows.Forms.Label();
-            this.chkSpellCasting = new DarkUI.Controls.DarkCheckBox();
-            this.chkHideName = new DarkUI.Controls.DarkCheckBox();
+            this.chkAnimated = new DarkUI.Controls.DarkCheckBox();
             this.toolStrip.SuspendLayout();
             this.grpNpcs.SuspendLayout();
             this.pnlContainer.SuspendLayout();
@@ -1123,6 +1124,16 @@ namespace Intersect.Editor.Forms.Editors
             this.grpImmunities.TabIndex = 33;
             this.grpImmunities.TabStop = false;
             this.grpImmunities.Text = "Immunities";
+            // 
+            // chkSpellCasting
+            // 
+            this.chkSpellCasting.AutoSize = true;
+            this.chkSpellCasting.Location = new System.Drawing.Point(11, 164);
+            this.chkSpellCasting.Name = "chkSpellCasting";
+            this.chkSpellCasting.Size = new System.Drawing.Size(83, 17);
+            this.chkSpellCasting.TabIndex = 92;
+            this.chkSpellCasting.Text = "Spellcasting";
+            this.chkSpellCasting.CheckedChanged += new System.EventHandler(this.chkSpellCasting_CheckedChanged);
             // 
             // chkStealth
             // 
@@ -2606,6 +2617,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpGeneral.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpGeneral.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpGeneral.Controls.Add(this.chkAnimated);
             this.grpGeneral.Controls.Add(this.chkHideName);
             this.grpGeneral.Controls.Add(this.lblTier);
             this.grpGeneral.Controls.Add(this.nudTier);
@@ -2632,6 +2644,16 @@ namespace Intersect.Editor.Forms.Editors
             this.grpGeneral.TabIndex = 14;
             this.grpGeneral.TabStop = false;
             this.grpGeneral.Text = "General";
+            // 
+            // chkHideName
+            // 
+            this.chkHideName.AutoSize = true;
+            this.chkHideName.Location = new System.Drawing.Point(110, 96);
+            this.chkHideName.Name = "chkHideName";
+            this.chkHideName.Size = new System.Drawing.Size(85, 17);
+            this.chkHideName.TabIndex = 81;
+            this.chkHideName.Text = "Hide Name?";
+            this.chkHideName.CheckedChanged += new System.EventHandler(this.darkCheckBox1_CheckedChanged);
             // 
             // lblTier
             // 
@@ -2660,7 +2682,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblAlpha
             // 
             this.lblAlpha.AutoSize = true;
-            this.lblAlpha.Location = new System.Drawing.Point(76, 223);
+            this.lblAlpha.Location = new System.Drawing.Point(101, 228);
             this.lblAlpha.Name = "lblAlpha";
             this.lblAlpha.Size = new System.Drawing.Size(37, 13);
             this.lblAlpha.TabIndex = 78;
@@ -2669,7 +2691,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblBlue
             // 
             this.lblBlue.AutoSize = true;
-            this.lblBlue.Location = new System.Drawing.Point(76, 197);
+            this.lblBlue.Location = new System.Drawing.Point(107, 202);
             this.lblBlue.Name = "lblBlue";
             this.lblBlue.Size = new System.Drawing.Size(31, 13);
             this.lblBlue.TabIndex = 77;
@@ -2678,7 +2700,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblGreen
             // 
             this.lblGreen.AutoSize = true;
-            this.lblGreen.Location = new System.Drawing.Point(76, 171);
+            this.lblGreen.Location = new System.Drawing.Point(99, 176);
             this.lblGreen.Name = "lblGreen";
             this.lblGreen.Size = new System.Drawing.Size(39, 13);
             this.lblGreen.TabIndex = 76;
@@ -2687,7 +2709,7 @@ namespace Intersect.Editor.Forms.Editors
             // lblRed
             // 
             this.lblRed.AutoSize = true;
-            this.lblRed.Location = new System.Drawing.Point(76, 145);
+            this.lblRed.Location = new System.Drawing.Point(108, 150);
             this.lblRed.Name = "lblRed";
             this.lblRed.Size = new System.Drawing.Size(30, 13);
             this.lblRed.TabIndex = 75;
@@ -3706,25 +3728,15 @@ namespace Intersect.Editor.Forms.Editors
             this.lblProjectedDps.TabIndex = 121;
             this.lblProjectedDps.Text = "Est. DPS";
             // 
-            // chkSpellCasting
+            // chkAnimated
             // 
-            this.chkSpellCasting.AutoSize = true;
-            this.chkSpellCasting.Location = new System.Drawing.Point(11, 164);
-            this.chkSpellCasting.Name = "chkSpellCasting";
-            this.chkSpellCasting.Size = new System.Drawing.Size(83, 17);
-            this.chkSpellCasting.TabIndex = 92;
-            this.chkSpellCasting.Text = "Spellcasting";
-            this.chkSpellCasting.CheckedChanged += new System.EventHandler(this.chkSpellCasting_CheckedChanged);
-            // 
-            // chkHideName
-            // 
-            this.chkHideName.AutoSize = true;
-            this.chkHideName.Location = new System.Drawing.Point(110, 96);
-            this.chkHideName.Name = "chkHideName";
-            this.chkHideName.Size = new System.Drawing.Size(85, 17);
-            this.chkHideName.TabIndex = 81;
-            this.chkHideName.Text = "Hide Name?";
-            this.chkHideName.CheckedChanged += new System.EventHandler(this.darkCheckBox1_CheckedChanged);
+            this.chkAnimated.AutoSize = true;
+            this.chkAnimated.Location = new System.Drawing.Point(7, 218);
+            this.chkAnimated.Name = "chkAnimated";
+            this.chkAnimated.Size = new System.Drawing.Size(76, 17);
+            this.chkAnimated.TabIndex = 82;
+            this.chkAnimated.Text = "Animated?";
+            this.chkAnimated.CheckedChanged += new System.EventHandler(this.chkAnimated_CheckedChanged);
             // 
             // FrmNpc
             // 
@@ -4093,5 +4105,6 @@ namespace Intersect.Editor.Forms.Editors
         private DarkCheckBox chkNeverSkip;
         private DarkCheckBox chkSpellCasting;
         private DarkCheckBox chkHideName;
+        private DarkCheckBox chkAnimated;
     }
 }

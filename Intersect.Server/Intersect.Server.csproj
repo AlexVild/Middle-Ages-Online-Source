@@ -1361,6 +1361,10 @@
     <Compile Include="Migrations\Game\20231215194802_TimerExclusiveVisibilityMigration.designer.cs">
       <DependentUpon>20231215194802_TimerExclusiveVisibilityMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20240122153849_NpcAnimationMigration.cs" />
+    <Compile Include="Migrations\Game\20240122153849_NpcAnimationMigration.designer.cs">
+      <DependentUpon>20240122153849_NpcAnimationMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>
