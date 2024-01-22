@@ -39,6 +39,9 @@ namespace Intersect.Network.Packets.Server
         [Key(30)]
         public EventTrigger Trigger { get; set; }
 
+        [Key(31)]
+        public bool IdleAnimation { get; set; }
+
     }
 
 }

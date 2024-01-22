@@ -25,6 +25,8 @@ namespace Intersect.Server.Entities.Events
         public bool IsGlobal => GlobalClone != null;
 
         private bool mDirectionFix;
+        
+        private bool mIdleAnimation;
 
         private EventMovementSpeed mMovementSpeed;
 
@@ -104,6 +106,7 @@ namespace Intersect.Server.Entities.Events
             LastHideName = HideName;
             Sprite = MyPage.Graphic.Filename;
             mDirectionFix = MyPage.DirectionFix;
+            mIdleAnimation = MyPage.IdleAnimation;
             mWalkingAnim = MyPage.WalkingAnimation;
             mRenderLayer = MyPage.Layer;
             if (MyGraphic.Type == EventGraphicType.Sprite)
@@ -180,6 +183,7 @@ namespace Intersect.Server.Entities.Events
             MyGraphic.Height = globalClone.MyGraphic.Height;
             Sprite = MyPage.Graphic.Filename;
             mDirectionFix = MyPage.DirectionFix;
+            mIdleAnimation = MyPage.IdleAnimation;
             mWalkingAnim = MyPage.WalkingAnimation;
             mRenderLayer = MyPage.Layer;
             if (globalClone.MyGraphic.Type == EventGraphicType.Sprite)
@@ -291,6 +295,7 @@ namespace Intersect.Server.Entities.Events
             var pkt = (EventEntityPacket) packet;
             pkt.HideName = HideName;
             pkt.DirectionFix = mDirectionFix;
+            pkt.IdleAnimation = mIdleAnimation;
             pkt.WalkingAnim = mWalkingAnim;
             pkt.DisablePreview = DisablePreview;
             pkt.Description = MyPage.Description;

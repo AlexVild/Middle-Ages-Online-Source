@@ -22,6 +22,8 @@ namespace Intersect.Client.Entities.Events
         public string Desc = "";
 
         public bool DirectionFix;
+        
+        public bool IdleAnimation;
 
         public bool DisablePreview;
 
@@ -62,6 +64,7 @@ namespace Intersect.Client.Entities.Events
             base.Load(packet);
             var pkt = (EventEntityPacket) packet;
             DirectionFix = pkt.DirectionFix;
+            IdleAnimation = pkt.IdleAnimation;
             WalkingAnim = pkt.WalkingAnim;
             DisablePreview = pkt.DisablePreview;
             Desc = pkt.Description;
@@ -143,7 +146,7 @@ namespace Intersect.Client.Entities.Events
                             frame = WalkFrame;
                         }
 
-                        if (Options.AnimatedSprites.Contains(Graphic.Filename.ToLower()))
+                        if (Options.AnimatedSprites.Contains(Graphic.Filename.ToLower()) || IdleAnimation)
                         {
                             srcRectangle = new FloatRect(
                                 AnimationFrame * (int) entityTex.GetWidth() / Options.Instance.Sprites.NormalFrames, d * (int) entityTex.GetHeight() / Options.Instance.Sprites.Directions,

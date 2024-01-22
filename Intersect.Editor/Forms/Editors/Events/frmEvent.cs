@@ -1249,6 +1249,7 @@ namespace Intersect.Editor.Forms.Editors.Events
             chkWalkingAnimation.Checked = Convert.ToBoolean(CurrentPage.WalkingAnimation);
             chkInteractionFreeze.Checked = Convert.ToBoolean(CurrentPage.InteractionFreeze);
             txtDesc.Text = CurrentPage.Description;
+            chkIdleAnim.Checked = CurrentPage.IdleAnimation;
 
             if (!MyEvent.CommonEvent && !QuestEvent)
             {
@@ -2377,6 +2378,11 @@ namespace Intersect.Editor.Forms.Editors.Events
         private void cmbDisableMoveVar_SelectedIndexChanged(object sender, EventArgs e)
         {
             CurrentPage.DisableMovementVar = InstanceVariableBase.IdFromList(cmbEnableMoveVar.SelectedIndex - 1, VariableDataTypes.Boolean);
+        }
+
+        private void chkIdleAnim_CheckedChanged(object sender, EventArgs e)
+        {
+            CurrentPage.IdleAnimation = chkIdleAnim.Checked;
         }
     }
 
