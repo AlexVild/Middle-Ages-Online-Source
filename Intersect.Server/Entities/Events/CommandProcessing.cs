@@ -3376,6 +3376,11 @@ namespace Intersect.Server.Entities.Events
                             player.ChallengeContractId = Guid.Empty;
                         }
 
+                        if (challenge.Challenge.SpellUnlock != null)
+                        {
+                            player.TryAddSkillToBook(challenge.Challenge.SpellUnlockId);
+                        }
+
                         PacketSender.SendChatMsg(player,
                             $"Challenge completed: {descriptor.Name}!",
                             ChatMessageType.Experience,
@@ -3404,6 +3409,10 @@ namespace Intersect.Server.Entities.Events
                                 $"Challenge completed: {descriptor.Name}!",
                                 ChatMessageType.Experience,
                                 sendToast: true);
+                        if (challenge.Challenge.SpellUnlock != null)
+                        {
+                            player.TryAddSkillToBook(challenge.Challenge.SpellUnlockId);
+                        }
                     }
                     else if (!challenge.Challenge.RequiresContract)
                     {
