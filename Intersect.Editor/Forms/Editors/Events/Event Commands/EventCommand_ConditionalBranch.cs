@@ -577,6 +577,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     Condition = new ChallengeContractTaken();
 
                     break;
+                case ConditionTypes.SpellActive:
+                    Condition = new SpellIsActive();
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -910,6 +914,12 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     }
                     break;
 
+                case ConditionTypes.SpellActive:
+                    grpSpell.Show();
+                    cmbSpell.Items.Clear();
+                    cmbSpell.Items.AddRange(SpellBase.Names);
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -1852,6 +1862,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             cmbChallenges.SelectedIndex = ChallengeDescriptor.ListIndex(condition.ChallengeId);
         }
 
+        private void SetupFormValues(SpellIsActive condition)
+        {
+            cmbSpell.SelectedIndex = SpellBase.ListIndex(condition.SpellId);
+        }
+
         private void SetupFormValues(MapSpawnGroupIs condition)
         {
             nudSpawnGroup.Value = (int)condition.SpawnGroup;
@@ -2219,6 +2234,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         private void SaveFormValues(ChallengeContractTaken condition)
         {
             condition.ChallengeId = ChallengeDescriptor.IdFromList(cmbChallenges.SelectedIndex);
+        }
+
+        private void SaveFormValues(SpellIsActive condition)
+        {
+            condition.SpellId = SpellBase.IdFromList(cmbSpell.SelectedIndex);
         }
 
         private void SaveFormValues(MapSpawnGroupIs condition)

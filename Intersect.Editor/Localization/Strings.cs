@@ -508,6 +508,11 @@ namespace Intersect.Editor.Localization
             return EventConditionDesc.HasWeaponLevel.ToString(WeaponTypeDescriptor.GetName(condition.WeaponTypeId), condition.Level);
         }
 
+        public static string GetEventConditionalDesc(SpellIsActive condition)
+        {
+            return EventConditionDesc.SpellIsActive.ToString(SpellBase.GetName(condition.SpellId));
+        }
+
         public static string GetVariableComparisonString(VariableCompaison comparison)
         {
             return "";
@@ -2512,6 +2517,7 @@ Tick timer saved in server config.json.";
                 {49, @"Has champions disabled"},
                 {50, @"Map Spawn Group is..."},
                 {51, @"Challenge contract taken for..."},
+                {52, @"Spell X is active on player..."},
             };
 
             public static LocalizedString endrange = @"End Range:";
@@ -2866,6 +2872,9 @@ Tick timer saved in server config.json.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString ChallengeContractTaken = @"Contract taken for challenge: {00}";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString SpellIsActive = @"Spell {00} is active on player";
 
             public static Dictionary<int, LocalizedString> selfswitches = new Dictionary<int, LocalizedString>
             {

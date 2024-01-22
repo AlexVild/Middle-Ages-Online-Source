@@ -107,6 +107,8 @@ namespace Intersect.GameObjects.Events
 
         ChallengeContractTaken,
 
+        SpellActive,
+
     }
 
     public class Condition
@@ -709,6 +711,13 @@ namespace Intersect.GameObjects.Events
         public override ConditionTypes Type { get; } = ConditionTypes.ChallengeContractTaken;
 
         public Guid ChallengeId { get; set; }
+    }
+
+    public class SpellIsActive : Condition
+    {
+        public override ConditionTypes Type { get; } = ConditionTypes.SpellActive;
+
+        public Guid SpellId { get; set; }
     }
 
     public class VariableCompaison
