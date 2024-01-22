@@ -3813,6 +3813,11 @@ namespace Intersect.Server.Entities.Events
                 affectedPlayers.AddRange(player.Guild.FindOnlineMembers().Where(pl => pl.Id != player.Id));
             }
 
+            if (command.InstanceMembers && InstanceProcessor.TryGetInstanceController(player.MapInstanceId, out var instanceController))
+            {
+                affectedPlayers.AddRange(instanceController.Players);
+            }
+
             foreach (var affectedPlayer in affectedPlayers.GroupBy(pl => pl.Id).Select(pl => pl.FirstOrDefault()))
             {
                 if (!affectedPlayer.Online)

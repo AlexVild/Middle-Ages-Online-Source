@@ -913,6 +913,10 @@ namespace Intersect.Editor.Forms.Editors.Events
                     tmpCommand = new ShowEventCommand();
                     break;
 
+                case EventCommandType.CastSpellOn:
+                    tmpCommand = new CastSpellOn();
+                    break;
+
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -1702,6 +1706,10 @@ namespace Intersect.Editor.Forms.Editors.Events
 
                 case EventCommandType.ShowEvent:
                     cmdWindow = new EventCommand_ShowEvent((ShowEventCommand)command, this, mCurrentMap, MyEvent);
+                    break;
+
+                case EventCommandType.CastSpellOn:
+                    cmdWindow = new EventCommand_CastSpellOn((CastSpellOn)command, this);
                     break;
 
                 default:

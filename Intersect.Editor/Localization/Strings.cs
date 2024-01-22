@@ -2034,7 +2034,7 @@ Tick timer saved in server config.json.";
             public static LocalizedString ShowEvent = @"Show Event: {00}";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-            public static LocalizedString CastSpellOn = @"Cast Spell '{00}' [include self: {01}, include party: {02}; include guild: {03})";
+            public static LocalizedString CastSpellOn = @"Cast Spell '{00}' [include self: {01}, include party: {02}; include guild: {03}; include instance: {04})";
 
             public static LocalizedString selfswitch = @"Set Self Switch {00} to {01}";
 

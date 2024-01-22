@@ -105,6 +105,12 @@
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_AddInspiration.Designer.cs">
       <DependentUpon>EventCommand_AddInspiration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_CastSpellOn.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_CastSpellOn.Designer.cs">
+      <DependentUpon>EventCommand_CastSpellOn.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Editors\Events\Event Commands\EventCommand_ChangeBestiary.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -926,6 +932,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_AddInspiration.resx">
       <DependentUpon>EventCommand_AddInspiration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_CastSpellOn.resx">
+      <DependentUpon>EventCommand_CastSpellOn.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\Events\Event Commands\EventCommand_ChangeBestiary.resx">
       <DependentUpon>EventCommand_ChangeBestiary.cs</DependentUpon>

@@ -2136,5 +2136,10 @@ namespace Intersect.Editor.Forms.Editors.Events
                 return Strings.EventCommandList.ShowEvent.ToString(Strings.EventCommandList.deletedevent);
             }
         }
+
+        private static string GetCommandText(CastSpellOn command, MapInstance map)
+        {
+            return Strings.EventCommandList.CastSpellOn.ToString(SpellBase.GetName(command.SpellId), command.Self, command.PartyMembers, command.GuildMembers, command.InstanceMembers);
+        }
     }
 }
