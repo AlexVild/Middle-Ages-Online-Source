@@ -285,6 +285,7 @@ namespace Intersect.GameObjects.Events
         ChangeChampSettings, // 93
         HideEvent, // 94
         ShowEvent, // 95
+        CastSpellOn, // 96
     }
 
     public enum NPCGuildManagementSelection

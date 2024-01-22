@@ -2928,7 +2928,8 @@ namespace Intersect.Server.Entities.Events
             try
             {
                 player.ChangeLabelUnlockStatus(command.LabelId, command.Status);
-            } catch (NotImplementedException e)
+            }
+            catch (NotImplementedException e)
             {
                 Logging.Log.Error($"Player command processing exception: {e.Message}");
             }
@@ -3212,7 +3213,7 @@ namespace Intersect.Server.Entities.Events
             }
 
             var prevLevel = mastery.Level;
-            
+
             switch (command.ChangeType)
             {
                 case WeaponTrackUpdate.SetLevel:
@@ -3451,7 +3452,7 @@ namespace Intersect.Server.Entities.Events
                 return;
             }
 
-            switch(command.State)
+            switch (command.State)
             {
                 case DungeonState.Null:
                     instanceController.RemoveDungeon();
@@ -3513,7 +3514,7 @@ namespace Intersect.Server.Entities.Events
             if (instanceController.InstanceIsDungeon && instanceController.Dungeon.Participants.Contains(player))
             {
                 player.OpenLootRoll(instance.BaseEvent.Id, instanceController.GetDungeonLoot());
-                
+
                 PacketSender.SendOpenLootPacketTo(player, instanceController.DungeonName, GameObjects.Events.LootAnimType.Chest);
 
                 callStack.Peek().WaitingForResponse = CommandInstance.EventResponse.LootRoll;
@@ -3647,7 +3648,7 @@ namespace Intersect.Server.Entities.Events
                 return;
             }
 
-            foreach(var evt in mapInstance.GetGlobalEventInstances())
+            foreach (var evt in mapInstance.GetGlobalEventInstances())
             {
                 evt.GlobalPageInstance[evt.PageIndex].ResetPosition();
             }
@@ -3695,7 +3696,7 @@ namespace Intersect.Server.Entities.Events
 
             player.WithdrawFromMelee();
         }
-        
+
         private static void ProcessCommand(
           ChangeChampSettingsCommand command,
           Player player,
@@ -3719,7 +3720,7 @@ namespace Intersect.Server.Entities.Events
                 PacketSender.SendToast(player, "Champion spawning has been enabled.");
             }
         }
-        
+
         private static void ProcessCommand(
           HideEventCommand command,
           Player player,
@@ -3779,6 +3780,47 @@ namespace Intersect.Server.Entities.Events
                 {
                     evt.Value.PageInstance.ShowEvent();
                 }
+            }
+        }
+
+        private static void ProcessCommand(
+           CastSpellOn command,
+           Player player,
+           Event instance,
+           CommandInstance stackInfo,
+           Stack<CommandInstance> callStack
+       )
+        {
+            if (player == null || !player.Online || !SpellBase.TryGet(command.SpellId, out var spell))
+            {
+                return;
+            }
+
+            List<Player> affectedPlayers = new List<Player>();
+
+            if (command.Self)
+            {
+                affectedPlayers.Add(player);
+            }
+
+            if (command.PartyMembers && player.IsInParty)
+            {
+                affectedPlayers.AddRange(player.Party.Where(pl => pl.Id != player.Id));
+            }
+
+            if (command.GuildMembers && player.IsInGuild)
+            {
+                affectedPlayers.AddRange(player.Guild.FindOnlineMembers().Where(pl => pl.Id != player.Id));
+            }
+
+            foreach (var affectedPlayer in affectedPlayers.GroupBy(pl => pl.Id).Select(pl => pl.FirstOrDefault()))
+            {
+                if (!affectedPlayer.Online)
+                {
+                    continue;
+                }
+
+                affectedPlayer?.UseSpell(spell, -1, affectedPlayer, ignoreVitals: true, instantCast: true);
             }
         }
     }

@@ -2033,6 +2033,9 @@ Tick timer saved in server config.json.";
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString ShowEvent = @"Show Event: {00}";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString CastSpellOn = @"Cast Spell '{00}' [include self: {01}, include party: {02}; include guild: {03})";
+
             public static LocalizedString selfswitch = @"Set Self Switch {00} to {01}";
 
             public static LocalizedString showplayer = @"Show Player";
@@ -2372,6 +2375,7 @@ Tick timer saved in server config.json.";
                 {"changechampsettings", @"Change Champion Spawn Settings"},
                 {"hideevent", @"Hide Event"},
                 {"showevent", @"Show Event"},
+                {"castspellon", @"Cast Spell On"},
             };
 
         }
@@ -6473,6 +6477,34 @@ Negative values for time to flow backwards.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString ElapsedDays = @"{0:D1} Day(s) and {1:D2}:{2:D2}:{3:D2}.{4:D3}";
+        }
+
+        public partial struct EventCastSpellOn
+        {
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Cancel = @"Cancel";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString IncludeGuildies = @"Online Guild Members";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString IncludePartyMembers = @"Party Members";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString IncludeSelf = @"Self";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString LabelSpell = @"Spell";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString LabelTargets = @"Targets";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Okay = @"Okay";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Title = @"Cast Spell On";
+
         }
     }
 }

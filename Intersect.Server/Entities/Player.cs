@@ -9823,5 +9823,10 @@ namespace Intersect.Server.Entities
                     ?.FirstOrDefault()?.Rank ?? 0;
             }
         }
+
+        [NotMapped][JsonIgnore] public bool IsInGuild => Guild != null;
+
+        [NotMapped, JsonIgnore]
+        public bool IsInParty => Party != null && Party.Count > 1;
     }
 }
