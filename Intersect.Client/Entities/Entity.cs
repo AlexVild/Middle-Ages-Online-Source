@@ -3561,7 +3561,10 @@ namespace Intersect.Client.Entities
                 {
                     NameOpacity += 50;
                 }
-                NameOpacity = MathHelper.Clamp(NameOpacity, minOpacity, byte.MaxValue);
+
+                var maxValue = (Globals.Me?.CombatMode ?? false) ? 150 : byte.MaxValue;
+
+                NameOpacity = MathHelper.Clamp(NameOpacity, minOpacity, maxValue);
                 LastNameUpdate = Timing.Global.MillisecondsUtcUnsynced;
             }
         }
