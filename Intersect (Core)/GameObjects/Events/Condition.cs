@@ -108,6 +108,8 @@ namespace Intersect.GameObjects.Events
         ChallengeContractTaken,
 
         SpellActive,
+        
+        EnhancementOnWeapon,
 
     }
 
@@ -718,6 +720,17 @@ namespace Intersect.GameObjects.Events
         public override ConditionTypes Type { get; } = ConditionTypes.SpellActive;
 
         public Guid SpellId { get; set; }
+    }
+
+    public class HasWeaponWithEnhancement : Condition
+    {
+        public override ConditionTypes Type { get; } = ConditionTypes.EnhancementOnWeapon;
+
+        public Guid ItemId { get; set; }
+
+        public bool AnyItem { get; set; }
+
+        public Guid EnhancementId { get; set; }
     }
 
     public class VariableCompaison

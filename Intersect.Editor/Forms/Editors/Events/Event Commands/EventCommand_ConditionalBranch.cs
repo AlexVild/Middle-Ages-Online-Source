@@ -280,6 +280,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             cmbEnhancements.Items.Clear();
             cmbEnhancements.Items.AddRange(EnhancementDescriptor.Names);
 
+            cmbEnhancementOnWeap.Items.Clear();
+            cmbEnhancementOnWeap.Items.AddRange(EnhancementDescriptor.Names);
+            cmbItemEnhancement.Items.Clear();
+            cmbItemEnhancement.Items.AddRange(ItemBase.Names);
+
             btnSave.Text = Strings.EventConditional.okay;
             btnCancel.Text = Strings.EventConditional.cancel;
         }
@@ -581,6 +586,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     Condition = new SpellIsActive();
 
                     break;
+                case ConditionTypes.EnhancementOnWeapon:
+                    Condition = new HasWeaponWithEnhancement();
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -621,6 +630,7 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             grpDungeonState.Hide();
             grpEnhancements.Hide();
             grpSpawnGroup.Hide();
+            grpEnhancementOn.Hide();
 
             switch (type)
             {
@@ -918,6 +928,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     grpSpell.Show();
                     cmbSpell.Items.Clear();
                     cmbSpell.Items.AddRange(SpellBase.Names);
+
+                    break;
+                case ConditionTypes.EnhancementOnWeapon:
+                    grpEnhancementOn.Show();
 
                     break;
                 default:
@@ -1875,6 +1889,15 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             chkSpawnGroupLess.Checked = condition.OrLess;
         }
 
+        private void SetupFormValues(HasWeaponWithEnhancement condition)
+        {
+            cmbEnhancementOnWeap.SelectedIndex = EnhancementDescriptor.ListIndex(condition.EnhancementId);
+            cmbItemEnhancement.SelectedIndex = ItemBase.ListIndex(condition.ItemId);
+            chkAnyItem.Checked = condition.AnyItem;
+
+            cmbItemEnhancement.Enabled = !chkAnyItem.Checked;
+        }
+
         #endregion
 
         #region "SaveFormValues"
@@ -2247,6 +2270,13 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
             condition.OrGreater = chkSpawnGroupGreater.Checked;
             condition.OrLess = chkSpawnGroupLess.Checked;
         }
+
+        private void SaveFormValues(HasWeaponWithEnhancement condition)
+        {
+            condition.EnhancementId = EnhancementDescriptor.IdFromList(cmbEnhancementOnWeap.SelectedIndex);
+            condition.ItemId = ItemBase.IdFromList(cmbItemEnhancement.SelectedIndex);
+            condition.AnyItem = chkAnyItem.Checked;
+        }
         #endregion
 
         private void chkNpc_CheckedChanged(object sender, EventArgs e)
@@ -2312,6 +2342,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                 cmbRecordOf.Items.Clear();
                 cmbRecordOf.Enabled = false;
             }
+        }
+
+        private void chkAnyItem_CheckedChanged(object sender, EventArgs e)
+        {
+            cmbItemEnhancement.Enabled = !chkAnyItem.Checked;
         }
     }
 

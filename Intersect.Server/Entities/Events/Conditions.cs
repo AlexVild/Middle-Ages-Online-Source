@@ -1235,6 +1235,28 @@ namespace Intersect.Server.Entities.Events
             return player?.Statuses?.Any(status => status.Key.Id == condition.SpellId) ?? false;
         }
 
+        public static bool MeetsCondition(
+           HasWeaponWithEnhancement condition,
+           Player player,
+           Event eventInstance,
+           QuestBase questBase
+       )
+        {
+            if (player == null || condition == null)
+            {
+                return false;
+            }
+
+            var itemsWithEnhancement = player.Items.Where(slot => slot.ItemProperties.AppliedEnhancementIds.Contains(condition.EnhancementId)).ToArray();
+
+            if (itemsWithEnhancement.Length == 0)
+            {
+                return false;
+            }
+
+            return condition.AnyItem || itemsWithEnhancement.Any(slot => slot.ItemId == condition.ItemId);
+        }
+
     }
 
 }

@@ -3516,7 +3516,7 @@ namespace Intersect.Client.Entities
             }
 
             var mousePos = Graphics.ConvertToWorldPoint(Globals.InputManager.GetMousePosition());
-            /*return CalculateTileDistanceTo(Globals.Me) <= ClientConfiguration.Instance.ProximityNameDistance 
+            /*return CalculateTileDistanceTo(Globals.Me) <= ClientConfiguration.Instance.ProximityNameDistance // AV - Commented this out to use magic number instead tee-hee
                 || WorldPos.Contains(mousePos.X, mousePos.Y) 
                 || IsTargeted 
                 || !IsAllyOf(Globals.Me) 

@@ -513,6 +513,16 @@ namespace Intersect.Editor.Localization
             return EventConditionDesc.SpellIsActive.ToString(SpellBase.GetName(condition.SpellId));
         }
 
+        public static string GetEventConditionalDesc(HasWeaponWithEnhancement condition)
+        {
+            if (condition.AnyItem)
+            {
+                return EventConditionDesc.HasWeaponWithEnhancement.ToString(EnhancementDescriptor.GetName(condition.EnhancementId), "Any");
+            }
+
+            return EventConditionDesc.HasWeaponWithEnhancement.ToString(EnhancementDescriptor.GetName(condition.EnhancementId), ItemBase.GetName(condition.ItemId));
+        }
+
         public static string GetVariableComparisonString(VariableCompaison comparison)
         {
             return "";
@@ -2522,6 +2532,7 @@ Tick timer saved in server config.json.";
                 {50, @"Map Spawn Group is..."},
                 {51, @"Challenge contract taken for..."},
                 {52, @"Spell X is active on player..."},
+                {53, @"Enhancement X on item Y..."},
             };
 
             public static LocalizedString endrange = @"End Range:";
@@ -2879,6 +2890,9 @@ Tick timer saved in server config.json.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString SpellIsActive = @"Spell {00} is active on player";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString HasWeaponWithEnhancement = @"Has enhancement {00} on item: {01}";
 
             public static Dictionary<int, LocalizedString> selfswitches = new Dictionary<int, LocalizedString>
             {
