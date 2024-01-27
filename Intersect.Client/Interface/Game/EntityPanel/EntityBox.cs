@@ -480,6 +480,10 @@ namespace Intersect.Client.Interface.Game.EntityPanel
                     }
                     else
                     {
+                        if (npcBase.HideName)
+                        {
+                            text = "???";
+                        }
                         EntityName.SetText($"{text.ToUpper()} [Tr. {npcBase.Level}]");
                     }
                     
