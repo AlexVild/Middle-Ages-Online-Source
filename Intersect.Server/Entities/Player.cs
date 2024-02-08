@@ -9208,8 +9208,6 @@ namespace Intersect.Server.Entities
                 return; // Only drop items in PVP
             }
 
-            // Store our luck before dropping items!
-            var luck = GetBonusEffectTotal(EffectType.Luck);
             for (var n = 0; n < Items.Count; n++)
             {
                 if (Items[n] == null)
@@ -9226,9 +9224,8 @@ namespace Intersect.Server.Entities
                     continue;
                 }
 
-                //Don't lose non-droppable or equipped items
-                if (!itemBase.CanDrop || // Can't be dropped?
-                    (itemBase.ItemType == ItemTypes.Equipment && TryGetEquippedItem(itemBase.EquipmentSlot, out var equippedItem) && equippedItem == Items[n])) // Is equipped?
+                //Don't lose non-droppable items
+                if (!itemBase.CanDrop)
                 {
                     continue;
                 }
@@ -9236,8 +9233,8 @@ namespace Intersect.Server.Entities
                 var playerKiller = killer as Player;
 
                 Guid lootOwner = Guid.Empty;
-                // If the player has some luck, then there's a chance they keep some items
-                if (Randomization.Next(1, 101) <= luck && itemBase.Id.ToString() != Options.Combat.BloodshedItemId)
+                // Player has a 50/50 shot of keeping their item
+                if (Randomization.Next(1, 101) <= 50 && itemBase.Id.ToString() != Options.Combat.BloodshedItemId)
                 {
                     continue;
                 }

@@ -1698,7 +1698,7 @@ namespace Intersect.Client.Entities
                 var friendlyTarget = false;
                 if (en is Player pl)
                 {
-                    friendlyTarget = Globals.Me.MapInstance.ZoneType != MapZones.Arena && (IsInMyParty(pl) || pl.Guild == Guild);
+                    friendlyTarget = IsAllyOf(en);
                 }
 
                 // Don't enter combat mode on self-target, event target, or friendly target
