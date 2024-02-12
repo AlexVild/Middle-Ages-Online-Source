@@ -28,7 +28,7 @@ namespace Intersect.Editor.Forms.Editors
 
             if (mEditorItem == null)
             {
-                grpTerritories.Hide();
+                grpTerritory.Hide();
             }
 
             cmbIcon.Items.Clear();
@@ -88,7 +88,7 @@ namespace Intersect.Editor.Forms.Editors
             FormHelpers.UpdateEditor(
                 ref mEditorItem,
                 ref mChanged,
-                ref grpTerritories,
+                ref grpTerritory,
                 UpdateToolStripItems,
                 UpdateFields
             );
@@ -108,6 +108,7 @@ namespace Intersect.Editor.Forms.Editors
         private void txtName_TextChanged(object sender, EventArgs e)
         {
             mEditorItem.Name = txtName.Text;
+            lstGameObjects.UpdateText(txtName.Text);
         }
 
         private void toolStripItemNew_Click(object sender, EventArgs e)

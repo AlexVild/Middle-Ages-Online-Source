@@ -1365,6 +1365,10 @@
     <Compile Include="Migrations\Game\20240122153849_NpcAnimationMigration.designer.cs">
       <DependentUpon>20240122153849_NpcAnimationMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20240212164053_TerritoryMigration.cs" />
+    <Compile Include="Migrations\Game\20240212164053_TerritoryMigration.designer.cs">
+      <DependentUpon>20240212164053_TerritoryMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

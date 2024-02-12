@@ -552,6 +552,7 @@
             this.lblTick.Size = new System.Drawing.Size(28, 13);
             this.lblTick.TabIndex = 130;
             this.lblTick.Text = "Tick";
+            this.lblTick.TextAlign = System.Drawing.ContentAlignment.TopRight;
             // 
             // nudTick
             // 
@@ -629,6 +630,7 @@
             this.Controls.Add(this.toolStrip);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "frmTerritory";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Territory Editor";
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
