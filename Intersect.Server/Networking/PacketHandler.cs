@@ -3722,6 +3722,11 @@ namespace Intersect.Server.Networking
                     obj = EnhancementDescriptor.Get(id);
 
                     break;
+                
+                case GameObjectType.Territory:
+                    obj = TerritoryDescriptor.Get(id);
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -3918,6 +3923,11 @@ namespace Intersect.Server.Networking
 
                 case GameObjectType.Enhancement:
                     obj = DatabaseObject<EnhancementDescriptor>.Lookup.Get(id);
+
+                    break;
+
+                case GameObjectType.Territory:
+                    obj = DatabaseObject<TerritoryDescriptor>.Lookup.Get(id);
 
                     break;
                 default:

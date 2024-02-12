@@ -610,6 +610,10 @@ namespace Intersect.Server.Database
                     EnhancementDescriptor.Lookup.Clear();
 
                     break;
+                case GameObjectType.Territory:
+                    TerritoryDescriptor.Lookup.Clear();
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }
@@ -822,6 +826,13 @@ namespace Intersect.Server.Database
                             }
 
                             break;
+                        case GameObjectType.Territory:
+                            foreach (var territory in context.Territories)
+                            {
+                                TerritoryDescriptor.Lookup.Set(territory.Id, territory);
+                            }
+
+                            break;
                         default:
                             throw new ArgumentOutOfRangeException(nameof(gameObjectType), gameObjectType, null);
                     }
@@ -964,6 +975,11 @@ namespace Intersect.Server.Database
 
                 case GameObjectType.Enhancement:
                     dbObj = new EnhancementDescriptor(predefinedid);
+
+                    break;
+
+                case GameObjectType.Territory:
+                    dbObj = new TerritoryDescriptor(predefinedid);
 
                     break;
 
@@ -1146,6 +1162,12 @@ namespace Intersect.Server.Database
                             DungeonDescriptor.Lookup.Set(dbObj.Id, dbObj);
 
                             break;
+
+                        case GameObjectType.Territory:
+                            context.Territories.Add((TerritoryDescriptor)dbObj);
+                            TerritoryDescriptor.Lookup.Set(dbObj.Id, dbObj);
+
+                            break;
                         default:
                             throw new ArgumentOutOfRangeException(nameof(gameObjectType), gameObjectType, null);
                     }
@@ -1309,6 +1331,10 @@ namespace Intersect.Server.Database
 
                         case GameObjectType.Enhancement:
                             context.Enhancements.Remove((EnhancementDescriptor)gameObject);
+
+                            break;
+                        case GameObjectType.Territory:
+                            context.Territories.Remove((TerritoryDescriptor)gameObject);
 
                             break;
                     }
@@ -1475,6 +1501,11 @@ namespace Intersect.Server.Database
                         
                         case GameObjectType.Enhancement:
                             context.Enhancements.Update((EnhancementDescriptor)gameObject);
+
+                            break;
+                        
+                        case GameObjectType.Territory:
+                            context.Territories.Update((TerritoryDescriptor)gameObject);
 
                             break;
                     }
@@ -2072,6 +2103,7 @@ namespace Intersect.Server.Database
                     MigrateDbSet(context.Challenges, newGameContext.Challenges);
                     MigrateDbSet(context.Dungeons, newGameContext.Dungeons);
                     MigrateDbSet(context.Enhancements, newGameContext.Enhancements);
+                    MigrateDbSet(context.Territories, newGameContext.Territories);
                     newGameContext.ChangeTracker.DetectChanges();
                     newGameContext.SaveChanges();
                     newGameContext.Dispose();

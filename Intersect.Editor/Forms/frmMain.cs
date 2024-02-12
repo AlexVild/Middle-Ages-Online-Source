@@ -98,6 +98,8 @@ namespace Intersect.Editor.Forms
         
         private frmEnhancement mEnhancementEditor;
 
+        private frmTerritory mTerritoryEditor;
+
         //General Editting Variables
         bool mTMouseDown;
 
@@ -1749,6 +1751,15 @@ namespace Intersect.Editor.Forms
                         }
 
                         break;
+                    case GameObjectType.Territory:
+                        if (mTerritoryEditor == null || mTerritoryEditor.Visible == false)
+                        {
+                            mTerritoryEditor = new frmTerritory();
+                            mTerritoryEditor.InitEditor();
+                            mTerritoryEditor.Show();
+                        }
+
+                        break;
                     default:
                         return;
                 }
@@ -2190,6 +2201,11 @@ namespace Intersect.Editor.Forms
         private void enhancementEditorToolStripMenuItem_Click(object sender, EventArgs e)
         {
             PacketSender.SendOpenEditor(GameObjectType.Enhancement);
+        }
+
+        private void territoryEditorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PacketSender.SendOpenEditor(GameObjectType.Territory);
         }
     }
 

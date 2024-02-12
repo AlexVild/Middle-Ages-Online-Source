@@ -309,6 +309,7 @@
     <Compile Include="GameObjects\SpellBase.BonusEffects.cs" />
     <Compile Include="GameObjects\Switches and Variables\InstanceVariableBase.cs" />
     <Compile Include="GameObjects\Switches and Variables\VariableValue.cs" />
+    <Compile Include="GameObjects\TerritoryDescriptor.cs" />
     <Compile Include="GameObjects\Timers\TimerDescriptor.cs" />
     <Compile Include="GameObjects\WeaponTypeDescriptor.cs" />
     <Compile Include="GlobalSuppressions.cs" />

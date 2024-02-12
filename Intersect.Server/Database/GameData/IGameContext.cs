@@ -55,5 +55,7 @@ namespace Intersect.Server.Database.GameData
         DbSet<DungeonDescriptor> Dungeons { get; set; }
         
         DbSet<EnhancementDescriptor> Enhancements { get; set; }
+        
+        DbSet<TerritoryDescriptor> Territories { get; set; }
     }
 }

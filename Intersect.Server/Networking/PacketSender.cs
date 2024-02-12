@@ -1993,6 +1993,14 @@ namespace Intersect.Server.Networking
                         SendGameObject(client, obj.Value, false, false, packetList);
                     }
                     break;
+                
+                case GameObjectType.Territory:
+                    foreach (var obj in TerritoryDescriptor.Lookup)
+                    {
+                        SendGameObject(client, obj.Value, false, false, packetList);
+                    }
+                    break;
+
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }

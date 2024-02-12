@@ -780,14 +780,27 @@ namespace Intersect.Editor.Networking
                 case GameObjectType.Enhancement:
                     if (deleted)
                     {
-                        var dungeon = EnhancementDescriptor.Get(id);
-                        dungeon.Delete();
+                        var enhancement = EnhancementDescriptor.Get(id);
+                        enhancement.Delete();
                     }
                     else
                     {
-                        var dungeon = new EnhancementDescriptor(id);
-                        dungeon.Load(json);
-                        EnhancementDescriptor.Lookup.Set(id, dungeon);
+                        var enhancement = new EnhancementDescriptor(id);
+                        enhancement.Load(json);
+                        EnhancementDescriptor.Lookup.Set(id, enhancement);
+                    }
+                    break;
+                case GameObjectType.Territory:
+                    if (deleted)
+                    {
+                        var territory = TerritoryDescriptor.Get(id);
+                        territory.Delete();
+                    }
+                    else
+                    {
+                        var territory = new TerritoryDescriptor(id);
+                        territory.Load(json);
+                        TerritoryDescriptor.Lookup.Set(id, territory);
                     }
                     break;
                 default:

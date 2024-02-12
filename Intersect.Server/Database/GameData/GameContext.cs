@@ -120,6 +120,8 @@ namespace Intersect.Server.Database.GameData
         public DbSet<DungeonDescriptor> Dungeons { get; set; }
         
         public DbSet<EnhancementDescriptor> Enhancements { get; set; }
+        
+        public DbSet<TerritoryDescriptor> Territories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

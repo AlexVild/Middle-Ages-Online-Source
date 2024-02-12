@@ -9,6 +9,8 @@ using Intersect.Enums;
 using Intersect.Models;
 using System;
 using System.Collections.Generic;
+using System.Drawing.Imaging;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -244,6 +246,44 @@ namespace Intersect.Editor.Forms.Helpers
         {
             editorItem.Folder = cmbFolder.Text;
             initEditor();
+        }
+
+        public static void DrawInPictureBox(ref PictureBox pictureBox, ComboBox selector, string rootPath, float r = 255, float g = 255, float b = 255, float a = 255)
+        {
+            var picItemBmp = new Bitmap(pictureBox.Width, pictureBox.Height);
+            var gfx = Graphics.FromImage(picItemBmp);
+            gfx.FillRectangle(Brushes.Black, new Rectangle(0, 0, pictureBox.Width, pictureBox.Height));
+            if (selector.SelectedIndex > 0)
+            {
+                var img = Image.FromFile($"{rootPath}/{selector.Text}");
+                var imgAttributes = new ImageAttributes();
+
+                // Microsoft, what the heck is this crap?
+                imgAttributes.SetColorMatrix(
+                    new ColorMatrix(
+                        new float[][]
+                        {
+                            new float[] { r / 255,  0,  0,  0, 0},  // Modify the red space
+                            new float[] {0, g / 255,  0,  0, 0},    // Modify the green space
+                            new float[] {0,  0, b / 255,  0, 0},    // Modify the blue space
+                            new float[] {0,  0,  0, a / 255, 0},    // Modify the alpha space
+                            new float[] {0, 0, 0, 0, 1}         // We're not adding any non-linear changes. Value of 1 at the end is a dummy value!
+                        }
+                    )
+                );
+
+                gfx.DrawImage(
+                    img, new Rectangle(0, 0, img.Width, img.Height),
+                    0, 0, img.Width, img.Height, GraphicsUnit.Pixel, imgAttributes
+                );
+
+                img.Dispose();
+                imgAttributes.Dispose();
+            }
+
+            gfx.Dispose();
+
+            pictureBox.BackgroundImage = picItemBmp;
         }
     }
 }
