@@ -28,7 +28,9 @@ namespace Intersect.Enums
 
         Critter,
 
-        Footstep
+        Footstep,
+
+        Territory
 
     }
 

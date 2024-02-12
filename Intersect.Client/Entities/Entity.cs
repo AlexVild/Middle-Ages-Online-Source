@@ -2875,7 +2875,7 @@ namespace Intersect.Client.Entities
 
                         var tile = GetTileRectangle(currMap, (byte)mapX, (byte)mapY);
 
-                        if (texture == COMBAT_TILE_AOE) // If we're drawing the "DANGER" texture, give it a light so we can see it in darkness
+                        if (texture == COMBAT_TILE_AOE || texture == SINGLE_TARGET || texture == SINGLE_TARGET_OUTLINE) // If we're drawing the "DANGER" texture, give it a light so we can see it in darkness
                         {
                             Graphics.AddLight((int)tile.CenterX, (int)tile.CenterY, 100, 200, 1.0f, new Color(255, 222, 124, 112));
                         }

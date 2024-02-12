@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.ComponentModel.DataAnnotations.Schema;
 using Intersect.Enums;
 
 using Newtonsoft.Json;
@@ -41,6 +41,8 @@ namespace Intersect.GameObjects.Maps
                     return new MapCritterAttribute();
                 case MapAttributes.Footstep:
                     return new MapFootstepAttribute();
+                case MapAttributes.Territory:
+                    return new MapTerritoryAttribute();
             }
 
             return null;
@@ -317,6 +319,28 @@ namespace Intersect.GameObjects.Maps
         {
             var att = (MapFootstepAttribute)base.Clone();
             att.File = File;
+
+            return att;
+        }
+
+    }
+
+    public class MapTerritoryAttribute : MapAttribute
+    {
+
+        public override MapAttributes Type { get; } = MapAttributes.Territory;
+
+        public Guid TerritoryId { get; set; }
+
+        [NotMapped]
+        public TerritoryDescriptor Territory => TerritoryDescriptor.Get(TerritoryId);
+
+        public byte Radius { get; set; }
+
+        public override MapAttribute Clone()
+        {
+            var att = (MapTerritoryAttribute)base.Clone();
+            att.Radius = Radius;
 
             return att;
         }

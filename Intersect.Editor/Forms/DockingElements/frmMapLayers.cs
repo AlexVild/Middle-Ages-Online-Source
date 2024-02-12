@@ -474,6 +474,7 @@ namespace Intersect.Editor.Forms.DockingElements
             grpSlide.Visible = false;
             grpCritter.Visible = false;
             grpFootstep.Visible = false;
+            grpTerritorySettings.Visible = false;
         }
 
         private void rbItem_CheckedChanged(object sender, EventArgs e)
@@ -637,6 +638,10 @@ namespace Intersect.Editor.Forms.DockingElements
             {
                 return (int)MapAttributes.Footstep;
             }
+            else if (rdoTerritory.Checked == true)
+            {
+                return (int)MapAttributes.Territory;
+            }
 
             return (int) MapAttributes.Walkable;
         }
@@ -703,6 +708,11 @@ namespace Intersect.Editor.Forms.DockingElements
                 if (rdoFootstep.Checked)
                 {
                     return MapAttributes.Footstep;
+                }
+
+                if (rdoTerritory.Checked)
+                {
+                    return MapAttributes.Territory;
                 }
 
                 return (MapAttributes) byte.MaxValue;
@@ -801,6 +811,12 @@ namespace Intersect.Editor.Forms.DockingElements
                 case MapAttributes.Footstep:
                     var footstepAttribute = attribute as MapFootstepAttribute;
                     footstepAttribute.File = TextUtils.SanitizeNone(cmbFootstepSound.Text);
+                    break;
+
+                case MapAttributes.Territory:
+                    var territoryAttribute = attribute as MapTerritoryAttribute;
+                    territoryAttribute.Radius = (byte)nudTerritoryRadius.Value;
+                    territoryAttribute.TerritoryId = TerritoryDescriptor.IdFromList(cmbTerritory.SelectedIndex);
                     break;
 
                 default:
@@ -1669,6 +1685,18 @@ namespace Intersect.Editor.Forms.DockingElements
             {
                 var spawn = Globals.CurrentMap.Spawns[lstMapNpcs.SelectedIndex];
                 spawn.OverrideRange = chkOverrideRange.Checked;
+            }
+        }
+
+        private void rdoTerritory_CheckedChanged(object sender, EventArgs e)
+        {
+            HideAttributeMenus();
+            grpTerritorySettings.Visible = true;
+            cmbTerritory.Items.Clear();
+            cmbTerritory.Items.AddRange(TerritoryDescriptor.Names);
+            if (cmbTerritory.Items.Count > 0)
+            {
+                cmbTerritory.SelectedIndex = 0;
             }
         }
     }

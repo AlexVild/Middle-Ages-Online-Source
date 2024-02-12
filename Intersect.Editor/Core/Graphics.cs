@@ -19,6 +19,7 @@ using Intersect.Logging;
 using Intersect.Utilities;
 
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Intersect.Editor.Core
@@ -929,6 +930,40 @@ namespace Intersect.Editor.Core
                                             // Draw warps to new instances differently than warps on same instance
                                             blue = 0;
                                         }
+
+                                        if (attr is MapTerritoryAttribute territoryAttribute)
+                                        {
+                                            var radiusTexture = GameContentManager.GetTexture(GameContentManager.TextureType.Misc, "aoe_neutral.png");
+                                            var size = territoryAttribute.Radius;
+
+                                            int left = x - size;
+                                            int right = x + size;
+                                            int top = y - size;
+                                            int bottom = y + size;
+
+                                            for (int yy = top; yy <= bottom; yy++)
+                                            {
+                                                for (int xx = left; xx <= right; xx++) 
+                                                {
+                                                    var dist = CalculateDistanceToPoint(x, y, xx, yy);
+                                                    if (Math.Floor(dist) > size)
+                                                    {
+                                                        continue;
+                                                    }
+
+                                                    DrawTexture(
+                                                        radiusTexture,
+                                                        new RectangleF(0, 0, radiusTexture.Width, radiusTexture.Height),
+                                                        new RectangleF(
+                                                            CurrentView.Left + xx * Options.TileWidth,
+                                                            CurrentView.Top + yy * Options.TileHeight, Options.TileWidth,
+                                                            Options.TileHeight
+                                                        ), System.Drawing.Color.FromArgb(255, 255, 255, 255), null
+                                                    );
+                                                } 
+                                            }
+                                        }
+
                                         DrawTexture(
                                             attributesTex,
                                             new RectangleF(
@@ -940,7 +975,7 @@ namespace Intersect.Editor.Core
                                                 CurrentView.Top + y * Options.TileHeight, Options.TileWidth,
                                                 Options.TileHeight
                                             ), System.Drawing.Color.FromArgb(alpha, red, green, blue), null
-                                        ); ;
+                                        );
                                     }
                                 }
                             }
@@ -1041,6 +1076,14 @@ namespace Intersect.Editor.Core
                     System.Drawing.Color.White, null
                 );
             }
+        }
+
+        public static double CalculateDistanceToPoint(float selfX, float selfY, float otherX, float otherY)
+        {
+            var a = Math.Pow(otherX - selfX, 2);
+            var b = Math.Pow(otherY - selfY, 2);
+
+            return Math.Sqrt(a + b);
         }
 
         private static void DrawBoxOutline(int x, int y, int w, int h, System.Drawing.Color clr, RenderTarget2D target)
