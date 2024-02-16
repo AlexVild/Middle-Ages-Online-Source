@@ -15,6 +15,7 @@ using Intersect.Utilities;
 using Intersect.Server.Core;
 using Intersect.GameObjects.Timers;
 using Intersect.Server.Database.PlayerData.Players;
+using Intersect.Server.Core.Games.ClanWars;
 
 namespace Intersect.Server.Entities.Events
 {
@@ -1255,6 +1256,21 @@ namespace Intersect.Server.Entities.Events
             }
 
             return condition.AnyItem || itemsWithEnhancement.Any(slot => slot.ItemId == condition.ItemId);
+        }
+
+        public static bool MeetsCondition(
+          ClanWarsActive condition,
+          Player player,
+          Event eventInstance,
+          QuestBase questBase
+      )
+        {
+            if (player == null || condition == null)
+            {
+                return false;
+            }
+
+            return ClanWarManager.ClanWarActive;
         }
 
     }

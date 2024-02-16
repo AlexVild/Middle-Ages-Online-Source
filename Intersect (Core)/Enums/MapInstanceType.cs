@@ -43,6 +43,11 @@ namespace Intersect.Enums
         PartyDungeon,
 
         /// <summary>
+        /// An instance for the Clan Wars minigame, using the idea of the current clan war
+        /// </summary>
+        ClanWar,
+
+        /// <summary>
         /// ALWAYS PLACE AT END OF ENUM. This value is used for logical reference and should never appear to the user in the editor.
         /// </summary>
         NoChange,

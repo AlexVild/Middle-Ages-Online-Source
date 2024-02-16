@@ -540,4 +540,16 @@ namespace Intersect.GameObjects.Events
         Enhancement,
         Upgrade
     }
+
+    /// <summary>
+    /// Used to determine the state of Clan Wars territories
+    /// </summary>
+    public enum TerritoryState
+    {
+        Neutral = 0,
+        Wresting,
+        Capturing,
+        Contested,
+        Owned,
+    }
 }

@@ -41,6 +41,7 @@ using Intersect.GameObjects.Timers;
 using Intersect.Server.Utilities;
 using System.Text;
 using System.ComponentModel;
+using Intersect.Server.Core.Games.ClanWars;
 
 namespace Intersect.Server.Entities
 {
@@ -518,6 +519,11 @@ namespace Intersect.Server.Entities
 
             //Update parties
             LeaveParty(true);
+
+            if (InstanceType == MapInstanceType.ClanWar)
+            {
+                LeaveClanWar();
+            }
 
             // Update timers
             DbInterface.Pool.QueueWorkItem(LogoutPlayerTimers);
@@ -2509,8 +2515,16 @@ namespace Intersect.Server.Entities
 
             switch (instanceType)
             {
+                case MapInstanceType.ClanWar:
+                    // Either the war has ended, or you're trying to log into a new war
+                    if ((!ClanWarManager.ClanWarActive) || (fromLogin && MapInstanceId != ClanWarManager.CurrentWarId))
+                    {
+                        isValid = false;
+                        PacketSender.SendChatMsg(this, "The Clan War you were in has ended!", ChatMessageType.Error, CustomColors.Alerts.Error);
+                    }
+                    break;
                 case MapInstanceType.Guild:
-                    if (Guild == null)
+                    if (!IsInGuild)
                     {
                         isValid = false;
 
@@ -2743,7 +2757,18 @@ namespace Intersect.Server.Entities
                 InstanceType = mapInstanceType;
                 // Requests a new instance id, using the type of instance to determine creation logic
                 MapInstanceId = CreateNewInstanceIdFromType(mapInstanceType, fromLogin);
+
+                // Clan war management
+                if (mapInstanceType == MapInstanceType.ClanWar && ClanWarManager.ClanWarActive)
+                {
+                    JoinClanWar();
+                }
+                else if (PreviousMapInstanceType == MapInstanceType.ClanWar && mapInstanceType != MapInstanceType.NoChange)
+                {
+                    LeaveClanWar();
+                }
             }
+
             return MapInstanceId != PreviousMapInstanceId;
         }
 
@@ -2777,7 +2802,7 @@ namespace Intersect.Server.Entities
                     break;
 
                 case MapInstanceType.Guild:
-                    if (Guild != null)
+                    if (IsInGuild)
                     {
                         newMapLayerId = Guild.GuildInstanceId;
                     } else
@@ -2785,6 +2810,11 @@ namespace Intersect.Server.Entities
                         Log.Error($"Player {Name} requested a guild warp with no guild, and proceeded to warp to map anyway");
                         newMapLayerId = Guid.Empty;
                     }
+                    break;
+
+                case MapInstanceType.ClanWar:
+                    newMapLayerId = ClanWarManager.CurrentWarId;
+
                     break;
 
                 case MapInstanceType.Shared:
@@ -9825,5 +9855,21 @@ namespace Intersect.Server.Entities
 
         [NotMapped, JsonIgnore]
         public bool IsInParty => Party != null && Party.Count > 1;
+
+        public void JoinClanWar()
+        {
+            ClanWarManager.CurrentWar?.AddParticipant(this);
+#if DEBUG
+            Log.Debug($"{Name} has joined the clan war!");
+#endif
+        }
+
+        public void LeaveClanWar()
+        {
+            ClanWarManager.CurrentWar?.RemoveParticipant(this);
+#if DEBUG
+                Log.Debug($"{Name} has left the clan war!");
+#endif
+        }
     }
 }

@@ -414,6 +414,11 @@ namespace Intersect.Editor.Localization
             return EventConditionDesc.ChampionsDisabled;
         }
 
+        public static string GetEventConditionalDesc(ClanWarsActive condition)
+        {
+            return EventConditionDesc.ClanWarsActive;
+        }
+
         public static string GetEventConditionalDesc(MapSpawnGroupIs condition)
         {
             if (condition.OrGreater && condition.OrLess)
@@ -2533,6 +2538,7 @@ Tick timer saved in server config.json.";
                 {51, @"Challenge contract taken for..."},
                 {52, @"Spell X is active on player..."},
                 {53, @"Enhancement X on item Y..."},
+                {54, @"Clan War is active..."},
             };
 
             public static LocalizedString endrange = @"End Range:";
@@ -2872,6 +2878,9 @@ Tick timer saved in server config.json.";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString ChampionsDisabled = @"Champions are disabled";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ClanWarsActive = @"A Clan War is active";
 
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public static LocalizedString MapSpawnGroupIs = @"Map Spawn Group is {00}";

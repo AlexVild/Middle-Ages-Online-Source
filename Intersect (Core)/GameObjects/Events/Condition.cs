@@ -110,6 +110,8 @@ namespace Intersect.GameObjects.Events
         SpellActive,
         
         EnhancementOnWeapon,
+        
+        ClanWarsActive,
 
     }
 
@@ -731,6 +733,11 @@ namespace Intersect.GameObjects.Events
         public bool AnyItem { get; set; }
 
         public Guid EnhancementId { get; set; }
+    }
+
+    public class ClanWarsActive : Condition
+    {
+        public override ConditionTypes Type { get; } = ConditionTypes.ClanWarsActive;
     }
 
     public class VariableCompaison

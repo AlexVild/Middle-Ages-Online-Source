@@ -18,6 +18,9 @@ using Intersect.Server.Classes.Maps;
 using Intersect.GameObjects.Switches_and_Variables;
 using Intersect.Server.Core;
 using Intersect.Server.Localization;
+using Intersect.Server.Core.Games.ClanWars;
+using Intersect.Server.Database.GameData;
+using static Intersect.GameObjects.Maps.MapBase;
 
 namespace Intersect.Server.Maps
 {
@@ -183,6 +186,8 @@ namespace Intersect.Server.Maps
 
         public bool IsDisposed { get; protected set; }
 
+        public bool IsOverworld => MapInstanceId == Guid.Empty;
+
         /// <summary>
         /// Initializes the processing instance for processing - called in the constructor. Essentially refreshes the instance
         /// so that it can give everything it has to offer to the player by the time they arrive in it
@@ -194,8 +199,17 @@ namespace Intersect.Server.Maps
                 mIsProcessing = true;
 
                 CacheMapBlocks();
+                CacheTerritorySpawners();
                 DespawnEverything();
                 RespawnEverything();
+                InitializeTerritories();
+
+                // We don't want overworld maps bothering with clan wars, as they don't get
+                // .Dispose() called and might otherwise have long-hanging subscriptions
+                if (!IsOverworld)
+                {
+                    ClanWarManager.StatusChange += OnClanWarStatusChange;
+                }
             }
         }
 
@@ -234,11 +248,21 @@ namespace Intersect.Server.Maps
         public virtual void Dispose()
         {
             DestroyDanglingTimers();
+            UnsubscribeFromClanWars();
 
             if (!IsDisposed)
             {
                 IsDisposed = true;
             }
+        }
+
+        public void UnsubscribeFromClanWars()
+        {
+            ClearTerritoryInstances();
+#if DEBUG
+            Log.Debug($"{mMapController.Name} is unsubscribing from the ClanWarsManager...");
+#endif
+            ClanWarManager.StatusChange -= OnClanWarStatusChange;
         }
 
         public MapController GetController()
@@ -1833,10 +1857,109 @@ namespace Intersect.Server.Maps
     {
         private long mSpawnGroupLastChangedAt { get; set; }
 
+        private List<TerritoryInstance> ActiveTerritories { get; set; } = new List<TerritoryInstance>();
+        
+        private Guid[] mCachedTerritories { get; set; }
+
         public void RefreshNpcs()
         {
             DespawnNpcs();
             SpawnMapNpcs();
+        }
+
+        private void CacheTerritorySpawners()
+        {
+            var mapTerritories = new List<Guid>();
+            for (byte x = 0; x < Options.MapWidth; x++)
+            {
+                for (byte y = 0; y < Options.MapHeight; y++)
+                {
+                    var attribute = mMapController.Attributes[x, y];
+                    if (attribute == null || attribute.Type != MapAttributes.Territory)
+                    {
+                        continue;
+                    }
+
+                    try
+                    {
+                        var territoryAttr = attribute as MapTerritoryAttribute;
+                        mapTerritories.Add(territoryAttr.TerritoryId);
+                    }
+                    catch (InvalidCastException e)
+                    {
+#if DEBUG
+                        throw (e);
+#else
+                        Log.Error($"Invalid cast exception when caching map territories");
+#endif
+                    }
+                }
+            }
+
+            mCachedTerritories = mapTerritories.ToArray();
+        }
+
+        public void ClearTerritoryInstances()
+        {
+            ActiveTerritories.Clear();
+        }
+
+        public void InitializeTerritories()
+        {
+            ClearTerritoryInstances();
+            // Don't bother if a) overworld, b) map has no territory attributes or c) clan wars isn't active
+            if (IsOverworld || mCachedTerritories?.Length == 0 || !ClanWarManager.ClanWarActive)
+            {
+                return;
+            }
+
+            lock (GetLock())
+            {
+                var clanWarId = ClanWarManager.CurrentWarId;
+
+                using (var context = DbInterface.CreatePlayerContext(false))
+                {
+                    foreach (var territoryId in mCachedTerritories)
+                    {
+                        // Check to see if this territory has already been instantiated for the current CW
+                        var territory = context.Territories.Find(territoryId, clanWarId);
+                        if (territory != null)
+                        {
+                            territory.Initialize();
+#if DEBUG
+                            Log.Debug($"Loaded existing territory: {territory.Territory.Name} on map {mMapController.Name}");
+#endif
+                        }
+                        else
+                        {
+                            // If not, make a new instance
+                            territory = new TerritoryInstance(territoryId, clanWarId);
+#if DEBUG
+                            Log.Debug($"Loaded new territory: {territory.Territory.Name} on map {mMapController.Name}");
+#endif
+                            context.Territories.Add(territory);
+                        }
+
+                        // add to this map's list of territory instances
+                        ActiveTerritories.Add(territory);
+                    }
+
+                    context.ChangeTracker.DetectChanges();
+                    context.SaveChanges();
+                }
+            }
+        }
+
+        public void OnClanWarStatusChange(object sender, bool active)
+        {
+            if (active)
+            {
+                InitializeTerritories();
+            }
+            else
+            {
+                ClearTerritoryInstances();
+            }
         }
     }
 

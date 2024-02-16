@@ -8,6 +8,7 @@ using Intersect.GameObjects;
 using Intersect.Server.Database;
 using Intersect.Server.Database.GameData;
 using Intersect.Server.Entities;
+using Intersect.Server.Core.Games.ClanWars;
 
 namespace Intersect.Server.Core.Commands
 {
@@ -30,61 +31,11 @@ namespace Intersect.Server.Core.Commands
             var operation = result.Find(Operation);
             if (operation == Strings.Commands.Arguments.GuildWarsStart)
             {
-                var changed = UpdateGuildwarsValue(true);
-
-                if (changed)
-                {
-                    Console.WriteLine(Strings.Commandoutput.guildwarsenabled);
-                } else
-                {
-                    Console.WriteLine(Strings.Commandoutput.guildwarsenabledalready);
-                }
+                ClanWarManager.StartClanWar();
             }
             else if (operation == Strings.Commands.Arguments.GuildWarsEnd)
             {
-                var changed = UpdateGuildwarsValue(false);
-
-                if (changed)
-                {
-                    Console.WriteLine(Strings.Commandoutput.guildwarsdisabled);
-                }
-                else
-                {
-                    Console.WriteLine(Strings.Commandoutput.guildwarsdisabledalready);
-                }
-            }
-        }
-
-        private static bool UpdateGuildwarsValue(bool val)
-        {
-            if (Options.GuildWarsGUID != "")
-            {
-                var variable = GameContext.Queries.ServerVariableById(new Guid(Options.GuildWarsGUID));
-
-                if (variable == null)
-                {
-                    Console.WriteLine(Strings.Commandoutput.guildwarsinvalid);
-                    return false;
-                }
-
-                var changed = true;
-                if (variable.Value?.Value == val)
-                {
-                    changed = false;
-                }
-                variable.Value.Value = val;
-
-                if (changed)
-                {
-                    Player.StartCommonEventsWithTriggerForAll(Enums.CommonEventTrigger.ServerVariableChange, "", Options.GuildWarsGUID.ToString());
-                }
-                DbInterface.UpdatedServerVariables.AddOrUpdate(variable.Id, variable, (key, oldValue) => variable);
-
-                return changed;
-            } else
-            {
-                Console.WriteLine(Strings.Commandoutput.guildwarsinvalid);
-                return false;
+                ClanWarManager.EndAllClanWars();
             }
         }
     }

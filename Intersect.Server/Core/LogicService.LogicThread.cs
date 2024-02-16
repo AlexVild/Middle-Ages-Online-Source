@@ -23,6 +23,7 @@ using Intersect.Server.Database.PlayerData;
 using Intersect.GameObjects.Timers;
 using Intersect.GameObjects;
 using Intersect.Server.Utilities;
+using Intersect.Server.Core.Games.ClanWars;
 
 namespace Intersect.Server.Core
 {
@@ -95,6 +96,9 @@ namespace Intersect.Server.Core
 
                     // Initialize timers instance and load in values
                     LoadTimers();
+
+                    // Initialize ClanWars stuff
+                    ClanWarManager.InitializeManager();
 
                     // Initialize cached list of resources (for resource group logic)
                     Globals.RefreshGameObjectCache(Enums.GameObjectType.Resource, Globals.CachedResources);

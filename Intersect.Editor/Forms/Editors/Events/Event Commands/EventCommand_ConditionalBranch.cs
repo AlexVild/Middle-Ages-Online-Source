@@ -590,6 +590,11 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                     Condition = new HasWeaponWithEnhancement();
 
                     break;
+
+                case ConditionTypes.ClanWarsActive:
+                    Condition = new ClanWarsActive();
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -933,6 +938,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
                 case ConditionTypes.EnhancementOnWeapon:
                     grpEnhancementOn.Show();
 
+                    break;
+
+                case ConditionTypes.ClanWarsActive:
+                    
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -1871,6 +1880,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         {
         }
 
+        private void SetupFormValues(ClanWarsActive condition)
+        {
+        }
+
         private void SetupFormValues(ChallengeContractTaken condition)
         {
             cmbChallenges.SelectedIndex = ChallengeDescriptor.ListIndex(condition.ChallengeId);
@@ -2251,6 +2264,10 @@ namespace Intersect.Editor.Forms.Editors.Events.Event_Commands
         }
 
         private void SaveFormValues(ChampionsDisabled condition)
+        {
+        }
+
+        private void SaveFormValues(ClanWarsActive condition)
         {
         }
 

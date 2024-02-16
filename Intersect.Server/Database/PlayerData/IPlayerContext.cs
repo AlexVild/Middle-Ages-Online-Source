@@ -1,4 +1,5 @@
-﻿using Intersect.Server.Database.PlayerData.Api;
+﻿using Intersect.Server.Core.Games.ClanWars;
+using Intersect.Server.Database.PlayerData.Api;
 using Intersect.Server.Database.PlayerData.Players;
 using Intersect.Server.Entities;
 using Intersect.Server.Entities.PlayerData;
@@ -75,5 +76,9 @@ namespace Intersect.Server.Database.PlayerData
         DbSet<PlayerEnhancementInstance> Player_Enhancements { get; set; }
         
         DbSet<PlayerLoadout> Player_Loadouts { get; set; }
+        
+        DbSet<TerritoryInstance> Territories { get; set; }
+        
+        DbSet<ClanWarInstance> Clan_Wars { get; set; }
     }
 }

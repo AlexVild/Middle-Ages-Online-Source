@@ -1910,7 +1910,7 @@ namespace Intersect.Server.Entities
             }
             
             // These instance types are used when we ALWAYS want aggro NPCs within
-            if (player.InstanceType == MapInstanceType.PersonalDungeon || player.InstanceType == MapInstanceType.PartyDungeon)
+            if (player.InstanceType == MapInstanceType.PersonalDungeon || player.InstanceType == MapInstanceType.PartyDungeon || player.InstanceType == MapInstanceType.ClanWar)
             {
                 return true;
             }

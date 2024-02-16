@@ -929,6 +929,10 @@ namespace Intersect.Editor.Core
                                         {
                                             // Draw warps to new instances differently than warps on same instance
                                             blue = 0;
+                                            if (!warp.FadeOnWarp)
+                                            {
+                                                alpha = 100;
+                                            }
                                         }
 
                                         if (attr is MapTerritoryAttribute territoryAttribute)

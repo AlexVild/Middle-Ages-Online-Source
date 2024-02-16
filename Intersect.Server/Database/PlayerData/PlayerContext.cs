@@ -16,6 +16,7 @@ using Microsoft.EntityFrameworkCore;
 using Intersect.GameObjects.Timers;
 using Microsoft.EntityFrameworkCore.Internal;
 using Intersect.Server.Entities.PlayerData;
+using Intersect.Server.Core.Games.ClanWars;
 
 namespace Intersect.Server.Database.PlayerData
 {
@@ -107,6 +108,10 @@ namespace Intersect.Server.Database.PlayerData
         public DbSet<PlayerEnhancementInstance> Player_Enhancements { get; set; }
         
         public DbSet<PlayerLoadout> Player_Loadouts { get; set; }
+        
+        public DbSet<TerritoryInstance> Territories { get; set; }
+        
+        public DbSet<ClanWarInstance> Clan_Wars { get; set; }
 
         internal async ValueTask Commit(
             bool commit = false,
@@ -225,6 +230,9 @@ namespace Intersect.Server.Database.PlayerData
             modelBuilder.Entity<Player>()
                .HasMany(player => player.Loadouts)
                .WithOne(loadout => loadout.Player);
+
+            modelBuilder.Entity<TerritoryInstance>()
+                .HasKey(t => new { t.TerritoryId, t.ClanWarId });
         }
 
         public void Seed()

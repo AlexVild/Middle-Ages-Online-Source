@@ -456,6 +456,10 @@
     <Compile Include="Core\Commands\MetricsCommand.cs" />
     <Compile Include="Core\Commands\PanicCommand.cs" />
     <Compile Include="Core\Commands\SetVarCommand.cs" />
+    <Compile Include="Core\Games\ClanWars\ClanWarInstance.cs" />
+    <Compile Include="Core\Games\ClanWars\ClanWarManager.cs" />
+    <Compile Include="Core\Games\ClanWars\TerritoryInstance.cs" />
+    <Compile Include="Core\Games\ClanWars\TerritoryInstance.States.cs" />
     <Compile Include="Core\Instancing\Controller\Components\Duel.cs" />
     <Compile Include="Core\Instancing\Controller\Components\DuelQueue.cs" />
     <Compile Include="Core\Instancing\Controller\Components\Dungeon.cs" />
@@ -806,6 +810,10 @@
     <Compile Include="Migrations\20231023163959_CraftingWishlistMigration.cs" />
     <Compile Include="Migrations\20231023163959_CraftingWishlistMigration.designer.cs">
       <DependentUpon>20231023163959_CraftingWishlistMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20240216183945_ClanWarInstanceMigration1.cs" />
+    <Compile Include="Migrations\20240216183945_ClanWarInstanceMigration1.designer.cs">
+      <DependentUpon>20240216183945_ClanWarInstanceMigration1.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.cs" />
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.Designer.cs">
