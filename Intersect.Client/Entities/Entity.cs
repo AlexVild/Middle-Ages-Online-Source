@@ -2637,7 +2637,7 @@ namespace Intersect.Client.Entities
             var otherX = otherTile.CenterX;
             var otherY = otherTile.CenterY;
 
-            return CalculateDistanceToPoint(selfX, selfY, otherX, otherY);
+            return MathHelper.CalculateDistanceToPoint(selfX, selfY, otherX, otherY);
         }
 
         public int CalculateTileDistanceTo(Entity en)
@@ -2649,14 +2649,6 @@ namespace Intersect.Client.Entities
 
             var distance = CalculateDistanceTo(en);
             return (int)Math.Ceiling(distance / Math.Max(Options.TileHeight, Options.TileWidth));
-        }
-
-        public static double CalculateDistanceToPoint(float selfX, float selfY, float otherX, float otherY)
-        {
-            var a = Math.Pow(otherX - selfX, 2);
-            var b = Math.Pow(otherY - selfY, 2);
-
-            return Math.Sqrt(a + b);
         }
     }
 
@@ -2862,7 +2854,7 @@ namespace Intersect.Client.Entities
                 {
                     for (int x = left; x <= right; x++)
                     {
-                        var distanceFromCaster = CalculateDistanceToPoint(spawnX, spawnY, x, y);
+                        var distanceFromCaster = MathHelper.CalculateDistanceToPoint(spawnX, spawnY, x, y);
                         if (!inRange(distanceFromCaster))
                         {
                             continue;
@@ -2907,7 +2899,7 @@ namespace Intersect.Client.Entities
                         var edgeY = y - top;
                         edges[edgeX, edgeY] = new Edge();
 
-                        var distanceFromCaster = CalculateDistanceToPoint(spawnX, spawnY, x, y);
+                        var distanceFromCaster = MathHelper.CalculateDistanceToPoint(spawnX, spawnY, x, y);
                         if (!inRange(distanceFromCaster))
                         {
                             continue;
@@ -2926,10 +2918,10 @@ namespace Intersect.Client.Entities
                             Graphics.AddLight((int)tile.CenterX, (int)tile.CenterY, 100, 200, 1.0f, new Color(255, 222, 124, 112));
                         }
 
-                        var distLeft = CalculateDistanceToPoint(spawnX, spawnY, x - 1, y);
-                        var distRight = CalculateDistanceToPoint(spawnX, spawnY, x + 1, y);
-                        var distUp = CalculateDistanceToPoint(spawnX, spawnY, x, y - 1);
-                        var distDown = CalculateDistanceToPoint(spawnX, spawnY, x, y + 1);
+                        var distLeft = MathHelper.CalculateDistanceToPoint(spawnX, spawnY, x - 1, y);
+                        var distRight = MathHelper.CalculateDistanceToPoint(spawnX, spawnY, x + 1, y);
+                        var distUp = MathHelper.CalculateDistanceToPoint(spawnX, spawnY, x, y - 1);
+                        var distDown = MathHelper.CalculateDistanceToPoint(spawnX, spawnY, x, y + 1);
 
                         edges[edgeX, edgeY].Left = x == left || !inRange(distLeft);
                         edges[edgeX, edgeY].Right = x == right || !inRange(distRight);

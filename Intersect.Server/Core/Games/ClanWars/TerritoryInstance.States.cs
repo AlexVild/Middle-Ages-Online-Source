@@ -77,14 +77,17 @@ namespace Intersect.Server.Core.Games.ClanWars
                 return;
             }
 
-            if (Health >= MAX_HEALTH)
+            if (PlayerGuildIds.Length > 1)
+            {
+                // Territory must be under contest!
+                ChangeState(TerritoryState.Contested, currentTime);
+            }
+
+            if (Health >= Territory.CaptureMs)
             {
                 GuildTakeOver(mConqueringGuildId, currentTime);
                 return;
             }
-
-            // Territory must be under contest!
-            ChangeState(TerritoryState.Contested, currentTime);
         }
 
         private void StateWresting(long currentTime)
@@ -105,14 +108,17 @@ namespace Intersect.Server.Core.Games.ClanWars
                 return;
             }
 
+            if (PlayerGuildIds.Length > 1)
+            {
+                // Territory must be under contest!
+                ChangeState(TerritoryState.Contested, currentTime);
+            }
+
             if (Health <= 0)
             {
                 TeritoryLost(currentTime);
                 return;
             }
-
-            // Territory must be under contest!
-            ChangeState(TerritoryState.Contested, currentTime);
         }
 
         private void StateContested(long currentTime)

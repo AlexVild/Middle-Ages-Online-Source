@@ -1,10 +1,6 @@
 ﻿using Intersect.Server.Database;
-using Intersect.Server.Database.GameData;
-using Intersect.Server.Entities;
 using Intersect.Server.Localization;
-using Intersect.Utilities;
 using System;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 namespace Intersect.Server.Core.Games.ClanWars
 {
@@ -73,16 +69,11 @@ namespace Intersect.Server.Core.Games.ClanWars
             set
             {
                 _currentWar = value;
-                OnStatusChange();
+                StatusChange(null, ClanWarActive);
             }
         }
 
         public static event EventHandler<bool> StatusChange = delegate { };
-
-        private static void OnStatusChange()
-        {
-            StatusChange(null, ClanWarActive);
-        }
     }
 
 }

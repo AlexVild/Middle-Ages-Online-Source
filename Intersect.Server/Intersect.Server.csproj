@@ -600,6 +600,7 @@
     <Compile Include="Maps\MapAnimations.cs" />
     <Compile Include="Maps\MapEntityMovements.cs" />
     <Compile Include="Maps\MapController.cs" />
+    <Compile Include="Maps\MapInstance.ClanWars.cs" />
     <Compile Include="Maps\MapItemInstance.cs" />
     <Compile Include="Maps\MapItemSpawn.cs" />
     <Compile Include="Maps\MapNpcSpawn.cs" />

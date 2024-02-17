@@ -1158,6 +1158,7 @@ namespace Intersect.Server.Entities
             DestroyVehicle();
             PlayDeathAnimation();
             EndDeathTimers();
+            LeaveTerritory();
 
             // Force a fade in in case the player died during fade out
             PacketSender.SendFadePacket(Client, true);
@@ -8142,12 +8143,38 @@ namespace Intersect.Server.Entities
                     }
                 }
 
+                // Check if the player has moved around a territory
+                if (!Dead && IsInGuild && InstanceType == MapInstanceType.ClanWar && MapController.TryGetInstanceFromMap(MapId, MapInstanceId, out var instance))
+                {
+                    if (instance.TerritoryTiles.TryGetValue(new BytePoint((byte)X, (byte)Y), out var territoryInstance))
+                    {
+                        JoinTerritory(territoryInstance);
+                    }
+                    else
+                    {
+                        LeaveTerritory();
+                    }
+                }
+
                 // If we've changed maps, start relevant events!
                 if (oldMap != MapId)
                 {
                     AddDeferredEvent(CommonEventTrigger.MapChanged);
                 }
             }
+        }
+
+        [NotMapped, JsonIgnore]
+        private TerritoryInstance CurrentTerritory { get; set; }
+        private void JoinTerritory(TerritoryInstance territory)
+        {
+            CurrentTerritory = territory;
+            CurrentTerritory.AddPlayer(this);
+        }
+
+        public void LeaveTerritory()
+        {
+            CurrentTerritory?.RemovePlayer(this);
         }
 
         public void AutoPickupItem(Guid itemId, bool onlyIfInInventory)
@@ -9866,6 +9893,7 @@ namespace Intersect.Server.Entities
 
         public void LeaveClanWar()
         {
+            LeaveTerritory();
             ClanWarManager.CurrentWar?.RemoveParticipant(this);
 #if DEBUG
                 Log.Debug($"{Name} has left the clan war!");

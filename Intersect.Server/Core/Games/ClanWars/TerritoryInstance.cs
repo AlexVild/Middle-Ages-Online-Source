@@ -13,9 +13,6 @@ namespace Intersect.Server.Core.Games.ClanWars
     public partial class TerritoryInstance
     {
         [NotMapped]
-        private const long MAX_HEALTH = 100;
-
-        [NotMapped]
         private const long HEALTH_TICK_TIME = 500;
 
         [NotMapped]
@@ -53,7 +50,7 @@ namespace Intersect.Server.Core.Games.ClanWars
         public Guid ClanWarId { get; set; }
 
         [NotMapped, JsonIgnore]
-        public List<Player> Players { get; set; } = new List<Player>();
+        public HashSet<Player> Players { get; set; } = new HashSet<Player>();
 
         [NotMapped, JsonIgnore]
         public Guid[] PlayerGuildIds { get; set; }
@@ -83,7 +80,7 @@ namespace Intersect.Server.Core.Games.ClanWars
 
             if (State == TerritoryState.Wresting || State == TerritoryState.Owned)
             {
-                Health = MAX_HEALTH;
+                Health = Territory.CaptureMs;
             }
             else
             {
@@ -95,19 +92,26 @@ namespace Intersect.Server.Core.Games.ClanWars
 
         public void AddPlayer(Player player)
         {
-            if (!player.IsInGuild)
+            if (player == null || !player.IsInGuild || Players.Contains(player))
             {
                 return;
             }
 
             Players.Add(player);
             CachePlayerLookups();
+            Logging.Log.Debug($"{player} added to {Territory.Name}!");
         }
 
         public void RemovePlayer(Player player)
         {
-            Players.RemoveAll(x => x.Id == player.Id);
+            if (player == null || !Players.Contains(player))
+            {
+                return;
+            }
+
+            Players.Remove(player);
             CachePlayerLookups();
+            Logging.Log.Debug($"{player} left {Territory.Name}!");
         }
 
         private void CachePlayerLookups()
@@ -157,6 +161,8 @@ namespace Intersect.Server.Core.Games.ClanWars
 
             Health += amount;
             mNextHealthTick = currentTime + HEALTH_TICK_TIME;
+
+            Console.WriteLine($"{Territory.Name} Health: {Health}");
         }
 
         private void ResetHealth()
@@ -167,7 +173,7 @@ namespace Intersect.Server.Core.Games.ClanWars
             }
             else
             {
-                Health = MAX_HEALTH;
+                Health = Territory.CaptureMs;
             }
         }
 
@@ -198,6 +204,11 @@ namespace Intersect.Server.Core.Games.ClanWars
                 return false;
             }
 
+            if (conqueringId == mConqueringGuildId)
+            {
+                return false;
+            }
+
             mConqueringGuildId = conqueringId;
             return true;
         }
@@ -205,7 +216,7 @@ namespace Intersect.Server.Core.Games.ClanWars
         private void GuildTakeOver(Guid guildId, long currentTime)
         {
             GuildId = guildId;
-            Health = MAX_HEALTH;
+            Health = Territory.CaptureMs;
             ChangeState(TerritoryState.Owned, currentTime);
         }
 

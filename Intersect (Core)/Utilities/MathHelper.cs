@@ -137,6 +137,14 @@ namespace Intersect.Utilities
 
             return a | b;
         }
+
+        public static double CalculateDistanceToPoint(float selfX, float selfY, float otherX, float otherY)
+        {
+            var a = Math.Pow(otherX - selfX, 2);
+            var b = Math.Pow(otherY - selfY, 2);
+
+            return Math.Sqrt(a + b);
+        }
     }
 
 }

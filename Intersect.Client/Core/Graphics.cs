@@ -343,7 +343,7 @@ namespace Intersect.Client.Core
                                 var targetX = target.GetCurrentTileRectangle().CenterX;
                                 var targetY = target.GetCurrentTileRectangle().CenterY;
 
-                                var distance = Math.Floor(Entity.CalculateDistanceToPoint(entityX, entityY, targetX, targetY) / Options.TileWidth);
+                                var distance = Math.Floor(MathHelper.CalculateDistanceToPoint(entityX, entityY, targetX, targetY) / Options.TileWidth);
                                 if (distance > castSpell.Combat.CastRange)
                                 {
                                     break;

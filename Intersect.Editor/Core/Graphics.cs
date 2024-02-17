@@ -949,7 +949,7 @@ namespace Intersect.Editor.Core
                                             {
                                                 for (int xx = left; xx <= right; xx++) 
                                                 {
-                                                    var dist = CalculateDistanceToPoint(x, y, xx, yy);
+                                                    var dist = Utilities.MathHelper.CalculateDistanceToPoint(x, y, xx, yy);
                                                     if (Math.Floor(dist) > size)
                                                     {
                                                         continue;
@@ -1080,14 +1080,6 @@ namespace Intersect.Editor.Core
                     System.Drawing.Color.White, null
                 );
             }
-        }
-
-        public static double CalculateDistanceToPoint(float selfX, float selfY, float otherX, float otherY)
-        {
-            var a = Math.Pow(otherX - selfX, 2);
-            var b = Math.Pow(otherY - selfY, 2);
-
-            return Math.Sqrt(a + b);
         }
 
         private static void DrawBoxOutline(int x, int y, int w, int h, System.Drawing.Color clr, RenderTarget2D target)

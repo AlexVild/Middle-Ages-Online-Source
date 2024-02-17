@@ -321,7 +321,14 @@ namespace Intersect.Server.Database.PlayerData.Players
 
                 if (player.Online && player.InstanceType == MapInstanceType.Guild)
                 {
-                    player.WarpToLastOverworldLocation(false);
+                    if (player.InstanceType == MapInstanceType.Guild)
+                    {
+                        player.WarpToLastOverworldLocation(false);
+                    }
+                    if (player.InstanceType == MapInstanceType.ClanWar)
+                    {
+                        player.LeaveTerritory();
+                    }
                 }
             }
         }
