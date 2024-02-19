@@ -23,6 +23,8 @@ namespace Intersect.GameObjects
         /// </summary>
         public bool FakeMelee { get; set; } = false;
 
+        public bool AmmoDrop { get; set; } = false;
+
         [NotMapped] public List<ProjectileAnimation> Animations = new List<ProjectileAnimation>();
 
         [NotMapped] public Location[,] SpawnLocations = new Location[SPAWN_LOCATIONS_WIDTH, SPAWN_LOCATIONS_HEIGHT];

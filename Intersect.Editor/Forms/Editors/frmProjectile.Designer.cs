@@ -60,6 +60,8 @@ namespace Intersect.Editor.Forms.Editors
             this.lblSpawn = new System.Windows.Forms.Label();
             this.lblSpeed = new System.Windows.Forms.Label();
             this.grpAnimations = new DarkUI.Controls.DarkGroupBox();
+            this.cmbDeathAnimation = new DarkUI.Controls.DarkComboBox();
+            this.lblDeathAnim = new System.Windows.Forms.Label();
             this.chkFakeMelee = new DarkUI.Controls.DarkCheckBox();
             this.cmbAnimation = new DarkUI.Controls.DarkComboBox();
             this.btnRemove = new DarkUI.Controls.DarkButton();
@@ -97,8 +99,7 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemPaste = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripItemUndo = new System.Windows.Forms.ToolStripButton();
-            this.lblDeathAnim = new System.Windows.Forms.Label();
-            this.cmbDeathAnimation = new DarkUI.Controls.DarkComboBox();
+            this.chkAmmoDrop = new DarkUI.Controls.DarkCheckBox();
             this.grpProjectiles.SuspendLayout();
             this.grpSpawns.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picSpawns)).BeginInit();
@@ -178,7 +179,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpSpawns.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
             this.grpSpawns.Controls.Add(this.picSpawns);
             this.grpSpawns.ForeColor = System.Drawing.Color.Gainsboro;
-            this.grpSpawns.Location = new System.Drawing.Point(3, 305);
+            this.grpSpawns.Location = new System.Drawing.Point(3, 330);
             this.grpSpawns.Name = "grpSpawns";
             this.grpSpawns.Size = new System.Drawing.Size(186, 192);
             this.grpSpawns.TabIndex = 17;
@@ -199,6 +200,7 @@ namespace Intersect.Editor.Forms.Editors
             // 
             this.grpProperties.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
             this.grpProperties.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.grpProperties.Controls.Add(this.chkAmmoDrop);
             this.grpProperties.Controls.Add(this.cmbToolType);
             this.grpProperties.Controls.Add(this.lblToolType);
             this.grpProperties.Controls.Add(this.btnAddFolder);
@@ -222,7 +224,7 @@ namespace Intersect.Editor.Forms.Editors
             this.grpProperties.ForeColor = System.Drawing.Color.Gainsboro;
             this.grpProperties.Location = new System.Drawing.Point(1, 1);
             this.grpProperties.Name = "grpProperties";
-            this.grpProperties.Size = new System.Drawing.Size(186, 298);
+            this.grpProperties.Size = new System.Drawing.Size(186, 323);
             this.grpProperties.TabIndex = 18;
             this.grpProperties.TabStop = false;
             this.grpProperties.Text = "Properties";
@@ -529,6 +531,36 @@ namespace Intersect.Editor.Forms.Editors
             this.grpAnimations.TabIndex = 27;
             this.grpAnimations.TabStop = false;
             this.grpAnimations.Text = "Animations";
+            // 
+            // cmbDeathAnimation
+            // 
+            this.cmbDeathAnimation.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
+            this.cmbDeathAnimation.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
+            this.cmbDeathAnimation.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
+            this.cmbDeathAnimation.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
+            this.cmbDeathAnimation.DrawDropdownHoverOutline = false;
+            this.cmbDeathAnimation.DrawFocusRectangle = false;
+            this.cmbDeathAnimation.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
+            this.cmbDeathAnimation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbDeathAnimation.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.cmbDeathAnimation.ForeColor = System.Drawing.Color.Gainsboro;
+            this.cmbDeathAnimation.FormattingEnabled = true;
+            this.cmbDeathAnimation.Location = new System.Drawing.Point(82, 275);
+            this.cmbDeathAnimation.Name = "cmbDeathAnimation";
+            this.cmbDeathAnimation.Size = new System.Drawing.Size(180, 21);
+            this.cmbDeathAnimation.TabIndex = 42;
+            this.cmbDeathAnimation.Text = null;
+            this.cmbDeathAnimation.TextPadding = new System.Windows.Forms.Padding(2);
+            this.cmbDeathAnimation.SelectedIndexChanged += new System.EventHandler(this.cmbDeathAnimation_SelectedIndexChanged);
+            // 
+            // lblDeathAnim
+            // 
+            this.lblDeathAnim.AutoSize = true;
+            this.lblDeathAnim.Location = new System.Drawing.Point(9, 278);
+            this.lblDeathAnim.Name = "lblDeathAnim";
+            this.lblDeathAnim.Size = new System.Drawing.Size(65, 13);
+            this.lblDeathAnim.TabIndex = 41;
+            this.lblDeathAnim.Text = "Death Anim.";
             // 
             // chkFakeMelee
             // 
@@ -967,35 +999,15 @@ namespace Intersect.Editor.Forms.Editors
             this.toolStripItemUndo.Text = "Undo";
             this.toolStripItemUndo.Click += new System.EventHandler(this.toolStripItemUndo_Click);
             // 
-            // lblDeathAnim
+            // chkAmmoDrop
             // 
-            this.lblDeathAnim.AutoSize = true;
-            this.lblDeathAnim.Location = new System.Drawing.Point(9, 278);
-            this.lblDeathAnim.Name = "lblDeathAnim";
-            this.lblDeathAnim.Size = new System.Drawing.Size(65, 13);
-            this.lblDeathAnim.TabIndex = 41;
-            this.lblDeathAnim.Text = "Death Anim.";
-            // 
-            // cmbDeathAnimation
-            // 
-            this.cmbDeathAnimation.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(69)))), ((int)(((byte)(73)))), ((int)(((byte)(74)))));
-            this.cmbDeathAnimation.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(90)))), ((int)(((byte)(90)))), ((int)(((byte)(90)))));
-            this.cmbDeathAnimation.BorderStyle = System.Windows.Forms.ButtonBorderStyle.Solid;
-            this.cmbDeathAnimation.ButtonColor = System.Drawing.Color.FromArgb(((int)(((byte)(43)))), ((int)(((byte)(43)))), ((int)(((byte)(43)))));
-            this.cmbDeathAnimation.DrawDropdownHoverOutline = false;
-            this.cmbDeathAnimation.DrawFocusRectangle = false;
-            this.cmbDeathAnimation.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
-            this.cmbDeathAnimation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbDeathAnimation.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.cmbDeathAnimation.ForeColor = System.Drawing.Color.Gainsboro;
-            this.cmbDeathAnimation.FormattingEnabled = true;
-            this.cmbDeathAnimation.Location = new System.Drawing.Point(82, 275);
-            this.cmbDeathAnimation.Name = "cmbDeathAnimation";
-            this.cmbDeathAnimation.Size = new System.Drawing.Size(180, 21);
-            this.cmbDeathAnimation.TabIndex = 42;
-            this.cmbDeathAnimation.Text = null;
-            this.cmbDeathAnimation.TextPadding = new System.Windows.Forms.Padding(2);
-            this.cmbDeathAnimation.SelectedIndexChanged += new System.EventHandler(this.cmbDeathAnimation_SelectedIndexChanged);
+            this.chkAmmoDrop.AutoSize = true;
+            this.chkAmmoDrop.Location = new System.Drawing.Point(11, 300);
+            this.chkAmmoDrop.Name = "chkAmmoDrop";
+            this.chkAmmoDrop.Size = new System.Drawing.Size(85, 17);
+            this.chkAmmoDrop.TabIndex = 55;
+            this.chkAmmoDrop.Text = "Ammo drop?";
+            this.chkAmmoDrop.CheckedChanged += new System.EventHandler(this.chkAmmoDrop_CheckedChanged);
             // 
             // FrmProjectile
             // 
@@ -1113,5 +1125,6 @@ namespace Intersect.Editor.Forms.Editors
         private DarkCheckBox chkFakeMelee;
         private DarkComboBox cmbDeathAnimation;
         private System.Windows.Forms.Label lblDeathAnim;
+        private DarkCheckBox chkAmmoDrop;
     }
 }
