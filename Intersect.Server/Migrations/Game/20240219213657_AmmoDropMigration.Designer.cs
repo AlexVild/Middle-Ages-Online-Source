@@ -3,14 +3,16 @@ using System;
 using Intersect.Server.Database.GameData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Intersect.Server.Migrations.Game
 {
     [DbContext(typeof(GameContext))]
-    partial class GameContextModelSnapshot : ModelSnapshot
+    [Migration("20240219213657_AmmoDropMigration")]
+    partial class AmmoDropMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1281,36 +1283,6 @@ namespace Intersect.Server.Migrations.Game
                     b.HasKey("Id");
 
                     b.ToTable("Spells");
-                });
-
-            modelBuilder.Entity("Intersect.GameObjects.TerritoryDescriptor", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<long>("CaptureMs");
-
-                    b.Property<string>("DisplayName");
-
-                    b.Property<string>("Folder");
-
-                    b.Property<string>("Icon");
-
-                    b.Property<string>("Name");
-
-                    b.Property<int>("PointsPerAttack");
-
-                    b.Property<int>("PointsPerCapture");
-
-                    b.Property<int>("PointsPerDefend");
-
-                    b.Property<int>("PointsPerTick");
-
-                    b.Property<long>("TimeCreated");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Territories");
                 });
 
             modelBuilder.Entity("Intersect.GameObjects.TilesetBase", b =>

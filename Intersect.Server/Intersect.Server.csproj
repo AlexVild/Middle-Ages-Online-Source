@@ -1378,6 +1378,10 @@
     <Compile Include="Migrations\Game\20240212164053_TerritoryMigration.designer.cs">
       <DependentUpon>20240212164053_TerritoryMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Game\20240219213657_AmmoDropMigration.cs" />
+    <Compile Include="Migrations\Game\20240219213657_AmmoDropMigration.designer.cs">
+      <DependentUpon>20240219213657_AmmoDropMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">
       <DependentUpon>20201119230003_AddUserActivityHistory.cs</DependentUpon>

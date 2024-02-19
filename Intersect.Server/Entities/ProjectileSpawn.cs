@@ -86,6 +86,11 @@ namespace Intersect.Server.Entities
 
         public void AmmoDrop()
         {
+            if (!Parent.Base.AmmoDrop)
+            {
+                return;
+            }
+
             var map = MapController.Get(MapId);
             if (map != null && Parent.Base.AmmoItemId != Guid.Empty && Parent.Owner is Player owner)
             {

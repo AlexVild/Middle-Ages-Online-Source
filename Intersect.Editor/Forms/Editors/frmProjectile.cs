@@ -195,6 +195,8 @@ namespace Intersect.Editor.Forms.Editors
 
                 cmbToolType.SelectedIndex = mEditorItem.Tool + 1;
 
+                chkAmmoDrop.Checked = mEditorItem.AmmoDrop;
+
                 Render();
                 if (mChanged.IndexOf(mEditorItem) == -1)
                 {
@@ -799,6 +801,11 @@ namespace Intersect.Editor.Forms.Editors
         private void cmbDeathAnimation_SelectedIndexChanged(object sender, EventArgs e)
         {
             mEditorItem.ProjectileDeathAnimation = AnimationBase.IdFromList(cmbDeathAnimation.SelectedIndex - 1);
+        }
+
+        private void chkAmmoDrop_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.AmmoDrop = chkAmmoDrop.Checked;
         }
     }
 
