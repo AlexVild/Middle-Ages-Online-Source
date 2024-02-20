@@ -1,4 +1,5 @@
-﻿using Intersect.Server.Entities;
+﻿using Intersect.Server.Database;
+using Intersect.Server.Entities;
 using Intersect.Server.Networking;
 using Intersect.Utilities;
 using System;
@@ -55,6 +56,17 @@ namespace Intersect.Server.Core.Games.ClanWars
             }
 
             Players.Clear();
+        }
+
+        public void RemoveFromDb()
+        {
+            using (var context = DbInterface.CreatePlayerContext(readOnly: false))
+            {
+                context.Clan_Wars.Remove(this);
+
+                context.ChangeTracker.DetectChanges();
+                context.SaveChanges();
+            }
         }
     }
 }

@@ -81,6 +81,13 @@ namespace Intersect.Server.Maps
 
         public void ClearTerritoryInstances()
         {
+            if (!ClanWarManager.ClanWarActive)
+            {
+                foreach (var territory in ActiveTerritories.ToArray())
+                {
+                    DbInterface.Pool.QueueWorkItem(territory.RemoveFromDb);
+                }
+            }
             ActiveTerritories.Clear();
             TerritoryTiles.Clear();
         }

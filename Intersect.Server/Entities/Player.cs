@@ -2521,7 +2521,7 @@ namespace Intersect.Server.Entities
                     if ((!ClanWarManager.ClanWarActive) || (fromLogin && MapInstanceId != ClanWarManager.CurrentWarId))
                     {
                         isValid = false;
-                        PacketSender.SendChatMsg(this, "The Clan War you were in has ended!", ChatMessageType.Error, CustomColors.Alerts.Error);
+                        PacketSender.SendChatMsg(this, "The Clan War you were in is no longer available!", ChatMessageType.Error, CustomColors.Alerts.Error);
                     }
                     break;
                 case MapInstanceType.Guild:

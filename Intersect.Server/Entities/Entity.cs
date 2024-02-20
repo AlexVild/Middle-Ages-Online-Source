@@ -30,7 +30,7 @@ namespace Intersect.Server.Entities
         //Instance Values
         private Guid _id;
 
-        public Guid MapInstanceId = Guid.Empty;
+        public Guid MapInstanceId;
 
         [JsonProperty("MaxVitals"), NotMapped] private int[] _maxVital = new int[(int)Vitals.VitalCount];
 

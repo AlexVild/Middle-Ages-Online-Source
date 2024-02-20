@@ -1,5 +1,6 @@
 ﻿using Intersect.GameObjects;
 using Intersect.GameObjects.Events;
+using Intersect.Server.Database;
 using Intersect.Server.Entities;
 using Intersect.Utilities;
 using System;
@@ -12,6 +13,9 @@ namespace Intersect.Server.Core.Games.ClanWars
 {
     public partial class TerritoryInstance
     {
+        [NotMapped]
+        private object mLock = new object();
+
         [NotMapped]
         private const long HEALTH_TICK_TIME = 500;
 
@@ -225,6 +229,35 @@ namespace Intersect.Server.Core.Games.ClanWars
             GuildId = Guid.Empty;
             Health = 0;
             ChangeState(TerritoryState.Neutral, currentTime);
+        }
+
+        public void RemoveFromDb()
+        {
+            using (var context = DbInterface.CreatePlayerContext(readOnly: false))
+            {
+                context.Territories.Remove(this);
+
+                context.ChangeTracker.DetectChanges();
+                context.SaveChanges();
+            }
+        }
+
+        private void SaveToContext()
+        {
+            lock (mLock)
+            {
+                using (var context = DbInterface.CreatePlayerContext(readOnly: false))
+                {
+                    context.Territories.Update(this);
+                    context.ChangeTracker.DetectChanges();
+                    context.SaveChanges();
+                }
+            }
+        }
+
+        public void Save()
+        {
+            DbInterface.Pool.QueueWorkItem(SaveToContext);
         }
     }
 }

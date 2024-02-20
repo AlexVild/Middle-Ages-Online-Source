@@ -1,4 +1,5 @@
 ﻿using Intersect.GameObjects.Events;
+using Intersect.Server.Database;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
@@ -149,6 +150,10 @@ namespace Intersect.Server.Core.Games.ClanWars
 #if DEBUG
             Logging.Log.Debug($"Territory {Territory.Name} state change: {_prevState} -> {State}");
 #endif
+            if (_prevState != State)
+            {
+                Save();
+            }
         }
     }
 }
