@@ -40,6 +40,9 @@ namespace Intersect.Server.Migrations
 
                     b.Property<Guid>("GuildId");
 
+                    b.Property<int>("_state")
+                        .HasColumnName("State");
+
                     b.HasKey("TerritoryId", "ClanWarId");
 
                     b.ToTable("Territories");
@@ -818,6 +821,8 @@ namespace Intersect.Server.Migrations
                         .HasColumnName("Color");
 
                     b.Property<bool>("LabelTutorialDone");
+
+                    b.Property<Guid>("LastClanWarId");
 
                     b.Property<DateTime?>("LastOnline");
 

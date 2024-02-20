@@ -28,7 +28,6 @@ namespace Intersect.Server.Migrations
                     TerritoryId = table.Column<Guid>(nullable: false),
                     GuildId = table.Column<Guid>(nullable: false),
                     ClanWarId = table.Column<Guid>(nullable: false),
-                    State = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {

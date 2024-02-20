@@ -1,4 +1,6 @@
-﻿using Intersect.Server.Database;
+﻿using Intersect.Enums;
+using Intersect.Server.Database;
+using Intersect.Server.Entities;
 using Intersect.Server.Localization;
 using System;
 using System.Linq;
@@ -8,6 +10,7 @@ namespace Intersect.Server.Core.Games.ClanWars
     {
         public static void StartClanWar()
         {
+            var prevState = ClanWarActive;
             using (var context = DbInterface.CreatePlayerContext(false))
             {
                 if (context.Clan_Wars.Any(cw => cw.IsActive))
@@ -26,6 +29,10 @@ namespace Intersect.Server.Core.Games.ClanWars
                 CurrentWar = clanWar;
             }
 
+            if (prevState != ClanWarActive)
+            {
+                Player.StartCommonEventsWithTriggerForAll(CommonEventTrigger.ClanWarStarted);
+            }
             Console.WriteLine(Strings.Commandoutput.guildwarsenabled);
         }
 
@@ -39,6 +46,7 @@ namespace Intersect.Server.Core.Games.ClanWars
 
         public static void EndAllClanWars()
         {
+            var prevState = ClanWarActive;
             using (var context = DbInterface.CreatePlayerContext(false))
             {
                 CurrentWar?.End();
@@ -54,6 +62,10 @@ namespace Intersect.Server.Core.Games.ClanWars
                 context.SaveChanges();
             }
 
+            if (prevState != ClanWarActive)
+            {
+                Player.StartCommonEventsWithTriggerForAll(CommonEventTrigger.ClanWarEnded);
+            }
             Console.WriteLine(Strings.Commandoutput.guildwarsdisabled);
         }
 

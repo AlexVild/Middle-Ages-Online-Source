@@ -271,6 +271,8 @@ namespace Intersect.Server.Entities
         /// </summary>
         public Guid SharedMapInstanceId { get; set; } = Guid.Empty;
 
+        public Guid LastClanWarId { get; set; } = Guid.Empty;
+
         /* This bundle of columns exists so that we have a "non-instanced" location to reference in case we need
          * to kick someone out of an instance for any reason */
         [Column("LastOverworldMapId")]
@@ -2355,6 +2357,8 @@ namespace Intersect.Server.Entities
             {
                 VoidCurrentDungeon();
             }
+
+            UpdateTerritoryStatus();
         }
 
         /// <summary>
@@ -2518,7 +2522,7 @@ namespace Intersect.Server.Entities
             {
                 case MapInstanceType.ClanWar:
                     // Either the war has ended, or you're trying to log into a new war
-                    if ((!ClanWarManager.ClanWarActive) || (fromLogin && MapInstanceId != ClanWarManager.CurrentWarId))
+                    if ((!ClanWarManager.ClanWarActive) || (fromLogin && LastClanWarId != ClanWarManager.CurrentWarId))
                     {
                         isValid = false;
                         PacketSender.SendChatMsg(this, "The Clan War you were in is no longer available!", ChatMessageType.Error, CustomColors.Alerts.Error);
@@ -6422,7 +6426,7 @@ namespace Intersect.Server.Entities
 
         public static void StartCommonEventsWithTriggerForAll(CommonEventTrigger trigger, string command = "", string param = "")
         {
-            var players = Player.OnlineList;
+            var players = OnlineList;
             foreach (var value in EventBase.Lookup.Values)
             {
                 if (value is EventBase eventDescriptor && eventDescriptor.Pages.Any(p => p.CommonTrigger == trigger))
@@ -8144,17 +8148,7 @@ namespace Intersect.Server.Entities
                 }
 
                 // Check if the player has moved around a territory
-                if (!Dead && IsInGuild && InstanceType == MapInstanceType.ClanWar && MapController.TryGetInstanceFromMap(MapId, MapInstanceId, out var instance))
-                {
-                    if (instance.TerritoryTiles.TryGetValue(new BytePoint((byte)X, (byte)Y), out var territoryInstance))
-                    {
-                        JoinTerritory(territoryInstance);
-                    }
-                    else
-                    {
-                        LeaveTerritory();
-                    }
-                }
+                UpdateTerritoryStatus();
 
                 // If we've changed maps, start relevant events!
                 if (oldMap != MapId)
@@ -8166,6 +8160,24 @@ namespace Intersect.Server.Entities
 
         [NotMapped, JsonIgnore]
         private TerritoryInstance CurrentTerritory { get; set; }
+
+        private void UpdateTerritoryStatus()
+        {
+            if (Dead || !IsInGuild || InstanceType != MapInstanceType.ClanWar || !MapController.TryGetInstanceFromMap(MapId, MapInstanceId, out var instance))
+            {
+                return;
+            }
+
+            if (instance.TerritoryTiles.TryGetValue(new BytePoint((byte)X, (byte)Y), out var territoryInstance))
+            {
+                JoinTerritory(territoryInstance);
+            }
+            else
+            {
+                LeaveTerritory();
+            }
+        }
+
         private void JoinTerritory(TerritoryInstance territory)
         {
             CurrentTerritory = territory;
@@ -9885,7 +9897,12 @@ namespace Intersect.Server.Entities
 
         public void JoinClanWar()
         {
+            if (!ClanWarManager.ClanWarActive)
+            {
+                return;
+            }
             ClanWarManager.CurrentWar?.AddParticipant(this);
+            LastClanWarId = ClanWarManager.CurrentWarId;
 #if DEBUG
             Log.Debug($"{Name} has joined the clan war!");
 #endif
@@ -9896,7 +9913,7 @@ namespace Intersect.Server.Entities
             LeaveTerritory();
             ClanWarManager.CurrentWar?.RemoveParticipant(this);
 #if DEBUG
-                Log.Debug($"{Name} has left the clan war!");
+            Log.Debug($"{Name} has left the clan war!");
 #endif
         }
     }

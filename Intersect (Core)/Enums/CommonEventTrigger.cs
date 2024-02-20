@@ -62,6 +62,10 @@
 
         DuelStarted,
 
+        ClanWarStarted,
+
+        ClanWarEnded,
+
     }
 
 }
