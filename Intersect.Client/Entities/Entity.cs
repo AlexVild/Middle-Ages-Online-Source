@@ -460,6 +460,11 @@ namespace Intersect.Client.Entities
 
         public void AddAnimations(List<AnimationBase> anims)
         {
+            if (this is Player && Globals.Me?.MapInstance?.ZoneType != MapZones.Safe && !InPvpSight)
+            {
+                return;
+            }
+
             foreach (var anim in anims)
             {
                 Animations.Add(new Animation(anim, true, false, -1, this));
@@ -1030,6 +1035,12 @@ namespace Intersect.Client.Entities
                 return; //Don't draw if the entity is hidden
             }
 
+            // Player outside of PvP LOS?
+            if (Globals.Me != null && Globals.Me.MapInstance.ZoneType != MapZones.Safe && this is Player && !InPvpSight)
+            {
+                return;
+            }
+
             WorldPos.Reset();
             var map = MapInstance.Get(CurrentMap);
             if (map == null || !Globals.GridMaps.Contains(CurrentMap))
@@ -1575,6 +1586,11 @@ namespace Intersect.Client.Entities
             }
 
             if (NpcBase.TryGet(NpcId, out var npcBase) && npcBase.HideName)
+            {
+                return;
+            }
+
+            if (this is Player && Globals.Me.MapInstance.ZoneType != MapZones.Safe && !InPvpSight)
             {
                 return;
             }
@@ -3580,5 +3596,7 @@ namespace Intersect.Client.Entities
                 new FloatRect(x, y, championTexture.Width * Options.Scale, championTexture.Width * Options.Scale),
                 Color.White);
         }
+
+        public bool InPvpSight => Globals.Me?.CalculateTileDistanceTo(this) < 17;
     }
 }

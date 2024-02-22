@@ -2866,7 +2866,7 @@ namespace Intersect.Client.Entities
             }
             base.DrawName(textColor, borderColor, backgroundColor);
 
-            if (InCutscene())
+            if (InCutscene() || (Globals.Me.MapInstance.ZoneType != MapZones.Safe && !InPvpSight))
             {
                 return;
             }

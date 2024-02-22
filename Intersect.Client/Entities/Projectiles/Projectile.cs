@@ -596,6 +596,11 @@ namespace Intersect.Client.Entities.Projectiles
             {
                 return;
             }
+
+            if (Globals.Me.MapInstance.ZoneType != MapZones.Safe && !InPvpSight)
+            {
+                return;
+            }
         }
 
         public void SpawnDead(int spawnIndex)
