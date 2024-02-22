@@ -1,4 +1,5 @@
-﻿using Intersect.Enums;
+﻿using Intersect.Client.General;
+using Intersect.Enums;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -76,6 +77,16 @@ namespace Intersect.Client.Interface.Game.Chat
         public static void AddMessage(ChatboxMsg msg)
         {
             sGameMessages.Add(msg);
+        }
+
+        public static void DebugMessage(string message)
+        {
+#if DEBUG
+            var msg = new ChatboxMsg($"DEBUG: {message}", Color.Gray, ChatMessageType.Admin);
+            sGameMessages.Add(msg);
+#else
+            Logging.Log.Debug($"DEBUG: {message}");
+#endif
         }
 
         /// <summary>

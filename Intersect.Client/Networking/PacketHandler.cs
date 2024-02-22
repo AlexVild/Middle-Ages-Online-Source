@@ -3009,6 +3009,38 @@ namespace Intersect.Client.Networking
 
             CharacterWishlistController.ServerUpdate = true;
         }
+
+        //MapAreaPacket
+        public void HandlePacket(IPacketSender packetSender, TerritoriesPacket packet)
+        {
+            foreach (var territory in packet.Territories)
+            {
+                HandleTerritory(packetSender, territory);
+            }
+        }
+
+        public void HandlePacket(IPacketSender packetSender, TerritoryUpdatePacket packet)
+        {
+            HandleTerritory(packetSender, packet);
+        }
+
+        private void HandleTerritory(IPacketSender packetSender, TerritoryUpdatePacket packet)
+        {
+            var map = MapInstance.Get(packet.MapId);
+            if (Globals.Me == null || map == null)
+            {
+                return;
+            }
+
+            if (!map.Territories.TryGetValue(packet.DescriptorId, out var territory))
+            {
+                return;
+            }
+
+            territory.HandleServerUpdate(packet.State, packet.Owner, packet.Conquerer);
+
+            ChatboxMsg.DebugMessage($"Territory update: STATE == {packet.State}");
+        }
     }
 }
  

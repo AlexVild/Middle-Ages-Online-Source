@@ -783,5 +783,10 @@ namespace Intersect.Client.Networking
         {
             Network.SendPacket(new WishlistRemovePacket(craftId));
         }
+
+        public static void SendTerritorySyncRequest(Guid mapId, Guid territoryDescriptorId)
+        {
+            Network.SendPacket(new RequestTerritorySyncPacket(mapId, territoryDescriptorId));
+        }
     }
 }

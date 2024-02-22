@@ -3,14 +3,16 @@ using System;
 using Intersect.Server.Database.PlayerData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Intersect.Server.Migrations
 {
     [DbContext(typeof(PlayerContext))]
-    partial class PlayerContextModelSnapshot : ModelSnapshot
+    [Migration("20240220165717_AddLastClanWarMigration")]
+    partial class AddLastClanWarMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -38,16 +40,12 @@ namespace Intersect.Server.Migrations
 
                     b.Property<Guid>("ClanWarId");
 
-                    b.Property<Guid>("MapId");
-
-                    b.Property<Guid>("MapInstanceId");
-
                     b.Property<Guid>("GuildId");
 
                     b.Property<int>("_state")
                         .HasColumnName("State");
 
-                    b.HasKey("TerritoryId", "ClanWarId", "MapId", "MapInstanceId");
+                    b.HasKey("TerritoryId", "ClanWarId");
 
                     b.ToTable("Territories");
                 });

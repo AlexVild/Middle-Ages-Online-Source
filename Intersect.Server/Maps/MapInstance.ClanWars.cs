@@ -1,29 +1,30 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
 using Intersect.Enums;
-using Intersect.GameObjects;
-using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Maps;
 using Intersect.Logging;
-using Intersect.Network.Packets.Server;
 using Intersect.Server.Database;
-using Intersect.Server.Entities.Events;
-using Intersect.Server.General;
-using Intersect.Server.Networking;
 using Intersect.Utilities;
-using Intersect.Server.Entities;
-using Intersect.Server.Classes.Maps;
-using Intersect.GameObjects.Switches_and_Variables;
-using Intersect.Server.Core;
-using Intersect.Server.Localization;
 using Intersect.Server.Core.Games.ClanWars;
-using Intersect.Server.Database.GameData;
-using static Intersect.GameObjects.Maps.MapBase;
+using Intersect.Server.Entities;
+using Intersect.Network.Packets.Server;
+using Intersect.Server.Database.PlayerData.Players;
 
 namespace Intersect.Server.Maps
 {
+    public class MapTerritory
+    {
+        public MapTerritory(TerritoryInfo mapInfo, TerritoryInstance instance)
+        {
+            MapInfo = mapInfo;
+            Instance = instance;
+        }
+
+        public TerritoryInfo MapInfo { get; set; }
+
+        public TerritoryInstance Instance { get; set; }
+    }
+
     public class TerritoryInfo
     {
         public TerritoryInfo(BytePoint spawnPos, int radius)
@@ -38,7 +39,7 @@ namespace Intersect.Server.Maps
 
     public partial class MapInstance : IDisposable
     {
-        private List<TerritoryInstance> ActiveTerritories { get; set; } = new List<TerritoryInstance>();
+        public Dictionary<Guid, MapTerritory> ActiveTerritories { get; set; } = new Dictionary<Guid, MapTerritory>();
 
         private Dictionary<Guid, TerritoryInfo> mCachedTerritories { get; set; } = new Dictionary<Guid, TerritoryInfo>();
 
@@ -83,9 +84,9 @@ namespace Intersect.Server.Maps
         {
             if (!ClanWarManager.ClanWarActive)
             {
-                foreach (var territory in ActiveTerritories.ToArray())
+                foreach (var territory in ActiveTerritories.Values)
                 {
-                    DbInterface.Pool.QueueWorkItem(territory.RemoveFromDb);
+                    DbInterface.Pool.QueueWorkItem(territory.Instance.RemoveFromDb);
                 }
             }
             ActiveTerritories.Clear();
@@ -113,7 +114,7 @@ namespace Intersect.Server.Maps
                         var territoryInfo = cachedTerritory.Value;
                         
                         // Check to see if this territory has already been instantiated for the current CW
-                        var territoryInstance = context.Territories.Find(territoryId, clanWarId);
+                        var territoryInstance = context.Territories.Find(territoryId, clanWarId, mMapController?.Id ?? Guid.Empty, MapInstanceId);
                         if (territoryInstance != null)
                         {
                             territoryInstance.Initialize();
@@ -124,7 +125,7 @@ namespace Intersect.Server.Maps
                         else
                         {
                             // If not, make a new instance
-                            territoryInstance = new TerritoryInstance(territoryId, clanWarId);
+                            territoryInstance = new TerritoryInstance(territoryId, clanWarId, mMapController?.Id ?? Guid.Empty, MapInstanceId);
 #if DEBUG
                             Log.Debug($"Loaded new territory: {territoryInstance.Territory.Name} on map {mMapController.Name}");
 #endif
@@ -132,8 +133,8 @@ namespace Intersect.Server.Maps
                         }
 
                         // add to this map's list of territory instances
-                        ActiveTerritories.Add(territoryInstance);
-                        CacheTerritoryTiles(ActiveTerritories.Last(), territoryInfo.SpawnPos, territoryInfo.Radius);
+                        ActiveTerritories[territoryId] = new MapTerritory(territoryInfo, territoryInstance);
+                        CacheTerritoryTiles(territoryInstance, territoryInfo.SpawnPos, territoryInfo.Radius);
                     }
 
                     context.ChangeTracker.DetectChanges();
@@ -142,11 +143,27 @@ namespace Intersect.Server.Maps
             }
         }
 
+        public void SendTerritoryUpdatesTo(Player player)
+        {
+            if (ActiveTerritories.Count < 1)
+            {
+                return;
+            }
+
+            var packets = new List<TerritoryUpdatePacket>();
+            foreach (var mapTerritory in ActiveTerritories.Values)
+            {
+                packets.Add(mapTerritory.Instance.Packetize());
+            }
+
+            player.SendPacket(new TerritoriesPacket(packets.ToArray()));
+        }
+
         private void UpdateTerritories()
         {
-            foreach (var territory in ActiveTerritories)
+            foreach (var territory in ActiveTerritories.Values)
             {
-                territory.Update(Timing.Global.MillisecondsUtc);
+                territory.Instance.Update(Timing.Global.MillisecondsUtc);
             }
         }
 

@@ -1,13 +1,35 @@
-﻿using Intersect.Enums;
+﻿using Intersect.Config;
+using Intersect.Enums;
+using Intersect.Network.Packets.Server;
 using Intersect.Server.Database;
+using Intersect.Server.Database.PlayerData.Players;
 using Intersect.Server.Entities;
 using Intersect.Server.Localization;
+using Intersect.Server.Networking;
 using System;
 using System.Linq;
 namespace Intersect.Server.Core.Games.ClanWars
 {
     public static class ClanWarManager
     {
+        public static bool ClanWarActive => CurrentWar != null;
+
+        public static Guid CurrentWarId => CurrentWar?.Id ?? Guid.Empty;
+
+        public static ClanWarInstance _currentWar { get; set; }
+
+        public static ClanWarInstance CurrentWar
+        {
+            get => _currentWar;
+            set
+            {
+                _currentWar = value;
+                StatusChange(null, ClanWarActive);
+            }
+        }
+
+        public static event EventHandler<bool> StatusChange = delegate { };
+
         public static void StartClanWar()
         {
             var prevState = ClanWarActive;
@@ -69,23 +91,23 @@ namespace Intersect.Server.Core.Games.ClanWars
             Console.WriteLine(Strings.Commandoutput.guildwarsdisabled);
         }
 
-        public static bool ClanWarActive => CurrentWar != null;
-
-        public static Guid CurrentWarId => CurrentWar?.Id ?? Guid.Empty;
-
-        public static ClanWarInstance _currentWar { get; set; }
-
-        public static ClanWarInstance CurrentWar 
+        public static void BroadcastTerritoryUpdate(TerritoryInstance territory)
         {
-            get => _currentWar; 
-            set
+            if (!ClanWarActive)
             {
-                _currentWar = value;
-                StatusChange(null, ClanWarActive);
+                return;
+            }
+            
+            var war = CurrentWar;
+            foreach (var player in war.Players.ToArray())
+            {
+                if (!player.Online || player == null || player.MapInstanceId != territory.MapInstanceId)
+                {
+                    continue;
+                }
+                player.SendPacket(territory.Packetize());
             }
         }
-
-        public static event EventHandler<bool> StatusChange = delegate { };
     }
 
 }

@@ -4827,5 +4827,16 @@ namespace Intersect.Server.Networking
 
             player.RemoveCraftFromWishlist(packet.CraftId);
         }
+
+        public void HandlePacket(Client client, RequestTerritorySyncPacket packet)
+        {
+            var player = client?.Entity;
+            if (player == default || !MapController.TryGetInstanceFromMap(packet.MapId, player.MapInstanceId, out var mapInstance))
+            {
+                return;
+            }
+
+            mapInstance.SendTerritoryUpdatesTo(player);
+        }
     }
 }

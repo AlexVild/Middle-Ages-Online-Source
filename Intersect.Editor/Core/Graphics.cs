@@ -1398,6 +1398,8 @@ namespace Intersect.Editor.Core
             {
                 for (var x = x1; x < x2; x++)
                 {
+                    var tmpAttr = tmpMap.Attributes[x, y];
+
                     if (tmpMap.Attributes[x, y] == null)
                     {
                         continue;
@@ -1501,6 +1503,10 @@ namespace Intersect.Editor.Core
                                 animInstance.Draw(renderTarget, upper, alternate);
                             }
                         }
+                    }
+                    else if (tmpAttr.Type == MapAttributes.Territory)
+                    {
+
                     }
                 }
             }

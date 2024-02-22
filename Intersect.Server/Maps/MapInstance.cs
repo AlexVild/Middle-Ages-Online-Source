@@ -427,12 +427,14 @@ namespace Intersect.Server.Maps
             // Send the entities/items of this current MapInstance to the player
             SendMapEntitiesTo(player);
             SendTrapsTo(player);
+            SendTerritoryUpdatesTo(player);
 
             // send the entities/items of the SURROUNDING maps on this instance to the player
             foreach (var surroundingMapInstance in MapController.GetSurroundingMapInstances(mMapController.Id, MapInstanceId, false))
             {
                 surroundingMapInstance.SendMapEntitiesTo(player);
                 surroundingMapInstance.SendTrapsTo(player);
+                surroundingMapInstance.SendTerritoryUpdatesTo(player);
                 PacketSender.SendMapItems(player, surroundingMapInstance.GetController().Id);
             }
             PacketSender.SendEntityDataToProximity(player, player);

@@ -820,6 +820,10 @@
     <Compile Include="Migrations\20240220165717_AddLastClanWarMigration.designer.cs">
       <DependentUpon>20240220165717_AddLastClanWarMigration.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\20240222172606_ExpandedTerritoryKeysMigration.cs" />
+    <Compile Include="Migrations\20240222172606_ExpandedTerritoryKeysMigration.designer.cs">
+      <DependentUpon>20240222172606_ExpandedTerritoryKeysMigration.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.cs" />
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.Designer.cs">
       <DependentUpon>20201222164741_NpcResetRadius.cs</DependentUpon>

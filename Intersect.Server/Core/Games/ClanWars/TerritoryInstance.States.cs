@@ -1,5 +1,6 @@
 ﻿using Intersect.GameObjects.Events;
 using Intersect.Server.Database;
+using Intersect.Utilities;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
@@ -37,7 +38,7 @@ namespace Intersect.Server.Core.Games.ClanWars
                 return;
             }
 
-            if (TryConquererSwitch() || mConqueringGuildId != Guid.Empty)
+            if (TryConquererSwitch() || ConqueringGuildId != Guid.Empty)
             {
                 mNextHealthTick = currentTime + HEALTH_TICK_TIME;
                 ChangeState(TerritoryState.Capturing, currentTime);
@@ -86,7 +87,7 @@ namespace Intersect.Server.Core.Games.ClanWars
 
             if (Health >= Territory.CaptureMs)
             {
-                GuildTakeOver(mConqueringGuildId, currentTime);
+                GuildTakeOver(ConqueringGuildId, currentTime);
                 return;
             }
         }
@@ -134,7 +135,7 @@ namespace Intersect.Server.Core.Games.ClanWars
             }
 
             // Conquerer did not switch, continue wresting/capturing w/o health reset
-            if (mConqueringGuildId != Guid.Empty)
+            if (ConqueringGuildId != Guid.Empty)
             {
                 mNextHealthTick = currentTime + HEALTH_TICK_TIME;
                 ChangeState(_prevState, currentTime);
@@ -150,10 +151,22 @@ namespace Intersect.Server.Core.Games.ClanWars
 #if DEBUG
             Logging.Log.Debug($"Territory {Territory.Name} state change: {_prevState} -> {State}");
 #endif
-            if (_prevState != State)
+            if (StateChanged)
             {
-                Save();
+                Debounce();
+            }
+            else
+            {
+                StateChanged = true;
             }
         }
+
+        private void BroadcastStateChange()
+        {
+            ClanWarManager.BroadcastTerritoryUpdate(this);
+            Save();
+            Debounce();
+        }
+
     }
 }

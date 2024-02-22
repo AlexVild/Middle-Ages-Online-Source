@@ -20,28 +20,12 @@ namespace Intersect.Server.Migrations
                 {
                     table.PrimaryKey("PK_Clan_Wars", x => x.Id);
                 });
-
-            migrationBuilder.CreateTable(
-                name: "Territories",
-                columns: table => new
-                {
-                    TerritoryId = table.Column<Guid>(nullable: false),
-                    GuildId = table.Column<Guid>(nullable: false),
-                    ClanWarId = table.Column<Guid>(nullable: false),
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Territories", x => new { x.TerritoryId, x.ClanWarId });
-                });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
                 name: "Clan_Wars");
-
-            migrationBuilder.DropTable(
-                name: "Territories");
         }
     }
 }

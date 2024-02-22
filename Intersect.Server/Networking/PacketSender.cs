@@ -29,6 +29,8 @@ using Newtonsoft.Json;
 using Intersect.Server.Classes.Maps;
 using Intersect.GameObjects.Timers;
 using Intersect.Server.Database.PlayerData;
+using Intersect.GameObjects.Maps;
+using Intersect.Server.Core.Games.ClanWars;
 
 namespace Intersect.Server.Networking
 {
@@ -271,26 +273,15 @@ namespace Intersect.Server.Networking
             else
             {
                 client.Send(GenerateMapPacket(client, mapId));
-                var entity = client.Entity;
-                if (entity != null)
+                var player = client.Entity;
+                if (player != null)
                 {
                     //TODO: INCLUDE EVENTS IN MAP PACKET
-                    if (mapId == entity.MapId)
+                    if (mapId == player.MapId)
                     {
-                        entity.SendEvents();
+                        player.SendEvents();
                     }
                 }
-
-                //TODO - Include Aggression and Equipment in ENTITY DATA PACKETS!
-                //SendMapEntityEquipmentTo(client, sendEntities); //Send the equipment of each player
-
-                //for (var i = 0; i < sendEntities.Count; i++)
-                //{
-                //    if (sendEntities[i].GetType() == typeof(Npc))
-                //    {
-                //        SendNpcAggressionTo(client.Entity, (Npc)sendEntities[i]);
-                //    }
-                //}
             }
         }
 

@@ -304,6 +304,31 @@ namespace Intersect.Client.Core
                 }
             }
 
+            // Draw territories
+            for (var x = gridX - 1; x <= gridX + 1; x++)
+            {
+                for (var y = gridY - 1; y <= gridY + 1; y++)
+                {
+                    if (x >= 0 &&
+                        x < Globals.MapGridWidth &&
+                        y >= 0 &&
+                        y < Globals.MapGridHeight &&
+                        Globals.MapGrid[x, y] != Guid.Empty)
+                    {
+                        var map = MapInstance.Get(Globals.MapGrid[x, y]);
+                        if (map == null)
+                        {
+                            continue;
+                        }
+
+                        foreach (var territory in map.Territories.Values)
+                        {
+                            territory.Draw();
+                        }
+                    }
+                }
+            }
+
             for (var y = 0; y < Options.MapHeight * 5; y++)
             {
                 for (var x = 0; x < 6; x++)

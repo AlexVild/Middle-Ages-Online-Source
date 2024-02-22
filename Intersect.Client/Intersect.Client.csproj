@@ -119,6 +119,7 @@
     <Compile Include="Entities\Resource.cs" />
     <Compile Include="Entities\SpriteAnimations.cs" />
     <Compile Include="Entities\Status.cs" />
+    <Compile Include="Entities\Territory.cs" />
     <Compile Include="Entities\Timer.cs" />
     <Compile Include="General\Bestiary\BestiaryController.cs" />
     <Compile Include="General\Deconstructor\Deconstructor.cs" />

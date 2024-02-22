@@ -435,6 +435,7 @@
     <Compile Include="Network\Packets\Client\RequestRecipesPacket.cs" />
     <Compile Include="Network\Packets\Client\RequestRespawnPacket.cs" />
     <Compile Include="Network\Packets\Client\RequestSkillbookPacket.cs" />
+    <Compile Include="Network\Packets\Client\RequestTerritorySyncPacket.cs" />
     <Compile Include="Network\Packets\Client\RequestUnlockedRecipesPacket.cs" />
     <Compile Include="Network\Packets\Client\RequestUpgradePacket.cs" />
     <Compile Include="Network\Packets\Client\RequestWeaponEnhancementRemovalPacket.cs" />
@@ -543,6 +544,7 @@
     <Compile Include="Network\Packets\Server\ShakeScreenPacket.cs" />
     <Compile Include="Network\Packets\Server\SkillbookPacket.cs" />
     <Compile Include="Network\Packets\Server\SkillUpdatePacket.cs" />
+    <Compile Include="Network\Packets\Server\TerritoryUpdatePacket.cs" />
     <Compile Include="Network\Packets\Server\TimerPacket.cs" />
     <Compile Include="Network\Packets\Server\TimerStopPacket.cs" />
     <Compile Include="Network\Packets\Server\ToastPacket.cs" />

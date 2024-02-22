@@ -232,7 +232,7 @@ namespace Intersect.Server.Database.PlayerData
                .WithOne(loadout => loadout.Player);
 
             modelBuilder.Entity<TerritoryInstance>()
-                .HasKey(t => new { t.TerritoryId, t.ClanWarId });
+                .HasKey(t => new { t.TerritoryId, t.ClanWarId, t.MapId, t.MapInstanceId });
         }
 
         public void Seed()

@@ -1,6 +1,8 @@
 ﻿using Intersect.GameObjects;
 using Intersect.GameObjects.Events;
+using Intersect.Network.Packets.Server;
 using Intersect.Server.Database;
+using Intersect.Server.Database.PlayerData.Players;
 using Intersect.Server.Entities;
 using Intersect.Utilities;
 using System;
@@ -17,26 +19,28 @@ namespace Intersect.Server.Core.Games.ClanWars
         private object mLock = new object();
 
         [NotMapped]
-        private const long HEALTH_TICK_TIME = 500;
+        private const long HEALTH_TICK_TIME = 100;
 
         [NotMapped]
-        private const long HEALTH_BASE_TICK_AMT = 500;
+        private const long HEALTH_BASE_TICK_AMT = 100;
 
         [NotMapped]
-        private const long HEALTH_TICK_BONUS = 100;
+        private const long HEALTH_TICK_BONUS = 20;
 
         [NotMapped]
-        private const long HEALTH_TICK_MAXIMUM = 1000;
+        private const long HEALTH_TICK_MAXIMUM = 200;
 
         // EF
         public TerritoryInstance()
         {
         }
 
-        public TerritoryInstance(Guid territoryDescriptorId, Guid clanWarId)
+        public TerritoryInstance(Guid territoryDescriptorId, Guid clanWarId, Guid mapId, Guid mapInstanceId)
         {
             ClanWarId = clanWarId;
             TerritoryId = territoryDescriptorId;
+            MapId = mapId;
+            MapInstanceId = mapInstanceId;
 
             Initialize();
         }
@@ -52,6 +56,10 @@ namespace Intersect.Server.Core.Games.ClanWars
         public Guid GuildId { get; set; }
 
         public Guid ClanWarId { get; set; }
+
+        public Guid MapId { get; set; }
+
+        public Guid MapInstanceId { get; set; }
 
         [NotMapped, JsonIgnore]
         public HashSet<Player> Players { get; set; } = new HashSet<Player>();
@@ -69,7 +77,14 @@ namespace Intersect.Server.Core.Games.ClanWars
         private long mNextHealthTick { get; set; }
 
         [NotMapped, JsonIgnore]
-        private Guid mConqueringGuildId { get; set; }
+        public Guid ConqueringGuildId { get; set; }
+
+        private const long DEBOUNCE_TIME = 150;
+
+        [NotMapped, JsonIgnore]
+        public long DebounceTime { get; set; }
+
+        private bool StateChanged { get; set; }
 
         public void Initialize()
         {
@@ -92,6 +107,7 @@ namespace Intersect.Server.Core.Games.ClanWars
             }
 
             mNextHealthTick = Timing.Global.MillisecondsUtc + HEALTH_TICK_TIME;
+            DebounceTime = Timing.Global.MillisecondsUtc;
         }
 
         public void AddPlayer(Player player)
@@ -146,6 +162,17 @@ namespace Intersect.Server.Core.Games.ClanWars
                     StateContested(currentTime);
                     break;
             }
+
+            if (DebounceTime < Timing.Global.MillisecondsUtc && StateChanged)
+            {
+                StateChanged = false;
+                BroadcastStateChange();
+            }
+        }
+
+        private void Debounce()
+        {
+            DebounceTime = Timing.Global.Milliseconds + DEBOUNCE_TIME;
         }
 
         private void TickHealth(long currentTime, bool subtractive = false)
@@ -165,8 +192,9 @@ namespace Intersect.Server.Core.Games.ClanWars
 
             Health += amount;
             mNextHealthTick = currentTime + HEALTH_TICK_TIME;
-
-            Console.WriteLine($"{Territory.Name} Health: {Health}");
+#if DEBUG
+            Logging.Log.Debug($"{Territory.Name} Health: {Health}");
+#endif
         }
 
         private void ResetHealth()
@@ -204,16 +232,16 @@ namespace Intersect.Server.Core.Games.ClanWars
 
             if (conqueringId == Guid.Empty || Invaders.Any(pl => pl.Guild?.Id != conqueringId))
             {
-                mConqueringGuildId = Guid.Empty;
+                ConqueringGuildId = Guid.Empty;
                 return false;
             }
 
-            if (conqueringId == mConqueringGuildId)
+            if (conqueringId == ConqueringGuildId)
             {
                 return false;
             }
 
-            mConqueringGuildId = conqueringId;
+            ConqueringGuildId = conqueringId;
             return true;
         }
 
@@ -258,6 +286,13 @@ namespace Intersect.Server.Core.Games.ClanWars
         public void Save()
         {
             DbInterface.Pool.QueueWorkItem(SaveToContext);
+        }
+
+        public TerritoryUpdatePacket Packetize()
+        {
+            var owner = Guild.GetGuild(GuildId)?.Name ?? string.Empty;
+            var conquerer = Guild.GetGuild(ConqueringGuildId)?.Name ?? string.Empty;
+            return new TerritoryUpdatePacket(MapId, TerritoryId, owner, conquerer, State);
         }
     }
 }

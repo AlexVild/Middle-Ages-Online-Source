@@ -71,6 +71,7 @@ namespace Intersect.Client.Maps
         //Map Attributes
         private Dictionary<MapAttribute, Animation> mAttributeAnimInstances = new Dictionary<MapAttribute, Animation>();
         private Dictionary<MapAttribute, Entity> mAttributeCritterInstances = new Dictionary<MapAttribute, Entity>();
+        public Dictionary<Guid, Territory> Territories = new Dictionary<Guid, Territory>();
 
         protected float mCurFogIntensity = 0f;
 
@@ -256,6 +257,11 @@ namespace Intersect.Client.Maps
                 for (var i = 0; i < LocalEntitiesToDispose.Count; i++)
                 {
                     LocalEntities.Remove(LocalEntitiesToDispose[i]);
+                }
+
+                foreach (var territory in Territories.Values)
+                {
+                    territory.Update();
                 }
 
                 LocalEntitiesToDispose.Clear();
@@ -565,6 +571,16 @@ namespace Intersect.Client.Maps
                         }
 
                         mAttributeCritterInstances[att].Update();
+                    }
+
+                    if (att.Type == MapAttributes.Territory)
+                    {
+                        var territoryAttribute = (MapTerritoryAttribute)att;
+
+                        if (!Territories.ContainsKey(territoryAttribute.TerritoryId))
+                        {
+                            Territories[territoryAttribute.TerritoryId] = new Territory(this, (byte)x, (byte)y, territoryAttribute.Radius, territoryAttribute.TerritoryId);
+                        }
                     }
                 }
             }
