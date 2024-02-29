@@ -146,6 +146,7 @@ namespace Intersect.Client.Core
             HUDFontSmall = FindFont(ClientConfiguration.Instance.HudFontSmall);
             ToastFont = FindFont(ClientConfiguration.Instance.ToastFont);
             ToastFontSmall = FindFont(ClientConfiguration.Instance.ToastFontSmall);
+            TerritoryFont = FindFont(ClientConfiguration.Instance.TerritoryFont);
             DamageFont = FindFont(ClientConfiguration.Instance.DamageFont);
             MenuTexture = sContentManager.GetTexture(
                 GameContentManager.TextureType.Gui, ClientConfiguration.Instance.MenuBackground
@@ -1736,6 +1737,8 @@ namespace Intersect.Client.Core
         public static GameFont ToastFontSmall;
 
         public static GameFont DamageFont;
+        
+        public static GameFont TerritoryFont;
 
         private static GameTexture MenuTexture;
         private static readonly int MenuHFrames = 4;

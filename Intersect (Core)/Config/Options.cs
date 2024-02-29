@@ -83,6 +83,8 @@ namespace Intersect
         public NPCGuildOptions NpcGuild = new NPCGuildOptions();
 
         public BankOptions Bank = new BankOptions();
+        
+        public ClanWarOptions ClanWar = new ClanWarOptions();
 
         public static Options Instance { get; private set; }
 

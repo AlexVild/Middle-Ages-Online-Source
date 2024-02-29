@@ -217,6 +217,7 @@
     <Compile Include="Configuration\ConfigurationHelper.cs" />
     <Compile Include="Config\BankOptions.cs" />
     <Compile Include="Config\ChatOptions.cs" />
+    <Compile Include="Config\ClanWarOptions.cs" />
     <Compile Include="Config\DeconstructionOptions.cs" />
     <Compile Include="Config\DuelOptions.cs" />
     <Compile Include="Config\Guilds\GuildOptions.cs" />
@@ -850,6 +851,7 @@
     <Compile Include="Utilities\Randomization.cs" />
     <Compile Include="Utilities\Retry.cs" />
     <Compile Include="Utilities\StreamUtils.cs" />
+    <Compile Include="Utilities\TerritoryHelper.cs" />
     <Compile Include="Utilities\TextUtils.cs" />
     <Compile Include="Utilities\CSharpFeatures.cs" />
     <Compile Include="Utilities\ReflectionUtils.cs" />

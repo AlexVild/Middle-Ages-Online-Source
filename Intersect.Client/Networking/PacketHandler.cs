@@ -3037,7 +3037,7 @@ namespace Intersect.Client.Networking
                 return;
             }
 
-            territory.HandleServerUpdate(packet.State, packet.Owner, packet.Conquerer);
+            territory.HandleServerUpdate(packet.State, packet.Owner, packet.Conquerer, packet.Health, packet.HealthTickOffset);
 
             ChatboxMsg.DebugMessage($"Territory update: STATE == {packet.State}");
         }

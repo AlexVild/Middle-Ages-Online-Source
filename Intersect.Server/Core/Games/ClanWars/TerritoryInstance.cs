@@ -18,18 +18,6 @@ namespace Intersect.Server.Core.Games.ClanWars
         [NotMapped]
         private object mLock = new object();
 
-        [NotMapped]
-        private const long HEALTH_TICK_TIME = 100;
-
-        [NotMapped]
-        private const long HEALTH_BASE_TICK_AMT = 100;
-
-        [NotMapped]
-        private const long HEALTH_TICK_BONUS = 20;
-
-        [NotMapped]
-        private const long HEALTH_TICK_MAXIMUM = 200;
-
         // EF
         public TerritoryInstance()
         {
@@ -50,8 +38,8 @@ namespace Intersect.Server.Core.Games.ClanWars
         [NotMapped, JsonIgnore]
         public TerritoryDescriptor Territory { get; set; }
 
-        [NotMapped, JsonIgnore]
-        public long Health { get; set; }
+        [NotMapped]
+        public long Health;
 
         public Guid GuildId { get; set; }
 
@@ -73,8 +61,8 @@ namespace Intersect.Server.Core.Games.ClanWars
         [NotMapped, JsonIgnore]
         public Player[] Defenders { get; set; }
 
-        [NotMapped, JsonIgnore]
-        private long mNextHealthTick { get; set; }
+        [NotMapped]
+        private long mNextHealthTick;
 
         [NotMapped, JsonIgnore]
         public Guid ConqueringGuildId { get; set; }
@@ -106,7 +94,7 @@ namespace Intersect.Server.Core.Games.ClanWars
                 Health = 0;
             }
 
-            mNextHealthTick = Timing.Global.MillisecondsUtc + HEALTH_TICK_TIME;
+            mNextHealthTick = Timing.Global.MillisecondsUtc + Options.Instance.ClanWar.HealthTickMs;
             DebounceTime = Timing.Global.MillisecondsUtc;
         }
 
@@ -173,28 +161,6 @@ namespace Intersect.Server.Core.Games.ClanWars
         private void Debounce()
         {
             DebounceTime = Timing.Global.Milliseconds + DEBOUNCE_TIME;
-        }
-
-        private void TickHealth(long currentTime, bool subtractive = false)
-        {
-            if (mNextHealthTick > currentTime)
-            {
-                return;
-            }
-
-            var amount = HEALTH_BASE_TICK_AMT + (Invaders.Length - 1 * HEALTH_TICK_BONUS);
-            amount = MathHelper.Clamp(amount, HEALTH_BASE_TICK_AMT, HEALTH_TICK_MAXIMUM);
-            
-            if (subtractive)
-            {
-                amount *= -1;
-            }
-
-            Health += amount;
-            mNextHealthTick = currentTime + HEALTH_TICK_TIME;
-#if DEBUG
-            Logging.Log.Debug($"{Territory.Name} Health: {Health}");
-#endif
         }
 
         private void ResetHealth()
@@ -292,7 +258,9 @@ namespace Intersect.Server.Core.Games.ClanWars
         {
             var owner = Guild.GetGuild(GuildId)?.Name ?? string.Empty;
             var conquerer = Guild.GetGuild(ConqueringGuildId)?.Name ?? string.Empty;
-            return new TerritoryUpdatePacket(MapId, TerritoryId, owner, conquerer, State);
+            var healthTickOffset = MathHelper.Clamp(mNextHealthTick - Timing.Global.MillisecondsUtc, 0, long.MaxValue);
+            
+            return new TerritoryUpdatePacket(MapId, TerritoryId, owner, conquerer, State, Health, healthTickOffset);
         }
     }
 }

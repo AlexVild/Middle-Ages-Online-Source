@@ -28,13 +28,15 @@ namespace Intersect.Network.Packets.Server
         {
         }
 
-        public TerritoryUpdatePacket(Guid mapId, Guid descriptorId, string owner, string conquerer, TerritoryState state)
+        public TerritoryUpdatePacket(Guid mapId, Guid descriptorId, string owner, string conquerer, TerritoryState state, long health, long healthTickOffset)
         {
             MapId = mapId;
             DescriptorId = descriptorId;
             Owner = owner;
             State = state;
             Conquerer = conquerer;
+            Health = health;
+            HealthTickOffset = healthTickOffset;
         }
 
         [Key(0)]
@@ -51,5 +53,11 @@ namespace Intersect.Network.Packets.Server
 
         [Key(4)]
         public TerritoryState State { get; set; }
+
+        [Key(5)]
+        public long Health { get; set; }
+
+        [Key(6)]
+        public long HealthTickOffset { get; set; }
     }
 }

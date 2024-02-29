@@ -40,7 +40,7 @@ namespace Intersect.Server.Core.Games.ClanWars
 
             if (TryConquererSwitch() || ConqueringGuildId != Guid.Empty)
             {
-                mNextHealthTick = currentTime + HEALTH_TICK_TIME;
+                mNextHealthTick = currentTime + Options.Instance.ClanWar.HealthTickMs;
                 ChangeState(TerritoryState.Capturing, currentTime);
             }
         }
@@ -55,14 +55,14 @@ namespace Intersect.Server.Core.Games.ClanWars
 
             if (TryConquererSwitch())
             {
-                mNextHealthTick = currentTime + HEALTH_TICK_TIME;
+                mNextHealthTick = currentTime + Options.Instance.ClanWar.HealthTickMs;
                 ChangeState(TerritoryState.Wresting, currentTime);
             }
         }
 
         private void StateCapturing(long currentTime)
         {
-            TickHealth(currentTime);
+            TerritoryHelper.TickHealth(ref mNextHealthTick, ref Health, Invaders.Length, currentTime, false);
 
             // Did someone else start taking over mid-capture? I.e your clan lost a fight and another clan begins taking over
             if (TryConquererSwitch())
@@ -94,7 +94,7 @@ namespace Intersect.Server.Core.Games.ClanWars
 
         private void StateWresting(long currentTime)
         {
-            TickHealth(currentTime, true);
+            TerritoryHelper.TickHealth(ref mNextHealthTick, ref Health, Invaders.Length, currentTime, true);
 
             // Did someone else start taking over mid-capture? I.e your clan lost a fight and another clan begins taking over
             if (TryConquererSwitch())
@@ -128,7 +128,7 @@ namespace Intersect.Server.Core.Games.ClanWars
             if (TryConquererSwitch())
             {
                 // Go back to either capturing or wresting state, with new conquerer
-                mNextHealthTick = currentTime + HEALTH_TICK_TIME;
+                mNextHealthTick = currentTime + Options.Instance.ClanWar.HealthTickMs;
                 ChangeState(_prevState, currentTime);
                 ResetHealth();
                 return;
@@ -137,7 +137,7 @@ namespace Intersect.Server.Core.Games.ClanWars
             // Conquerer did not switch, continue wresting/capturing w/o health reset
             if (ConqueringGuildId != Guid.Empty)
             {
-                mNextHealthTick = currentTime + HEALTH_TICK_TIME;
+                mNextHealthTick = currentTime + Options.Instance.ClanWar.HealthTickMs;
                 ChangeState(_prevState, currentTime);
                 return;
             }

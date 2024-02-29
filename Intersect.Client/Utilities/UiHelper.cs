@@ -82,5 +82,18 @@ namespace Intersect.Client.Utilities
 
             return mousePos;
         }
+
+        public static Pointf GetTextCenteredStart(string value, GameFont font, float centerX, float centerY)
+        {
+            var textRect = Graphics.Renderer.MeasureText(value, font, 1.0f);
+            var textLength = textRect.X;
+            var textHeight = textRect.Y;
+
+            var FontX = centerX - textLength / 2;
+            // I have no idea why this +2 is necessary, but it centers incorrectly otherwise
+            var FontY = centerY - textHeight / 2 + 2;
+
+            return new Pointf(FontX, FontY);
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Intersect.GameObjects.Maps;
+using System;
 using System.Runtime.CompilerServices;
 
 namespace Intersect.Client.Framework.GenericClasses
@@ -50,6 +51,25 @@ namespace Intersect.Client.Framework.GenericClasses
         public float CenterX => Left + (Width / 2);
 
         public float CenterY => Top + (Height / 2);
+
+        /// <summary>
+        /// Returns a point that is the rendering center between two float rectangles
+        /// </summary>
+        /// <param name="rect1"></param>
+        /// <param name="rect2"></param>
+        /// <param name="scaled"></param>
+        /// <returns></returns>
+        public static Pointf CenterBetween(FloatRect rect1, FloatRect rect2, bool scaled = false)
+        {
+            if (scaled)
+            {
+                return new Pointf(rect1.CenterX - rect2.Width * Options.Scale / 2, rect1.CenterY - rect2.Height * Options.Scale / 2);
+            }
+            else
+            {
+                return new Pointf(rect1.CenterX - rect2.Width / 2, rect1.CenterY - rect2.Height / 2);
+            }
+        }
 
         public static FloatRect Empty => new FloatRect();
 

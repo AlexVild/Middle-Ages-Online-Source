@@ -123,6 +123,8 @@ namespace Intersect.Configuration
         public string ToastFont { get; set; } = DEFAULT_FONT;
 
         public string ToastFontSmall { get; set; } = DEFAULT_FONT;
+        
+        public string TerritoryFont { get; set; } = DEFAULT_FONT;
 
         /// <summary>
         /// The font family to use on unstyled windows such as the debug menu/admin window
