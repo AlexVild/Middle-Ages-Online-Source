@@ -30,116 +30,149 @@ namespace Intersect.Server.Core.Games.ClanWars
         [NotMapped, JsonIgnore]
         private TerritoryState _prevState { get; set; }
 
+        [NotMapped, JsonIgnore] 
+        private Guid PrevConquerer { get; set; }
+
         private void StateNeutral(long currentTime)
         {
+            Health = 0;
             // No one around/fight ongoing? Don't do anything
             if (PlayerGuildIds.Length != 1)
             {
                 return;
             }
 
-            if (TryConquererSwitch() || ConqueringGuildId != Guid.Empty)
+            FindCurrentConquerer();
+            if (ConqueringGuildId != Guid.Empty)
             {
                 mNextHealthTick = currentTime + Options.Instance.ClanWar.HealthTickMs;
+                PrevConquerer = ConqueringGuildId;
                 ChangeState(TerritoryState.Capturing, currentTime);
             }
         }
 
         private void StateOwned(long currentTime)
         {
-            // No one around/fight ongoing OR only defenders? Don't do anything
-            if (Invaders.Length == 0)
+            // Defenders exist, or the territory is empty? We done
+            if (Defenders.Length > 0 || Players.Count == 0)
             {
                 return;
             }
 
-            if (TryConquererSwitch())
+            FindCurrentConquerer();
+            if (ConqueringGuildId != Guid.Empty)
             {
                 mNextHealthTick = currentTime + Options.Instance.ClanWar.HealthTickMs;
+                PrevConquerer = ConqueringGuildId;
                 ChangeState(TerritoryState.Wresting, currentTime);
             }
         }
 
         private void StateCapturing(long currentTime)
         {
-            TerritoryHelper.TickHealth(ref mNextHealthTick, ref Health, Invaders.Length, currentTime, false);
-
-            // Did someone else start taking over mid-capture? I.e your clan lost a fight and another clan begins taking over
-            if (TryConquererSwitch())
-            {
-                ResetHealth();
-                return;
-            }
-            
-            // No one around? Reset to neutral
-            if (PlayerGuildIds.Length == 0 || Defenders.Length == PlayerGuildIds.Length)
+            // Capture abandoned
+            if (Invaders.Length == 0)
             {
                 ResetHealth();
                 ChangeState(TerritoryState.Neutral, currentTime);
                 return;
             }
 
+            // Otherwise, is there competition?
             if (PlayerGuildIds.Length > 1)
             {
                 // Territory must be under contest!
                 ChangeState(TerritoryState.Contested, currentTime);
-            }
-
-            if (Health >= Territory.CaptureMs)
-            {
-                GuildTakeOver(ConqueringGuildId, currentTime);
                 return;
             }
-        }
 
-        private void StateWresting(long currentTime)
-        {
-            TerritoryHelper.TickHealth(ref mNextHealthTick, ref Health, Invaders.Length, currentTime, true);
-
-            // Did someone else start taking over mid-capture? I.e your clan lost a fight and another clan begins taking over
-            if (TryConquererSwitch())
+            // Did a new team take over the capture?
+            FindCurrentConquerer();
+            if (PrevConquerer != ConqueringGuildId)
             {
+                PrevConquerer = ConqueringGuildId;
                 ResetHealth();
                 return;
             }
 
-            if (PlayerGuildIds.Length == 0 || Defenders.Length == PlayerGuildIds.Length)
+            // Otherwise, proceed with capture
+            TerritoryHelper.TickHealth(ref mNextHealthTick, ref Health, Invaders.Length, currentTime, false);
+            if (Health < Territory.CaptureMs)
+            {
+                return;
+            }
+            GuildTakeOver(ConqueringGuildId, currentTime);
+        }
+
+        private void StateWresting(long currentTime)
+        {
+            // Wresting failed or everyone left
+            if (Invaders.Length == 0 || Players.Count == 0)
             {
                 ResetHealth();
                 ChangeState(TerritoryState.Owned, currentTime);
                 return;
             }
 
+            // Otherwise, is there competition?
             if (PlayerGuildIds.Length > 1)
             {
                 // Territory must be under contest!
                 ChangeState(TerritoryState.Contested, currentTime);
-            }
-
-            if (Health <= 0)
-            {
-                TeritoryLost(currentTime);
                 return;
             }
-        }
 
-        private void StateContested(long currentTime)
-        {
-            if (TryConquererSwitch())
+            // Did a new team take over the capture?
+            FindCurrentConquerer();
+            if (PrevConquerer != ConqueringGuildId)
             {
-                // Go back to either capturing or wresting state, with new conquerer
-                mNextHealthTick = currentTime + Options.Instance.ClanWar.HealthTickMs;
-                ChangeState(_prevState, currentTime);
+                PrevConquerer = ConqueringGuildId;
                 ResetHealth();
                 return;
             }
 
-            // Conquerer did not switch, continue wresting/capturing w/o health reset
-            if (ConqueringGuildId != Guid.Empty)
+            // Otherwise, proceed with wresting control
+            TerritoryHelper.TickHealth(ref mNextHealthTick, ref Health, Invaders.Length, currentTime, true);
+            if (Health > 0)
             {
-                mNextHealthTick = currentTime + Options.Instance.ClanWar.HealthTickMs;
-                ChangeState(_prevState, currentTime);
                 return;
+            }
+            TeritoryLost(currentTime);
+        }
+
+        private void StateContested(long currentTime)
+        {
+            // Did the defenders succeed in contest?
+            if (Invaders.Length == 0 && GuildId != Guid.Empty)
+            {
+                ResetHealth();
+                ChangeState(TerritoryState.Owned, currentTime);
+                return;
+            }
+
+            // Otherwise, did everyone leave an otherwise neutral territory before ownership was swapped?
+            if (Players.Count == 0 && GuildId == Guid.Empty)
+            {
+                ChangeState(TerritoryState.Neutral, currentTime);
+                return;
+            }
+
+            // There's not one single conquering guild - remain contested
+            FindCurrentConquerer();
+            if (ConqueringGuildId == Guid.Empty)
+            {
+                return;
+            }
+
+
+            // If an invading guild was victorious, go back to wrest/capture
+            mNextHealthTick = currentTime + Options.Instance.ClanWar.HealthTickMs;
+            ChangeState(_prevState, currentTime);
+            
+            // If the conquerer changed since contest was entered
+            if (ConqueringGuildId != PrevConquerer)
+            {
+                ResetHealth();
             }
         }
 
@@ -159,6 +192,7 @@ namespace Intersect.Server.Core.Games.ClanWars
             {
                 StateChanged = true;
             }
+            CachePlayerLookups();
         }
 
         private void BroadcastStateChange()

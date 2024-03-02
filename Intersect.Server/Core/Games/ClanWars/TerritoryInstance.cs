@@ -180,35 +180,24 @@ namespace Intersect.Server.Core.Games.ClanWars
         /// a) Of the guilded players, only a single guild within the territory's bounds
         /// b) That the guild is different than that of the guild currently controlling the territory, if any
         /// </summary>
-        /// <returns></returns>
-        private bool TryConquererSwitch()
+        private void FindCurrentConquerer()
         {
-            if (Defenders.Length > 0)
+            ConqueringGuildId = Guid.Empty;
+            // No one's there, or someone is defending a territory they own
+            if (Players.Count == 0 || Defenders.Length > 0)
             {
-                return false;
+                return;
             }
 
-            if (Invaders.Length == 0)
-            {
-                return false;
-            }
-
-            var conqueringGuilds = Invaders.Where(pl => pl.IsInGuild && pl.Guild.Id != Guid.Empty).Select(pl => pl.Guild.Id);
+            var conqueringGuilds = Invaders.Where(pl => pl.IsInGuild).Select(pl => pl.Guild.Id);
             var conqueringId = conqueringGuilds.FirstOrDefault();
 
             if (conqueringId == Guid.Empty || Invaders.Any(pl => pl.Guild?.Id != conqueringId))
             {
-                ConqueringGuildId = Guid.Empty;
-                return false;
-            }
-
-            if (conqueringId == ConqueringGuildId)
-            {
-                return false;
+                return;
             }
 
             ConqueringGuildId = conqueringId;
-            return true;
         }
 
         private void GuildTakeOver(Guid guildId, long currentTime)

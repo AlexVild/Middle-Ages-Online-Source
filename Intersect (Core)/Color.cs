@@ -74,6 +74,14 @@ namespace Intersect
         {
         }
 
+        public Color(Color color)
+        {
+            A = color.A;
+            R = color.R;
+            G = color.G;
+            B = color.B;
+        }
+
         public Color(int a, int r, int g, int b)
         {
             A = (byte) a;

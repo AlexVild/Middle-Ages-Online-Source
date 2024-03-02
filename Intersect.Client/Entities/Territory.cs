@@ -107,6 +107,10 @@ namespace Intersect.Client.Entities
 
         private bool mAwaitingServer { get; set; }
 
+        private long mLastFgFlash { get; set; }
+        private long mFlashRate = 250;
+        private bool mFlashed = false;
+
         private long mLastRequestToServer { get; set; }
 
         private long mHealth;
@@ -143,6 +147,7 @@ namespace Intersect.Client.Entities
             // Default of 500 to allow for server to catch up before sending another packet
             mLastRequestToServer = Timing.Global.MillisecondsUtcUnsynced + 250;
             mNextHealthTick = Timing.Global.MillisecondsUtcUnsynced + Options.Instance.ClanWar.HealthTickMs;
+            mLastFgFlash = Timing.Global.MillisecondsUtcUnsynced + mFlashRate;
         }
 
         public void Update()
@@ -288,6 +293,27 @@ namespace Intersect.Client.Entities
                 return;
             }
 
+            var color = new Color(StaticRenderColor);
+
+            // Flag flashing
+            if (State == TerritoryState.Contested)
+            {
+                if (mLastFgFlash < Timing.Global.MillisecondsUtcUnsynced)
+                {
+                    mFlashed = !mFlashed;
+                    mLastFgFlash = Timing.Global.MillisecondsUtcUnsynced + mFlashRate;
+                }
+                if (mFlashed)
+                {
+                    color.A = 100;
+                }
+            }
+            else
+            {
+                mLastFgFlash = Timing.Global.MillisecondsUtcUnsynced + mFlashRate;
+                mFlashed = false;
+            }
+
             if (!MapInstance.TryGetMapInstanceFromCoords(Map?.Id ?? Guid.Empty, X, Y, out var currMap, out var mapX, out var mapY))
             {
                 return;
@@ -295,7 +321,12 @@ namespace Intersect.Client.Entities
 
             // SrcRect is sometimes chopped depending on health, so we need to represent that with the destination to draw
             // the flag at the base of the pole
-            var srcRect = FlagStateSrc;
+            if (!FlagStateSrc.HasValue)
+            {
+                return;
+            }
+
+            var srcRect = FlagStateSrc.Value;
             
             var tile = Entity.GetTileRectangle(currMap, (byte)mapX, (byte)mapY);
             var centeredDest = FloatRect.CenterBetween(tile, srcRect, true);
@@ -364,14 +395,15 @@ namespace Intersect.Client.Entities
             }
         }
 
-        private FloatRect FlagStateSrc
+        private FloatRect? FlagStateSrc
         {
             get
             {
                 FloatRect? src = null;
-                if (State == TerritoryState.Contested)
+
+                if (!string.IsNullOrEmpty(Owner))
                 {
-                    if (Conquering || Owned)
+                    if (Owned)
                     {
                         src = FRIENDLY_FLAG_SRC;
                     }
@@ -380,33 +412,21 @@ namespace Intersect.Client.Entities
                         src = HOSTILE_FLAG_SRC;
                     }
                 }
-                else if (Owned)
+                else
                 {
-                    src = FRIENDLY_FLAG_SRC;
-                }
-                else if (Conquering)
-                {
-                    if (State == TerritoryState.Capturing)
+                    if (Conquering)
                     {
                         src = FRIENDLY_FLAG_SRC;
                     }
-                    else if (State == TerritoryState.Wresting)
+                    else
                     {
                         src = HOSTILE_FLAG_SRC;
                     }
                 }
-                else if (!string.IsNullOrEmpty(Owner))
-                {
-                    src = HOSTILE_FLAG_SRC;
-                }
-                else
-                {
-                    src = NEUTRAL_FLAG_SRC;
-                }
 
                 if (!src.HasValue)
                 {
-                    return FLAG_BG_SRC;
+                    return null;
                 }
 
                 var rect = src.Value;

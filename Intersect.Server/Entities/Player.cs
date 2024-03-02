@@ -9895,7 +9895,7 @@ namespace Intersect.Server.Entities
             }
         }
 
-        [NotMapped][JsonIgnore] public bool IsInGuild => Guild != null;
+        [NotMapped][JsonIgnore] public bool IsInGuild => Guild != null && Guild.Id != Guid.Empty;
 
         [NotMapped, JsonIgnore]
         public bool IsInParty => Party != null && Party.Count > 1;
