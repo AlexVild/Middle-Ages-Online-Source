@@ -19,7 +19,7 @@ namespace Intersect.Server.Core.Games.ClanWars
         public Guid GuildId { get; set; }
 
         [JsonIgnore, NotMapped]
-        public Guild Guild { get; set; }
+        public virtual Guild Guild { get; private set; }
 
         [ForeignKey(nameof(ClanWar))]
         public Guid ClanWarId { get; set; }

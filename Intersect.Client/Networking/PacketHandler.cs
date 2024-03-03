@@ -3041,6 +3041,15 @@ namespace Intersect.Client.Networking
 
             ChatboxMsg.DebugMessage($"Territory update: STATE == {packet.State}");
         }
+
+        public void HandlePacket(IPacketSender packetSender, ClanWarScoreUpdatePacket packet)
+        {
+            ChatboxMsg.DebugMessage($"--- CLAN WAR SCORE UPDATE ---");
+            foreach (var score in packet.Scores)
+            {
+                ChatboxMsg.DebugMessage($"- {score.Guild} --- {score.Score} pts.");
+            }
+        }
     }
 }
  

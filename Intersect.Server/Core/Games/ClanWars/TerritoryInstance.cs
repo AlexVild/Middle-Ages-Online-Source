@@ -207,7 +207,7 @@ namespace Intersect.Server.Core.Games.ClanWars
             ChangeState(TerritoryState.Owned, currentTime);
         }
 
-        private void TeritoryLost(long currentTime)
+        public void TeritoryLost(long currentTime)
         {
             GuildId = Guid.Empty;
             Health = 0;

@@ -35,13 +35,7 @@ namespace Intersect.Server.Core.Commands
             using (var context = DbInterface.CreatePlayerContext(false))
             {
                 var clanWars = context.Clan_Wars.Where(cw => !cw.IsActive).ToArray();
-
-                foreach (var clanWar in clanWars)
-                {
-                    var participants = context.Clan_War_Participants.Where(p => p.ClanWarId == clanWar.Id);
-                    context.Clan_War_Participants.RemoveRange(participants);
-                    context.Clan_Wars.Remove(clanWar);
-                }
+                context.Clan_Wars.RemoveRange(clanWars);
 
                 context.ChangeTracker.DetectChanges();
                 context.SaveChanges();

@@ -453,6 +453,7 @@
     <Compile Include="Network\Packets\Client\WishlistAddPacket.cs" />
     <Compile Include="Network\Packets\Client\WishlistRemovePacket.cs" />
     <Compile Include="Network\Packets\Server\ChallengeProgressPacket.cs" />
+    <Compile Include="Network\Packets\Server\ClanWarScoreUpdatePacket.cs" />
     <Compile Include="Network\Packets\Server\CloseDeconstructorPacket.cs" />
     <Compile Include="Network\Packets\Server\CombatNumberPacket.cs" />
     <Compile Include="Network\Packets\Server\CombatNumberPackets.cs" />
@@ -499,6 +500,7 @@
     <Compile Include="Network\Packets\Server\KillCountPacket.cs" />
     <Compile Include="Network\Packets\Server\KillCountsPacket.cs" />
     <Compile Include="Network\Packets\Server\KnownEnhancementsPacket.cs" />
+    <Compile Include="Network\Packets\Server\LeaveClanWarPacket.cs" />
     <Compile Include="Network\Packets\Server\OpenEnhancementPacket.cs" />
     <Compile Include="Network\Packets\Server\OpenUpgradeStationPacket.cs" />
     <Compile Include="Network\Packets\Server\PlayerDeathTypePacket.cs" />

@@ -23,6 +23,7 @@ using Intersect.Server.Database.Logging.Entities;
 using static Intersect.Server.Database.Logging.Entities.GuildHistory;
 using Intersect.Server.Core;
 using Intersect.GameObjects.Timers;
+using Intersect.Server.Core.Games.ClanWars;
 
 namespace Intersect.Server.Database.PlayerData.Players
 {
@@ -259,6 +260,11 @@ namespace Intersect.Server.Database.PlayerData.Players
                         PacketSender.SendEntityDataToProximity(Player.FindOnline(player.Id));
 
                         LogActivity(Id, player, initiator, GuildActivityType.Joined);
+
+                        if (player.InstanceType == MapInstanceType.ClanWar)
+                        {
+                            player.JoinClanWar();
+                        }
                     }
                 }
             }
@@ -490,6 +496,7 @@ namespace Intersect.Server.Database.PlayerData.Players
         /// <param name="initiator">The player who initiated this change (null if done by the api or some other method).</param>
         public static void DeleteGuild(Guild guild, Player initiator = null)
         {
+            var guildId = guild?.Id ?? Guid.Empty;
             // Remove our members cleanly before deleting this from our database.
             using (var context = DbInterface.CreatePlayerContext(readOnly: false))
             {
@@ -534,6 +541,8 @@ namespace Intersect.Server.Database.PlayerData.Players
 
                 LogActivity(guild.Id, initiator, null, GuildActivityType.Disbanded);
             }
+
+            ClanWarManager.GuildDisbanded(guildId);
 
             // Remove dangling timers
             foreach (var timer in TimerProcessor.ActiveTimers.Where(timer => timer.Descriptor.OwnerType == GameObjects.Timers.TimerOwnerType.Guild && timer.OwnerId == guild.Id).ToArray())

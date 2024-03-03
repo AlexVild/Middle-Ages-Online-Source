@@ -51,8 +51,13 @@ namespace Intersect.Server.Core.Games.ClanWars
             var prevState = ClanWarActive;
             using (var context = DbInterface.CreatePlayerContext(false))
             {
-                if (context.Clan_Wars.Any(cw => cw.IsActive))
+                var activeWar = context.Clan_Wars.FirstOrDefault(cw => cw.IsActive);
+                if (activeWar != default)
                 {
+                    if (CurrentWar == null)
+                    {
+                        CurrentWar = activeWar;
+                    }
                     Console.WriteLine("A clan war is already active in the DB");
                     return;
                 }
@@ -83,6 +88,7 @@ namespace Intersect.Server.Core.Games.ClanWars
                 CurrentWar = context.Clan_Wars
                     .Where(cw => cw.IsActive)
                     .Include(cw => cw.Participants)
+                    .ThenInclude(cp => cp.Guild)
                     .FirstOrDefault(cw => cw.IsActive);
             }
         }
@@ -128,6 +134,16 @@ namespace Intersect.Server.Core.Games.ClanWars
                 }
                 player.SendPacket(territory.Packetize());
             }
+        }
+
+        public static void GuildDisbanded(Guid guildId)
+        {
+            if (!ClanWarActive || guildId == Guid.Empty)
+            {
+                return;
+            }
+
+            CurrentWar?.RemoveParticipant(guildId);
         }
     }
 

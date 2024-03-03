@@ -96,12 +96,7 @@ namespace Intersect.Server.Core.Games.ClanWars
             }
 
             // Otherwise, proceed with capture
-            var health = Health;
             TerritoryHelper.TickHealth(ref mNextHealthTick, ref Health, Invaders.Length, Timing.Global.Milliseconds, false);
-            if (health != Health)
-            {
-                Console.WriteLine($"TERRITORY HEALTH: {health}");
-            }
 
             if (Health < Territory.CaptureMs)
             {

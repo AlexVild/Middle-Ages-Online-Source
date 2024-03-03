@@ -1,10 +1,13 @@
 ﻿using Intersect.GameObjects;
+using Intersect.Network.Packets.Server;
 using Intersect.Server.Database;
 using Intersect.Server.Database.PlayerData.Players;
 using Intersect.Server.Entities;
 using Intersect.Server.Extensions;
+using Intersect.Server.Maps;
 using Intersect.Server.Networking;
 using Intersect.Utilities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Collections.Generic;
@@ -34,17 +37,27 @@ namespace Intersect.Server.Core.Games.ClanWars
         [NotMapped, JsonIgnore]
         public HashSet<Player> Players { get; set; } = new HashSet<Player>();
 
-        public void AddParticipant(Player player)
+        [NotMapped, JsonIgnore]
+        private ClanWarScore[] mScores => Participants
+            .OrderByDescending(p => p.Score)
+            .Select(p => new ClanWarScore(Guild.GetGuild(p.GuildId)?.Name, p.Score))
+            .ToArray();
+
+        public void AddPlayer(Player player)
         {
-            if (!player.IsInGuild)
+            if (player == null || !player.IsInGuild || !IsActive)
             {
                 return;
             }
 
             Players.Add(player);
+            AddParticipant(player.Guild?.Id ?? Guid.Empty);
+            SendScoresToPlayer(player);
+        }
 
-            var guildId = player.Guild?.Id ?? Guid.Empty;
-            if (ParticipantIds.Contains(guildId))
+        public void AddParticipant(Guid guildId)
+        {
+            if (ParticipantIds.Contains(guildId) || !IsActive)
             {
                 return;
             }
@@ -61,9 +74,55 @@ namespace Intersect.Server.Core.Games.ClanWars
             }
         }
 
-        public void RemoveParticipant(Player player) 
+        public void RemovePlayer(Player player, bool fromLogout = false) 
         {  
-            Players.Remove(player); 
+            Players.Remove(player);
+
+            if (!fromLogout)
+            {
+                player?.SendPacket(new LeaveClanWarPacket());
+            }
+        }
+
+        public void RemoveParticipant(Guid guildId)
+        {
+            // Don't bother if this clan war isn't even active
+            if (!IsActive || !ParticipantIds.Contains(guildId))
+            {
+                return;
+            }
+
+            using (var context = DbInterface.CreatePlayerContext(readOnly: false))
+            {
+                var participants = context.Clan_War_Participants.Where(p => p.ClanWarId == Id && p.GuildId == guildId);
+                context.Clan_War_Participants.RemoveRange(participants);
+                Participants.RemoveAll(p => p.GuildId == guildId);
+
+                var ownedTerritories = context.Territories
+                    .Where(t => t.ClanWarId == Id && t.GuildId == guildId)
+                    .ToArray();
+
+                var now = Timing.Global.MillisecondsUtc;
+
+                // Remove territories from this guild's control
+                foreach (var territory in ownedTerritories)
+                {
+                    if (!MapController.TryGetInstanceFromMap(territory.MapId, territory.MapInstanceId, out var mapInstance))
+                    {
+                        continue;
+                    }
+
+                    if (!mapInstance.ActiveTerritories.TryGetValue(territory.TerritoryId, out var activeTerritory))
+                    {
+                        continue;
+                    }
+
+                    activeTerritory?.Instance?.TeritoryLost(now);
+                }
+
+                context.ChangeTracker.DetectChanges();
+                context.SaveChanges();
+            }
         }
 
         public void Start()
@@ -156,17 +215,27 @@ namespace Intersect.Server.Core.Games.ClanWars
                 }
             }
 
-            Logging.Log.Debug($"\n--- CLAN WARS SCORE TICK ---");
-            foreach (var participant in Participants.OrderByDescending(p => p.Score).ToArray())
+            BroadcastScores();
+        }
+
+        public void BroadcastScores()
+        {
+            var updatePacket = new ClanWarScoreUpdatePacket(mScores);
+            
+            foreach (var player in Players.ToArray())
             {
-                var guild = Guild.GetGuild(participant.GuildId);
-                if (guild == null)
+                if (!player.Online || player.InstanceType != Enums.MapInstanceType.ClanWar || player.MapInstanceId != Id)
                 {
                     continue;
                 }
 
-                Logging.Log.Debug($"--- {guild.Name}: {participant.Score} pts.");
+                player?.SendPacket(updatePacket);
             }
+        }
+
+        public void SendScoresToPlayer(Player player)
+        {
+            player?.SendPacket(new ClanWarScoreUpdatePacket(mScores));
         }
     }
 }

@@ -185,17 +185,11 @@ namespace Intersect.Client.Entities
 
             if (State == TerritoryState.Capturing || State == TerritoryState.Wresting)
             {
-                var health = mHealth;
                 TerritoryHelper.TickHealth(ref mNextHealthTick, 
                     ref mHealth, 
                     mCompetitors.Where(comp => comp.InGuild && comp.Guild == Conquerer).Count(), 
                     Timing.Global.Milliseconds, 
                     State == TerritoryState.Wresting);
-
-                if (health != mHealth)
-                {
-                    ChatboxMsg.DebugMessage($"TERRITORY HEALTH: {health}");
-                }
             }
             else if (State == TerritoryState.Contested)
             {

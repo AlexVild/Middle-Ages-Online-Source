@@ -1609,6 +1609,10 @@ namespace Intersect.Server.Entities.Events
             List<EventCommand> newCommandList = null;
             if (success && stackInfo.Page.CommandLists.ContainsKey(command.BranchIds[0]))
             {
+                if (player.InstanceType == MapInstanceType.ClanWar)
+                {
+                    player.JoinClanWar();
+                }
                 newCommandList = stackInfo.Page.CommandLists[command.BranchIds[0]];
             }
 

@@ -529,7 +529,7 @@ namespace Intersect.Server.Entities
 
             if (InstanceType == MapInstanceType.ClanWar)
             {
-                LeaveClanWar();
+                LeaveClanWar(true);
             }
 
             // Update timers
@@ -9922,14 +9922,14 @@ namespace Intersect.Server.Entities
             {
                 return;
             }
-            ClanWarManager.CurrentWar?.AddParticipant(this);
+            ClanWarManager.CurrentWar?.AddPlayer(this);
             LastClanWarId = ClanWarManager.CurrentWarId;
         }
 
-        public void LeaveClanWar()
+        public void LeaveClanWar(bool fromLogout = false)
         {
             LeaveTerritory();
-            ClanWarManager.CurrentWar?.RemoveParticipant(this);
+            ClanWarManager.CurrentWar?.RemovePlayer(this, fromLogout);
         }
     }
 }

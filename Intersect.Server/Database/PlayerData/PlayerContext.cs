@@ -241,7 +241,13 @@ namespace Intersect.Server.Database.PlayerData
 
             modelBuilder.Entity<ClanWarInstance>()
                 .HasMany(instance => instance.Participants)
-                .WithOne(participant => participant.ClanWar );
+                .WithOne(participant => participant.ClanWar )
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<ClanWarParticipant>()
+                .HasOne(participant => participant.Guild)
+                .WithOne()
+                .HasForeignKey<ClanWarParticipant>(participant => participant.GuildId);
         }
 
         public void Seed()
