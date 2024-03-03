@@ -80,5 +80,7 @@ namespace Intersect.Server.Database.PlayerData
         DbSet<TerritoryInstance> Territories { get; set; }
         
         DbSet<ClanWarInstance> Clan_Wars { get; set; }
+
+        DbSet<ClanWarParticipant> Clan_War_Participants { get; set; }
     }
 }

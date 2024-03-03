@@ -444,6 +444,17 @@ namespace Intersect.Server.Localization
             };
         }
 
+        public sealed partial class CommandsNamespace : LocaleCommandNamespace
+        {
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocaleCommand ClearClanWarsCommand = new LocaleCommand
+            {
+                Name = @"clearclanwars",
+                Description = @"Prunes inactive clan wars from the DB.",
+                Help = @"prunes the clan wars Database and the participants database of clan wars that are no longer active"
+            };
+        }
+
     }
 
 }

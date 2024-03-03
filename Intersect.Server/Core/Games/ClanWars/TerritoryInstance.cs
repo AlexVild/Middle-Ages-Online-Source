@@ -94,7 +94,7 @@ namespace Intersect.Server.Core.Games.ClanWars
                 Health = 0;
             }
 
-            mNextHealthTick = Timing.Global.MillisecondsUtc + Options.Instance.ClanWar.HealthTickMs;
+            mNextHealthTick = Timing.Global.Milliseconds + Options.Instance.ClanWar.HealthTickMs;
             DebounceTime = Timing.Global.MillisecondsUtc;
         }
 
@@ -247,7 +247,7 @@ namespace Intersect.Server.Core.Games.ClanWars
         {
             var owner = Guild.GetGuild(GuildId)?.Name ?? string.Empty;
             var conquerer = Guild.GetGuild(ConqueringGuildId)?.Name ?? string.Empty;
-            var healthTickOffset = MathHelper.Clamp(mNextHealthTick - Timing.Global.MillisecondsUtc, 0, long.MaxValue);
+            var healthTickOffset = MathHelper.Clamp(mNextHealthTick - Timing.Global.Milliseconds, 0, long.MaxValue);
             
             return new TerritoryUpdatePacket(MapId, TerritoryId, owner, conquerer, State, Health, healthTickOffset);
         }

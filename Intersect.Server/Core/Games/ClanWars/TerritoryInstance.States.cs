@@ -45,7 +45,7 @@ namespace Intersect.Server.Core.Games.ClanWars
             FindCurrentConquerer();
             if (ConqueringGuildId != Guid.Empty)
             {
-                mNextHealthTick = currentTime + Options.Instance.ClanWar.HealthTickMs;
+                mNextHealthTick = Timing.Global.Milliseconds + Options.Instance.ClanWar.HealthTickMs;
                 PrevConquerer = ConqueringGuildId;
                 ChangeState(TerritoryState.Capturing, currentTime);
             }
@@ -62,7 +62,7 @@ namespace Intersect.Server.Core.Games.ClanWars
             FindCurrentConquerer();
             if (ConqueringGuildId != Guid.Empty)
             {
-                mNextHealthTick = currentTime + Options.Instance.ClanWar.HealthTickMs;
+                mNextHealthTick = Timing.Global.Milliseconds + Options.Instance.ClanWar.HealthTickMs;
                 PrevConquerer = ConqueringGuildId;
                 ChangeState(TerritoryState.Wresting, currentTime);
             }
@@ -96,7 +96,13 @@ namespace Intersect.Server.Core.Games.ClanWars
             }
 
             // Otherwise, proceed with capture
-            TerritoryHelper.TickHealth(ref mNextHealthTick, ref Health, Invaders.Length, currentTime, false);
+            var health = Health;
+            TerritoryHelper.TickHealth(ref mNextHealthTick, ref Health, Invaders.Length, Timing.Global.Milliseconds, false);
+            if (health != Health)
+            {
+                Console.WriteLine($"TERRITORY HEALTH: {health}");
+            }
+
             if (Health < Territory.CaptureMs)
             {
                 return;
@@ -132,7 +138,7 @@ namespace Intersect.Server.Core.Games.ClanWars
             }
 
             // Otherwise, proceed with wresting control
-            TerritoryHelper.TickHealth(ref mNextHealthTick, ref Health, Invaders.Length, currentTime, true);
+            TerritoryHelper.TickHealth(ref mNextHealthTick, ref Health, Invaders.Length, Timing.Global.Milliseconds, true);
             if (Health > 0)
             {
                 return;
@@ -166,7 +172,7 @@ namespace Intersect.Server.Core.Games.ClanWars
 
 
             // If an invading guild was victorious, go back to wrest/capture
-            mNextHealthTick = currentTime + Options.Instance.ClanWar.HealthTickMs;
+            mNextHealthTick = Timing.Global.Milliseconds + Options.Instance.ClanWar.HealthTickMs;
             ChangeState(_prevState, currentTime);
             
             // If the conquerer changed since contest was entered

@@ -55,6 +55,7 @@ namespace Intersect.Server.Core
                 Parser.Register<GuildWarsCommand>();
                 Parser.Register<SetVarCommand>();
                 Parser.Register<ClearRecordCacheCommand>();
+                Parser.Register<ClearClanWarsArchiveCommand>();
             }
 
             public CommandParser Parser { get; }

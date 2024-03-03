@@ -10,6 +10,8 @@ namespace Intersect.Config
 
         public long HealthTickMaximumMs { get; set; } = 200;
 
+        public long ScoreTickMs { get; set; } = 10000;
+
 
         [OnDeserialized]
         internal void OnDeserializedMethod(StreamingContext context)

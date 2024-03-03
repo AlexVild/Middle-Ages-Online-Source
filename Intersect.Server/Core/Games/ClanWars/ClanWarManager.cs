@@ -6,6 +6,8 @@ using Intersect.Server.Database.PlayerData.Players;
 using Intersect.Server.Entities;
 using Intersect.Server.Localization;
 using Intersect.Server.Networking;
+using Intersect.Utilities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 namespace Intersect.Server.Core.Games.ClanWars
@@ -17,6 +19,8 @@ namespace Intersect.Server.Core.Games.ClanWars
         public static Guid CurrentWarId => CurrentWar?.Id ?? Guid.Empty;
 
         public static ClanWarInstance _currentWar { get; set; }
+        
+        private static long mNextTick { get; set; }
 
         public static ClanWarInstance CurrentWar
         {
@@ -29,6 +33,18 @@ namespace Intersect.Server.Core.Games.ClanWars
         }
 
         public static event EventHandler<bool> StatusChange = delegate { };
+
+        public static void Update()
+        {
+            if (CurrentWar == null || Timing.Global.MillisecondsUtc <= mNextTick)
+            {
+                return;
+            }
+            
+            CurrentWar.Update();
+            
+            mNextTick = Timing.Global.MillisecondsUtc + Options.Instance.ClanWar.ScoreTickMs;
+        }
 
         public static void StartClanWar()
         {
@@ -56,13 +72,18 @@ namespace Intersect.Server.Core.Games.ClanWars
                 Player.StartCommonEventsWithTriggerForAll(CommonEventTrigger.ClanWarStarted);
             }
             Console.WriteLine(Strings.Commandoutput.guildwarsenabled);
+
+            mNextTick = Timing.Global.MillisecondsUtc + Options.Instance.ClanWar.ScoreTickMs;
         }
 
         public static void InitializeManager()
         {
             using (var context = DbInterface.CreatePlayerContext())
             {
-                CurrentWar = context.Clan_Wars.FirstOrDefault(cw => cw.IsActive);
+                CurrentWar = context.Clan_Wars
+                    .Where(cw => cw.IsActive)
+                    .Include(cw => cw.Participants)
+                    .FirstOrDefault(cw => cw.IsActive);
             }
         }
 

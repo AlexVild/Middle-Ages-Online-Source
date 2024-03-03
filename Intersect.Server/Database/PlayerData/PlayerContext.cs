@@ -112,6 +112,8 @@ namespace Intersect.Server.Database.PlayerData
         public DbSet<TerritoryInstance> Territories { get; set; }
         
         public DbSet<ClanWarInstance> Clan_Wars { get; set; }
+        
+        public DbSet<ClanWarParticipant> Clan_War_Participants { get; set; }
 
         internal async ValueTask Commit(
             bool commit = false,
@@ -233,6 +235,13 @@ namespace Intersect.Server.Database.PlayerData
 
             modelBuilder.Entity<TerritoryInstance>()
                 .HasKey(t => new { t.TerritoryId, t.ClanWarId, t.MapId, t.MapInstanceId });
+
+            modelBuilder.Entity<ClanWarParticipant>()
+                .HasKey(t => new { t.ClanWarId, t.GuildId });
+
+            modelBuilder.Entity<ClanWarInstance>()
+                .HasMany(instance => instance.Participants)
+                .WithOne(participant => participant.ClanWar );
         }
 
         public void Seed()

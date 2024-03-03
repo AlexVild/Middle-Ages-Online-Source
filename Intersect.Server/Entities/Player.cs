@@ -466,7 +466,7 @@ namespace Intersect.Server.Entities
                 PacketSender.SendPlayerDeathType(this, DeathType.Safe);
             }
 
-            if (InstanceType == MapInstanceType.ClanWar)
+            if (InstanceType == MapInstanceType.ClanWar && LastClanWarId == ClanWarManager.CurrentWarId)
             {
                 JoinClanWar();
             }
@@ -2375,26 +2375,42 @@ namespace Intersect.Server.Entities
             if (MapId == null || MapId == Guid.Empty)
             {
                 WarpToSpawn();
+                return;
+            }
+            
+            if (!CanChangeToInstanceType(InstanceType, true, MapId))
+            {
+                WarpToLastOverworldLocation(true);
+                return;
+            }
+            
+            if (Map?.ZoneType == MapZones.Arena)
+            {
+                ArenaRespawn(instanceType: InstanceType, fromLogin: true);
+                return;
+            }
+
+            if (InDuel)
+            {
+                LeaveDuel(true);
+                return;
+            }
+
+            // Will warp to spawn if we fail to create an instance for the relevant map
+            Warp(
+                MapId, (byte)X, (byte)Y, (byte)Dir, false, (byte)Z, false, false, InstanceType, true
+            );
+        }
+
+        private void ArenaRespawn(MapInstanceType instanceType = MapInstanceType.NoChange, bool fromLogin = false)
+        {
+            if (Map?.ZoneType == MapZones.Arena && ArenaRespawnMap != null)
+            {
+                Warp(ArenaRespawnMapId, ArenaRespawnX, ArenaRespawnY, (byte)ArenaRespawnDir, mapInstanceType: instanceType, fromLogin: fromLogin);
             }
             else
             {
-                if (!CanChangeToInstanceType(InstanceType, true, MapId))
-                {
-                    WarpToLastOverworldLocation(true);
-                } else
-                {
-                    if (InDuel)
-                    {
-                        LeaveDuel(true);
-                    }
-                    else
-                    {
-                        // Will warp to spawn if we fail to create an instance for the relevant map
-                        Warp(
-                            MapId, (byte)X, (byte)Y, (byte)Dir, false, (byte)Z, false, false, InstanceType, true
-                        );
-                    }
-                }
+                ClassRespawn();
             }
         }
 
@@ -2469,7 +2485,7 @@ namespace Intersect.Server.Entities
             } 
             else if (Map?.ZoneType == MapZones.Arena && ArenaRespawnMap != null)
             {
-                Warp(ArenaRespawnMapId, ArenaRespawnX, ArenaRespawnY, (byte)ArenaRespawnDir);
+                ArenaRespawn();
                 return;
             }
             else if (RespawnOverrideMap != null)
@@ -9908,18 +9924,12 @@ namespace Intersect.Server.Entities
             }
             ClanWarManager.CurrentWar?.AddParticipant(this);
             LastClanWarId = ClanWarManager.CurrentWarId;
-#if DEBUG
-            Log.Debug($"{Name} has joined the clan war!");
-#endif
         }
 
         public void LeaveClanWar()
         {
             LeaveTerritory();
             ClanWarManager.CurrentWar?.RemoveParticipant(this);
-#if DEBUG
-            Log.Debug($"{Name} has left the clan war!");
-#endif
         }
     }
 }

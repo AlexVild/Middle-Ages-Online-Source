@@ -146,7 +146,7 @@ namespace Intersect.Client.Entities
             mAwaitingServer = true;
             // Default of 500 to allow for server to catch up before sending another packet
             mLastRequestToServer = Timing.Global.MillisecondsUtcUnsynced + 250;
-            mNextHealthTick = Timing.Global.MillisecondsUtcUnsynced + Options.Instance.ClanWar.HealthTickMs;
+            mNextHealthTick = Timing.Global.Milliseconds + Options.Instance.ClanWar.HealthTickMs;
             mLastFgFlash = Timing.Global.MillisecondsUtcUnsynced + mFlashRate;
         }
 
@@ -185,11 +185,17 @@ namespace Intersect.Client.Entities
 
             if (State == TerritoryState.Capturing || State == TerritoryState.Wresting)
             {
+                var health = mHealth;
                 TerritoryHelper.TickHealth(ref mNextHealthTick, 
                     ref mHealth, 
                     mCompetitors.Where(comp => comp.InGuild && comp.Guild == Conquerer).Count(), 
-                    Timing.Global.MillisecondsUtcUnsynced, 
+                    Timing.Global.Milliseconds, 
                     State == TerritoryState.Wresting);
+
+                if (health != mHealth)
+                {
+                    ChatboxMsg.DebugMessage($"TERRITORY HEALTH: {health}");
+                }
             }
             else if (State == TerritoryState.Contested)
             {
@@ -209,7 +215,7 @@ namespace Intersect.Client.Entities
             Owner = newOwner;
             Conquerer = conquerer;
             TimeInState = timeOffset;
-            mNextHealthTick = Timing.Global.MillisecondsUtcUnsynced + (Options.Instance.ClanWar.HealthTickMs - timeOffset);
+            mNextHealthTick = Timing.Global.Milliseconds + (Options.Instance.ClanWar.HealthTickMs - timeOffset);
         }
 
         public void Draw()
@@ -338,7 +344,7 @@ namespace Intersect.Client.Entities
                 FLAG_TEXTURE.ScaledWidth / 2,
                 srcRect.Height * Options.Scale);
 
-            Graphics.DrawGameTexture(FLAG_TEXTURE, srcRect, destRect, StaticRenderColor);
+            Graphics.DrawGameTexture(FLAG_TEXTURE, srcRect, destRect, color);
         }
 
         private void ChangeState(TerritoryState newState)

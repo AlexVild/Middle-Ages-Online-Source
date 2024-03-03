@@ -451,6 +451,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Admin\Actions\ActionProcessing.cs" />
+    <Compile Include="Core\Commands\ClearClanWarsArchiveCommand.cs" />
     <Compile Include="Core\Commands\ClearRecordCacheCommand.cs" />
     <Compile Include="Core\Commands\GuildWarsCommand.cs" />
     <Compile Include="Core\Commands\MetricsCommand.cs" />
@@ -458,6 +459,7 @@
     <Compile Include="Core\Commands\SetVarCommand.cs" />
     <Compile Include="Core\Games\ClanWars\ClanWarInstance.cs" />
     <Compile Include="Core\Games\ClanWars\ClanWarManager.cs" />
+    <Compile Include="Core\Games\ClanWars\ClanWarParticipant.cs" />
     <Compile Include="Core\Games\ClanWars\TerritoryInstance.cs" />
     <Compile Include="Core\Games\ClanWars\TerritoryInstance.States.cs" />
     <Compile Include="Core\Instancing\Controller\Components\Duel.cs" />
@@ -823,6 +825,10 @@
     <Compile Include="Migrations\20240222172606_ExpandedTerritoryKeysMigration.cs" />
     <Compile Include="Migrations\20240222172606_ExpandedTerritoryKeysMigration.designer.cs">
       <DependentUpon>20240222172606_ExpandedTerritoryKeysMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20240302211506_AddClanWarParticipantMigration.cs" />
+    <Compile Include="Migrations\20240302211506_AddClanWarParticipantMigration.designer.cs">
+      <DependentUpon>20240302211506_AddClanWarParticipantMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.cs" />
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.Designer.cs">

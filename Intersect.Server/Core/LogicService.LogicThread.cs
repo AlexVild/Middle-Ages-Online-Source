@@ -198,6 +198,9 @@ namespace Intersect.Server.Core
 
                             // Update our global list of unique instances that are being processed
                             InstanceProcessor.UpdateInstanceControllers(ActiveMapInstances.Values.ToList());
+                            
+                            // Process clan war score updates
+                            ClanWarManager.Update();
 
                             if (Options.Instance.Metrics.Enable)
                             {
