@@ -552,4 +552,14 @@ namespace Intersect.GameObjects.Events
         Contested,
         Owned,
     }
+
+    /// <summary>
+    /// An enum to determine which map to show on the client's maps screen
+    /// </summary>
+    public enum MapType
+    {
+        None,
+        Overworld,
+        Battlelands
+    }
 }

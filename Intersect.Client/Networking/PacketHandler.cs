@@ -271,18 +271,15 @@ namespace Intersect.Client.Networking
             if (en != null)
             {
                 en.Load(packet);
-                if (packet.IsSelf)
-                {
-                    Globals.Me = (Player)Globals.Entities[packet.EntityId];
-                }
             }
             else
             {
                 Globals.Entities.Add(packet.EntityId, new Player(packet.EntityId, packet));
-                if (packet.IsSelf)
-                {
-                    Globals.Me = (Player)Globals.Entities[packet.EntityId];
-                }
+            }
+
+            if (packet.IsSelf)
+            {
+                Globals.Me = (Player)Globals.Entities[packet.EntityId];
             }
         }
 

@@ -42,6 +42,7 @@ using Intersect.Server.Utilities;
 using System.Text;
 using System.ComponentModel;
 using Intersect.Server.Core.Games.ClanWars;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace Intersect.Server.Entities
 {
@@ -1069,7 +1070,35 @@ namespace Intersect.Server.Entities
             pkt.IsScaledDown = IsScaledDown;
             pkt.ScaledTo = ScaledTo;
 
+            pkt.MapType = GetCurrentMapType();
+
             return pkt;
+        }
+
+        private MapType GetCurrentMapType()
+        {
+            if (Map == null)
+            {
+                return MapType.None;
+            }
+
+            var grid = DbInterface.GetGrid(Map.MapGrid);
+            if (grid == null)
+            {
+                return MapType.None;
+            }
+
+            if (grid.HasMap(Options.Instance.MapOpts.FenwyndellMapId))
+            {
+                return MapType.Overworld;
+            }
+
+            if (grid.HasMap(Options.Instance.MapOpts.BattlelandsMapId))
+            {
+                return MapType.Battlelands;
+            }
+
+            return MapType.None;
         }
 
         public int GetNonBuffedStat(Stats stat)

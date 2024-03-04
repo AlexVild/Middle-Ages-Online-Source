@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Intersect.Enums;
+using Intersect.GameObjects.Events;
 using MessagePack;
 
 namespace Intersect.Network.Packets.Server
@@ -58,6 +59,9 @@ namespace Intersect.Network.Packets.Server
 
         [Key(36)]
         public int ScaledTo { get; set; }
+
+        [Key(37)]
+        public MapType MapType { get; set; }
     }
 
 }

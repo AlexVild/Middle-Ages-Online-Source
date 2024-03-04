@@ -28,6 +28,7 @@ using Intersect.Client.Interface.Game.DescriptionWindows;
 using Intersect.GameObjects.Crafting;
 using Intersect.Client.General.Leaderboards;
 using Intersect.Localization;
+using Intersect.GameObjects.Events;
 
 namespace Intersect.Client.Entities
 {
@@ -402,6 +403,7 @@ namespace Intersect.Client.Entities
             TrueStats = pkt.TrueStats;
             ScaledTo = pkt.ScaledTo;
             IsScaledDown = pkt.IsScaledDown;
+            MapType = pkt.MapType;
 
             if (pkt.Equipment != null)
             {
@@ -3494,5 +3496,7 @@ namespace Intersect.Client.Entities
         public bool IsScaledDown { get; set; }
 
         public int ScaledTo { get; set; }
+
+        public MapType MapType { get; set; }
     }
 }

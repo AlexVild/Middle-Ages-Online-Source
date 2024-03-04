@@ -27,6 +27,13 @@ namespace Intersect.Config
 
         public bool DebugAllowMapFades = true;
 
+        /// <summary>
+        /// Used for Overworld identifcation
+        /// </summary>
+        public Guid FenwyndellMapId = new Guid("2396c678-dcb8-4769-b26a-490fa9958bc6");
+        
+        public Guid BattlelandsMapId = Guid.Empty;
+
         public LayerOptions Layers = new LayerOptions();
 
         [JsonIgnore]

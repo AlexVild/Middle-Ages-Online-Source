@@ -50,6 +50,8 @@ namespace Intersect.Client.Interface.Game.MapScreen
         private int[] ZoomLevels = { 1, 2, 4, 8 };
 
         private GameTexture MapTexture;
+        private GameTexture BattlelandsTexture;
+        private GameTexture CurrentMapTexture => Globals.Me?.MapType == GameObjects.Events.MapType.Battlelands ? BattlelandsTexture : MapTexture;
         private GameTexture BackgroundTexture;
         private GameTexture ForegroundTexture;
         private GameTexture LabelLeftTexture;
@@ -62,6 +64,8 @@ namespace Intersect.Client.Interface.Game.MapScreen
         private (int, int) CurrGrid => (Globals.Me.MapInstance?.MapGridX ?? 0, Globals.Me.MapInstance?.MapGridY ?? 0);
 
         private GameRenderTexture MapRenderTexture;
+        private GameRenderTexture BattlelandsRenderTexture;
+        private GameRenderTexture CurrentRenderTexture => Globals.Me?.MapType == GameObjects.Events.MapType.Battlelands ? BattlelandsRenderTexture : MapRenderTexture;
 
         private Color BackgroundColor = Color.White;
 
@@ -74,9 +78,11 @@ namespace Intersect.Client.Interface.Game.MapScreen
         public MapScreen()
         {
             MapTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "map.png");
+            BattlelandsTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "map_battlelands.png");
             BackgroundTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "map_background.png");
             ForegroundTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "map_foreground.png");
             MapRenderTexture = Graphics.Renderer.CreateRenderTexture(MapTexture.GetWidth(), MapTexture.GetHeight());
+            BattlelandsRenderTexture = Graphics.Renderer.CreateRenderTexture(BattlelandsTexture.GetWidth(), BattlelandsTexture.GetHeight());
             LabelLeftTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "label_left.png");
             LabelRightTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "label_right.png");
             LabelMidTexture = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Gui, "label_middle.png");
@@ -374,20 +380,19 @@ namespace Intersect.Client.Interface.Game.MapScreen
             Graphics.DrawFullScreenTexture(Graphics.Renderer.GetWhiteTexture(), new Color(100, 0, 0, 0));
             Graphics.DrawGameTexture(BackgroundTexture, new FloatRect(0, 0, bgWidth, bgHeight), bgDest, BackgroundColor);
 
-            // Janky-ass way of saying you're on the overworld or not
-            if (Globals.MapGridWidth < 10)
+            if (Globals.Me.MapType != GameObjects.Events.MapType.Overworld && Globals.Me.MapType != GameObjects.Events.MapType.Battlelands)
             {
-                var errorMsg = "You're not on the overworld!";
+                var errorMsg = "You're not on an overworld!";
                 var errorMsgLen = Graphics.Renderer.MeasureText(errorMsg, Graphics.HUDFont, 1);
                 var midX = bgDest.CenterX - errorMsgLen.X / 2;
                 var midY = bgDest.CenterY - errorMsgLen.Y / 2;
 
-                Graphics.Renderer.DrawString("You're not on the overworld!", Graphics.HUDFont, midX, midY, 1, MapNameColor);
+                Graphics.Renderer.DrawString("You're not on an overworld!", Graphics.HUDFont, midX, midY, 1, MapNameColor);
                 return;
             }
 
             // Render the map to MapRenderTexture, and draw the map in its revealed state
-            Graphics.DrawGameTexture(MapRenderTexture, new FloatRect(CurrentX, CurrentY, mapDest.Width / CurrentZoom, mapDest.Height / CurrentZoom), mapDest, Color.White);
+            Graphics.DrawGameTexture(CurrentRenderTexture, new FloatRect(CurrentX, CurrentY, mapDest.Width / CurrentZoom, mapDest.Height / CurrentZoom), mapDest, Color.White);
 
             // Render foreground elements
             Graphics.DrawGameTexture(ForegroundTexture, new FloatRect(0, 0, bgWidth, bgHeight), bgDest, BackgroundColor);
@@ -433,15 +438,16 @@ namespace Intersect.Client.Interface.Game.MapScreen
             }
 
             MapRenderTexture.Clear(Color.Black);
+            BattlelandsRenderTexture.Clear(Color.Black);
             
             var fogBorderWidth = 8;
             var fogSrc = new FloatRect(0, 0, FogTexture.GetWidth(), FogTexture.GetHeight());
             var locSrc = new FloatRect(0, 0, LocationTexture.GetWidth(), LocationTexture.GetHeight());
             var meSrc = new FloatRect(0, 0, MeTexture.GetWidth(), MeTexture.GetHeight());
 
-            var mapRect = new FloatRect(0, 0, MapTexture.GetWidth(), MapTexture.GetHeight());
+            var mapRect = new FloatRect(0, 0, CurrentMapTexture.GetWidth(), CurrentMapTexture.GetHeight());
 
-            Graphics.DrawGameTexture(MapTexture, mapRect, mapRect, Color.White, renderTarget: MapRenderTexture);
+            Graphics.DrawGameTexture(CurrentMapTexture, mapRect, mapRect, Color.White, renderTarget: CurrentRenderTexture);
 
             var minY = int.MaxValue;
             var minX = int.MaxValue;
@@ -465,7 +471,7 @@ namespace Intersect.Client.Interface.Game.MapScreen
                                 locSrc,
                                 new FloatRect(locX, locY, LocationTexture.GetWidth(), LocationTexture.GetHeight()),
                                 Color.White,
-                                renderTarget: MapRenderTexture);
+                                renderTarget: CurrentRenderTexture);
 
                             // Draw player's location within that map
                             var playerX = locX + (Globals.Me.X * Options.TileWidth / 16);
@@ -475,7 +481,7 @@ namespace Intersect.Client.Interface.Game.MapScreen
                                 meSrc,
                                 new FloatRect(playerX, playerY, MeTexture.GetWidth(), MeTexture.GetHeight()),
                                 Color.White,
-                                renderTarget: MapRenderTexture);
+                                renderTarget: CurrentRenderTexture);
                         }
 
                         // Determine the new min/max values of explored map, if they've been updated
@@ -492,7 +498,7 @@ namespace Intersect.Client.Interface.Game.MapScreen
                         fogSrc,
                         new FloatRect(fogX, fogY, FogTexture.GetWidth(), FogTexture.GetHeight()),
                         Color.White,
-                        renderTarget: MapRenderTexture);
+                        renderTarget: CurrentRenderTexture);
                 }
             }
 
@@ -508,6 +514,7 @@ namespace Intersect.Client.Interface.Game.MapScreen
         public void Dispose()
         {
             MapRenderTexture.Dispose();
+            BattlelandsRenderTexture.Dispose();
         }
     }
 }
