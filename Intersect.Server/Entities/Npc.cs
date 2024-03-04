@@ -1887,7 +1887,7 @@ namespace Intersect.Server.Entities
                 Globals.CachedNpcSpellScalar.TryGetValue(Base.Id, out damageScalar);
             }
 
-            PlayerThreatLevels[player.Id] = ThreatLevelUtilities.DetermineNpcThreatLevel(player.MaxVitals,
+            var threatLevel = ThreatLevelUtilities.DetermineNpcThreatLevel(player.MaxVitals,
                 player.StatVals,
                 Base.MaxVital,
                 Base.Stats,
@@ -1899,7 +1899,9 @@ namespace Intersect.Server.Entities
                 Base.IsSpellcaster,
                 damageScalar);
 
-            return PlayerThreatLevels[player.Id];
+            PlayerThreatLevels[player.Id] = threatLevel;
+
+            return threatLevel;
         }
 
         public bool IsDungeonAggroToward(Player player)

@@ -16,6 +16,8 @@ namespace Intersect.Client.Interface.Game.ClanWars
 {
     public static class ClanWarScoreboardController
     {
+        public static List<ClanWarMapUpdate> MapUpdates { get; set; } = new List<ClanWarMapUpdate>();
+
         public static void UpdateScores(ClanWarScore[] scores)
         {
             Interface.GameUi?.ClanWarScorePanel?.UpdateScores(scores.ToList());

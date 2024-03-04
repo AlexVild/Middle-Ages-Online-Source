@@ -1,4 +1,5 @@
 ﻿using MessagePack;
+using System;
 
 namespace Intersect.Network.Packets.Server
 {
@@ -10,13 +11,17 @@ namespace Intersect.Network.Packets.Server
         {
         }
 
-        public ClanWarScoreUpdatePacket(ClanWarScore[] scores)
+        public ClanWarScoreUpdatePacket(ClanWarScore[] scores, ClanWarMapUpdate[] mapUpdates)
         {
             Scores = scores;
+            MapUpdates = mapUpdates;
         }
 
         [Key(0)]
         public ClanWarScore[] Scores { get; set; }
+
+        [Key(1)]
+        public ClanWarMapUpdate[] MapUpdates { get; set; }
     }
 
     [MessagePackObject]
@@ -38,5 +43,25 @@ namespace Intersect.Network.Packets.Server
 
         [Key(1)]
         public int Score { get; set; }
+    }
+
+    [MessagePackObject]
+    public class ClanWarMapUpdate
+    {
+        public ClanWarMapUpdate()
+        {
+        }
+
+        public ClanWarMapUpdate(Guid mapId, string owner)
+        {
+            MapId = mapId;
+            Owner = owner;
+        }
+
+        [Key(0)]
+        public Guid MapId { get; set; }
+
+        [Key(1)]
+        public string Owner { get; set; }
     }
 }

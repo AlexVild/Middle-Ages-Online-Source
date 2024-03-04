@@ -3,6 +3,7 @@ using Intersect.Client.Core.Controls;
 using Intersect.Client.Framework.GenericClasses;
 using Intersect.Client.Framework.Graphics;
 using Intersect.Client.General;
+using Intersect.Client.Interface.Game.ClanWars;
 using Intersect.Client.Utilities;
 using Intersect.Utilities;
 using System;
@@ -60,6 +61,12 @@ namespace Intersect.Client.Interface.Game.MapScreen
         private GameTexture FogTexture;
         private GameTexture LocationTexture;
         private GameTexture MeTexture;
+        private GameTexture FLAG_TEXTURE = Globals.ContentManager.GetTexture(Framework.File_Management.GameContentManager.TextureType.Misc, "territory_flags.png");
+
+        private FloatRect FLAG_BG_SRC = new FloatRect(0, 0, 16, 30);
+        private FloatRect NEUTRAL_FLAG_SRC = new FloatRect(16, 0, 16, 30);
+        private FloatRect HOSTILE_FLAG_SRC = new FloatRect(0, 30, 16, 30);
+        private FloatRect FRIENDLY_FLAG_SRC = new FloatRect(16, 30, 16, 30);
 
         private (int, int) CurrGrid => (Globals.Me.MapInstance?.MapGridX ?? 0, Globals.Me.MapInstance?.MapGridY ?? 0);
 
@@ -425,7 +432,7 @@ namespace Intersect.Client.Interface.Game.MapScreen
             Graphics.Renderer.DrawString(CurrentMap.Trim().ToUpper(), Graphics.HUDFont, x + LabelLeftTexture.GetWidth(), y + 8, 1, MapNameColor); ;
         }
 
-        private void GenerateMap()
+        public void GenerateMap()
         {
             if (!NeedsGenerating)
             {
@@ -460,13 +467,16 @@ namespace Intersect.Client.Interface.Game.MapScreen
                 {
                     var fogX = x * MapScreenGridWidth - fogBorderWidth;
                     // Have we been here? If so, draw it
-                    if (Globals.Me.MapsExplored.Contains(Globals.MapGrid[x, y]))
+                    var mapId = Globals.MapGrid[x, y];
+
+                    if (Globals.Me.MapsExplored.Contains(mapId))
                     {
+                        var locX = fogX + fogBorderWidth;
+                        var locY = fogY + fogBorderWidth;
+                        // Are we currently here? Draw a border if so
                         if (x == CurrGrid.Item1 && y == CurrGrid.Item2)
                         {
                             // Draw border around our current map
-                            var locX = fogX + fogBorderWidth;
-                            var locY = fogY + fogBorderWidth;
                             Graphics.DrawGameTexture(LocationTexture,
                                 locSrc,
                                 new FloatRect(locX, locY, LocationTexture.GetWidth(), LocationTexture.GetHeight()),
@@ -482,6 +492,26 @@ namespace Intersect.Client.Interface.Game.MapScreen
                                 new FloatRect(playerX, playerY, MeTexture.GetWidth(), MeTexture.GetHeight()),
                                 Color.White,
                                 renderTarget: CurrentRenderTexture);
+                        }
+
+                        // Are we in the Battlelands?
+                        if (Globals.Me?.MapType == GameObjects.Events.MapType.Battlelands)
+                        {
+                            // Draw territory info if it exists
+                            var territory = ClanWarScoreboardController.MapUpdates.Find(m => m.MapId == mapId);
+                            if (territory != default)
+                            {
+                                var src = GetFlagSrc(territory.Owner);
+                                var centerX = locX + ((Options.MapWidth * Options.TileWidth) / 32);
+                                var centerY = locY + ((Options.MapHeight * Options.TileHeight) / 32);
+                                centerX -= (int)src.Width / 2;
+                                centerY -= (int)src.Height / 2;
+                                Graphics.DrawGameTexture(FLAG_TEXTURE,
+                                    src,
+                                    new FloatRect(centerX, centerY, src.Width, src.Height),
+                                    Color.White,
+                                    renderTarget: CurrentRenderTexture);
+                            }
                         }
 
                         // Determine the new min/max values of explored map, if they've been updated
@@ -509,6 +539,21 @@ namespace Intersect.Client.Interface.Game.MapScreen
             MaxY = maxY;
 
             NeedsGenerating = false;
+        }
+
+        private FloatRect GetFlagSrc(string owner)
+        {
+            if (Globals.Me == null || string.IsNullOrEmpty(owner))
+            {
+                return FLAG_BG_SRC;
+            }
+
+            if (Globals.Me.Guild == owner)
+            {
+                return FRIENDLY_FLAG_SRC;
+            }
+
+            return HOSTILE_FLAG_SRC;
         }
 
         public void Dispose()

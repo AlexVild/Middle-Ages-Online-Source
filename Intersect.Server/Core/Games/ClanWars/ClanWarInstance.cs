@@ -220,7 +220,7 @@ namespace Intersect.Server.Core.Games.ClanWars
 
         public void BroadcastScores()
         {
-            var updatePacket = new ClanWarScoreUpdatePacket(mScores);
+            var updatePacket = new ClanWarScoreUpdatePacket(mScores, null);
             
             foreach (var player in Players.ToArray())
             {
@@ -233,9 +233,24 @@ namespace Intersect.Server.Core.Games.ClanWars
             }
         }
 
+        private ClanWarMapUpdate[] GetMapUpdates(Guid mapInstanceId)
+        {
+            using (var context = DbInterface.CreatePlayerContext())
+            {
+                List<ClanWarMapUpdate> mapUpdates = new List<ClanWarMapUpdate>();
+                var territories = context.Territories.Where(t => t.ClanWarId == Id && t.MapInstanceId == mapInstanceId);
+                foreach (var territory in territories)
+                {
+                    mapUpdates.Add(new ClanWarMapUpdate(territory.MapId, Guild.GetGuild(territory.GuildId)?.Name ?? string.Empty));
+                }
+
+                return mapUpdates.ToArray();
+            }
+        }
+
         public void SendScoresToPlayer(Player player)
         {
-            player?.SendPacket(new ClanWarScoreUpdatePacket(mScores));
+            player?.SendPacket(new ClanWarScoreUpdatePacket(mScores, GetMapUpdates(player.MapInstanceId)));
         }
     }
 }

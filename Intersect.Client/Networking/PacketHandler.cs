@@ -3036,12 +3036,34 @@ namespace Intersect.Client.Networking
             }
 
             territory.HandleServerUpdate(packet.State, packet.Owner, packet.Conquerer, packet.Health, packet.HealthTickOffset);
+
+            var territoriesToUpdate = ClanWarScoreboardController.MapUpdates?.Where(update => update.MapId == packet.MapId)?.ToArray();
+            foreach (var territoryUpdate in territoriesToUpdate)
+            {
+                territoryUpdate.Owner = packet.Owner;
+            }
+
+            if (Interface.Interface.GameUi?.Map?.IsOpen ?? false)
+            {
+                Interface.Interface.GameUi?.Map?.RegenerateMap();
+                Interface.Interface.GameUi?.Map?.GenerateMap();
+            }
         }
 
         public void HandlePacket(IPacketSender packetSender, ClanWarScoreUpdatePacket packet)
         {
             ClanWarScoreboardController.UpdateScores(packet.Scores);
+            if (packet.MapUpdates != null)
+            {
+                ClanWarScoreboardController.MapUpdates = packet.MapUpdates.ToList();
+            }
             Interface.Interface.GameUi?.ClanWarScorePanel?.Show();
+            
+            if (Interface.Interface.GameUi?.Map?.IsOpen ?? false)
+            {
+                Interface.Interface.GameUi?.Map?.RegenerateMap();
+                Interface.Interface.GameUi?.Map?.GenerateMap();
+            }
         }
 
         public void HandlePacket(IPacketSender packetSender, LeaveClanWarPacket packet)
