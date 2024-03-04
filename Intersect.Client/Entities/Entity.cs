@@ -2043,7 +2043,12 @@ namespace Intersect.Client.Entities
             {
                 return;
             }
-            
+
+            if (this is Player && Globals.Me.MapInstance.ZoneType != MapZones.Safe && !InPvpSight)
+            {
+                return;
+            }
+
             var targetTex = Globals.Me.StatusIsActive(StatusTypes.Taunt) ?
                 Globals.ContentManager.GetTexture(TextureType.Misc, "taunt_target.png") :
                 Globals.ContentManager.GetTexture(TextureType.Misc, "target.png");

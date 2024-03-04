@@ -34,6 +34,7 @@ using Intersect.Client.Interface.Game.Character.Panels;
 using Intersect.Client.Interface.Game.Toasts;
 using Intersect.Client.General.Bestiary;
 using Intersect.Client.Interface.Game.WeaponPicker;
+using Intersect.Client.Interface.Game.ClanWars;
 
 namespace Intersect.Client.Networking
 {
@@ -3038,17 +3039,17 @@ namespace Intersect.Client.Networking
             }
 
             territory.HandleServerUpdate(packet.State, packet.Owner, packet.Conquerer, packet.Health, packet.HealthTickOffset);
-
-            ChatboxMsg.DebugMessage($"Territory update: STATE == {packet.State}");
         }
 
         public void HandlePacket(IPacketSender packetSender, ClanWarScoreUpdatePacket packet)
         {
-            ChatboxMsg.DebugMessage($"--- CLAN WAR SCORE UPDATE ---");
-            foreach (var score in packet.Scores)
-            {
-                ChatboxMsg.DebugMessage($"- {score.Guild} --- {score.Score} pts.");
-            }
+            ClanWarScoreboardController.UpdateScores(packet.Scores);
+            Interface.Interface.GameUi?.ClanWarScorePanel?.Show();
+        }
+
+        public void HandlePacket(IPacketSender packetSender, LeaveClanWarPacket packet)
+        {
+            Interface.Interface.GameUi?.ClanWarScorePanel?.Hide();
         }
     }
 }

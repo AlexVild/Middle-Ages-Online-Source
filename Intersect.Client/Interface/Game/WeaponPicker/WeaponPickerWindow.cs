@@ -2,15 +2,12 @@
 using Intersect.Client.General;
 using Intersect.Client.Interface.Components;
 using Intersect.Client.Interface.Game.Components;
-using Intersect.Client.Interface.Game.Inventory;
 using Intersect.Client.Items;
 using Intersect.Client.Networking;
 using Intersect.GameObjects.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Intersect.Client.Interface.Game.WeaponPicker
 {

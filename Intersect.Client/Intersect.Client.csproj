@@ -131,6 +131,8 @@
     <Compile Include="General\Timers.cs" />
     <Compile Include="General\UpgradeStation\UpgradeStationInterface.cs" />
     <Compile Include="Interface\Components\GwenComponents.cs" />
+    <Compile Include="Interface\Game\ClanWars\ClanWarScoreRowComponent.cs" />
+    <Compile Include="Interface\Game\GamePanel.cs" />
     <Compile Include="Interface\Game\AnnouncementWindow.cs" />
     <Compile Include="Interface\Game\BestiaryUi\BeastLootItem.cs" />
     <Compile Include="Interface\Game\BestiaryUi\BeastSpellItem.cs" />
@@ -160,6 +162,7 @@
     <Compile Include="Interface\Game\Character\Panels\CharacterWishlistPanel.cs" />
     <Compile Include="Interface\Game\Character\Panels\SkillsPanel.cs" />
     <Compile Include="Interface\Game\Character\SearchableCharacterWindowPanel.cs" />
+    <Compile Include="Interface\Game\ClanWars\ClanWarScoreboard.cs" />
     <Compile Include="Interface\Game\ComboText.cs" />
     <Compile Include="Interface\Game\Components\ChallengeImageFrameComponent.cs" />
     <Compile Include="Interface\Game\Components\ChallengeProgressBarComponent.cs" />

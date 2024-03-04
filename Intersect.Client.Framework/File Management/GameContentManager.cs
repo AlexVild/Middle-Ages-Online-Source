@@ -471,7 +471,7 @@ namespace Intersect.Client.Framework.File_Management
             return "";
         }
 
-        private string GetUiSize(int width)
+        public static string GetUiSize(int width)
         {
             if (width > 1366)
             {

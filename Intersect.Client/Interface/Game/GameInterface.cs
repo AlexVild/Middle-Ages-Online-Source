@@ -31,6 +31,7 @@ using Intersect.Client.Interface.Game.Enhancement;
 using Intersect.Client.Interface.Game.UpgradeStation;
 using Intersect.Client.Interface.Game.WeaponPicker;
 using Intersect.GameObjects.Timers;
+using Intersect.Client.Interface.Game.ClanWars;
 
 namespace Intersect.Client.Interface.Game
 {
@@ -821,6 +822,7 @@ namespace Intersect.Client.Interface.Game
         public EnhancementWindow EnhancementWindow;
         public UpgradeStationWindow UpgradeStationWindow;
         public WeaponPickerWindow WeaponPickerWindow;
+        public ClanWarScoreboard ClanWarScorePanel;
         private CharacterPanelType _CurrentCharPanel;
 
         public CharacterPanelType CurrentCharacterPanel
@@ -840,6 +842,7 @@ namespace Intersect.Client.Interface.Game
             EnhancementWindow = new EnhancementWindow(gameCanvas);
             UpgradeStationWindow = new UpgradeStationWindow(gameCanvas);
             WeaponPickerWindow = new WeaponPickerWindow(gameCanvas);
+            ClanWarScorePanel = new ClanWarScoreboard(gameCanvas);
         }
 
         private void _Draw()
@@ -856,6 +859,7 @@ namespace Intersect.Client.Interface.Game
             EnhancementWindow?.Update();
             UpgradeStationWindow?.Update();
             WeaponPickerWindow?.Update();
+            ClanWarScorePanel?.Update();
         }
 
         public PlayerHud GetHud()
