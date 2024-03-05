@@ -404,6 +404,7 @@ namespace Intersect.Client.Entities
             ScaledTo = pkt.ScaledTo;
             IsScaledDown = pkt.IsScaledDown;
             MapType = pkt.MapType;
+            ClanWarWinner = pkt.ClanWarWinner;
 
             if (pkt.Equipment != null)
             {
@@ -3498,5 +3499,12 @@ namespace Intersect.Client.Entities
         public int ScaledTo { get; set; }
 
         public MapType MapType { get; set; }
+        
+        public bool ClanWarWinner { get; set; }
+
+        protected override bool ShouldDrawFlair()
+        {
+            return ClanWarWinner;
+        }
     }
 }

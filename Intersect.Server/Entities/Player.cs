@@ -1071,6 +1071,7 @@ namespace Intersect.Server.Entities
             pkt.ScaledTo = ScaledTo;
 
             pkt.MapType = GetCurrentMapType();
+            pkt.ClanWarWinner = IsInGuild ? Guild.Id == ClanWarManager.LastWinningGuild : false;
 
             return pkt;
         }

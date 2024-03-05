@@ -62,6 +62,9 @@ namespace Intersect.Network.Packets.Server
 
         [Key(37)]
         public MapType MapType { get; set; }
+
+        [Key(38)]
+        public bool ClanWarWinner { get; set; }
     }
 
 }

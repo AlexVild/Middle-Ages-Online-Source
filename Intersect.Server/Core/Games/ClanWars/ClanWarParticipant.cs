@@ -15,11 +15,7 @@ namespace Intersect.Server.Core.Games.ClanWars
         [NotMapped]
         private object mLock = new object();
 
-        [ForeignKey(nameof(Guild))]
         public Guid GuildId { get; set; }
-
-        [JsonIgnore, NotMapped]
-        public virtual Guild Guild { get; private set; }
 
         [ForeignKey(nameof(ClanWar))]
         public Guid ClanWarId { get; set; }

@@ -455,6 +455,7 @@
     <Compile Include="Network\Packets\Client\WishlistRemovePacket.cs" />
     <Compile Include="Network\Packets\Server\ChallengeProgressPacket.cs" />
     <Compile Include="Network\Packets\Server\ClanWarScoreUpdatePacket.cs" />
+    <Compile Include="Network\Packets\Server\ClanWarWinnerPacket.cs" />
     <Compile Include="Network\Packets\Server\CloseDeconstructorPacket.cs" />
     <Compile Include="Network\Packets\Server\CombatNumberPacket.cs" />
     <Compile Include="Network\Packets\Server\CombatNumberPackets.cs" />

@@ -21,6 +21,8 @@ namespace Intersect.Server.Core.Games.ClanWars
         public static Guid CurrentWarId => CurrentWar?.Id ?? Guid.Empty;
 
         public static ClanWarInstance _currentWar { get; set; }
+
+        public static Guid LastWinningGuild { get; set; }
         
         private static long mNextTick { get; set; }
 
@@ -93,8 +95,12 @@ namespace Intersect.Server.Core.Games.ClanWars
                 CurrentWar = context.Clan_Wars
                     .Where(cw => cw.IsActive)
                     .Include(cw => cw.Participants)
-                    .ThenInclude(cp => cp.Guild)
                     .FirstOrDefault(cw => cw.IsActive);
+
+                LastWinningGuild = context.Clan_Wars
+                    .Where(cw => !cw.IsActive)
+                    .OrderByDescending(cw => cw.TimeEnded)
+                    .FirstOrDefault()?.WinningGuildId ?? Guid.Empty;
             }
         }
 
@@ -105,13 +111,14 @@ namespace Intersect.Server.Core.Games.ClanWars
                 var prevState = ClanWarActive;
                 using (var context = DbInterface.CreatePlayerContext(false))
                 {
-                    CurrentWar?.End();
+                    CurrentWar?.End(true);
+                    LastWinningGuild = CurrentWar?.WinningGuildId ?? Guid.Empty;
                     CurrentWar = null;
 
                     var activeClanWars = context.Clan_Wars.Where(cw => cw.IsActive).ToArray();
                     foreach (var cw in activeClanWars)
                     {
-                        cw.End();
+                        cw.End(false);
                     }
 
                     context.ChangeTracker.DetectChanges();

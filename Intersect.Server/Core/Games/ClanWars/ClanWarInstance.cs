@@ -32,6 +32,8 @@ namespace Intersect.Server.Core.Games.ClanWars
 
         public bool IsActive { get; set; }
 
+        public Guid WinningGuildId { get; set; }
+
         public List<ClanWarParticipant> Participants { get; set; } = new List<ClanWarParticipant>();
 
         [NotMapped, JsonIgnore]
@@ -78,6 +80,7 @@ namespace Intersect.Server.Core.Games.ClanWars
                     context.SaveChanges();
                 }
             }
+            BroadcastScores();
         }
 
         public void RemovePlayer(Player player, bool fromLogout = false) 
@@ -132,6 +135,8 @@ namespace Intersect.Server.Core.Games.ClanWars
                     context.SaveChanges();
                 }
             }
+
+            BroadcastScores();
         }
 
         public void Start()
@@ -140,13 +145,14 @@ namespace Intersect.Server.Core.Games.ClanWars
             TimeStarted = Timing.Global.MillisecondsUtc;
         }
 
-        public void End()
+        public void End(bool save)
         {
             IsActive = false;
             TimeEnded = Timing.Global.MillisecondsUtc;
 
             Payout();
 
+            var clanWarWinnerPacket = new ClanWarWinnerPacket(Guild.GetGuild(WinningGuildId)?.Name ?? string.Empty);
             // Kick players out of the clan war instance
             foreach (Player player in Players.ToArray())
             {
@@ -156,6 +162,12 @@ namespace Intersect.Server.Core.Games.ClanWars
                 }
 
                 player?.WarpToLastOverworldLocation(false);
+                player?.SendPacket(clanWarWinnerPacket);
+            }
+
+            if (save)
+            {
+                Save();
             }
 
             Players.Clear();
@@ -184,6 +196,8 @@ namespace Intersect.Server.Core.Games.ClanWars
                 return;
             }
 
+            WinningGuildId = winners?.Select(p => p.GuildId)?.FirstOrDefault() ?? Guid.Empty;
+
             var totalScore = participants.Sum(p => p.Score);
 
             var pot = Options.Instance.ClanWar.BaseValorReward + (MathHelper.Clamp(winners.Length - Options.Instance.ClanWar.MinimumParticipants, 0, int.MaxValue) * Options.Instance.ClanWar.BoostPerParticipant);
@@ -201,7 +215,7 @@ namespace Intersect.Server.Core.Games.ClanWars
 
                 if (guild?.TryDirectBankDeposit(valorCoins) ?? false)
                 {
-                    guild?.SendMessageToMembers($"Your clan earned {payout} Valor Coins from Clan Wars! Your clan came in {place.ToOrdinal()} place with a score of {participant.Score.ToString("N0")} points.");
+                    guild?.SendMessageToMembers($"Your clan earned {payout} Valor Coin(s) from Clan Wars! They have been deposited in your clan bank. Your clan came in {place.ToOrdinal()} place with a score of {participant.Score.ToString("N0")} points.");
                 } 
                 else
                 {

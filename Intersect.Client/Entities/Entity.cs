@@ -3582,11 +3582,20 @@ namespace Intersect.Client.Entities
             }
         }
 
-
-        protected virtual void DrawFlair(int x, int y)
+        protected virtual bool ShouldDrawFlair()
         {
             var npc = NpcBase.Get(NpcId);
             if (npc == default || !npc.IsChampion)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        protected virtual void DrawFlair(int x, int y)
+        {
+            if (!ShouldDrawFlair())
             {
                 return;
             }

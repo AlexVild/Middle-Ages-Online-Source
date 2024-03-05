@@ -3075,6 +3075,14 @@ namespace Intersect.Client.Networking
         {
             Interface.Interface.GameUi?.ClanWarScorePanel?.Hide();
         }
+
+        public void HandlePacket(IPacketSender packetSender, ClanWarWinnerPacket packet)
+        {
+            foreach (var en in Globals.Entities.Values.OfType<Player>())
+            {
+                en.ClanWarWinner = en.InGuild && en.Guild == packet.ClanWarWinner;
+            }
+        }
     }
 }
  
