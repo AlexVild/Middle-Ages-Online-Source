@@ -3043,6 +3043,11 @@ namespace Intersect.Client.Networking
                 territoryUpdate.Owner = packet.Owner;
             }
 
+            if (territoriesToUpdate.Length == 0)
+            {
+                ClanWarScoreboardController.MapUpdates.Add(new ClanWarMapUpdate(packet.MapId, packet.Owner));
+            }
+
             if (Interface.Interface.GameUi?.Map?.IsOpen ?? false)
             {
                 Interface.Interface.GameUi?.Map?.RegenerateMap();

@@ -1,4 +1,6 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace Intersect.Config
 {
@@ -16,6 +18,11 @@ namespace Intersect.Config
         /// Represents for how long after leaving a territory's bounds a player is considered attacking/defending that territory
         /// </summary>
         public long TerritoryLeaveTimer { get; set; } = 5000;
+
+        /// <summary>
+        /// A janky way to populate the clan war map before territories have been created on the server side.
+        /// </summary>
+        public List<Guid> MapsWithTerritories { get; set; } = new List<Guid>();
 
 
         [OnDeserialized]

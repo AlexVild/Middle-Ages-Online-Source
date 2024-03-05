@@ -1,10 +1,12 @@
 ﻿using Intersect.Client.Core;
 using Intersect.Client.Core.Controls;
+using Intersect.Client.Entities;
 using Intersect.Client.Framework.GenericClasses;
 using Intersect.Client.Framework.Graphics;
 using Intersect.Client.General;
 using Intersect.Client.Interface.Game.ClanWars;
 using Intersect.Client.Utilities;
+using Intersect.GameObjects.Maps;
 using Intersect.Utilities;
 using System;
 using System.Linq;
@@ -501,16 +503,13 @@ namespace Intersect.Client.Interface.Game.MapScreen
                             var territory = ClanWarScoreboardController.MapUpdates.Find(m => m.MapId == mapId);
                             if (territory != default)
                             {
-                                var src = GetFlagSrc(territory.Owner);
-                                var centerX = locX + ((Options.MapWidth * Options.TileWidth) / 32);
-                                var centerY = locY + ((Options.MapHeight * Options.TileHeight) / 32);
-                                centerX -= (int)src.Width / 2;
-                                centerY -= (int)src.Height / 2;
-                                Graphics.DrawGameTexture(FLAG_TEXTURE,
-                                    src,
-                                    new FloatRect(centerX, centerY, src.Width, src.Height),
-                                    Color.White,
-                                    renderTarget: CurrentRenderTexture);
+                                DrawTerritoryMarker(territory.Owner, locX, locY);
+                            }
+                            // territory info from server not there? Try checking the map itself in case the territory hasn't been created
+                            // on the servmer yet, but still needs displayed as neutral
+                            else if (Options.Instance.ClanWar.MapsWithTerritories.Contains(mapId))
+                            {
+                                DrawTerritoryMarker(string.Empty, locX, locY);
                             }
                         }
 
@@ -539,6 +538,20 @@ namespace Intersect.Client.Interface.Game.MapScreen
             MaxY = maxY;
 
             NeedsGenerating = false;
+        }
+
+        private void DrawTerritoryMarker(string owner, int x, int y)
+        {
+            var src = GetFlagSrc(owner);
+            var centerX = x + ((Options.MapWidth * Options.TileWidth) / 32);
+            var centerY = y + ((Options.MapHeight * Options.TileHeight) / 32);
+            centerX -= (int)src.Width / 2;
+            centerY -= (int)src.Height / 2;
+            Graphics.DrawGameTexture(FLAG_TEXTURE,
+                src,
+                new FloatRect(centerX, centerY, src.Width, src.Height),
+                Color.White,
+                renderTarget: CurrentRenderTexture);
         }
 
         private FloatRect GetFlagSrc(string owner)
