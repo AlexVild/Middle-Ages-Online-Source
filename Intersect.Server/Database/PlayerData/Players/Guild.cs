@@ -802,5 +802,20 @@ namespace Intersect.Server.Database.PlayerData.Players
                 return null;
             }
         }
+
+        public bool TryDirectBankDeposit(Item item)
+        {
+            var bankItems = ((IEnumerable<Item>)Bank).ToList();
+            var bankInterface = new BankInterface(null, bankItems, Lock, this, BankSlotsCount);
+            return bankInterface.TryDirectGuildDeposit(item, true);
+        }
+
+        public void SendMessageToMembers(string message)
+        {
+            foreach (var member in FindOnlineMembers())
+            {
+                PacketSender.SendChatMsg(member, message, ChatMessageType.Guild);
+            }
+        }
     }
 }

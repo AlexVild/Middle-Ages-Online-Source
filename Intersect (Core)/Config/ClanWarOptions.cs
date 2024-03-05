@@ -19,6 +19,18 @@ namespace Intersect.Config
         /// </summary>
         public long TerritoryLeaveTimer { get; set; } = 5000;
 
+        public Guid ValorTokenItemId { get; set; }
+
+        public int BaseValorReward { get; set; } = 5;
+
+        public int MinimumValorReward { get; set; } = 1;
+
+        public int MinimumParticipants { get; set; } = 2;
+
+        public int BoostPerParticipant { get; set; } = 2;
+
+        public int MinimumScore { get; set; } = 200;
+
         /// <summary>
         /// A janky way to populate the clan war map before territories have been created on the server side.
         /// </summary>

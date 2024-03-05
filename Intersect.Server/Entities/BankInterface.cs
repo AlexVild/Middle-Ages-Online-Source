@@ -177,7 +177,7 @@ namespace Intersect.Server.Entities
 
             for (var i = 0; i < mMaxSlots; i++)
             {
-                var item = mBank[i];
+                var item = mBank.ElementAtOrDefault(i);
                 if (item?.ItemId != itemId)
                 {
                     continue;
@@ -534,7 +534,7 @@ namespace Intersect.Server.Entities
 
             }
 
-            if (mPlayer?.ItemsDiscovered.Add(new ItemDiscoveryInstance(mPlayer.Id, item.ItemId)) ?? false)
+            if (mPlayer != null && (mPlayer?.ItemsDiscovered.Add(new ItemDiscoveryInstance(mPlayer.Id, item.ItemId)) ?? false))
             {
                 Logging.Log.Debug($"Added item to {mPlayer.Name}'s discovered list");
             }
@@ -882,6 +882,28 @@ namespace Intersect.Server.Entities
             }
 
             return bankVal;
+        }
+
+        public bool TryDirectGuildDeposit(Item item, bool sendUpdate = true)
+        {
+            if (item == null)
+            {
+                return true;
+            }
+            var itemBase = item.Descriptor;
+
+            if (itemBase == null || item.ItemId == Guid.Empty || !itemBase.CanGuildBank || mGuild == null)
+            {
+                return false;
+            }
+
+            if (!CanStoreItem(item))
+            {
+                return false;
+            }
+
+            PutItem(item, sendUpdate);
+            return true;
         }
     }
 }

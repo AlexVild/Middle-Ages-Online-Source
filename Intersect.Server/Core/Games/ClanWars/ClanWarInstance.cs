@@ -1,4 +1,5 @@
-﻿using Intersect.GameObjects;
+﻿using Intersect.Extensions;
+using Intersect.GameObjects;
 using Intersect.Network.Packets.Server;
 using Intersect.Server.Database;
 using Intersect.Server.Database.PlayerData.Players;
@@ -144,6 +145,9 @@ namespace Intersect.Server.Core.Games.ClanWars
             IsActive = false;
             TimeEnded = Timing.Global.MillisecondsUtc;
 
+            Payout();
+
+            // Kick players out of the clan war instance
             foreach (Player player in Players.ToArray())
             {
                 if (!player.Online || player.InstanceType != Enums.MapInstanceType.ClanWar)
@@ -155,6 +159,62 @@ namespace Intersect.Server.Core.Games.ClanWars
             }
 
             Players.Clear();
+        }
+
+        private void Payout()
+        {
+            // Dict of Guilds -> their Valor Coin payout
+            Dictionary<Guid, int> payouts = new Dictionary<Guid, int>();
+
+            var participants = Participants.ToArray();
+
+            var winners = participants
+                .OrderByDescending(p => p.Score)
+                .TakeWhile(score => score.Score >= Options.Instance.ClanWar.MinimumScore)
+                .ToArray();
+            var losers = participants.Except(winners);
+
+            if (winners.Length < Options.Instance.ClanWar.MinimumParticipants)
+            {
+                foreach (var participant in participants)
+                {
+                    var guild = Guild.LoadGuild(participant.GuildId);
+                    guild?.SendMessageToMembers($"There were not enough clans in the Clan War to earn Valor Coins. At least {Options.Instance.ClanWar.MinimumParticipants} clans must score a minimum of {Options.Instance.ClanWar.MinimumScore} points for a Clan War to be valid.");
+                }
+                return;
+            }
+
+            var totalScore = participants.Sum(p => p.Score);
+
+            var pot = Options.Instance.ClanWar.BaseValorReward + (MathHelper.Clamp(winners.Length - Options.Instance.ClanWar.MinimumParticipants, 0, int.MaxValue) * Options.Instance.ClanWar.BoostPerParticipant);
+
+            var place = 1;
+            foreach (var participant in winners)
+            {
+                var proportion = participant.Score / (float)totalScore;
+
+                var payout = (int)MathHelper.Clamp(Math.Floor(pot * proportion), Options.Instance.ClanWar.MinimumValorReward, pot);
+
+                var valorCoins = new Item(Options.Instance.ClanWar.ValorTokenItemId, payout);
+
+                var guild = Guild.LoadGuild(participant.GuildId);
+
+                if (guild?.TryDirectBankDeposit(valorCoins) ?? false)
+                {
+                    guild?.SendMessageToMembers($"Your clan earned {payout} Valor Coins from Clan Wars! Your clan came in {place.ToOrdinal()} place with a score of {participant.Score.ToString("N0")} points.");
+                } 
+                else
+                {
+                    guild?.SendMessageToMembers($"Your clan earned {payout} Valor Coins from Clan Wars, but does not have space in its Clan Bank! Your clan came in {place.ToOrdinal()} place with a score of {participant.Score.ToString("N0")} points.");
+                }
+                place++;
+            }
+
+            foreach (var participant in losers)
+            {
+                var guild = Guild.LoadGuild(participant.GuildId);
+                guild?.SendMessageToMembers($"Your clan did not score at least {Options.Instance.ClanWar.MinimumScore} points in the Clan War, and thus did not earn any Valor Coins.");
+            }
         }
 
         public void RemoveFromDb()
