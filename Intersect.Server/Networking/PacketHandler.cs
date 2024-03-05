@@ -1418,7 +1418,7 @@ namespace Intersect.Server.Networking
                 PacketSender.SendDestroyConditionPacket(player, player.CanDestroyItem(packet.Slot), packet.Slot);
             } else
             {
-                player?.TryDestroyItem(packet.Slot, packet.Quantity);
+                player?.DestroyItem(packet.Slot, packet.Quantity);
             }
         }
 

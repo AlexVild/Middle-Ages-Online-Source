@@ -2438,7 +2438,7 @@ namespace Intersect.Server.Entities
                 return;
             }
             
-            if (Map?.ZoneType == MapZones.Arena)
+            if (Map?.ZoneType == MapZones.Arena && !PlayerDead)
             {
                 ArenaRespawn(instanceType: InstanceType, fromLogin: true);
                 return;
@@ -3853,7 +3853,7 @@ namespace Intersect.Server.Entities
             return Conditions.MeetsConditionLists(Items[slot].Descriptor.DestroyRequirements, this, null);
         }
 
-        public void TryDestroyItem(int slot, int quantity)
+        public void DestroyItem(int slot, int quantity)
         {
             TryTakeItem(Items[slot], quantity);
         }
@@ -5235,7 +5235,7 @@ namespace Intersect.Server.Entities
                 return;
             }
 
-            if (!itemBase.CanBag)
+            if (!itemBase.CanBag || itemBase.DestroyOnInstanceChange)
             {
                 PacketSender.SendChatMsg(this, Strings.Items.nobag, ChatMessageType.Inventory, CustomColors.Items.Bound);
                 return;
