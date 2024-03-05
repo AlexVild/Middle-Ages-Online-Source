@@ -20,6 +20,8 @@ namespace Intersect.Server.Core.Games.ClanWars
 {
     public class ClanWarInstance
     {
+        private object mLock = new object();
+
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; private set; }
 
@@ -62,15 +64,18 @@ namespace Intersect.Server.Core.Games.ClanWars
                 return;
             }
 
-            using (var context = DbInterface.CreatePlayerContext(false))
+            lock (mLock)
             {
-                var participant = new ClanWarParticipant(Id, guildId);
-                Participants.Add(participant);
+                using (var context = DbInterface.CreatePlayerContext(false))
+                {
+                    var participant = new ClanWarParticipant(Id, guildId);
+                    Participants.Add(participant);
 
-                context.Clan_War_Participants.Add(participant);
+                    context.Clan_War_Participants.Add(participant);
 
-                context.ChangeTracker.DetectChanges();
-                context.SaveChanges();
+                    context.ChangeTracker.DetectChanges();
+                    context.SaveChanges();
+                }
             }
         }
 
@@ -92,36 +97,39 @@ namespace Intersect.Server.Core.Games.ClanWars
                 return;
             }
 
-            using (var context = DbInterface.CreatePlayerContext(readOnly: false))
+            lock (mLock)
             {
-                var participants = context.Clan_War_Participants.Where(p => p.ClanWarId == Id && p.GuildId == guildId);
-                context.Clan_War_Participants.RemoveRange(participants);
-                Participants.RemoveAll(p => p.GuildId == guildId);
-
-                var ownedTerritories = context.Territories
-                    .Where(t => t.ClanWarId == Id && t.GuildId == guildId)
-                    .ToArray();
-
-                var now = Timing.Global.MillisecondsUtc;
-
-                // Remove territories from this guild's control
-                foreach (var territory in ownedTerritories)
+                using (var context = DbInterface.CreatePlayerContext(readOnly: false))
                 {
-                    if (!MapController.TryGetInstanceFromMap(territory.MapId, territory.MapInstanceId, out var mapInstance))
+                    var participants = context.Clan_War_Participants.Where(p => p.ClanWarId == Id && p.GuildId == guildId);
+                    context.Clan_War_Participants.RemoveRange(participants);
+                    Participants.RemoveAll(p => p.GuildId == guildId);
+
+                    var ownedTerritories = context.Territories
+                        .Where(t => t.ClanWarId == Id && t.GuildId == guildId)
+                        .ToArray();
+
+                    var now = Timing.Global.MillisecondsUtc;
+
+                    // Remove territories from this guild's control
+                    foreach (var territory in ownedTerritories)
                     {
-                        continue;
+                        if (!MapController.TryGetInstanceFromMap(territory.MapId, territory.MapInstanceId, out var mapInstance))
+                        {
+                            continue;
+                        }
+
+                        if (!mapInstance.ActiveTerritories.TryGetValue(territory.TerritoryId, out var activeTerritory))
+                        {
+                            continue;
+                        }
+
+                        activeTerritory?.Instance?.TeritoryLost(now);
                     }
 
-                    if (!mapInstance.ActiveTerritories.TryGetValue(territory.TerritoryId, out var activeTerritory))
-                    {
-                        continue;
-                    }
-
-                    activeTerritory?.Instance?.TeritoryLost(now);
+                    context.ChangeTracker.DetectChanges();
+                    context.SaveChanges();
                 }
-
-                context.ChangeTracker.DetectChanges();
-                context.SaveChanges();
             }
         }
 
@@ -171,7 +179,6 @@ namespace Intersect.Server.Core.Games.ClanWars
             }
 
             participant.Score += scoreDelta;
-            participant.Save();
         }
 
         public void Update()
@@ -182,6 +189,7 @@ namespace Intersect.Server.Core.Games.ClanWars
                 return;
             }
 
+            var change = false;
             using (var context = DbInterface.CreatePlayerContext()) 
             {
                 var scoringGuilds = context.Territories
@@ -210,12 +218,18 @@ namespace Intersect.Server.Core.Games.ClanWars
                         }
 
                         score += territory.PointsPerTick;
+                        change = true;
                     }
                     ChangeGuildScore(scoringGuild.Key, score);
                 }
             }
 
             BroadcastScores();
+
+            if (change)
+            {
+                Save();
+            }
         }
 
         public void BroadcastScores()
@@ -251,6 +265,24 @@ namespace Intersect.Server.Core.Games.ClanWars
         public void SendScoresToPlayer(Player player)
         {
             player?.SendPacket(new ClanWarScoreUpdatePacket(mScores, GetMapUpdates(player.MapInstanceId)));
+        }
+
+        public void SaveToContext()
+        {
+            lock (mLock)
+            {
+                using (var context = DbInterface.CreatePlayerContext(false))
+                {
+                    context.Clan_Wars.Update(this);
+                    context.ChangeTracker.DetectChanges();
+                    context.SaveChanges();
+                }
+            }
+        }
+
+        public void Save()
+        {
+            DbInterface.Pool.QueueWorkItem(SaveToContext);
         }
     }
 }

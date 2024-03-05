@@ -196,7 +196,7 @@ namespace Intersect.Client.MonoGame.Input
                 if ((InputHandler.HoveredControl == null 
                     || !InputHandler.HoveredControl.IsVisible 
                     || InputHandler.HoveredControl.IsBaseCanvas)
-                    && !Globals.Me.IsBusy())
+                    && (Globals.Me != null && !Globals.Me.IsBusy()))
                 {
                     if (deltaV < 0)
                     {

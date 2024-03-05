@@ -52,6 +52,12 @@ namespace Intersect.Client.Interface.Game.ClanWars
             SetColor(data.Guild);
         }
 
+        public void ClearRow()
+        {
+            ClanName.Text = string.Empty;
+            Score.Text = string.Empty;
+        }
+
         private void SetColor(string guildName)
         {
             Color textColor = Globals.Me?.Guild == guildName ? CustomColors.General.GeneralPrimary : CustomColors.General.GeneralMuted;

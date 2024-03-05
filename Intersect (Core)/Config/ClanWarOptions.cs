@@ -12,6 +12,11 @@ namespace Intersect.Config
 
         public long ScoreTickMs { get; set; } = 10000;
 
+        /// <summary>
+        /// Represents for how long after leaving a territory's bounds a player is considered attacking/defending that territory
+        /// </summary>
+        public long TerritoryLeaveTimer { get; set; } = 5000;
+
 
         [OnDeserialized]
         internal void OnDeserializedMethod(StreamingContext context)

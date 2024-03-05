@@ -14,6 +14,8 @@ namespace Intersect.Server.Core.Games.ClanWars
 {
     public static class ClanWarManager
     {
+        private static object mLock = new object();
+
         public static bool ClanWarActive => CurrentWar != null;
 
         public static Guid CurrentWarId => CurrentWar?.Id ?? Guid.Empty;
@@ -48,37 +50,40 @@ namespace Intersect.Server.Core.Games.ClanWars
 
         public static void StartClanWar()
         {
-            var prevState = ClanWarActive;
-            using (var context = DbInterface.CreatePlayerContext(false))
+            lock (mLock)
             {
-                var activeWar = context.Clan_Wars.FirstOrDefault(cw => cw.IsActive);
-                if (activeWar != default)
+                var prevState = ClanWarActive;
+                using (var context = DbInterface.CreatePlayerContext(false))
                 {
-                    if (CurrentWar == null)
+                    var activeWar = context.Clan_Wars.FirstOrDefault(cw => cw.IsActive);
+                    if (activeWar != default)
                     {
-                        CurrentWar = activeWar;
+                        if (CurrentWar == null)
+                        {
+                            CurrentWar = activeWar;
+                        }
+                        Console.WriteLine("A clan war is already active in the DB");
+                        return;
                     }
-                    Console.WriteLine("A clan war is already active in the DB");
-                    return;
+
+                    var clanWar = new ClanWarInstance();
+                    clanWar.Start();
+                    context.Clan_Wars.Add(clanWar);
+
+                    context.ChangeTracker.DetectChanges();
+                    context.SaveChanges();
+
+                    CurrentWar = clanWar;
                 }
 
-                var clanWar = new ClanWarInstance();
-                clanWar.Start();
-                context.Clan_Wars.Add(clanWar);
+                if (prevState != ClanWarActive)
+                {
+                    Player.StartCommonEventsWithTriggerForAll(CommonEventTrigger.ClanWarStarted);
+                }
+                Console.WriteLine(Strings.Commandoutput.guildwarsenabled);
 
-                context.ChangeTracker.DetectChanges();
-                context.SaveChanges();
-
-                CurrentWar = clanWar;
+                mNextTick = Timing.Global.MillisecondsUtc + Options.Instance.ClanWar.ScoreTickMs;
             }
-
-            if (prevState != ClanWarActive)
-            {
-                Player.StartCommonEventsWithTriggerForAll(CommonEventTrigger.ClanWarStarted);
-            }
-            Console.WriteLine(Strings.Commandoutput.guildwarsenabled);
-
-            mNextTick = Timing.Global.MillisecondsUtc + Options.Instance.ClanWar.ScoreTickMs;
         }
 
         public static void InitializeManager()
@@ -95,27 +100,30 @@ namespace Intersect.Server.Core.Games.ClanWars
 
         public static void EndAllClanWars()
         {
-            var prevState = ClanWarActive;
-            using (var context = DbInterface.CreatePlayerContext(false))
+            lock (mLock)
             {
-                CurrentWar?.End();
-                CurrentWar = null;
-                
-                var activeClanWars = context.Clan_Wars.Where(cw => cw.IsActive).ToArray();
-                foreach (var cw in activeClanWars)
+                var prevState = ClanWarActive;
+                using (var context = DbInterface.CreatePlayerContext(false))
                 {
-                    cw.End();
+                    CurrentWar?.End();
+                    CurrentWar = null;
+
+                    var activeClanWars = context.Clan_Wars.Where(cw => cw.IsActive).ToArray();
+                    foreach (var cw in activeClanWars)
+                    {
+                        cw.End();
+                    }
+
+                    context.ChangeTracker.DetectChanges();
+                    context.SaveChanges();
                 }
 
-                context.ChangeTracker.DetectChanges();
-                context.SaveChanges();
+                if (prevState != ClanWarActive)
+                {
+                    Player.StartCommonEventsWithTriggerForAll(CommonEventTrigger.ClanWarEnded);
+                }
+                Console.WriteLine(Strings.Commandoutput.guildwarsdisabled);
             }
-
-            if (prevState != ClanWarActive)
-            {
-                Player.StartCommonEventsWithTriggerForAll(CommonEventTrigger.ClanWarEnded);
-            }
-            Console.WriteLine(Strings.Commandoutput.guildwarsdisabled);
         }
 
         public static void BroadcastTerritoryUpdate(TerritoryInstance territory)
@@ -143,7 +151,37 @@ namespace Intersect.Server.Core.Games.ClanWars
                 return;
             }
 
-            CurrentWar?.RemoveParticipant(guildId);
+            lock (mLock)
+            {
+                CurrentWar?.RemoveParticipant(guildId);
+            }
+        }
+
+        public static bool IsInWar(Player player)
+        {
+            if (!ClanWarActive || player == null) 
+            { 
+                return false;
+            }
+
+            lock (mLock)
+            {
+                return CurrentWar.Players.Contains(player);
+            }
+        }
+
+        public static void ChangePoints(Guid guildId, int points)
+        {
+            if (!ClanWarActive || points == 0 || guildId == Guid.Empty)
+            {
+                return;
+            }
+
+            lock (mLock)
+            {
+                CurrentWar?.ChangeGuildScore(guildId, points);
+                CurrentWar?.BroadcastScores();
+            }
         }
     }
 

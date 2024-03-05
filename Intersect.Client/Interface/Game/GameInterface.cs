@@ -833,6 +833,7 @@ namespace Intersect.Client.Interface.Game
 
         private void _InitGameGui(Canvas gameCanvas)
         {
+            ClanWarScorePanel = new ClanWarScoreboard(gameCanvas);
             mHUD = new PlayerHud();
             mPartyHUD = new PartyHud();
             LeaderboardWindow = new LeaderboardWindow(gameCanvas);
@@ -842,12 +843,12 @@ namespace Intersect.Client.Interface.Game
             EnhancementWindow = new EnhancementWindow(gameCanvas);
             UpgradeStationWindow = new UpgradeStationWindow(gameCanvas);
             WeaponPickerWindow = new WeaponPickerWindow(gameCanvas);
-            ClanWarScorePanel = new ClanWarScoreboard(gameCanvas);
         }
 
         private void _Draw()
         {
             mComboText?.Update();
+            ClanWarScorePanel?.Update();
             mHUD?.Draw();
             ExpToastService.Draw();
             mPartyHUD?.Draw();
@@ -859,7 +860,6 @@ namespace Intersect.Client.Interface.Game
             EnhancementWindow?.Update();
             UpgradeStationWindow?.Update();
             WeaponPickerWindow?.Update();
-            ClanWarScorePanel?.Update();
         }
 
         public PlayerHud GetHud()

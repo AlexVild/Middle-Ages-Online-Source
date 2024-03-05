@@ -1183,6 +1183,7 @@ namespace Intersect.Server.Entities
                 {
                     playerKiller.AddDeferredEvent(CommonEventTrigger.PVPKill, "", Name);
                     AddDeferredEvent(CommonEventTrigger.PVPDeath, "", killer?.Name);
+                    playerKiller.ClanWarKill(this);
                 }
             }
 
@@ -1280,6 +1281,30 @@ namespace Intersect.Server.Entities
             }
             PacketSender.SendEntityDie(this);
             PacketSender.SendInventory(this);
+        }
+
+        public bool InCurrentClanWar => InstanceType == MapInstanceType.ClanWar 
+            && ClanWarManager.CurrentWarId == MapInstanceId
+            && ClanWarManager.IsInWar(this);
+
+        public void ClanWarKill(Player slainPlayer)
+        {
+            lock (TerritoryLock)
+            {
+                if (!InCurrentClanWar || !IsInGuild || slainPlayer == null)
+                {
+                    return;
+                }
+
+                if (DefendingTerritory && LastTerritory != null)
+                {
+                    ClanWarManager.ChangePoints(Guild?.Id ?? Guid.Empty, LastTerritory?.Territory?.PointsPerDefend ?? 0);
+                }
+                else if (slainPlayer.DefendingTerritory && slainPlayer.LastTerritory != null)
+                {
+                    ClanWarManager.ChangePoints(Guild?.Id ?? Guid.Empty, slainPlayer.LastTerritory?.Territory?.PointsPerAttack ?? 0);
+                }
+            }
         }
 
         /// <summary>
@@ -8208,37 +8233,6 @@ namespace Intersect.Server.Entities
             }
         }
 
-        [NotMapped, JsonIgnore]
-        private TerritoryInstance CurrentTerritory { get; set; }
-
-        private void UpdateTerritoryStatus()
-        {
-            if (Dead || !IsInGuild || InstanceType != MapInstanceType.ClanWar || !MapController.TryGetInstanceFromMap(MapId, MapInstanceId, out var instance))
-            {
-                return;
-            }
-
-            if (instance.TerritoryTiles.TryGetValue(new BytePoint((byte)X, (byte)Y), out var territoryInstance))
-            {
-                JoinTerritory(territoryInstance);
-            }
-            else
-            {
-                LeaveTerritory();
-            }
-        }
-
-        private void JoinTerritory(TerritoryInstance territory)
-        {
-            CurrentTerritory = territory;
-            CurrentTerritory.AddPlayer(this);
-        }
-
-        public void LeaveTerritory()
-        {
-            CurrentTerritory?.RemovePlayer(this);
-        }
-
         public void AutoPickupItem(Guid itemId, bool onlyIfInInventory)
         {
             if (onlyIfInInventory && CountItems(itemId, true, false) <= 0)
@@ -9959,6 +9953,56 @@ namespace Intersect.Server.Entities
         {
             LeaveTerritory();
             ClanWarManager.CurrentWar?.RemovePlayer(this, fromLogout);
+        }
+
+        [NotMapped, JsonIgnore]
+        public TerritoryInstance LastTerritory { get; set; }
+
+        [NotMapped, JsonIgnore]
+        private long mTerritoryLeaveTimer { get; set; }
+
+        private void UpdateTerritoryStatus()
+        {
+            if (Dead || !IsInGuild || InstanceType != MapInstanceType.ClanWar || !MapController.TryGetInstanceFromMap(MapId, MapInstanceId, out var instance))
+            {
+                return;
+            }
+
+            if (instance.TerritoryTiles.TryGetValue(new BytePoint((byte)X, (byte)Y), out var territoryInstance))
+            {
+                JoinTerritory(territoryInstance);
+            }
+            else
+            {
+                LeaveTerritory();
+            }
+        }
+
+        [NotMapped, JsonIgnore]
+        public object TerritoryLock = new object();
+
+        public bool DefendingTerritory => IsInGuild
+            && LastTerritory != null 
+            && (mTerritoryLeaveTimer < 0 || mTerritoryLeaveTimer > Timing.Global.MillisecondsUtc)
+            && LastTerritory.GuildId == Guild?.Id;
+
+        private void JoinTerritory(TerritoryInstance territory)
+        {
+            lock (TerritoryLock)
+            {
+                LastTerritory = territory;
+                LastTerritory.AddPlayer(this);
+                mTerritoryLeaveTimer = -1; // Player is in a territory. This is used for determining attacking/defending points
+            }
+        }
+
+        public void LeaveTerritory()
+        {
+            lock (TerritoryLock)
+            {
+                LastTerritory?.RemovePlayer(this);
+                mTerritoryLeaveTimer = Timing.Global.MillisecondsUtc + Options.Instance.ClanWar.TerritoryLeaveTimer;
+            }
         }
     }
 }

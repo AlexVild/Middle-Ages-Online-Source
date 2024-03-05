@@ -100,6 +100,7 @@ namespace Intersect.Client.Interface.Game.ClanWars
             {
                 if (idx >= scoresToDisplay?.Length)
                 {
+                    row.ClearRow();
                     continue;
                 }
                 row.UpdateRow(scoresToDisplay.ElementAtOrDefault(idx), first + idx + 1);
@@ -108,7 +109,7 @@ namespace Intersect.Client.Interface.Game.ClanWars
 
             if (scores.Count > 0)
             {
-                TooltipPanel.SetToolTipText($"Current leader: {scores[0].Guild} with {scores[0].Score} pts.");
+                TooltipPanel.SetToolTipText($"Current leader: {scores[0].Guild} with {scores[0].Score.ToString("N0")} pts.");
             }
         }
     }

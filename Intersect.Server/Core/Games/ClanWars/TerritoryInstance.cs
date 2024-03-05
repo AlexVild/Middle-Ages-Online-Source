@@ -36,7 +36,22 @@ namespace Intersect.Server.Core.Games.ClanWars
         public Guid TerritoryId { get; private set; }
 
         [NotMapped, JsonIgnore]
-        public TerritoryDescriptor Territory { get; set; }
+        private TerritoryDescriptor _territory { get; set; }
+
+        [NotMapped, JsonIgnore]
+        public TerritoryDescriptor Territory
+        {
+            get
+            {
+                if (_territory == null)
+                {
+                    _territory = TerritoryDescriptor.Get(TerritoryId);
+                    return _territory;
+                }
+
+                return _territory;
+            }
+        }
 
         [NotMapped]
         public long Health;
@@ -81,7 +96,6 @@ namespace Intersect.Server.Core.Games.ClanWars
                 throw new InvalidOperationException($"Tried to update territory with invalid descriptor: Descriptor ID: ${TerritoryId}");
             }
 
-            Territory = territory;
             Players.Clear();
             CachePlayerLookups();
 
@@ -205,6 +219,7 @@ namespace Intersect.Server.Core.Games.ClanWars
             GuildId = guildId;
             Health = Territory.CaptureMs;
             ChangeState(TerritoryState.Owned, currentTime);
+            ClanWarManager.ChangePoints(guildId, Territory.PointsPerCapture);
         }
 
         public void TeritoryLost(long currentTime)
