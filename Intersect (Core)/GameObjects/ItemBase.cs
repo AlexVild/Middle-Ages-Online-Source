@@ -657,6 +657,8 @@ namespace Intersect.GameObjects
         public int SkillPoints { get; set; } = 0;
 
         public bool MeleeConsumable { get; set; }
+        
+        public bool ClanWarConsumable { get; set; }
 
         public Guid ProcSpellId { get; set; }
 

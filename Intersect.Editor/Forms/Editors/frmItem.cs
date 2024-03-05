@@ -641,6 +641,7 @@ namespace Intersect.Editor.Forms.Editors
                 RefreshUpgradeList(false);
 
                 chkMeleeConsumable.Checked = mEditorItem.MeleeConsumable;
+                chkOnlyClanWar.Checked = mEditorItem.ClanWarConsumable;
 
                 cmbStudyEnhancement.SelectedIndex = EnhancementDescriptor.ListIndex(mEditorItem.StudyEnhancement) + 1;
                 nudStudyChance.Value = (decimal)mEditorItem.StudyChance;
@@ -2454,6 +2455,11 @@ namespace Intersect.Editor.Forms.Editors
         private void nudProcChance_ValueChanged(object sender, EventArgs e)
         {
             mEditorItem.ProcChance = (float)nudProcChance.Value;
+        }
+
+        private void chkOnlyClanWar_CheckedChanged(object sender, EventArgs e)
+        {
+            mEditorItem.ClanWarConsumable = chkOnlyClanWar.Checked;
         }
     }
 }

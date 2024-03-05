@@ -3652,6 +3652,18 @@ namespace Intersect.Server.Entities
                             return;
                         }
 
+                        if (itemBase.ClanWarConsumable && !InCurrentClanWar)
+                        {
+                            PacketSender.SendChatMsg(this, "You can't use this item while not in a Clan War!", ChatMessageType.Notice, sound: true);
+                            return;
+                        }
+
+                        if (!itemBase.ClanWarConsumable && InCurrentClanWar)
+                        {
+                            PacketSender.SendChatMsg(this, "You can't use this item while in a Clan War!", ChatMessageType.Notice, sound: true);
+                            return;
+                        }
+
                         switch (itemBase.Consumable.Type)
                         {
                             case ConsumableType.Health:
@@ -3757,6 +3769,13 @@ namespace Intersect.Server.Entities
                         break;
                     case ItemTypes.Event:
                         var evt = EventBase.Get(itemBase.EventId);
+                        
+                        if (InDuel)
+                        {
+                            PacketSender.SendChatMsg(this, "You can't use this item while in a Duel!", ChatMessageType.Notice, sound: true);
+                            return;
+                        }
+
                         if (evt == null || !UnsafeStartCommonEvent(evt))
                         {
                             return;
