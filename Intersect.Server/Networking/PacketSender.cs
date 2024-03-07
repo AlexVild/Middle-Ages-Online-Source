@@ -2793,6 +2793,10 @@ namespace Intersect.Server.Networking
 
         public static void SendToast(Player player, string message)
         {
+            if (!player.Online)
+            {
+                return;
+            }
             player?.SendPacket(new ToastPacket(message));
         }
 

@@ -2418,6 +2418,13 @@ namespace Intersect.Server.Entities
                 VoidCurrentDungeon();
             }
 
+            // We do this so I can send a cute lil' "Clan War Complete" message to a player once they've warped out of the Clan War
+            if (ClanWarComplete != default)
+            {
+                SendPacket(ClanWarComplete);
+                ClanWarComplete = null;
+            }
+
             UpdateTerritoryStatus();
         }
 
@@ -2474,7 +2481,7 @@ namespace Intersect.Server.Entities
         /// instances in a variety of situations.
         /// </summary>
         /// <param name="fromLogin">Whether or not we're coming to this method via the player login/join game flow</param>
-        public void WarpToLastOverworldLocation(bool fromLogin)
+        public void WarpToLastOverworldLocation(bool fromLogin, bool fade = false)
         {
             if (!fromLogin 
                 && InstanceProcessor.TryGetInstanceController(MapInstanceId, out var instanceController)
@@ -2484,7 +2491,7 @@ namespace Intersect.Server.Entities
             }
 
             Warp(
-                LastOverworldMapId, (byte)LastOverworldX, (byte)LastOverworldY, (byte)Dir, false, (byte)Z, false, false, MapInstanceType.Overworld, fromLogin
+                LastOverworldMapId, (byte)LastOverworldX, (byte)LastOverworldY, (byte)Dir, false, (byte)Z, false, fade, MapInstanceType.Overworld, fromLogin
             );
             // If the player was forcibly warped, which they would have been here, we need to kick them out of any vehicle they were in in the instance
             LeaveVehicle();
@@ -10024,5 +10031,8 @@ namespace Intersect.Server.Entities
                 mTerritoryLeaveTimer = Timing.Global.MillisecondsUtc + Options.Instance.ClanWar.TerritoryLeaveTimer;
             }
         }
+
+        [NotMapped, JsonIgnore]
+        public ClanWarCompletePacket ClanWarComplete { get; set; }
     }
 }

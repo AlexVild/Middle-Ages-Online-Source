@@ -1,9 +1,11 @@
-﻿using Intersect.GameObjects;
+﻿using Intersect.Config;
+using Intersect.GameObjects;
 using Intersect.GameObjects.Events;
 using Intersect.Network.Packets.Server;
 using Intersect.Server.Database;
 using Intersect.Server.Database.PlayerData.Players;
 using Intersect.Server.Entities;
+using Intersect.Server.Networking;
 using Intersect.Utilities;
 using System;
 using System.Collections.Generic;
@@ -216,17 +218,35 @@ namespace Intersect.Server.Core.Games.ClanWars
 
         private void GuildTakeOver(Guid guildId, long currentTime)
         {
+            var oldGuildId = GuildId;
             GuildId = guildId;
             Health = Territory.CaptureMs;
             ChangeState(TerritoryState.Owned, currentTime);
             ClanWarManager.ChangePoints(guildId, Territory.PointsPerCapture);
+
+            var guild = Guild.GetGuild(guildId);
+            foreach (var player in ClanWarManager.CurrentWar.Players.Where(pl => pl.IsInGuild).ToArray())
+            {
+                var plGuildId = player.Guild?.Id ?? Guid.Empty;
+                if (plGuildId == GuildId)
+                {
+                    PacketSender.SendToast(player, $"Territory Captured: {Territory?.DisplayName}");
+                }
+                PacketSender.SendChatMsg(player, $"{guild?.Name} captured the {Territory.DisplayName}!", Enums.ChatMessageType.Guild, CustomColors.General.GeneralWarning);
+            }
         }
 
         public void TeritoryLost(long currentTime)
         {
+            var oldGuildId = GuildId;
             GuildId = Guid.Empty;
             Health = 0;
             ChangeState(TerritoryState.Neutral, currentTime);
+
+            foreach (var player in ClanWarManager.CurrentWar.Players.Where(pl => pl.Guild?.Id == oldGuildId).ToArray())
+            {
+                PacketSender.SendToast(player, $"Territory Lost: {Territory?.DisplayName}");
+            }
         }
 
         public void RemoveFromDb()

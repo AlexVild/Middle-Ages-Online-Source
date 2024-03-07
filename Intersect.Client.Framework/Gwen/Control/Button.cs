@@ -552,6 +552,41 @@ namespace Intersect.Client.Framework.Gwen.Control
             mHoverSound = sound;
         }
 
+        public void StyleMAO()
+        {
+            Width = 96;
+            Height = 32;
+            
+            mNormalTextColor = new Color(255, 50, 19, 0);
+            mHoverTextColor = new Color(255, 111, 63, 0);
+            mClickedTextColor = new Color(255, 0, 0, 0);
+            mDisabledTextColor = new Color(255, 60, 60, 60);
+
+            mText.RemoveAlignments();
+            mText.AddAlignment(Alignments.Center);
+            Font = GameContentManager.Current.GetFont("november", 12);
+
+            var normalTexture = GameContentManager.Current?.GetTexture(GameContentManager.TextureType.Gui, "smallbutton.png");
+            var hoveredTexture = GameContentManager.Current?.GetTexture(GameContentManager.TextureType.Gui, "smallbutton_hovered.png");
+            var clickedTexture = GameContentManager.Current?.GetTexture(GameContentManager.TextureType.Gui, "smallbutton_clicked.png");
+            var disabledTexture = GameContentManager.Current?.GetTexture(GameContentManager.TextureType.Gui, "smallbutton_disabled.png");
+
+            mNormalImageFilename = normalTexture.GetName();
+            mNormalImage = normalTexture;
+            
+            mHoverImageFilename = hoveredTexture.GetName();
+            mHoverImage = hoveredTexture;
+
+            mClickedImageFilename = clickedTexture.GetName();
+            mClickedImage = clickedTexture;
+
+            mDisabledImageFilename = disabledTexture.GetName();
+            mDisabledImage = disabledTexture;
+
+            mMouseDownSound = "ui_press.wav";
+
+            ProcessAlignments();
+        }
     }
 
 }

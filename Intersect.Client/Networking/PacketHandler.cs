@@ -3083,6 +3083,12 @@ namespace Intersect.Client.Networking
                 en.ClanWarWinner = en.InGuild && en.Guild == packet.ClanWarWinner;
             }
         }
+
+        public void HandlePacket(IPacketSender packetSender, ClanWarCompletePacket packet)
+        {
+            Interface.Interface.GameUi?.ClanWarCompletionWindow?.Show(packet.Placement, packet.Payout);
+            Interface.Interface.GameUi?.ClanWarScorePanel?.Hide();
+        }
     }
 }
  

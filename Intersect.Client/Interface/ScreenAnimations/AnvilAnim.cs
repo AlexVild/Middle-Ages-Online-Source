@@ -1,11 +1,6 @@
-﻿using Intersect.Attributes;
-using Intersect.Client.Framework.Graphics;
+﻿using Intersect.Client.Framework.Graphics;
 using Intersect.Client.General;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Intersect.Client.Interface.ScreenAnimations
 {

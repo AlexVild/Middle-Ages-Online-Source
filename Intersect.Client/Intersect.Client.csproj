@@ -131,6 +131,7 @@
     <Compile Include="General\Timers.cs" />
     <Compile Include="General\UpgradeStation\UpgradeStationInterface.cs" />
     <Compile Include="Interface\Components\GwenComponents.cs" />
+    <Compile Include="Interface\Game\ClanWars\ClanWarCompletionWindow.cs" />
     <Compile Include="Interface\Game\ClanWars\ClanWarScoreRowComponent.cs" />
     <Compile Include="Interface\Game\GamePanel.cs" />
     <Compile Include="Interface\Game\AnnouncementWindow.cs" />
@@ -220,6 +221,7 @@
     <Compile Include="Interface\Game\WeaponPicker\WeaponPickerWindow.cs" />
     <Compile Include="Interface\Objects\HarvestInfoRows.cs" />
     <Compile Include="Interface\ScreenAnimations\AnvilAnim.cs" />
+    <Compile Include="Interface\ScreenAnimations\ClanWarCompleteAnimation.cs" />
     <Compile Include="Interface\ScreenAnimations\DeconstructorAnim.cs" />
     <Compile Include="Interface\ScreenAnimations\Gravestone.cs" />
     <Compile Include="Interface\Game\HUD\PartyHud.cs" />

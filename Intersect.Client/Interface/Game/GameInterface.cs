@@ -823,6 +823,7 @@ namespace Intersect.Client.Interface.Game
         public UpgradeStationWindow UpgradeStationWindow;
         public WeaponPickerWindow WeaponPickerWindow;
         public ClanWarScoreboard ClanWarScorePanel;
+        public ClanWarCompletionWindow ClanWarCompletionWindow;
         private CharacterPanelType _CurrentCharPanel;
 
         public CharacterPanelType CurrentCharacterPanel
@@ -837,6 +838,7 @@ namespace Intersect.Client.Interface.Game
             mHUD = new PlayerHud();
             mPartyHUD = new PartyHud();
             LeaderboardWindow = new LeaderboardWindow(gameCanvas);
+            ClanWarCompletionWindow = new ClanWarCompletionWindow(gameCanvas);
             LootRollWindow = new LootRollWindow(gameCanvas);
             RespawnWindow = new PlayerRespawnWindow(gameCanvas);
             DeconstructorWindow = new DeconstructorWindow(gameCanvas);
@@ -854,6 +856,7 @@ namespace Intersect.Client.Interface.Game
             mPartyHUD?.Draw();
 
             LeaderboardWindow?.Update();
+            ClanWarCompletionWindow?.Update();
             LootRollWindow?.Update();
             RespawnWindow?.Update();
             DeconstructorWindow?.Update();

@@ -29,6 +29,11 @@ namespace Intersect.Client.Interface.ScreenAnimations
         protected abstract int FPS { get; }
 
         /// <summary>
+        /// The scale to draw at
+        /// </summary>
+        protected virtual int Scale { get; }
+
+        /// <summary>
         /// The current horizontal frame of animation
         /// </summary>
         protected int CurrentHFrame { get; set;  }
@@ -109,12 +114,12 @@ namespace Intersect.Client.Interface.ScreenAnimations
                 var srcX = srcWidth * CurrentHFrame;
                 var srcY = srcHeight * CurrentVFrame;
 
-                var centerX = CenterX - (srcWidth / 2);
-                var centerY = CenterY - (srcHeight / 2);
+                var centerX = CenterX - (srcWidth * Scale / 2);
+                var centerY = CenterY - (srcHeight * Scale / 2);
 
                 Graphics.DrawGameTexture(Texture,
                     new FloatRect(srcX, srcY, srcWidth, srcHeight),
-                    new FloatRect(centerX, centerY, srcWidth, srcHeight),
+                    new FloatRect(centerX, centerY, srcWidth * Scale, srcHeight * Scale),
                     Color.White);
 
                 Animate();

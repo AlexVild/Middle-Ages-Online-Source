@@ -160,9 +160,8 @@ namespace Intersect.Server.Core.Games.ClanWars
                 {
                     continue;
                 }
-
-                player?.WarpToLastOverworldLocation(false);
-                player?.SendPacket(clanWarWinnerPacket);
+                player.WarpToLastOverworldLocation(false, true);
+                player.SendPacket(clanWarWinnerPacket);
             }
 
             if (save)
@@ -221,6 +220,12 @@ namespace Intersect.Server.Core.Games.ClanWars
                 {
                     guild?.SendMessageToMembers($"Your clan earned {payout} Valor Coins from Clan Wars, but does not have space in its Clan Bank! Your clan came in {place.ToOrdinal()} place with a score of {participant.Score.ToString("N0")} points.");
                 }
+                
+                foreach (var player in guild.FindOnlineMembers().Where(pl => pl.InCurrentClanWar))
+                {
+                    player.ClanWarComplete = new ClanWarCompletePacket(payout, place);
+                }
+                
                 place++;
             }
 
