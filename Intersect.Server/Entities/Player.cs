@@ -1188,6 +1188,12 @@ namespace Intersect.Server.Entities
                 }
             }
 
+            if (InCurrentClanWar)
+            {
+                LastTerritory = null;
+                TerritoryLeaveTimer = Timing.Global.MillisecondsUtc;
+            }
+
             var currentMapZoneType = MapController.Get(Map.Id).ZoneType;
             CancelCast();
             CastTarget = null;
@@ -9986,7 +9992,7 @@ namespace Intersect.Server.Entities
         public TerritoryInstance LastTerritory { get; set; }
 
         [NotMapped, JsonIgnore]
-        private long mTerritoryLeaveTimer { get; set; }
+        public long TerritoryLeaveTimer { get; set; }
 
         private void UpdateTerritoryStatus()
         {
@@ -10010,7 +10016,7 @@ namespace Intersect.Server.Entities
 
         public bool DefendingTerritory => IsInGuild
             && LastTerritory != null 
-            && (mTerritoryLeaveTimer < 0 || mTerritoryLeaveTimer > Timing.Global.MillisecondsUtc)
+            && (TerritoryLeaveTimer < 0 || TerritoryLeaveTimer > Timing.Global.MillisecondsUtc)
             && LastTerritory.GuildId == Guild?.Id;
 
         private void JoinTerritory(TerritoryInstance territory)
@@ -10019,7 +10025,7 @@ namespace Intersect.Server.Entities
             {
                 LastTerritory = territory;
                 LastTerritory.AddPlayer(this);
-                mTerritoryLeaveTimer = -1; // Player is in a territory. This is used for determining attacking/defending points
+                TerritoryLeaveTimer = -1; // Player is in a territory. This is used for determining attacking/defending points
             }
         }
 
@@ -10028,7 +10034,7 @@ namespace Intersect.Server.Entities
             lock (TerritoryLock)
             {
                 LastTerritory?.RemovePlayer(this);
-                mTerritoryLeaveTimer = Timing.Global.MillisecondsUtc + Options.Instance.ClanWar.TerritoryLeaveTimer;
+                TerritoryLeaveTimer = Timing.Global.MillisecondsUtc + Options.Instance.ClanWar.TerritoryLeaveTimer;
             }
         }
 
