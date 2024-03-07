@@ -1,3 +1,5 @@
+using Intersect.Attributes;
+
 namespace Intersect.Enums
 {
 
@@ -16,12 +18,17 @@ namespace Intersect.Enums
 
     public enum VariableTypes
     {
-
+        [EnhancedRelatedTable(GameObjectType.PlayerVariable)]
         PlayerVariable = 0,
 
+        [EnhancedRelatedTable(GameObjectType.ServerVariable)]
         ServerVariable,
 
-        InstanceVariable
+        [EnhancedRelatedTable(GameObjectType.InstanceVariable)]
+        InstanceVariable,
+
+        [EnhancedRelatedTable(GameObjectType.GuildVariable)]
+        GuildVariable
 
     }
 

@@ -4,6 +4,8 @@ using System.Linq;
 
 using Intersect.Collections;
 using Intersect.Extensions;
+using Intersect.GameObjects;
+using Intersect.GameObjects.Switches_and_Variables;
 using Intersect.Models;
 
 namespace Intersect.Enums
@@ -74,6 +76,79 @@ namespace Intersect.Enums
         public static string[] Names(this GameObjectType gameObjectType) => gameObjectType.GetLookup().OrderBy(p => p.Value?.Name)
             .Select(pair => pair.Value?.Name ?? Deleted)
             .ToArray();
+
+        public static int ListIndex(this GameObjectType gameObjectType, Guid id, VariableDataTypes dataTypeFilter = 0)
+        {
+            var lookup = gameObjectType.GetLookup();
+
+            if (dataTypeFilter == 0)
+            {
+                return lookup.KeyList.OrderBy(pairs => lookup[pairs]?.Name).ToList().IndexOf(id);
+            }
+
+            return lookup
+                .OrderBy(kv => kv.Value?.Name)
+                .Select(kv => kv.Value)
+                .OfType<IVariableBase>()
+                .Where(desc => desc.Type == dataTypeFilter)
+                .Select(desc => desc.Id)
+                .ToList()
+                .IndexOf(id);
+        }
+
+        public static Guid IdFromList(this GameObjectType gameObjectType, int listIndex, VariableDataTypes dataTypeFilter = 0)
+        {
+            var lookup = gameObjectType.GetLookup();
+
+            if (listIndex < 0 || listIndex >= lookup.KeyList.Count)
+            {
+                return Guid.Empty;
+            }
+
+            if (dataTypeFilter == 0)
+            {
+                return lookup.KeyList.OrderBy(pairs => lookup[pairs]?.Name).ToArray()[listIndex];
+            }
+
+            return lookup
+                .OrderBy(kv => kv.Value?.Name)
+                .Select(kv => kv.Value)
+                .OfType<IVariableBase>()
+                .Where(desc => desc.Type == dataTypeFilter)
+                .Select(desc => desc.Id)
+                .Skip(listIndex)
+                .FirstOrDefault();
+        }
+
+        public static VariableDataTypes GetVariableType(this GameObjectType gameObjectType, Guid variableDescriptorId)
+        {
+            var lookup = gameObjectType.GetLookup();
+
+            return lookup.ValueList
+                    .OfType<IVariableBase>()
+                    .FirstOrDefault(var => var.Id == variableDescriptorId)?.Type ?? 0;
+        }
+
+        public static string[] Names(this GameObjectType gameObjectType, VariableDataTypes dataTypeFilter = 0)
+        {
+            if (dataTypeFilter == 0)
+            {
+                return gameObjectType
+                    .GetLookup()
+                    .OrderBy(p => p.Value?.Name)
+                    .Select(pair => pair.Value?.Name ?? PlayerVariableBase.Deleted)
+                    .ToArray();
+            }
+
+            return gameObjectType
+                .GetLookup()
+                .Select(kv => kv.Value)
+                .OfType<IVariableBase>()
+                .Where(desc => desc.Type == dataTypeFilter)
+                .OrderBy(p => p?.Name)
+                .Select(pair => pair?.Name ?? PlayerVariableBase.Deleted)
+                .ToArray();
+        }
 
         public const string Deleted = "ERR_DELETED";
 

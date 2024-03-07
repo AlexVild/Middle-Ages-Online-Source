@@ -203,6 +203,7 @@
     <Compile Include="Admin\Actions\WarpToMeAction.cs" />
     <Compile Include="AlphanumComparatorFast.cs" />
     <Compile Include="Attributes\Attributes.cs" />
+    <Compile Include="Attributes\EnhancedRelatedTableAttribute.cs" />
     <Compile Include="Collections\NamedInstanceStore.cs" />
     <Compile Include="Collections\ReadOnlyList.cs" />
     <Compile Include="Collections\SanitizedValue.cs" />
@@ -292,6 +293,7 @@
     <Compile Include="Extensions\PropertyInfoExtensions.cs" />
     <Compile Include="Extensions\LogLevelExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Extensions\VariableTypeExtensions.cs" />
     <Compile Include="Factories\FactoryRegistry.cs" />
     <Compile Include="Factories\IFactory.cs" />
     <Compile Include="GameObjects\BaseDrop.cs" />

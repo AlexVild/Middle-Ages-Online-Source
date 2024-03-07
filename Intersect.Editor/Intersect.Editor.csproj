@@ -400,6 +400,12 @@
     <Compile Include="Forms\frmUpdate.Designer.cs">
       <DependentUpon>frmUpdate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\frmVariableSelector.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmVariableSelector.Designer.cs">
+      <DependentUpon>frmVariableSelector.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Helpers\EventFormHelpers.cs" />
     <Compile Include="Forms\Helpers\FormHelpers.cs" />
     <Compile Include="Forms\Helpers\GridHelper.cs" />
@@ -1121,6 +1127,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Editors\frmWeaponType.resx">
       <DependentUpon>frmWeaponType.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmVariableSelector.resx">
+      <DependentUpon>frmVariableSelector.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Shaders\radialgradient_editor.xnb" />
   </ItemGroup>

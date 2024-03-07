@@ -6540,6 +6540,42 @@ Negative values for time to flow backwards.";
             public static LocalizedString Title = @"Cast Spell On";
 
         }
+
+        public partial struct VariableSelector
+        {
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Button = @"Select a Variable";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString LabelCurrentSelection = @"Current Selection:";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString LabelGroup = @"Select a Variable";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString LabelVariableType = @"Variable Type";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString LabelVariableValue = @"Variable";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString Title = @"Variable Selector";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ValueCurrentSelection = @"{00} ({01})";
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public static LocalizedString ValueNoneSelected = @"None Selected!";
+
+            public static Dictionary<int, LocalizedString> VariableTypes = new Dictionary<int, LocalizedString>
+            {
+                {(int) Enums.VariableTypes.PlayerVariable, @"Player Variable" },
+                {(int) Enums.VariableTypes.ServerVariable, @"Server Variable" },
+                {(int) Enums.VariableTypes.InstanceVariable, @"Instance Variable" },
+                {(int) Enums.VariableTypes.GuildVariable, @"Guild Variable" },
+            };
+
+        }
     }
 }
 
