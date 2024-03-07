@@ -2,6 +2,7 @@
 using Intersect.GameObjects.Crafting;
 using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Maps.MapList;
+using Intersect.GameObjects.Switches_and_Variables;
 using Intersect.Server.Maps;
 
 using Microsoft.EntityFrameworkCore;
@@ -57,5 +58,7 @@ namespace Intersect.Server.Database.GameData
         DbSet<EnhancementDescriptor> Enhancements { get; set; }
         
         DbSet<TerritoryDescriptor> Territories { get; set; }
+        
+        DbSet<GuildVariableBase> GuildVariables { get; set; }
     }
 }

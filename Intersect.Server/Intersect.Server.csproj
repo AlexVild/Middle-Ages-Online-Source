@@ -493,6 +493,7 @@
     <Compile Include="Database\ContextInterface.cs" />
     <Compile Include="Database\GameData\Migrations\RecipeCrMigration.cs" />
     <Compile Include="Database\PlayerData\Players\DungeonTrackerInstance.cs" />
+    <Compile Include="Database\PlayerData\Players\GuildVariable.cs" />
     <Compile Include="Database\PlayerData\Players\ItemDiscoveryInstance.cs" />
     <Compile Include="Database\PlayerData\Migrations\GuildBankMaxSlotMigration.cs" />
     <Compile Include="Database\IDbContext.cs" />
@@ -530,6 +531,7 @@
     <Compile Include="Database\PlayerData\Players\PermabuffInstance.cs" />
     <Compile Include="Database\PlayerData\Players\PlayerEnhancementInstance.cs" />
     <Compile Include="Database\PlayerData\Players\PlayerLoadout.cs" />
+    <Compile Include="Database\PlayerData\Players\PlayerVariable.cs" />
     <Compile Include="Database\PlayerData\Players\Quest.cs" />
     <Compile Include="Database\PlayerData\Players\PlayerRecord.cs" />
     <Compile Include="Database\PlayerData\Players\RecipeInstance.cs" />
@@ -833,6 +835,10 @@
     <Compile Include="Migrations\20240305190320_ClanWarWinnerMigration.cs" />
     <Compile Include="Migrations\20240305190320_ClanWarWinnerMigration.designer.cs">
       <DependentUpon>20240305190320_ClanWarWinnerMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20240307201054_GuildVariableMigration.cs" />
+    <Compile Include="Migrations\20240307201054_GuildVariableMigration.designer.cs">
+      <DependentUpon>20240307201054_GuildVariableMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.cs" />
     <Compile Include="Migrations\Game\20201222164741_NpcResetRadius.Designer.cs">
@@ -1403,6 +1409,10 @@
     <Compile Include="Migrations\Game\20240305170050_ClanWarItemMigration.cs" />
     <Compile Include="Migrations\Game\20240305170050_ClanWarItemMigration.designer.cs">
       <DependentUpon>20240305170050_ClanWarItemMigration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Game\20240307201020_GuildVariableMigration.cs" />
+    <Compile Include="Migrations\Game\20240307201020_GuildVariableMigration.designer.cs">
+      <DependentUpon>20240307201020_GuildVariableMigration.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.cs" />
     <Compile Include="Migrations\Logging\20201119230003_AddUserActivityHistory.Designer.cs">

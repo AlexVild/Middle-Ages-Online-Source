@@ -17,6 +17,7 @@ using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using Intersect.GameObjects.Timers;
+using Intersect.GameObjects.Switches_and_Variables;
 
 namespace Intersect.Server.Database.GameData
 {
@@ -122,6 +123,8 @@ namespace Intersect.Server.Database.GameData
         public DbSet<EnhancementDescriptor> Enhancements { get; set; }
         
         public DbSet<TerritoryDescriptor> Territories { get; set; }
+
+        public DbSet<GuildVariableBase> GuildVariables { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

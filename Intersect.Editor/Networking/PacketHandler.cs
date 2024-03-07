@@ -18,6 +18,7 @@ using Intersect.Logging;
 using Intersect.Network;
 using Intersect.Network.Packets.Server;
 using Intersect.GameObjects.Timers;
+using Intersect.GameObjects.Switches_and_Variables;
 
 namespace Intersect.Editor.Networking
 {
@@ -803,6 +804,21 @@ namespace Intersect.Editor.Networking
                         TerritoryDescriptor.Lookup.Set(id, territory);
                     }
                     break;
+
+                case GameObjectType.GuildVariable:
+                    if (deleted)
+                    {
+                        var guildVariable = GuildVariableBase.Get(id);
+                        guildVariable.Delete();
+                    }
+                    else
+                    {
+                        var guildVariable = new GuildVariableBase(id);
+                        guildVariable.Load(json);
+                        GuildVariableBase.Lookup.Set(id, guildVariable);
+                    }
+                    break;
+
                 default:
                     throw new ArgumentOutOfRangeException();
             }

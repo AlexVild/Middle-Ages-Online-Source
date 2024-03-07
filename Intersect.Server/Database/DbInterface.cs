@@ -40,6 +40,7 @@ using Microsoft.EntityFrameworkCore;
 
 using MySql.Data.MySqlClient;
 using Intersect.GameObjects.Timers;
+using Intersect.GameObjects.Switches_and_Variables;
 
 namespace Intersect.Server.Database
 {
@@ -74,6 +75,8 @@ namespace Intersect.Server.Database
         public static Dictionary<string, ServerVariableBase> ServerVariableEventTextLookup = new Dictionary<string, ServerVariableBase>();
 
         public static Dictionary<string, PlayerVariableBase> PlayerVariableEventTextLookup = new Dictionary<string, PlayerVariableBase>();
+
+        public static Dictionary<string, GuildVariableBase> GuildVariableEventTextLookup = new Dictionary<string, GuildVariableBase>();
 
         public static ConcurrentDictionary<Guid, ServerVariableBase> UpdatedServerVariables = new ConcurrentDictionary<Guid, ServerVariableBase>();
 
@@ -326,6 +329,7 @@ namespace Intersect.Server.Database
                     CacheServerVariableEventTextLookups();
                     CachePlayerVariableEventTextLookups();
                     CacheInstanceVariableEventTextLookups();
+                    CacheGuildVariableEventTextLookups();
                 }
             }
 
@@ -614,6 +618,11 @@ namespace Intersect.Server.Database
                     TerritoryDescriptor.Lookup.Clear();
 
                     break;
+
+                case GameObjectType.GuildVariable:
+                    GuildVariableBase.Lookup.Clear();
+
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, null);
             }
@@ -833,6 +842,15 @@ namespace Intersect.Server.Database
                             }
 
                             break;
+
+                        case GameObjectType.GuildVariable:
+                            foreach (var guildVar in context.GuildVariables)
+                            {
+                                GuildVariableBase.Lookup.Set(guildVar.Id, guildVar);
+                            }
+
+                            break;
+
                         default:
                             throw new ArgumentOutOfRangeException(nameof(gameObjectType), gameObjectType, null);
                     }
@@ -980,6 +998,11 @@ namespace Intersect.Server.Database
 
                 case GameObjectType.Territory:
                     dbObj = new TerritoryDescriptor(predefinedid);
+
+                    break;
+
+                case GameObjectType.GuildVariable:
+                    dbObj = new GuildVariableBase(predefinedid);
 
                     break;
 
@@ -1168,6 +1191,13 @@ namespace Intersect.Server.Database
                             TerritoryDescriptor.Lookup.Set(dbObj.Id, dbObj);
 
                             break;
+
+                        case GameObjectType.GuildVariable:
+                            context.GuildVariables.Add((GuildVariableBase)dbObj);
+                            GuildVariableBase.Lookup.Set(dbObj.Id, dbObj);
+
+                            break;
+
                         default:
                             throw new ArgumentOutOfRangeException(nameof(gameObjectType), gameObjectType, null);
                     }
@@ -1335,6 +1365,11 @@ namespace Intersect.Server.Database
                             break;
                         case GameObjectType.Territory:
                             context.Territories.Remove((TerritoryDescriptor)gameObject);
+
+                            break;
+
+                        case GameObjectType.GuildVariable:
+                            context.GuildVariables.Remove((GuildVariableBase)gameObject);
 
                             break;
                     }
@@ -1508,6 +1543,11 @@ namespace Intersect.Server.Database
                             context.Territories.Update((TerritoryDescriptor)gameObject);
 
                             break;
+
+                        case GameObjectType.GuildVariable:
+                            context.GuildVariables.Update((GuildVariableBase)gameObject);
+
+                            break;
                     }
 
                     context.ChangeTracker.DetectChanges();
@@ -1619,6 +1659,21 @@ namespace Intersect.Server.Database
                 }
             }
             InstanceVariableEventTextLookup = lookup;
+        }
+
+        public static void CacheGuildVariableEventTextLookups()
+        {
+            var lookup = new Dictionary<string, GuildVariableBase>();
+            var addedIds = new HashSet<string>();
+            foreach (GuildVariableBase variable in GuildVariableBase.Lookup.Values)
+            {
+                if (!string.IsNullOrWhiteSpace(variable.TextId) && !addedIds.Contains(variable.TextId))
+                {
+                    lookup.Add(Strings.Events.guildvar + "{" + variable.TextId + "}", variable);
+                    addedIds.Add(variable.TextId);
+                }
+            }
+            GuildVariableEventTextLookup = lookup;
         }
 
         //Extra Map Helper Functions

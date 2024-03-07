@@ -31,7 +31,7 @@ namespace Intersect.Server.Database.PlayerData
 
         DbSet<SpellSlot> Player_Spells { get; set; }
 
-        DbSet<Variable> Player_Variables { get; set; }
+        DbSet<PlayerVariable> Player_Variables { get; set; }
 
         DbSet<Bag> Bags { get; set; }
 
@@ -82,5 +82,7 @@ namespace Intersect.Server.Database.PlayerData
         DbSet<ClanWarInstance> Clan_Wars { get; set; }
 
         DbSet<ClanWarParticipant> Clan_War_Participants { get; set; }
+
+        DbSet<GuildVariable> Guild_Variables { get; set; }
     }
 }

@@ -63,7 +63,7 @@ namespace Intersect.Server.Database.PlayerData
 
         public DbSet<SpellSlot> Player_Spells { get; set; }
 
-        public DbSet<Variable> Player_Variables { get; set; }
+        public DbSet<PlayerVariable> Player_Variables { get; set; }
 
         public DbSet<Bag> Bags { get; set; }
 
@@ -114,6 +114,8 @@ namespace Intersect.Server.Database.PlayerData
         public DbSet<ClanWarInstance> Clan_Wars { get; set; }
         
         public DbSet<ClanWarParticipant> Clan_War_Participants { get; set; }
+        
+        public DbSet<GuildVariable> Guild_Variables { get; set; }
 
         internal async ValueTask Commit(
             bool commit = false,
@@ -153,7 +155,7 @@ namespace Intersect.Server.Database.PlayerData
             modelBuilder.Entity<Player>().HasMany(b => b.Items).WithOne(p => p.Player);
 
             modelBuilder.Entity<Player>().HasMany(b => b.Variables).WithOne(p => p.Player);
-            modelBuilder.Entity<Variable>().HasIndex(p => new {p.VariableId, CharacterId = p.PlayerId}).IsUnique();
+            modelBuilder.Entity<PlayerVariable>().HasIndex(p => new {p.VariableId, CharacterId = p.PlayerId}).IsUnique();
 
             modelBuilder.Entity<Player>().HasMany(b => b.Hotbar).WithOne(p => p.Player);
 
@@ -243,6 +245,9 @@ namespace Intersect.Server.Database.PlayerData
                 .HasMany(instance => instance.Participants)
                 .WithOne(participant => participant.ClanWar )
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Guild>().HasMany(b => b.Variables).WithOne(p => p.Guild);
+            modelBuilder.Entity<GuildVariable>().HasIndex(p => new { p.VariableId, p.GuildId }).IsUnique();
         }
 
         public void Seed()

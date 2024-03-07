@@ -6,6 +6,7 @@ using Intersect.GameObjects.QuestBoard;
 using Intersect.GameObjects.Events;
 using Intersect.GameObjects.Maps;
 using Intersect.GameObjects.Timers;
+using Intersect.GameObjects.Switches_and_Variables;
 
 namespace Intersect.Enums
 {
@@ -99,6 +100,9 @@ namespace Intersect.Enums
 
         [GameObjectInfo(typeof(TerritoryDescriptor), "territory")]
         Territory,
+
+        [GameObjectInfo(typeof(GuildVariableBase), "guild_variables")]
+        GuildVariable,
     }
 
 }

@@ -24,6 +24,7 @@ using static Intersect.Server.Database.Logging.Entities.GuildHistory;
 using Intersect.Server.Core;
 using Intersect.GameObjects.Timers;
 using Intersect.Server.Core.Games.ClanWars;
+using Intersect.GameObjects.Switches_and_Variables;
 
 namespace Intersect.Server.Database.PlayerData.Players
 {
@@ -87,6 +88,17 @@ namespace Intersect.Server.Database.PlayerData.Players
         [NotMapped]
         [JsonIgnore]
         public long LastUpdateTime { get; set; } = -1;
+
+        /// <summary>
+        /// Guild Variable Values
+        /// </summary>
+        [JsonIgnore]
+        public virtual List<GuildVariable> Variables { get; set; } = new List<GuildVariable>();
+
+        /// <summary>
+        /// Variables that have been updated for this guild which need to be saved to the db
+        /// </summary>
+        public ConcurrentDictionary<Guid, GuildVariableBase> UpdatedVariables = new ConcurrentDictionary<Guid, GuildVariableBase>();
 
         /// <summary>
         /// Locking context to prevent saving this guild to the db twice at the same time, and to prevent bank items from being withdrawed/deposited into by 2 threads at the same time
@@ -162,31 +174,33 @@ namespace Intersect.Server.Database.PlayerData.Players
             {
                 using (var context = DbInterface.CreatePlayerContext())
                 {
-                    var guild = context.Guilds.Where(g => g.Id == id).Include(g => g.Bank).FirstOrDefault();
-                    if (guild != null)
+                    var guild = context.Guilds.Where(g => g.Id == id)
+                        .Include(g => g.Bank)
+                        .Include(g => g.Variables)
+                        .FirstOrDefault();
+                    if (guild == default)
                     {
-                        //Load Members
-                        var members = context.Players.Where(p => p.DbGuild.Id == id).ToDictionary(t => t.Id, t => new Tuple<Guid, string, int, int, Guid, Guid>(t.Id, t.Name, t.GuildRank, t.Level, t.ClassId, t.MapId));
-                        foreach (var member in members)
-                        {
-                            var gmember = new GuildMember(member.Value.Item1, member.Value.Item2, member.Value.Item3, member.Value.Item4, ClassBase.GetName(member.Value.Item5), MapBase.GetName(member.Value.Item6));
-                            guild.Members.AddOrUpdate(member.Key, gmember, (key, oldValue) => gmember);
-                        }
-
-                        SlotHelper.ValidateSlots(guild.Bank, guild.BankSlotsCount);
-                        guild.Bank = guild.Bank.OrderBy(bankSlot => bankSlot?.Slot).ToList();
-
-                        Guilds.AddOrUpdate(id, guild, (key, oldValue) => guild);
-
-                        return guild;
+                        return default;
                     }
+
+                    //Load Members
+                    var members = context.Players.Where(p => p.DbGuild.Id == id).ToDictionary(t => t.Id, t => new Tuple<Guid, string, int, int, Guid, Guid>(t.Id, t.Name, t.GuildRank, t.Level, t.ClassId, t.MapId));
+                    foreach (var member in members)
+                    {
+                        var gmember = new GuildMember(member.Value.Item1, member.Value.Item2, member.Value.Item3, member.Value.Item4, ClassBase.GetName(member.Value.Item5), MapBase.GetName(member.Value.Item6));
+                        guild.Members.AddOrUpdate(member.Key, gmember, (key, oldValue) => gmember);
+                    }
+
+                    SlotHelper.ValidateSlots(guild.Bank, guild.BankSlotsCount);
+                    guild.Bank = guild.Bank.OrderBy(bankSlot => bankSlot?.Slot).ToList();
+
+                    Guilds.AddOrUpdate(id, guild, (key, oldValue) => guild);
+
+                    return guild;
                 }
             }
-            else
-            {
-                return found;
-            }
-            return null;
+            
+            return found;
         }
 
         /// <summary>
@@ -725,6 +739,69 @@ namespace Intersect.Server.Database.PlayerData.Players
             Save();
 
             return true;
+        }
+
+        /// <summary>
+        /// Returns a variable object given a guild variable id
+        /// </summary>
+        /// <param name="id">Variable id</param>
+        /// <param name="createIfNull">Creates this variable for the guild if it hasn't been set yet</param>
+        /// <returns></returns>
+        public Variable GetVariable(Guid id, bool createIfNull = false)
+        {
+            foreach (var v in Variables)
+            {
+                if (v.VariableId == id)
+                {
+                    return v;
+                }
+            }
+
+            if (createIfNull)
+            {
+                return CreateVariable(id);
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Creates a variable for this guild with a given id if it doesn't already exist
+        /// </summary>
+        /// <param name="id">Variablke id</param>
+        /// <returns></returns>
+        private Variable CreateVariable(Guid id)
+        {
+            if (GuildVariableBase.Get(id) == null)
+            {
+                return null;
+            }
+
+            var variable = new GuildVariable(id);
+            Variables.Add(variable);
+
+            return variable;
+        }
+
+        /// <summary>
+        /// Gets the value of a guild variable given a variable id
+        /// </summary>
+        /// <param name="id">Variable id</param>
+        /// <returns></returns>
+        public GameObjects.Switches_and_Variables.VariableValue GetVariableValue(Guid id)
+        {
+            var v = GetVariable(id);
+            if (v == null)
+            {
+                v = CreateVariable(id);
+            }
+
+            if (v == null)
+            {
+                return new GameObjects.Switches_and_Variables.VariableValue();
+            }
+
+            return v.Value;
         }
 
         /// <summary>

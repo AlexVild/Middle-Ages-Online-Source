@@ -735,6 +735,9 @@ namespace Intersect.Server.Localization
             [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public readonly LocalizedString instancevar = @"\iv";
 
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public readonly LocalizedString guildvar = @"\guv";
+
         }
 
         public sealed class FormulasNamespace : LocaleNamespace

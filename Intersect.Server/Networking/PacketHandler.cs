@@ -37,6 +37,7 @@ using System.Text;
 using Intersect.GameObjects.Timers;
 using Intersect.Server.Utilities;
 using Intersect.Server.DTOs;
+using Intersect.GameObjects.Switches_and_Variables;
 
 namespace Intersect.Server.Networking
 {
@@ -3727,6 +3728,12 @@ namespace Intersect.Server.Networking
                     obj = TerritoryDescriptor.Get(id);
 
                     break;
+
+                case GameObjectType.GuildVariable:
+                    obj = GuildVariableBase.Get(id);
+
+                    break;
+
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -3930,6 +3937,12 @@ namespace Intersect.Server.Networking
                     obj = DatabaseObject<TerritoryDescriptor>.Lookup.Get(id);
 
                     break;
+
+                case GameObjectType.GuildVariable:
+                    obj = DatabaseObject<GuildVariableBase>.Lookup.Get(id);
+
+                    break;
+
                 default:
                     throw new ArgumentOutOfRangeException();
             }

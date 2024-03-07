@@ -31,6 +31,7 @@ using Intersect.GameObjects.Timers;
 using Intersect.Server.Database.PlayerData;
 using Intersect.GameObjects.Maps;
 using Intersect.Server.Core.Games.ClanWars;
+using Intersect.GameObjects.Switches_and_Variables;
 
 namespace Intersect.Server.Networking
 {
@@ -1987,6 +1988,13 @@ namespace Intersect.Server.Networking
                 
                 case GameObjectType.Territory:
                     foreach (var obj in TerritoryDescriptor.Lookup)
+                    {
+                        SendGameObject(client, obj.Value, false, false, packetList);
+                    }
+                    break;
+
+                case GameObjectType.GuildVariable:
+                    foreach (var obj in GuildVariableBase.Lookup)
                     {
                         SendGameObject(client, obj.Value, false, false, packetList);
                     }
